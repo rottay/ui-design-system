@@ -78,7 +78,7 @@
     calc(var(--ds-modern-table-control-size) - 0.375rem)
   );
   --ds-modern-table-control-radius: var(
-    --ds-table-control-radius,
+    --ds-data-table-control-radius,
     var(--ds-radius-md, 0.5rem)
   );
   --ds-modern-table-divider: var(
@@ -195,9 +195,10 @@
     var(--ds-table-cell-font-size, var(--ds-font-size-sm)) *
       var(--ds-density-factor-compact, 0.85)
   );
-  /* The shared line-height channel stays the tenant override; only the
-     posture floor changes (1.25 here, 1.35 base, 1.55 spacious). */
-  line-height: var(--ds-table-cell-line-height, 1.25);
+  /* One channel per posture: a theme-root value substitutes its var()s where
+     it is declared, so the three rules (1.25 here, 1.35 base, 1.55 spacious)
+     read three rungs. */
+  line-height: var(--ds-data-table-cell-line-height-compact, 1.25);
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"]
@@ -206,7 +207,7 @@
     var(--ds-table-cell-font-size, var(--ds-font-size-sm)) *
       var(--ds-density-factor-spacious, 1.15)
   );
-  line-height: var(--ds-table-cell-line-height, 1.55);
+  line-height: var(--ds-data-table-cell-line-height-spacious, 1.55);
 }
 
 /* The header label joins the SAME ladder (height + type + chrome move
@@ -741,7 +742,7 @@
   padding: var(--ds-modern-table-cell-padding);
   overflow: hidden;
   font-size: var(--ds-table-cell-font-size, var(--ds-font-size-sm));
-  line-height: var(--ds-table-cell-line-height, 1.35);
+  line-height: var(--ds-data-table-cell-line-height, 1.35);
   text-overflow: ellipsis;
   unicode-bidi: plaintext;
   white-space: nowrap;
@@ -1021,7 +1022,10 @@
       color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
     var(
       --ds-table-shadow,
-      var(--ds-workspace-card-shadow, var(--ds-elevation-1))
+      var(
+        --ds-data-table-card-shadow,
+        var(--ds-workspace-card-shadow, var(--ds-elevation-1))
+      )
     );
   transition: border-color var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-move, ease-out),
@@ -1399,10 +1403,13 @@
   transform: rotate(-90deg);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-count-pill"] {
-  /* The count chip follows the family's control-radius channel: a squarer
-     edge profile reads as a framed figure, a soft one as a pill. The
-     fallback keeps the historic full-pill render byte-exact. */
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-full, 9999px));
+  /* The chip has its own radius rung, not the box controls': a squarer edge
+     profile reads as a framed figure, a soft one as a pill, and the two
+     surfaces rest at opposite ends of the scale. */
+  border-radius: var(
+    --ds-data-table-control-pill-radius,
+    var(--ds-radius-full, 9999px)
+  );
   background: color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
   color: var(--ds-color-text-secondary);
 }

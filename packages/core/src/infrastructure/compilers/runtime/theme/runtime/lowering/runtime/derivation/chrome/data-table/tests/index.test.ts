@@ -6,7 +6,7 @@
  * its Modern skin reads (produced === fallback === resting paint), the same
  * parity contract the form-sections wave lot asserts.
  */
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -82,6 +82,12 @@ function skinFallbacks(channel: string): string[] {
 
 const context = () =>
   buildLoweringContext({ theme: firstPartyFixture("bithire") });
+
+/** The family's stories, the only other place a family channel is authored. */
+const STORIES = readFileSync(
+  resolve(process.cwd(), "src/components/patterns/data/data-table/DataTable.stories.tsx"),
+  "utf8"
+);
 
 /** Every wired channel: the exact chain the deriver produces and the skin reads. */
 const WIRED: Record<string, string> = {
@@ -246,11 +252,18 @@ function densityPostures(alias: string): string[] {
  */
 const DRAINED: Record<string, string> = {
   "--ds-data-table-action-gap": "var(--ds-spacing-2, 0.5rem)",
+  "--ds-data-table-card-shadow":
+    "var(--ds-workspace-card-shadow, var(--ds-elevation-1))",
+  "--ds-data-table-cell-line-height": "1.35",
+  "--ds-data-table-cell-line-height-compact": "1.25",
+  "--ds-data-table-cell-line-height-spacious": "1.55",
+  "--ds-data-table-control-pill-radius": "var(--ds-radius-full, 9999px)",
+  "--ds-data-table-control-radius": "var(--ds-radius-md, 0.5rem)",
   "--ds-data-table-drag-grip-offset": "var(--ds-spacing-0, 0)",
   "--ds-data-table-drag-grip-size":
     "calc(var(--ds-data-table-control-size, calc(var(--ds-spacing-8, 2rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))) - 0.375rem)",
   "--ds-data-table-drop-indicator-radius":
-    "var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))",
+    "var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem))",
   "--ds-data-table-editorial-mobile-title-size": "var(--ds-font-size-lg, 1rem)",
   "--ds-data-table-mobile-actions-padding-block":
     "calc(0.625rem * var(--ds-rhythm-effective-scale, 1))",
@@ -269,6 +282,7 @@ const DRAINED: Record<string, string> = {
     "var(--ds-spacing-8, 2rem) var(--ds-spacing-5, 1.25rem)",
   "--ds-data-table-mobile-state-radius":
     "var(--ds-table-radius, var(--ds-radius-lg))",
+  "--ds-data-table-mobile-state-shadow": "var(--ds-elevation-1)",
   "--ds-data-table-mobile-summary-divider":
     "color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)",
   "--ds-data-table-mobile-summary-min-height": "var(--ds-spacing-8, 2rem)",
@@ -282,12 +296,55 @@ const DRAINED: Record<string, string> = {
   "--ds-data-table-ruled-mobile-shadow": "var(--ds-elevation-0, none)",
 };
 
-/** The three names this family reads that no honest single value can produce. */
-const DIVERGENT = [
-  "--ds-table-cell-line-height",
-  "--ds-table-control-radius",
-  "--ds-table-shadow",
-];
+/**
+ * The three names this family read under the `--ds-table-` spelling that no
+ * single value could produce. Two were family-private and are drained; the
+ * third is read by an app and keeps a superseded read window.
+ */
+const RESIDUAL = {
+  drained: ["--ds-table-cell-line-height", "--ds-table-control-radius"],
+  windowed: "--ds-table-shadow",
+} as const;
+
+/** The `data-density` posture of every Modern rule that READS `channel`. */
+function readDensityPostures(channel: string): string[] {
+  const postures: string[] = [];
+  for (const match of SKIN.matchAll(
+    new RegExp(`var\\(\\s*${channel}\\s*,`, "g")
+  )) {
+    const selector = SKIN.slice(0, match.index ?? 0).split("}").pop() ?? "";
+    const density = selector.match(/\[data-density="([a-z]+)"\]/);
+    postures.push(density ? density[1]! : "");
+  }
+  return postures;
+}
+
+/** How many times each family skin reads `channel`, in the declared order. */
+function readSiteCounts(channel: string): number[] {
+  return FAMILY_SKINS.map(
+    (text) => [...text.matchAll(new RegExp(`var\\(\\s*${channel}\\s*,`, "g"))].length
+  );
+}
+
+/**
+ * The app read that holds the `--ds-table-shadow` window open, measured rather
+ * than asserted from memory: `app-bithire` paints its own table card from the
+ * name with a third rest of its own (`--ds-card-shadow`), so renaming the two
+ * DS read sites would silently stop a tenant override of that name from
+ * reaching them. Three readings, the shape the shell window uses: the sibling
+ * repo ABSENT is unmeasurable here and keeps the window open, present-and-
+ * still-reading keeps it open, and present-and-migrated returns false so the
+ * pin below reds and tells that lot to close the window.
+ */
+const APP_TABLE_SKIN = resolve(
+  process.cwd(),
+  "../../../app-bithire/src/ui/tables/data-table/styles/index.css"
+);
+
+function appStillReadsTheBand(): boolean {
+  if (!existsSync(APP_TABLE_SKIN)) return true;
+  return readFileSync(APP_TABLE_SKIN, "utf8").includes(RESIDUAL.windowed);
+}
 
 describe("chrome/data-table drained channels", () => {
   it("produces each one at the single fallback its skins state", () => {
@@ -330,7 +387,7 @@ describe("chrome/data-table drained channels", () => {
       "var(--ds-data-table-control-size-spacious, calc(var(--ds-spacing-9, 2.25rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1)))",
     ]);
     expect(LADDER.get("--ds-modern-table-control-radius")).toEqual([
-      "var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))",
+      "var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem))",
     ]);
     /* Both expansions end on channels a decision moves: the grip on the
        family's own control rung, the corner on the radius scale. */
@@ -437,27 +494,91 @@ describe("chrome/data-table drained channels", () => {
     ).toBe("var(--ds-spacing-0, 0)");
   });
 
-  it("leaves the three divergent reads unproduced, with their divergence measured", () => {
+  it("drains the cell measure to one produced rung per density posture", () => {
     const derived = dataTableChromeDeriver.derive(context(), {});
-    for (const channel of DIVERGENT) {
-      expect(derived[channel], channel).toBeUndefined();
+    /* The measurement that made this a drain and not a window: the name was
+       read three times, all three in this family's own Modern skin, and
+       declared nowhere in the four repos. */
+    expect(readSiteCounts("--ds-table-cell-line-height")).toEqual([0, 0, 0, 0]);
+    expect(familyFallbacks("--ds-table-cell-line-height")).toEqual([]);
+    POSTURES.forEach((suffix, posture) => {
+      const channel = `--ds-data-table-cell-line-height${suffix}`;
+      expect(dataTableChromeDeriver.produces, channel).toContain(channel);
+      expect(readSiteCounts(channel), channel).toEqual([0, 0, 0, 1]);
+      /* Each rung is the byte-identical rest its own posture rule stated. */
       expect(
-        familyFallbacks(channel).length,
-        `${channel}: one resting value would repaint the other read sites`
-      ).toBeGreaterThan(1);
+        familyFallbacks(channel).map((fallback) => atPosture(fallback, posture)),
+        channel
+      ).toEqual([normalise(derived[channel]!)]);
+      /* And the rule that reads it really is that posture's rule. */
+      expect(readDensityPostures(channel), channel).toEqual([
+        suffix === "" ? "" : suffix.slice(1),
+      ]);
+    });
+    expect([
+      derived["--ds-data-table-cell-line-height-compact"],
+      derived["--ds-data-table-cell-line-height"],
+      derived["--ds-data-table-cell-line-height-spacious"],
+    ]).toEqual(["1.25", "1.35", "1.55"]);
+  });
+
+  it("splits the control radius by surface: the box rung and the count pill", () => {
+    const derived = dataTableChromeDeriver.derive(context(), {});
+    /* Ten read sites disagreed on one name. Nine are box controls on the
+       radius scale's md rung -- the Modern ladder (which five parts read),
+       two focus rings and six mobile surfaces -- and the tenth is the
+       group-header count chip, which rests full-round. Two surfaces, two
+       channels; the shared name is gone from every skin the family paints
+       from, and from the family's stories. */
+    expect(readSiteCounts("--ds-table-control-radius")).toEqual([0, 0, 0, 0]);
+    expect(familyFallbacks("--ds-table-control-radius")).toEqual([]);
+    expect(STORIES).not.toContain("--ds-table-control-radius");
+    expect(readSiteCounts("--ds-data-table-control-radius")).toEqual([0, 2, 6, 1]);
+    expect(readSiteCounts("--ds-data-table-control-pill-radius")).toEqual([0, 0, 0, 1]);
+    expect(derived["--ds-data-table-control-radius"]).toBe(
+      "var(--ds-radius-md, 0.5rem)"
+    );
+    expect(derived["--ds-data-table-control-pill-radius"]).toBe(
+      "var(--ds-radius-full, 9999px)"
+    );
+    /* The box rung is the one the ladder expands to, so the drop indicator's
+       corner now chains through a produced channel instead of a name nobody
+       writes -- and still ends on the radius scale. */
+    expect(LADDER.get("--ds-modern-table-control-radius")).toEqual([
+      "var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem))",
+    ]);
+    expect(derived["--ds-data-table-drop-indicator-radius"]).toContain(
+      "var(--ds-data-table-control-radius,"
+    );
+  });
+
+  it("keeps the shadow band's old name as the first arm, with the produced channel behind it", () => {
+    const derived = dataTableChromeDeriver.derive(context(), {});
+    /* The one residual that is NOT family-private. Both DS read sites keep the
+       band name first and reach the produced channel from the same scope, so
+       an un-migrated override still wins and the resting paint is unchanged. */
+    expect(appStillReadsTheBand()).toBe(true);
+    expect(readSiteCounts(RESIDUAL.windowed)).toEqual([0, 0, 1, 1]);
+    expect(familyFallbacks(RESIDUAL.windowed).sort()).toEqual([
+      "var(--ds-data-table-card-shadow, var(--ds-workspace-card-shadow, var(--ds-elevation-1)))",
+      "var(--ds-data-table-mobile-state-shadow, var(--ds-elevation-1))",
+    ]);
+    /* Two surfaces behind the one band: the desktop table card and the mobile
+       state panel, each at the elevation its own read site stated. */
+    expect(derived["--ds-data-table-card-shadow"]).toBe(
+      "var(--ds-workspace-card-shadow, var(--ds-elevation-1))"
+    );
+    expect(derived["--ds-data-table-mobile-state-shadow"]).toBe(
+      "var(--ds-elevation-1)"
+    );
+    expect(readSiteCounts("--ds-data-table-card-shadow")).toEqual([0, 0, 0, 1]);
+    expect(readSiteCounts("--ds-data-table-mobile-state-shadow")).toEqual([
+      0, 0, 1, 0,
+    ]);
+    /* Nothing else was left behind: the two drained names are gone and this is
+       the only one the family still reads without a producer. */
+    for (const channel of RESIDUAL.drained) {
+      expect(familyFallbacks(channel), channel).toEqual([]);
     }
-    expect(familyFallbacks("--ds-table-cell-line-height").sort()).toEqual([
-      "1.25",
-      "1.35",
-      "1.55",
-    ]);
-    expect(familyFallbacks("--ds-table-control-radius").sort()).toEqual([
-      "var(--ds-radius-full, 9999px)",
-      "var(--ds-radius-md, 0.5rem)",
-    ]);
-    expect(familyFallbacks("--ds-table-shadow").sort()).toEqual([
-      "var(--ds-elevation-1)",
-      "var(--ds-workspace-card-shadow, var(--ds-elevation-1))",
-    ]);
   });
 });

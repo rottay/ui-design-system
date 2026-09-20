@@ -21,6 +21,8 @@ function mobileRoot(id: string, recipe: string): string {
     `<div class="${MOBILE}" data-part="mobile-bulk-actions"></div>`,
     `<div class="ds-data-table__mobile-card" data-part="mobile-card">`,
     `<div data-part="mobile-card-selection"></div>`,
+    `<div data-part="mobile-card-selection" data-probe="legacy"`,
+    ` style="border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))"></div>`,
     `<div data-part="mobile-card-title">Title</div>`,
     `<div data-part="mobile-card-summary-row"></div>`,
     `<div data-part="mobile-card-actions"></div>`,
@@ -37,6 +39,15 @@ const MARKUP = [
   mobileRoot("editorial", "editorial"),
   mobileRoot("ruled", "ruled"),
   `<div id="state" class="${MOBILE}" data-part="mobile-state-panel"></div>`,
+  /* The same panel painted by the chain the skin read BEFORE this lot. The
+     band name has no producer, so this twin computes what the skin computed
+     at HEAD and byte-equality becomes a measurement, not an argument. */
+  `<div id="stateLegacy" class="${MOBILE}" data-part="mobile-state-panel"`,
+  ` style="box-shadow: var(--ds-table-shadow, var(--ds-elevation-1))"></div>`,
+  /* And the window's first arm, exercised: an un-migrated consumer declaring
+     the band name on its own scope still wins over the produced channel. */
+  `<div id="stateWindow" class="${MOBILE}" data-part="mobile-state-panel"`,
+  ` style="--ds-table-shadow: 0px 1px 0px 0px rgb(1, 2, 3)"></div>`,
   `<div id="desktop" class="ds-pattern-data-table ds-engine-modern" data-part="root">`,
   `<span data-part="drag-grip"></span></div>`,
 ].join("");
@@ -80,12 +91,12 @@ const RESTING: Record<string, readonly [string, string, string]> = {
     "11.25px",
   ],
   selectionWidth: [
-    "#editorial [data-part='mobile-card-selection']",
+    "#editorial [data-part='mobile-card-selection']:not([data-probe])",
     "min-width",
     "33.75px",
   ],
   selectionHeight: [
-    "#editorial [data-part='mobile-card-selection']",
+    "#editorial [data-part='mobile-card-selection']:not([data-probe])",
     "min-height",
     "33.75px",
   ],
@@ -189,6 +200,32 @@ describe("chrome/data-table rewired channels", () => {
           selector: "#ruled .ds-data-table__mobile-card",
           property: "--ds-elevation-0",
         },
+        /* The residual lot's two mobile channels: the paint each one feeds,
+           the superseded chain beside it, and the channel itself read where
+           the deriver's declaration has to reach. */
+        { id: "stateShadow", selector: "#state", property: "box-shadow" },
+        { id: "stateShadowLegacy", selector: "#stateLegacy", property: "box-shadow" },
+        { id: "stateShadowWindow", selector: "#stateWindow", property: "box-shadow" },
+        {
+          id: "stateShadowChannel",
+          selector: "#state",
+          property: "--ds-data-table-mobile-state-shadow",
+        },
+        {
+          id: "selectionRadius",
+          selector: "#editorial [data-part='mobile-card-selection']:not([data-probe])",
+          property: "border-top-left-radius",
+        },
+        {
+          id: "selectionRadiusLegacy",
+          selector: "#editorial [data-part='mobile-card-selection'][data-probe='legacy']",
+          property: "border-top-left-radius",
+        },
+        {
+          id: "controlRadiusChannel",
+          selector: "#editorial",
+          property: "--ds-data-table-control-radius",
+        },
       ],
     });
   }, 240_000);
@@ -240,6 +277,38 @@ describe("chrome/data-table rewired channels", () => {
       expect(base![id], `base: ${id}`).toBe("15px");
       expect(bigType![id], `bigType: ${id}`).toBe("17.496px");
       expect(spacious![id], `spacious: ${id}`).toBe(base![id]);
+    }
+  });
+
+  it("paints the two mobile residuals exactly as the superseded chain did", () => {
+    /* Byte-equality for the drained control radius and for the windowed band,
+       each measured against a twin painted by the pre-lot chain. */
+    for (const arm of ["base", "airy", "spacious", "bigType"]) {
+      const reading = readings[arm]!;
+      expect(reading.stateShadow, `${arm}: state panel shadow`).toBe(
+        reading.stateShadowLegacy
+      );
+      expect(reading.selectionRadius, `${arm}: selection corner`).toBe(
+        reading.selectionRadiusLegacy
+      );
+    }
+    /* Real paint on both sides, not two selectors that matched nothing. */
+    const base = readings.base!;
+    expect(base.stateShadow).not.toBe("none");
+    expect(base.selectionRadius).toBe("8px");
+    expect(base.stateShadowChannel.trim()).not.toBe("");
+    expect(base.controlRadiusChannel.trim()).not.toBe("");
+  });
+
+  it("leaves the shadow band's first arm live for an un-migrated consumer", () => {
+    /* The window, exercised: `--ds-table-shadow` is still read first at both
+       DS sites, so a scope that declares it outranks the produced channel.
+       This is what a rename would have silently taken away from the app that
+       reads the band today. */
+    for (const arm of ["base", "airy", "spacious", "bigType"]) {
+      expect(readings[arm]!.stateShadowWindow, `${arm}: windowed panel`).toBe(
+        "rgb(1, 2, 3) 0px 1px 0px 0px"
+      );
     }
   });
 

@@ -30,11 +30,23 @@ const ENGINE = readFileSync(
  * product does not render.
  */
 function root(density?: "compact" | "spacious"): string {
+  const legacyLineHeight = density === "compact" ? "1.25" : density === "spacious" ? "1.55" : "1.35";
   return [
     `<div class="ds-pattern-data-table ds-engine-modern" data-part="root"`,
     density ? ` data-density="${density}"` : "",
     `><span data-part="drag-grip"></span>`,
-    `<span data-part="drop-indicator"></span></div>`,
+    `<span data-part="drop-indicator"></span>`,
+    `<span data-part="data-cell">M</span>`,
+    /* The same part, painted by the chain the skin read BEFORE this lot: the
+       old name has no producer anywhere, so this twin computes exactly what
+       the skin computed at HEAD. Byte-equality is then a measurement of the
+       two side by side rather than an argument about the fallback. */
+    `<span data-part="data-cell" data-probe="legacy"`,
+    ` style="line-height: var(--ds-table-cell-line-height, ${legacyLineHeight})">M</span>`,
+    `<span data-part="group-header-count-pill"></span>`,
+    `<span data-part="group-header-count-pill" data-probe="legacy"`,
+    ` style="border-radius: var(--ds-table-control-radius, var(--ds-radius-full, 9999px))"></span>`,
+    `</div>`,
   ].join("");
 }
 
@@ -48,6 +60,19 @@ const GRIP_CHANNEL = "--ds-data-table-drag-grip-size";
 const GRIP_COMPACT = `${GRIP_CHANNEL}-compact`;
 const GRIP_SPACIOUS = `${GRIP_CHANNEL}-spacious`;
 const RADIUS_CHANNEL = "--ds-data-table-drop-indicator-radius";
+const CONTROL_RADIUS = "--ds-data-table-control-radius";
+const PILL_RADIUS = "--ds-data-table-control-pill-radius";
+const LINE_HEIGHT = "--ds-data-table-cell-line-height";
+
+/** The three posture scopes, and the channel suffix each one's rule reads. */
+const POSTURES = [
+  ["rest", ""],
+  ["compact", "-compact"],
+  ["spacious", "-spacious"],
+] as const;
+
+const cell = (scope: string, legacy = false) =>
+  `#${scope} [data-part='data-cell']${legacy ? "[data-probe='legacy']" : ":not([data-probe])"}`;
 
 let readings: ProbeReadings;
 
@@ -86,6 +111,17 @@ describe("chrome/data-table channels at the theme root", () => {
         { id: "dropRadius", selector: "#rest [data-part='drop-indicator']", property: "border-top-left-radius" },
         { id: "dropRadiusCompact", selector: "#compact [data-part='drop-indicator']", property: "border-top-left-radius" },
         { id: "dropRadiusSpacious", selector: "#spacious [data-part='drop-indicator']", property: "border-top-left-radius" },
+        // The residual lot's channels, at the scope the deriver writes them,
+        // and the paint each one feeds beside the chain it replaced.
+        ...POSTURES.flatMap(([scope, suffix]) => [
+          { id: `lineChannel_${scope}`, selector: `#${scope}`, property: `${LINE_HEIGHT}${suffix}` },
+          { id: `line_${scope}`, selector: cell(scope), property: "line-height" },
+          { id: `lineLegacy_${scope}`, selector: cell(scope, true), property: "line-height" },
+        ]),
+        { id: "controlRadiusChannel", selector: "#rest", property: CONTROL_RADIUS },
+        { id: "pillRadiusChannel", selector: "#rest", property: PILL_RADIUS },
+        { id: "pill", selector: "#rest [data-part='group-header-count-pill']:not([data-probe])", property: "border-top-left-radius" },
+        { id: "pillLegacy", selector: "#rest [data-part='group-header-count-pill'][data-probe='legacy']", property: "border-top-left-radius" },
       ],
     });
   }, 240_000);
@@ -161,6 +197,57 @@ describe("chrome/data-table channels at the theme root", () => {
       expect(tall![posture], `tall: ${posture}`).not.toBe(base![posture]);
       expect(rounder![posture], `rounder: ${posture}`).toBe(base![posture]);
     }
+  });
+
+  it("resolves the residual lot's channels where the deriver writes them", () => {
+    /* Same trap as the two ladder channels above: a channel that resolved only
+       on the component root would leave every read site painting from its own
+       fallback, and the paint would look identical while the decision reached
+       nothing. Read above the root, where the theme scope has to carry it. */
+    for (const arm of ["base", "tall", "rounder"]) {
+      const reading = readings[arm]!;
+      for (const [scope] of POSTURES) {
+        expect(reading[`lineChannel_${scope}`]!.trim(), `${arm}: ${scope} rung`).not.toBe("");
+      }
+      expect(reading.controlRadiusChannel.trim(), `${arm}: control radius`).not.toBe("");
+      expect(reading.pillRadiusChannel.trim(), `${arm}: pill radius`).not.toBe("");
+    }
+    expect(readings.base!.lineChannel_rest!.trim()).toBe("1.35");
+    expect(readings.base!.lineChannel_compact!.trim()).toBe("1.25");
+    expect(readings.base!.lineChannel_spacious!.trim()).toBe("1.55");
+  });
+
+  it("paints the cell measure and the count pill exactly as the superseded chain did", () => {
+    /* The byte-equality arm, measured rather than argued: each legacy twin is
+       the same part painted by the pre-lot chain, whose name still has no
+       producer, so it computes what the skin computed at HEAD. */
+    for (const arm of ["base", "tall", "rounder"]) {
+      const reading = readings[arm]!;
+      for (const [scope] of POSTURES) {
+        expect(reading[`line_${scope}`], `${arm}: ${scope} line-height`).toBe(
+          reading[`lineLegacy_${scope}`]
+        );
+      }
+      expect(reading.pill, `${arm}: pill corner`).toBe(reading.pillLegacy);
+    }
+    /* And the twins are real paint, not two selectors that matched nothing:
+       the pill rests full-round where the box rung rests on the radius
+       scale's md step, which is the divergence that made this a split. */
+    const base = readings.base!;
+    expect(base.pill).toBe("9999px");
+    expect(base.dropRadius).toBe("8px");
+    for (const [scope] of POSTURES) {
+      expect(base[`line_${scope}`], `${scope}: measured`).toMatch(/^[\d.]+px$/);
+    }
+  });
+
+  it("splits the cell measure across the three density postures", () => {
+    /* The reason the channel is three channels: the postures really do paint
+       three measures, and a single theme-root rung would carry the resting one
+       to all three. */
+    const base = readings.base!;
+    const measures = POSTURES.map(([scope]) => base[`line_${scope}`]!);
+    expect(new Set(measures).size).toBe(POSTURES.length);
   });
 
   it("holds the drop indicator's corner across every posture", () => {

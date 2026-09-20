@@ -32,6 +32,26 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
  * needs no such split: `--ds-modern-table-control-radius` is declared once, on
  * the component root only, so the postures never move it and one channel
  * carries all three. `tests/index.test.ts` fails if that stops being true.
+ *
+ * The three names this family read under the `--ds-table-` spelling that no
+ * single value could produce are resolved one by one, by what the tree
+ * measures rather than by one rule:
+ *
+ * - `--ds-table-cell-line-height` was family-private -- three reads, all in
+ *   this family's Modern skin, one per `[data-density]` posture, and no
+ *   declaration or read anywhere else in the four repos. Drained to the
+ *   family's own posture split, byte-equal, no window.
+ * - `--ds-table-control-radius` was family-private too (ten reads across the
+ *   family's four skins and its stories, zero outside). The divergence was two
+ *   surfaces sharing one name: nine box controls on the radius scale's md rung
+ *   and the group-header count chip resting full-round. Split by surface and
+ *   drained, byte-equal, no window.
+ * - `--ds-table-shadow` is NOT family-private: `app-bithire`'s own
+ *   `.rt-data-table-card` reads it, with a third rest of its own. Renaming the
+ *   two DS read sites would silently stop a tenant override of that name from
+ *   reaching them, so both keep it as the FIRST arm and reach the produced
+ *   channel behind it -- `var(--ds-table-shadow, var(--ds-data-table-*-shadow,
+ *   rest))`. The window closes when that app read moves to the family name.
  */
 export const dataTableChromeDeriver: FamilyDeriver = {
   family: "data-table",
@@ -53,9 +73,15 @@ export const dataTableChromeDeriver: FamilyDeriver = {
     "--ds-data-table-action-gap",
     "--ds-data-table-action-shadow",
     "--ds-data-table-bulk-bar-padding",
+    "--ds-data-table-card-shadow",
     "--ds-data-table-caption-font-size",
+    "--ds-data-table-cell-line-height",
+    "--ds-data-table-cell-line-height-compact",
+    "--ds-data-table-cell-line-height-spacious",
     "--ds-data-table-collapsed-min-inline-size",
     "--ds-data-table-control-font-size",
+    "--ds-data-table-control-pill-radius",
+    "--ds-data-table-control-radius",
     "--ds-data-table-control-size",
     "--ds-data-table-control-size-compact",
     "--ds-data-table-control-size-spacious",
@@ -115,6 +141,7 @@ export const dataTableChromeDeriver: FamilyDeriver = {
     "--ds-data-table-mobile-state-min-height",
     "--ds-data-table-mobile-state-padding",
     "--ds-data-table-mobile-state-radius",
+    "--ds-data-table-mobile-state-shadow",
     "--ds-data-table-mobile-summary-divider",
     "--ds-data-table-mobile-summary-min-height",
     "--ds-data-table-mobile-summary-padding-block",
@@ -270,7 +297,8 @@ export function deriveDataTableChannels(): Record<string, string> {
     "calc(var(--ds-data-table-control-size-compact, calc(var(--ds-spacing-7, 1.75rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))) - 0.375rem)";
   vars["--ds-data-table-drag-grip-size-spacious"] =
     "calc(var(--ds-data-table-control-size-spacious, calc(var(--ds-spacing-9, 2.25rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))) - 0.375rem)";
-  vars["--ds-data-table-drop-indicator-radius"] = "var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))";
+  vars["--ds-data-table-drop-indicator-radius"] =
+    "var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem))";
   vars["--ds-data-table-editorial-mobile-title-size"] = "var(--ds-font-size-lg, 1rem)";
   vars["--ds-data-table-mobile-actions-padding-block"] =
     "calc(0.625rem * var(--ds-rhythm-effective-scale, 1))";
@@ -297,5 +325,22 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-resize-bar-width-active"] = "0.1875rem";
   vars["--ds-data-table-ruled-mobile-radius"] = "var(--ds-radius-md, 0.5rem)";
   vars["--ds-data-table-ruled-mobile-shadow"] = "var(--ds-elevation-0, none)";
+  /* The cell's reading measure, one rung per posture: the skin restates the
+     line-height under each [data-density] root, and a theme-root value
+     substitutes its var()s once, so the three rules need three channels. */
+  vars["--ds-data-table-cell-line-height"] = "1.35";
+  vars["--ds-data-table-cell-line-height-compact"] = "1.25";
+  vars["--ds-data-table-cell-line-height-spacious"] = "1.55";
+  /* Two surfaces, not one channel with two rests: every box control (the focus
+     rings, the mobile bars, the state tile, the list rows) sits on the radius
+     scale's md rung, and the group-header count chip rests full-round. */
+  vars["--ds-data-table-control-radius"] = "var(--ds-radius-md, 0.5rem)";
+  vars["--ds-data-table-control-pill-radius"] = "var(--ds-radius-full, 9999px)";
+  /* The table's own card and the mobile state panel, each at the elevation its
+     read site stated. Both read sites keep --ds-table-shadow as their first
+     arm while an app still reads that name (see the header note). */
+  vars["--ds-data-table-card-shadow"] =
+    "var(--ds-workspace-card-shadow, var(--ds-elevation-1))";
+  vars["--ds-data-table-mobile-state-shadow"] = "var(--ds-elevation-1)";
   return vars;
 }
