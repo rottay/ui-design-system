@@ -25,7 +25,6 @@
   /* ========================================================================
      NODE - Individual tree node
      ======================================================================== */
-  --ds-tree-node-padding: 4px 8px;
   --ds-tree-node-bg: transparent;
   --ds-tree-node-bg-hover: var(--ds-material-panel-background-hover);
   --ds-tree-node-bg-selected: var(--ds-material-panel-background-selected);
@@ -59,4 +58,10 @@
      CHECKBOX - Checkable mode spacing
      ======================================================================== */
   --ds-tree-checkbox-margin: 8px;
+}
+
+/* Classic-only, and declared on `.ant-tree` -- an ancestor-or-self of the one
+   rule that reads it -- so it cannot head the Modern skin's row chain. */
+.ant-tree {
+  --ds-tree-node-padding: 4px 8px;
 }

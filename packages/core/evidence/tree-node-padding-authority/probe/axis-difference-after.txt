@@ -1,0 +1,118 @@
+axis-difference — catalog d9e1541e203de194, 1 mountable famil(ies), 3 vertical(s) x 2 mode(s); bundle fresh; chromium 149.0.7827.55
+  denominators (effective): shape 1 (1 N/A), typography 1 (0 N/A), rhythm 1 (0 N/A), depth 1 (0 N/A), states 1 (0 N/A), motion 1 (0 N/A)
+  denominators (declared by check/theme/population): shape 217 (1 N/A), typography 181 (0 N/A), rhythm 224 (0 N/A), depth 199 (0 N/A), states 155 (0 N/A), motion 204 (0 N/A)
+    shape       217 declared − 0 unmountable − 6 unsettled = 1
+    typography  181 declared − 0 unmountable − 5 unsettled = 1
+    rhythm      224 declared − 0 unmountable − 6 unsettled = 1
+    depth       199 declared − 0 unmountable − 6 unsettled = 1
+    states      155 declared − 0 unmountable − 5 unsettled = 1
+    motion      204 declared − 0 unmountable − 6 unsettled = 1
+  excluded as unmountable (pinned, named): 0 famil(ies) — exactly the pin: not checked (--families run)
+  roots: 1 famil(ies) measured on the head compound their own skin requires — 0 of them a chain squashed onto one node
+  part mounts: ON, 1 famil(ies) / 11 part(s) / 33 node(s) grafted onto the roots already mounted
+    per axis (families/parts): shape 1/5, typography 1/1, rhythm 1/9, depth 1/2, states 1/2, motion 1/3
+    pinned UNMOUNTABLE and painting an axis on a descendant only (no root to graft onto, still excluded): 0 — none
+    selectors refused by the part law, by reason: part-variant-gated 15, part-pseudo 3
+  excluded as unsettled (declared, named): affix, card, cockpit-header, detail-header, input, layout-primitives, mobile-header — observed this run: none
+      bithire/light shape                  shape       1/1 = 100.0%
+      bithire/light typography             typography  1/1 = 100.0%
+      bithire/light rhythm                 rhythm      1/1 = 100.0%
+      bithire/light depth                  depth       0/1 = 0.0%
+      bithire/light states                 states      1/1 = 100.0%
+      bithire/light motion                 motion      1/1 = 100.0%
+      bithire/dark shape                  shape       1/1 = 100.0%
+      bithire/dark typography             typography  1/1 = 100.0%
+      bithire/dark rhythm                 rhythm      1/1 = 100.0%
+      bithire/dark depth                  depth       0/1 = 0.0%
+      bithire/dark states                 states      1/1 = 100.0%
+      bithire/dark motion                 motion      1/1 = 100.0%
+      evnto/light shape                  shape       1/1 = 100.0%
+      evnto/light typography             typography  1/1 = 100.0%
+      evnto/light rhythm                 rhythm      1/1 = 100.0%
+      evnto/light depth                  depth       0/1 = 0.0%
+      evnto/light states                 states      1/1 = 100.0%
+      evnto/light motion                 motion      1/1 = 100.0%
+      evnto/dark shape                  shape       1/1 = 100.0%
+      evnto/dark typography             typography  1/1 = 100.0%
+      evnto/dark rhythm                 rhythm      1/1 = 100.0%
+      evnto/dark depth                  depth       0/1 = 0.0%
+      evnto/dark states                 states      1/1 = 100.0%
+      evnto/dark motion                 motion      1/1 = 100.0%
+      rottay/light shape                  shape       1/1 = 100.0%
+      rottay/light typography             typography  1/1 = 100.0%
+      rottay/light rhythm                 rhythm      1/1 = 100.0%
+      rottay/light depth                  depth       0/1 = 0.0%
+      rottay/light states                 states      1/1 = 100.0%
+      rottay/light motion                 motion      1/1 = 100.0%
+      rottay/dark shape                  shape       1/1 = 100.0%
+      rottay/dark typography             typography  1/1 = 100.0%
+      rottay/dark rhythm                 rhythm      1/1 = 100.0%
+      rottay/dark depth                  depth       0/1 = 0.0%
+      rottay/dark states                 states      1/1 = 100.0%
+      rottay/dark motion                 motion      1/1 = 100.0%
+  NEG bithire/light palette-only           shape       0/1 = 0.0%
+  NEG bithire/light palette-only           typography  0/1 = 0.0%
+  NEG bithire/light palette-only           rhythm      0/1 = 0.0%
+  NEG bithire/light palette-only           depth       0/1 = 0.0%
+  NEG bithire/light palette-only           states      0/1 = 0.0%
+  NEG bithire/light palette-only           motion      0/1 = 0.0%
+  NEG bithire/light states-emphasis-only   shape       0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in bithire/light, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  NEG bithire/light states-emphasis-only   typography  0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in bithire/light, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  NEG bithire/dark palette-only           shape       0/1 = 0.0%
+  NEG bithire/dark palette-only           typography  0/1 = 0.0%
+  NEG bithire/dark palette-only           rhythm      0/1 = 0.0%
+  NEG bithire/dark palette-only           depth       0/1 = 0.0%
+  NEG bithire/dark palette-only           states      0/1 = 0.0%
+  NEG bithire/dark palette-only           motion      0/1 = 0.0%
+  NEG bithire/dark states-emphasis-only   shape       0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in bithire/dark, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  NEG bithire/dark states-emphasis-only   typography  0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in bithire/dark, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  NEG evnto/light palette-only           shape       0/1 = 0.0%
+  NEG evnto/light palette-only           typography  0/1 = 0.0%
+  NEG evnto/light palette-only           rhythm      0/1 = 0.0%
+  NEG evnto/light palette-only           depth       0/1 = 0.0%
+  NEG evnto/light palette-only           states      0/1 = 0.0%
+  NEG evnto/light palette-only           motion      0/1 = 0.0%
+  NEG evnto/light states-emphasis-only   shape       0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in evnto/light, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  NEG evnto/light states-emphasis-only   typography  0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in evnto/light, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  NEG evnto/dark palette-only           shape       0/1 = 0.0%
+  NEG evnto/dark palette-only           typography  0/1 = 0.0%
+  NEG evnto/dark palette-only           rhythm      0/1 = 0.0%
+  NEG evnto/dark palette-only           depth       0/1 = 0.0%
+  NEG evnto/dark palette-only           states      0/1 = 0.0%
+  NEG evnto/dark palette-only           motion      0/1 = 0.0%
+  NEG evnto/dark states-emphasis-only   shape       0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in evnto/dark, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  NEG evnto/dark states-emphasis-only   typography  0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in evnto/dark, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  NEG rottay/light palette-only           shape       0/1 = 0.0%
+  NEG rottay/light palette-only           typography  0/1 = 0.0%
+  NEG rottay/light palette-only           rhythm      0/1 = 0.0%
+  NEG rottay/light palette-only           depth       0/1 = 0.0%
+  NEG rottay/light palette-only           states      0/1 = 0.0%
+  NEG rottay/light palette-only           motion      0/1 = 0.0%
+  NEG rottay/light states-emphasis-only   shape       0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in rottay/light, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  NEG rottay/light states-emphasis-only   typography  0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in rottay/light, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  NEG rottay/dark palette-only           shape       0/1 = 0.0%
+  NEG rottay/dark palette-only           typography  0/1 = 0.0%
+  NEG rottay/dark palette-only           rhythm      0/1 = 0.0%
+  NEG rottay/dark palette-only           depth       0/1 = 0.0%
+  NEG rottay/dark palette-only           states      0/1 = 0.0%
+  NEG rottay/dark palette-only           motion      0/1 = 0.0%
+  NEG rottay/dark states-emphasis-only   shape       0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in rottay/dark, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  NEG rottay/dark states-emphasis-only   typography  0/1 = 0.0%  [NON-EVIDENTIAL: the states positive moved 1 famil(ies) in rottay/dark, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis]
+  witness palette-only (effective-map, differing/channels): bithire/light 42/42, bithire/dark 42/42, evnto/light 42/54, evnto/dark 42/54, rottay/light 42/54, rottay/dark 42/54
+  baseline-coincident arms (empty delta, NOT empty paint): bithire/light rhythm arm A (2/2 differing on the page), bithire/dark rhythm arm A (2/2 differing on the page)
+  states stamped: hovered, pressed, selected, focus-visible, disabled — disabled reaches 1/1 famil(ies) that gate disabled paint (rules by vocabulary: dataState 0, dataDisabled 2, nativePseudo 0, ariaDisabled 0)
+    gating disabled paint on :disabled or [aria-disabled] ALONE (unreached): 0 — none
+  states axis limit: 16 of the 28 states channels have no reader in any Modern skin
+  states axis limit: 7 states channels paint only background colour, which the six non-chromatic axes exclude
+  states axis limit: :hover and :focus-visible are not simulated, so 133 of the 156 states families declare the axis in a way this scene never enters
+  states axis limit: disabled is stamped as the two attributes a disabled component writes; a family that gates its disabled paint on :disabled or [aria-disabled] alone is still outside the scene (counted per run at limits.disabled)
+  publication of the pilot record (test-artifacts/gates/axis-difference-pilot): REFUSED — --no-write was passed — this CLI writes no artifact of its own
+  NEGATIVE CONTROL palette-only: 0 % on 36 evidential cell(s) of 36
+  NEGATIVE CONTROL states-emphasis-only: NON-EVIDENTIAL on all 12 cell(s) — e.g. bithire/light: the states positive moved 1 famil(ies) in bithire/light, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis
+    states-emphasis-only bithire/light: the states positive moved 1 famil(ies) in bithire/light, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis
+    states-emphasis-only bithire/dark: the states positive moved 1 famil(ies) in bithire/dark, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis
+    states-emphasis-only evnto/light: the states positive moved 1 famil(ies) in evnto/light, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis
+    states-emphasis-only evnto/dark: the states positive moved 1 famil(ies) in evnto/dark, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis
+    states-emphasis-only rottay/light: the states positive moved 1 famil(ies) in rottay/light, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis
+    states-emphasis-only rottay/dark: the states positive moved 1 famil(ies) in rottay/dark, but states.emphasis on its own moved 0 of 1 famil(ies) on the states axis there, so that movement is attributable to the other row of the positive pair and not to states.emphasis
+axis-difference OK — every evidential negative-control cell at 0 %; no threshold applied (the fleet bar is WO-EVI-02 acceptance, not this run)

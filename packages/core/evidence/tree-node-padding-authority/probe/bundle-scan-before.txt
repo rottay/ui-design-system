@@ -1,0 +1,57 @@
+
+== bithire  sha=1b6272db3f84 bytes=5433319
+  --ds-tree-node-padding
+    producers (1)
+      10797  :root {
+    readers (3)
+      20726  html[data-tenant] .ant-tree .ant-tree-treenode {   fallback=NONE
+      21417  [data-engine='modern'] .rottay-tree .rottay-tree-node {   fallback=NONE
+      69910  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] {   fallback=YES
+  --ds-tree-node-padding-block
+    producers (1)
+      123042  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
+    readers (1)
+      70275  .rottay-tree-node {   fallback=YES
+  --ds-tree-node-padding-inline
+    producers (1)
+      123043  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
+    readers (1)
+      70276  .rottay-tree-node {   fallback=YES
+
+== evnto  sha=5a03f69368dd bytes=5421910
+  --ds-tree-node-padding
+    producers (1)
+      10797  :root {
+    readers (3)
+      20726  html[data-tenant] .ant-tree .ant-tree-treenode {   fallback=NONE
+      21417  [data-engine='modern'] .rottay-tree .rottay-tree-node {   fallback=NONE
+      69910  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] {   fallback=YES
+  --ds-tree-node-padding-block
+    producers (1)
+      122881  :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])) {
+    readers (1)
+      70275  .rottay-tree-node {   fallback=YES
+  --ds-tree-node-padding-inline
+    producers (1)
+      122882  :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])) {
+    readers (1)
+      70276  .rottay-tree-node {   fallback=YES
+
+== rottay  sha=24067c2d5d92 bytes=5421168
+  --ds-tree-node-padding
+    producers (1)
+      10774  :root {
+    readers (3)
+      20703  html[data-tenant] .ant-tree .ant-tree-treenode {   fallback=NONE
+      21394  [data-engine='modern'] .rottay-tree .rottay-tree-node {   fallback=NONE
+      69887  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] {   fallback=YES
+  --ds-tree-node-padding-block
+    producers (1)
+      122858  :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay'])) {
+    readers (1)
+      70252  .rottay-tree-node {   fallback=YES
+  --ds-tree-node-padding-inline
+    producers (1)
+      122859  :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay'])) {
+    readers (1)
+      70253  .rottay-tree-node {   fallback=YES

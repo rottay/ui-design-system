@@ -1,0 +1,499 @@
+{
+  "provenance": {
+    "specifier": "@playwright/test",
+    "root": "/private/tmp/tree-pad-wt/packages/core/../showroom/package.json",
+    "resolved": "/Users/daniel/Developer/Rottay/ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
+    "browserVersion": "149.0.7827.55"
+  },
+  "density": null,
+  "bundles": {
+    "bithire": {
+      "sha256": "3b3fa0dfd7f6d1a5da527876cbebf8e57a8a496fe5d3159862e2fb19d2eff5e5",
+      "bytes": 5434621
+    },
+    "evnto": {
+      "sha256": "6bd51f53be45e3836bf928954b0e3e443e2a407b57f239d117380bddb7985954",
+      "bytes": 5423212
+    },
+    "rottay": {
+      "sha256": "f7235213c92a1a1d89a084d2f49c6449b1713d78ac6291e7f1713204068fba99",
+      "bytes": 5422470
+    }
+  },
+  "readings": [
+    {
+      "vertical": "bithire",
+      "theme": "light",
+      "sites": {
+        "modern-row": {
+          "paddingTop": "2.99625px",
+          "paddingRight": "5.9925px",
+          "paddingBottom": "2.99625px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "modern-node": {
+          "paddingTop": "2.99625px",
+          "paddingRight": "5.9925px",
+          "paddingBottom": "2.99625px",
+          "paddingLeft": "5.9925px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "compound-node": {
+          "paddingTop": "2.99625px",
+          "paddingRight": "5.9925px",
+          "paddingBottom": "2.99625px",
+          "paddingLeft": "5.9925px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "classic-treenode": {
+          "paddingTop": "4px",
+          "paddingRight": "8px",
+          "paddingBottom": "4px",
+          "paddingLeft": "8px",
+          "nodePadding": "4px 8px",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-orphan-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-iacvt-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-bare": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        }
+      },
+      "root": {
+        "--ds-tree-node-padding": "",
+        "--ds-tree-node-padding-block": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-tree-node-padding-inline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-1": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-2": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-density-effective-scale": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  )",
+        "--ds-density-mode-factor": "0.85"
+      },
+      "fontSize": "14.1px"
+    },
+    {
+      "vertical": "bithire",
+      "theme": "dark",
+      "sites": {
+        "modern-row": {
+          "paddingTop": "2.99625px",
+          "paddingRight": "5.9925px",
+          "paddingBottom": "2.99625px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "modern-node": {
+          "paddingTop": "2.99625px",
+          "paddingRight": "5.9925px",
+          "paddingBottom": "2.99625px",
+          "paddingLeft": "5.9925px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "compound-node": {
+          "paddingTop": "2.99625px",
+          "paddingRight": "5.9925px",
+          "paddingBottom": "2.99625px",
+          "paddingLeft": "5.9925px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "classic-treenode": {
+          "paddingTop": "4px",
+          "paddingRight": "8px",
+          "paddingBottom": "4px",
+          "paddingLeft": "8px",
+          "nodePadding": "4px 8px",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-orphan-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-iacvt-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-bare": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        }
+      },
+      "root": {
+        "--ds-tree-node-padding": "",
+        "--ds-tree-node-padding-block": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-tree-node-padding-inline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-1": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-2": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-density-effective-scale": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 0.85),\n    3\n  ) *\n      1\n    ),\n    3\n  )",
+        "--ds-density-mode-factor": "0.85"
+      },
+      "fontSize": "14.1px"
+    },
+    {
+      "vertical": "evnto",
+      "theme": "light",
+      "sites": {
+        "modern-row": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "modern-node": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "7.5px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "compound-node": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "7.5px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "classic-treenode": {
+          "paddingTop": "4px",
+          "paddingRight": "8px",
+          "paddingBottom": "4px",
+          "paddingLeft": "8px",
+          "nodePadding": "4px 8px",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-orphan-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-iacvt-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-bare": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        }
+      },
+      "root": {
+        "--ds-tree-node-padding": "",
+        "--ds-tree-node-padding-block": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-tree-node-padding-inline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-1": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-2": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-density-effective-scale": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  )",
+        "--ds-density-mode-factor": "1"
+      },
+      "fontSize": "15px"
+    },
+    {
+      "vertical": "evnto",
+      "theme": "dark",
+      "sites": {
+        "modern-row": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "modern-node": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "7.5px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "compound-node": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "7.5px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "classic-treenode": {
+          "paddingTop": "4px",
+          "paddingRight": "8px",
+          "paddingBottom": "4px",
+          "paddingLeft": "8px",
+          "nodePadding": "4px 8px",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-orphan-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-iacvt-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-bare": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        }
+      },
+      "root": {
+        "--ds-tree-node-padding": "",
+        "--ds-tree-node-padding-block": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-tree-node-padding-inline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-1": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-2": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-density-effective-scale": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  )",
+        "--ds-density-mode-factor": "1"
+      },
+      "fontSize": "15px"
+    },
+    {
+      "vertical": "rottay",
+      "theme": "light",
+      "sites": {
+        "modern-row": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "modern-node": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "7.5px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "compound-node": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "7.5px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "classic-treenode": {
+          "paddingTop": "4px",
+          "paddingRight": "8px",
+          "paddingBottom": "4px",
+          "paddingLeft": "8px",
+          "nodePadding": "4px 8px",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-orphan-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-iacvt-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-bare": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        }
+      },
+      "root": {
+        "--ds-tree-node-padding": "",
+        "--ds-tree-node-padding-block": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-tree-node-padding-inline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-1": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-2": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-density-effective-scale": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  )",
+        "--ds-density-mode-factor": "1"
+      },
+      "fontSize": "15px"
+    },
+    {
+      "vertical": "rottay",
+      "theme": "dark",
+      "sites": {
+        "modern-row": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "modern-node": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "7.5px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "compound-node": {
+          "paddingTop": "3.75px",
+          "paddingRight": "7.5px",
+          "paddingBottom": "3.75px",
+          "paddingLeft": "7.5px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "classic-treenode": {
+          "paddingTop": "4px",
+          "paddingRight": "8px",
+          "paddingBottom": "4px",
+          "paddingLeft": "8px",
+          "nodePadding": "4px 8px",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-orphan-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-iacvt-treenode": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        },
+        "control-bare": {
+          "paddingTop": "0px",
+          "paddingRight": "0px",
+          "paddingBottom": "0px",
+          "paddingLeft": "0px",
+          "nodePadding": "",
+          "nodePaddingBlock": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+          "nodePaddingInline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))"
+        }
+      },
+      "root": {
+        "--ds-tree-node-padding": "",
+        "--ds-tree-node-padding-block": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-tree-node-padding-inline": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-1": "calc(0.25rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-spacing-2": "calc(0.5rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  ))",
+        "--ds-density-effective-scale": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  )",
+        "--ds-density-mode-factor": "1"
+      },
+      "fontSize": "15px"
+    }
+  ]
+}

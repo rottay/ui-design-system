@@ -123,8 +123,9 @@
   background-color: var(--ds-tree-bg);
 }
 
+/* Rhythm drained: `skin/tree` paints `.rottay-tree-node` from the deriver's
+   channels, and this selector's specificity was outranking it in the layer. */
 [data-engine='modern'] .rottay-tree .rottay-tree-node {
-  padding: var(--ds-tree-node-padding);
   color: var(--ds-tree-node-color);
   transition: var(--ds-transition-fast);
 }

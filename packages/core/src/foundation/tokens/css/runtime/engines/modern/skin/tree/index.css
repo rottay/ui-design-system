@@ -60,13 +60,12 @@
  * than hover (ungated so touch gets the equivalent feedback), `grab` /
  * `grabbing` cursor semantics and a dragging-row emphasis channel keyed on
  * the engine's new `data-draggable`/`data-dragging` hooks.
- * (4) Density: the row padding fallback rides the
- * `--_ds-tree-row-padding-*` axes scaled by the governed
- * `--ds-density-effective-scale` authority; the per-level indent step scales
- * in the engine (logical offsets, connectors track the same step). The
- * legacy layered presentation bridge still declares `--ds-tree-node-padding`,
- * so the proto axes take effect where that bridge is absent or the channel
- * is cleared -- documented debt, not a parallel system.
+ * (4) Density: the row and the node compound both read the tree deriver's
+ * `--ds-tree-node-padding-block/-inline`, so node padding has one producer
+ * here; the `--_ds-tree-row-padding-*` proto axes scaled by
+ * `--ds-density-effective-scale` are the fallback when no tenant artifact is
+ * mounted. The per-level indent step scales in the engine (logical offsets,
+ * connectors track the same step).
  * (5) Forced colors: disabled rows re-map to GrayText (opacity is not a
  * sufficient signal in the forced palette).
  */
@@ -124,15 +123,16 @@
      row past its own node and the document with it. */
   max-inline-size: 100%;
   align-items: center;
-  /* B4-04: the fallback padding splits into the private proto axes so row
-     rhythm scales with the governed density authority. An explicit
-     --ds-tree-node-padding (the legacy layered bridge declares one) keeps
-     exact tenant intent and skips the scale. */
+  /* The deriver's channels, the same two the node compound below resolves;
+     the proto axes stay as the no-artifact fallback. */
   padding: var(
-    --ds-tree-node-padding,
-    calc(var(--_ds-tree-row-padding-block, 4px) * var(--ds-density-effective-scale))
+      --ds-tree-node-padding-block,
+      calc(var(--_ds-tree-row-padding-block, 4px) * var(--ds-density-effective-scale))
+    )
+    var(
+      --ds-tree-node-padding-inline,
       calc(var(--_ds-tree-row-padding-inline, 8px) * var(--ds-density-effective-scale))
-  );
+    );
   border-radius: var(--ds-tree-node-radius, var(--ds-radius-md));
   background: var(--ds-tree-node-bg);
   color: var(--ds-tree-node-color);
