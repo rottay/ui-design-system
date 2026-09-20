@@ -294,3 +294,12 @@ them from the states population with written reasons.
 
 **H3. G1 stays the gate for rhythm.** The rem/px mismatch (section G) blocks ~37
 families' rhythm adoption. No new information; it remains the owner's call.
+
+**H4. Status update on G1/H1 (measured 2026-09-20, no decision needed yet).** The
+re-measurement after the fleet wave says: G1 (rem/px) no longer blocks the rhythm
+THRESHOLD (only ~10 px-authored families stay ramp-gated; rhythm reaches ~87-94%
+without it) — G1 stays open as a product question, not a milestone blocker. H1 (depth
+flat-by-design exclusions) is likewise NOT needed to reach 80% (the 52-family
+flat-channel derivation pattern measures ~80-90% potential by itself). H2 (colour-only
+states) stands: states reaches ~81.6% with the wiring closers + the pseudo-10
+resolution, and the 23 no-paint/colour-only families are the residue.
