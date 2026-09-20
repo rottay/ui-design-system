@@ -40,7 +40,7 @@ const FALLBACK_SKELETON_AFTER_MS = 500;
  * `--ds-async-*` moves this hook's timing with it. Without this read the tokens
  * would be inert: a tenant could set them and nothing would change, leaving the
  * CSS law and the JS timing as two sources of truth that silently disagree.
- * Follows the same resolve-a-token-in-JS pattern as `useChartTheme`.
+ * Follows the same resolve-a-token-in-JS pattern as `resolveCssColor`.
  */
 function resolveDurationToken(name: string, fallback: number): number {
   if (typeof window === 'undefined' || typeof document === 'undefined') return fallback;

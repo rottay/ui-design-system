@@ -134,7 +134,7 @@
       },
       "patterns/visualization/charts/presentation/tooltip/index.tsx": {
         "floor": 2,
-        "why": "`TooltipValue`'s and `TooltipSeries`'s swatch `backgroundColor: color`/`backgroundColor: item.color` -- both a caller-supplied per-series/per-value color passed into the shared tooltip components every chart in the family mounts. The other 9 sites in this file (TOOLTIP_STYLE \u00d75, SWATCH_STYLE \u00d71, label colors \u00d73) are all static tokens."
+        "why": "`TooltipValue`'s and `TooltipSeries`'s swatch `backgroundColor: color`/`backgroundColor: item.color` -- both a caller-supplied per-series/per-value color passed into the shared tooltip components every chart in the family mounts. The other 9 sites in this file (TOOLTIP_STYLE ×5, SWATCH_STYLE ×1, label colors ×3) are all static tokens."
       },
       "patterns/visualization/charts/presentation/crosshair/index.ts": {
         "runtimeSvgFloor": 1,
@@ -178,7 +178,7 @@
     }
   },
   "SKIN-EXEMPT-NOT-PAINT": {
-    "$why": "Paint-shaped property names on objects that never reach a DOM style prop. Not A, not B: migrating them is a category error -- no CSS selector can hold a TypeScript mutation. The same law covers SVG attribute-name collisions: SMIL `fill=\"freeze\"` on `<animate>` is animation timing state, not a colour, yet the AST fill-attribute rule counts it.",
+    "$why": "Paint-shaped property names on objects that never reach a DOM style prop. Not A, not B: migrating them is a category error -- no CSS selector can hold a TypeScript mutation. The same law covers SVG attribute-name collisions: SMIL `fill=\"freeze\"` on `<animate>` is animation timing state, not a colour, yet the AST fill-attribute rule counts it. 2026-09-19: the color-theme row is withdrawn, not lowered -- useChartTheme/ChartFamilyFrame were retired (WO-FAM-09, owner R2); the file no longer exists.",
     "files": {
       "patterns/customization/brand-studio/index.tsx": {
         "floor": 8,
@@ -188,10 +188,6 @@
       "surfaces/presentation/pages/operations/kanban/index.tsx": {
         "floor": 1,
         "why": "`color: col.color` builds the KanbanColumnDef passed to PatternKanbanBoard; it is domain-data forwarding, not a DOM style object. No CSS selector can replace this TypeScript value without changing the public column contract."
-      },
-      "patterns/visualization/charts/runtime/theming/presentation/react/color-theme/index.ts": {
-        "floor": 4,
-        "why": "The four `background` keys build ChartTheme surface data returned by the hook. They never enter a React style object or DOM sink; treating them as CSS paint would be a category error."
       },
       "patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/index.ts": {
         "floor": 1,

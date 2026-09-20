@@ -29,11 +29,6 @@ export type {
   ChartRankedRowsSource,
   ChartRankedRowsViewProps,
 } from '../../components/patterns/visualization/charts/runtime/chart-engine/presentation/react/projection/ranked-rows';
-export { ChartFamilyFrame } from '../../components/patterns/visualization/charts/presentation/family-frame';
-export type {
-  ChartFamilyFrameProps,
-  ChartFamilyFrameStateProps,
-} from '../../components/patterns/visualization/charts/presentation/family-frame';
 export { ChartInsightSummary } from '../../components/patterns/visualization/charts/runtime/chart-engine/presentation/react/insight/summary';
 export { resolveChartProjection } from '../../components/patterns/visualization/charts/runtime/chart-engine/foundation/projection';
 export type {

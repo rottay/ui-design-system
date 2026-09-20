@@ -140,7 +140,6 @@ const GOVERNED_PUBLIC_SUPPORT = {
   // Chart-engine internals, shared by all 18 chart families rather than owned by
   // any one of them. The `chart` cohort is their owner; they are parts of the
   // rendering engine, not chart products a consumer picks from a catalog.
-  ChartFamilyFrame: { owner: 'chart/*', disposition: 'support', reason: 'shared chart frame' },
   ChartScaffold: { owner: 'chart/*', disposition: 'support', reason: 'shared chart scaffold' },
   ChartTooltip: { owner: 'chart/*', disposition: 'support', reason: 'shared chart tooltip' },
   TooltipValue: { owner: 'chart/*', disposition: 'support', reason: 'chart tooltip part' },

@@ -6,11 +6,8 @@ import {
   exportChart,
   useChartBrush,
   useChartExport,
-  useChartTheme,
   type ChartColorOwner,
   type ChartColorScheme,
-  type ChartTheme,
-  type ChartThemeOwner,
 } from '../../../../../index';
 
 function BrushHarness({
@@ -45,19 +42,15 @@ function BrushHarness({
 }
 
 describe('public chart api', () => {
-  it('exports the interaction, export, and provider-scoped theme contract from the package root', () => {
+  it('exports the interaction and export contract from the package root', () => {
     expect(useChartBrush).toBeTypeOf('function');
     expect(useChartExport).toBeTypeOf('function');
     expect(exportChart).toBeTypeOf('function');
-    expect(useChartTheme).toBeTypeOf('function');
 
-    expectTypeOf<ReturnType<typeof useChartTheme>>().toEqualTypeOf<ChartTheme>();
     expectTypeOf<HTMLElement>().toMatchTypeOf<ChartColorOwner>();
 
     const scheme: ChartColorScheme = 'accessible';
-    const owner: ChartThemeOwner = document.createElement('div');
     expect(scheme).toBe('accessible');
-    expect(owner).toBeInstanceOf(HTMLElement);
   });
 
   it('creates an inverted-domain brush selection and clears it through public interaction handlers', () => {

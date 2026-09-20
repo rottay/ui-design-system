@@ -127,7 +127,6 @@ const UNOWNED_REGISTER = Object.freeze({
   // create family rows by themselves" -- so the honest fix is to stop
   // exporting them publicly, not to invent nine chart rows.
   'chart-internals': [
-    'ChartFamilyFrame',
     'ChartFrame',
     'ChartImperativePlot',
     'ChartMetricTrendView',

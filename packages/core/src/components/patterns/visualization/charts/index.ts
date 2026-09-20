@@ -38,7 +38,6 @@ export {
   useChartDimensions,
   useChartPersonality,
   useChartCompact,
-  useChartTheme,
   useChartTooltip,
   useChartBrush,
   useChartViewport,
@@ -52,8 +51,6 @@ export type {
   UseChartCompactOptions,
   ResolvedChartCompact,
   ChartColorOwner,
-  ChartTheme,
-  ChartThemeOwner,
   UseChartTooltipReturn,
   BrushSelection,
   UseChartBrushOptions,
@@ -89,13 +86,6 @@ export type {
   ChartScaffoldProps,
   ChartScaffoldStateResolution,
 } from './presentation/scaffold';
-
-// Opt-in semantic-projection door for families
-export { ChartFamilyFrame } from './presentation/family-frame';
-export type {
-  ChartFamilyFrameProps,
-  ChartFamilyFrameStateProps,
-} from './presentation/family-frame';
 
 // Responsive chart experience kernel
 export { ChartFrame, resolveChartProjection } from './runtime/chart-engine';
