@@ -40,7 +40,9 @@ import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 
 import {
+  ALTERNATIVE_LIMIT,
   COMPILER_MODULE,
+  allProperties,
   INERT_PAIRS,
   SCENARIOS,
   STATES_AXIS_LIMITS,
@@ -60,8 +62,19 @@ import {
   effectiveMapDifference,
   resolvedDifference,
   inertReason,
+  axisByProperty,
+  compoundKey,
   denominatorLine,
   evaluatePilot,
+  expandAlternatives,
+  familyAxisParts,
+  familyParts,
+  measureCell,
+  partMountReport,
+  partTreeHtml,
+  projectPartChain,
+  selectorList,
+  unmountablePartCandidates,
   partInvariantFailures,
   pairScenarios,
   pilotReadings,
@@ -73,8 +86,8 @@ import {
   stripColour,
   witnessReading,
 } from '../index.mjs';
-import { AXIS_IDS, AXES, axisControls, groupControls } from '../../population/index.mjs';
-import { resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
+import { AXIS_IDS, AXES, axisControls, axisPopulations, groupControls } from '../../population/index.mjs';
+import { launchBrowser, resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -1052,6 +1065,298 @@ describe('axis-difference — a family can be measured on its own anatomy', () =
     const after = { base: {}, states: { pressed: { probe: { transform: 'matrix(0.96, 0, 0, 0.96, 0, 0)' } } } };
     assert.equal(differsOnAxis('states', before, after, 'probe'), 'transform');
   });
+});
+
+
+/**
+ * THE PART MOUNTS, which exist because the instrument was blind.
+ *
+ * The probe read one bare element per family, so a skin that paints its radius
+ * on `[data-part='bubble']` declared that paint in a rule no scene ever
+ * mounted and the family read as a NON-MOVER. These cases pin the repair from
+ * both ends: the projection law (what may be grafted onto the root, and every
+ * reason a selector is refused), and -- in a real browser -- the three readings
+ * that tell the repair apart from a number that merely went up.
+ */
+const DRILL_ROOT_CSS = ".ds-drill.ds-drill--modern[data-part='root'] { padding: 4px; }";
+/* Two levels deep on purpose: a chain merged onto one node -- the cheap
+ * collapse -- stops matching, and the browser arms below say so. */
+const DRILL_LIVE_PART = ".ds-drill.ds-drill--modern[data-part='root'] > [data-part='content'] > [data-part='bubble'] "
+  + '{ border-radius: var(--ds-radius-md); }';
+const DRILL_DEAD_PART = ".ds-drill.ds-drill--modern[data-part='root'] > [data-part='content'] > [data-part='bubble'] "
+  + '{ border-radius: 6px; }';
+const DRILL_ELEMENT = Object.freeze({
+  classes: ['ds-drill', 'ds-drill--modern'],
+  attributes: { 'data-part': 'root' },
+});
+
+describe('axis-difference — the mount is the element the family PAINTS the axis on', () => {
+  it('splits a selector list on its top-level commas only, so :is(a, b) survives as one selector', () => {
+    assert.deepEqual(selectorList(".ds-x:is([data-part='a'], [data-part='b']) .ds-y, .ds-z"), [
+      ".ds-x:is([data-part='a'], [data-part='b']) .ds-y",
+      '.ds-z',
+    ]);
+  });
+
+  it('expands :is() into the selectors it stands for, and bounds the expansion', () => {
+    assert.deepEqual(expandAlternatives(".ds-x :is([data-part='a'], [data-part='b'])"), [
+      ".ds-x [data-part='a']",
+      ".ds-x [data-part='b']",
+    ]);
+    const wide = `.ds-x :is(${[...Array(20).keys()].map((n) => `[data-part='p${n}']`).join(', ')})`;
+    assert.equal(expandAlternatives(wide).length, ALTERNATIVE_LIMIT);
+  });
+
+  it('grafts a descendant part onto the family root and keeps the chain, because a descendant needs an ANCESTOR', () => {
+    const projection = projectPartChain(
+      ".ds-drill.ds-drill--modern[data-part='root'] > [data-part='content'] > [data-part='title']",
+      DRILL_ELEMENT,
+    );
+    assert.deepEqual(projection.chain.map(compoundKey), ['div||data-part=content', 'div||data-part=title']);
+  });
+
+  it('refuses every selector the part law refuses, each with its own reason', () => {
+    const refusals = {
+      'root-level': '.ds-drill.ds-drill--modern',
+      'sibling-combinator': ".ds-drill.ds-drill--modern[data-part='root'] ~ [data-part='x']",
+      'pseudo-element': ".ds-drill.ds-drill--modern[data-part='root'] [data-part='x']::after",
+      'head-pseudo': ".ds-drill.ds-drill--modern:hover [data-part='x']",
+      'head-not-the-family-root': ".ds-other[data-part='root'] [data-part='x']",
+      'head-variant-gated': ".ds-drill.ds-drill--modern[data-variant='ghost'] [data-part='x']",
+      'part-pseudo': ".ds-drill.ds-drill--modern[data-part='root'] [data-part='x']:focus-visible",
+      'part-universal': ".ds-drill.ds-drill--modern[data-part='root'] *",
+      'part-variant-gated': ".ds-drill.ds-drill--modern[data-part='root'] [data-part='x'][data-tone='danger']",
+      'part-substring-operator': ".ds-drill.ds-drill--modern[data-part='root'] [data-part^='x']",
+    };
+    for (const [reason, selector] of Object.entries(refusals)) {
+      assert.equal(projectPartChain(selector, DRILL_ELEMENT).rejected, reason, selector);
+    }
+  });
+
+  it('strips the kernel state stamp rather than baking it into the part', () => {
+    const projection = projectPartChain(
+      ".ds-drill.ds-drill--modern[data-part='root'] [data-part='x'][data-state~='pressed']",
+      DRILL_ELEMENT,
+    );
+    assert.deepEqual(projection.chain[0].attributes, { 'data-part': 'x' });
+    assert.ok(!partTreeHtml([{ chain: projection.chain, axes: ['states'] }]).includes('data-state'));
+  });
+
+  it('a part is read for the axes its OWN declaring rule wrote, and for no others', () => {
+    const css = `${DRILL_ROOT_CSS}\n.ds-drill.ds-drill--modern[data-part='root'] > [data-part='pad'] { gap: 8px; }`;
+    const { parts } = familyParts(css, DRILL_ELEMENT, ['shape', 'rhythm']);
+    assert.deepEqual(parts.map((part) => part.axes), [['rhythm']]);
+    assert.match(partTreeHtml(parts), /data-part="pad" data-axis-part="rhythm"/u);
+  });
+
+  it('shares every ancestor two parts share, and marks only the node a rule TARGETS', () => {
+    const css = `.ds-drill.ds-drill--modern[data-part='root'] > [data-part='body'] > [data-part='title'] { font-size: 1rem; }
+      .ds-drill.ds-drill--modern[data-part='root'] > [data-part='body'] > [data-part='lede'] { font-size: 2rem; }`;
+    const html = partTreeHtml(familyParts(css, DRILL_ELEMENT, ['typography']).parts);
+    assert.equal(html.match(/data-part="body"/gu).length, 1, html);
+    assert.ok(!/data-part="body" data-axis-part/u.test(html), html);
+    assert.match(html, /data-part="title" data-axis-part="typography"/u);
+  });
+
+  it('mounts a void element as a leaf and never as scaffolding', () => {
+    const html = partTreeHtml(familyParts(
+      ".ds-drill.ds-drill--modern[data-part='root'] img[data-part='thumb'] { border-radius: 4px; }",
+      DRILL_ELEMENT,
+      ['shape'],
+    ).parts);
+    assert.match(html, /<img data-part="thumb" data-axis-part="shape">/u);
+    assert.ok(!html.includes('</img>'));
+    assert.equal(
+      projectPartChain(".ds-drill.ds-drill--modern[data-part='root'] img [data-part='x']", DRILL_ELEMENT).rejected,
+      'part-under-void-element',
+    );
+  });
+
+  it('keeps the family root in the scene and nests the parts inside it, so the reading is a SUPERSET of the old one', () => {
+    const elements = new Map([['drill', DRILL_ELEMENT]]);
+    const parts = new Map([['drill', familyParts(`${DRILL_ROOT_CSS}\n${DRILL_LIVE_PART}`, DRILL_ELEMENT, ['shape'])]]);
+    const before = sceneHtml({ css: '', vertical: 'bithire', theme: 'light', elements });
+    const after = sceneHtml({ css: '', vertical: 'bithire', theme: 'light', elements, partMounts: parts });
+    assert.match(before, /<div data-axis-family="drill" class="ds-drill ds-drill--modern" data-part="root"><\/div>/u);
+    assert.match(
+      after,
+      /<div data-axis-family="drill" class="ds-drill ds-drill--modern" data-part="root"><div data-part="content"><div data-part="bubble" data-axis-part="shape"><\/div><\/div><\/div>/u,
+    );
+  });
+
+  it('every computed property this probe reads belongs to exactly one axis, which is what makes the scoping possible', () => {
+    const owner = axisByProperty();
+    for (const axis of AXIS_IDS) {
+      for (const property of AXES[axis].computed) assert.equal(owner[property], axis, property);
+    }
+  });
+});
+
+describe('axis-difference — the part mounts honour the pins they were told to honour', () => {
+  const report = partMountReport(familyAxisParts(ROOT));
+
+  it('grafts parts onto a real corpus rather than a handful of families', () => {
+    assert.ok(report.families > 100, `only ${report.families} families gained a part mount`);
+    assert.ok(report.parts > report.families, `${report.parts} parts over ${report.families} families`);
+  });
+
+  it('gives NO part to a family pinned as unmountable, so the denominator is the one the pre-lot run published', () => {
+    const wrong = UNMOUNTABLE_FAMILIES.filter((family) => report.map[family] !== undefined);
+    assert.deepEqual(wrong, [], `part-mounted despite being pinned unmountable: ${wrong.join(', ')}`);
+  });
+
+  it('never gives a family a part on an axis it is not in the population of, so a reviewed N/A stays withdrawn', () => {
+    const populations = axisPopulations(ROOT);
+    const wrong = [];
+    for (const [family, byAxis] of Object.entries(report.map)) {
+      for (const axis of Object.keys(byAxis)) {
+        if (!populations.get(axis).includes(family)) wrong.push(`${family}/${axis}`);
+      }
+    }
+    assert.deepEqual(wrong, [], `part-mounted outside the population: ${wrong.join(', ')}`);
+  });
+
+  it('names the families the unmountable pin now costs, instead of letting them disappear', () => {
+    const candidates = unmountablePartCandidates(ROOT);
+    assert.ok(candidates.length > 0, 'no unmountable family paints an axis on a descendant — check the walk');
+    assert.deepEqual(candidates.filter((family) => !UNMOUNTABLE_FAMILIES.includes(family)), []);
+    assert.deepEqual(
+      partMountReport(familyAxisParts(ROOT), { unmountableCandidates: candidates }).pinnedUnmountableWithPartPaint,
+      candidates,
+    );
+  });
+
+  it('publishes the refusals, because they are the BOUNDARY of the lot and not noise', () => {
+    assert.ok(report.refused['head-variant-gated'] > 0, JSON.stringify(report.refused));
+    assert.ok(report.refused['part-pseudo'] > 0, JSON.stringify(report.refused));
+  });
+});
+
+/**
+ * THE RED ARM, and it is the case this lot exists to make reachable.
+ *
+ * Proving the numbers went up proves nothing: a mount that reported a
+ * difference because it mounted MORE nodes would do exactly that. What has to
+ * be true of a repaired instrument is the opposite reading -- a part that is
+ * mounted, read, and STOPS consuming the dial must come back as a non-mover
+ * and fail the axis. So the same family is driven three ways through one real
+ * browser, over one page, with the same two arms:
+ *
+ *   BLIND  the part is not mounted           -> no difference (the defect)
+ *   SEEING the part is mounted and dial-fed  -> the difference, on the part
+ *   RED    the part is mounted and literal   -> no difference, and the axis fails
+ *
+ * BLIND and RED read the same 0 and mean opposite things, which is the whole
+ * reason the mount map is published with the run.
+ */
+describe('axis-difference BROWSER drill — a mounted part that STOPS differing is caught', { skip: browserReason }, () => {
+  const ARM_A = { '--ds-radius-md': '4px', '--ds-state-press-scale': '0.9' };
+  const ARM_B = { '--ds-radius-md': '16px', '--ds-state-press-scale': '0.7' };
+  const axisOf = axisByProperty();
+
+  /** Both arms of one scene, measured the way `run` measures a cell. */
+  const measure = async (page, css, partMounts, axis = 'shape') => {
+    const properties = axis === 'states' ? allProperties() : AXES[axis].computed;
+    await page.setContent(
+      sceneHtml({ css, vertical: 'bithire', theme: 'light', elements: new Map([['drill', DRILL_ELEMENT]]), partMounts }),
+      { waitUntil: 'load' },
+    );
+    const before = await measureCell({ page, variables: ARM_A, properties, axisOf });
+    const after = await measureCell({ page, variables: ARM_B, properties, axisOf });
+    return differsOnAxis(axis, before, after, 'drill');
+  };
+
+  it('reads the difference on the part, reads nothing without the mount, and reads nothing again when the part goes literal', async () => {
+    const live = `${DRILL_ROOT_CSS}\n${DRILL_LIVE_PART}`;
+    const dead = `${DRILL_ROOT_CSS}\n${DRILL_DEAD_PART}`;
+    const mounted = (css) => new Map([['drill', familyParts(css, DRILL_ELEMENT, ['shape'])]]);
+    const { browser, close } = await launchBrowser();
+    let blind;
+    let seeing;
+    let red;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      blind = await measure(page, live, null);
+      seeing = await measure(page, live, mounted(live));
+      red = await measure(page, dead, mounted(dead));
+      await page.close();
+    } finally {
+      await close();
+    }
+    // The defect this lot repairs, planted: the paint is live and the
+    // instrument cannot see it because it never mounted the element.
+    assert.equal(blind, null, 'the unmounted part must be invisible — otherwise this drill proves nothing');
+    assert.equal(seeing, 'border-top-left-radius', 'the mounted part must carry the dial to the page');
+    // THE RED ARM. The part is still mounted and still read; it stopped
+    // consuming the dial, and that must read as a non-mover.
+    assert.equal(red, null, 'a mounted part that stopped consuming the dial must NOT keep reporting a difference');
+  }, 120_000);
+
+  it('reads a part for its OWN axes only, so a rhythm part cannot lend the shape axis a node it never asked for', async () => {
+    // `pad` is a RHYTHM part -- the rule that mounts it writes `gap`. A second,
+    // root-level rule paints its radius from the shape dial, so the node's
+    // border-radius genuinely differs between the arms. The shape axis must
+    // still read nothing: it did not ask for this element.
+    const css = `${DRILL_ROOT_CSS}
+      .ds-drill.ds-drill--modern[data-part='root'] > [data-part='pad'] { gap: 8px; }
+      [data-part='pad'] { border-radius: var(--ds-radius-md); }`;
+    const partMounts = new Map([['drill', familyParts(css, DRILL_ELEMENT, ['shape', 'rhythm'])]]);
+    assert.deepEqual(partMounts.get('drill').parts.map((part) => part.axes), [['rhythm']]);
+    const { browser, close } = await launchBrowser();
+    let shape;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      shape = await measure(page, css, partMounts, 'shape');
+      await page.close();
+    } finally {
+      await close();
+    }
+    assert.equal(shape, null, 'the shape axis read a part that declares only rhythm');
+  }, 120_000);
+
+  it('stamps the mounted parts with the probed state, so a state-gated part is reachable at all', async () => {
+    const css = `${DRILL_ROOT_CSS}
+      .ds-drill.ds-drill--modern[data-part='root'] > [data-part='knob'] { opacity: 1; }
+      .ds-drill.ds-drill--modern[data-part='root'] > [data-part='knob'][data-state~='pressed']
+        { transform: scale(var(--ds-state-press-scale)); }`;
+    const partMounts = new Map([['drill', familyParts(css, DRILL_ELEMENT, ['states'])]]);
+    const { browser, close } = await launchBrowser();
+    let states;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      states = await measure(page, css, partMounts, 'states');
+      await page.close();
+    } finally {
+      await close();
+    }
+    assert.equal(states, 'transform', 'a part the scene never stamped can never move on the states axis');
+  }, 120_000);
+
+  it('the axis FAILS when its only mounted part goes literal, so the loss is a verdict and not a quieter number', async () => {
+    const dead = `${DRILL_ROOT_CSS}\n${DRILL_DEAD_PART}`;
+    const live = `${DRILL_ROOT_CSS}\n${DRILL_LIVE_PART}`;
+    const mounted = (css) => new Map([['drill', familyParts(css, DRILL_ELEMENT, ['shape'])]]);
+    const { browser, close } = await launchBrowser();
+    let moved;
+    let lost;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      moved = await measure(page, live, mounted(live));
+      lost = await measure(page, dead, mounted(dead));
+      await page.close();
+    } finally {
+      await close();
+    }
+    const axisCell = (property) => cell({
+      axis: 'shape', scenario: 'shape', denominator: 1,
+      moved: property === null ? 0 : 1, percent: property === null ? 0 : 100,
+      movedFamilies: property === null ? [] : [{ family: 'drill', property }],
+      movedIds: property === null ? [] : ['drill'],
+    });
+    assert.deepEqual(evaluate(result([axisCell(moved)]), { threshold: 80 }).filter((line) => line.startsWith('shape:')), []);
+    const failures = evaluate(result([axisCell(lost)]), { threshold: 80 });
+    assert.ok(failures.some((line) => line.startsWith('shape: 0.0 % < 80 %')), failures.join(' | '));
+  }, 120_000);
 });
 
 describe('axis-difference BROWSER drill — a document does not differ from itself', { skip: browserReason }, () => {

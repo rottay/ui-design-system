@@ -45,6 +45,19 @@
  * DIFFERENT effective maps. A non-empty map is not a witness; neither is a
  * positive that moved in another cell.
  *
+ * WHAT THE SCENE MOUNTS, because the percentage means nothing without it. Each
+ * family is mounted as the most-decorated single-element selector its Modern
+ * skin publishes, AND -- since the EVI-02 instrument lot -- as the descendant
+ * parts that skin paints each axis on, grafted onto that same element. The
+ * probe used to mount the bare element alone, so a family whose radius lives on
+ * `activity-log`'s `[data-part='item-body']` and whose elevation lives on
+ * `popover`'s `[data-part='surface']` read as a NON-MOVER on an axis its parts
+ * genuinely resolve differently for two tenants. That was the instrument failing to reach the paint, not the
+ * fleet failing to be reachable. The law for what may be grafted, and every
+ * reason a selector is refused, is at `familyAxisParts` below; the map is
+ * published with every run and `--no-part-mounts` reproduces the older,
+ * narrower reading on the same tree.
+ *
  * THE DENOMINATOR IS NOT THIS FILE'S. It comes from `check/theme/population`,
  * read at a recorded catalog revision and published with every run, because
  * "a percentage whose denominator moved between runs is not comparable"
@@ -63,6 +76,7 @@
  *   node scripts/check/theme/axis-difference/index.mjs --vertical=evnto one vertical
  *   node scripts/check/theme/axis-difference/index.mjs --threshold=80   fail below 80 % per axis
  *   node scripts/check/theme/axis-difference/index.mjs --families=button,card
+ *   node scripts/check/theme/axis-difference/index.mjs --no-part-mounts   the pre-lot reading
  */
 
 import { readFileSync } from 'node:fs';
@@ -84,6 +98,7 @@ import {
   axisNotApplicable,
   axisPopulations,
   catalogRevision,
+  cssRules,
   groupControls,
   skinFamilies,
   stripCssComments,
@@ -270,6 +285,401 @@ export function familyElements(root = CORE_ROOT, only = null) {
 }
 
 /**
+ * THE PART MOUNTS: the element a family actually PAINTS the axis on.
+ *
+ * WHAT WAS BROKEN, measured rather than asserted. `familyElement` above mounts
+ * exactly ONE node per family -- the most-decorated selector `isSingleElement`
+ * admits -- so every OTHER rule that skin writes paints on a node the scene
+ * never built, whatever the shape of that rule's selector.
+ *
+ * And `isSingleElement` admits more than its name reads. It STRIPS every
+ * `[...]` from the selector FIRST, then refuses `>`, `~`, `+`, whitespace that
+ * SURVIVED the strip, `:` and `*`. A descendant chain whose compounds after the
+ * head are attribute-only is therefore erased down to its head and passes as
+ * "single", and `familyElement` collapses the whole chain onto one node
+ * carrying the union of its classes and the LAST compound's attribute values.
+ * Measured on today's tree: 113 of the 255 mounted roots are such collapses.
+ * Only a chain that keeps a class or a tag after its head is actually refused.
+ *
+ * Either way the paint is unreached: a skin that paints its radius on
+ * `activity-log`'s `[data-part='item-body']`, its elevation on `popover`'s
+ * `[data-part='surface']` or its transition on `checkbox`'s `[data-part='box']`
+ * declared that paint in a rule the scene never mounted, and the family read as
+ * a NON-MOVER on an axis whose channels its parts genuinely resolve differently
+ * for two tenants. That is the instrument failing to reach the paint, not the
+ * fleet failing to be reachable, and the two are indistinguishable in the
+ * published percentage until the mount is repaired. The fleet-axis analysis of
+ * 2026-09-17 counted 73 unique families in that condition across four axes
+ * (shape, rhythm, depth, motion).
+ *
+ * WHAT A PART MOUNT IS, and the law is deliberately narrow:
+ *
+ *  1. The chain's HEAD must be the family's OWN root element -- the node the
+ *     scene already mounts. Its classes must be a subset of the root's and
+ *     every attribute it names must be one the root already carries. A head
+ *     that adds `[data-variant='outlined']` is a PROP gate, not a part gate:
+ *     mounting it would measure a configuration the default render does not
+ *     produce, which is making a number move rather than measuring what the
+ *     family paints. Those are counted, named and left to the wiring lots.
+ *  2. Every following compound is a DESCENDANT PART: classes, an optional tag
+ *     and `data-part` only. Another attribute on a part is again a variant gate
+ *     and is refused for the same reason.
+ *  3. `data-state` (and any `*-state`) is STRIPPED rather than baked in, so a
+ *     state-gated part is mounted at REST and reached by the same
+ *     `[data-state]` stamp every other node of the scene is reached by. A
+ *     fabricated resting state would measure the fabrication.
+ *  4. Pseudo-classes, pseudo-elements, sibling combinators and `*` are refused
+ *     outright -- exactly as `isSingleElement` refuses them for the root. This
+ *     probe does not simulate `:hover`, and a mount that dropped `:hover` from
+ *     a selector would read a hover rule as resting paint.
+ *
+ * TWO LIMITS THIS LOT DOES NOT LIFT, named rather than left inside the refusal
+ * counts. First, a collapsed root carries its LAST compound's attribute values,
+ * so a genuinely root-headed part rule can be refused by law 1 as
+ * `head-variant-gated` against attributes the family's real root never carried;
+ * the published `head-variant-gated` count therefore overstates the prop-gated
+ * cluster the wiring lots own. Repairing the root is the NEXT instrument lot --
+ * doing it here would change the pre-lot element and break the one-tree A/B
+ * these numbers are read from. Second, a family whose part rules are headed by
+ * a root class of their OWN is out of reach of law 1: `tooltip`'s bubble is
+ * headed by `.ds-tooltip-bubble`, not by a compound under the mounted
+ * `.ds-tooltip.ds-tooltip--modern[data-part='root']`, so all 10 of its part
+ * rules are refused as `head-not-the-family-root` and tooltip gains no parts.
+ *
+ * The chain is then GRAFTED onto the family's existing root node, one nested
+ * element per compound, so the scene holds the anatomy the skin describes
+ * instead of a merged single node. Merging the chain onto one element -- the
+ * cheaper move -- does not work and is not a detail: a descendant combinator
+ * needs an ANCESTOR, and `.ds-tabs [data-part='tab-button']` does not match a
+ * node carrying both tokens.
+ *
+ * THE READING IS PER AXIS, which is what keeps this a repair and not a
+ * widening. A mounted part is stamped with the axes whose OWN authored
+ * vocabulary its declaring rule wrote, and each property is read over the root
+ * plus the parts of that property's axis alone. So a part that declares only
+ * `gap` cannot lend the shape axis a node it never asked for. The root element
+ * is in every axis's target set, so the reading is a strict SUPERSET of the
+ * pre-lot one: nothing that moved before can stop moving, and the two runs are
+ * comparable family by family.
+ *
+ * THE PINS ARE UNTOUCHED. A family with no mountable root gains no parts and
+ * stays in `UNMOUNTABLE_FAMILIES`; a reviewed N/A stays withdrawn from its
+ * axis. Every denominator this run publishes is the denominator the pre-lot
+ * run published, so the before/after is a change in the NUMERATOR only.
+ */
+
+/** The states axis's part vocabulary: it declares no authored list, so its own computed longhands are it, plus the shorthand a skin writes them with. */
+export const PART_STATE_AUTHORED = Object.freeze([
+  'transform', 'opacity', 'outline', 'outline-width', 'outline-offset', 'outline-style',
+]);
+
+/** The authored properties whose declaration makes a rule a part source for `axis`. */
+const partAuthored = (axis) => (AXES[axis].authored.length > 0 ? AXES[axis].authored : PART_STATE_AUTHORED);
+
+/** property -> the axis that owns it. The six vocabularies are disjoint, so one owner each. */
+export function axisByProperty() {
+  const owner = {};
+  for (const axis of AXIS_IDS) {
+    for (const property of AXES[axis].computed) owner[property] ??= axis;
+  }
+  return owner;
+}
+
+/** A selector list split on its TOP-LEVEL commas, so `:is(a, b)` survives as one selector. */
+export function selectorList(selector) {
+  const parts = [];
+  let depth = 0;
+  let current = '';
+  for (const character of selector) {
+    if (character === '(') depth += 1;
+    else if (character === ')') depth -= 1;
+    if (character === ',' && depth === 0) {
+      parts.push(current);
+      current = '';
+      continue;
+    }
+    current += character;
+  }
+  parts.push(current);
+  return parts.map((part) => part.trim()).filter((part) => part.length > 0);
+}
+
+/** How many alternatives one `:is()`/`:where()` selector may expand to before the rest are dropped. */
+export const ALTERNATIVE_LIMIT = 12;
+
+/**
+ * `:is(a, b) c` read as the selectors it stands for.
+ *
+ * Unwrapping it to `a, b c` -- the naive replace -- is not the same selector
+ * and produced fragments like `:focus-visible)` when the list was split on
+ * every comma. Expanding is the reading that stays true to the rule, and it is
+ * bounded because a nested list multiplies.
+ */
+export function expandAlternatives(selector, limit = ALTERNATIVE_LIMIT) {
+  let list = [selector.trim()];
+  for (let round = 0; round < 3; round += 1) {
+    const next = [];
+    let changed = false;
+    for (const entry of list) {
+      const match = /:(?:is|where)\(([^()]*)\)/u.exec(entry);
+      if (match === null) {
+        next.push(entry);
+        continue;
+      }
+      changed = true;
+      for (const alternative of selectorList(match[1])) {
+        next.push(`${entry.slice(0, match.index)}${alternative}${entry.slice(match.index + match[0].length)}`);
+      }
+    }
+    list = next.slice(0, limit);
+    if (!changed) break;
+  }
+  return list.map((entry) => entry.replace(/\s+/gu, ' ').trim());
+}
+
+const PART_CLASS_TOKEN = /\.([A-Za-z][\w-]*)/gu;
+const PART_ATTRIBUTE_TOKEN = /\[([\w-]+)(?:\s*([~^|$*]?=)\s*['"]?([^\]'"]*)['"]?)?\]/gu;
+const PART_TAG = /^([a-z][a-z0-9]*)/u;
+/** The kernel's state stamp, which the scene supplies rather than the selector. */
+const STATE_ATTRIBUTE = /(^|-)state$/u;
+/** Elements with no content model: mounted as leaves, never as scaffolding. */
+const VOID_TAGS = Object.freeze(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
+
+/**
+ * One compound selector as a node this scene can build, or the reason it is not
+ * one. The reason is returned rather than `null` so a run can publish WHY a
+ * part was refused instead of a reader having to guess.
+ */
+export function partCompound(text) {
+  const withoutAttributes = text.replace(/\[[^\]]*\]/gu, '');
+  if (/:/u.test(withoutAttributes)) return { rejected: 'pseudo' };
+  if (withoutAttributes.includes('*')) return { rejected: 'universal' };
+  const classes = [...text.matchAll(PART_CLASS_TOKEN)].map((match) => match[1]);
+  const attributes = {};
+  for (const match of text.matchAll(PART_ATTRIBUTE_TOKEN)) {
+    if (STATE_ATTRIBUTE.test(match[1])) continue;
+    // `^=`, `*=` and friends match a set of values; a node built from one of
+    // them would be a guess at which member the component stamps.
+    if (match[2] !== undefined && match[2] !== '=' && match[2] !== '~=') return { rejected: 'substring-operator' };
+    attributes[match[1]] = match[3] ?? '';
+  }
+  const tag = PART_TAG.exec(text.trim());
+  return { tag: tag === null ? null : tag[1], classes, attributes };
+}
+
+/** The key two compounds share exactly when they build the same node. */
+export const compoundKey = (compound) =>
+  `${compound.tag ?? 'div'}|${[...compound.classes].sort().join('.')}`
+  + `|${Object.entries(compound.attributes).sort().map(([name, value]) => `${name}=${value}`).join(';')}`;
+
+/**
+ * A skin selector read as a chain of parts hanging off the family's own root,
+ * or the reason it is not one.
+ */
+export function projectPartChain(selector, rootElement) {
+  if (/[~+]/u.test(selector.replace(/\[[^\]]*\]/gu, ''))) return { rejected: 'sibling-combinator' };
+  if (selector.includes('::')) return { rejected: 'pseudo-element' };
+  const pieces = selector.split(/\s*>\s*|\s+/u).filter((piece) => piece.length > 0);
+  if (pieces.length < 2) return { rejected: 'root-level' };
+  const head = partCompound(pieces[0]);
+  if (head.rejected !== undefined) return { rejected: `head-${head.rejected}` };
+  if (!head.classes.every((name) => rootElement.classes.includes(name))) return { rejected: 'head-not-the-family-root' };
+  if (!Object.entries(head.attributes).every(([name, value]) => rootElement.attributes[name] === value)) {
+    return { rejected: 'head-variant-gated' };
+  }
+  const chain = [];
+  for (const piece of pieces.slice(1)) {
+    const compound = partCompound(piece);
+    if (compound.rejected !== undefined) return { rejected: `part-${compound.rejected}` };
+    if (Object.keys(compound.attributes).some((name) => name !== 'data-part')) return { rejected: 'part-variant-gated' };
+    if (compound.tag === null && compound.classes.length === 0 && Object.keys(compound.attributes).length === 0) {
+      return { rejected: 'part-empty' };
+    }
+    if (chain.some((entry) => VOID_TAGS.includes(entry.tag))) return { rejected: 'part-under-void-element' };
+    chain.push(compound);
+  }
+  return { chain, selector };
+}
+
+/**
+ * One family's parts, read off the rules of ONE stylesheet.
+ *
+ * `axes` is the set the family is in the population of: a part may only be
+ * mounted for an axis the family already DECLARES, so a reviewed N/A exclusion
+ * cannot be re-entered through the scene. `rejected` counts (axis, selector)
+ * refusals, so a selector refused for four axes is counted four times -- the
+ * unit is the reading that was refused, not the string.
+ */
+export function familyParts(css, rootElement, axes) {
+  const rules = cssRules(css);
+  const parts = new Map();
+  const rejected = {};
+  for (const axis of axes) {
+    const authored = new Set(partAuthored(axis));
+    for (const rule of rules) {
+      if (!rule.declarations.some((declaration) => authored.has(declaration.property))) continue;
+      for (const listed of selectorList(rule.selector)) {
+        for (const selector of expandAlternatives(listed)) {
+          const projection = projectPartChain(selector, rootElement);
+          if (projection.rejected !== undefined) {
+            if (projection.rejected !== 'root-level') {
+              rejected[projection.rejected] = (rejected[projection.rejected] ?? 0) + 1;
+            }
+            continue;
+          }
+          const id = projection.chain.map(compoundKey).join(' > ');
+          if (!parts.has(id)) parts.set(id, { id, selector, chain: projection.chain, axes: new Set() });
+          parts.get(id).axes.add(axis);
+        }
+      }
+    }
+  }
+  return {
+    parts: [...parts.values()].map((part) => ({ ...part, axes: [...part.axes].sort() })),
+    rejected,
+  };
+}
+
+/**
+ * family -> the parts its own Modern skin paints each axis on, plus the
+ * selectors refused and why.
+ *
+ * Read from the SAME source and the SAME authored vocabulary
+ * `check/theme/population` reads the denominator from, so the family that is
+ * in shape's population because a rule writes `border-radius` is measured on
+ * the element THAT rule paints. One vocabulary, one source, both halves.
+ *
+ * A family whose skin publishes no mountable root element gets NO parts: the
+ * graft has nothing to hang on, and inventing a root for it would move a
+ * denominator this lot is not entitled to move.
+ */
+export function familyAxisParts(root = CORE_ROOT, only = null, elements = null) {
+  const resolved = elements ?? familyElements(root, only);
+  const populations = axisPopulations(root);
+  const byFamily = new Map();
+  for (const [family, files] of skinFamilies(root)) {
+    if (only && !only.includes(family)) continue;
+    const rootElement = resolved.get(family);
+    if (!rootElement) continue;
+    const declared = AXIS_IDS.filter((axis) => populations.get(axis).includes(family));
+    const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
+    const record = familyParts(css, rootElement, declared);
+    if (record.parts.length === 0 && Object.keys(record.rejected).length === 0) continue;
+    byFamily.set(family, record);
+  }
+  return byFamily;
+}
+
+/**
+ * The mount map as a run publishes it: per axis, how many families gained a
+ * part and how many parts in total; per family, the parts and the axes each
+ * one is read for; and the selectors this law refused, by reason.
+ *
+ * The refusals are published because they are the BOUNDARY of this lot, not
+ * noise. `head-variant-gated` and `part-variant-gated` are the prop-gated
+ * cluster the wiring lots own -- mounting them here would measure a
+ * configuration the default render does not produce -- and `part-pseudo` is the
+ * `:hover` half of the states rule this probe already names as unmeasured.
+ */
+export function partMountReport(byFamily, { applied = true, unmountableCandidates = [] } = {}) {
+  const perAxis = Object.fromEntries(AXIS_IDS.map((axis) => [axis, { families: 0, parts: 0 }]));
+  const refused = {};
+  const map = {};
+  let nodes = 0;
+  for (const [family, record] of byFamily) {
+    for (const [reason, count] of Object.entries(record.rejected)) {
+      refused[reason] = (refused[reason] ?? 0) + count;
+    }
+    if (record.parts.length === 0) continue;
+    const byAxis = {};
+    for (const part of record.parts) {
+      for (const axis of part.axes) (byAxis[axis] ??= []).push(part.selector);
+    }
+    for (const [axis, selectors] of Object.entries(byAxis)) {
+      perAxis[axis].families += 1;
+      perAxis[axis].parts += selectors.length;
+    }
+    nodes += record.parts.reduce((total, part) => total + part.chain.length, 0);
+    map[family] = byAxis;
+  }
+  return {
+    applied,
+    families: Object.keys(map).length,
+    parts: [...byFamily.values()].reduce((total, record) => total + record.parts.length, 0),
+    maxChainNodes: nodes,
+    perAxis,
+    refused,
+    // What the unmountable pin costs, now that parts are mounted: these
+    // families paint an axis on a descendant ONLY, and stay out of every
+    // denominator because they publish no root to graft it onto.
+    pinnedUnmountableWithPartPaint: unmountableCandidates,
+    map,
+  };
+}
+
+/**
+ * The families a pin now costs something, named rather than left implicit.
+ *
+ * A family with no mountable root gains no parts, by law -- the graft has
+ * nothing to hang on. These are the ones that WOULD have gained one: their
+ * skin paints an axis on a descendant and nothing else. They stay out of every
+ * denominator, exactly as `UNMOUNTABLE_FAMILIES` pins them, and this count is
+ * what a later lot would be buying by giving them a root.
+ */
+export function unmountablePartCandidates(root = CORE_ROOT, unmountable = UNMOUNTABLE_FAMILIES) {
+  const populations = axisPopulations(root);
+  const candidates = [];
+  for (const [family, files] of skinFamilies(root)) {
+    if (!unmountable.includes(family)) continue;
+    const declared = AXIS_IDS.filter((axis) => populations.get(axis).includes(family));
+    if (declared.length === 0) continue;
+    const rules = cssRules(files.map((file) => readFileSync(file, 'utf8')).join('\n'));
+    const paints = rules.some((rule) => {
+      if (!declared.some((axis) => {
+        const authored = new Set(partAuthored(axis));
+        return rule.declarations.some((declaration) => authored.has(declaration.property));
+      })) return false;
+      return selectorList(rule.selector)
+        .some((selector) => selector.split(/\s*>\s*|\s+/u).filter((piece) => piece.length > 0).length > 1);
+    });
+    if (paints) candidates.push(family);
+  }
+  return candidates.sort();
+}
+
+const escapeAttribute = (value) => String(value).replace(/&/gu, '&amp;').replace(/"/gu, '&quot;').replace(/</gu, '&lt;');
+
+/**
+ * The parts of one family as nested markup, sharing every ancestor they share.
+ *
+ * Only the node a rule actually TARGETS carries `data-axis-part`; the
+ * compounds above it are scaffolding the selector requires and are not read.
+ */
+export function partTreeHtml(parts) {
+  const root = { children: new Map() };
+  for (const part of parts) {
+    let node = root;
+    part.chain.forEach((compound, index) => {
+      const key = compoundKey(compound);
+      if (!node.children.has(key)) node.children.set(key, { compound, children: new Map(), axes: new Set() });
+      node = node.children.get(key);
+      if (index === part.chain.length - 1) for (const axis of part.axes) node.axes.add(axis);
+    });
+  }
+  const render = (node) => [...node.children.values()].map((child) => {
+    const tag = child.compound.tag ?? 'div';
+    const classes = child.compound.classes.length > 0 ? ` class="${escapeAttribute(child.compound.classes.join(' '))}"` : '';
+    const attributes = Object.entries(child.compound.attributes)
+      .map(([name, value]) => ` ${name}="${escapeAttribute(value)}"`)
+      .join('');
+    const axes = child.axes.size > 0 ? ` data-axis-part="${[...child.axes].sort().join(' ')}"` : '';
+    const open = `<${tag}${classes}${attributes}${axes}>`;
+    return VOID_TAGS.includes(tag) ? open : `${open}${render(child)}</${tag}>`;
+  }).join('');
+  return render(root);
+}
+
+/**
  * Pairs whose two arms reach the page as the SAME PAINT in the CELL being
  * measured: every channel either arm compiles resolves -- against the
  * vertical's own baseline, for a name the arm does not carry -- to the value
@@ -376,8 +786,12 @@ export function effectiveVariables(artifact, theme) {
  * A family with a MOUNT is measured on its own server-rendered anatomy instead
  * of the one element read off its skin: a skin that paints a part below the
  * root (a checkbox box, a segmented option) is invisible to a single element.
+ *
+ * A family with PART MOUNTS keeps that single element and gains, nested inside
+ * it, the descendant parts its own skin paints the axes on -- so the same node
+ * the pre-lot run read is still read, and the parts are read BESIDE it.
  */
-export function sceneHtml({ css, vertical, theme, elements, mounts = null }) {
+export function sceneHtml({ css, vertical, theme, elements, mounts = null, partMounts = null }) {
   const attributes = rootAttributesToHtml(rootAttributes({ vertical, theme }));
   const nodes = [...elements]
     .filter(([family, element]) => element !== null || mounts?.[family] !== undefined)
@@ -389,7 +803,8 @@ export function sceneHtml({ css, vertical, theme, elements, mounts = null }) {
       const extra = Object.entries(element.attributes)
         .map(([name, value]) => ` ${name}="${value}"`)
         .join('');
-      return `<div data-axis-family="${family}" class="${classAttribute}"${extra}></div>`;
+      const parts = partMounts?.get?.(family)?.parts ?? partMounts?.[family]?.parts ?? [];
+      return `<div data-axis-family="${family}" class="${classAttribute}"${extra}>${partTreeHtml(parts)}</div>`;
     })
     .join('\n');
   return `<!doctype html><html ${attributes}><head><style>${css}</style></head>`
@@ -509,7 +924,7 @@ export function allProperties() {
   return [...new Set(AXIS_IDS.flatMap((axis) => AXES[axis].computed))];
 }
 
-const readComputed = (properties) => {
+const readComputed = ({ properties, axisOf }) => {
   // FORCE A STYLE FLUSH BEFORE READING. Not defensive padding: writing custom
   // properties on the document element and calling getComputedStyle in the next
   // CDP round trip returns the STALE value on a document this size. Measured
@@ -529,15 +944,34 @@ const readComputed = (properties) => {
     }
   }
   const out = {};
+  const styles = new Map();
+  const styleOf = (element) => {
+    let style = styles.get(element);
+    if (style === undefined) {
+      style = getComputedStyle(element);
+      styles.set(element, style);
+    }
+    return style;
+  };
   for (const node of document.querySelectorAll('[data-axis-family]')) {
     const family = node.getAttribute('data-axis-family');
     // A mounted family reads every element of its anatomy, in document order,
     // so a move on any part is a move of the family.
-    const targets = node.hasAttribute('data-axis-mount') ? [...node.querySelectorAll('*')] : [node];
-    const styles = targets.map((target) => getComputedStyle(target));
+    const mounted = node.hasAttribute('data-axis-mount');
+    const anatomy = mounted ? [...node.querySelectorAll('*')] : null;
+    // A PART is read for the axes whose own authored vocabulary its declaring
+    // rule wrote, and for no others: a part that declares only `gap` must not
+    // lend the shape axis a node that axis never asked for. The family's root
+    // element is in every axis's set, so this reading contains the one taken
+    // before the parts existed.
+    const parts = mounted ? [] : [...node.querySelectorAll('[data-axis-part]')];
     const values = {};
     for (const property of properties) {
-      values[property] = styles.map((style) => style.getPropertyValue(property)).join(' | ');
+      const axis = axisOf[property];
+      const targets = mounted
+        ? anatomy
+        : [node, ...parts.filter((part) => part.getAttribute('data-axis-part').split(' ').includes(axis))];
+      values[property] = targets.map((target) => styleOf(target).getPropertyValue(property)).join(' | ');
     }
     out[family] = values;
   }
@@ -603,8 +1037,14 @@ export const readArmChannels = (page, names) => page.evaluate(readRootChannels, 
 const stampState = (state) => {
   for (const node of document.querySelectorAll('[data-axis-family]')) {
     if (!node.hasAttribute('data-axis-mount')) {
-      if (state === null) node.removeAttribute('data-state');
-      else node.setAttribute('data-state', state);
+      // The root AND its mounted parts. A part is mounted at rest with its
+      // `data-state` stripped precisely so the scene, not the selector,
+      // supplies the state -- and a part nobody stamped could never move on an
+      // axis whose rules are state-gated.
+      for (const target of [node, ...node.querySelectorAll('[data-axis-part]')]) {
+        if (state === null) target.removeAttribute('data-state');
+        else target.setAttribute('data-state', state);
+      }
       continue;
     }
     // Real anatomy already carries its resting state tokens, and the skins
@@ -744,13 +1184,14 @@ export const UNMOUNTABLE_FAMILIES = Object.freeze([
  * denominator, and published with the run. An exclusion nobody can see is how a
  * denominator gets shrunk to reach a threshold.
  */
-export async function readSettled(page, properties) {
-  let previous = await page.evaluate(readComputed, properties);
+export async function readSettled(page, plan) {
+  const { properties } = plan;
+  let previous = await page.evaluate(readComputed, plan);
   let unsettled = new Set(Object.keys(previous));
   let current = previous;
   for (let attempt = 0; attempt < SETTLE_ATTEMPTS && unsettled.size > 0; attempt += 1) {
     await page.evaluate(invalidateStyles);
-    current = await page.evaluate(readComputed, properties);
+    current = await page.evaluate(readComputed, plan);
     const stillMoving = new Set();
     for (const family of unsettled) {
       for (const property of properties) {
@@ -767,11 +1208,11 @@ export async function readSettled(page, properties) {
 }
 
 /** One document's readings: the resting paint plus one per stamped state. */
-export async function measureCell({ page, variables, properties }) {
+export async function measureCell({ page, variables, properties, axisOf = axisByProperty() }) {
   const applied = await page.evaluate(applyVariables, variables);
   const unsettled = new Set();
   const collect = async () => {
-    const reading = await readSettled(page, properties);
+    const reading = await readSettled(page, { properties, axisOf });
     for (const family of reading.unsettled) unsettled.add(family);
     return reading.values;
   };
@@ -1153,6 +1594,11 @@ export async function run({
   /* [{ family, part, selector, properties }]: parts below a mount whose computed
    * values are published per arm, for invariants the verdict does not read. */
   parts = null,
+  /* The per-axis part mounts, derived from the same skins the denominator is.
+   * `false` reproduces the pre-lot reading -- the family's root element alone --
+   * which is how the before/after of this instrument repair is measured on one
+   * tree rather than compared across two. */
+  partMounts = true,
   /* The same export of the same compiler, handed in by a runner that reads the
    * source tree instead of `dist/`; absent, the published door is imported. */
   compile: compileOverride = null,
@@ -1179,6 +1625,11 @@ export async function run({
   const populations = axisPopulations(root);
   const notApplicable = axisNotApplicable(root);
   const properties = allProperties();
+  const axisOf = axisByProperty();
+  // The pins are read first and honoured: a family with no mountable root
+  // gains no parts, so `UNMOUNTABLE_FAMILIES` and every denominator below it
+  // are exactly the ones the pre-lot run published.
+  const mountedParts = partMounts === false ? new Map() : familyAxisParts(root, families, elements);
   const effective = (axis) => populations
     .get(axis)
     .filter((family) => mountable.includes(family) && !UNSETTLED_FAMILIES.includes(family));
@@ -1218,9 +1669,10 @@ export async function run({
       }))].sort();
       for (const theme of themes) {
         const page = await context.newPage();
-        await page.setContent(sceneHtml({ css: bundle.css, vertical, theme, elements, mounts }), {
-          waitUntil: 'load',
-        });
+        await page.setContent(
+          sceneHtml({ css: bundle.css, vertical, theme, elements, mounts, partMounts: mountedParts }),
+          { waitUntil: 'load' },
+        );
         // Before the first arm, so it is the bundle's own paint and not an
         // arm's leftovers: the value every channel an arm does not carry
         // resolves to in this cell.
@@ -1253,13 +1705,13 @@ export async function run({
           const pairChannels = [...new Set([...Object.keys(variablesA), ...Object.keys(variablesB)])].sort();
           let paintDifference;
           try {
-            before = await measureCell({ page, variables: variablesA, properties });
+            before = await measureCell({ page, variables: variablesA, properties, axisOf });
             partsA = parts ? await page.evaluate(readParts, parts) : null;
             // Arm A is still on the root here, and arm B there: each read is
             // that arm's own computed value for every channel of the pair, so
             // an alias is compared as what it paints and not as its string.
             const paintA = await readArmChannels(page, pairChannels);
-            after = await measureCell({ page, variables: variablesB, properties });
+            after = await measureCell({ page, variables: variablesB, properties, axisOf });
             partsB = parts ? await page.evaluate(readParts, parts) : null;
             const paintB = await readArmChannels(page, pairChannels);
             paintDifference = resolvedDifference(variablesA, variablesB, baselineRoot, {
@@ -1390,6 +1842,13 @@ export async function run({
       observedUnsettled: [...observedUnsettled].sort(),
       newlyUnsettled: [...newlyUnsettled].sort(),
     },
+    // WHICH ELEMENT EACH FAMILY WAS MEASURED ON, per axis, published so the
+    // numerator this run reports can be read against the element it was read
+    // from. A mount map nobody can see is a numerator nobody can audit.
+    partMounts: partMountReport(mountedParts, {
+      applied: partMounts !== false,
+      unmountableCandidates: families === null ? unmountablePartCandidates(root, unmountable) : [],
+    }),
     populations: Object.fromEntries(AXIS_IDS.map((axis) => [axis, effective(axis).length])),
     // The families a reviewed exclusion withdrew from each axis, counted beside
     // every denominator so no line of this run can be read without them.
@@ -1718,6 +2177,10 @@ if (isMain) {
     verticals: argument('vertical')?.split(',') ?? ['bithire', 'evnto', 'rottay'],
     themes: argument('theme')?.split(',') ?? ['light', 'dark'],
     families: argument('families')?.split(',') ?? null,
+    // The pre-lot reading, on demand: the family's root element alone. It is
+    // how the before/after of the mount repair is measured on ONE tree, at one
+    // catalog revision, with one browser.
+    partMounts: !process.argv.includes('--no-part-mounts'),
   });
   if (process.argv.includes('--json')) console.log(JSON.stringify(result, null, 2));
 
@@ -1737,6 +2200,24 @@ if (isMain) {
   console.log(
     `  excluded as unmountable (pinned, named): ${result.families.unmountable.length} famil(ies)`
     + ` — exactly the pin: ${result.familiesFiltered ? 'not checked (--families run)' : 'yes'}`,
+  );
+  console.log(
+    `  part mounts: ${result.partMounts.applied ? 'ON' : 'OFF (root element only — the pre-lot reading)'}`
+    + `, ${result.partMounts.families} famil(ies) / ${result.partMounts.parts} part(s) / `
+    + `${result.partMounts.maxChainNodes} node(s) grafted onto the roots already mounted`,
+  );
+  console.log(
+    `    per axis (families/parts): ${Object.entries(result.partMounts.perAxis)
+      .map(([axis, row]) => `${axis} ${row.families}/${row.parts}`).join(', ')}`,
+  );
+  console.log(
+    `    pinned UNMOUNTABLE and painting an axis on a descendant only (no root to graft onto, still excluded): `
+    + `${result.partMounts.pinnedUnmountableWithPartPaint.length} — `
+    + `${result.partMounts.pinnedUnmountableWithPartPaint.join(', ') || 'none'}`,
+  );
+  console.log(
+    `    selectors refused by the part law, by reason: ${Object.entries(result.partMounts.refused)
+      .sort((left, right) => right[1] - left[1]).map(([reason, count]) => `${reason} ${count}`).join(', ') || 'none'}`,
   );
   console.log(
     `  excluded as unsettled (declared, named): ${result.families.excludedUnsettled.join(', ')}`
