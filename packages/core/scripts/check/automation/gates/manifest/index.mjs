@@ -225,8 +225,9 @@ export const CI_GATES = Object.freeze([
   { id: 'chart-family-registry-closure-drill', run: ['node', '--test', 'scripts/check/charts/family-registry-closure/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['chart-family-registry-closure'], },
   { id: 'chart-family-registry-closure', run: ['node', 'scripts/check/charts/family-registry-closure/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'chart-family-registry-closure-drill', },
   // scheme-scope-causality stays OUT of the manifest. Lot 1 (the Q1 de-alias)
-  // closed both paint classes, but 20 of 55 rows are still red because five
-  // families never plumb `colorScheme` to their root; the lot that plumbs them
+  // closed both paint classes, but 12 of 55 rows are still red because three
+  // families never plumb `colorScheme` to their root (network-graph, sankey,
+  // scatter — computed by the gate's own census); the lot that plumbs them
   // registers this gate blocking.
 
   // --- source-owned artifact freshness: this manifest runs before Build ---

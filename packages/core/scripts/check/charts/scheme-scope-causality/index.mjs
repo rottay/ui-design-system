@@ -14,14 +14,22 @@
  * and reported as ungoverned. That was an instrument blindness, never a tree
  * defect, and the bridge keeps its own failure modes.
  *
- * What remains is ONE class and a different defect: 20 of 55 rows are
- * `scope-ignores-request`. Five families -- funnel-chart, gantt-chart,
- * network-graph, sankey and scatter -- never carry `colorScheme` to the root,
- * so they stamp `default` for all five requests and four of every five
- * requests paint the wrong table. That is prop plumbing in those five
- * families, not palette governance, and it is not this lot's write set. The
- * instrument therefore stays NON-BLOCKING with a named owner rather than a
- * deferral; the lot that plumbs those five flips it to blocking and green.
+ * What remains is ONE class and a different defect: 12 of 55 rows are
+ * `scope-ignores-request`. Three families -- network-graph, sankey and
+ * scatter -- never carry `colorScheme` to the root, so they stamp `default`
+ * for all five requests and four of every five requests paint the wrong
+ * table. That is prop plumbing in those three families, not palette
+ * governance, and it is not this lot's write set. The instrument therefore
+ * stays NON-BLOCKING with a named owner rather than a deferral; the lot that
+ * plumbs the last three flips it to blocking and green.
+ *
+ * The residue was five families at the Q1 de-alias; `6feb6a315` gave
+ * funnel-chart and gantt-chart the governed `colorScheme` input, which closed
+ * eight of the twenty rows. The pin below follows that down. It pins the
+ * divergent family SET, not only a count, because a count alone let this
+ * registration go stale while the tree got better, and because a regression
+ * in a family that agrees today would otherwise hide behind a repair
+ * elsewhere.
  * ===========================================================================
  *
  * The law, in one line: for every categorical family and every scheme,
@@ -70,6 +78,20 @@ export function classify(row) {
   if (row.governedPaint === null) return DIVERGENCES.PAINT_UNGOVERNED;
   if (row.governedPaint !== row.expectedPaint) return DIVERGENCES.PAINT_WRONG_TABLE;
   return null;
+}
+
+/**
+ * The families carrying `scope-ignores-request`, sorted. This is the open
+ * defect's own roster, read from the census rather than written in prose, so
+ * the banner cannot outlive the tree it describes.
+ */
+export function unplumbedFamilies(report) {
+  const families = new Set(
+    report.divergences
+      .filter((divergence) => divergence.kind === DIVERGENCES.SCOPE)
+      .map((divergence) => divergence.family),
+  );
+  return Object.freeze([...families].sort());
 }
 
 export function adjudicate(census) {
@@ -133,7 +155,13 @@ function main() {
     return;
   }
 
-  console.log('chart-scheme-scope-causality  [NON-BLOCKING: 5 families do not plumb colorScheme]');
+  const unplumbed = unplumbedFamilies(report);
+  console.log(
+    'chart-scheme-scope-causality  '
+      + (unplumbed.length > 0
+        ? `[NON-BLOCKING: ${unplumbed.length} families do not plumb colorScheme: ${unplumbed.join(', ')}]`
+        : '[no family ignores its requested scheme]'),
+  );
   console.log(`  rows measured: ${report.total}`);
   console.log(`  agreeing:      ${report.agreeing}`);
   for (const [kind, count] of Object.entries(report.byKind)) {

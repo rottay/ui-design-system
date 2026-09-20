@@ -13,7 +13,12 @@
  *      the Q1 de-alias both paint classes read zero, so the live leg pins
  *      that: a paint divergence coming back means the alias came back, and a
  *      scope divergence disappearing means the probe stopped rendering rather
- *      than that the five unplumbed families were repaired.
+ *      than that the unplumbed families were repaired.
+ *
+ * The live leg pins the divergent family SET as well as the count. Pinning a
+ * count alone is what let this drill claim five families after `6feb6a315`
+ * had repaired two of them: the good news failed closed on the number but had
+ * no way to say which family moved.
  *
  * The live leg is opt-in through CHART_CAUSALITY_DRILL_LIVE=1: it renders 55
  * charts and belongs in the instrument's own window, not in a unit drill.
@@ -21,7 +26,17 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { DIVERGENCES, adjudicate, classify, measure } from './index.mjs';
+import { DIVERGENCES, adjudicate, classify, measure, unplumbedFamilies } from './index.mjs';
+
+/**
+ * The families that still stamp `default` for every request, measured at the
+ * Q1 de-alias and followed down by `6feb6a315` (funnel-chart and gantt-chart
+ * took the governed `colorScheme` input and left the set).
+ */
+const UNPLUMBED = ['network-graph', 'sankey', 'scatter'];
+const SCHEMES_PER_FAMILY = 5;
+/** Four of the five requests diverge; the family's own `default` agrees. */
+const DIVERGENT_ROWS = UNPLUMBED.length * (SCHEMES_PER_FAMILY - 1);
 
 const AGREEING = {
   family: 'bar-chart',
@@ -87,6 +102,23 @@ test('the scope is adjudicated before the paint, so one row carries one cause', 
   assert.equal(classify(both), DIVERGENCES.SCOPE);
 });
 
+test('the unplumbed roster is deduplicated, sorted, and counts only scope divergence', () => {
+  const report = adjudicate({
+    rows: [
+      row({ family: 'scatter', stampedScheme: 'default' }),
+      row({ family: 'scatter', requested: 'pastel', stampedScheme: 'default' }),
+      row({ family: 'network-graph', stampedScheme: 'default' }),
+      // A paint divergence is a different defect and must not name a family here.
+      row({ family: 'pie-chart', governedPaint: null }),
+    ],
+  });
+  assert.deepEqual(unplumbedFamilies(report), ['network-graph', 'scatter']);
+});
+
+test('a green census names no unplumbed family', () => {
+  assert.deepEqual(unplumbedFamilies(adjudicate({ rows: [row({})] })), []);
+});
+
 test('an empty census is not a pass by vacuity', () => {
   const report = adjudicate({ rows: [] });
   assert.equal(report.total, 0);
@@ -106,8 +138,11 @@ test('the live probe measures scope divergence only, and no paint divergence at 
   assert.equal(report.byKind[DIVERGENCES.PAINT_UNGOVERNED] ?? 0, 0);
   assert.equal(report.byKind[DIVERGENCES.UNRENDERED] ?? 0, 0);
 
-  // And the one open defect is still measured: five families do not plumb
-  // `colorScheme`, so four of their five requests stamp `default`.
-  assert.equal(report.byKind[DIVERGENCES.SCOPE], 20);
-  assert.equal(report.agreeing, 35);
+  // And the one open defect is still measured, by roster and not only by
+  // count: three families do not plumb `colorScheme`, so four of their five
+  // requests stamp `default`. A family leaving this set is a repair that owes
+  // this pin an update; a family joining it is a regression.
+  assert.deepEqual(unplumbedFamilies(report), UNPLUMBED);
+  assert.equal(report.byKind[DIVERGENCES.SCOPE], DIVERGENT_ROWS);
+  assert.equal(report.agreeing, report.total - DIVERGENT_ROWS);
 });
