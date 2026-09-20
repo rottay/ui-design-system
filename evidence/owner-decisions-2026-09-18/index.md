@@ -274,3 +274,23 @@ the declared cascade direction; Fable adjudicated independently (see
 
 RESOLVED: the owner moved the writer seat to the Kimi CLI (`kimi-code/kimi-for-coding`) on 2026-09-18;
 the D/E drafts landed as e5c3a7334 and the queue has been running on the new seat since.
+
+## H. New from the 2026-09-20 fleet-axis analysis (milestone B program)
+
+Measured by running the axis-difference instrument itself (evidence: the fleet-axis
+analysis registered in the WO-EVI-02 progress log).
+
+**H1. Depth's ceiling.** Wiring alone caps the depth axis at ~65.8%: 58 of the measured
+families are flat BY DESIGN (no surface elevation to move). Decide: (a) declare those
+families N/A for depth with per-family written reasons (the radio/shape precedent), or
+(b) the product genuinely wants elevation differences there (a design program, not
+wiring). Recommendation: (a) with the per-family reasons reviewed.
+
+**H2. Colour-only state reads.** 48 measured state reads are colour-only; the material
+state facets paint colour, which the non-chromatic states axis can never see. The
+honest levers are focus-ring geometry, press-scale and disabled-opacity. Decide: extend
+those families with non-chromatic state paint (product work per family), or exclude
+them from the states population with written reasons.
+
+**H3. G1 stays the gate for rhythm.** The rem/px mismatch (section G) blocks ~37
+families' rhythm adoption. No new information; it remains the owner's call.
