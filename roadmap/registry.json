@@ -5065,7 +5065,7 @@
    "lane": "family-cuts",
    "order": 9,
    "size": "XL",
-   "status": "done",
+   "status": "in-progress",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -5077,9 +5077,9 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "wave 4; closes F-22, F-81, F-69, F-82 R4 2026-09-08: this cut inherits the runtime that WO-CRA-24 repairs (CD-01, restored-record identity) — `upload/runtime/upload-behavior`; do not re-derive its identity allocation inside the cut.",
+   "notes": "2026-09-20 relevo kimi-admin (sesion Kimi previa pausada por cuota; unico DT; Opus writer=claude normal Daniel.Avila, auditor=Fable real; Codex fuera del loop). REOPEN por orden del owner (ultimo prompt guardado + auditoria S20-02, docs-engineering/archive/audits/2026-09-20-ds-incremental-fe7933d73-davila.md): el cierre 0c7a3808b admite deuda y deriva axe a INV-03, pero la aceptacion propia sigue exigiendo axe sin serias. Pendientes finitos: AXE_DEBT no vacio en patterns/data/column-settings/tests/ColumnSettings.causality.integration.test.tsx:87 y patterns/data/file-manager/tests/PatternFileManager.causality.integration.test.tsx:218,350 (contraste). Control positivo: data-table AXE_DEBT={} y virtual-list/saved-views vacios — NO rehacer. Se conserva toda la implementacion y evidencia; re-cierre solo contra aceptacion real, nunca por igualdad al baseline de deuda ni ratchet. R4 solo eximio el fallback de error-boundary.",
    "claimedBy": "kimi-admin",
-   "claimedAt": "2026-09-16",
+   "claimedAt": "2026-09-20",
    "progressLog": [
     {
      "at": "2026-09-16 02:40",
@@ -5290,10 +5290,20 @@
      "at": "2026-09-19 18:03",
      "by": "kimi-dt",
      "note": "2026-09-19 kimi-dt (2): EXPORT-KERNEL — the D16 packet was ALREADY LANDED (ef7edcb94 + 2008fbdea, 2026-09-17); a fresh Opus dispatch verified it instead of duplicating (brief's census corrected honestly: 4 Blob sites under src/components not 3; downloadFile copies were NOT byte-equivalent and the divergence was DT-adjudicated at the time — triggerDownload stays local; clipboard sites are 5 non-test, none in charts; net was -74/+68 LOC, not -160). Registered residual for the record: table-export/index.ts:300 still calls navigator.clipboard.writeText raw — adopting writeClipboard would change exportClipboard's observable behavior (reject vs resolve false), so it stays as-is until a policy decision. OWNER DECISIONS LANDED (a00a13224, R1-R5): F-69 useSortableList retirement AUTHORIZED (R2) — census re-measured today: zero productive callers in core and the three apps; retirement lot dispatched (Opus). D21 ds-table-density consumer migration AUTHORIZED (R1) — app-bithire first, queued for the migration wave. In flight: data-table inert-channel repair + density split (Fable re-review running). Next: the close audit once the repairs land."
+    },
+    {
+     "at": "2026-09-20 14:18",
+     "by": "reopen",
+     "note": "REOPENED from done. Reason: not recorded. Prior claimedBy=kimi-admin claimedAt=2026-09-16 doneAt=2026-09-20. Prior evidence (verbatim): 2026-09-20 close audit (kimi-dt), every arm re-measured on the integrated tree: (1) family-cut 18/18 rows OK today; (2) RWP: every family's own channels are produced — the residual rows are named foreign vocabulary (grid-view 11 and the collection-card cross-family set, widget-board 5, data-table's 8 density/typography foreign names + the windowed --ds-table-shadow whose trigger is pinned against app-bithire's reader) — data-table's three divergent reads were adjudicated and drained today (cefa1becc+91d187e34, Fable ACCEPT): posture split for cell-line-height, surface split for control-radius, superseded window for the shadow; (3) hardcodes 0, contract census 0 per row; (4) causality suites green per family (data-table's 15/15 with its axe arm re-run today); (5) axe: the per-family debt is pinned by node identity with none new (the fleet axe-per-family arm stays OWED to WO-INV-03, registered, not waived — the same disposition FAM-10's close used); (6) no rottay-* class emitted by any FAM-08 family (measured 0 across the roster); (7) the findings: F-22 (ARIA row model + density probe) landed, F-81 both reuse waves landed (8c96f4197, 051232cba), F-69 closed today (useSortableList retired, 425012314's sibling 2dd895f8b, drills 10/10, zero callers in 4 repos), the export kernel verified landed (ef7edcb94) and the DnD ownership resolved (the sortable kernel owns; the cross-container kernel is WO-FAM-13's); (8) the R4 arms: adaptation (WO-INV-07 done) and skeletons (WO-FAM-14 done). Registered carryover, not blockers: the ds-table-density classes stay emitted until the app migration at the next DS bump (R1 window, authorized); the table-export clipboard policy residual is registered for the owner. Closed with the registry at 118/161. Prior notes (verbatim): wave 4; closes F-22, F-81, F-69, F-82 R4 2026-09-08: this cut inherits the runtime that WO-CRA-24 repairs (CD-01, restored-record identity) — `upload/runtime/upload-behavior`; do not re-derive its identity allocation inside the cut."
+    },
+    {
+     "at": "2026-09-20 14:30",
+     "by": "kimi-admin",
+     "note": "2026-09-20 kimi-admin: correccion de claim del lote 7dd43cd12 (publicado): 'every wire is byte-equal at rest' NO se sostiene en bithire para los 6 canales calc(x*var(--ds-rhythm-effective-scale,1)) (mobile-actions-padding-block, mobile-bulk-padding, mobile-pagination-padding, mobile-summary-padding-block/inline, swipe-actions-bar del skin). Evidencia: medicion browser del censo rhythm (evidence/rhythm-wiring-census §6) + verificacion focal DT del clamp (0.85 en bithire) = -15% (5.2875->4.494px); evnto/rottay genuinamente byte-equal. Disposicion: los wires se CONSERVAN (la respuesta al dial es el objetivo del eje; el repaint es la identidad compact de bithire alcanzando los paddings mobile); el claim queda corregido en este trail y en el censo; verificacion sighted bithire data-table mobile pendiente en la proxima ventana browser. No se revierte ni se oculta. Reapertura activa: pendientes de contraste AXE_DEBT en column-settings y file-manager (ver nota reopen)."
     }
    ],
-   "doneAt": "2026-09-20",
-   "evidence": "2026-09-20 close audit (kimi-dt), every arm re-measured on the integrated tree: (1) family-cut 18/18 rows OK today; (2) RWP: every family's own channels are produced — the residual rows are named foreign vocabulary (grid-view 11 and the collection-card cross-family set, widget-board 5, data-table's 8 density/typography foreign names + the windowed --ds-table-shadow whose trigger is pinned against app-bithire's reader) — data-table's three divergent reads were adjudicated and drained today (cefa1becc+91d187e34, Fable ACCEPT): posture split for cell-line-height, surface split for control-radius, superseded window for the shadow; (3) hardcodes 0, contract census 0 per row; (4) causality suites green per family (data-table's 15/15 with its axe arm re-run today); (5) axe: the per-family debt is pinned by node identity with none new (the fleet axe-per-family arm stays OWED to WO-INV-03, registered, not waived — the same disposition FAM-10's close used); (6) no rottay-* class emitted by any FAM-08 family (measured 0 across the roster); (7) the findings: F-22 (ARIA row model + density probe) landed, F-81 both reuse waves landed (8c96f4197, 051232cba), F-69 closed today (useSortableList retired, 425012314's sibling 2dd895f8b, drills 10/10, zero callers in 4 repos), the export kernel verified landed (ef7edcb94) and the DnD ownership resolved (the sortable kernel owns; the cross-container kernel is WO-FAM-13's); (8) the R4 arms: adaptation (WO-INV-07 done) and skeletons (WO-FAM-14 done). Registered carryover, not blockers: the ds-table-density classes stay emitted until the app migration at the next DS bump (R1 window, authorized); the table-export clipboard policy residual is registered for the owner. Closed with the registry at 118/161."
+   "doneAt": null,
+   "evidence": null
   },
   {
    "id": "WO-FAM-09",
@@ -5375,7 +5385,7 @@
    "lane": "family-cuts",
    "order": 11,
    "size": "L",
-   "status": "done",
+   "status": "in-progress",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -5387,9 +5397,9 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "wave 4; closes F-55, F-41, F-64",
-   "claimedBy": "kimi-dt",
-   "claimedAt": "2026-09-18",
+   "notes": "2026-09-20 relevo kimi-admin (misma sucesion registrada en WO-FAM-08). REOPEN por orden del owner (S20-01): el cierre 073c9f7dd invoca la excepcion error-boundary R4, pero R4 eximio SOLO las 3 propiedades del fallback; NO eximio contraste, adapt ni doctrina ledger. Pendientes finitos: (1) AXE_DEBT no vacio con nodos de contraste BitHire/Evnto en structures/record/tests/Record.causality.integration.test.tsx:174 y exito=igualdad con deuda en :282; (2) foundation/contracts/kernel/adaptation/composition/families/registry/index.ts declara diez familias y ninguna FAM-10 — adjudicar/cubrir las sensibles al espacio; (3) surfaces/presentation/pages/forms/guided-draft-form/index.tsx:451-521,690 conserva GuidedDraftFormSectionCard + Card/Card.Body (doctrina ledger: formularios sin pilas de cards). Se conserva implementacion y evidencia; re-cierre solo con evidencia contra aceptacion vigente, no por igualdad a deuda ni reenvio a otra WO. Header-surface test ya reparado en 3b00d339a: no reabrir esa prueba.",
+   "claimedBy": "kimi-admin",
+   "claimedAt": "2026-09-20",
    "progressLog": [
     {
      "at": "2026-09-18 02:21",
@@ -5455,10 +5465,15 @@
      "at": "2026-09-19 18:33",
      "by": "kimi-dt",
      "note": "2026-09-19 kimi-dt (3): R4 LANDED (aa8d1e26e, Fable ACCEPT) — the crash-safe floor is now the named three-property allowance (background/foreground/border, governed channel first + documented light-dark() pair), the old floor:8 cardinality exemption retired; 17 drills refuse every widening shape; Chromium arms green (light 7.60:1, dark 9.44:1, keyboard retry with no providers; healthy-tree channel override reaches the boundary). That was the close audit's one open row (18/19 families measured green at 6da4c8706). Registered honest caveat (Fable, non-blocking): the light-mode border measures 1.74:1 against its own ground; acceptable as a delineating edge under WCAG 1.4.11 scope; a separate family-owner packet may raise it to 3:1. NEXT: the FAM-10 close re-audit runs after the in-flight wiring wave settles."
+    },
+    {
+     "at": "2026-09-20 14:18",
+     "by": "reopen",
+     "note": "REOPENED from done. Reason: not recorded. Prior claimedBy=kimi-dt claimedAt=2026-09-18 doneAt=2026-09-19. Prior evidence (verbatim): 2026-09-19 close (kimi-dt): 19/19 family-cut rows OK re-measured today on the integrated tree (the 06:21 audit measured 18/19 with exactly one open row: surface-lifecycle's error-boundary exemption). That row is CLOSED by owner resolution R4 (a00a13224) as implemented in aa8d1e26e (Fable ACCEPT): the crash-safe floor is the named three-property allowance with 17 refusal drills and Chromium behavior arms; engine-audit reports exemptionsBreached=0 with the EXACT 3 pin. The acceptance arms stand from the close audit (6da4c8706): causality suites green per family, axe debt pinned by identity with none new, no rottay-* class emitted, contract census exact. Findings F-55/F-41/F-64 close per the audit pack criteria cited there. Honest carryover, registered not hidden: the light-mode crash-surface border measures 1.74:1 against its own ground (delineating edge, WCAG 1.4.11 scope per Fable; a family-owner packet may raise it to 3:1) and record's partsConsumedNotStamped=63 stays pinned at its measured value. Prior notes (verbatim): wave 4; closes F-55, F-41, F-64"
     }
    ],
-   "doneAt": "2026-09-19",
-   "evidence": "2026-09-19 close (kimi-dt): 19/19 family-cut rows OK re-measured today on the integrated tree (the 06:21 audit measured 18/19 with exactly one open row: surface-lifecycle's error-boundary exemption). That row is CLOSED by owner resolution R4 (a00a13224) as implemented in aa8d1e26e (Fable ACCEPT): the crash-safe floor is the named three-property allowance with 17 refusal drills and Chromium behavior arms; engine-audit reports exemptionsBreached=0 with the EXACT 3 pin. The acceptance arms stand from the close audit (6da4c8706): causality suites green per family, axe debt pinned by identity with none new, no rottay-* class emitted, contract census exact. Findings F-55/F-41/F-64 close per the audit pack criteria cited there. Honest carryover, registered not hidden: the light-mode crash-surface border measures 1.74:1 against its own ground (delineating edge, WCAG 1.4.11 scope per Fable; a family-owner packet may raise it to 3:1) and record's partsConsumedNotStamped=63 stays pinned at its measured value."
+   "doneAt": null,
+   "evidence": null
   },
   {
    "id": "WO-FAM-11",
@@ -6318,6 +6333,11 @@
      "at": "2026-09-20 08:44",
      "by": "kimi-dt",
      "note": "2026-09-20 kimi-dt (2): the re-measurement over the landed wave (addendum in the fleet-axis analysis): typography 99.4%, motion 75.4%, rhythm 72.2%, shape 66.3%, states 52.4%, depth 40.1% — denominators/pins unchanged. The path to 80% per axis is now precise: motion needs the 15 flat-base-ramp families (dispatched, lot 1b); rhythm needs wiring lots (~87-94% potential; G1 no longer axis-blocking per the re-measurement — only ~10 px-authored families stay ramp-gated); shape needs the 21-family chrome-compiler dial-product lot + literal rewires (~88%); states needs 33 wiring closers + the pseudo-10 decision (twins or pointer pass) -> 81.6%; depth needs the 52-family flat-channel derivation pattern (dispatched; ~80-90% realistic) — H1's flat-by-design exclusions are NOT needed to reach 80% on current measurements. The true owner-decision residue after the wiring program: ~5 shape + 6 rhythm + 6 depth + 23 states no-paint/colour-only families (H2) and the instrument's portal mounts."
+    },
+    {
+     "at": "2026-09-20 14:30",
+     "by": "Kimi K3",
+     "note": "2026-09-20 relevo kimi-admin: censo rhythm adoptado como EVIDENCIA (packages/core/evidence/rhythm-wiring-census; 0 wires — premisa refutada por construccion: el preset bithire ES el brazo A del par rhythm, join byte-equal vacio medido 0/558). Paquetes finitos abiertos dentro de las WOs vigentes: (1) INSTRUMENTO residual — 18 casos: mount law dropea atributos estampados (9 familias §3), part-axis scoping (tree-select/qrcode §4), reglas que exigen compuesto descendiente (7 §3) — write set acotado a scripts/check/theme/axis-difference/**, se despacha tras el commit del candidato states (arbol limpio); (2) G1 DISPOSICION EXPLICITA — 12 familias (7 flat + 5 bare-rem) sin wire byte-equal posible: NO se pinta nada arbitrario para mover el porcentaje; diferidas porque el eje alcanza 80% sin ellas (potencial 87-94% via wiring, medicion 08:44); se revisitan solo si la corrida fleet queda corta — exclusion explicita con razon, no inferencia; (3) TREE authority — adjudicacion DT: canonico=deriver; paquete Opus con mapa de consumidores: scoping del bridge :root a su consumidor Classic (congelado, byte-identico), modern-bridge actualizado, repaint bithire -15% como cambio visual DECLARADO con evidencia sighted; no borrar el token por grep. CORRECCION DE CLAIM (7dd43cd12, publicado): 'every wire byte-equal at rest' FALSO en bithire — verificacion focal DT: --ds-rhythm-effective-scale=clamp(0.8,var(--ds-rhythm-scale),1.25)=0.85 en bithire; calc(0.375rem*0.85)=4.494px vs pre-lot 5.2875px = -15%; evnto/rottay byte-equal. Los 6 canales se CONSERVAN (la respuesta al dial es el objetivo del eje); la correccion es del claim; verificacion sighted de los paddings mobile en la proxima ventana browser. Sin reescritura de historia publicada."
     }
    ]
   },
