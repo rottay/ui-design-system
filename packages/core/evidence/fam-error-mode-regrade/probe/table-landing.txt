@@ -1,0 +1,360 @@
+
+### error-ink/on-canvas  [ink, floor 4.5]
+    the 126 bare `color: var(--ds-color-error)` sites, on the page canvas
+  rottay light   #f87171    on #fafafa    2.65  FAIL  ->  #dc2626    on #fafafa    4.63  ok   <<< repaired
+  rottay dark    #f87171    on #0b1220    6.77  ok   ->  #f87171    on #0b1220    6.77  ok   (byte-identical)
+  bithire light  #c62828    on #ffffff    5.62  ok   ->  #c62828    on #ffffff    5.62  ok   (byte-identical)
+  bithire dark   #c62828    on #0a0a0a    3.52  FAIL  ->  #c62828    on #0a0a0a    3.52  FAIL  (byte-identical)
+  evnto light    #f87171    on #fafafa    2.65  FAIL  ->  #dc2626    on #fafafa    4.63  ok   <<< repaired
+  evnto dark     #f87171    on #0b1220    6.77  ok   ->  #f87171    on #0b1220    6.77  ok   (byte-identical)
+
+### error-ink/on-card  [ink, floor 4.5]
+    same ink inside a card
+  rottay light   #f87171    on #ffffff    2.77  FAIL  ->  #dc2626    on #ffffff    4.83  ok   <<< repaired
+  rottay dark    #f87171    on #182235    5.76  ok   ->  #f87171    on #182235    5.76  ok   (byte-identical)
+  bithire light  #c62828    on #ffffff    5.62  ok   ->  #c62828    on #ffffff    5.62  ok   (byte-identical)
+  bithire dark   #c62828    on #182235    2.83  FAIL  ->  #c62828    on #182235    2.83  FAIL  (byte-identical)
+  evnto light    #f87171    on #ffffff    2.77  FAIL  ->  #dc2626    on #ffffff    4.83  ok   <<< repaired
+  evnto dark     #f87171    on #182235    5.76  ok   ->  #f87171    on #182235    5.76  ok   (byte-identical)
+
+### error-ink/on-error-bg  [ink, floor 4.5]
+    error text on the error wash (alert bodies)
+  rottay light   #f87171    on #fef2f2    2.53  FAIL  ->  #dc2626    on #fef2f2    4.41  FAIL
+  rottay dark    #f87171    on #fef2f2    2.53  FAIL  ->  #f87171    on #450a0a    5.84  ok   <<< repaired
+  bithire light  #c62828    on #fffbfa    5.47  ok   ->  #c62828    on #fffbfa    5.47  ok   (byte-identical)
+  bithire dark   #c62828    on #1d0001    3.55  FAIL  ->  #c62828    on #1d0001    3.55  FAIL  (byte-identical)
+  evnto light    #f87171    on #fef2f2    2.53  FAIL  ->  #dc2626    on #fef2f2    4.41  FAIL
+  evnto dark     #f87171    on #fef2f2    2.53  FAIL  ->  #f87171    on #450a0a    5.84  ok   <<< repaired
+
+### error-ink/on-alpha-10  [ink, floor 4.5]
+    error text on the 10% alpha wash
+  rottay light   #f87171    on #fdecec    2.42  FAIL  ->  #dc2626    on #fdecec    4.23  FAIL
+  rottay dark    #f87171    on #2e2637    5.27  ok   ->  #f87171    on #2e2637    5.27  ok   (byte-identical)
+  bithire light  #c62828    on #f6dcdc    4.33  FAIL  ->  #c62828    on #f6dcdc    4.33  FAIL  (byte-identical)
+  bithire dark   #c62828    on #342232    2.62  FAIL  ->  #c62828    on #342232    2.62  FAIL  (byte-identical)
+  evnto light    #f87171    on #fdecec    2.42  FAIL  ->  #dc2626    on #fdecec    4.23  FAIL
+  evnto dark     #f87171    on #2e2637    5.27  ok   ->  #f87171    on #2e2637    5.27  ok   (byte-identical)
+
+### error-ink/on-own-7pct-wash  [ink, floor 4.5]
+    file-manager's ghost rest wash, before the family half
+  rottay light   #f87171    on #fff5f5    2.59  FAIL  ->  #dc2626    on #fdf0f0    4.35  FAIL
+  rottay dark    #f87171    on #282839    5.24  ok   ->  #f87171    on #282839    5.24  ok   (byte-identical)
+  bithire light  #c62828    on #fbf0f0    5.04  ok   ->  #c62828    on #fbf0f0    5.04  ok   (byte-identical)
+  bithire dark   #c62828    on #242334    2.74  FAIL  ->  #c62828    on #242334    2.74  FAIL  (byte-identical)
+  evnto light    #f87171    on #fff5f5    2.59  FAIL  ->  #dc2626    on #fdf0f0    4.35  FAIL
+  evnto dark     #f87171    on #282839    5.24  ok   ->  #f87171    on #282839    5.24  ok   (byte-identical)
+
+### error-fill/white-ink  [fill, floor 4.5]
+    white label on an error fill (upload close, floatbutton badge)
+  rottay light   #ffffff    on #f87171    2.77  FAIL  ->  #ffffff    on #dc2626    4.83  ok   <<< repaired
+  rottay dark    #ffffff    on #f87171    2.77  FAIL  ->  #ffffff    on #f87171    2.77  FAIL  (byte-identical)
+  bithire light  #ffffff    on #c62828    5.62  ok   ->  #ffffff    on #c62828    5.62  ok   (byte-identical)
+  bithire dark   #ffffff    on #c62828    5.62  ok   ->  #ffffff    on #c62828    5.62  ok   (byte-identical)
+  evnto light    #ffffff    on #f87171    2.77  FAIL  ->  #ffffff    on #dc2626    4.83  ok   <<< repaired
+  evnto dark     #ffffff    on #f87171    2.77  FAIL  ->  #ffffff    on #f87171    2.77  FAIL  (byte-identical)
+
+### error-fill/on-tone-ink  [fill, floor 4.5]
+    the governed on-tone ink on an error fill
+  rottay light   #171717    on #f87171    6.48  ok   ->  #ffffff    on #dc2626    4.83  ok 
+  rottay dark    #171717    on #f87171    6.48  ok   ->  #171717    on #f87171    6.48  ok   (byte-identical)
+  bithire light  #ffffff    on #c62828    5.62  ok   ->  #ffffff    on #c62828    5.62  ok   (byte-identical)
+  bithire dark   #ffffff    on #c62828    5.62  ok   ->  #ffffff    on #c62828    5.62  ok   (byte-identical)
+  evnto light    #171717    on #f87171    6.48  ok   ->  #ffffff    on #dc2626    4.83  ok 
+  evnto dark     #171717    on #f87171    6.48  ok   ->  #171717    on #f87171    6.48  ok   (byte-identical)
+
+### error-fill/vs-canvas  [border, floor 3]
+    an error fill as a non-text object on the canvas (radio dot, badge)
+  rottay light   #f87171    on #fafafa    2.65  FAIL  ->  #dc2626    on #fafafa    4.63  ok   <<< repaired
+  rottay dark    #f87171    on #0b1220    6.77  ok   ->  #f87171    on #0b1220    6.77  ok   (byte-identical)
+  bithire light  #c62828    on #ffffff    5.62  ok   ->  #c62828    on #ffffff    5.62  ok   (byte-identical)
+  bithire dark   #c62828    on #0a0a0a    3.52  ok   ->  #c62828    on #0a0a0a    3.52  ok   (byte-identical)
+  evnto light    #f87171    on #fafafa    2.65  FAIL  ->  #dc2626    on #fafafa    4.63  ok   <<< repaired
+  evnto dark     #f87171    on #0b1220    6.77  ok   ->  #f87171    on #0b1220    6.77  ok   (byte-identical)
+
+### radio-error-ring/vs-input-bg  [border, floor 3]
+    the radio error ring against the control ground
+  rottay light   #f87171    on #ffffff    2.77  FAIL  ->  #dc2626    on #ffffff    4.83  ok   <<< repaired
+  rottay dark    #f87171    on #0f0f12    6.92  ok   ->  #f87171    on #0f0f12    6.92  ok   (byte-identical)
+  bithire light  #c62828    on #ffffff    5.62  ok   ->  #c62828    on #ffffff    5.62  ok   (byte-identical)
+  bithire dark   #c62828    on #0c0c0c    3.48  ok   ->  #c62828    on #0c0c0c    3.48  ok   (byte-identical)
+  evnto light    #f87171    on #ffffff    2.77  FAIL  ->  #dc2626    on #ffffff    4.83  ok   <<< repaired
+  evnto dark     #f87171    on #0f0f12    6.92  ok   ->  #f87171    on #0f0f12    6.92  ok   (byte-identical)
+
+### tooltip-error/ink-on-fill  [fill, floor 4.5]
+    tooltip error ink on its fill (both literals today)
+  rottay light   #0c0c0e    on #f87171    7.07  ok   ->  #ffffff    on #dc2626    4.83  ok 
+  rottay dark    #ffffff    on #f87171    2.77  FAIL  ->  #171717    on #f87171    6.48  ok   <<< repaired
+  bithire light  #ffffff    on #c62828    5.62  ok   ->  #ffffff    on #c62828    5.62  ok   (byte-identical)
+  bithire dark   #ffffff    on #c62828    5.62  ok   ->  #ffffff    on #c62828    5.62  ok   (byte-identical)
+  evnto light    #0c0c0e    on #f87171    7.07  ok   ->  #ffffff    on #dc2626    4.83  ok 
+  evnto dark     #ffffff    on #f87171    2.77  FAIL  ->  #171717    on #f87171    6.48  ok   <<< repaired
+
+### btn-solid/rest  [fill, floor 4.5]
+    solid danger button label at rest
+  rottay light   #ffffff    on #ef4444    3.76  FAIL  ->  #ffffff    on #ef4444    3.76  FAIL  (byte-identical)
+  rottay dark    #ffffff    on #ef4444    3.76  FAIL  ->  #ffffff    on #ef4444    3.76  FAIL  (byte-identical)
+  bithire light  #ffffff    on #c22526    5.86  ok   ->  #ffffff    on #c22526    5.86  ok   (byte-identical)
+  bithire dark   #ffffff    on #dd423d    4.27  FAIL  ->  #ffffff    on #dd423d    4.27  FAIL  (byte-identical)
+  evnto light    #ffffff    on #ef4444    3.76  FAIL  ->  #ffffff    on #ef4444    3.76  FAIL  (byte-identical)
+  evnto dark     #ffffff    on #ef4444    3.76  FAIL  ->  #ffffff    on #ef4444    3.76  FAIL  (byte-identical)
+
+### btn-solid/hover  [fill, floor 4.5]
+    solid danger button label on hover
+  rottay light   #ffffff    on #dc2626    4.83  ok   ->  #ffffff    on #dc2626    4.83  ok   (byte-identical)
+  rottay dark    #ffffff    on #dc2626    4.83  ok   ->  #ffffff    on #dc2626    4.83  ok   (byte-identical)
+  bithire light  #ffffff    on #9c000f    8.68  ok   ->  #ffffff    on #9c000f    8.68  ok   (byte-identical)
+  bithire dark   #ffffff    on #f8675d    2.96  FAIL  ->  #ffffff    on #bc1d20    6.3   ok   <<< repaired
+  evnto light    #ffffff    on #dc2626    4.83  ok   ->  #ffffff    on #dc2626    4.83  ok   (byte-identical)
+  evnto dark     #ffffff    on #dc2626    4.83  ok   ->  #ffffff    on #dc2626    4.83  ok   (byte-identical)
+
+### btn-solid/active  [fill, floor 4.5]
+    solid danger button label pressed
+  rottay light   #ffffff    on #b91c1c    6.47  ok   ->  #ffffff    on #b91c1c    6.47  ok   (byte-identical)
+  rottay dark    #ffffff    on #b91c1c    6.47  ok   ->  #ffffff    on #b91c1c    6.47  ok   (byte-identical)
+  bithire light  #ffffff    on #710008    12.31 ok   ->  #ffffff    on #710008    12.31 ok   (byte-identical)
+  bithire dark   #ffffff    on #ff998e    2.06  FAIL  ->  #ffffff    on #94000e    9.27  ok   <<< repaired
+  evnto light    #ffffff    on #b91c1c    6.47  ok   ->  #ffffff    on #b91c1c    6.47  ok   (byte-identical)
+  evnto dark     #ffffff    on #b91c1c    6.47  ok   ->  #ffffff    on #b91c1c    6.47  ok   (byte-identical)
+
+### btn-solid/border-vs-canvas  [border, floor 3]
+    the solid danger rim against the canvas
+  rottay light   #dc2626    on #fafafa    4.63  ok   ->  #b91c1c    on #fafafa    6.2   ok 
+  rottay dark    #dc2626    on #0b1220    3.88  ok   ->  #fca5a5    on #0b1220    9.86  ok 
+  bithire light  #9c000f    on #ffffff    8.68  ok   ->  #710008    on #ffffff    12.31 ok 
+  bithire dark   #f8675d    on #0a0a0a    6.68  ok   ->  #ff998e    on #0a0a0a    9.62  ok 
+  evnto light    #dc2626    on #fafafa    4.63  ok   ->  #b91c1c    on #fafafa    6.2   ok 
+  evnto dark     #dc2626    on #0b1220    3.88  ok   ->  #fca5a5    on #0b1220    9.86  ok 
+
+### btn-quiet/rest-on-card  [ink, floor 4.5]
+    quiet-danger ink at rest on a card (no wash)
+  rottay light   #dc2626    on #ffffff    4.83  ok   ->  #b91c1c    on #ffffff    6.47  ok 
+  rottay dark    #dc2626    on #182235    3.3   FAIL  ->  #fca5a5    on #182235    8.39  ok   <<< repaired
+  bithire light  #9c000f    on #ffffff    8.68  ok   ->  #710008    on #ffffff    12.31 ok 
+  bithire dark   #f8675d    on #182235    5.37  ok   ->  #ff998e    on #182235    7.73  ok 
+  evnto light    #dc2626    on #ffffff    4.83  ok   ->  #b91c1c    on #ffffff    6.47  ok 
+  evnto dark     #dc2626    on #182235    3.3   FAIL  ->  #fca5a5    on #182235    8.39  ok   <<< repaired
+
+### btn-quiet/rest-on-fm-wash  [ink, floor 4.5]
+    file-manager's 7% ghost rest wash AFTER the family half - the arm-3a row
+  rottay light   #dc2626    on #fdf0f0    4.35  FAIL  ->  #b91c1c    on #faefef    5.75  ok   <<< repaired
+  rottay dark    #dc2626    on #262334    3.18  FAIL  ->  #fca5a5    on #282c3d    7.31  ok   <<< repaired
+  bithire light  #9c000f    on #f8edee    7.58  ok   ->  #710008    on #f5edee    10.69 ok 
+  bithire dark   #f8675d    on #282738    4.94  ok   ->  #ff998e    on #282b3b    6.82  ok 
+  evnto light    #dc2626    on #fdf0f0    4.35  FAIL  ->  #b91c1c    on #faefef    5.75  ok   <<< repaired
+  evnto dark     #dc2626    on #262334    3.18  FAIL  ->  #fca5a5    on #282c3d    7.31  ok   <<< repaired
+
+### btn-quiet/hover  [ink, floor 4.5]
+    quiet-danger ink on the 8% hover wash
+  rottay light   #b91c1c    on #fef0f0    5.83  ok   ->  #991b1b    on #fef0f0    7.49  ok 
+  rottay dark    #b91c1c    on #292436    2.31  FAIL  ->  #fecaca    on #292436    10.34 ok   <<< repaired
+  bithire light  #710008    on #faeeee    10.86 ok   ->  #480003    on #faeeee    14.51 ok 
+  bithire dark   #ff998e    on #272436    7.3   ok   ->  #ffc7c0    on #272436    10.16 ok 
+  evnto light    #b91c1c    on #fef0f0    5.83  ok   ->  #991b1b    on #fef0f0    7.49  ok 
+  evnto dark     #b91c1c    on #292436    2.31  FAIL  ->  #fecaca    on #292436    10.34 ok   <<< repaired
+
+### btn-quiet/pressed  [ink, floor 4.5]
+    quiet-danger ink on the 14% pressed wash
+  rottay light   #991b1b    on #fde5e5    6.93  ok   ->  #7f1d1d    on #fde5e5    8.36  ok 
+  rottay dark    #991b1b    on #372738    1.67  FAIL  ->  #fee2e2    on #372738    11.39 ok   <<< repaired
+  bithire light  #480003    on #f6e0e0    13.04 ok   ->  #230001    on #f6e0e0    15.53 ok 
+  bithire dark   #ffc7c0    on #342637    9.59  ok   ->  #fff2f0    on #342637    12.99 ok 
+  evnto light    #991b1b    on #fde5e5    6.93  ok   ->  #7f1d1d    on #fde5e5    8.36  ok 
+  evnto dark     #991b1b    on #372738    1.67  FAIL  ->  #fee2e2    on #372738    11.39 ok   <<< repaired
+
+### btn-outline/border-vs-card  [border, floor 3]
+    the outline danger rim on a card
+  rottay light   #dc2626    on #ffffff    4.83  ok   ->  #b91c1c    on #ffffff    6.47  ok 
+  rottay dark    #dc2626    on #182235    3.3   ok   ->  #fca5a5    on #182235    8.39  ok 
+  bithire light  #9c000f    on #ffffff    8.68  ok   ->  #710008    on #ffffff    12.31 ok 
+  bithire dark   #f8675d    on #182235    5.37  ok   ->  #ff998e    on #182235    7.73  ok 
+  evnto light    #dc2626    on #ffffff    4.83  ok   ->  #b91c1c    on #ffffff    6.47  ok 
+  evnto dark     #dc2626    on #182235    3.3   ok   ->  #fca5a5    on #182235    8.39  ok 
+
+### statistic-negative/on-card  [ink, floor 4.5]
+    a negative statistic on a card
+  rottay light   #f87171    on #ffffff    2.77  FAIL  ->  #dc2626    on #ffffff    4.83  ok   <<< repaired
+  rottay dark    #f87171    on #182235    5.76  ok   ->  #f87171    on #182235    5.76  ok   (byte-identical)
+  bithire light  #c62828    on #ffffff    5.62  ok   ->  #c62828    on #ffffff    5.62  ok   (byte-identical)
+  bithire dark   #c62828    on #182235    2.83  FAIL  ->  #c62828    on #182235    2.83  FAIL  (byte-identical)
+  evnto light    #f87171    on #ffffff    2.77  FAIL  ->  #dc2626    on #ffffff    4.83  ok   <<< repaired
+  evnto dark     #f87171    on #182235    5.76  ok   ->  #f87171    on #182235    5.76  ok   (byte-identical)
+
+### menu-danger/on-menu-bg  [ink, floor 4.5]
+    a destructive menu item
+  rottay light   #f87171    on #f8f8f8    2.6   FAIL  ->  #dc2626    on #f8f8f8    4.55  ok   <<< repaired
+  rottay dark    #f87171    on #182234    5.76  ok   ->  #f87171    on #182234    5.76  ok   (byte-identical)
+  bithire light  #c62828    on #f9fafe    5.39  ok   ->  #c62828    on #f9fafe    5.39  ok   (byte-identical)
+  bithire dark   #c62828    on #19243a    2.76  FAIL  ->  #c62828    on #19243a    2.76  FAIL  (byte-identical)
+  evnto light    #f87171    on #f8f8f8    2.6   FAIL  ->  #dc2626    on #f8f8f8    4.55  ok   <<< repaired
+  evnto dark     #f87171    on #182234    5.76  ok   ->  #f87171    on #182234    5.76  ok   (byte-identical)
+
+### form-error/on-input-bg  [ink, floor 4.5]
+    a form field error message under its control
+  rottay light   #f87171    on #fafafa    2.65  FAIL  ->  #dc2626    on #fafafa    4.63  ok   <<< repaired
+  rottay dark    #f87171    on #0b1220    6.77  ok   ->  #f87171    on #0b1220    6.77  ok   (byte-identical)
+  bithire light  #c62828    on #ffffff    5.62  ok   ->  #c62828    on #ffffff    5.62  ok   (byte-identical)
+  bithire dark   #c62828    on #0a0a0a    3.52  FAIL  ->  #c62828    on #0a0a0a    3.52  FAIL  (byte-identical)
+  evnto light    #f87171    on #fafafa    2.65  FAIL  ->  #dc2626    on #fafafa    4.63  ok   <<< repaired
+  evnto dark     #f87171    on #0b1220    6.77  ok   ->  #f87171    on #0b1220    6.77  ok   (byte-identical)
+
+### activity-icon-box/ink-on-100  [ink, floor 4.5]
+    activity-{compact,timeline,ticker,cards} error icon box: role ink on the 100 step
+  rottay light   #f87171    on #fee2e2    2.26  FAIL  ->  #dc2626    on #fee2e2    3.95  FAIL
+  rottay dark    #f87171    on #fee2e2    2.26  FAIL  ->  #f87171    on #7f1d1d    3.62  FAIL
+  bithire light  #c62828    on #ffd1cb    4.08  FAIL  ->  #c62828    on #ffd1cb    4.08  FAIL  (byte-identical)
+  bithire dark   #c62828    on #410002    3.05  FAIL  ->  #c62828    on #410002    3.05  FAIL  (byte-identical)
+  evnto light    #f87171    on #fee2e2    2.26  FAIL  ->  #dc2626    on #fee2e2    3.95  FAIL
+  evnto dark     #f87171    on #fee2e2    2.26  FAIL  ->  #f87171    on #7f1d1d    3.62  FAIL
+
+### avatar-error/700-on-100  [ink, floor 4.5]
+    avatar error: the 700 ink on the 100 ground
+  rottay light   #b91c1c    on #fee2e2    5.3   ok   ->  #b91c1c    on #fee2e2    5.3   ok   (byte-identical)
+  rottay dark    #b91c1c    on #fee2e2    5.3   ok   ->  #fca5a5    on #7f1d1d    5.28  ok 
+  bithire light  #710008    on #ffd1cb    8.93  ok   ->  #710008    on #ffd1cb    8.93  ok   (byte-identical)
+  bithire dark   #ff998e    on #410002    8.32  ok   ->  #ff998e    on #410002    8.32  ok   (byte-identical)
+  evnto light    #b91c1c    on #fee2e2    5.3   ok   ->  #b91c1c    on #fee2e2    5.3   ok   (byte-identical)
+  evnto dark     #b91c1c    on #fee2e2    5.3   ok   ->  #fca5a5    on #7f1d1d    5.28  ok 
+
+### badge-soft/700-on-100  [ink, floor 4.5]
+    badge soft danger: the 700 ink on the 100 ground
+  rottay light   #b91c1c    on #fee2e2    5.3   ok   ->  #b91c1c    on #fee2e2    5.3   ok   (byte-identical)
+  rottay dark    #b91c1c    on #fee2e2    5.3   ok   ->  #fca5a5    on #7f1d1d    5.28  ok 
+  bithire light  #710008    on #ffd1cb    8.93  ok   ->  #710008    on #ffd1cb    8.93  ok   (byte-identical)
+  bithire dark   #ff998e    on #410002    8.32  ok   ->  #ff998e    on #410002    8.32  ok   (byte-identical)
+  evnto light    #b91c1c    on #fee2e2    5.3   ok   ->  #b91c1c    on #fee2e2    5.3   ok   (byte-identical)
+  evnto dark     #b91c1c    on #fee2e2    5.3   ok   ->  #fca5a5    on #7f1d1d    5.28  ok 
+
+### tag-subtle/500-on-100  [ink, floor 4.5]
+    tag subtle danger: the 500 ink on the 100 ground
+  rottay light   #ef4444    on #fee2e2    3.08  FAIL  ->  #ef4444    on #fee2e2    3.08  FAIL  (byte-identical)
+  rottay dark    #ef4444    on #fee2e2    3.08  FAIL  ->  #ef4444    on #7f1d1d    2.66  FAIL
+  bithire light  #c22526    on #ffd1cb    4.25  FAIL  ->  #c22526    on #ffd1cb    4.25  FAIL  (byte-identical)
+  bithire dark   #dd423d    on #410002    4.02  FAIL  ->  #dd423d    on #410002    4.02  FAIL  (byte-identical)
+  evnto light    #ef4444    on #fee2e2    3.08  FAIL  ->  #ef4444    on #fee2e2    3.08  FAIL  (byte-identical)
+  evnto dark     #ef4444    on #fee2e2    3.08  FAIL  ->  #ef4444    on #7f1d1d    2.66  FAIL
+
+### cockpit-header/700-on-100  [ink, floor 4.5]
+    cockpit/workbench header danger chip: 700 on 100, 200 rim
+  rottay light   #b91c1c    on #fee2e2    5.3   ok   ->  #b91c1c    on #fee2e2    5.3   ok   (byte-identical)
+  rottay dark    #b91c1c    on #fee2e2    5.3   ok   ->  #fca5a5    on #7f1d1d    5.28  ok 
+  bithire light  #710008    on #ffd1cb    8.93  ok   ->  #710008    on #ffd1cb    8.93  ok   (byte-identical)
+  bithire dark   #ff998e    on #410002    8.32  ok   ->  #ff998e    on #410002    8.32  ok   (byte-identical)
+  evnto light    #b91c1c    on #fee2e2    5.3   ok   ->  #b91c1c    on #fee2e2    5.3   ok   (byte-identical)
+  evnto dark     #b91c1c    on #fee2e2    5.3   ok   ->  #fca5a5    on #7f1d1d    5.28  ok 
+
+### detail-panel/600-on-50  [ink, floor 4.5]
+    detail-panel danger band: the 600 ink on the 50 ground
+  rottay light   #dc2626    on #fef2f2    4.41  FAIL  ->  #dc2626    on #fef2f2    4.41  FAIL  (byte-identical)
+  rottay dark    #dc2626    on #fef2f2    4.41  FAIL  ->  #f87171    on #450a0a    5.84  ok   <<< repaired
+  bithire light  #9c000f    on #fffbfa    8.44  ok   ->  #9c000f    on #fffbfa    8.44  ok   (byte-identical)
+  bithire dark   #f8675d    on #1d0001    6.73  ok   ->  #f8675d    on #1d0001    6.73  ok   (byte-identical)
+  evnto light    #dc2626    on #fef2f2    4.41  FAIL  ->  #dc2626    on #fef2f2    4.41  FAIL  (byte-identical)
+  evnto dark     #dc2626    on #fef2f2    4.41  FAIL  ->  #f87171    on #450a0a    5.84  ok   <<< repaired
+
+### card-error/200-rim-on-50  [border, floor 3]
+    the error card rim against its own wash
+  rottay light   #fecaca    on #fef2f2    1.32  FAIL  ->  #fecaca    on #fef2f2    1.32  FAIL  (byte-identical)
+  rottay dark    #fecaca    on #fef2f2    1.32  FAIL  ->  #991b1b    on #450a0a    1.94  FAIL
+  bithire light  #ffa399    on #fffbfa    1.87  FAIL  ->  #ffa399    on #fffbfa    1.87  FAIL  (byte-identical)
+  bithire dark   #690007    on #1d0001    1.52  FAIL  ->  #690007    on #1d0001    1.52  FAIL  (byte-identical)
+  evnto light    #fecaca    on #fef2f2    1.32  FAIL  ->  #fecaca    on #fef2f2    1.32  FAIL  (byte-identical)
+  evnto dark     #fecaca    on #fef2f2    1.32  FAIL  ->  #991b1b    on #450a0a    1.94  FAIL
+
+### card-error/50-vs-card  [border, floor 1]
+    the error card wash against the card it sits on (reported, no floor)
+  rottay light   #fef2f2    on #ffffff    1.09  ok   ->  #fef2f2    on #ffffff    1.09  ok   (byte-identical)
+  rottay dark    #fef2f2    on #182235    14.55 ok   ->  #450a0a    on #182235    1.01  ok 
+  bithire light  #fffbfa    on #ffffff    1.03  ok   ->  #fffbfa    on #ffffff    1.03  ok   (byte-identical)
+  bithire dark   #1d0001    on #182235    1.25  ok   ->  #1d0001    on #182235    1.25  ok   (byte-identical)
+  evnto light    #fef2f2    on #ffffff    1.09  ok   ->  #fef2f2    on #ffffff    1.09  ok   (byte-identical)
+  evnto dark     #fef2f2    on #182235    14.55 ok   ->  #450a0a    on #182235    1.01  ok 
+
+### modal-icon/role-on-100  [border, floor 3]
+    the modal's error glyph on its icon well
+  rottay light   #f87171    on #fee2e2    2.26  FAIL  ->  #dc2626    on #fee2e2    3.95  ok   <<< repaired
+  rottay dark    #f87171    on #fee2e2    2.26  FAIL  ->  #f87171    on #7f1d1d    3.62  ok   <<< repaired
+  bithire light  #c62828    on #ffd1cb    4.08  ok   ->  #c62828    on #ffd1cb    4.08  ok   (byte-identical)
+  bithire dark   #c62828    on #410002    3.05  ok   ->  #c62828    on #410002    3.05  ok   (byte-identical)
+  evnto light    #f87171    on #fee2e2    2.26  FAIL  ->  #dc2626    on #fee2e2    3.95  ok   <<< repaired
+  evnto dark     #f87171    on #fee2e2    2.26  FAIL  ->  #f87171    on #7f1d1d    3.62  ok   <<< repaired
+
+### input-error/500-rim-vs-input  [border, floor 3]
+    the invalid input rim at rest (the 500 pivot)
+  rottay light   #ef4444    on #ffffff    3.76  ok   ->  #ef4444    on #ffffff    3.76  ok   (byte-identical)
+  rottay dark    #ef4444    on #0f0f12    5.09  ok   ->  #ef4444    on #0f0f12    5.09  ok   (byte-identical)
+  bithire light  #c22526    on #ffffff    5.86  ok   ->  #c22526    on #ffffff    5.86  ok   (byte-identical)
+  bithire dark   #dd423d    on #0c0c0c    4.58  ok   ->  #dd423d    on #0c0c0c    4.58  ok   (byte-identical)
+  evnto light    #ef4444    on #ffffff    3.76  ok   ->  #ef4444    on #ffffff    3.76  ok   (byte-identical)
+  evnto dark     #ef4444    on #0f0f12    5.09  ok   ->  #ef4444    on #0f0f12    5.09  ok   (byte-identical)
+
+### input-error/600-rim-focus  [border, floor 3]
+    the invalid input rim on focus (the 600 step)
+  rottay light   #dc2626    on #ffffff    4.83  ok   ->  #dc2626    on #ffffff    4.83  ok   (byte-identical)
+  rottay dark    #dc2626    on #0f0f12    3.96  ok   ->  #f87171    on #0f0f12    6.92  ok 
+  bithire light  #9c000f    on #ffffff    8.68  ok   ->  #9c000f    on #ffffff    8.68  ok   (byte-identical)
+  bithire dark   #f8675d    on #0c0c0c    6.6   ok   ->  #f8675d    on #0c0c0c    6.6   ok   (byte-identical)
+  evnto light    #dc2626    on #ffffff    4.83  ok   ->  #dc2626    on #ffffff    4.83  ok   (byte-identical)
+  evnto dark     #dc2626    on #0f0f12    3.96  ok   ->  #f87171    on #0f0f12    6.92  ok 
+
+### toast-error/700-on-card  [ink, floor 4.5]
+    the rustic/contract toast danger ink on a card
+  rottay light   #b91c1c    on #ffffff    6.47  ok   ->  #b91c1c    on #ffffff    6.47  ok   (byte-identical)
+  rottay dark    #b91c1c    on #182235    2.46  FAIL  ->  #fca5a5    on #182235    8.39  ok   <<< repaired
+  bithire light  #710008    on #ffffff    12.31 ok   ->  #710008    on #ffffff    12.31 ok   (byte-identical)
+  bithire dark   #ff998e    on #182235    7.73  ok   ->  #ff998e    on #182235    7.73  ok   (byte-identical)
+  evnto light    #b91c1c    on #ffffff    6.47  ok   ->  #b91c1c    on #ffffff    6.47  ok   (byte-identical)
+  evnto dark     #b91c1c    on #182235    2.46  FAIL  ->  #fca5a5    on #182235    8.39  ok   <<< repaired
+
+### alert-danger/ink-on-well  [ink, floor 4.5]
+    the alert danger body on the alert error well (the skin formula)
+  rottay light   #c65d5d    on #feefef    3.67  FAIL  ->  #b12323    on #fbe7e7    5.64  ok   <<< repaired
+  rottay dark    #f88f90    on #312b3c    6.05  ok   ->  #f88f90    on #312b3c    6.05  ok   (byte-identical)
+  bithire light  #9f2424    on #f9e7e7    6.4   ok   ->  #9f2424    on #f9e7e7    6.4   ok   (byte-identical)
+  bithire dark   #d15657    on #2b2334    3.72  FAIL  ->  #d15657    on #2b2334    3.72  FAIL  (byte-identical)
+  evnto light    #c65d5d    on #feefef    3.67  FAIL  ->  #b12323    on #fbe7e7    5.64  ok   <<< repaired
+  evnto dark     #f88f90    on #312b3c    6.05  ok   ->  #f88f90    on #312b3c    6.05  ok   (byte-identical)
+
+### error-state/role-on-6pct  [ink, floor 4.5]
+    the otp/error-state 6% wash under the role ink
+  rottay light   #f87171    on #fff6f6    2.6   FAIL  ->  #dc2626    on #fdf2f2    4.41  FAIL
+  rottay dark    #f87171    on #252739    5.32  ok   ->  #f87171    on #252739    5.32  ok   (byte-identical)
+  bithire light  #c62828    on #fcf2f2    5.12  ok   ->  #c62828    on #fcf2f2    5.12  ok   (byte-identical)
+  bithire dark   #c62828    on #222234    2.77  FAIL  ->  #c62828    on #222234    2.77  FAIL  (byte-identical)
+  evnto light    #f87171    on #fff6f6    2.6   FAIL  ->  #dc2626    on #fdf2f2    4.41  FAIL
+  evnto dark     #f87171    on #252739    5.32  ok   ->  #f87171    on #252739    5.32  ok   (byte-identical)
+
+### btn-default-danger/rest  [ink, floor 4.5]
+    quiet-danger ink on the default/outline variant's OWN ground
+  rottay light   #dc2626    on #ffffff    4.83  ok   ->  #b91c1c    on #ffffff    6.47  ok 
+  rottay dark    #dc2626    on #ffffff    4.83  ok   ->  #fca5a5    on #0f0f12    10.08 ok 
+  bithire light  #9c000f    on #ffffff    8.68  ok   ->  #710008    on #ffffff    12.31 ok 
+  bithire dark   #f8675d    on #ffffff    2.96  FAIL  ->  #ff998e    on #0c0c0c    9.5   ok   <<< repaired
+  evnto light    #dc2626    on #ffffff    4.83  ok   ->  #b91c1c    on #ffffff    6.47  ok 
+  evnto dark     #dc2626    on #ffffff    4.83  ok   ->  #fca5a5    on #0f0f12    10.08 ok 
+
+### btn-default-danger/hover  [ink, floor 4.5]
+    the same on the 8% hover wash
+  rottay light   #b91c1c    on #fef0f0    5.83  ok   ->  #991b1b    on #fef0f0    7.49  ok 
+  rottay dark    #b91c1c    on #fef0f0    5.83  ok   ->  #fecaca    on #211316    12.43 ok 
+  bithire light  #710008    on #faeeee    10.86 ok   ->  #480003    on #faeeee    14.51 ok 
+  bithire dark   #ff998e    on #fcf0f0    1.85  FAIL  ->  #ffc7c0    on #1c1010    12.53 ok   <<< repaired
+  evnto light    #b91c1c    on #fef0f0    5.83  ok   ->  #991b1b    on #fef0f0    7.49  ok 
+  evnto dark     #b91c1c    on #fef0f0    5.83  ok   ->  #fecaca    on #211316    12.43 ok 
+
+### btn-default/neutral-label  [ink, floor 4.5]
+    CONTROL: the default variant's own neutral label on the same ground
+  rottay light   #171717    on #ffffff    17.93 ok   ->  #171717    on #ffffff    17.93 ok   (byte-identical)
+  rottay dark    #f8fafc    on #ffffff    1.05  FAIL  ->  #f8fafc    on #0f0f12    18.29 ok   <<< repaired
+  bithire light  #171717    on #ffffff    17.93 ok   ->  #171717    on #ffffff    17.93 ok   (byte-identical)
+  bithire dark   #f8fafc    on #ffffff    1.05  FAIL  ->  #f8fafc    on #0c0c0c    18.7  ok   <<< repaired
+  evnto light    #171717    on #ffffff    17.93 ok   ->  #171717    on #ffffff    17.93 ok   (byte-identical)
+  evnto dark     #f8fafc    on #ffffff    1.05  FAIL  ->  #f8fafc    on #0f0f12    18.29 ok   <<< repaired
+
+### btn-ghost-danger/rest  [ink, floor 4.5]
+    quiet-danger ink on the ghost variant (transparent, so the card)
+  rottay light   #dc2626    on #ffffff    4.83  ok   ->  #b91c1c    on #ffffff    6.47  ok 
+  rottay dark    #dc2626    on #182235    3.3   FAIL  ->  #fca5a5    on #182235    8.39  ok   <<< repaired
+  bithire light  #9c000f    on #ffffff    8.68  ok   ->  #710008    on #ffffff    12.31 ok 
+  bithire dark   #f8675d    on #182235    5.37  ok   ->  #ff998e    on #182235    7.73  ok 
+  evnto light    #dc2626    on #ffffff    4.83  ok   ->  #b91c1c    on #ffffff    6.47  ok 
+  evnto dark     #dc2626    on #182235    3.3   FAIL  ->  #fca5a5    on #182235    8.39  ok   <<< repaired

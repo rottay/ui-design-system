@@ -98,7 +98,7 @@ export function deriveTooltipChannels(): Record<string, string> {
   vars["--ds-tooltip-error-bg"] = "var(--ds-color-error)";
   vars["--ds-tooltip-success-color"] = "var(--ds-color-text-on-primary)";
   vars["--ds-tooltip-warning-color"] = "var(--ds-color-text-on-primary)";
-  vars["--ds-tooltip-error-color"] = "var(--ds-color-text-on-primary)";
+  vars["--ds-tooltip-error-color"] = "var(--ds-color-on-error)";
   vars["--ds-tooltip-shortcut-key-background"] = "color-mix(in srgb, currentColor 10%, transparent)";
   vars["--ds-tooltip-shortcut-key-border"] = "color-mix(in srgb, currentColor 28%, transparent)";
   vars["--ds-tooltip-shortcut-key-shadow"] = "inset 0 1px 0 color-mix(in srgb, currentColor 10%, transparent)";

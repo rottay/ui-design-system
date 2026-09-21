@@ -181,7 +181,10 @@
      consume the ramp directly. */
   --ds-color-success: var(--ds-color-success-600);
   --ds-color-warning: var(--ds-color-warning-600);
-  --ds-color-error: var(--ds-color-error-400);
+  /* Step 600, like every status sibling above. Step 400 was the dark-graded
+     stop sitting at the LIGHT root because there was no dark leg to state a
+     light-graded one in; the dark block below now states that leg. */
+  --ds-color-error: var(--ds-color-error-600);
   --ds-color-danger: var(--ds-color-error);
   --ds-color-info: var(--ds-color-info-400);
   --ds-color-neutral-0: var(--ds-color-white);
@@ -432,7 +435,10 @@
      WCAG pick lands on the dark ink for all four tones. */
   --ds-color-on-success: #171717;
   --ds-color-on-warning: #171717;
-  --ds-color-on-error: #171717;
+  /* Error is the one tone whose fill is now mode-graded, so its readable ink
+     is too: the WCAG pick on the light-mode #dc2626 is white, on the dark-mode
+     #f87171 it stays the flat dark neutral (restated in the dark block). */
+  --ds-color-on-error: #ffffff;
   --ds-color-on-info: #171717;
   --ds-color-on-primary: var(--ds-color-text-on-primary);
 
@@ -2084,6 +2090,32 @@ html.dark {
   --ds-color-neutral-700: #cbd5e1;
   --ds-color-neutral-800: #e2e8f0;
   --ds-color-neutral-900: #f8fafc;
+
+  /* The error ramp runs the other way on this canvas, exactly as the neutral
+     ramp above already does: 50 is the darkest wash and 900 the lightest ink.
+     A seeded tenant's compiler emits this same inversion from its own seed, so
+     a channel written as a ramp STEP is mode-correct in every vertical; the
+     light literals cascading into dark were what left an error wash painting
+     near-white here and left the 600 step reading as a dark ink on a dark
+     ground. The step values are the light ramp read backwards, extended by one
+     stop at the dark end, so every pair that consumed two steps keeps its
+     relationship. */
+  --ds-color-error-50: #450a0a;
+  --ds-color-error-100: #7f1d1d;
+  --ds-color-error-200: #991b1b;
+  --ds-color-error-300: #b91c1c;
+  --ds-color-error-400: #dc2626;
+  --ds-color-error-500: #ef4444;
+  --ds-color-error-600: #f87171;
+  --ds-color-error-700: #fca5a5;
+  --ds-color-error-800: #fecaca;
+  --ds-color-error-900: #fee2e2;
+
+  /* The role itself is NOT restated: `:root` states step 600 and the inverted
+     ramp above resolves that to #f87171 here, which is what the role has
+     always painted in this mode. Only its readable ink owes a leg, because the
+     WCAG pick flips back to the flat dark neutral on that lighter fill. */
+  --ds-color-on-error: #171717;
 
   --ds-text-primary: var(--ds-color-text-primary);
   --ds-text-secondary: var(--ds-color-text-secondary);

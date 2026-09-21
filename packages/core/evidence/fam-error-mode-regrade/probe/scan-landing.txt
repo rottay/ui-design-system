@@ -1,0 +1,255 @@
+# before (HEAD) -> the landing set
+scopes: 6 | comparable pairings: 40
+
+REGRESSIONS (passing -> failing): 0
+
+REPAIRED (failing -> passing): 49
+  rottay light error-ink/on-canvas: 2.65->4.63
+  rottay light error-ink/on-card: 2.77->4.83
+  rottay light error-fill/white-ink: 2.77->4.83
+  rottay light error-fill/vs-canvas: 2.65->4.63
+  rottay light radio-error-ring/vs-input-bg: 2.77->4.83
+  rottay light btn-quiet/rest-on-fm-wash: 4.35->5.75
+  rottay light statistic-negative/on-card: 2.77->4.83
+  rottay light menu-danger/on-menu-bg: 2.6->4.55
+  rottay light form-error/on-input-bg: 2.65->4.63
+  rottay light modal-icon/role-on-100: 2.26->3.95
+  rottay light alert-danger/ink-on-well: 3.67->5.64
+  rottay dark error-ink/on-error-bg: 2.53->5.84
+  rottay dark tooltip-error/ink-on-fill: 2.77->6.48
+  rottay dark btn-quiet/rest-on-card: 3.3->8.39
+  rottay dark btn-quiet/rest-on-fm-wash: 3.18->7.31
+  rottay dark btn-quiet/hover: 2.31->10.34
+  rottay dark btn-quiet/pressed: 1.67->11.39
+  rottay dark detail-panel/600-on-50: 4.41->5.84
+  rottay dark modal-icon/role-on-100: 2.26->3.62
+  rottay dark toast-error/700-on-card: 2.46->8.39
+  rottay dark btn-default/neutral-label: 1.05->18.29
+  rottay dark btn-ghost-danger/rest: 3.3->8.39
+  bithire dark btn-solid/hover: 2.96->6.3
+  bithire dark btn-solid/active: 2.06->9.27
+  bithire dark btn-default-danger/rest: 2.96->9.5
+  bithire dark btn-default-danger/hover: 1.85->12.53
+  bithire dark btn-default/neutral-label: 1.05->18.7
+  evnto light error-ink/on-canvas: 2.65->4.63
+  evnto light error-ink/on-card: 2.77->4.83
+  evnto light error-fill/white-ink: 2.77->4.83
+  evnto light error-fill/vs-canvas: 2.65->4.63
+  evnto light radio-error-ring/vs-input-bg: 2.77->4.83
+  evnto light btn-quiet/rest-on-fm-wash: 4.35->5.75
+  evnto light statistic-negative/on-card: 2.77->4.83
+  evnto light menu-danger/on-menu-bg: 2.6->4.55
+  evnto light form-error/on-input-bg: 2.65->4.63
+  evnto light modal-icon/role-on-100: 2.26->3.95
+  evnto light alert-danger/ink-on-well: 3.67->5.64
+  evnto dark error-ink/on-error-bg: 2.53->5.84
+  evnto dark tooltip-error/ink-on-fill: 2.77->6.48
+  evnto dark btn-quiet/rest-on-card: 3.3->8.39
+  evnto dark btn-quiet/rest-on-fm-wash: 3.18->7.31
+  evnto dark btn-quiet/hover: 2.31->10.34
+  evnto dark btn-quiet/pressed: 1.67->11.39
+  evnto dark detail-panel/600-on-50: 4.41->5.84
+  evnto dark modal-icon/role-on-100: 2.26->3.62
+  evnto dark toast-error/700-on-card: 2.46->8.39
+  evnto dark btn-default/neutral-label: 1.05->18.29
+  evnto dark btn-ghost-danger/rest: 3.3->8.39
+
+MOVED cells: 119; byte-identical cells: 121
+
+=== CHANNEL CENSUS DIFF ===
+
+## rottay light: 32 channels moved (of 4207 declared)
+   --ds-button-error-border: #dc2626 -> #b91c1c
+   --ds-button-error-border-active: #991b1b -> #7f1d1d
+   --ds-button-error-border-hover: #b91c1c -> #991b1b
+   --ds-checkbox-error-bg: #f87171 -> #dc2626
+   --ds-checkbox-error-border: #f87171 -> #dc2626
+   --ds-color-danger: #f87171 -> #dc2626
+   --ds-color-error: #f87171 -> #dc2626
+   --ds-color-error-ink: color-mix(in srgb, #f87171 78%, #171717 22%) -> color-mix(in srgb, #dc2626 78%, #171717 22%)
+   --ds-color-on-error: #171717 -> #ffffff
+   --ds-error-state-bg: linear-gradient(
+    145deg,
+    color-mix(in srgb, #f87171 7%, #ffffff),
+    #e5e5e5
+  ) -> linear-gradient(
+    145deg,
+    color-mix(in srgb, #dc2626 7%, #ffffff),
+    #e5e5e5
+  )
+   --ds-error-state-border: color-mix(
+    in srgb,
+    #f87171 28%,
+    #e5e5e5
+  ) -> color-mix(
+    in srgb,
+    #dc2626 28%,
+    #e5e5e5
+  )
+   --ds-error-state-icon-bg: color-mix(
+    in srgb,
+    #f87171 10%,
+    #ffffff
+  ) -> color-mix(
+    in srgb,
+    #dc2626 10%,
+    #ffffff
+  )
+   --ds-floatbutton-badge-bg: #f87171 -> #dc2626
+   --ds-menu-item-danger-color: #f87171 -> #dc2626
+   --ds-meter-fill-error: #f87171 -> #dc2626
+   --ds-metric-card-meter-fill-error: #f87171 -> #dc2626
+   --ds-radio-error-bg: #f87171 -> #dc2626
+   --ds-radio-error-border: #f87171 -> #dc2626
+   --ds-result-500-color: #f87171 -> #dc2626
+   --ds-result-error-color: #f87171 -> #dc2626
+   --ds-select-error-border: #f87171 -> #dc2626
+   --ds-shadow-error-md: 0 4px 6px -1px color-mix(in srgb, #f87171 12%, transparent),
+                     0 2px 4px -2px color-mix(in srgb, #f87171 12%, transparent) -> 0 4px 6px -1px color-mix(in srgb, #dc2626 12%, transparent),
+                     0 2px 4px -2px color-mix(in srgb, #dc2626 12%, transparent)
+   --ds-shadow-error-sm: 0 1px 3px 0 color-mix(in srgb, #f87171 12%, transparent),
+                     0 1px 2px -1px color-mix(in srgb, #f87171 12%, transparent) -> 0 1px 3px 0 color-mix(in srgb, #dc2626 12%, transparent),
+                     0 1px 2px -1px color-mix(in srgb, #dc2626 12%, transparent)
+   --ds-statistic-negative-color: #f87171 -> #dc2626
+   --ds-stats-grid-trend-negative: #f87171 -> #dc2626
+   --ds-timeline-color-error: #f87171 -> #dc2626
+   --ds-toggle-error-message-color: color-mix(in srgb, #f87171 78%, #171717 22%) -> color-mix(in srgb, #dc2626 78%, #171717 22%)
+   --ds-tooltip-error-bg: #f87171 -> #dc2626
+   --ds-tooltip-error-color: #0C0C0E -> #ffffff
+   --ds-upload-error-border: #f87171 -> #dc2626
+   --ds-upload-file-remove-color: #f87171 -> #dc2626
+   --ds-upload-preview-close-bg: #f87171 -> #dc2626
+
+## rottay dark: 27 channels moved (of 4209 declared)
+   --ds-avatar-error-bg: #fee2e2 -> #7f1d1d
+   --ds-avatar-error-border-color: #fecaca -> #991b1b
+   --ds-avatar-error-color: #b91c1c -> #fca5a5
+   --ds-button-default-bg: #ffffff -> #0F0F12
+   --ds-button-error-border: #dc2626 -> #fca5a5
+   --ds-button-error-border-active: #991b1b -> #fee2e2
+   --ds-button-error-border-hover: #b91c1c -> #fecaca
+   --ds-card-error-bg: #fef2f2 -> #450a0a
+   --ds-card-error-border-color: #fecaca -> #991b1b
+   --ds-card-error-title-color: #7f1d1d -> #fee2e2
+   --ds-color-error-100: #fee2e2 -> #7f1d1d
+   --ds-color-error-200: #fecaca -> #991b1b
+   --ds-color-error-300: #fca5a5 -> #b91c1c
+   --ds-color-error-400: #f87171 -> #dc2626
+   --ds-color-error-50: #fef2f2 -> #450a0a
+   --ds-color-error-600: #dc2626 -> #f87171
+   --ds-color-error-700: #b91c1c -> #fca5a5
+   --ds-color-error-800: #991b1b -> #fecaca
+   --ds-color-error-900: #7f1d1d -> #fee2e2
+   --ds-color-error-bg: #fef2f2 -> #450a0a
+   --ds-command-home-control-bg: #ffffff -> #0F0F12
+   --ds-input-count-color-error: #dc2626 -> #f87171
+   --ds-input-error-border-color-focus: #dc2626 -> #f87171
+   --ds-input-error-message-color: #dc2626 -> #f87171
+   --ds-modal-error-icon-bg: #fee2e2 -> #7f1d1d
+   --ds-select-error-border-color-focus: #dc2626 -> #f87171
+   --ds-tooltip-error-color: #ffffff -> #171717
+
+## bithire light: 3 channels moved (of 4180 declared)
+   --ds-button-error-border: #9C000F -> #710008
+   --ds-button-error-border-active: #480003 -> #230001
+   --ds-button-error-border-hover: #710008 -> #480003
+
+## bithire dark: 7 channels moved (of 4182 declared)
+   --ds-button-default-bg: #ffffff -> #0c0c0c
+   --ds-button-error-bg-active: #FF998E -> #94000E
+   --ds-button-error-bg-hover: #F8675D -> #BC1D20
+   --ds-button-error-border: #F8675D -> #FF998E
+   --ds-button-error-border-active: #FFC7C0 -> #FFF2F0
+   --ds-button-error-border-hover: #FF998E -> #FFC7C0
+   --ds-command-home-control-bg: #ffffff -> #0c0c0c
+
+## evnto light: 32 channels moved (of 4207 declared)
+   --ds-button-error-border: #dc2626 -> #b91c1c
+   --ds-button-error-border-active: #991b1b -> #7f1d1d
+   --ds-button-error-border-hover: #b91c1c -> #991b1b
+   --ds-checkbox-error-bg: #f87171 -> #dc2626
+   --ds-checkbox-error-border: #f87171 -> #dc2626
+   --ds-color-danger: #f87171 -> #dc2626
+   --ds-color-error: #f87171 -> #dc2626
+   --ds-color-error-ink: color-mix(in srgb, #f87171 78%, #171717 22%) -> color-mix(in srgb, #dc2626 78%, #171717 22%)
+   --ds-color-on-error: #171717 -> #ffffff
+   --ds-error-state-bg: linear-gradient(
+    145deg,
+    color-mix(in srgb, #f87171 7%, #ffffff),
+    #e5e5e5
+  ) -> linear-gradient(
+    145deg,
+    color-mix(in srgb, #dc2626 7%, #ffffff),
+    #e5e5e5
+  )
+   --ds-error-state-border: color-mix(
+    in srgb,
+    #f87171 28%,
+    #e5e5e5
+  ) -> color-mix(
+    in srgb,
+    #dc2626 28%,
+    #e5e5e5
+  )
+   --ds-error-state-icon-bg: color-mix(
+    in srgb,
+    #f87171 10%,
+    #ffffff
+  ) -> color-mix(
+    in srgb,
+    #dc2626 10%,
+    #ffffff
+  )
+   --ds-floatbutton-badge-bg: #f87171 -> #dc2626
+   --ds-menu-item-danger-color: #f87171 -> #dc2626
+   --ds-meter-fill-error: #f87171 -> #dc2626
+   --ds-metric-card-meter-fill-error: #f87171 -> #dc2626
+   --ds-radio-error-bg: #f87171 -> #dc2626
+   --ds-radio-error-border: #f87171 -> #dc2626
+   --ds-result-500-color: #f87171 -> #dc2626
+   --ds-result-error-color: #f87171 -> #dc2626
+   --ds-select-error-border: #f87171 -> #dc2626
+   --ds-shadow-error-md: 0 4px 6px -1px color-mix(in srgb, #f87171 12%, transparent),
+                     0 2px 4px -2px color-mix(in srgb, #f87171 12%, transparent) -> 0 4px 6px -1px color-mix(in srgb, #dc2626 12%, transparent),
+                     0 2px 4px -2px color-mix(in srgb, #dc2626 12%, transparent)
+   --ds-shadow-error-sm: 0 1px 3px 0 color-mix(in srgb, #f87171 12%, transparent),
+                     0 1px 2px -1px color-mix(in srgb, #f87171 12%, transparent) -> 0 1px 3px 0 color-mix(in srgb, #dc2626 12%, transparent),
+                     0 1px 2px -1px color-mix(in srgb, #dc2626 12%, transparent)
+   --ds-statistic-negative-color: #f87171 -> #dc2626
+   --ds-stats-grid-trend-negative: #f87171 -> #dc2626
+   --ds-timeline-color-error: #f87171 -> #dc2626
+   --ds-toggle-error-message-color: color-mix(in srgb, #f87171 78%, #171717 22%) -> color-mix(in srgb, #dc2626 78%, #171717 22%)
+   --ds-tooltip-error-bg: #f87171 -> #dc2626
+   --ds-tooltip-error-color: #0C0C0E -> #ffffff
+   --ds-upload-error-border: #f87171 -> #dc2626
+   --ds-upload-file-remove-color: #f87171 -> #dc2626
+   --ds-upload-preview-close-bg: #f87171 -> #dc2626
+
+## evnto dark: 27 channels moved (of 4209 declared)
+   --ds-avatar-error-bg: #fee2e2 -> #7f1d1d
+   --ds-avatar-error-border-color: #fecaca -> #991b1b
+   --ds-avatar-error-color: #b91c1c -> #fca5a5
+   --ds-button-default-bg: #ffffff -> #0F0F12
+   --ds-button-error-border: #dc2626 -> #fca5a5
+   --ds-button-error-border-active: #991b1b -> #fee2e2
+   --ds-button-error-border-hover: #b91c1c -> #fecaca
+   --ds-card-error-bg: #fef2f2 -> #450a0a
+   --ds-card-error-border-color: #fecaca -> #991b1b
+   --ds-card-error-title-color: #7f1d1d -> #fee2e2
+   --ds-color-error-100: #fee2e2 -> #7f1d1d
+   --ds-color-error-200: #fecaca -> #991b1b
+   --ds-color-error-300: #fca5a5 -> #b91c1c
+   --ds-color-error-400: #f87171 -> #dc2626
+   --ds-color-error-50: #fef2f2 -> #450a0a
+   --ds-color-error-600: #dc2626 -> #f87171
+   --ds-color-error-700: #b91c1c -> #fca5a5
+   --ds-color-error-800: #991b1b -> #fecaca
+   --ds-color-error-900: #7f1d1d -> #fee2e2
+   --ds-color-error-bg: #fef2f2 -> #450a0a
+   --ds-command-home-control-bg: #ffffff -> #0F0F12
+   --ds-input-count-color-error: #dc2626 -> #f87171
+   --ds-input-error-border-color-focus: #dc2626 -> #f87171
+   --ds-input-error-message-color: #dc2626 -> #f87171
+   --ds-modal-error-icon-bg: #fee2e2 -> #7f1d1d
+   --ds-select-error-border-color-focus: #dc2626 -> #f87171
+   --ds-tooltip-error-color: #ffffff -> #171717

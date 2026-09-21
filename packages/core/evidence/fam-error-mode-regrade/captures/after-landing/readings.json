@@ -1,0 +1,44 @@
+{
+  "rottay dark": {
+    "solidRestBg": "rgb(239, 68, 68)",
+    "quietRestInk": "rgb(254, 202, 202)",
+    "alertWell": "oklab(0.225312 0.00903956 -0.0232003)",
+    "fmTodayInk": "rgb(248, 113, 113)",
+    "fmHalfInk": "rgb(252, 165, 165)"
+  },
+  "rottay light": {
+    "solidRestBg": "rgb(239, 68, 68)",
+    "quietRestInk": "rgb(153, 27, 27)",
+    "alertWell": "oklab(0.952458 0.0153344 0.00792037)",
+    "fmTodayInk": "rgb(220, 38, 38)",
+    "fmHalfInk": "rgb(185, 28, 28)"
+  },
+  "evnto dark": {
+    "solidRestBg": "rgb(239, 68, 68)",
+    "quietRestInk": "rgb(254, 202, 202)",
+    "alertWell": "oklab(0.225312 0.00903956 -0.0232003)",
+    "fmTodayInk": "rgb(248, 113, 113)",
+    "fmHalfInk": "rgb(252, 165, 165)"
+  },
+  "evnto light": {
+    "solidRestBg": "rgb(239, 68, 68)",
+    "quietRestInk": "rgb(153, 27, 27)",
+    "alertWell": "oklab(0.952458 0.0153344 0.00792037)",
+    "fmTodayInk": "rgb(220, 38, 38)",
+    "fmHalfInk": "rgb(185, 28, 28)"
+  },
+  "bithire dark": {
+    "solidRestBg": "rgb(221, 66, 61)",
+    "quietRestInk": "rgb(255, 199, 192)",
+    "alertWell": "oklab(0.17629 0.0138499 0.00697326)",
+    "fmTodayInk": "rgb(198, 40, 40)",
+    "fmHalfInk": "rgb(255, 153, 142)"
+  },
+  "bithire light": {
+    "solidRestBg": "rgb(194, 37, 38)",
+    "quietRestInk": "rgb(72, 0, 3)",
+    "alertWell": "oklab(0.963081 0.0138858 0.00698907)",
+    "fmTodayInk": "rgb(198, 40, 40)",
+    "fmHalfInk": "rgb(113, 0, 8)"
+  }
+}

@@ -134,7 +134,10 @@
   --ds-button-secondary-shadow: var(--ds-shadow-sm);
 
   /* DEFAULT - Neutral actions */
-  --ds-button-default-bg: var(--ds-color-white);
+  /* The control material, not a literal: its hover and active siblings below
+     already read that family, and a fixed white stood this variant's own
+     near-white label on a white pill at 1.05:1 in every dark scope. */
+  --ds-button-default-bg: var(--ds-material-control-background);
   --ds-button-default-bg-hover: var(--ds-material-control-background-hover);
   --ds-button-default-bg-active: var(--ds-material-control-background-active);
   --ds-button-default-color: var(--ds-color-neutral-900);
@@ -230,9 +233,12 @@
   --ds-button-error-color: var(--ds-color-white);
   --ds-button-error-color-hover: var(--ds-button-error-color);
   --ds-button-error-color-active: var(--ds-button-error-color);
-  --ds-button-error-border: var(--ds-color-error-600);
-  --ds-button-error-border-hover: var(--ds-color-error-700);
-  --ds-button-error-border-active: var(--ds-color-error-800);
+  /* These three are the quiet-danger INK as well as the solid rim: the
+     `data-tone='danger'` recipe paints them as `color` on a tone-tinted wash,
+     which needs one step more than the same red needs on bare paper. */
+  --ds-button-error-border: var(--ds-color-error-700);
+  --ds-button-error-border-hover: var(--ds-color-error-800);
+  --ds-button-error-border-active: var(--ds-color-error-900);
 
   /* INFO */
   --ds-button-info-bg: var(--ds-color-info-500);
@@ -401,4 +407,13 @@
   --ds-button-spinner-track-opacity: 0.2;
   --ds-button-spinner-stroke-width: 2.5;
   --ds-button-spinner-duration: var(--ds-motion-attention);
+}
+
+/* The solid danger fill keeps its dark-graded steps on a dark canvas: the ramp
+   inverts per mode, so 600/700 become the LIGHT end there and a white label
+   would sit on a pale red. 400/300 are the same #dc2626/#b91c1c this recipe
+   has always painted, re-reached from the other side of the ramp. */
+:where(:root, [data-ds-root]):is([data-theme='dark'], .dark) {
+  --ds-button-error-bg-hover: var(--ds-color-error-400);
+  --ds-button-error-bg-active: var(--ds-color-error-300);
 }
