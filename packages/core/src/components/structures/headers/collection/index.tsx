@@ -31,11 +31,12 @@
  *     rail overline; a tenant styles its key caps once and this rail follows)
  *
  * The family stamps anatomy — `data-part`, the posture/variant attributes
- * (`data-embedded`, `data-compact`, `data-minimal`, `data-editorial-tech`,
- * `data-title-treatment`, `data-subtitle-treatment`, `data-tone`) — and the
- * shared interaction kernel's `data-state` on the two chrome surfaces that
- * lift on pointer contact (the root card and the quick-actions pill). Paint
- * and geometry live entirely in `skin/collection-header`, reachable through
+ * (`data-posture`, `data-embedded`, `data-compact`, `data-minimal`,
+ * `data-editorial-tech`, `data-title-treatment`, `data-subtitle-treatment`,
+ * `data-tone`) — and the shared interaction kernel's `data-state` on the two
+ * chrome surfaces that lift on pointer contact (the root card and the
+ * quick-actions pill). Paint and geometry live entirely in
+ * `skin/collection-header`, reachable through
  * the `--ds-collection-header-*` channels `derivation/chrome/collection-header`
  * produces. The TSX carries NO visual values: the coarse-pointer action
  * floor the inline paint used to enforce is the composed Button's own
@@ -47,6 +48,12 @@
  * the waiting state has the exact footprint of the header it stands in for
  * and late content never jumps.
  *
+ * The compact composition is layout-sensitive in the strict sense: it decides
+ * WHICH clusters render, so it resolves against the header's OWN box through
+ * the shared adaptation runtime (`adapt` + `data-posture`, WO-FAM-10). The
+ * viewport projection (`compact ?? isPhoneOrTablet`) is the base layer of that
+ * resolution, not its last word.
+ *
  * Visually distinct from `CockpitHeader` (detail-page style: 22px title,
  * plain background, simple actions) and `WorkbenchHeader` (briefing style:
  * exception count, saved view selector). Use this structures family when you want a
@@ -56,7 +63,7 @@
  * users, or any specific entity. All copy comes from props.
  */
 
-import { Fragment, type ReactNode } from 'react';
+import { Fragment, useMemo, useState, type ReactNode } from 'react';
 
 import { Box } from '../../../primitives/layout/box';
 import { Button } from '../../../primitives/inputs/button';
@@ -65,6 +72,13 @@ import { Flex } from '../../../primitives/layout/flex';
 import { KeyboardIcon } from '@/graphics/icons';
 import { NavigationMoreIcon } from '@/graphics/icons/semantic/generated/roles/navigation-more';
 import { useResponsive } from '../../../../infrastructure/runtime/responsive';
+import type { Adapt } from '../../../../foundation/contracts/kernel/adaptation';
+import {
+  COLLECTION_HEADER_ADAPT_DEFAULTS,
+  type CollectionHeaderAdaptation,
+  type ResolvedCollectionHeaderAdaptation,
+} from '../../../../foundation/contracts/kernel/adaptation/composition/families/collection-header';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { AnatomySkeleton } from '../../../primitives/feedback/skeleton';
@@ -114,8 +128,21 @@ export interface CollectionHeaderProps {
   /**
    * Overrides the responsive layout projection. When omitted, phone and tablet
    * device classes from `ResponsiveProvider` use the compact composition.
+   *
+   * This is the BASE layer, not the last word: the header also measures its own
+   * box, and a compact box narrows over whatever this resolves to. Declare
+   * `adapt={{ compact: { compactLayout: false } }}` to keep the full
+   * composition in a narrow rail.
    */
   compact?: boolean;
+  /**
+   * Per-posture deltas the application declares. The header measures its OWN
+   * box, so the same header in a narrow rail runs compact while it keeps the
+   * full editorial composition at page width -- on one and the same viewport.
+   *
+   * @example adapt={{ compact: { compactLayout: false } }}
+   */
+  adapt?: Adapt<CollectionHeaderAdaptation>;
   /**
    * Identity-only projection intended for constrained mobile contexts. Keeps
    * the eyebrow and title while omitting supporting and interactive clusters.
@@ -142,6 +169,7 @@ export function CollectionHeader({
   quickActions,
   surfaceVariant = 'default',
   compact,
+  adapt,
   minimal = false,
   loading = false,
 }: CollectionHeaderProps) {
@@ -162,7 +190,20 @@ export function CollectionHeader({
 
   const embedded = surfaceVariant === 'embedded';
   const editorialTech = layoutVariant === 'editorial-tech';
-  const compactLayout = compact ?? isPhoneOrTablet;
+  /* `compactLayout` decides WHICH CLUSTERS RENDER, so it follows the header's own
+     box: viewport is the base layer, the family narrows it, `adapt` outranks both. */
+  const [rootElement, setRootElement] = useState<HTMLElement | null>(null);
+  const containerRef = useMemo(() => ({ current: rootElement }), [rootElement]);
+  const base = useMemo<ResolvedCollectionHeaderAdaptation>(
+    () => ({ compactLayout: compact ?? isPhoneOrTablet }),
+    [compact, isPhoneOrTablet],
+  );
+  const { adaptation, postureAttribute } = useAdaptation(adapt, {
+    base,
+    defaults: COLLECTION_HEADER_ADAPT_DEFAULTS,
+    containerRef,
+  });
+  const compactLayout = adaptation.compactLayout;
   const minimalLayout = minimal;
   const compactMetaItems = metaItems ?? [];
   const inlineMetaItems = metaItemsPlacement === 'inline-start' ? compactMetaItems : [];
@@ -493,8 +534,10 @@ export function CollectionHeader({
      second time. */
   return (
     <Box
+      ref={setRootElement}
       data-embedded={embedded}
       data-compact={compactLayout}
+      data-posture={postureAttribute}
       data-minimal={minimalLayout}
       data-editorial-tech={editorialTech}
       data-loading={loading ? 'true' : 'false'}

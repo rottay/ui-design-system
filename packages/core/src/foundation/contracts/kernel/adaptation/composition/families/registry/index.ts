@@ -111,6 +111,12 @@ export const LAYOUT_SENSITIVE_FAMILIES = Object.freeze([
     layoutSensitive: true,
     cut: 'WO-FAM-10',
   },
+  {
+    family: 'collection-header',
+    owner: 'src/components/structures/headers/collection',
+    layoutSensitive: true,
+    cut: 'WO-FAM-10',
+  },
 ] as const satisfies readonly LayoutSensitiveFamily[]);
 
 export type LayoutSensitiveFamilyId = (typeof LAYOUT_SENSITIVE_FAMILIES)[number]['family'];
