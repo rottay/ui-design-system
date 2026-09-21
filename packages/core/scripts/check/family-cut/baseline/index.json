@@ -1312,7 +1312,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 9,
-        "channelsRead": 128,
+        "channelsRead": 131,
         "classTokens": 2,
         "partsStamped": 1,
         "partsConsumed": 1
@@ -1328,7 +1328,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "undefined 2026-09-18: +1 channel read (the typography skin reads the derived --ds-color-link) — the ink derivation lot; census re-read per the gate instruction."
+      "cutNote": "undefined 2026-09-18: +1 channel read (the typography skin reads the derived --ds-color-link) — the ink derivation lot; census re-read per the gate instruction. Re-pin 2026-09-21 (DT, census re-read per the gate instruction): channelsRead 128 -> 131 = the b91ca0b5c tone-ink lot (Fable ACCEPT) -- the typography skin tone rules now read the governed --ds-color-success-ink / --ds-color-warning-ink / --ds-color-error-ink channels with the fill roles as fallback. readWithoutProducer stays 0."
     },
     "box": {
       "cut": "WO-FAM-07",
