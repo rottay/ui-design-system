@@ -184,13 +184,22 @@ describeCausality({
  * The section description joined this map when the sections left their Card:
  * the card ground was hiding the node from axe rather than making it legible.
  * Its ink is the family's one supporting role, and in bithire and evnto EVERY
- * supporting role (`secondary`/`tertiary`/`muted`/`subtle`) resolves into the
+ * supporting role (`secondary`/`tertiary`/`muted`/`subtle`) resolved into the
  * #96..#a0 grey band -- 2.49:1 on #fafafa, 2.6:1 on #ffffff -- so no ink this
- * surface can choose clears 4.5:1. The five siblings already pinned here fail
- * on the same single token. Owed to tokens/derivation, not repairable from a
- * surface. The two section STATUS chips were repaired rather than pinned: off
- * the card ground their tinted copy failed too, so the semantic icon keeps the
- * non-colour cue and the label takes the reading ink.
+ * surface could choose cleared 4.5:1. The five siblings already pinned here
+ * failed on the same single token. The two section STATUS chips were repaired
+ * rather than pinned: off the card ground their tinted copy failed too, so the
+ * semantic icon keeps the non-colour cue and the label takes the reading ink.
+ *
+ * DRAINED 2026-09-21 by the supporting-ink floor (Fable-verified): the three
+ * supporting rungs were re-graded at their producer (the default theme's light
+ * :root) with tint unchanged, so the description and its five siblings measure
+ * clean by identity (2.49-2.6:1 -> 6.5-6.8:1) and left this map. What survives
+ * is exactly `draft-status-label`: its chip ground is `--ds-color-bg-tertiary`
+ * `#e5e5e5`, where even the re-graded muted reads 4.20:1 -- the ground-side
+ * exit (`#e5e5e5` -> `#ededed`) is routed as its own bounded packet, and the
+ * active pill's primary ink on its tinted ground in dark mode stays pinned on
+ * its own cause.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire dark': {
@@ -201,24 +210,12 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   },
   'bithire light': {
     'color-contrast': [
-      'button[data-active="false"] > span[data-state="visible"][data-part="content"] > span[data-part="label"] > .rottay-flex[data-part="section-nav-item-row"][data-align="center"] > .rottay-flex[data-part="section-nav-item-main"][data-align="center"] > span[data-part="section-nav-item-label"][data-color="inherit"][data-size="sm"]',
-      'p[data-part="section-card-description"]',
-      'p[data-part="subtitle"]',
       'span[data-part="draft-status-label"]',
-      'span[data-part="progress-count"]',
-      'span[data-part="section-nav-label"]',
-      'span[data-part="submit-bar-progress"]',
     ],
   },
   'evnto light': {
     'color-contrast': [
-      'button[data-active="false"] > span[data-state="visible"][data-part="content"] > span[data-part="label"] > .rottay-flex[data-part="section-nav-item-row"][data-align="center"] > .rottay-flex[data-part="section-nav-item-main"][data-align="center"] > span[data-part="section-nav-item-label"][data-color="inherit"][data-size="sm"]',
-      'p[data-part="section-card-description"]',
-      'p[data-part="subtitle"]',
       'span[data-part="draft-status-label"]',
-      'span[data-part="progress-count"]',
-      'span[data-part="section-nav-label"]',
-      'span[data-part="submit-bar-progress"]',
     ],
   },
   'rottay dark': {

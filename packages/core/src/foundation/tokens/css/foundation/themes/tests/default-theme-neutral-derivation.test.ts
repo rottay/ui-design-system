@@ -74,15 +74,16 @@ const DARK_REPOINTED_BEFORE = {
  */
 const NO_EXACT_STEP_LITERALS: Record<string, Record<string, string>> = {
   root: {
-    "--ds-color-text-secondary": "#A0A0A5",
-    // W8 (APCA remediation, reviewed): tertiary lifted #8A8A90 → #9A9AA2 to
-    // keep the secondary>tertiary>muted ladder coherent after the muted
-    // APCA fix. Deliberate, documented change — not a silent approximation.
-    "--ds-color-text-tertiary": "#9A9AA2",
-    // W8 (APCA remediation, reviewed): muted lifted #6B6B72 → #96969E to
-    // reach the APCA body/ui floor on page backgrounds. Deliberate,
-    // documented change — not a silent approximation.
-    "--ds-color-text-muted": "#96969E",
+    "--ds-color-text-secondary": "#5A5A61",
+    // 2026-09-21 supporting-ink floor (Fable-verified): the W8 ladder was
+    // levelled against a DARK ground (its APCA numbers reproduce only there);
+    // on the light ground the three supporting rungs read 2.49-2.94:1, below
+    // the 4.5:1 WCAG floor. Re-graded with tint unchanged (same OKLCH
+    // chroma/hue across the three) and uniform lightness steps, so every
+    // supporting rung clears 4.5:1 on the card/panel grounds while primary
+    // stays 26.5 L above and the ranks keep their order in both modes.
+    "--ds-color-text-tertiary": "#62626A",
+    "--ds-color-text-muted": "#6B6B72",
     "--ds-color-text-disabled": "#4A4A50",
     "--ds-color-text-on-primary": "#0C0C0E",
   },
