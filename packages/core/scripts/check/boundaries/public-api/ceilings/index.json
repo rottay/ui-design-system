@@ -170,7 +170,7 @@
     },
     "./primitives/input": {
       "maxReachableModules": 67,
-      "maxSourceBytes": 237877
+      "maxSourceBytes": 243265
     },
     "./primitives/input-number": {
       "maxReachableModules": 17,
@@ -182,7 +182,7 @@
     },
     "./primitives/modal": {
       "maxReachableModules": 44,
-      "maxSourceBytes": 170887
+      "maxSourceBytes": 171556
     },
     "./primitives/progress": {
       "maxReachableModules": 20,
@@ -190,7 +190,7 @@
     },
     "./primitives/radio": {
       "maxReachableModules": 37,
-      "maxSourceBytes": 146057
+      "maxSourceBytes": 146726
     },
     "./primitives/responsive": {
       "maxReachableModules": 5,
@@ -254,7 +254,7 @@
     },
     "./primitives/tooltip": {
       "maxReachableModules": 34,
-      "maxSourceBytes": 168733
+      "maxSourceBytes": 169402
     },
     "./primitives/typography": {
       "maxReachableModules": 142,
@@ -270,7 +270,7 @@
     },
     "./runtime/i18n": {
       "maxReachableModules": 20,
-      "maxSourceBytes": 59860
+      "maxSourceBytes": 60529
     },
     "./runtime/motion": {
       "maxReachableModules": 187,
@@ -310,7 +310,7 @@
     },
     "./structures/app-shell": {
       "maxReachableModules": 78,
-      "maxSourceBytes": 283584
+      "maxSourceBytes": 288600
     },
     "./structures/column-menu": {
       "maxReachableModules": 643,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-FAM-11 class window (f32287e2c): dual-class stamping + the registry; +6102 bytes measured, Fable-reviewed",
+  "lastMove": "primitives/modal +669B: same INV-02 shared i18n module growth through the reachable closure (see runtime/i18n)",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
