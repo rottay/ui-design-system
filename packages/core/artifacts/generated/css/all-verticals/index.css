@@ -70779,14 +70779,16 @@ html[data-ds-motion='reduced']
 .rottay-typography.rottay-typography--modern.rottay-typography--modern:is(a)[data-color='primary'] {
   color: var(--ds-color-link, var(--ds-color-primary));
 }
+/* Same rule as the link above, for the same reason: a tone on TEXT reads its
+   governed ink, with the saturated fill as the fallback an ungoverned scope keeps. */
 .rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='success'] {
-  color: var(--ds-color-success);
+  color: var(--ds-color-success-ink, var(--ds-color-success));
 }
 .rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='warning'] {
-  color: var(--ds-color-warning);
+  color: var(--ds-color-warning-ink, var(--ds-color-warning));
 }
 .rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='error'] {
-  color: var(--ds-color-error);
+  color: var(--ds-color-error-ink, var(--ds-color-error));
 }
 
 /* ---- contrast precedence repair (Phase B batch-01): `data-contrast` is only
