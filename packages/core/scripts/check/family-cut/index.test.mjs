@@ -3061,7 +3061,7 @@ test('LIVE: list-toolbar holds the states arm only through the composed Button, 
    * product packet, so the arm must not be the place that forgets it. */
   assert.deepEqual(
     measured.detail.statesNotComposed.map((row) => `${row.state} ${row.compound}`),
-    ['hovered ds-list-toolbar'],
+    ["hovered ds-list-toolbar[data-part='filter-chip']"],
   );
 });
 
@@ -3069,8 +3069,158 @@ test('LIVE: list-toolbar holds the states arm only through the composed Button, 
  * they land; that no composed primitive answers for them is the invariant this
  * credit must not break, and it is the only thing asserted here. */
 test('LIVE: the families whose parts are NOT backed by a composed primitive receive no composed-state credit', () => {
-  for (const family of ['table', 'tag', 'avatar', 'descriptions', 'splitter', 'tree']) {
+  for (const family of ['table', 'tag', 'avatar', 'descriptions', 'tree']) {
     const measured = measureFamily(resolveFamily(family, ROOT), { producers: PRODUCERS });
     assert.deepEqual(measured.detail.stateComposedFrom, [], family);
   }
+});
+
+// ---------------------------------------------------------------------------
+// The PART-KEYED backer: a part the family declares and another component stamps
+// ---------------------------------------------------------------------------
+
+const GRIP = 'planted-grip';
+const GRIP_TSX = `src/components/primitives/foundation/${GRIP}/index.tsx`;
+/** How `patterns/data/<family>` reaches `primitives/foundation/<grip>`. */
+const GRIP_SPECIFIER = `../../../primitives/foundation/${GRIP}`;
+
+/** The shipped ResizeHandle shape: the kernel stamps, `anatomy` spreads LAST. */
+const GRIP_DEFAULT_TSX = [
+  "import { partAttributes, useInteractionState } from '@/foundation/behavior';",
+  '',
+  'export function PlantedGrip({ anatomy, children }) {',
+  '  const state = useInteractionState();',
+  "  const stateProps = { ...partAttributes('planted-grip', state), onPointerEnter: state.onPointerEnter };",
+  '  return <div {...stateProps} {...anatomy}>{children}</div>;',
+  '}',
+  '',
+].join('\n');
+
+/** The splitter call site: the family names the part and delegates the stamp. */
+const handoffTsx = ({ specifier = GRIP_SPECIFIER, anatomy = "{ 'data-part': 'grip' }" } = {}) => [
+  `import { PlantedGrip } from '${specifier}';`,
+  '',
+  'export function PlantedBar() {',
+  '  return (',
+  '    <div className="ds-planted-bar" data-part="bar">',
+  `      <PlantedGrip anatomy={${anatomy}} />`,
+  '    </div>',
+  '  );',
+  '}',
+  '',
+].join('\n');
+
+/** The gutter shape: a bare part compound, no class token anywhere on it. */
+const GRIP_SKIN = `${BAR_RULE}`
+  + ".ds-planted-bar[data-part='bar'] [data-part='grip']:is([data-state~='hovered'], :hover) { color: inherit; }\n";
+
+function measurePartKeyed({ tsx = handoffTsx(), grip = GRIP_DEFAULT_TSX, skin = GRIP_SKIN, barrel } = {}) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-partkeyed-'));
+  try {
+    for (const relativePath of SANDBOX_SOURCES) {
+      const target = join(sandbox, relativePath);
+      mkdirSync(dirname(target), { recursive: true });
+      cpSync(join(ROOT, relativePath), target, { recursive: true });
+    }
+    const planted = [[COMPOSER_TSX, tsx], [GRIP_TSX, grip], [COMPOSER_SKIN, skin]];
+    if (barrel) planted.push(['src/components/primitives/index.ts', barrel]);
+    for (const [relativePath, text] of planted) {
+      mkdirSync(dirname(join(sandbox, relativePath)), { recursive: true });
+      writeFileSync(join(sandbox, relativePath), text);
+    }
+    return measureFamily(resolveFamily(COMPOSER, sandbox), { producers: PRODUCERS });
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+test('CONTROL: a part the family declares through `anatomy` and another component stamps is credited to that component', () => {
+  const measured = measurePartKeyed();
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, []);
+  assert.deepEqual(measured.detail.stateComposedFrom, [GRIP]);
+  assert.deepEqual(measured.detail.statesNotComposed, []);
+});
+
+test('PLANT: a part handed to a component that stamps NOTHING is still debt', () => {
+  const measured = measurePartKeyed({
+    grip: GRIP_DEFAULT_TSX.replace("...partAttributes('planted-grip', state),", ''),
+  });
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, ['hovered']);
+  assert.deepEqual(measured.detail.stateComposedFrom, []);
+});
+
+test("PLANT: a stamping component that spreads `anatomy` BEFORE its own stamp renders its own part, so the family's part is uncredited", () => {
+  const measured = measurePartKeyed({
+    grip: GRIP_DEFAULT_TSX.replace('{...stateProps} {...anatomy}', '{...anatomy} {...stateProps}'),
+  });
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, ['hovered']);
+  assert.deepEqual(measured.detail.stateComposedFrom, []);
+});
+
+test('PLANT: one unstamped branch is enough -- a component that spreads `anatomy` alone somewhere is refused', () => {
+  const measured = measurePartKeyed({
+    grip: GRIP_DEFAULT_TSX.replace(
+      '  return <div {...stateProps} {...anatomy}>{children}</div>;',
+      [
+        '  if (!state.operable) return <div {...anatomy}>{children}</div>;',
+        '  return <div {...stateProps} {...anatomy}>{children}</div>;',
+      ].join('\n'),
+    ),
+  });
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, ['hovered']);
+  assert.deepEqual(measured.detail.stateComposedFrom, []);
+});
+
+test("GUARD: an `anatomy` that carries its own `data-state` keeps the FAMILY as the decider and is refused (widget-board's shape)", () => {
+  const measured = measurePartKeyed({
+    tsx: handoffTsx({ anatomy: "{ 'data-part': 'grip', 'data-state': edgeState }" }),
+  });
+  assert.deepEqual(measured.detail.stateComposedFrom, []);
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, ['hovered']);
+});
+
+test('GUARD: a barrel import proves nothing about the tag -- only the component\'s own owner folder does', () => {
+  /* The barrel is a real module with a real entry -- the only thing that
+   * refuses it is that its folder is not the component's own. */
+  const measured = measurePartKeyed({
+    tsx: handoffTsx({ specifier: '../../../primitives' }),
+    barrel: `export { PlantedGrip } from './foundation/${GRIP}';\n`,
+  });
+  assert.deepEqual(measured.detail.stateComposedFrom, []);
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, ['hovered']);
+});
+
+test('GUARD: the credit is the STATE SET the component stamps, never a blanket bit', () => {
+  const measured = measurePartKeyed({
+    grip: GRIP_DEFAULT_TSX.replace(
+      "...partAttributes('planted-grip', state),",
+      "'data-part': 'planted-grip', 'data-state': 'hovered',",
+    ),
+    skin: `${GRIP_SKIN}`
+      + ".ds-planted-bar[data-part='bar'] [data-part='grip']:is([data-state~='pressed'], :active) { color: inherit; }\n",
+  });
+  /* The component serializes `hovered` and nothing else, so `pressed` stays debt. */
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, ['pressed']);
+  assert.deepEqual(measured.detail.stateComposedFrom, [GRIP]);
+});
+
+test('PLANT: a part the family never hands down is not credited by an unrelated hand-off', () => {
+  const measured = measurePartKeyed({
+    skin: `${GRIP_SKIN}`
+      + ".ds-planted-bar[data-part='bar'] [data-part='other']:is([data-state~='pressed'], :active) { color: inherit; }\n",
+  });
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, ['pressed']);
+  assert.deepEqual(measured.detail.statesNotComposed.map((row) => `${row.state} ${row.compound}`),
+    ["pressed [data-part='other']"]);
+});
+
+test('LIVE: splitter holds the states arm through the shared ResizeHandle it hands `gutter` to', () => {
+  const measured = measureFamily(resolveFamily('splitter', ROOT), { producers: PRODUCERS });
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, []);
+  assert.deepEqual(measured.detail.stateComposedFrom, ['resize-handle']);
+});
+
+test("LIVE: widget-board's own stamp keeps the last word -- it receives no composed-state credit", () => {
+  const measured = measureFamily(resolveFamily('widget-board', ROOT), { producers: PRODUCERS });
+  assert.deepEqual(measured.detail.stateComposedFrom, []);
 });

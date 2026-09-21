@@ -731,6 +731,8 @@ export function analyzeSource(file, source = ts.createSourceFile(
   let stampsPartAttribute = false;
   let stampsStateAttribute = false;
   let stampsVariantAttribute = false;
+  const anatomyHandoffs = [];
+  const imports = new Map();
 
   const styleObjects = new Set();
   const namedObjects = new Map();
@@ -765,6 +767,40 @@ export function analyzeSource(file, source = ts.createSourceFile(
       const tag = node.tagName.getText(source);
       if (SKELETON_WORD.test(tag) && tag !== SKELETON_RENDERER_EXPORT) {
         skeletonSigns.push({ what: `element \`<${tag}>\``, line: lineOf(node) });
+      }
+      /* A family can hand a part DOWN: `<ResizeHandle anatomy={{'data-part':
+       * 'gutter'}} />` names the part but renders no element, so the stamp is
+       * the composed component's to make. The prop NAME travels with the
+       * hand-off -- it is what proves the spread order on the other side. */
+      if (/^[A-Z]/u.test(tag)) {
+        for (const attribute of node.attributes.properties.filter(ts.isJsxAttribute)) {
+          const initializer = attribute.initializer;
+          if (!initializer || !ts.isJsxExpression(initializer) || !initializer.expression) continue;
+          const object = unwrapTransparent(initializer.expression);
+          if (!ts.isObjectLiteralExpression(object)) continue;
+          const keyed = new Map(object.properties.filter(ts.isPropertyAssignment)
+            .map((property) => [property.name.getText(source).replace(/^['"]|['"]$/gu, ''), property]));
+          const partProperty = keyed.get('data-part');
+          if (!partProperty) continue;
+          for (const part of literalsIn(partProperty.initializer)) {
+            anatomyHandoffs.push({
+              part,
+              tag,
+              prop: attributeName(attribute),
+              decidesState: keyed.has('data-state'),
+              line: lineOf(node),
+            });
+          }
+        }
+      }
+    }
+    if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
+      const specifier = node.moduleSpecifier.text;
+      const clause = node.importClause;
+      if (clause?.name) imports.set(clause.name.text, specifier);
+      const named = clause?.namedBindings;
+      if (named && ts.isNamedImports(named)) {
+        for (const element of named.elements) imports.set(element.name.text, specifier);
       }
     }
     if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
@@ -875,6 +911,9 @@ export function analyzeSource(file, source = ts.createSourceFile(
     skeletonSigns: skeletonSigns.map((entry) => ({ ...entry, file })),
     usesPartAttributes,
     dynamicParts,
+    anatomyHandoffs,
+    imports,
+    propSpreads: readPropSpreads(source),
     stampsPartAttribute,
     stampsStateAttribute: stampsStateAttribute || usesPartAttributes,
     stampsVariantAttribute,
@@ -899,11 +938,13 @@ export function analyzeSkin(file) {
    * on, and only the owning compound names that element. */
   const stateCompounds = [];
   for (const match of text.matchAll(/\[data-state\s*[~^*$|]?=\s*['"]([^'"]+)['"]/gu)) {
-    const tokens = owningCompoundClassTokens(text, match.index);
+    const compound = owningCompound(text, match.index);
+    const tokens = prefixedClassesIn(compound);
+    const parts = partValuesIn(compound);
     const line = text.slice(0, match.index).split('\n').length;
     for (const token of match[1].split(/\s+/u).filter(Boolean)) {
       states.add(token);
-      stateCompounds.push({ state: token, tokens, line, file });
+      stateCompounds.push({ state: token, tokens, parts, line, file });
     }
   }
   for (const match of text.matchAll(/\[data-component\s*=\s*['"]([^'"]+)['"]/gu)) components.add(match[1]);
@@ -978,8 +1019,66 @@ export function analyzeSkin(file) {
 }
 
 /**
- * The prefixed classes of the simple-selector-sequence that owns the attribute
- * at `index` -- the compound that decides WHICH element the rule paints.
+ * Where each spread-in prop lands on the elements a component renders, and
+ * whether a `partAttributes` spread already ran on that element when it did.
+ *
+ * Order is the whole question for a handed-down part: the kernel stamps
+ * `data-part` itself, so only a prop spread AFTER it survives to the DOM. A
+ * component that spread the prop first would render its own part name, the
+ * skin's `[data-part='gutter']` rule would match nothing, and crediting the
+ * family for that stamp would be crediting an element that does not exist.
+ */
+function readPropSpreads(source) {
+  const isPartStampCall = (node) => {
+    const expression = unwrapTransparent(node);
+    if (!ts.isCallExpression(expression)) return false;
+    const callee = expression.expression.getText(source);
+    return callee === 'partAttributes' || callee.endsWith('.partAttributes');
+  };
+  /* What competes with the handed-down part is any `data-part` the component
+   * writes itself, whether the kernel serializes it or the component spells it
+   * out. Both forms are the same collision. */
+  const declaresPart = (object) => object.properties.some((property) =>
+    (ts.isSpreadAssignment(property) && isPartStampCall(property.expression))
+    || (ts.isPropertyAssignment(property)
+      && property.name.getText(source).replace(/^['"]|['"]$/gu, '') === 'data-part'));
+  const stampObjects = new Set();
+  const collect = (node) => {
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
+      const initializer = unwrapTransparent(node.initializer);
+      if (ts.isObjectLiteralExpression(initializer) && declaresPart(initializer)) {
+        stampObjects.add(node.name.text);
+      }
+    }
+    ts.forEachChild(node, collect);
+  };
+  collect(source);
+
+  const spreads = [];
+  const walk = (node) => {
+    if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+      let stamped = false;
+      for (const attribute of node.attributes.properties) {
+        if (!ts.isJsxSpreadAttribute(attribute)) continue;
+        const expression = unwrapTransparent(attribute.expression);
+        if (isPartStampCall(expression)
+          || (ts.isObjectLiteralExpression(expression) && declaresPart(expression))
+          || (ts.isIdentifier(expression) && stampObjects.has(expression.text))) {
+          stamped = true;
+          continue;
+        }
+        if (ts.isIdentifier(expression)) spreads.push({ name: expression.text, stampedBefore: stamped });
+      }
+    }
+    ts.forEachChild(node, walk);
+  };
+  walk(source);
+  return spreads;
+}
+
+/**
+ * The simple-selector-sequence that owns the attribute at `index` -- the
+ * compound that decides WHICH element the rule paints.
  *
  * `compoundClassTokensBefore` cannot answer this for a state: the governed
  * F-37 idiom nests the attribute inside `:is([data-state~='x'], :hover)`, so
@@ -989,7 +1088,7 @@ export function analyzeSkin(file) {
  * the compound, not the selector: in `.ds-button .ds-x[data-state~='x']` the
  * `.ds-button` is an ancestor, and an ancestor stamps nothing on `.ds-x`.
  */
-function owningCompoundClassTokens(text, index) {
+function owningCompound(text, index) {
   let at = index;
   let depth = 0;
   let brackets = 0;
@@ -1020,8 +1119,8 @@ function owningCompoundClassTokens(text, index) {
       at -= 1;
       while (at > 0 && /[\w-]/u.test(text[at - 1])) at -= 1;
       while (at > 0 && text[at - 1] === ':') at -= 1;
-      const host = descendant ? [] : owningCompoundClassTokens(text, at);
-      return [...host, ...prefixedClassesIn(compound)];
+      const host = descendant ? '' : owningCompound(text, at);
+      return `${host} ${withoutParens(compound)}`;
     }
     if (depth === 0) {
       if (/[{};]/u.test(char)) break;
@@ -1032,14 +1131,25 @@ function owningCompoundClassTokens(text, index) {
     }
     keep();
   }
-  if (listComma && compound === '') return [];
-  return prefixedClassesIn(compound);
+  if (listComma && compound === '') return '';
+  return withoutParens(compound);
+}
+
+/** A compound with every parenthesised group removed. */
+function withoutParens(text) {
+  let compound = text;
+  while (/\([^()]*\)/u.test(compound)) compound = compound.replace(/\([^()]*\)/gu, '');
+  return compound;
+}
+
+/** The `data-part` values named in one compound. */
+function partValuesIn(compound) {
+  return [...compound.matchAll(/\[data-part\s*=\s*['"]([^'"]+)['"]/gu)].map((match) => match[1]);
 }
 
 /** The prefixed class tokens of one compound, ignoring anything inside parens. */
 function prefixedClassesIn(text) {
-  let compound = text;
-  while (/\([^()]*\)/u.test(compound)) compound = compound.replace(/\([^()]*\)/gu, '');
+  const compound = withoutParens(text);
   const tokens = [];
   for (const prefix of CLASS_PREFIXES) {
     for (const match of compound.matchAll(new RegExp(`\\.(${prefix}-[a-zA-Z0-9]+(?:-{1,2}[a-zA-Z0-9]+)*)`, 'gu'))) {
@@ -1196,6 +1306,38 @@ function composedPrimitiveStampsVariant(token, root) {
   }
   return composedVariantStampCache.get(key);
 }
+
+const partKeyedBackerCache = new Map();
+
+/**
+ * The states a component stamps on a part its CALLER named. `<ResizeHandle
+ * anatomy={{'data-part': 'gutter'}} />` is the family declaring the part and
+ * delegating the stamp; both halves are provable from source, so the credit is
+ * too -- but only when the import names the component's own owner folder. A
+ * barrel specifier resolves to a directory full of other people's stamps and
+ * proves nothing about this tag.
+ */
+function composedComponentStampsPart(handoff, specifier, fromFile) {
+  if (!specifier.startsWith('.')) return undefined;
+  const dir = resolve(dirname(fromFile), specifier);
+  if (basename(dir) !== kebabOf(handoff.tag)) return undefined;
+  if (!['index.tsx', 'index.ts'].some((entry) => existsSync(join(dir, entry)))) return undefined;
+  const key = `${dir}\0${handoff.prop}`;
+  if (!partKeyedBackerCache.has(key)) {
+    const analyzed = walkFiles(dir, isFamilySource).map((file) => analyzeSource(file));
+    const stampers = analyzed.filter((entry) => entry.stampsStateAttribute);
+    const spreads = analyzed.flatMap((entry) => entry.propSpreads)
+      .filter((entry) => entry.name === handoff.prop);
+    partKeyedBackerCache.set(key, stampers.length > 0
+      && spreads.length > 0
+      && spreads.every((entry) => entry.stampedBefore)
+      ? { name: basename(dir), states: new Set(stampers.flatMap((entry) => [...entry.states])) }
+      : undefined);
+  }
+  return partKeyedBackerCache.get(key);
+}
+
+const kebabOf = (tag) => tag.replace(/([a-z0-9])([A-Z])/gu, '$1-$2').toLowerCase();
 
 const composedStateStampCache = new Map();
 
@@ -1993,18 +2135,38 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
   const stateComposedFrom = new Set();
   const composedStampedStates = new Set();
   const statesNotComposed = [];
+  /* A part this family declares but hands to another component to render. The
+   * anatomy that carries its own `data-state` is NOT one of these: there the
+   * family is the decider, and crediting the component would hide the day the
+   * family stops stamping. */
+  const partKeyedBackers = new Map();
+  for (const entry of sources) {
+    for (const handoff of entry.anatomyHandoffs) {
+      if (handoff.decidesState) continue;
+      const specifier = entry.imports.get(handoff.tag);
+      if (!specifier) continue;
+      const backer = composedComponentStampsPart(handoff, specifier, entry.file);
+      if (backer) partKeyedBackers.set(handoff.part, backer);
+    }
+  }
   for (const occurrence of skins.flatMap((skin) => skin.stateCompounds)) {
     const backer = occurrence.tokens
       .filter((token) => !ownsClass(token))
       .map((token) => composedPrimitiveStampsState(token, root))
-      .find((entry) => entry?.states.has(occurrence.state));
+      .find((entry) => entry?.states.has(occurrence.state))
+      ?? occurrence.parts
+        .map((part) => partKeyedBackers.get(part))
+        .find((entry) => entry?.states.has(occurrence.state));
     if (backer) {
       stateComposedFrom.add(backer.name);
       composedStampedStates.add(occurrence.state);
     } else {
       statesNotComposed.push({
         state: occurrence.state,
-        compound: occurrence.tokens.join(' '),
+        compound: [
+          occurrence.tokens.join(' '),
+          ...occurrence.parts.map((part) => `[data-part='${part}']`),
+        ].join(''),
         line: occurrence.line,
         file: occurrence.file,
       });
