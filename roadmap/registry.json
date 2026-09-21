@@ -5450,7 +5450,7 @@
    "lane": "family-cuts",
    "order": 11,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -5552,8 +5552,8 @@
      "note": "2026-09-21 kimi (checkpoint-recovery): el slot collection-header LANDO como d3f593ad4 — adapt adoption (raiz observa su caja via useAdaptation, data-posture junto a data-compact, contrato container-only sin entrada viewport por diseno) + reconciliacion de autoridad responsive unica (bloque @container 34rem retirado, 2 reglas de pintura re-claveadas al stamp [data-compact=true], suite estatica 6 brazos con drills). Fable ACCEPT x2 (review lot + re-review correctivo). La WO sigue abierta: falta la auditoria de cierre contra la aceptacion completa."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-21",
+   "evidence": "2026-09-21 close audit (kimi-dt, bounded, measured at e3a99a8b3): family-cut gate exit 0 — the 19 families of the cut OK or admitted at their adjudicated floors (surface-lifecycle 3/3/1 = the owner R4 crash-safe allowance, aa8d1e26e Fable ACCEPT; splitter/list-toolbar are WO-FAM-08 rows). Causality/behaviour focal window over the cut's families: 612 tests, 610 green; the 2 reds were stale axe pins in the drain direction (debt emptied by f73348ed5's supporting-ink regrade, never re-pinned), drained with provenance at e3a99a8b3 (Fable ACCEPT) and re-run 70/70. Axe: debt pinned by identity with record AXE_DEBT={} (34929b2b7) and today's drains; the live per-family axe arm stays OWED to WO-INV-03 by gate design (a11yAssertions blocking arm green). Adapt amendment: all 6 declared layout-sensitive families of the cut acceptAdapt + stamp data-posture (adapt-slot gate; the charts FAIL is WO-FAM-09's, outside this cut); adapt-slot self-tests 16/16; adaptive-contracts census exit 0 (71/71 productive). Skeleton amendment: WO-FAM-14 DONE (N3 d06babee7, ancestor) — the anatomy-derived-skeleton arm is live, not OWED. Reopen pendings of 2026-09-20 all landed with Fable ACCEPT: adapt+ledger 4c7d726f5, record contrast 34929b2b7, collection-header d3f593ad4 (x2), S19-F01/02/03 ce0a2e0c2. Registered honest carryovers, not blockers: record partsConsumedNotStamped=63 pinned at its measured value; the light crash-surface border at 1.74:1 (WCAG 1.4.11 delineating edge per Fable; a family-owner packet may raise it to 3:1). F-55/F-41/F-64 close per their audit-pack criteria as recorded in the 2026-09-19 close (6da4c8706)."
   },
   {
    "id": "WO-FAM-11",
