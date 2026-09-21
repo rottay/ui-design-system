@@ -200,16 +200,16 @@ describeCausality({
  * exit (`#e5e5e5` -> `#ededed`) is routed as its own bounded packet, and the
  * active pill's primary ink on its tinted ground in dark mode stays pinned on
  * its own cause.
+ *
+ * DRAINED 2026-09-21 by that ground-side exit (Fable-ruled): `bithire light`
+ * measures 4.64:1 on the new `#ededed` chip ground and leaves this map whole.
+ * `evnto light` (2.82:1) and `bithire dark` (3.00:1) stay pinned on the
+ * success FILL ink, which is the separate success-ink packet's cause.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire dark': {
     'color-contrast': [
       'button[data-active="true"] > span[data-state="visible"][data-part="content"] > span[data-part="label"] > .rottay-flex[data-part="section-nav-item-row"][data-align="center"] > .rottay-flex[data-part="section-nav-item-main"][data-align="center"] > span[data-part="section-nav-item-label"][data-color="inherit"][data-size="sm"]',
-      'span[data-part="draft-status-label"]',
-    ],
-  },
-  'bithire light': {
-    'color-contrast': [
       'span[data-part="draft-status-label"]',
     ],
   },

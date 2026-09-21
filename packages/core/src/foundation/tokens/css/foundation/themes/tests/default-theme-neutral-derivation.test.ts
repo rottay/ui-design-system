@@ -74,6 +74,9 @@ const DARK_REPOINTED_BEFORE = {
  */
 const NO_EXACT_STEP_LITERALS: Record<string, Record<string, string>> = {
   root: {
+    // Ground-side exit: retired `var(--ds-color-neutral-200)` (still the border
+    // rung) and the dark literal #141417; seed relation asserted below.
+    "--ds-color-bg-tertiary": "#ededed",
     "--ds-color-text-secondary": "#5A5A61",
     // 2026-09-21 supporting-ink floor (Fable-verified): the W8 ladder was
     // levelled against a DARK ground (its APCA numbers reproduce only there);
@@ -98,10 +101,13 @@ const NO_EXACT_STEP_LITERALS: Record<string, Record<string, string>> = {
 };
 
 /**
- * The thirteen contaminated light seeds. Each carried a dark literal on bare
- * `:root` — a ground that painted near-black under near-white ink on any
- * untenanted light document — and now derives from the light neutral ramp,
- * which `.dark` was already doing in its own text.
+ * The twelve contaminated light seeds still on the ramp. Each carried a dark
+ * literal on bare `:root` — a ground that painted near-black under near-white
+ * ink on any untenanted light document — and now derives from the light
+ * neutral ramp, which `.dark` was already doing in its own text.
+ * `--ds-color-bg-tertiary` was the thirteenth and has left for the
+ * no-exact-step ledger above, where it is an explicit seed pinned to the
+ * neutral-100/200 midpoint instead of to the border rung.
  *
  * This is NOT the value-preserving contract the dark table above encodes: the
  * light value changed on purpose, because it was wrong. What is pinned is the
@@ -121,11 +127,6 @@ const ROOT_REWIRED: Record<
     derivation: "var(--ds-color-neutral-100)",
     retiredDarkLiteral: "#0F0F12",
     resolvesTo: "#f5f5f5",
-  },
-  "--ds-color-bg-tertiary": {
-    derivation: "var(--ds-color-neutral-200)",
-    retiredDarkLiteral: "#141417",
-    resolvesTo: "#e5e5e5",
   },
   "--ds-color-bg-hover": {
     derivation: "var(--ds-color-neutral-100)",
@@ -317,5 +318,23 @@ describe("default theme semantic neutral derivation (TOK-01)", () => {
         ).toBe(false);
       }
     }
+  });
+
+  it("holds the tertiary ground on the neutral-100/200 midpoint it was seeded from", () => {
+    const channels = (hex: string) =>
+      [1, 3, 5].map((offset) => Number.parseInt(hex.slice(offset, offset + 2), 16));
+    const lower = channels(resolveVarGraph("--ds-color-neutral-100", rootScope));
+    const upper = channels(resolveVarGraph("--ds-color-neutral-200", rootScope));
+    const midpoint = `#${lower
+      .map((channel, index) =>
+        Math.round((channel + upper[index]) / 2)
+          .toString(16)
+          .padStart(2, "0")
+      )
+      .join("")}`;
+    expect(
+      resolveVarGraph("--ds-color-bg-tertiary", rootScope).toLowerCase(),
+      `the light tertiary ground drifted off the neutral-100/200 midpoint (${midpoint}); the ramp was re-graded, so re-seed it`
+    ).toBe(midpoint);
   });
 });

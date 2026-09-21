@@ -66,7 +66,7 @@ export const FOUNDATION_COLOR_DEFAULTS_LIGHT: Readonly<Record<string, string>> =
   "--ds-color-bg-secondary": "var(--ds-color-neutral-100)",
   "--ds-color-bg-subtle": "var(--ds-color-bg-secondary, #0D0D10)",
   "--ds-color-bg-surface": "var(--ds-color-bg-secondary)",
-  "--ds-color-bg-tertiary": "var(--ds-color-neutral-200)",
+  "--ds-color-bg-tertiary": "#ededed",
   "--ds-color-black": "#000000",
   "--ds-color-border": "var(--ds-color-neutral-200)",
   "--ds-color-border-focus": "var(--ds-color-primary)",

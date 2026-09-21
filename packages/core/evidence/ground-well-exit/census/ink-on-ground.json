@@ -1,0 +1,255 @@
+[
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css",
+    "line": 215,
+    "sel": ".ds-structure.ds-collection-header [data-part='meta-item'][data-tone='neutral']",
+    "bg": [
+      "var(--ds-surface-panel)"
+    ],
+    "ink": [
+      "var(--ds-color-text-secondary)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/command-center/index.css",
+    "line": 57,
+    "sel": ".ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-actio",
+    "bg": [
+      "var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary))"
+    ],
+    "ink": [
+      "var(--ds-color-text-secondary)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
+    "line": 345,
+    "sel": ".ds-pattern-data-table.ds-data-table--mobile [data-part=\"mobile-pagination\"]",
+    "bg": [
+      "var( --ds-data-table-mobile-pagination-bg, var(--ds-surface-inset, var"
+    ],
+    "ink": [
+      "var(--ds-data-table-mobile-pagination-ink, var(--ds-color-text-primary))"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
+    "line": 84,
+    "sel": ".ds-pattern-gallery-view [data-part='image-placeholder']",
+    "bg": [
+      "var(--ds-color-bg-tertiary)"
+    ],
+    "ink": [
+      "var(--ds-color-text-disabled)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css",
+    "line": 326,
+    "sel": ".ds-surface.ds-guided-draft-form [data-part='draft-recovery-icon']",
+    "bg": [
+      "var(--ds-color-info-bg, var(--ds-color-bg-tertiary))"
+    ],
+    "ink": [
+      "var(--ds-color-info)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css",
+    "line": 74,
+    "sel": ".rottay-modal-close-button[data-part='close-button']:hover",
+    "bg": [
+      "var(--ds-modal-close-button-hover-bg, var(--ds-modal-close-bg-hover, v"
+    ],
+    "ink": [
+      "var(--ds-modal-close-button-hover-color, var(--ds-modal-close-color-hover, var(--ds-color-text-primary)))"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/record-workbench/index.css",
+    "line": 140,
+    "sel": ".ds-surface.ds-record-workbench .ds-record-workbench__tab-badge[data-part='tab-badge']",
+    "bg": [
+      "var(--ds-color-bg-tertiary)"
+    ],
+    "ink": [
+      "var(--ds-color-text-muted)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 348,
+    "sel": "> .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-voice-status]",
+    "bg": [
+      "var(--ds-search-command-bar-badge-bg, var(--ds-surface-panel))"
+    ],
+    "ink": [
+      "var(--ds-search-command-bar-badge-color, var(--ds-color-text-secondary))"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css",
+    "line": 105,
+    "sel": ".ds-visual-excellence__command-search kbd",
+    "bg": [
+      "var(--ds-surface-panel-bg, var(--ds-color-bg-secondary))"
+    ],
+    "ink": [
+      "var(--ds-color-text-muted)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+    "line": 231,
+    "sel": ".ds-widget-board__catalog-icon",
+    "bg": [
+      "var(--ds-workspace-card-icon-bg, var(--ds-surface-panel-bg))"
+    ],
+    "ink": [
+      "var(--ds-workspace-card-icon-color, var(--ds-color-primary))"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+    "line": 1382,
+    "sel": ".ds-pattern-widget-board .ds-widget-board__empty[data-part=\"empty-state\"]",
+    "bg": [
+      "var(--ds-empty-state-bg, var(--ds-surface-panel-bg))"
+    ],
+    "ink": [
+      "var(--ds-color-text-secondary)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+    "line": 1399,
+    "sel": ".ds-pattern-widget-board .ds-widget-board__error[data-part=\"error-state\"]",
+    "bg": [
+      "color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-surface-panel-bg"
+    ],
+    "ink": [
+      "var(--ds-color-text-secondary)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form/index.css",
+    "line": 226,
+    "sel": ".ds-form-item.ds-form-item--modern [data-part='required-mark'][data-kind='optional']",
+    "bg": [
+      "var(--ds-surface-inset, var(--ds-surface-panel))"
+    ],
+    "ink": [
+      "var(--ds-form-badge-ink, var(--ds-color-text-secondary))"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form/index.css",
+    "line": 249,
+    "sel": ".ds-form-item.ds-form-item--modern [data-part='tooltip-icon']",
+    "bg": [
+      "var(--ds-surface-inset, var(--ds-surface-panel))"
+    ],
+    "ink": [
+      "var(--ds-color-text-muted)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+    "line": 67,
+    "sel": ".rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-theme='dark']",
+    "bg": [
+      "var(--ds-layout-sider-bg, var(--ds-material-panel-background))"
+    ],
+    "ink": [
+      "var(--ds-layout-sider-color, var(--ds-material-panel-foreground))"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css",
+    "line": 1,
+    "sel": ".ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-part='root']",
+    "bg": [
+      "var( --ds-toolbar-header-gradient, linear-gradient( 118deg, color-mix("
+    ],
+    "ink": [
+      "var( --ds-toolbar-color, var(--ds-material-panel-foreground, var(--ds-color-text-primary)) )"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
+    "line": 133,
+    "sel": ".ds-pattern-live-feed.ds-engine-modern [data-part='badge']",
+    "bg": [
+      "var(--ds-surface-panel)"
+    ],
+    "ink": [
+      "var(--ds-color-text-primary)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger/index.css",
+    "line": 66,
+    "sel": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell']",
+    "bg": [
+      "var(--ds-surface-panel)"
+    ],
+    "ink": [
+      "var(--ds-color-text-muted)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
+    "line": 220,
+    "sel": ".ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__icon",
+    "bg": [
+      "var(--ds-surface-panel)"
+    ],
+    "ink": [
+      "var(--ds-stats-grid-accent, var(--ds-color-text-secondary))"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
+    "line": 254,
+    "sel": ".ds-stats-grid__trend[data-change=\"neutral\"]",
+    "bg": [
+      "var(--ds-surface-panel)"
+    ],
+    "ink": [
+      "var(--ds-color-text-secondary)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/upload/index.css",
+    "line": 430,
+    "sel": ".ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture [data-part='file-i",
+    "bg": [
+      "var(--ds-surface-panel)"
+    ],
+    "ink": [
+      "var(--ds-color-text-secondary)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css",
+    "line": 136,
+    "sel": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__avatar-fallback[data",
+    "bg": [
+      "var(--ds-surface-panel)"
+    ],
+    "ink": [
+      "var(--ds-color-text-primary)"
+    ]
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css",
+    "line": 277,
+    "sel": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-pa",
+    "bg": [
+      "var(--ds-surface-panel)"
+    ],
+    "ink": [
+      "var(--ds-color-text-secondary)"
+    ]
+  }
+]

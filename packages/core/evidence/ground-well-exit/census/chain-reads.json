@@ -1,0 +1,2493 @@
+[
+  {
+    "file": "src/components/patterns/visualization/charts/runtime/theming/composition/foundation/paint/index.ts",
+    "line": 133,
+    "prop": "low",
+    "value": "'var(--ds-color-bg-tertiary)', steps: 5,",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "other"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1571,
+    "prop": "--ds-upload-card-bg",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1646,
+    "prop": "--ds-table-row-bg-hover",
+    "value": "var(--ds-material-panel-background-hover)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1648,
+    "prop": "--ds-table-row-bg-selected",
+    "value": "var(--ds-material-panel-background-selected)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1690,
+    "prop": "--ds-skeleton-wave-gradient",
+    "value": "linear-gradient( 90deg, var(--ds-surface-panel-bg) 25%, color-mix(in srgb, var(--ds-color-primary) 8%, var(--d",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "other"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1809,
+    "prop": "--ds-menu-item-bg-hover",
+    "value": "var(--ds-material-panel-background-hover)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1810,
+    "prop": "--ds-menu-item-bg-active",
+    "value": "var(--ds-material-panel-background-active)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1821,
+    "prop": "--ds-menu-item-hover-bg",
+    "value": "var(--ds-material-panel-background-hover)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1822,
+    "prop": "--ds-menu-item-selected-bg",
+    "value": "var(--ds-material-panel-background-selected)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1845,
+    "prop": "--ds-collapse-header-bg-hover",
+    "value": "var(--ds-material-panel-background-hover)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1924,
+    "prop": "--ds-list-item-bg-hover",
+    "value": "var(--ds-material-panel-background-hover)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1925,
+    "prop": "--ds-list-skeleton-bg",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1965,
+    "prop": "--ds-live-feed-skeleton-bg",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 1981,
+    "prop": "--ds-stats-grid-skeleton-bg",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 2133,
+    "prop": "--ds-input-bg",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 2157,
+    "prop": "--ds-menu-item-bg-hover",
+    "value": "var(--ds-material-panel-background-hover)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 2158,
+    "prop": "--ds-menu-item-bg-active",
+    "value": "var(--ds-material-panel-background-active)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 256,
+    "prop": "--ds-color-surface-subtle",
+    "value": "var(--ds-surface-panel-bg)",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "other"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 282,
+    "prop": "--ds-surface-panel",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "other"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 283,
+    "prop": "--ds-surface-card",
+    "value": "var(--ds-color-bg-elevated, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "other"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 320,
+    "prop": "--ds-material-panel-background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 322,
+    "prop": "--ds-material-panel-background-hover",
+    "value": "color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift, 4%), var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 323,
+    "prop": "--ds-material-panel-background-active",
+    "value": "color-mix(in srgb, var(--ds-color-primary) var(--ds-state-active-shift, 7%), var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 324,
+    "prop": "--ds-material-panel-background-selected",
+    "value": "color-mix(in srgb, var(--ds-color-primary) var(--ds-state-selected-shift, 9%), var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 325,
+    "prop": "--ds-material-panel-background-disabled",
+    "value": "color-mix(in srgb, var(--ds-surface-panel) var(--ds-state-disabled-mix, 82%), var(--ds-surface-canvas))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 345,
+    "prop": "--ds-material-card-background-disabled",
+    "value": "color-mix(in srgb, var(--ds-surface-card) var(--ds-state-disabled-mix, 82%), var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+    "line": 372,
+    "prop": "--ds-material-control-background-disabled",
+    "value": "color-mix(in srgb, var(--ds-surface-control) var(--ds-state-disabled-mix, 82%), var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/card/index.css",
+    "line": 230,
+    "prop": "--ds-card-flat-bg",
+    "value": "var(--ds-surface-panel, var(--ds-card-bg))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/card/index.css",
+    "line": 317,
+    "prop": "--ds-premium-card-bg-disabled",
+    "value": "var( --ds-material-card-background-disabled, color-mix( in srgb, var(--ds-material-card-background, var(--ds-c",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/collapse/index.css",
+    "line": 63,
+    "prop": "--ds-collapse-header-default-hover-bg",
+    "value": "var(--ds-material-panel-background-hover)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/collapse/index.css",
+    "line": 71,
+    "prop": "--ds-collapse-header-default-active-bg",
+    "value": "var(--ds-material-panel-background-active)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/collapse/index.css",
+    "line": 74,
+    "prop": "--ds-collapse-header-default-disabled-bg",
+    "value": "var(--ds-material-panel-background-disabled)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/collapse/index.css",
+    "line": 93,
+    "prop": "--ds-collapse-header-ghost-hover-bg",
+    "value": "var(--ds-material-panel-background-hover)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
+    "line": 107,
+    "prop": "border",
+    "value": "1px solid var(--ds-surface-panel-border)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
+    "line": 108,
+    "prop": "background",
+    "value": "var(--ds-surface-panel-bg)",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
+    "line": 109,
+    "prop": "box-shadow",
+    "value": "var(--ds-surface-panel-shadow)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
+    "line": 113,
+    "prop": "background-image",
+    "value": "var(--ds-surface-panel-texture), var(--ds-surface-card-grid-bg)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
+    "line": 120,
+    "prop": "border-color",
+    "value": "var( --ds-material-panel-border-hover, var(--ds-surface-panel-border) )",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
+    "line": 124,
+    "prop": "box-shadow",
+    "value": "var(--ds-surface-panel-focus-ring)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
+    "line": 312,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg) 76%, var(--ds-surface-card-bg) )",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 102,
+    "prop": "--ds-surface-hero-bg",
+    "value": "linear-gradient( 145deg, var(--ds-surface-card-bg), color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-su",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 1046,
+    "prop": "--ds-workspace-shell-bg",
+    "value": "linear-gradient( 180deg, var(--ds-surface-card-bg) 0%, var(--ds-surface-canvas, var(--ds-surface-panel-bg)) 50",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 1071,
+    "prop": "--ds-workspace-shell-bg",
+    "value": "linear-gradient( 180deg, var(--ds-surface-card-bg) 0%, var(--ds-surface-canvas, var(--ds-surface-panel-bg)) 46",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 1136,
+    "prop": "color",
+    "value": "var(--ds-surface-panel-color)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 1360,
+    "prop": "--ds-signal-card-bg",
+    "value": "linear-gradient( 145deg, color-mix( in srgb, var(--ds-surface-card-bg) 94%, var(--ds-signal-card-soft, transpa",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 176,
+    "prop": "--ds-shell-active-bg",
+    "value": "var(--ds-material-panel-background-active)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 225,
+    "prop": "--ds-command-rail-bg",
+    "value": "linear-gradient( 180deg, var(--ds-surface-card-bg) 0%, var(--ds-surface-panel-bg) 100% )",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 238,
+    "prop": "--ds-rich-card-header-bg",
+    "value": "color-mix( in srgb, var(--ds-surface-card-bg) 82%, var(--ds-surface-panel-bg) )",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 244,
+    "prop": "--ds-rich-card-section-alt-bg",
+    "value": "color-mix( in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel-bg) )",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 2935,
+    "prop": "border",
+    "value": "1px solid var(--ds-surface-panel-border)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 2936,
+    "prop": "background",
+    "value": "var(--ds-surface-panel-bg)",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 2937,
+    "prop": "box-shadow",
+    "value": "var(--ds-surface-panel-shadow)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 2941,
+    "prop": "background-image",
+    "value": "var(--ds-surface-panel-texture), var(--ds-surface-card-grid-bg)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 2948,
+    "prop": "border-color",
+    "value": "var( --ds-material-panel-border-hover, var(--ds-surface-panel-border) )",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 2952,
+    "prop": "box-shadow",
+    "value": "var(--ds-surface-panel-focus-ring)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 3136,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg) 76%, var(--ds-surface-card-bg) )",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 393,
+    "prop": "--ds-table-header-bg-hover",
+    "value": "var(--ds-material-panel-background-hover)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 48,
+    "prop": "--ds-surface-panel-bg",
+    "value": "var( --ds-material-panel-background, var(--ds-surface-panel, var(--ds-color-bg-secondary)) )",
+    "channels": [
+      "--ds-material-panel-background",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 575,
+    "prop": "--ds-meter-track",
+    "value": "color-mix( in srgb, var(--ds-surface-card-border) 48%, var(--ds-surface-panel-bg) )",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "other"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 593,
+    "prop": "--ds-cell-meter-track",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg) 78%, var(--ds-surface-card-bg) )",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "other"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 608,
+    "prop": "--ds-empty-state-bg",
+    "value": "linear-gradient( 145deg, color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card-bg)), var(--ds-s",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 624,
+    "prop": "--ds-error-state-bg",
+    "value": "linear-gradient( 145deg, color-mix(in srgb, var(--ds-color-error) 7%, var(--ds-surface-card-bg)), var(--ds-sur",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 639,
+    "prop": "--ds-chart-panel-bg",
+    "value": "linear-gradient( 145deg, var(--ds-surface-card-bg), color-mix(in srgb, var(--ds-color-secondary) 4%, var(--ds-",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 645,
+    "prop": "--ds-chart-plot-bg",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg) 78%, var(--ds-surface-card-bg) )",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 729,
+    "prop": "--ds-skeleton-bg",
+    "value": "linear-gradient( 90deg, var(--ds-surface-panel-bg) 25%, color-mix(in srgb, var(--ds-color-primary) 8%, var(--d",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 766,
+    "prop": "--ds-command-home-panel-bg",
+    "value": "var( --ds-premium-card-bg, linear-gradient( 180deg, var(--ds-surface-card-bg) 0%, color-mix( in srgb, var(--ds",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 779,
+    "prop": "--ds-command-home-panel-bg-strong",
+    "value": "linear-gradient( 180deg, var(--ds-surface-card-bg) 0%, color-mix( in srgb, var(--ds-surface-panel-bg) 32%, var",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 801,
+    "prop": "--ds-command-home-console-bg",
+    "value": "repeating-linear-gradient( 90deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 30px ), repeating-li",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 827,
+    "prop": "--ds-command-home-surface-bg",
+    "value": "repeating-linear-gradient( 90deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 26px ), repeating-li",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 850,
+    "prop": "--ds-command-home-hero-bg",
+    "value": "repeating-linear-gradient( 90deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 28px ), repeating-li",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "line": 902,
+    "prop": "--ds-command-home-card-bg",
+    "value": "linear-gradient( 90deg, color-mix(in srgb, var(--ds-command-home-card-tone) 6%, transparent) 1px, transparent ",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/activity-ticker/index.css",
+    "line": 333,
+    "prop": "background",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css",
+    "line": 107,
+    "prop": "background",
+    "value": "var(--ds-surface-panel, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/chart-c/index.css",
+    "line": 157,
+    "prop": "fill",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "other"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/chart-calendar-heatmap/index.css",
+    "line": 26,
+    "prop": "background",
+    "value": "linear-gradient( 90deg, var(--_ds-calendar-heatmap-ramp-low, var(--ds-color-bg-tertiary)), var(--_ds-calendar-",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/chart-calendar-heatmap/index.css",
+    "line": 36,
+    "prop": "background",
+    "value": "linear-gradient( 270deg, var(--_ds-calendar-heatmap-ramp-low, var(--ds-color-bg-tertiary)), var(--_ds-calendar",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/chat-surface/index.css",
+    "line": 88,
+    "prop": "background",
+    "value": "var(--ds-surface-panel, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css",
+    "line": 114,
+    "prop": "background",
+    "value": "var( --ds-collection-header-bg, linear-gradient(116deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--d",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css",
+    "line": 217,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css",
+    "line": 575,
+    "prop": "background",
+    "value": "color-mix(in srgb, var(--ds-surface-panel) 68%, transparent)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css",
+    "line": 579,
+    "prop": "background",
+    "value": "color-mix(in srgb, var(--ds-surface-panel) 76%, transparent)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css",
+    "line": 583,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/command-center/index.css",
+    "line": 68,
+    "prop": "background",
+    "value": "var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/compare/index.css",
+    "line": 84,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel, var(--ds-color-bg-secondary)) )",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/dashboard-header/index.css",
+    "line": 87,
+    "prop": "background",
+    "value": "var( --ds-dashboard-header-bg, linear-gradient( 180deg, color-mix(in srgb, var(--ds-color-primary) 5%, var(--d",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/dashboard/index.css",
+    "line": 51,
+    "prop": "background",
+    "value": "var( --ds-dashboard-skeleton-background, var(--ds-surface-panel, var(--ds-color-bg-secondary)) )",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
+    "line": 310,
+    "prop": "background",
+    "value": "var(--ds-surface-inset, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
+    "line": 349,
+    "prop": "background",
+    "value": "var( --ds-data-table-mobile-pagination-bg, var(--ds-surface-inset, var(--ds-surface-panel)) )",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css",
+    "line": 111,
+    "prop": "--ds-decision-comparison-footer-bg",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 56%, var(--ds-surface-card-bg, va",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css",
+    "line": 450,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 34%, transparent )",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css",
+    "line": 51,
+    "prop": "--ds-decision-comparison-toolbar-bg",
+    "value": "linear-gradient( 100deg, color-mix( in srgb, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 88%, var",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css",
+    "line": 64,
+    "prop": "--ds-decision-comparison-verdict-bg",
+    "value": "linear-gradient( 112deg, color-mix( in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card-bg, var(--ds-co",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css",
+    "line": 80,
+    "prop": "background",
+    "value": "var(--ds-color-primary-bg, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
+    "line": 326,
+    "prop": "background",
+    "value": "linear-gradient( 180deg, color-mix( in srgb, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 72%, var",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
+    "line": 62,
+    "prop": "background",
+    "value": "linear-gradient( 180deg, color-mix( in srgb, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 64%, var",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
+    "line": 83,
+    "prop": "background",
+    "value": "linear-gradient( 180deg, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card-bg, var(--ds-col",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/editor-surface/index.css",
+    "line": 52,
+    "prop": "background",
+    "value": "var(--ds-surface-panel, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css",
+    "line": 110,
+    "prop": "background",
+    "value": "var(--ds-surface-panel, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css",
+    "line": 163,
+    "prop": "background",
+    "value": "linear-gradient( 105deg, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 20%, color-mix( in srgb, var",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
+    "line": 87,
+    "prop": "background",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css",
+    "line": 103,
+    "prop": "background",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css",
+    "line": 202,
+    "prop": "--ds-button-ghost-bg-hover",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css",
+    "line": 222,
+    "prop": "--ds-button-ghost-bg-hover",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css",
+    "line": 335,
+    "prop": "background",
+    "value": "var(--ds-color-info-bg, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css",
+    "line": 520,
+    "prop": "background",
+    "value": "var(--ds-color-bg-elevated, var(--ds-surface-card, var(--ds-color-bg-tertiary)))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/kanban-surface/index.css",
+    "line": 74,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel, var(--ds-color-bg-secondary)) )",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/marketing-surface/index.css",
+    "line": 127,
+    "prop": "background",
+    "value": "var(--ds-surface-panel, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/media-surface/index.css",
+    "line": 64,
+    "prop": "background",
+    "value": "var(--ds-surface-panel, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css",
+    "line": 286,
+    "prop": "background",
+    "value": "var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/metrics-chart/index.css",
+    "line": 165,
+    "prop": "background",
+    "value": "var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/metrics-minimal/index.css",
+    "line": 221,
+    "prop": "background",
+    "value": "var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
+    "line": 84,
+    "prop": "background",
+    "value": "var(--ds-surface-panel, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/operational-surface/index.css",
+    "line": 30,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel, var(--ds-color-bg-secondary)) )",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css",
+    "line": 75,
+    "prop": "background-color",
+    "value": "var(--ds-modal-close-button-hover-bg, var(--ds-modal-close-bg-hover, var(--ds-color-bg-tertiary)))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/pricing-surface/index.css",
+    "line": 58,
+    "prop": "background",
+    "value": "var(--ds-surface-panel, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css",
+    "line": 160,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 28%, var(--ds-surface-card-bg, va",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css",
+    "line": 198,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 52%, var(--ds-surface-card-bg, va",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css",
+    "line": 325,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-color-text-primary) 8%, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) ",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css",
+    "line": 67,
+    "prop": "background",
+    "value": "radial-gradient( circle at 10% 0%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), transparent 40",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/record-workbench/index.css",
+    "line": 148,
+    "prop": "background",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/report/index.css",
+    "line": 44,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel, var(--ds-color-bg-secondary)) )",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
+    "line": 73,
+    "prop": "background",
+    "value": "var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
+    "line": 79,
+    "prop": "background",
+    "value": "var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
+    "line": 96,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel, var(--ds-color-bg-secondary)) )",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 114,
+    "prop": "background",
+    "value": "var(--ds-search-command-bar-shell-bg, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 124,
+    "prop": "background",
+    "value": "var(--ds-search-command-bar-shell-embedded-bg, color-mix(in srgb, var(--ds-surface-panel) 76%, transparent))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 130,
+    "prop": "background",
+    "value": "var(--ds-search-command-bar-shell-editorial-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-pa",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 218,
+    "prop": "background",
+    "value": "var(--ds-search-command-bar-input-bg, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 232,
+    "prop": "background",
+    "value": "var(--ds-search-command-bar-input-embedded-bg, color-mix(in srgb, var(--ds-surface-panel) 84%, transparent))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 254,
+    "prop": "background",
+    "value": "var(--ds-search-command-bar-input-editorial-bg, color-mix(in srgb, var(--ds-surface-panel) 78%, transparent))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 300,
+    "prop": "--ds-button-ghost-bg",
+    "value": "var(--ds-search-command-bar-control-bg, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 310,
+    "prop": "--ds-button-ghost-bg",
+    "value": "var(--ds-search-command-bar-control-bg, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 317,
+    "prop": "--ds-button-ghost-bg-hover",
+    "value": "var(--ds-search-command-bar-voice-toggle-bg-hover, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-sur",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 362,
+    "prop": "background",
+    "value": "var(--ds-search-command-bar-badge-bg, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 580,
+    "prop": "--ds-button-ghost-bg",
+    "value": "var(--ds-search-command-bar-control-bg, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 583,
+    "prop": "--ds-button-ghost-bg-hover",
+    "value": "var(--ds-search-command-bar-chip-bg-hover, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-pan",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css",
+    "line": 586,
+    "prop": "--ds-button-ghost-bg-active",
+    "value": "var(--ds-search-command-bar-chip-bg-active, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-p",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/search/index.css",
+    "line": 125,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel, var(--ds-color-bg-secondary)) )",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+    "line": 135,
+    "prop": "background",
+    "value": "linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 90%, var(--ds-color-bg-elevated) 10%), var(",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+    "line": 165,
+    "prop": "background",
+    "value": "linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 88%, var(--ds-color-bg-elevated) 12%), var(",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css",
+    "line": 133,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) )",
+    "channels": [
+      "--ds-surface-panel-bg",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css",
+    "line": 144,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) )",
+    "channels": [
+      "--ds-surface-panel-bg",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css",
+    "line": 187,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) )",
+    "channels": [
+      "--ds-surface-panel-bg",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css",
+    "line": 213,
+    "prop": "background",
+    "value": "var( --ds-skeleton-wave-gradient, linear-gradient( 90deg, var(--ds-material-panel-background, var(--ds-surface",
+    "channels": [
+      "--ds-material-panel-background",
+      "--ds-surface-panel-bg",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css",
+    "line": 243,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) )",
+    "channels": [
+      "--ds-surface-panel-bg",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css",
+    "line": 251,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) )",
+    "channels": [
+      "--ds-surface-panel-bg",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css",
+    "line": 76,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) )",
+    "channels": [
+      "--ds-surface-panel-bg",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css",
+    "line": 91,
+    "prop": "background",
+    "value": "var( --ds-skeleton-wave-gradient, linear-gradient( 90deg, var(--ds-material-panel-background, var(--ds-surface",
+    "channels": [
+      "--ds-material-panel-background",
+      "--ds-surface-panel-bg",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/table-toolbar/index.css",
+    "line": 165,
+    "prop": "--ds-input-bg",
+    "value": "var(--ds-toolbar-control-bg, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css",
+    "line": 110,
+    "prop": "background",
+    "value": "var(--ds-surface-panel-bg, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css",
+    "line": 124,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 94%, var(--ds-surface-panel-bg, var",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css",
+    "line": 182,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 46%, var(--ds-surface-card-bg, va",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css",
+    "line": 206,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 58%, var(--ds-surface-card-bg, va",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css",
+    "line": 279,
+    "prop": "background",
+    "value": "linear-gradient( 110deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card-bg, white)), var",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css",
+    "line": 429,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 34%, var(--ds-surface-card-bg, va",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css",
+    "line": 487,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 34%, var(--ds-surface-card-bg, va",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/visualization/index.css",
+    "line": 57,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel, var(--ds-color-bg-secondary)) )",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+    "line": 1396,
+    "prop": "background",
+    "value": "var(--ds-empty-state-bg, var(--ds-surface-panel-bg))",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+    "line": 1419,
+    "prop": "background",
+    "value": "color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-surface-panel-bg))",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+    "line": 242,
+    "prop": "background",
+    "value": "var(--ds-workspace-card-icon-bg, var(--ds-surface-panel-bg))",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+    "line": 324,
+    "prop": "background",
+    "value": "color-mix(in srgb, var(--ds-surface-panel-bg) 68%, transparent)",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+    "line": 396,
+    "prop": "background",
+    "value": "radial-gradient( circle at 100% 0%, color-mix(in srgb, var(--ds-color-primary) 6%, transparent), transparent 3",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+    "line": 43,
+    "prop": "background",
+    "value": "var( --ds-card-header-bg, linear-gradient( var(--_ds-widget-board-band-angle, 112deg), color-mix(in srgb, var(",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+    "line": 745,
+    "prop": "background",
+    "value": "var( --ds-card-header-bg, linear-gradient( var(--_ds-widget-board-band-angle, 112deg), color-mix(in srgb, var(",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+    "line": 897,
+    "prop": "background",
+    "value": "color-mix( in srgb, var(--ds-surface-panel-bg) 78%, var(--ds-surface-card-bg) )",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/statistic/index.css",
+    "line": 38,
+    "prop": "--ds-statistic-loading-bg",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/tree/index.css",
+    "line": 28,
+    "prop": "--ds-tree-node-bg-hover",
+    "value": "var(--ds-material-panel-background-hover)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/tree/index.css",
+    "line": 29,
+    "prop": "--ds-tree-node-bg-selected",
+    "value": "var(--ds-material-panel-background-selected)",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/framework-token-projection/index.css",
+    "line": 28,
+    "prop": "--color-base-300",
+    "value": "var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "other"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
+    "line": 317,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
+    "line": 338,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
+    "line": 56,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow/index.css",
+    "line": 171,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow/index.css",
+    "line": 56,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow/index.css",
+    "line": 78,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css",
+    "line": 60,
+    "prop": "background",
+    "value": "var(--ds-surface-panel, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
+    "line": 117,
+    "prop": "background-color",
+    "value": "var(--ds-card-flat-bg, var(--ds-card-bg, var(--ds-surface-panel)))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+    "line": 140,
+    "prop": "border-color",
+    "value": "color-mix(in srgb, var(--ds-checkbox-border, var(--ds-color-border)) 88%, var(--ds-surface-panel) 12%)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+    "line": 141,
+    "prop": "background-color",
+    "value": "color-mix(in srgb, var(--ds-surface-panel) 76%, var(--ds-color-text-primary) 24%)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+    "line": 215,
+    "prop": "background-color",
+    "value": "color-mix(in srgb, var(--ds-surface-panel) 68%, var(--ds-color-text-primary) 32%)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+    "line": 1110,
+    "prop": "background",
+    "value": "var( --ds-table-header-bg, linear-gradient( 112deg, color-mix( in srgb, var(--ds-color-primary) 5%, var(--ds-s",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+    "line": 1180,
+    "prop": "background-color",
+    "value": "var(--ds-surface-inset, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+    "line": 1238,
+    "prop": "background-color",
+    "value": "var( --ds-table-row-bg-striped, color-mix( in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, ",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+    "line": 1372,
+    "prop": "background",
+    "value": "var( --ds-table-header-bg, color-mix( in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
+    "line": 153,
+    "prop": "background",
+    "value": "var( --ds-detail-hero-bg, var( --ds-card-header-bg, linear-gradient( 112deg, color-mix(in srgb, var(--ds-color",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
+    "line": 589,
+    "prop": "background",
+    "value": "var( --ds-detail-section-bg, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-pa",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
+    "line": 643,
+    "prop": "background",
+    "value": "var(--ds-workspace-card-bg-hover, var(--ds-detail-section-bg, var(--ds-workspace-card-glass-bg, var(--ds-works",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-builder/index.css",
+    "line": 89,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form/index.css",
+    "line": 233,
+    "prop": "background",
+    "value": "var(--ds-surface-inset, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form/index.css",
+    "line": 259,
+    "prop": "background",
+    "value": "var(--ds-surface-inset, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/image/index.css",
+    "line": 141,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+    "line": 82,
+    "prop": "background",
+    "value": "var(--ds-layout-sider-bg, var(--ds-material-panel-background))",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css",
+    "line": 52,
+    "prop": "background",
+    "value": "var( --ds-toolbar-header-gradient, linear-gradient( 118deg, color-mix( in srgb, var( --ds-toolbar-bg, var(--ds",
+    "channels": [
+      "--ds-material-panel-background"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css",
+    "line": 218,
+    "prop": "background",
+    "value": "var(--ds-list-item-hover-background-color, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css",
+    "line": 223,
+    "prop": "background",
+    "value": "var(--ds-list-item-hover-background-color, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
+    "line": 144,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
+    "line": 64,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
+    "line": 44,
+    "prop": "background",
+    "value": "var(--ds-menu-dark-bg, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery/index.css",
+    "line": 294,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery/index.css",
+    "line": 305,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery/index.css",
+    "line": 81,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger/index.css",
+    "line": 105,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger/index.css",
+    "line": 231,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger/index.css",
+    "line": 243,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger/index.css",
+    "line": 76,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
+    "line": 156,
+    "prop": "background",
+    "value": "var( --ds-page-header-bg, var( --ds-card-header-bg, linear-gradient( 112deg, color-mix(in srgb, var(--ds-color",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
+    "line": 137,
+    "prop": "border",
+    "value": "var(--ds-border-width-1) solid var(--ds-color-bg-tertiary)",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
+    "line": 246,
+    "prop": "border-color",
+    "value": "color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
+    "line": 252,
+    "prop": "border-color",
+    "value": "color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "edge/ink"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
+    "line": 92,
+    "prop": "background",
+    "value": "var(--ds-timeline-line-color, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
+    "line": 70,
+    "prop": "background",
+    "value": "var(--ds-surface-panel, var(--ds-color-bg-secondary))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/record-facts/index.css",
+    "line": 161,
+    "prop": "background",
+    "value": "radial-gradient( circle at var(--_ds-record-facts-header-origin), color-mix( in srgb, var(--ds-color-primary) ",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
+    "line": 274,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
+    "line": 316,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
+    "line": 328,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
+    "line": 62,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
+    "line": 69,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/skeleton/index.css",
+    "line": 130,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) )",
+    "channels": [
+      "--ds-surface-panel-bg",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/skeleton/index.css",
+    "line": 145,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) )",
+    "channels": [
+      "--ds-surface-panel-bg",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/skeleton/index.css",
+    "line": 21,
+    "prop": "background",
+    "value": "var( --ds-skeleton-bg, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) )",
+    "channels": [
+      "--ds-surface-panel-bg",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/splitter/index.css",
+    "line": 86,
+    "prop": "background",
+    "value": "var(--ds-splitter-gutter-bg-hover, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-material-panel-bac",
+    "channels": [
+      "--ds-material-panel-background",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/splitter/index.css",
+    "line": 91,
+    "prop": "background",
+    "value": "var(--ds-splitter-gutter-bg-hover, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-material-panel-bac",
+    "channels": [
+      "--ds-material-panel-background",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/splitter/index.css",
+    "line": 96,
+    "prop": "background",
+    "value": "var(--ds-splitter-gutter-bg-dragging, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-material-panel-",
+    "channels": [
+      "--ds-material-panel-background",
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+    "line": 110,
+    "prop": "background",
+    "value": "var( --ds-statistic-loading-bg, linear-gradient( 105deg, var(--ds-surface-panel), color-mix(in srgb, var(--ds-",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
+    "line": 223,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
+    "line": 258,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
+    "line": 268,
+    "prop": "background",
+    "value": "linear-gradient( 90deg, var(--ds-surface-panel) 25%, var(--ds-surface-inset) 50%, var(--ds-surface-panel) 75% ",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard/index.css",
+    "line": 82,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard/index.css",
+    "line": 87,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard/index.css",
+    "line": 96,
+    "prop": "--ds-progress-bg",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/timeline/index.css",
+    "line": 229,
+    "prop": "background",
+    "value": "var(--ds-timeline-color-gray, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/timeline/index.css",
+    "line": 278,
+    "prop": "background",
+    "value": "var(--ds-timeline-line-color, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/timeline/index.css",
+    "line": 87,
+    "prop": "background",
+    "value": "var(--ds-timeline-line-color, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tour/index.css",
+    "line": 140,
+    "prop": "background",
+    "value": "var(--ds-tour-indicator-bg, var(--ds-surface-panel))",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
+    "line": 55,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/upload/index.css",
+    "line": 444,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css",
+    "line": 121,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css",
+    "line": 143,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css",
+    "line": 279,
+    "prop": "background",
+    "value": "var(--ds-surface-panel)",
+    "channels": [
+      "--ds-surface-panel"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/skin/widget-board/index.css",
+    "line": 103,
+    "prop": "background",
+    "value": "radial-gradient( circle at var(--_ds-widget-board-tint-origin), color-mix( in srgb, var(--ds-color-primary) va",
+    "channels": [
+      "--ds-surface-panel-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/rustic/skin/list/index.css",
+    "line": 39,
+    "prop": "background",
+    "value": "var(--ds-list-skeleton-bg, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-list-skeleton-bg",
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/rustic/skin/list/index.css",
+    "line": 43,
+    "prop": "background",
+    "value": "var(--ds-list-skeleton-bg, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-list-skeleton-bg",
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
+    "line": 93,
+    "prop": "background",
+    "value": "var(--ds-live-feed-skeleton-bg, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-live-feed-skeleton-bg",
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
+    "line": 126,
+    "prop": "background",
+    "value": "var(--ds-stats-grid-skeleton-bg, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-stats-grid-skeleton-bg",
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/rustic/skin/table/index.css",
+    "line": 75,
+    "prop": "background-color",
+    "value": "var(--ds-table-header-bg-hover, var(--ds-color-bg-tertiary))",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/rustic/skin/upload/index.css",
+    "line": 110,
+    "prop": "background",
+    "value": "var(--ds-upload-card-bg)",
+    "channels": [
+      "--ds-upload-card-bg"
+    ],
+    "role": "GROUND"
+  },
+  {
+    "file": "src/foundation/tokens/ts/runtime/mirrors/rottay/index.ts",
+    "line": 23,
+    "prop": "primary",
+    "value": "'var(--ds-color-bg-primary)', secondary: 'var(--ds-color-bg-secondary)', tertiary: 'var(--ds-color-bg-tertiary",
+    "channels": [
+      "--ds-color-bg-tertiary"
+    ],
+    "role": "other"
+  }
+]

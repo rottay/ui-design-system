@@ -215,7 +215,9 @@
 
   --ds-color-bg-primary: var(--ds-color-neutral-50);
   --ds-color-bg-secondary: var(--ds-color-neutral-100);
-  --ds-color-bg-tertiary: var(--ds-color-neutral-200);
+  /* Ground, not border: neutral-200 is ALSO the default border rung, and only
+     the ground carries text -- at #e5e5e5 the muted rung reads 4.20:1 there. */
+  --ds-color-bg-tertiary: #ededed;
   /* Derived, not literal: bithire and evnto override the whole bg-* family to
      a light canvas but never authored a subtle rung, so a literal here left
      them resolving near-black in light mode while every sibling was light.
