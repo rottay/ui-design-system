@@ -4627,7 +4627,7 @@
    "lane": "emission-mount",
    "order": 3,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-EMI-01"
    ],
@@ -4636,9 +4636,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes n/a",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-dt",
+   "claimedAt": "2026-09-21",
+   "progressLog": [
+    {
+     "at": "2026-09-21 18:31",
+     "by": "kimi-dt",
+     "note": "2026-09-21 kimi-dt: claimed — debrief packet read-only despachado a Opus (brief-emi-03-debrief-opus.md) bajo la regla shared-core (toca compilation/emission, recurso singleton que el DT ya reserva como claimant común con CAT-04; el contrato CAT-04 adoptado no toca lowering ni emitters, frontera declarada en el brief). Revisión Kimi+Fable del MISMO debrief antes de cualquier implementación."
+    }
+   ]
   },
   {
    "id": "WO-FAM-00",
