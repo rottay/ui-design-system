@@ -1473,7 +1473,9 @@
 
   --ds-color-bg-primary: var(--ds-color-neutral-50);
   --ds-color-bg-secondary: var(--ds-color-neutral-100);
-  --ds-color-bg-tertiary: var(--ds-color-neutral-200);
+  /* Ground, not border: neutral-200 is ALSO the default border rung, and only
+     the ground carries text -- at #e5e5e5 the muted rung reads 4.20:1 there. */
+  --ds-color-bg-tertiary: #ededed;
   /* Derived, not literal: bithire and evnto override the whole bg-* family to
      a light canvas but never authored a subtle rung, so a literal here left
      them resolving near-black in light mode while every sibling was light.
@@ -1491,12 +1493,11 @@
   --ds-color-background: var(--ds-color-bg-primary);
 
   --ds-color-text-primary: var(--ds-color-neutral-900);
-  --ds-color-text-secondary: #A0A0A5;
-  /* Ladder re-leveled (W8): muted must clear APCA |Lc| 45 on the page ground
-     (#6B6B72 measured 25.3); tertiary rises with it so the
-     secondary > tertiary > muted ordering is preserved (50.9 > 47.9 > 45.8). */
-  --ds-color-text-tertiary: #9A9AA2;
-  --ds-color-text-muted: #96969E;
+  /* Supporting ink clears WCAG 4.5:1 on every light ground this theme declares
+     down to #f5f5f5, and darkens with emphasis: secondary is the strongest. */
+  --ds-color-text-secondary: #5A5A61;
+  --ds-color-text-tertiary: #62626A;
+  --ds-color-text-muted: #6B6B72;
   --ds-color-text-disabled: #4A4A50;
   --ds-color-text-on-primary: #0C0C0E;
   --ds-color-text-inverse: var(--ds-color-text-on-primary);
@@ -3641,19 +3642,29 @@ html.dark {
      design-language section 2.6 closed set 120/200/320), so tenant-scoped and
      unscoped contexts resolve the token to the same duration. */
   --ds-motion-instant: 120ms;
-  --ds-motion-fast: 120ms;
-  --ds-motion-normal: 200ms;
-  --ds-motion-slow: 320ms;
+  --ds-motion-calm: 200ms;
+  --ds-motion-deliberate: 320ms;
   --ds-motion-glacial: 500ms;
   --ds-motion-duration-scale: 1;
 
-  /* `calm` and `deliberate` are the cadence's own names for `normal` and
-     `slow`. They existed ONLY inside the reduced-motion block below, so every
-     `animation: … var(--ds-motion-calm)` resolved to nothing at rest and the
-     whole declaration was invalid wherever no compiled tenant artifact ships.
-     A role a component may bind carries a resting value. */
-  --ds-motion-calm: var(--ds-motion-normal);
-  --ds-motion-deliberate: var(--ds-motion-slow);
+  /* `fast`, `normal` and `slow` are the cadence's other names for `instant`,
+     `calm` and `deliberate`, and — like the intent names below — they are DIAL
+     PRODUCTS of it: the cadence is what `motion.dial` multiplies, every public
+     duration name is what a skin binds. Stating them as bare rungs made the
+     choice of spelling decide whether a tenant could move the duration at all.
+     Same resting values (120/200/320ms at scale 1), same order the compiler
+     derives them in (lowering/runtime/derivation/motion DURATION_ALIASES).
+     `glacial` stays a rung: the ambient loops apply the dial at the call site,
+     so a product here would apply it twice. */
+  --ds-motion-fast: calc(
+    var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1)
+  );
+  --ds-motion-normal: calc(
+    var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1)
+  );
+  --ds-motion-slow: calc(
+    var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1)
+  );
   /* The travel dial skins multiply their entrance offsets by, and the ease
      name the compiler emits as `--ds-ease-standard`. Both were read with a
      literal fallback in place of a declaration. */
@@ -3664,22 +3675,22 @@ html.dark {
      choosing arbitrary speeds, which keeps dense tools calm and AI feedback
      expressive without becoming decorative noise. */
   --ds-motion-feedback: calc(
-    var(--ds-motion-fast) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1)
   );
   --ds-motion-reveal: calc(
-    var(--ds-motion-normal) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1)
   );
   --ds-motion-disclosure: calc(
-    var(--ds-motion-normal) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1)
   );
   --ds-motion-resize: calc(
-    var(--ds-motion-normal) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1)
   );
   --ds-motion-rearrange: calc(
-    var(--ds-motion-slow) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1)
   );
   --ds-motion-attention: calc(
-    var(--ds-motion-slow) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1)
   );
 
   /* Easings. ease-out is the premium curve (formerly copy-pasted as a literal). */
@@ -87188,31 +87199,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 }
 
-/* ---- container posture. The TSX compact branch answers the DEVICE class;
-        this answers the BOX, which is the case a device class cannot see: the
-        same header at half width inside a split view or a rail on a 1440px
-        screen is still `data-compact='false'`. Mobile is a simplified posture,
-        not a compressed desktop, so what retires is decoration, never content:
-        the hero drops to the compact step, the two ornamental rules and the
-        shortcuts glyph (redundant beside its own word) go, and the caps
-        tighten. The identity tick STAYS — on a narrow box the eyebrow leads
-        the identity column, so it is the one mark carrying most. Viewport
-        media queries are forbidden under presentation/components; the root
-        declares the container this queries. ---- */
-@container ds-collection-header (max-width: 34rem) {
-  .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='default'] {
-    font-size: var(--ds-font-size-fluid-3xl);
-  }
+/* ---- compact paint, keyed on the resolution the root already stamps. What
+        renders is the TSX's decision; paint only retires the shortcuts glyph
+        (redundant beside its own word) and tightens the caps. ---- */
+.ds-structure.ds-collection-header[data-part='root'][data-compact='true'] [data-part='shortcuts-label-icon'] {
+  display: none;
+}
 
-  .ds-structure.ds-collection-header [data-part='subtitle-divider'],
-  .ds-structure.ds-collection-header [data-part='editorial-tech-rule'],
-  .ds-structure.ds-collection-header [data-part='shortcuts-label-icon'] {
-    display: none;
-  }
-
-  .ds-structure.ds-collection-header [data-part='shortcut-pill'] {
-    padding-inline: var(--ds-spacing-1, 4px);
-  }
+.ds-structure.ds-collection-header[data-part='root'][data-compact='true'] [data-part='shortcut-pill'] {
+  padding-inline: var(--ds-spacing-1, 4px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -120170,9 +120165,15 @@ html[lang]:lang(ar) {
   --ds-motion-instant: 120ms;
   --ds-motion-calm: 200ms;
   --ds-motion-deliberate: 320ms;
-  --ds-motion-fast: var(--ds-motion-instant);
-  --ds-motion-normal: var(--ds-motion-calm);
-  --ds-motion-slow: var(--ds-motion-deliberate);
+  --ds-motion-fast: calc(
+    var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1)
+  );
+  --ds-motion-normal: calc(
+    var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1)
+  );
+  --ds-motion-slow: calc(
+    var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1)
+  );
   --ds-motion-glacial: 500ms;
   --ds-motion-duration-scale: 1;
   --ds-motion-intensity: 1;
@@ -121889,19 +121890,19 @@ html[lang]:lang(ar) {
   --ds-motion-ease-move: var(--ds-ease-standard);
   --ds-motion-ease-out: var(--ds-motion-ease-enter);
   --ds-motion-ease-standard: var(--ds-ease-standard);
-  --ds-motion-fast: var(--ds-motion-instant);
+  --ds-motion-fast: calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1));
   --ds-motion-feedback: calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1));
   --ds-motion-glacial: calc(var(--ds-motion-deliberate) * 1.5625);
   --ds-motion-instant: 120ms;
   --ds-motion-intensity: 0.55;
-  --ds-motion-normal: var(--ds-motion-calm);
+  --ds-motion-normal: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-offset-in: 0px;
   --ds-motion-panel-offset: 8px;
   --ds-motion-rearrange: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
   --ds-motion-resize: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-reveal: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-scale-in: 1;
-  --ds-motion-slow: var(--ds-motion-deliberate);
+  --ds-motion-slow: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
   --ds-notifier-border-color: var(--ds-color-border-subtle);
   --ds-notifier-clickable-shadow-hover: var(--ds-elevation-4);
   --ds-notifier-close-color: var(--ds-color-text-secondary);
