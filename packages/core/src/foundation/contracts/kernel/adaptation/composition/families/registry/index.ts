@@ -81,6 +81,36 @@ export const LAYOUT_SENSITIVE_FAMILIES = Object.freeze([
     layoutSensitive: true,
     cut: 'WO-FAM-05',
   },
+  {
+    family: 'edit-fields',
+    owner: 'src/components/structures/record/edit-fields',
+    layoutSensitive: true,
+    cut: 'WO-FAM-10',
+  },
+  {
+    family: 'form-surface',
+    owner: 'src/components/surfaces/presentation/pages/forms/form',
+    layoutSensitive: true,
+    cut: 'WO-FAM-10',
+  },
+  {
+    family: 'detail-form-surface',
+    owner: 'src/components/surfaces/presentation/pages/forms/detail-form',
+    layoutSensitive: true,
+    cut: 'WO-FAM-10',
+  },
+  {
+    family: 'guided-draft-form',
+    owner: 'src/components/surfaces/presentation/pages/forms/guided-draft-form',
+    layoutSensitive: true,
+    cut: 'WO-FAM-10',
+  },
+  {
+    family: 'wizard-surface',
+    owner: 'src/components/surfaces/presentation/pages/forms/wizard',
+    layoutSensitive: true,
+    cut: 'WO-FAM-10',
+  },
 ] as const satisfies readonly LayoutSensitiveFamily[]);
 
 export type LayoutSensitiveFamilyId = (typeof LAYOUT_SENSITIVE_FAMILIES)[number]['family'];

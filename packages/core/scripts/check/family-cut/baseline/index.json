@@ -2227,7 +2227,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 32,
+        "channelsRead": 33,
         "classTokens": 1,
         "partsStamped": 51,
         "partsConsumed": 51
@@ -2243,7 +2243,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-10 sub-lot F, S1-visible, and the family the blind walk measured INVERTED: it reported 31 parts painted-and-never-stamped and zero source files, where the owner in fact stamps 53 parts and carries 5 inline paints, 8 hand-made skeleton constructs and 46 parts with no skeleton role. It owns no executable a11y assertion."
+      "cutNote": "WO-FAM-10 sub-lot F, S1-visible, and the family the blind walk measured INVERTED: it reported 31 parts painted-and-never-stamped and zero source files, where the owner in fact stamps 53 parts and carries 5 inline paints, 8 hand-made skeleton constructs and 46 parts with no skeleton role. It owns no executable a11y assertion. Re-pin 2026-09-20 (WO-FAM-10 arm 2, ledger doctrine): channelsRead 32 -> 33 = +--ds-color-link (+1), measured by the gate. The scroll-mode sections stopped being Cards, so the two `--ds-card-bordered-border-color` writes that marked the active and errored section reached nothing of the family's own and, being custom properties, inherited into any Card a consumer rendered inside `section.render()`. They are deleted and replaced by a locus rail on the block's inline-start edge, which takes the link channel because --ds-color-primary is mode-blind (#171717 on the #0b1220 rottay dark ground, measured invisible) while --ds-color-link is the primary-family ink derived against the ground it is painted on. The rail's width is a literal 2px ON PURPOSE -- the governed emphasis edge grades to 1px in two verticals, a hairline rather than a locus -- so this lot adds exactly one channel, not two."
     },
     "surface-lifecycle": {
       "cut": "WO-FAM-10",

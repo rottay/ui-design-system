@@ -41,6 +41,10 @@ import { Button } from '../../../../../primitives/inputs/button';
 import { Select } from '../../../../../primitives/inputs/select';
 import { Card } from '../../../../../primitives/display/card';
 import type { CardVariant } from '../../../../../primitives/display/card/contracts';
+import {
+  InlineEditGrid,
+  InlineEditor,
+} from '../../../../../structures/record/edit-fields';
 import { Progress } from '../../../../../primitives/feedback/progress';
 import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton/runtime/anatomy-renderer';
 import { PatternStepWizard } from '../../../../../patterns/forms/step-wizard';
@@ -51,6 +55,14 @@ import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/sta
 import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
 import { WorkflowTemplateIcon } from '@/graphics/icons/semantic/generated/roles/workflow-template';
+import type { Adapt } from '../../../../../../foundation/contracts/kernel/adaptation';
+import { EDIT_FIELDS_SINGLE_TRACK } from '../../../../../../foundation/contracts/kernel/adaptation/composition/families/edit-fields';
+import {
+  FORM_SURFACE_ADAPT_DEFAULTS,
+  type FormSurfaceAdaptation,
+  type ResolvedFormSurfaceAdaptation,
+} from '../../../../../../foundation/contracts/kernel/adaptation/composition/families/form-surface';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { resolveDelegatedSubmitIntent } from '@/foundation/behavior/runtime/submit-intent';
@@ -174,6 +186,16 @@ export interface GuidedDraftFormSurfaceProps {
    * ```
    */
   adaptive?: import('../../../../foundation/contracts/adaptive').SurfaceAdaptivePosture;
+
+  /**
+   * Per-posture deltas on the shared posture vocabulary. `adaptive` declares
+   * the surface's viewport-keyed baseline; `adapt` outranks it and adds the
+   * CONTAINER band, so the same form narrows inside a rail the way it narrows
+   * on a phone.
+   *
+   * @example adapt={{ compact: { sectionLayout: 'dropdown-nav', actionBar: 'inline' } }}
+   */
+  adapt?: Adapt<FormSurfaceAdaptation>;
 }
 
 // ---------------------------------------------------------------------------
@@ -451,18 +473,16 @@ function TemplateCard({
 function GuidedDraftFormSectionCard({
   section,
   isActive,
-  cardVariant,
   completeLabel,
   errorsLabel,
 }: {
   section: FormSection;
   isActive: boolean;
-  cardVariant: CardVariant;
   completeLabel: string;
   errorsLabel: string;
 }) {
   return (
-    <Card
+    <InlineEditor
       className={[
         'ds-guided-draft-form__section-card',
         isActive ? 'ds-guided-draft-form__section-card--active' : '',
@@ -471,12 +491,12 @@ function GuidedDraftFormSectionCard({
       ]
         .filter(Boolean)
         .join(' ')}
-      variant={cardVariant}
+      headerless
+      title={section.title}
       id={`section-${section.key}`}
     >
-      <Card.Body>
-        <Stack spacing="sm">
-          <Box data-part="section-card-header">
+      <>
+        <Box data-part="section-card-header">
             <Flex align="center" gap={2}>
               {section.icon && (
                 <Box data-part="section-card-icon" aria-hidden="true">
@@ -495,31 +515,34 @@ function GuidedDraftFormSectionCard({
               </Heading>
               {section.isComplete && (
                 <Flex data-part="section-card-complete" align="center" gap={1}>
+                  {/* Off the card ground the status tint no longer clears 4.5:1
+                      as COPY; the semantic icon keeps the non-colour cue and the
+                      label takes the ledger's reading ink. */}
                   <StatusSuccessIcon decorative size={14} />
-                  <Text size="xs" color="success">
-                    {completeLabel}
-                  </Text>
+                  <Text size="xs">{completeLabel}</Text>
                 </Flex>
               )}
               {section.hasErrors && (
                 <Flex data-part="section-card-errors" align="center" gap={1}>
                   <StatusErrorIcon decorative size={14} />
-                  <Text size="xs" color="error">
-                    {errorsLabel}
-                  </Text>
+                  <Text size="xs">{errorsLabel}</Text>
                 </Flex>
               )}
             </Flex>
-            {section.description && (
-              <Text data-part="section-card-description" size="sm" color="muted" as="p">
-                {section.description}
-              </Text>
-            )}
-          </Box>
+          {section.description && (
+            <Text data-part="section-card-description" size="sm" color="muted" as="p">
+              {section.description}
+            </Text>
+          )}
+        </Box>
+        {/* The fields sit on the ledger grid, not in a nested card: the
+            region seam is the family's divider grammar and the posture is
+            resolved off the region's OWN box. */}
+        <InlineEditGrid kind="primary" columns={EDIT_FIELDS_SINGLE_TRACK}>
           {section.render()}
-        </Stack>
-      </Card.Body>
-    </Card>
+        </InlineEditGrid>
+      </>
+    </InlineEditor>
   );
 }
 
@@ -549,6 +572,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
     headerSlot,
     footerSlot,
     adaptive,
+    adapt,
   } = props;
 
   const { tSurfaceOr } = useSurfaceTranslations();
@@ -564,27 +588,40 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const headingWeight = resolveHeadingFontWeight(profileDefaults.headerWeight);
 
-  // Adaptive posture resolution
+  // Adaptive posture resolution. `adaptive` is the surface's viewport-keyed
+  // baseline and becomes the BASE layer; the family narrows it on a compact
+  // box, and the app's `adapt` outranks both.
   const posture = resolveSurfacePosture(adaptive, activeBreakpoint);
+  const [rootElement, setRootElement] = useState<HTMLElement | null>(null);
+  const containerRef = useMemo(() => ({ current: rootElement }), [rootElement]);
+  const base = useMemo<ResolvedFormSurfaceAdaptation>(
+    () => ({
+      stacked: isMobile || isTablet,
+      sectionLayout:
+        posture.formLayout ?? (isMobile ? 'dropdown-nav' : isTablet ? 'pill-nav' : 'sidebar-nav'),
+      actionBar: posture.actionBar ?? 'sticky-bottom',
+      compactHeader: Boolean(posture.compactHeader),
+    }),
+    [isMobile, isTablet, posture.actionBar, posture.compactHeader, posture.formLayout],
+  );
+  const { adaptation, postureAttribute } = useAdaptation(adapt, {
+    base,
+    defaults: FORM_SURFACE_ADAPT_DEFAULTS,
+    containerRef,
+  });
 
-  // Responsive layout: adaptive override -> breakpoint defaults
   const formLayoutMap: Record<string, SectionNavLayout> = {
     'stacked': 'dropdown',
     'dropdown-nav': 'dropdown',
     'pill-nav': 'pills',
     'sidebar-nav': 'sidebar',
   };
-  const sectionNavLayout: SectionNavLayout = posture.formLayout
-    ? (formLayoutMap[posture.formLayout] ?? 'sidebar')
-    : isMobile
-    ? 'dropdown'
-    : isTablet
-      ? 'pills'
-      : 'sidebar';
-  const shouldStack = isMobile || isTablet;
+  const sectionNavLayout: SectionNavLayout =
+    formLayoutMap[adaptation.sectionLayout] ?? 'sidebar';
+  const shouldStack = adaptation.stacked;
   // Action bar posture: sticky-bottom (default) | inline | floating.
-  const actionBarPosture = posture.actionBar ?? 'sticky-bottom';
-  const compactHeader = Boolean(posture.compactHeader);
+  const actionBarPosture = adaptation.actionBar;
+  const compactHeader = adaptation.compactHeader;
 
   const [activeSection, setActiveSection] = useState(sections[0]?.key ?? '');
   const [showTemplates, setShowTemplates] = useState(false);
@@ -691,7 +728,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
           key={section.key}
           section={section}
           isActive={activeSection === section.key}
-          cardVariant={profileDefaults.cardVariant}
           completeLabel={completeLabel}
           errorsLabel={sectionErrorsLabel}
         />
@@ -746,7 +782,9 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             layout={sectionNavLayout}
             mode={mode}
           />
-          <Box data-part="content-body">
+          {/* The body claims the track the nav leaves: without it the column is
+              shrink-to-fit and a ledger section is as wide as its widest field. */}
+          <Box data-part="content-body" flex={1}>
             {mode === 'wizard' ? wizardContent : sectionCards}
           </Box>
         </Flex>
@@ -939,9 +977,11 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
 
   const content = (
     <Stack
+      ref={setRootElement}
       className="ds-surface ds-guided-draft-form"
       data-part="root"
       data-mode={mode}
+      data-posture={postureAttribute}
       data-mobile={resolvedMobile ? 'true' : 'false'}
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading || undefined}

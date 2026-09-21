@@ -27,6 +27,13 @@ import type {
   WizardSurfaceStepRenderContext,
 } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import type { Adapt } from '../../../../../../foundation/contracts/kernel/adaptation';
+import {
+  FORM_SURFACE_ADAPT_DEFAULTS,
+  type FormSurfaceAdaptation,
+  type ResolvedFormSurfaceAdaptation,
+} from '../../../../../../foundation/contracts/kernel/adaptation/composition/families/form-surface';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
 import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
@@ -116,13 +123,39 @@ export interface WizardSurfaceProps {
   loading?: boolean;
   error?: unknown;
   onRetry?: () => void | Promise<void>;
+  /**
+   * Per-posture deltas the application declares. The surface measures its own
+   * box, so a compact BOX stacks the tracks whatever the viewport says.
+   *
+   * @example adapt={{ compact: { stacked: true } }}
+   */
+  adapt?: Adapt<FormSurfaceAdaptation>;
 }
 
-export function WizardSurface({ config, loading = false, error, onRetry }: WizardSurfaceProps): React.ReactElement {
+export function WizardSurface({ config, loading = false, error, onRetry, adapt }: WizardSurfaceProps): React.ReactElement {
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
-  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
+  const declaredStacking = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
+  // The config's viewport stacking is the base; the family narrows it on a
+  // compact BOX, and the app's `adapt` outranks both.
+  const [rootElement, setRootElement] = useState<HTMLElement | null>(null);
+  const containerRef = useMemo(() => ({ current: rootElement }), [rootElement]);
+  const base = useMemo<ResolvedFormSurfaceAdaptation>(
+    () => ({
+      stacked: declaredStacking,
+      sectionLayout: 'sidebar-nav',
+      actionBar: 'inline',
+      compactHeader: false,
+    }),
+    [declaredStacking],
+  );
+  const { adaptation, postureAttribute } = useAdaptation(adapt, {
+    base,
+    defaults: FORM_SURFACE_ADAPT_DEFAULTS,
+    containerRef,
+  });
+  const shouldStack = adaptation.stacked;
   const resolvedMobile = hasResolvedViewport && isMobile;
   const dirtyState = config.behavior.dirtyState;
   const { requestDiscard } = useUnsavedChangesGuard({
@@ -321,9 +354,11 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
 
   const wizardContent = (
     <Grid
+      ref={setRootElement}
       className="ds-surface ds-wizard"
       data-part="root"
       data-mobile={resolvedMobile ? 'true' : 'false'}
+      data-posture={postureAttribute}
       // Split/stacked landing hook (form/detail-form family idiom): the skin
       // keys the sticky aside posture on it, and it mirrors the actual grid
       // decision (`columns` below) one-for-one.

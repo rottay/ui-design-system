@@ -12,6 +12,8 @@
  * skeleton (title, field rows, action bar) is what the user sees.
  */
 
+import { useMemo, useState } from 'react';
+
 import { Box, Button, Card, Grid, Stack, Text, Flex } from '../../../../../primitives';
 import { ActionDock } from '../../../../../structures/workspace/action-dock';
 import { PatternFormBuilder } from '../../../../../patterns';
@@ -26,6 +28,13 @@ import {
 import type { FormSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import type { Adapt } from '../../../../../../foundation/contracts/kernel/adaptation';
+import {
+  FORM_SURFACE_ADAPT_DEFAULTS,
+  type FormSurfaceAdaptation,
+  type ResolvedFormSurfaceAdaptation,
+} from '../../../../../../foundation/contracts/kernel/adaptation/composition/families/form-surface';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
 import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
@@ -40,14 +49,41 @@ export interface FormSurfaceProps {
   loading?: boolean;
   error?: unknown;
   onRetry?: () => void | Promise<void>;
+  /**
+   * Per-posture deltas the application declares. The surface measures its own
+   * box, so a form in a narrow rail stacks while the same form on a wide page
+   * keeps its aside track.
+   *
+   * @example adapt={{ compact: { stacked: true } }}
+   */
+  adapt?: Adapt<FormSurfaceAdaptation>;
 }
 
 /** Page-level form shell with error handling, action normalization, and optional aside content. */
-export function FormSurface({ config, loading = false, error, onRetry }: FormSurfaceProps): React.ReactElement {
+export function FormSurface({ config, loading = false, error, onRetry, adapt }: FormSurfaceProps): React.ReactElement {
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
-  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
+  const declaredStacking = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
+  // The config's viewport stacking is the base; the family narrows it on a
+  // compact BOX, and the app's `adapt` outranks both.
+  const [rootElement, setRootElement] = useState<HTMLElement | null>(null);
+  const containerRef = useMemo(() => ({ current: rootElement }), [rootElement]);
+  const base = useMemo<ResolvedFormSurfaceAdaptation>(
+    () => ({
+      stacked: declaredStacking,
+      sectionLayout: 'sidebar-nav',
+      actionBar: 'inline',
+      compactHeader: false,
+    }),
+    [declaredStacking],
+  );
+  const { adaptation, postureAttribute } = useAdaptation(adapt, {
+    base,
+    defaults: FORM_SURFACE_ADAPT_DEFAULTS,
+    containerRef,
+  });
+  const shouldStack = adaptation.stacked;
   // Stamped state attributes follow the resolved viewport so SSR/first-paint
   // markup never claims a mobile posture the media query has not confirmed.
   const resolvedMobile = hasResolvedViewport && isMobile;
@@ -146,11 +182,13 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
   // common create/edit screen layout without explicit configuration.
   const formContent = (
     <Grid
+      ref={setRootElement}
       className={['ds-surface ds-form-surface', actionsSticky ? 'ds-form-surface--sticky-actions' : undefined]
         .filter(Boolean)
         .join(' ')}
       data-part="root"
       data-mobile={resolvedMobile ? 'true' : 'false'}
+      data-posture={postureAttribute}
       data-stacked={shouldStack ? 'true' : 'false'}
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading || undefined}

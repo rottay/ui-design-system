@@ -49,13 +49,22 @@
 
 import {
   useId,
+  useMemo,
+  useState,
   type CSSProperties,
   type ElementType,
   type ReactNode,
 } from 'react';
 
 import { Box, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
+import type { Adapt } from '../../../../foundation/contracts/kernel/adaptation';
+import {
+  EDIT_FIELDS_ADAPT_DEFAULTS,
+  type EditFieldsAdaptation,
+  type ResolvedEditFieldsAdaptation,
+} from '../../../../foundation/contracts/kernel/adaptation/composition/families/edit-fields';
 import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* -------------------------------------------------------------------------- */
@@ -120,6 +129,8 @@ export interface InlineEditorFooterSlotProps {
 
 export interface InlineEditorProps {
   children: ReactNode;
+  /** Id on the editor root, so a composing page can scroll to this block. */
+  id?: string;
   title: ReactNode;
   description?: ReactNode;
   eyebrow?: ReactNode;
@@ -140,6 +151,15 @@ export interface InlineEditGridProps {
   unmountWhenCollapsed?: boolean;
   /** CSS `grid-template-columns` value. @default 'repeat(3, minmax(0, 1fr))' */
   columns?: string;
+  /**
+   * Per-posture deltas the application declares. The region measures its OWN
+   * box, so a narrow rail collapses to the single-track ledger while the same
+   * editor at full page width keeps `columns`.
+   *
+   * @example
+   * adapt={{ regular: { columns: 'repeat(2, minmax(0, 1fr))' } }}
+   */
+  adapt?: Adapt<EditFieldsAdaptation>;
   gap?: number;
   /** Id for `MoreFieldsToggle`'s `controls`. Without it the toggle's
    *  `aria-controls` has no target to name. */
@@ -239,6 +259,7 @@ export function InlineEditorGroup({
 
 export function InlineEditor({
   children,
+  id,
   title,
   description,
   eyebrow,
@@ -255,6 +276,7 @@ export function InlineEditor({
 
   return (
     <Box
+      id={id}
       className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
       data-part="editor"
       data-headerless={headerless}
@@ -315,28 +337,42 @@ export function InlineEditGrid({
   expanded = true,
   unmountWhenCollapsed = true,
   columns = 'repeat(3, minmax(0, 1fr))',
+  adapt,
   gap = 14,
   id,
   className,
   style,
 }: InlineEditGridProps): React.ReactElement | null {
+  /* The region measures its own box, so the posture in force is the box's
+     band on the tenant ladder, not the window's. */
+  const [gridElement, setGridElement] = useState<HTMLElement | null>(null);
+  const containerRef = useMemo(() => ({ current: gridElement }), [gridElement]);
+  const base = useMemo<ResolvedEditFieldsAdaptation>(() => ({ columns }), [columns]);
+  const { adaptation, postureAttribute } = useAdaptation(adapt, {
+    base,
+    defaults: EDIT_FIELDS_ADAPT_DEFAULTS,
+    containerRef,
+  });
+
   if (kind === 'advanced' && !expanded && unmountWhenCollapsed) {
     return null;
   }
 
   return (
     <Box
+      ref={setGridElement}
       id={id}
       className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
       data-part="grid"
       data-kind={kind}
       data-expanded={kind === 'advanced' ? expanded : undefined}
+      data-posture={postureAttribute}
       hidden={kind === 'advanced' && !expanded ? true : undefined}
       aria-hidden={kind === 'advanced' && !expanded ? true : undefined}
       style={{
         /* Consumer layout values ride quoted channels; the skin applies them
            and owns the narrow container cut. */
-        '--ds-edit-fields-grid-columns': columns,
+        '--ds-edit-fields-grid-columns': adaptation.columns,
         '--ds-edit-fields-grid-gap': `${gap}px`,
         ...style,
       } as CSSProperties}
