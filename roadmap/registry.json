@@ -5853,6 +5853,11 @@
      "at": "2026-09-21 12:44",
      "by": "kimi-dt-2026-09-21",
      "note": "2026-09-21 kimi: paquete A (contrato/kernel i18n) integrado — premises F-39 re-medidas: adopcion 23.4% (92/141 en Modern), toLocale 71 calls/34 sin argumento (la forma del gate en la WO es insound; propuesta de filas corregidas registrada), premisa IME MUERTA en Modern (resolveSubmitIntent ya existe y 5/5 guarded; cero codigo escrito ahi), Arabic font LIVE reparada (pack arabic-text Noto Sans Arabic OFL, unicode-range gated, subpath fonts/arabic-text.css). Reparacion real: I18nProvider crasheaba con locales desconocidos/region tags (LOCALE_CONFIGS[undefined].code); ahora normaliza via toSupportedLocale al fallback CONFIGURADO. Nuevos contratos: useFormatter/useOptionalFormatter (barrel raiz). Fable ACCEPT-WITH-CHANGES con correctivos DT aplicados (comentarios a la regla, floor corpus >= 12, techos public-entrypoints re-anclados por nombre: i18n/input/radio/tooltip/app-shell/modal, hooks manifest regenerado 107). RESIDUAL registrado (ruling Fable): el pack queda SIN roster — la puerta de tenant (TENANT_THEME_FONT_PACK_IDS) no lo lista a proposito; el tail compilado sigue resolviendo a system install hasta que el paquete DER/verticals decida roster+whitelabel pin+regen. WO sigue abierta: la adoption >= 90% en Modern viaja con los family cuts (10 archivos no-frozen enumerados en el recibo)."
+    },
+    {
+     "at": "2026-09-21 18:16",
+     "by": "kimi-dt",
+     "note": "2026-09-21 kimi-dt: residual del roster árabe INTEGRADO (f56c64974, Fable ACCEPT-WITH-CHANGES resuelto — el bump minor del changeset prevalece). arabic-text en las 3 verticales + puerta tenant; bundles regenerados con @font-face range-gated; invariante flippeada con drill; preload verificado (no existe emisor SSR hoy; residual: un futuro preload debe excluir role script). Reparación nombrada: fila de contrato no-unsanctioned-ds-subpath que 8ae785f1e debió traer. Residuales registrados: (a) --ds-font-pack-arabic-text es dead writer hasta que el tail del kernel lea var() (lane tipografía); (b) censo surface/report stale con 3 dead writers (2 ajenos) — drenaje acotado en ventana DT; (c) build:vertical-css no-op sin refresh de dist. La WO sigue abierta en su brazo de adopción i18n."
     }
    ]
   },
