@@ -5837,7 +5837,7 @@
    "lane": "platform-invariants",
    "order": 2,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -5846,9 +5846,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-39",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-dt-2026-09-21",
+   "claimedAt": "2026-09-21",
+   "progressLog": [
+    {
+     "at": "2026-09-21 12:44",
+     "by": "kimi-dt-2026-09-21",
+     "note": "2026-09-21 kimi: paquete A (contrato/kernel i18n) integrado — premises F-39 re-medidas: adopcion 23.4% (92/141 en Modern), toLocale 71 calls/34 sin argumento (la forma del gate en la WO es insound; propuesta de filas corregidas registrada), premisa IME MUERTA en Modern (resolveSubmitIntent ya existe y 5/5 guarded; cero codigo escrito ahi), Arabic font LIVE reparada (pack arabic-text Noto Sans Arabic OFL, unicode-range gated, subpath fonts/arabic-text.css). Reparacion real: I18nProvider crasheaba con locales desconocidos/region tags (LOCALE_CONFIGS[undefined].code); ahora normaliza via toSupportedLocale al fallback CONFIGURADO. Nuevos contratos: useFormatter/useOptionalFormatter (barrel raiz). Fable ACCEPT-WITH-CHANGES con correctivos DT aplicados (comentarios a la regla, floor corpus >= 12, techos public-entrypoints re-anclados por nombre: i18n/input/radio/tooltip/app-shell/modal, hooks manifest regenerado 107). RESIDUAL registrado (ruling Fable): el pack queda SIN roster — la puerta de tenant (TENANT_THEME_FONT_PACK_IDS) no lo lista a proposito; el tail compilado sigue resolviendo a system install hasta que el paquete DER/verticals decida roster+whitelabel pin+regen. WO sigue abierta: la adoption >= 90% en Modern viaja con los family cuts (10 archivos no-frozen enumerados en el recibo)."
+    }
+   ]
   },
   {
    "id": "WO-INV-03",
@@ -6811,7 +6817,7 @@
    "lane": "consumer-contract",
    "order": 6,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CON-05",
     "WO-EMI-02"
@@ -6822,10 +6828,10 @@
    ],
    "notes": "OWNER-RATIFIED 2026-09-08 (GO del owner post-checkpoint DER-02): activated 1:1 per anti-sprawl law; need identified by the 2026-09-08 re-audit (DEL-06, plus the migrateDocumentV1ToV2 states gap disclosed by .changeset/der-02-states-materials.md). wave 4; DEL-06 ONLY (distinct scope, not dependency pressure): the v2 seam's stale ownership, plus carrying general.states through migrate v1->v2 or refusing it by name. Not a gate of milestone A: DEL-06 never belonged to A's constrained static/v1 interpretation.",
    "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
-   "doneAt": null,
-   "evidence": null
+   "claimedBy": "kimi-dt-2026-09-21",
+   "claimedAt": "2026-09-21",
+   "doneAt": "2026-09-21",
+   "evidence": "consumer-proof published+packed legs green at integrated HEAD 0fe4026fa (builds against the packed package); consumer suite 32/32 x4 + 96/96 under 3x load; typecheck:tests 0; mutation drills (carry removal / silenced refusal) red as required; Fable ACCEPT (receipt-hoist-drains-con06-fable.json lot 3); commit 0fe4026fa"
   },
   {
    "id": "WO-CON-07",
