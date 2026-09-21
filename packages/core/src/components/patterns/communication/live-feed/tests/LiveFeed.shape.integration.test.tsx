@@ -16,11 +16,11 @@ import { describe, expect, it } from 'vitest';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { TenantConfig } from '@/foundation/contracts';
+import type { FeedItem } from '../contracts';
 import ModernLiveFeed from '../engines/modern';
 import { FIRST_PARTY_VERTICALS, measureArms } from '@tests/support/family-causality';
 
-interface Entry {
-  id: string;
+interface Entry extends FeedItem {
   label: string;
 }
 
@@ -45,7 +45,7 @@ async function serverMarkup(): Promise<string> {
       ssrViewport="desktop"
     >
       <ModernLiveFeed<Entry>
-        items={[{ id: 'a', label: 'Panel confirmed' }]}
+        items={[{ key: 'a', label: 'Panel confirmed' }]}
         renderItem={(entry) => <span>{entry.label}</span>}
         newItemsCount={3}
         onShowNewItems={() => {}}

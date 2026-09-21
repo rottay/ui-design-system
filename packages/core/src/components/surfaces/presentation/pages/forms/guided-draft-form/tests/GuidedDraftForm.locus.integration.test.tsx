@@ -35,7 +35,7 @@ const TENANT: TenantConfig = {
 
 /** A consumer card inside the section body -- the node the leaked channel tinted. */
 const nested = (key: string) => (
-  <Card className={`probe-card probe-card--${key}`} variant="bordered">
+  <Card className={`probe-card probe-card--${key}`} variant="outlined">
     <Card.Body>Nested</Card.Body>
   </Card>
 );
