@@ -20,6 +20,7 @@ const packsDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const coreRoot = resolve(packsDir, "../../../../../../../");
 
 const EXPECTED_IDS = [
+  "arabic-text",
   "editorial-display",
   "editorial-text",
   "geometric-display",
@@ -33,7 +34,7 @@ function packCss(id: string): string {
 }
 
 describe("FONT_PACK_MANIFEST shape", () => {
-  it("registers exactly the six catalogued packs", () => {
+  it("registers exactly the catalogued packs", () => {
     expect([...FONT_PACK_IDS].sort()).toEqual(EXPECTED_IDS);
   });
 
@@ -41,7 +42,7 @@ describe("FONT_PACK_MANIFEST shape", () => {
     for (const id of FONT_PACK_IDS) {
       const entry = FONT_PACK_MANIFEST[id];
       expect(entry.id, id).toBe(id);
-      expect(["display", "text", "mono"]).toContain(entry.role);
+      expect(["display", "text", "mono", "script"]).toContain(entry.role);
       expect(entry.cssSubpath).toBe(`@rottay/design-system/fonts/${id}.css`);
       expect(entry.variable).toBe(`--ds-font-pack-${id}`);
       expect(entry.fallbackStack.length).toBeGreaterThan(0);
@@ -113,8 +114,11 @@ describe("first-party vertical font ownership", () => {
   it("projects each roster row's exact font-pack ownership into its bundle", () => {
     for (const row of FIRST_PARTY_VERTICAL_ROSTER) {
       const css = readBundle(row.bundleFile);
+      // Read as plain strings: the tenant door lists a subset of the manifest
+      // (an unrostered pack like arabic-text must assert expected=false).
+      const packs: readonly string[] = row.fontPacks;
       for (const id of FONT_PACK_IDS) {
-        const expected = row.fontPacks.includes(id);
+        const expected = packs.includes(id);
         for (const face of FONT_PACK_MANIFEST[id].files) {
           expect(
             css.includes(`url('./fonts/${face.path.slice(2)}')`),

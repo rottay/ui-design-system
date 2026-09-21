@@ -63,6 +63,7 @@ import {
   resolveTranslationEntry,
   resolveTranslationOr,
 } from '@/foundation/i18n/runtime/resolution';
+import { toSupportedLocale } from '@/foundation/i18n/runtime/resolution/locale';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import {
   claimRootAttribute,
@@ -101,13 +102,21 @@ const DIRECTION_SCOPE_STYLE = { display: 'contents' } as const;
  */
 export function I18nProvider({
   locale: initialLocale = DEFAULT_LOCALE,
-  fallbackLocale = DEFAULT_FALLBACK_LOCALE,
+  fallbackLocale: configuredFallbackLocale = DEFAULT_FALLBACK_LOCALE,
   customTranslations,
   onLocaleChange,
   directionScope = 'none',
   children,
 }: I18nProviderProps) {
-  const [locale, setLocaleState] = useState<SupportedLocale>(initialLocale);
+  // Locale arrives as runtime data (region tags, unsupported languages) and is
+  // normalized through toSupportedLocale toward the configured fallback.
+  const fallbackLocale = toSupportedLocale(
+    configuredFallbackLocale,
+    DEFAULT_FALLBACK_LOCALE
+  );
+  const requestedLocale = toSupportedLocale(initialLocale, fallbackLocale);
+
+  const [locale, setLocaleState] = useState<SupportedLocale>(requestedLocale);
 
   /**
    * The provider can now sit under DesignSystemProvider, so locale may change
@@ -116,8 +125,8 @@ export function I18nProvider({
    * honoring upstream updates.
    */
   useEffect(() => {
-    setLocaleState(initialLocale);
-  }, [initialLocale]);
+    setLocaleState(requestedLocale);
+  }, [requestedLocale]);
 
   // Tenant custom translations are checked first so whitelabel apps can
   // override any DS string without forking the locale dictionaries.
@@ -174,10 +183,13 @@ export function I18nProvider({
   // Cambiar locale
   const setLocale = useCallback(
     (newLocale: SupportedLocale) => {
-      setLocaleState(newLocale);
-      onLocaleChange?.(newLocale);
+      // onLocaleChange reports the RESOLVED locale, so a listener mirroring it
+      // back into the `locale` prop cannot oscillate.
+      const resolved = toSupportedLocale(newLocale, fallbackLocale);
+      setLocaleState(resolved);
+      onLocaleChange?.(resolved);
     },
-    [onLocaleChange]
+    [onLocaleChange, fallbackLocale]
   );
 
   // Obtener configuración del locale actual

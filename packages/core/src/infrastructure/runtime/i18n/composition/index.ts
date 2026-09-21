@@ -10,3 +10,8 @@ export {
   useTranslation,
 } from "@/infrastructure/runtime/i18n/composition/translation";
 export type { UseTranslationResult } from "@/infrastructure/runtime/i18n/composition/translation";
+export {
+  useFormatter,
+  useOptionalFormatter,
+} from "@/infrastructure/runtime/i18n/composition/formatting";
+export type { UseFormatterResult } from "@/infrastructure/runtime/i18n/composition/formatting";

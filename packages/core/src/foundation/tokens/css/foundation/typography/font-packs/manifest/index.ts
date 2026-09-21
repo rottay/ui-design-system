@@ -1,9 +1,9 @@
 /**
  * @fileoverview Font-pack registry manifest (W4-B1).
  *
- * The single source of truth mapping each self-hosted, latin-subset, OFL font
- * pack to the physical woff2 face files it ships, the custom property its css
- * defines, and the fallback stack that property carries. Re-exported from the
+ * The single source of truth mapping each self-hosted, OFL font pack to the
+ * physical woff2 face files it ships, the custom property its css defines, and
+ * the fallback stack that property carries. Re-exported from the
  * `@rottay/design-system/server` entrypoint so an SSR shell can emit
  * `<link rel="preload" as="font" type="font/woff2" crossorigin>` tags for the
  * packs a tenant's envelope enables, without importing the css.
@@ -20,7 +20,7 @@
  * css so the app bundler fingerprints the same url() the css references.
  */
 
-export type FontPackRole = 'display' | 'text' | 'mono';
+export type FontPackRole = 'display' | 'text' | 'mono' | 'script';
 
 export interface FontPackFace {
   /** Relative to the pack css (../<id>/index.css), matching its url(). */
@@ -45,6 +45,28 @@ export interface FontPackEntry {
 }
 
 export const FONT_PACK_MANIFEST = {
+  /**
+   * The only pack nobody CHOOSES. Every other row is a style decision a tenant
+   * or vertical opts into; this one carries the family `withArabicSafeFallback`
+   * already compiles into every base/heading/display stack (DS-A007), so it is
+   * what turns that tail from a system-install bet into shipped coverage.
+   */
+  'arabic-text': {
+    id: 'arabic-text',
+    role: 'script',
+    cssSubpath: '@rottay/design-system/fonts/arabic-text.css',
+    variable: '--ds-font-pack-arabic-text',
+    fallbackStack: "'Noto Sans Arabic', 'Geeza Pro', Tahoma, sans-serif",
+    files: [
+      {
+        path: './noto-sans-arabic-variable.woff2',
+        family: 'Noto Sans Arabic',
+        weight: '400 700',
+        style: 'normal',
+        variable: true,
+      },
+    ],
+  },
   'editorial-display': {
     id: 'editorial-display',
     role: 'display',

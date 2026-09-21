@@ -568,6 +568,11 @@
       "import": "./dist/entrypoints/suppliers/cli/index.js",
       "default": "./dist/entrypoints/suppliers/cli/index.js"
     },
+    "./fonts/arabic-text.css": {
+      "style": "./dist/fonts/arabic-text.css",
+      "import": "./dist/fonts/arabic-text.css",
+      "default": "./dist/fonts/arabic-text.css"
+    },
     "./fonts/editorial-display.css": {
       "style": "./dist/fonts/editorial-display.css",
       "import": "./dist/fonts/editorial-display.css",
