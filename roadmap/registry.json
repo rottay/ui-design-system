@@ -7164,7 +7164,14 @@
    ],
    "notes": "owner-approved 2026-09-20 (proposals.md style/history queue; Fable review ACCEPT: evidence/style-history-roadmap-review/index.md); registered 2026-09-20 by the sole DT per the queue instructions — no new source IDs, phase or DS-improvements authority; wave 4; the shared contract adopts first under the Kimi+Fable same-debrief review (scope approval is not implementation approval)",
    "claimedBy": "kimi-dt-2026-09-21",
-   "claimedAt": "2026-09-21"
+   "claimedAt": "2026-09-21",
+   "progressLog": [
+    {
+     "at": "2026-09-21 19:06",
+     "by": "kimi-dt",
+     "note": "2026-09-21 kimi-dt: debrief ADOPTADO como base del contrato (revision 4, sha256 e554df453ac2ec57, medido en bd5739b57). Ciclo shared-core completo: v1 (Opus, receipt-cat-04-debrief-opus.json) → revision Kimi (16 citas verificadas, ACCEPT-WITH-CHANGES) + Fable (C1-C9, receipt-cat04-debrief-review-fable.json) → v2 → re-revisión Fable (C3'/C6', receipt-cat04-debrief-v2-review-fable.md) → v3 → confirmación Fable (C6''(d)) → v4 → Fable ACCEPT final (receipt-cat04-debrief-v4-review-fable.md). Rulings DT: Q1=(a) datos en contracts/theme/runtime/styles/registry, Q2=(b) v3 explicito con migrate-on-read encadenado, Q3=(a) sidebar-tone brand (soportado mecanicamente; owner-routed, flaggeado), Q4=(b) mecanismo de exclusion con set vacio (owner-routed), Q5=(a) recipe-profile admitido con el piso reparado. Siguiente: paquete de implementacion con el write-set del §5 (incluye la extension nombrada del publish terminal R3 y la reserva EVI-02 descargada por claimant comun)."
+    }
+   ]
   },
   {
    "id": "WO-DER-09",
