@@ -202,12 +202,10 @@
 }
 
 /* ---- item-action tones: the composed ghost Buttons keep their chrome; the
-        pattern owns only the semantic tone of each action label. ---- */
+        pattern owns only the neutral rename tone. The destructive action asks
+        the Button for `danger`, so its ink is the governed quiet-danger one. ---- */
 .ds-pattern-file-manager.ds-engine-modern [data-part='item-action'][data-action='rename'] {
   color: var(--ds-color-text-primary);
-}
-.ds-pattern-file-manager.ds-engine-modern [data-part='item-action'][data-action='delete'] {
-  color: var(--ds-color-error);
 }
 
 /* ---- per-kind icon colours + sizes (moved off the retired h-* utilities) ---- */

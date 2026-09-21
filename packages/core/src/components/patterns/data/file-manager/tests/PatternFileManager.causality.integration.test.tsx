@@ -212,46 +212,51 @@ describeCausality({
  * still far above the floor, and now produced by one mode-following formula
  * instead of a role that only happened to work in dark.
  *
- * STANDING. Re-measured node by node through the productive door (six
- * vertical/mode scopes, colours read through a 1x1 canvas); the two rows have
- * DIFFERENT owners and the earlier reading of them was wrong on both counts.
+ * DRAINED, by repair: every `*-delete` label, in BOTH scopes that carried
+ * them. The ink was never the Button's: this family's own skin stated
+ * `color: var(--ds-color-error)` on
+ * `[data-part='item-action'][data-action='delete']` -- the FILL role used as
+ * an ink -- and the ghost rest wash is `color-mix(currentColor 7%,
+ * transparent)`, so that one statement also tinted the ground it was measured
+ * against. `data-tone` measured null on every delete button in every scope,
+ * which was the proof the Button's governed quiet-destructive recipe never
+ * ran. The delete Button now asks for `danger` (keeping `variant='ghost'`, so
+ * the quiet recipe runs rather than the solid one) and the statement is gone;
+ * both legs of the pair were the family's, so both move together. The ink is
+ * now `--ds-button-error-border`, and it only became usable once the error
+ * ramp followed the mode: the regrade inverted the DS default's dark error
+ * ramp, moved `--ds-color-error` to step 600 and took the quiet-danger ink to
+ * step 700, which is what makes one declaration correct in six scopes. The
+ * three labels measure 6.40/6.82 in `bithire dark` (was 2.59/2.74) and
+ * 4.93/5.75 in `evnto light` (was 3.73/4.35), and the ungated scopes ride the
+ * same channel: 4.93/5.75 rottay light, 7.37/7.31 rottay and evnto dark,
+ * 9.58/10.69 bithire light. `evnto light` is therefore gone from this map
+ * entirely, and a relapse in either scope reddens here. The neighbouring
+ * `rename`, `folder-link`, crumb, name-cell and size-cell readings are
+ * byte-identical in all six scopes -- the controls that prove the statement
+ * carried nothing else.
  *
- *  - the `*-delete` labels in `bithire dark` (2.74:1) and `evnto light`
- *    (2.59:1) are FAMILY-LOCAL, not the Button's. The ink came from this
- *    family's own skin, `color: var(--ds-color-error)` on
- *    `[data-part='item-action'][data-action='delete']` -- the FILL role used
- *    as an ink -- and the ghost rest wash is `color-mix(currentColor 7%,
- *    transparent)`, so the same statement also tinted the ground it is
- *    measured against. `data-tone` measured null on every delete button in
- *    every scope, which is the proof the Button's governed quiet-destructive
- *    recipe never ran. The family half of the repair (ask the Button for
- *    `danger`, drop the statement) is measured and does NOT land alone: the
- *    governed ink `--ds-button-error-border` is `--ds-color-error-600`
- *    `#dc2626` in BOTH modes of the DS default, so the stamp drains bithire
- *    dark (2.74 -> 4.94, bithire authors a seed that grades per mode, `#9C000F`
- *    light / `#F8675D` dark), leaves evnto light failing at 4.35 and pushes
- *    rottay dark and evnto dark from 5.24 to 3.18. No single value can clear
- *    4.5:1 on both a `#262334` and an `#fdf0f0` ghost ground, so the mode leg
- *    is a precondition, not a follow-up: the danger-ink regrade lands first
- *    and the family stamp with it;
- *  - the `data-current` crumb in `rottay dark` (1.07:1) is the Card component
- *    base, not the Breadcrumb. `presentation/components/card/index.css` states
- *    `--ds-card-bg: var(--ds-color-white)` mode-blind in the `rottay-components`
- *    layer, which outranks the theme's own `--ds-card-bg:
- *    var(--ds-color-bg-elevated)` by layer ORDER -- byte for byte the defect
- *    the input ground was repaired for, with bithire escaping again because its
- *    unlayered artifact re-aliases the name. The crumb is only the tip axe can
- *    see: the whole trail paints a white gradient in rottay and evnto dark, and
- *    the Modern Card's own elevated/bordered grounds resolve white there too.
- *    Grounding the chip on the mode-following elevated role measures 14.63:1 in
- *    both broken scopes and is byte-identical in the other four; both candidate
- *    paired inks were drilled and refuted (primary 72% into the ground takes
- *    bithire dark to 2.00, text-primary 72% leaves rottay dark at 1.05 and
- *    moves every light scope off 15.18). That repair LANDED at the Card base,
- *    so this row DRAINED: `rottay dark` is gone from the map below and must
- *    now measure clean, and a relapse reddens here.
- * `f1-name` stays registered on its own channel (`--ds-color-link` `#3f6ffd`,
- * 3.72:1) and belongs to neither arm.
+ * DRAINED, at the Card base: the `data-current` crumb in `rottay dark`
+ * (1.07:1) was the Card component base, not the Breadcrumb.
+ * `presentation/components/card/index.css` stated
+ * `--ds-card-bg: var(--ds-color-white)` mode-blind in the `rottay-components`
+ * layer, which outranks the theme's own `--ds-card-bg:
+ * var(--ds-color-bg-elevated)` by layer ORDER -- byte for byte the defect the
+ * input ground was repaired for, with bithire escaping again because its
+ * unlayered artifact re-aliases the name. The crumb was only the tip axe could
+ * see: the whole trail painted a white gradient in rottay and evnto dark, and
+ * the Modern Card's own elevated/bordered grounds resolved white there too.
+ * Both candidate paired inks were drilled and refuted (primary 72% into the
+ * ground takes bithire dark to 2.00, text-primary 72% leaves rottay dark at
+ * 1.05 and moves every light scope off 15.18); the ground repair landed at the
+ * Card base and measures 14.63:1 in both broken scopes, byte-identical in the
+ * other four. `rottay dark` is therefore gone from this map and must now
+ * measure clean; a relapse reddens here.
+ *
+ * STANDING, and the only node left: `f1-name` belongs to neither arm. The
+ * folder link reads `--ds-color-link`, and bithire's own artifact states a
+ * blue (`#3f6ffd`) that measures 3.72:1 on its dark card. Registered on the
+ * link channel; the danger repair leaves it byte-identical.
  *
  * DROPPED EARLIER BY IDENTITY: `rottay dark`'s folder-link label. That link
  * resolves `--ds-color-link`, which took the raw primary seed in every mode --
@@ -262,17 +267,7 @@ describeCausality({
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire dark': {
     'color-contrast': [
-      '#_R_2_-a1-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-      '#_R_2_-a2-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-      '#_R_2_-f1-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
       '#_R_2_-f1-name > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      '#_R_2_-a1-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-      '#_R_2_-a2-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-      '#_R_2_-f1-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
     ],
   },
 };

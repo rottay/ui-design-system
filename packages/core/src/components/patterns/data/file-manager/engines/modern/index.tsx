@@ -515,6 +515,7 @@ export default function ModernFileManager(props: FileManagerProps) {
                           {onDelete && (
                             <ModernButton
                               variant="ghost"
+                              danger
                               size="xs"
                               data-part="item-action"
                               data-action="delete"

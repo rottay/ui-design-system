@@ -1,0 +1,740 @@
+{
+  "rottay light": {
+    "channels": {
+      "--ds-color-error": "#dc2626",
+      "--ds-color-error-400": "#f87171",
+      "--ds-color-error-600": "#dc2626",
+      "--ds-color-error-700": "#b91c1c",
+      "--ds-color-error-800": "#991b1b",
+      "--ds-color-error-900": "#7f1d1d",
+      "--ds-color-on-error": "#ffffff",
+      "--ds-button-error-border": "#b91c1c",
+      "--ds-button-error-border-hover": "#991b1b",
+      "--ds-button-error-border-active": "#7f1d1d",
+      "--ds-button-error-bg": "#ef4444",
+      "--ds-button-default-bg": "#ffffff",
+      "--ds-material-control-background": "#ffffff",
+      "--ds-card-bg": "#ffffff",
+      "--ds-color-bg-primary": "#fafafa",
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-link": "rgb(23, 23, 23) => #171717"
+    },
+    "pairings": {
+      "deleteA1Label": {
+        "ink": "#b91c1c",
+        "ground": "#e9dede",
+        "ratio": 4.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA2Label": {
+        "ink": "#b91c1c",
+        "ground": "#faefef",
+        "ratio": 5.75,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteF1Label": {
+        "ink": "#b91c1c",
+        "ground": "#faefef",
+        "ratio": 5.75,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA1Button": {
+        "ink": "#b91c1c",
+        "ground": "#e9dede",
+        "ratio": 4.93,
+        "ownBg": "color(srgb 0.72549 0.109804 0.109804 / 0.07)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "renameA1Label": {
+        "ink": "#171717",
+        "ground": "#dedede",
+        "ratio": 13.36,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderNameLabel": {
+        "ink": "#171717",
+        "ground": "#ffffff",
+        "ratio": 17.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      },
+      "crumbLabel": {
+        "ink": "#171717",
+        "ground": "#ececec",
+        "ratio": 15.18,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "toolbarDelete": {
+        "ink": "#ffffff",
+        "ground": "#ef4444",
+        "ratio": 3.76,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "danger"
+      },
+      "nameCellA1": {
+        "ink": "#171717",
+        "ground": "#ffffff",
+        "ratio": 17.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "sizeCellA1": {
+        "ink": "#585858",
+        "ground": "#ffffff",
+        "ratio": 7.11,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      }
+    },
+    "states": {
+      "hovered": {
+        "ink": "#991b1b",
+        "ground": "#eddfdf",
+        "ratio": 6.45,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      },
+      "pressed": {
+        "ink": "#7f1d1d",
+        "ground": "#eed6d6",
+        "ratio": 7.24,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      }
+    }
+  },
+  "rottay dark": {
+    "channels": {
+      "--ds-color-error": "#f87171",
+      "--ds-color-error-400": "#dc2626",
+      "--ds-color-error-600": "#f87171",
+      "--ds-color-error-700": "#fca5a5",
+      "--ds-color-error-800": "#fecaca",
+      "--ds-color-error-900": "#fee2e2",
+      "--ds-color-on-error": "#171717",
+      "--ds-button-error-border": "#fca5a5",
+      "--ds-button-error-border-hover": "#fecaca",
+      "--ds-button-error-border-active": "#fee2e2",
+      "--ds-button-error-bg": "#ef4444",
+      "--ds-button-default-bg": "#0F0F12",
+      "--ds-material-control-background": "#0F0F12",
+      "--ds-card-bg": "#182235",
+      "--ds-color-bg-primary": "#0b1220",
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-link": "#a3a3a3"
+    },
+    "pairings": {
+      "deleteA1Label": {
+        "ink": "#fca5a5",
+        "ground": "#282b3b",
+        "ratio": 7.37,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA2Label": {
+        "ink": "#fca5a5",
+        "ground": "#282c3d",
+        "ratio": 7.31,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteF1Label": {
+        "ink": "#fca5a5",
+        "ground": "#282c3d",
+        "ratio": 7.31,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA1Button": {
+        "ink": "#fca5a5",
+        "ground": "#282b3b",
+        "ratio": 7.37,
+        "ownBg": "color(srgb 0.988235 0.647059 0.647059 / 0.07)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "renameA1Label": {
+        "ink": "#f3f4f6",
+        "ground": "#273040",
+        "ratio": 12.03,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderNameLabel": {
+        "ink": "#a3a3a3",
+        "ground": "#182235",
+        "ratio": 6.31,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      },
+      "crumbLabel": {
+        "ink": "#f3f4f6",
+        "ground": "#182133",
+        "ratio": 14.63,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "toolbarDelete": {
+        "ink": "#ffffff",
+        "ground": "#ef4444",
+        "ratio": 3.76,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "danger"
+      },
+      "nameCellA1": {
+        "ink": "#f3f4f6",
+        "ground": "#182235",
+        "ratio": 14.47,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "sizeCellA1": {
+        "ink": "#b6b9c0",
+        "ground": "#182235",
+        "ratio": 8.1,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      }
+    },
+    "states": {
+      "hovered": {
+        "ink": "#fecaca",
+        "ground": "#292434",
+        "ratio": 10.41,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      },
+      "pressed": {
+        "ink": "#fee2e2",
+        "ground": "#372736",
+        "ratio": 11.46,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      }
+    }
+  },
+  "bithire light": {
+    "channels": {
+      "--ds-color-error": "#C62828",
+      "--ds-color-error-400": "#E34842",
+      "--ds-color-error-600": "#9C000F",
+      "--ds-color-error-700": "#710008",
+      "--ds-color-error-800": "#480003",
+      "--ds-color-error-900": "#230001",
+      "--ds-color-on-error": "#ffffff",
+      "--ds-button-error-border": "#710008",
+      "--ds-button-error-border-hover": "#480003",
+      "--ds-button-error-border-active": "#230001",
+      "--ds-button-error-bg": "#C22526",
+      "--ds-button-default-bg": "#ffffff",
+      "--ds-material-control-background": "#ffffff",
+      "--ds-card-bg": "#ffffff",
+      "--ds-color-bg-primary": "#FFFFFF",
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-link": "#2F5BE8"
+    },
+    "pairings": {
+      "deleteA1Label": {
+        "ink": "#710008",
+        "ground": "#e6e1ec",
+        "ratio": 9.58,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA2Label": {
+        "ink": "#710008",
+        "ground": "#f5edee",
+        "ratio": 10.69,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteF1Label": {
+        "ink": "#710008",
+        "ground": "#f5edee",
+        "ratio": 10.69,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA1Button": {
+        "ink": "#710008",
+        "ground": "#e6e1ec",
+        "ratio": 9.58,
+        "ownBg": "color(srgb 0.443137 0 0.0313726 / 0.07)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "renameA1Label": {
+        "ink": "#171717",
+        "ground": "#e0e3ed",
+        "ratio": 13.98,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderNameLabel": {
+        "ink": "#2f5be8",
+        "ground": "#ffffff",
+        "ratio": 5.55,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      },
+      "crumbLabel": {
+        "ink": "#171717",
+        "ground": "#eef2fd",
+        "ratio": 16.01,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "toolbarDelete": {
+        "ink": "#ffffff",
+        "ground": "#c22526",
+        "ratio": 5.86,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "danger"
+      },
+      "nameCellA1": {
+        "ink": "#171717",
+        "ground": "#ffffff",
+        "ratio": 17.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "sizeCellA1": {
+        "ink": "#585858",
+        "ground": "#ffffff",
+        "ratio": 7.11,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      }
+    },
+    "states": {
+      "hovered": {
+        "ink": "#480003",
+        "ground": "#ebe2ec",
+        "ratio": 13.02,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      },
+      "pressed": {
+        "ink": "#230001",
+        "ground": "#e8d5de",
+        "ratio": 13.98,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      }
+    }
+  },
+  "bithire dark": {
+    "channels": {
+      "--ds-color-error": "#C62828",
+      "--ds-color-error-400": "#BC1D20",
+      "--ds-color-error-600": "#F8675D",
+      "--ds-color-error-700": "#FF998E",
+      "--ds-color-error-800": "#FFC7C0",
+      "--ds-color-error-900": "#FFF2F0",
+      "--ds-color-on-error": "#ffffff",
+      "--ds-button-error-border": "#FF998E",
+      "--ds-button-error-border-hover": "#FFC7C0",
+      "--ds-button-error-border-active": "#FFF2F0",
+      "--ds-button-error-bg": "#DD423D",
+      "--ds-button-default-bg": "#0c0c0c",
+      "--ds-material-control-background": "#0c0c0c",
+      "--ds-card-bg": "#182235",
+      "--ds-color-bg-primary": "#0A0A0A",
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-link": "#3F6FFD"
+    },
+    "pairings": {
+      "deleteA1Label": {
+        "ink": "#ff998e",
+        "ground": "#2a2f48",
+        "ratio": 6.4,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA2Label": {
+        "ink": "#ff998e",
+        "ground": "#282b3b",
+        "ratio": 6.82,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteF1Label": {
+        "ink": "#ff998e",
+        "ground": "#282b3b",
+        "ratio": 6.82,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA1Button": {
+        "ink": "#ff998e",
+        "ground": "#2a2f48",
+        "ratio": 6.4,
+        "ownBg": "color(srgb 1 0.6 0.556863 / 0.07)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "renameA1Label": {
+        "ink": "#f3f4f6",
+        "ground": "#29354f",
+        "ratio": 11.15,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderNameLabel": {
+        "ink": "#3f6ffd",
+        "ground": "#182235",
+        "ratio": 3.72,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      },
+      "crumbLabel": {
+        "ink": "#f3f4f6",
+        "ground": "#1a2743",
+        "ratio": 13.48,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "toolbarDelete": {
+        "ink": "#ffffff",
+        "ground": "#dd423d",
+        "ratio": 4.27,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "danger"
+      },
+      "nameCellA1": {
+        "ink": "#f3f4f6",
+        "ground": "#182235",
+        "ratio": 14.47,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "sizeCellA1": {
+        "ink": "#b6b9c0",
+        "ground": "#182235",
+        "ratio": 8.1,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      }
+    },
+    "states": {
+      "hovered": {
+        "ink": "#ffc7c0",
+        "ground": "#292843",
+        "ratio": 9.56,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      },
+      "pressed": {
+        "ink": "#fff2f0",
+        "ground": "#352a42",
+        "ratio": 12.28,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      }
+    }
+  },
+  "evnto light": {
+    "channels": {
+      "--ds-color-error": "#dc2626",
+      "--ds-color-error-400": "#f87171",
+      "--ds-color-error-600": "#dc2626",
+      "--ds-color-error-700": "#b91c1c",
+      "--ds-color-error-800": "#991b1b",
+      "--ds-color-error-900": "#7f1d1d",
+      "--ds-color-on-error": "#ffffff",
+      "--ds-button-error-border": "#b91c1c",
+      "--ds-button-error-border-hover": "#991b1b",
+      "--ds-button-error-border-active": "#7f1d1d",
+      "--ds-button-error-bg": "#ef4444",
+      "--ds-button-default-bg": "#ffffff",
+      "--ds-material-control-background": "#ffffff",
+      "--ds-card-bg": "#ffffff",
+      "--ds-color-bg-primary": "#fafafa",
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-link": "rgb(23, 23, 23) => #171717"
+    },
+    "pairings": {
+      "deleteA1Label": {
+        "ink": "#b91c1c",
+        "ground": "#e9dede",
+        "ratio": 4.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA2Label": {
+        "ink": "#b91c1c",
+        "ground": "#faefef",
+        "ratio": 5.75,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteF1Label": {
+        "ink": "#b91c1c",
+        "ground": "#faefef",
+        "ratio": 5.75,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA1Button": {
+        "ink": "#b91c1c",
+        "ground": "#e9dede",
+        "ratio": 4.93,
+        "ownBg": "color(srgb 0.72549 0.109804 0.109804 / 0.07)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "renameA1Label": {
+        "ink": "#171717",
+        "ground": "#dedede",
+        "ratio": 13.36,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderNameLabel": {
+        "ink": "#171717",
+        "ground": "#ffffff",
+        "ratio": 17.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      },
+      "crumbLabel": {
+        "ink": "#171717",
+        "ground": "#ececec",
+        "ratio": 15.18,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "toolbarDelete": {
+        "ink": "#ffffff",
+        "ground": "#ef4444",
+        "ratio": 3.76,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "danger"
+      },
+      "nameCellA1": {
+        "ink": "#171717",
+        "ground": "#ffffff",
+        "ratio": 17.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "sizeCellA1": {
+        "ink": "#585858",
+        "ground": "#ffffff",
+        "ratio": 7.11,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      }
+    },
+    "states": {
+      "hovered": {
+        "ink": "#991b1b",
+        "ground": "#eddfdf",
+        "ratio": 6.45,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      },
+      "pressed": {
+        "ink": "#7f1d1d",
+        "ground": "#eed6d6",
+        "ratio": 7.24,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      }
+    }
+  },
+  "evnto dark": {
+    "channels": {
+      "--ds-color-error": "#f87171",
+      "--ds-color-error-400": "#dc2626",
+      "--ds-color-error-600": "#f87171",
+      "--ds-color-error-700": "#fca5a5",
+      "--ds-color-error-800": "#fecaca",
+      "--ds-color-error-900": "#fee2e2",
+      "--ds-color-on-error": "#171717",
+      "--ds-button-error-border": "#fca5a5",
+      "--ds-button-error-border-hover": "#fecaca",
+      "--ds-button-error-border-active": "#fee2e2",
+      "--ds-button-error-bg": "#ef4444",
+      "--ds-button-default-bg": "#0F0F12",
+      "--ds-material-control-background": "#0F0F12",
+      "--ds-card-bg": "#182235",
+      "--ds-color-bg-primary": "#0b1220",
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-link": "#a3a3a3"
+    },
+    "pairings": {
+      "deleteA1Label": {
+        "ink": "#fca5a5",
+        "ground": "#282b3b",
+        "ratio": 7.37,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA2Label": {
+        "ink": "#fca5a5",
+        "ground": "#282c3d",
+        "ratio": 7.31,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteF1Label": {
+        "ink": "#fca5a5",
+        "ground": "#282c3d",
+        "ratio": 7.31,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "deleteA1Button": {
+        "ink": "#fca5a5",
+        "ground": "#282b3b",
+        "ratio": 7.37,
+        "ownBg": "color(srgb 0.988235 0.647059 0.647059 / 0.07)",
+        "tone": "danger",
+        "variant": "ghost"
+      },
+      "renameA1Label": {
+        "ink": "#f3f4f6",
+        "ground": "#273040",
+        "ratio": 12.03,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderNameLabel": {
+        "ink": "#a3a3a3",
+        "ground": "#182235",
+        "ratio": 6.31,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      },
+      "crumbLabel": {
+        "ink": "#f3f4f6",
+        "ground": "#182133",
+        "ratio": 14.63,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "toolbarDelete": {
+        "ink": "#ffffff",
+        "ground": "#ef4444",
+        "ratio": 3.76,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "danger"
+      },
+      "nameCellA1": {
+        "ink": "#f3f4f6",
+        "ground": "#182235",
+        "ratio": 14.47,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "sizeCellA1": {
+        "ink": "#b6b9c0",
+        "ground": "#182235",
+        "ratio": 8.1,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      }
+    },
+    "states": {
+      "hovered": {
+        "ink": "#fecaca",
+        "ground": "#292434",
+        "ratio": 10.41,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      },
+      "pressed": {
+        "ink": "#fee2e2",
+        "ground": "#372736",
+        "ratio": 11.46,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": "danger",
+        "variant": "ghost",
+        "applied": true
+      }
+    }
+  }
+}
