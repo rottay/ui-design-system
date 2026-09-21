@@ -385,6 +385,37 @@ capability, static/DB/preview/publication parity, accessibility, RTL/i18n and re
 mobile-web contracts. Final branding and native applications are not silently added
 to a family's closure. Milestone C still requires its WOs, findings and indicators.
 
+### Owner-approved styles and tenant history — 2026-09-20
+
+The owner requested reusable cross-vertical styles, family-grouped folder/index
+ownership and persistent tenant change history, with real Fable review before
+incorporation. The corrected specification received **ACCEPT** from
+`claude-fable-5-1`; the durable review is
+[`evidence/style-history-roadmap-review/index.md`](../evidence/style-history-roadmap-review/index.md).
+The three approved packets are in
+[`proposals.md#owner-approved-styles-and-tenant-history--2026-09-20`](./proposals.md#owner-approved-styles-and-tenant-history--2026-09-20).
+
+**At the next serialized roadmap checkpoint**, the sole DT must transfer those
+packets to their named lane files, add their registry entries and regenerate
+STATUS together. This is already owner-approved scope, not a request for another
+GO; the inbox is used only because registry/STATUS have an active writer. Until
+that transfer, the proposed IDs are **not registered, claimable or executable**.
+Do not represent the inbox as an already updated DAG. Record the addition of
+three WOs explicitly (161 -> 164 if no other additions intervened), leaving
+existing statuses/evidence, source IDs, the 82-item authority denominator,
+phase controls and their fingerprint unchanged. The new packets belong to
+`audit-2026-09-05`, so the programme-C gate includes them after registration.
+
+Finish current packets without interruption. CAT-04 must acquire the shared
+Theme/catalog/ingress reservation; scope approval is not shared-core design
+approval: Kimi and Fable must review its implementation debrief under the
+existing policy. CON-08 includes the necessary app-bithire persistence/reference
+integration under D-31 and is an explicit cross-repo exception to DS-only focus;
+other apps receive the contract/recipe, not an unsolicited migration. Existing
+ARC-21/CON-06 closures are not expanded retroactively. Keep Codex out of the
+execution loop, including this transfer: no callback, consultation or approval
+request to Codex. Preserve current main/account/audit/publication rules.
+
 ### Owner-delegated decisions adopted — 2026-09-19
 
 The owner explicitly delegated resolution of the pending owner questions in this

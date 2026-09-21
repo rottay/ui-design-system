@@ -1,11 +1,15 @@
 # DS Improvement Proposals — Owner Review Inbox
 
-- **Status**: ALL rounds APPROVED by the owner 2026-07-07 — except P-07 (WITHDRAWN, kept for the
+- **Current inbox**: three owner-approved packets from 2026-09-20 await the sole DT's
+  serialized lane/registry/STATUS registration. They are specified below and are
+  NOT executable until registered. No additional owner GO is required for this scope.
+- **Historical status (2026-07-07)**: ALL rounds APPROVED — except P-07 (WITHDRAWN, kept for the
   record). Every approved proposal is converted to a `### WO-` block in a lane + a registry entry
   (round 1 + round 3 -> `gates.md` / `tokens.md` / `architecture.md` / the `craft.md` extension;
   round 2 -> `craft.md` WO-CRA-01..05). The inbox is EMPTY pending new proposals; new items follow
   the same law (owner approves 1:1, then a WO block + registry entry — the anti-sprawl law). This
-  file remains the historical record of the proposal specs.
+  file remains the historical record of those proposal specs. The 2026-09-20
+  approved-registration queue below supersedes the historical EMPTY statement.
 - **Date**: 2026-07-07. **Requested by**: davila ("would you improve the DS in any other way?
   we feel behind the best current trends; multi-engine stays; elevate modern to the maximum;
   be certain everything is whitelabel-able per tenant; assess whether the architecture is right").
@@ -17,6 +21,144 @@
   lane deliberately does not touch: the engine implementation STRATEGY, the color/token engine,
   whitelabel proof, and the 2026 trend gap. Nothing here blocks the ENG lane; sequencing notes
   are per proposal.
+
+## Owner-approved styles and tenant history — 2026-09-20
+
+**Disposition: APPROVED SCOPE / PENDING SERIAL REGISTRATION.** The owner asked
+Codex directly to incorporate this proposal after independent Fable feedback.
+Real `claude-fable-5-1`, normal Claude on Daniel.Avila, reviewed it read-only:
+first ACCEPT WITH CHANGES, then ACCEPT on the corrected specification. See
+[`../evidence/style-history-roadmap-review/index.md`](../evidence/style-history-roadmap-review/index.md).
+This is the existing sanctioned inbox, not a second roadmap or status registry.
+
+### Product and architecture contract
+
+- Product/vertical, reusable visual style, brand identity and tenant adjustments
+  are separate concerns. A BitHire tenant and an Evnto tenant can reference the
+  same style with their own brands; two BitHire tenants can use different styles.
+  A style is registered bounded decision data, not an engine, component/CSS fork,
+  new derivation pipeline or generated token map copied per tenant.
+- Standard/Pro restrict DIRECT AUTHORING, not the complete inherited theme or
+  its quality. Internal is the trusted authoring seat. Selecting a registered
+  compatible style is available to Standard by default; no new paid-style policy
+  is introduced. Vertical exclusions require a measured functional incompatibility
+  and written D-28 reason, never aesthetic ownership or silent fallback.
+- Keep the approved 29 decision IDs and their tier/domain authority unchanged.
+  A style-reference selector is an explicit versioned contract for registered
+  bundles, not a second arbitrary control list. Tenant input names `{id, version}`,
+  never a style body, forged provenance, a supplied digest override or trusted
+  entitlement. The document's `plan` remains; the app supplies it from current
+  server authority, not a customer-controlled field.
+- Tenant-selected style input passes through ingress/admission, never through
+  the privileged compile-door baseline option. Track the authored style reference
+  separately from its expanded leaves. Style leaves rank below direct tenant
+  decisions AND their derived consequences (`preset-inherited` below
+  `profile-derived`); losing claims remain attributable. Do not exempt an entire
+  tenant request by labelling it inherited.
+- Before authoring presets, specify one checked ownership/precedence table using
+  existing decision IDs and types: style, vertical brand/defaults, tenant brand
+  and explicit decisions. Composite `experience.profile` and `recipe-profile`
+  must have measured fan-out attribution; reject ambiguous ownership by name.
+  Do not blindly classify these composite profiles as brand-only or invent a
+  second BrandTheme contract. Families interpret decisions according to anatomy,
+  accessibility and responsive context, not a universal radius or fixed width.
+- Style references are immutable version pins with immutable content/digests.
+  Updating a shared style must not silently repoint existing tenants. Explicit
+  upgrades are validated and audited. Unknown IDs/versions fail closed by name.
+- V2 has a closed field set. CAT-04 decides v3 versus an explicitly versioned
+  additive rollout in its core debrief under CON-05; an optional field is NOT
+  automatically compatible with old readers. Existing tenants remain unchanged,
+  old readers never receive unsupported publications, and migrations enter the
+  SAME admission/compiler. Existing migrate-on-read is one route and stays;
+  a second compiler/admission or an old authoring route retained indefinitely
+  after rollout does not. Retiring an authoring route needs an executable check.
+
+### Folder/index and single ownership
+
+- Contracts are born in the target grammar, reusing existing types and the
+  dependency ladder: for example `contracts/theme/runtime/styles/`, consumed by
+  the document/admission owner. Do not create a top-level `presets/` source root.
+- There is one registry of styles and one authored representation per style.
+  A small style may use `<style>/{document,manifest}/index.json`. When size or
+  responsibility warrants splitting, use `<style>/{shape,typography,density,
+  surfaces,motion}/index.ts` with a composition-only root and a generated document,
+  NEVER that document plus independently authored fragments. No meaningless
+  one-constant microfiles. Tests live with their owner. Generated consistency
+  needs both regenerate-and-diff AND a source-truth check.
+- Preset DATA may sit beside the current vertical data at
+  `foundation/presets/styles/` only as a named, bounded migration exception,
+  retaining the current unknown-document boundary. It moves ONCE with the
+  verticals under RET-04; no blanket legacy-root exemption, identity-baseline
+  widening, global relocation now or permanent forwarding wrappers. Confirm the
+  final data owner/dependency direction before the move. The resolver, admission,
+  family derivers and emitter remain their existing unique owners.
+- Verticals reference a style and author their own brand/default data, never
+  duplicate a style implementation. Organization tenants remain database data;
+  there is no checked-in folder per customer. Application functionality stays
+  in the application, not in visual presets.
+
+### Revision history contract
+
+- Distinguish four identities: document-schema version, immutable style version,
+  tenant configuration revision, and compiled artifact identity. Technical value
+  provenance is not a persisted actor/publication audit trail.
+- The DS owns serializable revision/provenance descriptors and validation. Pin
+  document, style, vertical preset, catalog and envelope digests, the exact
+  compiler/deriver build and referenced assets/fonts, and the served artifact
+  identity. Preserve the served artifact or inputs sufficient to reproduce its
+  digest. Do not promise exact historical browser rendering.
+- App-bithire owns storage, tenant isolation, current actor authorization,
+  server-supplied plan, saved drafts, history reads, before/after authored deltas,
+  timestamps/origin, publication, restore and transactions. Reuse the owning
+  module's ports; the DS never queries a database. Other apps receive the same
+  protocol rather than inventing competing history semantics.
+- Saved changes are versioned; published revisions are immutable. Materialize
+  immutable inputs and the artifact before atomically activating the revision
+  and recording publication. Optimistic expected-revision/CAS refuses stale
+  publishers; validation/storage failure leaves the previous publication active.
+  Failed attempts are separate from successful publication events.
+- Restore creates a NEW revision, retains intervening history and runs admission
+  with the CURRENT server-authorized plan/envelope/catalog. Historical entitlement
+  is audit data only; it must not restore privileges or silently drop disallowed
+  choices. Style upgrades and migrations identify their source and initiator.
+- Record minimum necessary actor/tenant identifiers and reasons; define retention,
+  access and redaction boundaries. No credential/billing/secret snapshots. A
+  readable history/diff contract and reference integration are required, not a
+  full new branding studio or general-purpose event-sourcing platform.
+
+### TRANSFERRED: WO-CAT-04 — Reusable style references, entitlement and precedence
+
+Registered 2026-09-20 by the sole DT: the executable spec now lives at [`catalog-door.md`](./catalog-door.md) `### WO-CAT-04` (lane `catalog-door`, order 4, size L; depends on WO-CAT-03, WO-CON-06), with its registry entry. This inbox copy is the historical record of the approved scope, not a second evolving spec.
+
+### TRANSFERRED: WO-DER-09 — Shared style presets and first-party migration
+
+Registered 2026-09-20 by the sole DT: the executable spec now lives at [`derivation.md`](./derivation.md) `### WO-DER-09` (lane `derivation`, order 9, size M; depends on WO-CAT-04, WO-DER-06), with its registry entry. This inbox copy is the historical record of the approved scope, not a second evolving spec.
+
+### TRANSFERRED: WO-CON-08 — Tenant revision history and atomic publication
+
+Registered 2026-09-20 by the sole DT: the executable spec now lives at [`consumer-contract.md`](./consumer-contract.md) `### WO-CON-08` (lane `consumer-contract`, order 8, size L; depends on WO-CAT-04, WO-EMI-02, WO-CON-06, WO-ARC-21; `touchedRepos: [ui-design-system, app-bithire]` under D-31), with its registry entry. This inbox copy is the historical record of the approved scope, not a second evolving spec.
+
+### Serialized registration and closure instructions
+
+1. Do not stop, kill, roll back or redirect current writers. At the DT's next
+   roadmap window, verify the three IDs remain free; preserve all current entries.
+2. Transfer the complete packet specifications to their target lane `### WO-`
+   blocks and add matching registry entries together, with the exact prerequisites
+   above. Registry/STATUS remain sole-DT writes. Do not broaden a done WO, change
+   legacy source authorities or silently reopen it to hide this new scope.
+3. Mark these inbox packets TRANSFERRED with their lane links so there is one
+   executable spec, not two evolving copies. Record the three-WO denominator
+   increase explicitly: 161 -> 164 if the starting count is still 161. Existing
+   completion evidence and the 82-item source denominator remain unchanged.
+4. Generate STATUS with its official producer, run roadmap:check, inspect
+   show/delegate/next and verify the source-plan fingerprint stayed unchanged.
+   Include the lane/registry/STATUS/bookkeeping in one reviewed integration lot.
+5. Preserve the CON lane's frozen-signature law for old work: CAT-04/CON-08 use
+   the CON-05 versioned change protocol, never reinterpret old signatures.
+   Programme C includes these additions via programme membership once registered;
+   do not report C complete while this approved registration queue remains open.
+6. Keep the same roles, main checkout, functional commits and focused audits.
+   No agent contacts Codex; the owner alone requests independent audits.
 
 ## Operating context recorded (owner, 2026-07-07)
 

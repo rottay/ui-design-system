@@ -298,7 +298,7 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | export | `.#WaterfallChart` | changed; same class (increase/decrease/total defaults resolve through the chain). | patch | `fam-09-5b-semantic-chart-tones.md` |
 | export | `.#WorkspaceResponsiveConfig` | changed; `mobileBreakpoint` is a ladder step, not a pixel count | major | `inv-04-one-responsive-mechanism.md` |
 
-Also pending, declaring no public surface movement: `der-02-material-arm-non-vacuity.md` (patch), `der-08-superseded-static-ingress-key.md` (patch), `emi-02-artifact-recipe-profile.md` (patch), `evi-02-instrument-coverage.md` (patch), `evi-02-tree-node-padding-authority.md` (patch), `evi-02-witness-per-cell.md` (patch), `evi-05-causal-gate-pilot.md` (patch), `evi-05-segmented-motion-dial.md` (patch), `fam-01-button-silhouette-reaches-paint.md` (patch), `fam-01-interrupted-press-cancellation.md` (patch), `fam-07-box-anatomy-part.md` (minor), `fam-07-breakpoint-floor-retired.md` (minor), `fam-07-collapse-family-cut.md` (minor), `fam-08-b6-chrome-cuts.md` (patch), `fam-08-b8-widget-board.md` (patch), `fam-08-retire-use-sortable-list.md` (major), `fam-09-q1-default-scheme.md` (minor), `fam-09-retire-chart-theme-frame.md` (major), `fam-09-twelve-slot-vocabulary.md` (minor), `fam-10-cohort-de-headers.md` (patch), `fam-10-sub-lot-f-record-forms.md` (patch), `fam-10-sub-lot-g-surface-lifecycle.md` (patch), `fam-11-class-window.md` (minor), `fam-11-e-dock-and-switchers.md` (minor), `fam-11-shell-namespace.md` (minor), `fam-card-ground-mode-mirroring.md` (patch), `fam-error-danger-mode-legs.md` (patch), `fam-input-ground-mode-mirroring.md` (patch), `fam10-d2-collection-header.md` (minor), `fam10-d2-dashboard-header.md` (minor), `fam10-d2-detail-header.md` (minor), `fam10-d2-header-surface.md` (minor), `fam11-b-app-shell.md` (minor), `fam11-c-page-composition.md` (minor), `fam11-d-command-chain.md` (minor), `fix-103-motion-retime-list-keyboard.md` (patch), `icon-size-map-leaf-home.md` (patch), `inv-01-box-text-align-types.md` (patch), `inv-01-dead-keyframes.md` (patch), `inv-01-direction-authority-gate.md` (patch), `inv-01-direction-authority-sweep.md` (minor), `inv-01-direction-migration-2.md` (patch), `inv-01-physical-class-d-corrections.md` (patch), `inv-01-toast-rtl.md` (patch), `major-canonical-tree.md` (major), `pack-hygiene-test-declarations.md` (patch), `r3-honest-verification.md` (patch), `resize-handle-state-stamp.md` (patch), `seeds-render-mode.md` (patch), `shell-cluster-wiring.md` (patch), `table-part-state-stamps.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major), `v96-gate-repairs.md` (patch).
+Also pending, declaring no public surface movement: `der-02-material-arm-non-vacuity.md` (patch), `der-08-superseded-static-ingress-key.md` (patch), `emi-02-artifact-recipe-profile.md` (patch), `evi-02-instrument-coverage.md` (patch), `evi-02-tree-node-padding-authority.md` (patch), `evi-02-witness-per-cell.md` (patch), `evi-05-causal-gate-pilot.md` (patch), `evi-05-segmented-motion-dial.md` (patch), `fam-01-button-silhouette-reaches-paint.md` (patch), `fam-01-interrupted-press-cancellation.md` (patch), `fam-07-box-anatomy-part.md` (minor), `fam-07-breakpoint-floor-retired.md` (minor), `fam-07-collapse-family-cut.md` (minor), `fam-08-b6-chrome-cuts.md` (patch), `fam-08-b8-widget-board.md` (patch), `fam-08-retire-use-sortable-list.md` (major), `fam-09-q1-default-scheme.md` (minor), `fam-09-retire-chart-theme-frame.md` (major), `fam-09-twelve-slot-vocabulary.md` (minor), `fam-10-cohort-de-headers.md` (patch), `fam-10-sub-lot-f-record-forms.md` (patch), `fam-10-sub-lot-g-surface-lifecycle.md` (patch), `fam-11-class-window.md` (minor), `fam-11-e-dock-and-switchers.md` (minor), `fam-11-shell-namespace.md` (minor), `fam-card-ground-mode-mirroring.md` (patch), `fam-error-danger-mode-legs.md` (patch), `fam-fm-danger-ink-governed.md` (patch), `fam-input-ground-mode-mirroring.md` (patch), `fam10-d2-collection-header.md` (minor), `fam10-d2-dashboard-header.md` (minor), `fam10-d2-detail-header.md` (minor), `fam10-d2-header-surface.md` (minor), `fam11-b-app-shell.md` (minor), `fam11-c-page-composition.md` (minor), `fam11-d-command-chain.md` (minor), `fix-103-motion-retime-list-keyboard.md` (patch), `icon-size-map-leaf-home.md` (patch), `inv-01-box-text-align-types.md` (patch), `inv-01-dead-keyframes.md` (patch), `inv-01-direction-authority-gate.md` (patch), `inv-01-direction-authority-sweep.md` (minor), `inv-01-direction-migration-2.md` (patch), `inv-01-physical-class-d-corrections.md` (patch), `inv-01-toast-rtl.md` (patch), `major-canonical-tree.md` (major), `pack-hygiene-test-declarations.md` (patch), `r3-honest-verification.md` (patch), `resize-handle-state-stamp.md` (patch), `seeds-render-mode.md` (patch), `shell-cluster-wiring.md` (patch), `table-part-state-stamps.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major), `v96-gate-repairs.md` (patch).
 
 ## Family acceptance — the sealed Modern Rescue adjudication
 
@@ -306,7 +306,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 116/161 work orders done (72%)
+## Work-order burn-down — 116/164 work orders done (71%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -319,9 +319,9 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | [architecture](./architecture.md) | 11 | 0 | 10 | 21 |
 | [skin-adoption](./skin-adoption.md) | 7 | 0 | 1 | 8 |
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
-| [consumer-contract](./consumer-contract.md) | 6 | 0 | 1 | 7 |
-| [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
-| [derivation](./derivation.md) | 7 | 1 | 0 | 8 |
+| [consumer-contract](./consumer-contract.md) | 6 | 0 | 2 | 8 |
+| [catalog-door](./catalog-door.md) | 3 | 0 | 1 | 4 |
+| [derivation](./derivation.md) | 7 | 1 | 1 | 9 |
 | [family-cuts](./family-cuts.md) | 9 | 4 | 2 | 15 |
 | [emission-mount](./emission-mount.md) | 2 | 0 | 1 | 3 |
 | [platform-invariants](./platform-invariants.md) | 4 | 0 | 4 | 8 |
@@ -335,7 +335,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | A · The apps can build | reached | WO-CON-04, WO-CON-05 | none | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2-pilot · Architecture validated in one vertical cut (pilot population) | reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | none | Decisions -> derivation -> channels -> skin proven end to end on ONE family, on the pilot population only. It is not the fleet threshold: the six-axis >= 80 % obligation of WO-EVI-02 gates milestone B, never this one. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-EVI-02 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached. |
-| C · 116/116 | not reached | all 61 work orders of the audit-2026-09-05 programme | 20 of 61 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 64 work orders of the audit-2026-09-05 programme | 23 of 64 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -416,6 +416,9 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | WO-RET-04 | dependencies: WO-RET-01 |
 | WO-INV-06 | dependencies: WO-FAM-10, WO-FAM-11 |
 | WO-FAM-13 | dependencies: WO-FAM-08, WO-FAM-12, WO-INV-08 |
+| WO-CAT-04 | dependencies: WO-CON-06 |
+| WO-DER-09 | dependencies: WO-CAT-04 |
+| WO-CON-08 | dependencies: WO-CAT-04, WO-CON-06, WO-ARC-21 |
 
 ## Sequencing hazards (mechanically enforced)
 
