@@ -77,12 +77,11 @@ const TIER_RAMP: Readonly<Record<string, readonly [leading: string, tracking: st
 /**
  * Measured ink debt, pinned by node IDENTITY. Registered, never excluded.
  *
- * What is left is ONE ladder: `--ds-color-text-secondary` (#A0A0A5) and
- * `--ds-color-muted`, which clear no text floor on a light canvas -- 2.60:1 on
- * bithire's white and 2.49:1 on evnto's #fafafa. That ladder belongs to the
- * palette/text roles, not to any one compound, and a mode-aware repair of it is
- * its own cut.
- *
+ * What WAS left was ONE ladder: `--ds-color-text-secondary` (#A0A0A5) and
+ * `--ds-color-muted`, which cleared no text floor on a light canvas -- 2.60:1
+ * on bithire's white and 2.49:1 on evnto's #fafafa. The supporting-ink regrade
+ * (f73348ed5) lifted both rungs over the floor on every light scope, so both
+ * pin rows drained on the measured suite rerun (a relapse reddens this pin).
  * DROPPED BY IDENTITY, both genuinely repaired (a relapse reddens this pin):
  *  - `rottay dark: a` and `bithire dark: a` -- the link took its ink from
  *    `--ds-color-primary`, the raw seed, which is a BRAND statement and not a
@@ -93,14 +92,7 @@ const TIER_RAMP: Readonly<Record<string, readonly [leading: string, tracking: st
  *  - the ten `bithire dark` ground-ink rows -- drained upstream by the
  *    mode-canvas repair (4f7d46751), measured absent at HEAD before this cut.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire light': {
-    'color-contrast': ['span[data-color="muted"]', 'span[data-color="secondary"]'],
-  },
-  'evnto light': {
-    'color-contrast': ['span[data-color="muted"]', 'span[data-color="secondary"]'],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('typography ramp and accessibility', () => {
   it.each(VERTICALS)('resolves the tier ramp to its declared stops in %s', async (vertical) => {
