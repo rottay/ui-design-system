@@ -583,8 +583,8 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/detail-form/index.tsx",
-            "line": 54,
-            "column": 63,
+            "line": 71,
+            "column": 68,
             "role": "transport-read"
           }
         ],
@@ -615,8 +615,8 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/detail-form/index.tsx",
-            "line": 54,
-            "column": 63,
+            "line": 71,
+            "column": 68,
             "role": "transport-read"
           }
         ],
@@ -729,7 +729,7 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/form/index.tsx",
-            "line": 72,
+            "line": 108,
             "column": 80,
             "role": "read"
           }
@@ -780,7 +780,7 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/form/index.tsx",
-            "line": 86,
+            "line": 122,
             "column": 65,
             "role": "read"
           }
@@ -843,8 +843,8 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/form/index.tsx",
-            "line": 50,
-            "column": 63,
+            "line": 67,
+            "column": 68,
             "role": "transport-read"
           }
         ],
@@ -868,8 +868,8 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/form/index.tsx",
-            "line": 50,
-            "column": 63,
+            "line": 67,
+            "column": 68,
             "role": "transport-read"
           }
         ],
@@ -1763,19 +1763,25 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
-            "line": 628,
-            "column": 36,
+            "line": 602,
+            "column": 26,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
+            "line": 605,
+            "column": 34,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 921,
+            "line": 948,
             "column": 46,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2617,
+            "line": 2644,
             "column": 16,
             "role": "read"
           }
@@ -1800,19 +1806,19 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 935,
+            "line": 962,
             "column": 17,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 936,
+            "line": 963,
             "column": 22,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 939,
+            "line": 966,
             "column": 15,
             "role": "read"
           }
@@ -1837,25 +1843,31 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
-            "line": 629,
-            "column": 41,
+            "line": 603,
+            "column": 38,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
+            "line": 605,
+            "column": 53,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 923,
+            "line": 950,
             "column": 13,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 941,
+            "line": 968,
             "column": 39,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2064,
+            "line": 2091,
             "column": 28,
             "role": "read"
           }
@@ -1880,13 +1892,13 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 914,
+            "line": 941,
             "column": 27,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 917,
+            "line": 944,
             "column": 27,
             "role": "read"
           }
@@ -1911,14 +1923,14 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
-            "line": 619,
-            "column": 54,
+            "line": 601,
+            "column": 17,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
-            "line": 620,
-            "column": 30,
+            "line": 605,
+            "column": 76,
             "role": "read"
           }
         ],
@@ -1984,13 +1996,13 @@
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1944,
+            "line": 1971,
             "column": 44,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2498,
+            "line": 2525,
             "column": 44,
             "role": "read"
           }
@@ -2034,43 +2046,43 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 954,
+            "line": 981,
             "column": 31,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1392,
+            "line": 1419,
             "column": 41,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1393,
+            "line": 1420,
             "column": 45,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1442,
+            "line": 1469,
             "column": 15,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1450,
+            "line": 1477,
             "column": 39,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1451,
+            "line": 1478,
             "column": 43,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1461,
+            "line": 1488,
             "column": 56,
             "role": "read"
           }
@@ -2226,7 +2238,7 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/wizard/index.tsx",
-            "line": 387,
+            "line": 423,
             "column": 62,
             "role": "read"
           }
@@ -2251,7 +2263,7 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/wizard/index.tsx",
-            "line": 391,
+            "line": 427,
             "column": 60,
             "role": "read"
           }
@@ -2276,8 +2288,8 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/wizard/index.tsx",
-            "line": 125,
-            "column": 63,
+            "line": 139,
+            "column": 68,
             "role": "transport-read"
           }
         ],
@@ -2301,8 +2313,8 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/wizard/index.tsx",
-            "line": 125,
-            "column": 63,
+            "line": 139,
+            "column": 68,
             "role": "transport-read"
           }
         ],
@@ -2326,25 +2338,25 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1391,
+            "line": 1418,
             "column": 48,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1436,
+            "line": 1463,
             "column": 30,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1449,
+            "line": 1476,
             "column": 46,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1461,
+            "line": 1488,
             "column": 30,
             "role": "read"
           }
@@ -2369,25 +2381,25 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1393,
+            "line": 1420,
             "column": 77,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1394,
+            "line": 1421,
             "column": 48,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1451,
+            "line": 1478,
             "column": 75,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1454,
+            "line": 1481,
             "column": 21,
             "role": "read"
           }
@@ -2412,19 +2424,19 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1406,
+            "line": 1433,
             "column": 49,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1455,
+            "line": 1482,
             "column": 21,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1460,
+            "line": 1487,
             "column": 22,
             "role": "read"
           }
@@ -2449,13 +2461,13 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1409,
+            "line": 1436,
             "column": 49,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1410,
+            "line": 1437,
             "column": 21,
             "role": "read"
           }
@@ -2868,7 +2880,7 @@
         "localName": "createTenantConfig",
         "declaration": {
           "source": "ui-design-system/packages/core/src/infrastructure/runtime/tenant/runtime/authoring/configuration/index.ts",
-          "line": 88,
+          "line": 90,
           "column": 17
         },
         "productiveCallers": [
@@ -2880,7 +2892,7 @@
           },
           {
             "source": "ui-design-system/packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx",
-            "line": 165,
+            "line": 169,
             "column": 38,
             "repository": "ui-design-system"
           },

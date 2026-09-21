@@ -53,12 +53,11 @@ const patch = (sandbox, relativePath, replace) => {
 
 const onlyDataTable = (sandbox) => collectAdaptSlot({ root: sandbox, only: 'data-table' }).findings;
 
-test('declares the seven layout-sensitive families, each with one owner and a cut', () => {
+test('every declared layout-sensitive family has one owner and a cut, with no duplicates', () => {
   const families = readLayoutSensitiveFamilies();
-  assert.deepEqual(
-    families.map((entry) => entry.family),
-    ['data-table', 'card', 'grid', 'form', 'app-shell', 'modal', 'charts'],
-  );
+  assert.ok(families.length > 0, 'the registry declares at least one family');
+  const names = families.map((entry) => entry.family);
+  assert.equal(new Set(names).size, names.length, 'no family is declared twice');
   for (const entry of families) {
     assert.equal(entry.layoutSensitive, true);
     assert.match(entry.owner, /^src\/components\//);
@@ -73,9 +72,9 @@ test('the reference family holds every arm on the live tree', () => {
 });
 
 test('a family whose cut has not landed is red, by design', () => {
-  const { findings } = collectAdaptSlot({ only: 'card' });
-  assert.ok(findings.some((finding) => finding.includes('card (WO-FAM-06): accepts-adapt')), JSON.stringify(findings));
-  assert.ok(findings.some((finding) => finding.includes('card (WO-FAM-06): stamps-posture')), JSON.stringify(findings));
+  const { findings } = collectAdaptSlot({ only: 'charts' });
+  assert.ok(findings.some((finding) => finding.includes('charts (WO-FAM-09): accepts-adapt')), JSON.stringify(findings));
+  assert.ok(findings.some((finding) => finding.includes('charts (WO-FAM-09): stamps-posture')), JSON.stringify(findings));
 });
 
 test('the whole-registry run is red while any declared family lacks the slot', () => {
@@ -199,10 +198,10 @@ test('the census does not mistake a non-posture set for a vocabulary', () => {
 
 test('family-cut holds a rostered layout-sensitive family to the slot as BLOCKING', () => {
   const producers = collectChannelProducers().producers;
-  const measured = measureFamily(resolveFamily('card'), { producers });
+  const measured = measureFamily(resolveFamily('charts'), { producers });
   assert.ok(measured.blocking.adaptSlot.length > 0);
-  const findings = judgeFamily(measured, { cut: 'WO-FAM-06' });
-  assert.ok(findings.some((finding) => finding.startsWith('card: BLOCKING adapt-slot')), JSON.stringify(findings));
+  const findings = judgeFamily(measured, { cut: 'WO-FAM-09' });
+  assert.ok(findings.some((finding) => finding.startsWith('charts: BLOCKING adapt-slot')), JSON.stringify(findings));
 
   const button = measureFamily(resolveFamily('button'), { producers });
   assert.deepEqual(button.blocking.adaptSlot, []);

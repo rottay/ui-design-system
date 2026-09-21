@@ -16785,13 +16785,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-widget-board-cell-height: auto;
 }
 
-/* The resize edge's state host draws no box: the handle inside it stays
-   absolutely positioned against the card, so the rendered geometry is the
-   one this family had before the host existed. */
-.ds-pattern-widget-board .ds-widget-board__resize-edge {
-  display: contents;
-}
-
 .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"] {
   display: flex;
   align-items: center;
@@ -83149,7 +83142,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * primitives exclusively through their public channels:
  *   - ghost Button nav items:  `--ds-button-ghost-{bg,color,border}` (+ -hover)
  *     `--ds-button-sm-radius`, `--ds-button-sm-height`, `--ds-button-font-weight`
- *   - Cards (recovery / section / summary): `--ds-card-bordered-border-color`
+ *   - Cards (recovery / summary): `--ds-card-bordered-border-color`. The
+ *     SECTION is no longer a Card -- it is an edit-fields ledger block -- so
+ *     that channel is not written for it; its locus is the rail below.
  *   - the two Heading titles carry the engine's inline role read
  *     `var(--ds-type-section-title-font-weight)`; the family retunes that
  *     channel per element onto `--ds-guided-draft-form-heading-font-weight`,
@@ -83492,19 +83487,52 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    Section cards (scroll mode)
    ========================================================================== */
 
-/* Active context and error locus are painted on the card border through the
-   bordered-border channel; `--errors` sorts last so it outranks `--active`
-   when both modifiers are present. */
+/* Active context and error locus ride a LOCUS RAIL on the ledger block's
+   inline-start edge. The section is no longer a Card, so the two
+   `--ds-card-bordered-border-color` writes that used to paint this reached
+   nothing of the family's own -- and, being a custom property, they inherited
+   into any Card a consumer rendered inside the section, tinting an unrelated
+   nested card. They are deleted, not re-pointed.
+
+   The rail is a pseudo-element, not a border: a layered `border-*` here cannot
+   paint at all (preflight zeroes `border-width` from outside every rottay
+   layer, which is why the edit-fields skin is unlayered), and a frame is the
+   card this family just retired. `inset-inline-start` keeps it on the reading
+   edge under RTL. Every section reserves the rail's gutter so the ledger
+   rhythm does not shift when a section becomes active or picks up an error;
+   only the two modifiers paint it, so the cue is the PRESENCE of a shape
+   rather than a hue the reader has to compare. `--errors` sorts last so it
+   outranks `--active` when both modifiers are present. */
 .ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card {
+  position: relative;
   scroll-margin-block-start: var(--ds-spacing-4);
+  padding-inline-start: var(--ds-spacing-3);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card--active {
-  --ds-card-bordered-border-color: color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary));
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card--active::before,
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card--errors::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  /* A fixed marker width, not a governed edge: the emphasis edge grades down
+     to 1px in two of the three verticals, which is a hairline rather than a
+     locus, so this rail does not ride that axis. */
+  inline-size: 2px;
+  border-radius: var(--ds-radius-full, 999px);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card--errors {
-  --ds-card-bordered-border-color: var(--ds-color-error);
+/* The link channel, not the raw seed: `--ds-color-primary` is a brand
+   statement and is mode-blind (#171717 in rottay dark, on a #0b1220 ground),
+   while `--ds-color-link` is the primary-family ink DERIVED against the ground
+   it is painted on -- the same reason the typography skin paints a link with
+   it. The rail is read against the ground, so it takes the derived ink. */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card--active::before {
+  background: var(--ds-color-link, var(--ds-color-primary));
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card--errors::before {
+  background: var(--ds-color-error);
 }
 
 .ds-surface.ds-guided-draft-form [data-part='section-card-icon'] {
@@ -83702,6 +83730,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-item[data-active='true'] {
     outline: 2px solid ButtonText;
     outline-offset: -2px;
+  }
+
+  /* The locus rail is a painted ground, so it re-keys to a system colour
+     instead of disappearing into the forced canvas. */
+  .ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card--active::before {
+    background: Highlight;
+  }
+
+  .ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card--errors::before {
+    background: CanvasText;
   }
 }
 

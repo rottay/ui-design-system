@@ -481,16 +481,22 @@ test('C2/EXACTO — el techo de `./runtime/visual-authority` es el grafo MEDIDO,
    *
    * 73544 -> 73535 (2026-09-16, lote DER-08 sobre f61a9da9f BrandTheme->FlatTheme):
    * -9 en dos hojas ya alcanzadas (tenant-selectors -7, runtime -2). Los modulos
-   * siguen en 9. */
+   * siguen en 9.
+   *
+   * 73535 -> 74751 (2026-09-19, lote S19-A01 d5a3e1a74, reparacion estructural que
+   * baja las gramaticas compartidas bajo sus lectores): +1 modulo
+   * (kernel/foundation/css/value-functions ENTRA al grafo) y value-safety
+   * 6706 -> 6165; neto +1216. El baseline ya sigue este movimiento (f17c6a87c);
+   * este ancla lo alcanza, medido 2026-09-20 con la clausura del propio gate. */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
     .filter((entry) => entry.subpath === './runtime/visual-authority');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 9, sourceBytes: 73535 },
+    { reachableModules: 10, sourceBytes: 74751 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 73535), 'el ancla es el valor medido, sin holgura');
+  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(10, 74751), 'el ancla es el valor medido, sin holgura');
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */
