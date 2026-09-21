@@ -21,13 +21,6 @@
   --ds-widget-board-cell-height: auto;
 }
 
-/* The resize edge's state host draws no box: the handle inside it stays
-   absolutely positioned against the card, so the rendered geometry is the
-   one this family had before the host existed. */
-.ds-pattern-widget-board .ds-widget-board__resize-edge {
-  display: contents;
-}
-
 .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"] {
   display: flex;
   align-items: center;

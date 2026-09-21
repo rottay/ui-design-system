@@ -17,12 +17,14 @@ import {
   Box,
   Button,
   Input,
-  ResizeHandle,
   Sheet,
   Stack,
   Text,
-  type ResizeHandleIntent,
 } from "../../../../../primitives";
+import {
+  ResizeHandle,
+  type ResizeHandleIntent,
+} from "../../../../../primitives/foundation/resize-handle";
 import { partAttributes, useInteractionState } from "@/foundation/behavior";
 import { composeHandlers } from "@/foundation/behavior/runtime/compose-handlers";
 import { ActionAddIcon } from "@/graphics/icons/semantic/generated/roles/action-add";
@@ -292,29 +294,6 @@ function BoardCellControls({
     >
       {children}
     </div>
-  );
-}
-
-/*
- * The resize edge's state host. `ResizeHandle` stamps the anatomy it is given
- * verbatim but exposes no interaction handlers (its contract carries semantics
- * and keyboard operation only), so the family owns the kernel around it and
- * hands the serialized state back through `anatomy` -- which keeps the skin's
- * selectors on the handle itself. The host draws no box: the skin gives it
- * `display: contents`, so the absolutely positioned handle still resolves
- * against the card and the rendered geometry is unchanged.
- */
-function BoardResizeEdge({
-  children,
-}: {
-  children: (state: string | undefined) => React.ReactNode;
-}): React.ReactElement {
-  const interaction = useInteractionState();
-  const anatomy = partAttributes("resize-handle", interaction.state);
-  return (
-    <span className="ds-widget-board__resize-edge" {...interaction.handlers}>
-      {children(anatomy["data-state"])}
-    </span>
   );
 }
 
@@ -1485,9 +1464,8 @@ export function WidgetBoardEngine({
                          * pointer-only hit areas, which is only honest because
                          * both dimensions already have a keyboard equivalent.
                          */
-                        <BoardResizeEdge key={edge}>
-                          {(edgeState) => (
                         <ResizeHandle
+                          key={edge}
                           className="ds-widget-board__resize-handle"
                           operable={keyboardEdge}
                           orientation={widthEdge ? "vertical" : "horizontal"}
@@ -1518,7 +1496,6 @@ export function WidgetBoardEngine({
                           keyShortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown Home End"
                           anatomy={{
                             "data-part": "resize-handle",
-                            "data-state": edgeState,
                             "data-edge": edge,
                             "data-active": active ? "true" : "false",
                           }}
@@ -1577,8 +1554,6 @@ export function WidgetBoardEngine({
                             </span>
                           </span>
                         </ResizeHandle>
-                          )}
-                        </BoardResizeEdge>
                       );
                     })}
                   </>
