@@ -1439,7 +1439,10 @@
      consume the ramp directly. */
   --ds-color-success: var(--ds-color-success-600);
   --ds-color-warning: var(--ds-color-warning-600);
-  --ds-color-error: var(--ds-color-error-400);
+  /* Step 600, like every status sibling above. Step 400 was the dark-graded
+     stop sitting at the LIGHT root because there was no dark leg to state a
+     light-graded one in; the dark block below now states that leg. */
+  --ds-color-error: var(--ds-color-error-600);
   --ds-color-danger: var(--ds-color-error);
   --ds-color-info: var(--ds-color-info-400);
   --ds-color-neutral-0: var(--ds-color-white);
@@ -1690,7 +1693,10 @@
      WCAG pick lands on the dark ink for all four tones. */
   --ds-color-on-success: #171717;
   --ds-color-on-warning: #171717;
-  --ds-color-on-error: #171717;
+  /* Error is the one tone whose fill is now mode-graded, so its readable ink
+     is too: the WCAG pick on the light-mode #dc2626 is white, on the dark-mode
+     #f87171 it stays the flat dark neutral (restated in the dark block). */
+  --ds-color-on-error: #ffffff;
   --ds-color-on-info: #171717;
   --ds-color-on-primary: var(--ds-color-text-on-primary);
 
@@ -3342,6 +3348,32 @@ html.dark {
   --ds-color-neutral-700: #cbd5e1;
   --ds-color-neutral-800: #e2e8f0;
   --ds-color-neutral-900: #f8fafc;
+
+  /* The error ramp runs the other way on this canvas, exactly as the neutral
+     ramp above already does: 50 is the darkest wash and 900 the lightest ink.
+     A seeded tenant's compiler emits this same inversion from its own seed, so
+     a channel written as a ramp STEP is mode-correct in every vertical; the
+     light literals cascading into dark were what left an error wash painting
+     near-white here and left the 600 step reading as a dark ink on a dark
+     ground. The step values are the light ramp read backwards, extended by one
+     stop at the dark end, so every pair that consumed two steps keeps its
+     relationship. */
+  --ds-color-error-50: #450a0a;
+  --ds-color-error-100: #7f1d1d;
+  --ds-color-error-200: #991b1b;
+  --ds-color-error-300: #b91c1c;
+  --ds-color-error-400: #dc2626;
+  --ds-color-error-500: #ef4444;
+  --ds-color-error-600: #f87171;
+  --ds-color-error-700: #fca5a5;
+  --ds-color-error-800: #fecaca;
+  --ds-color-error-900: #fee2e2;
+
+  /* The role itself is NOT restated: `:root` states step 600 and the inverted
+     ramp above resolves that to #f87171 here, which is what the role has
+     always painted in this mode. Only its readable ink owes a leg, because the
+     WCAG pick flips back to the flat dark neutral on that lighter fill. */
+  --ds-color-on-error: #171717;
 
   --ds-text-primary: var(--ds-color-text-primary);
   --ds-text-secondary: var(--ds-color-text-secondary);
@@ -6671,7 +6703,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-secondary-shadow: var(--ds-shadow-sm);
 
   /* DEFAULT - Neutral actions */
-  --ds-button-default-bg: var(--ds-color-white);
+  /* The control material, not a literal: its hover and active siblings below
+     already read that family, and a fixed white stood this variant's own
+     near-white label on a white pill at 1.05:1 in every dark scope. */
+  --ds-button-default-bg: var(--ds-material-control-background);
   --ds-button-default-bg-hover: var(--ds-material-control-background-hover);
   --ds-button-default-bg-active: var(--ds-material-control-background-active);
   --ds-button-default-color: var(--ds-color-neutral-900);
@@ -6767,9 +6802,12 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-error-color: var(--ds-color-white);
   --ds-button-error-color-hover: var(--ds-button-error-color);
   --ds-button-error-color-active: var(--ds-button-error-color);
-  --ds-button-error-border: var(--ds-color-error-600);
-  --ds-button-error-border-hover: var(--ds-color-error-700);
-  --ds-button-error-border-active: var(--ds-color-error-800);
+  /* These three are the quiet-danger INK as well as the solid rim: the
+     `data-tone='danger'` recipe paints them as `color` on a tone-tinted wash,
+     which needs one step more than the same red needs on bare paper. */
+  --ds-button-error-border: var(--ds-color-error-700);
+  --ds-button-error-border-hover: var(--ds-color-error-800);
+  --ds-button-error-border-active: var(--ds-color-error-900);
 
   /* INFO */
   --ds-button-info-bg: var(--ds-color-info-500);
@@ -6940,6 +6978,15 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-spinner-duration: var(--ds-motion-attention);
 }
 
+/* The solid danger fill keeps its dark-graded steps on a dark canvas: the ramp
+   inverts per mode, so 600/700 become the LIGHT end there and a white label
+   would sit on a pale red. 400/300 are the same #dc2626/#b91c1c this recipe
+   has always painted, re-reached from the other side of the ramp. */
+:where(:root, [data-ds-root]):is([data-theme='dark'], .dark) {
+  --ds-button-error-bg-hover: var(--ds-color-error-400);
+  --ds-button-error-bg-active: var(--ds-color-error-300);
+}
+
 }
 @layer rottay-components {
 /**
@@ -7020,9 +7067,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      DEFAULT STATE - Base Appearance
      Default input styling
      ======================================================================== */
-  --ds-input-bg: var(--ds-color-white);
+  /* The control ground is the mode-aware role, never a literal: a fixed white
+     here would stand the dark mode's near-white ink on a white field. */
+  --ds-input-bg: var(--ds-color-bg-input, var(--ds-surface-control));
   --ds-input-bg-hover: var(--ds-material-control-background-hover);
-  --ds-input-bg-focus: var(--ds-color-white);
+  --ds-input-bg-focus: var(--ds-color-bg-input, var(--ds-surface-control));
   --ds-input-bg-disabled: var(--ds-material-control-background-disabled);
 
   --ds-input-color: var(--ds-color-neutral-900);
@@ -7509,7 +7558,9 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      BACKGROUND & COLORS
      Base appearance for cards
      ======================================================================== */
-  --ds-card-bg: var(--ds-color-white);
+  /* The card ground is the mode-aware elevated role, never a literal: a fixed
+     white here would stand the dark mode's near-white ink on a white card. */
+  --ds-card-bg: var(--ds-color-bg-elevated);
   --ds-card-bg-hover: var(--ds-material-card-background-hover);
   --ds-card-bg-active: var(--ds-material-card-background-active);
   --ds-card-bg-selected: var(--ds-material-card-background-selected);
@@ -10792,7 +10843,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   /* ========================================================================
      NODE - Individual tree node
      ======================================================================== */
-  --ds-tree-node-padding: 4px 8px;
   --ds-tree-node-bg: transparent;
   --ds-tree-node-bg-hover: var(--ds-material-panel-background-hover);
   --ds-tree-node-bg-selected: var(--ds-material-panel-background-selected);
@@ -10826,6 +10876,12 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      CHECKBOX - Checkable mode spacing
      ======================================================================== */
   --ds-tree-checkbox-margin: 8px;
+}
+
+/* Classic-only, and declared on `.ant-tree` -- an ancestor-or-self of the one
+   rule that reads it -- so it cannot head the Modern skin's row chain. */
+.ant-tree {
+  --ds-tree-node-padding: 4px 8px;
 }
 
 }
@@ -21411,8 +21467,9 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background-color: var(--ds-tree-bg);
 }
 
+/* Rhythm drained: `skin/tree` paints `.rottay-tree-node` from the deriver's
+   channels, and this selector's specificity was outranking it in the layer. */
 [data-engine='modern'] .rottay-tree .rottay-tree-node {
-  padding: var(--ds-tree-node-padding);
   color: var(--ds-tree-node-color);
   transition: var(--ds-transition-fast);
 }
@@ -64400,7 +64457,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 }
 
 @media (hover: hover) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:is([data-state~='hovered'], :hover) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:hover {
     background-position: 100% 50%;
     border-color: var(
       --ds-descriptions-header-border-hover,
@@ -64548,7 +64605,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 }
 
 @media (hover: hover) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:is([data-state~='hovered'], :hover) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:hover {
     transform: translateY(-1px);
     border-color: var(
       --ds-descriptions-row-border-hover,
@@ -64567,7 +64624,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 /* Touch equivalent of the hover wash: coarse pointers never fire :hover, so
    the pressed row settles into the same tinted material with the lift
    removed (pressed = physically connected, no upward motion). */
-.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:is([data-state~='pressed'], :active) {
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:active {
   transform: none;
   background: var(
     --ds-descriptions-row-bg-hover,
@@ -64741,8 +64798,8 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
    automatically; the row/header hover washes disappear, so hover keeps a
    plain outline and the empty-value dash stays visible as text. */
 @media (forced-colors: active) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:is([data-state~='hovered'], :hover),
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:is([data-state~='hovered'], :hover) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:hover,
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:hover {
     outline: 1px solid;
     outline-offset: -1px;
   }
@@ -69837,13 +69894,12 @@ html[data-ds-motion='reduced']
  * than hover (ungated so touch gets the equivalent feedback), `grab` /
  * `grabbing` cursor semantics and a dragging-row emphasis channel keyed on
  * the engine's new `data-draggable`/`data-dragging` hooks.
- * (4) Density: the row padding fallback rides the
- * `--_ds-tree-row-padding-*` axes scaled by the governed
- * `--ds-density-effective-scale` authority; the per-level indent step scales
- * in the engine (logical offsets, connectors track the same step). The
- * legacy layered presentation bridge still declares `--ds-tree-node-padding`,
- * so the proto axes take effect where that bridge is absent or the channel
- * is cleared -- documented debt, not a parallel system.
+ * (4) Density: the row and the node compound both read the tree deriver's
+ * `--ds-tree-node-padding-block/-inline`, so node padding has one producer
+ * here; the `--_ds-tree-row-padding-*` proto axes scaled by
+ * `--ds-density-effective-scale` are the fallback when no tenant artifact is
+ * mounted. The per-level indent step scales in the engine (logical offsets,
+ * connectors track the same step).
  * (5) Forced colors: disabled rows re-map to GrayText (opacity is not a
  * sufficient signal in the forced palette).
  */
@@ -69901,15 +69957,16 @@ html[data-ds-motion='reduced']
      row past its own node and the document with it. */
   max-inline-size: 100%;
   align-items: center;
-  /* B4-04: the fallback padding splits into the private proto axes so row
-     rhythm scales with the governed density authority. An explicit
-     --ds-tree-node-padding (the legacy layered bridge declares one) keeps
-     exact tenant intent and skips the scale. */
+  /* The deriver's channels, the same two the node compound below resolves;
+     the proto axes stay as the no-artifact fallback. */
   padding: var(
-    --ds-tree-node-padding,
-    calc(var(--_ds-tree-row-padding-block, 4px) * var(--ds-density-effective-scale))
+      --ds-tree-node-padding-block,
+      calc(var(--_ds-tree-row-padding-block, 4px) * var(--ds-density-effective-scale))
+    )
+    var(
+      --ds-tree-node-padding-inline,
       calc(var(--_ds-tree-row-padding-inline, 8px) * var(--ds-density-effective-scale))
-  );
+    );
   border-radius: var(--ds-tree-node-radius, var(--ds-radius-md));
   background: var(--ds-tree-node-bg);
   color: var(--ds-tree-node-color);
@@ -83834,11 +83891,22 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* The label is the only channel the variant re-tints; value and helper are the
-   same two tokens in all five. */
+   same two tokens in all five.
+
+   QUIET RUNG: the three variants whose well is a flat blend of the secondary
+   background role read the family's own graded ink instead of a page role. The
+   roles are fixed for a light canvas (the muted rung measured 2.7:1 on this
+   well) and they do not even keep their RANK across modes: `text-secondary` is
+   lighter than `text-muted` in both modes, which makes it the QUIETER of the two
+   on a light ground (2.43:1 vs 2.74:1 here) and the LOUDER on a dark one
+   (12.0:1 vs 7.0:1) -- so the family states ONE quiet rung, a weighted mix of the reading ink into the well it
+   sits on, whose sign follows the mode by construction. The value keeps the
+   full reading ink, so the label stays subordinate. The editorial and
+   governance wells are gradients and keep their own authored tints. */
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] [data-part='summary-item-label'],
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] [data-part='summary-item-label'],
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-item-label'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-record-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary)));
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'] [data-part='summary-item-label'] {
@@ -83879,7 +83947,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant] [data-part='summary-item-helper'] {
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-record-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary)));
   line-height: 1.5;
 }
 
@@ -84065,8 +84133,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   line-height: 1.4;
 }
 
+/* The ledger's field labels are the canvas-side arm of the same quiet rung:
+   the cells paint no well, so their ink is graded against the canvas the grid
+   rests on rather than against a page role fixed for a light one. */
 .ds-structure.ds-record[data-part='field'][data-empty] > * > [data-part='field-label'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
 .ds-structure.ds-record[data-part='field'] [data-part='field-label'] {
@@ -84227,7 +84298,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* The meta label/text pair renders only when `meta` is a string, so no consumer
    node can sit on this path. */
 .ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] [data-part='action-bar-meta-label'] {
-  color: var(--ds-color-text-tertiary);
+  color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
 .ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-meta-label'] {
@@ -84237,7 +84308,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] [data-part='action-bar-meta-text'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
 .ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-meta-text'] {
@@ -99515,12 +99586,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* ---- item-action tones: the composed ghost Buttons keep their chrome; the
-        pattern owns only the semantic tone of each action label. ---- */
+        pattern owns only the neutral rename tone. The destructive action asks
+        the Button for `danger`, so its ink is the governed quiet-danger one. ---- */
 .ds-pattern-file-manager.ds-engine-modern [data-part='item-action'][data-action='rename'] {
   color: var(--ds-color-text-primary);
-}
-.ds-pattern-file-manager.ds-engine-modern [data-part='item-action'][data-action='delete'] {
-  color: var(--ds-color-error);
 }
 
 /* ---- per-kind icon colours + sizes (moved off the retired h-* utilities) ---- */
@@ -99584,11 +99653,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-collapse: collapse;
   font-size: var(--ds-font-size-sm);
 }
+/* The column headers are the list's quiet rung. They read the family's own
+   graded ink rather than a page role: the role is fixed for a light canvas and
+   measured 2.6:1 on the card, while this channel mixes the reading ink INTO the
+   card ground the family itself paints, so it flips with the mode. */
 .ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] th {
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-spacing-2);
   border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-file-manager-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-card)));
   font-weight: var(--ds-font-weight-semibold);
   text-align: start;
 }
@@ -99605,7 +99678,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    and its header follows. */
 .ds-pattern-file-manager.ds-engine-modern [data-part='size-cell'],
 .ds-pattern-file-manager.ds-engine-modern [data-part='date-cell'] {
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-file-manager-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-card)));
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -102169,8 +102242,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-size: var(--ds-font-size-sm);
   font-weight: var(--ds-font-weight-semibold);
 }
+/* The counter and a hidden column's label are the panel's quiet rung. They read
+   the family's own graded ink rather than a page role: the role is fixed for a
+   light canvas and measured 2.9:1 here, while this channel is a weighted mix of
+   the reading ink INTO the ground the panel sits on, so it flips with the mode
+   and stays quieter than the visible label by construction. */
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='counter'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-column-settings-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
   font-size: var(--ds-font-size-xs);
   font-variant-numeric: tabular-nums;
 }
@@ -102274,7 +102352,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'][data-visible='false'] [data-part='label'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-column-settings-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
 /* ---- pin toggle: small ghost target by default, 44px under coarse ---- */
@@ -120847,6 +120925,7 @@ html[lang]:lang(ar) {
   --ds-column-settings-motion-duration: var(--ds-motion-feedback);
   --ds-column-settings-motion-timing: var(--ds-motion-ease-out);
   --ds-column-settings-pin-side-font-size: 10px;
+  --ds-column-settings-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary)));
   --ds-column-settings-row-bg-hover: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
   --ds-column-settings-row-gap: var(--ds-spacing-2, 8px);
   --ds-column-settings-row-padding-block: 6px;
@@ -121316,6 +121395,7 @@ html[lang]:lang(ar) {
   --ds-file-manager-content-min-height: 12.5rem;
   --ds-file-manager-link-color: var(--ds-color-link, var(--ds-color-primary));
   --ds-file-manager-link-hover-color: var(--ds-color-link-hover, var(--ds-color-primary-hover));
+  --ds-file-manager-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-card));
   --ds-file-manager-touch-target: 2.75rem;
   --ds-filter-chip-bg: var(--ds-surface-card);
   --ds-filter-chip-border: var(--ds-toolbar-control-border, var(--ds-color-border));
@@ -122013,7 +122093,9 @@ html[lang]:lang(ar) {
   --ds-radius-nest-inset: 0px;
   --ds-radius-nest-ratio: 0;
   --ds-radius-scale: 0.8;
+  --ds-record-canvas-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary)));
   --ds-record-heading-font-size: var(--ds-font-size-lg);
+  --ds-record-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary));
   --ds-rhythm-scale: 0.85;
   --ds-saved-views-bar-min-height: 40px;
   --ds-saved-views-bar-padding-inline: 8px;
@@ -122931,7 +123013,7 @@ html[lang]:lang(ar) {
   --ds-tooltip-bordered-shadow: var(--ds-elevation-3);
   --ds-tooltip-bordered-texture: none;
   --ds-tooltip-error-bg: var(--ds-color-error);
-  --ds-tooltip-error-color: var(--ds-color-text-on-primary);
+  --ds-tooltip-error-color: var(--ds-color-on-error);
   --ds-tooltip-focus-color: var(--ds-focus-ring-color);
   --ds-tooltip-inverse-background: var(--ds-color-text-primary);
   --ds-tooltip-inverse-border: color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent);

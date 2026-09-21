@@ -781,6 +781,7 @@
   --ds-column-settings-motion-duration: var(--ds-motion-feedback);
   --ds-column-settings-motion-timing: var(--ds-motion-ease-out);
   --ds-column-settings-pin-side-font-size: 10px;
+  --ds-column-settings-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary)));
   --ds-column-settings-row-bg-hover: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
   --ds-column-settings-row-gap: var(--ds-spacing-2, 8px);
   --ds-column-settings-row-padding-block: 6px;
@@ -1250,6 +1251,7 @@
   --ds-file-manager-content-min-height: 12.5rem;
   --ds-file-manager-link-color: var(--ds-color-link, var(--ds-color-primary));
   --ds-file-manager-link-hover-color: var(--ds-color-link-hover, var(--ds-color-primary-hover));
+  --ds-file-manager-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-card));
   --ds-file-manager-touch-target: 2.75rem;
   --ds-filter-chip-bg: var(--ds-surface-card);
   --ds-filter-chip-border: var(--ds-toolbar-control-border, var(--ds-color-border));
@@ -1947,7 +1949,9 @@
   --ds-radius-nest-inset: 0px;
   --ds-radius-nest-ratio: 0;
   --ds-radius-scale: 0.8;
+  --ds-record-canvas-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary)));
   --ds-record-heading-font-size: var(--ds-font-size-lg);
+  --ds-record-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary));
   --ds-rhythm-scale: 0.85;
   --ds-saved-views-bar-min-height: 40px;
   --ds-saved-views-bar-padding-inline: 8px;
@@ -2865,7 +2869,7 @@
   --ds-tooltip-bordered-shadow: var(--ds-elevation-3);
   --ds-tooltip-bordered-texture: none;
   --ds-tooltip-error-bg: var(--ds-color-error);
-  --ds-tooltip-error-color: var(--ds-color-text-on-primary);
+  --ds-tooltip-error-color: var(--ds-color-on-error);
   --ds-tooltip-focus-color: var(--ds-focus-ring-color);
   --ds-tooltip-inverse-background: var(--ds-color-text-primary);
   --ds-tooltip-inverse-border: color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent);
