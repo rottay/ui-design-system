@@ -392,19 +392,18 @@ ownership and persistent tenant change history, with real Fable review before
 incorporation. The corrected specification received **ACCEPT** from
 `claude-fable-5-1`; the durable review is
 [`evidence/style-history-roadmap-review/index.md`](../evidence/style-history-roadmap-review/index.md).
-The three approved packets are in
-[`proposals.md#owner-approved-styles-and-tenant-history--2026-09-20`](./proposals.md#owner-approved-styles-and-tenant-history--2026-09-20).
-
-**At the next serialized roadmap checkpoint**, the sole DT must transfer those
-packets to their named lane files, add their registry entries and regenerate
-STATUS together. This is already owner-approved scope, not a request for another
-GO; the inbox is used only because registry/STATUS have an active writer. Until
-that transfer, the proposed IDs are **not registered, claimable or executable**.
-Do not represent the inbox as an already updated DAG. Record the addition of
-three WOs explicitly (161 -> 164 if no other additions intervened), leaving
-existing statuses/evidence, source IDs, the 82-item authority denominator,
-phase controls and their fingerprint unchanged. The new packets belong to
-`audit-2026-09-05`, so the programme-C gate includes them after registration.
+**Registered on 2026-09-20 in commit `3084dc0d5`:** the executable specifications
+are WO-CAT-04 in [`catalog-door.md`](./catalog-door.md), WO-DER-09 in
+[`derivation.md`](./derivation.md), and WO-CON-08 in
+[`consumer-contract.md`](./consumer-contract.md). Matching entries are in
+`registry.json`, and generated STATUS includes them. The addition changed the
+WO denominator **161 -> 164**, preserving prior completion evidence, source IDs,
+the 82-item authority denominator, phase controls and their fingerprint.
+They belong to `audit-2026-09-05` and therefore gate programme C. The
+[`proposals.md` record](./proposals.md#owner-approved-styles-and-tenant-history--2026-09-20)
+is historical: do not register duplicates or wait for another owner GO. Use
+`show`/`delegate`/`next` and the registry dependencies to schedule the work;
+registration is not permission to skip prerequisites or file reservations.
 
 Finish current packets without interruption. CAT-04 must acquire the shared
 Theme/catalog/ingress reservation; scope approval is not shared-core design
@@ -413,8 +412,21 @@ existing policy. CON-08 includes the necessary app-bithire persistence/reference
 integration under D-31 and is an explicit cross-repo exception to DS-only focus;
 other apps receive the contract/recipe, not an unsolicited migration. Existing
 ARC-21/CON-06 closures are not expanded retroactively. Keep Codex out of the
-execution loop, including this transfer: no callback, consultation or approval
+execution loop, including these work orders: no callback, consultation or approval
 request to Codex. Preserve current main/account/audit/publication rules.
+
+**Owner reaffirmation — completion priority (2026-09-20):** finishing the Design
+System is the execution priority. Safe useful parallelism is mandatory, not an
+optional optimization: do not leave an eligible complete packet idle solely
+because an unrelated WO is still running. Apply the six dispatch checks below,
+including real review, memory and validation capacity; increase writers only
+while those conditions hold. Prefer finishing near-complete accepted scope and
+unblocking shared contracts over growing the number of drafts. Reassign released
+capacity at delivery events, not through recurring polling. The new style/history
+WOs follow the scheduling rows below and must not interrupt current packets or
+skip prerequisites. Never trade away acceptance, independent audit or source
+ownership to improve elapsed time; do not repeat unchanged censuses or full
+suites where valid focused evidence suffices. No standing Codex supervision.
 
 ### Owner-delegated decisions adopted — 2026-09-19
 
@@ -506,6 +518,9 @@ is not an exclusive file reservation for one small packet.
 
 | WO | Work that can run concurrently | Boundary / completion rule |
 | --- | --- | --- |
+| WO-CAT-04 | Once CAT-03 and CON-06 are done, a bounded shared-contract packet may run alongside unrelated family closers on disjoint inputs. Prioritize the CON-06 prerequisite when it is eligible and its source reservation is free. | One owner for document/provenance/admission/schema. Kimi+Fable approve the core debrief; acquire or wait for EVI-02's ingress reservation. No competing core writers or consumers implementing against an unsettled contract. |
+| WO-DER-09 | After CAT-04 and DER-06, separate complete style-data/fixture packets can run together; they can overlap CON-08 when all of CON-08's dependencies are also satisfied and files/read dependencies are disjoint. | Style registry, vertical composition and official generators have one owner. Keep each style's tests with its writer; batch shared registration and serialize artifact generation. Reserve paths against RET-04 before any moves. |
+| WO-CON-08 | After its registered prerequisites, use separate DS-descriptor and app-bithire persistence packets once their consumed contract is adopted. The history work need not wait for all DER-09 style data when it consumes the stable CAT-04 contract and controlled fixtures. | One publication/provenance contract owner; no simultaneous edits to a shared app module or generated authority. Adopt the descriptor before dependent adapters, then verify the combined DB/preview/publish/restore path. Serialize browser/integration validation; do not expand into other app migrations. |
 | WO-FAM-08 | Complete disjoint data families and named residues; export-kernel work separate from table ARIA work when their files and contracts do not overlap. | One DnD owner, one export owner. Family kernel contracts land before dependent adoption. Own tests stay with the family writer. Keep the WO open until the real family/finding acceptance passes. |
 | WO-FAM-09 | Chart cohorts after the shared series-paint/geometry contract is reviewed and stable; alongside FAM-08/10/11. | One owner for chart theme/series resolver, shared geometry utilities and registration. No 18 competing paint implementations; do not split one chart's behavior from its skin/tests. |
 | WO-FAM-10 | Form/record, header and lifecycle cohorts on exact disjoint files after common contracts settle. | One header/SurfaceRegion contract owner. FAM-11 reads the settled contract; shared surface builders cannot be co-edited. |

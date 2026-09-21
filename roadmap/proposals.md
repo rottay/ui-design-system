@@ -1,15 +1,16 @@
 # DS Improvement Proposals — Owner Review Inbox
 
-- **Current inbox**: three owner-approved packets from 2026-09-20 await the sole DT's
-  serialized lane/registry/STATUS registration. They are specified below and are
-  NOT executable until registered. No additional owner GO is required for this scope.
+- **Current inbox**: the three owner-approved style/history packets were transferred
+  to their lane specifications and registered by the sole DT on 2026-09-20 in
+  `3084dc0d5` (161 -> 164 WOs). Nothing in this queue awaits registration or another
+  owner GO. Follow the lane links below and the registry dependencies; do not add duplicates.
 - **Historical status (2026-07-07)**: ALL rounds APPROVED — except P-07 (WITHDRAWN, kept for the
   record). Every approved proposal is converted to a `### WO-` block in a lane + a registry entry
   (round 1 + round 3 -> `gates.md` / `tokens.md` / `architecture.md` / the `craft.md` extension;
   round 2 -> `craft.md` WO-CRA-01..05). The inbox is EMPTY pending new proposals; new items follow
   the same law (owner approves 1:1, then a WO block + registry entry — the anti-sprawl law). This
-  file remains the historical record of those proposal specs. The 2026-09-20
-  approved-registration queue below supersedes the historical EMPTY statement.
+  file remains the historical record of those proposal specs and of the completed
+  2026-09-20 style/history transfer below.
 - **Date**: 2026-07-07. **Requested by**: davila ("would you improve the DS in any other way?
   we feel behind the best current trends; multi-engine stays; elevate modern to the maximum;
   be certain everything is whitelabel-able per tenant; assess whether the architecture is right").
@@ -24,12 +25,14 @@
 
 ## Owner-approved styles and tenant history — 2026-09-20
 
-**Disposition: APPROVED SCOPE / PENDING SERIAL REGISTRATION.** The owner asked
+**Disposition: TRANSFERRED AND REGISTERED (`3084dc0d5`, 2026-09-20).** The owner asked
 Codex directly to incorporate this proposal after independent Fable feedback.
 Real `claude-fable-5-1`, normal Claude on Daniel.Avila, reviewed it read-only:
 first ACCEPT WITH CHANGES, then ACCEPT on the corrected specification. See
 [`../evidence/style-history-roadmap-review/index.md`](../evidence/style-history-roadmap-review/index.md).
-This is the existing sanctioned inbox, not a second roadmap or status registry.
+This is the historical approval/review record, not a second executable roadmap or
+status registry. The three lane specifications linked below own implementation;
+`registry.json` owns current status and dependencies.
 
 ### Product and architecture contract
 
@@ -138,7 +141,10 @@ Registered 2026-09-20 by the sole DT: the executable spec now lives at [`derivat
 
 Registered 2026-09-20 by the sole DT: the executable spec now lives at [`consumer-contract.md`](./consumer-contract.md) `### WO-CON-08` (lane `consumer-contract`, order 8, size L; depends on WO-CAT-04, WO-EMI-02, WO-CON-06, WO-ARC-21; `touchedRepos: [ui-design-system, app-bithire]` under D-31), with its registry entry. This inbox copy is the historical record of the approved scope, not a second evolving spec.
 
-### Serialized registration and closure instructions
+### Historical serialized registration instructions — completed
+
+The transfer below was completed in `3084dc0d5`; do not execute it again. The
+three registered lane specifications and registry entries now govern the work.
 
 1. Do not stop, kill, roll back or redirect current writers. At the DT's next
    roadmap window, verify the three IDs remain free; preserve all current entries.
