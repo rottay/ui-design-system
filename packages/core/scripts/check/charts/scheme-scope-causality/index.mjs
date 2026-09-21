@@ -2,34 +2,21 @@
 /**
  * chart-scheme-scope-causality — the requested scheme IS the stamped scope.
  *
- * ============ STILL RED, BUT NO LONGER FOR THE REASON IT LANDED ============
- * It landed NON-BLOCKING and absent from the CI gate manifest with 11 of 55
- * scopes agreeing, deferred "until lot 1". Lot 1 -- the owner's Q1 de-alias --
- * has landed, and the deferral is discharged: `default` now resolves its own
- * governed table, so BOTH paint classes measure zero. `paint-from-another-
- * table` went 9 -> 0 because the alias is gone; `paint-outside-the-chain` went
- * 6 -> 0 because the probe learned the second governed route -- the class-
- * painted families reach the chain through the scope-keyed
- * `--ds-chart-paint-N` skin bridge, which the inline-only reader could not see
- * and reported as ungoverned. That was an instrument blindness, never a tree
- * defect, and the bridge keeps its own failure modes.
- *
- * What remains is ONE class and a different defect: 12 of 55 rows are
- * `scope-ignores-request`. Three families -- network-graph, sankey and
- * scatter -- never carry `colorScheme` to the root, so they stamp `default`
- * for all five requests and four of every five requests paint the wrong
- * table. That is prop plumbing in those three families, not palette
- * governance, and it is not this lot's write set. The instrument therefore
- * stays NON-BLOCKING with a named owner rather than a deferral; the lot that
- * plumbs the last three flips it to blocking and green.
- *
- * The residue was five families at the Q1 de-alias; `6feb6a315` gave
- * funnel-chart and gantt-chart the governed `colorScheme` input, which closed
- * eight of the twenty rows. The pin below follows that down. It pins the
- * divergent family SET, not only a count, because a count alone let this
- * registration go stale while the tree got better, and because a regression
- * in a family that agrees today would otherwise hide behind a repair
- * elsewhere.
+ * ============ GREEN AND BLOCKING SINCE THE FAM-09 PLUMBING LOT =============
+ * It landed NON-BLOCKING with 11 of 55 scopes agreeing, deferred "until
+ * lot 1". Lot 1 -- the owner's Q1 de-alias -- discharged the deferral:
+ * `default` resolves its own governed table, so BOTH paint classes measure
+ * zero (`paint-from-another-table` 9 -> 0 with the alias gone;
+ * `paint-outside-the-chain` 6 -> 0 when the probe learned the scope-keyed
+ * `--ds-chart-paint-N` skin bridge -- an instrument blindness, never a tree
+ * defect). `6feb6a315` plumbed funnel-chart and gantt-chart, and the FAM-09
+ * plumbing lot gave network-graph, sankey and scatter the same governed
+ * `colorScheme` input: the roster of `scope-ignores-request` families is
+ * EMPTY by measurement, 55 of 55 rows agree, and the gate entered the CI
+ * gate manifest as blocking. The pinned set below is now a REGRESSION ALARM:
+ * a family that stops carrying `colorScheme` to its root joins the set and
+ * names itself, and the 55/55 totals are the non-vacuity floor -- a probe
+ * that stops rendering fails the floor, never reads as a repair.
  * ===========================================================================
  *
  * The law, in one line: for every categorical family and every scheme,

@@ -29,11 +29,13 @@ import test from 'node:test';
 import { DIVERGENCES, adjudicate, classify, measure, unplumbedFamilies } from './index.mjs';
 
 /**
- * The families that still stamp `default` for every request, measured at the
- * Q1 de-alias and followed down by `6feb6a315` (funnel-chart and gantt-chart
- * took the governed `colorScheme` input and left the set).
+ * The families that still stamp `default` for every request. Measured EMPTY
+ * since the FAM-09 plumbing lot (network-graph, sankey and scatter took the
+ * governed `colorScheme` input — the roster emptied at 55 of 55 agreeing).
+ * A family JOINING this set is a regression and names itself here; the set
+ * stays pinned so a repair elsewhere cannot hide a new unplumbed family.
  */
-const UNPLUMBED = ['network-graph', 'sankey', 'scatter'];
+const UNPLUMBED = [];
 const SCHEMES_PER_FAMILY = 5;
 /** Four of the five requests diverge; the family's own `default` agrees. */
 const DIVERGENT_ROWS = UNPLUMBED.length * (SCHEMES_PER_FAMILY - 1);
@@ -138,11 +140,11 @@ test('the live probe measures scope divergence only, and no paint divergence at 
   assert.equal(report.byKind[DIVERGENCES.PAINT_UNGOVERNED] ?? 0, 0);
   assert.equal(report.byKind[DIVERGENCES.UNRENDERED] ?? 0, 0);
 
-  // And the one open defect is still measured, by roster and not only by
-  // count: three families do not plumb `colorScheme`, so four of their five
-  // requests stamp `default`. A family leaving this set is a repair that owes
-  // this pin an update; a family joining it is a regression.
+  // Every categorical family now plumbs `colorScheme`: the unplumbed roster is
+  // empty BY MEASUREMENT, and a family joining it is a regression that names
+  // itself. The 55/55 totals are the non-vacuity floor — a probe that stops
+  // rendering reads as a failure of this floor, never as a repair.
   assert.deepEqual(unplumbedFamilies(report), UNPLUMBED);
-  assert.equal(report.byKind[DIVERGENCES.SCOPE], DIVERGENT_ROWS);
+  assert.equal(report.byKind[DIVERGENCES.SCOPE] ?? 0, DIVERGENT_ROWS);
   assert.equal(report.agreeing, report.total - DIVERGENT_ROWS);
 });

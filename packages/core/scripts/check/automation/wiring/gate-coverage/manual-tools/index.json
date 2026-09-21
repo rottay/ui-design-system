@@ -49,8 +49,8 @@
     },
     {
       "path": "scripts/check/charts/scheme-scope-causality/probe/index.mjs",
-      "reason": "The vitest harness for the FAM-09 scheme-scope causality probe. It landed deliberately unwired (a53bdc3da): it measures a divergence the product suites must not record. Lot 1 (the Q1 de-alias) closed both paint classes; the probe stays a hand-run tool while 12 of 55 rows remain red on three families that do not plumb `colorScheme` (network-graph, sankey, scatter — computed by the gate's own census), at which point WO-FAM-09 wires it as a real channel or deletes it. Registering it here is the written third state, NOT a blocking gate.",
-      "owner": "WO-FAM-09 -- the colorScheme-plumbing lot makes the probe green, then wires it or deletes it"
+      "reason": "The vitest harness for the FAM-09 scheme-scope causality probe. It landed deliberately unwired (a53bdc3da): it measures a divergence the product suites must not record. The roster it was registered against is EMPTY by measurement since the FAM-09 plumbing lot (network-graph/sankey/scatter took the governed colorScheme input; 55 of 55 rows agree), and the gate it feeds entered the CI manifest blocking (chart-scheme-scope-causality, 2026-09-20). It stays the hand-run harness the live drill imports; registering it here remains the written third state — not a second gate.",
+      "owner": "WO-FAM-09 -- roster emptied by the plumbing lot; the manifest gate is the blocking channel, this stays its harness"
     },
     {
       "path": "scripts/check/orchestration/foundation/glob/index.mjs",
