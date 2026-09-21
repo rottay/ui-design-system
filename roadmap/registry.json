@@ -7142,7 +7142,7 @@
    "lane": "catalog-door",
    "order": 4,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CAT-03",
     "WO-CON-06"
@@ -7151,7 +7151,9 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "owner-approved 2026-09-20 (proposals.md style/history queue; Fable review ACCEPT: evidence/style-history-roadmap-review/index.md); registered 2026-09-20 by the sole DT per the queue instructions — no new source IDs, phase or DS-improvements authority; wave 4; the shared contract adopts first under the Kimi+Fable same-debrief review (scope approval is not implementation approval)"
+   "notes": "owner-approved 2026-09-20 (proposals.md style/history queue; Fable review ACCEPT: evidence/style-history-roadmap-review/index.md); registered 2026-09-20 by the sole DT per the queue instructions — no new source IDs, phase or DS-improvements authority; wave 4; the shared contract adopts first under the Kimi+Fable same-debrief review (scope approval is not implementation approval)",
+   "claimedBy": "kimi-dt-2026-09-21",
+   "claimedAt": "2026-09-21"
   },
   {
    "id": "WO-DER-09",
