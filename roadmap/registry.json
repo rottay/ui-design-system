@@ -4643,6 +4643,11 @@
      "at": "2026-09-21 18:31",
      "by": "kimi-dt",
      "note": "2026-09-21 kimi-dt: claimed — debrief packet read-only despachado a Opus (brief-emi-03-debrief-opus.md) bajo la regla shared-core (toca compilation/emission, recurso singleton que el DT ya reserva como claimant común con CAT-04; el contrato CAT-04 adoptado no toca lowering ni emitters, frontera declarada en el brief). Revisión Kimi+Fable del MISMO debrief antes de cualquier implementación."
+    },
+    {
+     "at": "2026-09-21 19:27",
+     "by": "kimi-dt",
+     "note": "2026-09-21 kimi-dt: debrief ADOPTADO como base del contrato (revision 3, sha256 1c94eb42790af863, medido en cb876bdca). Ciclo shared-core: v1 Opus (premisa corregida por medicion: ~80% no-literal, no 25-45%; la clausura no es auto-cerrada: 43% requiere la capa estatica) → Fable ACCEPT-WITH-CHANGES (7 cambios: oraculo independiente para la paridad, theme-contract-freeze al write set, resolved-map SI es gate registrado, tipos reparados, facade con owner y base explicito, unit-mix post-sustitucion, roster de importadores) → v2 → Fable re-review (3 defectos A/B/C; pre-autorizo adopcion de v3 sin pasada completa) → v3 con ruling DT para A (opcion 1: sin eje density en el documento raiz — el factor compilado gana en :root y un documento por densidad reportaria valores que el browser nunca pinta; la densidad es dial de runtime que el consumidor aplica como factor, modelo motion contracts) → verificacion Kimi de A/B/C: ADOPTADO. Rulings: Q1=(a) split emission otorgado, Q2=(a) port del resolver con instrumento consumiendo desde dist (mantener resolved-map verde o re-pin oficial), Q3=(a) snapshot por build, Q4 owner-routed (recomiendo useTokens como follow-on), Q5=(a) gate ampliado a clamp/min/max/env como enmienda registrada, Q6: tamano M→L. BLOQUEO DE SECUENCIA: la implementacion de EMI-03 comparte entrypoints/server/index.ts y el manifest de gates con el lote CAT-04 EN VUELO — el paquete EMI-03 espera a que CAT-04 integre."
     }
    ]
   },
