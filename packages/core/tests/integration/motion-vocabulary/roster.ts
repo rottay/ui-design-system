@@ -20,11 +20,23 @@ export const SKIN_ROOTS = [
 
 const INTENTS = ['feedback', 'reveal', 'disclosure', 'resize', 'rearrange', 'attention'];
 /**
- * The two dial-reaching spellings. `duration-scale` is the glacial escape
+ * The ramp spellings of the same three rungs. Since the base-ramp derivation
+ * lot they are `calc(<cadence rung> * var(--ds-motion-duration-scale))` at
+ * every producer, so a skin that binds one reaches the dial exactly as its
+ * intent twin does -- which is why they enter this roster and are measured
+ * rather than trusted.
+ */
+const RAMP = ['fast', 'normal', 'slow'];
+/**
+ * The three dial-reaching spellings. `duration-scale` is the glacial escape
  * hatch: `calc(glacial * N * var(--ds-motion-duration-scale, 1))` bends with
  * the dial and is byte-equal to the bare `calc(glacial * N)` at scale 1.
+ * `glacial` itself is NOT here: it stays a rung so its loops can apply the
+ * dial themselves without applying it twice.
  */
-const DIAL_READ = new RegExp(`var\\(\\s*--ds-motion-(${[...INTENTS, 'duration-scale'].join('|')})\\b`);
+const DIAL_READ = new RegExp(
+  `var\\(\\s*--ds-motion-(${[...INTENTS, ...RAMP, 'duration-scale'].join('|')})\\b`,
+);
 
 export interface MotionSite {
   /** `family#n`: unique per probed rule, so one family contributes many sites. */

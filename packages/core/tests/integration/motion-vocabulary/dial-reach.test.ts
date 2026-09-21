@@ -1,14 +1,18 @@
 /**
  * Per-family dial reach for the milestone-B motion lot.
  *
- * Every family whose skin binds a dial-reaching duration -- an intent name, or
- * the `--ds-motion-duration-scale` factor an ambient glacial loop rides -- is
- * mounted on the axis instrument's own scene, the rule's descendant chain
- * collapsed onto one bare node, and measured under a base arm and a
- * `motion.dial` arm. The family
- * reaches the dial when its own `transition-duration`/`animation-duration`
- * moves; the bare control beside it must not, which is the negative control a
- * palette-only document relies on.
+ * Every family whose skin binds a dial-reaching duration -- an intent name, a
+ * ramp name, or the `--ds-motion-duration-scale` factor an ambient glacial loop
+ * rides -- is mounted on the axis instrument's own scene, the rule's descendant
+ * chain collapsed onto one bare node, and measured under a base arm and a
+ * `motion.dial` arm. The family reaches the dial when its own
+ * `transition-duration`/`animation-duration` moves; the bare control beside it
+ * must not, which is the negative control a palette-only document relies on.
+ *
+ * The RAMP names entered this roster with the base-ramp derivation lot, which
+ * made `fast`/`normal`/`slow` dial products of the cadence at every producer.
+ * They are measured here rather than trusted: a family that binds one now has
+ * to move, or be named below with the owner that outranks it.
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -26,8 +30,8 @@ const sites = motionSites();
  * are what makes that visible: they are the milestone-B motion lot's measured
  * population, and they are decrease-only by review, never by a silent edit.
  */
-const PINNED_SITES = 432;
-const PINNED_FAMILIES = 172;
+const PINNED_SITES = 456;
+const PINNED_FAMILIES = 180;
 const CONTROL = '<div id="control">Bare control node</div>';
 
 /**
@@ -45,16 +49,21 @@ const OUTRANKED: Readonly<Record<string, string>> = {
   search: '--ds-skeleton-animation-duration: 1.5s (foundation/themes/default)',
   visualization: '--ds-skeleton-animation-duration: 1.5s (foundation/themes/default)',
   'menu-compounds': "runtime/personality's `[data-engine] .ds-menu-item` wins with --ds-personality-animation-entrance-duration",
-  'markdown-view': "the frozen classic theme's `html[data-tenant] a` wins with --ds-transition-fast",
 };
+
+const AVATAR_CHANNEL =
+  '--ds-avatar-transition-duration: 0.2s (presentation/components/avatar/index.css:183) defines the channel, so the skin fallback to --ds-motion-fast is dead; 0.2s is also off-cadence for its 0.12s rung';
 
 /**
  * One RULE outranked while the rest of its family reaches the dial, so the
  * family-wide list above would overstate it. Same law: measured here, named
  * with the owner that wins, and it fails closed the moment the rule moves.
- * Empty: no single rule is currently outranked by another owner.
  */
-const OUTRANKED_SITES: Readonly<Record<string, string>> = {};
+const OUTRANKED_SITES: Readonly<Record<string, string>> = {
+  "avatar .rottay-avatar.rottay-avatar--modern > [data-part='mask']": AVATAR_CHANNEL,
+  "avatar .rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-part='status-dot']":
+    AVATAR_CHANNEL,
+};
 
 const siteKey = (site: MotionSite): string => `${site.family} ${site.selector}`;
 
@@ -102,7 +111,9 @@ describe('motion dial reach, family by family', () => {
     });
     base = readings.base!;
     slower = readings.slower!;
-  }, 240_000);
+    // INTERIM bound, not a measured pin: measureArms re-parses the ~72KB scene into a fresh host per
+    // target (quadratic; tests/support/family-causality/index.ts:185-188). The hoist is its own packet.
+  }, 600_000);
 
   it('paints a duration on every family it measured', () => {
     expect(sites.length).toBeGreaterThan(0);

@@ -42,14 +42,32 @@ function motionDialVariables(
  * `instant/calm/deliberate` are the product-law cadence; `fast/normal/slow/
  * glacial` are the same three steps under the names the token sheet and the
  * skins already read. They are ALIASES of the cadence, not a second ladder:
- * expressing them as `var()` onto the cadence is what keeps a second spelling
- * from becoming a second authority, which is how the retired pre-composed
- * transition catalog drifted from the cadence it was supposed to restate.
+ * deriving them from it is what keeps a second spelling from becoming a second
+ * authority, which is how the retired pre-composed transition catalog drifted
+ * from the cadence it was supposed to restate.
+ *
+ * `fast/normal/slow` are DIAL PRODUCTS of that cadence, in the same shape the
+ * intent names take: the cadence is the dial's INPUT and every public duration
+ * name a skin may bind is its OUTPUT. Stating them as a bare `var()` made the
+ * distinction between the two spellings a distinction between a tenant-movable
+ * duration and a fixed one -- `--ds-motion-feedback` answered `motion.dial`
+ * while `--ds-motion-fast`, its own rung under the other name, could not. At
+ * `durationScale: 1` both spellings resolve to the same duration they always
+ * did, so this changes no resting value; under a dial they now agree.
+ *
+ * `glacial` is deliberately NOT one. It is the ambient-loop rung, and the loops
+ * that ride it already multiply it by the dial at the call site
+ * (`calc(var(--ds-motion-glacial) * var(--ds-motion-duration-scale, 1))`, the
+ * empty-state precedent); making the channel a product too would apply the
+ * dial twice. Measured, not assumed: 16 declaration sites carry the factor already.
  */
 const DURATION_ALIASES: Readonly<Record<string, string>> = {
-  "--ds-motion-fast": "var(--ds-motion-instant)",
-  "--ds-motion-normal": "var(--ds-motion-calm)",
-  "--ds-motion-slow": "var(--ds-motion-deliberate)",
+  "--ds-motion-fast":
+    "calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1))",
+  "--ds-motion-normal":
+    "calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1))",
+  "--ds-motion-slow":
+    "calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1))",
   "--ds-motion-glacial": "calc(var(--ds-motion-deliberate) * 1.5625)",
 };
 

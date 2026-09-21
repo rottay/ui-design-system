@@ -1,0 +1,106 @@
+{
+ "note": "Per-name transition-duration read back from Chromium through the productive door (documentThemeIntent -> compileThemeIntent -> emitThemeCss). BEFORE measured at parent commit 12894ff11 in the /tmp/ds-head archive tree; AFTER is the same probe on the candidate, asserted by tests/integration/motion-vocabulary/index.test.ts.",
+ "arms": {
+  "base": "{}",
+  "slower": "{\"motion.dial\":{\"durationScale\":1.35}}"
+ },
+ "browser": "chrome-headless-shell 149.0.7827.55",
+ "before": {
+  "rottay": {
+   "base": {
+    "feedback": "0.12s",
+    "reveal": "0.2s",
+    "disclosure": "0.2s",
+    "resize": "0.2s",
+    "rearrange": "0.32s",
+    "attention": "0.32s",
+    "fast": "0.12s",
+    "normal": "0.2s",
+    "slow": "0.32s",
+    "instant": "0.12s",
+    "calm": "0.2s",
+    "deliberate": "0.32s",
+    "glacial": "0.5s"
+   },
+   "slower": {
+    "feedback": "0.162s",
+    "reveal": "0.27s",
+    "disclosure": "0.27s",
+    "resize": "0.27s",
+    "rearrange": "0.432s",
+    "attention": "0.432s",
+    "fast": "0.12s",
+    "normal": "0.2s",
+    "slow": "0.32s",
+    "instant": "0.12s",
+    "calm": "0.2s",
+    "deliberate": "0.32s",
+    "glacial": "0.5s"
+   }
+  },
+  "bithire": {
+   "base": {
+    "feedback": "0.096s",
+    "reveal": "0.16s",
+    "disclosure": "0.16s",
+    "resize": "0.16s",
+    "rearrange": "0.256s",
+    "attention": "0.256s",
+    "fast": "0.12s",
+    "normal": "0.2s",
+    "slow": "0.32s",
+    "instant": "0.12s",
+    "calm": "0.2s",
+    "deliberate": "0.32s",
+    "glacial": "0.5s"
+   },
+   "slower": {
+    "feedback": "0.162s",
+    "reveal": "0.27s",
+    "disclosure": "0.27s",
+    "resize": "0.27s",
+    "rearrange": "0.432s",
+    "attention": "0.432s",
+    "fast": "0.12s",
+    "normal": "0.2s",
+    "slow": "0.32s",
+    "instant": "0.12s",
+    "calm": "0.2s",
+    "deliberate": "0.32s",
+    "glacial": "0.5s"
+   }
+  },
+  "evnto": {
+   "base": {
+    "feedback": "0.12s",
+    "reveal": "0.2s",
+    "disclosure": "0.2s",
+    "resize": "0.2s",
+    "rearrange": "0.32s",
+    "attention": "0.32s",
+    "fast": "0.12s",
+    "normal": "0.2s",
+    "slow": "0.32s",
+    "instant": "0.12s",
+    "calm": "0.2s",
+    "deliberate": "0.32s",
+    "glacial": "0.5s"
+   },
+   "slower": {
+    "feedback": "0.162s",
+    "reveal": "0.27s",
+    "disclosure": "0.27s",
+    "resize": "0.27s",
+    "rearrange": "0.432s",
+    "attention": "0.432s",
+    "fast": "0.12s",
+    "normal": "0.2s",
+    "slow": "0.32s",
+    "instant": "0.12s",
+    "calm": "0.2s",
+    "deliberate": "0.32s",
+    "glacial": "0.5s"
+   }
+  }
+ }
+}

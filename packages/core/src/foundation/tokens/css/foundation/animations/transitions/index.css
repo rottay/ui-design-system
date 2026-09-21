@@ -91,19 +91,29 @@
      design-language section 2.6 closed set 120/200/320), so tenant-scoped and
      unscoped contexts resolve the token to the same duration. */
   --ds-motion-instant: 120ms;
-  --ds-motion-fast: 120ms;
-  --ds-motion-normal: 200ms;
-  --ds-motion-slow: 320ms;
+  --ds-motion-calm: 200ms;
+  --ds-motion-deliberate: 320ms;
   --ds-motion-glacial: 500ms;
   --ds-motion-duration-scale: 1;
 
-  /* `calm` and `deliberate` are the cadence's own names for `normal` and
-     `slow`. They existed ONLY inside the reduced-motion block below, so every
-     `animation: … var(--ds-motion-calm)` resolved to nothing at rest and the
-     whole declaration was invalid wherever no compiled tenant artifact ships.
-     A role a component may bind carries a resting value. */
-  --ds-motion-calm: var(--ds-motion-normal);
-  --ds-motion-deliberate: var(--ds-motion-slow);
+  /* `fast`, `normal` and `slow` are the cadence's other names for `instant`,
+     `calm` and `deliberate`, and — like the intent names below — they are DIAL
+     PRODUCTS of it: the cadence is what `motion.dial` multiplies, every public
+     duration name is what a skin binds. Stating them as bare rungs made the
+     choice of spelling decide whether a tenant could move the duration at all.
+     Same resting values (120/200/320ms at scale 1), same order the compiler
+     derives them in (lowering/runtime/derivation/motion DURATION_ALIASES).
+     `glacial` stays a rung: the ambient loops apply the dial at the call site,
+     so a product here would apply it twice. */
+  --ds-motion-fast: calc(
+    var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1)
+  );
+  --ds-motion-normal: calc(
+    var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1)
+  );
+  --ds-motion-slow: calc(
+    var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1)
+  );
   /* The travel dial skins multiply their entrance offsets by, and the ease
      name the compiler emits as `--ds-ease-standard`. Both were read with a
      literal fallback in place of a declaration. */
@@ -114,22 +124,22 @@
      choosing arbitrary speeds, which keeps dense tools calm and AI feedback
      expressive without becoming decorative noise. */
   --ds-motion-feedback: calc(
-    var(--ds-motion-fast) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1)
   );
   --ds-motion-reveal: calc(
-    var(--ds-motion-normal) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1)
   );
   --ds-motion-disclosure: calc(
-    var(--ds-motion-normal) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1)
   );
   --ds-motion-resize: calc(
-    var(--ds-motion-normal) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1)
   );
   --ds-motion-rearrange: calc(
-    var(--ds-motion-slow) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1)
   );
   --ds-motion-attention: calc(
-    var(--ds-motion-slow) * var(--ds-motion-duration-scale, 1)
+    var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1)
   );
 
   /* Easings. ease-out is the premium curve (formerly copy-pasted as a literal). */
