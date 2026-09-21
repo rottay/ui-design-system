@@ -114,8 +114,8 @@ describe("first-party vertical font ownership", () => {
   it("projects each roster row's exact font-pack ownership into its bundle", () => {
     for (const row of FIRST_PARTY_VERTICAL_ROSTER) {
       const css = readBundle(row.bundleFile);
-      // Read as plain strings: the tenant door lists a subset of the manifest
-      // (an unrostered pack like arabic-text must assert expected=false).
+      // Read as plain strings: a roster row declares a subset of the manifest,
+      // and a pack no row declares must assert expected=false.
       const packs: readonly string[] = row.fontPacks;
       for (const id of FONT_PACK_IDS) {
         const expected = packs.includes(id);
@@ -126,6 +126,30 @@ describe("first-party vertical font ownership", () => {
           ).toBe(expected);
         }
       }
+    }
+  });
+
+  // This arm FLIPPED. It was written to assert that NO vertical bundle shipped
+  // arabic-text, because 8ae785f1e landed the pack deliberately unrostered.
+  // Rostering it on all three is the measured intent here: the pack is coverage,
+  // not a style choice -- it carries the family withArabicSafeFallback already
+  // compiles into every base/heading/display stack, so a bundle without it makes
+  // that tail a bet on a system install. It is free for a latin page because the
+  // face is unicode-range-gated, which the next assertion measures in the bundle
+  // rather than trusting from the pack source.
+  it("ships the arabic-text face in every vertical bundle, range-gated", () => {
+    const [face] = FONT_PACK_MANIFEST["arabic-text"].files;
+    for (const row of FIRST_PARTY_VERTICAL_ROSTER) {
+      expect(row.fontPacks, `${row.slug} roster`).toContain("arabic-text");
+      const css = readBundle(row.bundleFile);
+      expect(
+        css.includes(`url('./fonts/${face.path.slice(2)}')`),
+        `${row.slug} arabic face`,
+      ).toBe(true);
+      const block = /@font-face\s*\{[^}]*Noto Sans Arabic[^}]*\}/.exec(css);
+      expect(block, `${row.slug} arabic @font-face`).not.toBeNull();
+      expect(block![0], `${row.slug} arabic range`).toMatch(/U\+0600-06FF/);
+      expect(block![0], `${row.slug} latin range`).not.toMatch(/U\+0000-00FF/);
     }
   });
 });

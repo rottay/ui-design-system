@@ -333,18 +333,32 @@ export const FIRST_PARTY_VERTICAL_ROSTER: readonly FirstPartyVerticalEntry[] =
       // Every pack listed for any vertical is physically shipped — see
       // FONT_PACK_MANIFEST. A family that is not in a pack is not available to
       // a first-party theme, however common it is on a designer's machine.
+      //
+      // `arabic-text` closes every row because it is coverage, not style: it
+      // ships the family `withArabicSafeFallback` compiles into every stack,
+      // and its `unicode-range` keeps a latin page from fetching it.
       defaultMode: "dark",
-      fontPacks: ["humanist-text", "plex-mono"],
+      fontPacks: ["humanist-text", "plex-mono", "arabic-text"],
       defaultProductProfile: "rottay.admin",
     }),
     entry("bithire", {
       defaultMode: "light",
-      fontPacks: ["grotesk-display", "humanist-text", "plex-mono"],
+      fontPacks: [
+        "grotesk-display",
+        "humanist-text",
+        "plex-mono",
+        "arabic-text",
+      ],
       defaultProductProfile: "recruiting.operator",
     }),
     entry("evnto", {
       defaultMode: "light",
-      fontPacks: ["geometric-display", "humanist-text", "plex-mono"],
+      fontPacks: [
+        "geometric-display",
+        "humanist-text",
+        "plex-mono",
+        "arabic-text",
+      ],
       defaultProductProfile: "events.organizer",
     }),
   ]);

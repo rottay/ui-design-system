@@ -474,6 +474,11 @@ export const TENANT_THEME_CHROME_FAMILIES = [
  *
  * Ids are role-suffixed because one `var()` slot carries ONE family list; a
  * pack that changes display AND body is two variables.
+ *
+ * `arabic-text` is the one row that is coverage rather than a style decision:
+ * it carries the family `withArabicSafeFallback` already compiles into every
+ * stack, and its `@font-face` is `unicode-range`-gated, so a latin page never
+ * fetches it.
  */
 export const TENANT_THEME_FONT_PACK_IDS = [
   "editorial-display",
@@ -482,6 +487,7 @@ export const TENANT_THEME_FONT_PACK_IDS = [
   "humanist-text",
   "geometric-display",
   "plex-mono",
+  "arabic-text",
 ] as const;
 export type TenantThemeFontPackId = (typeof TENANT_THEME_FONT_PACK_IDS)[number];
 

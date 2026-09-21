@@ -69,7 +69,7 @@ describe("W4 schema surface: typography, shape, materials and palette.dark", () 
     );
   });
 
-  it("retires the bare editorial pack id for the six role-suffixed packs", () => {
+  it("retires the bare editorial pack id and opens the door to the script pack", () => {
     expect([...TENANT_THEME_FONT_PACK_IDS]).toEqual([
       "editorial-display",
       "editorial-text",
@@ -77,7 +77,35 @@ describe("W4 schema surface: typography, shape, materials and palette.dark", () 
       "humanist-text",
       "geometric-display",
       "plex-mono",
+      "arabic-text",
     ]);
+  });
+
+  it("admits a tenant font-family naming the arabic-text pack", () => {
+    const result = validateTenantThemeDocument({
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: {
+        typography: {
+          fontFamilyBase:
+            "var(--ds-font-pack-humanist-text), var(--ds-font-pack-arabic-text), sans-serif",
+        },
+      },
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("still refuses a font-pack id no manifest row backs", () => {
+    const result = validateTenantThemeDocument({
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: {
+        typography: {
+          fontFamilyBase: "var(--ds-font-pack-arabic), sans-serif",
+        },
+      },
+    });
+    expect(result.success).toBe(false);
   });
 
   it("accepts the complete General visual foundation inside documented bounds", () => {

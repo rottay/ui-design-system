@@ -76,19 +76,20 @@ describe('consumer contract: document is the single source', () => {
     expect(parsed.published.map((row) => row.subpath)).toEqual(exportKeys);
   });
 
-  it('publishes 120 subpaths and states that count in the document', () => {
+  it('publishes 121 subpaths and states that count in the document', () => {
     // 121 until `./surfaces/oauth-transition` left the package with WO-CAN-04
     // (F-18: a parallel design system with product identity and its own private
-    // token namespace). The count is asserted three ways on purpose -- the export
-    // map, the parsed table and the prose -- so a retirement that updates only
-    // one of them is a failure rather than a silent drift.
-    expect(exportKeys).toHaveLength(120);
-    expect(parsed.published).toHaveLength(120);
+    // token namespace), and 121 again since WO-INV-02 published
+    // `./fonts/arabic-text.css`. The count is asserted three ways on purpose --
+    // the export map, the parsed table and the prose -- so a retirement that
+    // updates only one of them is a failure rather than a silent drift.
+    expect(exportKeys).toHaveLength(121);
+    expect(parsed.published).toHaveLength(121);
     expect(documentMarkdown).toContain(
-      '| Subpaths publicados | 120 |',
+      '| Subpaths publicados | 121 |',
     );
     expect(documentMarkdown).toContain(
-      '## 1. Superficie de importación sancionada (120/120)',
+      '## 1. Superficie de importación sancionada (121/121)',
     );
   });
 
@@ -218,7 +219,7 @@ describe('no-unsanctioned-ds-subpath', () => {
       (row) => row.disposition === 'guaranteed',
     ).map((row) => row.subpath);
 
-    expect(guaranteed).toHaveLength(17);
+    expect(guaranteed).toHaveLength(18);
     for (const subpath of guaranteed) {
       const specifier =
         subpath === '.'
