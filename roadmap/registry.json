@@ -5330,6 +5330,16 @@
      "at": "2026-09-20 20:35",
      "by": "kimi-admin",
      "note": "2026-09-20 kimi-admin (7): brazo 3a DESPACHADO (receipt destino receipt-fm-danger-3a-opus.json): la mitad file-manager de la tinta danger contra las patas 3b ya integradas — stamp danger en los delete Buttons + borrar skin:209 (fill role como tinta), re-medicion en los 6 scopes; el AXE_DEBT map de la familia queda {} si la aritmetica 3b se sostiene (4.35->5.75 luz, 3.18->7.31 dark medido en 3b). Tras su integracion: ventana serial de regeneracion (bundles verticales: input/card/button/default-bg/descriptions/tree-bridge; artefactos facade: --ds-tooltip-error-color; catalogo tokens) y luego la re-medicion fleet del eje. Pendientes FAM-08 al cierre de la ola: mapa AXE_DEBT completo vacio + re-cierre contra aceptacion."
+    },
+    {
+     "at": "2026-09-20 21:39",
+     "by": "kimi-admin",
+     "note": "2026-09-20 kimi-admin (8): AJUSTES DEL OWNER registrados (aplican desde ya a todo dispatch futuro): (1) la prohibicion de ramas/worktrees se EXTIENDE a Fable y a comparaciones temporales — los briefs prohiben git worktree/worktree-add explicitamente; las comparaciones se hacen via git archive a scratch o A/B in-place con restauracion verificada; no se eliminan worktrees historicos ni trabajo ajeno. (2) se RESPETA el STOP de Fable sobre el cambio global de color-error: el lote 3b integrado (e20059e65) fue acotado, medido (40 parejas x 6 scopes, 0 regresiones/49 reparaciones) y auditado — queda; los follow-ups (tooltip success/warning, bulk delete-selected 5/6, f1-name link channel, las filas de tinta mode-blind bithire) quedan REGISTRADOS y NINGUN cambio global adicional de color-error se despacha salvo paquete acotado con medicion y revision Fable propia. Antes del proximo checkpoint: STATUS con productor oficial, catalogo actualizado, roadmap:check verde sobre el candidato integrado. FAM-08/FAM-10 siguen abiertas hasta cumplir los pendientes registrados."
+    },
+    {
+     "at": "2026-09-20 22:59",
+     "by": "kimi-admin",
+     "note": "2026-09-20 kimi-admin (9): widget-board workaround retirado INTEGRADO 1a54a9f19 (Fable ACCEPT): BoardResizeEdge fuera (0 consumidores), import directo (Guard D load-bearing medido en 3 brazos), DOM BEFORE-minus-wrappers==AFTER byte-por-byte, pintura 0/15, data-state +3 press (el token ahora CONCUERDA con la pseudo-clase). Drain de la regla muerta en el skin; los 4 artefactos generados la conservan hasta la proxima ventana build:vertical-bundles (registrado). ATENCION — hallazgo 4b de Fable adjudicado: public-entrypoints esta VERDE en HEAD y rojo SOLO bajo el arbol FAM-10 (los dos nuevos modulos de contrato de familia suman +2 reachable a widget-board 40>38 y app-shell 80>78 via kernel/adaptation): es pregunta de presupuesto del lote FAM-10 (reestructurar o justificar), no del lote widget-board. TS2344 LiveFeed.shape: base-red de HEAD (evidencia states-audit), no atribuible a FAM-10."
     }
    ],
    "doneAt": null,
@@ -5421,6 +5431,16 @@
      "at": "2026-09-20 16:58",
      "by": "kimi-dt",
      "note": "2026-09-20 kimi-admin (3) CORRECCION DEL DT: mi nota (2) despacho Q1 como pendiente y ERA YA LANDADO — 39041218d (2026-09-19 21:23, Fable ACCEPT, 2026-09-19-chart-q1-dealias-review-davila.md): default con su cadena gobernada propia (CHART_SCHEME_LITERALS.default declaracion unica, aliased=false medido), accessible explicito, boundary 9-12 por esquema. El writer despachado verifico en vez de duplicar (conducta correcta) y encontro un residual real: el hallazgo registrado del gate scheme-scope-causality estaba stale (live pin 20 vs 12 medido — 6feb6a315 plumbo funnel/gantt sin seguir el pin hacia abajo). Reparado: banner COMPUTA su roster (3 familias: network-graph, sankey, scatter), pin sigue a 12/43 con set pineado, drills 10/10 ambas direcciones. En auditoria Fable. paint-single-door re-pineado aparte (1556ef3ee, causa 425012314). Siguiente para que el gate sea blocking: plumb colorScheme en network-graph/sankey/scatter. La doble lectura stale del trail (6feb6a315 y 39041218d) queda registrada como fallo de frescura del DT, no del registro."
+    },
+    {
+     "at": "2026-09-20 21:51",
+     "by": "kimi-dt",
+     "note": "2026-09-20 kimi-admin (4): paquete colorScheme-plumbing DESPACHADO (receipt-fam09-colorscheme-opus.json): network-graph/sankey/scatter reciben el contrato espejo de bar/funnel/gantt (ChartColorSchemeProps, useChartPaint, useChartPersonality, precedencia real pineada, boundary 9-12 light/dark). El roster computado del gate debe vaciarse; el re-pin del set (vacio) viaja en la ventana DT y habilita evaluar su entrada al manifiesto como blocking. El hallazgo 6feb6a315 (schemes identicos bajo tenant brandeado) se re-mide identico — plumb de la misma puerta, no su cierre. Regla nueva del owner ya en briefs: nada de git worktree ni ramas ni comparaciones temporales por worktree (Fable incluido); STOP de Fable sobre cambio global de color-error respetado — follow-ups de status-color quedan registrados, no despachados."
+    },
+    {
+     "at": "2026-09-20 22:59",
+     "by": "kimi-dt",
+     "note": "2026-09-20 kimi-admin (5): colorScheme-plumbing INTEGRADO 4b1f7130a (Fable ACCEPT WITH CHANGES — aplicadas: docs rows 61bf479, cambioset contract-diff de las 3 props) + PROMOCION del gate 00b2cef64: chart-scheme-scope-causality entra BLOCKING al manifiesto (suite 24/24), roster vacio con piso 55/55 (?? 0 guard), docblock GREEN-AND-BLOCKING, manual-tools reescrito, gate-coverage OK. El hallazgo 6feb6a315 (schemes identicos bajo tenant brandeado) queda REGISTRADO e identico (5/5 vs 1/5 — vive en la precedencia resolver/tenant, no en la puerta familiar). Follow-up registrado en el paint owner: esquemas out-of-domain pasan verbatim (type-refused, JS-reachable; rowFor ya rechaza familias desconocidas por nombre — un esquema desconocido deberia rechazar igual). Pendientes FAM-09 al cierre: la migracion app de los 3 callers bump-gated (espera ventana release) y el retiro colors-prop tras validacion de consumidores (R2)."
     }
    ]
   },
@@ -5520,6 +5540,11 @@
      "at": "2026-09-20 14:56",
      "by": "kimi-admin",
      "note": "2026-09-20 kimi-admin (2): pendientes de la reapertura ya acotados por el DT. ADAPT: el registry LAYOUT_SENSITIVE_FAMILIES (10 entradas) no tiene ninguna familia de corte WO-FAM-10; adjudicacion DT: las sensibles al espacio de este corte son record (edit-fields) y las superficies de formulario (FormSurface, DetailFormSurface, GuidedDraftForm, WizardSurface); adopcion segun la referencia data-table (useAdapt en contracts + stamp data-posture en presentation + tests adapt/SSR); headers quedan adjudicados NO sensibles (chrome de pagina, sin reflow de contenido) salvo evidencia contraria del writer con medicion. LEDGER: GuidedDraftFormSectionCard + Card/Card.Body (index.tsx:451-521,690) reemplazado por la doctrina edit-fields/record — cambio estructural visual que exige evidencia sighted before/after. El paquete se despacha cuando libere un slot de escritor (2 Opus en vuelo: instrumento rhythm + drenaje contraste); write set EXCLUYE skins/tests de record (reservados al paquete contraste). CONTRASTE: viaja en el paquete compartido FAM-08+FAM-10 ya despachado (ver trail FAM-08)."
+    },
+    {
+     "at": "2026-09-20 23:50",
+     "by": "kimi-admin",
+     "note": "2026-09-20 kimi-admin (3): pendientes R4 INTEGRADOS 4c7d726f5 (Fable CHANGES->3 rondas->ACCEPT, receipt-fam10-recheck-fable.json): adapt adoption REAL en 5 familias (edit-fields, form-surface, detail-form-surface, guided-draft-form, wizard-surface — cada raiz observa SU caja via useAdaptation, ResizeObserver real, tests adapt/SSR por familia) + doctrina ledger (sections dejan de ser Card stack; locus active/error re-pintado en la gramatica del ledger con ::before inline-start + rail --ds-color-link, writes huerfanos borrados, nested Card no hereda probado; content-body flex=1 repara el colapso hairline de HEAD). Presupuesto public-entrypoints resuelto por de-barrel (patron overlay: widget-board 37, app-shell 77, bajo HEAD; la ley queda en el docblock del barrel). collection-header ADJUDICADO fuera de la regla blanket: SI es layout-sensitive (compactLayout=compact??isPhoneOrTablet guia ~20 decisiones estructurales por viewport) — paquete propio registrado pendiente (cut propio, no WO-FAM-10); header-surface queda fuera (solo opt-ins declarados). section-card-description queda pineada en la banda #96-#a0 (todo rol de tinta de soporte en bithire/evnto — piso tokens/derivation, ruteado). Ventana DT cerrada 1c2b381a2: bundles regenerados, censo adaptive verde, adapt-slot 16/16, ancla visual-authority atribuida a d5a3e1a74. Para el re-cierre: contrast drenado (record AXE_DEBT={}), adapt+ledger hechos — falta la auditoria de cierre contra la aceptacion completa de la WO."
     }
    ],
    "doneAt": null,
