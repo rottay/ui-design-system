@@ -14,5 +14,5 @@ are optional; absent input keeps the prior byte-identical defaults
 ```contract-diff
 signature ./server#Theme — normalized surfaces gain optional `stateEmphasis` and `focusStyle`; absent means `medium`/`ring`, byte-identical to the pre-decision foundation defaults
 signature ./server#TenantThemeDocumentV2 — decisions `states.emphasis` and `states.focus-style` (catalog rows 20/21) now lower to 28 emitted `--ds-state-*`/`--ds-focus-ring*`/`--ds-material-*` channels; closed enum domains, additive
-signature ./server#TenantThemeSimpleConfig — `general.states` optional input accepted (`emphasis`, `focusStyle`); the v1 lowering maps it to `surfaces.{stateEmphasis,focusStyle}` and the v2→v1 projection writes it back by name; the v1→v2 migration (`migrateDocumentV1ToV2`) does not carry it yet (dropped; gap registered for implementation)
+signature ./server#TenantThemeSimpleConfig — `general.states` optional input accepted (`emphasis`, `focusStyle`); the v1 lowering maps it to `surfaces.{stateEmphasis,focusStyle}` and the v2→v1 projection writes it back by name; the v1→v2 migration (`migrateDocumentV1ToV2`) carries it to the `states.emphasis` / `states.focus-style` decisions, or refuses an out-of-domain value at its own v1 keypath (carry landed in 79e3b9a5a; both directions proven by the consumer fixture pair in WO-CON-06)
 ```

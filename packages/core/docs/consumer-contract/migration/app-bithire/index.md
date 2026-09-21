@@ -221,6 +221,26 @@ either closed domain at its own v1 keypath rather than dropping it. Both rows
 are Standard, so a row that authored only these still derives the `standard`
 plan.
 
+Both directions are executable in the same fixture, so an app can read what it
+will get rather than take this paragraph's word for it:
+
+- "carries both interaction dials from a v1 row through to the published
+  artifact" -- a v1 row authoring `emphasis: subtle` / `focusStyle: glow`
+  migrates, admits with both decisions lit at `appearance.general.states.*`,
+  projects both back into the v1-shape document the patch was lowered from
+  (so `v1 -> v2 -> v1` loses neither dial), and compiles to an artifact that
+  carries nine channels the same row without the dials does not:
+  six `--ds-state-*` and three `--ds-focus-ring*`.
+- "refuses an out-of-domain state value by name, at its own v1 keypath" -- a
+  row holding `emphasis: 'loud'` or `focusStyle: 'halo'` throws
+  `ThemePatchMigrationError` naming the v1 keypath, the rejected value and the
+  closed vocabulary, through `migrateDocumentV1ToV2` and through
+  `migrateAndAdmitDocument` alike.
+
+A row whose dials are outside those vocabularies therefore does NOT migrate
+silently: fix the value at the source row, or leave the row on v1 until you
+can.
+
 ### Step 7 — `oauth-transition` leaves the design system
 
 See §3. It is last because it is the only step that removes symbols from the

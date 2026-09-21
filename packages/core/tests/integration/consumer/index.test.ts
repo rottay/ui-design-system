@@ -32,6 +32,9 @@ import {
   assertTenantThemeDocumentV2,
   hydrateTenantThemeConfig,
   TenantThemeValidationError,
+  ThemePatchMigrationError,
+  type TenantThemeArtifact,
+  type TenantThemeDocument,
   type MountTenantThemeOptions,
   type MountedTenantTheme,
   type ThemeIntent,
@@ -55,6 +58,9 @@ import {
   TENANT_IDENTITY,
   TENANT_SLUG,
   TENANT_TRANSPORT_V1,
+  TENANT_TRANSPORT_V1_STATES,
+  TENANT_TRANSPORT_V1_UNMIGRATABLE_EMPHASIS,
+  TENANT_TRANSPORT_V1_UNMIGRATABLE_FOCUS_STYLE,
 } from './app/tenant-document';
 
 const APP_ROOT = resolve(__dirname, 'app');
@@ -373,6 +379,118 @@ describe('the application writes a tenant document v2 through the door', () => {
   });
 
   /**
+   * The states pair, direction 1: what the migration CARRIES.
+   *
+   * A v1 row that authored the interaction dials used to lose them in silence
+   * the moment it migrated, so this asserts the carry where a tenant would
+   * feel it -- in the bytes the published compiler emits, not in the migrated
+   * document agreeing with itself. The floor is the same row WITHOUT the
+   * dials, compiled through the same call: nine channels separate them, and a
+   * carry that stopped working would return an empty difference here rather
+   * than a green test.
+   */
+  it('carries both interaction dials from a v1 row through to the published artifact', () => {
+    const { migrated, decisions, unlit, effective, ledger } = migrateAndAdmitDocument({
+      vertical: 'bithire',
+      document: TENANT_TRANSPORT_V1_STATES,
+    });
+    expect(migrated.decisions['states.emphasis']).toBe('subtle');
+    expect(migrated.decisions['states.focus-style']).toBe('glow');
+    // Both rows are Standard, so migrating a row that authored only these does
+    // not quietly sell the tenant a plan it did not have.
+    expect(migrated.plan).toBe('standard');
+    expect(unlit).toEqual([]);
+    expect(
+      decisions
+        .filter((decision) => decision.id.startsWith('states.'))
+        .map((decision) => [decision.id, decision.keypaths]),
+    ).toEqual([
+      ['states.emphasis', ['appearance.general.states.emphasis']],
+      ['states.focus-style', ['appearance.general.states.focusStyle']],
+    ]);
+    // Both are the TENANT's own claims, not something the migration invented.
+    expect(
+      ledger.entries
+        .filter((entry) => entry.provenance === 'direct-override')
+        .map((entry) => entry.ref),
+    ).toEqual(
+      expect.arrayContaining([
+        { kind: 'decision', id: 'states.emphasis' },
+        { kind: 'decision', id: 'states.focus-style' },
+      ]),
+    );
+    // The return direction: the v1-shape document the patch was lowered from
+    // writes both fields back at their own names, so v1 -> v2 -> v1 is
+    // lossless for this row and an app can migrate without keeping a copy.
+    expect(
+      (effective as { visualFoundation?: { general?: { states?: unknown } } })
+        .visualFoundation?.general?.states,
+    ).toEqual({ emphasis: 'subtle', focusStyle: 'glow' });
+
+    const publish = (row: TenantThemeDocument): TenantThemeArtifact =>
+      compileTenantThemeDocumentV2({
+        ...TENANT_IDENTITY,
+        verticalKey: 'bithire',
+        document: migrateDocumentV1ToV2(row),
+      }).artifact;
+    const withDials = publish(TENANT_TRANSPORT_V1_STATES);
+    const withoutDials = publish(TENANT_TRANSPORT_V1);
+    const variables = withDials.variables as Record<string, string | undefined>;
+    const floor = withoutDials.variables as Record<string, string | undefined>;
+    expect(
+      Object.keys({ ...floor, ...variables })
+        .filter((name) => variables[name] !== floor[name])
+        .sort(),
+    ).toEqual([
+      '--ds-focus-ring',
+      '--ds-focus-ring-offset',
+      '--ds-focus-ring-width',
+      '--ds-state-active-shift',
+      '--ds-state-disabled-mix',
+      '--ds-state-disabled-opacity',
+      '--ds-state-hover-shift',
+      '--ds-state-press-scale',
+      '--ds-state-selected-shift',
+    ]);
+    expect(variables['--ds-state-hover-shift']).toBe('2%');
+    expect(variables['--ds-focus-ring']).toContain(
+      '0 0 12px 2px color-mix(in srgb, var(--ds-focus-ring-color) 45%, transparent)',
+    );
+    expect(withDials.digest).not.toBe(withoutDials.digest);
+  });
+
+  /**
+   * The states pair, direction 2: what the migration REFUSES.
+   *
+   * v1 types both fields as an open string at the DB edge, so the closed
+   * catalog vocabulary is what admits them. A value outside it is named at its
+   * own v1 keypath -- the keypath the tenant wrote, not the decision id they
+   * have never seen -- because the difference between a migration and a
+   * repaint nobody was told about is whether the row that cannot move says so.
+   */
+  it('refuses an out-of-domain state value by name, at its own v1 keypath', () => {
+    for (const [row, message] of [
+      [
+        TENANT_TRANSPORT_V1_UNMIGRATABLE_EMPHASIS,
+        /v1 general\.states\.emphasis "loud" is outside the "states\.emphasis" domain; row 20 closes it at subtle, medium, strong/,
+      ],
+      [
+        TENANT_TRANSPORT_V1_UNMIGRATABLE_FOCUS_STYLE,
+        /v1 general\.states\.focusStyle "halo" is outside the "states\.focus-style" domain; row 21 closes it at ring, underline, glow/,
+      ],
+    ] as const) {
+      expect(() => migrateDocumentV1ToV2(row)).toThrow(ThemePatchMigrationError);
+      expect(() => migrateDocumentV1ToV2(row)).toThrow(message);
+      // The door the app actually calls refuses it too: a migration that only
+      // failed when called directly would let the same row through the
+      // one-call path this fixture documents.
+      expect(() =>
+        migrateAndAdmitDocument({ vertical: 'bithire', document: row }),
+      ).toThrow(message);
+    }
+  });
+
+  /**
    * The seam this fixture pinned as a NEGATIVE until WO-CON-06 closed it: the
    * artifact compiler spoke v1 only, so an app on a v2 row could not compile
    * the `TenantThemeArtifact` `mountTenantTheme` requires and had to keep a
@@ -380,6 +498,14 @@ describe('the application writes a tenant document v2 through the door', () => {
    * second row; what stays pinned is that the V1 door still refuses a v2
    * document by name, because that refusal is the reason the adapter exists
    * and not an accident to be discovered by an app.
+   *
+   * THE CONDITION, stated so the next reader does not have to guess it: the
+   * refusal row below may be replaced only when `hydrateTenantThemeConfig`
+   * itself is retired from the published surface under its own work order and
+   * changeset -- not when a v2 path starts working, which is what already
+   * happened here. Until then it is deleted by nobody: a v1 door that stopped
+   * refusing v2 would admit a document it cannot lower, and this row is the
+   * only place that says so out loud.
    */
   it('publishes the v2 document through the real path, keeping one row', () => {
     const { artifact, admission, ledger } = compileTenantThemeDocumentV2({
@@ -469,10 +595,14 @@ describe('the application renders a page from the guaranteed surface', () => {
         }),
       }),
     );
+    // The page root mounts before the engine-switched leaves inside it, so the
+    // row content is awaited rather than read on the same tick: a synchronous
+    // read here fails intermittently on a loaded host and says "the surface
+    // does not paint" when what happened is that it had not painted YET.
     expect(await screen.findByTestId('consumer-page')).toBeTruthy();
-    expect(screen.getByText('Open roles')).toBeTruthy();
-    expect(screen.getByText('Staff engineer')).toBeTruthy();
-    expect(screen.getByText('Offer')).toBeTruthy();
+    expect(await screen.findByText('Open roles')).toBeTruthy();
+    expect(await screen.findByText('Staff engineer')).toBeTruthy();
+    expect(await screen.findByText('Offer')).toBeTruthy();
   });
 
   it('resolves the engine from the provider, never from a component prop', async () => {
