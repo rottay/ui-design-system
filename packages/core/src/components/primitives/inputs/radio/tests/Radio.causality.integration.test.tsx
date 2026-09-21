@@ -80,19 +80,13 @@ describeCausality({
  * designed for.
  * Dropped by identity, not waived -- with no entry the scope must measure
  * clean, and a relapse reddens here.
+ * `bithire light` and `evnto light` DRAINED 2026-09-21: the #ededed
+ * tertiary-ground seed (4b94d7e1d) plus the supporting-ink regrade (f73348ed5)
+ * lifted the muted description over the floor in both scopes (measured by this
+ * suite on two consecutive runs; the first drain attempt kept the evnto light
+ * pin and the suite proved it stale).
  */
-const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
-  'bithire light': {
-    'color-contrast': [
-      '#radio-modern-_R_1_-description',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      '#radio-modern-_R_1_-description',
-    ],
-  },
-};
+const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {};
 
 describe('radio segments, geometry, direction and accessibility in a real browser', () => {
   const segments = renderToStaticMarkup(
