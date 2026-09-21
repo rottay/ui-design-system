@@ -23,6 +23,7 @@ import { memo, useMemo, useRef } from 'react';
 import type {
   ChartBaseProps,
   ChartCartesianCompactConfig,
+  ChartColorSchemeProps,
   ChartColorsProps,
   ChartCompactProps,
   ChartLegendProps,
@@ -69,6 +70,7 @@ interface ScatterChartOwnProps
   extends ChartBaseProps,
     ChartLegendProps,
     ChartColorsProps,
+    ChartColorSchemeProps,
     ChartMarginProps,
     ChartCompactProps<ChartCartesianCompactConfig> {
   data: ScatterDataPoint[];
@@ -129,6 +131,7 @@ export const ScatterChart = memo(function ScatterChart({
   legend = false,
   animate,
   responsive = true,
+  colorScheme,
   tooltip,
   margin = DEFAULT_MARGIN,
   compact,
@@ -142,8 +145,10 @@ export const ScatterChart = memo(function ScatterChart({
   // The renderer governs motion and native point titles from the resolved
   // personality; the family retains `animate`/`tooltip` in its contract and
   // sources the loading label and the governed palette from the hook.
-  const paint = useChartPaint({ family: 'scatter' });
-  const chartPersonality = useChartPersonality({ animate, tooltip });
+  // `colors` stays unread here: the registry row declares honoursColorsProp
+  // false for this family, so the resolver would ignore the override.
+  const paint = useChartPaint({ family: 'scatter', scheme: colorScheme });
+  const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = chartPersonality.colors;
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   // The idle tooltip element preserves the tooltip-personality/skin contract.

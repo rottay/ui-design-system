@@ -45,6 +45,7 @@ import {
 
 import type {
   ChartBaseProps,
+  ChartColorSchemeProps,
   ChartColorsProps,
   ChartLegendProps,
   ChartStateProps,
@@ -75,7 +76,11 @@ export interface NetworkLink {
 }
 
 /** Topology, presentation, and layout options for {@link NetworkGraph}. */
-export interface NetworkGraphOwnProps extends ChartBaseProps, ChartLegendProps, ChartColorsProps {
+export interface NetworkGraphOwnProps
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartColorsProps,
+    ChartColorSchemeProps {
   nodes: NetworkNode[];
   links: NetworkLink[];
   directed?: boolean;
@@ -193,6 +198,7 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
     animate = true,
     responsive = true,
     colors,
+    colorScheme,
     tooltip = true,
     skeleton,
     state,
@@ -222,8 +228,8 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
   const instanceToken = instanceId.replace(/[^a-zA-Z0-9_-]/g, '');
   const definitionsId = `network-definitions-${instanceToken}`;
   const markerId = `network-arrow-${instanceToken}`;
-  const paint = useChartPaint({ family: 'network-graph', override: colors });
-  const chartPersonality = useChartPersonality({ animate, tooltip });
+  const paint = useChartPaint({ family: 'network-graph', scheme: colorScheme, override: colors });
+  const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const validation = useMemo(() => validateNetworkData(nodes, links), [nodes, links]);
   const graphNodes = validation.ok ? validation.nodes : [];
   const graphLinks = validation.ok ? validation.links : [];

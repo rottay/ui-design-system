@@ -56,6 +56,7 @@ import { scaleLinear, select } from 'd3';
 
 import type {
   ChartBaseProps,
+  ChartColorSchemeProps,
   ChartColorsProps,
   ChartLegendProps,
   ChartMarginProps,
@@ -98,7 +99,11 @@ export interface SankeyLink {
 
 /** Layout, presentation, and callback options for {@link SankeyChart}. */
 export interface SankeyChartOwnProps
-  extends ChartBaseProps, ChartLegendProps, ChartColorsProps, ChartMarginProps {
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartColorsProps,
+    ChartColorSchemeProps,
+    ChartMarginProps {
   /** The set of nodes displayed as rectangles in the diagram. */
   nodes: SankeyNode[];
   /** Directed flows between nodes, rendered as curved paths. */
@@ -537,6 +542,7 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
     animate = true,
     responsive = true,
     colors,
+    colorScheme,
     tooltip = true,
     margin = { top: 16, right: 120, bottom: 16, left: 16 },
     skeleton,
@@ -562,8 +568,8 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
   } as ChartStateProps;
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
-  const paint = useChartPaint({ family: 'sankey', override: colors });
-  const chartPersonality = useChartPersonality({ animate, tooltip });
+  const paint = useChartPaint({ family: 'sankey', scheme: colorScheme, override: colors });
+  const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
 
   const fmt = useCallback(
     (v: number) => (formatValue ? formatValue(v) : v.toLocaleString()),
