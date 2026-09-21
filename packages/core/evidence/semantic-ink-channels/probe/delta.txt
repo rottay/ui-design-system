@@ -1,0 +1,74 @@
+
+== rottay light ==
+  draft-status-label/success              2.82 ->  5.62  ink #16a34a -> #166b36  ground #ededed  REPAIRED
+  draft-status-label/warning              2.72 ->     6  ink #d97706 -> #824c0e  ground #ededed  REPAIRED
+  draft-status-label/error                4.13 ->  5.72  ink #dc2626 -> #b12323  ground #ededed  REPAIRED
+  validation-issue-field/error            4.63 ->  6.42  ink #dc2626 -> #b12323  ground #fafafa
+  validation-issue-field/warning          3.05 ->  6.73  ink #d97706 -> #824c0e  ground #fafafa  REPAIRED
+  import-export/error-title               4.83 ->   6.7  ink #dc2626 -> #b12323  ground #ffffff
+  import-export/success-message           2.82 ->  5.62  ink #16a34a -> #166b36  ground #ededed  REPAIRED
+  notification/destructive-text           4.31 ->  5.99  ink #dc2626 -> #b12323  ground #f2f2f2  REPAIRED
+  brand-studio/metric-warning             2.72 ->     6  ink #d97706 -> #824c0e  ground #ededed  REPAIRED
+  brand-studio/metric-success             2.82 ->  5.62  ink #16a34a -> #166b36  ground #ededed  REPAIRED
+
+== rottay dark ==
+  draft-status-label/success              4.94 ->  7.88  ink #16a34a -> #70c691  ground #172033
+  draft-status-label/warning              5.11 ->  8.54  ink #d97706 -> #e7b275  ground #172033
+  draft-status-label/error                5.88 ->  7.22  ink #f87171 -> #f88f90  ground #172033
+  validation-issue-field/error            6.77 ->  8.31  ink #f87171 -> #f88f90  ground #0b1220
+  validation-issue-field/warning          5.88 ->  9.83  ink #d97706 -> #e7b275  ground #0b1220
+  import-export/error-title               5.76 ->  7.07  ink #f87171 -> #f88f90  ground #182235
+  import-export/success-message           4.94 ->  7.88  ink #16a34a -> #70c691  ground #172033
+  notification/destructive-text           4.89 ->     6  ink #f87171 -> #f88f90  ground #242f41
+  brand-studio/metric-warning             5.11 ->  8.54  ink #d97706 -> #e7b275  ground #172033
+  brand-studio/metric-success             4.94 ->  7.88  ink #16a34a -> #70c691  ground #172033
+
+== bithire light ==
+  draft-status-label/success              4.64 ->  7.82  ink #16794a -> #165236  ground #ededed
+  draft-status-label/warning              4.29 ->  8.07  ink #b45309 -> #6d380f  ground #ededed  REPAIRED
+  draft-status-label/error                 4.8 ->  6.52  ink #c62828 -> #9f2424  ground #ededed
+  validation-issue-field/error            5.62 ->  7.63  ink #c62828 -> #9f2424  ground #ffffff
+  validation-issue-field/warning          5.02 ->  9.45  ink #b45309 -> #6d380f  ground #ffffff
+  import-export/error-title               5.62 ->  7.63  ink #c62828 -> #9f2424  ground #ffffff
+  import-export/success-message           4.64 ->  7.82  ink #16794a -> #165236  ground #ededed
+  notification/destructive-text           5.02 ->  6.82  ink #c62828 -> #9f2424  ground #f2f2f2
+  brand-studio/metric-warning             4.29 ->  8.07  ink #b45309 -> #6d380f  ground #ededed  REPAIRED
+  brand-studio/metric-success             4.64 ->  7.82  ink #16794a -> #165236  ground #ededed
+
+== bithire dark ==
+  draft-status-label/success                 3 ->  6.26  ink #16794a -> #70ad91  ground #172033  REPAIRED
+  draft-status-label/warning              3.24 ->  6.91  ink #b45309 -> #d39e76  ground #172033  REPAIRED
+  draft-status-label/error                2.89 ->  4.01  ink #c62828 -> #d15657  ground #172033
+  validation-issue-field/error            3.52 ->  4.88  ink #c62828 -> #d15657  ground #0a0a0a  REPAIRED
+  validation-issue-field/warning          3.94 ->  8.41  ink #b45309 -> #d39e76  ground #0a0a0a  REPAIRED
+  import-export/error-title               2.83 ->  3.93  ink #c62828 -> #d15657  ground #182235
+  import-export/success-message              3 ->  6.26  ink #16794a -> #70ad91  ground #172033  REPAIRED
+  notification/destructive-text            2.4 ->  3.33  ink #c62828 -> #d15657  ground #242f41
+  brand-studio/metric-warning             3.24 ->  6.91  ink #b45309 -> #d39e76  ground #172033  REPAIRED
+  brand-studio/metric-success                3 ->  6.26  ink #16794a -> #70ad91  ground #172033  REPAIRED
+
+== evnto light ==
+  draft-status-label/success              2.82 ->  5.62  ink #16a34a -> #166b36  ground #ededed  REPAIRED
+  draft-status-label/warning              2.72 ->     6  ink #d97706 -> #824c0e  ground #ededed  REPAIRED
+  draft-status-label/error                4.13 ->  5.72  ink #dc2626 -> #b12323  ground #ededed  REPAIRED
+  validation-issue-field/error            4.63 ->  6.42  ink #dc2626 -> #b12323  ground #fafafa
+  validation-issue-field/warning          3.05 ->  6.73  ink #d97706 -> #824c0e  ground #fafafa  REPAIRED
+  import-export/error-title               4.83 ->   6.7  ink #dc2626 -> #b12323  ground #ffffff
+  import-export/success-message           2.82 ->  5.62  ink #16a34a -> #166b36  ground #ededed  REPAIRED
+  notification/destructive-text           4.31 ->  5.99  ink #dc2626 -> #b12323  ground #f2f2f2  REPAIRED
+  brand-studio/metric-warning             2.72 ->     6  ink #d97706 -> #824c0e  ground #ededed  REPAIRED
+  brand-studio/metric-success             2.82 ->  5.62  ink #16a34a -> #166b36  ground #ededed  REPAIRED
+
+== evnto dark ==
+  draft-status-label/success              4.94 ->  7.88  ink #16a34a -> #70c691  ground #172033
+  draft-status-label/warning              5.11 ->  8.54  ink #d97706 -> #e7b275  ground #172033
+  draft-status-label/error                5.88 ->  7.22  ink #f87171 -> #f88f90  ground #172033
+  validation-issue-field/error            6.77 ->  8.31  ink #f87171 -> #f88f90  ground #0b1220
+  validation-issue-field/warning          5.88 ->  9.83  ink #d97706 -> #e7b275  ground #0b1220
+  import-export/error-title               5.76 ->  7.07  ink #f87171 -> #f88f90  ground #182235
+  import-export/success-message           4.94 ->  7.88  ink #16a34a -> #70c691  ground #172033
+  notification/destructive-text           4.89 ->     6  ink #f87171 -> #f88f90  ground #242f41
+  brand-studio/metric-warning             5.11 ->  8.54  ink #d97706 -> #e7b275  ground #172033
+  brand-studio/metric-success             4.94 ->  7.88  ink #16a34a -> #70c691  ground #172033
+
+regressions(pass->fail)=0 repaired(fail->pass)=25 byte-equal-ratio rows=0

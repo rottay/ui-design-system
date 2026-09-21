@@ -1,0 +1,980 @@
+{
+  "rottay light": {
+    "channels": {
+      "--ds-color-success": "#16a34a",
+      "--ds-color-success-ink": "#166b36",
+      "--ds-color-warning": "#d97706",
+      "--ds-color-warning-ink": "#824c0e",
+      "--ds-color-error": "#dc2626",
+      "--ds-color-error-ink": "#b12323"
+    },
+    "sites": {
+      "draft-status-label/success": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "success",
+        "text": "Saved 12:30",
+        "ink": "#166b36",
+        "ground": "#ededed",
+        "stack": [
+          "draft-status=#ededed"
+        ],
+        "ratio": 5.62,
+        "lc": 71.5,
+        "pass": true
+      },
+      "draft-status-label/warning": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Unsaved changes",
+        "ink": "#824c0e",
+        "ground": "#ededed",
+        "stack": [
+          "draft-status=#ededed"
+        ],
+        "ratio": 6,
+        "lc": 73.3,
+        "pass": true
+      },
+      "draft-status-label/error": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Save failed",
+        "ink": "#b12323",
+        "ground": "#ededed",
+        "stack": [
+          "draft-status=#ededed"
+        ],
+        "ratio": 5.72,
+        "lc": 70.8,
+        "pass": true
+      },
+      "validation-issue-field/error": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Name",
+        "ink": "#b12323",
+        "ground": "#fafafa",
+        "stack": [
+          "main=#fafafa"
+        ],
+        "ratio": 6.42,
+        "lc": 78.5,
+        "pass": true
+      },
+      "validation-issue-field/warning": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Capacity",
+        "ink": "#824c0e",
+        "ground": "#fafafa",
+        "stack": [
+          "main=#fafafa"
+        ],
+        "ratio": 6.73,
+        "lc": 81,
+        "pass": true
+      },
+      "import-export/error-title": {
+        "where": "admin/import-export:285",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Validation Errors",
+        "ink": "#b12323",
+        "ground": "#ffffff",
+        "stack": [
+          "root=#ffffff"
+        ],
+        "ratio": 6.7,
+        "lc": 81.5,
+        "pass": true
+      },
+      "import-export/success-message": {
+        "where": "admin/import-export:351",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Import completed successfully",
+        "ink": "#166b36",
+        "ground": "#ededed",
+        "stack": [
+          "root=#ededed"
+        ],
+        "ratio": 5.62,
+        "lc": 71.5,
+        "pass": true
+      },
+      "notification/destructive-text": {
+        "where": "experience/notification:220",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Delete",
+        "ink": "#b12323",
+        "ground": "#f2f2f2",
+        "stack": [
+          "trigger=#474747@0.07",
+          "root=#ffffff"
+        ],
+        "ratio": 5.99,
+        "lc": 73.7,
+        "pass": true
+      },
+      "brand-studio/metric-warning": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "warning",
+        "text": "Bounce rate 48%",
+        "ink": "#824c0e",
+        "ground": "#ededed",
+        "stack": [
+          "root=#ededed"
+        ],
+        "ratio": 6,
+        "lc": 73.3,
+        "pass": true
+      },
+      "brand-studio/metric-success": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Conversion 12%",
+        "ink": "#166b36",
+        "ground": "#ededed",
+        "stack": [
+          "root=#ededed"
+        ],
+        "ratio": 5.62,
+        "lc": 71.5,
+        "pass": true
+      }
+    }
+  },
+  "rottay dark": {
+    "channels": {
+      "--ds-color-success": "#16a34a",
+      "--ds-color-success-ink": "#70c691",
+      "--ds-color-warning": "#d97706",
+      "--ds-color-warning-ink": "#e7b275",
+      "--ds-color-error": "#f87171",
+      "--ds-color-error-ink": "#f88f90"
+    },
+    "sites": {
+      "draft-status-label/success": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "success",
+        "text": "Saved 12:30",
+        "ink": "#70c691",
+        "ground": "#172033",
+        "stack": [
+          "draft-status=#172033"
+        ],
+        "ratio": 7.88,
+        "lc": -60,
+        "pass": true
+      },
+      "draft-status-label/warning": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Unsaved changes",
+        "ink": "#e7b275",
+        "ground": "#172033",
+        "stack": [
+          "draft-status=#172033"
+        ],
+        "ratio": 8.54,
+        "lc": -64.1,
+        "pass": true
+      },
+      "draft-status-label/error": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Save failed",
+        "ink": "#f88f90",
+        "ground": "#172033",
+        "stack": [
+          "draft-status=#172033"
+        ],
+        "ratio": 7.22,
+        "lc": -55.9,
+        "pass": true
+      },
+      "validation-issue-field/error": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Name",
+        "ink": "#f88f90",
+        "ground": "#0b1220",
+        "stack": [
+          "main=#0b1220"
+        ],
+        "ratio": 8.31,
+        "lc": -57.4,
+        "pass": true
+      },
+      "validation-issue-field/warning": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Capacity",
+        "ink": "#e7b275",
+        "ground": "#0b1220",
+        "stack": [
+          "main=#0b1220"
+        ],
+        "ratio": 9.83,
+        "lc": -65.7,
+        "pass": true
+      },
+      "import-export/error-title": {
+        "where": "admin/import-export:285",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Validation Errors",
+        "ink": "#f88f90",
+        "ground": "#182235",
+        "stack": [
+          "root=#182235"
+        ],
+        "ratio": 7.07,
+        "lc": -55.6,
+        "pass": true
+      },
+      "import-export/success-message": {
+        "where": "admin/import-export:351",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Import completed successfully",
+        "ink": "#70c691",
+        "ground": "#172033",
+        "stack": [
+          "root=#172033"
+        ],
+        "ratio": 7.88,
+        "lc": -60,
+        "pass": true
+      },
+      "notification/destructive-text": {
+        "where": "experience/notification:220",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Delete",
+        "ink": "#f88f90",
+        "ground": "#242f41",
+        "stack": [
+          "trigger=#c6d5e3@0.07",
+          "root=#182235"
+        ],
+        "ratio": 6,
+        "lc": -53.3,
+        "pass": true
+      },
+      "brand-studio/metric-warning": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "warning",
+        "text": "Bounce rate 48%",
+        "ink": "#e7b275",
+        "ground": "#172033",
+        "stack": [
+          "root=#172033"
+        ],
+        "ratio": 8.54,
+        "lc": -64.1,
+        "pass": true
+      },
+      "brand-studio/metric-success": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Conversion 12%",
+        "ink": "#70c691",
+        "ground": "#172033",
+        "stack": [
+          "root=#172033"
+        ],
+        "ratio": 7.88,
+        "lc": -60,
+        "pass": true
+      }
+    }
+  },
+  "bithire light": {
+    "channels": {
+      "--ds-color-success": "#16794a",
+      "--ds-color-success-ink": "#165236",
+      "--ds-color-warning": "#b45309",
+      "--ds-color-warning-ink": "#6d380f",
+      "--ds-color-error": "#c62828",
+      "--ds-color-error-ink": "#9f2424"
+    },
+    "sites": {
+      "draft-status-label/success": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "success",
+        "text": "Saved 12:30",
+        "ink": "#165236",
+        "ground": "#ededed",
+        "stack": [
+          "draft-status=#ededed"
+        ],
+        "ratio": 7.82,
+        "lc": 80.1,
+        "pass": true
+      },
+      "draft-status-label/warning": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Unsaved changes",
+        "ink": "#6d380f",
+        "ground": "#ededed",
+        "stack": [
+          "draft-status=#ededed"
+        ],
+        "ratio": 8.07,
+        "lc": 80.8,
+        "pass": true
+      },
+      "draft-status-label/error": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Save failed",
+        "ink": "#9f2424",
+        "ground": "#ededed",
+        "stack": [
+          "draft-status=#ededed"
+        ],
+        "ratio": 6.52,
+        "lc": 74.5,
+        "pass": true
+      },
+      "validation-issue-field/error": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Name",
+        "ink": "#9f2424",
+        "ground": "#ffffff",
+        "stack": [
+          "main=#ffffff"
+        ],
+        "ratio": 7.63,
+        "lc": 85.1,
+        "pass": true
+      },
+      "validation-issue-field/warning": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Capacity",
+        "ink": "#6d380f",
+        "ground": "#ffffff",
+        "stack": [
+          "main=#ffffff"
+        ],
+        "ratio": 9.45,
+        "lc": 91.5,
+        "pass": true
+      },
+      "import-export/error-title": {
+        "where": "admin/import-export:285",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Validation Errors",
+        "ink": "#9f2424",
+        "ground": "#ffffff",
+        "stack": [
+          "root=#ffffff"
+        ],
+        "ratio": 7.63,
+        "lc": 85.1,
+        "pass": true
+      },
+      "import-export/success-message": {
+        "where": "admin/import-export:351",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Import completed successfully",
+        "ink": "#165236",
+        "ground": "#ededed",
+        "stack": [
+          "root=#ededed"
+        ],
+        "ratio": 7.82,
+        "lc": 80.1,
+        "pass": true
+      },
+      "notification/destructive-text": {
+        "where": "experience/notification:220",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Delete",
+        "ink": "#9f2424",
+        "ground": "#f2f2f2",
+        "stack": [
+          "trigger=#474747@0.07",
+          "root=#ffffff"
+        ],
+        "ratio": 6.82,
+        "lc": 77.4,
+        "pass": true
+      },
+      "brand-studio/metric-warning": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "warning",
+        "text": "Bounce rate 48%",
+        "ink": "#6d380f",
+        "ground": "#ededed",
+        "stack": [
+          "root=#ededed"
+        ],
+        "ratio": 8.07,
+        "lc": 80.8,
+        "pass": true
+      },
+      "brand-studio/metric-success": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Conversion 12%",
+        "ink": "#165236",
+        "ground": "#ededed",
+        "stack": [
+          "root=#ededed"
+        ],
+        "ratio": 7.82,
+        "lc": 80.1,
+        "pass": true
+      }
+    }
+  },
+  "bithire dark": {
+    "channels": {
+      "--ds-color-success": "#16794a",
+      "--ds-color-success-ink": "#70ad91",
+      "--ds-color-warning": "#b45309",
+      "--ds-color-warning-ink": "#d39e76",
+      "--ds-color-error": "#c62828",
+      "--ds-color-error-ink": "#d15657"
+    },
+    "sites": {
+      "draft-status-label/success": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "success",
+        "text": "Saved 12:30",
+        "ink": "#70ad91",
+        "ground": "#172033",
+        "stack": [
+          "draft-status=#172033"
+        ],
+        "ratio": 6.26,
+        "lc": -49,
+        "pass": true
+      },
+      "draft-status-label/warning": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Unsaved changes",
+        "ink": "#d39e76",
+        "ground": "#172033",
+        "stack": [
+          "draft-status=#172033"
+        ],
+        "ratio": 6.91,
+        "lc": -53.6,
+        "pass": true
+      },
+      "draft-status-label/error": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Save failed",
+        "ink": "#d15657",
+        "ground": "#172033",
+        "stack": [
+          "draft-status=#172033"
+        ],
+        "ratio": 4.01,
+        "lc": -32.4,
+        "pass": false
+      },
+      "validation-issue-field/error": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Name",
+        "ink": "#d15657",
+        "ground": "#0a0a0a",
+        "stack": [
+          "main=#0a0a0a"
+        ],
+        "ratio": 4.88,
+        "lc": -34.5,
+        "pass": true
+      },
+      "validation-issue-field/warning": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Capacity",
+        "ink": "#d39e76",
+        "ground": "#0a0a0a",
+        "stack": [
+          "main=#0a0a0a"
+        ],
+        "ratio": 8.41,
+        "lc": -55.6,
+        "pass": true
+      },
+      "import-export/error-title": {
+        "where": "admin/import-export:285",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Validation Errors",
+        "ink": "#d15657",
+        "ground": "#182235",
+        "stack": [
+          "root=#182235"
+        ],
+        "ratio": 3.93,
+        "lc": -32.1,
+        "pass": false
+      },
+      "import-export/success-message": {
+        "where": "admin/import-export:351",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Import completed successfully",
+        "ink": "#70ad91",
+        "ground": "#172033",
+        "stack": [
+          "root=#172033"
+        ],
+        "ratio": 6.26,
+        "lc": -49,
+        "pass": true
+      },
+      "notification/destructive-text": {
+        "where": "experience/notification:220",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Delete",
+        "ink": "#d15657",
+        "ground": "#242f41",
+        "stack": [
+          "trigger=#c6d5e3@0.07",
+          "root=#182235"
+        ],
+        "ratio": 3.33,
+        "lc": -29.8,
+        "pass": false
+      },
+      "brand-studio/metric-warning": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "warning",
+        "text": "Bounce rate 48%",
+        "ink": "#d39e76",
+        "ground": "#172033",
+        "stack": [
+          "root=#172033"
+        ],
+        "ratio": 6.91,
+        "lc": -53.6,
+        "pass": true
+      },
+      "brand-studio/metric-success": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Conversion 12%",
+        "ink": "#70ad91",
+        "ground": "#172033",
+        "stack": [
+          "root=#172033"
+        ],
+        "ratio": 6.26,
+        "lc": -49,
+        "pass": true
+      }
+    }
+  },
+  "evnto light": {
+    "channels": {
+      "--ds-color-success": "#16a34a",
+      "--ds-color-success-ink": "#166b36",
+      "--ds-color-warning": "#d97706",
+      "--ds-color-warning-ink": "#824c0e",
+      "--ds-color-error": "#dc2626",
+      "--ds-color-error-ink": "#b12323"
+    },
+    "sites": {
+      "draft-status-label/success": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "success",
+        "text": "Saved 12:30",
+        "ink": "#166b36",
+        "ground": "#ededed",
+        "stack": [
+          "draft-status=#ededed"
+        ],
+        "ratio": 5.62,
+        "lc": 71.5,
+        "pass": true
+      },
+      "draft-status-label/warning": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Unsaved changes",
+        "ink": "#824c0e",
+        "ground": "#ededed",
+        "stack": [
+          "draft-status=#ededed"
+        ],
+        "ratio": 6,
+        "lc": 73.3,
+        "pass": true
+      },
+      "draft-status-label/error": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Save failed",
+        "ink": "#b12323",
+        "ground": "#ededed",
+        "stack": [
+          "draft-status=#ededed"
+        ],
+        "ratio": 5.72,
+        "lc": 70.8,
+        "pass": true
+      },
+      "validation-issue-field/error": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Name",
+        "ink": "#b12323",
+        "ground": "#fafafa",
+        "stack": [
+          "main=#fafafa"
+        ],
+        "ratio": 6.42,
+        "lc": 78.5,
+        "pass": true
+      },
+      "validation-issue-field/warning": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Capacity",
+        "ink": "#824c0e",
+        "ground": "#fafafa",
+        "stack": [
+          "main=#fafafa"
+        ],
+        "ratio": 6.73,
+        "lc": 81,
+        "pass": true
+      },
+      "import-export/error-title": {
+        "where": "admin/import-export:285",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Validation Errors",
+        "ink": "#b12323",
+        "ground": "#ffffff",
+        "stack": [
+          "root=#ffffff"
+        ],
+        "ratio": 6.7,
+        "lc": 81.5,
+        "pass": true
+      },
+      "import-export/success-message": {
+        "where": "admin/import-export:351",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Import completed successfully",
+        "ink": "#166b36",
+        "ground": "#ededed",
+        "stack": [
+          "root=#ededed"
+        ],
+        "ratio": 5.62,
+        "lc": 71.5,
+        "pass": true
+      },
+      "notification/destructive-text": {
+        "where": "experience/notification:220",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Delete",
+        "ink": "#b12323",
+        "ground": "#f2f2f2",
+        "stack": [
+          "trigger=#474747@0.07",
+          "root=#ffffff"
+        ],
+        "ratio": 5.99,
+        "lc": 73.7,
+        "pass": true
+      },
+      "brand-studio/metric-warning": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "warning",
+        "text": "Bounce rate 48%",
+        "ink": "#824c0e",
+        "ground": "#ededed",
+        "stack": [
+          "root=#ededed"
+        ],
+        "ratio": 6,
+        "lc": 73.3,
+        "pass": true
+      },
+      "brand-studio/metric-success": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Conversion 12%",
+        "ink": "#166b36",
+        "ground": "#ededed",
+        "stack": [
+          "root=#ededed"
+        ],
+        "ratio": 5.62,
+        "lc": 71.5,
+        "pass": true
+      }
+    }
+  },
+  "evnto dark": {
+    "channels": {
+      "--ds-color-success": "#16a34a",
+      "--ds-color-success-ink": "#70c691",
+      "--ds-color-warning": "#d97706",
+      "--ds-color-warning-ink": "#e7b275",
+      "--ds-color-error": "#f87171",
+      "--ds-color-error-ink": "#f88f90"
+    },
+    "sites": {
+      "draft-status-label/success": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "success",
+        "text": "Saved 12:30",
+        "ink": "#70c691",
+        "ground": "#172033",
+        "stack": [
+          "draft-status=#172033"
+        ],
+        "ratio": 7.88,
+        "lc": -60,
+        "pass": true
+      },
+      "draft-status-label/warning": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Unsaved changes",
+        "ink": "#e7b275",
+        "ground": "#172033",
+        "stack": [
+          "draft-status=#172033"
+        ],
+        "ratio": 8.54,
+        "lc": -64.1,
+        "pass": true
+      },
+      "draft-status-label/error": {
+        "where": "guided-draft-form:242",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Save failed",
+        "ink": "#f88f90",
+        "ground": "#172033",
+        "stack": [
+          "draft-status=#172033"
+        ],
+        "ratio": 7.22,
+        "lc": -55.9,
+        "pass": true
+      },
+      "validation-issue-field/error": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "error",
+        "text": "Name",
+        "ink": "#f88f90",
+        "ground": "#0b1220",
+        "stack": [
+          "main=#0b1220"
+        ],
+        "ratio": 8.31,
+        "lc": -57.4,
+        "pass": true
+      },
+      "validation-issue-field/warning": {
+        "where": "guided-draft-form:862",
+        "kind": "real",
+        "found": true,
+        "tone": "warning",
+        "text": "Capacity",
+        "ink": "#e7b275",
+        "ground": "#0b1220",
+        "stack": [
+          "main=#0b1220"
+        ],
+        "ratio": 9.83,
+        "lc": -65.7,
+        "pass": true
+      },
+      "import-export/error-title": {
+        "where": "admin/import-export:285",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Validation Errors",
+        "ink": "#f88f90",
+        "ground": "#182235",
+        "stack": [
+          "root=#182235"
+        ],
+        "ratio": 7.07,
+        "lc": -55.6,
+        "pass": true
+      },
+      "import-export/success-message": {
+        "where": "admin/import-export:351",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Import completed successfully",
+        "ink": "#70c691",
+        "ground": "#172033",
+        "stack": [
+          "root=#172033"
+        ],
+        "ratio": 7.88,
+        "lc": -60,
+        "pass": true
+      },
+      "notification/destructive-text": {
+        "where": "experience/notification:220",
+        "kind": "recon",
+        "found": true,
+        "tone": "error",
+        "text": "Delete",
+        "ink": "#f88f90",
+        "ground": "#242f41",
+        "stack": [
+          "trigger=#c6d5e3@0.07",
+          "root=#182235"
+        ],
+        "ratio": 6,
+        "lc": -53.3,
+        "pass": true
+      },
+      "brand-studio/metric-warning": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "warning",
+        "text": "Bounce rate 48%",
+        "ink": "#e7b275",
+        "ground": "#172033",
+        "stack": [
+          "root=#172033"
+        ],
+        "ratio": 8.54,
+        "lc": -64.1,
+        "pass": true
+      },
+      "brand-studio/metric-success": {
+        "where": "brand-studio/visual-excellence:94",
+        "kind": "recon",
+        "found": true,
+        "tone": "success",
+        "text": "Conversion 12%",
+        "ink": "#70c691",
+        "ground": "#172033",
+        "stack": [
+          "root=#172033"
+        ],
+        "ratio": 7.88,
+        "lc": -60,
+        "pass": true
+      }
+    }
+  }
+}

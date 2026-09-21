@@ -1,0 +1,401 @@
+{
+  "generated": "2026-09-21",
+  "totals": {
+    "rows": 48,
+    "production": 43,
+    "productionFiles": 30,
+    "byRoot": {
+      "ds-core": 6,
+      "ds-showroom": 0,
+      "app-bithire": 35,
+      "app-platform": 2,
+      "app-evnto": 0
+    }
+  },
+  "rows": [
+    {
+      "root": "ds-core",
+      "file": "ui-design-system/packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/visual-excellence/index.tsx",
+      "line": 94,
+      "tag": "Text",
+      "value": "{ tone === \"warning\" ? \"warning\" : tone === \"positive\" ? \"success\" : \"secondary\" }",
+      "kind": "production"
+    },
+    {
+      "root": "ds-core",
+      "file": "ui-design-system/packages/core/src/components/primitives/display/typography/tests/Typography.modern-engine-advanced.test.tsx",
+      "line": 32,
+      "tag": "ModernText",
+      "value": "\"warning\"",
+      "kind": "test-or-story"
+    },
+    {
+      "root": "ds-core",
+      "file": "ui-design-system/packages/core/src/components/primitives/display/typography/tests/Typography.test.tsx",
+      "line": 238,
+      "tag": "Text",
+      "value": "{color}",
+      "kind": "test-or-story"
+    },
+    {
+      "root": "ds-core",
+      "file": "ui-design-system/packages/core/src/components/primitives/display/typography/tests/Typography.test.tsx",
+      "line": 304,
+      "tag": "Paragraph",
+      "value": "{color}",
+      "kind": "test-or-story"
+    },
+    {
+      "root": "ds-core",
+      "file": "ui-design-system/packages/core/src/components/primitives/display/typography/Typography.stories.tsx",
+      "line": 214,
+      "tag": "Text",
+      "value": "{color}",
+      "kind": "test-or-story"
+    },
+    {
+      "root": "ds-core",
+      "file": "ui-design-system/packages/core/src/components/primitives/display/typography/Typography.stories.tsx",
+      "line": 299,
+      "tag": "Paragraph",
+      "value": "{color}",
+      "kind": "test-or-story"
+    },
+    {
+      "root": "ds-core",
+      "file": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/notification/index.tsx",
+      "line": 220,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "ds-core",
+      "file": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
+      "line": 242,
+      "tag": "Text",
+      "value": "{statusTone[status]}",
+      "kind": "production"
+    },
+    {
+      "root": "ds-core",
+      "file": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
+      "line": 862,
+      "tag": "Text",
+      "value": "{issue.severity === 'error' ? 'error' : 'warning'}",
+      "kind": "production"
+    },
+    {
+      "root": "ds-core",
+      "file": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/admin/import-export/index.tsx",
+      "line": 285,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "ds-core",
+      "file": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/admin/import-export/index.tsx",
+      "line": 351,
+      "tag": "Text",
+      "value": "\"success\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/app/(dashboard)/ai-studio/rubrics/content/index.tsx",
+      "line": 47,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/app/(dashboard)/scoring/process-builder/content/index.tsx",
+      "line": 883,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/record/edit/index.tsx",
+      "line": 1041,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/record/edit/index.tsx",
+      "line": 1084,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/record/edit/index.tsx",
+      "line": 1144,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/record/edit/view/sections/professional-details/index.tsx",
+      "line": 239,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/record/listing/view/sections/bulk-pool-dialog/index.tsx",
+      "line": 116,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/record/overview/wiring/controller/index.tsx",
+      "line": 1040,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/record/overview/wiring/controller/index.tsx",
+      "line": 1045,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/workflows/matching/index.tsx",
+      "line": 608,
+      "tag": "Text",
+      "value": "{focusedCandidateError ? \"warning\" : \"muted\"}",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/workflows/compare/index.tsx",
+      "line": 344,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/workflows/compare/index.tsx",
+      "line": 366,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/workflows/compare/index.tsx",
+      "line": 429,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/workflows/compare/index.tsx",
+      "line": 477,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/candidates/surface/screens/workflows/compare/index.tsx",
+      "line": 524,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/settings/surface/screens/integrations/ats-integrations/candidate-schedule/index.tsx",
+      "line": 339,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/settings/surface/components/workflows/workflow-listing/workflow-card/index.tsx",
+      "line": 215,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/settings/surface/components/workflows/workflow-builder/index.tsx",
+      "line": 483,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/offers/surface/screens/record/edit/index.tsx",
+      "line": 613,
+      "tag": "Text",
+      "value": "\"success\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/sprints/surface/components/quick-create/index.tsx",
+      "line": 237,
+      "tag": "Text",
+      "value": "\"success\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/sprints/surface/components/quick-create/index.tsx",
+      "line": 368,
+      "tag": "Text",
+      "value": "\"warning\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/sprints/surface/components/quick-create/index.tsx",
+      "line": 386,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/portals/surface/components/candidate/interview-entry/biometric-capture/index.tsx",
+      "line": 213,
+      "tag": "Text",
+      "value": "{feedback.status === \"error\" ? \"error\" : \"muted\"}",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/portals/surface/components/chrome/index.tsx",
+      "line": 45,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/teams/surface/components/members/team-member-listing/index.tsx",
+      "line": 323,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/governance/surface/screens/workflows/audit-center/index.tsx",
+      "line": 1298,
+      "tag": "Text",
+      "value": "\"warning\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/governance/surface/screens/workflows/audit-center/index.tsx",
+      "line": 1345,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/governance/surface/screens/workflows/audit-center/index.tsx",
+      "line": 1363,
+      "tag": "Text",
+      "value": "\"success\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/governance/surface/screens/workflows/compliance/consent-center/index.tsx",
+      "line": 681,
+      "tag": "Text",
+      "value": "\"warning\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/governance/surface/screens/workflows/persona-management/index.tsx",
+      "line": 1276,
+      "tag": "Text",
+      "value": "\"success\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/scoring/surface/screens/workflows/assessments/submissions/index.tsx",
+      "line": 250,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/scoring/surface/screens/workflows/rubrics/create/view/sections/scoring-logic-section/index.tsx",
+      "line": 263,
+      "tag": "Text",
+      "value": "\"success\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/scoring/surface/screens/workflows/appeals/index.tsx",
+      "line": 923,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/scoring/surface/screens/workflows/scorecards/view/sections/client-view/index.tsx",
+      "line": 53,
+      "tag": "Text",
+      "value": "\"error\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-bithire",
+      "file": "app-bithire/src/features/sourcing/surface/components/referrals/quick-create/index.tsx",
+      "line": 226,
+      "tag": "Text",
+      "value": "\"success\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-platform",
+      "file": "app-platform/src/app/(auth)/verify-email/page.tsx",
+      "line": 101,
+      "tag": "Text",
+      "value": "\"success\"",
+      "kind": "production"
+    },
+    {
+      "root": "app-platform",
+      "file": "app-platform/src/features/security/security/components/session-table/index.tsx",
+      "line": 249,
+      "tag": "Text",
+      "value": "\"success\"",
+      "kind": "production"
+    }
+  ]
+}

@@ -205,17 +205,20 @@ describeCausality({
  * measures 4.64:1 on the new `#ededed` chip ground and leaves this map whole.
  * `evnto light` (2.82:1) and `bithire dark` (3.00:1) stay pinned on the
  * success FILL ink, which is the separate success-ink packet's cause.
+ *
+ * DRAINED 2026-09-21 by that success-ink packet: the modern typography tone
+ * rules now read `--ds-color-{tone}-ink` with the fill as fallback, so the
+ * label takes the governed TEXT ink instead of the saturated fill --
+ * `evnto light` 2.82 -> 5.62:1 and `bithire dark` 3.00 -> 6.26:1, measured in
+ * Chromium through the productive door (evidence/semantic-ink-channels).
+ * `evnto light` leaves this map entirely; what survives in `bithire dark` and
+ * `rottay dark` is the active pill's primary ink on its tinted ground, pinned
+ * on its own cause.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire dark': {
     'color-contrast': [
       'button[data-active="true"] > span[data-state="visible"][data-part="content"] > span[data-part="label"] > .rottay-flex[data-part="section-nav-item-row"][data-align="center"] > .rottay-flex[data-part="section-nav-item-main"][data-align="center"] > span[data-part="section-nav-item-label"][data-color="inherit"][data-size="sm"]',
-      'span[data-part="draft-status-label"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      'span[data-part="draft-status-label"]',
     ],
   },
   'rottay dark': {
