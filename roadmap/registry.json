@@ -5320,6 +5320,16 @@
      "at": "2026-09-20 19:07",
      "by": "kimi-admin",
      "note": "2026-09-20 kimi-admin (5): ADJUDICACION DE DISENO (filter-chip de list-toolbar, quedaba abierta tras ff71efc8c): la regla consistente con descriptions es — partes no-activables no llevan productor de interaccion. El chip root no activa (sin clickable/onClick medido en engines/modern:1173), asi que NO se estampa data-state; su lavado hover queda por el brazo pseudo (ayuda de lectura, pintura sin cambios, :is() misma especificidad) y la ocurrencia queda literal en statesNotComposed como registro permanente de la decision. El close del chip SI es interactivo y ya sella via Tag close (ff71efc8c). No hay deuda nueva ni pin que mover: el contador de list-toolbar lee 0 con el credito de ace98c15d. Cierro la pregunta de diseno con esta nota: interactivo sella, no-interactivo no; el lavado hover en partes no-activables es lectura, no affordance, y se revisita solo si un consumidor real le da activacion al chip."
+    },
+    {
+     "at": "2026-09-20 19:44",
+     "by": "kimi-admin",
+     "note": "2026-09-20 kimi-admin (6): card-base INTEGRADO 51fd557fc (Fable ACCEPT; la Card Moderna era blanca en rottay/evnto dark — defecto nadie habia medido: body copy 1.48:1 -> 10.72:1; 9 filas drenadas en 4 suites; luz pixel-identica con control 0px de delta) + atribucion WO-DER-06 corregida en las 3 suites 61c3d5479 (forma Fable). PUBLICADO origin/main=f8bd8ed88. Brazo 3b ENTREGADO (receipt-error-mode-leg-opus.json): rampa dark invertida + --ds-color-error pineado + error-border 700/800/900, 0 regresiones/27 reparaciones en 40 parejas x 6 scopes; extensiones medidas a adjudicar: --ds-button-default-bg (tercera instancia de la clase ground) y la linea del deriver tooltip (on-ink primario -> error). En auditoria Fable. Tree-bridge INTEGRADO 78f2a9ed2 (deriver canonico; Classic byte-identico; rhythm lee tree como mover 0->1 en las 6 celdas). Splitter ENTREGADO con STOP de corpus registrado (el sello aterrizo en ResizeHandle; el gate no ve la familia — adjudicacion DT pendiente sobre la forma roster/corpus). Siguientes: brazo 3a file-manager tras 3b; ventana de regeneracion vertical-css+catalogo."
+    },
+    {
+     "at": "2026-09-20 20:35",
+     "by": "kimi-admin",
+     "note": "2026-09-20 kimi-admin (7): brazo 3a DESPACHADO (receipt destino receipt-fm-danger-3a-opus.json): la mitad file-manager de la tinta danger contra las patas 3b ya integradas — stamp danger en los delete Buttons + borrar skin:209 (fill role como tinta), re-medicion en los 6 scopes; el AXE_DEBT map de la familia queda {} si la aritmetica 3b se sostiene (4.35->5.75 luz, 3.18->7.31 dark medido en 3b). Tras su integracion: ventana serial de regeneracion (bundles verticales: input/card/button/default-bg/descriptions/tree-bridge; artefactos facade: --ds-tooltip-error-color; catalogo tokens) y luego la re-medicion fleet del eje. Pendientes FAM-08 al cierre de la ola: mapa AXE_DEBT completo vacio + re-cierre contra aceptacion."
     }
    ],
    "doneAt": null,
@@ -6403,6 +6413,11 @@
      "at": "2026-09-20 17:51",
      "by": "Kimi K3",
      "note": "2026-09-20 kimi-admin (5): ruta (a) INTEGRADA ace98c15d (Fable CHANGES->correccion->ACCEPT): el brazo states de family-cut acredita el sello del primitivo compuesto (stateCompounds + composedPrimitiveStampsState granular por valor de estado; discriminador .ds-button en la secuencia dueña medido contra runtime; list-toolbar 4->0, las 6 medidas NOT-STAMPED quedan rojas con stateComposedFrom:[] — fail-closed). Ruta (b) primer lote INTEGRADO ff71efc8c: tag+avatar sellan (2 adiciones de comportamiento revisadas: Enter/Space estampa pressed en roots role=button; guardia target===currentTarget); descriptions DROP adjudicado con pintura byte-identica. Pendientes de la ruta (b): table (8 parts), tree (2), splitter via ResizeHandle (tras el credito), y la pregunta de diseno abierta (hover en partes no-activables: descriptions ya cayo por no-interaccion; filter-chip de list-toolbar queda literal en statesNotComposed esperando la misma llamada de diseno). El aviso de aceptacion de un bit queda registrado: los paquetes (b) prueban POR PART, no por el verde del brazo."
+    },
+    {
+     "at": "2026-09-20 20:35",
+     "by": "Kimi K3",
+     "note": "2026-09-20 kimi-admin (6): backer part-keyed INTEGRADO cb002ca03 (Fable CHANGES->join fix->ACCEPT): el brazo states acredita sellos compuestos por PART via anatomy (splitter 3->0, stateComposedFrom:[resize-handle]; Guard 1 state-set, Guard 2 anatomy-con-data-state rechazada, Guard D basename==tag). FAMILY-CUT GATE VERDE por primera vez (fe9a0ab42): 104 cortes OK + 3 admitidas con deuda declarada (splitter y list-toolbar con openCut que nombra al decididor compuesto + la enmienda de contrato registrada para el DT; surface-lifecycle con su piso R4). Brazo 3b INTEGRADO e20059e65 (Fable ACCEPT x2): familia danger sigue el modo — rampa error invertida en dark, --ds-color-error 400->600 solo en luz, --ds-color-on-error con pata modal, quiet-danger 700/800/900, --ds-button-default-bg material (3ra instancia clase ground), tooltip lee on-error gobernado. 0 regresiones/49 reparaciones en 40 parejas x 6 scopes. Oracle de lowering exige regeneracion de artefactos por --ds-tooltip-error-color: viaja en la ventana DT tras el brazo 3a. Follow-ups registrados: tooltip success/warning (misma clase), tag-subtle 500-on-100, workaround BoardResizeEdge de widget-board (retiro posterior)."
     }
    ]
   },
