@@ -1055,7 +1055,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 6,
-        "channelsRead": 51,
+        "channelsRead": 50,
         "classTokens": 5,
         "partsStamped": 13,
         "partsConsumed": 14
@@ -1071,7 +1071,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-08 (F-69, 2026-09-17): the DnD admission arm is new, so its two counters seed at what the gate measures today -- INSTRUMENT COVERAGE, newly visible debt for a corpus never scanned before, with no ceiling raised for source that changed. dndTransportOwners=1 / dndDropZoneOwners=0. Both are decrease-only and the F-69 consolidation criterion closes only when every row reaches 0. 2026-09-17: the transport moves to the shared sortable kernel (WO-FAM-08 lot 3) — dndTransportOwners 1 -> 0 measured by the F-69 arm; the frozen engines stay named exceptions. 2026-09-17: +1 stamped/consumed part (drag-handle) from the Move affordance (WO-FAM-08 lot 7, daa739788) — census re-read per the gate instruction. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 3 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down."
+      "cutNote": "WO-FAM-08 (F-69, 2026-09-17): the DnD admission arm is new, so its two counters seed at what the gate measures today -- INSTRUMENT COVERAGE, newly visible debt for a corpus never scanned before, with no ceiling raised for source that changed. dndTransportOwners=1 / dndDropZoneOwners=0. Both are decrease-only and the F-69 consolidation criterion closes only when every row reaches 0. 2026-09-17: the transport moves to the shared sortable kernel (WO-FAM-08 lot 3) — dndTransportOwners 1 -> 0 measured by the F-69 arm; the frozen engines stay named exceptions. 2026-09-17: +1 stamped/consumed part (drag-handle) from the Move affordance (WO-FAM-08 lot 7, daa739788) — census re-read per the gate instruction. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 3 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down. Re-pin 2026-09-20 (DT, tree-bridge lot 78f2a9ed2, Fable ACCEPT): channelsRead 51 -> 50 — the legacy --ds-tree-node-padding shorthand retired from the row read set (its declaration scoped to .ant-tree for Classic; the Modern row and the theme bridge now read the derivers --ds-tree-node-padding-block/-inline pair, already counted). One producer fewer in the ratchet (5823 -> 5822), debt unchanged."
     },
     "descriptions": {
       "cut": "WO-FAM-06",
@@ -1207,7 +1207,17 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": " Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 6 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down."
+      "cutNote": " Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 6 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down.",
+      "openCut": {
+        "workOrder": "WO-FAM-08",
+        "opened": "2026-09-20",
+        "lot": "splitter ResizeHandle state stamp (88ebc2d5b) + part-keyed backer (cb002ca03)",
+        "debt": {
+          "stateContract": 1,
+          "stateGoverned": 1
+        },
+        "note": "the gutter IS stamped at runtime by the shared ResizeHandle via the anatomy handoff, proven by the part-keyed backer (stateComposedFrom: [resize-handle], six occurrences credited, measured live in receipt-splitter-resizehandle-fable.json). The BLOCKING arms text is per-family source (\"the family source calls partAttributes\"), so they stay red while the composed component does the deciding; extending any credit to the blocking arms is a contract amendment registered for the DT (covers splitter and list-toolbar, both credit kinds). Decrease-only: when the amendment or a family-side stamp lands, this row closes by removing openCut."
+      }
     },
     "divider": {
       "cut": "WO-FAM-07",
@@ -1454,7 +1464,17 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-08: the list toolbar measured at HEAD 55e61c96a, unfixed debt pinned as measured; the family stamps no data-variant and every [data-variant] rule in its skin reaches the composed Button through .ds-button, so the variant arm holds on Button's own stamp (detail.variantComposedFrom); colorLiteralsInSkin is 0 because the 8 #000 stops live in mask-image (maskAlphaStops); the decision-causality suite is ListToolbar.causality.integration.test.tsx. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. Re-pin 2026-09-20 (DT, wave window): channelsRead 172 -> 174 = +--ds-motion-attention (8e6b7e57b, +1 — the intent is added without retiring a rung other rules still read) and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 11 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down."
+      "cutNote": "WO-FAM-08: the list toolbar measured at HEAD 55e61c96a, unfixed debt pinned as measured; the family stamps no data-variant and every [data-variant] rule in its skin reaches the composed Button through .ds-button, so the variant arm holds on Button's own stamp (detail.variantComposedFrom); colorLiteralsInSkin is 0 because the 8 #000 stops live in mask-image (maskAlphaStops); the decision-causality suite is ListToolbar.causality.integration.test.tsx. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. Re-pin 2026-09-20 (DT, wave window): channelsRead 172 -> 174 = +--ds-motion-attention (8e6b7e57b, +1 — the intent is added without retiring a rung other rules still read) and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 11 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down.",
+      "openCut": {
+        "workOrder": "WO-FAM-08",
+        "opened": "2026-09-20",
+        "lot": "states-arm composed-stamp credit (ace98c15d) + tag/avatar stamps (ff71efc8c)",
+        "debt": {
+          "stateContract": 1,
+          "stateGoverned": 1
+        },
+        "note": "8 of 9 painted parts ARE stamped at runtime by the composed Button kernel (button/engines/modern:541, P-79; stateComposedFrom: [button], ten of eleven occurrences credited, measured live in receipt-stamp-truth-opus.json). The ninth (filter-chip, a Tag with no clickable/onClick) is adjudicated non-activating: no stamp, its hover wash stays pseudo-side as a reading aid, the occurrence stays literal in statesNotComposed (FAM-08 trail 2026-09-20). The BLOCKING arms text is per-family source, so they stay red while the composed primitive decides; extending the credit to the blocking arms is the same registered contract amendment as splitters. Decrease-only: closes by removing openCut when that lands."
+      }
     },
     "data-table": {
       "cut": "WO-FAM-08",
