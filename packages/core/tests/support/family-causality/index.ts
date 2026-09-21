@@ -180,24 +180,40 @@ export async function measureArms(request: ProbeRequest): Promise<ProbeReadings>
             document.documentElement.setAttribute(name, value);
           }
           const values: Record<string, string> = {};
+          const read = (host: HTMLElement, target: (typeof targets)[number]): string => {
+            const element = host.querySelector(target.selector);
+            if (!element) {
+              return `<no match: ${target.selector}>`;
+            }
+            const stamped = target.attributesOn ? host.querySelector(target.attributesOn) ?? element : element;
+            for (const [name, value] of Object.entries(target.attributes ?? {})) {
+              stamped.setAttribute(name, value);
+            }
+            return target.property.startsWith('@rect.')
+              ? String(Math.round(element.getBoundingClientRect()[target.property.slice(6) as 'left']))
+              : getComputedStyle(element).getPropertyValue(target.property);
+          };
+          // No target stamps attributes or a direction: one host carries the
+          // whole scene — identical readings, one parse instead of one per target.
+          if (targets.every((target) => !target.attributes && !target.attributesOn && !target.dir)) {
+            const host = document.createElement('div');
+            host.setAttribute('style', surface);
+            host.setAttribute('dir', 'ltr');
+            host.innerHTML = markup;
+            document.body.append(host);
+            for (const target of targets) {
+              values[target.id] = read(host, target);
+            }
+            host.remove();
+            return values;
+          }
           for (const target of targets) {
             const host = document.createElement('div');
             host.setAttribute('style', surface);
             host.setAttribute('dir', target.dir ?? 'ltr');
             host.innerHTML = markup;
             document.body.append(host);
-            const element = host.querySelector(target.selector);
-            if (!element) {
-              values[target.id] = `<no match: ${target.selector}>`;
-            } else {
-              const stamped = target.attributesOn ? host.querySelector(target.attributesOn) ?? element : element;
-              for (const [name, value] of Object.entries(target.attributes ?? {})) {
-                stamped.setAttribute(name, value);
-              }
-              values[target.id] = target.property.startsWith('@rect.')
-                ? String(Math.round(element.getBoundingClientRect()[target.property.slice(6) as 'left']))
-                : getComputedStyle(element).getPropertyValue(target.property);
-            }
+            values[target.id] = read(host, target);
             host.remove();
           }
           return values;

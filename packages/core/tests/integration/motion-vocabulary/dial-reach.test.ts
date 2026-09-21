@@ -111,9 +111,9 @@ describe('motion dial reach, family by family', () => {
     });
     base = readings.base!;
     slower = readings.slower!;
-    // INTERIM bound, not a measured pin: measureArms re-parses the ~72KB scene into a fresh host per
-    // target (quadratic; tests/support/family-causality/index.ts:185-188). The hoist is its own packet.
-  }, 600_000);
+    // Measured pin: with the single-mount hoist in measureArms the two-arm
+    // scene reads in ~10s on a calm host; 120s is ~12x headroom, not a guess.
+  }, 120_000);
 
   it('paints a duration on every family it measured', () => {
     expect(sites.length).toBeGreaterThan(0);
