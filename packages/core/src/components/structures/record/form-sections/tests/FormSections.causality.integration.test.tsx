@@ -168,35 +168,14 @@ describeCausality({
 /**
  * Measured debt, pinned by node IDENTITY rather than by count: a repaired
  * node, a new node and a same-count swap all go red and must be re-adjudicated.
- * The muted-on-tinted contrast pairs below are the family's resting paint
- * (text-muted/tertiary on the tinted card grounds) at bithire and evnto
- * light — measured by this suite for the first time; this cut moved none of
- * the pairs (the drained inline painted the title's SIZE, not its ink).
+ * DRAINED 2026-09-21 (DT): the muted-on-tinted pairs formerly pinned here
+ * (text-muted/tertiary on the tinted card grounds at bithire and evnto
+ * light) measure clean after f73348ed5's supporting-ink regrade lifted the
+ * rungs over the floor on every light scope — the same drain class as
+ * 31c6bc9d1 (typography) and 54737cb6e (checkbox/radio). The map is empty;
+ * the fail-closed shape is untouched and reddens on any new measured debt.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire light': {
-    'color-contrast': [
-      'button[aria-controls="_R_6_-identity-content"] > .rottay-flex[data-part="section-lead"][data-align="start"] > .rottay-box.rottay-box--modern[data-part="section-index"]',
-      'button[aria-controls="_R_a_-review-content"] > .rottay-flex[data-part="section-lead"][data-align="start"] > .rottay-box.rottay-box--modern[data-part="section-index"]',
-      'div[data-part="facts-card-item"][data-justify="between"][data-align="start"]:nth-child(1) > .rottay-stack[data-part="facts-card-item-copy"][data-spacing="xs"] > .font-bold[data-part="facts-card-item-label"][data-size="xs"]',
-      'div[data-part="facts-card-item"][data-justify="between"][data-align="start"]:nth-child(2) > .rottay-stack[data-part="facts-card-item-copy"][data-spacing="xs"] > .font-bold[data-part="facts-card-item-label"][data-size="xs"]',
-      'span[data-part="facts-card-description"]',
-      'span[data-part="facts-card-eyebrow"]',
-      'span[data-part="facts-card-item-helper"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      'button[aria-controls="_R_6_-identity-content"] > .rottay-flex[data-part="section-lead"][data-align="start"] > .rottay-box.rottay-box--modern[data-part="section-index"]',
-      'button[aria-controls="_R_a_-review-content"] > .rottay-flex[data-part="section-lead"][data-align="start"] > .rottay-box.rottay-box--modern[data-part="section-index"]',
-      'div[data-part="facts-card-item"][data-justify="between"][data-align="start"]:nth-child(1) > .rottay-stack[data-part="facts-card-item-copy"][data-spacing="xs"] > .font-bold[data-part="facts-card-item-label"][data-size="xs"]',
-      'div[data-part="facts-card-item"][data-justify="between"][data-align="start"]:nth-child(2) > .rottay-stack[data-part="facts-card-item-copy"][data-spacing="xs"] > .font-bold[data-part="facts-card-item-label"][data-size="xs"]',
-      'span[data-part="facts-card-description"]',
-      'span[data-part="facts-card-eyebrow"]',
-      'span[data-part="facts-card-item-helper"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('form-sections causality surface', () => {
   it('serves the anatomy every probe reads', () => {

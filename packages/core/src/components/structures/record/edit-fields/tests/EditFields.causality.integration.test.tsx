@@ -154,33 +154,14 @@ describeCausality({
 /**
  * Measured debt, pinned by node IDENTITY rather than by count: a repaired
  * node, a new node and a same-count swap all go red and must be re-adjudicated.
- * The muted-on-flat contrast pairs below are the family's resting chrome ink
- * (text-secondary labels, text-muted numerals/eyebrows) at bithire and evnto
- * light — measured by this suite for the first time; this cut moved none of
- * the pairs (it moved WHERE the width/span/dock paint lives, never the ink).
+ * DRAINED 2026-09-21 (DT): the muted-on-flat pairs formerly pinned here
+ * (text-secondary labels, text-muted numerals/eyebrows at bithire and evnto
+ * light) measure clean after f73348ed5's supporting-ink regrade lifted the
+ * rungs over the floor on every light scope — the same drain class as
+ * 31c6bc9d1 (typography) and 54737cb6e (checkbox/radio). The map is empty;
+ * the fail-closed shape is untouched and reddens on any new measured debt.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire light': {
-    'color-contrast': [
-      'label[for="f-name"]',
-      'label[for="f-notes"]',
-      'label[for="f-referral"]',
-      'span[data-part="editor-description"]',
-      'span[data-part="editor-eyebrow"]',
-      'span[data-part="field-number"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      'label[for="f-name"]',
-      'label[for="f-notes"]',
-      'label[for="f-referral"]',
-      'span[data-part="editor-description"]',
-      'span[data-part="editor-eyebrow"]',
-      'span[data-part="field-number"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('edit-fields causality surface', () => {
   it('serves the anatomy every probe reads, stamped by the variants not inline paint', () => {
