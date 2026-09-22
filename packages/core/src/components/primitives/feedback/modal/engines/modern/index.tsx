@@ -34,25 +34,42 @@ import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation
 const FLOATING: ResolvedOverlayAdaptation = { presentation: 'floating' };
 const FULLSCREEN: ResolvedOverlayAdaptation = { presentation: 'fullscreen' };
 
-/** A modal button whose hover, press and focus ring the interaction kernel decides. */
-function ModalButton({
-  part,
-  disabled,
-  children,
-  ...rest
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & { part: 'close-button' | 'action' }) {
+type ModalButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+/** The hover, press and focus ring the interaction kernel decides for a modal button. */
+function useModalButton({ disabled, ...rest }: ModalButtonProps) {
   const interaction = useInteractionState({ disabled });
   const kernel = interaction.handlers;
-  const chained = {
-    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
-    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
-    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
-    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
-    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
-    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  return {
+    state: interaction.state,
+    props: {
+      disabled,
+      ...rest,
+      onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+      onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+      onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+      onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+      onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+      onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+    } satisfies ModalButtonProps,
   };
+}
+
+/** The footer action of a modal. */
+function ModalActionButton({ children, ...rest }: ModalButtonProps) {
+  const action = useModalButton(rest);
   return (
-    <button type="button" disabled={disabled} {...rest} {...partAttributes(part, interaction.state)} {...chained}>
+    <button type="button" {...action.props} {...partAttributes('action', action.state)}>
+      {children}
+    </button>
+  );
+}
+
+/** The header dismiss control of a modal. */
+function ModalCloseButton({ children, ...rest }: ModalButtonProps) {
+  const close = useModalButton(rest);
+  return (
+    <button type="button" {...close.props} {...partAttributes('close-button', close.state)}>
       {children}
     </button>
   );
@@ -263,13 +280,12 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     : footer ?? ((onOk || onCancel) ? (
       <>
         {onCancel && (
-          <ModalButton part="action" data-action="cancel" onClick={handleCancel}>
+          <ModalActionButton data-action="cancel" onClick={handleCancel}>
             {resolvedCancelText}
-          </ModalButton>
+          </ModalActionButton>
         )}
         {onOk && (
-          <ModalButton
-            part="action"
+          <ModalActionButton
             data-action="ok"
             data-loading={confirmLoading ? 'true' : 'false'}
             disabled={confirmLoading}
@@ -278,7 +294,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           >
             {confirmLoading && <span data-part="spinner" aria-hidden="true" />}
             <span data-part="action-label">{resolvedOkText}</span>
-          </ModalButton>
+          </ModalActionButton>
         )}
       </>
     ) : null);
@@ -372,13 +388,12 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                       )}
                     </div>
                     {closable && (
-                      <ModalButton
-                        part="close-button"
+                      <ModalCloseButton
                         onClick={handleCancel}
                         aria-label={i18n?.tOr('modal.close', 'Close') ?? 'Close'}
                       >
                         <ActionCloseIcon decorative size={16} />
-                      </ModalButton>
+                      </ModalCloseButton>
                     )}
                   </div>
                 )}

@@ -44,8 +44,8 @@
  * quick-action coarse-pointer floor is the Button's own and is not restated.
  *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
- * 100% of layout and paint — typography and tab geometry included. The only
- * inline style the engine writes is the caller's own `style` prop on the root.
+ * 100% of layout and paint — typography and tab geometry included. What travels
+ * inline on the root is the caller's own `style` prop, forwarded unchanged.
  *
  * LOADING: drawn by the shared `AnatomySkeleton` from this header's own stamped
  * anatomy. This file owns no skeleton geometry, no skeleton part and no pulse.

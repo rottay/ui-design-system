@@ -60982,7 +60982,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * with the density dial stops being the platform-height bar its consumers
  * position against), the slot flex shares and the touch floors. The runtime
  * stamps NO geometry at all now: `position: sticky` moved into the sticky
- * posture rule below, so the only inline style left on the root is the
+ * posture rule below, so what still travels inline on the root is the
  * consumer's own `style` prop (WO-FAM-10 sub-lot D).
  *
  * CHANNELS: every value above rides a `--ds-mobile-header-*` channel produced by
@@ -75098,8 +75098,8 @@ html[data-ds-motion='reduced']
  *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
  * 100% of layout and paint — typography, sticky positioning and compact padding
- * included. The only inline style the engine writes is the caller's own `style`
- * prop on the root.
+ * included. What travels inline on the root is the caller's own `style` prop,
+ * forwarded unchanged.
  *
  * STATE: every state pseudo is paired with the `data-state` token the shared
  * kernel stamps. The pseudo is the pre-hydration floor and the token is the
@@ -75619,8 +75619,8 @@ html[data-ds-motion='reduced']
  * own `data-part` tree and draws one bone per part, so the skeleton cannot
  * drift from the header it stands in for; the twenty-nine hand-made
  * `[data-part='skeleton-*']` constructs this file used to carry are gone.
- * The only inline styles left in the engine are the caller's own `style` prop
- * and the `--ds-page-shell-max-width` channel on the root.
+ * What travels inline on the root is the caller's own `style` prop plus the
+ * `--ds-page-shell-max-width` channel this skin consumes.
  *
  * Values were transcribed verbatim from `engines/modern.tsx`; the wave R2+R3
  * pass moved the remaining inline typography (title, subtitle, crumbs, tabs,
@@ -76423,8 +76423,8 @@ html[data-ds-motion='reduced']
  * quick-action coarse-pointer floor is the Button's own and is not restated.
  *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
- * 100% of layout and paint — typography and tab geometry included. The only
- * inline style the engine writes is the caller's own `style` prop on the root.
+ * 100% of layout and paint — typography and tab geometry included. What travels
+ * inline on the root is the caller's own `style` prop, forwarded unchanged.
  *
  * LOADING: drawn by the shared `AnatomySkeleton` from this header's own stamped
  * anatomy. This file owns no skeleton geometry, no skeleton part and no pulse.

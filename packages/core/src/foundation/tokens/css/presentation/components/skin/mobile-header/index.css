@@ -73,7 +73,7 @@
  * with the density dial stops being the platform-height bar its consumers
  * position against), the slot flex shares and the touch floors. The runtime
  * stamps NO geometry at all now: `position: sticky` moved into the sticky
- * posture rule below, so the only inline style left on the root is the
+ * posture rule below, so what still travels inline on the root is the
  * consumer's own `style` prop (WO-FAM-10 sub-lot D).
  *
  * CHANNELS: every value above rides a `--ds-mobile-header-*` channel produced by

@@ -72,34 +72,57 @@ interface TransferListProps {
  *  an explicit pageSize. Matches the Ant Design Transfer default. */
 const DEFAULT_PAGE_SIZE = 10;
 
-type TransferButtonPart = 'move-button' | 'pagination-button' | 'panel-item-remove';
+type TransferButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-interface TransferButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  part: TransferButtonPart;
-}
-
-/** A ghost button of the transfer whose hover, press, focus and disabled state the interaction kernel decides. */
-function TransferButton({ part, disabled, onFocus, onBlur, children, ...rest }: TransferButtonProps) {
+/** The hover, press, focus and disabled wiring the interaction kernel decides for a ghost button. */
+function useTransferButton({ disabled, onFocus, onBlur, ...rest }: TransferButtonProps) {
   const button = useInteractionState({ disabled });
-  return (
-    <button
-      type="button"
-      disabled={disabled}
-      {...rest}
-      {...partAttributes(part, button.state)}
-      onPointerEnter={button.handlers.onPointerEnter}
-      onPointerLeave={button.handlers.onPointerLeave}
-      onPointerDown={button.handlers.onPointerDown}
-      onPointerUp={button.handlers.onPointerUp}
-      onFocus={(event) => {
+  return {
+    state: button.state,
+    props: {
+      disabled,
+      ...rest,
+      onPointerEnter: button.handlers.onPointerEnter,
+      onPointerLeave: button.handlers.onPointerLeave,
+      onPointerDown: button.handlers.onPointerDown,
+      onPointerUp: button.handlers.onPointerUp,
+      onFocus: (event: React.FocusEvent<HTMLButtonElement>) => {
         button.handlers.onFocus(event);
         onFocus?.(event);
-      }}
-      onBlur={(event) => {
+      },
+      onBlur: (event: React.FocusEvent<HTMLButtonElement>) => {
         button.handlers.onBlur(event);
         onBlur?.(event);
-      }}
-    >
+      },
+    } satisfies TransferButtonProps,
+  };
+}
+
+/** A direction control of the operations column. */
+function TransferMoveButton({ children, ...rest }: TransferButtonProps) {
+  const move = useTransferButton(rest);
+  return (
+    <button type="button" {...move.props} {...partAttributes('move-button', move.state)}>
+      {children}
+    </button>
+  );
+}
+
+/** A page step of a panel's pagination. */
+function TransferPaginationButton({ children, ...rest }: TransferButtonProps) {
+  const page = useTransferButton(rest);
+  return (
+    <button type="button" {...page.props} {...partAttributes('pagination-button', page.state)}>
+      {children}
+    </button>
+  );
+}
+
+/** The per-row removal action of the `oneWay` grammar. */
+function TransferRemoveButton({ children, ...rest }: TransferButtonProps) {
+  const remove = useTransferButton(rest);
+  return (
+    <button type="button" {...remove.props} {...partAttributes('panel-item-remove', remove.state)}>
       {children}
     </button>
   );
@@ -339,8 +362,7 @@ const TransferList: React.FC<TransferListProps> = ({
                     </span>
                   )}
                   {onRemoveItem && (
-                    <TransferButton
-                      part="panel-item-remove"
+                    <TransferRemoveButton
                       disabled={disabled || item.disabled}
                       aria-label={tOr('transfer.remove_item', `Remove ${item.title}`, {
                         item: item.title,
@@ -362,7 +384,7 @@ const TransferList: React.FC<TransferListProps> = ({
                       }}
                     >
                       <ActionCloseIcon decorative size={12} />
-                    </TransferButton>
+                    </TransferRemoveButton>
                   )}
                 </TransferRow>
               </li>
@@ -381,25 +403,23 @@ const TransferList: React.FC<TransferListProps> = ({
       {/* Pagination */}
       {pagination && totalPages > 1 && (
         <div data-part="panel-pagination">
-          <TransferButton
-            part="pagination-button"
+          <TransferPaginationButton
             disabled={disabled || currentPage <= 1}
             aria-label={tOr('pagination.previous', 'Previous page')}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           >
             <NavigationBackIcon decorative size={14} />
-          </TransferButton>
+          </TransferPaginationButton>
           <span data-part="pagination-status">
             {currentPage} / {totalPages}
           </span>
-          <TransferButton
-            part="pagination-button"
+          <TransferPaginationButton
             disabled={disabled || currentPage >= totalPages}
             aria-label={tOr('pagination.next', 'Next page')}
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           >
             <NavigationForwardIcon decorative size={14} />
-          </TransferButton>
+          </TransferPaginationButton>
         </div>
       )}
     </div>
@@ -566,8 +586,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
         />
 
         <div data-part="operations">
-          <TransferButton
-            part="move-button"
+          <TransferMoveButton
             data-direction="right"
             disabled={disabled || sourceSelectedKeys.size === 0}
             aria-label={tOr('transfer.move_to_target', 'Move to target')}
@@ -576,10 +595,9 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
             {operations![0] === TRANSFER_DEFAULTS.operations?.[0]
               ? <NavigationForwardIcon decorative size={16} />
               : operations![0]}
-          </TransferButton>
+          </TransferMoveButton>
           {!oneWay && (
-            <TransferButton
-              part="move-button"
+            <TransferMoveButton
               data-direction="left"
               disabled={disabled || targetSelectedKeys.size === 0}
               aria-label={tOr('transfer.move_to_source', 'Move to source')}
@@ -588,7 +606,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
               {operations![1] === TRANSFER_DEFAULTS.operations?.[1]
                 ? <NavigationBackIcon decorative size={16} />
                 : operations![1]}
-            </TransferButton>
+            </TransferMoveButton>
           )}
         </div>
 

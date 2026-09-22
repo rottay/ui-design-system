@@ -64,24 +64,41 @@ import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { resolveNavigationIntent } from '../../../../runtime/collection/roving-focus';
 
-/** A tour button whose hover, press and focus ring the interaction kernel decides. */
-function TourButton({
-  part,
-  children,
-  ...rest
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & { part: 'close-button' | 'action' }) {
+type TourButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+/** The hover, press and focus ring the interaction kernel decides for a tour button. */
+function useTourButton(rest: TourButtonProps) {
   const interaction = useInteractionState({ disabled: rest.disabled });
   const kernel = interaction.handlers;
-  const chained = {
-    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
-    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
-    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
-    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
-    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
-    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  return {
+    state: interaction.state,
+    props: {
+      ...rest,
+      onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+      onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+      onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+      onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+      onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+      onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+    } satisfies TourButtonProps,
   };
+}
+
+/** A step navigation action of the tour. */
+function TourActionButton({ children, ...rest }: TourButtonProps) {
+  const action = useTourButton(rest);
   return (
-    <button type="button" {...rest} {...partAttributes(part, interaction.state)} {...chained}>
+    <button type="button" {...action.props} {...partAttributes('action', action.state)}>
+      {children}
+    </button>
+  );
+}
+
+/** The dismiss control of the tour surface. */
+function TourCloseButton({ children, ...rest }: TourButtonProps) {
+  const close = useTourButton(rest);
+  return (
+    <button type="button" {...close.props} {...partAttributes('close-button', close.state)}>
       {children}
     </button>
   );
@@ -316,8 +333,7 @@ const ModernTourChrome = ({
         onKeyDown={handleSurfaceKeyDown}
         style={targetEl ? overlay.positionStyle : undefined}
       >
-        <TourButton
-          part="close-button"
+        <TourCloseButton
           onClick={onClose}
           /* `t` echoes the key back when the catalog lacks it, so a host app
              shipping a partial `common` namespace labelled this button the
@@ -326,7 +342,7 @@ const ModernTourChrome = ({
           aria-label={translation?.tOr('close', 'Close') ?? 'Close'}
         >
           <ActionCloseIcon decorative size={16} />
-        </TourButton>
+        </TourCloseButton>
 
         {/* Content */}
         {step?.cover && <div data-part="cover">{step.cover}</div>}
@@ -363,13 +379,13 @@ const ModernTourChrome = ({
               keeps the shipped label byte-identical. */}
           <div data-part="actions">
             {currentStep > 0 && (
-              <TourButton part="action" data-action="prev" onClick={onPrev}>
+              <TourActionButton data-action="prev" onClick={onPrev}>
                 {translation?.tOr('previous', 'Previous') ?? 'Previous'}
-              </TourButton>
+              </TourActionButton>
             )}
-            <TourButton part="action" data-action="next" onClick={onNext}>
+            <TourActionButton data-action="next" onClick={onNext}>
               {currentStep === steps.length - 1 ? (translation?.tOr('finish', 'Finish') ?? 'Finish') : (translation?.tOr('next', 'Next') ?? 'Next')}
-            </TourButton>
+            </TourActionButton>
           </div>
         </div>
       </div>

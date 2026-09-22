@@ -30,8 +30,8 @@
  *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
  * 100% of layout and paint — typography, sticky positioning and compact padding
- * included. The only inline style the engine writes is the caller's own `style`
- * prop on the root.
+ * included. What travels inline on the root is the caller's own `style` prop,
+ * forwarded unchanged.
  *
  * STATE: every state pseudo is paired with the `data-state` token the shared
  * kernel stamps. The pseudo is the pre-hydration floor and the token is the

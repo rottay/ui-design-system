@@ -173,32 +173,47 @@ function handleColumnKeyDown(event: React.KeyboardEvent<HTMLDivElement>, isRtl: 
   }
 }
 
-interface TimeOptionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  part: 'time-option' | 'now-button';
-}
+type TimeButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-/** A column cell or the Now action whose hover, focus and disabled state the interaction kernel decides. */
-function TimeOptionButton({ part, disabled, onFocus, onBlur, children, ...rest }: TimeOptionButtonProps) {
+/** The hover, focus and disabled wiring the interaction kernel decides for a panel button. */
+function useTimeButton({ disabled, onFocus, onBlur, ...rest }: TimeButtonProps) {
   const cell = useInteractionState({ disabled });
-  return (
-    <button
-      type="button"
-      disabled={disabled}
-      {...rest}
-      {...partAttributes(part, cell.state)}
-      onPointerEnter={cell.handlers.onPointerEnter}
-      onPointerLeave={cell.handlers.onPointerLeave}
-      onPointerDown={cell.handlers.onPointerDown}
-      onPointerUp={cell.handlers.onPointerUp}
-      onFocus={(event) => {
+  return {
+    state: cell.state,
+    props: {
+      disabled,
+      ...rest,
+      onPointerEnter: cell.handlers.onPointerEnter,
+      onPointerLeave: cell.handlers.onPointerLeave,
+      onPointerDown: cell.handlers.onPointerDown,
+      onPointerUp: cell.handlers.onPointerUp,
+      onFocus: (event: React.FocusEvent<HTMLButtonElement>) => {
         cell.handlers.onFocus(event);
         onFocus?.(event);
-      }}
-      onBlur={(event) => {
+      },
+      onBlur: (event: React.FocusEvent<HTMLButtonElement>) => {
         cell.handlers.onBlur(event);
         onBlur?.(event);
-      }}
-    >
+      },
+    } satisfies TimeButtonProps,
+  };
+}
+
+/** A column cell whose hover, focus and disabled state the interaction kernel decides. */
+function TimeOptionButton({ children, ...rest }: TimeButtonProps) {
+  const cell = useTimeButton(rest);
+  return (
+    <button type="button" {...cell.props} {...partAttributes('time-option', cell.state)}>
+      {children}
+    </button>
+  );
+}
+
+/** The Now action, wired by the same kernel as a column cell. */
+function TimeNowButton({ children, ...rest }: TimeButtonProps) {
+  const action = useTimeButton(rest);
+  return (
+    <button type="button" {...action.props} {...partAttributes('now-button', action.state)}>
       {children}
     </button>
   );
@@ -344,7 +359,6 @@ const TimePanel: React.FC<TimePanelProps> = ({
               {col.options.map((opt) => (
                 <TimeOptionButton
                   key={opt.value}
-                  part="time-option"
                   role="option"
                   aria-selected={opt.value === col.selected}
                   data-selected={opt.value === col.selected || undefined}
@@ -376,7 +390,6 @@ const TimePanel: React.FC<TimePanelProps> = ({
               {(['am', 'pm'] as const).map((mer) => (
                 <TimeOptionButton
                   key={mer}
-                  part="time-option"
                   role="option"
                   aria-selected={meridiem === mer}
                   data-selected={meridiem === mer || undefined}
@@ -394,9 +407,9 @@ const TimePanel: React.FC<TimePanelProps> = ({
       {/* Now button */}
       {showNow && (
         <div data-part="footer">
-          <TimeOptionButton part="now-button" onClick={onNowClick}>
+          <TimeNowButton onClick={onNowClick}>
             {tOr('timepicker.now', 'Now')}
-          </TimeOptionButton>
+          </TimeNowButton>
         </div>
       )}
 

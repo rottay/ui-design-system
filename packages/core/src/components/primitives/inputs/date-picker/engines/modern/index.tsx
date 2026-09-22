@@ -136,37 +136,61 @@ const NextYearIcon = () => (
   </span>
 );
 
-type GovernedButtonPart = 'nav-button' | 'cell' | 'today-button';
-
 interface GovernedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  part: GovernedButtonPart;
   stateDisabled?: boolean;
 }
 
-/** A panel button whose hover, press, focus and disabled state the interaction kernel decides. */
-function GovernedButton({ part, stateDisabled, onFocus, onBlur, children, ...rest }: GovernedButtonProps) {
+/** The hover, press, focus and disabled wiring the interaction kernel decides for a panel button. */
+function useGovernedButton({ stateDisabled, onFocus, onBlur, ...rest }: GovernedButtonProps) {
   const button = useInteractionState({ disabled: stateDisabled });
-  return (
-    <button
-      type="button"
-      {...rest}
-      {...partAttributes(part, button.state)}
-      onPointerEnter={(event) => {
+  return {
+    state: button.state,
+    props: {
+      ...rest,
+      onPointerEnter: (event: React.PointerEvent<HTMLButtonElement>) => {
         button.handlers.onPointerEnter(event);
         rest.onPointerEnter?.(event);
-      }}
-      onPointerLeave={button.handlers.onPointerLeave}
-      onPointerDown={button.handlers.onPointerDown}
-      onPointerUp={button.handlers.onPointerUp}
-      onFocus={(event) => {
+      },
+      onPointerLeave: button.handlers.onPointerLeave,
+      onPointerDown: button.handlers.onPointerDown,
+      onPointerUp: button.handlers.onPointerUp,
+      onFocus: (event: React.FocusEvent<HTMLButtonElement>) => {
         button.handlers.onFocus(event);
         onFocus?.(event);
-      }}
-      onBlur={(event) => {
+      },
+      onBlur: (event: React.FocusEvent<HTMLButtonElement>) => {
         button.handlers.onBlur(event);
         onBlur?.(event);
-      }}
-    >
+      },
+    } satisfies React.ButtonHTMLAttributes<HTMLButtonElement>,
+  };
+}
+
+/** A header step of the panel: previous/next month, year or decade. */
+function NavButton({ children, ...rest }: GovernedButtonProps) {
+  const nav = useGovernedButton(rest);
+  return (
+    <button type="button" {...nav.props} {...partAttributes('nav-button', nav.state)}>
+      {children}
+    </button>
+  );
+}
+
+/** One selectable date, month or year of the panel grid. */
+function CellButton({ children, ...rest }: GovernedButtonProps) {
+  const cell = useGovernedButton(rest);
+  return (
+    <button type="button" {...cell.props} {...partAttributes('cell', cell.state)}>
+      {children}
+    </button>
+  );
+}
+
+/** The footer shortcut back to today. */
+function TodayButton({ children, ...rest }: GovernedButtonProps) {
+  const today = useGovernedButton(rest);
+  return (
+    <button type="button" {...today.props} {...partAttributes('today-button', today.state)}>
       {children}
     </button>
   );
@@ -390,13 +414,13 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     return (
       <div data-part="panel" data-mode="month" className={PANEL_CLASS} role="dialog" aria-label={t('datepicker.date_picker')}>
         <div data-part="header">
-          <GovernedButton part="nav-button" onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
+          <NavButton onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
             {superPrevIcon ?? <PreviousIcon />}
-          </GovernedButton>
+          </NavButton>
           <span data-part="panel-title">{viewYear}</span>
-          <GovernedButton part="nav-button" onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
+          <NavButton onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
             {superNextIcon ?? <NextIcon />}
-          </GovernedButton>
+          </NavButton>
         </div>
         <div data-part="grid">
           {monthNamesShort.map((m, i) => {
@@ -405,9 +429,8 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
               : false;
             const isCurrent = today.getMonth() === i && today.getFullYear() === viewYear;
             return (
-              <GovernedButton
+              <CellButton
                 key={m}
-                part="cell"
                 data-selected={isSelected || undefined}
                 data-today={isCurrent || undefined}
                 onClick={() => {
@@ -417,7 +440,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 }}
               >
                 {m}
-              </GovernedButton>
+              </CellButton>
             );
           })}
         </div>
@@ -431,15 +454,15 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     return (
       <div data-part="panel" data-mode="year" className={PANEL_CLASS} role="dialog" aria-label={t('datepicker.date_picker')}>
         <div data-part="header">
-          <GovernedButton part="nav-button" onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
+          <NavButton onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
             {superPrevIcon ?? <PreviousIcon />}
-          </GovernedButton>
+          </NavButton>
           <span data-part="panel-title">
             {startYear} - {startYear + 9}
           </span>
-          <GovernedButton part="nav-button" onClick={() => onViewChange(viewYear + 10, viewMonth)} aria-label={t('datepicker.next_decade')}>
+          <NavButton onClick={() => onViewChange(viewYear + 10, viewMonth)} aria-label={t('datepicker.next_decade')}>
             {superNextIcon ?? <NextIcon />}
-          </GovernedButton>
+          </NavButton>
         </div>
         <div data-part="grid">
           {Array.from({ length: 12 }, (_, i) => {
@@ -448,9 +471,8 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
             const isCurrent = today.getFullYear() === yr;
             const isOutOfRange = i === 0 || i === 11;
             return (
-              <GovernedButton
+              <CellButton
                 key={yr}
-                part="cell"
                 data-selected={isSelected || undefined}
                 data-today={isCurrent || undefined}
                 data-decade-edge={isOutOfRange || undefined}
@@ -461,7 +483,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 }}
               >
                 {yr}
-              </GovernedButton>
+              </CellButton>
             );
           })}
         </div>
@@ -487,23 +509,23 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     <div data-part="panel" data-mode="date" data-range={isRangePanel || undefined} className={PANEL_CLASS} role="dialog" aria-label={t('datepicker.date_picker')}>
       <div data-part="header">
         <div data-part="nav-group">
-          <GovernedButton part="nav-button" onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
+          <NavButton onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
             {superPrevIcon ?? <PreviousYearIcon />}
-          </GovernedButton>
-          <GovernedButton part="nav-button" onClick={handlePrevMonth} aria-label={t('datepicker.previous_month')}>
+          </NavButton>
+          <NavButton onClick={handlePrevMonth} aria-label={t('datepicker.previous_month')}>
             {prevIcon ?? <PreviousIcon />}
-          </GovernedButton>
+          </NavButton>
         </div>
         <span data-part="panel-title">
           {monthNamesFull[viewMonth]} {viewYear}
         </span>
         <div data-part="nav-group">
-          <GovernedButton part="nav-button" onClick={handleNextMonth} aria-label={t('datepicker.next_month')}>
+          <NavButton onClick={handleNextMonth} aria-label={t('datepicker.next_month')}>
             {nextIcon ?? <NextIcon />}
-          </GovernedButton>
-          <GovernedButton part="nav-button" onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
+          </NavButton>
+          <NavButton onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
             {superNextIcon ?? <NextYearIcon />}
-          </GovernedButton>
+          </NavButton>
         </div>
       </div>
 
@@ -529,9 +551,8 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
               const originNode = cell.day;
 
               return (
-                <GovernedButton
+                <CellButton
                   key={idx}
-                  part="cell"
                   stateDisabled={cell.isDisabled}
                   role="gridcell"
                   aria-selected={isSelected}
@@ -553,7 +574,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
                   }}
                 >
                   {cellRender ? cellRender(cell.date, { originNode, today, range: endpointRange }) : originNode}
-                </GovernedButton>
+                </CellButton>
               );
             })}
           </div>
@@ -571,9 +592,9 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
 
       <div data-part="footer">
         {showToday && (
-          <GovernedButton part="today-button" onClick={onTodayClick}>
+          <TodayButton onClick={onTodayClick}>
             {showTime && showNow ? t('datepicker.now') : t('datepicker.today')}
-          </GovernedButton>
+          </TodayButton>
         )}
         {renderExtraFooter && <div data-part="extra-footer">{renderExtraFooter()}</div>}
       </div>
