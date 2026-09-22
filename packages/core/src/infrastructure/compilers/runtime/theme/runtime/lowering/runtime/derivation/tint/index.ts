@@ -15,6 +15,11 @@ import { setTintScaleVariables } from "../../../foundation/tint";
  * A single role colour mixed over the page background generates every
  * interaction tint, which is what lets a vertical drop a foreign second blue
  * and re-derive hover/active/selected/focus from its primary alone.
+ *
+ * `consumes` names the palette decisions that fill the channels these formulas
+ * READ, the way the notifier and alert families do; the derivation itself takes
+ * no Theme, because a step that names `var(--ds-color-primary)` is correct for
+ * a theme that seeds the role and for one that inherits the DS base.
  */
 export const tintDeriver: FamilyDeriver = {
   family: "tint",
@@ -27,9 +32,9 @@ export const tintDeriver: FamilyDeriver = {
     "palette.infoColor",
   ],
   produces: ["--ds-tint-*"],
-  derive: (context) => {
+  derive: () => {
     const vars: Record<string, string> = {};
-    setTintScaleVariables(vars, context.theme);
+    setTintScaleVariables(vars);
     return vars;
   },
 };

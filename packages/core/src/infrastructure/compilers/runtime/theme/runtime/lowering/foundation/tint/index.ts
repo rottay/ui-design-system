@@ -6,8 +6,6 @@
  * @package @rottay/design-system
  */
 
-import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
-
 /** The five closed tint steps of the one-blue scale (design-language §2.5). */
 const TINT_STEPS = [4, 8, 12, 16, 24] as const;
 
@@ -45,8 +43,10 @@ function setTintRampVariables(
  * canonical interaction scale — hover=tint-4, active/selected=tint-8, selected
  * row=tint-12, focus ring=tint-24); each status tone (success/warning/error/info)
  * carries a role suffix so a tinted pill reads bg = tint-8 of the tone and
- * border = tint-24 of the tone. A role is skipped when its palette color is
- * absent, so themes that omit a tone simply omit that tone's tints.
+ * border = tint-24 of the tone.
+ *
+ * Emitted for every block, whatever a theme seeds: each step names the role's
+ * own CHANNEL, which the DS base theme declares unconditionally.
  *
  * OKLAB, NOT SRGB, because a perceptually-even space keeps the steps evenly
  * spaced in perceived lightness; an sRGB mix compresses and expands unevenly
@@ -71,21 +71,10 @@ function setTintRampVariables(
  * or only on a role that happens to share the ground's hue, will therefore show
  * no difference at all -- which is why this needs saying rather than rediscovering.
  */
-export function setTintScaleVariables(
-  vars: Record<string, string>,
-  bt: FlatTheme
-): void {
-  const palette = bt.palette;
-  if (!palette) return;
-
-  if (palette.primaryColor)
-    setTintRampVariables(vars, "--ds-tint", "--ds-color-primary");
-  if (palette.successColor)
-    setTintRampVariables(vars, "--ds-tint-success", "--ds-color-success");
-  if (palette.warningColor)
-    setTintRampVariables(vars, "--ds-tint-warning", "--ds-color-warning");
-  if (palette.errorColor)
-    setTintRampVariables(vars, "--ds-tint-error", "--ds-color-error");
-  if (palette.infoColor)
-    setTintRampVariables(vars, "--ds-tint-info", "--ds-color-info");
+export function setTintScaleVariables(vars: Record<string, string>): void {
+  setTintRampVariables(vars, "--ds-tint", "--ds-color-primary");
+  setTintRampVariables(vars, "--ds-tint-success", "--ds-color-success");
+  setTintRampVariables(vars, "--ds-tint-warning", "--ds-color-warning");
+  setTintRampVariables(vars, "--ds-tint-error", "--ds-color-error");
+  setTintRampVariables(vars, "--ds-tint-info", "--ds-color-info");
 }

@@ -760,7 +760,16 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // --ds-page-header-* to --ds-page-shell-header-*) and the two retired
       // --ds-type-tier-* letter-spacings. The fifty-two remaining commits in
       // the window move no key.
-      rottay: 2926,
+      // WO-EVI-02 tint un-gating (measured, 2026-09-22): rottay 2926 -> 2951,
+      // added 25, removed 0 -- the closed tint scale stopped being gated on
+      // `palette.{role}Color`, so a preset that seeds no palette now declares
+      // the 25 rungs its own notifier and alert chrome already read. evnto
+      // moves with rottay, byte-for-byte the same 25 keys; bithire seeds its
+      // palette and already emitted them, so its count does not move. The
+      // residual +1 all three verticals measure over these pins is NOT this
+      // lot: it measures at HEAD 73dc36d70 too (rottay 2927, bithire 3088,
+      // evnto 2927).
+      rottay: 2951,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -877,7 +886,7 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // too: the wave is family chrome and geometry, and the one row that
       // separates a vertical (4def25f24's two chart slots) separates the one
       // preset that authors a categorical series, which is not evnto's.
-      evnto: 2926,
+      evnto: 2951,
     };
     for (const vertical of VERTICALS) {
       expect(
