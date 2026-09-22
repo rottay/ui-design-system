@@ -1,5 +1,6 @@
 /**
- * The touch-target contract — ONE suite over ONE authority.
+ * The per-selector touch-target contract — ONE suite over ONE table. The
+ * floor VALUE is its peer's question (`scripts/check/touch-target-floor/`).
  *
  * Assertions COME FROM mechanical discovery applied to the real modern skin
  * directory and the real production TSX tree, never from a curated list. A
@@ -28,6 +29,7 @@ import {
   type SourceFile,
   type TouchAdjudication,
 } from '..';
+import { EXPRESSIVE_A11Y_FLOORS } from '../../../../src/foundation/tokens/ts/presentation/expressive-profiles';
 
 const SKIN_DIR = resolve(
   process.cwd(),
@@ -377,6 +379,44 @@ describe('touch-target negative drills (each fails for a NAMED cause)', () => {
     const result = auditTouchTargetsMechanical([{ name: 'f.css', content: css }], []);
     expect(result.violations).toHaveLength(1);
     expect(result.violations[0]).toContain("[data-part='x']");
+  });
+
+  it('drill vi-b: a `2.75rem` literal is not a floor; the shared px constant is', () => {
+    const at = (value: string) =>
+      auditTouchTargetsMechanical(
+        [
+          {
+            name: 'f.css',
+            content: `.f--modern [data-part='x'] { cursor: pointer; }
+              @media (pointer: coarse) { .f--modern [data-part='x'] { min-block-size: ${value}; } }`,
+          },
+        ],
+        []
+      );
+    expect(at('2.75rem').violations).toHaveLength(1);
+    expect(at('2.75rem').violations[0]).toContain("[data-part='x']");
+    expect(at('144px').violations).toHaveLength(1);
+    expect(at(`${EXPRESSIVE_A11Y_FLOORS.touchTargetMinPx}px`).violations).toEqual([]);
+  });
+
+  it('drill iii-b: a part stamped through the partAttributes spread keeps its discriminator', () => {
+    const rows = discoverTsxTouchTargets([
+      {
+        name: 'src/components/structures/workspace/ghost/index.tsx',
+        content: [
+          "export const G = () => <>",
+          "<div {...partAttributes('row', state)} onClick={() => {}}>x</div>",
+          "<div {...partAttributes(part, state)} onClick={() => {}}>y</div>",
+          "<div {...partAttributes('lost', state)} data-part='won' onClick={() => {}}>z</div>",
+          '</>;',
+        ].join(''),
+      },
+    ]);
+    expect(rows.map((row) => row.discriminator).sort()).toEqual([
+      "[data-part='row']",
+      "[data-part='won']",
+      'dynamic',
+    ]);
   });
 
   it('drill vii: an adjudication whose target is gone fails as stale', () => {

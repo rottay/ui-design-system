@@ -1,12 +1,18 @@
 /**
- * The SINGLE touch-target authority (FASE F).
+ * The per-SELECTOR touch-target authority (FASE F): WHICH boxes are
+ * interactive, and does each carry a floor on its own row.
  *
- * There used to be two systems: a per-FILE census keyed on skin filenames
- * with its own exemption table, and this per-SELECTOR discovery. Two tables
- * meant a skin could be adjudicated in one and unadjudicated in the other,
- * and the per-file table could absolve a whole file because ONE control in it
- * was floored. The per-file system is retired; `adjudications/index.json` is the
- * only table and this module is the only mechanism.
+ * NOT the same authority as its peer `scripts/check/touch-target-floor/`,
+ * which measures WHAT THE FLOOR RESOLVES TO: one canonical channel, a physical
+ * pixel length, reaching every component channel after the tenant artifacts
+ * overlay it. This one is keyed on selectors, that one on channels; neither
+ * subsumes the other. Both read the pixel value from
+ * `EXPRESSIVE_A11Y_FLOORS.touchTargetMinPx`.
+ *
+ * There used to be two systems HERE: a per-FILE census keyed on skin filenames
+ * with its own exemption table, and this per-SELECTOR discovery. The per-file
+ * table could absolve a whole file because ONE control in it was floored. It
+ * is retired; `adjudications/index.json` is this owner's only table.
  *
  * WHAT IS A TARGET. Interactivity is discovered, never listed:
  *   CSS (PostCSS-real, never a regex over raw text)
@@ -17,7 +23,8 @@
  *                   `[tabindex]` — ARIA promotes an inert box to a control
  *     `css-pointer` the rule declares `cursor: pointer`, or the selector
  *                   carries `:focus-visible`
- *   TSX (TypeScript AST over the production tree)
+ *   TSX (TypeScript AST over the production tree; a part stamped through
+ *   `{...partAttributes('x', state)}` is read as `data-part='x'`)
  *     `tsx-native`  an intrinsic native interactive element
  *     `tsx-role`    any element carrying an interactive `role` literal
  *     `tsx-handler` an intrinsic NON-native element (div/span/li) given
@@ -26,7 +33,7 @@
  *
  * WHAT IS A FLOOR. A rule whose declarations size a box from a touch channel
  * (`--ds-*touch-target*` / `--ds-*touch-size*`) or the sanctioned physical
- * literals (44px / 2.75rem), VALID only when the rule is unconditional or
+ * literal (44px; never `2.75rem`, which is 41.25px at the fluid root), VALID only when the rule is unconditional or
  * inside a coarse-pointer / hover-none media query. A floor inside a width
  * media query proves nothing about a touch device.
  *
@@ -45,6 +52,8 @@
  * exists fails as stale. Debt is explicit (owner + reason) and decrease-only.
  */
 import { createRequire } from 'node:module';
+
+import { EXPRESSIVE_A11Y_FLOORS } from '../../../../src/foundation/tokens/ts/presentation/expressive-profiles';
 
 const require = createRequire(import.meta.url);
 // PostCSS is a package dependency; loaded lazily so importing types stays free.
@@ -76,7 +85,11 @@ export interface TouchDiscovery {
   readonly floors: readonly DiscoveredFloor[];
 }
 
-const FLOOR_VALUE = /--ds-[a-z-]*touch-(?:target|size)|44px|2\.75rem/;
+// The px literal is the constant `touch-target-floor` reads; `2.75rem` is not
+// a floor (41.25px under the 15px fluid root).
+const FLOOR_VALUE = new RegExp(
+  `--ds-[a-z-]*touch-(?:target|size)|(?<![\\d.])${EXPRESSIVE_A11Y_FLOORS.touchTargetMinPx}px\\b`
+);
 const FLOOR_PROP = /^(?:min-)?(?:block|inline)-size$|^(?:min-)?(?:height|width)$|^inset$/;
 
 /** Elements the user agent makes interactive without any author help. */
@@ -559,6 +572,23 @@ function staticAttributeValue(
   return null;
 }
 
+/** `{...partAttributes('x', state)}` stamps `data-part='x'`; any other spread stays unknown. */
+function spreadPartLiteral(
+  ts: typeof import('typescript'),
+  spread: import('typescript').JsxSpreadAttribute
+): string | null {
+  const call = spread.expression;
+  if (
+    !ts.isCallExpression(call) ||
+    !ts.isIdentifier(call.expression) ||
+    call.expression.text !== 'partAttributes'
+  ) {
+    return null;
+  }
+  const [part] = call.arguments;
+  return part && ts.isStringLiteralLike(part) ? part.text : null;
+}
+
 function expressionCanBeTabFocusable(
   ts: typeof import('typescript'),
   expression: import('typescript').Expression | undefined
@@ -622,6 +652,11 @@ export function discoverTsxTouchTargets(
         const attributes = new Map<string, string | null>();
         let tabFocusable = false;
         for (const property of node.attributes.properties) {
+          if (ts.isJsxSpreadAttribute(property)) {
+            const part = spreadPartLiteral(ts, property);
+            if (part !== null) attributes.set('data-part', part);
+            continue;
+          }
           if (!ts.isJsxAttribute(property)) continue;
           const name = property.name.getText(source);
           attributes.set(name, staticAttributeValue(ts, property, source));
