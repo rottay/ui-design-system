@@ -3176,7 +3176,9 @@
   --ds-calendar-bg: #ffffff;
   --ds-calendar-border: #e5e5e5;
   --ds-calendar-header-color: #171717;
-  --ds-calendar-day-color-other: #a3a3a3;
+  /* Supporting ink, not decoration: the adjacent-month numerals ride the
+     governed secondary rung so they stay subordinate AND clear 4.5:1. */
+  --ds-calendar-day-color-other: var(--ds-color-text-secondary);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      TIMELINE
@@ -15863,7 +15865,8 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 .ds-pattern-decision-panorama .ds-decision-panorama__fact {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--ds-spacing-3, 12px);
+  column-gap: var(--ds-spacing-3, 12px);
+  row-gap: 0;
   min-width: 0;
   padding-block: var(--ds-spacing-3, 12px);
   border-bottom: 1px solid color-mix(
@@ -15889,8 +15892,29 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   font-size: var(--ds-decision-panorama-fact-icon-size, var(--ds-font-size-sm));
 }
 
-.ds-pattern-decision-panorama .ds-decision-panorama__fact-copy {
+.ds-pattern-decision-panorama .ds-decision-panorama__fact > dt,
+.ds-pattern-decision-panorama .ds-decision-panorama__fact > dd {
+  grid-column: 1;
   min-width: 0;
+}
+
+.ds-pattern-decision-panorama
+  .ds-decision-panorama__fact[data-has-icon='true'] > dt,
+.ds-pattern-decision-panorama
+  .ds-decision-panorama__fact[data-has-icon='true'] > dd {
+  grid-column: 2;
+}
+
+/* The pair is always exactly <dt> + <dd>, and `-1` counts explicit row lines,
+   so the two rows are declared for the icon's span to resolve against. */
+.ds-pattern-decision-panorama .ds-decision-panorama__fact {
+  grid-template-rows: auto auto;
+}
+
+.ds-pattern-decision-panorama
+  .ds-decision-panorama__fact[data-has-icon='true']
+  > .ds-decision-panorama__fact-icon {
+  grid-row: 1 / -1;
 }
 
 .ds-pattern-decision-panorama .ds-decision-panorama__fact dt {
@@ -16579,9 +16603,36 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   border-radius: var(--ds-radius-md, 8px);
 }
 
-.ds-pattern-record-facts .ds-record-facts__heading-copy,
-.ds-pattern-record-facts .ds-record-facts__fact-copy {
+.ds-pattern-record-facts .ds-record-facts__heading-copy {
   min-width: 0;
+}
+
+.ds-pattern-record-facts .ds-record-facts__fact > dt,
+.ds-pattern-record-facts .ds-record-facts__fact > dd {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.ds-pattern-record-facts .ds-record-facts__fact[data-has-icon="true"] > dt,
+.ds-pattern-record-facts .ds-record-facts__fact[data-has-icon="true"] > dd {
+  grid-column: 2;
+}
+
+/* `-1` counts lines of the EXPLICIT row grid, so the rows the pair occupies
+   are declared: without them the icon claims row 1 and sizes it to its own
+   30px instead of sitting beside the whole stack. */
+.ds-pattern-record-facts .ds-record-facts__fact[data-rows="2"] {
+  grid-template-rows: auto auto;
+}
+
+.ds-pattern-record-facts .ds-record-facts__fact[data-rows="3"] {
+  grid-template-rows: auto auto auto;
+}
+
+.ds-pattern-record-facts
+  .ds-record-facts__fact[data-has-icon="true"]
+  > .ds-record-facts__fact-icon {
+  grid-row: 1 / -1;
 }
 
 .ds-pattern-record-facts .ds-record-facts__title,
@@ -16629,7 +16680,8 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-content: center;
-  gap: var(--ds-spacing-3, 12px);
+  column-gap: var(--ds-spacing-3, 12px);
+  row-gap: 0;
   min-width: 0;
   min-height: var(--ds-record-facts-item-height, 82px);
   margin: 0;
@@ -62565,30 +62617,30 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='primary'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-primary-solid-bg, var(--ds-color-primary)));
-  color: var(--ds-avatar-primary-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse)));
+  --ds-avatar-ink-resting: var(--ds-avatar-primary-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse)));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='secondary'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)));
-  color: var(--ds-avatar-secondary-ink, var(--ds-color-white));
+  --ds-avatar-ink-resting: var(--ds-avatar-secondary-ink, var(--ds-color-white));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='success'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-success-solid-bg, color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%)));
-  color: var(--ds-avatar-success-ink, var(--ds-color-white));
+  --ds-avatar-ink-resting: var(--ds-avatar-success-ink, var(--ds-color-white));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='warning'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-warning-solid-bg, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%)));
-  color: var(--ds-avatar-warning-ink, var(--ds-color-white));
+  --ds-avatar-ink-resting: var(--ds-avatar-warning-ink, var(--ds-color-white));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='error'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)));
-  color: var(--ds-avatar-error-ink, var(--ds-color-white));
+  --ds-avatar-ink-resting: var(--ds-avatar-error-ink, var(--ds-color-white));
 }
 
 /* ---- gradient is the only variant that diverges on ink, and the only one that
         lifts its initials off the fill ---- */
 .rottay-avatar.rottay-avatar--modern[data-variant='gradient'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, linear-gradient(to bottom right, var(--ds-color-primary), var(--ds-color-secondary)));
-  color: var(--ds-avatar-gradient-color);
+  --ds-avatar-ink-resting: var(--ds-avatar-gradient-color);
   text-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-neutral-900) 15%, transparent);
 }
 
@@ -62756,6 +62808,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
    values the family paints when no caller states one. */
 .rottay-avatar.rottay-avatar--modern {
   --ds-avatar-ink: initial;
+  --ds-avatar-ink-resting: initial;
   --ds-avatar-custom-bg: initial;
 }
 
@@ -62797,8 +62850,14 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   cursor: pointer;
 }
 
+/* The caller's ink outranks every variant step, so this doubled-attribute rule
+   is the family's single `color` on the initials. Its resting leg is the
+   variant's own governed ink (declared as `--ds-avatar-ink-resting` by the
+   variant rules): a bare `inherit` here painted body text on the solid fills,
+   which is how primary initials measured 3.22 on bithire and 1.02 on TMM. An
+   avatar with no variant still inherits, exactly as before. */
 .rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'][data-part='fallback'] {
-  color: var(--ds-avatar-ink, inherit);
+  color: var(--ds-avatar-ink, var(--ds-avatar-ink-resting, inherit));
 }
 
 }
@@ -63048,21 +63107,34 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   align-items: center;
   gap: var(--ds-spacing-2);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='weekday-row'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='weekday-row'] {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: var(--ds-spacing-1);
   margin-block-end: var(--ds-spacing-2);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] {
+/* The grid box stacks rows; each row box carries the column track and the
+   column gap, and the row rhythm is the former grid `gap` moved onto the
+   adjacent-row margin -- identical geometry, with the `row` the ARIA grid
+   grammar requires between the grid and its cells. */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] {
+  display: grid;
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='week-row'] {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: var(--ds-spacing-1);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='week-row'] + [data-part='week-row'] {
+  margin-block-start: var(--ds-spacing-1);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='month-row'] {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--ds-spacing-2);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='month-row'] + [data-part='month-row'] {
+  margin-block-start: var(--ds-spacing-2);
 }
 
 /* ---- cell layout (former `aspect-square flex flex-col items-center
@@ -63088,7 +63160,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] [data-part='cell-spacer'][data-outside-month='true'] {
   font-size: var(--ds-font-size-xs);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='cell'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] [data-part='cell'] {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -63099,19 +63171,19 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   cursor: pointer;
   font-size: var(--ds-font-size-sm);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'][data-fullscreen='false'] > [data-part='grid'] > [data-part='cell'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'][data-fullscreen='false'] > [data-part='grid'] [data-part='cell'] {
   font-size: var(--ds-font-size-xs);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] [data-part='cell'] {
   position: relative;
   padding: var(--ds-calendar-year-cell-padding, calc(1rem * var(--ds-density-effective-scale)));
   cursor: pointer;
   text-align: center;
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'][data-fullscreen='false'] > [data-part='grid'] > [data-part='cell'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'][data-fullscreen='false'] > [data-part='grid'] [data-part='cell'] {
   font-size: var(--ds-font-size-xs);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-disabled] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-disabled] {
   opacity: var(--ds-calendar-cell-disabled-opacity, 0.3);
   cursor: not-allowed;
 }
@@ -63119,7 +63191,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 /* ---- injected cell content (former `absolute bottom-0 start-0 end-0 text-xs
         truncate` / `mt-1 text-xs`): pinned to the day cell's block-end with
         ellipsis; static flow under the month name in year view. ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='cell'] > [data-part='cell-content'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] [data-part='cell'] > [data-part='cell-content'] {
   position: absolute;
   inset-block-end: 0;
   inset-inline: 0;
@@ -63128,7 +63200,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   white-space: nowrap;
   font-size: var(--ds-font-size-xs);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell'] > [data-part='cell-content'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] [data-part='cell'] > [data-part='cell-content'] {
   margin-block-start: var(--ds-spacing-1);
   font-size: var(--ds-font-size-xs);
 }
@@ -63199,7 +63271,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
         above (the engine's pinned utility string is an inert bridge at the
         same 22.75rem value). ---- */
 @media (pointer: coarse) {
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'] {
     min-block-size: 44px;
     min-inline-size: 44px;
   }
@@ -63228,7 +63300,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
         forced-colors block below re-maps this to a Highlight outline. ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible),
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:is([data-state~='focus-visible'], :focus-visible),
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='focus-visible'], :focus-visible) {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(--ds-calendar-focus-ring, var(--ds-focus-ring));
 }
 
@@ -63246,7 +63318,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
         the day numbers, uppercase with tracking, so the grid reads
         label/number instead of two competing text rows; ink stays the
         contrast-governed secondary channel). ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > div > [data-part='weekday-header'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] div > [data-part='weekday-header'] {
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-medium);
   letter-spacing: 0.04em;
@@ -63264,7 +63336,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
         paint owner) owns the state transition on the repainted channels;
         prefers-reduced-motion clamps it below. Resting background stays
         transparent by construction (the hover rule's contrast argument). ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'] {
   border-radius: var(--ds-calendar-cell-radius, var(--ds-radius-md));
   /* B4-04: every cell reserves the 1px border box the today-ring uses, so
      today/rest share identical inner geometry (no 1px content shift when the
@@ -63276,7 +63348,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 
 /* ---- cells (one rule set serves the month grid and the year grid: their paint
         is identical, only their geometry differs). ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-selected='true'] {
   background: var(--ds-color-primary);
   /* CONTRAST LAW (K4-B round 2, axe color-contrast): the old
      --ds-color-text-inverse ink is UNDECLARED in the bithire light context,
@@ -63296,15 +63368,15 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
         (with the active toggle), today-ring = Highlight edge, disabled keeps
         the opacity channel (GrayText below). ---- */
 @media (forced-colors: active) {
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true'],
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-selected='true'],
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-today='true']:not([data-selected='true']) {
     border-color: Highlight;
   }
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-disabled] {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-disabled] {
     /* The disabled channel in forced colors is GrayText ON TOP of the
        (skin-owned) opacity channel. */
     color: GrayText;
@@ -63317,12 +63389,12 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
      keyboard ring to a Highlight outline on every interactive part. */
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible),
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:is([data-state~='focus-visible'], :focus-visible),
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='focus-visible'], :focus-visible) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell']:is([data-state~='focus-visible'], :focus-visible) {
     outline: var(--ds-focus-ring-width, 2px) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset, 2px);
   }
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-today='true']:not([data-selected='true']) {
   border: 1px solid var(--ds-color-primary);
   /* B4-04: today is never a color-only signal -- the primary ring pairs with
      a semibold numeral (the grid's tabular figures keep columns aligned; the
@@ -63342,7 +63414,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
    direct child, cells are direct children carrying data-selected/data-today
    and data-disabled only when disabled. */
 @media (hover: hover) {
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='hovered'], :hover):not([data-selected='true']):not([data-disabled]) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell']:is([data-state~='hovered'], :hover):not([data-selected='true']):not([data-disabled]) {
     background: var(
       --ds-calendar-cell-hover,
       var(--ds-color-interactive-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, transparent))
@@ -63353,7 +63425,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 /* ---- W10: press feedback on cells -- the WO-ENG-04 active channel, one
         step deeper than hover (alpha-primary-10 vs the 6-8% hover tint), same
         gates. Background only, no transform (see the header press rule). ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='pressed'], :active):not([data-selected='true']):not([data-disabled]) {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell']:is([data-state~='pressed'], :active):not([data-selected='true']):not([data-disabled]) {
   background: var(
     --ds-calendar-cell-active,
     var(--ds-color-interactive-bg-active, color-mix(in srgb, var(--ds-color-primary) 14%, transparent))
@@ -63365,7 +63437,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 @media (prefers-reduced-motion: reduce) {
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'],
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'],
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'] {
     transition-duration: 0.01ms;
   }
 }
@@ -63375,7 +63447,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'],
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'] {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -121828,11 +121900,11 @@ html[lang]:lang(ar) {
   --ds-menu-arrow-opacity: 0.4;
   --ds-menu-arrow-size: var(--ds-spacing-4);
   --ds-menu-bg: color-mix(in srgb, var(--ds-card-bg, var(--ds-surface-card)) 97%, var(--ds-color-primary) 3%);
-  --ds-menu-border-color: var(--ds-sidebar-border, var(--ds-color-border-subtle));
+  --ds-menu-border-color: var(--ds-color-border-subtle);
   --ds-menu-border-width: var(--ds-edge-standard-width);
   --ds-menu-child-padding-inline: var(--ds-sidebar-item-indent, var(--ds-spacing-2));
   --ds-menu-collapsed-inline-size: var(--ds-spacing-16);
-  --ds-menu-color: var(--ds-sidebar-text, var(--ds-color-text-secondary));
+  --ds-menu-color: var(--ds-color-text-secondary);
   --ds-menu-current-rule-ink: var(--ds-color-primary);
   --ds-menu-current-rule-inset: var(--ds-spacing-3);
   --ds-menu-current-rule-size: var(--ds-border-width-2);
@@ -121851,7 +121923,7 @@ html[lang]:lang(ar) {
   --ds-menu-font-family: var(--ds-type-body-font-family);
   --ds-menu-gap: var(--ds-spacing-1);
   --ds-menu-group-bg: color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
-  --ds-menu-group-color: var(--ds-sidebar-text, var(--ds-color-text-secondary));
+  --ds-menu-group-color: var(--ds-color-text-secondary);
   --ds-menu-group-font-family: var(--ds-type-caption-font-family);
   --ds-menu-group-font-size: var(--ds-sidebar-group-font-size, var(--ds-type-caption-font-size));
   --ds-menu-group-font-weight: var(--ds-font-weight-semibold);
@@ -121872,15 +121944,15 @@ html[lang]:lang(ar) {
   --ds-menu-icon-scale: calc(1 + 0.04 * var(--ds-motion-intensity));
   --ds-menu-icon-size: var(--ds-icon-sm-size);
   --ds-menu-inline-indent: var(--ds-spacing-6);
-  --ds-menu-item-bg-active: var(--ds-sidebar-item-bg-active, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-card-bg, var(--ds-surface-card))));
-  --ds-menu-item-bg-hover: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card))));
-  --ds-menu-item-bg-pressed: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card))));
+  --ds-menu-item-bg-active: color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-card-bg, var(--ds-surface-card)));
+  --ds-menu-item-bg-hover: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card)));
+  --ds-menu-item-bg-pressed: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)));
   --ds-menu-item-border-active: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-subtle));
   --ds-menu-item-border-hover: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-menu-item-child-height: var(--ds-sidebar-item-child-height, var(--ds-spacing-10));
-  --ds-menu-item-color: var(--ds-sidebar-text, var(--ds-color-text-secondary));
-  --ds-menu-item-color-active: var(--ds-sidebar-item-color-active, var(--ds-color-primary));
-  --ds-menu-item-color-disabled: var(--ds-sidebar-text-muted, var(--ds-color-text-secondary));
+  --ds-menu-item-color: var(--ds-color-text-secondary);
+  --ds-menu-item-color-active: var(--ds-color-primary);
+  --ds-menu-item-color-disabled: var(--ds-color-text-secondary);
   --ds-menu-item-color-hover: var(--ds-color-text-primary);
   --ds-menu-item-danger-color: var(--ds-color-error);
   --ds-menu-item-font-family: var(--ds-type-body-font-family);
@@ -121914,7 +121986,7 @@ html[lang]:lang(ar) {
   --ds-menu-submenu-bg: var(--ds-color-bg-secondary);
   --ds-menu-submenu-indent: var(--ds-spacing-6);
   --ds-menu-touch-target-min: var(--ds-touch-target-min);
-  --ds-menu-trigger-open-bg: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card))));
+  --ds-menu-trigger-open-bg: color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card)));
   --ds-menu-trigger-open-border: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-menu-trigger-open-color: var(--ds-color-text-primary);
   --ds-mobile-header-bar-block-size: 56px;
@@ -124944,11 +125016,11 @@ html[lang]:lang(ar) {
   --ds-menu-arrow-opacity: 0.4;
   --ds-menu-arrow-size: var(--ds-spacing-4);
   --ds-menu-bg: color-mix(in srgb, var(--ds-card-bg, var(--ds-surface-card)) 97%, var(--ds-color-primary) 3%);
-  --ds-menu-border-color: var(--ds-sidebar-border, var(--ds-color-border-subtle));
+  --ds-menu-border-color: var(--ds-color-border-subtle);
   --ds-menu-border-width: var(--ds-edge-standard-width);
   --ds-menu-child-padding-inline: var(--ds-sidebar-item-indent, var(--ds-spacing-2));
   --ds-menu-collapsed-inline-size: var(--ds-spacing-16);
-  --ds-menu-color: var(--ds-sidebar-text, var(--ds-color-text-secondary));
+  --ds-menu-color: var(--ds-color-text-secondary);
   --ds-menu-current-rule-ink: var(--ds-color-primary);
   --ds-menu-current-rule-inset: var(--ds-spacing-3);
   --ds-menu-current-rule-size: var(--ds-border-width-2);
@@ -124967,7 +125039,7 @@ html[lang]:lang(ar) {
   --ds-menu-font-family: var(--ds-type-body-font-family);
   --ds-menu-gap: var(--ds-spacing-1);
   --ds-menu-group-bg: color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
-  --ds-menu-group-color: var(--ds-sidebar-text, var(--ds-color-text-secondary));
+  --ds-menu-group-color: var(--ds-color-text-secondary);
   --ds-menu-group-font-family: var(--ds-type-caption-font-family);
   --ds-menu-group-font-size: var(--ds-sidebar-group-font-size, var(--ds-type-caption-font-size));
   --ds-menu-group-font-weight: var(--ds-font-weight-semibold);
@@ -124988,15 +125060,15 @@ html[lang]:lang(ar) {
   --ds-menu-icon-scale: calc(1 + 0.04 * var(--ds-motion-intensity));
   --ds-menu-icon-size: var(--ds-icon-sm-size);
   --ds-menu-inline-indent: var(--ds-spacing-6);
-  --ds-menu-item-bg-active: var(--ds-sidebar-item-bg-active, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-card-bg, var(--ds-surface-card))));
-  --ds-menu-item-bg-hover: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card))));
-  --ds-menu-item-bg-pressed: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card))));
+  --ds-menu-item-bg-active: color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-card-bg, var(--ds-surface-card)));
+  --ds-menu-item-bg-hover: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card)));
+  --ds-menu-item-bg-pressed: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)));
   --ds-menu-item-border-active: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-subtle));
   --ds-menu-item-border-hover: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-menu-item-child-height: var(--ds-sidebar-item-child-height, var(--ds-spacing-10));
-  --ds-menu-item-color: var(--ds-sidebar-text, var(--ds-color-text-secondary));
-  --ds-menu-item-color-active: var(--ds-sidebar-item-color-active, var(--ds-color-primary));
-  --ds-menu-item-color-disabled: var(--ds-sidebar-text-muted, var(--ds-color-text-secondary));
+  --ds-menu-item-color: var(--ds-color-text-secondary);
+  --ds-menu-item-color-active: var(--ds-color-primary);
+  --ds-menu-item-color-disabled: var(--ds-color-text-secondary);
   --ds-menu-item-color-hover: var(--ds-color-text-primary);
   --ds-menu-item-danger-color: var(--ds-color-error);
   --ds-menu-item-font-family: var(--ds-type-body-font-family);
@@ -125030,7 +125102,7 @@ html[lang]:lang(ar) {
   --ds-menu-submenu-bg: var(--ds-color-bg-secondary);
   --ds-menu-submenu-indent: var(--ds-spacing-6);
   --ds-menu-touch-target-min: var(--ds-touch-target-min);
-  --ds-menu-trigger-open-bg: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card))));
+  --ds-menu-trigger-open-bg: color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card)));
   --ds-menu-trigger-open-border: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-menu-trigger-open-color: var(--ds-color-text-primary);
   --ds-mobile-header-bar-block-size: 56px;
@@ -128018,11 +128090,11 @@ html[lang]:lang(ar) {
   --ds-menu-arrow-opacity: 0.4;
   --ds-menu-arrow-size: var(--ds-spacing-4);
   --ds-menu-bg: color-mix(in srgb, var(--ds-card-bg, var(--ds-surface-card)) 97%, var(--ds-color-primary) 3%);
-  --ds-menu-border-color: var(--ds-sidebar-border, var(--ds-color-border-subtle));
+  --ds-menu-border-color: var(--ds-color-border-subtle);
   --ds-menu-border-width: var(--ds-edge-standard-width);
   --ds-menu-child-padding-inline: var(--ds-sidebar-item-indent, var(--ds-spacing-2));
   --ds-menu-collapsed-inline-size: var(--ds-spacing-16);
-  --ds-menu-color: var(--ds-sidebar-text, var(--ds-color-text-secondary));
+  --ds-menu-color: var(--ds-color-text-secondary);
   --ds-menu-current-rule-ink: var(--ds-color-primary);
   --ds-menu-current-rule-inset: var(--ds-spacing-3);
   --ds-menu-current-rule-size: var(--ds-border-width-2);
@@ -128041,7 +128113,7 @@ html[lang]:lang(ar) {
   --ds-menu-font-family: var(--ds-type-body-font-family);
   --ds-menu-gap: var(--ds-spacing-1);
   --ds-menu-group-bg: color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
-  --ds-menu-group-color: var(--ds-sidebar-text, var(--ds-color-text-secondary));
+  --ds-menu-group-color: var(--ds-color-text-secondary);
   --ds-menu-group-font-family: var(--ds-type-caption-font-family);
   --ds-menu-group-font-size: var(--ds-sidebar-group-font-size, var(--ds-type-caption-font-size));
   --ds-menu-group-font-weight: var(--ds-font-weight-semibold);
@@ -128062,15 +128134,15 @@ html[lang]:lang(ar) {
   --ds-menu-icon-scale: calc(1 + 0.04 * var(--ds-motion-intensity));
   --ds-menu-icon-size: var(--ds-icon-sm-size);
   --ds-menu-inline-indent: var(--ds-spacing-6);
-  --ds-menu-item-bg-active: var(--ds-sidebar-item-bg-active, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-card-bg, var(--ds-surface-card))));
-  --ds-menu-item-bg-hover: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card))));
-  --ds-menu-item-bg-pressed: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card))));
+  --ds-menu-item-bg-active: color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-card-bg, var(--ds-surface-card)));
+  --ds-menu-item-bg-hover: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card)));
+  --ds-menu-item-bg-pressed: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)));
   --ds-menu-item-border-active: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-subtle));
   --ds-menu-item-border-hover: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-menu-item-child-height: var(--ds-sidebar-item-child-height, var(--ds-spacing-10));
-  --ds-menu-item-color: var(--ds-sidebar-text, var(--ds-color-text-secondary));
-  --ds-menu-item-color-active: var(--ds-sidebar-item-color-active, var(--ds-color-primary));
-  --ds-menu-item-color-disabled: var(--ds-sidebar-text-muted, var(--ds-color-text-secondary));
+  --ds-menu-item-color: var(--ds-color-text-secondary);
+  --ds-menu-item-color-active: var(--ds-color-primary);
+  --ds-menu-item-color-disabled: var(--ds-color-text-secondary);
   --ds-menu-item-color-hover: var(--ds-color-text-primary);
   --ds-menu-item-danger-color: var(--ds-color-error);
   --ds-menu-item-font-family: var(--ds-type-body-font-family);
@@ -128104,7 +128176,7 @@ html[lang]:lang(ar) {
   --ds-menu-submenu-bg: var(--ds-color-bg-secondary);
   --ds-menu-submenu-indent: var(--ds-spacing-6);
   --ds-menu-touch-target-min: var(--ds-touch-target-min);
-  --ds-menu-trigger-open-bg: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card))));
+  --ds-menu-trigger-open-bg: color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card)));
   --ds-menu-trigger-open-border: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-menu-trigger-open-color: var(--ds-color-text-primary);
   --ds-mobile-header-bar-block-size: 56px;

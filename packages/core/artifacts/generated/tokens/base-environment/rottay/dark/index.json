@@ -5,7 +5,7 @@
   "vertical": "rottay",
   "mode": "dark",
   "channelCount": 4260,
-  "digest": "671055e8d7744ab6ea7e404b70a1f1216bad29f30db7db4cf8cdbf253df3c0ee",
+  "digest": "186ee204e0121e1a30a8a9ef885a9974fa1d3305f59585b7f5e5c73b6f55d14b",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -616,7 +616,7 @@
     "--ds-button-xs-radius": "var(\n    --ds-radius-button,\n    var(--ds-button-xs-border-radius)\n  )",
     "--ds-calendar-bg": "#ffffff",
     "--ds-calendar-border": "#e5e5e5",
-    "--ds-calendar-day-color-other": "#a3a3a3",
+    "--ds-calendar-day-color-other": "var(--ds-color-text-secondary)",
     "--ds-calendar-header-color": "#171717",
     "--ds-card-actions-gap": "var(--ds-spacing-2)",
     "--ds-card-actions-margin-top": "var(--ds-spacing-4)",

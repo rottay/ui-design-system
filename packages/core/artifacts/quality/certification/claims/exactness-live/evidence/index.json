@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "3b87c0743a98fd75520517c2f147afc783fb98a260d891bf967d122e5efbb31a",
+    "authorityDigest": "1d91eb6ead68664d74c1ed33b0a5938a4c5d6d79dc2a471243a837fe84a4e8c4",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "0dd195f60d32a0b1801919797e88ae0ce1475799",
+    "documentationRevision": "cbd580f3ef2b599dfa086919b0d6332f604f80dd",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -187,8 +187,8 @@
           "data-part-corpus",
           "documentation-seal"
         ],
-        "bytes": 178782,
-        "sha256": "d7191791cafa1c95577c7fa611904e3eb168699bb738f715c382a1c079823419"
+        "bytes": 179175,
+        "sha256": "33c2227b770391d426b48b016d9b16dc1aea7be6bc9246343096d52bc6487cb4"
       },
       {
         "path": "docs-engineering/engineering/design-system/runtime/tenancy/README.md",
@@ -222,8 +222,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 25435,
-        "sha256": "bad124e0b2bdb10f3eb625d3df0191db86711ca6b088835a2c987b3852bb4a8e"
+        "bytes": 25539,
+        "sha256": "d84afbd416f87da3cd6c6d938aaffe946abf6c407580841d4957166030f2ef44"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5913529,
-        "sha256": "3c860249c7c3ade3db7da4a56fcc2443c67b08e9c5f7b5c6cf2f888fe5b12962"
+        "bytes": 5921713,
+        "sha256": "7aa1ff636183e4066143105eab27f5ffadaf30c307cf4d1119783aaefd313019"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/modern/index.css",
@@ -271,24 +271,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5471485,
-        "sha256": "892f0aae2e116741b5655b0b574b969377bf1eb9bf0a851b1b785ab11e74a940"
+        "bytes": 5480265,
+        "sha256": "aea83936276e82b483dec96caa3d3b43af976bf5051da15c6098a3ed6d555ccb"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5462516,
-        "sha256": "e01752852b24068d53e3c309df81f3da02a3a172845f98db73c3bb8f69ef9469"
+        "bytes": 5471296,
+        "sha256": "f293c3aefefc99272af5e0c0aab3472a73c357784e353f53d1972cc24241fe69"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5461774,
-        "sha256": "fbd8f56679bdd5408b047de44cb5e164811c61f6267dd9431eda0488971c8d7e"
+        "bytes": 5470554,
+        "sha256": "f59038e8b0a61e916d4f8e409c363439dd7ece73a7cf16af4cad06e273b93711"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -324,7 +324,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "c33580992a68d11a9c0b5b64e0f851d4d59ca949ec741f36d95231a898b07db4"
+        "sha256": "7308614d8bb418a14ef630ff8942f4bb1114fe76b14034c49f9eef79358dc789"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
@@ -1772,8 +1772,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 3847,
-        "sha256": "48e6a036baecd0419076225c4121e618d243b07fbcaf5043ebf6ed9e1200db13"
+        "bytes": 4141,
+        "sha256": "fc1b7493d41b46251f72b1fffa54f196694a0d2684a94d99ee001dceeef9d7f2"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/decision-panorama/engines/modern/index.tsx",
@@ -1812,6 +1812,14 @@
         ],
         "bytes": 2757,
         "sha256": "ebf4a4f752ef657bd5857234afbe4ab5e0f340482d173dcec749e2f094388212"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/patterns/data/decision-panorama/tests/DecisionPanorama.description-list-semantics.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5215,
+        "sha256": "9c4b9b6144d6e83a605c9ab85ac13e9fe4a4592d018710ae08efe85118cd7616"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/detail-panel/contracts/index.ts",
@@ -2325,8 +2333,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 4286,
-        "sha256": "e374feed13c84ce61e27159ea5d723d864ee74f9325d656280f570191e694d05"
+        "bytes": 4676,
+        "sha256": "8e12b3bbfb1ba3b2fa7c60c7ffb0cad35857db66621f8aa7ac648d4d603f6181"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/record-facts/engines/modern/index.tsx",
@@ -2365,6 +2373,14 @@
         ],
         "bytes": 2644,
         "sha256": "363d55a0c7ef1552e1e4418757cfe80f2dc6bdc9bc288babc6794e68c94bf1fe"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/patterns/data/record-facts/tests/RecordFacts.description-list-semantics.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 6894,
+        "sha256": "34ee321dac56220a4bb8133389496f09206e96dbd38abeffdff6ffbec8d5ca65"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/record-facts/tests/RecordFacts.modern-remediation.test.ts",
@@ -6444,8 +6460,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 15058,
-        "sha256": "640000d8b8ee3eb46c689905731fe18366eb4a7d23ca55f25b61c01d2a125ace"
+        "bytes": 15061,
+        "sha256": "bc2e52a26923b2a26431194084eb80f31c8d8325947408482cc2c2fa2eccb94d"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/visualization/kanban-board/tests/PatternKanbanBoard.engine-advanced.test.tsx",
@@ -7142,8 +7158,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 6334,
-        "sha256": "9fa6a521354415aba8e0e4f6beaef9d3c673d3490872cd1faa90f443e3a74847"
+        "bytes": 6330,
+        "sha256": "34c8afb902ca96ebc6f047b7962d27bdfb012cbb5c4c43a2aae5a2647f3a8777"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/avatar/tests/Avatar.compounds.test.tsx",
@@ -7158,8 +7174,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 6474,
-        "sha256": "647d2526b6d4c5a5a3e4dc00b606eac961342cacd4b146015d6f3b415d8b31b7"
+        "bytes": 7867,
+        "sha256": "94a691be59b02595c15ae4ce96799947d24cb828024e3b901a3037533ddf6310"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/avatar/tests/Avatar.modern-engine-advanced.test.tsx",
@@ -7392,8 +7408,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 24420,
-        "sha256": "28b4f8d5ddf95de3817b2f8bbf0932149c1a06b1ccaa5860e5b120639a6e1e08"
+        "bytes": 26352,
+        "sha256": "9e4239c50b7d8585de792dc0614fe7d89628a7fcdf7920fd22c4478c523e60ba"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx",
@@ -7414,6 +7430,14 @@
         ],
         "bytes": 1105,
         "sha256": "8e293f389ae7eb47abeb3b73e3bb49c30b3a4f9d3f5ccf4efd2bd261276412d3"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/display/calendar/tests/Calendar.aria-grid-grammar.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 8353,
+        "sha256": "166a9d50b2e60563dde403096c4a96bf9da4f7d7355aa7e511b598290d8e44c1"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/calendar/tests/Calendar.classic-engine.test.tsx",
@@ -7444,16 +7468,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 20066,
-        "sha256": "92d8714530d90a36c2b9d40ccf25b54eb7934ac15483cf08999babf7e187753f"
+        "bytes": 20189,
+        "sha256": "e1cb00da29374bb21eb2fd998f37454789d48e2d4feb3f98a3ce1c025c2b4bbd"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/calendar/tests/Calendar.premium-ground.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2696,
-        "sha256": "2d7c602a80de9dc2572d098cb387549f68ce4727d67140be74599b70f32ce7b5"
+        "bytes": 2694,
+        "sha256": "b91dccc3761de1ef2e82ed7e7110a7cbdcf89643384b421e3430ec567419c77f"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/calendar/tests/Calendar.roving-stop.test.tsx",
@@ -7890,8 +7914,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 16284,
-        "sha256": "98334e669ff6cb38940a9877762af9df98226d10ff8fdc0fe02035bdaac2b9a0"
+        "bytes": 16472,
+        "sha256": "1957d59774a9e6d3a0c426b1c7637851fd6787eb94449dc69d6bd7ac4373e729"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/code-block/runtime/highlighter/index.ts",
@@ -7924,8 +7948,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 13050,
-        "sha256": "b71aca9497628b54b7d3c7502d7f59f1616623edccc6bfb33d82ce12b4ab99e1"
+        "bytes": 13972,
+        "sha256": "862ca493759f6cd67b4e8ce7028749f867edbcafcd215fda54b2d365644ea9d1"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/code-block/tests/CodeBlock.test.tsx",
@@ -8018,8 +8042,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 12006,
-        "sha256": "ed7bb1e9e4e2e5d3162b498cc6ecc8aa2969c6f253aaefb9ea84b725c0ab1b3f"
+        "bytes": 11991,
+        "sha256": "9163c836f1ce6983319c3bbe25ecaecefbc446d220906c458d3ea70908ad6d12"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx",
@@ -8042,12 +8066,20 @@
         "sha256": "8e7016b59427eb592b9f205a109c5265e6a1256296be73919a97d6e59275988d"
       },
       {
+        "path": "ui-design-system/packages/core/src/components/primitives/display/descriptions/tests/Descriptions.description-list-semantics.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5415,
+        "sha256": "479ded07cbe3837ffe559b1d54e7346278ff3d3157715198d4b24f66811f8ed7"
+      },
+      {
         "path": "ui-design-system/packages/core/src/components/primitives/display/descriptions/tests/Descriptions.modern-engine-advanced.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 6939,
-        "sha256": "817796e37bcc88074bebab1895263bc765b7fe25568983b8d1ce9e521bd3c9e9"
+        "bytes": 7223,
+        "sha256": "c3d8a90f9cb26a71a0631a6c2ab1d7380dcfa5602e9da747e66c866112aff1b5"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/descriptions/tests/Descriptions.modern-paint-ownership.test.tsx",
@@ -8078,8 +8110,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 2924,
-        "sha256": "685213864e5ff2053f49c285fceecc52ad8a34d6c41c3388bef1a2a77d8cbab2"
+        "bytes": 3079,
+        "sha256": "0c3ab25d2170159532d6b09b693bcdbe4b85c3191793390f93ea242cfbfa07f3"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/descriptions/tests/Descriptions.test.tsx",
@@ -11253,8 +11285,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 42990,
-        "sha256": "bcbfd5519e7e48bb055c25aa76cd009de638a7a325380c403b2b83977e833702"
+        "bytes": 43013,
+        "sha256": "3521cc62c95fea822924b3db1adc7a4a3ccfd3159f02976a65dabf92847aed94"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/feedback/skeleton/runtime/anatomy-renderer/tests/host-busy.test.tsx",
@@ -17773,8 +17805,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 11786,
-        "sha256": "ebd99c85137f99808c0608d6acb79b72056e3fcde05e133883f1f5323348c98e"
+        "bytes": 11091,
+        "sha256": "2e3c083a83eea4e52f339a3044eff8c22a4a8710b61cee4651278338c2f9c358"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/navigation/menu/tests/Menu.integration.test.tsx",
@@ -26262,24 +26294,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 229538,
-        "sha256": "d0788b5bf0ea0e6097a1d438cac038b0275d3a27725c62ef4c498387d68447ff"
+        "bytes": 229240,
+        "sha256": "12af4d6c9ac7142a816e551ea34df468e0aa6d74c20305c214b9a1e25615eb28"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 220605,
-        "sha256": "e0c565942eb2fe84d1ce0214d3694068e63f13bbab01878846d64b61534ff960"
+        "bytes": 220307,
+        "sha256": "4ed0ac8afca8ffd66a3134a30ab8f26b4936516aea9b377d9c95fc571dbbfd59"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 220616,
-        "sha256": "84c523019829addec03ab5edc21adaee8467518426de9f79dd2d0a8961f1ef20"
+        "bytes": 220318,
+        "sha256": "bc3fd5fa9d43af7346ef2ef87bb782b3ad10cfb16fadec0da5a5f924e5df8b0d"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/entrypoints/base/index.css",
@@ -26430,8 +26462,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 6527,
-        "sha256": "873bdaa4d47c52623393812a9963a45a5ecb1228a6a2bcd6cc5c3a279c3c27e2"
+        "bytes": 6714,
+        "sha256": "706481709b3a00affa493361d0e637c27d0dc0c9528b4e3960a4974490b1d7b8"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/base/tests/button-silhouette-reach.test.ts",
@@ -26614,8 +26646,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 130427,
-        "sha256": "9323153cd2d9c0f8ab5afc347b35524394cc00541edf44659021a6508c1d8717"
+        "bytes": 130598,
+        "sha256": "67c686495f5e53f9279f90ea8204e1d35827981bed14eafba196c373d1223ac9"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/themes/tests/default-theme-neutral-derivation.test.ts",
@@ -27787,8 +27819,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 15955,
-        "sha256": "e101a45b134d0fae26ca44b226194079ce38b7cf20da9cb01bc817c826f6436e"
+        "bytes": 16650,
+        "sha256": "5a821dbe9fce53e14e8838a0ecd006ef2a4a05f574469edb5509e22bcd8fa619"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/detail-form-surface/index.css",
@@ -28317,8 +28349,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 14183,
-        "sha256": "8a600734e7b2b62b2f259b55cefa697938f63b647dc6daa99321a032246c03a5"
+        "bytes": 15013,
+        "sha256": "83a480712d3b0b0f501cbb00ae7beb7a66d0f4253f41bca908d952032ee529c5"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/record-workbench/index.css",
@@ -29033,8 +29065,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 21387,
-        "sha256": "1ae5b130c566fa7d1340c0823db5fcc7ddf2c419142b57ff764e87417fff8fb2"
+        "bytes": 22012,
+        "sha256": "cda4d6b9a01b1835059e6fac2a87931f072e8c37d33cb9463d211d383304c867"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/back-top/index.css",
@@ -29093,8 +29125,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 27313,
-        "sha256": "fe2e65704ca64d9365aaef0d5e7e1a19a0516cf8d271f7ee5ab1539dbc80586a"
+        "bytes": 28093,
+        "sha256": "6dc113e4f9c9f89051c5a9e8233f7e85e72b8ca3ec72a47bc7b54137aa99ac8b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -37129,8 +37161,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 8536,
-        "sha256": "4c88edcd9828b89691b997c280d4cf4195231aa69970c7d965c99d2d63e52085"
+        "bytes": 8311,
+        "sha256": "d27ab522108f95bc0f98d3ef2c981def74a2bd3d950bd614d0f5158f9bce9585"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/rustic/index.ts",
@@ -38601,8 +38633,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 13273,
-        "sha256": "24a8f462c5ea4842df33fbc202203f0afca76f121eab872584ed1d8763fe1896"
+        "bytes": 13009,
+        "sha256": "41fd7f631cb0ee05148ac1c5aca1461f42961405ca4000df0eeffc0550531c86"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/tests/index.test.ts",
@@ -44182,8 +44214,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 5300,
-        "sha256": "dc9c217f85f3abd7f832836af5b9fcea78a1f2cf8c1022464d135dda385601f0"
+        "bytes": 6112,
+        "sha256": "cff276dce545959b9cbe1ab4ea19d99fe4327aaf1b10bdc9a025b5acd2847b19"
       },
       {
         "path": "ui-design-system/packages/showroom/src/app/probe/ds-reference/ground/client-only.tsx",
@@ -44353,8 +44385,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 7351,
-        "sha256": "a7d246bfec58b8b04a7f056dc56d09e4b9ef064bcbb8e8dcd1b0055a18ad9071"
+        "bytes": 8206,
+        "sha256": "33ac63c4b25d07f99282a60c7d95cf8a291cbeaa16c89cb9a4ac35841dad1a7b"
       },
       {
         "path": "ui-design-system/packages/showroom/src/app/probe/ds-reference/sections/inputs-material/index.tsx",
@@ -44362,8 +44394,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 1609,
-        "sha256": "c9f650e6848ee976f510f7abbc805277b68694a68e157bd295f43b58ae24d858"
+        "bytes": 1647,
+        "sha256": "99380ff0b2cd3eb3f010756604c2840c03ba2a5c973fa0873e3619b03e389e51"
       },
       {
         "path": "ui-design-system/packages/showroom/src/app/probe/ds-reference/sections/microbatch-material/index.tsx",
@@ -44434,8 +44466,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 74022,
-        "sha256": "972521edb66d8a4c404d66079db848a8b0d440d2833625ab960af677cff06357"
+        "bytes": 74021,
+        "sha256": "ca4b34ac5d084ad8d5cb0fc07463d4c889edd253bb8bf40a499d0e5ee48eaa1e"
       },
       {
         "path": "ui-design-system/packages/showroom/src/app/probe/ds-reference/sections/primitive-anatomy/index.tsx",
@@ -44452,8 +44484,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 41710,
-        "sha256": "51f0bc72c029b3510dff280a8a2fb23028ac9087d52f19c24ebfff60ce88d941"
+        "bytes": 41709,
+        "sha256": "48f97320b595f08b71a4be4e464b42dd6ec9dbdd9c075e98377dc363eab3f81d"
       },
       {
         "path": "ui-design-system/packages/showroom/src/app/probe/ds-reference/sections/primitive-interactions/index.tsx",
@@ -46298,7 +46330,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "3b87c0743a98fd75520517c2f147afc783fb98a260d891bf967d122e5efbb31a"
+    "digest": "1d91eb6ead68664d74c1ed33b0a5938a4c5d6d79dc2a471243a837fe84a4e8c4"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3351 counters; 3256 completed zeros locked exactly; 85 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -47872,7 +47904,7 @@
     ],
     "documentation": {
       "path": "docs-engineering/engineering/design-system/runtime/skins/data-part-contracts/README.md",
-      "sha256": "d7191791cafa1c95577c7fa611904e3eb168699bb738f715c382a1c079823419"
+      "sha256": "33c2227b770391d426b48b016d9b16dc1aea7be6bc9246343096d52bc6487cb4"
     },
     "documentedEntries": 541,
     "inspectedSourceFiles": 403,
@@ -51295,83 +51327,83 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 176
+          "line": 189
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 187
+          "line": 200
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 190
+          "line": 203
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 196
+          "line": 209
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 199
+          "line": 212
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 207
+          "line": 220
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 216
+          "line": 229
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 287
+          "line": 300
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 314
+          "line": 327
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 352
+          "line": 365
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 364
+          "line": 377
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 384
+          "line": 397
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 389
+          "line": 402
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 392
+          "line": 405
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 403
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 410
+          "line": 423
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 430
+          "line": 443
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 441
+          "line": 454
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 451
+          "line": 464
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 462
+          "line": 475
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css",
@@ -59046,91 +59078,103 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 142
+          "line": 146
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 147
+          "line": 149
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 176
+          "line": 154
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 187
+          "line": 157
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 190
+          "line": 162
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 196
+          "line": 189
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 199
+          "line": 200
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 207
+          "line": 203
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 216
+          "line": 209
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 287
+          "line": 212
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 314
+          "line": 220
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 352
+          "line": 229
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 364
+          "line": 300
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 384
+          "line": 327
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 389
+          "line": 365
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 392
+          "line": 377
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 403
+          "line": 397
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 410
+          "line": 402
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 430
+          "line": 405
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 441
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 451
+          "line": 423
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 462
+          "line": 443
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
+          "line": 454
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
+          "line": 464
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
+          "line": 475
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css",
@@ -60268,71 +60312,71 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 224
+          "line": 237
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 235
+          "line": 248
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 235
+          "line": 248
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 256
+          "line": 269
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 260
+          "line": 273
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 304
+          "line": 317
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 304
+          "line": 317
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 314
+          "line": 327
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 314
+          "line": 327
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 325
+          "line": 338
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 325
+          "line": 338
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 384
+          "line": 397
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 403
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 403
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 451
+          "line": 464
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 451
+          "line": 464
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 462
+          "line": 475
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -65098,31 +65142,31 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 235
+          "line": 248
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 304
+          "line": 317
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 314
+          "line": 327
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 325
+          "line": 338
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 403
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 451
+          "line": 464
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 462
+          "line": 475
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css",
@@ -70152,11 +70196,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
-          "line": 378
+          "line": 400
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
-          "line": 425
+          "line": 447
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/detail-form-surface/index.css",
@@ -73444,71 +73488,79 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 142
+          "line": 146
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 147
+          "line": 149
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 158
+          "line": 154
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 161
+          "line": 157
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 173
+          "line": 162
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 176
+          "line": 171
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 187
+          "line": 174
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 190
+          "line": 186
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 196
+          "line": 189
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 199
+          "line": 200
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 207
+          "line": 203
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 216
+          "line": 209
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 224
+          "line": 212
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 235
+          "line": 220
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 235
+          "line": 229
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 256
+          "line": 237
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 260
+          "line": 248
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
+          "line": 248
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
+          "line": 269
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
@@ -73516,115 +73568,119 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 278
+          "line": 286
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 287
+          "line": 291
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 304
+          "line": 300
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 304
+          "line": 317
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 314
+          "line": 317
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 314
+          "line": 327
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 314
+          "line": 327
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 325
+          "line": 327
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 325
+          "line": 338
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 334
+          "line": 338
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 352
+          "line": 347
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 364
+          "line": 365
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 384
+          "line": 377
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 384
+          "line": 397
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 389
+          "line": 397
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 392
+          "line": 402
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 398
+          "line": 405
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 403
+          "line": 411
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 403
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 403
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 410
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 430
+          "line": 423
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 441
+          "line": 443
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 451
+          "line": 454
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 451
+          "line": 464
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 451
+          "line": 464
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 462
+          "line": 464
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 462
+          "line": 475
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
+          "line": 475
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -95502,7 +95558,7 @@
       "weekday-header": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-          "line": 334
+          "line": 347
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css",
@@ -96501,7 +96557,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "FieldFiltersPanel",
@@ -96621,7 +96677,7 @@
           }
         ],
         "skinSelectorCorpusKey": "grid",
-        "skinSelectorCount": 96
+        "skinSelectorCount": 99
       },
       {
         "section": "FieldFiltersPanel",
@@ -96943,7 +96999,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "FilterPanel",
@@ -97676,7 +97732,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "SelectionPreviewRail",
@@ -98336,7 +98392,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "DetailPanel",
@@ -99024,7 +99080,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "DataTable",
@@ -99087,7 +99143,7 @@
           {
             "part": "skeleton-row",
             "path": "ui-design-system/packages/core/src/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.tsx",
-            "line": 1220,
+            "line": 1221,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -99112,7 +99168,7 @@
           {
             "part": "skeleton-cell",
             "path": "ui-design-system/packages/core/src/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.tsx",
-            "line": 1229,
+            "line": 1230,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -100747,7 +100803,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "FormField",
@@ -100947,7 +101003,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Textarea",
@@ -101030,7 +101086,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "TagInput",
@@ -101221,7 +101277,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "InputNumber",
@@ -101478,7 +101534,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "PasswordInput",
@@ -101683,7 +101739,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Switch",
@@ -101844,7 +101900,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Toggle",
@@ -102108,7 +102164,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Radio",
@@ -102322,7 +102378,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Radio",
@@ -102501,7 +102557,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Checkbox",
@@ -102702,7 +102758,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Checkbox",
@@ -102831,7 +102887,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Slider",
@@ -103104,7 +103160,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "OTPInput",
@@ -103226,7 +103282,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Form",
@@ -103633,7 +103689,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Select",
@@ -104794,7 +104850,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "AutoComplete",
@@ -105077,7 +105133,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Mentions",
@@ -105263,7 +105319,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "TreeSelect",
@@ -105972,7 +106028,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Cascader",
@@ -106632,7 +106688,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Transfer",
@@ -107250,7 +107306,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Upload",
@@ -107976,7 +108032,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "DatePicker",
@@ -108716,7 +108772,7 @@
           }
         ],
         "skinSelectorCorpusKey": "grid",
-        "skinSelectorCount": 96
+        "skinSelectorCount": 99
       },
       {
         "section": "DatePicker",
@@ -109064,7 +109120,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "TimePicker",
@@ -109504,7 +109560,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "ColorPicker",
@@ -110021,7 +110077,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Input",
@@ -110409,7 +110465,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Input",
@@ -110530,7 +110586,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Input",
@@ -111028,7 +111084,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Skeleton",
@@ -111101,7 +111157,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.tsx",
-            "line": 1244,
+            "line": 1245,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -111113,7 +111169,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Skeleton",
@@ -111269,7 +111325,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Alert",
@@ -111502,7 +111558,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Progress",
@@ -111785,7 +111841,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Spinner",
@@ -111874,7 +111930,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Rate",
@@ -111952,7 +112008,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Modal",
@@ -112779,7 +112835,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Toast",
@@ -112968,7 +113024,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Toast",
@@ -113094,7 +113150,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Message",
@@ -113245,7 +113301,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Notification",
@@ -113447,7 +113503,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Result",
@@ -113824,7 +113880,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Modal (overlay)",
@@ -114241,7 +114297,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Tour",
@@ -114935,7 +114991,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "AlertDialog",
@@ -115522,7 +115578,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Sheet",
@@ -116486,7 +116542,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Watermark",
@@ -116555,7 +116611,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Affix",
@@ -116634,7 +116690,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Anchor",
@@ -116673,7 +116729,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Anchor",
@@ -116786,7 +116842,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "BottomTabBar",
@@ -116945,7 +117001,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Breadcrumb",
@@ -117174,7 +117230,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "FloatButton",
@@ -117439,7 +117495,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Menu",
@@ -117481,7 +117537,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Menu",
@@ -118134,7 +118190,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "MobileHeader",
@@ -118233,7 +118289,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Pagination",
@@ -118459,7 +118515,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Segmented",
@@ -118570,7 +118626,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Stepper",
@@ -118941,7 +118997,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Steps",
@@ -119284,7 +119340,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4457
+        "skinSelectorCount": 4460
       },
       {
         "section": "Tabs",
@@ -119555,8 +119611,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "b3df93fed824e0e160eccd86f2e370521ea7b7e9dbd56be0ce0ab09ec3c80adb",
-      "b3df93fed824e0e160eccd86f2e370521ea7b7e9dbd56be0ce0ab09ec3c80adb"
+      "909eefec4089c732346e095c47c8b670142be6d2de4f0e80c673fff049c3f8b2",
+      "909eefec4089c732346e095c47c8b670142be6d2de4f0e80c673fff049c3f8b2"
     ],
     "agree": true
   }

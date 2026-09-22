@@ -32,7 +32,7 @@
     "emitted-but-unconsumed.recipe": 0,
     "emitted-but-unconsumed.segmented": 0,
     "emitted-but-unconsumed.shell": 5,
-    "emitted-but-unconsumed.sidebar": 1,
+    "emitted-but-unconsumed.sidebar": 4,
     "emitted-but-unconsumed.signal": 34,
     "emitted-but-unconsumed.surface": 1,
     "emitted-but-unconsumed.switch": 0,
@@ -40,7 +40,7 @@
     "emitted-but-unconsumed.tall": 43,
     "emitted-but-unconsumed.text": 3,
     "emitted-but-unconsumed.tint": 10,
-    "emitted-but-unconsumed.total": 205,
+    "emitted-but-unconsumed.total": 208,
     "emitted-but-unconsumed.workspace": 19
   },
   "_adoptions": {
