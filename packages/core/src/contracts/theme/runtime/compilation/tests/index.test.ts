@@ -33,6 +33,7 @@ describe("token emission contract", () => {
   it("every refusal reason is declared, so a refusal cannot be invented", () => {
     expect(Object.isFrozen(UNRESOLVED_TOKEN_REASONS)).toBe(true);
     expect([...UNRESOLVED_TOKEN_REASONS].sort()).toEqual([
+      "cascade-keyword",
       "cycle",
       "depth",
       "guaranteed-invalid",
@@ -40,8 +41,30 @@ describe("token emission contract", () => {
       "unevaluable",
       "unit-mix",
     ]);
+    expect(new Set(UNRESOLVED_TOKEN_REASONS).size).toBe(UNRESOLVED_TOKEN_REASONS.length);
     const reason: UnresolvedToken["reason"] = UNRESOLVED_TOKEN_REASONS[0];
     expect(UNRESOLVED_TOKEN_REASONS).toContain(reason);
+    // Every member of the roster is nameable as the field's type, so the
+    // frozen array and the union cannot drift apart silently.
+    const everyReason: UnresolvedToken["reason"][] = [...UNRESOLVED_TOKEN_REASONS];
+    expect(everyReason).toHaveLength(UNRESOLVED_TOKEN_REASONS.length);
+  });
+
+  it("a refusal that names a cascade-wide keyword is a declared outcome, not a leaf", () => {
+    // `inherit` computes perfectly well in a browser and means nothing to a
+    // consumer holding no element tree, so it is the one roster member that is
+    // a refusal to SPEAK rather than a failure to compute.
+    const refusal: UnresolvedToken = {
+      channel: "--ds-collection-header-overline-family",
+      reason: "cascade-keyword",
+      cause: null,
+    };
+    expect(UNRESOLVED_TOKEN_REASONS).toContain(refusal.reason);
+    // It is a refusal reason, never a way for a leaf to stay CSS-typed.
+    expect(CSS_TYPED_LEAF_REASONS as readonly string[]).not.toContain(refusal.reason);
+    // @ts-expect-error a keyword leaf is the shape this reason exists to refuse
+    const notALeaf: UnresolvedToken = { ...refusal, reason: "keyword" };
+    expect(notALeaf.reason).toBe("keyword");
   });
 
   it("the bounds are frozen, and the colour tolerances live inside them", () => {

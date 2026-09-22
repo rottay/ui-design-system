@@ -5,7 +5,8 @@
   "law": {
     "statement": "CERO-DELTA RESUELTO: una cohorte de colapso preserva este mapa. El diff de bytes del artefacto deja de ser criterio y pasa a ser el registro de lo colapsado.",
     "why": "un slot colapsado viaja al artefacto como texto var(), no como su valor resuelto: la byte-identidad es imposible por construccion en cuanto el frente colapsa.",
-    "unresolvedLaw": "un canal que no resuelve se marca con su motivo (missing | cycle | depth | guaranteed-invalid), CON el canal externo que falla y su causa inmediata, y jamas se lo hace pasar por literal.",
+    "unresolvedLaw": "un canal que no resuelve se marca con su motivo (missing | cycle | depth | guaranteed-invalid | cascade-keyword), CON el canal externo que falla y su causa inmediata, y jamas se lo hace pasar por literal.",
+    "cascadeKeywordLaw": "un valor que es EXACTAMENTE una palabra de cascada (inherit | unset | revert | revert-layer) se rehusa como cascade-keyword: es una instruccion a la cascada, no un valor, y un consumidor sin arbol de elementos no puede actuar sobre ella. `initial` lo reclama antes guaranteed-invalid, que es la lectura mas estricta. La sustitucion no cambia: el texto resuelto queda igual y el rehuse se declara al lado.",
     "fallbackLaw": "var(--x, F) usa F cuando --x no esta declarada, es ciclica, o es invalida en computed-value time por su propia cadena de var() (IACVT → guaranteed-invalid, semantica CSS de custom properties); `--x: initial` ES guaranteed-invalid. La guarda depth del instrumento NUNCA engancha un fallback: es una guarda, no una invalidez real.",
     "againstLaw": "--against compara valores Y el conjunto unresolved (canal externo + motivo + causa): un colapso que rompe o repara una resolucion sin mover su valor igual FALLA aqui.",
     "maxDepth": 32
@@ -14,10 +15,11 @@
     "verticals": 3,
     "scopes": 6,
     "channels": 17984,
-    "unresolved": 9592,
+    "unresolved": 9598,
     "unresolvedByReason": {
       "missing": 9568,
-      "guaranteed-invalid": 24
+      "guaranteed-invalid": 24,
+      "cascade-keyword": 6
     }
   },
   "unresolved": [
@@ -8501,6 +8503,13 @@
     {
       "vertical": "rottay",
       "scope": "base",
+      "channel": "--ds-collection-header-overline-family",
+      "reason": "cascade-keyword",
+      "cause": null
+    },
+    {
+      "vertical": "rottay",
+      "scope": "base",
       "channel": "--ds-collection-header-chip-family",
       "reason": "missing",
       "cause": "--ds-type-caption-font-family"
@@ -20590,6 +20599,13 @@
     {
       "vertical": "rottay",
       "scope": "light",
+      "channel": "--ds-collection-header-overline-family",
+      "reason": "cascade-keyword",
+      "cause": null
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
       "channel": "--ds-collection-header-chip-family",
       "reason": "missing",
       "cause": "--ds-type-caption-font-family"
@@ -30775,6 +30791,13 @@
     {
       "vertical": "bithire",
       "scope": "base",
+      "channel": "--ds-collection-header-overline-family",
+      "reason": "cascade-keyword",
+      "cause": null
+    },
+    {
+      "vertical": "bithire",
+      "scope": "base",
       "channel": "--ds-collection-header-chip-family",
       "reason": "missing",
       "cause": "--ds-type-caption-font-family"
@@ -40165,6 +40188,13 @@
       "channel": "--ds-collection-header-display-shade",
       "reason": "missing",
       "cause": "--ds-color-text-primary"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "dark",
+      "channel": "--ds-collection-header-overline-family",
+      "reason": "cascade-keyword",
+      "cause": null
     },
     {
       "vertical": "bithire",
@@ -51463,6 +51493,13 @@
       "channel": "--ds-collection-header-accent",
       "reason": "missing",
       "cause": "--ds-color-primary"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "base",
+      "channel": "--ds-collection-header-overline-family",
+      "reason": "cascade-keyword",
+      "cause": null
     },
     {
       "vertical": "evnto",
@@ -63552,6 +63589,13 @@
       "channel": "--ds-collection-header-accent",
       "reason": "missing",
       "cause": "--ds-color-primary"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "dark",
+      "channel": "--ds-collection-header-overline-family",
+      "reason": "cascade-keyword",
+      "cause": null
     },
     {
       "vertical": "evnto",
@@ -85170,5 +85214,5 @@
       }
     }
   },
-  "digest": "bcd415855ccfd9bde7578e60035b3a21314f7052b2b4bad335e74de9447ec264"
+  "digest": "79bf728334d701f1dbb3f07b64e98aa2cdf387ce05bf4f843fa971b8a90af435"
 }

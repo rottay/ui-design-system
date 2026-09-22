@@ -24,6 +24,7 @@ import {
   TokenEmissionEnvironmentError,
   compilationScope,
   emitThemeTokens,
+  isCascadeWideKeyword,
   type ResolvedBaseEnvironment,
 } from "..";
 
@@ -132,6 +133,49 @@ describe.each(VERTICALS)("%s", (vertical) => {
   it("MUTANT M-8: a unit mix that guessed a root font size would leave unresolved short", () => {
     const withoutRefusals = document.unresolved.filter((entry) => entry.reason !== "unit-mix");
     expect(withoutRefusals.length).toBeLessThan(document.unresolved.length);
+  });
+
+  it("I-5 (b): a cascade-wide keyword is refused, never handed over as a leaf", () => {
+    // A document consumer holds no element tree, so `inherit` names nothing it
+    // can act on. The whole class is refused, not one channel: the scan is over
+    // every leaf, and the census below is what that scan currently finds.
+    const leaked = Object.entries(document.tokens).filter(
+      ([, leaf]) => leaf.kind === "keyword" && isCascadeWideKeyword(leaf.value)
+    );
+    expect(leaked).toEqual([]);
+    const refused = document.unresolved.filter((entry) => entry.reason === "cascade-keyword");
+    // `--ds-collection-header-overline-family` is the tree's only member: the
+    // skin's deliberate resting fallback (the retired inline read resolved to
+    // `inherit` in every shipped context). The exact list is a ceiling by
+    // design: the next cascade keyword surfaces loudly.
+    expect(refused.map((entry) => entry.channel)).toEqual([
+      "--ds-collection-header-overline-family",
+    ]);
+    for (const entry of refused) expect(entry.cause).toBeNull();
+    // The four `initial` materials keep the STRICTER classification: a custom
+    // property declared `initial` is guaranteed-invalid, which also says what
+    // the consuming reference's fallback does.
+    const invalid = document.unresolved.filter(
+      (entry) => entry.reason === "guaranteed-invalid"
+    );
+    expect(invalid.length).toBeGreaterThanOrEqual(4);
+    expect(invalid.map((entry) => entry.channel)).not.toContain(
+      "--ds-collection-header-overline-family"
+    );
+  });
+
+  it("MUTANT M-10: a resolver that passes the keyword off as a leaf is caught by I-5 (b)", () => {
+    // The pre-refusal emitter's own output for that channel, planted as data.
+    const planted: ThemeTokenLeaf = { kind: "keyword", value: "inherit" };
+    expect(planted.kind === "keyword" && isCascadeWideKeyword(planted.value)).toBe(true);
+    // ... and it would have left the refusal roster's newest member empty.
+    const withoutRefusals = document.unresolved.filter(
+      (entry) => entry.reason !== "cascade-keyword"
+    );
+    expect(withoutRefusals.length).toBeLessThan(document.unresolved.length);
+    // A keyword that is NOT cascade-wide stays a perfectly good leaf.
+    expect(isCascadeWideKeyword("auto")).toBe(false);
+    expect(Object.values(document.tokens).some((leaf) => leaf.kind === "keyword")).toBe(true);
   });
 
   it("I-7: CSS-typed leaves stay bounded", () => {

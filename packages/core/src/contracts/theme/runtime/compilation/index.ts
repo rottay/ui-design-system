@@ -109,7 +109,8 @@ export type UnresolvedTokenReason =
   | "guaranteed-invalid"
   | "depth"
   | "unevaluable"
-  | "unit-mix";
+  | "unit-mix"
+  | "cascade-keyword";
 
 export interface UnresolvedToken {
   readonly channel: TokenChannelName;
@@ -133,6 +134,17 @@ export const CSS_TYPED_LEAF_REASONS = Object.freeze([
 ] as const);
 export type CssTypedLeafReason = (typeof CSS_TYPED_LEAF_REASONS)[number];
 
+/**
+ * The closed roster of ways a channel declines to become a leaf.
+ *
+ * `cascade-keyword` is the one that is not a failure to compute: a value that
+ * is exactly `inherit`, `unset`, `revert` or `revert-layer` computes perfectly
+ * well in a browser and means nothing to a consumer holding no element tree.
+ * Passing it off as `{ kind: "keyword" }` would state it as an actionable
+ * value, so the document refuses it instead. (`initial` is admitted to the
+ * roster and never produced under it: a custom property declared `initial` is
+ * guaranteed-invalid, which is the stricter reading and already has a name.)
+ */
 export const UNRESOLVED_TOKEN_REASONS = Object.freeze([
   "missing",
   "cycle",
@@ -140,6 +152,7 @@ export const UNRESOLVED_TOKEN_REASONS = Object.freeze([
   "depth",
   "unevaluable",
   "unit-mix",
+  "cascade-keyword",
 ] as const);
 
 export const TOKEN_EMISSION_BOUNDS = Object.freeze({

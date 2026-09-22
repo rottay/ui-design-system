@@ -6,7 +6,7 @@ import { MAX_DEPTH, buildResolvedMap, diffMaps, diffUnresolved, loadResolver } f
 /* WO-EMI-03: el resolvedor pasó a su duenio PRODUCTIVO y este drill lo ata
  * desde `dist/`. Las mismas aserciones, contra el codigo compilado: si todas
  * siguen verdes, la mudanza preservo las cuatro semanticas. */
-const { isGuaranteedInvalid, resolveScope, resolveValue, splitVar } = await loadResolver();
+const { isCascadeWideKeyword, isGuaranteedInvalid, resolveScope, resolveValue, splitVar } = await loadResolver();
 
 const scope = {
   '--ds-ink': '#14283B',
@@ -213,24 +213,49 @@ test('sobre el arbol real: el mapa resuelto no tiene ciclos y los missing estan 
   assert.equal(doc.stats.unresolvedByReason.cycle, undefined, 'un ciclo real seria un defecto de la cascada');
   assert.equal(doc.stats.unresolvedByReason.depth, undefined, 'la guarda depth tampoco puede dispararse en el arbol real (gemela de cycle)');
   assert.equal(doc.stats.unresolved, doc.unresolved.length);
-  for (const item of doc.unresolved) assert.ok(['missing', 'cycle', 'depth', 'guaranteed-invalid'].includes(item.reason));
+  for (const item of doc.unresolved) assert.ok(['missing', 'cycle', 'depth', 'guaranteed-invalid', 'cascade-keyword'].includes(item.reason));
   // El pin del arbol resuelve los canales testigo.
   assert.equal(doc.themes.bithire.base['--ds-color-text-primary'], '#14283B');
   assert.equal(doc.themes.bithire.base['--ds-input-md-line-height'], '20px');
 });
 
-test('sobre el arbol real: ninguna custom property compilada usa inherit/unset/revert (no modelados)', async () => {
-  /* Esas palabras en una custom property necesitarian modelo de cascada/herencia
-   * que el instrumento no tiene; hoy hay CERO ocurrencias y este drill lo fija. */
+test('sobre el arbol real: toda palabra de cascada esta REHUSADA, nunca pasada como literal', async () => {
+  /* La version anterior de este drill exigia CERO ocurrencias, porque el
+   * instrumento no tenia modelo para ellas. Ahora el resolvedor PRODUCTIVO si lo
+   * tiene -- `cascade-keyword` -- asi que el drill afirma ese modelo en vez de la
+   * ausencia: el valor resuelto puede seguir diciendo `inherit` (la sustitucion
+   * no cambia), pero el canal tiene que estar declarado en `unresolved`. Nunca
+   * las dos cosas: ni un literal accionable, ni un rehuse inventado. */
   const live = await buildResolvedMap();
-  const prohibidas = new Set(['inherit', 'unset', 'revert', 'revert-layer']);
-  for (const scopes of Object.values(live.themes)) {
-    for (const scope of Object.values(scopes)) {
+  const rehusados = new Map();
+  for (const item of live.unresolved) rehusados.set(`${item.vertical}/${item.scope}/${item.channel}`, item.reason);
+  const encontradas = [];
+  for (const [vertical, scopes] of Object.entries(live.themes)) {
+    for (const [scopeName, scope] of Object.entries(scopes)) {
       for (const [channel, value] of Object.entries(scope)) {
-        assert.ok(!prohibidas.has(String(value).trim().toLowerCase()),
-          `${channel} usa una palabra de cascada no modelada: ${value}`);
+        if (!isCascadeWideKeyword(value)) continue;
+        const motivo = rehusados.get(`${vertical}/${scopeName}/${channel}`);
+        encontradas.push([channel, String(value).trim().toLowerCase(), motivo]);
+        /* `initial` lo reclama antes guaranteed-invalid: es la lectura mas
+         * estricta, y ademas dice que hace el fallback del consumidor. */
+        const esperado = String(value).trim().toLowerCase() === 'initial' ? 'guaranteed-invalid' : 'cascade-keyword';
+        assert.equal(motivo, esperado,
+          `${vertical}/${scopeName} ${channel}: valor \`${value}\` -> motivo \`${motivo ?? 'NINGUNO'}\`, esperaba \`${esperado}\``);
       }
     }
+  }
+  /* No-vacuidad: el barrido corrio sobre una poblacion real, no sobre el vacio. */
+  assert.ok(encontradas.length >= 30, `el barrido tiene que ver la poblacion viva (vio ${encontradas.length})`);
+  const porMotivo = encontradas.reduce((acc, [, , motivo]) => { acc[motivo] = (acc[motivo] ?? 0) + 1; return acc; }, {});
+  assert.equal(porMotivo['cascade-keyword'], 6,
+    '--ds-collection-header-overline-family en los 6 pares (vertical, scope): el unico `inherit` deliberado del arbol');
+  assert.ok(porMotivo['guaranteed-invalid'] >= 24, 'los cuatro materiales `initial` en los 6 pares');
+  /* Y el rehuse no se inventa: ningun canal fuera de este barrido lo lleva. */
+  const conMotivoNuevo = live.unresolved.filter((item) => item.reason === 'cascade-keyword');
+  assert.equal(conMotivoNuevo.length, 6);
+  for (const item of conMotivoNuevo) {
+    assert.equal(item.channel, '--ds-collection-header-overline-family');
+    assert.equal(item.cause, null);
   }
 });
 
@@ -246,4 +271,57 @@ test('el mapa vivo y el pineado coinciden (la ley cero-delta, hecha continua)', 
   const pinned = JSON.parse(readFileSync(new URL('../../../../../artifacts/generated/manifest/cascade/values/index.json', import.meta.url), 'utf8'));
   const live = await buildResolvedMap();
   assert.deepEqual(diffMaps(pinned, live), []);
+});
+
+/* ── 4. la palabra de cascada, sobre fixture ────────────────────────────────
+ * La mitad sintetica de la ley que el test sobre el arbol real afirma. Va al
+ * final a proposito: insertarla en la seccion 2b correria la numeracion de los
+ * tres tests del arbol, que estan ruteados por numero. */
+
+test('un valor que es EXACTAMENTE una palabra de cascada se rehusa, no se pasa como literal', () => {
+  const { resolved, unresolved } = resolveScope({
+    '--ds-heredada': 'inherit',
+    '--ds-reseteada': 'unset',
+    '--ds-revertida': 'revert',
+    '--ds-revertida-capa': 'revert-layer',
+  });
+  for (const canal of Object.keys(resolved)) {
+    const fila = unresolved.find((item) => item.channel === canal);
+    assert.equal(fila?.reason, 'cascade-keyword', `${canal} tiene que quedar rehusado`);
+    assert.equal(fila.cause, null, 'no hay un canal interno al que culpar: el valor ES la palabra');
+  }
+  /* La SUSTITUCION no cambia: el texto resuelto sigue siendo el mismo, y el
+   * rehuse se declara al lado. Por eso la ley cero-delta no se mueve. */
+  assert.equal(resolved['--ds-heredada'], 'inherit');
+  assert.equal(unresolved.length, 4);
+});
+
+test('llega por FALLBACK y se rehusa igual: lo que importa es el valor final', () => {
+  const { resolved, unresolved } = resolveScope({ '--ds-tipo': 'var(--ds-ausente, inherit)' });
+  assert.equal(resolved['--ds-tipo'], 'inherit', 'el fallback engancho: la sustitucion es normal');
+  assert.deepEqual(unresolved, [{ channel: '--ds-tipo', reason: 'cascade-keyword', cause: null }]);
+});
+
+test('una palabra de cascada DENTRO de un valor mas grande NO es de esta clase', () => {
+  /* El rehuse es sobre el valor entero. Un token suelto dentro de un shorthand
+   * es otra cosa y adivinar ahi seria inventar; hoy el arbol tiene CERO casos. */
+  assert.ok(!isCascadeWideKeyword('1px solid inherit'));
+  assert.ok(!isCascadeWideKeyword('inherit 0'));
+  assert.ok(isCascadeWideKeyword('  INHERIT  '), 'recortada y sin distinguir mayusculas, como el resto del resolvedor');
+  const { unresolved } = resolveScope({ '--ds-borde': '1px solid inherit' });
+  assert.deepEqual(unresolved, []);
+});
+
+test('`initial` NO se reclasifica: guaranteed-invalid es la lectura mas estricta', () => {
+  /* Es tambien palabra de cascada, pero su nombre viejo dice ademas que hace el
+   * fallback del consumidor. Reclasificarla habria movido 24 filas del pin. */
+  assert.ok(isCascadeWideKeyword('initial'));
+  const { unresolved } = resolveScope({ '--ds-vacia': 'initial' });
+  assert.deepEqual(unresolved, [{ channel: '--ds-vacia', reason: 'guaranteed-invalid', cause: null }]);
+});
+
+test('un canal que resuelve a un literal normal no gana ningun rehuse', () => {
+  /* No-vacuidad del rehuse: no se dispara sobre cualquier palabra. */
+  const { unresolved } = resolveScope({ '--ds-auto': 'auto', '--ds-normal': 'normal', '--ds-ninguno': 'none' });
+  assert.deepEqual(unresolved, []);
 });

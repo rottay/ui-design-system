@@ -1,6 +1,6 @@
 /**
  * Custom-property substitution with the four CSS semantics a naive substituter
- * gets wrong.
+ * gets wrong, and the one refusal a resolved DOCUMENT needs on top of them.
  *
  * This is the PRODUCTIVE owner of the resolution the cascade instrument used to
  * carry. It is a move, not a fork: the instrument binds these functions out of
@@ -21,6 +21,13 @@
  *     seen-set spelling reported 36 such pairs as cycles.
  *  4. The depth guard NEVER hooks a fallback. It is the resolver's own guard,
  *     not a real invalidity, and hooking it would hide the guard.
+ *
+ * Those four are value-level. `resolveScope` adds a fifth that only a channel's
+ * FINAL value can trip: a value that is exactly one cascade-wide keyword
+ * (`inherit`, `unset`, `revert`, `revert-layer` -- `initial` is claimed first by
+ * rule 1) is refused as `cascade-keyword`. Substitution is unaffected: the
+ * resolved text is unchanged and the refusal is declared alongside it, because
+ * the keyword is a true statement about the CASCADE and a lie about the VALUE.
  */
 
 export interface ResolutionFailure {
@@ -54,9 +61,17 @@ export interface ScopeResolutionOptions extends ResolutionOptions {
   readonly closure?: Readonly<Record<string, string>>;
 }
 
+/**
+ * A scope-level refusal names one more thing than a value-level one.
+ *
+ * `cascade-keyword` is not reachable from `resolveChannelValue`: it is a
+ * property of a channel's FINAL value, not of any step in its substitution.
+ */
+export type ScopeFailureReason = ResolutionFailure["reason"] | "cascade-keyword";
+
 export interface ScopeFailure {
   readonly channel: string;
-  readonly reason: ResolutionFailure["reason"];
+  readonly reason: ScopeFailureReason;
   readonly cause: string | null;
 }
 
@@ -112,6 +127,22 @@ function splitTopLevelComma(text: string): number | null {
 /** `initial`, case-insensitively, leaves a custom property guaranteed-invalid. */
 export function isGuaranteedInvalid(raw: unknown): boolean {
   return typeof raw === "string" && raw.trim().toLowerCase() === "initial";
+}
+
+/** The closed CSS-wide keyword roster (css-cascade-5 section 7). */
+export const CASCADE_WIDE_KEYWORDS = Object.freeze([
+  "initial",
+  "inherit",
+  "unset",
+  "revert",
+  "revert-layer",
+] as const);
+
+/** Is the WHOLE value one cascade-wide keyword? A keyword inside a longer value is not. */
+export function isCascadeWideKeyword(raw: unknown): boolean {
+  if (typeof raw !== "string") return false;
+  const word = raw.trim().toLowerCase();
+  return (CASCADE_WIDE_KEYWORDS as readonly string[]).includes(word);
 }
 
 /**
@@ -225,7 +256,10 @@ export function resolveScope(
     resolved[channel] = outcome.value;
     if (isGuaranteedInvalid(raw)) {
       // The declaration is itself guaranteed-invalid: declared with the outer
-      // channel, never passed off as a usable literal.
+      // channel, never passed off as a usable literal. `initial` is a
+      // cascade-wide keyword too, and this branch deliberately claims it first:
+      // the CSS classification is the stricter of the two and says what the
+      // consuming reference does about it.
       unresolved.push({ channel, reason: "guaranteed-invalid", cause: null });
     } else if (outcome.unresolved) {
       unresolved.push({
@@ -233,6 +267,13 @@ export function resolveScope(
         reason: outcome.unresolved.reason,
         cause: outcome.unresolved.channel ?? null,
       });
+    } else if (isCascadeWideKeyword(outcome.value)) {
+      // Rule 5: a cascade-wide keyword is an INSTRUCTION TO THE CASCADE, not a
+      // value. A consumer holding an element tree can act on it; one reading a
+      // resolved document cannot, so it is refused rather than passed off as a
+      // keyword literal. Whether the keyword was declared or arrived through a
+      // fallback makes no difference to what the consumer can do with it.
+      unresolved.push({ channel, reason: "cascade-keyword", cause: null });
     }
   }
   return { resolved, unresolved };

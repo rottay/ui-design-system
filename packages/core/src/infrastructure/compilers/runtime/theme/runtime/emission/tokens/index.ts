@@ -38,7 +38,9 @@ export type {
   EvaluationRefusal,
 } from "./evaluate";
 export {
+  CASCADE_WIDE_KEYWORDS,
   MAX_RESOLUTION_DEPTH,
+  isCascadeWideKeyword,
   isGuaranteedInvalid,
   resolveChannelValue,
   resolveScope,

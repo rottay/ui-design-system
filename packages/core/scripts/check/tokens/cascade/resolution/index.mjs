@@ -33,6 +33,14 @@
  * por literal. Un resolvedor que devuelve el texto crudo cuando se pierde
  * declararia iguales dos mapas que difieren.
  *
+ * PALABRAS DE CASCADA (WO-EVI-02, 2026-09-22). Hay un quinto motivo que no es
+ * una falla de computo: un canal cuyo valor resuelto es EXACTAMENTE `inherit`,
+ * `unset`, `revert` o `revert-layer` se rehusa como `cascade-keyword`. El
+ * navegador si sabe que hacer con esa palabra; un documento resuelto no, y
+ * pasarla como literal seria afirmarla como valor accionable. El instrumento no
+ * modela herencia y tampoco la necesita: lee el mismo rehuse que el resolvedor
+ * productivo emite, en vez de tener una gramatica propia.
+ *
  * FALLBACKS (semantica CORREGIDA 2026-08-27, correccion pre-2B pedida por independent code audit
  * via owner; caso ciclo-miembro reproducido por la postauditoría). La regla
  * de CSS es mas fina que "declarada o no": una custom property cuyo valor
@@ -104,6 +112,8 @@ export function loadResolver({ coreRoot = CORE_ROOT, importModule = importByPath
       const bound = {
         splitVar: module.splitVar,
         isGuaranteedInvalid: module.isGuaranteedInvalid,
+        isCascadeWideKeyword: module.isCascadeWideKeyword,
+        cascadeWideKeywords: module.CASCADE_WIDE_KEYWORDS,
         resolveValue: module.resolveChannelValue,
         resolveScope: module.resolveScope,
         maxDepth: module.MAX_RESOLUTION_DEPTH,
@@ -148,7 +158,8 @@ export async function buildResolvedMap({ coreRoot = CORE_ROOT, arm = null } = {}
     law: {
       statement: 'CERO-DELTA RESUELTO: una cohorte de colapso preserva este mapa. El diff de bytes del artefacto deja de ser criterio y pasa a ser el registro de lo colapsado.',
       why: 'un slot colapsado viaja al artefacto como texto var(), no como su valor resuelto: la byte-identidad es imposible por construccion en cuanto el frente colapsa.',
-      unresolvedLaw: 'un canal que no resuelve se marca con su motivo (missing | cycle | depth | guaranteed-invalid), CON el canal externo que falla y su causa inmediata, y jamas se lo hace pasar por literal.',
+      unresolvedLaw: 'un canal que no resuelve se marca con su motivo (missing | cycle | depth | guaranteed-invalid | cascade-keyword), CON el canal externo que falla y su causa inmediata, y jamas se lo hace pasar por literal.',
+      cascadeKeywordLaw: 'un valor que es EXACTAMENTE una palabra de cascada (inherit | unset | revert | revert-layer) se rehusa como cascade-keyword: es una instruccion a la cascada, no un valor, y un consumidor sin arbol de elementos no puede actuar sobre ella. `initial` lo reclama antes guaranteed-invalid, que es la lectura mas estricta. La sustitucion no cambia: el texto resuelto queda igual y el rehuse se declara al lado.',
       fallbackLaw: 'var(--x, F) usa F cuando --x no esta declarada, es ciclica, o es invalida en computed-value time por su propia cadena de var() (IACVT → guaranteed-invalid, semantica CSS de custom properties); `--x: initial` ES guaranteed-invalid. La guarda depth del instrumento NUNCA engancha un fallback: es una guarda, no una invalidez real.',
       againstLaw: '--against compara valores Y el conjunto unresolved (canal externo + motivo + causa): un colapso que rompe o repara una resolucion sin mover su valor igual FALLA aqui.',
       maxDepth: MAX_DEPTH,
