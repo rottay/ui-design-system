@@ -295,7 +295,8 @@ reads-adjudication OK - 1272 reads owned, 0 without owner
 1. **`claim-exactness` pin owed.** The exactness-live artifacts
    (`artifacts/quality/certification/claims/exactness-live/{provenance,evidence}/index.json`)
    pin this ledger as an audit input at 1,470,103 bytes /
-   `23ea54ea...`; it is now 745,230 bytes / `f7f9bd06...`. They are generated
+   `23ea54ea...`; it is now 745,283 bytes / `24c90cec...` (figure corrected at the
+   reseal ceremony's Fable confirmation). They are generated
    files and were not hand-edited. Verified by A/B that this is not a new red:
    with the ledger restored to its HEAD bytes, `claim-exactness:check` already
    throws on the WO-GAT-07 documentation seal (`a922085d` past the sealed
