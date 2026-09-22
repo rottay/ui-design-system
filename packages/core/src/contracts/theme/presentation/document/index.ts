@@ -306,7 +306,7 @@ function assertThemeDocument(
     typeof decisions !== "object" ||
     Array.isArray(decisions)
   ) {
-    refuse(`\`decisions\` must be an object`);
+    throw refuse(`\`decisions\` must be an object`);
   }
   const entitled = THEME_PLAN_TIERS[plan as ThemePlan];
   for (const id of Object.keys(decisions as object)) {
