@@ -535,7 +535,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 12,
-        "maxSourceBytes": 75625
+        "maxSourceBytes": 77427
       },
       "symbols": [
         {
@@ -631,7 +631,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 67,
-        "maxSourceBytes": 243265
+        "maxSourceBytes": 245067
       },
       "symbols": [
         {

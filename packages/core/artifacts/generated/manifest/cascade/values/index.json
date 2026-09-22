@@ -13,10 +13,10 @@
   "stats": {
     "verticals": 3,
     "scopes": 6,
-    "channels": 17878,
-    "unresolved": 9476,
+    "channels": 17884,
+    "unresolved": 9480,
     "unresolvedByReason": {
-      "missing": 9452,
+      "missing": 9456,
       "guaranteed-invalid": 24
     }
   },
@@ -8242,6 +8242,13 @@
     {
       "vertical": "rottay",
       "scope": "base",
+      "channel": "--ds-workspace-shell-mask-stop",
+      "reason": "missing",
+      "cause": "--ds-color-primary"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "base",
       "channel": "--ds-workspace-shell-particle-primary",
       "reason": "missing",
       "cause": "--ds-color-primary"
@@ -8258,14 +8265,14 @@
       "scope": "base",
       "channel": "--ds-workspace-shell-orbital-mask",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-workspace-shell-mask-stop"
     },
     {
       "vertical": "rottay",
       "scope": "base",
       "channel": "--ds-workspace-shell-ambient-mask",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-workspace-shell-mask-stop"
     },
     {
       "vertical": "rottay",
@@ -20135,6 +20142,13 @@
     {
       "vertical": "rottay",
       "scope": "light",
+      "channel": "--ds-workspace-shell-mask-stop",
+      "reason": "missing",
+      "cause": "--ds-color-primary"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
       "channel": "--ds-workspace-shell-particle-primary",
       "reason": "missing",
       "cause": "--ds-color-primary"
@@ -20151,14 +20165,14 @@
       "scope": "light",
       "channel": "--ds-workspace-shell-orbital-mask",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-workspace-shell-mask-stop"
     },
     {
       "vertical": "rottay",
       "scope": "light",
       "channel": "--ds-workspace-shell-ambient-mask",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-workspace-shell-mask-stop"
     },
     {
       "vertical": "rottay",
@@ -50788,6 +50802,13 @@
     {
       "vertical": "evnto",
       "scope": "base",
+      "channel": "--ds-workspace-shell-mask-stop",
+      "reason": "missing",
+      "cause": "--ds-color-primary"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "base",
       "channel": "--ds-workspace-shell-particle-primary",
       "reason": "missing",
       "cause": "--ds-color-primary"
@@ -50804,14 +50825,14 @@
       "scope": "base",
       "channel": "--ds-workspace-shell-orbital-mask",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-workspace-shell-mask-stop"
     },
     {
       "vertical": "evnto",
       "scope": "base",
       "channel": "--ds-workspace-shell-ambient-mask",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-workspace-shell-mask-stop"
     },
     {
       "vertical": "evnto",
@@ -62681,6 +62702,13 @@
     {
       "vertical": "evnto",
       "scope": "dark",
+      "channel": "--ds-workspace-shell-mask-stop",
+      "reason": "missing",
+      "cause": "--ds-color-primary"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "dark",
       "channel": "--ds-workspace-shell-particle-primary",
       "reason": "missing",
       "cause": "--ds-color-primary"
@@ -62697,14 +62725,14 @@
       "scope": "dark",
       "channel": "--ds-workspace-shell-orbital-mask",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-workspace-shell-mask-stop"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
       "channel": "--ds-workspace-shell-ambient-mask",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-workspace-shell-mask-stop"
     },
     {
       "vertical": "evnto",
@@ -69267,9 +69295,10 @@
         "--ds-workbench-header-item-gap": "calc(12px * 1)",
         "--ds-workbench-header-padding": "calc(clamp(16px, 2vw, 24px) * 1)",
         "--ds-workbench-header-section-gap": "calc(16px * 1)",
-        "--ds-workspace-shell-ambient-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-color-primary) 36%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 42%, transparent) 40%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 18%, transparent) 100%\n    )",
+        "--ds-workspace-shell-ambient-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 36%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 42%, transparent) 40%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 18%, transparent) 100%\n    )",
         "--ds-workspace-shell-mask-color": "var(--ds-color-primary)",
-        "--ds-workspace-shell-orbital-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-color-primary) 58%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 24%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 46%, transparent) 54%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 32%, transparent) 80%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 8%, transparent) 100%\n    )",
+        "--ds-workspace-shell-mask-stop": "var(--ds-color-primary)",
+        "--ds-workspace-shell-orbital-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 58%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 58%, transparent) 24%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 46%, transparent) 54%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 32%, transparent) 80%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 8%, transparent) 100%\n    )",
         "--ds-workspace-shell-particle-primary": "color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%)",
         "--ds-workspace-shell-particle-secondary": "color-mix( in srgb, var(--ds-color-primary) 18%, var(--ds-color-text-secondary) 24%, transparent )",
         "--ds-z-index-base": "0",
@@ -72195,9 +72224,10 @@
         "--ds-workbench-header-item-gap": "calc(12px * 1)",
         "--ds-workbench-header-padding": "calc(clamp(16px, 2vw, 24px) * 1)",
         "--ds-workbench-header-section-gap": "calc(16px * 1)",
-        "--ds-workspace-shell-ambient-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-color-primary) 36%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 42%, transparent) 40%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 18%, transparent) 100%\n    )",
+        "--ds-workspace-shell-ambient-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 36%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 42%, transparent) 40%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 18%, transparent) 100%\n    )",
         "--ds-workspace-shell-mask-color": "var(--ds-color-primary)",
-        "--ds-workspace-shell-orbital-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-color-primary) 58%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 24%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 46%, transparent) 54%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 32%, transparent) 80%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 8%, transparent) 100%\n    )",
+        "--ds-workspace-shell-mask-stop": "var(--ds-color-primary)",
+        "--ds-workspace-shell-orbital-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 58%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 58%, transparent) 24%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 46%, transparent) 54%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 32%, transparent) 80%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 8%, transparent) 100%\n    )",
         "--ds-workspace-shell-particle-primary": "color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%)",
         "--ds-workspace-shell-particle-secondary": "color-mix( in srgb, var(--ds-color-primary) 18%, var(--ds-color-text-secondary) 24%, transparent )",
         "--ds-z-index-base": "0",
@@ -75288,6 +75318,7 @@
         "--ds-workbench-header-section-gap": "calc(16px * 1)",
         "--ds-workspace-shell-ambient-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, #2F5BE8 36%, transparent) 0%,\n      color-mix(in srgb, #2F5BE8 42%, transparent) 40%,\n      color-mix(in srgb, #2F5BE8 18%, transparent) 100%\n    )",
         "--ds-workspace-shell-mask-color": "#2F5BE8",
+        "--ds-workspace-shell-mask-stop": "#2F5BE8",
         "--ds-workspace-shell-orbital-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, #2F5BE8 58%, transparent) 0%,\n      color-mix(in srgb, #2F5BE8 58%, transparent) 24%,\n      color-mix(in srgb, #2F5BE8 46%, transparent) 54%,\n      color-mix(in srgb, #2F5BE8 32%, transparent) 80%,\n      color-mix(in srgb, #2F5BE8 8%, transparent) 100%\n    )",
         "--ds-workspace-shell-particle-primary": "color-mix(in srgb, #2F5BE8 34%, var(--ds-surface-card) 66%)",
         "--ds-workspace-shell-particle-secondary": "color-mix( in srgb, #2F5BE8 18%, var(--ds-color-text-secondary) 24%, transparent )",
@@ -78377,6 +78408,7 @@
         "--ds-workbench-header-section-gap": "calc(16px * 1)",
         "--ds-workspace-shell-ambient-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, #2F5BE8 36%, transparent) 0%,\n      color-mix(in srgb, #2F5BE8 42%, transparent) 40%,\n      color-mix(in srgb, #2F5BE8 18%, transparent) 100%\n    )",
         "--ds-workspace-shell-mask-color": "#2F5BE8",
+        "--ds-workspace-shell-mask-stop": "#2F5BE8",
         "--ds-workspace-shell-orbital-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, #2F5BE8 58%, transparent) 0%,\n      color-mix(in srgb, #2F5BE8 58%, transparent) 24%,\n      color-mix(in srgb, #2F5BE8 46%, transparent) 54%,\n      color-mix(in srgb, #2F5BE8 32%, transparent) 80%,\n      color-mix(in srgb, #2F5BE8 8%, transparent) 100%\n    )",
         "--ds-workspace-shell-particle-primary": "color-mix(in srgb, #2F5BE8 34%, var(--ds-surface-card) 66%)",
         "--ds-workspace-shell-particle-secondary": "color-mix( in srgb, #2F5BE8 18%, var(--ds-color-text-secondary) 24%, transparent )",
@@ -81305,9 +81337,10 @@
         "--ds-workbench-header-item-gap": "calc(12px * 1)",
         "--ds-workbench-header-padding": "calc(clamp(16px, 2vw, 24px) * 1)",
         "--ds-workbench-header-section-gap": "calc(16px * 1)",
-        "--ds-workspace-shell-ambient-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-color-primary) 36%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 42%, transparent) 40%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 18%, transparent) 100%\n    )",
+        "--ds-workspace-shell-ambient-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 36%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 42%, transparent) 40%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 18%, transparent) 100%\n    )",
         "--ds-workspace-shell-mask-color": "var(--ds-color-primary)",
-        "--ds-workspace-shell-orbital-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-color-primary) 58%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 24%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 46%, transparent) 54%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 32%, transparent) 80%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 8%, transparent) 100%\n    )",
+        "--ds-workspace-shell-mask-stop": "var(--ds-color-primary)",
+        "--ds-workspace-shell-orbital-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 58%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 58%, transparent) 24%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 46%, transparent) 54%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 32%, transparent) 80%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 8%, transparent) 100%\n    )",
         "--ds-workspace-shell-particle-primary": "color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%)",
         "--ds-workspace-shell-particle-secondary": "color-mix( in srgb, var(--ds-color-primary) 18%, var(--ds-color-text-secondary) 24%, transparent )",
         "--ds-z-index-base": "0",
@@ -84233,9 +84266,10 @@
         "--ds-workbench-header-item-gap": "calc(12px * 1)",
         "--ds-workbench-header-padding": "calc(clamp(16px, 2vw, 24px) * 1)",
         "--ds-workbench-header-section-gap": "calc(16px * 1)",
-        "--ds-workspace-shell-ambient-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-color-primary) 36%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 42%, transparent) 40%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 18%, transparent) 100%\n    )",
+        "--ds-workspace-shell-ambient-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 36%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 42%, transparent) 40%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 18%, transparent) 100%\n    )",
         "--ds-workspace-shell-mask-color": "var(--ds-color-primary)",
-        "--ds-workspace-shell-orbital-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-color-primary) 58%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 24%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 46%, transparent) 54%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 32%, transparent) 80%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 8%, transparent) 100%\n    )",
+        "--ds-workspace-shell-mask-stop": "var(--ds-color-primary)",
+        "--ds-workspace-shell-orbital-mask": "linear-gradient(\n      180deg,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 58%, transparent) 0%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 58%, transparent) 24%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 46%, transparent) 54%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 32%, transparent) 80%,\n      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 8%, transparent) 100%\n    )",
         "--ds-workspace-shell-particle-primary": "color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%)",
         "--ds-workspace-shell-particle-secondary": "color-mix( in srgb, var(--ds-color-primary) 18%, var(--ds-color-text-secondary) 24%, transparent )",
         "--ds-z-index-base": "0",
@@ -84252,5 +84286,5 @@
       }
     }
   },
-  "digest": "48c263167303018f3c5ea45e986649c571ec3ecfd2efe0c1fb12910b7474ba31"
+  "digest": "b6c7dd9047be89a53699b29c15ff7ef3fd9b1cdc413dab625cf7be9a4f4aaba8"
 }

@@ -42,6 +42,7 @@ export const workspaceShellChromeDeriver: FamilyDeriver = {
   consumes: ["palette.*", "surfaces.*"],
   produces: [
     "--ds-workspace-shell-mask-color",
+    "--ds-workspace-shell-mask-stop",
     "--ds-workspace-shell-particle-primary",
     "--ds-workspace-shell-particle-secondary",
     "--ds-workspace-shell-orbital-mask",
@@ -53,9 +54,20 @@ export const workspaceShellChromeDeriver: FamilyDeriver = {
 /** The accent the whole atmosphere is mixed from, stated once. */
 const MASK_COLOR = "var(--ds-workspace-shell-mask-color, var(--ds-color-primary))";
 
+/**
+ * The relay every ramp stop reads the accent through.
+ *
+ * It carries `MASK_COLOR` verbatim and is stated in the same rule, so a stop
+ * resolves to what it always resolved to. Repeating the chain at each stop put
+ * the five-stop orbital ramp at 584 characters, over the emission grammar's
+ * 512-character value bound, and the channel was dropped in silence; one relay
+ * brings it to 454 without moving a stop or reordering one.
+ */
+const MASK_STOP = "var(--ds-workspace-shell-mask-stop)";
+
 const ramp = (...stops: [number, string][]) =>
   `linear-gradient(\n      180deg,\n      ${stops
-    .map(([mix, at]) => `color-mix(in srgb, ${MASK_COLOR} ${mix}%, transparent) ${at}`)
+    .map(([mix, at]) => `color-mix(in srgb, ${MASK_STOP} ${mix}%, transparent) ${at}`)
     .join(",\n      ")}\n    )`;
 
 export function deriveWorkspaceShellChannels(): Record<string, string> {
@@ -63,6 +75,7 @@ export function deriveWorkspaceShellChannels(): Record<string, string> {
 
   // The atmospheric field mixes from one accent.
   vars["--ds-workspace-shell-mask-color"] = "var(--ds-color-primary)";
+  vars["--ds-workspace-shell-mask-stop"] = MASK_COLOR;
   vars["--ds-workspace-shell-particle-primary"] =
     "color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%)";
   vars["--ds-workspace-shell-particle-secondary"] =

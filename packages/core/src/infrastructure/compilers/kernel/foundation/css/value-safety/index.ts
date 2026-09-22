@@ -49,6 +49,13 @@ const MAX_VALUE_LENGTH = 512;
  */
 const STRUCTURAL_BREAKOUT = /[{};<>[\]\\]/;
 
+/**
+ * The only environment variables this grammar admits. `env` is kept OUT of
+ * `ALLOWED_VALUE_FUNCTIONS` because that table is also the tenant publication
+ * vocabulary, where an unbounded `env()` would read any UA variable.
+ */
+const SAFE_AREA_INSET = /^safe-area-inset-(?:top|right|bottom|left)$/i;
+
 /** Token sequences that fetch, escape the value context, or outrank the cascade. */
 const FORBIDDEN_TOKENS =
   /\/\*|\*\/|!\s*important|expression\s*\(|url\s*\(|javascript\s*:|data\s*:|-moz-binding/i;
@@ -105,6 +112,42 @@ function scanValue(value: string): ValueScan {
   return { balanced: quote === null && depth === 0, atOutsideQuotes, hasControl: false };
 }
 
+/** The index of the `)` closing the `(` at `open`, or -1 when it never closes. */
+function closingParen(value: string, open: number): number {
+  let quote: string | null = null;
+  let depth = 0;
+  for (let index = open; index < value.length; index += 1) {
+    const char = value[index];
+    if (quote !== null) {
+      if (char === quote) quote = null;
+      continue;
+    }
+    if (char === '"' || char === "'") quote = char;
+    else if (char === '(') depth += 1;
+    else if (char === ')') {
+      depth -= 1;
+      if (depth === 0) return index;
+    }
+  }
+  return -1;
+}
+
+/**
+ * True when the `env(` at `open` reads one of the four safe-area insets, with a
+ * fallback -- everything after the first comma, the separator because a
+ * `<custom-ident>` carries none -- that is itself admissible. Run per
+ * occurrence, so a nested `env()` is bounded exactly like a top-level one.
+ */
+function isSafeEnvCall(value: string, open: number): boolean {
+  const close = closingParen(value, open);
+  if (close < 0) return false;
+  const args = value.slice(open + 1, close);
+  const separator = args.indexOf(',');
+  const name = (separator < 0 ? args : args.slice(0, separator)).trim();
+  if (!SAFE_AREA_INSET.test(name)) return false;
+  return separator < 0 || isSafeCssValue(args.slice(separator + 1).trim());
+}
+
 /** True when the name is a DS channel this pipeline is allowed to declare. */
 export function isSafeCssChannelName(name: string): boolean {
   return CHANNEL_NAME.test(name);
@@ -128,9 +171,15 @@ export function isSafeCssValue(value: string): boolean {
   const scan = scanValue(value);
   if (scan.hasControl || !scan.balanced || scan.atOutsideQuotes) return false;
 
-  return [...value.matchAll(/([a-z][a-z0-9-]*)\s*\(/gi)].every((match) =>
-    ALLOWED_VALUE_FUNCTIONS.has(match[1]!.toLowerCase())
-  );
+  for (const match of value.matchAll(/([a-z][a-z0-9-]*)\s*\(/gi)) {
+    const name = match[1]!.toLowerCase();
+    if (name === 'env') {
+      if (!isSafeEnvCall(value, (match.index ?? 0) + match[0].length - 1)) return false;
+      continue;
+    }
+    if (!ALLOWED_VALUE_FUNCTIONS.has(name)) return false;
+  }
+  return true;
 }
 
 /** True when both halves of a declaration are admissible. */

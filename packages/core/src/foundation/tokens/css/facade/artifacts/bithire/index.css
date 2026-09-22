@@ -20,6 +20,8 @@
   --ds-action-dock-gap: var(--ds-spacing-3, 0.75rem);
   --ds-action-dock-padding-block: var(--ds-spacing-3, 0.75rem);
   --ds-action-dock-padding-inline: var(--ds-spacing-4, 1rem);
+  --ds-action-dock-safe-area-bottom: var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px));
+  --ds-action-dock-safe-area-top: var(--ds-safe-area-top, env(safe-area-inset-top, 0px));
   --ds-action-dock-shadow-bottom: 0 -2px 4px color-mix(in srgb, var(--ds-color-shadow) 30%, transparent), 0 -12px 28px -12px color-mix(in srgb, var(--ds-color-shadow) 60%, transparent);
   --ds-action-dock-shadow-top: var(--ds-shadow-navbar);
   --ds-action-dock-sticky-z-index: var(--ds-z-index-sticky, 1100);
@@ -3084,11 +3086,20 @@
   --ds-workbench-header-section-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
   --ds-workspace-shell-ambient-mask: linear-gradient(
       180deg,
-      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 36%, transparent) 0%,
-      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 42%, transparent) 40%,
-      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 18%, transparent) 100%
+      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 36%, transparent) 0%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 42%, transparent) 40%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 18%, transparent) 100%
     );
   --ds-workspace-shell-mask-color: var(--ds-color-primary);
+  --ds-workspace-shell-mask-stop: var(--ds-workspace-shell-mask-color, var(--ds-color-primary));
+  --ds-workspace-shell-orbital-mask: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 58%, transparent) 0%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 58%, transparent) 24%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 46%, transparent) 54%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 32%, transparent) 80%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 8%, transparent) 100%
+    );
   --ds-workspace-shell-particle-primary: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%);
   --ds-workspace-shell-particle-secondary: color-mix( in srgb, var(--ds-color-primary) 18%, var(--ds-color-text-secondary) 24%, transparent );
   --ds-z-index-base: 0;

@@ -170,7 +170,7 @@
     },
     "./primitives/input": {
       "maxReachableModules": 67,
-      "maxSourceBytes": 243265
+      "maxSourceBytes": 245067
     },
     "./primitives/input-number": {
       "maxReachableModules": 17,
@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 12,
-      "maxSourceBytes": 75625
+      "maxSourceBytes": 77427
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-EMI-03 split the emission owner into css/ + artifact/ under a barrel, which is the CLAUDE.md hierarchy law for an owner that gains a third child. ./runtime/visual-authority imports emitTenantArtifactCss from that folder, so it now reaches 3 files where it reached 1: +2 reachable modules and +874 source bytes, measured. The token emitter is deliberately NOT on the barrel, which is what keeps the move at +2 instead of +8 and keeps the resolver, the evaluator and the colour kernel off this boundary.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 1 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-EVI-02 value-safety: the bounded env() safe-area rule adds 1802 source bytes to compilers/kernel/foundation/css/value-safety (6165 -> 7967 bytes, measured per file). Both budgets move by exactly 1802 and by nothing else -- ./runtime/visual-authority 75625 -> 77427 and ./primitives/input 243265 -> 245067, reachable modules unchanged at 12 and 67 -- so the three compiled channels the grammar was dropping in silence (--ds-action-dock-safe-area-top/-bottom and --ds-workspace-shell-orbital-mask) are emitted.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 2 subido(s), 0 sin ancla valida"
 }

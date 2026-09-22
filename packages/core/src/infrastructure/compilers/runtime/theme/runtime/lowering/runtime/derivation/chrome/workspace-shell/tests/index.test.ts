@@ -18,6 +18,9 @@ import { firstPartyFixture } from "@tests/support/theme-lowering";
 import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
 import { workspaceShellChromeDeriver } from "..";
+import { isSafeCssValue } from "@/infrastructure/compilers/kernel/foundation/css/value-safety";
+
+const MASK_STOP = "var(--ds-workspace-shell-mask-stop)";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
 
@@ -71,15 +74,46 @@ describe("chrome/workspace-shell", () => {
     expect(Object.keys(derived).sort()).toEqual(
       [...workspaceShellChromeDeriver.produces].sort()
     );
+    // The ramps read the accent through `--ds-workspace-shell-mask-stop`, which
+    // the same rule states; substituting it back is what makes the comparison
+    // against the skin's terminal fallback a resolved-value comparison rather
+    // than a spelling one. The skin cannot read the relay: with no producer at
+    // all the relay is undefined too, so its fallback stays the whole chain.
+    const stop = derived["--ds-workspace-shell-mask-stop"]!;
+    const resolved = (value: string) => value.replaceAll(MASK_STOP, stop);
     for (const [channel, value] of Object.entries(derived)) {
-      // The mask colour is read only as the accent INSIDE the two ramps, so
-      // its own rest is pinned by the ramps rather than by a fallback of its own.
+      // The mask colour and its relay are read only as the accent INSIDE the two
+      // ramps, so their rest is pinned by the ramps rather than by a fallback of
+      // their own.
       if (channel === "--ds-workspace-shell-mask-color") continue;
+      if (channel === "--ds-workspace-shell-mask-stop") continue;
       expect({ channel, fallbacks: skinFallbacks(channel) }).toEqual({
         channel,
-        fallbacks: [normalise(value)],
+        fallbacks: [normalise(resolved(value))],
       });
     }
+  });
+
+  it("keeps both ramps inside the emission grammar's value bound", () => {
+    const derived = workspaceShellChromeDeriver.derive(context(), {});
+    for (const channel of Object.keys(derived)) {
+      expect({ channel, admitted: isSafeCssValue(derived[channel]!) }).toEqual({
+        channel,
+        admitted: true,
+      });
+    }
+    // Measured, not rounded: the orbital ramp is the longest value this family
+    // states, and repeating the accent chain at each of its five stops put it
+    // at 584 against a bound of 512.
+    expect(derived["--ds-workspace-shell-orbital-mask"]).toHaveLength(454);
+    expect(
+      isSafeCssValue(
+        derived["--ds-workspace-shell-orbital-mask"]!.replaceAll(
+          MASK_STOP,
+          derived["--ds-workspace-shell-mask-stop"]!
+        )
+      )
+    ).toBe(false);
   });
 
   it("names only its own family namespace", () => {
@@ -91,8 +125,12 @@ describe("chrome/workspace-shell", () => {
   it("mixes the whole atmosphere from one accent channel", () => {
     const derived = workspaceShellChromeDeriver.derive(context(), {});
     expect(derived["--ds-workspace-shell-mask-color"]).toBe("var(--ds-color-primary)");
+    expect(derived["--ds-workspace-shell-mask-stop"]).toBe(
+      "var(--ds-workspace-shell-mask-color, var(--ds-color-primary))"
+    );
     for (const ramp of ["--ds-workspace-shell-orbital-mask", "--ds-workspace-shell-ambient-mask"]) {
-      expect(derived[ramp]).toContain("var(--ds-workspace-shell-mask-color, var(--ds-color-primary))");
+      expect(derived[ramp]).toContain(MASK_STOP);
+      expect(derived[ramp]).not.toContain("var(--ds-color-primary)");
     }
   });
 

@@ -308,3 +308,73 @@ describe("admission and emission share one function table", () => {
     expect(isSafeVisualValue("repeating-conic-gradient(1)", "emitted.--ds-probe", false)).toBe(false);
   });
 });
+
+/**
+ * The safe-area class (WO-EVI-02). `env()` is the only honest value for the
+ * two `--ds-action-dock-safe-area-*` channels, and the grammar dropped both in
+ * silence. The name stays out of the shared function table on purpose: that
+ * table is also the tenant publication vocabulary, so the bound is stated here
+ * and nowhere else, and the publication door goes on refusing every `env()`.
+ */
+describe("the safe-area class is admitted at emission and bounded to four insets", () => {
+  const EMITTED = [
+    "var(--ds-safe-area-top, env(safe-area-inset-top, 0px))",
+    "var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px))",
+  ] as const;
+
+  const admitted: readonly [string, string][] = [
+    ["the bare inset", "env(safe-area-inset-top)"],
+    ["a cased inset, because CSS idents are case-insensitive", "env(Safe-Area-Inset-Top)"],
+    ["every one of the four insets", "env(safe-area-inset-right)"],
+    ["an inset with a length fallback", "env(safe-area-inset-bottom, 0px)"],
+    ["an inset nested in calc", "calc(env(safe-area-inset-top) + 8px)"],
+    ["an inset nested in var, the shape the dock really emits", EMITTED[0]],
+    ["calc nested inside the fallback", "env(safe-area-inset-left, calc(1rem + 2px))"],
+    ["a var fallback that carries its own comma", "env(safe-area-inset-top, var(--ds-spacing-2, 8px))"],
+  ];
+
+  for (const [label, value] of admitted) {
+    it(`admits ${label}`, () => {
+      expect(isSafeCssValue(value)).toBe(true);
+    });
+  }
+
+  const refused: readonly [string, string][] = [
+    ["an environment variable outside the four insets", "env(foo)"],
+    ["a UA keyboard inset", "env(keyboard-inset-height)"],
+    ["a titlebar area inset", "env(titlebar-area-height, 0px)"],
+    ["an inset prefix that is not the whole name", "env(safe-area-inset-topmost)"],
+    ["an empty argument list", "env()"],
+    ["an empty fallback", "env(safe-area-inset-top,)"],
+    ["a fetching fallback", "env(safe-area-inset-top, url(https://example.test/x.png))"],
+    ["a rule-closing fallback", "env(safe-area-inset-top, 0px) } body { display: none } .x {"],
+    ["an unknown function in the fallback", "env(safe-area-inset-top, evil(1))"],
+    ["an unbalanced env", "env(safe-area-inset-top"],
+    ["an over-closed env", "env(safe-area-inset-top))"],
+    ["a hostile env nested inside an admitted one", "env(safe-area-inset-top, env(foo))"],
+    ["a hostile env nested inside calc", "calc(env(foo) + 8px)"],
+    ["an indexed environment variable", "env(safe-area-inset-top 0)"],
+  ];
+
+  for (const [label, value] of refused) {
+    it(`refuses ${label}`, () => {
+      expect(isSafeCssValue(value)).toBe(false);
+    });
+  }
+
+  it("emits both dock channels with their authored strings intact", () => {
+    const variables = {
+      "--ds-action-dock-safe-area-top": EMITTED[0],
+      "--ds-action-dock-safe-area-bottom": EMITTED[1],
+    };
+    expect(admitCssVariables(variables)).toEqual(variables);
+  });
+
+  it("keeps `env` out of the shared table, so the publication door still refuses it", () => {
+    expect(ALLOWED_VALUE_FUNCTIONS.has("env")).toBe(false);
+    for (const [, value] of admitted) {
+      expect(isSafeVisualValue(value, "tenant.--ds-probe", true), value).toBe(false);
+      expect(isSafeVisualValue(value, "emitted.--ds-probe", false), value).toBe(false);
+    }
+  });
+});
