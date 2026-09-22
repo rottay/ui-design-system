@@ -421,11 +421,13 @@ jobs:
       # One invocation, one `next start`: e2e/visual/ (pixel diffs, WO-GAT-01),
       # e2e/whitelabel/ (hostile-tenant computed-style probe, WO-GAT-03),
       # e2e/responsive/ (360px overflow + coarse-pointer hit areas, WO-ENG-12)
-      # and e2e/a11y/axe.spec.ts (the route-level axe batch, WO-INV-03 — opt-in
-      # via DS_AXE_ROUTE_BATCH) are the spec directories
+      # and e2e/a11y/axe.spec.ts (the route-level axe batch, WO-INV-03 — enabled
+      # via DS_AXE_ROUTE_BATCH=1 in this step's env) are the spec directories
       # playwright.visual.config.ts matches.
       - name: Run visual regression, whitelabel, and responsive suites
         run: pnpm --filter @rottay/showroom run test:gates
+        env:
+          DS_AXE_ROUTE_BATCH: "1"
 
       - name: Upload visual regression report
         if: failure()
@@ -434,6 +436,7 @@ jobs:
           name: visual-report
           path: |
             packages/core/artifacts/quality/captures/visual-regressions
+            packages/core/artifacts/quality/audits/accessibility/runs
             packages/showroom/test-results
             packages/showroom/playwright-report
           if-no-files-found: ignore
