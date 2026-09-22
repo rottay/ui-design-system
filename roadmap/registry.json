@@ -6517,6 +6517,11 @@
      "at": "2026-09-22 00:01",
      "by": "kimi-dt",
      "note": "2026-09-22 kimi-dt: paquete value-safety despachado a Opus (brief-value-safety-evi02-opus.md) sobre HEAD cb6304622 limpio — env() acotado a safe-area-inset-* en value-safety (NO en la tabla compartida del schema), mascara orbital atacada desde el deriver workspace-shell (compactar -> factorizar canal intermedio; prohibido subir MAX_VALUE_LENGTH sin ruling DT). Oraculo: la suite emission/css/tests pasa a verde SIN editarla. Senal viva roja desde a8786b23c; esta reparacion la cierra por admision real."
+    },
+    {
+     "at": "2026-09-22 00:47",
+     "by": "kimi-dt",
+     "note": "2026-09-22 kimi-dt: paquete value-safety INTEGRADO (d4edd6420, Fable ACCEPT receipt-value-safety-review-fable.json). La senal viva roja (suite emission byte-identity, roja desde a8786b23c) quedo VERDE por admision real de los 3 canales — la asercion no se toco. env() acotado (safe-area-inset-* + fallback recursivo) en el owner value-safety; tabla compartida y schema de publicacion intactos. Mascara orbital 584->454 via canal relay --ds-workspace-shell-mask-stop (render identico, probado en bithire byte-identico). Residuales Fable al trail: (a) los 2 branches mutation-surviving de closingParen son ALCANZABLES via env( quoteado (redundantemente rechazados) — no dead preconditions; hardening opcional: brazo que admita fallback con string quoteado; (b) relay sin fila de catalogo es CORRECTO (es relay, no knob); (c) drenaje ds:derive theme-graph (stale desde 31d04caa0, 9.39MB vs pin 9.00MB + ratchet re-pin) EN COLA como paquete propio junto al drenaje engine-audit de cb6304622."
     }
    ]
   },
