@@ -122,7 +122,7 @@
     },
     "./primitives/breadcrumb": {
       "maxReachableModules": 20,
-      "maxSourceBytes": 108197
+      "maxSourceBytes": 109585
     },
     "./primitives/button": {
       "maxReachableModules": 589,
@@ -170,7 +170,7 @@
     },
     "./primitives/input": {
       "maxReachableModules": 67,
-      "maxSourceBytes": 245067
+      "maxSourceBytes": 246455
     },
     "./primitives/input-number": {
       "maxReachableModules": 17,
@@ -182,7 +182,7 @@
     },
     "./primitives/modal": {
       "maxReachableModules": 44,
-      "maxSourceBytes": 171556
+      "maxSourceBytes": 172944
     },
     "./primitives/progress": {
       "maxReachableModules": 20,
@@ -190,7 +190,7 @@
     },
     "./primitives/radio": {
       "maxReachableModules": 37,
-      "maxSourceBytes": 146726
+      "maxSourceBytes": 148114
     },
     "./primitives/responsive": {
       "maxReachableModules": 5,
@@ -222,7 +222,7 @@
     },
     "./primitives/steps": {
       "maxReachableModules": 31,
-      "maxSourceBytes": 147391
+      "maxSourceBytes": 148779
     },
     "./primitives/switch": {
       "maxReachableModules": 17,
@@ -310,7 +310,7 @@
     },
     "./structures/app-shell": {
       "maxReachableModules": 78,
-      "maxSourceBytes": 288600
+      "maxSourceBytes": 289988
     },
     "./structures/column-menu": {
       "maxReachableModules": 643,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-EVI-02 value-safety: the bounded env() safe-area rule adds 1802 source bytes to compilers/kernel/foundation/css/value-safety (6165 -> 7967 bytes, measured per file). Both budgets move by exactly 1802 and by nothing else -- ./runtime/visual-authority 75625 -> 77427 and ./primitives/input 243265 -> 245067, reachable modules unchanged at 12 and 67 -- so the three compiled channels the grammar was dropping in silence (--ds-action-dock-safe-area-top/-bottom and --ds-workspace-shell-orbital-mask) are emitted.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 2 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-INV-03 Lot A pointerType: the interaction-state hook's six handlers become pointer-aware so a touch tap stops latching hover, adding 1388 source bytes to foundation/behavior/runtime/interaction-state (4195 -> 5583 bytes, measured per file, comments already trimmed to the two-line law). All six budgets move by exactly 1388 and by nothing else -- ./primitives/input 245067 -> 246455, ./primitives/radio 146726 -> 148114, ./primitives/breadcrumb 108197 -> 109585, ./primitives/steps 147391 -> 148779, ./primitives/modal 171556 -> 172944 and ./structures/app-shell 288600 -> 289988, reachable modules unchanged in all six -- because each closure reaches the hook. No export, interface or handler-type line changed.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 6 subido(s), 0 sin ancla valida"
 }

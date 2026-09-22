@@ -13,11 +13,27 @@
  * probe that only checks whether it throws reports support and every keyboard
  * focus silently loses its ring. Skins that want the platform's own answer still
  * have `:focus-visible` available in CSS.
+ *
+ * Hover is a pointer that RESTS on the part, which a finger never does: a tap's
+ * `pointerenter` may never get its leave, so touch presses without hovering.
  */
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 import type { InteractionState } from '../../kernel/anatomy';
+
+type PressModality = 'mouse' | 'pen' | 'touch' | 'keyboard';
+
+/**
+ * No `pointerType` means no pointer made the call: a press synthesized from a
+ * key lands here, and it is its own modality -- never touch.
+ */
+function modalityOf(event?: { pointerType?: string }): PressModality {
+  const pointerType = event?.pointerType;
+  if (!pointerType) return 'keyboard';
+  if (pointerType === 'touch' || pointerType === 'pen') return pointerType;
+  return 'mouse';
+}
 
 export interface UseInteractionStateOptions {
   /** A disabled part reports no hover, no press and no focus ring. */
@@ -57,14 +73,22 @@ export function useInteractionState(
    * while a pointer is down did not arrive from the keyboard.
    */
   const pointerDownRef = useRef(false);
+  /** Which input opened the live press, or null while nothing is pressed. */
+  const pressModalityRef = useRef<PressModality | null>(null);
 
-  const onPointerEnter = useCallback(() => {
-    if (!disabled) setHovered(true);
-  }, [disabled]);
+  const onPointerEnter = useCallback(
+    (event?: React.PointerEvent) => {
+      if (disabled) return;
+      if (modalityOf(event) === 'touch') return;
+      setHovered(true);
+    },
+    [disabled]
+  );
 
   /** Every way a press ends with no click: leave, cancel, blur, disable. */
   const cancelPress = useCallback(() => {
     pointerDownRef.current = false;
+    pressModalityRef.current = null;
     setPressed(false);
   }, []);
 
@@ -81,13 +105,27 @@ export function useInteractionState(
     cancelPress();
   }, [cancelPress]);
 
-  const onPointerDown = useCallback(() => {
-    if (disabled) return;
-    pointerDownRef.current = true;
-    setPressed(true);
-  }, [disabled]);
+  const onPointerDown = useCallback(
+    (event?: React.PointerEvent) => {
+      if (disabled) return;
+      pointerDownRef.current = true;
+      pressModalityRef.current = modalityOf(event);
+      setPressed(true);
+    },
+    [disabled]
+  );
 
-  const onPointerUp = cancelPress;
+  // Release, and the pointercancel callers wire here too. A touch release ends
+  // the gesture, so a hover it finds latched goes with the finger.
+  const onPointerUp = useCallback(
+    (event?: React.PointerEvent) => {
+      const touchRelease =
+        pressModalityRef.current === 'touch' || modalityOf(event) === 'touch';
+      cancelPress();
+      if (touchRelease) setHovered(false);
+    },
+    [cancelPress]
+  );
 
   const onFocus = useCallback(() => {
     if (disabled) return;

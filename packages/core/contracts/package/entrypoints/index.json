@@ -631,7 +631,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 67,
-        "maxSourceBytes": 245067
+        "maxSourceBytes": 246455
       },
       "symbols": [
         {
@@ -669,7 +669,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 37,
-        "maxSourceBytes": 146726
+        "maxSourceBytes": 148114
       },
       "symbols": [
         {
@@ -783,7 +783,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 20,
-        "maxSourceBytes": 108197
+        "maxSourceBytes": 109585
       },
       "symbols": [
         {
@@ -840,7 +840,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 31,
-        "maxSourceBytes": 147391
+        "maxSourceBytes": 148779
       },
       "symbols": [
         {
@@ -1214,7 +1214,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 44,
-        "maxSourceBytes": 171556
+        "maxSourceBytes": 172944
       },
       "symbols": [
         {
@@ -1708,7 +1708,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 78,
-        "maxSourceBytes": 288600
+        "maxSourceBytes": 289988
       },
       "symbols": [
         {

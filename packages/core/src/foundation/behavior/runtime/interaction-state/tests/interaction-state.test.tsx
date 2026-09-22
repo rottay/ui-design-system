@@ -23,6 +23,9 @@ function Probe({ disabled = false }: { disabled?: boolean }) {
       disabled={disabled}
       {...partAttributes('trigger', state)}
       {...handlers}
+      // The table's part kernel wiring: cancel onto the release path, keyboard
+      // activation through the pointer handlers (`parts/kernel/index.ts:101,110-119`).
+      onPointerCancel={handlers.onPointerUp}
       onKeyDown={(event) => event.key === ' ' && handlers.onPointerDown(event as never)}
       onKeyUp={(event) => event.key === ' ' && handlers.onPointerUp(event as never)}
     >
@@ -235,5 +238,149 @@ describe('the handlers do not chain to a caller', () => {
 
     expect(caller).toHaveBeenCalledTimes(1);
     expect(trigger().getAttribute('data-state')).toContain('pressed');
+  });
+});
+
+
+/**
+ * A tap raises `pointerenter` like a mouse does, but the matching leave may
+ * never arrive -- so honouring it latched a hover that outlived the gesture.
+ */
+describe('a finger leaves no hover behind', () => {
+  const touch = { pointerType: 'touch' } as const;
+
+  it('reports the modality the test fires, so these drills are not vacuous', () => {
+    // If the runner dropped `pointerType`, every touch leg below would pass by
+    // reading `undefined` and prove nothing.
+    const seen: string[] = [];
+    function Sensor() {
+      return (
+        <button type="button" onPointerDown={(event) => seen.push(event.pointerType)}>
+          probe
+        </button>
+      );
+    }
+    render(<Sensor />);
+    fireEvent.pointerDown(trigger(), touch);
+    expect(seen).toEqual(['touch']);
+  });
+
+  it('does not hover on a touch tap, and is back at rest after the release', () => {
+    render(<Probe />);
+    fireEvent.pointerEnter(trigger(), touch);
+    expect(trigger().getAttribute('data-state') ?? '', 'a tap latched a hover').not.toContain(
+      'hovered'
+    );
+
+    fireEvent.pointerDown(trigger(), touch);
+    fireEvent.pointerUp(trigger(), touch);
+    expect(trigger()).not.toHaveAttribute('data-state');
+  });
+
+  it('presses a touch hold, and releases it cleanly', () => {
+    render(<Probe />);
+    fireEvent.pointerEnter(trigger(), touch);
+    fireEvent.pointerDown(trigger(), touch);
+
+    const held = trigger().getAttribute('data-state') ?? '';
+    expect(held).toContain('pressed');
+    expect(held).not.toContain('hovered');
+
+    fireEvent.pointerUp(trigger(), touch);
+    expect(trigger()).not.toHaveAttribute('data-state');
+  });
+
+  it('drops a hover the release finds latched, whoever set it', () => {
+    // A hybrid device: the mouse rested here, then a finger lifted off it.
+    render(<Probe />);
+    fireEvent.pointerEnter(trigger(), { pointerType: 'mouse' });
+    expect(trigger().getAttribute('data-state')).toContain('hovered');
+
+    fireEvent.pointerUp(trigger(), touch);
+    expect(trigger()).not.toHaveAttribute('data-state');
+  });
+
+  it('releases press and hover when the gesture is cancelled', () => {
+    render(<Probe />);
+    fireEvent.pointerEnter(trigger(), touch);
+    fireEvent.pointerDown(trigger(), touch);
+    fireEvent.pointerCancel(trigger(), touch);
+    expect(trigger()).not.toHaveAttribute('data-state');
+  });
+
+  it('ends a touch press through a release that carries no pointer type', () => {
+    // A drag ends at `dragend`, which is not a PointerEvent at all
+    // (`structures/workspace/column-menu/index.tsx:1226`).
+    render(<Probe />);
+    fireEvent.pointerEnter(trigger(), { pointerType: 'mouse' });
+    fireEvent.pointerDown(trigger(), touch);
+    fireEvent.pointerUp(trigger());
+    expect(trigger(), 'the release could not tell it was ending a touch').not.toHaveAttribute(
+      'data-state'
+    );
+  });
+
+  it('does not let a touch press that already ended clear a later hover', () => {
+    // The modality outlives its press only if nothing clears it: the leave
+    // cancelled this press, so the mouse arriving after it keeps its hover.
+    render(<Probe />);
+    fireEvent.pointerDown(trigger(), touch);
+    fireEvent.pointerLeave(trigger());
+    fireEvent.pointerEnter(trigger(), { pointerType: 'mouse' });
+    fireEvent.pointerUp(trigger());
+    expect(
+      trigger().getAttribute('data-state'),
+      'a stale touch press cleared a hover it never set'
+    ).toContain('hovered');
+  });
+
+  it('cancels a mouse press without disturbing its hover', () => {
+    render(<Probe />);
+    fireEvent.pointerEnter(trigger(), { pointerType: 'mouse' });
+    fireEvent.pointerDown(trigger(), { pointerType: 'mouse' });
+    fireEvent.pointerCancel(trigger(), { pointerType: 'mouse' });
+
+    const state = trigger().getAttribute('data-state') ?? '';
+    expect(state).not.toContain('pressed');
+    expect(state, 'the mouse is still resting on the part').toContain('hovered');
+  });
+});
+
+/** A pointer that rests on the part still hovers, and still keeps its hover. */
+describe('a resting pointer hovers as it always did', () => {
+  it.each(['mouse', 'pen'])('hovers for a %s, and keeps it across a press', (pointerType) => {
+    render(<Probe />);
+    fireEvent.pointerEnter(trigger(), { pointerType });
+    expect(trigger().getAttribute('data-state')).toContain('hovered');
+
+    fireEvent.pointerDown(trigger(), { pointerType });
+    fireEvent.pointerUp(trigger(), { pointerType });
+    expect(trigger().getAttribute('data-state'), 'the press ate the hover').toContain('hovered');
+  });
+});
+
+/**
+ * The table's part kernel activates a stamped part by passing its KeyboardEvent
+ * into `onPointerDown`; carrying no `pointerType` must not read as a touch.
+ */
+describe('a keyboard activation is not a touch', () => {
+  it('presses and releases through the pointer handlers', () => {
+    render(<Probe />);
+    fireEvent.focus(trigger());
+    fireEvent.keyDown(trigger(), { key: ' ' });
+    expect(trigger().getAttribute('data-state')).toContain('pressed');
+
+    fireEvent.keyUp(trigger(), { key: ' ' });
+    expect(trigger().getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('does not clear the hover the pointer is still holding', () => {
+    render(<Probe />);
+    fireEvent.pointerEnter(trigger(), { pointerType: 'mouse' });
+    fireEvent.focus(trigger());
+    fireEvent.keyDown(trigger(), { key: ' ' });
+    fireEvent.keyUp(trigger(), { key: ' ' });
+
+    expect(trigger().getAttribute('data-state')).toContain('hovered');
   });
 });
