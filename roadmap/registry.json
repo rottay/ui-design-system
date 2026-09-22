@@ -4627,7 +4627,7 @@
    "lane": "emission-mount",
    "order": 3,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-EMI-01"
    ],
@@ -4648,8 +4648,15 @@
      "at": "2026-09-21 19:27",
      "by": "kimi-dt",
      "note": "2026-09-21 kimi-dt: debrief ADOPTADO como base del contrato (revision 3, sha256 1c94eb42790af863, medido en cb876bdca). Ciclo shared-core: v1 Opus (premisa corregida por medicion: ~80% no-literal, no 25-45%; la clausura no es auto-cerrada: 43% requiere la capa estatica) → Fable ACCEPT-WITH-CHANGES (7 cambios: oraculo independiente para la paridad, theme-contract-freeze al write set, resolved-map SI es gate registrado, tipos reparados, facade con owner y base explicito, unit-mix post-sustitucion, roster de importadores) → v2 → Fable re-review (3 defectos A/B/C; pre-autorizo adopcion de v3 sin pasada completa) → v3 con ruling DT para A (opcion 1: sin eje density en el documento raiz — el factor compilado gana en :root y un documento por densidad reportaria valores que el browser nunca pinta; la densidad es dial de runtime que el consumidor aplica como factor, modelo motion contracts) → verificacion Kimi de A/B/C: ADOPTADO. Rulings: Q1=(a) split emission otorgado, Q2=(a) port del resolver con instrumento consumiendo desde dist (mantener resolved-map verde o re-pin oficial), Q3=(a) snapshot por build, Q4 owner-routed (recomiendo useTokens como follow-on), Q5=(a) gate ampliado a clamp/min/max/env como enmienda registrada, Q6: tamano M→L. BLOQUEO DE SECUENCIA: la implementacion de EMI-03 comparte entrypoints/server/index.ts y el manifest de gates con el lote CAT-04 EN VUELO — el paquete EMI-03 espera a que CAT-04 integre."
+    },
+    {
+     "at": "2026-09-21 23:55",
+     "by": "kimi-dt",
+     "note": "2026-09-21 kimi-dt: lote INTEGRADO en 4 commits: cb2298189 (reparacion contract:check — 1 linea throw refuse(...), checker intacto, desenmascaro 2 contratos stale), a3a8f7bac (lote: emission split css/artifact/tokens, ThemeTokenDocument + emitThemeTokens(ForIntent), facade tokens, gate base-environment-freshness, resolver portado a productivo con instrumento consumiendo dist — move not fork, 17878 canales 0 diffs), 6fa22c5c2 (follow-through D-7: instruments shape/emphasis-probe repointed), 65ed0f10b (contratos suppliers+hooks regenerados, atribucion A/B: 8ae785f1e/90b75bfd5/a3a8f7bac). Auditoria: Fable ACCEPT-WITH-CHANGES (5 cambios aplicados) -> ACCEPT (receipt-emi-03-lot-review-fable.json, receipt-emi-03-confirm-fable.json). Ruling DT R-EMI03-O6: gobierna la cadena nombrada de colorimetria; pin [152,184,255]; errata registrada en la fila O-6. Build estandar VERDE de punta a punta (el red de contract:check bloqueaba prebuild desde la era CAT-02/WO-CRA-24). Residuales ruteados: (a) drill resolved-map test 23 chip-family=inherit -> deriver collection-header (7a67243d8); (b) test 22 witness channels stale bithire/base -> owner del instrumento; (c) NUEVO: 22 canales notifier leen --ds-tint-* jamas declarados en rottay/evnto (IACVT en artifacts publicados) -> deriver tint/notifier; (d) NUEVO: --ds-pagination-jumper-width reduce a calc(<rem> + 0) invalido -> deriver pagination; (e) ThemeTokenIdentity no exportado (literal estructural, observacion); (f) labels MUTANT data-shaped en invariants.test.ts. La suite emission/css/tests sigue ROJA con los mismos 4 fallos — senal viva value-safety bajo WO-EVI-02. Q4 (useTokens consumidor canonico) queda owner-routed como follow-on con aceptacion propia, recomendado por la reauditoria owner caa5070c0."
     }
-   ]
+   ],
+   "doneAt": "2026-09-21",
+   "evidence": "Acceptance gate met: emitThemeTokens/emitThemeTokensForIntent produce ThemeTokenDocument con 0 var(/calc(/color-mix( en las hojas emitidas (los no resolubles se REHUSAN nombrados: roster cerrado + razones; I-1 verde 7 funciones x3 verticales) y paridad CSS<->JSON verde (36/36, 3 verticales x 4 ambientes, sRGB tolerance 0 tras correctivo). Sin segunda compilacion: la facade llama compileThemeIntent exactamente una vez (I-4 con AST scan + spy real). Lote a3a8f7bac + 6fa22c5c2 + cb2298189 + 65ed0f10b; Fable ACCEPT tras correctivo (2 recibos); build completo verde; 110/110 suites del lote + 9/9 drill freshness. Residuales ruteados en el trail (ninguno bloquea el gate de aceptacion): tint IACVT, pagination calc invalido, chip-family inherit, witness pins stale, value-safety env()/mascara bajo WO-EVI-02 (senal viva intacta), follow-on useTokens owner-routed."
   },
   {
    "id": "WO-FAM-00",
