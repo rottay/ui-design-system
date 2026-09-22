@@ -6522,6 +6522,11 @@
      "at": "2026-09-22 00:47",
      "by": "kimi-dt",
      "note": "2026-09-22 kimi-dt: paquete value-safety INTEGRADO (d4edd6420, Fable ACCEPT receipt-value-safety-review-fable.json). La senal viva roja (suite emission byte-identity, roja desde a8786b23c) quedo VERDE por admision real de los 3 canales — la asercion no se toco. env() acotado (safe-area-inset-* + fallback recursivo) en el owner value-safety; tabla compartida y schema de publicacion intactos. Mascara orbital 584->454 via canal relay --ds-workspace-shell-mask-stop (render identico, probado en bithire byte-identico). Residuales Fable al trail: (a) los 2 branches mutation-surviving de closingParen son ALCANZABLES via env( quoteado (redundantemente rechazados) — no dead preconditions; hardening opcional: brazo que admita fallback con string quoteado; (b) relay sin fila de catalogo es CORRECTO (es relay, no knob); (c) drenaje ds:derive theme-graph (stale desde 31d04caa0, 9.39MB vs pin 9.00MB + ratchet re-pin) EN COLA como paquete propio junto al drenaje engine-audit de cb6304622."
+    },
+    {
+     "at": "2026-09-22 02:23",
+     "by": "kimi-dt",
+     "note": "2026-09-22 kimi-dt: drenaje engine-audit INTEGRADO (950900aed, Fable ACCEPT). fallbackParityViolations 9->0 en fuente (opacity 0.5 stale entró en 9d64c294f sobre 6ce8cd545 — corrección de atribución Fable; bithire compila 0.5 por preset y el checker juzga contra el default DS por diseño); 36 baselines atribuidos (d198d6b1f/af9289c04/f32287e2c). EN COLA: (a) los 19 claim-exactness desenmascarados — ahora el red vivo de la cadena cert; (b) certificar usePartInteraction via admisión de transparent-argument en nonStylePropBag (8 archivos, 9 unidades de ratchet); (c) 3 reds csspaint ajenos; (d) drenaje theme-graph ds:derive."
     }
    ]
   },
