@@ -25,9 +25,41 @@
   },
   "ratchets": {
     "droppedFrames": {
-      "seeded": false,
-      "scenes": {},
-      "rationale": "Decrease-only, seeded at the first real measurement. The showroom probe route and spec are a LATER lot (WO-INV-08 ships the authority module, its drill and the bundle arm); until that lot seeds these, no scene has a dropped-frame ceiling and the browser arm is not registered as a gate."
+      "seeded": true,
+      "scenes": {
+        "reflow": 26,
+        "size-interpolate": 14,
+        "size-measured": 12,
+        "presence": 10
+      },
+      "seedContext": {
+        "protocol": {
+          "traceMs": 1000,
+          "togglesAtMs": [
+            0,
+            500
+          ],
+          "observerFlushMs": 250,
+          "quietMs": 300,
+          "viewport": [
+            1280,
+            900
+          ],
+          "runsPerSeed": "1 warmup + 7 measured, fresh context each"
+        },
+        "display": {
+          "calibratedIntervalMs": 8.3,
+          "refreshHz": 120,
+          "surface": "local headless Chromium, the DT seeding host, 2026-09-22"
+        },
+        "rationale": "These ceilings only mean something under this protocol and on this display. The protocol constants live in packages/showroom/e2e/responsive/motion-budget.spec.ts, so a protocol edit silently re-bases the ratchet: changing them requires resetting scenes to {} and seeding again. Re-seeding only lowers a ceiling, so a noisier surface (for example the CI runner) can never be seeded over these values. Moving the ratchet to another surface needs an explicit reset (scenes {}, seeded false) recorded as its own decision, not a MOTION_BUDGET_WRITE_SEED run."
+      },
+      "seedRule": {
+        "sigmas": 3,
+        "minSigma": 1,
+        "rationale": "The ceiling is the pooled dropped count plus a margin of sigmas x sigma, where sigma = max(sqrt(runs x sample variance of the per-run counts), sqrt(pooled count), minSigma): the standard deviation of a pooled total over this many runs, measured from the seeding run itself. The Poisson term is there because dropped frames are a count of rare events, so the total varies by about its square root even when seven runs happen to agree. minSigma is there so an all-zero run still gets a margin. 3 sigma keeps the false-red rate near 0.1% per scene per run (4 scenes per CI pass), and anything beyond it is outside what seven runs can call noise, so it reds. The previous rule seeded at the exact first-run count with zero margin: on 2026-09-22 the acceptance run went red on +1 (reflow 14 vs 13, size-interpolate 3 vs 2) with every other arm green. The rule lives in seedDroppedFrameCeiling (index.mjs) and is drilled in tests/index.test.mjs."
+      },
+      "rationale": "Decrease-only, keyed by the probe scene ids (/probe/motion-budget/<scene>: reflow, size-interpolate, size-measured, presence). packages/showroom/e2e/responsive/motion-budget.spec.ts measures them and asserts every other arm of this file; it is env-gated (DS_MOTION_BUDGET=1). MOTION_BUDGET_WRITE_SEED=1 writes min(existing ceiling, seedRule ceiling of this run) per scene, and only after a complete run that is green outside this arm. A later seed can lower a ceiling but never raise it. Until seeded, no scene has a ceiling. Seeded 2026-09-22 with the seedRule on a calibrated 8.3ms (120Hz) display. Pooled count -> ceiling per scene: reflow 14 -> 26, size-interpolate 6 -> 14, size-measured 5 -> 12, presence 4 -> 10. In every scene the Poisson term was the largest sigma; the per-run counts were 0-2. The acceptance run over this seed measured 14 / 4 / 5 / 5 and was green."
     }
   },
   "kernelBundle": {

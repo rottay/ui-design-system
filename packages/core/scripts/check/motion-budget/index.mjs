@@ -15,8 +15,9 @@
  * a warmup median outside `calibrationWindowMs` fails as UNCALIBRATED instead of
  * silently adopting a throttled surface's bar.
  *
- * The browser arm is not registered as a gate yet: the probe route and spec are
- * a later lot. `motion-budget-drill` runs this module's suite; `property-law`
+ * The browser arm is `packages/showroom/e2e/responsive/motion-budget.spec.ts`,
+ * which calls these verdicts in its own phase and is not a manifest gate.
+ * `motion-budget-drill` runs this module's suite; `property-law`
  * and `kernel-bundle` under `audits/` are the two registered gates of this
  * capability today.
  */
@@ -83,6 +84,43 @@ export function countDroppedFrames(deltas, intervalMs, budget = readBudget()) {
   return deltas.filter((delta) => delta > ceiling).length;
 }
 
+/** The seed rule `ratchets.droppedFrames.seedRule` states: the pooled count plus
+ *  `sigmas` x the largest of the observed spread, the Poisson spread and `minSigma`. */
+export function seedDroppedFrameCeiling(droppedPerRun, budget = readBudget(), existing = Number.POSITIVE_INFINITY) {
+  const { sigmas, minSigma } = budget.ratchets.droppedFrames.seedRule;
+  const runs = droppedPerRun.length;
+  const total = droppedPerRun.reduce((sum, count) => sum + count, 0);
+  const mean = runs === 0 ? 0 : total / runs;
+  const variance = runs > 1
+    ? droppedPerRun.reduce((sum, count) => sum + (count - mean) ** 2, 0) / (runs - 1)
+    : 0;
+  const sigma = Math.max(Math.sqrt(runs * variance), Math.sqrt(total), minSigma);
+  const margin = Math.ceil(sigmas * sigma);
+  return { total, sigma, margin, ceiling: Math.min(existing, total + margin) };
+}
+
+/** Whether a run may seed: every scene has a complete budget verdict red at most on the
+ *  ratchet arm AND a green reduced-motion control. Absent verdicts block like failed ones. */
+export function seedAdmission(sceneIds, sceneVerdicts, controlVerdicts, budget = readBudget()) {
+  const reasons = [];
+  for (const id of sceneIds) {
+    const scene = sceneVerdicts.get(id);
+    if (!scene) reasons.push(`${id}: no budget verdict was recorded`);
+    else {
+      for (const failure of scene.failures) {
+        if (failure.arm !== 'ratchets.droppedFrames') reasons.push(`${id}: ${failure.arm} failed`);
+      }
+      if (scene.measured.droppedPerRun.length !== budget.frames.measuredRuns) {
+        reasons.push(`${id}: ${scene.measured.droppedPerRun.length} per-run counts, expected ${budget.frames.measuredRuns}`);
+      }
+    }
+    const control = controlVerdicts.get(id);
+    if (!control) reasons.push(`${id}: no reduced-motion control verdict was recorded`);
+    else for (const failure of control.failures) reasons.push(`${id}: control ${failure.arm} failed`);
+  }
+  return { ok: reasons.length === 0, reasons };
+}
+
 /**
  * The verdict for one scene. `failures` is empty or the run is red; every entry
  * names the arm, so a reader does not have to diff numbers to find out which.
@@ -106,8 +144,11 @@ export function verdictForScene(scene, budget = readBudget()) {
   const deltas = pool(runs);
   const p95 = percentile(deltas, 0.95);
   const max = deltas.length === 0 ? Number.NaN : Math.max(...deltas);
+  const droppedPerRun = calibration.calibrated
+    ? runs.map((run) => countDroppedFrames(run, calibration.intervalMs, budget))
+    : [];
   const dropped = calibration.calibrated
-    ? countDroppedFrames(deltas, calibration.intervalMs, budget)
+    ? droppedPerRun.reduce((sum, count) => sum + count, 0)
     : Number.NaN;
 
   if (calibration.calibrated) {
@@ -168,6 +209,7 @@ export function verdictForScene(scene, budget = readBudget()) {
       p95Ms: p95,
       maxMs: max,
       droppedFrames: dropped,
+      droppedPerRun,
       longTasksOverThreshold: offendingTasks.length,
       animationsCreated,
       rafCallbacks,

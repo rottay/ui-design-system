@@ -14,6 +14,8 @@ import {
   median,
   percentile,
   readBudget,
+  seedAdmission,
+  seedDroppedFrameCeiling,
   verdictForReducedMotionControl,
   verdictForScene,
 } from '../index.mjs';
@@ -170,8 +172,130 @@ test('the statistics helpers are the ones the arms claim', () => {
   assert.equal(percentile(Array.from({ length: 100 }, (_, index) => index + 1), 0.95), 95);
 });
 
-test('the browser arm is NOT claimed as seeded while its probe is a later lot', () => {
-  assert.equal(budget.ratchets.droppedFrames.seeded, false);
-  assert.deepEqual(budget.ratchets.droppedFrames.scenes, {});
-  assert.match(budget.ratchets.droppedFrames.rationale, /LATER lot/u);
+test('the dropped-frame ratchet is keyed to the probe scenes and seeded all-or-nothing', () => {
+  const PROBE_SCENES = ['reflow', 'size-interpolate', 'size-measured', 'presence'];
+  const { seeded, scenes } = budget.ratchets.droppedFrames;
+  assert.ok(Object.keys(scenes).every((id) => PROBE_SCENES.includes(id)), Object.keys(scenes).join(', '));
+  assert.ok(Object.values(scenes).every((ceiling) => Number.isInteger(ceiling) && ceiling >= 0));
+  assert.deepEqual(Object.keys(scenes).sort(), seeded ? [...PROBE_SCENES].sort() : []);
+});
+
+/** A 60-frame run at 16.7ms with `dropped` frames at 34ms (one missed vsync each). */
+function runDropping(dropped) {
+  return [...Array.from({ length: 60 - dropped }, () => 16.7), ...Array.from({ length: dropped }, () => 34)];
+}
+
+function acceptance(ceiling, perRun) {
+  const seeded = {
+    ...budget,
+    ratchets: { droppedFrames: { ...budget.ratchets.droppedFrames, seeded: true, scenes: { grid: ceiling } } },
+  };
+  return verdictForScene(scene({ runs: perRun.map(runDropping) }), seeded);
+}
+
+const isRatchetRed = (verdict) => verdict.failures.some((failure) => failure.arm === 'ratchets.droppedFrames');
+
+test('the seed rule is stated in the thresholds file', () => {
+  const { sigmas, minSigma, rationale } = budget.ratchets.droppedFrames.seedRule;
+  assert.equal(sigmas, 3);
+  assert.equal(minSigma, 1);
+  assert.match(rationale, /seedDroppedFrameCeiling/u);
+});
+
+test('the verdict reports the per-run dropped counts the seed rule reads', () => {
+  const verdict = acceptance(99, [2, 2, 2, 2, 2, 2, 1]);
+  assert.deepEqual(verdict.measured.droppedPerRun, [2, 2, 2, 2, 2, 2, 1]);
+  assert.equal(verdict.measured.droppedFrames, 13);
+});
+
+test('DRILL: a +1 jitter over the seeding run passes, where the zero-margin rule redded it', () => {
+  // The 2026-09-22 reflow case: seeded on 13, the acceptance run measured 14.
+  const seedRun = [2, 2, 2, 2, 2, 2, 1];
+  const seed = seedDroppedFrameCeiling(seedRun, budget);
+  assert.equal(seed.total, 13);
+  assert.equal(seed.margin, Math.ceil(3 * Math.sqrt(13)));
+
+  const jitter = [2, 2, 2, 2, 2, 2, 2];
+  assert.equal(isRatchetRed(acceptance(seed.ceiling, jitter)), false);
+  assert.equal(isRatchetRed(acceptance(seed.total, jitter)), true);
+});
+
+test('DRILL: a regression beyond the margin is RED', () => {
+  const seed = seedDroppedFrameCeiling([2, 2, 2, 2, 2, 2, 1], budget);
+  assert.equal(seed.ceiling, 24);
+  assert.equal(isRatchetRed(acceptance(seed.ceiling, [4, 4, 4, 3, 3, 3, 3])), false);
+  assert.equal(isRatchetRed(acceptance(seed.ceiling, [4, 4, 4, 4, 3, 3, 3])), true);
+});
+
+test('DRILL: a quiet seeding run still gets a margin; one dropped frame passes, a real regression reds', () => {
+  const seed = seedDroppedFrameCeiling([0, 0, 0, 0, 0, 0, 0], budget);
+  assert.equal(seed.ceiling, 3);
+  assert.equal(isRatchetRed(acceptance(seed.ceiling, [1, 0, 0, 0, 0, 0, 0])), false);
+  assert.equal(isRatchetRed(acceptance(seed.ceiling, [1, 1, 1, 1, 0, 0, 0])), true);
+});
+
+test('DRILL: a spread wider than Poisson widens the margin', () => {
+  const spread = seedDroppedFrameCeiling([0, 6, 0, 6, 0, 6, 0], budget);
+  assert.ok(spread.sigma > Math.sqrt(spread.total));
+  assert.equal(spread.margin, Math.ceil(3 * spread.sigma));
+});
+
+test('DRILL: re-seeding never raises a ceiling', () => {
+  assert.equal(seedDroppedFrameCeiling([9, 9, 9, 9, 9, 9, 9], budget, 12).ceiling, 12);
+  assert.equal(seedDroppedFrameCeiling([0, 0, 0, 0, 0, 0, 0], budget, 12).ceiling, 3);
+});
+
+const SEED_SCENES = ['reflow', 'presence'];
+
+function greenRun() {
+  const sceneVerdicts = new Map(SEED_SCENES.map((id) => [id, verdictForScene(scene({ id }), budget)]));
+  const controlVerdicts = new Map(SEED_SCENES.map((id) => [id, verdictForReducedMotionControl({
+    id, animationsCreated: 0, committedGeometryMatchesTarget: true,
+  })]));
+  return { sceneVerdicts, controlVerdicts };
+}
+
+test('a complete run with green controls is admitted to seed', () => {
+  const { sceneVerdicts, controlVerdicts } = greenRun();
+  assert.deepEqual(seedAdmission(SEED_SCENES, sceneVerdicts, controlVerdicts, budget), { ok: true, reasons: [] });
+});
+
+test('DRILL: a failed reduced-motion control blocks the seed like a failed budget arm', () => {
+  const { sceneVerdicts, controlVerdicts } = greenRun();
+  controlVerdicts.set('presence', verdictForReducedMotionControl({
+    id: 'presence', animationsCreated: 3, committedGeometryMatchesTarget: true,
+  }));
+  const admission = seedAdmission(SEED_SCENES, sceneVerdicts, controlVerdicts, budget);
+  assert.equal(admission.ok, false);
+  assert.deepEqual(admission.reasons, ['presence: control reducedMotion failed']);
+
+  const budgetRed = greenRun();
+  budgetRed.sceneVerdicts.set('presence', verdictForScene(scene({ id: 'presence', longTasks: [60] }), budget));
+  assert.deepEqual(
+    seedAdmission(SEED_SCENES, budgetRed.sceneVerdicts, budgetRed.controlVerdicts, budget).reasons,
+    ['presence: longTasks failed'],
+  );
+});
+
+test('DRILL: a missing control or budget verdict blocks the seed', () => {
+  const noControl = greenRun();
+  noControl.controlVerdicts.delete('reflow');
+  assert.deepEqual(
+    seedAdmission(SEED_SCENES, noControl.sceneVerdicts, noControl.controlVerdicts, budget).reasons,
+    ['reflow: no reduced-motion control verdict was recorded'],
+  );
+  const noBudget = greenRun();
+  noBudget.sceneVerdicts.delete('reflow');
+  assert.equal(seedAdmission(SEED_SCENES, noBudget.sceneVerdicts, noBudget.controlVerdicts, budget).ok, false);
+});
+
+test('a red ratchet arm alone does not block a re-seed, which can only lower', () => {
+  const { sceneVerdicts, controlVerdicts } = greenRun();
+  const tight = {
+    ...budget,
+    ratchets: { droppedFrames: { ...budget.ratchets.droppedFrames, scenes: { reflow: 0 } } },
+  };
+  sceneVerdicts.set('reflow', verdictForScene(scene({ id: 'reflow', runs: [1, 0, 0, 0, 0, 0, 0].map(runDropping) }), tight));
+  assert.ok(sceneVerdicts.get('reflow').failures.some((failure) => failure.arm === 'ratchets.droppedFrames'));
+  assert.equal(seedAdmission(SEED_SCENES, sceneVerdicts, controlVerdicts, budget).ok, true);
 });
