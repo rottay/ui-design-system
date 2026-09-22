@@ -149,7 +149,7 @@
 
 .ds-rate.ds-rate--modern[data-part='root'][data-disabled='true'] [data-part='star'] {
   cursor: not-allowed;
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
 }
 
 /* Half-star foreground: clips the active fill to the leading half. */

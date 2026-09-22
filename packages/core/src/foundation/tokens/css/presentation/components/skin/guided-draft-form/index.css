@@ -392,7 +392,7 @@
      to 1px in two of the three verticals, which is a hairline rather than a
      locus, so this rail does not ride that axis. */
   inline-size: 2px;
-  border-radius: var(--ds-radius-full, 999px);
+  border-radius: var(--ds-radius-full, 9999px);
 }
 
 /* The link channel, not the raw seed: `--ds-color-primary` is a brand

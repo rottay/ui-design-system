@@ -2,7 +2,7 @@
  * The disabled stamp behind the slider's muting rules.
  *
  * The skin mutes rail/track/handle/dot with
- * `opacity: var(--ds-state-disabled-opacity, 0.5)`, but every one of those
+ * `opacity: var(--ds-state-disabled-opacity, 0.6)`, but every one of those
  * rules was headed by `[data-disabled='true']` alone — the component's own prop
  * echo, not the anatomy kernel's token. The head now pairs the two, and the
  * root stamps `data-state~='disabled'` beside the prop echo it already wrote,
@@ -43,7 +43,7 @@ describe('Slider disabled stamp', () => {
   });
 
   it('keeps the muting value on the governed channel with the literal floor', () => {
-    expect(skin).toContain('opacity: var(--ds-state-disabled-opacity, 0.5);');
+    expect(skin).toContain('opacity: var(--ds-state-disabled-opacity, 0.6);');
   });
 
   it.each([false, true])('stamps both attributes together (range=%s)', async (range) => {

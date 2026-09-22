@@ -547,7 +547,7 @@
   border-color: var(--ds-upload-add-border-hover, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
 }
 .ds-upload.ds-upload--modern [data-part='add-button'][data-disabled='true'] {
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
   cursor: not-allowed;
 }
 .ds-upload.ds-upload--modern [data-part='add-button'] svg {
@@ -560,7 +560,7 @@
 }
 .ds-upload.ds-upload--modern [data-part='trigger'][data-disabled='true'] {
   cursor: not-allowed;
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
 }
 /* The trigger span carries no role of its own, so the border/chrome rules
    buy the (0,4,0) floor with the stable `[data-part='root']` ancestor
@@ -592,7 +592,7 @@
 }
 .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:is([data-state~='disabled'], :disabled) {
   cursor: not-allowed;
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
 }
 
 /* Keyboard rings on every Upload-owned action surface. */
@@ -686,7 +686,7 @@
   color: var(--ds-color-primary);
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-disabled='true'] {
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
   cursor: not-allowed;
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] svg {

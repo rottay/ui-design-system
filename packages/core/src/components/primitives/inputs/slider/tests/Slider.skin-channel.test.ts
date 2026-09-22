@@ -54,7 +54,7 @@ describe('Slider modern skin state postures (K2-V sweep)', () => {
     expect(skin).toContain("[data-disabled='true']) [data-part='rail']");
     expect(skin).toContain("[data-disabled='true']) [data-part='track']");
     expect(skin).toContain("[data-disabled='true']) [data-part='handle']");
-    expect(skin).toContain('opacity: var(--ds-state-disabled-opacity, 0.5);');
+    expect(skin).toContain('opacity: var(--ds-state-disabled-opacity, 0.6);');
   });
 
   it('keeps the handle :active to a bare scale (no double translate)', () => {

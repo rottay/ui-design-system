@@ -37685,7 +37685,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='rail'],
 .ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='track'],
 .ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='handle'] {
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
 }
 
 .ds-slider.ds-slider--modern [data-part='mark-label'] {
@@ -37776,7 +37776,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   outline: none;
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='disabled'], :disabled) {
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
   cursor: not-allowed;
 }
 
@@ -37988,7 +37988,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background: var(--ds-color-primary);
 }
 .ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='dot'] {
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
 }
 
 /* Mark labels inside the filled span: ink + weight, never color alone (the
@@ -41208,7 +41208,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-color: var(--ds-upload-add-border-hover, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
 }
 .ds-upload.ds-upload--modern [data-part='add-button'][data-disabled='true'] {
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
   cursor: not-allowed;
 }
 .ds-upload.ds-upload--modern [data-part='add-button'] svg {
@@ -41221,7 +41221,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-upload.ds-upload--modern [data-part='trigger'][data-disabled='true'] {
   cursor: not-allowed;
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
 }
 /* The trigger span carries no role of its own, so the border/chrome rules
    buy the (0,4,0) floor with the stable `[data-part='root']` ancestor
@@ -41253,7 +41253,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:is([data-state~='disabled'], :disabled) {
   cursor: not-allowed;
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
 }
 
 /* Keyboard rings on every Upload-owned action surface. */
@@ -41347,7 +41347,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-primary);
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-disabled='true'] {
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
   cursor: not-allowed;
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] svg {
@@ -48240,7 +48240,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .ds-rate.ds-rate--modern[data-part='root'][data-disabled='true'] [data-part='star'] {
   cursor: not-allowed;
-  opacity: var(--ds-state-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
 }
 
 /* Half-star foreground: clips the active fill to the leading half. */
@@ -83525,7 +83525,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
      to 1px in two of the three verticals, which is a hairline rather than a
      locus, so this rail does not ride that axis. */
   inline-size: 2px;
-  border-radius: var(--ds-radius-full, 999px);
+  border-radius: var(--ds-radius-full, 9999px);
 }
 
 /* The link channel, not the raw seed: `--ds-color-primary` is a brand
