@@ -61,8 +61,10 @@
 @media (hover: none) and (pointer: coarse) {
   :root {
     /* Ensure minimum touch targets */
-    --ds-avatar-xs-size: max(var(--ds-avatar-xs-size), 2.75rem);
-    --ds-avatar-sm-size: max(var(--ds-avatar-sm-size), 2.75rem);
+    /* Physical floor, not rem: 2.75rem is 41.25px at the 15px fluid root. The
+       self-referencing var() was also a cycle, so the whole rule computed away. */
+    --ds-avatar-xs-size: max(44px, 2.75rem);
+    --ds-avatar-sm-size: max(44px, 2.75rem);
 
     /* Disable hover effects on touch devices */
     --ds-avatar-hover-scale: 1;

@@ -49,6 +49,9 @@
 /* Perceptually-even grayscale ramp + ink/paper surface anchors. Distinct from the
    hue-tinted `--ds-color-neutral-*` UI scale; see foundation/monochrome/index.css. */
 @import "../../../foundation/monochrome/index.css" layer(rottay-tokens);
+/* Forced-colors floor: properties on role selectors, never channels. It sits in
+   the LOWEST paint layer on purpose, so every per-family block wins over it. */
+@import "../../../foundation/a11y/forced-colors/index.css" layer(rottay-tokens);
 @import "../../../foundation/animations/index.css" layer(rottay-motion);
 
 /* Layer 2: Component tokens */
@@ -761,6 +764,10 @@
    artifact is unlayered too, so a layered guard can never reach it. See
    foundation/responsive/language-arabic-root.css. */
 @import "../../../foundation/responsive/language-arabic-root/index.css";
+
+/* Increased-contrast geometry floor at ROOT scope, the second member of the
+   same unlayered class: seven of its nine channels are artifact-declared. */
+@import "../../../foundation/a11y/contrast/index.css";
 
 /* Accessibility: touch targets (unlayered)
  *

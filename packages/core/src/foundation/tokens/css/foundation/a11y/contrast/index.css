@@ -1,0 +1,51 @@
+/**
+ * Increased-contrast geometry floor — ROOT scope, unlayered.
+ *
+ * GEOMETRY ONLY. Widths, offsets and separator opacities are the same number
+ * for every tenant, so they may be hand-authored here. Anything whose correct
+ * value under the preference is a FUNCTION of a tenant decision — the on-tone
+ * inks, the posture mix ratios — is the lowering's to state, not this file's.
+ *
+ * WHY UNLAYERED, AND WHY TWO ATTRIBUTES. Seven of the nine channels below are
+ * declared by every compiled tenant artifact, and tenant paint is unlayered by
+ * law (cascade-layers: TENANT_PAINT_IS_UNLAYERED), so it outranks every layer
+ * regardless of specificity: a layered guard would reach none of them. The same
+ * device the Arabic root guard uses applies —
+ * `html[data-engine='modern'][data-theme]` is (0,2,1), which beats the
+ * artifact's `:is(html[data-tenant='x'], …)` at (0,1,1). A TIE LOSES, because
+ * the artifact is appended later; both attributes are load-bearing, and both
+ * are non-optional keys of the governed root projection.
+ *
+ * WHY NOT `!important`. Specificity is enough and stays negotiable: an
+ * application that genuinely means to override this can still author a rule.
+ *
+ * WHAT IT DELIBERATELY OVERRIDES. bithire compiles
+ * `--ds-edge-standard-width: 1.5px` as a vertical decision. Under an explicit
+ * `prefers-contrast: more` this floor replaces it with 2px. That is intended:
+ * the floor is not deriving anything from bithire's edge decision, it is
+ * stating the minimum a user who asked for more contrast gets, which is the
+ * same number whatever the tenant decided.
+ *
+ * MODERN FENCE. Classic and Rustic are frozen and fail-closed; new floor
+ * content must not reach them.
+ *
+ * DRIFT: the channel list is pinned, row for row, by
+ * `tests/contrast-root-guard/index.test.ts`. A tenth channel fails until the
+ * pinned table is revisited.
+ */
+
+@media (prefers-contrast: more) {
+  html[data-engine="modern"][data-theme] {
+    --ds-focus-ring-width: 3px;
+    --ds-focus-ring-offset: 3px;
+    --ds-edge-hairline-width: 2px;
+    --ds-edge-standard-width: 2px;
+    --ds-breadcrumb-separator-opacity: 1;
+    --ds-stack-divider-opacity: 1;
+    --ds-toolbar-divider-opacity: 1;
+    /* The rung stays one step above the hairline, which this floor moved to 2px. */
+    --ds-border-width-2: 3px;
+    --ds-avatar-focus-ring-width: 3px;
+    --ds-avatar-focus-ring-offset: 3px;
+  }
+}

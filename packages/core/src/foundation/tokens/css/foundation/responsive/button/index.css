@@ -12,7 +12,9 @@
    density while the interactive target remains safe. */
 @media (hover: none), (pointer: coarse) {
   :root {
-    --ds-button-touch-target-min: 2.75rem;
+    /* Physical floor, not rem: at this tree's 15px fluid root 2.75rem is
+       41.25px, under the WCAG AAA floor. `max()` pins it root-independently. */
+    --ds-button-touch-target-min: max(44px, 2.75rem);
   }
 }
 

@@ -38,7 +38,9 @@ describe('touch-target floor (44px coarse pointer)', () => {
       css('runtime/engines/modern/skin/select/index.css'),
       css('runtime/engines/modern/skin/menu/index.css'),
     ].join('\n');
-    const CANONICAL_FLOOR = /(?:44px|2\.75rem)/;
+    // One law, one spelling. `2.75rem` was an accepted alternative and it is
+    // 41.25px at this tree's 15px fluid root -- i.e. it never was the floor.
+    const CANONICAL_FLOOR = /44px/;
     /** Every value the cascade declares for a channel, across the files above. */
     const declaredValues = (channel: string): string[] =>
       [...declarations.matchAll(new RegExp(`${channel}:\\s*([^;]+);`, 'g'))].map((match) =>

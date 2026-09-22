@@ -1,0 +1,82 @@
+/**
+ * Forced-colors floor — properties on role/anatomy selectors, NEVER channels.
+ *
+ * A `--ds-*` channel set inside a global forced-colors block propagates into
+ * every reader, including the families that correctly opt out (charts, brand
+ * marks, pictograms). Properties on role selectors do not, so this floor states
+ * properties only and leaves the channel grammar untouched.
+ *
+ * LAYER `rottay-tokens` — the lowest DS paint layer. Every one of the existing
+ * per-family forced-colors blocks lives in `rottay-components`/`rottay-engines`
+ * and therefore wins over this floor by layer alone. Specificity is (0,0,0) by
+ * construction (`:where()` throughout) and is asserted by the suite, so an app
+ * rule of any specificity also wins.
+ *
+ * MODERN FENCE — `:where([data-engine='modern'])`. Classic and Rustic are
+ * frozen and fail-closed; new floor content must not reach them.
+ *
+ * OPT OUTS, deliberately unmapped: brand and tone fills (forced-colors discards
+ * brand by design — restating it re-introduces the unreadable pairing the mode
+ * exists to remove), on-tone inks, elevation/shadow/glass, and charts / brand
+ * marks / pictograms, whose own blocks stay the authority.
+ */
+
+@media (forced-colors: active) {
+  /* `forced-color-adjust` is inherited: asserting `auto` at the root makes the
+     allowlist (charts, marks, pictograms) the only place `none` may appear. */
+  :where(html[data-engine="modern"]) {
+    forced-color-adjust: auto;
+  }
+
+  /* Job 1 — never-branded roles. Link is the least-served role in the tree. */
+  :where([data-engine="modern"]) :where(a[href]) {
+    color: LinkText;
+  }
+
+  :where([data-engine="modern"]) :where(a[href]:visited) {
+    color: VisitedText;
+  }
+
+  :where([data-engine="modern"]) :where(:focus-visible) {
+    outline-color: Highlight;
+  }
+
+  :where([data-engine="modern"])
+    :where(
+      [aria-selected="true"],
+      [data-selected="true"],
+      [aria-current]:not([aria-current="false"])
+    ) {
+    background-color: Highlight;
+    color: HighlightText;
+  }
+
+  :where([data-engine="modern"])
+    :where(
+      [disabled],
+      [aria-disabled="true"],
+      [data-disabled="true"],
+      [data-state~="disabled"]
+    ) {
+    color: GrayText;
+    border-color: GrayText;
+  }
+
+  /* Job 2 — structure survival. Where the DS draws a boundary with background
+     or shadow only, both are discarded and the surface merges into the canvas. */
+  :where([data-engine="modern"])
+    :where(
+      dialog,
+      [popover],
+      [role="dialog"],
+      [role="alertdialog"],
+      [role="menu"],
+      [role="listbox"],
+      [role="tooltip"],
+      [data-part="surface"],
+      [data-part="panel"],
+      [data-part="card"]
+    ) {
+    border: 1px solid ButtonBorder;
+  }
+}

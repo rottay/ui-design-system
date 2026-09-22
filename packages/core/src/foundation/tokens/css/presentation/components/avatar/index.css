@@ -174,7 +174,9 @@
      TOUCH TARGETS
      Minimum touch target size for accessibility
      ======================================================================== */
-  --ds-avatar-touch-target-min: 2.75rem;  /* 44px - WCAG AAA minimum */
+  /* Physical floor, not rem: at this tree's 15px fluid root 2.75rem is
+     41.25px, under the WCAG AAA floor. `max()` pins it root-independently. */
+  --ds-avatar-touch-target-min: max(44px, 2.75rem);  /* 44px - WCAG AAA minimum, root-independent */
 
   /* ========================================================================
      TRANSITIONS
