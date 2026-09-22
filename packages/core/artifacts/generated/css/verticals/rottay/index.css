@@ -3558,6 +3558,93 @@ html.dark {
 }
 
 }
+/* Forced-colors floor: properties on role selectors, never channels. It sits in
+   the LOWEST paint layer on purpose, so every per-family block wins over it. */
+@layer rottay-tokens {
+/**
+ * Forced-colors floor — properties on role/anatomy selectors, NEVER channels.
+ *
+ * A `--ds-*` channel set inside a global forced-colors block propagates into
+ * every reader, including the families that correctly opt out (charts, brand
+ * marks, pictograms). Properties on role selectors do not, so this floor states
+ * properties only and leaves the channel grammar untouched.
+ *
+ * LAYER `rottay-tokens` — the lowest DS paint layer. Every one of the existing
+ * per-family forced-colors blocks lives in `rottay-components`/`rottay-engines`
+ * and therefore wins over this floor by layer alone. Specificity is (0,0,0) by
+ * construction (`:where()` throughout) and is asserted by the suite, so an app
+ * rule of any specificity also wins.
+ *
+ * MODERN FENCE — `:where([data-engine='modern'])`. Classic and Rustic are
+ * frozen and fail-closed; new floor content must not reach them.
+ *
+ * OPT OUTS, deliberately unmapped: brand and tone fills (forced-colors discards
+ * brand by design — restating it re-introduces the unreadable pairing the mode
+ * exists to remove), on-tone inks, elevation/shadow/glass, and charts / brand
+ * marks / pictograms, whose own blocks stay the authority.
+ */
+
+@media (forced-colors: active) {
+  /* `forced-color-adjust` is inherited: asserting `auto` at the root makes the
+     allowlist (charts, marks, pictograms) the only place `none` may appear. */
+  :where(html[data-engine="modern"]) {
+    forced-color-adjust: auto;
+  }
+
+  /* Job 1 — never-branded roles. Link is the least-served role in the tree. */
+  :where([data-engine="modern"]) :where(a[href]) {
+    color: LinkText;
+  }
+
+  :where([data-engine="modern"]) :where(a[href]:visited) {
+    color: VisitedText;
+  }
+
+  :where([data-engine="modern"]) :where(:focus-visible) {
+    outline-color: Highlight;
+  }
+
+  :where([data-engine="modern"])
+    :where(
+      [aria-selected="true"],
+      [data-selected="true"],
+      [aria-current]:not([aria-current="false"])
+    ) {
+    background-color: Highlight;
+    color: HighlightText;
+  }
+
+  :where([data-engine="modern"])
+    :where(
+      [disabled],
+      [aria-disabled="true"],
+      [data-disabled="true"],
+      [data-state~="disabled"]
+    ) {
+    color: GrayText;
+    border-color: GrayText;
+  }
+
+  /* Job 2 — structure survival. Where the DS draws a boundary with background
+     or shadow only, both are discarded and the surface merges into the canvas. */
+  :where([data-engine="modern"])
+    :where(
+      dialog,
+      [popover],
+      [role="dialog"],
+      [role="alertdialog"],
+      [role="menu"],
+      [role="listbox"],
+      [role="tooltip"],
+      [data-part="surface"],
+      [data-part="panel"],
+      [data-part="card"]
+    ) {
+    border: 1px solid ButtonBorder;
+  }
+}
+
+}
 @layer rottay-motion {
 /**
  * Animation Tokens Index - Rottay Design System
@@ -5249,7 +5336,9 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      TOUCH TARGETS
      Minimum touch target size for accessibility
      ======================================================================== */
-  --ds-avatar-touch-target-min: 2.75rem;  /* 44px - WCAG AAA minimum */
+  /* Physical floor, not rem: at this tree's 15px fluid root 2.75rem is
+     41.25px, under the WCAG AAA floor. `max()` pins it root-independently. */
+  --ds-avatar-touch-target-min: max(44px, 2.75rem);  /* 44px - WCAG AAA minimum, root-independent */
 
   /* ========================================================================
      TRANSITIONS
@@ -119539,8 +119628,10 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
 @media (hover: none) and (pointer: coarse) {
   :root {
     /* Ensure minimum touch targets */
-    --ds-avatar-xs-size: max(var(--ds-avatar-xs-size), 2.75rem);
-    --ds-avatar-sm-size: max(var(--ds-avatar-sm-size), 2.75rem);
+    /* Physical floor, not rem: 2.75rem is 41.25px at the 15px fluid root. The
+       self-referencing var() was also a cycle, so the whole rule computed away. */
+    --ds-avatar-xs-size: max(44px, 2.75rem);
+    --ds-avatar-sm-size: max(44px, 2.75rem);
 
     /* Disable hover effects on touch devices */
     --ds-avatar-hover-scale: 1;
@@ -119632,7 +119723,9 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    density while the interactive target remains safe. */
 @media (hover: none), (pointer: coarse) {
   :root {
-    --ds-button-touch-target-min: 2.75rem;
+    /* Physical floor, not rem: at this tree's 15px fluid root 2.75rem is
+       41.25px, under the WCAG AAA floor. `max()` pins it root-independently. */
+    --ds-button-touch-target-min: max(44px, 2.75rem);
   }
 }
 
@@ -119943,6 +120036,61 @@ html[lang]:lang(ar) {
   --ds-type-caption-letter-spacing: 0;
   --ds-type-code-letter-spacing: 0;
   --ds-type-numeric-letter-spacing: 0;
+}
+
+
+/* Increased-contrast geometry floor at ROOT scope, the second member of the
+   same unlayered class: seven of its nine channels are artifact-declared. */
+/**
+ * Increased-contrast geometry floor — ROOT scope, unlayered.
+ *
+ * GEOMETRY ONLY. Widths, offsets and separator opacities are the same number
+ * for every tenant, so they may be hand-authored here. Anything whose correct
+ * value under the preference is a FUNCTION of a tenant decision — the on-tone
+ * inks, the posture mix ratios — is the lowering's to state, not this file's.
+ *
+ * WHY UNLAYERED, AND WHY TWO ATTRIBUTES. Seven of the nine channels below are
+ * declared by every compiled tenant artifact, and tenant paint is unlayered by
+ * law (cascade-layers: TENANT_PAINT_IS_UNLAYERED), so it outranks every layer
+ * regardless of specificity: a layered guard would reach none of them. The same
+ * device the Arabic root guard uses applies —
+ * `html[data-engine='modern'][data-theme]` is (0,2,1), which beats the
+ * artifact's `:is(html[data-tenant='x'], …)` at (0,1,1). A TIE LOSES, because
+ * the artifact is appended later; both attributes are load-bearing, and both
+ * are non-optional keys of the governed root projection.
+ *
+ * WHY NOT `!important`. Specificity is enough and stays negotiable: an
+ * application that genuinely means to override this can still author a rule.
+ *
+ * WHAT IT DELIBERATELY OVERRIDES. bithire compiles
+ * `--ds-edge-standard-width: 1.5px` as a vertical decision. Under an explicit
+ * `prefers-contrast: more` this floor replaces it with 2px. That is intended:
+ * the floor is not deriving anything from bithire's edge decision, it is
+ * stating the minimum a user who asked for more contrast gets, which is the
+ * same number whatever the tenant decided.
+ *
+ * MODERN FENCE. Classic and Rustic are frozen and fail-closed; new floor
+ * content must not reach them.
+ *
+ * DRIFT: the channel list is pinned, row for row, by
+ * `tests/contrast-root-guard/index.test.ts`. A tenth channel fails until the
+ * pinned table is revisited.
+ */
+
+@media (prefers-contrast: more) {
+  html[data-engine="modern"][data-theme] {
+    --ds-focus-ring-width: 3px;
+    --ds-focus-ring-offset: 3px;
+    --ds-edge-hairline-width: 2px;
+    --ds-edge-standard-width: 2px;
+    --ds-breadcrumb-separator-opacity: 1;
+    --ds-stack-divider-opacity: 1;
+    --ds-toolbar-divider-opacity: 1;
+    /* The rung stays one step above the hairline, which this floor moved to 2px. */
+    --ds-border-width-2: 3px;
+    --ds-avatar-focus-ring-width: 3px;
+    --ds-avatar-focus-ring-offset: 3px;
+  }
 }
 
 
