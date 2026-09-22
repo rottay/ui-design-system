@@ -6572,6 +6572,11 @@
      "at": "2026-09-22 10:24",
      "by": "kimi-dt",
      "note": "2026-09-22 kimi-dt: small-drains-2 INTEGRADO en commit local bc1f738ed (Fable ACCEPT receipt-small-drains-2-review-fable-2.json). Freeze 108->117 (9 minters FAM-11 nombrados); 2 canales a motion-glacial con rest byte-igual; ratchet 2114/5823 y graph re-anchor +451 escritos. Residuales Fable al trail: (a) paquete z-index repaint toma AMBOS literales de la familia (30 + voice-help 180, una sola relacion de apilado); (b) line-height 1.45 viaja con voice-help-hint-line-height; (c) docblock motion deriver stale ('16 sites carry the dial factor' miden 2/99) — correccion doc para el proximo que toque derivation/motion; (d) --ds-line-height-label no tiene reads (correccion aritmetica del reporte). El reseal ceremony exige docs tree limpio primero (Fable observo: docs origin/main en a6a0e55, dirty ajeno). usePartInteraction entrego en paralelo; su auditoria Fable despachada ahora (3 archivos, disjunto)."
+    },
+    {
+     "at": "2026-09-22 10:34",
+     "by": "kimi-dt",
+     "note": "2026-09-22 kimi-dt: usePartInteraction/nonStylePropBag INTEGRADO en commit local 8c5f50a12 (Fable ACCEPT-WITH-CHANGES resuelto; correccion del comentario transparentParameterNames aplicada). Correcciones Fable al trail: --update-baseline inusable por absorcion whole-map de decreases ajenos (NO por filesScanned, que es MIN-governed); las 6 filas ajenas suman -20 (no -12); la fila total tiene offset preexistente de 8 contra su propia suma — todo queda con el dueno del drift ajeno. La enmienda quedo con 2 piernas (transparent-arg + local-bag prover con walk de referencias post-literal — Fable: faithful completion, no overreach). EN COLA: (a) paquete re-marking destructured + property-access (AMBOS predicados, drill opaque-arg-through-transparent-slot; Fable midio el gap mas amplio de lo descrito — isCertifiedNonStylePropBagValue entero); (b) ownership zeroPaint sin verificar para kind nonStylePropBag (nota; la escritura props.style=paint cae en la fila fleet del kernel, no es silenciosa); (c) docblocks nuevos de 4-7 lineas quedan por consistencia de estilo del archivo (DT call). decisions-reads census en vuelo (su ledger ya aparece en el arbol — pathspecs lo respetaron)."
     }
    ]
   },
