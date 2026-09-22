@@ -6527,6 +6527,11 @@
      "at": "2026-09-22 02:23",
      "by": "kimi-dt",
      "note": "2026-09-22 kimi-dt: drenaje engine-audit INTEGRADO (950900aed, Fable ACCEPT). fallbackParityViolations 9->0 en fuente (opacity 0.5 stale entró en 9d64c294f sobre 6ce8cd545 — corrección de atribución Fable; bithire compila 0.5 por preset y el checker juzga contra el default DS por diseño); 36 baselines atribuidos (d198d6b1f/af9289c04/f32287e2c). EN COLA: (a) los 19 claim-exactness desenmascarados — ahora el red vivo de la cadena cert; (b) certificar usePartInteraction via admisión de transparent-argument en nonStylePropBag (8 archivos, 9 unidades de ratchet); (c) 3 reds csspaint ajenos; (d) drenaje theme-graph ds:derive."
+    },
+    {
+     "at": "2026-09-22 03:24",
+     "by": "kimi-dt",
+     "note": "2026-09-22 kimi-dt: claim-exactness INTEGRADO en commit LOCAL 7e618e6fd (Fable ACCEPT receipt-claim-exactness-review-fable.json) — gate verde (541 entries, 68/68 subtests) sin debilitar nada; 5 refactors componente-por-parte; reseal del doc sellado bajo ruling DT R-EVI02-DOCPARTS (docs 7a48d931c) que ademas dreno un red enmascarado (8/12 docs off-seal vs pin viejo e048d2f9). PUSH DE DS RETENIDO: el CI pin exige el SHA en el remoto de docs-engineering y fam04-docs tiene 63 commits locales (el pin VIEJO ya era inalcanzable — dangling desde el seal anterior). Esperando autorizacion owner para publicar docs. EN COLA: (a) Transfer.causality re-pin a la baja (7->0, deuda drenada); (b) cuarta enmienda doc: columnas state de skeleton-row (data-divider) y skeleton-cell (data-kind) stale — requiere otra ceremonia seal+CI; (c) usePartInteraction/nonStylePropBag gana 5 sitios nuevos (los hooks use*Button); (d) theme-graph ds:derive; (e) 3 reds csspaint."
     }
    ]
   },
