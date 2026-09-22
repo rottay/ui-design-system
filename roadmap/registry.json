@@ -6635,6 +6635,11 @@
      "at": "2026-09-22 19:33",
      "by": "kimi-dt",
      "note": "2026-09-22 kimi-dt: widget-board adopta readTiming del kernel (6a8a6a756, Fable ACCEPT) — el defecto de parse erradicado del arbol (kernel + widget-board comparten la MISMA primitiva). Registrado para el handoff FAM-13 (TODO, sin trail abierto aun): (a) el edge privado components/patterns→layout/kernel/measure es TRANSITORIO y entra en el write-set del handoff para BORRARSE (no dejar una segunda puerta al kernel abierta); (b) el brazo real-browser del widget-board queda aceptado como registrado sin slot fechado — el handoff pone el board sobre useFlipLayout, que el runner emitted-timing ya maneja; si se quiere evidencia antes, la ruta whitelabel-canary ya monta un WidgetBoard bajo tres tenants; (c) cosmetico Fable: la lectura de easing de readTiming se descarta y el engine computa estilos 2 veces por reflow (desaparece con el handoff)."
+    },
+    {
+     "at": "2026-09-22 19:42",
+     "by": "kimi-dt",
+     "note": "2026-09-22 kimi-dt: Classic elevation metadata CORREGIDA e integrada (89f00778e + ceremonia seal 636cd2d; Fable ACCEPT-WITH-CHANGES resuelto) — decision owner ratificada ejecutada: postura native con scope component (unica lectora: la Box clasica; alias --ds-shadow-* excluidos porque un tenant puede cortar el vinculo; el 'every artifact redeclares' era stale — los 3 artifacts declaran CERO de esos canales). Matriz 30/24 -> 31/23 con preambulo fechado; suite engine-posture 378/378; drills de mutacion x3. Residuales al trail: (a) la regla del scope drill HEREDA la gameabilidad text-read de la suite (un literal muerto en un TSX clasico cuenta como lector — si se quiere cerrar, es del INSTRUMENTO, no de esta celda); (b) lg/xl leen elevation-4/5, fuera del set declarado del control (la celda lista 1-3 correctamente; la sonda cubre los 5 rungs)."
     }
    ]
   },
