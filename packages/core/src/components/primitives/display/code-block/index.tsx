@@ -299,6 +299,9 @@ export function CodeBlock({
           data-part="pre"
           style={{
             margin: 0,
+            // The keyboard-reachable scroll region above owns scrolling; a host
+            // reset's `pre { overflow: auto }` would otherwise steal it.
+            overflow: 'visible',
             padding: 'var(--ds-spacing-3)',
             fontFamily: MONO_FONT,
             fontSize: 'var(--ds-font-size-sm)',

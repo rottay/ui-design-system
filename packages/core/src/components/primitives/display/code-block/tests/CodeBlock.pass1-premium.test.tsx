@@ -184,6 +184,25 @@ describe('CodeBlock remediation (K4-B)', () => {
     expect(scrollableAttr(scroll)).toEqual({ role: 'region', tabIndex: '0', name: 'Code block' });
   });
 
+  it('keeps scrolling on the focusable region when a host reset makes every pre a scroller', () => {
+    // antd's reset ships `pre { overflow: auto }`; the unfocusable pre then
+    // captured the scroll and axe reported scrollable-region-focusable.
+    const reset = document.createElement('style');
+    reset.textContent = 'pre { overflow: auto; }';
+    document.head.appendChild(reset);
+    try {
+      const { container } = render(<CodeBlock code={'a\nb'} {...LABELS} />);
+      const pre = container.querySelector<HTMLElement>('[data-part="pre"]')!;
+      expect(pre.parentElement!.getAttribute('data-part')).toBe('scroll');
+      // An inline declaration outranks any non-important author reset.
+      expect(pre.style.overflow).toBe('visible');
+      expect(getComputedStyle(pre).overflow).toBe('visible');
+      expect(pre.hasAttribute('tabindex')).toBe(false);
+    } finally {
+      reset.remove();
+    }
+  });
+
   it('resolves the scroll-region name through the guarded i18n channel', () => {
     const { container } = render(
       <I18nProvider

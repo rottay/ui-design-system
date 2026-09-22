@@ -1895,7 +1895,7 @@ export function PatternBehaviorScene({ only }: { only: PatternBehaviorCase }) {
         </div>
       </SpecimenRow>
       <Vignette label={only}>
-        <p style={{ font: 'inherit', fontSize: '0.75rem', opacity: 0.55, margin: 0 }}>
+        <p style={{ font: 'inherit', fontSize: '0.75rem', opacity: 0.7, margin: 0 }}>
           Rendered under the segment’s FlatTheme. The specimen above is the judged band; this
           note carries no tenant identity of its own.
         </p>

@@ -35,7 +35,7 @@ export function InputsMaterialScene() {
         </div>
 
         <div data-testid="lab-select" style={{ inlineSize: 240 }}>
-          <Select options={SELECT_OPTIONS} defaultValue="reviewer" forceCustomDropdown />
+          <Select aria-label="Inputs material — role" options={SELECT_OPTIONS} defaultValue="reviewer" forceCustomDropdown />
         </div>
       </SpecimenRow>
 

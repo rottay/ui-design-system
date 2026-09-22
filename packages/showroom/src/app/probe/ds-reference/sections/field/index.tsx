@@ -38,33 +38,36 @@ function FocusedInput() {
   useEffect(() => {
     ref.current?.focus();
   }, []);
-  return <Input ref={ref} defaultValue="Focused" data-testid="lab-focused-field" />;
+  return <Input ref={ref} aria-label="States — focus-visible" defaultValue="Focused" data-testid="lab-focused-field" />;
 }
 
+/* Every specimen outside a FormField carries an `aria-label`: a bare control is
+   genuinely unnamed, and a visual probe must not ship that defect to prove a
+   border. FormField-wrapped children are named by its own `<label htmlFor>`. */
 export function FieldScene() {
   return (
     <SceneFrame title="field — input + select + formfield">
       <SpecimenRow axis="field chrome">
-        <Input placeholder="Placeholder" />
-        <Input defaultValue="Filled value" />
-        <Select placeholder="Select a region" options={REGION_OPTIONS} />
-        <Select defaultValue="north" options={REGION_OPTIONS} />
+        <Input aria-label="Field chrome — placeholder" placeholder="Placeholder" />
+        <Input aria-label="Field chrome — filled" defaultValue="Filled value" />
+        <Select aria-label="Field chrome — select placeholder" placeholder="Select a region" options={REGION_OPTIONS} />
+        <Select aria-label="Field chrome — select filled" defaultValue="north" options={REGION_OPTIONS} />
       </SpecimenRow>
 
       <SpecimenRow axis="scale">
-        <Input size="sm" placeholder="Small" />
-        <Input size="md" placeholder="Medium" />
-        <Input size="lg" placeholder="Large" />
+        <Input aria-label="Scale — small" size="sm" placeholder="Small" />
+        <Input aria-label="Scale — medium" size="md" placeholder="Medium" />
+        <Input aria-label="Scale — large" size="lg" placeholder="Large" />
       </SpecimenRow>
 
       {/* States. The focus treatment here must agree with the control group's:
           if a field focuses with a ring and a button focuses with a rule, the
           two groups are not one grammar. */}
       <SpecimenRow axis="states — rest, focus-visible, error, disabled">
-        <Input defaultValue="Rest" data-testid="lab-focus-rest" />
+        <Input aria-label="States — rest" defaultValue="Rest" data-testid="lab-focus-rest" />
         <FocusedInput />
-        <Input defaultValue="Bad value" status="error" />
-        <Input defaultValue="Disabled" disabled />
+        <Input aria-label="States — error" defaultValue="Bad value" status="error" />
+        <Input aria-label="States — disabled" defaultValue="Disabled" disabled />
       </SpecimenRow>
 
       {/* FormField carries the label/help/error rhythm. Label posture is a
@@ -111,16 +114,16 @@ export function FieldScene() {
 
       <SpecimenRow axis="content — long value, es, ar (RTL), unbroken token">
         <div style={{ width: 280 }}>
-          <Input defaultValue={TORTURE_CONTENT.longLabel} />
+          <Input aria-label="Content — long value" defaultValue={TORTURE_CONTENT.longLabel} />
         </div>
         <div style={{ width: 280 }}>
-          <Input defaultValue={TORTURE_CONTENT.spanish} />
+          <Input aria-label="Content — Spanish" defaultValue={TORTURE_CONTENT.spanish} />
         </div>
         <div style={{ width: 280 }} dir="rtl">
-          <Input defaultValue={TORTURE_CONTENT.arabic} />
+          <Input aria-label="Content — Arabic (RTL)" defaultValue={TORTURE_CONTENT.arabic} />
         </div>
         <div style={{ width: 220 }}>
-          <Input defaultValue={TORTURE_CONTENT.unbroken} />
+          <Input aria-label="Content — unbroken token" defaultValue={TORTURE_CONTENT.unbroken} />
         </div>
       </SpecimenRow>
 
@@ -148,10 +151,10 @@ export function FieldScene() {
           one this proof actually measures. */}
       <SpecimenRow axis="container query — independent of viewport (400px vs 220px)">
         <div data-testid="lab-container-probe-wide" style={{ width: 400 }}>
-          <Input prefix="$" defaultValue="Wide container" />
+          <Input aria-label="Container query — wide" prefix="$" defaultValue="Wide container" />
         </div>
         <div data-testid="lab-container-probe-narrow" style={{ width: 220 }}>
-          <Input prefix="$" defaultValue="Narrow container" />
+          <Input aria-label="Container query — narrow" prefix="$" defaultValue="Narrow container" />
         </div>
       </SpecimenRow>
     </SceneFrame>

@@ -14,6 +14,17 @@
  *
  * The furniture is also deliberately UNSTYLED beyond neutral layout: it must
  * not contribute visual character that could be mistaken for the tenant's.
+ *
+ * RECEDING IS NOT THE SAME AS UNREADABLE. The title and the axis captions used
+ * to recede by compositing the inherited ink at `opacity` 0.45 / 0.35, which
+ * measured 2.92:1 and 2.22:1 on both grounds — the furniture failed the
+ * contrast floor the scenes exist to audit. They now ink from
+ * `--ds-color-text-muted`, the muted rung of the tenant's OWN neutral ladder,
+ * so each ground keeps its hue family (cool #6B6B72 on BitHire's white, warm
+ * #6E6B63 on The Management's #F6F3EC) where a hard-coded rung would be cold
+ * on a warm ground AND still fail. Size and letter-spacing are untouched, so
+ * the title/caption hierarchy is unchanged. Do not reintroduce `opacity` here:
+ * it composites against whatever sits behind and cannot be reasoned about.
  */
 
 import type { ReactNode } from 'react';
@@ -38,7 +49,7 @@ export function SceneFrame({ title, children }: { title: string; children: React
           fontSize: '0.6875rem',
           letterSpacing: '0.08em',
           textTransform: 'uppercase',
-          opacity: 0.45,
+          color: 'var(--ds-color-text-muted)',
           margin: 0,
         }}
       >
@@ -76,7 +87,7 @@ export function AxisCaption({ children }: { children: ReactNode }) {
         fontSize: '0.625rem',
         letterSpacing: '0.06em',
         textTransform: 'uppercase',
-        opacity: 0.35,
+        color: 'var(--ds-color-text-muted)',
         margin: 0,
       }}
     >
