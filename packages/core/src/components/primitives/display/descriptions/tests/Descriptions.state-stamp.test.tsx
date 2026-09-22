@@ -1,7 +1,7 @@
 /**
  * Descriptions has no interactive part, so it stamps no interaction state.
  *
- * The header is a title block and a row is a `role="listitem"` inside a `<dl>`:
+ * The header is a title block and a row is a roleless grouping `<div>` inside a `<dl>`:
  * no engine gives either one a click handler, an activation key or a tab stop,
  * and the public contract declares no `onClick` / `clickable` / row callback.
  * Its skin's hover and press response is therefore a reading aid painted by the
@@ -58,7 +58,9 @@ describe('Descriptions modern state contract', () => {
       expect(node.getAttribute('role')).not.toBe('button');
     }
     expect(header.getAttribute('role')).toBeNull();
-    expect(rows[0].getAttribute('role')).toBe('listitem');
+    // The row wrapper is the description list's grouping element and stays
+    // roleless, so its <dt>/<dd> keep their native mapping (dlitem repair).
+    expect(rows[0].getAttribute('role')).toBeNull();
   });
 
   it('stamps no interaction state under pointer or focus input', () => {

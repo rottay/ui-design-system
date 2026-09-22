@@ -52,7 +52,11 @@ describe('Descriptions modern advanced coverage', () => {
     expect(root.style.getPropertyValue('--ds-descriptions-column-count')).toBe('');
     expect(root.style.getPropertyValue('--_ds-descriptions-columns-md')).toBe('2');
     expect(root.style.getPropertyValue('--_ds-descriptions-columns-lg')).toBe('4');
-    expect(grid).toHaveAttribute('role', 'list');
+    // Retargeted by the dlitem repair: the grid IS the <dl>, and it must carry no
+    // explicit role — an ARIA role there replaces the native description-list
+    // mapping. Structural law: Descriptions.description-list-semantics.test.tsx.
+    expect(grid.tagName).toBe('DL');
+    expect(grid.hasAttribute('role')).toBe(false);
     expect(grid.querySelector('[data-part="row"]')).toHaveAttribute('data-span', '2');
     expect(screen.getByText('Name:')).toHaveStyle({ color: 'rgb(255, 0, 0)', fontStyle: 'italic' });
     expect(screen.getByText('Ada Lovelace')).toHaveStyle({ fontWeight: '700' });

@@ -185,13 +185,11 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         <div data-part="body">
           {layout === 'horizontal' ? (
             // Horizontal: CSS grid with configurable columns; items can span multiple cells.
-            // Semantics: a description LIST — <dl> with <dt>/<dd> pairs (the div row
-            // wrapper is spec-legal inside <dl>); the role attributes stay for the
-            // pinned test contract.
-            <dl
-              data-part="rows"
-              role="list"
-            >
+            // Semantics: a description LIST — <dl> with <dt>/<dd> pairs. The single div
+            // row wrapper is the spec's own grouping element and MUST stay roleless:
+            // an explicit role on it (or on the <dl>) replaces the native
+            // term/definition mapping, which is what orphans every <dt>/<dd>.
+            <dl data-part="rows">
               {itemElements.map((child, index) => {
                 const itemProps = child.props as DescriptionsItemProps;
                 const span = clampSpan(itemProps.span, columnCount);
@@ -203,7 +201,6 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                     data-part="row"
                     data-index={index}
                     data-span={span}
-                    role="listitem"
                     style={{
                       '--ds-descriptions-item-span': span,
                     } as React.CSSProperties}
@@ -232,7 +229,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
             // Vertical: label column on the inline-start side, value on the
             // inline-end side; the skin owns the track split (with a subgrid
             // upgrade where supported). Same <dl>/<dt>/<dd> semantics.
-            <dl data-part="rows" role="list">
+            <dl data-part="rows">
               {itemElements.map((child, index) => {
                 const itemProps = child.props as DescriptionsItemProps;
 
@@ -243,7 +240,6 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                     data-part="row"
                     data-index={index}
                     data-span={clampSpan(itemProps.span, columnCount)}
-                    role="listitem"
                   >
                     <dt
                       className="rottay-descriptions-label"

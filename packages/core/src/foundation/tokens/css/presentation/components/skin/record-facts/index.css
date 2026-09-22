@@ -120,9 +120,36 @@
   border-radius: var(--ds-radius-md, 8px);
 }
 
-.ds-pattern-record-facts .ds-record-facts__heading-copy,
-.ds-pattern-record-facts .ds-record-facts__fact-copy {
+.ds-pattern-record-facts .ds-record-facts__heading-copy {
   min-width: 0;
+}
+
+.ds-pattern-record-facts .ds-record-facts__fact > dt,
+.ds-pattern-record-facts .ds-record-facts__fact > dd {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.ds-pattern-record-facts .ds-record-facts__fact[data-has-icon="true"] > dt,
+.ds-pattern-record-facts .ds-record-facts__fact[data-has-icon="true"] > dd {
+  grid-column: 2;
+}
+
+/* `-1` counts lines of the EXPLICIT row grid, so the rows the pair occupies
+   are declared: without them the icon claims row 1 and sizes it to its own
+   30px instead of sitting beside the whole stack. */
+.ds-pattern-record-facts .ds-record-facts__fact[data-rows="2"] {
+  grid-template-rows: auto auto;
+}
+
+.ds-pattern-record-facts .ds-record-facts__fact[data-rows="3"] {
+  grid-template-rows: auto auto auto;
+}
+
+.ds-pattern-record-facts
+  .ds-record-facts__fact[data-has-icon="true"]
+  > .ds-record-facts__fact-icon {
+  grid-row: 1 / -1;
 }
 
 .ds-pattern-record-facts .ds-record-facts__title,
@@ -170,7 +197,8 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-content: center;
-  gap: var(--ds-spacing-3, 12px);
+  column-gap: var(--ds-spacing-3, 12px);
+  row-gap: 0;
   min-width: 0;
   min-height: var(--ds-record-facts-item-height, 82px);
   margin: 0;

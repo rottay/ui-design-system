@@ -112,7 +112,8 @@
 .ds-pattern-decision-panorama .ds-decision-panorama__fact {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--ds-spacing-3, 12px);
+  column-gap: var(--ds-spacing-3, 12px);
+  row-gap: 0;
   min-width: 0;
   padding-block: var(--ds-spacing-3, 12px);
   border-bottom: 1px solid color-mix(
@@ -138,8 +139,29 @@
   font-size: var(--ds-decision-panorama-fact-icon-size, var(--ds-font-size-sm));
 }
 
-.ds-pattern-decision-panorama .ds-decision-panorama__fact-copy {
+.ds-pattern-decision-panorama .ds-decision-panorama__fact > dt,
+.ds-pattern-decision-panorama .ds-decision-panorama__fact > dd {
+  grid-column: 1;
   min-width: 0;
+}
+
+.ds-pattern-decision-panorama
+  .ds-decision-panorama__fact[data-has-icon='true'] > dt,
+.ds-pattern-decision-panorama
+  .ds-decision-panorama__fact[data-has-icon='true'] > dd {
+  grid-column: 2;
+}
+
+/* The pair is always exactly <dt> + <dd>, and `-1` counts explicit row lines,
+   so the two rows are declared for the icon's span to resolve against. */
+.ds-pattern-decision-panorama .ds-decision-panorama__fact {
+  grid-template-rows: auto auto;
+}
+
+.ds-pattern-decision-panorama
+  .ds-decision-panorama__fact[data-has-icon='true']
+  > .ds-decision-panorama__fact-icon {
+  grid-row: 1 / -1;
 }
 
 .ds-pattern-decision-panorama .ds-decision-panorama__fact dt {

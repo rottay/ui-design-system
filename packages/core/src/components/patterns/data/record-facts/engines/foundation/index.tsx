@@ -22,6 +22,10 @@ export function RecordFactsEngine({
   const generatedTitleId = React.useId();
   const titleId = `${generatedTitleId}-title`;
   const Heading: "h2" | "h3" | "h4" = `h${headingLevel}`;
+  // A <dl> may only hold term/definition pairs (optionally one grouping <div>
+  // each). The empty state puts the Empty primitive in the grid instead, which
+  // is not a pair — so that state is a plain <div>. Same class, same box.
+  const Grid: "dl" | "div" = !loading && facts.length === 0 ? "div" : "dl";
 
   return (
     <section
@@ -60,7 +64,7 @@ export function RecordFactsEngine({
         ) : null}
       </header>
 
-      <dl className="ds-record-facts__grid" data-part="grid">
+      <Grid className="ds-record-facts__grid" data-part="grid">
         {loading ? (
           Array.from({ length: 3 }, (_, index) => (
             <div
@@ -76,7 +80,8 @@ export function RecordFactsEngine({
         ) : facts.length === 0 ? (
           // Empty collection: the composed Empty primitive (P09) owns the copy
           // (catalog `empty.description` with its English floor) — never an
-          // accidental blank grid. The div wrapper is spec-legal inside <dl>.
+          // accidental blank grid. `Grid` is a <div> here, so this is not a
+          // stray non-pair child of a description list.
           <div className="ds-record-facts__empty" data-part="empty">
             <ModernEmpty image="simple" />
           </div>
@@ -87,6 +92,8 @@ export function RecordFactsEngine({
                 key={fact.key}
                 data-part="fact"
                 data-fact-key={fact.key}
+                data-has-icon={fact.icon ? "true" : "false"}
+                data-rows={fact.supporting ? "3" : "2"}
                 data-span={fact.span ?? 3}
                 data-emphasis={fact.emphasis ?? "default"}
                 data-state={fact.state ?? "set"}
@@ -108,19 +115,17 @@ export function RecordFactsEngine({
                     {fact.icon}
                   </span>
                 ) : null}
-                <div className="ds-record-facts__fact-copy">
-                  <dt className="ds-record-facts__label">{fact.label}</dt>
-                  <dd className="ds-record-facts__value">{fact.value}</dd>
-                  {fact.supporting ? (
-                    <dd className="ds-record-facts__supporting">
-                      {fact.supporting}
-                    </dd>
-                  ) : null}
-                </div>
+                <dt className="ds-record-facts__label">{fact.label}</dt>
+                <dd className="ds-record-facts__value">{fact.value}</dd>
+                {fact.supporting ? (
+                  <dd className="ds-record-facts__supporting">
+                    {fact.supporting}
+                  </dd>
+                ) : null}
               </div>
             ))
           )}
-      </dl>
+      </Grid>
     </section>
   );
 }

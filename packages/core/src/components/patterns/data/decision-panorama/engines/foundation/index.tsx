@@ -39,19 +39,26 @@ export function DecisionPanoramaEngine({
           ) : null}
           <dl className="ds-decision-panorama__facts">
             {contextFacts.map((fact) => (
-              <div className="ds-decision-panorama__fact" key={fact.key} data-part="fact">
+              // One grouping level only: axe's `dlitem` walks out of a single
+              // roleless <div>, so a second wrapper orphans the pair.
+              // `data-has-icon` carries the column the removed copy wrapper
+              // used to pick implicitly.
+              <div
+                className="ds-decision-panorama__fact"
+                key={fact.key}
+                data-part="fact"
+                data-has-icon={fact.icon ? 'true' : 'false'}
+              >
                 {fact.icon ? (
                   <div className="ds-decision-panorama__fact-icon" aria-hidden="true">
                     {fact.icon}
                   </div>
                 ) : null}
-                <div className="ds-decision-panorama__fact-copy">
-                  <dt>{fact.label}</dt>
-                  <dd>
-                    <strong>{fact.value}</strong>
-                    {fact.supporting ? <small>{fact.supporting}</small> : null}
-                  </dd>
-                </div>
+                <dt>{fact.label}</dt>
+                <dd>
+                  <strong>{fact.value}</strong>
+                  {fact.supporting ? <small>{fact.supporting}</small> : null}
+                </dd>
               </div>
             ))}
           </dl>
