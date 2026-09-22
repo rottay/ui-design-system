@@ -1854,7 +1854,9 @@
   --ds-calendar-bg: #ffffff;
   --ds-calendar-border: #e5e5e5;
   --ds-calendar-header-color: #171717;
-  --ds-calendar-day-color-other: #a3a3a3;
+  /* Supporting ink, not decoration: the adjacent-month numerals ride the
+     governed secondary rung so they stay subordinate AND clear 4.5:1. */
+  --ds-calendar-day-color-other: var(--ds-color-text-secondary);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      TIMELINE

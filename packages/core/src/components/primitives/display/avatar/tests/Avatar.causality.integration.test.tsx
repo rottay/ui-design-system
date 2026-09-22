@@ -90,6 +90,15 @@ describeCausality({
  * dropped here, and the other two supporting rungs return none of them -- that
  * arm is the attribution, not the commit date. Dropped by identity, not
  * waived: a relapse of a dropped node reddens this map.
+ *
+ * The whole `bithire light` group and `evnto light` left with the initials-ink
+ * repair (WO-INV-03 axe batch): the caller-ink rule resolved to a bare
+ * `inherit` and out-ranked every variant step, so a solid fill painted
+ * inherited body text -- primary initials measured 3.22:1 on bithire and
+ * 1.02:1 on the-management. The variants now declare `--ds-avatar-ink-resting`
+ * and the caller knob resolves through it (white initials: 5.55:1 and
+ * 17.42:1). The two dark `success` rows are a different mechanism -- the
+ * darkened success fill on a dark ground -- and are untouched.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'rottay dark': {
@@ -97,19 +106,7 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
       '#success > .rottay-avatar[data-variant="success"][data-shape="circle"] > div[data-part="mask"] > div[data-part="fallback"]',
     ],
   },
-  'bithire light': {
-    'color-contrast': [
-      '#primary > .rottay-avatar[data-variant="primary"][data-shape="circle"] > div[data-part="mask"] > div[data-part="fallback"]',
-      '#success > .rottay-avatar[data-variant="success"][data-shape="circle"] > div[data-part="mask"] > div[data-part="fallback"]',
-      'div[data-shape="square"] > div[data-part="mask"] > div[data-part="fallback"]',
-    ],
-  },
   'bithire dark': {
-    'color-contrast': [
-      '#success > .rottay-avatar[data-variant="success"][data-shape="circle"] > div[data-part="mask"] > div[data-part="fallback"]',
-    ],
-  },
-  'evnto light': {
     'color-contrast': [
       '#success > .rottay-avatar[data-variant="success"][data-shape="circle"] > div[data-part="mask"] > div[data-part="fallback"]',
     ],

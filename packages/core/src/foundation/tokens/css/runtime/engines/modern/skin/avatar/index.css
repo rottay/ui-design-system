@@ -173,30 +173,30 @@
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='primary'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-primary-solid-bg, var(--ds-color-primary)));
-  color: var(--ds-avatar-primary-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse)));
+  --ds-avatar-ink-resting: var(--ds-avatar-primary-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse)));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='secondary'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)));
-  color: var(--ds-avatar-secondary-ink, var(--ds-color-white));
+  --ds-avatar-ink-resting: var(--ds-avatar-secondary-ink, var(--ds-color-white));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='success'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-success-solid-bg, color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%)));
-  color: var(--ds-avatar-success-ink, var(--ds-color-white));
+  --ds-avatar-ink-resting: var(--ds-avatar-success-ink, var(--ds-color-white));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='warning'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-warning-solid-bg, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%)));
-  color: var(--ds-avatar-warning-ink, var(--ds-color-white));
+  --ds-avatar-ink-resting: var(--ds-avatar-warning-ink, var(--ds-color-white));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='error'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)));
-  color: var(--ds-avatar-error-ink, var(--ds-color-white));
+  --ds-avatar-ink-resting: var(--ds-avatar-error-ink, var(--ds-color-white));
 }
 
 /* ---- gradient is the only variant that diverges on ink, and the only one that
         lifts its initials off the fill ---- */
 .rottay-avatar.rottay-avatar--modern[data-variant='gradient'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, linear-gradient(to bottom right, var(--ds-color-primary), var(--ds-color-secondary)));
-  color: var(--ds-avatar-gradient-color);
+  --ds-avatar-ink-resting: var(--ds-avatar-gradient-color);
   text-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-neutral-900) 15%, transparent);
 }
 
@@ -364,6 +364,7 @@
    values the family paints when no caller states one. */
 .rottay-avatar.rottay-avatar--modern {
   --ds-avatar-ink: initial;
+  --ds-avatar-ink-resting: initial;
   --ds-avatar-custom-bg: initial;
 }
 
@@ -405,6 +406,12 @@
   cursor: pointer;
 }
 
+/* The caller's ink outranks every variant step, so this doubled-attribute rule
+   is the family's single `color` on the initials. Its resting leg is the
+   variant's own governed ink (declared as `--ds-avatar-ink-resting` by the
+   variant rules): a bare `inherit` here painted body text on the solid fills,
+   which is how primary initials measured 3.22 on bithire and 1.02 on TMM. An
+   avatar with no variant still inherits, exactly as before. */
 .rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'][data-part='fallback'] {
-  color: var(--ds-avatar-ink, inherit);
+  color: var(--ds-avatar-ink, var(--ds-avatar-ink-resting, inherit));
 }

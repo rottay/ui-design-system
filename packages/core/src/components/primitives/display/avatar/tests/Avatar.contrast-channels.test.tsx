@@ -153,7 +153,7 @@ describe('Avatar modern skin: solid-fallback contrast channels (R0/Axe)', () => 
       );
       expect(rule).not.toBeNull();
       expect(rule![0]).toContain(
-        `color: var(--ds-avatar-${variant}-ink, var(--ds-color-white));`
+        `--ds-avatar-ink-resting: var(--ds-avatar-${variant}-ink, var(--ds-color-white));`
       );
       // The near-black-collapsing chain must not return on darkened fills.
       expect(rule![0]).not.toContain(
@@ -165,5 +165,29 @@ describe('Avatar modern skin: solid-fallback contrast channels (R0/Axe)', () => 
       /\.rottay-avatar\.rottay-avatar--modern\[data-variant='primary'\][^{]*\{[^}]*\}/
     );
     expect(primary![0]).toContain('var(--ds-color-primary-foreground');
+  });
+
+  it('resolves the initials ink caller-knob-first, then the variant resting ink -- never a bare inherit on a solid fill', () => {
+    // The doubled-attribute rule is the family's only `color` on the initials:
+    // it out-ranks every variant step so a caller's `--ds-avatar-ink` wins. Its
+    // resting leg used to be `inherit`, which painted body text on the solid
+    // fills (primary initials: 3.22:1 on bithire, 1.02:1 on the-management).
+    const knob = SKIN.match(
+      /\.rottay-avatar\.rottay-avatar--modern > \[data-part='mask'\] > \[data-part='fallback'\]\[data-part='fallback'\] \{[^}]*\}/
+    );
+    expect(knob).not.toBeNull();
+    expect(knob![0]).toContain('color: var(--ds-avatar-ink, var(--ds-avatar-ink-resting, inherit));');
+
+    for (const variant of ['primary', 'secondary', 'success', 'warning', 'error', 'gradient']) {
+      const rule = SKIN.match(
+        new RegExp(
+          `\\.rottay-avatar\\.rottay-avatar--modern\\[data-variant='${variant}'\\][^{]*\\{[^}]*\\}`
+        )
+      );
+      expect(rule, `${variant} must declare its ink`).not.toBeNull();
+      expect(rule![0], `${variant} must state a resting ink`).toContain('--ds-avatar-ink-resting:');
+      // A `color` here would lose to the knob rule and the defect would return.
+      expect(rule![0], `${variant} must not carry a losing color`).not.toMatch(/\scolor:/);
+    }
   });
 });
