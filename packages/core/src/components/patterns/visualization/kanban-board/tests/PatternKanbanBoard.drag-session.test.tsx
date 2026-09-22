@@ -162,7 +162,7 @@ describe('KanbanBoard (modern) FLIP coupling', () => {
       () =>
         ({
           getPropertyValue: (name: string) =>
-            name === '--ds-motion-normal' ? '200ms' : 'ease-out',
+            name === '--ds-motion-rearrange' ? '200ms' : 'ease-out',
         }) as unknown as CSSStyleDeclaration,
     );
 

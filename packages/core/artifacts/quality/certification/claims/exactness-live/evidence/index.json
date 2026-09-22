@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "d992eee42211ae9f1ddcf9c6907543c8fd8b70c272ed198e66a86518301e5f24",
+    "authorityDigest": "3b87c0743a98fd75520517c2f147afc783fb98a260d891bf967d122e5efbb31a",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "aee4f2a30a8cd533ed4f1e064e85226b943b1fd9",
+    "documentationRevision": "0dd195f60d32a0b1801919797e88ae0ce1475799",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -152,8 +152,8 @@
           "claim-census",
           "documentation-seal"
         ],
-        "bytes": 36464,
-        "sha256": "069d821307ac6454e0dc007e1b9843275afb2a2eb434551f3691d193f3f39837"
+        "bytes": 38846,
+        "sha256": "e16b9120571b699d04e2d1f7f3c88cf94a9037d1234e58a4bf2d1e3b52cba72e"
       },
       {
         "path": "docs-engineering/engineering/design-system/README.md",
@@ -223,7 +223,7 @@
           "workspace-toolchain"
         ],
         "bytes": 25435,
-        "sha256": "18308de2f7ae98d25f0535a7c313694c72f9dbe6d60a166dae97f859b8cf4038"
+        "sha256": "bad124e0b2bdb10f3eb625d3df0191db86711ca6b088835a2c987b3852bb4a8e"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -324,7 +324,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "2fc5f09bee00d51ccc13c90ead1fb79c9c91cf9e099ec6c9ce4ffd58adf7b824"
+        "sha256": "c33580992a68d11a9c0b5b64e0f851d4d59ca949ec741f36d95231a898b07db4"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
@@ -23502,8 +23502,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 2498,
-        "sha256": "f3aae7c2c13ce28ca787b2f3791a28cdb479655b72887df0d67efd50e45269f3"
+        "bytes": 2968,
+        "sha256": "5a2b94a9fdbb9bfa1e336254deec5872b149c1c7729f646819f0860f44648391"
       },
       {
         "path": "ui-design-system/packages/core/src/entrypoints/eslint/rules/index.ts",
@@ -23512,8 +23512,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 345,
-        "sha256": "1593858c6384f0a112a15dafc8d08df6e900939f9bed25021d46315d4ba2d4f7"
+        "bytes": 445,
+        "sha256": "25949ee63e276783b47f7425174ac2f081478d49d084410d987ab24b8888ed46"
       },
       {
         "path": "ui-design-system/packages/core/src/entrypoints/eslint/rules/no-db-in-components/index.ts",
@@ -23570,22 +23570,40 @@
         "sha256": "083c293b9277290325fee8e484b3b25ce5b1ec859be0faf24977695f1457ff56"
       },
       {
+        "path": "ui-design-system/packages/core/src/entrypoints/eslint/rules/no-layout-property-animation/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 9021,
+        "sha256": "40e0f834c7be648baa8a5d9d149be56c1a49aefb2a68f67c262f979d4b2eef96"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/entrypoints/eslint/rules/no-layout-property-animation/tests/index.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5029,
+        "sha256": "9459649b7c3ecc9ba6805518c4703d5822fcadfa2855c9294fe1854cd0c6c301"
+      },
+      {
         "path": "ui-design-system/packages/core/src/entrypoints/eslint/rules/no-motion-literals/index.ts",
         "roles": [
           "audit-input",
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 5263,
-        "sha256": "b16380bd5517d0132a8e069e9243742e50c03f97c0611aa89f01d2c6be424b79"
+        "bytes": 5895,
+        "sha256": "1dabb8d99b9f289cc73e575866add7c5930aa375df4f997c7454754a991fef86"
       },
       {
         "path": "ui-design-system/packages/core/src/entrypoints/eslint/rules/no-motion-literals/tests/index.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 3538,
-        "sha256": "e1531ee3ae395c8ae4d176b3bf0ccc9e40562568c4e1f6ca1fbdd4297a4072ec"
+        "bytes": 5011,
+        "sha256": "a58f083883adcd142eea112aca1d61aae6b294914d27fbc186b26ae1efb8dad8"
       },
       {
         "path": "ui-design-system/packages/core/src/entrypoints/eslint/rules/no-raw-html/index.ts",
@@ -24664,16 +24682,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 4195,
-        "sha256": "d3285abc7343ca4683e278d3e5a45bb48c7652d7f6fe23fa17126f37ac4a7fb9"
+        "bytes": 5583,
+        "sha256": "581a1ebb1e586fc8182630d6f630cc895579c0e66124c8bd17a0c74382d00588"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/behavior/runtime/interaction-state/tests/interaction-state.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 8139,
-        "sha256": "7c0698c9e78cea3e49fed7bf5707879a2daa4bec3648aa5f8dd0e40a340254a9"
+        "bytes": 13868,
+        "sha256": "e0e3ac4342028c39134e35938bf9c3db1a520016c97f6dd6b847f7e687994399"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/behavior/runtime/submit-intent/index.ts",
@@ -26268,8 +26286,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 50514,
-        "sha256": "f869453b81a33b25792e7bd63fb255fa4fac02ba64b6f5f6a73238e412a57033"
+        "bytes": 50968,
+        "sha256": "f69c9fb6ecedcbc2ec7ad6674e8900e8bd2d5a993de885876ec48f80975a2f78"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/entrypoints/tests/touch-target-floor.test.ts",
@@ -26278,6 +26296,46 @@
         ],
         "bytes": 3446,
         "sha256": "4eff077d7b370fc6b93cb728407819b4ca465467d58df6b8bd3c7fc9634e7a46"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/a11y/contrast/index.css",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2416,
+        "sha256": "bd3bd88f4f91448dcb01d88794d724f26a9739a171a65a309179a11c307007c4"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/a11y/forced-colors/index.css",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2747,
+        "sha256": "1227b606aa6d4886d94b84dfd65ba11be7e77a873bc5cb5360bd0228ed03973c"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/a11y/tests/contrast-root-guard/index.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 12153,
+        "sha256": "3bfe3afe644b8ee09910d76daf4a387b6078c0397a18acd5d469b955c180ab89"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/a11y/tests/forced-colors-floor/index.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5803,
+        "sha256": "edcbdee1b6ad08ecfafb265d38ec4fbf7a750d6a6df1ca3b57a6e52ccfa7805d"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/a11y/tests/support/selector/index.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 7060,
+        "sha256": "35d025204bccd50d2936930978ce6cb1c99552d7f3131f076d6a68be3880c77d"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/animations/collection-stagger/index.css",
@@ -26372,8 +26430,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 6384,
-        "sha256": "3e691f3acf5d06f2f4372d2f97d6fd77591419ddc690eab130713f828bc6a9d2"
+        "bytes": 6527,
+        "sha256": "873bdaa4d47c52623393812a9963a45a5ecb1228a6a2bcd6cc5c3a279c3c27e2"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/base/tests/button-silhouette-reach.test.ts",
@@ -26436,8 +26494,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 4755,
-        "sha256": "34069697fc1b4e9bf8714cf7c0b4b0865a9640aa9c3a1a712454550648e3d57a"
+        "bytes": 4878,
+        "sha256": "ef742e790b8e4be27fa0937441bdfea184bf5bde1ca69087576ca2f9bfc0beb4"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/responsive/breakpoints/index.css",
@@ -26452,8 +26510,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 1465,
-        "sha256": "fa002b3b0edaf671bbd643cb7b24833a2cf9e310ba6e3dc399fa926851321048"
+        "bytes": 1631,
+        "sha256": "87ac4b2cca04aa46310ad8823871b088016ebfe4bf23a1c482c547caaaa9fda1"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/responsive/channels/index.css",
@@ -26739,8 +26797,8 @@
           "audit-input",
           "stale-claim-corpus"
         ],
-        "bytes": 9144,
-        "sha256": "2f7555d04efa0e56fb9970dfc1f86f4b1ff85107396ceb6f4071688884eee431"
+        "bytes": 9324,
+        "sha256": "72eeac5a0dd2f222d47d4ce8c16012583a5c540d2015a7413a5db466d513987a"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/badge/index.css",
@@ -35417,8 +35475,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 17588,
-        "sha256": "e1bc20c64d9989b07ad20f18a0e53551e01c85b86e0f82205df98f68907163ea"
+        "bytes": 17623,
+        "sha256": "afefb0658c7a87ef2b5939a65dbc6a260ae4486c2947523f69a5b0df11449b8c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/motion/foundation/index.ts",
@@ -35825,24 +35883,6 @@
         "sha256": "797d06198cf24936cd74de560eafb4aeefe207f67e82adfdba1c736bbf080626"
       },
       {
-        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/flip-layout/index.ts",
-        "roles": [
-          "audit-input",
-          "claim-census",
-          "stale-claim-corpus"
-        ],
-        "bytes": 6028,
-        "sha256": "3e8a4e998f1e81689ac7c7971b13773d1cb4b4b6694ca0e0e0e248c8c8e8f614"
-      },
-      {
-        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/flip-layout/tests/use-flip-layout.test.tsx",
-        "roles": [
-          "audit-input"
-        ],
-        "bytes": 6512,
-        "sha256": "e693bd760538ccdf36832fb36e0264208ccd97b96f387482f7613a6f5e8e224b"
-      },
-      {
         "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/foundation/reduced-motion/index.ts",
         "roles": [
           "audit-input",
@@ -35869,8 +35909,184 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 1711,
-        "sha256": "b42e683513e20b4e7308bb6dc546c2e6059db5921fa243f8032d6c0d30908c23"
+        "bytes": 2165,
+        "sha256": "0e0357e11b143ecb24f11c8bbc0bfe0b08d2ebc82d321f3c87eef5cdd8adbbcc"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/composition/react/group/index.tsx",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 1857,
+        "sha256": "5d4692022ce0940a2c534d80f076175bd93769d4eedc5b91273b4a26f9a7c33b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/composition/react/presence-list/index.tsx",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 5302,
+        "sha256": "af495b873ea17bee5a950ac0345afc06c47861f0f9cb96c762ae9e6d8a2d0af2"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/contracts/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 3571,
+        "sha256": "56609dbe831030a7ac1c3830abf435f0911da859b0284bff4227db3fdd337a34"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/facade/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 3474,
+        "sha256": "f48002614eb8fed0285018c2174f2db7ffbbb57b56525f7e119f38de9897c630"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 1237,
+        "sha256": "0721cf1a9e6477b24152de5c4f036bffc27ba9e3a493b70321720d76eb101e4a"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/kernel/channels/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 922,
+        "sha256": "a71dfdd1ccbc22afe9546a95f383cbfb54313aa57e5efa1a2571331f7af938fd"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/kernel/group/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 1312,
+        "sha256": "bca52b38da59a9263e1d5747606186580ad36a845d60ff7d56ea3fb2a22c2621"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/kernel/measure/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 2526,
+        "sha256": "4a7a928cf9c19133f808afee92e5017a3dce551aeff2ebd31684aa960e2e9969"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/kernel/play/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 1412,
+        "sha256": "19d62e4537579ad8f7398cba055bc80665c4537291f35ffbeda73dd4e9daf6a7"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/runtime/reflow/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 5355,
+        "sha256": "d335e2292f527b97c1c9c442716087b6a2a511eeb816d3a57e60f277503d75fb"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/runtime/shared-element/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 1729,
+        "sha256": "f8456c943102a4a165246b4b816d2f3e45592f5660ace139badb53b4aba792b0"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/runtime/size/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 5146,
+        "sha256": "c1a8bd3ca1120522948391332dd941b7045b373ac789dbe314d3f854b61b80dc"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/tests/channels.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2613,
+        "sha256": "078f7b1bec3a9548930fc1f30ad0279c8a5270af855d5a420489550819e0507c"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/tests/presence.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5217,
+        "sha256": "6c3f2f20425b0659a1a127ae885d4fd25e24fb8b4ef722848c571164abd496a1"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/tests/reduced-motion.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3319,
+        "sha256": "0beb8791d3204f10fdc177d8daa412493fa24d0dad6ade4814a08ce028c5454b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/tests/reflow.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5961,
+        "sha256": "514f0a2ef2d9c3ab95b6507413002eb81475d42ad0502783a084d5e7fe1ab485"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/tests/shared.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2265,
+        "sha256": "ca2177ea2d38b10e34ebfcdac22c473d78c06718de340dc0f149a5bffc5f3bf7"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/tests/size.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 4140,
+        "sha256": "5333ef5d26327c1a5a2a21a5197ab5159676f64d68abddd787f5d47c3e8e408b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/tests/support.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2142,
+        "sha256": "ab867fa0d6429440909d4e92ec3bff348bb8e0202e0adea1cc0f09d6706870a9"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/motion-personality/index.ts",
@@ -46082,7 +46298,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "d992eee42211ae9f1ddcf9c6907543c8fd8b70c272ed198e66a86518301e5f24"
+    "digest": "3b87c0743a98fd75520517c2f147afc783fb98a260d891bf967d122e5efbb31a"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3351 counters; 3256 completed zeros locked exactly; 85 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -47431,7 +47647,7 @@
           "claims": [
             "surface-profile-overrides"
           ],
-          "sha256": "069d821307ac6454e0dc007e1b9843275afb2a2eb434551f3691d193f3f39837",
+          "sha256": "e16b9120571b699d04e2d1f7f3c88cf94a9037d1234e58a4bf2d1e3b52cba72e",
           "blocks": [
             {
               "claimId": "surface-profile-overrides",
@@ -119320,7 +119536,7 @@
           "includeTests": false
         }
       ],
-      "typescriptFiles": 2681,
+      "typescriptFiles": 2693,
       "cssRoots": [
         "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components",
         "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines"
@@ -119339,8 +119555,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "4858d0b418ef1503fcf1984977022e8cc917f510d14c9a664b4b49013d515281",
-      "4858d0b418ef1503fcf1984977022e8cc917f510d14c9a664b4b49013d515281"
+      "b3df93fed824e0e160eccd86f2e370521ea7b7e9dbd56be0ce0ab09ec3c80adb",
+      "b3df93fed824e0e160eccd86f2e370521ea7b7e9dbd56be0ce0ab09ec3c80adb"
     ],
     "agree": true
   }
