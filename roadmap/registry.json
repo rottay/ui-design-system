@@ -5885,7 +5885,7 @@
    "lane": "platform-invariants",
    "order": 3,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-03"
    ],
@@ -5922,7 +5922,9 @@
      "by": "kimi-dt",
      "note": "2026-09-22 kimi-dt: Lot C INTEGRADO en commit local 2f946190f (Fable ACCEPT tras correctivo R8 flatten). Los 3 lotes del contrato estan en main local: A 35218a760, B 6e115b533, C 2f946190f. Acceptance gate: (1) grep -c critical = 0 MEDIDO (modulo sin el literal; asercion JSON parseada con drill); (2) runner --list | grep touch = 2 (touch-target-floor + drill, era 0 — F-47 cerrada como gate); (3) axe batch verde Modern x bithire (2 tenants): PENDIENTE de la ventana browser DT fechada (DS_AXE_ROUTE_BATCH=1 primer seeding + DS_CONTRAST_ARMS=1 + re-medicion de los 2 criticos stale retirados con prosa). CIERRE DE LA WO cuando la ventana browser entregue + verificacion final Kimi de las 3 clausulas. Quedan como deuda registrada con receptor (no bloquean el gate, bloquean el CIERRE si no se registran — ya registrados): Option A lowering, keyboard 8, notification-center, hermano touch-targets (CI-rojo), sonda browser."
     }
-   ]
+   ],
+   "doneAt": "2026-09-22",
+   "evidence": "Cierre formal con las 3 clausulas del acceptance gate MEDIDAS: (1) grep -c critical packages/showroom/e2e/a11y/axe-baseline.json = 0 (ledger sembrado 2026-09-22 por una corrida de cobertura completa validada; la ley JSON parseada con drill cubre la fragilidad del grep — Q10); (2) axe batch verde Modern x bithire DOS tenants reales (/probe/ds-reference/{bithire,the-management}): 25 escenas x 2 grounds, 50 celdas completas, DOS corridas consecutivas verdes (seeding + aceptacion) contra el server de produccion — el mismo path que CI usa; integridad de evidencia P1: la reduccion/publicacion exige las 50 celdas exactas con cero fallidas, los parciales se etiquetan y nunca escriben (la reproduccion de la auditoria independiente quedo como drill); (3) runner --list | grep touch >= 1: 4 filas (touch-target-floor gate + drill, era 0 — F-47 cerrada como gate, contrato no ratchet, con el follower resolviendo por contexto de cascada). Outcome: forced-colors floor (Lot B, ley de mapeo por selectores de rol, scope Modern); prefers-contrast como root guard unlayered geometrico (la linea original era insatisfacible — reescrita en la adopcion: el delta de color por postura es el paquete Option A del lowering owner, REGISTRADO antes de cerrar); axe por familia queda en el harness EVI-02 existente (78 suites) + route level de esta WO; ARIA ids medidos preexistentes (141 archivos useId, 618 refs); pointerType en useInteractionState (Lot A, semantica por modalidad, 13/120 tests); Classic/Rustic FUERA de la matriz (engines congelados intactos en toda la ola). Hallazgos del batch reparados con disposicion L2 (ninguno baselinado en silencio): calendar grid>row>gridcell (1er defecto DS real), contraste calendar/avatar/probe/mobiliario-lab, dlitem en 3 familias, scroll region code-block, specimen labels, N2 menu ink (ruling DT opcion A — CONTRAST_GAP drenado a {}). CI: el batch ejecuta efectivamente (DS_AXE_ROUTE_BATCH=1 en el step visual, f2e30481f). Deuda registrada con receptor (no bloquea el gate): Option A lowering, keyboard 8, notification-center, hermano touch-targets, sonda con fecha. Fable: auditoria consolidada de la ola ACCEPT/ACCEPT-WITH-CHANGES resuelto (receipt-axe-wave-review-fable.json) + ~15 confirmaciones por paquete. 7 commits de integracion (6fb4885f8..2ca902ed8) + ci f2e30481f"
   },
   {
    "id": "WO-INV-04",
