@@ -6557,6 +6557,11 @@
      "at": "2026-09-22 09:21",
      "by": "kimi-dt",
      "note": "2026-09-22 kimi-dt: censo cascade-ratchet INTEGRADO en commit local 937767c7f (Fable ACCEPT). Metodo replay: pin reproducido exacto en su commit natal; 457 nombres atribuidos por replay sobre los 41 commits del corpus; corroboracion independiente registry:6434. Test del instrumento 7/17->17/17. Nota: atribuciones son survivors endpoint-delta, no raw moves por commit (sentence Fable). EN COLA: (a) paquete fuente: 4 --ds-search-command-bar-{pulse-duration,spin-duration,status-line-height,z-index} a raiz gobernada (forma WO-FAM-08); (b) theme-graph ds:derive; (c) usePartInteraction; (d) verify:core; (e) los que esperan docs/owner."
+    },
+    {
+     "at": "2026-09-22 09:45",
+     "by": "kimi-dt",
+     "note": "2026-09-22 kimi-dt: theme-graph drain INTEGRADO en commit local 231835730 (Fable ACCEPT receipt-theme-graph-drain-review-fable.json). Grafo regenerado (108->118 derivers, censo en evidence/theme-graph-drain-census); pin a tamaño exacto cero headroom (ruling Fable: honesto para artifact derivado; endurece la convencion MiB-redondeada). Correccion de atribucion: el red freeze (owner list sin workspace-shell) es de b5eca0e4b FAM-11-C, NO de d4edd6420. EN COLA: (a) freeze list +1 linea (tests/integration/theme-contract-freeze); (b) paquete TSX inline READ-site extraction del theme-graph (NO el plano productor — enmienda Fable de scoping); (c) paquete fuente search-command-bar (4 canales a raiz gobernada); (d) usePartInteraction/nonStylePropBag; (e) censo decisions/reads stale (--ds-disabled-opacity en autocomplete:151); (f) verify:core."
     }
    ]
   },
