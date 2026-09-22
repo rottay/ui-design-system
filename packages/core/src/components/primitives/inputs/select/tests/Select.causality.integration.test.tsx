@@ -72,15 +72,12 @@ describeCausality({
 });
 
 /**
- * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): under the
- * neutral compile a governed chrome pair can reach a scope with no producer --
- * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
- * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
- * Nothing is lowered: every other serious rule must still be empty, and the
- * contrast debt is pinned by the IDENTITY of every failing node, so this row
- * reddens when the debt spreads, when a node is repaired, and when one node is
- * fixed while another starts failing in its place -- the substitution a count
- * could not see (EVI-02, 2026-09-15).
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15). Pinned by
+ * finding id and the IDENTITY of every failing node, so with no entry a scope
+ * must measure clean and a relapse reddens here instead of being absorbed.
+ *
+ * Every row this family carried has drained. Each was dropped by identity, not
+ * waived.
  *
  * `bithire dark` had 5 rows and they DRAINED: that scope's dark block now
  * re-derives its own canvas ground instead of inheriting the light body's, so
@@ -88,23 +85,18 @@ describeCausality({
  * designed for.
  * Dropped by identity, not waived -- with no entry the scope must measure
  * clean, and a relapse reddens here.
+ *
+ * `bithire light` and `evnto light` DRAINED at the supporting-ink re-grade
+ * (f73348ed5, 2026-09-21), which moved `--ds-color-text-secondary` from
+ * `#A0A0A5` to `#5A5A61` in the default light `:root`; neither vertical
+ * authors that rung, so both follow the default. Every node was a trigger
+ * `placeholder`.
+ *
+ * Measured 2026-09-22. Each attribution is an arm, not a date: reverting only
+ * the named declaration at HEAD returns exactly the node identities credited
+ * to it, and every other candidate revert returns none of them.
  */
-const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
-  'bithire light': {
-    'color-contrast': [
-      'div[aria-label="Approver"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
-      'div[aria-label="Loading owner"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
-      'div[aria-label="Reviewer"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      'div[aria-label="Approver"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
-      'div[aria-label="Loading owner"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
-      'div[aria-label="Reviewer"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
-    ],
-  },
-};
+const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {};
 
 /**
  * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15):

@@ -190,27 +190,33 @@ describeCausality({
  * Measured debt, pinned by node IDENTITY rather than by count: a repaired node,
  * a new node and a same-count swap all go red and must be re-adjudicated.
  *
- * Every finding is contrast, and every offending node is content the family
- * does NOT own: the composed Empty's description in an empty column (`p`) and
- * the composed Badge's danger-tone WIP count at the limit (`span[title='1 /
- * 1']`). The board states no ground of its own beneath a caller slot, and the
- * Empty and Badge primitives own their own ink. Registered, never excluded; a
- * scope with no entry is a scope that must stay clean.
+ * Every finding this map carried was contrast, and every offending node was
+ * content the family does NOT own: the composed Empty's description in an
+ * empty column (`p`) and the composed Badge's danger-tone WIP count at the
+ * limit (`span[title='1 / 1']`). The board states no ground of its own beneath
+ * a caller slot, and the Empty and Badge primitives own their own ink -- which
+ * is where both repairs landed. Registered, never excluded; a scope with no
+ * entry is a scope that must stay clean.
  *
  * `bithire dark` held a fourth node, the caller's toolbar slot, whose ground
  * the mode-canvas derivation repaired; it leaves the map by identity.
+ *
+ * Every remaining row DRAINED, under two separate causes. The composed Empty's
+ * description (`p`, in `bithire light` and `evnto light`) followed the
+ * supporting-ink re-grade (f73348ed5, 2026-09-21), which moved
+ * `--ds-color-text-secondary` from `#A0A0A5` to `#5A5A61` in the default light
+ * `:root`. The composed Badge's danger-tone WIP count (`span[title="1 / 1"]`,
+ * in `rottay dark`) followed the danger-family mode leg (e20059e65,
+ * 2026-09-20), which steps `--ds-color-error` from `var(--ds-color-error-400)`
+ * to `var(--ds-color-error-600)` at the light `:root` and states the inverted
+ * error ramp in the dark block: that dark block is what re-grades the error
+ * ramp on a dark canvas. Both nodes still render; both now clear the floor.
+ *
+ * Measured 2026-09-22. Each attribution is an arm, not a date: reverting only
+ * the named declaration at HEAD returns exactly the node identities credited
+ * to it, and every other candidate revert returns none of them.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire light': {
-    'color-contrast': ['p'],
-  },
-  'evnto light': {
-    'color-contrast': ['p'],
-  },
-  'rottay dark': {
-    'color-contrast': ['span[title="1 / 1"]'],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('kanban-board causality surface', () => {
   it('serves the anatomy every probe reads', () => {

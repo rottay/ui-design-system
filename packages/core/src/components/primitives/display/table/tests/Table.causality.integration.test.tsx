@@ -92,10 +92,22 @@ describeCausality({
 
 /**
  * Measured debt, pinned by node IDENTITY, not by count: a repaired node, a new
- * node and a same-count swap all go red. The page counter fails in EVERY gated
- * scope, so its ink is a systemic defect, not a dark-mode one; the title and
- * the header titles fail only in the dark scopes. The fix is a mode-aware ink
+ * node and a same-count swap all go red. The page counter, the title and the
+ * header titles now fail only in the dark scopes. The fix is a mode-aware ink
  * derivation, never an axe exclusion. Registered, never hidden.
+ *
+ * `bithire light` and `evnto light` DRAINED entirely at the supporting-ink
+ * re-grade (f73348ed5, 2026-09-21), which moved `--ds-color-text-secondary`
+ * from `#A0A0A5` to `#5A5A61` in the default light `:root`. The single node
+ * each carried was `pagination-range`, which inks from that rung; neither
+ * vertical authors it. The page counter is therefore no longer a systemic
+ * defect -- it survives only where the dark ramp reaches it.
+ *
+ * Measured 2026-09-22: the surviving rows above are byte-identical. Reverting
+ * only `--ds-color-text-secondary` at HEAD returns exactly the node identities
+ * dropped here, and the other two supporting rungs return none of them -- that
+ * arm is the attribution, not the commit date. Dropped by identity, not
+ * waived: a relapse of a dropped node reddens this map.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire dark': {
@@ -106,8 +118,6 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
       'th:nth-child(2) > div[data-part="header-content"] > span[data-part="header-title"]',
     ],
   },
-  'bithire light': { 'color-contrast': ['span[data-part="pagination-range"]'] },
-  'evnto light': { 'color-contrast': ['span[data-part="pagination-range"]'] },
   'rottay dark': {
     'color-contrast': [
       'div[data-part="title"]',

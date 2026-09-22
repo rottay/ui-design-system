@@ -55,15 +55,12 @@ describeCausality({
 });
 
 /**
- * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): under the
- * neutral compile a governed chrome pair can reach a scope with no producer --
- * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
- * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
- * Nothing is lowered: every other serious rule must still be empty, and the
- * contrast debt is pinned by the IDENTITY of every failing node, so this row
- * reddens when the debt spreads, when a node is repaired, and when one node is
- * fixed while another starts failing in its place -- the substitution a count
- * could not see (EVI-02, 2026-09-15).
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15). Pinned by
+ * finding id and the IDENTITY of every failing node, so with no entry a scope
+ * must measure clean and a relapse reddens here instead of being absorbed.
+ *
+ * Every row this family carried has drained. Each was dropped by identity, not
+ * waived.
  *
  * `bithire dark` had 4 rows and they DRAINED: that scope's dark block now
  * re-derives its own canvas ground instead of inheriting the light body's, so
@@ -79,20 +76,21 @@ describeCausality({
  * `var(--ds-color-bg-input, var(--ds-surface-control))`, so the control grounds
  * at `#0F0F12` there. Dropped by identity, not waived: with no entry the scope
  * must measure clean, and a relapse reddens here.
+ *
+ * Both light scopes DRAINED, under two separate causes. `strength-label`
+ * followed the supporting-ink re-grade (f73348ed5, 2026-09-21), which moved
+ * `--ds-color-text-secondary` from `#A0A0A5` to `#5A5A61` in the default light
+ * `:root`. The error line `#password-modern-_R_3_-error` that `evnto light`
+ * carried followed the danger-family mode leg (e20059e65, 2026-09-20), which
+ * steps `--ds-color-error` from `var(--ds-color-error-400)` to
+ * `var(--ds-color-error-600)` at the light `:root` and states the inverted
+ * error ramp in the dark block.
+ *
+ * Measured 2026-09-22. Each attribution is an arm, not a date: reverting only
+ * the named declaration at HEAD returns exactly the node identities credited
+ * to it, and every other candidate revert returns none of them.
  */
-const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
-  'bithire light': {
-    'color-contrast': [
-      'span[data-part="strength-label"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      '#password-modern-_R_3_-error',
-      'span[data-part="strength-label"]',
-    ],
-  },
-};
+const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {};
 
 /**
  * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15):

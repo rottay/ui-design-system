@@ -62,17 +62,12 @@ describeCausality({
 });
 
 /**
- * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the DER-06
- * compile corrected this family's chrome ink to the dark ramp, which exposed a
- * pre-existing mode-blind GROUND underneath it in
- * `presentation/components/card` (the card base stated `--ds-card-bg:
- * var(--ds-color-white)` in the `rottay-components` layer; repaired in
- * 51fd557fc). Measured against a
- * pristine HEAD archive, every scope below audited CLEAN there, so each entry
- * is lot-caused and none is a pre-existing finding. The gap is pinned by axe
- * rule id AND the identity of every failing node: another rule, one more node,
- * a repaired node or a same-count swap reddens the scope, and a scope absent
- * from this map must still audit clean (EVI-02, 2026-09-15).
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15). Pinned by
+ * finding id and the IDENTITY of every failing node, so with no entry a scope
+ * must measure clean and a relapse reddens here instead of being absorbed.
+ *
+ * Every row this family carried has drained. Each was dropped by identity, not
+ * waived.
  *
  * `bithire dark` had 1 row and it DRAINED: that scope's dark block now
  * re-derives its own canvas ground instead of inheriting the light body's, so
@@ -88,19 +83,18 @@ describeCausality({
  * dark mode's near-white ink. That base now states the mode-aware role and the
  * ground resolves `#182235`. Dropped by identity, not waived: with no entry the
  * scope must measure clean, and a relapse reddens here.
+ *
+ * `bithire light` and `evnto light` DRAINED at the supporting-ink re-grade
+ * (f73348ed5, 2026-09-21), which moved `--ds-color-text-secondary` from
+ * `#A0A0A5` to `#5A5A61` in the default light `:root`; neither vertical
+ * authors that rung, so both follow the default. The single node each scope
+ * carried was `pagination-range`, the total-count line.
+ *
+ * Measured 2026-09-22. Each attribution is an arm, not a date: reverting only
+ * the named declaration at HEAD returns exactly the node identities credited
+ * to it, and every other candidate revert returns none of them.
  */
-const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
-  'bithire light': {
-    'color-contrast': [
-      'div[data-part="pagination-range"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      'div[data-part="pagination-range"]',
-    ],
-  },
-};
+const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {};
 
 describe('pagination direction, state governance and accessibility', () => {
   it('keeps the previous control on the inline start and the seam between controls in both directions', async () => {

@@ -137,37 +137,27 @@ describeCausality({
  * Registered, never excluded; a scope with no entry is a scope that must stay
  * clean.
  *
- * Every remaining finding is contrast on ONE part: the row caption, which inks
- * with `--ds-column-menu-description-color` resting on `--ds-color-text-muted`
- * over the panel's own recessed ground. It is a token-pair finding, not a
- * family one -- moving either side is a palette decision this cut did not take.
- * The two dark scopes and the rottay light scope are clean.
+ * Every finding this map carried was contrast on ONE part: the row caption,
+ * which inks with `--ds-column-menu-description-color` resting on
+ * `--ds-color-text-muted` over the panel's own recessed ground. It was a
+ * token-pair finding, not a family one, and the pair moved on the ink side.
  *
  * REPAIRED BY THIS CUT, not pinned: the five `label` findings. The visibility
  * checkbox of every column row and of every action row rendered with no
  * accessible name at all, so a screen reader announced five unnamed checkboxes
  * in a panel whose whole purpose is choosing between them. Each now carries the
  * name of the thing it toggles.
+ *
+ * Both light scopes DRAINED at the supporting-ink re-grade (f73348ed5,
+ * 2026-09-21), which moved `--ds-color-text-muted` from `#96969E` to `#6B6B72`
+ * in the default light `:root`; neither vertical authors that rung, so the
+ * caption followed it. Every scope now measures clean.
+ *
+ * Measured 2026-09-22. Each attribution is an arm, not a date: reverting only
+ * the named declaration at HEAD returns exactly the node identities credited
+ * to it, and every other candidate revert returns none of them.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire light': {
-    'color-contrast': [
-      '.rottay-box.rottay-box--modern[data-part="action-row-copy"] > .font-normal[data-part="description"][data-visible="true"]',
-      '.rottay-box.rottay-box--modern[data-part="action-row-copy"] > .font-normal[data-visible="false"][data-part="description"]',
-      '.rottay-flex[data-direction="column"][data-part="root"] > div[data-part="row"][data-drag-target="false"][data-dragging="false"] > div[data-part="row-content"][data-justify="between"][data-align="center"] > .rottay-flex[data-part="row-main"][data-align="center"] > .rottay-box.rottay-box--modern[data-part="row-copy"] > .rottay-flex[data-part="row-meta"][data-align="center"] > .font-normal[data-part="description"][data-visible="true"]',
-      '.rottay-flex[data-part="row-meta"][data-align="center"] > .font-normal[data-visible="false"][data-part="description"]',
-      'div[data-part="group-content"] > div[data-part="row"][data-drag-target="false"][data-dragging="false"]:nth-child(1) > div[data-part="row-content"][data-justify="between"][data-align="center"] > .rottay-flex[data-part="row-main"][data-align="center"] > .rottay-box.rottay-box--modern[data-part="row-copy"] > .rottay-flex[data-part="row-meta"][data-align="center"] > .font-normal[data-part="description"][data-visible="true"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      '.rottay-box.rottay-box--modern[data-part="action-row-copy"] > .font-normal[data-part="description"][data-visible="true"]',
-      '.rottay-flex[data-direction="column"][data-part="root"] > div[data-part="row"][data-drag-target="false"][data-dragging="false"] > div[data-part="row-content"][data-justify="between"][data-align="center"] > .rottay-flex[data-part="row-main"][data-align="center"] > .rottay-box.rottay-box--modern[data-part="row-copy"] > .rottay-flex[data-part="row-meta"][data-align="center"] > .font-normal[data-part="description"][data-visible="true"]',
-      '.rottay-flex[data-part="row-meta"][data-align="center"] > .font-normal[data-visible="false"][data-part="description"]',
-      'div[data-part="group-content"] > div[data-part="row"][data-drag-target="false"][data-dragging="false"]:nth-child(1) > div[data-part="row-content"][data-justify="between"][data-align="center"] > .rottay-flex[data-part="row-main"][data-align="center"] > .rottay-box.rottay-box--modern[data-part="row-copy"] > .rottay-flex[data-part="row-meta"][data-align="center"] > .font-normal[data-part="description"][data-visible="true"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('column-menu causality surface', () => {
   it('serves the anatomy every probe reads', () => {

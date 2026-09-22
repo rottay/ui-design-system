@@ -208,51 +208,37 @@ describeCausality({
   },
 });
 
-const TOOLBAR_COPY = (host: string, leaf: string) =>
-  `#${host} > section > .ds-widget-board__toolbar[data-part="toolbar"]`
-  + ' > .ds-widget-board__toolbar-heading[data-part="toolbar-heading"]'
-  + ` > .ds-widget-board__toolbar-copy[data-part="toolbar-copy"] > ${leaf}`;
-
-const CONTEXT = '.ds-widget-board__toolbar-context[data-part="toolbar-context"]';
-const HINT = '.rottay-typography.rottay-typography--modern.font-normal';
 const HEADING = 'h2';
 
 /**
  * Measured debt, pinned by node IDENTITY rather than by count: a repaired node,
  * a new node and a same-count swap all go red and must be re-adjudicated.
  *
- * Every finding is `color-contrast` on the board's OWN toolbar copy -- the
- * eyebrow (`--ds-color-text-muted`) and the mode hint (the composed Text at
- * `color="muted"`). It is a palette reading, not a skin one: the nodes take
- * their ink from the neutral ramp and their ground from the canvas, and neither
- * is a `--ds-widget-board-*` channel this cut owns. Repairing it means moving
- * the vertical's muted ink or giving the toolbar copy a tone of its own, both
- * of which are decisions outside this lot. Registered, never excluded: the
- * rottay scopes are clean and have no entry, so they must stay clean.
+ * Every finding this map carried was `color-contrast` on the board's OWN
+ * toolbar copy -- the eyebrow (`--ds-color-text-muted`) and the mode hint (the
+ * composed Text at `color="muted"`). It was a palette reading, not a skin one:
+ * the nodes take their ink from the neutral ramp and their ground from the
+ * canvas, and neither is a `--ds-widget-board-*` channel this cut owns.
+ * Registered, never excluded: every scope is clean and has no entry, so every
+ * scope must stay clean.
  *
  * `bithire dark` had six rows -- the same four plus both headings, which fail
  * only when a dark ink sits on a light ground -- and they DRAINED: that scope's
  * dark block now re-derives its own canvas ground instead of inheriting the
  * light body's. Dropped by identity, not waived, and a relapse reddens here.
+ *
+ * `bithire light` and `evnto light` each had 4 rows and they DRAINED at the
+ * supporting-ink re-grade (f73348ed5, 2026-09-21); neither vertical authors
+ * these rungs. The two `toolbar-context` eyebrows ink from
+ * `--ds-color-text-muted` (`#96969E` -> `#6B6B72`); the two mode hints ink
+ * from `--ds-color-text-secondary` (`#A0A0A5` -> `#5A5A61`). The palette
+ * reading this map called for was taken on the ink side, fleet-wide.
+ *
+ * Measured 2026-09-22. Each attribution is an arm, not a date: reverting only
+ * the named declaration at HEAD returns exactly the node identities credited
+ * to it, and every other candidate revert returns none of them.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire light': {
-    'color-contrast': [
-      TOOLBAR_COPY('board', CONTEXT),
-      TOOLBAR_COPY('board', HINT),
-      TOOLBAR_COPY('empty', CONTEXT),
-      TOOLBAR_COPY('empty', HINT),
-    ].sort(),
-  },
-  'evnto light': {
-    'color-contrast': [
-      TOOLBAR_COPY('board', CONTEXT),
-      TOOLBAR_COPY('board', HINT),
-      TOOLBAR_COPY('empty', CONTEXT),
-      TOOLBAR_COPY('empty', HINT),
-    ].sort(),
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('widget-board causality surface', () => {
   it('serves the anatomy every probe reads', () => {

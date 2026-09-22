@@ -95,28 +95,20 @@ describeCausality({
  * three rows were all control grounds (the search field and both range fields),
  * and the Input base stated `--ds-input-bg: var(--ds-color-white)` mode-lessly,
  * so each one painted white under the dark mode's ink. That base now states the
- * mode-aware role. The light scopes keep their own rows.
+ * mode-aware role.
+ *
+ * `bithire light` and `evnto light` each had 5 rows and they DRAINED at the
+ * supporting-ink re-grade (f73348ed5, 2026-09-21); neither vertical authors
+ * these rungs, so both follow the default light `:root`. Four nodes per scope
+ * ink from `--ds-color-text-muted` (`#96969E` -> `#6B6B72`): the three
+ * `field-label`s and the `range-separator`. The fifth, `placeholder`, inks
+ * from `--ds-color-text-secondary` (`#A0A0A5` -> `#5A5A61`).
+ *
+ * Measured 2026-09-22. Each attribution is an arm, not a date: reverting only
+ * the named declaration at HEAD returns exactly the node identities credited
+ * to it, and every other candidate revert returns none of them.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire light': {
-    'color-contrast': [
-      'div[data-part="field-row"]:nth-child(1) > span[data-part="field-label"]',
-      'div[data-part="field-row"]:nth-child(2) > span[data-part="field-label"]',
-      'div[data-part="field-row"]:nth-child(3) > span[data-part="field-label"]',
-      'span[data-part="placeholder"]',
-      'span[data-part="range-separator"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      'div[data-part="field-row"]:nth-child(1) > span[data-part="field-label"]',
-      'div[data-part="field-row"]:nth-child(2) > span[data-part="field-label"]',
-      'div[data-part="field-row"]:nth-child(3) > span[data-part="field-label"]',
-      'span[data-part="placeholder"]',
-      'span[data-part="range-separator"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('filter-panel accessibility', () => {
   it('carries no serious axe finding beyond the pinned debt', async () => {

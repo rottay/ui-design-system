@@ -75,8 +75,21 @@ describeCausality({
 /**
  * Measured ink debt, pinned by node IDENTITY. Registered, never excluded: the
  * solid tones a portrait falls back to do not clear the contrast floor against
- * their own initials, and the group surplus counter fails it on two light
- * grounds. A mode-aware ink derivation for the tone ramp is the fix.
+ * their own initials. A mode-aware ink derivation for the tone ramp is the
+ * fix.
+ *
+ * `.rottay-avatar-surplus` left `bithire light` and `evnto light` at the
+ * supporting-ink re-grade (f73348ed5, 2026-09-21), which moved
+ * `--ds-color-text-secondary` from `#A0A0A5` to `#5A5A61` in the default light
+ * `:root`; the group-surplus counter inks from that rung and neither vertical
+ * authors it. The fallback nodes that remain are family-owned tone ink, a
+ * different mechanism, and are untouched.
+ *
+ * Measured 2026-09-22: the surviving rows above are byte-identical. Reverting
+ * only `--ds-color-text-secondary` at HEAD returns exactly the node identities
+ * dropped here, and the other two supporting rungs return none of them -- that
+ * arm is the attribution, not the commit date. Dropped by identity, not
+ * waived: a relapse of a dropped node reddens this map.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'rottay dark': {
@@ -88,7 +101,6 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
     'color-contrast': [
       '#primary > .rottay-avatar[data-variant="primary"][data-shape="circle"] > div[data-part="mask"] > div[data-part="fallback"]',
       '#success > .rottay-avatar[data-variant="success"][data-shape="circle"] > div[data-part="mask"] > div[data-part="fallback"]',
-      '.rottay-avatar-surplus',
       'div[data-shape="square"] > div[data-part="mask"] > div[data-part="fallback"]',
     ],
   },
@@ -100,7 +112,6 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'evnto light': {
     'color-contrast': [
       '#success > .rottay-avatar[data-variant="success"][data-shape="circle"] > div[data-part="mask"] > div[data-part="fallback"]',
-      '.rottay-avatar-surplus',
     ],
   },
 };

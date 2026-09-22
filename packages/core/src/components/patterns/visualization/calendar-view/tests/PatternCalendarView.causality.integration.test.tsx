@@ -164,8 +164,8 @@ describeCausality({
  * re-adjudicated. Registered, never excluded; a scope with no entry is a
  * scope that must stay clean.
  *
- * Every finding is contrast, in two groups, and the groups are NOT the same
- * kind of debt:
+ * Every finding this map carried was contrast, in two groups, and the groups
+ * were NOT the same kind of debt:
  *  - the family's OWN weekday header under the two light scopes
  *    (`--ds-color-text-secondary` on `--ds-surface-inset`) -- this cut's named
  *    residue, a tone decision for the owner rather than a cut edit;
@@ -181,29 +181,26 @@ describeCausality({
  * that scope's dark block now re-derives its own canvas ground instead of
  * inheriting the light body's, and each of those primitives leaves the canvas
  * showing. Dropped by identity, not waived, so a relapse reddens here.
+ *
+ * The first group is gone too. The seven `weekday` column headers left
+ * `bithire light` -- the whole scope -- and `evnto light` at the
+ * supporting-ink re-grade (f73348ed5, 2026-09-21), which moved
+ * `--ds-color-text-secondary` from `#A0A0A5` to `#5A5A61` in the default light
+ * `:root`; the rail inks from that rung and neither vertical authors it, so
+ * the named tone residue was answered on the ink side rather than by an owner
+ * decision here. The event-chip group is a different mechanism and is
+ * untouched.
+ *
+ * Measured 2026-09-22: the surviving rows above are byte-identical. Reverting
+ * only `--ds-color-text-secondary` at HEAD returns exactly the node identities
+ * dropped here, and the other two supporting rungs return none of them -- that
+ * arm is the attribution, not the commit date. Dropped by identity, not
+ * waived: a relapse of a dropped node reddens this map.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire light': {
-    'color-contrast': [
-      'div[data-part="weekday"][role="columnheader"]:nth-child(1)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(2)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(3)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(4)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(5)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(6)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(7)',
-    ],
-  },
   'evnto light': {
     'color-contrast': [
       'div[data-part="week-row"][role="row"]:nth-child(2) > div[data-last-column="false"][data-empty="false"][role="gridcell"]:nth-child(3) > div[role="button"][data-part="event"]:nth-child(2)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(1)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(2)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(3)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(4)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(5)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(6)',
-      'div[data-part="weekday"][role="columnheader"]:nth-child(7)',
       'div[role="button"][data-part="event"]:nth-child(3)',
     ],
   },

@@ -70,14 +70,12 @@ describeCausality({
 });
 
 /**
- * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the chrome
- * pair this family paints on loses its authored half under neutral+preset, so
- * ink and ground come from opposite ends of the ramp. Measured against a
- * pristine HEAD archive, every scope below audited CLEAN there, so each entry
- * is lot-caused and none is a pre-existing finding. The gap is pinned by axe
- * rule id AND the identity of every failing node: another rule, one more node,
- * a repaired node or a same-count swap reddens the scope, and a scope absent
- * from this map must still audit clean (EVI-02, 2026-09-15).
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15). Pinned by
+ * finding id and the IDENTITY of every failing node, so with no entry a scope
+ * must measure clean and a relapse reddens here instead of being absorbed.
+ *
+ * Every row this family carried has drained. Each was dropped by identity, not
+ * waived.
  *
  * `bithire dark` had 5 rows and they DRAINED: that scope's dark block now
  * re-derives its own canvas ground instead of inheriting the light body's, so
@@ -85,27 +83,18 @@ describeCausality({
  * for.
  * Dropped by identity, not waived -- with no entry the scope must measure
  * clean, and a relapse reddens here.
+ *
+ * `bithire light` and `evnto light` DRAINED at the supporting-ink re-grade
+ * (f73348ed5, 2026-09-21), which moved `--ds-color-text-secondary` from
+ * `#A0A0A5` to `#5A5A61` in the default light `:root`; neither vertical
+ * authors that rung, so both follow the default. Every node was an unselected
+ * segment label.
+ *
+ * Measured 2026-09-22. Each attribution is an arm, not a date: reverting only
+ * the named declaration at HEAD returns exactly the node identities credited
+ * to it, and every other candidate revert returns none of them.
  */
-const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
-  'bithire light': {
-    'color-contrast': [
-      'button[data-selected="false"]:nth-child(2) > span',
-      'div[data-size="middle"] > button[data-selected="false"]:nth-child(1) > span',
-      'div[data-size="middle"] > button[data-selected="false"]:nth-child(3) > span',
-      'div[data-size="small"] > button[data-selected="false"]:nth-child(1) > span',
-      'div[data-size="small"] > button[data-selected="false"]:nth-child(3) > span',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      'button[data-selected="false"]:nth-child(2) > span',
-      'div[data-size="middle"] > button[data-selected="false"]:nth-child(1) > span',
-      'div[data-size="middle"] > button[data-selected="false"]:nth-child(3) > span',
-      'div[data-size="small"] > button[data-selected="false"]:nth-child(1) > span',
-      'div[data-size="small"] > button[data-selected="false"]:nth-child(3) > span',
-    ],
-  },
-};
+const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {};
 
 describe('segmented composition, direction and accessibility in a real browser', () => {
   it('paints a control a composite renamed exactly like the bare control', async () => {

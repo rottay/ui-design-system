@@ -70,14 +70,12 @@ describeCausality({
 });
 
 /**
- * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15). The neutral
- * compile leaves this family's ink and its ground on opposite sides of the
- * ramp, so axe reports serious `color-contrast`. Measured at the pre-lot tree:
- * ZERO findings on all four scopes, so every entry below is lot-caused, not
- * inherited. Pinned by finding id and the IDENTITY of every failing node:
- * another kind of violation, one more node, one node repaired, a same-count
- * swap, or a finding in a scope pinned clean turns this row red. It clears when
- * the derivation lane gives the family a legible pair (EVI-02, 2026-09-15).
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15). Pinned by
+ * finding id and the IDENTITY of every failing node, so with no entry a scope
+ * must measure clean and a relapse reddens here instead of being absorbed.
+ *
+ * Every row this family carried has drained. Each was dropped by identity, not
+ * waived.
  *
  * `bithire dark` had 3 rows and they DRAINED: that scope's dark block now
  * re-derives its own canvas ground instead of inheriting the light body's, so
@@ -94,21 +92,18 @@ describeCausality({
  * `var(--ds-color-bg-input, var(--ds-surface-control))`, so the control grounds
  * at `#0F0F12` there. Dropped by identity, not waived: with no entry the scope
  * must measure clean, and a relapse reddens here.
+ *
+ * `bithire light` and `evnto light` DRAINED at the supporting-ink re-grade
+ * (f73348ed5, 2026-09-21), which moved `--ds-color-text-secondary` from
+ * `#A0A0A5` to `#5A5A61` in the default light `:root`; neither vertical
+ * authors that rung, so both follow the default. Both nodes were trigger
+ * `placeholder`s.
+ *
+ * Measured 2026-09-22. Each attribution is an arm, not a date: reverting only
+ * the named declaration at HEAD returns exactly the node identities credited
+ * to it, and every other candidate revert returns none of them.
  */
-const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
-  'bithire light': {
-    'color-contrast': [
-      'div[aria-label="Team"] > span[data-part="placeholder"]',
-      'div[data-status="error"] > span[data-part="placeholder"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      'div[aria-label="Team"] > span[data-part="placeholder"]',
-      'div[data-status="error"] > span[data-part="placeholder"]',
-    ],
-  },
-};
+const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {};
 
 describe('tree-select direction, indent, language and accessibility', () => {
   const openTree = async () => {
