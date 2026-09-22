@@ -11,9 +11,9 @@ import { describe, expect, it } from "vitest";
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 
-import { compileTheme } from "../../lowering";
-import { staticThemeIntent } from "../../ingress";
-import { resolveAdapter } from "../../../presentation/adapters";
+import { compileTheme } from "../../../lowering";
+import { staticThemeIntent } from "../../../ingress";
+import { resolveAdapter } from "../../../../presentation/adapters";
 import {
   containerScope,
   emitDeclarations,
@@ -21,7 +21,7 @@ import {
   emitThemeCss,
   firstPartyScope,
   tenantArtifactScope,
-} from "..";
+} from "../..";
 import { FIRST_PARTY_BASELINES, resolveFirstParty } from "@tests/support/theme-lowering";
 
 const modern = resolveAdapter("modern");

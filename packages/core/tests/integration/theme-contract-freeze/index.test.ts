@@ -563,8 +563,17 @@ describe("channel minting and CSS text have declared owners", () => {
     expect(names.length).not.toBe(quotedValues.length);
   });
 
-  /** The single owner of the declaration/rule grammar, under `src/`. */
-  const EMISSION_ASSEMBLY_OWNER = `${EMISSION_OWNER}/index.ts`;
+  /**
+   * The single owner of the declaration/rule grammar, under `src/`.
+   *
+   * It moved one level down in WO-EMI-03, which finished the emission owner's
+   * declared grammar: `emission/index.ts` is now a barrel over `css/`,
+   * `artifact/` and `tokens/`, and the declaration assembler travelled with the
+   * CSS half. This is a RE-PIN, not a relaxation -- the exact-equality shape
+   * below is untouched, and after the split there is still exactly one
+   * assembler of a CSS declaration in the repository.
+   */
+  const EMISSION_ASSEMBLY_OWNER = `${EMISSION_OWNER}/css/index.ts`;
 
   /** The one grammar that decides whether a value may become CSS text. */
   const VALUE_AUTHORITY = "infrastructure/compilers/kernel/foundation/css/value-safety";
@@ -869,6 +878,16 @@ describe("channel minting and CSS text have declared owners", () => {
   const MODE_RULE_COMPOSITION =
     /@media \(prefers-color-scheme: (?:\$\{[^}]*\}|light|dark)\)|modeSelector\(/;
 
+  /**
+   * The artifact FORMAT's owner, which is not the declaration grammar's.
+   *
+   * WO-EMI-03 split the emission owner into `css/`, `artifact/` and `tokens/`
+   * under a barrel. The declaration assembler stayed with `css/` and the
+   * artifact composer travelled to `artifact/`, so the two pins name two files
+   * where they used to name one. Both are still singletons.
+   */
+  const ARTIFACT_COMPOSITION_OWNER = `${EMISSION_OWNER}/artifact/index.ts`;
+
   it("emission is the ONLY productive composer of a tenant artifact", () => {
     // RAW source: the banner IS a CSS comment, so a comment stripper deletes
     // the very marker this rule is about.
@@ -879,7 +898,7 @@ describe("channel minting and CSS text have declared owners", () => {
       })
       .map(rel)
       .sort();
-    expect(composers).toEqual([EMISSION_ASSEMBLY_OWNER]);
+    expect(composers).toEqual([ARTIFACT_COMPOSITION_OWNER]);
   });
 
   it("MUTANT: a second artifact composer is caught", () => {

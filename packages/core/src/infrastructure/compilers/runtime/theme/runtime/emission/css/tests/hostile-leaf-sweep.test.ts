@@ -16,9 +16,9 @@
 import { describe, expect, it } from "vitest";
 
 
-import { compileTheme } from "../../lowering";
-import { resolveAdapter } from "../../../presentation/adapters";
-import { containerScope, emitThemeCss } from "..";
+import { compileTheme } from "../../../lowering";
+import { resolveAdapter } from "../../../../presentation/adapters";
+import { containerScope, emitThemeCss } from "../..";
 import { FIRST_PARTY_BASELINES, resolveFirstParty } from "@tests/support/theme-lowering";
 
 const ESCAPE = "#000; } body { display: none; } .escaped {";

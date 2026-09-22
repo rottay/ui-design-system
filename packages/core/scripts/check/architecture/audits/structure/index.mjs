@@ -185,6 +185,24 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     runtime: 1,
     composition: 2,
   }),
+  // The emission owner is a ladder, not a bag of peers. `css` owns the
+  // declaration/rule grammar and the value admission that decides whether a
+  // string may become CSS text at all; the artifact FORMAT composes those
+  // declarations into a stylesheet, and the token document resolves the same
+  // compilation onto typed numeric leaves. Both consume `css`; neither consumes
+  // the other, and the folder's `index.ts` is a barrel over all three.
+  'infrastructure/compilers/runtime/theme/runtime/emission': Object.freeze({
+    css: 0,
+    artifact: 1,
+    tokens: 1,
+  }),
+  // `compile` is the single compile door. `tokens` is the intent-shaped facade
+  // that composes that door with the token emitter and decides nothing of its
+  // own, so it sits one rung above and the edge is the requested hierarchy.
+  'infrastructure/compilers/runtime/theme/facade/runtime': Object.freeze({
+    compile: 0,
+    tokens: 1,
+  }),
   // The theme contract chain is a dependency ladder, not a bag of peers:
   // iso owns Theme/ThemePatch, provenance owns the decision-provenance ledger
   // vocabulary, compiled is the lowering product, emission is scope,

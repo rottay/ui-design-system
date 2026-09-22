@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { MAX_DEPTH, buildResolvedMap, diffMaps, diffUnresolved, isGuaranteedInvalid, resolveScope, resolveValue, splitVar } from './index.mjs';
+import { MAX_DEPTH, buildResolvedMap, diffMaps, diffUnresolved, loadResolver } from './index.mjs';
+
+/* WO-EMI-03: el resolvedor pasó a su duenio PRODUCTIVO y este drill lo ata
+ * desde `dist/`. Las mismas aserciones, contra el codigo compilado: si todas
+ * siguen verdes, la mudanza preservo las cuatro semanticas. */
+const { isGuaranteedInvalid, resolveScope, resolveValue, splitVar } = await loadResolver();
 
 const scope = {
   '--ds-ink': '#14283B',

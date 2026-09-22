@@ -1,4 +1,27 @@
 {
   "$comment": "Explicit-review list for new packed entries. The package inventory fails when a path appears in the tarball that is neither in baseline/index.json nor listed here. To intentionally add a published file, record its exact npm-pack path and reason, then re-seed the baseline and empty this list after review.",
-  "additions": []
+  "additions": [
+    "dist/contracts/theme/runtime/compilation/index.cjs",
+    "dist/contracts/theme/runtime/compilation/index.d.ts",
+    "dist/contracts/theme/runtime/compilation/index.js",
+    "dist/infrastructure/compilers/runtime/theme/facade/runtime/tokens/index.cjs",
+    "dist/infrastructure/compilers/runtime/theme/facade/runtime/tokens/index.d.ts",
+    "dist/infrastructure/compilers/runtime/theme/facade/runtime/tokens/index.js",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/artifact/index.cjs",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/artifact/index.d.ts",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/artifact/index.js",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/index.cjs",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/index.d.ts",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/index.js",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/evaluate/index.cjs",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/evaluate/index.d.ts",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/evaluate/index.js",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/index.cjs",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/index.d.ts",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/index.js",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/resolve/index.cjs",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/resolve/index.d.ts",
+    "dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/resolve/index.js"
+  ],
+  "$reason": "WO-EMI-03. The emission owner's declared grammar is finished: `emission/index.ts` became a barrel and its implementation moved to `css/` (declaration/rule assembler, value admission) and `artifact/` (the tenant stylesheet format), with `tokens/` added as the third child -- the resolved token document, its var() resolver and its expression evaluator. `facade/runtime/tokens` is the intent-shaped door over that emitter and `contracts/theme/runtime/compilation` is the document's contract. Every path here is a new owner of published code, not a new dependency: the two shrinks reported beside them (`emission/index.{js,cjs}`) are the same code under its new owners, and the barrel is source-only because it re-exports and nothing else."
 }

@@ -42,6 +42,11 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { wrapModernFrameworkLayer } from "../../../libraries/engine/framework/index.mjs";
+import {
+  BASE_ENVIRONMENT_MODES,
+  baseEnvironmentDocument,
+  serializeBaseEnvironment,
+} from "../../../libraries/tokens/base-environment/index.mjs";
 
 // The roster is imported from dist, like build-vertical-artifacts.mjs, so this
 // script runs after `tsc && vite build` (build:vertical-css sequences it).
@@ -363,12 +368,25 @@ for (const vertical of verticals) {
     }
   }
 
+  // The base environment: the bundle's own `:root` projection at each declared
+  // mode, taken from the same in-memory text the bundle is written from. It is
+  // an INPUT to the non-CSS token emitter, which cannot resolve a compilation
+  // against itself -- the properties two channels in five read are declared by
+  // this static layer and are not compiled per tenant.
+  const baseEnvironments = BASE_ENVIRONMENT_MODES.map((mode) => ({
+    mode,
+    relPath: `artifacts/generated/tokens/base-environment/${name}/${mode}/index.json`,
+    text: serializeBaseEnvironment(baseEnvironmentDocument(bundle, { vertical: name, mode })),
+  }));
+
   if (check) {
     compareToDisk(`artifacts/generated/css/verticals/${name}/index.css`, bundle);
+    for (const snapshot of baseEnvironments) compareToDisk(snapshot.relPath, snapshot.text);
   } else {
     const sizeKB = Math.round(bundle.length / 1024);
     writeFileSync(resolve(dist, `${name}.css`), bundle);
     writeGeneratedStyle(`artifacts/generated/css/verticals/${name}/index.css`, bundle);
+    for (const snapshot of baseEnvironments) writeGeneratedStyle(snapshot.relPath, snapshot.text);
     console.log(`  -> dist/${name}.css (${sizeKB}KB)`);
   }
 }

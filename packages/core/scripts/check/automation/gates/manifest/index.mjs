@@ -1081,6 +1081,26 @@ export const CI_GATES = Object.freeze([
     drillId: 'resolved-map-drill',
     prerequisites: ['fresh-dist'],
   },
+  // The base environment is the `:root` projection of the static token layer
+  // that the non-CSS token emitter resolves a compilation against. A stale
+  // projection does not fail loudly: it answers with what the static layer used
+  // to declare, so the emitted document reports values the browser never paints.
+  {
+    id: 'base-environment-freshness-drill',
+    run: ['node', '--test', 'scripts/check/tokens/cascade/roots/base-environment-freshness/index.test.mjs'],
+    blocking: true,
+    phase: 'post-build',
+    drillFor: ['base-environment-freshness'],
+    prerequisites: ['fresh-dist'],
+  },
+  {
+    id: 'base-environment-freshness',
+    run: ['node', 'scripts/check/tokens/cascade/roots/base-environment-freshness/index.mjs', '--check'],
+    blocking: true,
+    phase: 'post-build',
+    drillId: 'base-environment-freshness-drill',
+    prerequisites: ['fresh-dist'],
+  },
   { id: 'wiring-coverage-drill', run: ['node', '--test', 'scripts/check/automation/wiring/gate-coverage/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['wiring-coverage'], },
   // Every production script is wired through a declared channel (manifest,
   // lifecycle chain or ci.yml) or it does not exist. This gate is what makes

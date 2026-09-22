@@ -75,6 +75,9 @@ export {
   firstPartyScope,
   tenantArtifactScope,
 } from "./runtime/emission";
+export { emitThemeTokens } from "./runtime/emission/tokens";
+export type { ResolvedBaseEnvironment } from "./runtime/emission/tokens";
+export { emitThemeTokensForIntent } from "./facade/runtime/tokens";
 export {
   EngineControlUnsupportedError,
   assertEngineSupportsActivatedControls,

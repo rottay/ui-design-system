@@ -213,6 +213,8 @@ export {
   documentThemeIntent,
   draftPreviewThemeIntent,
   emitThemeCss,
+  emitThemeTokens,
+  emitThemeTokensForIntent,
   engineVisualOf,
   firstPartyEngineVisual,
   firstPartyScope,
@@ -240,6 +242,24 @@ export type {
   ThemeIntentOrigin,
   ThemeResolution,
 } from '../../infrastructure/compilers/runtime/theme';
+/**
+ * THE TOKEN DOCUMENT'S OWN CONTRACT, published with the emitter that answers
+ * with it. `contracts/` ranks above the emission owner and cannot be reached
+ * through it, so a consumer that can call `emitThemeTokens` could otherwise not
+ * name what it holds nor read the two closed rosters that bound the answer:
+ * which value types may stay CSS-typed, and how much of a document may.
+ */
+export {
+  CSS_TYPED_LEAF_REASONS,
+  TOKEN_EMISSION_BOUNDS,
+} from '../../contracts/theme/runtime/compilation';
+export type {
+  ThemeTokenDocument,
+  ThemeTokenLeaf,
+  ThemeTokenProvenance,
+  TokenEmissionEnvironment,
+  UnresolvedToken,
+} from '../../contracts/theme/runtime/compilation';
 /**
  * THE ADMISSION HALF OF THE SAME DOOR, and the migration that reaches it.
  *

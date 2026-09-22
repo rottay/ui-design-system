@@ -72,155 +72,63 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 export const CORE_ROOT = findPackageRoot(HERE);
 export const OUT_PATH = join(CORE_ROOT, 'artifacts/generated/manifest/cascade/values/index.json');
 
+/**
+ * EL RESOLVEDOR YA NO VIVE ACA (WO-EMI-03). Las cuatro semanticas de arriba son
+ * ahora del duenio PRODUCTIVO -- `src/infrastructure/compilers/runtime/theme/
+ * runtime/emission/tokens/resolve` -- porque el emisor de tokens tiene que
+ * resolver exactamente lo mismo y dos archivos con una responsabilidad son
+ * deuda, no redundancia. Este instrumento lo consume desde `dist/` por ruta
+ * absoluta, el mismo patron con el que `scripts/libraries/theme-lowering` come
+ * el unico lowering. Es una MUDANZA, no un fork: si el mapa pineado no se
+ * mueve, esa es la prueba de que la semantica se preservo.
+ */
+const RESOLVER_MODULE =
+  'dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/index.js';
+
+const importByPath = (absolutePath) => import(pathToFileURL(absolutePath).href);
+
 /** Tope de sustitucion. Una cadena mas larga que esto es un defecto, no un dato. */
 export const MAX_DEPTH = 32;
 
-const VAR_CALL = /var\(\s*(--[\w-]+)\s*(?:,([\s\S]*))?\)/;
-
-/** Parte `var(--x, resto)` respetando parentesis balanceados en el fallback. */
-export function splitVar(text) {
-  const start = text.indexOf('var(');
-  if (start === -1) return null;
-  let depth = 0;
-  for (let index = start + 3; index < text.length; index += 1) {
-    if (text[index] === '(') depth += 1;
-    else if (text[index] === ')') {
-      depth -= 1;
-      if (depth === 0) {
-        const inner = text.slice(start + 4, index);
-        const comma = splitTopLevelComma(inner);
-        return {
-          before: text.slice(0, start),
-          name: (comma ? inner.slice(0, comma) : inner).trim(),
-          fallback: comma === null ? null : inner.slice(comma + 1).trim(),
-          after: text.slice(index + 1),
-        };
-      }
-    }
-  }
-  return null;
-}
-
-function splitTopLevelComma(text) {
-  let depth = 0;
-  for (let index = 0; index < text.length; index += 1) {
-    if (text[index] === '(') depth += 1;
-    else if (text[index] === ')') depth -= 1;
-    else if (text[index] === ',' && depth === 0) return index;
-  }
-  return null;
-}
+let resolverPromise = null;
 
 /**
- * Resuelve un valor contra un scope, por CADENA y no por conjunto global.
+ * El resolvedor productivo, atado una sola vez por proceso.
  *
- * DEFECTO PROPIO, CORREGIDO ACA. La primera version marcaba ciclo cuando un
- * canal ya sustituido volvia a aparecer, y eso convirtio en "ciclo" a 36 casos
- * que no lo son: un valor puede nombrar el mismo canal dos veces sin ninguna
- * circularidad --
- *   --ds-table-row-focus-shadow:
- *     inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 28%, transparent),
- *     0 4px 14px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
- * es dos referencias independientes al mismo color, no un bucle. Un ciclo es
- * que resolver un canal lleve DE VUELTA a ese mismo canal, y eso solo se ve
- * con la cadena abierta, no con la lista de todo lo visto.
- *
- * Por eso la resolucion es recursiva con una PILA ORDENADA `visiting` que viaja
- * por la RAMA: cada referencia se resuelve con su propia copia, dos hermanas no
- * se estorban, y un canal que se referencia a si mismo -- directa o
- * transitivamente -- se marca `cycle` y jamas se hace pasar por literal.
- *
- * CICLO Y FALLBACK (postauditoría independiente, sonda ejecutable): por
- * css-variables-1 §3.1 las aristas del grafo las crea el PRIMER argumento de
- * cada var() (el fallback no es escape), asi que TODA custom property que
- * participa del ciclo computa a guaranteed-invalid y SU PROPIO FALLBACK ES
- * IRRELEVANTE. Los miembros son las propiedades desde la primera aparicion del
- * nombre revisitado hasta el tope de la pila: esos niveles devuelven invalidez
- * SIN enganchar fallback. Solo los niveles EXTERNOS al ciclo (consumidores)
- * enganchan el suyo. La version anterior enganchaba tambien en el miembro y el
- * ciclo desaparecia del instrumento (`--a: var(--b, 1); --b: var(--a, 2)`
- * "resolvia" 1 y 2 sin dejar registro).
+ * Un `dist/` ausente o sin los nombres es un REHUSE explicito: fabricar una
+ * sustitucion local aca es exactamente el segundo duenio que este lote cerro.
  */
-/** `initial` (ASCII case-insensitive) deja la custom property guaranteed-invalid. */
-export function isGuaranteedInvalid(raw) {
-  return typeof raw === 'string' && raw.trim().toLowerCase() === 'initial';
-}
-
-export function resolveValue(raw, scope, { maxDepth = MAX_DEPTH, visiting = [], depth = 0, self = undefined } = {}) {
-  let text = String(raw);
-  let unresolved = null;
-  for (let guard = 0; guard <= maxDepth; guard += 1) {
-    if (depth > maxDepth) return { value: text.trim(), unresolved: { channel: null, reason: 'depth' } };
-    const parsed = splitVar(text);
-    if (!parsed) return { value: text.trim(), unresolved };
-    const { name, fallback } = parsed;
-    const revisit = visiting.indexOf(name);
-    if (revisit !== -1) {
-      /* La rama vuelve sobre si misma: ciclo. Los miembros son las propiedades
-       * desde la primera aparicion de `name` en la pila hasta el tope; se
-       * devuelven para que cada nivel superior decida si ES miembro (no
-       * engancha) o consumidor externo (engancha si tiene fallback). */
-      return { value: text.trim(), unresolved: { channel: name, reason: 'cycle', members: visiting.slice(revisit) } };
-    }
-    const declared = scope[name];
-    if (declared !== undefined && !isGuaranteedInvalid(declared)) {
-      const inner = resolveValue(declared, scope, {
-        maxDepth, depth: depth + 1, visiting: [...visiting, name], self: name,
-      });
-      if (inner.unresolved && inner.unresolved.reason === 'depth') {
-        /* Guarda del instrumento, no invalidez real: se registra y se sigue
-         * con el mejor texto, pero NUNCA se engancha el fallback. */
-        if (!unresolved) unresolved = inner.unresolved;
-        text = `${parsed.before}${inner.value}${parsed.after}`;
-        continue;
+export function loadResolver({ coreRoot = CORE_ROOT, importModule = importByPath } = {}) {
+  if (!resolverPromise) {
+    resolverPromise = importModule(join(coreRoot, RESOLVER_MODULE)).then((module) => {
+      const bound = {
+        splitVar: module.splitVar,
+        isGuaranteedInvalid: module.isGuaranteedInvalid,
+        resolveValue: module.resolveChannelValue,
+        resolveScope: module.resolveScope,
+        maxDepth: module.MAX_RESOLUTION_DEPTH,
+      };
+      for (const [name, value] of Object.entries(bound)) {
+        if (value === undefined) {
+          throw new Error(
+            `resolved-map-diff: ${RESOLVER_MODULE} no exporta ${name}; ` +
+              'me niego a fabricar una segunda sustitucion.',
+          );
+        }
       }
-      if (inner.unresolved?.reason === 'cycle'
-          && Array.isArray(inner.unresolved.members) && inner.unresolved.members.includes(self)) {
-        /* Este nivel ES miembro del ciclo: guaranteed-invalid por spec y su
-         * propio fallback es irrelevante. Se propaga la invalidez intacta. */
-        return { value: text.trim(), unresolved: unresolved ?? inner.unresolved };
+      if (bound.maxDepth !== MAX_DEPTH) {
+        throw new Error(
+          `resolved-map-diff: el tope productivo es ${bound.maxDepth} y este instrumento pinea ${MAX_DEPTH}.`,
+        );
       }
-      if (inner.unresolved) {
-        /* IACVT transitiva (o consumidor EXTERNO de un ciclo): la declarada
-         * computa a guaranteed-invalid y el fallback del sitio ENGANCHA. Sin
-         * fallback, el consumidor hereda la causa raiz (missing|cycle|guaranteed-invalid). */
-        if (fallback !== null) { text = `${parsed.before}${fallback}${parsed.after}`; continue; }
-        return { value: text.trim(), unresolved: unresolved ?? { channel: name, reason: inner.unresolved.reason } };
-      }
-      text = `${parsed.before}${inner.value}${parsed.after}`;
-      continue;
-    }
-    /* No declarada, o declarada con `initial` (guaranteed-invalid por spec):
-     * para el var() que la consume es como si no existiera. */
-    if (fallback !== null) { text = `${parsed.before}${fallback}${parsed.after}`; continue; }
-    const reason = declared === undefined ? 'missing' : 'guaranteed-invalid';
-    return { value: text.trim(), unresolved: unresolved ?? { channel: name, reason } };
+      return bound;
+    });
   }
-  return { value: text.trim(), unresolved: unresolved ?? { channel: null, reason: 'depth' } };
-}
-
-export function resolveScope(scope, options) {
-  const resolved = {};
-  const unresolved = [];
-  for (const [channel, raw] of Object.entries(scope)) {
-    const outcome = resolveValue(raw, scope, { ...options, self: channel });
-    resolved[channel] = outcome.value;
-    if (isGuaranteedInvalid(raw)) {
-      /* La propia declaracion es guaranteed-invalid: se declara con el canal
-       * que falla (el externo), nunca se la hace pasar por literal usable. */
-      unresolved.push({ channel, reason: 'guaranteed-invalid', cause: null });
-    } else if (outcome.unresolved) {
-      /* ATRIBUCION (correccion pre-2B): `channel` es el canal EXTERNO que no
-       * resolvio y `cause` la variable inmediata que lo hundio. La version
-       * anterior pisaba `channel` con la causa y perdia al reclamante: 251
-       * entradas con 99 tuplas distintas. */
-      unresolved.push({ channel, reason: outcome.unresolved.reason, cause: outcome.unresolved.channel ?? null });
-    }
-  }
-  return { resolved, unresolved };
+  return resolverPromise;
 }
 
 export async function buildResolvedMap({ coreRoot = CORE_ROOT, arm = null } = {}) {
+  const { resolveScope } = await loadResolver({ coreRoot });
   const loaded = arm ?? (await loadArm({ coreRoot }));
   const themes = {};
   const unresolvedAll = [];

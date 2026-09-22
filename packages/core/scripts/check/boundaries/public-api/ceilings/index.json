@@ -301,8 +301,8 @@
       "maxSourceBytes": 294
     },
     "./runtime/visual-authority": {
-      "maxReachableModules": 10,
-      "maxSourceBytes": 74751
+      "maxReachableModules": 12,
+      "maxSourceBytes": 75625
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "primitives/modal +669B: same INV-02 shared i18n module growth through the reachable closure (see runtime/i18n)",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-EMI-03 split the emission owner into css/ + artifact/ under a barrel, which is the CLAUDE.md hierarchy law for an owner that gains a third child. ./runtime/visual-authority imports emitTenantArtifactCss from that folder, so it now reaches 3 files where it reached 1: +2 reachable modules and +874 source bytes, measured. The token emitter is deliberately NOT on the barrel, which is what keeps the move at +2 instead of +8 and keeps the resolver, the evaluator and the colour kernel off this boundary.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 1 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
