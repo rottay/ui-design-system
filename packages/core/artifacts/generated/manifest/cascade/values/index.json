@@ -14,9 +14,9 @@
     "verticals": 3,
     "scopes": 6,
     "channels": 17984,
-    "unresolved": 9580,
+    "unresolved": 9592,
     "unresolvedByReason": {
-      "missing": 9556,
+      "missing": 9568,
       "guaranteed-invalid": 24
     }
   },
@@ -8501,6 +8501,13 @@
     {
       "vertical": "rottay",
       "scope": "base",
+      "channel": "--ds-collection-header-chip-family",
+      "reason": "missing",
+      "cause": "--ds-type-caption-font-family"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "base",
       "channel": "--ds-collection-header-keycap-family",
       "reason": "missing",
       "cause": "--ds-font-family-mono"
@@ -9050,6 +9057,13 @@
       "channel": "--ds-data-table-header-focus-shadow",
       "reason": "missing",
       "cause": "--ds-color-primary"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "base",
+      "channel": "--ds-data-table-header-font-family",
+      "reason": "missing",
+      "cause": "--ds-type-label-font-family"
     },
     {
       "vertical": "rottay",
@@ -20576,6 +20590,13 @@
     {
       "vertical": "rottay",
       "scope": "light",
+      "channel": "--ds-collection-header-chip-family",
+      "reason": "missing",
+      "cause": "--ds-type-caption-font-family"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
       "channel": "--ds-collection-header-keycap-family",
       "reason": "missing",
       "cause": "--ds-font-family-mono"
@@ -21125,6 +21146,13 @@
       "channel": "--ds-data-table-header-focus-shadow",
       "reason": "missing",
       "cause": "--ds-color-primary"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-data-table-header-font-family",
+      "reason": "missing",
+      "cause": "--ds-type-label-font-family"
     },
     {
       "vertical": "rottay",
@@ -30747,6 +30775,13 @@
     {
       "vertical": "bithire",
       "scope": "base",
+      "channel": "--ds-collection-header-chip-family",
+      "reason": "missing",
+      "cause": "--ds-type-caption-font-family"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "base",
       "channel": "--ds-collection-header-keycap-family",
       "reason": "missing",
       "cause": "--ds-font-family-mono"
@@ -31177,6 +31212,13 @@
       "channel": "--ds-data-table-group-header-font-size",
       "reason": "missing",
       "cause": "--ds-font-size-sm"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "base",
+      "channel": "--ds-data-table-header-font-family",
+      "reason": "missing",
+      "cause": "--ds-type-label-font-family"
     },
     {
       "vertical": "bithire",
@@ -40127,6 +40169,13 @@
     {
       "vertical": "bithire",
       "scope": "dark",
+      "channel": "--ds-collection-header-chip-family",
+      "reason": "missing",
+      "cause": "--ds-type-caption-font-family"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "dark",
       "channel": "--ds-collection-header-keycap-family",
       "reason": "missing",
       "cause": "--ds-font-family-mono"
@@ -40557,6 +40606,13 @@
       "channel": "--ds-data-table-group-header-font-size",
       "reason": "missing",
       "cause": "--ds-font-size-sm"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "dark",
+      "channel": "--ds-data-table-header-font-family",
+      "reason": "missing",
+      "cause": "--ds-type-label-font-family"
     },
     {
       "vertical": "bithire",
@@ -51411,6 +51467,13 @@
     {
       "vertical": "evnto",
       "scope": "base",
+      "channel": "--ds-collection-header-chip-family",
+      "reason": "missing",
+      "cause": "--ds-type-caption-font-family"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "base",
       "channel": "--ds-collection-header-keycap-family",
       "reason": "missing",
       "cause": "--ds-font-family-mono"
@@ -51960,6 +52023,13 @@
       "channel": "--ds-data-table-header-focus-shadow",
       "reason": "missing",
       "cause": "--ds-color-primary"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "base",
+      "channel": "--ds-data-table-header-font-family",
+      "reason": "missing",
+      "cause": "--ds-type-label-font-family"
     },
     {
       "vertical": "evnto",
@@ -63486,6 +63556,13 @@
     {
       "vertical": "evnto",
       "scope": "dark",
+      "channel": "--ds-collection-header-chip-family",
+      "reason": "missing",
+      "cause": "--ds-type-caption-font-family"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "dark",
       "channel": "--ds-collection-header-keycap-family",
       "reason": "missing",
       "cause": "--ds-font-family-mono"
@@ -64035,6 +64112,13 @@
       "channel": "--ds-data-table-header-focus-shadow",
       "reason": "missing",
       "cause": "--ds-color-primary"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "dark",
+      "channel": "--ds-data-table-header-font-family",
+      "reason": "missing",
+      "cause": "--ds-type-label-font-family"
     },
     {
       "vertical": "evnto",
@@ -67579,7 +67663,7 @@
         "--ds-collection-header-bg": "linear-gradient(116deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, var(--ds-surface-panel))",
         "--ds-collection-header-border": "var(--ds-color-border-primary)",
         "--ds-collection-header-chip-block-size": "24px",
-        "--ds-collection-header-chip-family": "inherit",
+        "--ds-collection-header-chip-family": "var(--ds-type-caption-font-family)",
         "--ds-collection-header-chip-inline-padding": "8px",
         "--ds-collection-header-chip-radius": "9999px",
         "--ds-collection-header-chip-size": "calc(0.6875rem * 1)",
@@ -67925,7 +68009,7 @@
         "--ds-data-table-group-header-font-weight": "600",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
         "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)",
-        "--ds-data-table-header-font-family": "inherit",
+        "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
         "--ds-data-table-leading-cell-padding-compact": "0.375rem 0.75rem 0.375rem 0.125rem",
@@ -68810,7 +68894,7 @@
         "--ds-pagination-item-color": "var(--ds-color-text-primary)",
         "--ds-pagination-item-color-current": "var(--ds-color-text-on-primary)",
         "--ds-pagination-item-color-hover": "var(--ds-color-text-primary)",
-        "--ds-pagination-jumper-width": "calc(var(--ds-spacing-14) + var(--ds-spacing-0))",
+        "--ds-pagination-jumper-width": "var(--ds-spacing-14)",
         "--ds-pagination-lg-font-size": "var(--ds-font-size-base)",
         "--ds-pagination-lg-height": "var(--ds-spacing-11)",
         "--ds-pagination-lg-padding-x": "var(--ds-spacing-5)",
@@ -70533,7 +70617,7 @@
         "--ds-collection-header-bg": "linear-gradient(116deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, var(--ds-surface-panel))",
         "--ds-collection-header-border": "var(--ds-color-border-primary)",
         "--ds-collection-header-chip-block-size": "24px",
-        "--ds-collection-header-chip-family": "inherit",
+        "--ds-collection-header-chip-family": "var(--ds-type-caption-font-family)",
         "--ds-collection-header-chip-inline-padding": "8px",
         "--ds-collection-header-chip-radius": "9999px",
         "--ds-collection-header-chip-size": "calc(0.6875rem * 1)",
@@ -70879,7 +70963,7 @@
         "--ds-data-table-group-header-font-weight": "600",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
         "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)",
-        "--ds-data-table-header-font-family": "inherit",
+        "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
         "--ds-data-table-leading-cell-padding-compact": "0.375rem 0.75rem 0.375rem 0.125rem",
@@ -71764,7 +71848,7 @@
         "--ds-pagination-item-color": "var(--ds-color-text-primary)",
         "--ds-pagination-item-color-current": "var(--ds-color-text-on-primary)",
         "--ds-pagination-item-color-hover": "var(--ds-color-text-primary)",
-        "--ds-pagination-jumper-width": "calc(var(--ds-spacing-14) + var(--ds-spacing-0))",
+        "--ds-pagination-jumper-width": "var(--ds-spacing-14)",
         "--ds-pagination-lg-font-size": "var(--ds-font-size-base)",
         "--ds-pagination-lg-height": "var(--ds-spacing-11)",
         "--ds-pagination-lg-padding-x": "var(--ds-spacing-5)",
@@ -73506,7 +73590,7 @@
         "--ds-collection-header-bg": "linear-gradient(116deg, color-mix(in srgb, #2F5BE8 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, var(--ds-surface-panel))",
         "--ds-collection-header-border": "var(--ds-color-border-primary)",
         "--ds-collection-header-chip-block-size": "24px",
-        "--ds-collection-header-chip-family": "inherit",
+        "--ds-collection-header-chip-family": "var(--ds-type-caption-font-family)",
         "--ds-collection-header-chip-inline-padding": "8px",
         "--ds-collection-header-chip-radius": "9999px",
         "--ds-collection-header-chip-size": "calc(0.6875rem * 0.94)",
@@ -73949,7 +74033,7 @@
         "--ds-data-table-group-header-font-weight": "700",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
         "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, #2F5BE8 48%, transparent)",
-        "--ds-data-table-header-font-family": "inherit",
+        "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
         "--ds-data-table-leading-cell-padding-compact": "0.375rem 0.75rem 0.375rem 0.125rem",
@@ -74850,7 +74934,7 @@
         "--ds-pagination-item-color": "var(--ds-color-text-primary)",
         "--ds-pagination-item-color-current": "#ffffff",
         "--ds-pagination-item-color-hover": "var(--ds-color-text-primary)",
-        "--ds-pagination-jumper-width": "calc(var(--ds-spacing-14) + var(--ds-spacing-0))",
+        "--ds-pagination-jumper-width": "var(--ds-spacing-14)",
         "--ds-pagination-lg-font-size": "var(--ds-font-size-base)",
         "--ds-pagination-lg-height": "var(--ds-spacing-11)",
         "--ds-pagination-lg-padding-x": "var(--ds-spacing-5)",
@@ -76596,7 +76680,7 @@
         "--ds-collection-header-bg": "linear-gradient(116deg, color-mix(in srgb, #2F5BE8 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, var(--ds-surface-panel))",
         "--ds-collection-header-border": "var(--ds-color-border-primary)",
         "--ds-collection-header-chip-block-size": "24px",
-        "--ds-collection-header-chip-family": "inherit",
+        "--ds-collection-header-chip-family": "var(--ds-type-caption-font-family)",
         "--ds-collection-header-chip-inline-padding": "8px",
         "--ds-collection-header-chip-radius": "9999px",
         "--ds-collection-header-chip-size": "calc(0.6875rem * 0.94)",
@@ -77039,7 +77123,7 @@
         "--ds-data-table-group-header-font-weight": "700",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
         "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, #2F5BE8 48%, transparent)",
-        "--ds-data-table-header-font-family": "inherit",
+        "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
         "--ds-data-table-leading-cell-padding-compact": "0.375rem 0.75rem 0.375rem 0.125rem",
@@ -77940,7 +78024,7 @@
         "--ds-pagination-item-color": "var(--ds-color-text-primary)",
         "--ds-pagination-item-color-current": "#ffffff",
         "--ds-pagination-item-color-hover": "var(--ds-color-text-primary)",
-        "--ds-pagination-jumper-width": "calc(var(--ds-spacing-14) + var(--ds-spacing-0))",
+        "--ds-pagination-jumper-width": "var(--ds-spacing-14)",
         "--ds-pagination-lg-font-size": "var(--ds-font-size-base)",
         "--ds-pagination-lg-height": "var(--ds-spacing-11)",
         "--ds-pagination-lg-padding-x": "var(--ds-spacing-5)",
@@ -79671,7 +79755,7 @@
         "--ds-collection-header-bg": "linear-gradient(116deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, var(--ds-surface-panel))",
         "--ds-collection-header-border": "var(--ds-color-border-primary)",
         "--ds-collection-header-chip-block-size": "24px",
-        "--ds-collection-header-chip-family": "inherit",
+        "--ds-collection-header-chip-family": "var(--ds-type-caption-font-family)",
         "--ds-collection-header-chip-inline-padding": "8px",
         "--ds-collection-header-chip-radius": "9999px",
         "--ds-collection-header-chip-size": "calc(0.6875rem * 1)",
@@ -80017,7 +80101,7 @@
         "--ds-data-table-group-header-font-weight": "600",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
         "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)",
-        "--ds-data-table-header-font-family": "inherit",
+        "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
         "--ds-data-table-leading-cell-padding-compact": "0.375rem 0.75rem 0.375rem 0.125rem",
@@ -80902,7 +80986,7 @@
         "--ds-pagination-item-color": "var(--ds-color-text-primary)",
         "--ds-pagination-item-color-current": "var(--ds-color-text-on-primary)",
         "--ds-pagination-item-color-hover": "var(--ds-color-text-primary)",
-        "--ds-pagination-jumper-width": "calc(var(--ds-spacing-14) + var(--ds-spacing-0))",
+        "--ds-pagination-jumper-width": "var(--ds-spacing-14)",
         "--ds-pagination-lg-font-size": "var(--ds-font-size-base)",
         "--ds-pagination-lg-height": "var(--ds-spacing-11)",
         "--ds-pagination-lg-padding-x": "var(--ds-spacing-5)",
@@ -82625,7 +82709,7 @@
         "--ds-collection-header-bg": "linear-gradient(116deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, var(--ds-surface-panel))",
         "--ds-collection-header-border": "var(--ds-color-border-primary)",
         "--ds-collection-header-chip-block-size": "24px",
-        "--ds-collection-header-chip-family": "inherit",
+        "--ds-collection-header-chip-family": "var(--ds-type-caption-font-family)",
         "--ds-collection-header-chip-inline-padding": "8px",
         "--ds-collection-header-chip-radius": "9999px",
         "--ds-collection-header-chip-size": "calc(0.6875rem * 1)",
@@ -82971,7 +83055,7 @@
         "--ds-data-table-group-header-font-weight": "600",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
         "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)",
-        "--ds-data-table-header-font-family": "inherit",
+        "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
         "--ds-data-table-leading-cell-padding-compact": "0.375rem 0.75rem 0.375rem 0.125rem",
@@ -83856,7 +83940,7 @@
         "--ds-pagination-item-color": "var(--ds-color-text-primary)",
         "--ds-pagination-item-color-current": "var(--ds-color-text-on-primary)",
         "--ds-pagination-item-color-hover": "var(--ds-color-text-primary)",
-        "--ds-pagination-jumper-width": "calc(var(--ds-spacing-14) + var(--ds-spacing-0))",
+        "--ds-pagination-jumper-width": "var(--ds-spacing-14)",
         "--ds-pagination-lg-font-size": "var(--ds-font-size-base)",
         "--ds-pagination-lg-height": "var(--ds-spacing-11)",
         "--ds-pagination-lg-padding-x": "var(--ds-spacing-5)",
@@ -85086,5 +85170,5 @@
       }
     }
   },
-  "digest": "61d3d61c8ec2a4f9a678adc06400cee07a4cffe0e6a78bc20d354aad6cb55aff"
+  "digest": "bcd415855ccfd9bde7578e60035b3a21314f7052b2b4bad335e74de9447ec264"
 }

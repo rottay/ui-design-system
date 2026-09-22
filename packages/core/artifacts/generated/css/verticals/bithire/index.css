@@ -31212,7 +31212,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   font-size: var(--ds-table-header-font-size, 13px);
   font-family: var(
     --ds-data-table-header-font-family,
-    var(--ds-type-label-font-family, inherit)
+    var(--ds-type-label-font-family)
   );
   font-weight: var(--ds-table-header-font-weight, 500);
   letter-spacing: var(
@@ -32819,7 +32819,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   );
   font-family: var(
     --ds-data-table-header-font-family,
-    var(--ds-type-label-font-family, inherit)
+    var(--ds-type-label-font-family)
   );
   letter-spacing: var(--ds-typography-label-tracking, 0.08em);
   text-transform: var(
@@ -47165,7 +47165,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .ds-alert.ds-alert--modern[data-part='root'] {
   --ds-alert-ink: var(--ds-alert-info-ink, var(--ds-color-info));
-  --ds-alert-wash: var(--ds-alert-info-wash, var(--ds-color-bg-elevated));
+  --ds-alert-wash: var(--ds-alert-info-wash, color-mix(in oklab, var(--ds-color-info) 8%, var(--ds-color-bg-primary)));
   --ds-alert-well: var(--ds-alert-info-well, var(--ds-color-bg-elevated));
   --ds-alert-edge: var(--ds-alert-info-edge, var(--ds-color-border));
   --ds-alert-well-edge: var(--ds-alert-info-well-edge, var(--ds-color-border));
@@ -47181,7 +47181,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   overflow: hidden;
   padding: var(--ds-alert-responsive-padding, var(--ds-alert-surface-padding));
   color: var(--ds-alert-color, var(--ds-color-text-primary));
-  background-color: var(--ds-alert-wash, var(--ds-alert-info-wash, var(--ds-color-bg-elevated)));
+  background-color: var(--ds-alert-wash, var(--ds-alert-info-wash, color-mix(in oklab, var(--ds-color-info) 8%, var(--ds-color-bg-primary))));
   background-image: var(--ds-alert-texture, var(--ds-gradient-surface));
   border: var(--ds-alert-border-width, var(--ds-edge-standard-width)) var(--ds-alert-border-style, var(--ds-edge-standard-style)) var(--ds-alert-edge, var(--ds-alert-info-edge, var(--ds-color-border)));
   border-radius: var(--ds-alert-surface-radius, var(--ds-radius-md));
@@ -47331,7 +47331,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 @media (hover: hover) {
   .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']:is([data-state~='hovered'], :hover) {
     color: var(--ds-alert-close-color-hover, var(--ds-color-text-primary));
-    background: var(--ds-alert-wash, var(--ds-alert-info-wash, var(--ds-color-bg-elevated)));
+    background: var(--ds-alert-wash, var(--ds-alert-info-wash, color-mix(in oklab, var(--ds-color-info) 8%, var(--ds-color-bg-primary))));
     border-color: var(--ds-alert-control-edge-hover, var(--ds-alert-info-control-edge-hover, var(--ds-color-border)));
   }
 }
@@ -49959,8 +49959,8 @@ html[data-ds-motion='reduced'] .ds-skeleton-anatomy-rows[data-loading='true'] [d
   --ds-notifier-surface-bg: var(--ds-notifier-toast-bg, var(--ds-material-overlay-background));
   --ds-notifier-surface-shadow: var(--ds-notifier-toast-shadow, var(--ds-elevation-3));
   --ds-notifier-ink: var(--ds-notifier-neutral-ink, var(--ds-color-primary));
-  --ds-notifier-wash: var(--ds-notifier-neutral-wash, var(--ds-notifier-surface-bg));
-  --ds-notifier-well: var(--ds-notifier-neutral-well, var(--ds-notifier-surface-bg));
+  --ds-notifier-wash: var(--ds-notifier-neutral-wash, color-mix(in oklab, var(--ds-color-primary) 8%, var(--ds-color-bg-primary)));
+  --ds-notifier-well: var(--ds-notifier-neutral-well, color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary)));
   --ds-notifier-edge: var(--ds-notifier-neutral-edge, var(--ds-notifier-border-color));
   --ds-notifier-edge-strong: var(--ds-notifier-neutral-edge-strong, var(--ds-notifier-border-color));
   --ds-notifier-well-edge: var(--ds-notifier-neutral-well-edge, var(--ds-notifier-border-color));
@@ -49975,8 +49975,8 @@ html[data-ds-motion='reduced'] .ds-skeleton-anatomy-rows[data-loading='true'] [d
   color: var(--ds-notifier-color, var(--ds-color-text-primary));
   background: linear-gradient(
     var(--ds-notifier-sheen-angle),
-    var(--ds-notifier-wash, var(--ds-notifier-neutral-wash, var(--ds-notifier-surface-bg))),
-    var(--ds-notifier-surface-bg) var(--ds-notifier-sheen-stop)
+    var(--ds-notifier-wash, var(--ds-notifier-neutral-wash, color-mix(in oklab, var(--ds-color-primary) 8%, var(--ds-color-bg-primary)))),
+    var(--ds-notifier-surface-bg, var(--ds-material-overlay-background)) var(--ds-notifier-sheen-stop)
   );
   border: var(--ds-notifier-border-width, var(--ds-edge-standard-width)) var(--ds-notifier-border-style, var(--ds-edge-standard-style)) var(--ds-notifier-edge, var(--ds-notifier-neutral-edge, var(--ds-notifier-border-color)));
   border-radius: var(--ds-notifier-radius, var(--ds-radius-lg));
@@ -50114,7 +50114,7 @@ html[data-ds-motion='reduced'] .ds-skeleton-anatomy-rows[data-loading='true'] [d
   block-size: var(--ds-notifier-well-size);
   box-sizing: border-box;
   color: var(--ds-notifier-ink, var(--ds-notifier-neutral-ink, var(--ds-color-primary)));
-  background: var(--ds-notifier-well, var(--ds-notifier-neutral-well, var(--ds-notifier-surface-bg)));
+  background: var(--ds-notifier-well, var(--ds-notifier-neutral-well, color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary))));
   border: var(--ds-notifier-hairline-width, var(--ds-edge-hairline-width)) var(--ds-notifier-border-style, var(--ds-edge-standard-style)) var(--ds-notifier-well-edge, var(--ds-notifier-neutral-well-edge, var(--ds-notifier-border-color)));
   border-radius: var(--ds-notifier-well-radius, var(--ds-radius-md));
   box-shadow: var(--ds-notifier-well-keyline, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(56% * var(--ds-effect-intensity)), transparent));
@@ -50217,7 +50217,7 @@ html[data-ds-motion='reduced'] .ds-skeleton-anatomy-rows[data-loading='true'] [d
   padding-inline: var(--ds-notifier-control-padding-inline, var(--ds-spacing-3));
   font-size: var(--ds-notifier-control-font-size, var(--ds-type-label-font-size));
   font-weight: var(--ds-notifier-control-font-weight, var(--ds-type-label-font-weight));
-  background: var(--ds-notifier-well, var(--ds-notifier-neutral-well, var(--ds-notifier-surface-bg)));
+  background: var(--ds-notifier-well, var(--ds-notifier-neutral-well, color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary))));
   border-color: var(--ds-notifier-edge, var(--ds-notifier-neutral-edge, var(--ds-notifier-border-color)));
 }
 
@@ -55817,7 +55817,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
 }
 
 .ds-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
-  inline-size: var(--ds-pagination-jumper-width, calc(var(--ds-spacing-14) + var(--ds-spacing-0)));
+  inline-size: var(--ds-pagination-jumper-width, var(--ds-spacing-14));
   padding-inline: var(--_ds-pagination-current-padding-x);
   text-align: center;
 }
@@ -86692,7 +86692,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   padding-inline: var(--ds-collection-header-chip-inline-padding, var(--ds-spacing-2, 8px));
   border-radius: var(--ds-collection-header-chip-radius, var(--ds-radius-full, 9999px));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent);
-  font-family: var(--ds-collection-header-chip-family, var(--ds-type-caption-font-family, inherit));
+  font-family: var(--ds-collection-header-chip-family, var(--ds-type-caption-font-family));
   font-size: var(--ds-collection-header-chip-size, var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px)));
   font-weight: var(--ds-collection-header-chip-weight, var(--ds-font-weight-bold, 700));
   letter-spacing: var(--ds-collection-header-chip-tracking, var(--ds-type-caption-letter-spacing, 0.02em));
@@ -120749,7 +120749,7 @@ html[lang]:lang(ar) {
   --ds-collection-header-bg: linear-gradient(116deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, var(--ds-surface-panel));
   --ds-collection-header-border: var(--ds-color-border-primary);
   --ds-collection-header-chip-block-size: var(--ds-spacing-6, 24px);
-  --ds-collection-header-chip-family: var(--ds-type-caption-font-family, inherit);
+  --ds-collection-header-chip-family: var(--ds-type-caption-font-family);
   --ds-collection-header-chip-inline-padding: var(--ds-spacing-2, 8px);
   --ds-collection-header-chip-radius: var(--ds-radius-full, 9999px);
   --ds-collection-header-chip-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
@@ -121192,7 +121192,7 @@ html[lang]:lang(ar) {
   --ds-data-table-group-header-font-weight: var(--ds-type-section-title-font-weight, 600);
   --ds-data-table-header-content-gap: calc(0.375rem * var(--ds-rhythm-effective-scale, 1));
   --ds-data-table-header-focus-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
-  --ds-data-table-header-font-family: var(--ds-type-label-font-family, inherit);
+  --ds-data-table-header-font-family: var(--ds-type-label-font-family);
   --ds-data-table-header-pinned-bg: var(--ds-table-header-bg, var(--ds-surface-inset));
   --ds-data-table-leading-cell-padding-comfortable: 0.75rem 1rem 0.75rem 0.1875rem;
   --ds-data-table-leading-cell-padding-compact: 0.375rem 0.75rem 0.375rem 0.125rem;
@@ -122093,7 +122093,7 @@ html[lang]:lang(ar) {
   --ds-pagination-item-color: var(--ds-color-text-primary);
   --ds-pagination-item-color-current: var(--ds-color-text-on-primary);
   --ds-pagination-item-color-hover: var(--ds-color-text-primary);
-  --ds-pagination-jumper-width: calc(var(--ds-spacing-14) + var(--ds-spacing-0));
+  --ds-pagination-jumper-width: var(--ds-spacing-14);
   --ds-pagination-lg-font-size: var(--ds-font-size-base);
   --ds-pagination-lg-height: var(--ds-spacing-11);
   --ds-pagination-lg-padding-x: var(--ds-spacing-5);

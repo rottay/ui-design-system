@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "652fa2149190798db37091cfe4567c0d3f2617101cc419a7e671d7a0aa7133f8",
+    "authorityDigest": "162b6c1ddae32ee06bf62d1a2b1a000e708c2cf05457d4b8b4826814c4071163",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5913059,
-        "sha256": "b9f02e6501a9d67d89504963fc06d4f7013d34e4909ab8cd5c344b267e8cb508"
+        "bytes": 5913273,
+        "sha256": "30b00bfac534c39ce1fa388ab1ad8b6e1e15b037e3fb71bdbe2e1382c6dc8dd1"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/modern/index.css",
@@ -271,24 +271,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5471051,
-        "sha256": "f1244142601fc6848f4b4bc9755389afc23f5aedf8c432d521f61b878bdc4da7"
+        "bytes": 5471357,
+        "sha256": "19b67ca78959a13252dbe6954fe332696d182e75212c5d1e3bf4178be8820230"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5462082,
-        "sha256": "4e8a7abdc1b8a5a5ac116509bacf00a2fd96faf6ee8c5ea2f05ec8a8bd3c1840"
+        "bytes": 5462388,
+        "sha256": "b3b749deddd9367254eb26d50acde76e9e99b9032e0cf72041e5f65d1f0d3fd3"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5461340,
-        "sha256": "7ac29951c104a7a0da3d87af22ac74daeeceaae779691651d2a3bacce990ded9"
+        "bytes": 5461646,
+        "sha256": "53f44c67892320b5daae036521261da547f24a5f5ae1d84d32ecb4c3ed0e9c94"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -14926,8 +14926,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 10171,
-        "sha256": "123d34bfeedf5a8cdee578a83a82c0c0aeae8d296e252b903df37ae54e887797"
+        "bytes": 8265,
+        "sha256": "43ff2d069c4007115c62ba4aa98ef34fb66ec91ba6e41f33e0307e7d14fbbbf7"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/inputs/transfer/tests/Transfer.engine-advanced.test.tsx",
@@ -26244,24 +26244,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 229520,
-        "sha256": "7a5ac26858626ee2608b178f242301619ff248a519dd3f194d99052e2cafae64"
+        "bytes": 229474,
+        "sha256": "60be3667d83f0472383ceba11dba295a9f03af7ed2d9683c7c8d4d6f069a99b9"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 220587,
-        "sha256": "40b53634b826ec5e5b3c29bf4c7414cb0d9d63e5fe56feaf79dcc9d274ec6760"
+        "bytes": 220541,
+        "sha256": "7f79487887c922f7bf8e7bc89c24e91481170ad6137edae5d40818ec31114e7f"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 220598,
-        "sha256": "9e02365ed393d9845ad1f60a9cbd10f387d204b8fb9120f6515ab4077dd349aa"
+        "bytes": 220552,
+        "sha256": "0d8a8a0797bad175ec43e8e2d3d6c6945499929f24862bec7448be48ae9df5f4"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/entrypoints/base/index.css",
@@ -27539,8 +27539,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 46097,
-        "sha256": "84b5e8be038cc4d29ccb32e4029c4efee30e6544a49ba886a0a76cc01d22cd6a"
+        "bytes": 46088,
+        "sha256": "4bebd4afa7213913bfa7eb6a285ba3bc383873d9eab4584d6e672d1a27891770"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css",
@@ -28915,8 +28915,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 13222,
-        "sha256": "e033f88dfe038470b412990459c5f72b66211d3c3b0302c7aa39df1351833015"
+        "bytes": 13357,
+        "sha256": "8e87c51bda67f68f5f745530d50cfa17648da1f988b147b4439e1efffa093172"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
@@ -29175,8 +29175,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 88252,
-        "sha256": "95207d844a08feaf60c04fc1129769625e3a274e597bcdd5340031f61f68dd7f"
+        "bytes": 88234,
+        "sha256": "a52a7ce95644683dfa08daaecfab23937652df236b0a392599239d717b4c2ad3"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css",
@@ -29535,8 +29535,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 29348,
-        "sha256": "bb151762138bd48a2b52dc0585fb69124d85233219fc9f712819be671c7ee055"
+        "bytes": 29620,
+        "sha256": "04da19d1f9d7066e946cd6bde5e8fe7a4c7da0fa605c3ce223baebfb5689bb1e"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger/index.css",
@@ -29575,8 +29575,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 16389,
-        "sha256": "387f1d493d42989f6f21699231e92853d621bac8df2f76a4cc32d7bda85d48a2"
+        "bytes": 16361,
+        "sha256": "09aeb86244133953376fc31fcb7f84cd89eca671b4ee6a07526886af56c5f1b4"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
@@ -37047,8 +37047,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 11140,
-        "sha256": "052f46649044f87ed51232872535bb60bd28735308c9d59547d339de3ed8af78"
+        "bytes": 11046,
+        "sha256": "0fc66308a0b086a68b4da80df334e83d610d5fddc0d5dd7dc6a3a73d72753c27"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/tokens/tests/oracle.test.ts",
@@ -37839,8 +37839,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 16605,
-        "sha256": "7d751bdb30952a9d0eb5a8bba43ba8b69e65c7cb5a43d15edfd61bff3e5d8c9d"
+        "bytes": 16596,
+        "sha256": "7f7dc1c307a414bf550d0c6795cebb833c1c35198807a7f7e8efef3edbd8a077"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/collection-header/tests/index.test.ts",
@@ -37959,8 +37959,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 21839,
-        "sha256": "5842d2ae60390c6bc3e685d787ab88b562a7293ea0bf19513084be6f1552d73b"
+        "bytes": 21830,
+        "sha256": "e9968338b6bf38b3b5a8465e73395b8eb0520b16f1c8608e71ab277b099a2196"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/data-table/tests/cascade-wiring.integration.test.ts",
@@ -38469,16 +38469,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 6017,
-        "sha256": "10398695d957f151c6798bfbbb5a0ee06d8d63aa20ae8e5366f0e330de6d3e8b"
+        "bytes": 5989,
+        "sha256": "5414fc0c4d735768871cfacb6f5b5d016d5f4664b78105229acccda7ee295757"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/pagination/tests/index.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5344,
-        "sha256": "f8f942b7854aade73c3a3ed4fea42fdd358b8b0d7d9412f532309a53880afc6e"
+        "bytes": 5316,
+        "sha256": "06286fc49ef4098287eb6f92bfe42b8ca8732ecd90b3db8fb13a8848007cec87"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/password-input/index.ts",
@@ -46082,7 +46082,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "652fa2149190798db37091cfe4567c0d3f2617101cc419a7e671d7a0aa7133f8"
+    "digest": "162b6c1ddae32ee06bf62d1a2b1a000e708c2cf05457d4b8b4826814c4071163"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3351 counters; 3248 completed zeros locked exactly; 93 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -119339,8 +119339,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "582a73956b0b31947f018158afbc0fb10d0b10d11f07ef1b2c989dcaeafa8ed9",
-      "582a73956b0b31947f018158afbc0fb10d0b10d11f07ef1b2c989dcaeafa8ed9"
+      "db1cb66efa17b94d1b73b1fea794744ea5a79c4d870251493c39ee91fe37edfe",
+      "db1cb66efa17b94d1b73b1fea794744ea5a79c4d870251493c39ee91fe37edfe"
     ],
     "agree": true
   }

@@ -97,8 +97,8 @@
   --ds-notifier-surface-bg: var(--ds-notifier-toast-bg, var(--ds-material-overlay-background));
   --ds-notifier-surface-shadow: var(--ds-notifier-toast-shadow, var(--ds-elevation-3));
   --ds-notifier-ink: var(--ds-notifier-neutral-ink, var(--ds-color-primary));
-  --ds-notifier-wash: var(--ds-notifier-neutral-wash, var(--ds-notifier-surface-bg));
-  --ds-notifier-well: var(--ds-notifier-neutral-well, var(--ds-notifier-surface-bg));
+  --ds-notifier-wash: var(--ds-notifier-neutral-wash, color-mix(in oklab, var(--ds-color-primary) 8%, var(--ds-color-bg-primary)));
+  --ds-notifier-well: var(--ds-notifier-neutral-well, color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary)));
   --ds-notifier-edge: var(--ds-notifier-neutral-edge, var(--ds-notifier-border-color));
   --ds-notifier-edge-strong: var(--ds-notifier-neutral-edge-strong, var(--ds-notifier-border-color));
   --ds-notifier-well-edge: var(--ds-notifier-neutral-well-edge, var(--ds-notifier-border-color));
@@ -113,8 +113,8 @@
   color: var(--ds-notifier-color, var(--ds-color-text-primary));
   background: linear-gradient(
     var(--ds-notifier-sheen-angle),
-    var(--ds-notifier-wash, var(--ds-notifier-neutral-wash, var(--ds-notifier-surface-bg))),
-    var(--ds-notifier-surface-bg) var(--ds-notifier-sheen-stop)
+    var(--ds-notifier-wash, var(--ds-notifier-neutral-wash, color-mix(in oklab, var(--ds-color-primary) 8%, var(--ds-color-bg-primary)))),
+    var(--ds-notifier-surface-bg, var(--ds-material-overlay-background)) var(--ds-notifier-sheen-stop)
   );
   border: var(--ds-notifier-border-width, var(--ds-edge-standard-width)) var(--ds-notifier-border-style, var(--ds-edge-standard-style)) var(--ds-notifier-edge, var(--ds-notifier-neutral-edge, var(--ds-notifier-border-color)));
   border-radius: var(--ds-notifier-radius, var(--ds-radius-lg));
@@ -252,7 +252,7 @@
   block-size: var(--ds-notifier-well-size);
   box-sizing: border-box;
   color: var(--ds-notifier-ink, var(--ds-notifier-neutral-ink, var(--ds-color-primary)));
-  background: var(--ds-notifier-well, var(--ds-notifier-neutral-well, var(--ds-notifier-surface-bg)));
+  background: var(--ds-notifier-well, var(--ds-notifier-neutral-well, color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary))));
   border: var(--ds-notifier-hairline-width, var(--ds-edge-hairline-width)) var(--ds-notifier-border-style, var(--ds-edge-standard-style)) var(--ds-notifier-well-edge, var(--ds-notifier-neutral-well-edge, var(--ds-notifier-border-color)));
   border-radius: var(--ds-notifier-well-radius, var(--ds-radius-md));
   box-shadow: var(--ds-notifier-well-keyline, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(56% * var(--ds-effect-intensity)), transparent));
@@ -355,7 +355,7 @@
   padding-inline: var(--ds-notifier-control-padding-inline, var(--ds-spacing-3));
   font-size: var(--ds-notifier-control-font-size, var(--ds-type-label-font-size));
   font-weight: var(--ds-notifier-control-font-weight, var(--ds-type-label-font-weight));
-  background: var(--ds-notifier-well, var(--ds-notifier-neutral-well, var(--ds-notifier-surface-bg)));
+  background: var(--ds-notifier-well, var(--ds-notifier-neutral-well, color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary))));
   border-color: var(--ds-notifier-edge, var(--ds-notifier-neutral-edge, var(--ds-notifier-border-color)));
 }
 

@@ -59,55 +59,39 @@ describeCausality({
 });
 
 /**
- * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15). The neutral
- * compile leaves this family's ink and its ground on opposite sides of the
- * ramp, so axe reports serious `color-contrast`. Measured at the pre-lot tree:
- * ZERO findings on all four scopes, so every entry below is lot-caused, not
- * inherited. Pinned by finding id and the IDENTITY of every failing node:
- * another kind of violation, one more node, one node repaired, a same-count
- * swap, or a finding in a scope pinned clean turns this row red. It clears when
- * the derivation lane gives the family a legible pair (EVI-02, 2026-09-15).
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15). Pinned by
+ * finding id and the IDENTITY of every failing node, so with no entry a scope
+ * must measure clean and a relapse reddens here instead of being absorbed.
  *
- * `bithire dark` had 9 rows and they DRAINED: that scope's dark block now
- * re-derives its own canvas ground instead of inheriting the light body's, so
- * the panel chrome and its quiet copy are read against the ground they were
- * designed for.
- * Dropped by identity, not waived -- with no entry the scope must measure
- * clean, and a relapse reddens here.
+ * Every row this family carried has drained. Each was dropped by identity, not
+ * waived.
  *
- * `rottay dark` DRAINED at the Input base, not in this family: every node in
+ * `bithire dark` had 9 rows: that scope's dark block now re-derives its own
+ * canvas ground instead of inheriting the light body's, so the panel chrome and
+ * its quiet copy are read against the ground they were designed for.
+ *
+ * `rottay dark` drained at the Input base, not in this family: every node in
  * that row was a control ground, and the Input component base stated
  * `--ds-input-bg: var(--ds-color-white)` mode-lessly, which shadowed the
  * mode-aware chain beneath it (the component tokens sit in a LATER cascade
  * layer than the theme). The base now states
  * `var(--ds-color-bg-input, var(--ds-surface-control))`, so the control grounds
- * at `#0F0F12` there. Dropped by identity, not waived: with no entry the scope
- * must measure clean, and a relapse reddens here.
+ * at `#0F0F12` there.
+ *
+ * `bithire light` and `evnto light` each had 7 rows -- the `panel-count` and
+ * `panel-empty` parts, which is exactly the pair the skin paints from
+ * `--ds-transfer-meta-ink`. They drained at the supporting-ink re-grade
+ * (f73348ed5, 2026-09-21), which moved `--ds-color-text-secondary` from
+ * `#A0A0A5` to `#5A5A61` in the default light `:root`; neither vertical authors
+ * that rung, so both follow it. Measured 2026-09-22 in both scopes: zero
+ * serious findings, the count ink reading `rgb(90, 90, 97)` on the
+ * `rgb(245, 245, 245)` header ground, 6.27:1 where the old ink read 2.39:1.
+ * The family channel is not what moved: the deriver states
+ * `--ds-transfer-meta-ink: var(--ds-color-text-secondary)`, and forcing the
+ * channel guaranteed-invalid so the skin's own fallback hooks measures the same
+ * zero in both scopes.
  */
-const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
-  'bithire light': {
-    'color-contrast': [
-      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(1) > div[data-panel="source"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(1) > div[data-panel="target"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(2) > div[data-panel="source"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(2) > div[data-panel="target"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      'div[data-panel="source"][data-part="panel"][data-disabled="true"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      'div[data-panel="target"][data-part="panel"][data-disabled="true"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      'div[data-part="panel-empty"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(1) > div[data-panel="source"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(1) > div[data-panel="target"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(2) > div[data-panel="source"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(2) > div[data-panel="target"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      'div[data-panel="source"][data-part="panel"][data-disabled="true"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      'div[data-panel="target"][data-part="panel"][data-disabled="true"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
-      'div[data-part="panel-empty"]',
-    ],
-  },
-};
+const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {};
 
 describe('transfer direction, keyboard, language and accessibility', () => {
   it('lays the source panel at the inline start in both directions', async () => {

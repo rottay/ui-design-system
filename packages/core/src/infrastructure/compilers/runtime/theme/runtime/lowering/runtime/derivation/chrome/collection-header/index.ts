@@ -175,7 +175,7 @@ export function deriveCollectionHeaderChannels(): Record<string, string> {
   vars["--ds-collection-header-chip-block-size"] = "var(--ds-spacing-6, 24px)";
   vars["--ds-collection-header-chip-inline-padding"] = "var(--ds-spacing-2, 8px)";
   vars["--ds-collection-header-chip-radius"] = "var(--ds-radius-full, 9999px)";
-  vars["--ds-collection-header-chip-family"] = "var(--ds-type-caption-font-family, inherit)";
+  vars["--ds-collection-header-chip-family"] = "var(--ds-type-caption-font-family)";
   vars["--ds-collection-header-chip-size"] =
     "var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px))";
   vars["--ds-collection-header-chip-weight"] = "var(--ds-font-weight-bold, 700)";

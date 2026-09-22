@@ -423,7 +423,7 @@
   font-size: var(--ds-table-header-font-size, 13px);
   font-family: var(
     --ds-data-table-header-font-family,
-    var(--ds-type-label-font-family, inherit)
+    var(--ds-type-label-font-family)
   );
   font-weight: var(--ds-table-header-font-weight, 500);
   letter-spacing: var(
@@ -2030,7 +2030,7 @@
   );
   font-family: var(
     --ds-data-table-header-font-family,
-    var(--ds-type-label-font-family, inherit)
+    var(--ds-type-label-font-family)
   );
   letter-spacing: var(--ds-typography-label-tracking, 0.08em);
   text-transform: var(

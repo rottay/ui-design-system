@@ -111,16 +111,15 @@ describe.each(VERTICALS)("%s", (vertical) => {
       expect(typeof entry.reason).toBe("string");
       expect(entry).toHaveProperty("cause");
     }
-    // The five real post-substitution refusals, the same five on all three
+    // The four real post-substitution refusals, the same four on all three
     // verticals: two px+rem (`--ds-app-shell-navigation-body-padding` and
-    // `--ds-app-shell-navigation-body-scroll-padding-block-end`), one
-    // rem+unitless (`--ds-pagination-jumper-width`, which reduces to
-    // `calc(<rem> + 0)`), one %+px (`--ds-search-command-bar-voice-help-offset`)
-    // and one dvw+px (`--ds-search-command-bar-voice-help-inline-size`). None
-    // reduces without inventing a root font size or a viewport for a root that
-    // is fluid, so the emitter refuses rather than guesses.
+    // `--ds-app-shell-navigation-body-scroll-padding-block-end`), one %+px
+    // (`--ds-search-command-bar-voice-help-offset`) and one dvw+px
+    // (`--ds-search-command-bar-voice-help-inline-size`). None reduces without
+    // inventing a root font size or a viewport for a root that is fluid, so the
+    // emitter refuses rather than guesses.
     const unitMix = document.unresolved.filter((entry) => entry.reason === "unit-mix");
-    expect(unitMix.length).toBeGreaterThanOrEqual(5);
+    expect(unitMix.length).toBeGreaterThanOrEqual(4);
   });
 
   it("MUTANT M-4: a silently dropped channel is caught by I-5", () => {

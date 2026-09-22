@@ -110,7 +110,7 @@ export function derivePaginationChannels(): Record<string, string> {
   vars["--ds-pagination-range-color"] = "var(--ds-color-text-secondary)";
   vars["--ds-pagination-range-font-size"] = "var(--ds-type-supporting-font-size)";
   vars["--ds-pagination-range-margin-block-end"] = "var(--ds-spacing-0)";
-  vars["--ds-pagination-jumper-width"] = "calc(var(--ds-spacing-14) + var(--ds-spacing-0))";
+  vars["--ds-pagination-jumper-width"] = "var(--ds-spacing-14)";
   vars["--ds-pagination-size-arrow-clearance"] = "var(--ds-spacing-8)";
   vars["--ds-pagination-size-arrow-inset"] = "var(--ds-spacing-2)";
   vars["--ds-pagination-size-icon-color"] = "var(--ds-color-text-muted)";

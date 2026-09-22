@@ -86,7 +86,7 @@ const WIRED: Record<string, string> = {
     "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))",
   "--ds-pagination-item-bg-active":
     "color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg, var(--ds-surface-card)))",
-  "--ds-pagination-jumper-width": "calc(var(--ds-spacing-14) + var(--ds-spacing-0))",
+  "--ds-pagination-jumper-width": "var(--ds-spacing-14)",
   "--ds-pagination-nav-inline-size":
     "var(--ds-pagination-md-height, var(--_ds-pagination-current-height))",
 };

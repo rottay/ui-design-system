@@ -185,7 +185,7 @@
 }
 
 .ds-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
-  inline-size: var(--ds-pagination-jumper-width, calc(var(--ds-spacing-14) + var(--ds-spacing-0)));
+  inline-size: var(--ds-pagination-jumper-width, var(--ds-spacing-14));
   padding-inline: var(--_ds-pagination-current-padding-x);
   text-align: center;
 }

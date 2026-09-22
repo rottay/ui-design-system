@@ -24,7 +24,7 @@
 
 .ds-alert.ds-alert--modern[data-part='root'] {
   --ds-alert-ink: var(--ds-alert-info-ink, var(--ds-color-info));
-  --ds-alert-wash: var(--ds-alert-info-wash, var(--ds-color-bg-elevated));
+  --ds-alert-wash: var(--ds-alert-info-wash, color-mix(in oklab, var(--ds-color-info) 8%, var(--ds-color-bg-primary)));
   --ds-alert-well: var(--ds-alert-info-well, var(--ds-color-bg-elevated));
   --ds-alert-edge: var(--ds-alert-info-edge, var(--ds-color-border));
   --ds-alert-well-edge: var(--ds-alert-info-well-edge, var(--ds-color-border));
@@ -40,7 +40,7 @@
   overflow: hidden;
   padding: var(--ds-alert-responsive-padding, var(--ds-alert-surface-padding));
   color: var(--ds-alert-color, var(--ds-color-text-primary));
-  background-color: var(--ds-alert-wash, var(--ds-alert-info-wash, var(--ds-color-bg-elevated)));
+  background-color: var(--ds-alert-wash, var(--ds-alert-info-wash, color-mix(in oklab, var(--ds-color-info) 8%, var(--ds-color-bg-primary))));
   background-image: var(--ds-alert-texture, var(--ds-gradient-surface));
   border: var(--ds-alert-border-width, var(--ds-edge-standard-width)) var(--ds-alert-border-style, var(--ds-edge-standard-style)) var(--ds-alert-edge, var(--ds-alert-info-edge, var(--ds-color-border)));
   border-radius: var(--ds-alert-surface-radius, var(--ds-radius-md));
@@ -190,7 +190,7 @@
 @media (hover: hover) {
   .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']:is([data-state~='hovered'], :hover) {
     color: var(--ds-alert-close-color-hover, var(--ds-color-text-primary));
-    background: var(--ds-alert-wash, var(--ds-alert-info-wash, var(--ds-color-bg-elevated)));
+    background: var(--ds-alert-wash, var(--ds-alert-info-wash, color-mix(in oklab, var(--ds-color-info) 8%, var(--ds-color-bg-primary))));
     border-color: var(--ds-alert-control-edge-hover, var(--ds-alert-info-control-edge-hover, var(--ds-color-border)));
   }
 }
