@@ -98415,14 +98415,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
   > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='listening'] {
-  animation: ds-search-command-bar-pulse var(--ds-search-command-bar-pulse-duration, 1.6s)
+  animation: ds-search-command-bar-pulse var(--ds-search-command-bar-pulse-duration, calc(var(--ds-motion-glacial) * 3.2))
     var(--ds-search-command-bar-pulse-easing, ease-out) infinite;
 }
 
 /* the transcribing spin: the engine names the node, the skin owns the motion */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__spinning-icon {
-  animation: ds-search-command-bar-spin var(--ds-search-command-bar-spin-duration, 1s) linear infinite;
+  animation: ds-search-command-bar-spin var(--ds-search-command-bar-spin-duration, calc(var(--ds-motion-glacial) * 2)) linear infinite;
 }
 
 /* ---- voice badge: pattern chrome (status lozenge, not a Button) ---- */
@@ -122278,7 +122278,7 @@ html[lang]:lang(ar) {
   --ds-search-command-bar-input-padding-inline-start: 46px;
   --ds-search-command-bar-input-padding-toggle: 88px;
   --ds-search-command-bar-input-radius: var(--ds-radius-xl, 16px);
-  --ds-search-command-bar-pulse-duration: 1.6s;
+  --ds-search-command-bar-pulse-duration: calc(var(--ds-motion-glacial) * 3.2);
   --ds-search-command-bar-pulse-easing: ease-out;
   --ds-search-command-bar-pulse-fade: color-mix(in srgb, var(--ds-color-primary) 0%, transparent);
   --ds-search-command-bar-pulse-tint: color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
@@ -122311,7 +122311,7 @@ html[lang]:lang(ar) {
   --ds-search-command-bar-slot-padding-inline-start: 18px;
   --ds-search-command-bar-slot-rule: 1px solid var(--ds-color-border-subtle);
   --ds-search-command-bar-slot-touch-target: var(--ds-touch-target-min, 44px);
-  --ds-search-command-bar-spin-duration: 1s;
+  --ds-search-command-bar-spin-duration: calc(var(--ds-motion-glacial) * 2);
   --ds-search-command-bar-status-color: var(--ds-color-text-muted);
   --ds-search-command-bar-status-error-color: var(--ds-color-error);
   --ds-search-command-bar-status-font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));

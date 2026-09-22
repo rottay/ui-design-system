@@ -292,11 +292,11 @@ export function deriveSearchCommandBarChannels(): Record<string, string> {
   vars["--ds-search-command-bar-badge-warning-bg"] = "color-mix(in srgb, var(--ds-color-warning) 8%, transparent)";
   vars["--ds-search-command-bar-badge-warning-border"] = "1px solid var(--ds-color-warning)";
   vars["--ds-search-command-bar-badge-warning-color"] = "var(--ds-color-warning)";
-  vars["--ds-search-command-bar-pulse-duration"] = "1.6s";
+  vars["--ds-search-command-bar-pulse-duration"] = "calc(var(--ds-motion-glacial) * 3.2)";
   vars["--ds-search-command-bar-pulse-easing"] = "ease-out";
   vars["--ds-search-command-bar-pulse-fade"] = "color-mix(in srgb, var(--ds-color-primary) 0%, transparent)";
   vars["--ds-search-command-bar-pulse-tint"] = "color-mix(in srgb, var(--ds-color-primary) 22%, transparent)";
-  vars["--ds-search-command-bar-spin-duration"] = "1s";
+  vars["--ds-search-command-bar-spin-duration"] = "calc(var(--ds-motion-glacial) * 2)";
 
   // The microphone-permission drawer: a warning-framed sheet under the shell.
   vars["--ds-search-command-bar-voice-help-bg"] = "var(--ds-surface-card)";

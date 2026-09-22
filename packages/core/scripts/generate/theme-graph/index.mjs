@@ -145,6 +145,12 @@ function readJsonViews() {
  * re-anchored with a reason like every other ratchet here. What it is not is a
  * promise the estimate made on the tree's behalf.
  *
+ * RE-ANCHORED 2026-09-22 (WO-EVI-02 search-command-bar governed-root wiring),
+ * 10,031,551 -> 10,032,002 bytes, +451. Two channels stopped deriving to the bare
+ * literals 1.6s and 1s and now read --ds-motion-glacial, so the graph gained two
+ * `leaf-fallback` edges and two read sites carry the longer fallback text. The
+ * growth is the wiring itself, measured on the regenerated artifact.
+ *
  * RE-ANCHORED 2026-09-22 (WO-EVI-02 theme-graph drain), 9,437,184 -> 10,031,551
  * bytes, the regenerated artifact's exact size. The graph had been stale since
  * 31d04caa0 over a 194-commit window; its census
@@ -154,7 +160,7 @@ function readJsonViews() {
  * any byte of drift, so this pin's only job is to make growth re-anchor
  * deliberately; headroom would only buy a quieter alarm, never a green check.
  */
-export const SIZE_BUDGET_BYTES = 10_031_551;
+export const SIZE_BUDGET_BYTES = 10_032_002;
 
 /** A key no id can collide with, used only to sort and de-duplicate pairs. */
 const SEP = "\u241F";

@@ -2053,7 +2053,7 @@
   --ds-search-command-bar-input-padding-inline-start: 46px;
   --ds-search-command-bar-input-padding-toggle: 88px;
   --ds-search-command-bar-input-radius: var(--ds-radius-xl, 16px);
-  --ds-search-command-bar-pulse-duration: 1.6s;
+  --ds-search-command-bar-pulse-duration: calc(var(--ds-motion-glacial) * 3.2);
   --ds-search-command-bar-pulse-easing: ease-out;
   --ds-search-command-bar-pulse-fade: color-mix(in srgb, var(--ds-color-primary) 0%, transparent);
   --ds-search-command-bar-pulse-tint: color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
@@ -2086,7 +2086,7 @@
   --ds-search-command-bar-slot-padding-inline-start: 18px;
   --ds-search-command-bar-slot-rule: 1px solid var(--ds-color-border-subtle);
   --ds-search-command-bar-slot-touch-target: var(--ds-touch-target-min, 44px);
-  --ds-search-command-bar-spin-duration: 1s;
+  --ds-search-command-bar-spin-duration: calc(var(--ds-motion-glacial) * 2);
   --ds-search-command-bar-status-color: var(--ds-color-text-muted);
   --ds-search-command-bar-status-error-color: var(--ds-color-error);
   --ds-search-command-bar-status-font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
