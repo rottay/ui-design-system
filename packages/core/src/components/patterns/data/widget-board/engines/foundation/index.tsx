@@ -35,6 +35,7 @@ import { LayoutColumnsIcon } from "@/graphics/icons/semantic/generated/roles/lay
 import { LayoutGridIcon } from "@/graphics/icons/semantic/generated/roles/layout-grid";
 import { NavigationSettingsIcon } from "@/graphics/icons/semantic/generated/roles/navigation-settings";
 import { StatusVerifiedIcon } from "@/graphics/icons/semantic/generated/roles/status-verified";
+import { readTiming } from "@/graphics/motion/react/runtime/layout/kernel/measure";
 import type {
   WidgetBoardItem,
   WidgetBoardProps,
@@ -462,16 +463,15 @@ export function WidgetBoardEngine({
       "(prefers-reduced-motion: reduce)"
     ).matches;
     const styles = getComputedStyle(grid);
-    const durationToken =
-      styles.getPropertyValue("--ds-motion-rearrange").trim() ||
-      styles.getPropertyValue("--ds-motion-normal").trim();
-    const parsedDuration = Number.parseFloat(durationToken);
+    const durationVar = styles.getPropertyValue("--ds-motion-rearrange").trim()
+      ? "--ds-motion-rearrange"
+      : styles.getPropertyValue("--ds-motion-normal").trim()
+      ? "--ds-motion-normal"
+      : null;
     const duration = reducedMotion
       ? 0
-      : Number.isFinite(parsedDuration)
-      ? durationToken.endsWith("s") && !durationToken.endsWith("ms")
-        ? parsedDuration * 1000
-        : parsedDuration
+      : durationVar
+      ? readTiming(grid, durationVar, "--ds-motion-ease-move").durationMs
       : 200;
     const easing =
       styles.getPropertyValue("--ds-motion-ease-move").trim() ||
