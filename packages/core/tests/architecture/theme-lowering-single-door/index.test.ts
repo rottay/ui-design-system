@@ -276,24 +276,80 @@ const RESOLVE_THEME_OPTION_KEYS: readonly string[] = ["baseline"];
 const RESOLVE_THEME_BASELINE_PRODUCER = "baselineFor";
 
 /**
+ * The member an intent uses to CARRY a baseline of its own.
+ *
+ * Re-anchored over D6-CORE-01 (`9d7294e33`, 2026-09-15), which made the door
+ * `baseline: target.baseline ?? baselineFor(target.vertical, target.slug)`.
+ * The census pinned the pre-D6 shape -- a bare `baselineFor(...)` call -- so
+ * every arm that reads it went red on the landed tree rather than on a defect.
+ *
+ * The widening is exactly one form and no wider: a nullish coalescing whose
+ * FALLBACK is still the derivation and whose carried arm is still the intent's
+ * own `.baseline`. D6-CORE-01's reason is that an intent opened on a tenant's
+ * already customized theme must resolve over THAT baseline; composing its patch
+ * over the preset instead drops every leaf the draft carried but did not move.
+ * A carried arm that is anything else, a fallback that is not `baselineFor`,
+ * and `||` in place of `??` all stay findings -- the mutants below hold each.
+ */
+const RESOLVE_THEME_CARRIED_BASELINE = "baseline";
+
+/** The derivation the door is allowed to produce a baseline with. */
+const isBaselineDerivation = (node: ts.Expression): boolean =>
+  ts.isCallExpression(node) &&
+  ts.isIdentifier(node.expression) &&
+  node.expression.text === RESOLVE_THEME_BASELINE_PRODUCER;
+
+/** The intent's own carried baseline: the only admitted left arm of the `??`. */
+const isCarriedBaseline = (node: ts.Expression): boolean =>
+  ts.isPropertyAccessExpression(node) &&
+  node.name.text === RESOLVE_THEME_CARRIED_BASELINE;
+
+/** True for the two admitted producers, and for nothing else. */
+const isAdmittedBaseline = (node: ts.Expression): boolean =>
+  isBaselineDerivation(node) ||
+  (ts.isBinaryExpression(node) &&
+    node.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken &&
+    isCarriedBaseline(node.left) &&
+    isBaselineDerivation(node.right));
+
+/**
  * The admission stations, by the symbol each one owns.
  *
  * Every one of these was a private function inside `compileTenantTheme` before
  * WO-CAT-03, which is why the DB transport had a policy the preview and draft
  * transports did not. The census below asserts that each name is DECLARED in
- * exactly one productive source, and that the source is under the admission
- * owner -- a second declaration anywhere is a second policy.
+ * exactly one productive source, and that the source is the owner named here --
+ * a second declaration anywhere is a second policy.
+ *
+ * Each station carries its owner rather than inheriting one, because S19-A01
+ * (`d47c874aa`, 2026-09-19) moved `isSafeVisualValue` OUT of the admission and
+ * down to `kernel/foundation/schemas/tenant-theme`: preview, intent and
+ * publication each needed the value grammar, and an admission-owned copy is
+ * what a second grammar is born from. Its structural repair (`d5a3e1a74`) kept
+ * it there. The station is still pinned to exactly one owner and still
+ * exactly-once -- what moved is WHICH owner, not how strong the assertion is.
  */
-const ADMISSION_STATIONS = [
-  "tierIssues",
-  "admitEngine",
-  "envelopeIssues",
-  "contrastIssues",
-  "chartCategoryIssues",
-  "limitIssues",
-  "isSafeVisualValue",
-  "themeChannelDelta",
-] as const;
+const ADMISSION_STATIONS: readonly {
+  readonly station: string;
+  readonly owner?: string;
+}[] = [
+  { station: "tierIssues" },
+  { station: "admitEngine" },
+  { station: "envelopeIssues" },
+  { station: "contrastIssues" },
+  { station: "chartCategoryIssues" },
+  { station: "limitIssues" },
+  {
+    station: "isSafeVisualValue",
+    owner: "src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.ts",
+  },
+  { station: "themeChannelDelta" },
+];
+
+/** Every station name, for the sweeps that only care that it is a station. */
+const ADMISSION_STATION_NAMES: readonly string[] = ADMISSION_STATIONS.map(
+  ({ station }) => station
+);
 
 /**
  * `ThemeAdmissionError.measured` — the graded compilation a refusal carries.
@@ -380,9 +436,10 @@ function resolveThemeCalls(source: string, file: string): ts.CallExpression[] {
  *
  * The argument is unwrapped through every branch of a conditional; each branch
  * must be an object literal whose keys are within the allowlist (`{}` passes),
- * and a `baseline` must be produced by `baselineFor`. Anything else -- an
- * identifier, a spread, another call -- is a baseline the door did not derive
- * from the closed source set, which is a fourth origin.
+ * and a `baseline` must be produced by `baselineFor`, or fall back to it from
+ * the intent's own carried baseline. Anything else -- an identifier, a spread,
+ * another call -- is a baseline the door did not derive from the closed source
+ * set, which is a fourth origin.
  */
 function resolveThemeOptionFindings(node: ts.Expression, label: string): string[] {
   if (ts.isParenthesizedExpression(node)) {
@@ -414,11 +471,7 @@ function resolveThemeOptionFindings(node: ts.Expression, label: string): string[
       continue;
     }
     const { initializer } = property;
-    if (
-      !ts.isCallExpression(initializer) ||
-      !ts.isIdentifier(initializer.expression) ||
-      initializer.expression.text !== RESOLVE_THEME_BASELINE_PRODUCER
-    ) {
+    if (!isAdmittedBaseline(initializer)) {
       findings.push(
         `${label}: resolveTheme ${key} is not produced by ${RESOLVE_THEME_BASELINE_PRODUCER} (${ts.SyntaxKind[initializer.kind]})`
       );
@@ -693,12 +746,12 @@ describe("the theme lowering has exactly one productive door", () => {
   });
 
   it("every admission station is declared exactly once, under the admission owner", () => {
-    for (const station of ADMISSION_STATIONS) {
+    for (const { station, owner } of ADMISSION_STATIONS) {
       const owners = SOURCES.filter(({ path, source }) =>
         declaredNames(source, path).has(station)
       ).map(({ label }) => label);
       expect(owners, `${station} owners`).toHaveLength(1);
-      expect(owners[0], `${station} owner`).toContain(ADMISSION_OWNER);
+      expect(owners[0], `${station} owner`).toContain(owner ?? ADMISSION_OWNER);
     }
   });
 
@@ -721,7 +774,7 @@ describe("the theme lowering has exactly one productive door", () => {
     );
     expect(terminal, "the DB terminal must be in the census").toBeDefined();
     const declared = declaredNames(terminal!.source, terminal!.path);
-    for (const station of ADMISSION_STATIONS) {
+    for (const station of ADMISSION_STATION_NAMES) {
       expect(declared.has(station), `${station} redeclared by the terminal`).toBe(false);
     }
   });
@@ -1095,6 +1148,34 @@ describe("planted mutants make the single-door gate go red", () => {
 
   it("a baseline the door did not derive through baselineFor is caught", () => {
     for (const branch of ["{ baseline: theme }", "{ baseline: pickBaseline(target) }", "{ baseline }"]) {
+      const { findings } = resolveThemeArityCensus(
+        withPlanted(COMPILE_DOOR, doorConditional(branch))
+      );
+      expect(findings, branch).toHaveLength(1);
+    }
+  });
+
+  it("the carried-baseline fallback D6-CORE-01 opened is admitted, and nothing wider", () => {
+    // The `??` arm re-anchored over `9d7294e33`. Each mutant below breaks ONE
+    // half of the admitted shape, so the widening cannot be read as "any binary
+    // expression ending in baselineFor" or "any fallback off `target.baseline`".
+    const admitted = "{ baseline: target.baseline ?? baselineFor(target.vertical, target.slug) }";
+    expect(
+      resolveThemeArityCensus(withPlanted(COMPILE_DOOR, doorConditional(admitted))).findings
+    ).toEqual([]);
+    for (const branch of [
+      // the fallback is not the derivation
+      "{ baseline: target.baseline ?? pickBaseline(target) }",
+      "{ baseline: target.baseline ?? theme }",
+      // the carried arm is not the intent's own baseline
+      "{ baseline: fallbackTheme ?? baselineFor(target.vertical, target.slug) }",
+      "{ baseline: target.theme ?? baselineFor(target.vertical, target.slug) }",
+      // `||` coerces where `??` does not: an empty-but-present baseline would
+      // silently fall through to the preset
+      "{ baseline: target.baseline || baselineFor(target.vertical, target.slug) }",
+      // the arms reversed: the derivation would only run when it is NOT needed
+      "{ baseline: baselineFor(target.vertical, target.slug) ?? target.baseline }",
+    ]) {
       const { findings } = resolveThemeArityCensus(
         withPlanted(COMPILE_DOOR, doorConditional(branch))
       );

@@ -502,11 +502,25 @@ describe("TenantThemeConfig v1 server contract", () => {
     // joined the ten. A WIDENING with the law of CC-01 above -- nothing
     // withdrawn, no field changed type or format -- so the superseded pins stay
     // asserted and the ratchet keeps its history.
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       "sha256-5e5ce26a923789b4889ea56fddc54b044672d010ba7a4711999c3af7d947b518"
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-f6554523f70d1897322c239093b2f20e33f85dfd5eb6d25ba6c90a902de2ddef"
+    );
+    // WO-INV-02 residual (`f56c64974`, 2026-09-21): `arabic-text` joined
+    // `TENANT_THEME_FONT_PACK_IDS`, so row 6's `fontPackIds` carries seven rows
+    // instead of six. A WIDENING with the law of CC-01 above -- nothing
+    // withdrawn, no field changed type or format -- so the superseded pins stay
+    // asserted and the ratchet keeps its history. Attributed by A/B on isolated
+    // copies of the parent `db8e57542` (which measures the superseded pair
+    // byte-exact) and of `90b75bfd5`, the window's other schema-shaped lot,
+    // which moves neither digest.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      "sha256-4a7dd8ef14d9102a67b61b3420bf1a24b4a2d39379686776ef23eee22b42b326"
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      "sha256-3062ff22278b26bf6d8ae59e6a8ead8f91035072811ba6a3df5f53447e0459e5"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(

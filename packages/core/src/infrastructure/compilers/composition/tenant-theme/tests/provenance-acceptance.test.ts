@@ -614,7 +614,34 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      *         +1       +1       +1  31d04caa0  --ds-stats-header-spark-dot-opacity goes public and continuous (WO-FAM-10's last residual)
      *        +56      +56      +56  da6b06d41  app-shell family cut: the chrome/app-shell deriver owns the whole --ds-shell-* namespace -- background, collapse-transition, content 3, footer 4, header 13, main 3, navigation 21, sidebar 3, skip-link 7 (WO-FAM-11 sub-lot B). a0c300488 is the sub-lot A gate that measures the cut and moves nothing
      *   2552 / 2711 / 2552  measured 2026-09-19 on this tree (the d5a3e1a74 tree); the seven S19 lots between sub-lot B and HEAD -- 6a3eae066 (Stack gap rungs), d47c874aa and d5a3e1a74 (A01 value grammar and its structural repair), d6d4e96ae (A03 Tooltip refusal), 7d23f7873 (F04 DetailHeader direction), ce0a2e0c2 (F01/F02/F03) and 3c828086c (artifact regeneration) -- each measure the same
-     * Totals: rottay +2202/-957, bithire +2209/-781, evnto +2293/-325.
+     * FAM-11 sub-lots C/D/E and the FAM-08/09/10 tail, measured commit by commit
+     * (2026-09-21) with the same `lowerTheme` call, on an isolated copy of the
+     * tree at every one of the 66 commits in d5a3e1a74..HEAD that touch
+     * packages/core/src outside a `tests/` folder -- the only commits that can
+     * move this lowering. The measurement harness
+     * (`@tests/support/theme-lowering`) is untouched across the whole window, so
+     * every row below is the same call on a different tree. The anchor copy
+     * reproduced 2552 / 2711 / 2552 byte-exact and the parent of every row
+     * measures exactly the previous row, so the sums close with no residue.
+     * Fourteen commits move a key; the other fifty-two move none. Two of the
+     * fourteen are renames that move no COUNT, and they are on the table anyway
+     * because the pin is a key-set claim before it is a number.
+     *        +28      +28      +28  e33a2c757  FAM-11 sub-lot E, the dock and the two switchers: --ds-scope-switcher-* 15 and --ds-action-dock-* 13 (WO-FAM-11)
+     *       +242     +242     +242  9779cab05  FAM-11 sub-lot D completion, the three derivers and the provider mount: --ds-search-command-* 143, --ds-command-palette-* 54, --ds-shortcuts-overlay-* 45. 33e6e5f1f opens sub-lot D with the command chain and the keyboard owner and moves no key: the derivers are what emit
+     *        +16      +16      +16  b5eca0e4b  FAM-11 sub-lot C, page-shell and the three shells: --ds-page-header-* 6, --ds-workspace-shell-* 5, --ds-section-card-* 4, --ds-page-shell-actions-backdrop (WO-FAM-11)
+     *        +16      +16      +16  08f70e4fd  list-toolbar's 16 unproduced reads derive from decisions: the whole --ds-toolbar-* set the skin already resolved to
+     *        +24      +24      +24  85cc1085b  data-table's unproduced reads get their producers: 23 --ds-data-table-* (the mobile cluster, drag grip, resize bar and drop indicator) plus --ds-filter-chip-radius
+     *        +32      +32      +32  7a267f705  materials overlay/raised carry the full facet list (71 -> 103 roots): --ds-material-raised-* 17 and --ds-material-overlay-* 15, each family's background/border/shadow states and the focus ring
+     *         +2       +2       +2  fa2a4fff9  data-table's two produced channels resolve at the theme root: --ds-data-table-drag-grip-size-{compact,spacious}, the density split carried by producers (WO-FAM-08)
+     *         +0       +2       +0  4def25f24  the twelve chart slots reach the tenant authority: --ds-chart-series-{11,12} (WO-FAM-09, R3 second half). The ONLY row in this table that separates bithire, and the reason its constant offset over the other two moves 159 -> 161: the twelve-slot vocabulary is a tenant authority, and bithire's preset is the one first-party preset that authors a categorical series -- rottay's and evnto's are structural only, so the two new slots reach no baseline of theirs. 80bfb2d16 declares the vocabulary and moves no key
+     *        +51      +51      +51  339a0a7a0  app-shell's chrome channels move to their own namespace (WO-FAM-11, owner R1) -- and REMOVE the 51 they came from: --ds-shell-navigation-* 21, --ds-shell-header-* 12, --ds-shell-skip-* 7, --ds-shell-footer-* 4, --ds-shell-content-* 3, --ds-shell-main-* 3, --ds-shell-background. A rename, +51/-51, count-neutral: the superseded read window is a CSS-side alias and never reaches this lowering
+     *         +6       +6       +6  8c901556d  the last ten namespace strays adjudicated (WO-FAM-11 sub-lot C, owner R1) -- and REMOVE the six --ds-page-header-* b5eca0e4b had just added, which become --ds-page-shell-header-*. The second rename, +6/-6, count-neutral
+     *         +7       +7       +7  cefa1becc  data-table's three divergent reads adjudicated and drained (WO-FAM-08): cell-line-height splits into its per-posture produced rungs (3), plus card-shadow, the two control radii and mobile-state-shadow
+     *         -2       -2       -2  ed46c7fc5  the F2.9 liveness tail resolves honestly (owner R5): --ds-type-tier-{sm,xs}-letter-spacing retired. The table's only removal that is not half of a rename, and the window's only net-negative row
+     *         +5       +5       +5  6d80b1468  the six honestly-wireable depth families read the edge vocabulary (milestone B): --ds-card-border-width, --ds-list-border-width, --ds-tag-border-width, --ds-tree-line-width and --ds-collapse-root-default-idle-border-width
+     *         +4       +4       +4  34929b2b7  the quiet inks of column-settings, file-manager and record derive from their actual grounds: --ds-{column-settings,file-manager,record-canvas,record}-quiet-ink
+     *   2926 / 3087 / 2926  measured 2026-09-21 on this tree (the 234f8e825 tree)
+     * Totals: rottay +2635/-1016, bithire +2644/-840, evnto +2726/-384.
      *
      * The D6-2c-ii row is the largest single move this table records and it is
      * measured, not inferred: both legs were compiled with the SAME
@@ -722,7 +749,18 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // border-accent-hover middle link and stats-header's spark-dot opacity.
       // The fifteen remaining commits in the window -- the whole S19 lot series
       // included -- move no channel.
-      rottay: 2552,
+      // FAM-11 C/D/E + the FAM-08/09/10 tail (measured, 2026-09-21): rottay
+      // 2552 -> 2926, added 433, removed 59, commit by commit in the table
+      // above. 419 of the 433 are four family cuts landing their derivers --
+      // sub-lot D's command surfaces (242), sub-lot E's dock and switchers
+      // (28), list-toolbar (16) and data-table's three lots (33) -- plus the
+      // materials facet list (32), sub-lot C's shells (16) and the depth,
+      // quiet-ink and root-resolution remainder (11). The 59 removals are 57
+      // halves of two renames (--ds-shell-* to --ds-app-shell-*,
+      // --ds-page-header-* to --ds-page-shell-header-*) and the two retired
+      // --ds-type-tier-* letter-spacings. The fifty-two remaining commits in
+      // the window move no key.
+      rottay: 2926,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -774,7 +812,16 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // added key set is byte-identical to rottay's and evnto's. Its constant
       // +159 over them is still the two solitary preset moves plus the 157 the
       // D6-2c-ii row records, untouched by this wave.
-      bithire: 2711,
+      // FAM-11 C/D/E + the FAM-08/09/10 tail (measured, 2026-09-21): bithire
+      // 2711 -> 3087, added 435, removed 59, the same fourteen rows. bithire
+      // DOES separate here, for the first time since the D6-2c-ii row: 4def25f24
+      // gives it --ds-chart-series-11 and -12 and gives the other two verticals
+      // nothing, because the twelve-slot categorical vocabulary is a tenant
+      // authority and bithire's is the one first-party preset that authors a
+      // series. Its constant offset over rottay and evnto therefore moves 159 ->
+      // 161: the 157 the D6-2c-ii row records, the two solitary preset moves
+      // FAM-10 records, and now these two chart slots.
+      bithire: 3087,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -824,7 +871,13 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // added 68, removed 0, the same four rows, the same 68 keys. evnto stays
       // level with rottay through the whole window: its preset is structural
       // only, and the app-shell cut states geometry and chrome, never a seed.
-      evnto: 2552,
+      // FAM-11 C/D/E + the FAM-08/09/10 tail (measured, 2026-09-21): evnto
+      // 2552 -> 2926, added 433, removed 59, byte-for-byte rottay's key set on
+      // all fourteen rows. evnto stays level with rottay through this window
+      // too: the wave is family chrome and geometry, and the one row that
+      // separates a vertical (4def25f24's two chart slots) separates the one
+      // preset that authors a categorical series, which is not evnto's.
+      evnto: 2926,
     };
     for (const vertical of VERTICALS) {
       expect(

@@ -501,11 +501,34 @@ describe("digest identity across the canonicalization extraction", () => {
       "sha256-5e5ce26a923789b4889ea56fddc54b044672d010ba7a4711999c3af7d947b518";
     const POST_TWELVE_SLOT_CATEGORY_CONFIG_DIGEST =
       "sha256-f6554523f70d1897322c239093b2f20e33f85dfd5eb6d25ba6c90a902de2ddef";
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       POST_TWELVE_SLOT_CATEGORY_DOCUMENT_DIGEST
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_TWELVE_SLOT_CATEGORY_CONFIG_DIGEST
+    );
+    // WO-INV-02 residual (`f56c64974`, 2026-09-21): `arabic-text` joined
+    // `TENANT_THEME_FONT_PACK_IDS`, so `fontPackIds` carries seven rows instead
+    // of six. A WIDENING under the CC-01 law -- nothing withdrawn, no field
+    // changed type or format -- so the superseded pins drop to `not.toBe` and
+    // the two new values are re-derived from the tree.
+    //
+    // Attributed by A/B on isolated copies of three trees with this file's own
+    // imports: the parent `db8e57542` measures the superseded pair byte-exact,
+    // `f56c64974` measures the pair below, and `90b75bfd5` (WO-CAT-04, the only
+    // other schema-shaped lot in the window) measures the same pair -- the
+    // third AuthoredSelectionKind and the v3 transport move neither digest.
+    // The schema owner itself is untouched since `4def25f24`: this digest moved
+    // through the roster it reads, not through a field.
+    const POST_ARABIC_FONT_PACK_DOCUMENT_DIGEST =
+      "sha256-4a7dd8ef14d9102a67b61b3420bf1a24b4a2d39379686776ef23eee22b42b326";
+    const POST_ARABIC_FONT_PACK_CONFIG_DIGEST =
+      "sha256-3062ff22278b26bf6d8ae59e6a8ead8f91035072811ba6a3df5f53447e0459e5";
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      POST_ARABIC_FONT_PACK_DOCUMENT_DIGEST
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      POST_ARABIC_FONT_PACK_CONFIG_DIGEST
     );
   });
 
