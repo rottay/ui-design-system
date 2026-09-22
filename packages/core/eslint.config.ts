@@ -78,6 +78,7 @@ export default [
       '@rottay/no-db-in-components': 'error',
       '@rottay/no-direct-lucide': 'error',
       '@rottay/no-motion-literals': 'error',
+      '@rottay/no-layout-property-animation': 'error',
       '@rottay/no-size-type-outside-classic': 'error',
 
       // ON, with three file exemptions declared below. Across production
@@ -143,5 +144,55 @@ export default [
     // reports; the other five rules stay on here too.
     files: ['src/graphics/motion/**/tests/**/*.{ts,tsx}', 'src/graphics/motion/**/*.{test,spec}.{ts,tsx}'],
     rules: { '@rottay/no-motion-literals': 'off' },
+  },
+  {
+    // EXEMPTION 6 — component stories and suites, for the two motion rules, and
+    // NOT inside an engine. WO-INV-08 widened both subjects from
+    // `engines/modern/**` to `src/components/**`, which newly puts 58 findings in
+    // 24 story/suite files under the rules. Every one is Exemption 4's shape one
+    // directory out: a suite DRIVING the transition it measures
+    // (`transitionDuration: '30ms'` is the harness) or a story demonstrating a
+    // primitive. The engine exclusion is what keeps the pre-existing subject
+    // exactly as strict as it was: a modern-engine suite still reports.
+    files: [
+      'src/components/**/*.stories.{ts,tsx}',
+      'src/components/**/tests/**/*.{ts,tsx}',
+      'src/components/**/*.{test,spec}.{ts,tsx}',
+    ],
+    ignores: ['src/components/**/engines/**'],
+    rules: {
+      '@rottay/no-motion-literals': 'off',
+      '@rottay/no-layout-property-animation': 'off',
+    },
+  },
+  {
+    // EXEMPTION 7 — TRANSITIONAL, and the only one that is not a "this is not a
+    // defect" claim. The two widened subjects report 15 pre-existing findings in
+    // these 12 production files (9 no-motion-literals, 6
+    // no-layout-property-animation), measured with the shipped config. Every one
+    // is a real site; none is in WO-INV-08's write set, and most sit inside a
+    // live family reservation (widget-board FAM-08, app-shell FAM-11) or belong
+    // to the `--ds-transition-*` alias-retirement packet (box/stack/flex).
+    // `warn` keeps each one printed on every lint run instead of hiding it
+    // behind `off`, and both rules stay ERROR everywhere else, so new code
+    // cannot join this list. A file leaves the list when its owner drains it.
+    files: [
+      'src/components/patterns/data/widget-board/engines/foundation/index.tsx',
+      'src/components/patterns/foundation/engine-styles/modern/index.ts',
+      'src/components/patterns/foundation/motion/transition/index.ts',
+      'src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/sparkline/index.tsx',
+      'src/components/primitives/feedback/progress/compound/circle/index.tsx',
+      'src/components/primitives/feedback/progress/compound/line/index.tsx',
+      'src/components/primitives/feedback/toast/runtime/animation/index.ts',
+      'src/components/primitives/layout/box/engines/modern/index.tsx',
+      'src/components/primitives/layout/flex/runtime/presentation/index.ts',
+      'src/components/primitives/layout/stack/runtime/presentation/index.ts',
+      'src/components/primitives/runtime/overlay/backdrop/index.tsx',
+      'src/components/structures/shell/app-shell/index.tsx',
+    ],
+    rules: {
+      '@rottay/no-motion-literals': 'warn',
+      '@rottay/no-layout-property-animation': 'warn',
+    },
   },
 ];

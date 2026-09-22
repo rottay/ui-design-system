@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "owner": "WO-INV-08 layout animation kernel",
+  "frames": {
+    "measuredRuns": 7,
+    "warmupRuns": 1,
+    "droppedFactor": 1.5,
+    "p95Factor": 1.2,
+    "maxAbsoluteMs": 50,
+    "calibrationWindowMs": [
+      4,
+      40
+    ],
+    "rationale": "The frame arm is DISPLAY-RELATIVE: rAF deltas cluster AT the vsync interval, so an absolute 16.7ms ceiling reds a perfect 60Hz run and passes a 120Hz run that drops every second frame. displayInterval = median of the discarded warmup run's deltas; dropped = delta > 1.5x it (one missed vsync lands at 2x); p95 <= 1.2x it. maxAbsoluteMs stays absolute because a 50ms frame is a perceptible stall on any display, and it is what stops the relative arms accommodating a catastrophically slow surface. A warmup median outside the calibration window means a throttled or software surface: the run fails as UNCALIBRATED rather than adopting a nonsense bar."
+  },
+  "longTasks": {
+    "thresholdMs": 50,
+    "maxEntries": 0,
+    "rationale": "Absolute, and the arm that proves the design claim: a correct FLIP does no main-thread work after the play call. Both size strategies must clear it -- the interpolate-size path animates layout every frame by design, which is exactly why it is not exempt."
+  },
+  "nonVacuity": {
+    "minAnimations": 1,
+    "minRafCallbacks": 10,
+    "rationale": "A kernel that silently no-ops scores a perfect budget. The reduced-motion context is the negative control: it must report 0 animations on the same scene this context reports >0 on."
+  },
+  "ratchets": {
+    "droppedFrames": {
+      "seeded": false,
+      "scenes": {},
+      "rationale": "Decrease-only, seeded at the first real measurement. The showroom probe route and spec are a LATER lot (WO-INV-08 ships the authority module, its drill and the bundle arm); until that lot seeds these, no scene has a dropped-frame ceiling and the browser arm is not registered as a gate."
+    }
+  },
+  "kernelBundle": {
+    "instrument": {
+      "bundler": "vite/rollup",
+      "configFile": false,
+      "entryShape": "virtual entry importing the named exports from a built dist file",
+      "external": [
+        "react",
+        "^react/"
+      ],
+      "minify": "esbuild",
+      "treeShaking": true,
+      "inlineDynamicImports": true,
+      "preserveEntrySignatures": "strict",
+      "compression": "zlib.gzipSync(code, { level: 9 })",
+      "source": "scripts/check/automation/bundle/index.mjs (REACT_EXTERNALS, buildAssetRetentionEsmFixture)"
+    },
+    "entryEsm": "dist/index.js",
+    "exports": [
+      "useLayoutAnimation",
+      "LayoutGroup",
+      "PresenceList",
+      "useFlipLayout",
+      "useSizeAnimation",
+      "useSharedElementKey",
+      "usePresence",
+      "useReducedMotion"
+    ],
+    "maxGzipBytes": 8192,
+    "maxRetainedNodeModules": 0,
+    "allowedExternalImports": [
+      "react",
+      "react/*"
+    ],
+    "seed": {
+      "gzipBytes": 2631,
+      "rawBytes": 6802,
+      "exports": [
+        "useFlipLayout",
+        "usePresence",
+        "useReducedMotion"
+      ],
+      "measuredAt": "2026-09-22",
+      "measuredOn": "dist/index.js, pre-kernel hooks entry, the instrument above",
+      "rationale": "The ratchet is decrease-only on gzipBytes - seed.gzipBytes. The seed comes from the GATE'S OWN instrument on the pre-kernel hooks entry at lot open, not from an out-of-band esbuild probe: three arms of the same instrument differ by 731B purely by naming different exports, so the seed is meaningless without the export list pinned beside it. seed.exports is that list."
+    },
+    "maxDeltaGzipBytes": 8192,
+    "ratchet": {
+      "deltaGzipBytes": null,
+      "rationale": "Decrease-only, and UNSEEDED on purpose: the delta can only be measured over a dist/ that carries the kernel, which is the DT's post-build window. The cap arms (maxGzipBytes, maxDeltaGzipBytes) are live now; this ceiling is pinned to the first post-build reading, after which it may only fall. `kernel-bundle-drill` proves the ceiling reddens when it is set and exceeded, so the mechanism is drilled before it is seeded."
+    },
+    "rationale": "retainedNodeModules === 0 is the LOAD-BEARING clause. An externals-only predicate is satisfied by the regression it was written to catch: a fixture that adds MotionProvider bundles 5 framer-motion/motion-dom modules while its externalImports stay ['react','react/jsx-runtime'], inside any react-shaped allowance, because `motion` is not in REACT_EXTERNALS and therefore arrives bundled rather than external."
+  }
+}

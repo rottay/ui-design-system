@@ -44,10 +44,35 @@ describe('no-motion-literals', () => {
     expect(reports[0]?.messageId).toBe('cubicBezier');
   });
 
-  it('does not run outside modern engines', () => {
-    const { created, reports } = visitors('/repo/src/components/button/engines/rustic/index.tsx');
+  it('does not run in the frozen engines', () => {
+    for (const engine of ['classic', 'rustic']) {
+      const { created, reports } = visitors(`/repo/src/components/button/engines/${engine}/index.tsx`);
+      expect(Object.keys(created)).toEqual([]);
+      expect(reports).toEqual([]);
+    }
+  });
+
+  it('reaches the component bodies one level outside an engine (WO-INV-08 widening)', () => {
+    // `progress/compound/line/index.tsx:279` -- an engine-shared body, publicly
+    // exported as `Progress.Line`, outside every pre-widening instrument.
+    const compound = visitors('/repo/src/components/primitives/feedback/progress/compound/line/index.tsx');
+    compound.created.Literal?.(styleValue('transition', 'width 0.3s ease'));
+    expect(compound.reports.map((report) => report.messageId)).toEqual(['rawDuration']);
+
+    // The two `runtime/presentation/` inline writers.
+    const writer = visitors('/repo/src/components/primitives/layout/stack/runtime/presentation/index.ts');
+    writer.created.Literal?.(styleValue('transition', 'transform 220ms'));
+    expect(writer.reports.map((report) => report.messageId)).toEqual(['rawDuration']);
+
+    // A pattern body that is not an engine at all.
+    const pattern = visitors('/repo/src/components/patterns/data/data-table/index.tsx');
+    pattern.created.Literal?.(styleValue('animation', 'ds-spin 2s steps(8) infinite'));
+    expect(pattern.reports.map((report) => report.messageId)).toEqual(['keywordEasing']);
+  });
+
+  it('does not reach a file outside components and outside the motion vocabulary', () => {
+    const { created } = visitors('/repo/src/infrastructure/runtime/bootstrap/index.ts');
     expect(Object.keys(created)).toEqual([]);
-    expect(reports).toEqual([]);
   });
 
   it('blocks keyword easing in a transition or animation value, including behind a conditional', () => {

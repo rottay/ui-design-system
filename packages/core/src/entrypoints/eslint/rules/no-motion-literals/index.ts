@@ -7,10 +7,10 @@
  * `transition`/`animation` value. Motion must reference the foundation `--ds-motion-*` canon
  * (WO-ENG-01) so cadence and easing tune centrally and follow `motion.character`.
  *
- * Scoped to the two owners that author interaction motion: every file under a
- * `engines/modern/` subtree, and the motion vocabulary itself under
- * `graphics/motion/`. Classic (Ant Design) and rustic legitimately use the legacy
- * `--transition-*`/`--duration-*` catalog and are not linted by this rule.
+ * Scoped to the owners that author interaction motion: every file under
+ * `src/components/` except the frozen engines, and the motion vocabulary itself
+ * under `graphics/motion/`. Classic (Ant Design) and rustic legitimately use the
+ * legacy `--transition-*`/`--duration-*` catalog and are not linted by this rule.
  * Loop/long-form durations >= 1s (shimmer, spinner) are allowed: they sit outside the
  * 120/200/320 interaction cadence. `linear` is allowed: a constant-velocity loop has no
  * curve for a character to reshape.
@@ -28,14 +28,25 @@ const CSS_MOTION_DECLARATION_RE = /(?:^|[\s;{])(?:transition|animation)(?:-timin
 const MOTION_STYLE_KEY_RE = /^(?:transition|animation)(?:TimingFunction)?$/;
 
 /**
- * The rule's subject. `engines/modern(/[^/]+)?` matched one level below the
- * engine only, so `engines/modern/cell-editor/index.tsx` was unlinted; and the
- * motion vocabulary the rule points every engine AT was itself outside the
- * subject, so the canon could hard-code the cadence it publishes (audit F-57).
+ * The rule's subject, widened twice for the same reason.
+ *
+ * F-57: `engines/modern(/[^/]+)?` matched one level below the engine only, so
+ * `engines/modern/cell-editor/index.tsx` was unlinted; and the motion vocabulary
+ * the rule points every engine AT was itself outside the subject, so the canon
+ * could hard-code the cadence it publishes.
+ *
+ * WO-INV-08: `engines/modern` is not where every component authors motion. Three
+ * real sites sat one level further out -- two `runtime/presentation/` inline
+ * writers and `progress/compound/line/index.tsx`, an engine-shared body publicly
+ * exported as `Progress.Line` -- so the subject is now `src/components/` minus
+ * the frozen engines. `graphics/motion/` stays, and the layout kernel is not
+ * exempt: it names channels, never literals.
  */
 function isMotionAuthoringFile(filename: string): boolean {
   const path = filename.replace(/\\/g, '/');
-  return /(?:^|\/)engines\/modern(?:\/.+)?\.[jt]sx?$/.test(path)
+  if (/(?:^|\/)engines\/(?:classic|rustic)(?:\/|\.)/.test(path)) return false;
+  return /(?:^|\/)src\/components\/.+\.[jt]sx?$/.test(path)
+    || /(?:^|\/)engines\/modern(?:\/.+)?\.[jt]sx?$/.test(path)
     || /(?:^|\/)graphics\/motion\/.+\.[jt]sx?$/.test(path);
 }
 

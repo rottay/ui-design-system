@@ -1,0 +1,551 @@
+{
+  "schemaVersion": 1,
+  "law": "transform / opacity / clip-path only. A transition or animation on a layout property costs layout + paint every frame on the main thread; a size change belongs to the layout kernel (graphics/motion/react/runtime/layout).",
+  "grammar": {
+    "version": 1,
+    "stripComments": true,
+    "declaration": "from a `transition` or `transition-property` property name to the next `;` or `}`, newlines included",
+    "declarationPattern": "(?:^|[\\s;{])(transition(?:-property)?)\\s*:([^;}]*)",
+    "segments": "the value is split on commas at depth 0 (a comma inside var()/cubic-bezier() does not split)",
+    "reported": "the FIRST token of a segment when it is a layout property or `all`; plus any segment reading a pre-composed --ds-transition-* alias whose expansion declares a layout property"
+  },
+  "layoutPropertyTokens": [
+    "top",
+    "right",
+    "bottom",
+    "left",
+    "inset",
+    "inset-block",
+    "inset-block-start",
+    "inset-block-end",
+    "inset-inline",
+    "inset-inline-start",
+    "inset-inline-end",
+    "width",
+    "height",
+    "min-width",
+    "max-width",
+    "min-height",
+    "max-height",
+    "inline-size",
+    "block-size",
+    "min-inline-size",
+    "max-inline-size",
+    "min-block-size",
+    "max-block-size",
+    "margin",
+    "margin-top",
+    "margin-right",
+    "margin-bottom",
+    "margin-left",
+    "margin-block",
+    "margin-block-start",
+    "margin-block-end",
+    "margin-inline",
+    "margin-inline-start",
+    "margin-inline-end",
+    "padding",
+    "padding-top",
+    "padding-right",
+    "padding-bottom",
+    "padding-left",
+    "padding-block",
+    "padding-block-start",
+    "padding-block-end",
+    "padding-inline",
+    "padding-inline-start",
+    "padding-inline-end",
+    "gap",
+    "row-gap",
+    "column-gap",
+    "grid-template-columns",
+    "grid-template-rows",
+    "grid-template-areas",
+    "flex",
+    "flex-basis",
+    "order",
+    "columns",
+    "column-width",
+    "border-width",
+    "border-top-width",
+    "border-right-width",
+    "border-bottom-width",
+    "border-left-width",
+    "font-size",
+    "line-height"
+  ],
+  "layoutAliases": [
+    "--ds-transition-rearrange",
+    "--ds-transition-resize",
+    "--ds-transition-all"
+  ],
+  "scanRoots": [
+    "src/foundation/tokens/css"
+  ],
+  "excluded": [
+    "engines/classic/",
+    "engines/rustic/",
+    "facade/artifacts/"
+  ],
+  "countingUnit": "one site = one (file, line, kind, property). A single declaration with two layout legs is two sites; the debrief's per-declaration estimate is therefore lower than this roster by construction.",
+  "termWeights": {
+    "grammar": {
+      "frozen": 68,
+      "singleLineAnchored": 11,
+      "worth": 57
+    },
+    "tokenList": {
+      "frozen": 68,
+      "engineAuditKebabListOnly": 30,
+      "worth": 38
+    },
+    "note": "Measured on this corpus with this counting unit, by the drill beside this file. Both terms are load-bearing; the grammar is the larger, which is why it is frozen before the count. The debrief's 16/1 decomposition was taken over src/** with a per-declaration unit and a different widening -- not comparable, and not carried forward."
+  },
+  "knownBlindSpots": [
+    {
+      "shape": "a component channel that expands to `all`, read as `transition: var(--ds-<component>-transition)`",
+      "pattern": "--ds-[a-z-]+-transition:\\s*all",
+      "scanRoot": "src/foundation/tokens/css",
+      "measured": 11,
+      "owners": [
+        "rate",
+        "radio",
+        "input",
+        "checkbox",
+        "collapse",
+        "toggle",
+        "button",
+        "avatar",
+        "select",
+        "modal",
+        "tag"
+      ],
+      "evidence": "11 `--ds-<component>-transition: all var(...)` channel declarations under presentation/components/**, one per owner listed above. The DECLARATION is a channel definition, not an applied transition, and the READ names no layout property at the call site, so neither the frozen grammar nor Arm A can see it.",
+      "correction": "An earlier revision of this file said 12. That figure came from a looser `transition:\\s*all` grep over the whole stylesheet tree, which also swept in `runtime/engines/modern/framework-bridge/index.css:63` -- a DIRECT `transition: all 0.2s ease`, which is a different class and is already the single `transitionAll` row of this roster. The two classes are counted separately now; the drill measures `pattern` over `scanRoot` and refuses a baseline number that disagrees with the sheets.",
+      "disposition": "OUT of this roster on purpose. The closed alias map is `--ds-transition-*` only (the adopted ruling); widening it to per-component channels would mint a second authority for `which channel expands to a layout property` that can drift from the sheets. Owner: the property-law drain programme, which is not this lot."
+    }
+  ],
+  "corpus": {
+    "files": 383,
+    "floorFiles": 381,
+    "note": "383 stylesheets were reachable when the roster was seeded, two of which were another writer's uncommitted a11y sheets (zero sites in either). The FLOOR is 381 -- what this lot can vouch for -- because a floor exists to catch a scanner that stopped walking, not to pin an exact corpus that any legitimate new stylesheet moves."
+  },
+  "counts": {
+    "total": 68,
+    "byKind": {
+      "layoutProperty": 63,
+      "layoutAlias": 4,
+      "transitionAll": 1
+    }
+  },
+  "sites": [
+    {
+      "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+      "line": 1382,
+      "kind": "layoutProperty",
+      "property": "max-height"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+      "line": 1382,
+      "kind": "layoutProperty",
+      "property": "padding"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+      "line": 1549,
+      "kind": "layoutProperty",
+      "property": "width"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
+      "line": 111,
+      "kind": "layoutProperty",
+      "property": "width"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers/index.css",
+      "line": 157,
+      "kind": "layoutProperty",
+      "property": "width"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 451,
+      "kind": "layoutProperty",
+      "property": "flex-basis"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 451,
+      "kind": "layoutProperty",
+      "property": "max-width"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 451,
+      "kind": "layoutProperty",
+      "property": "min-width"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 451,
+      "kind": "layoutProperty",
+      "property": "width"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 486,
+      "kind": "layoutProperty",
+      "property": "inline-size"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 486,
+      "kind": "layoutProperty",
+      "property": "inset-inline-start"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 566,
+      "kind": "layoutProperty",
+      "property": "max-height"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 566,
+      "kind": "layoutProperty",
+      "property": "padding"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 606,
+      "kind": "layoutProperty",
+      "property": "max-height"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 606,
+      "kind": "layoutProperty",
+      "property": "padding"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 692,
+      "kind": "layoutProperty",
+      "property": "max-height"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "line": 759,
+      "kind": "layoutProperty",
+      "property": "max-height"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
+      "line": 116,
+      "kind": "layoutAlias",
+      "property": "--ds-transition-rearrange"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css",
+      "line": 308,
+      "kind": "layoutProperty",
+      "property": "width"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/form-sections/index.css",
+      "line": 543,
+      "kind": "layoutProperty",
+      "property": "grid-template-rows"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/menu-compounds/index.css",
+      "line": 124,
+      "kind": "layoutProperty",
+      "property": "grid-template-rows"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/sidebar-surface/index.css",
+      "line": 22,
+      "kind": "layoutProperty",
+      "property": "grid-template-columns"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+      "line": 423,
+      "kind": "layoutProperty",
+      "property": "block-size"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+      "line": 423,
+      "kind": "layoutProperty",
+      "property": "height"
+    },
+    {
+      "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
+      "line": 423,
+      "kind": "layoutProperty",
+      "property": "inline-size"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/framework-bridge/index.css",
+      "line": 63,
+      "kind": "transitionAll",
+      "property": "all"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/aspect-ratio/index.css",
+      "line": 26,
+      "kind": "layoutProperty",
+      "property": "max-inline-size"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
+      "line": 211,
+      "kind": "layoutProperty",
+      "property": "inline-size"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
+      "line": 79,
+      "kind": "layoutProperty",
+      "property": "padding"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
+      "line": 370,
+      "kind": "layoutProperty",
+      "property": "font-size"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+      "line": 450,
+      "kind": "layoutProperty",
+      "property": "grid-template-rows"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+      "line": 462,
+      "kind": "layoutProperty",
+      "property": "padding"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/container/index.css",
+      "line": 26,
+      "kind": "layoutProperty",
+      "property": "margin"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/container/index.css",
+      "line": 26,
+      "kind": "layoutProperty",
+      "property": "max-inline-size"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/container/index.css",
+      "line": 26,
+      "kind": "layoutProperty",
+      "property": "padding"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+      "line": 675,
+      "kind": "layoutProperty",
+      "property": "height"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+      "line": 675,
+      "kind": "layoutProperty",
+      "property": "width"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/divider/index.css",
+      "line": 27,
+      "kind": "layoutProperty",
+      "property": "gap"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/divider/index.css",
+      "line": 27,
+      "kind": "layoutProperty",
+      "property": "margin"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/filter-panel/index.css",
+      "line": 218,
+      "kind": "layoutProperty",
+      "property": "max-block-size"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/filter-panel/index.css",
+      "line": 229,
+      "kind": "layoutProperty",
+      "property": "max-block-size"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/flex/index.css",
+      "line": 160,
+      "kind": "layoutAlias",
+      "property": "--ds-transition-rearrange"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-builder/index.css",
+      "line": 235,
+      "kind": "layoutProperty",
+      "property": "margin-block-end"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-builder/index.css",
+      "line": 281,
+      "kind": "layoutProperty",
+      "property": "max-height"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/grid/index.css",
+      "line": 116,
+      "kind": "layoutAlias",
+      "property": "--ds-transition-rearrange"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+      "line": 185,
+      "kind": "layoutProperty",
+      "property": "width"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+      "line": 271,
+      "kind": "layoutProperty",
+      "property": "inset-block-end"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+      "line": 271,
+      "kind": "layoutProperty",
+      "property": "inset-block-start"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+      "line": 271,
+      "kind": "layoutProperty",
+      "property": "inset-inline-end"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+      "line": 271,
+      "kind": "layoutProperty",
+      "property": "inset-inline-start"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+      "line": 271,
+      "kind": "layoutProperty",
+      "property": "left"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+      "line": 271,
+      "kind": "layoutProperty",
+      "property": "right"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css",
+      "line": 109,
+      "kind": "layoutProperty",
+      "property": "width"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/space/index.css",
+      "line": 21,
+      "kind": "layoutProperty",
+      "property": "gap"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stack/index.css",
+      "line": 199,
+      "kind": "layoutAlias",
+      "property": "--ds-transition-rearrange"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+      "line": 288,
+      "kind": "layoutProperty",
+      "property": "inset-block-end"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+      "line": 288,
+      "kind": "layoutProperty",
+      "property": "inset-block-start"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+      "line": 288,
+      "kind": "layoutProperty",
+      "property": "inset-inline-end"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+      "line": 288,
+      "kind": "layoutProperty",
+      "property": "inset-inline-start"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+      "line": 288,
+      "kind": "layoutProperty",
+      "property": "left"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+      "line": 288,
+      "kind": "layoutProperty",
+      "property": "right"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tour/index.css",
+      "line": 142,
+      "kind": "layoutProperty",
+      "property": "inline-size"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/personality/index.css",
+      "line": 556,
+      "kind": "layoutProperty",
+      "property": "height"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/personality/index.css",
+      "line": 556,
+      "kind": "layoutProperty",
+      "property": "width"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/personality/index.css",
+      "line": 647,
+      "kind": "layoutProperty",
+      "property": "left"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/personality/index.css",
+      "line": 647,
+      "kind": "layoutProperty",
+      "property": "width"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/personality/index.css",
+      "line": 669,
+      "kind": "layoutProperty",
+      "property": "width"
+    },
+    {
+      "file": "src/foundation/tokens/css/runtime/personality/index.css",
+      "line": 811,
+      "kind": "layoutProperty",
+      "property": "max-height"
+    }
+  ]
+}

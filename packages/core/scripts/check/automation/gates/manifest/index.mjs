@@ -63,6 +63,16 @@ export const CI_GATES = Object.freeze([
   // at the first new file.
   { id: 'scripts-tree-drill', run: ['node', '--test', 'scripts/check/architecture/conventions/scripts-tree/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['scripts-tree'], },
   { id: 'scripts-tree', run: ['node', 'scripts/check/architecture/conventions/scripts-tree/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'scripts-tree-drill', ratchet: 'scripts/check/architecture/conventions/scripts-tree/baseline/index.json', },
+  // WO-INV-08, the motion property law and its budget. THREE entries, and the
+  // split is deliberate: the thresholds and the verdict live in core (browserless,
+  // drillable on synthetic metric series), the CSS census is source-only, and the
+  // browser half is not registered at all until its probe route exists -- a gate
+  // with no fixture to measure would be a green row over nothing.
+  { id: 'motion-budget-drill', run: ['node', '--test', 'scripts/check/motion-budget/tests/index.test.mjs'], blocking: true, phase: 'pre-build',
+    noDrillReason:
+      'This entry IS the drill for the perfection-budget thresholds: it feeds the authority module synthetic metric series and asserts each arm reddens -- a 60ms long task, a p95 at 1.35x the calibrated interval, a 58ms frame, a 2ms warmup median (UNCALIBRATED, failed loudly rather than adopting a throttled bar), a dropped-frame count over a seeded ceiling, a scene that animated nothing, and a reduced-motion control that animated. The measuring half is a showroom Playwright spec in the visual job and is a later lot; registering a structural validator over evidence that does not exist yet would be a green row over nothing.', },
+  { id: 'property-law-drill', run: ['node', '--test', 'scripts/check/motion-budget/audits/property-law/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['property-law'], },
+  { id: 'property-law', run: ['node', 'scripts/check/motion-budget/audits/property-law/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'property-law-drill', ratchet: 'scripts/check/motion-budget/audits/property-law/baseline/index.json', },
   { id: 'retired-vertical-identity-drill', run: ['node', '--test', 'scripts/check/verticals/retired-identity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['retired-vertical-identity'], },
   { id: 'retired-vertical-identity', run: ['node', 'scripts/check/verticals/retired-identity/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'retired-vertical-identity-drill', },
   // WO-DER-06: a first-party vertical preset is decisions and nothing the
@@ -1294,6 +1304,14 @@ export const CI_GATES = Object.freeze([
     noDrillReason:
       'TRACKED DEBT, not a justification: the export-map artifact check has no planted negative on disk. Owner: WO-CAT-03 (public surface).',
     prerequisites: ['fresh-dist'], },
+  // WO-INV-08's byte + supplier-edge authority. Post-build because both the gate
+  // and its drill build a virtual entry over `dist/index.js`; `retainedNodeModules
+  // === 0` is the load-bearing clause, because the regression an externals-only
+  // predicate was written to catch satisfies it (measured: a planted
+  // `MotionProvider` fixture retains 5 framer-motion/motion-dom modules while its
+  // externals stay ['react','react/jsx-runtime']).
+  { id: 'kernel-bundle-drill', run: ['node', '--test', 'scripts/check/motion-budget/audits/kernel-bundle/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['kernel-bundle'], prerequisites: ['fresh-dist'], },
+  { id: 'kernel-bundle', run: ['node', 'scripts/check/motion-budget/audits/kernel-bundle/index.mjs'], blocking: true, phase: 'post-build', drillId: 'kernel-bundle-drill', prerequisites: ['fresh-dist'], ratchet: 'scripts/check/motion-budget/budget/index.json', },
   { id: 'runtime-hardening-drill', run: ['node', '--test', 'scripts/check/evidence/certification/runtime-hardening/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['runtime-hardening-structural'], prerequisites: ['fresh-dist'], },
   { id: 'runtime-hardening-structural', run: ['pnpm', 'run', 'runtime-hardening:structural'], blocking: true, phase: 'post-build', drillId: 'runtime-hardening-drill', prerequisites: ['fresh-dist'], },
 

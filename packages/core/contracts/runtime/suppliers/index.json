@@ -278,10 +278,12 @@
         "KBD_DEFAULTS",
         "KanbanSurface",
         "Kbd",
+        "LAYOUT_CHANNEL_DEFAULTS",
         "LAYOUT_DEFAULTS",
         "LEGACY_SIZE_SPANS",
         "LOCALE_CONFIGS",
         "Layout",
+        "LayoutGroup",
         "LineChart",
         "Link",
         "List",
@@ -340,6 +342,7 @@
         "PASSWORD_INPUT_DEFAULTS",
         "POPCONFIRM_DEFAULTS",
         "POPOVER_DEFAULTS",
+        "PRESENCE_ITEM_ATTRIBUTE",
         "PREVIEW_SCOPE_ATTRIBUTE",
         "PRODUCT_PROFILES",
         "PageShellSurface",
@@ -403,6 +406,7 @@
         "PremiumFormSections",
         "Presence",
         "PresenceBar",
+        "PresenceList",
         "PresenceTypingIndicator",
         "PreviewDiffCard",
         "PricingSurface",
@@ -881,6 +885,7 @@
         "staticThemeIntent",
         "stringifySurfaceValue",
         "stripTime",
+        "supportsKeywordSizeInterpolation",
         "surfaceSectionCardRecipe",
         "tabPanelTransitionName",
         "tabPanelTransitionStyle",
@@ -953,6 +958,7 @@
         "useInlineEditing",
         "useKanban",
         "useKeyboardNavigation",
+        "useLayoutAnimation",
         "useLayoutPreference",
         "useLocale",
         "useMeasuredScroll",
@@ -989,8 +995,10 @@
         "useRouterState",
         "useRovingTabindex",
         "useScrollProgress",
+        "useSharedElementKey",
         "useShellContext",
         "useShortcutScope",
+        "useSizeAnimation",
         "useSmoothCounter",
         "useSpacingTokens",
         "useStreamingText",
@@ -2047,9 +2055,15 @@
         "Presence": [
           "motion"
         ],
+        "PRESENCE_ITEM_ATTRIBUTE": [
+          "motion"
+        ],
         "PresenceBar": [
           "@phosphor-icons/react",
           "antd"
+        ],
+        "PresenceList": [
+          "motion"
         ],
         "PresenceTypingIndicator": [
           "@phosphor-icons/react",
@@ -2297,6 +2311,9 @@
           "antd",
           "motion"
         ],
+        "supportsKeywordSizeInterpolation": [
+          "motion"
+        ],
         "SurfaceActionBar": [
           "@phosphor-icons/react",
           "antd",
@@ -2501,6 +2518,9 @@
           "@phosphor-icons/react",
           "antd"
         ],
+        "useLayoutAnimation": [
+          "motion"
+        ],
         "useMessage": [
           "@phosphor-icons/react",
           "antd"
@@ -2528,6 +2548,9 @@
         "useShellContext": [
           "@phosphor-icons/react",
           "antd",
+          "motion"
+        ],
+        "useSizeAnimation": [
           "motion"
         ],
         "useSmoothCounter": [
@@ -2757,9 +2780,11 @@
         "JUSTIFY_ITEMS_MAP",
         "KBD_DEFAULTS",
         "Kbd",
+        "LAYOUT_CHANNEL_DEFAULTS",
         "LAYOUT_DEFAULTS",
         "LEGACY_SIZE_SPANS",
         "LOCALE_CONFIGS",
+        "LayoutGroup",
         "LoadingIndicator",
         "MENTIONS_DEFAULTS",
         "MENU_DEFAULTS",
@@ -3236,6 +3261,7 @@
         "useRouterState",
         "useRovingTabindex",
         "useScrollProgress",
+        "useSharedElementKey",
         "useShortcutScope",
         "useStreamingText",
         "useSurfaceProfileDefaultsWithOverrides",

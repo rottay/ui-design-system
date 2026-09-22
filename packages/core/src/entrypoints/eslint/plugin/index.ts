@@ -23,6 +23,7 @@ import {
   noDbInComponents,
   noDirectLucide,
   noHardcodedColors,
+  noLayoutPropertyAnimation,
   noMotionLiterals,
   noRawHtml,
   noSizeTypeOutsideClassic,
@@ -36,6 +37,7 @@ export const rules = {
   'no-db-in-components': noDbInComponents,
   'no-direct-lucide': noDirectLucide,
   'no-motion-literals': noMotionLiterals,
+  'no-layout-property-animation': noLayoutPropertyAnimation,
   'no-size-type-outside-classic': noSizeTypeOutsideClassic,
 };
 
@@ -59,6 +61,11 @@ export const configs = {
       '@rottay/no-db-in-components': 'error' as const,
       '@rottay/no-direct-lucide': 'warn' as const,
       '@rottay/no-motion-literals': 'error' as const,
+      // OFF in `recommended` until each app censuses its own layout-property
+      // debt: this rule reports pre-existing CSS-in-JS across three apps that
+      // have never been measured, and a rule that lands as noise gets disabled
+      // wholesale. Apps opt in per app; `packages/core/eslint.config.ts` is on.
+      '@rottay/no-layout-property-animation': 'off' as const,
       '@rottay/no-size-type-outside-classic': 'warn' as const,
     },
   },

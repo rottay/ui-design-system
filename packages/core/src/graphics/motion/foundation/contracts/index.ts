@@ -43,7 +43,7 @@
  *    whenever a component's motion is a simple two-state (open/closed)
  *    visual, because it needs no imperative cancellation logic at all.
  * 2. **Web Animations API with `commitStyles()` where JS drives.**
- *    {@link useFlipLayout} (`motion/react/runtime/flip-layout`) is the JS-driven
+ *    {@link useFlipLayout} (`motion/react/runtime/layout`, the layout kernel) is the JS-driven
  *    case: it measures real DOM rects, so it cannot be pure CSS. Before
  *    starting a new invert-play animation on a node, it calls
  *    `animation.commitStyles()` (bakes the current mid-flight frame into the
@@ -60,7 +60,7 @@
  * enter keyframe as the exit's mirror was the lower-risk change against
  * components with native `<dialog>`/portal/focus-trap timing. Re-opening one
  * of these while its exit keyframe is still playing does not smoothly
- * reverse -- it restarts. `useFlipLayout` and any NEW `data-state`-driven
+ * reverse -- it restarts. `useLayoutAnimation`/`useFlipLayout` and any NEW `data-state`-driven
  * component (Dropdown/ContextMenu's popover motion) do not have this gap.
  */
 

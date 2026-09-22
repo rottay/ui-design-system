@@ -47,5 +47,31 @@ export type {
   ExitFallbackOptions,
   GovernedMotionChannel,
 } from './presence/duration';
-export { useFlipLayout } from './flip-layout';
-export type { UseFlipLayoutOptions, UseFlipLayoutResult } from './flip-layout';
+export {
+  useLayoutAnimation,
+  LayoutGroup,
+  PresenceList,
+  useFlipLayout,
+  useSizeAnimation,
+  useSharedElementKey,
+  supportsKeywordSizeInterpolation,
+  LAYOUT_CHANNEL_DEFAULTS,
+  PRESENCE_ITEM_ATTRIBUTE,
+} from './layout';
+export type {
+  LayoutAnimationKind,
+  LayoutAnimationOptions,
+  LayoutChannelPair,
+  LayoutGroupProps,
+  PresenceListProps,
+  PresenceResult,
+  ReflowResult,
+  ResolvedSizeStrategy,
+  SharedResult,
+  SizeResult,
+  SizeStrategy,
+  TimedLayoutAnimationKind,
+  UseFlipLayoutOptions,
+  UseFlipLayoutResult,
+  UseSizeAnimationOptions,
+} from './layout';
