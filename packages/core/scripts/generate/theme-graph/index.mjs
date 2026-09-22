@@ -135,17 +135,26 @@ function readJsonViews() {
  * `audit/40-architecture/manifest` §2 rule 4 estimated "< 5 MB" for this graph,
  * and said so before anyone had derived one: the estimate was a contrast with
  * the 103 MB of manifest and receipts it replaces, not a measurement. The real
- * graph is 8.97 MB, and every byte of it is a measured fact -- 16,960 read sites
- * with their selector, property and line are 4.23 MB on their own, and 39,866
- * edge endpoints are most of the rest. Two rounds of honest deduplication took
- * it from 16.74 MB: short ids with an asserted-unique truncation, an interned
- * file table, and dropping the census id the short one already prefixes.
+ * graph is 9.57 MB, and every byte of it is a measured fact -- 17,114 read sites
+ * with their selector, property and line make `nodes.json` 3.91 MB, and 58,813
+ * edges make `edges.json` 5.39 MB. Two rounds of honest deduplication took it
+ * from 16.74 MB: short ids with an asserted-unique truncation, an interned file
+ * table, and dropping the census id the short one already prefixes.
  *
  * It is pinned, not loosened: this is an exact ceiling, so growth reddens and is
  * re-anchored with a reason like every other ratchet here. What it is not is a
  * promise the estimate made on the tree's behalf.
+ *
+ * RE-ANCHORED 2026-09-22 (WO-EVI-02 theme-graph drain), 9,437,184 -> 10,031,551
+ * bytes, the regenerated artifact's exact size. The graph had been stale since
+ * 31d04caa0 over a 194-commit window; its census
+ * (`packages/core/evidence/theme-graph-drain-census/index.md`) attributes every
+ * structural move to a landed lot and confirms no removal a consumer could still
+ * reference. Exact rather than rounded because `compareGraph` already reddens on
+ * any byte of drift, so this pin's only job is to make growth re-anchor
+ * deliberately; headroom would only buy a quieter alarm, never a green check.
  */
-export const SIZE_BUDGET_BYTES = 9 * 1024 * 1024;
+export const SIZE_BUDGET_BYTES = 10_031_551;
 
 /** A key no id can collide with, used only to sort and de-duplicate pairs. */
 const SEP = "\u241F";
