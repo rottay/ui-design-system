@@ -6577,6 +6577,11 @@
      "at": "2026-09-22 10:34",
      "by": "kimi-dt",
      "note": "2026-09-22 kimi-dt: usePartInteraction/nonStylePropBag INTEGRADO en commit local 8c5f50a12 (Fable ACCEPT-WITH-CHANGES resuelto; correccion del comentario transparentParameterNames aplicada). Correcciones Fable al trail: --update-baseline inusable por absorcion whole-map de decreases ajenos (NO por filesScanned, que es MIN-governed); las 6 filas ajenas suman -20 (no -12); la fila total tiene offset preexistente de 8 contra su propia suma — todo queda con el dueno del drift ajeno. La enmienda quedo con 2 piernas (transparent-arg + local-bag prover con walk de referencias post-literal — Fable: faithful completion, no overreach). EN COLA: (a) paquete re-marking destructured + property-access (AMBOS predicados, drill opaque-arg-through-transparent-slot; Fable midio el gap mas amplio de lo descrito — isCertifiedNonStylePropBagValue entero); (b) ownership zeroPaint sin verificar para kind nonStylePropBag (nota; la escritura props.style=paint cae en la fila fleet del kernel, no es silenciosa); (c) docblocks nuevos de 4-7 lineas quedan por consistencia de estilo del archivo (DT call). decisions-reads census en vuelo (su ledger ya aparece en el arbol — pathspecs lo respetaron)."
+    },
+    {
+     "at": "2026-09-22 11:00",
+     "by": "kimi-dt",
+     "note": "2026-09-22 kimi-dt: censo decisions-reads INTEGRADO en commit local 0ca1fc522 (Fable ACCEPT-WITH-CHANGES resuelto, prose). Gate reads-adjudication VERDE (1272/0) — otro eslabon pre-build drenado. La cadena verify:core ahora pasa: contract:check, engine-audit, claim-exactness (con seal red a933085 pendiente de ceremonia), cascade-ratchet, ds:derive, reads-adjudication. Reds ajenos vivos restantes conocidos: csspaint 3, theme-parity 28v23, tokens-catalog 7 vistas, los 9 vitest nombrados, test 22 witnesses, motion x2, root-membership/slot-inventory/normalization-contract, cascade:producers stack-overflow. Checklist finito EVI-02 para cierre se consolida en la verify:core final."
     }
    ]
   },
