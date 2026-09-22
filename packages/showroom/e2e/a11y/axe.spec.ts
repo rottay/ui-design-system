@@ -1,148 +1,182 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import {
+  ADMISSIBLE_IMPACT,
+  GROUNDS,
+  INADMISSIBLE_IMPACT,
+  intersect,
+  ledgerKey,
+  readLedger,
+  SCENES,
+  type LedgerEntry,
+} from './baseline';
+
 // ---------------------------------------------------------------------------
-// WO-GAT-04 axis 1 — axe over the flagship galleries (proposal P-10).
+// WO-INV-03 — the route-level axe batch, over the DS reference lab.
 //
-// For each flagship (button, input, select, card, badge, table, tabs, modal)
-// under each tenant palette (rottay = dark ground, bithire = light ground),
-// load /probe/engine-modern?tenant=<t>&slug=<flagship> — which renders the
-// per-state variants (default/filled/disabled/error/...) statically, so one
-// page-level axe run covers per-state markup — and run AxeBuilder.analyze().
+// RETARGETED from /probe/engine-modern, which cannot serve this matrix: its
+// SurfaceTenant union is rottay | bithire | evnto, so there is no SECOND
+// BitHire tenant and the WO's "Modern x bithire (two tenants)" line is
+// unsatisfiable there. /probe/ds-reference has exactly two BitHire-vertical
+// grounds — `bithire`, a static FlatTheme stamped as attributes, and
+// `the-management`, a published DB document compiled and SSR-embedded as an
+// artifact — over 25 identical scene routes that between them render all 24
+// primitives/inputs families.
 //
-// Serious + critical violations are collected keyed by `rule|target-selector`.
-// The spec FAILS on any serious/critical finding NOT in axe-baseline.json.
-// The baseline is DECREASE-ONLY: it is generated on the first run (when
-// absent), and thereafter never grown to make a new finding pass. As component
-// WOs fix findings, shrink it with AXE_UPDATE_BASELINE=1 (which rewrites the
-// baseline to the INTERSECTION of the old baseline and current findings —
-// dropping fixed entries, never adding new ones).
+// SINGLE OWNER. Family-level axe is WO-EVI-02's harness (78 suites over
+// tests/support/family-causality + AXE_DEBT); this adds no family pin. Route
+// level — assembled page, real bundle, real SSR artifact, real tenant document
+// — is this WO's, and nothing else measures it.
+//
+// NOT YET RUN. 50 page loads on one worker is a booked serial slot, and the
+// batch is gated off until the DT takes it, so landing it cannot red the CI
+// a11y job over findings nobody has looked at:
+//   DS_AXE_ROUTE_BATCH=1 pnpm --filter @rottay/showroom exec playwright test e2e/a11y/axe.spec.ts
+// The structural half of this contract — the ledger's laws and the parsed-JSON
+// assertion of Q10 — is in axe-baseline.spec.ts and runs on EVERY CI pass.
 // ---------------------------------------------------------------------------
 
 const here = dirname(fileURLToPath(import.meta.url));
-const baselinePath = join(here, 'axe-baseline.json');
+const ledgerPath = join(here, 'axe-baseline.json');
 const repoRoot = resolve(here, '../../../..');
-const reportDir = join(
+const reportPath = join(
   repoRoot,
-  'packages/core/artifacts/quality/audits/accessibility/runs/axe',
+  'packages/core/artifacts/quality/audits/accessibility/runs/axe/index.json',
 );
-const reportPath = join(reportDir, 'index.json');
-
-const FLAGSHIP_SLUGS = ['button', 'input', 'select', 'card', 'badge', 'table', 'tabs', 'modal'] as const;
-const TENANTS = ['rottay', 'bithire'] as const;
-const BLOCKING_IMPACTS = new Set(['serious', 'critical']);
 
 /**
- * Normalize a target selector so the baseline key is STABLE across runs. axe
- * emits CSS selectors that embed React `useId()` tokens (e.g. `.ds-input-ph-_r_2h_`,
- * `#tabs-tab-_r_1d_-2`) which change every render; left raw, every run would look
- * "novel". We collapse those id tokens to `_id_` so the key identifies the
- * finding by rule + structural selector, not by a volatile per-render id.
+ * A scene is ready when the tenant scope is stamped AND the provider has
+ * actually painted. Both are needed: the stamp is server-rendered, but the DB
+ * ground defers its provider past hydration (ground/client-only.tsx), so a run
+ * that waited only on `data-tenant` would measure an empty body and report a
+ * clean page. Without `html[data-tenant]` the tenant artifact never applies at
+ * all and the run reads as a pass over an unpainted document.
  */
-function normalizeTarget(target: string): string {
-  return target.replace(/_[Rr]_[a-z0-9]+_/g, '_id_');
-}
+const MIN_PAINTED_NODES = 5;
 
-interface Finding {
-  rule: string;
-  impact: string;
-  help: string;
-  target: string;
-  occurrences: { tenant: string; slug: string }[];
-}
-
-function loadBaseline(): Record<string, Finding> | null {
-  if (!existsSync(baselinePath)) return null;
-  return JSON.parse(readFileSync(baselinePath, 'utf8')) as Record<string, Finding>;
+async function settle(page: import('@playwright/test').Page) {
+  await page.waitForFunction(
+    (minimum) =>
+      Boolean(document.documentElement.dataset.tenant) &&
+      document.querySelectorAll('[data-part], [class*="rottay-"], [class*="ds-"]').length >= minimum,
+    MIN_PAINTED_NODES,
+    { timeout: 30_000 },
+  );
+  await page.waitForLoadState('networkidle');
 }
 
 function writeJson(path: string, data: unknown) {
   mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(path, JSON.stringify(data, null, 2) + '\n');
+  writeFileSync(path, `${JSON.stringify(data, null, 2)}\n`);
 }
 
-test('no non-baselined serious/critical axe violations across flagship galleries (both tenant palettes)', async ({ page }) => {
-  test.setTimeout(300_000);
+/** axe emits selectors carrying React useId() tokens, which change every render. */
+function normalizeTarget(target: string): string {
+  return target.replace(/_[Rr]_[a-z0-9]+_/g, '_id_');
+}
 
-  const current: Record<string, Finding> = {};
+type Measured = Record<string, Omit<LedgerEntry, 'disposition' | 'owner' | 'wo'>>;
 
-  for (const tenant of TENANTS) {
-    for (const slug of FLAGSHIP_SLUGS) {
-      await test.step(`${tenant} / ${slug}`, async () => {
-        await page.goto(`/probe/engine-modern?tenant=${tenant}&slug=${slug}`, { waitUntil: 'networkidle' });
-        await page.getByRole('heading', { name: /modern engine evidence/i }).waitFor({ timeout: 30_000 });
+test.skip(
+  !process.env.DS_AXE_ROUTE_BATCH,
+  'booked serial slot (50 loads): set DS_AXE_ROUTE_BATCH=1 to run the route batch',
+);
 
-        // The modal flagship's real surface only exists once opened — open it so
-        // axe covers the dialog markup, not just the trigger button.
-        if (slug === 'modal') {
-          await page.getByRole('button', { name: /open modal/i }).first().click();
-          await page.getByRole('dialog').waitFor({ timeout: 10_000 }).catch(() => undefined);
-        }
+test.describe.serial('route-level axe — DS reference lab, Modern, two BitHire tenants', () => {
+  const measured: Measured = {};
+  const blocking: string[] = [];
 
-        // Settle any remaining transitions so axe's color-contrast reads the
-        // final rendered colors (reducedMotion disables entrances; this covers
-        // the last paint).
-        await page.waitForTimeout(400);
+  for (const scene of SCENES) {
+    test(`${scene} (both grounds)`, async ({ page }) => {
+      test.setTimeout(120_000);
+      for (const ground of GROUNDS) {
+        await test.step(`${ground} / ${scene}`, async () => {
+          await page.goto(`/probe/ds-reference/${ground}/${scene}`, { waitUntil: 'domcontentloaded' });
+          await settle(page);
 
-        const results = await new AxeBuilder({ page }).analyze();
-        for (const violation of results.violations) {
-          if (!BLOCKING_IMPACTS.has(violation.impact ?? '')) continue;
-          for (const node of violation.nodes) {
-            const rawTarget = (Array.isArray(node.target) ? node.target.join(' ') : String(node.target)).trim();
-            const target = normalizeTarget(rawTarget);
-            const key = `${violation.id}|${target}`;
-            if (!current[key]) {
-              current[key] = {
+          const results = await new AxeBuilder({ page }).analyze();
+          // Non-vacuity: axe over an unpainted document still "passes".
+          expect(
+            results.passes.length,
+            `${ground}/${scene}: axe found nothing to check — the scene did not paint`,
+          ).toBeGreaterThan(0);
+
+          for (const violation of results.violations) {
+            const impact = violation.impact ?? 'unknown';
+            if (impact !== ADMISSIBLE_IMPACT && impact !== INADMISSIBLE_IMPACT) continue;
+            for (const node of violation.nodes) {
+              const target = normalizeTarget(
+                (Array.isArray(node.target) ? node.target.join(' ') : String(node.target)).trim(),
+              );
+              const key = ledgerKey(violation.id, scene, ground, target);
+              // L1: the higher blocking impact is structurally inadmissible. It
+              // fails the run and is never a candidate for the ledger.
+              if (impact === INADMISSIBLE_IMPACT) {
+                blocking.push(`  ${violation.id} @ ${target}  [${ground}/${scene}]  (${violation.help})`);
+                continue;
+              }
+              measured[key] ??= {
                 rule: violation.id,
-                impact: violation.impact ?? 'unknown',
+                impact,
                 help: violation.help,
+                scene,
+                ground,
                 target,
-                occurrences: [],
               };
             }
-            current[key].occurrences.push({ tenant, slug });
           }
-        }
+        });
+      }
+    });
+  }
+
+  test.afterAll(async () => {
+    const noWrite = process.env.AXE_NO_WRITE === '1';
+    const update = process.env.AXE_UPDATE_BASELINE === '1';
+    // L5(iii): ONE flag suppresses BOTH write paths, so a reviewer can run this
+    // spec without dirtying the tree whatever else is set.
+    if (!noWrite) {
+      writeJson(reportPath, {
+        generatedAt: new Date().toISOString(),
+        impacts: [ADMISSIBLE_IMPACT],
+        matrix: { engine: 'modern', grounds: GROUNDS, scenes: SCENES },
+        findingCount: Object.keys(measured).length,
+        findings: measured,
       });
     }
-  }
+    // L5(i): no self-generation. An absent ledger throws here.
+    const ledger = readLedger(ledgerPath);
+    expect(
+      blocking,
+      `Findings at the blocking impact the ledger may never record (L1). They fail the run; they are not baselined:\n${blocking.join('\n')}`,
+    ).toEqual([]);
 
-  // Always persist the full current finding set as the CI report artifact.
-  writeJson(reportPath, {
-    generatedAt: new Date().toISOString(),
-    impacts: [...BLOCKING_IMPACTS],
-    tenants: TENANTS,
-    flagships: FLAGSHIP_SLUGS,
-    findingCount: Object.keys(current).length,
-    findings: current,
+    if (update) {
+      // L5(ii) + L3: the only write path, and it is the intersection — fixed
+      // entries drop out, a novel finding can never be admitted by a flag.
+      if (noWrite) return;
+      const kept = intersect(ledger.entries, measured);
+      writeJson(ledgerPath, {
+        ...ledger,
+        entries: Object.fromEntries(
+          Object.entries(kept).map(([key, entry]) => [key, { ...entry, ...ledger.entries[key] }]),
+        ),
+      });
+      return;
+    }
+
+    const novel = Object.keys(measured).filter((key) => !(key in ledger.entries));
+    const detail = novel.map((key) => {
+      const finding = measured[key]!;
+      return `  ${finding.impact.toUpperCase()} ${finding.rule} @ ${finding.target}  [${finding.ground}/${finding.scene}]  (${finding.help})`;
+    });
+    expect(
+      novel,
+      `New blocking-impact axe violations not in axe-baseline.json.\nEach must be admitted BY HAND with a disposition, an owner and a WO (L2) — AXE_UPDATE_BASELINE=1 is intersection-only and cannot add them:\n${detail.join('\n')}`,
+    ).toEqual([]);
   });
-
-  const baseline = loadBaseline();
-  const forceUpdate = process.env.AXE_UPDATE_BASELINE === '1';
-
-  if (baseline === null || forceUpdate) {
-    // Generate on first run; on an explicit update, shrink to the intersection
-    // (decrease-only — never add a novel finding to make it pass).
-    const next =
-      baseline && forceUpdate
-        ? Object.fromEntries(Object.entries(current).filter(([key]) => key in baseline))
-        : current;
-    writeJson(baselinePath, next);
-    console.log(
-      `axe-baseline.json ${baseline === null ? 'generated' : 'updated (decrease-only)'} with ${Object.keys(next).length} serious/critical entries.`,
-    );
-    return; // pass — the baseline is now the recorded state
-  }
-
-  const novel = Object.keys(current).filter((key) => !(key in baseline));
-  const detail = novel.map((key) => {
-    const f = current[key];
-    const where = f.occurrences.map((o) => `${o.tenant}/${o.slug}`).join(', ');
-    return `  ${f.impact.toUpperCase()} ${f.rule} @ ${f.target}  [${where}]  (${f.help})`;
-  });
-
-  expect(novel, `New serious/critical axe violations not in axe-baseline.json:\n${detail.join('\n')}`).toEqual([]);
 });

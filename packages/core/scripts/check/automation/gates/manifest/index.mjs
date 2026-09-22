@@ -286,6 +286,20 @@ export const CI_GATES = Object.freeze([
   { id: 'csspaint-drill', run: ['node', '--test', 'scripts/check/engine/css/paint/layers/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['csspaint'], },
   { id: 'containerquery', run: ['pnpm', 'run', 'containerquery:check'], blocking: true, phase: 'pre-build', drillId: 'containerquery-drill', ratchet: 'scripts/check/engine/css/container-queries/baseline/index.json', },
   { id: 'containerquery-drill', run: ['node', '--test', 'scripts/check/engine/css/container-queries/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['containerquery'], },
+  // WO-INV-03 (F-47). The 44px touch floor had a shipped `@media (pointer:
+  // coarse)` block, a vitest contract inside `test:ci` and NO manifest entry --
+  // `--list | grep touch` was 0. This measures what the floor RESOLVES to: one
+  // canonical channel, a physical px, reaching every component channel a Modern
+  // skin reads AFTER the three tenant artifacts overlay it. It is a CONTRACT,
+  // so there is no `ratchet:`; the routed debt it cannot write lives in a named
+  // decrease-only ledger beside it, and a row there that has gone green fails.
+  //
+  // NOT its peer `scripts/check/touch-targets/`, the per-SELECTOR authority
+  // over which boxes are floored. That suite reaches CI only through
+  // `test:scripts`, after the build, and is red at HEAD on debt this WO may not
+  // repair; the two measure different questions and neither subsumes the other.
+  { id: 'touch-target-floor-drill', run: ['node', '--test', 'scripts/check/touch-target-floor/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['touch-target-floor'], },
+  { id: 'touch-target-floor', run: ['node', 'scripts/check/touch-target-floor/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'touch-target-floor-drill', },
   // The audit's own six suites. `engine-token-audit` computes 3,326 counters;
   // a classifier that stopped classifying reports plausible numbers and looks
   // exactly like a clean tree -- `themeCss.unreferencedSelectors` read 0 for

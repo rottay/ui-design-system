@@ -1,98 +1,78 @@
 {
-  "label|.ds-input-ph-_id_": {
-    "rule": "label",
-    "impact": "critical",
-    "help": "Form elements must have labels",
-    "target": ".ds-input-ph-_id_",
-    "occurrences": [
-      {
-        "tenant": "rottay",
-        "slug": "input"
-      },
-      {
-        "tenant": "rottay",
-        "slug": "input"
-      },
-      {
-        "tenant": "bithire",
-        "slug": "input"
-      },
-      {
-        "tenant": "bithire",
-        "slug": "input"
-      }
+  "purpose": "Route-level axe debt for the DS reference lab under the Modern engine: two real BitHire-vertical tenants (a static FlatTheme ground and a published-document ground compiled to an SSR-embedded artifact) across all 25 lab scenes, which between them cover all 24 primitives/inputs families. It records findings at the blocking impact named in \"impacts\" and nothing above it. Family-level axe debt is NOT here: it belongs to the per-family AXE_DEBT pins owned by WO-EVI-02, and a route-level finding whose node is already pinned there is recorded as routed, never re-litigated (L4).",
+  "owner": "WO-INV-03 while it is open; thereafter the DS a11y CI job (.github/workflows/ci.yml, the a11y specs step).",
+  "provenance": "db759703a 2026-09-22 — schema and laws established by WO-INV-03 Lot C. NO ROUTE MEASUREMENT HAS BEEN TAKEN AGAINST THIS MATRIX YET: entries is deliberately empty and the retargeted batch is gated off until the DT's serial browser slot runs it. Command: DS_AXE_ROUTE_BATCH=1 pnpm --filter @rottay/showroom exec playwright test e2e/a11y/axe.spec.ts",
+  "retire": "Deleted when the route batch runs clean with no entries. Individual entries retire as their owner repairs them, via AXE_UPDATE_BASELINE=1, which rewrites entries to the intersection of this ledger and the current findings and therefore only ever shrinks.",
+  "matrix": {
+    "engine": "modern",
+    "grounds": ["bithire", "the-management"],
+    "scenes": [
+      "charts",
+      "component-behaviors",
+      "compositions",
+      "control",
+      "display-collections",
+      "display-content",
+      "display-labels",
+      "display-surfaces",
+      "feedback",
+      "field",
+      "inputs-material",
+      "microbatch-material",
+      "monochrome",
+      "overlay",
+      "overlay-blocking",
+      "overlay-drawer",
+      "overlay-edge",
+      "pattern-behaviors",
+      "primitive-anatomy",
+      "primitive-complex-states",
+      "primitive-interactions",
+      "primitive-state-repairs",
+      "structures",
+      "surfaces",
+      "transient-material"
     ]
   },
-  "select-name|.ds-sel-_id_": {
-    "rule": "select-name",
-    "impact": "critical",
-    "help": "Select element must have an accessible name",
-    "target": ".ds-sel-_id_",
-    "occurrences": [
-      {
-        "tenant": "rottay",
-        "slug": "select"
-      },
-      {
-        "tenant": "rottay",
-        "slug": "select"
-      },
-      {
-        "tenant": "rottay",
-        "slug": "select"
-      },
-      {
-        "tenant": "bithire",
-        "slug": "select"
-      },
-      {
-        "tenant": "bithire",
-        "slug": "select"
-      },
-      {
-        "tenant": "bithire",
-        "slug": "select"
-      }
-    ]
+  "impacts": ["serious"],
+  "entries": {},
+  "deferred": {
+    "color-contrast|tabs|rottay|#tabs-tab-_id_-1": {
+      "rule": "color-contrast",
+      "impact": "serious",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "reason": "Measured on tenant=rottay at /probe/engine-modern, which D-24 removed from this batch's matrix: the two grounds are now both BitHire-vertical tenants. The subject left the matrix; the pin is kept as evidence rather than deleted.",
+      "deferredUnder": "D-24"
+    },
+    "color-contrast|tabs|rottay|#tabs-tab-_id_-2": {
+      "rule": "color-contrast",
+      "impact": "serious",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "reason": "Same subject and same reason as the -1 node.",
+      "deferredUnder": "D-24"
+    },
+    "color-contrast|tabs|rottay|#tabs-tab-_id_-3": {
+      "rule": "color-contrast",
+      "impact": "serious",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "reason": "Same subject and same reason as the -1 node.",
+      "deferredUnder": "D-24"
+    }
   },
-  "color-contrast|#tabs-tab-_id_-2": {
-    "rule": "color-contrast",
-    "impact": "serious",
-    "help": "Elements must meet minimum color contrast ratio thresholds",
-    "target": "#tabs-tab-_id_-2",
-    "occurrences": [
-      {
-        "tenant": "rottay",
-        "slug": "tabs"
-      }
-    ]
-  },
-  "color-contrast|#tabs-tab-_id_-3": {
-    "rule": "color-contrast",
-    "impact": "serious",
-    "help": "Elements must meet minimum color contrast ratio thresholds",
-    "target": "#tabs-tab-_id_-3",
-    "occurrences": [
-      {
-        "tenant": "rottay",
-        "slug": "tabs"
-      },
-      {
-        "tenant": "rottay",
-        "slug": "tabs"
-      }
-    ]
-  },
-  "color-contrast|#tabs-tab-_id_-1": {
-    "rule": "color-contrast",
-    "impact": "serious",
-    "help": "Elements must meet minimum color contrast ratio thresholds",
-    "target": "#tabs-tab-_id_-1",
-    "occurrences": [
-      {
-        "tenant": "rottay",
-        "slug": "tabs"
-      }
-    ]
+  "retired": {
+    "label|.ds-input-ph-_id_": {
+      "rule": "label",
+      "impact": null,
+      "help": "Form elements must have labels",
+      "reason": "Recorded at the blocking impact L1 now makes structurally inadmissible, and STALE BY KEY: the class prefix ds-input-ph- no longer exists anywhere in the tree. WO-INV-04 removed it, and it survives only as a negative assertion at packages/core/src/components/primitives/tests/EmbeddedCssRecovery.contract.test.ts:801. Whether the underlying missing-label defect reproduces under the new selectors on the field/control scenes is UNMEASURED; that measurement is a DT serial browser slot and the disposition is not adopted until it is taken. This batch does not inherit the entry.",
+      "awaits": "DT serial browser slot — re-measure on /probe/ds-reference/{bithire,the-management}/{field,control}"
+    },
+    "select-name|.ds-sel-_id_": {
+      "rule": "select-name",
+      "impact": null,
+      "help": "Select element must have an accessible name",
+      "reason": "Same class as the label row: the ds-sel-search- prefix is refused at EmbeddedCssRecovery.contract.test.ts:805 and the Select now carries exactly one ds-select-shell__search-input. Stale by key, subject unmeasured, disposition not adopted.",
+      "awaits": "DT serial browser slot — re-measure on /probe/ds-reference/{bithire,the-management}/{field,control}"
+    }
   }
 }

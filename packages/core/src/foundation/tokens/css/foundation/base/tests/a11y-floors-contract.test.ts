@@ -7,6 +7,13 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+import {
+  buildCascade,
+  collectDeclarations,
+  collectTouchReads,
+  reachesFloor,
+} from '@checks/touch-target-floor/reach/index.mjs';
+
 import { EXPRESSIVE_A11Y_FLOORS } from '@/foundation/tokens/ts/presentation/expressive-profiles';
 import { clampExpressiveEdgeWidth } from '@/foundation/tokens/ts/presentation/expressive-profiles/expansion';
 import { assertExpressiveEdgeWidthInvariant } from '@/infrastructure/compilers/composition/tenant-theme';
@@ -18,82 +25,82 @@ function css(path: string): string {
 }
 
 describe('touch-target floor (44px coarse pointer)', () => {
-  it('declares the canonical channel and enforces it in every core control skin', () => {
+  /**
+   * The corpus is the eight files that carry this floor, and each is judged in
+   * its OWN cascade context. The retired private follower joined them into one
+   * string and asked `.some()`, so `presentation/components/button`'s correct
+   * `max(44px, 2.75rem)` absolved a bare `2.75rem` at `responsive/button` --
+   * measured under WO-INV-03 Lot B. The mechanism now lives in
+   * `scripts/check/touch-target-floor/reach`, shared with the pre-build
+   * gate that measures the same law over the whole corpus plus the artifacts.
+   */
+  const CORPUS = [
+    'foundation/themes/default/index.css',
+    'presentation/components/button/index.css',
+    'presentation/components/input/index.css',
+    'presentation/components/select/index.css',
+    'foundation/responsive/button/index.css',
+    'runtime/engines/modern/skin/input/index.css',
+    'runtime/engines/modern/skin/select/index.css',
+    'runtime/engines/modern/skin/menu/index.css',
+  ];
+  const SKINS = CORPUS.filter((path) => path.startsWith('runtime/engines/modern/skin/'));
+  const sources = () => CORPUS.map((path) => ({ name: path, content: css(path) }));
+  const FLOOR = EXPRESSIVE_A11Y_FLOORS.touchTargetMinPx;
+
+  it('declares the canonical channel as a physical pixel length', () => {
+    // One law, one spelling. `2.75rem` was an accepted alternative here and it
+    // is 41.25px at this tree's 15px fluid root -- i.e. it never was the floor.
     expect(css('foundation/themes/default/index.css')).toContain(
-      '--ds-touch-target-min: 44px'
+      `--ds-touch-target-min: ${FLOOR}px`
     );
-    // A skin may read the canonical root directly or a per-component channel
-    // that resolves to it -- `button` reads only `--ds-button-touch-target-min`
-    // now. Naming the root was never the floor; RESOLVING to it is, so every
-    // channel a skin reads is followed to its declaration and required to carry
-    // the 44px floor. A component channel declared at anything less would fail
-    // here even though the old substring check would have passed it.
-    const declarations = [
-      css('foundation/themes/default/index.css'),
-      css('presentation/components/button/index.css'),
-      css('presentation/components/input/index.css'),
-      css('presentation/components/select/index.css'),
-      css('foundation/responsive/button/index.css'),
-      css('runtime/engines/modern/skin/input/index.css'),
-      css('runtime/engines/modern/skin/select/index.css'),
-      css('runtime/engines/modern/skin/menu/index.css'),
-    ].join('\n');
-    // One law, one spelling. `2.75rem` was an accepted alternative and it is
-    // 41.25px at this tree's 15px fluid root -- i.e. it never was the floor.
-    const CANONICAL_FLOOR = /44px/;
-    /** Every value the cascade declares for a channel, across the files above. */
-    const declaredValues = (channel: string): string[] =>
-      [...declarations.matchAll(new RegExp(`${channel}:\\s*([^;]+);`, 'g'))].map((match) =>
-        match[1].trim()
-      );
-    /**
-     * Does this expression REACH the floor? A read may carry it in place, or
-     * name a channel declared with it, or fall back to another channel that
-     * is -- which is how the menu reads it
-     * (`var(--ds-menu-touch-target-min, var(--ds-touch-target-min))`). The
-     * chain is followed the way the cascade follows it; a chain that ends
-     * anywhere else still fails.
-     */
-    const reachesFloor = (expression: string, depth = 0): boolean => {
-      if (depth > 4 || !expression) return false;
-      if (CANONICAL_FLOOR.test(expression.replace(/var\([^)]*\)/g, ''))) return true;
-      for (const match of expression.matchAll(/var\(\s*(--[a-z0-9-]+)\s*(?:,\s*([\s\S]+))?\)/g)) {
-        const [, channel, fallback] = match;
-        if (declaredValues(channel).some((value) => reachesFloor(value, depth + 1))) return true;
-        if (fallback && reachesFloor(fallback, depth + 1)) return true;
-      }
-      return false;
-    };
-    for (const skin of [
-      'runtime/engines/modern/skin/button/index.css',
-      'runtime/engines/modern/skin/input/index.css',
-      'runtime/engines/modern/skin/select/index.css',
-      'runtime/engines/modern/skin/menu/index.css',
-    ]) {
-      const content = css(skin);
-      expect(content, skin).toMatch(/pointer:\s*coarse/);
-      // The fallback may itself be a `var()`, so one nesting level is captured
-      // rather than stopping at the first `)`.
-      const reads = [
-        ...content.matchAll(
-          /var\((--ds-[a-z-]*touch-target-min)\s*(,\s*(?:[^()]|\([^()]*\))+)?\)/g
-        ),
-      ].map((match) => ({ channel: match[1], fallback: (match[2] ?? '').slice(1).trim() }));
-      expect(reads.length, `${skin} reads no touch-target channel`).toBeGreaterThan(0);
-      for (const { channel, fallback } of reads) {
-        // Either the read carries the floor in place, or it reaches it through
-        // the channel it names or that channel's own fallback. One of the
-        // three, never none -- that is what makes the 44px reachable.
-        const reached =
-          reachesFloor(fallback) ||
-          declaredValues(channel).some((value) => reachesFloor(value)) ||
-          reachesFloor(`var(${channel}${fallback ? `, ${fallback}` : ''})`);
-        expect(
-          reached,
-          `${channel} is read by ${skin} and reaches no 44px floor by any route`
-        ).toBe(true);
-      }
+  });
+
+  it('every channel a core control skin reads reaches the floor in its own context', () => {
+    const cascade = buildCascade(collectDeclarations(sources()));
+    const reads = collectTouchReads(sources().filter((source) => SKINS.includes(source.name)));
+    // A corpus that stopped being read would report a clean tree.
+    expect(reads.length).toBeGreaterThanOrEqual(3);
+    for (const skin of SKINS) {
+      expect(css(skin), skin).toMatch(/pointer:\s*coarse/);
+      expect(reads.some((read) => read.file === skin), `${skin} reads no touch-target channel`).toBe(true);
     }
+    for (const read of reads) {
+      const verdict = reachesFloor(read.expression, cascade, FLOOR);
+      expect(verdict.reached, `${read.file}:${read.line} — ${read.expression}: ${verdict.why}`).toBe(true);
+    }
+  });
+
+  it('drill: a sibling file cannot absolve a wrong declaration in the coarse context', () => {
+    // `responsive/button` declares the channel under `(pointer: coarse)`, the
+    // site that governs; `presentation/components/button` declares it at base.
+    const defected = sources().map((source) =>
+      source.name === 'foundation/responsive/button/index.css'
+        ? { ...source, content: source.content.replace('max(44px, 2.75rem)', '2.75rem') }
+        : source
+    );
+    expect(
+      defected.find((source) => source.name === 'foundation/responsive/button/index.css')!.content
+    ).toContain('--ds-button-touch-target-min: 2.75rem');
+    const cascade = buildCascade(collectDeclarations(defected));
+    expect(reachesFloor('var(--ds-button-touch-target-min)', cascade, FLOOR).reached).toBe(false);
+    // ...and the sibling is present and does carry the floor, so the refusal
+    // above is per-context and not a corpus that went empty.
+    const base = collectDeclarations(defected).filter(
+      (row) =>
+        row.channel === '--ds-button-touch-target-min' &&
+        row.file === 'presentation/components/button/index.css'
+    );
+    expect(base).toHaveLength(1);
+    expect(reachesFloor(base[0].value, buildCascade([]), FLOOR).reached).toBe(true);
+  });
+
+  it('drill: a declared channel is not rescued by its own read-site fallback', () => {
+    const cascade = buildCascade(
+      collectDeclarations([{ name: 'x.css', content: ':root { --ds-x-touch-target: 2.75rem; }' }])
+    );
+    expect(reachesFloor('var(--ds-x-touch-target, 44px)', cascade, FLOOR).reached).toBe(false);
+    expect(reachesFloor('var(--ds-absent-touch-target, 44px)', cascade, FLOOR).reached).toBe(true);
   });
 });
 
