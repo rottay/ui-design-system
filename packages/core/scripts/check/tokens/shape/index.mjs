@@ -143,7 +143,10 @@ async function loadCompiler() {
   const load = (path) => import(pathToFileURL(join(dist, path)).href);
   const [server, emission] = await Promise.all([
     load('server.js'),
-    load('infrastructure/compilers/runtime/theme/runtime/emission/index.js'),
+    /* The CSS half of the emission owner. The folder's barrel is source-only:
+     * it re-exports and nothing else, so the bundler hoists it away and emits
+     * no `emission/index.js`. Both names this probe uses live in `css/`. */
+    load('infrastructure/compilers/runtime/theme/runtime/emission/css/index.js'),
   ]);
   return { server, emission };
 }
@@ -161,7 +164,7 @@ async function measureVertical({ vertical, targets, server, emission, context })
       document: { version: 2, plan: 'standard', decisions: { 'shape.radius-scale': radiusScale } },
     });
     const { compiled } = server.compileThemeIntent(intent);
-    const armCss = emission.emitThemeCss(compiled, emission.firstPartyScope(vertical));
+    const armCss = emission.emitThemeCss(compiled, server.firstPartyScope(vertical));
 
     const page = await context.newPage();
     await page.setContent('<!doctype html><html><body></body></html>');
