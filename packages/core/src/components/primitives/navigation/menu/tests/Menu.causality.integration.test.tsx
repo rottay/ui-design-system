@@ -70,10 +70,9 @@ describeCausality({
     { id: 'duration', selector: TOP, property: 'transition-duration' },
   ],
   decisions: {
-    // bithire left this arm in D6-2c-ii-RED: with `navigation.sidebar-tone:
-    // inverse` decided by its preset, the menu ink is the inverse sidebar ink,
-    // a fixed white no seed moves. Pinned below; WO-DER-06 owns the gap.
-    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['selectedInk'], holds: 'rowRadius', in: ['evnto'] },
+    // The selected ink rides the primary on the card in both seed verticals;
+    // bithire rejoined when the menu stopped chaining the sidebar tone (N2).
+    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['selectedInk'], holds: 'rowRadius', in: SEED_VERTICALS },
     'palette.status-seeds': { value: { error: '#B23A48' }, moves: ['dangerInk'], holds: 'rowRadius', in: SEED_VERTICALS },
     'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'rowRadius', in: SEED_VERTICALS },
     'typography.scale': { value: 1.08, moves: ['rowSize', 'groupSize'], holds: 'rowRadius', in: VERTICALS },
@@ -106,27 +105,20 @@ describeCausality({
  * dark mode's near-white ink. That base now states the mode-aware role and the
  * ground resolves `#182235`. Dropped by identity, not waived: with no entry the
  * scope must measure clean, and a relapse reddens here.
+ *
+ * `bithire light` and `bithire dark` DRAINED (WO-DER-06 residual N2, DT ruling
+ * option A, 2026-09-22): the menu deriver chained its inks and washes to the
+ * sidebar tone while its ground stayed the card, so bithire's inverse tone
+ * painted `#f5f5f5` rows over the light card (1.04:1) and a `#171717` open
+ * trigger over the `#262626` sidebar hover (1.18:1). The colour chain now pairs
+ * with the card: rows read `--ds-color-text-secondary`, the open trigger
+ * `--ds-color-text-primary` over a 5% primary card wash. Measured after the
+ * change: all four scopes here audit `{}`; on the production overlay-edge
+ * route axe reads bithire rows 6.55:1 (`#5a5a61` on `#f9fafe`), the open
+ * trigger 16.74:1, the selected row 4.87:1, and the-management 10.53 / 16.75
+ * / 14.48:1.
  */
-const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
-  'bithire light': {
-    'color-contrast': [
-      'ul[aria-orientation="horizontal"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
-      'ul[aria-orientation="horizontal"] > li[data-part="row"][role="none"]:nth-child(2) > div[data-part="trigger"][aria-controls="menu-panel-_R_2_"][data-open="true"] > span[data-part="label"]',
-      'ul[aria-orientation="vertical"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
-      'ul[aria-orientation="vertical"] > li[data-part="row"][role="none"]:nth-child(2) > div[data-part="trigger"][aria-controls="menu-panel-_R_2_"][data-open="true"] > span[data-part="label"]',
-    ],
-  },
-  'bithire dark': {
-    'color-contrast': [
-      'ul[aria-orientation="horizontal"] > li[data-part="group"][role="presentation"] > div[data-part="group-label"]',
-      'ul[aria-orientation="horizontal"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
-      'ul[aria-orientation="horizontal"] > li[data-part="row"][role="none"]:nth-child(2) > div[data-part="trigger"][aria-controls="menu-panel-_R_2_"][data-open="true"] > span[data-part="label"]',
-      'ul[aria-orientation="vertical"] > li[data-part="group"][role="presentation"] > div[data-part="group-label"]',
-      'ul[aria-orientation="vertical"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
-      'ul[aria-orientation="vertical"] > li[data-part="row"][role="none"]:nth-child(2) > div[data-part="trigger"][aria-controls="menu-panel-_R_2_"][data-open="true"] > span[data-part="label"]',
-    ],
-  },
-};
+const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {};
 
 describe('menu direction, state governance and accessibility', () => {
   it('indents child rows on the reading side in both directions', async () => {
@@ -194,18 +186,21 @@ describe('menu direction, state governance and accessibility', () => {
 });
 
 /**
- * The menu ink IS the sidebar ink, and a preset decides the sidebar tone.
+ * The menu ink pairs with the card it paints, never with the sidebar tone.
  *
- * Measured on this tree: `--ds-menu-item-color` resolves to `--ds-sidebar-text`
- * on all three verticals. bithire's preset states `navigation.sidebar-tone:
- * inverse`, so a menu mounted on the page canvas paints the inverse rail's ink
- * (#f5f5f5) on a light ground -- the palette seed cannot move it, and the axe
- * scopes below record the contrast that follows. WO-DER-06 owns the gap; this
- * row reddens when a menu ink stops being a sidebar ink.
+ * bithire's preset states `navigation.sidebar-tone: inverse` (`--ds-sidebar-text`
+ * `#f5f5f5`). The menu deriver used to chain its row ink to that root, so a menu
+ * over the page's light card painted the inverse rail ink at 1.04:1 (WO-DER-06
+ * residual N2). Option A of the DT ruling (2026-09-22) cut every sidebar channel
+ * from the menu's colour chain: measured on this tree the row ink resolves to
+ * `--ds-color-text-secondary` (`#5A5A61`) while the sidebar ink stays
+ * `#f5f5f5`, and the palette seed now moves the selected ink
+ * (`rgb(47, 91, 232)` -> `rgb(47, 107, 154)`). This row reddens if a menu ink
+ * becomes a sidebar ink again.
  */
 
 describe('menu ink provenance under the neutral compile', () => {
-  it('holds the inverse sidebar ink on bithire, which no palette seed moves', async () => {
+  it('pairs the menu ink with the card on bithire, whose sidebar tone is inverse', async () => {
     const result = await measureArms({
       vertical: 'bithire',
       markup,
@@ -213,10 +208,12 @@ describe('menu ink provenance under the neutral compile', () => {
       targets: [
         { id: 'selectedInk', selector: SELECTED, property: 'color' },
         { id: 'menuInk', selector: ROOT, property: '--ds-menu-item-color' },
+        { id: 'secondaryInk', selector: ROOT, property: '--ds-color-text-secondary' },
         { id: 'sidebarInk', selector: ROOT, property: '--ds-sidebar-text' },
       ],
     });
-    expect(result.base!.menuInk).toBe(result.base!.sidebarInk);
-    expect(result.seed!.selectedInk).toBe(result.base!.selectedInk);
+    expect(result.base!.menuInk).toBe(result.base!.secondaryInk);
+    expect(result.base!.menuInk).not.toBe(result.base!.sidebarInk);
+    expect(result.seed!.selectedInk).not.toBe(result.base!.selectedInk);
   }, 120_000);
 });

@@ -175,12 +175,9 @@ export const modernThemeAdapter = defineEngineAdapter({
       posture: "native",
       evidence: {
         kind: "channels",
-        // The Modern sidebar IS the Menu, and the family cut gave the menu its
-        // own channels: the tone's ink now reaches paint as
-        // `--ds-menu-item-color: var(--ds-sidebar-text, ...)`, a chain the
-        // COMPILED artifact declares. This matrix counts reads on AUTHORED CSS
-        // only, so those channels are not named here; the surface reads these
-        // two directly (WO-DER-06 derivation-lane registry, 2026-09-15).
+        // The tone paints the app shell's navigation ground; the menu's inks
+        // pair with its card, not the tone. This matrix counts reads on
+        // AUTHORED CSS only: the menu skin names these two as fallbacks.
         read: ["--ds-sidebar-item-bg-hover", "--ds-sidebar-item-bg-active"],
       },
     },

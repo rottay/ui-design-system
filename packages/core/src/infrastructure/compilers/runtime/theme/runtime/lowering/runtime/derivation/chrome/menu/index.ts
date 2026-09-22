@@ -3,9 +3,10 @@
  * material, its rows on the body and supporting roles, hover, press and
  * selection washes from the palette, the current-row markers on the
  * primary ink, and every geometry channel on the spacing ramp so density
- * reaches the rail. A sidebar tone reaches the rail through the produced
- * `--ds-sidebar-*` roots the menu colour, group, child and indent channels
- * chain to, so a tenant's authored `chrome.sidebar` leaves keep painting.
+ * reaches the rail. The menu is not the sidebar: its inks and washes pair
+ * with the card it paints, so no sidebar tone enters its colour chain (an
+ * inverse tone's ink over the light card reads 1.04:1). Group, child and
+ * indent geometry chain to the authored `--ds-sidebar-*` roots.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/menu
  * @category Compilers
@@ -29,7 +30,6 @@ export const menuChromeDeriver: FamilyDeriver = {
     "states.press",
     "density",
     "motion",
-    "navigation.sidebarTone",
   ],
   produces: [
     "--ds-menu-bg",
@@ -135,11 +135,11 @@ export function deriveMenuChannels(): Record<string, string> {
   // Surface: the paired card material, tinted a breath toward the primary.
   vars["--ds-menu-bg"] = "color-mix(in srgb, var(--ds-card-bg, var(--ds-surface-card)) 97%, var(--ds-color-primary) 3%)";
   vars["--ds-menu-dark-bg"] = "color-mix(in srgb, var(--ds-surface-panel) 94%, var(--ds-color-white) 6%)";
-  vars["--ds-menu-color"] = "var(--ds-sidebar-text, var(--ds-color-text-secondary))";
+  vars["--ds-menu-color"] = "var(--ds-color-text-secondary)";
   vars["--ds-menu-font-family"] = "var(--ds-type-body-font-family)";
   vars["--ds-menu-radius"] = "var(--ds-radius-xl)";
   vars["--ds-menu-shadow"] = "var(--ds-elevation-1)";
-  vars["--ds-menu-border-color"] = "var(--ds-sidebar-border, var(--ds-color-border-subtle))";
+  vars["--ds-menu-border-color"] = "var(--ds-color-border-subtle)";
   vars["--ds-menu-border-width"] = "var(--ds-edge-standard-width)";
   vars["--ds-menu-padding-block"] = "var(--ds-spacing-2)";
   vars["--ds-menu-padding-inline"] = "var(--ds-spacing-2)";
@@ -150,13 +150,13 @@ export function deriveMenuChannels(): Record<string, string> {
   vars["--ds-menu-panel-layer"] = "var(--ds-z-index-relative-above)";
 
   // Rows: ink and washes from the palette, geometry from the spacing ramp.
-  vars["--ds-menu-item-color"] = "var(--ds-sidebar-text, var(--ds-color-text-secondary))";
+  vars["--ds-menu-item-color"] = "var(--ds-color-text-secondary)";
   vars["--ds-menu-item-color-hover"] = "var(--ds-color-text-primary)";
-  vars["--ds-menu-item-color-active"] = "var(--ds-sidebar-item-color-active, var(--ds-color-primary))";
-  vars["--ds-menu-item-color-disabled"] = "var(--ds-sidebar-text-muted, var(--ds-color-text-secondary))";
-  vars["--ds-menu-item-bg-hover"] = "var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card))))";
-  vars["--ds-menu-item-bg-pressed"] = "var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card))))";
-  vars["--ds-menu-item-bg-active"] = "var(--ds-sidebar-item-bg-active, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-card-bg, var(--ds-surface-card))))";
+  vars["--ds-menu-item-color-active"] = "var(--ds-color-primary)";
+  vars["--ds-menu-item-color-disabled"] = "var(--ds-color-text-secondary)";
+  vars["--ds-menu-item-bg-hover"] = "color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card)))";
+  vars["--ds-menu-item-bg-pressed"] = "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)))";
+  vars["--ds-menu-item-bg-active"] = "color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-card-bg, var(--ds-surface-card)))";
   vars["--ds-menu-item-border-hover"] = "color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle))";
   vars["--ds-menu-item-border-active"] = "color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-subtle))";
   vars["--ds-menu-item-shadow-hover"] = "var(--ds-elevation-1)";
@@ -202,7 +202,7 @@ export function deriveMenuChannels(): Record<string, string> {
 
   // An open or ancestor-of-current trigger reads as lit, not selected.
   vars["--ds-menu-trigger-open-color"] = "var(--ds-color-text-primary)";
-  vars["--ds-menu-trigger-open-bg"] = "var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card))))";
+  vars["--ds-menu-trigger-open-bg"] = "color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card)))";
   vars["--ds-menu-trigger-open-border"] = "color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle))";
   vars["--ds-menu-submenu-bg"] = "var(--ds-color-bg-secondary)";
 
@@ -229,7 +229,7 @@ export function deriveMenuChannels(): Record<string, string> {
   vars["--ds-menu-submenu-indent"] = "var(--ds-spacing-6)";
 
   // Group eyebrows on the caption role, cased by the overline grammar chain.
-  vars["--ds-menu-group-color"] = "var(--ds-sidebar-text, var(--ds-color-text-secondary))";
+  vars["--ds-menu-group-color"] = "var(--ds-color-text-secondary)";
   vars["--ds-menu-group-bg"] = "color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent)";
   vars["--ds-menu-group-font-family"] = "var(--ds-type-caption-font-family)";
   vars["--ds-menu-group-font-size"] = "var(--ds-sidebar-group-font-size, var(--ds-type-caption-font-size))";
