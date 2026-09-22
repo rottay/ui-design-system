@@ -99,6 +99,7 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'list-scroll': 'pass',
   'list-table': 'pass',
   'main-row': 'pass',
+  'month-row': 'pass',
   'mobile-actions': 'pass',
   'mobile-bulk-actions': 'pass',
   'mobile-card-actions': 'pass',

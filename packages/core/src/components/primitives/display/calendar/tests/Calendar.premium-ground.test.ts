@@ -39,7 +39,7 @@ function ruleBlock(css: string, selectorPart: string): string {
 }
 
 const ROOT = ".rottay-calendar.rottay-calendar--modern[data-part='root'] {";
-const CELL = "[data-part='root'] > [data-part='grid'] > [data-part='cell'] {";
+const CELL = "[data-part='root'] > [data-part='grid'] [data-part='cell'] {";
 const TODAY = "[data-part='cell'][data-today='true']:not([data-selected='true']) {";
 
 describe('Calendar modern premium ground', () => {

@@ -133,21 +133,34 @@
   align-items: center;
   gap: var(--ds-spacing-2);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='weekday-row'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='weekday-row'] {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: var(--ds-spacing-1);
   margin-block-end: var(--ds-spacing-2);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] {
+/* The grid box stacks rows; each row box carries the column track and the
+   column gap, and the row rhythm is the former grid `gap` moved onto the
+   adjacent-row margin -- identical geometry, with the `row` the ARIA grid
+   grammar requires between the grid and its cells. */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] {
+  display: grid;
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='week-row'] {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: var(--ds-spacing-1);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='week-row'] + [data-part='week-row'] {
+  margin-block-start: var(--ds-spacing-1);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='month-row'] {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--ds-spacing-2);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='month-row'] + [data-part='month-row'] {
+  margin-block-start: var(--ds-spacing-2);
 }
 
 /* ---- cell layout (former `aspect-square flex flex-col items-center
@@ -173,7 +186,7 @@
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] [data-part='cell-spacer'][data-outside-month='true'] {
   font-size: var(--ds-font-size-xs);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='cell'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] [data-part='cell'] {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -184,19 +197,19 @@
   cursor: pointer;
   font-size: var(--ds-font-size-sm);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'][data-fullscreen='false'] > [data-part='grid'] > [data-part='cell'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'][data-fullscreen='false'] > [data-part='grid'] [data-part='cell'] {
   font-size: var(--ds-font-size-xs);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] [data-part='cell'] {
   position: relative;
   padding: var(--ds-calendar-year-cell-padding, calc(1rem * var(--ds-density-effective-scale)));
   cursor: pointer;
   text-align: center;
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'][data-fullscreen='false'] > [data-part='grid'] > [data-part='cell'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'][data-fullscreen='false'] > [data-part='grid'] [data-part='cell'] {
   font-size: var(--ds-font-size-xs);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-disabled] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-disabled] {
   opacity: var(--ds-calendar-cell-disabled-opacity, 0.3);
   cursor: not-allowed;
 }
@@ -204,7 +217,7 @@
 /* ---- injected cell content (former `absolute bottom-0 start-0 end-0 text-xs
         truncate` / `mt-1 text-xs`): pinned to the day cell's block-end with
         ellipsis; static flow under the month name in year view. ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='cell'] > [data-part='cell-content'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] [data-part='cell'] > [data-part='cell-content'] {
   position: absolute;
   inset-block-end: 0;
   inset-inline: 0;
@@ -213,7 +226,7 @@
   white-space: nowrap;
   font-size: var(--ds-font-size-xs);
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell'] > [data-part='cell-content'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] [data-part='cell'] > [data-part='cell-content'] {
   margin-block-start: var(--ds-spacing-1);
   font-size: var(--ds-font-size-xs);
 }
@@ -284,7 +297,7 @@
         above (the engine's pinned utility string is an inert bridge at the
         same 22.75rem value). ---- */
 @media (pointer: coarse) {
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'] {
     min-block-size: 44px;
     min-inline-size: 44px;
   }
@@ -313,7 +326,7 @@
         forced-colors block below re-maps this to a Highlight outline. ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible),
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:is([data-state~='focus-visible'], :focus-visible),
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='focus-visible'], :focus-visible) {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(--ds-calendar-focus-ring, var(--ds-focus-ring));
 }
 
@@ -331,7 +344,7 @@
         the day numbers, uppercase with tracking, so the grid reads
         label/number instead of two competing text rows; ink stays the
         contrast-governed secondary channel). ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > div > [data-part='weekday-header'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] div > [data-part='weekday-header'] {
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-medium);
   letter-spacing: 0.04em;
@@ -349,7 +362,7 @@
         paint owner) owns the state transition on the repainted channels;
         prefers-reduced-motion clamps it below. Resting background stays
         transparent by construction (the hover rule's contrast argument). ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'] {
   border-radius: var(--ds-calendar-cell-radius, var(--ds-radius-md));
   /* B4-04: every cell reserves the 1px border box the today-ring uses, so
      today/rest share identical inner geometry (no 1px content shift when the
@@ -361,7 +374,7 @@
 
 /* ---- cells (one rule set serves the month grid and the year grid: their paint
         is identical, only their geometry differs). ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true'] {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-selected='true'] {
   background: var(--ds-color-primary);
   /* CONTRAST LAW (K4-B round 2, axe color-contrast): the old
      --ds-color-text-inverse ink is UNDECLARED in the bithire light context,
@@ -381,15 +394,15 @@
         (with the active toggle), today-ring = Highlight edge, disabled keeps
         the opacity channel (GrayText below). ---- */
 @media (forced-colors: active) {
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true'],
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-selected='true'],
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-today='true']:not([data-selected='true']) {
     border-color: Highlight;
   }
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-disabled] {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-disabled] {
     /* The disabled channel in forced colors is GrayText ON TOP of the
        (skin-owned) opacity channel. */
     color: GrayText;
@@ -402,12 +415,12 @@
      keyboard ring to a Highlight outline on every interactive part. */
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible),
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:is([data-state~='focus-visible'], :focus-visible),
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='focus-visible'], :focus-visible) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell']:is([data-state~='focus-visible'], :focus-visible) {
     outline: var(--ds-focus-ring-width, 2px) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset, 2px);
   }
 }
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-today='true']:not([data-selected='true']) {
   border: 1px solid var(--ds-color-primary);
   /* B4-04: today is never a color-only signal -- the primary ring pairs with
      a semibold numeral (the grid's tabular figures keep columns aligned; the
@@ -427,7 +440,7 @@
    direct child, cells are direct children carrying data-selected/data-today
    and data-disabled only when disabled. */
 @media (hover: hover) {
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='hovered'], :hover):not([data-selected='true']):not([data-disabled]) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell']:is([data-state~='hovered'], :hover):not([data-selected='true']):not([data-disabled]) {
     background: var(
       --ds-calendar-cell-hover,
       var(--ds-color-interactive-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, transparent))
@@ -438,7 +451,7 @@
 /* ---- W10: press feedback on cells -- the WO-ENG-04 active channel, one
         step deeper than hover (alpha-primary-10 vs the 6-8% hover tint), same
         gates. Background only, no transform (see the header press rule). ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='pressed'], :active):not([data-selected='true']):not([data-disabled]) {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell']:is([data-state~='pressed'], :active):not([data-selected='true']):not([data-disabled]) {
   background: var(
     --ds-calendar-cell-active,
     var(--ds-color-interactive-bg-active, color-mix(in srgb, var(--ds-color-primary) 14%, transparent))
@@ -450,7 +463,7 @@
 @media (prefers-reduced-motion: reduce) {
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'],
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'],
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'] {
     transition-duration: 0.01ms;
   }
 }
@@ -460,7 +473,7 @@
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'],
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'] {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

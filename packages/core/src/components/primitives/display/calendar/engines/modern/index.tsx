@@ -91,6 +91,22 @@ const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
 const MONTH_KEYS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const;
 
 
+// An ARIA grid owns `row`s and every `gridcell` needs one as its parent, so
+// both panels emit their cells row by row (the skin tracks columns per row).
+const chunkIntoRows = <T,>(cells: readonly T[], perRow: number): T[][] => {
+  const rows: T[][] = [];
+  for (let index = 0; index < cells.length; index += perRow) {
+    rows.push(cells.slice(index, index + perRow));
+  }
+  return rows;
+};
+
+// A day panel cell is either a selectable day of the viewed month or an inert
+// spacer carrying an adjacent month's day.
+type DayGridCell =
+  | { readonly kind: 'day'; readonly day: number }
+  | { readonly kind: 'spacer'; readonly day: number; readonly side: 'prev' | 'next' };
+
 // Normalizes the incoming value (Date, ISO string, or undefined) into a Date.
 // Falls back to "now" so the calendar always has a valid reference date.
 const parseDate = (value: Date | string | undefined): Date => {
@@ -208,6 +224,21 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   );
   const leadingCells = grid.slice(0, grid.findIndex((cell) => cell.isCurrentMonth));
   const trailingCells = grid.slice(leadingCells.length + daysInMonth);
+
+  // The day panel's six week rows and the year panel's four: the grid's `row`
+  // children, and the boxes the skin lays the columns on.
+  const weekRows = chunkIntoRows<DayGridCell>(
+    [
+      ...leadingCells.map((cell): DayGridCell => ({ kind: 'spacer', day: cell.day, side: 'prev' })),
+      ...Array.from({ length: daysInMonth }, (_, index): DayGridCell => ({ kind: 'day', day: index + 1 })),
+      ...trailingCells.map((cell): DayGridCell => ({ kind: 'spacer', day: cell.day, side: 'next' })),
+    ],
+    7,
+  );
+  const monthRows = chunkIntoRows(
+    months.map((month, index) => ({ month, index })),
+    3,
+  );
 
   const isDateDisabled = useCallback((date: Date) => {
     if (disabledDate && disabledDate(date)) return true;
@@ -432,7 +463,15 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
       </div>
 
       {mode === 'month' ? (
-        <>
+        /* Days grid (APG: roving stop, arrow/PageUp/Home). The grid owns rows,
+           never bare cells: the weekday strip, then six week rows of seven. */
+        <div
+          ref={dayGridRef}
+          data-part="grid"
+          role="grid"
+          aria-label={calendarLabel('calendar.gridLabel', 'Dates grid')}
+          onKeyDown={handleDayGridKeyDown}
+        >
           {/* Day headers (locale-rotated with the week start). APG grammar
               (the DatePicker idiom): the row is a `row` and each header a
               named `columnheader` -- the accessible name keeps the full
@@ -446,66 +485,64 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             ))}
           </div>
 
-          {/* Days grid (APG: roving stop + arrow/PageUp/Home navigation) */}
-          <div
-            ref={dayGridRef}
-            data-part="grid"
-            role="grid"
-            aria-label={calendarLabel('calendar.gridLabel', 'Dates grid')}
-            onKeyDown={handleDayGridKeyDown}
-          >
-            {/* Leading cells: previous month's tail days (inert, muted) */}
-            {leadingCells.map((cell) => (
-              <div key={`outside-prev-${cell.day}`} data-part="cell-spacer" data-outside-month="true" aria-hidden="true">
-                <span>{cell.day}</span>
+          {weekRows.map((week, weekIndex) => {
+            // A week of nothing but adjacent-month spacers holds no cell, so
+            // it is inert for assistive tech (its children already are).
+            const holdsDay = week.some((cell) => cell.kind === 'day');
+
+            return (
+              <div
+                key={`week-${weekIndex}`}
+                data-part="week-row"
+                role={holdsDay ? 'row' : undefined}
+                aria-hidden={holdsDay ? undefined : true}
+              >
+                {week.map((cell) => {
+                  if (cell.kind === 'spacer') {
+                    /* Leading/trailing cells: the adjacent months' days (inert, muted) */
+                    return (
+                      <div key={`outside-${cell.side}-${cell.day}`} data-part="cell-spacer" data-outside-month="true" aria-hidden="true">
+                        <span>{cell.day}</span>
+                      </div>
+                    );
+                  }
+
+                  const day = cell.day;
+                  const date = new Date(viewYear, viewMonth, day);
+                  const isToday = isSameDay(date, today);
+                  const isSelected = isSameDay(date, currentDate);
+                  const isDisabled = isDateDisabled(date);
+                  const isTabStop = isSameDay(date, tabStopDate);
+
+                  return (
+                    <button
+                      key={day}
+                      type="button"
+                      data-part="cell"
+                      role="gridcell"
+                      data-selected={isSelected ? 'true' : 'false'}
+                      data-today={isToday ? 'true' : 'false'}
+                      data-disabled={isDisabled || undefined}
+                      aria-selected={isSelected}
+                      aria-current={isToday ? 'date' : undefined}
+                      aria-label={i18n?.locale ? formatCalendarDate(date, i18n.locale) : date.toDateString()}
+                      tabIndex={isTabStop && !isDisabled ? 0 : -1}
+                      onClick={() => handleDateClick(day)}
+                      disabled={isDisabled}
+                    >
+                      <span>{day}</span>
+                      {dateCellRender && (
+                        <div data-part="cell-content">
+                          {dateCellRender(date)}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
-            ))}
-
-            {/* Day cells */}
-            {Array.from({ length: daysInMonth }).map((_, i) => {
-              const day = i + 1;
-              const date = new Date(viewYear, viewMonth, day);
-              const isToday = isSameDay(date, today);
-              const isSelected = isSameDay(date, currentDate);
-              const isDisabled = isDateDisabled(date);
-              const isTabStop = isSameDay(date, tabStopDate);
-
-              return (
-                <button
-                  key={day}
-                  type="button"
-                  data-part="cell"
-                  role="gridcell"
-                  data-selected={isSelected ? 'true' : 'false'}
-                  data-today={isToday ? 'true' : 'false'}
-                  data-disabled={isDisabled || undefined}
-                  aria-selected={isSelected}
-                  aria-current={isToday ? 'date' : undefined}
-                  aria-label={i18n?.locale ? formatCalendarDate(date, i18n.locale) : date.toDateString()}
-                  tabIndex={isTabStop && !isDisabled ? 0 : -1}
-                  onClick={() => handleDateClick(day)}
-                  disabled={isDisabled}
-                >
-                  <span>{day}</span>
-                  {dateCellRender && (
-                    <div data-part="cell-content">
-                      {dateCellRender(date)}
-                    </div>
-                  )}
-                </button>
-              );
-            })}
-
-            {/* Trailing cells: next month's head days (inert, muted) -- the
-                grid always totals 42 cells, so the panel never re-heights
-                between months. */}
-            {trailingCells.map((cell) => (
-              <div key={`outside-next-${cell.day}`} data-part="cell-spacer" data-outside-month="true" aria-hidden="true">
-                <span>{cell.day}</span>
-              </div>
-            ))}
-          </div>
-        </>
+            );
+          })}
+        </div>
       ) : (
         /* Year view - show months (APG: roving stop + arrow/Home navigation) */
         <div
@@ -515,32 +552,36 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
           aria-label={calendarLabel('calendar.monthsGridLabel', 'Months grid')}
           onKeyDown={handleYearGridKeyDown}
         >
-          {months.map((month, i) => {
-            const date = new Date(viewYear, i, 1);
-            const isCurrentMonth = i === today.getMonth() && viewYear === today.getFullYear();
-            const isSelected = i === currentDate.getMonth() && viewYear === currentDate.getFullYear();
+          {monthRows.map((monthRow, rowIndex) => (
+            <div key={`month-row-${rowIndex}`} data-part="month-row" role="row">
+              {monthRow.map(({ month, index: i }) => {
+                const date = new Date(viewYear, i, 1);
+                const isCurrentMonth = i === today.getMonth() && viewYear === today.getFullYear();
+                const isSelected = i === currentDate.getMonth() && viewYear === currentDate.getFullYear();
 
-            return (
-              <button
-                key={month}
-                type="button"
-                data-part="cell"
-                role="gridcell"
-                data-selected={isSelected ? 'true' : 'false'}
-                data-today={isCurrentMonth ? 'true' : 'false'}
-                aria-selected={isSelected}
-                tabIndex={i === anchorMonthIndex ? 0 : -1}
-                onClick={() => handleMonthClick(i)}
-              >
-                <span>{month}</span>
-                {monthCellRender && (
-                  <div data-part="cell-content">
-                    {monthCellRender(date)}
-                  </div>
-                )}
-              </button>
-            );
-          })}
+                return (
+                  <button
+                    key={month}
+                    type="button"
+                    data-part="cell"
+                    role="gridcell"
+                    data-selected={isSelected ? 'true' : 'false'}
+                    data-today={isCurrentMonth ? 'true' : 'false'}
+                    aria-selected={isSelected}
+                    tabIndex={i === anchorMonthIndex ? 0 : -1}
+                    onClick={() => handleMonthClick(i)}
+                  >
+                    <span>{month}</span>
+                    {monthCellRender && (
+                      <div data-part="cell-content">
+                        {monthCellRender(date)}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
         </div>
       )}
     </div>

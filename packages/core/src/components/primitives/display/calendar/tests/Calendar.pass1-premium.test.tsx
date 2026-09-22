@@ -207,7 +207,7 @@ describe('Modern Calendar remediation (K4-B)', () => {
     expect(skin).not.toMatch(/:hover[^{]*\{\s*background:\s*var\(--ds-surface-inset\)/);
   });
 
-  it('renders the DOM the hover selector targets: root classes, direct-child grid, gated cell attributes (R5)', () => {
+  it('renders the DOM the hover selector targets: root classes, direct-child grid, row-grouped cells, gated cell attributes (R5)', () => {
     const { container } = render(<CalendarModern defaultValue={notToday()} fullscreen={false} />);
 
     const root = container.querySelector<HTMLElement>('[data-part="root"]')!;
@@ -215,17 +215,17 @@ describe('Modern Calendar remediation (K4-B)', () => {
     expect(root.classList.contains('rottay-calendar--modern')).toBe(true);
 
     const grid = container.querySelector<HTMLElement>('[data-part="grid"]')!;
-    // The selector chains with `>`: grid must be a direct child of root.
+    // The selector chains with `>` down to the grid: it is a direct child of root.
     expect(grid.parentElement).toBe(root);
 
-    const cells = Array.from(grid.children).filter(
-      (el): el is HTMLElement => el instanceof HTMLElement && el.dataset.part === 'cell',
-    );
+    const cells = Array.from(grid.querySelectorAll<HTMLElement>('[data-part="cell"]'));
     expect(cells.length).toBeGreaterThan(0);
     for (const cell of cells) {
-      // Cells are direct children of the grid and carry the gating attributes
-      // the :not() guards read (data-disabled present only when disabled).
-      expect(cell.parentElement).toBe(grid);
+      // Cells hang off the grid's `row` boxes -- the ARIA grid grammar the
+      // skin reaches with a descendant combinator -- and carry the gating
+      // attributes the :not() guards read (data-disabled only when disabled).
+      expect(cell.parentElement!.dataset.part).toBe('week-row');
+      expect(cell.parentElement!.parentElement).toBe(grid);
       expect(cell.getAttribute('data-selected')).toMatch(/^(true|false)$/);
       if (!cell.hasAttribute('disabled')) {
         expect(cell.hasAttribute('data-disabled')).toBe(false);
