@@ -4,7 +4,7 @@
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
   "entryCount": 7904,
-  "unpackedSize": 43724430,
+  "unpackedSize": 43736848,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -12,7 +12,7 @@
     },
     {
       "path": "contracts/css/hooks/index.json",
-      "size": 483314
+      "size": 483345
     },
     {
       "path": "contracts/package/entrypoints/index.json",
@@ -32,7 +32,7 @@
     },
     {
       "path": "dist/bithire.css",
-      "size": 5477462
+      "size": 5480265
     },
     {
       "path": "dist/chart-access.cjs",
@@ -856,7 +856,7 @@
     },
     {
       "path": "dist/components/patterns/data/decision-panorama/engines/foundation/index.cjs",
-      "size": 2794
+      "size": 2761
     },
     {
       "path": "dist/components/patterns/data/decision-panorama/engines/foundation/index.d.ts",
@@ -864,7 +864,7 @@
     },
     {
       "path": "dist/components/patterns/data/decision-panorama/engines/foundation/index.js",
-      "size": 4002
+      "size": 4411
     },
     {
       "path": "dist/components/patterns/data/decision-panorama/engines/modern/index.cjs",
@@ -1176,7 +1176,7 @@
     },
     {
       "path": "dist/components/patterns/data/record-facts/engines/foundation/index.cjs",
-      "size": 2549
+      "size": 2581
     },
     {
       "path": "dist/components/patterns/data/record-facts/engines/foundation/index.d.ts",
@@ -1184,7 +1184,7 @@
     },
     {
       "path": "dist/components/patterns/data/record-facts/engines/foundation/index.js",
-      "size": 4105
+      "size": 4186
     },
     {
       "path": "dist/components/patterns/data/record-facts/engines/modern/index.cjs",
@@ -4292,7 +4292,7 @@
     },
     {
       "path": "dist/components/primitives/display/calendar/engines/modern/index.cjs",
-      "size": 8004
+      "size": 8383
     },
     {
       "path": "dist/components/primitives/display/calendar/engines/modern/index.d.ts",
@@ -4300,7 +4300,7 @@
     },
     {
       "path": "dist/components/primitives/display/calendar/engines/modern/index.js",
-      "size": 12006
+      "size": 13100
     },
     {
       "path": "dist/components/primitives/display/calendar/engines/rustic/index.cjs",
@@ -4576,7 +4576,7 @@
     },
     {
       "path": "dist/components/primitives/display/code-block/index.cjs",
-      "size": 5734
+      "size": 5753
     },
     {
       "path": "dist/components/primitives/display/code-block/index.d.ts",
@@ -4584,7 +4584,7 @@
     },
     {
       "path": "dist/components/primitives/display/code-block/index.js",
-      "size": 12863
+      "size": 13069
     },
     {
       "path": "dist/components/primitives/display/code-block/runtime/highlighter/index.cjs",
@@ -4648,7 +4648,7 @@
     },
     {
       "path": "dist/components/primitives/display/descriptions/engines/modern/index.cjs",
-      "size": 3816
+      "size": 3760
     },
     {
       "path": "dist/components/primitives/display/descriptions/engines/modern/index.d.ts",
@@ -4656,7 +4656,7 @@
     },
     {
       "path": "dist/components/primitives/display/descriptions/engines/modern/index.js",
-      "size": 7440
+      "size": 7198
     },
     {
       "path": "dist/components/primitives/display/descriptions/engines/rustic/index.cjs",
@@ -6584,7 +6584,7 @@
     },
     {
       "path": "dist/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.cjs",
-      "size": 23113
+      "size": 23132
     },
     {
       "path": "dist/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.d.ts",
@@ -6592,7 +6592,7 @@
     },
     {
       "path": "dist/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.js",
-      "size": 36428
+      "size": 36451
     },
     {
       "path": "dist/components/primitives/feedback/spinner/compound/index.d.ts",
@@ -14184,7 +14184,7 @@
     },
     {
       "path": "dist/evnto.css",
-      "size": 5468493
+      "size": 5471296
     },
     {
       "path": "dist/fonts/arabic-text.css",
@@ -20176,7 +20176,7 @@
     },
     {
       "path": "dist/graphics/motion/react/runtime/layout/kernel/measure/index.cjs",
-      "size": 832
+      "size": 1169
     },
     {
       "path": "dist/graphics/motion/react/runtime/layout/kernel/measure/index.d.ts",
@@ -20184,7 +20184,7 @@
     },
     {
       "path": "dist/graphics/motion/react/runtime/layout/kernel/measure/index.js",
-      "size": 945
+      "size": 1324
     },
     {
       "path": "dist/graphics/motion/react/runtime/layout/kernel/play/index.cjs",
@@ -20996,7 +20996,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.js",
-      "size": 7805
+      "size": 7580
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/rustic/index.cjs",
@@ -22164,7 +22164,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/index.cjs",
-      "size": 10234
+      "size": 9911
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/index.d.ts",
@@ -22172,7 +22172,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/index.js",
-      "size": 11003
+      "size": 10675
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/mobile-header/index.cjs",
@@ -31556,7 +31556,7 @@
     },
     {
       "path": "dist/rottay.css",
-      "size": 5467751
+      "size": 5470554
     },
     {
       "path": "dist/server.cjs",
@@ -31596,7 +31596,7 @@
     },
     {
       "path": "dist/styles.css",
-      "size": 5919506
+      "size": 5921713
     },
     {
       "path": "governance/graphics/licenses/phosphor-icons-react/index.md",
