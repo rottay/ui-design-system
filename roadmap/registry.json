@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-21",
+ "updated": "2026-09-22",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -6507,6 +6507,11 @@
      "at": "2026-09-21 21:42",
      "by": "kimi-dt",
      "note": "2026-09-21 kimi-dt (2): segundo residual vivo del re-anclaje — adapters/tests 'classic/surfaces.elevation-posture' (pin 3, medido 0, con asercion unaccounted>0 inamovible): f56020c58 (FAM-07 L5, revisado) dio a classic Box las lecturas var(--ds-elevation-1..5). WO-FAM-07 ya esta DONE, asi que el residual se registra aqui. Adjudicacion DT (recomendacion Fable adoptada): el adaptador es metadata del compilador que describe lo que el engine lee — la descripcion debe seguir a la realidad; flip de postura a mapped con evidencia read: en la fuente del adaptador. PENDIENTE DE RULING OWNER si la ley de engine congelado cubre tambien la metadata del adaptador; revertir las lecturas de Box (tocar el engine congelado) queda descartado como la peor opcion. Suite roja como senal viva mientras tanto (1 failed/274)."
+    },
+    {
+     "at": "2026-09-22 00:00",
+     "by": "kimi-dt",
+     "note": "2026-09-21 kimi-dt: full cert (verify:core) post-EMI-03 corre por primera vez con la build reparada y frena en engine-audit:check — TODO ajeno (Fable A/B byte-identico HEAD vs lote): (a) 30 counters 'no baseline' de los table modern parts + nav-link-anchor + class-window (archivos landed sin baselinar en engine-token-audit); (b) ceiling regression scale.fallbackParityViolations=9 (baseline=0) — requiere diagnostico, no bump ciego. Paquete de drenaje propio EN COLA tras value-safety: baselinar counters con atribucion por commit + diagnosticar los 9 fallback parity antes de cualquier re-pin. verify:core nunca llego a test:scripts/vitest/storybook — deuda preexistente, no regresion de hoy."
     }
    ]
   },
