@@ -5906,6 +5906,11 @@
      "at": "2026-09-22 11:42",
      "by": "kimi-dt",
      "note": "2026-09-22 kimi-dt: Lot A (pointerType) INTEGRADO en commit local 35218a760 (Fable ACCEPT-WITH-CHANGES resuelto: trim a ley de 2 lineas + 6 ceilings re-anclados por el residual exacto 1388B + 2 mutantes muertos). Semantica por modalidad: touch no latcha, keyboard es clase propia (el path del table kernel queda correcto por clasificador, no por suerte), mouse/pen byte-identico. 13/120 tests. Residual ruteado: sticky :hover nativo en tap → paquete template-skin (guard @media (hover), 310 sitios de idioma ya). Lot B (pisos) y kernel INV-08 en vuelo en paralelo; Lot C (gate touch-target + axe retarget) al integrar B."
+    },
+    {
+     "at": "2026-09-22 12:15",
+     "by": "kimi-dt",
+     "note": "2026-09-22 kimi-dt: Lot B (pisos) INTEGRADO en commit local 6e115b533 (Fable ACCEPT-WITH-CHANGES resuelto: caso 10 del tie (0,2,1) con drill en el texto real del artifact + mutaciones del filtro). Incidente registrado: git stash prohibido del writer barrio 3 lotes en vuelo, pop inmediato, SIN perdida (reflog HEAD@{0} 'reset: moving to HEAD' como evidencia; los 3 lotes verificados intactos por Fable). Residuales ruteados: (a) sonda browser forced-colors en el slot DT (medir el 1px ButtonBorder en 600+ sitios — sin reset global box-sizing, el borde suma caja); (b) censo de las 15 familias no-chart/mark con forced-color-adjust:none → paquete propio (un roster gate las enrojeceria hoy); (c) paquete trim de comentarios para la clase unlayered (headers de 22-35 lineas: pisos + precedentes arabic/touch-target); (d) rojos ajenos confirmados: channel-contract (--ds-shell-collapse-transition@xs, inputs limpios en HEAD) → owner de la proyeccion responsive; touch-targets (193<200 corpus floor / 72 violations) → owner del corpus floor. Regen vertical-css + primera corrida DS_CONTRAST_ARMS=1 en la ventana DT al integrar el kernel. Lot C espera el manifest (kernel en auditoria)."
     }
    ]
   },
