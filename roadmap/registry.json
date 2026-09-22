@@ -7156,6 +7156,11 @@
      "at": "2026-09-22 12:37",
      "by": "kimi-dt",
      "note": "2026-09-22 kimi-dt: kernel INTEGRADO en commit local 28ef8363e (Fable ACCEPT-WITH-CHANGES resuelto: PresenceList onExitComplete bajo reduce con red-before, blind-spot honesto a 11, termWeights medidos 57/38). 41 archivos: kernel 19 + motion-budget 3 + Arm A rule 2 + gates/baseline/changeset + regen suppliers. Ceremonia de integracion ya hecha en 264c717f2 (reseal hooks README docs 0dd195f60 + mock kanban 11/11). Ventana pesada en curso: build completo + vertical-css; despues los regens post-build que Fable listo (inventory baseline, dist stamp, cascade producers — aun nombran paths de flip-layout) y la live gate kernel-bundle sobre dist fresco. Residuales Fable al trail: (a) brazo unused de la facade dentro de LayoutGroup hace un getComputedStyle extra por commit; (b) readExitWindowMs duplica la logica inline de usePresence; (c) el selector de presence-item rompe con key que contenga comilla doble; (d) el brazo interpolate-size keyframea a auto (si la hoja fija size, el end frame es content size) — del lote de la sonda showroom; (e) pin por archivo para Exemption 7 (deuda transicional). Adopciones por handoff familiar: grid=FAM-12 tras FAM-08; overlays liberados; widget-board FLIP propio a FAM-13; alias retirement a paquete FAM-07; Collapse follow-on."
+    },
+    {
+     "at": "2026-09-22 12:43",
+     "by": "kimi-dt",
+     "note": "2026-09-22 kimi-dt: ventana pesada CERRADA — build completo verde de punta a punta (postbuild gates incluidas); kernel-bundle LIVE sobre dist fresco: gzip=4496B (delta +1865B sobre el seed 2631B), externals=[react, react/jsx-runtime], node_modules retenidos=0, 10 modulos kernel — la puerta de bytes del kernel queda verde en produccion; packinv re-seed atribuido (+124 entradas de la ola); cascade:producers sigue con su stack-overflow preexistente (deuda ajena registrada, no nueva). Regens committeados: fd4185f93 (hooks manifest + vertical css + base-env) y el packinv baseline. Arbol limpio. Lot C de INV-03 despachado a continuacion (manifest libre)."
     }
    ]
   },
