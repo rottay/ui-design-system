@@ -244,6 +244,26 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     ]),
   ],
   [
+    // The modern table's part kernel. Its `props` bag is the caller's own props
+    // with the interaction handlers composed in: `{ ...props, ...composed }`,
+    // where `props` is the declared-transparent argument and `composed` holds
+    // handler functions only. Neither spread can introduce paint the kernel
+    // owns, so the eight part components that spread `props` must not read as
+    // inline paint they do not author.
+    "components/primitives/display/table/engines/modern/parts/kernel/index",
+    new Map([
+      [
+        "usePartInteraction",
+        {
+          kind: "nonStylePropBag",
+          ownership: "zeroPaint",
+          nonStylePaths: new Set(["props"]),
+          transparentArgs: [{ index: 0, mode: "propBag" }],
+        },
+      ],
+    ]),
+  ],
+  [
     "foundation/tokens/ts/runtime/personality/index",
     new Map([
       [
@@ -766,7 +786,129 @@ function returnExpressionsForContract(node) {
   return returned;
 }
 
-function isProvenNonStylePropBag(node) {
+/** True when `scope` binds `name` anywhere other than `except`. */
+function redeclaresName(scope, name, except) {
+  let found = false;
+  function visit(candidate) {
+    if (found) return;
+    if (
+      candidate !== except &&
+      (ts.isVariableDeclaration(candidate) ||
+        ts.isBindingElement(candidate) ||
+        ts.isParameter(candidate) ||
+        ts.isFunctionDeclaration(candidate) ||
+        ts.isClassDeclaration(candidate)) &&
+      candidate.name &&
+      ts.isIdentifier(candidate.name) &&
+      candidate.name.text === name
+    ) {
+      found = true;
+      return;
+    }
+    ts.forEachChild(candidate, visit);
+  }
+  visit(scope);
+  return found;
+}
+
+/**
+ * The producer parameters a contract declares transparent, by name. A
+ * transparent argument is the CALLER's value travelling through the producer
+ * untouched, so the call site -- not this module -- owns whatever it carries.
+ * Re-marking a transparent argument reached by destructuring or property
+ * access is NOT implemented here; it is queued with the symmetric
+ * `kind: "style"` close. A parameter that is destructured rather
+ * than named, or whose spelling is rebound inside the producer, cannot be
+ * recognised at a spread and is therefore left out: the spread then fails closed.
+ */
+function transparentParameterNames(node, contract) {
+  const names = new Set();
+  if (!ts.isFunctionLike(node)) return names;
+  for (const transparent of contract?.transparentArgs ?? []) {
+    const parameter = node.parameters[transparent.index];
+    if (!parameter || !ts.isIdentifier(parameter.name)) continue;
+    if (redeclaresName(node, parameter.name.text, parameter)) continue;
+    names.add(parameter.name.text);
+  }
+  return names;
+}
+
+/**
+ * A reference to a local bag keeps it provably style-free only when it is the
+ * spread itself or a `bag.<key> = …` write with a static key that is not
+ * `style`. Anything else -- an alias, a computed write, the bag handed to a
+ * call that could mutate it -- invalidates a proof taken from the declaration.
+ */
+function isSafeLocalBagReference(identifier) {
+  const parent = identifier.parent;
+  if (!parent) return false;
+  if (ts.isSpreadAssignment(parent)) return true;
+  if (
+    (ts.isPropertyAccessExpression(parent) ||
+      ts.isElementAccessExpression(parent)) &&
+    parent.expression === identifier
+  ) {
+    const assignment = parent.parent;
+    if (
+      !assignment ||
+      !ts.isBinaryExpression(assignment) ||
+      assignment.left !== parent ||
+      assignment.operatorToken.kind !== ts.SyntaxKind.EqualsToken
+    ) {
+      return false;
+    }
+    const key = ts.isPropertyAccessExpression(parent)
+      ? parent.name.text
+      : staticString(parent.argumentExpression);
+    return key !== null && key !== "style";
+  }
+  return false;
+}
+
+/**
+ * A bag declared in this producer is pass-through when its declaration proves
+ * it free of `style` AND every later reference keeps it that way. The second
+ * half is not optional: a producer may build the bag as a literal and then
+ * assign onto it, so a proof read from the initializer alone would certify a
+ * shape that is not what the producer returns.
+ */
+function isProvenNonStyleLocalBag(name, context, seen) {
+  const scope = context.functionNode ?? context.sourceFile;
+  if (!scope) return false;
+  const declarations = localDeclarationsNamed(scope, name);
+  if (declarations.length !== 1) return false;
+  if (!isProvenNonStyleBinding(name, context, seen)) return false;
+  const declaration = declarations[0];
+  let safe = true;
+  function visit(candidate) {
+    if (!safe) return;
+    if (ts.isIdentifier(candidate) && candidate.text === name) {
+      if (candidate !== declaration.name && !isSafeLocalBagReference(candidate)) {
+        safe = false;
+      }
+      return;
+    }
+    ts.forEachChild(candidate, visit);
+  }
+  visit(scope);
+  return safe;
+}
+
+/**
+ * A spread inside a certified prop bag is pass-through, not an unreadable
+ * hazard, when the value it spreads is either an argument the contract declares
+ * transparent or a local bag this module proves style-free. Every other spread
+ * stays a hazard: the certification cannot see what it carries.
+ */
+function isPassThroughSpread(property, context, seen) {
+  if (!context) return false;
+  const expression = unwrapExpression(property.expression);
+  if (!expression || !ts.isIdentifier(expression)) return false;
+  if (context.transparentParams?.has(expression.text)) return true;
+  return isProvenNonStyleLocalBag(expression.text, context, seen);
+}
+
+function isProvenNonStylePropBag(node, context, seen = new Set()) {
   const expression = unwrapExpression(node);
   if (!expression) return false;
   if (
@@ -778,13 +920,16 @@ function isProvenNonStylePropBag(node) {
   }
   if (ts.isConditionalExpression(expression)) {
     return (
-      isProvenNonStylePropBag(expression.whenTrue) &&
-      isProvenNonStylePropBag(expression.whenFalse)
+      isProvenNonStylePropBag(expression.whenTrue, context, seen) &&
+      isProvenNonStylePropBag(expression.whenFalse, context, seen)
     );
   }
   if (!ts.isObjectLiteralExpression(expression)) return false;
   for (const property of expression.properties) {
-    if (ts.isSpreadAssignment(property)) return false;
+    if (ts.isSpreadAssignment(property)) {
+      if (isPassThroughSpread(property, context, seen)) continue;
+      return false;
+    }
     if (!property.name) return false;
     const name = staticPropertyName(property.name);
     if (name === null || name === "style") return false;
@@ -872,7 +1017,7 @@ function isProvenNonStyleValue(node, context, seen = new Set()) {
     );
   }
   if (ts.isObjectLiteralExpression(expression)) {
-    return isProvenNonStylePropBag(expression);
+    return isProvenNonStylePropBag(expression, context, nextSeen);
   }
   if (ts.isIdentifier(expression)) {
     return isProvenNonStyleBinding(expression.text, context, nextSeen);
@@ -924,7 +1069,7 @@ function returnedExpressionHasPath(node, path, context) {
       returnedExpressionHasPath(expression.whenFalse, path, context)
     );
   }
-  if (path.length === 0) return isProvenNonStylePropBag(expression);
+  if (path.length === 0) return isProvenNonStylePropBag(expression, context);
   if (!ts.isObjectLiteralExpression(expression)) return false;
   const property = expression.properties.find(
     (candidate) =>
@@ -949,13 +1094,14 @@ function returnedExpressionHasPath(node, path, context) {
   return false;
 }
 
-function hasNonStylePropBagHazard(node) {
+function hasNonStylePropBagHazard(node, context) {
   let hazard = false;
   function visit(candidate) {
     if (hazard) return;
     if (ts.isObjectLiteralExpression(candidate)) {
       for (const property of candidate.properties) {
         if (ts.isSpreadAssignment(property)) {
+          if (isPassThroughSpread(property, context, new Set())) continue;
           hazard = true;
           return;
         }
@@ -1019,16 +1165,22 @@ function certifiedProducerContract(entry, fileName) {
 
   let valid = true;
   if (contract.kind === "nonStylePropBag") {
+    const context = {
+      sourceFile: symbol.sourceFile,
+      functionNode: symbol.node,
+      transparentParams: transparentParameterNames(symbol.node, contract),
+    };
     const returned = returnExpressionsForContract(symbol.node);
     valid =
       returned.length > 0 &&
-      !hasNonStylePropBagHazard(symbol.node) &&
+      !hasNonStylePropBagHazard(symbol.node, context) &&
       [...contract.nonStylePaths].every((path) =>
         returned.every((value) =>
-          returnedExpressionHasPath(value, path === "" ? [] : path.split("."), {
-            sourceFile: symbol.sourceFile,
-            functionNode: symbol.node,
-          })
+          returnedExpressionHasPath(
+            value,
+            path === "" ? [] : path.split("."),
+            context
+          )
         )
       );
   } else if (contract.ownership === "zeroPaint") {
@@ -3033,6 +3185,16 @@ function countScopedStylePaintInFile(text, fileName) {
         contract?.kind === "nonStylePropBag" &&
         isCertifiedNonStylePropBagEntry(callable.entry)
       ) {
+        // A declared-transparent argument travels through the bag untouched,
+        // so the caller still owns whatever it carries and is marked here.
+        for (const transparent of contract.transparentArgs ?? []) {
+          if (expression.arguments[transparent.index]) {
+            markExpression(
+              expression.arguments[transparent.index],
+              transparent.mode
+            );
+          }
+        }
         return;
       }
       if (!isCertifiedProducerEntry(callable?.entry)) {

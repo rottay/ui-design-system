@@ -175,6 +175,148 @@ test('PLANT: a certified producer whose module moves without a registry re-key r
 });
 
 // ---------------------------------------------------------------------------
+// Pass-through spreads: a certified prop bag may hand back a transparent
+// argument and a locally proven bag without becoming unreadable
+// ---------------------------------------------------------------------------
+
+const TABLE_PARTS = 'src/components/primitives/display/table/engines/modern/parts';
+const PART_KERNEL = `${TABLE_PARTS}/kernel`;
+const BODY_ROW = `${TABLE_PARTS}/presentation/body-row/index.tsx`;
+const KERNEL_RETURN =
+  '  return { state: stamped ? state : {}, props: { ...props, ...composed } as P };';
+
+/** Copies the part kernel (optionally under a new owner) plus the row consumer, edits the kernel, counts the row. */
+function countBodyRowWithKernel(edit, kernelOwner = PART_KERNEL) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'paint-inline-part-kernel-'));
+  try {
+    const core = join(sandbox, 'packages/core');
+    cpSync(join(CORE, BEHAVIOR), join(core, BEHAVIOR), { recursive: true });
+    cpSync(join(CORE, PART_KERNEL), join(core, kernelOwner), { recursive: true });
+    const kernelFile = join(core, kernelOwner, 'index.ts');
+    writeFileSync(kernelFile, edit(readFileSync(kernelFile, 'utf8')));
+    const consumer = join(core, BODY_ROW);
+    mkdirSync(dirname(consumer), { recursive: true });
+    const source = readFileSync(join(CORE, BODY_ROW), 'utf8').replace(
+      "from '../../kernel'",
+      `from '@/${kernelOwner.slice('src/'.length)}'`,
+    );
+    assert.match(source, /from '@\//u, 'the consumer import must be rewritten to the sandbox owner');
+    writeFileSync(consumer, source);
+    return countArc09PaintInFile(source, consumer);
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+test('the part kernel really returns a transparent argument beside a local handler bag', () => {
+  const kernel = readFileSync(join(CORE, PART_KERNEL, 'index.ts'), 'utf8');
+  assert.ok(kernel.includes(KERNEL_RETURN), 'the drills below edit the shipped return statement');
+  assert.match(kernel, /export function usePartInteraction<P extends PartInteractionHandlers>\(\n  props: P,/u);
+  assert.match(readFileSync(join(CORE, BODY_ROW), 'utf8'), /\{\.\.\.props\}/u);
+});
+
+test('CONTROL: the eight table part components spread the kernel bag at zero inline paint', () => {
+  for (const part of [
+    'body-cell', 'body-row', 'expand-button', 'field',
+    'header-cell', 'pagination-button', 'resize-handle', 'selection-control',
+  ]) {
+    const file = join(CORE, TABLE_PARTS, 'presentation', part, 'index.tsx');
+    const source = readFileSync(file, 'utf8');
+    assert.match(source, /usePartInteraction\(/u, `${part} must really use the kernel`);
+    assert.equal(countArc09PaintInFile(source, file), 0, part);
+  }
+  assert.equal(countBodyRowWithKernel((text) => text), 0);
+});
+
+test('PLANT: a spread of a bag that is neither transparent nor locally proven stays a hazard', () => {
+  const count = countBodyRowWithKernel((text) => {
+    const planted = text.replace(
+      KERNEL_RETURN,
+      KERNEL_RETURN.replace('...composed }', '...composed, ...externalBag() }'),
+    );
+    assert.notEqual(planted, text, 'the plant must edit the real return statement');
+    return `import { externalBag } from './bag';\n${planted}`;
+  });
+  assert.equal(count, 1, `expected the unreadable spread to leave the row opaque, got ${count}`);
+});
+
+test('PLANT: a style key added to the certified bag is counted at the consumer spread', () => {
+  const count = countBodyRowWithKernel((text) => {
+    const planted = text.replace(
+      KERNEL_RETURN,
+      KERNEL_RETURN.replace(
+        '...composed }',
+        "...composed, style: { color: 'var(--ds-color-primary)' } }",
+      ),
+    );
+    assert.notEqual(planted, text);
+    return planted;
+  });
+  assert.ok(count > 0, `expected an undeclared style key to be counted, got ${count}`);
+});
+
+test('PLANT: a `style` written onto the local bag AFTER its literal is counted at the consumer spread', () => {
+  // The proof that admits `...composed` is read from its declaration, so a
+  // later mutation must invalidate it -- this hook does assign onto that bag.
+  const count = countBodyRowWithKernel((text) => {
+    const planted = text.replace(
+      KERNEL_RETURN,
+      `  composed.style = { color: 'var(--ds-color-primary)' } as never;\n${KERNEL_RETURN}`,
+    );
+    assert.notEqual(planted, text);
+    return planted;
+  });
+  assert.ok(count > 0, `expected a post-literal style mutation to be counted, got ${count}`);
+});
+
+test('PLANT: a computed write onto the local bag fails closed', () => {
+  const count = countBodyRowWithKernel((text) => {
+    const planted = text.replace(
+      KERNEL_RETURN,
+      `  (composed as Record<string, unknown>)[String(stamped)] = 1;\n${KERNEL_RETURN}`,
+    );
+    assert.notEqual(planted, text);
+    return planted;
+  });
+  assert.equal(count, 1, `expected an unreadable key to leave the row opaque, got ${count}`);
+});
+
+test('CONTROL: a non-style write onto the local bag keeps it pass-through', () => {
+  const count = countBodyRowWithKernel((text) => {
+    const planted = text.replace(
+      KERNEL_RETURN,
+      `  composed.onKeyUp = undefined;\n${KERNEL_RETURN}`,
+    );
+    assert.notEqual(planted, text);
+    return planted;
+  });
+  assert.equal(count, 0, `a handler write must not invalidate the proof, got ${count}`);
+});
+
+test('PLANT: the part kernel moved off its registry key reads as opaque paint again', () => {
+  const count = countBodyRowWithKernel((text) => text, `${TABLE_PARTS}/relocated-kernel`);
+  assert.equal(count, 1, `expected the unkeyed kernel to leave the row opaque, got ${count}`);
+});
+
+test('the five local `use*Button` hooks of the same shape need no registry row', () => {
+  // They are module-private, so the counter resolves them in the consuming
+  // file and follows their spread back to the component's own parameter.
+  for (const owner of [
+    'src/components/primitives/feedback/modal/engines/modern/index.tsx',
+    'src/components/primitives/overlay/tour/engines/modern/index.tsx',
+    'src/components/primitives/inputs/time-picker/engines/modern/index.tsx',
+    'src/components/primitives/inputs/transfer/engines/modern/index.tsx',
+    'src/components/primitives/inputs/date-picker/engines/modern/index.tsx',
+  ]) {
+    const file = join(CORE, owner);
+    const source = readFileSync(file, 'utf8');
+    assert.match(source, /^function use[A-Za-z]*Button/mu, `${owner} must really declare the hook`);
+    assert.match(source, /\.\.\.rest,/u);
+    assert.equal(countArc09PaintInFile(source, file), 0, owner);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // The certified registry must stay bound to the tree it certifies
 // ---------------------------------------------------------------------------
 
