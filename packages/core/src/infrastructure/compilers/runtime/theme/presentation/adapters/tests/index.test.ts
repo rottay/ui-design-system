@@ -159,6 +159,17 @@ export function countComponentReads(engine: MeasuredEngine, channel: string): nu
   ).length;
 }
 
+/** The engine's own files, source-relative, whose text reads any of the channels. */
+export function readersOf(engine: MeasuredEngine, channels: readonly string[]): readonly string[] {
+  const read = channels.map((channel) => new RegExp(`var\\(\\s*${escape(channel)}\\s*[,)]`));
+  const own = files.filter((file) => !isArtifact(file) && engineOf(file) === engine);
+  if (engine === "classic") own.push(ANTD_BRIDGE);
+  return own
+    .filter((file) => read.some((pattern) => pattern.test(text.get(file) ?? "")))
+    .map((file) => file.slice(SRC_ROOT.length + 1))
+    .sort();
+}
+
 export function carriesAttribute(engine: MeasuredEngine, attribute: string): boolean {
   return surfaceText[engine].includes(attribute);
 }
@@ -375,6 +386,22 @@ describe("`native` names exactly what the engine's own surface consumes", () => 
         }
       });
 
+      it(`${engine}/${id}: reads found on no stylesheet are scoped to their component readers`, () => {
+        const direct = cell.evidence.read;
+        if (direct.length > 0 && direct.every((channel) => countCssReads(engine, channel) === 0))
+          expect(cell.evidence.scope?.surface).toBe("component");
+      });
+
+      if (cell.evidence.scope) {
+        const scope = cell.evidence.scope;
+        it(`${engine}/${id}: the scope names exactly the files that read it, and no stylesheet does`, () => {
+          const declared = DECLARED.get(id)?.channels ?? [];
+          expect([...scope.readers].sort()).toEqual(readersOf(engine, declared));
+          for (const channel of declared) expect(countCssReads(engine, channel)).toBe(0);
+          expect(scope.reason.length).toBeGreaterThan(20);
+        });
+      }
+
       it(`${engine}/${id}: the engine consumes something of it`, () => {
         const carried = (cell.evidence.carriers ?? []).length;
         const attributes = (cell.evidence.attributes ?? []).length;
@@ -495,10 +522,12 @@ describe("the measured matrix, so a relabelling cannot pass unnoticed", () => {
     );
     expect(cells).toHaveLength(66);
     const count = (posture: EnginePosture) => cells.filter((value) => value === posture).length;
-    expect(count("native")).toBe(30);
+    // 2026-09-22: classic/surfaces.elevation-posture measured native, scoped to
+    // the classic Box (3 of 3 declared channels read, 0 unaccounted), 30/24 -> 31/23.
+    expect(count("native")).toBe(31);
     expect(count("mapped")).toBe(3);
     expect(count("invariant")).toBe(9);
-    expect(count("unsupported")).toBe(24);
+    expect(count("unsupported")).toBe(23);
     expect(count("native") + count("mapped") + count("invariant") + count("unsupported")).toBe(66);
   });
 

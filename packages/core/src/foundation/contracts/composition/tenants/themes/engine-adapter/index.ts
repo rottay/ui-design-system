@@ -49,6 +49,17 @@ export interface EngineChannelFamily {
   readonly reason: string;
 }
 
+/**
+ * A `native` read that rests on named component readers alone, not on the
+ * engine's stylesheets. `readers` is the exact set of engine files that read a
+ * declared channel, so the claim cannot widen past the components that paint it.
+ */
+export interface EngineChannelScope {
+  readonly surface: "component";
+  readonly readers: readonly string[];
+  readonly reason: string;
+}
+
 /** `native`: the engine's own surface reads these channels or attributes. */
 export interface EngineChannelEvidence {
   readonly kind: "channels";
@@ -56,6 +67,7 @@ export interface EngineChannelEvidence {
   readonly carriers?: readonly EngineChannelCarrier[];
   readonly attributes?: readonly string[];
   readonly family?: EngineChannelFamily;
+  readonly scope?: EngineChannelScope;
 }
 
 /** `mapped`: the projection carries the axis into the library's own vocabulary. */

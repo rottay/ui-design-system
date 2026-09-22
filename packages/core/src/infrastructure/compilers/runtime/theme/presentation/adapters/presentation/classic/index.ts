@@ -233,12 +233,16 @@ export const classicThemeAdapter = defineEngineAdapter({
       },
     },
     "surfaces.elevation-posture": {
-      posture: "unsupported",
+      posture: "native",
       evidence: {
-        kind: "absent",
-        unaccounted: 3,
-        reason:
-          "the classic surface reads --ds-shadow-{sm,md,lg}, which alias the elevation ladder only in the default theme: every first-party artifact redeclares them as literals and evnto emits no elevation channel at all, so no total mapping exists",
+        kind: "channels",
+        read: ["--ds-elevation-1", "--ds-elevation-2", "--ds-elevation-3"],
+        scope: {
+          surface: "component",
+          readers: ["components/primitives/layout/box/engines/classic/index.tsx"],
+          reason:
+            "only the classic Box reads the ladder, inline through CLASSIC_BOX_SHADOWS when its shadow prop is set; classic stylesheets read none of it, and the --ds-shadow-{sm,md,lg} readers (message, notification, image, tenant-preview) are not claimed because a tenant surfaces.shadows or token override severs that alias",
+        },
       },
     },
     "surfaces.effect-intensity": {

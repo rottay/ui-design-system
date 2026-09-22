@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "1d91eb6ead68664d74c1ed33b0a5938a4c5d6d79dc2a471243a837fe84a4e8c4",
+    "authorityDigest": "ddc110c22f5b5a5a676c80d0e78e1f3322ce90d6b60a84c853d4961f5245aab2",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "cbd580f3ef2b599dfa086919b0d6332f604f80dd",
+    "documentationRevision": "636cd2d1032f62ca538bd9e150b8150cdf5b203c",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -178,8 +178,8 @@
           "documentation-seal",
           "vertical-facts"
         ],
-        "bytes": 19266,
-        "sha256": "ab45391282cd46a076187a6d9fc0a148293fa98ec3227bacd38132bcafd3c226"
+        "bytes": 19395,
+        "sha256": "2e392bdf570f8aa28548903e85c151ec549625f28014d1a98515c901343b4295"
       },
       {
         "path": "docs-engineering/engineering/design-system/runtime/skins/data-part-contracts/README.md",
@@ -222,8 +222,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 25539,
-        "sha256": "d84afbd416f87da3cd6c6d938aaffe946abf6c407580841d4957166030f2ef44"
+        "bytes": 25678,
+        "sha256": "fa47790baf7e215bb000b1089c1c4812802ae4201dbe824b0aa383f6074b0f42"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -324,7 +324,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "7308614d8bb418a14ef630ff8942f4bb1114fe76b14034c49f9eef79358dc789"
+        "sha256": "9d46828ddf634031a1cb0ebb7d802cfadd85c7978711d7d9407a54f8497fcbf5"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
@@ -2713,8 +2713,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 63559,
-        "sha256": "4c8e4cee2538ff59cd4c56f8b03e8e4d75b7ea007991a0eabfc7169f2873b7b4"
+        "bytes": 63575,
+        "sha256": "99f4cc000d5329ebfe281a142252df42becd4d57d009c1fea513acbfa6fd0e81"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/widget-board/engines/modern/index.tsx",
@@ -2821,6 +2821,14 @@
         ],
         "bytes": 22733,
         "sha256": "86143d77d1a7b05b807c127acc312bd60b4b111ebbd3ce7522d248e13835434b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/patterns/data/widget-board/tests/WidgetBoard.flip-timing.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 4863,
+        "sha256": "588a0f18f510ecd3f158bed83c4b9aab5700d95d9c052e6016278f654680b6a0"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/widget-board/tests/WidgetBoard.layout.test.tsx",
@@ -24820,8 +24828,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 6616,
-        "sha256": "53d752465bce9aecb988ea928c0a2091d3730ccb75337cb110e228ad7557839d"
+        "bytes": 7040,
+        "sha256": "fcc80c54b51712dfc98efba4745c7a634815d07a193b0271440e7bea56f27e2e"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/engine-adapter/tests/index.test.ts",
@@ -36021,8 +36029,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 2526,
-        "sha256": "4a7a928cf9c19133f808afee92e5017a3dce551aeff2ebd31684aa960e2e9969"
+        "bytes": 3409,
+        "sha256": "3cb44a68ef19a57ffbeb6ff294c9873014c82acd46c0ffcc3b2b4d4d35773327"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/layout/kernel/play/index.ts",
@@ -37151,8 +37159,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 11716,
-        "sha256": "049c13cc414384a8e0b0fac71a70027e469cade96297d0e7d9c4d0d7b7719e71"
+        "bytes": 11987,
+        "sha256": "bdd025ad2565a386bfae44e69902d9a5c2d9c10e27e49dd12691a04b56d0128f"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts",
@@ -37187,8 +37195,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 22141,
-        "sha256": "e2c60ca56baa2742029a257c423c9968bdecdbf603d8f98b33ad96108b7a6e8e"
+        "bytes": 23710,
+        "sha256": "99e7b1686d2cac0813708e289f670787912176b95d2c751dc08d5755aa8390b2"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/tests/projection.test.ts",
@@ -44920,6 +44928,42 @@
         "sha256": "9f74fd471f095691045ac045a92aecaaefdce8bb6dd3127479b172aaef4c9632"
       },
       {
+        "path": "ui-design-system/packages/showroom/src/app/probe/motion-budget/[scene]/page.tsx",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 545,
+        "sha256": "1d0e6e65079442e40a345419b854ec39b7b041d826001873a87d6c057b259357"
+      },
+      {
+        "path": "ui-design-system/packages/showroom/src/app/probe/motion-budget/layout.tsx",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 427,
+        "sha256": "c2268932f3c0238c0a7598f2ea4b5f820cc7e6442a90fd6a120a212708204701"
+      },
+      {
+        "path": "ui-design-system/packages/showroom/src/app/probe/motion-budget/roster/index.ts",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 809,
+        "sha256": "14cb8eb64936f11d913ab9e84a5da592a8dc740da28c8f7e8855f1d6fde64f2d"
+      },
+      {
+        "path": "ui-design-system/packages/showroom/src/app/probe/motion-budget/scenes/index.tsx",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 5718,
+        "sha256": "7d34312c55c27fa173edf3a994bd2a1b48f2d874cf59141e15cf5343307dcbf3"
+      },
+      {
         "path": "ui-design-system/packages/showroom/src/app/probe/page.tsx",
         "roles": [
           "claim-census",
@@ -46330,7 +46374,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "1d91eb6ead68664d74c1ed33b0a5938a4c5d6d79dc2a471243a837fe84a4e8c4"
+    "digest": "ddc110c22f5b5a5a676c80d0e78e1f3322ce90d6b60a84c853d4961f5245aab2"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3351 counters; 3256 completed zeros locked exactly; 85 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -47890,7 +47934,7 @@
       },
       "engines": {
         "path": "docs-engineering/engineering/design-system/runtime/engines/README.md",
-        "sha256": "ab45391282cd46a076187a6d9fc0a148293fa98ec3227bacd38132bcafd3c226"
+        "sha256": "2e392bdf570f8aa28548903e85c151ec549625f28014d1a98515c901343b4295"
       }
     }
   },
@@ -119592,7 +119636,7 @@
           "includeTests": false
         }
       ],
-      "typescriptFiles": 2693,
+      "typescriptFiles": 2697,
       "cssRoots": [
         "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components",
         "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines"
@@ -119611,8 +119655,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "909eefec4089c732346e095c47c8b670142be6d2de4f0e80c673fff049c3f8b2",
-      "909eefec4089c732346e095c47c8b670142be6d2de4f0e80c673fff049c3f8b2"
+      "2c7af5fbf4ad631c1a04d2c1c6dc7514fe4e509c8f4eaec88685b29d5266c34a",
+      "2c7af5fbf4ad631c1a04d2c1c6dc7514fe4e509c8f4eaec88685b29d5266c34a"
     ],
     "agree": true
   }
