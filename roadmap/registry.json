@@ -6490,6 +6490,16 @@
      "at": "2026-09-21 20:18",
      "by": "kimi-dt",
      "note": "2026-09-21 kimi-dt: ROJO PRE-EXISTENTE localizado y atribuido — tests/architecture/theme-lowering-single-door: 5 failed / 59 passed en HEAD (85bba5c59), reproducido por el writer CAT-04 y verificado por el DT con git archive sobre HEAD prístino. Bisección: VERDE en f61a9da9f (64/64), ROJO (4 failed) desde 9d7294e33 (D6-CORE-01 introdujo 'target.baseline ?? baselineFor' en facade/runtime/compile/index.ts sin re-anclar los censos de la suite: brazos de arity de resolveTheme y de unicidad de admission stations); un quinto brazo derivó entre 8f270ff5c y HEAD. La suite no corre en las ventanas focales habituales — quedó roja sin dueño desde el 2026-09-15. Reparación acotada ruteada: re-anclar los censos de la suite a la realidad post-D6-CORE-01 CON atribución por brazo (el cambio de D6-CORE-01 fue revisado; la suite debe seguirlo, no revertirlo). Paquete propio con revisión Fable; NO bloquea CAT-04 (delta del lote = 0). Mismo tratamiento para los 8 rojos A/B del sweep del writer (emission grammar safe-area channels + provenance variable counts + sentinels de drift): atribuir en el mismo paquete o nombrar el lane dueño."
+    },
+    {
+     "at": "2026-09-21 21:41",
+     "by": "kimi-dt",
+     "note": "2026-09-21 kimi-dt: el rojo single-door quedo RESUELTO por el paquete de re-anclaje (a8786b23c, Fable ACCEPT; suite 65/65 en el arbol integrado). NUEVO residual con owner: admitCssVariables descarta 3 canales compilados (--ds-action-dock-safe-area-{top,bottom} por env() fuera de ALLOWED_VALUE_FUNCTIONS; --ds-workspace-shell-orbital-mask por 584 chars > 512) — nunca llegaron al CSS shippeado; la suite de emission queda ROJA como senal viva hasta el paquete de reparacion. Ruling de forma (Fable, adoptado): admitir env() con gramatica limitada a safe-area-inset-* (no una entrada generica de allowlist); para la mascara, sospechar primero del deriver (584 chars) antes de subir el presupuesto 512. Owner: kernel value-grammar (linea S19-A01), paquete acotado Opus + revision Fable, con la suite de emission como oraculo de aceptacion."
+    },
+    {
+     "at": "2026-09-21 21:42",
+     "by": "kimi-dt",
+     "note": "2026-09-21 kimi-dt (2): segundo residual vivo del re-anclaje — adapters/tests 'classic/surfaces.elevation-posture' (pin 3, medido 0, con asercion unaccounted>0 inamovible): f56020c58 (FAM-07 L5, revisado) dio a classic Box las lecturas var(--ds-elevation-1..5). WO-FAM-07 ya esta DONE, asi que el residual se registra aqui. Adjudicacion DT (recomendacion Fable adoptada): el adaptador es metadata del compilador que describe lo que el engine lee — la descripcion debe seguir a la realidad; flip de postura a mapped con evidencia read: en la fuente del adaptador. PENDIENTE DE RULING OWNER si la ley de engine congelado cubre tambien la metadata del adaptador; revertir las lecturas de Box (tocar el engine congelado) queda descartado como la peor opcion. Suite roja como senal viva mientras tanto (1 failed/274)."
     }
    ]
   },
@@ -7163,7 +7173,7 @@
    "lane": "catalog-door",
    "order": 4,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-CAT-03",
     "WO-CON-06"
@@ -7186,7 +7196,9 @@
      "by": "kimi-dt",
      "note": "2026-09-21 kimi-dt: lote de implementacion INTEGRADO (90b75bfd5) sobre el contrato adoptado (debrief v4). Fable ACCEPT-WITH-CHANGES del lote (receipt-cat04-lot-review-fable.json) → correctivo (F1: razones D-28 clavadas por vertical EXCLUIDA, requeridas por cada una, espejo en la gate con ROSTER_UNREADABLE fail-closed; changeset minor con contract-diff) → confirmacion Fable con un defecto (mi narrowing del barrel rompio un import de test) → reparado como prescrito (suites ingress 103/103, typecheck:tests 0). Ruling DT: la via D7 publicaba admitStyle/styleThemePatch/StyleAdmission/migrateDocumentV2ToV3 en la raiz '.' via star-export — el barrel hop quedo SOLO con ThemeStyleValidationError; la maquinaria de estilos NO es superficie publica (el contrato adoptado publica solo la referencia, su refusal y el transporte v3 en ./server). Docs sibling: docs-engineering a971677. Residuales registrados: ThemeStyleId es string (membership runtime-only); clearance fail-open con allowAnatomyVariants ausente (sin camino vivo hoy); digest sobre document.decisions bajo el documento cerrado de una clave. ABIERTA: la aceptacion exige single-door verde y la suite esta roja desde 9d7294e33 (pre-existente, delta cero del lote, paquete de re-anclaje despachado) — el cierre espera ese re-anclaje."
     }
-   ]
+   ],
+   "doneAt": "2026-09-21",
+   "evidence": "2026-09-21 close (kimi-dt): the adopted contract (debrief v4, sha256 e554df453ac2ec57, Kimi+Fable same-text ACCEPT after four convergent rounds) is implemented at 90b75bfd5 with the F1 corrective (D-28 reasons keyed by the excluded vertical, mirrored in the gate) and the DT barrel narrowing (no style machinery on the root surface). Every acceptance arm measured green on the integrated tree: I1-I2 unknown/inline/forgery refused by name on all four doors byte-identically; I3 Standard/Pro byte-equal with the non-vacuity pair; I4 Pro direct-edit refused for Standard with a style present; I5 explicit decisions and profile expansions beat style leaves with provenance kept (the ordering drill proven red when the underlay moves); I7 schema --check no-diff + single-listing green + 29 pinned as a literal; I8 existing tenants byte-preserved (tenant-theme-fixtures no-diff); I9 old/new reader rollout with the executed per-door texts; single-door green at 65/65 after the attributed re-anchor a8786b23c (the acceptance clause it gates was the last open arm). Review chain: Fable lot audit ACCEPT-WITH-CHANGES -> corrective -> confirmation (receipt-cat04-lot-review-fable.json, receipt-cat04-corrective-confirm-fable.json). Registered residuals: ThemeStyleId runtime-only membership; clearance fail-open on absent allowAnatomyVariants (no live path); digest over the closed one-key document; Q3/Q4 owner-flagged (sidebar-tone brand; exclusion mechanism empty at launch). Docs: docs-engineering a971677. Changeset minor with the full contract-diff incl. the D9 v3 narrowing."
   },
   {
    "id": "WO-DER-09",
