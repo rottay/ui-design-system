@@ -13,19 +13,26 @@ import {
   ADMISSIBLE_IMPACT,
   caseAxis,
   CASE_LIST_FILES,
+  cellKey,
+  declaredCells,
   GROUNDS,
   INADMISSIBLE_IMPACT,
   intersect,
   ledgerKey,
   ledgerProblems,
   measuredCases,
+  MIN_PAINTED_NODES,
+  PAINTED_FLOORS,
   parseCaseList,
+  publication,
   quotedAxisFigures,
   readLedger,
   SCENE_CASES,
   scenePath,
   SCENES,
+  type Finding,
   type Ledger,
+  type LedgerEntry,
 } from './baseline';
 
 // ---------------------------------------------------------------------------
@@ -56,6 +63,17 @@ test.describe('route-level axe ledger — laws', () => {
           `/probe/ds-reference/${ground}/${scene} has no page.tsx`,
         ).toBe(true);
       }
+    }
+  });
+
+  test('a per-scene painted floor is an exact measured exception, never a loosening', () => {
+    expect(MIN_PAINTED_NODES).toBe(5);
+    for (const [scene, { nodes, why }] of Object.entries(PAINTED_FLOORS)) {
+      expect(SCENES, scene).toContain(scene);
+      // Parameterized scenes pick a representative case instead of a lower floor.
+      expect(SCENE_CASES[scene], scene).toBeUndefined();
+      expect(Number.isInteger(nodes) && nodes >= 1 && nodes < MIN_PAINTED_NODES, scene).toBe(true);
+      expect(why.trim().length, scene).toBeGreaterThan(0);
     }
   });
 
@@ -265,6 +283,151 @@ test.describe('route-level axe ledger — laws', () => {
     expect(intersect(recorded, measuredNow)).toEqual({ b: 20 });
   });
 
+  test.describe('coverage — only the complete matrix publishes', () => {
+    const debt = (scene: string): LedgerEntry => ({
+      rule: 'color-contrast',
+      impact: ADMISSIBLE_IMPACT,
+      help: 'Elements must meet minimum color contrast ratio thresholds',
+      scene,
+      ground: 'bithire',
+      target: `.${scene}-planted`,
+      disposition: 'routed',
+      owner: `the ${scene} scene owner, named for this fixture`,
+      wo: 'WO-INV-03',
+    });
+    const keyOf = (entry: LedgerEntry) => ledgerKey(entry.rule, entry.scene, entry.ground, entry.target);
+    const finding = ({ disposition: _d, owner: _o, wo: _w, ...rest }: LedgerEntry): Finding => rest;
+    const A = debt('field');
+    const B = debt('control');
+    const withDebt = (): Ledger => ({
+      ...readLedger(ledgerPath),
+      entries: { [keyOf(A)]: A, [keyOf(B)]: B },
+    });
+    const cellsOf = (scene: string) => GROUNDS.map((ground) => cellKey(scene, ground));
+    type PlanInput = Parameters<typeof publication>[0];
+    const plan = (input: Omit<PlanInput, 'ledger' | 'generatedAt' | 'blocking'> & Partial<PlanInput>) =>
+      publication({ ledger: withDebt(), generatedAt: 'fixture', blocking: [], ...input });
+
+    test("DRILL (a): the audit's reproduction — measuring only A refuses the update and keeps B", () => {
+      const ledger = withDebt();
+      const result = plan({
+        ledger,
+        measured: { [keyOf(A)]: finding(A) },
+        coverage: { completed: cellsOf('field'), failed: {} },
+        update: true,
+      });
+      expect(result.refusal).toMatch(/AXE_UPDATE_BASELINE=1 refused/);
+      expect(result.refusal).toContain(`  ${cellKey('control', 'bithire')}\n`);
+      expect(result.ledger, 'a partial run produced a ledger to write').toBeNull();
+      expect(result.report, 'a partial run produced the canonical report').toBeNull();
+      expect(Object.keys(ledger.entries)).toEqual([keyOf(A), keyOf(B)]);
+      // The audit's second leg: an empty measurement erased both.
+      const empty = plan({ ledger, measured: {}, coverage: { completed: [], failed: {} }, update: true });
+      expect(empty.ledger).toBeNull();
+      expect(empty.verdict.missing).toHaveLength(declaredCells().length);
+    });
+
+    test('DRILL (b): a failed or timed-out cell refuses, names the cell, and preserves its debt', () => {
+      const all = declaredCells();
+      const lost = cellKey('control', 'bithire');
+      const result = plan({
+        measured: { [keyOf(A)]: finding(A) },
+        coverage: { completed: all.filter((cell) => cell !== lost), failed: { [lost]: 'timedOut' } },
+        update: true,
+      });
+      expect(result.verdict.failed).toEqual([`${lost} (timedOut)`]);
+      expect(result.verdict.missing).toEqual([]);
+      expect(result.refusal).toContain(`${lost} (timedOut)`);
+      expect(result.ledger).toBeNull();
+      // A cell listed as BOTH completed and failed (a retry) is still a failure.
+      const retried = plan({
+        measured: { [keyOf(A)]: finding(A) },
+        coverage: { completed: all, failed: { [lost]: 'failed' } },
+        update: true,
+      });
+      expect(retried.verdict.complete).toBe(false);
+      expect(retried.ledger).toBeNull();
+    });
+
+    test('DRILL (c): a focal selection or a restarted worker never reaches the update path', () => {
+      // `-g field` measures two cells; a worker restarted after a failure sees only the tail.
+      for (const completed of [cellsOf('field'), declaredCells().slice(10)]) {
+        const result = plan({ measured: {}, coverage: { completed, failed: {} }, update: true });
+        expect(result.ledger).toBeNull();
+        expect(result.report).toBeNull();
+        expect(result.refusal).toMatch(/refused/);
+        // Without the flag it is a labeled diagnostic, still never the report.
+        const diagnostic = plan({ measured: {}, coverage: { completed, failed: {} }, update: false });
+        expect(diagnostic.refusal).toBeNull();
+        expect(diagnostic.report).toBeNull();
+        expect(diagnostic.diagnostic).toMatch(/^PARTIAL axe run — diagnostic only, NOT the complete matrix/);
+        expect(diagnostic.diagnostic).toContain(`${completed.length} of ${declaredCells().length} cells measured`);
+      }
+      // A cell outside the matrix is not coverage either.
+      const stray = plan({
+        measured: {},
+        coverage: { completed: [...declaredCells(), cellKey('field', 'evnto')], failed: {} },
+        update: true,
+      });
+      expect(stray.verdict.unexpected).toEqual([cellKey('field', 'evnto')]);
+      expect(stray.ledger).toBeNull();
+    });
+
+    test('DRILL (d): the complete matrix updates, intersection-only', () => {
+      const novel = { ...finding(A), target: '.novel' };
+      const result = plan({
+        measured: { [keyOf(A)]: finding(A), [ledgerKey(novel.rule, novel.scene, novel.ground, novel.target)]: novel },
+        coverage: { completed: declaredCells(), failed: {} },
+        update: true,
+      });
+      expect(result.verdict).toMatchObject({ complete: true, measured: 50, declared: 50 });
+      expect(result.failures).toEqual([]);
+      expect(result.refusal).toBeNull();
+      expect(result.diagnostic).toBeNull();
+      // B was measured clean across the whole matrix, so it drops as repaired; the novel key is refused.
+      expect(result.ledger!.entries).toEqual({ [keyOf(A)]: A });
+      expect(result.report).toMatchObject({ coverage: { status: 'complete', cells: 50 }, findingCount: 2 });
+    });
+
+    test('DRILL: a blocking finding fails the run and withholds the complete report', () => {
+      const blocking = ['  label @ .planted  [bithire/field]  (Form elements must have labels)'];
+      for (const update of [false, true]) {
+        const result = plan({
+          measured: { [keyOf(A)]: finding(A) },
+          blocking,
+          coverage: { completed: declaredCells(), failed: {} },
+          update,
+        });
+        expect(result.verdict.complete).toBe(true);
+        expect(result.failures.some((failure) => failure.includes('(L1)') && failure.includes('.planted'))).toBe(true);
+        expect(result.report, 'a failing run produced a complete-labeled report').toBeNull();
+        expect(result.ledger).toBeNull();
+      }
+      // A novel key fails the same way, and it is named.
+      const novel = { ...finding(A), target: '.novel' };
+      const withNovel = plan({
+        measured: { [ledgerKey(novel.rule, novel.scene, novel.ground, novel.target)]: novel },
+        coverage: { completed: declaredCells(), failed: {} },
+        update: false,
+      });
+      expect(withNovel.failures.join('\n')).toContain('.novel');
+      expect(withNovel.report).toBeNull();
+    });
+
+    test('the batch publishes only through publication(), and only after every check', () => {
+      const spec = readFileSync(join(here, 'axe.spec.ts'), 'utf8');
+      expect(spec).not.toMatch(/\bintersect\b/);
+      expect(spec).toContain('publication({');
+      expect(spec.match(/writeJson\(/g)).toHaveLength(3);
+      const hook = spec.slice(spec.indexOf('test.afterAll('));
+      const gate = hook.indexOf('expect(plan.failures');
+      expect(gate, 'the afterAll no longer asserts plan.failures').toBeGreaterThan(-1);
+      for (const write of ['writeJson(reportPath, plan.report)', 'writeJson(ledgerPath, plan.ledger)']) {
+        expect(hook.indexOf(write), write).toBeGreaterThan(gate);
+      }
+    });
+  });
+
   test('the deferred and retired pins are kept as evidence, not deleted', () => {
     const ledger = readLedger(ledgerPath);
     // Q4(b): the three rottay serious entries move to `deferred` with D-24
@@ -272,10 +435,21 @@ test.describe('route-level axe ledger — laws', () => {
     const deferred = Object.values(ledger.deferred) as { deferredUnder?: string }[];
     expect(deferred).toHaveLength(3);
     for (const entry of deferred) expect(entry.deferredUnder).toBe('D-24');
-    // The two stale pins retired by WO-INV-04 are recorded with the
-    // re-measurement they await; this batch does not inherit them.
-    const retired = Object.values(ledger.retired) as { awaits?: string }[];
+    // The two stale pins retired by WO-INV-04 were re-measured clean on the
+    // cells they came from; a row still awaiting that slot is out of date.
+    const retired = Object.values(ledger.retired) as {
+      awaits?: string;
+      status?: string;
+      remeasured?: { on?: string; cells?: string[] };
+    }[];
     expect(retired).toHaveLength(2);
-    for (const entry of retired) expect(entry.awaits).toMatch(/DT serial browser slot/);
+    const origin = ['field', 'control'].flatMap((scene) => GROUNDS.map((ground) => cellKey(scene, ground)));
+    for (const entry of retired) {
+      expect(entry.awaits).toBeUndefined();
+      expect(entry.status).toBe('confirmed');
+      expect(entry.remeasured?.on).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(entry.remeasured?.cells).toEqual(origin);
+      for (const cell of origin) expect(declaredCells()).toContain(cell);
+    }
   });
 });

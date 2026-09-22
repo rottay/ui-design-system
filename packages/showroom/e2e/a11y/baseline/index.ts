@@ -20,7 +20,11 @@
  *       pin, never re-litigated here.
  *   L5  a MISSING ledger fails. There is no self-generation path;
  *       `AXE_UPDATE_BASELINE=1` is the only write path and it is
- *       intersection-only, so it shrinks and never grows.
+ *       intersection-only, so it shrinks and never grows. It runs, and the
+ *       run report is written, only when the run measured the complete
+ *       declared matrix (every scene x ground cell, none failed, timed out or
+ *       skipped) AND passed L1 and the novel/refusal checks; anything else is
+ *       a PARTIAL diagnostic that prints and never writes. See `publication`.
  */
 import { existsSync, readFileSync } from 'node:fs';
 
@@ -117,6 +121,34 @@ export const SCENE_CASES: Readonly<Record<string, SceneCase>> = Object.freeze({
 export function scenePath(ground: string, scene: string): string {
   const only = SCENE_CASES[scene]?.only;
   return `/probe/ds-reference/${ground}/${scene}${only ? `?only=${only}` : ''}`;
+}
+
+/**
+ * The readiness floor: a scene is painted once it carries this many DS nodes.
+ *
+ * A scene whose measured case legitimately paints fewer gets its EXACT count
+ * here with its reason, never a rounder number: the floor still reddens an
+ * empty or half-mounted body, it just stops demanding content the case does
+ * not have. `primitive-interactions` is measured on its page default
+ * (`progress`), one line Progress whose whole anatomy is root, fill and label,
+ * so a floor of 5 could never be met on either ground.
+ */
+export const MIN_PAINTED_NODES = 5;
+
+export interface PaintedFloor {
+  readonly nodes: number;
+  readonly why: string;
+}
+
+export const PAINTED_FLOORS: Readonly<Record<string, PaintedFloor>> = Object.freeze({
+  'primitive-interactions': {
+    nodes: 3,
+    why: 'the page default is one line Progress: root, fill and label, measured on both grounds',
+  },
+});
+
+export function paintedFloor(scene: string): number {
+  return PAINTED_FLOORS[scene]?.nodes ?? MIN_PAINTED_NODES;
 }
 
 /** Where each parameterized scene's case list lives, relative to the app root. */
@@ -287,4 +319,150 @@ export function intersect<Recorded, Measured>(
   measured: Record<string, Measured>,
 ): Record<string, Measured> {
   return Object.fromEntries(Object.entries(measured).filter(([key]) => key in recorded));
+}
+
+/** A measured finding: a ledger entry before a human adjudicates it. */
+export type Finding = Omit<LedgerEntry, 'disposition' | 'owner' | 'wo'>;
+
+/** One scene x ground page load of the matrix. */
+export function cellKey(scene: string, ground: string): string {
+  return `${scene}|${ground}`;
+}
+
+export function declaredCells(): string[] {
+  return SCENES.flatMap((scene) => GROUNDS.map((ground) => cellKey(scene, ground)));
+}
+
+/**
+ * Which cells a run actually measured. Findings alone cannot say this: a cell
+ * that timed out and a cell that is clean both contribute nothing to them.
+ */
+export interface Coverage {
+  /** Settled, analyzed and non-vacuous. */
+  completed: readonly string[];
+  /** Cell -> the Playwright status that stopped it (failed, timedOut, skipped, ...). */
+  failed: Readonly<Record<string, string>>;
+}
+
+export interface CoverageVerdict {
+  complete: boolean;
+  measured: number;
+  declared: number;
+  missing: string[];
+  failed: string[];
+  unexpected: string[];
+}
+
+/** Complete means exactly the declared matrix, every cell measured, none failed. */
+export function coverageVerdict(coverage: Coverage): CoverageVerdict {
+  const declared = declaredCells();
+  const done = new Set(coverage.completed);
+  const failed = Object.entries(coverage.failed).map(([cell, status]) => `${cell} (${status})`);
+  const missing = declared.filter((cell) => !done.has(cell) && !(cell in coverage.failed));
+  const unexpected = [...new Set([...done, ...Object.keys(coverage.failed)])].filter(
+    (cell) => !declared.includes(cell),
+  );
+  return {
+    complete: failed.length === 0 && missing.length === 0 && unexpected.length === 0 && done.size === declared.length,
+    measured: [...done].filter((cell) => declared.includes(cell) && !(cell in coverage.failed)).length,
+    declared: declared.length,
+    missing,
+    failed,
+    unexpected,
+  };
+}
+
+function describeGaps(verdict: CoverageVerdict): string {
+  const lines = [`${verdict.measured} of ${verdict.declared} cells measured.`];
+  if (verdict.failed.length) lines.push(`Failed:\n${verdict.failed.map((cell) => `  ${cell}`).join('\n')}`);
+  if (verdict.missing.length) lines.push(`Unmeasured:\n${verdict.missing.map((cell) => `  ${cell}`).join('\n')}`);
+  if (verdict.unexpected.length) {
+    lines.push(`Outside the declared matrix:\n${verdict.unexpected.map((cell) => `  ${cell}`).join('\n')}`);
+  }
+  return lines.join('\n');
+}
+
+/** Only a complete, passing matrix publishes: `intersect` over a subset reads every
+ * unmeasured cell's debt as repaired. A partial run is a labeled diagnostic. */
+export interface Publication {
+  verdict: CoverageVerdict;
+  /** L1, the update refusal and the novel keys; any one withholds every write. */
+  failures: string[];
+  report: Record<string, unknown> | null;
+  ledger: Ledger | null;
+  refusal: string | null;
+  diagnostic: string | null;
+}
+
+export function publication(input: {
+  ledger: Ledger;
+  measured: Readonly<Record<string, Finding>>;
+  blocking: readonly string[];
+  coverage: Coverage;
+  update: boolean;
+  generatedAt: string;
+}): Publication {
+  const { ledger, measured, blocking, coverage, update, generatedAt } = input;
+  const verdict = coverageVerdict(coverage);
+  const failures: string[] = [];
+  if (blocking.length) {
+    failures.push(
+      `Findings at the blocking impact the ledger may never record (L1). They fail the run; they are not baselined:\n${blocking.join('\n')}`,
+    );
+  }
+  const refusal =
+    update && !verdict.complete
+      ? `AXE_UPDATE_BASELINE=1 refused: the run is not the complete matrix, and intersecting a subset would erase the debt of every cell it did not measure.\n${describeGaps(verdict)}`
+      : null;
+  if (refusal) failures.push(refusal);
+  const novel = update ? [] : Object.keys(measured).filter((key) => !(key in ledger.entries));
+  if (novel.length) {
+    const detail = novel.map((key) => {
+      const finding = measured[key]!;
+      return `  ${finding.impact.toUpperCase()} ${finding.rule} @ ${finding.target}  [${finding.ground}/${finding.scene}]  (${finding.help})`;
+    });
+    failures.push(
+      `New blocking-impact axe violations not in axe-baseline.json.\nEach must be admitted BY HAND with a disposition, an owner and a WO (L2) — AXE_UPDATE_BASELINE=1 is intersection-only and cannot add them:\n${detail.join('\n')}`,
+    );
+  }
+
+  if (!verdict.complete) {
+    const findings = Object.values(measured).map(
+      (finding) => `  ${finding.impact.toUpperCase()} ${finding.rule} @ ${finding.target}  [${finding.ground}/${finding.scene}]`,
+    );
+    return {
+      verdict,
+      failures,
+      report: null,
+      ledger: null,
+      refusal,
+      diagnostic: `PARTIAL axe run — diagnostic only, NOT the complete matrix; nothing was published.\n${describeGaps(verdict)}\nFindings in the measured cells (${findings.length}):\n${findings.join('\n')}`,
+    };
+  }
+  if (failures.length) return { verdict, failures, report: null, ledger: null, refusal, diagnostic: null };
+  const report = {
+    generatedAt,
+    impacts: [ADMISSIBLE_IMPACT],
+    matrix: { engine: 'modern', grounds: GROUNDS, scenes: SCENES },
+    coverage: { status: 'complete', cells: verdict.declared },
+    findingCount: Object.keys(measured).length,
+    findings: measured,
+  };
+  if (!update) return { verdict, failures, report, ledger: null, refusal, diagnostic: null };
+  // L5(ii) + L3: intersection-only, so a fixed entry drops out and a novel one
+  // can never be admitted by a flag.
+  const kept = intersect(ledger.entries, measured);
+  return {
+    verdict,
+    failures,
+    report,
+    ledger: {
+      ...ledger,
+      entries: Object.fromEntries(
+        Object.entries(kept).map(([key, entry]) => [key, { ...entry, ...ledger.entries[key] } as LedgerEntry]),
+      ),
+    },
+    refusal,
+    diagnostic: null,
+  };
 }

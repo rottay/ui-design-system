@@ -159,7 +159,7 @@ jobs:
           # scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json.
           # claim-exactness refuses any other revision, and it now refuses a
           # workflow that pins one, so the two cannot drift apart again.
-          ref: 0dd195f60d32a0b1801919797e88ae0ce1475799
+          ref: 499901d01aff4358f3c9d79e399f75a46402a50f
           path: .gat07/docs-engineering
           token: ${{ secrets.DOCS_TOOLING_TOKEN || secrets.NPM_TOKEN || github.token }}
 
@@ -419,9 +419,11 @@ jobs:
         run: pnpm --filter @rottay/showroom exec playwright install chromium
 
       # One invocation, one `next start`: e2e/visual/ (pixel diffs, WO-GAT-01),
-      # e2e/whitelabel/ (hostile-tenant computed-style probe, WO-GAT-03), and
+      # e2e/whitelabel/ (hostile-tenant computed-style probe, WO-GAT-03),
       # e2e/responsive/ (360px overflow + coarse-pointer hit areas, WO-ENG-12)
-      # are the three spec directories playwright.visual.config.ts matches.
+      # and e2e/a11y/axe.spec.ts (the route-level axe batch, WO-INV-03 — opt-in
+      # via DS_AXE_ROUTE_BATCH) are the spec directories
+      # playwright.visual.config.ts matches.
       - name: Run visual regression, whitelabel, and responsive suites
         run: pnpm --filter @rottay/showroom run test:gates
 

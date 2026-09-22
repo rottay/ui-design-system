@@ -6,15 +6,17 @@ import { fileURLToPath } from 'node:url';
 
 import {
   ADMISSIBLE_IMPACT,
+  cellKey,
   GROUNDS,
   INADMISSIBLE_IMPACT,
-  intersect,
   ledgerKey,
+  publication,
   readLedger,
   SCENE_CASES,
+  paintedFloor,
   scenePath,
   SCENES,
-  type LedgerEntry,
+  type Finding,
 } from './baseline';
 
 // ---------------------------------------------------------------------------
@@ -37,7 +39,9 @@ import {
 // NOT YET RUN. 50 page loads on one worker is a booked serial slot, and the
 // batch is gated off until the DT takes it, so landing it cannot red the CI
 // a11y job over findings nobody has looked at:
-//   DS_AXE_ROUTE_BATCH=1 pnpm --filter @rottay/showroom exec playwright test e2e/a11y/axe.spec.ts
+//   pnpm --filter @rottay/showroom run build
+//   DS_AXE_ROUTE_BATCH=1 pnpm --filter @rottay/showroom exec playwright test \
+//     a11y/axe.spec.ts --config playwright.visual.config.ts
 // The structural half of this contract — the ledger's laws and the parsed-JSON
 // assertion of Q10 — is in axe-baseline.spec.ts and runs on EVERY CI pass.
 // ---------------------------------------------------------------------------
@@ -51,15 +55,68 @@ const reportPath = join(
 );
 
 /**
+ * PRODUCTION SERVER, not `pnpm dev` — this spec runs on
+ * playwright.visual.config.ts. `pnpm dev` compiles every route on demand, and
+ * across 50 serial navigations of ~90-family scenes the process died mid-batch
+ * (monochrome: ERR_CONNECTION_REFUSED after ~12 minutes). Production serves
+ * prebuilt routes, so there is no per-route compile to absorb and the old
+ * compile primer is gone with its premise.
+ */
+const NAVIGATE_BUDGET_MS = 30_000;
+const LOAD_BUDGET_MS = 30_000;
+const READY_BUDGET_MS = 30_000;
+/**
+ * The final paint settle. A fixed window, not a network condition: see
+ * `settle()` for why `networkidle` was removed.
+ */
+const QUIET_MS = 400;
+/**
+ * EVERY wait below is individually bounded, so this is a backstop rather than
+ * the mechanism. It is the pathological sum for two grounds — two navigations,
+ * load, the ready predicate and the settle — and no single call can reach it
+ * on its own.
+ */
+const SCENE_BUDGET_MS =
+  (NAVIGATE_BUDGET_MS * 2 + LOAD_BUDGET_MS + READY_BUDGET_MS + QUIET_MS) * 2;
+
+/** One bounded retry, and only for a timeout — every other failure is real. */
+async function navigate(page: import('@playwright/test').Page, path: string) {
+  try {
+    return await page.goto(path, { waitUntil: 'domcontentloaded', timeout: NAVIGATE_BUDGET_MS });
+  } catch (error) {
+    if (!(error instanceof Error) || !/Timeout|timeout/.test(error.message)) throw error;
+    // Against a prebuilt route a timeout is transient, so it is worth exactly
+    // one retry; a genuinely broken route times out twice and still fails.
+    return await page.goto(path, { waitUntil: 'domcontentloaded', timeout: NAVIGATE_BUDGET_MS });
+  }
+}
+
+/**
  * A scene is ready when the route really served it, the tenant scope is
  * stamped, and the provider has actually painted. All three are load-bearing:
  * a 404 from a scene that fails closed on a missing `?only=` still carries the
  * stamp, and the DB ground defers its provider past hydration
  * (ground/client-only.tsx), so a run that waited only on `data-tenant` would
  * measure an empty body and report a clean page.
+ *
+ * WHY `networkidle` IS GONE. It waits for a 500ms window with no connections,
+ * which is a property of the SERVER'S LOAD, not of the page being ready — and
+ * it was called with no timeout, so `navigationTimeout` (0 by default) let one
+ * call consume the entire scene budget. Measured in isolation,
+ * `component-behaviors` reaches idle on both grounds with zero pending
+ * requests; under a 50-route serial batch the same page did not, and the
+ * unbounded wait burned the whole budget. A signal that can legitimately never
+ * arrive must never be waited on without a bound.
+ *
+ * WHAT THE TRADE LOSES. `load` plus the painted floor plus a fixed quiet
+ * window cannot see content that arrives from a LATE XHR — a component that
+ * fetches on mount and renders results after the window closes, while already
+ * having enough nodes to clear the painted floor, is audited in its pre-fetch
+ * state. Today's lab is deterministic fixtures and short timers (the longest
+ * async harness is 120ms), so nothing in it is affected; a future scene that
+ * renders real fetched content would need its own explicit readiness marker
+ * rather than a longer global wait.
  */
-const MIN_PAINTED_NODES = 5;
-
 async function settle(
   page: import('@playwright/test').Page,
   response: import('@playwright/test').Response | null,
@@ -68,20 +125,21 @@ async function settle(
   // Exact, not heuristic: `notFound()` serves 404, so a scene that failed
   // closed can never be mistaken for one that rendered clean.
   expect(response?.status(), `${scene}: the route did not serve the scene`).toBe(200);
+  await page.waitForLoadState('load', { timeout: LOAD_BUDGET_MS });
   await page.waitForFunction(
     ({ minimum, marker }) =>
       Boolean(document.documentElement.dataset.tenant) &&
       (marker === null || document.querySelector(marker) !== null) &&
       document.querySelectorAll('[data-part], [class*="rottay-"], [class*="ds-"]').length >= minimum,
     {
-      minimum: MIN_PAINTED_NODES,
+      minimum: paintedFloor(scene),
       // `lab-scene` is READINESS, not identity: SceneFrame stamps it on <main>
       // for most unparameterized scenes too. The 200 above is the discriminator.
       marker: SCENE_CASES[scene] ? '[data-testid="lab-scene"]' : null,
     },
-    { timeout: 30_000 },
+    { timeout: READY_BUDGET_MS },
   );
-  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(QUIET_MS);
 }
 
 function writeJson(path: string, data: unknown) {
@@ -94,23 +152,34 @@ function normalizeTarget(target: string): string {
   return target.replace(/_[Rr]_[a-z0-9]+_/g, '_id_');
 }
 
-type Measured = Record<string, Omit<LedgerEntry, 'disposition' | 'owner' | 'wo'>>;
-
 test.skip(
   !process.env.DS_AXE_ROUTE_BATCH,
   'booked serial slot (50 loads): set DS_AXE_ROUTE_BATCH=1 to run the route batch',
 );
 
-test.describe.serial('route-level axe — DS reference lab, Modern, two BitHire tenants', () => {
-  const measured: Measured = {};
+/**
+ * NOT `describe.serial`. Order and one-at-a-time are already guaranteed by the
+ * config (`workers: 1`, `fullyParallel: false`); what `.serial` added was
+ * SKIPPING every later test after a failure, and one flake cost 23 unmeasured
+ * scenes out of a booked slot. An audit batch is worth more complete than
+ * early. The fail-fast argument for `.serial` rested on an unbounded hang, and
+ * every wait in `settle()` is now individually bounded; a genuinely dead server
+ * answers with connection errors, not timeouts, so the remaining scenes still
+ * fail fast.
+ */
+test.describe('route-level axe — DS reference lab, Modern, two BitHire tenants', () => {
+  const measured: Record<string, Finding> = {};
   const blocking: string[] = [];
+  const completed = new Set<string>();
+  const failed: Record<string, string> = {};
 
   for (const scene of SCENES) {
     test(`${scene} (both grounds)`, async ({ page }) => {
-      test.setTimeout(120_000);
+      test.setTimeout(SCENE_BUDGET_MS);
       for (const ground of GROUNDS) {
         await test.step(`${ground} / ${scene}`, async () => {
-          const response = await page.goto(scenePath(ground, scene), { waitUntil: 'domcontentloaded' });
+          const path = scenePath(ground, scene);
+          const response = await navigate(page, path);
           await settle(page, response, scene);
 
           const results = await new AxeBuilder({ page }).analyze();
@@ -144,54 +213,43 @@ test.describe.serial('route-level axe — DS reference lab, Modern, two BitHire 
               };
             }
           }
+          completed.add(cellKey(scene, ground));
         });
       }
     });
   }
 
+  test.afterEach(async ({}, testInfo) => {
+    if (testInfo.status === testInfo.expectedStatus) return;
+    // A timeout never reaches a catch inside the test, so the cell is recorded here.
+    const scene = SCENES.find((name) => testInfo.title === `${name} (both grounds)`);
+    if (!scene) return;
+    for (const ground of GROUNDS) {
+      const cell = cellKey(scene, ground);
+      if (!completed.has(cell)) failed[cell] = testInfo.status ?? 'unknown';
+    }
+  });
+
   test.afterAll(async () => {
     const noWrite = process.env.AXE_NO_WRITE === '1';
     const update = process.env.AXE_UPDATE_BASELINE === '1';
-    // L5(iii): ONE flag suppresses BOTH write paths, so a reviewer can run this
-    // spec without dirtying the tree whatever else is set.
-    if (!noWrite) {
-      writeJson(reportPath, {
-        generatedAt: new Date().toISOString(),
-        impacts: [ADMISSIBLE_IMPACT],
-        matrix: { engine: 'modern', grounds: GROUNDS, scenes: SCENES },
-        findingCount: Object.keys(measured).length,
-        findings: measured,
-      });
-    }
     // L5(i): no self-generation. An absent ledger throws here.
     const ledger = readLedger(ledgerPath);
-    expect(
+    const plan = publication({
+      ledger,
+      measured,
       blocking,
-      `Findings at the blocking impact the ledger may never record (L1). They fail the run; they are not baselined:\n${blocking.join('\n')}`,
-    ).toEqual([]);
-
-    if (update) {
-      // L5(ii) + L3: the only write path, and it is the intersection — fixed
-      // entries drop out, a novel finding can never be admitted by a flag.
-      if (noWrite) return;
-      const kept = intersect(ledger.entries, measured);
-      writeJson(ledgerPath, {
-        ...ledger,
-        entries: Object.fromEntries(
-          Object.entries(kept).map(([key, entry]) => [key, { ...entry, ...ledger.entries[key] }]),
-        ),
-      });
-      return;
-    }
-
-    const novel = Object.keys(measured).filter((key) => !(key in ledger.entries));
-    const detail = novel.map((key) => {
-      const finding = measured[key]!;
-      return `  ${finding.impact.toUpperCase()} ${finding.rule} @ ${finding.target}  [${finding.ground}/${finding.scene}]  (${finding.help})`;
+      coverage: { completed: [...completed], failed },
+      update,
+      generatedAt: new Date().toISOString(),
     });
-    expect(
-      novel,
-      `New blocking-impact axe violations not in axe-baseline.json.\nEach must be admitted BY HAND with a disposition, an owner and a WO (L2) — AXE_UPDATE_BASELINE=1 is intersection-only and cannot add them:\n${detail.join('\n')}`,
-    ).toEqual([]);
+    if (plan.diagnostic) console.log(plan.diagnostic);
+    // Every check runs before any write: a failing run leaves no complete-labeled artifact.
+    expect(plan.failures, plan.failures.join('\n\n')).toEqual([]);
+    // L5(iv): ONE flag suppresses BOTH write paths, so a reviewer can run this
+    // spec without dirtying the tree whatever else is set.
+    if (noWrite) return;
+    if (plan.report) writeJson(reportPath, plan.report);
+    if (plan.ledger) writeJson(ledgerPath, plan.ledger);
   });
 });

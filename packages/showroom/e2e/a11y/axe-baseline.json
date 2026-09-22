@@ -1,8 +1,8 @@
 {
   "purpose": "Route-level axe debt for the DS reference lab under the Modern engine: two real BitHire-vertical tenants (a static FlatTheme ground and a published-document ground compiled to an SSR-embedded artifact) across all 25 lab scenes, which between them cover all 24 primitives/inputs families. It records findings at the blocking impact named in \"impacts\" and nothing above it. Family-level axe debt is NOT here: it belongs to the per-family AXE_DEBT pins owned by WO-EVI-02, and a route-level finding whose node is already pinned there is recorded as routed, never re-litigated (L4).",
   "owner": "WO-INV-03 while it is open; thereafter the DS a11y CI job (.github/workflows/ci.yml, the a11y specs step).",
-  "provenance": "db759703a 2026-09-22 — schema and laws established by WO-INV-03 Lot C. The DT's first slot ran the batch read-only (AXE_NO_WRITE=1): 24 scenes settled, charts timed out, and the four other parameterized scenes had been scanned over a 404 — the case axis below is the repair. entries stays empty: no run against the corrected matrix has been adjudicated yet. Command: DS_AXE_ROUTE_BATCH=1 pnpm --filter @rottay/showroom exec playwright test e2e/a11y/axe.spec.ts",
-  "retire": "Deleted when the route batch runs clean with no entries. Individual entries retire as their owner repairs them, via AXE_UPDATE_BASELINE=1, which rewrites entries to the intersection of this ledger and the current findings and therefore only ever shrinks.",
+  "provenance": "db759703a 2026-09-22 — schema and laws established by WO-INV-03 Lot C. The DT's first slot ran the batch read-only (AXE_NO_WRITE=1): 24 scenes settled, charts timed out, and the four other parameterized scenes had been scanned over a 404 — the case axis below is the repair (d7a878c71). SEEDED 2026-09-22: entries were adjudicated as empty and accepted by the DT's complete route batch of 2026-09-22 (run report generatedAt 2026-09-22T21:49:04.104Z, coverage complete 50/50 cells, findingCount 0). That run measured every declared scene x ground cell with none failed, timed out or skipped, found nothing at the recorded impact, and passed L1, so no finding at the blocking impact either; the run report is written only when all of that holds. The report lives at packages/core/artifacts/quality/audits/accessibility/runs/axe/index.json, which is gitignored run output, so this line is its durable record. Command: pnpm --filter @rottay/showroom run build, then DS_AXE_ROUTE_BATCH=1 pnpm --filter @rottay/showroom exec playwright test a11y/axe.spec.ts --config playwright.visual.config.ts",
+  "retire": "The ledger's old deletion condition (the batch runs clean with no entries) was MET on 2026-09-22, and the file is deliberately kept: L5 makes a missing ledger fail the run, and an empty ledger is the strictest standing state, in which every new finding at the recorded impact fails the batch until a human admits it with a disposition, an owner and a WO. The file retires only together with the route batch itself, when a successor batch owns this matrix. Entries retire individually as their owner repairs them, via AXE_UPDATE_BASELINE=1 on a complete run, which rewrites entries to the intersection of this ledger and the current findings and therefore only ever shrinks.",
   "matrix": {
     "engine": "modern",
     "grounds": [
@@ -79,15 +79,37 @@
       "rule": "label",
       "impact": null,
       "help": "Form elements must have labels",
-      "reason": "Recorded at the blocking impact L1 now makes structurally inadmissible, and STALE BY KEY: the class prefix ds-input-ph- no longer exists anywhere in the tree. WO-INV-04 removed it, and it survives only as a negative assertion at packages/core/src/components/primitives/tests/EmbeddedCssRecovery.contract.test.ts:801. Whether the underlying missing-label defect reproduces under the new selectors on the field/control scenes is UNMEASURED; that measurement is a DT serial browser slot and the disposition is not adopted until it is taken. This batch does not inherit the entry.",
-      "awaits": "DT serial browser slot — re-measure on /probe/ds-reference/{bithire,the-management}/{field,control}"
+      "reason": "Recorded at the blocking impact L1 makes structurally inadmissible, and stale by key: the class prefix ds-input-ph- no longer exists anywhere in the tree. WO-INV-04 removed it, and it survives only as a negative assertion at packages/core/src/components/primitives/tests/EmbeddedCssRecovery.contract.test.ts:801. RE-MEASURED 2026-09-22: the underlying missing-label defect did NOT reproduce under the current selectors on field and control, on both grounds. axe reports the label rule at the blocking impact, so a reproduction would have failed that run under L1 rather than passed it. The provisional retirement is CONFIRMED; this batch does not inherit the entry.",
+      "status": "confirmed",
+      "remeasured": {
+        "on": "2026-09-22",
+        "run": "the DT's complete route batch of 2026-09-22 (run report generatedAt 2026-09-22T21:49:04.104Z, coverage complete 50/50 cells, findingCount 0)",
+        "cells": [
+          "field|bithire",
+          "field|the-management",
+          "control|bithire",
+          "control|the-management"
+        ],
+        "result": "no finding at any impact the batch records on any of the four cells, and the run passed L1"
+      }
     },
     "select-name|.ds-sel-_id_": {
       "rule": "select-name",
       "impact": null,
       "help": "Select element must have an accessible name",
-      "reason": "Same class as the label row: the ds-sel-search- prefix is refused at EmbeddedCssRecovery.contract.test.ts:805 and the Select now carries exactly one ds-select-shell__search-input. Stale by key, subject unmeasured, disposition not adopted.",
-      "awaits": "DT serial browser slot — re-measure on /probe/ds-reference/{bithire,the-management}/{field,control}"
+      "reason": "Same class as the label row: the ds-sel-search- prefix is refused at EmbeddedCssRecovery.contract.test.ts:805 and the Select now carries exactly one ds-select-shell__search-input. RE-MEASURED 2026-09-22: the missing-name defect did NOT reproduce on field and control, on both grounds; axe reports select-name at the blocking impact, so a reproduction would have failed that run under L1. The provisional retirement is CONFIRMED; this batch does not inherit the entry.",
+      "status": "confirmed",
+      "remeasured": {
+        "on": "2026-09-22",
+        "run": "the DT's complete route batch of 2026-09-22 (run report generatedAt 2026-09-22T21:49:04.104Z, coverage complete 50/50 cells, findingCount 0)",
+        "cells": [
+          "field|bithire",
+          "field|the-management",
+          "control|bithire",
+          "control|the-management"
+        ],
+        "result": "no finding at any impact the batch records on any of the four cells, and the run passed L1"
+      }
     }
   }
 }

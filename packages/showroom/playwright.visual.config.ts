@@ -4,17 +4,23 @@ import { defineConfig, devices } from '@playwright/test';
 // Showroom visual-regression harness (WO-GAT-01, proposal P-11).
 //
 // SEPARATE from playwright.config.ts (the WO-GAT-04 a11y harness, which runs
-// e2e/a11y/ against the DEV server). Visual regression runs against the
-// PRODUCTION build (`next start`) instead: dev-mode Turbopack/HMR paints
+// the rest of e2e/a11y/ against the DEV server). Visual regression runs against
+// the PRODUCTION build (`next start`) instead: dev-mode Turbopack/HMR paints
 // non-deterministically (a rottay dark-ground pre-theme light-paint timing
 // artifact was directly observed against the dev server), which is fatal to a
 // pixel-diff net. `webServer` below builds nothing itself — the production
 // bundle must already exist (`pnpm --filter @rottay/showroom run build`)
 // before this config's webServer starts `next start`.
 //
-// Do not add a third Playwright config to this package. e2e/a11y/ runs on
-// playwright.config.ts (dev server); e2e/visual/ and e2e/whitelabel/ both run
-// on this one. The whitelabel torture probe (WO-GAT-03) belongs here rather
+// Do not add a third Playwright config to this package. e2e/a11y/ is SPLIT BY
+// SERVER REQUIREMENT, which is the only thing these two configs organize by:
+// focus.spec.ts, axe-baseline.spec.ts and contrast-channel-arms.spec.ts are
+// cheap and stay on playwright.config.ts (dev server); a11y/axe.spec.ts is the
+// 50-route batch and runs here, because `pnpm dev` compiles every route on
+// demand and the process died mid-batch under that load (monochrome:
+// ERR_CONNECTION_REFUSED after ~12 minutes of on-demand compiles). The same
+// precedent the whitelabel probe set below: a non-pixel spec belongs on this
+// config when what it needs is a production server. The whitelabel torture probe (WO-GAT-03) belongs here rather
 // than on the a11y config for two reasons: it captures screenshots (which the
 // dev server's pre-theme paint artifact would poison), and CI runs it in the
 // same invocation as the visual suite so one production `next start` serves
@@ -39,7 +45,7 @@ export default defineConfig({
   // chunks to measure the frame before hydration, which only means anything
   // against a production server — the dev server ships its own extra scripts
   // and recompiles on navigation.
-  testMatch: ['visual/**/*.spec.ts', 'whitelabel/**/*.spec.ts', 'responsive/**/*.spec.ts', 'diagnostics/**/*.spec.ts', 'first-paint/**/*.spec.ts'],
+  testMatch: ['visual/**/*.spec.ts', 'whitelabel/**/*.spec.ts', 'responsive/**/*.spec.ts', 'diagnostics/**/*.spec.ts', 'first-paint/**/*.spec.ts', 'a11y/axe.spec.ts'],
   // One flagship gallery page serves every cell in the matrix; parallel
   // workers would fight over the same production server's compile/response
   // cache for no benefit, so this mirrors the a11y harness's single-worker,

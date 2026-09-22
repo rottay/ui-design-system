@@ -78,7 +78,7 @@ Budget after the first Next compile: roughly 3–5 minutes.
 - **L3 — decrease-only**, keyed `rule|scene|ground|target`, so the same rule on
   two scenes is two separate adjudications.
 - **L4 — no double adjudication** (see the split above).
-- **L5 — a missing ledger FAILS.** Three clauses, all implemented:
+- **L5 — a missing ledger FAILS.** Four clauses, all implemented:
   1. there is **no self-generation path**. The old spec wrote its own baseline
      when absent and then passed, recording every finding as accepted — a
      fail-open in the one authority the acceptance gate greps. An absent
@@ -87,9 +87,23 @@ Budget after the first Next compile: roughly 3–5 minutes.
      is intersection-only: repaired entries drop out, a novel finding can never
      be admitted by a flag. Seeding is therefore a **hand** edit — L2's
      disposition, owner and WO are not things a machine can infer.
-  3. `AXE_NO_WRITE=1` suppresses **both** writes — the ledger *and* the
-     unconditional CI report artifact — so the batch is reviewable read-only
-     whatever else is set.
+  3. **Complete 50/50 or nothing.** Findings cannot tell a clean cell from an
+     unmeasured one, so the run records which scene x ground cells completed
+     (settled, analyzed, non-vacuous) and which failed, timed out or were
+     skipped. The run report (`coverage.status: complete`) and the ledger
+     update are written only when every one of the 50 declared cells completed,
+     none failed, and the run passed L1, the novel-key check and the update
+     refusal — all of which run **before** any write, so a failing run leaves
+     no complete-labeled artifact. Anything less (a `-g` selection, a failed or
+     timed-out cell, a retry's restarted worker) is a **PARTIAL** diagnostic:
+     it prints the measured findings and names the unmeasured and failed cells,
+     still fails on L1 and novel findings in the cells it measured, and never
+     writes. `AXE_UPDATE_BASELINE=1` on a partial run is refused, naming those
+     cells, because intersecting a subset would erase the debt of every cell it
+     did not measure. `publication()` in `baseline/index.ts` is the single
+     decision; `axe-baseline.spec.ts` drills it offline.
+  4. `AXE_NO_WRITE=1` suppresses **both** writes — the ledger *and* the run
+     report — so the batch is reviewable read-only whatever else is set.
 
 ## `deferred` and `retired` — kept as evidence, not deleted
 
@@ -103,16 +117,21 @@ refuses (`label|.ds-input-ph-…`, `select-name|.ds-sel-…`). Both are **stale 
 key**: WO-INV-04 removed those class prefixes and they survive only as negative
 assertions at
 `packages/core/src/components/primitives/tests/EmbeddedCssRecovery.contract.test.ts:801,805`.
-Whether the underlying defect reproduces under the new selectors is
-**unmeasured**, and it decides the disposition:
+The re-measurement decided the disposition between three outcomes:
 
 - reproduces with a DS control that cannot be labelled without `FormField` →
   a real fix, routed to the inputs family owner;
 - reproduces only because the *specimen* renders a bare `Input placeholder=`
   → a showroom specimen repair, and the DS is clean;
-- does not reproduce → deleted with provenance, in the FAM-10 stale-pin drain
+- does not reproduce → retired with provenance, in the FAM-10 stale-pin drain
   class.
 
-That re-measurement is a **DT serial browser slot**, not this lot's. The rows
-carry no impact field, so the acceptance grep holds; the fact is recorded in
-full here. **This batch does not inherit them.**
+**Measured 2026-09-22: the third outcome.** The DT's complete route batch (run
+report `generatedAt` 2026-09-22T21:49:04.104Z, coverage complete 50/50,
+`findingCount` 0, L1 passed) measured `field` and `control` on both grounds
+clean. axe-core 4.12.1 reports `label` and `select-name` at the blocking
+impact, so a reproduction would have failed that run under L1. Each row now
+carries `status: "confirmed"` and a `remeasured` record naming the four cells.
+They are kept rather than deleted because the run report is gitignored output
+and these rows are its durable record. The rows carry no impact field, so the
+acceptance grep holds. **This batch does not inherit them.**

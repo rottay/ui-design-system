@@ -23,7 +23,12 @@ export default defineConfig({
   // playwright.visual.config.ts. Ignoring them here keeps a bare `playwright
   // test` on this config from running pixel diffs and torture captures against
   // the dev server, whose pre-theme paint is non-deterministic.
-  testIgnore: ['visual/**', 'whitelabel/**', 'responsive/**'],
+  //
+  // a11y/axe.spec.ts is there too. It is the only spec in e2e/a11y/ that moved:
+  // 50 serial routes killed the dev server outright, and production serves
+  // prebuilt routes with no on-demand compile. The rest of e2e/a11y/ is cheap
+  // and stays here, so `playwright test e2e/a11y` remains the quick local loop.
+  testIgnore: ['visual/**', 'whitelabel/**', 'responsive/**', 'a11y/axe.spec.ts'],
   // Dev-server compile contention makes parallel navigation flaky; the a11y
   // sweep is read-only and cheap, so a single worker in series is both stable
   // and fast enough (all specs hit one route; Next compiles it once).
