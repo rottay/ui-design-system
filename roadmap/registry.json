@@ -6512,6 +6512,11 @@
      "at": "2026-09-22 00:00",
      "by": "kimi-dt",
      "note": "2026-09-21 kimi-dt: full cert (verify:core) post-EMI-03 corre por primera vez con la build reparada y frena en engine-audit:check — TODO ajeno (Fable A/B byte-identico HEAD vs lote): (a) 30 counters 'no baseline' de los table modern parts + nav-link-anchor + class-window (archivos landed sin baselinar en engine-token-audit); (b) ceiling regression scale.fallbackParityViolations=9 (baseline=0) — requiere diagnostico, no bump ciego. Paquete de drenaje propio EN COLA tras value-safety: baselinar counters con atribucion por commit + diagnosticar los 9 fallback parity antes de cualquier re-pin. verify:core nunca llego a test:scripts/vitest/storybook — deuda preexistente, no regresion de hoy."
+    },
+    {
+     "at": "2026-09-22 00:01",
+     "by": "kimi-dt",
+     "note": "2026-09-22 kimi-dt: paquete value-safety despachado a Opus (brief-value-safety-evi02-opus.md) sobre HEAD cb6304622 limpio — env() acotado a safe-area-inset-* en value-safety (NO en la tabla compartida del schema), mascara orbital atacada desde el deriver workspace-shell (compactar -> factorizar canal intermedio; prohibido subir MAX_VALUE_LENGTH sin ruling DT). Oraculo: la suite emission/css/tests pasa a verde SIN editarla. Senal viva roja desde a8786b23c; esta reparacion la cierra por admision real."
     }
    ]
   },
