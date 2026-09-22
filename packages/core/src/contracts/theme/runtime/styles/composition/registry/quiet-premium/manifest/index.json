@@ -1,0 +1,29 @@
+{
+  "id": "quiet-premium",
+  "version": 1,
+  "title": "Quiet Premium",
+  "workOrder": "WO-CAT-04",
+  "publishedOn": "2026-09-21",
+  "digest": "sha256-089a2351ee4eb0c9c42089a946148861d1cedda3e3a0bd36b42b9cfeea05c13a",
+  "rows": [
+    "typography.pairing",
+    "typography.scale",
+    "shape.radius-scale",
+    "shape.button-style",
+    "surfaces.elevation-posture",
+    "surfaces.effect-intensity",
+    "states.focus-style",
+    "motion.dial"
+  ],
+  "provenance": {
+    "typography.pairing": "An editorial pairing is the posture's voice; the tenant's own faces stay brand-class and unreachable from here.",
+    "typography.scale": "A small positive step, inside every declared vertical's type range.",
+    "shape.radius-scale": "Softened geometry, inside every declared vertical's radius range.",
+    "shape.button-style": "Soft buttons follow the radius posture rather than restating it.",
+    "surfaces.elevation-posture": "Elevated surfaces are the posture's depth statement.",
+    "surfaces.effect-intensity": "Mid effect intensity, inside every declared vertical's range.",
+    "states.focus-style": "An underlined focus reads as quiet without losing the indicator.",
+    "motion.dial": "Unhurried motion: half intensity, slightly longer durations, both inside every declared range."
+  },
+  "verticals": "all"
+}

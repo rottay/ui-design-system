@@ -24,11 +24,15 @@ import { VERTICAL_THEME_PRESETS } from "@/foundation/presets/verticals";
 import { FIRST_PARTY_VERTICALS } from "@/foundation/presets/verticals/roster";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import {
-  assertTenantThemeDocumentV2,
-  isTenantThemeDocumentV2,
+  TENANT_THEME_DOCUMENT_VERSION_V3,
+  assertSupportedDocumentVersion,
+  assertTenantThemeDocumentVersioned,
+  isTenantThemeDocumentVersioned,
   type TenantThemeDocumentAny,
-  type TenantThemeDocumentV2,
+  type TenantThemeDocumentV3,
+  type TenantThemeDocumentVersioned,
 } from "@/contracts/theme/presentation/document";
+import type { ThemeStyleReference } from "@/contracts/theme/runtime/styles";
 import { assertThemeDecisionDomains } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/decisions";
 import { assertExpressiveOverrides } from "@/foundation/tokens/ts/presentation/expressive-profiles";
 import {
@@ -53,11 +57,15 @@ import { projectDecisionsToV1, type DecisionProjection } from "../../foundation/
 import {
   captureV1Decisions,
   migrateDocumentV1ToV2,
+  migrateDocumentV2ToV3,
 } from "../../foundation/migrate";
+import { admitStyle } from "../../runtime/style";
 
 export interface DocumentAdmission {
-  /** `1` for the persisted v1 transport, `2` for the decision document. */
-  version: 1 | 2;
+  /** The version the row was READ as: `1` the persisted transport, `2`/`3` the
+   * decision document. A v3 document without a style is a v2 document with a
+   * different version number, which is why there is no third branch below. */
+  version: 1 | 2 | 3;
   patch: ThemeLayerPatch;
   /** Empty for v1: a v1 document has no decision ids to report against. */
   decisions: readonly DecisionProjection[];
@@ -85,6 +93,14 @@ export interface DocumentAdmission {
    * ledger models"), never a missing one.
    */
   ledger: ThemeProvenanceLedger;
+  /** The style this row NAMED, if any. Absent is a real answer. */
+  styleRef?: ThemeStyleReference;
+  /**
+   * The single `preset-inherited` entry that style contributed, over the leaves
+   * its underlay actually wrote. It is on the `ledger` too; it is surfaced here
+   * so a door that hands the ledger on does not have to search it for one ref.
+   */
+  styleClaim?: DecisionProvenanceClaim<ThemeDecisionId>;
 }
 
 /**
@@ -170,7 +186,17 @@ export function admitDocument(input: {
    */
   ranges?: TenantThemeVerticalEnvelope["ranges"];
 }): DocumentAdmission {
-  if (!isTenantThemeDocumentV2(input.document)) {
+  // THE VERSION FORK, above the v1 branch, at the ONE point every path crosses.
+  // A v1 row states `schemaVersion` and no `version`, so it passes through
+  // untouched; a row that states a version this reader does not know is refused
+  // by name here instead of falling into the v1 branch, where it used to reach
+  // `authoredFieldRefusal` and crash on `document.visualFoundation` with a bare
+  // TypeError that named neither the version nor the door. One site, and every
+  // caller of this admission earns the identical refusal -- the two public
+  // producers, the migrate door, the unpublished patch projection and the
+  // vertical baseline alike.
+  assertSupportedDocumentVersion(input.document);
+  if (!isTenantThemeDocumentVersioned(input.document)) {
     // Authorship is judged on the ORIGINAL row, before a default fills
     // anything: only an ABSENT field may receive one.
     const refusal = authoredFieldRefusal(input.document);
@@ -193,7 +219,7 @@ export function admitDocument(input: {
       ledger: v1Ledger(input.document, expanded.claims),
     };
   }
-  const document = assertTenantThemeDocumentV2(input.document);
+  const document = assertTenantThemeDocumentVersioned(input.document);
   // The contract closed the key sets; the generated schema closes the VALUES of
   // every domain the catalog states in full. Two owners, one table.
   assertThemeDecisionDomains(document.decisions);
@@ -213,23 +239,49 @@ export function admitDocument(input: {
     document: v1,
     ranges: input.ranges,
   });
+  // THE STYLE ENTERS LAST, and fills only what is STILL absent. The expansion
+  // above writes only fields that are `=== undefined`, so a style underlaid
+  // before it would stop the expansion firing for every row the style supplied:
+  // the ledger would report `profile-derived` winning while the effective
+  // document carried the style's value.
+  const style = styleOf(document)
+    ? admitStyle({
+        vertical: input.vertical,
+        plan: document.plan,
+        style: styleOf(document) as ThemeStyleReference,
+        document: expanded.document,
+        ranges: input.ranges,
+      })
+    : undefined;
+  const effective = style?.document ?? expanded.document;
   return {
-    version: 2,
+    version: document.version,
     patch: documentThemePatch({
       vertical: input.vertical,
-      document: expanded.document,
+      document: effective,
     }),
     decisions: projections,
     unlit: projections.filter((projection) => !projection.lit),
     profileClaims: expanded.claims,
-    effective: expanded.document,
+    effective,
     ledger: documentProvenanceLedger({
       decisions: document.decisions as Record<string, unknown>,
       chrome: document.overrides?.chrome,
       chromeTransportPrefix: "overrides.chrome",
       profileClaims: expanded.claims,
+      styleClaim: style?.claim,
     }),
+    ...(style ? { styleRef: style.ref, styleClaim: style.claim } : {}),
   };
+}
+
+/** The style a decision document names, on the one version that may name one. */
+function styleOf(
+  document: TenantThemeDocumentVersioned
+): ThemeStyleReference | undefined {
+  return document.version === TENANT_THEME_DOCUMENT_VERSION_V3
+    ? document.style
+    : undefined;
 }
 
 /**
@@ -242,10 +294,17 @@ export function admitDocument(input: {
 export function migrateAndAdmitDocument(input: {
   vertical: FirstPartyVerticalId;
   document: TenantThemeDocumentAny;
-}): DocumentAdmission & { migrated: TenantThemeDocumentV2 } {
-  const migrated = isTenantThemeDocumentV2(input.document)
-    ? assertTenantThemeDocumentV2(input.document)
-    : migrateDocumentV1ToV2(input.document);
+}): DocumentAdmission & { migrated: TenantThemeDocumentV3 } {
+  assertSupportedDocumentVersion(input.document);
+  // The chain is v1 -> v2 -> v3, and this door is the whole of it: a row is
+  // read as the version it was stored in and handed on as the current one. v1
+  // to v2 is untouched -- the same capture, the same refusals, the same
+  // derived plan -- and the second link adds a version number and nothing else.
+  const migrated = migrateDocumentV2ToV3(
+    isTenantThemeDocumentVersioned(input.document)
+      ? assertTenantThemeDocumentVersioned(input.document)
+      : migrateDocumentV1ToV2(input.document)
+  );
   return {
     ...admitDocument({ vertical: input.vertical, document: migrated }),
     migrated,

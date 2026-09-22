@@ -1028,7 +1028,9 @@ describe("migration is proven at the COMPILE door, not only structurally", () =>
   it("migrateAndAdmitDocument admits the migrated document through the publish door", () => {
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
       const result = migrateAndAdmitDocument({ vertical, document: ADVANCED_V1 });
-      expect(result.version).toBe(2);
+      // v1 -> v2 -> v3: the door reports the version it HANDS ON, and the patch
+      // equality below is what proves the second link carried nothing else.
+      expect(result.version).toBe(3);
       expect(result.migrated.plan).toBe("pro");
       expect(result.patch).toEqual(
         documentThemeIntent({ vertical, slug: "acme", document: ADVANCED_V1 }).patch
@@ -1053,9 +1055,16 @@ describe("migration is proven at the COMPILE door, not only structurally", () =>
   }
 
   it("passes a v2 document straight through instead of migrating it twice", () => {
+    // The migrate-on-read chain is v1 -> v2 -> v3 (WO-CAT-04), so a row is READ
+    // as the version it was stored in and handed on as the current one. The
+    // second link adds a version number and nothing else: no style is invented,
+    // no decision moves, and the admission below is byte-identical either way.
     const document = v2({ "palette.seeds": { primary: PRIMARY } });
     const result = migrateAndAdmitDocument({ vertical: "bithire", document });
-    expect(result.migrated).toEqual(document);
+    expect(result.migrated).toEqual({ ...document, version: 3 });
+    expect(result.patch).toEqual(
+      admitDocument({ vertical: "bithire", document }).patch
+    );
   });
 
   it("a v1 document the LOWERING refuses does not become a compilable v2 one", () => {
@@ -1221,7 +1230,10 @@ describe("migrate v1 -> v2 over the real app-platform rows", () => {
         vertical: "bithire",
         document,
       });
-      expect(admission.version).toBe(2);
+      // The migrate door hands on the CURRENT version: v1 -> v2 -> v3. What the
+      // row expresses is untouched -- `sameDoor` below compares the migrated
+      // row's bytes against its v1 self on both arms.
+      expect(admission.version).toBe(3);
       // Everything the migration carried is LIT: the remediation removes only
       // fields v2 retires, so nothing survives the migration without a keypath.
       expect(admission.unlit).toEqual([]);

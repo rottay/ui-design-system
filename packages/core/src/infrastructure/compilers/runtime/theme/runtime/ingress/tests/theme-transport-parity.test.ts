@@ -28,7 +28,9 @@ import { describe, expect, it } from "vitest";
 
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
+import { mergeThemePatches } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { compileThemeIntent } from "../../../facade/runtime/compile";
+import { baselineFor, styleThemePatch } from "../runtime/document-v2";
 import { documentThemeIntent } from "../presentation/document";
 import { draftPreviewThemeIntent } from "../presentation/preview";
 
@@ -285,6 +287,66 @@ describe("theme-transport-parity: shape.control-height", () => {
       expect(factor("standard")).toBe(1);
       expect(factor("compact")).toBeLessThan(factor("standard"));
       expect(factor("tall")).toBeGreaterThan(factor("standard"));
+    });
+  }
+});
+
+/**
+ * WO-CAT-04. A style-bearing document is the same parity question with one more
+ * source in it: a tenant inherits the style's form, and the draft door is handed
+ * the same form as its baseline. If the two disagree, the studio is showing an
+ * editor something publication will not produce -- which is F-08 again, with the
+ * style as the thing one transport expanded and the other did not.
+ *
+ * The style's patch is composed into the draft's baseline through the ingress's
+ * own `styleThemePatch`, which runs the SAME projection and the SAME
+ * `documentThemePatch` the admission runs. One chain, one keypath table.
+ */
+describe("theme-transport-parity: a style-bearing document", () => {
+  const STYLE = { id: "quiet-premium", version: 1 } as const;
+
+  for (const vertical of VERTICALS) {
+    it(`${vertical}: the styled document and the styled draft compile to the same block`, () => {
+      const fromDocument = compileThemeIntent(
+        documentThemeIntent({
+          vertical,
+          slug: SLUG,
+          document: { version: 3, plan: "standard", decisions: {}, style: STYLE } as never,
+        })
+      ).compiled;
+      const baseline = mergeThemePatches(
+        baselineFor(vertical, SLUG),
+        styleThemePatch({ vertical, plan: "pro", style: STYLE })
+      );
+      const fromDraft = compileThemeIntent(
+        draftPreviewThemeIntent({
+          vertical,
+          slug: SLUG,
+          draft: baseline,
+          carriedFrom: baseline,
+          style: STYLE,
+        })
+      ).compiled;
+      expect(fromDraft.cssVariables).toEqual(fromDocument.cssVariables);
+      expect(fromDraft.modeBlocks).toEqual(fromDocument.modeBlocks);
+    });
+
+    it(`${vertical}: the style MOVES the block, so the equality above is not vacuous`, () => {
+      const styled = compileThemeIntent(
+        documentThemeIntent({
+          vertical,
+          slug: SLUG,
+          document: { version: 3, plan: "standard", decisions: {}, style: STYLE } as never,
+        })
+      ).compiled;
+      const bare = compileThemeIntent(
+        documentThemeIntent({
+          vertical,
+          slug: SLUG,
+          document: { version: 2, plan: "standard", decisions: {} } as never,
+        })
+      ).compiled;
+      expect(styled.cssVariables).not.toEqual(bare.cssVariables);
     });
   }
 });

@@ -33,7 +33,7 @@ import {
   type ThemeDecisionTier,
   type ThemeDecisions,
 } from "@/contracts/theme/presentation/document";
-import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
+import type { TenantThemeDocumentVersioned } from "@/contracts/theme/presentation/document";
 import { themeControl } from "@/contracts/theme/runtime/catalog";
 import { FONT_PACK_MANIFEST } from "@/foundation/tokens/css/foundation/typography/font-packs/manifest";
 
@@ -197,7 +197,7 @@ function writeFamilies(target: ProjectionTarget, value: unknown): boolean {
  * shape that carries `recipeProfile`, `profiles`, `responsivePosture` and
  * chrome. A decisions-only document lowers identically through either mode.
  */
-export function projectDecisionsToV1(document: TenantThemeDocumentV2): {
+export function projectDecisionsToV1(document: TenantThemeDocumentVersioned): {
   v1: TenantThemeAdvancedDocument;
   projections: readonly DecisionProjection[];
 } {

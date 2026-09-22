@@ -87,10 +87,11 @@ function isDecisionProvenance(value: unknown): value is DecisionProvenance {
 /* Immutable raw identity                                                     */
 /* -------------------------------------------------------------------------- */
 
-/** The two authorship classes a v2 document admits. */
+/** The three authorship classes a decision document admits. */
 export const AUTHORED_SELECTION_KINDS = Object.freeze([
   "decision",
   "sanctioned-override",
+  "style-reference",
 ] as const);
 
 export type AuthoredSelectionKind = (typeof AUTHORED_SELECTION_KINDS)[number];
@@ -104,19 +105,35 @@ export type AuthoredSelectionKind = (typeof AUTHORED_SELECTION_KINDS)[number];
  */
 export type AuthoredSelectionRef<Id extends string = string> =
   | { readonly kind: "decision"; readonly id: Id }
-  | { readonly kind: "sanctioned-override"; readonly path: string };
+  | { readonly kind: "sanctioned-override"; readonly path: string }
+  | {
+      readonly kind: "style-reference";
+      readonly id: string;
+      readonly version: number;
+    };
 
-/** A stable key for one raw selection; two selections never share one. */
+/**
+ * A stable key for one raw selection; two selections never share one.
+ *
+ * ONE ENTRY PER STYLE, not one per row it supplies. A per-row style claim would
+ * collide with the tenant's own decision of the same id and be refused as a
+ * selection captured twice; keyed this way the two coexist, and the style's own
+ * key space is disjoint from `decision:<id>`.
+ */
 export function authoredSelectionKey(ref: AuthoredSelectionRef): string {
-  return ref.kind === "decision"
-    ? `decision:${ref.id}`
-    : `sanctioned-override:${ref.path}`;
+  if (ref.kind === "decision") return `decision:${ref.id}`;
+  if (ref.kind === "style-reference") {
+    return `style-reference:${ref.id}@${ref.version}`;
+  }
+  return `sanctioned-override:${ref.path}`;
 }
 
 /**
  * The tier of a raw selection, read from the injected catalog and from nowhere
  * else (I-P3b). `null` for a sanctioned override, whose gate is entitlement
- * rather than tier.
+ * rather than tier, and `null` for a style reference, which is not a decision
+ * the tenant activated: that is what makes a style invisible to the tier
+ * station and therefore inherited equally under every plan.
  */
 export function catalogTierOf<Id extends string, Tier extends string>(
   ref: AuthoredSelectionRef<NoInfer<Id>>,
@@ -262,6 +279,27 @@ function assertAuthoredSelectionRef<Id extends string, Tier extends string>(
     if (!(catalog.ids as readonly unknown[]).includes(value.id)) {
       throw new Error(
         `${where}: unknown decision id ${JSON.stringify(value.id)}; the catalog is the closed set`
+      );
+    }
+    return;
+  }
+  if (kind === "style-reference") {
+    assertExactKeys(value, ["kind", "id", "version"], [], `${where}.ref`);
+    if (typeof value.id !== "string" || value.id.length === 0) {
+      throw new Error(
+        `${where}: a style-reference ref carries a non-empty style id; got ${JSON.stringify(
+          value.id
+        )}`
+      );
+    }
+    // The STYLE REGISTRY is not consulted here and cannot be: this rung sits
+    // below `contracts/theme/**`, which is why the decision domain arrives as
+    // an injected catalog rather than an import. Resolution is the ingress's.
+    if (!Number.isSafeInteger(value.version) || (value.version as number) <= 0) {
+      throw new Error(
+        `${where}: a style-reference ref carries a positive integer version; got ${JSON.stringify(
+          value.version
+        )}`
       );
     }
     return;

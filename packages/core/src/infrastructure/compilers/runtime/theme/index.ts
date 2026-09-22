@@ -36,6 +36,7 @@ export {
   projectThemeDraft,
   readThemeDraft,
   staticThemeIntent,
+  ThemeStyleValidationError,
   verticalEngine,
 } from "./runtime/ingress";
 export type {

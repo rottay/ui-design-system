@@ -246,8 +246,15 @@ describe('tenant document v2 is nameable through @rottay/design-system/server', 
       vertical: 'bithire',
       document: v1Seeds(PRIMARY),
     });
-    expect(admitted.migrated.version).toBe(2);
-    expect(admitted.version).toBe(2);
+    // The migrate-on-read chain is v1 -> v2 -> v3 (WO-CAT-04): the FIRST link
+    // is still exactly what it was -- `migrateDocumentV1ToV2` above returns a
+    // v2 row with the same plan and the same decisions -- and the door hands on
+    // the current version. The second link adds a version number and nothing
+    // else, which the patch equality below is the real proof of.
+    expect(admitted.migrated.version).toBe(3);
+    expect(admitted.version).toBe(3);
+    expect(admitted.migrated.decisions).toEqual(migrated.decisions);
+    expect(admitted.migrated.plan).toBe(migrated.plan);
 
     const unmigratable = {
       schemaVersion: 1,

@@ -46,9 +46,14 @@ import {
 } from "@/contracts/theme/presentation/document";
 import {
   TENANT_THEME_DOCUMENT_VERSION_V2,
+  TENANT_THEME_DOCUMENT_VERSION_V3,
   assertTenantThemeDocumentV2,
+  assertTenantThemeDocumentV3,
+  isTenantThemeDocumentV3,
   type SanctionedOverrides,
   type TenantThemeDocumentV2,
+  type TenantThemeDocumentV3,
+  type TenantThemeDocumentVersioned,
 } from "@/contracts/theme/presentation/document";
 import { ThemePatchMigrationError } from "../../../../foundation/document-patch";
 
@@ -412,5 +417,26 @@ export function migrateDocumentV1ToV2(
     plan: minimumPlan(decisions, overrides),
     decisions,
     ...(overrides ? { overrides } : {}),
+  });
+}
+
+/**
+ * The second link of the migrate-on-read chain: v2 -> v3.
+ *
+ * It adds a version number and nothing else. A v3 document without a `style` IS
+ * a v2 document, so there is nothing to derive, nothing to default and no style
+ * to invent: an upgrade is a document the app REWRITES through the same door,
+ * naming the style it chose, never a migration that picks one.
+ *
+ * A v3 row passes through by identity, so the chain is idempotent and a caller
+ * that does not know which version it holds can run it unconditionally.
+ */
+export function migrateDocumentV2ToV3(
+  document: TenantThemeDocumentVersioned
+): TenantThemeDocumentV3 {
+  if (isTenantThemeDocumentV3(document)) return document;
+  return assertTenantThemeDocumentV3({
+    ...document,
+    version: TENANT_THEME_DOCUMENT_VERSION_V3,
   });
 }

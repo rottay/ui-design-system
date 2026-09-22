@@ -84,6 +84,85 @@ const F13_PROBES: readonly (readonly [string, TenantThemeDocument])[] = [
   ],
 ];
 
+/**
+ * WO-CAT-04. The same law over a document that NAMES a style: a style refused
+ * differently by preview and by the persisted door is a CAT-03 regression, not
+ * a CAT-04 finding. The third probe is the request-time envelope one -- the
+ * only style refusal that depends on an argument the caller supplies -- and it
+ * is compared with the narrowed `ranges` handed to BOTH doors, exactly as a
+ * publish terminal would hand it to one.
+ */
+const STYLE_PROBES: readonly (readonly [string, unknown])[] = [
+  ["an unknown style id", { id: "nope", version: 1 }],
+  ["an unavailable style version", { id: "quiet-premium", version: 7 }],
+  ["an inline style body", { id: "quiet-premium", version: 1, decisions: {} }],
+];
+
+const NARROWED = {
+  densityScale: { min: 0.85, max: 1.15 },
+  effectIntensity: { min: 0, max: 0.65 },
+  motionIntensity: { min: 0, max: 0.8 },
+  motionDurationScale: { min: 0.75, max: 1.35 },
+  typeScale: { min: 0.92, max: 1.08 },
+  radiusScale: { min: 0.8, max: 1.0 },
+};
+
+describe("preview and publish give ONE answer about a NAMED STYLE", () => {
+  for (const [label, style] of STYLE_PROBES) {
+    it(`refuses ${label} identically through both doors`, () => {
+      const styled = {
+        version: 3,
+        plan: "standard",
+        decisions: {},
+        style,
+      } as unknown as TenantThemeDocument;
+      const preview = throughPreview(styled);
+      const persisted = throughDocument(styled);
+      expect(preview.name).not.toBe("no-refusal");
+      expect(preview.name).toBe(persisted.name);
+      expect(preview.message).toBe(persisted.message);
+    });
+  }
+
+  it("refuses a caller-narrowed envelope identically, in one issue shape", () => {
+    const styled = {
+      version: 3,
+      plan: "standard",
+      decisions: {},
+      style: { id: "quiet-premium", version: 1 },
+    } as unknown as TenantThemeDocument;
+    const preview = refusal(() =>
+      previewThemeIntent({
+        vertical: VERTICAL,
+        slug: SLUG,
+        document: styled,
+        ranges: NARROWED,
+      })
+    );
+    const persisted = refusal(() =>
+      documentThemeIntent({
+        vertical: VERTICAL,
+        slug: SLUG,
+        document: styled,
+        ranges: NARROWED,
+      })
+    );
+    expect(preview.name).toBe("ThemeStyleValidationError");
+    expect(preview).toEqual(persisted);
+  });
+
+  it("admits the registered style identically through both doors", () => {
+    const styled = {
+      version: 3,
+      plan: "standard",
+      decisions: {},
+      style: { id: "quiet-premium", version: 1 },
+    } as unknown as TenantThemeDocument;
+    expect(throughPreview(styled).name).toBe("no-refusal");
+    expect(throughDocument(styled).name).toBe("no-refusal");
+  });
+});
+
 describe("preview and publish give ONE answer about one document", () => {
   for (const [label, doc] of F13_PROBES) {
     it(`refuses ${label} identically through both doors`, () => {

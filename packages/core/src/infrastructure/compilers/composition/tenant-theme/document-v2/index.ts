@@ -17,10 +17,14 @@
  */
 
 import {
-  TenantThemeDocumentV2Error,
-  isTenantThemeDocumentV2,
-  type TenantThemeDocumentV2,
+  TenantThemeDocumentError,
+  TENANT_THEME_DOCUMENT_VERSIONS,
+  assertSupportedDocumentVersion,
+  isTenantThemeDocumentVersioned,
+  type TenantThemeDocumentVersioned,
 } from "@/contracts/theme/presentation/document";
+import { ThemeStyleValidationError } from "@/infrastructure/compilers/runtime/theme";
+import { ThemeStyleReferenceError } from "@/contracts/theme/runtime/styles";
 import { ThemeDecisionDomainError } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/decisions";
 import { themeControl } from "@/contracts/theme/runtime/catalog";
 import { THEME_DECISION_IDS } from "@/contracts/theme/foundation/decisions";
@@ -52,8 +56,10 @@ import {
 } from "../foundation/envelope";
 
 export interface CompileTenantThemeDocumentV2Input {
-  /** The persisted v2 document; v1 belongs to `compileTenantTheme`. */
-  readonly document: TenantThemeDocumentV2;
+  /** The persisted decision document, either version; v1 belongs to
+   * `compileTenantTheme`. A v3 row is a v2 row that may name a style, so the
+   * terminal reads both rather than refusing the tenant that selected one. */
+  readonly document: TenantThemeDocumentVersioned;
   /** Artifact identity a ThemeIntent does not carry; the digest is over it. */
   readonly tenantId: string;
   readonly slug: string;
@@ -109,7 +115,7 @@ function dialPath(dial: EnvelopeRangedDial): string {
  * keypath is what locates the value in both spaces.
  */
 function authoredDials(
-  document: TenantThemeDocumentV2
+  document: TenantThemeDocumentVersioned
 ): TenantAppearanceGeneral {
   const decisions = document.decisions as Record<string, unknown>;
   const general: Record<string, unknown> = {};
@@ -143,11 +149,18 @@ function authoredDials(
 export function compileTenantThemeDocumentV2(
   input: CompileTenantThemeDocumentV2Input
 ): TenantThemeDocumentV2Compilation {
-  if (!isTenantThemeDocumentV2(input.document)) {
+  // The version fork FIRST, so an out-of-set version earns the contract's own
+  // named refusal here exactly as it does at the three ingress doors, instead
+  // of this terminal reporting "expected version 2" about a row that never
+  // claimed to be one.
+  assertSupportedDocumentVersion(input.document);
+  if (!isTenantThemeDocumentVersioned(input.document)) {
     refuse(
       "unsupported_schema_version",
       "$.document.version",
-      "Only TenantThemeDocument version 2 is supported"
+      `Only TenantThemeDocument versions ${TENANT_THEME_DOCUMENT_VERSIONS.join(
+        " | "
+      )} are supported`
     );
   }
   if (!isFirstPartyVerticalId(input.verticalKey)) {
@@ -237,7 +250,13 @@ export function compileTenantThemeDocumentV2(
       error instanceof TenantThemeValidationError ||
       error instanceof ThemeAdmissionError ||
       error instanceof ThemeDecisionDomainError ||
-      error instanceof TenantThemeDocumentV2Error
+      // The base, so a v3 refusal propagates by name exactly as a v2 one does.
+      error instanceof TenantThemeDocumentError ||
+      // A style refusal is the DOOR's, and the preview of the same document
+      // received this very object: translating it here would give publish a
+      // different text for an identical rejection.
+      error instanceof ThemeStyleReferenceError ||
+      error instanceof ThemeStyleValidationError
     ) {
       throw error;
     }

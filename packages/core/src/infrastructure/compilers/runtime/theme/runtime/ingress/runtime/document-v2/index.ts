@@ -12,7 +12,16 @@ export {
   type DecisionProjection,
   type UnlitReason,
 } from "./foundation/projection";
-export { migrateDocumentV1ToV2 } from "./foundation/migrate";
+export {
+  migrateDocumentV1ToV2,
+  migrateDocumentV2ToV3,
+} from "./foundation/migrate";
+export {
+  ThemeStyleValidationError,
+  admitStyle,
+  styleThemePatch,
+  type StyleAdmission,
+} from "./runtime/style";
 export {
   admitDocument,
   baselineFor,

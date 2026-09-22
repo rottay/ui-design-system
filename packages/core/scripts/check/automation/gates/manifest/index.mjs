@@ -1147,6 +1147,26 @@ export const CI_GATES = Object.freeze([
   { id: 'theme-single-listing', run: ['node', 'scripts/check/theme/single-listing/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'theme-single-listing-drill', },
   { id: 'theme-decision-schema-drill', run: ['node', '--test', 'scripts/generate/theme/schema/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-decision-schema'], },
   { id: 'theme-decision-schema', run: ['node', 'scripts/generate/theme/schema/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'theme-decision-schema-drill', },
+  // WO-CAT-04. Two laws over the reusable-style contract, each with its drill.
+  //
+  // `theme-document-version` is the transport's retirement check: v3 is the
+  // version a row is WRITTEN in and v2 is one it is READ in forever, so the
+  // gate refuses a v2 literal in a WRITE position while keeping the migrate
+  // chain's own literal legal -- and its drill plants both halves, because a
+  // gate that refused every v2 literal would refuse the read path. It also
+  // asserts the version fork is still called from `admitDocument`: deleting
+  // that one line leaves every type correct and returns two public doors to a
+  // bare TypeError that names neither the version nor the door.
+  //
+  // `theme-style-registry` holds a published style to the partition it may
+  // author, the floor it must clear and the envelope of every vertical it
+  // declares. The envelope half lives HERE rather than in the contract for a
+  // structural reason: `contracts/theme/runtime/envelopes` is the style
+  // owner's unranked peer, so a production edge to it is sibling debt.
+  { id: 'theme-document-version-drill', run: ['node', '--test', 'scripts/check/theme/document-version/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-document-version'], },
+  { id: 'theme-document-version', run: ['node', 'scripts/check/theme/document-version/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'theme-document-version-drill', },
+  { id: 'theme-style-registry-drill', run: ['node', '--test', 'scripts/check/theme/style-registry/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-style-registry'], },
+  { id: 'theme-style-registry', run: ['node', 'scripts/check/theme/style-registry/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'theme-style-registry-drill', },
   // The DRILL is blocking and green; the GATE is registered non-blocking with a
   // written reason because it cannot pass before the derivation lane exists.
   // That is the sanctioned shape, and the only alternative -- leaving the law

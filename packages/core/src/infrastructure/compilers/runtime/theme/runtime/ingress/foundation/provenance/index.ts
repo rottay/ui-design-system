@@ -246,6 +246,91 @@ function decisionClaim(
 }
 
 /**
+ * What a STYLE claims, as ONE entry naming the leaves its rows actually wrote.
+ *
+ * TWO KEYPATH SPACES, and this is the bridge. The underlay writes v1 DOCUMENT
+ * keypaths (`appearance.general.shape.radiusScale`); a ledger leaf is a
+ * Theme-space keypath (`typography.fontFamilyBase`). So the claim is built from
+ * `namedLeaves`/`expansionEntries` -- the same pair every other claim here uses
+ * -- over the rows the underlay actually wrote, and never by re-deriving leaves
+ * from the v1 paths it just touched.
+ *
+ * `written` is therefore load-bearing: a style row the tenant authored or the
+ * profile expansion already filled writes nothing, so it contributes no leaf,
+ * and the entry is retained with fewer leaves rather than claiming a value it
+ * did not cause.
+ */
+export function styleProvenanceClaim(input: {
+  readonly ref: { readonly id: string; readonly version: number };
+  readonly authoredValue: unknown;
+  readonly written: ReadonlyMap<ThemeDecisionId, unknown>;
+}): ThemeProvenanceClaim {
+  const leaves: { leaf: string; specificity: "named" | "expansion-derived" }[] = [];
+  const seen = new Set<string>();
+  for (const [id, value] of input.written) {
+    for (const leaf of namedLeaves(id, value)) {
+      if (seen.has(leaf)) continue;
+      seen.add(leaf);
+      leaves.push({ leaf, specificity: "named" });
+    }
+    for (const entry of expansionEntries(id, value)) {
+      if (seen.has(entry.leaf)) continue;
+      seen.add(entry.leaf);
+      leaves.push({ leaf: entry.leaf, specificity: "expansion-derived" });
+    }
+  }
+  return {
+    ref: { kind: "style-reference", id: input.ref.id, version: input.ref.version },
+    provenance: CARRIED,
+    authoredValue: input.authoredValue,
+    leaves,
+  };
+}
+
+/**
+ * The same entry for the DRAFT door, which claims chrome and nothing else.
+ *
+ * A draft is a whole theme, so outside chrome moved-ness is the entire answer
+ * and a claim there would invent an owner for a leaf the door cannot attribute.
+ * Inside chrome the style entry meets the decision claims the draft loop builds
+ * first, at rank 2, and loses every leaf they already own -- which is the
+ * pre-emption this door has by construction, not a tie anybody has to break.
+ */
+export function draftStyleClaim(input: {
+  readonly ref: { readonly id: string; readonly version: number };
+  readonly decisions: Readonly<Record<string, unknown>>;
+  readonly draft: FlatTheme;
+}): ThemeProvenanceClaim {
+  const leaves: { leaf: string; specificity: "named" | "expansion-derived" }[] = [];
+  const seen = new Set<string>();
+  for (const id of THEME_DECISION_IDS) {
+    const value = input.decisions[id];
+    if (value === undefined) continue;
+    for (const leaf of namedLeaves(id, value)) {
+      if (!isChromeLeaf(leaf) || seen.has(leaf)) continue;
+      seen.add(leaf);
+      leaves.push({ leaf, specificity: "named" });
+    }
+    for (const entry of expansionEntries(id, value)) {
+      if (!isChromeLeaf(entry.leaf) || seen.has(entry.leaf)) continue;
+      // The SAME filter `draftChromeClaim` applies to a decision's expansion: a
+      // leaf whose draft value is not what the lowering derives was moved by
+      // the editor, so neither the decision nor the style that would have
+      // expanded into it owns it.
+      if (readDraftLeaf(input.draft, entry.leaf) !== entry.value) continue;
+      seen.add(entry.leaf);
+      leaves.push({ leaf: entry.leaf, specificity: "expansion-derived" });
+    }
+  }
+  return {
+    ref: { kind: "style-reference", id: input.ref.id, version: input.ref.version },
+    provenance: CARRIED,
+    authoredValue: input.decisions,
+    leaves,
+  };
+}
+
+/**
  * What a draft can assert about a chrome value it merely CARRIES: nothing.
  *
  * A document states only what its tenant chose, so every leaf in it is
@@ -419,6 +504,12 @@ export function documentProvenanceLedger(input: {
    * one's answer downstream.
    */
   readonly profileClaims?: readonly ThemeProvenanceClaim[];
+  /**
+   * The single entry a named style contributes, already narrowed to the leaves
+   * its underlay wrote. It is appended rather than folded: a style is not a
+   * decision the tenant authored in part, so there is nothing to split.
+   */
+  readonly styleClaim?: ThemeProvenanceClaim;
 }): ThemeProvenanceLedger {
   const decisions = input.decisions;
   const authored: ThemeProvenanceClaim[] = [
@@ -428,7 +519,11 @@ export function documentProvenanceLedger(input: {
     ...chromeOverrideClaims(input.chrome, input.chromeTransportPrefix),
   ];
   return resolveDecisionProvenanceLedger(
-    [...authored, ...foldProfileClaims(authored, input.profileClaims ?? [])],
+    [
+      ...authored,
+      ...foldProfileClaims(authored, input.profileClaims ?? []),
+      ...(input.styleClaim ? [input.styleClaim] : []),
+    ],
     THEME_DECISION_PROVENANCE_CATALOG,
     "documentProvenanceLedger"
   );
@@ -529,6 +624,15 @@ export function draftProvenanceLedger(
   options: {
     /** The baseline the draft is a patch of. */
     readonly carriedFrom: Theme;
+    /**
+     * The entry a named style contributes, so the draft door RECORDS the ref
+     * the WO requires it to record. Its chrome leaves are pre-empted by the
+     * decision claims below, which the loop builds first and which stamp
+     * `direct-override`: a style is reported on this door exactly as a vertical
+     * preset is, because the door reads a flattened theme and cannot see which
+     * source put a value in it.
+     */
+    readonly styleClaim?: ThemeProvenanceClaim;
   }
 ): ThemeProvenanceLedger {
   const { carriedFrom } = options;
@@ -549,6 +653,7 @@ export function draftProvenanceLedger(
       claimed,
       carriedFrom,
     }),
+    ...(options.styleClaim ? [options.styleClaim] : []),
     ...Object.keys(modes).flatMap((mode) =>
       chromeOverrideClaims(
         modes[mode as keyof typeof modes]?.chrome,

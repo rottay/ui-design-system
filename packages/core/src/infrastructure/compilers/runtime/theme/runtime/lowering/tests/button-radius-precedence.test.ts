@@ -75,9 +75,13 @@ const ownerOfRadius = (
     (candidate) => candidate.effectiveLeaves.includes(LEAF)
   );
   if (!entry) return undefined;
-  return entry.ref.kind === "decision"
-    ? `decision:${entry.ref.id}`
-    : `override:${entry.ref.path}`;
+  if (entry.ref.kind === "decision") return `decision:${entry.ref.id}`;
+  // A style entry is neither a decision nor an override; naming it as one would
+  // make this reader's answer about ownership quietly wrong.
+  if (entry.ref.kind === "style-reference") {
+    return `style:${entry.ref.id}@${entry.ref.version}`;
+  }
+  return `override:${entry.ref.path}`;
 };
 
 for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {

@@ -8,22 +8,33 @@
 
 import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
 import {
-  isTenantThemeDocumentV2,
+  isTenantThemeDocumentVersioned,
   type TenantThemeDocumentAny,
 } from "@/contracts/theme/presentation/document";
+import type { ThemeStyleReference } from "@/contracts/theme/runtime/styles";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import type { TenantThemeVerticalEnvelope } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { admitDocument, baselineFor, type DocumentAdmission } from "../../runtime/document-v2";
+import {
+  admitDocument,
+  baselineFor,
+  styleThemePatch,
+  type DocumentAdmission,
+} from "../../runtime/document-v2";
 import { authoredThemePatch } from "../../foundation/draft-patch";
 import { movedThemePatch } from "../../foundation/authorship";
-import { draftProvenanceLedger } from "../../foundation/provenance";
+import {
+  draftProvenanceLedger,
+  draftStyleClaim,
+} from "../../foundation/provenance";
 import { liftAuthoredTheme, readGovernedTheme } from "../../../lowering/foundation/intake";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import {
   isGovernedActive,
+  mergeThemePatches,
   type Governed,
   type Theme,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
+import { resolveThemeStyle } from "@/contracts/theme/runtime/styles";
 
 /** What an unsaved document preview needs to name a compile. */
 export interface PreviewThemeIntentInput {
@@ -62,6 +73,17 @@ export interface DraftPreviewThemeIntentInput {
    * one field therefore keeps every other customization it inherited.
    */
   carriedFrom?: Theme;
+  /**
+   * The style the tenant this draft belongs to has selected.
+   *
+   * Without it the door has nothing to resolve from, and a draft opened over a
+   * style-bearing tenant measures every style leaf against a baseline that does
+   * not contain the style: every one of them enters the patch as tenant
+   * authorship and the studio reports the style's ink as the editor's. It is
+   * ignored when `carriedFrom` is supplied, because then the caller has already
+   * said what the draft is a patch of.
+   */
+  style?: ThemeStyleReference;
 }
 
 /**
@@ -71,7 +93,7 @@ export interface DraftPreviewThemeIntentInput {
 function entitlementOf(
   document: TenantThemeDocumentAny
 ): Pick<ThemeIntent, "entitlement"> {
-  return isTenantThemeDocumentV2(document)
+  return isTenantThemeDocumentVersioned(document)
     ? { entitlement: { plan: document.plan } }
     : {};
 }
@@ -270,12 +292,27 @@ export function projectThemeDraft(draft: Theme): FlatTheme {
 export function draftPreviewThemeIntent(
   input: DraftPreviewThemeIntentInput
 ): ThemeIntent {
+  // The baseline the draft is a patch OF, composed in THEME space. It is not
+  // the underlay: that writes v1 document keypaths and a `carriedFrom` is a
+  // Theme. The style's patch comes from the same projection and the same
+  // `documentThemePatch` the compile door runs, so the draft measures against
+  // exactly the baseline publishing it will produce.
   const carriedFrom =
-    input.carriedFrom ?? baselineFor(input.vertical, input.slug);
+    input.carriedFrom ?? composedBaseline(input.vertical, input.slug, input.style);
   // ONE projection, at the door. Everything below reads the same flat view the
   // flat draft used to arrive as, so this move changes the transport's TYPE and
   // nothing about what the door decides.
   const draft = readGovernedTheme(readThemeDraft(input.draft));
+  const styleClaim = input.style
+    ? draftStyleClaim({
+        ref: input.style,
+        decisions: resolveThemeStyle(input.style).document.decisions as Record<
+          string,
+          unknown
+        >,
+        draft,
+      })
+    : undefined;
   return {
     vertical: input.vertical,
     slug: input.slug,
@@ -284,12 +321,38 @@ export function draftPreviewThemeIntent(
     // baseline is the vertical's own, and presenting it as tenant authorship
     // moved the tenant posture floors the compile door never sees.
     patch: movedThemePatch(authoredThemePatch(draft), carriedFrom),
-    ledger: draftProvenanceLedger(draft, input.vertical, { carriedFrom }),
+    ledger: draftProvenanceLedger(draft, input.vertical, {
+      carriedFrom,
+      styleClaim,
+    }),
     // The SAME baseline the prune measured against, handed down: what the draft
     // carried is carried by the compiled theme too, not re-derived from the
     // preset by the next station.
     baseline: carriedFrom,
   };
+}
+
+/**
+ * The vertical's baseline with the style the tenant selected composed onto it.
+ *
+ * A style-bearing tenant's draft is a patch of the vertical PLUS its style, and
+ * the two are composed here rather than carried: `carriedFrom` is what the
+ * prune measures against and what the intent hands down as `baseline`, so a
+ * baseline missing the style turns every inherited leaf into tenant authorship.
+ * The plan is `pro` because a plan limits EDITING, never inheritance, and this
+ * composition is not an edit.
+ */
+function composedBaseline(
+  vertical: FirstPartyVerticalId,
+  slug: string,
+  style: ThemeStyleReference | undefined
+): Theme {
+  const baseline = baselineFor(vertical, slug);
+  if (style === undefined) return baseline;
+  return mergeThemePatches(
+    baseline,
+    styleThemePatch({ vertical, plan: "pro", style })
+  );
 }
 
 /**

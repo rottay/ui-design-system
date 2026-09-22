@@ -1,0 +1,12 @@
+{
+  "decisions": {
+    "typography.pairing": "editorial",
+    "typography.scale": 1.05,
+    "shape.radius-scale": 1.1,
+    "shape.button-style": "soft",
+    "surfaces.elevation-posture": "elevated",
+    "surfaces.effect-intensity": 0.45,
+    "states.focus-style": "underline",
+    "motion.dial": { "intensity": 0.5, "durationScale": 1.1 }
+  }
+}

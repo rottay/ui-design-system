@@ -400,6 +400,8 @@ export {
   SURFACE_BORDER_STYLES,
   SURFACE_ELEVATION_POSTURES,
   TENANT_THEME_DOCUMENT_VERSION_V2,
+  TENANT_THEME_DOCUMENT_VERSION_V3,
+  TENANT_THEME_DOCUMENT_VERSIONS,
   THEME_DECISION_BOUNDS,
   THEME_DECISION_IDS,
   THEME_DECISION_TIERS,
@@ -410,11 +412,36 @@ export {
   TYPOGRAPHY_NUMERIC_POSTURES,
   TYPOGRAPHY_PAIRINGS,
   TYPOGRAPHY_ROLE_WEIGHTS,
+  TenantThemeDocumentError,
   TenantThemeDocumentV2Error,
   activatedDecisionIds,
+  assertStyleReferenceShape,
+  assertSupportedDocumentVersion,
   assertTenantThemeDocumentV2,
+  assertTenantThemeDocumentV3,
+  assertTenantThemeDocumentVersioned,
   isTenantThemeDocumentV2,
+  isTenantThemeDocumentV3,
+  isTenantThemeDocumentVersioned,
 } from '../../contracts/theme/presentation/document';
+/**
+ * The style contract: a tenant row NAMES a published style and never carries
+ * one. `assertThemeStyleReference` is published with the types because a writer
+ * that can build the reference must be able to refuse a malformed one at the
+ * same boundary it writes it; `THEME_STYLE_IDS` is published because a surface
+ * offering the choice has to know what exists. The registry itself, the
+ * partition and the clearance stay unpublished: they are the DS's own law over
+ * content no caller authors.
+ */
+export {
+  THEME_STYLE_IDS,
+  ThemeStyleReferenceError,
+  assertThemeStyleReference,
+} from '../../contracts/theme/runtime/styles';
+export type {
+  ThemeStyleId,
+  ThemeStyleReference,
+} from '../../contracts/theme/runtime/styles';
 export type {
   ChromeAnatomy,
   DensityMode,
@@ -440,6 +467,9 @@ export type {
   TenantThemeDocumentAny,
   TenantThemeDocumentV1,
   TenantThemeDocumentV2,
+  TenantThemeDocumentV3,
+  TenantThemeDocumentVersion,
+  TenantThemeDocumentVersioned,
   ThemeDecisionId,
   ThemeDecisionTier,
   ThemeDecisions,

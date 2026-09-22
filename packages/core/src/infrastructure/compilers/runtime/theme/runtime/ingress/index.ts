@@ -21,12 +21,17 @@ export {
   documentAnyThemePatch,
   migrateAndAdmitDocument,
   migrateDocumentV1ToV2,
+  migrateDocumentV2ToV3,
   projectDecisionsToV1,
+  ThemeStyleValidationError,
+  admitStyle,
+  styleThemePatch,
   v1KeypathOf,
 } from "./runtime/document-v2";
 export type {
   DecisionProjection,
   DocumentAdmission,
+  StyleAdmission,
   UnlitReason,
 } from "./runtime/document-v2";
 export { authoredThemePatch } from "./foundation/draft-patch";

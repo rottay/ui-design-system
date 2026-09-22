@@ -278,7 +278,10 @@ describe("compileTenantThemeDocumentV2 · refusals, by name", () => {
           {
             code: "unsupported_schema_version",
             path: "$.document.version",
-            message: "Only TenantThemeDocument version 2 is supported",
+            // WO-CAT-04: the terminal reads both decision versions, so the
+            // refusal names the set rather than a single literal. A v1 row is
+            // still refused here; `compileTenantTheme` is its door.
+            message: "Only TenantThemeDocument versions 2 | 3 are supported",
           },
         ],
       })

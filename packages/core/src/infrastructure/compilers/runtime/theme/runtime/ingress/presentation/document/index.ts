@@ -8,7 +8,7 @@
 
 import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
 import {
-  isTenantThemeDocumentV2,
+  isTenantThemeDocumentVersioned,
   type TenantThemeDocumentAny,
 } from "@/contracts/theme/presentation/document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
@@ -48,7 +48,10 @@ export interface DocumentThemeIntentInput {
 function entitlementOf(
   document: TenantThemeDocumentAny
 ): Pick<ThemeIntent, "entitlement"> {
-  return isTenantThemeDocumentV2(document)
+  // The question is "is this a decision document", not "is it version 2": a v3
+  // row states the same `plan` and a discriminant pinned to one literal would
+  // have silently dropped the entitlement of every row the next version writes.
+  return isTenantThemeDocumentVersioned(document)
     ? { entitlement: { plan: document.plan } }
     : {};
 }
