@@ -31,6 +31,26 @@ export function maxDurationMs(value: string): number {
   return max;
 }
 
+const PLAIN_TIME = /^-?(?:\d+\.?\d*|\.\d+)(?:ms|s)$/;
+
+/**
+ * An unregistered custom property computes to its token stream, so a channel
+ * written as `calc(var(--x) * scale)` reads back unevaluated. Such a value is
+ * resolved through `transition-duration` on a hidden child, which inherits the
+ * root's channels; a value invalid as a <time> computes to `0s`.
+ */
+function resolveDurationMs(root: Element, durationVar: string, raw: string): number {
+  if (!raw) return 0;
+  if (PLAIN_TIME.test(raw)) return parseDurationMs(raw);
+  const probe = root.ownerDocument.createElement('span');
+  probe.style.setProperty('display', 'none');
+  probe.style.setProperty('transition-duration', `var(${durationVar})`);
+  root.appendChild(probe);
+  const resolved = getComputedStyle(probe).transitionDuration;
+  probe.remove();
+  return parseDurationMs(resolved);
+}
+
 /**
  * Reads the duration and easing channels ONCE, from the element that owns the
  * group. A channel with no resolved duration yields `0`, which every play loop
@@ -39,7 +59,7 @@ export function maxDurationMs(value: string): number {
 export function readTiming(root: Element, durationVar: string, easingVar: string): LayoutTiming {
   const computed = getComputedStyle(root);
   return {
-    durationMs: parseDurationMs(computed.getPropertyValue(durationVar)),
+    durationMs: resolveDurationMs(root, durationVar, computed.getPropertyValue(durationVar).trim()),
     easing: computed.getPropertyValue(easingVar).trim(),
   };
 }
