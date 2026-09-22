@@ -5885,7 +5885,7 @@
    "lane": "platform-invariants",
    "order": 3,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-03"
    ],
@@ -5894,9 +5894,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-40, F-47; supersedes: WO-ARC-15, WO-GAT-11",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-dt",
+   "claimedAt": "2026-09-22",
+   "progressLog": [
+    {
+     "at": "2026-09-22 11:13",
+     "by": "kimi-dt",
+     "note": "2026-09-22 kimi-dt: contrato ADOPTADO tras ciclo shared-core completo (debrief v1 Opus → revision Fable (6 cambios) → v2 → confirmacion Fable (5 ediciones finales) → v3 → ACCEPT final receipt-inv-03-final-confirm-fable.json; sha256 del v3 en el recibo). Rulings DT: Q1=B como root guard unlayered html[data-engine='modern'][data-theme] (0,2,1) con lista pineada de 9 canales + drift test de 8 casos + sonda emulateMedia; la ley es DEPENDENCIA-de-decision-tenant, no constancia; A (delta de color postura) ruteado al lowering owner y DEBE registrarse antes de cerrar INV-03. Q2=ley adoptada con :where([data-engine='modern']) + test specificity-0. Q3=family=EVI-02 existente, route=INV-03 retarget a /probe/ds-reference. Q4=L1-L4+L5 (baseline ausente FALLA; AXE_UPDATE_BASELINE=1 unica escritura; AXE_NO_WRITE=1 suprime ambos paths). Q5=slot serial + opt-out. Q6=Files extendido (base entrypoint, scripts/check/a11y, avatar presentation) como redefinicion de aceptacion con firma DT (precedente Q-DER06-RES opcion D). Q7=reserva manifest solo vs INV-08. Q8=autoridad de cierre = Why line + acceptance gate; pack 1f661d82a (refs/checkpoints/main-preconsolidation-2026-09-14, NO ancestro) = evidencia recuperada SIN autoridad; los 8 keydown sueltos a UN paquete keyboard nombrado (decrease-only desde 8, registrado antes de cerrar). Q9=minimal. Q10=prosa + asercion JSON parseada con drill. Q11=ledger decrease-only para las 6 filas artifact + repair con Option A; los 2 sitios authored rem (button:15, avatar:177) se reparan en Lot B ANTES del cambio de regex, fuera del ledger. Implementacion por lotes: A=pointerType (S, valida con 12 suites table kernel por el coupling usePartInteraction), B=pisos forced-colors/prefers-contrast (M), C=gate touch-target + axe retarget (M). N2/R3 ruteados (FAM-05 done, entrada post-close Q-DER06-RES). RED VIVA a no reparar: las filas deferred rottay con D-24."
+    }
+   ]
   },
   {
    "id": "WO-INV-04",
