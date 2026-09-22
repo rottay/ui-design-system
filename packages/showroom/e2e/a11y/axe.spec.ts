@@ -11,6 +11,8 @@ import {
   intersect,
   ledgerKey,
   readLedger,
+  SCENE_CASES,
+  scenePath,
   SCENES,
   type LedgerEntry,
 } from './baseline';
@@ -49,21 +51,34 @@ const reportPath = join(
 );
 
 /**
- * A scene is ready when the tenant scope is stamped AND the provider has
- * actually painted. Both are needed: the stamp is server-rendered, but the DB
- * ground defers its provider past hydration (ground/client-only.tsx), so a run
- * that waited only on `data-tenant` would measure an empty body and report a
- * clean page. Without `html[data-tenant]` the tenant artifact never applies at
- * all and the run reads as a pass over an unpainted document.
+ * A scene is ready when the route really served it, the tenant scope is
+ * stamped, and the provider has actually painted. All three are load-bearing:
+ * a 404 from a scene that fails closed on a missing `?only=` still carries the
+ * stamp, and the DB ground defers its provider past hydration
+ * (ground/client-only.tsx), so a run that waited only on `data-tenant` would
+ * measure an empty body and report a clean page.
  */
 const MIN_PAINTED_NODES = 5;
 
-async function settle(page: import('@playwright/test').Page) {
+async function settle(
+  page: import('@playwright/test').Page,
+  response: import('@playwright/test').Response | null,
+  scene: string,
+) {
+  // Exact, not heuristic: `notFound()` serves 404, so a scene that failed
+  // closed can never be mistaken for one that rendered clean.
+  expect(response?.status(), `${scene}: the route did not serve the scene`).toBe(200);
   await page.waitForFunction(
-    (minimum) =>
+    ({ minimum, marker }) =>
       Boolean(document.documentElement.dataset.tenant) &&
+      (marker === null || document.querySelector(marker) !== null) &&
       document.querySelectorAll('[data-part], [class*="rottay-"], [class*="ds-"]').length >= minimum,
-    MIN_PAINTED_NODES,
+    {
+      minimum: MIN_PAINTED_NODES,
+      // `lab-scene` is READINESS, not identity: SceneFrame stamps it on <main>
+      // for most unparameterized scenes too. The 200 above is the discriminator.
+      marker: SCENE_CASES[scene] ? '[data-testid="lab-scene"]' : null,
+    },
     { timeout: 30_000 },
   );
   await page.waitForLoadState('networkidle');
@@ -95,8 +110,8 @@ test.describe.serial('route-level axe — DS reference lab, Modern, two BitHire 
       test.setTimeout(120_000);
       for (const ground of GROUNDS) {
         await test.step(`${ground} / ${scene}`, async () => {
-          await page.goto(`/probe/ds-reference/${ground}/${scene}`, { waitUntil: 'domcontentloaded' });
-          await settle(page);
+          const response = await page.goto(scenePath(ground, scene), { waitUntil: 'domcontentloaded' });
+          await settle(page, response, scene);
 
           const results = await new AxeBuilder({ page }).analyze();
           // Non-vacuity: axe over an unpainted document still "passes".

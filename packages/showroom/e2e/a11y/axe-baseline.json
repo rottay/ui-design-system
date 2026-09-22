@@ -1,11 +1,14 @@
 {
   "purpose": "Route-level axe debt for the DS reference lab under the Modern engine: two real BitHire-vertical tenants (a static FlatTheme ground and a published-document ground compiled to an SSR-embedded artifact) across all 25 lab scenes, which between them cover all 24 primitives/inputs families. It records findings at the blocking impact named in \"impacts\" and nothing above it. Family-level axe debt is NOT here: it belongs to the per-family AXE_DEBT pins owned by WO-EVI-02, and a route-level finding whose node is already pinned there is recorded as routed, never re-litigated (L4).",
   "owner": "WO-INV-03 while it is open; thereafter the DS a11y CI job (.github/workflows/ci.yml, the a11y specs step).",
-  "provenance": "db759703a 2026-09-22 — schema and laws established by WO-INV-03 Lot C. NO ROUTE MEASUREMENT HAS BEEN TAKEN AGAINST THIS MATRIX YET: entries is deliberately empty and the retargeted batch is gated off until the DT's serial browser slot runs it. Command: DS_AXE_ROUTE_BATCH=1 pnpm --filter @rottay/showroom exec playwright test e2e/a11y/axe.spec.ts",
+  "provenance": "db759703a 2026-09-22 — schema and laws established by WO-INV-03 Lot C. The DT's first slot ran the batch read-only (AXE_NO_WRITE=1): 24 scenes settled, charts timed out, and the four other parameterized scenes had been scanned over a 404 — the case axis below is the repair. entries stays empty: no run against the corrected matrix has been adjudicated yet. Command: DS_AXE_ROUTE_BATCH=1 pnpm --filter @rottay/showroom exec playwright test e2e/a11y/axe.spec.ts",
   "retire": "Deleted when the route batch runs clean with no entries. Individual entries retire as their owner repairs them, via AXE_UPDATE_BASELINE=1, which rewrites entries to the intersection of this ledger and the current findings and therefore only ever shrinks.",
   "matrix": {
     "engine": "modern",
-    "grounds": ["bithire", "the-management"],
+    "grounds": [
+      "bithire",
+      "the-management"
+    ],
     "scenes": [
       "charts",
       "component-behaviors",
@@ -32,9 +35,21 @@
       "structures",
       "surfaces",
       "transient-material"
-    ]
+    ],
+    "cases": {
+      "note": "Five scenes fail closed without ?only=. One representative case each keeps the batch at 50 loads; all 24 primitives/inputs families live in the unparameterized scenes, so the WO's acceptance is unaffected. The full axis is 96 cases (charts 18, compositions 4, monochrome 11, structures 27, surfaces 36) and sweeping it is 232 loads, ~4.6x this slot — an open budget decision, not covered here. `measured` below is a read-only copy of SCENE_CASES in baseline/index.ts; axe-baseline.spec.ts asserts the two are equal.",
+      "measured": {
+        "charts": "bar-chart",
+        "compositions": "page-shell",
+        "monochrome": "terminal-block",
+        "structures": "app-shell",
+        "surfaces": "dashboard"
+      }
+    }
   },
-  "impacts": ["serious"],
+  "impacts": [
+    "serious"
+  ],
   "entries": {},
   "deferred": {
     "color-contrast|tabs|rottay|#tabs-tab-_id_-1": {
