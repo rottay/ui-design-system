@@ -28,41 +28,40 @@
     "parentByDesignFailures": []
   },
   "stats": {
-    "rows": 177,
+    "rows": 181,
     "byVia": {
-      "unattributed": 134,
-      "head-exact": 23,
+      "unattributed": 137,
+      "head-exact": 24,
       "declared-fallback": 20
     },
     "byTier": {
-      "sin-tier": 171,
+      "sin-tier": 177,
       "control": 1,
-      "base": 4,
+      "base": 2,
       "page": 1
     },
     "byProperty": {
       "radius": 7,
-      "fg": 90,
-      "sin-propiedad": 57,
-      "seed.error": 1,
+      "fg": 91,
+      "seed.error": 3,
+      "sin-propiedad": 58,
+      "seed.success": 2,
+      "seed.warning": 2,
       "seed.info": 1,
-      "seed.success": 1,
-      "seed.warning": 1,
       "height": 1,
       "border": 3,
       "intensity": 2,
-      "family": 3,
+      "family": 4,
       "duration": 1,
       "bg": 1,
-      "seed.primary": 3,
       "delta.active": 1,
       "delta.disabled": 1,
       "delta.hover": 1,
       "delta.selected": 1,
       "scale": 1
     },
-    "withRoot": 43,
-    "withoutRoot": 134,
+    "withRoot": 44,
+    "withoutRoot": 137,
     "sharedHeadsResolved": 9,
     "sharedHeadsUnresolved": 0,
     "ownersCensused": 11,
@@ -72,13 +71,14 @@
     "rowsRefinedByStep": 0,
     "rowsParentByDesign": 0,
     "byStep": {
-      "sin-paso": 177
+      "sin-paso": 181
     },
     "r2Floor": 13,
     "r2FloorRoots": [
       "control.ratio.radius",
       "motion.duration",
       "motion.intensity",
+      "tier.page.bg",
       "type.scale"
     ]
   },
@@ -177,28 +177,28 @@
   },
   "byOwner": {
     "THEME.palette": {
-      "channels": 101,
-      "unattributed": 76,
+      "channels": 104,
+      "unattributed": 75,
       "properties": {
-        "fg": 67,
-        "sin-propiedad": 9
+        "fg": 70,
+        "sin-propiedad": 5
+      }
+    },
+    "THEME.typography": {
+      "channels": 21,
+      "unattributed": 16,
+      "properties": {
+        "sin-propiedad": 16
       }
     },
     "THEME.surfaces": {
       "channels": 22,
-      "unattributed": 16,
+      "unattributed": 15,
       "properties": {
-        "radius": 6,
+        "radius": 5,
         "height": 1,
         "sin-propiedad": 6,
         "border": 3
-      }
-    },
-    "THEME.typography": {
-      "channels": 20,
-      "unattributed": 16,
-      "properties": {
-        "sin-propiedad": 16
       }
     },
     "THEME.expressive": {
@@ -215,11 +215,25 @@
         "sin-propiedad": 7
       }
     },
+    "THEME.chrome.sidebar": {
+      "channels": 6,
+      "unattributed": 5,
+      "properties": {
+        "sin-propiedad": 5
+      }
+    },
     "THEME.responsive": {
       "channels": 4,
       "unattributed": 4,
       "properties": {
         "sin-propiedad": 4
+      }
+    },
+    "THEME.appearance": {
+      "channels": 1,
+      "unattributed": 1,
+      "properties": {
+        "sin-propiedad": 1
       }
     },
     "THEME.expressive.profiles": {
@@ -242,16 +256,6 @@
       "properties": {
         "sin-propiedad": 1
       }
-    },
-    "THEME.appearance": {
-      "channels": 1,
-      "unattributed": 0,
-      "properties": {}
-    },
-    "THEME.chrome.sidebar": {
-      "channels": 6,
-      "unattributed": 0,
-      "properties": {}
     }
   },
   "rows": [
@@ -429,7 +433,6 @@
         "THEME.palette"
       ],
       "contributingSlots": [
-        "bithire:THEME.palette.backgroundColor",
         "bithire:THEME.palette.primaryColor"
       ],
       "rootExposure": "tenant-dial",
@@ -439,6 +442,54 @@
     },
     {
       "channel": "--ds-chart-series-10",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.palette"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.primaryColor"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-chart-series-11",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.palette"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.primaryColor"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-chart-series-12",
       "rootId": null,
       "via": null,
       "evidence": {
@@ -550,7 +601,6 @@
         "THEME.palette"
       ],
       "contributingSlots": [
-        "bithire:THEME.palette.backgroundColor",
         "bithire:THEME.palette.primaryColor"
       ],
       "rootExposure": null,
@@ -599,7 +649,6 @@
         "THEME.palette"
       ],
       "contributingSlots": [
-        "bithire:THEME.palette.backgroundColor",
         "bithire:THEME.palette.primaryColor"
       ],
       "rootExposure": null,
@@ -649,7 +698,6 @@
         "THEME.palette"
       ],
       "contributingSlots": [
-        "bithire:THEME.palette.backgroundColor",
         "bithire:THEME.palette.primaryColor"
       ],
       "rootExposure": null,
@@ -682,16 +730,17 @@
     },
     {
       "channel": "--ds-color-alpha-error-10",
-      "rootId": null,
-      "via": null,
+      "rootId": "ramp.seed.error",
+      "via": "declared-fallback",
       "evidence": {
-        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "fallbackFrom": "--ds-color-error",
+        "site": "packages/core/src/foundation/tokens/css/foundation/base/shadows/index.css:123",
+        "edgeClass": "decl-fallback",
+        "guardPrimary": "--ds-color-alpha-error-10",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
-      "property": null,
+      "property": "seed.error",
       "state": null,
       "owners": [
         "THEME.palette"
@@ -699,23 +748,24 @@
       "contributingSlots": [
         "bithire:THEME.palette.contrastPosture"
       ],
-      "rootExposure": null,
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
-      "stepNote": "sin raiz que refinar"
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
     },
     {
       "channel": "--ds-color-alpha-error-20",
-      "rootId": null,
-      "via": null,
+      "rootId": "ramp.seed.error",
+      "via": "declared-fallback",
       "evidence": {
-        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "fallbackFrom": "--ds-color-error",
+        "site": "packages/core/src/foundation/tokens/css/foundation/base/shadows/index.css:132",
+        "edgeClass": "decl-fallback",
+        "guardPrimary": "--ds-color-alpha-error-20",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
-      "property": null,
+      "property": "seed.error",
       "state": null,
       "owners": [
         "THEME.palette"
@@ -723,10 +773,10 @@
       "contributingSlots": [
         "bithire:THEME.palette.contrastPosture"
       ],
-      "rootExposure": null,
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
-      "stepNote": "sin raiz que refinar"
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
     },
     {
       "channel": "--ds-color-alpha-info-10",
@@ -778,16 +828,17 @@
     },
     {
       "channel": "--ds-color-alpha-success-20",
-      "rootId": null,
-      "via": null,
+      "rootId": "ramp.seed.success",
+      "via": "declared-fallback",
       "evidence": {
-        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "fallbackFrom": "--ds-color-success",
+        "site": "packages/core/src/foundation/tokens/css/foundation/base/shadows/index.css:134",
+        "edgeClass": "decl-fallback",
+        "guardPrimary": "--ds-color-alpha-success-20",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
-      "property": null,
+      "property": "seed.success",
       "state": null,
       "owners": [
         "THEME.palette"
@@ -795,10 +846,10 @@
       "contributingSlots": [
         "bithire:THEME.palette.contrastPosture"
       ],
-      "rootExposure": null,
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
-      "stepNote": "sin raiz que refinar"
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
     },
     {
       "channel": "--ds-color-alpha-warning-10",
@@ -826,16 +877,17 @@
     },
     {
       "channel": "--ds-color-alpha-warning-20",
-      "rootId": null,
-      "via": null,
+      "rootId": "ramp.seed.warning",
+      "via": "declared-fallback",
       "evidence": {
-        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "fallbackFrom": "--ds-color-warning",
+        "site": "packages/core/src/foundation/tokens/css/foundation/base/shadows/index.css:136",
+        "edgeClass": "decl-fallback",
+        "guardPrimary": "--ds-color-alpha-warning-20",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
-      "property": null,
+      "property": "seed.warning",
       "state": null,
       "owners": [
         "THEME.palette"
@@ -843,10 +895,10 @@
       "contributingSlots": [
         "bithire:THEME.palette.contrastPosture"
       ],
-      "rootExposure": null,
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
-      "stepNote": "sin raiz que refinar"
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
     },
     {
       "channel": "--ds-color-background",
@@ -902,8 +954,8 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-surface-control",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css:397",
-        "edgeClass": "leaf-fallback",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/input/index.css:81",
+        "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-color-bg-input",
         "coincidenceGuard": "no-value-match-used"
       },
@@ -1550,7 +1602,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-info",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:61",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:136",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-info-border",
         "coincidenceGuard": "no-value-match-used"
@@ -1575,7 +1627,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:130",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css:404",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-link",
         "coincidenceGuard": "no-value-match-used"
@@ -1587,6 +1639,7 @@
         "THEME.palette"
       ],
       "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor",
         "bithire:THEME.palette.primaryColor"
       ],
       "rootExposure": "tenant-dial",
@@ -1611,6 +1664,7 @@
         "THEME.palette"
       ],
       "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor",
         "bithire:THEME.palette.primaryColor"
       ],
       "rootExposure": null,
@@ -1745,7 +1799,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:278",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:283",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-primary-300",
         "coincidenceGuard": "no-value-match-used"
@@ -2912,6 +2966,30 @@
       "stepNote": "sin raiz que refinar"
     },
     {
+      "channel": "--ds-divider-label-ink",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.palette"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
       "channel": "--ds-ease-exit",
       "rootId": null,
       "via": null,
@@ -3105,7 +3183,6 @@
         "THEME.palette"
       ],
       "contributingSlots": [
-        "bithire:THEME.palette.backgroundColor",
         "bithire:THEME.palette.primaryColor"
       ],
       "rootExposure": "tenant-dial",
@@ -3130,6 +3207,29 @@
       ],
       "contributingSlots": [
         "bithire:THEME.typography.fontFamilyBase"
+      ],
+      "rootExposure": "tenant-dial",
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+    },
+    {
+      "channel": "--ds-font-family-display",
+      "rootId": "type.family.display",
+      "via": "head-exact",
+      "evidence": {
+        "catalogHead": "--ds-font-family-display",
+        "sharedHead": false,
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "family",
+      "state": null,
+      "owners": [
+        "THEME.typography"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.typography.fontFamilyDisplay"
       ],
       "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
@@ -3682,12 +3782,13 @@
     },
     {
       "channel": "--ds-radius-button",
-      "rootId": null,
-      "via": null,
+      "rootId": "radius.base",
+      "via": "declared-fallback",
       "evidence": {
-        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: THEME.surfaces",
+        "fallbackFrom": "--ds-radius-md",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/framework-token-projection/index.css:43",
+        "edgeClass": "decl-fallback",
+        "guardPrimary": "--ds-radius-button",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
@@ -3701,10 +3802,10 @@
         "evnto:THEME.surfaces.buttonStyle",
         "rottay:THEME.surfaces.buttonStyle"
       ],
-      "rootExposure": null,
-      "rootHasDerivationLaw": false,
+      "rootExposure": "tenant-dial",
+      "rootHasDerivationLaw": true,
       "step": null,
-      "stepNote": "sin raiz que refinar"
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
     },
     {
       "channel": "--ds-radius-nest-inset",
@@ -3909,17 +4010,16 @@
     },
     {
       "channel": "--ds-sidebar-item-bg-active",
-      "rootId": "ramp.seed.primary",
-      "via": "declared-fallback",
+      "rootId": null,
+      "via": null,
       "evidence": {
-        "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css:336",
-        "edgeClass": "leaf-fallback",
-        "guardPrimary": "--ds-sidebar-item-bg-active",
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.appearance, THEME.chrome.sidebar",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
-      "property": "seed.primary",
+      "property": null,
       "state": null,
       "owners": [
         "THEME.appearance",
@@ -3931,24 +4031,23 @@
         "rottay:THEME.appearance.defaultMode",
         "rottay:THEME.chrome.sidebar.tone"
       ],
-      "rootExposure": "tenant-dial",
+      "rootExposure": null,
       "rootHasDerivationLaw": false,
       "step": null,
-      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+      "stepNote": "sin raiz que refinar"
     },
     {
       "channel": "--ds-sidebar-item-bg-hover",
-      "rootId": "ramp.seed.primary",
-      "via": "declared-fallback",
+      "rootId": null,
+      "via": null,
       "evidence": {
-        "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css:295",
-        "edgeClass": "leaf-fallback",
-        "guardPrimary": "--ds-sidebar-item-bg-hover",
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.chrome.sidebar",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
-      "property": "seed.primary",
+      "property": null,
       "state": null,
       "owners": [
         "THEME.chrome.sidebar"
@@ -3958,24 +4057,23 @@
         "evnto:THEME.chrome.sidebar.tone",
         "rottay:THEME.chrome.sidebar.tone"
       ],
-      "rootExposure": "tenant-dial",
+      "rootExposure": null,
       "rootHasDerivationLaw": false,
       "step": null,
-      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+      "stepNote": "sin raiz que refinar"
     },
     {
       "channel": "--ds-sidebar-item-color-active",
-      "rootId": "ramp.seed.primary",
-      "via": "declared-fallback",
+      "rootId": null,
+      "via": null,
       "evidence": {
-        "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css:335",
-        "edgeClass": "leaf-fallback",
-        "guardPrimary": "--ds-sidebar-item-color-active",
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.chrome.sidebar",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
-      "property": "seed.primary",
+      "property": null,
       "state": null,
       "owners": [
         "THEME.chrome.sidebar"
@@ -3985,24 +4083,23 @@
         "evnto:THEME.chrome.sidebar.tone",
         "rottay:THEME.chrome.sidebar.tone"
       ],
-      "rootExposure": "tenant-dial",
+      "rootExposure": null,
       "rootHasDerivationLaw": false,
       "step": null,
-      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+      "stepNote": "sin raiz que refinar"
     },
     {
       "channel": "--ds-sidebar-text",
-      "rootId": "tier.base.fg.secondary",
-      "via": "declared-fallback",
+      "rootId": null,
+      "via": null,
       "evidence": {
-        "fallbackFrom": "--ds-color-text-secondary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css:120",
-        "edgeClass": "leaf-fallback",
-        "guardPrimary": "--ds-sidebar-text",
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.chrome.sidebar",
         "coincidenceGuard": "no-value-match-used"
       },
-      "tier": "base",
-      "property": "fg",
+      "tier": null,
+      "property": null,
       "state": null,
       "owners": [
         "THEME.chrome.sidebar"
@@ -4012,24 +4109,23 @@
         "evnto:THEME.chrome.sidebar.tone",
         "rottay:THEME.chrome.sidebar.tone"
       ],
-      "rootExposure": "internal-head",
-      "rootHasDerivationLaw": true,
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
       "step": null,
-      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+      "stepNote": "sin raiz que refinar"
     },
     {
       "channel": "--ds-sidebar-text-muted",
-      "rootId": "tier.base.fg.muted",
-      "via": "declared-fallback",
+      "rootId": null,
+      "via": null,
       "evidence": {
-        "fallbackFrom": "--ds-color-text-muted",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css:517",
-        "edgeClass": "leaf-fallback",
-        "guardPrimary": "--ds-sidebar-text-muted",
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.chrome.sidebar",
         "coincidenceGuard": "no-value-match-used"
       },
-      "tier": "base",
-      "property": "fg",
+      "tier": null,
+      "property": null,
       "state": null,
       "owners": [
         "THEME.chrome.sidebar"
@@ -4039,10 +4135,10 @@
         "evnto:THEME.chrome.sidebar.tone",
         "rottay:THEME.chrome.sidebar.tone"
       ],
-      "rootExposure": "internal-head",
-      "rootHasDerivationLaw": true,
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
       "step": null,
-      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+      "stepNote": "sin raiz que refinar"
     },
     {
       "channel": "--ds-state-active-shift",
@@ -4658,5 +4754,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "be8d3d23746784f27878a31be7f7bc39f20a8298664461bda56bdc22f21b5d6b"
+  "digest": "dacf2be3e60356b33576888222a2a0060deb35988b3b55cd010a68383e167b78"
 }
