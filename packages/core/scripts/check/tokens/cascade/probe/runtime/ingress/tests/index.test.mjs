@@ -2575,14 +2575,22 @@ test('M-1 drill 2 [needs dist]: BOTH halves — the overlay governs its mode, an
   const { lowered } = await m1Lower(M1_PALETTE, 'primary/crimson', 'bithire');
   // (a) the base scope carries the STOP: this is the tenant's decision landing.
   assert.equal(lowered.variables['--ds-color-primary'], '#DC2626');
-  // (b) the mode scope carries the VERTICAL'S OWN dark value, not the stop --
-  //     bithire's overlay restates primaryColor, so the seed does not reach dark.
-  //     Only the second half distinguishes a real extraction from one that
-  //     copied the base map into the mode block (drill 7's failure mode).
-  assert.equal(lowered.modeVariables.dark['--ds-color-primary'], '#1e84e6');
+  // (b) the mode scope carries what the mode DERIVES, and only that. Since
+  //     d524ec1d6 bithire's preset states no dark palette ('palette.dark-mode':
+  //     'auto'), so under the WO-DER-05 law (F-05) the tenant's one brand colour
+  //     is its colour in both modes: the dark block withdraws the primary and
+  //     inherits the base, while the ramp stop re-derives against the dark ground.
+  const dark = lowered.modeVariables.dark;
+  assert.equal(Object.hasOwn(dark, '--ds-color-primary'), false, 'the dark block does not restate the primary');
+  assert.equal({ ...lowered.variables, ...dark }['--ds-color-primary'], '#DC2626', 'dark inherits the tenant primary');
+  // Only this half distinguishes a real extraction from one that copied the
+  // base map into the mode block (drill 7's failure mode).
+  assert.notEqual(dark['--ds-color-primary-500'], lowered.variables['--ds-color-primary-500']);
+  const baseline = await compiledBaseline('bithire');
   assert.notEqual(
-    lowered.modeVariables.dark['--ds-color-primary'],
-    lowered.variables['--ds-color-primary'],
+    dark['--ds-color-primary-500'],
+    baseline.modes.dark['--ds-color-primary-500'],
+    'the dark stop follows the tenant seed, not the vertical\'s',
   );
 });
 
@@ -2701,8 +2709,13 @@ test('M-1 drill 7 [needs dist]: the mode block must carry the OVERLAY, never the
     wrong.cssBlock,
     'the extraction must not be the base map under another selector',
   );
-  assert.equal(correct.modeVariables.dark['--ds-color-primary'], '#1e84e6');
+  // The mode block carries the derived dark stop and withdraws the primary
+  // (d524ec1d6 + the WO-DER-05 law); the base map under another selector
+  // restates the base primary and the LIGHT stop instead.
+  assert.equal(Object.hasOwn(correct.modeVariables.dark, '--ds-color-primary'), false);
+  assert.notEqual(correct.modeVariables.dark['--ds-color-primary-500'], lowered.variables['--ds-color-primary-500']);
   assert.equal(wrong.modeVariables.dark['--ds-color-primary'], '#DC2626');
+  assert.equal(wrong.modeVariables.dark['--ds-color-primary-500'], lowered.variables['--ds-color-primary-500']);
   // And the real lowering is the correct one: the extraction reads the compiled
   // mode block, so this cannot pass by both sides being the same.
   assert.notDeepEqual(lowered.modeVariables.dark, lowered.variables);
@@ -2910,7 +2923,13 @@ test('H-3(a) drill 8 [needs dist]: FLATTENING the deltas into the base must not 
   assert.notEqual(correct.cssBlock, flattened.cssBlock);
   // The base scope must carry the STOP, never the mode's value.
   assert.equal(correct.variables['--ds-color-primary'], '#DC2626');
-  assert.equal(flattened.variables['--ds-color-primary'], dbLowered.modeVariables.dark['--ds-color-primary']);
+  const darkStop = dbLowered.modeVariables.dark['--ds-color-primary-500'];
+  assert.notEqual(correct.variables['--ds-color-primary-500'], darkStop);
+  assert.equal(flattened.variables['--ds-color-primary-500'], darkStop, 'the flatten paints the dark stop in the base scope too');
+  // Flatten and block agree BY LAW: the flattened map IS the correct arm's dark
+  // view (base plus dark delta), so a withdrawn primary reads the base in both.
+  assert.deepEqual(flattened.variables, { ...correct.variables, ...correct.modeVariables.dark });
+  assert.equal(flattened.variables['--ds-color-primary'], '#DC2626');
   assert.equal((correct.cssBlock.match(/\{/g) ?? []).length, 2, 'two scopes');
   assert.equal((flattened.cssBlock.match(/\{/g) ?? []).length, 1, 'the flattened one has lost a scope');
 });
