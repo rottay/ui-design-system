@@ -26,6 +26,8 @@ import {
   analyzeRhythmStylesheets,
   CLASSIFICATIONS,
   classifyRhythmProperty,
+  classifyRhythmPropertyByConsumers,
+  collectConsumerSinks,
   illicitRhythmMentions,
   collectAuthoredModernStylesheets,
   collectTypeScriptRhythmCarriers,
@@ -35,6 +37,7 @@ import {
   DEFAULT_FAMILY_INVENTORY,
   DEFAULT_SOURCE_ROOT,
   formatReport,
+  isBareFiniteNumber,
   isDescendantOfSelector,
   NAMED_FORBIDDEN_CAPABILITIES,
   occurrenceCount,
@@ -49,6 +52,7 @@ import {
   subjectIsContained,
   subjectLacksIdentity,
   UNDECIDABLE_TS_CARRIER,
+  walkModernStylesheets,
 } from './index.mjs';
 
 const READ = `var(${RHYTHM_CHANNEL}, 1)`;
@@ -1654,8 +1658,10 @@ test('decision 20 (d): el arbol real pasa, y pasa por la forma, no por la exenci
     'utf8',
   );
   assert.ok(artefacto.includes('--ds-rhythm-effective-scale'), 'bithire SI lleva ritmo, por diseño');
+  // Los consumidores de cada canal viven en el corpus autorado, no en el artefacto.
+  const { authored } = walkModernStylesheets();
   assert.deepEqual(
-    illicitRhythmMentions(artefacto),
+    illicitRhythmMentions(artefacto, 'bithire', { consumerStylesheets: authored }),
     [],
     'y cada mencion carga el factor: pasa por cumplir la forma',
   );
@@ -1671,4 +1677,190 @@ test('decision 20 (e): la mordida clasica intacta — ritmo sobre una propiedad 
   const ofensas = illicitRhythmMentions(escondido);
   assert.equal(ofensas.length, 1);
   assert.match(ofensas[0].why, /FORBIDDEN_SIZE/u);
+});
+
+/* ---------------------------------------------------------------------------
+ * DT rulings 2026-09-23 (P1). (1) The raw seed is the vertical authoring its
+ * dial; only the derived channel declared at root freezes it. (2)+(3) A custom
+ * property is judged by what its consumers paint, never by a name allowance.
+ * ------------------------------------------------------------------------- */
+
+test('ruling 1: the seed passes only as a bare finite number; the derived channel never', () => {
+  for (const seed of [':root { --ds-rhythm-scale: 0.85; }', ':root { --ds-rhythm-scale: 1; }']) {
+    assert.deepEqual(illicitRhythmMentions(seed), [], `${seed} is the vertical authoring its seed`);
+  }
+  const red = [
+    ':root { --ds-rhythm-effective-scale: 1; }',
+    ':root { --ds-rhythm-effective-scale: clamp(0.8, var(--ds-rhythm-scale, 1), 1.25); }',
+    ':root { --ds-rhythm-scale: var(--x); }',
+    ':root { --ds-rhythm-scale: calc(1 * 0.85); }',
+    ':root { --ds-rhythm-scale: 0.85 !important; }',
+    ':root { --ds-rhythm-scale: tight; }',
+    ':root { --ds-rhythm-scale:\n  var(--x); }',
+    ':root { --ds-gap: 1rem; --ds-rhythm-effective-scale: 1; }',
+  ];
+  for (const css of red) {
+    const offenders = illicitRhythmMentions(css);
+    assert.ok(
+      offenders.some((offender) => /congela el dial/u.test(offender.why)),
+      `${JSON.stringify(css)} must stay red; got ${JSON.stringify(offenders)}`,
+    );
+  }
+  // Two seeds on one line: the first one's delimiter must not hide the second.
+  const pair = illicitRhythmMentions(':root { --ds-rhythm-scale: 1; --ds-rhythm-scale: var(--x); }');
+  assert.equal(pair.length, 1);
+});
+
+test('ruling 1: isBareFiniteNumber admits literals only', () => {
+  for (const value of ['0.85', '1', ' 1.2 ', '.9', '1e0']) assert.ok(isBareFiniteNumber(value), value);
+  for (const value of ['', 'var(--x)', '1px', 'NaN', 'Infinity', '1e999', 'calc(1)', '1 !important']) {
+    assert.ok(!isBareFiniteNumber(value), JSON.stringify(value));
+  }
+});
+
+/** Classification of the rhythm read declared on `channel`, with the given consumers. */
+function classifyChannelWithConsumers(channel, consumers) {
+  const result = analyze(`.probe { ${channel}: calc(1rem * ${READ}); }\n${consumers}`);
+  const read = result.reads.find((entry) => entry.property === channel);
+  assert.ok(read, `${channel} produced no read`);
+  return read.classification;
+}
+
+test('ruling 2: an icon-named channel whose consumers paint spacing is spacing', () => {
+  assert.equal(
+    classifyChannelWithConsumers(
+      '--ds-x-action-icon-gap',
+      '.probe [data-part="icon"] { margin-inline-end: var(--ds-x-action-icon-gap, 4px); }',
+    ),
+    CLASSIFICATIONS.allowedSpacing,
+  );
+});
+
+test('ruling 2: an icon-named channel whose consumers paint icon GEOMETRY stays red', () => {
+  for (const sink of ['width', 'height', 'inline-size', 'block-size', 'min-width']) {
+    assert.equal(
+      classifyChannelWithConsumers('--ds-x-icon-gap', `.probe svg { ${sink}: var(--ds-x-icon-gap); }`),
+      CLASSIFICATIONS.forbiddenIcon,
+      `${sink} is icon geometry`,
+    );
+  }
+  // One geometry consumer poisons the channel even beside a spacing one.
+  assert.equal(
+    classifyChannelWithConsumers(
+      '--ds-x-icon-gap',
+      '.a { margin-inline-end: var(--ds-x-icon-gap); } .b svg { width: var(--ds-x-icon-gap); }',
+    ),
+    CLASSIFICATIONS.forbiddenIcon,
+  );
+  // And the geometry consumer is itself reported by the indirect leg.
+  const result = analyze(
+    `.probe { --ds-x-icon-gap: calc(1rem * ${READ}); } .probe svg { width: var(--ds-x-icon-gap); }`,
+  );
+  assert.ok(result.indirectViolations.some((finding) => finding.property === 'width'));
+});
+
+test('ruling 2: no consumer, an unconsumed relay or a loop keeps the name verdict (fail-closed)', () => {
+  assert.equal(classifyChannelWithConsumers('--ds-x-icon-gap', ''), CLASSIFICATIONS.forbiddenIcon);
+  assert.equal(
+    classifyChannelWithConsumers('--ds-x-icon-gap', '.a { --ds-x-relay: var(--ds-x-icon-gap); }'),
+    CLASSIFICATIONS.forbiddenIcon,
+    'a relay nobody reads is an unknown consumption',
+  );
+  assert.equal(
+    classifyChannelWithConsumers(
+      '--ds-x-icon-gap',
+      '.a { --ds-x-loop-a: var(--ds-x-icon-gap, var(--ds-x-loop-b)); --ds-x-loop-b: var(--ds-x-loop-a); }',
+    ),
+    CLASSIFICATIONS.forbiddenIcon,
+    'a reference loop is never spacing',
+  );
+  assert.equal(
+    classifyChannelWithConsumers(
+      '--ds-x-icon-gap',
+      '.a { margin-inline-end: var(--ds-x-icon-gap); --ds-x-relay: var(--ds-x-icon-gap); }',
+    ),
+    CLASSIFICATIONS.forbiddenIcon,
+    'a spacing consumer beside an unknown one does not clear it',
+  );
+});
+
+test('ruling 3: an inset rung consumed through a relay by margin is spacing', () => {
+  const consumers =
+    '.d[data-spacing="md"] { --ds-x-inset: var(--ds-x-inset-md, 1rem); }\n' +
+    '.d[data-orientation="horizontal"] { margin-block: var(--ds-x-inset); }\n' +
+    '.d[data-orientation="vertical"] { margin-inline: var(--ds-x-inset); }';
+  assert.equal(classifyChannelWithConsumers('--ds-x-inset-md', consumers), CLASSIFICATIONS.allowedSpacing);
+  assert.equal(
+    classifyChannelWithConsumers('--ds-x-pad', '.c { padding: var(--ds-x-pad); }'),
+    CLASSIFICATIONS.allowedSpacing,
+  );
+});
+
+test('ruling 3: a name allowance cannot launder rhythm into a position or a physical side', () => {
+  const cases = [
+    ['--ds-x-inset-md', '.d { inset: var(--ds-x-inset-md); }'],
+    ['--ds-x-inset-md', '.d { top: var(--ds-x-inset-md); }'],
+    ['--ds-x-inset-md', '.d { inset-inline-start: var(--ds-x-inset-md); }'],
+    ['--ds-x-inset-md', '.d { --ds-x-inset: var(--ds-x-inset-md); } .d { inset-block: var(--ds-x-inset); }'],
+    ['--ds-x-pad', '.c { padding-left: var(--ds-x-pad); }'],
+    ['--ds-x-pad', '.c { padding: var(--ds-x-pad); } .c > * { top: var(--ds-x-pad); }'],
+  ];
+  for (const [channel, consumers] of cases) {
+    assert.equal(
+      classifyChannelWithConsumers(channel, consumers),
+      CLASSIFICATIONS.forbiddenOther,
+      `${channel} consumed by ${consumers}`,
+    );
+  }
+  // The real properties themselves stay red on the direct leg.
+  for (const property of ['inset', 'top', 'inset-inline-start']) {
+    assert.notEqual(classifyDeclaration(property), CLASSIFICATIONS.allowedSpacing, property);
+  }
+  assert.equal(classifyDeclaration('padding-left'), CLASSIFICATIONS.forbiddenPhysicalInlineSide);
+});
+
+test('ruling 3: the rhythm-free rung was never flagged', () => {
+  const css = '.d { --ds-divider-inset-none: var(--ds-spacing-0, 0); } .d { margin-block: var(--ds-divider-inset-none); }';
+  assert.deepEqual(analyze(css).reads, []);
+  assert.deepEqual(illicitRhythmMentions(':root { --ds-divider-inset-none: var(--ds-spacing-0, 0); }'), []);
+});
+
+test('rulings 2-3: an artifact channel is judged by the authored consumers, and only by them', () => {
+  const artifact = `:root { --ds-x-action-icon-gap: calc(var(--ds-spacing-1, 4px) * ${READ}); }`;
+  assert.equal(illicitRhythmMentions(artifact).length, 1, 'with no consumer corpus the name verdict stands');
+  const spacing = [{ file: '/authored/skin.css', css: '.h [data-part="icon"] { margin-inline-end: var(--ds-x-action-icon-gap); }' }];
+  assert.deepEqual(illicitRhythmMentions(artifact, 'artifact', { consumerStylesheets: spacing }), []);
+  const geometry = [{ file: '/authored/skin.css', css: '.h svg { width: var(--ds-x-action-icon-gap); }' }];
+  assert.match(
+    illicitRhythmMentions(artifact, 'artifact', { consumerStylesheets: geometry })[0]?.why ?? '',
+    /FORBIDDEN_ICON/u,
+  );
+});
+
+test('rulings 2-3 do not reach the card shapes P2/P3 own: size and radius stay red', () => {
+  const css = `
+    .card[data-loading] { min-block-size: var(--ds-card-loading-min-height, calc(1rem * ${READ})); }
+    .card { --ds-card-loading-min-height: calc(3rem * ${READ}); }
+    .card-body { padding: calc(1rem * ${READ}); --_ds-card-nest-radius: calc(1rem * ${READ}); }
+    .card-body > .inner { border-radius: var(--_ds-card-nest-radius); }`;
+  const result = analyze(css);
+  const verdicts = Object.fromEntries(result.reads.map((read) => [`${read.property}`, read.classification]));
+  assert.equal(verdicts['min-block-size'], CLASSIFICATIONS.forbiddenSize);
+  assert.equal(verdicts['--ds-card-loading-min-height'], CLASSIFICATIONS.forbiddenSize);
+  assert.notEqual(verdicts['--_ds-card-nest-radius'], CLASSIFICATIONS.allowedSpacing);
+  assert.ok(result.indirectViolations.some((finding) => finding.property === 'border-radius'));
+});
+
+test('collectConsumerSinks follows relays to the real paint', () => {
+  const sinks = collectConsumerSinks([
+    { property: '--a', references: ['--b'] },
+    { property: 'margin-block', references: ['--a'] },
+    { property: 'padding', references: ['--b'] },
+  ]);
+  assert.deepEqual([...sinks.get('--b')].sort(), ['margin-block', 'padding']);
+  assert.equal(
+    classifyRhythmPropertyByConsumers('--ds-x-icon-gap', sinks),
+    CLASSIFICATIONS.forbiddenIcon,
+    'no entry for the name: the name verdict',
+  );
 });

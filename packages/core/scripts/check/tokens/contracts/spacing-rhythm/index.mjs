@@ -341,16 +341,19 @@ export function occurrenceCount(value) {
  *   - el artefacto LEE el canal fuera de un `calc()` (`padding: var(--ds-rhythm-…)`),
  *     que pinta con un escalar y no multiplica nada.
  */
-export function illicitRhythmMentions(css, file = '<inline>') {
+export function illicitRhythmMentions(css, file = '<inline>', { consumerStylesheets = [] } = {}) {
   const text = String(css ?? '');
   const offenders = [];
   const channelAlternation = RHYTHM_CHANNELS.map((channel) =>
     channel.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'),
   ).join('|');
   // Tras `{` o `;` tambien: una declaracion no siempre abre la linea.
-  const declaresChannel = new RegExp(`(?:^|[{;])\\s*(?:${channelAlternation})\\s*:`, 'u');
+  const declaresChannel = new RegExp(`(?:^|[{;])\\s*(${channelAlternation})\\s*:([^;}]*)`, 'gu');
   for (const line of text.split('\n')) {
-    if (declaresChannel.test(line)) {
+    for (const [, channel, value] of line.matchAll(declaresChannel)) {
+      /* La semilla cruda es la vertical autorando su dial (decision 20): solo un
+       * numero finito a pelo. El canal derivado declarado congela el dial. */
+      if (channel === RAW_RHYTHM_CHANNEL && isBareFiniteNumber(value)) continue;
       offenders.push({ line: line.trim(), why: 'declara un canal de ritmo: congela el dial en su raiz' });
     }
   }
@@ -360,8 +363,9 @@ export function illicitRhythmMentions(css, file = '<inline>') {
    * lo juzga con una regla propia mas blanda sino con la de siempre. Lo unico
    * que la decision 20 cambia es que una declaracion de ESPACIADO con el factor
    * —la forma licita— dejo de ser infraccion por el solo hecho de estar en un
-   * artefacto. */
-  const analysis = analyzeRhythmStylesheets([{ file, css: text }]);
+   * artefacto. Los consumidores de un canal viven en el corpus autorado, no en
+   * el artefacto que lo declara. */
+  const analysis = analyzeRhythmStylesheets([{ file, css: text }], { consumerStylesheets });
   for (const violation of analysis.violations ?? []) {
     offenders.push({
       line: `${violation.property ?? '?'}: ${violation.value ?? ''}`.trim(),
@@ -369,6 +373,12 @@ export function illicitRhythmMentions(css, file = '<inline>') {
     });
   }
   return offenders;
+}
+
+/** `0.85`, `1`, `1.2e0`: a literal, never a var(), calc() or keyword. */
+export function isBareFiniteNumber(value) {
+  const text = String(value ?? '').trim();
+  return /^[-+]?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?$/iu.test(text) && Number.isFinite(Number(text));
 }
 
 function referencedCustomProperties(value) {
@@ -840,6 +850,63 @@ export function classifyRhythmProperty(property) {
   return CLASSIFICATIONS.forbiddenOther;
 }
 
+/**
+ * What each custom property's readers finally PAINT: the real properties at the
+ * end of every reference chain. A reader that is itself a custom property
+ * nobody reads, or a chain that loops, is recorded by its own name, so an
+ * unknown consumption can never pass for spacing.
+ */
+export function collectConsumerSinks(declarations) {
+  const readers = new Map();
+  for (const entry of declarations) {
+    for (const name of new Set(entry.references)) {
+      const list = readers.get(name) ?? [];
+      list.push(entry.property);
+      readers.set(name, list);
+    }
+  }
+  const sinks = new Map();
+  const resolving = new Set();
+  const sinksOf = (name) => {
+    if (sinks.has(name)) return sinks.get(name);
+    if (resolving.has(name)) return new Set([name]);
+    resolving.add(name);
+    const found = new Set();
+    for (const reader of readers.get(name) ?? []) {
+      if (!reader.startsWith('--')) found.add(reader);
+      else if (!readers.has(reader)) found.add(reader);
+      else for (const sink of sinksOf(reader)) found.add(sink);
+    }
+    resolving.delete(name);
+    sinks.set(name, found);
+    return found;
+  };
+  for (const name of readers.keys()) sinksOf(name);
+  return sinks;
+}
+
+/**
+ * A custom property is judged by what its consumers paint: a name the
+ * classifier forbids (`--ds-x-icon-gap`, `--ds-divider-inset-md`) is spacing
+ * when EVERY sink is a spacing property. No sink, an unknown sink or one
+ * non-spacing sink keeps the name's own verdict. Rhythm and radius channels
+ * keep theirs: they have their own grammar.
+ */
+export function classifyRhythmPropertyByConsumers(property, consumerSinks) {
+  const byName = classifyRhythmProperty(property);
+  const normalized = property.trim().toLowerCase();
+  if (byName === CLASSIFICATIONS.allowedSpacing || !normalized.startsWith('--')) return byName;
+  if (RHYTHM_CHANNELS.includes(normalized) || isRadiusSemantic(normalized)) return byName;
+  const sinks = consumerSinks?.get(normalized);
+  if (!sinks || sinks.size === 0) return byName;
+  for (const sink of sinks) {
+    if (sink.startsWith('--') || classifyRhythmProperty(sink) !== CLASSIFICATIONS.allowedSpacing) {
+      return byName;
+    }
+  }
+  return CLASSIFICATIONS.allowedSpacing;
+}
+
 function declarationContext(declaration) {
   let cursor = declaration.parent;
   let selector = '<stylesheet-root>';
@@ -876,13 +943,10 @@ export function resolveDashboardInsightsFamilyId(
 }
 
 /**
- * Walk `sourceRoot` for authored stylesheets and, in the same pass, prove the
- * exclusion set is honest: an excluded stylesheet that carries a rhythm read
- * would mean the walk is hiding a productive read behind a folder name.
+ * The authored corpus and the excluded files, without judging either. The
+ * excluded set is judged against the authored one, which holds the consumers.
  */
-export function collectAuthoredModernStylesheets(
-  sourceRoot = DEFAULT_SOURCE_ROOT,
-) {
+export function walkModernStylesheets(sourceRoot = DEFAULT_SOURCE_ROOT) {
   const root = resolve(sourceRoot);
   let rootStats;
   try {
@@ -914,8 +978,29 @@ export function collectAuthoredModernStylesheets(
     throw new Error(`Modern authored CSS corpus contains zero stylesheets: ${root}`);
   }
 
+  const authored = files.sort().map((file) => ({
+    file,
+    css: readFileSync(file, 'utf8'),
+  }));
+  return { authored, excluded: excluded.sort() };
+}
+
+/**
+ * Walk `sourceRoot` for authored stylesheets and, in the same pass, prove the
+ * exclusion set is honest: an excluded stylesheet that carries a rhythm read
+ * would mean the walk is hiding a productive read behind a folder name.
+ */
+export function collectAuthoredModernStylesheets(
+  sourceRoot = DEFAULT_SOURCE_ROOT,
+) {
+  const { authored, excluded } = walkModernStylesheets(sourceRoot);
   const hidden = excluded
-    .map((file) => ({ file, offenders: illicitRhythmMentions(readFileSync(file, 'utf8')) }))
+    .map((file) => ({
+      file,
+      offenders: illicitRhythmMentions(readFileSync(file, 'utf8'), file, {
+        consumerStylesheets: authored,
+      }),
+    }))
     .filter((entry) => entry.offenders.length > 0);
   if (hidden.length > 0) {
     throw new Error(
@@ -929,10 +1014,7 @@ export function collectAuthoredModernStylesheets(
     );
   }
 
-  return files.sort().map((file) => ({
-    file,
-    css: readFileSync(file, 'utf8'),
-  }));
+  return authored;
 }
 
 /**
@@ -945,7 +1027,7 @@ export function collectAuthoredModernStylesheets(
  */
 export function analyzeRhythmStylesheets(
   stylesheets,
-  { dashboardInsightsFamilyId = null } = {},
+  { dashboardInsightsFamilyId = null, consumerStylesheets = [] } = {},
 ) {
   const reads = [];
   const parseErrors = [];
@@ -987,13 +1069,12 @@ export function analyzeRhythmStylesheets(
 
       if (count === 0) return;
 
-      const classification = classifyRhythmProperty(declaration.prop);
       for (let occurrence = 1; occurrence <= count; occurrence += 1) {
         reads.push({
           file: stylesheet.file,
           line: declaration.source?.start?.line ?? 0,
           property: declaration.prop,
-          classification,
+          classification: null,
           reach: 'direct',
           occurrence,
           familyId,
@@ -1001,6 +1082,27 @@ export function analyzeRhythmStylesheets(
         });
       }
     });
+  }
+
+  // --- who consumes each channel: the analysed set plus the consumer corpus ---
+  const consumerDeclarations = [...declarations];
+  for (const stylesheet of consumerStylesheets) {
+    let consumerRoot;
+    try {
+      consumerRoot = postcss.parse(stylesheet.css, { from: stylesheet.file });
+    } catch {
+      continue;
+    }
+    consumerRoot.walkDecls((declaration) => {
+      consumerDeclarations.push({
+        property: declaration.prop.trim().toLowerCase(),
+        references: referencedCustomProperties(declaration.value ?? ''),
+      });
+    });
+  }
+  const consumerSinks = collectConsumerSinks(consumerDeclarations);
+  for (const read of reads) {
+    read.classification = classifyRhythmPropertyByConsumers(read.property, consumerSinks);
   }
 
   // --- the indirect leg: which custom properties CARRY rhythm downstream ---
@@ -1213,7 +1315,7 @@ export function analyzeRhythmStylesheets(
     if (entry.directReads > 0) continue;
     const via = entry.references.filter((name) => carriers.has(name));
     if (via.length === 0) continue;
-    let classification = classifyRhythmProperty(entry.rawProperty);
+    let classification = classifyRhythmPropertyByConsumers(entry.rawProperty, consumerSinks);
     if (classification === CLASSIFICATIONS.allowedSpacing) continue;
     // Clause (b) gates entry to the radius grammar at all: a non-radius
     // property drinking from a concentric channel stays whatever it is.
