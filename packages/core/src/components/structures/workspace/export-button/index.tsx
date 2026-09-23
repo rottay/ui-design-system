@@ -30,6 +30,7 @@ import { ContentDocumentIcon } from '@/graphics/icons/semantic/generated/roles/c
 import { ContentCodeIcon } from '@/graphics/icons/semantic/generated/roles/content-code';
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
 import { Portal } from '../../../primitives/runtime/overlay/portal';
+import { useOverlayLayer } from '../../../primitives/runtime/overlay/layer-stack';
 import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { ExportColumn } from './runtime/file-export';
@@ -184,17 +185,17 @@ export function ExportButton<T = unknown>({
   // -----------------------------------------------------------------------
   // Close on Escape
   // -----------------------------------------------------------------------
-  useEffect(() => {
-    if (!open) return;
-    function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        setOpen(false);
-        triggerRef.current?.querySelector('button')?.focus();
-      }
-    }
-    document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
-  }, [open]);
+  useOverlayLayer({
+    kind: 'dropdown',
+    active: open,
+    modal: true,
+    lockScroll: false,
+    restoreFocus: false,
+    onEscape: () => {
+      setOpen(false);
+      triggerRef.current?.querySelector('button')?.focus();
+    },
+  });
 
   // -----------------------------------------------------------------------
   // Export handler

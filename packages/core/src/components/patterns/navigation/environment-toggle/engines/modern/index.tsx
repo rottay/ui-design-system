@@ -38,6 +38,7 @@ import { NavigationExpandIcon } from '@/graphics/icons/semantic/generated/roles/
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
 import ModernConfirmDialog from '../../../../../primitives/overlay/confirm-dialog/engines/modern';
+import { useOverlayLayer } from '../../../../../primitives/runtime/overlay/layer-stack';
 
 /**
  * Modern (token-driven) implementation of the EnvironmentToggle pattern.
@@ -134,17 +135,17 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
   }, []);
 
   /* Escape dismisses the dropdown and returns focus to the trigger. */
-  useEffect(() => {
-    if (!dropdownOpen) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return;
-      event.stopPropagation();
+  useOverlayLayer({
+    kind: 'dropdown',
+    active: dropdownOpen,
+    modal: true,
+    lockScroll: false,
+    restoreFocus: false,
+    onEscape: () => {
       setDropdownOpen(false);
       focusInvoker();
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, [dropdownOpen, focusInvoker]);
+    },
+  });
 
   /* Opening the menu moves focus into it, landing on the checked environment
      so the keyboard cursor starts where the eye does. */

@@ -7,7 +7,7 @@ browser-driven gate lives under one of these two.
 | --- | --- | --- | --- | --- |
 | Config | `playwright.config.ts` | `playwright.visual.config.ts` | `playwright.visual.config.ts` | `playwright.visual.config.ts` |
 | Target server | dev server (`pnpm dev`) | production build (`pnpm start`) | production build | production build |
-| What it gates | axe + focus-visible sweep (WO-GAT-04) | pixel-diff screenshots (WO-GAT-01) | hostile-tenant computed-style probe (WO-GAT-03) | 360px overflow + coarse-pointer hit areas (WO-ENG-12) |
+| What it gates | axe + focus-visible sweep (WO-GAT-04) | pixel-diff screenshots (WO-GAT-01) | hostile-tenant computed-style probe (WO-GAT-03) | 360px overflow + coarse-pointer hit areas (WO-ENG-12); layout-kernel motion budget (WO-INV-08, env-gated) |
 | Run | `... exec playwright test e2e/a11y` | `... run test:visual` | `... run test:whitelabel` | `... run test:responsive` |
 
 `playwright.visual.config.ts` matches all three of its directories, so
@@ -32,6 +32,19 @@ entry per capture cell whose document scrolls horizontally at 360px) and
 grow even if this spec is skipped. Regenerate with
 `RESPONSIVE_UPDATE_BASELINE=1`, which rewrites the file to the intersection with
 the current run. Fix the width or the hit area; never widen the baseline.
+
+`motion-budget.spec.ts` measures the layout animation kernel on
+`/probe/motion-budget/<scene>` (reflow, size-interpolate, size-measured,
+presence; static bithire ground). It checks frame timing relative to the
+display, long tasks (absolute 0), a floor proving the scene actually animated,
+and a reduced-motion control. The thresholds and verdicts are core's:
+`packages/core/scripts/check/motion-budget/budget/index.json` and the drilled
+functions beside it, imported by path. The browser tests run only with
+`DS_MOTION_BUDGET=1`. `MOTION_BUDGET_WRITE_SEED=1` re-seeds the dropped-frame
+ceilings through core's seed rule, and only after core's `seedAdmission`
+accepts every scene's budget verdict and its reduced-motion control. The
+ceilings are specific to the spec's trace protocol and the display they were
+seeded on.
 
 ## Why visual regression needs the production build
 

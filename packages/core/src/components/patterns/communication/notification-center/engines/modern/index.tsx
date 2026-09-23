@@ -32,6 +32,7 @@ import ModernEmpty from '../../../../../primitives/display/empty/engines/modern'
 import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/modern';
 import ModernScrollArea from '../../../../../primitives/layout/scroll-area/engines/modern';
 import { VisuallyHidden } from '../../../../../primitives/foundation';
+import { useOverlayLayer } from '../../../../../primitives/runtime/overlay/layer-stack';
 import type { NotificationCenterProps, Notification } from '../../contracts';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
@@ -187,28 +188,33 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
 
   // Manual click-outside detection because the dropdown toggle does not
   // support controlled open state. Only attached while open to avoid
-  // unnecessary document-level listeners. Escape closes the panel and
-  // returns focus to the trigger (popover keyboard contract).
+  // unnecessary document-level listeners.
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         handleOpenChange(false);
       }
     };
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return;
-      handleOpenChange(false);
-      triggerRef.current?.focus();
-    };
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleEscape);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
     };
   }, [isOpen, handleOpenChange]);
+
+  // Escape closes the panel and returns focus to the trigger (popover keyboard contract).
+  useOverlayLayer({
+    kind: 'popover',
+    active: isOpen,
+    modal: true,
+    lockScroll: false,
+    restoreFocus: false,
+    onEscape: () => {
+      handleOpenChange(false);
+      triggerRef.current?.focus();
+    },
+  });
 
   // The panel hangs off the anchor's reading-END edge, which pushed it past
   // the inline-START edge whenever the bell sat near it (locale-switcher idiom).

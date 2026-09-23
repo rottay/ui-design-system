@@ -47,6 +47,7 @@ import { StatusFeaturedIcon } from '@/graphics/icons/semantic/generated/roles/st
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Box, Flex, Text } from '../../../primitives';
 import { Portal } from '../../../primitives/runtime/overlay/portal';
+import { useOverlayLayer } from '../../../primitives/runtime/overlay/layer-stack';
 import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { writeClipboard } from '@/infrastructure/runtime/application/data/foundation/export-kernel';
@@ -468,16 +469,14 @@ export function SavedViewsMenu({
   }, [isOpen]);
 
   // Close on Escape and hand focus back to the trigger (APG disclosure).
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeMenu();
-      }
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, closeMenu]);
+  useOverlayLayer({
+    kind: 'dropdown',
+    active: isOpen,
+    modal: true,
+    lockScroll: false,
+    restoreFocus: false,
+    onEscape: closeMenu,
+  });
 
   /* The trigger is a STATEFUL PART: the shared kernel is the one place that
      decides when it is hovered, pressed or focus-visible, and the skin pairs
