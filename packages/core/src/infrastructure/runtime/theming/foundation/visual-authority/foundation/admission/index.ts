@@ -171,6 +171,18 @@ function exactArtifactSnapshot(candidate: unknown): TenantThemeArtifact | null {
   }
 }
 
+function isOrderedChannelMap(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  const names = Object.keys(value);
+  return (
+    names.length > 0 &&
+    Object.entries(value).every(
+      ([name, channel]) => name.startsWith("--ds-") && typeof channel === "string",
+    ) &&
+    names.join("\0") === [...names].sort().join("\0")
+  );
+}
+
 function sameOrderedStrings(
   actual: readonly unknown[],
   expected: readonly string[],
@@ -219,6 +231,7 @@ function expectedArtifactCss(artifact: TenantThemeArtifact): string {
     digest: artifact.digest,
     variables: artifact.variables,
     modeDeltas: artifact.modeDeltas,
+    contrastDeltas: artifact.contrastDeltas,
     // Read off the artifact, exactly as the producer reads it. `auto` is the
     // only value this format acts on, so the verifier needs no default-mode
     // authority of its own -- and must not acquire one, or the two spellings
@@ -286,6 +299,7 @@ export function verifyTenantThemeArtifactV1(
     !isRecord(artifact.normalizedAppearance) ||
     !isRecord(artifact.variables) ||
     (artifact.modeDeltas !== undefined && !Array.isArray(artifact.modeDeltas)) ||
+    (artifact.contrastDeltas !== undefined && !Array.isArray(artifact.contrastDeltas)) ||
     !isRecord(artifact.scopes) ||
     typeof artifact.css !== "string" ||
     !Array.isArray(artifact.coverage) ||
@@ -334,17 +348,32 @@ export function verifyTenantThemeArtifactV1(
         !isRecord(block) ||
         (block.mode !== "light" && block.mode !== "dark") ||
         seenModes.has(block.mode) ||
-        !isRecord(block.variables) ||
-        Object.keys(block.variables).length === 0 ||
-        Object.entries(block.variables).some(
-          ([name, value]) => !name.startsWith("--ds-") || typeof value !== "string",
-        ) ||
-        Object.keys(block.variables).join("\0") !==
-          Object.keys(block.variables).sort().join("\0")
+        !isOrderedChannelMap(block.variables)
       ) {
         return { ok: false, error: "modeDeltas are not unique ordered --ds-* maps" };
       }
       seenModes.add(block.mode);
+    }
+  }
+  if (artifact.contrastDeltas !== undefined) {
+    const seenStates = new Set<string>();
+    for (const block of artifact.contrastDeltas) {
+      const state: unknown = !isRecord(block)
+        ? undefined
+        : block.mode === undefined
+          ? "base"
+          : block.mode === "light" || block.mode === "dark"
+            ? block.mode
+            : undefined;
+      if (
+        !isRecord(block) ||
+        typeof state !== "string" ||
+        seenStates.has(state) ||
+        !isOrderedChannelMap(block.variables)
+      ) {
+        return { ok: false, error: "contrastDeltas are not unique ordered --ds-* maps" };
+      }
+      seenStates.add(state);
     }
   }
 
@@ -366,6 +395,9 @@ export function verifyTenantThemeArtifactV1(
       variables: artifact.variables,
       ...(artifact.modeDeltas && artifact.modeDeltas.length > 0
         ? { modeDeltas: artifact.modeDeltas }
+        : {}),
+      ...(artifact.contrastDeltas && artifact.contrastDeltas.length > 0
+        ? { contrastDeltas: artifact.contrastDeltas }
         : {}),
       // A decision metadatum that changes runtime policy cannot live outside
       // the digest the mount proves: an artifact whose provenance was edited in

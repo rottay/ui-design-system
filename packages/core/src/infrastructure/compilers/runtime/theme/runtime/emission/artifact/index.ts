@@ -4,11 +4,22 @@ import {
   tenantArtifactScope,
 } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
 
-import { emitDeclarations, emitRule } from "../css";
+import {
+  emitContrastRule,
+  emitDeclarations,
+  emitRule,
+  PREFERS_MORE_CONTRAST,
+} from "../css";
 
 /** One compiled mode overlay of a tenant artifact: the delta, not the block. */
 export interface TenantArtifactModeDelta {
   readonly mode: FlatThemeMode;
+  readonly variables: Readonly<Record<string, string>>;
+}
+
+/** A `prefers-contrast: more` delta over the base rule, or over `mode`'s rule. */
+export interface TenantArtifactContrastDelta {
+  readonly mode?: FlatThemeMode;
   readonly variables: Readonly<Record<string, string>>;
 }
 
@@ -21,6 +32,7 @@ export interface TenantArtifactComposition {
   readonly digest: string;
   readonly variables: Readonly<Record<string, string>>;
   readonly modeDeltas?: readonly TenantArtifactModeDelta[];
+  readonly contrastDeltas?: readonly TenantArtifactContrastDelta[];
   /**
    * Whether the document defers its canvas to the viewer (`backgroundMode:
    * "auto"`), which is the only thing this format does with that field. A
@@ -66,10 +78,33 @@ export function emitTenantArtifactCss(composition: TenantArtifactComposition): s
       )}\n}`;
     return `${explicitRule}\n${automaticRule}`;
   });
+  // Follows the mode rules it corrects; under `auto` a mode delta gets its system copy too.
+  const contrast = composition.contrastDeltas ?? [];
+  const contrastRule = emitContrastRule(
+    contrast.map((block) => ({ mode: block.mode, cssVariables: block.variables })),
+    scope
+  );
+  const automaticContrastRules =
+    composition.followsSystem !== true
+      ? []
+      : contrast.flatMap((block) => {
+          if (block.mode === undefined) return [];
+          const contrastDeclarations = emitDeclarations(block.variables);
+          if (contrastDeclarations.length === 0) return [];
+          return [
+            `@media ${PREFERS_MORE_CONTRAST} and (prefers-color-scheme: ${block.mode}) {\n` +
+              `${emitRule(
+                systemModeSelector(scope.baseSelector, block.mode),
+                contrastDeclarations
+              )}\n}`,
+          ];
+        });
   return [
     `/* TenantThemeArtifact v1 | ${composition.compilerVersion} | ${composition.digest} */`,
     emitRule(scope.baseSelector, declarations),
     ...modeRules,
+    ...(contrastRule ? [contrastRule] : []),
+    ...automaticContrastRules,
     "",
   ].join("\n");
 }

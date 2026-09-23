@@ -703,6 +703,12 @@ export interface TenantThemeArtifactModeDelta {
   variables: Readonly<Record<string, string>>;
 }
 
+/** A tenant delta under `prefers-contrast: more`, over the base rule or `mode`'s rule. */
+export interface TenantThemeArtifactContrastDelta {
+  mode?: "light" | "dark";
+  variables: Readonly<Record<string, string>>;
+}
+
 /**
  * One raw selection an artifact was compiled from, and the effective leaves it
  * owns — the ledger entry MINUS its authored value.
@@ -753,6 +759,8 @@ export interface TenantThemeArtifact {
   variables: Readonly<Record<string, string>>;
   /** Present only when the tenant changes a non-body mode. */
   modeDeltas?: readonly TenantThemeArtifactModeDelta[];
+  /** Present only when the high contrast posture moves a tenant channel. */
+  contrastDeltas?: readonly TenantThemeArtifactContrastDelta[];
   /** Present only when at least one contrast autocorrect was applied. */
   adjustments?: readonly TenantThemeContrastAdjustment[];
   /** Present when the compile resolved a decision-provenance ledger. */

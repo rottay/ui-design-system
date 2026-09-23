@@ -31,7 +31,10 @@
  * @package @rottay/design-system
  */
 
-import type { TenantThemeArtifactModeDelta } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import type {
+  TenantThemeArtifactContrastDelta,
+  TenantThemeArtifactModeDelta,
+} from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { cyclesIn } from "../../foundation/references";
 import type { ThemeAdmissionIssue } from "../../foundation/issues";
 
@@ -39,6 +42,25 @@ import type { ThemeAdmissionIssue } from "../../foundation/issues";
 interface EmittedDelta {
   readonly variables: Readonly<Record<string, string>>;
   readonly modeDeltas: readonly TenantThemeArtifactModeDelta[];
+  readonly contrastDeltas?: readonly TenantThemeArtifactContrastDelta[];
+}
+
+/** Each state under `prefers-contrast: more`: the base, and each mode over it. */
+function contrastStates(delta: EmittedDelta): Readonly<Record<string, string>>[] {
+  const contrast = delta.contrastDeltas ?? [];
+  if (contrast.length === 0) return [];
+  const base = {
+    ...delta.variables,
+    ...contrast.find((block) => block.mode === undefined)?.variables,
+  };
+  return [
+    base,
+    ...(["light", "dark"] as const).map((mode) => ({
+      ...base,
+      ...delta.modeDeltas.find((block) => block.mode === mode)?.variables,
+      ...contrast.find((block) => block.mode === mode)?.variables,
+    })),
+  ];
 }
 
 /**
@@ -58,6 +80,7 @@ export function referenceCycleIssues(
       ...delta.variables,
       ...block.variables,
     })),
+    ...contrastStates(delta),
   ];
   for (const block of blocks) {
     for (const [channel, cycle] of cyclesIn(block)) {

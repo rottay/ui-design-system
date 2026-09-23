@@ -10,6 +10,7 @@
 export {
   containerScope,
   emitBaseRule,
+  emitContrastRule,
   emitDeclarations,
   emitModeRule,
   emitRule,
@@ -19,6 +20,7 @@ export {
 } from "./css";
 export type {
   TenantArtifactComposition,
+  TenantArtifactContrastDelta,
   TenantArtifactModeDelta,
 } from "./artifact";
 export { emitTenantArtifactCss } from "./artifact";

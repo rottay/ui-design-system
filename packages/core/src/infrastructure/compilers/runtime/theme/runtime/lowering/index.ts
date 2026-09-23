@@ -28,6 +28,11 @@ import {
   mergePartialPersonality,
 } from "./foundation/personality";
 import { PRIMARY_SEED_FIELD } from "./foundation/seeds";
+import {
+  atPreferredContrast,
+  projectContrastBlocks,
+  restsAtPreferredContrast,
+} from "./runtime/derivation/contrast";
 import { deriveModeThemes, projectModeDelta } from "./runtime/derivation/modes";
 import { lowerBlock } from "./runtime/pipeline";
 
@@ -157,33 +162,34 @@ export function compileTheme(
       }
     : undefined;
 
-  const cssVariables = lowerBlock({
-    theme: effectiveTheme,
-    tenant: tenantFacts,
-  });
-
-  assertMandatoryFontFallback(cssVariables, tenantSlug);
-
-  // The declared mode of the values above; the other mode is derived from the
+  // The declared mode of the base block; the other mode is derived from the
   // SAME decisions by the modes family and lowered through the SAME pipeline.
+  const lowerWithModes = (
+    theme: FlatTheme,
+    patch: Partial<FlatTheme> | undefined,
+    atMode: (modeTheme: FlatTheme) => FlatTheme = (modeTheme) => modeTheme
+  ) => {
+    const base = lowerBlock({ theme, tenant: tenantFacts });
+    const modes = deriveModeThemes({ theme, tenantFacts, tenantPatch: patch }).map(
+      (request) =>
+        projectModeDelta(
+          request,
+          lowerBlock({
+            theme: atMode(request.theme),
+            mode: request.mode,
+            surface: request.mode,
+            modePrefix: request.modePrefix,
+            tenant: request.tenant,
+          }),
+          base
+        )
+    );
+    return { cssVariables: base, modeBlocks: modes };
+  };
+
+  const { cssVariables, modeBlocks } = lowerWithModes(effectiveTheme, tenantPatch);
+  assertMandatoryFontFallback(cssVariables, tenantSlug);
   const colorScheme = effectiveTheme.appearance?.defaultMode;
-  const modeBlocks = deriveModeThemes({
-    theme: effectiveTheme,
-    tenantFacts,
-    tenantPatch,
-  }).map((request) =>
-    projectModeDelta(
-      request,
-      lowerBlock({
-        theme: request.theme,
-        mode: request.mode,
-        surface: request.mode,
-        modePrefix: request.modePrefix,
-        tenant: request.tenant,
-      }),
-      cssVariables
-    )
-  );
   for (const block of modeBlocks) {
     // A mode may restyle type; it may not drop the mandatory fallback while
     // doing so. The guard reads the block's own emission, not the base's.
@@ -193,11 +199,24 @@ export function compileTheme(
     );
   }
 
+  // `prefers-contrast: more`: the same decisions re-lowered at the high posture.
+  const contrastBlocks = restsAtPreferredContrast(effectiveTheme)
+    ? []
+    : projectContrastBlocks(
+        { cssVariables, modeBlocks },
+        lowerWithModes(
+          atPreferredContrast(effectiveTheme),
+          tenantPatch && atPreferredContrast(tenantPatch),
+          atPreferredContrast
+        )
+      );
+
   const { recipeProfile, experienceProfile } =
     resolveGovernedSelections(effectiveTheme);
   const compiled: ThemeCompilation = {
     cssVariables,
     modeBlocks,
+    ...(contrastBlocks.length > 0 ? { contrastBlocks } : {}),
     ...(colorScheme ? { colorScheme } : {}),
     runtime: {
       personality,

@@ -10,6 +10,7 @@
 import type { BrandExpressiveSelection } from '@/foundation/contracts/composition/tenants/themes';
 import type {
   ThemeCompilation,
+  ThemeCompilationContrastBlock,
   ThemeCompilationModeBlock,
 } from '@/foundation/contracts/composition/tenants/themes/compiled';
 import type { ThemeResolution } from '@/foundation/contracts/composition/tenants/themes/resolved';
@@ -23,6 +24,7 @@ import {
   firstPartyScope,
   staticThemeIntent,
 } from '../../theme';
+import { emitContrastRule } from '../../theme/runtime/emission';
 import { readGovernedTheme } from '../../theme/runtime/lowering/foundation/intake';
 import { flatThemeToPersonality } from '../../theme/runtime/lowering/foundation/personality';
 import { projectFirstPartyArtifactScopes } from '../../../kernel/foundation/css/scope-projection';
@@ -121,6 +123,8 @@ export interface RenderVerticalArtifactInput {
   colorScheme?: 'light' | 'dark';
   /** Compiled deltas for every mode the theme authors beyond its default. */
   modeBlocks?: readonly ThemeCompilationModeBlock[];
+  /** The compile's `prefers-contrast: more` deltas; none, no section. */
+  contrastBlocks?: readonly ThemeCompilationContrastBlock[];
   regenerateCommand: string;
 }
 
@@ -135,6 +139,7 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     compiledCssVariables,
     colorScheme,
     modeBlocks,
+    contrastBlocks,
     regenerateCommand,
   } = input;
 
@@ -213,8 +218,27 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     ].join('\n'),
   );
 
+  // Same two scopes: the base delta rides the base selector, a mode's delta
+  // its mode selector, so each one outranks exactly the rule it corrects.
+  const contrastRule = emitContrastRule(
+    (contrastBlocks ?? []).map((block) => ({
+      ...(block.mode === undefined ? {} : { mode: block.mode }),
+      cssVariables: Object.fromEntries(
+        Object.keys(block.cssVariables)
+          .sort()
+          .map((key) => [key, block.cssVariables[key] as string]),
+      ),
+    })),
+    { baseSelector: baseScope.baseSelector, modeSelector: modeScope.modeSelector },
+  );
+  const contrastSections = contrastRule
+    ? [
+        `/* === Compiled from palette.contrast-posture high, under prefers-contrast: more — do not edit === */\n${contrastRule}`,
+      ]
+    : [];
+
   return projectFirstPartyArtifactScopes(
-    [header, compiledBlock, ...modeBlockSections].join('\n\n') + '\n',
+    [header, compiledBlock, ...modeBlockSections, ...contrastSections].join('\n\n') + '\n',
     tenantSlug,
     verticalKey,
   );
@@ -316,6 +340,7 @@ export function renderFirstPartyArtifact(input: RenderFirstPartyArtifactInput): 
       compiledCssVariables: compiled.cssVariables,
       colorScheme: compiled.colorScheme,
       modeBlocks: compiled.modeBlocks,
+      contrastBlocks: compiled.contrastBlocks,
       regenerateCommand: regenerateCommand ?? FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
     }),
   };

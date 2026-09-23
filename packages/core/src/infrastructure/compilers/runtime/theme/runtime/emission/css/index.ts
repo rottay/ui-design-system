@@ -1,5 +1,6 @@
 import type {
   ThemeCompilation,
+  ThemeCompilationContrastBlock,
   ThemeCompilationModeBlock,
 } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { EmissionScope } from "@/foundation/contracts/composition/tenants/themes/emission";
@@ -77,6 +78,26 @@ export function emitModeRule(
   ]);
 }
 
+export const PREFERS_MORE_CONTRAST = "(prefers-contrast: more)";
+
+/** The `prefers-contrast: more` deltas at a scope in one media rule; nothing declared, no rule. */
+export function emitContrastRule(
+  blocks: readonly ThemeCompilationContrastBlock[],
+  scope: EmissionScope
+): string {
+  const rules = blocks
+    .map((block) => ({ block, declarations: emitDeclarations(block.cssVariables) }))
+    .filter(({ declarations }) => declarations.length > 0)
+    .map(({ block, declarations }) =>
+      emitRule(
+        block.mode === undefined ? scope.baseSelector : scope.modeSelector(block.mode),
+        declarations
+      )
+    );
+  if (rules.length === 0) return "";
+  return `@media ${PREFERS_MORE_CONTRAST} {\n${rules.join("\n")}\n}`;
+}
+
 /**
  * Reproduces the compiler's own CSS grammar against an arbitrary scope. The
  * base block is the empty string when it carries neither entries nor a
@@ -87,6 +108,7 @@ export function emitThemeCss(compiled: ThemeCompilation, scope: EmissionScope): 
   return [
     emitBaseRule(compiled, scope),
     ...compiled.modeBlocks.map((mode) => emitModeRule(mode, scope)),
+    emitContrastRule(compiled.contrastBlocks ?? [], scope),
   ]
     .filter(Boolean)
     .join("\n\n");

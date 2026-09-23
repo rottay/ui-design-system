@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 12,
-      "maxSourceBytes": 77427
+      "maxSourceBytes": 80616
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-INV-03 Lot A pointerType: the interaction-state hook's six handlers become pointer-aware so a touch tap stops latching hover, adding 1388 source bytes to foundation/behavior/runtime/interaction-state (4195 -> 5583 bytes, measured per file, comments already trimmed to the two-line law). All six budgets move by exactly 1388 and by nothing else -- ./primitives/input 245067 -> 246455, ./primitives/radio 146726 -> 148114, ./primitives/breadcrumb 108197 -> 109585, ./primitives/steps 147391 -> 148779, ./primitives/modal 171556 -> 172944 and ./structures/app-shell 288600 -> 289988, reachable modules unchanged in all six -- because each closure reaches the hook. No export, interface or handler-type line changed.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 6 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-INV-03 Option A (DT trail 98): ./runtime/visual-authority 77,427 -> 80,616 B (+3,189). The mount verifier rebuilds the artifact CSS by calling the producer, so the contrastDeltas emitter (emission/artifact, emission/css emitContrastRule) and the verifier's contrastDeltas shape check and digest field are reachable from this subpath; new comments trimmed to one line and the modeDeltas check reuses the new map predicate before widening.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

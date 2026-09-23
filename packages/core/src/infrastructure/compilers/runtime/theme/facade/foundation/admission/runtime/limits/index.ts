@@ -28,7 +28,10 @@ import {
   type DecisionProvenanceLedger,
 } from "@/foundation/contracts/composition/tenants/themes/provenance";
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
-import type { TenantThemeArtifactModeDelta } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import type {
+  TenantThemeArtifactContrastDelta,
+  TenantThemeArtifactModeDelta,
+} from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   canonicalizeJsonValue,
   compareCodeUnits,
@@ -243,6 +246,68 @@ function effectiveModeVariables(
   return { ...compiled.cssVariables, ...block?.cssVariables };
 }
 
+/** What resolves under `prefers-contrast: more`, in the base state or in a mode. */
+function preferredContrastVariables(
+  compiled: ThemeCompilation,
+  mode?: FlatThemeMode
+): Record<string, string> {
+  const contrast = compiled.contrastBlocks ?? [];
+  const base = contrast.find((block) => block.mode === undefined);
+  if (mode === undefined) return { ...compiled.cssVariables, ...base?.cssVariables };
+  return {
+    ...compiled.cssVariables,
+    ...base?.cssVariables,
+    ...compiled.modeBlocks?.find((block) => block.mode === mode)?.cssVariables,
+    ...contrast.find((block) => block.mode === mode)?.cssVariables,
+  };
+}
+
+function movedChannels(
+  target: Readonly<Record<string, string>>,
+  applied: Readonly<Record<string, string>>
+): Record<string, string> {
+  const moved: Record<string, string> = {};
+  for (const [key, value] of Object.entries(target)) {
+    if (applied[key] !== value) moved[key] = value;
+  }
+  return moved;
+}
+
+/**
+ * The tenant's `prefers-contrast: more` rules, measured against what the vertical's
+ * artifact and the tenant's resting rules already resolve under the preference.
+ */
+function contrastChannelDelta(
+  compiled: ThemeCompilation,
+  baseline: ThemeCompilation,
+  variables: Readonly<Record<string, string>>,
+  modeDeltas: readonly TenantThemeArtifactModeDelta[]
+): TenantThemeArtifactContrastDelta[] {
+  const base = movedChannels(preferredContrastVariables(compiled), {
+    ...preferredContrastVariables(baseline),
+    ...variables,
+  });
+  const deltas: TenantThemeArtifactContrastDelta[] =
+    Object.keys(base).length > 0 ? [{ variables: sortedThemeVariables(base) }] : [];
+  for (const mode of ["light", "dark"] as const) {
+    const declared = [
+      ...(compiled.modeBlocks ?? []),
+      ...(baseline.modeBlocks ?? []),
+    ].some((block) => block.mode === mode);
+    if (!declared) continue;
+    const moved = movedChannels(preferredContrastVariables(compiled, mode), {
+      ...preferredContrastVariables(baseline, mode),
+      ...variables,
+      ...base,
+      ...modeDeltas.find((block) => block.mode === mode)?.variables,
+    });
+    if (Object.keys(moved).length > 0) {
+      deltas.push({ mode, variables: sortedThemeVariables(moved) });
+    }
+  }
+  return deltas;
+}
+
 /**
  * What this compile CHANGED against the vertical's own compile.
  *
@@ -254,10 +319,7 @@ function effectiveModeVariables(
 export function themeChannelDelta(
   compiled: ThemeCompilation,
   baseline: ThemeCompilation
-): {
-  variables: Record<string, string>;
-  modeDeltas: readonly TenantThemeArtifactModeDelta[];
-} {
+): ThemeChannelDelta {
   const base: Record<string, string> = {};
   for (const [key, value] of Object.entries(compiled.cssVariables)) {
     if (baseline.cssVariables[key] !== value) base[key] = value;
@@ -284,13 +346,15 @@ export function themeChannelDelta(
       modeDeltas.push({ mode, variables: sortedThemeVariables(moved) });
     }
   }
-  return { variables, modeDeltas };
+  const contrastDeltas = contrastChannelDelta(compiled, baseline, variables, modeDeltas);
+  return { variables, modeDeltas, contrastDeltas };
 }
 
 /** What the admission and the artifact both call a tenant's own emission. */
 export interface ThemeChannelDelta {
   readonly variables: Readonly<Record<string, string>>;
   readonly modeDeltas: readonly TenantThemeArtifactModeDelta[];
+  readonly contrastDeltas: readonly TenantThemeArtifactContrastDelta[];
 }
 
 /**
@@ -306,7 +370,7 @@ export function limitIssues(delta: ThemeChannelDelta): ThemeAdmissionIssue[] {
 
   const compiledVariableCount =
     Object.keys(delta.variables).length +
-    delta.modeDeltas.reduce(
+    [...delta.modeDeltas, ...delta.contrastDeltas].reduce(
       (total, block) => total + Object.keys(block.variables).length,
       0
     );
@@ -321,6 +385,7 @@ export function limitIssues(delta: ThemeChannelDelta): ThemeAdmissionIssue[] {
   const projectedVariableMaps = [
     delta.variables,
     ...delta.modeDeltas.map((block) => block.variables),
+    ...delta.contrastDeltas.map((block) => block.variables),
   ];
   for (const [key, value] of projectedVariableMaps.flatMap((map) =>
     Object.entries(map)
@@ -348,6 +413,9 @@ export function limitIssues(delta: ThemeChannelDelta): ThemeAdmissionIssue[] {
     canonicalizeJsonValue({
       variables: delta.variables,
       modeDeltas: delta.modeDeltas,
+      ...(delta.contrastDeltas.length > 0
+        ? { contrastDeltas: delta.contrastDeltas }
+        : {}),
     })
   ).byteLength;
   if (compiledVariableBytes > limits.maxCompiledVariableBytes) {

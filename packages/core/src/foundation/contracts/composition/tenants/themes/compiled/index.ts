@@ -17,6 +17,13 @@ export interface ThemeCompilationModeBlock {
   readonly colorScheme: FlatThemeMode;
 }
 
+/** What `prefers-contrast: more` moves: the compile re-lowered at high posture, as a delta. */
+export interface ThemeCompilationContrastBlock {
+  /** Absent for the base block; otherwise the mode rule this delta sits over. */
+  readonly mode?: FlatThemeMode;
+  readonly cssVariables: Readonly<Record<string, string>>;
+}
+
 /** The non-CSS half of a compile: what a React runtime reads without re-deriving. */
 export interface ThemeCompilationRuntime {
   readonly personality: PartialPersonalityTokens;
@@ -36,6 +43,8 @@ export interface ThemeCompilation {
   readonly cssVariables: Readonly<Record<string, string>>;
   /** Always present; may be empty. Never optional, so a reader needs no guard. */
   readonly modeBlocks: readonly ThemeCompilationModeBlock[];
+  /** Present only when the high contrast posture moves a channel. */
+  readonly contrastBlocks?: readonly ThemeCompilationContrastBlock[];
   readonly colorScheme?: FlatThemeMode;
   readonly runtime: ThemeCompilationRuntime;
 }
