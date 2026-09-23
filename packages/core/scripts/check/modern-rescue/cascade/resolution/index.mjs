@@ -753,7 +753,7 @@ function resolveImportTargetFile(moduleSpecifier, fromFileRel) {
   return null;
 }
 
-function findExportedDecl(targetSource, importedName, form, starDepth = 0, starSeen = new Set()) {
+function findExportedDecl(targetSource, importedName, form, starDepth = 0, starSeen = new Set(), localSeen = []) {
   const starTargets = [];
   for (const stmt of targetSource.statements) {
     const hasExportModifier = (stmt.modifiers ?? []).some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
@@ -789,7 +789,15 @@ function findExportedDecl(targetSource, importedName, form, starDepth = 0, starS
       for (const el of stmt.exportClause.elements) {
         if (el.name.text === importedName) {
           const localName = (el.propertyName ?? el.name).text;
-          return findExportedDecl(targetSource, localName, form) ?? findLocalDecl(targetSource, localName);
+          const chain = [...localSeen, importedName];
+          // `export { X }` names the local binding X, not the export X: re-entering the list would never end
+          if (chain.includes(localName)) {
+            return localExportBinding(targetSource, localName) ?? { kind: "localExportCycle", file: targetSource.fileName, cycle: [...chain, localName] };
+          }
+          const viaExport = findExportedDecl(targetSource, localName, form, 0, new Set(), chain);
+          // a cycle further down is only a cycle if this local is not itself declared
+          if (viaExport?.kind === "localExportCycle") return localExportBinding(targetSource, localName) ?? viaExport;
+          return viaExport ?? findLocalDecl(targetSource, localName) ?? findImportedLocal(targetSource, localName);
         }
       }
     }
@@ -829,6 +837,63 @@ function findLocalDecl(targetSource, name) {
     if (ts.isFunctionDeclaration(stmt) && stmt.name?.text === name && stmt.body) {
       return { kind: "namedFunction", node: stmt };
     }
+  }
+  return null;
+}
+
+/** `import { A as X } from './m'; export { X };` is a re-export of `A` from `./m`. */
+function findImportedLocal(targetSource, name) {
+  for (const stmt of targetSource.statements) {
+    const bindings = ts.isImportDeclaration(stmt) ? stmt.importClause?.namedBindings : null;
+    if (!bindings || !ts.isNamedImports(bindings) || !ts.isStringLiteralLike(stmt.moduleSpecifier)) continue;
+    for (const el of bindings.elements) {
+      if (el.name.text === name) return { kind: "reExport", moduleSpecifier: stmt.moduleSpecifier.text, importedName: (el.propertyName ?? el.name).text };
+    }
+  }
+  return null;
+}
+
+/** What a name in a local export list binds to, or null when the module never declares it. */
+function localExportBinding(targetSource, name) {
+  const resolved = findLocalDecl(targetSource, name) ?? findImportedLocal(targetSource, name);
+  if (resolved) return resolved;
+  const importForm = defaultOrNamespaceImportForm(targetSource, name);
+  if (importForm) return { kind: "localExportOfDefaultOrNamespaceImport", file: targetSource.fileName, name, importForm };
+  const why = unreadableLocalReason(targetSource, name);
+  if (why) return { kind: "localExportUnreadableLocal", file: targetSource.fileName, name, why };
+  return null;
+}
+
+/** Why a module-scope declaration of `name` exists but carries no readable value, or null. */
+function unreadableLocalReason(targetSource, name) {
+  const declares = (bindingName) => {
+    if (ts.isIdentifier(bindingName)) return bindingName.text === name;
+    return bindingName.elements.some((el) => !ts.isOmittedExpression(el) && declares(el.name));
+  };
+  for (const stmt of targetSource.statements) {
+    if (ts.isVariableStatement(stmt)) {
+      for (const decl of stmt.declarationList.declarations) {
+        if (!declares(decl.name)) continue;
+        return ts.isIdentifier(decl.name) ? "no-initializer" : "binding-pattern";
+      }
+    }
+    if (stmt.name?.text !== name) continue;
+    if (ts.isFunctionDeclaration(stmt)) return "function-without-body";
+    if (ts.isClassDeclaration(stmt)) return "class-declaration";
+    if (ts.isEnumDeclaration(stmt)) return "enum-declaration";
+    if (ts.isModuleDeclaration(stmt)) return "namespace-declaration";
+    if (ts.isInterfaceDeclaration(stmt) || ts.isTypeAliasDeclaration(stmt)) return "type-only-declaration";
+  }
+  return null;
+}
+
+/** `import X from './m'` -> "default", `import * as X from './m'` -> "namespace", else null. */
+function defaultOrNamespaceImportForm(targetSource, name) {
+  for (const stmt of targetSource.statements) {
+    const clause = ts.isImportDeclaration(stmt) ? stmt.importClause : null;
+    if (!clause) continue;
+    if (clause.name?.text === name) return "default";
+    if (clause.namedBindings && ts.isNamespaceImport(clause.namedBindings) && clause.namedBindings.name.text === name) return "namespace";
   }
   return null;
 }
@@ -2891,6 +2956,13 @@ function followImport(binding, localName, ctx, path, depth, callNode, callerCtx)
   if (!targetSrc) return { kind: "openUnknown", reason: "target-file-unreadable", path: stepPath, targetFile };
   const exported = findExportedDecl(targetSrc.source, binding.importedName ?? localName, binding.form);
   if (!exported) return { kind: "openUnknown", reason: "export-not-found-in-target", path: stepPath, targetFile };
+  if (exported.kind === "localExportCycle") return { kind: "openUnknown", reason: "local-export-cycle", path: stepPath, targetFile, cycle: exported.cycle };
+  if (exported.kind === "localExportOfDefaultOrNamespaceImport") {
+    return { kind: "openUnknown", reason: "local-export-of-default-or-namespace-import", path: stepPath, targetFile, name: exported.name, importForm: exported.importForm };
+  }
+  if (exported.kind === "localExportUnreadableLocal") {
+    return { kind: "openUnknown", reason: "local-export-unreadable-local", path: stepPath, targetFile, name: exported.name, why: exported.why };
+  }
   const nextVisited = new Set([...visitedImports, visitKey]);
 
   if (exported.kind === "reExport") {
