@@ -2093,10 +2093,54 @@ test('H-2 drill 10 (profiles.expressive): the flat enumValues union cannot catch
     baselineSource: baselines.rottay.source,
   });
 
-  // The real, product-owned sanitizer drops the value: geometry's own
-  // channels (radius/button-style cascade) stay byte-identical to baseline.
+  // The lowering reports only the manifest's declared channels; the geometry
+  // cascade is read from the FULL compile instead. Since d524ec1d6 the composed
+  // rottay baseline authors shape.button-style 'soft', so --ds-radius-button is
+  // var(--ds-radius-md, 8px) there -- a stated decision, not 36d135d44's
+  // `initial` -- and a geometry value must leave both channels untouched.
   assert.equal(lowered.variables['--ds-radius-scale'], baselineVars['--ds-radius-scale']);
-  assert.equal(lowered.variables['--ds-radius-button'], baselineVars['--ds-radius-button']);
+  const compileGeometry = (theme, geometry) =>
+    arms['static-brand-theme'].compile({
+      brandTheme: { ...theme, expressive: { ...(theme.expressive ?? {}), profiles: { ...(theme.expressive?.profiles ?? {}), geometry } } },
+      vertical: 'rottay',
+      tenantSlug: 'h2-drill-10-geometry',
+      tenantPatch: { expressive: { profiles: { geometry } } },
+      tenantAuthoredPaths: new Set(['expressive.profiles.geometry']),
+    }).cssVariables;
+  const crossAxis = compileGeometry(baselines.rottay.theme, 'flat');
+  assert.equal(crossAxis['--ds-radius-scale'], baselineVars['--ds-radius-scale']);
+  assert.equal(crossAxis['--ds-radius-button'], baselineVars['--ds-radius-button']);
+
+  // The authored radius scale outranks a profile default, so on the composed
+  // baseline even a VALID geometry is silent. The drop is witnessed on a
+  // document without that leaf: a valid value moves the scale, the
+  // cross-axis value leaves it at the baseline.
+  const withoutAuthoredScale = structuredClone(baselines.rottay.theme);
+  delete withoutAuthoredScale.surfaces.radiusScale;
+  const unscaledBaseline = arms['static-brand-theme'].compile({
+    brandTheme: withoutAuthoredScale,
+    vertical: 'rottay',
+    tenantSlug: 'h2-drill-10-geometry',
+    tenantPatch: {},
+    tenantAuthoredPaths: new Set(),
+  }).cssVariables['--ds-radius-scale'];
+  assert.notEqual(compileGeometry(withoutAuthoredScale, 'sharp')['--ds-radius-scale'], unscaledBaseline, 'a valid geometry paints');
+  assert.equal(compileGeometry(withoutAuthoredScale, 'flat')['--ds-radius-scale'], unscaledBaseline, 'the cross-axis value is dropped');
+
+  // The DB door's compiler refuses the leak by name, and lowers a valid value.
+  const db = arms['db-tenant-theme'];
+  const lowerOnDb = (stop) => lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: { ...EXPRESSIVE_H2, calibration: { ...EXPRESSIVE_H2.calibration, normalizedStops: [stop] } },
+    stopId: stop.id,
+    compile: db.compile,
+    vertical: 'rottay',
+    provenance: db.provenance,
+    defaultMode: verticalDefaultMode(baselines.rottay, 'rottay'),
+    verticalEnvelopeFor: db.verticalEnvelopeFor,
+  });
+  assert.throws(() => lowerOnDb({ id: 'flat', role: 'geometry' }), /profiles\.geometry: Expected one of sharp, soft, rounded, pill-accented/);
+  assert.notEqual(lowerOnDb({ id: 'sharp', role: 'geometry' }).variables['--ds-radius-scale'], baselineVars['--ds-radius-scale']);
 
   // And the discrimination guard -- the evidence pipeline's own EXISTS check
   // -- must not accept this as a witness for geometry: only ONE stop exists
