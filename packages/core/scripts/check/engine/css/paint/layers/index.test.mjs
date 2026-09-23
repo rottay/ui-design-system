@@ -147,6 +147,8 @@ test("every owned channel maps to its canonical layer and root authorities stay 
       "@import './runtime/personality/index.css' layer(rottay-personality);",
       "@import './foundation/responsive/index.css' layer(rottay-responsive);",
       "@import './foundation/responsive/language-arabic-root/index.css';",
+      "@import './foundation/a11y/forced-colors/index.css' layer(rottay-tokens);",
+      "@import './foundation/a11y/contrast/index.css';",
       "",
     ].join("\n")
   );
@@ -210,8 +212,11 @@ test("tenant artifacts and the Arabic root floor cannot be demoted into a named 
   const arabic = fixture(
     `${canonical}\n@import './foundation/responsive/language-arabic-root/index.css' layer(rottay-responsive);\n`
   );
+  const contrast = fixture(
+    `${canonical}\n@import './foundation/a11y/contrast/index.css' layer(rottay-tokens);\n`
+  );
   try {
-    for (const entry of [tenant.entry, arabic.entry]) {
+    for (const entry of [tenant.entry, arabic.entry, contrast.entry]) {
       const result = run(entry);
       assert.equal(result.status, 1);
       assert.match(result.stderr, /root paint authority must remain unlayered/);
@@ -219,6 +224,45 @@ test("tenant artifacts and the Arabic root floor cannot be demoted into a named 
   } finally {
     tenant.cleanup();
     arabic.cleanup();
+    contrast.cleanup();
+  }
+});
+
+test("the forced-colors floor is owned by rottay-tokens, and only that exact channel", () => {
+  const unlayered = fixture(
+    `${canonical}\n@import './foundation/a11y/forced-colors/index.css';\n`
+  );
+  const wrong = fixture(
+    `${canonical}\n@import './foundation/a11y/forced-colors/index.css' layer(rottay-components);\n`
+  );
+  const sibling = fixture(
+    `${canonical}\n@import './foundation/a11y/focus/index.css' layer(rottay-tokens);\n`
+  );
+  try {
+    const escaped = run(unlayered.entry);
+    assert.equal(escaped.status, 1, escaped.stdout);
+    assert.match(
+      escaped.stderr,
+      /unlayered first-party import: \.\/foundation\/a11y\/forced-colors\/index\.css; expected layer\(rottay-tokens\)/
+    );
+
+    const misplaced = run(wrong.entry);
+    assert.equal(misplaced.status, 1, misplaced.stdout);
+    assert.match(
+      misplaced.stderr,
+      /wrong cascade owner: \.\/foundation\/a11y\/forced-colors\/index\.css uses layer\(rottay-components\); expected layer\(rottay-tokens\)/
+    );
+
+    const undeclared = run(sibling.entry);
+    assert.equal(undeclared.status, 1, undeclared.stdout);
+    assert.match(
+      undeclared.stderr,
+      /first-party import has no cascade owner: \.\/foundation\/a11y\/focus\/index\.css/
+    );
+  } finally {
+    unlayered.cleanup();
+    wrong.cleanup();
+    sibling.cleanup();
   }
 });
 

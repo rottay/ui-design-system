@@ -91,6 +91,7 @@ const IMPORT_RE = /@import\s+(['"])([^'"]+)\1\s*(?:layer\(([^)]*)\))?\s*;/g;
 const UNLAYERED_REGISTRIES = new Set(["foundation/base/properties/index.css"]);
 const UNLAYERED_ROOT_AUTHORITIES = new Set([
   "foundation/responsive/language-arabic-root/index.css",
+  "foundation/a11y/contrast/index.css",
 ]);
 const PAINT_BRIDGE_RE = /(?:patterns|collapse|personality)-paint\.css$/;
 
@@ -351,7 +352,8 @@ function expectedLayer(specifier, cssRoot = CSS_ROOT) {
   if (
     normalized.includes("foundation/base/") ||
     normalized.includes("foundation/themes/") ||
-    normalized.includes("foundation/monochrome/")
+    normalized.includes("foundation/monochrome/") ||
+    normalized.includes("foundation/a11y/forced-colors/")
   )
     return "rottay-tokens";
   return null;

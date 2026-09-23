@@ -6,7 +6,7 @@
 > Rollback: every control is an INPUT — removing the authored value restores the vertical's baseline.
 > `effect today` is MEASURED, not intended: `not-yet-derived` means the row has no producer anywhere yet.
 
-digest: f3c5599fd377f8b4a99183e81ec5c415a62e12407486cbb10432684d84e0b8c0
+digest: c4de46b748a626dd3ee9a812415d435fe24a700ec63eff05a2c48e80e3ffc85d
 
 ## STANDARD — 19 controls
 
@@ -24,7 +24,7 @@ digest: f3c5599fd377f8b4a99183e81ec5c415a62e12407486cbb10432684d84e0b8c0
 | `density.mode` | 15 | Density posture | `compact` \| `normal` \| `spacious` | `appearance.general.density` | 2 channels | 24/25 (declared fan-out) | open | css-channels |
 | `spacing.rhythm` | 16 | Layout rhythm | `tight` \| `normal` \| `airy` | `appearance.general.rhythm` | 2 channels | 20/25 (declared fan-out) | open | css-channels |
 | `surfaces.elevation-posture` | 17 | Elevation posture | `flat` \| `soft` \| `elevated` | `appearance.general.surfaces.elevation` | 3 channels | 25/25 (declared fan-out) | open | css-channels |
-| `surfaces.border-style` | 18 | Border style | `none` \| `hairline` \| `strong` | `appearance.general.surfaces.borderStyle` | 3 channels | declared fan-out: card, input, table, panel | open | css-channels |
+| `surfaces.border-style` | 18 | Border style | `none` \| `hairline` \| `strong` | `appearance.general.surfaces.borderStyle` | 3 channels | declared fan-out: card, input, table, panel, page-shell | open | css-channels |
 | `surfaces.effect-intensity` | 19 | Decoration intensity | [0 – 1] | `appearance.general.surfaces.effectIntensity` | 1 channel | declared fan-out: glass, blur, glow | open | css-channels |
 | `states.emphasis` | 20 | Interaction-state emphasis | `subtle` \| `medium` \| `strong` | `appearance.general.states.emphasis` | 18 channels | 20/25 (declared fan-out) | open | css-channels |
 | `states.focus-style` | 21 | Focus signature | `ring` \| `underline` \| `glow` | `appearance.general.states.focusStyle` | 10 channels | 20/25 (declared fan-out) | never-lockable | css-channels |
@@ -43,7 +43,7 @@ digest: f3c5599fd377f8b4a99183e81ec5c415a62e12407486cbb10432684d84e0b8c0
 | `shape.nesting` | 12 | Nested radius law | `concentric` \| `uniform` | `appearance.general.shape.nesting` | 2 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | locked-by-default | css-channels |
 | `motion.character` | 23 | Motion character | `mechanical` \| `organic` \| `playful` | `appearance.general.motion.character` | 7 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | locked-by-default | css-channels |
 | `profiles.expressive` | 26 | Explicit expressive axes | 7 keys (type, geometry, edge, material, elevation, motif, icon), 28 values | `visualFoundation.advanced.profiles.{type,geometry,edge,material,elevation,motif}` | 6 channels | declared fan-out (the row names no separate family list) | open | css-channels |
-| `recipe-profile` | 27 | Family recipe profile | registered ids (`RECIPE_PROFILE_REGISTRY`) | `visualFoundation.recipeProfile` | — | declared fan-out: button, card, section-card, tabs, tag, input, select, checkbox, radio, toggle | locked-by-default | data-only |
+| `recipe-profile` | 27 | Family recipe profile | registered ids (`RECIPE_PROFILE_REGISTRY`) | `visualFoundation.recipeProfile` | — | declared fan-out: button, card, section-card, surface-chrome, tabs, tag, input, select, checkbox, radio, toggle | locked-by-default | data-only |
 | `chrome.anatomy` | 28 | Anatomy variants | 4 keys (cardComponent, table, sidebar, layout) | `visualFoundation.advanced.chrome.{cardComponent,table,sidebar,layout}.anatomy` | 4 root attributes | declared fan-out: cardComponent, table, sidebar, layout | open | root-attributes |
 | `responsive.posture` | 29 | Responsive posture | `compact` \| `balanced` \| `expansive` | `visualFoundation.advanced.responsivePosture` | 4 channels | declared fan-out (the row names no separate family list) | open | css-channels |
 
