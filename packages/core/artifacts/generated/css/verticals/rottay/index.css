@@ -79147,7 +79147,7 @@ html[data-ds-motion='reduced']
   .ds-pattern-notification-center.ds-engine-modern [data-part='action'],
   .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
   .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
-    min-block-size: var(--ds-notification-center-touch-target, 2.75rem);
+    min-block-size: var(--ds-notification-center-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 
@@ -122015,6 +122015,7 @@ html[lang]:lang(ar) {
   --ds-motion-reveal: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-scale-in: 1;
   --ds-motion-slow: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
+  --ds-notification-center-touch-target: var(--ds-touch-target-min, 44px);
   --ds-notifier-border-color: var(--ds-color-border-subtle);
   --ds-notifier-clickable-shadow-hover: var(--ds-elevation-4);
   --ds-notifier-close-color: var(--ds-color-text-secondary);

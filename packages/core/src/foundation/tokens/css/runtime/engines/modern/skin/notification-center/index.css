@@ -306,7 +306,7 @@
   .ds-pattern-notification-center.ds-engine-modern [data-part='action'],
   .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
   .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
-    min-block-size: var(--ds-notification-center-touch-target, 2.75rem);
+    min-block-size: var(--ds-notification-center-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 

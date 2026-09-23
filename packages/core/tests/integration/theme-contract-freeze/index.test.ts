@@ -413,6 +413,7 @@ describe("channel minting and CSS text have declared owners", () => {
       `${LOWERING_ROOT}/runtime/derivation/chrome/menu/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/mobile-header/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/modal/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/chrome/notification-center/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/notifier/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/otp-input/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/page-shell/index.ts`,

@@ -100,6 +100,7 @@ import { listChromeDeriver } from "./chrome/list";
 import { tooltipChromeDeriver } from "./chrome/tooltip";
 import { tourChromeDeriver } from "./chrome/tour";
 import { notifierChromeDeriver } from "./chrome/notifier";
+import { notificationCenterChromeDeriver } from "./chrome/notification-center";
 import { alertChromeDeriver } from "./chrome/alert";
 import { containerChromeDeriver } from "./chrome/container";
 import { aspectRatioChromeDeriver } from "./chrome/aspect-ratio";
@@ -247,6 +248,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   tooltipChromeDeriver,
   tourChromeDeriver,
   notifierChromeDeriver,
+  notificationCenterChromeDeriver,
   alertChromeDeriver,
   containerChromeDeriver,
   aspectRatioChromeDeriver,

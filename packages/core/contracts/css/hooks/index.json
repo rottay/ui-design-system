@@ -52,8 +52,8 @@
     "valueConstraint": "an assignment to a promoted hook must chain through DS/tenant tokens; a raw colour literal would pin brand paint an application user cannot re-theme"
   },
   "counts": {
-    "tenantChannel": 4506,
-    "compilerConcreteEmissions": 5044,
+    "tenantChannel": 4507,
+    "compilerConcreteEmissions": 5045,
     "compilerEmissionPatterns": 11,
     "themeContractFiles": 70,
     "ambiguousThemeContractTypes": 0,
@@ -65,7 +65,7 @@
     "componentSuppliers": 373,
     "reads": 7750,
     "hooks": 107,
-    "unadjudicatedReads": 1272,
+    "unadjudicatedReads": 1271,
     "promoted": 107,
     "styleFiles": 496,
     "componentFiles": 1324
@@ -2148,7 +2148,6 @@
     "--ds-notification-center-message-color",
     "--ds-notification-center-panel-width",
     "--ds-notification-center-timestamp-color",
-    "--ds-notification-center-touch-target",
     "--ds-notification-center-unread-bg",
     "--ds-notification-center-unread-dot",
     "--ds-notification-close-color",
@@ -10154,6 +10153,7 @@
     "--ds-motion-reveal",
     "--ds-motion-spring-gentle",
     "--ds-notification-bg",
+    "--ds-notification-center-touch-target",
     "--ds-notification-shadow",
     "--ds-notification-title-color",
     "--ds-notifier-border-color",
