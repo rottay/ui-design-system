@@ -25565,7 +25565,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='loading-content'] {
   position: relative;
-  min-block-size: var(--ds-card-loading-min-height, calc(var(--ds-spacing-10) * 3 * var(--ds-rhythm-effective-scale, 1)));
+  min-block-size: var(--ds-card-loading-min-height, calc(var(--ds-spacing-10) * 3));
   padding: var(--ds-card-instance-padding, calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1)));
 }
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='loading-overlay'] {
@@ -120871,7 +120871,7 @@ html[lang]:lang(ar) {
   --ds-card-image-radius-sm: var(--ds-radius-sm);
   --ds-card-info-title-color: var(--ds-color-info-900);
   --ds-card-instance-padding: calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1));
-  --ds-card-loading-min-height: calc(var(--ds-spacing-10) * 3 * var(--ds-rhythm-effective-scale, 1));
+  --ds-card-loading-min-height: calc(var(--ds-spacing-10) * 3);
   --ds-card-nested-shadow: none;
   --ds-card-outlined-border-hover: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));
   --ds-card-padding-base: var(--ds-card-padding, var(--ds-card-md-padding));
