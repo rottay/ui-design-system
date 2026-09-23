@@ -1249,8 +1249,12 @@ test('regression fence: every stop of density.mode reaches the channel, and dist
 const DENSITY_MANIFEST_H1 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/density/mode/index.json'));
 const FIRST_PARTY = Object.keys(VERTICALS).filter((id) => id !== 'none');
 
-/** Structural scale each vertical AUTHORS. If these move, the drills below say so. */
-const AUTHORED_DENSITY_SCALE = { rottay: '1', bithire: '0.9', evnto: '1.125' };
+/* The density MODE each first-party preset document authors. d524ec1d6 (D6-2c-ii)
+ * retired the authored themes and, with them, the per-vertical structural scale
+ * (0.9 / 1 / 1.125); the mode is what distinguishes the verticals now. */
+const PRESET_DENSITY_MODE = { rottay: 'normal', bithire: 'compact', evnto: 'normal' };
+const densityFactorOf = (stopId) =>
+  String(DENSITY_MANIFEST_H1.calibration.normalizedStops.find((stop) => stop.id === stopId).value);
 
 test('H-1 drill 1: a base is COMPOSED into, not replaced by, the ingress keypath', () => {
   // Pure: no compiler. The claim is about the document the harness builds.
@@ -1272,27 +1276,36 @@ test('H-1 drill 2 [needs dist]: no vertical collapses onto the rottay value any 
   const arms = await loadCompilerArms();
   const baselines = await loadStaticBaselines();
   for (const vertical of FIRST_PARTY) {
+    const theme = baselines[vertical].theme;
+    assert.equal(theme.surfaces.density, PRESET_DENSITY_MODE[vertical], `${vertical}: the preset document authors this mode`);
+    const compiled = arms['static-brand-theme'].compile({
+      brandTheme: theme,
+      vertical,
+      tenantSlug: `h1-drill-2-${vertical}`,
+      tenantPatch: {},
+      tenantAuthoredPaths: new Set(),
+    }).cssVariables;
+    assert.equal(
+      compiled['--ds-density-mode-factor'],
+      densityFactorOf(PRESET_DENSITY_MODE[vertical]),
+      `${vertical} must lower its OWN preset mode, not a default`,
+    );
+    assert.equal(compiled['--ds-density-scale'], '1', `${vertical}: no vertical authors a structural scale since d524ec1d6`);
+    // A lowered stop overrides the vertical's mode, and is carried on every vertical.
     const lowered = lowerStop({
       armId: 'static-brand-theme',
       controlManifest: DENSITY_MANIFEST_H1,
       stopId: 'compact',
       compile: arms['static-brand-theme'].compile,
       vertical,
-      base: baselines[vertical].theme,
+      base: theme,
       baselineSource: baselines[vertical].source,
     });
-    assert.equal(
-      lowered.variables['--ds-density-scale'],
-      AUTHORED_DENSITY_SCALE[vertical],
-      `${vertical} must lower its OWN structural scale, not a default`,
-    );
-    // The stop itself is carried either way; this is the channel that used to collapse.
-    assert.equal(lowered.variables['--ds-density-mode-factor'], '0.85');
+    assert.equal(lowered.variables['--ds-density-mode-factor'], densityFactorOf('compact'));
   }
-  const distinct = new Set(
-    FIRST_PARTY.map((v) => AUTHORED_DENSITY_SCALE[v]),
-  );
-  assert.equal(distinct.size, FIRST_PARTY.length, 'the three verticals must remain distinguishable');
+  const factor = (vertical) => densityFactorOf(PRESET_DENSITY_MODE[vertical]);
+  assert.notEqual(factor('bithire'), factor('rottay'), 'bithire must stay distinguishable from rottay');
+  assert.equal(factor('rottay'), factor('evnto'), 'rottay and evnto author the same mode, so sharing its factor is legitimate');
 });
 
 /* Controls whose lowering is base-SENSITIVE by design. Everything else closed
@@ -1747,21 +1760,33 @@ test('H-2 drill 2 [needs dist]: the density anti-door is refused, and the mechan
   };
   await assert.rejects(() => discriminate(antiDoor, 'static-brand-theme', 'rottay'), /encodes NO stop/);
 
-  // Not just the symptom: the stop's OWN channel is absent entirely, and the
-  // arm stayed non-empty on the unconditional seed alone. That is the mechanism.
+  // Not just the symptom. The composed baseline carries density.mode because its
+  // preset document authors it, so a factor THERE is the baseline, not the door:
+  // the anti-door leaves rottay's own factor, never the stop's.
   const arms = await loadCompilerArms();
   const baselines = await loadStaticBaselines();
-  const lowered = lowerStop({
+  const lowerThrough = (manifest, base) => lowerStop({
     armId: 'static-brand-theme',
-    controlManifest: antiDoor,
+    controlManifest: manifest,
     stopId: 'compact',
     compile: arms['static-brand-theme'].compile,
     vertical: 'rottay',
-    base: baselines.rottay.theme,
+    base,
     baselineSource: baselines.rottay.source,
   });
-  assert.equal(Object.hasOwn(lowered.variables, '--ds-density-mode-factor'), false);
-  assert.equal(lowered.variables['--ds-density-scale'], '1');
+  const composed = lowerThrough(antiDoor, baselines.rottay.theme);
+  assert.equal(composed.variables['--ds-density-mode-factor'], densityFactorOf(PRESET_DENSITY_MODE.rottay));
+  assert.notEqual(composed.variables['--ds-density-mode-factor'], densityFactorOf('compact'));
+
+  // The mechanism, on a document that authors NO mode, through the real
+  // compiler: the anti-door must not invent the factor, and the real door must.
+  const withoutMode = structuredClone(baselines.rottay.theme);
+  delete withoutMode.surfaces.density;
+  const antiLowered = lowerThrough(antiDoor, withoutMode);
+  assert.equal(Object.hasOwn(antiLowered.variables, '--ds-density-mode-factor'), false);
+  assert.equal(antiLowered.variables['--ds-density-scale'], '1');
+  const doorLowered = lowerThrough(DENSITY_MANIFEST_H1, withoutMode);
+  assert.equal(doorLowered.variables['--ds-density-mode-factor'], densityFactorOf('compact'));
 });
 
 test('H-2 drill 3 [needs dist]: an IDENTITY stop does not fail the guard', async () => {
@@ -3064,33 +3089,63 @@ test('B-2 drill 3 [needs dist]: bithire\'s button follows the seed on BOTH arms'
   // And it really is the alias. The DB artifact may omit it because the
   // generated artifact is a delta over a baseline that already owns the alias.
   assert.equal(staticLowered.variables[channel], 'var(--ds-color-primary)');
+  // The authored chrome.controls.buttonPrimary leaf left with d524ec1d6; the
+  // channel is derived now. Witnessed through the REAL compiler: a primary seed
+  // move moves the derived hover, an unrelated seed move does not.
   const baselines = await b2Baselines();
-  assert.equal(
-    baselines.bithire.chrome.controls.buttonPrimary.bg,
-    'var(--ds-color-primary)',
-    'BitHire retired the baked button background in the 2B literal-to-variable collapse',
+  assert.deepEqual(
+    Object.entries(baselines.bithire.chrome?.controls?.buttonPrimary ?? {}).filter(([, value]) => value !== undefined),
+    [],
+    'no vertical authors the button leaf any more',
   );
+  assert.equal(baseline.base[channel], 'var(--ds-color-primary)', 'the derived button background is the shared alias');
+  const { compile: lowerFlatTheme } = await loadFlatThemeLowering({ coreRoot: CORE_ROOT });
+  const hoverWith = (palette) => lowerFlatTheme({
+    brandTheme: { ...baselines.bithire, palette: { ...baselines.bithire.palette, ...palette } },
+    vertical: 'bithire',
+    tenantSlug: 'bithire',
+  }).cssVariables['--ds-button-primary-bg-hover'];
+  const restingHover = hoverWith({});
+  assert.notEqual(hoverWith({ primaryColor: '#DC2626' }), restingHover, 'a primary seed move reaches the derived button');
+  assert.equal(hoverWith({ secondaryColor: '#16A34A' }), restingHover, 'an unrelated seed move does not');
 });
 
 test('B-2 drill 4 [needs dist]: a VERTICAL editing its own theme still does not move the button', async () => {
   /* The behaviour `applyTenantSeedDerivations` documents as intended: "No
    * provenance, or a seed this block did not get from the tenant, and the
    * function returns without touching a byte. Every static first-party compile
-   * takes this path." B-2 must not make a vertical's own palette edit look
-   * like a tenant selection. */
+   * takes this path." No first-party vertical bakes a button colour since
+   * d524ec1d6, so the law is witnessed on a synthetic document that does. */
   const { compile: lowerFlatTheme } = await loadFlatThemeLowering({ coreRoot: CORE_ROOT });
   const baselines = await b2Baselines();
-  const edited = {
+  const baked = {
     ...baselines.bithire,
-    palette: { ...baselines.bithire.palette, primaryColor: '#DC2626' },
+    chrome: { ...baselines.bithire.chrome, controls: { ...(baselines.bithire.chrome?.controls ?? {}), buttonPrimary: { bg: '#123456' } } },
   };
-  const compiled = lowerFlatTheme({ brandTheme: edited, vertical: 'bithire', tenantSlug: 'bithire' });
-  assert.equal(compiled.cssVariables['--ds-color-primary'], '#DC2626', 'the seed itself moved');
-  assert.equal(
-    compiled.cssVariables['--ds-button-primary-bg'],
-    baselines.bithire.chrome.controls.buttonPrimary.bg,
-    'but the leaf the vertical bakes did NOT follow it',
-  );
+  const bg = (compiled) => compiled.cssVariables['--ds-button-primary-bg'];
+  assert.equal(bg(lowerFlatTheme({ brandTheme: baked, vertical: 'bithire', tenantSlug: 'bithire' })), '#123456');
+  const edited = { ...baked, palette: { ...baked.palette, primaryColor: '#DC2626' } };
+  const verticalEdit = lowerFlatTheme({ brandTheme: edited, vertical: 'bithire', tenantSlug: 'bithire' });
+  assert.equal(verticalEdit.cssVariables['--ds-color-primary'], '#DC2626', 'the seed itself moved');
+  assert.equal(bg(verticalEdit), '#123456', 'but the leaf the vertical bakes did NOT follow it');
+  // The twin: the SAME seed, authored by a tenant, re-derives the baked leaf.
+  const tenantSeed = lowerFlatTheme({
+    brandTheme: edited,
+    tenantPatch: { palette: { primaryColor: '#DC2626' } },
+    vertical: 'bithire',
+    tenantSlug: 'b2-drill-4-tenant',
+    tenantAuthoredPaths: new Set(['palette.primaryColor']),
+  });
+  assert.equal(bg(tenantSeed), 'var(--ds-color-primary)', 'a tenant seed outranks the baked baseline leaf');
+  // And an unrelated tenant seed leaves it baked.
+  const tenantSecondary = lowerFlatTheme({
+    brandTheme: { ...baked, palette: { ...baked.palette, secondaryColor: '#16A34A' } },
+    tenantPatch: { palette: { secondaryColor: '#16A34A' } },
+    vertical: 'bithire',
+    tenantSlug: 'b2-drill-4-tenant',
+    tenantAuthoredPaths: new Set(['palette.secondaryColor']),
+  });
+  assert.equal(bg(tenantSecondary), '#123456');
 });
 
 test('B-2 drill 5: authorship over a path the patch does not write THROWS', () => {
@@ -3307,22 +3362,36 @@ test('B-2 drill 7 [needs dist]: W-B — an IDENTITY stop declares NO authorship'
       [],
       `${vertical}: the identity stop must be byte-identical to the baseline`,
     );
-    /* AND THE RULING IS LOAD-BEARING, measured rather than assumed: declaring
-     * authorship of the vertical's OWN value moves real channels, because the
-     * seed derivation reads the CLAIM and not the value. On bithire that is
-     * exactly the leaf this control is about. */
-    const asAuthored = lowerFlatTheme({
-      brandTheme: theme,
-      tenantPatch: patch,
-      vertical,
-      tenantSlug: vertical,
-      tenantAuthoredPaths: new Set(['palette.primaryColor']),
-    });
-    assert.ok(
-      movedChannels(baseline, asAuthored).length > 0,
-      `${vertical}: declaring authorship of the identity value must NOT be a no-op`,
-    );
   }
+  /* AND THE RULING IS LOAD-BEARING, measured rather than assumed: declaring
+   * authorship of a vertical's OWN value moves real channels, because the seed
+   * derivation reads the CLAIM and not the value. Since d524ec1d6 no first-party
+   * baseline bakes a seed-shadowed leaf, so the claim is witnessed on a synthetic
+   * document that bakes one. */
+  const baked = {
+    ...baselines.bithire,
+    chrome: { ...baselines.bithire.chrome, controls: { ...(baselines.bithire.chrome?.controls ?? {}), buttonPrimary: { bg: '#123456' } } },
+  };
+  const bakedPatch = { palette: { primaryColor: baked.palette.primaryColor } };
+  const bakedBaseline = lowerFlatTheme({ brandTheme: baked, vertical: 'bithire', tenantSlug: 'bithire' });
+  const bakedUnclaimed = lowerFlatTheme({
+    brandTheme: { ...baked, palette: { ...baked.palette, ...bakedPatch.palette } },
+    vertical: 'bithire',
+    tenantSlug: 'bithire',
+  });
+  assert.deepEqual(movedChannels(bakedBaseline, bakedUnclaimed), [], 'fixture: the unclaimed identity is byte-identical');
+  const bakedClaimed = lowerFlatTheme({
+    brandTheme: baked,
+    tenantPatch: bakedPatch,
+    vertical: 'bithire',
+    tenantSlug: 'bithire',
+    tenantAuthoredPaths: new Set(['palette.primaryColor']),
+  });
+  assert.deepEqual(
+    movedChannels(bakedBaseline, bakedClaimed),
+    ['--ds-button-primary-bg'],
+    'fixture: declaring authorship of the identity value must NOT be a no-op',
+  );
   const bithire = baselines.bithire;
   const authoredIdentity = lowerFlatTheme({
     brandTheme: bithire,
@@ -3336,7 +3405,11 @@ test('B-2 drill 7 [needs dist]: W-B — an IDENTITY stop declares NO authorship'
     'var(--ds-color-primary)',
     'bithire: the button background remains on the shared alias',
   );
-  assert.equal(bithire.chrome.controls.buttonPrimary.bg, 'var(--ds-color-primary)');
+  assert.deepEqual(
+    Object.entries(bithire.chrome?.controls?.buttonPrimary ?? {}).filter(([, value]) => value !== undefined),
+    [],
+    'the button leaf is derived, not authored, since d524ec1d6',
+  );
 
   // The ruling is WRITTEN beside the branch that resolves identity, so a
   // future reader meets the reason before the code.
