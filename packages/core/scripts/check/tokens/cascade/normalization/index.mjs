@@ -49,7 +49,7 @@
  *      (b) DUPLICACION DE DECISION SUPERIOR. Ver la nota de forma abajo.
  *
  *   L5 PRECEDENCIA TENANT-LAST INTACTA. El conjunto sobreescribible por tenant
- *      no se achica: el allowlist sigue componiendo 290 nombres (67 literales +
+ *      no se achica: el allowlist sigue componiendo 292 nombres (69 literales +
  *      8x20 de superficie + 9x7 de tipografia) y los 20 controles conservan su
  *      puerta DB. Es la ley que protege contra la clase anti-puerta de la
  *      decision 19: una vertical no puede congelar el resultado terminal de un
@@ -101,7 +101,7 @@ export const LAWS = Object.freeze(['L1', 'L2', 'L3', 'L4a', 'L4b', 'L5']);
 /** Las claves que `ThemeSource` exige al normalizador ISO: nada se infiere. */
 export const REQUIRED_THEME_KEYS = Object.freeze(['appearance', 'palette', 'capabilities']);
 
-export const ALLOWLIST_COMPOSITION = Object.freeze({ literals: 67, surfaceRoles: 8, surfaceFacets: 20, typeRoles: 9, typeFacets: 7 });
+export const ALLOWLIST_COMPOSITION = Object.freeze({ literals: 69, surfaceRoles: 8, surfaceFacets: 20, typeRoles: 9, typeFacets: 7 });
 export const ALLOWLIST_TOTAL = ALLOWLIST_COMPOSITION.literals
   + ALLOWLIST_COMPOSITION.surfaceRoles * ALLOWLIST_COMPOSITION.surfaceFacets
   + ALLOWLIST_COMPOSITION.typeRoles * ALLOWLIST_COMPOSITION.typeFacets;
@@ -232,7 +232,7 @@ export function readTree(coreRoot = CORE_ROOT) {
     (record) => record.ingress.dbTenantThemePath,
   ).length;
 
-  /* El allowlist se COMPONE, no se cuenta a ojo: 67 literales mas dos productos
+  /* El allowlist se COMPONE, no se cuenta a ojo: 69 literales mas dos productos
    * cartesianos. Si alguien borra un rol o una faceta, el total cae y L5 lo ve. */
   const sliceOf = (name) => {
     const match = new RegExp(`${name}\\s*=\\s*\\[(.*?)\\] as const`, 's').exec(tenantSource);

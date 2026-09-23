@@ -17,14 +17,13 @@
   "stats": {
     "rows": 26,
     "byClass": {
-      "pure": 19,
-      "value-shift": 6,
-      "head-not-emitted": 1
+      "value-shift": 7,
+      "pure": 19
     },
     "byVertical": {
-      "bithire": 15,
+      "bithire": 16,
       "evnto": 5,
-      "rottay": 6
+      "rottay": 5
     },
     "pureByRoot": {
       "motion.duration": 3,
@@ -39,9 +38,7 @@
       "type.family.mono": 1,
       "type.scale": 3
     },
-    "headlessByChannel": {
-      "--ds-color-primary": 1
-    },
+    "headlessByChannel": {},
     "collapsibleReplacementBytes": 347,
     "collapsibleBytesByVertical": {
       "bithire": 157,
@@ -55,6 +52,17 @@
     }
   },
   "rows": [
+    {
+      "slotId": "bithire:THEME.chrome.sidebar.tone",
+      "vertical": "bithire",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
     {
       "slotId": "bithire:THEME.motion.durationScale",
       "vertical": "bithire",
@@ -166,17 +174,6 @@
       "replacementDeltaBytes": 23
     },
     {
-      "slotId": "bithire:THEME.surfaces.radiusScale",
-      "vertical": "bithire",
-      "rootId": "control.ratio.radius",
-      "rule": "R2",
-      "scope": "base",
-      "headChannel": "--ds-button-md-radius",
-      "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 23
-    },
-    {
       "slotId": "bithire:THEME.typography.fontFamilyBase",
       "vertical": "bithire",
       "rootId": "type.family.base",
@@ -186,6 +183,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": -7
+    },
+    {
+      "slotId": "bithire:THEME.typography.fontFamilyDisplay",
+      "vertical": "bithire",
+      "rootId": "type.family.display",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-font-family-display",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -6
     },
     {
       "slotId": "bithire:THEME.typography.fontFamilyHeading",
@@ -221,6 +229,17 @@
       "replacementDeltaBytes": 16
     },
     {
+      "slotId": "evnto:THEME.chrome.sidebar.tone",
+      "vertical": "evnto",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 14
+    },
+    {
       "slotId": "evnto:THEME.motion.durationScale",
       "vertical": "evnto",
       "rootId": "motion.duration",
@@ -241,17 +260,6 @@
       "headEmitted": true,
       "class": "pure",
       "replacementDeltaBytes": 23
-    },
-    {
-      "slotId": "evnto:THEME.surfaces.buttonStyle",
-      "vertical": "evnto",
-      "rootId": "control.ratio.radius",
-      "rule": "R2",
-      "scope": "base",
-      "headChannel": "--ds-button-md-radius",
-      "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 22
     },
     {
       "slotId": "evnto:THEME.surfaces.effectIntensity",
@@ -276,15 +284,15 @@
       "replacementDeltaBytes": 19
     },
     {
-      "slotId": "rottay:THEME.appearance.defaultMode",
+      "slotId": "rottay:THEME.chrome.sidebar.tone",
       "vertical": "rottay",
-      "rootId": "ramp.seed.primary",
-      "rule": "R5",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-primary",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 19
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 14
     },
     {
       "slotId": "rottay:THEME.motion.durationScale",
@@ -309,17 +317,6 @@
       "replacementDeltaBytes": 23
     },
     {
-      "slotId": "rottay:THEME.surfaces.buttonStyle",
-      "vertical": "rottay",
-      "rootId": "control.ratio.radius",
-      "rule": "R2",
-      "scope": "base",
-      "headChannel": "--ds-button-md-radius",
-      "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 22
-    },
-    {
       "slotId": "rottay:THEME.surfaces.effectIntensity",
       "vertical": "rottay",
       "rootId": "effect.intensity",
@@ -342,5 +339,5 @@
       "replacementDeltaBytes": 19
     }
   ],
-  "digest": "307b8deaa975ba1e9551c0da9dc1ea308f4f188b4ac85a8f78d73885a1645523"
+  "digest": "ca7600a78603923730ab0165ced6a2ad8705e88b68f47ece5a2d8b05a292ee46"
 }

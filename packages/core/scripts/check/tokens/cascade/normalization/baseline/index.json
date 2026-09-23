@@ -3,32 +3,31 @@
   "law": "decrece-solo, sin excepcion tacita. Jamas se re-ancla un hallazgo nuevo.",
   "counters": {
     "shadowingLiteralPins": {
-      "value": 7,
-      "reason": "cobertura ganada, no regresion: --ds-motion-intensity ahora nace de motion.intensity con ley de derivacion (foundation/animations/transitions + las copias compiladas); medido por el batch A del ledger 2026-09-18"
+      "value": 8,
+      "reason": "re-atribucion por cobertura ganada, un solo mover: 36d135d44 (fix(tokens): let the button silhouette decision reach the painted corner, 2026-09-14) hizo que --ds-radius-button GANE raiz -- radius.base por declared-fallback en framework-token-projection:43 -- y escribio en foundation/base/borders:29 el valor initial, que NO decide silueta: deja ganar la rampa por tamano (el anti-sombra del propio commit). La membresia regenerada (03a8e0b2a) publico esa raiz: shadowingLiteralPins 7 -> 8 con el pin nuevo --ds-radius-button @ borders:29; no hay fuente que arreglar. La misma raiz, llevada al inventario de slots regenerado, deja bithire:THEME.surfaces.radiusScale abarcando dos raices (control.ratio.radius + radius.base) y sin rootId: el grupo bithire|control.ratio.radius se disuelve por atribucion, no por colapso -- divergentGroups 1 -> 0, divergentSlots 2 -> 0."
     },
     "divergentGroups": {
-      "value": 1,
-      "reason": "D6-2c-ii (2026-09-15): el universo pasa de los tres temas autorados al baseline compuesto neutro+preset (slots: 3594 -> 115 filas, digest b874f2bfd5b3). shadowingLiteralPins 200 -> 4, divergentGroups 235 -> 1, divergentSlots 1609 -> 2: no es cobertura perdida -- los keypaths que nadie autora ya no existen; los 4 pins, 1 grupo y 2 slots que sobreviven son la cola medida del carril de derivacion (WO-DER-06), y la ley L2 con sus dos contadores quedo retirada con su sujeto (campo retired, razon escrita)."
+      "value": 0,
+      "reason": "re-atribucion por cobertura ganada, un solo mover: 36d135d44 (fix(tokens): let the button silhouette decision reach the painted corner, 2026-09-14) hizo que --ds-radius-button GANE raiz -- radius.base por declared-fallback en framework-token-projection:43 -- y escribio en foundation/base/borders:29 el valor initial, que NO decide silueta: deja ganar la rampa por tamano (el anti-sombra del propio commit). La membresia regenerada (03a8e0b2a) publico esa raiz: shadowingLiteralPins 7 -> 8 con el pin nuevo --ds-radius-button @ borders:29; no hay fuente que arreglar. La misma raiz, llevada al inventario de slots regenerado, deja bithire:THEME.surfaces.radiusScale abarcando dos raices (control.ratio.radius + radius.base) y sin rootId: el grupo bithire|control.ratio.radius se disuelve por atribucion, no por colapso -- divergentGroups 1 -> 0, divergentSlots 2 -> 0."
     },
     "divergentSlots": {
-      "value": 2,
-      "reason": "D6-2c-ii (2026-09-15): el universo pasa de los tres temas autorados al baseline compuesto neutro+preset (slots: 3594 -> 115 filas, digest b874f2bfd5b3). shadowingLiteralPins 200 -> 4, divergentGroups 235 -> 1, divergentSlots 1609 -> 2: no es cobertura perdida -- los keypaths que nadie autora ya no existen; los 4 pins, 1 grupo y 2 slots que sobreviven son la cola medida del carril de derivacion (WO-DER-06), y la ley L2 con sus dos contadores quedo retirada con su sujeto (campo retired, razon escrita)."
+      "value": 0,
+      "reason": "re-atribucion por cobertura ganada, un solo mover: 36d135d44 (fix(tokens): let the button silhouette decision reach the painted corner, 2026-09-14) hizo que --ds-radius-button GANE raiz -- radius.base por declared-fallback en framework-token-projection:43 -- y escribio en foundation/base/borders:29 el valor initial, que NO decide silueta: deja ganar la rampa por tamano (el anti-sombra del propio commit). La membresia regenerada (03a8e0b2a) publico esa raiz: shadowingLiteralPins 7 -> 8 con el pin nuevo --ds-radius-button @ borders:29; no hay fuente que arreglar. La misma raiz, llevada al inventario de slots regenerado, deja bithire:THEME.surfaces.radiusScale abarcando dos raices (control.ratio.radius + radius.base) y sin rootId: el grupo bithire|control.ratio.radius se disuelve por atribucion, no por colapso -- divergentGroups 1 -> 0, divergentSlots 2 -> 0."
     }
   },
   "namedDebt": {
     "shadowingLiteralPins": [
-      "--ds-motion-duration-scale -> motion.duration (head-exact) @ packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:98",
-      "--ds-motion-intensity -> motion.intensity (head-exact) @ packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:110",
-      "--ds-state-hover-shift -> state.delta.hover (head-exact) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:813",
-      "--ds-state-disabled-opacity -> state.delta.disabled (head-exact) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:815",
-      "--ds-color-bg-input -> tier.control.bg (declared-fallback) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:1999",
-      "--ds-motion-duration-scale -> motion.duration (head-exact) @ packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled/index.css:36",
-      "--ds-motion-intensity -> motion.intensity (head-exact) @ packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled/index.css:37"
+      "--ds-motion-duration-scale -> motion.duration (head-exact) @ packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:97",
+      "--ds-motion-intensity -> motion.intensity (head-exact) @ packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:120",
+      "--ds-radius-button -> radius.base (declared-fallback) @ packages/core/src/foundation/tokens/css/foundation/base/borders/index.css:29",
+      "--ds-state-hover-shift -> state.delta.hover (head-exact) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:855",
+      "--ds-state-disabled-opacity -> state.delta.disabled (head-exact) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:857",
+      "--ds-color-bg-input -> tier.control.bg (declared-fallback) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2042",
+      "--ds-motion-duration-scale -> motion.duration (head-exact) @ packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled/index.css:42",
+      "--ds-motion-intensity -> motion.intensity (head-exact) @ packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled/index.css:43"
     ],
-    "divergentGroupsTop": [
-      "bithire|control.ratio.radius|radius|sin-estado|base: 2 slots, 2 posiciones"
-    ]
+    "divergentGroupsTop": []
   },
-  "lastMove": "re-atribucion autorizada, cobertura ganada (no regresion): --ds-motion-intensity ahora nace de motion.intensity con ley de derivacion (foundation/animations/transitions + las copias compiladas en runtime/engines/modern/compiled); medido por el batch A del ledger 2026-09-18",
+  "lastMove": "re-atribucion por cobertura ganada, un solo mover: 36d135d44 (fix(tokens): let the button silhouette decision reach the painted corner, 2026-09-14) hizo que --ds-radius-button GANE raiz -- radius.base por declared-fallback en framework-token-projection:43 -- y escribio en foundation/base/borders:29 el valor initial, que NO decide silueta: deja ganar la rampa por tamano (el anti-sombra del propio commit). La membresia regenerada (03a8e0b2a) publico esa raiz: shadowingLiteralPins 7 -> 8 con el pin nuevo --ds-radius-button @ borders:29; no hay fuente que arreglar. La misma raiz, llevada al inventario de slots regenerado, deja bithire:THEME.surfaces.radiusScale abarcando dos raices (control.ratio.radius + radius.base) y sin rootId: el grupo bithire|control.ratio.radius se disuelve por atribucion, no por colapso -- divergentGroups 1 -> 0, divergentSlots 2 -> 0.",
   "lastMoveKind": "re-atribucion (subida autorizada por nombre)"
 }

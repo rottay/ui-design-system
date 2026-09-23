@@ -25,9 +25,9 @@
     ]
   },
   "stats": {
-    "rows": 115,
+    "rows": 116,
     "byVertical": {
-      "bithire": 59,
+      "bithire": 60,
       "evnto": 28,
       "rottay": 28
     },
@@ -35,36 +35,35 @@
       "string": 82,
       "number": 21,
       "hex": 8,
-      "var-reference": 3,
+      "var-reference": 4,
       "dimension": 1
     },
-    "rowsReadingVar": 3,
+    "rowsReadingVar": 4,
     "expressionsCarryingLiteral": 0,
     "byRule": {
       "R5": 80,
-      "R4": 19,
       "R2": 13,
-      "R1": 3
+      "R4": 19,
+      "R1": 4
     },
     "byVerdict": {
       "adjudicate": 80,
-      "pro-expert": 19,
       "collapse": 13,
-      "already-collapsed": 3
+      "pro-expert": 19,
+      "already-collapsed": 4
     },
     "byRootAttribution": {
       "emits-no-channel": 52,
-      "slot-spans-several-roots": 7,
-      "no-persisted-membership": 30,
-      "head-exact": 25,
-      "declared-fallback": 1
+      "head-exact": 26,
+      "no-persisted-membership": 31,
+      "slot-spans-several-roots": 7
     },
     "rowsWithRoot": 26,
     "rowsEmittingNoChannel": 52,
-    "channelEmissions": 325,
-    "distinctChannelsReached": 177,
+    "channelEmissions": 326,
+    "distinctChannelsReached": 181,
     "metadataRows": 21,
-    "paintDenominator": 94,
+    "paintDenominator": 95,
     "metadataRosterSize": 4,
     "metadataRosterUnmatched": 0,
     "literalSeedRows": 30,
@@ -275,20 +274,17 @@
         "base|--ds-sidebar-text-muted",
         "dark|--ds-sidebar-item-color-active"
       ],
-      "rootId": null,
+      "rootId": "tier.page.bg",
       "headRootIds": [
-        "ramp.seed.primary",
-        "tier.base.fg.muted",
-        "tier.base.fg.secondary",
         "tier.page.bg"
       ],
-      "rootAttribution": "slot-spans-several-roots",
-      "rule": "R5",
-      "verdict": "adjudicate",
+      "rootAttribution": "head-exact",
+      "rule": "R2",
+      "verdict": "collapse",
       "evidence": {
-        "whyNotR2": "sin raiz atribuible",
-        "whyNotR3": "sin raiz atribuible",
-        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
+        "rootId": "tier.page.bg",
+        "rootDerivation": "Chrome de pagina (shell, layout, sidebar, detail, list, feed, calendar, timeline, tree): fondo = suelo base desplazado un escalon. El unico tramo con cabeza propia es el sidebar.",
+        "coincidenceGuard": "no-value-match-used"
       }
     },
     {
@@ -749,11 +745,7 @@
       "readsVar": false,
       "isMetadata": false,
       "emitsChannels": [
-        "--ds-chart-series-1",
-        "--ds-chart-series-5",
-        "--ds-chart-series-7",
         "--ds-chart-series-8",
-        "--ds-chart-series-9",
         "--ds-color-background",
         "--ds-color-bg",
         "--ds-color-bg-input",
@@ -776,6 +768,8 @@
         "--ds-color-info-600",
         "--ds-color-info-700",
         "--ds-color-info-800",
+        "--ds-color-link",
+        "--ds-color-link-hover",
         "--ds-color-primary-100",
         "--ds-color-primary-200",
         "--ds-color-primary-300",
@@ -812,7 +806,7 @@
         "--ds-color-warning-600",
         "--ds-color-warning-700",
         "--ds-color-warning-800",
-        "--ds-focus-ring-color"
+        "--ds-divider-label-ink"
       ],
       "emitsScoped": [
         "base|--ds-chart-series-8",
@@ -838,6 +832,8 @@
         "base|--ds-color-info-600",
         "base|--ds-color-info-700",
         "base|--ds-color-info-800",
+        "base|--ds-color-link",
+        "base|--ds-color-link-hover",
         "base|--ds-color-primary-100",
         "base|--ds-color-primary-200",
         "base|--ds-color-primary-300",
@@ -874,69 +870,13 @@
         "base|--ds-color-warning-600",
         "base|--ds-color-warning-700",
         "base|--ds-color-warning-800",
-        "dark|--ds-chart-series-1",
-        "dark|--ds-chart-series-5",
-        "dark|--ds-chart-series-7",
-        "dark|--ds-chart-series-9",
-        "dark|--ds-color-error-100",
-        "dark|--ds-color-error-200",
-        "dark|--ds-color-error-300",
-        "dark|--ds-color-error-400",
-        "dark|--ds-color-error-50",
-        "dark|--ds-color-error-500",
-        "dark|--ds-color-error-600",
-        "dark|--ds-color-error-700",
-        "dark|--ds-color-error-800",
-        "dark|--ds-color-info-100",
-        "dark|--ds-color-info-200",
-        "dark|--ds-color-info-300",
-        "dark|--ds-color-info-400",
-        "dark|--ds-color-info-50",
-        "dark|--ds-color-info-500",
-        "dark|--ds-color-info-600",
-        "dark|--ds-color-info-700",
-        "dark|--ds-color-info-800",
-        "dark|--ds-color-primary-100",
-        "dark|--ds-color-primary-200",
-        "dark|--ds-color-primary-300",
-        "dark|--ds-color-primary-400",
-        "dark|--ds-color-primary-50",
-        "dark|--ds-color-primary-500",
-        "dark|--ds-color-primary-600",
-        "dark|--ds-color-primary-700",
-        "dark|--ds-color-primary-800",
-        "dark|--ds-color-secondary-100",
-        "dark|--ds-color-secondary-200",
-        "dark|--ds-color-secondary-300",
-        "dark|--ds-color-secondary-400",
-        "dark|--ds-color-secondary-50",
-        "dark|--ds-color-secondary-500",
-        "dark|--ds-color-secondary-600",
-        "dark|--ds-color-secondary-700",
-        "dark|--ds-color-secondary-800",
-        "dark|--ds-color-success-100",
-        "dark|--ds-color-success-200",
-        "dark|--ds-color-success-300",
-        "dark|--ds-color-success-400",
-        "dark|--ds-color-success-50",
-        "dark|--ds-color-success-500",
-        "dark|--ds-color-success-600",
-        "dark|--ds-color-success-700",
-        "dark|--ds-color-success-800",
-        "dark|--ds-color-warning-100",
-        "dark|--ds-color-warning-200",
-        "dark|--ds-color-warning-300",
-        "dark|--ds-color-warning-400",
-        "dark|--ds-color-warning-50",
-        "dark|--ds-color-warning-500",
-        "dark|--ds-color-warning-600",
-        "dark|--ds-color-warning-700",
-        "dark|--ds-color-warning-800",
-        "dark|--ds-focus-ring-color"
+        "base|--ds-divider-label-ink",
+        "dark|--ds-color-link",
+        "dark|--ds-color-link-hover",
+        "dark|--ds-divider-label-ink"
       ],
       "rootId": null,
       "headRootIds": [
-        "chart.palette",
         "ramp.seed.error",
         "ramp.seed.primary",
         "ramp.seed.secondary",
@@ -1166,6 +1106,8 @@
         "--ds-button-primary-bg-hover",
         "--ds-chart-series-1",
         "--ds-chart-series-10",
+        "--ds-chart-series-11",
+        "--ds-chart-series-12",
         "--ds-chart-series-2",
         "--ds-chart-series-3",
         "--ds-chart-series-4",
@@ -1195,6 +1137,8 @@
         "base|--ds-button-primary-bg-hover",
         "base|--ds-chart-series-1",
         "base|--ds-chart-series-10",
+        "base|--ds-chart-series-11",
+        "base|--ds-chart-series-12",
         "base|--ds-chart-series-2",
         "base|--ds-chart-series-3",
         "base|--ds-chart-series-4",
@@ -1221,6 +1165,8 @@
         "base|--ds-focus-ring-color",
         "dark|--ds-chart-series-1",
         "dark|--ds-chart-series-10",
+        "dark|--ds-chart-series-11",
+        "dark|--ds-chart-series-12",
         "dark|--ds-chart-series-2",
         "dark|--ds-chart-series-3",
         "dark|--ds-chart-series-4",
@@ -1229,6 +1175,8 @@
         "dark|--ds-chart-series-7",
         "dark|--ds-chart-series-8",
         "dark|--ds-chart-series-9",
+        "dark|--ds-color-link",
+        "dark|--ds-color-link-hover",
         "dark|--ds-color-primary-100",
         "dark|--ds-color-primary-200",
         "dark|--ds-color-primary-300",
@@ -1782,17 +1730,18 @@
         "base|--ds-radius-button",
         "base|--ds-radius-scale"
       ],
-      "rootId": "control.ratio.radius",
+      "rootId": null,
       "headRootIds": [
-        "control.ratio.radius"
+        "control.ratio.radius",
+        "radius.base"
       ],
-      "rootAttribution": "head-exact",
-      "rule": "R2",
-      "verdict": "collapse",
+      "rootAttribution": "slot-spans-several-roots",
+      "rule": "R5",
+      "verdict": "adjudicate",
       "evidence": {
-        "rootId": "control.ratio.radius",
-        "rootDerivation": "LA RAZON MAS LIMPIA MEDIDA: radio = redondeo(altura / 4). Bithire la cumple EXACTA en 8 de 10 filas -- botones 26/7, 32/8, 36/9, 40/10, 46/11 (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:1351-1400) y campos 28/7, 32/8, 36/9, 40/10, 46/11 (:1402-1460); el cociente da 0,250 exacto en sm/md/lg de ambas familias.",
-        "coincidenceGuard": "no-value-match-used"
+        "whyNotR2": "sin raiz atribuible",
+        "whyNotR3": "sin raiz atribuible",
+        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
       }
     },
     {
@@ -1880,6 +1829,32 @@
       "rootId": "type.family.base",
       "headRootIds": [
         "type.family.base"
+      ],
+      "rootAttribution": "head-exact",
+      "rule": "R1",
+      "verdict": "already-collapsed",
+      "evidence": {
+        "collapsedAs": "var-reference"
+      }
+    },
+    {
+      "slotId": "bithire:THEME.typography.fontFamilyDisplay",
+      "vertical": "bithire",
+      "slotPath": "THEME.typography.fontFamilyDisplay",
+      "evaluatedPath": "typography.fontFamilyDisplay",
+      "authoredValue": "var(--ds-font-pack-grotesk-display)",
+      "valueKind": "var-reference",
+      "readsVar": true,
+      "isMetadata": false,
+      "emitsChannels": [
+        "--ds-font-family-display"
+      ],
+      "emitsScoped": [
+        "base|--ds-font-family-display"
+      ],
+      "rootId": "type.family.display",
+      "headRootIds": [
+        "type.family.display"
       ],
       "rootAttribution": "head-exact",
       "rule": "R1",
@@ -2268,20 +2243,17 @@
         "base|--ds-sidebar-text-muted",
         "dark|--ds-sidebar-item-bg-active"
       ],
-      "rootId": null,
+      "rootId": "tier.page.bg",
       "headRootIds": [
-        "ramp.seed.primary",
-        "tier.base.fg.muted",
-        "tier.base.fg.secondary",
         "tier.page.bg"
       ],
-      "rootAttribution": "slot-spans-several-roots",
-      "rule": "R5",
-      "verdict": "adjudicate",
+      "rootAttribution": "head-exact",
+      "rule": "R2",
+      "verdict": "collapse",
       "evidence": {
-        "whyNotR2": "sin raiz atribuible",
-        "whyNotR3": "sin raiz atribuible",
-        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
+        "rootId": "tier.page.bg",
+        "rootDerivation": "Chrome de pagina (shell, layout, sidebar, detail, list, feed, calendar, timeline, tree): fondo = suelo base desplazado un escalon. El unico tramo con cabeza propia es el sidebar.",
+        "coincidenceGuard": "no-value-match-used"
       }
     },
     {
@@ -2543,17 +2515,18 @@
         "base|--ds-button-xs-radius",
         "base|--ds-radius-button"
       ],
-      "rootId": "control.ratio.radius",
+      "rootId": null,
       "headRootIds": [
-        "control.ratio.radius"
+        "control.ratio.radius",
+        "radius.base"
       ],
-      "rootAttribution": "head-exact",
-      "rule": "R2",
-      "verdict": "collapse",
+      "rootAttribution": "slot-spans-several-roots",
+      "rule": "R5",
+      "verdict": "adjudicate",
       "evidence": {
-        "rootId": "control.ratio.radius",
-        "rootDerivation": "LA RAZON MAS LIMPIA MEDIDA: radio = redondeo(altura / 4). Bithire la cumple EXACTA en 8 de 10 filas -- botones 26/7, 32/8, 36/9, 40/10, 46/11 (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:1351-1400) y campos 28/7, 32/8, 36/9, 40/10, 46/11 (:1402-1460); el cociente da 0,250 exacto en sm/md/lg de ambas familias.",
-        "coincidenceGuard": "no-value-match-used"
+        "whyNotR2": "sin raiz atribuible",
+        "whyNotR3": "sin raiz atribuible",
+        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
       }
     },
     {
@@ -2901,16 +2874,14 @@
         "dark|--ds-sidebar-item-bg-active",
         "light|--ds-sidebar-item-bg-active"
       ],
-      "rootId": "ramp.seed.primary",
-      "headRootIds": [
-        "ramp.seed.primary"
-      ],
-      "rootAttribution": "declared-fallback",
+      "rootId": null,
+      "headRootIds": [],
+      "rootAttribution": "no-persisted-membership",
       "rule": "R5",
       "verdict": "adjudicate",
       "evidence": {
-        "whyNotR2": "la raiz no tiene deuda de derivacion con ley citada",
-        "whyNotR3": "el tema no autora un nombre de stop de un control gobernante",
+        "whyNotR2": "sin raiz atribuible",
+        "whyNotR3": "sin raiz atribuible",
         "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
       }
     },
@@ -3028,20 +2999,17 @@
         "base|--ds-sidebar-text-muted",
         "light|--ds-sidebar-item-bg-active"
       ],
-      "rootId": null,
+      "rootId": "tier.page.bg",
       "headRootIds": [
-        "ramp.seed.primary",
-        "tier.base.fg.muted",
-        "tier.base.fg.secondary",
         "tier.page.bg"
       ],
-      "rootAttribution": "slot-spans-several-roots",
-      "rule": "R5",
-      "verdict": "adjudicate",
+      "rootAttribution": "head-exact",
+      "rule": "R2",
+      "verdict": "collapse",
       "evidence": {
-        "whyNotR2": "sin raiz atribuible",
-        "whyNotR3": "sin raiz atribuible",
-        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
+        "rootId": "tier.page.bg",
+        "rootDerivation": "Chrome de pagina (shell, layout, sidebar, detail, list, feed, calendar, timeline, tree): fondo = suelo base desplazado un escalon. El unico tramo con cabeza propia es el sidebar.",
+        "coincidenceGuard": "no-value-match-used"
       }
     },
     {
@@ -3303,17 +3271,18 @@
         "base|--ds-button-xs-radius",
         "base|--ds-radius-button"
       ],
-      "rootId": "control.ratio.radius",
+      "rootId": null,
       "headRootIds": [
-        "control.ratio.radius"
+        "control.ratio.radius",
+        "radius.base"
       ],
-      "rootAttribution": "head-exact",
-      "rule": "R2",
-      "verdict": "collapse",
+      "rootAttribution": "slot-spans-several-roots",
+      "rule": "R5",
+      "verdict": "adjudicate",
       "evidence": {
-        "rootId": "control.ratio.radius",
-        "rootDerivation": "LA RAZON MAS LIMPIA MEDIDA: radio = redondeo(altura / 4). Bithire la cumple EXACTA en 8 de 10 filas -- botones 26/7, 32/8, 36/9, 40/10, 46/11 (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:1351-1400) y campos 28/7, 32/8, 36/9, 40/10, 46/11 (:1402-1460); el cociente da 0,250 exacto en sm/md/lg de ambas familias.",
-        "coincidenceGuard": "no-value-match-used"
+        "whyNotR2": "sin raiz atribuible",
+        "whyNotR3": "sin raiz atribuible",
+        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
       }
     },
     {
@@ -3645,5 +3614,5 @@
       }
     }
   ],
-  "digest": "38a45faa089f083d92a50e1df37e4d0ddccacd074f5e480d2acb372f676d7c4e"
+  "digest": "ed27e0372513de6d54c6e3ad9e3a73bf9d76987e55eb684a50b4ffa97056ba6f"
 }
