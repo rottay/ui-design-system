@@ -70,7 +70,7 @@ export function deriveCardChannels(): Record<string, string> {
   vars["--ds-card-padding-base"] = "var(--ds-card-padding, var(--ds-card-md-padding))";
   vars["--ds-card-instance-padding"] =
     "calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1))";
-  vars["--ds-card-loading-min-height"] = "calc(var(--ds-spacing-10) * 3 * var(--ds-rhythm-effective-scale, 1))";
+  vars["--ds-card-loading-min-height"] = "calc(var(--ds-spacing-10) * 3)";
   vars["--ds-card-primary-title-color"] = "var(--ds-color-primary-900)";
   vars["--ds-card-success-title-color"] = "var(--ds-color-success-900)";
   vars["--ds-card-warning-title-color"] = "var(--ds-color-warning-900)";

@@ -261,7 +261,7 @@
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='loading-content'] {
   position: relative;
-  min-block-size: var(--ds-card-loading-min-height, calc(var(--ds-spacing-10) * 3 * var(--ds-rhythm-effective-scale, 1)));
+  min-block-size: var(--ds-card-loading-min-height, calc(var(--ds-spacing-10) * 3));
   padding: var(--ds-card-instance-padding, calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1)));
 }
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='loading-overlay'] {

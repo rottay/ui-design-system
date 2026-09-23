@@ -57,21 +57,24 @@ const SKIN = readFileSync(
 const normalise = (value: string) =>
   value.replace(/\s+/g, " ").replace(/\( /g, "(").replace(/ \)/g, ")").trim();
 
-/** Every distinct fallback the skin states for `channel`. */
-function skinFallbacks(channel: string): string[] {
+/** Every distinct fallback `css` states for `channel`. */
+function fallbacksIn(css: string, channel: string): string[] {
   const found = new Set<string>();
-  for (const match of SKIN.matchAll(/var\(\s*(--ds-[a-z0-9-]+)\s*,/g)) {
+  for (const match of css.matchAll(/var\(\s*(--ds-[a-z0-9-]+)\s*,/g)) {
     if (match[1] !== channel) continue;
     const start = (match.index ?? 0) + match[0].length;
     let end = start;
     for (let depth = 1; depth > 0; end += 1) {
-      if (SKIN[end] === "(") depth += 1;
-      else if (SKIN[end] === ")") depth -= 1;
+      if (css[end] === "(") depth += 1;
+      else if (css[end] === ")") depth -= 1;
     }
-    found.add(normalise(SKIN.slice(start, end - 1)));
+    found.add(normalise(css.slice(start, end - 1)));
   }
   return [...found];
 }
+
+/** Every distinct fallback the skin states for `channel`. */
+const skinFallbacks = (channel: string): string[] => fallbacksIn(SKIN, channel);
 
 /** Channels the deriver produces; the skin's fallback must equal the produced string. */
 const DERIVER_WIRED: Record<string, string> = {
@@ -81,8 +84,7 @@ const DERIVER_WIRED: Record<string, string> = {
     "var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))))",
   "--ds-card-instance-padding":
     "calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1))",
-  "--ds-card-loading-min-height":
-    "calc(var(--ds-spacing-10) * 3 * var(--ds-rhythm-effective-scale, 1))",
+  "--ds-card-loading-min-height": "calc(var(--ds-spacing-10) * 3)",
   "--ds-card-primary-title-color": "var(--ds-color-primary-900)",
   "--ds-card-success-title-color": "var(--ds-color-success-900)",
   "--ds-card-warning-title-color": "var(--ds-color-warning-900)",
@@ -129,6 +131,28 @@ describe("chrome/card", () => {
         fallbacks: [normalise(chain)],
       });
     }
+  });
+
+  it("sizes the loading content off the size ladder alone, never the rhythm dial", () => {
+    // Rhythm multiplying a size is the class the spacing-rhythm law forbids.
+    for (const { label, theme } of FIXTURES) {
+      const derived = cardChromeDeriver.derive(buildLoweringContext({ theme }), {});
+      expect(derived["--ds-card-loading-min-height"], label).toBe("calc(var(--ds-spacing-10) * 3)");
+      expect(derived["--ds-card-loading-min-height"], label).not.toMatch(/rhythm/);
+    }
+    expect(skinFallbacks("--ds-card-loading-min-height").join()).not.toMatch(/rhythm/);
+  });
+
+  it("reds the pair when the rhythm factor comes back into the skin fallback alone", () => {
+    const channel = "--ds-card-loading-min-height";
+    const derived = cardChromeDeriver.derive(context(), {})[channel];
+    const rescaled = SKIN.replace(
+      `var(${channel}, calc(var(--ds-spacing-10) * 3))`,
+      `var(${channel}, calc(var(--ds-spacing-10) * 3 * var(--ds-rhythm-effective-scale, 1)))`
+    );
+    expect(rescaled).not.toBe(SKIN);
+    expect(fallbacksIn(SKIN, channel)).toEqual([normalise(derived)]);
+    expect(fallbacksIn(rescaled, channel)).not.toEqual([normalise(derived)]);
   });
 
   it("produces the instance padding at the default arm's resting value", () => {
