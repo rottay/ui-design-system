@@ -52,6 +52,7 @@
  */
 
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -1017,26 +1018,33 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
  * cannot derive from the contract must not be lowered on a remembered
  * convention.
  */
-/* FASE-B -- the font-family contract, REPLICATED from the product validator.
- *
- * These three constants mirror `isSafeFontFamily`
- * (`compilers/composition/tenant-theme`): the length limit lives in
- * `TENANT_THEME_CONFIG_SCHEMA.limits.maxFontFamilyLength`, the pack ids in
- * `TENANT_THEME_FONT_PACK_IDS`, and the residue charset in the validator body.
- * They are COPIED rather than imported because this module is the pure half of
- * the harness: `buildIngressInput` runs in tests that never load `dist/`, and
- * importing the published schema here would make the ingress path depend on a
- * build. The copy is not left to rot -- a drill asserts these three values
- * against the PUBLISHED ones, so drift turns red instead of silent. */
+/* FASE-B -- the font-family contract of the product validator
+ * (`isSafeFontFamily`, `compilers/composition/tenant-theme`). The length limit
+ * and the residue charset are copied, and a drill checks them against the
+ * published build. The pack ids are READ from the contract source instead,
+ * because a copied list drifted: it missed `arabic-text` for days. Reading the
+ * TypeScript text keeps this module free of `dist/`. */
 const FONT_STACK_MAX_LENGTH = 200;
-const FONT_STACK_PACK_IDS = Object.freeze([
-  'editorial-display',
-  'editorial-text',
-  'grotesk-display',
-  'humanist-text',
-  'geometric-display',
-  'plex-mono',
-]);
+export const FONT_PACK_IDS_SOURCE = 'src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts';
+
+export function readPublishedFontPackIds(
+  source = readFileSync(resolve(CORE_ROOT, FONT_PACK_IDS_SOURCE), 'utf8'),
+) {
+  const declaration = /export const TENANT_THEME_FONT_PACK_IDS = \[([^\]]*)\] as const;/.exec(source);
+  if (!declaration) {
+    throw new Error(`resolution-probe: ${FONT_PACK_IDS_SOURCE} declares no TENANT_THEME_FONT_PACK_IDS = [...] as const`);
+  }
+  const ids = [...declaration[1].matchAll(/"([a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?)"/g)].map((match) => match[1]);
+  const residue = declaration[1].replace(/"[a-z0-9-]+"/g, '').replace(/[\s,]/g, '');
+  if (ids.length === 0 || residue !== '' || new Set(ids).size !== ids.length) {
+    throw new Error(
+      `resolution-probe: TENANT_THEME_FONT_PACK_IDS in ${FONT_PACK_IDS_SOURCE} is not a plain list of unique quoted ids; refusing to guess the pack set`,
+    );
+  }
+  return Object.freeze(ids);
+}
+
+export const FONT_STACK_PACK_IDS = readPublishedFontPackIds();
 const FONT_PACK_REFERENCE = /var\(--ds-font-pack-([a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?)\)/g;
 const FONT_STACK_RESIDUE = /^[\p{L}\p{N}\s'",._-]+$/u;
 

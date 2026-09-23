@@ -42,6 +42,8 @@ import {
   INGRESS_ARMS,
   advancedCompileOptions,
   isLowerableFontStack,
+  FONT_STACK_PACK_IDS,
+  readPublishedFontPackIds,
   dbIngressSpace,
   DB_INGRESS_SPACES,
   IngressSpaceError,
@@ -4046,6 +4048,11 @@ const B1_STOPS = [
   { value: "'Fira Sans', Arial, sans-serif", lowerable: true },
   // A font-pack id that does not exist: the real ids end in -display/-text/-mono.
   { value: 'var(--ds-font-pack-grotesk), sans-serif', lowerable: false },
+  // The seventh published pack (f56c64974), alone and inside a stack.
+  { value: 'var(--ds-font-pack-arabic-text)', lowerable: true },
+  { value: 'var(--ds-font-pack-grotesk-display), var(--ds-font-pack-arabic-text), sans-serif', lowerable: true },
+  // An eighth id nobody publishes, shaped like a real one.
+  { value: 'var(--ds-font-pack-serif-display), sans-serif', lowerable: false },
   { value: '  Inter, sans-serif  ', lowerable: false },
   { value: '', lowerable: false },
   { value: 'url(https://evil/x.woff2)', lowerable: false },
@@ -4091,16 +4098,18 @@ test('B1: the font-stack branch lowers exactly what the product contract admits'
 });
 
 test('B1b: the replica does not drift from the PUBLISHED product contract', async () => {
-  // The three constants are COPIED into the pure module on purpose (no dist on
-  // the ingress path). This is the drill that keeps the copy honest.
+  // The limit and the charset are COPIED into the pure module (no dist on the
+  // ingress path); the pack ids are read from the contract source. This drill
+  // keeps both honest against the build.
   const server = await import(
     pathToFileURL(resolve(CORE_ROOT, 'dist/server.js')).href
   );
   assert.deepEqual(
     [...server.TENANT_THEME_FONT_PACK_IDS].sort(),
-    ['editorial-display', 'editorial-text', 'geometric-display', 'grotesk-display', 'humanist-text', 'plex-mono'],
+    ['arabic-text', 'editorial-display', 'editorial-text', 'geometric-display', 'grotesk-display', 'humanist-text', 'plex-mono'],
     'the pack id set the replica encodes is the published one',
   );
+  assert.deepEqual([...FONT_STACK_PACK_IDS], [...server.TENANT_THEME_FONT_PACK_IDS], 'the derived set is the published set, in order');
   assert.equal(server.TENANT_THEME_CONFIG_SCHEMA.limits.maxFontFamilyLength, 200);
   // And the replica agrees with the product validator stop for stop, through
   // the real DB door.
@@ -4121,6 +4130,22 @@ test('B1b: the replica does not drift from the PUBLISHED product contract', asyn
     }
     assert.equal(dbAccepts, lowerable, `replica and product disagree on ${JSON.stringify(value)}`);
     assert.equal(isLowerableFontStack(value), dbAccepts);
+  }
+});
+
+test('B1c: the pack ids are read from the contract source, and a source the reader cannot parse is refused', () => {
+  const declare = (body) => `export const TENANT_THEME_FONT_PACK_IDS = [${body}] as const;`;
+  assert.deepEqual([...readPublishedFontPackIds(declare('\n  "a-text",\n  "b-display",\n'))], ['a-text', 'b-display']);
+  // A new published id reaches the replica with no second edit.
+  assert.equal(readPublishedFontPackIds(declare('"plex-mono", "serif-display"')).includes('serif-display'), true);
+  for (const [label, source] of [
+    ['absent', 'export const OTHER = [] as const;'],
+    ['empty', declare('')],
+    ['spread', declare('"plex-mono", ...MORE')],
+    ['identifier', declare('"plex-mono", EXTRA_PACK')],
+    ['duplicate', declare('"plex-mono", "plex-mono"')],
+  ]) {
+    assert.throws(() => readPublishedFontPackIds(source), /TENANT_THEME_FONT_PACK_IDS/, label);
   }
 });
 
