@@ -14,7 +14,7 @@ import { repoRoot as findRepoRoot } from "../../../../libraries/repo-root/index.
 
 export const REPO_ABS = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 
-import { resolveShape, readProperty, isShapeClosed, keySetEnumerable, classifyRelayBoundary, dynamicSetPropertyDomain, entriesRecordSetPropertyDomain, publicGenericWriterProof, publicStylePassthroughProof, getSource } from "../resolution/index.mjs";
+import { resolveShape, readProperty, isShapeClosed, keySetEnumerable, computedDomainRoles, classifyRelayBoundary, dynamicSetPropertyDomain, entriesRecordSetPropertyDomain, publicGenericWriterProof, publicStylePassthroughProof, getSource } from "../resolution/index.mjs";
 import { governanceOutcome, governanceAnalysis, astPathFromSinkToPart, canonicalPreimageId, legacyPreimageIdWithSymbol, zeroEmissionSiteId, governedProducerSiteId, sourcePartId, decomposeImmediate, orderParts, digestText, canonicalJson, sortSet, digestOf, sha256Hex, utf8 } from "../governance/index.mjs";
 /**
  * v4 driver — READ-ONLY. Same verbatim sink-anchored walk as
@@ -862,7 +862,7 @@ export function classifyCrossFileRows() {
       // domain receipt).
       const nestedComputedDomains =
         shape && shape.kind !== "computedKey"
-          ? normalizeNestedComputedDomains(collectNestedComputedDomains(shape))
+          ? normalizeNestedComputedDomains(collectNestedComputedDomains(shape, new WeakSet(), 0, [], computedDomainRoles(shape).roles))
           : [];
       // T-TYPED-RELAY: the annotation proofs that justified this row's closure.
       const typedRelays = normalizeTypedRelays(collectTypedRelays(shape));
@@ -996,7 +996,7 @@ const stable = (value) => JSON.stringify(value ?? null);
  * published field are both kept, so no material occurrence is lost. Ordering is
  * stable by astPath, then declaration file/line/span.
  */
-function collectNestedComputedDomains(shape, visited = new WeakSet(), depth = 0, out = []) {
+function collectNestedComputedDomains(shape, visited = new WeakSet(), depth = 0, out = [], roles = new Map()) {
   if (!shape || typeof shape !== "object" || depth > 80) return out;
   if (visited.has(shape)) return out;
   visited.add(shape);
@@ -1009,6 +1009,8 @@ function collectNestedComputedDomains(shape, visited = new WeakSet(), depth = 0,
       memberStatuses: (shape.memberStatuses ?? []).map((st) => ({ member: st.member, status: st.status })),
       indexMayEscape: shape.indexMayEscape ?? null,
       domainComplete: shape.closed === true,
+      // whether the predicate that closed the row read this domain (see computedDomainRoles)
+      role: roles.get(shape) ?? "justifying",
       declaration: shape.declaration
         ? {
             file: shape.declaration.file,
@@ -1021,17 +1023,17 @@ function collectNestedComputedDomains(shape, visited = new WeakSet(), depth = 0,
   }
   // P0: an enumeration referenced by a shape derived THROUGH it (see
   // `readProperty`'s computedKey branch) is part of this row's justification.
-  if (shape.viaComputedDomain) collectNestedComputedDomains(shape.viaComputedDomain, visited, depth + 1, out);
+  if (shape.viaComputedDomain) collectNestedComputedDomains(shape.viaComputedDomain, visited, depth + 1, out, roles);
   switch (shape.kind) {
     case "object":
-      for (const entry of shape.order ?? []) collectNestedComputedDomains(entry.shape, visited, depth + 1, out);
+      for (const entry of shape.order ?? []) collectNestedComputedDomains(entry.shape, visited, depth + 1, out, roles);
       break;
     case "array":
-      for (const el of shape.elements ?? []) collectNestedComputedDomains(el.shape, visited, depth + 1, out);
+      for (const el of shape.elements ?? []) collectNestedComputedDomains(el.shape, visited, depth + 1, out, roles);
       break;
     case "branches":
     case "computedKey":
-      for (const b of shape.branches ?? []) collectNestedComputedDomains(b, visited, depth + 1, out);
+      for (const b of shape.branches ?? []) collectNestedComputedDomains(b, visited, depth + 1, out, roles);
       break;
     default:
       break;
@@ -1442,8 +1444,14 @@ export function boundedReceiptOf(row) {
           path,
         };
       }
-      // P0: an INDIRECT closure names the enumerations that justified it.
-      if (row.receipt?.kind !== "branches" && row.nestedComputedDomains?.length) {
+      /* P0: an INDIRECT closure names the enumerations that justified it -- only
+       * when one did, and only when the close admitted no open value; a key-set
+       * close keeps its own label below and carries the domains by role. */
+      if (
+        row.receipt?.kind !== "branches" &&
+        row.nestedComputedDomains?.some((d) => d.role === "justifying") &&
+        !row.governance?.openLeafValues
+      ) {
         return {
           nestedComputedDomains: row.nestedComputedDomains,
           nestedComputedDomainCount: row.nestedComputedDomains.length,
@@ -1495,6 +1503,13 @@ export function boundedReceiptOf(row) {
           ungovernedCustomPropertyKeys: [...(row.governance.ungovernedCustomPropertyKeys ?? [])].sort(),
           ...(row.receipt?.kind === "branches"
             ? { branchCensus: branchTreeCensus(row.receipt.branches ?? []) }
+            : {}),
+          // the enumerations the key-set proof itself read, and nothing else
+          ...(row.nestedComputedDomains?.some((d) => d.role === "justifying")
+            ? {
+                nestedComputedDomains: row.nestedComputedDomains.filter((d) => d.role === "justifying"),
+                nestedComputedDomainCount: row.nestedComputedDomains.filter((d) => d.role === "justifying").length,
+              }
             : {}),
           path,
         };

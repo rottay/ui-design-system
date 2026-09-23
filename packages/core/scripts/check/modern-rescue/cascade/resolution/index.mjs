@@ -2912,8 +2912,8 @@ export function readProperty(shape, key) {
      * survives the read. It is a reference, not a copy: no evidence is invented,
      * and the cycle it creates is handled by the collector's visited set. */
     if (shape.domainKind) {
-      if (through.valueShape) through.valueShape = { ...through.valueShape, viaComputedDomain: shape };
-      if (through.opaqueShape) through.opaqueShape = { ...through.opaqueShape, viaComputedDomain: shape };
+      if (through.valueShape) through.valueShape = { ...through.valueShape, viaComputedDomain: shape, viaComputedDomainOrigin: "read-through" };
+      if (through.opaqueShape) through.opaqueShape = { ...through.opaqueShape, viaComputedDomain: shape, viaComputedDomainOrigin: "read-through" };
     }
     return through;
   }
@@ -3031,7 +3031,55 @@ function withArgumentComputedDomains(result, callNode, ctx, path, depth) {
     ...result,
     viaComputedDomain:
       fresh.length === 1 ? fresh[0] : { kind: "branches", branches: fresh, path: result.path ?? [] },
+    viaComputedDomainOrigin: "call-argument",
   };
+}
+
+/**
+ * Which enumerated domains a row's CLOSE actually consulted.
+ *
+ * A row closes by one of two predicates, and each reads a different part of
+ * the shape:
+ *   - "shape-closed" (`isShapeClosed`): the spine AND every leaf value, and
+ *     a value derived THROUGH an enumeration carries that domain's arms;
+ *   - "key-set" (`keySetEnumerable`, T-STATIC-KEYSET): the key spine only --
+ *     literal keys, spreads, branch arms, enumerated lookup arms. Leaf values
+ *     are deliberately not interrogated.
+ * Neither predicate reads a `viaComputedDomain` reference. A read-through
+ * reference names a domain whose arms were copied into the derived value, so it
+ * is consulted wherever that value is. A call-argument reference records an
+ * enumeration that fed an argument; the call's result was built from the body,
+ * so no predicate ever reads it.
+ *
+ * Returns Map(computedKey shape -> "justifying" | "informational") over every
+ * enumerated domain `collectNestedComputedDomains` can reach, plus the route.
+ * A domain reached along several edges justifies if any edge does.
+ */
+export function computedDomainRoles(root) {
+  const route = isShapeClosed(root) ? "shape-closed" : "key-set";
+  const roles = new Map();
+  const visited = new WeakMap();
+  const walk = (shape, position, informational, depth) => {
+    if (!shape || typeof shape !== "object" || depth > 80) return;
+    const edge = `${position}|${informational}`;
+    const edges = visited.get(shape) ?? new Set();
+    if (edges.has(edge)) return;
+    edges.add(edge);
+    visited.set(shape, edges);
+    if (shape.kind === "computedKey" && shape.domainKind) {
+      const justifies = !informational && (route === "shape-closed" || position === "spine");
+      if (justifies) roles.set(shape, "justifying");
+      else if (!roles.has(shape)) roles.set(shape, "informational");
+    }
+    if (shape.viaComputedDomain) {
+      walk(shape.viaComputedDomain, position, informational || shape.viaComputedDomainOrigin === "call-argument", depth + 1);
+    }
+    for (const entry of shape.order ?? []) walk(entry.shape, entry.kind === "spread" ? position : "value", informational, depth + 1);
+    for (const el of shape.elements ?? []) walk(el.shape, position, informational, depth + 1);
+    for (const b of shape.branches ?? []) walk(b, position, informational, depth + 1);
+  };
+  walk(root, "spine", false, 0);
+  return { route, roles };
 }
 
 /**

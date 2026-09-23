@@ -31,7 +31,7 @@ import {
   DispositionJoinConflict,
   DISPOSITION_DECISION_FIELDS,
 } from '../disposition/index.mjs';
-import { REPO_ABS, resolveShape, resolveSealedTypeDecl, publicGenericWriterProof, entriesRecordSetPropertyDomain, getSource } from '../resolution/index.mjs';
+import { REPO_ABS, resolveShape, computedDomainRoles, resolveSealedTypeDecl, publicGenericWriterProof, entriesRecordSetPropertyDomain, getSource } from '../resolution/index.mjs';
 
 /** Run the public-writer predicate over a REAL file's named writer function. */
 const publicGenericWriterProofOf = (fileRel, writerName) => {
@@ -2088,8 +2088,9 @@ test('B-9 the live tree drains 43 branch rows and the 2 survivors name their cha
   assert.equal(flat.filter((r) => r.evidence.branchKinds.includes('computedKey')).length, 3);
   // the 486 that closed by the earlier route keep NO receipt and are untouched
   // 486 - 13: hardening the mutation detector gave 13 pre-existing zeros a real
-  // route (`internal-base-mutation`) instead of no receipt at all.
-  assert.equal(out.closedZeroGoverned.filter((r) => r.resolvedVia === undefined).length, 466);
+  // route (`internal-base-mutation`) instead of no receipt at all; + 2 by the E-1
+  // ruling (time-picker rustic:181 x2 lost a label no justifying domain earned).
+  assert.equal(out.closedZeroGoverned.filter((r) => r.resolvedVia === undefined).length, 468, E1_ROUTE_MOVERS);
   assert.equal(out.stats.closedZeroGoverned, 613);
 
   /* The 2 survivors were promoted by T-BRANCH-PRODUCER: their emission is
@@ -2253,10 +2254,10 @@ test('C-4 every ZERO row keeps the semantics of the route that closed it', () =>
   // of how it was closed.
   const byRoute = {};
   for (const row of out.closedZeroGoverned) byRoute[row.resolvedVia ?? '(none)'] = (byRoute[row.resolvedVia ?? '(none)'] || 0) + 1;
-  assert.deepEqual(byRoute, { '(none)': 466, 'branch-union': 50, 'static-key-set': 30, 'internal-base-mutation': 16, 'dynamic-property-domain': 2, 'computed-domain-enumeration': 8, 'nested-computed-domain': 37, 'static-sequential-assignment': 4 });
+  assert.deepEqual(byRoute, { '(none)': 468, 'branch-union': 50, 'static-key-set': 49, 'internal-base-mutation': 16, 'dynamic-property-domain': 2, 'computed-domain-enumeration': 8, 'nested-computed-domain': 16, 'static-sequential-assignment': 4 }, E1_ROUTE_MOVERS);
   const original = out.closedZeroGoverned.filter((r) => r.resolvedVia === undefined);
-  // 486 - 13 relabelled by the hardened mutation detector (see CL-10)
-  assert.equal(original.length, 466);
+  // 486 - 13 relabelled by the hardened mutation detector (see CL-10), + 2 by the E-1 ruling
+  assert.equal(original.length, 468, E1_ROUTE_MOVERS);
   for (const row of original) {
     assert.equal(row.evidence, undefined, 'an originally-closed row must not gain a receipt');
     assert.match(row.reason, /^zero-governed-emission-object:/);
@@ -2747,10 +2748,48 @@ test('D-11 producer rows reached through enumeration carry the domain contract',
  * P0 nested evidence · P1a __proto__ · P1b unmodelled members.
  * ===================================================================== */
 
+/* The E-1 ruling: a member status may be `open` only in a domain the row's close
+ * did not consult (role "informational"). The label nested-computed-domain needs
+ * at least one justifying domain and a close that admitted no open value. */
+const E1_ROUTE_MOVERS =
+  'E-1 ruling, 21 relabels and no disposition change: nested-computed-domain 37 -> 16. ' +
+  'To static-key-set (30 -> 49): the 16 positioning key-set closes justified by no enumeration ' +
+  '(auto-complete:422 x2, color-picker:473, date-picker:854, date-picker:1152, mentions:389, select:624, select:1027, ' +
+  'time-picker modern:720 x2 and :1081 x2, alert-dialog:163 x2, confirm-dialog:195 x2) and 3 key-set closes whose ' +
+  'open leaf values were hidden behind the enumeration label (notification rustic:424, data-table rustic:723 and :807). ' +
+  'To (none) (466 -> 468): time-picker rustic:181 x2, shape-closed with only a call-argument domain. ' +
+  'A key-set receipt names only the domains its proof read, so the 16 positioning rows carry none, like their 22 overlay siblings.';
+const nestedDomainEvidenceProblems = (row) => {
+  const at = `${row.file}:${row.line}`;
+  const list = row.evidence?.nestedComputedDomains ?? [];
+  const problems = [];
+  for (const d of list) {
+    if (!['justifying', 'informational'].includes(d.role)) problems.push(`${at} ${d.domainKind}: role ${d.role}`);
+    for (const st of d.memberStatuses) {
+      if (!['found', 'absent', 'open'].includes(st.status)) problems.push(`${at} ${d.domainKind}: status ${st.status}`);
+      else if (st.status === 'open' && d.role !== 'informational') problems.push(`${at} ${d.domainKind}: open member ${st.member} in a domain that justified the close`);
+    }
+  }
+  if (row.resolvedVia === 'nested-computed-domain') {
+    if (!list.some((d) => d.role === 'justifying')) problems.push(`${at}: nested-computed-domain with no justifying domain`);
+    if (row.evidence.openLeafValues) problems.push(`${at}: an enumeration label over a key-set close`);
+  }
+  return problems;
+};
+
 test('E-1 P0: indirect closures name the enumerations that justified them', () => {
   const out = buildProducers();
   const nested = out.closedZeroGoverned.filter((r) => r.resolvedVia === 'nested-computed-domain');
-  assert.equal(nested.length, 37);
+  assert.equal(nested.length, 16, E1_ROUTE_MOVERS);
+  const carrying = out.closedZeroGoverned.filter((r) => r.evidence?.nestedComputedDomains?.length);
+  const carryingByRoute = {};
+  for (const r of carrying) carryingByRoute[r.resolvedVia] = (carryingByRoute[r.resolvedVia] || 0) + 1;
+  assert.deepEqual(carryingByRoute, { 'nested-computed-domain': 16, 'static-key-set': 3 }, E1_ROUTE_MOVERS);
+  assert.deepEqual(carrying.flatMap(nestedDomainEvidenceProblems), []);
+  const published = carrying.flatMap((r) => r.evidence.nestedComputedDomains);
+  // the 16 all-open placement unions were call-argument domains: no predicate read them, none is published
+  assert.equal(published.filter((d) => d.memberStatuses.some((st) => st.status === 'open')).length, 0);
+  assert.ok(carrying.filter((r) => r.resolvedVia === 'static-key-set').every((r) => r.evidence.nestedComputedDomains.every((d) => d.role === 'justifying')));
   for (const row of nested) {
     const list = row.evidence.nestedComputedDomains;
     assert.ok(Array.isArray(list) && list.length > 0, `${row.file}:${row.line} indirect closure with no evidence`);
@@ -2764,7 +2803,7 @@ test('E-1 P0: indirect closures name the enumerations that justified them', () =
       assert.ok(d.members.length > 0);
       assert.equal(d.memberCount, d.members.length);
       assert.equal(d.memberStatuses.length, d.members.length);
-      for (const st of d.memberStatuses) assert.ok(['found', 'absent'].includes(st.status));
+      assert.ok(['justifying', 'informational'].includes(d.role), `role ${d.role}`);
       if (d.domainKind === 'sealed-container-keys') assert.equal(d.indexMayEscape, true);
       /* Only a sealed CONTAINER has a declaration node to point at; an index
        * typed by a literal union is declared by the type, not by a container. */
@@ -2787,8 +2826,75 @@ test('E-1 P0: indirect closures name the enumerations that justified them', () =
   // the full route split, so no row can change its story silently
   const byRoute = {};
   for (const r of out.closedZeroGoverned) byRoute[r.resolvedVia ?? '(none)'] = (byRoute[r.resolvedVia ?? '(none)'] || 0) + 1;
-  assert.deepEqual(byRoute, { '(none)': 466, 'branch-union': 50, 'static-key-set': 30, 'internal-base-mutation': 16, 'dynamic-property-domain': 2, 'computed-domain-enumeration': 8, 'nested-computed-domain': 37, 'static-sequential-assignment': 4 });
+  assert.deepEqual(byRoute, { '(none)': 468, 'branch-union': 50, 'static-key-set': 49, 'internal-base-mutation': 16, 'dynamic-property-domain': 2, 'computed-domain-enumeration': 8, 'nested-computed-domain': 16, 'static-sequential-assignment': 4 }, E1_ROUTE_MOVERS);
   assert.equal(486 + 52 + 28 + 18 + 18 + 8, 610);
+});
+
+test('E-1a NEGATIVE: an open member in the JUSTIFYING domain reds the E-1 check', () => {
+  const out = buildProducers();
+  // select:624 closes on its key set; neither of its domains justified it, so none is published
+  const select = out.closedZeroGoverned.find((r) => r.file.endsWith('inputs/select/engines/modern/index.tsx') && r.line === 624);
+  assert.equal(select?.resolvedVia, 'static-key-set', E1_ROUTE_MOVERS);
+  assert.equal(select.evidence.nestedComputedDomains, undefined);
+  const witness = out.closedZeroGoverned.find((r) => r.resolvedVia === 'nested-computed-domain' && r.evidence.nestedComputedDomains.some((d) => d.role === 'informational'));
+  assert.ok(witness, 'a row carrying both roles is the witness');
+  assert.deepEqual(nestedDomainEvidenceProblems(witness), []);
+  const patchDomains = (row, pick, patch) => ({ ...row, evidence: { ...row.evidence, nestedComputedDomains: row.evidence.nestedComputedDomains.map((d) => (pick(d) ? patch(d) : d)) } });
+  const openFirst = (d) => ({ ...d, memberStatuses: d.memberStatuses.map((st, i) => (i === 0 ? { ...st, status: 'open' } : st)) });
+  // an open member is admissible where the close did not look ...
+  const infoOpen = patchDomains(witness, (d) => d.role === 'informational', openFirst);
+  assert.deepEqual(nestedDomainEvidenceProblems(infoOpen), []);
+  // ... and reds the moment that domain is the one that justified the close
+  assert.ok(nestedDomainEvidenceProblems(patchDomains(infoOpen, (d) => d.role === 'informational', (d) => ({ ...d, role: 'justifying' }))).some((p) => p.includes('in a domain that justified the close')));
+  assert.ok(nestedDomainEvidenceProblems(patchDomains(witness, (d) => d.role === 'justifying', openFirst)).some((p) => p.includes('in a domain that justified the close')));
+  // a missing role, and an enumeration label with no justifying domain, both red
+  assert.ok(nestedDomainEvidenceProblems(patchDomains(witness, () => true, (d) => ({ ...d, role: undefined }))).length > 0);
+  assert.ok(nestedDomainEvidenceProblems(patchDomains(witness, () => true, (d) => ({ ...d, role: 'informational' }))).some((p) => p.includes('no justifying domain')));
+  assert.ok(nestedDomainEvidenceProblems({ ...witness, evidence: { ...witness.evidence, openLeafValues: 3 } }).some((p) => p.includes('key-set close')));
+});
+
+/** The select:624 shape in miniature: an opaque placement table read through a helper
+ * and harvested as an argument, a sealed table in value position, a switch spread. */
+const SELECT_DRILL_PRELUDE = `type Placement = 'top' | 'top-start' | 'bottom' | 'bottom-start';
+type Side = 'top' | 'bottom';
+declare const PARTS: Record<Placement, readonly [Side, string]>;
+declare const AREAS: Record<Placement, { [k: string]: string }>;
+const CHAIN: Record<Side, string> = { top: 'flip-block', bottom: 'flip-inline' };
+function parse(p: Placement) { return PARTS[p]; }
+function area(p: Placement) { return AREAS[p]; }
+function margins(side: Side) {
+  switch (side) {
+    case 'top': return { marginBlockEnd: 6 };
+    case 'bottom': return { marginBlockStart: 6 };
+  }
+}
+`;
+const rolesOf = (shape) => {
+  const { route, roles } = computedDomainRoles(shape);
+  return { route, domains: [...roles].map(([d, role]) => ({ kind: d.domainKind, members: d.domain.length, role, open: d.memberStatuses.some((st) => st.status === 'open') })) };
+};
+
+test('E-1b the select close in both directions: informational open domain closes, justifying open domain refuses', () => {
+  const informational = branchProbe(`${SELECT_DRILL_PRELUDE}export const C = ({ placement, flip, w }: { placement: Placement; flip: boolean; w: number }) => {
+  const [side] = parse(placement);
+  return <div style={{ position: 'fixed', inlineSize: w, ...(flip ? { positionTryFallbacks: CHAIN[side] } : {}), ...margins(side) }} />;
+};`);
+  assert.equal(informational.disposition, ZERO_D, 'the key set is closed whatever the placement reads');
+  assert.deepEqual(rolesOf(informational.shape), {
+    route: 'key-set',
+    domains: [
+      { kind: 'sealed-container-keys', members: 2, role: 'informational', open: false },
+      { kind: 'index-type-literal-union', members: 4, role: 'informational', open: true },
+    ],
+  });
+
+  const justifying = branchProbe(`${SELECT_DRILL_PRELUDE}export const C = ({ placement, w }: { placement: Placement; w: number }) => <div style={{ position: 'fixed', inlineSize: w, ...area(placement) }} />;`);
+  assert.notEqual(justifying.disposition, ZERO_D, 'the same open domain on the key spine must not close');
+  assert.notEqual(justifying.disposition, 'CLOSED_PRODUCER');
+  assert.deepEqual(rolesOf(justifying.shape), {
+    route: 'key-set',
+    domains: [{ kind: 'index-type-literal-union', members: 4, role: 'justifying', open: true }],
+  });
 });
 
 test('E-2 P0 POSITIVE: an indirect closure is re-derivable from its receipt', () => {
@@ -4029,7 +4135,7 @@ test('KS-9 the 3 PREFLIGHT CORRECTIONS are enumerated computed domains, not new 
     assert.ok(!out.branchCompositeOpen.some((r) => r.file === file && r.ordinal === ordinal));
   }
   // 31 zeros arrived; 28 by open-value admission, these 3 by branch union
-  assert.equal(out.closedZeroGoverned.filter((r) => r.resolvedVia === KS_VIA).length, 30);
+  assert.equal(out.closedZeroGoverned.filter((r) => r.resolvedVia === KS_VIA).length, 49, E1_ROUTE_MOVERS);
   assert.equal(28 + 3, 31);
 });
 
@@ -4072,7 +4178,7 @@ test('KS-10 every arrival publishes its route, its key union and its admission',
   }
   // the ZERO arrivals publish the admission too, and an EMPTY union
   const zeroAdmitted = out.closedZeroGoverned.filter((r) => r.resolvedVia === KS_VIA);
-  assert.equal(zeroAdmitted.length, 30);
+  assert.equal(zeroAdmitted.length, 49, E1_ROUTE_MOVERS);
   for (const row of zeroAdmitted) {
     assert.equal(row.evidence.resolvedVia, KS_VIA);
     assert.ok(row.evidence.openLeafValues > 0);
@@ -5137,7 +5243,7 @@ test('NF-1 NEGATIVE: a governed fill hidden in a nested callback refuses, twelve
     'nested alias then write': `const o: any = {}; xs.forEach((s) => { const a = o; a['--ds-' + s] = '1'; }); return o;`,
     'nested alias spelled like a read-only outer alias': `const o: any = {}; const a = o; void a; xs.forEach(() => { const a = o; a['--ds-x'] = '1'; }); return o;`,
     'second of two same-named callback aliases writes': `const o: any = {}; xs.forEach(() => { const a = o; void a; }); xs.forEach(() => { const a = o; a['--ds-x'] = '1'; }); return o;`,
-    'named function expression that does NOT shadow the name': `const o: any = {}; const f = function p() { o.k = 1; }; void f; return o;`,
+    'named function expression that does NOT shadow the name': `const o: any = {}; const f = function p() { o['--ds-x'] = '1'; }; void f; return o;`,
     'nested ++ on a property': `const o: any = { n: 0 }; xs.forEach(() => { o.n++; }); return o;`,
     'nested delete': `const o: any = { '--ds-probe-a': x }; xs.forEach(() => { delete o['--ds-probe-a']; }); return o;`,
     'deferred write in an uncalled closure body': `const o = {}; const later = () => { o['--ds-probe-a'] = '1'; }; void later; return o;`,
