@@ -147,8 +147,11 @@ function scanTsxSource(rel, text, onUnresolved) {
       return found;
     }
     if (ts.isIdentifier(node)) {
-      if (seen.has(node.text)) return found;
-      seen.add(node.text);
+      // `undefined` is a value, not a binding: each occurrence is its own site.
+      if (node.text !== "undefined") {
+        if (seen.has(node.text)) return found;
+        seen.add(node.text);
+      }
       const binding = localBindings.get(node.text);
       if (binding) return resolveObjects(binding, depth + 1, seen);
       noteUnresolved(node, "identifier", "identifier is not bound in this file (import, parameter or prop passthrough)", currentSinkNode);

@@ -1817,6 +1817,27 @@ export function serialize(output) {
 
 export const OUT_PATH = OUT;
 
+/* The committed inventory names the command that wrote it, the day, and the
+ * digest of its own body; --check rebuilds all of it except the day. */
+export const PROVENANCE_COMMAND = "cascade:producers --write";
+const WRITTEN_ON = /^\d{4}-\d{2}-\d{2}$/;
+
+export function withProvenance(output, writtenOn) {
+  return {
+    ...output,
+    provenance: { producedBy: PROVENANCE_COMMAND, writtenOn, contentDigest: sha256(serialize(output)) },
+  };
+}
+
+export function committedWrittenOn(text) {
+  try {
+    const writtenOn = JSON.parse(text)?.provenance?.writtenOn;
+    return typeof writtenOn === "string" && WRITTEN_ON.test(writtenOn) ? writtenOn : null;
+  } catch {
+    return null;
+  }
+}
+
 /* ==================================================== talking --check === */
 /*
  * WHY THIS EXISTS. `--check` used to say only "the committed inventory is not
@@ -2166,7 +2187,6 @@ function main(argv) {
     process.exit(2);
   }
   const output = buildProducers();
-  const text = serialize(output);
   if (mode === "--check") {
     let onDisk = null;
     try {
@@ -2175,6 +2195,7 @@ function main(argv) {
       console.error(`cascade-producers --check FAILED: ${OUT} does not exist`);
       process.exit(1);
     }
+    const text = serialize(withProvenance(output, committedWrittenOn(onDisk)));
     if (onDisk !== text) {
       console.error(
         "cascade-producers --check FAILED: the committed inventory is not what the tree produces.\n" +
@@ -2197,7 +2218,7 @@ function main(argv) {
     return;
   }
   mkdirSync(dirname(OUT), { recursive: true });
-  writeFileSync(OUT, text);
+  writeFileSync(OUT, serialize(withProvenance(output, new Date().toISOString().slice(0, 10))));
   console.log(`producer sites:       ${output.stats.producerSites}`);
   console.log(`channel emissions:    ${output.stats.channelEmissions}`);
   console.log(`distinct channels:    ${output.stats.distinctChannels}`);
