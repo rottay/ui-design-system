@@ -24,6 +24,7 @@ const CASES = [
   ['broken-without-owner', /sin owner\+razón\+prueba/],
   ['pin-drift', /ratchet secundario/],
   ['planted-literal', /LITERAL VIVO SIN FILA/],
+  ['empty-with-pin', /ratchet secundario: pin=\d+ vs registro=0/],
 ];
 
 for (const [name, causeRe] of CASES) {

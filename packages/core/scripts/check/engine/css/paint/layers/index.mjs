@@ -5,7 +5,8 @@
  * Tailwind v4 and Rottay share one named layer order. First-party paint must
  * live in its owning DS layer, except for the deliberately unlayered root
  * authorities: the document-wide @property registry, compiled tenant
- * artifacts, and the Arabic root typography floor. Tenant artifacts are the
+ * artifacts, the Arabic root typography floor and the increased-contrast
+ * geometry floor. Tenant artifacts are the
  * final authored authority for the channels in their coverage declaration;
  * putting them in a named layer would make unlayered application paint win.
  */

@@ -22,7 +22,10 @@
  * --check          exit 1 on any violation
  * --drill=<case>   duplicate-one | drop-one | missing-real-site |
  *                  stale-extra-row | duplicate-key | broken-without-owner |
- *                  pin-drift | planted-literal
+ *                  pin-drift | planted-literal | empty-with-pin
+ *
+ * A DRAINED register (`sites: []`) is the gate's success state; only a
+ * register whose `sites` array is ABSENT is refused.
  */
 import { readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
@@ -85,10 +88,22 @@ function toMultiset(sites) {
   return keyed;
 }
 
+const ROW_MUTATING_DRILLS = new Set(['duplicate-one', 'drop-one', 'duplicate-key', 'broken-without-owner']);
+const SEED_SITE = { file: 'runtime/engines/modern/skin/button/index.css', value: normValue('13px'), line: 1 };
+
 export function checkOwnership({ registryRows, discovered, pin, drillCase }) {
   const failures = [];
   let rows = registryRows.map((r) => ({ ...r }));
   let found = discovered.map((s) => ({ ...s }));
+  let seededPin = pin;
+
+  // A drained register gives the row-mutating drills nothing to mutate. They
+  // seed one green row+site pair so each still reds for its own cause.
+  if (ROW_MUTATING_DRILLS.has(drillCase) && rows.length === 0) {
+    rows = [{ ...SEED_SITE, cls: 'NO_RUNG_SCALE_EXTENSION', owner: 'drill', reason: 'drill', proof: 'drill' }];
+    found = [...found, { ...SEED_SITE }];
+    seededPin = pin + 1;
+  }
 
   // A copy-pasted row makes the corpus claim one site twice. Written against
   // rows[0] and the corpus SIZE rather than a fixed index 5: the oauth-transition
@@ -113,7 +128,10 @@ export function checkOwnership({ registryRows, discovered, pin, drillCase }) {
     const t = rows.find((r) => BROKEN.has(r.cls));
     if (t) { t.owner = ''; t.reason = ''; }
   }
-  const effectivePin = drillCase === 'pin-drift' ? pin + 5 : pin;
+  if (drillCase === 'empty-with-pin') rows = [];
+  const effectivePin = drillCase === 'pin-drift' ? seededPin + 5
+    : drillCase === 'empty-with-pin' ? seededPin + 1
+      : seededPin;
 
   // Fully-identical duplicated registry rows are corruption, rejected
   // outright. LINE is part of the fingerprint: two rows for two REAL sites
@@ -159,10 +177,19 @@ export function checkOwnership({ registryRows, discovered, pin, drillCase }) {
   return failures;
 }
 
+const DRILLS = new Set([
+  'duplicate-one', 'drop-one', 'missing-real-site', 'stale-extra-row', 'duplicate-key',
+  'broken-without-owner', 'pin-drift', 'planted-literal', 'empty-with-pin',
+]);
+
 function main() {
+  if (drill !== undefined && !DRILLS.has(drill)) {
+    console.error(`literal-ownership DRILL FAIL — "${drill}" no es un drill conocido (${[...DRILLS].join(' | ')})`);
+    process.exit(1);
+  }
   const registry = JSON.parse(readFileSync(REGISTRY, 'utf8'));
   const corpus = registry.faseBExecution?.fase2_reconciliation?.ownershipGateCorpus;
-  if (!corpus?.sites?.length) {
+  if (!Array.isArray(corpus?.sites)) {
     console.error('literal-ownership FAIL — ownershipGateCorpus ausente');
     process.exit(1);
   }
@@ -174,7 +201,8 @@ function main() {
       console.error(`literal-ownership DRILL FAIL — "${drill}" no produjo violaciones (gate vacuo)`);
       process.exit(1);
     }
-    console.log(`literal-ownership drill "${drill}" OK — ${failures.length} violación(es): ${failures[0].slice(0, 200)}`);
+    console.log(`literal-ownership drill "${drill}" OK — ${failures.length} violación(es):`);
+    for (const f of failures) console.log(`  - ${f}`);
     return;
   }
   if (failures.length > 0) {
