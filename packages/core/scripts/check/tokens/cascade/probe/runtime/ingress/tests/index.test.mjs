@@ -3634,43 +3634,96 @@ test('R-2 drill 4: the scope stamp lands ONLY on a document that already writes 
   assert.equal(Object.hasOwn(seen.appearance, 'palette'), false);
 });
 
-test('R-2 drill 5 [needs dist]: crimson through the DB door on rottay-dark is REFUSED by the APCA floor', async () => {
+/* The governed floor, measured on what the DB door SHIPS rather than inferred
+ * from the gate's silence: the artifact merged over the vertical's own compiled
+ * baseline, per mode, var() chains resolved. 514e2b6f1 made the on-primary ink
+ * derive against the primary each block renders; a seed that no ink can sit on
+ * is still refused by name. */
+const FLOOR_PAIRS = [
+  ['--ds-button-primary-color', '--ds-button-primary-bg'],
+  ['--ds-color-text-on-primary', '--ds-color-primary'],
+];
+const NO_INK_SEED = '#A0A0A0';
+const GOVERNED_FLOOR_MESSAGE =
+  /has APCA Lc -?\d+\.\d+ against --ds-(?:button-primary-bg|color-primary); authored tenant colors must meet the governed floor/;
+const withStop = (manifest, stop) => ({
+  ...manifest,
+  calibration: { ...manifest.calibration, normalizedStops: [...manifest.calibration.normalizedStops, stop] },
+});
+async function loadBrandingContrast() {
+  return import(pathToFileURL(resolve(CORE_ROOT, 'dist/foundation/kernel/accessibility/branding-contrast/index.js')).href);
+}
+function resolveScopeValue(scope, value, depth = 0) {
+  if (typeof value !== 'string' || depth > 16) return value;
+  const reference = /^var\(\s*(--[\w-]+)\s*(?:,\s*(.+))?\)$/.exec(value.trim());
+  if (!reference) return value;
+  return scope[reference[1]] !== undefined
+    ? resolveScopeValue(scope, scope[reference[1]], depth + 1)
+    : resolveScopeValue(scope, reference[2], depth + 1);
+}
+async function shippedFloorPairs(stopId, vertical) {
   const arms = await loadCompilerArms();
   const baselines = await loadStaticBaselines();
   const spec = arms['db-tenant-theme'];
-  /* The exclusion this control asserts is not a preference: the vertical
-   * envelope rejects the stop. rottay's dark identity pairs
-   * `--ds-color-primary: #FFFFFF` with near-black on-primary ink, so a mid
-   * chromatic seed drops the pair below the governed contrast floor. Citing the
-   * REAL message (P3): the compiler names the BUTTON pair. */
-  assert.throws(
-    () =>
-      lowerStop({
-        armId: 'db-tenant-theme',
-        controlManifest: M1_PALETTE,
-        stopId: 'primary/crimson',
-        compile: spec.compile,
-        vertical: 'rottay',
-        defaultMode: verticalDefaultMode(baselines.rottay, 'rottay'),
-        provenance: spec.provenance,
-      }),
-    /dark --ds-button-primary-color has APCA Lc 32\.2 against --ds-button-primary-bg/,
-  );
-  assert.throws(
-    () =>
-      lowerStop({
-        armId: 'db-tenant-theme',
-        controlManifest: M1_PALETTE,
-        stopId: 'primary/indigo',
-        compile: spec.compile,
-        vertical: 'rottay',
-        defaultMode: verticalDefaultMode(baselines.rottay, 'rottay'),
-        provenance: spec.provenance,
-      }),
-    /dark --ds-button-primary-color has APCA Lc 23\.2 against --ds-button-primary-bg/,
-  );
-  // The same two stops lower fine on the light-default verticals: the exclusion
-  // is a property of rottay's dark identity, not of the stop.
+  let artifact = null;
+  lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: M1_PALETTE,
+    stopId,
+    compile: (input) => (artifact = spec.compile(input)),
+    vertical,
+    defaultMode: verticalDefaultMode(baselines[vertical], vertical),
+    provenance: spec.provenance,
+  });
+  const baseline = await compiledBaseline(vertical);
+  const deltas = Object.fromEntries((artifact.modeDeltas ?? []).map((delta) => [delta.mode, delta.variables]));
+  const pairs = [];
+  for (const mode of ['light', 'dark']) {
+    const scope = { ...baseline.base, ...(baseline.modes[mode] ?? {}), ...artifact.variables, ...(deltas[mode] ?? {}) };
+    for (const [ink, ground] of FLOOR_PAIRS) {
+      pairs.push({ mode, ink, ground, inkValue: resolveScopeValue(scope, scope[ink]), groundValue: resolveScopeValue(scope, scope[ground]) });
+    }
+  }
+  return pairs;
+}
+
+test('R-2 drill 5 [needs dist]: crimson through the DB door on rottay-dark clears the APCA floor it used to fail, and the floor still refuses a seed no ink can sit on', async () => {
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  const spec = arms['db-tenant-theme'];
+  const { apcaContrast, APCA_BODY_TEXT_MIN_LC } = await loadBrandingContrast();
+  /* Until 514e2b6f1 rottay's dark identity kept its near-black on-primary ink
+   * under a tenant seed, and crimson / indigo measured Lc 32.2 / 23.2. The ink
+   * now derives against the primary it sits on, so the admission is the pair
+   * genuinely passing -- measured below on the shipped values, both modes. */
+  for (const stopId of ['primary/crimson', 'primary/indigo']) {
+    for (const pair of await shippedFloorPairs(stopId, 'rottay')) {
+      const lc = Math.abs(apcaContrast(pair.inkValue, pair.groundValue));
+      assert.ok(lc >= APCA_BODY_TEXT_MIN_LC, `rottay/${stopId} ${pair.mode} ${pair.ink} ${pair.inkValue} on ${pair.groundValue}: Lc ${lc.toFixed(1)}`);
+    }
+  }
+  // The floor is not weakened: a mid-grey seed that neither white nor
+  // near-black ink can sit on is refused by name on the same door.
+  assert.ok(Math.abs(apcaContrast('#FFFFFF', NO_INK_SEED)) < APCA_BODY_TEXT_MIN_LC);
+  assert.ok(Math.abs(apcaContrast('#171717', NO_INK_SEED)) < APCA_BODY_TEXT_MIN_LC);
+  const noInk = withStop(M1_PALETTE, { id: 'primary/no-ink', role: 'primary', value: NO_INK_SEED });
+  for (const vertical of ['rottay', 'bithire', 'evnto']) {
+    assert.throws(
+      () =>
+        lowerStop({
+          armId: 'db-tenant-theme',
+          controlManifest: noInk,
+          stopId: 'primary/no-ink',
+          compile: spec.compile,
+          vertical,
+          defaultMode: verticalDefaultMode(baselines[vertical], vertical),
+          provenance: spec.provenance,
+        }),
+      GOVERNED_FLOOR_MESSAGE,
+      `${vertical}: ${NO_INK_SEED} must stay refused`,
+    );
+  }
+  // And the stops lower on the light-default verticals too.
   for (const vertical of ['bithire', 'evnto']) {
     const lowered = lowerStop({
       armId: 'db-tenant-theme',
@@ -3868,16 +3921,30 @@ test('R-2 drill 9: each KNOWN class publishes, with its class and its reason', a
   const arms = await loadCompilerArms();
   const baselines = await loadStaticBaselines();
   const seen = new Set();
+  // The four chromatic stops clear the floor since 514e2b6f1 (drill 5 measures
+  // the shipped pairs), so the floor class is exercised by a seed no ink can sit
+  // on, lowered through the same real compiler.
+  const noInk = withStop(M1_PALETTE, { id: 'primary/no-ink', role: 'primary', value: NO_INK_SEED });
   for (const vertical of ['rottay', 'bithire', 'evnto']) {
-    const verdict = assertStopDiscrimination({
+    const discriminateOn = (controlManifest) => assertStopDiscrimination({
       armId: 'db-tenant-theme',
-      controlManifest: M1_PALETTE,
+      controlManifest,
       compile: arms['db-tenant-theme'].compile,
       vertical,
       provenance: arms['db-tenant-theme'].provenance,
       defaultMode: verticalDefaultMode(baselines[vertical], vertical),
     });
-    assert.equal(verdict.excluded.length, 3, `${vertical}: three stops are inadmissible on the DB arm`);
+    assert.deepEqual(
+      discriminateOn(M1_PALETTE).excluded.map((entry) => entry.stopId),
+      ['primary/identity'],
+      `${vertical}: only the identity stop is inadmissible among the real stops`,
+    );
+    const verdict = discriminateOn(noInk);
+    assert.deepEqual(
+      verdict.excluded.map((entry) => entry.stopId),
+      ['primary/identity', 'primary/no-ink'],
+      `${vertical}: the identity stop and the no-ink seed are inadmissible on the DB arm`,
+    );
     for (const entry of verdict.excluded) {
       assert.ok(
         Object.hasOwn(STOP_EXCLUSION_CLASSES, entry.exclusionClass),
@@ -3886,7 +3953,7 @@ test('R-2 drill 9: each KNOWN class publishes, with its class and its reason', a
       assert.ok(entry.reason.length > 0);
       seen.add(entry.exclusionClass);
       if (entry.exclusionClass === STOP_EXCLUSION_CLASSES.GOVERNED_CONTRAST_FLOOR) {
-        assert.match(entry.reason, /APCA Lc -?\d+\.\d+ against --ds-color-primary/);
+        assert.match(entry.reason, GOVERNED_FLOOR_MESSAGE);
       }
     }
   }
@@ -3914,6 +3981,20 @@ test('R-2 drill 10: the hardening did not change WHAT is excluded, only how it i
    * frozen here: the 2B literal-to-variable collapse retired the button's
    * baked background, so the compiler now reports the remaining governed
    * contrast pair. Drill 9 owns that current diagnostic contract. */
+  /* Two later lots moved the set, and only they may: 514e2b6f1 derived the
+   * on-primary ink against the primary it renders, so the four floor
+   * exclusions left the DB arm (drill 5 measures the shipped pairs); d524ec1d6
+   * retired the authored baselines, so rottay and evnto author no primary and
+   * their static identity stop has no value to name. */
+  const EXCLUSION_EXITS = {
+    'rottay/db-tenant-theme': ['primary/crimson', 'primary/indigo'],
+    'bithire/db-tenant-theme': ['primary/warm-sand', 'primary/pale-mint'],
+    'evnto/db-tenant-theme': ['primary/warm-sand', 'primary/pale-mint'],
+  };
+  const EXCLUSION_ENTRIES = {
+    'rottay/static-brand-theme': ['primary/identity'],
+    'evnto/static-brand-theme': ['primary/identity'],
+  };
   const { readFileSync } = await import('node:fs');
   const PRE = JSON.parse(
     readFileSync(new URL('./pre-hardening-exclusions/index.json', import.meta.url), 'utf8'),
@@ -3932,10 +4013,16 @@ test('R-2 drill 10: the hardening did not change WHAT is excluded, only how it i
         defaultMode: verticalDefaultMode(baselines[vertical], vertical),
         ...(armId === 'static-brand-theme' ? { baseline: baselines[vertical] } : {}),
       });
+      const pre = PRE[vertical][armId].map((entry) => entry.stopId);
+      const exits = EXCLUSION_EXITS[`${vertical}/${armId}`] ?? [];
+      const entries = EXCLUSION_ENTRIES[`${vertical}/${armId}`] ?? [];
+      for (const stopId of exits) assert.ok(pre.includes(stopId), `${vertical}/${armId}: exit ${stopId} was not excluded before`);
+      for (const stopId of entries) assert.ok(!pre.includes(stopId), `${vertical}/${armId}: entry ${stopId} was already excluded`);
+      const expected = [...pre.filter((stopId) => !exits.includes(stopId)), ...entries];
       assert.deepEqual(
-        verdict.excluded.map((entry) => entry.stopId),
-        PRE[vertical][armId].map((entry) => entry.stopId),
-        `${vertical}/${armId}: the hardening must not move a single exclusion`,
+        [...verdict.excluded.map((entry) => entry.stopId)].sort(),
+        expected.sort(),
+        `${vertical}/${armId}: the hardening must not move a single exclusion; only the named later movers do`,
       );
       // And every one of them now carries a class from the closed set.
       for (const entry of verdict.excluded) {
