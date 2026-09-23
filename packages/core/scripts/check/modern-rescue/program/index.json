@@ -93,8 +93,8 @@
   "controlBaselines": {
     "standard": 14,
     "proCapabilities": 7,
-    "expertExactAllowlist": 290,
-    "expertExactAllowlistDigest": "4964f8eb4cd6bcca0c44ce19270b078e441dbbfde49eb5b78d9f01be2978f296",
+    "expertExactAllowlist": 292,
+    "expertExactAllowlistDigest": "e8e7c951fc98e2f8d5b706b00d6d9e9b9610a5969b1e764bfc7bb67c557314e8",
     "expertMaximumOverridesPerDocument": 200,
     "appPublicHooks": 93,
     "productivePrototypes": 0

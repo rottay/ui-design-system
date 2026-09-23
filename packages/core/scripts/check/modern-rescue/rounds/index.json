@@ -482,7 +482,7 @@
         "families": 254,
         "standardControlsBaseline": 14,
         "proCapabilitiesBaseline": 7,
-        "expertExactAllowlistBaseline": 290,
+        "expertExactAllowlistBaseline": 292,
         "recipeGroups": {
           "current": 6,
           "target": 14
