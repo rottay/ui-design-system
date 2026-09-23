@@ -253,7 +253,7 @@
   .ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'],
   .ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button'],
   .ds-pattern-filter-panel.ds-engine-modern [data-part='apply-button'] {
-    min-block-size: var(--ds-filter-panel-touch-target, 2.75rem);
+    min-block-size: var(--ds-filter-panel-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 

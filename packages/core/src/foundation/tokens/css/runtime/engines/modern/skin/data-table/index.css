@@ -2196,10 +2196,10 @@
   .ds-pattern-data-table.ds-engine-modern
     .ds-data-table__column-tooltip--resize.ds-data-table__column-tooltip--resize {
     inset-inline-end: calc(
-      var(--ds-data-table-touch-target, var(--ds-spacing-11, 2.75rem)) / -2
+      var(--ds-data-table-touch-target, var(--ds-touch-target-min, 44px)) / -2
     );
-    width: var(--ds-data-table-touch-target, var(--ds-spacing-11, 2.75rem));
-    min-width: var(--ds-data-table-touch-target, var(--ds-spacing-11, 2.75rem));
+    width: var(--ds-data-table-touch-target, var(--ds-touch-target-min, 44px));
+    min-width: var(--ds-data-table-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 

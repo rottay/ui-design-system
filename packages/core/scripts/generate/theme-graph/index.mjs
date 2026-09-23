@@ -145,6 +145,15 @@ function readJsonViews() {
  * re-anchored with a reason like every other ratchet here. What it is not is a
  * promise the estimate made on the tree's behalf.
  *
+ * RE-ANCHORED 2026-09-22 (WO-INV-03 Q11 touch channels), 10,032,002 ->
+ * 10,033,491 bytes, +1,489 over the old pin; edges.json itself grew 1,586 bytes
+ * (+14 edges), 97 of them absorbed by headroom the old pin carried over a
+ * 10,031,905-byte graph. Every other graph file is byte-unchanged. Seven touch channels
+ * stopped deriving to 2.75rem / var(--ds-spacing-11, 2.75rem) and now read
+ * var(--ds-touch-target-min, 44px), in the derivers and the skin fallbacks: the
+ * graph trades two --ds-spacing-11 alias edges and four fallback reads for seven
+ * --ds-touch-target-min alias edges and eleven fallback reads.
+ *
  * RE-ANCHORED 2026-09-22 (WO-EVI-02 search-command-bar governed-root wiring),
  * 10,031,551 -> 10,032,002 bytes, +451. Two channels stopped deriving to the bare
  * literals 1.6s and 1s and now read --ds-motion-glacial, so the graph gained two
@@ -160,7 +169,7 @@ function readJsonViews() {
  * any byte of drift, so this pin's only job is to make growth re-anchor
  * deliberately; headroom would only buy a quieter alarm, never a green check.
  */
-export const SIZE_BUDGET_BYTES = 10_032_002;
+export const SIZE_BUDGET_BYTES = 10_033_491;
 
 /** A key no id can collide with, used only to sort and de-duplicate pairs. */
 const SEP = "\u241F";

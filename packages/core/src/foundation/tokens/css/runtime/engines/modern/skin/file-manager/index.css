@@ -427,7 +427,7 @@
   .ds-pattern-file-manager.ds-engine-modern [data-part='toolbar-action'],
   .ds-pattern-file-manager.ds-engine-modern [data-part='view-toggle'],
   .ds-pattern-file-manager.ds-engine-modern [data-part='item-action'] {
-    min-block-size: var(--ds-file-manager-touch-target, 2.75rem);
+    min-block-size: var(--ds-file-manager-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 

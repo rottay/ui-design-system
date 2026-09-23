@@ -16,7 +16,7 @@
     },
     {
       "channels": 338,
-      "channelsThroughAliases": 1211,
+      "channelsThroughAliases": 1209,
       "decision": "density.mode",
       "derivers": [
         "app-shell",
@@ -248,7 +248,7 @@
     },
     {
       "channels": 224,
-      "channelsThroughAliases": 1885,
+      "channelsThroughAliases": 1883,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -2410,7 +2410,7 @@
     },
     {
       "channels": 224,
-      "channelsThroughAliases": 1885,
+      "channelsThroughAliases": 1883,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",

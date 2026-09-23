@@ -50,7 +50,9 @@ describe('Badge modern skin resilience', () => {
     // invisible centered hit area instead of a physically larger button that
     // would overflow the badge's height.
     expect(coarse![0]).toContain("[data-part='close']::after");
-    expect(coarse![0]).toContain('2.75rem');
+    expect(coarse![0]).toContain(
+      'var(--ds-badge-remove-touch-size, var(--ds-touch-target-min, 44px))'
+    );
     expect(coarse![0]).not.toMatch(/\[data-part='close'\]\s*\{[^}]*inline-size/);
   });
 });

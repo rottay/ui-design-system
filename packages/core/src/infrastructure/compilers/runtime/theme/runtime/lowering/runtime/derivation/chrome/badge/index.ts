@@ -187,7 +187,7 @@ export function deriveBadgeChannels(): Record<string, string> {
   vars["--ds-badge-remove-hover-transform"] = "scale(1.06)";
   vars["--ds-badge-remove-opacity"] = "0.72";
   vars["--ds-badge-remove-radius"] = "var(--ds-radius-full)";
-  vars["--ds-badge-remove-touch-size"] = "2.75rem";
+  vars["--ds-badge-remove-touch-size"] = "var(--ds-touch-target-min, 44px)";
   vars["--ds-badge-selected-frame"] = "var(--ds-filter-pill-active-border, color-mix(in srgb, var(--ds-color-primary) 34%, transparent))";
   vars["--ds-badge-selected-ink"] = "var(--ds-filter-pill-active-color, var(--ds-color-primary))";
   vars["--ds-badge-selected-shadow"] = "var(--ds-filter-pill-active-shadow, inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent))";

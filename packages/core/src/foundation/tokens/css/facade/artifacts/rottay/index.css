@@ -281,7 +281,7 @@
   --ds-badge-remove-hover-transform: scale(1.06);
   --ds-badge-remove-opacity: 0.72;
   --ds-badge-remove-radius: var(--ds-radius-full);
-  --ds-badge-remove-touch-size: 2.75rem;
+  --ds-badge-remove-touch-size: var(--ds-touch-target-min, 44px);
   --ds-badge-selected-frame: var(--ds-filter-pill-active-border, color-mix(in srgb, var(--ds-color-primary) 34%, transparent));
   --ds-badge-selected-ink: var(--ds-filter-pill-active-color, var(--ds-color-primary));
   --ds-badge-selected-shadow: var(--ds-filter-pill-active-shadow, inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent));
@@ -405,7 +405,7 @@
   --ds-calendar-view-cell-min-height: 5rem;
   --ds-calendar-view-cell-min-height-compact: 3.5rem;
   --ds-calendar-view-entry-accent: var(--ds-color-primary);
-  --ds-calendar-view-touch-target: 2.75rem;
+  --ds-calendar-view-touch-target: var(--ds-touch-target-min, 44px);
   --ds-card-body-font-size-sm: var(--ds-type-supporting-font-size);
   --ds-card-border-accent-hover: var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary)));
   --ds-card-border-width: var(--ds-edge-hairline-width);
@@ -914,7 +914,7 @@
   --ds-data-table-state-copy-max-inline-size: 32rem;
   --ds-data-table-toolbar-gap: calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1));
   --ds-data-table-touch-hit-expansion: 0.5625rem;
-  --ds-data-table-touch-target: var(--ds-spacing-11, 2.75rem);
+  --ds-data-table-touch-target: var(--ds-touch-target-min, 44px);
   --ds-date-picker-active-ring: 0 0 0 var(--ds-focus-ring-width) var(--ds-color-primary);
   --ds-date-picker-band-bg: var(--ds-wash-band);
   --ds-date-picker-band-preview-bg: var(--ds-wash-band-preview);
@@ -1139,7 +1139,7 @@
   --ds-file-manager-link-color: var(--ds-color-link, var(--ds-color-primary));
   --ds-file-manager-link-hover-color: var(--ds-color-link-hover, var(--ds-color-primary-hover));
   --ds-file-manager-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-card));
-  --ds-file-manager-touch-target: 2.75rem;
+  --ds-file-manager-touch-target: var(--ds-touch-target-min, 44px);
   --ds-filter-chip-bg: var(--ds-surface-card);
   --ds-filter-chip-border: var(--ds-toolbar-control-border, var(--ds-color-border));
   --ds-filter-chip-radius: var(--ds-button-sm-radius, var(--ds-radius-sm, 6px));
@@ -1153,7 +1153,7 @@
   --ds-filter-panel-option-gap: var(--ds-spacing-2);
   --ds-filter-panel-range-gap: var(--ds-spacing-2);
   --ds-filter-panel-stacked-gap: var(--ds-spacing-3);
-  --ds-filter-panel-touch-target: 2.75rem;
+  --ds-filter-panel-touch-target: var(--ds-touch-target-min, 44px);
   --ds-flex-column-gap: var(--ds-spacing-0, 0px);
   --ds-flex-gap: var(--ds-spacing-0, 0px);
   --ds-flex-reflow-transition: var(--ds-transition-rearrange);
@@ -1291,7 +1291,7 @@
   --ds-kanban-board-column-gap: var(--ds-spacing-4);
   --ds-kanban-board-column-max-height: none;
   --ds-kanban-board-column-min-width: 280px;
-  --ds-kanban-board-touch-target: var(--ds-spacing-11, 2.75rem);
+  --ds-kanban-board-touch-target: var(--ds-touch-target-min, 44px);
   --ds-list-border-width: var(--ds-edge-hairline-width);
   --ds-list-meta-description-ink: color-mix(in srgb, var(--ds-list-meta-description-color, var(--ds-color-text-secondary)) 70%, var(--ds-color-text-primary) 30%);
   --ds-material-canvas-background: var(--ds-surface-canvas);
@@ -2728,7 +2728,7 @@
   --ds-toolbar-title-letter-spacing: var(--ds-type-section-title-letter-spacing, -0.015em);
   --ds-toolbar-title-max-width: 18rem;
   --ds-toolbar-title-section-padding: 0.25rem;
-  --ds-toolbar-touch-target: 2.75rem;
+  --ds-toolbar-touch-target: var(--ds-touch-target-min, 44px);
   --ds-tooltip-bordered-background: var(--ds-material-overlay-background);
   --ds-tooltip-bordered-border: var(--ds-color-border-primary);
   --ds-tooltip-bordered-foreground: var(--ds-color-text-primary);

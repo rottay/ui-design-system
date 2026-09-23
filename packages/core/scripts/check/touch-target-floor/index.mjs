@@ -30,9 +30,8 @@
  *                     narrows nothing
  *
  * CONTRACT, NOT RATCHET: there is no `ratchet:` on the manifest row and no
- * debtRatio. The one ledger is `ledger/index.json`, a named decrease-only
- * record of the channels whose repair belongs to an owner this WO may not
- * write (Q11). It admits nothing new and refuses a row that has gone green.
+ * debtRatio. The Q11 ledger (`ledger/index.json`) was decrease-only and has
+ * drained to zero rows, so the file is gone and recreating it is refused.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, relative, resolve } from 'node:path';
@@ -300,6 +299,7 @@ export function auditFloorBlock(entrypointCss, skinSources, cascade, floorPx) {
 // --- ledger ----------------------------------------------------------------
 
 export function readLedger(path = LEDGER) {
+  if (!existsSync(path)) return { rows: [], problems: [] };
   const ledger = JSON.parse(readFileSync(path, 'utf8'));
   const problems = [];
   for (const field of ['purpose', 'owner', 'provenance', 'retire']) {
@@ -319,14 +319,20 @@ export function readLedger(path = LEDGER) {
 
 // --- run -------------------------------------------------------------------
 
-export function audit() {
+/** The drills inject a ledger path and a rewritten artifact; the gate reads the tree. */
+export function audit({ ledgerPath = LEDGER, rewriteArtifact = (_vertical, source) => source } = {}) {
   const floorPx = readFloorPx(readFileSync(FLOORS_TS, 'utf8'));
   const entrypointCss = readFileSync(ENTRYPOINT, 'utf8');
   const authored = loadImportGraph(ENTRYPOINT);
-  const artifacts = VERTICALS.map((vertical) => ({ vertical, source: artifact(vertical) }));
+  const artifacts = VERTICALS.map((vertical) => ({ vertical, source: rewriteArtifact(vertical, artifact(vertical)) }));
   const declarations = collectDeclarations([...authored, ...artifacts.map((entry) => entry.source)]);
   const cascade = buildCascade(declarations);
-  const ledger = readLedger();
+  const ledger = readLedger(ledgerPath);
+  if (existsSync(ledgerPath)) {
+    ledger.problems.push(
+      'ledger/index.json: the Q11 ledger drained to zero rows and was deleted; a new row is a new exemption, not debt. Repair the channel instead.'
+    );
+  }
   const reach = auditReach(authored, artifacts, floorPx, ledger.rows);
   const legs = [
     ['(a) declaration', auditDeclaration(declarations, floorPx)],
@@ -357,7 +363,6 @@ function main(argv = process.argv.slice(2)) {
     for (const problem of problems) console.log(`       - ${problem}`);
     failed += problems.length;
   }
-  console.log(`  ${report.ledgered} channel(s) on the named decrease-only ledger (Q11), owners recorded there.`);
   if (failed > 0) {
     console.error(`\ntouch-target floor contract FAILED with ${failed} problem(s).`);
     process.exit(1);

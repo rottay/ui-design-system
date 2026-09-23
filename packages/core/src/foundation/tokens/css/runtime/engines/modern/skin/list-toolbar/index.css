@@ -1293,8 +1293,8 @@
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__segmented-control
     > [data-part='option'] {
-    min-inline-size: var(--ds-toolbar-touch-target, 2.75rem);
-    min-block-size: var(--ds-toolbar-touch-target, 2.75rem);
+    min-inline-size: var(--ds-toolbar-touch-target, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-toolbar-touch-target, var(--ds-touch-target-min, 44px));
   }
 
   /* The toolbar's primary text entry must meet the same 44px touch floor as
@@ -1303,7 +1303,7 @@
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__search-section
     .ds-input-field[data-part='field'] {
-    min-block-size: var(--ds-toolbar-touch-target, 2.75rem);
+    min-block-size: var(--ds-toolbar-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 

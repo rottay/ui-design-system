@@ -65,6 +65,6 @@ export function deriveFileManagerChannels(): Record<string, string> {
   // this family's minimum: WCAG 4.5 binds at 64% in the gated scopes.
   vars["--ds-file-manager-quiet-ink"] =
     "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-card))";
-  vars["--ds-file-manager-touch-target"] = "2.75rem";
+  vars["--ds-file-manager-touch-target"] = "var(--ds-touch-target-min, 44px)";
   return vars;
 }

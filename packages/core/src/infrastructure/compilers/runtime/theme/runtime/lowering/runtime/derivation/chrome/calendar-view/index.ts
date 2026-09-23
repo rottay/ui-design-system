@@ -62,6 +62,6 @@ export function deriveCalendarViewChannels(): Record<string, string> {
   // An event that states no colour reads as the family's own accent, which is
   // the seeded primary -- never a neutral chip nobody can tell from the cell.
   vars["--ds-calendar-view-entry-accent"] = "var(--ds-color-primary)";
-  vars["--ds-calendar-view-touch-target"] = "2.75rem";
+  vars["--ds-calendar-view-touch-target"] = "var(--ds-touch-target-min, 44px)";
   return vars;
 }

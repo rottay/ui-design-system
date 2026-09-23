@@ -7,8 +7,9 @@
  * rather than reporting a clean tree. Nothing touches the repository.
  */
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
@@ -268,11 +269,53 @@ test('the ledger is decrease-only: a row that has gone green fails as stale', ()
   assert.match(problems[0], /still carries --ds-widget-touch-target-min, which now reaches the floor/);
 });
 
-test('the ledger refuses a placeholder purpose, owner, provenance or retire', () => {
-  const { rows, problems } = readLedger();
-  assert.deepEqual(problems, []);
-  assert.ok(rows.length > 0, 'a ledger with no rows should be deleted, not kept');
-  for (const row of rows) assert.ok(row.reason.length > 24, `${row.channel} needs a written reason`);
+test('the Q11 ledger is retired: the file is gone and reads as zero rows', () => {
+  assert.equal(existsSync(resolve(here, '../ledger/index.json')), false);
+  assert.deepEqual(readLedger(), { rows: [], problems: [] });
+});
+
+test('a ledger with a placeholder statement or a row without a reason is refused', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'touch-ledger-'));
+  const path = join(dir, 'index.json');
+  writeFileSync(path, JSON.stringify({
+    purpose: 'tbd', owner: 'tbd', provenance: 'tbd', retire: 'tbd',
+    rows: [{ channel: '--ds-widget-touch-target', class: 'artifact-emitted', owner: 'x', reason: '' }],
+  }));
+  const { problems } = readLedger(path);
+  rmSync(dir, { recursive: true, force: true });
+  assert.equal(problems.filter((problem) => /must be a written statement/.test(problem)).length, 4, problems.join('\n'));
+  assert.ok(problems.some((problem) => /--ds-widget-touch-target is missing `reason`/.test(problem)), problems.join('\n'));
+});
+
+test('drill: a re-created ledger is refused as a new exemption, even over a genuinely red channel', () => {
+  const channel = '--ds-toolbar-touch-target';
+  // Red for real: bithire's artifact row rewritten to the bare rem it carried before the repair.
+  const rewriteArtifact = (vertical, file) =>
+    vertical === 'bithire'
+      ? { ...file, content: file.content.replace(`${channel}: var(--ds-touch-target-min, 44px);`, `${channel}: 2.75rem;`) }
+      : file;
+  const red = audit({ rewriteArtifact });
+  const reach = new Map(red.legs).get('(b) reach');
+  assert.equal(reach.length, 1, reach.join('\n'));
+  assert.match(reach[0], /--ds-toolbar-touch-target does not reach the 44px floor in bithire/);
+
+  const dir = mkdtempSync(join(tmpdir(), 'touch-ledger-'));
+  const ledgerPath = join(dir, 'index.json');
+  writeFileSync(ledgerPath, JSON.stringify({
+    purpose: 'A fresh exemption for a channel that genuinely misses the floor.',
+    owner: 'nobody — this ledger was retired at zero rows',
+    provenance: 'planted by the touch-target-floor drill, never committed',
+    retire: 'never: the ledger is gone and recreating it is the defect',
+    rows: [{ channel, class: 'artifact-emitted', value: '2.75rem', owner: 'x', reason: 'a fresh row over a red channel' }],
+  }));
+  const report = audit({ ledgerPath, rewriteArtifact });
+  rmSync(dir, { recursive: true, force: true });
+  const legs = new Map(report.legs);
+  // The row really does silence the red channel on the reach leg...
+  assert.deepEqual(legs.get('(b) reach'), []);
+  // ...so the retirement refusal is the only thing standing between it and a green gate.
+  assert.equal(legs.get('ledger shape').length, 1, legs.get('ledger shape').join('\n'));
+  assert.match(legs.get('ledger shape')[0], /a new row is a new exemption/);
 });
 
 test('the real tree passes every leg of the contract', () => {

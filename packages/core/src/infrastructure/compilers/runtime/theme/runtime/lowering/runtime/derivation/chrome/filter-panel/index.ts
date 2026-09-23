@@ -56,7 +56,7 @@ export function deriveFilterPanelChannels(): Record<string, string> {
   vars["--ds-filter-panel-option-gap"] = "var(--ds-spacing-2)";
   vars["--ds-filter-panel-range-gap"] = "var(--ds-spacing-2)";
   vars["--ds-filter-panel-stacked-gap"] = "var(--ds-spacing-3)";
-  vars["--ds-filter-panel-touch-target"] = "2.75rem";
+  vars["--ds-filter-panel-touch-target"] = "var(--ds-touch-target-min, 44px)";
   return vars;
 }
 

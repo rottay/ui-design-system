@@ -106,7 +106,7 @@ const WIRED: Record<string, string> = {
     "var(--ds-text-eyebrow-transform, uppercase)",
   "--ds-data-table-minimal-shadow": "var(--ds-elevation-0, none)",
   "--ds-data-table-resize-hit-size": "var(--ds-spacing-4, 1rem)",
-  "--ds-data-table-touch-target": "var(--ds-spacing-11, 2.75rem)",
+  "--ds-data-table-touch-target": "var(--ds-touch-target-min, 44px)",
 };
 
 describe("chrome/data-table cascade wiring", () => {

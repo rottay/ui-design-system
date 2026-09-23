@@ -281,7 +281,7 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-state-copy-max-inline-size"] = "32rem";
   vars["--ds-data-table-toolbar-gap"] = "calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-data-table-touch-hit-expansion"] = "0.5625rem";
-  vars["--ds-data-table-touch-target"] = "var(--ds-spacing-11, 2.75rem)";
+  vars["--ds-data-table-touch-target"] = "var(--ds-touch-target-min, 44px)";
   /* Drained out of the `--ds-table-` spelling nobody produced: the skins now
      read the family's own name at the same byte-identical fallback. */
   vars["--ds-data-table-action-gap"] = "var(--ds-spacing-2, 0.5rem)";

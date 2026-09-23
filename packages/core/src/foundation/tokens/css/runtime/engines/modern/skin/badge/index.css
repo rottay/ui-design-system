@@ -573,7 +573,7 @@
   .rottay-badge.rottay-badge--modern > [data-part='close']::after {
     content: '';
     position: absolute;
-    inset: calc(50% - var(--ds-badge-remove-touch-size, 2.75rem) / 2);
+    inset: calc(50% - var(--ds-badge-remove-touch-size, var(--ds-touch-target-min, 44px)) / 2);
     border-radius: var(--ds-radius-full);
   }
 }

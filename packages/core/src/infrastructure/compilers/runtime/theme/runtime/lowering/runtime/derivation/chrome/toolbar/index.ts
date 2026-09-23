@@ -163,6 +163,6 @@ export function deriveToolbarChannels(): Record<string, string> {
   vars["--ds-toolbar-title-letter-spacing"] = "var(--ds-type-section-title-letter-spacing, -0.015em)";
   vars["--ds-toolbar-title-max-width"] = "18rem";
   vars["--ds-toolbar-title-section-padding"] = "0.25rem";
-  vars["--ds-toolbar-touch-target"] = "2.75rem";
+  vars["--ds-toolbar-touch-target"] = "var(--ds-touch-target-min, 44px)";
   return vars;
 }

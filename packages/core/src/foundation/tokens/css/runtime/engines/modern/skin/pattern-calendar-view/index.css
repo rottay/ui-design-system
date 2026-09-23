@@ -325,7 +325,7 @@
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='toolbar']
     [data-part='toolbar-action'] {
-    min-block-size: var(--ds-calendar-view-touch-target, 2.75rem);
+    min-block-size: var(--ds-calendar-view-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 
