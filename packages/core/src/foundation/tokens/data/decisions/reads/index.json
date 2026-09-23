@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "Drained to the CURRENT hooks contract (WO-EVI-02 reads-ledger drain, 2026-09-22). The ledger is hand-merged and had no producer, so it kept 2603 rows while the manifest — regenerated 48 times by its own producer since — fences 1272: 1331 extra, 0 missing, plus a stale digest pin. Every extra row was censused before removal and none was a lost adjudication: 962 had gained a real owner (683 tenantChannel, 216 foundationTokens, 23 componentTokens, 32 foundation+tenant, 6 component+tenant, 1 component+foundation, 1 publicHook+component) through the FAM family-cut derivers, so the debt was discharged, not hidden; 365 reads no longer exist anywhere in the tree; 4 survive only outside the contract scan roots (a compiler emission RHS, a TS token module, a test, and the generated artifacts that shadow them). ZERO rows were live in-scope reads the manifest failed to fence, so nothing is pending a fence ceremony. Per-row attribution to the 82 landed commits that moved each read: packages/core/evidence/reads-ledger-drain-census. The digest is re-pinned to the manifest at HEAD; the row set is set-equal to it (0 extra, 0 missing).",
-  "basedOnManifestDigest": "da7a471fca767bfd2c4064f55133812dc90752830889d91cf58cc5d6c56ec8e0",
+  "generatedBy": "Drained to the CURRENT hooks contract (WO-EVI-02 reads-ledger drain, 2026-09-22). The ledger is hand-merged and had no producer, so it kept 2603 rows while the manifest — regenerated 48 times by its own producer since — fences 1272: 1331 extra, 0 missing, plus a stale digest pin. Every extra row was censused before removal and none was a lost adjudication: 962 had gained a real owner (683 tenantChannel, 216 foundationTokens, 23 componentTokens, 32 foundation+tenant, 6 component+tenant, 1 component+foundation, 1 publicHook+component) through the FAM family-cut derivers, so the debt was discharged, not hidden; 365 reads no longer exist anywhere in the tree; 4 survive only outside the contract scan roots (a compiler emission RHS, a TS token module, a test, and the generated artifacts that shadow them). ZERO rows were live in-scope reads the manifest failed to fence, so nothing is pending a fence ceremony. Per-row attribution to the 82 landed commits that moved each read: packages/core/evidence/reads-ledger-drain-census. The digest is re-pinned to the manifest at HEAD; the row set is set-equal to it (0 extra, 0 missing). 2026-09-22: row 789 (--ds-notification-center-touch-target) retired — the channel moved to adjudicated when the notification-center chrome deriver landed (643c3588b); it no longer belongs to the unadjudicated-reads ledger. basedOnManifestDigest follows the manifest regen.",
+  "basedOnManifestDigest": "373abf96827966b1c264c0418e3b4017033bc83fb6487ccae13758dc1d10d7f6",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
@@ -24,9 +24,9 @@
     "readsLedgerDrain": "2026-09-22 WO-EVI-02: the ledger follows its authority. The hooks manifest is produced by pnpm hooks:generate; this projection is not, so drift is one-directional and silent. The drain removes only rows the manifest no longer fences and records why each left. A removed row is not a retired decision — a name that returns to unadjudicatedReads must be re-classified from scratch, not restored from git."
   },
   "counts": {
-    "total": 1272,
+    "total": 1271,
     "byClass": {
-      "MODERN_PRIVATE": 726,
+      "MODERN_PRIVATE": 725,
       "FROZEN_ENGINE_SCOPED": 481,
       "TENANT_FACING_CANDIDATE": 55,
       "FOUNDATION_SHARED": 10
@@ -14130,16 +14130,6 @@
         "ui/patterns/communication/notification-center/engines/classic/index.tsx"
       ],
       "evidence": "read ONLY by frozen engines (classic), 1 read(s); outside the modern critical path, not edited"
-    },
-    {
-      "name": "--ds-notification-center-touch-target",
-      "family": "notification",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/notification-center.css"
-      ],
-      "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
     },
     {
       "name": "--ds-notification-center-unread-bg",
