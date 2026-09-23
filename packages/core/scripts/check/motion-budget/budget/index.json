@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "owner": "WO-INV-08 layout animation kernel",
+  "purpose": "The layout animation kernel's perfection budget: the frame, long-task and non-vacuity thresholds the showroom motion-budget probe asserts, the decrease-only dropped-frame ceilings per probe scene, and the kernel-bundle byte and supplier-edge ceilings. The kernel-bundle gate ratchets on this file; every arm states its own rationale below.",
   "frames": {
     "measuredRuns": 7,
     "warmupRuns": 1,

@@ -146,6 +146,15 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
       runtime: 1,
       composition: 2,
     },
+    'infrastructure/compilers/runtime/theme/runtime/emission': {
+      css: 0,
+      artifact: 1,
+      tokens: 1,
+    },
+    'infrastructure/compilers/runtime/theme/facade/runtime': {
+      compile: 0,
+      tokens: 1,
+    },
     'foundation/contracts/composition/tenants/themes': {
       iso: 0,
       provenance: 1,
@@ -271,8 +280,8 @@ test('every scoped owner and ranked child resolves to a real directory', () => {
 
   // Pinned before the loop: an entry silently deleted from the table would
   // otherwise leave a passing loop over whatever survived.
-  assert.equal(owners.length, 26);
-  assert.equal(rankedChildren.length, 99);
+  assert.equal(owners.length, 28);
+  assert.equal(rankedChildren.length, 104);
 
   for (const path of [...owners, ...rankedChildren]) {
     assert.equal(

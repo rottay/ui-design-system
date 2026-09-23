@@ -1233,7 +1233,7 @@
       "valueType": "<length> resolving through the DS spacing ramp",
       "fallback": "var(--ds-spacing-3), which is also the DS default declaration",
       "sinceVersion": "2.19.36",
-      "whiteLabelCompat": "derives-from-spacing",
+      "whiteLabelCompat": "not-tenant-emitted",
       "subtreeRepaint": "the placeholder bars of the rows in that one loading table. No text, control or surface below the scope changes: the rows carry no content while they load.",
       "rationale": "A dense table and a comfortable one want different bone weights, and the row height they stand in for is the host row height, not a global. The sibling `--ds-skeleton-cell-padding` is already fenced for the same reason."
     },
@@ -1244,7 +1244,7 @@
       "valueType": "<length> resolving through the DS spacing ramp",
       "fallback": "var(--ds-spacing-4), which is also the DS default declaration",
       "sinceVersion": "2.19.36",
-      "whiteLabelCompat": "derives-from-spacing",
+      "whiteLabelCompat": "not-tenant-emitted",
       "subtreeRepaint": "the square placeholder in the selection and expand wells of that one loading table. No text, control or surface below the scope changes.",
       "rationale": "The well stands in for a checkbox or a chevron, whose size the host already chooses; the square must follow it rather than a global bone width."
     }

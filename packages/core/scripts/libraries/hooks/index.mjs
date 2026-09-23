@@ -1267,7 +1267,7 @@ export const PROMOTIONS = Object.freeze([
     valueType: '<length> resolving through the DS spacing ramp',
     fallback: 'var(--ds-spacing-3), which is also the DS default declaration',
     sinceVersion: '2.19.36',
-    whiteLabelCompat: 'derives-from-spacing',
+    whiteLabelCompat: 'not-tenant-emitted',
     subtreeRepaint:
       'the placeholder bars of the rows in that one loading table. No text, control ' +
       'or surface below the scope changes: the rows carry no content while they load.',
@@ -1287,7 +1287,7 @@ export const PROMOTIONS = Object.freeze([
     valueType: '<length> resolving through the DS spacing ramp',
     fallback: 'var(--ds-spacing-4), which is also the DS default declaration',
     sinceVersion: '2.19.36',
-    whiteLabelCompat: 'derives-from-spacing',
+    whiteLabelCompat: 'not-tenant-emitted',
     subtreeRepaint:
       'the square placeholder in the selection and expand wells of that one loading ' +
       'table. No text, control or surface below the scope changes.',
