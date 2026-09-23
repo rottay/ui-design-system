@@ -178,13 +178,16 @@ for (const arm of ['readWithoutProducer', 'kernelAuthorableWithoutRest']) {
   });
 }
 
-test('RESIDUE readWithoutProducer: a pinned name that gains a producer fails as a silent fix', () => {
-  const [name] = Object.keys(RESIDUE.readWithoutProducer);
-  expectFinding(
-    collectFindings({ producers: new Set([...CHANNELS.producers, name]), channelProducers: CHANNELS }),
-    `residue list-toolbar.readWithoutProducer: ${name} is no longer residue`,
-    'dar productor a un residuo pineado sin el checkpoint del owner tiene que enrojecer',
-  );
+test('RESIDUE readWithoutProducer: every pinned name that gains a producer fails as a silent fix', () => {
+  const names = Object.keys(RESIDUE.readWithoutProducer);
+  assert.ok(names.length > 0, 'un arma sin residuo pineado no prueba nada');
+  for (const name of names) {
+    expectFinding(
+      collectFindings({ producers: new Set([...CHANNELS.producers, name]), channelProducers: CHANNELS }),
+      `residue list-toolbar.readWithoutProducer: ${name} is no longer residue`,
+      'dar productor a un residuo pineado sin el checkpoint del owner tiene que enrojecer',
+    );
+  }
 });
 
 test('RESIDUE kernelAuthorableWithoutRest: a pinned name that gains a rest declaration fails as a silent fix', () => {
@@ -197,21 +200,60 @@ test('RESIDUE kernelAuthorableWithoutRest: a pinned name that gains a rest decla
   );
 });
 
-test('RESIDUE language scope: --ds-toolbar-title-letter-spacing fails on growth and on a silent fix', () => {
+/* Los 17 despines de 2026-09-23 (residueNote): cada nombre tiene productor hoy y,
+ * sin pin, perderlo lo devuelve al residuo como crecimiento. */
+const RULED_EXITS = [
+  '--ds-filter-chip-radius',
+  '--ds-toolbar-compact-padding',
+  '--ds-toolbar-control-gap',
+  '--ds-toolbar-control-radius',
+  '--ds-toolbar-controls-gap',
+  '--ds-toolbar-controls-radius',
+  '--ds-toolbar-filter-strip-padding',
+  '--ds-toolbar-icon-radius',
+  '--ds-toolbar-min-height',
+  '--ds-toolbar-mobile-actions-radius',
+  '--ds-toolbar-mobile-rail-radius',
+  '--ds-toolbar-phone-filter-strip-padding',
+  '--ds-toolbar-phone-padding',
+  '--ds-toolbar-saved-views-radius',
+  '--ds-toolbar-sheen-opacity',
+  '--ds-toolbar-title-gap',
+  '--ds-toolbar-title-letter-spacing',
+];
+
+test('RESIDUE ruled exits: a despinned name that loses its producer fails as growth', () => {
+  assert.equal(RULED_EXITS.length, 17);
+  for (const name of RULED_EXITS) {
+    assert.ok(!(name in RESIDUE.readWithoutProducer), `${name} ya no esta pineado`);
+    assert.ok(CHANNELS.producers.has(name), `${name} tiene productor en el arbol vivo`);
+    const producers = new Set([...CHANNELS.producers].filter((produced) => produced !== name));
+    expectFinding(
+      collectFindings({ producers, channelProducers: { ...CHANNELS, producers } }),
+      `residue list-toolbar.readWithoutProducer GREW: ${name}`,
+      'un nombre despineado que vuelve a quedarse sin productor tiene que enrojecer',
+    );
+  }
+});
+
+test('RESIDUE language scope: --ds-toolbar-title-letter-spacing fails on growth and on a silent re-pin', () => {
   const name = '--ds-toolbar-title-letter-spacing';
-  assert.ok(name in RESIDUE.readWithoutProducer, 'el residuo de idioma esta pineado');
+  assert.ok(!(name in RESIDUE.readWithoutProducer), 'el residuo de idioma salio con su checkpoint');
+  const producers = new Set([...CHANNELS.producers].filter((produced) => produced !== name));
+  expectFinding(
+    collectFindings({ producers, channelProducers: { ...CHANNELS, producers } }),
+    `residue list-toolbar.readWithoutProducer GREW: ${name}`,
+    'perder el productor de la raiz tiene que enrojecer',
+  );
   withEditedBaseline(
-    (baseline) => delete baseline.namedResidue['list-toolbar'].readWithoutProducer[name],
+    (baseline) => {
+      baseline.namedResidue['list-toolbar'].readWithoutProducer[name] = 'drill';
+    },
     (baselinePath) =>
       expectFinding(
         collectFindings({ baselinePath, channelProducers: CHANNELS }),
-        `residue list-toolbar.readWithoutProducer GREW: ${name}`,
-        'despinear el residuo de idioma tiene que enrojecer',
+        `residue list-toolbar.readWithoutProducer: ${name} is no longer residue`,
+        'volver a pinearlo con productor vivo tiene que enrojecer',
       ),
-  );
-  expectFinding(
-    collectFindings({ producers: new Set([...CHANNELS.producers, name]), channelProducers: CHANNELS }),
-    `residue list-toolbar.readWithoutProducer: ${name} is no longer residue`,
-    'derivarlo en la raiz sin el checkpoint del owner tiene que enrojecer',
   );
 });
