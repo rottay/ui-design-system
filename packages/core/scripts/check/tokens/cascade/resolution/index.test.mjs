@@ -214,9 +214,17 @@ test('sobre el arbol real: el mapa resuelto no tiene ciclos y los missing estan 
   assert.equal(doc.stats.unresolvedByReason.depth, undefined, 'la guarda depth tampoco puede dispararse en el arbol real (gemela de cycle)');
   assert.equal(doc.stats.unresolved, doc.unresolved.length);
   for (const item of doc.unresolved) assert.ok(['missing', 'cycle', 'depth', 'guaranteed-invalid', 'cascade-keyword'].includes(item.reason));
-  // El pin del arbol resuelve los canales testigo.
-  assert.equal(doc.themes.bithire.base['--ds-color-text-primary'], '#14283B');
-  assert.equal(doc.themes.bithire.base['--ds-input-md-line-height'], '20px');
+  // El pin del arbol resuelve los canales testigo: el piso tactil Q11
+  // (65b88e0e2), el derivador de notification-center (643c3588b) y la altura de
+  // carga de card fuera del dial de ritmo (5ec57c3a7).
+  const bithire = doc.themes.bithire.base;
+  assert.equal(bithire['--ds-data-table-touch-target'], '44px');
+  assert.equal(bithire['--ds-notification-center-touch-target'], '44px');
+  assert.equal(bithire['--ds-card-loading-min-height'], 'calc(var(--ds-spacing-10) * 3)');
+  // Los testigos anteriores salieron con a4bc94927: el preset neutro de bithire
+  // no autora tinta de texto ni line-height de input.
+  assert.equal(bithire['--ds-color-text-primary'], undefined);
+  assert.equal(bithire['--ds-input-md-line-height'], undefined);
 });
 
 test('sobre el arbol real: toda palabra de cascada esta REHUSADA, nunca pasada como literal', async () => {

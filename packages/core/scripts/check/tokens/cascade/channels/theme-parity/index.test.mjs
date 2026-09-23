@@ -1118,27 +1118,31 @@ test("the productivity test moves no number on the shipped lowering", () => {
 });
 
 test("an obligated bucket is netted out of its category roll-up, exactly", () => {
+  const cardCeiling = baseline.ceilings["emitted-but-unconsumed.card"];
   const counters = {
     "emitted-but-unconsumed.total": 208,
     "emitted-but-unconsumed.posture": 4,
-    "emitted-but-unconsumed.card": 3,
+    "emitted-but-unconsumed.card": cardCeiling,
   };
   const consumed = new Map([["emitted-but-unconsumed.posture", { count: 4 }]]);
   assert.deepEqual(deductObligations(counters, consumed), {
     "emitted-but-unconsumed.total": 204,
     "emitted-but-unconsumed.posture": 4,
-    "emitted-but-unconsumed.card": 3,
+    "emitted-but-unconsumed.card": cardCeiling,
   });
   assert.equal(counters["emitted-but-unconsumed.total"], 208, "the measured census is not mutated");
 
   // The deduction buys no slack anywhere else: a fifth dead channel in ANOTHER
   // bucket still consumes the roll-up and still breaks its own ceiling.
   const regressed = deductObligations(
-    { ...counters, "emitted-but-unconsumed.total": 209, "emitted-but-unconsumed.card": 4 },
+    { ...counters, "emitted-but-unconsumed.total": 209, "emitted-but-unconsumed.card": cardCeiling + 1 },
     consumed,
   );
   const evaluation = evaluateParityBaseline(regressed, baseline);
-  assert.match(evaluation.errors.join("\n"), /emitted-but-unconsumed\.card=4; baseline=3/);
+  assert.ok(
+    evaluation.errors.includes(`parity regression: emitted-but-unconsumed.card=${cardCeiling + 1}; baseline=${cardCeiling}`),
+    evaluation.errors.join("\n"),
+  );
 });
 
 test("a category roll-up can never itself be obligated", () => {
@@ -1181,9 +1185,12 @@ test("INV-07: the shipped posture obligation holds against the live census, in b
   // Q3: the bucket is NOT also a ceiling, and its roll-up is back at the value
   // it held before the tree walk — the ratchet reads it net of the obligation.
   assert.equal(Object.hasOwn(baseline.ceilings, "emitted-but-unconsumed.posture"), false);
-  assert.equal(baseline.ceilings["emitted-but-unconsumed.total"], 206);
   const ratcheted = deductObligations(shipped.counters, consumed);
-  assert.equal(ratcheted["emitted-but-unconsumed.total"], 204);
+  assert.equal(
+    ratcheted["emitted-but-unconsumed.total"],
+    shipped.counters["emitted-but-unconsumed.total"] - obligation.count,
+  );
+  assert.equal(ratcheted["emitted-but-unconsumed.total"], baseline.ceilings["emitted-but-unconsumed.total"]);
   assert.deepEqual(evaluateParityBaseline(ratcheted, baseline).errors, [
     "new unbaselined bucket: emitted-but-unconsumed.posture=4",
   ]);
