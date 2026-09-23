@@ -732,25 +732,44 @@ test('the retired DB compiler is absent from every PUBLISHED entrypoint', async 
   }
 });
 
+/* The DB door serves a DELTA against the vertical's own compiled baseline, so a
+ * stop equal to that baseline has nothing to serve: it is an exclusion, never a
+ * lowering. These are the stops each first-party preset document authors. */
+const RHYTHM_FACTORS = Object.freeze({ tight: '0.85', normal: '1', airy: '1.2' });
+const RHYTHM_BASELINE_STOP = Object.freeze({ rottay: 'normal', evnto: 'normal', bithire: 'tight' });
+const EMPTY_DELTA = /emitted none of the declared channels/;
+
 test('the DB arm lowers every declared stop through the productive compiler', async () => {
   const arms = await loadCompilerArms();
-  const factors = { tight: '0.85', normal: '1', airy: '1.2' };
-  for (const [stopId, expected] of Object.entries(factors)) {
-    const lowered = lowerStop({
-      armId: 'db-tenant-theme',
-      controlManifest: CONTROL_MANIFEST,
-      stopId,
-      compile: arms['db-tenant-theme'].compile,
-      provenance: arms['db-tenant-theme'].provenance,
-      vertical: 'rottay',
-    });
-    assert.equal(lowered.variables['--ds-rhythm-scale'], expected);
+  const lowerable = new Set();
+  for (const [vertical, baselineStop] of Object.entries(RHYTHM_BASELINE_STOP)) {
+    for (const [stopId, expected] of Object.entries(RHYTHM_FACTORS)) {
+      const lower = () => lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: CONTROL_MANIFEST,
+        stopId,
+        compile: arms['db-tenant-theme'].compile,
+        provenance: arms['db-tenant-theme'].provenance,
+        vertical,
+      });
+      if (stopId === baselineStop) {
+        assert.throws(lower, (error) => error instanceof StopExclusionError && EMPTY_DELTA.test(error.message),
+          `${vertical}/${stopId}: the vertical's own baseline stop is an empty delta`);
+        continue;
+      }
+      assert.equal(lower().variables['--ds-rhythm-scale'], expected, `${vertical}/${stopId}`);
+      lowerable.add(stopId);
+    }
   }
+  assert.deepEqual([...lowerable].sort(), Object.keys(RHYTHM_FACTORS).sort(), 'every stop lowers on some vertical');
 });
 
 test('manifest-ingress parity: both arms lower the SAME stop to the SAME channel value', async () => {
   const arms = await loadCompilerArms();
-  for (const stopId of ['tight', 'normal', 'airy']) {
+  const pairs = Object.entries(RHYTHM_BASELINE_STOP).flatMap(([vertical, baselineStop]) =>
+    Object.keys(RHYTHM_FACTORS).filter((stopId) => stopId !== baselineStop).map((stopId) => [vertical, stopId]));
+  assert.deepEqual([...new Set(pairs.map(([, stopId]) => stopId))].sort(), Object.keys(RHYTHM_FACTORS).sort());
+  for (const [vertical, stopId] of pairs) {
     const lowered = Object.fromEntries(
       INGRESS_ARM_IDS.map((armId) => [
         armId,
@@ -760,14 +779,14 @@ test('manifest-ingress parity: both arms lower the SAME stop to the SAME channel
           stopId,
           compile: arms[armId].compile,
           provenance: arms[armId].provenance,
-          vertical: 'rottay',
+          vertical,
         }),
       ]),
     );
     assert.deepEqual(
       lowered['static-brand-theme'].variables,
       lowered['db-tenant-theme'].variables,
-      `arms diverged at stop "${stopId}"`,
+      `arms diverged at ${vertical}/${stopId}`,
     );
     // Each arm really travelled its own manifest-declared door.
     assert.equal(lowered['static-brand-theme'].producedBy.input.path, 'surfaces.rhythm');
@@ -785,7 +804,7 @@ test('manifest-ingress parity: both arms lower the SAME stop to the SAME channel
  * ------------------------------------------------------------------------ */
 
 const BOUNDED_CONTROL_MANIFEST = readManifest(
-  resolve(QUARANTINE_MANIFEST_ROOT, '/controls/surfaces/effect-intensity/index.json'),
+  resolve(QUARANTINE_MANIFEST_ROOT, 'controls/surfaces/effect-intensity/index.json'),
 );
 
 test('a BOUNDED control lowers the stop VALUE at the ingress path, never the stop id', () => {
@@ -903,7 +922,7 @@ test('negative drill: a bounded stop with no finite numeric value is refused, no
  * ------------------------------------------------------------------------ */
 
 const PROFILE_ID_CONTROL_MANIFEST = readManifest(
-  resolve(QUARANTINE_MANIFEST_ROOT, '/controls/experience/profile/index.json'),
+  resolve(QUARANTINE_MANIFEST_ROOT, 'controls/experience/profile/index.json'),
 );
 
 test('a PROFILE-ID control lowers the opaque registry id VERBATIM at both doors', () => {
@@ -1071,7 +1090,7 @@ test('negative drill: a closed-enum stop outside the declared domain values is r
  * artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/.
  */
 const RADIUS_MANIFEST = readManifest(
-  resolve(QUARANTINE_MANIFEST_ROOT, '/controls/shape/radius-scale/index.json'),
+  resolve(QUARANTINE_MANIFEST_ROOT, 'controls/shape/radius-scale/index.json'),
 );
 
 test('regression fence: the radius-scale static door is a literal path, never a wildcard or prose', () => {
@@ -1154,7 +1173,7 @@ test('regression fence: every stop of radius-scale reaches the channel, and dist
  * door being literal and being the ENUM's.
  */
 const DENSITY_MANIFEST = readManifest(
-  resolve(QUARANTINE_MANIFEST_ROOT, '/controls/density/mode/index.json'),
+  resolve(QUARANTINE_MANIFEST_ROOT, 'controls/density/mode/index.json'),
 );
 
 test('regression fence: the density.mode static door is a literal path, and it is the ENUM', () => {
@@ -1225,7 +1244,7 @@ test('regression fence: every stop of density.mode reaches the channel, and dist
  * therefore go red on a stale build, exactly like the arm drills above.
  * ===================================================================== */
 
-const DENSITY_MANIFEST_H1 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/density/mode/index.json'));
+const DENSITY_MANIFEST_H1 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/density/mode/index.json'));
 const FIRST_PARTY = Object.keys(VERTICALS).filter((id) => id !== 'none');
 
 /** Structural scale each vertical AUTHORS. If these move, the drills below say so. */
@@ -1294,7 +1313,7 @@ test('H-1 drill 2 [needs dist]: no vertical collapses onto the rottay value any 
  * their under-declaration.
  */
 function dataTerminalControlIds() {
-  const dir = resolve(QUARANTINE_MANIFEST_ROOT, '/cascade/roots');
+  const dir = resolve(QUARANTINE_MANIFEST_ROOT, 'cascade/roots');
   const ids = new Set();
   for (const name of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
     const root = JSON.parse(readFileSync(resolve(dir, name), 'utf8'));
@@ -1334,7 +1353,7 @@ function dataTerminalControlIds() {
  * ===================================================================== */
 const WITHDRAWN_AFTER_TREE_FREEZE = /^RERUN_(?:DATA_)?CAUSAL_PROOF_AFTER_TREE_FREEZE/u;
 
-const CONTROLS_DIR = resolve(QUARANTINE_MANIFEST_ROOT, '/controls');
+const CONTROLS_DIR = resolve(QUARANTINE_MANIFEST_ROOT, 'controls');
 
 /**
  * Assert that an empty cohort is explained by the authority, not by an
@@ -1506,7 +1525,7 @@ test('H-1 drill 3 CONTROL [needs dist]: the cohort selector and the comparison l
 test('H-1 drill 4 [needs dist]: a tenant-selected profile reaches the channel, and OUTRANKS every baseline', async () => {
   const arms = await loadCompilerArms();
   const baselines = await loadStaticBaselines();
-  const manifest = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/experience/profile/index.json'));
+  const manifest = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/experience/profile/index.json'));
   const stops = manifest.calibration.normalizedStops;
   assert.ok(stops.length >= 1);
   for (const stop of stops) {
@@ -1673,8 +1692,8 @@ test('H-1 drill 8 (V1): a static arm with no named baseline fails arm verificati
  * density would start failing on its structural channel.
  * ===================================================================== */
 
-const RADIUS_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/shape/radius-scale/index.json'));
-const TYPO_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/typography/scale/index.json'));
+const RADIUS_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/shape/radius-scale/index.json'));
+const TYPO_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/typography/scale/index.json'));
 
 /** The guard, on the real compilers, with the arm's own baseline tuple. */
 const discriminate = async (manifest, armId, vertical, overrides = {}) => {
@@ -2001,7 +2020,7 @@ test('H-2 drill 9 (W-C): the guard stands on the ARM\'s baseline, and proves it'
   );
 });
 
-const EXPRESSIVE_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/profiles/expressive/index.json'));
+const EXPRESSIVE_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/profiles/expressive/index.json'));
 
 test('H-2 drill 10 (profiles.expressive): the flat enumValues union cannot catch a cross-axis value, and the compiler is the real gate', async () => {
   // The union check (`enumValues.includes(stop.id)`, runtime/ingress/index.mjs)
@@ -2217,7 +2236,7 @@ test('H3C drill 3: the inline plan still names what it introduced, so restore st
  * first time the ramp math changed.
  * ===================================================================== */
 
-const PALETTE_MANIFEST = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/palette/seeds/index.json'));
+const PALETTE_MANIFEST = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/palette/seeds/index.json'));
 const STATIC_SET = 'palette.{primaryColor,secondaryColor,accentColor,backgroundColor}';
 const DB_SET = 'appearance.general.palette.{primary,secondary,accent,background}';
 
@@ -2476,7 +2495,7 @@ const STATIC_PROVENANCE_FIXTURE = Object.freeze({
   },
 });
 
-const M1_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/palette/seeds/index.json'));
+const M1_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/palette/seeds/index.json'));
 const M1_CLOSED = [
   'density.mode',
   'spacing.rhythm',
@@ -2484,7 +2503,7 @@ const M1_CLOSED = [
   'surfaces.effect-intensity',
   'typography.scale',
 ].map((id) => readManifest(
-  resolve(QUARANTINE_MANIFEST_ROOT, '/controls', pathForManifestId(id), 'index.json'),
+  resolve(QUARANTINE_MANIFEST_ROOT, 'controls', pathForManifestId(id), 'index.json'),
 ));
 
 /** One real static lowering, arms and baselines loaded from dist. */
@@ -2672,7 +2691,7 @@ test('M-1 drill 7 [needs dist]: the mode block must carry the OVERLAY, never the
  * deltas into the base, and spelling the mode grammar in the harness.
  * ===================================================================== */
 
-const H3A2_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/palette/seeds/index.json'));
+const H3A2_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/palette/seeds/index.json'));
 
 /** Both arms, lowered for the same stop on the same vertical, from dist. */
 async function h3a2Arms(vertical, stopId = 'primary/crimson') {
@@ -2818,18 +2837,19 @@ test('H-3(a) drill 6: the inline path is NOT retired', async () => {
 test('H-3(a) drill 7 [needs dist]: an arm with no mode delta yields exactly one block', async () => {
   // typography.scale has no declared channel in any mode block (the M-1 fence
   // table), so its DB arm must be a single block -- and an empty delta must not
-  // emit an empty rule.
+  // emit an empty rule. `compacta` (0.94) is bithire's own baseline, an empty
+  // delta; rottay's baseline is 1, so there it is a move.
   const arms = await loadCompilerArms();
   const lowered = lowerStop({
     armId: 'db-tenant-theme',
     controlManifest: TYPO_H2,
     stopId: 'compacta',
     compile: arms['db-tenant-theme'].compile,
-    vertical: 'bithire',
+    vertical: 'rottay',
     provenance: arms['db-tenant-theme'].provenance,
   });
   const arm = composeDbArm({
-    vertical: 'bithire',
+    vertical: 'rottay',
     variables: lowered.variables,
     producedBy: lowered.producedBy,
     modeVariables: lowered.modeVariables,
@@ -2940,7 +2960,7 @@ test('H-3(a) drill 10 [needs dist]: no probe artifact carries a prefers-color-sc
  * it, and measures what would happen if it did not.
  * ===================================================================== */
 
-const B2_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/palette/seeds/index.json'));
+const B2_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/palette/seeds/index.json'));
 
 /** The three composed first-party baselines, through the door the arms bind. */
 async function b2Baselines() {
@@ -3126,7 +3146,7 @@ test('B-2 drill 6: the CLOSED consulted vocabulary is what bounds the blast radi
   assert.ok(consulted.size >= 12, `parsed only ${consulted.size} consulted fields`);
   assert.ok(consulted.has('palette.primaryColor'), 'the primary seed must be in the vocabulary');
 
-  const controlDir = resolve(QUARANTINE_MANIFEST_ROOT, '/controls');
+  const controlDir = resolve(QUARANTINE_MANIFEST_ROOT, 'controls');
   const intersections = [];
   let staticDoors = 0;
   for (const { document: manifest } of readManifestRecords(controlDir, 'controlId')) {
@@ -3211,7 +3231,7 @@ test('F4B-12 drill: the registry keypath is exactly SIDEBAR_TONE_FIELD, read fro
   assert.equal(sidebarToneField, 'chrome.sidebar.tone');
 
   const manifest = readManifest(
-    resolve(QUARANTINE_MANIFEST_ROOT, '/controls/navigation/sidebar-tone/index.json'),
+    resolve(QUARANTINE_MANIFEST_ROOT, 'controls/navigation/sidebar-tone/index.json'),
   );
   assert.equal(staticDoorPath(manifest), sidebarToneField);
 

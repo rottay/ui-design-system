@@ -124,11 +124,11 @@ test('the recovered static paint lives in wired, logical-property skins', () => 
   // one shared expectation table was a fiction that only held while both were
   // read through a permissive substring check.
   //
-  // Modern rides the declared DS scale bare: every `--ds-radius-*` and
-  // `--ds-elevation-1..6` channel is declared in the default theme, so a
-  // literal fallback beside it is dead bytes that can never fire (the engine's
-  // fallback-parity law). `2xl` mounts `--ds-elevation-6` -- the rung the
-  // token layer grew -- not a reference back down to 5.
+  // Modern lives in the Box family's own skin, anchored on `box-surface`, and
+  // reads the `--ds-box-*` deriver channels first with the DS scale as the
+  // only fallback. No literal fallback: the scale is declared in the default
+  // theme, so one would be dead bytes (the engine's fallback-parity law).
+  // `2xl` mounts `--ds-elevation-6`, not a reference back down to 5.
   //
   // Rustic keeps its seven radius fallbacks and its six shadows BYTE-EXACT.
   // It is the vanilla-CSS fallback engine: it is the one skin expected to
@@ -139,28 +139,32 @@ test('the recovered static paint lives in wired, logical-property skins', () => 
     [
       'modern',
       {
+        skin: 'runtime/engines/modern/skin/box/index.css',
+        anchor: "[data-part='box-surface']",
         radius: new Map([
-          ['xs', 'var(--ds-radius-xs)'],
-          ['sm', 'var(--ds-radius-sm)'],
-          ['md', 'var(--ds-radius-md)'],
-          ['lg', 'var(--ds-radius-lg)'],
-          ['xl', 'var(--ds-radius-xl)'],
-          ['2xl', 'var(--ds-radius-2xl)'],
-          ['full', 'var(--ds-radius-full)'],
+          ['xs', 'var(--ds-box-corner-xs, var(--ds-radius-xs))'],
+          ['sm', 'var(--ds-box-corner-sm, var(--ds-radius-sm))'],
+          ['md', 'var(--ds-box-corner-md, var(--ds-radius-md))'],
+          ['lg', 'var(--ds-box-corner-lg, var(--ds-radius-lg))'],
+          ['xl', 'var(--ds-box-corner-xl, var(--ds-radius-xl))'],
+          ['2xl', 'var(--ds-box-corner-2xl, var(--ds-radius-2xl))'],
+          ['full', 'var(--ds-box-corner-full, var(--ds-radius-full))'],
         ]),
         shadow: new Map([
-          ['xs', 'var(--ds-elevation-1)'],
-          ['sm', 'var(--ds-elevation-2)'],
-          ['md', 'var(--ds-elevation-3)'],
-          ['lg', 'var(--ds-elevation-4)'],
-          ['xl', 'var(--ds-elevation-5)'],
-          ['2xl', 'var(--ds-elevation-6)'],
+          ['xs', 'var(--ds-box-depth-xs, var(--ds-elevation-1))'],
+          ['sm', 'var(--ds-box-depth-sm, var(--ds-elevation-2))'],
+          ['md', 'var(--ds-box-depth-md, var(--ds-elevation-3))'],
+          ['lg', 'var(--ds-box-depth-lg, var(--ds-elevation-4))'],
+          ['xl', 'var(--ds-box-depth-xl, var(--ds-elevation-5))'],
+          ['2xl', 'var(--ds-box-depth-2xl, var(--ds-elevation-6))'],
         ]),
       },
     ],
     [
       'rustic',
       {
+        skin: 'runtime/engines/rustic/skin/layout/index.css',
+        anchor: '',
         radius: new Map([
           ['xs', 'var(--ds-radius-xs, 0.1875rem)'],
           ['sm', 'var(--ds-radius-sm, 0.375rem)'],
@@ -194,12 +198,12 @@ test('the recovered static paint lives in wired, logical-property skins', () => 
       box.source,
       /["']data-shadow["']:\s*!callerOwnsShadow && props\.shadow && props\.shadow !== ["']none["']/,
     );
-    const boxCss = stylesheet(`runtime/engines/${engine}/skin/layout/index.css`);
-    const { radius, shadow } = boxSkinExpectations.get(engine);
+    const { skin, anchor, radius, shadow } = boxSkinExpectations.get(engine);
+    const boxCss = stylesheet(skin);
     for (const [token, value] of radius) {
       assertSoleRule(
         boxCss,
-        `.rottay-box.rottay-box--${engine}[data-radius='${token}']`,
+        `.rottay-box.rottay-box--${engine}${anchor}[data-radius='${token}']`,
         `border-radius: ${value};`,
         `${engine} radius ${token}`
       );
@@ -207,12 +211,19 @@ test('the recovered static paint lives in wired, logical-property skins', () => 
     for (const [token, value] of shadow) {
       assertSoleRule(
         boxCss,
-        `.rottay-box.rottay-box--${engine}[data-shadow='${token}']`,
+        `.rottay-box.rottay-box--${engine}${anchor}[data-shadow='${token}']`,
         `box-shadow: ${value};`,
         `${engine} shadow ${token}`
       );
     }
   }
+
+  // The box rules left the shared layout skin; a copy left behind there would
+  // compete in the same layer.
+  assert.doesNotMatch(
+    stylesheet('runtime/engines/modern/skin/layout/index.css').replace(/\/\*[\s\S]*?\*\//g, ''),
+    /\.rottay-box\b/,
+  );
 
   const toast = component('primitives/feedback/toast/compound/container/index.tsx');
   assert.equal(countArc09PaintInFile(toast.source, toast.file), 0);
@@ -259,8 +270,8 @@ test('the tour modern surface spreads its geometry through the certified overlay
   // this file, not from one that stopped reading it. Real paint planted in the
   // same style object has to be seen.
   const painted = tour.source.replace(
-    '          zIndex: zIndex + 2,\n',
-    "          zIndex: zIndex + 2,\n          background: 'red',\n"
+    'style={targetEl ? overlay.positionStyle : undefined}',
+    "style={targetEl ? { ...overlay.positionStyle, background: 'red' } : undefined}"
   );
   assert.notEqual(painted, tour.source);
   assert.equal(countArc09PaintInFile(painted, tour.file), 1);
