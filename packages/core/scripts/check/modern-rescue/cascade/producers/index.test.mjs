@@ -1153,7 +1153,7 @@ test('Z-10 ZERO and PRODUCER are disjoint, and PRODUCER is never drained', () =>
   }
   // 3 original + 9 reached once T-COMPUTED-DOMAIN enumerated their lookups,
   // + the dynamic sink whose record T-ENTRIES-RECORD enumerated
-  assert.equal(producers.length, 56);
+  assert.equal(producers.length, 156, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze)');
 });
 
 test('Z-11 the frozen producer counters do not move with this tranche', () => {
@@ -1244,7 +1244,7 @@ test('T-3 NEGATIVE: a relay row is never a producer and never joins the ZERO dra
       `${row.file}:${row.line} label and resolvedVia disagree`,
     );
   }
-  assert.equal(out.privateRelay.filter((r) => r.reason.startsWith('sealed-import-relay:')).length, 16);
+  assert.equal(out.privateRelay.filter((r) => r.reason.startsWith('sealed-import-relay:')).length, 0, 'the 16 motion-recipe rows now close as producers (Object.freeze)');
   // 675 + the 10 historical `motion.div` rows the intrinsic-sink correction moved
   assert.equal(out.privateRelay.filter((r) => r.reason.startsWith('private-relay-unresolved:')).length, 652);
   assert.equal(out.privateRelay.filter((r) => r.reason.startsWith('public-style-passthrough:')).length, 21);
@@ -1316,7 +1316,7 @@ test('T-5 every cohort row carries a receipt sufficient to audit origin and reas
 
 test('T-6 every producer row carries a full causal receipt and invents no root', () => {
   const out = buildProducers();
-  assert.equal(out.closedProducer.length, 56);
+  assert.equal(out.closedProducer.length, 156, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze)');
   // Two identity shapes, kept apart on purpose. A coordinate with ONE producer
   // occurrence publishes its scalar identity. A coordinate with SEVERAL cannot:
   // `governedProducerSiteId` is minted per occurrence, so publishing one of
@@ -1325,8 +1325,8 @@ test('T-6 every producer row carries a full causal receipt and invents no root',
   const single = out.closedProducer.filter((r) => !r.occurrenceProducerSiteIds);
   const multi = out.closedProducer.filter((r) => r.occurrenceProducerSiteIds);
   // the T-ENTRIES-RECORD arrival is single-occurrence, so it lands in `single`
-  assert.equal(single.length, 45);
-  assert.equal(multi.length, 11);
+  assert.equal(single.length, 137, '45 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 8 single-occurrence motion-recipe rows (Object.freeze)');
+  assert.equal(multi.length, 19, '11 + 8 motion-recipe rows (Object.freeze): the button pressMotion coordinates occur twice');
   for (const row of multi) {
     assert.equal(row.evidence.governedProducerSiteId, undefined, 'a multi-occurrence coordinate must not publish one arbitrary id');
     assert.equal(row.evidence.sourcePartRefs, undefined);
@@ -1636,7 +1636,7 @@ test('T-15 relayKinds is published with a CLOSED vocabulary and survives multi-s
   }
   // and multi-sink evidence more generally survives
   // 20 before T-SEALED-RELAY; 8 of its 22 arrivals also reach two sinks
-  assert.equal([...out.publicBoundary, ...out.privateRelay].filter((r) => r.sinkTags.length > 1).length, 28);
+  assert.equal([...out.publicBoundary, ...out.privateRelay].filter((r) => r.sinkTags.length > 1).length, 20, '28 - the 8 two-sink motion-recipe relay rows now closed producers (Object.freeze)');
 
   // the receipt-bound digests COVER relayKinds: dropping it must move them
   const withKinds = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.relayKinds, r.evidence]));
@@ -1890,8 +1890,8 @@ test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched
   const out = buildProducers();
   // closed cohorts from the previous tranches
   assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 693);
-  assert.equal(out.stats.closedProducer, 56);
+  assert.equal(out.stats.privateRelay, 677, '693 - 16 motion-recipe sealed-import-relay rows now closed producers (Object.freeze)');
+  assert.equal(out.stats.closedProducer, 156, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze)');
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.closedZeroGoverned, 613);
   // producer counters
@@ -2468,7 +2468,7 @@ test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
   // T-SEALED-RELAY arrives in this same bucket but is NOT one of the 1114 this
   // test freezes: it is excluded by its own label so the original claim stays
   // exactly as strong as it was.
-  assert.equal(out.privateRelay.filter((r) => r.resolvedVia === 'sealed-import-relay').length, 16);
+  assert.equal(out.privateRelay.filter((r) => r.resolvedVia === 'sealed-import-relay').length, 0, 'the 16 motion-recipe rows now close as producers (Object.freeze)');
   const directRelay = out.privateRelay.filter(
     (r) =>
       !INHERITED(r) &&
@@ -2493,7 +2493,7 @@ test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
   // and the other cohorts did not move at all
   assert.equal(out.stats.closedZeroGoverned, 613);
   assert.equal(out.stats.closedNonObject, 88);
-  assert.equal(out.stats.closedProducer, 56);
+  assert.equal(out.stats.closedProducer, 156, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze)');
   assert.equal(out.branchConditionalAuthored.length, 0);
   assert.equal(out.authoredOpen.length, 0);
   assert.equal(out.openUnknown.length, 0);
@@ -3973,7 +3973,7 @@ test('KS-9 the 3 PREFLIGHT CORRECTIONS are enumerated computed domains, not new 
 test('KS-10 every arrival publishes its route, its key union and its admission', () => {
   const out = buildProducers();
   const admitted = out.closedProducer.filter((r) => r.evidence.openLeafValues);
-  assert.equal(admitted.length, 43, 'the producers resting on admitted open values');
+  assert.equal(admitted.length, 127, 'the producers resting on admitted open values: 43 + 84 responsive socket rows whose for-of value is open (Object.freeze and T-SOCKET-LOOP-FILL)');
   for (const row of admitted) {
     assert.ok(row.evidence.openLeafValues > 0);
     assert.ok(Array.isArray(row.evidence.openLeafValueKinds) && row.evidence.openLeafValueKinds.length > 0);
@@ -4900,4 +4900,147 @@ test('TC-8 an unparseable committed inventory still FAILS, and says why, instead
   assert.equal(status, 1, 'a report that cannot be produced must not change the verdict');
   assert.match(stderr, /the committed inventory is not what the tree produces/);
   assert.match(stderr, /no divergence report/);
+});
+
+/* ===================================================================== *
+ * SOCKET-FILL -- three resolver reach limits, each fail-closed:
+ *   Object.freeze(x)       the unshadowed global returns its argument
+ *   T-SOCKET-LOOP-FILL     `X[key] = v` at any loop depth, admitted only when
+ *                          every key is proven inside the `--_ds-` namespace
+ *   conditional key        `[c ? 'a' : 'b']` names exactly its literal arms
+ * ===================================================================== */
+
+/** A fixture shaped like the responsive projection, with a pluggable key writer. */
+const socketFillFixture = (keyWriter, fill = 'channels[name(entry.p, step)] = value;') => `
+const STEPS = ["sm", "md"] as const;
+const EMPTY = Object.freeze({ attrs: Object.freeze({}), channels: Object.freeze({}) });
+function name(slug: string, step: string): string { ${keyWriter} }
+function project(entries: readonly { p: string; v: Record<string, string> }[]) {
+  if (entries.length === 0) return EMPTY;
+  const channels: Record<string, string> = {};
+  for (const entry of entries) {
+    for (const step of STEPS) {
+      const value = entry.v[step];
+      if (value === undefined) continue;
+      ${fill}
+    }
+  }
+  return { attrs: {}, channels: channels as object };
+}
+export const C = (props) => { const responsive = project(props.entries); return <div style={responsive.channels} />; };
+`;
+
+/** Every openUnknown reason reachable in a shape tree. */
+const openReasonsOf = (shape, out = new Set(), seen = new WeakSet()) => {
+  if (!shape || typeof shape !== 'object' || seen.has(shape)) return out;
+  seen.add(shape);
+  if (shape.kind === 'openUnknown') out.add(shape.reason);
+  for (const b of shape.branches ?? []) openReasonsOf(b, out, seen);
+  for (const e of shape.order ?? []) openReasonsOf(e.shape, out, seen);
+  return out;
+};
+
+test('SF-1 POSITIVE: a new --_ds-rsp-* loop fill classifies as a socket producer, never as open debt', () => {
+  const out = branchProbe(socketFillFixture('return `--_ds-rsp-${slug}-${step}`;'));
+  assert.equal(out.disposition, 'CLOSED_PRODUCER');
+  assert.deepEqual(out.governance.governedChannelKeys, []);
+  assert.deepEqual(out.governance.internalSocketKeys, ['--_ds-rsp-*'], 'the namespace, not an invented key list');
+  assert.deepEqual(out.governance.ungovernedCustomPropertyKeys, []);
+  assert.equal(out.governance.customPropertyScanComplete, true);
+  const fill = out.shape.branches.find((b) => b.socketLoopFill);
+  assert.ok(fill, 'the filled arm carries its own receipt');
+  assert.equal(fill.socketLoopFill.writeCount, 1);
+  assert.equal(fill.socketLoopFill.writes[0].proof, 'call-return-template-head');
+  assert.equal(openReasonsOf(out.shape).has('reassignment-or-mutation-present'), false);
+  // the direct template head and an exact literal ride the same proof
+  const direct = branchProbe(socketFillFixture('return "";', 'channels[`--_ds-rsp-${entry.p}-${step}`] = value;'));
+  assert.equal(direct.disposition, 'CLOSED_PRODUCER');
+  assert.deepEqual(direct.governance.internalSocketKeys, ['--_ds-rsp-*']);
+  const literal = branchProbe(socketFillFixture('return "";', 'channels["--_ds-exact"] = value;'));
+  assert.deepEqual(literal.governance.internalSocketKeys, ['--_ds-exact']);
+});
+
+test('SF-2 NEGATIVE: a NON-socket key hidden by the same loop fill stays open debt', () => {
+  const cases = {
+    'governed namespace': 'return `--ds-rsp-${slug}-${step}`;',
+    'ungoverned namespace': 'return `--rottay-${slug}-${step}`;',
+    'head short of the socket prefix': 'return `--_d${slug}-${step}`;',
+    'socket name hidden behind a local': 'const n = `--_ds-${slug}`; return n;',
+    'two returns': 'if (!slug) return "--_ds-a"; return `--ds-${slug}`;',
+  };
+  for (const [label, writer] of Object.entries(cases)) {
+    const out = branchProbe(socketFillFixture(writer));
+    assert.equal(out.disposition, 'BRANCH_COMPOSITE_OPEN', `${label}: must stay open`);
+    assert.ok(openReasonsOf(out.shape).has('reassignment-or-mutation-present'), `${label}: the mutation refusal stands`);
+  }
+  // one unproven key refuses the WHOLE fill, even beside a proven one
+  const mixed = branchProbe(socketFillFixture(
+    'return `--_ds-rsp-${slug}-${step}`;',
+    'channels[name(entry.p, step)] = value; channels[entry.p] = value;',
+  ));
+  assert.equal(mixed.disposition, 'BRANCH_COMPOSITE_OPEN');
+});
+
+test('SF-3 NEGATIVE: a real mutation still refuses, whatever namespace its keys are in', () => {
+  const socket = 'return `--_ds-rsp-${slug}-${step}`;';
+  const cases = {
+    'delete': 'channels[name(entry.p, step)] = value; delete channels[name(entry.p, step)];',
+    'compound assignment': 'channels[name(entry.p, step)] += value;',
+    'static-name write': 'channels[name(entry.p, step)] = value; channels.color = value;',
+    'handed to a call': 'channels[name(entry.p, step)] = value; Object.assign(channels, entry.v);',
+    'aliased': 'const alias = channels; alias[name(entry.p, step)] = value;',
+    'value reads the binding': 'channels[name(entry.p, step)] = String(channels);',
+  };
+  for (const [label, fill] of Object.entries(cases)) {
+    const out = branchProbe(socketFillFixture(socket, fill));
+    assert.notEqual(out.disposition, 'CLOSED_PRODUCER', `${label}: must not close`);
+    assert.ok(openReasonsOf(out.shape).has('reassignment-or-mutation-present'), `${label}: the mutation refusal stands`);
+  }
+});
+
+test('SF-4 Object.freeze reads its argument exactly, and only the global one', () => {
+  const empty = branchProbe('const S = Object.freeze({});\nexport const C = () => <div style={S} />;');
+  assert.equal(empty.disposition, ZERO_D);
+  const full = branchProbe('const S = Object.freeze({ "--ds-a": "1", color: "red" });\nexport const C = () => <div style={S} />;');
+  assert.equal(full.disposition, 'CLOSED_PRODUCER');
+  assert.deepEqual(full.governance.governedChannelKeys, ['--ds-a']);
+  assert.deepEqual(full.governance.ordinaryPropertyKeys, ['color']);
+  const socket = branchProbe('const S = Object.freeze({ "--_ds-s": "1" });\nexport const C = () => <div style={S} />;');
+  assert.deepEqual(socket.governance.internalSocketKeys, ['--_ds-s']);
+  // a local `Object` is not the global: nothing about freeze may be assumed
+  const shadowed = branchProbe('const Object = { freeze: (x) => ({ "--ds-hidden": "1" }) };\nconst S = Object.freeze({});\nexport const C = () => <div style={S} />;');
+  assert.notEqual(shadowed.disposition, ZERO_D);
+  // freeze takes one argument; anything else is not read
+  const arity = branchProbe('const S = Object.freeze({}, {});\nexport const C = () => <div style={S} />;');
+  assert.ok(openReasonsOf(arity.shape).has('object-freeze-arity-not-one'));
+});
+
+test('SF-5 a conditional computed key names its literal arms, under the rules a typed key already follows', () => {
+  // an object root always stamps one of the arms: the same producer a closed union key makes
+  const root = branchProbe('export const C = (p) => <div style={{ [p.side === "l" ? "--ds-a" : "--ds-b"]: "0px" }} />;');
+  assert.equal(root.disposition, 'CLOSED_PRODUCER');
+  assert.deepEqual([...root.governance.governedChannelKeys].sort(), ['--ds-a', '--ds-b']);
+  // behind an early empty return the emission is conditional, and a governed one stays blocking
+  const out = branchProbe('function g(side) { if (!side) return {}; return { [side === "l" ? "--ds-a" : "--ds-b"]: "0px" }; }\nexport const C = (p) => <div style={g(p.side)} />;');
+  assert.equal(out.disposition, 'BRANCH_CONDITIONAL_AUTHORED', 'a conditional governed emission is not a producer');
+  assert.deepEqual([...out.governance.governedChannelKeys].sort(), ['--ds-a', '--ds-b']);
+  const plain = branchProbe('export const C = (p) => <div style={{ [p.side === "l" ? "insetInlineStart" : "insetInlineEnd"]: "0px" }} />;');
+  assert.equal(plain.disposition, ZERO_D);
+  // one arm that is not a literal keeps the key unresolved
+  const open = branchProbe('export const C = (p) => <div style={{ [p.side === "l" ? "--ds-a" : p.name]: "0px" }} />;');
+  assert.notEqual(open.disposition, 'BRANCH_CONDITIONAL_AUTHORED');
+  assert.notEqual(open.disposition, 'CLOSED_PRODUCER');
+});
+
+test('SF-6 the live responsive sinks are socket producers, and no open row is a socket', () => {
+  const out = buildProducers();
+  const socketRows = out.closedProducer.filter((r) => (r.evidence?.internalSocketKeys ?? []).includes('--_ds-rsp-*'));
+  assert.equal(socketRows.length, 84, '42 responsive sites in two forms');
+  for (const row of socketRows) {
+    assert.deepEqual(row.evidence.internalSocketKeys, ['--_ds-rsp-*']);
+    assert.deepEqual(row.evidence.governedChannelKeys, []);
+  }
+  for (const row of openRows(out)) {
+    assert.deepEqual(row.evidence?.internalSocketKeys ?? [], [], 'a socket emission is never open debt');
+  }
 });

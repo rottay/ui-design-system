@@ -1308,6 +1308,173 @@ function resolveInternalMutationShape(binding, ctx, path, depth) {
   };
 }
 
+/* ------------------------------------------ socket loop fill (T-SOCKET-LOOP-FILL) --- */
+/**
+ * T-SOCKET-LOOP-FILL -- a fresh `const X = {}` filled by `X[key] = value`
+ * statements at any loop or `if` depth, and read only by a `return`.
+ *
+ * Neither the key count nor the key names are enumerable, so this is admitted
+ * ONLY when every write key is proven inside the private `--_ds-` socket
+ * namespace by a constant head: a literal, a template head, or the single
+ * return of a called function whose return is such a template. A socket is
+ * never a tenant channel and is never claimed by a cascade root, so bounding
+ * the namespace decides the emission class without naming the keys.
+ *
+ * Refused (the coarse mutation refusal stands): any key not proven inside the
+ * namespace, a write in any other form (`X.k =`, compound, `delete`,
+ * `Object.assign`), a reference inside a nested function, an alias or any
+ * other read, a value or key that mentions X, and a non-empty or non-`const`
+ * base.
+ */
+const SOCKET_NAMESPACE_HEAD = "--_ds-";
+
+function socketHeadOfTemplate(expr) {
+  const n = unwrap(expr);
+  if (!n) return null;
+  if (ts.isStringLiteralLike(n)) return n.text.startsWith(SOCKET_NAMESPACE_HEAD) ? { key: n.text, head: n.text, exact: true } : null;
+  if (ts.isTemplateExpression(n)) {
+    return n.head.text.startsWith(SOCKET_NAMESPACE_HEAD) ? { key: `${n.head.text}*`, head: n.head.text, exact: false } : null;
+  }
+  return null;
+}
+
+function singleReturnExpression(fnNode) {
+  if (!fnNode?.body) return null;
+  if (!ts.isBlock(fnNode.body)) return fnNode.body;
+  const statements = fnNode.body.statements;
+  if (statements.length !== 1 || !ts.isReturnStatement(statements[0]) || !statements[0].expression) return null;
+  return statements[0].expression;
+}
+
+function socketKeyProof(keyExpr, source, fileRel) {
+  const direct = socketHeadOfTemplate(keyExpr);
+  if (direct) return { ...direct, proof: direct.exact ? "literal" : "template-head", via: null };
+  const n = unwrap(keyExpr);
+  if (!ts.isCallExpression(n) || !ts.isIdentifier(unwrap(n.expression))) return null;
+  const calleeName = unwrap(n.expression).text;
+  const binding = resolveBinding(calleeName, n.expression, source, collectModuleImports(source));
+  let fnNode = null;
+  let via = null;
+  if (binding?.kind === "hoistedFunction") {
+    fnNode = binding.node;
+    via = binding.declaredAt;
+  } else if (binding?.kind === "import" && binding.form === "named") {
+    const targetFile = resolveImportTargetFile(binding.moduleSpecifier, fileRel);
+    const hit = targetFile ? followExportedDecl(targetFile, binding.importedName ?? calleeName) : null;
+    if (hit?.exported?.kind === "namedFunction") {
+      fnNode = hit.exported.node;
+      const declSource = hit.exported.declSource ?? hit.source;
+      via = `${hit.exported.declFile ?? hit.file}:${declSource.getLineAndCharacterOfPosition(fnNode.getStart(declSource)).line + 1}`;
+    }
+  }
+  const returned = fnNode ? socketHeadOfTemplate(singleReturnExpression(fnNode)) : null;
+  if (!returned) return null;
+  return { ...returned, proof: "call-return-template-head", via };
+}
+
+/** Is `occurrence` only carried, unwrapped, into the returned object? */
+function isReturnedValueOnly(occurrence, funcScope) {
+  let child = occurrence;
+  let current = occurrence.parent;
+  while (current) {
+    if (
+      ts.isAsExpression(current) || ts.isParenthesizedExpression(current) || ts.isNonNullExpression(current) ||
+      ts.isSatisfiesExpression?.(current) || ts.isObjectLiteralExpression(current) ||
+      (ts.isPropertyAssignment(current) && current.initializer === child) ||
+      (ts.isShorthandPropertyAssignment(current) && current.name === child)
+    ) {
+      child = current;
+      current = current.parent;
+      continue;
+    }
+    if (ts.isReturnStatement(current) && current.expression === child) return nearestFunctionOrSource(current) === funcScope;
+    return false;
+  }
+  return false;
+}
+
+function resolveSocketLoopFillShape(binding, ctx, path, depth) {
+  const { name, declNode, funcScope, source } = binding;
+  if (!name || !declNode || !funcScope || !source || ts.isSourceFile(funcScope)) return null;
+  const init = declNode.initializer ? unwrap(declNode.initializer) : null;
+  if (!init || !ts.isObjectLiteralExpression(init) || init.properties.length !== 0) return null;
+  const declList = declNode.parent;
+  if (!declList || !ts.isVariableDeclarationList(declList) || (declList.flags & ts.NodeFlags.Const) === 0) return null;
+  if (declList.declarations.length !== 1) return null;
+  const fileRel = ctx.fileRel ?? source.fileName;
+  const moduleImports = collectModuleImports(source);
+
+  const writes = [];
+  let refused = false;
+  let returnedReads = 0;
+  const visit = (node) => {
+    if (refused) return;
+    if (ts.isIdentifier(node) && node.text === name && node !== declNode.name) {
+      // a property NAME spelled like the binding is not a reference to it
+      const parent = node.parent;
+      if ((ts.isPropertyAccessExpression(parent) && parent.name === node) || (ts.isPropertyAssignment(parent) && parent.name === node)) return;
+      if (nearestFunctionOrSource(node) !== funcScope) { refused = true; return; }
+      const bound = resolveBinding(name, node, source, moduleImports);
+      if (!bound || bound.declNode !== declNode) { refused = true; return; }
+      const access = parent;
+      const assignment = access?.parent;
+      if (
+        ts.isElementAccessExpression(access) && access.expression === node &&
+        ts.isBinaryExpression(assignment) && assignment.left === access &&
+        assignment.operatorToken.kind === ts.SyntaxKind.EqualsToken &&
+        ts.isExpressionStatement(assignment.parent)
+      ) {
+        if (mentionsName(access.argumentExpression, name) || mentionsName(assignment.right, name)) { refused = true; return; }
+        const key = socketKeyProof(access.argumentExpression, source, fileRel);
+        if (!key) { refused = true; return; }
+        writes.push({ key, valueNode: assignment.right, statement: assignment.parent });
+        return;
+      }
+      if (isReturnedValueOnly(node, funcScope)) { returnedReads += 1; return; }
+      refused = true;
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(funcScope.body ?? funcScope);
+  if (refused || writes.length === 0 || returnedReads === 0) return null;
+
+  const stepPath = [...path, { kind: "socketLoopFill", declaredAt: binding.declaredAt }];
+  const order = [];
+  const receipts = [];
+  for (const w of writes) {
+    const at = `${source.fileName}:${source.getLineAndCharacterOfPosition(w.statement.getStart(source)).line + 1}`;
+    const valueShape = resolveShape(w.valueNode, freshCtx(ctx, { depth: depth + 1, path: [...stepPath, { kind: "objectProperty", key: w.key.key }] }));
+    receipts.push({ at, key: w.key.key, exact: w.key.exact, proof: w.key.proof, via: w.key.via });
+    // a write inside a loop or guard may run zero times: every write is conditional
+    const present = {
+      kind: "object",
+      order: [{ kind: "leaf", key: w.key.key, node: w.valueNode, source, fileRel: source.fileName, declNode: w.statement, shape: valueShape, unresolvedKey: false, socketNamespace: w.key.exact ? null : w.key.head }],
+      closed: isShapeClosed(valueShape),
+      path: stepPath,
+      node: init,
+      fileRel: source.fileName,
+    };
+    const absent = { kind: "object", order: [], closed: true, path: stepPath, node: init, fileRel: source.fileName };
+    order.push({ kind: "spread", node: w.statement, shape: { kind: "branches", branches: [present, absent], path: stepPath } });
+  }
+  return {
+    kind: "object",
+    order,
+    closed: order.every(entryIsClosed),
+    path: stepPath,
+    node: init,
+    fileRel: source.fileName,
+    socketLoopFill: {
+      binding: name,
+      declaredAt: binding.declaredAt,
+      namespace: SOCKET_NAMESPACE_HEAD,
+      writeCount: receipts.length,
+      writes: receipts,
+    },
+  };
+}
+
 /* ------------- custom-property namespace relay (T-NAMESPACE-RELAY) --- */
 /**
  * T-NAMESPACE-RELAY -- a value whose declared type bounds it to a custom-property
@@ -2262,10 +2429,11 @@ export function resolveShape(node, ctx) {
         let keyDomain = null;
         if (resolvedKey === null && ts.isComputedPropertyName(property.name)) {
           /* T-COMPUTED-NAME: a computed PROPERTY NAME is not automatically
-           * unknowable. Two proofs, both fail-closed:
+           * unknowable. Three proofs, all fail-closed:
            *   (1) the expression substitutes to a literal at this call site
            *       (`buildPinStyle('right', …)` makes `[side]` exactly `right`);
-           *   (2) its declared type is a closed literal union, so the name
+           *   (2) it is a conditional whose every arm is a literal;
+           *   (3) its declared type is a closed literal union, so the name
            *       ranges over a finite, enumerable set.
            * Anything else keeps `unresolvedKey` and the object stays open. */
           const nameExpr = unwrap(property.name.expression);
@@ -2275,7 +2443,9 @@ export function resolveShape(node, ctx) {
           if (ts.isStringLiteralLike(substituted)) {
             resolvedKey = substituted.text;
           } else {
-            const domain = enumerateKeyDomainByType(nameExpr, property.name, source, { allowNullish: true });
+            // (3) a conditional whose every arm is a literal names exactly those arms
+            const domain = conditionalLiteralKeyDomain(substituted) ??
+              enumerateKeyDomainByType(nameExpr, property.name, source, { allowNullish: true });
             if (domain && domain.length) keyDomain = domain;
           }
         }
@@ -2387,6 +2557,8 @@ export function resolveShape(node, ctx) {
         // T-INTERNAL-MUTATION: the same idiom over a NON-EMPTY fresh base.
         const mutated = resolveInternalMutationShape(binding, ctx, path, depth);
         if (mutated) return mutated;
+        const socketFill = resolveSocketLoopFillShape(binding, ctx, path, depth);
+        if (socketFill) return socketFill;
         return { kind: "openUnknown", reason: "reassignment-or-mutation-present", path: [...path, { kind: "localConst-mutated", declaredAt: binding.declaredAt }] };
       }
       return resolveShape(binding.node, freshCtx(ctx, { depth: depth + 1, path: [...path, { kind: "localConst", declaredAt: binding.declaredAt }] }));
@@ -2601,6 +2773,19 @@ export function resolveShape(node, ctx) {
       }
       return { kind: "openUnknown", reason: `callee-binding-kind:${binding.kind}`, path };
     }
+    /* `Object.freeze(x)` returns `x` itself. Only the unshadowed global
+     * qualifies; a local `Object` is resolved like any other binding. */
+    if (
+      ts.isPropertyAccessExpression(callee) &&
+      ts.isIdentifier(callee.expression) && callee.expression.text === "Object" &&
+      callee.name.text === "freeze" &&
+      !resolveBinding("Object", callee.expression, source, collectModuleImports(source))
+    ) {
+      if (n.arguments.length !== 1 || ts.isSpreadElement(n.arguments[0])) {
+        return { kind: "openUnknown", reason: "object-freeze-arity-not-one", path: [...path, { kind: "objectFreeze" }] };
+      }
+      return resolveShape(n.arguments[0], freshCtx(ctx, { depth: depth + 1, path: [...path, { kind: "objectFreeze" }] }));
+    }
     if (ts.isPropertyAccessExpression(callee)) {
       const objShape = resolveShape(callee.expression, freshCtx(ctx, { depth: depth + 1, path }));
       const lookup = readProperty(objShape, callee.name.text);
@@ -2621,6 +2806,24 @@ export function resolveShape(node, ctx) {
   }
 
   return { kind: "openUnknown", reason: `node-kind-not-handled:${ts.SyntaxKind[n.kind]}`, path };
+}
+
+/** `a ? 'x' : b ? 'y' : 'z'` -> ['x', 'y', 'z']; null unless every arm is a literal. */
+function conditionalLiteralKeyDomain(expr) {
+  const n = unwrap(expr);
+  if (!n || !ts.isConditionalExpression(n)) return null;
+  const members = [];
+  const collect = (arm, depth) => {
+    const a = unwrap(arm);
+    if (!a || depth > 8) return false;
+    if (ts.isStringLiteralLike(a)) {
+      if (!members.includes(a.text)) members.push(a.text);
+      return true;
+    }
+    if (ts.isConditionalExpression(a)) return collect(a.whenTrue, depth + 1) && collect(a.whenFalse, depth + 1);
+    return false;
+  };
+  return collect(n, 0) ? members : null;
 }
 
 /** Per-order-entry closedness: a spread is closed iff its shape is closed; a
