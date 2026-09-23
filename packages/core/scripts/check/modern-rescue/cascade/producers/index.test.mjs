@@ -1920,10 +1920,8 @@ test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched
  * ===================================================================== */
 
 /** Resolve the `style={...}` expression of a fixture and dispose of it. */
-const branchProbe = (code) => {
-  const source = ts.createSourceFile(
-    'packages/core/src/components/probe/index.tsx', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX,
-  );
+const branchProbe = (code, fileRel = 'packages/core/src/components/probe/index.tsx') => {
+  const source = ts.createSourceFile(fileRel, code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   let expression = null;
   const walk = (node) => {
     if (
@@ -1934,7 +1932,6 @@ const branchProbe = (code) => {
   };
   walk(source);
   assert.ok(expression, 'fixture must contain a style sink');
-  const fileRel = 'packages/core/src/components/probe/index.tsx';
   const shape = resolveShape(expression, {
     source, fileRel, depth: 0, path: [{ kind: 'terminal-at-sink', form: 'identifier' }],
   });
@@ -3378,37 +3375,73 @@ test('S-11 NEGATIVE: a SIBLING declarator or a `var` binding is never proven', (
 
 const SEALED_VIA = 'sealed-import-relay';
 const RECIPE_MODULE = '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
-const RECIPE_KEYS = [
-  '--ds-recipe-curve', '--ds-recipe-cycle', '--ds-recipe-enter', '--ds-recipe-exit',
-  '--ds-recipe-scale-from', '--ds-recipe-settle', '--ds-recipe-x', '--ds-recipe-y',
-];
 /** A consumer fixture that imports the REAL sealed producer module. */
 const sealedProbe = (body) => branchProbe(`import { useMotionRecipePresentation } from '${RECIPE_MODULE}';\n${body}`);
 const isProven = (shape) => shape.kind === 'relay' && !!shape.sealedImportRelay;
 /** The shape of the single spread entry of an object fixture. */
 const spreadShapeOf = (shape) => (shape.order ?? []).find((e) => e.kind === 'spread')?.shape ?? shape;
 
-test('SR-1 POSITIVE: an ARBITRARY alias and either access form prove identically', () => {
-  const direct = sealedProbe(
-    'export const C = ({n}) => { const zqArbitrary$1 = useMotionRecipePresentation(n); return <div style={zqArbitrary$1.variables} />; };',
-  );
-  assert.ok(isProven(direct.shape), 'a bare member-access read must prove');
-  assert.equal(direct.disposition, 'RELAY_PRIVATE_UNRESOLVED');
-  assert.equal(direct.shape.sealedImportRelay.localBinding, 'zqArbitrary$1');
-  assert.equal(direct.shape.sealedImportRelay.property, 'variables');
-  assert.equal(direct.shape.sealedImportRelay.owner, 'motionRecipeCssVariables');
-  assert.deepEqual(direct.shape.sealedImportRelay.keys, RECIPE_KEYS);
+/* The rule takes precedence over CLOSED_PRODUCER on a followable sealed producer with an
+ * unresolved value (a read whose SHAPE is not closed); no live read qualifies since
+ * 399c3d997, so SR-1/5/6 witness it on a synthetic producer instead. */
+const SEALED_DRILL_KEYS = ['--ds-drill-a', '--ds-drill-b'];
+/** OPEN keeps one runtime value; CLOSED is its twin with that value as a literal. */
+const sealedDrillProducer = (value) => `export interface DrillVars { '--ds-drill-a': string; '--ds-drill-b': string }
+export interface DrillOut { vars: DrillVars }
+declare function readRuntimeCurve(name: string): string;
+function buildDrillVars(x: number, curve: string): DrillVars { return { '--ds-drill-a': \`\${x}px\`, '--ds-drill-b': ${value} }; }
+export function useDrill(x: number, curve: string): DrillOut { return { vars: buildDrillVars(x, curve) }; }
+`;
+const SEALED_DRILL_IMPORTS =
+  "import { useDrill } from './fixtures/open';\nimport { useDrill as useClosedDrill } from './fixtures/closed';\n";
+/** Writes both producers (and an optional scanned consumer) under a temporary components folder. */
+const withSealedRelayDrill = (consumerSource, run) => {
+  const dir = mkdtempSync(join(REPO_ABS, 'packages/core/src/components/__sealed-relay-drill-'));
+  const dirRel = `packages/core/src/components/${dir.slice(dir.lastIndexOf('/') + 1)}`;
+  try {
+    mkdirSync(join(dir, 'fixtures'));
+    writeFileSync(join(dir, 'fixtures', 'open.ts'), sealedDrillProducer('readRuntimeCurve(curve)'));
+    writeFileSync(join(dir, 'fixtures', 'closed.ts'), sealedDrillProducer("'ease'"));
+    if (consumerSource) writeFileSync(join(dir, 'index.tsx'), consumerSource);
+    return run(dirRel);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+};
 
-  const spread = sealedProbe(
-    'export const C = ({n}) => { const totallyOther = useMotionRecipePresentation(n); return <div style={{ ...totallyOther.variables }} />; };',
-  );
-  const inner = spreadShapeOf(spread.shape);
-  assert.ok(isProven(inner), 'the same read inside a spread must prove');
-  // the alias is cosmetic: the two receipts differ ONLY in the binding name
-  assert.deepEqual(
-    { ...inner.sealedImportRelay, localBinding: null, localDeclaredAt: null },
-    { ...direct.shape.sealedImportRelay, localBinding: null, localDeclaredAt: null },
-  );
+test('SR-1 POSITIVE: an ARBITRARY alias and either access form prove identically', () => {
+  withSealedRelayDrill(null, (dirRel) => {
+    const probe = (body) => branchProbe(`${SEALED_DRILL_IMPORTS}${body}`, `${dirRel}/index.tsx`);
+    const direct = probe(
+      'export const C = ({n, c}) => { const zqArbitrary$1 = useDrill(n, c); return <div style={zqArbitrary$1.vars} />; };',
+    );
+    assert.ok(isProven(direct.shape), 'a bare member-access read must prove');
+    assert.equal(direct.disposition, 'RELAY_PRIVATE_UNRESOLVED');
+    assert.equal(direct.shape.sealedImportRelay.localBinding, 'zqArbitrary$1');
+    assert.equal(direct.shape.sealedImportRelay.property, 'vars');
+    assert.equal(direct.shape.sealedImportRelay.propertyType, 'DrillVars');
+    assert.equal(direct.shape.sealedImportRelay.owner, 'buildDrillVars');
+    assert.equal(direct.shape.sealedImportRelay.exportFile, `${dirRel}/fixtures/open.ts`);
+    assert.deepEqual(direct.shape.sealedImportRelay.keys, SEALED_DRILL_KEYS);
+
+    const spread = probe(
+      'export const C = ({n, c}) => { const totallyOther = useDrill(n, c); return <div style={{ ...totallyOther.vars }} />; };',
+    );
+    const inner = spreadShapeOf(spread.shape);
+    assert.ok(isProven(inner), 'the same read inside a spread must prove');
+    // the alias is cosmetic: the two receipts differ ONLY in the binding name
+    assert.deepEqual(
+      { ...inner.sealedImportRelay, localBinding: null, localDeclaredAt: null },
+      { ...direct.shape.sealedImportRelay, localBinding: null, localDeclaredAt: null },
+    );
+
+    // the twin whose shape closes stays a producer: the rule outranks CLOSED_PRODUCER only on an unclosed shape
+    for (const read of ['shut.vars', '{ ...shut.vars }']) {
+      const twin = probe(`export const C = ({n, c}) => { const shut = useClosedDrill(n, c); return <div style={${read}} />; };`);
+      assert.equal(twin.disposition, 'CLOSED_PRODUCER', `${read} over the closing twin must close`);
+      assert.ok(!isProven(twin.shape) && !isProven(spreadShapeOf(twin.shape)), `${read} over the closing twin must NOT prove`);
+    }
+  });
 });
 
 test('SR-2 POSITIVE: a property other than `variables` proves through the same seal', () => {
@@ -3494,10 +3527,32 @@ test('SR-4 NEGATIVE: an UNSEALED declared shape is never proven', () => {
   }
 });
 
+const SEALED_DRILL_CONSUMER = `${SEALED_DRILL_IMPORTS}
+export const A = ({ n, c }) => { const qRelay = useDrill(n, c); return <div style={qRelay.vars} />; };
+export const B = ({ n, c }) => { const wOther$ = useDrill(n, c); return <div style={{ ...wOther$.vars }} />; };
+export const E = ({ n, c }) => { const zzThird = useDrill(n, c); return <div style={{ ...zzThird.vars }} />; };
+export const D = ({ n, c }) => { const shut = useClosedDrill(n, c); return <div style={shut.vars} />; };
+export const G = ({ n, c }) => { const shutToo = useClosedDrill(n, c); return <div style={{ ...shutToo.vars }} />; };
+`;
+let sealedDrillArtifact = null;
+/** One real build with the drill consumer on disk, shared by SR-5 and SR-6. */
+const sealedDrillBuild = () => {
+  sealedDrillArtifact ??= withSealedRelayDrill(SEALED_DRILL_CONSUMER, (dirRel) => ({
+    file: `${dirRel}/index.tsx`,
+    producerFile: `${dirRel}/fixtures/open.ts`,
+    out: buildProducers(),
+  }));
+  return sealedDrillArtifact;
+};
+
 test('SR-5 the proof reaches the ARTIFACT and never becomes governance', () => {
-  const out = buildProducers();
+  const { file, producerFile, out } = sealedDrillBuild();
   const proven = out.privateRelay.filter((r) => r.resolvedVia === SEALED_VIA);
-  assert.equal(proven.length, 16);
+  const drill = proven.filter((r) => r.file === file);
+  assert.equal(drill.length, 5, 'A + B + E: one member-access row each, plus a spread row for B and E');
+  assert.equal(drill.filter((r) => r.reason.endsWith(':member-access')).length, 3);
+  assert.equal(drill.filter((r) => r.reason.endsWith(':spread')).length, 2);
+  assert.deepEqual([...new Set(drill.map((r) => r.symbol))].sort(), ['A', 'B', 'E']);
   for (const row of proven) {
     assert.equal(row.reason.startsWith('sealed-import-relay:'), true);
     assert.match(row.reason, /:(member-access|spread)$/, 'the reason must keep the site form');
@@ -3512,32 +3567,40 @@ test('SR-5 the proof reaches the ARTIFACT and never becomes governance', () => {
 
     const list = row.evidence.sealedImportRelay;
     assert.ok(Array.isArray(list) && list.length === 1, `${row.file}:${row.line} published no single proof`);
-    const proof = list[0];
     // exact object shape: no extra field, no missing field
-    assert.deepEqual(Object.keys(proof).sort(), [
+    assert.deepEqual(Object.keys(list[0]).sort(), [
       'exportFile', 'exportedFunction', 'importedCallee', 'importedName', 'keyCount', 'keys',
       'localBinding', 'localDeclaredAt', 'moduleSpecifier', 'owner', 'ownerDeclaredAt',
       'ownerFile', 'property', 'propertyType', 'returnType',
     ]);
-    // binding -> import/export -> property -> owner -> keys, all named
-    assert.match(proof.localBinding, /Motion$/);
-    assert.equal(proof.importedCallee, 'useMotionRecipePresentation');
-    assert.equal(proof.importedName, 'useMotionRecipePresentation');
-    assert.equal(proof.moduleSpecifier, RECIPE_MODULE);
-    assert.equal(proof.exportFile, 'packages/core/src/infrastructure/runtime/foundation/motion/composition/react/preference/recipe/index.ts');
-    assert.equal(proof.exportedFunction, 'useMotionRecipePresentation');
-    assert.equal(proof.returnType, 'MotionRecipePresentation');
-    assert.equal(proof.property, 'variables');
-    assert.equal(proof.propertyType, 'MotionRecipeCssVariables');
-    assert.equal(proof.owner, 'motionRecipeCssVariables');
-    assert.equal(proof.ownerFile, proof.exportFile);
-    assert.equal(proof.keyCount, 8);
-    assert.deepEqual(proof.keys, RECIPE_KEYS);
     // the path shows HOW the producer was reached, and ends on the sealing step
     assert.equal(row.evidence.path[0], 'terminal-at-sink');
     assert.equal(row.evidence.path[row.evidence.path.length - 1], 'sealedImportRelay');
   }
-  // no relay that did NOT close by this route gains an empty or spurious field
+  // binding -> import/export -> property -> owner -> keys, all named
+  assert.deepEqual([...new Set(drill.map((r) => r.evidence.sealedImportRelay[0].localBinding))].sort(), ['qRelay', 'wOther$', 'zzThird']);
+  for (const row of drill) {
+    const proof = row.evidence.sealedImportRelay[0];
+    assert.equal(proof.localDeclaredAt.startsWith(`${file}:`), true);
+    assert.equal(proof.importedCallee, 'useDrill');
+    assert.equal(proof.importedName, 'useDrill');
+    assert.equal(proof.moduleSpecifier, './fixtures/open');
+    assert.equal(proof.exportFile, producerFile);
+    assert.equal(proof.exportedFunction, 'useDrill');
+    assert.equal(proof.returnType, 'DrillOut');
+    assert.equal(proof.property, 'vars');
+    assert.equal(proof.propertyType, 'DrillVars');
+    assert.equal(proof.owner, 'buildDrillVars');
+    assert.equal(proof.ownerFile, producerFile);
+    assert.equal(proof.keyCount, 2);
+    assert.deepEqual(proof.keys, SEALED_DRILL_KEYS);
+  }
+  // the closing twin reaches the artifact as a producer, never as a relay or with a proof
+  const twins = out.closedProducer.filter((r) => r.file === file);
+  assert.deepEqual([...new Set(twins.map((r) => r.symbol))].sort(), ['D', 'G']);
+  for (const row of twins) assert.equal(row.evidence.sealedImportRelay, undefined);
+  assert.deepEqual(out.privateRelay.filter((r) => r.file === file).map((r) => r.symbol).sort(), ['A', 'B', 'B', 'E', 'E']);
+  // no relay reached by any other route gains an empty or spurious field
   for (const row of out.privateRelay.filter((r) => r.resolvedVia !== SEALED_VIA)) {
     assert.equal(row.evidence.sealedImportRelay, undefined);
     // T-NAMESPACE-RELAY is a SECOND proven route into this bucket; every other
@@ -3554,8 +3617,8 @@ test('SR-5 the proof reaches the ARTIFACT and never becomes governance', () => {
 });
 
 test('SR-6 NEGATIVE: tampering with a sealed-relay proof moves the bound digest', () => {
-  const out = buildProducers();
-  const rows = out.privateRelay.filter((r) => r.resolvedVia === SEALED_VIA).slice(0, 4);
+  const { file, out } = sealedDrillBuild();
+  const rows = out.privateRelay.filter((r) => r.resolvedVia === SEALED_VIA && r.file === file).slice(0, 4);
   assert.equal(rows.length, 4);
   const bound = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.relayKinds, r.evidence]));
   const identity = (rs) => JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason]));
@@ -4533,37 +4596,39 @@ test('R42-7 the Message/Notification family closed as ZERO and stayed there', ()
   }
 });
 
-test('R42-8 the final inventory: 41 closed by RESIDUAL-42, the 42nd resolved, nothing open', () => {
+test('R42-8 the final inventory: 41 closed by RESIDUAL-42, the 42nd retired with its file, only the 6 data-table conditionals open', () => {
   const out = buildProducers();
-  assert.equal(out.stats.openBlocking, 0);
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.authoredOpen.length, 0);
-  assert.equal(out.branchConditionalAuthored.length, 0);
+  /* The 6 BRANCH_CONDITIONAL_AUTHORED rows are WO-FAM-08 B4's data-table
+   * computed-key stamps (--ds-data-table-pinned-inset-* behind two early {}
+   * returns): real conditional governed emissions, correctly BLOCKING
+   * (receiver: the data-table owner under WO-FAM-08). */
+  assert.equal(out.branchConditionalAuthored.length, 6);
+  assert.equal(out.stats.openBlocking, 6);
   assert.equal(out.openUnknown.length, 0);
   assert.equal(out.callArgsPending.length, 0);
   assert.equal(out.computedDomainPending.length, 0);
-  /* RESIDUAL-42's one declared debt is gone -- and the distinction that
-   * matters is HOW. It was not dropped from the inventory: the same site, in
-   * the same file and under the same symbol, is now a closed PRODUCER whose
-   * name domain was enumerated. A debt that merely disappeared would satisfy
-   * `dynamicSinkPending.length === 0` too, so identity is what is asserted. */
+  /* RESIDUAL-42's 42nd debt, writePersonalityDeclarations, closed as an
+   * entries-record PRODUCER and was then deleted with css-variables-bridge by
+   * WO-CAN-04 (64ff990bd). Its identity leg is retired with the file: the
+   * absence is pinned by ER-1, CL-9, GW-2 and C-a3, the route by ER-2..ER-4,
+   * and "nothing vanished" by the exact universe below. */
   assert.equal(out.dynamicSinkPending.length, 0);
-  const resolvedDebt = out.closedProducer.filter((r) => /css-variables-bridge/.test(r.file));
-  assert.equal(resolvedDebt.length, 1, 'the debt must be RESOLVED, not vanish from the inventory');
-  assert.equal(resolvedDebt[0].symbol, 'writePersonalityDeclarations');
-  assert.ok(resolvedDebt[0].evidence.entriesRecordDomain, 'and it must carry the proof that closed it');
-  assert.equal(resolvedDebt[0].consumable, false);
-  assert.equal(resolvedDebt[0].tenantSafe, false);
   // the closed buckets, exact
   assert.equal(out.stats.closedZeroGoverned, 613);
-  assert.equal(out.stats.closedProducer, 56);
+  /* closedProducer 56→156: +84 responsive socket rows (42 sites × 2 forms,
+   * the T-SOCKET-LOOP-FILL rule reading the --_ds-rsp-* private sockets) and
+   * +16 motion-recipe .variables rows (RECIPE_CURVE_CSS's Object.freeze table)
+   * in; the same 16 left privateRelay (693→677). */
+  assert.equal(out.stats.closedProducer, 156);
   assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 693);
+  assert.equal(out.stats.privateRelay, 677);
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(universeTotal(out), 2067);
   assert.equal(out.openBacklogRollup.lotBOpen, out.stats.unknownProvenance === 0 && openRows(out).length === 0);
-  assert.equal(out.openBacklogRollup.lotBOpen, true, 'no debt remains, so lot B is no longer shut');
+  assert.equal(out.openBacklogRollup.lotBOpen, false, 'the 6 data-table conditionals keep lot B shut, honestly');
 });
 
 /* ===================================================================== *
@@ -5043,4 +5108,74 @@ test('SF-6 the live responsive sinks are socket producers, and no open row is a 
   for (const row of openRows(out)) {
     assert.deepEqual(row.evidence?.internalSocketKeys ?? [], [], 'a socket emission is never open debt');
   }
+});
+
+/* ===================================================================== *
+ * NF-* -- the nested-function mutation walk (the false-ZERO repair).
+ *
+ * Before the walk reached into nested function bodies, an object filled
+ * from a forEach/map callback certified ZERO with its keys unexamined --
+ * the false-ZERO class Fable measured at HEAD. The walk now reads writes
+ * inside nested bodies against the binding they actually touch: a write
+ * through the outer binding (or an alias of it) is a mutation and refuses;
+ * a shadowed name, a fresh own object and a read-only helper are not.
+ * ===================================================================== */
+
+/** A `build` helper whose body the probe fills, called at the style sink. */
+const nestedFillFixture = (body) => `function build(xs: string[], x: string) {
+${body}
+}
+export const C = ({ xs, x }: any) => <div style={build(xs, x)} />;`;
+
+test('NF-1 NEGATIVE: a governed fill hidden in a nested callback refuses, twelve ways', () => {
+  const cases = {
+    'forEach fill, governed computed keys': `const o = {}; xs.forEach((s) => { o['--ds-' + s] = '1'; }); return o;`,
+    'forEach fill, socket keys': `const o = {}; xs.forEach((s) => { o['--_ds-rsp-' + s] = '1'; }); return o;`,
+    'forEach fill, one static governed key': `const o = {}; xs.forEach(() => { o['--ds-probe-a'] = '1'; }); return o;`,
+    'nested .map write via dot access': `const o: any = {}; xs.map(() => { o.color = 'red'; }); return o;`,
+    'nested Object.assign': `const o = {}; xs.forEach((s) => { Object.assign(o, { ['--ds-' + s]: '1' }); }); return o;`,
+    'nested alias then write': `const o: any = {}; xs.forEach((s) => { const a = o; a['--ds-' + s] = '1'; }); return o;`,
+    'nested alias spelled like a read-only outer alias': `const o: any = {}; const a = o; void a; xs.forEach(() => { const a = o; a['--ds-x'] = '1'; }); return o;`,
+    'second of two same-named callback aliases writes': `const o: any = {}; xs.forEach(() => { const a = o; void a; }); xs.forEach(() => { const a = o; a['--ds-x'] = '1'; }); return o;`,
+    'named function expression that does NOT shadow the name': `const o: any = {}; const f = function p() { o.k = 1; }; void f; return o;`,
+    'nested ++ on a property': `const o: any = { n: 0 }; xs.forEach(() => { o.n++; }); return o;`,
+    'nested delete': `const o: any = { '--ds-probe-a': x }; xs.forEach(() => { delete o['--ds-probe-a']; }); return o;`,
+    'deferred write in an uncalled closure body': `const o = {}; const later = () => { o['--ds-probe-a'] = '1'; }; void later; return o;`,
+  };
+  for (const [label, body] of Object.entries(cases)) {
+    const out = branchProbe(nestedFillFixture(body));
+    assert.equal(out.disposition, 'OPEN_UNKNOWN', `${label}: must not close`);
+    assert.ok(openReasonsOf(out.shape).has('reassignment-or-mutation-present'), `${label}: the mutation refusal stands`);
+  }
+});
+
+test('NF-2 POSITIVE: nested bodies that never mutate the outer binding still close', () => {
+  const cases = {
+    'read-only helper': `const o = {}; const n = xs.map((s) => Object.keys(o).length + s); void n; return o;`,
+    'nested fn returns its OWN fresh object': `const o = {}; const make = (s: string) => { const o: any = {}; o['--ds-' + s] = '1'; return o; }; void xs.map(make); return o;`,
+    'param shadows the name': `const o = {}; xs.map((s) => ({})).forEach((o: any) => { o['--ds-probe-a'] = '1'; }); return o;`,
+    'named function expression shadows the name': `const o = {}; const f = function o() { o['--ds-x'] = '1'; }; void f; return o;`,
+    'fresh object from each call': `const make = () => ({}); const o = make(); void xs.map(() => make()); return o;`,
+    'alias declared inside the callback, only read': `const o: any = {}; xs.forEach(() => { const a = o; void a.k; }); return o;`,
+  };
+  for (const [label, body] of Object.entries(cases)) {
+    const out = branchProbe(nestedFillFixture(body));
+    assert.equal(out.disposition, ZERO_D, `${label}: no mutation of the emitted object`);
+  }
+});
+
+test('NF-3 the socket loop-fill rule stays at its own reach: a forEach fill is not smuggled closed', () => {
+  const topLevel = branchProbe(nestedFillFixture('const o: Record<string, string> = {}; for (const s of xs) { o[`--_ds-rsp-${s}`] = x; } return o;'));
+  assert.equal(topLevel.disposition, 'CLOSED_PRODUCER', 'the top-level socket fill keeps its rule');
+  const governed = branchProbe(nestedFillFixture('const o: Record<string, string> = {}; for (const s of xs) { o[`--ds-${s}`] = x; } return o;'));
+  assert.equal(governed.disposition, 'OPEN_UNKNOWN', 'a governed key refuses the same fill');
+  const inCallback = branchProbe(nestedFillFixture('const o: Record<string, string> = {}; xs.forEach((s) => { o[`--_ds-rsp-${s}`] = x; }); return o;'));
+  assert.equal(inCallback.disposition, 'OPEN_UNKNOWN', 'the SAME socket fill inside a callback stays open -- the walk proves the write but the socket rule does not reach into callbacks');
+  assert.ok(openReasonsOf(inCallback.shape).has('reassignment-or-mutation-present'));
+});
+
+test('NF-4 REGRESSION: a top-level computed write still refuses', () => {
+  const out = branchProbe(nestedFillFixture(`const o: any = {}; o[x] = '1'; return o;`));
+  assert.equal(out.disposition, 'OPEN_UNKNOWN');
+  assert.ok(openReasonsOf(out.shape).has('reassignment-or-mutation-present'));
 });

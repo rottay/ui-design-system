@@ -222,17 +222,42 @@ function destructuringTargetsName(pattern, name) {
   return false;
 }
 
+/** Every name a declaration's binding target introduces. */
+function boundNamesOf(target) {
+  if (ts.isIdentifier(target)) return [target.text];
+  if (ts.isObjectBindingPattern(target) || ts.isArrayBindingPattern(target)) {
+    return target.elements.flatMap((el) => (ts.isOmittedExpression(el) ? [] : boundNamesOf(el.name)));
+  }
+  return [];
+}
+
+/** A nested function that binds `name` itself -- a parameter, its own
+ * function-expression name, or a declaration in its body's statement list --
+ * refers to a different binding everywhere inside it. */
+function functionRebindsName(fn, name) {
+  if (ts.isFunctionExpression(fn) && fn.name?.text === name) return true;
+  if (fn.parameters.some((param) => boundNamesOf(param.name).includes(name))) return true;
+  if (!fn.body || !ts.isBlock(fn.body)) return false;
+  return fn.body.statements.some(
+    (st) =>
+      ((ts.isFunctionDeclaration(st) || ts.isClassDeclaration(st)) && st.name?.text === name) ||
+      (ts.isVariableStatement(st) && st.declarationList.declarations.some((d) => boundNamesOf(d.name).includes(name))),
+  );
+}
+
 /** Any assignment operator, prefix/postfix `++`/`--` (identifier or property
  * target), or destructuring-assignment write that targets `name` or a
- * property of `name`, anywhere in the same function scope (not crossing into
- * nested function bodies). */
-function hasReassignmentOrMutation(funcScope, name, seen = new Set()) {
+ * property of `name`, anywhere in the function scope -- including nested
+ * function bodies, since a callback's write lands on the same object. An
+ * alias is keyed by its declaration, so two aliases sharing a spelling are
+ * each searched. */
+function hasReassignmentOrMutation(funcScope, name, seen = new Set(), key = `scope@${funcScope.pos}:${name}`) {
   let found = false;
-  if (seen.has(name) || seen.size > 8) return false; // alias cycle / depth guard
-  seen.add(name);
+  if (seen.has(key) || seen.size > 8) return false; // alias cycle / depth guard
+  seen.add(key);
   const walk = (node) => {
     if (found) return;
-    if (isFunctionLike(node) && node !== funcScope) return;
+    if (isFunctionLike(node) && node !== funcScope && functionRebindsName(node, name)) return;
     if (ts.isBinaryExpression(node) && ASSIGN_OPS.has(node.operatorToken.kind)) {
       const lhs = node.left;
       if (ts.isIdentifier(lhs) && lhs.text === name) {
@@ -291,8 +316,9 @@ function hasReassignmentOrMutation(funcScope, name, seen = new Set()) {
       ts.isIdentifier(node.name)
     ) {
       // an alias only matters when the ALIAS is itself mutated; a read-only
-      // second name for the same object changes nothing and must keep resolving
-      if (hasReassignmentOrMutation(funcScope, node.name.text, seen)) {
+      // second name for the same object changes nothing and must keep resolving.
+      // The alias is searched from the function that declares it.
+      if (hasReassignmentOrMutation(nearestFunctionOrSource(node), node.name.text, seen, `decl@${node.pos}:${node.name.text}`)) {
         found = true;
         return;
       }
