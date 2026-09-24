@@ -418,16 +418,16 @@ test('the retired TableCheckboxStyles bodies cannot come back under the lowered 
     retired,
   );
 
-  // The reconciled ceiling is real, not a fixture: pin the row this drill is about.
+  // The reconciled ceiling is real, not a fixture: pin the row this drill is about (lowered 346/139 -> 304/138 at 64ff990bd).
   const contract = JSON.parse(readFileSync(new URL('./registry/index.json', import.meta.url), 'utf8'));
   const row = contract.baselines['raw-motion-timing'].files
     .find((entry) => entry.repo === 'ui-design-system' && entry.scope === 'ds-internal');
   assert.deepEqual(
     { maxCount: row.maxCount, maxFiles: row.maxFiles, digest: row.digest },
     {
-      maxCount: 346,
-      maxFiles: 139,
-      digest: '0a3dc1c331f84136c256b017c6690273a480e9ecea1b5487ceb043980b3e60f9',
+      maxCount: 304,
+      maxFiles: 138,
+      digest: '6706a3a6571003a50a42a029da35fd1eb4cf40b81262e9e1a2714c434a8c356e',
     },
   );
 

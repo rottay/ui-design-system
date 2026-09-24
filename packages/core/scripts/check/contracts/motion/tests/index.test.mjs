@@ -266,3 +266,40 @@ function unrelated() { return { transitionDuration: '0.01ms' }; }
   }).findings.filter((entry) => entry.channel === 'raw-motion-timing');
   assert.equal(findings.length, 1, 'a TS near-zero must stay counted even beside the guard string');
 });
+
+/**
+ * The lint rule that bans `transition: all` quotes the pattern in its own diagnostic and lints fixtures that contain
+ * it. Those strings run inside ESLint, never in a stylesheet, so they are masked -- and only under the rules root.
+ */
+test('DRILL: an eslint rule module and its tests do not count their own diagnostics and fixtures', async () => {
+  const { scanSource, LINT_RULE_TEXT_ROOT } = await import('../index.mjs');
+  const rule = [
+    "context.report({ node, message: '`transition: all` animates every layout property by definition.' });",
+    "const hint = 'This @keyframes step declares a layout property.';",
+    "created.TemplateElement?.({ value: { cooked: '@keyframes x { to { max-height: 0 } }' } });",
+    'const later = { transitionDuration: 250 };',
+  ].join('\n');
+  for (const path of [
+    `${LINT_RULE_TEXT_ROOT.pathPrefix}no-layout-property-animation/index.ts`,
+    `${LINT_RULE_TEXT_ROOT.pathPrefix}no-layout-property-animation/tests/index.test.ts`,
+  ]) {
+    const scanned = scanSource({ source: rule, extension: '.ts', repo: 'ui-design-system', path });
+    assert.deepEqual(scanned.findings, [], `${path}: the enforcer's own text must not count`);
+    assert.deepEqual(scanned.definitions, [], `${path}: a quoted @keyframes is not a definition`);
+  }
+});
+
+test('DRILL: a real `transition: all` in a component string still counts, and so does the same text outside the rules root', async () => {
+  const { scanSource } = await import('../index.mjs');
+  const styled = 'const Row = styled.div`\n  color: red;\n  transition: all 200ms ease;\n`;';
+  const component = scanSource({ source: styled, extension: '.ts', repo: 'ui-design-system', path: 'packages/core/src/components/x/index.ts' });
+  const all = component.findings.filter((entry) => entry.channel === 'transition-all');
+  assert.equal(all.length, 1, 'a CSS-in-JS transition: all must still red');
+  assert.equal(all[0].line, 3, 'masking elsewhere never shifts a line');
+  for (const path of ['packages/core/src/entrypoints/eslint/plugin/index.ts', 'packages/core/src/entrypoints/eslint-rules-lookalike/index.ts']) {
+    const outside = scanSource({ source: styled, extension: '.ts', repo: 'ui-design-system', path });
+    assert.equal(outside.findings.filter((entry) => entry.channel === 'transition-all').length, 1, `${path} is not the rules root`);
+  }
+  const otherRepo = scanSource({ source: styled, extension: '.ts', repo: 'app-bithire', path: 'packages/core/src/entrypoints/eslint/rules/x/index.ts' });
+  assert.equal(otherRepo.findings.filter((entry) => entry.channel === 'transition-all').length, 1, 'the exemption is bound to this repository');
+});

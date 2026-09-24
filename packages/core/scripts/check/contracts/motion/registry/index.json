@@ -313,9 +313,20 @@
         {
           "repo": "ui-design-system",
           "scope": "test",
-          "maxCount": 41,
-          "maxFiles": 14,
-          "digest": "cbdccbc05250afb2e21fc2766ee186a5c49129d0a0f5e71d72b979748d851490"
+          "maxCount": 47,
+          "maxFiles": 12,
+          "digest": "0a5912805b168e679953c38b93dfc2708adf63a82ce541b0a02bb8bb987abc7a",
+          "lastMove": {
+            "date": "2026-09-25",
+            "from": "41/14",
+            "to": "47/12",
+            "kind": "measured test-fixture growth, nothing animates",
+            "movers": [
+              "+3 d495324e5 (scroll-area relocation): reduced-motion-guard.test.ts fixtures",
+              "+6 b5226905d (skeleton reduced-motion guard): reduced-motion-guard.test.ts fixtures",
+              "-1 35d57712a (mentions cut), -1 3f0841553 (transfer cut), -1 0d154c0d4 (popover cut): assertion strings retired"
+            ]
+          }
         }
       ],
       "canonicalTreeRelocation": {

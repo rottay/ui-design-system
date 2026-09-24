@@ -116,6 +116,34 @@ export function maskComments(source, extension = '.ts') {
   return chars.join('');
 }
 
+/**
+ * Lint rules and their tests run inside ESLint and never reach a stylesheet or a component, so their strings are the
+ * enforcer's diagnostics and lint fixtures, not motion. Only these string contents are masked; code stays scanned.
+ */
+export const LINT_RULE_TEXT_ROOT = Object.freeze({ repo: 'ui-design-system', pathPrefix: 'packages/core/src/entrypoints/eslint/rules/' });
+
+/** Blank the contents of every string and template literal without changing offsets or line numbers. */
+export function maskStringContents(source) {
+  const chars = [...source];
+  let quote = null;
+  let escaped = false;
+  for (let i = 0; i < chars.length; i += 1) {
+    const char = chars[i];
+    if (quote) {
+      if (escaped) escaped = false;
+      else if (char === '\\') escaped = true;
+      else if (char === quote) {
+        quote = null;
+        continue;
+      }
+      if (char !== '\n') chars[i] = ' ';
+      continue;
+    }
+    if (char === "'" || char === '"' || char === '`') quote = char;
+  }
+  return chars.join('');
+}
+
 function scopeFor(repo, path) {
   if (/(^|\/)(?:__tests__|tests?|fixtures)(\/|$)|\.(?:test|spec)\.[cm]?[jt]sx?$/.test(path)) return 'test';
   if (repo === 'ui-design-system' && path.startsWith('packages/showroom/')) return 'showroom';
@@ -257,7 +285,9 @@ function isNearZeroTiming(value) {
 }
 
 export function scanSource({ source, extension = '.tsx', repo, path, scope = scopeFor(repo, path) }) {
-  const masked = maskComments(source, extension);
+  const commentFree = maskComments(source, extension);
+  const lintRuleText = repo === LINT_RULE_TEXT_ROOT.repo && path.startsWith(LINT_RULE_TEXT_ROOT.pathPrefix);
+  const masked = lintRuleText ? maskStringContents(commentFree) : commentFree;
   const definitions = [];
   const references = [];
   const findings = [];
