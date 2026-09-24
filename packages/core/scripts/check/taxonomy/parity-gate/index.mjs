@@ -197,6 +197,77 @@ const GOVERNED_PUBLIC_SUPPORT = {
 };
 
 /**
+ * Indexed folders beside claimed families that are one shared implementation of several families rather than a
+ * family of their own. Each entry names its owner rows and is re-proven every run: the owners exist, nothing public
+ * reaches the folder, and every importer outside it lives inside an owner. Adding a path here is a decision.
+ */
+export const GOVERNED_SUPPORT_FOLDERS = Object.freeze({
+  'packages/core/src/components/primitives/feedback/notifier': Object.freeze({
+    owners: Object.freeze(['primitive/feedback/message', 'primitive/feedback/notification', 'primitive/feedback/toast']),
+    reason: 'the Modern announcement engine the Toast, Notification and Message families render through; no public export',
+  }),
+});
+
+const MODULE_SPECIFIER = /(?:\b(?:import|export)\b[^'"`;]*?\bfrom\s*|\bimport\s*\(\s*)['"]([^'"]+)['"]/gu;
+
+/** Every source file under a directory, as repository-relative posix paths. */
+function sourceFilesUnder(repositoryRoot, relativeDir) {
+  const out = [];
+  const walk = (dir) => {
+    if (!fs.existsSync(dir)) return;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name === 'node_modules' || entry.name === 'dist') continue;
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (/\.(?:ts|tsx|mts)$/u.test(entry.name)) out.push(path.relative(repositoryRoot, full).split(path.sep).join('/'));
+    }
+  };
+  walk(path.join(repositoryRoot, relativeDir));
+  return out;
+}
+
+/** The repository-relative path a module specifier names, or null for a package import. */
+function resolveSpecifier(importer, specifier) {
+  if (specifier.startsWith('@/')) return path.posix.join('packages/core/src', specifier.slice(2));
+  if (specifier.startsWith('.')) return path.posix.normalize(path.posix.join(path.posix.dirname(importer), specifier));
+  return null;
+}
+
+function importsInto(repositoryRoot, file, folder) {
+  const text = fs.readFileSync(path.join(repositoryRoot, file), 'utf8');
+  for (const match of text.matchAll(MODULE_SPECIFIER)) {
+    const target = resolveSpecifier(file, match[1]);
+    if (target !== null && (target === folder || target.startsWith(`${folder}/`))) return true;
+  }
+  return false;
+}
+
+/** The findings that keep a governed support folder honest; empty when it holds. */
+export function governedSupportFolderFindings({ repositoryRoot, folder, entry, rows, rootEntryFile, ownerRootOf }) {
+  const findings = [];
+  const rowsById = new Map(rows.map((row) => [row.id, row]));
+  const missing = entry.owners.filter((id) => !rowsById.has(id));
+  if (missing.length > 0) findings.push(['support-folder-owner', `${folder} names owner(s) ${missing.join(', ')} that are not inventory rows`]);
+  const ownerRoots = entry.owners.filter((id) => rowsById.has(id)).map((id) => ownerRootOf(rowsById.get(id)));
+  const entryFiles = [
+    path.relative(repositoryRoot, rootEntryFile).split(path.sep).join('/'),
+    ...sourceFilesUnder(repositoryRoot, 'packages/core/src/entrypoints'),
+  ].filter((file) => fs.existsSync(path.join(repositoryRoot, file)));
+  for (const file of entryFiles) {
+    if (importsInto(repositoryRoot, file, folder)) findings.push(['support-folder-public', `${folder} is reached from the public entry ${file}; a public shape needs a family row`]);
+  }
+  let ownerConsumers = 0;
+  for (const file of sourceFilesUnder(repositoryRoot, 'packages/core/src')) {
+    if (file.startsWith(`${folder}/`) || /\/(?:tests|__tests__)\//u.test(file) || entryFiles.includes(file)) continue;
+    if (!importsInto(repositoryRoot, file, folder)) continue;
+    if (ownerRoots.some((owner) => file.startsWith(`${owner}/`))) ownerConsumers += 1;
+    else findings.push(['support-folder-consumer', `${folder} is imported by ${file}, which is inside none of its owners (${entry.owners.join(', ')})`]);
+  }
+  if (ownerConsumers === 0) findings.push(['support-folder-unused', `${folder} is imported by none of its owners; support nobody uses is not support`]);
+  return findings;
+}
+
+/**
  * Every way a public name can fail to reach a declaration, and what each one
  * costs a consumer. `TYPE_ONLY` is absent on purpose -- a published type is
  * legal public API -- the clear majority of the root's names are types -- and
@@ -563,6 +634,8 @@ export function auditTaxonomyParity({
   // dirents cannot share one relative path), so the only way to exercise the
   // collision guard honestly is to hand the audit a planted file list.
   listFamilyManifestFiles = collectFamilyManifestFiles,
+  // The governed support folders are real-tree paths; a fixture repository passes its own.
+  governedSupportFolders = repositoryRoot === REPOSITORY_ROOT ? GOVERNED_SUPPORT_FOLDERS : {},
 } = {}) {
   const violations = [];
   const add = (kind, detail) => violations.push({ kind, detail });
@@ -680,6 +753,7 @@ export function auditTaxonomyParity({
   // claimed too. This is deliberately narrower than "every indexed folder must
   // be a row": 29 rows resolve by `component-symbol` and legitimately share a
   // host folder, so a blanket rule would report them as unowned.
+  const governedSeen = new Set();
   const containers = new Set();
   for (const row of rows) {
     if (row.resolvedBy !== 'folder-slug') continue;
@@ -696,10 +770,21 @@ export function auditTaxonomyParity({
       if (claimedOwners.has(childRelative)) continue;
       if (!hasIndexModule(path.join(absolute, entry.name))) continue;
       if (!hasRenderableComponent(path.join(absolute, entry.name))) continue;
+      const governed = governedSupportFolders[childRelative];
+      if (governed) {
+        governedSeen.add(childRelative);
+        for (const [kind, detail] of governedSupportFolderFindings({ repositoryRoot, folder: childRelative, entry: governed, rows, rootEntryFile, ownerRootOf: relativeOwnerOf })) add(kind, detail);
+        continue;
+      }
       add(
         'unowned-folder',
         `${childRelative} is an indexed component folder beside claimed families but owns no inventory row`,
       );
+    }
+  }
+  for (const folder of Object.keys(governedSupportFolders).sort()) {
+    if (!governedSeen.has(folder)) {
+      add('support-folder-stale', `${folder} is governed as support but is no longer an unclaimed component folder beside claimed families; delete the entry`);
     }
   }
 

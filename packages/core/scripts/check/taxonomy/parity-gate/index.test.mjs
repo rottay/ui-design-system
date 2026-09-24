@@ -1026,3 +1026,69 @@ test('FENCE DRILL: a blocking gate that reads the family slice of the seal fails
   assert.ok(blockingFindings.some((finding) => finding.startsWith('blocking gate planted-family-gate')), blockingFindings.join('\n'));
   assert.equal(advisoryFindings.some((finding) => finding.startsWith('blocking gate planted-family-gate')), false);
 });
+
+/** The audit with a governed support folder planted beside the two fixture families. */
+function auditGoverned(fixture, entry, { consumer = 'Avatar', publicExport = false, plant = true } = {}) {
+  const folder = `${UI_ROOT}/primitives/display/Engine`;
+  if (plant) {
+    fs.mkdirSync(path.join(fixture.root, folder), { recursive: true });
+    fs.writeFileSync(path.join(fixture.root, folder, 'index.tsx'), 'export const EngineItem = () => null;\n');
+  }
+  if (consumer) {
+    fs.appendFileSync(path.join(fixture.root, `${UI_ROOT}/primitives/display/${consumer}/index.tsx`), "import { EngineItem } from '../Engine';\n");
+  }
+  if (publicExport) {
+    fs.appendFileSync(path.join(fixture.root, 'packages/core/src/index.ts'), `export * from '../../../${folder}';\n`);
+  }
+  return auditTaxonomyParity({
+    repositoryRoot: fixture.root,
+    programRoot: fixture.programRoot,
+    manifestRoot: fixture.manifestRoot,
+    showroomRegistryRoot: fixture.registryRoot,
+    registries: [{ file: 'primitives.ts', layers: ['primitive'] }],
+    rootEntryFile: path.join(fixture.root, 'packages/core/src/index.ts'),
+    governedSupportFolders: { [folder]: entry },
+  });
+}
+
+const ENGINE_OWNED_BY_AVATAR = { owners: ['primitive/display/avatar'], reason: 'the shared engine the avatar family renders through' };
+
+test('a governed support folder consumed only by its owner is not unowned', () => {
+  const result = auditGoverned(buildCleanFixture(), ENGINE_OWNED_BY_AVATAR);
+  assert.deepEqual(result.violations, []);
+});
+
+test('DRILL: a governed support folder imported from outside its owners is reported', () => {
+  const result = auditGoverned(buildCleanFixture(), ENGINE_OWNED_BY_AVATAR, { consumer: 'Badge' });
+  assert.deepEqual(kinds(result), ['support-folder-consumer', 'support-folder-unused']);
+  assert.match(result.violations[0].detail, /Badge\/index\.tsx, which is inside none of its owners/u);
+});
+
+test('DRILL: a governed support folder reached from the public entry is reported', () => {
+  const result = auditGoverned(buildCleanFixture(), ENGINE_OWNED_BY_AVATAR, { publicExport: true });
+  assert.ok(kinds(result).includes('support-folder-public'), JSON.stringify(result.violations));
+});
+
+test('DRILL: a governed support folder naming an owner that is not a row is reported', () => {
+  const result = auditGoverned(buildCleanFixture(), { owners: ['primitive/display/avatar', 'primitive/display/ghost'], reason: 'x'.repeat(20) });
+  assert.deepEqual(kinds(result), ['support-folder-owner']);
+});
+
+test('DRILL: a governed support folder no owner imports is reported', () => {
+  const result = auditGoverned(buildCleanFixture(), ENGINE_OWNED_BY_AVATAR, { consumer: null });
+  assert.deepEqual(kinds(result), ['support-folder-unused']);
+});
+
+test('DRILL: a governed entry whose folder is gone is stale', () => {
+  const result = auditGoverned(buildCleanFixture(), ENGINE_OWNED_BY_AVATAR, { consumer: null, plant: false });
+  assert.deepEqual(kinds(result), ['support-folder-stale']);
+});
+
+test('the live tree governs exactly the notifier folder, owned by the three announcement families', async () => {
+  const { GOVERNED_SUPPORT_FOLDERS } = await import('./index.mjs');
+  assert.deepEqual(Object.keys(GOVERNED_SUPPORT_FOLDERS), ['packages/core/src/components/primitives/feedback/notifier']);
+  assert.deepEqual(
+    [...GOVERNED_SUPPORT_FOLDERS['packages/core/src/components/primitives/feedback/notifier'].owners],
+    ['primitive/feedback/message', 'primitive/feedback/notification', 'primitive/feedback/toast'],
+  );
+});
