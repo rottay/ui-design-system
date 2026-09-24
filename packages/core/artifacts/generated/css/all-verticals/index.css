@@ -25645,7 +25645,9 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] {
   min-inline-size: 0;
-  padding: var(--ds-card-instance-padding, calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1)));
+  /* The padding this rule paints, named once so the nest radius derives from it. */
+  --_ds-card-padding-current: var(--ds-card-instance-padding, calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1)));
+  padding: var(--_ds-card-padding-current);
   color: var(--ds-card-body-color);
   font-size: var(--_ds-card-body-font-size-current, var(--ds-card-body-font-size));
   line-height: var(--ds-card-body-line-height);
@@ -25657,7 +25659,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
     calc(
       var(--_ds-card-radius-current, var(--ds-card-radius)) -
         min(
-          var(--ds-card-instance-padding, calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1))),
+          var(--_ds-card-padding-current),
           max(
             var(--ds-card-nest-inset, var(--ds-radius-nest-inset)),
             calc(var(--_ds-card-radius-current, var(--ds-card-radius)) * var(--ds-card-nest-ratio, var(--ds-radius-nest-ratio)))
