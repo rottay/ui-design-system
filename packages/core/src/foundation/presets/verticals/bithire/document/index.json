@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "plan": "internal",
   "decisions": {
     "palette.seeds": {
@@ -23,45 +23,13 @@
       "display": "grotesk-display",
       "mono": "plex-mono"
     },
-    "typography.pairing": "technical",
-    "typography.scale": 0.94,
-    "typography.role-weights": "strong",
-    "typography.numeric": "tabular",
     "shape.radius-scale": 0.8,
-    "shape.nesting": "uniform",
-    "shape.button-style": "sharp",
-    "shape.control-height": "compact",
     "density.mode": "compact",
-    "spacing.rhythm": "tight",
     "surfaces.elevation-posture": "soft",
-    "surfaces.border-style": "strong",
-    "surfaces.effect-intensity": 0.2,
-    "states.emphasis": "strong",
-    "states.focus-style": "ring",
-    "motion.dial": {
-      "intensity": 0.55,
-      "durationScale": 0.8,
-      "ambient": "off"
-    },
-    "motion.character": "mechanical",
-    "navigation.sidebar-tone": "inverse",
-    "experience.profile": "rottay/bithire-technical@1",
-    "profiles.expressive": {
-      "type": "technical",
-      "geometry": "sharp",
-      "edge": "outlined",
-      "material": "flat",
-      "elevation": "hairline-lift",
-      "motif": "micro-grid",
-      "icon": "strong-outline"
-    },
-    "recipe-profile": "rottay/technical-sharp@1",
-    "chrome.anatomy": {
-      "cardComponent": "framed",
-      "table": "zebra",
-      "sidebar": "rail",
-      "layout": "default"
-    },
-    "responsive.posture": "compact"
+    "experience.profile": "rottay/bithire-technical@1"
+  },
+  "style": {
+    "id": "technical-dense",
+    "version": 1
   }
 }

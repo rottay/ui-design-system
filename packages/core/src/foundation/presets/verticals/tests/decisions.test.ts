@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { THEME_DECISION_IDS } from "@/contracts/theme/foundation/decisions";
 import { assertTenantThemeDocumentV2, type TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import { THEME_CONTROL_CATALOG } from "@/contracts/theme/runtime/catalog";
+import { resolveThemeStyle, type ThemeStyleReference } from "@/contracts/theme/runtime/styles";
 import { contrastRatio } from "@/foundation/kernel/color/contrast";
 import { BITHIRE_IDENTITY_CANDIDATES, bithireIdentityCandidate } from "@/foundation/presets/candidates/bithire";
 import { FIRST_PARTY_VERTICALS } from "@/foundation/presets/verticals/roster";
@@ -19,8 +20,16 @@ type FirstParty = "rottay" | "bithire" | "evnto";
 const VERTICALS: readonly FirstParty[] = ["rottay", "bithire", "evnto"];
 const ARTIFACTS = resolve(__dirname, "../../../tokens/css/facade/artifacts");
 
-const documentOf = (preset: VerticalThemePreset): TenantThemeDocumentV2 =>
-  assertTenantThemeDocumentV2(preset.document);
+/** The preset's full decision set: its style reference's rows under its own brand/default rows. */
+const documentOf = (preset: VerticalThemePreset): TenantThemeDocumentV2 => {
+  const { plan, decisions, style } = preset.document as {
+    plan: string;
+    decisions: Record<string, unknown>;
+    style: ThemeStyleReference;
+  };
+  const styleRows = resolveThemeStyle(style).document.decisions as Record<string, unknown>;
+  return assertTenantThemeDocumentV2({ version: 2, plan, decisions: { ...styleRows, ...decisions } });
+};
 
 function compile(vertical: FirstParty, document: TenantThemeDocumentV2) {
   const { artifact } = compileTenantThemeDocumentV2({
@@ -65,6 +74,7 @@ describe("WO-DER-06 — the first-party verticals as decisions", () => {
       const admission = admitDocument({ vertical, document });
       expect(admission.version).toBe(2);
       expect(admission.decisions.length).toBe(Object.keys(document.decisions).length);
+      expect(admitDocument({ vertical, document: preset.document as never }).unlit).toEqual([]);
     }
     expect(getVerticalThemePreset("platform")).toBeUndefined();
   });

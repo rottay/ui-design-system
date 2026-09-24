@@ -57,6 +57,7 @@ describe('DesignSystemProvider recipe profile — artifact over the preset selec
 
   it('publishes what the artifact block says, not what the preset selected', async () => {
     const { VERTICAL_THEME_PRESETS } = await import('@/foundation/presets/verticals');
+    const { resolveThemeStyle } = await import('@/contracts/theme/runtime/styles');
     const { useRecipeProfile } = await import('@/infrastructure/runtime/foundation/recipes/profiles');
     const { getKnownTenantConfig } = await import(
       '@/infrastructure/runtime/tenant/foundation/configuration/registry'
@@ -67,9 +68,12 @@ describe('DesignSystemProvider recipe profile — artifact over the preset selec
 
     // The disagreement is real only if the preset still selects the other
     // thing. Reading it here is the anti-cheat for the whole file.
-    expect(JSON.stringify(VERTICAL_THEME_PRESETS.bithire.document)).toContain(
-      `"recipe-profile":${JSON.stringify(PRESET_SAYS)}`,
-    );
+    const preset = VERTICAL_THEME_PRESETS.bithire.document as {
+      decisions: Record<string, unknown>;
+      style: Parameters<typeof resolveThemeStyle>[0];
+    };
+    expect(preset.decisions['recipe-profile']).toBeUndefined();
+    expect(resolveThemeStyle(preset.style).document.decisions['recipe-profile']).toBe(PRESET_SAYS);
     expect(ARTIFACT_SAYS).not.toBe(PRESET_SAYS);
 
     function Probe() {

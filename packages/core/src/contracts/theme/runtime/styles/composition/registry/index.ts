@@ -17,7 +17,10 @@
  * @package @rottay/design-system
  */
 
-import type { ThemeStyleRecord } from "@/contracts/theme/runtime/styles/foundation/document";
+import {
+  defineThemeStyle,
+  type ThemeStyleRecord,
+} from "@/contracts/theme/runtime/styles/foundation/document";
 import {
   assertStyleAuthorable,
   assertStyleEmitsSomething,
@@ -25,6 +28,8 @@ import {
 import { EDITORIAL_QUIET_V1 } from "./editorial-quiet";
 import { PRODUCT_DENSE_V1 } from "./product-dense";
 import { QUIET_PREMIUM_V1 } from "./quiet-premium";
+import { STRUCTURAL_NEUTRAL_STYLE_SOURCE } from "@/foundation/presets/styles/structural-neutral";
+import { TECHNICAL_DENSE_STYLE_SOURCE } from "@/foundation/presets/styles/technical-dense";
 
 function admit(record: ThemeStyleRecord): ThemeStyleRecord {
   for (const id of record.manifest.rows) {
@@ -38,6 +43,9 @@ const PUBLICATIONS: readonly ThemeStyleRecord[] = Object.freeze([
   QUIET_PREMIUM_V1,
   PRODUCT_DENSE_V1,
   EDITORIAL_QUIET_V1,
+  // The first-party verticals' own style references (DER-09 step 2), data under foundation/presets/styles.
+  defineThemeStyle(TECHNICAL_DENSE_STYLE_SOURCE as never),
+  defineThemeStyle(STRUCTURAL_NEUTRAL_STYLE_SOURCE as never),
 ].map(admit));
 
 /** A registry key. A version is a ROW, never a mutation of a row. */

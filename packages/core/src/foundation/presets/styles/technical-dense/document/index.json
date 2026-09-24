@@ -1,0 +1,40 @@
+{
+  "decisions": {
+    "typography.pairing": "technical",
+    "typography.scale": 0.94,
+    "typography.role-weights": "strong",
+    "typography.numeric": "tabular",
+    "shape.nesting": "uniform",
+    "shape.button-style": "sharp",
+    "shape.control-height": "compact",
+    "spacing.rhythm": "tight",
+    "surfaces.border-style": "strong",
+    "surfaces.effect-intensity": 0.2,
+    "states.emphasis": "strong",
+    "states.focus-style": "ring",
+    "motion.dial": {
+      "intensity": 0.55,
+      "durationScale": 0.8,
+      "ambient": "off"
+    },
+    "motion.character": "mechanical",
+    "navigation.sidebar-tone": "inverse",
+    "profiles.expressive": {
+      "type": "technical",
+      "geometry": "sharp",
+      "edge": "outlined",
+      "material": "flat",
+      "elevation": "hairline-lift",
+      "motif": "micro-grid",
+      "icon": "strong-outline"
+    },
+    "recipe-profile": "rottay/technical-sharp@1",
+    "chrome.anatomy": {
+      "cardComponent": "framed",
+      "table": "zebra",
+      "sidebar": "rail",
+      "layout": "default"
+    },
+    "responsive.posture": "compact"
+  }
+}

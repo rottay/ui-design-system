@@ -21,6 +21,7 @@ import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/vertic
 import { VERTICAL_THEME_PRESETS } from "@/foundation/presets/verticals";
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import { themeControl } from "@/contracts/theme/runtime/catalog";
+import { resolveThemeStyle, type ThemeStyleReference } from "@/contracts/theme/runtime/styles";
 import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
 import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme";
 
@@ -106,9 +107,14 @@ describe("every connected decision reaches a channel on every vertical", () => {
             // by naming the reason: it may only stand still when the preset
             // itself states this exact value. Reach between the two stops is
             // asserted unconditionally in the sibling describe below.
-            const presetDocument = VERTICAL_THEME_PRESETS[vertical]
-              .document as { readonly decisions: Record<string, unknown> };
-            const presetStop = presetDocument.decisions[id];
+            const presetDocument = VERTICAL_THEME_PRESETS[vertical].document as {
+              readonly decisions: Record<string, unknown>;
+              readonly style: ThemeStyleReference;
+            };
+            const presetStop =
+              id in presetDocument.decisions
+                ? presetDocument.decisions[id]
+                : (resolveThemeStyle(presetDocument.style).document.decisions as Record<string, unknown>)[id];
             if (presetStop === value) expect(changed).toEqual([]);
             else expect(changed.length).toBeGreaterThan(0);
           });
