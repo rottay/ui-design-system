@@ -3,8 +3,8 @@
   "generatedBy": "pnpm --filter @rottay/design-system packinv:write (after a clean build)",
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
-  "entryCount": 7910,
-  "unpackedSize": 43754551,
+  "entryCount": 7913,
+  "unpackedSize": 43774005,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -32,7 +32,7 @@
     },
     {
       "path": "dist/bithire.css",
-      "size": 5480607
+      "size": 5481740
     },
     {
       "path": "dist/chart-access.cjs",
@@ -14184,7 +14184,7 @@
     },
     {
       "path": "dist/evnto.css",
-      "size": 5471638
+      "size": 5472767
     },
     {
       "path": "dist/fonts/arabic-text.css",
@@ -14336,7 +14336,7 @@
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/themes/compiled/index.d.ts",
-      "size": 1819
+      "size": 2215
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/themes/emission/index.d.ts",
@@ -14452,7 +14452,7 @@
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/themes/tenant-theme/index.d.ts",
-      "size": 31475
+      "size": 31644
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/themes/tenant-theme/index.js",
@@ -15588,7 +15588,7 @@
     },
     {
       "path": "dist/foundation/tokens/ts/foundation/base/density/index.cjs",
-      "size": 1360
+      "size": 1430
     },
     {
       "path": "dist/foundation/tokens/ts/foundation/base/density/index.d.ts",
@@ -15596,7 +15596,7 @@
     },
     {
       "path": "dist/foundation/tokens/ts/foundation/base/density/index.js",
-      "size": 1435
+      "size": 1506
     },
     {
       "path": "dist/foundation/tokens/ts/foundation/base/index.d.ts",
@@ -20556,7 +20556,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/composition/tenant-theme/index.cjs",
-      "size": 12971
+      "size": 13115
     },
     {
       "path": "dist/infrastructure/compilers/composition/tenant-theme/index.d.ts",
@@ -20564,7 +20564,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/composition/tenant-theme/index.js",
-      "size": 16327
+      "size": 16513
     },
     {
       "path": "dist/infrastructure/compilers/composition/tenant-theme/version/index.cjs",
@@ -20760,15 +20760,15 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.cjs",
-      "size": 4059
+      "size": 4375
     },
     {
       "path": "dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.d.ts",
-      "size": 5329
+      "size": 5501
     },
     {
       "path": "dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.js",
-      "size": 5011
+      "size": 5415
     },
     {
       "path": "dist/infrastructure/compilers/runtime/tenant-css/artifact-runtime/index.cjs",
@@ -20836,15 +20836,15 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/cycles/index.cjs",
-      "size": 774
+      "size": 897
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/cycles/index.d.ts",
-      "size": 908
+      "size": 979
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/cycles/index.js",
-      "size": 966
+      "size": 1195
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/engine/index.cjs",
@@ -20872,15 +20872,15 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.cjs",
-      "size": 4973
+      "size": 5415
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.d.ts",
-      "size": 3268
+      "size": 3338
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.js",
-      "size": 6247
+      "size": 6806
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/tier/index.cjs",
@@ -21012,31 +21012,31 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/artifact/index.cjs",
-      "size": 1115
+      "size": 1226
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/artifact/index.d.ts",
-      "size": 2443
+      "size": 2613
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/artifact/index.js",
-      "size": 1235
+      "size": 1399
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/index.cjs",
-      "size": 1210
+      "size": 1600
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/index.d.ts",
-      "size": 3130
+      "size": 3761
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/index.js",
-      "size": 1349
+      "size": 1803
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/index.d.ts",
-      "size": 773
+      "size": 841
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/evaluate/index.cjs",
@@ -21264,15 +21264,15 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/contract/index.cjs",
-      "size": 501
+      "size": 599
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/contract/index.d.ts",
-      "size": 10271
+      "size": 10588
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/contract/index.js",
-      "size": 489
+      "size": 600
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/expressive/index.cjs",
@@ -21468,7 +21468,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/index.cjs",
-      "size": 2687
+      "size": 3076
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/index.d.ts",
@@ -21476,7 +21476,19 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/index.js",
-      "size": 3325
+      "size": 3854
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/density-scope/index.cjs",
+      "size": 1723
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/density-scope/index.d.ts",
+      "size": 1563
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/density-scope/index.js",
+      "size": 2066
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.cjs",
@@ -22584,7 +22596,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/toolbar/index.cjs",
-      "size": 7149
+      "size": 7168
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/toolbar/index.d.ts",
@@ -22592,7 +22604,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/toolbar/index.js",
-      "size": 7603
+      "size": 7626
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.cjs",
@@ -24924,7 +24936,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission/index.cjs",
-      "size": 13908
+      "size": 14104
     },
     {
       "path": "dist/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission/index.d.ts",
@@ -24932,7 +24944,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission/index.js",
-      "size": 17281
+      "size": 17505
     },
     {
       "path": "dist/infrastructure/runtime/theming/foundation/visual-authority/index.d.ts",
@@ -31580,7 +31592,7 @@
     },
     {
       "path": "dist/rottay.css",
-      "size": 5470896
+      "size": 5472027
     },
     {
       "path": "dist/server.cjs",
@@ -31620,7 +31632,7 @@
     },
     {
       "path": "dist/styles.css",
-      "size": 5922391
+      "size": 5925784
     },
     {
       "path": "governance/graphics/licenses/phosphor-icons-react/index.md",
