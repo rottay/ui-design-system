@@ -463,6 +463,26 @@ export const CI_GATES = Object.freeze([
       trackedSince: '2026-09-11',
     },
   },
+  {
+    id: 'style-reuse-differentiation',
+    run: ['node', '--test', 'scripts/check/theme/style-registry/tests/reuse-differentiation/index.test.mjs'],
+    blocking: false,
+    phase: 'post-build',
+    prerequisites: ['fresh-dist', 'showroom-workspace', 'playwright-chromium'],
+    noDrillReason:
+      'This row IS WO-DER-09\'s acceptance measurement, not a drill of another gate: its own mutant '
+      + 'and negative-control arms live inside its file (0 %% on all six axes with the style held; the '
+      + 'witness shows the brands reaching the page), so no second drill exists to name.',
+    excluded: {
+      reason:
+        'WO-DER-09 step 4\'s acceptance proof, registered 2026-09-24 so CI does not treat it as optional '
+        + 'by absence: its offline half runs wherever dist exists; its browser half carries the same '
+        + 'browser-skip-with-written-reason standing as axis-difference, and it goes blocking with the '
+        + 'same EVI-02 browser wiring, never by hand.',
+      owner: 'WO-EVI-02 fleet acceptance (browser install in the gates job of .github/workflows/ci.yml)',
+      trackedSince: '2026-09-24',
+    },
+  },
   // WHAT EVERY RATCHET IN THIS REPOSITORY IS STANDING ON (F-86, F-75). A
   // decrease-only promise is about the DIRECTION of a number and says nothing
   // about its size; ~9,000 findings sat frozen while every ratchet reported OK.

@@ -7424,7 +7424,7 @@
       "lane": "derivation",
       "order": 9,
       "size": "M",
-      "status": "todo",
+      "status": "done",
       "dependsOn": [
         "WO-CAT-04",
         "WO-DER-06"
@@ -7433,7 +7433,18 @@
       "programs": [
         "audit-2026-09-05"
       ],
-      "notes": "owner-approved 2026-09-20 (proposals.md style/history queue; Fable review ACCEPT: evidence/style-history-roadmap-review/index.md); registered 2026-09-20 by the sole DT per the queue instructions — no new source IDs, phase or DS-improvements authority; wave 4; the named bounded foundation/presets/styles/ data exception moves ONCE with RET-04 (2026-09-20 owner amendment); registry/generators/composition singleton-owned"
+      "notes": "owner-approved 2026-09-20 (proposals.md style/history queue; Fable review ACCEPT: evidence/style-history-roadmap-review/index.md); registered 2026-09-20 by the sole DT per the queue instructions — no new source IDs, phase or DS-improvements authority; wave 4; the named bounded foundation/presets/styles/ data exception moves ONCE with RET-04 (2026-09-20 owner amendment); registry/generators/composition singleton-owned",
+      "claimedBy": "kimi-admin",
+      "claimedAt": "2026-09-24",
+      "doneAt": "2026-09-24",
+      "progressLog": [
+        {
+          "at": "2026-09-24 00:30",
+          "by": "kimi-dt",
+          "note": "Steps 0-2 landed: 84c3be73a (step 0 sidebar-tone style-class, owner-ratified 2026-09-22, the debrief's full drill matrix), 45dfb2820 (step 1: product-dense@1 + editorial-quiet@1 registered under CAT-04's contract from WO-DER-07's measured candidates), 9f66db096 (step 2: the first-party preset split byte-identical by proof, the boundary record at foundation/presets/styles/ per the ficha's named exception, admissible per structure:check 4620 files findings=0), 01a06ddca + b758addae (the window's regens)."
+        }
+      ],
+      "evidence": "DONE 2026-09-24 (b88fc8617, Fable ACCEPT of the WO's own acceptance, der-09-step34-verdict.md — every clause reproduced by her own runs). ACCEPTANCE, clause by clause: (1) byte-equal artifacts pre/post migration — sha256 three-way (pre-migration 1053cab42, HEAD, disk) identical for all 7 first-party artifacts; the official pre/post path is the gate manifest's rows, each run by its own command line, exit 0; (2) DER-06's affected metrics re-certified WITHOUT weaker gates — its own blocking gate taught v3 by the same law (structure keyed by version, closed domains over the effective set, derivability with produced = the full compile; the old decisions-only leg was vacuous since D6-2c-ii — stronger now), BrandTheme grep 0, name intersection 99.75% >= 90%, root reach 93.0-93.1% >= 80% per vertical, per-family coverage equal (277 families, 2 unreachable = the pin); (3) the same style reused across BitHire/Evnto with their own brands — structural-neutral@1 held, the style-reference ledger's 21 owned leaves identical across brands and ONLY the 4 palette leaves move; evnto's 'own brand' is the instrument's second palette (evnto authors no brand rows — stated, not hidden); (4) two styles in one vertical visibly affect declared non-color axes with brand inputs fixed — bithire's 6 brand rows held, product-dense vs editorial-quiet: 0 color/font channels move, the 19-row contrasting roster pinned, the 3 that cannot move named, and through EVI-02's UNMODIFIED instrument: shape 138/205, typography 173/174, rhythm 174/209, depth 63/187, states 147/147, motion 156/195, the palette-only negative control 0% in all 4 cells; (5) version pins unchanged (the fixture folders untouched since 45dfb2820); registration/source-truth + folder/index checks pass. FOLLOW-UPS NAMED (not blocking): the proof's compile seam used beyond its declared purpose (a scenario should carry its document shape — the axis-difference instrument owner); the proof registered as a manifest row (style-reuse-differentiation, post-build non-blocking, goes blocking with EVI-02's browser wiring). Suites: styles+presets+ingress 662/662, style-registry 21/21, proof 7/7, DER-06 14/14, axis-difference 152/152."
     },
     {
       "id": "WO-CON-08",
