@@ -335,6 +335,41 @@ test('NEGATIVE CONTROL: a family that emits from a SUB-owner is not an empty fam
   }
 });
 
+test('DRILL: a first-level helper beside the families is not a family; a sub-owner without a family field still is', () => {
+  const root = plantNestedRegistry();
+  try {
+    mkdirSync(join(root, 'contrast'));
+    writeFileSync(join(root, 'contrast', 'index.ts'), 'export function projectBlocks(high, rest) { return [high, rest]; }\n');
+    const sources = collectFlatThemeCompilerSources(root);
+    assert.deepEqual(sources.map((source) => `${source.relativePath.split('/').slice(-2).join('/')} ${source.rank}`), [
+      'typography/index.ts derived',
+      'weights/index.ts derived',
+    ]);
+
+    // The helper leaves only while it writes no channel: one that emits is kept, unranked, and reds the rank law.
+    writeFileSync(join(root, 'contrast', 'index.ts'), 'export function derive(vars) {\n  vars["--ds-contrast-x"] = "1";\n}\n');
+    const emitting = collectFlatThemeCompilerSources(root).find((source) => source.relativePath.endsWith('contrast/index.ts'));
+    assert.equal(emitting?.rank, 'unranked');
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('DRILL: a root with no declared family is not a registry, so the family law never drops its sources', () => {
+  const root = mkdtempSync(join(tmpdir(), 'liveness-plain-root-'));
+  try {
+    mkdirSync(join(root, 'foundation', 'chrome'), { recursive: true });
+    writeFileSync(join(root, 'foundation', 'index.ts'), 'export * from "./chrome";\n');
+    writeFileSync(join(root, 'foundation', 'chrome', 'index.ts'), 'export const CHROME = { "--ds-x": "1" };\n');
+    assert.deepEqual(
+      collectFlatThemeCompilerSources(root).map((source) => source.relativePath.split('/').slice(-2).join('/')),
+      ['chrome/index.ts', 'foundation/index.ts'],
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test('LIVE: the real registry reaches its sub-owners, and every one inherits a real rank', () => {
   const sources = collectFlatThemeCompilerSources();
   const nested = sources.filter((source) => !source.declaresRank).map((source) => source.relativePath);
@@ -1821,21 +1856,21 @@ test('dispositionFailures is the ownership law plus the preconditions that make 
   ]);
 });
 
-test('META: the SHIPPED table is the registered set -- 44 channels, one owner each, no duplicates', () => {
+test('META: the SHIPPED table is the registered set -- 42 channels, one owner each, no duplicates', () => {
   const { index, duplicates } = buildDispositionIndex();
   assert.deepEqual(duplicates, []);
   assert.equal(
     index.size,
-    44,
-    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together)',
+    42,
+    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see)',
   );
   const byClass = {};
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
   assert.deepEqual(byClass, {
     [LIVENESS.authorableUnprovenEffect]: 32,
-    [LIVENESS.unreadEmittedNoRoute]: 10,
-    [LIVENESS.readUnproven]: 1,
-    [LIVENESS.structuralConstant]: 1,
+    [LIVENESS.unreadEmittedNoRoute]: 6,
+    [LIVENESS.readUnproven]: 2,
+    [LIVENESS.readNoProductiveTerminal]: 2,
   });
   for (const pin of index.values()) {
     assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(pin.registered), `${pin.channel}: a pin without a registration date is an excuse`);
@@ -1888,7 +1923,7 @@ test('META: every structural pin names an invariant whose suite exists, and ever
   };
   const roster = deriveCanonicalZScaleRoster(readFileSync(DEFAULT_Z_INDEX_SCALE_OWNER, 'utf8'));
   const structuralGroups = CHANNEL_DISPOSITIONS.filter((group) => STRUCTURAL_CLASSIFICATIONS.has(group.classification));
-  assert.equal(structuralGroups.length, 1, 'exactly one structural pin group is registered today');
+  assert.equal(structuralGroups.length, 0, 'no structural pin is registered today: the floor gained a reader and its pin was discharged');
   for (const group of structuralGroups) {
     assert.equal(group.owner, undefined, 'a structural pin names no owner');
     const suite = suites[group.invariant];
@@ -1898,7 +1933,6 @@ test('META: every structural pin names an invariant whose suite exists, and ever
       assert.ok(roster.has(channel), `${channel}: pinned structural but not measured in the canonical roster of the real declaration site`);
     }
   }
-  assert.deepEqual(structuralGroups[0].channels, ['--ds-z-index-base']);
 });
 
 test('DEFAULT_EVIDENCE_ROOT points at the semantic Modern Rescue evidence tree', () => {

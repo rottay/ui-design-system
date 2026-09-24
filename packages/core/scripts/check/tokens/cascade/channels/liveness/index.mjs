@@ -228,6 +228,8 @@ export const DEFAULT_BRAND_THEME_COMPILER_ROOT = resolve(
  * competing one, which is exactly why the parent is the only file that states
  * a rank.
  */
+const DECLARES_FAMILY = /\b(?:family|rank):\s*["']/;
+
 export function collectFlatThemeCompilerSources(
   root = DEFAULT_BRAND_THEME_COMPILER_ROOT,
 ) {
@@ -243,8 +245,10 @@ export function collectFlatThemeCompilerSources(
       const child = join(directory, entry.name);
       const file = join(child, 'index.ts');
       let rank = inheritedRank;
-      if (existsSync(file)) {
-        const text = readFileSync(file, 'utf8');
+      const text = existsSync(file) ? readFileSync(file, 'utf8') : null;
+      // In a family registry a first-level folder is a family only if it declares one; a helper that writes no channel is not.
+      const helper = registry && text !== null && family === null && !DECLARES_FAMILY.test(text) && !/\bvars\[/.test(text);
+      if (text !== null && !helper) {
         const declaredRank = /\brank:\s*["']([a-zA-Z-]+)["']/.exec(text)?.[1] ?? null;
         rank = declaredRank ?? inheritedRank ?? 'unranked';
         sources.push({
@@ -259,6 +263,15 @@ export function collectFlatThemeCompilerSources(
       walk(child, family ?? entry.name, rank);
     }
   };
+  let registry = false;
+  try {
+    registry = readdirSync(root, { withFileTypes: true }).some((entry) => {
+      const file = join(root, entry.name, 'index.ts');
+      return entry.isDirectory() && existsSync(file) && DECLARES_FAMILY.test(readFileSync(file, 'utf8'));
+    });
+  } catch {
+    registry = false;
+  }
   walk(root, null, null);
   return sources.sort((a, b) => a.relativePath.localeCompare(b.relativePath));
 }
@@ -1383,7 +1396,7 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   // to leave the emitting control unnamed.
   [/^--ds-posture-/, () => 'responsive.posture'],
   // A family cut's deriver owns its family namespace (roadmap/family-cut-template.md 1.1).
-  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-header|form-sections|form-surface|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|alert|menu|tabs|breadcrumb|pagination|stepper|sidebar-surface|card|active-filters-bar|aspect-ratio|avatar|badge|box|calendar-view|collapse|column-menu|column-settings|container|data-table|descriptions|divider|file-manager|filter-chip|filter-panel|flex|grid|kanban-board|list|saved-views|space|splitter|stack|table|tag|toolbar|tree|widget-board|action-dock|app-shell|command-palette|page-shell|scope-switcher|search-command-bar|shortcuts-overlay|surface-chrome|view-mode-switcher|workspace-shell|cockpit-header|workbench-header|mobile-header|stats-header|section-frame|collection-header|dashboard-header|detail-header|detail-form-surface|header-surface|record|guided-draft-form|edit-header|edit-fields-if-present|wizard-surface|header)-/, (m) => `chrome.${m[1]}`],
+  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-header|form-sections|form-surface|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|notification-center|alert|menu|tabs|breadcrumb|pagination|stepper|sidebar-surface|card|active-filters-bar|aspect-ratio|avatar|badge|box|calendar-view|collapse|column-menu|column-settings|container|data-table|descriptions|divider|file-manager|filter-chip|filter-panel|flex|grid|kanban-board|list|saved-views|space|splitter|stack|table|tag|toolbar|tree|widget-board|action-dock|app-shell|command-palette|page-shell|scope-switcher|search-command-bar|shortcuts-overlay|surface-chrome|view-mode-switcher|workspace-shell|cockpit-header|workbench-header|mobile-header|stats-header|section-frame|collection-header|dashboard-header|detail-header|detail-form-surface|header-surface|record|guided-draft-form|edit-header|edit-fields-if-present|wizard-surface|header)-/, (m) => `chrome.${m[1]}`],
   // Two published bands are spelled unlike their family: `--ds-section-card-*`
   // (`surface-chrome` deriver) and `--ds-shell-*` (app-shell skin contract).
   [/^--ds-section-card-/, () => 'chrome.surface-chrome'],
@@ -1580,20 +1593,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     classification: LIVENESS.unreadEmittedNoRoute,
     registered: '2026-09-17',
     reason:
-      'a CSS @media/@container prelude cannot read a custom property, so the productive route was always a paint or a style query: the Container measure ladder supplies it, reading --ds-breakpoint-{sm..2xl} through a deriver-to-deriver chain (--ds-container-<step>: var(--ds-breakpoint-<step>)) whose terminal is the container measure, probed in Container.causality. The liveness graph does not follow that shape, so the five rows measure unread while the route is real and Chromium-probed. WO-FAM-07 went done on 2026-09-16 having landed that adoption, which leaves only the instrument gap -- the same class as the status-tint pin this lane already owns. The pin clears when the graph counts a deriver-to-deriver chain as a productive route and the five rows re-measure read, or when a probe disproves the chain and the rows return to a layout cut as real debt',
-    channels: Object.freeze([
-      '--ds-breakpoint-2xl',
-      '--ds-breakpoint-lg',
-      '--ds-breakpoint-md',
-      '--ds-breakpoint-sm',
-      '--ds-breakpoint-xl',
-    ]),
-  }),
-  Object.freeze({
-    owner: 'WO-EVI-02',
-    classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-09-17',
-    reason:
       'the row is measured emitted and nothing emits it: derivation/responsive skips the zero floor (`if (step === PROJECTION_FLOOR) continue`) and --ds-breakpoint-xs is absent from every compiled vertical artifact, while this producer resolves vars[`--ds-breakpoint-${step}`] over the whole imported RESPONSIVE_BREAKPOINTS table and does not model the single-step guard. The retirement dropped its WO-FAM-07 pin, which left a false row unregistered and STOP NO-GO, so it is re-pinned here instead of carried silently -- a pin is not deleted to reach green. The pin retires with the row when the keyed resolver honors the emitter guard, or becomes real debt if a residual emission is ever measured',
     channels: Object.freeze(['--ds-breakpoint-xs']),
   }),
@@ -1609,14 +1608,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
       '--ds-posture-id',
       '--ds-posture-span-bias',
     ]),
-  }),
-  Object.freeze({
-    invariant: 'z-index-single-scale',
-    classification: LIVENESS.structuralConstant,
-    registered: '2026-09-14',
-    reason:
-      'a structural constant, not debt: --ds-z-index-base is the declared floor of the single z-index scale, the zero band that means no stacking, and a band is declared, never read -- reading the floor would be a defect, not a terminal. The obligation is the roster law, not a reader: every canonical band declared at the one declaration site must be present in one owner, which z-index-single-scale enforces and this instrument measures from that site on every run. The pin is retired only if the canonical roster drops the floor, in the same commit that retires the channel and this pin',
-    channels: Object.freeze(['--ds-z-index-base']),
   }),
   Object.freeze({
     owner: 'WO-EVI-02',
@@ -1642,6 +1633,33 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     reason:
       'the only evidence is a raw TS/TSX var() occurrence with no stylesheet terminal, so the step is read without being painted. WO-DER-06 went done on 2026-09-15 without deciding it and the preset conversion it named as the decider is finished, so the proof belongs to the causal gates. The pin clears when the TSX read is proven to reach a terminal or a stylesheet reader is wired, or when the step retires from the secondary ramp with its producers -- never by counting a TS occurrence as paint',
     channels: Object.freeze(['--ds-color-secondary-400']),
+  }),
+  Object.freeze({
+    owner: 'WO-FAM-11',
+    classification: LIVENESS.readUnproven,
+    registered: '2026-09-24',
+    reason:
+      'the drawer body padding is read only by an inline restatement the shell chose: app-shell/index.tsx:436 hands Sheet `padding: var(--ds-app-shell-navigation-drawer-body-padding, 0)` through `bodyStyle`. The Modern engine does not force it -- sheet/engines/modern renders the body without inline padding and its padding is the stylesheet declaration at skin/sheet:248; only the frozen classic and rustic engines write body padding inline. The app-shell skin already owns a layout rule for the drawer body (skin/app-shell:139), so the exit is a padding declaration there at the specificity that beats skin/sheet:248, which is a terminal the graph sees. The pin clears when that CSS route lands and the inline restatement goes, or when the channel retires with its chrome/app-shell producer -- never by counting a TS occurrence as paint',
+    channels: Object.freeze(['--ds-app-shell-navigation-drawer-body-padding']),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    classification: LIVENESS.unreadEmittedNoRoute,
+    registered: '2026-09-24',
+    reason:
+      'the row measures unread while its reader is its own deriver: derivation/chrome/workspace-shell emits the stop and its `ramp()` writes `var(--ds-workspace-shell-mask-stop)` into --ds-workspace-shell-orbital-mask and --ds-workspace-shell-ambient-mask, both measured LIVE_MODERN_PAINTED at the collection-shell skin (-webkit-mask); every shipped facade artifact carries that chain. The graph does not follow a compiled value into a sibling compiled channel -- the class the breakpoint pin carried until the Container skin read the steps directly. The pin clears when the graph counts a compiled deriver-to-deriver chain as a productive route, or when the stop folds into its two masks and retires',
+    channels: Object.freeze(['--ds-workspace-shell-mask-stop']),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    classification: LIVENESS.readNoProductiveTerminal,
+    registered: '2026-09-24',
+    reason:
+      'the particle inks paint on a canvas the graph cannot see: the collection-shell skin resolves each into --_ds-workspace-shell-particle-*-resolved, workspace-shell/index.tsx:200/216 hands that var() to ParticleField as `color`, and runtime/canvas resolves it through computed style (resolveConcreteParticleColor) into ctx.fillStyle. The only test today (WorkspaceShell.cut) asserts the source text, not the painted ink. The pin clears when a browser probe proves the canvas ink follows the channel, or when the inks retire with their producer',
+    channels: Object.freeze([
+      '--ds-workspace-shell-particle-primary',
+      '--ds-workspace-shell-particle-secondary',
+    ]),
   }),
 ]);
 
