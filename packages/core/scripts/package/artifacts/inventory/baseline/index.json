@@ -3,8 +3,8 @@
   "generatedBy": "pnpm --filter @rottay/design-system packinv:write (after a clean build)",
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
-  "entryCount": 7931,
-  "unpackedSize": 43802375,
+  "entryCount": 7949,
+  "unpackedSize": 43829204,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -12956,7 +12956,7 @@
     },
     {
       "path": "dist/contracts/theme/runtime/styles/composition/registry/index.cjs",
-      "size": 853
+      "size": 1176
     },
     {
       "path": "dist/contracts/theme/runtime/styles/composition/registry/index.d.ts",
@@ -12964,7 +12964,7 @@
     },
     {
       "path": "dist/contracts/theme/runtime/styles/composition/registry/index.js",
-      "size": 908
+      "size": 1358
     },
     {
       "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/document/index.json.cjs",
@@ -15487,16 +15487,88 @@
       "size": 7679
     },
     {
+      "path": "dist/foundation/presets/styles/structural-neutral/document/index.json.cjs",
+      "size": 742
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/document/index.json.d.ts",
+      "size": 790
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/document/index.json.js",
+      "size": 747
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/index.cjs",
+      "size": 264
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/index.d.ts",
+      "size": 505
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/index.js",
+      "size": 190
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/manifest/index.json.cjs",
+      "size": 4216
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/manifest/index.json.d.ts",
+      "size": 4194
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/manifest/index.json.js",
+      "size": 4293
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/document/index.json.cjs",
+      "size": 976
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/document/index.json.d.ts",
+      "size": 1152
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/document/index.json.js",
+      "size": 1059
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/index.cjs",
+      "size": 261
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/index.d.ts",
+      "size": 480
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/index.js",
+      "size": 187
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/manifest/index.json.cjs",
+      "size": 4028
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/manifest/index.json.d.ts",
+      "size": 4017
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/manifest/index.json.js",
+      "size": 4112
+    },
+    {
       "path": "dist/foundation/presets/verticals/bithire/document/index.json.cjs",
-      "size": 1576
+      "size": 832
     },
     {
       "path": "dist/foundation/presets/verticals/bithire/document/index.json.d.ts",
-      "size": 1919
+      "size": 907
     },
     {
       "path": "dist/foundation/presets/verticals/bithire/document/index.json.js",
-      "size": 1791
+      "size": 888
     },
     {
       "path": "dist/foundation/presets/verticals/bithire/index.cjs",
@@ -15524,15 +15596,15 @@
     },
     {
       "path": "dist/foundation/presets/verticals/evnto/document/index.json.cjs",
-      "size": 809
+      "size": 303
     },
     {
       "path": "dist/foundation/presets/verticals/evnto/document/index.json.d.ts",
-      "size": 834
+      "size": 179
     },
     {
       "path": "dist/foundation/presets/verticals/evnto/document/index.json.js",
-      "size": 824
+      "size": 236
     },
     {
       "path": "dist/foundation/presets/verticals/evnto/index.cjs",
@@ -15584,15 +15656,15 @@
     },
     {
       "path": "dist/foundation/presets/verticals/rottay/document/index.json.cjs",
-      "size": 809
+      "size": 303
     },
     {
       "path": "dist/foundation/presets/verticals/rottay/document/index.json.d.ts",
-      "size": 834
+      "size": 179
     },
     {
       "path": "dist/foundation/presets/verticals/rottay/document/index.json.js",
-      "size": 824
+      "size": 236
     },
     {
       "path": "dist/foundation/presets/verticals/rottay/index.cjs",

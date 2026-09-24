@@ -192,6 +192,78 @@
     {
       "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/manifest/index.json.d.ts",
       "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/index.cjs",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/index.js",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/index.d.ts",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/document/index.json.cjs",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/document/index.json.js",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/document/index.json.d.ts",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/manifest/index.json.cjs",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/manifest/index.json.js",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/technical-dense/manifest/index.json.d.ts",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/index.cjs",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/index.js",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/index.d.ts",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/document/index.json.cjs",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/document/index.json.js",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/document/index.json.d.ts",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/manifest/index.json.cjs",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/manifest/index.json.js",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
+    },
+    {
+      "path": "dist/foundation/presets/styles/structural-neutral/manifest/index.json.d.ts",
+      "reason": "DER-09 step 2 (9f66db096, Fable ACCEPT): the first-party preset split's style data — technical-dense (bithire's posture) and structural-neutral (rottay/evnto's shared reference), JSON-only under the boundary record, the registry the sole definer"
     }
   ],
   "$reason": "WO-EMI-03. The emission owner's declared grammar is finished: `emission/index.ts` became a barrel and its implementation moved to `css/` (declaration/rule assembler, value admission) and `artifact/` (the tenant stylesheet format), with `tokens/` added as the third child -- the resolved token document, its var() resolver and its expression evaluator. `facade/runtime/tokens` is the intent-shaped door over that emitter and `contracts/theme/runtime/compilation` is the document's contract. Every path here is a new owner of published code, not a new dependency: the two shrinks reported beside them (`emission/index.{js,cjs}`) are the same code under its new owners, and the barrel is source-only because it re-exports and nothing else."
