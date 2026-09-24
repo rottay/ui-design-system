@@ -51,7 +51,21 @@
         "requiresSourcePattern": "const barAnimName = `ds-toast-undo-bar-",
         "reason": "Per-instance toast bar keyframe with a DS-owned collision-safe prefix."
       }
-    ]
+    ],
+    "pinInvocation": {
+      "command": "node scripts/check/contracts/motion/index.mjs --repositories ui-design-system",
+      "scope": "every ui-design-system row is pinned by the single-repository run, the blocking CI invocation; a four-repository run re-reads the ui-design-system keyframes rows against the sibling apps"
+    },
+    "crossRepositoryKeyframeContamination": {
+      "measuredOn": "2026-09-24",
+      "receiver": "WO-EVI-02 (instrument lane)",
+      "mechanism": "global-keyframes kinds are resolved across every scanned repository: a bare-animation-reference fires for a name any repository defines, and a definition turns duplicate when another repository defines it. The sibling apps are read from their working trees, so these three rows move with foreign, uncommitted state.",
+      "deltasFourRepoMinusSingleRepo": [
+        "global-keyframes ui-design-system/ds-internal: +2 findings, +2 files (animation: pulse in approval-workflow/engines/rustic and skeleton/contracts; pulse is defined only in app-bithire, app-evnto, app-platform)",
+        "global-keyframes ui-design-system/test: +3 findings, +1 file (animation: pulse fixtures in foundation/tokens/tests/reduced-motion-guard.test.ts)",
+        "global-keyframes ui-design-system/showroom: digest only (fadeIn and scaleIn in the showroom motion page read duplicate-keyframe-definition instead of bare-keyframe-definition because app-bithire defines fadeIn and scaleIn)"
+      ]
+    }
   },
   "baselines": {
     "dependency-state": {
@@ -172,7 +186,17 @@
           "scope": "ds-internal",
           "maxCount": 64,
           "maxFiles": 13,
-          "digest": "ca6633ea54fe1580cacff9e15332c42e4182b35c4037e7c8783f715ac313a63c"
+          "digest": "9e2d22200ab5904b741c43dc3835bb615ea4b9c61b801597e6c78de3a6e16477",
+          "lastMove": {
+            "date": "2026-09-24",
+            "from": "64/13",
+            "to": "64/13",
+            "kind": "body rewrite at unchanged count; the duplicate name is retired, not registered",
+            "movers": [
+              "8e6b7e57b: skin/tree rottay-drop-indicator reference reads --ds-motion-rearrange (was --ds-motion-slow)",
+              "the commit carrying this row: the second @keyframes ds-dropdown-enter (c6be7d3bd, modern dropdown skin) retired; the rottay-personality definition already won for every consumer"
+            ]
+          }
         },
         {
           "repo": "ui-design-system",
@@ -299,9 +323,23 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 304,
-          "maxFiles": 138,
-          "digest": "6706a3a6571003a50a42a029da35fd1eb4cf40b81262e9e1a2714c434a8c356e"
+          "maxCount": 289,
+          "maxFiles": 129,
+          "digest": "a220c38b878bcbdecc80f4c397e706179e4eb1f9bf95563541d3002c8f712e22",
+          "lastMove": {
+            "date": "2026-09-24",
+            "from": "304/138",
+            "to": "289/129",
+            "kind": "measured rewrite and removal; no new author (the 0ca2eb294 widget-board literal was introduced and retired within the window)",
+            "movers": [
+              "8e6b7e57b: +45/-47 in its own diff, -45 of the pin's rows, motion reads rewritten from primitive rungs to dial-driven intents",
+              "dd3060fa2: -2 (approval-workflow modern skin, the 720ms fallbacks rewritten; their surviving form lands with 8e6b7e57b)",
+              "d495324e5: +1/-1, frozen scrollbar paint relocated from skin/scroll-area to engines/classic/theme",
+              "8c901556d: +1/-1, page-shell sheen channel renamed",
+              "-2 each: 9779cab05, a9e48ebc1, e5c3a7334, 0a725ecc8; -1 each: e31c1174e, 0d29e9fe8, b5eca0e4b, 0d154c0d4, d524ec1d6 (family cuts retiring raw timings)",
+              "the commit carrying this row: skin/widget-board transform/inline-size fallback reads --ds-motion-deliberate instead of repeating 320ms"
+            ]
+          }
         },
         {
           "repo": "ui-design-system",
@@ -317,7 +355,7 @@
           "maxFiles": 12,
           "digest": "0a5912805b168e679953c38b93dfc2708adf63a82ce541b0a02bb8bb987abc7a",
           "lastMove": {
-            "date": "2026-09-25",
+            "date": "2026-09-24",
             "from": "41/14",
             "to": "47/12",
             "kind": "measured test-fixture growth, nothing animates",

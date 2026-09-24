@@ -17352,9 +17352,9 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
     translateY(var(--ds-widget-board-entry-offset))
     scale(var(--ds-widget-board-entry-scale))
     scale(var(--ds-widget-board-interaction-scale));
-  transition: transform var(--ds-motion-rearrange, var(--ds-motion-slow, 320ms))
+  transition: transform var(--ds-motion-rearrange, var(--ds-motion-slow, var(--ds-motion-deliberate)))
       var(--ds-motion-ease-move, var(--ds-motion-ease-out, ease-out)),
-    inline-size var(--ds-motion-rearrange, var(--ds-motion-slow, 320ms))
+    inline-size var(--ds-motion-rearrange, var(--ds-motion-slow, var(--ds-motion-deliberate)))
       var(--ds-motion-ease-move, var(--ds-motion-ease-out, ease-out)),
     block-size var(--ds-motion-resize, 200ms)
       var(--ds-motion-ease-move, var(--ds-motion-ease-out, ease-out)),
@@ -53305,16 +53305,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
  * `presentation/components/dropdown` or the default theme's dropdown tokens.
  */
 
-@keyframes ds-dropdown-enter {
-  from {
-    opacity: 0;
-    transform: translateY(calc(0px - var(--ds-dropdown-enter-y))) scale(var(--ds-dropdown-enter-scale));
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
+/* `ds-dropdown-enter` is defined once, in runtime/personality: keyframes are global and its higher layer wins. */
 
 @keyframes ds-dropdown-exit {
   from {

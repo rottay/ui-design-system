@@ -10,16 +10,7 @@
  * `presentation/components/dropdown` or the default theme's dropdown tokens.
  */
 
-@keyframes ds-dropdown-enter {
-  from {
-    opacity: 0;
-    transform: translateY(calc(0px - var(--ds-dropdown-enter-y))) scale(var(--ds-dropdown-enter-scale));
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
+/* `ds-dropdown-enter` is defined once, in runtime/personality: keyframes are global and its higher layer wins. */
 
 @keyframes ds-dropdown-exit {
   from {
