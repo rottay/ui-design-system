@@ -4,7 +4,7 @@
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
   "entryCount": 7949,
-  "unpackedSize": 43829204,
+  "unpackedSize": 43829430,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -648,7 +648,7 @@
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/modern/index.cjs",
-      "size": 33586
+      "size": 33680
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/modern/index.d.ts",
@@ -656,7 +656,7 @@
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/modern/index.js",
-      "size": 82431
+      "size": 82563
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/rustic/index.cjs",

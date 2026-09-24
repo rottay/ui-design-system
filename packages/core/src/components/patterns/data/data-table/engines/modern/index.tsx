@@ -1042,16 +1042,12 @@ export default function ModernDataTable<T extends object>(
     [pinnedColumns]
   );
 
-  const getPinnedOffsetStyle = useCallback(
-    (
-      colKey: string,
-      side: "left" | "right" | undefined
-    ): React.CSSProperties => {
-      if (!side) return {};
+  const measurePinnedOffset = useCallback(
+    (colKey: string, side: "left" | "right"): string | null => {
       const currentIndex = visibleColumns.findIndex(
         (column) => column.key === colKey
       );
-      if (currentIndex < 0) return {};
+      if (currentIndex < 0) return null;
 
       const widthTerm = (
         column: (typeof visibleColumns)[number]
@@ -1083,12 +1079,7 @@ export default function ModernDataTable<T extends object>(
         terms.unshift(actionsWidthTerm);
       }
 
-      const offset = terms.length > 0 ? `calc(${terms.join(" + ")})` : "0px";
-      return {
-        [side === "left"
-          ? "--ds-data-table-pinned-inset-start"
-          : "--ds-data-table-pinned-inset-end"]: offset,
-      } as React.CSSProperties;
+      return terms.length > 0 ? `calc(${terms.join(" + ")})` : "0px";
     },
     [
       actions,
@@ -1097,6 +1088,23 @@ export default function ModernDataTable<T extends object>(
       resolvedActionsColumnWidth,
       visibleColumns,
     ]
+  );
+
+  // Both insets on every cell; the side a cell does not pin on keeps its inherited value.
+  const getPinnedOffsetStyle = useCallback(
+    (
+      colKey: string,
+      side: "left" | "right" | undefined
+    ): React.CSSProperties => {
+      const offset = side ? measurePinnedOffset(colKey, side) : null;
+      return {
+        "--ds-data-table-pinned-inset-start":
+          side === "left" && offset !== null ? offset : "inherit",
+        "--ds-data-table-pinned-inset-end":
+          side === "right" && offset !== null ? offset : "inherit",
+      } as React.CSSProperties;
+    },
+    [measurePinnedOffset]
   );
 
   /** True when any visible column is pinned — drives fixed table layout (D3). */

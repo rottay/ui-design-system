@@ -1154,7 +1154,7 @@ test('Z-10 ZERO and PRODUCER are disjoint, and PRODUCER is never drained', () =>
   }
   // 3 original + 9 reached once T-COMPUTED-DOMAIN enumerated their lookups,
   // + the dynamic sink whose record T-ENTRIES-RECORD enumerated
-  assert.equal(producers.length, 156, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze)');
+  assert.equal(producers.length, 162, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell)');
 });
 
 test('Z-11 the frozen producer counters do not move with this tranche', () => {
@@ -1317,7 +1317,7 @@ test('T-5 every cohort row carries a receipt sufficient to audit origin and reas
 
 test('T-6 every producer row carries a full causal receipt and invents no root', () => {
   const out = buildProducers();
-  assert.equal(out.closedProducer.length, 156, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze)');
+  assert.equal(out.closedProducer.length, 162, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell)');
   // Two identity shapes, kept apart on purpose. A coordinate with ONE producer
   // occurrence publishes its scalar identity. A coordinate with SEVERAL cannot:
   // `governedProducerSiteId` is minted per occurrence, so publishing one of
@@ -1326,7 +1326,7 @@ test('T-6 every producer row carries a full causal receipt and invents no root',
   const single = out.closedProducer.filter((r) => !r.occurrenceProducerSiteIds);
   const multi = out.closedProducer.filter((r) => r.occurrenceProducerSiteIds);
   // the T-ENTRIES-RECORD arrival is single-occurrence, so it lands in `single`
-  assert.equal(single.length, 137, '45 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 8 single-occurrence motion-recipe rows (Object.freeze)');
+  assert.equal(single.length, 143, '45 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 8 single-occurrence motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows');
   assert.equal(multi.length, 19, '11 + 8 motion-recipe rows (Object.freeze): the button pressMotion coordinates occur twice');
   for (const row of multi) {
     assert.equal(row.evidence.governedProducerSiteId, undefined, 'a multi-occurrence coordinate must not publish one arbitrary id');
@@ -1892,7 +1892,7 @@ test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched
   // closed cohorts from the previous tranches
   assert.equal(out.stats.publicBoundary, 527);
   assert.equal(out.stats.privateRelay, 677, '693 - 16 motion-recipe sealed-import-relay rows now closed producers (Object.freeze)');
-  assert.equal(out.stats.closedProducer, 156, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze)');
+  assert.equal(out.stats.closedProducer, 162, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell)');
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.closedZeroGoverned, 613);
   // producer counters
@@ -2492,7 +2492,7 @@ test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
   // and the other cohorts did not move at all
   assert.equal(out.stats.closedZeroGoverned, 613);
   assert.equal(out.stats.closedNonObject, 88);
-  assert.equal(out.stats.closedProducer, 156, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze)');
+  assert.equal(out.stats.closedProducer, 162, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell)');
   assert.equal(out.branchConditionalAuthored.length, 0);
   assert.equal(out.authoredOpen.length, 0);
   assert.equal(out.openUnknown.length, 0);
@@ -4723,16 +4723,21 @@ test('R42-7 the Message/Notification family closed as ZERO and stayed there', ()
   }
 });
 
-test('R42-8 the final inventory: 41 closed by RESIDUAL-42, the 42nd retired with its file, only the 6 data-table conditionals open', () => {
+test('R42-8 the final inventory: 41 closed by RESIDUAL-42, the 42nd retired with its file, the 6 data-table insets closed as producers', () => {
   const out = buildProducers();
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.authoredOpen.length, 0);
-  /* The 6 BRANCH_CONDITIONAL_AUTHORED rows are WO-FAM-08 B4's data-table
-   * computed-key stamps (--ds-data-table-pinned-inset-* behind two early {}
-   * returns): real conditional governed emissions, correctly BLOCKING
-   * (receiver: the data-table owner under WO-FAM-08). */
-  assert.equal(out.branchConditionalAuthored.length, 6);
-  assert.equal(out.stats.openBlocking, 6);
+  /* Both pinned insets are stamped on every cell (`inherit` on the side a cell does not pin on), so the 6 data-table
+   * rows (3 sites x call/spread) are unconditional governed producer objects with unchanged paint. */
+  assert.equal(out.branchConditionalAuthored.length, 0);
+  const insets = out.closedProducer.filter((row) => row.file.endsWith('data-table/engines/modern/index.tsx'));
+  assert.deepEqual(
+    insets.map((row) => `${row.symbol} ${row.reason}`).sort(),
+    ['ModernDataTable governed-producer-object:call', 'ModernDataTable governed-producer-object:spread',
+      'flatRowNodes governed-producer-object:call', 'flatRowNodes governed-producer-object:spread',
+      'groupedRowNodes governed-producer-object:call', 'groupedRowNodes governed-producer-object:spread'],
+  );
+  assert.equal(out.stats.openBlocking, 0);
   assert.equal(out.openUnknown.length, 0);
   assert.equal(out.callArgsPending.length, 0);
   assert.equal(out.computedDomainPending.length, 0);
@@ -4747,15 +4752,15 @@ test('R42-8 the final inventory: 41 closed by RESIDUAL-42, the 42nd retired with
   /* closedProducer 56→156: +84 responsive socket rows (42 sites × 2 forms,
    * the T-SOCKET-LOOP-FILL rule reading the --_ds-rsp-* private sockets) and
    * +16 motion-recipe .variables rows (RECIPE_CURVE_CSS's Object.freeze table)
-   * in; the same 16 left privateRelay (693→677). */
-  assert.equal(out.stats.closedProducer, 156);
+   * in; the same 16 left privateRelay (693→677). 156→162: the 6 data-table insets above. */
+  assert.equal(out.stats.closedProducer, 162);
   assert.equal(out.stats.publicBoundary, 527);
   assert.equal(out.stats.privateRelay, 677);
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(universeTotal(out), 2067);
   assert.equal(out.openBacklogRollup.lotBOpen, out.stats.unknownProvenance === 0 && openRows(out).length === 0);
-  assert.equal(out.openBacklogRollup.lotBOpen, false, 'the 6 data-table conditionals keep lot B shut, honestly');
+  assert.equal(out.openBacklogRollup.lotBOpen, true, 'no open row is left, so lot B opens');
 });
 
 /* ===================================================================== *
