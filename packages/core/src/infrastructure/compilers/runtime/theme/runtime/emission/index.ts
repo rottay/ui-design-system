@@ -9,9 +9,12 @@
 
 export {
   containerScope,
+  DENSITY_SCOPE_POSTURES,
+  densityScopeSelector,
   emitBaseRule,
   emitContrastRule,
   emitDeclarations,
+  emitDensityScopeRule,
   emitModeRule,
   emitRule,
   emitThemeCss,

@@ -6,7 +6,7 @@ import type {
   ThemeCompilationModeBlock,
 } from "@/foundation/contracts/composition/tenants/themes/compiled";
 
-import { themeChannelDelta } from "..";
+import { limitIssues, themeChannelDelta } from "..";
 
 const compilation = (
   cssVariables: Record<string, string>,
@@ -96,5 +96,41 @@ describe("themeChannelDelta: the tenant's prefers-contrast: more rules", () => {
 
   it("emits no contrast delta when neither compile moves under the preference", () => {
     expect(themeChannelDelta(baseline, baseline).contrastDeltas).toEqual([]);
+  });
+});
+
+describe("themeChannelDelta: what a density boundary re-declares over the vertical's rule", () => {
+  const SCALED = "calc(3.75rem * var(--ds-density-effective-scale, 1))";
+  const scoped = (
+    cssVariables: Record<string, string>,
+    densityScope?: Record<string, string>
+  ): ThemeCompilation => ({
+    ...compilation(cssVariables, []),
+    ...(densityScope ? { densityScopeBlock: { cssVariables: densityScope } } : {}),
+  });
+  const vertical = scoped({ "--ds-toolbar-min-height": SCALED }, { "--ds-toolbar-min-height": SCALED });
+
+  it("states nothing when the boundary value is the vertical's", () => {
+    expect(themeChannelDelta(vertical, vertical).densityScopeVariables).toEqual({});
+  });
+
+  it("carries a tenant statement into the boundary, where the vertical's rule would beat the root", () => {
+    const stated = scoped({ "--ds-toolbar-min-height": "50px" }, { "--ds-toolbar-min-height": "50px" });
+    const delta = themeChannelDelta(stated, vertical);
+    expect(delta.variables).toEqual({ "--ds-toolbar-min-height": "50px" });
+    expect(delta.densityScopeVariables).toEqual({ "--ds-toolbar-min-height": "50px" });
+  });
+
+  it("carries the tenant's root value for a channel the vertical projects and this compile does not", () => {
+    const unprojected = scoped({ "--ds-toolbar-min-height": "50px" });
+    expect(themeChannelDelta(unprojected, vertical).densityScopeVariables).toEqual({
+      "--ds-toolbar-min-height": "50px",
+    });
+  });
+
+  it("screens the boundary declarations like every other emitted map", () => {
+    const hostile = { ...themeChannelDelta(vertical, vertical), densityScopeVariables: { "--ds-toolbar-min-height": "1px}body{x:y" } };
+    expect(limitIssues(hostile).map((issue) => issue.code)).toContain("unsafe_value");
+    expect(limitIssues(themeChannelDelta(vertical, vertical))).toEqual([]);
   });
 });

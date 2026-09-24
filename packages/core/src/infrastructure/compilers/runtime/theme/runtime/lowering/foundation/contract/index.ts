@@ -187,6 +187,9 @@ export type AssembledChannels = Readonly<Record<string, string>>;
 /** What one deriver returns: its own channels, nothing else. */
 export type DerivedChannels = Readonly<Record<string, string>>;
 
+/** A container scope that re-derives inputs for its subtree; `density` is a `[data-density]:not(:root)` boundary. */
+export type ChannelScope = "density";
+
 /**
  * One family, one deriver.
  *
@@ -206,6 +209,8 @@ export interface FamilyDeriver {
   readonly rank: MergeRankName;
   readonly consumes: readonly ThemeKeypath[];
   readonly produces: readonly ChannelPattern[];
+  /** The container scopes this family answers; which channels are re-declared is derived from their values. */
+  readonly scopes?: readonly ChannelScope[];
   derive(context: LoweringContext, below: AssembledChannels): DerivedChannels;
 }
 

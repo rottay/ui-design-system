@@ -11,6 +11,7 @@ import type { BrandExpressiveSelection } from '@/foundation/contracts/compositio
 import type {
   ThemeCompilation,
   ThemeCompilationContrastBlock,
+  ThemeCompilationDensityScopeBlock,
   ThemeCompilationModeBlock,
 } from '@/foundation/contracts/composition/tenants/themes/compiled';
 import type { ThemeResolution } from '@/foundation/contracts/composition/tenants/themes/resolved';
@@ -24,7 +25,7 @@ import {
   firstPartyScope,
   staticThemeIntent,
 } from '../../theme';
-import { emitContrastRule } from '../../theme/runtime/emission';
+import { emitContrastRule, emitDensityScopeRule } from '../../theme/runtime/emission';
 import { readGovernedTheme } from '../../theme/runtime/lowering/foundation/intake';
 import { flatThemeToPersonality } from '../../theme/runtime/lowering/foundation/personality';
 import { projectFirstPartyArtifactScopes } from '../../../kernel/foundation/css/scope-projection';
@@ -125,6 +126,8 @@ export interface RenderVerticalArtifactInput {
   modeBlocks?: readonly ThemeCompilationModeBlock[];
   /** The compile's `prefers-contrast: more` deltas; none, no section. */
   contrastBlocks?: readonly ThemeCompilationContrastBlock[];
+  /** The channels every density boundary re-declares; none, no section. */
+  densityScopeBlock?: ThemeCompilationDensityScopeBlock;
   regenerateCommand: string;
 }
 
@@ -140,6 +143,7 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     colorScheme,
     modeBlocks,
     contrastBlocks,
+    densityScopeBlock,
     regenerateCommand,
   } = input;
 
@@ -237,8 +241,26 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
       ]
     : [];
 
+  // Rides the base selector, so a boundary under the spec's scope re-declares them.
+  const densityScopeRule = emitDensityScopeRule(
+    densityScopeBlock && {
+      cssVariables: Object.fromEntries(
+        Object.keys(densityScopeBlock.cssVariables)
+          .sort()
+          .map((key) => [key, densityScopeBlock.cssVariables[key] as string]),
+      ),
+    },
+    baseScope,
+  );
+  const densityScopeSections = densityScopeRule
+    ? [
+        `/* === Compiled for every [data-density] boundary, re-resolved by its local factor — do not edit === */\n${densityScopeRule}`,
+      ]
+    : [];
+
   return projectFirstPartyArtifactScopes(
-    [header, compiledBlock, ...modeBlockSections, ...contrastSections].join('\n\n') + '\n',
+    [header, compiledBlock, ...modeBlockSections, ...contrastSections, ...densityScopeSections].join('\n\n') +
+      '\n',
     tenantSlug,
     verticalKey,
   );
@@ -341,6 +363,7 @@ export function renderFirstPartyArtifact(input: RenderFirstPartyArtifactInput): 
       colorScheme: compiled.colorScheme,
       modeBlocks: compiled.modeBlocks,
       contrastBlocks: compiled.contrastBlocks,
+      densityScopeBlock: compiled.densityScopeBlock,
       regenerateCommand: regenerateCommand ?? FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
     }),
   };

@@ -761,6 +761,8 @@ export interface TenantThemeArtifact {
   modeDeltas?: readonly TenantThemeArtifactModeDelta[];
   /** Present only when the high contrast posture moves a tenant channel. */
   contrastDeltas?: readonly TenantThemeArtifactContrastDelta[];
+  /** Present only when a density boundary must re-declare a channel differently from the vertical's. */
+  densityScopeVariables?: Readonly<Record<string, string>>;
   /** Present only when at least one contrast autocorrect was applied. */
   adjustments?: readonly TenantThemeContrastAdjustment[];
   /** Present when the compile resolved a decision-provenance ledger. */

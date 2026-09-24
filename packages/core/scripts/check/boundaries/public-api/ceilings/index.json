@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 12,
-      "maxSourceBytes": 80616
+      "maxSourceBytes": 82632
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-INV-03 Option A (DT trail 98): ./runtime/visual-authority 77,427 -> 80,616 B (+3,189). The mount verifier rebuilds the artifact CSS by calling the producer, so the contrastDeltas emitter (emission/artifact, emission/css emitContrastRule) and the verifier's contrastDeltas shape check and digest field are reachable from this subpath; new comments trimmed to one line and the modeDeltas check reuses the new map predicate before widening.",
+  "lastMove": "B23 container-scoped density projection (emi03-debrief-v3 §8 risk 6): ./runtime/visual-authority 80,616 -> 82,632 B (+2,016). The mount verifier rebuilds the artifact CSS by calling the producer, so the density-boundary emitter reaches this subpath: emission/css +1,258 (DENSITY_SCOPE_POSTURES, densityScopeSelector, emitDensityScopeRule, the emitThemeCss line), emission/artifact +371 (densityScopeVariables and its rule), the verifier +313 (the shape check, the expected-CSS field and the digest field), the emission barrel +74. Reachable modules unchanged (12). New comments at the two-line law.",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

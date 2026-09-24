@@ -43,6 +43,7 @@ interface EmittedDelta {
   readonly variables: Readonly<Record<string, string>>;
   readonly modeDeltas: readonly TenantThemeArtifactModeDelta[];
   readonly contrastDeltas?: readonly TenantThemeArtifactContrastDelta[];
+  readonly densityScopeVariables?: Readonly<Record<string, string>>;
 }
 
 /** Each state under `prefers-contrast: more`: the base, and each mode over it. */
@@ -81,6 +82,10 @@ export function referenceCycleIssues(
       ...block.variables,
     })),
     ...contrastStates(delta),
+    // Inside a density boundary: the root emission under the boundary's re-declarations.
+    ...(delta.densityScopeVariables && Object.keys(delta.densityScopeVariables).length > 0
+      ? [{ ...delta.variables, ...delta.densityScopeVariables }]
+      : []),
   ];
   for (const block of blocks) {
     for (const [channel, cycle] of cyclesIn(block)) {

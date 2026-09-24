@@ -1,8 +1,10 @@
 import type {
   ThemeCompilation,
   ThemeCompilationContrastBlock,
+  ThemeCompilationDensityScopeBlock,
   ThemeCompilationModeBlock,
 } from "@/foundation/contracts/composition/tenants/themes/compiled";
+import type { DensityPreference } from "@/foundation/tokens/ts/foundation/base/density";
 import type { EmissionScope } from "@/foundation/contracts/composition/tenants/themes/emission";
 import {
   containerScope,
@@ -98,6 +100,33 @@ export function emitContrastRule(
   return `@media ${PREFERS_MORE_CONTRAST} {\n${rules.join("\n")}\n}`;
 }
 
+/** The postures a boundary is spelled with in CSS; `normal` names no scope. */
+export const DENSITY_SCOPE_POSTURES = [
+  "compact",
+  "comfortable",
+  "spacious",
+] as const satisfies readonly DensityPreference[];
+
+/** Every density boundary below `baseSelector`, unlayered at the base selector's own weight: that
+ *  placement is the consumer-override contract. */
+export function densityScopeSelector(baseSelector: string): string {
+  const boundaries = DENSITY_SCOPE_POSTURES.map(
+    (posture) => `[data-density='${posture}']:not(:root)`
+  ).join(", ");
+  const base = baseSelector.includes(",") ? `:is(${baseSelector})` : baseSelector;
+  return `${base} :where(${boundaries})`;
+}
+
+/** The boundary block at a scope; nothing declared, no rule. */
+export function emitDensityScopeRule(
+  block: ThemeCompilationDensityScopeBlock | undefined,
+  scope: EmissionScope
+): string {
+  const declarations = emitDeclarations(block?.cssVariables ?? {});
+  if (declarations.length === 0) return "";
+  return emitRule(densityScopeSelector(scope.baseSelector), declarations);
+}
+
 /**
  * Reproduces the compiler's own CSS grammar against an arbitrary scope. The
  * base block is the empty string when it carries neither entries nor a
@@ -109,6 +138,7 @@ export function emitThemeCss(compiled: ThemeCompilation, scope: EmissionScope): 
     emitBaseRule(compiled, scope),
     ...compiled.modeBlocks.map((mode) => emitModeRule(mode, scope)),
     emitContrastRule(compiled.contrastBlocks ?? [], scope),
+    emitDensityScopeRule(compiled.densityScopeBlock, scope),
   ]
     .filter(Boolean)
     .join("\n\n");

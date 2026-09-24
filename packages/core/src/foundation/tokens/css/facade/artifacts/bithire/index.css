@@ -3201,3 +3201,15 @@
   --ds-focus-ring-color: #2A55E0;
   --ds-sidebar-item-color-active: var(--ds-color-neutral-100);
 }
+
+/* === Compiled for every [data-density] boundary, re-resolved by its local factor — do not edit === */
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where([data-density='compact']:not(:root), [data-density='comfortable']:not(:root), [data-density='spacious']:not(:root)) {
+  --ds-toolbar-compact-padding: calc(0.75rem * var(--ds-density-effective-scale, 1)) calc(1rem * var(--ds-density-effective-scale, 1));
+  --ds-toolbar-control-gap: var(--ds-spacing-1, 0.25rem);
+  --ds-toolbar-controls-gap: var(--ds-spacing-2, 0.5rem);
+  --ds-toolbar-filter-strip-padding: calc(0.5rem * var(--ds-density-effective-scale, 1)) calc(1rem * var(--ds-density-effective-scale, 1));
+  --ds-toolbar-min-height: calc(3.75rem * var(--ds-density-effective-scale, 1));
+  --ds-toolbar-phone-filter-strip-padding: calc(0.625rem * var(--ds-density-effective-scale, 1)) calc(0.75rem * var(--ds-density-effective-scale, 1));
+  --ds-toolbar-phone-padding: calc(0.625rem * var(--ds-density-effective-scale, 1)) calc(0.75rem * var(--ds-density-effective-scale, 1));
+  --ds-toolbar-title-gap: var(--ds-spacing-2, 0.5rem);
+}

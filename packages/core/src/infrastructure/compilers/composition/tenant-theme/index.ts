@@ -578,6 +578,7 @@ function renderArtifactCss(
   options: {
     modeDeltas?: readonly TenantThemeArtifactModeDelta[];
     contrastDeltas?: readonly TenantThemeArtifactContrastDelta[];
+    densityScopeVariables?: Readonly<Record<string, string>>;
     /** Whether the document defers its canvas to the viewer. */
     followsSystem?: boolean;
   } = {}
@@ -594,6 +595,7 @@ function renderArtifactCss(
     variables,
     modeDeltas: options.modeDeltas,
     contrastDeltas: options.contrastDeltas,
+    densityScopeVariables: options.densityScopeVariables,
     followsSystem: options.followsSystem,
   });
 }
@@ -840,7 +842,9 @@ export function assembleTenantThemeArtifact(
       )}; an artifact cannot be projected from an unmeasured compile`
     );
   }
-  const { variables, modeDeltas, contrastDeltas } = delta;
+  const { variables, modeDeltas, contrastDeltas, densityScopeVariables } = delta;
+  const densityScope =
+    Object.keys(densityScopeVariables).length > 0 ? { densityScopeVariables } : {};
   // The ledger is the RESOLUTION's and can be nothing else. It reaches here
   // only by travelling on the intent, where `resolveTheme` checked every tier
   // against the catalog; a second parameter beside the intent would be a door
@@ -893,6 +897,7 @@ export function assembleTenantThemeArtifact(
     variables,
     ...(modeDeltas.length > 0 ? { modeDeltas } : {}),
     ...(contrastDeltas.length > 0 ? { contrastDeltas } : {}),
+    ...densityScope,
     ...(provenance ? { provenance } : {}),
     // Governs at render, so it is proven at mount: an edited runtime half must
     // fail the digest rather than verify and then take effect.
@@ -922,12 +927,14 @@ export function assembleTenantThemeArtifact(
       variables,
       ...(modeDeltas.length > 0 ? { modeDeltas } : {}),
       ...(contrastDeltas.length > 0 ? { contrastDeltas } : {}),
+      ...densityScope,
       ...(adjustments.length > 0 ? { adjustments } : {}),
       ...(provenance ? { provenance } : {}),
       runtime,
       css: renderArtifactCss(identity.verticalKey, identity.slug, variables, digest, {
         modeDeltas,
         contrastDeltas,
+        ...densityScope,
         followsSystem: declaredMode === "auto",
       }),
       scopes,

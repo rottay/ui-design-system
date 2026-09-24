@@ -35,6 +35,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const toolbarChromeDeriver: FamilyDeriver = {
   family: "toolbar",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "surfaces.radiusScale",

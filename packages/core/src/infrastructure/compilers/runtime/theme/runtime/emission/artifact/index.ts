@@ -7,6 +7,7 @@ import {
 import {
   emitContrastRule,
   emitDeclarations,
+  emitDensityScopeRule,
   emitRule,
   PREFERS_MORE_CONTRAST,
 } from "../css";
@@ -33,6 +34,8 @@ export interface TenantArtifactComposition {
   readonly variables: Readonly<Record<string, string>>;
   readonly modeDeltas?: readonly TenantArtifactModeDelta[];
   readonly contrastDeltas?: readonly TenantArtifactContrastDelta[];
+  /** What every density boundary under the tenant root re-declares over the vertical's rule. */
+  readonly densityScopeVariables?: Readonly<Record<string, string>>;
   /**
    * Whether the document defers its canvas to the viewer (`backgroundMode:
    * "auto"`), which is the only thing this format does with that field. A
@@ -105,6 +108,12 @@ export function emitTenantArtifactCss(composition: TenantArtifactComposition): s
     ...modeRules,
     ...(contrastRule ? [contrastRule] : []),
     ...automaticContrastRules,
+    ...[
+      emitDensityScopeRule(
+        composition.densityScopeVariables && { cssVariables: composition.densityScopeVariables },
+        scope
+      ),
+    ].filter(Boolean),
     "",
   ].join("\n");
 }

@@ -232,6 +232,7 @@ function expectedArtifactCss(artifact: TenantThemeArtifact): string {
     variables: artifact.variables,
     modeDeltas: artifact.modeDeltas,
     contrastDeltas: artifact.contrastDeltas,
+    densityScopeVariables: artifact.densityScopeVariables,
     // Read off the artifact, exactly as the producer reads it. `auto` is the
     // only value this format acts on, so the verifier needs no default-mode
     // authority of its own -- and must not acquire one, or the two spellings
@@ -300,6 +301,8 @@ export function verifyTenantThemeArtifactV1(
     !isRecord(artifact.variables) ||
     (artifact.modeDeltas !== undefined && !Array.isArray(artifact.modeDeltas)) ||
     (artifact.contrastDeltas !== undefined && !Array.isArray(artifact.contrastDeltas)) ||
+    (artifact.densityScopeVariables !== undefined &&
+      !isOrderedChannelMap(artifact.densityScopeVariables)) ||
     !isRecord(artifact.scopes) ||
     typeof artifact.css !== "string" ||
     !Array.isArray(artifact.coverage) ||
@@ -398,6 +401,9 @@ export function verifyTenantThemeArtifactV1(
         : {}),
       ...(artifact.contrastDeltas && artifact.contrastDeltas.length > 0
         ? { contrastDeltas: artifact.contrastDeltas }
+        : {}),
+      ...(artifact.densityScopeVariables !== undefined
+        ? { densityScopeVariables: artifact.densityScopeVariables }
         : {}),
       // A decision metadatum that changes runtime policy cannot live outside
       // the digest the mount proves: an artifact whose provenance was edited in

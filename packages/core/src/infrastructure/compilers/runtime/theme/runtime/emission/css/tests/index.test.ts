@@ -61,6 +61,15 @@ function referenceCss(compiled: ThemeCompilation, slug: string): string {
       ])
     );
   }
+  const scoped = Object.entries(compiled.densityScopeBlock?.cssVariables ?? {});
+  if (scoped.length > 0) {
+    blocks.push(
+      rule(
+        `${root} :where([data-density='compact']:not(:root), [data-density='comfortable']:not(:root), [data-density='spacious']:not(:root))`,
+        scoped.map(([k, v]) => `  ${k}: ${v};`)
+      )
+    );
+  }
   return blocks.join("\n\n");
 }
 

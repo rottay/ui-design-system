@@ -24,6 +24,11 @@ export interface ThemeCompilationContrastBlock {
   readonly cssVariables: Readonly<Record<string, string>>;
 }
 
+/** What every `[data-density]:not(:root)` boundary re-declares, at final values its local factor re-resolves. */
+export interface ThemeCompilationDensityScopeBlock {
+  readonly cssVariables: Readonly<Record<string, string>>;
+}
+
 /** The non-CSS half of a compile: what a React runtime reads without re-deriving. */
 export interface ThemeCompilationRuntime {
   readonly personality: PartialPersonalityTokens;
@@ -45,6 +50,8 @@ export interface ThemeCompilation {
   readonly modeBlocks: readonly ThemeCompilationModeBlock[];
   /** Present only when the high contrast posture moves a channel. */
   readonly contrastBlocks?: readonly ThemeCompilationContrastBlock[];
+  /** Present only when a family claiming the density scope derives a scope-varying channel. */
+  readonly densityScopeBlock?: ThemeCompilationDensityScopeBlock;
   readonly colorScheme?: FlatThemeMode;
   readonly runtime: ThemeCompilationRuntime;
 }

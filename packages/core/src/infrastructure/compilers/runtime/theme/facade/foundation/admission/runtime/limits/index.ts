@@ -347,7 +347,27 @@ export function themeChannelDelta(
     }
   }
   const contrastDeltas = contrastChannelDelta(compiled, baseline, variables, modeDeltas);
-  return { variables, modeDeltas, contrastDeltas };
+  return {
+    variables,
+    modeDeltas,
+    contrastDeltas,
+    densityScopeVariables: densityScopeChannelDelta(compiled, baseline),
+  };
+}
+
+/** The vertical's boundary rule beats a tenant's root value, so every channel whose boundary value moves is carried. */
+function densityScopeChannelDelta(
+  compiled: ThemeCompilation,
+  baseline: ThemeCompilation
+): Record<string, string> {
+  const own = compiled.densityScopeBlock?.cssVariables ?? {};
+  const vertical = baseline.densityScopeBlock?.cssVariables ?? {};
+  const moved: Record<string, string> = {};
+  for (const key of new Set([...Object.keys(own), ...Object.keys(vertical)])) {
+    const target = own[key] ?? compiled.cssVariables[key];
+    if (target !== undefined && vertical[key] !== target) moved[key] = target;
+  }
+  return sortedThemeVariables(moved);
 }
 
 /** What the admission and the artifact both call a tenant's own emission. */
@@ -355,6 +375,7 @@ export interface ThemeChannelDelta {
   readonly variables: Readonly<Record<string, string>>;
   readonly modeDeltas: readonly TenantThemeArtifactModeDelta[];
   readonly contrastDeltas: readonly TenantThemeArtifactContrastDelta[];
+  readonly densityScopeVariables: Readonly<Record<string, string>>;
 }
 
 /**
@@ -370,6 +391,7 @@ export function limitIssues(delta: ThemeChannelDelta): ThemeAdmissionIssue[] {
 
   const compiledVariableCount =
     Object.keys(delta.variables).length +
+    Object.keys(delta.densityScopeVariables).length +
     [...delta.modeDeltas, ...delta.contrastDeltas].reduce(
       (total, block) => total + Object.keys(block.variables).length,
       0
@@ -386,6 +408,7 @@ export function limitIssues(delta: ThemeChannelDelta): ThemeAdmissionIssue[] {
     delta.variables,
     ...delta.modeDeltas.map((block) => block.variables),
     ...delta.contrastDeltas.map((block) => block.variables),
+    delta.densityScopeVariables,
   ];
   for (const [key, value] of projectedVariableMaps.flatMap((map) =>
     Object.entries(map)
@@ -415,6 +438,9 @@ export function limitIssues(delta: ThemeChannelDelta): ThemeAdmissionIssue[] {
       modeDeltas: delta.modeDeltas,
       ...(delta.contrastDeltas.length > 0
         ? { contrastDeltas: delta.contrastDeltas }
+        : {}),
+      ...(Object.keys(delta.densityScopeVariables).length > 0
+        ? { densityScopeVariables: delta.densityScopeVariables }
         : {}),
     })
   ).byteLength;

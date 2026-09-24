@@ -33,6 +33,11 @@ import {
   projectContrastBlocks,
   restsAtPreferredContrast,
 } from "./runtime/derivation/contrast";
+import {
+  densityScopeMembers,
+  projectDensityScopeBlock,
+} from "./runtime/density-scope";
+import { FAMILY_DERIVERS } from "./runtime/derivation";
 import { deriveModeThemes, projectModeDelta } from "./runtime/derivation/modes";
 import { lowerBlock } from "./runtime/pipeline";
 
@@ -211,12 +216,28 @@ export function compileTheme(
         )
       );
 
+  // Every `[data-density]:not(:root)` boundary re-declares these at their final values.
+  const densityScopeBlock = projectDensityScopeBlock(
+    cssVariables,
+    densityScopeMembers(FAMILY_DERIVERS, (derivers) =>
+      lowerBlock({ theme: effectiveTheme, tenant: tenantFacts }, derivers)
+    ),
+    [
+      ...modeBlocks.map((block) => ({ label: `${block.mode} mode`, cssVariables: block.cssVariables })),
+      ...contrastBlocks.map((block) => ({
+        label: `contrast${block.mode ? ` ${block.mode}` : ""}`,
+        cssVariables: block.cssVariables,
+      })),
+    ]
+  );
+
   const { recipeProfile, experienceProfile } =
     resolveGovernedSelections(effectiveTheme);
   const compiled: ThemeCompilation = {
     cssVariables,
     modeBlocks,
     ...(contrastBlocks.length > 0 ? { contrastBlocks } : {}),
+    ...(densityScopeBlock ? { densityScopeBlock } : {}),
     ...(colorScheme ? { colorScheme } : {}),
     runtime: {
       personality,

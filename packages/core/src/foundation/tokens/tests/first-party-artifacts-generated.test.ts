@@ -24,6 +24,7 @@ import {
   GENERATED_ARTIFACT_BANNER,
 } from '@/infrastructure/compilers/runtime/tenant-css';
 import { brandModeSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
+import { densityScopeSelector } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const ARTIFACTS_DIR = resolve(TEST_DIR, '..', 'css/facade/artifacts');
@@ -80,14 +81,15 @@ describe('first-party generated artifact scope ownership', () => {
       // per mode the compile authors. A mode block is authored too — in
       // `Theme.modes`, by the preset over the neutral foundation — so it
       // counts here or the projection would look like it invented an owner.
-      // There is no third source of owner arms: that was the declared
-      // extension, and it is gone.
+      // The compiled density-boundary block is one more authored arm. There
+      // is no other source: the declared extension is gone.
       const modeSelectors = compiled.modeBlocks.map((block) =>
         brandModeSelector(spec.slug, block.mode),
       );
       const authoredSelectors = [
         `${spec.selector} {}`,
         ...modeSelectors.map((selector) => `${selector} {}`),
+        ...(compiled.densityScopeBlock ? [`${densityScopeSelector(spec.selector)} {}`] : []),
       ].join('\n');
       const legacyOwners = [
         `html[data-tenant='${spec.slug}']`,
