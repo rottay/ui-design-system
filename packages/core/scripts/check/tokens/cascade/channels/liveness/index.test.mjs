@@ -26,6 +26,9 @@ import {
   collectFlatThemeCompilerSources,
   extractIdentifierVarsAssignments,
   extractKeyedVarsEmissions,
+  extractProducesRoster,
+  reconcileCompiledEmission,
+  FORWARD_GAP_PINS,
   findCrossFileProducerCollisions,
   // corpus
   isScannableCorpusFile,
@@ -1856,13 +1859,13 @@ test('dispositionFailures is the ownership law plus the preconditions that make 
   ]);
 });
 
-test('META: the SHIPPED table is the registered set -- 42 channels, one owner each, no duplicates', () => {
+test('META: the SHIPPED table is the registered set -- 43 channels, one owner each, no duplicates', () => {
   const { index, duplicates } = buildDispositionIndex();
   assert.deepEqual(duplicates, []);
   assert.equal(
     index.size,
-    42,
-    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see)',
+    43,
+    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see) + 1 (2026-09-25, WO-RET-02: --ds-text-inverse, which joined the universe through the emission oracle -- the palette roster declares it -- and is read only by the dead themes/default --ds-sidebar-text declaration)',
   );
   const byClass = {};
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
@@ -1870,7 +1873,7 @@ test('META: the SHIPPED table is the registered set -- 42 channels, one owner ea
     [LIVENESS.authorableUnprovenEffect]: 32,
     [LIVENESS.unreadEmittedNoRoute]: 6,
     [LIVENESS.readUnproven]: 2,
-    [LIVENESS.readNoProductiveTerminal]: 2,
+    [LIVENESS.readNoProductiveTerminal]: 3,
   });
   for (const pin of index.values()) {
     assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(pin.registered), `${pin.channel}: a pin without a registration date is an excuse`);
@@ -1937,4 +1940,112 @@ test('META: every structural pin names an invariant whose suite exists, and ever
 
 test('DEFAULT_EVIDENCE_ROOT points at the semantic Modern Rescue evidence tree', () => {
   assert.ok(DEFAULT_EVIDENCE_ROOT.endsWith(join('artifacts', 'quality', 'programs', 'modern-rescue')));
+});
+
+/* ---------------------------------------------------------------------- */
+/* The emission oracle and the compile reconciliation                     */
+/* ---------------------------------------------------------------------- */
+
+test('ORACLE: a roster reads exact names, globs and a resolvable spread, and reports a member it cannot read', () => {
+  const roster = extractProducesRoster(
+    'const EXTRA = { "--ds-color-extra": "x" } as const;\n'
+    + 'export const d = { family: "palette", rank: "derived", produces: ["--ds-color-a", "--ds-color-wash-*", ...(Object.keys(EXTRA) as string[]), ...compute()] };\n',
+  );
+  assert.deepEqual(roster.exact.map((entry) => entry.name), ['--ds-color-a', '--ds-color-extra']);
+  assert.deepEqual(roster.globs.map((entry) => entry.prefix), ['--ds-color-wash-']);
+  assert.deepEqual(roster.unresolved.map((entry) => entry.raw), ['...compute()']);
+});
+
+/** One family source for the analyzer: a roster plus the writes the drill is about. */
+const familySource = (text, family = 'palette') => ({ relativePath: `derivation/${family}/index.ts`, text, rank: 'derived', family });
+
+test('ORACLE: a name only a roster declares joins the universe as emitted, attributed to that roster', () => {
+  const result = analyzeChannelLiveness(baseAnalyzerArgs({
+    flatThemeSources: [familySource('export const d = { family: "palette", rank: "derived", produces: ["--ds-color-primary", "--ds-color-declared"] };\nvars["--ds-color-primary"] = "#111111";\n')],
+  }));
+  const row = result.channels.find((entry) => entry.name === '--ds-color-declared');
+  assert.equal(row?.emitted, true);
+  assert.equal(row.emittedVia, 'produces-roster');
+  assert.equal(row.producer.kind, 'produces-roster');
+  assert.equal(result.channels.find((entry) => entry.name === '--ds-color-primary').emittedVia, 'direct-literal');
+});
+
+test('DRILL: a produced name outside its own family roster reds; a glob-covered write does not', () => {
+  const result = analyzeChannelLiveness(baseAnalyzerArgs({
+    flatThemeSources: [familySource('export const d = { family: "palette", rank: "derived", produces: ["--ds-color-primary", "--ds-color-wash-*"] };\nvars["--ds-color-primary"] = "#1";\nvars["--ds-color-wash-1"] = "#2";\nvars["--ds-color-stray"] = "#3";\n')],
+  }));
+  const outside = result.failures.filter((failure) => failure.startsWith('produced outside its roster'));
+  assert.equal(outside.length, 1);
+  assert.match(outside[0], /--ds-color-stray @ derivation\/palette\/index\.ts:4 \(family palette\)/u);
+});
+
+test('DRILL: an unreadable roster member is a disposition precondition, never a smaller roster', () => {
+  const result = analyzeChannelLiveness(baseAnalyzerArgs({
+    flatThemeSources: [familySource('export const d = { family: "palette", rank: "derived", produces: ["--ds-color-primary", ...compute()] };\nvars["--ds-color-primary"] = "#1";\n')],
+  }));
+  assert.ok(dispositionFailures(result).some((failure) => failure.startsWith('unresolved roster member: ...compute()')));
+});
+
+test('DRILL: an unresolved pattern closes only under an exact-only roster; a glob in the roster keeps it red', () => {
+  const pattern = 'for (const [channel, value] of Object.entries(table())) {\n  if (!FOREIGN.has(channel)) vars[channel] = value;\n}\n';
+  const exactOnly = analyzeChannelLiveness(baseAnalyzerArgs({
+    flatThemeSources: [familySource(`export const d = { family: "palette", rank: "derived", produces: ["--ds-color-primary"] };\n${pattern}`)],
+  }));
+  assert.equal(exactOnly.failures.filter((failure) => failure.startsWith('unresolved emission pattern')).length, 0);
+  assert.deepEqual(exactOnly.oracleClosedPatterns.map((site) => site.names), [['--ds-color-primary']]);
+  const globbed = analyzeChannelLiveness(baseAnalyzerArgs({
+    flatThemeSources: [familySource(`export const d = { family: "palette", rank: "derived", produces: ["--ds-color-primary", "--ds-color-wash-*"] };\n${pattern}`)],
+  }));
+  assert.equal(globbed.failures.filter((failure) => failure.startsWith('unresolved emission pattern')).length, 1);
+  assert.deepEqual(globbed.oracleClosedPatterns, []);
+});
+
+test('RECONCILE: both directions are named, an unowned or out-of-roster name reds, and a closed gap discharges its pin', () => {
+  const channels = [
+    { name: '--ds-color-a', emitted: true, emittedVia: 'direct-literal', classification: 'LIVE_MODERN_PAINTED' },
+    { name: '--ds-color-tenant-only', emitted: true, emittedVia: 'direct-literal', classification: 'LIVE_MODERN_PAINTED' },
+  ];
+  const rosters = [{ family: 'palette', exact: [{ name: '--ds-color-a' }], globs: [{ prefix: '--ds-color-ramp-' }], unresolved: [] }];
+  const compiled = new Map([['bithire', new Set(['--ds-color-a', '--ds-color-ramp-1', '--ds-color-ramp-2', '--ds-stray'])]]);
+  const pins = [{ owner: 'WO-EVI-02', channels: ['--ds-color-ramp-1', '--ds-color-gone'] }];
+  const outcome = reconcileCompiledEmission({ channels, compiled, rosters, pins });
+  assert.deepEqual(outcome.forward.map((row) => `${row.name}:${row.owner}`), ['--ds-color-ramp-1:WO-EVI-02', '--ds-color-ramp-2:null', '--ds-stray:null']);
+  assert.deepEqual(outcome.reverse.map((row) => row.name), ['--ds-color-tenant-only']);
+  assert.deepEqual(outcome.outsideAnyRoster, ['--ds-stray']);
+  const kinds = outcome.failures.map((failure) => failure.split(':')[0]).sort();
+  assert.deepEqual(kinds, ['compiled outside every roster', 'discharged forward pin', 'unowned forward gap', 'unowned forward gap']);
+  assert.equal(reconcileCompiledEmission({ channels, compiled: new Map([['bithire', new Set(['--ds-color-a', '--ds-color-ramp-1'])]]), rosters, pins: [{ owner: 'WO-EVI-02', channels: ['--ds-color-ramp-1'] }] }).ok, true);
+});
+
+test('META: every forward-gap pin names an open work order, a reason and exact channel names, and no name twice', () => {
+  const registry = JSON.parse(readFileSync(join(CORE_ROOT, '..', '..', 'roadmap', 'registry.json'), 'utf8'));
+  const statusOf = new Map(registry.workOrders.map((order) => [order.id, order.status]));
+  const seen = new Set();
+  for (const pin of FORWARD_GAP_PINS) {
+    assert.ok(DISPOSITION_OWNER_PATTERN.test(pin.owner) && statusOf.has(pin.owner) && statusOf.get(pin.owner) !== 'done', pin.owner);
+    assert.ok(pin.reason.length > 40 && /^\d{4}-\d{2}-\d{2}$/u.test(pin.registered));
+    for (const name of pin.channels) {
+      assert.match(name, /^--ds-[a-z0-9-]+$/u);
+      assert.ok(!seen.has(name), `${name} is pinned twice`);
+      seen.add(name);
+    }
+  }
+  assert.equal(seen.size, 91);
+});
+
+test('META: the --ds-text-inverse pin states its measured mechanism and its only clearing route', () => {
+  const pin = CHANNEL_DISPOSITIONS.find((group) => group.channels.includes('--ds-text-inverse'));
+  assert.equal(pin.owner, 'WO-RET-02');
+  assert.equal(pin.classification, LIVENESS.readNoProductiveTerminal);
+  for (const fact of [
+    'dead by CASCADE, not by absence',
+    'the consumerRoot does read',
+    'outranking the relay',
+    '`if (chrome.text)`',
+    'cross-corpus relay blindness',
+    'WO-EVI-02',
+    'clears ONLY when the ink retires WITH its palette roster entry',
+    'removing the relay alone drifts the row to UNREAD_EMITTED_NO_KNOWN_ROUTE',
+  ]) assert.ok(pin.reason.includes(fact), `the pin reason lost: ${fact}`);
+  assert.ok(!/no stylesheet reads|clears with either/u.test(pin.reason), 'the retracted claims are back');
 });

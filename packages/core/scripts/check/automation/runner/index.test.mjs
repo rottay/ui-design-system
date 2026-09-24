@@ -113,10 +113,15 @@ test('every excluded gate names its reason and its owner', () => {
   // `visual` jobs run `playwright install chromium`, so a blocking entry would
   // be PREREQ-MISSING on every run, which is precisely how F-76 says a gate gets
   // downgraded. It returns to blocking when that job installs a browser, not
-  // when anything about the gate changes.
+  // when anything about the gate changes. `channel-liveness-reconcile` joined on 2026-09-25: a post-build naming of the
+  // universe against a real compile, every forward gap owned; it blocks when the source resolver reads those shapes.
+  // `style-reuse-differentiation` joined on 2026-09-24 (WO-DER-09's acceptance proof):
+  // the same browser-wiring class as axis-difference -- its browser half skips with a
+  // written reason where no Chromium is reachable, and it goes blocking with the same
+  // EVI-02 browser wiring, never by hand.
   assert.deepEqual(
     excluded.map((g) => g.id).sort(),
-    ['axis-difference', 'channel-liveness', 'theme-keypath-coverage'],
+    ['axis-difference', 'channel-liveness', 'channel-liveness-reconcile', 'style-reuse-differentiation', 'theme-keypath-coverage'],
     'la lista de exclusiones cambio; adjudicala antes de moverla',
   );
   for (const gate of excluded) {

@@ -156,7 +156,7 @@ export const CI_GATES = Object.freeze([
   // check stopped firing. Drill first: a classifier that returned a
   // live/protected verdict for everything would report zero findings and
   // look exactly like a clean tree.
-  { id: 'channel-liveness-drill', run: ['node', '--test', 'scripts/check/tokens/cascade/channels/liveness/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['channel-liveness', 'channel-liveness-dispositions'], },
+  { id: 'channel-liveness-drill', run: ['node', '--test', 'scripts/check/tokens/cascade/channels/liveness/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['channel-liveness', 'channel-liveness-dispositions', 'channel-liveness-reconcile'], },
   // The OWNERSHIP half of the liveness producer, and it BLOCKS.
   //
   // Audit 100 (2026-09-11, finding F2) established that the full `--check` was
@@ -172,29 +172,43 @@ export const CI_GATES = Object.freeze([
   // findings the producer refuses to hide; those stay in the exclusion below.
   { id: 'channel-liveness-dispositions', run: ['node', 'scripts/check/tokens/cascade/channels/liveness/index.mjs', '--check-dispositions'], blocking: true, phase: 'pre-build', drillId: 'channel-liveness-drill', },
   // Excluded from blocking, with a reason that is now exact rather than a
-  // census from 2026-08-20. With the 44 rows pinned and enforced by the entry
-  // above, `--check` still carries FIVE findings the disposition registry does
+  // census from 2026-08-20. With the 43 rows pinned and enforced by the entry
+  // above, `--check` still carries FOUR findings the disposition registry does
   // not cover and must not pretend to:
   //   * the missing R1 `channel-liveness.json` artifact, which `--write`
   //     refuses to produce while the analysis is red -- it unblocks when the
-  //     four below do;
-  //   * three unresolved emitter patterns (`derivation/axes/index.ts:35`,
-  //     `derivation/typography/scale/index.ts:48` and `:53`), where the key is
-  //     the complement of a roster, or a table computed elsewhere, and is not
-  //     enumerable from source text;
-  //   * 54 consumer sites under `patterns/visualization` with no canonical
+  //     three below do;
+  //   * two unresolved emitter patterns (`derivation/typography/scale/index.ts:48`
+  //     and `:53`), a table computed elsewhere that the family roster covers only
+  //     by glob (`derivation/axes/index.ts:35` closed through its exact roster);
+  //   * 31 consumer sites under `patterns/visualization` with no canonical
   //     family-inventory row -- inventory drift.
-  // Return to blocking = those five drained, not re-baselined.
+  // Return to blocking = those four drained, not re-baselined.
   {
     id: 'channel-liveness',
     run: ['node', 'scripts/check/tokens/cascade/channels/liveness/index.mjs', '--check'],
     blocking: false,
     excluded: {
-      reason: 'The 44 known non-LIVE rows are pinned to work orders and enforced BLOCKING by channel-liveness-dispositions. What keeps the full --check red is outside that law: the missing R1 artifact, three emitter patterns not enumerable from source text (derivation/axes:35, typography/scale:48 and :53), and 54 consumer sites under patterns/visualization with no family-inventory row.',
-      owner: 'WO-EVI-02 (emitter-pattern resolution + R1 artifact) and WO-RET-04 (family-inventory drift); the 44 channel rows are owned per CHANNEL_DISPOSITIONS',
+      reason: 'The 43 known non-LIVE rows are pinned to work orders and enforced BLOCKING by channel-liveness-dispositions. What keeps the full --check red is outside that law: the missing R1 artifact, two emitter patterns the family roster covers only by glob (typography/scale:48 and :53; axes:35 is closed through its exact produces roster), and 31 consumer sites under patterns/visualization with no family-inventory row.',
+      owner: 'WO-EVI-02 (emitter-pattern resolution + R1 artifact) and WO-RET-04 (family-inventory drift); the 43 channel rows are owned per CHANNEL_DISPOSITIONS',
       trackedSince: '2026-08-20',  // re-adjudicada 2026-09-11 tras la auditoria 100 (antes: censo 2026-08-20)
     },
     phase: 'pre-build',
+    drillId: 'channel-liveness-drill',
+  },
+  // The source universe against a real compile of the first-party verticals, both directions; every forward gap is
+  // owned by an exact FORWARD_GAP_PINS entry and the reverse gap (tenant- or engine-conditional emissions) is named.
+  {
+    id: 'channel-liveness-reconcile',
+    run: ['node', 'scripts/check/tokens/cascade/channels/liveness/reconcile/index.mjs'],
+    blocking: false,
+    excluded: {
+      reason: 'A reconciliation that names both directions every run, not a law of its own: the 91 forward-gap names are each owned by an exact FORWARD_GAP_PINS entry, and the 118 reverse-gap rows are tenant- or engine-conditional emissions no first-party compile produces. It turns red on an unowned forward name, a discharged pin or a compiled name outside every roster, and returns to blocking when the source universe reads the glob-covered shapes itself.',
+      owner: 'WO-EVI-02 (the source resolver that enumerates the forward gap)',
+      trackedSince: '2026-09-25',
+    },
+    phase: 'post-build',
+    prerequisites: ['fresh-dist'],
     drillId: 'channel-liveness-drill',
   },
   // One responsive authority: no per-instance stylesheet, 100vh/vw, width query

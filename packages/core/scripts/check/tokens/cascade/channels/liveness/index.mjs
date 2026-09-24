@@ -900,6 +900,53 @@ function resolveRoster(name, facts, cache, coreRoot, depth) {
   return resolveRoster(imported.imported, moduleFacts(target, text, cache), cache, coreRoot, depth + 1);
 }
 
+/**
+ * A family's `produces:` roster, read as the emission oracle: exact names, `prefix*` globs, and every member this
+ * reader could not enumerate (reported, never dropped). A spread resolves through the same literal resolver as keys.
+ */
+export function extractProducesRoster(sourceText, { file = null, coreRoot = CORE_ROOT } = {}) {
+  const offsets = buildLineIndex(sourceText);
+  const cache = new Map();
+  const facts = moduleFacts(file ?? '<inline>', sourceText, cache);
+  const roster = { exact: [], globs: [], unresolved: [] };
+  const marker = /\bproduces:\s*\[/gu;
+  let match;
+  while ((match = marker.exec(sourceText)) !== null) {
+    const line = lineForOffset(offsets, match.index);
+    const body = extractBracketBlock(sourceText.slice(match.index), match[0], '[', ']');
+    if (body === null) {
+      roster.unresolved.push({ raw: 'produces: [', line, reason: 'the roster array does not close' });
+      continue;
+    }
+    for (const item of splitTopLevelListItems(body)) {
+      const literal = /^(['"])([^'"]*)\1$/u.exec(item);
+      if (literal) {
+        const entry = literal[2];
+        if (/^--ds-[a-z0-9-]*\*$/u.test(entry)) roster.globs.push({ prefix: entry.slice(0, -1), line });
+        else if (/^--ds-[a-z0-9-]+$/u.test(entry)) roster.exact.push({ name: entry, line });
+        else roster.unresolved.push({ raw: item, line, reason: 'a roster literal that is neither a channel name nor a `prefix*` glob' });
+        continue;
+      }
+      const spread = /^\.\.\.\s*(?:\(\s*([\s\S]*?)\s+as\s+[\s\S]*\)|([\s\S]+))$/u.exec(item);
+      const names = spread === null ? null : nonEmpty(enumerateLiterals((spread[1] ?? spread[2]).trim(), facts, cache, coreRoot, 0));
+      if (names === null) {
+        roster.unresolved.push({ raw: item, line, reason: 'a roster member this reader cannot enumerate to literal names' });
+        continue;
+      }
+      for (const name of names) {
+        if (/^--ds-[a-z0-9-]+$/u.test(name)) roster.exact.push({ name, line });
+        else roster.unresolved.push({ raw: name, line, reason: 'a spread roster member that is not a channel name' });
+      }
+    }
+  }
+  return roster;
+}
+
+/** True when `name` is one of the roster's exact names or sits under one of its globs. */
+export function rosterCovers(roster, name) {
+  return roster.exact.some((entry) => entry.name === name) || roster.globs.some((glob) => name.startsWith(glob.prefix));
+}
+
 /** Every `vars[<identifier>] = ...` assignment, with the guard that precedes it. */
 export function extractIdentifierVarsAssignments(sourceText) {
   const offsets = buildLineIndex(sourceText);
@@ -1359,6 +1406,13 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   [/^--ds-surface-chrome-/, () => 'chrome.surface-chrome'],
   [/^--ds-surface-/, () => 'surfaces'],
   [/^--ds-font-family-/, () => 'typography'],
+  // The frozen-engine spellings of cut families (FROZEN_ENGINE_COMPAT_CHANNELS) belong to the family they restate.
+  [/^--ds-(autocomplete|datepicker|timepicker)-/, (m) => `chrome.${{ autocomplete: 'auto-complete', datepicker: 'date-picker', timepicker: 'time-picker' }[m[1]]}`],
+  [/^--ds-(?:message|notification(?!-center))-/, () => 'chrome.notifier'],
+  [/^--ds-text-(?:primary|secondary|tertiary|disabled|inverse)$/, () => 'palette'],
+  [/^--ds-edge-/, () => 'surfaces.edge'],
+  [/^--ds-page-header-/, () => 'chrome.page-shell'],
+  [/^--ds-control-height-scale$/, () => 'shape.control-height'],
   // The three families the recursive producer walk made visible. A census that
   // newly SEES a channel must be able to name its owner, or it has traded one
   // hole for another. (The four `--ds-posture-*` rows are a standing unowned
@@ -1641,6 +1695,14 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     reason:
       'the drawer body padding is read only by an inline restatement the shell chose: app-shell/index.tsx:436 hands Sheet `padding: var(--ds-app-shell-navigation-drawer-body-padding, 0)` through `bodyStyle`. The Modern engine does not force it -- sheet/engines/modern renders the body without inline padding and its padding is the stylesheet declaration at skin/sheet:248; only the frozen classic and rustic engines write body padding inline. The app-shell skin already owns a layout rule for the drawer body (skin/app-shell:139), so the exit is a padding declaration there at the specificity that beats skin/sheet:248, which is a terminal the graph sees. The pin clears when that CSS route lands and the inline restatement goes, or when the channel retires with its chrome/app-shell producer -- never by counting a TS occurrence as paint',
     channels: Object.freeze(['--ds-app-shell-navigation-drawer-body-padding']),
+  }),
+  Object.freeze({
+    owner: 'WO-RET-02',
+    classification: LIVENESS.readNoProductiveTerminal,
+    registered: '2026-09-25',
+    reason:
+      'dead by CASCADE, not by absence: the palette roster declares the ink (it joins the universe through the emission oracle) and its only DS read is the legacy relay themes/default:973 `--ds-sidebar-text: var(--ds-text-inverse)` on :root inside @layer rottay-tokens, which the consumerRoot does read (app-bithire sidebar styles, seven terminal color declarations). Every first-party artifact re-declares --ds-sidebar-text on its html[data-tenant]/[data-vertical] scope, outranking the relay, but that emission is conditional (chrome-variables `if (chrome.text)` / `if (s.text)`), so the relay WOULD compute for a tenant whose sidebar tone lowers no text. The RNPT reading also hides an instrument limit owned by WO-EVI-02: cross-corpus relay blindness -- the relay sits in the DS graph and its terminals in the consumer graph, and the two are never joined. The pin clears ONLY when the ink retires WITH its palette roster entry, or a DS reader is wired; removing the relay alone drifts the row to UNREAD_EMITTED_NO_KNOWN_ROUTE, which this register accuses as a drifted pin',
+    channels: Object.freeze(['--ds-text-inverse']),
   }),
   Object.freeze({
     owner: 'WO-EVI-02',
@@ -2139,7 +2201,18 @@ export function analyzeChannelLiveness({
   const directEmission = new Map();
   const rosterEmission = new Map();
   const unresolvedInterpolated = [];
+  const familyOfFile = new Map();
+  const familyRosters = new Map();
   for (const source of compilerSources) {
+    if (source.family !== undefined) {
+      familyOfFile.set(source.relativePath, source.family);
+      const roster = extractProducesRoster(source.text, { file: source.path ?? null });
+      const own = familyRosters.get(source.family) ?? { exact: [], globs: [], unresolved: [] };
+      for (const key of ['exact', 'globs', 'unresolved']) {
+        own[key].push(...roster[key].map((entry) => ({ ...entry, file: source.relativePath, rank: source.rank })));
+      }
+      familyRosters.set(source.family, own);
+    }
     const tint = extractTintRampEmissions(source.text);
     for (const name of tint.names) tintNames.add(name);
     for (const site of tint.callSites) {
@@ -2169,6 +2242,25 @@ export function analyzeChannelLiveness({
     }
     for (const site of keyed.unresolved) {
       unresolvedInterpolated.push({ ...site, file: source.relativePath });
+    }
+  }
+  // The emission oracle: every exact name a family roster declares is emitted, attributed to that roster.
+  const oracleEmission = new Map();
+  for (const roster of familyRosters.values()) {
+    for (const entry of roster.exact) {
+      oracleEmission.set(entry.name, [...(oracleEmission.get(entry.name) ?? []), entry]);
+    }
+    for (const entry of roster.unresolved) {
+      failures.push(`unresolved roster member: ${entry.raw} at ${entry.file}:${entry.line} -- ${entry.reason}; a roster the oracle cannot read is never read as smaller`);
+    }
+  }
+  const oracleClosedPatterns = [];
+  for (let index = unresolvedInterpolated.length - 1; index >= 0; index -= 1) {
+    const site = unresolvedInterpolated[index];
+    const roster = familyRosters.get(familyOfFile.get(site.file));
+    if (roster && roster.exact.length > 0 && roster.globs.length === 0 && roster.unresolved.length === 0) {
+      oracleClosedPatterns.push({ ...site, family: familyOfFile.get(site.file), names: [...new Set(roster.exact.map((entry) => entry.name))].sort() });
+      unresolvedInterpolated.splice(index, 1);
     }
   }
   const tintEmission = {
@@ -2207,7 +2299,24 @@ export function analyzeChannelLiveness({
     );
   }
 
-  const emittedNames = new Set([...tintEmission.names, ...directEmission.keys(), ...rosterEmission.keys()]);
+  // The roster law: a resolved write of a family whose roster exists must sit inside that roster.
+  const resolvedWrites = [
+    ...[...directEmission].flatMap(([name, sites]) => sites.map((site) => ({ name, site }))),
+    ...[...rosterEmission].flatMap(([name, sites]) => sites.map((site) => ({ name, site }))),
+    ...tintEmission.callSites.flatMap((site) => tintEmission.suffixes.map((suffix) => ({ name: `${site.scale}${suffix}`, site }))),
+  ];
+  const outsideRoster = new Set();
+  for (const { name, site } of resolvedWrites) {
+    const family = familyOfFile.get(site.file);
+    const roster = family === undefined ? undefined : familyRosters.get(family);
+    if (!roster || roster.exact.length + roster.globs.length === 0 || rosterCovers(roster, name)) continue;
+    outsideRoster.add(`${name} @ ${site.file}:${site.line} (family ${family})`);
+  }
+  for (const entry of [...outsideRoster].sort()) {
+    failures.push(`produced outside its roster: ${entry} -- a family's produces: roster is its declared output, so a write it does not declare is either a stale roster or an undeclared emission`);
+  }
+
+  const emittedNames = new Set([...tintEmission.names, ...directEmission.keys(), ...rosterEmission.keys(), ...oracleEmission.keys()]);
   const universe = new Set([...declaredOverride, ...declaredReference, ...emittedNames]);
 
   // --- consumerRoots (defect 7) ----------------------------------------
@@ -2265,6 +2374,14 @@ export function analyzeChannelLiveness({
       const sites = rosterEmission.get(name);
       return {
         kind: 'keyed-resolved',
+        family: [...new Set(sites.map((site) => site.rank ?? 'unranked'))].sort(),
+        sites: sites.map(siteLabel),
+      };
+    }
+    if (oracleEmission.has(name)) {
+      const sites = oracleEmission.get(name);
+      return {
+        kind: 'produces-roster',
         family: [...new Set(sites.map((site) => site.rank ?? 'unranked'))].sort(),
         sites: sites.map(siteLabel),
       };
@@ -2359,7 +2476,9 @@ export function analyzeChannelLiveness({
           ? 'direct-literal'
           : rosterEmission.has(name)
             ? 'keyed-resolved'
-            : null,
+            : oracleEmission.has(name)
+              ? 'produces-roster'
+              : null,
       producer,
       semanticOwner,
       familyIds: [...familyIds].sort(),
@@ -2472,6 +2591,7 @@ export function analyzeChannelLiveness({
     // Ownership PASS is not effect PASS: a fully pinned universe still fails here.
     effect,
     analysisLimitations,
+    oracleClosedPatterns,
     sourceDigest,
     // A pinned finding is still a finding: it is published, with its owner, on
     // every run. Nothing here is a count that went down.
@@ -2653,6 +2773,11 @@ export function formatReport(gateRun, { effectBlocks = true } = {}) {
   lines.push(
     `  family attribution: resolved=${result.counts.attributedReadSites} unattributed=${result.counts.unattributedReadSites} unattributedShared=${result.counts.unattributedSharedReadSites} unknown=${result.counts.unknownFamilySites}`,
   );
+  const oracleOnly = result.channels.filter((row) => row.emittedVia === 'produces-roster').length;
+  lines.push(`  emission oracle: ${oracleOnly} name(s) emitted only by a family's produces: roster`);
+  for (const site of result.oracleClosedPatterns ?? []) {
+    lines.push(`    pattern closed by its exact roster: vars[${site.raw}] at ${site.file}:${site.line} -> ${site.family} {${site.names.join(', ')}}`);
+  }
   lines.push('  consumerRoots:');
   for (const consumer of result.consumerRoots) {
     lines.push(
@@ -2726,6 +2851,7 @@ const DISPOSITION_PRECONDITION_PREFIXES = Object.freeze([
   'required consumerRoot missing',
   'unclassified output',
   'z-scale owner unreadable',
+  'unresolved roster member',
 ]);
 
 /** Exactly the ownership law, plus the preconditions that make it readable. */
@@ -2735,6 +2861,225 @@ export function dispositionFailures(result) {
       DISPOSITION_PRECONDITION_PREFIXES.some((prefix) => failure.startsWith(prefix))),
     ...(result.dispositions?.failures ?? []),
   ];
+}
+
+/* ---------------------------------------------------------------------- */
+/* 11. Reconciliation against a real first-party compile (post-build)     */
+/* ---------------------------------------------------------------------- */
+
+/**
+ * The names a first-party compile emits that the source universe cannot see yet, each group owned by the work order
+ * that brings it in. Exact names, never a prefix: a new gap must be red, and a closed gap discharges its pin.
+ */
+export const FORWARD_GAP_PINS = Object.freeze([
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    registered: '2026-09-25',
+    roster: '--ds-text-*',
+    reason: 'typography/scale emits the named ramp through two keys the resolver cannot read (:48 the facets, :53 the shorthands) over the table setTypeRampVariables fills; the family roster covers them only by glob. 27 of the 31 have no stylesheet reader, so their liveness rows will need owners the day they join',
+    channels: Object.freeze([
+      '--ds-text-body',
+      '--ds-text-body-letter-spacing',
+      '--ds-text-body-line-height',
+      '--ds-text-body-size',
+      '--ds-text-body-weight',
+      '--ds-text-detail',
+      '--ds-text-detail-letter-spacing',
+      '--ds-text-detail-line-height',
+      '--ds-text-detail-size',
+      '--ds-text-detail-weight',
+      '--ds-text-display',
+      '--ds-text-display-letter-spacing',
+      '--ds-text-display-line-height',
+      '--ds-text-display-size',
+      '--ds-text-display-weight',
+      '--ds-text-emphasis',
+      '--ds-text-emphasis-letter-spacing',
+      '--ds-text-emphasis-line-height',
+      '--ds-text-emphasis-size',
+      '--ds-text-emphasis-weight',
+      '--ds-text-eyebrow',
+      '--ds-text-eyebrow-letter-spacing',
+      '--ds-text-eyebrow-line-height',
+      '--ds-text-eyebrow-size',
+      '--ds-text-eyebrow-transform',
+      '--ds-text-eyebrow-weight',
+      '--ds-text-title',
+      '--ds-text-title-letter-spacing',
+      '--ds-text-title-line-height',
+      '--ds-text-title-size',
+      '--ds-text-title-weight',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    registered: '2026-09-25',
+    roster: '--ds-motion-*',
+    reason: 'the motion family writes its duration, easing and offset roles through object-literal tables merged by Object.assign and through vars[channel] over MOTION_DIAL_CHANNELS and the lowering/foundation motion helpers -- shapes the source extractor does not model',
+    channels: Object.freeze([
+      '--ds-motion-attention',
+      '--ds-motion-calm',
+      '--ds-motion-deliberate',
+      '--ds-motion-disclosure',
+      '--ds-motion-ease-enter',
+      '--ds-motion-ease-exit',
+      '--ds-motion-ease-in-out',
+      '--ds-motion-ease-move',
+      '--ds-motion-ease-out',
+      '--ds-motion-ease-standard',
+      '--ds-motion-fast',
+      '--ds-motion-feedback',
+      '--ds-motion-glacial',
+      '--ds-motion-instant',
+      '--ds-motion-normal',
+      '--ds-motion-offset-in',
+      '--ds-motion-panel-offset',
+      '--ds-motion-rearrange',
+      '--ds-motion-resize',
+      '--ds-motion-reveal',
+      '--ds-motion-scale-in',
+      '--ds-motion-slow',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    registered: '2026-09-25',
+    roster: '--ds-color-*',
+    reason: 'written by helpers outside the corpus root (lowering/foundation palette, ramps and seeds, the kernel chrome-variables table); all eleven are bithire-only, document-driven emissions',
+    channels: Object.freeze([
+      '--ds-color-border-focus',
+      '--ds-color-link',
+      '--ds-color-link-hover',
+      '--ds-color-on-error',
+      '--ds-color-on-info',
+      '--ds-color-on-success',
+      '--ds-color-on-warning',
+      '--ds-color-primary-foreground',
+      '--ds-color-primary-rgb',
+      '--ds-color-secondary-rgb',
+      '--ds-color-text-on-primary',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    registered: '2026-09-25',
+    roster: '--ds-type-*',
+    reason: 'the --ds-type-<role> composites are written through a computed key with no literal anywhere in src',
+    channels: Object.freeze([
+      '--ds-type-body',
+      '--ds-type-caption',
+      '--ds-type-code',
+      '--ds-type-display',
+      '--ds-type-label',
+      '--ds-type-numeric',
+      '--ds-type-page-title',
+      '--ds-type-section-title',
+      '--ds-type-supporting',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    registered: '2026-09-25',
+    roster: '--ds-font-weight-*',
+    reason: 'typography/weights merges its weight table through Object.assign, a shape the source extractor does not model',
+    channels: Object.freeze([
+      '--ds-font-weight-body',
+      '--ds-font-weight-bold',
+      '--ds-font-weight-medium',
+      '--ds-font-weight-normal',
+      '--ds-font-weight-regular',
+      '--ds-font-weight-semibold',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    registered: '2026-09-25',
+    roster: '--ds-sidebar-*',
+    reason: 'written by the kernel chrome-variables sidebar table outside the corpus root',
+    channels: Object.freeze([
+      '--ds-sidebar-bg',
+      '--ds-sidebar-item-bg-active',
+      '--ds-sidebar-item-bg-hover',
+      '--ds-sidebar-item-color-active',
+      '--ds-sidebar-text',
+      '--ds-sidebar-text-muted',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    registered: '2026-09-25',
+    roster: '--ds-button-primary-*',
+    reason: 'written by helpers outside the corpus root (lowering/foundation seeds and palette, kernel chrome-variables); bithire-only, document-driven',
+    channels: Object.freeze([
+      '--ds-button-primary-bg',
+      '--ds-button-primary-bg-hover',
+      '--ds-button-primary-border',
+      '--ds-button-primary-color',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    registered: '2026-09-25',
+    roster: '--ds-ease-*',
+    reason: 'the motion family\'s easing aliases, merged through the same Object.assign tables as its --ds-motion-* roles',
+    channels: Object.freeze([
+      '--ds-ease-exit',
+      '--ds-ease-standard',
+    ]),
+  }),
+]);
+
+/**
+ * Both directions between the source universe and a real compile of the first-party verticals. Forward: compiled names
+ * the universe lacks, each owned by a pin and covered by a family roster. Reverse: universe rows marked emitted that no
+ * first-party compile produces (tenant- or engine-conditional emissions), named every run, never dropped.
+ */
+export function reconcileCompiledEmission({ channels, compiled, rosters, pins = FORWARD_GAP_PINS }) {
+  const failures = [];
+  const universe = new Map(channels.map((row) => [row.name, row]));
+  const union = new Map();
+  for (const [vertical, names] of compiled) {
+    for (const name of names) union.set(name, [...(union.get(name) ?? []), vertical]);
+  }
+  const coverOf = (name) => rosters.filter((roster) => rosterCovers(roster, name)).map((roster) => roster.family);
+  const outsideAnyRoster = [...union.keys()].filter((name) => coverOf(name).length === 0).sort();
+  for (const name of outsideAnyRoster) {
+    failures.push(`compiled outside every roster: ${name} is emitted by a first-party compile and declared by no family produces: roster`);
+  }
+  const pinOf = new Map();
+  for (const pin of pins) for (const name of pin.channels) pinOf.set(name, pin);
+  const forward = [...union.keys()].filter((name) => !universe.has(name)).sort().map((name) => ({
+    name,
+    verticals: union.get(name),
+    rosterFamilies: coverOf(name),
+    owner: pinOf.get(name)?.owner ?? null,
+  }));
+  for (const row of forward.filter((entry) => entry.owner === null)) {
+    failures.push(`unowned forward gap: ${row.name} is emitted by ${row.verticals.join('/')} and absent from the source universe with no owner pin`);
+  }
+  const forwardNames = new Set(forward.map((row) => row.name));
+  for (const pin of pins) {
+    for (const name of pin.channels.filter((channel) => !forwardNames.has(channel))) {
+      failures.push(`discharged forward pin: ${name} (${pin.owner}) is no longer a forward gap -- it joined the universe or left the compile, so delete it; this table only shrinks`);
+    }
+  }
+  const reverse = channels
+    .filter((row) => row.emitted && !union.has(row.name))
+    .map((row) => ({ name: row.name, emittedVia: row.emittedVia, classification: row.classification }))
+    .sort((left, right) => left.name.localeCompare(right.name));
+  return { ok: failures.length === 0, failures, forward, reverse, outsideAnyRoster, compiledNames: union.size };
+}
+
+/** Every family roster of the compiler registry, attributed to its family. */
+export function collectFamilyRosters(sources = collectFlatThemeCompilerSources()) {
+  const byFamily = new Map();
+  for (const source of sources) {
+    const roster = extractProducesRoster(source.text, { file: source.path ?? null });
+    const own = byFamily.get(source.family) ?? { family: source.family, exact: [], globs: [], unresolved: [] };
+    for (const key of ['exact', 'globs', 'unresolved']) own[key].push(...roster[key]);
+    byFamily.set(source.family, own);
+  }
+  return [...byFamily.values()];
 }
 
 function main() {
@@ -2772,6 +3117,7 @@ function main() {
   }
 
   const gateRun = runGate({ round, artifactPath, requireArtifact: check });
+
 
   // THE OWNERSHIP LAW ON ITS OWN, which is the leg that blocks. The full
   // `--check` additionally requires the R1 artifact and the two standing
