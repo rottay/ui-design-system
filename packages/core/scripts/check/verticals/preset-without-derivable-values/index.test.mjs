@@ -14,6 +14,7 @@ import {
   runGate,
   structuralFindings,
 } from './index.mjs';
+import { STYLE_DATA_ROOTS } from '../../theme/style-registry/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -24,14 +25,17 @@ const REASON = 'the input error ink is not derived from any decision today, so t
 const sandboxes = [];
 after(() => { for (const dir of sandboxes) rmSync(dir, { recursive: true, force: true }); });
 
-/** A copy of the three real presets, so a planted defect never touches the tree. */
+/** A copy of the three real presets and the styles they reference, so a planted defect never touches the tree. */
 function sandbox() {
   const dir = mkdtempSync(join(tmpdir(), 'der06-presets-'));
   sandboxes.push(dir);
-  mkdirSync(join(dir, PRESETS_ROOT), { recursive: true });
-  cpSync(join(ROOT, PRESETS_ROOT), join(dir, PRESETS_ROOT), { recursive: true });
+  for (const path of [PRESETS_ROOT, ...STYLE_DATA_ROOTS]) {
+    mkdirSync(join(dir, path), { recursive: true });
+    cpSync(join(ROOT, path), join(dir, path), { recursive: true });
+  }
   return dir;
 }
+const stylePath = (dir, id) => join(dir, 'src/foundation/presets/styles', id, 'document/index.json');
 const documentPath = (dir, vertical) => join(dir, PRESETS_ROOT, vertical, 'document/index.json');
 const manifestPath = (dir, vertical) => join(dir, PRESETS_ROOT, vertical, 'manifest/index.json');
 const edit = (path, mutate) => {
@@ -55,6 +59,8 @@ describe('preset-without-derivable-values — the three first-party presets', ()
     assert.deepEqual(presets.map((preset) => preset.vertical), ['rottay', 'bithire', 'evnto']);
     for (const preset of presets) {
       assert.equal(preset.document.plan, 'internal');
+      assert.equal(preset.document.version, 3);
+      assert.ok(Object.keys(preset.style.decisions).length > 0, `${preset.vertical} resolves its style`);
       assert.deepEqual(structuralFindings(preset), [], `${preset.vertical}: ${JSON.stringify(structuralFindings(preset))}`);
       assert.deepEqual(overrideLeaves(preset.document).leaves, [], `${preset.vertical} carries no sanctioned override today`);
     }
@@ -91,8 +97,8 @@ describe('preset-without-derivable-values — drills', () => {
       document.decisions['shape.button-style'] = 'round';
       document.decisions['shape.radius-scale'] = 9;
       document.decisions['palette.seeds'].foreground = '#000000';
-      document.decisions['profiles.expressive'].texture = 'zigzag';
     });
+    edit(stylePath(dir, 'technical-dense'), (document) => { document.decisions['profiles.expressive'].texture = 'zigzag'; });
     const findings = structuralFindings(presetOf(dir, 'bithire'));
     const paths = findings.map((entry) => `${entry.rule}:${entry.path}`);
     for (const expected of [
@@ -100,7 +106,7 @@ describe('preset-without-derivable-values — drills', () => {
       'domain:decisions.shape.button-style',
       'domain:decisions.shape.radius-scale',
       'domain:decisions.palette.seeds.foreground',
-      'domain:decisions.profiles.expressive.texture',
+      'domain:style(technical-dense@1).decisions.profiles.expressive.texture',
     ]) assert.ok(paths.includes(expected), `${expected} missing from ${paths.join(' | ')}`);
   });
 
@@ -176,10 +182,45 @@ describe('preset-without-derivable-values — drills', () => {
 
     // A record's values are the family contract's: the door names them, the structural pass does not.
     const zigzag = sandbox();
-    edit(documentPath(zigzag, 'bithire'), (document) => { document.decisions['profiles.expressive'].motif = 'zigzag'; });
+    edit(documentPath(zigzag, 'bithire'), (document) => {
+      document.decisions['profiles.expressive'] = { ...presetOf(zigzag, 'bithire').style.decisions['profiles.expressive'], motif: 'zigzag' };
+    });
     assert.deepEqual(structuralFindings(presetOf(zigzag, 'bithire')), []);
     const refused = await derivableFindings(presetOf(zigzag, 'bithire'), { root: ROOT, door: await door() });
     assert.deepEqual(rules(refused.findings), ['admission']);
     assert.ok(refused.findings[0].message.includes('zigzag'), refused.findings[0].message);
+  });
+
+  it('MUTANT: a v3 preset naming no registered style, a v3 without a style, and a v2 carrying one are each refused', () => {
+    const dir = sandbox();
+    edit(documentPath(dir, 'rottay'), (document) => { document.style = { id: 'structural-neutral', version: 2 }; });
+    edit(documentPath(dir, 'evnto'), (document) => { delete document.style; });
+    edit(documentPath(dir, 'bithire'), (document) => { document.version = 2; });
+    const paths = (vertical) => structuralFindings(presetOf(dir, vertical)).map((entry) => `${entry.rule}:${entry.path}`);
+    assert.deepEqual(paths('rottay'), ['style:style']);
+    assert.deepEqual(paths('evnto'), ['style:style']);
+    assert.ok(paths('bithire').includes('shape:style'), paths('bithire').join(' | '));
+  });
+
+  it('MUTANT: a vertical row that restates its own style is a duplicated style, refused by name', () => {
+    const dir = sandbox();
+    edit(documentPath(dir, 'rottay'), (document) => { document.decisions['density.mode'] = 'normal'; });
+    const findings = structuralFindings(presetOf(dir, 'rottay'));
+    assert.deepEqual(rules(findings), ['restated-style-row']);
+    assert.match(findings[0].message, /structural-neutral@1/u);
+    // bithire's three departures differ from anything its style carries, so they are not a restatement.
+    assert.deepEqual(structuralFindings(presetOf(sandbox(), 'bithire')), []);
+  });
+
+  it('MUTANT: a defect in a shared style reds every vertical that references it, at the style path', () => {
+    const dir = sandbox();
+    edit(stylePath(dir, 'structural-neutral'), (document) => { document.decisions['shape.radius-scale'] = 9; });
+    for (const vertical of ['rottay', 'evnto']) {
+      assert.deepEqual(
+        structuralFindings(presetOf(dir, vertical)).map((entry) => `${entry.rule}:${entry.path}`),
+        ['domain:style(structural-neutral@1).decisions.shape.radius-scale'],
+      );
+    }
+    assert.deepEqual(structuralFindings(presetOf(dir, 'bithire')), []);
   });
 });

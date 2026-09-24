@@ -4,8 +4,10 @@
  * DECISIONS, and nothing the compiler already produces from them (WO-DER-06).
  *
  * WHAT IT REFUSES, by name:
- *  - a document that is not a v2 decision document on a known plan, or a
- *    manifest that disagrees with it;
+ *  - a document that is not a v2 decision document, or a v3 one naming a
+ *    registered style, on a known plan, or a manifest that disagrees with it;
+ *  - a v3 row that restates its own style's value: a vertical never duplicates
+ *    a style, and every check below reads the style's rows under its own;
  *  - a decision outside the 29 rows of the typed catalog, a tier the plan does
  *    not entitle, or a value outside its CLOSED domain (enum, scale bounds,
  *    colour-set roles, record keys) -- the domains are read from the catalog
@@ -31,13 +33,17 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 import { CATALOG_SOURCE, readThemeCatalog } from '../../../libraries/theme-catalog/index.mjs';
+import { readPublications } from '../../theme/style-registry/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 
 export const PRESETS_ROOT = 'src/foundation/presets/verticals';
 export const FIRST_PARTY_VERTICALS = Object.freeze(['rottay', 'bithire', 'evnto']);
-export const DOCUMENT_FIELDS = Object.freeze(['version', 'plan', 'decisions', 'overrides']);
+export const DOCUMENT_FIELDS = Object.freeze({
+  2: Object.freeze(['version', 'plan', 'decisions', 'overrides']),
+  3: Object.freeze(['version', 'plan', 'decisions', 'overrides', 'style']),
+});
 export const PLANS = Object.freeze(['standard', 'pro', 'internal']);
 export const PLAN_TIERS = Object.freeze({
   standard: ['standard'],
@@ -81,9 +87,19 @@ export function readPresets(root = CORE_ROOT, presetsRoot = PRESETS_ROOT) {
       findings.push(finding(vertical, 'unreadable', dir, error instanceof Error ? error.message : String(error)));
       continue;
     }
-    presets.push({ vertical, dir, document, manifest, documentPath, manifestPath });
+    presets.push({ vertical, dir, document, manifest, documentPath, manifestPath, style: styleOf(document, root) });
   }
   return { presets, findings };
+}
+
+/** The registered publication a v3 document names, read from the registry's own roster; null when it names none. */
+export function styleOf(document, root = CORE_ROOT) {
+  const ref = document?.style;
+  if (!ref || typeof ref !== 'object') return null;
+  const publication = readPublications(root).find(
+    (candidate) => candidate.manifest?.id === ref.id && candidate.manifest?.version === ref.version,
+  );
+  return publication ? { ref, decisions: publication.document.decisions ?? {} } : null;
 }
 
 const isPlainObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -172,10 +188,14 @@ export function structuralFindings(preset, catalog = readThemeCatalog(CATALOG_SO
   const out = [];
   const { vertical, document, manifest } = preset;
   if (!isPlainObject(document)) return [finding(vertical, 'shape', 'document', 'the document must be an object')];
+  const fields = DOCUMENT_FIELDS[document.version];
+  if (!fields) out.push(finding(vertical, 'shape', 'version', `version ${JSON.stringify(document.version)} is not the v2 or v3 decision document`));
   for (const key of Object.keys(document)) {
-    if (!DOCUMENT_FIELDS.includes(key)) out.push(finding(vertical, 'shape', key, `unsupported field ${JSON.stringify(key)}; a v2 document is { version, plan, decisions, overrides? }`));
+    if (fields && !fields.includes(key)) out.push(finding(vertical, 'shape', key, `unsupported field ${JSON.stringify(key)}; a v${document.version} document is { ${fields.join(', ')} }`));
   }
-  if (document.version !== 2) out.push(finding(vertical, 'shape', 'version', `version ${JSON.stringify(document.version)} is not the v2 decision document`));
+  if (document.version === 3 && preset.style == null) {
+    out.push(finding(vertical, 'style', 'style', `style ${JSON.stringify(document.style)} names no publication the style registry publishes`));
+  }
   if (!PLANS.includes(document.plan)) out.push(finding(vertical, 'shape', 'plan', `plan ${JSON.stringify(document.plan)} is not one of ${PLANS.join(' | ')}`));
   if (!isPlainObject(manifest)) {
     out.push(finding(vertical, 'manifest', 'manifest', 'the manifest must be an object'));
@@ -190,16 +210,30 @@ export function structuralFindings(preset, catalog = readThemeCatalog(CATALOG_SO
   }
   const rows = new Map(catalog.map((row) => [row.id, row]));
   const entitled = PLAN_TIERS[document.plan] ?? [];
+  const inherited = preset.style?.decisions ?? {};
+  const styleName = preset.style ? `${preset.style.ref.id}@${preset.style.ref.version}` : null;
+  const styleWhere = styleName ? `style(${styleName}).decisions` : 'decisions';
   for (const [id, value] of Object.entries(decisions)) {
+    if (id in inherited && JSON.stringify(inherited[id]) === JSON.stringify(value)) {
+      out.push(finding(vertical, 'restated-style-row', `decisions.${id}`, `${id} restates the value its style ${styleName} already carries; a vertical references a style, never duplicates it`));
+    }
+  }
+  const effective = [
+    ...Object.entries(inherited).filter(([id]) => !(id in decisions)).map(([id, value]) => [id, value, styleWhere]),
+    ...Object.entries(decisions).map(([id, value]) => [id, value, 'decisions']),
+  ];
+  for (const [id, value, where] of effective) {
     const row = rows.get(id);
     if (!row) {
-      out.push(finding(vertical, 'decision', `decisions.${id}`, `${JSON.stringify(id)} is not a decision of the catalog (${catalog.length} rows)`));
+      out.push(finding(vertical, 'decision', `${where}.${id}`, `${JSON.stringify(id)} is not a decision of the catalog (${catalog.length} rows)`));
       continue;
     }
-    if (!entitled.includes(row.tier)) out.push(finding(vertical, 'tier', `decisions.${id}`, `tier ${row.tier} is not entitled by plan ${document.plan}`));
-    out.push(...domainFindings(preset, row, value));
+    // Tier judges the vertical's own selections: a style row is inherited, never activated.
+    if (where === 'decisions' && !entitled.includes(row.tier)) out.push(finding(vertical, 'tier', `decisions.${id}`, `tier ${row.tier} is not entitled by plan ${document.plan}`));
+    out.push(...domainFindings(preset, row, value).map((entry) => ({ ...entry, path: entry.path.replace(/^decisions/u, where) })));
   }
   out.push(...rawChannelFindings(preset, decisions, 'decisions'));
+  out.push(...rawChannelFindings(preset, inherited, styleWhere));
   const { leaves, invalid } = overrideLeaves(document);
   for (const message of invalid) out.push(finding(vertical, 'override', 'overrides', message));
   if (document.overrides !== undefined) out.push(...rawChannelFindings(preset, document.overrides, 'overrides'));
@@ -238,8 +272,8 @@ async function loadDoor(root) {
   const modulePath = resolve(root, COMPILER_MODULE);
   if (!existsSync(modulePath)) return null;
   const door = await import(pathToFileURL(modulePath).href);
-  if (typeof door.compileTenantThemeDocumentV2 !== 'function' || typeof door.admitDocument !== 'function') {
-    throw new Error(`preset-without-derivable-values: ${COMPILER_MODULE} exports no compileTenantThemeDocumentV2/admitDocument`);
+  for (const name of ['compileTenantThemeDocumentV2', 'admitDocument', 'compileThemeIntent', 'staticThemeIntent']) {
+    if (typeof door[name] !== 'function') throw new Error(`preset-without-derivable-values: ${COMPILER_MODULE} exports no ${name}`);
   }
   return door;
 }
@@ -270,8 +304,14 @@ export async function derivableFindings(preset, { root = CORE_ROOT, door = null 
     out.push(finding(vertical, 'compile', 'decisions', error instanceof Error ? error.message : String(error)));
     return { checked: true, findings: out };
   }
+  // A tenant compile is the delta over neutral + preset, so what the decisions PRODUCE is the vertical's full compile.
+  const full = opened.compileThemeIntent(opened.staticThemeIntent(vertical)).compiled;
+  const produced = { ...full.cssVariables };
+  for (const block of full.modeBlocks ?? []) {
+    for (const [name, value] of Object.entries(block.cssVariables ?? {})) produced[`${block.mode}:${name}`] = value;
+  }
   const derivedValues = new Map();
-  for (const [name, value] of Object.entries(derived)) {
+  for (const [name, value] of Object.entries(produced)) {
     const key = normalizeValue(value);
     if (!derivedValues.has(key)) derivedValues.set(key, []);
     derivedValues.get(key).push(name);
@@ -291,7 +331,7 @@ export async function derivableFindings(preset, { root = CORE_ROOT, door = null 
       out.push(finding(vertical, 'inert-override', path, `override ${path} = ${JSON.stringify(value)} moves no channel: the decisions already produce it`));
       continue;
     }
-    const alreadyDerived = moved.filter((name) => name in derived);
+    const alreadyDerived = moved.filter((name) => name in produced);
     if (alreadyDerived.length > 0) {
       out.push(finding(vertical, 'derivable', path, `override ${path} = ${JSON.stringify(value)} repaints ${alreadyDerived.join(', ')}, which the compiler already produces from the decisions`));
       continue;

@@ -46,6 +46,9 @@ const REPO_ROOT = findRepoRoot(HERE);
 
 export const STYLES_ROOT = 'src/contracts/theme/runtime/styles';
 export const REGISTRY_DIR = `${STYLES_ROOT}/composition/registry`;
+export const REGISTRY_FILE = `${REGISTRY_DIR}/index.ts`;
+/** The two homes style data may live in: the registry itself and the named preset boundary exception. */
+export const STYLE_DATA_ROOTS = Object.freeze([REGISTRY_DIR, 'src/foundation/presets/styles']);
 export const PARTITION_FILE = `${STYLES_ROOT}/runtime/partition/index.ts`;
 export const ENVELOPES_FILE = 'src/contracts/theme/runtime/envelopes/index.ts';
 export const ROSTER_FILE = 'src/foundation/contracts/kernel/verticals/index.ts';
@@ -162,25 +165,88 @@ export function readFirstPartyRoster(coreRoot = CORE_ROOT) {
   return roster;
 }
 
-/** Every publication, read from the JSON that IS the content. */
-export function readPublications(coreRoot = CORE_ROOT) {
-  const root = join(coreRoot, REGISTRY_DIR);
-  if (!existsSync(root)) return [];
-  return readdirSync(root, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => {
-      const documentPath = join(root, entry.name, 'document/index.json');
-      const manifestPath = join(root, entry.name, 'manifest/index.json');
-      if (!existsSync(documentPath) || !existsSync(manifestPath)) {
-        return { folder: entry.name, incomplete: true };
+/** The folder an import specifier of the registry barrel names, relative to the core root. */
+function specifierFolder(specifier) {
+  if (specifier.startsWith('./')) return join(REGISTRY_DIR, specifier.slice(2));
+  if (specifier.startsWith('@/')) return join('src', specifier.slice(2));
+  return null;
+}
+
+/** The roster off the registry's own `PUBLICATIONS`, each element followed to its import so the scan sees what
+ *  the registry publishes wherever its data lives; an element it cannot follow is a problem, never a skip. */
+export function readRegistryRoster(coreRoot = CORE_ROOT) {
+  const file = join(coreRoot, REGISTRY_FILE);
+  if (!existsSync(file)) return { entries: [], problems: [`${REGISTRY_FILE} does not exist`] };
+  const source = parse(file);
+  const imports = new Map();
+  let elements = null;
+  const problems = [];
+  const visit = (node) => {
+    if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
+      for (const element of node.importClause?.namedBindings?.elements ?? []) {
+        imports.set(element.name.text, node.moduleSpecifier.text);
       }
-      return {
-        folder: entry.name,
-        documentPath,
-        document: JSON.parse(readFileSync(documentPath, 'utf8')),
-        manifest: JSON.parse(readFileSync(manifestPath, 'utf8')),
+    }
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.name.text === 'PUBLICATIONS' && node.initializer) {
+      const find = (candidate) => {
+        if (elements === null && ts.isArrayLiteralExpression(candidate)) elements = candidate.elements;
+        else ts.forEachChild(candidate, find);
       };
-    });
+      find(node.initializer);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  if (elements === null) return { entries: [], problems: ['no PUBLICATIONS array literal could be read'] };
+  const entries = [];
+  for (const element of elements) {
+    let expression = element;
+    if (ts.isCallExpression(expression) && expression.arguments.length === 1) expression = expression.arguments[0];
+    while (ts.isAsExpression(expression) || ts.isParenthesizedExpression(expression)) expression = expression.expression;
+    const name = ts.isIdentifier(expression) ? expression.text : null;
+    const specifier = name === null ? undefined : imports.get(name);
+    const folder = specifier === undefined ? null : specifierFolder(specifier);
+    if (folder === null) {
+      problems.push(`PUBLICATIONS element \`${element.getText(source)}\` does not resolve to an imported style folder`);
+      continue;
+    }
+    entries.push({ binding: name, specifier, folder });
+  }
+  return { entries, problems };
+}
+
+/** Every registered publication, read from the JSON that IS the content, in registry order. */
+export function readPublications(coreRoot = CORE_ROOT) {
+  return readRegistryRoster(coreRoot).entries.map(({ binding, folder }) => {
+    const documentPath = join(coreRoot, folder, 'document/index.json');
+    const manifestPath = join(coreRoot, folder, 'manifest/index.json');
+    if (!existsSync(documentPath) || !existsSync(manifestPath)) {
+      return { folder, binding, incomplete: true };
+    }
+    return {
+      folder,
+      binding,
+      documentPath,
+      document: JSON.parse(readFileSync(documentPath, 'utf8')),
+      manifest: JSON.parse(readFileSync(manifestPath, 'utf8')),
+    };
+  });
+}
+
+/** Style folders under either home that the registry does not publish: data with no door. */
+export function readUnregisteredStyleData(coreRoot = CORE_ROOT) {
+  const registered = new Set(readRegistryRoster(coreRoot).entries.map((entry) => entry.folder));
+  const out = [];
+  for (const home of STYLE_DATA_ROOTS) {
+    const root = join(coreRoot, home);
+    if (!existsSync(root)) continue;
+    for (const entry of readdirSync(root, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const folder = join(home, entry.name);
+      if (!registered.has(folder)) out.push(folder);
+    }
+  }
+  return out;
 }
 
 function dialValue(decisions, entry) {
@@ -198,7 +264,18 @@ export function measure({ coreRoot = CORE_ROOT, repoRoot = REPO_ROOT } = {}) {
   const { classes, nonEmitting } = readPartition(coreRoot);
   const envelopes = readEnvelopes(coreRoot);
   const roster = readFirstPartyRoster(coreRoot);
+  const registry = readRegistryRoster(coreRoot);
   const publications = readPublications(coreRoot);
+  for (const problem of registry.problems) {
+    findings.push({ rule: 'REGISTRY_UNREADABLE', where: REGISTRY_FILE, detail: `${problem}; an unread roster scans nothing` });
+  }
+  for (const folder of readUnregisteredStyleData(coreRoot)) {
+    findings.push({
+      rule: 'STYLE_DATA_UNREGISTERED',
+      where: folder,
+      detail: 'a style folder the registry does not publish; style data enters only through the registry',
+    });
+  }
   if (roster.length === 0) {
     findings.push({
       rule: 'ROSTER_UNREADABLE',
@@ -261,7 +338,7 @@ export function measure({ coreRoot = CORE_ROOT, repoRoot = REPO_ROOT } = {}) {
     if (publication.incomplete) {
       findings.push({
         rule: 'PUBLICATION_INCOMPLETE',
-        where: `${REGISTRY_DIR}/${publication.folder}`,
+        where: publication.folder,
         detail: 'a style folder carries no document/index.json and manifest/index.json pair',
       });
       continue;
@@ -350,7 +427,7 @@ export function measure({ coreRoot = CORE_ROOT, repoRoot = REPO_ROOT } = {}) {
   if (publications.length === 0) {
     findings.push({
       rule: 'VACUOUS_SCAN',
-      where: REGISTRY_DIR,
+      where: REGISTRY_FILE,
       detail: 'the style registry is empty — every law below it is vacuous, so the scan refuses to report a pass',
     });
   }
@@ -360,7 +437,8 @@ export function measure({ coreRoot = CORE_ROOT, repoRoot = REPO_ROOT } = {}) {
     classCounts: counts,
     nonEmitting,
     verticals: Object.keys(envelopes),
-    publications: publications.map((publication) => publication.manifest?.id ?? publication.folder),
+    publications: publications.map((publication) =>
+      publication.manifest ? `${publication.manifest.id}@${publication.manifest.version}` : publication.folder),
     findings,
   };
 }

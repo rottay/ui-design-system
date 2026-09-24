@@ -18,12 +18,15 @@ import {
   ENVELOPES_FILE,
   PARTITION_FILE,
   REGISTRY_DIR,
+  REGISTRY_FILE,
   ROSTER_FILE,
+  STYLE_DATA_ROOTS,
   measure,
   readEnvelopes,
   readFirstPartyRoster,
   readPartition,
   readPublications,
+  readRegistryRoster,
 } from '../index.mjs';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
 
@@ -48,6 +51,7 @@ function sandbox() {
     mkdirSync(join(core, path), { recursive: true });
   }
   cpSync(join(CORE_ROOT, STYLES_ROOT), join(core, STYLES_ROOT), { recursive: true });
+  for (const home of STYLE_DATA_ROOTS) cpSync(join(CORE_ROOT, home), join(core, home), { recursive: true });
   cpSync(join(CORE_ROOT, CATALOG_FILE), join(core, CATALOG_FILE));
   cpSync(join(CORE_ROOT, ENVELOPES_FILE), join(core, ENVELOPES_FILE));
   cpSync(join(CORE_ROOT, ROSTER_FILE), join(core, ROSTER_FILE));
@@ -79,6 +83,18 @@ describe('theme-style-registry — the measurement', () => {
     assert.deepEqual(Object.keys(readEnvelopes(CORE_ROOT)).sort(), ['bithire', 'evnto', 'rottay']);
     assert.deepEqual(readFirstPartyRoster(CORE_ROOT), ['rottay', 'bithire', 'evnto']);
     assert.ok(readPublications(CORE_ROOT).length > 0);
+  });
+
+  it('reads the roster the registry publishes, including the boundary styles outside its folder', () => {
+    const { entries, problems } = readRegistryRoster(CORE_ROOT);
+    assert.deepEqual(problems, []);
+    assert.deepEqual(measure().publications, [
+      'quiet-premium@1', 'product-dense@1', 'editorial-quiet@1', 'technical-dense@1', 'structural-neutral@1',
+    ]);
+    assert.deepEqual(
+      entries.filter((entry) => !entry.folder.startsWith(REGISTRY_DIR)).map((entry) => entry.folder),
+      ['src/foundation/presets/styles/technical-dense', 'src/foundation/presets/styles/structural-neutral'],
+    );
   });
 });
 
@@ -223,9 +239,67 @@ describe('theme-style-registry — the drills', () => {
 
   it('goes RED on an empty registry rather than reporting a pass', () => {
     const box = sandbox();
-    for (const entry of readdirSync(join(box.core, REGISTRY_DIR), { withFileTypes: true })) {
-      if (entry.isDirectory()) rmSync(join(box.core, REGISTRY_DIR, entry.name), { recursive: true, force: true });
+    const file = join(box.core, REGISTRY_FILE);
+    const before = readFileSync(file, 'utf8');
+    const after = before.replace(/const PUBLICATIONS: readonly ThemeStyleRecord\[\] = Object\.freeze\(\[[\s\S]*?\]\.map\(admit\)\);/u,
+      'const PUBLICATIONS: readonly ThemeStyleRecord[] = Object.freeze([].map(admit));');
+    assert.notEqual(after, before, 'the mutation must land');
+    writeFileSync(file, after);
+    const found = rules(measure(options(box)));
+    assert.ok(found.includes('VACUOUS_SCAN'));
+    assert.ok(found.includes('STYLE_DATA_UNREGISTERED'), 'the five folders left behind are data with no door');
+  });
+
+  it('goes RED on every publication folder removed, in both homes', () => {
+    const box = sandbox();
+    for (const home of STYLE_DATA_ROOTS) {
+      for (const entry of readdirSync(join(box.core, home), { withFileTypes: true })) {
+        if (entry.isDirectory()) rmSync(join(box.core, home, entry.name), { recursive: true, force: true });
+      }
     }
-    assert.ok(rules(measure(options(box))).includes('VACUOUS_SCAN'));
+    const result = measure(options(box));
+    assert.equal(result.findings.filter((finding) => finding.rule === 'PUBLICATION_INCOMPLETE').length, 5);
+  });
+
+  it('goes RED when a boundary style is removed, and the scan counts 4 publications', () => {
+    const box = sandbox();
+    rmSync(join(box.core, 'src/foundation/presets/styles/structural-neutral'), { recursive: true, force: true });
+    const result = measure(options(box));
+    const incomplete = result.findings.filter((finding) => finding.rule === 'PUBLICATION_INCOMPLETE');
+    assert.deepEqual(incomplete.map((finding) => finding.where), ['src/foundation/presets/styles/structural-neutral']);
+    assert.equal(result.publications.filter((name) => name.includes('@')).length, 4);
+  });
+
+  it('goes RED on a boundary style that breaks the partition, which the old registry-folder scan never read', () => {
+    const box = sandbox();
+    const path = join(box.core, 'src/foundation/presets/styles/technical-dense/document/index.json');
+    const document = JSON.parse(readFileSync(path, 'utf8'));
+    writeFileSync(path, JSON.stringify({ ...document, decisions: { ...document.decisions, 'palette.seeds': { primary: '#101010' } } }));
+    const found = measure(options(box)).findings.filter((finding) => finding.rule === 'STYLE_AUTHORS_FORBIDDEN_ROW');
+    assert.equal(found.length, 1);
+    assert.match(found[0].detail, /style "technical-dense" authors palette\.seeds/u);
+  });
+
+  it('goes RED on style data the registry does not publish', () => {
+    const box = sandbox();
+    cpSync(
+      join(box.core, 'src/foundation/presets/styles/technical-dense'),
+      join(box.core, 'src/foundation/presets/styles/unpublished'),
+      { recursive: true },
+    );
+    const found = measure(options(box)).findings.filter((finding) => finding.rule === 'STYLE_DATA_UNREGISTERED');
+    assert.deepEqual(found.map((finding) => finding.where), ['src/foundation/presets/styles/unpublished']);
+  });
+
+  it('goes RED when a PUBLICATIONS element cannot be followed to its import', () => {
+    const box = sandbox();
+    const file = join(box.core, REGISTRY_FILE);
+    const before = readFileSync(file, 'utf8');
+    const after = before.replace('  EDITORIAL_QUIET_V1,\n', '  EDITORIAL_QUIET_V1,\n  SOMEWHERE_ELSE_V1,\n');
+    assert.notEqual(after, before, 'the mutation must land');
+    writeFileSync(file, after);
+    const found = measure(options(box)).findings.filter((finding) => finding.rule === 'REGISTRY_UNREADABLE');
+    assert.equal(found.length, 1);
+    assert.match(found[0].detail, /SOMEWHERE_ELSE_V1/u);
   });
 });
