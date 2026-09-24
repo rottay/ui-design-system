@@ -17,7 +17,7 @@ import {
 } from "@/foundation/contracts/composition/tenants/themes/provenance";
 import type { TenantThemeDocumentAny } from "@/contracts/theme/presentation/document";
 import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
-import { resolveThemeStyle } from "@/contracts/theme/runtime/styles";
+import { resolveThemeStyle, THEME_STYLE_IDS } from "@/contracts/theme/runtime/styles";
 import { documentAnyThemePatch } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import {
   admitDocument,
@@ -98,7 +98,7 @@ describe("I1 an unknown or unavailable style is refused identically everywhere",
     [
       "an unknown id",
       { id: "nope", version: 1 },
-      'ThemeStyle: unknown style "nope"; the registry is quiet-premium',
+      `ThemeStyle: unknown style "nope"; the registry is ${THEME_STYLE_IDS.join(" | ")}`,
     ],
     [
       "an unavailable version",

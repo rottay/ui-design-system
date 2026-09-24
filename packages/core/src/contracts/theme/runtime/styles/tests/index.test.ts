@@ -13,6 +13,9 @@
  * production and a column nobody re-measures is a column that rots.
  */
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -22,6 +25,9 @@ import {
 import { THEME_CONTROL_CATALOG, themeControl } from "@/contracts/theme/runtime/catalog";
 import { TENANT_THEME_VERTICAL_ENVELOPES } from "@/contracts/theme/runtime/envelopes";
 import { ENVELOPE_RANGED_DIALS } from "@/infrastructure/compilers/composition/tenant-theme/foundation/envelope";
+import { sidebarToneToVariables } from "@/infrastructure/compilers/kernel/foundation/css/chrome-variables";
+import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme/facade/runtime/compile";
+import { documentThemeIntent } from "@/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/document";
 import {
   THEME_STYLE_CLASSES,
   THEME_STYLE_CLASS_BY_DECISION,
@@ -496,3 +502,120 @@ describe("the registered publication is what the manifest says it is", () => {
     );
   });
 });
+
+/* WO-DER-09 step 1: the two contrasting registry fixtures, drawn from WO-DER-07's measured bithire
+ * candidates product-dense and editorial-quiet, registered under the CAT-04 contract. */
+describe("DER-09 the two contrasting registry fixtures", () => {
+  const FIXTURES = ["product-dense", "editorial-quiet"] as const;
+  const record = (id: string) => resolveThemeStyle({ id, version: 1 });
+  const candidate = (id: string) =>
+    JSON.parse(
+      readFileSync(resolve(process.cwd(), `src/foundation/presets/candidates/bithire/documents/${id}/index.json`), "utf8")
+    ).decisions as Record<string, unknown>;
+
+  it("(a) both register at version 1 under the digest law, style-class only, clearing all three verticals", () => {
+    for (const id of FIXTURES) {
+      const style = record(id);
+      expect(style.ref).toEqual({ id, version: 1 });
+      expect(style.manifest.digest).toBe(themeStyleDigest(style.document));
+      expect(style.manifest.verticals).toBe("all");
+      for (const row of style.manifest.rows) expect({ id, row, cls: THEME_STYLE_CLASS_BY_DECISION[row] }).toEqual({ id, row, cls: "style" });
+      expect(themeStyleClearanceIssues({ styleId: id, document: style.document, envelopes: envelopesOf(...ALL) })).toEqual([]);
+    }
+  });
+
+  it("(a) each is its candidate's style-class rows, verbatim, with the brand rows left to the tenant", () => {
+    for (const id of FIXTURES) {
+      const source = candidate(id);
+      const styleRows = Object.keys(source).filter((row) => THEME_STYLE_CLASS_BY_DECISION[row as ThemeDecisionId] === "style");
+      expect(Object.keys(record(id).document.decisions)).toEqual(styleRows);
+      for (const row of styleRows) {
+        expect({ row, value: (record(id).document.decisions as Record<string, unknown>)[row] }).toEqual({ row, value: source[row] });
+      }
+      expect(Object.keys(source).filter((row) => !styleRows.includes(row)).sort()).toEqual([
+        "experience.profile",
+        "palette.contrast-posture",
+        "palette.dark-mode",
+        "palette.neutral-temperature",
+        "palette.seeds",
+        "palette.status-seeds",
+        "typography.families",
+      ]);
+    }
+  });
+
+  it("(a) both pass admission through the v3 door", () => {
+    for (const id of FIXTURES) {
+      expect(() => compileAs(id)).not.toThrow();
+    }
+  });
+
+  it("(b) a fixture row outside the style class is refused by name, brand and refused alike", () => {
+    const decisions = record("product-dense").document.decisions as Record<string, unknown>;
+    expect(() => register({ id: "product-dense-seeded", decisions: { ...decisions, "palette.seeds": { primary: "#2F5BE8" } } })).toThrow(
+      'ThemeStyle: style "product-dense-seeded" authors "palette.seeds", which is brand-class; a style owns form, the tenant owns brand'
+    );
+    expect(() =>
+      register({ id: "product-dense-profiled", decisions: { ...decisions, "experience.profile": "rottay/bithire-technical@1" } })
+    ).toThrow(/"experience\.profile", whose expansion produces "profile-derived"/u);
+  });
+
+  it("(b) the version pin is immutable: a changed document under the published digest is refused, and no version 2 exists", () => {
+    const published = record("editorial-quiet");
+    expect(() =>
+      defineThemeStyle({
+        document: { decisions: { ...published.document.decisions, "spacing.rhythm": "tight" } },
+        manifest: published.manifest,
+      } as never)
+    ).toThrow(/is not the document digest .*a style is immutable, so a changed document is a NEW version/u);
+    expect(() => resolveThemeStyle({ id: "editorial-quiet", version: 2 })).toThrow(
+      'ThemeStyle: style "editorial-quiet" has no version 2; the registered versions are 1'
+    );
+  });
+
+  it("(c) the same tenant document under each fixture differs in non-color output while the brand stays fixed", () => {
+    const dense = compileAs("product-dense");
+    const quiet = compileAs("editorial-quiet");
+    const names = [...new Set([...Object.keys(dense.cssVariables), ...Object.keys(quiet.cssVariables)])];
+    const moved = names.filter((name) => dense.cssVariables[name] !== quiet.cssVariables[name]);
+    expect(moved.filter((name) => name.startsWith("--ds-color-") || /font-family/u.test(name))).toEqual([]);
+    for (const mode of ["light", "dark"] as const) {
+      const block = (compiled: typeof dense) => compiled.modeBlocks.find((candidate) => candidate.mode === mode)?.cssVariables ?? {};
+      const colors = (compiled: typeof dense) =>
+        Object.fromEntries(Object.entries({ ...compiled.cssVariables, ...block(compiled) }).filter(([name]) => name.startsWith("--ds-color-")));
+      expect(colors(dense)).toEqual(colors(quiet));
+    }
+    const sidebar = (compiled: typeof dense) =>
+      Object.fromEntries(Object.entries(compiled.cssVariables).filter(([name]) => name.startsWith("--ds-sidebar-")));
+    expect(sidebar(dense)).toMatchObject(sidebarToneToVariables("inverse", "light"));
+    expect(sidebar(quiet)).toMatchObject(sidebarToneToVariables("subtle", "light"));
+    for (const dial of [
+      "--ds-density-mode-factor",
+      "--ds-rhythm-scale",
+      "--ds-control-height-scale",
+      "--ds-type-scale",
+      "--ds-motion-duration-scale",
+      "--ds-radius-scale",
+    ]) {
+      expect({ dial, moved: moved.includes(dial) }).toEqual({ dial, moved: true });
+    }
+    expect(moved.length).toBeGreaterThan(40);
+  });
+});
+
+/** One fixed tenant: its own seeds, status seeds and faces, so only the style can move the output. */
+const FIXED_TENANT = {
+  "palette.seeds": { primary: "#2563EB", secondary: "#0F172A", accent: "#0891B2", background: "#FFFFFF" },
+  "palette.status-seeds": { success: "#15803D", warning: "#B45309", error: "#B91C1C", info: "#0369A1" },
+  "typography.families": { base: "humanist-text", heading: "grotesk-display", display: "grotesk-display", mono: "plex-mono" },
+};
+
+function compileAs(style: string) {
+  return compileThemeIntent(
+    documentThemeIntent({
+      vertical: "bithire",
+      slug: "acme",
+      document: { version: 3, plan: "pro", decisions: FIXED_TENANT, style: { id: style, version: 1 } } as never,
+    })
+  ).compiled;
+}

@@ -22,6 +22,8 @@ import {
   assertStyleAuthorable,
   assertStyleEmitsSomething,
 } from "@/contracts/theme/runtime/styles/runtime/partition";
+import { EDITORIAL_QUIET_V1 } from "./editorial-quiet";
+import { PRODUCT_DENSE_V1 } from "./product-dense";
 import { QUIET_PREMIUM_V1 } from "./quiet-premium";
 
 function admit(record: ThemeStyleRecord): ThemeStyleRecord {
@@ -34,6 +36,8 @@ function admit(record: ThemeStyleRecord): ThemeStyleRecord {
 
 const PUBLICATIONS: readonly ThemeStyleRecord[] = Object.freeze([
   QUIET_PREMIUM_V1,
+  PRODUCT_DENSE_V1,
+  EDITORIAL_QUIET_V1,
 ].map(admit));
 
 /** A registry key. A version is a ROW, never a mutation of a row. */

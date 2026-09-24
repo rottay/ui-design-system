@@ -8,7 +8,7 @@
  * claims to measure.
  */
 import assert from 'node:assert/strict';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -200,8 +200,8 @@ describe('theme-style-registry — the drills', () => {
   });
 
   it('goes RED when a vertical closes allowAnatomyVariants under a style that uses one', () => {
-    // Vacuous on production data -- all three envelopes open it -- and this is
-    // the arm that makes the day one of them closes it visible.
+    // Every publication that sets an anatomy variant reds under the closed envelope, each naming evnto;
+    // the repointed quiet-premium's single variant is asserted exactly.
     const box = sandbox();
     repoint(box.core, { 'chrome.anatomy': { table: 'grid' } });
     const file = join(box.core, ENVELOPES_FILE);
@@ -215,13 +215,17 @@ describe('theme-style-registry — the drills', () => {
     const findings = measure(options(box)).findings.filter(
       (finding) => finding.rule === 'STYLE_ANATOMY_FORBIDDEN',
     );
-    assert.equal(findings.length, 1);
-    assert.match(findings[0].detail, /the evnto envelope sets allowAnatomyVariants false/u);
+    const own = findings.filter((finding) => finding.detail.startsWith('style "quiet-premium"'));
+    assert.equal(own.length, 1);
+    assert.match(own[0].detail, /the evnto envelope sets allowAnatomyVariants false/u);
+    for (const finding of findings) assert.match(finding.detail, /the evnto envelope sets allowAnatomyVariants false/u);
   });
 
   it('goes RED on an empty registry rather than reporting a pass', () => {
     const box = sandbox();
-    rmSync(join(box.core, REGISTRY_DIR, 'quiet-premium'), { recursive: true, force: true });
+    for (const entry of readdirSync(join(box.core, REGISTRY_DIR), { withFileTypes: true })) {
+      if (entry.isDirectory()) rmSync(join(box.core, REGISTRY_DIR, entry.name), { recursive: true, force: true });
+    }
     assert.ok(rules(measure(options(box))).includes('VACUOUS_SCAN'));
   });
 });
