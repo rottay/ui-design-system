@@ -84,6 +84,30 @@
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/tokens/resolve/index.js",
       "reason": "WO-EMI-03 (a3a8f7bac): the var() resolver of the resolved token document"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/notification-center/index.cjs",
+      "reason": "the notification-center family deriver (notificationCenterChromeDeriver: rank derived, produces --ds-notification-center-touch-target = var(--ds-touch-target-min, 44px)), a new published owner from 643c3588b (WO-INV-03); Fable ACCEPT (receipt-notification-center-review-fable.json); owner review B37: compiled output matches the source, and ESM and CJS emit the same channel"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/notification-center/index.d.ts",
+      "reason": "the notification-center family deriver (notificationCenterChromeDeriver: rank derived, produces --ds-notification-center-touch-target = var(--ds-touch-target-min, 44px)), a new published owner from 643c3588b (WO-INV-03); Fable ACCEPT (receipt-notification-center-review-fable.json); owner review B37: compiled output matches the source, and ESM and CJS emit the same channel"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/notification-center/index.js",
+      "reason": "the notification-center family deriver (notificationCenterChromeDeriver: rank derived, produces --ds-notification-center-touch-target = var(--ds-touch-target-min, 44px)), a new published owner from 643c3588b (WO-INV-03); Fable ACCEPT (receipt-notification-center-review-fable.json); owner review B37: compiled output matches the source, and ESM and CJS emit the same channel"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/contrast/index.cjs",
+      "reason": "the contrastDeltas emitter (projectContrastBlocks and the prefers-contrast: more posture helpers), a new published owner from 7efadbf1f; Fable ACCEPT-WITH-CHANGES (option-a-emitter-verdict.md), with the required themeChannelDelta mode-state pin landed in the same commit; owner review B37: compiled output matches the source, the .d.ts imports resolve in dist, and ESM and CJS emit the same blocks"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/contrast/index.d.ts",
+      "reason": "the contrastDeltas emitter (projectContrastBlocks and the prefers-contrast: more posture helpers), a new published owner from 7efadbf1f; Fable ACCEPT-WITH-CHANGES (option-a-emitter-verdict.md), with the required themeChannelDelta mode-state pin landed in the same commit; owner review B37: compiled output matches the source, the .d.ts imports resolve in dist, and ESM and CJS emit the same blocks"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/contrast/index.js",
+      "reason": "the contrastDeltas emitter (projectContrastBlocks and the prefers-contrast: more posture helpers), a new published owner from 7efadbf1f; Fable ACCEPT-WITH-CHANGES (option-a-emitter-verdict.md), with the required themeChannelDelta mode-state pin landed in the same commit; owner review B37: compiled output matches the source, the .d.ts imports resolve in dist, and ESM and CJS emit the same blocks"
     }
   ],
   "$reason": "WO-EMI-03. The emission owner's declared grammar is finished: `emission/index.ts` became a barrel and its implementation moved to `css/` (declaration/rule assembler, value admission) and `artifact/` (the tenant stylesheet format), with `tokens/` added as the third child -- the resolved token document, its var() resolver and its expression evaluator. `facade/runtime/tokens` is the intent-shaped door over that emitter and `contracts/theme/runtime/compilation` is the document's contract. Every path here is a new owner of published code, not a new dependency: the two shrinks reported beside them (`emission/index.{js,cjs}`) are the same code under its new owners, and the barrel is source-only because it re-exports and nothing else."
