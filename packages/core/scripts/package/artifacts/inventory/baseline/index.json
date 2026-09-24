@@ -4,7 +4,7 @@
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
   "entryCount": 7913,
-  "unpackedSize": 43774197,
+  "unpackedSize": 43774574,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -13012,7 +13012,7 @@
     },
     {
       "path": "dist/contracts/theme/runtime/styles/runtime/partition/index.d.ts",
-      "size": 3174
+      "size": 3551
     },
     {
       "path": "dist/contracts/theme/runtime/styles/runtime/partition/index.js",
