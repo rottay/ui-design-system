@@ -45,9 +45,13 @@
  *            `AMBIGUOUS`, `CYCLE_ONLY` -- is a violation in its own right, one
  *            message per name. See `UNRESOLVABLE_EXPORT_KINDS` for why skipping
  *            them was the worst available default.
- *   manifest `family-inventory/index.json`, `manifest/index.json` and the per-family
- *            `manifest/families/{layer}/{group}/{slug}/index.json` cells describe
- *            the same set of ids -- no ghost row, no orphan cell.
+ *   manifest RETIRED from the live run (see MANIFEST_PARITY_RETIREMENT). The
+ *            leg compared the live inventory with the sealed manifest's family
+ *            cells; it runs only when a caller hands it a manifest root, which
+ *            the drills do with a synthetic fixture.
+ *   seal     the fence on the sealed manifest (`seal-fence/`): every script that
+ *            reads it is listed with its reason, and no blocking gate reads its
+ *            family slice.
  *   showroom every registry entry resolves to a family and publishes that
  *            family's own name and category, and every family is reachable in
  *            the Showroom, modulo the declared slug conventions. Slug alone is
@@ -94,6 +98,8 @@ import { fileURLToPath } from 'node:url';
 import { createRootPublicResolver } from '../../../libraries/taxonomy/roots/index.mjs';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../libraries/repo-root/index.mjs';
 import { relocateSourceOwners, RelocationError } from '../../../libraries/taxonomy/owner-resolution/index.mjs';
+import { CI_GATES } from '../../automation/gates/manifest/index.mjs';
+import { collectSealFenceFindings } from './seal-fence/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
@@ -105,10 +111,31 @@ const PROGRAM_ROOT = path.join(
   CORE_ROOT,
   'scripts/check/modern-rescue',
 );
-/** The manifest was quarantined to docs/history by WO-RET-03 (2026-09-19):
- *  sealed evidence the programme still cross-checks, never authority. It is a
- *  binding of its own. */
-const MANIFEST_ROOT = path.join(REPOSITORY_ROOT, 'docs/history/inventories/customization-manifest');
+/**
+ * Why the manifest leg left the live run, and the last thing it measured.
+ *
+ * WO-RET-03 sealed the customization manifest (docs/history/inventories/
+ * customization-manifest) on 2026-09-19, so its family cells can never change
+ * again, while the live family inventory must change whenever a family does.
+ * The leg asserted the two were equal, which from then on could only fail on
+ * the first honest change to the live set. The inventory-correspondence CLI
+ * (`framework/cli inventory --check`) binds the live rows to source owners and
+ * public exports, which is the check this leg was standing in for.
+ */
+export const MANIFEST_PARITY_RETIREMENT = Object.freeze({
+  retiredOn: '2026-09-23',
+  reason: 'the sealed manifest is history; the live family inventory is the family set',
+  lastLiveCensus: Object.freeze({
+    sealedFamilies: 254,
+    liveFamilies: 252,
+    sealedOnly: Object.freeze(['primitive/inputs/switch', 'primitive/navigation/steps']),
+    liveOnly: Object.freeze([]),
+    movers: Object.freeze([
+      'e31c1174e (Switch merged into Toggle, D-16 WO-FAM-01)',
+      '1ddfd6198 (Steps merged into Stepper, D-16 WO-FAM-05)',
+    ]),
+  }),
+});
 const UI_ROOT_RELATIVE = 'packages/core/src/components';
 const SHOWROOM_REGISTRY_ROOT = path.join(
   REPOSITORY_ROOT,
@@ -516,8 +543,13 @@ function hasRenderableComponent(dir) {
 export function auditTaxonomyParity({
   repositoryRoot = REPOSITORY_ROOT,
   programRoot = PROGRAM_ROOT,
-  manifestRoot = MANIFEST_ROOT,
+  // Null on the live run: the manifest leg is retired (MANIFEST_PARITY_RETIREMENT).
+  // The drills pass a fixture root to keep the mechanism under test.
+  manifestRoot = null,
   showroomRegistryRoot = SHOWROOM_REGISTRY_ROOT,
+  // The CI gate list the seal fence reads. Null skips the fence; the live run
+  // passes CI_GATES.
+  sealFenceGates = null,
   // Narrowed only by the drills, so a fixture can model one tier without its
   // four stub registries reading as four empty-registry findings. The real run
   // always takes the default and checks all five.
@@ -671,9 +703,10 @@ export function auditTaxonomyParity({
     }
   }
 
-  // --- manifest parity ----------------------------------------------------
-  const manifestIndexPath = path.join(manifestRoot, 'index.json');
+  // --- manifest parity (retired from the live run) ------------------------
   const inventoryIds = new Set(rows.map((row) => row.id));
+  if (manifestRoot !== null) {
+  const manifestIndexPath = path.join(manifestRoot, 'index.json');
   if (fs.existsSync(manifestIndexPath)) {
     const manifestIndex = readJson(manifestIndexPath);
     const manifestFamilies = manifestIndex?.families ?? {};
@@ -743,6 +776,14 @@ export function auditTaxonomyParity({
   for (const id of familyFileIds) {
     if (!inventoryIds.has(id)) {
       add('manifest-parity', `manifest/families cell ${id} has no inventory row`);
+    }
+  }
+  }
+
+  // --- the seal fence ------------------------------------------------------
+  if (sealFenceGates !== null) {
+    for (const finding of collectSealFenceFindings({ coreRoot: path.join(repositoryRoot, 'packages/core'), gates: sealFenceGates })) {
+      add('seal-fence', finding);
     }
   }
 
@@ -918,7 +959,7 @@ export function auditTaxonomyParity({
 
 function main() {
   const asJson = process.argv.includes('--json');
-  const { violations, rowCount } = auditTaxonomyParity();
+  const { violations, rowCount } = auditTaxonomyParity({ sealFenceGates: CI_GATES });
 
   if (asJson) {
     console.log(JSON.stringify({ rowCount, violations }, null, 2));
@@ -933,7 +974,7 @@ function main() {
 
   console.log(`taxonomy parity: ${rowCount} inventory rows`);
   if (violations.length === 0) {
-    console.log('OK -- source, public, manifest and Showroom agree');
+    console.log('OK -- source, public and Showroom agree, and the seal fence holds');
     process.exit(0);
   }
 

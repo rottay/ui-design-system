@@ -435,8 +435,8 @@
       "R2": [
         ["foundation-visual-5", "primitive-layout-responsive-18"],
         ["primitive-display-24"],
-        ["primitive-inputs-25"],
-        ["primitive-navigation-12"],
+        ["primitive-inputs-24"],
+        ["primitive-navigation-11"],
         ["primitive-feedback-11", "primitive-overlay-10"]
       ],
       "R3": [
@@ -456,8 +456,8 @@
       "R7": [
         ["foundation-visual-5", "primitive-layout-responsive-18"],
         ["primitive-display-24"],
-        ["primitive-inputs-25"],
-        ["primitive-navigation-12"],
+        ["primitive-inputs-24"],
+        ["primitive-navigation-11"],
         ["primitive-feedback-11", "primitive-overlay-10"],
         ["pattern-data-17"],
         ["pattern-forms-5", "pattern-visualization-non-chart-6", "pattern-commerce-1", "pattern-feedback-3", "pattern-identity-1"],

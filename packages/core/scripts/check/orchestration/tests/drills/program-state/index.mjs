@@ -46,6 +46,8 @@ const CARRIED = [
   // does -- but so the inverse drill below can prove that editing it changes nothing.
   'packages/core/artifacts/quality/programs/modern-rescue/archive/ledgers/family-source-visitation/252-family-era/index.json',
   'packages/core/scripts/check/modern-rescue/family-inventory/index.json',
+  // The sealed customization manifest, carried for the same reason as the ledger: `derive()`
+  // no longer reads it, and the inverse drill proves that editing it moves nothing.
   'docs/history/inventories/customization-manifest/index.json',
   'packages/core/scripts/check/orchestration/public/work-order/synthetic-ownership/index.json',
   'packages/core/scripts/check/orchestration/plans/examples/index.json',
@@ -186,11 +188,11 @@ export function runDrills() {
     suite.expectFact({
       label: 'TEETH — the pinned figures are still in the body and still byte-verified',
       ok: /\| `inventory\.families` \| \d+ \|/.test(section)
-        && /\| `manifest\.controlFamilyCells` \| \d+ \|/.test(section)
+        && /\| `ownership\.syntheticRows` \| \d+ \|/.test(section)
         && /\| `singleOwner\.entries` \| \d+ \|/.test(section),
       details: [
         (section.match(/\| `inventory\.families` \| .* \|/) ?? ['<missing>'])[0].trim(),
-        (section.match(/\| `manifest\.controlFamilyCells` \| .* \|/) ?? ['<missing>'])[0].trim(),
+        (section.match(/\| `ownership\.syntheticRows` \| .* \|/) ?? ['<missing>'])[0].trim(),
         (section.match(/\| `singleOwner\.entries` \| .* \|/) ?? ['<missing>'])[0].trim(),
       ],
     });
@@ -214,25 +216,21 @@ export function runDrills() {
     });
     writeFileSync(target, written);
 
-    // A real content change in an ACTIVE source must still go red: the pinned facts have teeth.
-    // This drill used to remove a row from `family-ledger.json`, because the family denominator
-    // was pinned from the ledger. It is pinned from the manifest and the family inventory now,
-    // so the ledger is no longer a source a pinned figure can be false about.
-    const manifestPath = join(
-      dir,
-      'docs/history/inventories/customization-manifest/index.json',
-    );
-    const manifestBefore = readFileSync(manifestPath, 'utf8');
-    const cellsIndex = JSON.parse(manifestBefore);
-    cellsIndex.denominators.controlFamilyCells += 1;
-    writeFileSync(manifestPath, JSON.stringify(cellsIndex, null, 2));
+    // A real content change in the ACTIVE source must still go red: the pinned facts have teeth.
+    // The family denominator is pinned from the live family inventory alone, so that is the
+    // source a pinned figure can be false about.
+    const inventoryPath = join(dir, 'packages/core/scripts/check/modern-rescue/family-inventory/index.json');
+    const inventoryBefore = readFileSync(inventoryPath, 'utf8');
+    const shrunk = JSON.parse(inventoryBefore);
+    shrunk.rows = shrunk.rows.slice(0, -1);
+    writeFileSync(inventoryPath, JSON.stringify(shrunk, null, 2));
     suite.expectRefusal({
-      label: 'P8 — a REAL manifest denominator change goes red, because the pinned figure is now false',
+      label: 'P8 — a REAL live-inventory change goes red, because the pinned family count is now false',
       rule: 'P8-body-mismatch',
       showOutput: true,
       result: call('--check'),
     });
-    writeFileSync(manifestPath, manifestBefore);
+    writeFileSync(inventoryPath, inventoryBefore);
 
     // THE INVERSE, and the reason the drill above changed shape.
     //
@@ -334,19 +332,48 @@ export function runDrills() {
       details: [`${ledgerBefore.length} bytes restored — the drill mutates history, it does not rewrite it`],
     });
 
-    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
-    manifest.rollups.familyReviews.blockedOwnerDecision += 1;
-    manifest.rollups.familyReviews.unreviewed -= 1;
-    writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-    suite.expectRefusal({
-      label: 'P8 — a REAL manifest adjudication change goes red until the checkpoint is re-rendered',
-      rule: 'P8-body-mismatch',
-      showOutput: true,
-      result: call('--check'),
+    // The sealed customization manifest is history too. Its family count, cell count and
+    // review rollup used to be pinned figures, so a sealed file could only disagree with the
+    // first honest change to the live set. Mutate it as the format allows and require the same
+    // four invariants to hold.
+    const manifestPath = join(dir, 'docs/history/inventories/customization-manifest/index.json');
+    const manifestBefore = readFileSync(manifestPath, 'utf8');
+    const sealedVerdictBefore = call('--check');
+    const sealedFiguresBefore = pinnedFigures(dir);
+    const sealedBoundsBefore = laneBounds(dir);
+    const sealedRenderBefore = renderedCheckpoint(dir);
+    const sealed = JSON.parse(manifestBefore);
+    sealed.denominators.canonicalFamilies += 7;
+    sealed.denominators.controlFamilyCells += 7;
+    sealed.rollups.familyReviews.blockedOwnerDecision += 3;
+    sealed.rollups.familyReviews.unreviewed -= 1;
+    const droppedFamily = Object.keys(sealed.families ?? {})[0];
+    if (droppedFamily) delete sealed.families[droppedFamily];
+    writeFileSync(manifestPath, JSON.stringify(sealed, null, 2));
+    const sealedVerdictAfter = call('--check');
+    const sealedFiguresAfter = pinnedFigures(dir);
+    const sealedBoundsAfter = laneBounds(dir);
+    const sealedRenderAfter = renderedCheckpoint(dir);
+    writeFileSync(manifestPath, manifestBefore);
+    suite.expectFact({
+      label: 'HISTORY IS NOT AUTHORITY — rewriting the sealed manifest counts and review rollup moves no verdict, no rendered checkpoint, no figure and no lane bound',
+      ok: sealedVerdictBefore.status === sealedVerdictAfter.status
+        && sealedRenderAfter.body === sealedRenderBefore.body
+        && JSON.stringify(sealedFiguresBefore) === JSON.stringify(sealedFiguresAfter)
+        && sealedBoundsBefore.length > 0
+        && JSON.stringify(sealedBoundsBefore) === JSON.stringify(sealedBoundsAfter),
+      details: [
+        `canonicalFamilies +7, controlFamilyCells +7, rollup shifted, family "${droppedFamily ?? '<none>'}" dropped`,
+        `--check verdict: exit ${sealedVerdictBefore.status} → ${sealedVerdictAfter.status}`,
+        `checkpoint re-rendered: identical: ${sealedRenderAfter.body === sealedRenderBefore.body}`,
+        `${Object.keys(sealedFiguresBefore).length} pinned figures re-derived, every one unchanged`,
+      ],
     });
-    manifest.rollups.familyReviews.blockedOwnerDecision -= 1;
-    manifest.rollups.familyReviews.unreviewed += 1;
-    writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+    suite.expectFact({
+      label: 'HISTORY IS NOT AUTHORITY — the sealed manifest was restored byte-for-byte',
+      ok: readFileSync(manifestPath, 'utf8') === manifestBefore,
+      details: [`${manifestBefore.length} bytes restored`],
+    });
 
     // ── P9: the guard that stops the defect coming back ─────────────────────
     const intentBody = JSON.parse(readFileSync(intent, 'utf8'));

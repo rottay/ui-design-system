@@ -118,7 +118,7 @@ const RETIRED_IMPLEMENTER_2 = 'Cloud Opus implementer pool';
 // adjudication. Every number below is a census of the inventory, never a hand-carried
 // total.
 const EXPECTED_COUNTS = Object.freeze({
-  primitive: 105,
+  primitive: 103,
   pattern: 57,
   chart: 18,
   structure: 39,

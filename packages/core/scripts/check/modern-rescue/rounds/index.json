@@ -21,7 +21,7 @@
       "enabled": true,
       "name": "Truth, instrumentation and baseline",
       "scope": {
-        "families": 254,
+        "families": 252,
         "writes": "quality tooling and contracts only; no broad family styling"
       },
       "objectives": [
@@ -346,7 +346,7 @@
       "enabled": true,
       "name": "Primitive depth and resilience",
       "scope": {
-        "primitives": 105
+        "primitives": 103
       },
       "objectives": [
         "apply accepted R1 grammar without shallow file visitation",
@@ -416,7 +416,7 @@
       "enabled": true,
       "name": "Cross-system canon and propagation closure",
       "scope": {
-        "families": 254,
+        "families": 252,
         "controls": "all active Standard and Pro plus Expert entries changed by R1-R4"
       },
       "objectives": [
@@ -444,7 +444,7 @@
       "enabled": true,
       "name": "Independent DT certification",
       "scope": {
-        "families": 254,
+        "families": 252,
         "tenants": [
           "bithire-static",
           "themanagement-db"
@@ -479,7 +479,7 @@
         "all R7 external references are non-normative benchmarks rather than naming visual or architectural authorities"
       ],
       "scope": {
-        "families": 254,
+        "families": 252,
         "standardControlsBaseline": 14,
         "proCapabilitiesBaseline": 7,
         "expertExactAllowlistBaseline": 292,

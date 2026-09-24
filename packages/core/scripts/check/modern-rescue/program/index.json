@@ -83,8 +83,8 @@
     "preservation": "packages/core/scripts/generate/tokens/customization/preservation/manifest/index.json"
   },
   "denominators": {
-    "visibleFamilies": 254,
-    "primitives": 105,
+    "visibleFamilies": 252,
+    "primitives": 103,
     "patternsExcludingCharts": 57,
     "charts": 18,
     "structures": 39,

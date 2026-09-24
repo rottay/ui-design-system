@@ -47,6 +47,28 @@ export const MANIFEST_INDEX_PATH = 'docs/history/inventories/customization-manif
 export const FAMILY_INVENTORY_PATH = 'packages/core/scripts/check/modern-rescue/family-inventory/index.json';
 
 /**
+ * The customization manifest's figures as the seal recorded them. WO-RET-03 sealed
+ * that tree on 2026-09-19 and deleted the generator that produced them, so no
+ * command can derive them any more: they are history, rendered under their own
+ * heading, never in the derived set. The family count the checkpoint pins comes
+ * from the live inventory alone.
+ */
+export const HISTORICAL_FIGURES = Object.freeze({
+  asOf: '2026-09-19 (sealed)',
+  source: MANIFEST_INDEX_PATH,
+  sealedBy: 'f66b1bd45',
+  sealedTree: '5b81f099d2c91b275baf2072e961508767351b32',
+  figures: Object.freeze([
+    Object.freeze({ key: 'sealed.families', value: 254, recorded: 'denominators.canonicalFamilies' }),
+    Object.freeze({ key: 'sealed.controlFamilyCells', value: 5334, recorded: 'denominators.controlFamilyCells' }),
+    Object.freeze({ key: 'sealed.reviews.unreviewed', value: 254, recorded: 'rollups.familyReviews.unreviewed' }),
+    Object.freeze({ key: 'sealed.reviews.accepted', value: 0, recorded: 'rollups.familyReviews.accepted' }),
+    Object.freeze({ key: 'sealed.reviews.assessedNotElevated', value: 0, recorded: 'rollups.familyReviews.assessedNotElevated' }),
+    Object.freeze({ key: 'sealed.reviews.blockedOwnerDecision', value: 0, recorded: 'rollups.familyReviews.blockedOwnerDecision' }),
+  ]),
+});
+
+/**
  * The exact CLI vocabulary this command parses — the single place that says so.
  *
  * It is also the contract the gate manifest is held to: `tests/index.test.mjs`
@@ -104,30 +126,12 @@ export const PROVENANCE = 'provenance';
 export function derive({ root, planPath }) {
   const head = headMeta(root);
   const context = loadContext({ root });
-  const manifestIndex = JSON.parse(readFileSync(`${root}/${MANIFEST_INDEX_PATH}`, 'utf8'));
-  // The denominator is READ from the active family inventory, never restated here. This check
-  // used to compare against a literal 252; when the catalog moved to 253 the literal became a
-  // second, stale authority that could only fail. The inventory is the one place a family id
-  // is declared, so agreement with it is the real invariant.
+  // The denominator is READ from the active family inventory, never restated here, and never
+  // compared with the sealed manifest: a frozen count can only disagree with the first honest
+  // change to the live set. The inventory is the one place a family id is declared.
   const familyInventory = JSON.parse(readFileSync(`${root}/${FAMILY_INVENTORY_PATH}`, 'utf8'));
   const inventoryFamilies = familyInventory.rows.length;
   const inventoryCounts = familyInventory.counts ?? {};
-  const familyReviews = manifestIndex?.rollups?.familyReviews;
-  if (!familyReviews || manifestIndex?.denominators?.canonicalFamilies !== inventoryFamilies) {
-    throw new Error(
-      `lane-control: customization manifest index must carry a ${inventoryFamilies}-family review rollup, found ${manifestIndex?.denominators?.canonicalFamilies ?? 'none'}`,
-    );
-  }
-  const reviewTotal =
-    familyReviews.unreviewed
-    + familyReviews.accepted
-    + familyReviews.assessedNotElevated
-    + familyReviews.blockedOwnerDecision;
-  if (reviewTotal !== manifestIndex.denominators.canonicalFamilies) {
-    throw new Error(
-      `lane-control: customization manifest family review rollup totals ${reviewTotal}, expected ${manifestIndex.denominators.canonicalFamilies}`,
-    );
-  }
 
   const derived = {
     // Provenance — never pinned into the body.
@@ -154,11 +158,6 @@ export function derive({ root, planPath }) {
       how: `${FAMILY_INVENTORY_PATH} rows.length`,
       volatility: PINNED,
     },
-    'manifest.controlFamilyCells': {
-      value: manifestIndex.denominators.controlFamilyCells,
-      how: `${MANIFEST_INDEX_PATH} denominators.controlFamilyCells`,
-      volatility: PINNED,
-    },
     'ownership.syntheticRows': {
       value: context.rows.syntheticRows.length,
       how: 'synthetic-ownership/index.json rows.length — the non-family lanes',
@@ -171,21 +170,6 @@ export function derive({ root, planPath }) {
     },
   };
 
-  derived['adjudication.accepted'] = {
-    value: familyReviews.accepted,
-    how: `${MANIFEST_INDEX_PATH} rollups.familyReviews.accepted`,
-    volatility: PINNED,
-  };
-  derived['adjudication.assessedNotElevated'] = {
-    value: familyReviews.assessedNotElevated,
-    how: `${MANIFEST_INDEX_PATH} rollups.familyReviews.assessedNotElevated`,
-    volatility: PINNED,
-  };
-  derived['adjudication.unreviewed'] = {
-    value: familyReviews.unreviewed,
-    how: `${MANIFEST_INDEX_PATH} rollups.familyReviews.unreviewed`,
-    volatility: PINNED,
-  };
   // Per-layer counts follow the same rule as the total: derived from the active inventory,
   // whose five canonical layers are the ones the catalog actually has. The ledger's byLayer
   // table still carries the retired `commercial` and `surface-composition` buckets.
@@ -395,6 +379,17 @@ export function renderBody(intent, derived) {
       continue;
     }
     lines.push(`| \`${key}\` | ${derived[key].value} | ${derived[key].how} |`);
+  }
+  lines.push('');
+  lines.push(`### Historical figures (as of ${HISTORICAL_FIGURES.asOf})`);
+  lines.push('');
+  lines.push(`*Recorded by the sealed manifest (\`${HISTORICAL_FIGURES.source}\`, sealed by ${HISTORICAL_FIGURES.sealedBy}).`);
+  lines.push('No command produces these any more; they describe the programme at the seal, not now.*');
+  lines.push('');
+  lines.push('| Figure | Value | Recorded as |');
+  lines.push('|---|---|---|');
+  for (const figure of HISTORICAL_FIGURES.figures) {
+    lines.push(`| \`${figure.key}\` | ${figure.value} | ${figure.recorded} |`);
   }
   lines.push('');
 

@@ -27,10 +27,18 @@ import test from 'node:test';
 import { createRootPublicResolver } from '../../../libraries/taxonomy/roots/index.mjs';
 import {
   auditTaxonomyParity,
+  MANIFEST_PARITY_RETIREMENT,
   normalizeFamilySlug,
   parseShowroomRegistry,
   CANONICAL_LAYERS,
 } from './index.mjs';
+import {
+  SCANNED_ROOTS as SEAL_SCANNED_ROOTS,
+  SEAL_READERS,
+  SEAL_ROOT_REL,
+  collectSealFenceFindings,
+} from './seal-fence/index.mjs';
+import { CI_GATES } from '../../automation/gates/manifest/index.mjs';
 
 const UI_ROOT = 'packages/core/src/components';
 
@@ -914,4 +922,107 @@ test('an Object.assign compound component is recognised as a component', () => {
     ),
     'expected the Object.assign compound to be seen as a component',
   );
+});
+
+// --- the retired manifest leg and the seal fence --------------------------
+
+const REPO_ROOT_FOR_FENCE = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../../../..');
+const CORE_FOR_FENCE = path.join(REPO_ROOT_FOR_FENCE, 'packages/core');
+
+test('the live run no longer compares the family set with the sealed manifest', () => {
+  const fixture = buildCleanFixture();
+  // A manifest that disagrees with the inventory is planted, and the audit is
+  // called the way the live run calls it: without a manifest root.
+  fs.rmSync(path.join(fixture.manifestRoot, 'families/primitive/display/badge'), { recursive: true, force: true });
+  const result = auditTaxonomyParity({
+    repositoryRoot: fixture.root,
+    programRoot: fixture.programRoot,
+    showroomRegistryRoot: fixture.registryRoot,
+    registries: [{ file: 'primitives.ts', layers: ['primitive'] }],
+    rootEntryFile: path.join(fixture.root, 'packages/core/src/index.ts'),
+  });
+  assert.equal(kinds(result).includes('manifest-parity'), false);
+  // The mechanism itself still fires when a root is handed to it.
+  assert.ok(kinds(audit(fixture)).includes('manifest-parity'));
+});
+
+test('the retirement record states the last live divergence and matches the live inventory', () => {
+  const census = MANIFEST_PARITY_RETIREMENT.lastLiveCensus;
+  assert.equal(census.sealedFamilies - census.liveFamilies, census.sealedOnly.length - census.liveOnly.length);
+  assert.equal(census.movers.length, 2);
+  assert.ok(census.movers.some((mover) => mover.startsWith('e31c1174e')));
+  assert.ok(census.movers.some((mover) => mover.startsWith('1ddfd6198')));
+  const inventory = JSON.parse(fs.readFileSync(
+    path.join(CORE_FOR_FENCE, 'scripts/check/modern-rescue/family-inventory/index.json'), 'utf8',
+  ));
+  const liveIds = new Set(inventory.rows.map((row) => row.id));
+  assert.equal(inventory.rows.length, census.liveFamilies);
+  for (const id of census.sealedOnly) assert.equal(liveIds.has(id), false, `${id} is folded into its surviving family`);
+});
+
+function copyScannedRoots(box) {
+  for (const root of SEAL_SCANNED_ROOTS) {
+    const from = path.join(CORE_FOR_FENCE, root);
+    if (fs.existsSync(from)) fs.cpSync(from, path.join(box, root), { recursive: true });
+  }
+}
+
+function fenceSandbox(mutate, options = {}) {
+  const box = fs.mkdtempSync(path.join(os.tmpdir(), 'seal-fence-'));
+  try {
+    copyScannedRoots(box);
+    const write = (rel, text) => {
+      fs.mkdirSync(path.dirname(path.join(box, rel)), { recursive: true });
+      fs.writeFileSync(path.join(box, rel), text);
+    };
+    mutate({ box, write });
+    return collectSealFenceFindings({ coreRoot: box, ...options });
+  } finally {
+    fs.rmSync(box, { recursive: true, force: true });
+  }
+}
+
+test('the seal fence holds on the live tree', () => {
+  assert.deepEqual(collectSealFenceFindings({ coreRoot: CORE_FOR_FENCE, gates: CI_GATES }), []);
+});
+
+test('every listed reader of the seal carries a written reason and a slice', () => {
+  assert.ok(SEAL_READERS.length > 0);
+  for (const entry of SEAL_READERS) {
+    assert.ok(entry.path.endsWith('.mjs'), `${entry.path} must name a module`);
+    assert.ok(typeof entry.slice === 'string' && entry.slice.length > 0, `${entry.path} needs a slice`);
+    assert.ok(entry.reason.trim().length >= 40, `${entry.path} needs a written reason`);
+  }
+});
+
+test('FENCE DRILL: a new script that reads the seal fails until it is listed', () => {
+  const findings = fenceSandbox(({ write }) => {
+    write('scripts/check/planted-reader/index.mjs', `export const root = '${SEAL_ROOT_REL}/index.json';\n`);
+  });
+  assert.ok(
+    findings.some((finding) => finding.startsWith('scripts/check/planted-reader/index.mjs reads the sealed customization manifest')),
+    findings.join('\n'),
+  );
+});
+
+test('FENCE DRILL: a listed reader that stops reading the seal is a stale entry', () => {
+  const listed = SEAL_READERS.find((entry) => entry.slice === 'cascade');
+  const findings = fenceSandbox(({ write }) => {
+    write(listed.path, 'export const nothing = true;\n');
+  });
+  assert.ok(
+    findings.some((finding) => finding.startsWith(`${listed.path} is listed as a reader of the seal but no longer names it`)),
+    findings.join('\n'),
+  );
+});
+
+test('FENCE DRILL: a blocking gate that reads the family slice of the seal fails; a non-blocking one does not', () => {
+  const planted = 'scripts/check/planted-family-gate/index.mjs';
+  const readers = [...SEAL_READERS, { path: planted, slice: 'drill', reason: 'planted by the fence drill to model a gate that compares family sets' }];
+  const plant = ({ write }) => write(planted, `const cells = '${SEAL_ROOT_REL}/families';\nexport default cells;\n`);
+  const gate = (blocking) => [{ id: 'planted-family-gate', run: ['node', planted], blocking }];
+  const blockingFindings = fenceSandbox(plant, { readers, gates: gate(true) });
+  const advisoryFindings = fenceSandbox(plant, { readers, gates: gate(false) });
+  assert.ok(blockingFindings.some((finding) => finding.startsWith('blocking gate planted-family-gate')), blockingFindings.join('\n'));
+  assert.equal(advisoryFindings.some((finding) => finding.startsWith('blocking gate planted-family-gate')), false);
 });

@@ -1003,8 +1003,8 @@ test("historical quality rubric checks fail closed", () => {
 
 test("historical family inventory checks fail closed", () => {
   expectError(
-    mutated((copy) => { copy.program.denominators.primitives = 104; }),
-    "program denominator primitives must be 105",
+    mutated((copy) => { copy.program.denominators.primitives = 102; }),
+    "program denominator primitives must be 103",
     "primitive denominator shrink must be rejected"
   );
   expectError(
@@ -1018,8 +1018,8 @@ test("historical family inventory checks fail closed", () => {
     "bogus family sourceRoot must be rejected"
   );
   expectError(
-    mutated((copy) => { copy.inventory.counts.primitive = 104; }),
-    "family inventory declared primitive count must be 105",
+    mutated((copy) => { copy.inventory.counts.primitive = 102; }),
+    "family inventory declared primitive count must be 103",
     "inventory count mismatch must be rejected"
   );
 });

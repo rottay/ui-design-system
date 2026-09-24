@@ -169,7 +169,6 @@ const navigation: PrimitiveEntry[] = [
   { slug: 'pagination', name: 'Pagination', category: 'navigation', description: 'Page navigation with size options', engines: allEngines },
   { slug: 'segmented', name: 'Segmented', category: 'navigation', description: 'Segmented control for switching views', engines: allEngines },
   { slug: 'stepper', name: 'Stepper', category: 'navigation', description: 'Compact step indicator for mobile flows', engines: allEngines },
-  { slug: 'steps', name: 'Steps', category: 'navigation', description: 'Multi-step process indicator', engines: allEngines },
   { slug: 'tabs', name: 'Tabs', category: 'navigation', description: 'Tabbed content switcher', engines: allEngines },
 ];
 
