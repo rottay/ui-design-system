@@ -16,6 +16,7 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative } from 'node:path';
 import test from 'node:test';
@@ -5310,4 +5311,197 @@ test('NF-4 REGRESSION: a top-level computed write still refuses', () => {
   const out = branchProbe(nestedFillFixture(`const o: any = {}; o[x] = '1'; return o;`));
   assert.equal(out.disposition, 'OPEN_UNKNOWN');
   assert.ok(openReasonsOf(out.shape).has('reassignment-or-mutation-present'));
+});
+
+/* ===================================================================== *
+ * OM -- an OMITTED stamp is invisible to the key-set law.
+ *
+ * React drops a style entry whose value is `undefined`, `null`, a boolean or
+ * `''`, so such a key is stamped only on the arms where the value is defined.
+ * The disposition is decided on the key set, and T-BRANCH-PRODUCER's
+ * "every arm stamps the same keys" test runs only when a `branches` shape is
+ * the TOP of the resolved site. Four shapes that omit a key in the DOM still
+ * close as CLOSED_PRODUCER: a leaf value that can be `undefined`/`null`
+ * (OM-1, OM-4), a whole-style `undefined` arm (OM-2), a conditional tree with
+ * an open leaf value, which leaves T-BRANCH-PRODUCER for T-STATIC-KEYSET
+ * (OM-3), and a conditional spread INSIDE an object, which the object route
+ * hands to governance without the branch test (OM-5). Each drill pins the
+ * disposition AND a fixture difference the instrument does see, so a
+ * classifier change that starts (or stops) telling them apart turns a drill
+ * red instead of moving a class silently. OM-4 and OM-5 resolve the live
+ * data-table stamp at the `:call` / `:spread` sites the census enqueues, with
+ * the early-return form as the positive control that the law does bite there.
+ * ===================================================================== */
+
+const requireFromHere = createRequire(import.meta.url);
+const renderStyle = (style) => {
+  const React = requireFromHere('react');
+  const { renderToStaticMarkup } = requireFromHere('react-dom/server');
+  return renderToStaticMarkup(React.createElement('td', { style }));
+};
+/** The terminal reasons of every value written under `key`, spreads and arms included. */
+const leafTerminalReasons = (shape, key) => {
+  const reasons = new Set();
+  const terminals = (s) => {
+    if (!s) return;
+    if (s.kind === 'branches') { for (const b of s.branches ?? []) terminals(b); return; }
+    reasons.add(s.kind === 'nonObject' ? s.reason : s.kind);
+  };
+  const visit = (s) => {
+    if (!s) return;
+    if (s.kind === 'branches') { for (const b of s.branches ?? []) visit(b); return; }
+    for (const entry of s.order ?? []) {
+      if (entry.kind === 'leaf' && entry.key === key) terminals(entry.shape);
+      if (entry.kind === 'spread') visit(entry.shape);
+    }
+  };
+  visit(shape);
+  return reasons;
+};
+const OM_KEY = '--ds-zq-om-inset';
+
+test('OM-1 NAMED LIMIT: a stamp whose value can be undefined or null closes exactly like its defined twin', () => {
+  const fixture = (omitted) => `export const C = ({f}) => <td style={{ "${OM_KEY}": f ? "0px" : ${omitted} }} />;`;
+  const defined = branchProbe(fixture('"inherit"'));
+  const undef = branchProbe(fixture('undefined'));
+  const nul = branchProbe(fixture('null'));
+  for (const [label, out] of [['defined', defined], ['undefined', undef], ['null', nul]]) {
+    assert.equal(out.disposition, PRODUCER_D, `${label}: the key set alone decides`);
+    assert.deepEqual(out.governance.governedChannelKeys, [OM_KEY], `${label}: same governed key`);
+  }
+  // the DOM differs: only the defined twin stamps on its false arm
+  assert.match(renderStyle({ [OM_KEY]: 'inherit' }), new RegExp(`${OM_KEY}:inherit`));
+  assert.equal(renderStyle({ [OM_KEY]: undefined }), '<td></td>');
+  assert.equal(renderStyle({ [OM_KEY]: null }), '<td></td>');
+  // the instrument HAS the difference in the resolved value, and the law does not read it
+  assert.ok(!leafTerminalReasons(defined.shape, OM_KEY).has('undefined-keyword'));
+  assert.ok(!leafTerminalReasons(defined.shape, OM_KEY).has('literal-kind:NullKeyword'));
+  assert.ok(leafTerminalReasons(undef.shape, OM_KEY).has('undefined-keyword'));
+  assert.ok(leafTerminalReasons(nul.shape, OM_KEY).has('literal-kind:NullKeyword'));
+});
+
+test('OM-2 NAMED LIMIT: a whole-style `undefined` arm is a producer where an empty-object arm is conditional', () => {
+  const fixture = (absent) => `export const C = ({f}) => <td style={f ? { "${OM_KEY}": "0px" } : ${absent}} />;`;
+  const undefinedArm = branchProbe(fixture('undefined'));
+  const emptyArm = branchProbe(fixture('{}'));
+  // both omit the key when f is false; only the empty object is read as a missing key
+  assert.equal(undefinedArm.disposition, PRODUCER_D);
+  assert.equal(emptyArm.disposition, 'BRANCH_CONDITIONAL_AUTHORED');
+  assert.deepEqual(undefinedArm.governance.governedChannelKeys, [OM_KEY]);
+  assert.deepEqual(emptyArm.governance.governedChannelKeys, [OM_KEY]);
+});
+
+test('OM-3 NAMED LIMIT: an open leaf value moves a conditional stamp from the branch law to the key-set route', () => {
+  const fixture = (value) =>
+    `export const C = ({side, off}) => <td style={side === "left" ? { "${OM_KEY}-start": ${value} } : side === "right" ? { "${OM_KEY}-end": ${value} } : {}} />;`;
+  const closedValues = branchProbe(fixture('"0px"'));
+  const openValues = branchProbe(fixture('off'));
+  assert.equal(closedValues.disposition, 'BRANCH_CONDITIONAL_AUTHORED', 'closed values: T-BRANCH-PRODUCER refuses the conditional');
+  assert.equal(openValues.disposition, PRODUCER_D, 'open values: the same conditional closes through T-STATIC-KEYSET');
+  const objectArms = (shape) =>
+    shape.kind === 'branches' ? shape.branches.flatMap(objectArms) : shape.kind === 'object' ? [shape] : [];
+  assert.ok(objectArms(closedValues.shape).every((arm) => arm.closed === true));
+  assert.ok(objectArms(openValues.shape).some((arm) => arm.closed !== true), 'the only difference is the open value');
+});
+
+const DT_FILE = 'packages/core/src/components/patterns/data/data-table/engines/modern/index.tsx';
+const DT_INSETS = ['--ds-data-table-pinned-inset-start', '--ds-data-table-pinned-inset-end'];
+/** The return statement of the live `getPinnedOffsetStyle`: the one place a mutant rewrites. */
+const DT_RETURN = /return \{\n\s*"--ds-data-table-pinned-inset-start":[\s\S]*?\} as React\.CSSProperties;/;
+const dtWithReturn = (text, replacement) => {
+  assert.equal(text.match(new RegExp(DT_RETURN.source, 'g'))?.length, 1, 'exactly one pinned-offset return to rewrite');
+  const out = text.replace(DT_RETURN, replacement);
+  assert.notEqual(out, text);
+  return out;
+};
+/**
+ * Resolve every `...getPinnedOffsetStyle(...)` at the census's own sites:
+ * the call expression is the start expression of both the `:call` and the
+ * `:spread` row, so each form is resolved from it with its own path.
+ */
+const pinnedStampSites = (code) => {
+  const source = ts.createSourceFile(DT_FILE, code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const out = [];
+  const walk = (node) => {
+    if (
+      ts.isCallExpression(node) && node.expression.getText(source) === 'getPinnedOffsetStyle' &&
+      node.parent && ts.isSpreadAssignment(node.parent)
+    ) {
+      for (const form of ['call', 'spread']) {
+        const shape = resolveShape(node, {
+          source, fileRel: DT_FILE, depth: 0, path: [{ kind: 'terminal-at-sink', form }],
+        });
+        out.push({ form, shape, ...dispositionOf(shape, null, { sinkNode: node, sourceFile: source, fileRel: DT_FILE, line: 1 }, []) });
+      }
+    }
+    ts.forEachChild(node, walk);
+  };
+  walk(source);
+  assert.equal(out.length, 6, 'header, grouped and flat cells, each a :call and a :spread row');
+  return out;
+};
+const dtLiveText = () => readFileSync(join(REPO_ABS, DT_FILE), 'utf8');
+const DT_EARLY_RETURN = `if (!side || offset === null) return {};
+      return {
+        [side === "left"
+          ? "--ds-data-table-pinned-inset-start"
+          : "--ds-data-table-pinned-inset-end"]: offset,
+      } as React.CSSProperties;`;
+
+test('OM-4 LIVE: at the census sites the stamp stays defined, the early-return form is refused, and the `undefined` mutant is invisible', () => {
+  const text = dtLiveText();
+  for (const site of pinnedStampSites(text)) {
+    assert.equal(site.disposition, PRODUCER_D, `live :${site.form}`);
+    for (const key of DT_INSETS) {
+      const reasons = leafTerminalReasons(site.shape, key);
+      assert.ok(!reasons.has('undefined-keyword'), `${key} must stay stamped on every cell`);
+      // the `offset !== null` guard is not modelled: a null terminal is present
+      // on the lawful stamp, so "omittable terminal" alone cannot separate the forms
+      assert.ok(reasons.has('literal-kind:NullKeyword'), `${key}: path-insensitive null terminal`);
+    }
+  }
+  // positive control: at these sites the law refuses a conditional stamp
+  for (const site of pinnedStampSites(dtWithReturn(text, DT_EARLY_RETURN))) {
+    assert.equal(site.disposition, 'BRANCH_CONDITIONAL_AUTHORED', `early-return :${site.form}`);
+  }
+  // the limit: the off-side literal, whatever it is, replaced by `undefined`
+  const block = text.match(DT_RETURN)[0];
+  const OFF_SIDE = /(\? offset : )"[^"]*"/g;
+  assert.equal(block.match(OFF_SIDE)?.length, 2, 'the mutation must hit both off-side leaves');
+  const mutant = pinnedStampSites(dtWithReturn(text, block.replace(OFF_SIDE, '$1undefined')));
+  for (const site of mutant) {
+    assert.equal(site.disposition, PRODUCER_D, `undefined mutant :${site.form} still closes as a producer`);
+    for (const key of DT_INSETS) assert.ok(leafTerminalReasons(site.shape, key).has('undefined-keyword'));
+  }
+});
+
+test('OM-5 NAMED LIMIT: a conditional spread inside an object is a producer where the same conditional at the top is refused', () => {
+  const keys = `{ "${OM_KEY}-start": "0px", "${OM_KEY}-end": "0px" }`;
+  const top = branchProbe(`export const C = ({f}) => <td style={f ? ${keys} : {}} />;`);
+  const spread = branchProbe(`export const C = ({f}) => <td style={{ ...(f ? ${keys} : {}) }} />;`);
+  const beside = branchProbe(`export const C = ({f}) => <td style={{ color: "red", ...(f ? ${keys} : {}) }} />;`);
+  assert.equal(top.disposition, 'BRANCH_CONDITIONAL_AUTHORED', 'top-level: T-BRANCH-PRODUCER refuses the conditional');
+  assert.equal(spread.disposition, PRODUCER_D, 'the same arms one spread deeper close');
+  assert.equal(beside.disposition, PRODUCER_D);
+  for (const out of [top, spread, beside]) {
+    assert.deepEqual([...out.governance.governedChannelKeys].sort(), [`${OM_KEY}-end`, `${OM_KEY}-start`]);
+  }
+  // the instrument sees the difference: the branches sit under a spread, not at the top
+  assert.equal(top.shape.kind, 'branches');
+  assert.equal(spread.shape.kind, 'object');
+  assert.equal(spread.shape.order.find((entry) => entry.kind === 'spread')?.shape?.kind, 'branches');
+  // live: the data-table stamp rewritten to stamp only pinned cells closes at the census sites
+  const conditionalSpread = `return {
+        ...(offset !== null
+          ? {
+              "--ds-data-table-pinned-inset-start":
+                side === "left" ? offset : "inherit",
+              "--ds-data-table-pinned-inset-end":
+                side === "right" ? offset : "inherit",
+            }
+          : {}),
+      } as React.CSSProperties;`;
+  for (const site of pinnedStampSites(dtWithReturn(dtLiveText(), conditionalSpread))) {
+    assert.equal(site.disposition, PRODUCER_D, `conditional spread :${site.form}`);
+  }
 });
