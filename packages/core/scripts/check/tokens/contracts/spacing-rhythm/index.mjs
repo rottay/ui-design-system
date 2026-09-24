@@ -150,8 +150,10 @@
  *   - a read whose target is a RECOGNIZED CSS property is judged by the same
  *     classifier the stylesheet legs use, so a TSX inline style can never be
  *     held to a softer rule than a stylesheet.
- *   - a read whose target is not a recognized CSS property, or is computed in
- *     a helper, is UNDECIDABLE, and an undecidable read BLOCKS. The capability
+ *   - a read that DECLARES a channel (a deriver's `vars["--ds-x"] = …`, directly
+ *     or through a local helper whose every use is such a declaration) is judged
+ *     as that declaration; a read with no nameable sink is UNDECIDABLE, named with
+ *     its reason, and an undecidable read BLOCKS. The capability
  *     registry legitimately stores the channel under `symbol:`/`consumer:` as
  *     evidence metadata, and a gap resolver legitimately builds its value
  *     before any caller picks a property -- but "the target is legitimate" is
@@ -1027,7 +1029,7 @@ export function collectAuthoredModernStylesheets(
  */
 export function analyzeRhythmStylesheets(
   stylesheets,
-  { dashboardInsightsFamilyId = null, consumerStylesheets = [] } = {},
+  { dashboardInsightsFamilyId = null, consumerStylesheets = [], declaredCarriers = [] } = {},
 ) {
   const reads = [];
   const parseErrors = [];
@@ -1106,11 +1108,13 @@ export function analyzeRhythmStylesheets(
   }
 
   // --- the indirect leg: which custom properties CARRY rhythm downstream ---
-  const carriers = new Set(
-    declarations
+  // A channel a compiler deriver declares with rhythm carries it too: one set, one report path.
+  const carriers = new Set([
+    ...declarations
       .filter((entry) => entry.directReads > 0 && entry.property.startsWith('--'))
       .map((entry) => entry.property),
-  );
+    ...declaredCarriers.map((name) => name.trim().toLowerCase()),
+  ]);
   for (let changed = true; changed; ) {
     changed = false;
     for (const entry of declarations) {
@@ -1374,6 +1378,7 @@ export function analyzeRhythmStylesheets(
     parseErrors,
     byClassification,
     violationsByFamily,
+    consumerSinks,
   };
 }
 
@@ -1447,6 +1452,39 @@ export function isRecognizedCssProperty(property) {
 }
 
 export const UNDECIDABLE_TS_CARRIER = 'UNDECIDABLE_TS_CARRIER';
+
+/** How a TS read reaches paint. A deriver writing `vars["--ds-x"] = …` DECLARES a channel, so it is
+ *  judged by the decision-20 law over the same consumer graph, never by a TS-only rule. */
+export const TS_SINKS = Object.freeze({
+  inlineStyle: 'inline-style',
+  channelDeclaration: 'channel-declaration',
+  channelHelper: 'channel-helper',
+  resolverSink: 'resolver-sink',
+});
+
+/** A read whose sink this instrument cannot name, with the mechanical reason. */
+export const TS_UNDECIDABLE_REASONS = Object.freeze({
+  computedChannelName: 'COMPUTED_CHANNEL_NAME',
+  helperEscapes: 'HELPER_ESCAPES',
+  helperUnused: 'HELPER_UNUSED',
+  resolverTraceUndecidable: 'RESOLVER_TRACE_UNDECIDABLE',
+  noStaticSink: 'NO_STATIC_SINK',
+});
+
+/** Declaring a rhythm channel freezes the dial at its own root (decision 20). */
+export const TS_DECLARES_RHYTHM_CHANNEL = 'FORBIDDEN_RHYTHM_CHANNEL_DECLARATION';
+
+/** Decision 20 for one compiler-declared channel: a rhythm channel is red unless it is the bare-number
+ *  seed; anything else is classified by name and, where the name forbids, by what its consumers paint. */
+export function judgeTypeScriptChannelDeclaration(channel, value, consumerSinks) {
+  const normalized = channel.trim().toLowerCase();
+  if (RHYTHM_CHANNELS.includes(normalized)) {
+    return normalized === RAW_RHYTHM_CHANNEL && isBareFiniteNumber(value)
+      ? CLASSIFICATIONS.allowedSpacing
+      : TS_DECLARES_RHYTHM_CHANNEL;
+  }
+  return classifyRhythmPropertyByConsumers(normalized, consumerSinks);
+}
 
 /**
  * Defect 1, "resolved structurally" half. A read mentioned only in a
@@ -1560,6 +1598,82 @@ function resolverSinkPropertyAt(source, index) {
   if (resolveStart <= boundary) return null;
   const cssProperty = /\bcssProperty\s*:\s*(['"])([^'"]+)\1/u.exec(block.text)?.[2];
   return cssProperty ? camelToKebab(cssProperty) : null;
+}
+
+/** The text of the statement running up to `index` (comments are already stripped). */
+function statementHead(source, index) {
+  return source.slice(source.lastIndexOf(';', index - 1) + 1, index);
+}
+
+const CHANNEL_ASSIGNMENT = /[A-Za-z_$][\w$]*\s*\[\s*(["'`])((?:(?!\1)[^\\]|\\.)*)\1\s*\]\s*=(?!=)[^]*$/u;
+const CHANNEL_OBJECT_KEY = /(["'`]?)(--[A-Za-z0-9_-]+)\1\s*:\s*[^,{}]*$/u;
+
+/** The channel `recv["--ds-x"] = …` or `"--ds-x": …` assigns when the read sits in its right-hand side;
+ *  a key that is not a literal custom-property name is COMPUTED. */
+function channelAssignedAt(source, index) {
+  const head = statementHead(source, index);
+  const assignment = CHANNEL_ASSIGNMENT.exec(head);
+  if (assignment) {
+    const [, quote, key] = assignment;
+    if (quote === '`' && key.includes('${')) return { computed: true };
+    return key.startsWith('--') ? { channel: key } : null;
+  }
+  const objectKey = CHANNEL_OBJECT_KEY.exec(head);
+  return objectKey ? { channel: objectKey[2] } : null;
+}
+
+/** The string or template literal enclosing `index`, as the declared value text. */
+function enclosingLiteral(source, index) {
+  const head = statementHead(source, index);
+  const start = index - head.length;
+  const statementEnd = source.indexOf(';', index);
+  const statement = source.slice(start, statementEnd === -1 ? source.length : statementEnd);
+  const literals = [...statement.matchAll(/(["'`])((?:(?!\1)[^\\]|\\.)*)\1/gu)];
+  const relative = index - start;
+  const hit = literals.find((match) => match.index < relative && match.index + match[0].length > relative);
+  return (hit?.[2] ?? statement).replace(/\$\{[^}]*\}/gu, '0px');
+}
+
+/** Whether `index` sits inside a single- or double-quoted string on its own line. */
+function insideQuotedString(source, index) {
+  const lineStart = source.lastIndexOf('\n', index - 1) + 1;
+  let open = null;
+  for (let cursor = lineStart; cursor < index; cursor += 1) {
+    const char = source[cursor];
+    if (char === '\\') cursor += 1;
+    else if (open === null && (char === '"' || char === "'")) open = char;
+    else if (char === open) open = null;
+  }
+  return open !== null;
+}
+
+/** A local helper whose EVERY use is `recv["--ds-x"] = h(…)` in the same module; an export or any
+ *  other use escapes the proof. */
+function helperChannelsAt(source, index) {
+  const helper = variableInitializers(source).find(
+    (variable) => index >= variable.start && index < variable.end,
+  );
+  if (!helper || !/^\s*(?:async\s+)?(?:function\b|(?:\([^)]*\)|[A-Za-z_$][\w$]*)\s*(?::[^=]*)?=>)/u.test(helper.initializer)) {
+    return null;
+  }
+  if (/\bexport\s+$/u.test(source.slice(Math.max(0, helper.start - 16), helper.start))) {
+    return { name: helper.name, reason: TS_UNDECIDABLE_REASONS.helperEscapes };
+  }
+  const occurrences = new RegExp(`(?<![\\w$.-])${regexEscape(helper.name)}(?![\\w$-])`, 'gu');
+  const channels = [];
+  for (const match of source.matchAll(occurrences)) {
+    if (match.index >= helper.start && match.index < helper.end) continue;
+    if (insideQuotedString(source, match.index)) continue;
+    const after = source.slice(match.index + helper.name.length).match(/^\s*/u)[0].length;
+    const called = source[match.index + helper.name.length + after] === '(';
+    const target = called ? channelAssignedAt(source, match.index) : null;
+    if (!target || target.computed) {
+      return { name: helper.name, reason: TS_UNDECIDABLE_REASONS.helperEscapes };
+    }
+    channels.push(target.channel);
+  }
+  if (channels.length === 0) return { name: helper.name, reason: TS_UNDECIDABLE_REASONS.helperUnused };
+  return { name: helper.name, channels };
 }
 
 /**
@@ -1679,7 +1793,10 @@ function traceTypeScriptCarrierTargets(corpus, binding) {
   return { targets: [...targets], undecidable };
 }
 
-export function collectTypeScriptRhythmCarriers(sourceRoot = DEFAULT_SOURCE_ROOT) {
+export function collectTypeScriptRhythmCarriers(
+  sourceRoot = DEFAULT_SOURCE_ROOT,
+  { consumerSinks = new Map() } = {},
+) {
   const root = resolve(sourceRoot);
   const findings = [];
   const corpus = [];
@@ -1722,12 +1839,38 @@ export function collectTypeScriptRhythmCarriers(sourceRoot = DEFAULT_SOURCE_ROOT
         // as CSS would fail the gate on a registry entry that paints nothing.
         // Unrecognized keys are therefore DISCLOSED, not failed: this is the
         // stated limit of the TS leg, not a silent pass.
-        let property = candidate && isRecognizedCssProperty(candidate) ? candidate : null;
+        let property =
+          candidate && !candidate.startsWith('--') && isRecognizedCssProperty(candidate) ? candidate : null;
         let classification = property
           ? classifyRhythmProperty(property)
           : UNDECIDABLE_TS_CARRIER;
+        let sink = property ? TS_SINKS.inlineStyle : null;
+        let reason = null;
+        let channels = [];
+        const value = enclosingLiteral(source, match.index);
 
         if (!property) {
+          const assigned = channelAssignedAt(source, match.index);
+          const helper = assigned ? null : helperChannelsAt(source, match.index);
+          if (assigned?.computed) {
+            reason = TS_UNDECIDABLE_REASONS.computedChannelName;
+          } else if (assigned || helper?.channels) {
+            sink = assigned ? TS_SINKS.channelDeclaration : TS_SINKS.channelHelper;
+            channels = (assigned ? [assigned.channel] : helper.channels).map((channel) => ({
+              channel,
+              classification: judgeTypeScriptChannelDeclaration(channel, value, consumerSinks),
+            }));
+            const decisive =
+              channels.find((entry) => entry.classification !== CLASSIFICATIONS.allowedSpacing)
+              ?? channels[0];
+            property = decisive.channel;
+            classification = decisive.classification;
+          } else if (helper?.reason) {
+            reason = helper.reason;
+          }
+        }
+
+        if (!property && !reason) {
           const bindingMatch = /\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*[^;\n]*$/u.exec(
             upTo.slice(Math.max(0, upTo.length - 300)),
           );
@@ -1744,14 +1887,22 @@ export function collectTypeScriptRhythmCarriers(sourceRoot = DEFAULT_SOURCE_ROOT
             if (!traced.undecidable && resolved) {
               property = resolved.target;
               classification = resolved.classification;
+              sink = TS_SINKS.resolverSink;
+            } else {
+              reason = TS_UNDECIDABLE_REASONS.resolverTraceUndecidable;
             }
           }
         }
+        if (classification === UNDECIDABLE_TS_CARRIER) reason ??= TS_UNDECIDABLE_REASONS.noStaticSink;
         findings.push({
           file: full,
           line,
           property,
           classification,
+          sink,
+          channels,
+          reason,
+          factorForm: scalesByReference(value, RHYTHM_CHANNELS),
         });
       }
   }
@@ -1770,10 +1921,13 @@ export function runGate({
     ...collectAuthoredModernStylesheets(sourceRoot),
     ...extraStylesheets,
   ];
+  const { consumerSinks } = analyzeRhythmStylesheets(stylesheets, { dashboardInsightsFamilyId });
+  const typeScriptCarriers = collectTypeScriptRhythmCarriers(sourceRoot, { consumerSinks });
+  // Every channel an arm-A/arm-B read declares enters the indirect walk exactly as a CSS declaration would.
   const result = analyzeRhythmStylesheets(stylesheets, {
     dashboardInsightsFamilyId,
+    declaredCarriers: typeScriptCarriers.flatMap((finding) => finding.channels.map((entry) => entry.channel)),
   });
-  const typeScriptCarriers = collectTypeScriptRhythmCarriers(sourceRoot);
   // A DECIDABLE non-spacing target is a violation on exactly the same terms as
   // a stylesheet declaration -- the classifier is shared, so a TS carrier is
   // never judged by a softer rule.
@@ -1793,8 +1947,18 @@ export function runGate({
   const typeScriptUndecidable = typeScriptCarriers.filter(
     (finding) => finding.classification === UNDECIDABLE_TS_CARRIER,
   );
+  const declared = [...new Set(typeScriptCarriers.flatMap((finding) => finding.channels.map((entry) => entry.channel)))];
+  const carrying = new Set(result.rhythmCarriers);
+  const typeScriptConsumerGraph = {
+    declared: declared.length,
+    examined: declared.filter((channel) => carrying.has(channel)).length,
+    violations: [...result.indirectViolations, ...result.indirectUnclassified].filter((finding) =>
+      (finding.via ?? []).some((channel) => declared.includes(channel)),
+    ),
+  };
   return {
     ...result,
+    typeScriptConsumerGraph,
     ok: result.ok && typeScriptViolations.length === 0 && typeScriptUndecidable.length === 0,
     typeScriptCarriers,
     typeScriptViolations,
@@ -1804,6 +1968,16 @@ export function runGate({
 
 function findingLine(finding) {
   return `  ${finding.familyId ?? 'UNRESOLVED_FAMILY'} ${reportPath(finding.file)}:${finding.line} ${finding.property} ${finding.classification} ${finding.selector}`;
+}
+
+/** One TS read: where, how it reaches paint, what it lands on, the verdict and, when undecided, why. */
+function typeScriptLine(finding) {
+  const target =
+    finding.channels?.length > 1
+      ? finding.channels.map((entry) => `${entry.channel}=${entry.classification}`).join(',')
+      : finding.property ?? '<undecidable target>';
+  const reason = finding.reason ? ` ${finding.reason}` : '';
+  return `  ${reportPath(finding.file)}:${finding.line} ${finding.sink ?? 'undecidable'} ${target} ${finding.classification}${reason}`;
 }
 
 export function formatReport(result) {
@@ -1850,21 +2024,13 @@ export function formatReport(result) {
     lines.push(
       `spacing-rhythm-contract FAIL — ${result.typeScriptViolations.length} TypeScript inline-style carrier(s) reach a non-spacing property, which the CSS walk cannot see`,
     );
-    for (const finding of result.typeScriptViolations) {
-      lines.push(
-        `  ${reportPath(finding.file)}:${finding.line} ${finding.property ?? '<undecidable target>'} ${finding.classification}`,
-      );
-    }
+    for (const finding of result.typeScriptViolations) lines.push(typeScriptLine(finding));
   }
   if (result.typeScriptUndecidable?.length > 0) {
     lines.push(
-      `spacing-rhythm-contract FAIL — ${result.typeScriptUndecidable.length} TypeScript rhythm read(s) have an undecidable target; a channel this gate cannot classify is not evidence of innocence`,
+      `spacing-rhythm-contract FAIL — ${result.typeScriptUndecidable.length} TypeScript rhythm read(s) have an undecidable target; a channel this gate cannot classify is not evidence of innocence. Instrument limit, by reason:`,
     );
-    for (const finding of result.typeScriptUndecidable) {
-      lines.push(
-        `  ${reportPath(finding.file)}:${finding.line} <undecidable target>`,
-      );
-    }
+    for (const finding of result.typeScriptUndecidable) lines.push(typeScriptLine(finding));
   }
   if (result.ok) {
     lines.push(
@@ -1879,9 +2045,17 @@ export function formatReport(result) {
     // (defect 1) is a separate claim from the CSS leg's, and an operator
     // reading a FAIL report still needs to see that the CSS-only scope claim
     // was actually measured, not merely asserted.
+    const bySink = {};
+    for (const finding of result.typeScriptCarriers) {
+      const key = finding.sink ?? 'undecidable';
+      bySink[key] = (bySink[key] ?? 0) + 1;
+    }
+    const sinks = Object.entries(bySink).map(([sink, count]) => `${count} ${sink}`).join(', ');
+    const graph = result.typeScriptConsumerGraph ?? { declared: 0, examined: 0, violations: [] };
     lines.push(
-      `  TypeScript carriers: ${result.typeScriptCarriers.length} var() rhythm read(s) in .ts/.tsx, ${result.typeScriptViolations?.length ?? 0} reaching a decidable non-spacing property — the CSS-only scope is MEASURED, not claimed`,
+      `  TypeScript carriers: ${result.typeScriptCarriers.length} var() rhythm read(s) in .ts/.tsx (${sinks}): ${result.typeScriptViolations?.length ?? 0} violations by name and ${graph.violations.length} by consumer graph, ${graph.examined}/${graph.declared} channels' consumers examined, ${result.typeScriptUndecidable?.length ?? 0} undecidable — the CSS-only scope is MEASURED, not claimed`,
     );
+    for (const finding of result.typeScriptCarriers) lines.push(typeScriptLine(finding));
   }
   return lines.join('\n');
 }

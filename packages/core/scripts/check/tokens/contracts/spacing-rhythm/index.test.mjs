@@ -51,6 +51,9 @@ import {
   subjectIsComponentRoot,
   subjectIsContained,
   subjectLacksIdentity,
+  TS_DECLARES_RHYTHM_CHANNEL,
+  TS_SINKS,
+  TS_UNDECIDABLE_REASONS,
   UNDECIDABLE_TS_CARRIER,
   walkModernStylesheets,
 } from './index.mjs';
@@ -1863,4 +1866,222 @@ test('collectConsumerSinks follows relays to the real paint', () => {
     CLASSIFICATIONS.forbiddenIcon,
     'no entry for the name: the name verdict',
   );
+});
+
+/* The TS leg read by read: a deriver writing a channel DECLARES it (decision 20). Every arm is drilled
+ * both ways: a lawful read in the arm's shape stays green, a violation in it stays red by name. */
+
+/** The TS findings of one module, judged against one authored stylesheet. */
+function tsLeg(source, css = `.a { gap: calc(1rem * ${READ}); }`) {
+  const root = tempDirectory('spacing-rhythm-ts-leg');
+  write(root, 'tokens/modern.css', css);
+  write(root, 'deriver/index.ts', source);
+  return runGate({ sourceRoot: root, familyInventoryPath: DEFAULT_FAMILY_INVENTORY });
+}
+
+test('GREEN arm A: a deriver channel declaration on a spacing name is lawful, whatever its receiver, quotes or line break', () => {
+  const result = tsLeg(
+    [
+      `const vars = {};`,
+      `vars["--ds-probe-gap"] = "calc(1rem * ${READ})";`,
+      `out['--ds-probe-padding'] =`,
+      `  'calc(0.5rem * ${READ}) calc(1rem * ${READ})';`,
+    ].join('\n'),
+  );
+  assert.deepEqual(result.typeScriptViolations, []);
+  assert.deepEqual(result.typeScriptUndecidable, []);
+  assert.deepEqual(
+    result.typeScriptCarriers.map((finding) => [finding.sink, finding.property, finding.classification]),
+    [
+      [TS_SINKS.channelDeclaration, '--ds-probe-gap', CLASSIFICATIONS.allowedSpacing],
+      [TS_SINKS.channelDeclaration, '--ds-probe-padding', CLASSIFICATIONS.allowedSpacing],
+      [TS_SINKS.channelDeclaration, '--ds-probe-padding', CLASSIFICATIONS.allowedSpacing],
+    ],
+  );
+});
+
+test('GREEN arm A: an object-literal channel key is a declaration too', () => {
+  const result = tsLeg(`export const vars = { "--ds-probe-margin": "calc(1rem * ${READ})" };`);
+  assert.equal(result.typeScriptCarriers.length, 1);
+  assert.equal(result.typeScriptCarriers[0].sink, TS_SINKS.channelDeclaration);
+  assert.equal(result.typeScriptCarriers[0].classification, CLASSIFICATIONS.allowedSpacing);
+});
+
+test('RED arm A: a deriver declaring a size or icon channel with rhythm is a violation by name', () => {
+  const result = tsLeg(
+    `vars["--ds-probe-icon-size"] = "calc(1rem * ${READ})";\nvars["--ds-probe-block-size"] = "calc(3rem * ${READ})";`,
+  );
+  assert.equal(result.ok, false);
+  assert.deepEqual(
+    result.typeScriptViolations.map((finding) => finding.property).sort(),
+    ['--ds-probe-block-size', '--ds-probe-icon-size'],
+  );
+  for (const finding of result.typeScriptViolations) {
+    assert.notEqual(finding.classification, CLASSIFICATIONS.allowedSpacing);
+    assert.notEqual(finding.classification, UNDECIDABLE_TS_CARRIER);
+  }
+  assert.match(formatReport(result), /deriver\/index\.ts:1 channel-declaration --ds-probe-icon-size FORBIDDEN_/u);
+});
+
+test('RED arm A: a deriver that declares the rhythm channel itself freezes the dial', () => {
+  const result = tsLeg(`vars["${RHYTHM_CHANNEL}"] = "calc(2 * var(${RAW_RHYTHM_CHANNEL}, 1))";`);
+  assert.equal(result.typeScriptViolations.length, 1);
+  assert.equal(result.typeScriptViolations[0].classification, TS_DECLARES_RHYTHM_CHANNEL);
+});
+
+test('arm A follows the consumer graph both ways: an icon-named gap painted as margin is spacing, painted as a size it is not', () => {
+  const source = `vars["--ds-probe-icon-gap"] = "calc(0.25rem * ${READ})";`;
+  const asMargin = tsLeg(source, `.a { gap: calc(1rem * ${READ}); } .b { margin-inline-end: var(--ds-probe-icon-gap); }`);
+  assert.deepEqual(asMargin.typeScriptViolations, []);
+  assert.equal(asMargin.typeScriptCarriers[0].classification, CLASSIFICATIONS.allowedSpacing);
+  const asSize = tsLeg(source, `.a { gap: calc(1rem * ${READ}); } .b { inline-size: var(--ds-probe-icon-gap); }`);
+  assert.equal(asSize.typeScriptViolations.length, 1);
+  assert.equal(asSize.typeScriptViolations[0].property, '--ds-probe-icon-gap');
+});
+
+test('UNDECIDABLE arm A: a computed channel name is named as such and still blocks', () => {
+  const result = tsLeg(`for (const k of KEYS) vars[\`--ds-probe-\${k}\`] = "calc(1rem * ${READ})";`);
+  assert.equal(result.ok, false);
+  assert.equal(result.typeScriptUndecidable.length, 1);
+  assert.equal(result.typeScriptUndecidable[0].reason, TS_UNDECIDABLE_REASONS.computedChannelName);
+  assert.match(formatReport(result), /deriver\/index\.ts:1 undecidable <undecidable target> UNDECIDABLE_TS_CARRIER COMPUTED_CHANNEL_NAME/u);
+});
+
+test('GREEN arm B: a local helper whose every use is a channel declaration judges each channel', () => {
+  const result = tsLeg(
+    [
+      `const rhythm = (value: string) => \`calc(\${value} * ${READ})\`;`,
+      `vars["--ds-probe-padding-inline"] = rhythm("var(--ds-spacing-5, 20px)");`,
+      `vars["--ds-probe-gap"] =`,
+      `  rhythm("var(--ds-spacing-2, 8px)");`,
+    ].join('\n'),
+  );
+  assert.deepEqual(result.typeScriptViolations, []);
+  assert.equal(result.typeScriptCarriers.length, 1);
+  const [finding] = result.typeScriptCarriers;
+  assert.equal(finding.sink, TS_SINKS.channelHelper);
+  assert.deepEqual(finding.channels.map((entry) => entry.channel), ['--ds-probe-padding-inline', '--ds-probe-gap']);
+});
+
+test('RED arm B: one forbidden channel behind a helper reds the read, by that channel', () => {
+  const result = tsLeg(
+    [
+      `const rhythm = (value: string) => \`calc(\${value} * ${READ})\`;`,
+      `vars["--ds-probe-gap"] = rhythm("1rem");`,
+      `vars["--ds-probe-icon-size"] = rhythm("1rem");`,
+    ].join('\n'),
+  );
+  assert.equal(result.typeScriptViolations.length, 1);
+  assert.equal(result.typeScriptViolations[0].property, '--ds-probe-icon-size');
+  assert.match(formatReport(result), /channel-helper --ds-probe-gap=ALLOWED_SPACING_RHYTHM,--ds-probe-icon-size=FORBIDDEN_/u);
+});
+
+test('UNDECIDABLE arm B: a helper that escapes, is exported, or is never applied is named with its reason', () => {
+  const helper = `const rhythm = (value: string) => \`calc(\${value} * ${READ})\`;`;
+  const escapes = tsLeg(`${helper}\nvars["--ds-probe-gap"] = rhythm("1rem");\nexport const table = { pad: rhythm };`);
+  assert.equal(escapes.typeScriptUndecidable[0]?.reason, TS_UNDECIDABLE_REASONS.helperEscapes);
+  const exported = tsLeg(`export ${helper}\nvars["--ds-probe-gap"] = rhythm("1rem");`);
+  assert.equal(exported.typeScriptUndecidable[0]?.reason, TS_UNDECIDABLE_REASONS.helperEscapes);
+  const unused = tsLeg(helper);
+  assert.equal(unused.typeScriptUndecidable[0]?.reason, TS_UNDECIDABLE_REASONS.helperUnused);
+  for (const result of [escapes, exported, unused]) assert.equal(result.ok, false);
+});
+
+test('arm B: the helper name inside a string (a channel key, a shadow keyword) is not a use', () => {
+  const result = tsLeg(
+    [
+      `const inset = (rung: string) => \`calc(var(\${rung}) * ${READ})\`;`,
+      `vars["--ds-probe-inset-sm"] = inset("--ds-spacing-2");`,
+      `vars["--ds-probe-shadow"] = "inset 0 1px 0 black";`,
+    ].join('\n'),
+    `.a { gap: calc(1rem * ${READ}); } .b { margin-block: var(--ds-probe-inset-sm); }`,
+  );
+  assert.deepEqual(result.typeScriptUndecidable, []);
+  assert.equal(result.typeScriptCarriers[0].sink, TS_SINKS.channelHelper);
+});
+
+test('a plain constant is not a helper: the resolver tracer keeps deciding it', () => {
+  const root = tempDirectory('spacing-rhythm-ts-constant');
+  write(
+    root,
+    'layout/index.tsx',
+    `const SCALE = "var(${RHYTHM_CHANNEL}, 1)";
+function resolveGap(value) { return \`calc(\${value} * \${SCALE})\`; }
+export function collect() {
+  const entries = [];
+  entries.push({ cssProperty: "gap", value: {}, resolve: resolveGap });
+  return entries;
+}`,
+  );
+  const [finding] = collectTypeScriptRhythmCarriers(root);
+  assert.equal(finding.sink, TS_SINKS.resolverSink);
+  assert.equal(finding.classification, CLASSIFICATIONS.allowedSpacing);
+});
+
+test('the live TS leg: every read is decided and named, with its sink and verdict', () => {
+  const result = runGate();
+  assert.deepEqual(result.typeScriptViolations, []);
+  assert.deepEqual(result.typeScriptUndecidable, []);
+  const report = formatReport(result);
+  for (const finding of result.typeScriptCarriers) {
+    assert.ok(Object.values(TS_SINKS).includes(finding.sink), `${finding.file}:${finding.line} has no sink`);
+    assert.ok(report.includes(`:${finding.line} ${finding.sink} `), `${finding.file}:${finding.line} is not enumerated`);
+  }
+});
+
+/* P6 parity: a spacing-named channel declared in CSS and one declared by a deriver reach the SAME indirect
+ * walk, so painting either as a size or a radius reds identically, through one report path. */
+function p6(declaredIn, paint) {
+  const root = tempDirectory('spacing-rhythm-p6');
+  const declaration = `calc(1rem * ${READ})`;
+  write(
+    root,
+    'tokens/modern.css',
+    [
+      `.a { gap: calc(1rem * ${READ}); }`,
+      declaredIn === 'css' ? `:root { --ds-probe-padding: ${declaration}; }` : '',
+      ...paint.map((property, index) => `.p${index} { ${property}: var(--ds-probe-padding); }`),
+    ].join('\n'),
+  );
+  if (declaredIn === 'ts') write(root, 'deriver/index.ts', `vars["--ds-probe-padding"] = "${declaration}";`);
+  const result = runGate({ sourceRoot: root, familyInventoryPath: DEFAULT_FAMILY_INVENTORY });
+  return {
+    result,
+    rows: [...result.indirectViolations, ...result.indirectUnclassified]
+      .map((finding) => `${finding.property} ${finding.classification} via ${finding.via.join(',')}`)
+      .sort(),
+  };
+}
+
+test('P6 parity: a spacing-named channel painted as block-size and as border-radius reds in BOTH declaration forms', () => {
+  const css = p6('css', ['block-size', 'border-radius']);
+  const ts = p6('ts', ['block-size', 'border-radius']);
+  assert.equal(css.rows.length, 2, `CSS-declared: ${css.rows}`);
+  assert.deepEqual(ts.rows, css.rows, 'the TS-declared channel must red exactly as the CSS-declared one');
+  assert.ok(ts.rows.some((row) => row.startsWith(`block-size ${CLASSIFICATIONS.forbiddenSize}`)));
+  assert.ok(ts.rows.some((row) => row.startsWith('border-radius ')));
+  assert.equal(ts.result.ok, false);
+  // One report path: the TS read itself is lawful by name; the red is the consumer-graph row.
+  assert.deepEqual(ts.result.typeScriptViolations, []);
+  assert.equal(ts.result.typeScriptConsumerGraph.violations.length, 2);
+  assert.match(formatReport(ts.result), /0 violations by name and 2 by consumer graph, 1\/1 channels' consumers examined/u);
+});
+
+test('P6 parity control: the same channel painted as padding stays green in both declaration forms', () => {
+  for (const form of ['css', 'ts']) {
+    const { result, rows } = p6(form, ['padding-block']);
+    assert.deepEqual(rows, [], form);
+    assert.equal(result.ok, true, form);
+  }
+});
+
+test('the live consumer graph: every TS-declared channel is examined, and no row is reported twice', () => {
+  const result = runGate();
+  const graph = result.typeScriptConsumerGraph;
+  assert.ok(graph.declared > 0);
+  assert.equal(graph.examined, graph.declared);
+  assert.deepEqual(graph.violations, []);
+  assert.deepEqual(result.typeScriptViolations, []);
+  const keys = result.indirectViolations.map((finding) => `${finding.file}:${finding.line}`);
+  assert.equal(new Set(keys).size, keys.length);
 });
