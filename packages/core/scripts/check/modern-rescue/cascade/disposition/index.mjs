@@ -69,6 +69,19 @@ function tsxCandidates(root) {
 }
 const isExcluded = (rel) => TSX_EXCLUDE.some((needle) => rel.includes(needle));
 
+/** Repo-relative files a caller scans beside the corpus; never inside a scan root. */
+export function injectedScanPaths(files) {
+  return files.map((rel) => {
+    const abs = join(REPO_ABS, rel);
+    const inCorpus = TSX_ROOTS.some((root) => rel === root || rel.startsWith(`${root}/`));
+    const outside = rel.startsWith("../");
+    if (relative(REPO_ABS, abs) !== rel || outside || inCorpus || !/\.(ts|tsx)$/.test(rel) || !existsSync(abs)) {
+      throw new Error(`injected scan file refused: ${rel}`);
+    }
+    return abs;
+  });
+}
+
 function enclosingSymbol(node) {
   let current = node;
   while (current) {
@@ -701,8 +714,9 @@ const A5_SHA = "7e977dfd0d8dc0a9bca0df7f4e9324d17360a5deecc4b7aad7dbcad645cdad0f
  * with their disposition and receipts so the producer inventory can drain
  * ONLY the dispositions it can prove.
  */
-export function classifyCrossFileRows() {
-  const candidates = tsxCandidates(REPO_ABS);
+export function classifyCrossFileRows({ injectedFiles = [] } = {}) {
+  const candidates = [...tsxCandidates(REPO_ABS), ...injectedScanPaths(injectedFiles)];
+  const injected = new Set(injectedFiles);
   const rows = [];
   let scannedFiles = 0,
     excludedFiles = 0;
@@ -710,7 +724,7 @@ export function classifyCrossFileRows() {
 
   for (const abs of candidates) {
     const rel = relative(REPO_ABS, abs);
-    if (isExcluded(`/${rel}`)) {
+    if (!injected.has(rel) && isExcluded(`/${rel}`)) {
       excludedFiles += 1;
       continue;
     }

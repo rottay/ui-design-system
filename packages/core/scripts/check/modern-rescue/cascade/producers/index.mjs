@@ -66,7 +66,7 @@ import ts from "typescript";
 import { repoRoot as findRepoRoot } from "../../../../libraries/repo-root/index.mjs";
 import { readManifestRecords } from "../../../../libraries/manifest/index.mjs";
 import { CASCADE_ENGINE_ORDER } from "../../../../libraries/engine/roster/index.mjs";
-import { classifyCrossFileRows, dispositionIndex } from "../disposition/index.mjs";
+import { classifyCrossFileRows, dispositionIndex, injectedScanPaths } from "../disposition/index.mjs";
 import {
   CHROME_VARIABLES,
   LOWERING_SOURCES,
@@ -785,7 +785,11 @@ export function buildProducers({
   cascadeRootsDir = CASCADE_ROOTS,
   rootCatalogPath = ROOT_CATALOG,
   artifactsDir = ARTIFACTS_DIR,
+  injectedFiles = [],
 } = {}) {
+  if (injectedFiles.length > 0 && root !== REPO_ABS) {
+    throw new Error("buildProducers: injectedFiles are repo-relative and need the default root");
+  }
   const unknownProvenance = [];
   // Receipt for the sites the scanner CLOSES by proof (see provablyNonObject).
   // Same identity family as `unknownProvenance`; a SEQUENCE, not a set.
@@ -813,7 +817,7 @@ export function buildProducers({
   // reaching several JSX sinks yields several rows. `dispositionIndex` throws on
   // any material disagreement at a shared coordinate and merges only the
   // per-sink evidence, so nothing is silently overwritten.
-  const crossFile = classifyCrossFileRows();
+  const crossFile = classifyCrossFileRows({ injectedFiles });
   const dispositionAt = dispositionIndex(crossFile.rows);
   const precedenceMetadata = [];
 
@@ -1072,7 +1076,8 @@ export function buildProducers({
   }
 
   /* ------------------------------------------- plane tsx-inline-stamp --- */
-  const candidates = tsxCandidates(root);
+  const candidates = [...tsxCandidates(root), ...injectedScanPaths(injectedFiles)];
+  const injected = new Set(injectedFiles);
   let scannedFiles = 0;
   let excludedFiles = 0;
   let styleSinks = 0;
@@ -1088,7 +1093,7 @@ export function buildProducers({
   let tsxSiteTotal = 0;
   for (const abs of candidates) {
     const rel = relative(root, abs);
-    if (isExcluded(`/${rel}`)) {
+    if (!injected.has(rel) && isExcluded(`/${rel}`)) {
       excludedFiles += 1;
       continue;
     }

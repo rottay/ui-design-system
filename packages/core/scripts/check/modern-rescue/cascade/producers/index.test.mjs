@@ -17,7 +17,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
@@ -30,6 +30,7 @@ import {
   boundedReceiptOf,
   DispositionJoinConflict,
   DISPOSITION_DECISION_FIELDS,
+  injectedScanPaths,
 } from '../disposition/index.mjs';
 import { REPO_ABS, resolveShape, computedDomainRoles, resolveSealedTypeDecl, publicGenericWriterProof, entriesRecordSetPropertyDomain, getSource } from '../resolution/index.mjs';
 
@@ -3500,19 +3501,15 @@ export function useDrill(x: number, curve: string): DrillOut { return { vars: bu
 `;
 const SEALED_DRILL_IMPORTS =
   "import { useDrill } from './fixtures/open';\nimport { useDrill as useClosedDrill } from './fixtures/closed';\n";
-/** Writes both producers (and an optional scanned consumer) under a temporary components folder. */
+/** The permanent drill fixture: outside every corpus root, scanned only when a build injects it. */
+const SEALED_DRILL_DIR = 'packages/core/scripts/check/modern-rescue/cascade/producers/sealed-relay-fixture';
+const SEALED_DRILL_FILE = `${SEALED_DRILL_DIR}/index.tsx`;
 const withSealedRelayDrill = (consumerSource, run) => {
-  const dir = mkdtempSync(join(REPO_ABS, 'packages/core/src/components/__sealed-relay-drill-'));
-  const dirRel = `packages/core/src/components/${dir.slice(dir.lastIndexOf('/') + 1)}`;
-  try {
-    mkdirSync(join(dir, 'fixtures'));
-    writeFileSync(join(dir, 'fixtures', 'open.ts'), sealedDrillProducer('readRuntimeCurve(curve)'));
-    writeFileSync(join(dir, 'fixtures', 'closed.ts'), sealedDrillProducer("'ease'"));
-    if (consumerSource) writeFileSync(join(dir, 'index.tsx'), consumerSource);
-    return run(dirRel);
-  } finally {
-    rmSync(dir, { recursive: true, force: true });
-  }
+  const onDisk = (rel) => readFileSync(join(REPO_ABS, SEALED_DRILL_DIR, rel), 'utf8');
+  assert.equal(onDisk('fixtures/open/index.ts'), sealedDrillProducer('readRuntimeCurve(curve)'));
+  assert.equal(onDisk('fixtures/closed/index.ts'), sealedDrillProducer("'ease'"));
+  if (consumerSource) assert.equal(onDisk('index.tsx'), consumerSource);
+  return run(SEALED_DRILL_DIR);
 };
 
 test('SR-1 POSITIVE: an ARBITRARY alias and either access form prove identically', () => {
@@ -3527,7 +3524,7 @@ test('SR-1 POSITIVE: an ARBITRARY alias and either access form prove identically
     assert.equal(direct.shape.sealedImportRelay.property, 'vars');
     assert.equal(direct.shape.sealedImportRelay.propertyType, 'DrillVars');
     assert.equal(direct.shape.sealedImportRelay.owner, 'buildDrillVars');
-    assert.equal(direct.shape.sealedImportRelay.exportFile, `${dirRel}/fixtures/open.ts`);
+    assert.equal(direct.shape.sealedImportRelay.exportFile, `${dirRel}/fixtures/open/index.ts`);
     assert.deepEqual(direct.shape.sealedImportRelay.keys, SEALED_DRILL_KEYS);
 
     const spread = probe(
@@ -3645,8 +3642,8 @@ let sealedDrillArtifact = null;
 const sealedDrillBuild = () => {
   sealedDrillArtifact ??= withSealedRelayDrill(SEALED_DRILL_CONSUMER, (dirRel) => ({
     file: `${dirRel}/index.tsx`,
-    producerFile: `${dirRel}/fixtures/open.ts`,
-    out: buildProducers(),
+    producerFile: `${dirRel}/fixtures/open/index.ts`,
+    out: buildProducers({ injectedFiles: [SEALED_DRILL_FILE] }),
   }));
   return sealedDrillArtifact;
 };
@@ -3747,6 +3744,31 @@ test('SR-6 NEGATIVE: tampering with a sealed-relay proof moves the bound digest'
   }
 });
 
+test('SR-10 NEGATIVE: the injection door admits only an existing file outside every scan root', () => {
+  assert.deepEqual(injectedScanPaths([SEALED_DRILL_FILE]), [join(REPO_ABS, SEALED_DRILL_FILE)]);
+  const refused = {
+    'a corpus file': 'packages/core/src/index.ts',
+    'the corpus root itself': 'packages/core/src',
+    'a missing file': `${SEALED_DRILL_DIR}/absent.tsx`,
+    'a non-source file': 'packages/core/package.json',
+    'a non-normalized path': `${SEALED_DRILL_DIR}/../sealed-relay-fixture/index.tsx`,
+  };
+  const outside = mkdtempSync(join(tmpdir(), 'cascade-producers-injection-'));
+  try {
+    writeFileSync(join(outside, 'index.tsx'), 'export const C = () => null;\n');
+    refused['an existing file outside the repository'] = relative(REPO_ABS, join(outside, 'index.tsx'));
+    for (const [name, rel] of Object.entries(refused)) {
+      assert.throws(() => injectedScanPaths([rel]), /injected scan file refused/, `${name} must be refused`);
+    }
+  } finally {
+    rmSync(outside, { recursive: true, force: true });
+  }
+  assert.throws(
+    () => buildProducers({ root: tmpdir(), injectedFiles: [SEALED_DRILL_FILE] }),
+    /need the default root/,
+  );
+});
+
 test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
   const out = buildProducers();
   // the two cohorts that moved, and the rollup that must only ever go down
@@ -3803,14 +3825,13 @@ test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
  * importable producer module (`resolveImportTargetFile` resolves on disk), so
  * the single-file `branchProbe` cannot express the producer-side refusals.
  *
- * The modules are written under a `/fixtures/` path -- one of `TSX_EXCLUDE`'s
- * needles -- so they can never enter the scan universe or the inventory, and
- * they are removed again in `finally`.
+ * The modules are written under the OS temp dir, outside every scan root, so
+ * they can never enter the scan universe or the inventory, and they are
+ * removed again in `finally`.
  */
 const withProducerModules = (run) => {
-  const dir = mkdtempSync(join(REPO_ABS, 'packages/core/src/components/__sealed-relay-drill-'));
-  const dirName = dir.slice(dir.lastIndexOf('/') + 1);
-  const consumerFile = `packages/core/src/components/${dirName}/consumer.tsx`;
+  const dir = mkdtempSync(join(tmpdir(), 'cascade-producers-sealed-relay-'));
+  const consumerFile = relative(REPO_ABS, join(dir, 'consumer.tsx'));
   mkdirSync(join(dir, 'fixtures'), { recursive: true });
   let seq = 0;
   /** Write one producer module and resolve `<alias>.vars` against it. */
