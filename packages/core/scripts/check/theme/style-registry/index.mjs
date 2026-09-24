@@ -50,8 +50,8 @@ export const PARTITION_FILE = `${STYLES_ROOT}/runtime/partition/index.ts`;
 export const ENVELOPES_FILE = 'src/contracts/theme/runtime/envelopes/index.ts';
 export const ROSTER_FILE = 'src/foundation/contracts/kernel/verticals/index.ts';
 
-/** The counts the partition is pinned at, so the table cannot rot in silence. */
-export const EXPECTED_CLASS_COUNTS = Object.freeze({ style: 21, brand: 7, refused: 1 });
+/** The counts the partition is pinned at, so the table cannot rot in silence (sidebar tone to style, ratified 2026-09-22). */
+export const EXPECTED_CLASS_COUNTS = Object.freeze({ style: 22, brand: 6, refused: 1 });
 
 /** Which envelope range governs which authored dial, by decision and member. */
 export const RANGED_DIALS = Object.freeze([

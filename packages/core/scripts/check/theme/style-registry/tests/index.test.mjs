@@ -189,15 +189,13 @@ describe('theme-style-registry — the drills', () => {
   });
 
   it('goes RED when a row is moved between classes without a decision', () => {
+    // Undoing the 2026-09-22 ratification without a decision is exactly such a move.
     const box = sandbox();
     const file = join(box.core, PARTITION_FILE);
-    writeFileSync(
-      file,
-      readFileSync(file, 'utf8').replace(
-        '  "navigation.sidebar-tone": "brand",',
-        '  "navigation.sidebar-tone": "style",',
-      ),
-    );
+    const before = readFileSync(file, 'utf8');
+    const after = before.replace('  "navigation.sidebar-tone": "style",', '  "navigation.sidebar-tone": "brand",');
+    assert.notEqual(after, before, 'the mutation must land');
+    writeFileSync(file, after);
     assert.ok(rules(measure(options(box))).includes('PARTITION_COUNT_MOVED'));
   });
 

@@ -35,11 +35,17 @@ export type ThemeStyleClass = (typeof THEME_STYLE_CLASSES)[number];
  *
  * BRAND is chromatic reach or the tenant's own faces: the seeds, the status
  * seeds, the neutral temperature, the contrast posture that consumes both seed
- * rows, the per-tenant mode identity, and the font families. `navigation
- * .sidebar-tone` joins them on the same mechanical reading rather than as a
- * safe default: it consumes `palette.seeds` and produces six COLOUR channels,
- * so a style authoring it would set tenant sidebar colour derived from a seed
- * row it may not touch.
+ * rows, the per-tenant mode identity, and the font families.
+ *
+ * `navigation.sidebar-tone` is STYLE (owner-ratified 2026-09-22). The tone
+ * selects WHICH steps of the tenant's own ramps the sidebar wears: its six
+ * channels are `var()` references to palette channels, with zero literals and
+ * zero seed reads, so it cannot move a seed, a ramp or a temperature. The
+ * catalog's `consumes: ["palette.seeds"]` stays as the honest REACH statement:
+ * the resolved colours depend on the tenant's brand exactly as every skin that
+ * reads a palette channel does. A style proposes; the underlay and the lattice
+ * are why: the style fills only an absent row, and a tenant's tone or sidebar
+ * leaf outranks it.
  *
  * REFUSED is `experience.profile` alone, for two independent reasons. It is the
  * sole row whose selection drives the profile expansion, which hard-codes
@@ -76,7 +82,7 @@ export const THEME_STYLE_CLASS_BY_DECISION: Readonly<
   "states.focus-style": "style",
   "motion.dial": "style",
   "motion.character": "style",
-  "navigation.sidebar-tone": "brand",
+  "navigation.sidebar-tone": "style",
   "experience.profile": "refused",
   "profiles.expressive": "style",
   "recipe-profile": "style",

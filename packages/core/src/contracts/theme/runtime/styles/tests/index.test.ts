@@ -152,12 +152,24 @@ describe("I10 registration refuses a row a style may not author", () => {
     );
   });
 
-  it("refuses navigation.sidebar-tone as brand", () => {
-    // The Q3 = (a) row. Nothing else in this package reads it as style-class,
-    // so widening it later is a deliberate edit with this fixture as its gate.
+  it("admits navigation.sidebar-tone as style: the deliberate widening this fixture gated (ratified 2026-09-22)", () => {
+    expect(THEME_STYLE_CLASS_BY_DECISION["navigation.sidebar-tone"]).toBe("style");
+    const record = register({ id: "tonal", decisions: { "navigation.sidebar-tone": "inverse" } });
+    expect(record.manifest.rows).toEqual(["navigation.sidebar-tone"]);
+  });
+
+  it("R1: a style proposing a tone AND the seeds is refused on the seeds row, by name", () => {
     expect(() =>
-      register({ id: "tonal", decisions: { "navigation.sidebar-tone": "inverse" } })
-    ).toThrow(/"navigation\.sidebar-tone", which is brand-class/u);
+      register({
+        id: "tonal-seeded",
+        decisions: { "navigation.sidebar-tone": "strong", "palette.seeds": { primary: "#101010" } },
+      })
+    ).toThrow(
+      'ThemeStyle: style "tonal-seeded" authors "palette.seeds", which is brand-class; a style owns form, the tenant owns brand'
+    );
+    expect(() =>
+      register({ id: "tonal-only", decisions: { "navigation.sidebar-tone": "strong" } })
+    ).not.toThrow();
   });
 
   it("refuses experience.profile, naming the rank rule", () => {
@@ -233,7 +245,7 @@ describe("I10 the partition is total and pinned", () => {
     );
   });
 
-  it("pins the counts: 21 style, 7 brand, 1 refused", () => {
+  it("pins the counts: 22 style, 6 brand, 1 refused (sidebar tone to style, ratified 2026-09-22)", () => {
     const counts = Object.fromEntries(
       THEME_STYLE_CLASSES.map((cls) => [
         cls,
@@ -241,7 +253,18 @@ describe("I10 the partition is total and pinned", () => {
           .length,
       ])
     );
-    expect(counts).toEqual({ style: 21, brand: 7, refused: 1 });
+    expect(counts).toEqual({ style: 22, brand: 6, refused: 1 });
+  });
+
+  it("P1: every registered publication's rows are still style-class", () => {
+    for (const record of Object.values(THEME_STYLE_REGISTRY)) {
+      for (const row of record.manifest.rows) {
+        expect({ row, cls: THEME_STYLE_CLASS_BY_DECISION[row as keyof typeof THEME_STYLE_CLASS_BY_DECISION] }).toEqual({
+          row,
+          cls: "style",
+        });
+      }
+    }
   });
 
   it("pins the catalog at 29, which this WO does not move", () => {
