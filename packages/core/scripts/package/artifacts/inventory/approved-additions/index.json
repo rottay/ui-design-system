@@ -120,6 +120,78 @@
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/density-scope/index.js",
       "reason": "the container-scoped density projection's owner module (95bd44651, WO-FAM-08 B23, Fable ACCEPT-LAND): FamilyDeriver.scopes membership derivation, the boundary carry law and the roster census; the projected block emitted separately from cssVariables"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/index.cjs",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/index.js",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/index.d.ts",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/document/index.json.cjs",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/document/index.json.js",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/document/index.json.d.ts",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/manifest/index.json.cjs",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/manifest/index.json.js",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/manifest/index.json.d.ts",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/index.cjs",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/index.js",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/index.d.ts",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/document/index.json.cjs",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/document/index.json.js",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/document/index.json.d.ts",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/manifest/index.json.cjs",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/manifest/index.json.js",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/manifest/index.json.d.ts",
+      "reason": "DER-09 step 1 (45dfb2820, Fable ACCEPT): the two contrasting style fixtures under CAT-04's adopted contract — one authored representation per style (document + manifest + index), digest-pinned and immutable"
     }
   ],
   "$reason": "WO-EMI-03. The emission owner's declared grammar is finished: `emission/index.ts` became a barrel and its implementation moved to `css/` (declaration/rule assembler, value admission) and `artifact/` (the tenant stylesheet format), with `tokens/` added as the third child -- the resolved token document, its var() resolver and its expression evaluator. `facade/runtime/tokens` is the intent-shaped door over that emitter and `contracts/theme/runtime/compilation` is the document's contract. Every path here is a new owner of published code, not a new dependency: the two shrinks reported beside them (`emission/index.{js,cjs}`) are the same code under its new owners, and the barrel is source-only because it re-exports and nothing else."

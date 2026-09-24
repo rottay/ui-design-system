@@ -3,8 +3,8 @@
   "generatedBy": "pnpm --filter @rottay/design-system packinv:write (after a clean build)",
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
-  "entryCount": 7913,
-  "unpackedSize": 43774574,
+  "entryCount": 7931,
+  "unpackedSize": 43802375,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -12919,8 +12919,44 @@
       "size": 990
     },
     {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/document/index.json.cjs",
+      "size": 1060
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/document/index.json.d.ts",
+      "size": 1253
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/document/index.json.js",
+      "size": 1154
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/index.cjs",
+      "size": 308
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/index.d.ts",
+      "size": 450
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/index.js",
+      "size": 244
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/manifest/index.json.cjs",
+      "size": 3016
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/manifest/index.json.d.ts",
+      "size": 3038
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/editorial-quiet/manifest/index.json.js",
+      "size": 3121
+    },
+    {
       "path": "dist/contracts/theme/runtime/styles/composition/registry/index.cjs",
-      "size": 733
+      "size": 853
     },
     {
       "path": "dist/contracts/theme/runtime/styles/composition/registry/index.d.ts",
@@ -12928,7 +12964,43 @@
     },
     {
       "path": "dist/contracts/theme/runtime/styles/composition/registry/index.js",
-      "size": 762
+      "size": 908
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/document/index.json.cjs",
+      "size": 1061
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/document/index.json.d.ts",
+      "size": 1256
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/document/index.json.js",
+      "size": 1157
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/index.cjs",
+      "size": 306
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/index.d.ts",
+      "size": 442
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/index.js",
+      "size": 242
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/manifest/index.json.cjs",
+      "size": 3100
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/manifest/index.json.d.ts",
+      "size": 3122
+    },
+    {
+      "path": "dist/contracts/theme/runtime/styles/composition/registry/product-dense/manifest/index.json.js",
+      "size": 3205
     },
     {
       "path": "dist/contracts/theme/runtime/styles/composition/registry/quiet-premium/document/index.json.cjs",
