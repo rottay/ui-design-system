@@ -3865,7 +3865,7 @@
       "kind": "tab",
       "id": "activity",
       "source": "features/events/events/components/event-detail/index.tsx",
-      "line": 1233,
+      "line": 1221,
       "column": 5
     },
     {
@@ -3907,7 +3907,7 @@
       "kind": "tab",
       "id": "finance",
       "source": "features/events/events/components/event-detail/index.tsx",
-      "line": 1214,
+      "line": 1202,
       "column": 5
     },
     {
@@ -3935,7 +3935,7 @@
       "kind": "tab",
       "id": "lineup",
       "source": "features/events/events/components/event-detail/index.tsx",
-      "line": 1196,
+      "line": 1184,
       "column": 5
     },
     {
@@ -3949,7 +3949,7 @@
       "kind": "tab",
       "id": "overview",
       "source": "features/events/events/components/event-detail/index.tsx",
-      "line": 1167,
+      "line": 1155,
       "column": 5
     },
     {
@@ -4019,7 +4019,7 @@
       "kind": "tab",
       "id": "tickets",
       "source": "features/events/events/components/event-detail/index.tsx",
-      "line": 1181,
+      "line": 1169,
       "column": 5
     },
     {

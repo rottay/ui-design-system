@@ -36,6 +36,7 @@ const INVENTORY_FILE = path.join(
   REPO_ROOT,
   'packages/core/scripts/check/modern-rescue/family-inventory/index.json',
 );
+const PROGRAM_FILE = path.join(REPO_ROOT, 'packages/core/scripts/check/modern-rescue/program/index.json');
 
 const COMPONENTS = 'packages/core/src/components/';
 
@@ -250,7 +251,8 @@ test('an absent repoRoot fails closed rather than resolving against the process 
 
 test('the real inventory resolves completely, every row landing on its own sourceOwner', () => {
   const rows = inventoryRows();
-  assert.equal(rows.length, 255);
+  const { visibleFamilies } = JSON.parse(fs.readFileSync(PROGRAM_FILE, 'utf8')).denominators;
+  assert.equal(rows.length, visibleFamilies, 'the inventory must hold exactly the stated family denominator');
 
   const resolved = relocateSourceOwners(rows, { repoRoot: REPO_ROOT });
   assert.equal(resolved.size, rows.length, 'every row must resolve');

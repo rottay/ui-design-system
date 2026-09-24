@@ -2529,7 +2529,7 @@ test('visualization skin Kanban Modern crosses the column accent only through a 
   // missing `column` link is what a never-returned value costs. The Class E
   // mutant below is the same defect moved INSIDE `column`, where enclosure is
   // perfect and only the render path can still tell.
-  const KANBAN_COLUMN_CALLBACK_ANCHOR = 'const isDropping = dropTarget?.columnId === column.id;';
+  const KANBAN_COLUMN_CALLBACK_ANCHOR = 'const isDropping = drag.session?.target?.columnId === column.id;';
   assert.equal(
     text.split(KANBAN_COLUMN_CALLBACK_ANCHOR).length - 1,
     1,
