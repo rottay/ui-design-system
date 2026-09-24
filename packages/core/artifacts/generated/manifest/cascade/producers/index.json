@@ -18,9 +18,9 @@
     "cssEdges": "5a4a0772b7671bfd021761fbb71e916c0362e4531055157cce97716e1f750298",
     "cascadeRoots": "16a5fcc515d41fe064232cac341e568cbdb09f55e034f518ed69468f0b2fdd23",
     "rootCatalog": "5cd77291d1795cb57e12100db51032ee348cb6329b4c292bfa032756f196357f",
-    "srcTsx": "56fe656f6f1ac1d7d59963ed4edc63dfaba485b26342d5a47eb970d1edf96942",
-    "srcCompilers": "45b149579270e7e0b6cc5e9de3d440b06f2e36472661cd20b3df3503e0f347f0",
-    "artifacts": "e7293f16c786dc633b6b7f2bf97a4bf36cb6bd141df4b2d6f6548e709c4e8cd7"
+    "srcTsx": "e3792c70b192d5c403d16a4498144bf7514d4e07767ac7a94420110f2f1dd86d",
+    "srcCompilers": "0233fb04b01edf74ccfa2f2341b0f94d94c7219c6dae65404354d5e1bf99832f",
+    "artifacts": "052197de6d4c8afaf2af100cc15821f8cbd74929c91fa70d67ae60b33542dc3b"
   },
   "stats": {
     "producerSites": 6232,
@@ -95,8 +95,8 @@
       "stampSites": 513
     },
     "measuredCensus": {
-      "scannedFiles": 1995,
-      "excludedFiles": 2035,
+      "scannedFiles": 1996,
+      "excludedFiles": 2038,
       "styleSinks": 3165,
       "stampSites": 380,
       "distinctCustomProperties": 250,
@@ -108,13 +108,13 @@
     "censusDiff": {
       "scannedFiles": {
         "authored": 1740,
-        "measured": 1995,
-        "delta": 255
+        "measured": 1996,
+        "delta": 256
       },
       "excludedFiles": {
         "authored": 1664,
-        "measured": 2035,
-        "delta": 371
+        "measured": 2038,
+        "delta": 374
       },
       "styleSinks": {
         "authored": 3283,
@@ -150,7 +150,7 @@
     "censusReconciliation": {
       "method": "identity, not tolerance. This module publishes the full member lists below; the authored census published COUNTS ONLY and no member list, so the two cannot be reconciled member by member from its side. The residual is therefore expressed as unknownProvenance rows with file and symbol, never as a numeric tolerance.",
       "authoredPublishesMemberLists": false,
-      "scannedFiles": 1995,
+      "scannedFiles": 1996,
       "governedChannels": 230,
       "unresolvedSites": 0
     },
@@ -2081,6 +2081,7 @@
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/type-ramp/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/density-scope/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/charts/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/action-dock/index.ts",
@@ -66293,7 +66294,7 @@
   "callArgsPending": [],
   "provenance": {
     "producedBy": "cascade:producers --write",
-    "writtenOn": "2026-09-23",
-    "contentDigest": "66e45247106e7b1421bd6da66dd6b2ad038da08867c591c122de16f3080f4c3a"
+    "writtenOn": "2026-09-24",
+    "contentDigest": "c26e6c37ca3ad0da151436ea6355f236d9af2f6190943244a03a311dc918fc8f"
   }
 }
