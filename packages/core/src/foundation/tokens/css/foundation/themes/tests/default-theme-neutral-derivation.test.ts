@@ -88,7 +88,6 @@ const NO_EXACT_STEP_LITERALS: Record<string, Record<string, string>> = {
     "--ds-color-text-tertiary": "#62626A",
     "--ds-color-text-muted": "#6B6B72",
     "--ds-color-text-disabled": "#4A4A50",
-    "--ds-color-text-on-primary": "#0C0C0E",
   },
   dark: {
     "--ds-color-bg-tertiary": "#172033",
@@ -179,6 +178,13 @@ const ROOT_REWIRED: Record<
     derivation: "var(--ds-color-neutral-100)",
     retiredDarkLiteral: "#161619",
     resolvesTo: "#f5f5f5",
+  },
+  // The fourteenth: the ink on the primary fill, left dark on the light scope,
+  // read 1.09:1 on the light #171717 primary. Dark restates its own #ffffff.
+  "--ds-color-text-on-primary": {
+    derivation: "var(--ds-color-neutral-0)",
+    retiredDarkLiteral: "#0C0C0E",
+    resolvesTo: "#ffffff",
   },
 };
 

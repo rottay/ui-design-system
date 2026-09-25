@@ -1134,7 +1134,9 @@
     var(--ds-filter-pill-active-color, var(--ds-color-primary))
   );
   border: 1px solid var(--ds-filter-pill-count-active-border, transparent);
-  color: var(--ds-color-text-on-primary);
+  /* Its ground is the raised material the count-active channel states, not
+     the primary, so it takes that ground's reading ink. */
+  color: var(--ds-color-text-primary);
 }
 
 @container ds-list-toolbar (max-width: 1080px) {

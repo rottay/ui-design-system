@@ -126,7 +126,7 @@
   padding-inline: var(--ds-live-feed-banner-padding-inline, 12px);
   margin-block-end: var(--ds-live-feed-banner-margin-block-end, 12px);
   background: var(--ds-color-info);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-info);
   border-radius: var(--ds-radius-md);
   border: none;
   font-size: var(--ds-live-feed-control-font-size, 13px);

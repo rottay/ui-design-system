@@ -1539,7 +1539,9 @@
   --ds-color-text-tertiary: #62626A;
   --ds-color-text-muted: #6B6B72;
   --ds-color-text-disabled: #4A4A50;
-  --ds-color-text-on-primary: #0C0C0E;
+  /* The ink ON the primary fill, not a reading ink: the light ramp's white,
+     17.93:1 on the #171717 primary. */
+  --ds-color-text-on-primary: var(--ds-color-neutral-0);
   --ds-color-text-inverse: var(--ds-color-text-on-primary);
   --ds-color-text: var(--ds-color-text-primary);
 
@@ -9255,17 +9257,17 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   /* Success variant */
   --ds-checkbox-success-bg: var(--ds-color-success);
   --ds-checkbox-success-border: var(--ds-color-success);
-  --ds-checkbox-success-check: var(--ds-color-text-on-primary);
+  --ds-checkbox-success-check: var(--ds-color-on-success);
 
   /* Warning variant */
   --ds-checkbox-warning-bg: var(--ds-color-warning);
   --ds-checkbox-warning-border: var(--ds-color-warning);
-  --ds-checkbox-warning-check: var(--ds-color-text-on-primary);
+  --ds-checkbox-warning-check: var(--ds-color-on-warning);
 
   /* Error variant */
   --ds-checkbox-error-bg: var(--ds-color-error);
   --ds-checkbox-error-border: var(--ds-color-error);
-  --ds-checkbox-error-check: var(--ds-color-text-on-primary);
+  --ds-checkbox-error-check: var(--ds-color-on-error);
 
   /* ========================================================================
      STATES
@@ -9305,6 +9307,13 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-checkbox-focus-ring-width: var(--ds-focus-ring-width);
   --ds-checkbox-focus-ring-offset: var(--ds-focus-ring-offset);
   --ds-checkbox-focus-ring-color: var(--ds-focus-ring-color);
+}
+
+/* Secondary states no ink of its own, so its check inks by its own fill. */
+@supports (color: contrast-color(red)) {
+  :root {
+    --ds-checkbox-secondary-check: contrast-color(var(--ds-checkbox-secondary-bg));
+  }
 }
 
 }
@@ -9373,17 +9382,17 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   /* Success variant */
   --ds-radio-success-bg: var(--ds-color-success);
   --ds-radio-success-border: var(--ds-color-success);
-  --ds-radio-success-dot: var(--ds-color-text-on-primary);
+  --ds-radio-success-dot: var(--ds-color-on-success);
 
   /* Warning variant */
   --ds-radio-warning-bg: var(--ds-color-warning);
   --ds-radio-warning-border: var(--ds-color-warning);
-  --ds-radio-warning-dot: var(--ds-color-text-on-primary);
+  --ds-radio-warning-dot: var(--ds-color-on-warning);
 
   /* Error variant */
   --ds-radio-error-bg: var(--ds-color-error);
   --ds-radio-error-border: var(--ds-color-error);
-  --ds-radio-error-dot: var(--ds-color-text-on-primary);
+  --ds-radio-error-dot: var(--ds-color-on-error);
 
   /* ========================================================================
      STATES
@@ -9428,6 +9437,13 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-radio-focus-ring-width: var(--ds-focus-ring-width);
   --ds-radio-focus-ring-offset: var(--ds-focus-ring-offset);
   --ds-radio-focus-ring-color: var(--ds-focus-ring-color);
+}
+
+/* Secondary states no ink of its own, so its dot inks by its own fill. */
+@supports (color: contrast-color(red)) {
+  :root {
+    --ds-radio-secondary-dot: contrast-color(var(--ds-radio-secondary-bg));
+  }
 }
 
 }
@@ -27348,30 +27364,36 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   --ds-badge-tone-soft-color: var(--ds-color-secondary-600);
   --ds-badge-tone-outline: var(--ds-color-secondary-300, var(--ds-color-secondary));
 }
+/* Secondary states no ink of its own, so the solid tone inks by its own fill. */
+@supports (color: contrast-color(red)) {
+  .rottay-badge.rottay-badge--modern[data-variant='secondary'] {
+    --ds-badge-tone-solid-color: contrast-color(var(--ds-badge-tone-solid-bg));
+  }
+}
 .rottay-badge.rottay-badge--modern[data-variant='success'] {
   --ds-badge-tone-solid-bg: var(--ds-color-success);
-  --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
+  --ds-badge-tone-solid-color: var(--ds-color-on-success);
   --ds-badge-tone-soft-bg: var(--ds-color-success-bg, var(--ds-color-alpha-success-10));
   --ds-badge-tone-soft-color: var(--ds-color-success-ink, var(--ds-color-success-700));
   --ds-badge-tone-outline: var(--ds-color-success-border, var(--ds-color-success));
 }
 .rottay-badge.rottay-badge--modern[data-variant='warning'] {
   --ds-badge-tone-solid-bg: var(--ds-color-warning);
-  --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
+  --ds-badge-tone-solid-color: var(--ds-color-on-warning);
   --ds-badge-tone-soft-bg: var(--ds-color-warning-bg, var(--ds-color-alpha-warning-10));
   --ds-badge-tone-soft-color: var(--ds-color-warning-ink, var(--ds-color-warning-700));
   --ds-badge-tone-outline: var(--ds-color-warning-border, var(--ds-color-warning));
 }
 .rottay-badge.rottay-badge--modern[data-variant='error'] {
   --ds-badge-tone-solid-bg: var(--ds-color-error);
-  --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
+  --ds-badge-tone-solid-color: var(--ds-color-on-error);
   --ds-badge-tone-soft-bg: var(--ds-color-alpha-error-10);
   --ds-badge-tone-soft-color: var(--ds-color-error-700);
   --ds-badge-tone-outline: var(--ds-color-error-border, var(--ds-color-error));
 }
 .rottay-badge.rottay-badge--modern[data-variant='info'] {
   --ds-badge-tone-solid-bg: var(--ds-color-info);
-  --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
+  --ds-badge-tone-solid-color: var(--ds-color-on-info);
   --ds-badge-tone-soft-bg: var(--ds-color-info-bg, var(--ds-color-alpha-info-10));
   --ds-badge-tone-soft-color: var(--ds-color-info-ink, var(--ds-color-info-700));
   --ds-badge-tone-outline: var(--ds-color-info-border, var(--ds-color-info));
@@ -36600,7 +36622,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* Error fills the track in both states, so the glyph always rides the
    on-accent ink there. */
 .ds-toggle.ds-toggle--modern[data-error='true'] [data-part='state-icon'] {
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
 }
 /* xs geometry (16px track) fits no legible glyph: the thumb position and the
    fill carry the state alone at that step (deliberate density decision). */
@@ -37388,18 +37410,22 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-checkbox.ds-checkbox--modern[data-color='secondary'][data-active='true'] [data-part='box'] {
   border-color: var(--ds-checkbox-secondary-bg, var(--ds-color-secondary));
   background-color: var(--ds-checkbox-secondary-bg, var(--ds-color-secondary));
+  color: var(--ds-checkbox-secondary-check);
 }
 .ds-checkbox.ds-checkbox--modern[data-color='success'][data-active='true'] [data-part='box'] {
   border-color: var(--ds-checkbox-success-bg, var(--ds-color-success));
   background-color: var(--ds-checkbox-success-bg, var(--ds-color-success));
+  color: var(--ds-checkbox-success-check);
 }
 .ds-checkbox.ds-checkbox--modern[data-color='warning'][data-active='true'] [data-part='box'] {
   border-color: var(--ds-checkbox-warning-bg, var(--ds-color-warning));
   background-color: var(--ds-checkbox-warning-bg, var(--ds-color-warning));
+  color: var(--ds-checkbox-warning-check);
 }
 .ds-checkbox.ds-checkbox--modern[data-color='error'][data-active='true'] [data-part='box'] {
   border-color: var(--ds-checkbox-error-bg, var(--ds-color-error));
   background-color: var(--ds-checkbox-error-bg, var(--ds-color-error));
+  color: var(--ds-checkbox-error-check);
 }
 
 /* Error frame: an unchecked box in an error field announces the problem on
@@ -39806,10 +39832,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* focus ring (K4-B Pass 2: the button relied on the UA outline) — badge idiom. */
 .ds-voice-input-button[data-part='root']:focus-visible {
   outline: none;
-  box-shadow: var(
-    --ds-voice-input-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
-  );
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
 }
 /* forced colors: the focus ring degrades to a system outline, and every
    state keeps a FRAME (never hue alone): the base frame and the active
@@ -40991,7 +41014,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   font-size: var(--ds-upload-preview-close-font-size, 13px);
   cursor: pointer;
   background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
   border-radius: 50%;
   border: none;
 }
@@ -54033,7 +54056,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
      count changes (B9 pass 2). */
   font-variant-numeric: tabular-nums;
   border-radius: var(--ds-radius-full);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
 }
 
 /* ---- description text (was the engine's `text-xs` utility). ---- */
@@ -60597,13 +60620,11 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   min-inline-size: 20px;
 }
 
-/* On-token pair for the error pill. DOCUMENTED ESCAPE HATCH: no
-   `--ds-color-text-on-error` token exists yet (shared-token proposal
-   reported); the fallback rides the universal on-accent pair
-   `--ds-color-text-on-primary` instead of the old hard `#fff` floor. The
-   count is numeric data — tabular figures keep the pill width stable. */
+/* On-token pair for the error pill: the error fill's own ink, graded per
+   mode. The count is numeric data — tabular figures keep the pill width
+   stable. */
 .rottay-bottom-tab-bar__badge-text[data-part='badge-text'] {
-  color: var(--ds-color-text-on-error, var(--ds-color-text-on-primary));
+  color: var(--ds-color-on-error);
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-variant-numeric: tabular-nums;
   font-weight: 600;
@@ -63202,9 +63223,8 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
   background: var(--ds-color-primary);
-  /* CONTRAST LAW (K4-B round 2, axe color-contrast): the ink cannot ride
-     --ds-color-text-on-primary -- the foundation base value #0C0C0E fails on
-     the TMM teal (3.57:1) and bithire blue (3.80:1) primaries. White ink
+  /* CONTRAST LAW (K4-B round 2, axe color-contrast): the ink is white, not
+     --ds-color-text-on-primary, measured on the raw tenant primaries. White ink
      clears AA on BOTH raw tenant primaries (5.15:1 bithire #3A6FB0, 5.47:1
      TMM #0F766E), so the raw fill stays un-deepened. Escape hatch stays raw;
      --ds-color-white falls back to literal white when undeclared. */
@@ -69697,22 +69717,28 @@ html[data-ds-motion='reduced']
   --ds-tooltip-ink-current: var(--ds-tooltip-secondary-color, var(--ds-color-text-on-primary));
   --ds-tooltip-edge-current: var(--ds-tooltip-tone-border, transparent);
 }
+/* Secondary states no ink of its own, so the bubble inks by its own surface. */
+@supports (color: contrast-color(red)) {
+  .ds-tooltip-bubble[data-part='bubble'][data-tone='secondary'] {
+    --ds-tooltip-ink-current: contrast-color(var(--ds-tooltip-surface-current));
+  }
+}
 
 .ds-tooltip-bubble[data-part='bubble'][data-tone='success'] {
   --ds-tooltip-surface-current: var(--ds-tooltip-success-bg, var(--ds-color-success));
-  --ds-tooltip-ink-current: var(--ds-tooltip-success-color, var(--ds-color-text-on-primary));
+  --ds-tooltip-ink-current: var(--ds-tooltip-success-color, var(--ds-color-on-success));
   --ds-tooltip-edge-current: var(--ds-tooltip-tone-border, transparent);
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-tone='warning'] {
   --ds-tooltip-surface-current: var(--ds-tooltip-warning-bg, var(--ds-color-warning));
-  --ds-tooltip-ink-current: var(--ds-tooltip-warning-color, var(--ds-color-text-on-primary));
+  --ds-tooltip-ink-current: var(--ds-tooltip-warning-color, var(--ds-color-on-warning));
   --ds-tooltip-edge-current: var(--ds-tooltip-tone-border, transparent);
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-tone='error'] {
   --ds-tooltip-surface-current: var(--ds-tooltip-error-bg, var(--ds-color-error));
-  --ds-tooltip-ink-current: var(--ds-tooltip-error-color, var(--ds-color-text-on-primary));
+  --ds-tooltip-ink-current: var(--ds-tooltip-error-color, var(--ds-color-on-error));
   --ds-tooltip-edge-current: var(--ds-tooltip-tone-border, transparent);
 }
 
@@ -71513,17 +71539,17 @@ html[data-ds-motion='reduced']
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='approved'] {
   background: var(--ds-color-success);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-success);
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='rejected'] {
   background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='escalated'] {
   background: var(--ds-color-warning);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-warning);
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped'] {
@@ -71568,13 +71594,13 @@ html[data-ds-motion='reduced']
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve'] {
   background: var(--ds-color-success);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-success);
   border: none;
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject'] {
   background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
   border: none;
 }
 
@@ -72067,13 +72093,13 @@ html[data-ds-motion='reduced']
 
 .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='approve'] {
   background: var(--ds-color-success);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-success);
   border: none;
 }
 
 .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='reject'] {
   background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
   border: none;
 }
 
@@ -72434,13 +72460,13 @@ html[data-ds-motion='reduced']
 
 .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve'] {
   background: var(--ds-color-success);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-success);
   border: none;
 }
 
 .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject'] {
   background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
   border: none;
 }
 
@@ -77527,6 +77553,21 @@ html[data-ds-motion='reduced']
   }
 }
 
+/* The accent is the caller's environment color, so the ink is read against it here. */
+@supports (color: contrast-color(red)) {
+  .ds-pattern-environment-toggle.ds-engine-modern [data-part='badge'] {
+    color: contrast-color(var(--ds-envtoggle-accent));
+  }
+
+  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'][data-active='true'] {
+    color: contrast-color(var(--ds-envtoggle-accent));
+  }
+
+  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true'] {
+    color: contrast-color(var(--ds-envtoggle-accent));
+  }
+}
+
 }
 @layer rottay-engines {
 /**
@@ -79580,7 +79621,7 @@ html[data-ds-motion='reduced']
   padding-inline: var(--ds-live-feed-banner-padding-inline, 12px);
   margin-block-end: var(--ds-live-feed-banner-margin-block-end, 12px);
   background: var(--ds-color-info);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-info);
   border-radius: var(--ds-radius-md);
   border: none;
   font-size: var(--ds-live-feed-control-font-size, 13px);
@@ -95015,7 +95056,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     var(--ds-filter-pill-active-color, var(--ds-color-primary))
   );
   border: 1px solid var(--ds-filter-pill-count-active-border, transparent);
-  color: var(--ds-color-text-on-primary);
+  /* Its ground is the raised material the count-active channel states, not
+     the primary, so it takes that ground's reading ink. */
+  color: var(--ds-color-text-primary);
 }
 
 @container ds-list-toolbar (max-width: 1080px) {
@@ -97244,7 +97287,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   white-space: nowrap;
   pointer-events: none;
   transform: translateX(-50%);
-  animation: ds-export-toast-fade var(--ds-export-button-toast-duration, 1.8s) ease forwards;
+  /* the engine unmounts the toast after 1800ms; the fade spans that lifetime */
+  animation: ds-export-toast-fade 1.8s ease forwards;
 }
 
 .ds-structure.ds-export-button[data-part='root'] [data-part='toast'] [data-part='toast-label'] {
@@ -100536,7 +100580,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger'] {
   background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
 }
 
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default'] {
@@ -108965,9 +109009,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * "raise the specificity" look like the fix for losing to a later layer,
  * where specificity never wins.
  *
- * THE VEIL IS A PSEUDO-ELEMENT, NOT THE ROOT. `--ds-loading-overlay-scrim-opacity`
- * was applied as `opacity` on the root, and element opacity composites the
- * WHOLE subtree: the channel that makes the scrim see-through was equally
+ * THE VEIL IS A PSEUDO-ELEMENT, NOT THE ROOT. The scrim opacity was applied
+ * as `opacity` on the root, and element opacity composites the WHOLE
+ * subtree: the value that makes the scrim see-through was equally
  * dimming the message and the dots painted on top of it, and the dots
  * multiply it by their own 0.3 keyframe floor — so the one element on screen
  * that is supposed to say "working" was the faintest thing on it. The veil
@@ -109074,15 +109118,16 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   container: ds-loading-overlay / size;
 }
 
-/* The veil. Scrim see-through stays on the family channel and keeps its
-   default, but it now dims only the ground it is a veil for — see the header
-   for why applying it to the root dimmed the overlay's own message and dots. */
+/* The veil. The scrim see-through dims only the ground it is a veil for —
+   see the header for why applying it to the root dimmed the overlay's own
+   message and dots. 0.92 is a declared value, not a channel: no layer
+   produces a scrim opacity, so it cannot be re-pointed without moving paint. */
 .ds-loading-overlay[data-part='root']::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  opacity: var(--ds-loading-overlay-scrim-opacity, 0.92);
+  opacity: 0.92;
   background: var(--ds-color-bg-primary, rgba(15,23,42,0.85));
   backdrop-filter: blur(2px);
 }
@@ -123317,10 +123362,10 @@ html[lang]:lang(ar) {
   --ds-tooltip-shortcut-key-border: color-mix(in srgb, currentColor 28%, transparent);
   --ds-tooltip-shortcut-key-shadow: inset 0 1px 0 color-mix(in srgb, currentColor 10%, transparent);
   --ds-tooltip-success-bg: var(--ds-color-success);
-  --ds-tooltip-success-color: var(--ds-color-text-on-primary);
+  --ds-tooltip-success-color: var(--ds-color-on-success);
   --ds-tooltip-tone-border: color-mix(in srgb, currentColor 20%, transparent);
   --ds-tooltip-warning-bg: var(--ds-color-warning);
-  --ds-tooltip-warning-color: var(--ds-color-text-on-primary);
+  --ds-tooltip-warning-color: var(--ds-color-on-warning);
   --ds-tour-action-font-size: var(--ds-type-label-font-size);
   --ds-tour-action-next-bg: var(--ds-color-primary);
   --ds-tour-action-next-ink: var(--ds-color-text-on-primary);

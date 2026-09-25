@@ -177,7 +177,7 @@
   font-size: var(--ds-upload-preview-close-font-size, 13px);
   cursor: pointer;
   background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
   border-radius: 50%;
   border: none;
 }

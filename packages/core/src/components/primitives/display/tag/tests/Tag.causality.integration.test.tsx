@@ -57,20 +57,19 @@ describeCausality({
 });
 
 /**
- * Measured debt, pinned by node IDENTITY. Registered, never excluded: the chip
- * label does not clear the contrast floor in this scope. Same class as the
- * table family's: a mode-aware ink derivation is the fix, never an axe
- * exclusion. Pinned by node identity, so a repair or a swap both go red.
+ * Measured debt, pinned by node IDENTITY. Registered, never excluded: a mode-aware
+ * ink derivation is the fix, never an axe exclusion. Pinned by node identity, so
+ * a repair or a swap both go red.
  *
  * `bithire dark` had three rows -- the dismiss, done and small labels -- and
  * they DRAINED: that scope's dark block now re-derives its own canvas ground
  * instead of inheriting the light body's, so those labels no longer sit on a
- * near-white ground. Dropped by identity, not waived: with no entry the scope
- * must now measure clean, and a relapse reddens here.
+ * near-white ground. `evnto light` had one -- the solid "Ready" chip, the
+ * light root's on-primary ink on the near-black primary at 1.09:1 -- and it
+ * DRAINED when that ink took the light ramp's white. Dropped by identity, not
+ * waived: with no entry every scope must measure clean, and a relapse reddens here.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'evnto light': { 'color-contrast': ['span[title="Ready"]'] },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('tag derived channels and accessibility', () => {
   it('derives the tone fill and the pill corners from the family deriver', async () => {

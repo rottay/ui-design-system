@@ -174,7 +174,7 @@ export const FOUNDATION_COLOR_DEFAULTS_LIGHT: Readonly<Record<string, string>> =
   "--ds-color-text-disabled": "#4A4A50",
   "--ds-color-text-inverse": "var(--ds-color-text-on-primary)",
   "--ds-color-text-muted": "#6B6B72",
-  "--ds-color-text-on-primary": "#0C0C0E",
+  "--ds-color-text-on-primary": "var(--ds-color-neutral-0)",
   "--ds-color-text-primary": "var(--ds-color-neutral-900)",
   "--ds-color-text-secondary": "#5A5A61",
   "--ds-color-text-subtle": "var(--ds-color-text-muted)",

@@ -349,7 +349,7 @@
 
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger'] {
   background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
 }
 
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default'] {

@@ -175,7 +175,7 @@
      count changes (B9 pass 2). */
   font-variant-numeric: tabular-nums;
   border-radius: var(--ds-radius-full);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
 }
 
 /* ---- description text (was the engine's `text-xs` utility). ---- */

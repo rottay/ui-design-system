@@ -241,7 +241,9 @@
   --ds-color-text-tertiary: #62626A;
   --ds-color-text-muted: #6B6B72;
   --ds-color-text-disabled: #4A4A50;
-  --ds-color-text-on-primary: #0C0C0E;
+  /* The ink ON the primary fill, not a reading ink: the light ramp's white,
+     17.93:1 on the #171717 primary. */
+  --ds-color-text-on-primary: var(--ds-color-neutral-0);
   --ds-color-text-inverse: var(--ds-color-text-on-primary);
   --ds-color-text: var(--ds-color-text-primary);
 

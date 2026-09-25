@@ -436,19 +436,22 @@ export const VARIANT_SOFT_TEXT_COLOR_MAP: Record<string, string> = {
 
 /**
  * The foreground a SOLID badge paints on its own fill, derived per-variant from
- * an on-primary token rather than a flat value. Shared by the modern and rustic
- * engines so a tenant whose primary fill is light (rottay) does not get a
- * near-white label on a near-white badge. `default` reads the primary text
- * colour because its fill is a neutral surface, not a solid brand colour.
+ * the ink that fill states rather than a flat value. Shared by the modern and
+ * rustic engines so a tenant whose primary fill is light (rottay) does not get
+ * a near-white label on a near-white badge. Each status tone reads its own
+ * `--ds-color-on-{tone}`; secondary states no ink of its own, so it keeps the
+ * on-primary ink here and each skin reads it against the fill where
+ * `contrast-color()` exists. `default` reads the primary text colour because
+ * its fill is a neutral surface, not a solid brand colour.
  */
 export const VARIANT_SOLID_TEXT_COLOR_MAP: Record<string, string> = {
   default: 'var(--ds-color-text-primary)',
   primary: 'var(--ds-color-primary-foreground)',
   secondary: 'var(--ds-color-text-on-primary)',
-  success: 'var(--ds-color-text-on-primary)',
-  warning: 'var(--ds-color-text-on-primary)',
-  error: 'var(--ds-color-text-on-primary)',
-  info: 'var(--ds-color-text-on-primary)',
+  success: 'var(--ds-color-on-success)',
+  warning: 'var(--ds-color-on-warning)',
+  error: 'var(--ds-color-on-error)',
+  info: 'var(--ds-color-on-info)',
 } as const;
 
 /**

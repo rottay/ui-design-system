@@ -253,7 +253,7 @@
 /* Error fills the track in both states, so the glyph always rides the
    on-accent ink there. */
 .ds-toggle.ds-toggle--modern[data-error='true'] [data-part='state-icon'] {
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
 }
 /* xs geometry (16px track) fits no legible glyph: the thumb position and the
    fill carry the state alone at that step (deliberate density decision). */

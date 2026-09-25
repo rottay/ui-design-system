@@ -272,9 +272,8 @@
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
   background: var(--ds-color-primary);
-  /* CONTRAST LAW (K4-B round 2, axe color-contrast): the ink cannot ride
-     --ds-color-text-on-primary -- the foundation base value #0C0C0E fails on
-     the TMM teal (3.57:1) and bithire blue (3.80:1) primaries. White ink
+  /* CONTRAST LAW (K4-B round 2, axe color-contrast): the ink is white, not
+     --ds-color-text-on-primary, measured on the raw tenant primaries. White ink
      clears AA on BOTH raw tenant primaries (5.15:1 bithire #3A6FB0, 5.47:1
      TMM #0F766E), so the raw fill stays un-deepened. Escape hatch stays raw;
      --ds-color-white falls back to literal white when undeclared. */

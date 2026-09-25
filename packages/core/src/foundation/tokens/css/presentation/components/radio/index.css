@@ -62,17 +62,17 @@
   /* Success variant */
   --ds-radio-success-bg: var(--ds-color-success);
   --ds-radio-success-border: var(--ds-color-success);
-  --ds-radio-success-dot: var(--ds-color-text-on-primary);
+  --ds-radio-success-dot: var(--ds-color-on-success);
 
   /* Warning variant */
   --ds-radio-warning-bg: var(--ds-color-warning);
   --ds-radio-warning-border: var(--ds-color-warning);
-  --ds-radio-warning-dot: var(--ds-color-text-on-primary);
+  --ds-radio-warning-dot: var(--ds-color-on-warning);
 
   /* Error variant */
   --ds-radio-error-bg: var(--ds-color-error);
   --ds-radio-error-border: var(--ds-color-error);
-  --ds-radio-error-dot: var(--ds-color-text-on-primary);
+  --ds-radio-error-dot: var(--ds-color-on-error);
 
   /* ========================================================================
      STATES
@@ -117,4 +117,11 @@
   --ds-radio-focus-ring-width: var(--ds-focus-ring-width);
   --ds-radio-focus-ring-offset: var(--ds-focus-ring-offset);
   --ds-radio-focus-ring-color: var(--ds-focus-ring-color);
+}
+
+/* Secondary states no ink of its own, so its dot inks by its own fill. */
+@supports (color: contrast-color(red)) {
+  :root {
+    --ds-radio-secondary-dot: contrast-color(var(--ds-radio-secondary-bg));
+  }
 }

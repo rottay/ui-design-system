@@ -273,13 +273,11 @@
   min-inline-size: 20px;
 }
 
-/* On-token pair for the error pill. DOCUMENTED ESCAPE HATCH: no
-   `--ds-color-text-on-error` token exists yet (shared-token proposal
-   reported); the fallback rides the universal on-accent pair
-   `--ds-color-text-on-primary` instead of the old hard `#fff` floor. The
-   count is numeric data — tabular figures keep the pill width stable. */
+/* On-token pair for the error pill: the error fill's own ink, graded per
+   mode. The count is numeric data — tabular figures keep the pill width
+   stable. */
 .rottay-bottom-tab-bar__badge-text[data-part='badge-text'] {
-  color: var(--ds-color-text-on-error, var(--ds-color-text-on-primary));
+  color: var(--ds-color-on-error);
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-variant-numeric: tabular-nums;
   font-weight: 600;

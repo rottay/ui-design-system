@@ -18,11 +18,14 @@ import { describe, expect, it } from 'vitest';
 import { VARIANT_SOLID_TEXT_COLOR_MAP } from '../contracts';
 
 describe('the solid-badge foreground is background-aware, and shared', () => {
-  it('names an on-primary foreground for every solid variant', () => {
-    // A flat #fff here is the defect. Each brand-coloured fill reads an
-    // on-primary token; `default` is a neutral surface, so it reads primary text.
-    for (const variant of ['primary', 'secondary', 'success', 'warning', 'error', 'info'] as const) {
-      expect(VARIANT_SOLID_TEXT_COLOR_MAP[variant]).toMatch(/on-primary|primary-foreground/);
+  it('names the ink its own fill states for every solid variant', () => {
+    // A flat #fff here is the defect, and so is the primary's ink on a status
+    // fill: each tone reads its own on-tone ink. Secondary states none, so it
+    // keeps the on-primary ink; `default` is a neutral surface, so primary text.
+    expect(VARIANT_SOLID_TEXT_COLOR_MAP.primary).toBe('var(--ds-color-primary-foreground)');
+    expect(VARIANT_SOLID_TEXT_COLOR_MAP.secondary).toBe('var(--ds-color-text-on-primary)');
+    for (const tone of ['success', 'warning', 'error', 'info'] as const) {
+      expect(VARIANT_SOLID_TEXT_COLOR_MAP[tone]).toBe(`var(--ds-color-on-${tone})`);
     }
     expect(VARIANT_SOLID_TEXT_COLOR_MAP.default).toBe('var(--ds-color-text-primary)');
   });

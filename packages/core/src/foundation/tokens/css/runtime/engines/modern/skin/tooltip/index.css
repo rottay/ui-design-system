@@ -217,22 +217,28 @@
   --ds-tooltip-ink-current: var(--ds-tooltip-secondary-color, var(--ds-color-text-on-primary));
   --ds-tooltip-edge-current: var(--ds-tooltip-tone-border, transparent);
 }
+/* Secondary states no ink of its own, so the bubble inks by its own surface. */
+@supports (color: contrast-color(red)) {
+  .ds-tooltip-bubble[data-part='bubble'][data-tone='secondary'] {
+    --ds-tooltip-ink-current: contrast-color(var(--ds-tooltip-surface-current));
+  }
+}
 
 .ds-tooltip-bubble[data-part='bubble'][data-tone='success'] {
   --ds-tooltip-surface-current: var(--ds-tooltip-success-bg, var(--ds-color-success));
-  --ds-tooltip-ink-current: var(--ds-tooltip-success-color, var(--ds-color-text-on-primary));
+  --ds-tooltip-ink-current: var(--ds-tooltip-success-color, var(--ds-color-on-success));
   --ds-tooltip-edge-current: var(--ds-tooltip-tone-border, transparent);
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-tone='warning'] {
   --ds-tooltip-surface-current: var(--ds-tooltip-warning-bg, var(--ds-color-warning));
-  --ds-tooltip-ink-current: var(--ds-tooltip-warning-color, var(--ds-color-text-on-primary));
+  --ds-tooltip-ink-current: var(--ds-tooltip-warning-color, var(--ds-color-on-warning));
   --ds-tooltip-edge-current: var(--ds-tooltip-tone-border, transparent);
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-tone='error'] {
   --ds-tooltip-surface-current: var(--ds-tooltip-error-bg, var(--ds-color-error));
-  --ds-tooltip-ink-current: var(--ds-tooltip-error-color, var(--ds-color-text-on-primary));
+  --ds-tooltip-ink-current: var(--ds-tooltip-error-color, var(--ds-color-on-error));
   --ds-tooltip-edge-current: var(--ds-tooltip-tone-border, transparent);
 }
 

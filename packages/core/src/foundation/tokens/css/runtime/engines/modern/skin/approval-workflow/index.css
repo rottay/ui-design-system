@@ -92,17 +92,17 @@
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='approved'] {
   background: var(--ds-color-success);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-success);
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='rejected'] {
   background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='escalated'] {
   background: var(--ds-color-warning);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-warning);
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped'] {
@@ -147,13 +147,13 @@
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve'] {
   background: var(--ds-color-success);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-success);
   border: none;
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject'] {
   background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
   border: none;
 }
 

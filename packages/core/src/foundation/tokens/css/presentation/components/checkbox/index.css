@@ -72,17 +72,17 @@
   /* Success variant */
   --ds-checkbox-success-bg: var(--ds-color-success);
   --ds-checkbox-success-border: var(--ds-color-success);
-  --ds-checkbox-success-check: var(--ds-color-text-on-primary);
+  --ds-checkbox-success-check: var(--ds-color-on-success);
 
   /* Warning variant */
   --ds-checkbox-warning-bg: var(--ds-color-warning);
   --ds-checkbox-warning-border: var(--ds-color-warning);
-  --ds-checkbox-warning-check: var(--ds-color-text-on-primary);
+  --ds-checkbox-warning-check: var(--ds-color-on-warning);
 
   /* Error variant */
   --ds-checkbox-error-bg: var(--ds-color-error);
   --ds-checkbox-error-border: var(--ds-color-error);
-  --ds-checkbox-error-check: var(--ds-color-text-on-primary);
+  --ds-checkbox-error-check: var(--ds-color-on-error);
 
   /* ========================================================================
      STATES
@@ -122,4 +122,11 @@
   --ds-checkbox-focus-ring-width: var(--ds-focus-ring-width);
   --ds-checkbox-focus-ring-offset: var(--ds-focus-ring-offset);
   --ds-checkbox-focus-ring-color: var(--ds-focus-ring-color);
+}
+
+/* Secondary states no ink of its own, so its check inks by its own fill. */
+@supports (color: contrast-color(red)) {
+  :root {
+    --ds-checkbox-secondary-check: contrast-color(var(--ds-checkbox-secondary-bg));
+  }
 }

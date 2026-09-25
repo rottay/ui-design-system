@@ -288,3 +288,18 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+/* The accent is the caller's environment color, so the ink is read against it here. */
+@supports (color: contrast-color(red)) {
+  .ds-pattern-environment-toggle.ds-engine-modern [data-part='badge'] {
+    color: contrast-color(var(--ds-envtoggle-accent));
+  }
+
+  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'][data-active='true'] {
+    color: contrast-color(var(--ds-envtoggle-accent));
+  }
+
+  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true'] {
+    color: contrast-color(var(--ds-envtoggle-accent));
+  }
+}

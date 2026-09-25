@@ -171,13 +171,13 @@
 
 .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve'] {
   background: var(--ds-color-success);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-success);
   border: none;
 }
 
 .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject'] {
   background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-color-on-error);
   border: none;
 }
 
