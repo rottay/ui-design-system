@@ -50,7 +50,6 @@ const CLOSURE_MEMBERS = [
   "packages/core/scripts/check/orchestration",
   "packages/core/scripts/libraries",
   "packages/core/scripts/generate/tokens/manifest/fanout",
-  "packages/core/scripts/generate/tokens/manifest/root-checklists",
   "packages/core/scripts/generate/tokens/customization/surface",
   "packages/core/scripts/generate/tokens/customization/preservation",
   "packages/core/contracts/css/hooks/index.json",

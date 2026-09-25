@@ -1460,6 +1460,13 @@ export const RETIRED_GATES = Object.freeze([
     replacedBy:
       'scripts/check/engine/read-without-producer (a read with no producer is the real defect the checklist '
       + 'gestured at) and scripts/check/theme/artifact-coverage.',
+    producerRemoved:
+      'root-checklists retirement (2026-09-25): the producer itself is deleted, closing the follow-up the '
+      + 'mirror-parity-freshness entry registered. Measured before the cut: zero importers, zero readers of its '
+      + 'artifact (artifacts/generated/manifest/cascade/coverage, gitignored, no longer produced), no CI row; its '
+      + 'only remaining mention was a dead member of the constitution sandbox copy-list. The family bindings it '
+      + 'projected are read live by governance/manifest/bindings through parity-gate/bindings (both directions) '
+      + 'and by the skins evidence drill.',
   },
   {
     id: 'modern-rescue-customization-manifest-freshness',
