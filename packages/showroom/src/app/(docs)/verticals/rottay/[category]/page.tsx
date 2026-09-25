@@ -44,7 +44,7 @@ const PLATFORM_DEMOS: Record<string, CategoryData> = {
       {
         title: 'Profile Settings',
         description: 'Self-service profile editor with avatar upload and MFA configuration.',
-        components: ['FormBuilder', 'FormHeader', 'Upload', 'Switch', 'Input'],
+        components: ['FormBuilder', 'FormHeader', 'Upload', 'Toggle', 'Input'],
       },
       {
         title: 'Session Manager',
@@ -131,7 +131,7 @@ const PLATFORM_DEMOS: Record<string, CategoryData> = {
       {
         title: 'MFA Setup',
         description: 'TOTP setup wizard with QR code, backup codes, and verification step.',
-        components: ['Steps', 'QRCode', 'OTPInput', 'Button', 'Alert'],
+        components: ['Stepper', 'QRCode', 'OTPInput', 'Button', 'Alert'],
       },
       {
         title: 'Password Reset',
@@ -160,7 +160,7 @@ const PLATFORM_DEMOS: Record<string, CategoryData> = {
       {
         title: 'Flag Dashboard',
         description: 'Feature flag overview with status, rollout percentage, and toggle controls.',
-        components: ['PatternDataTable', 'Switch', 'Badge', 'Progress', 'Tooltip'],
+        components: ['PatternDataTable', 'Toggle', 'Badge', 'Progress', 'Tooltip'],
       },
       {
         title: 'Rollout Strategy',

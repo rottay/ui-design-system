@@ -102,7 +102,7 @@ const EVNTO_DEMOS: Record<string, CategoryData> = {
       {
         title: 'Pricing Builder',
         description: 'Dynamic pricing configuration with time-based tiers and bundle options.',
-        components: ['FormBuilder', 'Input', 'Select', 'Switch', 'Card'],
+        components: ['FormBuilder', 'Input', 'Select', 'Toggle', 'Card'],
       },
       {
         title: 'Promo Codes',

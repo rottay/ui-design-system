@@ -44,7 +44,7 @@ const BITHIRE_DEMOS: Record<string, CategoryData> = {
       {
         title: 'Stage Manager',
         description: 'Pipeline stage configuration with ordering, automation rules, and SLA settings.',
-        components: ['FormBuilder', 'Stepper', 'Switch', 'Input', 'Card'],
+        components: ['FormBuilder', 'Stepper', 'Toggle', 'Input', 'Card'],
       },
       {
         title: 'Candidate Quick View',
@@ -136,7 +136,7 @@ const BITHIRE_DEMOS: Record<string, CategoryData> = {
       {
         title: 'Approval Workflow',
         description: 'Position approval chain with reviewer assignments and status tracking.',
-        components: ['Steps', 'Avatar', 'Badge', 'Timeline', 'Button'],
+        components: ['Stepper', 'Avatar', 'Badge', 'Timeline', 'Button'],
       },
     ],
   },
@@ -223,12 +223,12 @@ const BITHIRE_DEMOS: Record<string, CategoryData> = {
       {
         title: 'Stage Transitions',
         description: 'Configurable stage transition rules with guard conditions and auto-actions.',
-        components: ['FormBuilder', 'Select', 'Switch', 'Tag', 'Card'],
+        components: ['FormBuilder', 'Select', 'Toggle', 'Tag', 'Card'],
       },
       {
         title: 'Notification Rules',
         description: 'Event-driven notification configuration with templates and channel routing.',
-        components: ['Table', 'Switch', 'Select', 'Badge', 'Tag'],
+        components: ['Table', 'Toggle', 'Select', 'Badge', 'Tag'],
       },
     ],
   },

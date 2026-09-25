@@ -198,6 +198,10 @@ test('navigation routes every primitive to its registered category', () => {
 
   const missing = entries.filter((entry) => !routes.has(entry.slug)).map((entry) => entry.slug);
   assert.deepEqual(missing, [], 'registered primitive with no sidebar route');
+
+  const registered = new Set(entries.map((entry) => entry.slug));
+  const orphaned = [...routes.keys()].filter((slug) => !registered.has(slug));
+  assert.deepEqual(orphaned, [], 'sidebar route with no registered primitive');
 });
 
 test('no documented tier path names a folder that does not exist', () => {

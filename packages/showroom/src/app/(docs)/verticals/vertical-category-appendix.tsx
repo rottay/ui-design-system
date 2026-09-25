@@ -111,7 +111,7 @@ function inferArchetype(components: string[]) {
       (component) =>
         component.includes('Timeline') ||
         component.includes('Calendar') ||
-        component.includes('Steps'),
+        component.includes('Stepper'),
     )
   ) {
     return 'Process workspace';

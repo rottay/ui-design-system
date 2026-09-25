@@ -127,16 +127,18 @@ test('the partition check rejects an unowned or doubly-owned slug', () => {
  *  to content width, so the stacked rule must state its own cross-axis value. */
 test('the stacked sidebar rule resets the cross-axis alignment it inherits', () => {
   const skin = readFileSync(
-    path.join(REPO, 'packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css'),
+    path.join(REPO, 'packages/core/src/foundation/tokens/css/presentation/components/skin/sidebar-surface/index.css'),
     'utf8',
   );
-  const gridRule = skin.slice(skin.indexOf(".ds-surface.ds-sidebar[data-part='root'] {"));
+  const gridStart = skin.indexOf(".ds-structure.ds-sidebar-surface[data-part='root'] {");
+  assert.ok(gridStart !== -1, 'the grid rule must exist');
+  const gridRule = skin.slice(gridStart, skin.indexOf('}', gridStart));
   assert.ok(
-    /align-items:\s*start/.test(gridRule.slice(0, 260)),
+    /align-items:\s*start/.test(gridRule),
     'the grid rule is expected to set align-items: start; if that changed, revisit this pin',
   );
 
-  const start = skin.indexOf(".ds-surface.ds-sidebar[data-part='root'][data-stacked='true']");
+  const start = skin.indexOf(".ds-structure.ds-sidebar-surface[data-part='root'][data-stacked='true']");
   assert.ok(start !== -1, 'the stacked rule must exist');
   const stacked = skin.slice(start, skin.indexOf('}', start));
   assert.match(stacked, /display:\s*flex/);
