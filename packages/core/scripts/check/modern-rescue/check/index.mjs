@@ -1255,6 +1255,37 @@ function collectHistoricalContractFailures(contracts) {
       errors.push(`program inventory authority ${name} does not exist`);
     }
   }
+  const liveAuthorities = program?.inventoryAuthorities ?? {};
+  const authorityHistory = program?.inventoryAuthorityHistory ?? {};
+  for (const move of authorityHistory.canonicalTreeRelocation ?? []) {
+    const label = `inventory authority relocation ${JSON.stringify(move?.authority ?? null)}`;
+    if (!move?.commit || !move?.reason || !move?.from || !move?.to) {
+      errors.push(`${label} needs from, to, a commit and a reason`);
+      continue;
+    }
+    if (liveAuthorities[move.authority] !== move.to) {
+      errors.push(`${label} moved to ${move.to}, but the live authority reads ${JSON.stringify(liveAuthorities[move.authority] ?? null)}`);
+    }
+    if (existsSync(join(repoRoot, move.from))) {
+      errors.push(`${label} still has a file at its old path ${move.from}`);
+    }
+  }
+  for (const retired of authorityHistory.retirement ?? []) {
+    const label = `retired inventory authority ${JSON.stringify(retired?.authority ?? null)}`;
+    if (!retired?.commit || !retired?.reason || !retired?.path) {
+      errors.push(`${label} needs a path, a commit and a reason`);
+      continue;
+    }
+    if (Object.hasOwn(liveAuthorities, retired.authority)) {
+      errors.push(`${label} is still listed as a live authority`);
+    }
+    if (existsSync(join(repoRoot, retired.path))) {
+      errors.push(`${label} still exists at ${retired.path}`);
+    }
+    if (retired.successor && !existsSync(join(repoRoot, retired.successor))) {
+      errors.push(`${label} names a successor that does not exist: ${retired.successor}`);
+    }
+  }
 
   if (inventory?.denominator !== EXPECTED_FAMILY_TOTAL || inventory?.rows?.length !== EXPECTED_FAMILY_TOTAL) {
     errors.push(`family inventory must contain exactly ${EXPECTED_FAMILY_TOTAL} rows`);

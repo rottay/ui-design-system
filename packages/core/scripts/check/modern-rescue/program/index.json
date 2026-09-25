@@ -77,10 +77,31 @@
     "appHooks": "packages/core/contracts/css/hooks/index.json",
     "capabilities": "packages/core/src/foundation/contracts/composition/tenants/capabilities",
     "themeContracts": "packages/core/src/foundation/contracts/composition/tenants/themes",
-    "staticBrandThemes": "packages/core/src/foundation/tokens/ts/presentation/brand-themes",
     "dbFixtures": "packages/core/tests/fixtures/tenants",
-    "prototypeLedger": "packages/core/governance/tokens/prototypes/index.json",
+    "prototypeLedger": "packages/core/src/foundation/tokens/data/prototypes/index.json",
     "preservation": "packages/core/scripts/generate/tokens/customization/preservation/manifest/index.json"
+  },
+  "inventoryAuthorityHistory": {
+    "canonicalTreeRelocation": [
+      {
+        "authority": "prototypeLedger",
+        "from": "packages/core/governance/tokens/prototypes/index.json",
+        "to": "packages/core/src/foundation/tokens/data/prototypes/index.json",
+        "commit": "8672fb694",
+        "decision": "WO-RET-03",
+        "reason": "governance/tokens moved to its measured home under the token foundation: the prototype ledger is live compiler input, not historical evidence; the file moved with identical content"
+      }
+    ],
+    "retirement": [
+      {
+        "authority": "staticBrandThemes",
+        "path": "packages/core/src/foundation/tokens/ts/presentation/brand-themes",
+        "commit": "d524ec1d6",
+        "decision": "WO-DER-06 D6-2c-ii",
+        "successor": "packages/core/src/foundation/presets",
+        "reason": "the authored first-party themes were retired: a code-owned vertical is the neutral foundation plus its preset document, admitted through the same door every tenant takes"
+      }
+    ]
   },
   "denominators": {
     "visibleFamilies": 252,

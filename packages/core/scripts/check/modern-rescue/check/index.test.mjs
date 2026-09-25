@@ -812,6 +812,49 @@ test("planted invented domain.kind fails closed", () => {
   }
 });
 
+test("a relocated inventory authority is re-proven: the live path follows it and its old path stays empty", () => {
+  const relocation = (copy) => copy.program.inventoryAuthorityHistory.canonicalTreeRelocation[0];
+  expectError(
+    mutated((copy) => { copy.program.inventoryAuthorities.prototypeLedger = relocation(copy).from; }),
+    "the live authority reads",
+    "a live path that did not follow its relocation must fail",
+  );
+  expectError(
+    mutated((copy) => { relocation(copy).from = relocation(copy).to; }),
+    "still has a file at its old path",
+    "a relocation whose old path still holds a file must fail",
+  );
+  expectError(
+    mutated((copy) => { delete relocation(copy).commit; }),
+    "needs from, to, a commit and a reason",
+    "a relocation without its commit must fail",
+  );
+});
+
+test("a retired inventory authority stays retired: not listed, not on disk, successor real", () => {
+  const retirement = (copy) => copy.program.inventoryAuthorityHistory.retirement[0];
+  expectError(
+    mutated((copy) => { copy.program.inventoryAuthorities[retirement(copy).authority] = retirement(copy).successor; }),
+    "is still listed as a live authority",
+    "a retired authority listed again must fail",
+  );
+  expectError(
+    mutated((copy) => { retirement(copy).path = retirement(copy).successor; }),
+    "still exists at",
+    "a retirement whose path still exists must fail",
+  );
+  expectError(
+    mutated((copy) => { retirement(copy).successor = "packages/core/src/no-such-successor"; }),
+    "names a successor that does not exist",
+    "a retirement naming a missing successor must fail",
+  );
+  expectError(
+    mutated((copy) => { delete retirement(copy).reason; }),
+    "needs a path, a commit and a reason",
+    "a retirement without its reason must fail",
+  );
+});
+
 test("manifest deep regression fails closed", () => {
   const target = join(manifestRoot, "families/primitive/inputs/button/index.json");
   const backup = `${target}.t1-test-backup`;
@@ -819,7 +862,7 @@ test("manifest deep regression fails closed", () => {
   try {
     renameSync(target, backup);
     const errors = validateModernRescueContracts(baseline);
-    expectError(errors, "missing family manifest", "deleted family manifest must be reported");
+    expectError(errors, 'familyId "primitive/inputs/button" is not a canonical family id', "a cascade root reaching a deleted family cell must fail");
   } finally {
     if (!restored) {
       renameSync(backup, target);
