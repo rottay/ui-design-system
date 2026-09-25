@@ -1,4 +1,9 @@
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import type { StorybookConfig } from '@storybook/react-vite';
+
+const storybookDir = dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
   "stories": [
@@ -16,10 +21,17 @@ const config: StorybookConfig = {
     return {
       ...config,
       plugins: config.plugins?.filter((plugin) => plugin?.name !== 'vite:dts'),
-      esbuild: {
-        ...config.esbuild,
-        loader: 'tsx',
-        include: /\.tsx?$/,
+      resolve: {
+        ...config.resolve,
+        alias: [
+          ...(Array.isArray(config.resolve?.alias)
+            ? config.resolve.alias
+            : Object.entries(config.resolve?.alias ?? {}).map(([find, replacement]) => ({
+                find,
+                replacement,
+              }))),
+          { find: '@tests', replacement: resolve(storybookDir, '../tests') },
+        ],
       },
       build: {
         ...config.build,
