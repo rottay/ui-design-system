@@ -1,6 +1,6 @@
 {
   "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
-  "updated": "2026-09-23",
+  "updated": "2026-09-25",
   "rules": {
     "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
     "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -5378,6 +5378,11 @@
           "at": "2026-09-24 23:14",
           "by": "kimi-dt",
           "note": "kimi-dt: density wave 1 (paquete 2026-09-24) — data-table NO adopta scopes:[\"density\"] todavia, con razon medida (writer + medida Chromium): la tabla pone su propio data-density en su root, asi que ella ES la frontera; sus rungs -compact/-spacious ya codifican la postura y con el claim el factor local se aplicaria ENCIMA (postura contada dos veces: grip compact 10.75->6.30px, spacious 15.33->21.98px, comfortable inalterado). Ademas el claim enrojece root-resolution.integration.test.ts. DECISION DE FAMILIA PENDIENTE: como convive la postura propia con el factor local de la frontera (p.ej. el deriver deja de codificar postura cuando el claim proyecta, o la familia se exime explicitamente). Hasta esa decision, data-table queda fuera del censo de adopcion por medida, no por omission. charts (WO-FAM-09) queda fuera por no tener canales density-exposed (medido: 0)."
+        },
+        {
+          "at": "2026-09-25 02:25",
+          "by": "kimi-dt",
+          "note": "kimi-dt: density waves 2a+2b+2c CERRADAS (commits 1f17755c7, 8b138bc05, 266199fe9; Fable ACCEPT en las 3). 39 familias adoptan scopes:[\"density\"] esta sesion (2a: 23 one-liners; 2b: 11 con pins medidos — MASKED_ARABIC 1->14, SHADOWED con centinela 77px, UNREACHED por @container auto-referente, FLOORED por piso tactil 44px; 2c: los 6 aliases indirectos se RETIRAN de los derivers por el ruling Fable opcion (c) y las 5 familias adoptan todas-directas). Censo unclaimed [48,342] -> [8,63]. Las 8 restantes tienen exclusion MEDIDA registrada: data-table y popover (doble conteo de postura — decision de familia pendiente, misma clase), pagination (su nav es cuadrado solo en md — decision del duenio), stack (doble conteo medido x0.85^2, el skin re-basa el rung), flex/grid (inertes: --ds-spacing-0 = 0 en toda postura o siempre inline por prop), cockpit-header/edit-header (inertes: el skin re-declara 5/5 y 4/4 — deuda del paint lane, checklist B45). Cada exclusion quedo pineada en los tests para enrojecer cuando la causa se arregle."
         }
       ],
       "doneAt": null,
@@ -6710,6 +6715,11 @@
           "at": "2026-09-24 22:15",
           "by": "kimi-dt",
           "note": "kimi-dt: DIAGNOSTICO MOTION POST-B33 (medido en HEAD 7805ef3fb, arbol limpio, 2 corridas deterministas). La nota \"rojo solo en 2 filas\" valia para el drill, NO para el gate CRA12 completo. Single-repo (--repositories ui-design-system): 4 fallas = gk ds-internal 66>64 (files 15>13, digest) + raw-motion-timing ds-internal digest drift sin crecimiento; el +2 gk = ds-skeleton-pulse/ds-skeleton-wave inline (skeleton/engines/rustic:154/:161, cea31faca WO-FAM-14, autores reales no registrados). Fleet (default): 19 fallas = las 4 + gk test 27>24 + ds-internal 68 + digest showroom + filas de apps (arboles foreign dirty: bithire 20, platform 17, evnto 20 archivos). FINDING NUEVO no nombrado en 7805ef3fb: contaminacion cross-repo — definitionsByName es global entre repos (contracts/motion/index.mjs), un duplicado con un arbol foreign dirty mueve las filas ui-design-system (66->68, test 24->27); los pins nuestros se atan a la corrida single-repo. Snapshot HEAD por git archive + gate single-repo: VERDE. DESPACHADOS EN PARALELO (write-sets disjuntos, 6 condiciones verificadas): M-CLOSE (Opus: cierra STOP-1 320ms widget-board lee el rung, STOP-2 duplicado ds-dropdown-enter con medida de cadena de carga, clasifica el +2 skeleton, re-pin raw-motion-timing con lastMove, registra la contaminacion cross-repo) y B40 (Opus: emision por columna como productor lawful mas barato que el stamp incondicional de data-table ~83B/celda + drill del limite undefined del censo, Fable b12-verdict §3). Auditoria Fable por lote antes de integrar. Receptor de la contaminacion cross-repo: la instrument lane."
+        },
+        {
+          "at": "2026-09-25 02:25",
+          "by": "kimi-dt",
+          "note": "kimi-dt: QUARANTINE SLICE CERRADA (debrief b-prima ejecutado completo): P1 677670244 (la tajada cascade vuelve a governance/manifest/cascade con prueba diff-modulo-sustitucion por artefacto + tabla de retiros retired/index.json + exencion 6c con chequeo lado-catalogo), P2 aa7c41bc2 (constitucion VERDE: relocation/retirement verificados por el checker, no decoracion), P3 dc79aa95f (calibracion del probe en tabla viva governance/manifest/calibration con validacion bidireccional fail-closed contra el catalogo tipado + registros carriedFromSeal con owner), P4 cf038f411 (opcion A rulada: los rosters produces NO son twin de los bindings — premisa del debrief falsa, reconocida por Fable; rótulo honesto medido bindingsProvenance en root-checklists; Packet B = mapa ownership vivo governance/manifest/bindings/ con duenio family-inventory, checklist B44), B35 c9c1d7536 (fence sigue imports a profundidad arbitraria con semilla por forma + escanea scripts/ de raiz; el scanner viejo era fail-open por truncamiento, corregido acoplado captura+semilla). Recepciones nuevas registradas en el checklist: B43 (vocabulario post-D-16 showroom), B44 (Packet B), B45 (deuda paint lane medida por wave 2), B46 (constitucion: active-set desde el catalogo + socket-ownership sigue a B), B47 (rulings de calibracion pendientes), B48 (probe docs/fixture + seeds de extraction), B49 (leftovers wave 2)."
         }
       ]
     },
