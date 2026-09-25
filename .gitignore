@@ -11,6 +11,7 @@ build/
 /out/
 storybook-static/
 packages/core/storybook-static/
+packages/core/artifacts/local/
 packages/core/*.tgz
 packages/core/.bundle-analysis-components/
 
