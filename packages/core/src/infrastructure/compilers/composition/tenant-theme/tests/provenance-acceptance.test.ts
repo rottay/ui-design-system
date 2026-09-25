@@ -643,6 +643,17 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      *   2926 / 3087 / 2926  measured 2026-09-21 on this tree (the 234f8e825 tree)
      * Totals: rottay +2635/-1016, bithire +2644/-840, evnto +2726/-384.
      *
+     * The EVI-02 -> density wave 2c window (measured 2026-09-25, same call, one
+     * isolated `git archive` tree per commit): the 234f8e825 anchor above to
+     * b2cc18aab. Every one of the 42 commits from 73dc36d70 on that touches
+     * core src or this harness was compiled and diffed key by key against its
+     * predecessor; four commits move a key and none of the others moves any.
+     *         +1       +1       +1  d4edd6420  WO-EVI-02 value-safety admits the grammar's dropped channels: --ds-workspace-shell-mask-stop. It sat unpinned under efd93b37a, which named it as the residual +1
+     *        +25       +0      +25  efd93b37a  WO-EVI-02 tint un-gating: --ds-tint-{4,8,12,16,24} and --ds-tint-{success,warning,error,info}-{4,8,12,16,24}. bithire seeds its palette and already emitted them
+     *         +1       +1       +1  643c3588b  WO-INV-03 notification-center's family deriver: --ds-notification-center-touch-target
+     *         -6       -6       -6  266199fe9  density wave 2c retires the six selector aliases: --ds-container-pad, --ds-divider-inset, --ds-sidebar-surface-aside-inline-size, --ds-space-gap, --ds-tabs-responsive-{height,padding}
+     *   2947 / 3083 / 2947  measured 2026-09-25 on the b2cc18aab tree
+     *
      * The D6-2c-ii row is the largest single move this table records and it is
      * measured, not inferred: both legs were compiled with the SAME
      * `lowerTheme` call this test makes, the pre-lot leg on an isolated copy of
@@ -769,7 +780,10 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // residual +1 all three verticals measure over these pins is NOT this
       // lot: it measures at HEAD 73dc36d70 too (rottay 2927, bithire 3088,
       // evnto 2927).
-      rottay: 2951,
+      // EVI-02 -> density wave 2c (measured, 2026-09-25): rottay 2951 -> 2947,
+      // the four rows above: 2951 pinned by efd93b37a, +1 d4edd6420 (the
+      // residual it named), +1 643c3588b, -6 266199fe9.
+      rottay: 2947,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -830,7 +844,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // series. Its constant offset over rottay and evnto therefore moves 159 ->
       // 161: the 157 the D6-2c-ii row records, the two solitary preset moves
       // FAM-10 records, and now these two chart slots.
-      bithire: 3087,
+      // EVI-02 -> density wave 2c (measured, 2026-09-25): bithire 3087 -> 3083,
+      // +1 d4edd6420, +0 efd93b37a (its palette already seeded the tint
+      // scale), +1 643c3588b, -6 266199fe9. The offset over rottay is 136 now:
+      // efd93b37a gave the other two the 25 tint rungs bithire already had.
+      bithire: 3083,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -886,7 +904,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // too: the wave is family chrome and geometry, and the one row that
       // separates a vertical (4def25f24's two chart slots) separates the one
       // preset that authors a categorical series, which is not evnto's.
-      evnto: 2951,
+      // EVI-02 -> density wave 2c (measured, 2026-09-25): evnto 2951 -> 2947,
+      // byte-for-byte rottay's keys on all four rows.
+      evnto: 2947,
     };
     for (const vertical of VERTICALS) {
       expect(
