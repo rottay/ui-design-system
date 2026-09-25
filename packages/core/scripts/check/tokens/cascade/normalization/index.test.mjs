@@ -154,6 +154,45 @@ test('L4(a) — un literal sobre canal cuya raiz ya sabe derivar es sombra; si l
   assert.equal(shadows[0].rootId, 'tier.control.bg');
 });
 
+test('L4(a) — una CSS-wide keyword no es literal pin: no afirma valor, no puede sombrear', () => {
+  const byChannel = new Map(MEMBERSHIP.rows.map((row) => [row.channel, row]));
+  const byRoot = new Map(CATALOG.roots.map((root) => [root.rootId, root]));
+  for (const keyword of ['initial', 'inherit', 'unset', 'revert', 'revert-layer', ' INHERIT ']) {
+    const shadows = findShadowingPins({
+      literalPins: [{ channel: '--ds-control-bg', value: keyword, file: 'a.css', line: 1 }],
+      membershipByChannel: byChannel, rootById: byRoot,
+    });
+    assert.deepEqual(shadows, [], `${JSON.stringify(keyword)} conto como sombra`);
+  }
+  const real = findShadowingPins({
+    literalPins: [
+      { channel: '--ds-control-bg', value: 'inherit', file: 'a.css', line: 1 },
+      { channel: '--ds-control-bg', value: 'inherited', file: 'a.css', line: 2 },
+      { channel: '--ds-control-bg', value: '#ffffff', file: 'a.css', line: 3 },
+    ],
+    membershipByChannel: byChannel, rootById: byRoot,
+  });
+  assert.deepEqual(real.map((shadow) => shadow.site), ['a.css:2', 'a.css:3']);
+});
+
+test('L4(a) — sobre el arbol real, la keyword de borders:29 queda fuera y un pin real plantado ahi SI cuenta', () => {
+  const live = readTree();
+  const site = 'packages/core/src/foundation/tokens/css/foundation/base/borders/index.css:29';
+  const keywordPin = live.literalPins.find((pin) => `${pin.file}:${pin.line}` === site);
+  assert.equal(keywordPin?.channel, '--ds-radius-button');
+  assert.equal(keywordPin.value, 'initial');
+  const baseline = analyse(live).counters.shadowingLiteralPins;
+  assert.ok(!analyse(live).shadows.some((shadow) => shadow.site === site));
+
+  const withInherit = live.literalPins.map((pin) => (pin === keywordPin ? { ...pin, value: 'inherit' } : pin));
+  assert.equal(analyse({ ...live, literalPins: withInherit }).counters.shadowingLiteralPins, baseline);
+
+  const withLiteral = live.literalPins.map((pin) => (pin === keywordPin ? { ...pin, value: '8px' } : pin));
+  const planted = analyse({ ...live, literalPins: withLiteral });
+  assert.equal(planted.counters.shadowingLiteralPins, baseline + 1);
+  assert.ok(planted.shadows.some((shadow) => shadow.site === site && shadow.rootId === 'radius.base'));
+});
+
 /* ── 6. L5: la superficie del tenant no se achica ───────────────────────── */
 
 test('L5 — achicar el allowlist falla', () => {

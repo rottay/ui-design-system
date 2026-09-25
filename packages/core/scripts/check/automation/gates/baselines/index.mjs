@@ -84,17 +84,6 @@ export const WIDENINGS = Object.freeze([
       'F-75: `maxSourceBytes` was raised once by name for the conn2 lot (+226 measured bytes on ./runtime/tenant-theme). '
       + 'The record is kept verbatim rather than rewritten; what is closed here is the next silent one.',
   },
-  {
-    id: 'normalization-contract',
-    owner: 'WO-DER-06 (derivation carril), WO-FAM-10 (the wave that landed the re-attribution)',
-    reason:
-      '2026-09-18 (DT re-pin sweep after the FAM-10 wave, bfcac0099): shadowingLiteralPins rose 4 -> 7 '
-      + 'through the governed --write-baseline --reattribution door, authorized by name in the sweep commit: '
-      + '--ds-motion-intensity now roots at motion.intensity with a derivation law '
-      + '(foundation/animations/transitions + the compiled copies in runtime/engines/modern/compiled), so the '
-      + 'pins that name it are coverage gained, not regression. The record is kept verbatim rather than '
-      + 'rewritten; decrease-only from here.',
-  },
 ]);
 
 /**

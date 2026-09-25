@@ -3,8 +3,8 @@
   "law": "decrece-solo, sin excepcion tacita. Jamas se re-ancla un hallazgo nuevo.",
   "counters": {
     "shadowingLiteralPins": {
-      "value": 8,
-      "reason": "re-atribucion por cobertura ganada, un solo mover: 36d135d44 (fix(tokens): let the button silhouette decision reach the painted corner, 2026-09-14) hizo que --ds-radius-button GANE raiz -- radius.base por declared-fallback en framework-token-projection:43 -- y escribio en foundation/base/borders:29 el valor initial, que NO decide silueta: deja ganar la rampa por tamano (el anti-sombra del propio commit). La membresia regenerada (03a8e0b2a) publico esa raiz: shadowingLiteralPins 7 -> 8 con el pin nuevo --ds-radius-button @ borders:29; no hay fuente que arreglar. La misma raiz, llevada al inventario de slots regenerado, deja bithire:THEME.surfaces.radiusScale abarcando dos raices (control.ratio.radius + radius.base) y sin rootId: el grupo bithire|control.ratio.radius se disuelve por atribucion, no por colapso -- divergentGroups 1 -> 0, divergentSlots 2 -> 0."
+      "value": 7,
+      "reason": "decrece-solo, un solo caso retirado: las CSS-wide keywords (initial/inherit/unset/revert/revert-layer) no son literal pins -- no afirman valor y no pueden sombrear una seed. findShadowingPins las excluye (isCssWideKeyword). Sale --ds-radius-button -> radius.base (declared-fallback) @ foundation/base/borders:29, cuyo valor initial es el estado no-declarado que deja ganar la rampa por tamano (36d135d44); era el falso positivo del extractor que la re-atribucion 7 -> 8 dejo nombrado. shadowingLiteralPins 8 -> 7; los otros 7 pines no se movieron. La declaracion sigue siendo sitio productor para producers: la ley vive en el consumidor de sombra, no en el extractor de edges."
     },
     "divergentGroups": {
       "value": 0,
@@ -19,7 +19,6 @@
     "shadowingLiteralPins": [
       "--ds-motion-duration-scale -> motion.duration (head-exact) @ packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:97",
       "--ds-motion-intensity -> motion.intensity (head-exact) @ packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:120",
-      "--ds-radius-button -> radius.base (declared-fallback) @ packages/core/src/foundation/tokens/css/foundation/base/borders/index.css:29",
       "--ds-state-hover-shift -> state.delta.hover (head-exact) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:855",
       "--ds-state-disabled-opacity -> state.delta.disabled (head-exact) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:857",
       "--ds-color-bg-input -> tier.control.bg (declared-fallback) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2042",
@@ -28,6 +27,6 @@
     ],
     "divergentGroupsTop": []
   },
-  "lastMove": "re-atribucion por cobertura ganada, un solo mover: 36d135d44 (fix(tokens): let the button silhouette decision reach the painted corner, 2026-09-14) hizo que --ds-radius-button GANE raiz -- radius.base por declared-fallback en framework-token-projection:43 -- y escribio en foundation/base/borders:29 el valor initial, que NO decide silueta: deja ganar la rampa por tamano (el anti-sombra del propio commit). La membresia regenerada (03a8e0b2a) publico esa raiz: shadowingLiteralPins 7 -> 8 con el pin nuevo --ds-radius-button @ borders:29; no hay fuente que arreglar. La misma raiz, llevada al inventario de slots regenerado, deja bithire:THEME.surfaces.radiusScale abarcando dos raices (control.ratio.radius + radius.base) y sin rootId: el grupo bithire|control.ratio.radius se disuelve por atribucion, no por colapso -- divergentGroups 1 -> 0, divergentSlots 2 -> 0.",
-  "lastMoveKind": "re-atribucion (subida autorizada por nombre)"
+  "lastMove": "decrece-solo, un solo caso retirado: las CSS-wide keywords (initial/inherit/unset/revert/revert-layer) no son literal pins -- no afirman valor y no pueden sombrear una seed. findShadowingPins las excluye (isCssWideKeyword). Sale --ds-radius-button -> radius.base (declared-fallback) @ foundation/base/borders:29, cuyo valor initial es el estado no-declarado que deja ganar la rampa por tamano (36d135d44); era el falso positivo del extractor que la re-atribucion 7 -> 8 dejo nombrado. shadowingLiteralPins 8 -> 7; los otros 7 pines no se movieron. La declaracion sigue siendo sitio productor para producers: la ley vive en el consumidor de sombra, no en el extractor de edges.",
+  "lastMoveKind": "decrece-solo"
 }

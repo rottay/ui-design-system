@@ -127,10 +127,19 @@ export function checkContractShape(contractSource) {
   return findings;
 }
 
+/* Una CSS-wide keyword no afirma valor y no puede sombrear una seed. Para `producers`
+ * la misma declaracion si es sitio productor, por eso la ley vive aca y no en el extractor. */
+export const CSS_WIDE_KEYWORDS = Object.freeze(['initial', 'inherit', 'unset', 'revert', 'revert-layer']);
+
+export function isCssWideKeyword(value) {
+  return CSS_WIDE_KEYWORDS.includes(String(value ?? '').trim().toLowerCase());
+}
+
 /** L4(a): literal del CSS autorado sobre un canal cuya raiz ya sabe derivar. */
 export function findShadowingPins({ literalPins, membershipByChannel, rootById }) {
   const shadows = [];
   for (const pin of literalPins) {
+    if (isCssWideKeyword(pin.value)) continue;
     const member = membershipByChannel.get(pin.channel);
     if (!member?.rootId) continue;
     const root = rootById.get(member.rootId);
