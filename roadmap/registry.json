@@ -5083,7 +5083,7 @@
       "lane": "family-cuts",
       "order": 9,
       "size": "XL",
-      "status": "in-progress",
+      "status": "done",
       "dependsOn": [
         "WO-FAM-00",
         "WO-DER-02",
@@ -5388,10 +5388,15 @@
           "at": "2026-09-25 13:30",
           "by": "kimi-dt",
           "note": "kimi-dt: RULING DE POSTURA (forma A, medicion b49-posture-measurement.md): data-table y popover NO adoptan density — quedan como DENSITY_EXEMPT ejecutable (ccc54d7b2). data-table siempre es su propia frontera (stampa data-density siempre) y un claim mataria los overrides crudos de tenant aun en reposo (13.05 vs 99px); popover seria inerte (14 celdas x 2 verticales identicas) pero hostil a overrides. El censo nombra las 8 restantes con razon+owner. B45 drenado (802aa2120): los 5 defectos medidos de skins fixeados con oraculo (form-header 12.73px, detail-header 14.98px, table ratio 0.85 una vez, shortcuts-overlay por margin del dialog, stack claimant 42 con reposo byte-igual)."
+        },
+        {
+          "at": "2026-09-25 16:00",
+          "by": "kimi-dt",
+          "note": "kimi-dt: WO-FAM-08 CERRADA. Close audit completa (7 brazos verdes + axe drenado): RWP por adjudicacion, hardcodes 0, census adjudicado, causalidad 163/163, AXE_DEBT 18/18 vacio tras 7abe19e52, rottay-* 0, adapt completo, skeletons limpio. Los rojos restantes del family-cut gate son filas de OTROS cuts (transfer/date-picker/time-picker) con duenio propio — el cierre cita las 18 filas FAM-08, no el gate entero. Queda registrado: la migracion app-side de ds-table-density-* en la ventana R1 autorizada, y el par near-black on-primary de rottay/evnto light como packet propio."
         }
       ],
-      "doneAt": null,
-      "evidence": null
+      "doneAt": "2026-09-25",
+      "evidence": "Close audit 2026-09-25 (fam08-close-audit.md, Opus) + drenaje final: brazo 1 RWP verde por adjudicacion (33 reads vocabulario ajeno con duenio D17; los unicos nombres propios --ds-widget-board-layout-x/y producidos inline en runtime; ratchet global OK 494/4824 + sharedPaint/componentInline); brazo 2 colorLiteralsInSkin=0 en las 18; brazo 3 contract census con todos los residuos adjudicados (list-toolbar: filter-chip no-activable, ocurrencia literal en statesNotComposed, 8/9 partes con credito del kernel Button — fe9a0ab42); brazo 4 causalidad 18/18 suites 163/163; brazo 5 AXE_DEBT 18/18 mapas vacios (los 4 nodos drenados en 7abe19e52 con su excepcion medida nombrada); brazo 6 rottay-* = 0 en 62 fuentes (ds-table-density-* es namespace ds- y queda hasta la migracion app-side R1 autorizada); brazo 7 adapt: data-table adapt-slot completo (charts es de FAM-09); brazo 8 skeletons: anatomy-derived sin hallazgos en las 18 (los rojos del gate son partes de transfer/date-picker/time-picker, de sus propios cuts). Rulings del cierre: postura forma A para data-table/popover como DENSITY_EXEMPT (ccc54d7b2), B45 drenado (802aa2120), denominadores re-leidos con movers (0735a88fa), notifier fuera del roster por ontologia (61a2414b8+0735a88fa)."
     },
     {
       "id": "WO-FAM-09",
