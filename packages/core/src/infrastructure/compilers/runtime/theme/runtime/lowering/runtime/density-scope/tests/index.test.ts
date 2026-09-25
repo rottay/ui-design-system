@@ -69,12 +69,71 @@ const MASKED_ARABIC: Readonly<Record<string, string>> = {
     "the tab button's only read site is overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
 };
 
+/** Families that read the density axis and must NOT claim it, each with the measured reason. */
+const DENSITY_EXEMPT: Readonly<Record<string, string>> = {
+  "data-table":
+    "always its own boundary (the engine stamps data-density on every table, comfortable by default) and its posture PICKS the control-size/drag-grip rung, so the posture counts once; a claim would re-scale that rung (grip compact 10.75px -> 6.30px bithire) and kill every raw-root tenant override even at rest (13.05px painted, not the stated 99px), and the single-channel or unscaled-rung re-expressions move posture paint or retire 4 published hooks",
+  popover:
+    "a claim is paint-inert (identical on 14 cells x 2 verticals: the title rungs read presentation-sheet inputs frozen at :root) yet would outrank a tenant's raw-root rung override on any surface carrying its own posture; the frozen :root inputs are the real blocker to local scaling",
+};
+
+/** Families that read the density axis, are not claimed yet, and are not exempt: each names why and who moves it. */
+const DENSITY_PENDING: Readonly<Record<string, { readonly reason: string; readonly owner: string }>> = {
+  flex: {
+    reason: "inert: its three channels read --ds-spacing-0, which every posture re-declares as 0, and any non-zero gap is written inline by the prop",
+    owner: "inert by measurement",
+  },
+  grid: {
+    reason: "inert: the engine always writes the effective gap inline (--ds-grid-gap for a preset, gap for a measure), so the theme channel never paints",
+    owner: "inert by measurement",
+  },
+  "cockpit-header": {
+    reason: "its skin re-declares 5 of its 5 density channels on the root, so no root or boundary statement reaches a read site",
+    owner: "paint lane: the skin re-declarations",
+  },
+  "edit-header": {
+    reason: "its skin re-declares 4 of its 4 density channels on the root, so no root or boundary statement reaches a read site",
+    owner: "paint lane: the skin re-declarations",
+  },
+  pagination: {
+    reason: "its nav inline-size is an alias of the md height, square only in md; retiring it or reading the current height is a family decision (retire vs repaint sm/lg)",
+    owner: "family owner decision: nav square only in md",
+  },
+};
+
+/** Every way the unclaimed families and the two registries can disagree; empty when the roster is the law. */
+function rosterViolations(
+  unclaimedFamilies: readonly string[],
+  exempt: Readonly<Record<string, string>> = DENSITY_EXEMPT,
+  pending: Readonly<Record<string, { readonly reason: string; readonly owner: string }>> = DENSITY_PENDING
+): string[] {
+  const violations: string[] = [];
+  const unclaimed = new Set(unclaimedFamilies);
+  for (const family of unclaimed) {
+    if (!(family in exempt) && !(family in pending)) violations.push(`${family} is unclaimed and named nowhere`);
+  }
+  for (const family of new Set([...Object.keys(exempt), ...Object.keys(pending)])) {
+    if (!unclaimed.has(family)) violations.push(`${family} is named but is not an unclaimed density family`);
+    if (family in exempt && family in pending) violations.push(`${family} is both exempt and pending`);
+  }
+  for (const [family, reason] of Object.entries(exempt)) {
+    if (!reason.trim()) violations.push(`${family} is exempt without a reason`);
+  }
+  for (const [family, { reason, owner }] of Object.entries(pending)) {
+    if (!reason.trim()) violations.push(`${family} is pending without a reason`);
+    if (!owner.trim()) violations.push(`${family} is pending without an owner`);
+  }
+  return violations;
+}
+
+const NAMED = new Set([...Object.keys(DENSITY_EXEMPT), ...Object.keys(DENSITY_PENDING)]);
+
 const VERTICALS = ["bithire", "rottay", "evnto"] as const;
 
-function roster(vertical: (typeof VERTICALS)[number]) {
+function roster(vertical: (typeof VERTICALS)[number], derivers: readonly FamilyDeriver[] = FAMILY_DERIVERS) {
   const { channels, provenance } = runDerivation(
     buildLoweringContext({ theme: firstPartyFixture(vertical) }),
-    FAMILY_DERIVERS
+    derivers
   );
   const family = (channel: string) => provenance.get(channel)?.family ?? "";
   const density = densityScopeExposed(channels);
@@ -88,13 +147,27 @@ function roster(vertical: (typeof VERTICALS)[number]) {
       .filter(([, value]) => referencedNames(value).some((name) => ARABIC_AXIS.has(name)))
       .map(([channel]) => channel)
   );
-  const claimed = new Set(FAMILY_DERIVERS.filter(claimsDensityScope).map((deriver) => deriver.family));
+  const claimed = new Set(derivers.filter(claimsDensityScope).map((deriver) => deriver.family));
   const unclaimed = [...density].filter((channel) => !claimed.has(family(channel)));
-  return { channels, family, density, direct, arabic, claimed, unclaimed };
+  const unclaimedFamilies = [...new Set(unclaimed.map(family))];
+  const namedChannels = [...density].filter((channel) => NAMED.has(family(channel))).length;
+  return { channels, family, density, direct, arabic, claimed, unclaimed, unclaimedFamilies, namedChannels };
 }
 
 const familiesOf = (channels: Iterable<string>, family: (channel: string) => string) =>
   new Set([...channels].map(family)).size;
+
+/** An unclaimed family that reads the density axis and that no registry names. */
+const UNNAMED_PROBE: FamilyDeriver = {
+  family: "probe-unnamed",
+  rank: "derived",
+  consumes: [],
+  produces: ["--ds-probe-unnamed-gap", "--ds-probe-unnamed-size"],
+  derive: () => ({
+    "--ds-probe-unnamed-gap": "var(--ds-spacing-2)",
+    "--ds-probe-unnamed-size": "calc(2rem * var(--ds-density-effective-scale, 1))",
+  }),
+};
 
 describe("density-scope roster", () => {
   it("keys the boundary on exactly the postures base/density spells", () => {
@@ -118,18 +191,68 @@ describe("density-scope roster", () => {
 
   it("measures the same roster on every first-party vertical", () => {
     const census = VERTICALS.map((vertical) => {
-      const { density, direct, arabic, unclaimed, family } = roster(vertical);
+      const { density, direct, arabic, unclaimed, family, namedChannels } = roster(vertical);
       return {
         density: [familiesOf(density, family), density.size],
         direct: direct.size,
         arabic: [familiesOf(arabic, family), arabic.size],
         unclaimed: [familiesOf(unclaimed, family), unclaimed.length],
+        named: [NAMED.size, namedChannels],
       };
     });
     expect(census[1]).toEqual(census[0]);
     expect(census[2]).toEqual(census[0]);
-    // The census the next claims drain: every claim moves `unclaimed` down.
-    expect(census[0]).toEqual({ density: [49, 344], direct: 343, arabic: [13, 23], unclaimed: [8, 63] });
+    // What is unclaimed is exactly what the two registries name, family for family and channel for channel.
+    expect(census[0]).toEqual({
+      density: [49, 344],
+      direct: 343,
+      arabic: [13, 23],
+      unclaimed: census[0].named,
+      named: census[0].named,
+    });
+  });
+
+  it("the unclaimed families are exactly the exempt and the named pending ones, each with its reason", () => {
+    expect(Object.keys(DENSITY_EXEMPT).sort()).toEqual(["data-table", "popover"]);
+    for (const vertical of VERTICALS) {
+      const { unclaimedFamilies } = roster(vertical);
+      expect(unclaimedFamilies.sort()).toEqual([...Object.keys(DENSITY_EXEMPT), ...Object.keys(DENSITY_PENDING)].sort());
+      expect(rosterViolations(unclaimedFamilies)).toEqual([]);
+    }
+  });
+
+  it("drill: an unclaimed density family neither exempt nor pending breaks the law, and its channels break the count", () => {
+    const lawful = roster("bithire");
+    const probed = roster("bithire", [...FAMILY_DERIVERS, UNNAMED_PROBE]);
+    expect(probed.unclaimedFamilies).toContain("probe-unnamed");
+    expect(rosterViolations(probed.unclaimedFamilies)).toEqual([
+      "probe-unnamed is unclaimed and named nowhere",
+      ...rosterViolations(lawful.unclaimedFamilies),
+    ]);
+    expect(probed.unclaimed.length - probed.namedChannels).toBe(
+      lawful.unclaimed.length - lawful.namedChannels + UNNAMED_PROBE.produces.length
+    );
+  });
+
+  it("drill: an empty reason or owner in either registry breaks the law, and so does a name that is claimed or not density-exposed", () => {
+    const { unclaimedFamilies } = roster("bithire");
+    const base = rosterViolations(unclaimedFamilies);
+    const added = (violations: string[]) => violations.filter((violation) => !base.includes(violation));
+    expect(added(rosterViolations(unclaimedFamilies, { ...DENSITY_EXEMPT, popover: " " }))).toEqual([
+      "popover is exempt without a reason",
+    ]);
+    expect(
+      added(rosterViolations(unclaimedFamilies, DENSITY_EXEMPT, { ...DENSITY_PENDING, grid: { reason: "", owner: "inert by measurement" } }))
+    ).toEqual(["grid is pending without a reason"]);
+    expect(
+      added(rosterViolations(unclaimedFamilies, DENSITY_EXEMPT, { ...DENSITY_PENDING, grid: { reason: "inert", owner: "" } }))
+    ).toEqual(["grid is pending without an owner"]);
+    expect(added(rosterViolations(unclaimedFamilies, { ...DENSITY_EXEMPT, toolbar: "claimed" }))).toEqual([
+      "toolbar is named but is not an unclaimed density family",
+    ]);
+    expect(added(rosterViolations(unclaimedFamilies, { ...DENSITY_EXEMPT, grid: "twice" }))).toEqual([
+      "grid is both exempt and pending",
+    ]);
   });
 
   it("projects every density-exposed channel of a claiming family, and only those", () => {
@@ -144,7 +267,7 @@ describe("density-scope roster", () => {
     }
   });
 
-  it("the claimants are the forty-one adopting families, and their arabic-axis channels are named masked pins", () => {
+  it("the claimants are the forty-two adopting families, and their arabic-axis channels are named masked pins", () => {
     expect(FAMILY_DERIVERS.filter(claimsDensityScope).map((deriver) => deriver.family)).toEqual([
       "textarea", "menu", "tabs", "breadcrumb", "stepper", "sidebar-surface", "form-header",
       "workbench-header", "section-frame", "mobile-header", "stats-header", "surface-lifecycle",
@@ -152,7 +275,7 @@ describe("density-scope roster", () => {
       "search-command-bar", "surface-chrome", "collection-header", "dashboard-header",
       "detail-header", "form-surface", "wizard-surface", "detail-form-surface", "card", "table",
       "tag", "badge", "tree", "kanban-board", "widget-board", "column-settings", "filter-panel",
-      "toolbar", "descriptions", "container", "space", "divider", "collapse", "splitter",
+      "toolbar", "descriptions", "container", "space", "divider", "stack", "collapse", "splitter",
     ]);
     for (const vertical of VERTICALS) {
       const { arabic, family, claimed } = roster(vertical);
