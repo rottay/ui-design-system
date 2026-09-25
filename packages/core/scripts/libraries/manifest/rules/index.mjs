@@ -75,8 +75,9 @@ export const SCRATCH_CHANNEL = /(-resolved-|-resolved$|-computed-|-computed$|-ef
 
 /**
  * CASCADA: validate one authored root file (governance/manifest/cascade/roots/<id>/index.json).
- * socketOwnership: Map<channelId, { owner: controlId, families: Set<familyId> }>
- * built from families internalChannels (semanticOwner edges).
+ * socketOwnership: optional Map<channelId, { owner: controlId, families: Set<familyId> }>. When
+ * given, terminalReach must equal the edges it assigns to this root both ways; when absent, the
+ * clause does not run (the constitution retired it, see SOCKET_OWNERSHIP_RETIREMENT).
  */
 export function validateCascadeRoot(doc, {
   label,
@@ -229,7 +230,7 @@ export function validateCascadeRoot(doc, {
     if (!isNonEmptyString(t?.channelId) || !t.channelId.startsWith('--_ds-')) errors.push(`${where} channelId must be a --_ds- family socket`);
     if (t?.channelId && SCRATCH_CHANNEL.test(t.channelId)) errors.push(`${where} channel ${t.channelId} carries a scratch marker and is not a customization socket (R5)`);
     if (!familyIds.has(t?.familyId)) errors.push(`${where} familyId ${JSON.stringify(t?.familyId ?? null)} is not a canonical family id`);
-    if (t?.channelId && t?.familyId) {
+    if (socketOwnership && t?.channelId && t?.familyId) {
       reachSet.add(`${t.familyId} ${t.channelId}`);
       const own = socketOwnership.get(t.channelId);
       if (!own || own.owner !== doc.rootId || !own.families.has(t.familyId)) {
@@ -237,7 +238,7 @@ export function validateCascadeRoot(doc, {
       }
     }
   });
-  for (const [channelId, own] of socketOwnership) {
+  for (const [channelId, own] of socketOwnership ?? []) {
     if (own.owner !== doc.rootId) continue;
     if (SCRATCH_CHANNEL.test(channelId)) continue;
     for (const fam of own.families) {

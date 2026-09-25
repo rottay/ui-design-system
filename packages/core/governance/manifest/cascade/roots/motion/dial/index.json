@@ -754,11 +754,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-switch-transition-duration",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-toggle-checked-hover-filter",
       "familyId": "primitive/inputs/toggle",
       "state": "PRESCRIPCION"
@@ -976,11 +971,6 @@
     {
       "channelId": "--_ds-stepper-transition-duration",
       "familyId": "primitive/navigation/stepper",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-transition-duration",
-      "familyId": "primitive/navigation/steps",
       "state": "PRESCRIPCION"
     },
     {

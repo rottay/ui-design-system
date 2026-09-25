@@ -975,11 +975,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-steps-radius",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-alert-dialog-radius",
       "familyId": "primitive/overlay/alert-dialog",
       "state": "PRESCRIPCION"

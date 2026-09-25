@@ -227,11 +227,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-steps-control-radius",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-tabs-badge-radius",
       "familyId": "primitive/navigation/tabs",
       "state": "PRESCRIPCION"

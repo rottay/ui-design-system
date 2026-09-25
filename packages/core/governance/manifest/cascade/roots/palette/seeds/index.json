@@ -4032,36 +4032,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-switch-checked-bg",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-checked-bg-hover",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-label-color",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-thumb-bg",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-unchecked-bg",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-unchecked-bg-hover",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-tag-input-bg",
       "familyId": "primitive/inputs/tag-input",
       "state": "PRESCRIPCION"
@@ -5024,101 +4994,6 @@
     {
       "channelId": "--_ds-stepper-subtitle-color",
       "familyId": "primitive/navigation/stepper",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-active-indicator",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-connector-color",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-description-color",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-disabled-description-color",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-disabled-label-color",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-icon-color",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-bg",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-bg-process",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-border",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-border-process",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-color",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-color-error",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-color-finish",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-color-process",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-label-color",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-label-color-error",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-label-color-hover",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-label-color-wait",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-subtitle-color",
-      "familyId": "primitive/navigation/steps",
       "state": "PRESCRIPCION"
     },
     {

@@ -1577,26 +1577,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-steps-focus-ring-color",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-focus-ring-color",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-focus-ring-offset",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-focus-ring-width",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-table-border-width",
       "familyId": "primitive/display/table",
       "state": "PRESCRIPCION"

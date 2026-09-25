@@ -52,6 +52,66 @@ const THEME_CATALOG_SOURCE_REL = 'packages/core/src/contracts/theme/runtime/cata
 /** The probe's calibration table, whose `uncalibrated.ids` registers the catalog rows nothing calibrates yet. */
 const CALIBRATION_REL = 'packages/core/governance/manifest/calibration/index.json';
 
+/**
+ * The socket-ownership leg is retired from the live run. It compared two authored lists (the
+ * sealed families' `internalChannels` edges and the live roots' `terminalReach`) and never
+ * compared either with paint; `validateCascadeRoot` keeps the clause for callers that hand it a
+ * synthetic `socketOwnership`, which the drills do.
+ */
+export const SOCKET_OWNERSHIP_RETIREMENT = Object.freeze({
+  retiredOn: '2026-09-25',
+  bornIn: '1d474eefe (2026-08-18)',
+  reason:
+    'it compares two authored lists: the sealed families\' internalChannels edges and the live roots\' '
+    + 'terminalReach mirror of them. The live data is not derived from this source, and neither list is '
+    + 'compared with paint. It never fired from 1d474eefe (2026-08-18) to its retirement.',
+  lastLiveCensus: Object.freeze({
+    sealedEdges: 4092,
+    terminalReachEntries: 4073,
+    prescribed: 4071,
+    absentFromSrc: 4050,
+    deadEntries: Object.freeze({ 'primitive/navigation/steps': 40, 'primitive/inputs/switch': 22 }),
+    deadEntriesTotal: 62,
+    deadEntriesDisposition:
+      'removed from the live roots in the retirement commit: the merges e31c1174e and 1ddfd6198 deleted '
+      + 'those families\' files, and the leg that read the entries retires in the same commit',
+    movers: Object.freeze([
+      'e31c1174e (Switch merged into Toggle, D-16 WO-FAM-01)',
+      '1ddfd6198 (Steps merged into Stepper, D-16 WO-FAM-05)',
+    ]),
+  }),
+});
+
+/** Every field of a retirement record that is missing or empty, as sentences. */
+export function socketOwnershipRetirementFailures(record) {
+  const failures = [];
+  const nonEmpty = (value) => typeof value === 'string' && value.trim().length > 0;
+  for (const field of ['retiredOn', 'bornIn', 'reason']) {
+    if (!nonEmpty(record?.[field])) failures.push(`SOCKET_OWNERSHIP_RETIREMENT.${field} must be a non-empty string`);
+  }
+  const census = record?.lastLiveCensus;
+  if (!nonEmpty(census?.deadEntriesDisposition)) {
+    failures.push('SOCKET_OWNERSHIP_RETIREMENT.lastLiveCensus.deadEntriesDisposition must be a non-empty string');
+  }
+  for (const field of ['sealedEdges', 'terminalReachEntries', 'prescribed', 'absentFromSrc', 'deadEntriesTotal']) {
+    if (!Number.isInteger(census?.[field]) || census[field] <= 0) {
+      failures.push(`SOCKET_OWNERSHIP_RETIREMENT.lastLiveCensus.${field} must be a positive integer`);
+    }
+  }
+  const dead = census?.deadEntries;
+  const deadCounts = dead && typeof dead === 'object' ? Object.values(dead) : [];
+  if (deadCounts.length === 0 || deadCounts.some((n) => !Number.isInteger(n) || n <= 0)) {
+    failures.push('SOCKET_OWNERSHIP_RETIREMENT.lastLiveCensus.deadEntries must name each dead family with a positive count');
+  } else if (deadCounts.reduce((sum, n) => sum + n, 0) !== census.deadEntriesTotal) {
+    failures.push('SOCKET_OWNERSHIP_RETIREMENT.lastLiveCensus.deadEntries must sum to deadEntriesTotal');
+  }
+  const movers = census?.movers;
+  if (!Array.isArray(movers) || movers.length === 0 || !movers.every((m) => nonEmpty(m) && /^[0-9a-f]{7,40}\b/u.test(m))) {
+    failures.push('SOCKET_OWNERSHIP_RETIREMENT.lastLiveCensus.movers must list the commits that removed the dead families');
+  }
+  return failures;
+}
+
 const FILES = {
   agents: 'AGENTS.md',
   claude: 'CLAUDE.md',
@@ -541,21 +601,10 @@ function collectTextualFailures(contracts) {
   if (!existsSync(cascadeDir)) {
     failures.push(`${CASCADE_ROOTS_REL} is missing: every active control needs its cascade root`);
   } else {
-    const famDir = join(repoRoot, MANIFEST_DIR, 'families');
-    const famIds = new Set();
-    const socketOwnership = new Map();
-    for (const pathname of indexJsonFiles(famDir)) {
-      const famId = semanticId(famDir, pathname);
-      famIds.add(famId);
-      const doc = readJson(relative(repoRoot, pathname));
-      for (const cell of doc?.themeControls ?? []) {
-        for (const edge of cell?.internalChannels ?? []) {
-          if (!edge?.channelId || !String(edge.channelId).startsWith('--_ds-')) continue;
-          const own = socketOwnership.get(edge.channelId) ?? { owner: edge.semanticOwner, families: new Set() };
-          own.families.add(famId);
-          socketOwnership.set(edge.channelId, own);
-        }
-      }
+    failures.push(...socketOwnershipRetirementFailures(SOCKET_OWNERSHIP_RETIREMENT));
+    const famIds = new Set((contracts.inventory?.rows ?? []).map((row) => row?.id).filter(Boolean));
+    if (famIds.size === 0) {
+      failures.push('the live family inventory is unreadable: no cascade terminalReach family can be resolved');
     }
     const cascadeControlsDir = join(repoRoot, MANIFEST_DIR, 'controls');
     const controlRecords = readManifestRecords(cascadeControlsDir, 'controlId');
@@ -576,7 +625,6 @@ function collectTextualFailures(contracts) {
           controlTier: control?.tier ?? null,
           controlDomain: control?.domain ?? null,
           familyIds: famIds,
-          socketOwnership,
         }),
       );
     }

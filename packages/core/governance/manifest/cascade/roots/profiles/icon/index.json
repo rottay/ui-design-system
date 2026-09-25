@@ -505,11 +505,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-steps-icon-fill-mode",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-steps-icon-stroke-width",
       "familyId": "pattern/workflow/approval-inbox",
       "state": "PRESCRIPCION"

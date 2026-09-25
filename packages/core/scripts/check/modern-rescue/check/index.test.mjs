@@ -7,6 +7,7 @@ import {
   readFileSync,
   realpathSync,
   renameSync as rawRenameSync,
+  rmSync as rawRmSync,
   symlinkSync,
   writeFileSync as rawWriteFileSync,
 } from "node:fs";
@@ -132,8 +133,15 @@ if (resolvedRoot !== SANDBOX) {
   );
 }
 
-const { cascadeCoverage, readModernRescueContracts, validateModernRescueContracts } = await import(
-  pathToFileURL(join(sandboxProgramDir, "check/index.mjs")).href
+const {
+  cascadeCoverage,
+  readModernRescueContracts,
+  SOCKET_OWNERSHIP_RETIREMENT,
+  socketOwnershipRetirementFailures,
+  validateModernRescueContracts,
+} = await import(pathToFileURL(join(sandboxProgramDir, "check/index.mjs")).href);
+const { validateCascadeRoot } = await import(
+  pathToFileURL(join(SANDBOX, "packages/core/scripts/libraries/manifest/rules/index.mjs")).href
 );
 
 const repoRoot = SANDBOX;
@@ -819,7 +827,7 @@ test("an ABSENT cascade roots directory fails closed instead of skipping the leg
     renameSync(backup, cascadeRootsDir);
   }
 });
-test("planted cascade defects fail closed (kind, site, orphan terminalReach)", () => {
+test("planted cascade defects fail closed (kind, site, non-canonical terminalReach family)", () => {
   const target = join(cascadeRootsDir, "shape/radius-scale/index.json");
   const original = readFileSync(target, "utf8");
   const run = () => validateModernRescueContracts(baseline);
@@ -834,11 +842,11 @@ test("planted cascade defects fail closed (kind, site, orphan terminalReach)", (
     doc.derivations[0].site = "packages/core/NO-EXISTE.css";
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
     expectError(run(), "site does not resolve", "nonexistent site must fail");
-    // 3) terminalReach huerfano (sin edge que lo respalde)
+    // 3) terminalReach on a family the live inventory does not hold
     doc = JSON.parse(original);
-    doc.terminalReach.push({ channelId: "--_ds-fantasma-radius", familyId: "primitive/inputs/button", state: "LIVE" });
+    doc.terminalReach.push({ channelId: "--_ds-fantasma-radius", familyId: "primitive/navigation/steps", state: "LIVE" });
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    expectError(run(), "orphan terminalReach", "orphan terminalReach must fail");
+    expectError(run(), 'familyId "primitive/navigation/steps" is not a canonical family id', "a retired family must fail");
   } finally {
     writeFileSync(target, original);
   }
@@ -923,20 +931,14 @@ test("a retired inventory authority stays retired: not listed, not on disk, succ
   );
 });
 
-test("manifest deep regression fails closed", () => {
-  const target = join(manifestRoot, "families/primitive/inputs/button/index.json");
-  const backup = `${target}.t1-test-backup`;
-  let restored = false;
-  try {
-    renameSync(target, backup);
-    const errors = validateModernRescueContracts(baseline);
-    expectError(errors, 'familyId "primitive/inputs/button" is not a canonical family id', "a cascade root reaching a deleted family cell must fail");
-  } finally {
-    if (!restored) {
-      renameSync(backup, target);
-      restored = true;
-    }
-  }
+test("a cascade root reaching a family the live inventory lost fails closed", () => {
+  expectError(
+    mutated((copy) => {
+      copy.inventory.rows = copy.inventory.rows.filter((row) => row.id !== "primitive/inputs/button");
+    }),
+    'familyId "primitive/inputs/button" is not a canonical family id',
+    "a cascade root reaching a family the inventory no longer holds must fail",
+  );
 });
 
 test("double-accept does not authorize commit or R7", () => {
@@ -1744,5 +1746,103 @@ test("F6: a missing controlFamilyCells denominator fails closed", () => {
     );
   } finally {
     writeFileSync(target, original);
+  }
+});
+
+const SOCKET_FAILURE = /orphan terminalReach|reverse cross-check/u;
+
+function socketErrors(doc, socketOwnership) {
+  return validateCascadeRoot(doc, {
+    label: "synthetic",
+    repositoryRoot: repoRoot,
+    activeControlIds: [doc.rootId],
+    controlTier: null,
+    familyIds: new Set(doc.terminalReach.map((t) => t.familyId)),
+    socketOwnership,
+  }).filter((error) => SOCKET_FAILURE.test(error));
+}
+
+/** The ownership a synthetic ledger would assign if it agreed exactly with this root's terminalReach. */
+function agreeingOwnership(doc) {
+  const own = new Map();
+  for (const t of doc.terminalReach) {
+    const entry = own.get(t.channelId) ?? { owner: doc.rootId, families: new Set() };
+    entry.families.add(t.familyId);
+    own.set(t.channelId, entry);
+  }
+  return own;
+}
+
+test("the socket clause still bites when a caller hands it a synthetic socketOwnership", () => {
+  const doc = JSON.parse(readFileSync(join(cascadeRootsDir, "density/mode/index.json"), "utf8"));
+  assert.ok(doc.terminalReach.length > 1, "the fixture root needs terminalReach entries");
+  assert.deepEqual(socketErrors(doc, agreeingOwnership(doc)), []);
+
+  const [first] = doc.terminalReach;
+  const wrongFamily = structuredClone(doc);
+  wrongFamily.terminalReach[0] = { ...first, familyId: "primitive/navigation/stepper" };
+  const refamily = socketErrors(wrongFamily, agreeingOwnership(doc));
+  assert.ok(refamily.some((e) => e.includes(`${first.channelId}@primitive/navigation/stepper`) && e.includes("orphan terminalReach")), JSON.stringify(refamily));
+  assert.ok(refamily.some((e) => e.includes(`${first.channelId}@${first.familyId}`) && e.includes("reverse cross-check")), JSON.stringify(refamily));
+
+  const wrongRoot = agreeingOwnership(doc);
+  wrongRoot.set(first.channelId, { ...wrongRoot.get(first.channelId), owner: "motion.dial" });
+  const reowned = socketErrors(doc, wrongRoot);
+  assert.ok(reowned.some((e) => e.includes(`${first.channelId}@${first.familyId}`) && e.includes("not backed by an internalChannels edge owned by density.mode")), JSON.stringify(reowned));
+});
+
+test("without a socketOwnership the clause does not run", () => {
+  const doc = JSON.parse(readFileSync(join(cascadeRootsDir, "density/mode/index.json"), "utf8"));
+  doc.terminalReach.push({ channelId: "--_ds-fantasma-gap", familyId: doc.terminalReach[0].familyId, state: "LIVE" });
+  assert.deepEqual(socketErrors(doc, undefined), []);
+});
+
+test("the live constitution no longer feeds the socket clause from the sealed families", () => {
+  const sealed = join(manifestRoot, "families/primitive/inputs/button/index.json");
+  const original = readFileSync(sealed, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    doc.themeControls[0].internalChannels.push({ channelId: "--_ds-button-fantasma", semanticOwner: "shape.radius-scale" });
+    writeFileSync(sealed, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline);
+    assert.deepEqual(errors.filter((e) => SOCKET_FAILURE.test(e)), []);
+  } finally {
+    writeFileSync(sealed, original);
+  }
+});
+
+test("the socket-ownership retirement record carries its census, commits and reason", () => {
+  assert.deepEqual(socketOwnershipRetirementFailures(SOCKET_OWNERSHIP_RETIREMENT), []);
+  const blanks = [
+    ["reason", (r) => { r.reason = " "; }, "SOCKET_OWNERSHIP_RETIREMENT.reason"],
+    ["retiredOn", (r) => { delete r.retiredOn; }, "SOCKET_OWNERSHIP_RETIREMENT.retiredOn"],
+    ["bornIn", (r) => { r.bornIn = ""; }, "SOCKET_OWNERSHIP_RETIREMENT.bornIn"],
+    ["census", (r) => { r.lastLiveCensus.sealedEdges = 0; }, "lastLiveCensus.sealedEdges"],
+    ["absent", (r) => { delete r.lastLiveCensus.absentFromSrc; }, "lastLiveCensus.absentFromSrc"],
+    ["dead", (r) => { r.lastLiveCensus.deadEntries = {}; }, "lastLiveCensus.deadEntries must name"],
+    ["sum", (r) => { r.lastLiveCensus.deadEntriesTotal = 61; }, "must sum to deadEntriesTotal"],
+    ["disposition", (r) => { r.lastLiveCensus.deadEntriesDisposition = ""; }, "deadEntriesDisposition"],
+    ["movers", (r) => { r.lastLiveCensus.movers = []; }, "lastLiveCensus.movers"],
+    ["mover-sha", (r) => { r.lastLiveCensus.movers = ["the Steps merge"]; }, "lastLiveCensus.movers"],
+  ];
+  for (const [name, mutate, fragment] of blanks) {
+    const record = structuredClone(SOCKET_OWNERSHIP_RETIREMENT);
+    mutate(record);
+    expectError(socketOwnershipRetirementFailures(record), fragment, `${name} must be required`);
+  }
+});
+
+test("the live run gates the retirement record, not only the drill", async () => {
+  const source = readFileSync(join(programRoot, "check/index.mjs"), "utf8");
+  const anchor = "  retiredOn: '2026-09-25',";
+  assert.equal(source.split(anchor).length, 2, "the record's retiredOn line must be unique");
+  const probe = join(programRoot, "check/index.retirement-probe.mjs");
+  writeFileSync(probe, source.replace(anchor, "  retiredOn: '',"));
+  try {
+    const { validateModernRescueContracts: validateProbe } = await import(pathToFileURL(probe).href);
+    expectError(validateProbe(baseline), "SOCKET_OWNERSHIP_RETIREMENT.retiredOn", "a blank record must fail the live run");
+  } finally {
+    assertSandboxWritePath(probe);
+    rawRmSync(probe, { force: true });
   }
 });

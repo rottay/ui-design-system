@@ -3296,56 +3296,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-switch-label-gap",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-lg-height",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-lg-thumb",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-lg-width",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-md-height",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-md-thumb",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-md-width",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-sm-height",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-sm-thumb",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-sm-width",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-tag-input-chip-gap",
       "familyId": "primitive/inputs/tag-input",
       "state": "PRESCRIPCION"
@@ -4153,51 +4103,6 @@
     {
       "channelId": "--_ds-stepper-vertical-item-gap",
       "familyId": "primitive/navigation/stepper",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-connector-width",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-density-factor",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-dot-size",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-size",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-size-sm",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-process-ring-width",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-text-gap",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-vertical-gap",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-vertical-item-gap",
-      "familyId": "primitive/navigation/steps",
       "state": "PRESCRIPCION"
     },
     {

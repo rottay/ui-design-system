@@ -1237,16 +1237,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-switch-label-font-size",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-switch-label-line-height",
-      "familyId": "primitive/inputs/switch",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-tag-input-chip-font-size",
       "familyId": "primitive/inputs/tag-input",
       "state": "PRESCRIPCION"
@@ -1629,41 +1619,6 @@
     {
       "channelId": "--_ds-stepper-label-font-size-sm",
       "familyId": "primitive/navigation/stepper",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-description-font-size",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-font-size",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-font-size",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-item-font-size-sm",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-label-font-size",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-label-font-size-sm",
-      "familyId": "primitive/navigation/steps",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-steps-subtitle-font-size",
-      "familyId": "primitive/navigation/steps",
       "state": "PRESCRIPCION"
     },
     {
