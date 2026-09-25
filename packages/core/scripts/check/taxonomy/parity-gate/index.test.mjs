@@ -1006,7 +1006,7 @@ test('FENCE DRILL: a new script that reads the seal fails until it is listed', (
 });
 
 test('FENCE DRILL: a listed reader that stops reading the seal is a stale entry', () => {
-  const listed = SEAL_READERS.find((entry) => entry.slice === 'cascade');
+  const listed = SEAL_READERS.find((entry) => entry.slice === 'history-citation');
   const findings = fenceSandbox(({ write }) => {
     write(listed.path, 'export const nothing = true;\n');
   });
@@ -1025,6 +1025,32 @@ test('FENCE DRILL: a blocking gate that reads the family slice of the seal fails
   const advisoryFindings = fenceSandbox(plant, { readers, gates: gate(false) });
   assert.ok(blockingFindings.some((finding) => finding.startsWith('blocking gate planted-family-gate')), blockingFindings.join('\n'));
   assert.equal(advisoryFindings.some((finding) => finding.startsWith('blocking gate planted-family-gate')), false);
+});
+
+test('no listed reader holds the cascade slice: the cascade tables are live', () => {
+  assert.deepEqual(SEAL_READERS.filter((entry) => entry.slice === 'cascade').map((entry) => entry.path), []);
+});
+
+test('FENCE DRILL: a module that resolves the cascade tables through the seal fails, even when listed', () => {
+  const planted = 'scripts/check/planted-cascade-reader/index.mjs';
+  const readers = [...SEAL_READERS, { path: planted, slice: 'drill', reason: 'planted by the fence drill to model a reader left on the seal path' }];
+  const forms = [
+    `export const roots = '${SEAL_ROOT_REL}/cascade/roots';\n`,
+    "import { QUARANTINE_MANIFEST_REL } from '../../../libraries/manifest/index.mjs';\nexport const catalog = [QUARANTINE_MANIFEST_REL, 'cascade/catalog/index.json'];\n",
+    "export const dir = ['docs', 'history', 'inventories', 'customization-manifest', 'cascade'];\n",
+  ];
+  for (const text of forms) {
+    const findings = fenceSandbox(({ write }) => write(planted, text), { readers });
+    assert.ok(
+      findings.some((finding) => finding.startsWith(`${planted} resolves the cascade tables through the sealed customization manifest`)),
+      `${text}\n${findings.join('\n')}`,
+    );
+  }
+  const live = fenceSandbox(
+    ({ write }) => write(planted, `export const root = '${SEAL_ROOT_REL}/controls';\nexport const cascade = 'governance/manifest/cascade/roots';\n`),
+    { readers },
+  );
+  assert.equal(live.some((finding) => finding.includes('resolves the cascade tables')), false, live.join('\n'));
 });
 
 /** The audit with a governed support folder planted beside the two fixture families. */

@@ -3,10 +3,10 @@
  *
  * WO-RET-03 sealed `docs/history/inventories/customization-manifest` on
  * 2026-09-19 and its README says no gate may read that tree as authority. The
- * tree does not satisfy that yet: the cascade lane still reads its root
- * catalog, root cells and control calibration because no live twin of those
- * exists. The family SET, however, has a live authority (the family
- * inventory), so for that slice the rule can be enforced now:
+ * cascade tables (root catalog, owner assignments, root cells) are live under
+ * `governance/manifest/cascade`; the probe still reads the sealed control
+ * calibration because no live twin of it exists. The family SET has a live
+ * authority (the family inventory), so for that slice the rule is enforced:
  *
  *   F1  every script module that names the seal is listed below, by path, with
  *       the reason it still reads it. A new reader fails until someone writes
@@ -18,6 +18,9 @@
  *       slice (its `families/` cells, `canonicalFamilies`, `familyReviews`).
  *       Listed readers of the `fence` slice are exempt: they name the forbidden
  *       read in order to forbid it or to plant it in a sandbox.
+ *   F4  no module resolves the cascade tables through the seal: they live at
+ *       `governance/manifest/cascade`, and a seal path to them reads nothing.
+ *       The `fence` slice is exempt for the same reason as in F3.
  *
  * The check is on the entry module a gate runs, not on its import graph; a
  * module reached through an import is still bound by F1.
@@ -42,6 +45,9 @@ export const SCANNED_ROOTS = Object.freeze([
 export const SEAL_REFERENCE = /customization-manifest|QUARANTINE_MANIFEST_(?:REL|ROOT)|SEAL_ROOT_REL/;
 
 /** Reads of the seal's family slice: the per-family cells and the family-set rollups. */
+/** A path into the seal's former cascade slice: the literal path, or a seal constant joined with `cascade`. */
+export const CASCADE_SLICE_READ = /customization-manifest\/cascade|['"`]customization-manifest['"`]\s*,\s*['"`]cascade\b|(?:QUARANTINE_MANIFEST_(?:REL|ROOT)|SEAL_ROOT_REL)\b[^\n]*['"`\/]cascade\b/;
+
 export const FAMILY_SET_READ = /canonicalFamilies|familyReviews|customization-manifest\/families|(?:MANIFEST_DIR|QUARANTINE_MANIFEST_(?:REL|ROOT)|SEAL_ROOT_REL)[^\n]*['"`]families['"`]|SEAL_ROOT_REL\}\/families/;
 
 const reader = (path, slice, reason) => Object.freeze({ path, slice, reason });
@@ -75,40 +81,16 @@ export const SEAL_READERS = Object.freeze([
     'asserts the retired manifest-freshness gate stays retired; the name is an id, not a read'),
   reader('scripts/check/automation/runner/index.test.mjs', 'gate-registry',
     'uses the retired manifest-freshness gate id as a fixture for the runner, not a read of the tree'),
-  reader('scripts/check/automation/gates/honesty/index.test.mjs', 'gate-registry',
-    'plants the sealed cascade catalog path as a declared input in its honesty fixtures'),
   reader('scripts/check/evidence/framework/receipts/index.test.mjs', 'evidence-contract',
     'cites the sealed schema as where validateReceipt was first named; the receipt contract itself is live'),
   reader('scripts/check/engine/skins/evidence/index.test.mjs', 'family-evidence',
     'reads the sealed family cells as skin evidence for a drill outside CI; it compares skins, not the family set'),
-  reader('scripts/libraries/manifest/index.mjs', 'cascade',
-    'owns QUARANTINE_MANIFEST_REL, the one path constant every cascade reader resolves the seal through'),
-  reader('scripts/libraries/manifest/rules/index.mjs', 'cascade',
-    'the validation rules of the sealed corpus, kept for the cascade readers that still load it'),
-  reader('scripts/check/modern-rescue/cascade/extraction/index.mjs', 'cascade',
-    'extracts the cascade edges against the sealed root catalog, which has no live twin yet'),
-  reader('scripts/check/modern-rescue/cascade/producers/index.mjs', 'cascade',
-    'reads the sealed root catalog to attribute channel producers; no live root catalog exists'),
-  reader('scripts/check/tokens/cascade/normalization/index.mjs', 'cascade',
-    'reads the sealed root catalog for the normalization contract; replaced when a live root catalog lands'),
-  reader('scripts/check/tokens/cascade/purity/references/index.mjs', 'cascade',
-    'reads the sealed root catalog to classify reference purity; no live root catalog exists'),
-  reader('scripts/check/tokens/cascade/roots/catalog-freshness/index.mjs', 'cascade',
-    'checks the sealed root catalog against the tree it catalogues; the catalog has no live twin'),
-  reader('scripts/check/tokens/cascade/roots/exposure/index.mjs', 'cascade',
-    'reads the sealed root catalog to classify root exposure; no live root catalog exists'),
-  reader('scripts/check/tokens/cascade/roots/exposure/index.test.mjs', 'cascade',
-    'the exposure drills read the same sealed root catalog as the gate they prove'),
-  reader('scripts/check/tokens/cascade/roots/membership/index.mjs', 'cascade',
-    'resolves root membership against the sealed root catalog and step table; no live twin exists'),
-  reader('scripts/check/tokens/cascade/roots/membership/index.test.mjs', 'cascade',
-    'reads the sealed step table the membership mechanism is specified by'),
-  reader('scripts/check/tokens/cascade/slots/index.mjs', 'cascade',
-    'joins theme slots to the sealed root catalog; no live root catalog exists'),
-  reader('scripts/check/tokens/cascade/slots/index.test.mjs', 'cascade',
-    'the slot drills read the same sealed root catalog as the gate they prove'),
-  reader('scripts/generate/tokens/manifest/root-checklists/index.mjs', 'cascade',
-    'projects the sealed root cells and per-family bindings into root checklists; owned by the cascade programme'),
+  reader('scripts/libraries/manifest/index.mjs', 'seal-constant',
+    'owns QUARANTINE_MANIFEST_REL, the path constant for readers of the sealed history; the cascade tables resolve through CASCADE_MANIFEST_REL'),
+  reader('scripts/libraries/manifest/rules/index.mjs', 'seal-self-validation',
+    'the validation rules the sealed programme check applies to its preserved control cells, which it cites by their sealed path'),
+  reader('scripts/generate/tokens/manifest/root-checklists/index.mjs', 'family-bindings',
+    'binds root checklists to the per-family cells of the seal; no live source of family bindings exists yet'),
   reader('scripts/check/theme/single-listing/index.mjs', 'forbidder',
     'forbids gates from reading the sealed control documents, so it has to name that path'),
   reader('scripts/check/tokens/cascade/probe/foundation/paths/index.mjs', 'probe-calibration',
@@ -180,6 +162,12 @@ export function collectSealFenceFindings({ coreRoot, gates = [], readers = SEAL_
       if (text && FAMILY_SET_READ.test(text)) {
         findings.push(`blocking gate ${gate.id} (${arg}) reads the family slice of the sealed customization manifest; the live family inventory is the family set`);
       }
+    }
+  }
+  for (const [path, text] of naming) {
+    if (listed.get(path)?.slice === 'fence') continue;
+    if (CASCADE_SLICE_READ.test(text)) {
+      findings.push(`${path} resolves the cascade tables through the sealed customization manifest; they live at governance/manifest/cascade (CASCADE_MANIFEST_REL)`);
     }
   }
   return findings;

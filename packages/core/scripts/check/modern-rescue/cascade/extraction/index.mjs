@@ -48,6 +48,7 @@ import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
 import { CASCADE_ENGINE_ORDER } from '../../../../libraries/engine/roster/index.mjs';
+import { CASCADE_MANIFEST_REPO_REL } from '../../../../libraries/manifest/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ABS = findRepoRoot(HERE);
@@ -381,7 +382,7 @@ const AUTHORED_CENSUS = {
       "--ds-type-scale",
     ],
     method:
-      "rootChannel de cada docs/history/inventories/customization-manifest/cascade/roots/*/index.json con canal no nulo. Quedan fuera chrome.anatomy (su raiz es el atributo data-anatomy-card, no un canal) y responsive.posture (channel: null por diseno, DATA NOT CSS).",
+      `rootChannel de cada ${CASCADE_MANIFEST_REPO_REL}/roots/*/index.json con canal no nulo. Quedan fuera chrome.anatomy (su raiz es el atributo data-anatomy-card, no un canal) y responsive.posture (channel: null por diseno, DATA NOT CSS).`,
     sensitivity:
       "la cifra solo-css depende del sembrado y NO es comparable con un solo-css de otro informe que siembre otro conjunto. Raices candidatas fuera del manifiesto y su aporte marginal medido: --ds-color-neutral-900 +152, --ds-surface-fg +142, --ds-shadow-key-strength +81, --ds-shadow-ambient-strength +81, --ds-surface-bg +27, --ds-focus-ring-width +3, --ds-focus-ring-offset +2.",
   },

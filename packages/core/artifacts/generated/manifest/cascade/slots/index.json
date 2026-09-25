@@ -15,8 +15,8 @@
     "themesModule": "dist/index.js#baselineFor + dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake/index.js#readGovernedTheme",
     "freshnessProven": true,
     "membershipSource": "artifacts/generated/manifest/cascade/membership/index.json",
-    "catalog": "docs/history/inventories/customization-manifest/cascade/catalog/index.json",
-    "catalogRoots": 100,
+    "catalog": "packages/core/governance/manifest/cascade/catalog/index.json",
+    "catalogRoots": 99,
     "metadataPrefixes": [
       "THEME.id",
       "THEME.name",
@@ -3614,5 +3614,5 @@
       }
     }
   ],
-  "digest": "ed27e0372513de6d54c6e3ad9e3a73bf9d76987e55eb684a50b4ffa97056ba6f"
+  "digest": "550d1db37e6165d2ea9ee1ad9e392513a6f970b7b807cf4d1df01ea7ea64b518"
 }

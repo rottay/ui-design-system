@@ -30,7 +30,7 @@ import {
 import { repoRoot as findRepoRoot } from '../../../libraries/repo-root/index.mjs';
 import { parseRegistry as parseCapabilityRegistry } from '../../../generate/tokens/customization/surface/index.mjs';
 import { overrideTokens } from '../../orchestration/runtime/tenant-reach/index.mjs';
-import { pathForManifestId, readManifestRecords } from '../../../libraries/manifest/index.mjs';
+import { CASCADE_MANIFEST_REPO_REL, pathForManifestId, readManifestRecords } from '../../../libraries/manifest/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,6 +42,10 @@ const PROGRAM_ROOT = join(repoRoot, PROGRAM_DIR);
 // (2026-09-19): it is sealed evidence under docs/history, and every manifest
 // path is composed from here.
 const MANIFEST_DIR = 'docs/history/inventories/customization-manifest';
+/** The cascade root cells are live tables inside the package, not sealed evidence. */
+const CASCADE_ROOTS_REL = `${CASCADE_MANIFEST_REPO_REL}/roots`;
+const CASCADE_RETIRED_REL = `${CASCADE_MANIFEST_REPO_REL}/retired/index.json`;
+const CASCADE_CATALOG_REL = `${CASCADE_MANIFEST_REPO_REL}/catalog/index.json`;
 
 const FILES = {
   agents: 'AGENTS.md',
@@ -527,9 +531,11 @@ function collectTextualFailures(contracts) {
       failures.push('docs/history/inventories/customization-manifest/schema/index.json vocabulary.domainKinds must match rules/index.mjs DOMAIN_KINDS exactly');
     }
   }
-  // 6c. CASCADA (adjudicacion): validar docs/history/inventories/customization-manifest/cascade/roots/* con diente
-  const cascadeDir = join(repoRoot, MANIFEST_DIR, 'cascade/roots');
-  if (existsSync(cascadeDir)) {
+  // 6c. CASCADA (adjudicacion): validar governance/manifest/cascade/roots/* con diente
+  const cascadeDir = join(repoRoot, CASCADE_ROOTS_REL);
+  if (!existsSync(cascadeDir)) {
+    failures.push(`${CASCADE_ROOTS_REL} is missing: every active control needs its cascade root`);
+  } else {
     const famDir = join(repoRoot, MANIFEST_DIR, 'families');
     const famIds = new Set();
     const socketOwnership = new Map();
@@ -552,7 +558,7 @@ function collectTextualFailures(contracts) {
     const controlIdsForCascade = controlRecords.map(({ id }) => id);
     const docs = [];
     for (const { document: doc, relativePath } of readManifestRecords(cascadeDir, 'rootId')) {
-      const label = `docs/history/inventories/customization-manifest/cascade/roots/${relativePath}`;
+      const label = `${CASCADE_ROOTS_REL}/${relativePath}`;
       docs.push(doc);
       const control = controlsById.get(doc.rootId);
       failures.push(
@@ -567,12 +573,38 @@ function collectTextualFailures(contracts) {
         }),
       );
     }
-    failures.push(...validateCascadeSet(docs, { label: 'docs/history/inventories/customization-manifest/cascade/roots' }));
-    // completitud (orden del adjudicador): TODO control activo tiene su root file
+    failures.push(...validateCascadeSet(docs, { label: CASCADE_ROOTS_REL }));
+    // completitud (orden del adjudicador): TODO control activo tiene su root file, salvo los retirados con commit y razon,
+    // sin celda y sin fila en el catalogo vivo
+    const retiredEntries = readJson(CASCADE_RETIRED_REL)?.roots ?? [];
+    const catalogRoots = retiredEntries.length > 0 ? readJson(CASCADE_CATALOG_REL)?.roots : [];
+    if (!Array.isArray(catalogRoots)) {
+      failures.push(`${CASCADE_CATALOG_REL} is unreadable: retired roots cannot be proven absent from it`);
+    }
+    const catalogIds = new Set((Array.isArray(catalogRoots) ? catalogRoots : []).map((row) => row?.rootId));
+    const retired = new Set();
+    for (const entry of retiredEntries) {
+      if (!entry?.rootId || !entry.commit || !entry.reason) {
+        failures.push(`${CASCADE_RETIRED_REL}: retired root ${JSON.stringify(entry?.rootId ?? null)} needs a commit and a reason`);
+        continue;
+      }
+      retired.add(entry.rootId);
+      const cell = `roots/${pathForManifestId(entry.rootId)}/index.json`;
+      if (entry.cell !== cell) {
+        failures.push(`${CASCADE_RETIRED_REL}: retired root ${entry.rootId} names cell ${JSON.stringify(entry.cell ?? null)}, not ${cell}`);
+      }
+      if (existsSync(join(cascadeDir, `${pathForManifestId(entry.rootId)}/index.json`))) {
+        failures.push(`${CASCADE_ROOTS_REL}/${pathForManifestId(entry.rootId)}/index.json still exists for retired root ${entry.rootId}`);
+      }
+      if (catalogIds.has(entry.rootId)) {
+        failures.push(`${CASCADE_CATALOG_REL} roots[] still lists retired root ${entry.rootId}`);
+      }
+    }
     for (const cid of controlIdsForCascade) {
+      if (retired.has(cid)) continue;
       const relativePath = `${pathForManifestId(cid)}/index.json`;
       if (!existsSync(join(cascadeDir, relativePath))) {
-        failures.push(`docs/history/inventories/customization-manifest/cascade/roots/${relativePath} is missing for active control ${cid}`);
+        failures.push(`${CASCADE_ROOTS_REL}/${relativePath} is missing for active control ${cid}`);
       }
     }
   }
@@ -683,7 +715,7 @@ function collectTextualFailures(contracts) {
    * habria dado seis rojos falsos el primer dia.
    */
   const admissionRoots = [];
-  const cascadeRootsDir = join(repoRoot, MANIFEST_DIR, 'cascade/roots');
+  const cascadeRootsDir = join(repoRoot, CASCADE_ROOTS_REL);
   const outsideAdmission = [];
   if (existsSync(cascadeRootsDir)) {
     for (const pathname of indexJsonFiles(cascadeRootsDir)) {

@@ -69,14 +69,18 @@ import path from 'node:path';
 
 import { OUTPUT_PATH as FACTS_PATH, PAINT_PLANES, INLINE_EXPR } from '../fanout/index.mjs';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
-import { readManifestRecords } from '../../../../libraries/manifest/index.mjs';
+import {
+  CASCADE_MANIFEST_REL,
+  CASCADE_MANIFEST_REPO_REL,
+  readManifestRecords,
+} from '../../../../libraries/manifest/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PACKAGE_ROOT = findPackageRoot(HERE);
 /** The programme folder stays under `scripts/`; only the manifest graduated. */
 export const PROGRAM_ROOT = path.resolve(PACKAGE_ROOT, 'scripts/check/modern-rescue');
-/** `generated/` and `cascade/` live at the quarantined manifest ROOT
- *  (WO-RET-03, docs/history); only this producer stayed behind. */
+/** The quarantined manifest root (WO-RET-03, docs/history): sealed evidence,
+ *  resolved through the workspace root. The cascade cells are not in it. */
 export const MANIFEST_ROOT = path.join(findRepoRoot(HERE), 'docs/history/inventories/customization-manifest');
 export const OUTPUT_PATH = path.join(PACKAGE_ROOT, 'artifacts/generated/manifest/cascade/coverage/index.json');
 
@@ -88,8 +92,8 @@ export const ROOT_PATTERN = /^--ds-[a-z0-9-]+-scale$/;
 export const UNATTRIBUTED_PREFIX = 'unattributed';
 
 /** Manifiestos de raiz de cascada: la segunda fuente de raices. */
-export const CASCADE_ROOTS_DIR = path.join(MANIFEST_ROOT, 'cascade', 'roots');
-export const CASCADE_ROOTS_REL = 'docs/history/inventories/customization-manifest/cascade/roots';
+export const CASCADE_ROOTS_DIR = path.join(PACKAGE_ROOT, CASCADE_MANIFEST_REL, 'roots');
+export const CASCADE_ROOTS_REL = `${CASCADE_MANIFEST_REPO_REL}/roots`;
 
 /** Snapshots generados que el corpus de hechos excluye (fanout-facts.mjs). */
 export const ARTIFACTS_REL = 'src/foundation/tokens/css/facade/artifacts';

@@ -12,6 +12,8 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { CASCADE_MANIFEST_REL } from '../../../../../../libraries/manifest/index.mjs';
+
 const HERE = dirname(fileURLToPath(import.meta.url));
 
 /** `packages/core`. */
@@ -29,6 +31,9 @@ export const QUARANTINE_MANIFEST_ROOT = resolve(
   REPO_ROOT,
   'docs/history/inventories/customization-manifest',
 );
+
+/** The live cascade tables (root catalog, assignments, root cells), inside the package. */
+export const CASCADE_MANIFEST_ROOT = resolve(CORE_ROOT, CASCADE_MANIFEST_REL);
 
 /** The authored CSS tree the `fresh` bundle is composed from. */
 export const SRC_CSS = resolve(CORE_ROOT, 'src/foundation/tokens/css');

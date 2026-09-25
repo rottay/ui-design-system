@@ -64,7 +64,11 @@ import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
 import { repoRoot as findRepoRoot } from "../../../../libraries/repo-root/index.mjs";
-import { readManifestRecords } from "../../../../libraries/manifest/index.mjs";
+import {
+  CASCADE_MANIFEST_REL,
+  CASCADE_MANIFEST_REPO_REL,
+  readManifestRecords,
+} from "../../../../libraries/manifest/index.mjs";
 import { CASCADE_ENGINE_ORDER } from "../../../../libraries/engine/roster/index.mjs";
 import { classifyCrossFileRows, dispositionIndex, injectedScanPaths } from "../disposition/index.mjs";
 import {
@@ -82,11 +86,11 @@ import {
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ABS = findRepoRoot(HERE);
 const CORE_ROOT = join(REPO_ABS, "packages/core");
-const MANIFEST = join(REPO_ABS, "docs/history/inventories/customization-manifest");
+const CASCADE_MANIFEST = join(CORE_ROOT, CASCADE_MANIFEST_REL);
 const OUT = join(CORE_ROOT, "artifacts/generated/manifest/cascade/producers/index.json");
 const CSS_EDGES = join(CORE_ROOT, "artifacts/generated/manifest/cascade/edges/index.json");
-const CASCADE_ROOTS = join(MANIFEST, "cascade/roots");
-const ROOT_CATALOG = join(MANIFEST, "cascade/catalog/index.json");
+const CASCADE_ROOTS = join(CASCADE_MANIFEST, "roots");
+const ROOT_CATALOG = join(CASCADE_MANIFEST, "catalog/index.json");
 const ARTIFACTS_DIR = join(REPO_ABS, "packages/core/src/foundation/tokens/css/facade/artifacts");
 const TENANT_THEME_PATH =
   "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts";
@@ -506,7 +510,7 @@ export function authoredCausalRoots(cascadeRootsDir) {
   if (records.length === 0) throw new Error(`cascade roots directory is empty: ${cascadeRootsDir}`);
 
   for (const { document: doc, pathname: rootFile, relativePath } of records) {
-    const rel = `docs/history/inventories/customization-manifest/cascade/roots/${relativePath}`;
+    const rel = `${CASCADE_MANIFEST_REPO_REL}/roots/${relativePath}`;
     if (!Array.isArray(doc.derivations)) {
       throw new Error(`cascade root derivations are missing: ${rootFile}`);
     }
@@ -1875,7 +1879,7 @@ const REPORT_MAX_IDENTITIES = 4;
  */
 const INPUTS_DIGEST_COVERAGE = Object.freeze({
   cssEdges: "the extracted CSS edge inventory (one JSON file)",
-  cascadeRoots: "every docs/history/inventories/customization-manifest/cascade/roots/*/index.json",
+  cascadeRoots: `every ${CASCADE_MANIFEST_REPO_REL}/roots/*/index.json`,
   rootCatalog: "the cascade root catalog (one JSON file)",
   srcTsx:
     "sha256 of every scanned .ts/.tsx under packages/core/src " +

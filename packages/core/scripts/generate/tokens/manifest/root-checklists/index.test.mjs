@@ -4,7 +4,7 @@
  * Los oraculos de atribucion y de descarte estan verificados contra fuente:
  * cada caso cita el archivo real del que sale. Los tests de integracion se
  * apoyan en `generated/fanout-facts/index.json` y en el canon de familias
- * (`family-inventory/index.json`, 255 filas), que es la autoridad del programa.
+ * (`family-inventory/index.json`, 252 filas), que es la autoridad del programa.
  */
 
 import { spawnSync } from 'node:child_process';
@@ -16,7 +16,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { INLINE_EXPR } from '../fanout/index.mjs';
-import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
 import { pathForManifestId, readManifestRecords } from '../../../../libraries/manifest/index.mjs';
 import {
   OUTPUT_PATH,
@@ -378,10 +378,10 @@ test('checklistFor: el bucket sin familia se cuenta y se lista', () => {
 const facts = loadFacts();
 const canon = loadCanon();
 
-test('el canon cargado son las 255 filas del manifiesto', () => {
-  assert.equal(canon.denominator, 255);
-  assert.equal(canon.familyIds.size, 255);
-  assert.equal(canon.owners.length, 255);
+test('el canon cargado son las 252 filas del inventario vivo', () => {
+  assert.equal(canon.denominator, 252);
+  assert.equal(canon.familyIds.size, 252);
+  assert.equal(canon.owners.length, 252);
   assert.ok(canon.classIndex.size > 1000, 'el indice de clases no puede venir vacio');
 });
 
@@ -708,6 +708,13 @@ test('los casos borde reales estan declarados, no silenciados', () => {
   assert.equal(doc.roots.find((r) => r.root === '--ds-sidebar-bg').rootAuthority, 'floor-arbitrated');
 });
 
+test('las raices declaradas del manifiesto son las celdas vivas: un directorio vacio o ausente no pasa como cero', () => {
+  const live = path.join(PACKAGE_ROOT, 'governance/manifest/cascade/roots');
+  const cells = readManifestRecords(live, 'rootId').length;
+  assert.ok(cells >= 19, `las celdas vivas de raiz cayeron a ${cells}`);
+  assert.equal(loadManifestRoots(new Set()).length, cells, `${CASCADE_ROOTS_DIR} no es el directorio vivo de celdas`);
+});
+
 test('toda cita archivo:linea de una raiz no medible existe en disco', () => {
   const doc = JSON.parse(readFileSync(OUTPUT_PATH, 'utf8'));
   assert.ok(doc.notMeasurableRoots.length > 0);
@@ -716,7 +723,7 @@ test('toda cita archivo:linea de una raiz no medible existe en disco', () => {
     for (const cite of n.evidence) {
       const m = /^(.+):(\d+)$/.exec(cite);
       assert.ok(m, `${n.rootId} → cita mal formada: ${cite}`);
-      const abs = path.join(PACKAGE_ROOT, m[1]);
+      const abs = path.join(m[1].startsWith('packages/') ? findRepoRoot(PACKAGE_ROOT) : PACKAGE_ROOT, m[1]);
       assert.ok(existsSync(abs), `${n.rootId} → no existe ${m[1]}`);
       const lines = readFileSync(abs, 'utf8').split('\n');
       assert.ok(Number(m[2]) >= 1 && Number(m[2]) <= lines.length, `${n.rootId} → linea fuera de rango: ${cite}`);

@@ -26,7 +26,7 @@ import {
   readManifestRecords,
 } from '../../../../../../../libraries/manifest/index.mjs';
 import { readManifest } from '../../../foundation/negative-controls/index.mjs';
-import { CORE_ROOT, QUARANTINE_MANIFEST_ROOT } from '../../../foundation/paths/index.mjs';
+import { CASCADE_MANIFEST_ROOT, CORE_ROOT, QUARANTINE_MANIFEST_ROOT } from '../../../foundation/paths/index.mjs';
 import { VERTICALS } from '../../../foundation/scope/index.mjs';
 import {
   assertArmProvenance,
@@ -1328,7 +1328,7 @@ test('H-1 drill 2 [needs dist]: no vertical collapses onto the rottay value any 
  * their under-declaration.
  */
 function dataTerminalControlIds() {
-  const dir = resolve(QUARANTINE_MANIFEST_ROOT, 'cascade/roots');
+  const dir = resolve(CASCADE_MANIFEST_ROOT, 'roots');
   const ids = new Set();
   for (const name of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
     const root = JSON.parse(readFileSync(resolve(dir, name), 'utf8'));

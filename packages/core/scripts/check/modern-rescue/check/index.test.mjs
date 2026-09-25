@@ -38,9 +38,9 @@ const CLOSURE_MEMBERS = [
   "packages/core/package.json",
   programDir,
   "packages/core/tests/fixtures/tenants",
-  "packages/core/governance/tokens/prototypes/index.json",
   "roadmap/registry.json",
   "docs/history/inventories/customization-manifest",
+  "packages/core/governance/manifest/cascade",
   "packages/core/scripts/check/evidence",
   "packages/core/scripts/check/orchestration",
   "packages/core/scripts/libraries",
@@ -87,15 +87,6 @@ const CLOSURE_MEMBERS = [
   // same copy-boundary artefact the comment above describes, wearing the
   // "source digest is stale" message.
   "packages/core/artifacts/generated/css",
-  // R-1 (F4B-14 close): typography.families' compound-case receipt is the
-  // first to compile directly against the FIRST_PARTY_THEMES/rottayBrandTheme
-  // exports (compileBrandTheme needs the raw BrandTheme, not the tenant-theme
-  // compiler's own baseline loader), so it is the first to name this dist
-  // module as a sourceBinding. Same copy-boundary artefact as the four dist
-  // files above -- absent from the sandbox, receipts.mjs hashes it 'MISSING'
-  // and a receipt that is genuinely fresh reads as stale for a reason that is
-  // about the copy, not the manifest.
-  "packages/core/dist/foundation/tokens/ts/presentation/brand-themes/index.js",
   "packages/showroom/src",
   "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts",
 ];
@@ -146,6 +137,8 @@ const programRoot = sandboxProgramDir;
 // The manifest was quarantined to docs/history by WO-RET-03; the programme
 // still validates it as sealed evidence.
 const manifestRoot = join(repoRoot, "docs/history/inventories/customization-manifest");
+// The cascade root cells are live tables inside the package.
+const cascadeRootsDir = join(repoRoot, "packages/core/governance/manifest/cascade/roots");
 
 // D-4: no write may escape the sandbox, including through either
 // node_modules symlink above (C-1, Fable preaudit). Every one of the 37
@@ -650,8 +643,8 @@ test("r7Enabled stays false across all contracts", () => {
 
 
 test("home law: pattern folds stay green, literal duplicates go red", () => {
-  const a = join(manifestRoot, "cascade/roots/surfaces/effect-intensity/index.json");
-  const b = join(manifestRoot, "cascade/roots/typography/scale/index.json");
+  const a = join(cascadeRootsDir, "surfaces/effect-intensity/index.json");
+  const b = join(cascadeRootsDir, "typography/scale/index.json");
   const origA = readFileSync(a, "utf8");
   const origB = readFileSync(b, "utf8");
   try {
@@ -678,7 +671,7 @@ test("home law: pattern folds stay green, literal duplicates go red", () => {
 });
 
 test("planted missing cascade root fails closed", () => {
-  const target = join(manifestRoot, "cascade/roots/density/mode/index.json");
+  const target = join(cascadeRootsDir, "density/mode/index.json");
   const backup = join(SANDBOX, "density-mode.index.json.t1-test-backup");
   try {
     renameSync(target, backup);
@@ -688,8 +681,78 @@ test("planted missing cascade root fails closed", () => {
     renameSync(backup, target);
   }
 });
+test("an EMPTY cascade roots directory fails every active control, never passes as zero roots", () => {
+  const backup = join(SANDBOX, "cascade-roots.t1-test-backup");
+  try {
+    renameSync(cascadeRootsDir, backup);
+    assertSandboxWritePath(cascadeRootsDir);
+    mkdirSync(cascadeRootsDir);
+    const missing = validateModernRescueContracts(baseline).filter((e) => e.includes("is missing for active control"));
+    assert.ok(missing.length >= 19, `an empty roots directory must red once per active control; got ${missing.length}`);
+  } finally {
+    if (existsSync(cascadeRootsDir)) renameSync(cascadeRootsDir, join(SANDBOX, "cascade-roots.t1-test-empty"));
+    renameSync(backup, cascadeRootsDir);
+  }
+});
+test("a retired cascade root is exempt only while its cell stays gone and its record carries a commit and a reason", () => {
+  const table = join(cascadeRootsDir, "..", "retired", "index.json");
+  const original = readFileSync(table, "utf8");
+  const planted = join(cascadeRootsDir, "experience/profile/index.json");
+  try {
+    let errors = validateModernRescueContracts(baseline);
+    assert.ok(!errors.some((e) => e.includes("for active control experience.profile")), JSON.stringify(errors));
+    assertSandboxWritePath(dirname(planted));
+    mkdirSync(dirname(planted), { recursive: true });
+    writeFileSync(planted, `${JSON.stringify({ rootId: "experience.profile" })}\n`);
+    expectError(validateModernRescueContracts(baseline), "still exists for retired root experience.profile", "a retired root whose cell returns must fail");
+    renameSync(planted, join(SANDBOX, "retired-cell.t1-test-planted"));
+    const doc = JSON.parse(original);
+    delete doc.roots[0].commit;
+    writeFileSync(table, `${JSON.stringify(doc, null, 2)}\n`);
+    errors = validateModernRescueContracts(baseline);
+    expectError(errors, "needs a commit and a reason", "a retirement without its commit must fail");
+    expectError(errors, "is missing for active control experience.profile", "an unrecorded retirement is a missing root");
+  } finally {
+    writeFileSync(table, original);
+  }
+});
+test("a retired cascade root may not keep a catalog row, and its record names the cell it retired", () => {
+  const catalogPath = join(cascadeRootsDir, "..", "catalog", "index.json");
+  const table = join(cascadeRootsDir, "..", "retired", "index.json");
+  const originalCatalog = readFileSync(catalogPath, "utf8");
+  const originalTable = readFileSync(table, "utf8");
+  try {
+    const catalog = JSON.parse(originalCatalog);
+    catalog.roots.push({ rootId: "experience.profile", channel: "--ds-experience-profile" });
+    writeFileSync(catalogPath, `${JSON.stringify(catalog, null, 2)}\n`);
+    expectError(validateModernRescueContracts(baseline), "roots[] still lists retired root experience.profile", "a retired root back in the catalog rows must fail");
+    writeFileSync(catalogPath, "{ not json\n");
+    expectError(validateModernRescueContracts(baseline), "is unreadable: retired roots cannot be proven absent", "an unreadable catalog must fail closed");
+    writeFileSync(catalogPath, originalCatalog);
+    const doc = JSON.parse(originalTable);
+    doc.roots[1].cell = "roots/recipe-profile/index.json";
+    writeFileSync(table, `${JSON.stringify(doc, null, 2)}\n`);
+    expectError(validateModernRescueContracts(baseline), "retired root recipe-profile names cell", "a record naming another cell must fail");
+  } finally {
+    writeFileSync(catalogPath, originalCatalog);
+    writeFileSync(table, originalTable);
+  }
+});
+test("an ABSENT cascade roots directory fails closed instead of skipping the leg", () => {
+  const backup = join(SANDBOX, "cascade-roots.t1-test-backup-absent");
+  try {
+    renameSync(cascadeRootsDir, backup);
+    expectError(
+      validateModernRescueContracts(baseline),
+      "is missing: every active control needs its cascade root",
+      "a cascade roots path that resolves nowhere must fail",
+    );
+  } finally {
+    renameSync(backup, cascadeRootsDir);
+  }
+});
 test("planted cascade defects fail closed (kind, site, orphan terminalReach)", () => {
-  const target = join(manifestRoot, "cascade/roots/shape/radius-scale/index.json");
+  const target = join(cascadeRootsDir, "shape/radius-scale/index.json");
   const original = readFileSync(target, "utf8");
   const run = () => validateModernRescueContracts(baseline);
   try {
@@ -714,7 +777,7 @@ test("planted cascade defects fail closed (kind, site, orphan terminalReach)", (
 });
 
 test("cabeza nula: sin razon citada va rojo, bien declarada va verde", () => {
-  const target = join(manifestRoot, "cascade/roots/responsive/posture/index.json");
+  const target = join(cascadeRootsDir, "responsive/posture/index.json");
   const original = readFileSync(target, "utf8");
   const run = () => validateModernRescueContracts(baseline);
   try {
@@ -1239,7 +1302,7 @@ test("CONTROL: a catalog is a real alternative domicile, not decoration", () => 
  * plus the live tree as the standing positive.
  */
 test("planted emitted value with no admission fails closed", () => {
-  const target = join(manifestRoot, "cascade/roots/chrome/anatomy/index.json");
+  const target = join(cascadeRootsDir, "chrome/anatomy/index.json");
   const original = readFileSync(target, "utf8");
   try {
     const doc = JSON.parse(original);
@@ -1301,7 +1364,7 @@ test("the density axis is admitted by density.mode, not by the sibling catalog",
 });
 
 test("planted root axis with no mapped owner fails closed", () => {
-  const target = join(manifestRoot, "cascade/roots/profiles/expressive/index.json");
+  const target = join(cascadeRootsDir, "profiles/expressive/index.json");
   const original = readFileSync(target, "utf8");
   try {
     const doc = JSON.parse(original);
@@ -1468,7 +1531,7 @@ test("a walk that misses cells fails, instead of reporting zero bare ones", () =
  * probar el agujero: una raiz que ANTES no estaba cubierta.
  */
 test("F1: an invented variant in a newly covered root fails closed", () => {
-  const target = join(manifestRoot, "cascade/roots/density/mode/index.json");
+  const target = join(cascadeRootsDir, "density/mode/index.json");
   const original = readFileSync(target, "utf8");
   try {
     const doc = JSON.parse(original);

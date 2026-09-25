@@ -74,7 +74,7 @@ const TENANT_SEED_ROOTS = Object.freeze({
 export const SCRATCH_CHANNEL = /(-resolved-|-resolved$|-computed-|-computed$|-effective-|-effective$|-current-|-current$)/;
 
 /**
- * CASCADA: validate one authored root file (docs/history/inventories/customization-manifest/cascade/roots/<id>.json).
+ * CASCADA: validate one authored root file (governance/manifest/cascade/roots/<id>/index.json).
  * socketOwnership: Map<channelId, { owner: controlId, families: Set<familyId> }>
  * built from families internalChannels (semanticOwner edges).
  */
@@ -1017,7 +1017,7 @@ export function validateCell(cell, options) {
    * declaration is gated, cited and singular; re-deciding it here would create a
    * second authority for the same fact. The ids arrive through the explicit
    * context, like activeControlIds, because this module stays pure with respect
-   * to its context: reading docs/history/inventories/customization-manifest/cascade by path would pin the real tree and
+   * to its context: reading governance/manifest/cascade by path would pin the real tree and
    * a drill could no longer grade a temporary fixture.
    */
   const isDataTerminal =

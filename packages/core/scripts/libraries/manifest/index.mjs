@@ -9,6 +9,12 @@ import { basename, dirname, extname, join, relative, sep } from 'node:path';
  */
 export const QUARANTINE_MANIFEST_REL = 'docs/history/inventories/customization-manifest';
 
+/** Package-relative home of the live cascade tables: root catalog, owner assignments and root cells. */
+export const CASCADE_MANIFEST_REL = 'governance/manifest/cascade';
+
+/** The same home as generated artifacts cite it, relative to the workspace root. */
+export const CASCADE_MANIFEST_REPO_REL = `packages/core/${CASCADE_MANIFEST_REL}`;
+
 const PATH_ALIASES = new Map([
   ['recipe-profile', 'recipes/profile'],
   ['token-overrides', 'tokens/overrides'],

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "statement": "Controls that stay live in the typed catalog but no longer head a cascade root: their selection reaches the runtime as data, not as a CSS channel. A retired id may keep neither a root cell nor a row in the cascade catalog.",
+  "roots": [
+    {
+      "rootId": "experience.profile",
+      "cell": "roots/experience/profile/index.json",
+      "commit": "61280a253",
+      "reason": "--ds-experience-profile lost its only emissions: the selection travels as runtime data. The control still produces its four distributed channels, none of which is a root head."
+    },
+    {
+      "rootId": "recipe-profile",
+      "cell": "roots/recipes/profile/index.json",
+      "commit": "61280a253",
+      "reason": "--ds-recipe-profile lost its only emissions and the recipes deriver was deleted: the selection travels as runtime data and the control produces no channel."
+    }
+  ]
+}

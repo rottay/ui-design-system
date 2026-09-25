@@ -7,7 +7,7 @@
  * catalog (or control), so the drill still runs against today's 64 roots and 21
  * controls. What it removes is the in-place write. `node --test` runs test FILES
  * in parallel processes against ONE working tree, so a drill that mutated
- * `docs/history/inventories/customization-manifest/cascade/catalog/index.json` and restored it published a
+ * `governance/manifest/cascade/catalog/index.json` and restored it published a
  * window in which every other suite reading that file saw the planted defect --
  * measured: `cascade-producers`' determinism drill compared two builds of the
  * same tree and got two different `inputsDigest.rootCatalog` values.
@@ -101,7 +101,7 @@ test('the live snapshot is the measured one, not a guess', () => {
   // legal. La adjudicacion que el owner tenia pendiente era "neutral no tiene
   // semilla", y sigue sin tenerla: lo que se abrio es la TEMPERATURA del eje,
   // que mueve la rampa entera y los dos anclajes del monocromo.
-  assert.deepEqual(counts, { 'tenant-dial': 38, 'internal-head': 23, gap: 3 });
+  assert.deepEqual(counts, { 'tenant-dial': 37, 'internal-head': 23, gap: 3 });
 });
 
 /* ------- LAW 0b: the premise that makes the refined-root discount honest ------ */

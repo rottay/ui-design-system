@@ -17,13 +17,13 @@
     "collapsesLegacy": "este artefacto NO se reconcilia con roots[].collapsesLegacy.total: esa cifra es salida de un clasificador que no existe, no reproduce por ninguna via disponible, incluye `duplicado` (criterio prohibido) y esta medida sobre otro denominador y otro arbol."
   },
   "provenance": {
-    "catalog": "docs/history/inventories/customization-manifest/cascade/catalog/index.json",
-    "catalogRoots": 100,
+    "catalog": "packages/core/governance/manifest/cascade/catalog/index.json",
+    "catalogRoots": 99,
     "edges": "artifacts/generated/manifest/cascade/edges/index.json",
     "inventory": "scripts/check/tokens/cascade/slots/index.mjs (funcion pura, no el artefacto: leerlo crearia un ciclo)",
-    "ownerTiers": "docs/history/inventories/customization-manifest/cascade/assignments/tiers/index.json",
+    "ownerTiers": "packages/core/governance/manifest/cascade/assignments/tiers/index.json",
     "ownerTiersFormFailures": [],
-    "ownerStepRules": "docs/history/inventories/customization-manifest/cascade/assignments/steps/index.json",
+    "ownerStepRules": "packages/core/governance/manifest/cascade/assignments/steps/index.json",
     "ownerStepRulesFormFailures": [],
     "parentByDesignFailures": []
   },
@@ -4754,5 +4754,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "dacf2be3e60356b33576888222a2a0060deb35988b3b55cd010a68383e167b78"
+  "digest": "83a2f2ac8523f16178b726fed8ca5393c52ca8d0e351d9fe9d78c6f8cde9b50b"
 }

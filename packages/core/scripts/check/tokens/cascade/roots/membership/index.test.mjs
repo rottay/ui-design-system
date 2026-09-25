@@ -778,9 +778,8 @@ test('COBERTURA de la tabla de pasos: toda regla la ejerce una fila viva, o esta
   const { readFileSync } = await import('node:fs');
   const { join } = await import('node:path');
   const { PARENT_BY_DESIGN, CORE_ROOT } = await import('./index.mjs');
-  const { repoRoot: findRepoRoot } = await import('../../../../../libraries/repo-root/index.mjs');
-  const { QUARANTINE_MANIFEST_REL } = await import('../../../../../libraries/manifest/index.mjs');
-  const table = JSON.parse(readFileSync(join(findRepoRoot(CORE_ROOT), QUARANTINE_MANIFEST_REL, 'cascade/assignments/steps/index.json'), 'utf8'));
+  const { CASCADE_MANIFEST_REL } = await import('../../../../../libraries/manifest/index.mjs');
+  const table = JSON.parse(readFileSync(join(CORE_ROOT, CASCADE_MANIFEST_REL, 'assignments/steps/index.json'), 'utf8'));
   const doc = JSON.parse(readFileSync(join(CORE_ROOT, 'artifacts/generated/manifest/cascade/membership/index.json'), 'utf8'));
   const rules = Array.isArray(table) ? table : table.rows;
   assert.ok(rules.length > 0, 'sin reglas este drill no prueba nada');
