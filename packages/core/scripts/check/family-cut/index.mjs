@@ -141,9 +141,9 @@ export const OWED_ARMS = Object.freeze([
   },
   {
     id: 'axe-per-family',
-    owner: 'WO-INV-03',
+    owner: 'WO-INV-03 (DONE 4bf21162e)',
     reason:
-      'axe needs a rendered DOM; a static gate cannot run it. The live acceptance is WO-INV-03: axe per family over the Modern x bithire matrix in CI, on a baseline carrying zero `critical` rows -- the shipped run measures eight flagship galleries, which is not one cut per family. What this gate CAN prove, and does, is the blocking arm `a11yAssertions`: the family EXECUTES at least one accessibility assertion of its own -- an assertion inside a suppressed suite is text, not evidence',
+      'axe needs a rendered DOM; a static gate cannot run it. The live acceptance ran under WO-INV-03 (done 2026-09-22), and the per-family debt maps are measured by identity: the 2026-09-25 close audit read 16 of 18 FAM-08 maps empty and the remaining 4 nodes drained in 7abe19e52. What this gate CAN prove, and does, is the blocking arm `a11yAssertions`: the family EXECUTES at least one accessibility assertion of its own -- an assertion inside a suppressed suite is text, not evidence',
   },
 ]);
 
