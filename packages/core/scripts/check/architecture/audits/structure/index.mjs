@@ -160,10 +160,10 @@ export const UI_LAYER_RANKS = Object.freeze({
  * infrastructure macro root.
  */
 export const SCOPED_OWNER_RANKS = Object.freeze({
-  // One Notifier owns the transient announcement surface; Toast, Notification
-  // and Message are its role entry points and compose it, never the reverse.
+  // One Notifier owns the transient announcement surface, under the `foundation`
+  // support owner; Toast, Notification and Message compose it, never the reverse.
   'components/primitives/feedback': Object.freeze({
-    notifier: 0,
+    foundation: 0,
     message: 1,
     notification: 1,
     toast: 1,

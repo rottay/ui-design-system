@@ -128,7 +128,7 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
     // One Notifier owns the transient announcement surface; message,
     // notification and toast are its role entry points and compose it.
     'components/primitives/feedback': {
-      notifier: 0,
+      foundation: 0,
       message: 1,
       notification: 1,
       toast: 1,
@@ -545,22 +545,22 @@ test('the announcement roles compose one Notifier without becoming peers of each
   try {
     const owner = 'components/primitives/feedback';
     write(
-      resolve(sourceRoot, `${owner}/notifier/index.ts`),
-      "import { toast } from '../toast';\nexport const notifier = toast;\n",
+      resolve(sourceRoot, `${owner}/foundation/notifier/index.ts`),
+      "import { toast } from '../../toast';\nexport const notifier = toast;\n",
     );
     write(
       resolve(sourceRoot, `${owner}/message/index.ts`),
-      "import { notifier } from '../notifier';\nexport const message = notifier;\n",
+      "import { notifier } from '../foundation/notifier';\nexport const message = notifier;\n",
     );
     write(
       resolve(sourceRoot, `${owner}/notification/index.ts`),
-      "import { notifier } from '../notifier';\nexport const notification = notifier;\n",
+      "import { notifier } from '../foundation/notifier';\nexport const notification = notifier;\n",
     );
     // Two controls leave this one file: the notifier is rank 0 below it, and
     // message is a rank-1 role beside it.
     write(
       resolve(sourceRoot, `${owner}/toast/index.ts`),
-      "import { notifier } from '../notifier';\nimport { message } from '../message';\nexport const toast = [notifier, message];\n",
+      "import { notifier } from '../foundation/notifier';\nimport { message } from '../message';\nexport const toast = [notifier, message];\n",
     );
 
     const result = auditCoreStructure({ packageRoot, sourceRoot });
@@ -568,11 +568,11 @@ test('the announcement roles compose one Notifier without becoming peers of each
     const ids = new Set(result.findings.map(({ id }) => id));
 
     for (const role of ['message', 'notification', 'toast']) {
-      const edge = `${owner}/${role}/index.ts->${owner}/notifier/index.ts`;
+      const edge = `${owner}/${role}/index.ts->${owner}/foundation/notifier/index.ts`;
       assert(!ids.has(`sibling-owner-dependency:${edge}`), `a role must compose the notifier: ${edge}`);
       assert(!ids.has(`local-layer-inversion:${edge}`), `a role must compose the notifier: ${edge}`);
     }
-    assert(ids.has(`local-layer-inversion:${owner}/notifier/index.ts->${owner}/toast/index.ts`));
+    assert(ids.has(`local-layer-inversion:${owner}/foundation/notifier/index.ts->${owner}/toast/index.ts`));
     // Equal rank is not permission: the three roles stay peers of each other.
     assert(ids.has(`sibling-owner-dependency:${owner}/toast/index.ts->${owner}/message/index.ts`));
   } finally {

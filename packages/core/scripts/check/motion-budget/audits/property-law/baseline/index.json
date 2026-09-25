@@ -138,6 +138,15 @@
       "transitionAll": 1
     }
   },
+  "lastMove": {
+    "date": "2026-09-25",
+    "kind": "line moves only: same file, kind and property; count 68 unchanged",
+    "movers": [
+      "802aa2120 (B45 paint drain): stack skin re-base removed above the site, --ds-transition-rearrange 199 -> 182",
+      "a3b241626 (on-primary ink lot): tooltip skin lines inserted above the site, the six inset/left/right legs 288 -> 294"
+    ],
+    "notMoved": "skin/app-shell/index.css:111 stays: its move to 110 exists only in the working tree (the in-flight C12-continuation writer's uncommitted app-shell edit), not in any commit; that writer re-pins it with its lot"
+  },
   "sites": [
     {
       "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -465,43 +474,43 @@
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stack/index.css",
-      "line": 199,
+      "line": 182,
       "kind": "layoutAlias",
       "property": "--ds-transition-rearrange"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 288,
+      "line": 294,
       "kind": "layoutProperty",
       "property": "inset-block-end"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 288,
+      "line": 294,
       "kind": "layoutProperty",
       "property": "inset-block-start"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 288,
+      "line": 294,
       "kind": "layoutProperty",
       "property": "inset-inline-end"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 288,
+      "line": 294,
       "kind": "layoutProperty",
       "property": "inset-inline-start"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 288,
+      "line": 294,
       "kind": "layoutProperty",
       "property": "left"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 288,
+      "line": 294,
       "kind": "layoutProperty",
       "property": "right"
     },

@@ -1534,18 +1534,30 @@ test('visualization skin Calendar Modern crosses the event accent only through a
   const cssPath = join(cssRoot, 'modern/skin/pattern-calendar-view/index.css');
   const css = readFileSync(cssPath, 'utf8');
   const sinks = collectSinks(css, cssPath, CALENDAR_CHANNEL);
-  assert.equal(sinks.length, 1, 'the Modern calendar skin must consume the event accent exactly once');
-  assert.equal(cssTrim(sinks[0].prop), 'background', 'the event accent must land as the chip fill');
+  // Two sinks, both on the chip: the fill, and (7abe19e52) the chip's own ink,
+  // contrast-color() of that same accent under @supports.
+  assert.equal(sinks.length, 2, 'the Modern calendar skin must consume the event accent as the chip fill and its ink, nothing else');
+  const fill = sinks.filter((sink) => cssTrim(sink.prop) === 'background');
+  const ink = sinks.filter((sink) => cssTrim(sink.prop) === 'color');
+  assert.equal(fill.length, 1, 'the event accent must land as the chip fill exactly once');
   assert.equal(
-    cssTrim(sinks[0].value),
+    cssTrim(fill[0].value),
     'var(--ds-calendar-view-entry-accent, var(--ds-color-primary))',
     'the event accent sink lost its exact primary fallback',
   );
-  assert.deepEqual(
-    scopeViolations(sinks[0], CALENDAR_ACCENT_SELECTOR),
-    [],
-    'the event accent sink must carry exactly the canonical Modern calendar selector',
+  assert.equal(ink.length, 1, 'the chip ink must read its own accent exactly once');
+  assert.equal(
+    cssTrim(ink[0].value),
+    'contrast-color(var(--ds-calendar-view-entry-accent, var(--ds-color-primary)))',
+    'the chip ink must be contrast-color() of the same accent, with the same primary fallback',
   );
+  for (const sink of sinks) {
+    assert.deepEqual(
+      scopeViolations(sink, CALENDAR_ACCENT_SELECTOR),
+      [],
+      'every event accent sink must carry exactly the canonical Modern calendar selector',
+    );
+  }
 
   // The causal pins, permanent. Every mutant is constructed in memory from the
   // live source; no repository file is ever mutated. Each pair states what the
@@ -2272,12 +2284,14 @@ test('visualization skin Calendar Modern crosses the event accent only through a
 
   // The unscoped alternative: one declaration, both retired `includes` still
   // true, and the channel leaking onto every `.ds-leak` in the document.
-  const leaked = collectSinks(
-    withLeakedSelectorAlternative(css, sinks[0].parent),
+  const leakedSinks = collectSinks(
+    withLeakedSelectorAlternative(css, fill[0].parent),
     cssPath,
     CALENDAR_CHANNEL,
   );
-  assert.equal(leaked.length, 1, 'the leaked alternative rides the SAME single declaration');
+  const leaked = leakedSinks.filter((sink) => cssTrim(sink.prop) === 'background');
+  assert.equal(leakedSinks.length, 2, 'widening the fill rule adds no sink');
+  assert.equal(leaked.length, 1, 'the leaked alternative rides the SAME single fill declaration');
   const leakedSelector = normalizeSelector(leaked[0].parent.selector);
   assert.ok(
     leakedSelector.includes(".ds-pattern-calendar-view.ds-engine-modern[data-part='root']") &&

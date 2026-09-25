@@ -27,6 +27,11 @@
       "rule": "M1-loose-manifest-file",
       "path": "docs/history/inventories/customization-manifest/README.md",
       "reason": "the WO-RET-03 quarantine marker itself: a one-line README stating that no gate reads the sealed corpus as authority. It is a deliberate loose file at the manifest root, adjudicated here rather than bent into an index.json. The M1 walk over the quarantine exists to keep certifying the corpus shape; the README is the one documented exception."
+    },
+    {
+      "rule": "R8-single-child-subdomain",
+      "path": "generate/tokens/manifest",
+      "reason": "left single-child by 68a02b951 (2026-09-25), which retired its sibling root-checklists (zero importers, zero artifact readers). The surviving child `fanout` is addressed by path from the gate manifest (fanout-facts-drill, fanout-facts-freshness), the modern-rescue sandbox closure and its own emitted artifact (`generator` field of artifacts/generated/manifest/cascade/fanout), so collapsing it one level is a path move with its readers and an artifact regeneration, not a re-pin: routed to a structure lot. The entry goes STALE the day the collapse lands or a second child arrives."
     }
   ]
 }

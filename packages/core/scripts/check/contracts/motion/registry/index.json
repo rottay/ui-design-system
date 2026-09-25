@@ -325,20 +325,29 @@
           "scope": "ds-internal",
           "maxCount": 289,
           "maxFiles": 129,
-          "digest": "a220c38b878bcbdecc80f4c397e706179e4eb1f9bf95563541d3002c8f712e22",
+          "digest": "99ce9eb7770a39533131eec558beeca2e7a30d440da9b2a955f100a52798e4d5",
           "lastMove": {
-            "date": "2026-09-24",
-            "from": "304/138",
+            "date": "2026-09-25",
+            "from": "289/129",
             "to": "289/129",
-            "kind": "measured rewrite and removal; no new author (the 0ca2eb294 widget-board literal was introduced and retired within the window)",
+            "kind": "body rewrite only, digest re-pinned via --print-baseline --repositories ui-design-system; count and files unchanged, no new author",
             "movers": [
-              "8e6b7e57b: +45/-47 in its own diff, -45 of the pin's rows, motion reads rewritten from primitive rungs to dial-driven intents",
-              "dd3060fa2: -2 (approval-workflow modern skin, the 720ms fallbacks rewritten; their surviving form lands with 8e6b7e57b)",
-              "d495324e5: +1/-1, frozen scrollbar paint relocated from skin/scroll-area to engines/classic/theme",
-              "8c901556d: +1/-1, page-shell sheen channel renamed",
-              "-2 each: 9779cab05, a9e48ebc1, e5c3a7334, 0a725ecc8; -1 each: e31c1174e, 0d29e9fe8, b5eca0e4b, 0d154c0d4, d524ec1d6 (family cuts retiring raw timings)",
-              "the commit carrying this row: skin/widget-board transform/inline-size fallback reads --ds-motion-deliberate instead of repeating 320ms"
-            ]
+              "47c2c681e: skin/export-button/index.css, `var(--ds-export-button-toast-duration, 1.8s)` -> `1.8s` (WO-EVI-03 arm 2: the channel was never produced, so the read always painted its fallback; the fallback became the declared paint because the toast fade is bound to the engine's fixed 1800ms lifetime). Measured by scanning 787d8215f and HEAD with the same scanner: 1 body removed, 1 added, nothing else moved"
+            ],
+            "previous": {
+              "date": "2026-09-24",
+              "from": "304/138",
+              "to": "289/129",
+              "kind": "measured rewrite and removal; no new author (the 0ca2eb294 widget-board literal was introduced and retired within the window)",
+              "movers": [
+                "8e6b7e57b: +45/-47 in its own diff, -45 of the pin's rows, motion reads rewritten from primitive rungs to dial-driven intents",
+                "dd3060fa2: -2 (approval-workflow modern skin, the 720ms fallbacks rewritten; their surviving form lands with 8e6b7e57b)",
+                "d495324e5: +1/-1, frozen scrollbar paint relocated from skin/scroll-area to engines/classic/theme",
+                "8c901556d: +1/-1, page-shell sheen channel renamed",
+                "-2 each: 9779cab05, a9e48ebc1, e5c3a7334, 0a725ecc8; -1 each: e31c1174e, 0d29e9fe8, b5eca0e4b, 0d154c0d4, d524ec1d6 (family cuts retiring raw timings)",
+                "the commit carrying this row: skin/widget-board transform/inline-size fallback reads --ds-motion-deliberate instead of repeating 320ms"
+              ]
+            }
           }
         },
         {
