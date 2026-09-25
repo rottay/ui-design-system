@@ -45,6 +45,7 @@ const PALETTE_RULE =
 export const commandPaletteChromeDeriver: FamilyDeriver = {
   family: "command-palette",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["surfaces.*", "palette.*", "shape.*", "density", "motion"],
   produces: [
     // Measure

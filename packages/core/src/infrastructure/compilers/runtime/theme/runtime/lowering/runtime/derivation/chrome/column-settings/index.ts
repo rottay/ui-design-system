@@ -14,6 +14,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const columnSettingsChromeDeriver: FamilyDeriver = {
   family: "column-settings",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "surfaces.radiusScale",

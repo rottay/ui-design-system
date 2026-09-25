@@ -31,6 +31,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const widgetBoardChromeDeriver: FamilyDeriver = {
   family: "widget-board",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["density"],
   produces: [
     "--ds-widget-board-catalog-no-results-min-height",

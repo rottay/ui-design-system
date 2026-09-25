@@ -26,6 +26,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const surfaceLifecycleChromeDeriver: FamilyDeriver = {
   family: "surface-lifecycle",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "typography.roles",

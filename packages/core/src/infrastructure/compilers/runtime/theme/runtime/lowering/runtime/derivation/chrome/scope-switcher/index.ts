@@ -31,6 +31,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const scopeSwitcherChromeDeriver: FamilyDeriver = {
   family: "scope-switcher",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "typography.roles",

@@ -20,6 +20,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const wizardSurfaceChromeDeriver: FamilyDeriver = {
   family: "wizard-surface",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["spacing.rhythm", "density"],
   produces: [
     "--ds-wizard-surface-description-margin-block-end",

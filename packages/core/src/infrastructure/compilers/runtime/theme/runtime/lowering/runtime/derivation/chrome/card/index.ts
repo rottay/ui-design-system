@@ -15,6 +15,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const cardChromeDeriver: FamilyDeriver = {
   family: "card",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.borderStyle", "surfaces.radiusScale", "typography.roles", "density"],
   produces: [
     "--ds-card-title-font-size-sm",

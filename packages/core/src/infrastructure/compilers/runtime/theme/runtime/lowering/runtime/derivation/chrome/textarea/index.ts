@@ -14,6 +14,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const textareaChromeDeriver: FamilyDeriver = {
   family: "textarea",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["palette.*", "surfaces.densityScale", "surfaces.materials"],
   produces: [
     "--ds-textarea-bg",

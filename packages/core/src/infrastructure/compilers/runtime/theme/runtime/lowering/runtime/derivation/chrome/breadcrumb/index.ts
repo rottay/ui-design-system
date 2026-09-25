@@ -15,6 +15,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const breadcrumbChromeDeriver: FamilyDeriver = {
   family: "breadcrumb",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.effects", "surfaces.radiusScale", "typography.roles", "states.focus", "states.press", "density", "motion"],
   produces: [
     "--ds-breadcrumb-bg",

@@ -16,6 +16,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const descriptionsChromeDeriver: FamilyDeriver = {
   family: "descriptions",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["palette.*", "surfaces.materials", "surfaces.radiusScale", "typography.roles", "typography.roleWeights", "density"],
   produces: [
     "--ds-descriptions-color",

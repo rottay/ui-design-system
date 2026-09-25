@@ -26,6 +26,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const sectionFrameChromeDeriver: FamilyDeriver = {
   family: "section-frame",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "typography.roles",

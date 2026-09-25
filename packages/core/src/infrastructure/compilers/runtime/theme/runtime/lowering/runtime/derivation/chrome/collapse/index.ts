@@ -14,6 +14,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const collapseChromeDeriver: FamilyDeriver = {
   family: "collapse",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "surfaces.radiusScale",

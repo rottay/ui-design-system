@@ -19,6 +19,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const detailFormSurfaceChromeDeriver: FamilyDeriver = {
   family: "detail-form-surface",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["spacing.rhythm", "density"],
   produces: ["--ds-detail-form-surface-error-banner-padding"],
   derive: () => deriveDetailFormSurfaceChannels(),

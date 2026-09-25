@@ -16,6 +16,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const tagChromeDeriver: FamilyDeriver = {
   family: "tag",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "surfaces.radiusScale",

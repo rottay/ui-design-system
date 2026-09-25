@@ -13,6 +13,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const splitterChromeDeriver: FamilyDeriver = {
   family: "splitter",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["palette.*", "surfaces.*", "materials", "density", "motion.*"],
   produces: [
     "--ds-splitter-gutter-bg",

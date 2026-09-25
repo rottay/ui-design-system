@@ -16,6 +16,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const badgeChromeDeriver: FamilyDeriver = {
   family: "badge",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "surfaces.radiusScale",

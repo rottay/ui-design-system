@@ -33,6 +33,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const surfaceChromeChromeDeriver: FamilyDeriver = {
   family: "surface-chrome",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["density"],
   produces: [
     "--ds-section-card-header-min-height",

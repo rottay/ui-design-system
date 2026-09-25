@@ -34,6 +34,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const kanbanBoardChromeDeriver: FamilyDeriver = {
   family: "kanban-board",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "typography.roles",

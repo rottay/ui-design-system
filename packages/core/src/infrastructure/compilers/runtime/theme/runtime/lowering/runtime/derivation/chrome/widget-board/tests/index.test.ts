@@ -56,10 +56,11 @@ describe("chrome/widget-board", () => {
       ),
       "utf8"
     );
-    const reads = skin.match(/var\(--ds-motion-rearrange(, var\(--[a-z-]+, [^)]+\))?\)/g) ?? [];
+    const reads = skin.match(/var\(--ds-motion-rearrange, var\(--ds-motion-slow, var\(--ds-motion-deliberate\)\)\)/g) ?? [];
     expect(reads.length).toBeGreaterThan(0);
+    expect(skin.match(/--ds-motion-rearrange/g)?.length).toBe(reads.length);
     for (const read of reads) {
-      expect(read).toBe("var(--ds-motion-rearrange, var(--ds-motion-slow, 320ms))");
+      expect(read).toBe("var(--ds-motion-rearrange, var(--ds-motion-slow, var(--ds-motion-deliberate)))");
     }
   });
 

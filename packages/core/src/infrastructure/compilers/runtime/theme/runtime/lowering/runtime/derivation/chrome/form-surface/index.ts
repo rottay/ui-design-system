@@ -20,6 +20,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const formSurfaceChromeDeriver: FamilyDeriver = {
   family: "form-surface",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["spacing.rhythm", "density"],
   produces: [
     "--ds-form-action-dock-reserved-space",

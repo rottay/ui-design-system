@@ -22,6 +22,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const filterPanelChromeDeriver: FamilyDeriver = {
   family: "filter-panel",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "surfaces.radiusScale",

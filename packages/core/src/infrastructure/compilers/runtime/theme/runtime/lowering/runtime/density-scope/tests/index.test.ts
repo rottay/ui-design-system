@@ -103,7 +103,7 @@ describe("density-scope roster", () => {
     expect(census[1]).toEqual(census[0]);
     expect(census[2]).toEqual(census[0]);
     // The census the next claims drain: every claim moves `unclaimed` down.
-    expect(census[0]).toEqual({ density: [49, 350], direct: 343, arabic: [13, 23], unclaimed: [47, 331] });
+    expect(census[0]).toEqual({ density: [49, 350], direct: 343, arabic: [13, 23], unclaimed: [24, 226] });
   });
 
   it("projects every density-exposed channel of a claiming family, and only those", () => {
@@ -118,8 +118,14 @@ describe("density-scope roster", () => {
     }
   });
 
-  it("the claimants are the toolbar and the app shell, and their arabic-axis channels are named masked pins", () => {
-    expect(FAMILY_DERIVERS.filter(claimsDensityScope).map((deriver) => deriver.family)).toEqual(["app-shell", "toolbar"]);
+  it("the claimants are the twenty-five adopting families, and their arabic-axis channels are named masked pins", () => {
+    expect(FAMILY_DERIVERS.filter(claimsDensityScope).map((deriver) => deriver.family)).toEqual([
+      "textarea", "breadcrumb", "stepper", "section-frame", "stats-header", "surface-lifecycle",
+      "app-shell", "scope-switcher", "command-palette", "search-command-bar", "surface-chrome",
+      "form-surface", "wizard-surface", "detail-form-surface", "card", "tag", "badge",
+      "kanban-board", "widget-board", "column-settings", "filter-panel", "toolbar",
+      "descriptions", "collapse", "splitter",
+    ]);
     for (const vertical of VERTICALS) {
       const { arabic, family, claimed } = roster(vertical);
       const claimedArabic = [...arabic].filter((channel) => claimed.has(family(channel))).sort();

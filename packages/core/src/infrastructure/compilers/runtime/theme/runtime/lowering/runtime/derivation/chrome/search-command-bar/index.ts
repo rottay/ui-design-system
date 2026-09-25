@@ -32,6 +32,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const searchCommandBarChromeDeriver: FamilyDeriver = {
   family: "search-command-bar",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["surfaces.*", "palette.*", "shape.*", "density", "motion"],
   produces: [
     // The strip itself: the bar is chrome over the page ground, and its two surface variants.

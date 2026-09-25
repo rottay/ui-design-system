@@ -17,6 +17,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const stepperChromeDeriver: FamilyDeriver = {
   family: "stepper",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.effects", "surfaces.radiusScale", "typography.roles", "typography.numeric", "states.focus", "states.press", "density", "motion"],
   produces: [
     "--ds-stepper-font-family",
