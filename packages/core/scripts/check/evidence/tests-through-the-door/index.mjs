@@ -174,6 +174,14 @@ export function checkArms({ consumers, unproduced, baselines, testLedger, baseli
   const harness = testLedger.harnessConsumers;
   if (!OWNER.test(harness.owner ?? '') || !harness.reason) findings.push('harness consumers: the ledger names no owner work order or no reason');
   exactSet('harness consumers', consumers, harness.files, findings);
+  const retained = harness.retainedBecause ?? {};
+  for (const file of harness.files) {
+    const because = Object.hasOwn(retained, file) ? retained[file] : undefined;
+    if (typeof because !== 'string' || because.trim() === '') findings.push(`harness consumers: ${file} is retained without a reason -- write its retainedBecause or route it through the door`);
+  }
+  for (const file of Object.keys(retained)) {
+    if (!harness.files.includes(file)) findings.push(`harness consumers: retainedBecause names ${file}, which is not a retained row -- remove the orphan reason`);
+  }
 
   const ledgerRows = testLedger.unproducedChannelAssertions.rows;
   const byKey = new Map(ledgerRows.map((row) => [`${row.file}::${row.name}`, row]));

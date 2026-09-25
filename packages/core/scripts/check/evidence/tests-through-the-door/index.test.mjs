@@ -59,6 +59,41 @@ test('MUTANT arm 1: a consumer that leaves without its exit written down is red'
   assert.match(findings[0], /left the census -- write the exit/u);
 });
 
+test('LIVE arm 1: every retained row carries its reason, and every reason its row', () => {
+  const { files, retainedBecause } = testLedger.harnessConsumers;
+  assert.ok(files.length > 0);
+  assert.deepEqual(Object.keys(retainedBecause).sort(), [...files].sort());
+  assert.ok(files.every((file) => retainedBecause[file].trim().length > 0));
+});
+
+test('MUTANT arm 1: a retained row without a reason is red by name', () => {
+  const [row] = testLedger.harnessConsumers.files;
+  for (const because of [undefined, '', '   ', 42]) {
+    const ledger = clone(testLedger);
+    if (because === undefined) delete ledger.harnessConsumers.retainedBecause[row];
+    else ledger.harnessConsumers.retainedBecause[row] = because;
+    const findings = checkArms({ ...live, testLedger: ledger, baselineLedger });
+    assert.equal(findings.length, 1, findings.join('\n'));
+    assert.equal(findings[0], `harness consumers: ${row} is retained without a reason -- write its retainedBecause or route it through the door`);
+  }
+});
+
+test('MUTANT arm 1: a ledger with no retainedBecause at all is red once per row', () => {
+  const ledger = clone(testLedger);
+  delete ledger.harnessConsumers.retainedBecause;
+  const findings = checkArms({ ...live, testLedger: ledger, baselineLedger });
+  assert.equal(findings.length, testLedger.harnessConsumers.files.length);
+  assert.ok(findings.every((finding) => /is retained without a reason/u.test(finding)));
+});
+
+test('MUTANT arm 1: a reason whose row is not retained is red by name', () => {
+  const ledger = clone(testLedger);
+  ledger.harnessConsumers.retainedBecause['core/src/drill/tests/orphan.test.ts'] = 'Measured: a reason for a row that is not in files[].';
+  const findings = checkArms({ ...live, testLedger: ledger, baselineLedger });
+  assert.equal(findings.length, 1, findings.join('\n'));
+  assert.equal(findings[0], 'harness consumers: retainedBecause names core/src/drill/tests/orphan.test.ts, which is not a retained row -- remove the orphan reason');
+});
+
 test('CONTROL arm 1: the binding counts in code, not in a comment or another name', () => {
   const sources = [
     { path: 'core/a.test.ts', text: 'const r = lowerFlatThemeFixture({ flatTheme });' },
