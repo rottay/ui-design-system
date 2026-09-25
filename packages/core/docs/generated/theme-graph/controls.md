@@ -8,34 +8,34 @@
 > `produced` counts the channels the decision's derivers emit; `via aliases` counts what those
 > channels can still reach through the measured alias chain.
 
-digest: 4fdf965ceddfe3079832ccc138da5eadf34dc375d8828afc713bc34ba5eed947
+digest: 16e08b93be9313d4c8d11992f26d008822f85fb9912c4da86131c7cc525355d4
 
 | decision | tier | derivers | produced | via aliases | families reached |
 |---|---|---|---|---|---|
 | `chrome.anatomy` | pro | 1 | 6 | 13 | 3 |
-| `density.mode` | standard | 11 | 337 | 1216 | 211 |
+| `density.mode` | standard | 11 | 337 | 1215 | 211 |
 | `experience.profile` | standard | 8 | 224 | 1890 | 245 |
-| `motion.character` | pro | 30 | 1056 | 1321 | 203 |
-| `motion.dial` | standard | 30 | 1056 | 1321 | 203 |
+| `motion.character` | pro | 30 | 1056 | 1319 | 203 |
+| `motion.dial` | standard | 30 | 1056 | 1319 | 203 |
 | `navigation.sidebar-tone` | standard | 1 | 6 | 13 | 3 |
-| `palette.contrast-posture` | pro | 85 | 2514 | 4103 | 251 |
+| `palette.contrast-posture` | pro | 85 | 2514 | 4094 | 251 |
 | `palette.dark-mode` | pro | — | 0 | 0 | **none** |
-| `palette.neutral-temperature` | standard | 85 | 2514 | 4103 | 251 |
-| `palette.seeds` | standard | 89 | 2612 | 4306 | 251 |
-| `palette.status-seeds` | standard | 88 | 2600 | 4282 | 251 |
+| `palette.neutral-temperature` | standard | 85 | 2514 | 4094 | 251 |
+| `palette.seeds` | standard | 89 | 2612 | 4297 | 251 |
+| `palette.status-seeds` | standard | 88 | 2600 | 4273 | 251 |
 | `profiles.expressive` | pro | 8 | 224 | 1890 | 245 |
 | `recipe-profile` | pro | — | 0 | 0 | **none** |
 | `responsive.posture` | pro | 2 | 31 | 32 | 1 |
-| `shape.button-style` | standard | 13 | 365 | 1053 | 218 |
-| `shape.control-height` | standard | 14 | 503 | 643 | 70 |
-| `shape.nesting` | pro | 11 | 344 | 458 | 54 |
-| `shape.radius-scale` | standard | 37 | 1287 | 1917 | 220 |
-| `spacing.rhythm` | standard | 11 | 336 | 539 | 62 |
+| `shape.button-style` | standard | 13 | 365 | 1052 | 218 |
+| `shape.control-height` | standard | 14 | 503 | 642 | 70 |
+| `shape.nesting` | pro | 11 | 344 | 457 | 54 |
+| `shape.radius-scale` | standard | 37 | 1287 | 1916 | 220 |
+| `spacing.rhythm` | standard | 11 | 336 | 538 | 62 |
 | `states.emphasis` | standard | 13 | 393 | 1204 | 207 |
 | `states.focus-style` | standard | 21 | 676 | 1468 | 208 |
-| `surfaces.border-style` | standard | 17 | 476 | 661 | 131 |
-| `surfaces.effect-intensity` | standard | 10 | 335 | 412 | 36 |
-| `surfaces.elevation-posture` | standard | 45 | 1701 | 1950 | 144 |
+| `surfaces.border-style` | standard | 17 | 476 | 660 | 131 |
+| `surfaces.effect-intensity` | standard | 10 | 335 | 411 | 36 |
+| `surfaces.elevation-posture` | standard | 45 | 1701 | 1949 | 144 |
 | `typography.families` | pro | 2 | 128 | 407 | 151 |
 | `typography.numeric` | pro | 5 | 256 | 524 | 151 |
 | `typography.pairing` | standard | 3 | 130 | 948 | 214 |

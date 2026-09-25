@@ -871,8 +871,6 @@
         "base|--ds-color-warning-700",
         "base|--ds-color-warning-800",
         "base|--ds-divider-label-ink",
-        "dark|--ds-color-link",
-        "dark|--ds-color-link-hover",
         "dark|--ds-divider-label-ink"
       ],
       "rootId": null,
@@ -3614,5 +3612,5 @@
       }
     }
   ],
-  "digest": "550d1db37e6165d2ea9ee1ad9e392513a6f970b7b807cf4d1df01ea7ea64b518"
+  "digest": "56d9f6f4ee32f70c6ee981ee2d65e831b6b00b469515c8dedbd8f44228a3761d"
 }
