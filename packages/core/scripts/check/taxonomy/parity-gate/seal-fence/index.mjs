@@ -90,7 +90,7 @@ export const SEAL_READERS = Object.freeze([
   reader('scripts/libraries/manifest/rules/index.mjs', 'seal-self-validation',
     'the validation rules the sealed programme check applies to its preserved control cells, which it cites by their sealed path'),
   reader('scripts/generate/tokens/manifest/root-checklists/index.mjs', 'family-bindings',
-    'binds root checklists to the per-family cells of the seal; no live source of family bindings exists yet'),
+    'binds root checklists to the per-family cells of the seal and labels the document with that provenance; the live map is Packet B, owned by the family-inventory lane (evidence/framework/inventory-correspondence)'),
   reader('scripts/check/theme/single-listing/index.mjs', 'forbidder',
     'forbids gates from reading the sealed control documents, so it has to name that path'),
   reader('scripts/check/theme/single-listing/index.test.mjs', 'forbidder',

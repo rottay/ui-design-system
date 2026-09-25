@@ -19,7 +19,7 @@
  * sigue siendo reconstruible por resta y el delta trae genealogia.
  *
  * La familia de un sitio de pintura es la del MANIFIESTO (RULING 1), no la del
- * sistema de archivos: `family-inventory/index.json` es el canon (255 filas). Orden
+ * sistema de archivos: `family-inventory/index.json` es el canon (252 filas). Orden
  * de resolucion en `resolveSite`. Lo que no resuelve cae en un bucket
  * explicito `unattributed/<archivo>`, que se cuenta y se lista aparte porque
  * CSS que pinta y que ninguna familia reclama es un HALLAZGO, no ruido.
@@ -72,6 +72,7 @@ import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../
 import {
   CASCADE_MANIFEST_REL,
   CASCADE_MANIFEST_REPO_REL,
+  QUARANTINE_MANIFEST_REL,
   readManifestRecords,
 } from '../../../../libraries/manifest/index.mjs';
 
@@ -131,6 +132,22 @@ function walk(dir, keep, out = []) {
 
 const stripPackage = (p) => String(p).replace(/^packages\/core\//, '').split('#')[0];
 
+/** Where the file -> family bindings come from: the sealed per-family cells. */
+export const FAMILY_BINDINGS_REL = `${QUARANTINE_MANIFEST_REL}/families`;
+export const FAMILY_BINDINGS_SEAL = Object.freeze({ commit: 'f66b1bd45', workOrder: 'WO-RET-03', date: '2026-09-19' });
+
+/** A binding key that still carries a `:line` locator can never equal a paint site's file. */
+export const DEAD_BINDING_KEY = /:\d[\d,-]*$/;
+export const DEAD_BINDING_RULE = 'key carries a :line suffix after stripPackage and can never equal a site file';
+
+export const FAMILY_BINDINGS_LAW = [
+  'The file -> family bindings that decide every paint site outside a sourceOwner are the per-family cells of the',
+  'sealed customization manifest, read as evidence because no live source of family bindings exists yet (seal',
+  "fence, slice family-bindings). They flatten the cells' sourceBindings (anatomy, per-control internalChannels and",
+  'the other sections) into file -> family. A family figure built on them is therefore of mixed provenance:',
+  'sourceOwner from the live inventory, everything else from a sealed cell.',
+].join(' ');
+
 /**
  * Indice clase CSS → familias que la estampan.
  *
@@ -178,42 +195,75 @@ export function loadCanon(programRoot = PROGRAM_ROOT, packageRoot = PACKAGE_ROOT
     .map((r) => ({ id: r.id, owner: stripPackage(r.sourceOwner) }))
     .sort((a, b) => b.owner.length - a.owner.length || (a.id < b.id ? -1 : 1));
 
-  const bindings = new Map();
-  // The families corpus is quarantined evidence (WO-RET-03): resolved through
-  // the workspace root that owns the package, never the package itself.
-  const familyFiles = walk(
-    path.join(findRepoRoot(packageRoot), 'docs', 'history', 'inventories', 'customization-manifest', 'families'),
-    (p) => p.endsWith('.json'),
+  const familyIds = new Set(inventory.rows.map((r) => r.id));
+  const { bindings, bindingsProvenance } = readFamilyBindings(
+    path.join(findRepoRoot(packageRoot), FAMILY_BINDINGS_REL),
+    familyIds,
   );
-  for (const abs of familyFiles) {
-    const doc = JSON.parse(readFileSync(abs, 'utf8'));
-    collectBindings(doc, doc.familyId, bindings);
-  }
 
   return {
     denominator: inventory.denominator,
-    familyIds: new Set(inventory.rows.map((r) => r.id)),
+    familyIds,
     owners,
     bindings,
+    bindingsProvenance,
     classIndex: buildClassIndex(owners, packageRoot),
   };
 }
 
-function collectBindings(node, familyId, out) {
+/**
+ * The file -> family bindings and the provenance block that describes them,
+ * measured in the same walk so the label cannot disagree with the map.
+ */
+export function readFamilyBindings(familiesDir, inventoryIds) {
+  const bindings = new Map();
+  const byLocation = new Map();
+  const cellIds = new Set();
+  let cells = 0;
+  for (const abs of walk(familiesDir, (p) => p.endsWith('.json'))) {
+    const doc = JSON.parse(readFileSync(abs, 'utf8'));
+    cells += 1;
+    cellIds.add(doc.familyId);
+    collectBindings(doc, doc.familyId, bindings, [], byLocation);
+  }
+  const deadKeys = [...bindings.keys()].filter((file) => DEAD_BINDING_KEY.test(file)).sort();
+  return {
+    bindings,
+    bindingsProvenance: {
+      provenance: 'sealed',
+      source: FAMILY_BINDINGS_REL,
+      sealedBy: { ...FAMILY_BINDINGS_SEAL },
+      law: FAMILY_BINDINGS_LAW,
+      cells,
+      cellFamilyIds: cellIds.size,
+      aliasFamilyIds: [...cellIds].filter((id) => !inventoryIds.has(id)).sort(),
+      boundFiles: bindings.size,
+      filesBoundToSeveralFamilies: [...bindings.values()].filter((families) => families.size > 1).length,
+      deadKeys: { count: deadKeys.length, rule: DEAD_BINDING_RULE, keys: deadKeys },
+      bindingsByLocation: Object.fromEntries(
+        [...byLocation.entries()].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1)),
+      ),
+    },
+  };
+}
+
+function collectBindings(node, familyId, out, trail, byLocation) {
   if (Array.isArray(node)) {
-    for (const item of node) collectBindings(item, familyId, out);
+    for (const item of node) collectBindings(item, familyId, out, trail.length ? [...trail.slice(0, -1), `${trail.at(-1)}[]`] : ['[]'], byLocation);
     return;
   }
   if (!node || typeof node !== 'object') return;
   for (const [key, value] of Object.entries(node)) {
     if (key === 'sourceBindings' && Array.isArray(value)) {
+      const location = trail.length > 0 ? trail.join('.') : '(cell)';
+      byLocation.set(location, (byLocation.get(location) ?? 0) + value.length);
       for (const binding of value) {
         const file = stripPackage(binding);
         if (!out.has(file)) out.set(file, new Set());
         out.get(file).add(familyId);
       }
     } else {
-      collectBindings(value, familyId, out);
+      collectBindings(value, familyId, out, [...trail, key], byLocation);
     }
   }
 }
@@ -796,6 +846,31 @@ export function mergeRoots(facts, extraRoots = [], manifestRoots = []) {
   return { roots, provenance, patternRoots, manifestRoots };
 }
 
+/** The one-sentence provenance of the family figure, composed from the bindings block. */
+export function familiesProvenanceSentence(block, inventoryRows) {
+  if (block.provenance === 'sealed') {
+    return `mixed: sourceOwner from the live inventory (${inventoryRows} rows); every other attribution from the `
+      + `sealed ${block.sealedBy.date} family cells (${block.cells} cells, ${block.aliasFamilyIds.length} alias ids, `
+      + `${block.boundFiles} bound files); no live twin exists (Packet B)`;
+  }
+  return `${block.provenance}: sourceOwner from the live inventory (${inventoryRows} rows); every other attribution `
+    + `from ${block.source} (${block.boundFiles} bound files)`;
+}
+
+/** The short form the rendered family lines carry. */
+export function familiesProvenanceSuffix(block) {
+  return block.provenance === 'sealed'
+    ? `(bindings: celdas selladas ${block.sealedBy.date}, procedencia mixta)`
+    : `(bindings: ${block.source}, ${block.provenance})`;
+}
+
+function requireBindingsProvenance(canon) {
+  if (!canon?.bindingsProvenance) {
+    throw new Error('root-checklist: el canon no declara bindingsProvenance; la cifra de familias no puede publicarse sin su procedencia');
+  }
+  return canon.bindingsProvenance;
+}
+
 export function buildChecklists(
   facts,
   canon,
@@ -803,6 +878,7 @@ export function buildChecklists(
   packageRoot = PACKAGE_ROOT,
   cascadeRootsDir = CASCADE_ROOTS_DIR,
 ) {
+  const bindingsProvenance = requireBindingsProvenance(canon);
   const graph = buildGraph(facts, canon, packageRoot);
   const byChannel = new Map(facts.channels.map((c) => [c.channel, c]));
   const declared = loadManifestRoots(new Set(byChannel.keys()), cascadeRootsDir, packageRoot);
@@ -833,6 +909,18 @@ export function buildChecklists(
   }
   const touched = new Set();
   for (const c of checklists) for (const f of c.families) if (f.manifestFamily) touched.add(f.family);
+  const closureChannels = new Set(checklists.flatMap((c) => c.channels.map((ch) => ch.channel)));
+  const bySource = new Map();
+  for (const channel of closureChannels) {
+    for (const site of graph.paintSites.get(channel) ?? []) {
+      const onlyBinding = site.resolvedBy === 'binding' || site.resolvedBy === 'binding-multi';
+      for (const family of site.families) {
+        if (!canon.familyIds.has(family)) continue;
+        bySource.set(family, (bySource.get(family) ?? true) && onlyBinding);
+      }
+    }
+  }
+  const onlyThroughBindings = [...bySource.entries()].filter(([, only]) => only).map(([family]) => family).sort();
 
   return {
     generator: 'scripts/generate/tokens/manifest/root-checklists/index.mjs',
@@ -879,6 +967,10 @@ export function buildChecklists(
       provenanceVocabulary: ROOT_PROVENANCE,
       notMeasurableVocabulary: NOT_MEASURABLE_REASONS,
     },
+    familyBindings: {
+      ...bindingsProvenance,
+      familiesTouchedOnlyThroughBindings: { count: onlyThroughBindings.length, families: onlyThroughBindings },
+    },
     notMeasurableRoots: notMeasurable,
     summary: {
       roots: checklists.length,
@@ -890,6 +982,7 @@ export function buildChecklists(
       totalUnreached: checklists.reduce((a, c) => a + c.summary.channelsUnreached, 0),
       manifestFamiliesTouched: touched.size,
       manifestDenominator: canon.denominator,
+      manifestFamiliesProvenance: familiesProvenanceSentence(bindingsProvenance, canon.familyIds.size),
       unattributedFiles: allUnattributed.size,
     },
     unattributed: [...allUnattributed.entries()]
@@ -907,12 +1000,15 @@ export function serialize(doc) {
  * Vista markdown
  * ───────────────────────────────────────────────────────────────────────── */
 
-export function toMarkdown(entry) {
+export function toMarkdown(entry, bindingsProvenance) {
+  if (!bindingsProvenance) {
+    throw new Error('root-checklist: toMarkdown necesita la procedencia de los bindings para rotular la cifra de familias');
+  }
   const L = [];
   const s = entry.summary;
   L.push(`# Checklist de raiz — \`${entry.root}\``);
   L.push('');
-  L.push(`• familias del manifiesto ─ ${s.manifestFamilies} de ${s.manifestDenominator}`);
+  L.push(`• familias del manifiesto ─ ${s.manifestFamilies} de ${s.manifestDenominator} ${familiesProvenanceSuffix(bindingsProvenance)}`);
   L.push(`• archivos sin familia ──── ${s.unattributedFiles} (${s.unattributedSites} sitios)`);
   L.push(`• canales en la cascada ─── ${s.channelsInCascade} (${s.channelsInCascadeDs} --ds- + ${s.channelsInCascadeViaBridge} via puente)`);
   L.push(`• con pintura ───────────── ${s.channelsPainting}`);
@@ -1002,7 +1098,7 @@ function main(argv) {
       process.stderr.write(`✗ root-checklist: el canal ${opts.markdown} no existe en los hechos\n`);
       process.exit(1);
     }
-    process.stdout.write(`${toMarkdown(checklistFor(opts.markdown, graph, byChannel, canon))}\n`);
+    process.stdout.write(`${toMarkdown(checklistFor(opts.markdown, graph, byChannel, canon), canon.bindingsProvenance)}\n`);
     return;
   }
 
@@ -1066,7 +1162,7 @@ function main(argv) {
   for (const nm of doc.notMeasurableRoots) {
     process.stdout.write(`    ✗ ${nm.rootId} ─ ${nm.reasonCode} (${nm.declaredAt})\n`);
   }
-  process.stdout.write(`  familias del manifiesto ─ ${doc.summary.manifestFamiliesTouched} de ${doc.summary.manifestDenominator}\n`);
+  process.stdout.write(`  familias del manifiesto ─ ${doc.summary.manifestFamiliesTouched} de ${doc.summary.manifestDenominator} ${familiesProvenanceSuffix(doc.familyBindings)}\n`);
   process.stdout.write(`  archivos sin familia ─── ${doc.summary.unattributedFiles}\n`);
   process.stdout.write(`  canales sin llegar ───── ${doc.summary.totalUnreached}\n`);
 }
