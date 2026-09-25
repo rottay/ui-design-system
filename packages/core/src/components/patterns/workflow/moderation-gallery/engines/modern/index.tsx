@@ -43,7 +43,7 @@ import ModernImage from '../../../../../primitives/display/image/engines/modern'
 import ModernConfirmDialog from '../../../../../primitives/overlay/confirm-dialog/engines/modern';
 import { ModernEmptyState } from '../../../../facade';
 import { VisuallyHidden } from '../../../../../primitives/foundation/visually-hidden';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalFormatter, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionConfirmIcon } from '@/graphics/icons/semantic/generated/roles/action-confirm';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { ActionPlayIcon } from '@/graphics/icons/semantic/generated/roles/action-play';
@@ -106,6 +106,7 @@ function ModerationCard({
   registerAction: (id: string, node: HTMLButtonElement | HTMLAnchorElement | null) => void;
   t: (key: string, floor: string, params?: Record<string, string | number>) => string;
 }) {
+  const format = useOptionalFormatter();
   const uploaded = (() => {
     const diffMin = Math.floor((Date.now() - new Date(item.uploadedAt).getTime()) / 60_000);
     if (diffMin < 1) return t('moderationGallery.uploaded.justNow', 'just now');
@@ -116,7 +117,7 @@ function ModerationCard({
     if (diffHr < 24) return t('moderationGallery.uploaded.hoursAgo', `${diffHr}h ago`, { count: diffHr });
     const diffDay = Math.floor(diffHr / 24);
     if (diffDay < 7) return t('moderationGallery.uploaded.daysAgo', `${diffDay}d ago`, { count: diffDay });
-    return new Date(item.uploadedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    return format.date(new Date(item.uploadedAt), { year: undefined, month: 'short', day: 'numeric' });
   })();
 
   return (
@@ -223,7 +224,7 @@ function ModerationCard({
           <span data-part="card-uploaded-at">{uploaded}</span>
           {item.engagement != null && (
             <span data-part="card-engagement">
-              {t('moderationGallery.views', `${item.engagement.toLocaleString()} views`, { count: item.engagement })}
+              {t('moderationGallery.views', `${format.number(item.engagement)} views`, { count: format.number(item.engagement) })}
             </span>
           )}
         </span>

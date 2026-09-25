@@ -43,6 +43,17 @@
  * STRING resolves. A key that is a string in the reference but an object in a
  * target locale cannot be rendered, so it counts as missing, not as present.
  *
+ * Two adoption rows read the component tree rather than the catalog:
+ *   - ADOPTION: of every `index.tsx` under `src/components` outside a `tests/`
+ *     folder, the share whose text names a translation hook
+ *     (`useTranslation` / `useOptionalTranslation`). The Modern slice (paths
+ *     under `/engines/modern/`) carries a decrease-only FLOOR and the 90 %
+ *     target; the whole-tree share is printed, not gated.
+ *   - ARGUMENT-LESS toLocale: lines under `src/` outside a `tests/` folder
+ *     matching `toLocale[A-Z][a-zA-Z]*()`. A call with no locale formats in
+ *     the runtime's language, not the provider's; the count is a
+ *     decrease-only CEILING.
+ *
  * Usage:
  *   node scripts/check/localization/index.mjs           # print the census
  *   node scripts/check/localization/index.mjs --check   # exit 1 on any violation
@@ -55,6 +66,8 @@ import { packageRoot as findPackageRoot } from '../../libraries/repo-root/index.
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
+const SRC_ROOT = join(CORE_ROOT, 'src');
+const COMPONENTS_ROOT = join(SRC_ROOT, 'components');
 const CONTRACTS_PATH = join(CORE_ROOT, 'src/foundation/i18n/kernel/contracts/index.ts');
 const LOCALES_ROOT = join(
   CORE_ROOT,
@@ -287,10 +300,95 @@ export function evaluateParity({ supportedLocales, localeKeys, baseline }) {
   };
 }
 
+const TRANSLATION_HOOK = /useTranslation|useOptionalTranslation/;
+const ARGUMENTLESS_TO_LOCALE = /toLocale[A-Z][a-zA-Z]*\(\)/;
+const MODERN_SEGMENT = '/engines/modern/';
+
+/** Every file under `root`, as `/`-separated paths relative to `root`, skipping any `tests/` folder. */
+function walkFiles(root, relative = '') {
+  const out = [];
+  for (const entry of readdirSync(join(root, relative), { withFileTypes: true })) {
+    const path = relative ? `${relative}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      if (entry.name === 'tests') continue;
+      out.push(...walkFiles(root, path));
+    } else if (entry.isFile()) {
+      out.push(path);
+    }
+  }
+  return out;
+}
+
+/** The adoption census: component entrypoints naming a translation hook, whole tree and Modern slice. */
+export function measureAdoption(componentsRoot = COMPONENTS_ROOT) {
+  const entrypoints = walkFiles(componentsRoot).filter((path) => path === 'index.tsx' || path.endsWith('/index.tsx'));
+  const adopted = entrypoints.filter((path) => TRANSLATION_HOOK.test(readFileSync(join(componentsRoot, path), 'utf8')));
+  const isModern = (path) => `/${path}`.includes(MODERN_SEGMENT);
+  return {
+    all: { adopted: adopted.length, total: entrypoints.length },
+    modern: { adopted: adopted.filter(isModern).length, total: entrypoints.filter(isModern).length },
+    modernUnadopted: entrypoints.filter((path) => isModern(path) && !adopted.includes(path)).sort(),
+  };
+}
+
+/** Every `file:line` under `srcRoot` (outside `tests/`) holding an argument-less `toLocale*()` call. */
+export function measureArgumentlessToLocale(srcRoot = SRC_ROOT) {
+  const sites = [];
+  for (const path of walkFiles(srcRoot)) {
+    const lines = readFileSync(join(srcRoot, path), 'utf8').split('\n');
+    lines.forEach((line, index) => {
+      if (ARGUMENTLESS_TO_LOCALE.test(line)) sites.push(`${path}:${index + 1}`);
+    });
+  }
+  return sites;
+}
+
+const percent = ({ adopted, total }) => (total === 0 ? 100 : (adopted / total) * 100);
+
+/** Pure evaluation of the two adoption rows against the baseline. */
+export function evaluateAdoption({ adoption, toLocaleSites, baseline }) {
+  const failures = [];
+  const tightenOpportunities = [];
+  const floor = baseline.adoption?.modernFloor;
+  const target = baseline.adoption?.modernTargetPercent;
+  if (typeof floor?.adopted !== 'number' || typeof floor?.total !== 'number') {
+    failures.push('baseline has no `adoption.modernFloor` {adopted, total}');
+  } else if (adoption.modern.adopted * floor.total < floor.adopted * adoption.modern.total) {
+    failures.push(
+      `Modern i18n adoption FELL: ${adoption.modern.adopted}/${adoption.modern.total} (${percent(adoption.modern).toFixed(1)}%), floor is ${floor.adopted}/${floor.total} (${percent(floor).toFixed(1)}%). A Modern entrypoint added without a translation hook lowers the share.`
+    );
+  } else if (adoption.modern.adopted * floor.total > floor.adopted * adoption.modern.total) {
+    tightenOpportunities.push(
+      `Modern adoption rose to ${adoption.modern.adopted}/${adoption.modern.total} (floor ${floor.adopted}/${floor.total}) — run --seed to raise the floor`
+    );
+  }
+  if (typeof target !== 'number') failures.push('baseline has no numeric `adoption.modernTargetPercent`');
+
+  const ceiling = baseline.argumentlessToLocale?.ceiling;
+  if (typeof ceiling !== 'number') {
+    failures.push('baseline has no numeric `argumentlessToLocale.ceiling`');
+  } else if (toLocaleSites.length > ceiling) {
+    failures.push(
+      `argument-less toLocale*() GREW: ${toLocaleSites.length} line(s), ceiling is ${ceiling}. Format through useFormatter()/useOptionalFormatter() or pass the provider locale.`
+    );
+  } else if (toLocaleSites.length < ceiling) {
+    tightenOpportunities.push(
+      `argument-less toLocale*() is at ${toLocaleSites.length}/${ceiling} — run --seed to lower the ceiling`
+    );
+  }
+  return {
+    failures,
+    tightenOpportunities,
+    targetMet: typeof target === 'number' && percent(adoption.modern) >= target,
+  };
+}
+
 export function runI18nKeyParityGate({
   contractsPath = CONTRACTS_PATH,
   localesRoot = LOCALES_ROOT,
   baselinePath = BASELINE_PATH,
+  componentsRoot = COMPONENTS_ROOT,
+  srcRoot = SRC_ROOT,
 } = {}) {
   const supportedLocales = readSupportedLocales(contractsPath);
   const baseline = loadBaseline(baselinePath);
@@ -311,6 +409,13 @@ export function runI18nKeyParityGate({
       `catalog directory "${name}" exists on disk but is not declared in SUPPORTED_LOCALES`
     );
   }
+  result.adoption = measureAdoption(componentsRoot);
+  result.toLocaleSites = measureArgumentlessToLocale(srcRoot);
+  const adoptionRows = evaluateAdoption({ adoption: result.adoption, toLocaleSites: result.toLocaleSites, baseline });
+  result.failures.push(...adoptionRows.failures);
+  result.tightenOpportunities.push(...adoptionRows.tightenOpportunities);
+  result.adoptionTargetMet = adoptionRows.targetMet;
+  result.adoptionTargetPercent = baseline.adoption?.modernTargetPercent;
   result.pass = result.failures.length === 0;
   return result;
 }
@@ -341,6 +446,15 @@ function seedBaseline(baselinePath) {
       reason: entry.reason,
     };
   }
+  const adoption = measureAdoption();
+  next.adoption = {
+    ...existing.adoption,
+    modernFloor: { adopted: adoption.modern.adopted, total: adoption.modern.total },
+  };
+  next.argumentlessToLocale = {
+    ...existing.argumentlessToLocale,
+    ceiling: measureArgumentlessToLocale().length,
+  };
   writeFileSync(baselinePath, `${JSON.stringify(next, null, 2)}\n`);
   console.log(`[i18n-key-parity-gate] seeded ${baselinePath}`);
 }
@@ -357,7 +471,11 @@ function main() {
     return;
   }
 
-  const result = runI18nKeyParityGate({ localesRoot: LOCALES_PATH });
+  const result = runI18nKeyParityGate({
+    localesRoot: LOCALES_PATH,
+    componentsRoot: resolve(argValue('--components-root', COMPONENTS_ROOT)),
+    srcRoot: resolve(argValue('--src-root', SRC_ROOT)),
+  });
 
   console.log('[i18n-key-parity-gate]');
   console.log(`  reference keys (union of mandatory locales) : ${result.referenceKeyCount}`);
@@ -368,7 +486,17 @@ function main() {
     );
   }
 
+  const { all, modern } = result.adoption;
+  console.log(`  adoption, all component entrypoints          : ${all.adopted}/${all.total} (${percent(all).toFixed(1)}%)`);
+  console.log(
+    `  adoption, Modern slice                       : ${modern.adopted}/${modern.total} (${percent(modern).toFixed(1)}%)` +
+      ` — target ${result.adoptionTargetPercent}% ${result.adoptionTargetMet ? 'MET' : 'not met'}`
+  );
+  console.log(`  argument-less toLocale*() lines              : ${result.toLocaleSites.length}`);
+
   if (mode === 'report') {
+    for (const site of result.toLocaleSites) console.log(`    toLocale: ${site}`);
+    for (const path of result.adoption.modernUnadopted) console.log(`    Modern without a translation hook: ${path}`);
     for (const row of result.census) {
       if (row.missing.length === 0) continue;
       console.log(`\n  ${row.locale} missing (${row.missing.length}):`);
@@ -399,7 +527,7 @@ function main() {
     return;
   }
 
-  console.log('[i18n-key-parity-gate] OK — every mandatory locale is at 100% and no declared-partial locale grew.');
+  console.log('[i18n-key-parity-gate] OK — every mandatory locale is at 100%, no declared-partial locale grew, Modern adoption held its floor and argument-less toLocale*() held its ceiling.');
 }
 
 const invokedDirectly =

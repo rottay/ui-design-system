@@ -41,6 +41,7 @@ import type {
   WidgetBoardProps,
   WidgetBoardSize,
 } from "../../contracts";
+import { useOptionalFormatter } from "@/infrastructure/runtime/i18n";
 import { useAdaptiveBoardLayout } from "../../runtime/adaptive/react";
 
 /* Private, not exported: constraint defaults are permissive so an unconstrained item is unchanged. */
@@ -326,6 +327,7 @@ export function WidgetBoardEngine({
   const [resizeSession, setResizeSession] =
     useState<WidgetResizeSession | null>(null);
   const [catalogQuery, setCatalogQuery] = useState("");
+  const { dateLocale } = useOptionalFormatter();
   const resizeSessionRef = useRef<WidgetResizeSession | null>(null);
   const dragSessionRef = useRef<WidgetDragSession | null>(null);
   const layoutRef = useRef(items);
@@ -385,7 +387,7 @@ export function WidgetBoardEngine({
    * and category. Rich ReactNode metadata only participates when it is plain
    * text; the plain-text accessibleTitle always covers the name.
    */
-  const normalizedCatalogQuery = catalogQuery.trim().toLocaleLowerCase();
+  const normalizedCatalogQuery = catalogQuery.trim().toLocaleLowerCase(dateLocale);
   const filteredHidden = useMemo(() => {
     if (!normalizedCatalogQuery) return hidden;
     const textOf = (node: React.ReactNode): string =>
@@ -398,10 +400,10 @@ export function WidgetBoardEngine({
         textOf(item.catalog?.category),
       ]
         .join("\n")
-        .toLocaleLowerCase()
+        .toLocaleLowerCase(dateLocale)
         .includes(normalizedCatalogQuery)
     );
-  }, [hidden, normalizedCatalogQuery]);
+  }, [hidden, normalizedCatalogQuery, dateLocale]);
 
   const setCellRef = useCallback(
     (id: string, node: HTMLElement | null): void => {

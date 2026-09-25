@@ -32,7 +32,7 @@ import type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from '../../
 import { Button } from '../../../../../primitives/inputs/button';
 import { Badge } from '../../../../../primitives/display/badge';
 import { ModernEmptyState } from '../../../../facade';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalFormatter, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusPendingIcon } from '@/graphics/icons/semantic/generated/roles/status-pending';
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
 import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
@@ -56,6 +56,8 @@ const STATUS_ICON: Record<ApprovalStatus, React.ReactNode> = {
   escalated: <StatusWarningIcon decorative size={12} />,
   skipped: <StatusNeutralIcon decorative size={12} />,
 };
+
+const DATE_TIME: Intl.DateTimeFormatOptions = { month: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
 
 /** Runtime thenable guard: `void` callbacks pass straight through. */
 function isThenable(value: unknown): value is PromiseLike<unknown> {
@@ -93,6 +95,7 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
   pendingAction?: 'approve' | 'reject' | 'escalate' | null;
   t: (key: string, fallback: string, params?: Record<string, string | number>) => string;
 }) {
+  const format = useOptionalFormatter();
   return (
     <li data-part="step" data-status={step.status} data-current={isCurrent} aria-current={isCurrent ? 'step' : undefined}>
       {/* Timeline column: dot + vertical connector line (logical geometry in
@@ -126,7 +129,7 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
 
         {step.timestamp && (
           <p data-part="step-timestamp">
-            {typeof step.timestamp === 'string' ? step.timestamp : step.timestamp.toLocaleString()}
+            {typeof step.timestamp === 'string' ? step.timestamp : format.date(step.timestamp, DATE_TIME)}
           </p>
         )}
 

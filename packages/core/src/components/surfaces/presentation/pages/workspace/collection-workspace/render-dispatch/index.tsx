@@ -36,6 +36,8 @@ import {
 } from '../../../../../runtime/helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../../structures/feedback/surface-lifecycle';
 import { SurfaceCapabilityAnatomy } from '../../../../../../structures/feedback/capability-anatomy';
+import { useFormatter } from '@/infrastructure/runtime/i18n';
+import type { UseFormatterResult } from '@/infrastructure/runtime/i18n';
 import { useSurfaceTranslations } from '../../../../../../structures/foundation/chrome/runtime/i18n';
 import type { DensityKey } from '../../../../../../patterns/data/list-toolbar/contracts';
 import type { BulkAction } from '../../../../../../../foundation/contracts/runtime/components/patterns/core';
@@ -229,7 +231,7 @@ function getColumnValue<T extends object>(
   column: ColumnDef<T>,
   index: number,
   t: SurfaceTranslator,
-  locale: string | undefined,
+  format: UseFormatterResult,
 ): ReactNode {
   const rawValue = column.accessorFn
     ? column.accessorFn(row)
@@ -246,7 +248,7 @@ function getColumnValue<T extends object>(
   }
   // Locale-aware: the fallback card is the ONLY place this dispatch formats a
   // raw Date itself (the table view delegates cell rendering to the pattern).
-  if (rawValue instanceof Date) return rawValue.toLocaleDateString(locale);
+  if (rawValue instanceof Date) return format.date(rawValue, { month: 'numeric' });
   if (typeof rawValue === 'boolean') {
     return rawValue
       ? t('collection_workspace.boolean_yes', 'Yes')
@@ -352,7 +354,7 @@ function renderFallbackCard<T extends object>({
   activationLabel,
   onActivate,
   t,
-  locale,
+  format,
 }: {
   row: T;
   index: number;
@@ -362,14 +364,14 @@ function renderFallbackCard<T extends object>({
   activationLabel: string;
   onActivate?: () => void;
   t: SurfaceTranslator;
-  locale: string | undefined;
+  format: UseFormatterResult;
 }): ReactNode {
   const visibleColumns = columns
     .filter((column) => column.visible !== false)
     .slice(0, 6);
   const [primaryColumn, ...detailColumns] = visibleColumns;
   const primaryValue = primaryColumn
-    ? getColumnValue(row, primaryColumn, index, t, locale)
+    ? getColumnValue(row, primaryColumn, index, t, format)
     : t('collection_workspace.record_number', 'Record {index}', { index: index + 1 });
   const actionContent = actions?.(row, index);
 
@@ -415,7 +417,7 @@ function renderFallbackCard<T extends object>({
               data-part="fallback-value"
               size="sm"
             >
-              {getColumnValue(row, column, index, t, locale)}
+              {getColumnValue(row, column, index, t, format)}
             </Text>
           </Box>
         ))}
@@ -456,6 +458,7 @@ function CollectionPaginationFooter({
   pagination?: PaginationConfig | false;
 }): React.ReactElement | null {
   const { tSurfaceOr } = useSurfaceTranslations();
+  const format = useFormatter();
   if (!pagination) return null;
 
   const pageSize = Math.max(1, pagination.pageSize);
@@ -482,9 +485,9 @@ function CollectionPaginationFooter({
         {total === 0
           ? tSurfaceOr('collection_workspace.results_zero', '0 results')
           : tSurfaceOr('collection_workspace.range_of', '{start}-{end} of {total}', {
-              start,
-              end,
-              total: total.toLocaleString(),
+              start: format.number(start),
+              end: format.number(end),
+              total: format.number(total),
             })}
       </Text>
 
@@ -563,6 +566,7 @@ function CardsIncrementalFooter({
   visibleCount: number;
 }): React.ReactElement {
   const { tSurfaceOr } = useSurfaceTranslations();
+  const format = useFormatter();
   const sentinelRef = React.useRef<HTMLElement | null>(null);
   const loadingRef = React.useRef(false);
   const pageSize = Math.max(1, pagination.pageSize);
@@ -616,8 +620,8 @@ function CardsIncrementalFooter({
         {total === 0
           ? tSurfaceOr('collection_workspace.results_zero', '0 results')
           : tSurfaceOr('collection_workspace.cards_showing', 'Showing 1-{visible} of {total}', {
-              visible,
-              total: total.toLocaleString(),
+              visible: format.number(visible),
+              total: format.number(total),
             })}
       </Text>
       {canLoadMore ? (
@@ -670,7 +674,8 @@ function resolveCardsGridTemplateColumns(
 export function CollectionRenderDispatch<T extends object>(
   props: CollectionRenderDispatchProps<T>,
 ): React.ReactElement {
-  const { tSurfaceOr, locale } = useSurfaceTranslations();
+  const { tSurfaceOr } = useSurfaceTranslations();
+  const format = useFormatter();
   const {
     viewMode,
     viewModes,
@@ -1011,7 +1016,7 @@ export function CollectionRenderDispatch<T extends object>(
                     activationLabel,
                     onActivate: onRowClick ? () => onRowClick(item, i) : undefined,
                     t: tSurfaceOr,
-                    locale,
+                    format,
                   })}
             </CardItem>
             );

@@ -58,7 +58,8 @@ import {
   useCollectionWorkspace,
 } from '../../../../runtime/collection-workspace';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
-import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
+import { useFormatter, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
+import type { UseFormatterResult } from '@/infrastructure/runtime/i18n';
 import {
   resolveSurfacePermission,
   hasSurfaceError,
@@ -568,11 +569,12 @@ function getPageSizeOptions(pagination?: PaginationConfig | false): number[] {
 
 function formatPaginationRange(
   t: SurfaceTranslator,
+  format: UseFormatterResult,
   pagination?: PaginationConfig | false,
   visibleCount?: number,
 ): string {
   if (!pagination) {
-    return t('collection_workspace.range_results', '{count} results', { count: visibleCount ?? 0 });
+    return t('collection_workspace.range_results', '{count} results', { count: format.number(visibleCount ?? 0) });
   }
 
   const pageSize = Math.max(1, pagination.pageSize);
@@ -582,8 +584,8 @@ function formatPaginationRange(
     return total === 0
       ? t('collection_workspace.results_zero', '0 results')
       : t('collection_workspace.range_from_start_of', '1-{visible} of {total}', {
-          visible,
-          total: total.toLocaleString(),
+          visible: format.number(visible),
+          total: format.number(total),
         });
   }
 
@@ -596,9 +598,9 @@ function formatPaginationRange(
   const end = Math.min(current * pageSize, total);
 
   return t('collection_workspace.range_of', '{start}-{end} of {total}', {
-    start,
-    end,
-    total: total.toLocaleString(),
+    start: format.number(start),
+    end: format.number(end),
+    total: format.number(total),
   });
 }
 
@@ -612,8 +614,9 @@ function PageSizeControl({
   compact?: boolean;
 }) {
   const { tSurfaceOr } = useSurfaceTranslations();
+  const format = useFormatter();
   const options = getPageSizeOptions(pagination);
-  const rangeLabel = formatPaginationRange(tSurfaceOr, pagination, visibleCount);
+  const rangeLabel = formatPaginationRange(tSurfaceOr, format, pagination, visibleCount);
   const isIncremental = !!pagination && pagination.loadMode === 'incremental';
   const unitLabel = isIncremental
     ? tSurfaceOr('collection_workspace.cards_unit', 'Cards')

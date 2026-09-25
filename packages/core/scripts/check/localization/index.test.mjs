@@ -1,12 +1,33 @@
 import assert from 'node:assert/strict';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 import { test } from 'node:test';
 
 import {
+  evaluateAdoption,
   evaluateParity,
   loadLocaleKeys,
+  measureAdoption,
+  measureArgumentlessToLocale,
   readSupportedLocales,
   runI18nKeyParityGate,
 } from './index.mjs';
+
+/** Writes `files` ({relativePath: text}) under a fresh temp root and returns it. */
+function plant(files) {
+  const root = mkdtempSync(join(tmpdir(), 'i18n-adoption-'));
+  for (const [path, text] of Object.entries(files)) {
+    mkdirSync(dirname(join(root, path)), { recursive: true });
+    writeFileSync(join(root, path), text);
+  }
+  return root;
+}
+
+const ADOPTION_BASELINE = {
+  adoption: { modernFloor: { adopted: 1, total: 2 }, modernTargetPercent: 90 },
+  argumentlessToLocale: { ceiling: 1 },
+};
 
 /** Builds the `localeKeys` shape `evaluateParity` consumes from plain key lists. */
 function catalog(entries) {
@@ -166,4 +187,73 @@ test('the real Arabic catalog resolves real strings, not placeholders', () => {
   const { keys, nonStringLeaves } = loadLocaleKeys('ar');
   assert.equal(nonStringLeaves.length, 0);
   assert.ok(keys.has('components.button.save'));
+});
+
+test('adoption counts index.tsx entrypoints naming a translation hook, with a Modern slice, outside tests/', (t) => {
+  const root = plant({
+    'patterns/a/engines/modern/index.tsx': "const { t } = useOptionalTranslation('components');",
+    'patterns/b/engines/modern/index.tsx': 'export const B = () => null;',
+    'patterns/b/engines/classic/index.tsx': "const { t } = useTranslation('components');",
+    'patterns/b/engines/modern/tests/index.tsx': "useTranslation('components');",
+    'patterns/b/engines/modern/helpers.tsx': "useTranslation('components');",
+  });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+
+  const adoption = measureAdoption(root);
+  assert.deepEqual(adoption.all, { adopted: 2, total: 3 });
+  assert.deepEqual(adoption.modern, { adopted: 1, total: 2 });
+  assert.deepEqual(adoption.modernUnadopted, ['patterns/b/engines/modern/index.tsx']);
+});
+
+test('a planted Modern entrypoint without a translation hook drops the share below the floor and fails', (t) => {
+  const root = plant({
+    'a/engines/modern/index.tsx': "useOptionalTranslation('components');",
+    'b/engines/modern/index.tsx': 'export {};',
+    'c/engines/modern/index.tsx': 'export {};',
+  });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+
+  const result = evaluateAdoption({ adoption: measureAdoption(root), toLocaleSites: [], baseline: ADOPTION_BASELINE });
+  assert.match(result.failures.join('\n'), /Modern i18n adoption FELL: 1\/3 \(33\.3%\), floor is 1\/2/);
+});
+
+test('a Modern share above the floor reports a tighten opportunity and the target verdict, not a failure', () => {
+  const result = evaluateAdoption({
+    adoption: { all: { adopted: 9, total: 10 }, modern: { adopted: 9, total: 10 }, modernUnadopted: [] },
+    toLocaleSites: ['a.ts:1'],
+    baseline: ADOPTION_BASELINE,
+  });
+  assert.deepEqual(result.failures, []);
+  assert.equal(result.targetMet, true);
+  assert.match(result.tightenOpportunities.join('\n'), /Modern adoption rose to 9\/10 \(floor 1\/2\)/);
+});
+
+test('argument-less toLocale*() lines are counted outside tests/, and a call carrying a locale is not', (t) => {
+  const root = plant({
+    'a/index.tsx': 'const x = total.toLocaleString();\nconst y = total.toLocaleString(locale);',
+    'b/index.ts': "name.toLocaleUpperCase('ar-SA');\ndate.toLocaleDateString();",
+    'b/tests/index.test.ts': 'date.toLocaleTimeString();',
+  });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+
+  assert.deepEqual(measureArgumentlessToLocale(root), ['a/index.tsx:1', 'b/index.ts:2']);
+});
+
+test('a planted argument-less toLocale*() past the ceiling fails', (t) => {
+  const root = plant({ 'a/index.tsx': 'a.toLocaleString();\nb.toLocaleDateString();' });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+
+  const result = evaluateAdoption({
+    adoption: { all: { adopted: 1, total: 2 }, modern: { adopted: 1, total: 2 }, modernUnadopted: [] },
+    toLocaleSites: measureArgumentlessToLocale(root),
+    baseline: ADOPTION_BASELINE,
+  });
+  assert.match(result.failures.join('\n'), /argument-less toLocale\*\(\) GREW: 2 line\(s\), ceiling is 1/);
+});
+
+test('the real tree holds the adoption floor and the toLocale ceiling', () => {
+  const result = runI18nKeyParityGate();
+  assert.ok(result.adoption.modern.total > 0 && result.adoption.all.total >= result.adoption.modern.total);
+  assert.ok(result.toLocaleSites.every((site) => !site.includes('/tests/')));
+  assert.equal(result.pass, true, result.failures.join('\n'));
 });

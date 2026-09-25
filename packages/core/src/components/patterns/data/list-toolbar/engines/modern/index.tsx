@@ -64,7 +64,7 @@ import type {
   DensityKey,
 } from '../../contracts';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalFormatter, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
 // DESIGN TOKENS (local aliases for readability)
@@ -742,6 +742,7 @@ export default function ModernListToolbar({
   const { isMobile } = useBreakpoints();
   const { containerRef, compact: isCompact } = useContainerCompact(isMobile);
   const i18n = useOptionalTranslation('components');
+  const format = useOptionalFormatter();
   /**
    * Catalog lookup with an honest English floor: when the provider is absent
    * or echoes the raw key (missing entry), the historical default wins.
@@ -879,7 +880,7 @@ export default function ModernListToolbar({
                     {title}
                   </Text>
                   <Badge variant='secondary'>
-                    {totalCount.toLocaleString()}
+                    {format.number(totalCount)}
                   </Badge>
                 </>
               )}
@@ -999,7 +1000,7 @@ export default function ModernListToolbar({
                 >
                   {title}
                 </Text>
-                <Badge variant='secondary'>{totalCount.toLocaleString()}</Badge>
+                <Badge variant='secondary'>{format.number(totalCount)}</Badge>
               </Flex>
 
               <ToolbarDivider />

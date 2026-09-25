@@ -17,6 +17,7 @@ import {
   type ViewportPosture,
 } from "@/foundation/contracts/kernel/adaptation";
 import { useAdaptation } from "@/infrastructure/runtime/adaptation";
+import { useOptionalFormatter } from "@/infrastructure/runtime/i18n";
 import { useResponsive } from "@/infrastructure/runtime/responsive";
 import { AnatomySkeleton } from "@/components/primitives/feedback/skeleton";
 import { Box } from "@/components/primitives/layout/box";
@@ -133,6 +134,7 @@ function MobilePagination<T extends object>({
   pagination?: DataTablePatternProps<T>["pagination"];
   messages?: DataTablePatternProps<T>["messages"];
 }): React.ReactElement | null {
+  const format = useOptionalFormatter();
   if (!pagination) return null;
   const totalPages = Math.max(1, Math.ceil(pagination.total / pagination.pageSize));
   const start =
@@ -153,7 +155,7 @@ function MobilePagination<T extends object>({
     >
       <Text color="inherit" data-part="mobile-pagination-range">
         {messages?.paginationRange?.(start, end, pagination.total) ??
-          `${start} – ${end} of ${pagination.total.toLocaleString()}`}
+          `${format.number(start)} – ${format.number(end)} of ${format.number(pagination.total)}`}
       </Text>
       <Flex align="center" gap={6} data-part="mobile-pagination-actions">
         <Button

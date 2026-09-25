@@ -65,7 +65,7 @@ import type {
 import { useChartPersonality } from '../../runtime';
 import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart } from '../../presentation/scaffold';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalFormatter, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
   ChartImperativePlot,
   type ChartImperativePlotDraw,
@@ -518,6 +518,7 @@ function linkPath(
  */
 export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
   const i18n = useOptionalTranslation('components');
+  const format = useOptionalFormatter();
   const {
     nodes,
     links,
@@ -572,8 +573,8 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
 
   const fmt = useCallback(
-    (v: number) => (formatValue ? formatValue(v) : v.toLocaleString()),
-    [formatValue],
+    (v: number) => (formatValue ? formatValue(v) : format.number(v)),
+    [formatValue, format],
   );
 
   const validation = useMemo(() => validateSankeyData(nodes, links), [nodes, links]);

@@ -29,11 +29,13 @@ import type { OperationalLedgerProps, LedgerEntry, LedgerFilter } from '../../co
 import ModernSelect from '../../../../../primitives/inputs/select/engines/modern';
 import { ModernEmptyState } from '../../../../facade';
 import { VisuallyHidden } from '../../../../../primitives/foundation/visually-hidden';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalFormatter, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import type { UseFormatterResult } from '@/infrastructure/runtime/i18n';
 
 /** Formats an ISO timestamp to a compact, locale-aware date/time string. */
-function formatTimestamp(ts: string): string {
-  return new Date(ts).toLocaleDateString(undefined, {
+function formatTimestamp(format: UseFormatterResult, ts: string): string {
+  return format.date(new Date(ts), {
+    year: undefined,
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
@@ -42,9 +44,9 @@ function formatTimestamp(ts: string): string {
 }
 
 /** Signed display string: the ± sign is the direction cue (never colour-only). */
-function formatQuantity(entry: LedgerEntry): string {
+function formatQuantity(format: UseFormatterResult, entry: LedgerEntry): string {
   const sign = entry.type === 'credit' ? '+' : '−';
-  return `${sign}${entry.quantity.toLocaleString()}`;
+  return `${sign}${format.number(entry.quantity)}`;
 }
 
 /** Column model. Which columns fold under a narrow container is a presentation
@@ -75,6 +77,7 @@ const COLUMN_FLOOR: Record<string, string> = {
  */
 export default function ModernOperationalLedger(props: OperationalLedgerProps) {
   const translation = useOptionalTranslation('components');
+  const format = useOptionalFormatter();
   const t = (key: string, floor: string, params?: Record<string, string | number>): string =>
     translation?.tOr(key, floor, params) ?? floor;
 
@@ -182,7 +185,7 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
               {entries.map((entry) => (
                 <tr key={entry.id} data-part="entry" data-type={entry.type}>
                   <td data-part="cell" data-column="timestamp">
-                    <span data-part="cell-timestamp">{formatTimestamp(entry.timestamp)}</span>
+                    <span data-part="cell-timestamp">{formatTimestamp(format, entry.timestamp)}</span>
                   </td>
                   <td data-part="cell" data-column="description">
                     <span data-part="cell-description">{entry.description}</span>
@@ -216,7 +219,7 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
                       <VisuallyHidden>
                         {t(`operationalLedger.type.${entry.type}`, entry.type)}
                       </VisuallyHidden>
-                      {formatQuantity(entry)}
+                      {formatQuantity(format, entry)}
                     </span>
                   </td>
                   <td data-part="cell" data-column="actor">

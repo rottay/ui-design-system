@@ -34,7 +34,7 @@
 import React from 'react';
 import type { UserProfileCardProps, UserProfile } from '../../contracts';
 import { panelCardStyle, pillBadgeSmStyle, spinnerStyle } from '../../../../../foundation/engine-styles/modern';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalFormatter, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* English floors for the presence vocabulary. */
 const STATUS_FLOORS: Record<NonNullable<UserProfile['status']>, string> = {
@@ -57,16 +57,16 @@ const SegmenterCtor = (
 
 /** First GRAPHEME, not charAt(0): that splits surrogate pairs and combining
  *  marks, rendering half a character in the avatar well. */
-function avatarInitial(name: string): string {
+function avatarInitial(name: string, locale: string): string {
   const trimmed = name.trim();
   if (!trimmed) return '';
   const first = SegmenterCtor
-    ? new SegmenterCtor(undefined, { granularity: 'grapheme' })
+    ? new SegmenterCtor(locale, { granularity: 'grapheme' })
         .segment(trimmed)
         [Symbol.iterator]()
         .next().value?.segment
     : String.fromCodePoint(trimmed.codePointAt(0) ?? 0);
-  return (first ?? '').toLocaleUpperCase();
+  return (first ?? '').toLocaleUpperCase(locale);
 }
 
 /**
@@ -96,6 +96,7 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
   const isOnline = online ?? (user.status === 'active');
 
   const i18n = useOptionalTranslation('components');
+  const { dateLocale } = useOptionalFormatter();
   const statusLabel = user.status
     ? i18n?.tOr(`userProfileCard.status.${user.status}`, STATUS_FLOORS[user.status]) ??
       STATUS_FLOORS[user.status]
@@ -118,7 +119,7 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
           <img src={user.avatar} alt="" onError={() => setAvatarFailed(true)} />
         ) : (
           <div data-part="avatar-fallback" className="ds-user-profile-card__avatar-fallback">
-            <span data-part="avatar-initial">{avatarInitial(user.name)}</span>
+            <span data-part="avatar-initial">{avatarInitial(user.name, dateLocale)}</span>
           </div>
         )}
       </div>
