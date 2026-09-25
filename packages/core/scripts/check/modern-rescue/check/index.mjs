@@ -31,6 +31,7 @@ import { repoRoot as findRepoRoot } from '../../../libraries/repo-root/index.mjs
 import { parseRegistry as parseCapabilityRegistry } from '../../../generate/tokens/customization/surface/index.mjs';
 import { overrideTokens } from '../../orchestration/runtime/tenant-reach/index.mjs';
 import { CASCADE_MANIFEST_REPO_REL, pathForManifestId, readManifestRecords } from '../../../libraries/manifest/index.mjs';
+import { readThemeCatalogRecords } from '../../../libraries/theme-catalog/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -46,6 +47,10 @@ const MANIFEST_DIR = 'docs/history/inventories/customization-manifest';
 const CASCADE_ROOTS_REL = `${CASCADE_MANIFEST_REPO_REL}/roots`;
 const CASCADE_RETIRED_REL = `${CASCADE_MANIFEST_REPO_REL}/retired/index.json`;
 const CASCADE_CATALOG_REL = `${CASCADE_MANIFEST_REPO_REL}/catalog/index.json`;
+/** The typed catalog is the list of controls the cascade asks for cells, never the seal. */
+const THEME_CATALOG_SOURCE_REL = 'packages/core/src/contracts/theme/runtime/catalog/index.ts';
+/** The probe's calibration table, whose `uncalibrated.ids` registers the catalog rows nothing calibrates yet. */
+const CALIBRATION_REL = 'packages/core/governance/manifest/calibration/index.json';
 
 const FILES = {
   agents: 'AGENTS.md',
@@ -555,7 +560,9 @@ function collectTextualFailures(contracts) {
     const cascadeControlsDir = join(repoRoot, MANIFEST_DIR, 'controls');
     const controlRecords = readManifestRecords(cascadeControlsDir, 'controlId');
     const controlsById = new Map(controlRecords.map(({ id, document }) => [id, document]));
-    const controlIdsForCascade = controlRecords.map(({ id }) => id);
+    const coverage = cascadeCoverage();
+    failures.push(...coverage.failures);
+    const controlIdsForCascade = coverage.recognised;
     const docs = [];
     for (const { document: doc, relativePath } of readManifestRecords(cascadeDir, 'rootId')) {
       const label = `${CASCADE_ROOTS_REL}/${relativePath}`;
@@ -574,8 +581,8 @@ function collectTextualFailures(contracts) {
       );
     }
     failures.push(...validateCascadeSet(docs, { label: CASCADE_ROOTS_REL }));
-    // completitud (orden del adjudicador): TODO control activo tiene su root file, salvo los retirados con commit y razon,
-    // sin celda y sin fila en el catalogo vivo
+    // Los retirados llevan commit y razon, sin celda y sin fila en el catalogo vivo; la completitud
+    // que exentan la mide cascadeCoverage().
     const retiredEntries = readJson(CASCADE_RETIRED_REL)?.roots ?? [];
     const catalogRoots = retiredEntries.length > 0 ? readJson(CASCADE_CATALOG_REL)?.roots : [];
     if (!Array.isArray(catalogRoots)) {
@@ -598,13 +605,6 @@ function collectTextualFailures(contracts) {
       }
       if (catalogIds.has(entry.rootId)) {
         failures.push(`${CASCADE_CATALOG_REL} roots[] still lists retired root ${entry.rootId}`);
-      }
-    }
-    for (const cid of controlIdsForCascade) {
-      if (retired.has(cid)) continue;
-      const relativePath = `${pathForManifestId(cid)}/index.json`;
-      if (!existsSync(join(cascadeDir, relativePath))) {
-        failures.push(`${CASCADE_ROOTS_REL}/${relativePath} is missing for active control ${cid}`);
       }
     }
   }
@@ -787,6 +787,60 @@ function collectTextualFailures(contracts) {
 
 
   return failures;
+}
+
+/**
+ * Completitud de la cascada (orden del adjudicador): TODO control activo tiene su celda raiz.
+ *
+ * El conjunto sale del CATALOGO TIPADO, no de los 21 documentos sellados de controls/: una ley
+ * viva sobre celdas vivas no puede preguntar por una lista congelada, que nunca pidio celda a
+ * las once filas que el catalogo sumo despues. `recognised` son todos los ids que el lector del
+ * catalogo nombra -- sus filas mas los nombres RETIRED y CONDITIONAL que carga a proposito,
+ * porque tres de ellos (token-overrides, chrome.families, profiles.icon) todavia encabezan una
+ * celda viva -- y una raiz o un solape puede nombrar cualquiera. La celda se exige a
+ * `recognised` menos la tabla de retiros, contando solo los registros con commit y razon.
+ *
+ * Una fila sin celda y sin retiro es un hueco y va roja por nombre, salvo que el registro vivo
+ * `uncalibrated.ids` de la tabla de calibracion la nombre: entonces es DEUDA, y vuelve en
+ * `debt` para que main() la imprima fila por fila. Un registro ilegible es rojo: sin el, una
+ * deuda no se distingue de un hueco.
+ */
+export function cascadeCoverage() {
+  const failures = [];
+  let recognised = [];
+  try {
+    recognised = readThemeCatalogRecords(join(repoRoot, THEME_CATALOG_SOURCE_REL)).map((record) => record.controlId);
+  } catch (error) {
+    failures.push(`${THEME_CATALOG_SOURCE_REL} could not be read as the control list the cascade asks for cells: ${error.message}`);
+  }
+  const retired = new Set(
+    (readJson(CASCADE_RETIRED_REL)?.roots ?? [])
+      .filter((entry) => entry?.rootId && entry.commit && entry.reason)
+      .map((entry) => entry.rootId),
+  );
+  const register = readJson(CALIBRATION_REL)?.uncalibrated?.ids;
+  if (!Array.isArray(register)) {
+    failures.push(
+      `${CALIBRATION_REL} declares no uncalibrated.ids register: a catalog control with no cascade root ` +
+        'cannot be told apart from a hole',
+    );
+  }
+  const registered = new Set(Array.isArray(register) ? register : []);
+  const debt = [];
+  for (const id of recognised) {
+    if (retired.has(id)) continue;
+    const relativePath = `${pathForManifestId(id)}/index.json`;
+    if (existsSync(join(repoRoot, CASCADE_ROOTS_REL, relativePath))) continue;
+    if (registered.has(id)) {
+      debt.push(id);
+      continue;
+    }
+    failures.push(
+      `${CASCADE_ROOTS_REL}/${relativePath} is missing for active control ${id}: the typed catalog lists it, ` +
+        `the retired-root table does not exempt it and ${CALIBRATION_REL} does not register it uncalibrated`,
+    );
+  }
+  return { recognised, debt, failures };
 }
 
 // ---------------------------------------------------------------------------
@@ -2127,6 +2181,11 @@ function main() {
     process.exit(1);
   }
 
+  const { debt } = cascadeCoverage();
+  if (debt.length > 0) {
+    console.log(`cascade debt — ${debt.length} catalog controls with no cascade root, registered uncalibrated:`);
+    for (const id of debt) console.log(`  • ${id}`);
+  }
   console.log('CONSTITUTION_READY');
   process.exit(0);
 }

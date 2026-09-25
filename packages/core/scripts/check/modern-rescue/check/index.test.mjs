@@ -5,6 +5,7 @@ import {
   mkdirSync,
   mkdtempSync,
   readFileSync,
+  realpathSync,
   renameSync as rawRenameSync,
   symlinkSync,
   writeFileSync as rawWriteFileSync,
@@ -12,6 +13,7 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { spawnSync } from "node:child_process";
 import test from "node:test";
 import { repoRoot as findRepoRoot } from '../../../libraries/repo-root/index.mjs';
 
@@ -41,6 +43,8 @@ const CLOSURE_MEMBERS = [
   "roadmap/registry.json",
   "docs/history/inventories/customization-manifest",
   "packages/core/governance/manifest/cascade",
+  // The cascade leg reads the uncalibrated register beside the cascade tables.
+  "packages/core/governance/manifest/calibration",
   "packages/core/scripts/check/evidence",
   "packages/core/scripts/check/orchestration",
   "packages/core/scripts/libraries",
@@ -128,7 +132,7 @@ if (resolvedRoot !== SANDBOX) {
   );
 }
 
-const { readModernRescueContracts, validateModernRescueContracts } = await import(
+const { cascadeCoverage, readModernRescueContracts, validateModernRescueContracts } = await import(
   pathToFileURL(join(sandboxProgramDir, "check/index.mjs")).href
 );
 
@@ -737,6 +741,70 @@ test("a retired cascade root may not keep a catalog row, and its record names th
     writeFileSync(catalogPath, originalCatalog);
     writeFileSync(table, originalTable);
   }
+});
+test("the cascade asks the typed catalog for cells: a planted catalog row with no cell and no register reds by name", () => {
+  const source = join(repoRoot, "packages/core/src/contracts/theme/runtime/catalog/index.ts");
+  const original = readFileSync(source, "utf8");
+  const head = "export const THEME_CONTROL_CATALOG = Object.freeze([\n";
+  assert.ok(original.includes(head), "the catalog head the drill plants under must exist");
+  try {
+    writeFileSync(source, original.replace(head, `${head}  { id: "drill.planted-row", tier: "pro", title: "planted" },\n`));
+    expectError(
+      validateModernRescueContracts(baseline),
+      "drill/planted-row/index.json is missing for active control drill.planted-row",
+      "a catalog row the seal never listed must still be asked for its cell",
+    );
+  } finally {
+    writeFileSync(source, original);
+  }
+});
+test("a catalog row with no cell that leaves the uncalibrated register reds by name", () => {
+  const table = join(repoRoot, "packages/core/governance/manifest/calibration/index.json");
+  const original = readFileSync(table, "utf8");
+  try {
+    assert.ok(cascadeCoverage().debt.includes("motion.character"), "motion.character is registered debt at baseline");
+    const doc = JSON.parse(original);
+    doc.uncalibrated.ids = doc.uncalibrated.ids.filter((id) => id !== "motion.character");
+    writeFileSync(table, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline);
+    expectError(errors, "is missing for active control motion.character", "an unregistered cell-less row must fail by name");
+    assert.equal(errors.filter((e) => e.includes("is missing for active control")).length, 1, JSON.stringify(errors));
+  } finally {
+    writeFileSync(table, original);
+  }
+});
+test("an unreadable uncalibrated register fails closed instead of turning debt into silence", () => {
+  const table = join(repoRoot, "packages/core/governance/manifest/calibration/index.json");
+  const original = readFileSync(table, "utf8");
+  try {
+    writeFileSync(table, "{ not json\n");
+    const errors = validateModernRescueContracts(baseline);
+    expectError(errors, "declares no uncalibrated.ids register", "an unreadable register must fail");
+    expectError(errors, "is missing for active control motion.character", "without the register every cell-less row is a hole");
+  } finally {
+    writeFileSync(table, original);
+  }
+});
+test("a retired root with a complete record stays green while the catalog still lists its control", () => {
+  const coverage = cascadeCoverage();
+  assert.deepEqual(coverage.failures, []);
+  for (const id of ["experience.profile", "recipe-profile"]) {
+    assert.ok(coverage.recognised.includes(id), `${id} is a typed catalog control`);
+    assert.ok(!coverage.debt.includes(id), `${id} is retired, not debt`);
+  }
+  const errors = validateModernRescueContracts(baseline);
+  assert.ok(!errors.some((e) => e.includes("experience.profile") || e.includes("recipe-profile")), JSON.stringify(errors));
+});
+test("the checker names every registered debt row before CONSTITUTION_READY", () => {
+  // realpath: the tmpdir sandbox sits behind a symlink on macOS, and the checker runs main() only when argv[1] is its own URL.
+  const run = spawnSync(process.execPath, [realpathSync(join(programRoot, "check/index.mjs"))], { encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr);
+  const lines = run.stdout.trim().split("\n");
+  assert.equal(lines.at(-1), "CONSTITUTION_READY");
+  const { debt } = cascadeCoverage();
+  assert.equal(debt.length, 11, JSON.stringify(debt));
+  assert.ok(lines[0].startsWith(`cascade debt — ${debt.length} catalog controls`), run.stdout);
+  for (const id of debt) assert.ok(lines.includes(`  • ${id}`), `${id} must be named in ${run.stdout}`);
 });
 test("an ABSENT cascade roots directory fails closed instead of skipping the leg", () => {
   const backup = join(SANDBOX, "cascade-roots.t1-test-backup-absent");
