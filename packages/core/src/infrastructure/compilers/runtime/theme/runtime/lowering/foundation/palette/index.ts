@@ -204,8 +204,14 @@ export function textGrounds(
   return raised === undefined ? [canvas] : [canvas, raised];
 }
 
+/**
+ * The foundation keys its declarations by the two modes only. The lowering
+ * does not re-admit the mode it is handed, so a mode that is not `dark` reads
+ * the light declarations -- the answer the contrast floor and the ground give
+ * for the same theme in the same compile -- instead of indexing past the map.
+ */
 function declaredColor(channel: string, mode: FlatThemeMode): string | undefined {
-  const declared = FOUNDATION_COLOR_DEFAULTS[mode];
+  const declared = FOUNDATION_COLOR_DEFAULTS[mode === "dark" ? "dark" : "light"];
   const seen = new Set<string>();
   let value = declared[channel];
   while (value !== undefined) {

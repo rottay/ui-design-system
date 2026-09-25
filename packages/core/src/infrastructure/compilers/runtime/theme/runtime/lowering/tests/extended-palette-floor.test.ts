@@ -34,7 +34,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { contrastRatio } from '@/foundation/kernel/color/contrast';
-import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme, FlatThemeMode } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
   APCA_BODY_TEXT_MIN_LC,
@@ -355,6 +355,13 @@ describe('the link inks clear every ground the block paints text on', () => {
       '#161616',
     ]);
     expect(textGrounds({}, 'dark')).toEqual([]);
+  });
+
+  it('reads a mode that is neither light nor dark as light, the way the contrast floor does, instead of throwing', () => {
+    const unknownMode = '__SLOT_SENTINEL_1__' as FlatThemeMode;
+    const grounds = textGrounds({ backgroundColor: '#0A0A0A' }, unknownMode);
+    expect(grounds).toEqual(textGrounds({ backgroundColor: '#0A0A0A' }, 'light'));
+    expect(grounds).not.toEqual(darkGrounds);
   });
 
   it('FOCAL: bithire dark -- the canvas-only ink fails the card, the graded ink clears both', () => {
