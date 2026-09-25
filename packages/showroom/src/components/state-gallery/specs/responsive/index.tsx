@@ -9,7 +9,7 @@ import {
   PatternFormBuilder,
   PatternStatsGrid,
   SelectionPreviewRail,
-  Switch,
+  Toggle,
 } from '@rottay/design-system';
 import type {
   ColumnDef,
@@ -139,19 +139,19 @@ export const RESPONSIVE_SPECS: FlagshipSpec[] = [
       {
         label: 'States',
         cells: [
-          { label: 'Off', node: <Switch /> },
-          { label: 'On', node: <Switch defaultChecked /> },
-          { label: 'Disabled', node: <Switch disabled /> },
-          { label: 'Disabled + on', node: <Switch disabled defaultChecked /> },
-          { label: 'Loading', node: <Switch loading /> },
+          { label: 'Off', node: <Toggle aria-label="Off" /> },
+          { label: 'On', node: <Toggle aria-label="On" defaultChecked /> },
+          { label: 'Disabled', node: <Toggle aria-label="Disabled" disabled /> },
+          { label: 'Disabled + on', node: <Toggle aria-label="Disabled + on" disabled defaultChecked /> },
+          { label: 'Loading', node: <Toggle aria-label="Loading" loading /> },
         ],
       },
       {
         label: 'Sizes',
         cells: [
-          { label: 'Small', node: <Switch size="small" defaultChecked /> },
-          { label: 'Default', node: <Switch size="default" defaultChecked /> },
-          { label: 'Large', node: <Switch size="large" defaultChecked /> },
+          { label: 'Small', node: <Toggle aria-label="Small" size="sm" defaultChecked /> },
+          { label: 'Medium', node: <Toggle aria-label="Medium" size="md" defaultChecked /> },
+          { label: 'Large', node: <Toggle aria-label="Large" size="lg" defaultChecked /> },
         ],
       },
     ],
