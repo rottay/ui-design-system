@@ -15,7 +15,9 @@ import { join } from "node:path";
 import { describe, it } from "node:test";
 
 import { assertNoUnknown, canonical, stableStringify } from "../schema.mjs";
-import { cascadeDrift, expandKeypath, familyOfFile, measureCascade } from "../derive.mjs";
+import {
+  cascadeDrift, componentOwner, expandKeypath, familyNodes, familyOfFile, measureCascade,
+} from "../derive.mjs";
 import {
   assertDistIsFresh, buildGraph, byControl, byFamily, checkFailures, compareGraph, compareViews, MUTANT_SKIN, OUT_DIR,
   OUT_FILES, plantSkinMutant, render, renderViews, VIEWS_DIR,
@@ -431,5 +433,82 @@ describe("theme-graph -- a check never repairs what it compares", () => {
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
+  });
+});
+
+describe("theme-graph walker -- the tier is the declared root, never the depth", () => {
+  const SKIN = "src/foundation/tokens/css/runtime/engines/modern/skin";
+
+  const withTree = (dirs, run) => {
+    const root = mkdtempSync(join(tmpdir(), "theme-graph-walker-"));
+    try {
+      for (const dir of dirs) mkdirSync(join(root, dir), { recursive: true });
+      return run(root);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  };
+
+  it("a family filed below a support segment keeps its tier: the notifier is a primitive", () => {
+    assert.deepEqual(componentOwner(["primitives", "feedback", "foundation", "notifier"]), {
+      tier: "primitive", family: "notifier",
+    });
+    assert.deepEqual(
+      familyNodes(process.cwd()).find((node) => node.id === "notifier"),
+      { kind: "family", id: "notifier", tier: "primitive" },
+      "the live tree's notifier lost its tier",
+    );
+    assert.equal(
+      familyOfFile("packages/core/src/components/primitives/feedback/foundation/notifier/presentation/stack/index.css"),
+      "notifier",
+    );
+  });
+
+  it("a family at the classic depth resolves exactly as before, whatever its group is called", () => {
+    assert.deepEqual(componentOwner(["primitives", "display", "badge"]), { tier: "primitive", family: "badge" });
+    assert.deepEqual(componentOwner(["surfaces", "runtime", "collection-workspace"]), {
+      tier: "surface", family: "collection-workspace",
+    });
+    assert.equal(familyOfFile("packages/core/src/components/primitives/display/avatar/compound/badge/index.css"), "avatar");
+    withTree(
+      [
+        "src/components/primitives/display/badge",
+        "src/components/primitives/display/avatar/compound/badge",
+        "src/components/patterns/data/stack",
+        "src/components/primitives/feedback/foundation/notifier/presentation/stack",
+        `${SKIN}/badge`, `${SKIN}/stack`, `${SKIN}/notifier`, `${SKIN}/orphan`,
+      ],
+      (root) => assert.deepEqual(familyNodes(root), [
+        { kind: "family", id: "badge", tier: "primitive" },
+        { kind: "family", id: "notifier", tier: "primitive" },
+        { kind: "family", id: "orphan" },
+        { kind: "family", id: "stack", tier: "pattern" },
+      ]),
+    );
+  });
+
+  it("a classic-depth owner outranks a support-nested one of the same name", () => {
+    withTree(
+      ["src/components/primitives/feedback/foundation/panel", "src/components/structures/shell/panel", `${SKIN}/panel`],
+      (root) => assert.deepEqual(familyNodes(root), [{ kind: "family", id: "panel", tier: "structure" }]),
+    );
+  });
+
+  it("a path that declares no owner is refused, not guessed", () => {
+    for (const segments of [
+      ["widgets", "display", "badge"],
+      ["primitives", "display"],
+      ["primitives", "display", "avatar", "compound", "badge"],
+      ["primitives", "feedback", "toast", "container"],
+      ["primitives", "feedback", "foundation"],
+      ["primitives", "feedback", "foundation", "notifier", "presentation"],
+    ]) {
+      assert.equal(componentOwner(segments), undefined, segments.join("/"));
+    }
+    assert.equal(familyOfFile("packages/core/src/components/primitives/feedback/foundation/index.css"), undefined);
+    withTree(
+      ["src/components/widgets/display/ghost", "src/components/primitives/display/avatar/compound/ghost", `${SKIN}/ghost`],
+      (root) => assert.deepEqual(familyNodes(root), [{ kind: "family", id: "ghost" }]),
+    );
   });
 });

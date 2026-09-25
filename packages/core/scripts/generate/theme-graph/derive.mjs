@@ -188,24 +188,64 @@ export function cascadeDrift(committed, measured) {
   ];
 }
 
+const COMPONENT_TIERS = Object.freeze(["primitives", "patterns", "structures", "surfaces"]);
+
+/**
+ * The segments that organise an owner's insides rather than name an owner: the
+ * family-cut's NESTED_OWNER_SEGMENT vocabulary. `feedback/foundation/notifier`
+ * is the notifier filed under the feedback group's foundation, not a family
+ * called `foundation` -- so a support segment is never an owner, and it never
+ * moves the tier either.
+ */
+const SUPPORT_SEGMENTS = new Set([
+  "compound", "engines", "contracts", "tests", "runtime", "foundation", "composition", "presentation",
+]);
+
+/**
+ * The owner a component path declares, or undefined when it declares none.
+ *
+ * The tier is the declared root (`<tier>/...`), never the depth: the owner sits
+ * at `<tier>/<group>/<family>`, with any run of support segments allowed between
+ * the group and the family. The group is the tier's own first-level branch and
+ * is read whatever its name (`surfaces/runtime/collection-workspace`). Anything
+ * else -- an unknown root, a missing group, a non-support segment in between, a
+ * support segment in the family slot -- is refused rather than guessed.
+ */
+export function componentOwner(segments) {
+  const [tier, group, ...rest] = segments;
+  if (!COMPONENT_TIERS.includes(tier) || group === undefined || rest.length === 0) return undefined;
+  const family = rest.at(-1);
+  if (SUPPORT_SEGMENTS.has(family)) return undefined;
+  if (!rest.slice(0, -1).every((segment) => SUPPORT_SEGMENTS.has(segment))) return undefined;
+  return { tier: tier.replace(/s$/, ""), family };
+}
+
 /**
  * FAMILY nodes: the skin tree on disk, with the component tier that owns each one.
  *
  * The tier is read from where the component actually sits, so it cannot disagree
- * with the tree. A skin whose family has no component folder is emitted with no
- * tier field at all rather than a placeholder one.
+ * with the tree. A family filed at the classic depth wins over one nested below
+ * support segments, and within a depth the first tier in declaration order wins.
+ * A skin whose family has no component folder is emitted with no tier field at
+ * all rather than a placeholder one.
  */
 export function familyNodes(root) {
-  const tiers = new Map();
+  const owners = [];
   const componentBase = join(root, COMPONENT_ROOT);
-  for (const tier of ["primitives", "patterns", "structures", "surfaces"]) {
-    const tierBase = join(componentBase, tier);
-    if (!existsSync(tierBase)) continue;
-    for (const group of readdirSync(tierBase, { withFileTypes: true }).filter((e) => e.isDirectory())) {
-      for (const family of readdirSync(join(tierBase, group.name), { withFileTypes: true }).filter((e) => e.isDirectory())) {
-        if (!tiers.has(family.name)) tiers.set(family.name, tier.replace(/s$/, ""));
-      }
+  const walk = (dir, segments) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true }).filter((e) => e.isDirectory())) {
+      const path = [...segments, entry.name];
+      const owner = componentOwner(path);
+      if (owner) owners.push({ depth: path.length, ...owner });
+      if (path.length === 2 || SUPPORT_SEGMENTS.has(entry.name)) walk(join(dir, entry.name), path);
     }
+  };
+  for (const tier of COMPONENT_TIERS) {
+    if (existsSync(join(componentBase, tier))) walk(join(componentBase, tier), [tier]);
+  }
+  const tiers = new Map();
+  for (const owner of owners.sort((a, b) => a.depth - b.depth)) {
+    if (!tiers.has(owner.family)) tiers.set(owner.family, owner.tier);
   }
   const families = new Set();
   for (const skinRoot of SKIN_ROOTS) {
@@ -228,8 +268,15 @@ export function familyOfFile(file) {
     const at = file.indexOf(marker);
     if (at !== -1) return file.slice(at + marker.length).split("/")[0].replace(/\.css$/, "");
   }
-  const component = file.match(/src\/components\/(?:primitives|patterns|structures|surfaces)\/[^/]+\/([^/]+)\//);
-  return component ? component[1] : undefined;
+  const marker = `${COMPONENT_ROOT}/`;
+  const at = file.indexOf(marker);
+  if (at === -1) return undefined;
+  const directories = file.slice(at + marker.length).split("/").slice(0, -1);
+  for (let length = 3; length <= directories.length; length += 1) {
+    const owner = componentOwner(directories.slice(0, length));
+    if (owner) return owner.family;
+  }
+  return undefined;
 }
 
 export { CASCADE_EDGES, CSS_ROOT, CSS_ROOT_REL, DERIVATION_ROOT, SKIN_ROOTS };
