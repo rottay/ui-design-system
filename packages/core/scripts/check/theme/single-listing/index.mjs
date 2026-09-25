@@ -80,7 +80,7 @@ export const NAMING_EXCEPTIONS = Object.freeze([
   },
   {
     path: 'scripts/check/modern-rescue/check/index.mjs',
-    reason: 'the sealed programme validating its own preserved evidence for internal consistency',
+    reason: 'reads the sealed controls only to check their domain kinds and enum domiciles against the seal itself; no live verdict reads them: the cascade leg takes tier and domain from the typed catalog and admission vocabulary from the calibration table',
   },
   {
     path: 'scripts/check/taxonomy/parity-gate/index.test.mjs',

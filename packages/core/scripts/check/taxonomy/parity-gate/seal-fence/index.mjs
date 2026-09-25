@@ -226,7 +226,7 @@ export const SEAL_READERS = Object.freeze([
   reader('scripts/check/orchestration/tests/drills/program-state/index.mjs', 'history-citation',
     'carries a copy of the sealed index into a throwaway repository and mutates it to prove program-state ignores it'),
   reader('scripts/check/modern-rescue/check/index.mjs', 'seal-self-validation',
-    'checks the sealed control kinds and governed family cells against the seal itself; its cascade leg still holds the live root cells to sealed tier, domain and vocabulary (controls/). The cascade active set comes from the typed catalog and its family set from the live family inventory; the socket-ownership leg that read sealed socket edges is retired (SOCKET_OWNERSHIP_RETIREMENT)'),
+    'checks the sealed control kinds and enum domiciles (controls/) and the governed family cells (families/) against the seal itself; nothing it reads from the seal reaches a live verdict. The cascade leg takes its active set, tier and domain from the typed catalog, its admission vocabulary from the calibration table and its family set from the live family inventory; the socket-ownership leg that read sealed socket edges is retired (SOCKET_OWNERSHIP_RETIREMENT)'),
   reader('scripts/check/modern-rescue/check/index.test.mjs', 'seal-self-validation',
     'the drills of the sealed programme check, which copy the preserved evidence into a sandbox'),
   reader('scripts/check/architecture/conventions/scripts-tree/index.mjs', 'seal-layout-law',

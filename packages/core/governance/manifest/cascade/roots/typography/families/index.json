@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "rootId": "typography.families",
-  "tier": "standard",
+  "tier": "pro",
   "rootChannel": {
     "authority": "floor-arbitrated",
     "channel": "--ds-font-family-base",

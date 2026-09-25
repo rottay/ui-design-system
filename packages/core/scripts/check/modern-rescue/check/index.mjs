@@ -112,6 +112,74 @@ export function socketOwnershipRetirementFailures(record) {
   return failures;
 }
 
+/**
+ * Catalog names outside the 29 rows that still head a live root cell, held by
+ * name until their owner decides. A held name is active for the cascade; every
+ * other retired or conditional name is not.
+ */
+export const HELD_NON_ROW_ROOTS = Object.freeze({
+  'token-overrides': Object.freeze({
+    catalogStatus: 'RETIRED',
+    owner: 'Kimi K3 (DT): route the v1 ThemePatch door retirement; no work order owns it at 153d9b390',
+    reason:
+      'the catalog retires raw --ds-* authorship (D-03) and the v2 door refuses it by name, but the v1 ThemePatch '
+      + 'door exported from entrypoints/server still lowers advanced.tokenOverrides '
+      + '(compilers/runtime/theme/runtime/ingress/foundation/document-patch migrateTokenOverrides), so the escape '
+      + 'hatch this cell describes is still reachable',
+    exitCondition: 'the v1 door stops accepting advanced.tokenOverrides; then the cell leaves through cascade/retired with that commit',
+  }),
+  'chrome.families': Object.freeze({
+    catalogStatus: 'RETIRED',
+    owner: 'Kimi K3 (DT): route the v1 ThemePatch door retirement; no work order owns it at 153d9b390',
+    reason:
+      'the catalog retires the open chrome family map, but the same v1 door still passes advanced.chrome through '
+      + 'as a ThemeLayerPatch (document-patch), so the slot map this cell describes is still written by tenants',
+    exitCondition: 'the v1 door stops accepting advanced.chrome outside the sanctioned overrides; then the cell leaves through cascade/retired with that commit',
+  }),
+  'profiles.icon': Object.freeze({
+    catalogStatus: 'CONDITIONAL',
+    owner: 'the icon lane (graphics/icons), through the DT',
+    reason:
+      'the catalog keeps this name only if --ds-icon-stroke-width becomes a real channel; today the channel is a '
+      + 'constant baseline (presentation/components/icon 1.5) and the posture travels as runtime table data '
+      + '(graphics/icons/semantic/foundation/policy). Retiring the cell or promoting the channel is that decision',
+    exitCondition: 'the icon lane makes the stroke width a derived channel (the name becomes a row) or retires the posture (the cell leaves through cascade/retired)',
+  }),
+});
+
+/** Every reason a held entry cannot stand, given the catalog records by id and a cell-existence probe. */
+export function heldNonRowRootFailures(register, recordsById, cellExists) {
+  const failures = [];
+  for (const [id, entry] of Object.entries(register)) {
+    for (const field of ['catalogStatus', 'owner', 'reason', 'exitCondition']) {
+      if (typeof entry?.[field] !== 'string' || entry[field].trim() === '') {
+        failures.push(`HELD_NON_ROW_ROOTS.${id}.${field} must be a non-empty string`);
+      }
+    }
+    const record = recordsById.get(id);
+    if (!record) {
+      failures.push(`HELD_NON_ROW_ROOTS.${id} is not a name the typed catalog carries: drop the hold`);
+      continue;
+    }
+    if (record.lifecycleState === 'OPERATIONAL') {
+      failures.push(`HELD_NON_ROW_ROOTS.${id} is a catalog row now: drop the hold`);
+    } else if (record.lifecycleState !== entry?.catalogStatus) {
+      failures.push(`HELD_NON_ROW_ROOTS.${id} says ${entry?.catalogStatus} but the catalog says ${record.lifecycleState}`);
+    }
+    if (!cellExists(id)) failures.push(`HELD_NON_ROW_ROOTS.${id} heads no live root cell: drop the hold`);
+  }
+  for (const [id, record] of recordsById) {
+    if (record.lifecycleState === 'OPERATIONAL' || Object.hasOwn(register, id)) continue;
+    if (cellExists(id)) {
+      failures.push(
+        `${id} is ${record.lifecycleState} in the typed catalog but heads a live root cell that no HELD_NON_ROW_ROOTS ` +
+          'entry holds: re-activate it in the catalog, retire the cell through cascade/retired, or hold it by name with an owner',
+      );
+    }
+  }
+  return failures;
+}
+
 const FILES = {
   agents: 'AGENTS.md',
   claude: 'CLAUDE.md',
@@ -606,9 +674,6 @@ function collectTextualFailures(contracts) {
     if (famIds.size === 0) {
       failures.push('the live family inventory is unreadable: no cascade terminalReach family can be resolved');
     }
-    const cascadeControlsDir = join(repoRoot, MANIFEST_DIR, 'controls');
-    const controlRecords = readManifestRecords(cascadeControlsDir, 'controlId');
-    const controlsById = new Map(controlRecords.map(({ id, document }) => [id, document]));
     const coverage = cascadeCoverage();
     failures.push(...coverage.failures);
     const controlIdsForCascade = coverage.recognised;
@@ -616,7 +681,7 @@ function collectTextualFailures(contracts) {
     for (const { document: doc, relativePath } of readManifestRecords(cascadeDir, 'rootId')) {
       const label = `${CASCADE_ROOTS_REL}/${relativePath}`;
       docs.push(doc);
-      const control = controlsById.get(doc.rootId);
+      const control = coverage.recordsById.get(doc.rootId);
       failures.push(
         ...validateCascadeRoot(doc, {
           label,
@@ -730,7 +795,7 @@ function collectTextualFailures(contracts) {
    *    tenant vocabulary instead of minting a parallel profile enum, so the
    *    domain belongs to the `density.mode` control. The root still emits a
    *    `density` axis because it HAS an expansion table. So this axis is
-   *    admitted against `controls/density.mode/index.json` rather than against the
+   *    admitted against the `density.mode` calibration row rather than against the
    *    sibling catalog. It is an exception with a named owner, not a hole:
    *    an axis with no mapped owner at all is a failure.
    */
@@ -741,8 +806,8 @@ function collectTextualFailures(contracts) {
    * Fable probo agregando `ultra` a density.mode. La regla ahora es: TODA raiz
    * de cascada con variantes cuyo control hermano sea enum/closed-enum entra.
    *
-   * MAPEO RAIZ -> CONTROL: por id, medido. Los 17 rootId con variantes tienen
-   * hoy un control homonimo en docs/history/inventories/customization-manifest/controls/. (El `type.pairing` que se
+   * MAPEO RAIZ -> CONTROL: por id, medido. Cada rootId con variantes tiene
+   * una fila homonima en la tabla de calibracion viva. (El `type.pairing` que se
    * parece a `typography.pairing` es el campo `bindings[].root` de las
    * familias, que nombra la RAIZ DE CANAL, no el archivo de cascada: son
    * espacios de nombres distintos y no se cruzan aqui.)
@@ -762,29 +827,52 @@ function collectTextualFailures(contracts) {
    * (density.mode: id `compact`, value `0.85`). Comparar `value` en las planas
    * habria dado seis rojos falsos el primer dia.
    */
-  const admissionRoots = [];
   const cascadeRootsDir = join(repoRoot, CASCADE_ROOTS_REL);
-  const outsideAdmission = [];
   if (existsSync(cascadeRootsDir)) {
-    for (const pathname of indexJsonFiles(cascadeRootsDir)) {
-      const rootDoc = readJson(relative(repoRoot, pathname));
-      if (!Array.isArray(rootDoc?.variants) || rootDoc.variants.length === 0) continue;
-      const rootId = rootDoc.rootId ?? semanticId(cascadeRootsDir, pathname);
-      const controlRel = `${MANIFEST_DIR}/controls/${pathForManifestId(rootId)}/index.json`;
-      if (!existsSync(join(repoRoot, controlRel))) {
-        // Fail-closed: una raiz que emite variantes y no tiene control hermano
-        // no es "fuera de alcance", es un hueco de gobierno.
-        failures.push(
-          `admission: ${rootId} emits ${rootDoc.variants.length} variants but has no sibling control in ` +
-            'docs/history/inventories/customization-manifest/controls/ to admit them',
-        );
-        continue;
-      }
-      const controlDoc = readJson(controlRel);
-      const kind = controlDoc?.domain?.kind;
-      if (kind === 'enum' || kind === 'closed-enum') admissionRoots.push({ rootId, rootDoc, controlDoc });
-      else outsideAdmission.push(`${rootId} (${kind})`);
+    const calibration = readJson(CALIBRATION_REL)?.controls;
+    if (!calibration || typeof calibration !== 'object') {
+      failures.push(`admission: ${CALIBRATION_REL} has no controls map, so no emitted variant can be admitted`);
+    } else {
+      const rootDocs = indexJsonFiles(cascadeRootsDir).map((pathname) => {
+        const doc = readJson(relative(repoRoot, pathname));
+        return { rootId: doc?.rootId ?? semanticId(cascadeRootsDir, pathname), doc };
+      });
+      failures.push(
+        ...evaluateAdmission({
+          rootDocs,
+          controlOf: (id) => (Object.hasOwn(calibration, id) ? calibration[id] : null),
+          sourceLabel: (id) => `${CALIBRATION_REL} controls["${id}"]`,
+        }).failures,
+      );
     }
+  }
+
+
+  return failures;
+}
+
+/**
+ * ADMISSION as a pure function of its control source: every value a root emits
+ * must be admitted by the control that owns its vocabulary. `controlOf(id)`
+ * returns that control ({ domain: { kind, enumValues }, calibration: { catalog } })
+ * or null; `sourceLabel(id)` names where it was looked up.
+ */
+export function evaluateAdmission({ rootDocs, controlOf, sourceLabel }) {
+  const failures = [];
+  const admissionRoots = [];
+  const outsideAdmission = [];
+  for (const { rootId, doc: rootDoc } of rootDocs) {
+    if (!Array.isArray(rootDoc?.variants) || rootDoc.variants.length === 0) continue;
+    const controlDoc = controlOf(rootId);
+    if (!controlDoc) {
+      // Fail-closed: una raiz que emite variantes y no tiene control hermano
+      // no es "fuera de alcance", es un hueco de gobierno.
+      failures.push(`admission: ${rootId} emits ${rootDoc.variants.length} variants but ${sourceLabel(rootId)} does not exist to admit them`);
+      continue;
+    }
+    const kind = controlDoc?.domain?.kind;
+    if (kind === 'enum' || kind === 'closed-enum') admissionRoots.push({ rootId, rootDoc, controlDoc });
+    else outsideAdmission.push(`${rootId} (${kind})`);
   }
   /** Root axis name -> catalog axis name. See adjudication 2 above. */
   const CATALOG_AXIS_ALIASES = { card: 'cardComponent' };
@@ -804,17 +892,15 @@ function collectTextualFailures(contracts) {
       let ownerLabel;
       if (axis !== null && Object.prototype.hasOwnProperty.call(CROSS_OWNER_AXES, axis)) {
         const ownerId = CROSS_OWNER_AXES[axis];
-        const ownerRel = `${MANIFEST_DIR}/controls/${pathForManifestId(ownerId)}/index.json`;
-        const owner = existsSync(join(repoRoot, ownerRel)) ? readJson(ownerRel) : null;
-        admitted = owner?.domain?.enumValues;
-        ownerLabel = `controls/${pathForManifestId(ownerId)}/index.json domain.enumValues`;
+        admitted = controlOf(ownerId)?.domain?.enumValues;
+        ownerLabel = `${sourceLabel(ownerId)} domain.enumValues`;
       } else if (axis !== null) {
         const catalogAxis = CATALOG_AXIS_ALIASES[axis] ?? axis;
         admitted = catalog?.[catalogAxis];
-        ownerLabel = `controls/${pathForManifestId(rootId)}/index.json calibration.catalog.${catalogAxis}`;
+        ownerLabel = `${sourceLabel(rootId)} calibration.catalog.${catalogAxis}`;
       } else {
         admitted = Array.isArray(enumValues) && enumValues.length > 0 ? enumValues : null;
-        ownerLabel = `controls/${pathForManifestId(rootId)}/index.json domain.enumValues`;
+        ownerLabel = `${sourceLabel(rootId)} domain.enumValues`;
       }
       if (!Array.isArray(admitted)) {
         failures.push(
@@ -832,9 +918,7 @@ function collectTextualFailures(contracts) {
       }
     }
   }
-
-
-  return failures;
+  return { failures, admitted: admissionRoots.map((r) => r.rootId), outsideAdmission };
 }
 
 /**
@@ -855,12 +939,18 @@ function collectTextualFailures(contracts) {
  */
 export function cascadeCoverage() {
   const failures = [];
-  let recognised = [];
+  let records = [];
   try {
-    recognised = readThemeCatalogRecords(join(repoRoot, THEME_CATALOG_SOURCE_REL)).map((record) => record.controlId);
+    records = readThemeCatalogRecords(join(repoRoot, THEME_CATALOG_SOURCE_REL));
   } catch (error) {
     failures.push(`${THEME_CATALOG_SOURCE_REL} could not be read as the control list the cascade asks for cells: ${error.message}`);
   }
+  const recordsById = new Map(records.map((record) => [record.controlId, record]));
+  const cellExists = (id) => existsSync(join(repoRoot, CASCADE_ROOTS_REL, `${pathForManifestId(id)}/index.json`));
+  failures.push(...heldNonRowRootFailures(HELD_NON_ROW_ROOTS, recordsById, cellExists));
+  const recognised = records
+    .filter((record) => record.lifecycleState === 'OPERATIONAL' || Object.hasOwn(HELD_NON_ROW_ROOTS, record.controlId))
+    .map((record) => record.controlId);
   const retired = new Set(
     (readJson(CASCADE_RETIRED_REL)?.roots ?? [])
       .filter((entry) => entry?.rootId && entry.commit && entry.reason)
@@ -888,7 +978,7 @@ export function cascadeCoverage() {
         `the retired-root table does not exempt it and ${CALIBRATION_REL} does not register it uncalibrated`,
     );
   }
-  return { recognised, debt, failures };
+  return { recognised, recordsById, debt, failures };
 }
 
 // ---------------------------------------------------------------------------

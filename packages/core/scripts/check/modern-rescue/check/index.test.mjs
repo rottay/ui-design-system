@@ -134,6 +134,8 @@ if (resolvedRoot !== SANDBOX) {
 
 const {
   cascadeCoverage,
+  HELD_NON_ROW_ROOTS,
+  heldNonRowRootFailures,
   readModernRescueContracts,
   SOCKET_OWNERSHIP_RETIREMENT,
   socketOwnershipRetirementFailures,
@@ -1436,43 +1438,44 @@ test("planted emitted value with no admission fails closed", () => {
   }
 });
 
-test("the card <-> cardComponent alias is the resolution path, not decoration", () => {
-  const target = join(manifestRoot, "controls/chrome/anatomy/index.json");
-  const original = readFileSync(target, "utf8");
+const calibrationTable = join(repoRoot, "packages/core/governance/manifest/calibration/index.json");
+
+/** Mutates the sandbox calibration table, runs the constitution, restores it. */
+function withCalibration(mutate, check) {
+  const original = readFileSync(calibrationTable, "utf8");
   try {
-    // The live tree is green while the root says `card` and the catalog says
-    // `cardComponent`: that IS the alias working. Removing the catalog axis
-    // proves the alias is where the lookup goes, and names it in the failure.
-    const doc = JSON.parse(original);
-    delete doc.calibration.catalog.cardComponent;
-    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline);
-    expectError(
-      errors,
-      "calibration.catalog.cardComponent",
-      "the card axis must resolve through the cardComponent alias"
-    );
+    const table = JSON.parse(original);
+    mutate(table.controls);
+    writeFileSync(calibrationTable, `${JSON.stringify(table, null, 2)}\n`);
+    check(validateModernRescueContracts(baseline));
   } finally {
-    writeFileSync(target, original);
+    writeFileSync(calibrationTable, original);
   }
+}
+
+test("the card <-> cardComponent alias is the resolution path, not decoration", () => {
+  // The live tree is green while the root says `card` and the calibration row
+  // says `cardComponent`: that IS the alias working. Removing the axis proves
+  // the alias is where the lookup goes, and names it in the failure.
+  withCalibration(
+    (controls) => { delete controls["chrome.anatomy"].calibration.catalog.cardComponent; },
+    (errors) => expectError(
+      errors,
+      'controls["chrome.anatomy"] calibration.catalog.cardComponent',
+      "the card axis must resolve through the cardComponent alias"
+    ),
+  );
 });
 
 test("the density axis is admitted by density.mode, not by the sibling catalog", () => {
-  const target = join(manifestRoot, "controls/density/mode/index.json");
-  const original = readFileSync(target, "utf8");
-  try {
-    const doc = JSON.parse(original);
-    doc.domain.enumValues = ["compact", "normal"];
-    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline);
-    expectError(
+  withCalibration(
+    (controls) => { controls["density.mode"].domain.enumValues = ["compact", "normal"]; },
+    (errors) => expectError(
       errors,
-      'profiles.expressive emits "density:spacious" but controls/density/mode/index.json',
+      'profiles.expressive emits "density:spacious" but packages/core/governance/manifest/calibration/index.json controls["density.mode"] domain.enumValues',
       "the cross-owner exception must read density.mode"
-    );
-  } finally {
-    writeFileSync(target, original);
-  }
+    ),
+  );
 });
 
 test("planted root axis with no mapped owner fails closed", () => {
@@ -1679,19 +1682,14 @@ test("F1: a flat root reads its token from the id, not from the emitted value", 
 });
 
 test("F1: a root that emits variants with no sibling control fails closed", () => {
-  const target = join(manifestRoot, "controls/profiles/icon/index.json");
-  const backup = join(SANDBOX, "profiles-icon.index.json.f1-drill-backup");
-  try {
-    renameSync(target, backup);
-    const errors = validateModernRescueContracts(baseline);
-    expectError(
+  withCalibration(
+    (controls) => { delete controls["profiles.icon"]; },
+    (errors) => expectError(
       errors,
-      "profiles.icon emits 4 variants but has no sibling control",
+      'profiles.icon emits 4 variants but packages/core/governance/manifest/calibration/index.json controls["profiles.icon"] does not exist to admit them',
       "una raiz que emite sin control hermano es un hueco de gobierno, no una exencion"
-    );
-  } finally {
-    renameSync(backup, target);
-  }
+    ),
+  );
 });
 
 test("F3: an invented targetBinding.status is a typo, not a new law", () => {
@@ -1843,5 +1841,110 @@ test("the live run gates the retirement record, not only the drill", async () =>
   } finally {
     assertSandboxWritePath(probe);
     rawRmSync(probe, { force: true });
+  }
+});
+
+function withFile(target, mutate, check) {
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    mutate(doc);
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    check(validateModernRescueContracts(baseline));
+  } finally {
+    writeFileSync(target, original);
+  }
+}
+
+test("F1: a root cell's tier mirrors the typed catalog, and the seal's tier no longer counts", () => {
+  withFile(
+    join(cascadeRootsDir, "typography/families/index.json"),
+    (doc) => { doc.tier = "standard"; },
+    (errors) => expectError(errors, 'typography/families/index.json: tier "standard" must mirror controls tier (pro)', "the catalog tier is the one the cell mirrors"),
+  );
+  withFile(
+    join(manifestRoot, "controls/typography/families/index.json"),
+    (doc) => { doc.tier = "expert"; },
+    (errors) => assert.deepEqual(errors.filter((e) => e.includes("tier")), [], "a sealed tier must not reach the cascade verdict"),
+  );
+});
+
+test("F3: admission and the tenant-seed domain no longer read the sealed controls", () => {
+  withFile(
+    join(manifestRoot, "controls/density/mode/index.json"),
+    (doc) => { doc.domain.enumValues = ["compact"]; },
+    (errors) => assert.deepEqual(errors.filter((e) => e.startsWith("admission:")), [], "a sealed vocabulary must not admit or refuse"),
+  );
+  withFile(
+    join(manifestRoot, "controls/palette/seeds/index.json"),
+    (doc) => { doc.domain.kind = "closed-enum"; },
+    (errors) => assert.deepEqual(errors.filter((e) => e.includes("tenant-seed")), [], "a sealed domain must not reach the tenant-seed rule"),
+  );
+});
+
+function recordsOf(entries) {
+  return new Map(entries.map(([id, lifecycleState]) => [id, { controlId: id, lifecycleState }]));
+}
+
+test("F2: the held register passes on the live catalog and each arm fails by name", () => {
+  const live = recordsOf([["palette.seeds", "OPERATIONAL"], ["token-overrides", "RETIRED"], ["chrome.families", "RETIRED"], ["profiles.icon", "CONDITIONAL"]]);
+  const cells = new Set(["palette.seeds", "token-overrides", "chrome.families", "profiles.icon"]);
+  const has = (id) => cells.has(id);
+  assert.deepEqual(heldNonRowRootFailures(HELD_NON_ROW_ROOTS, live, has), []);
+
+  const unheld = { ...HELD_NON_ROW_ROOTS };
+  delete unheld["chrome.families"];
+  expectError(heldNonRowRootFailures(unheld, live, has), "chrome.families is RETIRED in the typed catalog but heads a live root cell that no HELD_NON_ROW_ROOTS entry holds", "an unheld non-row cell");
+
+  for (const field of ["owner", "reason", "exitCondition", "catalogStatus"]) {
+    const blank = { ...HELD_NON_ROW_ROOTS, "profiles.icon": { ...HELD_NON_ROW_ROOTS["profiles.icon"], [field]: " " } };
+    expectError(heldNonRowRootFailures(blank, live, has), `HELD_NON_ROW_ROOTS.profiles.icon.${field} must be a non-empty string`, `${field} is required`);
+  }
+  const promoted = new Map(live);
+  promoted.set("profiles.icon", { controlId: "profiles.icon", lifecycleState: "OPERATIONAL" });
+  expectError(heldNonRowRootFailures(HELD_NON_ROW_ROOTS, promoted, has), "HELD_NON_ROW_ROOTS.profiles.icon is a catalog row now", "a promoted name drops its hold");
+  const dropped = new Map(live);
+  dropped.delete("token-overrides");
+  expectError(heldNonRowRootFailures(HELD_NON_ROW_ROOTS, dropped, has), "HELD_NON_ROW_ROOTS.token-overrides is not a name the typed catalog carries", "a name the catalog dropped");
+  const relabelled = new Map(live);
+  relabelled.set("chrome.families", { controlId: "chrome.families", lifecycleState: "CONDITIONAL" });
+  expectError(heldNonRowRootFailures(HELD_NON_ROW_ROOTS, relabelled, has), "HELD_NON_ROW_ROOTS.chrome.families says RETIRED but the catalog says CONDITIONAL", "a status drift");
+  expectError(heldNonRowRootFailures(HELD_NON_ROW_ROOTS, live, (id) => id !== "profiles.icon"), "HELD_NON_ROW_ROOTS.profiles.icon heads no live root cell", "a retired cell drops its hold");
+});
+
+test("F2: the held names are the only non-row names the cascade treats as active", () => {
+  const { recognised, recordsById } = cascadeCoverage();
+  const nonRow = recognised.filter((id) => recordsById.get(id)?.lifecycleState !== "OPERATIONAL");
+  assert.deepEqual(nonRow.sort(), Object.keys(HELD_NON_ROW_ROOTS).sort());
+});
+
+test("F2: the live run gates the held register, not only the drill", async () => {
+  const source = readFileSync(join(programRoot, "check/index.mjs"), "utf8");
+  const anchor = "    owner: 'the icon lane (graphics/icons), through the DT',";
+  assert.equal(source.split(anchor).length, 2, "the profiles.icon owner line must be unique");
+  const probe = join(programRoot, "check/index.held-probe.mjs");
+  writeFileSync(probe, source.replace(anchor, "    owner: '',"));
+  try {
+    const { validateModernRescueContracts: validateProbe } = await import(pathToFileURL(probe).href);
+    expectError(validateProbe(baseline), "HELD_NON_ROW_ROOTS.profiles.icon.owner", "a blank hold must fail the live run");
+  } finally {
+    assertSandboxWritePath(probe);
+    rawRmSync(probe, { force: true });
+  }
+});
+
+test("F2: a retired catalog name with no cell and no hold is not active, so it owes no cell", () => {
+  const catalog = join(repoRoot, "packages/core/src/contracts/theme/runtime/catalog/index.ts");
+  const original = readFileSync(catalog, "utf8");
+  const anchor = "export const THEME_CATALOG_RETIRED: readonly ThemeCatalogRetiredEntry[] =\n  Object.freeze([\n";
+  assert.equal(original.split(anchor).length, 2, "the retired list anchor must be unique");
+  try {
+    writeFileSync(catalog, original.replace(anchor, `${anchor}    { id: "fantasma.retired", replacedBy: "nothing", channels: [] },\n`));
+    const { recognised, recordsById } = cascadeCoverage();
+    assert.equal(recordsById.get("fantasma.retired")?.lifecycleState, "RETIRED", "the plant must reach the catalog reader");
+    assert.equal(recognised.includes("fantasma.retired"), false);
+    assert.deepEqual(validateModernRescueContracts(baseline).filter((e) => e.includes("fantasma.retired")), []);
+  } finally {
+    writeFileSync(catalog, original);
   }
 });
