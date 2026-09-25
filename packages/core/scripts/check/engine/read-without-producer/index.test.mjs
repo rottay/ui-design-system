@@ -21,9 +21,13 @@ import { collectSkinFiles } from '../../../libraries/engine/skins/files/index.mj
 import { collectChannelProducers } from '../../../libraries/tokens/producers/index.mjs';
 import {
   BASELINE_PATH,
+  classifyReadClass,
   classifyReadWithoutProducer,
+  collectComponentInlineFiles,
   collectFindings,
   collectModernSkinFiles,
+  collectSharedPaintFiles,
+  readClassFindings,
   shapeFailures,
 } from './index.mjs';
 
@@ -255,5 +259,150 @@ test('RESIDUE language scope: --ds-toolbar-title-letter-spacing fails on growth 
         `residue list-toolbar.readWithoutProducer: ${name} is no longer residue`,
         'volver a pinearlo con productor vivo tiene que enrojecer',
       ),
+  );
+});
+
+/* ── Las clases de lectura fuera del skin Modern ─────────────────────────── */
+
+const EVI_03_ELEVEN = Object.freeze({
+  '--ds-code-block-copy-bg-hover': ['sharedPaint', 'WO-FAM-06'],
+  '--ds-code-block-copied-frame': ['sharedPaint', 'WO-FAM-06'],
+  '--ds-code-block-copied-ink': ['sharedPaint', 'WO-FAM-06'],
+  '--ds-code-block-motion-duration': ['sharedPaint', 'WO-FAM-06'],
+  '--ds-code-block-selection-bg': ['sharedPaint', 'WO-FAM-06'],
+  '--ds-code-block-gutter-ink': ['componentInline', 'WO-FAM-06'],
+  '--ds-code-block-header-bg': ['componentInline', 'WO-FAM-06'],
+  '--ds-voice-input-focus-ring': ['sharedPaint', 'WO-FAM-01'],
+  '--ds-loading-overlay-scrim-opacity': ['sharedPaint', 'WO-FAM-04'],
+  '--ds-export-button-toast-duration': ['sharedPaint', 'WO-FAM-08'],
+  '--ds-size-touch-target': ['sharedPaint', 'WO-FAM-11'],
+});
+
+const readBaseline = () => JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
+
+/** Planta archivos en una sandbox con forma de paquete y devuelve su raiz. */
+function withSandbox(files, run) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'read-without-producer-class-drill-'));
+  for (const [path, text] of Object.entries(files)) {
+    mkdirSync(join(sandbox, path, '..'), { recursive: true });
+    writeFileSync(join(sandbox, path), text);
+  }
+  try {
+    run(sandbox);
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+const AGNOSTIC_SKIN = 'src/foundation/tokens/css/presentation/components/skin/__rwp-drill/index.css';
+const COMPONENT_TSX = 'src/components/primitives/display/__rwp-drill/index.tsx';
+const ORPHAN = '--ds-read-without-producer-class-drill-orphan';
+
+function plantedFindings(sandbox, { producers = PRODUCERS } = {}) {
+  return collectFindings({
+    producers,
+    sharedFiles: [...collectSharedPaintFiles(), ...collectSharedPaintFiles(sandbox)],
+    inlineFiles: [...collectComponentInlineFiles(), ...collectComponentInlineFiles(sandbox)],
+  });
+}
+
+test('BLIND SPOT: the Modern-only corpus cannot see any of the eleven, the read classes see every one', () => {
+  const modern = new Set(classifyReadWithoutProducer().denominator);
+  const shared = classifyReadClass(collectSharedPaintFiles(), 'css', PRODUCERS);
+  const inline = classifyReadClass(collectComponentInlineFiles(), 'script', PRODUCERS);
+  for (const [name, [cls]] of Object.entries(EVI_03_ELEVEN)) {
+    assert.ok(!modern.has(name), `${name} would not be a blind spot if the Modern skin read it`);
+    const measured = cls === 'sharedPaint' ? shared : inline;
+    assert.ok(measured.debt[name], `${name} must be measured as ${cls} debt`);
+  }
+});
+
+test('the eleven are named one by one in the ledger, each with its owner or proposal', () => {
+  const classes = readBaseline().readClasses;
+  for (const [name, [cls, wo]] of Object.entries(EVI_03_ELEVEN)) {
+    const row = classes[cls].names[name];
+    assert.ok(row, `${name} must be a ${cls} ledger row`);
+    assert.equal(row.owner ?? row.ownerProposal, wo, `${name} is routed to ${wo}`);
+    assert.match(row.evidence ?? '', /WO-EVI-03/, `${name} cites the measurement that found it`);
+  }
+});
+
+test('the read classes never read a frozen engine, and never double-count the Modern skin', () => {
+  const modern = new Set(collectModernSkinFiles());
+  for (const file of [...collectSharedPaintFiles(), ...collectComponentInlineFiles()]) {
+    assert.ok(!/\/engines\/(?:classic|rustic)\//.test(file), `frozen engine in a read class: ${file}`);
+    assert.ok(!modern.has(file), `the Modern skin is its own class: ${file}`);
+  }
+});
+
+test('sharedPaint: an unproduced read in the agnostic skin is anonymous and fails', () => {
+  withSandbox({ [AGNOSTIC_SKIN]: `.ds-drill { color: var(${ORPHAN}, #ff0000); }\n` }, (sandbox) => {
+    expectFinding(plantedFindings(sandbox), `sharedPaint GREW: ${ORPHAN}`, 'the agnostic skin paints under Modern');
+    // El control: el mismo nombre con productor no enrojece.
+    const produced = plantedFindings(sandbox, { producers: new Set([...PRODUCERS, ORPHAN]) });
+    assert.deepEqual(produced, [], 'with a producer the planted read is not debt');
+  });
+});
+
+test('sharedPaint: a frozen-engine read stays out, and the same read one folder over is caught', () => {
+  const frozen = 'src/foundation/tokens/css/runtime/engines/classic/skin/__rwp-drill/index.css';
+  withSandbox({ [frozen]: `.ds-drill { color: var(${ORPHAN}); }\n` }, (sandbox) => {
+    assert.deepEqual(plantedFindings(sandbox), [], 'classic is frozen');
+  });
+  withSandbox({ 'src/foundation/tokens/css/foundation/__rwp-drill/index.css': `:root { --x: var(${ORPHAN}); }\n` }, (sandbox) => {
+    expectFinding(plantedFindings(sandbox), `sharedPaint GREW: ${ORPHAN}`, 'foundation CSS paints under Modern');
+  });
+});
+
+test('componentInline: an unproduced inline read fails; a commented one does not; an interpolated one moves prefixSites', () => {
+  withSandbox({ [COMPONENT_TSX]: `export const s = { color: 'var(${ORPHAN}, red)' };\n` }, (sandbox) => {
+    expectFinding(plantedFindings(sandbox), `componentInline GREW: ${ORPHAN}`, 'an inline read paints like a skin read');
+  });
+  withSandbox(
+    { [COMPONENT_TSX]: `// color: var(${ORPHAN})\n/* var(${ORPHAN}) */\nexport const s = 1;\n` },
+    (sandbox) => assert.deepEqual(plantedFindings(sandbox), [], 'a comment is not paint'),
+  );
+  withSandbox({ [COMPONENT_TSX]: 'export const s = (k) => `var(--ds-drill-${k})`;\n' }, (sandbox) => {
+    expectFinding(plantedFindings(sandbox), 'componentInline prefixSites GREW', 'an interpolated name cannot hide');
+  });
+  withSandbox({ 'src/components/primitives/display/__rwp-drill/tests/x.test.tsx': `const s = 'var(${ORPHAN})';\n` }, (sandbox) => {
+    assert.deepEqual(plantedFindings(sandbox), [], 'a test is not productive paint');
+  });
+});
+
+test('a NEW reader of an already-pinned unproduced name is growth, not coverage', () => {
+  const name = '--ds-code-block-copy-bg-hover';
+  withSandbox({ [AGNOSTIC_SKIN]: `.ds-drill { color: var(${name}); }\n` }, (sandbox) => {
+    expectFinding(
+      plantedFindings(sandbox),
+      `sharedPaint GREW: src/foundation/tokens/css/presentation/components/skin/__rwp-drill/index.css is a new reader of the unproduced ${name}`,
+      'the ledger pins reads, not just names',
+    );
+  });
+});
+
+test('a row whose read gained a producer fails until it is deleted (decrease-only)', () => {
+  const name = '--ds-voice-input-focus-ring';
+  const findings = collectFindings({ producers: new Set([...PRODUCERS, name]) });
+  expectFinding(findings, `sharedPaint SHRANK: ${name} is no longer a read without producer`, 'a silent fix must be written down');
+});
+
+test('LEDGER SHAPE: a row with no owner field, or a null owner with no proposal field, fails', () => {
+  const measured = { denominator: 1, debt: { [ORPHAN]: ['src/x.css'] }, prefixSites: 0 };
+  expectFinding(
+    readClassFindings('sharedPaint', measured, { names: { [ORPHAN]: { readers: ['src/x.css'], family: 'x' } } }),
+    'carries no owner field',
+    'every row states its owner',
+  );
+  expectFinding(
+    readClassFindings('sharedPaint', measured, { names: { [ORPHAN]: { readers: ['src/x.css'], family: 'x', owner: null } } }),
+    'has a null owner and no ownerProposal field',
+    'an unowned row states its proposal (or null while unrouted)',
+  );
+  expectFinding(readClassFindings('sharedPaint', measured, undefined), 'carries no `names` ledger', 'a missing ledger is red');
+  expectFinding(
+    readClassFindings('sharedPaint', { denominator: 0, debt: {}, prefixSites: 0 }, { names: {} }),
+    'resolved to zero read names',
+    'an empty corpus is never a pass',
   );
 });

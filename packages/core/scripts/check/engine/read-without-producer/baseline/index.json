@@ -43,5 +43,3139 @@
   "debtNote": "530 -> 494 on 2026-09-23 (re-baseline over da968fcde..4d8607008): measured with one instrument (the HEAD collectors) over isolated `git archive` trees -- the pinned tree da968fcde measures 530/4718 with both its own and the HEAD instrument, HEAD measures 494/4826; 36 exits, 0 entries, attributed by replaying the instrument over all 121 commits in the range that touch packages/core/src (monotonic, no name re-enters). 9779cab05 (FAM-11 sub-lot D) -1: --ds-kbd-frame (declared). b5eca0e4b (FAM-11 sub-lot C, page-shell) -9: --ds-page-shell-actions-backdrop (derived), --ds-page-shell-max-width (declared), --ds-page-shell-skeleton-radius (leaves the read set), and the six --ds-page-header-{icon-radius,radius,shadow,shadow-hover,sheen-duration,sheen-opacity} (produced here; 8c901556d later renames their reads to --ds-page-shell-header-*, one exit and one entry each in the denominator). 08f70e4fd (list-toolbar RWP drain) -16: --ds-toolbar-{compact-padding,control-gap,control-radius,controls-gap,controls-radius,filter-strip-padding,icon-radius,min-height,mobile-actions-radius,mobile-rail-radius,phone-filter-strip-padding,phone-padding,saved-views-radius,sheen-opacity,title-gap,title-letter-spacing} (derivation/chrome/toolbar). 85cc1085b (data-table RWP drain) -4: --ds-filter-chip-radius (derivation/chrome/filter-chip) and --ds-table-{drag-grip-offset,drag-grip-size,drop-indicator-radius} (reads renamed to the produced --ds-data-table-* names). 7a267f705 (materials overlay/raised facets) -2: --ds-material-overlay-border, --ds-material-overlay-shadow. cefa1becc (data-table divergent reads) -2: --ds-table-cell-line-height, --ds-table-control-radius (renamed to produced --ds-data-table-* rungs). 9d64c294f (phantom disabled-opacity) -1: --ds-disabled-opacity (the read moves to the governed channel). 643c3588b (WO-INV-03 notification-center deriver) -1: --ds-notification-center-touch-target. The 17 list-toolbar/filter-chip exits were pinned residue; their removal is recorded in residueNote. Previous move: 550 -> 547 in WO-FAM-08 lot B8 (widget-board family cut, 2026-09-17): derivation/chrome/widget-board produces --ds-widget-board-catalog-no-results-min-height, --ds-widget-board-catalog-search-margin-block-end and --ds-widget-board-catalog-search-max-width at the skin's resting values; the three --ds-widget-board-cell-* runtime-geometry channels carry resting declarations on the family root and never entered the debt. Previous move: 558 -> 550 in WO-FAM-08 lot B6 (calendar-view, file-manager, active-filters-bar derivers, 2026-09-17): measured with the gate's own collectors on an isolated `git archive HEAD` copy against the working tree carrying the lot -- 8 debt exits and 0 entries. calendar-view contributes 4 (--ds-calendar-view-entry-accent, the renamed public hook whose old spelling --ds-calendar-event-accent leaves the read set with it; --ds-calendar-view-cell-min-height; --ds-calendar-view-cell-min-height-compact; --ds-calendar-view-touch-target) and file-manager contributes 4 (--ds-file-manager-content-min-height, --ds-file-manager-link-color, --ds-file-manager-link-hover-color, --ds-file-manager-touch-target), each produced by its new derivation/chrome/<family> deriver at the one resting value its skin already read. The third deriver of the lot, derivation/chrome/active-filters-bar, contributes 0 exits: every channel it emits already had a producer, so it moves the producer count and not the debt -- stated rather than implied, because the lot landed three derivers and only two of them are in this move. denominator stays 4665 (+1 --ds-calendar-view-entry-accent, -1 --ds-calendar-event-accent: the rename is one entry and one exit, not a net read); produced 4107 -> 4115 and producers 6347 -> 6374 are the same move seen from the other sides; modernSkinFiles stays 124. Of the +27 producer entries, 2 are a PRE-EXISTING drift and not this lot: the same collectors measure 6349 on the HEAD copy (5c8a1570c) against the 6347 the B5 note pinned, so those two are re-anchored here rather than left disagreeing with the tree. 563 -> 558 in WO-FAM-08 lot B5 (kanban-board family cut, 2026-09-17): derivation/chrome/kanban-board produces the five channels the modern kanban skin read without a producer (column-gap, column-min-width, column-accent, column-max-height, touch-target), renamed from --ds-kanban-* to the family namespace with byte-identical fallbacks. Previous move: 641 -> 563 in WO-FAM-08 lot B4 (data-table family cut, 2026-09-16), measured by the gate itself on the working tree carrying B4-1..B4-4 over HEAD 212439653: the new derivation/chrome/data-table deriver produces 76 --ds-data-table-* channels at the one resting value the modern data-table skin reads each with, the skins renamed their 76 reads from --ds-table-<suffix> to --ds-data-table-<suffix> (one namespace from the folder name; the ~38 --ds-table-* reads the Table primitive already produces stay as cross-family consumption), and two skeleton-only reads (--ds-modern-table-skeleton-index, --ds-table-skeleton-fill) retired with the hand-made skeleton (AnatomySkeleton). The 16 data-table names that remain unproduced are pinned by category in scripts/check/family-cut/baseline/index.json (data-table cutNote). Previous move: 686 -> 641 in WO-FAM-08 lot B7 (list-toolbar vocabularies, 2026-09-16), measured by set difference with the gate's own collectors between HEAD 2d3ff8833 and the working tree carrying the lot: 45 exits and 0 entries -- 42 --ds-toolbar-* now emitted by derivation/chrome/toolbar, --ds-filter-chip-{bg,border} by derivation/chrome/filter-chip, each at the one resting value skin/list-toolbar reads it with, and --ds-radius-pill, whose two reads moved to --ds-radius-full (9999px in all three verticals, pixel-identical to 999px on every measured box up to 1990x1990). The 20 list-toolbar names (--ds-toolbar-title-letter-spacing pinned by the R1 remediation, DT ruling option a: a nested :lang(ar) scope makes root resolution non-parity) still without a producer, and the 18 kernel-authorable names without a rest value, are pinned by name in namedResidue with their cause. Previous note: 1061 -> 686 in the WO-FAM-08 kernel-census lot (2026-09-16), in two steps measured on the pre-commit HEAD 0249ed181. Step 1, pre-existing and not caused by this lot: with libraries/tokens/producers unchanged the gate measures 741 / 4666 / 3925 / 6029 (debt / denominator / produced / producers) at 0249ed181 against the 1061 / 4547 pin; that drift was left unpinned by the family cuts landed after 008eb19e2 and is not attributed name by name here. Step 2, this lot: libraries/tokens/producers adds the compiler kernel (src/infrastructure/compilers/kernel) and lowering/foundation to the compiler roots. Measured by set difference with the gate's own collectors on the same tree and the same 124 Modern skin files, the producer set with only the derivation registry against the set with all three roots: 55 debt exits and 0 entries -- 51 kernel emissions (--ds-type-scale, the saved-views read the menu cut left behind; 13 --ds-search-*; 12 --ds-toolbar-*; 7 --ds-detail-{hero,section}-* and --ds-detail-rail-width; 7 --ds-filter-pill-*; 6 --ds-table-* (padding-{comfortable,compact,spacious}, page-button-hover-shadow, row-bg-expanded, row-focus-shadow); --ds-shell-grid-{line,size}; --ds-sidebar-collapsed-width and --ds-sidebar-shell-padding-collapsed; --ds-layout-sider-bg) and 4 lowering/foundation tint-ramp emissions (--ds-tint-{error,info,success,warning}-8). Most kernel emissions are tenant-authorable, written only when chrome.* is authored; the library keeps them apart in compiledByKind.kernel so that split stays visible. The compiler emission sites whose key is not enumerable (75 kernel, 40 lowering/foundation) stay out of the set and are pinned in libraries/tokens/producers/tests. Previous note: 1073 -> 1061 in WO-FAM-06 lot 1 (card), lowered in the commit that moves it. Measured by set difference with the gate's own collectors between the committed tree 22d7c35a3 (4551 / 3478 / 1073 / 5603, where this gate exits 0 with the popover-era pin) and the working tree carrying the card cut: 12 exits and 0 entries, every one read only by skin/card or skin/card-compounds -- --ds-card-body-font-size-sm, --ds-card-title-font-size-sm and --ds-card-title-font-size-lg (now emitted by derivation/chrome/card on the type roles), --ds-card-border-accent-hover and --ds-card-header-color (tenant-authored roots whose only producer is the chrome-variables template, invisible to this walker; the skins now read --ds-card-outlined-border-hover, --ds-card-header-ink and --ds-card-header-eyebrow-color, which the deriver emits with those roots chained first), --ds-card-nested-shadow and --ds-card-underline-border-width (emitted), --ds-card-cover-height (the loading cover now holds --ds-card-cover-min-height), and the four --ds-card-skeleton-{gap,min-height,stack-gap,stack-margin-top} names that left with the hand-made skeleton. denominator 4551 -> 4545 (+9 entries: the five --ds-card-*-title-color inks, --ds-card-header-ink, --ds-card-outlined-border-hover, --ds-card-loading-min-height and --ds-z-index-relative-base, all produced; -15 exits: the 12 debt names above minus the three that stay read under a new name, plus --ds-card-actions-justify and --ds-card-padding-current now written as --_ds- privates, --ds-card-border-color-hover now read inside the deriver value instead of the skin, and the seven --ds-card-skeleton-*/--ds-card-loading-skeleton-opacity constants the skin no longer reads), produced 3478 -> 3484 and producers 5603 -> 5622 are the same move seen from the other sides (+21 producer entries: the 21 channels derivation/chrome/card emits; -2 exits: the two --ds-card-*-current declarations the old skin carried); modernSkinFiles stays 117 (skin/card migrated in place; skin/card-compounds lives under presentation/components and is outside this corpus). Previous note: 1162 -> 1073 in WO-FAM-05 lot 3 (the unified steps/stepper family and the sidebar structure), lowered in the commit that moves it. Measured by set difference against 38409b3b2: 89 exits and 0 entries -- 48 --ds-stepper-* (skin/stepper and skin/stepper-compounds now read the 71 channels derivation/chrome/stepper emits, chained to the tenant's authored --ds-steps-* roots and the produced ramps), 40 --ds-steps-* (the retired engines/modern/skin/steps, whose family Steps is now a deprecated compound of stepper and paints through the stepper skin), and --ds-ease-standard, whose last Modern reader was that retired skin. denominator 4581 -> 4544 (+17 entries, the stepper channels the two skins now read; -54 exits: 47 --ds-steps-* with the retired skin, 6 --ds-stepper-* root privates now written as --_ds- intermediates, --ds-ease-standard), produced 3419 -> 3471 and producers 5520 -> 5596 are the same move seen from the other sides (+83 producer entries: 71 --ds-stepper-* emitted plus 12 --ds-sidebar-surface-* -- ten emitted by derivation/chrome/sidebar-surface and the two runtime track channels skin/sidebar-surface declares; -7 exits: the four --ds-stepper-current-* and three --ds-steps-current-* declarations the old skins carried); modernSkinFiles 118 -> 117 (skin/steps retired; the sidebar structure's skin lives under presentation/components and is outside this corpus). Previous note: 1316 -> 1162 in WO-FAM-05 lot 2 (tabs, breadcrumb, pagination), lowered in the commit that moves it. Measured by set difference against 0fd9af8e3 (HEAD's three Modern skins and producers, the only Modern skins that changed): 154 exits and 0 entries -- 113 --ds-tabs-*, 24 --ds-pagination-*, 15 --ds-breadcrumb-* and the two spacing half-steps --ds-spacing-1-5 and --ds-spacing-2-5 (read only by the old breadcrumb and tabs skins, repointed to the produced ramp). Every family name left by gaining a producer in derivation/chrome/<family> (128 --ds-tabs-*, 43 --ds-breadcrumb-*, 42 --ds-pagination-* emitted, chained to produced roots: the tab roots, the spacing ramp, the type roles, the elevation scale, --ds-motion-ease-standard instead of the unwritten --ds-ease-standard, and the former --_ds-pagination-* prototokens now produced as --ds-pagination-{jumper-width,size-arrow-clearance,size-arrow-inset}). denominator 4539 -> 4581 (+49 entries, the family channels the three skins now read: breadcrumb 25, pagination 13, tabs 11; -7 exits: the three --ds-pagination-current-* root privates now written as --_ds- intermediates, --ds-motion-rearrange now read inside the tabs deriver value instead of the skin, the two spacing half-steps and one breadcrumb name), produced 3223 -> 3419 and producers 5322 -> 5520 are the same move seen from the other sides (+201 producer entries: tabs 124, breadcrumb 40, pagination 37 -- the rest of the emitted names already had a producer; -5 exits: the three --ds-pagination-current-* declarations the old skin carried and --ds-recipe-profile / --ds-experience-profile, whose emitter derivation/recipes is retired by DER-06 in the same tree and which no Modern skin reads, so the debt SET does not see them; the walker measures 5324 on 0fd9af8e3, so two of the entries predate this lot and are re-anchored here rather than left disagreeing with the tree); modernSkinFiles stays 118 (the three skins migrated in place). Verified 2026-09-15 with the gate's own collectors on isolated copies of the committed tree (ea87ce0c3, eabf62987, 0fd9af8e3, 61280a253, b68389160, 011910356, 7b35276d5): every figure in this paragraph reproduces exactly (denominator +49/-7, debt 0 entries and 154 exits: tabs 113, pagination 24, breadcrumb 15, --ds-spacing-1-5 and --ds-spacing-2-5; modernSkinFiles 118), and the F5a paragraph below likewise (46 exits: 26 --ds-menu-*, 19 --ds-sidebar-*, --ds-surface-subtle). Two facts measured on 2026-09-15 rather than assumed: (a) --ds-ease-standard does NOT leave the debt with this cut -- skin/stepper and skin/steps still read it, and its writer (derivation/motion/character emits it from a keyed table) is invisible to the producers walker, so it is in the debt set on both sides; (b) the DER-06 2d-i profile retirement (61280a253) moves no debt, denominator or produced value -- 4539 / 3223 / 1316 on both 0fd9af8e3 and 61280a253 -- and only producers 5324 -> 5322 (--ds-recipe-profile, --ds-experience-profile), so of the -5 producer exits above two are that retirement and three are this cut (5322 -> 5520 is +201/-3 against the tree the cut landed on); the 2d-ii retirement of --ds-elevation-border-style (95a85b080) moves nothing here either -- 4581 / 3419 / 1162 / 5520 on both 011910356 and 7b35276d5, the channel never having been in the producer set the walker sees. Previous note: 1362 -> 1316 in WO-FAM-05 lot 1 (menu), lowered in the commit that moves it. Measured by set difference against 73c6e9195 (HEAD's menu skins and producers, the only Modern skins that changed): 46 exits and 0 entries -- 26 --ds-menu-*, 19 --ds-sidebar-* and --ds-surface-subtle, every one read only by skin/menu or skin/menu-compounds and gone because the family now reads the 92 --ds-menu-* channels derivation/chrome/menu emits, chained to produced roots (--ds-sidebar-{text,text-muted,border,item-bg-hover,item-bg-active,item-gap,item-padding-inline}, the type roles, the spacing ramp, --ds-motion-ease-standard) instead of the unwritten --ds-sidebar-* fallbacks, --ds-ease-standard, --ds-surface-subtle and --ds-type-scale. Two of menu's former reads stay in the debt through other families: --ds-ease-standard (pagination, stepper, steps, breadcrumb) and --ds-type-scale (saved-views). denominator 4508 -> 4539 (+56 entries, the --ds-menu-* channels the two skins now read, -25 exits), produced 3146 -> 3223 and producers 5247 -> 5322 are the same move seen from the other sides; modernSkinFiles stays 118 (both menu skins migrated in place). Previous note: 1685 -> 1362 in WO-FAM-04, lowered in the commit that moved it. Measured by set difference against 25d245167: 323 exits and 0 entries -- alert 11, alert-dialog 5, callout 11, color 1, confirm-dialog 4, drawer 2, dropdown 20, hover-card 11, material 3, message 2, modal 24, notification 3, overlay 1, popover 77, recipe 2, sheet 15, size 1, spacing 1, tint 10, toast 5, tooltip 90, tour 23, type 1. Every family name left by gaining a producer in derivation/chrome/<family> or presentation/components/<family>, by moving to the family namespace that has one, or by retiring with its skin (the toast, notification, message and callout Modern skins, and the old skins' unwritten --ds-tint-* and --ds-material-overlay-* reads). denominator 4059 -> 4504, produced 2374 -> 3142 and producers 4453 -> 5243 are the same move seen from the other sides (the twelve family namespaces the skins now read, the relations that write them, and the root fallbacks the reads now name); modernSkinFiles 121 -> 118 (skin/overlay-modal moved to skin/modal; skin/toast, skin/notification, skin/message and skin/callout folded into skin/notifier and skin/alert). Previous note: 1838 -> 1685 in WO-FAM-03, lowered in the commit that moved it. Measured by set difference against f015d31a8: 153 exits and 0 entries -- select 65, mentions 15, cascader 13, transfer 12, color-picker 11 (10 of them the retired --ds-colorpicker-* reads), tree-select 10, auto-complete 8, date-picker 8, time-picker 6, plus five shared names the rewritten skins stopped reading after repointing to produced roots (--ds-color-bg-selected, --ds-dropdown-max-height, --ds-opacity-disabled, --ds-surface-disabled, --ds-time-column-height). Every family name left by gaining a producer in derivation/chrome/<family> or presentation/components/<family>, or by moving to the family namespace that has one. denominator 3749 -> 4059, produced 1911 -> 2374 and producers 3991 -> 4453 are the same move seen from the other sides (the nine family namespaces the skins now read, the relations that write them, and the root fallbacks the structural constants gained); modernSkinFiles stays 121 (skin/autocomplete moved to skin/auto-complete). Previous note (WO-FAM-02): 1954 -> 1838 in WO-FAM-02, lowered in the commit that moved it. Measured by set difference against 7dc65733a: 116 exits and 0 entries -- input-number 25, input 22 (with --ds-surface-{disabled,subtle} and --ds-disabled-opacity, repointed to the material and state roots), form 16, otp 15, password 12, tag-input 12, form-field 7, textarea 7. Every name left by gaining a producer in derivation/chrome/<family> or presentation/components/<family>, or by being repointed to a produced root, not by losing its read. denominator 3619 -> 3749, produced 1665 -> 1911 and producers 3751 -> 3991 are the same move seen from the other sides (the renamed --ds-otp-input-*, --ds-password-input-* and --ds-input-number-* channels the skins now read); modernSkinFiles 122 -> 121 is the deleted comment-only input-residual skin. Previous note (WO-FAM-01): 2094 -> 1954, 124 exits across button, checkbox, radio, toggle and segmented.",
   "producersNote": "7147 -> 7146 on 2026-09-25 (still not gated): 266199fe9 (density wave 2c) retired divider's --ds-divider-inset to private --_ds-divider-inset, and this instrument counts --ds-* production only; measured by replaying the gate's collector over isolated archives of 1f17755c7, 8b138bc05 and 266199fe9 (7147 at both earlier commits, 7146 at the wave-2c one). Previous note: 6424 -> 7147 on 2026-09-23 (not gated): the pinned value was already stale at its own tree -- da968fcde measures 6693 with its own and with the HEAD instrument -- and HEAD measures 7147; the +454 is the FAM-11/FAM-08/INV-03 derivers of the range and is not attributed name by name here. Previous note: 6213 -> 6257 in WO-FAM-08 lot B7: +44 derived emissions (42 toolbar, 2 filter-chip), 0 exits; the 13 --ds-filter-pill-*/--ds-search-* rest declarations added to presentation/components/patterns were already producers through the kernel, so declared grows 4393 -> 4406 without moving this union. Previous note: 5613 -> 6213 in the WO-FAM-08 kernel-census lot (2026-09-16), measured on the pre-commit HEAD 0249ed181: 6029 with the unchanged library (declared 4393, derivation registry 1914), plus 184 names the compiler kernel (153) and lowering/foundation (31) emit that neither the authored CSS nor the derivation registry produces. The derivation-registry set is byte-identical before and after (1914 names, sha256 of the sorted list 46fea34206dfa5dda54a1fbfbfeb0295e3f525a8e4d1da68b0c8813a12225378), as is the declared set (4393, 26d835d27da89f0423dae816291892c150ae0b166f53471ddcff4712311c2d59); the 5613 -> 6029 step predates this lot and is not attributed here. Previous note: 5622 -> 5613 in lot F6c (2026-09-15): nine authored declarations with no reader anywhere left the producer set -- the four legacy menu group-title/divider names in foundation/themes/default (their semantics live in the --ds-menu-group-* and --ds-menu-divider-margin-{block,inline} channels derivation/chrome/menu emits), --ds-tooltip-transition and --ds-datepicker-border-hover in the same file (the tooltip enter/exit channels and the canonical --ds-date-picker-border-hover carry them), the --ds-z-notification / --ds-z-message aliases in foundation/base/z-index (no Modern skin read them since the layer stack took over), and the --ds-z-index-message band whose only reader was that alias (the layer stack has no message kind; the notifier stacks its message role in the notification band). `denominator`, `produced` and `debt` do not move: none of the eight was read by a Modern skin. Previous note: 3610 -> 3613 en WO-DER-02: `derivation/states` da productor a --ds-state-{active,selected}-shift y a --ds-state-disabled-mix, que antes no los tenia nadie. `debt` (2096) y `denominator` (3649) no se mueven: los tres nombres nuevos no los lee ningun skin Modern todavia.",
   "honesty": "El numero es la MEDIDA de hoy, no una meta. WO-DER-01 crea el instrumento; bajarlo es el trabajo de las WO-DER-02..04 y de los cortes por familia, que son las que dan productor a los nombres que hoy no lo tienen.",
-  "denominatorNote": "4825 -> 4824 and produced 4331 -> 4330 in B45 (the stack skin's density re-base retires), measured by set difference with the gate's own collectors against the same tree with the pre-B45 stack skin substituted: 1 name left the denominator, 0 entered -- --ds-density-global-effective-scale, which only the re-base read; it is produced, so `produced` falls by the same one and `debt` stays 494. Previous note: 4826 -> 4825 and produced 4332 -> 4331 at 266199fe9 (density wave 2c: divider's selector alias is renamed private, --ds-divider-inset -> --_ds-divider-inset), measured by set difference with the gate's own collectors over isolated archives of 8b138bc05 (reproduces 4826 / 4332 / 494) and 266199fe9: 1 name left the denominator and 0 entered -- --ds-divider-inset, which was produced, so `produced` falls by the same one and `debt` stays 494. Every other commit since the pin reproduces 4826 exactly (677670244, 1f17755c7, dc79aa95f, 8b138bc05). Previous note: 4718 -> 4826 on 2026-09-23 (+123 entries, -15 exits, same replay; every entry has a producer, so none enters the debt): 6a3eae066 +1 (--ds-density-global-effective-scale); 9779cab05 +100 (FAM-11 sub-lot D: the --ds-command-palette-* and sibling derived channels of its three new skins); b5eca0e4b -1 (--ds-page-shell-skeleton-radius); 85cc1085b +3/-3 (--ds-table-{drag-grip-offset,drag-grip-size,drop-indicator-radius} -> --ds-data-table-*); fa2a4fff9 +3 (--ds-data-table-drag-grip-size-{compact,spacious}, --ds-modern-table-drag-grip-size); 8c901556d +6/-6 (--ds-page-header-* -> --ds-page-shell-header-*); cefa1becc +6/-2 (--ds-table-{cell-line-height,control-radius} -> --ds-data-table-{card-shadow,cell-line-height,cell-line-height-compact,cell-line-height-spacious,control-pill-radius,control-radius}); 8e6b7e57b +1/-1 (--ds-motion-instant -> --ds-motion-rearrange); 9d64c294f -1 (--ds-disabled-opacity); 34929b2b7 +2 (--ds-column-settings-quiet-ink, --ds-file-manager-quiet-ink); 78f2a9ed2 -1 (--ds-tree-node-padding); 10194feca +1 (--ds-avatar-ink-resting). modernSkinFiles stays 124; produced 4188 -> 4332 is the same move (+108 net reads, +36 exits). Previous note: 4666 -> 4665 in WO-FAM-08 lot B7: --ds-radius-pill leaves the read set (skin/list-toolbar now reads --ds-radius-full, already read elsewhere); 0 entries; modernSkinFiles stays 124. Previous note: 4547 -> 4666 (2026-09-16, measured on the pre-commit HEAD 0249ed181 of the WO-FAM-08 kernel-census lot), and the kernel census does not move it: the denominator is 4666 with and without the kernel roots, because it counts reads, not producers. The +119 and modernSkinFiles 117 -> 124 are the drift the family cuts after 008eb19e2 left unpinned, not attributed here. Previous note: 4545 -> 4547 (2026-09-15, lot F6b), and `debt` (1061) does NOT move: the card md inset now falls to --ds-card-padding-base, which derivation/chrome/card emits as var(--ds-card-padding, var(--ds-card-md-padding)) so the tenant-authored base inset (a chrome-variables emission this walker cannot see, read by app-bithire in five places) paints through a produced name; and the card gains its xl padding step, so skin/card now reads --ds-card-padding-xl and --ds-card-xl-padding (both declared in authored CSS). Measured by set difference with the gate's own collectors between the committed tree 3aea57452 (where this baseline's 4545 / 3484 / 1061 / 5622 pin is the uncommitted working-tree re-pin of the card cut) and the working tree carrying the F6b edit: +3 denominator entries (--ds-card-padding-base, --ds-card-padding-xl, --ds-card-xl-padding), -1 exit (--ds-card-md-padding, now read inside the deriver value instead of the skin), 0 debt entries and 0 debt exits, produced 3484 -> 3486 is the same move seen from the other side; producers stay 5622 (+1 entry --ds-card-padding-base, -1 exit --ds-card-shadow-elevated, whose default declaration in foundation/themes/default and whose chrome-variables twin emission were retired in the same lot: the elevated variant's authorable root is --ds-card-elevated-shadow, written by the same shadowElevated field, and no skin ever read the twin); modernSkinFiles stays 117. The tabs skin's two --ds-control-height-scale reads moved into derivation/chrome/tabs in the same lot without changing any set: the name stays read by the input-family skins. Previous note: 4551 -> 4545 in WO-FAM-06 lot 1 (card): see debtNote, same measurement, `debt` moves with it. Previous note: 4544 -> 4551 (2026-09-15), and `debt` (1073) does NOT move: the seven channels the popover title-padding edit adds -- --ds-popover-bordered-title-padding-inline, --ds-popover-comfortable-title-padding-inline, --ds-popover-compact-title-padding-inline, --ds-popover-minimal-title-padding-inline, --ds-popover-rich-title-padding-inline, --ds-popover-spacious-title-padding-inline, --ds-popover-title-padding-inline-current -- are emitted by derivation/chrome/popover and read by skin/popover, so produced 3471 -> 3478 and producers 5596 -> 5603 are the same seven seen from the other sides (0 exits in every set; modernSkinFiles stays 117). Measured by set difference with the gate's own collectors between the committed tree c66520ce7 (4544 / 3471 / 1073 / 5596, where this gate exits 0) and the working tree carrying that edit (skin/popover/index.css and derivation/chrome/popover/index.ts, uncommitted when measured), which is why this pin must land in the same commit as the popover edit and is void without it. Previous note: 4581 -> 4544 in WO-FAM-05 lot 3: see debtNote, same measurement, `debt` moves with it. Previous note: 4539 -> 4581 in WO-FAM-05 lot 2 (tabs, breadcrumb, pagination): see debtNote, same measurement, `debt` moves with it. Previous note: 4508 -> 4539 in WO-FAM-05 lot 1 (menu): see debtNote, same measurement, `debt` moves with it. Previous note: 4504 -> 4508 on 2026-09-14, and `debt` (1362) does NOT move. Measured by set difference between ce05c3d41 (the WO-FAM-04 merge, where 1362/4504 was pinned and RWP exited 0) and 7314b2dbb: 4 entries and 0 exits, all introduced by 3082d0dfb (feat(alert): give the folded Callout back its lighter wash) -- --ds-alert-error-wash-subtle, --ds-alert-info-wash-subtle, --ds-alert-success-wash-subtle, --ds-alert-warning-wash-subtle, each read by skin/alert and emitted by derivation/chrome/alert (a compiled producer; none is declared in authored CSS). produced 3142 -> 3146 and producers 5243 -> 5247 are the same four seen from the other sides (0 producer exits); the debt SET is identical, not just its count; modernSkinFiles stays 118. The other four corpus commits in the range (36d135d44, 6040ad634, dd3060fa2, 45895720c) rewrite reads without changing the read set. Previous note: 3649 -> 3653 in connection lot 2, and `debt` (2094) does NOT move: the four names the Modern skin now reads all have a producer. Two are the roots `shape.nesting` and `shape.control-height` state -- --ds-radius-nest-ratio and --ds-control-height-scale, both declared in `foundation/themes/default` -- and two are the card channels read through them, --ds-card-nest-inset and --ds-card-nest-ratio, both declared in `presentation/components/card`. `produced` 1555 -> 1559 is the same four seen from the other side. `producers` 3625 -> 3631 is +6, not +4: the walker already measured 3627 on `main`, so two of the six predate this lot and are re-anchored here rather than left disagreeing with the tree."
+  "denominatorNote": "4825 -> 4824 and produced 4331 -> 4330 in B45 (the stack skin's density re-base retires), measured by set difference with the gate's own collectors against the same tree with the pre-B45 stack skin substituted: 1 name left the denominator, 0 entered -- --ds-density-global-effective-scale, which only the re-base read; it is produced, so `produced` falls by the same one and `debt` stays 494. Previous note: 4826 -> 4825 and produced 4332 -> 4331 at 266199fe9 (density wave 2c: divider's selector alias is renamed private, --ds-divider-inset -> --_ds-divider-inset), measured by set difference with the gate's own collectors over isolated archives of 8b138bc05 (reproduces 4826 / 4332 / 494) and 266199fe9: 1 name left the denominator and 0 entered -- --ds-divider-inset, which was produced, so `produced` falls by the same one and `debt` stays 494. Every other commit since the pin reproduces 4826 exactly (677670244, 1f17755c7, dc79aa95f, 8b138bc05). Previous note: 4718 -> 4826 on 2026-09-23 (+123 entries, -15 exits, same replay; every entry has a producer, so none enters the debt): 6a3eae066 +1 (--ds-density-global-effective-scale); 9779cab05 +100 (FAM-11 sub-lot D: the --ds-command-palette-* and sibling derived channels of its three new skins); b5eca0e4b -1 (--ds-page-shell-skeleton-radius); 85cc1085b +3/-3 (--ds-table-{drag-grip-offset,drag-grip-size,drop-indicator-radius} -> --ds-data-table-*); fa2a4fff9 +3 (--ds-data-table-drag-grip-size-{compact,spacious}, --ds-modern-table-drag-grip-size); 8c901556d +6/-6 (--ds-page-header-* -> --ds-page-shell-header-*); cefa1becc +6/-2 (--ds-table-{cell-line-height,control-radius} -> --ds-data-table-{card-shadow,cell-line-height,cell-line-height-compact,cell-line-height-spacious,control-pill-radius,control-radius}); 8e6b7e57b +1/-1 (--ds-motion-instant -> --ds-motion-rearrange); 9d64c294f -1 (--ds-disabled-opacity); 34929b2b7 +2 (--ds-column-settings-quiet-ink, --ds-file-manager-quiet-ink); 78f2a9ed2 -1 (--ds-tree-node-padding); 10194feca +1 (--ds-avatar-ink-resting). modernSkinFiles stays 124; produced 4188 -> 4332 is the same move (+108 net reads, +36 exits). Previous note: 4666 -> 4665 in WO-FAM-08 lot B7: --ds-radius-pill leaves the read set (skin/list-toolbar now reads --ds-radius-full, already read elsewhere); 0 entries; modernSkinFiles stays 124. Previous note: 4547 -> 4666 (2026-09-16, measured on the pre-commit HEAD 0249ed181 of the WO-FAM-08 kernel-census lot), and the kernel census does not move it: the denominator is 4666 with and without the kernel roots, because it counts reads, not producers. The +119 and modernSkinFiles 117 -> 124 are the drift the family cuts after 008eb19e2 left unpinned, not attributed here. Previous note: 4545 -> 4547 (2026-09-15, lot F6b), and `debt` (1061) does NOT move: the card md inset now falls to --ds-card-padding-base, which derivation/chrome/card emits as var(--ds-card-padding, var(--ds-card-md-padding)) so the tenant-authored base inset (a chrome-variables emission this walker cannot see, read by app-bithire in five places) paints through a produced name; and the card gains its xl padding step, so skin/card now reads --ds-card-padding-xl and --ds-card-xl-padding (both declared in authored CSS). Measured by set difference with the gate's own collectors between the committed tree 3aea57452 (where this baseline's 4545 / 3484 / 1061 / 5622 pin is the uncommitted working-tree re-pin of the card cut) and the working tree carrying the F6b edit: +3 denominator entries (--ds-card-padding-base, --ds-card-padding-xl, --ds-card-xl-padding), -1 exit (--ds-card-md-padding, now read inside the deriver value instead of the skin), 0 debt entries and 0 debt exits, produced 3484 -> 3486 is the same move seen from the other side; producers stay 5622 (+1 entry --ds-card-padding-base, -1 exit --ds-card-shadow-elevated, whose default declaration in foundation/themes/default and whose chrome-variables twin emission were retired in the same lot: the elevated variant's authorable root is --ds-card-elevated-shadow, written by the same shadowElevated field, and no skin ever read the twin); modernSkinFiles stays 117. The tabs skin's two --ds-control-height-scale reads moved into derivation/chrome/tabs in the same lot without changing any set: the name stays read by the input-family skins. Previous note: 4551 -> 4545 in WO-FAM-06 lot 1 (card): see debtNote, same measurement, `debt` moves with it. Previous note: 4544 -> 4551 (2026-09-15), and `debt` (1073) does NOT move: the seven channels the popover title-padding edit adds -- --ds-popover-bordered-title-padding-inline, --ds-popover-comfortable-title-padding-inline, --ds-popover-compact-title-padding-inline, --ds-popover-minimal-title-padding-inline, --ds-popover-rich-title-padding-inline, --ds-popover-spacious-title-padding-inline, --ds-popover-title-padding-inline-current -- are emitted by derivation/chrome/popover and read by skin/popover, so produced 3471 -> 3478 and producers 5596 -> 5603 are the same seven seen from the other sides (0 exits in every set; modernSkinFiles stays 117). Measured by set difference with the gate's own collectors between the committed tree c66520ce7 (4544 / 3471 / 1073 / 5596, where this gate exits 0) and the working tree carrying that edit (skin/popover/index.css and derivation/chrome/popover/index.ts, uncommitted when measured), which is why this pin must land in the same commit as the popover edit and is void without it. Previous note: 4581 -> 4544 in WO-FAM-05 lot 3: see debtNote, same measurement, `debt` moves with it. Previous note: 4539 -> 4581 in WO-FAM-05 lot 2 (tabs, breadcrumb, pagination): see debtNote, same measurement, `debt` moves with it. Previous note: 4508 -> 4539 in WO-FAM-05 lot 1 (menu): see debtNote, same measurement, `debt` moves with it. Previous note: 4504 -> 4508 on 2026-09-14, and `debt` (1362) does NOT move. Measured by set difference between ce05c3d41 (the WO-FAM-04 merge, where 1362/4504 was pinned and RWP exited 0) and 7314b2dbb: 4 entries and 0 exits, all introduced by 3082d0dfb (feat(alert): give the folded Callout back its lighter wash) -- --ds-alert-error-wash-subtle, --ds-alert-info-wash-subtle, --ds-alert-success-wash-subtle, --ds-alert-warning-wash-subtle, each read by skin/alert and emitted by derivation/chrome/alert (a compiled producer; none is declared in authored CSS). produced 3142 -> 3146 and producers 5243 -> 5247 are the same four seen from the other sides (0 producer exits); the debt SET is identical, not just its count; modernSkinFiles stays 118. The other four corpus commits in the range (36d135d44, 6040ad634, dd3060fa2, 45895720c) rewrite reads without changing the read set. Previous note: 3649 -> 3653 in connection lot 2, and `debt` (2094) does NOT move: the four names the Modern skin now reads all have a producer. Two are the roots `shape.nesting` and `shape.control-height` state -- --ds-radius-nest-ratio and --ds-control-height-scale, both declared in `foundation/themes/default` -- and two are the card channels read through them, --ds-card-nest-inset and --ds-card-nest-ratio, both declared in `presentation/components/card`. `produced` 1555 -> 1559 is the same four seen from the other side. `producers` 3625 -> 3631 is +6, not +4: the walker already measured 3627 on `main`, so two of the six predate this lot and are re-anchored here rather than left disagreeing with the tree.",
+  "readClasses": {
+    "law": "The ratchet was blind to every read outside engines/modern: the agnostic skin and the rest of the authored CSS that the base entrypoint imports under every engine, and literal var() reads inline in component TS/TSX, paint under Modern exactly like the Modern skin does. Measured 2026-09-25 at 6f5faa6f4 after WO-EVI-03 found 11 dead channels its tests pin that this ratchet could not see. Frozen engines (classic, rustic) stay out for the same reason as before; nothing else does.",
+    "shape": "names -> { readers, family, owner, ownerProposal }. A read without producer that is not a row (or a new reader of a row) is anonymous and red; a row or reader that stopped being debt is red until deleted. No write mode: the ledger only shrinks by hand.",
+    "ownership": "owner is a work order id or null. The 11 WO-EVI-03 channels carry their proposal one by one. Every other row is ownerProposal null: unrouted debt, measured and visible, that the DT routes by family (produce the channel in its family deriver, or retire the read). It is not an exemption: a row leaves only when its read has a producer or is gone.",
+    "sharedPaint": {
+      "corpus": "libraries/tokens/producers collectAuthoredStylesheets() minus /engines/(classic|rustic)/ minus the Modern skin corpus -- the same authored-CSS walker the producer set uses",
+      "measured": {
+        "files": 259,
+        "denominator": 2574,
+        "debt": 335,
+        "reads": 388
+      },
+      "names": {
+        "--ds-assistant-active-signal-shadow": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/assistant/index.css"
+          ],
+          "family": "assistant",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-avatar-badge-border": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css"
+          ],
+          "family": "avatar-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-avatar-badge-dot-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css"
+          ],
+          "family": "avatar-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-avatar-group-border": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css"
+          ],
+          "family": "avatar-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-avatar-group-overlap": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css"
+          ],
+          "family": "avatar-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-avatar-group-surplus-font-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css"
+          ],
+          "family": "avatar-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-avatar-group-surplus-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css"
+          ],
+          "family": "avatar-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-avatar-surplus-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css"
+          ],
+          "family": "avatar-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-avatar-surplus-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css"
+          ],
+          "family": "avatar-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-bottom-tab-bar-shadow": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
+          ],
+          "family": "bottom-tab-bar",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-bottom-tab-bar-z": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
+          ],
+          "family": "bottom-tab-bar",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-button-group-instance-gap": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/button-group/index.css"
+          ],
+          "family": "button-group",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-capability-anatomy-label-tracking": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
+          ],
+          "family": "surface-states",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-capability-cell-min-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
+          ],
+          "family": "surface-states",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-capability-disabled-opacity": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
+          ],
+          "family": "surface-states",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-capability-opacity": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
+          ],
+          "family": "surface-states",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-carousel-item-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/carousel-compounds/index.css"
+          ],
+          "family": "carousel-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-carousel-item-bg-image": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/carousel-compounds/index.css"
+          ],
+          "family": "carousel-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-cell-renderers-mono-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/cell-renderers/index.css"
+          ],
+          "family": "cell-renderers",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-cell-renderers-score-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/cell-renderers/index.css"
+          ],
+          "family": "cell-renderers",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-chart-cell-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css"
+          ],
+          "family": "chart-foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-chart-insight-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css"
+          ],
+          "family": "chart-foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-chart-label-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/chart-radar/index.css"
+          ],
+          "family": "chart-foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-chart-tooltip-x": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css"
+          ],
+          "family": "chart-foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-chart-tooltip-y": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css"
+          ],
+          "family": "chart-foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-code-block-copied-frame": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
+          ],
+          "family": "code-block",
+          "owner": null,
+          "ownerProposal": "WO-FAM-06",
+          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
+        },
+        "--ds-code-block-copied-ink": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
+          ],
+          "family": "code-block",
+          "owner": null,
+          "ownerProposal": "WO-FAM-06",
+          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
+        },
+        "--ds-code-block-copy-bg-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
+          ],
+          "family": "code-block",
+          "owner": null,
+          "ownerProposal": "WO-FAM-06",
+          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
+        },
+        "--ds-code-block-copy-bg-pressed": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
+          ],
+          "family": "code-block",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-code-block-copy-ink-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
+          ],
+          "family": "code-block",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-code-block-focus-ring": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
+          ],
+          "family": "code-block",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-code-block-motion-duration": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
+          ],
+          "family": "code-block",
+          "owner": null,
+          "ownerProposal": "WO-FAM-06",
+          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
+        },
+        "--ds-code-block-selection-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
+          ],
+          "family": "code-block",
+          "owner": null,
+          "ownerProposal": "WO-FAM-06",
+          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
+        },
+        "--ds-collection-card-depth": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
+          ],
+          "family": "grid-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-collection-card-gap": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
+          ],
+          "family": "grid-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-collection-card-glass-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
+          ],
+          "family": "grid-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-collection-card-grid-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
+          ],
+          "family": "grid-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-collection-card-grid-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
+          ],
+          "family": "grid-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-collection-card-hover-transform": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
+          ],
+          "family": "grid-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-collection-card-min-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
+          ],
+          "family": "grid-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-collection-card-overlay": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
+          ],
+          "family": "grid-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-collection-card-sheen": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
+          ],
+          "family": "grid-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-collection-card-transition": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
+          ],
+          "family": "grid-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-collection-filter-dropdown-padding": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
+          ],
+          "family": "collection-workspace",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-collection-filter-dropdown-width": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
+          ],
+          "family": "collection-workspace",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-color-bg-inset": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/themes/default/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-color-border-disabled": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/themes/default/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-color-border-hover": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/themes/default/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-color-focus": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/chart-c/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css"
+          ],
+          "family": "chart-c",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-color-primary-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css"
+          ],
+          "family": "decision-inbox",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-color-text-on-error": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
+          ],
+          "family": "bottom-tab-bar",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-command-action-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/patterns/index.css"
+          ],
+          "family": "patterns",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-command-console-min-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/patterns/index.css"
+          ],
+          "family": "patterns",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-command-console-padding": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/patterns/index.css"
+          ],
+          "family": "patterns",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-command-home-title-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/patterns/index.css"
+          ],
+          "family": "patterns",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-command-surface-max-width": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/patterns/index.css"
+          ],
+          "family": "patterns",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-compare-divider-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/compare/index.css"
+          ],
+          "family": "compare",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-compare-divider-spacing": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/compare/index.css"
+          ],
+          "family": "compare",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-compare-divider-width": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/compare/index.css"
+          ],
+          "family": "compare",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-compare-heading-weight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/compare/index.css"
+          ],
+          "family": "compare",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-compare-muted-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/compare/index.css"
+          ],
+          "family": "compare",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-compare-row-label-weight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/compare/index.css"
+          ],
+          "family": "compare",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-compare-section-background": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/compare/index.css"
+          ],
+          "family": "compare",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-compare-section-padding": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/compare/index.css"
+          ],
+          "family": "compare",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-compare-section-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/compare/index.css"
+          ],
+          "family": "compare",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-control-size-md": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
+          ],
+          "family": "active-filters-bar",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-control-size-sm": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
+          ],
+          "family": "active-filters-bar",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dashboard-section-description-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/dashboard/index.css"
+          ],
+          "family": "dashboard",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dashboard-section-title-weight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/dashboard/index.css"
+          ],
+          "family": "dashboard",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dashboard-skeleton-background": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/dashboard/index.css"
+          ],
+          "family": "dashboard",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dashboard-skeleton-duration": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/dashboard/index.css"
+          ],
+          "family": "dashboard",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dashboard-skeleton-line-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/dashboard/index.css"
+          ],
+          "family": "dashboard",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dashboard-skeleton-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/dashboard/index.css"
+          ],
+          "family": "dashboard",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dashboard-skeleton-stat-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/dashboard/index.css"
+          ],
+          "family": "dashboard",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dashboard-skeleton-title-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/dashboard/index.css"
+          ],
+          "family": "dashboard",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dashboard-skeleton-title-width": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/dashboard/index.css"
+          ],
+          "family": "dashboard",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-decision-comparison-columns": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css"
+          ],
+          "family": "decision-comparison",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-decision-comparison-subject-index": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css"
+          ],
+          "family": "decision-comparison",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-decision-panorama-aura-duration": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
+          ],
+          "family": "decision-panorama",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-decision-panorama-aura-timing": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
+          ],
+          "family": "decision-panorama",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-decision-panorama-decision-title-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
+          ],
+          "family": "decision-panorama",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-decision-panorama-fact-icon-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
+          ],
+          "family": "decision-panorama",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-decision-panorama-score-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
+          ],
+          "family": "decision-panorama",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-decision-panorama-title-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
+          ],
+          "family": "decision-panorama",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-factor-comfortable": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css"
+          ],
+          "family": "data-table-mobile",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-factor-compact": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css"
+          ],
+          "family": "data-table-mobile",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-factor-spacious": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css"
+          ],
+          "family": "data-table-mobile",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-scale": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/themes/default/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-2xl": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-3xl": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-4xl": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-5xl": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-component-gap": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-component-gap-lg": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-component-gap-sm": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-component-margin": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-component-margin-lg": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-component-margin-sm": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-component-padding": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-component-padding-lg": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-component-padding-sm": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-container": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-container-lg": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-container-sm": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-gutter": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-gutter-lg": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-gutter-md": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-gutter-sm": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-gutter-xl": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-lg": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-md": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-section": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-section-lg": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-section-sm": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-sm": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-xl": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-xs": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-xxs": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-density-spacing-xxxs": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/base/density/index.css",
+            "src/foundation/tokens/css/foundation/base/spacing/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-detail-state-gap": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/detail/index.css"
+          ],
+          "family": "detail",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dtc-duration-ambient": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css"
+          ],
+          "family": "data-terminal-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dtc-duration-drift": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css"
+          ],
+          "family": "data-terminal-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dtc-duration-entrance": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css"
+          ],
+          "family": "data-terminal-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dtc-duration-flow": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css"
+          ],
+          "family": "data-terminal-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dtc-duration-heartbeat": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css"
+          ],
+          "family": "data-terminal-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dtc-duration-pulse": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css"
+          ],
+          "family": "data-terminal-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dtc-duration-scan": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css"
+          ],
+          "family": "data-terminal-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dtc-duration-tick": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css"
+          ],
+          "family": "data-terminal-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dtc-live": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css"
+          ],
+          "family": "data-terminal-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-dtc-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css"
+          ],
+          "family": "data-terminal-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-export-button-panel-min-width": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/export-button/index.css"
+          ],
+          "family": "export-button",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-export-button-panel-z": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/export-button/index.css"
+          ],
+          "family": "export-button",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-export-button-toast-duration": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/export-button/index.css"
+          ],
+          "family": "export-button",
+          "owner": null,
+          "ownerProposal": "WO-FAM-08",
+          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
+        },
+        "--ds-export-button-toast-z": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/export-button/index.css"
+          ],
+          "family": "export-button",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-gutter-block-end": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-gutter-block-start": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-gutter-block-start-mobile": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-gutter-inline": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-gutter-inline-compact": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-gutter-inline-mobile": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-max-width-content": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-max-width-wide": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-navigation-z-index": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-section-gap": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-section-gap-compact": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-skeleton-card-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-skeleton-duration": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-skeleton-min-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-feature-workspace-sticky-offset": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-font-family-body": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-font-weight-regular": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "decision-comparison",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-glass-background": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css"
+          ],
+          "family": "visual-excellence-preview",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-image-pulse-duration": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/image-compounds/index.css"
+          ],
+          "family": "image-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-image-resolved-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/image-compounds/index.css"
+          ],
+          "family": "image-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-input-group-focus-z": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/input-compounds/index.css"
+          ],
+          "family": "input-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-kbd-depth": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css"
+          ],
+          "family": "collection-header",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-kbd-font-family": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css"
+          ],
+          "family": "collection-header",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-kbd-ink": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css"
+          ],
+          "family": "collection-header",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-kbd-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css"
+          ],
+          "family": "collection-header",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-kbd-surface": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css"
+          ],
+          "family": "collection-header",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-list-card-label-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/list/index.css"
+          ],
+          "family": "list",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-list-card-label-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/list/index.css"
+          ],
+          "family": "list",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-list-card-label-spacing": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/list/index.css"
+          ],
+          "family": "list",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-list-card-label-weight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/list/index.css"
+          ],
+          "family": "list",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-list-card-value-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/list/index.css"
+          ],
+          "family": "list",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-listing-grid-bottom-bleed": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
+          ],
+          "family": "grid-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-loading-overlay-scrim-opacity": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css"
+          ],
+          "family": "loading-overlay",
+          "owner": null,
+          "ownerProposal": "WO-FAM-04",
+          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
+        },
+        "--ds-loading-overlay-z": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css"
+          ],
+          "family": "loading-overlay",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-markdown-focus-ring": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
+          ],
+          "family": "markdown-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-markdown-link-decoration-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
+          ],
+          "family": "markdown-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-markdown-link-ink-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
+          ],
+          "family": "markdown-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-markdown-marker-ink": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
+          ],
+          "family": "markdown-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-markdown-table-frame": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
+          ],
+          "family": "markdown-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-markdown-table-frame-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
+          ],
+          "family": "markdown-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-markdown-view-measure": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
+          ],
+          "family": "markdown-view",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-background-active": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-background-disabled": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-background-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-background-selected": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-border": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-border-active": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-border-disabled": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-border-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-border-selected": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-border-strong": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-focus-ring": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-foreground-disabled": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-foreground-muted": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-highlight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-shadow": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-shadow-active": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-shadow-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-shadow-selected": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-canvas-texture": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/patterns/index.css",
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "patterns",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-card-highlight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/card/index.css",
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-card-texture": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/card/index.css",
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-control-highlight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/field-filters-panel/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-control-texture": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/button/index.css",
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "button",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-background-active": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-background-disabled": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-background-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-background-selected": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-border": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-border-active": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-border-disabled": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-border-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-border-selected": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-border-strong": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-focus-ring": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-foreground-disabled": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-foreground-muted": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-highlight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/edit-header/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/form-header/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-inset-texture": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-overlay-foreground": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-overlay-foreground-disabled": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-overlay-foreground-muted": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-overlay-highlight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-overlay-texture": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-panel-highlight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-panel-texture": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/patterns/index.css",
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "patterns",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-raised-highlight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-raised-texture": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-background-active": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-background-disabled": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-background-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-background-selected": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-border": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-border-active": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-border-disabled": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-border-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-border-selected": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-border-strong": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-focus-ring": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-foreground-disabled": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-foreground-muted": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-highlight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-shadow": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-shadow-active": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-shadow-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-shadow-selected": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-material-shell-texture": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/semantic-surface/index.css"
+          ],
+          "family": "semantic-surface",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-body-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-footer-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-footer-border": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-footer-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-gap": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-glass-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-grid-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-grid-line": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-grid-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-hover-transform": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions/index.css"
+          ],
+          "family": "dashboard-metrics-interactions",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-overlay": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-status-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-status-border": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-status-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
+          ],
+          "family": "metrics-cards",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-transition": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions/index.css"
+          ],
+          "family": "dashboard-metrics-interactions",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-value-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/patterns/index.css"
+          ],
+          "family": "patterns",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-modal-close-button-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
+          ],
+          "family": "overlay-modal-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-modal-close-button-hover-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
+          ],
+          "family": "overlay-modal-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-modal-close-button-hover-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
+          ],
+          "family": "overlay-modal-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-modal-close-button-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
+          ],
+          "family": "overlay-modal-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-overlay-backdrop-filter": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
+          ],
+          "family": "overlay-modal-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-page-header-eyebrow-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css"
+          ],
+          "family": "collection-header",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-page-header-eyebrow-tracking": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css"
+          ],
+          "family": "collection-header",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-page-header-subtitle-max-width": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css"
+          ],
+          "family": "collection-header",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-page-header-title-max-width": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css"
+          ],
+          "family": "collection-header",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-personality-animation-entrance-duration": {
+          "readers": [
+            "src/foundation/tokens/css/runtime/personality/index.css"
+          ],
+          "family": "personality",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-presence-badge-ring": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/presence/index.css"
+          ],
+          "family": "presence",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-presence-cursor-x": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/presence/index.css"
+          ],
+          "family": "presence",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-presence-cursor-y": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/presence/index.css"
+          ],
+          "family": "presence",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-fact-span": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-compact-item-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-compact-item-padding": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-header-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-header-padding": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-item-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-item-padding": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-label-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-narrative-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-shadow": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-strong-value-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-title-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-record-facts-value-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css"
+          ],
+          "family": "record-facts",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-selection-preview-rail-close-backdrop": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
+          ],
+          "family": "selection-preview-rail",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css"
+          ],
+          "family": "visual-excellence-preview",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-command-grid-line-soft": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/patterns/index.css"
+          ],
+          "family": "patterns",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-header-background": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-header-border": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-header-border-block-end": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-header-inset-block-start": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-header-inset-inline": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-header-padding-inline": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-header-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-header-shadow": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-navigation-body-padding": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-navigation-border": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-navigation-border-inline-end": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-navigation-footer-padding": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-navigation-logo-padding": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-navigation-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-navigation-shadow": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+          ],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-size-touch-target": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/detail-header/index.css"
+          ],
+          "family": "action-dock",
+          "owner": "WO-FAM-11",
+          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; already the cut-residue row of WO-FAM-11 in the tests-through-the-door ledger"
+        },
+        "--ds-skeleton-bone-height": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css"
+          ],
+          "family": "skeleton-anatomy",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-skeleton-bone-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css"
+          ],
+          "family": "skeleton-anatomy",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-skeleton-bone-width": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css"
+          ],
+          "family": "skeleton-anatomy",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-skeleton-bone-x": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css"
+          ],
+          "family": "skeleton-anatomy",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-skeleton-bone-y": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css"
+          ],
+          "family": "skeleton-anatomy",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-skeleton-border": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css"
+          ],
+          "family": "skeleton-anatomy",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-skeleton-line-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/skeleton-anatomy/index.css"
+          ],
+          "family": "skeleton-anatomy",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-stagger-index": {
+          "readers": [
+            "src/foundation/tokens/css/foundation/animations/collection-stagger/index.css"
+          ],
+          "family": "foundation",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-surface-card-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css"
+          ],
+          "family": "feature-workspace-frame",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-surface-chip-radius": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css"
+          ],
+          "family": "decision-comparison",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-table-shadow": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css"
+          ],
+          "family": "data-table-mobile",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-text-detail-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/record-facts/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css"
+          ],
+          "family": "decision-panorama",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-stack-transform": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/toast-compounds/index.css"
+          ],
+          "family": "toast-compounds",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-token-inspector-swatch": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/token-inspector/index.css"
+          ],
+          "family": "token-inspector",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-typography-display-family": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css"
+          ],
+          "family": "data-table-mobile",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-typography-display-tracking": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css"
+          ],
+          "family": "data-table-mobile",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-typography-label-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css"
+          ],
+          "family": "data-table-mobile",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-typography-numeric-family": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css"
+          ],
+          "family": "decision-comparison",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-typography-section-title-family": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css"
+          ],
+          "family": "decision-comparison",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-typography-section-title-tracking": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css"
+          ],
+          "family": "decision-comparison",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-typography-section-title-weight": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css"
+          ],
+          "family": "decision-comparison",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-typography-supporting-family": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css"
+          ],
+          "family": "decision-comparison",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-virtual-keyboard-inset": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/chat-surface/index.css"
+          ],
+          "family": "action-dock",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-voice-input-bg-hover": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
+          ],
+          "family": "voice-input-button",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-voice-input-focus-ring": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
+          ],
+          "family": "voice-input-button",
+          "owner": null,
+          "ownerProposal": "WO-FAM-01",
+          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
+        },
+        "--ds-voice-input-pulse-duration": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
+          ],
+          "family": "voice-input-button",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-widget-board-layout-x": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css"
+          ],
+          "family": "widget-board",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-widget-board-layout-y": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css"
+          ],
+          "family": "widget-board",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-workspace-card-icon-bg": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css"
+          ],
+          "family": "surface-section-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-workspace-card-icon-border": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css"
+          ],
+          "family": "surface-section-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-workspace-card-icon-color": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
+            "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css"
+          ],
+          "family": "surface-section-card",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-workspace-frame-padding": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
+            "src/foundation/tokens/css/presentation/components/patterns/index.css"
+          ],
+          "family": "patterns-paint",
+          "owner": null,
+          "ownerProposal": null
+        }
+      }
+    },
+    "componentInline": {
+      "corpus": "src/components/**/*.ts(x) without tests, stories, fixtures, .d.ts or frozen engines; literal var(--ds-x) only, comments stripped",
+      "measured": {
+        "files": 940,
+        "denominator": 621,
+        "debt": 46,
+        "reads": 46
+      },
+      "prefixSites": 35,
+      "prefixSitesReason": "var(--ds-x-${...}) interpolates the name, so the ledger cannot say which channel it reads; the count is pinned both ways so a new interpolated read cannot slip past the named ledger",
+      "names": {
+        "--ds-carousel-height": {
+          "readers": [
+            "src/components/primitives/display/carousel/engines/modern/index.tsx"
+          ],
+          "family": "carousel",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-chart-connector-color": {
+          "readers": [
+            "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/waterfall/index.tsx"
+          ],
+          "family": "chart-engine",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-code-block-gutter-ink": {
+          "readers": ["src/components/primitives/display/code-block/index.tsx"],
+          "family": "code-block",
+          "owner": null,
+          "ownerProposal": "WO-FAM-06",
+          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
+        },
+        "--ds-code-block-header-bg": {
+          "readers": ["src/components/primitives/display/code-block/index.tsx"],
+          "family": "code-block",
+          "owner": null,
+          "ownerProposal": "WO-FAM-06",
+          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
+        },
+        "--ds-filter-pill-radius": {
+          "readers": [
+            "src/components/patterns/data/list-toolbar/foundation/tokens/index.ts"
+          ],
+          "family": "list-toolbar",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-notification-center-list-max-height": {
+          "readers": [
+            "src/components/patterns/communication/notification-center/engines/modern/index.tsx"
+          ],
+          "family": "notification-center",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-radius-pill": {
+          "readers": [
+            "src/components/patterns/data/list-toolbar/foundation/tokens/index.ts"
+          ],
+          "family": "list-toolbar",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-shell-main-transition": {
+          "readers": ["src/components/structures/shell/app-shell/index.tsx"],
+          "family": "app-shell",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-stats-grid-value-font-size": {
+          "readers": [
+            "src/components/patterns/data/stats-grid/engines/modern/index.tsx"
+          ],
+          "family": "stats-grid",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-stats-grid-value-font-weight": {
+          "readers": [
+            "src/components/patterns/data/stats-grid/engines/modern/index.tsx"
+          ],
+          "family": "stats-grid",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-stats-grid-value-letter-spacing": {
+          "readers": [
+            "src/components/patterns/data/stats-grid/engines/modern/index.tsx"
+          ],
+          "family": "stats-grid",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-default-bg": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-default-border": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-default-color": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-default-icon": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-error-bg": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-error-border": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-error-color": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-error-icon": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-gradient-bg": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-gradient-color": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-gradient-icon": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-info-bg": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-info-border": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-info-color": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-info-icon": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-primary-bg": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-primary-border": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-primary-color": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-primary-icon": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-secondary-bg": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-secondary-border": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-secondary-color": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-secondary-icon": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-success-bg": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-success-border": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-success-color": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-success-icon": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-viewport-gutter": {
+          "readers": [
+            "src/components/primitives/feedback/toast/compound/container/index.tsx"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-warning-bg": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-warning-border": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-warning-color": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-warning-icon": {
+          "readers": [
+            "src/components/primitives/feedback/toast/contracts/index.ts"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toast-z-index": {
+          "readers": [
+            "src/components/primitives/feedback/toast/compound/container/index.tsx"
+          ],
+          "family": "toast",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-toolbar-divider-spacing": {
+          "readers": [
+            "src/components/patterns/data/list-toolbar/foundation/tokens/index.ts"
+          ],
+          "family": "list-toolbar",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-voice-input-tooltip-max-width": {
+          "readers": [
+            "src/components/primitives/inputs/voice-input-button/index.tsx"
+          ],
+          "family": "voice-input-button",
+          "owner": null,
+          "ownerProposal": null
+        }
+      }
+    }
+  }
 }

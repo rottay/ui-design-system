@@ -8,10 +8,26 @@
  * techo mecanico de F-09 -- "agregar tokens no mueve los nombres sin productor:
  * hay que reescribir cada var(--ds-x, LITERAL)".
  *
- * ALCANCE: SOLO MODERN. Classic y Rustic estan congelados por decision del
- * owner (2026-09-05) y ninguna orden de trabajo les agrega contenido, asi que
- * contar su pintura convertiria deuda congelada en ruido permanente en un
- * ratchet que existe para bajar.
+ * ALCANCE: TODO LO QUE PINTA BAJO MODERN, en tres clases de lectura. Classic y
+ * Rustic estan congelados por decision del owner (2026-09-05) y ninguna orden
+ * de trabajo les agrega contenido, asi que contar su pintura convertiria deuda
+ * congelada en ruido permanente en un ratchet que existe para bajar. Congelado
+ * es lo UNICO que queda fuera: el filtro original `/engines/modern/` tambien
+ * dejaba fuera el CSS compartido que el entrypoint base importa bajo todo
+ * engine y los `var()` inline del TSX, y esos pintan bajo Modern igual.
+ *
+ *   modernSkin      el skin de `engines/modern`: contador decrece-solo.
+ *   sharedPaint     todo el CSS autorado fuera de los engines congelados y del
+ *                   skin Modern (skin agnostico, tokens de componente,
+ *                   foundation, personality, modern/theme).
+ *   componentInline `var(--ds-*)` literal en el TS/TSX productivo de
+ *                   src/components (sin tests, stories ni engines congelados).
+ *
+ * Las dos clases nuevas entraron con deuda ya medida, asi que su baseline es un
+ * LEDGER nombre por lector, no un numero: una lectura sin productor que no este
+ * en el ledger es anonima y enrojece, y una fila que ya no es deuda enrojece
+ * hasta que se la borre. Un numero dejaria pasar un cambio de un nombre por
+ * otro; el ledger no.
  *
  * UN SOLO WALKER y UN SOLO CONJUNTO DE PRODUCTORES. El corpus lo da
  * `collectSkinFiles()` (el mismo del token-audit, del literal-ownership-gate y
@@ -28,22 +44,168 @@
  * Exit 0 = la deuda es exactamente la del baseline. Exit 1 = se movio.
  */
 
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { collectSkinFiles } from '../../../libraries/engine/skins/files/index.mjs';
-import { collectChannelProducers } from '../../../libraries/tokens/producers/index.mjs';
+import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
+import {
+  collectAuthoredStylesheets,
+  collectChannelProducers,
+} from '../../../libraries/tokens/producers/index.mjs';
 import { varCalls } from '../cascade-wiring/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+const PACKAGE_ROOT = findPackageRoot(HERE);
 export const BASELINE_PATH = join(HERE, 'baseline/index.json');
 
 const stripComments = (source) => source.replace(/\/\*[\s\S]*?\*\//g, '');
+const stripScriptComments = (source) => stripComments(source).replace(/^\s*\/\/.*$/gm, '');
+const posix = (file) => file.split(sep).join('/');
+const FROZEN_ENGINE = /\/engines\/(?:classic|rustic)\//;
+const NOT_PRODUCTIVE_SCRIPT =
+  /(?:^|\/)(?:tests?|__tests__|stories|fixtures|__snapshots__|generated)(?:\/|$)|\.(?:test|spec|stories)\.[cm]?[jt]sx?$|\.d\.ts$/;
+/** Un `var(--ds-x` literal; `var(--ds-x-${...}` es un prefijo interpolado, no un nombre. */
+const INLINE_READ = /var\(\s*(--ds-[a-zA-Z0-9_-]+)(\$\{)?/g;
+
+/** El lector como lo escribe el ledger: relativo a la raiz que contiene `src/`. */
+export function readerPath(file) {
+  const path = posix(file);
+  const at = path.lastIndexOf('/src/');
+  return at >= 0 ? path.slice(at + 1) : path;
+}
 
 /** El skin del unico engine productivo. */
 export function collectModernSkinFiles(files = collectSkinFiles()) {
   return files.filter((file) => file.split(sep).join('/').includes('/engines/modern/'));
+}
+
+/** sharedPaint: todo el CSS autorado que pinta bajo Modern y no es su skin. */
+export function collectSharedPaintFiles(root = PACKAGE_ROOT) {
+  const modern = new Set(collectModernSkinFiles(collectSkinFiles(root)));
+  return collectAuthoredStylesheets(root).filter(
+    (file) => !FROZEN_ENGINE.test(posix(file)) && !modern.has(file),
+  );
+}
+
+/** componentInline: el TS/TSX productivo de los componentes. */
+export function collectComponentInlineFiles(root = PACKAGE_ROOT) {
+  const files = [];
+  const walk = (dir) => {
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      const full = join(dir, entry.name);
+      const path = posix(full);
+      if (FROZEN_ENGINE.test(`${path}/`) || NOT_PRODUCTIVE_SCRIPT.test(path)) continue;
+      if (entry.isDirectory()) walk(full);
+      else if (entry.isFile() && /\.tsx?$/.test(entry.name)) files.push(full);
+    }
+  };
+  walk(join(root, 'src/components'));
+  return files.sort();
+}
+
+/** Cada nombre `--ds-*` leido por la clase, con sus lectores. */
+function readersByName(files, kind) {
+  const readers = new Map();
+  let prefixSites = 0;
+  const add = (name, file) => {
+    const set = readers.get(name) ?? new Set();
+    set.add(readerPath(file));
+    readers.set(name, set);
+  };
+  for (const file of files) {
+    const raw = readFileSync(file, 'utf8');
+    if (kind === 'css') {
+      for (const call of varCalls(stripComments(raw))) {
+        if (call.name.startsWith('--ds-')) add(call.name, file);
+      }
+      continue;
+    }
+    for (const match of stripScriptComments(raw).matchAll(INLINE_READ)) {
+      if (match[2] || match[1].endsWith('-')) prefixSites += 1;
+      else add(match[1], file);
+    }
+  }
+  return { readers, prefixSites };
+}
+
+/**
+ * Una clase de lectura fuera del skin Modern: denominador, y la deuda como
+ * pares nombre -> lectores, que es la forma que el ledger pina.
+ */
+export function classifyReadClass(files, kind, producers) {
+  const { readers, prefixSites } = readersByName(files, kind);
+  const debt = {};
+  for (const name of [...readers.keys()].sort()) {
+    if (!producers.has(name)) debt[name] = [...readers.get(name)].sort();
+  }
+  return { files: files.length, denominator: readers.size, debt, prefixSites };
+}
+
+/** El ledger de una clase contra su medida: toda diferencia es un hallazgo. */
+export function readClassFindings(label, measured, pinned) {
+  const findings = [];
+  if (!pinned || typeof pinned.names !== 'object' || pinned.names === null) {
+    return [`${label}: the baseline carries no \`names\` ledger for this read class`];
+  }
+  if (measured.denominator === 0) {
+    findings.push(`shape: ${label} resolved to zero read names -- an empty corpus is never a pass`);
+  }
+  for (const [name, readers] of Object.entries(measured.debt)) {
+    const row = pinned.names[name];
+    if (!row) {
+      findings.push(
+        `${label} GREW: ${name} is read by ${readers.join(', ')} and nobody writes it -- an anonymous ` +
+          'read without producer. Give it a producer or retire the read; a new ledger row is a new exemption',
+      );
+      continue;
+    }
+    const pinnedReaders = new Set(row.readers ?? []);
+    for (const reader of readers) {
+      if (!pinnedReaders.has(reader)) {
+        findings.push(`${label} GREW: ${reader} is a new reader of the unproduced ${name}`);
+      }
+    }
+    for (const reader of pinnedReaders) {
+      if (!readers.includes(reader)) {
+        findings.push(
+          `${label} SHRANK: ${reader} no longer reads the unproduced ${name} -- remove it from the row's readers`,
+        );
+      }
+    }
+  }
+  for (const [name, row] of Object.entries(pinned.names)) {
+    if (!measured.debt[name]) {
+      findings.push(
+        `${label} SHRANK: ${name} is no longer a read without producer -- delete its ledger row ` +
+          '(decrease-only: the ledger follows the tree DOWN)',
+      );
+    }
+    if (typeof row.family !== 'string' || !row.family) {
+      findings.push(`${label}: ${name} carries no family`);
+    }
+    if (!('owner' in row) || (row.owner !== null && typeof row.owner !== 'string')) {
+      findings.push(`${label}: ${name} carries no owner field (a work order id, or null while unrouted)`);
+    }
+    if (row.owner === null && !('ownerProposal' in row)) {
+      findings.push(`${label}: ${name} has a null owner and no ownerProposal field`);
+    }
+  }
+  if (typeof pinned.prefixSites === 'number' && measured.prefixSites !== pinned.prefixSites) {
+    const verb = measured.prefixSites > pinned.prefixSites ? 'GREW' : 'SHRANK';
+    findings.push(
+      `${label} prefixSites ${verb} from ${pinned.prefixSites} to ${measured.prefixSites}: an interpolated ` +
+        '`var(--ds-x-${...})` names no channel the ledger can check; resolve it to literal names instead of re-pinning',
+    );
+  }
+  return findings;
 }
 
 /** La clasificacion completa, en una pasada sobre el corpus Modern. */
@@ -134,7 +296,14 @@ export function residueFindings(residue, { files, producers, compiledByKind }) {
   return findings;
 }
 
-export function collectFindings({ baselinePath = BASELINE_PATH, files, producers, channelProducers } = {}) {
+export function collectFindings({
+  baselinePath = BASELINE_PATH,
+  files,
+  sharedFiles,
+  inlineFiles,
+  producers,
+  channelProducers,
+} = {}) {
   const measured = channelProducers ?? collectChannelProducers();
   const producerSet = producers ?? measured.producers;
   const corpus = files ?? collectModernSkinFiles();
@@ -180,6 +349,19 @@ export function collectFindings({ baselinePath = BASELINE_PATH, files, producers
       `denominator moved from ${baseline.denominator} to ${result.denominator.length}; re-read the census before touching \`debt\``,
     );
   }
+  const classes = baseline.readClasses ?? {};
+  findings.push(
+    ...readClassFindings(
+      'sharedPaint',
+      classifyReadClass(sharedFiles ?? collectSharedPaintFiles(), 'css', producerSet),
+      classes.sharedPaint,
+    ),
+    ...readClassFindings(
+      'componentInline',
+      classifyReadClass(inlineFiles ?? collectComponentInlineFiles(), 'script', producerSet),
+      classes.componentInline,
+    ),
+  );
   return findings;
 }
 
@@ -191,10 +373,17 @@ function main() {
     for (const finding of findings) console.error(`  - ${finding}`);
     process.exit(1);
   }
+  const producers = collectChannelProducers().producers;
+  const shared = classifyReadClass(collectSharedPaintFiles(), 'css', producers);
+  const inline = classifyReadClass(collectComponentInlineFiles(), 'script', producers);
+  const pinnedPairs = (measured) => Object.values(measured.debt).reduce((sum, readers) => sum + readers.length, 0);
   console.log(
     `read-without-producer-ratchet OK -- ${result.debt.length} of ${result.denominator.length} names read by the ` +
       `Modern skin have NO producer (${result.produced} do; ${result.producers} producers known; ` +
-      `${result.files} Modern skin files)`,
+      `${result.files} Modern skin files); sharedPaint ${Object.keys(shared.debt).length} of ${shared.denominator} ` +
+      `(${pinnedPairs(shared)} reads, ${shared.files} files), componentInline ${Object.keys(inline.debt).length} of ` +
+      `${inline.denominator} (${pinnedPairs(inline)} reads, ${inline.files} files, ${inline.prefixSites} prefix sites), ` +
+      'every one named in the ledger',
   );
 }
 
