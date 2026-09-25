@@ -71,15 +71,36 @@ import type { Theme } from '@/foundation/contracts/composition/tenants/themes/is
 
 const DECLARATION_PATTERN = /^\s*(--[A-Za-z0-9_-]+|[A-Za-z][A-Za-z0-9-]*)\s*:\s*(.+);\s*$/;
 
-/** Characters permitted in a selector suffix after the tenant base selector. */
-const SELECTOR_SUFFIX_PATTERN = /^[A-Za-z0-9[\]='".:()\- ]*$/;
+/** Inert suffix characters; a comma survives only inside a balanced argument list. */
+const SELECTOR_SUFFIX_PATTERN = /^[A-Za-z0-9[\]='".:(),\- ]*$/;
+
+/** Top-level commas only: the density boundary `<base> :where(a, b, c)` is ONE selector. */
+function splitTopLevelSelectors(selectorText: string): string[] | null {
+  const parts: string[] = [];
+  let depth = 0;
+  let start = 0;
+  for (let index = 0; index < selectorText.length; index += 1) {
+    const char = selectorText[index];
+    if (char === '(') depth += 1;
+    else if (char === ')') {
+      depth -= 1;
+      if (depth < 0) return null;
+    } else if (char === ',' && depth === 0) {
+      parts.push(selectorText.slice(start, index));
+      start = index + 1;
+    }
+  }
+  if (depth !== 0) return null;
+  parts.push(selectorText.slice(start));
+  return parts;
+}
 
 /**
  * Rewrite a generated selector-open line onto the preview scope selector.
  * Returns null unless every comma-separated selector starts with the expected
  * tenant base selector and continues with inert selector characters only.
  */
-function rescopeSelectorLine(
+export function rescopeSelectorLine(
   line: string,
   baseSelector: string,
   scopeSelector: string
@@ -87,9 +108,11 @@ function rescopeSelectorLine(
   if (!line.endsWith('{')) return null;
   const selectorText = line.slice(0, -1).trim();
   if (selectorText.length === 0) return null;
+  const parts = splitTopLevelSelectors(selectorText);
+  if (parts === null) return null;
 
   const rescoped: string[] = [];
-  for (const part of selectorText.split(',')) {
+  for (const part of parts) {
     const trimmed = part.trim();
     if (!trimmed.startsWith(baseSelector)) return null;
     const suffix = trimmed.slice(baseSelector.length);

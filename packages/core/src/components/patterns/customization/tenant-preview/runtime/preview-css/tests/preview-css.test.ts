@@ -24,7 +24,7 @@ import { liftAuthoredTheme, readGovernedTheme } from '@/infrastructure/compilers
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildPreviewCss, draftTheme, draftPreviewSource } from '..';
+import { buildPreviewCss, draftTheme, draftPreviewSource, rescopeSelectorLine } from '..';
 import {
   PREVIEW_SCOPE_ATTRIBUTE,
   buildPreviewScopeSelector,
@@ -139,6 +139,10 @@ describe('buildPreviewCss scoping (theme-draft source)', () => {
       const firstRule = css.split('\n').find((line) => line.endsWith('{'));
       expect(firstRule?.startsWith(scopeSelector)).toBe(true);
       expect(css).not.toContain('html[data-tenant');
+      // The density boundary is one selector with commas in its `:where(...)`;
+      // it used to be split on them and dropped whole (~281 declarations).
+      expect(raw).toContain(`${brandTenantSelector(safeSlug)} :where([data-density='compact']:not(:root)`);
+      expect(css).toContain(`${scopeSelector} :where([data-density='compact']:not(:root)`);
     }
   });
 
@@ -152,6 +156,25 @@ describe('buildPreviewCss scoping (theme-draft source)', () => {
     for (const line of css.split('\n').filter((l) => l.endsWith('{'))) {
       expect(line.startsWith(scopeSelector)).toBe(true);
     }
+  });
+});
+
+describe('rescopeSelectorLine selector grammar', () => {
+  const base = "html[data-tenant='acme']";
+  const scope = buildPreviewScopeSelector('acme');
+
+  it('re-anchors a selector whose argument list carries commas, keeping every part', () => {
+    const boundary = `${base} :where([data-density='compact']:not(:root), [data-density='spacious']:not(:root))`;
+    expect(rescopeSelectorLine(`${boundary}, ${base}.light {`, base, scope)).toBe(
+      `${scope} :where([data-density='compact']:not(:root), [data-density='spacious']:not(:root)), ${scope}.light {`,
+    );
+  });
+
+  it('still drops a top-level part the base does not own, and unbalanced parens', () => {
+    expect(rescopeSelectorLine(`${base} :where([data-density='compact']), * {`, base, scope)).toBeNull();
+    expect(rescopeSelectorLine(`${base} :where(a, b {`, base, scope)).toBeNull();
+    expect(rescopeSelectorLine(`${base} :where(a), b) {`, base, scope)).toBeNull();
+    expect(rescopeSelectorLine(`${base} :where(a;b) {`, base, scope)).toBeNull();
   });
 });
 
