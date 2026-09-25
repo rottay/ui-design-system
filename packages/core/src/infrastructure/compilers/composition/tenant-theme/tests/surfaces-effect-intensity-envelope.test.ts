@@ -33,7 +33,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { TENANT_THEME_EFFECT_INTENSITY_BOUNDS } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
@@ -76,7 +76,7 @@ const staticVariables = (
   vertical: FirstPartyVerticalId,
   effectIntensity?: unknown
 ): Record<string, string> =>
-  lowerFlatThemeFixture({
+  compileFlatThemeThroughDoor({
     flatTheme: {
       id: `ei-${vertical}`,
       name: 'Effect Intensity',

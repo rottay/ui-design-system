@@ -24,7 +24,8 @@ import {
 } from "@/infrastructure/compilers/runtime/theme";
 import { documentThemeIntent } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import { CONTRAST_POSTURES } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/contrast-posture";
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 
@@ -52,7 +53,7 @@ const INK_OVER_GROUND = [
 const DARK_PRIMARY = "#1e84e6";
 
 const bithireAt = (contrastPosture: string) =>
-  lowerFlatThemeFixture({
+  compileFlatThemeThroughDoor({
     flatTheme: {
       ...bithireFlatTheme,
       palette: { ...bithireFlatTheme.palette, contrastPosture },

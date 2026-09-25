@@ -7,7 +7,7 @@ import {
   validateRecipeProfileSelection,
 } from "@/foundation/tokens/ts/presentation/recipe-profiles";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
-import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 describe("recipe-profile governance (DS-S001)", () => {
   it("publishes a namespaced, versioned, closed registry", () => {
@@ -54,7 +54,7 @@ describe("recipe-profile governance (DS-S001)", () => {
         profile: "rottay/technical-sharp@1",
       },
     };
-    const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: "proof" });
+    const compiled = compileFlatThemeThroughDoor({ flatTheme, tenantSlug: "proof" });
     expect(compiled.recipeProfile).toBe("rottay/technical-sharp@1");
     // A selection is data, not paint: nothing in the stylesheet carries it.
     expect(compiled.cssVariables["--ds-recipe-profile"]).toBeUndefined();
@@ -63,7 +63,7 @@ describe("recipe-profile governance (DS-S001)", () => {
 
   it("resolves invalid static selections to engine defaults, with no payload and no channel", () => {
     const compile = (profile: string, schemaVersion: number) =>
-      lowerFlatThemeFixture({
+      compileFlatThemeThroughDoor({
         flatTheme: {
           id: "profile-proof",
           name: "Profile proof",

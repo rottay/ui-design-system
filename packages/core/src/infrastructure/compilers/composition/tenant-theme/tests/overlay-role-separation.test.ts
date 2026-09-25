@@ -15,7 +15,8 @@ import type {
   TenantThemeConfigIdentity,
   TenantThemeDocument,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -94,7 +95,7 @@ describe('SC-7 overlay panel/scrim separation', () => {
    * sola habria pasado con el panel pintando cualquier cosa. Juntas, la prueba
    * distingue los dos modos de romperse. */
   it('a theme that authors both roles emits the panel and the veil independently', () => {
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       flatTheme: OVERLAY_AUTHORING_FIXTURE,
       tenantSlug: 'overlay-role-fixture',
     });

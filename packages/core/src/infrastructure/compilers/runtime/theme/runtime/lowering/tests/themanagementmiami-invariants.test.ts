@@ -28,7 +28,8 @@ import { resolve } from "node:path";
 
 import { describe, it, expect } from "vitest";
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { themanagementmiamiFlatTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 import {
   isBundledTenant,
@@ -46,13 +47,13 @@ import {
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 
-type Compiled = ReturnType<typeof lowerFlatThemeFixture>;
+type Compiled = ReturnType<typeof compileFlatThemeThroughDoor>;
 
 // ── Compile ─────────────────────────────────────────────────────────────
 
 describe("themanagementmiami compiles", () => {
   it("compiles via compileTheme without throwing and scopes it to its tenant selector", () => {
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: "themanagementmiami",
     });
@@ -72,11 +73,11 @@ describe("themanagementmiami compiles", () => {
 // instead. it.each names the failing channel directly, per-row, rather than
 // bundling the whole ranked list into one assertion.
 
-const compiledThemanagementmiami: Compiled = lowerFlatThemeFixture({
+const compiledThemanagementmiami: Compiled = compileFlatThemeThroughDoor({
   flatTheme: themanagementmiamiFlatTheme,
   tenantSlug: "themanagementmiami",
 });
-const compiledBithire: Compiled = lowerFlatThemeFixture({
+const compiledBithire: Compiled = compileFlatThemeThroughDoor({
   flatTheme: bithireFlatTheme,
   tenantSlug: "bithire",
 });

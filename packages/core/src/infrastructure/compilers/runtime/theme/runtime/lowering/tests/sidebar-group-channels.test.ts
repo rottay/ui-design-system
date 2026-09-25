@@ -26,7 +26,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
-import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const MENU_SKIN = readFileSync(
@@ -41,7 +41,7 @@ const base: FlatTheme = {
 };
 
 const compile = (theme: FlatTheme) =>
-  lowerFlatThemeFixture({ flatTheme: theme, tenantSlug: 'fixture' }).cssVariables;
+  compileFlatThemeThroughDoor({ flatTheme: theme, tenantSlug: 'fixture' }).cssVariables;
 
 describe('sidebar group channels are wired to the Modern menu skin', () => {
   it.each([

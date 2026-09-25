@@ -17,7 +17,8 @@ import {
   measureArms,
   seriousFindings,
 } from '@tests/support/family-causality';
-import { firstPartyFixture, lowerFlatThemeFixture } from '@tests/support/theme-lowering';
+import { firstPartyFixture } from '@tests/support/theme-lowering';
+import { compileFlatThemeThroughDoor } from '@tests/support/theme-door';
 
 const markup = renderToStaticMarkup(
   <div>
@@ -69,7 +70,7 @@ describeCausality({
 describe('input-number ink producer', () => {
   it('has no root ink on any composed first-party baseline, so no temperature can move it', () => {
     for (const vertical of VERTICALS) {
-      const compiled = lowerFlatThemeFixture({
+      const compiled = compileFlatThemeThroughDoor({
         flatTheme: firstPartyFixture(vertical),
         tenantSlug: vertical,
       });

@@ -24,7 +24,8 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { flatThemeToChromeVariables } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome";
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import {
   isBundledTenant,
   BUNDLED_TENANT_SLUGS,
@@ -122,9 +123,9 @@ function collectDeclarationValues(css: string, property: string): string[] {
 // and every test below only reads the result.
 
 const COMPILED_BY_TENANT = {
-  bithire: lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' }),
-  evnto: lowerFlatThemeFixture({ flatTheme: evntoFlatTheme, tenantSlug: 'evnto' }),
-  rottay: lowerFlatThemeFixture({ flatTheme: rottayFlatTheme, tenantSlug: 'rottay' }),
+  bithire: compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' }),
+  evnto: compileFlatThemeThroughDoor({ flatTheme: evntoFlatTheme, tenantSlug: 'evnto' }),
+  rottay: compileFlatThemeThroughDoor({ flatTheme: rottayFlatTheme, tenantSlug: 'rottay' }),
 };
 
 /**
@@ -153,7 +154,7 @@ const baseBlock = (css: string): string => css.split('\n\n')[0];
  * Management -- a real customer theme carried as a fixture -- rather than a
  * vertical that no longer has one.
  */
-const THEMANAGEMENT = lowerFlatThemeFixture({
+const THEMANAGEMENT = compileFlatThemeThroughDoor({
   flatTheme: themanagementmiamiFlatTheme,
   tenantSlug: 'themanagementmiami',
 });
@@ -745,7 +746,7 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
   });
 
   it('DB-backed tenant with FlatTheme gets same chrome vars', () => {
-    const css = lowerFlatThemeFixture({
+    const css = compileFlatThemeThroughDoor({
       flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: 'db-premium',
     }).cssString;

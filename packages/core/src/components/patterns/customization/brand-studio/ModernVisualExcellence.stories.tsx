@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import type { TenantConfig } from "@/foundation/contracts";
 import { DesignSystemProvider } from "@/infrastructure/runtime/bootstrap";
+import { getKnownTenantConfig } from "@/entrypoints/public/runtime/tenant";
 import { BithireCandidateIcon } from "@/graphics/icons/semantic/generated/roles/bithire-candidate";
 import { ActionAddIcon } from "@/graphics/icons/semantic/generated/roles/action-add";
 import { NavigationSettingsIcon } from "@/graphics/icons/semantic/generated/roles/navigation-settings";
@@ -11,15 +11,7 @@ import { PatternPageShell } from "@/components/patterns/shell/page-shell";
 
 import { VisualExcellencePreviewFixture } from "./runtime/tenant-theme-preview/fixtures";
 
-const BITHIRE_PREVIEW: TenantConfig = {
-  slug: "bithire",
-  name: "BitHire",
-  engine: "modern",
-  theme: "light",
-  plan: "enterprise",
-  features: ["all"],
-  branding: { companyName: "BitHire" },
-};
+const BITHIRE_PREVIEW = getKnownTenantConfig("bithire")!;
 
 function PageHeaderContent() {
   return (
@@ -93,6 +85,7 @@ const meta = {
       <DesignSystemProvider
         tenantConfig={BITHIRE_PREVIEW}
         forceEngine="modern"
+        forceTheme="light"
         skipCssLoading
       >
         <Story />

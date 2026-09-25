@@ -18,7 +18,8 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { tortureDarkFlatTheme, tortureLightFlatTheme } from '@tests/fixtures/brand-themes/torture';
 
 const bithireFlatTheme = firstPartyFixture('bithire');
@@ -26,7 +27,7 @@ const rottayFlatTheme = firstPartyFixture('rottay');
 
 describe('the clear-mode ground is a FlatTheme channel', () => {
   it('a declared backgroundColor reaches --ds-color-bg-primary', () => {
-    const { cssVariables } = lowerFlatThemeFixture({ flatTheme: tortureLightFlatTheme, tenantSlug: 'canvas-probe' });
+    const { cssVariables } = compileFlatThemeThroughDoor({ flatTheme: tortureLightFlatTheme, tenantSlug: 'canvas-probe' });
     expect(tortureLightFlatTheme.palette!.backgroundColor).toBe('#FDFDFF');
     expect(cssVariables['--ds-color-bg-primary']).toBe('#FDFDFF');
     // The aliases the rest of the system reads must move with it, or a surface
@@ -36,7 +37,7 @@ describe('the clear-mode ground is a FlatTheme channel', () => {
   });
 
   it('global reading ink and neutral borders are first-class FlatTheme channels', () => {
-    const { cssVariables } = lowerFlatThemeFixture({ tenantSlug: 'canvas-probe', flatTheme: {
+    const { cssVariables } = compileFlatThemeThroughDoor({ tenantSlug: 'canvas-probe', flatTheme: {
       ...tortureLightFlatTheme,
       palette: {
         ...tortureLightFlatTheme.palette!,
@@ -67,7 +68,7 @@ describe('the clear-mode ground is a FlatTheme channel', () => {
     const { palette, ...rest } = bithireFlatTheme;
     const { backgroundColor: _omitted, ...paletteWithoutGround } = palette!;
     expect(palette!.backgroundColor).toBeDefined();
-    const { cssVariables } = lowerFlatThemeFixture({
+    const { cssVariables } = compileFlatThemeThroughDoor({
       tenantSlug: 'canvas-probe',
       flatTheme: { ...rest, palette: paletteWithoutGround },
     });
@@ -82,7 +83,7 @@ describe('the clear-mode ground is a FlatTheme channel', () => {
     // THAT block and only there. The old shape could not express this: the
     // dark ground sat in `darkBackgroundColor`, which compiled to a variable
     // nothing read, so a tenant declared a ground and never saw it.
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       flatTheme: tortureDarkFlatTheme,
       tenantSlug: 'canvas-probe',
     });
@@ -106,7 +107,7 @@ describe('the clear-mode ground is a FlatTheme channel', () => {
 
   it('emits no `dark`-prefixed ground twin for any theme', () => {
     for (const flatTheme of [tortureDarkFlatTheme, tortureLightFlatTheme, rottayFlatTheme, bithireFlatTheme]) {
-      const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: 'canvas-probe' });
+      const compiled = compileFlatThemeThroughDoor({ flatTheme, tenantSlug: 'canvas-probe' });
       const blocks = [compiled.cssVariables, ...(compiled.modeBlocks ?? []).map((b) => b.cssVariables)];
       for (const block of blocks) {
         expect(
@@ -128,7 +129,7 @@ describe('the ground field is no longer overloaded', () => {
     // bithire's ground is now its preset's #FFFFFF, not the authored #F4F8FB.
     expect(bithireFlatTheme.appearance?.defaultMode).toBe('light');
     expect(bithireFlatTheme.palette!.backgroundColor).toBe('#FFFFFF');
-    const { cssVariables } = lowerFlatThemeFixture({
+    const { cssVariables } = compileFlatThemeThroughDoor({
       flatTheme: bithireFlatTheme,
       tenantSlug: 'canvas-probe',
     });
@@ -147,7 +148,7 @@ describe('the ground field is no longer overloaded', () => {
 
     expect(tortureDarkFlatTheme.appearance?.defaultMode).toBe('dark');
     expect(tortureDarkFlatTheme.palette!.backgroundColor).toBe('#050307');
-    const { cssVariables } = lowerFlatThemeFixture({
+    const { cssVariables } = compileFlatThemeThroughDoor({
       flatTheme: tortureDarkFlatTheme,
       tenantSlug: 'canvas-probe',
     });

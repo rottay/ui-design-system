@@ -6,7 +6,8 @@ import type { FlatTheme } from "@/foundation/contracts/composition/tenants/theme
 import type { SemanticTypographyRoleTokens } from "@/foundation/contracts/kernel/tokens/typography";
 
 import { compileTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering";
-import { firstPartyFixture, lowerFlatThemeFixture, themeSourceOf } from "@tests/support/theme-lowering";
+import { firstPartyFixture, themeSourceOf } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { EMPTY_PROVENANCE } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import { resolveTheme } from "../../resolution";
 import { resolveAdapter } from "../../../presentation/adapters";
@@ -43,10 +44,10 @@ const ROLE_SKELETON: SemanticTypographyRoleTokens = {
   fontVariantNumeric: undefined,
 };
 
-type Compiled = ReturnType<typeof lowerFlatThemeFixture>;
+type Compiled = ReturnType<typeof compileFlatThemeThroughDoor>;
 
 function legA(flatTheme: FlatTheme): Compiled {
-  return lowerFlatThemeFixture({ flatTheme, tenantSlug: flatTheme.id });
+  return compileFlatThemeThroughDoor({ flatTheme, tenantSlug: flatTheme.id });
 }
 
 /**
@@ -218,7 +219,7 @@ function withRotatedBlock(
 
 describe("semantic typography roles", () => {
   it("emits complete defaults and accepts bounded first-party role overrides", () => {
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       tenantSlug: "type-proof",
       flatTheme: {
         id: "type-proof",
@@ -376,12 +377,12 @@ describe("present-with-undefined role keys", () => {
   // it neither emits "undefined" nor deletes the default it sits on top of,
   // while a key that DOES carry a value still wins.
   it("falls through to the default and still lets an authored value win", () => {
-    const control = lowerFlatThemeFixture({
+    const control = compileFlatThemeThroughDoor({
       tenantSlug: "skeleton-control",
       flatTheme: { id: "skeleton-control", name: "Control" },
     }).cssVariables;
 
-    const skeletal = lowerFlatThemeFixture({
+    const skeletal = compileFlatThemeThroughDoor({
       tenantSlug: "skeleton-probe",
       flatTheme: {
         id: "skeleton-probe",
@@ -424,7 +425,7 @@ describe("present-with-undefined role keys", () => {
   // the mechanical counterfactual: compacting only the role emitter leaves this
   // red, because the value is destroyed in the caller before the emitter runs.
   it("keeps an authored labelStyle when the label role arrives as a skeleton", () => {
-    const probe = lowerFlatThemeFixture({
+    const probe = compileFlatThemeThroughDoor({
       tenantSlug: "label-case-probe",
       flatTheme: {
         id: "label-case-probe",
@@ -439,7 +440,7 @@ describe("present-with-undefined role keys", () => {
     expect(probe["--ds-type-label-text-transform"]).toBe("capitalize");
 
     // ...and an explicitly authored role value still outranks labelStyle.
-    const explicit = lowerFlatThemeFixture({
+    const explicit = compileFlatThemeThroughDoor({
       tenantSlug: "label-case-explicit",
       flatTheme: {
         id: "label-case-explicit",

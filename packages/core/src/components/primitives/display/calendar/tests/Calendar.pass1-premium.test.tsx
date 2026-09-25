@@ -9,7 +9,8 @@ import { cleanup, render, screen } from '@testing-library/react';
 
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 import CalendarModern from '../engines/modern';
 
@@ -269,8 +270,8 @@ describe('Modern Calendar remediation (K4-B)', () => {
     // Measured on the compiled FlatThemes (same method as the CodeBlock
     // gutter measurement): white ink on BOTH raw primaries clears AA with
     // margin, so the fills stay raw.
-    const bithire = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
-    const tmm = lowerFlatThemeFixture({
+    const bithire = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
+    const tmm = compileFlatThemeThroughDoor({
       flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: 'themanagementmiami',
     });

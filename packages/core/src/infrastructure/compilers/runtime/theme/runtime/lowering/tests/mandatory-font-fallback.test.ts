@@ -9,7 +9,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { tortureDarkFlatTheme, tortureLightFlatTheme } from '@tests/fixtures/brand-themes/torture';
 import {
   MANDATORY_FALLBACK_FONT_CHANNELS,
@@ -34,7 +35,7 @@ const AUTHORS_TYPEFACES = [
 
 describe('mandatory font fallback', () => {
   it.each(AUTHORS_TYPEFACES)('%s emits every reading stack it declares with the fallback', (slug, flatTheme) => {
-    const { cssVariables } = lowerFlatThemeFixture({ flatTheme, tenantSlug: slug });
+    const { cssVariables } = compileFlatThemeThroughDoor({ flatTheme, tenantSlug: slug });
     const emitted = MANDATORY_FALLBACK_FONT_CHANNELS.filter(
       (channel) => cssVariables[channel] !== undefined
     );
@@ -52,7 +53,7 @@ describe('mandatory font fallback', () => {
     // nothing for this guard to hold. Stated rather than left implicit, so the
     // sweep above cannot quietly stop covering a vertical that starts to.
     for (const [slug, flatTheme] of [['rottay', rottayFlatTheme], ['evnto', evntoFlatTheme]] as const) {
-      const { cssVariables } = lowerFlatThemeFixture({ flatTheme, tenantSlug: slug });
+      const { cssVariables } = compileFlatThemeThroughDoor({ flatTheme, tenantSlug: slug });
       for (const channel of MANDATORY_FALLBACK_FONT_CHANNELS) {
         expect(cssVariables[channel], `${slug} ${channel}`).toBeUndefined();
       }
@@ -62,7 +63,7 @@ describe('mandatory font fallback', () => {
   it('leaves the mono stack alone — a code face renders no Arabic body text', () => {
     // D6-2c-ii (2026-09-15): anchored on bithire, whose preset authors a mono
     // family; evnto's no longer emits one, so it could not carry this claim.
-    const { cssVariables } = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
+    const { cssVariables } = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
     expect(MANDATORY_FALLBACK_FONT_CHANNELS).not.toContain('--ds-font-family-mono');
     expect(cssVariables['--ds-font-family-mono']).toBeDefined();
     expect(cssVariables['--ds-font-family-mono']).not.toContain(MANDATORY_FONT_FALLBACK_FAMILY);
@@ -86,7 +87,7 @@ describe('mandatory font fallback', () => {
 
   it('an already Arabic-capable family satisfies the requirement without a second tail', () => {
     expect(hasMandatoryFontFallback('Tahoma, sans-serif')).toBe(true);
-    const { cssVariables } = lowerFlatThemeFixture({
+    const { cssVariables } = compileFlatThemeThroughDoor({
       flatTheme: {
         ...evntoFlatTheme,
         typography: { ...evntoFlatTheme.typography, fontFamilyBase: 'Tahoma, sans-serif' },

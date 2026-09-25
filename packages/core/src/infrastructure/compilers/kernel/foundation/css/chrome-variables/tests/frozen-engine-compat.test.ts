@@ -3,7 +3,8 @@ import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import type { BrandChrome } from '@/foundation/contracts/composition/tenants/themes';
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { FROZEN_ENGINE_COMPAT_CHANNELS, chromeToVariables } from '..';
 
 const rottayFlatTheme = firstPartyFixture('rottay');
@@ -99,7 +100,7 @@ describe('frozen engine compatibility channels', () => {
         controls: { ...rottayFlatTheme.chrome?.controls, autocomplete: { bg: '#1B1B1F' } },
       },
     };
-    const compiled = lowerFlatThemeFixture({ flatTheme: tenant as never, tenantSlug: 'rottay' });
+    const compiled = compileFlatThemeThroughDoor({ flatTheme: tenant as never, tenantSlug: 'rottay' });
     expect(compiled.colorScheme).toBe('dark');
     expect(compiled.cssVariables['--ds-auto-complete-bg']).toBe('#1B1B1F');
     expect(compiled.cssVariables['--ds-autocomplete-bg']).toBe('#1B1B1F');

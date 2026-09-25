@@ -11,7 +11,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
@@ -31,7 +32,7 @@ function specFor(slug: string): FirstPartyArtifactSpec {
 }
 
 function render(flatTheme: FlatTheme, spec: FirstPartyArtifactSpec): string {
-  const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: spec.slug });
+  const compiled = compileFlatThemeThroughDoor({ flatTheme, tenantSlug: spec.slug });
   return renderVerticalArtifact({
     tenantSlug: spec.slug,
     verticalKey: spec.verticalKey,

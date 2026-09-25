@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
-import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 describe("semantic motion cadence", () => {
   it("derives intent-based motion from the bounded brand cadence", () => {
@@ -10,7 +10,7 @@ describe("semantic motion cadence", () => {
       motion: { entranceDuration: 240 },
     };
 
-    const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: "proof" });
+    const compiled = compileFlatThemeThroughDoor({ flatTheme, tenantSlug: "proof" });
     expect(compiled.cssVariables).toMatchObject({
       "--ds-motion-instant": "120ms",
       "--ds-motion-calm": "240ms",

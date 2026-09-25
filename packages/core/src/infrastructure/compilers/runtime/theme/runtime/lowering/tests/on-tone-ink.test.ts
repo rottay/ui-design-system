@@ -8,7 +8,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import {
   READABLE_INK_DARK,
@@ -19,7 +20,7 @@ import {
 const bithireFlatTheme = firstPartyFixture('bithire');
 
 const compile = (flatTheme: FlatTheme) =>
-  lowerFlatThemeFixture({ flatTheme, tenantSlug: 'bithire' });
+  compileFlatThemeThroughDoor({ flatTheme, tenantSlug: 'bithire' });
 
 const withPalette = (patch: Record<string, string | undefined>): FlatTheme => ({
   ...bithireFlatTheme,

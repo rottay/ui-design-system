@@ -17,7 +17,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 
@@ -30,7 +31,7 @@ const TONE_ROLES = [
 ] as const;
 
 describe('bithire brand compiler emits the one-blue tint scale', () => {
-  const { cssVariables } = lowerFlatThemeFixture({
+  const { cssVariables } = compileFlatThemeThroughDoor({
     flatTheme: bithireFlatTheme,
     tenantSlug: 'bithire',
   });

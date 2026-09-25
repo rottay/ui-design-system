@@ -30,7 +30,7 @@ import {
   buildPreviewScopeSelector,
   sanitizePreviewSlug,
 } from '../../../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
-import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import {
   compileThemeIntent,
   containerScope,
@@ -256,7 +256,7 @@ describe('buildPreviewCss hostile input neutralization (theme-draft source)', ()
       surfaces: { shadows: { md: 'red;\n}\nzz9, * {\n  --pwn9: 1;\n' } },
     });
     const safeSlug = sanitizePreviewSlug(sampleDraft.slug);
-    const raw = lowerFlatThemeFixture({ flatTheme: readGovernedTheme(theme), tenantSlug: safeSlug }).cssString;
+    const raw = compileFlatThemeThroughDoor({ flatTheme: readGovernedTheme(theme), tenantSlug: safeSlug }).cssString;
     expect(raw).not.toContain('zz9');
     expect(raw).not.toContain('--pwn9');
     // The DECLARATION, not the name: the material roots READ `--ds-shadow-md`

@@ -44,7 +44,8 @@ import {
   type TintStrengths,
 } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints";
 import { STATUS_SEED_SHADOWING_FIELDS } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds";
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 const evntoFlatTheme = firstPartyFixture('evnto');
@@ -131,7 +132,7 @@ function withPaletteField(
 }
 
 function compile(theme: FlatTheme, slug: string) {
-  return lowerFlatThemeFixture({ flatTheme: theme, tenantSlug: slug });
+  return compileFlatThemeThroughDoor({ flatTheme: theme, tenantSlug: slug });
 }
 
 // BitHire light authors a seed for all four tones (blue success `#327CA8`)

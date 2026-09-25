@@ -49,7 +49,8 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { FIRST_PARTY_BASELINES, firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { FIRST_PARTY_BASELINES, firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { TENANT_CAPABILITY_REGISTRY } from "@/foundation/contracts/composition/tenants/capabilities";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 import { EXPRESSIVE_PROFILE_SCHEMA_VERSION } from "@/foundation/tokens/ts/presentation/expressive-profiles";
@@ -258,14 +259,14 @@ const buildStaticMirror = (compiled: typeof dbCompiled): FlatTheme => {
 };
 
 const staticMirrorChannels = allChannels(
-  lowerFlatThemeFixture({
+  compileFlatThemeThroughDoor({
     flatTheme: buildStaticMirror(dbCompiled),
     tenantSlug: "static-mirror",
   })
 );
 
 const bithireChannels = allChannels(
-  lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" })
+  compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" })
 );
 
 /**

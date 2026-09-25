@@ -25,7 +25,8 @@ import {
   MANDATORY_FALLBACK_FONT_CHANNELS,
   MANDATORY_FONT_FALLBACK_FAMILY,
 } from '@/foundation/kernel/typography';
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import type { FlatTheme } from '@/foundation/contracts';
 import { resolveDocumentRootAttributes } from '..';
@@ -84,7 +85,7 @@ describe('arabic document: shipped font stacks', () => {
   it.each(FIRST_PARTY_VIEWS)(
     'compiles %s with an Arabic-capable fallback on every text-bearing channel it ships',
     (slug, flatTheme) => {
-      const { cssVariables } = lowerFlatThemeFixture({ flatTheme, tenantSlug: slug });
+      const { cssVariables } = compileFlatThemeThroughDoor({ flatTheme, tenantSlug: slug });
 
       for (const channel of MANDATORY_FALLBACK_FONT_CHANNELS) {
         const stack = cssVariables[channel];
@@ -101,7 +102,7 @@ describe('arabic document: shipped font stacks', () => {
     // Anti-vacuity for the per-vertical assertion above. Skipping absent
     // channels would let "nobody emits anything" read green, so the corpus has
     // to carry at least one real stack, and it is named rather than counted.
-    const { cssVariables } = lowerFlatThemeFixture({
+    const { cssVariables } = compileFlatThemeThroughDoor({
       flatTheme: bithireFlatTheme,
       tenantSlug: 'bithire',
     });
@@ -147,7 +148,7 @@ describe('arabic document: shipped font stacks', () => {
       },
     };
 
-    const { cssVariables } = lowerFlatThemeFixture({ flatTheme: authored, tenantSlug: 'bithire' });
+    const { cssVariables } = compileFlatThemeThroughDoor({ flatTheme: authored, tenantSlug: 'bithire' });
     for (const channel of MANDATORY_FALLBACK_FONT_CHANNELS) {
       expect(cssVariables[channel]).toContain(MANDATORY_FONT_FALLBACK_FAMILY);
       // The author's own families keep priority; the tail is appended, not swapped in.

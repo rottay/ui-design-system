@@ -16,7 +16,8 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 const evntoFlatTheme = firstPartyFixture('evnto');
@@ -28,7 +29,7 @@ describe('the brand compiler has no per-vertical branch', () => {
   it('produces identical channels for one theme under every tenant slug', () => {
     for (const theme of [bithireFlatTheme, evntoFlatTheme, rottayFlatTheme]) {
       const compiled = VERTICAL_NAMES.map((tenantSlug) =>
-        lowerFlatThemeFixture({ flatTheme: theme, tenantSlug })
+        compileFlatThemeThroughDoor({ flatTheme: theme, tenantSlug })
       );
       const [reference, ...rest] = compiled;
       for (const other of rest) {
@@ -42,11 +43,11 @@ describe('the brand compiler has no per-vertical branch', () => {
     // The strongest form of the property: if the compiler knew who bithire was,
     // compiling bithire's theme under evnto's slug could not reproduce, channel
     // for channel, what compiling it under its own slug produces.
-    const asBithire = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
-    const asEvnto = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'evnto' });
+    const asBithire = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
+    const asEvnto = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: 'evnto' });
     expect(asEvnto.cssVariables).toEqual(asBithire.cssVariables);
 
-    const evntoOwn = lowerFlatThemeFixture({ flatTheme: evntoFlatTheme, tenantSlug: 'evnto' });
+    const evntoOwn = compileFlatThemeThroughDoor({ flatTheme: evntoFlatTheme, tenantSlug: 'evnto' });
     expect(evntoOwn.cssVariables).not.toEqual(asEvnto.cssVariables);
   });
 

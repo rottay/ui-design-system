@@ -20,7 +20,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type {
@@ -99,7 +100,7 @@ function compileManagementArtifact() {
 }
 
 function compileBithireStatic(): Record<string, string> {
-  return lowerFlatThemeFixture({
+  return compileFlatThemeThroughDoor({
     flatTheme: bithireFlatTheme,
     tenantSlug: 'bithire',
   }).cssVariables;
@@ -392,7 +393,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
     // Concrete anchors so the divergence is legible, not just counted. The
     // selection itself is data, not a channel: the stylesheet carries none.
     expect(
-      lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' }).experienceProfile,
+      compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' }).experienceProfile,
     ).toBe('rottay/bithire-technical@1');
     expect(managementArtifact.normalizedAppearance.general?.experienceProfile).toBe(
       'rottay/management-editorial@1'
@@ -422,7 +423,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
         experienceProfile: 'rottay/management-editorial@1',
       },
     };
-    const staticCompiled = lowerFlatThemeFixture({
+    const staticCompiled = compileFlatThemeThroughDoor({
       flatTheme: staticTheme,
       tenantSlug: 'management-static-parity',
     });
@@ -519,7 +520,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
   it('rolls back to baseline identity when the selection is unset (static path)', () => {
     const stripped = structuredClone(bithireFlatTheme);
     delete (stripped as { expressive?: unknown }).expressive;
-    const vars = lowerFlatThemeFixture({
+    const vars = compileFlatThemeThroughDoor({
       flatTheme: stripped,
       tenantSlug: 'bithire',
     }).cssVariables;

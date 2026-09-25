@@ -8,6 +8,7 @@ import {
   mergePartialPersonality,
 } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality";
 import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { themanagementmiamiFlatTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 // `BrandExpressiveSelection.schemaVersion` is REQUIRED. Derived from the
 // contract's own constant rather than restated as a literal, so a version bump
@@ -232,7 +233,7 @@ describe("deepMergeTokenOverrides", () => {
 
 describe("compileTheme", () => {
   it("produces personality from brandTheme motion/charts/chrome", () => {
-    const result = lowerFlatThemeFixture({
+    const result = compileFlatThemeThroughDoor({
       flatTheme: MOCK_BRAND_THEME,
       tenantSlug: "test",
     });
@@ -243,7 +244,7 @@ describe("compileTheme", () => {
   });
 
   it("produces tokenOverrides from brandTheme surfaces", () => {
-    const result = lowerFlatThemeFixture({
+    const result = compileFlatThemeThroughDoor({
       flatTheme: MOCK_BRAND_THEME,
       tenantSlug: "test",
     });
@@ -252,7 +253,7 @@ describe("compileTheme", () => {
   });
 
   it("produces CSS variables from palette", () => {
-    const result = lowerFlatThemeFixture({
+    const result = compileFlatThemeThroughDoor({
       flatTheme: MOCK_BRAND_THEME,
       tenantSlug: "test",
     });
@@ -262,7 +263,7 @@ describe("compileTheme", () => {
   });
 
   it("emits the canonical scale axes explicitly for the static BitHire baseline", () => {
-    const result = lowerFlatThemeFixture({
+    const result = compileFlatThemeThroughDoor({
       flatTheme: bithireFlatTheme,
       tenantSlug: "bithire",
     });
@@ -298,7 +299,7 @@ describe("compileTheme", () => {
     // `--ds-color-dark-{role}-{step}` ramp family) are gone; a theme's other
     // mode is now a real `CompiledBrandModeBlock`, scoped to its own
     // selector, carrying the ordinary (non-`dark`-prefixed) channel names.
-    const result = lowerFlatThemeFixture({
+    const result = compileFlatThemeThroughDoor({
       flatTheme: MOCK_BRAND_THEME,
       tenantSlug: "test",
     });
@@ -317,7 +318,7 @@ describe("compileTheme", () => {
   });
 
   it("produces scoped CSS string", () => {
-    const result = lowerFlatThemeFixture({
+    const result = compileFlatThemeThroughDoor({
       flatTheme: MOCK_BRAND_THEME,
       tenantSlug: "acme",
     });
@@ -546,11 +547,11 @@ describe("parity: first-party brand pipeline", () => {
   it("DB-backed tenant uses same pipeline as first-party", () => {
     // Hypothetical DB tenant with the same FlatTheme as bithire
     // bithireFlatTheme imported at top of file
-    const dbTenantResult = lowerFlatThemeFixture({
+    const dbTenantResult = compileFlatThemeThroughDoor({
       flatTheme: bithireFlatTheme,
       tenantSlug: "db-customer",
     });
-    const firstPartyResult = lowerFlatThemeFixture({
+    const firstPartyResult = compileFlatThemeThroughDoor({
       flatTheme: bithireFlatTheme,
       tenantSlug: "bithire",
     });
@@ -615,19 +616,19 @@ describe("parity: first-party brand pipeline", () => {
 describe("parity: compileTheme with vertical baselines and real first-party tenants", () => {
 
   it("compileTheme produces a scoped CSS string with the palette's color scale", () => {
-    const result = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" });
+    const result = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" });
     expect(result.cssString).toContain("html[data-tenant='bithire']");
     expect(result.cssString).toContain("--ds-color-primary-500");
   });
 
   it("compileTheme produces the surfaces-derived densityScale token override", () => {
-    const result = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" });
+    const result = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" });
     expect(result.cssString).toContain("--ds-density-scale");
     expect(result.tokenOverrides.densityScale).toBe(bithireFlatTheme.surfaces!.densityScale);
   });
 
   it("a DB-backed tenant reusing bithire's FlatTheme compiles the same way, under its own selector", () => {
-    const result = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: "db-customer" });
+    const result = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: "db-customer" });
     expect(result.cssString).toContain("html[data-tenant='db-customer']");
     expect(result.cssString).toContain("--ds-color-primary-500");
     expect(result.cssString).toContain("--ds-density-scale");
@@ -638,7 +639,7 @@ describe("parity: compileTheme with vertical baselines and real first-party tena
     // the subject moves to a theme that AUTHORS all four families. The retired
     // bithire theme authored them and its preset decides only `motion.dial`,
     // so grading the derivation on bithire would now grade four absences.
-    const result = lowerFlatThemeFixture({
+    const result = compileFlatThemeThroughDoor({
       flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: "themanagementmiami",
     });
@@ -655,7 +656,7 @@ describe("parity: compileTheme with vertical baselines and real first-party tena
     // The other half of the same measurement: a preset that decides one family
     // produces one family. Pinned so a preset that later decides a chart or
     // card posture cannot start emitting personality unnoticed.
-    const result = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" });
+    const result = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" });
     expect(result.personality.animation?.intensity).toBe(bithireFlatTheme.motion!.intensity);
     expect(result.personality.animation?.entrance).toBeUndefined();
     expect(result.personality.chart).toEqual({});

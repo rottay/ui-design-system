@@ -20,7 +20,8 @@ import { RAMP_STEPS } from '@/foundation/kernel/color/oklch/ramp';
 import type { BrandPalette } from '@/foundation/contracts/composition/tenants/themes';
 import { isDarkSurfaceTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ground";
 import { deriveTenantColorRamps } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps";
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { tortureDarkFlatTheme, tortureLightFlatTheme } from '@tests/fixtures/brand-themes/torture';
 
 const bithireFlatTheme = firstPartyFixture('bithire');
@@ -93,7 +94,7 @@ describe('isDarkSurfaceTheme', () => {
 
 describe('deriveTenantColorRamps wired into compileTheme', () => {
   it('emits a 50..900 ramp for every role bithire declares a seed for', () => {
-    const { cssVariables } = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
+    const { cssVariables } = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
     for (const role of ROLES) {
       for (const step of RAMP_STEPS) {
         const value = cssVariables[`--ds-color-${role}-${step}`];
@@ -109,7 +110,7 @@ describe('deriveTenantColorRamps wired into compileTheme', () => {
     // fixture, which seeds every role. The authored-step branch stays because
     // an authored step still outranks the derivation (proved on its own in
     // mode-overlay.test.ts).
-    const { cssVariables } = lowerFlatThemeFixture({
+    const { cssVariables } = compileFlatThemeThroughDoor({
       flatTheme: tortureDarkFlatTheme,
       tenantSlug: 'torture-dark',
     });
@@ -132,7 +133,7 @@ describe('deriveTenantColorRamps wired into compileTheme', () => {
     // vertical whose preset authors no seed gets no ramp channels, rather than
     // a placeholder ramp off some default seed.
     for (const [slug, flatTheme] of [['rottay', rottayFlatTheme], ['evnto', evntoFlatTheme]] as const) {
-      const { cssVariables } = lowerFlatThemeFixture({ flatTheme, tenantSlug: slug });
+      const { cssVariables } = compileFlatThemeThroughDoor({ flatTheme, tenantSlug: slug });
       const rampChannels = Object.keys(cssVariables).filter((name) =>
         /^--ds-color-[a-z]+-\d+$/.test(name)
       );

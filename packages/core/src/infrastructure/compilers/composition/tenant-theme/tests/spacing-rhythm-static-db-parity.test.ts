@@ -41,11 +41,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import {
-  FIRST_PARTY_BASELINES,
-  lowerFlatThemeFixture,
-  lowerTheme,
-} from "@tests/support/theme-lowering";
+import { FIRST_PARTY_BASELINES, lowerTheme } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
@@ -101,7 +98,7 @@ const IDENTITY = {
  * or the compatibility `TenantConfig.brandTheme` field carries no type at all.
  */
 const staticVariables = (rhythm?: unknown): Record<string, string> =>
-  lowerFlatThemeFixture({
+  compileFlatThemeThroughDoor({
     flatTheme: {
       id: 'rhythm-parity',
       name: 'Rhythm Parity',

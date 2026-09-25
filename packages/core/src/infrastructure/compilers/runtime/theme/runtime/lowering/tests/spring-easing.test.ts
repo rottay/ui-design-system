@@ -4,7 +4,8 @@ import {
   springLinearEasingGentle,
 } from '@/infrastructure/compilers/kernel/foundation/motion/spring-easing';
 import { flatThemeToTokenOverrides } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality";
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 const bithireFlatTheme = firstPartyFixture('bithire');
@@ -155,13 +156,13 @@ describe('flatThemeToTokenOverrides: spring wiring', () => {
 
 describe('compileTheme: spring-gentle CSS variable', () => {
   it('emits --ds-motion-spring-gentle for a spring-eligible theme', () => {
-    const result = lowerFlatThemeFixture({ flatTheme: SPRING_THEME, tenantSlug: 'test' });
+    const result = compileFlatThemeThroughDoor({ flatTheme: SPRING_THEME, tenantSlug: 'test' });
     expect(result.cssVariables['--ds-motion-spring-gentle']).toBeDefined();
     expect(result.cssVariables['--ds-motion-spring-gentle']!.startsWith('linear(')).toBe(true);
   });
 
   it('does not emit --ds-motion-spring-gentle when spring is disabled', () => {
-    const result = lowerFlatThemeFixture({ flatTheme: NO_SPRING_THEME, tenantSlug: 'test' });
+    const result = compileFlatThemeThroughDoor({ flatTheme: NO_SPRING_THEME, tenantSlug: 'test' });
     expect(result.cssVariables['--ds-motion-spring-gentle']).toBeUndefined();
   });
 });
@@ -196,7 +197,7 @@ describe('compileTheme: real tenants get a derived tokenOverrides.motion.spring'
   ] as const)('%s: its preset authors no spring pair, so no curve is derived', (slug, flatTheme) => {
     expect(flatTheme.motion?.springTension).toBeUndefined();
     expect(flatTheme.motion?.springFriction).toBeUndefined();
-    const result = lowerFlatThemeFixture({ flatTheme, tenantSlug: slug });
+    const result = compileFlatThemeThroughDoor({ flatTheme, tenantSlug: slug });
     expect(result.tokenOverrides.motion?.spring).toBeUndefined();
   });
 
@@ -205,10 +206,10 @@ describe('compileTheme: real tenants get a derived tokenOverrides.motion.spring'
     // on the synthetic themes this file already declares: a spring pair reaches
     // `tokenOverrides.motion.spring`, and a different pair gives a different
     // curve.
-    const primary = lowerFlatThemeFixture({ flatTheme: SPRING_THEME, tenantSlug: 'spring' });
+    const primary = compileFlatThemeThroughDoor({ flatTheme: SPRING_THEME, tenantSlug: 'spring' });
     expect(primary.tokenOverrides.motion?.spring).toBe(springLinearEasing(170, 26));
 
-    const other = lowerFlatThemeFixture({
+    const other = compileFlatThemeThroughDoor({
       flatTheme: { ...SPRING_THEME, motion: { useSpring: true, springTension: 200, springFriction: 18 } },
       tenantSlug: 'spring-other',
     });

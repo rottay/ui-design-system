@@ -35,7 +35,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/presets/verticals/roster';
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
@@ -167,7 +168,7 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
     });
 
     it('L4 · leaves the ink to the foundation by name when the compile carries no ink channel, and refuses a blank one', () => {
-      const compiled = lowerFlatThemeFixture({
+      const compiled = compileFlatThemeThroughDoor({
         flatTheme: themeFor(spec),
         tenantSlug: spec.slug,
       });
@@ -237,7 +238,7 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
         ...authored,
         palette: { ...authored.palette, textPrimaryColor: CANARY_INK },
       };
-      const compiled = lowerFlatThemeFixture({
+      const compiled = compileFlatThemeThroughDoor({
         flatTheme: canaryTheme,
         tenantSlug: spec.slug,
       });

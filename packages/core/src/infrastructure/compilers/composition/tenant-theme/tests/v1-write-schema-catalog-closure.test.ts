@@ -34,7 +34,8 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import {
   THEME_CONTROL_CATALOG,
   type ThemeControlRow,
@@ -372,7 +373,7 @@ const documentVariables = (general: object): Record<string, string> =>
   ).variables;
 
 const flatThemeVariables = (patch: object): Record<string, string> =>
-  lowerFlatThemeFixture({
+  compileFlatThemeThroughDoor({
     flatTheme: deepMerge(bithireFlatTheme, patch) as FlatTheme,
     tenantSlug: IDENTITY.slug,
   }).cssVariables;

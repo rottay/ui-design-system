@@ -16,7 +16,8 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -31,8 +32,8 @@ import { flatThemeToTenantAppearance } from '@/components/patterns/customization
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 
-const bithire = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
-const themanagement = lowerFlatThemeFixture({ flatTheme: themanagementmiamiFlatTheme, tenantSlug: 'themanagementmiami' });
+const bithire = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
+const themanagement = compileFlatThemeThroughDoor({ flatTheme: themanagementmiamiFlatTheme, tenantSlug: 'themanagementmiami' });
 const themanagementProjectedAppearance = flatThemeToTenantAppearance(
   themanagementmiamiFlatTheme
 );

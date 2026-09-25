@@ -19,7 +19,8 @@
 import { describe, expect, it } from 'vitest';
 
 import { brandModeSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { projectFirstPartyArtifactScopes } from '@/infrastructure/compilers/kernel/foundation/css/scope-projection';
 import {
   compileTenantThemeConfig,
@@ -55,7 +56,7 @@ function render(
   flatTheme: FlatTheme,
   tenant: { slug: string; verticalKey: string }
 ): string {
-  const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: tenant.slug });
+  const compiled = compileFlatThemeThroughDoor({ flatTheme, tenantSlug: tenant.slug });
   return renderVerticalArtifact({
     tenantSlug: tenant.slug,
     verticalKey: tenant.verticalKey,
@@ -120,7 +121,7 @@ describe('SLUG-NEUTRAL · the rendered artifact carries no slug-dependent value'
   });
 
   it('the slug reaches mode blocks only through brandModeSelector', () => {
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       flatTheme: rottayFlatTheme,
       tenantSlug: ALPHA.slug,
     });
@@ -203,7 +204,7 @@ describe('SLUG-NEUTRAL · drill', () => {
       flatTheme: FlatTheme,
       tenant: { slug: string; verticalKey: string }
     ) => {
-      const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: tenant.slug });
+      const compiled = compileFlatThemeThroughDoor({ flatTheme, tenantSlug: tenant.slug });
       const cssVariables = {
         ...compiled.cssVariables,
         // The failure mode verbatim: one vertical gets a different ground.

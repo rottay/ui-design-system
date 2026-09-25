@@ -24,10 +24,10 @@
  * confirmed by grep over `ingress/foundation/document-patch`, same situation the PRIMARY
  * family already has for its own four unreachable fields:
  * `primaryForegroundColor`/`borderFocusColor`/`linkColor`/`linkHoverColor`).
- * So guard 2 and guard 3 are exercised directly against the exported
- * `compileTheme`, with a hand-built `tenantAuthoredPaths`/`tenantPatch`
- * — the same escape hatch the compiler itself uses internally, bypassing
- * only the DB-document intake layer that has nothing to test yet.
+ * So guard 2 and guard 3 are exercised through `compileThemeIntent` with a
+ * `tenant-document` intent whose patch authors the leaf: the resolver derives
+ * the authored paths from the patch and admission measures it, bypassing
+ * only the v1 document intake that has nothing to lower yet.
  *
  * Production DB-ingress coverage: the
  * bithire-only coverage above could not distinguish a LIVE DB door from a
@@ -51,7 +51,8 @@ import { describe, expect, it } from "vitest";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 import {
   compileTenantThemeConfig,
@@ -160,7 +161,6 @@ describe("a tenant seed defeats a baseline that still bakes a status literal", (
       flatTheme: withBakedLiteral,
       tenantSlug: "status-tint-guard-one",
       tenantPatch: { palette: { successColor: "#7C3AED" } as never },
-      tenantAuthoredPaths: new Set(["palette.successColor"]),
     });
     expect(artifact.cssVariables["--ds-color-success-bg"]).toBe(
       "var(--ds-color-success-50)"
@@ -196,22 +196,16 @@ describe("a tenant document silent on palette.status moves zero status bytes", (
 });
 
 /**
- * Guard 2 and guard 3, exercised directly against `compileTheme` with a
- * hand-built provenance record — see the file header for why no DB document
- * reaches these two guards today. `as never` mirrors the same cast already
- * used for synthetic input in `brand-authored-residue-retirement.test.ts`
- * (`compileTheme({ brandTheme: theme as never, ... })`); the public
- * `CompileBrandTheme` type is narrower than what the function actually reads
- * (`tenantAuthoredPaths`/`tenantPatch`), which is intentional — those two
- * fields are compiler-internal provenance, not part of the public contract.
+ * Guard 2 and guard 3 through the compile door: a `tenant-document` intent
+ * carrying the fixture as its baseline and the tenant's leaves as its patch.
+ * The claim is the authored value; the resolver derives the paths from it.
  */
 function compileWithProvenance(input: {
   flatTheme: FlatTheme;
   tenantSlug: string;
-  tenantPatch?: Partial<FlatTheme>;
-  tenantAuthoredPaths?: Set<string>;
+  tenantPatch: Partial<FlatTheme>;
 }) {
-  return lowerFlatThemeFixture(input as never);
+  return compileFlatThemeThroughDoor({ ...input, tenantPatch: input.tenantPatch as never });
 }
 
 describe("a tenant leaf on the derived channel outranks tenant seed derivation", () => {
@@ -222,7 +216,6 @@ describe("a tenant leaf on the derived channel outranks tenant seed derivation",
       tenantPatch: {
         palette: { successColor: "#7C3AED", successBgColor: "#123456" } as never,
       },
-      tenantAuthoredPaths: new Set(["palette.successColor", "palette.successBgColor"]),
     });
     expect(artifact.cssVariables["--ds-color-success-bg"]).toBe("#123456");
     // Every OTHER channel for the tone still re-derives from the tenant's
@@ -248,7 +241,6 @@ describe("a value that bakes no colour of its own remains exactly as assembled",
       flatTheme: withIndirection,
       tenantSlug: "status-tint-guard-three",
       tenantPatch: { palette: { successColor: "#7C3AED" } as never },
-      tenantAuthoredPaths: new Set(["palette.successColor"]),
     });
     // The indirection already tracks whatever the border-focus channel
     // resolves to; re-deriving it would replace one reference with another,

@@ -70,7 +70,8 @@ import {
   hydrateTenantThemeConfig,
   tenantThemeAnatomyAttributes,
 } from '@/infrastructure/compilers/composition/tenant-theme';
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 const bithireFlatTheme = firstPartyFixture('bithire');
@@ -532,7 +533,7 @@ function compileDb(document: Doc) {
 const channelName = (key: string): string => key.slice(key.indexOf(':') + 1);
 
 const compileStatic = (theme: FlatTheme): Record<string, string> =>
-  lowerFlatThemeFixture({ flatTheme: theme, tenantSlug: 'propagation-probe' })
+  compileFlatThemeThroughDoor({ flatTheme: theme, tenantSlug: 'propagation-probe' })
     .cssVariables;
 
 function changedKeys(

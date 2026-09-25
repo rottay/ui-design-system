@@ -9,7 +9,8 @@ import userEvent from '@testing-library/user-event';
 import { LOCALE_CONFIGS, TRANSLATION_CATALOG } from '@/foundation/i18n/runtime/catalog';
 import { resolveTranslation } from '@/foundation/i18n/runtime/resolution';
 import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 import ModernBadge from '../engines/modern';
 
@@ -170,8 +171,8 @@ describe('Modern Badge / Chip / Pill premium contract — Pass 1', () => {
   });
 
   it('keeps brand and locale as independent axes while making the two real tenants diverge', () => {
-    const bithire = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
-    const management = lowerFlatThemeFixture({
+    const bithire = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
+    const management = compileFlatThemeThroughDoor({
       flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: 'themanagementmiami',
     });

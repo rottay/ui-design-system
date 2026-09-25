@@ -33,7 +33,7 @@ import {
   DENSITY_LOCAL_FACTOR_VARIABLE,
   resolveEffectiveDensityScale,
 } from '@/foundation/tokens/ts/foundation/base/density';
-import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -171,7 +171,7 @@ describe('density posture equivalence across every authority', () => {
 
     // (1) Static FlatTheme vertical — the compiled artifact for a code-owned
     // product, scoped html[data-tenant='…'].
-    const brandVars = lowerFlatThemeFixture({
+    const brandVars = compileFlatThemeThroughDoor({
       flatTheme: {
         id: 'density-equivalence',
         name: 'Density equivalence',

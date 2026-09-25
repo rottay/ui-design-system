@@ -20,7 +20,8 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, it, expect } from 'vitest';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import {
   tortureDarkFlatTheme,
   tortureLightFlatTheme,
@@ -40,7 +41,7 @@ const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 
 describe('torture fixtures compile', () => {
   it('compiles torture-dark without throwing and scopes it to its tenant selector', () => {
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       flatTheme: tortureDarkFlatTheme,
       tenantSlug: 'torture-dark',
     });
@@ -49,7 +50,7 @@ describe('torture fixtures compile', () => {
   });
 
   it('compiles torture-light without throwing and scopes it to its tenant selector', () => {
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       flatTheme: tortureLightFlatTheme,
       tenantSlug: 'torture-light',
     });
@@ -59,19 +60,19 @@ describe('torture fixtures compile', () => {
 });
 
 describe('torture fixtures are hostile (probe channels actually move)', () => {
-  const compiledTortureDark = lowerFlatThemeFixture({
+  const compiledTortureDark = compileFlatThemeThroughDoor({
     flatTheme: tortureDarkFlatTheme,
     tenantSlug: 'torture-dark',
   });
-  const compiledTortureLight = lowerFlatThemeFixture({
+  const compiledTortureLight = compileFlatThemeThroughDoor({
     flatTheme: tortureLightFlatTheme,
     tenantSlug: 'torture-light',
   });
-  const compiledRottay = lowerFlatThemeFixture({
+  const compiledRottay = compileFlatThemeThroughDoor({
     flatTheme: rottayFlatTheme,
     tenantSlug: 'rottay',
   });
-  const compiledBithire = lowerFlatThemeFixture({
+  const compiledBithire = compileFlatThemeThroughDoor({
     flatTheme: bithireFlatTheme,
     tenantSlug: 'bithire',
   });

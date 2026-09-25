@@ -16,7 +16,7 @@ import { InputSearch } from "../compound/search";
 import { InputTextArea } from "../compound/text-area";
 import { renderWithEngine } from "@tests/support/engine";
 import { I18nProvider } from "@/infrastructure/runtime/i18n";
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { themanagementmiamiFlatTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 import { responsiveChannelElement, responsiveCss } from "@tests/support/responsive";
 

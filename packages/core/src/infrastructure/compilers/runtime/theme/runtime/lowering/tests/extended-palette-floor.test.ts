@@ -45,7 +45,8 @@ import {
   measureReadableInk,
 } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { deriveExtendedPaletteFloor } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette";
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { tortureDarkFlatTheme, tortureLightFlatTheme } from '@tests/fixtures/brand-themes/torture';
 
 const bithireFlatTheme = firstPartyFixture('bithire');
@@ -228,7 +229,7 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
       name: 'Authored Link',
       palette: { primaryColor: SEED, linkColor: '#1A1A1A' },
     };
-    const compiled = lowerFlatThemeFixture({ flatTheme: bt, tenantSlug: 'authored-link' }).cssVariables;
+    const compiled = compileFlatThemeThroughDoor({ flatTheme: bt, tenantSlug: 'authored-link' }).cssVariables;
     expect(compiled['--ds-color-link']).toBe('#1A1A1A');
     expect(compiled['--ds-color-primary-foreground']).toBe(derivedFloor['--ds-color-primary-foreground']);
     expect(compiled['--ds-color-border-focus']).toBe(derivedFloor['--ds-color-border-focus']);
@@ -238,7 +239,7 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
   it('FOCAL: removing the authored linkColor restores the derived value exactly', () => {
     const derivedFloor = deriveExtendedPaletteFloor(SEED);
     const bt: FlatTheme = { id: 'no-authored-link', name: 'No Authored Link', palette: { primaryColor: SEED } };
-    const compiled = lowerFlatThemeFixture({ flatTheme: bt, tenantSlug: 'no-authored-link' }).cssVariables;
+    const compiled = compileFlatThemeThroughDoor({ flatTheme: bt, tenantSlug: 'no-authored-link' }).cssVariables;
     expect(compiled['--ds-color-link']).toBe(derivedFloor['--ds-color-link']);
   });
 
@@ -249,7 +250,7 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
       name: 'Authored Foreground',
       palette: { primaryColor: SEED, primaryForegroundColor: '#FF00FF' },
     };
-    const compiled = lowerFlatThemeFixture({ flatTheme: bt, tenantSlug: 'authored-foreground' }).cssVariables;
+    const compiled = compileFlatThemeThroughDoor({ flatTheme: bt, tenantSlug: 'authored-foreground' }).cssVariables;
     expect(compiled['--ds-color-primary-foreground']).toBe('#FF00FF');
     expect(compiled['--ds-color-border-focus']).toBe(derivedFloor['--ds-color-border-focus']);
     expect(compiled['--ds-color-link']).toBe(derivedFloor['--ds-color-link']);
@@ -263,7 +264,7 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
       name: 'Authored Focus',
       palette: { primaryColor: SEED, borderFocusColor: 'rgba(10, 10, 10, 0.32)' },
     };
-    const compiled = lowerFlatThemeFixture({ flatTheme: bt, tenantSlug: 'authored-focus' }).cssVariables;
+    const compiled = compileFlatThemeThroughDoor({ flatTheme: bt, tenantSlug: 'authored-focus' }).cssVariables;
     expect(compiled['--ds-color-border-focus']).toBe('rgba(10, 10, 10, 0.32)');
     expect(compiled['--ds-color-primary-foreground']).toBe(derivedFloor['--ds-color-primary-foreground']);
     expect(compiled['--ds-color-link']).toBe(derivedFloor['--ds-color-link']);
@@ -277,7 +278,7 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
       name: 'Authored Link Hover',
       palette: { primaryColor: SEED, linkHoverColor: '#0A0A0A' },
     };
-    const compiled = lowerFlatThemeFixture({ flatTheme: bt, tenantSlug: 'authored-link-hover' }).cssVariables;
+    const compiled = compileFlatThemeThroughDoor({ flatTheme: bt, tenantSlug: 'authored-link-hover' }).cssVariables;
     expect(compiled['--ds-color-link-hover']).toBe('#0A0A0A');
     expect(compiled['--ds-color-primary-foreground']).toBe(derivedFloor['--ds-color-primary-foreground']);
     expect(compiled['--ds-color-border-focus']).toBe(derivedFloor['--ds-color-border-focus']);
@@ -296,7 +297,7 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
       linkColor: '#8AB4FF',
       linkHoverColor: '#B9D2FF',
     } as const;
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       flatTheme: {
         ...bithireFlatTheme,
         modes: {
@@ -328,7 +329,7 @@ describe('the extended palette floor reaches real first-party output', () => {
 
     for (const theme of [bithireFlatTheme, evntoFlatTheme]) {
       const palette = theme.palette!;
-      const compiled = lowerFlatThemeFixture({ flatTheme: theme, tenantSlug: theme.id }).cssVariables;
+      const compiled = compileFlatThemeThroughDoor({ flatTheme: theme, tenantSlug: theme.id }).cssVariables;
       const derivedFloor = deriveExtendedPaletteFloor(palette.primaryColor);
 
       for (const [channel, field] of Object.entries(channels)) {

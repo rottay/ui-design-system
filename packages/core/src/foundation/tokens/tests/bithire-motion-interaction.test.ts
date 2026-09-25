@@ -24,7 +24,8 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 
@@ -32,7 +33,7 @@ const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const ARTIFACT_PATH = resolve(TEST_DIR, '..', 'css/facade/artifacts/bithire/index.css');
 
 describe('bithire brand compiler emits the §2.6 motion vocabulary', () => {
-  const { cssVariables } = lowerFlatThemeFixture({
+  const { cssVariables } = compileFlatThemeThroughDoor({
     flatTheme: bithireFlatTheme,
     tenantSlug: 'bithire',
   });
@@ -68,7 +69,7 @@ describe('bithire brand compiler emits the §2.6 motion vocabulary', () => {
       motion?: { character?: string };
     };
     if (organic.motion) organic.motion.character = 'organic';
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       flatTheme: organic as unknown as typeof bithireFlatTheme,
       tenantSlug: 'bithire-organic',
     });

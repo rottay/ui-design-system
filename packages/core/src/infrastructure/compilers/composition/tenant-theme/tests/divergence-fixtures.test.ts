@@ -9,7 +9,8 @@ import {
   DIVERGENCE_SOBER_EXPECTED_ANATOMY,
   DIVERGENCE_SOBER_IDENTITY,
 } from "@tests/fixtures/brand-themes/divergence-sober";
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -44,7 +45,7 @@ const BITHIRE_ENVELOPE = getTenantThemeVerticalEnvelope("bithire");
  * (`pill` and `soft` both emit it), so the divergence this file certifies is
  * measured on the composed document, exactly as the Playwright spec renders it.
  */
-const BITHIRE_BASELINE = lowerFlatThemeFixture({
+const BITHIRE_BASELINE = compileFlatThemeThroughDoor({
   flatTheme: firstPartyFixture("bithire"),
   tenantSlug: "bithire",
 }).cssVariables;

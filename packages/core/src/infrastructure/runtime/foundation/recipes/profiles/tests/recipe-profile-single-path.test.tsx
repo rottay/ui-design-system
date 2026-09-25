@@ -25,7 +25,7 @@ import { join, relative, resolve, sep } from 'node:path';
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { themeControl } from '@/contracts/theme/runtime/catalog';
 import ModernButton from '@/components/primitives/inputs/button/engines/modern';
 import { RecipeProfileProvider } from '..';
@@ -81,7 +81,7 @@ describe('recipe profile — one resolution path', () => {
   it('is no longer emitted by the compilers: the selection is a runtime payload, not a channel', () => {
     // The census below is not looking for nothing: a valid selection still
     // resolves, and it reaches the product through the payload alone.
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       flatTheme: {
         id: 'recipe-profile-probe',
         name: 'Recipe profile probe',

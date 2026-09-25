@@ -9,7 +9,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
@@ -111,7 +112,7 @@ describe('mode blocks in the rendered artifact', () => {
   });
 
   it('does not restate a base-block channel inside the mode block', () => {
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       flatTheme: bithireFlatTheme,
       tenantSlug: 'bithire',
     });

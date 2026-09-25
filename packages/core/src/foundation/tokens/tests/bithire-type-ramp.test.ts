@@ -19,7 +19,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 
@@ -38,7 +39,7 @@ const FAMILY = 'var(--ds-font-family-base)';
 const dialed = (literal: string) => `calc(${literal} * var(--ds-type-scale, 1))`;
 
 describe('bithire brand compiler emits the composite type ramp', () => {
-  const { cssVariables } = lowerFlatThemeFixture({
+  const { cssVariables } = compileFlatThemeThroughDoor({
     flatTheme: bithireFlatTheme,
     tenantSlug: 'bithire',
   });

@@ -55,7 +55,8 @@ import {
 } from '@/infrastructure/compilers/composition/tenant-theme';
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { themanagementmiamiFlatTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
@@ -65,7 +66,7 @@ const NEW_PRIMARY = '#B4322A';
 const NEW_BACKGROUND = '#FFF7E8';
 
 const compile = (flatTheme: FlatTheme) =>
-  lowerFlatThemeFixture({ flatTheme, tenantSlug: 'bithire' }).cssVariables;
+  compileFlatThemeThroughDoor({ flatTheme, tenantSlug: 'bithire' }).cssVariables;
 
 const withPalette = (patch: Record<string, string>): FlatTheme => ({
   ...bithireFlatTheme,
@@ -147,7 +148,7 @@ const MINIMAL: FlatTheme = {
 } as FlatTheme;
 
 const minimal = (patch: Record<string, string>) =>
-  lowerFlatThemeFixture({
+  compileFlatThemeThroughDoor({
     flatTheme: { ...MINIMAL, palette: { ...MINIMAL.palette!, ...patch } },
     tenantSlug: 'minimal',
   }).cssVariables;
@@ -580,13 +581,13 @@ describe('TENANT-COLOR PROPAGATION · the reach still withheld', () => {
  * theme had.
  */
 const AUTHORS_ITS_CHROME = themanagementmiamiFlatTheme;
-const AUTHORED_CHROME_BASE = lowerFlatThemeFixture({
+const AUTHORED_CHROME_BASE = compileFlatThemeThroughDoor({
   flatTheme: AUTHORS_ITS_CHROME,
   tenantSlug: 'themanagementmiami',
 }).cssVariables;
 const AUTHORED_CHROME_PRIMARY_MOVED = movedBetween(
   AUTHORED_CHROME_BASE,
-  lowerFlatThemeFixture({
+  compileFlatThemeThroughDoor({
     flatTheme: {
       ...AUTHORS_ITS_CHROME,
       palette: { ...AUTHORS_ITS_CHROME.palette!, primaryColor: NEW_PRIMARY },

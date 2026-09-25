@@ -13,7 +13,8 @@ import { describe, expect, it } from 'vitest';
 
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 const evntoFlatTheme = firstPartyFixture('evnto');
@@ -27,7 +28,7 @@ const MINIMAL: FlatTheme = {
 };
 
 const compile = (flatTheme: FlatTheme, tenantSlug = 'fixture') =>
-  lowerFlatThemeFixture({ flatTheme, tenantSlug });
+  compileFlatThemeThroughDoor({ flatTheme, tenantSlug });
 
 describe('FlatTheme.modes — typed dual-mode contract', () => {
   it('emits no mode block when a theme authors no modes', () => {
