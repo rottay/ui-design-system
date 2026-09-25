@@ -33,7 +33,7 @@ import { BaseToast } from '../../engines';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useDeclaredEngine } from '@/infrastructure/runtime/engines/composition/react/provider';
-import { NotifierStack, type NotifierPlacement } from '../../../notifier';
+import { NotifierStack, type NotifierPlacement } from '../../../foundation/notifier';
 
 const NOTIFIER_PLACEMENTS: Record<ToastPosition, NotifierPlacement> = {
   'top-left': 'top-start',

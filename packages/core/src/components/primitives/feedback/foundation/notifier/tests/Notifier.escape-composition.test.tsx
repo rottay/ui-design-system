@@ -12,10 +12,10 @@ import React from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { NotificationInstance } from '../../notification/contracts';
-import { NotificationItem, NotificationProvider, useNotification } from '../../notification/engines/modern';
-import { MessageItem } from '../../message/engines/modern';
-import ModernToast from '../../toast/engines/modern';
+import type { NotificationInstance } from '../../../notification/contracts';
+import { NotificationItem, NotificationProvider, useNotification } from '../../../notification/engines/modern';
+import { MessageItem } from '../../../message/engines/modern';
+import ModernToast from '../../../toast/engines/modern';
 
 /** Window the governed exit reading yields when no motion is declared. */
 const BUFFER_MS = 50;

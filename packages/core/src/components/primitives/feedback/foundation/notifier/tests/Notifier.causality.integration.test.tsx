@@ -12,7 +12,7 @@ import { readAnatomyBones } from '@/components/primitives/feedback/skeleton/runt
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import { NotifierItem } from '..';
 import type { NotifierItemProps } from '../contracts';
-import { MessageItem } from '../../message/engines/modern';
+import { MessageItem } from '../../../message/engines/modern';
 import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,

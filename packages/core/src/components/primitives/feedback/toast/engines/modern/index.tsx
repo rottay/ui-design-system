@@ -16,7 +16,7 @@ import React, { useEffect, useState } from 'react';
 import type { ToastProps, ToastVariant } from '../../contracts';
 import { TOAST_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { NotifierItem, type NotifierTone } from '../../../notifier';
+import { NotifierItem, type NotifierTone } from '../../../foundation/notifier';
 
 const TOAST_TONES: Record<ToastVariant, NotifierTone> = {
   default: 'neutral',

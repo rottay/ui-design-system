@@ -59,6 +59,9 @@ const PRIMITIVE_CATEGORIES = Object.freeze([
   'overlay',
 ]);
 const PATTERN_SUPPORT_OWNERS = new Set(['foundation', 'runtime', 'tooling']);
+// A category-level support owner holds implementation shared by several families of its category (the notifier
+// under `feedback/foundation` serves message, notification and toast). It is neither a family nor a placeholder.
+const PRIMITIVE_CATEGORY_SUPPORT_OWNERS = new Set(['foundation']);
 // `ui/patterns/commercial` was the only owner that carried a second nesting level,
 // and it existed to hold a layer that is not one. Its 11 families were split into
 // the groups their behaviour actually belongs to, so no pattern owner nests again.
@@ -104,7 +107,8 @@ function listDirs(dir) {
  * Directories failing (a) are empty placeholders; directories failing (b) are
  * support owners or unexposed examples — reported as exclusions, never
  * counted. The barrel is the exposure authority, so this rule cannot drift
- * from the governed family list.
+ * from the governed family list. A child named in
+ * `PRIMITIVE_CATEGORY_SUPPORT_OWNERS` is reported by its own children instead.
  */
 function classifyPrimitiveCategory(categoryDir) {
   const names = listDirs(categoryDir);
@@ -120,7 +124,12 @@ function classifyPrimitiveCategory(categoryDir) {
   const governed = [];
   const excludedNoEntry = [];
   const excludedNotExported = [];
+  const supportParts = [];
   for (const name of names) {
+    if (PRIMITIVE_CATEGORY_SUPPORT_OWNERS.has(name)) {
+      supportParts.push(...listDirs(join(categoryDir, name)).map((part) => `${name}/${part}`));
+      continue;
+    }
     const hasEntry =
       existsSync(join(categoryDir, name, 'index.tsx'))
       || existsSync(join(categoryDir, name, 'index.ts'));
@@ -134,7 +143,7 @@ function classifyPrimitiveCategory(categoryDir) {
     }
     governed.push(name);
   }
-  return { governed, excludedNoEntry, excludedNotExported };
+  return { governed, excludedNoEntry, excludedNotExported, supportParts };
 }
 
 /**
@@ -172,9 +181,11 @@ let totalPrimitiveComponents = 0;
   lines.push('|---|---|');
   const allExcludedNoEntry = [];
   const allExcludedNotExported = [];
+  const allSupportParts = [];
   for (const cat of categories) {
-    const { governed, excludedNoEntry, excludedNotExported } =
+    const { governed, excludedNoEntry, excludedNotExported, supportParts } =
       classifyPrimitiveCategory(join(tierDir, cat));
+    allSupportParts.push(...supportParts.map((part) => `${cat}/${part}`));
     totalPrimitiveComponents += governed.length;
     allExcludedNoEntry.push(...excludedNoEntry.map((name) => `${cat}/${name}`));
     allExcludedNotExported.push(
@@ -185,7 +196,7 @@ let totalPrimitiveComponents = 0;
   lines.push('');
   lines.push(`**Total**: ${categories.length} categories containing ${totalPrimitiveComponents} governed primitive components.`);
   lines.push('');
-  if (allExcludedNoEntry.length > 0 || allExcludedNotExported.length > 0) {
+  if (allExcludedNoEntry.length > 0 || allExcludedNotExported.length > 0 || allSupportParts.length > 0) {
     lines.push('### Exclusions by rule (not governed components)');
     lines.push('');
     if (allExcludedNoEntry.length > 0) {
@@ -193,6 +204,9 @@ let totalPrimitiveComponents = 0;
     }
     if (allExcludedNotExported.length > 0) {
       lines.push(`- Not exported by the category barrel (support/unexposed): ${allExcludedNotExported.map((n) => `\`${n}\``).join(', ')}.`);
+    }
+    if (allSupportParts.length > 0) {
+      lines.push(`- Category support (shared by the category's families, no family of its own): ${allSupportParts.map((n) => `\`${n}\``).join(', ')}.`);
     }
     lines.push('');
   }

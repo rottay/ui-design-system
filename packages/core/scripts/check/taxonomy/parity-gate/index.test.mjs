@@ -1251,13 +1251,12 @@ test('DRILL: a governed entry whose folder is gone is stale', () => {
   assert.deepEqual(kinds(result), ['support-folder-stale']);
 });
 
-test('the live tree governs exactly the notifier folder, owned by the three announcement families', async () => {
+test('the live tree governs no support folder: the notifier lives under the feedback support owner, not beside the families', async () => {
   const { GOVERNED_SUPPORT_FOLDERS } = await import('./index.mjs');
-  assert.deepEqual(Object.keys(GOVERNED_SUPPORT_FOLDERS), ['packages/core/src/components/primitives/feedback/notifier']);
-  assert.deepEqual(
-    [...GOVERNED_SUPPORT_FOLDERS['packages/core/src/components/primitives/feedback/notifier'].owners],
-    ['primitive/feedback/message', 'primitive/feedback/notification', 'primitive/feedback/toast'],
-  );
+  assert.deepEqual(Object.keys(GOVERNED_SUPPORT_FOLDERS), []);
+  const feedback = new URL('../../../../src/components/primitives/feedback/', import.meta.url).pathname;
+  assert.equal(fs.existsSync(path.join(feedback, 'foundation/notifier/index.tsx')), true);
+  assert.equal(fs.existsSync(path.join(feedback, 'notifier')), false);
 });
 
 // --- the family bindings map ---------------------------------------------

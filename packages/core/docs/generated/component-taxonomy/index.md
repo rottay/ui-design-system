@@ -21,7 +21,8 @@
 
 ### Exclusions by rule (not governed components)
 
-- Not exported by the category barrel (support/unexposed): `feedback/notifier`, `navigation/examples`.
+- Not exported by the category barrel (support/unexposed): `navigation/examples`.
+- Category support (shared by the category's families, no family of its own): `feedback/foundation/notifier`.
 
 Tier support: `facade/`, `foundation/`, `runtime/`.
 

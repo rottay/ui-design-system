@@ -8,10 +8,10 @@ import React from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { NotificationInstance } from '../../notification/contracts';
-import { NotificationProvider, useNotification } from '../../notification/engines/modern';
-import type { MessageInstance } from '../../message/contracts';
-import { MessageProvider, useMessage } from '../../message/engines/modern';
+import type { NotificationInstance } from '../../../notification/contracts';
+import { NotificationProvider, useNotification } from '../../../notification/engines/modern';
+import type { MessageInstance } from '../../../message/contracts';
+import { MessageProvider, useMessage } from '../../../message/engines/modern';
 
 /** Window the governed exit reading yields when no motion is declared. */
 const BUFFER_MS = 50;

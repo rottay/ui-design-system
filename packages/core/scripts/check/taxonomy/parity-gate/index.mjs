@@ -220,12 +220,9 @@ const GOVERNED_PUBLIC_SUPPORT = {
  * Cost: one walk of `packages/core/src` per run (`supportFolderImportIndex`), shared by every entry, so an entry adds
  * an in-memory scan of the indexed specifiers rather than another read of every source file.
  */
-export const GOVERNED_SUPPORT_FOLDERS = Object.freeze({
-  'packages/core/src/components/primitives/feedback/notifier': Object.freeze({
-    owners: Object.freeze(['primitive/feedback/message', 'primitive/feedback/notification', 'primitive/feedback/toast']),
-    reason: 'the Modern announcement engine the Toast, Notification and Message families render through; no public export',
-  }),
-});
+// Retired entry: `primitives/feedback/notifier` moved under `primitives/feedback/foundation/notifier` (WO-RET-04), a
+// support-owner name the scan skips, so `-stale` reported it and it was deleted.
+export const GOVERNED_SUPPORT_FOLDERS = Object.freeze({});
 
 const MODULE_SPECIFIER = /(?:\b(?:import|export)\b[^'"`;]*?\bfrom\s*|\bimport\s*\(\s*)['"]([^'"]+)['"]/gu;
 

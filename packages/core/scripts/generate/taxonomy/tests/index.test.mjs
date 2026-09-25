@@ -99,6 +99,16 @@ test('a changed tree changes the render', () => {
   assert.match(after, /pivot-table/u);
 });
 
+test('a category support owner reports its parts as support, never as a placeholder', () => {
+  const root = makePackage();
+  fs.mkdirSync(path.join(root, 'src/components/primitives/display/foundation/engine'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'src/components/primitives/display/foundation/engine/index.tsx'), 'export const E = () => null;\n');
+  const rendered = renderTaxonomy({ packageRoot: root });
+
+  assert.match(rendered, /- Category support \(shared by the category's families, no family of its own\): `display\/foundation\/engine`\./u);
+  assert.equal(/`display\/foundation`/u.test(rendered), false, 'the support owner is not a placeholder or an unexposed family');
+});
+
 test('write then check is byte-identical and reports clean', () => {
   const root = makePackage();
   assert.equal(runMain([], root).code, 0);

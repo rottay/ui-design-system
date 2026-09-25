@@ -10,7 +10,7 @@ import { act, fireEvent, render, renderHook, screen } from '@testing-library/rea
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { renderWithEngine } from '@tests/support/engine';
-import { NotificationItem } from '../../../../notification/engines/modern';
+import { NotificationItem } from '../../../../../notification/engines/modern';
 import { NotifierItem } from '../../../presentation/item';
 import { useNotifierCountdown } from '..';
 

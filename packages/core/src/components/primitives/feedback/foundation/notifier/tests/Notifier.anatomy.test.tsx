@@ -8,17 +8,17 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { renderWithEngine } from '@tests/support/engine';
-import ModernToast from '../../toast/engines/modern';
+import ModernToast from '../../../toast/engines/modern';
 import {
   NotificationItem as ModernNotificationItem,
   NotificationProvider as ModernNotificationProvider,
   useNotification as useModernNotification,
-} from '../../notification/engines/modern';
+} from '../../../notification/engines/modern';
 import {
   MessageItem as ModernMessageItem,
   MessageProvider as ModernMessageProvider,
   useMessage as useModernMessage,
-} from '../../message/engines/modern';
+} from '../../../message/engines/modern';
 import { NotifierItem } from '..';
 
 afterEach(() => {

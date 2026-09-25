@@ -62988,7 +62988,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/visualization/charts/families/sankey/index.tsx",
-          "line": 882,
+          "line": 883,
           "prop": "fontSize",
           "scalars": []
         },
@@ -63052,7 +63052,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/visualization/charts/families/sankey/index.tsx",
-          "line": 880,
+          "line": 881,
           "prop": "gap",
           "scalars": []
         },
@@ -63123,7 +63123,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/visualization/charts/families/sankey/index.tsx",
-          "line": 882,
+          "line": 883,
           "prop": "gap",
           "scalars": []
         },
@@ -63187,7 +63187,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/visualization/charts/families/sankey/index.tsx",
-          "line": 880,
+          "line": 881,
           "prop": "marginTop",
           "scalars": []
         },
@@ -237935,7 +237935,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
-          "line": 663,
+          "line": 667,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -238031,7 +238031,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
-          "line": 893,
+          "line": 898,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -238060,14 +238060,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
-          "line": 660,
+          "line": 664,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
-          "line": 663,
+          "line": 667,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -281074,7 +281074,7 @@
       "channel": "--ds-notifier-layer",
       "kind": "ds",
       "declaredIn": [
-        "src/components/primitives/feedback/notifier/presentation/stack/index.tsx",
+        "src/components/primitives/feedback/foundation/notifier/presentation/stack/index.tsx",
         "src/foundation/tokens/css/presentation/components/notifier/index.css"
       ],
       "planes": [
@@ -281096,7 +281096,7 @@
       "channel": "--ds-notifier-lifetime",
       "kind": "ds",
       "declaredIn": [
-        "src/components/primitives/feedback/notifier/presentation/item/index.tsx",
+        "src/components/primitives/feedback/foundation/notifier/presentation/item/index.tsx",
         "src/foundation/tokens/css/presentation/components/notifier/index.css"
       ],
       "planes": [
@@ -282507,7 +282507,7 @@
       "channel": "--ds-notifier-stack-gap",
       "kind": "ds",
       "declaredIn": [
-        "src/components/primitives/feedback/notifier/presentation/stack/index.tsx",
+        "src/components/primitives/feedback/foundation/notifier/presentation/stack/index.tsx",
         "src/foundation/tokens/css/presentation/components/notifier/index.css"
       ],
       "planes": [
@@ -282573,7 +282573,7 @@
       "channel": "--ds-notifier-stack-offset",
       "kind": "ds",
       "declaredIn": [
-        "src/components/primitives/feedback/notifier/presentation/stack/index.tsx",
+        "src/components/primitives/feedback/foundation/notifier/presentation/stack/index.tsx",
         "src/foundation/tokens/css/presentation/components/notifier/index.css"
       ],
       "planes": [
@@ -354605,7 +354605,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
-          "line": 893,
+          "line": 898,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -355531,7 +355531,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/data/widget-board/engines/foundation/index.tsx",
-          "line": 1158,
+          "line": 1160,
           "prop": "padding",
           "scalars": []
         }

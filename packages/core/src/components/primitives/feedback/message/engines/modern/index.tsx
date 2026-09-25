@@ -21,7 +21,7 @@ import { MESSAGE_DEFAULTS } from '../../contracts';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n/composition/translation';
-import { NotifierItem, NotifierStack } from '../../../notifier';
+import { NotifierItem, NotifierStack } from '../../../foundation/notifier';
 
 interface InternalMessage extends MessageItemProps {
   key?: string | number;
