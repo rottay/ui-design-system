@@ -1,0 +1,16 @@
+{
+  "familyId": "pattern/visualization/pattern-map-view",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/visualization/map-view/contracts/index.ts",
+    "packages/core/src/components/patterns/visualization/map-view/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/visualization/map-view/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/visualization/pattern-map-view/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

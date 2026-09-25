@@ -1,0 +1,63 @@
+{
+  "familyId": "pattern/data/pattern-data-table",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/data/data-table",
+    "packages/core/src/components/patterns/data/data-table/OWNERSHIP.md",
+    "packages/core/src/components/patterns/data/data-table/contracts/index.ts",
+    "packages/core/src/components/patterns/data/data-table/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
+    "packages/core/src/components/patterns/data/data-table/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/data/data-table/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/data/data-table/index.ts",
+    "packages/core/src/components/patterns/data/data-table/presentation/table/index.tsx",
+    "packages/core/src/components/patterns/data/data-table/presentation/table/mobile-cards/index.tsx",
+    "packages/core/src/components/patterns/data/data-table/runtime/grouping/index.ts",
+    "packages/core/src/components/patterns/data/data-table/runtime/index.ts",
+    "packages/core/src/components/patterns/data/data-table/runtime/inline-editing/index.ts",
+    "packages/core/src/components/patterns/data/data-table/runtime/row-resolution/index.ts",
+    "packages/core/src/components/patterns/data/data-table/runtime/state/index.ts",
+    "packages/core/src/components/patterns/data/data-table/tests/DataTable.recipe-contract.test.tsx",
+    "packages/core/src/components/patterns/data/data-table/tests/PatternDataTable.responsive.test.tsx",
+    "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-actions/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-interactions/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
+      "with": [
+        "surface/workspace/collection-workspace"
+      ],
+      "reason": "sits under surface/workspace/collection-workspace's sourceOwner and is bound by the sealed cell of pattern/data/pattern-data-table (hostAdaptation)"
+    },
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css",
+      "with": [
+        "primitive/display/meter"
+      ],
+      "reason": "bound by the sealed cells of pattern/data/pattern-data-table at anatomy; primitive/display/meter at anatomy"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/data/pattern-data-table/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "repaired": [
+      {
+        "from": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:369,370,1475,1479,1561,1095,1102",
+        "to": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+        "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css exists at 3e38df146 with 2369 lines; every cited line (max 1561) is inside it; the sealed cell already binds the bare file, so the repair merges into that binding"
+      },
+      {
+        "from": "packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers/index.css:50-66,166,191",
+        "to": "packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers/index.css",
+        "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers/index.css exists at 3e38df146 with 228 lines; every cited line (max 191) is inside it; the sealed cell already binds the bare file, so the repair merges into that binding"
+      }
+    ]
+  }
+}

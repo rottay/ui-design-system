@@ -1,0 +1,20 @@
+{
+  "familyId": "pattern/navigation/command-palette",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/navigation/command-palette/contracts/index.ts",
+    "packages/core/src/components/patterns/navigation/command-palette/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/navigation/command-palette/foundation/frecency/index.ts",
+    "packages/core/src/components/patterns/navigation/command-palette/index.ts",
+    "packages/core/src/components/patterns/navigation/command-palette/runtime/application-commands/index.ts",
+    "packages/core/src/components/patterns/navigation/command-palette/runtime/argument-mode/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/navigation/command-palette/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

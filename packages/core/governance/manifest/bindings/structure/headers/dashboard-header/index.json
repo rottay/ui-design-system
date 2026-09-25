@@ -1,0 +1,12 @@
+{
+  "familyId": "structure/headers/dashboard-header",
+  "sourceBindings": [
+    "packages/core/src/components/structures/headers/dashboard",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-header/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/structure/headers/dashboard-header/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

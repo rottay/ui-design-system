@@ -1,0 +1,25 @@
+{
+  "familyId": "pattern/data/saved-views",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/data/saved-views",
+    "packages/core/src/components/patterns/data/saved-views/contracts/index.ts",
+    "packages/core/src/components/patterns/data/saved-views/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/data/saved-views/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/data/saved-views/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/data/saved-views/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/saved-views/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/saved-views/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/data/saved-views/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "repaired": [
+      {
+        "from": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/saved-views/index.css:290",
+        "to": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/saved-views/index.css",
+        "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/saved-views/index.css exists at 3e38df146 with 568 lines; every cited line (max 290) is inside it; the sealed cell already binds the bare file, so the repair merges into that binding"
+      }
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "familyId": "primitive/layout/grid",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/layout/grid/compound/index.ts",
+    "packages/core/src/components/primitives/layout/grid/contracts/index.ts",
+    "packages/core/src/components/primitives/layout/grid/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/layout/grid/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/layout/grid/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/layout/grid/index.ts",
+    "packages/core/src/components/primitives/layout/grid/runtime/dom-attributes/index.ts",
+    "packages/core/src/components/primitives/layout/grid/runtime/responsive/index.ts",
+    "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
+    "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
+      "with": [
+        "primitive/feedback/alert",
+        "primitive/layout/flex",
+        "primitive/layout/space",
+        "primitive/layout/stack"
+      ],
+      "reason": "bound by the sealed cells of primitive/feedback/alert at themeControls[]; primitive/layout/flex at statesMotion, themeControls[]; primitive/layout/grid at statesMotion, themeControls[]; primitive/layout/space at themeControls[]; primitive/layout/stack at statesMotion, themeControls[]"
+    },
+    {
+      "path": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+      "with": [
+        "primitive/display/card",
+        "primitive/display/typography",
+        "primitive/inputs/button",
+        "primitive/layout/flex",
+        "primitive/layout/space",
+        "primitive/layout/stack"
+      ],
+      "reason": "bound by the sealed cells of primitive/display/card at themeControls[]; primitive/display/typography at themeControls[].internalChannels[]; primitive/inputs/button at themeControls[]; primitive/layout/flex at themeControls[].internalChannels[]; primitive/layout/grid at themeControls[].internalChannels[]; primitive/layout/space at themeControls[].internalChannels[]; primitive/layout/stack at themeControls[].internalChannels[]"
+    },
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
+      "with": [
+        "primitive/layout/aspect-ratio",
+        "primitive/layout/container",
+        "primitive/layout/flex",
+        "primitive/layout/space",
+        "primitive/layout/stack"
+      ],
+      "reason": "bound by the sealed cells of primitive/layout/aspect-ratio at anatomy, themeControls[].internalChannels[]; primitive/layout/container at anatomy, themeControls[].internalChannels[]; primitive/layout/flex at anatomy, hostAdaptation, invariants, recipeAnatomy, statesMotion, themeControls[], themeControls[].internalChannels[]; primitive/layout/grid at anatomy, hostAdaptation, invariants, recipeAnatomy, themeControls[], themeControls[].internalChannels[]; primitive/layout/space at anatomy, hostAdaptation, invariants, recipeAnatomy, statesMotion, themeControls[], themeControls[].internalChannels[]; primitive/layout/stack at anatomy, hostAdaptation, invariants, recipeAnatomy, statesMotion, themeControls[], themeControls[].internalChannels[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/layout/grid/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "dropped": [
+      {
+        "path": "packages/core/governance/manifest/controls/spacing/rhythm/index.json",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      }
+    ]
+  }
+}

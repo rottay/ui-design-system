@@ -1,0 +1,17 @@
+{
+  "familyId": "pattern/navigation/environment-toggle",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/navigation/environment-toggle/contracts/index.ts",
+    "packages/core/src/components/patterns/navigation/environment-toggle/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/navigation/environment-toggle/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/navigation/environment-toggle/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

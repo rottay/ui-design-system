@@ -1,0 +1,65 @@
+{
+  "familyId": "structure/shell/sidebar-surface",
+  "sourceBindings": [
+    "packages/core/src/components/structures/shell/navigation/sidebar-surface",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/sidebar-surface/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
+    "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+    "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
+      "with": [
+        "structure/shell/app-shell"
+      ],
+      "reason": "bound by the sealed cells of structure/shell/app-shell at anatomy, themeControls[].internalChannels[]; structure/shell/sidebar-surface at themeControls[], themeControls[].internalChannels[]"
+    },
+    {
+      "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
+      "with": [
+        "primitive/navigation/menu"
+      ],
+      "reason": "bound by the sealed cells of primitive/navigation/menu at anatomy, themeControls[].internalChannels[], themeControls[].targetBinding; structure/shell/sidebar-surface at themeControls[], themeControls[].internalChannels[]"
+    },
+    {
+      "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
+      "with": [
+        "pattern/shell/cockpit-header",
+        "pattern/shell/feature-workspace-frame",
+        "pattern/shell/pattern-page-shell",
+        "pattern/shell/workbench-header"
+      ],
+      "reason": "bound by the sealed cells of pattern/shell/cockpit-header at themeControls[].internalChannels[]; pattern/shell/feature-workspace-frame at themeControls[].internalChannels[]; pattern/shell/pattern-page-shell at anatomy, themeControls[].internalChannels[]; pattern/shell/workbench-header at themeControls[].internalChannels[]; structure/shell/sidebar-surface at themeControls[].internalChannels[]"
+    },
+    {
+      "path": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+      "with": [
+        "primitive/display/typography",
+        "primitive/feedback/alert",
+        "primitive/inputs/button"
+      ],
+      "reason": "bound by the sealed cells of primitive/display/typography at themeControls[]; primitive/feedback/alert at themeControls[]; primitive/inputs/button at themeControls[]; structure/shell/sidebar-surface at themeControls[]"
+    },
+    {
+      "path": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+      "with": [
+        "primitive/layout/space"
+      ],
+      "reason": "bound by the sealed cells of primitive/layout/space at themeControls[]; structure/shell/sidebar-surface at themeControls[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/structure/shell/sidebar-surface/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "dropped": [
+      {
+        "path": "packages/core/governance/manifest/controls/navigation/sidebar-tone/index.json",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      }
+    ]
+  }
+}

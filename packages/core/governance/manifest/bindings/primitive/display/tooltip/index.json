@@ -1,0 +1,39 @@
+{
+  "familyId": "primitive/display/tooltip",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/display/tooltip/compound/content/index.tsx",
+    "packages/core/src/components/primitives/display/tooltip/compound/index.ts",
+    "packages/core/src/components/primitives/display/tooltip/compound/trigger/index.tsx",
+    "packages/core/src/components/primitives/display/tooltip/contracts/index.ts",
+    "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/display/tooltip/index.tsx",
+    "packages/core/src/components/primitives/display/tooltip/tests/tooltip.classic.test.tsx",
+    "packages/core/src/components/primitives/display/tooltip/tests/tooltip.interactive-keyboard.test.tsx",
+    "packages/core/src/components/primitives/display/tooltip/tests/tooltip.modern.test.tsx",
+    "packages/core/src/components/primitives/display/tooltip/tests/tooltip.positioning.test.tsx",
+    "packages/core/src/components/primitives/display/tooltip/tests/tooltip.rustic-engine-advanced.test.tsx",
+    "packages/core/src/components/primitives/display/tooltip/tests/tooltip.test.tsx",
+    "packages/core/src/components/primitives/display/tooltip/tooltip.stories.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/personality/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/display/tooltip/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "dropped": [
+      {
+        "path": "packages/core/src/components/primitives/display/tooltip/tests/tooltip.premium-ground.test.ts",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      },
+      {
+        "path": "packages/core/src/components/primitives/display/tooltip/tests/tooltip.visual-contract.test.ts",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      }
+    ]
+  }
+}

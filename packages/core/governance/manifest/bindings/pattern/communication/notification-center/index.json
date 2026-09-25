@@ -1,0 +1,17 @@
+{
+  "familyId": "pattern/communication/notification-center",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/communication/notification-center/contracts/index.ts",
+    "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/communication/notification-center/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/communication/notification-center/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

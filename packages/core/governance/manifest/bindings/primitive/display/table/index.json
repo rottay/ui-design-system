@@ -1,0 +1,28 @@
+{
+  "familyId": "primitive/display/table",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/display/table/contracts/index.ts",
+    "packages/core/src/components/primitives/display/table/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/display/table/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/display/table/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/display/table/index.tsx",
+    "packages/core/src/components/primitives/display/table/runtime/table-features/index.ts",
+    "packages/core/src/components/primitives/display/table/table.stories.tsx",
+    "packages/core/src/components/primitives/display/table/tests/table.engine-branches.test.tsx",
+    "packages/core/src/components/primitives/display/table/tests/table.header-hairline.test.tsx",
+    "packages/core/src/components/primitives/display/table/tests/table.integration.test.tsx",
+    "packages/core/src/components/primitives/display/table/tests/table.modern-paint-ownership.test.tsx",
+    "packages/core/src/components/primitives/display/table/tests/table.real-engines.test.tsx",
+    "packages/core/src/components/primitives/display/table/tests/table.rendering-advanced.test.tsx",
+    "packages/core/src/components/primitives/display/table/tests/table.runtime-advanced.test.tsx",
+    "packages/core/src/components/primitives/display/table/tests/table.test.tsx",
+    "packages/core/src/components/primitives/display/table/tests/useTableFeatures.test.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/display/table/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

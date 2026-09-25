@@ -1,0 +1,38 @@
+{
+  "familyId": "pattern/customization/pattern-brand-studio",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/customization/brand-studio/contracts/index.ts",
+    "packages/core/src/components/patterns/customization/brand-studio/index.tsx",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/file-export/index.ts",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/contrast-adjustments/index.ts",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/dashboard-metrics/index.tsx",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/form-detail/index.tsx",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/gallery/index.tsx",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/index.ts",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/list-collection/index.tsx",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/visual-excellence/index.tsx",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/index.ts",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/pack-warnings/index.ts",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/preview-scope/index.ts",
+    "packages/core/src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/brand-studio/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/customization/pattern-brand-studio/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "repaired": [
+      {
+        "from": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:102-109",
+        "to": "packages/core/src/components/patterns/customization/brand-studio/index.tsx",
+        "evidence": "packages/core/src/components/patterns/customization/brand-studio/index.tsx exists at 3e38df146 with 1820 lines; every cited line (max 109) is inside it; the sealed cell already binds the bare file, so the repair merges into that binding"
+      },
+      {
+        "from": "packages/core/src/foundation/tokens/css/presentation/components/skin/brand-studio/index.css:205",
+        "to": "packages/core/src/foundation/tokens/css/presentation/components/skin/brand-studio/index.css",
+        "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/brand-studio/index.css exists at 3e38df146 with 323 lines; every cited line (max 205) is inside it; the sealed cell already binds the bare file, so the repair merges into that binding"
+      }
+    ]
+  }
+}

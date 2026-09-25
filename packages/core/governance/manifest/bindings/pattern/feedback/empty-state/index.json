@@ -1,0 +1,27 @@
+{
+  "familyId": "pattern/feedback/empty-state",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/feedback/empty-state/contracts/index.ts",
+    "packages/core/src/components/patterns/feedback/empty-state/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/feedback/empty-state/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/feedback/empty-state/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/feedback/empty-state/index.ts",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/empty-state-surface/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/empty-state-surface/index.css",
+      "with": [
+        "surface/experience/empty-state"
+      ],
+      "reason": "bound by the sealed cells of pattern/feedback/empty-state at anatomy, themeControls[].internalChannels[]; surface/experience/empty-state at anatomy, themeControls[].internalChannels[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/feedback/empty-state/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

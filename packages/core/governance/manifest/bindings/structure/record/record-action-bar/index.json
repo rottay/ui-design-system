@@ -1,0 +1,24 @@
+{
+  "familyId": "structure/record/record-action-bar",
+  "sourceBindings": [
+    "packages/core/src/components/structures/record/action-bar",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+      "with": [
+        "structure/record/record-field",
+        "structure/record/record-field-grid",
+        "structure/record/record-panel",
+        "structure/record/record-summary-strip"
+      ],
+      "reason": "bound by the sealed cells of structure/record/record-action-bar at anatomy, themeControls[].internalChannels[]; structure/record/record-field at anatomy, themeControls[].internalChannels[]; structure/record/record-field-grid at anatomy, themeControls[].internalChannels[]; structure/record/record-panel at anatomy, themeControls[].internalChannels[]; structure/record/record-summary-strip at anatomy, themeControls[].internalChannels[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/structure/record/record-action-bar/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

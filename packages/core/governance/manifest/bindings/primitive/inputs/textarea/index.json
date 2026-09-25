@@ -1,0 +1,17 @@
+{
+  "familyId": "primitive/inputs/textarea",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/inputs/textarea/compound/index.ts",
+    "packages/core/src/components/primitives/inputs/textarea/contracts/index.ts",
+    "packages/core/src/components/primitives/inputs/textarea/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/inputs/textarea/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/inputs/textarea/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/inputs/textarea/index.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/inputs/textarea/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

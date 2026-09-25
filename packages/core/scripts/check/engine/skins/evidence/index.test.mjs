@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
+import { BINDINGS_REL, readBindingsMap } from '../../../taxonomy/parity-gate/bindings/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
@@ -11,10 +12,14 @@ const REPO_ROOT = findRepoRoot(HERE);
 
 const CSS_ROOT = path.join(CORE_ROOT, 'src/foundation/tokens/css');
 const ENTRYPOINTS = [path.join(CSS_ROOT, 'facade/entrypoints/base/index.css')];
-const FAMILIES = path.join(
-  REPO_ROOT,
-  'docs/history/inventories/customization-manifest/families',
-);
+const INVENTORY_ROWS = JSON.parse(
+  readFileSync(path.join(CORE_ROOT, 'scripts/check/modern-rescue/family-inventory/index.json'), 'utf8'),
+).rows;
+const BINDINGS = readBindingsMap({
+  bindingsRoot: path.join(CORE_ROOT, BINDINGS_REL),
+  repositoryRoot: REPO_ROOT,
+  inventoryRows: INVENTORY_ROWS,
+});
 
 /** A family's skin is evidence. If the file it lives in stops shipping, the
  *  family's appearance changes and nothing in the program notices, because the
@@ -86,40 +91,6 @@ function liveImports(entrypoint) {
   return imported;
 }
 
-/** Walks a parsed family row and collects every `sourceBindings` entry, which
- *  the schema allows to be an array or a role -> binding object map. The
- *  optional `#Symbol` suffix is stripped so the path can be resolved. */
-function collectSourceBindings(node, into) {
-  if (Array.isArray(node)) {
-    for (const item of node) collectSourceBindings(item, into);
-    return;
-  }
-  if (!node || typeof node !== 'object') return;
-  for (const [key, value] of Object.entries(node)) {
-    if (key === 'sourceBindings') {
-      const list = Array.isArray(value)
-        ? value
-        : value && typeof value === 'object'
-          ? Object.values(value)
-          : [];
-      for (const binding of list) {
-        if (typeof binding === 'string') into.add(binding.split('#')[0]);
-      }
-      continue;
-    }
-    collectSourceBindings(value, into);
-  }
-}
-
-function familyFiles(dir, files = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) familyFiles(full, files);
-    else if (entry.name.endsWith('.json')) files.push(full);
-  }
-  return files;
-}
-
 const LIVE = ENTRYPOINTS.map((entrypoint) => ({
   entrypoint,
   imported: liveImports(entrypoint),
@@ -178,32 +149,25 @@ test('each claimed skin defines the selector it is attributed by', () => {
 });
 
 test('the claimed family owns the components its skins render', () => {
-  const rows = familyFiles(FAMILIES).map((file) => JSON.parse(readFileSync(file, 'utf8')));
-  assert.ok(rows.length > 200, `parsed only ${rows.length} family rows`);
+  assert.ok(INVENTORY_ROWS.length > 200, `parsed only ${INVENTORY_ROWS.length} inventory rows`);
 
   for (const [familyId, record] of Object.entries(FAMILY_SKINS)) {
-    const row = rows.find((candidate) => candidate.familyId === familyId);
-    assert.ok(row, `${familyId} has no family row`);
+    const row = INVENTORY_ROWS.find((candidate) => candidate.id === familyId);
+    assert.ok(row, `${familyId} has no inventory row`);
     for (const component of record.components) {
       assert.ok(
-        row.identity.components.includes(component),
+        row.components.includes(component),
         `${familyId} does not own ${component}, so it cannot own that component's skin`,
       );
     }
   }
 });
 
-test('a CSS path bound by any family row resolves and still ships', () => {
-  // The general form of the same decay: a sourceBinding that points at a file
-  // which was deleted or dropped from the facade is dead evidence that still
-  // reads as evidence.
-  // Collected from parsed `sourceBindings` only. A regex over the raw JSON also
-  // picks up `knownDefects[].sourcePattern`, which is a glob by design and
-  // never resolves as a literal path -- a false failure against a correct file.
-  const bound = new Set();
-  for (const file of familyFiles(FAMILIES)) {
-    collectSourceBindings(JSON.parse(readFileSync(file, 'utf8')), bound);
-  }
+test('a CSS path bound by any family resolves and still ships', () => {
+  // The general form of the same decay: a binding that points at a file which
+  // was deleted or dropped from the facade is dead evidence that still reads as
+  // evidence. The map refuses a missing path on read; shipping is checked here.
+  const bound = new Set(BINDINGS.records.flatMap(({ cell }) => cell.sourceBindings));
   const cssBound = [...bound].filter((binding) => binding.endsWith('.css'));
   assert.ok(cssBound.length > 0, 'no CSS sourceBindings found at all; the scan is wrong');
 

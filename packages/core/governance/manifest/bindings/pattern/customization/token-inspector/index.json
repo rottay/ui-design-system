@@ -1,0 +1,12 @@
+{
+  "familyId": "pattern/customization/token-inspector",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/customization/token-inspector/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/customization/token-inspector/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

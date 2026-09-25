@@ -1,0 +1,13 @@
+{
+  "familyId": "primitive/inputs/form-field",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/inputs/form-field",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/inputs/form-field/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

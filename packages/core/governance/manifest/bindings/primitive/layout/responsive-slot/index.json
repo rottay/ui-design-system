@@ -1,0 +1,22 @@
+{
+  "familyId": "primitive/layout/responsive-slot",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/layout/responsive/runtime/visibility/index.tsx",
+    "packages/core/src/components/primitives/layout/responsive/slot/index.tsx"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/components/primitives/layout/responsive/runtime/visibility/index.tsx",
+      "with": [
+        "primitive/layout/hide",
+        "primitive/layout/show"
+      ],
+      "reason": "bound by the sealed cells of primitive/layout/hide at anatomy; primitive/layout/responsive-slot at anatomy; primitive/layout/show at anatomy"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/layout/responsive-slot/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "familyId": "primitive/layout/ascii-frame",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/layout/ascii-frame/contracts/index.ts",
+    "packages/core/src/components/primitives/layout/ascii-frame/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-frame/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/layout/ascii-frame/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "familyId": "primitive/navigation/float-button",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/navigation/float-button/compound/index.ts",
+    "packages/core/src/components/primitives/navigation/float-button/contracts/index.ts",
+    "packages/core/src/components/primitives/navigation/float-button/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/navigation/float-button/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/navigation/float-button/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/navigation/float-button/index.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/navigation/float-button/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "familyId": "primitive/display/meter",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/foundation/meter",
+    "packages/core/src/components/primitives/foundation/meter/contracts/index.ts",
+    "packages/core/src/components/primitives/foundation/meter/index.tsx",
+    "packages/core/src/components/primitives/foundation/meter/tests/meter.announced-reading.test.tsx",
+    "packages/core/src/components/primitives/foundation/meter/tests/meter.test.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css",
+      "with": [
+        "pattern/data/pattern-data-table"
+      ],
+      "reason": "bound by the sealed cells of pattern/data/pattern-data-table at anatomy; primitive/display/meter at anatomy"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/display/meter/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

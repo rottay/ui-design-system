@@ -1,0 +1,20 @@
+{
+  "familyId": "primitive/feedback/progress",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/feedback/progress/compound/circle/index.tsx",
+    "packages/core/src/components/primitives/feedback/progress/compound/index.ts",
+    "packages/core/src/components/primitives/feedback/progress/compound/line/index.tsx",
+    "packages/core/src/components/primitives/feedback/progress/contracts/index.ts",
+    "packages/core/src/components/primitives/feedback/progress/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/feedback/progress/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/feedback/progress/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/feedback/progress/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/progress-compounds/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/feedback/progress/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

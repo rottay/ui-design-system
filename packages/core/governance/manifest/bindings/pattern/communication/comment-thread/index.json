@@ -1,0 +1,17 @@
+{
+  "familyId": "pattern/communication/comment-thread",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/communication/comment-thread/contracts/index.ts",
+    "packages/core/src/components/patterns/communication/comment-thread/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/communication/comment-thread/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/communication/comment-thread/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

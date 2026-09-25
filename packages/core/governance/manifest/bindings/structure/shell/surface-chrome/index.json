@@ -1,0 +1,13 @@
+{
+  "familyId": "structure/shell/surface-chrome",
+  "sourceBindings": [
+    "packages/core/src/components/structures/shell/surface-chrome",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/structure/shell/surface-chrome/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "familyId": "primitive/feedback/modal",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/feedback/modal/compound/body/index.tsx",
+    "packages/core/src/components/primitives/feedback/modal/compound/footer/index.tsx",
+    "packages/core/src/components/primitives/feedback/modal/compound/header/close-button/index.tsx",
+    "packages/core/src/components/primitives/feedback/modal/compound/header/index.tsx",
+    "packages/core/src/components/primitives/feedback/modal/compound/index.ts",
+    "packages/core/src/components/primitives/feedback/modal/contracts/index.ts",
+    "packages/core/src/components/primitives/feedback/modal/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/feedback/modal/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/feedback/modal/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/feedback/modal/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/modal/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/modal-compounds/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/feedback/modal/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "dropped": [
+      {
+        "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal/index.css",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "familyId": "pattern/workflow/moderation-gallery",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/workflow/moderation-gallery/contracts/index.ts",
+    "packages/core/src/components/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/workflow/moderation-gallery/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/workflow/moderation-gallery/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/workflow/moderation-gallery/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

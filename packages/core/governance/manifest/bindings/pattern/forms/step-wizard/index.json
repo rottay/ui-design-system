@@ -1,0 +1,23 @@
+{
+  "familyId": "pattern/forms/step-wizard",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/forms/step-wizard",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/step-wizard/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+      "with": [
+        "structure/workspace/action-dock"
+      ],
+      "reason": "bound by the sealed cells of pattern/forms/step-wizard at anatomy, themeControls[].internalChannels[]; structure/workspace/action-dock at anatomy, themeControls[].internalChannels[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/forms/step-wizard/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

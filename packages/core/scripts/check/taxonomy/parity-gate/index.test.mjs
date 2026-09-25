@@ -40,6 +40,8 @@ import {
   collectSealFenceFindings,
 } from './seal-fence/index.mjs';
 import { CI_GATES } from '../../automation/gates/manifest/index.mjs';
+import { BINDINGS_REL, validateBindingsMap } from './bindings/index.mjs';
+import { LIVE_AUDIT_OPTIONS, LIVE_BINDINGS_ROOT } from './index.mjs';
 
 const UI_ROOT = 'packages/core/src/components';
 
@@ -1256,4 +1258,106 @@ test('the live tree governs exactly the notifier folder, owned by the three anno
     [...GOVERNED_SUPPORT_FOLDERS['packages/core/src/components/primitives/feedback/notifier'].owners],
     ['primitive/feedback/message', 'primitive/feedback/notification', 'primitive/feedback/toast'],
   );
+});
+
+// --- the family bindings map ---------------------------------------------
+
+const BINDING_ROWS = [
+  { id: 'primitive/display/badge', sourceOwner: 'packages/core/src/components/primitives/display/badge' },
+  { id: 'primitive/layout/card', sourceOwner: 'packages/core/src/components/primitives/layout/card' },
+];
+
+/** A planted repository with two families, their owners, two skins and a map written by `cells`. */
+function bindingsSandbox(cells) {
+  const repo = fs.mkdtempSync(path.join(os.tmpdir(), 'family-bindings-'));
+  const file = (rel) => {
+    fs.mkdirSync(path.dirname(path.join(repo, rel)), { recursive: true });
+    fs.writeFileSync(path.join(repo, rel), '/* planted */\n');
+  };
+  file('packages/core/src/components/primitives/display/badge/index.tsx');
+  file('packages/core/src/components/primitives/layout/card/index.tsx');
+  file('packages/core/src/skins/badge/index.css');
+  file('packages/core/src/skins/shared/index.css');
+  const root = path.join(repo, 'packages/core', BINDINGS_REL);
+  for (const cell of cells) {
+    const dir = path.join(root, cell.folder ?? cell.familyId);
+    fs.mkdirSync(dir, { recursive: true });
+    const { folder: _folder, ...body } = cell;
+    fs.writeFileSync(path.join(dir, 'index.json'), `${JSON.stringify(body, null, 2)}\n`);
+  }
+  try {
+    return validateBindingsMap({ bindingsRoot: root, repositoryRoot: repo, inventoryRows: BINDING_ROWS });
+  } finally {
+    fs.rmSync(repo, { recursive: true, force: true });
+  }
+}
+
+const badgeCell = (extra = {}) => ({ familyId: 'primitive/display/badge', sourceBindings: ['packages/core/src/skins/badge/index.css'], ...extra });
+const cardCell = (extra = {}) => ({ familyId: 'primitive/layout/card', sourceBindings: ['packages/core/src/components/primitives/layout/card/index.tsx'], ...extra });
+
+test('the live bindings map validates both ways, and the live audit runs its leg', () => {
+  assert.equal(LIVE_AUDIT_OPTIONS.bindingsRoot, LIVE_BINDINGS_ROOT);
+  assert.equal(LIVE_BINDINGS_ROOT, path.join(CORE_FOR_FENCE, 'governance/manifest/bindings'));
+  const rows = JSON.parse(fs.readFileSync(path.join(CORE_FOR_FENCE, 'scripts/check/modern-rescue/family-inventory/index.json'), 'utf8')).rows;
+  assert.deepEqual(validateBindingsMap({ bindingsRoot: LIVE_BINDINGS_ROOT, repositoryRoot: REPO_ROOT_FOR_FENCE, inventoryRows: rows }), []);
+});
+
+test('BINDINGS DRILL: a clean planted map holds', () => {
+  assert.deepEqual(bindingsSandbox([badgeCell(), cardCell()]), []);
+});
+
+test('BINDINGS DRILL B1: every id is a live row, every row has a cell, and a cell id is its folder', () => {
+  const unknown = bindingsSandbox([badgeCell(), cardCell(), { familyId: 'primitive/inputs/switch', sourceBindings: ['packages/core/src/skins/badge/index.css'] }]);
+  assert.ok(unknown.some((f) => f === 'primitive/inputs/switch has a bindings cell but is not a live inventory row'), unknown.join('\n'));
+  const missingCell = bindingsSandbox([badgeCell()]);
+  assert.ok(missingCell.includes('inventory row primitive/layout/card has no bindings cell'), missingCell.join('\n'));
+  const misfiled = bindingsSandbox([badgeCell(), cardCell({ folder: 'primitive/layout/cards' })]);
+  assert.ok(misfiled.some((f) => f.includes('primitive/layout/cards/index.json declares familyId "primitive/layout/card"')), misfiled.join('\n'));
+});
+
+test('BINDINGS DRILL B2: every path exists and carries no line or symbol locator', () => {
+  const missing = bindingsSandbox([badgeCell({ sourceBindings: ['packages/core/src/skins/gone/index.css'] }), cardCell()]);
+  assert.ok(missing.includes('primitive/display/badge binds packages/core/src/skins/gone/index.css, which does not exist'), missing.join('\n'));
+  for (const locator of [':205', ':12-14,30', '#Badge']) {
+    const findings = bindingsSandbox([badgeCell({ sourceBindings: [`packages/core/src/skins/badge/index.css${locator}`] }), cardCell()]);
+    assert.ok(findings.some((f) => f.includes('with a line or symbol locator')), `${locator}: ${findings.join('\n')}`);
+  }
+  const relative = bindingsSandbox([badgeCell({ sourceBindings: ['src/skins/badge/index.css'] }), cardCell()]);
+  assert.ok(relative.some((f) => f.includes('which is not a repo-relative path')), relative.join('\n'));
+});
+
+test('BINDINGS DRILL B3: an empty cell says why, and a bound cell never claims to be empty', () => {
+  const silent = bindingsSandbox([badgeCell({ sourceBindings: [] }), cardCell()]);
+  assert.ok(silent.includes('primitive/display/badge binds nothing and gives no noBindings.reason'), silent.join('\n'));
+  assert.deepEqual(bindingsSandbox([badgeCell({ sourceBindings: [], noBindings: { reason: 'planted: the family paints only through its owner' } }), cardCell()]), []);
+  const both = bindingsSandbox([badgeCell({ noBindings: { reason: 'planted' } }), cardCell()]);
+  assert.ok(both.includes('primitive/display/badge binds paths and still declares noBindings'), both.join('\n'));
+});
+
+test('BINDINGS DRILL B4: a shared path is recorded in every claiming cell, exactly, and a stale record is refused', () => {
+  const shared = 'packages/core/src/skins/shared/index.css';
+  const record = (withIds) => ({ path: shared, with: withIds, reason: 'planted: both families style this sheet' });
+  const both = (badgeShared, cardShared) => [
+    badgeCell({ sourceBindings: [shared], ...(badgeShared ? { shared: [badgeShared] } : {}) }),
+    cardCell({ sourceBindings: ['packages/core/src/components/primitives/layout/card/index.tsx', shared], ...(cardShared ? { shared: [cardShared] } : {}) }),
+  ];
+  assert.deepEqual(bindingsSandbox(both(record(['primitive/layout/card']), record(['primitive/display/badge']))), []);
+  const unrecorded = bindingsSandbox(both(record(['primitive/layout/card']), null));
+  assert.ok(unrecorded.some((f) => f.startsWith(`primitive/layout/card binds ${shared}, which primitive/display/badge also claim or own`)), unrecorded.join('\n'));
+  const wrong = bindingsSandbox(both(record(['primitive/layout/card', 'primitive/inputs/switch']), record(['primitive/display/badge'])));
+  assert.ok(wrong.some((f) => f.includes('the tree says ["primitive/layout/card"]')), wrong.join('\n'));
+  const stale = bindingsSandbox([badgeCell({ shared: [{ path: 'packages/core/src/skins/badge/index.css', with: ['primitive/layout/card'], reason: 'planted: no longer shared' }] }), cardCell()]);
+  assert.ok(stale.some((f) => f.includes('as shared, but no other family claims or owns it')), stale.join('\n'));
+  const reasonless = bindingsSandbox(both({ path: shared, with: ['primitive/layout/card'], reason: ' ' }, record(['primitive/display/badge'])));
+  assert.ok(reasonless.some((f) => f.includes('as shared without a reason')), reasonless.join('\n'));
+});
+
+test('BINDINGS DRILL B4: a path under another family\'s sourceOwner needs a shared record naming that owner', () => {
+  const owned = 'packages/core/src/components/primitives/layout/card/index.tsx';
+  const unrecorded = bindingsSandbox([badgeCell({ sourceBindings: [owned] }), cardCell({ sourceBindings: ['packages/core/src/skins/shared/index.css'] })]);
+  assert.ok(unrecorded.some((f) => f.startsWith(`primitive/display/badge binds ${owned}, which primitive/layout/card also claim or own`)), unrecorded.join('\n'));
+  assert.deepEqual(bindingsSandbox([
+    badgeCell({ sourceBindings: [owned], shared: [{ path: owned, with: ['primitive/layout/card'], reason: 'planted: sits under the card owner' }] }),
+    cardCell({ sourceBindings: ['packages/core/src/skins/shared/index.css'] }),
+  ]), []);
 });

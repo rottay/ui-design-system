@@ -1,0 +1,41 @@
+{
+  "familyId": "primitive/layout/divider",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/layout/divider/compound/index.ts",
+    "packages/core/src/components/primitives/layout/divider/contracts/index.ts",
+    "packages/core/src/components/primitives/layout/divider/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/layout/divider/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/layout/divider/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/layout/divider/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/divider/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/divider/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css",
+      "with": [
+        "primitive/display/avatar",
+        "primitive/display/badge",
+        "primitive/display/calendar",
+        "primitive/display/callout",
+        "primitive/display/card",
+        "primitive/display/carousel",
+        "primitive/display/descriptions",
+        "primitive/display/empty",
+        "primitive/display/image",
+        "primitive/display/kbd",
+        "primitive/feedback/skeleton",
+        "primitive/layout/collapse",
+        "primitive/layout/layout",
+        "primitive/layout/splitter"
+      ],
+      "reason": "bound by the sealed cells of primitive/display/avatar at anatomy; primitive/display/badge at anatomy; primitive/display/calendar at anatomy; primitive/display/callout at anatomy; primitive/display/card at anatomy, themeControls[]; primitive/display/carousel at anatomy; primitive/display/descriptions at anatomy; primitive/display/empty at anatomy; primitive/display/image at anatomy; primitive/display/kbd at anatomy; primitive/feedback/skeleton at themeControls[].internalChannels[]; primitive/layout/collapse at anatomy; primitive/layout/divider at anatomy; primitive/layout/layout at anatomy; primitive/layout/splitter at anatomy"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/layout/divider/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

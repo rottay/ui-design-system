@@ -1,0 +1,24 @@
+{
+  "familyId": "primitive/display/timeline",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/display/timeline/compound/index.ts",
+    "packages/core/src/components/primitives/display/timeline/compound/item/index.tsx",
+    "packages/core/src/components/primitives/display/timeline/contracts/index.ts",
+    "packages/core/src/components/primitives/display/timeline/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/display/timeline/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/display/timeline/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/display/timeline/index.tsx",
+    "packages/core/src/components/primitives/display/timeline/tests/timeline.modern-engine-advanced.test.tsx",
+    "packages/core/src/components/primitives/display/timeline/tests/timeline.occupied-track-collapse.test.tsx",
+    "packages/core/src/components/primitives/display/timeline/tests/timeline.rustic-engine-advanced.test.tsx",
+    "packages/core/src/components/primitives/display/timeline/tests/timeline.test.tsx",
+    "packages/core/src/components/primitives/display/timeline/timeline.stories.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/timeline/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/timeline/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/display/timeline/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

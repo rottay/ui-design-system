@@ -1,0 +1,13 @@
+{
+  "familyId": "pattern/feedback/terminal-block",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/feedback/terminal-block/contracts/index.ts",
+    "packages/core/src/components/patterns/feedback/terminal-block/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/feedback/terminal-block/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "familyId": "primitive/inputs/mentions",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/inputs/mentions",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/inputs/mentions/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

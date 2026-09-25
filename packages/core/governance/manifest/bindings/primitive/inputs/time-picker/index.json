@@ -1,0 +1,16 @@
+{
+  "familyId": "primitive/inputs/time-picker",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/inputs/time-picker/contracts/index.ts",
+    "packages/core/src/components/primitives/inputs/time-picker/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/inputs/time-picker/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/inputs/time-picker/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/inputs/time-picker/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/time-picker/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/inputs/time-picker/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

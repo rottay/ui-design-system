@@ -1,0 +1,16 @@
+{
+  "familyId": "pattern/visualization/pattern-kanban-board",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/visualization/kanban-board/contracts/index.ts",
+    "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/visualization/kanban-board/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/visualization/pattern-kanban-board/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

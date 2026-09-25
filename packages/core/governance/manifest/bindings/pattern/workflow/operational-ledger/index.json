@@ -1,0 +1,15 @@
+{
+  "familyId": "pattern/workflow/operational-ledger",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/workflow/operational-ledger/contracts/index.ts",
+    "packages/core/src/components/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/workflow/operational-ledger/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/workflow/operational-ledger/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/workflow/operational-ledger/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

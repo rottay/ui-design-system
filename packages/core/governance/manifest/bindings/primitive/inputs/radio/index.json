@@ -1,0 +1,20 @@
+{
+  "familyId": "primitive/inputs/radio",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/inputs/radio/compound/group/index.tsx",
+    "packages/core/src/components/primitives/inputs/radio/compound/index.ts",
+    "packages/core/src/components/primitives/inputs/radio/contracts/index.ts",
+    "packages/core/src/components/primitives/inputs/radio/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/inputs/radio/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/inputs/radio/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/inputs/radio/index.ts",
+    "packages/core/src/components/primitives/inputs/radio/runtime/group-context/index.ts",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/radio-group/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/radio/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/inputs/radio/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

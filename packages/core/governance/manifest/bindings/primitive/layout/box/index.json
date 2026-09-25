@@ -1,0 +1,35 @@
+{
+  "familyId": "primitive/layout/box",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/layout/box/compound/index.ts",
+    "packages/core/src/components/primitives/layout/box/contracts/index.ts",
+    "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/layout/box/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/layout/box/index.ts",
+    "packages/core/src/components/primitives/layout/box/runtime/responsive/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+      "with": [
+        "primitive/layout/layout"
+      ],
+      "reason": "bound by the sealed cells of primitive/layout/box at anatomy; primitive/layout/layout at anatomy, themeControls[].internalChannels[]"
+    },
+    {
+      "path": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout/index.css",
+      "with": [
+        "primitive/layout/layout"
+      ],
+      "reason": "bound by the sealed cells of primitive/layout/box at anatomy; primitive/layout/layout at anatomy"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/layout/box/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

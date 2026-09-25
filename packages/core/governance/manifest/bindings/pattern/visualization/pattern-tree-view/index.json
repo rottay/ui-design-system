@@ -1,0 +1,21 @@
+{
+  "familyId": "pattern/visualization/pattern-tree-view",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/visualization/tree-view/contracts/index.ts",
+    "packages/core/src/components/patterns/visualization/tree-view/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/visualization/tree-view/index.ts",
+    "packages/core/src/components/patterns/visualization/tree-view/presentation/connector/contracts/index.ts",
+    "packages/core/src/components/patterns/visualization/tree-view/presentation/connector/index.tsx",
+    "packages/core/src/components/patterns/visualization/tree-view/presentation/interactive/index.ts",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/visualization/pattern-tree-view/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

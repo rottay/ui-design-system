@@ -1,0 +1,34 @@
+{
+  "familyId": "primitive/feedback/toast",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/feedback/toast/compound/animated-check/index.tsx",
+    "packages/core/src/components/primitives/feedback/toast/compound/container/index.tsx",
+    "packages/core/src/components/primitives/feedback/toast/compound/index.ts",
+    "packages/core/src/components/primitives/feedback/toast/compound/undo-toast/index.tsx",
+    "packages/core/src/components/primitives/feedback/toast/contracts/index.ts",
+    "packages/core/src/components/primitives/feedback/toast/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/feedback/toast/engines/index.tsx",
+    "packages/core/src/components/primitives/feedback/toast/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/feedback/toast/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/feedback/toast/index.tsx",
+    "packages/core/src/components/primitives/feedback/toast/runtime/animation/index.ts",
+    "packages/core/src/components/primitives/feedback/toast/runtime/index.ts",
+    "packages/core/src/components/primitives/feedback/toast/runtime/state/index.ts",
+    "packages/core/src/components/primitives/feedback/toast/runtime/state/method-registry/index.ts",
+    "packages/core/src/components/primitives/feedback/toast/runtime/state/provider/index.tsx",
+    "packages/core/src/components/primitives/feedback/toast/runtime/state/provider/use-toast/index.ts",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/toast-animation-keyframes/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/toast-compounds/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/feedback/toast/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "dropped": [
+      {
+        "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/toast/index.css",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      }
+    ]
+  }
+}

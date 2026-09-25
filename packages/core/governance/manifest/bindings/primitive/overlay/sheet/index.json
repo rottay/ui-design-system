@@ -1,0 +1,17 @@
+{
+  "familyId": "primitive/overlay/sheet",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/overlay/sheet/contracts/index.ts",
+    "packages/core/src/components/primitives/overlay/sheet/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/overlay/sheet/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/overlay/sheet/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/overlay/sheet/index.tsx",
+    "packages/core/src/components/primitives/overlay/sheet/runtime/overlay-stack/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/overlay/sheet/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

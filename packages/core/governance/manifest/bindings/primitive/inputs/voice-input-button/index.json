@@ -1,0 +1,12 @@
+{
+  "familyId": "primitive/inputs/voice-input-button",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/inputs/voice-input-button/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/inputs/voice-input-button/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

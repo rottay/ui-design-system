@@ -1,0 +1,12 @@
+{
+  "familyId": "surface/admin/settings",
+  "sourceBindings": [
+    "packages/core/src/components/surfaces/presentation/pages/admin/settings",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/settings/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/surface/admin/settings/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

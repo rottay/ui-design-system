@@ -1,0 +1,29 @@
+{
+  "familyId": "primitive/layout/container",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/layout/container/contracts/index.ts",
+    "packages/core/src/components/primitives/layout/container/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/layout/container/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/layout/container/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/layout/container/index.ts",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
+      "with": [
+        "primitive/layout/aspect-ratio",
+        "primitive/layout/flex",
+        "primitive/layout/grid",
+        "primitive/layout/space",
+        "primitive/layout/stack"
+      ],
+      "reason": "bound by the sealed cells of primitive/layout/aspect-ratio at anatomy, themeControls[].internalChannels[]; primitive/layout/container at anatomy, themeControls[].internalChannels[]; primitive/layout/flex at anatomy, hostAdaptation, invariants, recipeAnatomy, statesMotion, themeControls[], themeControls[].internalChannels[]; primitive/layout/grid at anatomy, hostAdaptation, invariants, recipeAnatomy, themeControls[], themeControls[].internalChannels[]; primitive/layout/space at anatomy, hostAdaptation, invariants, recipeAnatomy, statesMotion, themeControls[], themeControls[].internalChannels[]; primitive/layout/stack at anatomy, hostAdaptation, invariants, recipeAnatomy, statesMotion, themeControls[], themeControls[].internalChannels[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/layout/container/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

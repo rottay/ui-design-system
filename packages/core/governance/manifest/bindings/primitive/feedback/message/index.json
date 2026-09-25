@@ -1,0 +1,21 @@
+{
+  "familyId": "primitive/feedback/message",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/feedback/message/contracts/index.ts",
+    "packages/core/src/components/primitives/feedback/message/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/feedback/message/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/feedback/message/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/feedback/message/index.tsx"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/feedback/message/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "dropped": [
+      {
+        "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/message/index.css",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      }
+    ]
+  }
+}

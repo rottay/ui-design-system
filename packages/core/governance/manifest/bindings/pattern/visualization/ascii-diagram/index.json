@@ -1,0 +1,13 @@
+{
+  "familyId": "pattern/visualization/ascii-diagram",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/visualization/ascii-diagram/contracts/index.ts",
+    "packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/visualization/ascii-diagram/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

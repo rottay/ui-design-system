@@ -1,0 +1,12 @@
+{
+  "familyId": "surface/data/list",
+  "sourceBindings": [
+    "packages/core/src/components/surfaces/presentation/pages/data/list",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/list/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/surface/data/list/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

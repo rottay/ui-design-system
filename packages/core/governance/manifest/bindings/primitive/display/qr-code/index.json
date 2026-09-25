@@ -1,0 +1,33 @@
+{
+  "familyId": "primitive/display/qr-code",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/display/qr-code/QRCode.stories.tsx",
+    "packages/core/src/components/primitives/display/qr-code/compound/index.ts",
+    "packages/core/src/components/primitives/display/qr-code/contracts/index.ts",
+    "packages/core/src/components/primitives/display/qr-code/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/display/qr-code/index.tsx",
+    "packages/core/src/components/primitives/display/qr-code/runtime/encoded-symbol/index.tsx",
+    "packages/core/src/components/primitives/display/qr-code/tests/QRCode.runtime-engines.test.tsx",
+    "packages/core/src/components/primitives/display/qr-code/tests/QRCode.test.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
+      "with": [
+        "primitive/display/tree",
+        "primitive/layout/collapse"
+      ],
+      "reason": "bound by the sealed cells of primitive/display/qr-code at anatomy; primitive/display/tree at anatomy; primitive/layout/collapse at anatomy"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/display/qr-code/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "familyId": "surface/workspace/collection-workspace",
+  "sourceBindings": [
+    "packages/core/src/components/surfaces/foundation/contracts/adaptive/collection/index.ts",
+    "packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
+    "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace",
+    "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+    "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
+    "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx",
+    "packages/core/src/components/surfaces/runtime/collection-workspace/index.ts",
+    "packages/core/src/foundation/contracts/runtime/components/patterns/data/index.ts",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+    "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
+      "with": [
+        "pattern/data/pattern-data-table"
+      ],
+      "reason": "bound by the sealed cells of pattern/data/pattern-data-table at hostAdaptation; surface/workspace/collection-workspace at invariants"
+    },
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "with": [
+        "structure/workspace/action-dock"
+      ],
+      "reason": "bound by the sealed cells of structure/workspace/action-dock at anatomy, themeControls[].internalChannels[]; surface/workspace/collection-workspace at hostAdaptation"
+    },
+    {
+      "path": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts",
+      "with": [
+        "chart/basic/area-chart",
+        "chart/basic/bar-chart",
+        "chart/basic/line-chart",
+        "chart/basic/pie-chart",
+        "chart/basic/scatter-chart",
+        "chart/flow/funnel-chart",
+        "chart/flow/sankey-chart",
+        "chart/flow/waterfall-chart",
+        "chart/hierarchical/tree-map",
+        "chart/kpi/bullet-chart",
+        "chart/relational/network-graph",
+        "chart/spatial/heat-map",
+        "chart/statistical/gauge-chart",
+        "chart/statistical/histogram",
+        "chart/statistical/radar-chart",
+        "chart/temporal/calendar-heat-map",
+        "chart/temporal/gantt-chart",
+        "chart/temporal/sparkline",
+        "pattern/data/bulk-select-toggle",
+        "pattern/data/column-settings",
+        "pattern/data/decision-comparison",
+        "pattern/data/decision-panorama",
+        "pattern/data/file-manager",
+        "pattern/data/mono-stat",
+        "pattern/data/pattern-gallery-view",
+        "pattern/data/pattern-grid-view",
+        "pattern/data/pattern-stats-grid",
+        "pattern/data/record-facts",
+        "pattern/data/status-filter-pills",
+        "pattern/data/virtual-list",
+        "pattern/data/widget-board",
+        "primitive/display/typography",
+        "structure/dashboard/dashboard-insights",
+        "structure/dashboard/data-terminal-card",
+        "structure/headers/edit-header",
+        "structure/headers/form-header",
+        "structure/headers/header-surface",
+        "structure/headers/mobile-header",
+        "structure/headers/section-frame",
+        "surface/experience/auth",
+        "surface/experience/chat",
+        "surface/experience/editor",
+        "surface/experience/empty-state",
+        "surface/experience/marketing",
+        "surface/experience/media",
+        "surface/experience/notification",
+        "surface/experience/pricing",
+        "surface/forms/detail-form",
+        "surface/forms/form",
+        "surface/forms/guided-draft-form",
+        "surface/forms/wizard",
+        "surface/operations/activity",
+        "surface/operations/kanban",
+        "surface/operations/operational",
+        "surface/operations/scheduler",
+        "surface/workspace/command-center",
+        "surface/workspace/decision-inbox",
+        "surface/workspace/record-workbench"
+      ],
+      "reason": "bound by the sealed cells of chart/basic/area-chart at themeControls[].internalChannels[]; chart/basic/bar-chart at themeControls[].internalChannels[]; chart/basic/line-chart at themeControls[].internalChannels[]; chart/basic/pie-chart at themeControls[].internalChannels[]; chart/basic/scatter-chart at themeControls[].internalChannels[]; chart/flow/funnel-chart at themeControls[].internalChannels[]; chart/flow/sankey-chart at themeControls[].internalChannels[]; chart/flow/waterfall-chart at themeControls[].internalChannels[]; chart/hierarchical/tree-map at themeControls[].internalChannels[]; chart/kpi/bullet-chart at themeControls[].internalChannels[]; chart/relational/network-graph at themeControls[].internalChannels[]; chart/spatial/heat-map at themeControls[].internalChannels[]; chart/statistical/gauge-chart at themeControls[].internalChannels[]; chart/statistical/histogram at themeControls[].internalChannels[]; chart/statistical/radar-chart at themeControls[].internalChannels[]; chart/temporal/calendar-heat-map at themeControls[].internalChannels[]; chart/temporal/gantt-chart at themeControls[].internalChannels[]; chart/temporal/sparkline at themeControls[].internalChannels[]; pattern/data/bulk-select-toggle at themeControls[].internalChannels[]; pattern/data/column-settings at themeControls[].internalChannels[]; pattern/data/decision-comparison at themeControls[].internalChannels[]; pattern/data/decision-panorama at themeControls[].internalChannels[]; pattern/data/file-manager at themeControls[].internalChannels[]; pattern/data/mono-stat at themeControls[].internalChannels[]; pattern/data/pattern-gallery-view at themeControls[].internalChannels[]; pattern/data/pattern-grid-view at themeControls[].internalChannels[]; pattern/data/pattern-stats-grid at themeControls[].internalChannels[]; pattern/data/record-facts at themeControls[].internalChannels[]; pattern/data/status-filter-pills at themeControls[].internalChannels[]; pattern/data/virtual-list at themeControls[].internalChannels[]; pattern/data/widget-board at themeControls[].internalChannels[]; primitive/display/typography at themeControls[], themeControls[].internalChannels[]; structure/dashboard/dashboard-insights at themeControls[].internalChannels[]; structure/dashboard/data-terminal-card at themeControls[].internalChannels[]; structure/headers/edit-header at themeControls[].internalChannels[]; structure/headers/form-header at themeControls[].internalChannels[]; structure/headers/header-surface at themeControls[].internalChannels[]; structure/headers/mobile-header at themeControls[].internalChannels[]; structure/headers/section-frame at themeControls[].internalChannels[]; surface/experience/auth at themeControls[].internalChannels[]; surface/experience/chat at themeControls[].internalChannels[]; surface/experience/editor at themeControls[].internalChannels[]; surface/experience/empty-state at themeControls[].internalChannels[]; surface/experience/marketing at themeControls[].internalChannels[]; surface/experience/media at themeControls[].internalChannels[]; surface/experience/notification at themeControls[].internalChannels[]; surface/experience/pricing at themeControls[].internalChannels[]; surface/forms/detail-form at themeControls[].internalChannels[]; surface/forms/form at themeControls[].internalChannels[]; surface/forms/guided-draft-form at themeControls[].internalChannels[]; surface/forms/wizard at themeControls[].internalChannels[]; surface/operations/activity at themeControls[].internalChannels[]; surface/operations/kanban at themeControls[].internalChannels[]; surface/operations/operational at themeControls[].internalChannels[]; surface/operations/scheduler at themeControls[].internalChannels[]; surface/workspace/collection-workspace at themeControls[].internalChannels[]; surface/workspace/command-center at themeControls[].internalChannels[]; surface/workspace/decision-inbox at themeControls[].internalChannels[]; surface/workspace/record-workbench at themeControls[].internalChannels[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/surface/workspace/collection-workspace/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "familyId": "pattern/navigation/shortcuts-overlay",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/navigation/shortcuts-overlay/contracts/index.ts",
+    "packages/core/src/components/patterns/navigation/shortcuts-overlay/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/navigation/shortcuts-overlay/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/navigation/shortcuts-overlay/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "familyId": "primitive/inputs/input-number",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/inputs/input-number",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/inputs/input-number/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

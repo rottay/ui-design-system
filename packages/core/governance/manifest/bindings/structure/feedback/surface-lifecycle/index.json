@@ -1,0 +1,21 @@
+{
+  "familyId": "structure/feedback/surface-lifecycle",
+  "sourceBindings": [
+    "packages/core/src/components/structures/feedback/surface-lifecycle",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css",
+      "with": [
+        "structure/feedback/capability-anatomy"
+      ],
+      "reason": "bound by the sealed cells of structure/feedback/capability-anatomy at anatomy, themeControls[].internalChannels[]; structure/feedback/surface-lifecycle at anatomy, themeControls[].internalChannels[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/structure/feedback/surface-lifecycle/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

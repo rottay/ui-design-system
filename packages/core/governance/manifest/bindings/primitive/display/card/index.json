@@ -1,0 +1,100 @@
+{
+  "familyId": "primitive/display/card",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/display/card/compound/body/index.tsx",
+    "packages/core/src/components/primitives/display/card/compound/footer/index.tsx",
+    "packages/core/src/components/primitives/display/card/compound/header/index.tsx",
+    "packages/core/src/components/primitives/display/card/compound/image/index.tsx",
+    "packages/core/src/components/primitives/display/card/contracts/index.ts",
+    "packages/core/src/components/primitives/display/card/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/display/card/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/display/card/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/display/card/index.tsx",
+    "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css",
+    "packages/core/src/foundation/tokens/css/foundation/base/properties/index.css",
+    "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/card/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/card-compounds/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card/index.css",
+    "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
+    "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+    "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/expressive/index.ts"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "with": [
+        "primitive/display/typography",
+        "primitive/feedback/alert",
+        "primitive/inputs/button"
+      ],
+      "reason": "bound by the sealed cells of primitive/display/card at themeControls[]; primitive/display/typography at themeControls[]; primitive/feedback/alert at themeControls[]; primitive/inputs/button at themeControls[]"
+    },
+    {
+      "path": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+      "with": [
+        "primitive/display/typography",
+        "primitive/inputs/button",
+        "primitive/layout/flex",
+        "primitive/layout/grid",
+        "primitive/layout/space",
+        "primitive/layout/stack"
+      ],
+      "reason": "bound by the sealed cells of primitive/display/card at themeControls[]; primitive/display/typography at themeControls[].internalChannels[]; primitive/inputs/button at themeControls[]; primitive/layout/flex at themeControls[].internalChannels[]; primitive/layout/grid at themeControls[].internalChannels[]; primitive/layout/space at themeControls[].internalChannels[]; primitive/layout/stack at themeControls[].internalChannels[]"
+    },
+    {
+      "path": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css",
+      "with": [
+        "primitive/display/avatar",
+        "primitive/display/badge",
+        "primitive/display/calendar",
+        "primitive/display/callout",
+        "primitive/display/carousel",
+        "primitive/display/descriptions",
+        "primitive/display/empty",
+        "primitive/display/image",
+        "primitive/display/kbd",
+        "primitive/feedback/skeleton",
+        "primitive/layout/collapse",
+        "primitive/layout/divider",
+        "primitive/layout/layout",
+        "primitive/layout/splitter"
+      ],
+      "reason": "bound by the sealed cells of primitive/display/avatar at anatomy; primitive/display/badge at anatomy; primitive/display/calendar at anatomy; primitive/display/callout at anatomy; primitive/display/card at anatomy, themeControls[]; primitive/display/carousel at anatomy; primitive/display/descriptions at anatomy; primitive/display/empty at anatomy; primitive/display/image at anatomy; primitive/display/kbd at anatomy; primitive/feedback/skeleton at themeControls[].internalChannels[]; primitive/layout/collapse at anatomy; primitive/layout/divider at anatomy; primitive/layout/layout at anatomy; primitive/layout/splitter at anatomy"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/display/card/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "dropped": [
+      {
+        "path": "packages/core/governance/manifest/controls/experience/profile/index.json",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      },
+      {
+        "path": "packages/core/governance/manifest/controls/profiles/expressive/index.json",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      },
+      {
+        "path": "packages/core/governance/manifest/controls/shape/radius-scale/index.json",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      },
+      {
+        "path": "packages/core/governance/manifest/controls/surfaces/effect-intensity/index.json",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      },
+      {
+        "path": "packages/core/governance/manifest/controls/surfaces/elevation-posture/index.json",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      },
+      {
+        "path": "packages/core/governance/manifest/controls/typography/scale/index.json",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      }
+    ]
+  }
+}

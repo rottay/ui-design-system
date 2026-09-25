@@ -1,0 +1,17 @@
+{
+  "familyId": "primitive/layout/scroll-area",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/layout/scroll-area/contracts/index.ts",
+    "packages/core/src/components/primitives/layout/scroll-area/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/layout/scroll-area/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/layout/scroll-area/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/layout/scroll-area/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/scroll-area/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/layout/scroll-area/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

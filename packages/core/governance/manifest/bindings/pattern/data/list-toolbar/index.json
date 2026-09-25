@@ -1,0 +1,25 @@
+{
+  "familyId": "pattern/data/list-toolbar",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/data/list-toolbar",
+    "packages/core/src/components/patterns/data/list-toolbar/contracts/index.ts",
+    "packages/core/src/components/patterns/data/list-toolbar/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/data/list-toolbar/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/data/list-toolbar/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/data/list-toolbar/foundation/tokens/index.ts",
+    "packages/core/src/components/patterns/data/list-toolbar/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/data/list-toolbar/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "repaired": [
+      {
+        "from": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:460-461,1050,1062,1078-1079",
+        "to": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css",
+        "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css exists at 3e38df146 with 1471 lines; every cited line (max 1079) is inside it; the sealed cell already binds the bare file, so the repair merges into that binding"
+      }
+    ]
+  }
+}

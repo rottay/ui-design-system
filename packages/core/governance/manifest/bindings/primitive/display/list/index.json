@@ -1,0 +1,23 @@
+{
+  "familyId": "primitive/display/list",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/display/list/contracts/index.ts",
+    "packages/core/src/components/primitives/display/list/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/display/list/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/display/list/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/display/list/index.tsx",
+    "packages/core/src/components/primitives/display/list/list.stories.tsx",
+    "packages/core/src/components/primitives/display/list/tests/list.engine-advanced.test.tsx",
+    "packages/core/src/components/primitives/display/list/tests/list.integration.test.tsx",
+    "packages/core/src/components/primitives/display/list/tests/list.loading-shell-continuity.test.tsx",
+    "packages/core/src/components/primitives/display/list/tests/list.modern-paint-ownership.test.tsx",
+    "packages/core/src/components/primitives/display/list/tests/list.test.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/display/list/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

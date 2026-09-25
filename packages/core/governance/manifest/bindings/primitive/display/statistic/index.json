@@ -1,0 +1,27 @@
+{
+  "familyId": "primitive/display/statistic",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx",
+    "packages/core/src/components/primitives/display/statistic/compound/index.ts",
+    "packages/core/src/components/primitives/display/statistic/contracts/index.ts",
+    "packages/core/src/components/primitives/display/statistic/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/display/statistic/index.tsx",
+    "packages/core/src/components/primitives/display/statistic/statistic.stories.tsx",
+    "packages/core/src/components/primitives/display/statistic/tests/countdown.integration.test.tsx",
+    "packages/core/src/components/primitives/display/statistic/tests/statistic.integration.test.tsx",
+    "packages/core/src/components/primitives/display/statistic/tests/statistic.modern-engine-advanced.test.tsx",
+    "packages/core/src/components/primitives/display/statistic/tests/statistic.modern-paint-ownership.test.tsx",
+    "packages/core/src/components/primitives/display/statistic/tests/statistic.rustic-engine-advanced.test.tsx",
+    "packages/core/src/components/primitives/display/statistic/tests/statistic.test.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/display/statistic/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

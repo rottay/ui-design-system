@@ -1,0 +1,29 @@
+{
+  "familyId": "pattern/shell/pattern-page-shell",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/shell/page-shell/contracts/index.ts",
+    "packages/core/src/components/patterns/shell/page-shell/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/shell/page-shell/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/shell/page-shell/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/shell/page-shell/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/page-shell/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
+      "with": [
+        "pattern/shell/cockpit-header",
+        "pattern/shell/feature-workspace-frame",
+        "pattern/shell/workbench-header",
+        "structure/shell/sidebar-surface"
+      ],
+      "reason": "bound by the sealed cells of pattern/shell/cockpit-header at themeControls[].internalChannels[]; pattern/shell/feature-workspace-frame at themeControls[].internalChannels[]; pattern/shell/pattern-page-shell at anatomy, themeControls[].internalChannels[]; pattern/shell/workbench-header at themeControls[].internalChannels[]; structure/shell/sidebar-surface at themeControls[].internalChannels[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/shell/pattern-page-shell/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

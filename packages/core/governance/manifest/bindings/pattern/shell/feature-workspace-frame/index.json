@@ -1,0 +1,30 @@
+{
+  "familyId": "pattern/shell/feature-workspace-frame",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/shell/feature-workspace-frame/contracts/index.ts",
+    "packages/core/src/components/patterns/shell/feature-workspace-frame/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx",
+    "packages/core/src/components/patterns/shell/feature-workspace-frame/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/shell/feature-workspace-frame/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/shell/feature-workspace-frame/index.ts",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
+      "with": [
+        "pattern/shell/cockpit-header",
+        "pattern/shell/pattern-page-shell",
+        "pattern/shell/workbench-header",
+        "structure/shell/sidebar-surface"
+      ],
+      "reason": "bound by the sealed cells of pattern/shell/cockpit-header at themeControls[].internalChannels[]; pattern/shell/feature-workspace-frame at themeControls[].internalChannels[]; pattern/shell/pattern-page-shell at anatomy, themeControls[].internalChannels[]; pattern/shell/workbench-header at themeControls[].internalChannels[]; structure/shell/sidebar-surface at themeControls[].internalChannels[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/shell/feature-workspace-frame/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

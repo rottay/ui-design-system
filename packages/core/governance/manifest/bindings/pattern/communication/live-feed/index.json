@@ -1,0 +1,17 @@
+{
+  "familyId": "pattern/communication/live-feed",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/communication/live-feed/contracts/index.ts",
+    "packages/core/src/components/patterns/communication/live-feed/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/communication/live-feed/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/communication/live-feed/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "familyId": "structure/dashboard/stats-header",
+  "sourceBindings": [
+    "packages/core/src/components/structures/dashboard/stats-header",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/structure/dashboard/stats-header/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

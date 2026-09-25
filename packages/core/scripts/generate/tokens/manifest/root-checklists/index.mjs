@@ -72,17 +72,14 @@ import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../
 import {
   CASCADE_MANIFEST_REL,
   CASCADE_MANIFEST_REPO_REL,
-  QUARANTINE_MANIFEST_REL,
   readManifestRecords,
 } from '../../../../libraries/manifest/index.mjs';
+import { BINDINGS_REL, readBindingsMap } from '../../../../check/taxonomy/parity-gate/bindings/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PACKAGE_ROOT = findPackageRoot(HERE);
 /** The programme folder stays under `scripts/`; only the manifest graduated. */
 export const PROGRAM_ROOT = path.resolve(PACKAGE_ROOT, 'scripts/check/modern-rescue');
-/** The quarantined manifest root (WO-RET-03, docs/history): sealed evidence,
- *  resolved through the workspace root. The cascade cells are not in it. */
-export const MANIFEST_ROOT = path.join(findRepoRoot(HERE), 'docs/history/inventories/customization-manifest');
 export const OUTPUT_PATH = path.join(PACKAGE_ROOT, 'artifacts/generated/manifest/cascade/coverage/index.json');
 
 const PAINT_SET = new Set(PAINT_PLANES);
@@ -132,20 +129,19 @@ function walk(dir, keep, out = []) {
 
 const stripPackage = (p) => String(p).replace(/^packages\/core\//, '').split('#')[0];
 
-/** Where the file -> family bindings come from: the sealed per-family cells. */
-export const FAMILY_BINDINGS_REL = `${QUARANTINE_MANIFEST_REL}/families`;
-export const FAMILY_BINDINGS_SEAL = Object.freeze({ commit: 'f66b1bd45', workOrder: 'WO-RET-03', date: '2026-09-19' });
+/** Where the file -> family bindings come from: the live bindings map, one cell per inventory family. */
+export const FAMILY_BINDINGS_REL = BINDINGS_REL;
 
 /** A binding key that still carries a `:line` locator can never equal a paint site's file. */
 export const DEAD_BINDING_KEY = /:\d[\d,-]*$/;
-export const DEAD_BINDING_RULE = 'key carries a :line suffix after stripPackage and can never equal a site file';
+export const DEAD_BINDING_RULE = 'key carries a :line suffix and can never equal a site file';
 
 export const FAMILY_BINDINGS_LAW = [
-  'The file -> family bindings that decide every paint site outside a sourceOwner are the per-family cells of the',
-  'sealed customization manifest, read as evidence because no live source of family bindings exists yet (seal',
-  "fence, slice family-bindings). They flatten the cells' sourceBindings (anatomy, per-control internalChannels and",
-  'the other sections) into file -> family. A family figure built on them is therefore of mixed provenance:',
-  'sourceOwner from the live inventory, everything else from a sealed cell.',
+  'The file -> family bindings that decide every paint site outside a sourceOwner are the live bindings map',
+  `(${BINDINGS_REL}), one cell per inventory family, refused as a whole unless every id is a live row, every row`,
+  'has a cell, every path exists without a locator, and every path claimed or owned by another family carries a',
+  'shared record in each claiming cell (the taxonomy parity gate\'s bindings laws). A family figure built on it is',
+  'live: sourceOwner from the inventory, every other attribution from a bindings cell.',
 ].join(' ');
 
 /**
@@ -197,8 +193,9 @@ export function loadCanon(programRoot = PROGRAM_ROOT, packageRoot = PACKAGE_ROOT
 
   const familyIds = new Set(inventory.rows.map((r) => r.id));
   const { bindings, bindingsProvenance } = readFamilyBindings(
-    path.join(findRepoRoot(packageRoot), FAMILY_BINDINGS_REL),
-    familyIds,
+    path.join(packageRoot, FAMILY_BINDINGS_REL),
+    inventory.rows,
+    findRepoRoot(packageRoot),
   );
 
   return {
@@ -213,59 +210,28 @@ export function loadCanon(programRoot = PROGRAM_ROOT, packageRoot = PACKAGE_ROOT
 
 /**
  * The file -> family bindings and the provenance block that describes them,
- * measured in the same walk so the label cannot disagree with the map.
+ * measured from the same validated read so the label cannot disagree with the map.
  */
-export function readFamilyBindings(familiesDir, inventoryIds) {
-  const bindings = new Map();
-  const byLocation = new Map();
-  const cellIds = new Set();
-  let cells = 0;
-  for (const abs of walk(familiesDir, (p) => p.endsWith('.json'))) {
-    const doc = JSON.parse(readFileSync(abs, 'utf8'));
-    cells += 1;
-    cellIds.add(doc.familyId);
-    collectBindings(doc, doc.familyId, bindings, [], byLocation);
-  }
+export function readFamilyBindings(bindingsRoot, inventoryRows, repositoryRoot) {
+  const { records, bindings } = readBindingsMap({ bindingsRoot, repositoryRoot, inventoryRows });
+  const inventoryIds = new Set(inventoryRows.map((row) => row.id));
+  const cellIds = records.map(({ cell }) => cell.familyId);
   const deadKeys = [...bindings.keys()].filter((file) => DEAD_BINDING_KEY.test(file)).sort();
   return {
     bindings,
     bindingsProvenance: {
-      provenance: 'sealed',
+      provenance: 'live',
       source: FAMILY_BINDINGS_REL,
-      sealedBy: { ...FAMILY_BINDINGS_SEAL },
       law: FAMILY_BINDINGS_LAW,
-      cells,
-      cellFamilyIds: cellIds.size,
-      aliasFamilyIds: [...cellIds].filter((id) => !inventoryIds.has(id)).sort(),
+      cells: records.length,
+      cellFamilyIds: new Set(cellIds).size,
+      aliasFamilyIds: cellIds.filter((id) => !inventoryIds.has(id)).sort(),
       boundFiles: bindings.size,
       filesBoundToSeveralFamilies: [...bindings.values()].filter((families) => families.size > 1).length,
+      sharedRecords: records.reduce((count, { cell }) => count + (cell.shared?.length ?? 0), 0),
       deadKeys: { count: deadKeys.length, rule: DEAD_BINDING_RULE, keys: deadKeys },
-      bindingsByLocation: Object.fromEntries(
-        [...byLocation.entries()].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1)),
-      ),
     },
   };
-}
-
-function collectBindings(node, familyId, out, trail, byLocation) {
-  if (Array.isArray(node)) {
-    for (const item of node) collectBindings(item, familyId, out, trail.length ? [...trail.slice(0, -1), `${trail.at(-1)}[]`] : ['[]'], byLocation);
-    return;
-  }
-  if (!node || typeof node !== 'object') return;
-  for (const [key, value] of Object.entries(node)) {
-    if (key === 'sourceBindings' && Array.isArray(value)) {
-      const location = trail.length > 0 ? trail.join('.') : '(cell)';
-      byLocation.set(location, (byLocation.get(location) ?? 0) + value.length);
-      for (const binding of value) {
-        const file = stripPackage(binding);
-        if (!out.has(file)) out.set(file, new Set());
-        out.get(file).add(familyId);
-      }
-    } else {
-      collectBindings(value, familyId, out, [...trail, key], byLocation);
-    }
-  }
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -851,7 +817,7 @@ export function familiesProvenanceSentence(block, inventoryRows) {
   if (block.provenance === 'sealed') {
     return `mixed: sourceOwner from the live inventory (${inventoryRows} rows); every other attribution from the `
       + `sealed ${block.sealedBy.date} family cells (${block.cells} cells, ${block.aliasFamilyIds.length} alias ids, `
-      + `${block.boundFiles} bound files); no live twin exists (Packet B)`;
+      + `${block.boundFiles} bound files)`;
   }
   return `${block.provenance}: sourceOwner from the live inventory (${inventoryRows} rows); every other attribution `
     + `from ${block.source} (${block.boundFiles} bound files)`;
@@ -861,7 +827,7 @@ export function familiesProvenanceSentence(block, inventoryRows) {
 export function familiesProvenanceSuffix(block) {
   return block.provenance === 'sealed'
     ? `(bindings: celdas selladas ${block.sealedBy.date}, procedencia mixta)`
-    : `(bindings: ${block.source}, ${block.provenance})`;
+    : `(bindings: mapa vivo ${block.source})`;
 }
 
 function requireBindingsProvenance(canon) {

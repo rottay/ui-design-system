@@ -1,0 +1,40 @@
+{
+  "familyId": "primitive/display/tree",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/display/tree/compound/index.ts",
+    "packages/core/src/components/primitives/display/tree/compound/tree-node/index.tsx",
+    "packages/core/src/components/primitives/display/tree/contracts/index.ts",
+    "packages/core/src/components/primitives/display/tree/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/display/tree/index.tsx",
+    "packages/core/src/components/primitives/display/tree/runtime/tree-behavior/index.ts",
+    "packages/core/src/components/primitives/display/tree/tests/tree.filtered-keyboard-reach.test.tsx",
+    "packages/core/src/components/primitives/display/tree/tests/tree.modern-engine-advanced.test.tsx",
+    "packages/core/src/components/primitives/display/tree/tests/tree.modern-paint-ownership.test.tsx",
+    "packages/core/src/components/primitives/display/tree/tests/tree.premium-ground.test.ts",
+    "packages/core/src/components/primitives/display/tree/tests/tree.rustic-engine-advanced.test.tsx",
+    "packages/core/src/components/primitives/display/tree/tests/tree.set-semantics.test.tsx",
+    "packages/core/src/components/primitives/display/tree/tests/tree.test.tsx",
+    "packages/core/src/components/primitives/display/tree/tests/tree.typeahead.test.tsx",
+    "packages/core/src/components/primitives/display/tree/tree.stories.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
+      "with": [
+        "primitive/display/qr-code",
+        "primitive/layout/collapse"
+      ],
+      "reason": "bound by the sealed cells of primitive/display/qr-code at anatomy; primitive/display/tree at anatomy; primitive/layout/collapse at anatomy"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/display/tree/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

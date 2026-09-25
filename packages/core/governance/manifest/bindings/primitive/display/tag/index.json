@@ -1,0 +1,25 @@
+{
+  "familyId": "primitive/display/tag",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/display/tag/compound/group/index.tsx",
+    "packages/core/src/components/primitives/display/tag/compound/index.ts",
+    "packages/core/src/components/primitives/display/tag/contracts/index.ts",
+    "packages/core/src/components/primitives/display/tag/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/display/tag/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/display/tag/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/display/tag/index.tsx",
+    "packages/core/src/components/primitives/display/tag/tag.stories.tsx",
+    "packages/core/src/components/primitives/display/tag/tests/tag.contrast-channels.test.tsx",
+    "packages/core/src/components/primitives/display/tag/tests/tag.modern-engine.test.tsx",
+    "packages/core/src/components/primitives/display/tag/tests/tag.skin-reachability.test.tsx",
+    "packages/core/src/components/primitives/display/tag/tests/tag.test.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/tag-compounds/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/display/tag/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

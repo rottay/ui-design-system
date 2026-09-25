@@ -485,7 +485,7 @@ test('toMarkdown rinde las secciones sin romperse', () => {
   const byChannel = new Map(facts.channels.map((c) => [c.channel, c]));
   const md = toMarkdown(checklistFor('--ds-rhythm-scale', graph, byChannel, canon), canon.bindingsProvenance);
   assert.match(md, /^# Checklist de raiz — `--ds-rhythm-scale`/);
-  assert.match(md, /• familias del manifiesto ─ \d+ de 252 \(bindings: celdas selladas 2026-09-19, procedencia mixta\)/);
+  assert.match(md, /• familias del manifiesto ─ \d+ de 252 \(bindings: mapa vivo governance\/manifest\/bindings\)/);
   assert.throws(() => toMarkdown(checklistFor('--ds-rhythm-scale', graph, byChannel, canon)), /procedencia de los bindings/);
   assert.ok(md.includes('## Familias del manifiesto'));
   assert.ok(md.includes('## Canales de la cascada'));
@@ -868,75 +868,61 @@ test('the determinism claim is not vacuous: a perturbed input yields a different
  * Procedencia de los bindings: medida, nunca tipeada
  * ───────────────────────────────────────────────────────────────────────── */
 
-/** An independent recount of the sealed cells: its own walk, its own flattening. */
-function recountSealedBindings() {
-  const dir = path.join(findRepoRoot(findPackageRoot(path.dirname(fileURLToPath(import.meta.url)))), FAMILY_BINDINGS_REL);
+/** An independent recount of the live bindings map: its own walk, its own flattening. */
+function recountLiveBindings() {
+  const dir = path.join(findPackageRoot(path.dirname(fileURLToPath(import.meta.url))), FAMILY_BINDINGS_REL);
   const files = new Map();
-  const locations = {};
-  const ids = new Set();
-  let cells = 0;
+  const ids = [];
+  let shared = 0;
   const pending = [dir];
   while (pending.length > 0) {
     const current = pending.pop();
     for (const entry of readdirSync(current, { withFileTypes: true })) {
       const abs = path.join(current, entry.name);
       if (entry.isDirectory()) { pending.push(abs); continue; }
-      if (!entry.name.endsWith('.json')) continue;
       const cell = JSON.parse(readFileSync(abs, 'utf8'));
-      cells += 1;
-      ids.add(cell.familyId);
-      const visit = (node, at) => {
-        if (Array.isArray(node)) { node.forEach((item) => visit(item, at.length ? [...at.slice(0, -1), `${at.at(-1)}[]`] : ['[]'])); return; }
-        if (!node || typeof node !== 'object') return;
-        for (const [key, value] of Object.entries(node)) {
-          if (key === 'sourceBindings' && Array.isArray(value)) {
-            const where = at.length ? at.join('.') : '(cell)';
-            locations[where] = (locations[where] ?? 0) + value.length;
-            for (const raw of value) {
-              const file = String(raw).replace(/^packages\/core\//, '').split('#')[0];
-              files.set(file, new Set([...(files.get(file) ?? []), cell.familyId]));
-            }
-          } else visit(value, [...at, key]);
-        }
-      };
-      visit(cell, []);
+      ids.push(cell.familyId);
+      shared += cell.shared?.length ?? 0;
+      for (const raw of cell.sourceBindings) {
+        const file = raw.replace(/^packages\/core\//, '');
+        files.set(file, new Set([...(files.get(file) ?? []), cell.familyId]));
+      }
     }
   }
-  return { cells, ids, files, locations };
+  return { ids, files, shared };
 }
 
-test('bindingsProvenance equals an independent recount of the sealed cells, field by field', () => {
-  const recount = recountSealedBindings();
+test('bindingsProvenance equals an independent recount of the live map, field by field', () => {
+  const recount = recountLiveBindings();
   const block = canon.bindingsProvenance;
-  assert.equal(block.provenance, 'sealed');
-  assert.equal(block.source, FAMILY_BINDINGS_REL);
-  assert.deepEqual(block.sealedBy, { commit: 'f66b1bd45', workOrder: 'WO-RET-03', date: '2026-09-19' });
-  assert.equal(block.cells, recount.cells);
-  assert.ok(block.cells > 0, 'the walk read no cell');
-  assert.equal(block.cellFamilyIds, recount.ids.size);
-  const alias = [...recount.ids].filter((id) => !canon.familyIds.has(id)).sort();
-  assert.deepEqual(block.aliasFamilyIds, alias);
-  assert.equal(alias.length, 2, 'the sealed cells carry exactly the two alias rows the live inventory folded');
+  assert.equal(block.provenance, 'live');
+  assert.equal(block.source, 'governance/manifest/bindings');
+  assert.equal(FAMILY_BINDINGS_REL, block.source);
+  assert.equal(block.cells, recount.ids.length);
+  assert.equal(block.cells, 252, 'one cell per live inventory family');
+  assert.equal(block.cellFamilyIds, new Set(recount.ids).size);
+  assert.deepEqual(block.aliasFamilyIds, recount.ids.filter((id) => !canon.familyIds.has(id)).sort());
+  assert.deepEqual(block.aliasFamilyIds, []);
   assert.equal(block.boundFiles, recount.files.size);
   assert.equal(block.boundFiles, canon.bindings.size);
   assert.equal(block.filesBoundToSeveralFamilies, [...recount.files.values()].filter((f) => f.size > 1).length);
+  assert.equal(block.sharedRecords, recount.shared);
   const dead = [...recount.files.keys()].filter((file) => /:\d[\d,-]*$/.test(file)).sort();
   assert.equal(DEAD_BINDING_KEY.source, /:\d[\d,-]*$/.source);
   assert.deepEqual(block.deadKeys.keys, dead);
-  assert.equal(block.deadKeys.count, dead.length);
-  assert.ok(block.deadKeys.rule.length > 0);
-  assert.deepEqual(block.bindingsByLocation, Object.fromEntries(
-    Object.entries(recount.locations).sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1)),
-  ));
+  assert.equal(block.deadKeys.count, 0, 'the live map carries no line-cited key');
+  for (const [file, families] of canon.bindings) {
+    assert.deepEqual([...families].sort(), [...recount.files.get(file)].sort(), file);
+  }
 
   const doc = buildChecklists(facts, canon);
   const { familiesTouchedOnlyThroughBindings, ...carried } = doc.familyBindings;
   assert.deepEqual(carried, block);
   assert.equal(familiesTouchedOnlyThroughBindings.count, familiesTouchedOnlyThroughBindings.families.length);
   for (const family of familiesTouchedOnlyThroughBindings.families) assert.ok(canon.familyIds.has(family), family);
-  assert.ok(doc.summary.manifestFamiliesProvenance.includes('sealed'));
-  assert.ok(doc.summary.manifestFamiliesProvenance.includes(`${block.cells} cells`));
-  assert.ok(doc.summary.manifestFamiliesProvenance.includes(`${block.boundFiles} bound files`));
+  assert.ok(doc.summary.manifestFamiliesProvenance.startsWith('live: '));
+  assert.equal(doc.summary.manifestFamiliesProvenance.includes('sealed'), false);
+  assert.ok(doc.summary.manifestFamiliesProvenance.includes(`governance/manifest/bindings (${block.boundFiles} bound files)`));
   assert.deepEqual(Object.keys(doc).slice(Object.keys(doc).indexOf('rootSources'), Object.keys(doc).indexOf('rootSources') + 2), ['rootSources', 'familyBindings']);
 });
 
@@ -945,16 +931,18 @@ test('the provenance label is a function of the canon, not a constant', () => {
     ...canon,
     bindingsProvenance: {
       ...canon.bindingsProvenance,
-      provenance: 'live',
-      source: 'governance/manifest/bindings',
+      provenance: 'sealed',
+      source: 'planted/sealed/families',
+      sealedBy: { commit: 'f000000', workOrder: 'WO-PLANTED', date: '2000-01-01' },
       boundFiles: 7,
     },
   };
   const doc = buildChecklists(facts, planted);
-  assert.equal(doc.familyBindings.provenance, 'live');
-  assert.equal(doc.familyBindings.source, 'governance/manifest/bindings');
-  assert.equal(doc.summary.manifestFamiliesProvenance.includes('sealed'), false);
-  assert.ok(doc.summary.manifestFamiliesProvenance.includes('governance/manifest/bindings (7 bound files)'));
+  assert.equal(doc.familyBindings.provenance, 'sealed');
+  assert.equal(doc.familyBindings.source, 'planted/sealed/families');
+  assert.ok(doc.summary.manifestFamiliesProvenance.startsWith('mixed: '));
+  assert.ok(doc.summary.manifestFamiliesProvenance.includes('sealed 2000-01-01 family cells'));
+  assert.ok(doc.summary.manifestFamiliesProvenance.includes('7 bound files'));
   const { bindingsProvenance: _dropped, ...unlabelled } = canon;
   assert.throws(() => buildChecklists(facts, unlabelled), /no declara bindingsProvenance/);
 });

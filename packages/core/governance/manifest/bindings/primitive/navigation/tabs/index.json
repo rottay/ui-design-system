@@ -1,0 +1,20 @@
+{
+  "familyId": "primitive/navigation/tabs",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/navigation/tabs/compound/index.ts",
+    "packages/core/src/components/primitives/navigation/tabs/compound/tab-pane/index.tsx",
+    "packages/core/src/components/primitives/navigation/tabs/contracts/index.ts",
+    "packages/core/src/components/primitives/navigation/tabs/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/navigation/tabs/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/navigation/tabs/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/navigation/tabs/index.tsx",
+    "packages/core/src/components/primitives/navigation/tabs/runtime/reveal/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tabs/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/navigation/tabs/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

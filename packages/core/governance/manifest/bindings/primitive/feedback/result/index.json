@@ -1,0 +1,16 @@
+{
+  "familyId": "primitive/feedback/result",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/feedback/result/contracts/index.ts",
+    "packages/core/src/components/primitives/feedback/result/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/feedback/result/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/feedback/result/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/feedback/result/index.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/result/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/feedback/result/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "familyId": "structure/workspace/search-command-bar",
+  "sourceBindings": [
+    "packages/core/src/components/structures/workspace/search-command-bar",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/structure/workspace/search-command-bar/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "familyId": "structure/workspace/connected-command-palette",
+  "sourceBindings": [
+    "packages/core/src/components/structures/workspace/connected-command-palette"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/structure/workspace/connected-command-palette/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

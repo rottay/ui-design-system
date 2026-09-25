@@ -1,0 +1,17 @@
+{
+  "familyId": "primitive/overlay/tour",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/overlay/tour/contracts/index.ts",
+    "packages/core/src/components/primitives/overlay/tour/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/overlay/tour/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/overlay/tour/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/overlay/tour/index.tsx",
+    "packages/core/src/components/primitives/overlay/tour/runtime/spotlight-rect/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tour/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/overlay/tour/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

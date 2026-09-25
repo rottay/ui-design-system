@@ -1,0 +1,14 @@
+{
+  "familyId": "primitive/display/icon-frame",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/foundation/icon-frame",
+    "packages/core/src/components/primitives/foundation/icon-frame/contracts/index.ts",
+    "packages/core/src/components/primitives/foundation/icon-frame/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/display/icon-frame/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

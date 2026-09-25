@@ -100,6 +100,7 @@ import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../
 import { relocateSourceOwners, RelocationError } from '../../../libraries/taxonomy/owner-resolution/index.mjs';
 import { CI_GATES } from '../../automation/gates/manifest/index.mjs';
 import { collectSealFenceFindings } from './seal-fence/index.mjs';
+import { BINDINGS_REL, validateBindingsMap } from './bindings/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
@@ -674,6 +675,9 @@ export function auditTaxonomyParity({
   listFamilyManifestFiles = collectFamilyManifestFiles,
   // The governed support folders are real-tree paths; a fixture repository passes its own.
   governedSupportFolders = repositoryRoot === REPOSITORY_ROOT ? GOVERNED_SUPPORT_FOLDERS : {},
+  // The family bindings map the bindings leg validates both ways against the
+  // inventory. Null skips the leg; the live run passes LIVE_BINDINGS_ROOT.
+  bindingsRoot = null,
 } = {}) {
   const violations = [];
   const add = (kind, detail) => violations.push({ kind, detail });
@@ -906,6 +910,12 @@ export function auditTaxonomyParity({
   }
 
   // --- the seal fence ------------------------------------------------------
+  if (bindingsRoot !== null) {
+    for (const finding of validateBindingsMap({ bindingsRoot, repositoryRoot, inventoryRows: rows })) {
+      add('bindings-parity', finding);
+    }
+  }
+
   if (sealFenceGates !== null) {
     for (const finding of collectSealFenceFindings({ coreRoot: path.join(repositoryRoot, 'packages/core'), gates: sealFenceGates })) {
       add('seal-fence', finding);
@@ -1082,9 +1092,15 @@ export function auditTaxonomyParity({
   return { violations, rowCount: rows.length };
 }
 
+/** The live family bindings map, validated by the bindings leg on every live run. */
+export const LIVE_BINDINGS_ROOT = path.join(CORE_ROOT, BINDINGS_REL);
+
+/** Exactly what the CLI passes: the seal fence and the bindings leg both run live. */
+export const LIVE_AUDIT_OPTIONS = Object.freeze({ sealFenceGates: CI_GATES, bindingsRoot: LIVE_BINDINGS_ROOT });
+
 function main() {
   const asJson = process.argv.includes('--json');
-  const { violations, rowCount } = auditTaxonomyParity({ sealFenceGates: CI_GATES });
+  const { violations, rowCount } = auditTaxonomyParity(LIVE_AUDIT_OPTIONS);
 
   if (asJson) {
     console.log(JSON.stringify({ rowCount, violations }, null, 2));
@@ -1099,7 +1115,7 @@ function main() {
 
   console.log(`taxonomy parity: ${rowCount} inventory rows`);
   if (violations.length === 0) {
-    console.log('OK -- source, public and Showroom agree, and the seal fence holds');
+    console.log('OK -- source, public and Showroom agree, the family bindings map holds both ways, and the seal fence holds');
     process.exit(0);
   }
 

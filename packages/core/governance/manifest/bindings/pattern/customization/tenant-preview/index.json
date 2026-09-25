@@ -1,0 +1,18 @@
+{
+  "familyId": "pattern/customization/tenant-preview",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/customization/tenant-preview/contracts/index.ts",
+    "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/customization/tenant-preview/index.ts",
+    "packages/core/src/components/patterns/customization/tenant-preview/runtime/preview-css/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/customization/tenant-preview/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

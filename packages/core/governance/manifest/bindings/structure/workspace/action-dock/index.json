@@ -1,0 +1,29 @@
+{
+  "familyId": "structure/workspace/action-dock",
+  "sourceBindings": [
+    "packages/core/src/components/structures/workspace/action-dock",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+      "with": [
+        "pattern/forms/step-wizard"
+      ],
+      "reason": "bound by the sealed cells of pattern/forms/step-wizard at anatomy, themeControls[].internalChannels[]; structure/workspace/action-dock at anatomy, themeControls[].internalChannels[]"
+    },
+    {
+      "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+      "with": [
+        "surface/workspace/collection-workspace"
+      ],
+      "reason": "bound by the sealed cells of structure/workspace/action-dock at anatomy, themeControls[].internalChannels[]; surface/workspace/collection-workspace at hostAdaptation"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/structure/workspace/action-dock/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

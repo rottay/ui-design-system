@@ -1,0 +1,16 @@
+{
+  "familyId": "primitive/inputs/slider",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/inputs/slider/contracts/index.ts",
+    "packages/core/src/components/primitives/inputs/slider/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/inputs/slider/index.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/inputs/slider/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

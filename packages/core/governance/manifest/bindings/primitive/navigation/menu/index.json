@@ -1,0 +1,33 @@
+{
+  "familyId": "primitive/navigation/menu",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/navigation/menu/compound/divider/index.tsx",
+    "packages/core/src/components/primitives/navigation/menu/compound/group/index.tsx",
+    "packages/core/src/components/primitives/navigation/menu/compound/index.ts",
+    "packages/core/src/components/primitives/navigation/menu/compound/item/index.tsx",
+    "packages/core/src/components/primitives/navigation/menu/compound/sub-menu/index.tsx",
+    "packages/core/src/components/primitives/navigation/menu/contracts/index.ts",
+    "packages/core/src/components/primitives/navigation/menu/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/navigation/menu/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/navigation/menu/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/navigation/menu/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/menu-compounds/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/navigation-static/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/menu/index.css"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
+      "with": [
+        "structure/shell/sidebar-surface"
+      ],
+      "reason": "bound by the sealed cells of primitive/navigation/menu at anatomy, themeControls[].internalChannels[], themeControls[].targetBinding; structure/shell/sidebar-surface at themeControls[], themeControls[].internalChannels[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/navigation/menu/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

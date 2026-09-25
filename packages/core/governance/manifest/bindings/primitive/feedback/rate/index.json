@@ -1,0 +1,17 @@
+{
+  "familyId": "primitive/feedback/rate",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/feedback/rate/compound/index.ts",
+    "packages/core/src/components/primitives/feedback/rate/contracts/index.ts",
+    "packages/core/src/components/primitives/feedback/rate/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/feedback/rate/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/feedback/rate/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/feedback/rate/index.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/rate/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/feedback/rate/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

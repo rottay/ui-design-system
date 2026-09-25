@@ -1,0 +1,71 @@
+{
+  "familyId": "primitive/inputs/button",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/inputs/button",
+    "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/button/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/button-group/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/button-icon/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button/index.css",
+    "packages/core/src/foundation/tokens/ts/presentation/recipe-profiles/index.ts",
+    "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+    "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts",
+    "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts"
+  ],
+  "shared": [
+    {
+      "path": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "with": [
+        "primitive/display/card",
+        "primitive/display/typography",
+        "primitive/feedback/alert"
+      ],
+      "reason": "bound by the sealed cells of primitive/display/card at themeControls[]; primitive/display/typography at themeControls[]; primitive/feedback/alert at themeControls[]; primitive/inputs/button at themeControls[]"
+    },
+    {
+      "path": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+      "with": [
+        "primitive/display/card",
+        "primitive/display/typography",
+        "primitive/layout/flex",
+        "primitive/layout/grid",
+        "primitive/layout/space",
+        "primitive/layout/stack"
+      ],
+      "reason": "bound by the sealed cells of primitive/display/card at themeControls[]; primitive/display/typography at themeControls[].internalChannels[]; primitive/inputs/button at themeControls[]; primitive/layout/flex at themeControls[].internalChannels[]; primitive/layout/grid at themeControls[].internalChannels[]; primitive/layout/space at themeControls[].internalChannels[]; primitive/layout/stack at themeControls[].internalChannels[]"
+    },
+    {
+      "path": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+      "with": [
+        "primitive/display/typography",
+        "primitive/feedback/alert",
+        "structure/shell/sidebar-surface"
+      ],
+      "reason": "bound by the sealed cells of primitive/display/typography at themeControls[]; primitive/feedback/alert at themeControls[]; primitive/inputs/button at themeControls[]; structure/shell/sidebar-surface at themeControls[]"
+    },
+    {
+      "path": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts",
+      "with": [
+        "primitive/feedback/alert"
+      ],
+      "reason": "bound by the sealed cells of primitive/feedback/alert at themeControls[]; primitive/inputs/button at themeControls[]"
+    }
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/inputs/button/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "dropped": [
+      {
+        "path": "packages/core/governance/manifest/controls/recipes/profile/index.json",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      },
+      {
+        "path": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/recipes/index.ts",
+        "reason": "does not exist at 3e38df146; no paint site can resolve through it"
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "familyId": "primitive/layout/resize-handle",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/foundation/resize-handle",
+    "packages/core/src/components/primitives/foundation/resize-handle/contracts/index.ts",
+    "packages/core/src/components/primitives/foundation/resize-handle/index.tsx"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/layout/resize-handle/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

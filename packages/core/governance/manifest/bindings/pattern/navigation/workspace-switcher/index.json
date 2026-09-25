@@ -1,0 +1,17 @@
+{
+  "familyId": "pattern/navigation/workspace-switcher",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/navigation/workspace-switcher/contracts/index.ts",
+    "packages/core/src/components/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/navigation/workspace-switcher/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/navigation/workspace-switcher/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/navigation/workspace-switcher/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/navigation/workspace-switcher/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

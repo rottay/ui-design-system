@@ -1,0 +1,17 @@
+{
+  "familyId": "primitive/overlay/watermark",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/overlay/watermark/contracts/index.ts",
+    "packages/core/src/components/primitives/overlay/watermark/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/overlay/watermark/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/overlay/watermark/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/overlay/watermark/index.tsx",
+    "packages/core/src/components/primitives/overlay/watermark/runtime/canvas-pattern/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/overlay/watermark/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

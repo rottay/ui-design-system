@@ -1,0 +1,16 @@
+{
+  "familyId": "primitive/overlay/popconfirm",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/overlay/popconfirm/contracts/index.ts",
+    "packages/core/src/components/primitives/overlay/popconfirm/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/overlay/popconfirm/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/overlay/popconfirm/index.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/overlay/popconfirm/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

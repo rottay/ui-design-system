@@ -1,0 +1,30 @@
+{
+  "familyId": "primitive/inputs/toggle",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/inputs/toggle/compound/index.ts",
+    "packages/core/src/components/primitives/inputs/toggle/contracts/index.ts",
+    "packages/core/src/components/primitives/inputs/toggle/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/inputs/toggle/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/inputs/toggle/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/inputs/toggle/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/toggle/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/inputs/toggle/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "retiredAliasCell": {
+      "familyId": "primitive/inputs/switch",
+      "mover": "e31c1174e (Switch merged into Toggle, D-16 WO-FAM-01)",
+      "reason": "the alias row folded into primitive/inputs/toggle; every path its sealed cell bound is gone at 3e38df146, so nothing is remapped",
+      "droppedPaths": [
+        "packages/core/src/components/primitives/inputs/switch/contracts/index.ts",
+        "packages/core/src/components/primitives/inputs/switch/engines/classic/index.tsx",
+        "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx",
+        "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx",
+        "packages/core/src/components/primitives/inputs/switch/index.tsx",
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
+      ]
+    }
+  }
+}

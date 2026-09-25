@@ -1,0 +1,21 @@
+{
+  "familyId": "primitive/feedback/drawer",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/feedback/drawer/compound/body/index.tsx",
+    "packages/core/src/components/primitives/feedback/drawer/compound/footer/index.tsx",
+    "packages/core/src/components/primitives/feedback/drawer/compound/header/index.tsx",
+    "packages/core/src/components/primitives/feedback/drawer/compound/index.ts",
+    "packages/core/src/components/primitives/feedback/drawer/contracts/index.ts",
+    "packages/core/src/components/primitives/feedback/drawer/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/feedback/drawer/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/feedback/drawer/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/feedback/drawer/index.tsx",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/drawer/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/feedback/drawer/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "familyId": "primitive/overlay/hover-card",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/overlay/hover-card/contracts/index.ts",
+    "packages/core/src/components/primitives/overlay/hover-card/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/overlay/hover-card/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/overlay/hover-card/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/overlay/hover-card/index.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/overlay/hover-card/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}

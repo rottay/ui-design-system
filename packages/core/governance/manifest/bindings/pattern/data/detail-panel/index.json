@@ -1,0 +1,25 @@
+{
+  "familyId": "pattern/data/detail-panel",
+  "sourceBindings": [
+    "packages/core/src/components/patterns/data/detail-panel",
+    "packages/core/src/components/patterns/data/detail-panel/contracts/index.ts",
+    "packages/core/src/components/patterns/data/detail-panel/engines/classic/index.tsx",
+    "packages/core/src/components/patterns/data/detail-panel/engines/modern/index.tsx",
+    "packages/core/src/components/patterns/data/detail-panel/engines/rustic/index.tsx",
+    "packages/core/src/components/patterns/data/detail-panel/index.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/detail-panel/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/pattern/data/detail-panel/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146",
+    "repaired": [
+      {
+        "from": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:277-292",
+        "to": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
+        "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css exists at 3e38df146 with 790 lines; every cited line (max 292) is inside it; the sealed cell already binds the bare file, so the repair merges into that binding"
+      }
+    ]
+  }
+}

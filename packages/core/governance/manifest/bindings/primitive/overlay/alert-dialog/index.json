@@ -1,0 +1,16 @@
+{
+  "familyId": "primitive/overlay/alert-dialog",
+  "sourceBindings": [
+    "packages/core/src/components/primitives/overlay/alert-dialog/contracts/index.ts",
+    "packages/core/src/components/primitives/overlay/alert-dialog/engines/classic/index.tsx",
+    "packages/core/src/components/primitives/overlay/alert-dialog/engines/modern/index.tsx",
+    "packages/core/src/components/primitives/overlay/alert-dialog/engines/rustic/index.tsx",
+    "packages/core/src/components/primitives/overlay/alert-dialog/index.tsx",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert-dialog/index.css"
+  ],
+  "provenance": {
+    "seededFrom": "docs/history/inventories/customization-manifest/families/primitive/overlay/alert-dialog/index.json",
+    "sealedBy": "f66b1bd45 (WO-RET-03, 2026-09-19)",
+    "seededAt": "3e38df146"
+  }
+}
