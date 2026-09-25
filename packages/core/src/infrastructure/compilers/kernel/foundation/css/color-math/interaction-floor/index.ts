@@ -28,11 +28,11 @@
  *
  * THE TWO LINK INKS FOLLOW THE GROUND. `--ds-color-link` and
  * `--ds-color-link-hover` are the only channels here that paint the seed AS
- * TEXT, on the canvas this block compiles for, and they used to restate the
- * seed verbatim in every mode. A seed is a BRAND statement, not a contrast one
- * -- rottay's near-black seed painted a 1.04:1 link on its own dark canvas, and
- * bithire's blue measured 3.56:1 there -- so each is now checked against that
- * ground and moved along lightness only when it fails, exactly as
+ * TEXT, on the canvas AND the raised ground this block compiles for, and they
+ * used to restate the seed verbatim in every mode. A seed is a BRAND statement,
+ * not a contrast one -- rottay's near-black seed painted a 1.04:1 link on its
+ * own dark canvas, and bithire's blue measured 3.72:1 on its dark card -- so
+ * each is now checked against every such ground and moved along lightness only when it fails, exactly as
  * `safeFocusRingColor` does for the ring. A seed that already reads resolves to
  * itself, so every light-surface block is byte-unchanged. `--ds-color-border-focus`
  * keeps the pass-through: it is a border, graded by the non-text floor the
@@ -50,7 +50,7 @@
 
 import { safeInkOnGround } from '@/foundation/kernel/color/oklch/ink';
 
-import { isValidCssColor } from '..';
+import { isDarkSurface, isHexColor, isValidCssColor } from '..';
 import { HOVER_LIGHTNESS_STEP, shadeSeed } from '../palette-derivations';
 import {
   CANONICAL_READABLE_INK,
@@ -92,9 +92,9 @@ export interface InteractionFloor {
  * `derivePaletteSemantics`, so the button/focus defaults and this floor can
  * never disagree about which primary a surface has.
  *
- * `ground` is the canvas the theme STATES, passed by the caller that holds it.
- * Omitted, or not a hex literal, the two link inks keep the verbatim
- * pass-through: a theme that states no canvas paints the sheet's, so an ink
+ * `grounds` are the grounds the block paints text on, canvas first; the link
+ * inks must clear each one on the canvas's side. None measurable, the two
+ * link inks keep the verbatim pass-through: a theme that states no canvas paints the sheet's, so an ink
  * moved against a guessed one would be a claim rather than a check, and the
  * sheet's own two scopes are the answer for it.
  *
@@ -110,7 +110,7 @@ export interface InteractionFloor {
 export function deriveInteractionFloor(
   effectivePrimary: string | undefined,
   pair?: ReadableInkPair,
-  ground?: string,
+  grounds: readonly string[] = [],
 ): InteractionFloor {
   if (!effectivePrimary || !isValidCssColor(effectivePrimary)) {
     return { variables: {}, ink: undefined };
@@ -120,8 +120,11 @@ export function deriveInteractionFloor(
   // painted ON a tone, and reading it here would let `palette.contrast-posture`
   // repaint a link that already clears the text floor on its own canvas.
   // Extending the posture to the link ink is a catalog decision, not this one.
+  const measurable = grounds.filter(isHexColor);
+  const canvasIsDark = measurable.length > 0 && isDarkSurface(measurable[0]!);
+  const gradedOn = measurable.filter((ground) => isDarkSurface(ground) === canvasIsDark);
   const readableOn = (ink: string): string =>
-    ground === undefined ? ink : safeInkOnGround(ink, ground, WCAG_AA_NORMAL_TEXT_RATIO);
+    gradedOn.reduce((moved, ground) => safeInkOnGround(moved, ground, WCAG_AA_NORMAL_TEXT_RATIO), ink);
 
   // The focus border restates the seed verbatim, so it holds for a `var()` seed
   // exactly as it holds for a hex one; the link ink is the seed this ground can

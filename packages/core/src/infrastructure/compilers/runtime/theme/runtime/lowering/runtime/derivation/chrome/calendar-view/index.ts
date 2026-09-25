@@ -28,6 +28,8 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
  * when the consumer's event states a colour: a chip that states none leaves
  * the channel to the value here, so it is the tenant's, and a per-event stamp
  * outranks it exactly as an inline declaration outranks the theme root.
+ * The chip's ink is no channel: the skin reads it against that accent AT the
+ * chip, since an ink produced here would resolve against the root's accent.
  *
  * The family's private narrow-collapse dot diameter
  * (`--_ds-calendar-view-dot-size`) is deliberately NOT produced: it is not a

@@ -259,6 +259,15 @@
   font-size: var(--ds-font-size-xs, 0.75rem);
   transition: filter var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
+/* The ink is read against the chip's OWN accent, resolved here so a per-event stamp gets its own ink. */
+@supports (color: contrast-color(red)) {
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    [data-part='day-cell']
+    [data-part='event'] {
+    color: contrast-color(var(--ds-calendar-view-entry-accent, var(--ds-color-primary)));
+  }
+}
 @media (hover: hover) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']

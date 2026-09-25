@@ -12,6 +12,7 @@ import { describe, expect, it } from 'vitest';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { TenantConfig } from '@/foundation/contracts';
+import { contrastRatio } from '@/foundation/kernel/color/contrast';
 import ModernCalendarView from '../engines/modern';
 import {
   AXE_SCOPES,
@@ -24,6 +25,9 @@ import {
 } from '@tests/support/family-causality';
 
 const noop = () => {};
+
+const hexOf = (computed: string): string =>
+  `#${(computed.match(/\d+(\.\d+)?/g) ?? []).slice(0, 3).map((c) => Math.round(Number(c)).toString(16).padStart(2, '0')).join('')}`;
 
 /** A fixed month, so the probe reads the same grid on every run. */
 const MONTH = new Date(2026, 2, 15);
@@ -196,20 +200,18 @@ describeCausality({
  * dropped here, and the other two supporting rungs return none of them -- that
  * arm is the attribution, not the commit date. Dropped by identity, not
  * waived: a relapse of a dropped node reddens this map.
+ *
+ * The event-chip group is gone as well. The chip inked every accent with
+ * `--ds-color-text-on-primary`, an ink paired with the primary rather than
+ * with the chip's ground: the default light sheet pairs `#0C0C0E` with its own
+ * `#171717` primary (1.09:1, the two `evnto light` chips), and a chip that
+ * states `var(--ds-color-info)` kept white on `#60a5fa` (2.54:1, `rottay
+ * dark`). The skin now reads the ink against the chip's own accent at the
+ * chip, so a per-event stamp gets its own ink: 17.92:1 and 8.25:1. Reverting
+ * only that relation returns exactly the three identities; no compiled channel
+ * moved. Dropped by identity, not waived: a relapse reddens this map.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'evnto light': {
-    'color-contrast': [
-      'div[data-part="week-row"][role="row"]:nth-child(2) > div[data-last-column="false"][data-empty="false"][role="gridcell"]:nth-child(3) > div[role="button"][data-part="event"]:nth-child(2)',
-      'div[role="button"][data-part="event"]:nth-child(3)',
-    ],
-  },
-  'rottay dark': {
-    'color-contrast': [
-      'div[data-part="week-row"][role="row"]:nth-child(3) > div[data-last-column="false"][data-empty="false"][role="gridcell"]:nth-child(3) > div[role="button"][data-part="event"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('calendar-view causality surface', () => {
   it('serves the anatomy every probe reads', () => {
@@ -259,6 +261,25 @@ describe('calendar-view causality surface', () => {
     // The theme's chip follows the palette; the caller's chip does not.
     expect(readings.seeded!.themed).not.toBe(readings.base!.themed);
     expect(readings.seeded!.stated).toBe(readings.base!.stated);
+  }, 120_000);
+
+  it('inks each chip against its own accent, so a stated accent carries its own ink', async () => {
+    const STATED = "#calendar [data-part='event'][style]";
+    const readings = await measureArms({
+      vertical: 'rottay',
+      markup,
+      arms: { base: {} },
+      targets: [
+        { id: 'themedInk', selector: EVENT, property: 'color' },
+        { id: 'themedGround', selector: EVENT, property: 'background-color' },
+        { id: 'statedInk', selector: STATED, property: 'color' },
+        { id: 'statedGround', selector: STATED, property: 'background-color' },
+      ],
+    });
+    const r = readings.base!;
+    expect(r.statedInk).not.toBe(r.themedInk);
+    expect(contrastRatio(hexOf(r.themedInk!), hexOf(r.themedGround!))).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(hexOf(r.statedInk!), hexOf(r.statedGround!))).toBeGreaterThanOrEqual(4.5);
   }, 120_000);
 
   /**

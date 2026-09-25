@@ -16,6 +16,7 @@ import {
   applyTenantSeedDerivations,
   applyTenantStatusSeedDerivations,
 } from "../../../foundation/seeds";
+import { textGrounds } from "../../../foundation/palette";
 
 /** Only what this family actually moved, so the merge records one producer. */
 function movedChannels(
@@ -66,7 +67,7 @@ export const seedsDeriver: FamilyDeriver = {
         modePrefix: context.modePrefix,
         seedIsTenantAuthored: tenant.seedIsTenantAuthored,
       },
-      context.theme.palette?.backgroundColor
+      textGrounds(context.theme.palette, context.mode)
     );
     applyTenantStatusSeedDerivations(next, context.statusTints, {
       authoredPaths: tenant.authoredPaths,

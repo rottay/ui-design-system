@@ -253,10 +253,15 @@ describeCausality({
  * other four. `rottay dark` is therefore gone from this map and must now
  * measure clean; a relapse reddens here.
  *
- * STANDING, and the only node left: `f1-name` belongs to neither arm. The
- * folder link reads `--ds-color-link`, and bithire's own artifact states a
- * blue (`#3f6ffd`) that measures 3.72:1 on its dark card. Registered on the
- * link channel; the danger repair leaves it byte-identical.
+ * DRAINED, on the link channel: `f1-name` in `bithire dark`. The folder link
+ * reads `--ds-color-link`, whose floor graded bithire's dark ink on the
+ * `#0A0A0A` canvas alone, where `#3F6FFD` clears 4.5:1, while the link paints
+ * on the `#182235` card and measured 3.72:1 there. The floor now grades the
+ * link against the canvas AND the raised ground the block paints, stated or
+ * declared by the foundation: `#5987FF`, 4.80:1 on the card. Only bithire
+ * dark's `--ds-color-link`/`-hover` moved; every other scope's compiled CSS is
+ * byte-identical. `bithire dark` is therefore gone from this map; a relapse
+ * reddens here.
  *
  * DROPPED EARLIER BY IDENTITY: `rottay dark`'s folder-link label. That link
  * resolves `--ds-color-link`, which took the raw primary seed in every mode --
@@ -264,13 +269,7 @@ describeCausality({
  * the ink that canvas can carry, so the node is measured clean; a relapse
  * reddens this pin.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '#_R_2_-f1-name > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('file-manager causality surface', () => {
   it('serves the anatomy every probe reads', () => {

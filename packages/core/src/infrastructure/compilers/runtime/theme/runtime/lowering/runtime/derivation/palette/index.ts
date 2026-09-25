@@ -7,11 +7,12 @@
  * @package @rottay/design-system
  */
 
-import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme, FlatThemeMode } from "@/foundation/contracts/composition/tenants/themes";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import {
   deriveExtendedPaletteFloor,
   setExtendedPaletteVariables,
+  textGrounds,
 } from "../../../foundation/palette";
 import { resolveContrastPosture } from "./contrast-posture";
 import { derivePaletteInks } from "./inks";
@@ -64,12 +65,13 @@ export const paletteDeriver: FamilyDeriver = {
     "--ds-text-inverse",
     "--ds-border-color*",
   ],
-  derive: (context) => derivePaletteChannels(context.theme, context.statusTints),
+  derive: (context) => derivePaletteChannels(context.theme, context.statusTints, context.mode),
 };
 
 export function derivePaletteChannels(
   bt: FlatTheme,
-  statusTints: Record<string, string>
+  statusTints: Record<string, string>,
+  mode: FlatThemeMode
 ): Record<string, string> {
   const vars: Record<string, string> = {};
   const palette = bt.palette;
@@ -86,7 +88,7 @@ export function derivePaletteChannels(
   Object.assign(vars, derivePaletteInks(palette, inkPair));
   Object.assign(
     vars,
-    deriveExtendedPaletteFloor(palette.primaryColor, inkPair, palette.backgroundColor)
+    deriveExtendedPaletteFloor(palette.primaryColor, inkPair, textGrounds(palette, mode))
   );
   Object.assign(vars, statusTints);
   setExtendedPaletteVariables(vars, palette);

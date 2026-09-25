@@ -10,8 +10,10 @@
 import type {
   BrandPalette,
   BrandPaletteAliases,
+  FlatThemeMode,
 } from "@/foundation/contracts/composition/tenants/themes";
 import { parseHex } from "@/foundation/kernel/color/contrast";
+import { FOUNDATION_COLOR_DEFAULTS } from "@/foundation/tokens/ts/foundation/base/declared-defaults";
 import { deriveInteractionFloor } from "@/infrastructure/compilers/kernel/foundation/css/color-math/interaction-floor";
 import type { ReadableInkPair } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 
@@ -167,9 +169,10 @@ export function setExtendedPaletteVariables(
  * "what does this seed imply" differently. This wrapper exists only to keep
  * the static path's own call site named after the channel group it feeds.
  *
- * `ground` is the canvas this block STATES; the two link inks are checked
- * against it and the other three channels do not read it. A theme that states
- * no ground defers them -- see `deriveInteractionFloor`.
+ * `grounds` are the canvas this block STATES and its raised ground (see
+ * `textGrounds`); the two link inks are checked against them and the other
+ * three channels do not read them. A theme that states no canvas defers them
+ * -- see `deriveInteractionFloor`.
  *
  * Merged BEFORE `setExtendedPaletteVariables`, whose unconditional "write
  * when the string is present" then overwrites exactly the keys the theme
@@ -180,7 +183,36 @@ export function setExtendedPaletteVariables(
 export function deriveExtendedPaletteFloor(
   effectivePrimary: string | undefined,
   inkPair?: ReadableInkPair,
-  ground?: string
+  grounds: readonly string[] = []
 ): Record<string, string> {
-  return deriveInteractionFloor(effectivePrimary, inkPair, ground).variables;
+  return deriveInteractionFloor(effectivePrimary, inkPair, grounds).variables;
+}
+
+/**
+ * The grounds a block paints text on: the canvas it states, then the raised
+ * ground its cards take -- stated, or else the one the foundation declares for
+ * this mode, which is what the cascade paints when nothing states it.
+ */
+export function textGrounds(
+  palette: Partial<BrandPalette> | undefined,
+  mode: FlatThemeMode
+): string[] {
+  const canvas = palette?.backgroundColor;
+  if (!canvas) return [];
+  const raised =
+    palette.backgroundElevatedColor ?? declaredColor("--ds-color-bg-elevated", mode);
+  return raised === undefined ? [canvas] : [canvas, raised];
+}
+
+function declaredColor(channel: string, mode: FlatThemeMode): string | undefined {
+  const declared = FOUNDATION_COLOR_DEFAULTS[mode];
+  const seen = new Set<string>();
+  let value = declared[channel];
+  while (value !== undefined) {
+    const reference = /^var\(\s*(--ds-[a-z0-9-]+)\s*\)$/i.exec(value.trim())?.[1];
+    if (reference === undefined || seen.has(reference)) return value;
+    seen.add(reference);
+    value = declared[reference];
+  }
+  return undefined;
 }

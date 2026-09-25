@@ -44,7 +44,10 @@ import {
   apcaReadableInk,
   measureReadableInk,
 } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
-import { deriveExtendedPaletteFloor } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette";
+import {
+  deriveExtendedPaletteFloor,
+  textGrounds,
+} from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import { tortureDarkFlatTheme, tortureLightFlatTheme } from '@tests/fixtures/brand-themes/torture';
@@ -338,5 +341,47 @@ describe('the extended palette floor reaches real first-party output', () => {
         );
       }
     }
+  });
+});
+
+describe('the link inks clear every ground the block paints text on', () => {
+  const BITHIRE_PRIMARY = '#2F5BE8';
+  const darkGrounds = textGrounds({ backgroundColor: '#0A0A0A' }, 'dark');
+
+  it('names the canvas first, then the raised ground the foundation declares when none is stated', () => {
+    expect(darkGrounds).toEqual(['#0A0A0A', '#182235']);
+    expect(textGrounds({ backgroundColor: '#0A0A0A', backgroundElevatedColor: '#161616' }, 'dark')).toEqual([
+      '#0A0A0A',
+      '#161616',
+    ]);
+    expect(textGrounds({}, 'dark')).toEqual([]);
+  });
+
+  it('FOCAL: bithire dark -- the canvas-only ink fails the card, the graded ink clears both', () => {
+    const canvasOnly = deriveExtendedPaletteFloor(BITHIRE_PRIMARY, undefined, ['#0A0A0A']);
+    expect(canvasOnly['--ds-color-link']).toBe('#3F6FFD');
+    expect(contrastRatio('#3F6FFD', '#182235')).toBeLessThan(WCAG_AA_NORMAL_TEXT_RATIO);
+
+    const floor = deriveExtendedPaletteFloor(BITHIRE_PRIMARY, undefined, darkGrounds);
+    for (const channel of ['--ds-color-link', '--ds-color-link-hover'] as const) {
+      for (const ground of darkGrounds) {
+        expect(contrastRatio(floor[channel]!, ground), `${channel} on ${ground}`).toBeGreaterThanOrEqual(
+          WCAG_AA_NORMAL_TEXT_RATIO,
+        );
+      }
+    }
+  });
+
+  it('leaves a link that already reads on every light ground byte-identical', () => {
+    const lightGrounds = textGrounds({ backgroundColor: '#FFFFFF' }, 'light');
+    expect(deriveExtendedPaletteFloor(BITHIRE_PRIMARY, undefined, lightGrounds)['--ds-color-link']).toBe(
+      BITHIRE_PRIMARY,
+    );
+  });
+
+  it('skips a raised ground on the other side of the canvas instead of pulling the ink below the canvas floor', () => {
+    expect(deriveExtendedPaletteFloor(BITHIRE_PRIMARY, undefined, ['#0A0A0A', '#FFFFFF'])).toEqual(
+      deriveExtendedPaletteFloor(BITHIRE_PRIMARY, undefined, ['#0A0A0A']),
+    );
   });
 });
