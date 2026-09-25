@@ -1,7 +1,7 @@
 import type { Preview } from "@storybook/react-vite";
 import type { EngineName } from "../src/contracts/engine";
-import type { TenantConfig } from "../src/foundation/contracts";
 import { DesignSystemProvider } from "../src/infrastructure/runtime/bootstrap";
+import { getKnownTenantConfig } from "../src/entrypoints/public/runtime/tenant";
 import React from "react";
 
 // Exercise the same public source facade used by symlinked consumers. Importing
@@ -149,22 +149,16 @@ const preview: Preview = {
       const selectedEngine = (context.parameters.engine ||
         context.globals.engine ||
         "modern") as EngineName;
-      const tenantConfig: TenantConfig = {
-        slug: selectedTenant,
-        name: selectedTenant === "bithire" ? "BitHire" : "Rottay",
-        engine: selectedEngine,
-        theme: "light",
-        plan: "enterprise",
-        features: ["all"],
-        branding: {
-          companyName: selectedTenant === "bithire" ? "BitHire" : "Rottay",
-        },
-      };
+      const tenantConfig = getKnownTenantConfig(selectedTenant);
+      if (!tenantConfig) {
+        throw new Error(`Storybook tenant "${selectedTenant}" is not a first-party vertical.`);
+      }
 
       return (
         <DesignSystemProvider
           tenantConfig={tenantConfig}
           forceEngine={selectedEngine}
+          forceTheme="light"
           skipCssLoading
         >
           <div className="storybook-canvas">

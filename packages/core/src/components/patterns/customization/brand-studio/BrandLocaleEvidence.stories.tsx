@@ -13,6 +13,7 @@ import { expect, within } from 'storybook/test';
 import type { TenantConfig } from '@/foundation/contracts';
 import { useTranslation } from '@/infrastructure/runtime/i18n/composition';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
+import { getKnownTenantConfig } from '@/entrypoints/public/runtime/tenant';
 import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { Box } from '@/components/primitives/layout/box';
 import { Grid } from '@/components/primitives/layout/grid';
@@ -22,19 +23,8 @@ import { Card } from '@/components/primitives/display/card';
 import { Text } from '@/components/primitives/display/typography';
 import { Button } from '@/components/primitives/inputs/button';
 import { Tabs } from '@/components/primitives/navigation/tabs';
-import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireView = firstPartyFixture('bithire');
-
-const BITHIRE_STATIC: TenantConfig = {
-  slug: 'bithire',
-  name: 'BitHire',
-  theme: 'light',
-  plan: 'enterprise',
-  features: ['all'],
-  branding: { companyName: 'BitHire' },
-  brandTheme: bithireView,
-};
+const BITHIRE_STATIC = getKnownTenantConfig('bithire')!;
 
 const THE_MANAGEMENT_DB: TenantConfig = {
   slug: 'themanagementmiami',
@@ -158,13 +148,15 @@ function withTenant(
   tenantConfig: TenantConfig,
   locale: 'en' | 'es' | 'ar',
 ): Decorator {
+  const isCodeOwned = tenantConfig === BITHIRE_STATIC;
   const runtimeTenantConfig = tenantConfig.slug === 'themanagementmiami'
     ? { ...tenantConfig, customTranslations: THE_MANAGEMENT_DB_COPY[locale] }
     : tenantConfig;
 
   return (Story) => (
     <DesignSystemProvider
-      tenantConfig={{ ...runtimeTenantConfig, locale }}
+      tenantConfig={isCodeOwned ? tenantConfig : { ...runtimeTenantConfig, locale }}
+      tenantOverrides={isCodeOwned ? { locale, theme: 'light' } : undefined}
       vertical="bithire"
       locale={locale}
       forceEngine="modern"
