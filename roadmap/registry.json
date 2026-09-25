@@ -5373,6 +5373,11 @@
           "at": "2026-09-24 00:30",
           "by": "kimi-dt",
           "note": "2026-09-24 kimi-dt: DENSITY ADOPTION assigned (the change-A census backlog, 95bd44651): this cut's density-exposed families claim scopes:['density'] on their derivers — ONE line per family — each with the acceptance test of the B23 precedent (the local-scope integration shape: the family's channels rescale under a nested [data-density] scope, b1/b2/b3 precedence arms, the roster's (c) tripwire moves 'unclaimed' down, never a hand-typed list). The roster instrument measures this cut's share of the 48 unclaimed families / 342 channels (density axis) — the arabic axis stays excluded with masked pins. The claim is refused at compile time (fail-closed) for a member exposed only through an unprojected channel or restated by a mode/contrast block — a family hitting a refusal STOPS and reports, never forces."
+        },
+        {
+          "at": "2026-09-24 23:14",
+          "by": "kimi-dt",
+          "note": "kimi-dt: density wave 1 (paquete 2026-09-24) — data-table NO adopta scopes:[\"density\"] todavia, con razon medida (writer + medida Chromium): la tabla pone su propio data-density en su root, asi que ella ES la frontera; sus rungs -compact/-spacious ya codifican la postura y con el claim el factor local se aplicaria ENCIMA (postura contada dos veces: grip compact 10.75->6.30px, spacious 15.33->21.98px, comfortable inalterado). Ademas el claim enrojece root-resolution.integration.test.ts. DECISION DE FAMILIA PENDIENTE: como convive la postura propia con el factor local de la frontera (p.ej. el deriver deja de codificar postura cuando el claim proyecta, o la familia se exime explicitamente). Hasta esa decision, data-table queda fuera del censo de adopcion por medida, no por omission. charts (WO-FAM-09) queda fuera por no tener canales density-exposed (medido: 0)."
         }
       ],
       "doneAt": null,

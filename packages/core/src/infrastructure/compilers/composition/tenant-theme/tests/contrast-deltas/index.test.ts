@@ -101,7 +101,7 @@ describe("contrastDeltas: the fixture tenant at standard posture, under each ver
 
     it(`${vertical}: the artifact carrying the block verifies at mount, and a tampered block does not`, () => {
       expect(verifyTenantThemeArtifactV1(structuredClone(artifact), { slug: "contrast-fixture" }).ok).toBe(true);
-      const forged = structuredClone(artifact) as TenantThemeArtifact & { contrastDeltas: { mode?: string; variables: Record<string, string> }[] };
+      const forged = structuredClone(artifact) as Omit<TenantThemeArtifact, "contrastDeltas"> & { contrastDeltas: { mode?: string; variables: Record<string, string> }[] };
       forged.contrastDeltas[0] = { ...forged.contrastDeltas[0], mode: "base" };
       expect(verifyTenantThemeArtifactV1(forged, { slug: "contrast-fixture" })).toMatchObject({ ok: false });
       const repainted = structuredClone(artifact);

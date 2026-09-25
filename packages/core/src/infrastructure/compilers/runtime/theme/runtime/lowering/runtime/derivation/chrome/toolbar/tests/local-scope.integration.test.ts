@@ -34,6 +34,7 @@ const DENSITY_AXIS = scopeVaryingNames("base/density/index.css", /:not\(:root\)/
 const ARABIC_AXIS = scopeVaryingNames("responsive/language-arabic/index.css", /:lang\(ar\)/);
 
 const PRODUCED = deriveToolbarChannels();
+const PRODUCES = new Set<string>(toolbarChromeDeriver.produces);
 
 const readsAny = (value: string, names: Set<string>) =>
   [...value.matchAll(/var\(\s*(--ds-[a-z0-9-]+)/g)].some((match) => names.has(match[1]));
@@ -377,7 +378,7 @@ describe("chrome/toolbar channels under a local scope", () => {
 
     const { compiled } = compileThemeIntent(staticThemeIntent("bithire"));
     const projected = Object.keys(compiled.densityScopeBlock?.cssVariables ?? {}).filter((channel) =>
-      toolbarChromeDeriver.produces.includes(channel)
+      PRODUCES.has(channel)
     );
     expect(projected.sort()).toEqual(densityExposed);
     for (const channel of projected) {

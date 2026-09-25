@@ -123450,6 +123450,17 @@ html[lang]:lang(ar) {
 
 /* === Compiled for every [data-density] boundary, re-resolved by its local factor — do not edit === */
 :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay'])) :where([data-density='compact']:not(:root), [data-density='comfortable']:not(:root), [data-density='spacious']:not(:root)) {
+  --ds-app-shell-header-padding-inline: var(--ds-spacing-6, 24px);
+  --ds-app-shell-header-slot-gap: var(--ds-spacing-1, 4px);
+  --ds-app-shell-navigation-body-padding: var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px));
+  --ds-app-shell-navigation-body-padding-collapsed: var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px));
+  --ds-app-shell-navigation-body-scroll-padding-block-end: calc(var(--ds-spacing-6, 24px) + 76px);
+  --ds-app-shell-navigation-drawer-header-padding: 0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px);
+  --ds-app-shell-navigation-footer-padding: var(--ds-spacing-3, 12px);
+  --ds-app-shell-navigation-footer-padding-collapsed: var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px);
+  --ds-app-shell-navigation-logo-padding: 0 var(--ds-spacing-5, 20px);
+  --ds-app-shell-navigation-trigger-margin-inline-end: var(--ds-spacing-3, 12px);
+  --ds-app-shell-skip-link-padding: 0 var(--ds-spacing-4, 16px);
   --ds-toolbar-compact-padding: calc(0.75rem * var(--ds-density-effective-scale, 1)) calc(1rem * var(--ds-density-effective-scale, 1));
   --ds-toolbar-control-gap: var(--ds-spacing-1, 0.25rem);
   --ds-toolbar-controls-gap: var(--ds-spacing-2, 0.5rem);
@@ -126666,6 +126677,17 @@ html[lang]:lang(ar) {
 
 /* === Compiled for every [data-density] boundary, re-resolved by its local factor — do not edit === */
 :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where([data-density='compact']:not(:root), [data-density='comfortable']:not(:root), [data-density='spacious']:not(:root)) {
+  --ds-app-shell-header-padding-inline: var(--ds-spacing-6, 24px);
+  --ds-app-shell-header-slot-gap: var(--ds-spacing-1, 4px);
+  --ds-app-shell-navigation-body-padding: var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px));
+  --ds-app-shell-navigation-body-padding-collapsed: var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px));
+  --ds-app-shell-navigation-body-scroll-padding-block-end: calc(var(--ds-spacing-6, 24px) + 76px);
+  --ds-app-shell-navigation-drawer-header-padding: 0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px);
+  --ds-app-shell-navigation-footer-padding: var(--ds-spacing-3, 12px);
+  --ds-app-shell-navigation-footer-padding-collapsed: var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px);
+  --ds-app-shell-navigation-logo-padding: 0 var(--ds-spacing-5, 20px);
+  --ds-app-shell-navigation-trigger-margin-inline-end: var(--ds-spacing-3, 12px);
+  --ds-app-shell-skip-link-padding: 0 var(--ds-spacing-4, 16px);
   --ds-toolbar-compact-padding: calc(0.75rem * var(--ds-density-effective-scale, 1)) calc(1rem * var(--ds-density-effective-scale, 1));
   --ds-toolbar-control-gap: var(--ds-spacing-1, 0.25rem);
   --ds-toolbar-controls-gap: var(--ds-spacing-2, 0.5rem);
@@ -129666,6 +129688,17 @@ html[lang]:lang(ar) {
 
 /* === Compiled for every [data-density] boundary, re-resolved by its local factor — do not edit === */
 :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])) :where([data-density='compact']:not(:root), [data-density='comfortable']:not(:root), [data-density='spacious']:not(:root)) {
+  --ds-app-shell-header-padding-inline: var(--ds-spacing-6, 24px);
+  --ds-app-shell-header-slot-gap: var(--ds-spacing-1, 4px);
+  --ds-app-shell-navigation-body-padding: var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px));
+  --ds-app-shell-navigation-body-padding-collapsed: var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px));
+  --ds-app-shell-navigation-body-scroll-padding-block-end: calc(var(--ds-spacing-6, 24px) + 76px);
+  --ds-app-shell-navigation-drawer-header-padding: 0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px);
+  --ds-app-shell-navigation-footer-padding: var(--ds-spacing-3, 12px);
+  --ds-app-shell-navigation-footer-padding-collapsed: var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px);
+  --ds-app-shell-navigation-logo-padding: 0 var(--ds-spacing-5, 20px);
+  --ds-app-shell-navigation-trigger-margin-inline-end: var(--ds-spacing-3, 12px);
+  --ds-app-shell-skip-link-padding: 0 var(--ds-spacing-4, 16px);
   --ds-toolbar-compact-padding: calc(0.75rem * var(--ds-density-effective-scale, 1)) calc(1rem * var(--ds-density-effective-scale, 1));
   --ds-toolbar-control-gap: var(--ds-spacing-1, 0.25rem);
   --ds-toolbar-controls-gap: var(--ds-spacing-2, 0.5rem);

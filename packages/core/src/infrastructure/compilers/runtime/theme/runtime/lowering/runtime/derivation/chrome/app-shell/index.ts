@@ -48,6 +48,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const appShellChromeDeriver: FamilyDeriver = {
   family: "app-shell",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "surfaces.*",
     "palette.*",
