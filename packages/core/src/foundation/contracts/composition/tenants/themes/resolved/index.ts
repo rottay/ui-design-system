@@ -38,6 +38,9 @@ export interface ThemeFloors {
     readonly scale?: BrandTypography["scale"];
     readonly fontFamilyBase?: BrandTypography["fontFamilyBase"];
     readonly fontFamilyHeading?: BrandTypography["fontFamilyHeading"];
+    readonly fontFamilyMono?: BrandTypography["fontFamilyMono"];
+    readonly letterSpacing?: Readonly<Pick<NonNullable<BrandTypography["letterSpacing"]>, "heading">>;
+    readonly lineHeight?: Readonly<Pick<NonNullable<BrandTypography["lineHeight"]>, "display">>;
   };
   readonly surfaces?: {
     readonly buttonStyle?: BrandSurfaces["buttonStyle"];
@@ -150,8 +153,15 @@ function immutableAuthoredPaths(values: Iterable<string>): TenantAuthoredPaths {
 }
 
 function freezeFloors(floors: ThemeFloors): ThemeFloors {
+  const typography = floors.typography;
   return Object.freeze({
-    typography: floors.typography && Object.freeze({ ...floors.typography }),
+    typography:
+      typography &&
+      Object.freeze({
+        ...typography,
+        letterSpacing: typography.letterSpacing && Object.freeze({ ...typography.letterSpacing }),
+        lineHeight: typography.lineHeight && Object.freeze({ ...typography.lineHeight }),
+      }),
     surfaces: floors.surfaces && Object.freeze({ ...floors.surfaces }),
     motion: floors.motion && Object.freeze({ ...floors.motion }),
   });
@@ -212,9 +222,12 @@ export function tenantProvenance(
  * The tenant's posture floors, projected out of a migrated patch. Exported so
  * the DB leg and anything reconstructing it read one definition.
  *
- * Only the scalars `resolveTenantPosture` reads cross; `undefined` leaves cost
- * nothing, because the merge skips them and an all-undefined posture collapses
- * to `undefined`. `expressive.*` is deliberately absent: it is expanded and
+ * Only the scalars `resolveTenantPosture` reads cross, plus every leaf a
+ * `typePairing` rewrites (the two families, mono, heading tracking, display
+ * leading): the tenant rank re-applies the tenant's own literal for each after
+ * the pairing, and a leaf absent here is lost to the pairing. `undefined` leaves
+ * cost nothing, because the merge skips them and an all-undefined posture
+ * collapses to `undefined`. `expressive.*` is deliberately absent: it is expanded and
  * applied at its own position, and routing it here would lower one selection
  * twice.
  *
@@ -232,6 +245,11 @@ export function tenantPostureFloors(patch: ThemeLayerPatch): ThemeFloors {
       scale: ty?.scale,
       fontFamilyBase: ty?.fontFamilyBase,
       fontFamilyHeading: ty?.fontFamilyHeading,
+      fontFamilyMono: ty?.fontFamilyMono,
+      letterSpacing:
+        ty?.letterSpacing?.heading === undefined ? undefined : { heading: ty.letterSpacing.heading },
+      lineHeight:
+        ty?.lineHeight?.display === undefined ? undefined : { display: ty.lineHeight.display },
     },
     surfaces: {
       buttonStyle: su?.buttonStyle,

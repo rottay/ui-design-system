@@ -169,7 +169,7 @@ describe("tenantProvenance snapshots the patch", () => {
 });
 
 describe("the projections behind the provenance", () => {
-  it("tenantPostureFloors projects exactly the six posture keypaths", () => {
+  it("tenantPostureFloors projects the posture keypaths, and a pairing-rewritten leaf only when the patch states it", () => {
     const floors = tenantPostureFloors(patch);
     expect(floors.typography).toEqual({
       typePairing: "editorial",
@@ -177,6 +177,9 @@ describe("the projections behind the provenance", () => {
       fontFamilyBase: "Inter",
       fontFamilyHeading: "Fraunces",
     });
+    expect(floors.typography?.fontFamilyMono).toBeUndefined();
+    expect(floors.typography?.letterSpacing).toBeUndefined();
+    expect(floors.typography?.lineHeight).toBeUndefined();
     expect(floors.surfaces).toEqual({
       buttonStyle: "pill",
       radiusScale: 1.25,
