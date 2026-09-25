@@ -245,7 +245,13 @@ describe.each(VERTICALS)("%s", (vertical) => {
         JSON.stringify(large.tokens[channel as keyof typeof large.tokens])
     );
     // Pinned from the first green run: 508 rem-derived leaves on each vertical.
-    expect(moved.length).toBeGreaterThanOrEqual(500);
+    // Re-pinned 2026-09-25 to the measured 497 (identical on the three verticals):
+    // Q11's 65b88e0e2 turned 7 touch channels into var(--ds-touch-target-min, 44px)
+    // constants (509 -> 502), and 266199fe9 (density wave 2c) retired the 6 selector
+    // aliases, 5 of which were duplicate rem-derived movers of their rungs (502 -> 497);
+    // the rungs themselves still move. The floor may never fall again without a
+    // named mover.
+    expect(moved.length).toBeGreaterThanOrEqual(497);
     for (const channel of moved.slice(0, 20)) {
       const leaf = large.tokens[channel as keyof typeof large.tokens];
       expect(leaf.kind).toBe("length");
