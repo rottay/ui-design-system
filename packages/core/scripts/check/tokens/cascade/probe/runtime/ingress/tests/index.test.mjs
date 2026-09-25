@@ -15,18 +15,19 @@
  */
 
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+import { readManifestRecords } from '../../../../../../../libraries/manifest/index.mjs';
 import {
-  pathForManifestId,
-  readManifestRecords,
-} from '../../../../../../../libraries/manifest/index.mjs';
-import { readManifest } from '../../../foundation/negative-controls/index.mjs';
-import { CASCADE_MANIFEST_ROOT, CORE_ROOT, QUARANTINE_MANIFEST_ROOT } from '../../../foundation/paths/index.mjs';
+  CALIBRATION_TABLE,
+  readCalibrationRecords,
+  readControlCalibration,
+} from '../../../foundation/calibration/index.mjs';
+import { CASCADE_MANIFEST_ROOT, CORE_ROOT } from '../../../foundation/paths/index.mjs';
 import { VERTICALS } from '../../../foundation/scope/index.mjs';
 import {
   assertArmProvenance,
@@ -70,9 +71,7 @@ import {
 /** This tests folder, so the textual fence can read the probe it owns. */
 const HERE = resolve(fileURLToPath(import.meta.url), '..');
 
-const CONTROL_MANIFEST = readManifest(
-  resolve(QUARANTINE_MANIFEST_ROOT, 'controls/spacing/rhythm/index.json'),
-);
+const CONTROL_MANIFEST = readControlCalibration('spacing.rhythm');
 
 // Every manifest read goes through the arm's own key name.
 const declaredIngressPath = (manifest, spec) => manifest?.ingress?.[spec.manifestIngressKey];
@@ -805,9 +804,7 @@ test('manifest-ingress parity: both arms lower the SAME stop to the SAME channel
  * and `sobrio` is only the label this programme gave that number.
  * ------------------------------------------------------------------------ */
 
-const BOUNDED_CONTROL_MANIFEST = readManifest(
-  resolve(QUARANTINE_MANIFEST_ROOT, 'controls/surfaces/effect-intensity/index.json'),
-);
+const BOUNDED_CONTROL_MANIFEST = readControlCalibration('surfaces.effect-intensity');
 
 test('a BOUNDED control lowers the stop VALUE at the ingress path, never the stop id', () => {
   const staticInput = buildIngressInput({
@@ -923,9 +920,7 @@ test('negative drill: a bounded stop with no finite numeric value is refused, no
  * into "anything may be written".
  * ------------------------------------------------------------------------ */
 
-const PROFILE_ID_CONTROL_MANIFEST = readManifest(
-  resolve(QUARANTINE_MANIFEST_ROOT, 'controls/experience/profile/index.json'),
-);
+const PROFILE_ID_CONTROL_MANIFEST = readControlCalibration('experience.profile');
 
 test('a PROFILE-ID control lowers the opaque registry id VERBATIM at both doors', () => {
   const staticInput = buildIngressInput({
@@ -1091,9 +1086,7 @@ test('negative drill: a closed-enum stop outside the declared domain values is r
  * `borderRadius` slot. Measured evidence:
  * artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/.
  */
-const RADIUS_MANIFEST = readManifest(
-  resolve(QUARANTINE_MANIFEST_ROOT, 'controls/shape/radius-scale/index.json'),
-);
+const RADIUS_MANIFEST = readControlCalibration('shape.radius-scale');
 
 test('regression fence: the radius-scale static door is a literal path, never a wildcard or prose', () => {
   const path = staticDoorPath(RADIUS_MANIFEST);
@@ -1174,9 +1167,7 @@ test('regression fence: every stop of radius-scale reaches the channel, and dist
  * lowering, it is just not this control's door. Both fences below are about the
  * door being literal and being the ENUM's.
  */
-const DENSITY_MANIFEST = readManifest(
-  resolve(QUARANTINE_MANIFEST_ROOT, 'controls/density/mode/index.json'),
-);
+const DENSITY_MANIFEST = readControlCalibration('density.mode');
 
 test('regression fence: the density.mode static door is a literal path, and it is the ENUM', () => {
   const path = staticDoorPath(DENSITY_MANIFEST);
@@ -1246,7 +1237,7 @@ test('regression fence: every stop of density.mode reaches the channel, and dist
  * therefore go red on a stale build, exactly like the arm drills above.
  * ===================================================================== */
 
-const DENSITY_MANIFEST_H1 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/density/mode/index.json'));
+const DENSITY_MANIFEST_H1 = readControlCalibration('density.mode');
 const FIRST_PARTY = Object.keys(VERTICALS).filter((id) => id !== 'none');
 
 /* The density MODE each first-party preset document authors. d524ec1d6 (D6-2c-ii)
@@ -1328,19 +1319,31 @@ test('H-1 drill 2 [needs dist]: no vertical collapses onto the rottay value any 
  * their under-declaration.
  */
 function dataTerminalControlIds() {
-  const dir = resolve(CASCADE_MANIFEST_ROOT, 'roots');
   const ids = new Set();
-  for (const name of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
-    const root = JSON.parse(readFileSync(resolve(dir, name), 'utf8'));
+  for (const { document: root } of readManifestRecords(resolve(CASCADE_MANIFEST_ROOT, 'roots'), 'rootId')) {
     if (root?.rootChannel && root.rootChannel.channel === null) ids.add(root.rootId);
   }
   return ids;
 }
 
+test('the DATA-terminal selector reads the root cells, and is not empty', () => {
+  // The cells are folder/index.json documents. A selector that lists only the
+  // directory's top-level files finds none of them, and every DATA routing
+  // branch below turns into dead code while its fence stays green.
+  const ids = dataTerminalControlIds();
+  assert.ok(ids.has('responsive.posture'), 'responsive.posture is the declared DATA terminal');
+  for (const id of ids) {
+    assert.ok(
+      readCalibrationRecords().some((record) => record.id === id),
+      `${id} is a DATA terminal the calibration table does not calibrate`,
+    );
+  }
+});
+
 /* =====================================================================
  * THE WITHDRAWAL, AND WHY AN EMPTY COHORT IS NOT A GREEN BY ITSELF.
  *
- * Both fences below select from the CONTROL manifests: one on
+ * Both fences below select from the calibration table: one on
  * `assessmentState === 'COMPUTED_VERIFIED'`, the other on a non-empty active
  * evidence list. b6896c4f6 emptied both selectors at once -- it downgraded the
  * nine COMPUTED_VERIFIED controls to IMPLEMENTED and cleared every
@@ -1368,14 +1371,13 @@ function dataTerminalControlIds() {
  * ===================================================================== */
 const WITHDRAWN_AFTER_TREE_FREEZE = /^RERUN_(?:DATA_)?CAUSAL_PROOF_AFTER_TREE_FREEZE/u;
 
-const CONTROLS_DIR = resolve(QUARANTINE_MANIFEST_ROOT, 'controls');
 
 /**
  * Assert that an empty cohort is explained by the authority, not by an
  * accident. `stopBearing` is every control the fence could ever select.
  */
-function assertWithdrawalExplainsEmptyCohort(controlsDir, fence) {
-  const stopBearing = readManifestRecords(controlsDir, 'controlId').filter(
+function assertWithdrawalExplainsEmptyCohort(tablePath, fence) {
+  const stopBearing = readCalibrationRecords({ path: tablePath }).filter(
     ({ document }) => (document.calibration?.normalizedStops ?? []).length > 0,
   );
   const unexplained = stopBearing
@@ -1393,7 +1395,7 @@ function assertWithdrawalExplainsEmptyCohort(controlsDir, fence) {
   // exclusions ate it. Without this line a fence whose exclusion list grew to
   // swallow every closed control would read as a quiet withdrawal.
   assert.deepEqual(
-    readManifestRecords(controlsDir, 'controlId')
+    readCalibrationRecords({ path: tablePath })
       .filter(({ document }) => document.calibration?.assessmentState === 'COMPUTED_VERIFIED')
       .map(({ id }) => id),
     [],
@@ -1401,15 +1403,15 @@ function assertWithdrawalExplainsEmptyCohort(controlsDir, fence) {
   );
 }
 
-/** A one-control controls tree, byte-derived from a live manifest. */
-function plantControlsTree(controlId, mutate) {
+/** A one-control calibration table, byte-derived from the live row. */
+function plantCalibrationTable(controlId, mutate) {
   const box = mkdtempSync(join(tmpdir(), 'ingress-cohort-'));
-  const document = mutate(
-    JSON.parse(readFileSync(resolve(CONTROLS_DIR, pathForManifestId(controlId), 'index.json'), 'utf8')),
+  const { controlId: _key, ...row } = mutate(readControlCalibration(controlId));
+  const table = JSON.parse(readFileSync(CALIBRATION_TABLE, 'utf8'));
+  writeFileSync(
+    join(box, 'index.json'),
+    `${JSON.stringify({ ...table, controls: { [controlId]: row } }, null, 2)}\n`,
   );
-  const target = resolve(box, pathForManifestId(controlId));
-  mkdirSync(target, { recursive: true });
-  writeFileSync(resolve(target, 'index.json'), `${JSON.stringify(document, null, 2)}\n`);
   return box;
 }
 
@@ -1444,13 +1446,13 @@ const BASE_SENSITIVE_BY_DESIGN = new Map([
   ],
 ]);
 
-async function runH1InvarianceFence(controlsDir) {
+async function runH1InvarianceFence(tablePath) {
   const arms = await loadCompilerArms();
   const baselines = await loadStaticBaselines();
   const dataTerminals = dataTerminalControlIds();
   let checked = 0;
   const covered = [];
-  for (const { document: manifest } of readManifestRecords(controlsDir, 'controlId')) {
+  for (const { document: manifest } of readCalibrationRecords({ path: tablePath })) {
     const id = manifest.controlId;
     const stops = manifest.calibration?.normalizedStops ?? [];
     // "Closed" = it has stops to lower AND a state that made it evidence-bearing.
@@ -1512,24 +1514,24 @@ async function runH1InvarianceFence(controlsDir) {
 }
 
 test('H-1 drill 3 [needs dist]: every OTHER closed control lowers identically with and without a base', async () => {
-  const { checked, covered } = await runH1InvarianceFence(CONTROLS_DIR);
+  const { checked, covered } = await runH1InvarianceFence(CALIBRATION_TABLE);
   if (covered.length > 0) {
     assert.ok(checked > 0, `the invariance fence must actually check something; covered: ${covered.join(', ')}`);
     return;
   }
-  assertWithdrawalExplainsEmptyCohort(CONTROLS_DIR, 'H-1 drill 3');
+  assertWithdrawalExplainsEmptyCohort(CALIBRATION_TABLE, 'H-1 drill 3');
 });
 
 test('H-1 drill 3 CONTROL [needs dist]: the cohort selector and the comparison loop are live', async () => {
   // Restore ONE withdrawn control on a planted copy. If the selector or the
   // loop stops working, this goes red while the real tree stays empty -- which
   // is the whole reason the empty cohort above is allowed to be quiet.
-  const box = plantControlsTree('shape.radius-scale', (document) => ({
+  const box = plantCalibrationTable('shape.radius-scale', (document) => ({
     ...document,
     calibration: { ...document.calibration, assessmentState: 'COMPUTED_VERIFIED' },
   }));
   try {
-    const { checked, covered } = await runH1InvarianceFence(box);
+    const { checked, covered } = await runH1InvarianceFence(join(box, 'index.json'));
     assert.deepEqual(covered, ['shape.radius-scale']);
     assert.ok(checked > 0, 'the planted cohort must produce real comparisons');
   } finally {
@@ -1540,7 +1542,7 @@ test('H-1 drill 3 CONTROL [needs dist]: the cohort selector and the comparison l
 test('H-1 drill 4 [needs dist]: a tenant-selected profile reaches the channel, and OUTRANKS every baseline', async () => {
   const arms = await loadCompilerArms();
   const baselines = await loadStaticBaselines();
-  const manifest = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/experience/profile/index.json'));
+  const manifest = readControlCalibration('experience.profile');
   const stops = manifest.calibration.normalizedStops;
   assert.ok(stops.length >= 1);
   for (const stop of stops) {
@@ -1707,8 +1709,8 @@ test('H-1 drill 8 (V1): a static arm with no named baseline fails arm verificati
  * density would start failing on its structural channel.
  * ===================================================================== */
 
-const RADIUS_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/shape/radius-scale/index.json'));
-const TYPO_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/typography/scale/index.json'));
+const RADIUS_H2 = readControlCalibration('shape.radius-scale');
+const TYPO_H2 = readControlCalibration('typography.scale');
 
 /** The guard, on the real compilers, with the arm's own baseline tuple. */
 const discriminate = async (manifest, armId, vertical, overrides = {}) => {
@@ -1820,13 +1822,13 @@ test('H-2 drill 4 [needs dist]: the predicate is EXISTS, not FOR-ALL', async () 
   assert.deepEqual(verdict.constant, ['--ds-density-scale']);
 });
 
-async function runH2ReceiptedFence(controlsDir) {
+async function runH2ReceiptedFence(tablePath) {
   const dataTerminals = dataTerminalControlIds();
   let checked = 0;
   let routed = 0;
   let seenDataTerminals = 0;
   let selected = 0;
-  for (const { document: manifest } of readManifestRecords(controlsDir, 'controlId')) {
+  for (const { document: manifest } of readCalibrationRecords({ path: tablePath })) {
     // "Carries receipts" read from the manifest state, not a hardcoded list, so
     // a control closing later is covered the day it closes (the V3 pattern).
     const evidence = [
@@ -1866,7 +1868,7 @@ async function runH2ReceiptedFence(controlsDir) {
 }
 
 test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both arms', async () => {
-  const { checked, routed, seenDataTerminals, selected } = await runH2ReceiptedFence(CONTROLS_DIR);
+  const { checked, routed, seenDataTerminals, selected } = await runH2ReceiptedFence(CALIBRATION_TABLE);
   // Both counters are asserted. If the DATA leg ever silently stops selecting
   // anything, this is what says so.
   assert.equal(
@@ -1878,11 +1880,11 @@ test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both
     assert.ok(checked >= 12, `the invariance fence must cover the receipted catalogue; checked ${checked}`);
     return;
   }
-  assertWithdrawalExplainsEmptyCohort(CONTROLS_DIR, 'H-2 drill 5');
+  assertWithdrawalExplainsEmptyCohort(CALIBRATION_TABLE, 'H-2 drill 5');
 });
 
 test('H-2 drill 5 CONTROL [needs dist]: the receipted selector and the guard loop are live', async () => {
-  const box = plantControlsTree('shape.radius-scale', (document) => ({
+  const box = plantCalibrationTable('shape.radius-scale', (document) => ({
     ...document,
     calibration: {
       ...document.calibration,
@@ -1890,7 +1892,7 @@ test('H-2 drill 5 CONTROL [needs dist]: the receipted selector and the guard loo
     },
   }));
   try {
-    const { checked, selected } = await runH2ReceiptedFence(box);
+    const { checked, selected } = await runH2ReceiptedFence(join(box, 'index.json'));
     assert.equal(selected, 1);
     assert.equal(checked, INGRESS_ARM_IDS.length * FIRST_PARTY.length);
   } finally {
@@ -2047,7 +2049,7 @@ test('H-2 drill 9 (W-C): the guard stands on the ARM\'s baseline, and proves it'
   );
 });
 
-const EXPRESSIVE_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/profiles/expressive/index.json'));
+const EXPRESSIVE_H2 = readControlCalibration('profiles.expressive');
 
 test('H-2 drill 10 (profiles.expressive): the flat enumValues union cannot catch a cross-axis value, and the compiler is the real gate', async () => {
   // The union check (`enumValues.includes(stop.id)`, runtime/ingress/index.mjs)
@@ -2307,7 +2309,7 @@ test('H3C drill 3: the inline plan still names what it introduced, so restore st
  * first time the ramp math changed.
  * ===================================================================== */
 
-const PALETTE_MANIFEST = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/palette/seeds/index.json'));
+const PALETTE_MANIFEST = readControlCalibration('palette.seeds');
 const STATIC_SET = 'palette.{primaryColor,secondaryColor,accentColor,backgroundColor}';
 const DB_SET = 'appearance.general.palette.{primary,secondary,accent,background}';
 
@@ -2566,16 +2568,14 @@ const STATIC_PROVENANCE_FIXTURE = Object.freeze({
   },
 });
 
-const M1_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/palette/seeds/index.json'));
+const M1_PALETTE = readControlCalibration('palette.seeds');
 const M1_CLOSED = [
   'density.mode',
   'spacing.rhythm',
   'shape.radius-scale',
   'surfaces.effect-intensity',
   'typography.scale',
-].map((id) => readManifest(
-  resolve(QUARANTINE_MANIFEST_ROOT, 'controls', pathForManifestId(id), 'index.json'),
-));
+].map((id) => readControlCalibration(id));
 
 /** One real static lowering, arms and baselines loaded from dist. */
 async function m1Lower(controlManifest, stopId, vertical) {
@@ -2775,7 +2775,7 @@ test('M-1 drill 7 [needs dist]: the mode block must carry the OVERLAY, never the
  * deltas into the base, and spelling the mode grammar in the harness.
  * ===================================================================== */
 
-const H3A2_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/palette/seeds/index.json'));
+const H3A2_PALETTE = readControlCalibration('palette.seeds');
 
 /** Both arms, lowered for the same stop on the same vertical, from dist. */
 async function h3a2Arms(vertical, stopId = 'primary/crimson') {
@@ -3050,7 +3050,7 @@ test('H-3(a) drill 10 [needs dist]: no probe artifact carries a prefers-color-sc
  * it, and measures what would happen if it did not.
  * ===================================================================== */
 
-const B2_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/palette/seeds/index.json'));
+const B2_PALETTE = readControlCalibration('palette.seeds');
 
 /** The three composed first-party baselines, through the door the arms bind. */
 async function b2Baselines() {
@@ -3266,10 +3266,9 @@ test('B-2 drill 6: the CLOSED consulted vocabulary is what bounds the blast radi
   assert.ok(consulted.size >= 12, `parsed only ${consulted.size} consulted fields`);
   assert.ok(consulted.has('palette.primaryColor'), 'the primary seed must be in the vocabulary');
 
-  const controlDir = resolve(QUARANTINE_MANIFEST_ROOT, 'controls');
   const intersections = [];
   let staticDoors = 0;
-  for (const { document: manifest } of readManifestRecords(controlDir, 'controlId')) {
+  for (const { document: manifest } of readCalibrationRecords()) {
     const declared = staticDoorPath(manifest);
     if (typeof declared !== 'string' || declared.length === 0) continue;
     staticDoors += 1;
@@ -3350,9 +3349,7 @@ test('F4B-12 drill: the registry keypath is exactly SIDEBAR_TONE_FIELD, read fro
   const [, sidebarToneField] = fieldMatch;
   assert.equal(sidebarToneField, 'chrome.sidebar.tone');
 
-  const manifest = readManifest(
-    resolve(QUARANTINE_MANIFEST_ROOT, 'controls/navigation/sidebar-tone/index.json'),
-  );
+  const manifest = readControlCalibration('navigation.sidebar-tone');
   assert.equal(staticDoorPath(manifest), sidebarToneField);
 
   // The closed six-channel leaf table is the other half of this control's

@@ -73,6 +73,40 @@ test('DRILL: a gate that starts reading the retired control documents fails', ()
   assert.match(findings[0], /scripts\/check\/planted\/index\.mjs still reads/u);
 });
 
+test('DRILL: a seal constant joined with `controls` fails, however the path is spelled', () => {
+  const forms = [
+    "import { QUARANTINE_MANIFEST_ROOT } from 'x';\nexport const dir = resolve(QUARANTINE_MANIFEST_ROOT, 'controls/spacing/rhythm/index.json');\n",
+    "export const dir = join(repoRoot, MANIFEST_DIR, 'controls');\n",
+    "export const dir = ['docs', 'history', 'inventories', 'customization-manifest', 'controls'];\n",
+  ];
+  for (const text of forms) {
+    const findings = sandbox(({ write }) => write('scripts/check/planted/index.mjs', text));
+    assert.equal(findings.length, 1, `${text}\n${JSON.stringify(findings)}`);
+    assert.match(findings[0], /scripts\/check\/planted\/index\.mjs still reads/u);
+  }
+});
+
+test('DRILL: the probe holds no exception, so a probe module that reads the controls slice fails', () => {
+  const findings = sandbox(({ write }) => {
+    write(
+      'scripts/check/tokens/cascade/probe/public/cli/index.mjs',
+      "export const manifest = resolve(QUARANTINE_MANIFEST_ROOT, 'controls', 'density/mode/index.json');\n",
+    );
+  });
+  assert.equal(findings.length, 1, JSON.stringify(findings));
+  assert.match(findings[0], /probe\/public\/cli\/index\.mjs still reads/u);
+});
+
+test('DRILL: every script root is scanned, not only check, generate and libraries', () => {
+  for (const root of ['scripts/build', 'scripts/maintain', 'scripts/package']) {
+    assert.ok(SCANNED_ROOTS.includes(root), `${root} is scanned`);
+    const findings = sandbox(({ write }) => {
+      write(`${root}/planted/index.mjs`, `export const dir = '${RETIRED_CONTROL_PATH}';\n`);
+    });
+    assert.equal(findings.length, 1, `${root}: ${JSON.stringify(findings)}`);
+  }
+});
+
 test('DRILL: the excepted modules are excepted, and only them', () => {
   // Planting the same string in an EXCEPTED path must stay green, so the
   // exception list is proven to be doing the work the drill above measures.

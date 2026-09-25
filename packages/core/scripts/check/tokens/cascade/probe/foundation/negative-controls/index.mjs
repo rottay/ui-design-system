@@ -11,9 +11,11 @@
  *
  * THE LIST IS NOT IN THIS FILE, AND MUST NOT BE. A negative control hardcoded
  * in the instrument is an instrument grading its own homework: the day the
- * manifest adds one, the harness keeps passing. The applicable list is read
- * from `docs/history/inventories/customization-manifest/controls/<control-id>.json#calibration.negativeControls`, and
- * narrowed by `docs/history/inventories/customization-manifest/families/<family>.json#themeControls[].negativeControls`
+ * calibration adds one, the harness keeps passing. The applicable list is read
+ * from the control's row of the calibration table
+ * (`governance/manifest/calibration`, `calibration.negativeControls`; see
+ * foundation/calibration), and narrowed by
+ * `docs/history/inventories/customization-manifest/families/<family>.json#themeControls[].negativeControls`
  * where a family states something more specific about its own root.
  *
  * WHAT LIVES HERE IS THE MEASURABLE DEFINITION. The manifest speaks prose

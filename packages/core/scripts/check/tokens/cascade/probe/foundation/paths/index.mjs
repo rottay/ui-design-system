@@ -24,8 +24,10 @@ export const REPO_ROOT = resolve(CORE_ROOT, '..', '..');
 
 /**
  * The customization manifest quarantined by WO-RET-03 (2026-09-19): sealed
- * calibration evidence the harness reads, never authority (see the quarantine
- * README). It lives at the workspace root, outside the package.
+ * evidence, never authority (see the quarantine README). The harness reads only
+ * its family cells, to narrow a control's negative controls onto one family
+ * root; control calibration is foundation/calibration. It lives at the
+ * workspace root, outside the package.
  */
 export const QUARANTINE_MANIFEST_ROOT = resolve(
   REPO_ROOT,

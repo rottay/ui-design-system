@@ -11,18 +11,17 @@
  * them here, so a green suite means the judgement is right even though no
  * Chromium was opened.
  *
- * The declared negative controls come from the REAL modern-rescue manifest, so
+ * The declared negative controls come from the REAL calibration table, so
  * these drills fail when the contract changes and the harness does not.
  *
  * @module Tooling/ResolutionProbe/Composition/Run/Tests
  */
 
 import assert from 'node:assert/strict';
-import { resolve } from 'node:path';
 import { test } from 'node:test';
 
-import { readManifest } from '../../../foundation/negative-controls/index.mjs';
-import { CORE_ROOT, QUARANTINE_MANIFEST_ROOT } from '../../../foundation/paths/index.mjs';
+import { readControlCalibration } from '../../../foundation/calibration/index.mjs';
+import { CORE_ROOT } from '../../../foundation/paths/index.mjs';
 import { assertKnownTargetKeys } from '../../../foundation/roster/index.mjs';
 import { composeDbArm, composeStaticArm, lowerStop } from '../../../runtime/ingress/index.mjs';
 import {
@@ -32,12 +31,7 @@ import {
   runCausalProbe,
 } from '../index.mjs';
 
-const CONTROL_MANIFEST = readManifest(
-  resolve(
-    QUARANTINE_MANIFEST_ROOT,
-    'controls/spacing/rhythm/index.json',
-  ),
-);
+const CONTROL_MANIFEST = readControlCalibration('spacing.rhythm');
 
 const SCOPE = 'rottay/light/modern/both';
 const STOP = { id: 'airy', value: 1.2 };

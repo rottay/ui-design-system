@@ -3,9 +3,9 @@
  *
  * Run: node --test scripts/check/tokens/cascade/probe/foundation/negative-controls/tests/index.test.mjs
  *
- * These drills read the REAL modern-rescue manifest rather than a fixture copy.
- * A resolver tested against its own idea of the manifest is a resolver that
- * cannot notice the manifest changing, and the whole point of sourcing the list
+ * These drills read the REAL calibration table and family cells rather than a
+ * fixture copy. A resolver tested against its own idea of the calibration is a
+ * resolver that cannot notice it changing, and the whole point of sourcing the list
  * from the contract is that the harness follows it rather than remembering it.
  *
  * @module Tooling/ResolutionProbe/Foundation/NegativeControls/Tests
@@ -16,6 +16,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { relative, resolve } from 'node:path';
 import { test } from 'node:test';
 
+import { readControlCalibration } from '../../calibration/index.mjs';
 import { CORE_ROOT, QUARANTINE_MANIFEST_ROOT } from '../../paths/index.mjs';
 import { assertKnownTargetKeys } from '../../roster/index.mjs';
 import {
@@ -29,12 +30,12 @@ import {
 } from '../index.mjs';
 
 const MANIFEST_ROOT = QUARANTINE_MANIFEST_ROOT;
-const CONTROL_MANIFEST = readManifest(resolve(MANIFEST_ROOT, 'controls/spacing/rhythm/index.json'));
+const CONTROL_MANIFEST = readControlCalibration('spacing.rhythm');
 const FLEX_MANIFEST = readManifest(resolve(MANIFEST_ROOT, 'families/primitive/layout/flex/index.json'));
 
 const SCOPE = 'rottay/light/modern/both';
 
-/** The eight the control file declares today, verbatim. */
+/** The eight the control's calibration row declares today, verbatim. */
 const CONTROL_LEVEL_IDS = [
   'numeric-instance-gaps-exact',
   'control-height-fixed',
@@ -76,7 +77,7 @@ test('negative drill: assertKnownTargetKeys refuses a fabricated fixture/target 
   );
 });
 
-test('the list comes from the manifest, not from this harness', () => {
+test('the list comes from the calibration table, not from this harness', () => {
   const declared = declaredPhrasesFor({
     controlManifest: CONTROL_MANIFEST,
     familyManifest: FLEX_MANIFEST,
@@ -692,7 +693,7 @@ test('grid track templates are declared UNMECHANISED, not silently asserted', ()
 
 test('active evidence ids resolve to receipts, while historical receipts never become source bindings', () => {
   // Receipts are outputs: they resolve by path but never enter their own source digest.
-  const control = readManifest(resolve(MANIFEST_ROOT, 'controls/spacing/rhythm/index.json'));
+  const control = readControlCalibration('spacing.rhythm');
   const evidenceRoot = JSON.parse(
     readFileSync(
       resolve(CORE_ROOT, 'scripts/check/modern-rescue/evidence-contract/index.json'),

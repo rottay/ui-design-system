@@ -17,7 +17,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { pathForManifestId } from '../../../../../../../libraries/manifest/index.mjs';
 import { diffArtifacts } from '../../../composition/diff/index.mjs';
 import { serialiseArtifact } from '../../../composition/run/index.mjs';
 import { firstDifferingLine, resolveBundle, sha256 } from '../../../runtime/bundle/index.mjs';
@@ -290,7 +289,8 @@ import { tmpdir } from 'node:os';
 import { join, resolve as resolvePath } from 'node:path';
 import { pathToFileURL as toFileUrl } from 'node:url';
 
-import { CORE_ROOT, QUARANTINE_MANIFEST_ROOT } from '../../../foundation/paths/index.mjs';
+import { readCalibrationRecords, readControlCalibration } from '../../../foundation/calibration/index.mjs';
+import { CORE_ROOT } from '../../../foundation/paths/index.mjs';
 
 const DATA_CLI = 'scripts/check/tokens/cascade/probe/public/cli/index.mjs';
 
@@ -328,8 +328,8 @@ test('PACKET-1 drill 1: the descriptor reproduces the live artifact byte-identic
         [
           DATA_CLI,
           'data-causal',
-          '--control-manifest',
-          resolvePath(QUARANTINE_MANIFEST_ROOT, 'controls/responsive/posture/index.json'),
+          '--control',
+          'responsive.posture',
           '--vertical',
           vertical,
           ...(bypassId === null ? [] : ['--bypass-id', bypassId]),
@@ -378,8 +378,8 @@ test('PACKET-1 drill 2: a control with no descriptor is refused, by name', () =>
         'data-causal',
         // A real manifest with real stops, but no DATA descriptor: the DATA
         // runner has no idea what document this control's tenant writes.
-        '--control-manifest',
-        resolvePath(QUARANTINE_MANIFEST_ROOT, 'controls/density/mode/index.json'),
+        '--control',
+        'density.mode',
         '--vertical',
         'bithire',
         '--quiet',
@@ -633,15 +633,12 @@ test('PACKET-K drill 1 [needs dist]: the declared entryCatalog agrees with the L
    *
    * The second and third together are what make the declared `valueType` a claim
    * about the product rather than a label. */
-  const { readFileSync } = await import('node:fs');
   const { resolve } = await import('node:path');
   const { pathToFileURL } = await import('node:url');
   const { CORE_ROOT } = await import('../../../foundation/paths/index.mjs');
   const server = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/server.js')).href);
 
-  const manifest = JSON.parse(
-    readFileSync(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/tokens/overrides/index.json'), 'utf8'),
-  );
+  const manifest = readControlCalibration('token-overrides');
   const catalog = manifest.calibration?.entryCatalog ?? [];
   assert.ok(catalog.length > 0, 'token-overrides declares an entryCatalog');
 
@@ -688,15 +685,9 @@ test('PACKET-K drill 8: the kinds that already existed still lower the SAME fiel
    * `profile-id` lower the stop's ID; `bounded` lowers its numeric VALUE. Read off
    * real manifests, so a manifest that changed shape fails here rather than in a
    * matrix three steps later. */
-  const { readFileSync } = await import('node:fs');
-  const { resolve } = await import('node:path');
-  const { CORE_ROOT } = await import('../../../foundation/paths/index.mjs');
   const { buildIngressInput } = await import('../../../runtime/ingress/index.mjs');
 
-  const read = (id) => JSON.parse(readFileSync(
-    resolve(QUARANTINE_MANIFEST_ROOT, 'controls', pathForManifestId(id), 'index.json'),
-    'utf8',
-  ));
+  const read = (id) => readControlCalibration(id);
   const valueAt = (document, path) =>
     path.split('.').reduce((cursor, segment) => cursor?.[segment], document);
 
@@ -793,9 +784,7 @@ test('C5 drill W-A: ONE resolver owns the calibration surface, and the harness h
   /* (iii) And the separation is REAL for the control that motivated it: the
    * calibrated surface is the 2 channels its stops write, while the declared
    * radius keeps the third the control genuinely moves. */
-  const manifest = JSON.parse(
-    readFileSync(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/tokens/overrides/index.json'), 'utf8'),
-  );
+  const manifest = readControlCalibration('token-overrides');
   const calibrated = calibrationChannels(manifest);
   assert.equal(calibrated.length, 2, 'token-overrides calibrates 2 channels');
   assert.ok(!calibrated.includes('--ds-surface-card'), '--ds-surface-card is NOT calibrated');
@@ -806,7 +795,6 @@ test('C5 drill W-A: ONE resolver owns the calibration surface, and the harness h
 });
 
 test('C5 drill W-B [needs dist]: calibrationChannels ⊆ derivedChannels, and the manifest mirrors the registry exactly', async () => {
-  const { readFileSync, existsSync } = await import('node:fs');
   const { resolve } = await import('node:path');
   const { pathToFileURL } = await import('node:url');
   const { CORE_ROOT } = await import('../../../foundation/paths/index.mjs');
@@ -814,6 +802,7 @@ test('C5 drill W-B [needs dist]: calibrationChannels ⊆ derivedChannels, and th
 
   const registry = main.TENANT_CAPABILITY_REGISTRY;
   assert.ok(Array.isArray(registry) && registry.length > 0, 'the registry is readable');
+  const calibrated = new Map(readCalibrationRecords().map(({ id, document }) => [id, document]));
 
   let mirrored = 0;
   for (const entry of registry) {
@@ -833,14 +822,8 @@ test('C5 drill W-B [needs dist]: calibrationChannels ⊆ derivedChannels, and th
     /* THE MIRROR. `calibration.channels` is GENERATED from the registry, so a
      * hand-edit of the manifest must fail here rather than silently become a
      * second authority for the same fact. */
-    const manifestPath = resolve(
-      QUARANTINE_MANIFEST_ROOT,
-      'controls',
-      pathForManifestId(entry.id),
-      'index.json',
-    );
-    if (!existsSync(manifestPath)) continue;
-    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+    const manifest = calibrated.get(entry.id);
+    if (!manifest) continue;
     assert.deepEqual(
       manifest.declaredOutputs?.channels ?? [],
       [...derived],

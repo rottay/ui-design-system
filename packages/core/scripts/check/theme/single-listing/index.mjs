@@ -9,12 +9,14 @@
  * This gate is what keeps it that way, and it checks four things a reviewer
  * cannot check by reading:
  *
- *   1. NO GATE READS THE RETIRED CONTROL DOCUMENTS. Every `scripts/check` and
- *      `scripts/generate` module is scanned for the quarantined controls path
- *      (`docs/history/inventories/customization-manifest/controls`, where
- *      WO-RET-03 sealed the corpus). The manifest tree survives as sealed
- *      WO-CRA-23 evidence; what must not survive is a gate sourcing its truth
- *      from it.
+ *   1. NO LIVE MODULE READS THE RETIRED CONTROL DOCUMENTS. Every module under
+ *      every script root the seal fence scans is checked for the quarantined
+ *      controls path (`docs/history/inventories/customization-manifest/controls`,
+ *      where WO-RET-03 sealed the corpus), spelled literally, as path segments,
+ *      or as a seal constant joined with `controls`. The manifest tree survives
+ *      as sealed WO-CRA-23 evidence; what must not survive is a gate, generator
+ *      or probe sourcing its truth from it. The probe's calibration lives in
+ *      `governance/manifest/calibration`, validated against the catalog.
  *   2. `customization-model` IS GONE, not kept "for reference".
  *   3. THE LEGACY REGISTRY INTRODUCES NO CONTROL THE CATALOG DOES NOT KNOW.
  *      `capabilities/index.ts` is the input the sealed governance manifest was
@@ -31,6 +33,7 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
+import { SCANNED_ROOTS as SCRIPT_ROOTS } from '../../taxonomy/parity-gate/seal-fence/index.mjs';
 import { parseRegistry } from '../../../generate/tokens/customization/surface/index.mjs';
 import {
   readThemeCatalog,
@@ -44,8 +47,15 @@ const CORE_ROOT = findPackageRoot(HERE);
 export const RETIRED_CONTROL_PATH = 'docs/history/inventories/customization-manifest/controls';
 export const RETIRED_MODEL_PATH = 'scripts/check/modern-rescue/customization-model';
 
-/** The script roots a gate can live in. Fixtures and evidence are not scanned. */
-export const SCANNED_ROOTS = Object.freeze(['scripts/check', 'scripts/generate', 'scripts/libraries']);
+/** Every script root a gate, generator or helper can live in: the seal fence's roots. */
+export const SCANNED_ROOTS = SCRIPT_ROOTS;
+
+/**
+ * A read of the seal's controls slice: the literal path, the path as segments,
+ * or a seal constant joined with `controls` on the same line.
+ */
+export const CONTROL_SLICE_READ =
+  /customization-manifest\/controls\b|['"`]customization-manifest['"`]\s*,\s*['"`]controls\b|(?:QUARANTINE_MANIFEST_(?:REL|ROOT)|SEAL_ROOT_REL|MANIFEST_DIR)\b[^\n]*['"`\/]controls\b/;
 
 /**
  * Modules allowed to keep naming the retired path, each with a written reason.
@@ -73,32 +83,8 @@ export const NAMING_EXCEPTIONS = Object.freeze([
     reason: 'the sealed programme validating its own preserved evidence for internal consistency',
   },
   {
-    path: 'scripts/check/tokens/cascade/probe/public/cli/index.mjs',
-    reason: 'the retained WO-CRA-23 causal-proof harness: its --control-manifest argument carries calibration evidence the catalog does not hold',
-  },
-  {
-    path: 'scripts/check/tokens/cascade/probe/composition/run/index.mjs',
-    reason: 'the same harness: it consumes a calibration manifest handed to it, and never resolves one by name',
-  },
-  {
-    path: 'scripts/check/tokens/cascade/probe/composition/run/tests/index.test.mjs',
-    reason: 'the harness drill, which plants calibration manifests to prove the run refuses a bad one',
-  },
-  {
-    path: 'scripts/check/tokens/cascade/probe/composition/receipt/tests/index.test.mjs',
-    reason: 'the receipt drill of the same retained harness',
-  },
-  {
-    path: 'scripts/check/tokens/cascade/probe/foundation/negative-controls/index.mjs',
-    reason: 'it reads calibration.negativeControls, which is sealed evidence and not a control identity',
-  },
-  {
-    path: 'scripts/check/tokens/cascade/probe/public/drills/tests/index.test.mjs',
-    reason: 'the public drill set of the same retained harness',
-  },
-  {
-    path: 'scripts/check/tokens/cascade/probe/runtime/ingress/tests/index.test.mjs',
-    reason: 'the H-1/H-2 fences of the retained harness, which measure against the sealed calibration corpus',
+    path: 'scripts/check/taxonomy/parity-gate/index.test.mjs',
+    reason: 'the seal fence drill plants a module naming the controls slice into a sandbox to prove F4 does not mistake it for a cascade read; it writes the path, never reads it',
   },
 ]);
 
@@ -127,7 +113,7 @@ export function collectFindings({
     for (const pathname of walk(join(coreRoot, scanned))) {
       const rel = relative(coreRoot, pathname).replaceAll('\\', '/');
       if (exceptions.has(rel)) continue;
-      if (readFileSync(pathname, 'utf8').includes(RETIRED_CONTROL_PATH)) {
+      if (CONTROL_SLICE_READ.test(readFileSync(pathname, 'utf8'))) {
         findings.push(
           `${rel} still reads ${RETIRED_CONTROL_PATH}; the typed catalog is the listing `
             + '(scripts/libraries/theme-catalog is the reader)',
@@ -189,6 +175,6 @@ if (invokedDirectly) {
   if (findings.length > 0) process.exit(1);
   console.log(
     `theme-single-listing OK — ${readThemeCatalog().length} catalog rows are the only listing; `
-      + 'no gate reads the retired control documents',
+      + 'no live module reads the retired control documents',
   );
 }

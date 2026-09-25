@@ -31,6 +31,7 @@ import {
 } from '../../composition/receipt/index.mjs';
 import { runCausalProbe, runProbe, serialiseArtifact } from '../../composition/run/index.mjs';
 import { buildDataCausalReport } from '../../composition/data-run/index.mjs';
+import { CALIBRATION_TABLE_REPO_REL, readControlCalibration } from '../../foundation/calibration/index.mjs';
 import { readManifest } from '../../foundation/negative-controls/index.mjs';
 import { CORE_ROOT } from '../../foundation/paths/index.mjs';
 import { assertKnownTargetKeys, FIXTURE_IDS } from '../../foundation/roster/index.mjs';
@@ -72,9 +73,9 @@ const USAGE = `resolution-probe — what the browser actually paints, per tenant
 
   node scripts/check/tokens/cascade/probe/public/cli/index.mjs run    [options]
   node scripts/check/tokens/cascade/probe/public/cli/index.mjs dial   --set <--var=value> [options]
-  node scripts/check/tokens/cascade/probe/public/cli/index.mjs causal --control-manifest <path> \\
+  node scripts/check/tokens/cascade/probe/public/cli/index.mjs causal --control <id> \\
                                                                --stop <id> [options]
-  node scripts/check/tokens/cascade/probe/public/cli/index.mjs data-causal --control-manifest <path> \\
+  node scripts/check/tokens/cascade/probe/public/cli/index.mjs data-causal --control <id> \\
                                                                --vertical <k> [--bypass-id <id>]
   node scripts/check/tokens/cascade/probe/public/cli/index.mjs diff   <before.json> <after.json>
 
@@ -92,11 +93,12 @@ Options
   --quiet                 suppress the human summary on stderr
 
 causal options
-  --control-manifest <p>  quarantine docs/history/inventories/customization-manifest/controls/<control-id>/index.json. It OWNS which
-                          negative controls apply and which channels the control declares.
+  --control <id>          a control id with a row in the calibration table
+                          (governance/manifest/calibration). Its row OWNS which negative controls
+                          apply and which channels the control declares.
   --family-manifest <p>   optional docs/history/inventories/customization-manifest/families/<layer>/<group>/<id>/index.json; narrows the negative controls
                           onto one family root.
-  --stop <id>             a normalized stop id declared by the control manifest.
+  --stop <id>             a normalized stop id declared by the control's calibration row.
   --arm <id>              repeatable; which ingress door(s) to run: ${INGRESS_ARM_IDS.join(' | ')}
                           (default: both). THIS COMMAND NEVER ACCEPTS A VARIABLE MAP FROM THE
                           OUTSIDE. It calls loadCompilerArms() + lowerStop() itself, importing the
@@ -109,8 +111,8 @@ causal options
                           a real "fixtureId/targetId" pair from FIXTURE_IDS — enforced mechanically
                           — never a name the harness merely wishes existed.
   --source-digest <hex>   the EXPECTED sha256 of the run's full freshness surface (declaredDigest):
-                          this instrument's own owned files, the control/family manifest(s), the
-                          TS lowerers and productive CSS the manifest's own sourceBindings name,
+                          this instrument's own owned files, the calibration table, the family
+                          manifest, the TS lowerers and productive CSS the row's sourceBindings name,
                           the two compiled dist/ modules the ingress arms import, dist/build-stamp.json,
                           and the bundle's own composition inputs. Wires the stale-source guard into
                           every causal run instead of skipping it; omitting this flag is itself a
@@ -197,7 +199,7 @@ function parseOptions(argv) {
     dial: null,
     dialTarget: 'root',
     quiet: false,
-    controlManifest: null,
+    control: null,
     familyManifest: null,
     stop: null,
     arms: [],
@@ -267,8 +269,8 @@ function parseOptions(argv) {
         options.dialTarget = target;
         break;
       }
-      case '--control-manifest':
-        options.controlManifest = next();
+      case '--control':
+        options.control = next();
         break;
       case '--bypass-id':
         options.bypassId = next();
@@ -729,11 +731,15 @@ function dataTerminalDescriptor(controlId) {
 }
 
 async function commandDataCausal(options) {
-  const controlManifest = options.controlManifest
-    ? readManifest(resolve(process.cwd(), options.controlManifest))
-    : null;
-  if (!controlManifest) {
-    process.stderr.write('resolution-probe: data-causal needs --control-manifest\n');
+  if (!options.control) {
+    process.stderr.write('resolution-probe: data-causal needs --control\n');
+    return 2;
+  }
+  let controlManifest;
+  try {
+    controlManifest = readControlCalibration(options.control);
+  } catch (error) {
+    process.stderr.write(`${error.message}\n`);
     return 2;
   }
   const vertical = options.verticals[0];
@@ -902,9 +908,11 @@ async function commandDataCausal(options) {
         measuredSourceFiles: dataFreshnessSourceFiles({
           controlManifest,
           manifestSourceFiles: [
-            options.controlManifest,
-            ...(options.familyManifest ? [options.familyManifest] : []),
-          ].map((path) => relative(REPOSITORY_ROOT, resolve(process.cwd(), path)).split('\\').join('/')),
+            CALIBRATION_TABLE_REPO_REL,
+            ...(options.familyManifest ? [options.familyManifest] : []).map((path) =>
+              relative(REPOSITORY_ROOT, resolve(process.cwd(), path)).split('\\').join('/'),
+            ),
+          ],
         }),
         negativeDrill: DEFAULT_CAUSAL_NEGATIVE_DRILL,
         producer: options.producer,
@@ -1100,10 +1108,10 @@ function dataFreshnessSourceFiles({ controlManifest, manifestSourceFiles }) {
  * or stop is a `2` (bad invocation), never a run with a caveat.
  */
 async function commandCausal(options) {
-  if (!options.controlManifest || !options.stop) {
+  if (!options.control || !options.stop) {
     process.stderr.write(
-      'resolution-probe: `causal` requires --control-manifest and --stop. A causal run without ' +
-        'the manifest has no declared negative controls, and without a stop it does not know ' +
+      'resolution-probe: `causal` requires --control and --stop. A causal run without ' +
+        'the calibration row has no declared negative controls, and without a stop it does not know ' +
         'what the mutation means.\n',
     );
     return 2;
@@ -1142,7 +1150,7 @@ async function commandCausal(options) {
   let controlManifest;
   let familyManifest = null;
   try {
-    controlManifest = readManifest(options.controlManifest);
+    controlManifest = readControlCalibration(options.control);
     if (options.familyManifest) familyManifest = readManifest(options.familyManifest);
   } catch (error) {
     process.stderr.write(`resolution-probe: ${error.message}\n`);
@@ -1277,9 +1285,11 @@ async function commandCausal(options) {
   // (unproven freshness), not a skip: fail-closed, the same law every other
   // guard in this harness follows.
   const manifestSourceFiles = [
-    options.controlManifest,
-    ...(options.familyManifest ? [options.familyManifest] : []),
-  ].map((path) => relative(REPOSITORY_ROOT, resolve(process.cwd(), path)).split('\\').join('/'));
+    CALIBRATION_TABLE_REPO_REL,
+    ...(options.familyManifest ? [options.familyManifest] : []).map((path) =>
+      relative(REPOSITORY_ROOT, resolve(process.cwd(), path)).split('\\').join('/'),
+    ),
+  ];
   const bundleInputFiles = (
     await Promise.all(
       options.verticals

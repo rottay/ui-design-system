@@ -4,8 +4,8 @@
  * WO-RET-03 sealed `docs/history/inventories/customization-manifest` on
  * 2026-09-19 and its README says no gate may read that tree as authority. The
  * cascade tables (root catalog, owner assignments, root cells) are live under
- * `governance/manifest/cascade`; the probe still reads the sealed control
- * calibration because no live twin of it exists. The family SET has a live
+ * `governance/manifest/cascade` and the probe's control calibration at
+ * `governance/manifest/calibration`. The family SET has a live
  * authority (the family inventory), so for that slice the rule is enforced:
  *
  *   F1  every script module that names the seal is listed below, by path, with
@@ -93,22 +93,16 @@ export const SEAL_READERS = Object.freeze([
     'binds root checklists to the per-family cells of the seal; no live source of family bindings exists yet'),
   reader('scripts/check/theme/single-listing/index.mjs', 'forbidder',
     'forbids gates from reading the sealed control documents, so it has to name that path'),
-  reader('scripts/check/tokens/cascade/probe/foundation/paths/index.mjs', 'probe-calibration',
-    'owns QUARANTINE_MANIFEST_ROOT for the retained causal-proof harness'),
-  reader('scripts/check/tokens/cascade/probe/foundation/negative-controls/index.mjs', 'probe-calibration',
-    'reads calibration negative controls from sealed control and family cells; calibration, not family identity'),
-  reader('scripts/check/tokens/cascade/probe/foundation/negative-controls/tests/index.test.mjs', 'probe-calibration',
-    'the negative-controls drills read the same sealed calibration corpus'),
-  reader('scripts/check/tokens/cascade/probe/public/cli/index.mjs', 'probe-calibration',
-    'the harness CLI accepts a sealed control or family manifest as calibration input'),
-  reader('scripts/check/tokens/cascade/probe/composition/run/index.mjs', 'probe-calibration',
-    'the harness run consumes a calibration manifest handed to it by the CLI'),
-  reader('scripts/check/tokens/cascade/probe/composition/run/tests/index.test.mjs', 'probe-calibration',
-    'plants calibration manifests to prove the harness run refuses a bad one'),
-  reader('scripts/check/tokens/cascade/probe/public/drills/tests/index.test.mjs', 'probe-calibration',
-    'the public drill set of the harness reads sealed control calibration'),
-  reader('scripts/check/tokens/cascade/probe/runtime/ingress/tests/index.test.mjs', 'probe-calibration',
-    'the ingress fences measure against the sealed control calibration corpus'),
+  reader('scripts/check/theme/single-listing/index.test.mjs', 'forbidder',
+    'the single-listing drills plant reads of the sealed controls slice in a sandbox to prove the gate refuses them'),
+  reader('scripts/check/tokens/cascade/probe/foundation/paths/index.mjs', 'probe-family-narrowing',
+    'owns QUARANTINE_MANIFEST_ROOT for the harness, which reads only sealed family cells to narrow negative controls'),
+  reader('scripts/check/tokens/cascade/probe/foundation/negative-controls/index.mjs', 'probe-family-narrowing',
+    'narrows a control\'s negative controls with a sealed family cell handed to it; calibration, not family identity'),
+  reader('scripts/check/tokens/cascade/probe/foundation/negative-controls/tests/index.test.mjs', 'probe-family-narrowing',
+    'the negative-controls drills read the sealed layout family cells the narrowing is measured on'),
+  reader('scripts/check/tokens/cascade/probe/public/cli/index.mjs', 'probe-family-narrowing',
+    'the harness CLI accepts a sealed family cell as optional --family-manifest narrowing'),
 ]);
 
 function* walk(root) {
