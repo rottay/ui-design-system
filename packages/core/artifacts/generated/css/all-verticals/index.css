@@ -39956,9 +39956,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Hover grammar: the certified ghost-button law (same as Transfer's
  * move/pagination buttons and Calendar's header chrome) --
  * `--ds-button-ghost-bg-hover` over a `--ds-surface-inset` floor, gated
- * `:not(:disabled)`. The hover background, copied ink/frame, selection tint and
- * transition duration read no `--ds-code-block-*` name: nothing produces one
- * and applications may not assign them, so the paint is written directly.
+ * `:not(:disabled)`. No paint in this skin reads a `--ds-code-block-*` name:
+ * nothing produces one and applications may not assign them, so the paint is
+ * written directly.
  */
 
 .ds-code-block[data-part='root'] [data-part='copy-button'] {
@@ -40053,15 +40053,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 @media (hover: hover) {
   .ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover {
     background: var(--ds-button-ghost-bg-hover, var(--ds-surface-inset));
-    color: var(--ds-code-block-copy-ink-hover, var(--ds-color-text-primary));
+    color: var(--ds-color-text-primary);
   }
 }
 
 .ds-code-block[data-part='root'] [data-part='copy-button']:active:not(:disabled) {
-  background: var(
-    --ds-code-block-copy-bg-pressed,
-    color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)
-  );
+  background: color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
 }
 
 /* Copied confirmation: the control flashes the success grammar (success ink,
@@ -40084,10 +40081,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-code-block[data-part='root'] [data-part='copy-button']:focus-visible,
 .ds-code-block[data-part='root'] [data-part='scroll']:focus-visible {
   outline: none;
-  box-shadow: var(
-    --ds-code-block-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
-  );
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
 }
 
 @media (forced-colors: active) {
@@ -115002,6 +114996,15 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   font-size: var(--ds-font-size-xs, 0.75rem);
   transition: filter var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
+/* The ink is read against the chip's OWN accent, resolved here so a per-event stamp gets its own ink. */
+@supports (color: contrast-color(red)) {
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    [data-part='day-cell']
+    [data-part='event'] {
+    color: contrast-color(var(--ds-calendar-view-entry-accent, var(--ds-color-primary)));
+  }
+}
 @media (hover: hover) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
@@ -126871,8 +126874,8 @@ html[lang]:lang(ar) {
   --ds-color-info-700: #82C1F2;
   --ds-color-info-800: #B2DDFF;
   --ds-color-info-900: #EDF7FF;
-  --ds-color-link: #3F6FFD;
-  --ds-color-link-hover: #3E6FFD;
+  --ds-color-link: #5987FF;
+  --ds-color-link-hover: #5987FF;
   --ds-color-primary-100: #040F5B;
   --ds-color-primary-200: #0B218C;
   --ds-color-primary-300: #1839B9;

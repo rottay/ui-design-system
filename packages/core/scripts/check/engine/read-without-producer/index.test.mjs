@@ -264,7 +264,8 @@ test('RESIDUE language scope: --ds-toolbar-title-letter-spacing fails on growth 
 
 /* ── Las clases de lectura fuera del skin Modern ─────────────────────────── */
 
-/* WO-EVI-03 found eleven; code-block's seven left through the ledger's exits. */
+/* WO-EVI-03 found eleven; code-block's seven left through the ledger's exits,
+   followed by the family's three unrouted siblings. */
 const EVI_03_REMAINING = Object.freeze({
   '--ds-voice-input-focus-ring': ['sharedPaint', 'WO-FAM-01'],
   '--ds-loading-overlay-scrim-opacity': ['sharedPaint', 'WO-FAM-04'],
@@ -272,7 +273,7 @@ const EVI_03_REMAINING = Object.freeze({
   '--ds-size-touch-target': ['sharedPaint', 'WO-FAM-11'],
 });
 
-const EVI_03_EXITS = Object.freeze({
+const CODE_BLOCK_EXITS = Object.freeze({
   '--ds-code-block-copy-bg-hover': 'sharedPaint',
   '--ds-code-block-copied-frame': 'sharedPaint',
   '--ds-code-block-copied-ink': 'sharedPaint',
@@ -280,6 +281,9 @@ const EVI_03_EXITS = Object.freeze({
   '--ds-code-block-selection-bg': 'sharedPaint',
   '--ds-code-block-gutter-ink': 'componentInline',
   '--ds-code-block-header-bg': 'componentInline',
+  '--ds-code-block-copy-bg-pressed': 'sharedPaint',
+  '--ds-code-block-copy-ink-hover': 'sharedPaint',
+  '--ds-code-block-focus-ring': 'sharedPaint',
 });
 
 const readBaseline = () => JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
@@ -331,12 +335,12 @@ test('the remaining four are named one by one in the ledger, each with its owner
   }
 });
 
-test('the seven code-block exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
+test('the ten code-block exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
   const classes = readBaseline().readClasses;
   const shared = classifyReadClass(collectSharedPaintFiles(), 'css', PRODUCERS);
   const inline = classifyReadClass(collectComponentInlineFiles(), 'script', PRODUCERS);
-  assert.deepEqual(Object.keys(classes.exits.rows).sort(), Object.keys(EVI_03_EXITS).sort());
-  for (const [name, cls] of Object.entries(EVI_03_EXITS)) {
+  assert.deepEqual(Object.keys(classes.exits.rows).sort(), Object.keys(CODE_BLOCK_EXITS).sort());
+  for (const [name, cls] of Object.entries(CODE_BLOCK_EXITS)) {
     assert.ok(!classes.sharedPaint.names[name] && !classes.componentInline.names[name], `${name} is no longer a row`);
     assert.ok(!shared.debt[name] && !inline.debt[name], `${name} is no longer read without a producer`);
     assert.ok(!PRODUCERS.has(name), `${name} left by losing its read, not by gaining a producer`);
@@ -397,7 +401,7 @@ test('componentInline: an unproduced inline read fails; a commented one does not
 });
 
 test('a NEW reader of an already-pinned unproduced name is growth, not coverage', () => {
-  const name = '--ds-code-block-copy-bg-pressed';
+  const name = '--ds-loading-overlay-scrim-opacity';
   withSandbox({ [AGNOSTIC_SKIN]: `.ds-drill { color: var(${name}); }\n` }, (sandbox) => {
     expectFinding(
       plantedFindings(sandbox),

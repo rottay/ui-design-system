@@ -99,6 +99,27 @@
           "from": "WO-FAM-06 (ownerProposal)",
           "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the fallback is built from produced channels only and is now the declared value, so the paint is unchanged and the dead name is no longer read; the contrast-measured mix (6.13:1 bithire, 6.09:1 TMM) is unchanged and the inline comment that called it a tenant escape hatch is corrected",
           "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        "--ds-code-block-copy-ink-hover": {
+          "class": "sharedPaint",
+          "family": "code-block",
+          "from": "unrouted (owner null, ownerProposal null)",
+          "disposition": "re-pointed: the hover ink now reads the produced --ds-color-text-primary directly, the value the dead wrapper always fell back to; the wrapper was dead: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it); paint unchanged",
+          "mover": "WO-EVI-03 arm 2, code-block siblings (2026-09-25, working tree over 60e12b8f3)"
+        },
+        "--ds-code-block-copy-bg-pressed": {
+          "class": "sharedPaint",
+          "family": "code-block",
+          "from": "unrouted (owner null, ownerProposal null)",
+          "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the fallback is built from produced channels only and is now the declared value, so the paint is unchanged and the dead name is no longer read; not re-pointed to --ds-form-sections-accent-secondary (the only produced channel whose value is the same expression -- a form-sections accent, semantically foreign and independently re-pointable) nor to --ds-button-ghost-bg-active (five different values across the bundle, none this mix)",
+          "mover": "WO-EVI-03 arm 2, code-block siblings (2026-09-25, working tree over 60e12b8f3)"
+        },
+        "--ds-code-block-focus-ring": {
+          "class": "sharedPaint",
+          "family": "code-block",
+          "from": "unrouted (owner null, ownerProposal null)",
+          "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the fallback is built from produced channels only and is now the declared value, so the paint is unchanged and the dead name is no longer read; not re-pointed to --ds-shadow-focus-ring, whose winning :root declaration is 0 0 0 3px var(--ds-tint-24) -- an opaque oklab mix toward --ds-color-bg-primary, not the translucent srgb mix toward transparent this ring paints -- nor to --ds-focus-ring (a two-layer offset ring)",
+          "mover": "WO-EVI-03 arm 2, code-block siblings (2026-09-25, working tree over 60e12b8f3)"
         }
       }
     },
@@ -106,9 +127,9 @@
       "corpus": "libraries/tokens/producers collectAuthoredStylesheets() minus /engines/(classic|rustic)/ minus the Modern skin corpus -- the same authored-CSS walker the producer set uses",
       "measured": {
         "files": 259,
-        "denominator": 2569,
-        "debt": 330,
-        "reads": 383
+        "denominator": 2566,
+        "debt": 327,
+        "reads": 380
       },
       "names": {
         "--ds-assistant-active-signal-shadow": {
@@ -309,30 +330,6 @@
             "src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css"
           ],
           "family": "chart-foundation",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-code-block-copy-bg-pressed": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
-          ],
-          "family": "code-block",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-code-block-copy-ink-hover": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
-          ],
-          "family": "code-block",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-code-block-focus-ring": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
-          ],
-          "family": "code-block",
           "owner": null,
           "ownerProposal": null
         },

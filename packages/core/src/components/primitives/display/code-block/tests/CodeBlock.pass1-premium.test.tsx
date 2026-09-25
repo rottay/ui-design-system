@@ -141,16 +141,23 @@ describe('CodeBlock remediation (K4-B)', () => {
     expect(button.getAttribute('style')).toBeNull();
     expect(container.querySelector('[data-part="copy-button"]')).toBe(button);
 
-    // Static paint transcribed verbatim; ghost-hover law with the family
-    // escape hatch; focus ring on both the button and the scroll region;
-    // forced-colors contract.
+    // Static paint transcribed verbatim; ghost-hover law; the press and the
+    // focus ring (shared by the button and the scroll region) read governed
+    // channels only; forced-colors contract.
     expect(skin).toContain('border: 1px solid var(--ds-color-border)');
     expect(skin).toContain('color: var(--ds-color-text-secondary)');
     const hover = skinDeclaration("[data-part='copy-button']:not(:disabled):hover", 'background');
     expect(channelReads(hover)).toEqual(['--ds-button-ghost-bg-hover', '--ds-surface-inset']);
-    expect(skin).toContain("[data-part='copy-button']:focus-visible");
+    const hoverInk = skinDeclaration("[data-part='copy-button']:not(:disabled):hover", 'color');
+    expect(hoverInk).toBe('var(--ds-color-text-primary)');
+    const pressed = skinDeclaration("[data-part='copy-button']:active:not(:disabled)", 'background');
+    expect(pressed).toBe('color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)');
+    expect(channelReads(pressed)).toEqual(['--ds-color-text-primary']);
     expect(skin).toContain("[data-part='scroll']:focus-visible");
-    expect(skin).toContain('color-mix(in srgb, var(--ds-color-primary) 24%, transparent)');
+    const ring = skinDeclaration("[data-part='copy-button']:focus-visible", 'box-shadow');
+    expect(ring).toBe('0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)');
+    expect(channelReads(ring)).toEqual(['--ds-color-primary']);
+    expect(skinDeclaration("[data-part='scroll']:focus-visible", 'box-shadow')).toBe(ring);
     expect(skin).toContain('@media (forced-colors: active)');
     // CI-1 checker fix: excludes the `@media (prefers-reduced-motion: reduce)`
     // block from the scan. `!important` there is the standard accessibility
