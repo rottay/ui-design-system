@@ -57,7 +57,7 @@ const config: StorybookConfig = {
                 return 'vendor-d3';
               }
 
-              if (id.includes('storybook')) {
+              if (id.includes('/node_modules/') && /\/@?storybook\//.test(id)) {
                 return 'vendor-storybook';
               }
 
