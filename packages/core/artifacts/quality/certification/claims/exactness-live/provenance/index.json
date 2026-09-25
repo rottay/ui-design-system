@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "fba67293858bd2e21cb3ba1f7554df1233832696655185262b555bd8fd179cc2"
+    "semanticHash": "b8c22b48586a8e64a36b11c8e19a651b77f86ee6672d8305918f88fa75f51f70"
   },
   "divergentInputs": [
     {
@@ -133,7 +133,7 @@
       },
       "live": {
         "bytes": 25678,
-        "sha256": "5257206d2c12e42c133dfeafdf688ddc8de46aa7e7d577a2e9c83afa2e98e6d4"
+        "sha256": "aea529bd271cf8b50070345302ae81110405b311b38bfe7524e48fc9749b67c5"
       }
     },
     {
@@ -143,8 +143,8 @@
         "sha256": "2b76bff070e31f2bdf6afa798b9e9248ead4f71580f9fffe0fe88af1d003f844"
       },
       "live": {
-        "bytes": 2476,
-        "sha256": "fa1c4f9ff52d6a1fc7afbb9de32229452bade0aed442ccf7d6985074bc483bb5"
+        "bytes": 2507,
+        "sha256": "9612ee55f03f0a812bbcf240d4d1efbbd946458cb57514b1dd0ca51c32924b1d"
       }
     },
     {
@@ -176,8 +176,8 @@
         "sha256": "9e3e93a018970d9e0a598bce7fe2c960104af98b130992cc5c072cced8d74e03"
       },
       "live": {
-        "bytes": 5925832,
-        "sha256": "9f50849374f127f2aeeac141af32339c785261da11debf55e81b816c2055ba8e"
+        "bytes": 5989639,
+        "sha256": "1785de629f40f342e63a352e5e0f5f527bf173ed079a12b0361272f9f9ea3dac"
       }
     },
     {
@@ -198,8 +198,8 @@
         "sha256": "a43d0f7917d69e88530d142f42365e5648c387abb74088772f447c3f1b9f0921"
       },
       "live": {
-        "bytes": 5481788,
-        "sha256": "c5ca47bfe758a48a34dcef42fe5d5f7a393c0c43253c86229a675d7120ec1c32"
+        "bytes": 5502251,
+        "sha256": "a82d7f949241d2bd852734f54de9f7beef50eee31a0786644af70065b44b9246"
       }
     },
     {
@@ -209,8 +209,8 @@
         "sha256": "e745fe98a012849cd8810a98dd134a87ef8d5ee6d6198ebe2fa983cd1d9768a3"
       },
       "live": {
-        "bytes": 5472815,
-        "sha256": "87326b0673e9d03e466fa9a8d4ce9bc21fd2d204d21a744d8387898c5e6f67e8"
+        "bytes": 5493278,
+        "sha256": "5a447b0cb6beb151eb7ed6e05f2baeed06175605a083b8011ddbeb5d085fc11a"
       }
     },
     {
@@ -220,8 +220,8 @@
         "sha256": "63805a9945449e549b587efc03916480faf0dd43188a0b6e450260d5925d9699"
       },
       "live": {
-        "bytes": 5472075,
-        "sha256": "53e388a15886b22806d41ce332b2fc97f066f464e089211092bd41977c216b4a"
+        "bytes": 5492538,
+        "sha256": "4548177b3810c545d1f85ef25e52fe9f40fcc781266ba6b963230c98abce7b19"
       }
     },
     {
@@ -254,7 +254,7 @@
       },
       "live": {
         "bytes": 166,
-        "sha256": "04ae396b412d413097b48b97f240cf27725751566cca4edb8bd3e4ce33a3589e"
+        "sha256": "90776a745e88d5fa483c8707d720d73aabf0c5f2089e11b9c1ddec550436e59b"
       }
     },
     {
@@ -428,8 +428,8 @@
         "sha256": "9fb113a606a5b4f47672055b07ba0acfa70aff8e668ffe2e5685119b06bd05fc"
       },
       "live": {
-        "bytes": 11496,
-        "sha256": "2ab8a84e9f18e36c51c52e5cbd7bffbf78e01688f28573938480f3a528f30326"
+        "bytes": 11464,
+        "sha256": "debdd449e27fb1ede58a7823c7ec46b52231980ad6deeeae9247ae0d542497a8"
       }
     },
     {
@@ -623,8 +623,8 @@
         "sha256": "16e39ba585facc2d7d01b4f7ae5520b695637c9b2037b9d00596043156535f6b"
       },
       "live": {
-        "bytes": 23313,
-        "sha256": "5899860d5eb09040c82760cf76e3e4107d50b4963104425eb6a46b8875f5e2fa"
+        "bytes": 24071,
+        "sha256": "aa32d0fefafb7e671b549c607e75eb9fc85b9570d83abfa2ad08b342a9d580b1"
       }
     },
     {
@@ -634,8 +634,8 @@
         "sha256": "4b4ac5f91a836b552d9be0ba87992063ab4b0012b7001defe0951655547f55a1"
       },
       "live": {
-        "bytes": 32049,
-        "sha256": "f3f80eb74e7302a143bf45f6f86bf11b134535fcfebcc9d71f3eae2e3281c25c"
+        "bytes": 33455,
+        "sha256": "8e5133eb5926298ae0fec2c827ab4f16124ce5471ff345fcfdfa9e1751c03395"
       }
     },
     {
@@ -752,8 +752,8 @@
         "sha256": "483220a25d6d6210aa9d82ef8f5d7a8a95f63655afffbea5579b7b4d18299208"
       },
       "live": {
-        "bytes": 130021,
-        "sha256": "ec1eecc8df4ea262555ba613783788f516a9a80451a339ae345fea2e6e1d3d57"
+        "bytes": 130389,
+        "sha256": "a4138b98b045159ef12291cd2db85b62807624a058c40b47696dcdd592af007e"
       }
     },
     {
@@ -774,8 +774,8 @@
         "sha256": "09566280d80772c2a78ea1790513cf6336bc26a95a5014e7007ddd2a6dcb1232"
       },
       "live": {
-        "bytes": 19717,
-        "sha256": "b7e4a0bfe262dbf897f94bd4bfdcbb151bbd2569faa9c6f8b4c68443b1be8fff"
+        "bytes": 19856,
+        "sha256": "985a61882cf81a4e233bde0091ab0631f24b74d66735c0f9b3c985fe03ce232a"
       }
     },
     {
@@ -863,6 +863,14 @@
       "live": {
         "bytes": 4140,
         "sha256": "28e69ba5a5e8d43bb37d51ee3ec8a19bd3626898cec6170a87245035138a45c1"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.provider-locale.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1898,
+        "sha256": "6eb5e5d9a2d22e850e803dce45f5cdf2d3bfe50e74c27e3d89c78bdc4454773a"
       }
     },
     {
@@ -1156,8 +1164,8 @@
         "sha256": "afc9d763a4821ce8894e16f2fd278271377dfdff9ddc103b9dc2a533ca1d31d3"
       },
       "live": {
-        "bytes": 38930,
-        "sha256": "d0024bb34d89a20888f52dbdf5048803f710df9f13f51a98b99df4d9847b5972"
+        "bytes": 38989,
+        "sha256": "8ca2318ca1d8d50e6524b4c30603ee90d3338b0bcd1c1e2bd47666f607863a53"
       }
     },
     {
@@ -1248,6 +1256,14 @@
       "live": {
         "bytes": 8884,
         "sha256": "0e4c14934acfcf8693ce5510896a2dea6b6cb661e6bc4b1ef0c6215eb767803e"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/data/list-toolbar/tests/ListToolbar.modern-provider-locale.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1292,
+        "sha256": "eba907ab7b565604d649a40b0f9ce2a728ea2060ebf658449c4540710d53b45c"
       }
     },
     {
@@ -1445,8 +1461,8 @@
         "sha256": "56320b812603308a6166c281dc68042c0bbf1590611a64a75ee15c30a09dfd46"
       },
       "live": {
-        "bytes": 63575,
-        "sha256": "99f4cc000d5329ebfe281a142252df42becd4d57d009c1fea513acbfa6fd0e81"
+        "bytes": 63726,
+        "sha256": "c06df13fd369c563d3dd640a8b380667cd043bbffe3485d5efa9a87a67d067f6"
       }
     },
     {
@@ -1526,6 +1542,14 @@
       "live": {
         "bytes": 15654,
         "sha256": "1c451c09368cb3bf32054818ee10b1d8ba450c2cb31bb3cc6de8c0dd3a488930"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/data/widget-board/tests/WidgetBoard.provider-locale.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1555,
+        "sha256": "b06cf424d3d897ca5a3d1c70bfa9445a5a7ef54bf7bf49a9c3aa36596bbb3cba"
       }
     },
     {
@@ -1756,6 +1780,25 @@
       "live": {
         "bytes": 1412,
         "sha256": "57acd6950c7bf1e47c9a77a049638380e5d80123d7162fabbdcd59ed5f589ee4"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/identity/profile/user-profile-card/engines/modern/index.tsx",
+      "archive": {
+        "bytes": 9477,
+        "sha256": "d0f969cb2484bf50afabe830697db7592cf3fe98b4a85c9c6428b3e617ac0972"
+      },
+      "live": {
+        "bytes": 9579,
+        "sha256": "a6f3c6e942e8d0b72e0f717a44398fef664d4f66bba022bafc1fba9299c097a8"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/identity/profile/user-profile-card/tests/UserProfileCard.provider-locale.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 963,
+        "sha256": "978a006233adbc8c2303b6a862def8d84bb8974ef96ba875d745eb1999e14942"
       }
     },
     {
@@ -2431,8 +2474,8 @@
         "sha256": "9542a8c4750a57e27374745149296ce64d44842f4a24952e22cf04c32bd75de5"
       },
       "live": {
-        "bytes": 32139,
-        "sha256": "a581fe3d26d8580f542f0fd855283f8487b7a42acedfda16bd7de7facb72f076"
+        "bytes": 32208,
+        "sha256": "2cc799a428e5e0096e6ba29db9824a968e047d7c29d50ad856596b94de2d79b2"
       }
     },
     {
@@ -2449,6 +2492,14 @@
       "live": {
         "bytes": 2604,
         "sha256": "0d748937f86a37f85ac7ad409a8dbbfa4c289c041608ad9127de92b445dd803c"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/visualization/charts/families/sankey/tests/SankeyChart.provider-locale.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1042,
+        "sha256": "8456702d7728edbc89367e4b66302b6a88fb5b33aba888a8d40bf0e9f7f902ae"
       }
     },
     {
@@ -3211,6 +3262,36 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/components/patterns/workflow/approval-workflow/engines/modern/index.tsx",
+      "archive": {
+        "bytes": 13603,
+        "sha256": "6e683c8a8172615f0699b55385d29a77a33836d4a79017b6f170c90b0701b253"
+      },
+      "live": {
+        "bytes": 13797,
+        "sha256": "25e6a22147e37a72331becf03a3e751fb4f151b589bbe933c5cc005920e9445b"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/workflow/approval-workflow/tests/ApprovalWorkflow.modern-provider-locale.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1205,
+        "sha256": "f62bbec1282043169deb9795fa1835c68c2f6a007ca8469a4dd97098893a9c60"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/workflow/moderation-gallery/engines/modern/index.tsx",
+      "archive": {
+        "bytes": 19641,
+        "sha256": "bdfe8765b7930cb877b0fd9fd2a2e986fcca304c5b89bf5418dd11e569b7fd2b"
+      },
+      "live": {
+        "bytes": 19717,
+        "sha256": "d5cf1ba7554fafd631ce00906f236962d09bbda2963484bd3410e3c472718451"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/components/patterns/workflow/moderation-gallery/index.ts",
       "archive": {
         "bytes": 938,
@@ -3222,6 +3303,25 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/components/patterns/workflow/moderation-gallery/tests/ModerationGallery.modern-provider-locale.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1567,
+        "sha256": "bb073daa1505b8ff17aad6799070c443330b4981bf8b98e7f7cbfd4b188bbb2a"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/workflow/operational-ledger/engines/modern/index.tsx",
+      "archive": {
+        "bytes": 9224,
+        "sha256": "22a35cef87e16f7bc92f6589ae64736edb43ffbcb5f62b1d4e2cc5061790dc3a"
+      },
+      "live": {
+        "bytes": 9434,
+        "sha256": "e90a7f00d6eb6b0b1580e20e6de458528c423b973df56f144cdfe92001de8d65"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/components/patterns/workflow/operational-ledger/index.ts",
       "archive": {
         "bytes": 974,
@@ -3230,6 +3330,14 @@
       "live": {
         "bytes": 1097,
         "sha256": "708df61d3a9e4dc1999cc938a2f3a33fb87fe380478b06109f5764663ac202a1"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/workflow/operational-ledger/tests/OperationalLedger.modern-provider-locale.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1559,
+        "sha256": "e94788c444ba33fee0ef80ee5c0943380aa076b29323ba40fe096c648774dc43"
       }
     },
     {
@@ -4798,6 +4906,118 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/contracts/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 3623,
+        "sha256": "f36276ed62b97b1e4299c87dbb7ab3563e38d4c6b1a4731f622cf6107ade8a88"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/index.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 590,
+        "sha256": "6de740a829ce13e2fcab568b406a32e216fd751a622f7303f79c0eeb3fc262ec"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/presentation/item/index.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 7944,
+        "sha256": "39d79ba39ed0ffd3423de165daf83a21ad6d200382b1a24e38aa23d23cb7a0de"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/presentation/item/tests/NotifierItem.lifecycle.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 7824,
+        "sha256": "0fb687003eee732f6f24aa6656495123abba29e20bbb9d82e656e190bbecdbbf"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/presentation/stack/index.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1468,
+        "sha256": "eccf6c3b1e2285dd70fa67734d7b109a94d657aa454263c86ee8a727f7467d40"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/runtime/countdown/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 3045,
+        "sha256": "7433ccd41c1726cc23772bddc61335c65b4c1a3e81c115a27e5462f2efaf65a0"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/runtime/countdown/tests/NotifierCountdown.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 14008,
+        "sha256": "d7b3c5d6914d2ecbb0113ffa51045f29af939ca1cf09abc67fb467d203fb4c29"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/runtime/exit/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 2129,
+        "sha256": "79993b832f4d2ec300817e13449d17726b4cc74356079dad218f9c8a84c24005"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/runtime/exit/tests/NotifierExit.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 4371,
+        "sha256": "4069d0f21c0a0862ba5b099ca3fcaf958816b72903bd38cbd927e98dbafa3326"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/tests/Notifier.anatomy.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 7000,
+        "sha256": "ab500b8f28f03645ec227864f7b9d3cd43f7629b84b14e1e547afbe192372d46"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/tests/Notifier.caller-handler-composition.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1436,
+        "sha256": "7d870418578ccf866b4f35c2ffd014d41bd837ff181960e91cd11204b5bcb1fa"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/tests/Notifier.causality.integration.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 6738,
+        "sha256": "78968d626484da5703d6c86b0b8e9d75664c66ffb318316ededafd1d5a141e84"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/tests/Notifier.escape-composition.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 6148,
+        "sha256": "04b42939bfdd9da12e41f883dd47fbcd867600e010d3f46eb810f2c95ae6c1dd"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/feedback/foundation/notifier/tests/Notifier.refresh.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 8610,
+        "sha256": "c81bf39ae016151f53c4d3c35dff508fe2168acee49b41db58828c5cc10641a3"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/components/primitives/feedback/index.ts",
       "archive": {
         "bytes": 2354,
@@ -4826,8 +5046,8 @@
         "sha256": "da4e2e0ead74034ec58a743818aab850905f2f437f57379c1b1db14a9c471f91"
       },
       "live": {
-        "bytes": 8616,
-        "sha256": "7ec1fde10ff61f5a2ef9abea21b9e70ec6cc9c0a249b73bf71141a74569b21d8"
+        "bytes": 8627,
+        "sha256": "381274a3e8c0d687abb95c2608d050fdc410890d74b814c7223cf9f499fe398b"
       }
     },
     {
@@ -5067,8 +5287,8 @@
         "sha256": "c54a6abf01222fe9b8a303f9ac0b9a1c8d57fde6a47984f7d9cf5738407e9b47"
       },
       "live": {
-        "bytes": 7843,
-        "sha256": "2ffede4474ecf9cd2713ac241f1131d816e290969bf30fff7954f8bbcb372952"
+        "bytes": 7854,
+        "sha256": "933a324e1e08b49b62aac76de2d6e1d4450561167a2bdedba79903c4bc1aa68d"
       }
     },
     {
@@ -5118,118 +5338,6 @@
       "live": {
         "bytes": 10592,
         "sha256": "69194ee048f25147b126d5eae0c809d70b06f5cfda060b89d08b03eb2ed01828"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/contracts/index.ts",
-      "archive": null,
-      "live": {
-        "bytes": 3623,
-        "sha256": "f36276ed62b97b1e4299c87dbb7ab3563e38d4c6b1a4731f622cf6107ade8a88"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/index.tsx",
-      "archive": null,
-      "live": {
-        "bytes": 590,
-        "sha256": "6de740a829ce13e2fcab568b406a32e216fd751a622f7303f79c0eeb3fc262ec"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/presentation/item/index.tsx",
-      "archive": null,
-      "live": {
-        "bytes": 7944,
-        "sha256": "39d79ba39ed0ffd3423de165daf83a21ad6d200382b1a24e38aa23d23cb7a0de"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/presentation/item/tests/NotifierItem.lifecycle.test.tsx",
-      "archive": null,
-      "live": {
-        "bytes": 7824,
-        "sha256": "0fb687003eee732f6f24aa6656495123abba29e20bbb9d82e656e190bbecdbbf"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/presentation/stack/index.tsx",
-      "archive": null,
-      "live": {
-        "bytes": 1468,
-        "sha256": "eccf6c3b1e2285dd70fa67734d7b109a94d657aa454263c86ee8a727f7467d40"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/runtime/countdown/index.ts",
-      "archive": null,
-      "live": {
-        "bytes": 3045,
-        "sha256": "7433ccd41c1726cc23772bddc61335c65b4c1a3e81c115a27e5462f2efaf65a0"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/runtime/countdown/tests/NotifierCountdown.test.tsx",
-      "archive": null,
-      "live": {
-        "bytes": 14005,
-        "sha256": "230ccb69b160755ffa9fb3989d27c0f82a8450d7570718f29ea97637c8f1d6f7"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/runtime/exit/index.ts",
-      "archive": null,
-      "live": {
-        "bytes": 2129,
-        "sha256": "79993b832f4d2ec300817e13449d17726b4cc74356079dad218f9c8a84c24005"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/runtime/exit/tests/NotifierExit.test.tsx",
-      "archive": null,
-      "live": {
-        "bytes": 4371,
-        "sha256": "4069d0f21c0a0862ba5b099ca3fcaf958816b72903bd38cbd927e98dbafa3326"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/tests/Notifier.anatomy.test.tsx",
-      "archive": null,
-      "live": {
-        "bytes": 6991,
-        "sha256": "3dd8abd4bc2c41029bbdb4ab0f7193a83b0ad88b501dbc0fc6de391e43092a31"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/tests/Notifier.caller-handler-composition.test.tsx",
-      "archive": null,
-      "live": {
-        "bytes": 1436,
-        "sha256": "7d870418578ccf866b4f35c2ffd014d41bd837ff181960e91cd11204b5bcb1fa"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/tests/Notifier.causality.integration.test.tsx",
-      "archive": null,
-      "live": {
-        "bytes": 6735,
-        "sha256": "ac0c772fe82a718fc899dc4c7a7e51abf17d9b53c32ffc99a6c205bedad2626e"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/tests/Notifier.escape-composition.test.tsx",
-      "archive": null,
-      "live": {
-        "bytes": 6136,
-        "sha256": "fea04f04e93f8f2516cc452628a02073d04be416c7f44ce25c079155f0e5463a"
-      }
-    },
-    {
-      "path": "ui-design-system/packages/core/src/components/primitives/feedback/notifier/tests/Notifier.refresh.test.tsx",
-      "archive": null,
-      "live": {
-        "bytes": 8598,
-        "sha256": "a608d83c6eb8ef216790ad02b1b9592b2a8577086421682cfcee3fef71f13a14"
       }
     },
     {
@@ -5485,8 +5593,8 @@
         "sha256": "5a8564549bacef37f4662dff3c8090c0762bb013bac142b4e199f4e01f730090"
       },
       "live": {
-        "bytes": 21125,
-        "sha256": "81dcf8ecda9ad281a62743b3dc243e46c55c5f3079f071919595f64dbc905c37"
+        "bytes": 21136,
+        "sha256": "3cffb42be11270a786442c0733516777d6d0c33d738d7530a245746c02380a48"
       }
     },
     {
@@ -5507,8 +5615,8 @@
         "sha256": "e5c1086d681a60bc942fef0c7a223bfdbf78284eae8ae4488efdbc26ce1d65dc"
       },
       "live": {
-        "bytes": 2413,
-        "sha256": "7c9981d1e2406d37de228c12bcb1a3809e9a3435cf8a28fbdf67e0e67131cfbc"
+        "bytes": 2424,
+        "sha256": "967a5a724a9c536d27fc0ce2d69d353b3d7759f8dc7e2e0980d749950abf8d0a"
       }
     },
     {
@@ -8173,8 +8281,8 @@
         "sha256": "21f6ec43501ab5f3dbf3f60de41bc978a24e694344b46f1f59913623de312918"
       },
       "live": {
-        "bytes": 5640,
-        "sha256": "fd5d35e359f69254c5c68f3a32a3f725fe10f872db04048c0c3bfdd328755ccd"
+        "bytes": 5632,
+        "sha256": "053e3d38a6270330d2e4a0dcac91c50c3e21e3d2f5481537bd5be4341edaa074"
       }
     },
     {
@@ -8345,8 +8453,8 @@
       "path": "ui-design-system/packages/core/src/components/primitives/layout/stack/tests/Stack.nested-density.integration.test.tsx",
       "archive": null,
       "live": {
-        "bytes": 7456,
-        "sha256": "1575fb5c35ab553f45633d042d6eb9dc5d49e61d65fdc626ce936fbd745eb28d"
+        "bytes": 7518,
+        "sha256": "32af70b74f949cfcb9ad59c136e07b98b00a6d84f43127369eade56f5d4965fe"
       }
     },
     {
@@ -8367,8 +8475,8 @@
         "sha256": "9b3ba956ae7125be0c2dd318f44972a3fc9f14b19e50365eacedeb6a77d19339"
       },
       "live": {
-        "bytes": 30841,
-        "sha256": "84404843e578a54d58e67c1f749638a5f3a81debe12f582ee6935b4d817db41b"
+        "bytes": 30542,
+        "sha256": "1d1335682b125756fa3caa5b24e0ee47b160b279b77ee11048e8570e336a48b5"
       }
     },
     {
@@ -12007,8 +12115,8 @@
         "sha256": "06f4e3648ccdc66c1113bcc374b1995427d2483157c512cb1c3ed53d24efc9a2"
       },
       "live": {
-        "bytes": 103289,
-        "sha256": "33f688522f77062a23a2dfc069cafb4281811a54fa733c5122527d0289831b97"
+        "bytes": 103524,
+        "sha256": "5d82cee812540c33488d886757890e822b774a0c0db6a329a89815cd44fc7d2b"
       }
     },
     {
@@ -12018,8 +12126,8 @@
         "sha256": "49cbebcf07206bd7b00eadd91adc0f5dc69ebbb8bd166f194386c7f8c951db51"
       },
       "live": {
-        "bytes": 39184,
-        "sha256": "0d8413fcf330d58792e3cc7dbb0dba3c6c7254dbd706ccf4896a2a800885f276"
+        "bytes": 39480,
+        "sha256": "1359adfd64b3796ed570e15d812cb44df0aae30ca6722b35af54ec0df220dc46"
       }
     },
     {
@@ -12031,6 +12139,14 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/tests/RenderDispatch.provider-locale.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1867,
+        "sha256": "4d1d480cce67c6abb42fcfa3390d7424d0e0ea41bb71e8aabb37daac058bf54e"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.grid-columns.test.tsx",
       "archive": {
         "bytes": 4064,
@@ -12039,6 +12155,14 @@
       "live": {
         "bytes": 4263,
         "sha256": "76ac3e3546c76ae28ac81be9bd4f108b892a1777189c7f495f7446f51f42b350"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.provider-locale.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 2091,
+        "sha256": "f09f2cbd9281f730395d354aba2171277a4473a3ea17f8f528a90d5b7bf758f4"
       }
     },
     {
@@ -12177,11 +12301,59 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/contracts/theme/runtime/styles/composition/registry/editorial-quiet/document/index.json",
+      "archive": null,
+      "live": {
+        "bytes": 1201,
+        "sha256": "b8aedc2d46a61afaa6dd9fe3b9d004a3b84f6b7db15b08a35d5e6ea6949ca20a"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/contracts/theme/runtime/styles/composition/registry/editorial-quiet/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 576,
+        "sha256": "beb25ac56aac161cc6d3db484691f9fed6c8e74efbe2eb818dc6d56699b6a3a5"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/contracts/theme/runtime/styles/composition/registry/editorial-quiet/manifest/index.json",
+      "archive": null,
+      "live": {
+        "bytes": 2986,
+        "sha256": "97a17fee6df14c1e3d06b387993f33edb445b4b90702db83465b5622c670fed7"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/contracts/theme/runtime/styles/composition/registry/index.ts",
       "archive": null,
       "live": {
-        "bytes": 2577,
-        "sha256": "a1abb8a98466b33171fb927f1eb0340848fa9cea0a5f43c3a19357951e4dc80d"
+        "bytes": 3169,
+        "sha256": "fc8592e410949f0b25e800fde03fe9bd25985d678eafd67c14e5a6c880cccb87"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/contracts/theme/runtime/styles/composition/registry/product-dense/document/index.json",
+      "archive": null,
+      "live": {
+        "bytes": 1204,
+        "sha256": "ce5c8a4022eb416c6c825a1e7f700fef062c79a04ca017a45058c0c2956eef47"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/contracts/theme/runtime/styles/composition/registry/product-dense/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 568,
+        "sha256": "af60aa78b54d3cb9a92482b5cd047b44eb30257d244e9488c4aa5a78cd730efb"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/contracts/theme/runtime/styles/composition/registry/product-dense/manifest/index.json",
+      "archive": null,
+      "live": {
+        "bytes": 3070,
+        "sha256": "d981341a2a9274b6905c5d72992aec748f9313f88f4d2d0ec4ed1636aa4ac543"
       }
     },
     {
@@ -12244,16 +12416,16 @@
       "path": "ui-design-system/packages/core/src/contracts/theme/runtime/styles/runtime/partition/index.ts",
       "archive": null,
       "live": {
-        "bytes": 6040,
-        "sha256": "cae155279a5729ba9cf370537a0bbb80caea0f2993155aa5b930eac7963ac36c"
+        "bytes": 6417,
+        "sha256": "30d2ad648c737d76692edeab893043162bc704964c4ff500d950b80eb5d82898"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/contracts/theme/runtime/styles/tests/index.test.ts",
       "archive": null,
       "live": {
-        "bytes": 17683,
-        "sha256": "da60a910b73187329a9f1f534028e22daee8f9bcda2ecd5cc48eb8446571c35e"
+        "bytes": 25177,
+        "sha256": "f2824498b56d031b1a80933ecf1eff2b038b1592f0b2bdb59aa5c23be1e7d828"
       }
     },
     {
@@ -13158,11 +13330,59 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/foundation/presets/styles/structural-neutral/document/index.json",
+      "archive": null,
+      "live": {
+        "bytes": 738,
+        "sha256": "450907476578e121dc7c1633eaa93ae0c1609b62cebb4c174af2d679e5dd8d96"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/presets/styles/structural-neutral/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 587,
+        "sha256": "a225377a008ca671906de4b330ef062798d14cf35d8f83e5db1c2ee2702730bf"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/presets/styles/structural-neutral/manifest/index.json",
+      "archive": null,
+      "live": {
+        "bytes": 4142,
+        "sha256": "e1d3bc5fc4263622ca9546b5576a1724ec7ad49a10c57f8b345abd72f1a220be"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/presets/styles/technical-dense/document/index.json",
+      "archive": null,
+      "live": {
+        "bytes": 1100,
+        "sha256": "088d6f3ec528c7b3a3ec0a0df9ce41776a2401e02e84beba0f948dccac552073"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/presets/styles/technical-dense/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 562,
+        "sha256": "616029450f5b9a84daf2a72f28c65955f835922f2b6e3aba85dfc0cd40c43cc7"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/presets/styles/technical-dense/manifest/index.json",
+      "archive": null,
+      "live": {
+        "bytes": 3965,
+        "sha256": "1271f224902c776cdea21123d9b09902c20cdf77aad1b7e493c01cb32d5a3ce3"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/foundation/presets/verticals/bithire/document/index.json",
       "archive": null,
       "live": {
-        "bytes": 1867,
-        "sha256": "45342ff71a43bfcc23672144b2acbb563aaee21e29fd55b3f1bb2a5183bf5b7a"
+        "bytes": 855,
+        "sha256": "99146fb0e0bd0e6797469e654348185e8eaa062aaebed190cd2a04cfe7a6c4fc"
       }
     },
     {
@@ -13185,8 +13405,8 @@
       "path": "ui-design-system/packages/core/src/foundation/presets/verticals/evnto/document/index.json",
       "archive": null,
       "live": {
-        "bytes": 782,
-        "sha256": "5de60e760d42c09a599cfa2047f13ce494910064d454865926e5687173fe8cf9"
+        "bytes": 127,
+        "sha256": "728d5e264c32b1a5a2094dd3585edfc9df92f05fb441c7b7484b91fe474760f3"
       }
     },
     {
@@ -13252,8 +13472,8 @@
       "path": "ui-design-system/packages/core/src/foundation/presets/verticals/rottay/document/index.json",
       "archive": null,
       "live": {
-        "bytes": 782,
-        "sha256": "5de60e760d42c09a599cfa2047f13ce494910064d454865926e5687173fe8cf9"
+        "bytes": 127,
+        "sha256": "728d5e264c32b1a5a2094dd3585edfc9df92f05fb441c7b7484b91fe474760f3"
       }
     },
     {
@@ -13276,8 +13496,16 @@
       "path": "ui-design-system/packages/core/src/foundation/presets/verticals/tests/decisions.test.ts",
       "archive": null,
       "live": {
-        "bytes": 13128,
-        "sha256": "7c5765d746fc79b2daa5bb85bd8ae39b530a4255728ecf72e49fd29a33e1bd7f"
+        "bytes": 13726,
+        "sha256": "fe8e2d3a35b2daa78e091794c1fcfbd99f0575424097dbc7cfd75fc61f40446f"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/presets/verticals/tests/style-split.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 5206,
+        "sha256": "cb672d564e94711a3033862e79b69266c8c015449f77c4f1be71edca0b93a87b"
       }
     },
     {
@@ -13287,8 +13515,8 @@
         "sha256": "7cc8b3fd9b89480c38c9324e9cf08eb3051e5914c00491b22cdec571b6d3bbf4"
       },
       "live": {
-        "bytes": 230541,
-        "sha256": "002df0d6c241c9983d3edd707215e452a58eb53a27ab25ca86269120d46a71f4"
+        "bytes": 252213,
+        "sha256": "3c3f19534f0ec41e1d92a044fff27b0f7a6d66af85944eae46044cd977279e74"
       }
     },
     {
@@ -13298,8 +13526,8 @@
         "sha256": "3ac87cae9a2356a8986a40a7b4c1e41d1f0fe5170931857e566fd82c55cdcb94"
       },
       "live": {
-        "bytes": 221604,
-        "sha256": "c56031b4281c5af60ff4d8a7a585782b9d1de45b12f55d43ccb57f620f1c2423"
+        "bytes": 243276,
+        "sha256": "add18766046102bc9cfd4c9668e21bd058d0bbe4aa26fed1d0b80cc4271f7495"
       }
     },
     {
@@ -13309,8 +13537,8 @@
         "sha256": "ad0a7e580eadfdf8e9a409db5209b9ae57182d5d31e434b5a83f3e5088d4d523"
       },
       "live": {
-        "bytes": 221617,
-        "sha256": "1b93014a4076237837cc9d74ce9061bd8ef40110d1199fa4717c9982b6085966"
+        "bytes": 243289,
+        "sha256": "59182284bbb1daa5f6d595c2cf83e55d91e09e780a117238eda35867cc9881e6"
       }
     },
     {
@@ -14580,8 +14808,8 @@
         "sha256": "3f837da2f3622b2383ab7d6f6549e5f24d8aadd009343bb4ddcff9c8edbb0a39"
       },
       "live": {
-        "bytes": 39822,
-        "sha256": "c56cc1623ae6d22d443936f810944bde81e807a0b66514b7a8e1cdcfa158c749"
+        "bytes": 39989,
+        "sha256": "a71f880abb6bb09378cba690ec490bf652e0153b75f0ee791b00c3d119eacece"
       }
     },
     {
@@ -14657,8 +14885,8 @@
         "sha256": "1fc00e26514ec6bda8524909ff2721bf3f3ffb4ff7264280fd3c4905c87eae52"
       },
       "live": {
-        "bytes": 19439,
-        "sha256": "6b96573a60ba4e984244db2824aab7e6a49ebd51e971e526b7f4717537dbb0c8"
+        "bytes": 19631,
+        "sha256": "71d91f6a66ce87dfa37565e7d285c81623b26b35cb5e98e7a4dba726106a52e3"
       }
     },
     {
@@ -15211,8 +15439,8 @@
         "sha256": "f058a751da495a36cbc6e87a04cf354df9429730c41b42c10177c4ea06b27605"
       },
       "live": {
-        "bytes": 55464,
-        "sha256": "bbf2a44c272e719e5a90a70b5f7ff76a5b2cc34bcddb8fae9b64932bc7d52195"
+        "bytes": 55508,
+        "sha256": "58de4c6a80cdcca8b8400338a991dbd0fae2be245671fc829a1dd0d31e58b0fa"
       }
     },
     {
@@ -15749,8 +15977,8 @@
         "sha256": "42b55b755a3ded60710de53296f51673090ea3797bb5712bb6b7cef21a0f0765"
       },
       "live": {
-        "bytes": 8836,
-        "sha256": "4f9ef3d7f95c2316ce61ccf406ccddd964fa7b84e6b5c572295a1b43a13f3851"
+        "bytes": 8844,
+        "sha256": "9780ffb54d7f562bd30969c9f1794095bdb056dc25920ab12c051b49483544a7"
       }
     },
     {
@@ -15771,8 +15999,8 @@
         "sha256": "d12625e01096a5460aaa6fa5c82e84c8d05dc79fc2a1230cc605590f91101ec7"
       },
       "live": {
-        "bytes": 21831,
-        "sha256": "25b88997bfd7eb25252a27a716b044f03705724ca509172dc90505a34ce7f993"
+        "bytes": 21731,
+        "sha256": "078e6fedc8bf05c89cb4892e9e31b5996d660a3e6639fcc339e6cea6e29c6717"
       }
     },
     {
@@ -16396,8 +16624,8 @@
         "sha256": "204d7bb49898f43493b121999fa8d6ca7bdf5b0c3721e707912cd6bb45f7d5d8"
       },
       "live": {
-        "bytes": 11530,
-        "sha256": "7066f5d30da0813c59f703628fdea3b06071d142cbbb30f669f6c18e08e7ee34"
+        "bytes": 11574,
+        "sha256": "a2b717ee205af99b6f55a732898b6fda8ac500e2a44b76c25907936a1c3d37f3"
       }
     },
     {
@@ -16456,8 +16684,8 @@
       "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stack/index.css",
       "archive": null,
       "live": {
-        "bytes": 10054,
-        "sha256": "273ccfd59ac0d82001144190c7555727c6403131dfba5cca93f712e5150c6d5c"
+        "bytes": 8490,
+        "sha256": "73846c5ffe2aff3a943d8f44ac7b32483e06ae1dc147fb4f53c2d94b1eb34848"
       }
     },
     {
@@ -17944,8 +18172,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/contrast-deltas/index.test.ts",
       "archive": null,
       "live": {
-        "bytes": 7208,
-        "sha256": "a19fb88cf465140b9005d1e1dc3d14a8c13a3b4478a7d8fa27e2e50476f1fda4"
+        "bytes": 7232,
+        "sha256": "a7f12b2e66eb5ff5e3dd3c73d969c65de166ad0a214d2c994f381d0abb9555ea"
       }
     },
     {
@@ -18037,8 +18265,8 @@
         "sha256": "2a3ef380caa75364eb64ddc1b638b1b3723eb3cc2a9666c47b00a0451364770a"
       },
       "live": {
-        "bytes": 89931,
-        "sha256": "024a1e5ae5f7845b7e2ef2a0540f0e2e629f5641fee3ba96fa6ee14b9fca9bb8"
+        "bytes": 91842,
+        "sha256": "912570e9ac8615040e79d0da62b9c80a9af016119ee5f5bb0f66bd5dce65a785"
       }
     },
     {
@@ -18981,8 +19209,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/tokens/tests/invariants.test.ts",
       "archive": null,
       "live": {
-        "bytes": 13472,
-        "sha256": "b4cd17e968e11f0152879422bbbdfdabf24292064128855d978b554e9a4b1e04"
+        "bytes": 13918,
+        "sha256": "31a874de9bb76ae98f547ff43106eae64318cf727faf940d93d30cb926cf43d8"
       }
     },
     {
@@ -19146,11 +19374,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/runtime/style/tests/sidebar-tone.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 13134,
+        "sha256": "2de96deca15494d315e2047f922ca80c78ba8f56a6ea8ca97d2b7ef0de1c8770"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/tests/decision-reach.test.ts",
       "archive": null,
       "live": {
-        "bytes": 13706,
-        "sha256": "41f7f7f5088e4a2a9b1001584ad3e2b5c85eec760584035ec1babb33560c00f7"
+        "bytes": 14038,
+        "sha256": "6948d75eac4b329a1fa625e87338ec544589d17d72109aa9a5d5512cb2ac4d1f"
       }
     },
     {
@@ -19237,8 +19473,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/tests/style-admission.test.ts",
       "archive": null,
       "live": {
-        "bytes": 20251,
-        "sha256": "5a9859459512772aafc8ee47e9300a39c27e29d9ab848fb111b9240500913f4b"
+        "bytes": 20285,
+        "sha256": "f78e4099b82671be0a89022bc2277d4da472840a09b648500950d699a9e84fb8"
       }
     },
     {
@@ -19429,8 +19665,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/density-scope/tests/index.test.ts",
       "archive": null,
       "live": {
-        "bytes": 8834,
-        "sha256": "74b6ad027ed82556524e08ca10c2073bc157692e88350ed5d16b8bcef25f265e"
+        "bytes": 18971,
+        "sha256": "39123ee50bd9edfe1af423005bdc1da44a4c19f3e758889e2069abfd8b9c5c30"
       }
     },
     {
@@ -19453,8 +19689,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/action-dock/index.ts",
       "archive": null,
       "live": {
-        "bytes": 5683,
-        "sha256": "72321fce05643fa5b0f9bcadf016a4557c6d14c2077112e5214404ec180a62d9"
+        "bytes": 5706,
+        "sha256": "5eab9b0034a46897b0d785097b00c7ef99afba3cda02d7f6ccf2689b75a812de"
       }
     },
     {
@@ -19463,6 +19699,14 @@
       "live": {
         "bytes": 9174,
         "sha256": "d7a2cac15b9a30136e156ab13d7a022d210e59521b42e58dd9407fceac621546"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/action-dock/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 16836,
+        "sha256": "4d48befdcaa1099ecb3a676b7815d27d2da0a76a9408e2d1524b8eb4bfaa6d07"
       }
     },
     {
@@ -19501,8 +19745,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts",
       "archive": null,
       "live": {
-        "bytes": 10924,
-        "sha256": "31f80d77a4e9738e04836cf39c1aad01e7fe6475fe7b3e590732acbfb73485e7"
+        "bytes": 10947,
+        "sha256": "e38da5f717237bd280252e34ed22c6288e3fdc57932547392e7c49b5b88b836d"
       }
     },
     {
@@ -19511,6 +19755,14 @@
       "live": {
         "bytes": 7404,
         "sha256": "fd7b12763c37f95a0ff9d96241dff3aae002b04288d51b3611eedf309b958bb5"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 18047,
+        "sha256": "e1e7fc0ed59a73899d2c3bc26618af38f4efac9e2d2053a6f991ec7540448bf3"
       }
     },
     {
@@ -19557,8 +19809,16 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/badge/index.ts",
       "archive": null,
       "live": {
-        "bytes": 10878,
-        "sha256": "570cf414ec55560a265f506fcbbd5b0d314883fc7931e4335e526afaa0a17268"
+        "bytes": 10901,
+        "sha256": "97b34d14caa38c7631e0655081324cc026c618ca4cffc036b8d0452ccb139897"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/badge/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 13841,
+        "sha256": "b6825a0e19f2212f5bf9b7a7ebc0d5eefd7da10628369555607008471cba06be"
       }
     },
     {
@@ -19573,8 +19833,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/breadcrumb/index.ts",
       "archive": null,
       "live": {
-        "bytes": 6404,
-        "sha256": "3fd8bf9a36817419d9ddf0389018954dfb4e72f0457f2f637f072626c822cfc5"
+        "bytes": 6427,
+        "sha256": "b41e9c9532f5ae2a1c9c770de0e074968d6b484def904d44a8c6b8b43e2b544f"
       }
     },
     {
@@ -19583,6 +19843,14 @@
       "live": {
         "bytes": 5956,
         "sha256": "9e59a727e8f0d3be960be594cdb202904c9c59bcfd6106bd01e2dd456a9f5487"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/breadcrumb/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 16418,
+        "sha256": "f188ff8c18923ff98bea6c8ea3784de917300d4edb888d71a35edf2edf721080"
       }
     },
     {
@@ -19613,8 +19881,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
       "archive": null,
       "live": {
-        "bytes": 4822,
-        "sha256": "2cc08178bfa3d805d94a9c6c0bc472c8ccab0a60a426dccd9cf57323e45ddf7a"
+        "bytes": 4845,
+        "sha256": "7c722b51f646066cc3f0a95ee4ed3c9e23b60ebeacd75eb3d393e2b97cc5bf71"
       }
     },
     {
@@ -19623,6 +19891,14 @@
       "live": {
         "bytes": 11919,
         "sha256": "4a8cde0507d8383eda34f9d887c1420e8436204798a74db8d148460ad8d92cf6"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 15990,
+        "sha256": "a8b0e4856778ab274cfc5789731343e45612e8ae7300a2ef2378512bb1c4ba72"
       }
     },
     {
@@ -19669,8 +19945,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/collapse/index.ts",
       "archive": null,
       "live": {
-        "bytes": 6792,
-        "sha256": "7d2f20f3ee7b80ded5ae5c54e8f0bc40db02b46c0dccbb71a1b6d0bfc4753512"
+        "bytes": 6815,
+        "sha256": "5781af49b27c966bd0fb220c39f04028cca7a20b4ae1c5e581f34aa501ce200c"
       }
     },
     {
@@ -19682,11 +19958,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/collapse/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 17347,
+        "sha256": "3b6d44a2f19f7194c8b25b6cb7aa75a419f3f961d001b0c262bff3cd58e3c21c"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/collection-header/index.ts",
       "archive": null,
       "live": {
-        "bytes": 16596,
-        "sha256": "7f7dc1c307a414bf550d0c6795cebb833c1c35198807a7f7e8efef3edbd8a077"
+        "bytes": 16619,
+        "sha256": "09a620ff0ce4cf2dec65bc3585e11241a485974e1f00bfd49c9d2da0a80803a3"
       }
     },
     {
@@ -19695,6 +19979,14 @@
       "live": {
         "bytes": 4168,
         "sha256": "b2a09affb7a6fef2183cac9d18c6de83c96fb3553eba9029dc8e088d893811e7"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/collection-header/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 31660,
+        "sha256": "96312ac92640ad241b44e8b0d2f0478955b1b2cad4ecc22dab97e408bc1f1df4"
       }
     },
     {
@@ -19725,16 +20017,24 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/column-settings/index.ts",
       "archive": null,
       "live": {
-        "bytes": 4038,
-        "sha256": "8e805617c386fb6061f0e720183de742f50e63352a4aee3ae733d71fd18c0f6d"
+        "bytes": 4061,
+        "sha256": "7b595215348d5a2748730c748d2fc37daf9c4b92b2dc9b87d84741b234ded1c9"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/column-settings/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 14457,
+        "sha256": "c30f040ac9bb2da236b550ff5e1c1da4d36dc8bcac5fe804683bbd22b28848d1"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/command-palette/index.ts",
       "archive": null,
       "live": {
-        "bytes": 10829,
-        "sha256": "2e58a665db205f1516682e7707125aff1c1a00d21913bea38bfef154aaba60fa"
+        "bytes": 10852,
+        "sha256": "5ff8f51406db9605700376e7dc8e697b7da3bdd4d92acc4d72f13267e1f1689d"
       }
     },
     {
@@ -19743,6 +20043,14 @@
       "live": {
         "bytes": 5806,
         "sha256": "71cc3375c90c9d7d67680a3acc49d8728067df1e3da6815451a232f9d6e70cb4"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/command-palette/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 20649,
+        "sha256": "f868ddcbe28a4bcb77729d6535199d1d453247c311330f6cd7547a3558d6d443"
       }
     },
     {
@@ -19757,24 +20065,32 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
       "archive": null,
       "live": {
-        "bytes": 4553,
-        "sha256": "1c58bbe73921307cf69fe5e8e0973b70279e9ab2f6acb59ecee22717fa5865f5"
+        "bytes": 4787,
+        "sha256": "ef8ebd88d8e2bbd743207ef3632027b38c026ccc184b722c680fd203d0883bcb"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/tests/index.test.ts",
       "archive": null,
       "live": {
-        "bytes": 3255,
-        "sha256": "8b7c9ae118343b677fecdf3e1bf30fa823c751189db938e9f925ae5af95f65ae"
+        "bytes": 3757,
+        "sha256": "fe184b063dc4e2b0edcdcf9a9b7ba16e911b7f38e3c7386b87732598c459983f"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 18122,
+        "sha256": "8265ee75338d9cb019fb9ec164341dce428ed788960c8bc16f02c35c723c1de7"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/dashboard-header/index.ts",
       "archive": null,
       "live": {
-        "bytes": 6606,
-        "sha256": "5b30217b0bd58723e83356de407923bbab4b7f76f414d1417543dbc21c20bc79"
+        "bytes": 6629,
+        "sha256": "7273ea8ed40cd0e0e4cd74f814ac8d258433217dab51a8ebb79db48f259d9f5a"
       }
     },
     {
@@ -19783,6 +20099,14 @@
       "live": {
         "bytes": 6265,
         "sha256": "caab64730dbf13402b3c52867d3ebb1b7668043e4cf4973b61ad72706593a51a"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/dashboard-header/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 18924,
+        "sha256": "bd1e4720e964a23aa591fbca1630120851d6a8780367b65e17b28209cf76cd88"
       }
     },
     {
@@ -19829,16 +20153,24 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/descriptions/index.ts",
       "archive": null,
       "live": {
-        "bytes": 6291,
-        "sha256": "59f8c04cb835f5cf7501ead1e91e3756aeef0f8059024649430ee11a3ef0f3eb"
+        "bytes": 6314,
+        "sha256": "eb4a8285940edb7f3f999b60a080237a7498a86e9f4a0646530882e4cbbbcf88"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/descriptions/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 16517,
+        "sha256": "71cca485f56dcb432cf52468a82132cb013dd6b5614d69bf916801cbf5b4f3e0"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/detail-form-surface/index.ts",
       "archive": null,
       "live": {
-        "bytes": 1336,
-        "sha256": "2646b82186565b75ed2e6b0472a12a1be42db223602cd7fb8dab93c2a22f34ba"
+        "bytes": 1359,
+        "sha256": "ffb3366ca1065ce9f65216a6240e94436a26cbff703e1323067fa38e1e712056"
       }
     },
     {
@@ -19850,11 +20182,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/detail-form-surface/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 14762,
+        "sha256": "b501a008da8e0695f72365b93c21a95cd9d8a751aa76d060ec17a7dc2d1c6ac0"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/detail-header/index.ts",
       "archive": null,
       "live": {
-        "bytes": 7448,
-        "sha256": "a2554295575a0c8094ba7b181238f8329c7013db565d9f43c57013ff7a8c1cbe"
+        "bytes": 7471,
+        "sha256": "98fa9b60eb9495ca557f02a9f65bef96576c8eb49d58f9ff5995cf12f7d422fd"
       }
     },
     {
@@ -19866,19 +20206,35 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/detail-header/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 24139,
+        "sha256": "ba889013521b265fb674f7f00a4e4a4dc5b5005fe29b9c08fad30cb6ce4745e3"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
       "archive": null,
       "live": {
-        "bytes": 8791,
-        "sha256": "c62749e12d7ffa0fc23c2aedc8815b65bf30a86845f259f599dc2c2179502c84"
+        "bytes": 8860,
+        "sha256": "6eb3d7135fdc28911cb77ce8b1f52f7a5f23a6e5ced3b2a13735841a5b366a2f"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/tests/index.test.ts",
       "archive": null,
       "live": {
-        "bytes": 3508,
-        "sha256": "66e65f7c149dc4b3a264db6a12fea70030298e92da6084a765c3b04114db79ca"
+        "bytes": 4002,
+        "sha256": "ffaf5d88880a2c081a08445c784e189125af533ccffdd0bad199a515f6075308"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 22608,
+        "sha256": "92e91353b56d41deca93cd7b5eca87d794518b5e7f4e961dda6e742bace39dc6"
       }
     },
     {
@@ -19949,8 +20305,16 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/filter-panel/index.ts",
       "archive": null,
       "live": {
-        "bytes": 2396,
-        "sha256": "4eb7ef7e9b5cb7b51edbe2856ec153541c1b663f9877497c73b260ef1bf68217"
+        "bytes": 2419,
+        "sha256": "0897c5f07218902c0f1b444e7f4099495ede56a61f94f828db4d34786bf5ffd1"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/filter-panel/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 16132,
+        "sha256": "4dfe63cf6d90a6d7de6cff4ae98361a64e11cb951f397665fc79dafd93e4d4fb"
       }
     },
     {
@@ -19973,8 +20337,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/form-header/index.ts",
       "archive": null,
       "live": {
-        "bytes": 3481,
-        "sha256": "89be4c1cf22e04970ba6a5eb7a93909c6bb2d8b27313c4b5c98096fde78c446a"
+        "bytes": 3504,
+        "sha256": "7e5f0d6d87254f55f9265a285e18a0d6cc672dbe8aee412df9dcafabfdacbc11"
       }
     },
     {
@@ -19983,6 +20347,14 @@
       "live": {
         "bytes": 3342,
         "sha256": "55253f05e17e3ec1a40c907cbbbd490c21623714a30ceca5ccefc74da7eb0982"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/form-header/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 20618,
+        "sha256": "760283d7ba9454d958fd692fd3de730059187887629e668662b9d33964756e61"
       }
     },
     {
@@ -20005,8 +20377,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/form-surface/index.ts",
       "archive": null,
       "live": {
-        "bytes": 2498,
-        "sha256": "876f9a1b29466f8edd621c991ce4de5ea16d5d473988101bb08c839e3a322c6c"
+        "bytes": 2521,
+        "sha256": "71c9ec58bb984e9cacfc00f2d08fdf0c7f252f019b6a35aeba31a570a1537159"
       }
     },
     {
@@ -20015,6 +20387,14 @@
       "live": {
         "bytes": 4732,
         "sha256": "ae8b89df0adc0506ee45e4c5824c9fbcf1186a18ffec809ed73614e717fd1348"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/form-surface/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 14912,
+        "sha256": "0a7f33e52c8cb5d21d78de0fbd24f47ada400c89189364eb7aaee99d75723fd6"
       }
     },
     {
@@ -20117,8 +20497,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/kanban-board/index.ts",
       "archive": null,
       "live": {
-        "bytes": 3053,
-        "sha256": "b1bb0094b2498ca181dc9759f1567169ebda03212c1745c4467f62d04dd87584"
+        "bytes": 3076,
+        "sha256": "9ba5002e857566fc678dea4d4e2db5888d6bae28f95419623f2a9bdd4e5310d5"
       }
     },
     {
@@ -20127,6 +20507,14 @@
       "live": {
         "bytes": 1562,
         "sha256": "96035c2f462f27f397e57e972e97022b31726c70aa4c1a002859a0da1e0f077c"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/kanban-board/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 12729,
+        "sha256": "fcdb70808153c79599c6f97d5c97b616c932ddc1a856f297e659506a9d4b3ba3"
       }
     },
     {
@@ -20157,8 +20545,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/index.ts",
       "archive": null,
       "live": {
-        "bytes": 13009,
-        "sha256": "41fd7f631cb0ee05148ac1c5aca1461f42961405ca4000df0eeffc0550531c86"
+        "bytes": 13032,
+        "sha256": "d5155c01fa4217fc2a93e6e65fcca002c6c9d71e6278652e769fcf6cb8a6dd02"
       }
     },
     {
@@ -20170,11 +20558,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 26222,
+        "sha256": "60eab5a5ba430da4f0956e0f9d5769c12f53a16dd6031e94c2355a45f4eef7c4"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/mobile-header/index.ts",
       "archive": null,
       "live": {
-        "bytes": 5394,
-        "sha256": "f0d1483d51325e78ebc48dee0c3ad578ad41043859a1d75f1482d61c80d014b2"
+        "bytes": 5417,
+        "sha256": "d2e6af51299413ef74e8c92f1891500507832e9a4bcc224926ab32a4140ce256"
       }
     },
     {
@@ -20183,6 +20579,14 @@
       "live": {
         "bytes": 4213,
         "sha256": "a00184e4341506375f1ae9767204f4e6e8a8a0d48d22c57672af2e0549781943"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/mobile-header/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 18110,
+        "sha256": "9c4d5370b6a4bc402723b31719256cef5bdbd2435f2533f831cf2f7b43a68ebb"
       }
     },
     {
@@ -20317,8 +20721,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/scope-switcher/index.ts",
       "archive": null,
       "live": {
-        "bytes": 4690,
-        "sha256": "f920ca812fb4827ebb03caa97b709ede842bac88bbb78e6ee06f13750c0ff8bc"
+        "bytes": 4713,
+        "sha256": "459f2c38f4999eb4946d40896de958043bebca566795c498f7c5ba5cf763da67"
       }
     },
     {
@@ -20330,11 +20734,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/scope-switcher/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 14644,
+        "sha256": "55f45e21ccc047705f3faa6cdec390f2a0e6a85afa4cbfd2e829f0aee1cf8f0d"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/search-command-bar/index.ts",
       "archive": null,
       "live": {
-        "bytes": 23386,
-        "sha256": "65aa173857ecf6c16427c412bf96ee384568ac1c25d47c78d5233fab36f4b39e"
+        "bytes": 23409,
+        "sha256": "66c261638de79fb7446979d5fcabcae6cdf5c684f31bc7adf41aa9a2e07bdad7"
       }
     },
     {
@@ -20346,11 +20758,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/search-command-bar/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 14306,
+        "sha256": "581d8e99b5ad5db219b7c511e85c4780431f7b0056da5bbf0e45ee3b539e9156"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/section-frame/index.ts",
       "archive": null,
       "live": {
-        "bytes": 3935,
-        "sha256": "ec0627f9958e9720329e8a0f28867ac9392e65c814053c9050de9226319836c7"
+        "bytes": 3958,
+        "sha256": "30cd2768cd6eb74df48d7e16c9799e7dbca09b443ef6bcbce1b722df3917da25"
       }
     },
     {
@@ -20359,6 +20779,14 @@
       "live": {
         "bytes": 3315,
         "sha256": "76ac7c855389b5efbd114fe8eef182c3a0371af000d4e8963039e06cc0e5ed0a"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/section-frame/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 14624,
+        "sha256": "e7c8453db10aa7c4d76c1212d7d914c42b67f66ee4c44019364e8277289a1388"
       }
     },
     {
@@ -20389,8 +20817,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/shortcuts-overlay/index.ts",
       "archive": null,
       "live": {
-        "bytes": 8066,
-        "sha256": "0c84403b5fb00a9fd5a51a0c79d7bdcb0338aeaef3c174d375764965058d376b"
+        "bytes": 8089,
+        "sha256": "eabaf630557f4d1932b901eda60aad36652521b76ea00acdc209c5501e4391a7"
       }
     },
     {
@@ -20402,51 +20830,83 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/shortcuts-overlay/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 22841,
+        "sha256": "58d06b367f4aba4d9db30c0931104c16bb6165483498ea618b6b5db1d9284fb0"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/sidebar-surface/index.ts",
       "archive": null,
       "live": {
-        "bytes": 4014,
-        "sha256": "690b04edffa068a5095244ef006c4037cf4271bfce1f1ec3d88ec58dd28982d0"
+        "bytes": 3771,
+        "sha256": "d09ef5c5e120d27ec7e41e93379810b99b8c288733ddfbb5aab5f15df01a4f55"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/sidebar-surface/tests/index.test.ts",
       "archive": null,
       "live": {
-        "bytes": 6657,
-        "sha256": "7f8824818ff1e6d12cf858a3e77181041df1d31b46f39a0264c941c18d3ce8b1"
+        "bytes": 6803,
+        "sha256": "18ea09f10ea8ac94d4c9233838e1a7b20c6bbab5abdb1f02b3dd7299a500f440"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/sidebar-surface/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 17216,
+        "sha256": "d40132c230cb0c30aea03ebe47aed85dcf61cde2120bdf7318220dc6ac140d3a"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/index.ts",
       "archive": null,
       "live": {
-        "bytes": 2611,
-        "sha256": "a8f6294b563b9e143be0b1f4d3c5d2fd5f689bd841cc4ea04f7aabe93527a95c"
+        "bytes": 2831,
+        "sha256": "af52510c2ae0dcb4f5151c42256e59e6f5b7c3ac51fa48353a070b0e5dd48334"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/tests/index.test.ts",
       "archive": null,
       "live": {
-        "bytes": 3207,
-        "sha256": "8d9a3999432610d85e139639534e4f2c60698d79014619d4bf3314ee1ff84c10"
+        "bytes": 3688,
+        "sha256": "ad1fde2611b0d013da549ee3b6a54c9a3ed4181f5057a0153ec0c1f703fe7f0e"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 17865,
+        "sha256": "e2d34a04efaaa106f57eed5dac4f59b6d0d84fceed132bf10aafcbe8d71e1f55"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/splitter/index.ts",
       "archive": null,
       "live": {
-        "bytes": 3202,
-        "sha256": "186cf86ffa7436db2f6f4146726b2e87f845f7287eff1447788d69d30d177faa"
+        "bytes": 3225,
+        "sha256": "c074ca25abd9fbd74f3ac0d9bf1a4e9f1b82543dbb888fb4b4a46a1f0452f869"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/splitter/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 14453,
+        "sha256": "05c563141f329e376b49035708cf09b076eab4da550ca1ff3d98215c9cd261a5"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
       "archive": null,
       "live": {
-        "bytes": 3611,
-        "sha256": "be59c709c5f6aeaf69edc90745346752fb8c5f459db2c90636acc0a424f2f760"
+        "bytes": 3634,
+        "sha256": "15c8833551f102a07325c6c6f39eb107fafcae5fb130e799c58e701956167225"
       }
     },
     {
@@ -20461,8 +20921,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stats-header/index.ts",
       "archive": null,
       "live": {
-        "bytes": 6620,
-        "sha256": "545229939aae36b628ffb0d507e0d97fd8fe1d15008d31d4b2580decf56bf36c"
+        "bytes": 6643,
+        "sha256": "76321094d5e5507d1f22bf513c8cc17e3068b7f8dfbff23cad9b3d757919c778"
       }
     },
     {
@@ -20474,11 +20934,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stats-header/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 15738,
+        "sha256": "fa6ef403b6c6852dc42e17851b84932a6d6b9bc889222231ccf5685464df28ce"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stepper/index.ts",
       "archive": null,
       "live": {
-        "bytes": 10386,
-        "sha256": "b34b3eba8432dc3052d7314dc38a5bf8c8e8c90bd478ed5db2d0044a58503e85"
+        "bytes": 10409,
+        "sha256": "afcb62ca02208dcf8e4cb7012c7c2313121841ab37cc47de9dd771028a55232e"
       }
     },
     {
@@ -20490,11 +20958,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stepper/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 20654,
+        "sha256": "d342df045686e8ec415115ebed239d14f077f23f81325d3942a138b5dbd80a4d"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/surface-chrome/index.ts",
       "archive": null,
       "live": {
-        "bytes": 2759,
-        "sha256": "b2912e63274d545873d734a9ef7554f95654a43f3fa63e08f1b4a980e73b4898"
+        "bytes": 2782,
+        "sha256": "1e5f3633d93e67858f6208e05d1642b985b20e9368000f2870a78d816fb48321"
       }
     },
     {
@@ -20506,11 +20982,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/surface-chrome/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 12510,
+        "sha256": "cf085690bcec3d92387a49c7db5584725a0cf93a816ff1092bd47e616ac9da3c"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/surface-lifecycle/index.ts",
       "archive": null,
       "live": {
-        "bytes": 3230,
-        "sha256": "dd3e9d31720b7e919939ef08b5b21bbb86c2597c24840bf387e3906cb3ed1273"
+        "bytes": 3253,
+        "sha256": "3faa06fca29c9c9dbe6198372860343b716a8eed3e8c5dd8ce34a3f0bafc69d8"
       }
     },
     {
@@ -20522,11 +21006,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/surface-lifecycle/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 14862,
+        "sha256": "718863addc33b689d82c04bdd107ed27b29b29b19269e75f3aa7f5850f925ed3"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/table/index.ts",
       "archive": null,
       "live": {
-        "bytes": 3744,
-        "sha256": "7e23b571cb573e2d24b1ae7d0b73f4239f0c94d8164ba8be92cea85d1b1f2597"
+        "bytes": 3728,
+        "sha256": "70c90e815d2e710d338986b096e8c2ec9d06ff0412b1cee0d8a708b7448b15c2"
       }
     },
     {
@@ -20538,19 +21030,35 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/table/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 20573,
+        "sha256": "437cb01cd0cce55f81a5daf76af149976a4ff3ea1bb6a6aae6de09c75272628b"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tabs/index.ts",
       "archive": null,
       "live": {
-        "bytes": 16692,
-        "sha256": "31ec46d79e142fc1097b85ef5495828f6402d2192656e51bef73817717eb5147"
+        "bytes": 16665,
+        "sha256": "69714c3adcce6fc7343fd08e9654ae49f142a5966f1351cf18196a1f2257a81f"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tabs/tests/index.test.ts",
       "archive": null,
       "live": {
-        "bytes": 8089,
-        "sha256": "c76643304d2e380c23808c0f976d90696e02c1c31393da430a10e7023c33b978"
+        "bytes": 8604,
+        "sha256": "50ac19f628975ae3ee341d90d3afb3adce9abe3098cfa7d3ed509882934f0393"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tabs/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 25777,
+        "sha256": "1b147ba529d34a2cf35f54626b246a862fe0b6d3e82504e483b3ff4154939fa8"
       }
     },
     {
@@ -20565,8 +21073,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
       "archive": null,
       "live": {
-        "bytes": 5626,
-        "sha256": "29d886e9a9fe2a3ab8fc84c292d8bfea744fd036cd8970ac5935f3320a12eecd"
+        "bytes": 5649,
+        "sha256": "8de79a04775ea185e21bec71b398c298fdb5b9e324a359253062033106effc28"
       }
     },
     {
@@ -20578,11 +21086,27 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 16276,
+        "sha256": "a0c767049f2ddc87db03a00f633465f105da18a9aa85c2824c20b550714ac547"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/textarea/index.ts",
       "archive": null,
       "live": {
-        "bytes": 5288,
-        "sha256": "5cfdff62e9314f04e3c7a5ffebb8eba265130cca7d8b7d447d77c92a2c572e38"
+        "bytes": 5311,
+        "sha256": "c77cb9695b9b4fbc3318af95956dd205999a6e91fcfad94c3735bd27a771273a"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/textarea/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 14692,
+        "sha256": "6bc04d3e0dac8842bde079d4fd945c389ccdbd648400cce032f2209d47b45352"
       }
     },
     {
@@ -20621,8 +21145,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/toolbar/tests/local-scope.integration.test.ts",
       "archive": null,
       "live": {
-        "bytes": 18832,
-        "sha256": "55af64dd4c5b2ff74a483bb8146a5c7439caf92f7514869e3ad53bac080f3d69"
+        "bytes": 18871,
+        "sha256": "2c220e7da64f7f76defabd224dfbac0de5ea4ae32b37059e1b9d68fae4eefb4a"
       }
     },
     {
@@ -20661,8 +21185,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tree/index.ts",
       "archive": null,
       "live": {
-        "bytes": 3494,
-        "sha256": "6d6c8b864d0cb9f2d58f2a66150ab7db47af5ee59030587178318a4f82a6d5d2"
+        "bytes": 3517,
+        "sha256": "374f0926769331f83aefb1b15b776a64aab108c73d4785918b555c2e91891ebe"
       }
     },
     {
@@ -20671,6 +21195,14 @@
       "live": {
         "bytes": 8474,
         "sha256": "d594c3a49c4dd58ee515de5e8ec534f068b2301d4d3787ff7e3cf21077ffc005"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tree/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 19783,
+        "sha256": "7ff6f56b828b07d3725e72a20b24c7e0ed692b23430a30394a5fa53102a29b1c"
       }
     },
     {
@@ -20693,24 +21225,32 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/widget-board/index.ts",
       "archive": null,
       "live": {
-        "bytes": 2518,
-        "sha256": "725fe8d58c59f828fa0d67abb793c80a168bda36c3f041603de9fb2751a0131d"
+        "bytes": 2541,
+        "sha256": "920c972b5d65c2b10e925d92c54f90af9d8743cca9a2f4632a29d354587a7b8a"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/widget-board/tests/index.test.ts",
       "archive": null,
       "live": {
-        "bytes": 2999,
-        "sha256": "243cbcb9ebc544fb1200a13ef2eeb72fe0434927d44fc5b6f155fe1b728378f2"
+        "bytes": 3126,
+        "sha256": "6331631ca72e8a602116dcf7cc7078de2ffc0762e139fce75d0d31a74e4bf7a3"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/widget-board/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 14729,
+        "sha256": "d75b1f9c412f5c94e71500d48b45ab842b1f095196ba72838829e2c20614b079"
       }
     },
     {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/wizard-surface/index.ts",
       "archive": null,
       "live": {
-        "bytes": 1726,
-        "sha256": "71d248f6b38bccfe63008c0d84e0b99a4ee898880e3389beb37c0eab229bac2e"
+        "bytes": 1749,
+        "sha256": "471ff27814b958b9496f73e7b320ee508cebc274851eeb3e0075f802dc15d317"
       }
     },
     {
@@ -20722,11 +21262,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/wizard-surface/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 14930,
+        "sha256": "8c2518d79fa6114add6ca510e5d024bc9aeccc529c0eddeeee3b9b28f33a035b"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/workbench-header/index.ts",
       "archive": null,
       "live": {
-        "bytes": 3565,
-        "sha256": "2b144fd9905232b4a702a00bfb9ad5bf3cb7779af039d7111bbb0331d061ba10"
+        "bytes": 3588,
+        "sha256": "296c813b0715b4fd5c5ac09a2c2f6c41c1330b4340cb09879fc277e1851584f3"
       }
     },
     {
@@ -20735,6 +21283,14 @@
       "live": {
         "bytes": 3685,
         "sha256": "b2921eac834ae37db0f51d6b33289ccf741a825f1a0de7896477803da0787db6"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/workbench-header/tests/local-scope.integration.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 17507,
+        "sha256": "9f88c89ef926e982e18a49bb79985bc36862f52b1d24a9197dfe599e1ee2017f"
       }
     },
     {
@@ -21628,8 +22184,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/runtime/bootstrap/facade/react/provider/tests/recipe-profile-artifact-authority.integration.test.tsx",
       "archive": null,
       "live": {
-        "bytes": 4437,
-        "sha256": "2c3b003762db6a755fad0480946d604aa60a057f5d556fefb95df0a110f7f100"
+        "bytes": 4709,
+        "sha256": "b5f55ddabaa02defd272c1c2d197cee451a3c04fd8fb72835d9a693c1a580d4d"
       }
     },
     {
@@ -22946,8 +23502,8 @@
         "sha256": "d10288f1fd483f1cec317f660fc3d93d727df0dcdfed0e590ff55f50732430ed"
       },
       "live": {
-        "bytes": 62772,
-        "sha256": "c1c7fbb8510837f96baf683f570a1a37056f0a325e259581ff408e7eb3580961"
+        "bytes": 62596,
+        "sha256": "136342ec28f7b74ae0bc1f8872e0f9fc3b5765710e6355644cc0e3b0751bdba0"
       }
     },
     {
@@ -22981,6 +23537,50 @@
       "live": {
         "bytes": 13231,
         "sha256": "fb74d4876bbed12ea196c88132a8420f3d5b330848491be9e1a2a931fa27dd82"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/showroom/src/app/(docs)/verticals/bithire/[category]/page.tsx",
+      "archive": {
+        "bytes": 12325,
+        "sha256": "405d1026a2958599eaae38a6c2a1b49e82b2f1aa350fe4aea0057a553da70bf8"
+      },
+      "live": {
+        "bytes": 12327,
+        "sha256": "e190525caaa863312265ef3726a815611201815b75f193753ad2c4cad289eca7"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/showroom/src/app/(docs)/verticals/evnto/[category]/page.tsx",
+      "archive": {
+        "bytes": 13741,
+        "sha256": "b427fedaac1c788139b3d8111bc7cb7aad8787c6ad0aa1149bd0f7ad1c1bbf97"
+      },
+      "live": {
+        "bytes": 13741,
+        "sha256": "26fff164a143cfe5decf85f45ee65667e6f62bd47f9a86f5681b3adb938bdfb0"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/showroom/src/app/(docs)/verticals/rottay/[category]/page.tsx",
+      "archive": {
+        "bytes": 12029,
+        "sha256": "fc79b80690c7e10c989122274b3da7b42e8960bfe0f368ff80158ae2008cdb34"
+      },
+      "live": {
+        "bytes": 12031,
+        "sha256": "5180cfd964f26df916bce090f30cfb4278cec5821f40c20d04ff67aa7b467c47"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/showroom/src/app/(docs)/verticals/vertical-category-appendix.tsx",
+      "archive": {
+        "bytes": 31266,
+        "sha256": "a6e9d4dbd02f7febeba70573d8580fd6fb8352cc2473dba7c24b5a93fca27287"
+      },
+      "live": {
+        "bytes": 31268,
+        "sha256": "07ed4c949e7887e7d03d1ebcf43ba30554be6d1de21b0f35824519ee881ed003"
       }
     },
     {
@@ -23607,8 +24207,8 @@
         "sha256": "7b90af7c2b974a53e21173d795460e0752b8d7f8d0cb0642fae1a8d29b5f8a86"
       },
       "live": {
-        "bytes": 30728,
-        "sha256": "a8bad87a8f6a06eecf5c6c226ef73d2f22625cade79c6e55307425405954071f"
+        "bytes": 30647,
+        "sha256": "3710d2fb39cf002c06fcc110a12f82debe4ffb08f79e2bcc8ac9b02458c4b338"
       }
     },
     {

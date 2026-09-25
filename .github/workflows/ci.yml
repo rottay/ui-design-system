@@ -159,7 +159,7 @@ jobs:
           # scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json.
           # claim-exactness refuses any other revision, and it now refuses a
           # workflow that pins one, so the two cannot drift apart again.
-          ref: f90e22fe94e7267fb7335608268ae21f53991d0a
+          ref: 7d5cafba2c0c4e9e0f9db2c1a789201f2ad79dd8
           path: .gat07/docs-engineering
           token: ${{ secrets.DOCS_TOOLING_TOKEN || secrets.NPM_TOKEN || github.token }}
 
