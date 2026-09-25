@@ -33,10 +33,12 @@
  *   node index.mjs --check    -> recompute, byte-compare, exit 1 on diff, NEVER write
  *   node index.mjs --write    -> write OUT
  *   any other flag                      -> exit 2 with usage
- * `buildEdges()` is PURE: it reads the css tree and returns the object.
+ * `buildEdges()` is PURE: it reads the css tree and the cascade manifest
+ * (root cells + retired table, for the seeds) and returns the object.
  * Importing this module writes nothing (canonical main guard at the bottom).
  */
 import {
+  existsSync,
   readdirSync,
   readFileSync,
   mkdirSync,
@@ -48,7 +50,11 @@ import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
 import { CASCADE_ENGINE_ORDER } from '../../../../libraries/engine/roster/index.mjs';
-import { CASCADE_MANIFEST_REPO_REL } from '../../../../libraries/manifest/index.mjs';
+import {
+  CASCADE_MANIFEST_REL,
+  CASCADE_MANIFEST_REPO_REL,
+  readManifestRecords,
+} from '../../../../libraries/manifest/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ABS = findRepoRoot(HERE);
@@ -56,6 +62,7 @@ const CORE_ROOT = join(REPO_ABS, "packages/core");
 const CSS_ROOT = join(REPO_ABS, "packages/core/src/foundation/tokens/css");
 const CSS_ROOT_REL = "packages/core/src/foundation/tokens/css";
 const OUT = join(CORE_ROOT, "artifacts/generated/manifest/cascade/edges/index.json");
+const MANIFEST_ROOT = join(CORE_ROOT, CASCADE_MANIFEST_REL);
 
 /**
  * The CLOSED plane vocabulary of the cascade evidence — four names, never two
@@ -361,26 +368,8 @@ const AUTHORED_CENSUS = {
   },
   seeds: {
     cssRoots: 18,
-    list: [
-      "--ds-button-primary-bg",
-      "--ds-color-error",
-      "--ds-color-primary",
-      "--ds-density-mode-factor",
-      "--ds-edge-emphasis-width",
-      "--ds-effect-intensity",
-      "--ds-elevation-1",
-      "--ds-experience-profile",
-      "--ds-font-family-base",
-      "--ds-font-family-heading",
-      "--ds-icon-stroke-width",
-      "--ds-motion-duration-scale",
-      "--ds-radius-button",
-      "--ds-radius-scale",
-      "--ds-recipe-profile",
-      "--ds-rhythm-scale",
-      "--ds-sidebar-bg",
-      "--ds-type-scale",
-    ],
+    listNote:
+      "los 18 nombres sembrados el 2026-08-18 ya no viven en este literal: la lista es la derivacion viva `seeds` del artefacto (celdas roots/*/index.json), y las raices retiradas salen con el commit y la razon de la tabla retired/index.json. La cifra 18 queda como el sembrado de ESTE censo congelado.",
     method:
       `rootChannel de cada ${CASCADE_MANIFEST_REPO_REL}/roots/*/index.json con canal no nulo. Quedan fuera chrome.anatomy (su raiz es el atributo data-anatomy-card, no un canal) y responsive.posture (channel: null por diseno, DATA NOT CSS).`,
     sensitivity:
@@ -1038,7 +1027,52 @@ function classify(decl, refs) {
  * At a paint site `prop: var(A, var(B))` the same normalisation yields the
  * new `leaf-fallback` class: `{ from: B, to: A, guardPrimary: A }`.
  * ========================================================================== */
-export function buildEdges({ cssRoot = CSS_ROOT, cssRootRel = CSS_ROOT_REL } = {}) {
+/**
+ * The css-root SEEDS, derived live from the cascade manifest instead of a
+ * literal: every root cell whose rootChannel.channel is a `--ds-*` channel.
+ * A cell with no channel or with an attribute head is listed apart with its
+ * head. Retired roots come from `retired/index.json` with their commit and
+ * reason; a retired root whose cell reappears fails the derivation instead of
+ * re-seeding it.
+ */
+export function deriveSeeds({ manifestRoot = MANIFEST_ROOT } = {}) {
+  const rootsDir = join(manifestRoot, "roots");
+  const retiredPath = join(manifestRoot, "retired", "index.json");
+  if (!existsSync(rootsDir)) throw new Error(`cascade seeds: ${rootsDir} does not exist`);
+  if (!existsSync(retiredPath)) throw new Error(`cascade seeds: ${retiredPath} does not exist`);
+  const retired = (JSON.parse(readFileSync(retiredPath, "utf8")).roots ?? []).map((entry) => {
+    if (!entry?.rootId || !entry.commit || !entry.reason) {
+      throw new Error(`cascade seeds: retired root ${JSON.stringify(entry?.rootId ?? null)} needs a commit and a reason`);
+    }
+    return { rootId: entry.rootId, commit: entry.commit, reason: entry.reason };
+  });
+  const retiredIds = new Set(retired.map((entry) => entry.rootId));
+  const list = new Set();
+  const nonChannelHeads = [];
+  for (const { id, document } of readManifestRecords(rootsDir, "rootId")) {
+    if (retiredIds.has(id)) {
+      throw new Error(`cascade seeds: retired root ${id} still has a root cell; it cannot seed the cascade`);
+    }
+    const channel = document?.rootChannel?.channel ?? null;
+    if (typeof channel === "string" && channel.startsWith("--ds-")) list.add(channel);
+    else nonChannelHeads.push({ rootId: id, head: channel });
+  }
+  return {
+    isComputed: true,
+    source: `${CASCADE_MANIFEST_REPO_REL}/roots/*/index.json`,
+    retiredSource: `${CASCADE_MANIFEST_REPO_REL}/retired/index.json`,
+    cssRoots: list.size,
+    list: [...list].sort(),
+    nonChannelHeads: nonChannelHeads.sort((a, b) => a.rootId.localeCompare(b.rootId)),
+    retired: retired.sort((a, b) => a.rootId.localeCompare(b.rootId)),
+  };
+}
+
+export function buildEdges({
+  cssRoot = CSS_ROOT,
+  cssRootRel = CSS_ROOT_REL,
+  manifestRoot = MANIFEST_ROOT,
+} = {}) {
   const files = walk(cssRoot).filter(
     (f) => !relative(cssRoot, f).startsWith(join("facade", "artifacts"))
   );
@@ -1347,6 +1381,7 @@ export function buildEdges({ cssRoot = CSS_ROOT, cssRootRel = CSS_ROOT_REL } = {
       planesNotScanned: PLANES_NOT_SCANNED,
     },
     authoredCensus: AUTHORED_CENSUS,
+    seeds: deriveSeeds({ manifestRoot }),
     digests: {
       // FULL-EVIDENCE SEAL. An earlier form hashed endpoints, class, file and
       // line only, which left `scopeId` and `kind` unsealed: moving a relation

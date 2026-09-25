@@ -39,8 +39,8 @@ node scripts/check/tokens/cascade/probe/public/cli/index.mjs dial \
 # the outside. Every --bind target must be a real "fixtureId/targetId" pair
 # from FIXTURE_IDS, enforced mechanically at parse time.
 node scripts/check/tokens/cascade/probe/public/cli/index.mjs causal \
-  --control-manifest governance/manifest/controls/spacing/rhythm/index.json \
-  --family-manifest governance/manifest/families/primitive/layout/flex/index.json \
+  --control spacing.rhythm \
+  --family-manifest ../../docs/history/inventories/customization-manifest/families/primitive/layout/flex/index.json \
   --stop airy --vertical rottay \
   --bind control-height-fixed=button-modern-md/hitbox --out causal.json
 
@@ -327,7 +327,7 @@ own manifest says so. For those, `data-causal` is the instrument:
 
 ```bash
 node scripts/check/tokens/cascade/probe/public/cli/index.mjs data-causal \
-  --control-manifest governance/manifest/controls/responsive/posture/index.json \
+  --control responsive.posture \
   --vertical rottay --out data.json
 ```
 
@@ -516,8 +516,8 @@ advisory, non-receipted run.
 
 ### Negative controls come from the manifest, not from here
 
-`governance/manifest/controls/<id>.json#calibration.negativeControls` owns WHICH negative
-controls apply; `governance/manifest/families/<id>.json#themeControls[].negativeControls`
+`governance/manifest/calibration/index.json#controls.<id>.calibration.negativeControls` owns WHICH negative
+controls apply; the quarantined family cell `docs/history/inventories/customization-manifest/families/<layer>/<group>/<id>/index.json#themeControls[].negativeControls`
 narrows them onto one family root, and the effective set is the union — a silent
 family inherits the full control list rather than escaping it.
 

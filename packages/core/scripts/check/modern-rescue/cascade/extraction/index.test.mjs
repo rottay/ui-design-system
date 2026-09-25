@@ -25,6 +25,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import {
   buildEdges,
+  deriveSeeds,
   edgeSealTuple,
   enumerateRefs,
   isGraphRef,
@@ -39,6 +40,26 @@ import {
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCRIPT = join(HERE, 'index.mjs');
 
+/** Plant a cascade manifest (root cells + retired table) in tmpdir. */
+function plantManifest({ cells = {}, retired = [] } = {}) {
+  const root = mkdtempSync(join(tmpdir(), 'cascade-extract-manifest-'));
+  mkdirSync(join(root, 'roots'), { recursive: true });
+  for (const [cellPath, channel] of Object.entries(cells)) {
+    const rootId = cellPath.replaceAll('/', '.');
+    mkdirSync(join(root, 'roots', cellPath), { recursive: true });
+    writeFileSync(
+      join(root, 'roots', cellPath, 'index.json'),
+      JSON.stringify({ schemaVersion: 1, rootId, rootChannel: { channel } }),
+    );
+  }
+  mkdirSync(join(root, 'retired'), { recursive: true });
+  writeFileSync(join(root, 'retired', 'index.json'), JSON.stringify({ schemaVersion: 1, roots: retired }));
+  return root;
+}
+
+const FIXTURE_MANIFEST = plantManifest();
+test.after(() => rmSync(FIXTURE_MANIFEST, { recursive: true, force: true }));
+
 /** Plant a css tree in tmpdir and build from it. Nothing real is read. */
 function withCss(files, run) {
   const sandbox = mkdtempSync(join(tmpdir(), 'cascade-extract-drill-'));
@@ -48,7 +69,7 @@ function withCss(files, run) {
       mkdirSync(dirname(abs), { recursive: true });
       writeFileSync(abs, body);
     }
-    run(buildEdges({ cssRoot: sandbox, cssRootRel: 'fixture/css' }), sandbox);
+    run(buildEdges({ cssRoot: sandbox, cssRootRel: 'fixture/css', manifestRoot: FIXTURE_MANIFEST }), sandbox);
   } finally {
     rmSync(sandbox, { recursive: true, force: true });
   }
@@ -337,7 +358,7 @@ test('serialize is stable: the same tree serialises byte-identically twice', () 
   withCss(
     { 'presentation/components/skin/a.css': `.a { color: var(--ds-x, var(--ds-color-primary)); }` },
     (out, sandbox) => {
-      const again = buildEdges({ cssRoot: sandbox, cssRootRel: 'fixture/css' });
+      const again = buildEdges({ cssRoot: sandbox, cssRootRel: 'fixture/css', manifestRoot: FIXTURE_MANIFEST });
       assert.equal(serialize(out), serialize(again));
       assert.equal(serialize(out).endsWith('\n'), true);
       assert.deepEqual(JSON.parse(serialize(out)).stats.edges, out.stats.edges);
@@ -478,7 +499,7 @@ test('H3 readRefId is materialised with its exact serialisation, unique and stab
       }
       assert.equal(ids.length, 3);
       assert.equal(new Set(ids).size, ids.length, 'readRefId is unique');
-      const again = buildEdges({ cssRoot: sandbox, cssRootRel: 'fixture/css' });
+      const again = buildEdges({ cssRoot: sandbox, cssRootRel: 'fixture/css', manifestRoot: FIXTURE_MANIFEST });
       assert.deepEqual(
         again.readSites.flatMap((s) => s.refs.map((r) => r.readRefId)),
         ids,
@@ -570,4 +591,63 @@ test('H4 the foreign digest seals the FULL evidence, in the exact documented ord
       assert.equal(weak(mutatedKind), weak(rows));
     },
   );
+});
+
+/* --------------------------------------------------------------- seeds --- */
+
+const RETIRED_PROFILE = {
+  rootId: 'experience.profile',
+  cell: 'roots/experience/profile/index.json',
+  commit: '61280a253',
+  reason: 'the selection travels as runtime data',
+};
+
+test('seeds: a live root cell seeds its channel; a retired root carries its commit and reason, never a seed', () => {
+  const manifest = plantManifest({
+    cells: { 'typography/scale': '--ds-type-scale', 'chrome/anatomy': 'data-anatomy-card' },
+    retired: [RETIRED_PROFILE],
+  });
+  try {
+    const seeds = deriveSeeds({ manifestRoot: manifest });
+    assert.deepEqual(seeds.list, ['--ds-type-scale']);
+    assert.equal(seeds.cssRoots, 1);
+    assert.deepEqual(seeds.nonChannelHeads, [{ rootId: 'chrome.anatomy', head: 'data-anatomy-card' }]);
+    assert.deepEqual(seeds.retired, [
+      { rootId: 'experience.profile', commit: '61280a253', reason: 'the selection travels as runtime data' },
+    ]);
+  } finally {
+    rmSync(manifest, { recursive: true, force: true });
+  }
+});
+
+test('seeds: a retired root whose cell reappears fails the derivation instead of seeding again', () => {
+  const manifest = plantManifest({
+    cells: { 'typography/scale': '--ds-type-scale', 'experience/profile': '--ds-experience-profile' },
+    retired: [RETIRED_PROFILE],
+  });
+  try {
+    assert.throws(() => deriveSeeds({ manifestRoot: manifest }), /retired root experience\.profile still has a root cell/);
+  } finally {
+    rmSync(manifest, { recursive: true, force: true });
+  }
+});
+
+test('seeds: a retired entry without commit or reason fails closed', () => {
+  const manifest = plantManifest({ retired: [{ rootId: 'recipe-profile', cell: 'roots/recipes/profile/index.json' }] });
+  try {
+    assert.throws(() => deriveSeeds({ manifestRoot: manifest }), /needs a commit and a reason/);
+  } finally {
+    rmSync(manifest, { recursive: true, force: true });
+  }
+});
+
+test('seeds: the committed artifact seeds no retired channel, and the frozen census no longer lists names', () => {
+  const artifact = JSON.parse(readFileSync(OUT_PATH, 'utf8'));
+  assert.equal(artifact.seeds.isComputed, true);
+  assert.deepEqual(artifact.seeds, deriveSeeds());
+  assert.ok(!artifact.seeds.list.includes('--ds-experience-profile'));
+  assert.ok(!artifact.seeds.list.includes('--ds-recipe-profile'));
+  assert.deepEqual(artifact.seeds.retired.map((entry) => entry.rootId), ['experience.profile', 'recipe-profile']);
+  assert.ok(artifact.seeds.list.includes('--ds-type-scale'));
+  assert.equal(artifact.authoredCensus.seeds.list, undefined);
 });

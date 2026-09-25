@@ -19,7 +19,7 @@
  */
 
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { test } from 'node:test';
@@ -38,6 +38,7 @@ import {
 } from '../index.mjs';
 // The programme validator owns the derivation; this file adds no second one.
 import { sightedApprovers } from '../../../../../../evidence/framework/receipts/index.mjs';
+import { CALIBRATION_TABLE_REPO_REL } from '../../../foundation/calibration/index.mjs';
 
 const EVIDENCE_ROOT = 'tmp-probe-evidence';
 const ARTIFACT_BYTES = `${JSON.stringify({ instrument: 'resolution-probe', rows: [] }, null, 2)}\n`;
@@ -51,7 +52,7 @@ const RECEIPT_FIELDS = Object.freeze({
   exitCode: 0,
   measuredSourceFiles: [
     'packages/core/src/foundation/tokens/css/foundation/themes/default/index.css',
-    'packages/core/governance/manifest/controls/spacing/rhythm/index.json',
+    CALIBRATION_TABLE_REPO_REL,
   ],
   negativeDrill: {
     violation: 'a moved negative control, a non-restoring variable, a zero-match selector',
@@ -59,6 +60,15 @@ const RECEIPT_FIELDS = Object.freeze({
     proof: 'node --test scripts/check/tokens/cascade/probe/foundation/*/tests/index.test.mjs',
   },
   producer: 'claude-modern-rescue-lane-b',
+});
+
+// computeSourceDigest hashes an absent file as MISSING, so a fixture citing a
+// moved file keeps every drill green over a digest of an absence.
+test('fixture: every measured source file the receipt cites exists in the repository', () => {
+  const absent = RECEIPT_FIELDS.measuredSourceFiles.filter(
+    (file) => !existsSync(join(REPOSITORY_ROOT, file)),
+  );
+  assert.deepEqual(absent, []);
 });
 
 /** A temp root whose `packages/` is the real one, so digests hash real bytes. */
