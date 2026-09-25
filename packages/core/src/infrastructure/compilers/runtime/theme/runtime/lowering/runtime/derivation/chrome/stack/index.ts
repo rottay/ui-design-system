@@ -13,6 +13,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const stackChromeDeriver: FamilyDeriver = {
   family: "stack",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["palette.*", "spacing.rhythm", "density"],
   produces: [
     "--ds-stack-divider-color",

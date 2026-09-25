@@ -2481,7 +2481,7 @@
   --ds-table-pagination-font-size: var(--ds-type-supporting-font-size);
   --ds-table-pagination-margin-block-start: var(--ds-spacing-4);
   --ds-table-pagination-numeric: tabular-nums;
-  --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
+  --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1));
   --ds-table-sticky-top: var(--ds-spacing-0, 0);
   --ds-table-title-font-weight: var(--ds-font-weight-semibold);
   --ds-table-title-margin-block-end: var(--ds-spacing-2);
@@ -3394,6 +3394,18 @@
   --ds-space-gap-md: calc(var(--ds-space-middle-size, var(--ds-spacing-4)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1));
   --ds-space-gap-sm: calc(var(--ds-space-small-size, var(--ds-spacing-2)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1));
   --ds-splitter-gutter-size: calc(0.5rem * var(--ds-density-effective-scale));
+  --ds-stack-divider-gutter: var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px));
+  --ds-stack-divider-inset: var(--ds-spacing-0, 0px);
+  --ds-stack-gap: var(--ds-spacing-0, 0px);
+  --ds-stack-gap-2xl: calc(var(--ds-spacing-10, 2.5rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-3xl: calc(var(--ds-spacing-12, 3rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-4xl: calc(var(--ds-spacing-16, 4rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-lg: calc(var(--ds-spacing-6, 1.5rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-md: calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-none: var(--ds-spacing-0, 0);
+  --ds-stack-gap-sm: calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-xl: calc(var(--ds-spacing-8, 2rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-xs: calc(var(--ds-spacing-1, 0.25rem) * var(--ds-rhythm-effective-scale, 1));
   --ds-stats-header-card-padding: var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px);
   --ds-stats-header-glow-block-size: var(--ds-spacing-10, 40px);
   --ds-stats-header-grid-gap: var(--ds-spacing-3, 12px);
@@ -3421,7 +3433,7 @@
   --ds-table-col-min-width: var(--ds-spacing-0, 0);
   --ds-table-footer-margin-block-start: var(--ds-spacing-2);
   --ds-table-pagination-margin-block-start: var(--ds-spacing-4);
-  --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
+  --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1));
   --ds-table-sticky-top: var(--ds-spacing-0, 0);
   --ds-table-title-margin-block-end: var(--ds-spacing-2);
   --ds-table-virtual-spacer: var(--ds-spacing-0, 0);

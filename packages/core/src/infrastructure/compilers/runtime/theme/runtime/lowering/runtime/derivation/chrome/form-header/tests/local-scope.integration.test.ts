@@ -97,10 +97,10 @@ const SHADOWED: readonly Channel[] = [
   "--ds-form-header-top-bar-padding-block",
   "--ds-form-header-top-bar-padding-inline",
 ];
-/** The compact rung is read only inside `@container ds-form-header` by a rule selecting the root that
- *  declares that container; a container query never queries its own element, so the rule never applies. */
-const UNREACHED = "--ds-form-header-hero-padding-compact" as const;
-const LIVE = CHANNELS.filter((channel) => !SHADOWED.includes(channel) && channel !== UNREACHED);
+/** The compact rung is read inside `@container ds-form-header` on the root's children (B45: a container
+ *  query never matches the root that declares the container), so the narrow hero paints it. */
+const COMPACT_RUNG = "--ds-form-header-hero-padding-compact" as const;
+const LIVE = CHANNELS.filter((channel) => !SHADOWED.includes(channel));
 const DRILLED = "--ds-form-header-root-margin" as const;
 
 const WIDTHS = { wide: "1000px", narrow: "400px" } as const;
@@ -132,7 +132,7 @@ function header(width: keyof typeof WIDTHS, rootStyle = ""): string {
     `<div style="width: ${WIDTHS[width]}">`,
     `<div class="ds-structure ds-form-header" data-part="root" data-structure="form-header" data-mode="create" style="${rootStyle}">`,
     `<div data-part="top-bar"><a href="#"><span data-part="back-button">Back</span></a></div>`,
-    `<div data-part="hero-panel" data-archetype="default"><div data-part="hero-row"><h1 data-part="title">New record</h1></div>`,
+    `<div data-part="hero-panel" data-archetype="default"><div data-part="hero-row"><div data-part="hero-cluster"><div data-part="icon-badge"></div><h1 data-part="title">New record</h1></div></div>`,
     `<div data-part="context-card"><div data-part="context-card-children">Context</div></div></div>`,
     CHANNELS.map(oracleOf).join(""),
     `</div></div>`,
@@ -160,12 +160,17 @@ function targets(channels: readonly Channel[] = CHANNELS): ProbeTarget[] {
   );
 }
 
-/** The full hero rung's own answer on the narrow header, beside the compact rung's. */
-const UNREACHED_TARGETS: ProbeTarget[] = SCOPE_NAMES.map((scope) => ({
-  id: `narrow-full|${scope}`,
-  selector: `#${hostId(scope, "narrow")} [data-oracle='--ds-form-header-hero-padding']`,
-  property: "padding-top",
-}));
+/** On the narrow header: the full hero rung's own answer (what the compact tier replaces), the context
+ *  gap and the icon badge the same tier re-declares. */
+const NARROW_TARGETS: ProbeTarget[] = SCOPE_NAMES.flatMap((scope) => [
+  {
+    id: `narrow-full|${scope}`,
+    selector: `#${hostId(scope, "narrow")} [data-oracle='--ds-form-header-hero-padding']`,
+    property: "padding-top",
+  },
+  { id: `narrow-context-gap|${scope}`, selector: `#${hostId(scope, "narrow")} ${ROOT} [data-part='context-card']`, property: "margin-top" },
+  { id: `narrow-icon-badge|${scope}`, selector: `#${hostId(scope, "narrow")} ${ROOT} [data-part='icon-badge']`, property: "width" },
+]);
 
 const DRILL: readonly Channel[] = [DRILLED];
 
@@ -255,7 +260,7 @@ describe("chrome/form-header channels under a local scope", () => {
       measureArms({ vertical: "bithire", markup: markupText, arms: { base: {} }, targets: probeTargets });
     readings = await probe(markup() + ON_BOUNDARY, [
       ...targets(),
-      ...UNREACHED_TARGETS,
+      ...NARROW_TARGETS,
       { id: "onBoundary", selector: "#on-boundary .ds-form-header", property: "margin-bottom" },
     ]);
     rootStated = await probe(markup(ROOT_STYLE, "", ["wide"]), targets(DRILL));
@@ -343,12 +348,18 @@ describe("chrome/form-header channels under a local scope", () => {
     }
   });
 
-  it("pin: the narrow hero never takes the compact rung; it paints the full rung's local answer in every scope", () => {
+  it("pin: the narrow hero takes the compact rung's local answer in every scope, and its tier moves the context gap and icon badge with it", () => {
+    // B45 moved the tier off the root that declares the container: measured 17.8277px (the full rung) -> 12.7341px at rest.
     expect(SKIN).toMatch(/\.ds-structure\.ds-form-header\[data-part='root'\]\s*\{[^{}]*container:\s*ds-form-header\s*\/\s*inline-size/);
+    expect(SKIN).toMatch(/@container ds-form-header \(inline-size < 34rem\)\s*\{\s*\.ds-structure\.ds-form-header\[data-part='root'\] > \*\s*\{/);
+    expect(site(readings, "rest", COMPACT_RUNG, "padding-top")).toBe("12.7341px");
     for (const scope of SCOPE_NAMES) {
-      const painted = site(readings, scope, UNREACHED, "padding-top");
-      expect({ scope, painted }).toEqual({ scope, painted: readings.base[`narrow-full|${scope}`] });
-      expect({ scope, painted }).not.toEqual({ scope, painted: oracle(readings, scope, UNREACHED, "padding-top") });
+      const painted = site(readings, scope, COMPACT_RUNG, "padding-top");
+      const compact = oracle(readings, scope, COMPACT_RUNG, "padding-top");
+      expect({ scope, painted }).toEqual({ scope, painted: compact });
+      expect({ scope, painted }).not.toEqual({ scope, painted: readings.base[`narrow-full|${scope}`] });
+      expect({ scope, gap: readings.base[`narrow-context-gap|${scope}`] }).toEqual({ scope, gap: compact });
+      expect({ scope, badge: readings.base[`narrow-icon-badge|${scope}`] }).toEqual({ scope, badge: "44px" });
     }
   });
 

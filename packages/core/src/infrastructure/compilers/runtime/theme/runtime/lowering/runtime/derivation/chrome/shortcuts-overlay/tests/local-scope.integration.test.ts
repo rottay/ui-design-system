@@ -72,9 +72,9 @@ const SITES = {
 type Channel = keyof typeof SITES;
 const CHANNELS = Object.keys(SITES) as Channel[];
 
-/** Named pin, never an (a) cell: the narrow rule re-selects the root inside `@container ds-shortcuts-overlay`,
- *  the container the root itself establishes, and a container query only matches an ANCESTOR container. */
-const UNREACHABLE = "--ds-shortcuts-overlay-narrow-inset-block-start";
+/** The top offset lives on the dialog (B45: the root establishes `@container ds-shortcuts-overlay`, and a
+ *  container query never matches its own container), so the narrow rule reaches it. */
+const NARROW_INSET = "--ds-shortcuts-overlay-narrow-inset-block-start";
 const WIDE_INSET = "--ds-shortcuts-overlay-inset-block-start";
 
 /** Named pin, never an (a) cell: `:lang(ar) { letter-spacing: normal }` in the last layer masks the
@@ -104,7 +104,7 @@ const oracleOf = (channel: Channel) =>
   `<div data-oracle="${channel}" style="${SITES[channel].declaration}: ${PRODUCED[channel]}"></div>`;
 
 const pinOracles = [
-  `<div data-oracle="${UNREACHABLE}" style="padding-block-start: ${PRODUCED[UNREACHABLE]}"></div>`,
+  `<div data-oracle="${NARROW_INSET}" style="padding-block-start: ${PRODUCED[NARROW_INSET]}"></div>`,
   `<div data-oracle="${WIDE_INSET}" style="padding-block-start: ${PRODUCED[WIDE_INSET]}"></div>`,
   `<div data-oracle="${MASKED}" style="letter-spacing: ${PRODUCED[MASKED]}; font-size: ${PRODUCED["--ds-shortcuts-overlay-category-font-size"]}"></div>`,
 ].join("");
@@ -173,13 +173,15 @@ const MASK_TARGETS: ProbeTarget[] = SCOPE_NAMES.flatMap((scope) => {
   { id: "mask-stated-arabic", selector: "#tracking-stated-arabic [data-part='category-label']", property: "letter-spacing" },
 ]);
 
-/** The unreachable pin reads the narrow root's inset, both inset oracles, and the dialog the same query does reach. */
+/** The inset pin reads the root, both dialogs' offset and width, and both inset oracles. */
 const NARROW_TARGETS: ProbeTarget[] = [
   { id: "narrow-root", selector: "#narrow [data-part='root']", property: "padding-top" },
+  { id: "narrow-dialog-offset", selector: "#narrow [data-part='dialog']", property: "margin-top" },
+  { id: "wide-dialog-offset", selector: `#${hostId("rest")} [data-part='dialog']`, property: "margin-top" },
   { id: "narrow-root-width", selector: "#narrow [data-part='root']", property: "@rect.width" },
   { id: "narrow-dialog", selector: "#narrow [data-part='dialog']", property: "max-width" },
   { id: "wide-dialog", selector: `#${hostId("rest")} [data-part='dialog']`, property: "max-width" },
-  { id: "narrow-oracle", selector: `#narrow [data-oracle='${UNREACHABLE}']`, property: "padding-top" },
+  { id: "narrow-oracle", selector: `#narrow [data-oracle='${NARROW_INSET}']`, property: "padding-top" },
   { id: "wide-oracle", selector: `#narrow [data-oracle='${WIDE_INSET}']`, property: "padding-top" },
 ];
 
@@ -322,12 +324,15 @@ describe("chrome/shortcuts-overlay channels under a local scope", () => {
     expect(drift).toEqual([]);
   });
 
-  it("pin: the narrow inset is unreachable, the root being its own container while its dialog does narrow", () => {
+  it("pin: the narrow inset reaches the dialog, and the wide inset still offsets it on a wide overlay", () => {
+    // B45 moved the offset from the root's padding to the dialog's margin: narrow 72px (10vh) -> 23.97px at rest; wide unchanged.
     expect(parseFloat(readings.base["narrow-root-width"])).toBeLessThan(640);
     expect(readings.base["narrow-dialog"]).toBe("100%");
     expect(readings.base["wide-dialog"]).not.toBe("100%");
     expect(readings.base["narrow-oracle"]).not.toBe(readings.base["wide-oracle"]);
-    expect(readings.base["narrow-root"]).toBe(readings.base["wide-oracle"]);
+    expect(readings.base["narrow-root"]).toBe("0px");
+    expect(readings.base["narrow-dialog-offset"]).toBe(readings.base["narrow-oracle"]);
+    expect(readings.base["wide-dialog-offset"]).toBe(readings.base["wide-oracle"]);
   });
 
   it("pin: the category label's tracking paints its channel at rest and is masked under :lang(ar), stated or not", () => {
@@ -402,7 +407,7 @@ describe("chrome/shortcuts-overlay channels under a local scope", () => {
       .filter(([, value]) => readsAny(value, DENSITY_AXIS))
       .map(([channel]) => channel)
       .sort();
-    expect(densityExposed).toEqual([...CHANNELS, UNREACHABLE].sort());
+    expect(densityExposed).toEqual([...CHANNELS, NARROW_INSET].sort());
     const arabicExposed = Object.entries(PRODUCED)
       .filter(([, value]) => readsAny(value, ARABIC_AXIS))
       .map(([channel]) => channel);

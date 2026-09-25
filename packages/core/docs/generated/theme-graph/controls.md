@@ -8,29 +8,29 @@
 > `produced` counts the channels the decision's derivers emit; `via aliases` counts what those
 > channels can still reach through the measured alias chain.
 
-digest: e14e944158f6c635c8b31a785d5e7dd8c43cb34a56eedcd2c4479fa422bd888d
+digest: 4fdf965ceddfe3079832ccc138da5eadf34dc375d8828afc713bc34ba5eed947
 
 | decision | tier | derivers | produced | via aliases | families reached |
 |---|---|---|---|---|---|
 | `chrome.anatomy` | pro | 1 | 6 | 13 | 3 |
-| `density.mode` | standard | 11 | 337 | 1210 | 211 |
-| `experience.profile` | standard | 8 | 224 | 1884 | 245 |
+| `density.mode` | standard | 11 | 337 | 1216 | 211 |
+| `experience.profile` | standard | 8 | 224 | 1890 | 245 |
 | `motion.character` | pro | 30 | 1056 | 1321 | 203 |
 | `motion.dial` | standard | 30 | 1056 | 1321 | 203 |
 | `navigation.sidebar-tone` | standard | 1 | 6 | 13 | 3 |
-| `palette.contrast-posture` | pro | 85 | 2514 | 4104 | 251 |
+| `palette.contrast-posture` | pro | 85 | 2514 | 4103 | 251 |
 | `palette.dark-mode` | pro | — | 0 | 0 | **none** |
-| `palette.neutral-temperature` | standard | 85 | 2514 | 4104 | 251 |
-| `palette.seeds` | standard | 89 | 2612 | 4307 | 251 |
-| `palette.status-seeds` | standard | 88 | 2600 | 4283 | 251 |
-| `profiles.expressive` | pro | 8 | 224 | 1884 | 245 |
+| `palette.neutral-temperature` | standard | 85 | 2514 | 4103 | 251 |
+| `palette.seeds` | standard | 89 | 2612 | 4306 | 251 |
+| `palette.status-seeds` | standard | 88 | 2600 | 4282 | 251 |
+| `profiles.expressive` | pro | 8 | 224 | 1890 | 245 |
 | `recipe-profile` | pro | — | 0 | 0 | **none** |
 | `responsive.posture` | pro | 2 | 31 | 32 | 1 |
 | `shape.button-style` | standard | 13 | 365 | 1053 | 218 |
 | `shape.control-height` | standard | 14 | 503 | 643 | 70 |
 | `shape.nesting` | pro | 11 | 344 | 458 | 54 |
 | `shape.radius-scale` | standard | 37 | 1287 | 1917 | 220 |
-| `spacing.rhythm` | standard | 11 | 336 | 532 | 62 |
+| `spacing.rhythm` | standard | 11 | 336 | 539 | 62 |
 | `states.emphasis` | standard | 13 | 393 | 1204 | 207 |
 | `states.focus-style` | standard | 21 | 676 | 1468 | 208 |
 | `surfaces.border-style` | standard | 17 | 476 | 661 | 131 |

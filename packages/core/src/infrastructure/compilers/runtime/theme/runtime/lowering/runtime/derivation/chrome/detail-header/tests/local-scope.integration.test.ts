@@ -97,12 +97,19 @@ const SITES = {
 type Channel = keyof typeof SITES;
 const CHANNELS = Object.keys(SITES) as Channel[];
 
-/** Named pin, never an (a) cell: the compact gutter is stated by a `@container ds-detail-header` rule on the
- *  root itself, and a container query never matches its own container, so the full gutter paints there. */
-const UNREACHABLE: Partial<Record<Channel, Channel>> = {
+/** The compact gutter is stated inside `@container ds-detail-header` on the root's children (B45: a container
+ *  query never matches the root that declares the container), so every narrow reader takes it over the full one. */
+const COMPACT_GUTTER: Partial<Record<Channel, Channel>> = {
   "--ds-detail-header-hero-panel-padding-compact": "--ds-detail-header-hero-panel-padding",
 };
-const LIVE = CHANNELS.filter((channel) => !(channel in UNREACHABLE));
+const LIVE = CHANNELS;
+/** The four parts that read the private gutter the compact tier re-declares, and the property each paints it on. */
+const GUTTER_READERS = [
+  ["hero-panel", "padding-top"],
+  ["top-bar", "padding-left"],
+  ["tab-strip", "padding-left"],
+  ["hero-spine", "top"],
+] as const;
 
 /** Named pins, never (a) cells: the title is an h1, so rottay-personality's heading tracking outranks both
  *  channels at their read sites, and `:lang(ar) { letter-spacing: normal }` in the last layer masks them all. */
@@ -182,15 +189,20 @@ function targets(channels: readonly Channel[] = CHANNELS): ProbeTarget[] {
   );
 }
 
-/** The unreachable pin reads the shadowing channel's oracle at the same host. */
-const UNREACHABLE_TARGETS: ProbeTarget[] = SCOPE_NAMES.flatMap((scope) =>
-  (Object.entries(UNREACHABLE) as Array<[Channel, Channel]>).flatMap(([channel, shadow]) =>
-    SITES[channel].properties.map((property) => ({
-      id: `shadow-oracle|${scope}|${channel}|${property}`,
-      selector: `#${hostId(scope, SITES[channel].width)} [data-oracle='${shadow}']`,
+/** The compact pin reads the full gutter's oracle at the same host, and every gutter reader there. */
+const COMPACT_TARGETS: ProbeTarget[] = SCOPE_NAMES.flatMap((scope) =>
+  (Object.entries(COMPACT_GUTTER) as Array<[Channel, Channel]>).flatMap(([channel, full]) => [
+    ...SITES[channel].properties.map((property) => ({
+      id: `full-oracle|${scope}|${channel}|${property}`,
+      selector: `#${hostId(scope, SITES[channel].width)} [data-oracle='${full}']`,
       property,
-    }))
-  )
+    })),
+    ...GUTTER_READERS.map(([part, property]) => ({
+      id: `gutter-reader|${scope}|${part}|${property}`,
+      selector: `#${hostId(scope, SITES[channel].width)} .ds-detail-header [data-part='${part}']`,
+      property,
+    })),
+  ])
 );
 
 /** The masked pins read each channel, its input and the painted tracking where the title sits at its width. */
@@ -305,7 +317,7 @@ describe("chrome/detail-header channels under a local scope", () => {
       measureArms({ vertical: "bithire", markup: markupText, arms: { base: {} }, targets: probeTargets });
     readings = await probe(markup() + ON_BOUNDARY + STATED, [
       ...targets(),
-      ...UNREACHABLE_TARGETS,
+      ...COMPACT_TARGETS,
       ...MASK_TARGETS,
       ...SHADOW_TARGETS,
       { id: "onBoundary", selector: "#on-boundary [data-part='root']", property: "margin-bottom" },
@@ -376,17 +388,19 @@ describe("chrome/detail-header channels under a local scope", () => {
     expect(drift).toEqual([]);
   });
 
-  it("pin: the compact gutter never reaches the hero panel, the full gutter's local answer paints there in every scope", () => {
+  it("pin: the compact gutter reaches every narrow reader, not the full gutter, in every scope", () => {
+    // B45 moved the tier off the root that declares the container: measured 17.9775px (the full gutter) -> 14.9813px at rest.
+    expect(site(readings, "rest", "--ds-detail-header-hero-panel-padding-compact", "padding-top")).toBe("14.9813px");
     for (const scope of SCOPE_NAMES) {
-      for (const channel of Object.keys(UNREACHABLE) as Channel[]) {
+      for (const channel of Object.keys(COMPACT_GUTTER) as Channel[]) {
         for (const property of SITES[channel].properties) {
-          const painted = site(readings, scope, channel, property);
-          expect({ scope, channel, painted }).toEqual({
-            scope,
-            channel,
-            painted: readings.base[`shadow-oracle|${scope}|${channel}|${property}`],
-          });
-          expect({ scope, channel, painted }).not.toEqual({ scope, channel, painted: oracle(readings, scope, channel, property) });
+          const compact = oracle(readings, scope, channel, property);
+          const full = readings.base[`full-oracle|${scope}|${channel}|${property}`];
+          expect({ scope, channel, full }).not.toEqual({ scope, channel, full: compact });
+          for (const [part, readerProperty] of GUTTER_READERS) {
+            const painted = readings.base[`gutter-reader|${scope}|${part}|${readerProperty}`];
+            expect({ scope, part, painted }).toEqual({ scope, part, painted: compact });
+          }
         }
       }
     }

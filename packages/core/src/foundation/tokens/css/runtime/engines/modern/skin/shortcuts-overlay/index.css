@@ -39,7 +39,6 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-block-start: var(--ds-shortcuts-overlay-inset-block-start, 10vh);
   padding-inline: var(--ds-shortcuts-overlay-padding-inline, var(--ds-spacing-3, 12px));
   container: ds-shortcuts-overlay / inline-size;
 }
@@ -68,6 +67,7 @@
         keyframes on the motion channel. ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
   position: relative;
+  margin-block-start: var(--ds-shortcuts-overlay-inset-block-start, 10vh);
   inline-size: 100%;
   max-inline-size: var(--ds-shortcuts-overlay-dialog-max-inline-size, 40rem);
   overflow: hidden;
@@ -179,15 +179,15 @@
   border-block-start: var(--ds-shortcuts-overlay-rule, 1px solid var(--ds-color-border));
 }
 
-/* ---- narrow overlay: full-width top sheet with a smaller top offset ---- */
+/* ---- narrow overlay: full-width top sheet with a smaller top offset. The
+        offset lives on the dialog: a container query never matches the root
+        that declares the container. ---- */
 @container ds-shortcuts-overlay (inline-size < 40rem) {
-  .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] {
-    padding-block-start: var(
+  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
+    margin-block-start: var(
       --ds-shortcuts-overlay-narrow-inset-block-start,
       var(--ds-spacing-8, 32px)
     );
-  }
-  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
     max-inline-size: 100%;
   }
 }

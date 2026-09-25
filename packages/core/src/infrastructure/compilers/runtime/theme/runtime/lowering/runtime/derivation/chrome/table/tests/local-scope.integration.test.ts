@@ -92,9 +92,9 @@ const SHADOWED: readonly Channel[] = [
 ];
 const ZERO: readonly Channel[] = ["--ds-table-col-min-width", "--ds-table-sticky-top", "--ds-table-virtual-spacer"];
 /** Read only under a coarse pointer, where the entrypoint's touch floor outranks it. Its expression
- *  multiplies a spacing rung, already density-scaled, by the density scale again. */
-const DOUBLED = "--ds-table-selection-control-coarse-size" as const;
-const LIVE = CHANNELS.filter((channel) => !SHADOWED.includes(channel) && channel !== DOUBLED);
+ *  reads a spacing rung that already carries density, and scales it by the control height only. */
+const COARSE = "--ds-table-selection-control-coarse-size" as const;
+const LIVE = CHANNELS.filter((channel) => !SHADOWED.includes(channel) && channel !== COARSE);
 const DRILLED = "--ds-table-pagination-margin-block-start" as const;
 
 /** None, each posture, both nesting orders, and an Arabic subtree. */
@@ -244,7 +244,7 @@ describe("chrome/table channels under a local scope", () => {
     const probe = (markupText: string, probeTargets: ProbeTarget[]) =>
       measureArms({ vertical: "bithire", markup: markupText, arms: { base: {} }, targets: probeTargets });
     readings = await probe(markup() + ON_BOUNDARY, [
-      ...targets(CHANNELS.filter((channel) => channel !== DOUBLED)),
+      ...targets(CHANNELS.filter((channel) => channel !== COARSE)),
       { id: "onBoundary", selector: "#on-boundary [data-part='pagination']", property: "margin-top" },
     ]);
     coarse = await measureArms({
@@ -252,10 +252,10 @@ describe("chrome/table channels under a local scope", () => {
       markup: markup(),
       arms: { base: {} },
       targets: [
-        ...targets([DOUBLED]),
+        ...targets([COARSE]),
         ...SCOPE_NAMES.map((scope) => ({
           id: `floor|${scope}`,
-          selector: `#${hostId(scope)} ${SITES[DOUBLED].site}`,
+          selector: `#${hostId(scope)} ${SITES[COARSE].site}`,
           property: "--ds-touch-target-min",
         })),
       ],
@@ -312,15 +312,17 @@ describe("chrome/table channels under a local scope", () => {
 
   it("pin: under a coarse pointer the touch floor paints the selection control in every scope, above the channel's own answer", () => {
     for (const scope of SCOPE_NAMES) {
-      const painted = site(coarse, scope, DOUBLED, "width");
+      const painted = site(coarse, scope, COARSE, "width");
       expect({ scope, painted }).toEqual({ scope, painted: coarse.base[`floor|${scope}`].trim() });
-      expect({ scope, below: px(oracle(coarse, scope, DOUBLED, "width")) < px(painted) }).toEqual({ scope, below: true });
+      expect({ scope, below: px(oracle(coarse, scope, COARSE, "width")) < px(painted) }).toEqual({ scope, below: true });
     }
   });
 
-  it("pin: the channel's own answer takes a boundary's posture twice", () => {
-    const ratio = px(oracle(coarse, "compact", DOUBLED, "width")) / px(oracle(coarse, "rest", DOUBLED, "width"));
-    expect(ratio).toBeCloseTo(0.85 * 0.85, 2);
+  it("pin: the channel's own answer takes a boundary's posture once", () => {
+    // B45 dropped the second density factor from the expression: measured rest 11.4531px -> 13.4688px, ratio 0.7225 -> 0.85.
+    expect(oracle(coarse, "rest", COARSE, "width")).toBe("13.4688px");
+    const ratio = px(oracle(coarse, "compact", COARSE, "width")) / px(oracle(coarse, "rest", COARSE, "width"));
+    expect(ratio).toBeCloseTo(0.85, 2);
   });
 
   it("pin: the table root re-declares the four runtime geometry channels", () => {

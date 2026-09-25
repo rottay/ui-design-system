@@ -16,7 +16,7 @@
     },
     {
       "channels": 337,
-      "channelsThroughAliases": 1210,
+      "channelsThroughAliases": 1216,
       "decision": "density.mode",
       "derivers": [
         "app-shell",
@@ -248,7 +248,7 @@
     },
     {
       "channels": 224,
-      "channelsThroughAliases": 1884,
+      "channelsThroughAliases": 1890,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -1011,7 +1011,7 @@
     },
     {
       "channels": 2514,
-      "channelsThroughAliases": 4104,
+      "channelsThroughAliases": 4103,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1365,7 +1365,7 @@
     },
     {
       "channels": 2514,
-      "channelsThroughAliases": 4104,
+      "channelsThroughAliases": 4103,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1711,7 +1711,7 @@
     },
     {
       "channels": 2612,
-      "channelsThroughAliases": 4307,
+      "channelsThroughAliases": 4306,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -2061,7 +2061,7 @@
     },
     {
       "channels": 2600,
-      "channelsThroughAliases": 4283,
+      "channelsThroughAliases": 4282,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",
@@ -2410,7 +2410,7 @@
     },
     {
       "channels": 224,
-      "channelsThroughAliases": 1884,
+      "channelsThroughAliases": 1890,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",
@@ -3371,7 +3371,7 @@
     },
     {
       "channels": 336,
-      "channelsThroughAliases": 532,
+      "channelsThroughAliases": 539,
       "decision": "spacing.rhythm",
       "derivers": [
         "app-shell",

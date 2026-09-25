@@ -265,11 +265,14 @@
 /* ---- composition ladder. A skin adapts to its CONTAINER, never to the window
         (WO-ARC-05: the first viewport breakpoint in a skin fails the build), so
         every step below is a container query against the container the root
-        declares. Narrow is a simplified posture, not a squeezed one. ---- */
+        declares. A container query never matches the element that declares the
+        container, so the tiers are re-declared on the root's children, which
+        every reader inherits from. Narrow is a simplified posture, not a
+        squeezed one. ---- */
 
 /* ~544px and below: the hero compacts instead of crushing. */
 @container ds-form-header (inline-size < 34rem) {
-  .ds-structure.ds-form-header[data-part='root'] {
+  .ds-structure.ds-form-header[data-part='root'] > * {
     --ds-form-header-hero-padding: var(--ds-form-header-hero-padding-compact, calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1)));
     --ds-form-header-context-gap: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
     --ds-form-header-icon-badge-size: 44px;
@@ -289,7 +292,7 @@
    baseline and the actions become full-width targets — a phone posture, not a
    compressed desktop. */
 @container ds-form-header (inline-size < 24rem) {
-  .ds-structure.ds-form-header[data-part='root'] {
+  .ds-structure.ds-form-header[data-part='root'] > * {
     --ds-form-header-top-bar-padding-inline: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
   }
   .ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'] {

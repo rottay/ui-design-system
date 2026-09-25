@@ -67783,19 +67783,12 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  * A RUNG SCALES, A MEASUREMENT DOES NOT: `data-spacing='custom'` reads
  * `--ds-stack-gap`, which the engine writes inline from the caller's number.
  *
- * A RUNG IS RE-BASED ONTO ITS OWN DENSITY. `--ds-stack-gap-<rung>` is computed
- * once, on the tenant root that declares it, so it cannot see a `data-density`
- * boundary further down -- the boundary the spacing ramp IS redeclared on
- * (`foundation/base/density`). Each rung therefore reads the channel through
- * `--_ds-stack-gap-rebased`, which multiplies it by the ratio the density
- * projection itself publishes: this element's effective scale over the global
- * one. The ratio is exactly 1 where no boundary intervenes, so a tenant root
- * reading is unchanged, and an authored `--ds-stack-gap-<rung>` still outranks
- * the ramp everywhere. The read carries NO fallback on purpose: with no channel
- * declared, `--_ds-stack-gap-rebased` is guaranteed-invalid and the rung falls
- * through to the ramp arm, which already resolves here and already carries the
- * local boundary -- one re-base, never two. `none` is zero on every density and
- * `custom` is the caller's exact measurement, so neither is re-based.
+ * A RUNG IS READ STRAIGHT. `--ds-stack-gap-<rung>` rides the spacing ramp, and
+ * the family claims the density scope, so a `data-density` boundary re-derives
+ * every rung for its own subtree: the value that reaches a stack is already the
+ * local answer, scaled once. An authored `--ds-stack-gap-<rung>` still outranks
+ * the ramp everywhere; with no channel declared the rung falls through to the
+ * ramp arm, which resolves here and already carries the local boundary.
  */
 
 .rottay-stack.rottay-stack--modern[data-component='stack'] {
@@ -67806,9 +67799,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   justify-content: flex-start;
   /* Pinned by the quality contract so flexible content can shrink and ellipsize. */
   min-inline-size: 0;
-  --_ds-stack-density-rebase: calc(var(--ds-density-effective-scale, 1) / var(--ds-density-global-effective-scale, 1));
-  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-md) * var(--_ds-stack-density-rebase, 1));
-  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-current: var(--ds-stack-gap-md, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
   gap: var(--_ds-stack-gap-current);
   /*
    * The divider's axis flags live on the ROOT so a RESPONSIVE direction, which
@@ -67881,43 +67872,35 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xs'] {
-  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-xs) * var(--_ds-stack-density-rebase, 1));
-  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-1, 0.25rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-current: var(--ds-stack-gap-xs, calc(var(--ds-spacing-1, 0.25rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='sm'] {
-  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-sm) * var(--_ds-stack-density-rebase, 1));
-  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-current: var(--ds-stack-gap-sm, calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='md'] {
-  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-md) * var(--_ds-stack-density-rebase, 1));
-  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-current: var(--ds-stack-gap-md, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='lg'] {
-  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-lg) * var(--_ds-stack-density-rebase, 1));
-  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-6, 1.5rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-current: var(--ds-stack-gap-lg, calc(var(--ds-spacing-6, 1.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xl'] {
-  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-xl) * var(--_ds-stack-density-rebase, 1));
-  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-8, 2rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-current: var(--ds-stack-gap-xl, calc(var(--ds-spacing-8, 2rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='2xl'] {
-  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-2xl) * var(--_ds-stack-density-rebase, 1));
-  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-10, 2.5rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-current: var(--ds-stack-gap-2xl, calc(var(--ds-spacing-10, 2.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='3xl'] {
-  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-3xl) * var(--_ds-stack-density-rebase, 1));
-  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-12, 3rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-current: var(--ds-stack-gap-3xl, calc(var(--ds-spacing-12, 3rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='4xl'] {
-  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-4xl) * var(--_ds-stack-density-rebase, 1));
-  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-16, 4rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-current: var(--ds-stack-gap-4xl, calc(var(--ds-spacing-16, 4rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* A consumer's numeric gap is exact geometry: honored as-is, never scaled. */
@@ -78179,7 +78162,6 @@ html[data-ds-motion='reduced']
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-block-start: var(--ds-shortcuts-overlay-inset-block-start, 10vh);
   padding-inline: var(--ds-shortcuts-overlay-padding-inline, var(--ds-spacing-3, 12px));
   container: ds-shortcuts-overlay / inline-size;
 }
@@ -78208,6 +78190,7 @@ html[data-ds-motion='reduced']
         keyframes on the motion channel. ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
   position: relative;
+  margin-block-start: var(--ds-shortcuts-overlay-inset-block-start, 10vh);
   inline-size: 100%;
   max-inline-size: var(--ds-shortcuts-overlay-dialog-max-inline-size, 40rem);
   overflow: hidden;
@@ -78319,15 +78302,15 @@ html[data-ds-motion='reduced']
   border-block-start: var(--ds-shortcuts-overlay-rule, 1px solid var(--ds-color-border));
 }
 
-/* ---- narrow overlay: full-width top sheet with a smaller top offset ---- */
+/* ---- narrow overlay: full-width top sheet with a smaller top offset. The
+        offset lives on the dialog: a container query never matches the root
+        that declares the container. ---- */
 @container ds-shortcuts-overlay (inline-size < 40rem) {
-  .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] {
-    padding-block-start: var(
+  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
+    margin-block-start: var(
       --ds-shortcuts-overlay-narrow-inset-block-start,
       var(--ds-spacing-8, 32px)
     );
-  }
-  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
     max-inline-size: 100%;
   }
 }
@@ -85414,9 +85397,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* the root is an inline-size container, so compact layouts de-escalate chrome
    (padding, display type, avatar) without coupling to the viewport. One gutter
    now carries the whole inline axis, so the top bar, hero and tab strip
-   de-escalate together instead of drifting apart. */
+   de-escalate together instead of drifting apart. A container query never
+   matches the root that declares the container, so the gutter is re-declared
+   on the root's children, which every reader inherits from. */
 @container ds-detail-header (max-width: 640px) {
-  .ds-structure.ds-detail-header[data-part='root'] {
+  .ds-structure.ds-detail-header[data-part='root'] > * {
     --_ds-detail-header-gutter: var(--ds-detail-header-hero-panel-padding-compact, var(--ds-spacing-5, 20px));
   }
   .ds-structure.ds-detail-header[data-part='root'] [data-part='title'] {
@@ -86538,11 +86523,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- composition ladder. A skin adapts to its CONTAINER, never to the window
         (WO-ARC-05: the first viewport breakpoint in a skin fails the build), so
         every step below is a container query against the container the root
-        declares. Narrow is a simplified posture, not a squeezed one. ---- */
+        declares. A container query never matches the element that declares the
+        container, so the tiers are re-declared on the root's children, which
+        every reader inherits from. Narrow is a simplified posture, not a
+        squeezed one. ---- */
 
 /* ~544px and below: the hero compacts instead of crushing. */
 @container ds-form-header (inline-size < 34rem) {
-  .ds-structure.ds-form-header[data-part='root'] {
+  .ds-structure.ds-form-header[data-part='root'] > * {
     --ds-form-header-hero-padding: var(--ds-form-header-hero-padding-compact, calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1)));
     --ds-form-header-context-gap: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
     --ds-form-header-icon-badge-size: 44px;
@@ -86562,7 +86550,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    baseline and the actions become full-width targets — a phone posture, not a
    compressed desktop. */
 @container ds-form-header (inline-size < 24rem) {
-  .ds-structure.ds-form-header[data-part='root'] {
+  .ds-structure.ds-form-header[data-part='root'] > * {
     --ds-form-header-top-bar-padding-inline: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
   }
   .ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'] {
@@ -122760,7 +122748,7 @@ html[lang]:lang(ar) {
   --ds-table-pagination-font-size: var(--ds-type-supporting-font-size);
   --ds-table-pagination-margin-block-start: var(--ds-spacing-4);
   --ds-table-pagination-numeric: tabular-nums;
-  --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
+  --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1));
   --ds-table-sticky-top: var(--ds-spacing-0, 0);
   --ds-table-title-font-weight: var(--ds-font-weight-semibold);
   --ds-table-title-margin-block-end: var(--ds-spacing-2);
@@ -123593,6 +123581,18 @@ html[lang]:lang(ar) {
   --ds-space-gap-md: calc(var(--ds-space-middle-size, var(--ds-spacing-4)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1));
   --ds-space-gap-sm: calc(var(--ds-space-small-size, var(--ds-spacing-2)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1));
   --ds-splitter-gutter-size: calc(0.5rem * var(--ds-density-effective-scale));
+  --ds-stack-divider-gutter: var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px));
+  --ds-stack-divider-inset: var(--ds-spacing-0, 0px);
+  --ds-stack-gap: var(--ds-spacing-0, 0px);
+  --ds-stack-gap-2xl: calc(var(--ds-spacing-10, 2.5rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-3xl: calc(var(--ds-spacing-12, 3rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-4xl: calc(var(--ds-spacing-16, 4rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-lg: calc(var(--ds-spacing-6, 1.5rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-md: calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-none: var(--ds-spacing-0, 0);
+  --ds-stack-gap-sm: calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-xl: calc(var(--ds-spacing-8, 2rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-xs: calc(var(--ds-spacing-1, 0.25rem) * var(--ds-rhythm-effective-scale, 1));
   --ds-stats-header-card-padding: var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px);
   --ds-stats-header-glow-block-size: var(--ds-spacing-10, 40px);
   --ds-stats-header-grid-gap: var(--ds-spacing-3, 12px);
@@ -123620,7 +123620,7 @@ html[lang]:lang(ar) {
   --ds-table-col-min-width: var(--ds-spacing-0, 0);
   --ds-table-footer-margin-block-start: var(--ds-spacing-2);
   --ds-table-pagination-margin-block-start: var(--ds-spacing-4);
-  --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
+  --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1));
   --ds-table-sticky-top: var(--ds-spacing-0, 0);
   --ds-table-title-margin-block-end: var(--ds-spacing-2);
   --ds-table-virtual-spacer: var(--ds-spacing-0, 0);

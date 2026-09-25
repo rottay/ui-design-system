@@ -78,7 +78,7 @@ function section(density: Density): string {
 }
 
 const markup = [
-  // The tenant root reading: no boundary intervenes, so the re-base is 1.
+  // The tenant root reading: no boundary intervenes, so the rung is the root's own.
   `<div id="stack-root">${stack({ spacing: 'md' })}</div>`,
   `<div id="flex-root">${flex()}</div>`,
   `<div id="authored-root" style="--ds-stack-gap-md: ${AUTHORED_MD}">${stack({ spacing: 'md' })}</div>`,
@@ -121,7 +121,7 @@ describe('the Stack rung answers the density boundary it stands in', () => {
     expect(px(r['flex-spacious'])).toBeGreaterThan(px(r['flex-comfortable']));
 
     // THE TABLE: per density, the Stack reads what the Flex reads. This is the
-    // audit's measurement, and before the re-base the Stack column was the
+    // audit's measurement, and before the rung answered its boundary the Stack column was the
     // single root value three times over.
     for (const density of DENSITIES) {
       expect(px(r[`stack-${density}`]), density).toBeCloseTo(px(r[`flex-${density}`]), 3);
@@ -149,15 +149,13 @@ describe('the Stack rung answers the density boundary it stands in', () => {
       expect(r[`exact-${density}`], density).toBe('21px');
     }
 
-    // NEGATIVE CONTROL: an explicit statement about the channel still outranks
-    // the ramp -- unchanged at the root, and re-based by a boundary exactly as
-    // every other value on that boundary is.
+    // NEGATIVE CONTROL: an explicit statement about the channel outranks the
+    // ramp and paints as stated wherever it sits: at the root, and on an
+    // element at or below a boundary (the claimed-family law b1). B45 retired
+    // the skin re-base that used to rescale it (20px -> 17px in compact).
     expect(r.authoredRoot).toBe(AUTHORED_MD);
     for (const density of DENSITIES) {
-      expect(px(r[`authored-${density}`]), density).toBeCloseTo(
-        px(AUTHORED_MD) * LOCAL_FACTOR[density],
-        3,
-      );
+      expect(r[`authored-${density}`], density).toBe(AUTHORED_MD);
     }
   }, 120_000);
 

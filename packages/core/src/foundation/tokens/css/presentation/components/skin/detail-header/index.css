@@ -664,9 +664,11 @@
 /* the root is an inline-size container, so compact layouts de-escalate chrome
    (padding, display type, avatar) without coupling to the viewport. One gutter
    now carries the whole inline axis, so the top bar, hero and tab strip
-   de-escalate together instead of drifting apart. */
+   de-escalate together instead of drifting apart. A container query never
+   matches the root that declares the container, so the gutter is re-declared
+   on the root's children, which every reader inherits from. */
 @container ds-detail-header (max-width: 640px) {
-  .ds-structure.ds-detail-header[data-part='root'] {
+  .ds-structure.ds-detail-header[data-part='root'] > * {
     --_ds-detail-header-gutter: var(--ds-detail-header-hero-panel-padding-compact, var(--ds-spacing-5, 20px));
   }
   .ds-structure.ds-detail-header[data-part='root'] [data-part='title'] {
