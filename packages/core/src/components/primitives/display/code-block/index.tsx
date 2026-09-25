@@ -221,9 +221,8 @@ export function CodeBlock({
           minHeight: '2.25rem',
           // Header/body hierarchy: a whisper of the source's own text ink lifts
           // the chrome off the inset code surface without stacking a second
-          // box (mode-adaptive, hue-faithful; tenant escape hatch first).
-          background:
-            'var(--ds-code-block-header-bg, color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent))',
+          // box (mode-adaptive, hue-faithful).
+          background: 'color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent)',
         }}
       >
         <span
@@ -363,11 +362,9 @@ export function CodeBlock({
                         // TMM DB rides the same vertical base). The ink deepens
                         // 45% toward the source's own primary text ink —
                         // hue-faithful, mode-adaptive (6.13:1 bithire, 6.09:1
-                        // TMM, computed from the compiled themes). A tenant's
-                        // explicit `--ds-code-block-gutter-ink` stays raw
-                        // (escape hatch).
+                        // TMM, computed from the compiled themes).
                         color:
-                          'var(--ds-code-block-gutter-ink, color-mix(in srgb, var(--ds-color-text-tertiary) 55%, var(--ds-color-text-primary)))',
+                          'color-mix(in srgb, var(--ds-color-text-tertiary) 55%, var(--ds-color-text-primary))',
                       }}
                     >
                       {lineNumber}

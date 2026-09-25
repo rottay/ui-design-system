@@ -47,14 +47,68 @@
   "readClasses": {
     "law": "The ratchet was blind to every read outside engines/modern: the agnostic skin and the rest of the authored CSS that the base entrypoint imports under every engine, and literal var() reads inline in component TS/TSX, paint under Modern exactly like the Modern skin does. Measured 2026-09-25 at 6f5faa6f4 after WO-EVI-03 found 11 dead channels its tests pin that this ratchet could not see. Frozen engines (classic, rustic) stay out for the same reason as before; nothing else does.",
     "shape": "names -> { readers, family, owner, ownerProposal }. A read without producer that is not a row (or a new reader of a row) is anonymous and red; a row or reader that stopped being debt is red until deleted. No write mode: the ledger only shrinks by hand.",
-    "ownership": "owner is a work order id or null. The 11 WO-EVI-03 channels carry their proposal one by one. Every other row is ownerProposal null: unrouted debt, measured and visible, that the DT routes by family (produce the channel in its family deriver, or retire the read). It is not an exemption: a row leaves only when its read has a producer or is gone.",
+    "ownership": "owner is a work order id or null. The 11 WO-EVI-03 channels carried their proposal one by one; 7 have left (see exits) and 4 remain. Every other row is ownerProposal null: unrouted debt, measured and visible, that the DT routes by family (produce the channel in its family deriver, or retire the read). It is not an exemption: a row leaves only when its read has a producer or is gone.",
+    "exits": {
+      "law": "A row that leaves the ledger is written here with its disposition and the lot that moved it. An exit is not a pin: the gate reads only the two read classes' names ledgers, and a name here read again without a producer is anonymous growth and red.",
+      "rows": {
+        "--ds-code-block-copy-bg-hover": {
+          "class": "sharedPaint",
+          "family": "code-block",
+          "from": "WO-FAM-06 (ownerProposal)",
+          "disposition": "re-pointed: the hover background now reads the produced --ds-button-ghost-bg-hover (over the produced --ds-surface-inset) directly, the value the dead wrapper always fell back to; paint unchanged",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        "--ds-code-block-motion-duration": {
+          "class": "sharedPaint",
+          "family": "code-block",
+          "from": "WO-FAM-06 (ownerProposal)",
+          "disposition": "re-pointed: the copy control's three transitions read the produced dial intent --ds-motion-feedback directly, the value the dead wrapper always fell back to; paint unchanged",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        "--ds-code-block-copied-ink": {
+          "class": "sharedPaint",
+          "family": "code-block",
+          "from": "WO-FAM-06 (ownerProposal)",
+          "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the fallback is built from produced channels only and is now the declared value, so the paint is unchanged and the dead name is no longer read; not re-pointed to --ds-color-success-ink, which mixes toward neutral-900 instead of the source's own text ink and would darken the confirmation on dark themes",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        "--ds-code-block-copied-frame": {
+          "class": "sharedPaint",
+          "family": "code-block",
+          "from": "WO-FAM-06 (ownerProposal)",
+          "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the fallback is built from produced channels only and is now the declared value, so the paint is unchanged and the dead name is no longer read; not re-pointed to --ds-color-success-border, which is 34% in the compiled verticals and rgba 0.2 in the default theme, not the 40% the confirmation paints",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        "--ds-code-block-selection-bg": {
+          "class": "sharedPaint",
+          "family": "code-block",
+          "from": "WO-FAM-06 (ownerProposal)",
+          "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the fallback is built from produced channels only and is now the declared value, so the paint is unchanged and the dead name is no longer read; not re-pointed to --ds-type-selection-bg, which only the Modern typography skin declares (22%) while this skin paints under every engine (28%)",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        "--ds-code-block-header-bg": {
+          "class": "componentInline",
+          "family": "code-block",
+          "from": "WO-FAM-06 (ownerProposal)",
+          "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the fallback is built from produced channels only and is now the declared value, so the paint is unchanged and the dead name is no longer read; the inline comment that called it a tenant escape hatch is corrected",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        "--ds-code-block-gutter-ink": {
+          "class": "componentInline",
+          "family": "code-block",
+          "from": "WO-FAM-06 (ownerProposal)",
+          "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the fallback is built from produced channels only and is now the declared value, so the paint is unchanged and the dead name is no longer read; the contrast-measured mix (6.13:1 bithire, 6.09:1 TMM) is unchanged and the inline comment that called it a tenant escape hatch is corrected",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        }
+      }
+    },
     "sharedPaint": {
       "corpus": "libraries/tokens/producers collectAuthoredStylesheets() minus /engines/(classic|rustic)/ minus the Modern skin corpus -- the same authored-CSS walker the producer set uses",
       "measured": {
         "files": 259,
-        "denominator": 2574,
-        "debt": 335,
-        "reads": 388
+        "denominator": 2569,
+        "debt": 330,
+        "reads": 383
       },
       "names": {
         "--ds-assistant-active-signal-shadow": {
@@ -258,33 +312,6 @@
           "owner": null,
           "ownerProposal": null
         },
-        "--ds-code-block-copied-frame": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
-          ],
-          "family": "code-block",
-          "owner": null,
-          "ownerProposal": "WO-FAM-06",
-          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
-        },
-        "--ds-code-block-copied-ink": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
-          ],
-          "family": "code-block",
-          "owner": null,
-          "ownerProposal": "WO-FAM-06",
-          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
-        },
-        "--ds-code-block-copy-bg-hover": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
-          ],
-          "family": "code-block",
-          "owner": null,
-          "ownerProposal": "WO-FAM-06",
-          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
-        },
         "--ds-code-block-copy-bg-pressed": {
           "readers": [
             "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
@@ -308,24 +335,6 @@
           "family": "code-block",
           "owner": null,
           "ownerProposal": null
-        },
-        "--ds-code-block-motion-duration": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
-          ],
-          "family": "code-block",
-          "owner": null,
-          "ownerProposal": "WO-FAM-06",
-          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
-        },
-        "--ds-code-block-selection-bg": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
-          ],
-          "family": "code-block",
-          "owner": null,
-          "ownerProposal": "WO-FAM-06",
-          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
         },
         "--ds-collection-card-depth": {
           "readers": [
@@ -2804,9 +2813,9 @@
       "corpus": "src/components/**/*.ts(x) without tests, stories, fixtures, .d.ts or frozen engines; literal var(--ds-x) only, comments stripped",
       "measured": {
         "files": 940,
-        "denominator": 621,
-        "debt": 46,
-        "reads": 46
+        "denominator": 619,
+        "debt": 44,
+        "reads": 44
       },
       "prefixSites": 35,
       "prefixSitesReason": "var(--ds-x-${...}) interpolates the name, so the ledger cannot say which channel it reads; the count is pinned both ways so a new interpolated read cannot slip past the named ledger",
@@ -2826,20 +2835,6 @@
           "family": "chart-engine",
           "owner": null,
           "ownerProposal": null
-        },
-        "--ds-code-block-gutter-ink": {
-          "readers": ["src/components/primitives/display/code-block/index.tsx"],
-          "family": "code-block",
-          "owner": null,
-          "ownerProposal": "WO-FAM-06",
-          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
-        },
-        "--ds-code-block-header-bg": {
-          "readers": ["src/components/primitives/display/code-block/index.tsx"],
-          "family": "code-block",
-          "owner": null,
-          "ownerProposal": "WO-FAM-06",
-          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
         },
         "--ds-filter-pill-radius": {
           "readers": [

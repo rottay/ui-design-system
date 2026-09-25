@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
 
 import { CodeBlock } from '../index';
+import { channelReads, renderedStyle, skinDeclaration } from './paint-reads';
 
 // W10 second visual pass (Modern craft). Paint-only changes: the existing
 // suites keep passing untouched; this file pins the NEW grammar so a future
@@ -27,10 +28,13 @@ afterEach(cleanup);
 
 describe('CodeBlock W10 second visual pass (Modern craft)', () => {
   it('lifts the header chrome off the code surface with a governed tint (hierarchy without a second box)', () => {
-    expect(source).toContain('--ds-code-block-header-bg');
-    expect(source).toContain(
-      'color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent)',
+    const background = renderedStyle(
+      <CodeBlock code={'const a = 1;'} title="candidate.ts" {...LABELS} />,
+      'header',
+      'background',
     );
+    expect(background).toBe('color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent)');
+    expect(channelReads(background)).toEqual(['--ds-color-text-primary']);
   });
 
   it('types the header label by role: filename in mono, bare language tag as a tracked uppercase caption', () => {
@@ -61,24 +65,27 @@ describe('CodeBlock W10 second visual pass (Modern craft)', () => {
   });
 
   it('confirms the copy with the success grammar (ink pulled toward the source text ink)', () => {
-    expect(skin).toContain("[data-part='copy-button'][data-copied='true']");
-    expect(skin).toContain('--ds-code-block-copied-ink');
-    expect(skin).toContain(
-      'color-mix(in srgb, var(--ds-color-success) 70%, var(--ds-color-text-primary))',
-    );
-    expect(skin).toContain('--ds-code-block-copied-frame');
+    const copied = "[data-part='copy-button'][data-copied='true']";
+    const ink = skinDeclaration(copied, 'color');
+    const frame = skinDeclaration(copied, 'border-color');
+    expect(ink).toBe('color-mix(in srgb, var(--ds-color-success) 70%, var(--ds-color-text-primary))');
+    expect(frame).toBe('color-mix(in srgb, var(--ds-color-success) 40%, transparent)');
+    expect(channelReads(ink)).toEqual(['--ds-color-success', '--ds-color-text-primary']);
+    expect(channelReads(frame)).toEqual(['--ds-color-success']);
   });
 
   it('paints selection from the primary tint, declared in the skin ownership header', () => {
-    expect(skin).toContain(".ds-code-block[data-part='root'] ::selection");
-    expect(skin).toContain('--ds-code-block-selection-bg');
-    expect(skin).toContain('color-mix(in srgb, var(--ds-color-primary) 28%, transparent)');
+    const selection = skinDeclaration(".ds-code-block[data-part='root'] ::selection", 'background');
+    expect(selection).toBe('color-mix(in srgb, var(--ds-color-primary) 28%, transparent)');
+    expect(channelReads(selection)).toEqual(['--ds-color-primary']);
   });
 
-  it('animates the copy control on the governed fast-duration channel with a family escape hatch', () => {
-    expect(skin).toContain(
-      'var(--ds-code-block-motion-duration, var(--ds-motion-fast))',
+  it('animates the copy control on the dial-driven feedback duration', () => {
+    const transition = skinDeclaration("[data-part='copy-button']", 'transition');
+    expect(transition).toBe(
+      'background var(--ds-motion-feedback) ease, color var(--ds-motion-feedback) ease, border-color var(--ds-motion-feedback) ease',
     );
+    expect(channelReads(transition)).toEqual(Array(3).fill('--ds-motion-feedback'));
     expect(skin).not.toContain('var(--ds-motion-fast, 120ms)');
     // The copy control's own font-size also rides the type scale now.
     expect(skin).toContain('font-size: var(--ds-font-size-xs)');

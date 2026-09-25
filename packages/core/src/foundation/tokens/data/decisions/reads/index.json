@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "Drained to the CURRENT hooks contract (WO-EVI-02 reads-ledger drain, 2026-09-22). The ledger is hand-merged and had no producer, so it kept 2603 rows while the manifest — regenerated 48 times by its own producer since — fences 1272: 1331 extra, 0 missing, plus a stale digest pin. Every extra row was censused before removal and none was a lost adjudication: 962 had gained a real owner (683 tenantChannel, 216 foundationTokens, 23 componentTokens, 32 foundation+tenant, 6 component+tenant, 1 component+foundation, 1 publicHook+component) through the FAM family-cut derivers, so the debt was discharged, not hidden; 365 reads no longer exist anywhere in the tree; 4 survive only outside the contract scan roots (a compiler emission RHS, a TS token module, a test, and the generated artifacts that shadow them). ZERO rows were live in-scope reads the manifest failed to fence, so nothing is pending a fence ceremony. Per-row attribution to the 82 landed commits that moved each read: packages/core/evidence/reads-ledger-drain-census. The digest is re-pinned to the manifest at HEAD; the row set is set-equal to it (0 extra, 0 missing). 2026-09-22: row 789 (--ds-notification-center-touch-target) retired — the channel moved to adjudicated when the notification-center chrome deriver landed (643c3588b); it no longer belongs to the unadjudicated-reads ledger. basedOnManifestDigest follows the manifest regen. 2026-09-22: digest re-pinned after the skeleton-row-bar-height and skeleton-row-control-size promotions corrected whiteLabelCompat derives-from-spacing -> not-tenant-emitted (a term outside the contract vocabulary; no compiler owner writes either channel); unadjudicatedReads untouched, the row set is unchanged.",
-  "basedOnManifestDigest": "d25f387ff60bb49ff030510c60fb2983c070df4de1f5aac74302f5ec252c2b0d",
+  "generatedBy": "Drained to the CURRENT hooks contract (WO-EVI-02 reads-ledger drain, 2026-09-22). The ledger is hand-merged and had no producer, so it kept 2603 rows while the manifest — regenerated 48 times by its own producer since — fences 1272: 1331 extra, 0 missing, plus a stale digest pin. Every extra row was censused before removal and none was a lost adjudication: 962 had gained a real owner (683 tenantChannel, 216 foundationTokens, 23 componentTokens, 32 foundation+tenant, 6 component+tenant, 1 component+foundation, 1 publicHook+component) through the FAM family-cut derivers, so the debt was discharged, not hidden; 365 reads no longer exist anywhere in the tree; 4 survive only outside the contract scan roots (a compiler emission RHS, a TS token module, a test, and the generated artifacts that shadow them). ZERO rows were live in-scope reads the manifest failed to fence, so nothing is pending a fence ceremony. Per-row attribution to the 82 landed commits that moved each read: packages/core/evidence/reads-ledger-drain-census. The digest is re-pinned to the manifest at HEAD; the row set is set-equal to it (0 extra, 0 missing). 2026-09-22: row 789 (--ds-notification-center-touch-target) retired — the channel moved to adjudicated when the notification-center chrome deriver landed (643c3588b); it no longer belongs to the unadjudicated-reads ledger. basedOnManifestDigest follows the manifest regen. 2026-09-22: digest re-pinned after the skeleton-row-bar-height and skeleton-row-control-size promotions corrected whiteLabelCompat derives-from-spacing -> not-tenant-emitted (a term outside the contract vocabulary; no compiler owner writes either channel); unadjudicatedReads untouched, the row set is unchanged. 2026-09-25: 7 rows retired (--ds-code-block-copied-frame, -copied-ink, -copy-bg-hover, -motion-duration, -selection-bg, -gutter-ink, -header-bg) — no deriver or declaration ever produced them, so every read painted its fallback; WO-EVI-03 arm 2 (code-block cluster) wrote the fallbacks, built from produced channels only, as the declared paint (copy-bg-hover and motion-duration re-pointed to the live --ds-button-ghost-bg-hover and --ds-motion-feedback), the names are no longer read and the regenerated manifest no longer fences them. byClass recomputed from the rows (MODERN_PRIVATE 725→718, total 1271→1264); basedOnManifestDigest follows the manifest regen.",
+  "basedOnManifestDigest": "d3513a5974e55fee5c8d828720f2d31f38200c6e7ee72c8890d6b38a20c5fb39",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
@@ -24,9 +24,9 @@
     "readsLedgerDrain": "2026-09-22 WO-EVI-02: the ledger follows its authority. The hooks manifest is produced by pnpm hooks:generate; this projection is not, so drift is one-directional and silent. The drain removes only rows the manifest no longer fences and records why each left. A removed row is not a retired decision — a name that returns to unadjudicatedReads must be re-classified from scratch, not restored from git."
   },
   "counts": {
-    "total": 1271,
+    "total": 1264,
     "byClass": {
-      "MODERN_PRIVATE": 725,
+      "MODERN_PRIVATE": 718,
       "FROZEN_ENGINE_SCOPED": 481,
       "TENANT_FACING_CANDIDATE": 55,
       "FOUNDATION_SHARED": 10
@@ -3525,60 +3525,6 @@
       }
     },
     {
-      "name": "--ds-code-block-copied-frame",
-      "family": "--ds-code-block",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:151  border-color: var(",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-code-block-copied-ink",
-      "family": "--ds-code-block",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:147  var( --ds-code-block-copied-ink, color-mix(in srgb, var(--ds-color-success) 70%, var(--ds-color-text-primary)) ",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-code-block-copy-bg-hover",
-      "family": "--ds-code-block",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:128  background: var(--ds-code-block-copy-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
       "name": "--ds-code-block-copy-bg-pressed",
       "family": "--ds-code-block",
       "class": "MODERN_PRIVATE",
@@ -3621,78 +3567,6 @@
       "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:169  box-shadow: var(",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-code-block-gutter-ink",
-      "family": "--ds-code-block",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/components/primitives/display/CodeBlock/index.tsx",
-      "readSites": 1,
-      "evidence": "packages/core/src/components/primitives/display/CodeBlock/index.tsx:341  'var(--ds-code-block-gutter-ink, color-mix(in srgb, var(--ds-color-text-tertiary) 55%, var(--ds-color-text-primary)))',",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "ui": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-code-block-header-bg",
-      "family": "--ds-code-block",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/components/primitives/display/CodeBlock/index.tsx",
-      "readSites": 1,
-      "evidence": "packages/core/src/components/primitives/display/CodeBlock/index.tsx:212  'var(--ds-code-block-header-bg, color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent))',",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "ui": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-code-block-motion-duration",
-      "family": "--ds-code-block",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
-      "readSites": 3,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:51  background var(--ds-code-block-motion-duration, var(--ds-motion-fast)) ease,",
-      "flag": "undeclared by design: 4 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 3
-        },
-        "declBuckets": {},
-        "withFallback": 4,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-code-block-selection-bg",
-      "family": "--ds-code-block",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:160  background: var(",
       "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
       "_audit": {
         "readBuckets": {

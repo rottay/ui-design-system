@@ -13,6 +13,7 @@ import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 import { CodeBlock } from '../index';
+import { channelReads, renderedStyle, skinDeclaration } from './paint-reads';
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 
@@ -145,10 +146,8 @@ describe('CodeBlock remediation (K4-B)', () => {
     // forced-colors contract.
     expect(skin).toContain('border: 1px solid var(--ds-color-border)');
     expect(skin).toContain('color: var(--ds-color-text-secondary)');
-    expect(skin).toContain(
-      'background: var(--ds-code-block-copy-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)))',
-    );
-    expect(skin).toContain("[data-part='copy-button']:not(:disabled):hover");
+    const hover = skinDeclaration("[data-part='copy-button']:not(:disabled):hover", 'background');
+    expect(channelReads(hover)).toEqual(['--ds-button-ghost-bg-hover', '--ds-surface-inset']);
     expect(skin).toContain("[data-part='copy-button']:focus-visible");
     expect(skin).toContain("[data-part='scroll']:focus-visible");
     expect(skin).toContain('color-mix(in srgb, var(--ds-color-primary) 24%, transparent)');
@@ -219,11 +218,16 @@ describe('CodeBlock remediation (K4-B)', () => {
   });
 
   it('measures the gutter ink pair on the source that still governs one (CONTRAST LAW, R2)', () => {
-    // Escape hatch + mix pinned in the source.
-    expect(source).toContain('--ds-code-block-gutter-ink');
-    expect(source).toContain(
+    // The gutter renders the measured mix, read from the two governed inks only.
+    const gutterInk = renderedStyle(
+      <CodeBlock code={'a\nb'} showLineNumbers {...LABELS} />,
+      'line-number',
+      'color',
+    );
+    expect(gutterInk).toBe(
       'color-mix(in srgb, var(--ds-color-text-tertiary) 55%, var(--ds-color-text-primary))',
     );
+    expect(channelReads(gutterInk)).toEqual(['--ds-color-text-tertiary', '--ds-color-text-primary']);
 
     const bithire = compileFlatThemeThroughDoor({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
     const tmm = compileFlatThemeThroughDoor({

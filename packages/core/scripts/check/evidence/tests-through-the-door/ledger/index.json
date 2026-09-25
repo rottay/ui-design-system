@@ -30,6 +30,53 @@
       "cut-residue": "The family is in a family cut; the cut owns the channel through its readWithoutProducer arm. The row leaves when the cut produces or retires the read.",
       "uncut-family-read": "The family is in no family cut, so no work order drains the read. owner stays null until the DT adjudicates ownerProposal (anti-sprawl: a roster admission is an owner decision)."
     },
+    "exits": {
+      "law": "A row that left the census is written here with how its test now asserts the paint and the lot that moved it. The gate does not read this list: a test that names an exited channel again without a producer is a new row and red.",
+      "rows": [
+        {
+          "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.pass1-premium.test.tsx",
+          "name": "--ds-code-block-copy-bg-hover",
+          "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the hover rule now reads the produced --ds-button-ghost-bg-hover over --ds-surface-inset; the test asserts the rule reads exactly those two channels",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        {
+          "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.pass1-premium.test.tsx",
+          "name": "--ds-code-block-gutter-ink",
+          "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the line numbers render the contrast-measured mix directly; the test asserts the server-rendered inline color and that it reads only --ds-color-text-tertiary and --ds-color-text-primary",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        {
+          "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.w10-craft.test.tsx",
+          "name": "--ds-code-block-copied-frame",
+          "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the copied rule declares the success-frame mix directly; the test asserts the parsed value and that it reads only --ds-color-success",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        {
+          "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.w10-craft.test.tsx",
+          "name": "--ds-code-block-copied-ink",
+          "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the copied rule declares the success mix directly; the test asserts the parsed value and that it reads only --ds-color-success and --ds-color-text-primary",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        {
+          "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.w10-craft.test.tsx",
+          "name": "--ds-code-block-header-bg",
+          "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the header renders the text-primary whisper directly; the test asserts the server-rendered inline background and that it reads only --ds-color-text-primary",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        {
+          "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.w10-craft.test.tsx",
+          "name": "--ds-code-block-motion-duration",
+          "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the three transitions read the produced dial intent --ds-motion-feedback; the test asserts the parsed transition value and that it reads only that channel (the old text pin still named --ds-motion-fast and was already red at 830b41e9f)",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        {
+          "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.w10-craft.test.tsx",
+          "name": "--ds-code-block-selection-bg",
+          "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the ::selection rule declares the primary tint directly; the test asserts the parsed value and that it reads only --ds-color-primary",
+          "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        }
+      ]
+    },
     "rows": [
       {
         "file": "core/src/components/patterns/navigation/workspace-switcher/tests/WorkspaceSwitcher.modern-rescue.test.tsx",
@@ -150,90 +197,6 @@
         "ownerProposal": "WO-FAM-06",
         "family": "carousel",
         "reason": "read by css/runtime/engines/modern/skin/carousel/index.css with no producer; carousel is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.pass1-premium.test.tsx",
-        "name": "--ds-code-block-copy-bg-hover",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/code-block/index.css",
-        "rwpDebt": false,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "code-block",
-        "reason": "read by css/presentation/components/skin/code-block/index.css with no producer; code-block is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; outside the read-without-producer corpus (engines/modern only)"
-      },
-      {
-        "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.pass1-premium.test.tsx",
-        "name": "--ds-code-block-gutter-ink",
-        "occurrences": 1,
-        "readAt": "c/primitives/display/code-block/index.tsx",
-        "rwpDebt": false,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "code-block",
-        "reason": "read by c/primitives/display/code-block/index.tsx with no producer; code-block is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; outside the read-without-producer corpus (engines/modern only)"
-      },
-      {
-        "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.w10-craft.test.tsx",
-        "name": "--ds-code-block-copied-frame",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/code-block/index.css",
-        "rwpDebt": false,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "code-block",
-        "reason": "read by css/presentation/components/skin/code-block/index.css with no producer; code-block is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; outside the read-without-producer corpus (engines/modern only)"
-      },
-      {
-        "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.w10-craft.test.tsx",
-        "name": "--ds-code-block-copied-ink",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/code-block/index.css",
-        "rwpDebt": false,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "code-block",
-        "reason": "read by css/presentation/components/skin/code-block/index.css with no producer; code-block is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; outside the read-without-producer corpus (engines/modern only)"
-      },
-      {
-        "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.w10-craft.test.tsx",
-        "name": "--ds-code-block-header-bg",
-        "occurrences": 1,
-        "readAt": "c/primitives/display/code-block/index.tsx",
-        "rwpDebt": false,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "code-block",
-        "reason": "read by c/primitives/display/code-block/index.tsx with no producer; code-block is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; outside the read-without-producer corpus (engines/modern only)"
-      },
-      {
-        "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.w10-craft.test.tsx",
-        "name": "--ds-code-block-motion-duration",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/code-block/index.css",
-        "rwpDebt": false,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "code-block",
-        "reason": "read by css/presentation/components/skin/code-block/index.css with no producer; code-block is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; outside the read-without-producer corpus (engines/modern only)"
-      },
-      {
-        "file": "core/src/components/primitives/display/code-block/tests/CodeBlock.w10-craft.test.tsx",
-        "name": "--ds-code-block-selection-bg",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/code-block/index.css",
-        "rwpDebt": false,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "code-block",
-        "reason": "read by css/presentation/components/skin/code-block/index.css with no producer; code-block is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; outside the read-without-producer corpus (engines/modern only)"
       },
       {
         "file": "core/src/components/primitives/display/kbd/tests/Kbd.modern-engine.test.tsx",

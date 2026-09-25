@@ -264,18 +264,22 @@ test('RESIDUE language scope: --ds-toolbar-title-letter-spacing fails on growth 
 
 /* ── Las clases de lectura fuera del skin Modern ─────────────────────────── */
 
-const EVI_03_ELEVEN = Object.freeze({
-  '--ds-code-block-copy-bg-hover': ['sharedPaint', 'WO-FAM-06'],
-  '--ds-code-block-copied-frame': ['sharedPaint', 'WO-FAM-06'],
-  '--ds-code-block-copied-ink': ['sharedPaint', 'WO-FAM-06'],
-  '--ds-code-block-motion-duration': ['sharedPaint', 'WO-FAM-06'],
-  '--ds-code-block-selection-bg': ['sharedPaint', 'WO-FAM-06'],
-  '--ds-code-block-gutter-ink': ['componentInline', 'WO-FAM-06'],
-  '--ds-code-block-header-bg': ['componentInline', 'WO-FAM-06'],
+/* WO-EVI-03 found eleven; code-block's seven left through the ledger's exits. */
+const EVI_03_REMAINING = Object.freeze({
   '--ds-voice-input-focus-ring': ['sharedPaint', 'WO-FAM-01'],
   '--ds-loading-overlay-scrim-opacity': ['sharedPaint', 'WO-FAM-04'],
   '--ds-export-button-toast-duration': ['sharedPaint', 'WO-FAM-08'],
   '--ds-size-touch-target': ['sharedPaint', 'WO-FAM-11'],
+});
+
+const EVI_03_EXITS = Object.freeze({
+  '--ds-code-block-copy-bg-hover': 'sharedPaint',
+  '--ds-code-block-copied-frame': 'sharedPaint',
+  '--ds-code-block-copied-ink': 'sharedPaint',
+  '--ds-code-block-motion-duration': 'sharedPaint',
+  '--ds-code-block-selection-bg': 'sharedPaint',
+  '--ds-code-block-gutter-ink': 'componentInline',
+  '--ds-code-block-header-bg': 'componentInline',
 });
 
 const readBaseline = () => JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
@@ -306,25 +310,47 @@ function plantedFindings(sandbox, { producers = PRODUCERS } = {}) {
   });
 }
 
-test('BLIND SPOT: the Modern-only corpus cannot see any of the eleven, the read classes see every one', () => {
+test('BLIND SPOT: the Modern-only corpus cannot see any of the remaining four, the read classes see every one', () => {
   const modern = new Set(classifyReadWithoutProducer().denominator);
   const shared = classifyReadClass(collectSharedPaintFiles(), 'css', PRODUCERS);
   const inline = classifyReadClass(collectComponentInlineFiles(), 'script', PRODUCERS);
-  for (const [name, [cls]] of Object.entries(EVI_03_ELEVEN)) {
+  for (const [name, [cls]] of Object.entries(EVI_03_REMAINING)) {
     assert.ok(!modern.has(name), `${name} would not be a blind spot if the Modern skin read it`);
     const measured = cls === 'sharedPaint' ? shared : inline;
     assert.ok(measured.debt[name], `${name} must be measured as ${cls} debt`);
   }
 });
 
-test('the eleven are named one by one in the ledger, each with its owner or proposal', () => {
+test('the remaining four are named one by one in the ledger, each with its owner or proposal', () => {
   const classes = readBaseline().readClasses;
-  for (const [name, [cls, wo]] of Object.entries(EVI_03_ELEVEN)) {
+  for (const [name, [cls, wo]] of Object.entries(EVI_03_REMAINING)) {
     const row = classes[cls].names[name];
     assert.ok(row, `${name} must be a ${cls} ledger row`);
     assert.equal(row.owner ?? row.ownerProposal, wo, `${name} is routed to ${wo}`);
     assert.match(row.evidence ?? '', /WO-EVI-03/, `${name} cites the measurement that found it`);
   }
+});
+
+test('the seven code-block exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
+  const classes = readBaseline().readClasses;
+  const shared = classifyReadClass(collectSharedPaintFiles(), 'css', PRODUCERS);
+  const inline = classifyReadClass(collectComponentInlineFiles(), 'script', PRODUCERS);
+  assert.deepEqual(Object.keys(classes.exits.rows).sort(), Object.keys(EVI_03_EXITS).sort());
+  for (const [name, cls] of Object.entries(EVI_03_EXITS)) {
+    assert.ok(!classes.sharedPaint.names[name] && !classes.componentInline.names[name], `${name} is no longer a row`);
+    assert.ok(!shared.debt[name] && !inline.debt[name], `${name} is no longer read without a producer`);
+    assert.ok(!PRODUCERS.has(name), `${name} left by losing its read, not by gaining a producer`);
+    const exit = classes.exits.rows[name];
+    assert.equal(exit.class, cls);
+    assert.ok(exit.disposition?.trim() && exit.mover?.trim(), `${name} carries its disposition and mover`);
+  }
+});
+
+test('an exit is not a pin: reading an exited name again is anonymous growth', () => {
+  const name = '--ds-code-block-copied-ink';
+  withSandbox({ [AGNOSTIC_SKIN]: `.ds-drill { color: var(${name}); }\n` }, (sandbox) => {
+    expectFinding(plantedFindings(sandbox), `sharedPaint GREW: ${name}`, 'the exits record does not exempt the name');
+  });
 });
 
 test('the read classes never read a frozen engine, and never double-count the Modern skin', () => {
@@ -371,7 +397,7 @@ test('componentInline: an unproduced inline read fails; a commented one does not
 });
 
 test('a NEW reader of an already-pinned unproduced name is growth, not coverage', () => {
-  const name = '--ds-code-block-copy-bg-hover';
+  const name = '--ds-code-block-copy-bg-pressed';
   withSandbox({ [AGNOSTIC_SKIN]: `.ds-drill { color: var(${name}); }\n` }, (sandbox) => {
     expectFinding(
       plantedFindings(sandbox),

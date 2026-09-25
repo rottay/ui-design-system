@@ -39932,7 +39932,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Hover grammar: the certified ghost-button law (same as Transfer's
  * move/pagination buttons and Calendar's header chrome) --
  * `--ds-button-ghost-bg-hover` over a `--ds-surface-inset` floor, gated
- * `:not(:disabled)`, family escape hatches `--ds-code-block-*`.
+ * `:not(:disabled)`. The hover background, copied ink/frame, selection tint and
+ * transition duration read no `--ds-code-block-*` name: nothing produces one
+ * and applications may not assign them, so the paint is written directly.
  */
 
 .ds-code-block[data-part='root'] [data-part='copy-button'] {
@@ -39949,9 +39951,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   font-weight: 500;
   cursor: pointer;
   transition:
-    background var(--ds-code-block-motion-duration, var(--ds-motion-feedback)) ease,
-    color var(--ds-code-block-motion-duration, var(--ds-motion-feedback)) ease,
-    border-color var(--ds-code-block-motion-duration, var(--ds-motion-feedback)) ease;
+    background var(--ds-motion-feedback) ease,
+    color var(--ds-motion-feedback) ease,
+    border-color var(--ds-motion-feedback) ease;
 }
 
 /* The idle/copied glyph sits on the button's text baseline: inline-flex with a
@@ -40026,7 +40028,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    keyboard equivalent. The test-pinned selector string is preserved. */
 @media (hover: hover) {
   .ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover {
-    background: var(--ds-code-block-copy-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+    background: var(--ds-button-ghost-bg-hover, var(--ds-surface-inset));
     color: var(--ds-code-block-copy-ink-hover, var(--ds-color-text-primary));
   }
 }
@@ -40045,23 +40047,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    gutter-ink mix in the engine). */
 .ds-code-block[data-part='root'] [data-part='copy-button'][data-copied='true'],
 .ds-code-block[data-part='root'] [data-part='copy-button'][data-copied='true']:not(:disabled):hover {
-  color: var(
-    --ds-code-block-copied-ink,
-    color-mix(in srgb, var(--ds-color-success) 70%, var(--ds-color-text-primary))
-  );
-  border-color: var(
-    --ds-code-block-copied-frame,
-    color-mix(in srgb, var(--ds-color-success) 40%, transparent)
-  );
+  color: color-mix(in srgb, var(--ds-color-success) 70%, var(--ds-color-text-primary));
+  border-color: color-mix(in srgb, var(--ds-color-success) 40%, transparent);
 }
 
 /* Selection inside the block paints with the primary tint instead of the UA
    default -- state paint the inline styles cannot express. */
 .ds-code-block[data-part='root'] ::selection {
-  background: var(
-    --ds-code-block-selection-bg,
-    color-mix(in srgb, var(--ds-color-primary) 28%, transparent)
-  );
+  background: color-mix(in srgb, var(--ds-color-primary) 28%, transparent);
 }
 
 .ds-code-block[data-part='root'] [data-part='copy-button']:focus-visible,
