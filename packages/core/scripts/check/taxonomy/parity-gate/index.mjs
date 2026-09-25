@@ -198,8 +198,26 @@ const GOVERNED_PUBLIC_SUPPORT = {
 
 /**
  * Indexed folders beside claimed families that are one shared implementation of several families rather than a
- * family of their own. Each entry names its owner rows and is re-proven every run: the owners exist, nothing public
- * reaches the folder, and every importer outside it lives inside an owner. Adding a path here is a decision.
+ * family of their own. Each entry names its owner rows and is re-proven every run by four findings. Adding a path
+ * here is a decision.
+ *
+ *   support-folder-owner     every owner id is an inventory row.
+ *   support-folder-public    no public entry file -- the root barrel and every file under
+ *                            `packages/core/src/entrypoints` -- imports the folder DIRECTLY. It follows no re-export
+ *                            chain: the root reaching the folder through an owner barrel is not this finding.
+ *   support-folder-consumer  every file under `packages/core/src` that imports the folder, outside the folder, the
+ *                            tests folders and the entry files, lives inside an owner. The scan is `packages/core/src`
+ *                            only; a consumer anywhere else in the repository is not seen.
+ *   support-folder-unused    at least one owner file imports the folder.
+ *
+ * The transitive public case is covered by the other two bindings, not by `-public`: a non-owner re-exporting the
+ * folder fails `-consumer`, and a component-shaped value declared in the folder that reaches the root through an
+ * owner fails the reverse projection as `public-unowned`, because no row's `sourceOwner` contains its declaration.
+ * What neither covers is a non-component value -- a hook, a lowercase function or constant -- that an owner
+ * re-exports to the root; that value is legal public API with no family row, and nothing here refuses it.
+ *
+ * Cost: one walk of `packages/core/src` per run (`supportFolderImportIndex`), shared by every entry, so an entry adds
+ * an in-memory scan of the indexed specifiers rather than another read of every source file.
  */
 export const GOVERNED_SUPPORT_FOLDERS = Object.freeze({
   'packages/core/src/components/primitives/feedback/notifier': Object.freeze({
@@ -233,33 +251,53 @@ function resolveSpecifier(importer, specifier) {
   return null;
 }
 
-function importsInto(repositoryRoot, file, folder) {
-  const text = fs.readFileSync(path.join(repositoryRoot, file), 'utf8');
-  for (const match of text.matchAll(MODULE_SPECIFIER)) {
-    const target = resolveSpecifier(file, match[1]);
-    if (target !== null && (target === folder || target.startsWith(`${folder}/`))) return true;
-  }
-  return false;
+/**
+ * The repository-relative module targets every relevant file names, read once. `sources` is every file under
+ * `packages/core/src` in walk order; `entryFiles` is the root barrel plus every file under
+ * `packages/core/src/entrypoints`, restricted to files that exist.
+ */
+export function supportFolderImportIndex({ repositoryRoot, rootEntryFile }) {
+  const targetsByFile = new Map();
+  const targetsOf = (file) => {
+    if (!targetsByFile.has(file)) {
+      const text = fs.readFileSync(path.join(repositoryRoot, file), 'utf8');
+      const targets = [];
+      for (const match of text.matchAll(MODULE_SPECIFIER)) {
+        const target = resolveSpecifier(file, match[1]);
+        if (target !== null) targets.push(target);
+      }
+      targetsByFile.set(file, targets);
+    }
+    return targetsByFile.get(file);
+  };
+  const entryFiles = [
+    path.relative(repositoryRoot, rootEntryFile).split(path.sep).join('/'),
+    ...sourceFilesUnder(repositoryRoot, 'packages/core/src/entrypoints'),
+  ].filter((file) => fs.existsSync(path.join(repositoryRoot, file)));
+  const sources = sourceFilesUnder(repositoryRoot, 'packages/core/src');
+  for (const file of [...entryFiles, ...sources]) targetsOf(file);
+  return { entryFiles, sources, targetsOf };
+}
+
+function importsInto(index, file, folder) {
+  return index.targetsOf(file).some((target) => target === folder || target.startsWith(`${folder}/`));
 }
 
 /** The findings that keep a governed support folder honest; empty when it holds. */
-export function governedSupportFolderFindings({ repositoryRoot, folder, entry, rows, rootEntryFile, ownerRootOf }) {
+export function governedSupportFolderFindings({ repositoryRoot, folder, entry, rows, rootEntryFile, ownerRootOf, index = supportFolderImportIndex({ repositoryRoot, rootEntryFile }) }) {
   const findings = [];
   const rowsById = new Map(rows.map((row) => [row.id, row]));
   const missing = entry.owners.filter((id) => !rowsById.has(id));
   if (missing.length > 0) findings.push(['support-folder-owner', `${folder} names owner(s) ${missing.join(', ')} that are not inventory rows`]);
   const ownerRoots = entry.owners.filter((id) => rowsById.has(id)).map((id) => ownerRootOf(rowsById.get(id)));
-  const entryFiles = [
-    path.relative(repositoryRoot, rootEntryFile).split(path.sep).join('/'),
-    ...sourceFilesUnder(repositoryRoot, 'packages/core/src/entrypoints'),
-  ].filter((file) => fs.existsSync(path.join(repositoryRoot, file)));
+  const { entryFiles } = index;
   for (const file of entryFiles) {
-    if (importsInto(repositoryRoot, file, folder)) findings.push(['support-folder-public', `${folder} is reached from the public entry ${file}; a public shape needs a family row`]);
+    if (importsInto(index, file, folder)) findings.push(['support-folder-public', `${folder} is reached from the public entry ${file}; a public shape needs a family row`]);
   }
   let ownerConsumers = 0;
-  for (const file of sourceFilesUnder(repositoryRoot, 'packages/core/src')) {
+  for (const file of index.sources) {
     if (file.startsWith(`${folder}/`) || /\/(?:tests|__tests__)\//u.test(file) || entryFiles.includes(file)) continue;
-    if (!importsInto(repositoryRoot, file, folder)) continue;
+    if (!importsInto(index, file, folder)) continue;
     if (ownerRoots.some((owner) => file.startsWith(`${owner}/`))) ownerConsumers += 1;
     else findings.push(['support-folder-consumer', `${folder} is imported by ${file}, which is inside none of its owners (${entry.owners.join(', ')})`]);
   }
@@ -754,6 +792,7 @@ export function auditTaxonomyParity({
   // be a row": 29 rows resolve by `component-symbol` and legitimately share a
   // host folder, so a blanket rule would report them as unowned.
   const governedSeen = new Set();
+  let supportIndex = null;
   const containers = new Set();
   for (const row of rows) {
     if (row.resolvedBy !== 'folder-slug') continue;
@@ -773,7 +812,8 @@ export function auditTaxonomyParity({
       const governed = governedSupportFolders[childRelative];
       if (governed) {
         governedSeen.add(childRelative);
-        for (const [kind, detail] of governedSupportFolderFindings({ repositoryRoot, folder: childRelative, entry: governed, rows, rootEntryFile, ownerRootOf: relativeOwnerOf })) add(kind, detail);
+        supportIndex ??= supportFolderImportIndex({ repositoryRoot, rootEntryFile });
+        for (const [kind, detail] of governedSupportFolderFindings({ repositoryRoot, folder: childRelative, entry: governed, rows, rootEntryFile, ownerRootOf: relativeOwnerOf, index: supportIndex })) add(kind, detail);
         continue;
       }
       add(

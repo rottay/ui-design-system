@@ -1178,14 +1178,17 @@ test('FENCE DRILL: a module that resolves the cascade tables through the seal fa
 });
 
 /** The audit with a governed support folder planted beside the two fixture families. */
-function auditGoverned(fixture, entry, { consumer = 'Avatar', publicExport = false, plant = true } = {}) {
+function auditGoverned(fixture, entry, { consumer = 'Avatar', publicExport = false, plant = true, ownerReexport = null } = {}) {
   const folder = `${UI_ROOT}/primitives/display/Engine`;
   if (plant) {
     fs.mkdirSync(path.join(fixture.root, folder), { recursive: true });
-    fs.writeFileSync(path.join(fixture.root, folder, 'index.tsx'), 'export const EngineItem = () => null;\n');
+    fs.writeFileSync(path.join(fixture.root, folder, 'index.tsx'), 'export const EngineItem = () => null;\nexport const useEngine = () => null;\n');
   }
   if (consumer) {
     fs.appendFileSync(path.join(fixture.root, `${UI_ROOT}/primitives/display/${consumer}/index.tsx`), "import { EngineItem } from '../Engine';\n");
+  }
+  if (ownerReexport) {
+    fs.appendFileSync(path.join(fixture.root, `${UI_ROOT}/primitives/display/Avatar/index.tsx`), `export { ${ownerReexport} } from '../Engine';\n`);
   }
   if (publicExport) {
     fs.appendFileSync(path.join(fixture.root, 'packages/core/src/index.ts'), `export * from '../../../${folder}';\n`);
@@ -1217,6 +1220,18 @@ test('DRILL: a governed support folder imported from outside its owners is repor
 test('DRILL: a governed support folder reached from the public entry is reported', () => {
   const result = auditGoverned(buildCleanFixture(), ENGINE_OWNED_BY_AVATAR, { publicExport: true });
   assert.ok(kinds(result).includes('support-folder-public'), JSON.stringify(result.violations));
+});
+
+// `-public` reads direct imports only; these two pin what covers, and what does not cover, the transitive case.
+test('DRILL: a component the support folder declares, re-exported to the root by its owner, is public-unowned', () => {
+  const result = auditGoverned(buildCleanFixture(), ENGINE_OWNED_BY_AVATAR, { ownerReexport: 'EngineItem' });
+  assert.deepEqual(kinds(result), ['public-unowned']);
+  assert.match(result.violations[0].detail, /"EngineItem"/u);
+});
+
+test('a hook the support folder declares, re-exported to the root by its owner, is refused by no binding', () => {
+  const result = auditGoverned(buildCleanFixture(), ENGINE_OWNED_BY_AVATAR, { ownerReexport: 'useEngine' });
+  assert.deepEqual(result.violations, []);
 });
 
 test('DRILL: a governed support folder naming an owner that is not a row is reported', () => {
