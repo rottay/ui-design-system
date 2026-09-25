@@ -1,18 +1,104 @@
 {
   "_comment": "Decrease-only accepted-debt ledger for container-query-gate.mjs. (a) deadContainerNames: @container <name> queries with no matching container-name declaration anywhere in src css -- a NEW dead name (not listed here) fails --check; revive a name by declaring container-name on some skin. (b) viewportQueries: per-file count of @media (max-width|min-width) declarations under presentation/components/** -- growth past a file's ceiling, or a NEW file with any count, fails --check; a file dropping below its ceiling is a tighten opportunity via --seed.",
-  "deadContainerNames": {
-    "ds-table": {
-      "reason": "pre-existing at W6-A landing: patterns.css queries @container ds-table for the data-table column-priority-collapse rule, but no engine skin (checked runtime/engines/{modern,rustic}/skin/{table,data-table}.css) declares container-name: ds-table -- only a patterns.css comment claims it does. The rule has been silently inert since it landed. W6-A was told to keep ds-table as-is; this is disclosed debt for a follow-up, not something this lane fixes."
-    }
-  },
+  "deadContainerNames": {},
   "viewportQueries": {
     "src/foundation/tokens/css/presentation/components/patterns/index.css": {
       "count": 1,
-      "reason": "RELOCATED 2026-08-02, not new debt: this is the same single query the patterns-paint.css entry below has always covered -- @media (max-width: 640px) { :is(.ds-command-home-console) { padding: 14px } } -- carried across when the orphaned paint half was migrated into patterns.css (see governance/tokens/decisions/writers/unused/system/index.json itemZero). Shipped viewport-query debt is unchanged at 1, because patterns-paint.css is imported by no entrypoint and reaches no bundle; the duplicate below disappears when that tombstone is deleted. Still the pre-existing W6 \"single\" to audit individually in a later wave."
+      "reason": "pre-existing viewport query outside the W6-A command-home migration scope (design doc W6 section 1.2 explicitly excludes this file as a \"single\" to audit individually in a later wave)"
     },
     "src/foundation/tokens/css/presentation/components/patterns-paint/index.css": {
       "count": 1,
-      "reason": "pre-existing viewport query outside the W6-A command-home migration scope (design doc W6 section 1.2 explicitly excludes this file as a \"single\" to audit individually in a later wave). Since 2026-08-02 this file is an unimported tombstone whose live twin is the patterns.css entry above; this entry retires with the file (whole-file RETIRE_PROPOSED)."
+      "reason": "pre-existing viewport query outside the W6-A command-home migration scope (design doc W6 section 1.2 explicitly excludes this file as a \"single\" to audit individually in a later wave)"
+    }
+  },
+  "selfReferentialQueries": {
+    "sites": {
+      "src/foundation/tokens/css/presentation/components/skin/decision-comparison/index.css :: @container ds-decision-comparison :: .ds-pattern-decision-comparison[data-part=\"root\"][data-loading]": {
+        "line": 620,
+        "adjudication": "A/B mixed — pad and the min-heights are read by descendants (A); --ds-decision-comparison-radius is read by the root itself (B)."
+      },
+      "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css :: @container ds-decision-panorama :: .ds-pattern-decision-panorama[data-part='root'][data-loading]": {
+        "line": 400,
+        "adjudication": "B — the rule restyles the declaring element itself (its own layout property, or a channel the root reads); it is inert outside a same-name ancestor. Fix is structural: query a container declared on a parent or wrapper. (border-radius on the root)"
+      },
+      "src/foundation/tokens/css/presentation/components/skin/edit-fields/index.css :: @container ds-edit-fields-grid :: .ds-structure.ds-edit-fields[data-part='grid']": {
+        "line": 175,
+        "adjudication": "B — the rule restyles the declaring element itself (its own layout property, or a channel the root reads); it is inert outside a same-name ancestor. Fix is structural: query a container declared on a parent or wrapper. (grid-template-columns and row-gap on the grid that is the container)"
+      },
+      "src/foundation/tokens/css/presentation/components/skin/edit-header/index.css :: @container ds-edit-header :: .ds-structure.ds-edit-header[data-part='root']": {
+        "line": 377,
+        "adjudication": "A — the rule sets custom properties only descendants read; it is inert outside a same-name ancestor, so the compact values never apply. Fix: re-declare on the root's children (root > *), the B45 form. (top-bar, hero-panel, context-card and icon-badge read the channels)"
+      },
+      "src/foundation/tokens/css/presentation/components/skin/edit-header/index.css :: @container ds-edit-header :: .ds-structure.ds-edit-header[data-part='root'] #2": {
+        "line": 396,
+        "adjudication": "A — the rule sets custom properties only descendants read; it is inert outside a same-name ancestor, so the compact values never apply. Fix: re-declare on the root's children (root > *), the B45 form. (top-bar, hero-panel, context-card and icon-badge read the channels)"
+      },
+      "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css :: @container ds-metrics-cards :: .ds-metrics-cards.ds-metrics-cards[data-part='root']": {
+        "line": 329,
+        "adjudication": "A — the rule sets custom properties only descendants read; it is inert outside a same-name ancestor, so the compact values never apply. Fix: re-declare on the root's children (root > *), the B45 form. (the value text reads --_ds-metric-value-size inline)"
+      },
+      "src/foundation/tokens/css/presentation/components/skin/metrics-minimal/index.css :: @container ds-metrics-minimal :: .ds-metrics-minimal.ds-metrics-minimal[data-part='root']": {
+        "line": 287,
+        "adjudication": "A — the rule sets custom properties only descendants read; it is inert outside a same-name ancestor, so the compact values never apply. Fix: re-declare on the root's children (root > *), the B45 form. (the value text reads --_ds-metric-value-size inline)"
+      },
+      "src/foundation/tokens/css/presentation/components/skin/metrics-rows/index.css :: @container ds-metrics-rows :: .ds-metrics-rows.ds-metrics-rows[data-part='root']": {
+        "line": 231,
+        "adjudication": "A — the rule sets custom properties only descendants read; it is inert outside a same-name ancestor, so the compact values never apply. Fix: re-declare on the root's children (root > *), the B45 form. (the value text reads --_ds-metric-value-size inline)"
+      },
+      "src/foundation/tokens/css/presentation/components/skin/record/index.css :: @container ds-record-fields :: .ds-structure.ds-record[data-part='field-grid']": {
+        "line": 655,
+        "adjudication": "B — the rule restyles the declaring element itself (its own layout property, or a channel the root reads); it is inert outside a same-name ancestor. Fix is structural: query a container declared on a parent or wrapper. (the field-grid gap and the summary-strip padding are read by the container element itself)"
+      },
+      "src/foundation/tokens/css/presentation/components/skin/record/index.css :: @container ds-record-summary :: .ds-structure.ds-record[data-part='summary-strip']": {
+        "line": 664,
+        "adjudication": "B — the rule restyles the declaring element itself (its own layout property, or a channel the root reads); it is inert outside a same-name ancestor. Fix is structural: query a container declared on a parent or wrapper. (the field-grid gap and the summary-strip padding are read by the container element itself)"
+      },
+      "src/foundation/tokens/css/presentation/components/skin/stats-header/index.css :: @container ds-stats-header :: .ds-stats-header[data-part='root']:not([data-columns='1'])": {
+        "line": 275,
+        "adjudication": "A — the rule sets custom properties only descendants read; it is inert outside a same-name ancestor, so the compact values never apply. Fix: re-declare on the root's children (root > *), the B45 form. (the card-grid reads --_ds-stats-header-track-count)"
+      },
+      "src/foundation/tokens/css/presentation/components/skin/stats-header/index.css :: @container ds-stats-header :: .ds-stats-header[data-part='root']:not([data-columns='1']) #2": {
+        "line": 280,
+        "adjudication": "A — the rule sets custom properties only descendants read; it is inert outside a same-name ancestor, so the compact values never apply. Fix: re-declare on the root's children (root > *), the B45 form. (the card-grid reads --_ds-stats-header-track-count)"
+      },
+      "src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css :: @container ds-visual-excellence :: .ds-visual-excellence": {
+        "line": 592,
+        "adjudication": "B — the rule restyles the declaring element itself (its own layout property, or a channel the root reads); it is inert outside a same-name ancestor. Fix is structural: query a container declared on a parent or wrapper. (border and radius on the root; showroom preview)"
+      },
+      "src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css :: @container ds-card :: .ds-card.ds-card--modern[data-part='root']": {
+        "line": 458,
+        "adjudication": "A — the rule sets custom properties only descendants read; it is inert outside a same-name ancestor, so the compact values never apply. Fix: re-declare on the root's children (root > *), the B45 form. (the actions row reads --_ds-card-actions-justify). A card nested in a card does match, but against the OUTER card's width, so it is not a valid nesting form"
+      },
+      "src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css :: @container ds-empty :: .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root']": {
+        "line": 122,
+        "adjudication": "B — the rule restyles the declaring element itself (its own layout property, or a channel the root reads); it is inert outside a same-name ancestor. Fix is structural: query a container declared on a parent or wrapper. (min-block-size and padding on the root)"
+      },
+      "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css :: @container ds-map-view :: .ds-pattern-map-view.ds-engine-modern[data-part='root']": {
+        "line": 185,
+        "adjudication": "B — the rule restyles the declaring element itself (its own layout property, or a channel the root reads); it is inert outside a same-name ancestor. Fix is structural: query a container declared on a parent or wrapper. (flex-direction on the root)"
+      },
+      "src/foundation/tokens/css/runtime/engines/modern/skin/saved-views/index.css :: @container ds-saved-views :: .ds-pattern-saved-views.ds-engine-modern[data-part='root']": {
+        "line": 103,
+        "adjudication": "B — the rule restyles the declaring element itself (its own layout property, or a channel the root reads); it is inert outside a same-name ancestor. Fix is structural: query a container declared on a parent or wrapper. (gap and padding on the root)"
+      }
+    },
+    "removed": {
+      "src/foundation/tokens/css/presentation/components/skin/detail-header/index.css :: @container ds-detail-header :: .ds-structure.ds-detail-header[data-part='root']": {
+        "mover": "802aa2120",
+        "reason": "B45 paint defect: the query moved onto the root's children, which inherit the answer; measured in Chromium (form-header 12.73px narrow hero, detail-header 14.98px gutter readers, shortcuts-overlay narrow dialog offset)."
+      },
+      "src/foundation/tokens/css/presentation/components/skin/form-header/index.css :: @container ds-form-header :: .ds-structure.ds-form-header[data-part='root']": {
+        "mover": "802aa2120",
+        "reason": "B45 paint defect: the query moved onto the root's children, which inherit the answer; measured in Chromium (form-header 12.73px narrow hero, detail-header 14.98px gutter readers, shortcuts-overlay narrow dialog offset)."
+      },
+      "src/foundation/tokens/css/presentation/components/skin/form-header/index.css :: @container ds-form-header :: .ds-structure.ds-form-header[data-part='root'] #2": {
+        "mover": "802aa2120",
+        "reason": "B45 paint defect: the query moved onto the root's children, which inherit the answer; measured in Chromium (form-header 12.73px narrow hero, detail-header 14.98px gutter readers, shortcuts-overlay narrow dialog offset)."
+      },
+      "src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay/index.css :: @container ds-shortcuts-overlay :: .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root']": {
+        "mover": "802aa2120",
+        "reason": "B45 paint defect: the query moved onto the root's children, which inherit the answer; measured in Chromium (form-header 12.73px narrow hero, detail-header 14.98px gutter readers, shortcuts-overlay narrow dialog offset)."
+      }
     }
   }
 }

@@ -28,6 +28,20 @@
  *       width queries left after the W6-A command-home migration are a
  *       decrease-only baseline, seeded at post-migration reality.
  *
+ *   (c) SELF-REFERENTIAL QUERIES. A container query resolves against the
+ *       nearest ANCESTOR container of that name, never the element itself. A
+ *       rule inside `@container <name>` whose subject compound carries every
+ *       simple selector of a compound that declares `container-name: <name>`
+ *       (the same selector, or a narrower one such as `root:hover`) can only
+ *       match the declaring element, so it matches nothing unless that element
+ *       sits inside another container of the same name. A selector that names
+ *       such an ancestor (`.card .card[data-part='root']`) says so and is not a
+ *       finding; a bare one is, and the same-name nesting it may rely on is
+ *       adjudicated per site. A pseudo-element or `&` on the declaring
+ *       element itself is counted as not judged. The live sites are a decrease-only ledger: a new site fails,
+ *       and a site that stops being live must move to `removed` with a reason
+ *       and the commit that moved it.
+ *
  * Usage:
  *   node scripts/check/engine/css/container-queries/index.mjs           # print the report
  *   node scripts/check/engine/css/container-queries/index.mjs --check   # exit 1 on any violation
@@ -36,7 +50,10 @@
 import { readFileSync, readdirSync, existsSync, writeFileSync } from 'node:fs';
 import { join, dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+
+const postcss = createRequire(import.meta.url)('postcss');
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
@@ -158,12 +175,244 @@ export function extractMediaQueries(rawCss) {
   return queries;
 }
 
+/** Splits `text` on `separator` characters that sit outside brackets, parens and quotes. */
+function splitTopLevel(text, isSeparator) {
+  const parts = [];
+  let depth = 0;
+  let quote = null;
+  let current = '';
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+    if (quote) {
+      current += ch;
+      if (ch === '\\') {
+        current += text[i + 1] ?? '';
+        i += 1;
+      } else if (ch === quote) {
+        quote = null;
+      }
+      continue;
+    }
+    if (ch === '"' || ch === "'") quote = ch;
+    else if (ch === '(' || ch === '[') depth += 1;
+    else if (ch === ')' || ch === ']') depth -= 1;
+    if (depth === 0 && isSeparator(ch)) {
+      parts.push(current);
+      current = ch;
+      continue;
+    }
+    current += ch;
+  }
+  parts.push(current);
+  return parts;
+}
+
+/** The comma branches of a selector list, trimmed. */
+export function selectorBranches(selector) {
+  return splitTopLevel(selector, (ch) => ch === ',')
+    .map((part, index) => (index === 0 ? part : part.slice(1)).trim())
+    .filter(Boolean);
+}
+
+/** One simple selector in a canonical spelling: attribute quotes and inner whitespace dropped. */
+function normalizeSimple(simple) {
+  if (!simple.startsWith('[')) return simple.replace(/\s+/g, ' ');
+  const inner = simple.slice(1, -1).trim();
+  const match = inner.match(/^([^~|^$*=\s]+)\s*([~|^$*]?=)\s*(.+?)(\s+[iIsS])?$/u);
+  if (!match) return `[${inner}]`;
+  const value = match[3].replace(/^(['"])(.*)\1$/u, '$2');
+  return `[${match[1]}${match[2]}${value}${match[4] ? match[4].trim().toLowerCase() : ''}]`;
+}
+
+/** The simple selectors of one compound, plus whether it carries a pseudo-element or a nesting `&`. */
+export function parseCompound(compound) {
+  const simples = [];
+  let i = 0;
+  const text = compound.trim();
+  while (i < text.length) {
+    let j = i + 1;
+    if (text[i] === '[') {
+      let depth = 0;
+      let quote = null;
+      for (j = i; j < text.length; j += 1) {
+        const ch = text[j];
+        if (quote) { if (ch === quote) quote = null; continue; }
+        if (ch === '"' || ch === "'") quote = ch;
+        else if (ch === '[') depth += 1;
+        else if (ch === ']') { depth -= 1; if (depth === 0) { j += 1; break; } }
+      }
+    } else if (text[i] === ':') {
+      j = text[i + 1] === ':' ? i + 2 : i + 1;
+      while (j < text.length && /[\w-]/u.test(text[j])) j += 1;
+      if (text[j] === '(') {
+        let depth = 0;
+        for (; j < text.length; j += 1) {
+          if (text[j] === '(') depth += 1;
+          else if (text[j] === ')') { depth -= 1; if (depth === 0) { j += 1; break; } }
+        }
+      }
+    } else {
+      while (j < text.length && !/[.#[:]/u.test(text[j])) j += 1;
+    }
+    simples.push(normalizeSimple(text.slice(i, j)));
+    i = j;
+  }
+  return {
+    simples: new Set(simples.filter((simple) => simple !== '*')),
+    pseudoElement: simples.some((simple) => simple.startsWith('::') || /^:(before|after|first-line|first-letter)$/u.test(simple)),
+    nesting: simples.some((simple) => simple.includes('&')),
+  };
+}
+
+/**
+ * A complex selector as compounds, each tagged with whether it is an ANCESTOR
+ * of the subject. A compound whose right-hand combinator is descendant or child
+ * is an ancestor of the subject: a sibling of the subject or of an ancestor
+ * shares its parent chain.
+ */
+export function parseComplexSelector(selector) {
+  const tokens = [];
+  let current = '';
+  const flush = () => {
+    if (current.trim()) tokens.push({ compound: current.trim() });
+    current = '';
+  };
+  const parts = splitTopLevel(selector.trim(), (ch) => /[\s>+~]/u.test(ch));
+  for (const part of parts) {
+    const head = part[0];
+    if (head && /[\s>+~]/u.test(head)) {
+      flush();
+      const last = tokens.at(-1);
+      if (last && head !== ' ' && head !== '\n' && head !== '\t') last.combinator = head;
+      else if (last && !last.combinator) last.combinator = ' ';
+      current = part.slice(1);
+    } else {
+      current += part;
+    }
+  }
+  flush();
+  return tokens.map((token, index) => ({
+    ...parseCompound(token.compound),
+    text: token.compound,
+    ancestor: index < tokens.length - 1 && (token.combinator ?? ' ') !== '+' && token.combinator !== '~',
+  }));
+}
+
+/** True when `candidate` carries every simple selector of `declared`: it matches only elements `declared` matches. */
+export function compoundWithin(candidate, declared) {
+  if (declared.simples.size === 0) return false;
+  for (const simple of declared.simples) if (!candidate.simples.has(simple)) return false;
+  return true;
+}
+
+function containerNamesOf(decl) {
+  const value = decl.value.trim();
+  const segment = decl.prop === 'container' ? value.split('/')[0].trim() : value;
+  if (!segment || segment === 'none') return [];
+  return segment.split(/\s+/u).filter(Boolean);
+}
+
+function queriedName(params) {
+  const token = params.trim().split(/\s+/u)[0] ?? '';
+  if (!token || token.startsWith('(') || token === 'not' || token.startsWith('not(') || token === 'style' || token.startsWith('style(')) return null;
+  return token;
+}
+
+/**
+ * The facts check (c) needs from one stylesheet: every combinator-free compound
+ * that declares a container name, and every rule branch inside a named
+ * `@container`.
+ */
+export function extractSelfReferenceFacts(rawCss, fileLabel = '') {
+  const declarations = [];
+  const queries = [];
+  const root = postcss.parse(rawCss);
+  root.walkRules((rule) => {
+    const names = [];
+    for (const node of rule.nodes ?? []) {
+      if (node.type === 'decl' && (node.prop === 'container-name' || node.prop === 'container')) names.push(...containerNamesOf(node));
+    }
+    const branches = selectorBranches(rule.selector);
+    if (names.length > 0) {
+      for (const branch of branches) {
+        const complex = parseComplexSelector(branch);
+        if (complex.length !== 1 || complex[0].pseudoElement || complex[0].nesting) continue;
+        for (const name of names) declarations.push({ name, compound: complex[0], selector: branch, file: fileLabel, line: rule.source?.start?.line ?? 0 });
+      }
+    }
+    for (let parent = rule.parent; parent; parent = parent.parent) {
+      if (parent.type !== 'atrule' || parent.name !== 'container') continue;
+      const name = queriedName(parent.params);
+      if (!name) continue;
+      for (const branch of branches) {
+        queries.push({ name, selector: branch, complex: parseComplexSelector(branch), file: fileLabel, line: rule.source?.start?.line ?? 0 });
+      }
+    }
+  });
+  return { declarations, queries };
+}
+
+/** The stable id of one self-referential site; a repeat of the same selector in the same file carries its ordinal. */
+export function selfReferenceSiteId(site) {
+  const base = `${site.file} :: @container ${site.name} :: ${site.selector.replace(/\s+/gu, ' ')}`;
+  return site.occurrence > 1 ? `${base} #${site.occurrence}` : base;
+}
+
+/** Pure evaluator for check (c). */
+export function evaluateSelfReferentialQueries({ declarations, queries, baseline = {} }) {
+  const declarersByName = new Map();
+  for (const declaration of declarations) {
+    if (!declarersByName.has(declaration.name)) declarersByName.set(declaration.name, []);
+    declarersByName.get(declaration.name).push(declaration);
+  }
+  const live = new Map();
+  const occurrences = new Map();
+  let unjudged = 0;
+  for (const query of queries) {
+    const declarers = declarersByName.get(query.name) ?? [];
+    const subject = query.complex.at(-1);
+    if (!subject || declarers.length === 0) continue;
+    const declarer = declarers.find((d) => compoundWithin(subject, d.compound));
+    if (!declarer) continue;
+    if (subject.pseudoElement || subject.nesting) {
+      unjudged += 1;
+      continue;
+    }
+    const namedAncestor = query.complex.some(
+      (compound) => compound.ancestor && declarers.some((d) => compoundWithin(compound, d.compound)),
+    );
+    if (namedAncestor) continue;
+    const site = { name: query.name, selector: query.selector, file: query.file, line: query.line, declaredBy: `${declarer.file}:${declarer.line} ${declarer.selector}` };
+    const base = selfReferenceSiteId(site);
+    const occurrence = (occurrences.get(base) ?? 0) + 1;
+    occurrences.set(base, occurrence);
+    site.occurrence = occurrence;
+    live.set(selfReferenceSiteId(site), site);
+  }
+  const ledger = new Set(Object.keys(baseline.sites ?? {}));
+  const removed = baseline.removed ?? {};
+  const newSites = [...live.keys()].filter((id) => !ledger.has(id)).sort();
+  const staleSites = [...ledger].filter((id) => !live.has(id)).sort();
+  const malformed = [];
+  for (const [id, entry] of Object.entries(baseline.sites ?? {})) {
+    if (typeof entry?.adjudication !== 'string' || entry.adjudication.trim() === '') malformed.push(`${id}: a ledger site needs an adjudication`);
+  }
+  for (const [id, entry] of Object.entries(removed)) {
+    if (typeof entry?.reason !== 'string' || entry.reason.trim() === '' || typeof entry?.mover !== 'string' || !/^[0-9a-f]{7,40}\b/u.test(entry.mover)) {
+      malformed.push(`${id}: a removed site needs a reason and the commit that moved it`);
+    }
+    if (ledger.has(id)) malformed.push(`${id}: listed both as a live site and as removed`);
+  }
+  return { live: [...live.values()], newSites, staleSites, malformed, unjudged };
+}
+
 function loadBaseline() {
-  if (!existsSync(BASELINE_PATH)) return { deadContainerNames: {}, viewportQueries: {} };
+  if (!existsSync(BASELINE_PATH)) return { deadContainerNames: {}, viewportQueries: {}, selfReferentialQueries: {} };
   const parsed = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
   return {
     deadContainerNames: parsed.deadContainerNames ?? {},
     viewportQueries: parsed.viewportQueries ?? {},
+    selfReferentialQueries: parsed.selfReferentialQueries ?? {},
   };
 }
 
@@ -207,10 +456,14 @@ function runGate() {
 
   const declaredNames = new Set();
   const referencedQueries = [];
+  const selfFacts = { declarations: [], queries: [] };
   for (const file of allCssFiles) {
     const css = readFileSync(file, 'utf8');
     for (const name of extractDeclaredContainerNames(css)) declaredNames.add(name);
     referencedQueries.push(...extractContainerQueries(css, relPath(file)));
+    const facts = extractSelfReferenceFacts(css, relPath(file));
+    selfFacts.declarations.push(...facts.declarations);
+    selfFacts.queries.push(...facts.queries);
   }
 
   const componentCssFiles = collectCssFiles(COMPONENTS_ROOT);
@@ -224,6 +477,7 @@ function runGate() {
   const baseline = loadBaseline();
   const nameResult = evaluateDeadNames({ declaredNames, referencedQueries, baseline: baseline.deadContainerNames });
   const viewportResult = evaluateViewportQueries({ countsByFile, baseline: baseline.viewportQueries });
+  const selfResult = evaluateSelfReferentialQueries({ ...selfFacts, baseline: baseline.selfReferentialQueries });
 
   const sitesByName = new Map();
   for (const q of referencedQueries) {
@@ -237,7 +491,9 @@ function runGate() {
     nameResult,
     countsByFile,
     viewportResult,
+    selfResult,
     sitesByName,
+    baseline,
   };
 }
 
@@ -282,6 +538,9 @@ function seed(result) {
       'count, fails --check; a file dropping below its ceiling is a tighten opportunity via --seed.',
     deadContainerNames,
     viewportQueries,
+    ...(result.baseline.selfReferentialQueries && Object.keys(result.baseline.selfReferentialQueries).length > 0
+      ? { selfReferentialQueries: result.baseline.selfReferentialQueries }
+      : {}),
   };
   writeFileSync(BASELINE_PATH, `${JSON.stringify(payload, null, 2)}\n`);
   console.log(
@@ -308,6 +567,8 @@ function main() {
   console.log(`  residual viewport queries   : ${totalViewport} across ${Object.keys(result.countsByFile).length} file(s)`);
   console.log(`  new viewport files (fail)   : ${result.viewportResult.newViolations.length}`);
   console.log(`  grown viewport files (fail) : ${result.viewportResult.grown.length}`);
+  console.log(`  self-referential queries    : ${result.selfResult.live.length} live (${result.selfResult.unjudged} pseudo-element/nesting subject(s) not judged)`);
+  console.log(`  new self-referential (fail) : ${result.selfResult.newSites.length}`);
 
   if (mode === 'report') {
     for (const q of result.nameResult.dead) {
@@ -315,6 +576,9 @@ function main() {
     }
     for (const [file, count] of Object.entries(result.countsByFile).sort()) {
       console.log(`    viewport: ${file} -- ${count}`);
+    }
+    for (const site of result.selfResult.live) {
+      console.log(`    self-referential: ${site.file}:${site.line} @container ${site.name} ${site.selector} (declared by ${site.declaredBy})`);
     }
   }
 
@@ -330,6 +594,14 @@ function main() {
   for (const v of result.viewportResult.grown) {
     failures.push(`viewport-query ceiling grew: ${v.file} carries ${v.count}, ceiling is ${v.ceiling}`);
   }
+  for (const id of result.selfResult.newSites) {
+    const site = result.selfResult.live.find((s) => selfReferenceSiteId(s) === id);
+    failures.push(`new self-referential container query: ${site.file}:${site.line} queries @container ${site.name} from ${site.selector}, which only the declaring element matches (declared by ${site.declaredBy}); query from a descendant, or ledger it with an adjudication`);
+  }
+  for (const id of result.selfResult.staleSites) {
+    failures.push(`self-referential site no longer live: ${id} -- move it to selfReferentialQueries.removed with a reason and the commit that moved it`);
+  }
+  for (const line of result.selfResult.malformed) failures.push(`self-referential ledger: ${line}`);
   for (const file of result.viewportResult.stale) {
     failures.push(`stale viewport-query baseline entry (file carries no viewport queries anymore): ${file}`);
   }
@@ -350,7 +622,7 @@ function main() {
     if (mode === 'check') process.exit(1);
     return;
   }
-  console.log('[container-query-gate] OK -- no new dead container names, no new/grown viewport-query residue.');
+  console.log('[container-query-gate] OK -- no new dead container names, no new/grown viewport-query residue, no new self-referential container query.');
 }
 
 const invokedDirectly = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);

@@ -18,11 +18,17 @@ import test from 'node:test';
 
 import {
   classifyMediaParams,
+  compoundWithin,
   evaluateDeadNames,
+  evaluateSelfReferentialQueries,
   evaluateViewportQueries,
   extractContainerQueries,
   extractDeclaredContainerNames,
   extractMediaQueries,
+  extractSelfReferenceFacts,
+  parseComplexSelector,
+  parseCompound,
+  selfReferenceSiteId,
   stripComments,
 } from './index.mjs';
 
@@ -314,6 +320,125 @@ test('fixture: growth past a seeded ceiling fails --check', () => {
     const result = runGate([...f.args, '--check']);
     assert.equal(result.status, 1);
     assert.match(result.stderr, /viewport-query ceiling grew/);
+  } finally {
+    f.cleanup();
+  }
+});
+
+/* ------------------------------------------------------------------------ */
+/* (c) self-referential container queries                                   */
+/* ------------------------------------------------------------------------ */
+
+const CARD = ".ds-card.ds-card--modern[data-part='root'] { container-name: ds-card; container-type: inline-size; }\n";
+
+function selfSites(css, baseline = {}) {
+  return evaluateSelfReferentialQueries({ ...extractSelfReferenceFacts(css, 'skin.css'), baseline });
+}
+
+function inQuery(rule) {
+  return `${CARD}@container ds-card (max-width: 28rem) {\n  ${rule} { gap: 0; }\n}\n`;
+}
+
+test('parseCompound: attribute quoting and duplicates normalize, so equal compounds compare equal', () => {
+  const a = parseCompound(".ds-card[data-part='root'][data-part='root']");
+  const b = parseCompound('.ds-card[data-part="root"]');
+  assert.deepEqual([...a.simples].sort(), [...b.simples].sort());
+  assert.equal(parseCompound('.x::before').pseudoElement, true);
+});
+
+test('compoundWithin: a narrower compound is within the declared one; a broader one is not', () => {
+  const declared = parseCompound(".ds-card.ds-card--modern[data-part='root']");
+  assert.equal(compoundWithin(parseCompound(".ds-card.ds-card--modern[data-part='root']:hover"), declared), true);
+  assert.equal(compoundWithin(parseCompound(".ds-card--modern.ds-card[data-part=root]"), declared), true);
+  assert.equal(compoundWithin(parseCompound("[data-part='root']"), declared), false);
+});
+
+test('parseComplexSelector: descendant and child compounds are ancestors; sibling compounds are not', () => {
+  const complex = parseComplexSelector(".a > .b + .c .d");
+  assert.deepEqual(complex.map((c) => [c.text, c.ancestor]), [['.a', true], ['.b', false], ['.c', true], ['.d', false]]);
+});
+
+test('self-reference: a planted query from the declaring selector is a finding', () => {
+  const result = selfSites(inQuery(".ds-card.ds-card--modern[data-part='root']"));
+  assert.equal(result.live.length, 1);
+  assert.deepEqual(result.newSites, [selfReferenceSiteId(result.live[0])]);
+});
+
+test('self-reference: a narrower compound on the same element (root:hover, root:not(...)) is a finding', () => {
+  assert.equal(selfSites(inQuery(".ds-card.ds-card--modern[data-part='root']:hover")).live.length, 1);
+  assert.equal(selfSites(inQuery(".ds-card--modern.ds-card[data-part=\"root\"]:not([data-x])")).live.length, 1);
+});
+
+test('self-reference: a query on real descendants is valid', () => {
+  for (const rule of [".ds-card.ds-card--modern[data-part='root'] > *", ".ds-card.ds-card--modern[data-part='root'] [data-part='body']", "[data-part='root']"]) {
+    assert.deepEqual(selfSites(inQuery(rule)).live, [], rule);
+  }
+});
+
+test('self-reference: a card inside a card names its same-name ancestor and is valid', () => {
+  const nested = ".ds-card.ds-card--modern[data-part='root'] .ds-card.ds-card--modern[data-part='root']";
+  assert.deepEqual(selfSites(inQuery(nested)).live, []);
+  const sibling = ".ds-card.ds-card--modern[data-part='root'] + .ds-card.ds-card--modern[data-part='root']";
+  assert.equal(selfSites(inQuery(sibling)).live.length, 1, 'a sibling is not an ancestor');
+});
+
+test('self-reference: a pseudo-element of the declaring element is counted as not judged, never as a finding', () => {
+  const result = selfSites(inQuery(".ds-card.ds-card--modern[data-part='root']::before"));
+  assert.deepEqual(result.live, []);
+  assert.equal(result.unjudged, 1);
+});
+
+test('self-reference ledger: a listed site passes, a vanished site is stale, and removal needs a reason and a mover', () => {
+  const css = inQuery(".ds-card.ds-card--modern[data-part='root']");
+  const id = selfReferenceSiteId(selfSites(css).live[0]);
+  assert.deepEqual(selfSites(css, { sites: { [id]: { adjudication: 'A' } } }).newSites, []);
+  const gone = selfSites(inQuery(".ds-card.ds-card--modern[data-part='root'] > *"), { sites: { [id]: { adjudication: 'A' } } });
+  assert.deepEqual(gone.staleSites, [id]);
+  const removed = selfSites(css.replace('max-width', 'min-width'), { sites: { [id]: { adjudication: 'A' } }, removed: { other: { reason: 'fixed', mover: 'not-a-sha' } } });
+  assert.match(removed.malformed.join('\n'), /other: a removed site needs a reason and the commit that moved it/);
+  const unadjudicated = selfSites(css, { sites: { [id]: {} } });
+  assert.match(unadjudicated.malformed.join('\n'), /needs an adjudication/);
+});
+
+test('self-reference: a repeated selector in the same file is two sites', () => {
+  const css = `${CARD}@container ds-card (max-width: 28rem) { .ds-card.ds-card--modern[data-part='root'] { gap: 0; } }\n@container ds-card (max-width: 20rem) { .ds-card.ds-card--modern[data-part='root'] { gap: 1px; } }\n`;
+  const ids = selfSites(css).live.map(selfReferenceSiteId);
+  assert.equal(ids.length, 2);
+  assert.match(ids[1], / #2$/);
+});
+
+test('fixture: a planted self-referential query fails --check; the ancestor-query and nested forms pass', () => {
+  const f = fixture();
+  try {
+    f.write('css-root/runtime/engines/modern/skin/probe/index.css', inQuery(".ds-card.ds-card--modern[data-part='root']"));
+    const red = runGate([...f.args, '--check']);
+    assert.equal(red.status, 1);
+    assert.match(red.stderr, /new self-referential container query: .*probe\/index\.css:3 queries @container ds-card/);
+
+    f.write('css-root/runtime/engines/modern/skin/probe/index.css', inQuery(".ds-card.ds-card--modern[data-part='root'] > *") + inQuery(".ds-card.ds-card--modern[data-part='root'] .ds-card.ds-card--modern[data-part='root']"));
+    const green = runGate([...f.args, '--check']);
+    assert.equal(green.status, 0, green.stderr);
+  } finally {
+    f.cleanup();
+  }
+});
+
+test('the committed ledger names every live site with an adjudication', () => {
+  const result = runGate([]);
+  assert.match(result.stdout, /self-referential queries\s+: (\d+) live/);
+  assert.match(result.stdout, /new self-referential \(fail\) : 0/);
+});
+
+test('fixture: --seed carries the self-referential ledger verbatim and never regenerates it', async () => {
+  const f = fixture();
+  try {
+    f.write('css-root/probe.css', inQuery(".ds-card.ds-card--modern[data-part='root']"));
+    const ledger = { sites: { 'hand-written id': { adjudication: 'kept as written' } }, removed: {} };
+    f.write('baseline.json', JSON.stringify({ deadContainerNames: {}, viewportQueries: {}, selfReferentialQueries: ledger }));
+    const seeded = runGate([...f.args, '--seed']);
+    assert.equal(seeded.status, 0, seeded.stderr);
+    const { readFileSync } = await import('node:fs');
+    assert.deepEqual(JSON.parse(readFileSync(f.baselinePath, 'utf8')).selfReferentialQueries, ledger);
   } finally {
     f.cleanup();
   }
