@@ -90,7 +90,6 @@ import {
   Stack,
   Statistic,
   Stepper,
-  Steps,
   Table,
   Tabs,
   Tag,
@@ -1846,16 +1845,6 @@ The parser is a **bounded** CommonMark subset, so no parser ships to the page.
     />
   ),
   'stepper': <StepperPreview />,
-  'steps': (
-    <Steps
-      current={1}
-      items={[
-        { title: 'Setup' },
-        { title: 'Configure' },
-        { title: 'Deploy' },
-      ]}
-    />
-  ),
   'tabs': (
     <Tabs
       items={[

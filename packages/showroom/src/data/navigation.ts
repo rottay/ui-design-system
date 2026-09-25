@@ -178,7 +178,6 @@ const primitives: NavSection = {
         { slug: 'pagination', label: 'Pagination', path: '/primitives/navigation/pagination' },
         { slug: 'segmented', label: 'Segmented', path: '/primitives/navigation/segmented' },
         { slug: 'stepper', label: 'Stepper', path: '/primitives/navigation/stepper' },
-        { slug: 'steps', label: 'Steps', path: '/primitives/navigation/steps' },
         { slug: 'tabs', label: 'Tabs', path: '/primitives/navigation/tabs' },
       ],
     },
