@@ -13,9 +13,9 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const spaceChromeDeriver: FamilyDeriver = {
   family: "space",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["spacing.rhythm", "density", "motion.*"],
   produces: [
-    "--ds-space-gap",
     "--ds-space-gap-lg",
     "--ds-space-gap-md",
     "--ds-space-gap-sm",
@@ -35,7 +35,10 @@ export const spaceChromeDeriver: FamilyDeriver = {
  * exactly as Stack states it.
  *
  * NOT produced here: the three size aliases, which the space token sheet
- * declares.
+ * declares; nor `--ds-space-gap`, the gap in force, which the skin re-points
+ * by `data-size` on the root and the engine writes inline for exact geometry.
+ * A root copy is never painted, and a projected one would outrank that
+ * re-point on a root that is its own density boundary.
  *
  * The authorable motion channels (`--ds-space-{motion-duration,motion-easing}`)
  * rest here at the exact fallback the skin chain names: the dial-scaled motion
@@ -53,7 +56,6 @@ export function deriveSpaceChannels(): Record<string, string> {
   vars["--ds-space-gap-sm"] = rung("--ds-space-small-size", "--ds-spacing-2");
   vars["--ds-space-gap-md"] = rung("--ds-space-middle-size", "--ds-spacing-4");
   vars["--ds-space-gap-lg"] = rung("--ds-space-large-size", "--ds-spacing-6");
-  vars["--ds-space-gap"] = "var(--ds-space-gap-sm)";
   vars["--ds-space-transition-duration"] =
     "var(--ds-space-motion-duration, var(--ds-motion-feedback))";
   vars["--ds-space-transition-timing"] =

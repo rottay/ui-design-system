@@ -96,8 +96,8 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
     const classes = ["ds-space", "ds-space--modern"];
 
     // Exact geometry only. A preset spelling resolves through the cascade, and
-    // a spelling no rung rule enumerates falls closed to the declared rung the
-    // deriver rests `--ds-space-gap` on.
+    // a spelling no rung rule enumerates falls closed to the declared rung
+    // (`--ds-space-gap-{sm,md,lg}`).
     let gapValue: string | undefined;
     if (typeof size === "number") {
       gapValue = safeGap(size);

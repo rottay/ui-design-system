@@ -136,6 +136,15 @@ describe("chrome/tabs", () => {
     }
   });
 
+  it("claims the density scope and never produces a root copy of the responsive height or padding", () => {
+    expect(tabsChromeDeriver.scopes).toEqual(["density"]);
+    const derived = tabsChromeDeriver.derive(context(), {});
+    for (const channel of ["--ds-tabs-responsive-height", "--ds-tabs-responsive-padding"]) {
+      expect({ channel, produced: new Set<string>(tabsChromeDeriver.produces).has(channel) }).toEqual({ channel, produced: false });
+      expect(derived[channel]).toBeUndefined();
+    }
+  });
+
   it("produces the measured indicator offset at the skin's resting value", () => {
     const derived = tabsChromeDeriver.derive(context(), {});
     expect(derived["--ds-tabs-indicator-offset"]).toBe("var(--ds-spacing-0, 0px)");

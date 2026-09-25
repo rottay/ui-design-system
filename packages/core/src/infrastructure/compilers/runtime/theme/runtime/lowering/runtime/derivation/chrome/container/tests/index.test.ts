@@ -47,6 +47,15 @@ describe("chrome/container", () => {
     expect(containerChromeDeriver.rank).toBe("derived");
   });
 
+  it("claims the density scope and never produces the inset in force, which the skin re-points by data-padding", () => {
+    expect(containerChromeDeriver.scopes).toEqual(["density"]);
+    const derived = containerChromeDeriver.derive(context(), {});
+    for (const channel of ["--ds-container-pad"]) {
+      expect({ channel, produced: new Set<string>(containerChromeDeriver.produces).has(channel) }).toEqual({ channel, produced: false });
+      expect(derived[channel]).toBeUndefined();
+    }
+  });
+
   it("states every declared channel at the single resting value the skin reads it with", () => {
     const derived = containerChromeDeriver.derive(context(), {});
     expect(Object.keys(derived).sort()).toEqual([...containerChromeDeriver.produces].sort());

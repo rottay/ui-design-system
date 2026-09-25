@@ -100,11 +100,11 @@ describe("chrome/sidebar-surface", () => {
     expect(derived["--ds-sidebar-surface-main-gap"]).toBe("var(--ds-spacing-4, 16px)");
   });
 
-  it("produces the aside-inline-size at the default arm's value through the aside-width relation", () => {
+  it("claims the density scope and leaves the aside track in force to the skin root and the config width", () => {
+    expect(sidebarSurfaceChromeDeriver.scopes).toEqual(["density"]);
     const derived = sidebarSurfaceChromeDeriver.derive(context(), {});
-    expect(derived["--ds-sidebar-surface-aside-inline-size"]).toBe(
-      "var(--ds-sidebar-surface-aside-width)"
-    );
+    expect([...sidebarSurfaceChromeDeriver.produces]).not.toContain("--ds-sidebar-surface-aside-inline-size");
+    expect(derived["--ds-sidebar-surface-aside-inline-size"]).toBeUndefined();
     expect(derived["--ds-sidebar-surface-aside-width"]).toBe("var(--ds-spacing-80, 320px)");
   });
 

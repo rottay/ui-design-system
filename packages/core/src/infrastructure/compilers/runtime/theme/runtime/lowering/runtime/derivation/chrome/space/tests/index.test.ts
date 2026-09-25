@@ -47,6 +47,15 @@ describe("chrome/space", () => {
     expect(spaceChromeDeriver.rank).toBe("derived");
   });
 
+  it("claims the density scope and never produces the gap in force, which the skin re-points by data-size", () => {
+    expect(spaceChromeDeriver.scopes).toEqual(["density"]);
+    const derived = spaceChromeDeriver.derive(context(), {});
+    for (const channel of ["--ds-space-gap"]) {
+      expect({ channel, produced: new Set<string>(spaceChromeDeriver.produces).has(channel) }).toEqual({ channel, produced: false });
+      expect(derived[channel]).toBeUndefined();
+    }
+  });
+
   it("states every declared channel at the single resting value the skin reads it with", () => {
     const derived = spaceChromeDeriver.derive(context(), {});
     expect(Object.keys(derived).sort()).toEqual([...spaceChromeDeriver.produces].sort());

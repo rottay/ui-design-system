@@ -15,6 +15,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const containerChromeDeriver: FamilyDeriver = {
   family: "container",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["responsive.posture", "spacing.rhythm", "density", "motion.*"],
   produces: [
     "--ds-container-2xl",
@@ -28,7 +29,6 @@ export const containerChromeDeriver: FamilyDeriver = {
     "--ds-container-measure",
     "--ds-container-motion-duration",
     "--ds-container-motion-easing",
-    "--ds-container-pad",
     "--ds-container-padding-lg",
     "--ds-container-padding-md",
     "--ds-container-padding-none",
@@ -65,6 +65,11 @@ export const containerChromeDeriver: FamilyDeriver = {
  * outranks the rest -- `chrome` sits one rank above this family -- so the
  * rest is what the chain resolved to when nobody authored the channel, never
  * a second opinion about it.
+ *
+ * NOT produced here: `--ds-container-pad`, the per-instance inset the skin
+ * re-points by `data-padding` on the root and the engine writes inline for a
+ * numeric padding. A root copy is never painted, and a projected one would
+ * outrank that re-point on a root that is its own density boundary.
  */
 export function deriveContainerChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
@@ -84,7 +89,6 @@ export function deriveContainerChannels(): Record<string, string> {
   vars["--ds-container-padding-sm"] = "calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-container-padding-md"] = "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-container-padding-lg"] = "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))";
-  vars["--ds-container-pad"] = "var(--ds-container-padding-md)";
   vars["--ds-container-surface"] = "var(--ds-container-background, transparent)";
   vars["--ds-container-frame"] = "var(--ds-container-border, 0 solid transparent)";
   vars["--ds-container-corner"] = "var(--ds-container-radius, 0)";

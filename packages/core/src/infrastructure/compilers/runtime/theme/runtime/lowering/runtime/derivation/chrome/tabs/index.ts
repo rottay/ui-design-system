@@ -16,6 +16,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const tabsChromeDeriver: FamilyDeriver = {
   family: "tabs",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.effects", "surfaces.radiusScale", "typography.roles", "states.focus", "states.press", "density", "motion"],
   produces: [
     "--ds-tabs-gap",
@@ -31,8 +32,6 @@ export const tabsChromeDeriver: FamilyDeriver = {
     "--ds-tabs-md-padding",
     "--ds-tabs-md-font-size",
     "--ds-tabs-md-icon-size",
-    "--ds-tabs-responsive-height",
-    "--ds-tabs-responsive-padding",
     "--ds-tabs-responsive-font-size",
     "--ds-tabs-responsive-icon-size",
     "--ds-tabs-lg-height",
@@ -172,8 +171,8 @@ export function deriveTabsChannels(): Record<string, string> {
   vars["--ds-tabs-md-padding"] = "0 var(--ds-spacing-4)";
   vars["--ds-tabs-md-font-size"] = "var(--ds-type-body-font-size)";
   vars["--ds-tabs-md-icon-size"] = "var(--ds-icon-sm-size)";
-  vars["--ds-tabs-responsive-height"] = "var(--ds-tabs-md-height)";
-  vars["--ds-tabs-responsive-padding"] = "var(--ds-tabs-md-padding)";
+  // No root copy of the responsive height or padding: the skin root falls back
+  // to the md rung where the tabs sit, and a root copy would freeze it there.
   vars["--ds-tabs-responsive-font-size"] = "var(--ds-tabs-md-font-size)";
   vars["--ds-tabs-responsive-icon-size"] = "var(--ds-tabs-md-icon-size)";
   vars["--ds-tabs-lg-height"] = "calc(2.5rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";

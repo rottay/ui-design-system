@@ -52,6 +52,15 @@ describe("chrome/divider", () => {
     expect(dividerChromeDeriver.rank).toBe("derived");
   });
 
+  it("claims the density scope and never produces the inset in force, which the skin selects by data-spacing", () => {
+    expect(dividerChromeDeriver.scopes).toEqual(["density"]);
+    const derived = dividerChromeDeriver.derive(context(), {});
+    for (const channel of ["--ds-divider-inset"]) {
+      expect({ channel, produced: new Set<string>(dividerChromeDeriver.produces).has(channel) }).toEqual({ channel, produced: false });
+      expect(derived[channel]).toBeUndefined();
+    }
+  });
+
   it("states every declared channel at the single resting value the skin reads it with", () => {
     const derived = dividerChromeDeriver.derive(context(), {});
     expect(Object.keys(derived).sort()).toEqual([...dividerChromeDeriver.produces].sort());

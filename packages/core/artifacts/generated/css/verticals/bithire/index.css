@@ -65154,7 +65154,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   inline-size: 100%;
   block-size: auto;
   min-block-size: 0;
-  margin-block: var(--ds-divider-inset, var(--ds-divider-inset-md));
+  margin-block: var(--_ds-divider-inset, var(--ds-divider-inset-md));
   margin-inline: 0;
 }
 
@@ -65171,33 +65171,33 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   block-size: 100%;
   min-block-size: var(--ds-divider-vertical-min);
   margin-block: 0;
-  margin-inline: var(--ds-divider-inset, var(--ds-divider-inset-md));
+  margin-inline: var(--_ds-divider-inset, var(--ds-divider-inset-md));
 }
 
 /* ---- inset rungs ---- */
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='none'] {
-  --ds-divider-inset: var(--ds-divider-inset-none, var(--ds-spacing-0, 0));
+  --_ds-divider-inset: var(--ds-divider-inset-none, var(--ds-spacing-0, 0));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='xs'] {
-  --ds-divider-inset: var(--ds-divider-inset-xs, calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-divider-inset: var(--ds-divider-inset-xs, calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='sm'] {
-  --ds-divider-inset: var(--ds-divider-inset-sm, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-divider-inset: var(--ds-divider-inset-sm, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='md'] {
-  --ds-divider-inset: var(--ds-divider-inset-md, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-divider-inset: var(--ds-divider-inset-md, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='lg'] {
-  --ds-divider-inset: var(--ds-divider-inset-lg, calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-divider-inset: var(--ds-divider-inset-lg, calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='xl'] {
-  --ds-divider-inset: var(--ds-divider-inset-xl, calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-divider-inset: var(--ds-divider-inset-xl, calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* ---- the hairline ---- */
@@ -121316,7 +121316,6 @@ html[lang]:lang(ar) {
   --ds-container-measure: var(--ds-container-lg);
   --ds-container-motion-duration: var(--ds-motion-resize);
   --ds-container-motion-easing: var(--ds-motion-ease-out);
-  --ds-container-pad: var(--ds-container-padding-md);
   --ds-container-padding-lg: calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1));
   --ds-container-padding-md: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
   --ds-container-padding-none: var(--ds-spacing-0);
@@ -121581,7 +121580,6 @@ html[lang]:lang(ar) {
   --ds-divider-edge-basis: var(--ds-divider-edge-segment, 5%);
   --ds-divider-edge-segment: 5%;
   --ds-divider-gap: var(--ds-divider-content-gap, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
-  --ds-divider-inset: var(--ds-divider-inset-md);
   --ds-divider-inset-lg: calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1));
   --ds-divider-inset-md: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
   --ds-divider-inset-none: var(--ds-spacing-0, 0);
@@ -122742,7 +122740,6 @@ html[lang]:lang(ar) {
   --ds-sidebar-item-bg-active: var(--ds-color-neutral-700);
   --ds-sidebar-item-bg-hover: var(--ds-color-neutral-800);
   --ds-sidebar-item-color-active: var(--ds-color-white);
-  --ds-sidebar-surface-aside-inline-size: var(--ds-sidebar-surface-aside-width);
   --ds-sidebar-surface-aside-width: var(--ds-spacing-80, 320px);
   --ds-sidebar-surface-collapsed-width: var(--ds-sidebar-collapsed-width, 5.5rem);
   --ds-sidebar-surface-divider: var(--ds-edge-standard-width) var(--ds-edge-standard-style) var(--ds-sidebar-border, var(--ds-color-border-subtle));
@@ -122755,7 +122752,6 @@ html[lang]:lang(ar) {
   --ds-sidebar-surface-width: var(--ds-sidebar-width, 17.5rem);
   --ds-sidebar-text: var(--ds-color-neutral-100);
   --ds-sidebar-text-muted: var(--ds-color-neutral-500);
-  --ds-space-gap: var(--ds-space-gap-sm);
   --ds-space-gap-lg: calc(var(--ds-space-large-size, var(--ds-spacing-6)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1));
   --ds-space-gap-md: calc(var(--ds-space-middle-size, var(--ds-spacing-4)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1));
   --ds-space-gap-sm: calc(var(--ds-space-small-size, var(--ds-spacing-2)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1));
@@ -123044,9 +123040,7 @@ html[lang]:lang(ar) {
   --ds-tabs-pills-list-radius: var(--ds-radius-full);
   --ds-tabs-pressed-transform: translateY(0) scale(0.985);
   --ds-tabs-responsive-font-size: var(--ds-tabs-md-font-size);
-  --ds-tabs-responsive-height: var(--ds-tabs-md-height);
   --ds-tabs-responsive-icon-size: var(--ds-tabs-md-icon-size);
-  --ds-tabs-responsive-padding: var(--ds-tabs-md-padding);
   --ds-tabs-segmented-active-bg: var(--ds-surface-card);
   --ds-tabs-segmented-active-shadow: var(--ds-tabs-active-shadow);
   --ds-tabs-segmented-list-bg: color-mix(in srgb, var(--ds-surface-inset) 94%, var(--ds-color-primary) 6%);
@@ -123731,6 +123725,10 @@ html[lang]:lang(ar) {
   --ds-command-palette-section-label-margin-block-end: var(--ds-spacing-1, 4px);
   --ds-command-palette-section-label-padding-inline: var(--ds-spacing-3, 12px);
   --ds-command-palette-shortcut-margin-inline-start: var(--ds-spacing-2, 8px);
+  --ds-container-padding-lg: calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1));
+  --ds-container-padding-md: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
+  --ds-container-padding-none: var(--ds-spacing-0);
+  --ds-container-padding-sm: calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1));
   --ds-dashboard-header-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
   --ds-dashboard-header-gap-hair: calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1));
   --ds-dashboard-header-gap-tight: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
@@ -123749,6 +123747,14 @@ html[lang]:lang(ar) {
   --ds-detail-header-metadata-card-margin-block-start: var(--ds-spacing-6, 24px);
   --ds-detail-header-root-margin-block-end: var(--ds-spacing-6, 24px);
   --ds-detail-header-tab-padding: 10px var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px);
+  --ds-divider-content-gap: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
+  --ds-divider-gap: var(--ds-divider-content-gap, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
+  --ds-divider-inset-lg: calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1));
+  --ds-divider-inset-md: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
+  --ds-divider-inset-none: var(--ds-spacing-0, 0);
+  --ds-divider-inset-sm: calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1));
+  --ds-divider-inset-xl: calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1));
+  --ds-divider-inset-xs: calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1));
   --ds-filter-panel-field-gap: var(--ds-spacing-2);
   --ds-filter-panel-inline-gap: var(--ds-spacing-3);
   --ds-filter-panel-option-gap: var(--ds-spacing-2);
@@ -123817,6 +123823,14 @@ html[lang]:lang(ar) {
   --ds-shortcuts-overlay-padding-inline: var(--ds-spacing-3, 12px);
   --ds-shortcuts-overlay-search-padding-block: var(--ds-spacing-2, 8px);
   --ds-shortcuts-overlay-search-padding-inline: var(--ds-spacing-5, 20px);
+  --ds-sidebar-surface-aside-width: var(--ds-spacing-80, 320px);
+  --ds-sidebar-surface-gap: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-sidebar-surface-main-gap: var(--ds-spacing-4, 16px);
+  --ds-sidebar-surface-panel-gap: var(--ds-spacing-4, 16px);
+  --ds-sidebar-surface-stacked-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-space-gap-lg: calc(var(--ds-space-large-size, var(--ds-spacing-6)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1));
+  --ds-space-gap-md: calc(var(--ds-space-middle-size, var(--ds-spacing-4)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1));
+  --ds-space-gap-sm: calc(var(--ds-space-small-size, var(--ds-spacing-2)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1));
   --ds-splitter-gutter-size: calc(0.5rem * var(--ds-density-effective-scale));
   --ds-stats-header-card-padding: var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px);
   --ds-stats-header-glow-block-size: var(--ds-spacing-10, 40px);
@@ -123849,6 +123863,27 @@ html[lang]:lang(ar) {
   --ds-table-sticky-top: var(--ds-spacing-0, 0);
   --ds-table-title-margin-block-end: var(--ds-spacing-2);
   --ds-table-virtual-spacer: var(--ds-spacing-0, 0);
+  --ds-tabs-badge-height: var(--ds-spacing-4);
+  --ds-tabs-badge-min-width: var(--ds-spacing-4);
+  --ds-tabs-badge-padding: 0 var(--ds-spacing-1);
+  --ds-tabs-gap: var(--ds-spacing-1);
+  --ds-tabs-icon-padding: var(--ds-spacing-1);
+  --ds-tabs-indicator-offset: var(--ds-spacing-0, 0px);
+  --ds-tabs-item-gap: var(--ds-spacing-2);
+  --ds-tabs-lg-height: calc(2.5rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
+  --ds-tabs-lg-padding: 0 var(--ds-spacing-4, 16px);
+  --ds-tabs-list-padding: var(--ds-spacing-1);
+  --ds-tabs-md-height: calc(2.25rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
+  --ds-tabs-md-padding: 0 var(--ds-spacing-4);
+  --ds-tabs-mobile-gap: var(--ds-spacing-0);
+  --ds-tabs-mobile-padding: 0 var(--ds-spacing-2, 8px);
+  --ds-tabs-overflow-control-size: var(--ds-spacing-8);
+  --ds-tabs-overflow-fade-width: var(--ds-spacing-7);
+  --ds-tabs-panel-gap: var(--ds-spacing-3, 12px);
+  --ds-tabs-panel-motion-distance: calc(var(--ds-spacing-1) * var(--ds-motion-intensity));
+  --ds-tabs-panel-padding: var(--ds-spacing-4, 16px) 0 0;
+  --ds-tabs-sm-height: calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
+  --ds-tabs-sm-padding: 0 var(--ds-spacing-3, 12px);
   --ds-tag-close-size: var(--ds-spacing-4);
   --ds-tag-lg-padding-inline: var(--ds-spacing-3);
   --ds-tag-max-inline-size: calc(var(--ds-spacing-4) * 16);

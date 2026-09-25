@@ -30,6 +30,7 @@ const OVERLINE_QUIET_INK = "#737373";
 export const dividerChromeDeriver: FamilyDeriver = {
   family: "divider",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "chrome.layout.dividerTextColor",
@@ -44,7 +45,6 @@ export const dividerChromeDeriver: FamilyDeriver = {
     "--ds-divider-edge-basis",
     "--ds-divider-edge-segment",
     "--ds-divider-gap",
-    "--ds-divider-inset",
     "--ds-divider-inset-lg",
     "--ds-divider-inset-md",
     "--ds-divider-inset-none",
@@ -86,7 +86,8 @@ export const dividerChromeDeriver: FamilyDeriver = {
  *
  * NOT produced here: `--ds-divider-{color,text-color,thickness-*}`, which
  * `chrome.layout` authors. They are the inputs of the derived channels below,
- * never their output.
+ * never their output. Nor the inset in force: `data-spacing` picks one of the
+ * rungs below on the root through the skin's private `--_ds-divider-inset`.
  *
  * The remaining authorable channels (`--ds-divider-{content-gap,edge-segment,
  * min-segment,label-font-size,label-font-weight,label-line-height,
@@ -133,7 +134,6 @@ export function deriveDividerChannels(
   vars["--ds-divider-inset-md"] = inset("--ds-spacing-4");
   vars["--ds-divider-inset-lg"] = inset("--ds-spacing-6");
   vars["--ds-divider-inset-xl"] = inset("--ds-spacing-8");
-  vars["--ds-divider-inset"] = "var(--ds-divider-inset-md)";
 
   vars["--ds-divider-label-ink"] = overlineInk(context);
   vars["--ds-divider-label-size"] =

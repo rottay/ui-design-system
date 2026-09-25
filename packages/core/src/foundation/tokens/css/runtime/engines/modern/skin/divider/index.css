@@ -37,7 +37,7 @@
   inline-size: 100%;
   block-size: auto;
   min-block-size: 0;
-  margin-block: var(--ds-divider-inset, var(--ds-divider-inset-md));
+  margin-block: var(--_ds-divider-inset, var(--ds-divider-inset-md));
   margin-inline: 0;
 }
 
@@ -54,33 +54,33 @@
   block-size: 100%;
   min-block-size: var(--ds-divider-vertical-min);
   margin-block: 0;
-  margin-inline: var(--ds-divider-inset, var(--ds-divider-inset-md));
+  margin-inline: var(--_ds-divider-inset, var(--ds-divider-inset-md));
 }
 
 /* ---- inset rungs ---- */
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='none'] {
-  --ds-divider-inset: var(--ds-divider-inset-none, var(--ds-spacing-0, 0));
+  --_ds-divider-inset: var(--ds-divider-inset-none, var(--ds-spacing-0, 0));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='xs'] {
-  --ds-divider-inset: var(--ds-divider-inset-xs, calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-divider-inset: var(--ds-divider-inset-xs, calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='sm'] {
-  --ds-divider-inset: var(--ds-divider-inset-sm, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-divider-inset: var(--ds-divider-inset-sm, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='md'] {
-  --ds-divider-inset: var(--ds-divider-inset-md, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-divider-inset: var(--ds-divider-inset-md, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='lg'] {
-  --ds-divider-inset: var(--ds-divider-inset-lg, calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-divider-inset: var(--ds-divider-inset-lg, calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='xl'] {
-  --ds-divider-inset: var(--ds-divider-inset-xl, calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-divider-inset: var(--ds-divider-inset-xl, calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* ---- the hairline ---- */

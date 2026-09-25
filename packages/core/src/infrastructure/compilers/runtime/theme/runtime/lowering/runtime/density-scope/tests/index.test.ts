@@ -61,6 +61,12 @@ const MASKED_ARABIC: Readonly<Record<string, string>> = {
     "the category label's only read site is overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
   "--ds-menu-group-letter-spacing":
     "the group label's only read sites (menu skin, menu-compounds skin) are overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
+  "--ds-divider-label-track":
+    "the overline label's only read site is overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
+  "--ds-divider-label-tracking":
+    "reaches the overline label only through --ds-divider-label-track, resolved at the root, and that read site is overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
+  "--ds-tabs-item-letter-spacing":
+    "the tab button's only read site is overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
 };
 
 const VERTICALS = ["bithire", "rottay", "evnto"] as const;
@@ -123,7 +129,7 @@ describe("density-scope roster", () => {
     expect(census[1]).toEqual(census[0]);
     expect(census[2]).toEqual(census[0]);
     // The census the next claims drain: every claim moves `unclaimed` down.
-    expect(census[0]).toEqual({ density: [49, 350], direct: 343, arabic: [13, 23], unclaimed: [13, 110] });
+    expect(census[0]).toEqual({ density: [49, 344], direct: 343, arabic: [13, 23], unclaimed: [8, 63] });
   });
 
   it("projects every density-exposed channel of a claiming family, and only those", () => {
@@ -138,15 +144,15 @@ describe("density-scope roster", () => {
     }
   });
 
-  it("the claimants are the thirty-six adopting families, and their arabic-axis channels are named masked pins", () => {
+  it("the claimants are the forty-one adopting families, and their arabic-axis channels are named masked pins", () => {
     expect(FAMILY_DERIVERS.filter(claimsDensityScope).map((deriver) => deriver.family)).toEqual([
-      "textarea", "menu", "breadcrumb", "stepper", "form-header", "workbench-header",
-      "section-frame", "mobile-header", "stats-header", "surface-lifecycle", "app-shell",
-      "action-dock", "scope-switcher", "command-palette", "shortcuts-overlay", "search-command-bar",
-      "surface-chrome", "collection-header", "dashboard-header", "detail-header", "form-surface",
-      "wizard-surface", "detail-form-surface", "card", "table", "tag", "badge", "tree",
-      "kanban-board", "widget-board", "column-settings", "filter-panel", "toolbar",
-      "descriptions", "collapse", "splitter",
+      "textarea", "menu", "tabs", "breadcrumb", "stepper", "sidebar-surface", "form-header",
+      "workbench-header", "section-frame", "mobile-header", "stats-header", "surface-lifecycle",
+      "app-shell", "action-dock", "scope-switcher", "command-palette", "shortcuts-overlay",
+      "search-command-bar", "surface-chrome", "collection-header", "dashboard-header",
+      "detail-header", "form-surface", "wizard-surface", "detail-form-surface", "card", "table",
+      "tag", "badge", "tree", "kanban-board", "widget-board", "column-settings", "filter-panel",
+      "toolbar", "descriptions", "container", "space", "divider", "collapse", "splitter",
     ]);
     for (const vertical of VERTICALS) {
       const { arabic, family, claimed } = roster(vertical);
@@ -155,7 +161,7 @@ describe("density-scope roster", () => {
     }
   });
 
-  it("no claimed channel re-resolves only through a channel no boundary re-declares", () => {
+  it("every channel of a claiming family reads the density axis directly: a selector alias is never projected", () => {
     for (const vertical of VERTICALS) {
       const { density, direct, family, claimed } = roster(vertical);
       expect([...density].filter((channel) => claimed.has(family(channel)) && !direct.has(channel))).toEqual([]);
