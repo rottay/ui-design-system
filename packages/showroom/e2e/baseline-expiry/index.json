@@ -1,0 +1,331 @@
+{
+  "schemaVersion": 1,
+  "workOrder": "WO-EVI-03",
+  "finding": "F-48",
+  "law": "Every committed Playwright baseline under packages/showroom/e2e belongs to one note here, keyed by the spec that owns its __screenshots__ folder. The note pins the count and a sha256 of the set (path and bytes, sorted), so a baseline without a note, or a set regenerated before it expires, is red. Checked by packages/core/scripts/check/evidence/tests-through-the-door.",
+  "expiries": {
+    "reference-identity-approved": "The owner picks the BitHire reference identity (D-30, WO-DER-07; deferred to the branding stage by the owner on 2026-09-10). Until then these sets are pre-migration captures that freeze current paint, hardcodes included. After the pick each set is regenerated once and its note is replaced."
+  },
+  "entries": [
+    {
+      "spec": "e2e/visual/application-surfaces/index.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 30,
+      "sha256": "c82fb0c93d27a44472d1584c09884d0a4301dfb48d53e29bb7355ec926d8c327"
+    },
+    {
+      "spec": "e2e/visual/communication-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 6,
+      "sha256": "230ae2dfc1abfaf4d1f525b84121f8e581747d31edae339705408e2b6c7c754f"
+    },
+    {
+      "spec": "e2e/visual/container-axis.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 16,
+      "sha256": "1e73e8242f8e331d4db4b74bd226bc7529eb89ed57e61d2cd0c10b6d7cd5e8aa"
+    },
+    {
+      "spec": "e2e/visual/dashboard-widgets-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 12,
+      "sha256": "1aee343f12248f4059f7e56cdf665549c9bb5f6bfc3ba32a06578ee96950669f"
+    },
+    {
+      "spec": "e2e/visual/data-display-states/index.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 10,
+      "sha256": "a6f93b1651e8d6bb3a3c2b32fcba5992bc7e6613a9ff61f409319232ce468c37"
+    },
+    {
+      "spec": "e2e/visual/data-table.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 19,
+      "sha256": "4f6967c64ae0a86c5d26658032ef7b7e0d30b09aac23ab7f690961bc4bbc44b2"
+    },
+    {
+      "spec": "e2e/visual/detail-panel.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 15,
+      "sha256": "6165a27fa0c28556fac1dfce2f78110bb43ec38a3182cb6d6f36f5828249acc5"
+    },
+    {
+      "spec": "e2e/visual/dropdowns-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 18,
+      "sha256": "84532e9c7efb9f5f7711665934d636c33511115a85fff0c38b900460e2c37e5f"
+    },
+    {
+      "spec": "e2e/visual/field-filters.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 8,
+      "sha256": "48c36c449fed25cf1ce05d762cc39497fdd1b76224f6ffe92b6e465c83fa8953"
+    },
+    {
+      "spec": "e2e/visual/fields-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 11,
+      "sha256": "d0702a4f185bcb6be139bd4e746a79cd06ae4012df87ce747971d7f63f1b3568"
+    },
+    {
+      "spec": "e2e/visual/filter-panel.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 12,
+      "sha256": "fd623e11741783ff53b3f83f7e3da45ee6739c96ce759195a4e1ec68dd42bc4e"
+    },
+    {
+      "spec": "e2e/visual/flagships.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 48,
+      "sha256": "07383ba9c43feefa796bc2787d46d9b4ac8aede117b116729a7407811d28c5dc"
+    },
+    {
+      "spec": "e2e/visual/forms-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 6,
+      "sha256": "732eda117201a6188ee1c7dfcc90e64d6fa6c978b42b13d3c79f9f2cb39c7f9b"
+    },
+    {
+      "spec": "e2e/visual/headers-patterns-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 24,
+      "sha256": "723a3f55550d044aeb007b5dd591948513c17614e4b4ce57af47b77870cc799b"
+    },
+    {
+      "spec": "e2e/visual/headers-structures-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 10,
+      "sha256": "78a6f9663252753c645c0d8bd9ca2eaf756b78174a50342775f824f2af465172"
+    },
+    {
+      "spec": "e2e/visual/layout-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 6,
+      "sha256": "f927f2bde485d27a0be5a52a8527c868a2970427468fbec101000f3689ff2e32"
+    },
+    {
+      "spec": "e2e/visual/loading-overlay.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 4,
+      "sha256": "7cefc13ad238957013d07fa4409566ff3df98904966d75aed45aabc28ae364d8"
+    },
+    {
+      "spec": "e2e/visual/media-states/index.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 10,
+      "sha256": "6f72c9fe98ff0884de43ef1e18e8ad6c29a95590e36e33111974b730b4fd7450"
+    },
+    {
+      "spec": "e2e/visual/navigation-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 14,
+      "sha256": "57f99b9ba69c5f68944e8a46f424355cd5367b8b60642e04b20aaf73060ea1ff"
+    },
+    {
+      "spec": "e2e/visual/navigation-patterns-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 9,
+      "sha256": "523bc1b8cb62c32cb1f600305e01ef613ab39855db15319c6c817075c69f5a3c"
+    },
+    {
+      "spec": "e2e/visual/overlay-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 26,
+      "sha256": "372dcdb6d4d2199694bb560c0659007b5c5753ba0dab6d27d50dd5947a520c8b"
+    },
+    {
+      "spec": "e2e/visual/overlays-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 14,
+      "sha256": "455ed25ba295116e2defcc0f5cfa505da80d9aebbd5d7d1f741f191d0ef10c4a"
+    },
+    {
+      "spec": "e2e/visual/pickers-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 13,
+      "sha256": "9c7ce69c0a0e4473b0eedff7c00405752a4866c9c71da647095e38a01c3e8cd3"
+    },
+    {
+      "spec": "e2e/visual/record-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 4,
+      "sha256": "9a4798823996a218da197f5eed66d96582c9a8109962ed70cfa4b7339eb12b2b"
+    },
+    {
+      "spec": "e2e/visual/selection-preview-rail.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 12,
+      "sha256": "1a75861ea8c9df21c632a6a743d46ac211163b5dd8139d5445e019e81e641b0e"
+    },
+    {
+      "spec": "e2e/visual/status-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 6,
+      "sha256": "57481c1e2f579b2d88ea0abd74c034363869e3341675dcd54ae800237460a880"
+    },
+    {
+      "spec": "e2e/visual/surfaces-long-tail-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 32,
+      "sha256": "3329a6d3f6df85a9a5b2b33cef73681be64baf7cb99b3ca6d0877a5fcdb204b6"
+    },
+    {
+      "spec": "e2e/visual/tenant-branding/index.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 8,
+      "sha256": "b30ead65b9e140d77474811af505e0d7a04a00110f9b4a78730fcd9474739182"
+    },
+    {
+      "spec": "e2e/visual/visualizations/index.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 23,
+      "sha256": "34c0ef4dcb5154bc9ec27a73029788670190425e3c1b5871075da8bcb3d4e7e0"
+    },
+    {
+      "spec": "e2e/visual/workspace-chrome-batch.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 7,
+      "sha256": "134b0d1758ac288fedd17adb372733b9024606fa63b79dd07586dc5f8497dd87"
+    },
+    {
+      "spec": "e2e/whitelabel/brand-locale-visual-matrix.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 12,
+      "sha256": "e0121d2e1d516016fde33c8b94ec0d587917c0cec30bdcfdd40752085c9f0f8e"
+    },
+    {
+      "spec": "e2e/whitelabel/layout-foundations-matrix.spec.ts",
+      "status": "pre-migration",
+      "owner": "WO-EVI-03",
+      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "expiresWhen": "reference-identity-approved",
+      "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
+      "baselines": 12,
+      "sha256": "7c803770d483e135429007acbb0ef11fcab5d30fde63ec3a57caf9019dfe2073"
+    }
+  ]
+}

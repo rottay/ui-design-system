@@ -390,6 +390,23 @@ export const CI_GATES = Object.freeze([
     drillId: 'read-without-producer-ratchet-drill',
     ratchet: 'scripts/check/engine/read-without-producer/baseline/index.json',
   },
+  // F-48: harness consumers, channel-text assertions without a producer and
+  // visual baselines without an expiry note, each equal to its ledger.
+  {
+    id: 'tests-through-the-door-drill',
+    run: ['node', '--test', 'scripts/check/evidence/tests-through-the-door/index.test.mjs'],
+    blocking: true,
+    phase: 'pre-build',
+    drillFor: ['tests-through-the-door'],
+  },
+  {
+    id: 'tests-through-the-door',
+    run: ['node', 'scripts/check/evidence/tests-through-the-door/index.mjs'],
+    blocking: true,
+    phase: 'pre-build',
+    drillId: 'tests-through-the-door-drill',
+    ratchet: 'scripts/check/evidence/tests-through-the-door/ledger/index.json',
+  },
   // El corte por familia comparte el mismo conjunto de productores (importado,
   // nunca medido dos veces) y baja la ley del template a cada familia: un canal
   // leido sin productor, pintura inline o una segunda clase de vocabulario en la
