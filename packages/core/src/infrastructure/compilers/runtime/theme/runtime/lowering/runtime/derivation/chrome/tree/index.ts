@@ -23,6 +23,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const treeChromeDeriver: FamilyDeriver = {
   family: "tree",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "surfaces.radiusScale",

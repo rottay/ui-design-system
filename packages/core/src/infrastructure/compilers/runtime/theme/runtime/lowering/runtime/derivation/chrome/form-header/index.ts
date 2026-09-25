@@ -23,6 +23,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const formHeaderChromeDeriver: FamilyDeriver = {
   family: "form-header",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "typography.roles",

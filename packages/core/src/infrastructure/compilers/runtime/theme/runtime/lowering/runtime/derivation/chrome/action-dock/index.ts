@@ -49,6 +49,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const actionDockChromeDeriver: FamilyDeriver = {
   family: "action-dock",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "surfaces.materials",

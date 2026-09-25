@@ -41,6 +41,26 @@ const ARABIC_AXIS = declaredUnder("responsive/language-arabic/index.css", /:lang
 const MASKED_ARABIC: Readonly<Record<string, string>> = {
   "--ds-toolbar-title-letter-spacing":
     "the title's only read site is overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
+  "--ds-mobile-header-title-tracking":
+    "the title is an h1: rottay-personality's :is(h1..h6) heading tracking outranks the channel at its only read site at rest, and :lang(ar) { letter-spacing: normal } in rottay-responsive masks both",
+  "--ds-dashboard-header-title-tracking":
+    "the title is an h1: rottay-personality's :is(h1..h6) heading tracking outranks the channel at its only read site at rest, and :lang(ar) { letter-spacing: normal } in rottay-responsive masks both",
+  "--ds-detail-header-title-tracking":
+    "the title is an h1: rottay-personality's :is(h1..h6) heading tracking outranks the channel at its only read site at rest, and :lang(ar) { letter-spacing: normal } in rottay-responsive masks both",
+  "--ds-detail-header-title-tracking-compact":
+    "the narrow title is an h1: rottay-personality's :is(h1..h6) heading tracking outranks the channel at its only read site at rest, and :lang(ar) { letter-spacing: normal } in rottay-responsive masks both",
+  "--ds-collection-header-chip-tracking":
+    "the chip's only read site (meta-item) is overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
+  "--ds-collection-header-subtitle-tracking-caption":
+    "the caption subtitle's only read site is overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
+  "--ds-collection-header-subtitle-tracking-compact-technical":
+    "the compact technical subtitle's only read site is overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
+  "--ds-collection-header-subtitle-tracking-code":
+    "resolves to 0 at the root on every first-party vertical, and its only read site is overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive for any tenant tracking",
+  "--ds-shortcuts-overlay-category-letter-spacing":
+    "the category label's only read site is overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
+  "--ds-menu-group-letter-spacing":
+    "the group label's only read sites (menu skin, menu-compounds skin) are overridden by :lang(ar) { letter-spacing: normal } in rottay-responsive",
 };
 
 const VERTICALS = ["bithire", "rottay", "evnto"] as const;
@@ -103,7 +123,7 @@ describe("density-scope roster", () => {
     expect(census[1]).toEqual(census[0]);
     expect(census[2]).toEqual(census[0]);
     // The census the next claims drain: every claim moves `unclaimed` down.
-    expect(census[0]).toEqual({ density: [49, 350], direct: 343, arabic: [13, 23], unclaimed: [24, 226] });
+    expect(census[0]).toEqual({ density: [49, 350], direct: 343, arabic: [13, 23], unclaimed: [13, 110] });
   });
 
   it("projects every density-exposed channel of a claiming family, and only those", () => {
@@ -118,11 +138,13 @@ describe("density-scope roster", () => {
     }
   });
 
-  it("the claimants are the twenty-five adopting families, and their arabic-axis channels are named masked pins", () => {
+  it("the claimants are the thirty-six adopting families, and their arabic-axis channels are named masked pins", () => {
     expect(FAMILY_DERIVERS.filter(claimsDensityScope).map((deriver) => deriver.family)).toEqual([
-      "textarea", "breadcrumb", "stepper", "section-frame", "stats-header", "surface-lifecycle",
-      "app-shell", "scope-switcher", "command-palette", "search-command-bar", "surface-chrome",
-      "form-surface", "wizard-surface", "detail-form-surface", "card", "tag", "badge",
+      "textarea", "menu", "breadcrumb", "stepper", "form-header", "workbench-header",
+      "section-frame", "mobile-header", "stats-header", "surface-lifecycle", "app-shell",
+      "action-dock", "scope-switcher", "command-palette", "shortcuts-overlay", "search-command-bar",
+      "surface-chrome", "collection-header", "dashboard-header", "detail-header", "form-surface",
+      "wizard-surface", "detail-form-surface", "card", "table", "tag", "badge", "tree",
       "kanban-board", "widget-board", "column-settings", "filter-panel", "toolbar",
       "descriptions", "collapse", "splitter",
     ]);

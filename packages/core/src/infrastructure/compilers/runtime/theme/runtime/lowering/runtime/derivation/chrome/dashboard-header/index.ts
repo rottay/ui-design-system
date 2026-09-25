@@ -37,6 +37,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const dashboardHeaderChromeDeriver: FamilyDeriver = {
   family: "dashboard-header",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "typography.roles",

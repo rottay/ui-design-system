@@ -28,6 +28,7 @@ const OVERLAY_RULE = "1px solid var(--ds-color-border)";
 export const shortcutsOverlayChromeDeriver: FamilyDeriver = {
   family: "shortcuts-overlay",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["surfaces.*", "palette.*", "shape.*", "density", "motion"],
   produces: [
     // The frame

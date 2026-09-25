@@ -43,6 +43,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const collectionHeaderChromeDeriver: FamilyDeriver = {
   family: "collection-header",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "typography.roles",

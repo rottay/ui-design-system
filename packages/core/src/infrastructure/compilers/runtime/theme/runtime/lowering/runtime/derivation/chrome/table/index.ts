@@ -25,6 +25,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const tableChromeDeriver: FamilyDeriver = {
   family: "table",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["typography.roles", "typography.roleWeights", "density", "surfaces.controlHeight"],
   produces: [
     "--ds-table-title-font-weight",

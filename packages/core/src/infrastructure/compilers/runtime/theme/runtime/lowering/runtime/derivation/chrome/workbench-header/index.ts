@@ -24,6 +24,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const workbenchHeaderChromeDeriver: FamilyDeriver = {
   family: "workbench-header",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "surfaces.radiusScale",

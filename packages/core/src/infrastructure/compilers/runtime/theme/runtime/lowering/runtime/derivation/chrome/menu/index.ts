@@ -19,6 +19,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const menuChromeDeriver: FamilyDeriver = {
   family: "menu",
   rank: "derived",
+  scopes: ["density"],
   consumes: [
     "palette.*",
     "surfaces.materials",
