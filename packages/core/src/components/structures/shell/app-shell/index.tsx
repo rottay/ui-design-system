@@ -363,7 +363,6 @@ export function AppShell({
     '--ds-shell-inline-start-inset': isCompact
       ? 'var(--ds-shell-safe-area-left)'
       : desktopSidebarInset,
-    '--ds-shell-inline-end-inset': 'var(--ds-shell-safe-area-right)',
     // The overlay presentation has no track to slide, so it has no transition
     // at all; otherwise the app's own `--ds-shell-main-transition` escape
     // hatch wins over the collapse cadence, resolved on this element so a

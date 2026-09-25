@@ -36,7 +36,6 @@ The root publishes:
 - `--ds-shell-top-inset`
 - `--ds-shell-bottom-inset`
 - `--ds-shell-inline-start-inset`
-- `--ds-shell-inline-end-inset`
 - `--ds-shell-safe-area-{top,right,bottom,left}`
 
 `geometry.bottomInset` is the total height occupied by fixed bottom chrome. It

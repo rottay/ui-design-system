@@ -15760,6 +15760,49 @@
       },
       "note": "Adjudicated D6-2d-resto (2026-09-15). The adoption reason der06-neutral-control-vocabulary-adoption claimed zero readers anywhere; measured, this channel has live readers in shipped product code, enumerated above. Reclassified externally-consumed rather than retired: the deadWriters projection is DS-scoped and is not the instrument behind a deletion."
     },
+    "--ds-shell-header-height": {
+      "name": "--ds-shell-header-height",
+      "provenanceClass": "A-app-consumed",
+      "decision": "KEEP_LIVE_APP_CONSUMER",
+      "executed": true,
+      "emittedBy": [
+        "core/src/components/structures/shell/app-shell/index.tsx"
+      ],
+      "declaredInSourceCss": [
+        "core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
+      ],
+      "readers": {
+        "coreSrc": 0,
+        "showroom": 0,
+        "apps": 8,
+        "appFiles": [
+          "app-bithire/src/features/settings/surface/screens/workflows/setup-guide/overview/wiring/styles/index.css",
+          "app-bithire/src/features/home/surface/screens/workflows/chat/wiring/styles/index.css",
+          "app-bithire/src/features/home/surface/screens/workflows/workbench/surface-only/styles/index.css"
+        ]
+      },
+      "note": "Adjudicated C12 (2026-09-25). A published AppShell channel (SHELL_PUBLISHED_CHANNELS) that entered the surface as a CSS-declared writer in da6b06d41 with no reader in core or showroom; app-bithire reads it 8 times (3+3+2 var() reads, each with a 56px fallback), identical at the CI-pinned corpus ref 8abd05578. Outside the census scope, not outside the truth: the customization-surface --check re-measures these files and fails if the count moves."
+    },
+    "--ds-font-pack-arabic-text": {
+      "name": "--ds-font-pack-arabic-text",
+      "provenanceClass": "B-modern-current",
+      "decision": "RECONNECT_PENDING_PART",
+      "executed": false,
+      "finalState": "OWNER_DECISION",
+      "emittedBy": [
+        "core/src/foundation/tokens/css/foundation/typography/font-packs/arabic-text/index.css"
+      ],
+      "declaredInSourceCss": [
+        "core/src/foundation/tokens/css/foundation/typography/font-packs/arabic-text/index.css"
+      ],
+      "readers": {
+        "coreSrc": 0,
+        "showroom": 0,
+        "apps": 0,
+        "appFiles": []
+      },
+      "note": "Registered residual of WO-INV-02 (f56c64974): the arabic-text pack is rostered and its hook ships, but nothing reads it until foundation/kernel/typography's withArabicSafeFallback tail reads var(--ds-font-pack-arabic-text) instead of the literal family. Owner: kernel typography. This row records the reason; it does not make the writer live and it does not enter the dead-writer anchor."
+    },
     "--ds-switch-bg": {
       "name": "--ds-switch-bg",
       "provenanceClass": "B-frozen-engine-painted",

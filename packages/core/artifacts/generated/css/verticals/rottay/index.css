@@ -61369,7 +61369,6 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   --ds-shell-inline-start-inset: calc(
     var(--ds-shell-sidebar-width, var(--ds-sidebar-width, 18.5rem)) + var(--ds-shell-safe-area-left)
   );
-  --ds-shell-inline-end-inset: var(--ds-shell-safe-area-right);
   --ds-shell-resolved-main-transition: margin-inline-start
     var(--ds-shell-collapse-transition, var(--ds-motion-rearrange, var(--ds-motion-normal)) var(--ds-motion-ease-move));
   --ds-shell-resolved-drawer-inline-size: min(

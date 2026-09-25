@@ -62,7 +62,7 @@
     "interpolatedNames": 553,
     "foundationTokens": 4184,
     "componentTokens": 719,
-    "componentSuppliers": 375,
+    "componentSuppliers": 374,
     "reads": 7739,
     "hooks": 107,
     "unadjudicatedReads": 1257,

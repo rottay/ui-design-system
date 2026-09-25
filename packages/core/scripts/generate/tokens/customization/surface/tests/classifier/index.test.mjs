@@ -127,7 +127,7 @@ test('DEAD — un nombre NUEVO falla, y manda cablearlo o retirarlo, no ampliar 
   assert.equal(failures.length, 1);
   assert.match(failures[0], /1 NEW dead writer\(s\): --ds-nuevo/);
   assert.match(failures[0], /se les da consumidor o se dejan de emitir, no se amplia el ancla/);
-  assert.match(failures[0], /--widen --reason/);
+  assert.match(failures[0], /--widen=<nombres> --owner "\.\.\." --reason/);
 });
 
 test('DEAD — un nombre que SALE tambien falla: una victoria en silencio deja el ancla mintiendo', async () => {
@@ -178,10 +178,26 @@ test('DEAD/PUERTA — sin razon no escribe; ampliar exige --widen; bajar no', as
   assert.equal(bajada.lastMove, 'el writer consiguio consumidor');
   assert.match(bajada.lastMoveKind, /^decrece-solo: -1 nombre/);
   assert.equal(bajada.schemaVersion, 1);
-  // Con la puerta pedida por nombre, la ampliacion se registra COMO ampliacion.
-  const subida = buildDeadBaselineDoc({ live: ['--ds-a', '--ds-nuevo'], previous, reason: 'apertura autorizada', widen: true });
+  // Una admision es con deuda declarada: por NOMBRE, con razon y con dueño. Sin cualquiera de los tres, negada.
+  const live = ['--ds-a', '--ds-nuevo'];
+  assert.throws(() => buildDeadBaselineDoc({ live, previous, reason: '', widen: ['--ds-nuevo'], owner: 'kernel' }), /exige --reason/);
+  assert.throws(() => buildDeadBaselineDoc({ live, previous, reason: 'deuda declarada', widen: ['--ds-nuevo'] }),
+    /exige --owner/);
+  assert.throws(() => buildDeadBaselineDoc({ live, previous, reason: 'deuda declarada', widen: ['--ds-nuevo'], owner: '  ' }),
+    /exige --owner/);
+  assert.throws(() => buildDeadBaselineDoc({ live, previous, reason: 'deuda declarada', widen: true, owner: 'kernel' }),
+    /se pide POR NOMBRE: --widen=--ds-nuevo \(pedido: ninguno\)/, 'un --widen desnudo no admite nada');
+  assert.throws(() => buildDeadBaselineDoc({ live: ['--ds-a', '--ds-nuevo', '--ds-colado'], previous, reason: 'deuda declarada', widen: ['--ds-nuevo'], owner: 'kernel' }),
+    /se pide POR NOMBRE: --widen=--ds-colado,--ds-nuevo/, 'no se cuela un nombre que no se pidio');
+  const subida = buildDeadBaselineDoc({ live, previous, reason: 'deuda declarada en abc1234', widen: ['--ds-nuevo'], owner: 'kernel' });
+  assert.deepEqual(subida.names, live);
   assert.match(subida.lastMoveKind, /ampliacion autorizada por nombre \(--widen\): \+1 nombre\(s\), -1/);
   assert.doesNotMatch(subida.lastMoveKind, /^decrece-solo/, 'lastMoveKind no puede llamar limpieza a una ampliacion');
+  assert.deepEqual(subida.admissions, [{ name: '--ds-nuevo', owner: 'kernel', reason: 'deuda declarada en abc1234' }]);
+  // La admision vive lo que vive el nombre: cuando sale del ancla, sale su deuda.
+  const cierre = buildDeadBaselineDoc({ live: ['--ds-a'], previous: subida, reason: 'el kernel lo lee' });
+  assert.equal(cierre.admissions, undefined);
+  assert.match(cierre.lastMoveKind, /^decrece-solo: -1 nombre/);
 });
 
 /* ── PRE-P0 ítem 2: el escudo frontier se DERIVA del registro ────────────── */

@@ -25,6 +25,9 @@
  *   production TS  src/**\/*.{ts,tsx} minus tests/stories/fixtures.
  *   test corpus    the excluded test/story files (counted separately).
  *   artifacts      src/foundation/tokens/css/facade/artifacts/*\/index.css.
+ *   showroom       ../showroom/src/**\/*.{css,ts,tsx} minus tests/stories/
+ *                  fixtures — a READER corpus: its reads keep a writer
+ *                  live, its declarations never make one.
  *   writer         a name in the manifest writer sets (foundationTokens,
  *                  componentTokens, tenantChannel) — the manifest already
  *                  resolved compiler emissions and interpolated families.
@@ -32,8 +35,13 @@
  *                  value, or a `--ds-x` occurrence inside a production TS
  *                  string literal that also contains `var(` or is a bare
  *                  channel name passed to a runtime API.
- *   dead writer    writer with ZERO productive consumers that is neither
- *                  frontier-reserved nor a generated-only artifact name.
+ *   dead writer    writer with ZERO productive consumers (core or showroom)
+ *                  that is neither frontier-reserved nor a generated-only
+ *                  artifact name, nor adjudicated live. A KEEP_LIVE_APP_CONSUMER
+ *                  adjudication the census leans on is re-measured by `--check`
+ *                  against the app files it names (read count per file, summed
+ *                  to the row's `readers.apps`); a claim that does not measure
+ *                  fails the dead arm.
  *
  * The report (surface/report/index.json) is DERIVED and never
  * hand-edited: `--write` regenerates it; `--check` fails on staleness,
@@ -46,7 +54,7 @@ import { readdirSync, readFileSync, statSync, writeFileSync, existsSync } from '
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
-import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
 
 const require = createRequire(import.meta.url);
 const postcss = require('postcss');
@@ -54,6 +62,8 @@ const ts = require('typescript');
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
+const WORKSPACE_ROOT = dirname(findRepoRoot(HERE));
+const SHOWROOM_SRC = join(ROOT, '../showroom/src');
 const REPORT_PATH = join(HERE, 'report/index.json');
 const DEAD_BASELINE_PATH = join(ROOT, 'scripts/generate/tokens/customization/surface/dead-writers-baseline/index.json');
 const MANIFEST_PATH = join(ROOT, 'contracts/css/hooks/index.json');
@@ -113,6 +123,21 @@ function collectCorpus() {
     else if (/\.(ts|tsx)$/.test(r)) tsFiles.push(file);
   }
   return { css, tsFiles, testFiles, artifactFiles };
+}
+
+function collectShowroomCorpus() {
+  if (!existsSync(SHOWROOM_SRC)) {
+    throw new Error(`customization-surface: the showroom reader corpus is missing (${SHOWROOM_SRC}); the scope law names it, so the census refuses to run without it`);
+  }
+  const css = [];
+  const tsFiles = [];
+  for (const file of walk(SHOWROOM_SRC)) {
+    const r = relative(SHOWROOM_SRC, file);
+    if (isTestPath(`/${r}`)) continue;
+    if (r.endsWith('.css')) css.push(file);
+    else if (/\.(ts|tsx)$/.test(r)) tsFiles.push(file);
+  }
+  return { css, tsFiles };
 }
 
 /** CSS consumption + declaration via PostCSS — comments never count. */
@@ -444,12 +469,12 @@ function sha256(text) {
   return createHash('sha256').update(text).digest('hex');
 }
 
-function computeInputsDigest(corpus) {
+function computeInputsDigest(corpus, showroom) {
   const parts = [];
   const add = (path) => {
     parts.push(`${relative(ROOT, path)}:${sha256(readFileSync(path, 'utf8'))}`);
   };
-  for (const group of [corpus.css, corpus.tsFiles, corpus.artifactFiles]) {
+  for (const group of [corpus.css, corpus.tsFiles, corpus.artifactFiles, showroom.css, showroom.tsFiles]) {
     for (const file of group) add(file);
   }
   for (const authority of [
@@ -488,8 +513,8 @@ const ADJUDICATED_ALIVE = /^(KEEP_LIVE|EXECUTED)/;
  * An explicit `name`/`token` still wins over the key, so a row that disagrees
  * with its own index is read as it is written, not as it is filed.
  */
-export function adjudicatedAliveNames(registry) {
-  const alive = new Set();
+export function adjudicatedAliveRows(registry) {
+  const alive = new Map();
   const walk = (node, key) => {
     if (Array.isArray(node)) { for (const item of node) walk(item, undefined); return; }
     if (typeof node !== 'object' || node === null) return;
@@ -497,7 +522,7 @@ export function adjudicatedAliveNames(registry) {
     const keyed = typeof key === 'string' && key.startsWith('--') ? key : undefined;
     const name = node.name ?? node.token ?? keyed;
     if (typeof name === 'string' && typeof decision === 'string' && ADJUDICATED_ALIVE.test(decision)) {
-      alive.add(name);
+      if (!alive.has(name)) alive.set(name, { name, decision, readers: node.readers });
     }
     for (const [childKey, value] of Object.entries(node)) walk(value, childKey);
   };
@@ -505,19 +530,70 @@ export function adjudicatedAliveNames(registry) {
   return alive;
 }
 
-function buildReport({ drill } = {}) {
+export function adjudicatedAliveNames(registry) {
+  return new Set(adjudicatedAliveRows(registry).keys());
+}
+
+export function appRepositoryRoot(segment, env = process.env) {
+  const fromEnv = env[`${segment.toUpperCase().replace(/-/g, '_')}_ROOT`];
+  return fromEnv && fromEnv.trim() ? fromEnv.trim() : join(WORKSPACE_ROOT, segment);
+}
+
+/**
+ * Re-measures every KEEP_LIVE adjudication the census leans on (the rows it
+ * reports `adjudicated-live`). Only KEEP_LIVE_APP_CONSUMER carries a reader
+ * claim this census can measure; a leaned-on KEEP_LIVE of any other class has
+ * no verifier and fails closed. A missing app checkout fails closed too.
+ */
+export function verifyKeepLiveClaims(claims, { resolveRoot = appRepositoryRoot } = {}) {
+  const failures = [];
+  for (const claim of claims) {
+    const { name, decision, readers } = claim;
+    if (!decision.startsWith('KEEP_LIVE')) continue;
+    if (decision !== 'KEEP_LIVE_APP_CONSUMER') {
+      failures.push(`adjudication: ${name} — ${decision} is leaned on but has no reader verifier; only KEEP_LIVE_APP_CONSUMER can keep a DS-dead writer live`);
+      continue;
+    }
+    const files = Array.isArray(readers?.appFiles) ? readers.appFiles : [];
+    if (files.length === 0 || !Number.isInteger(readers?.apps)) {
+      failures.push(`adjudication: ${name} — KEEP_LIVE_APP_CONSUMER without readers.appFiles and an integer readers.apps`);
+      continue;
+    }
+    const readRe = new RegExp(`var\\(\\s*${name.replace(/[-]/g, '\\-')}(?![a-z0-9-])`, 'g');
+    let measured = 0;
+    for (const file of files) {
+      const segment = file.split('/')[0];
+      const root = resolveRoot(segment);
+      if (!existsSync(root)) {
+        failures.push(`adjudication: ${name} — ${segment} is not checked out at ${root}; export ${segment.toUpperCase().replace(/-/g, '_')}_ROOT (the claim cannot be measured, so it cannot keep the writer live)`);
+        measured = null;
+        break;
+      }
+      const full = join(root, file.slice(segment.length + 1));
+      const count = existsSync(full) ? (readFileSync(full, 'utf8').match(readRe) ?? []).length : 0;
+      if (count === 0) failures.push(`adjudication: ${name} — ${file} does not read it (0 var() reads)`);
+      measured += count;
+    }
+    if (measured !== null && measured !== readers.apps) {
+      failures.push(`adjudication: ${name} — claims ${readers.apps} app read(s), measured ${measured}`);
+    }
+  }
+  return failures;
+}
+
+export function buildReport({ drill } = {}) {
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8'));
   // Adjudication registries are AUTHORITIES: a name a versioned, evidence-
   // backed adjudication marks as live/executed can never be a dead writer
   // (the Toast pair reads through a ternary→variable flow no call-site AST
   // match can see; the adjudication carries the human-verified evidence).
-  const adjudicatedAlive = new Set();
+  const adjudicatedAlive = new Map();
   for (const registryPath of ['src/foundation/tokens/data/decisions/writers/unused/system/index.json', 'src/foundation/tokens/data/decisions/writers/unused/cards/index.json']) {
     const full = join(ROOT, registryPath);
     if (!existsSync(full)) continue;
     try {
-      for (const name of adjudicatedAliveNames(JSON.parse(readFileSync(full, 'utf8')))) {
-        adjudicatedAlive.add(name);
+      for (const [name, row] of adjudicatedAliveRows(JSON.parse(readFileSync(full, 'utf8')))) {
+        if (!adjudicatedAlive.has(name)) adjudicatedAlive.set(name, row);
       }
     } catch { /* malformed registry: census stays independent */ }
   }
@@ -530,6 +606,7 @@ function buildReport({ drill } = {}) {
   const allowlist = allowlistResolved.names;
   const expressive = parseExpressiveLists();
   const corpus = collectCorpus();
+  const showroom = collectShowroomCorpus();
 
   const foundation = new Set(manifest.foundationTokens ?? []);
   const component = new Set(manifest.componentTokens ?? []);
@@ -542,6 +619,14 @@ function buildReport({ drill } = {}) {
   const tsConsumed = tsScan.reads;
   const testNames = scanNamesInText(corpus.testFiles);
   const artifactNames = scanNamesInText(corpus.artifactFiles);
+  const showroomReads = new Map();
+  if (drill !== 'showroom-blind') {
+    const add = (from) => {
+      for (const [name, count] of from) showroomReads.set(name, (showroomReads.get(name) ?? 0) + count);
+    };
+    add(scanCss(showroom.css).consumed);
+    add(scanTs(showroom.tsFiles).reads);
+  }
 
   if (drill === 'dead-growth') {
     // Synthetic never-read writer: must be reported as NEW dead growth.
@@ -578,7 +663,8 @@ function buildReport({ drill } = {}) {
       artifactNames.has(name);
     const cssReads = cssScan.consumed.get(name) ?? 0;
     const tsReads = tsConsumed.get(name) ?? 0;
-    const productiveReads = cssReads + tsReads;
+    const showroomReadCount = showroomReads.get(name) ?? 0;
+    const productiveReads = cssReads + tsReads + showroomReadCount;
 
     let category = null;
     if (isFrontierName(name)) category = 'frontier-reserved';
@@ -651,7 +737,7 @@ function buildReport({ drill } = {}) {
       category, tier, status,
       ...(alias ? { alias: { replacement: alias.replacement, batch: alias.batch } } : {}),
       writer: isWriter,
-      reads: { css: cssReads, ts: tsReads, tests: testNames.has(name), modern: cssScan.modernConsumed.has(name), artifact: artifactNames.has(name) },
+      reads: { css: cssReads, ts: tsReads, showroom: showroomReadCount, tests: testNames.has(name), modern: cssScan.modernConsumed.has(name), artifact: artifactNames.has(name) },
       tsWriteSites: tsScan.writes.get(name) ?? 0,
       tsMetadataMentions: tsScan.metadata.get(name) ?? 0,
     };
@@ -693,14 +779,15 @@ function buildReport({ drill } = {}) {
     generatedBy: 'scripts/generate/tokens/customization/surface/index.mjs --write',
     meta: {
       scopeLaw:
-        'DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.',
-      inputsDigest: computeInputsDigest(corpus),
+        'DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.',
+      inputsDigest: computeInputsDigest(corpus, showroom),
       manifestSchemaVersion: manifest.schemaVersion,
       corpus: {
         authoredCssFiles: corpus.css.length,
         productionTsFiles: corpus.tsFiles.length,
         testFiles: corpus.testFiles.length,
         artifactFiles: corpus.artifactFiles.length,
+        showroomReaderFiles: showroom.css.length + showroom.tsFiles.length,
       },
     },
     counts: {
@@ -717,6 +804,7 @@ function buildReport({ drill } = {}) {
       tsReadNames: tsConsumed.size,
       tsWriteNames: tsScan.writes.size,
       tsMetadataNames: tsScan.metadata.size,
+      showroomReadNames: showroomReads.size,
       unclassified,
       prototypeLedgerRows: Array.isArray(ledger) ? ledger.length : (ledger.entries?.length ?? 0),
     },
@@ -736,7 +824,10 @@ function buildReport({ drill } = {}) {
     deadWriters,
     rows,
   };
-  return report;
+  const leanedOn = Object.keys(rows)
+    .filter((name) => rows[name].status === 'adjudicated-live')
+    .map((name) => adjudicatedAlive.get(name));
+  return { report, leanedOn };
 }
 
 function loadBaselineDead() {
@@ -781,7 +872,7 @@ export function evaluateDeadBaseline(live, baseline) {
   if (grown.length > 0) {
     failures.push(`dead: ${grown.length} NEW dead writer(s): ${grown.slice(0, 8).join(', ')}${grown.length > 8 ? ', …' : ''}`
       + ' — se les da consumidor o se dejan de emitir, no se amplia el ancla. Si la ampliacion esta autorizada,'
-      + ' pedila por nombre: --write-baseline --widen --reason "..."');
+      + ' pedila por nombre: --write-baseline --widen=<nombres> --owner "..." --reason "..."');
   }
   const liveSet = new Set(live);
   const gone = baseline.names.filter((name) => !liveSet.has(name));
@@ -798,7 +889,7 @@ export function evaluateDeadBaseline(live, baseline) {
  * NORMAL deje la razon escrita y que el `--check` enrojezca ante cualquier
  * desvio, de modo que una ampliacion sin razon sea revisable en el diff.
  */
-export function buildDeadBaselineDoc({ live, previous, reason, widen = false }) {
+export function buildDeadBaselineDoc({ live, previous, reason, widen = false, owner }) {
   if (!reason || !String(reason).trim()) {
     throw new Error('--write-baseline exige --reason "por que se mueve el ancla"');
   }
@@ -835,10 +926,24 @@ export function buildDeadBaselineDoc({ live, previous, reason, widen = false }) 
     throw new Error(`me niego a AMPLIAR el inventario de dead-writers en ${added.length} nombre(s): `
       + `${added.slice(0, 8).join(', ')}${added.length > 8 ? ', …' : ''}`
       + '. Un writer sin consumidor se cablea o se retira. Si la ampliacion esta autorizada,'
-      + ' pedila por nombre: --widen --reason "..."');
+      + ' pedila por nombre: --widen=<nombres> --owner "..." --reason "..."');
+  }
+  if (added.length > 0) {
+    const named = Array.isArray(widen) ? [...new Set(widen)].sort() : [];
+    if (named.join('\n') !== [...added].sort().join('\n')) {
+      throw new Error(`una admision se pide POR NOMBRE: --widen=${[...added].sort().join(',')} `
+        + `(pedido: ${named.length > 0 ? named.join(',') : 'ninguno'})`);
+    }
+    if (!owner || !String(owner).trim()) {
+      throw new Error('una admision con deuda declarada exige --owner "quien la cierra": sin dueño es un widening silencioso');
+    }
   }
   const liveSet = new Set(live);
   const removed = previous.names.filter((name) => !liveSet.has(name));
+  const admissions = [
+    ...(previous.admissions ?? []).filter((entry) => liveSet.has(entry.name)),
+    ...added.map((name) => ({ name, owner: String(owner).trim(), reason })),
+  ].sort((left, right) => left.name.localeCompare(right.name));
   return {
     schemaVersion: DEAD_BASELINE_SCHEMA_VERSION,
     note: previous.note
@@ -847,6 +952,7 @@ export function buildDeadBaselineDoc({ live, previous, reason, widen = false }) 
     lastMoveKind: added.length > 0
       ? `ampliacion autorizada por nombre (--widen): +${added.length} nombre(s), -${removed.length}`
       : `decrece-solo: -${removed.length} nombre(s)`,
+    ...(admissions.length > 0 ? { admissions } : {}),
     names: live,
   };
 }
@@ -857,7 +963,7 @@ function main() {
   const write = Boolean(flag('--write'));
   const writeBaseline = Boolean(flag('--write-baseline'));
 
-  const report = buildReport({ drill });
+  const { report, leanedOn } = buildReport({ drill });
   const failures = [];
 
   if (write) {
@@ -871,7 +977,8 @@ function main() {
         live: report.deadWriters,
         previous: loadBaselineDead(),
         reason: reasonIndex >= 0 ? args[reasonIndex + 1] : flagValue('--reason'),
-        widen: Boolean(flag('--widen')),
+        widen: flag('--widen') ? String(flagValue('--widen')).split(',').map((name) => name.trim()).filter((name) => name.startsWith('--')) : false,
+        owner: args.indexOf('--owner') >= 0 ? args[args.indexOf('--owner') + 1] : flagValue('--owner'),
       });
       writeFileSync(DEAD_BASELINE_PATH, `${JSON.stringify(doc, null, 2)}\n`);
       console.log(`customization-surface: wrote dead-writer baseline (${doc.names.length} names, ${doc.lastMoveKind})`);
@@ -906,6 +1013,19 @@ function main() {
     }
     if (wantAll || check === 'dead') {
       failures.push(...evaluateDeadBaseline(report.deadWriters, loadBaselineDead()));
+      const claims = leanedOn.map((claim) => ({ ...claim }));
+      const firstAppClaim = claims.find((claim) => claim.decision === 'KEEP_LIVE_APP_CONSUMER');
+      if (drill === 'keep-live-unread') {
+        claims.push({
+          name: '--ds-drill-keep-live-unread',
+          decision: 'KEEP_LIVE_APP_CONSUMER',
+          readers: { apps: 1, appFiles: [firstAppClaim?.readers?.appFiles?.[0] ?? 'app-bithire/src/drill-missing.css'] },
+        });
+      }
+      if (drill === 'keep-live-count' && firstAppClaim) {
+        firstAppClaim.readers = { ...firstAppClaim.readers, apps: firstAppClaim.readers.apps + 1 };
+      }
+      failures.push(...verifyKeepLiveClaims(claims));
     }
   }
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/generate/tokens/customization/preservation/index.mjs --write",
-  "basedOnReportDigest": "452d5a8bd854b02d1a2d45a1d714c7fb277638b7c7b43963516834426fe25c2f",
+  "basedOnReportDigest": "4b2e04e906894281b9cf11740f0907a2b1c8abb22400eba0be71f666e849b5b2",
   "laws": [
     "preserve 100% of useful premium visual capability; connect it to the canon",
     "a census dead-writer verdict is never a deletion license",
@@ -2153,12 +2153,12 @@
     ]
   },
   "deadWriters": {
-    "total": 276,
+    "total": 271,
     "byProvenance": {
       "E-reserved-frontier": 13,
-      "B-modern-current": 62,
+      "B-modern-current": 60,
       "A-protected-premium": 183,
-      "D-compiler-generated": 18
+      "D-compiler-generated": 15
     },
     "entries": [
       {
@@ -3177,20 +3177,6 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-shell-header-height",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-shell-inline-end-inset",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-shell-shimmer-medium",
         "provenance": "D-compiler-generated",
         "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
@@ -3206,27 +3192,6 @@
       },
       {
         "name": "--ds-shell-shimmer-strong",
-        "provenance": "D-compiler-generated",
-        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
-        "owner": "design-system/D1-compilers",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-sidebar-item-color-active",
-        "provenance": "D-compiler-generated",
-        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
-        "owner": "design-system/D1-compilers",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-sidebar-text",
-        "provenance": "D-compiler-generated",
-        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
-        "owner": "design-system/D1-compilers",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-sidebar-text-muted",
         "provenance": "D-compiler-generated",
         "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
         "owner": "design-system/D1-compilers",

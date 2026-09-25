@@ -1,17 +1,19 @@
 {
   "schemaVersion": 1,
   "note": "Decrease-only dead-writer inventory (name-keyed). A NEW name here fails the gate; deletions are the goal. Regenerate only with --write-baseline after reviewing the diff.",
-  "lastMove": "WO-FAM-07 (2026-09-16): -1, decrease-only. `--ds-breakpoint-xs` is retired, not reclassified. The ladder's zero step is the floor the other steps are measured from and the one rung nothing can read -- a @media/@container prelude cannot read a custom property, and the routes that can (the Container measure ladder this cut wired to --ds-breakpoint-{sm..2xl}, JS, the compiled tenant block) have no use for a zero. Measured 0 readers in core, showroom and all three apps, so the emitter now skips the floor and the contract sheet no longer declares it. The STEP stays in RESPONSIVE_BREAKPOINTS; only its CSS projection is gone. The three vertical artifacts still carry the stale declaration until the coordinator regenerates them with the serialized build.",
-  "lastMoveKind": "decrece-solo: -1 nombre(s)",
+  "lastMove": "C12 (2026-09-25, DT ruling option A, documented-reason door as in fe9a0ab42). +1 admitted with declared debt: --ds-font-pack-arabic-text stays honestly dead. 8ae785f1e (WO-INV-02 packet A) made it a writer and f56c64974 rostered the arabic-text pack, whose hook ships in every vertical bundle; measured 0 readers in packages/core, packages/showroom, app-bithire, app-evnto and app-platform, because the DS-A007 arabic-safe tail (foundation/kernel/typography withArabicSafeFallback) appends the literal family instead of reading var(--ds-font-pack-arabic-text). The reconnection is pending in f56c64974; owner: kernel typography. The debt closes by removal from this anchor when the kernel tail reads var(). -6 wins registered: --ds-breakpoint-{sm,md,lg,xl,2xl} (89976e4c7, WO-FAM-07: the container deriver reads the measure ladder; it predates the anchor ba33315db, which moved only xs) and --ds-letter-spacing-subtle (7a67243d8, cascade-wiring: mobile-header title tracking). The sidebar trio, --ds-shell-header-height and --ds-shell-inline-end-inset were never anchored: they leave the live list by showroom reads, a verified KEEP_LIVE_APP_CONSUMER and retirement, respectively.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen): +1 nombre(s), -6",
+  "admissions": [
+    {
+      "name": "--ds-font-pack-arabic-text",
+      "owner": "foundation/kernel/typography (withArabicSafeFallback must read var(--ds-font-pack-arabic-text))",
+      "reason": "C12 (2026-09-25, DT ruling option A, documented-reason door as in fe9a0ab42). +1 admitted with declared debt: --ds-font-pack-arabic-text stays honestly dead. 8ae785f1e (WO-INV-02 packet A) made it a writer and f56c64974 rostered the arabic-text pack, whose hook ships in every vertical bundle; measured 0 readers in packages/core, packages/showroom, app-bithire, app-evnto and app-platform, because the DS-A007 arabic-safe tail (foundation/kernel/typography withArabicSafeFallback) appends the literal family instead of reading var(--ds-font-pack-arabic-text). The reconnection is pending in f56c64974; owner: kernel typography. The debt closes by removal from this anchor when the kernel tail reads var(). -6 wins registered: --ds-breakpoint-{sm,md,lg,xl,2xl} (89976e4c7, WO-FAM-07: the container deriver reads the measure ladder; it predates the anchor ba33315db, which moved only xs) and --ds-letter-spacing-subtle (7a67243d8, cascade-wiring: mobile-header title tracking). The sidebar trio, --ds-shell-header-height and --ds-shell-inline-end-inset were never anchored: they leave the live list by showroom reads, a verified KEEP_LIVE_APP_CONSUMER and retirement, respectively."
+    }
+  ],
   "names": [
     "--ds-action-dock-reserved-block-end",
     "--ds-action-dock-reserved-block-start",
     "--ds-bottom-tab-bar-reserved-block-end",
-    "--ds-breakpoint-2xl",
-    "--ds-breakpoint-lg",
-    "--ds-breakpoint-md",
-    "--ds-breakpoint-sm",
-    "--ds-breakpoint-xl",
     "--ds-button-primary-border-color",
     "--ds-cell-meter-fill",
     "--ds-cell-meter-shadow",
@@ -110,12 +112,12 @@
     "--ds-error-state-bg",
     "--ds-error-state-border",
     "--ds-error-state-icon-bg",
+    "--ds-font-pack-arabic-text",
     "--ds-input-search-clear-color",
     "--ds-input-success-message-color",
     "--ds-input-success-message-font-size",
     "--ds-input-success-message-margin-top",
     "--ds-letter-spacing-snug",
-    "--ds-letter-spacing-subtle",
     "--ds-letter-spacing-subtle-wide",
     "--ds-listing-grid-card-bg",
     "--ds-listing-grid-card-border",

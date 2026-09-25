@@ -84,7 +84,6 @@ async function serverMarkup(): Promise<string> {
 const rendered = await serverMarkup();
 const markup = `<div id="page" style="inline-size:64rem">${rendered}</div>`;
 
-const ROOT = "#page #primary [data-part='root']";
 const SIDEBAR = "#page #primary [data-part='navigation-sidebar']";
 const HEADER = "#page #primary [data-part='header']";
 const FOOTER_NAV = "#page #primary [data-part='navigation-footer']";
@@ -260,35 +259,21 @@ describe('app-shell causality surface', () => {
     expect(r.kernelWidth).not.toBe(r.restingWidth);
   }, 120_000);
 
-  /**
-   * The main column's inline padding is LOGICAL: the safe-area edge it
-   * consumes flips with direction, and the shell's own RTL arm is what makes
-   * that true rather than the physical `env()` reading alone.
-   */
-  it('maps the main column inline padding to the physical edge of the writing mode', async () => {
+  // Chromium substitutes env(safe-area-inset-*) to 0px here, so only resolution
+  // is observable, not which physical edge feeds the end padding.
+  it('resolves the main column end padding in both writing modes', async () => {
     const readings = await measureArms({
       vertical: 'rottay',
       markup,
       arms: { base: {} },
       targets: [
-        {
-          id: 'ltrStart',
-          selector: ROOT,
-          property: '--ds-shell-inline-end-inset',
-          dir: 'ltr',
-        },
-        {
-          id: 'rtlStart',
-          selector: ROOT,
-          property: '--ds-shell-inline-end-inset',
-          dir: 'rtl',
-        },
+        { id: 'ltrEnd', selector: MAIN, property: '--ds-shell-main-padding-inline-end', dir: 'ltr' },
+        { id: 'rtlEnd', selector: MAIN, property: '--ds-shell-main-padding-inline-end', dir: 'rtl' },
       ],
     });
     const r = readings.base!;
-    // The published inset is the same channel in both directions; the skin's
-    // RTL arm is what re-keys which physical edge feeds it.
-    expect(r.ltrStart).toBe(r.rtlStart);
+    expect(r.ltrEnd).toBe('0px');
+    expect(r.rtlEnd).toBe('0px');
   }, 120_000);
 
   /**

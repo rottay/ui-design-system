@@ -42,22 +42,22 @@
   ],
   "summary": {
     "filesScanned": 2790,
-    "channels": 9266,
-    "channelsDs": 8617,
+    "channels": 9265,
+    "channelsDs": 8616,
     "channelsBridge": 649,
-    "channelsWithoutReaders": 199,
-    "channelsPaintsFalse": 943,
-    "channelsPaintsInModernFalse": 2011,
-    "readers": 42178,
+    "channelsWithoutReaders": 198,
+    "channelsPaintsFalse": 942,
+    "channelsPaintsInModernFalse": 2010,
+    "readers": 42176,
     "readersByPlane": {
       "modern-skin-css": 16318,
-      "presentation-css": 12088,
+      "presentation-css": 12087,
       "foundation-css": 1686,
       "runtime-css": 192,
       "facade-entrypoints-css": 2,
       "classic-css": 937,
       "rustic-css": 3117,
-      "tsx-inline-stamp": 1573,
+      "tsx-inline-stamp": 1572,
       "graphics-tsx": 37,
       "infrastructure-tsx": 6,
       "ts-token-mirror": 1447,
@@ -72,7 +72,7 @@
       "facade-entrypoints-css": 1,
       "classic-css": 788,
       "rustic-css": 1160,
-      "tsx-inline-stamp": 584,
+      "tsx-inline-stamp": 583,
       "graphics-tsx": 26,
       "infrastructure-tsx": 4,
       "ts-token-mirror": 1410,
@@ -19726,7 +19726,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 57,
+          "line": 56,
           "prop": "background",
           "scalars": []
         }
@@ -19745,7 +19745,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 331,
+          "line": 330,
           "prop": "background",
           "scalars": []
         }
@@ -19764,7 +19764,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 332,
+          "line": 331,
           "prop": "border",
           "scalars": []
         }
@@ -19783,7 +19783,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 330,
+          "line": 329,
           "prop": "padding",
           "scalars": []
         }
@@ -19802,7 +19802,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 338,
+          "line": 337,
           "prop": "background",
           "scalars": []
         }
@@ -19821,7 +19821,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 339,
+          "line": 338,
           "prop": "border",
           "scalars": []
         }
@@ -19840,7 +19840,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 337,
+          "line": 336,
           "prop": "padding",
           "scalars": []
         }
@@ -19859,7 +19859,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 340,
+          "line": 339,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -19878,14 +19878,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 300,
+          "line": 299,
           "prop": "backdrop-filter",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 301,
+          "line": 300,
           "prop": "-webkit-backdrop-filter",
           "scalars": []
         }
@@ -19904,14 +19904,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 295,
+          "line": 294,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 507,
+          "line": 506,
           "prop": "background",
           "scalars": []
         }
@@ -19930,7 +19930,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 296,
+          "line": 295,
           "prop": "border",
           "scalars": []
         }
@@ -19949,7 +19949,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 297,
+          "line": 296,
           "prop": "border-block-end",
           "scalars": []
         }
@@ -19968,7 +19968,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 285,
+          "line": 284,
           "prop": "inset-block-start",
           "scalars": []
         }
@@ -19987,7 +19987,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 286,
+          "line": 285,
           "prop": "inset-inline",
           "scalars": []
         }
@@ -20006,7 +20006,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 290,
+          "line": 289,
           "prop": "padding-block-start",
           "scalars": []
         }
@@ -20025,7 +20025,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 291,
+          "line": 290,
           "prop": "padding-inline",
           "scalars": []
         }
@@ -20044,7 +20044,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 298,
+          "line": 297,
           "prop": "border-radius",
           "scalars": []
         }
@@ -20063,7 +20063,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 299,
+          "line": 298,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -20082,7 +20082,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 324,
+          "line": 323,
           "prop": "gap",
           "scalars": []
         }
@@ -20101,7 +20101,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 287,
+          "line": 286,
           "prop": "z-index",
           "scalars": []
         }
@@ -20120,7 +20120,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 269,
+          "line": 268,
           "prop": "background",
           "scalars": []
         }
@@ -20139,7 +20139,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 270,
+          "line": 269,
           "prop": "border",
           "scalars": []
         }
@@ -20158,7 +20158,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 271,
+          "line": 270,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -20177,7 +20177,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 478,
+          "line": 477,
           "prop": "background",
           "scalars": []
         }
@@ -20196,7 +20196,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 470,
+          "line": 469,
           "prop": "background",
           "scalars": []
         }
@@ -20215,14 +20215,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 112,
+          "line": 111,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 132,
+          "line": 131,
           "prop": "background",
           "scalars": []
         }
@@ -20241,7 +20241,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 215,
+          "line": 214,
           "prop": "padding",
           "decl": "padding: var( --ds-shell-navigation-body-padding, var( --ds-app-shell-navigation-body-padding, var( --ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px) ) ) )",
           "scalars": []
@@ -20261,7 +20261,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 231,
+          "line": 230,
           "prop": "padding",
           "scalars": []
         }
@@ -20280,7 +20280,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 224,
+          "line": 223,
           "prop": "scroll-padding-block-end",
           "decl": "scroll-padding-block-end: var( --ds-app-shell-navigation-body-scroll-padding-block-end, calc(var(--ds-spacing-6, 24px) + 76px) )",
           "scalars": []
@@ -20300,14 +20300,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 113,
+          "line": 112,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 133,
+          "line": 132,
           "prop": "border",
           "scalars": []
         }
@@ -20326,14 +20326,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 114,
+          "line": 113,
           "prop": "border-inline-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 134,
+          "line": 133,
           "prop": "border-inline-end",
           "scalars": []
         }
@@ -20352,7 +20352,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/structures/shell/app-shell/index.tsx",
-          "line": 436,
+          "line": 435,
           "prop": "padding",
           "scalars": []
         }
@@ -20371,7 +20371,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 156,
+          "line": 155,
           "prop": "padding",
           "scalars": []
         }
@@ -20390,7 +20390,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 238,
+          "line": 237,
           "prop": "background",
           "scalars": []
         }
@@ -20409,7 +20409,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 239,
+          "line": 238,
           "prop": "border-block-start",
           "scalars": []
         }
@@ -20428,7 +20428,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 237,
+          "line": 236,
           "prop": "padding",
           "scalars": []
         }
@@ -20447,7 +20447,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 244,
+          "line": 243,
           "prop": "padding",
           "scalars": []
         }
@@ -20466,14 +20466,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 158,
+          "line": 157,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 195,
+          "line": 194,
           "prop": "background",
           "scalars": []
         }
@@ -20492,14 +20492,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 159,
+          "line": 158,
           "prop": "border-block-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 196,
+          "line": 195,
           "prop": "border-block-end",
           "scalars": []
         }
@@ -20518,7 +20518,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 193,
+          "line": 192,
           "prop": "padding",
           "scalars": []
         }
@@ -20537,7 +20537,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 201,
+          "line": 200,
           "prop": "padding",
           "scalars": []
         }
@@ -20556,14 +20556,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 115,
+          "line": 114,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 135,
+          "line": 134,
           "prop": "border-radius",
           "scalars": []
         }
@@ -20582,7 +20582,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 305,
+          "line": 304,
           "prop": "margin-inline-end",
           "scalars": []
         }
@@ -20601,7 +20601,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 103,
+          "line": 102,
           "prop": "z-index",
           "scalars": []
         }
@@ -20620,7 +20620,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 72,
+          "line": 71,
           "prop": "background",
           "scalars": []
         }
@@ -20639,7 +20639,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 74,
+          "line": 73,
           "prop": "border",
           "scalars": []
         }
@@ -20658,7 +20658,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 73,
+          "line": 72,
           "prop": "color",
           "scalars": []
         }
@@ -20677,7 +20677,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 70,
+          "line": 69,
           "prop": "padding",
           "scalars": []
         }
@@ -20696,7 +20696,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 71,
+          "line": 70,
           "prop": "border-radius",
           "scalars": []
         }
@@ -20715,7 +20715,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 75,
+          "line": 74,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -20734,7 +20734,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 65,
+          "line": 64,
           "prop": "z-index",
           "scalars": []
         }
@@ -78022,21 +78022,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 72,
+          "line": 71,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 112,
+          "line": 111,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 132,
+          "line": 131,
           "prop": "background",
           "scalars": []
         },
@@ -93800,49 +93800,49 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 74,
+          "line": 73,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 114,
+          "line": 113,
           "prop": "border-inline-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 134,
+          "line": 133,
           "prop": "border-inline-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 159,
+          "line": 158,
           "prop": "border-block-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 196,
+          "line": 195,
           "prop": "border-block-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 239,
+          "line": 238,
           "prop": "border-block-start",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 297,
+          "line": 296,
           "prop": "border-block-end",
           "scalars": []
         },
@@ -103645,14 +103645,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 470,
+          "line": 469,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 478,
+          "line": 477,
           "prop": "background",
           "scalars": []
         },
@@ -104288,7 +104288,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 478,
+          "line": 477,
           "prop": "background",
           "scalars": []
         },
@@ -114493,14 +114493,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 94,
+          "line": 93,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 487,
+          "line": 486,
           "prop": "outline",
           "scalars": []
         },
@@ -137725,14 +137725,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 73,
+          "line": 72,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 177,
+          "line": 176,
           "prop": "color",
           "scalars": []
         },
@@ -185930,14 +185930,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 75,
+          "line": 74,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 388,
+          "line": 387,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -186398,7 +186398,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 136,
+          "line": 135,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -193064,14 +193064,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 94,
+          "line": 93,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 487,
+          "line": 486,
           "prop": "outline",
           "scalars": []
         },
@@ -193826,14 +193826,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 95,
+          "line": 94,
           "prop": "outline-offset",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 488,
+          "line": 487,
           "prop": "outline-offset",
           "scalars": []
         },
@@ -194755,14 +194755,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 93,
+          "line": 92,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 486,
+          "line": 485,
           "prop": "outline",
           "scalars": []
         },
@@ -231452,14 +231452,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 300,
+          "line": 299,
           "prop": "backdrop-filter",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 301,
+          "line": 300,
           "prop": "-webkit-backdrop-filter",
           "scalars": []
         },
@@ -231495,14 +231495,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 295,
+          "line": 294,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 507,
+          "line": 506,
           "prop": "background",
           "scalars": []
         },
@@ -231544,7 +231544,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 297,
+          "line": 296,
           "prop": "border-block-end",
           "scalars": []
         },
@@ -263939,14 +263939,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 42,
+          "line": 41,
           "prop": "--ds-shell-resolved-main-transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 111,
+          "line": 110,
           "prop": "transition",
           "scalars": []
         },
@@ -267145,14 +267145,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 459,
+          "line": 458,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 460,
+          "line": 459,
           "prop": "transition",
           "scalars": []
         },
@@ -270654,14 +270654,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 459,
+          "line": 458,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 460,
+          "line": 459,
           "prop": "transition",
           "scalars": []
         },
@@ -274075,14 +274075,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 459,
+          "line": 458,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 460,
+          "line": 459,
           "prop": "transition",
           "scalars": []
         },
@@ -276669,14 +276669,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 42,
+          "line": 41,
           "prop": "--ds-shell-resolved-main-transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 111,
+          "line": 110,
           "prop": "transition",
           "scalars": []
         },
@@ -276959,14 +276959,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 42,
+          "line": 41,
           "prop": "--ds-shell-resolved-main-transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 111,
+          "line": 110,
           "prop": "transition",
           "scalars": []
         },
@@ -301937,7 +301937,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 387,
+          "line": 386,
           "prop": "border-radius",
           "scalars": []
         },
@@ -304465,14 +304465,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 71,
+          "line": 70,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 457,
+          "line": 456,
           "prop": "border-radius",
           "scalars": []
         },
@@ -330165,14 +330165,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 265,
+          "line": 264,
           "prop": "padding-block-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 409,
+          "line": 408,
           "prop": "--ds-shell-main-padding-block-end",
           "decl": "--ds-shell-main-padding-block-end: max( var(--ds-shell-bottom-inset), calc(50px + env(safe-area-inset-bottom, 0px)) )",
           "scalars": []
@@ -330203,14 +330203,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 42,
+          "line": 41,
           "prop": "--ds-shell-resolved-main-transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 111,
+          "line": 110,
           "prop": "transition",
           "scalars": []
         },
@@ -330367,14 +330367,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 295,
+          "line": 294,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 507,
+          "line": 506,
           "prop": "background",
           "scalars": []
         }
@@ -330411,7 +330411,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/structures/shell/contracts/index.ts",
-          "line": 136,
+          "line": 134,
           "prop": "headerBlockSize",
           "scalars": []
         }
@@ -330432,7 +330432,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 296,
+          "line": 295,
           "prop": "border",
           "scalars": []
         }
@@ -330453,7 +330453,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 297,
+          "line": 296,
           "prop": "border-block-end",
           "scalars": []
         }
@@ -330486,7 +330486,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 285,
+          "line": 284,
           "prop": "inset-block-start",
           "scalars": []
         }
@@ -330507,7 +330507,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 286,
+          "line": 285,
           "prop": "inset-inline",
           "scalars": []
         }
@@ -330528,7 +330528,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 291,
+          "line": 290,
           "prop": "padding-inline",
           "scalars": []
         }
@@ -330549,7 +330549,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 298,
+          "line": 297,
           "prop": "border-radius",
           "scalars": []
         }
@@ -330570,23 +330570,11 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 299,
+          "line": 298,
           "prop": "box-shadow",
           "scalars": []
         }
       ]
-    },
-    {
-      "channel": "--ds-shell-inline-end-inset",
-      "kind": "ds",
-      "declaredIn": [
-        "src/components/structures/shell/app-shell/index.tsx",
-        "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
-      ],
-      "planes": [],
-      "paints": false,
-      "paintsInModern": false,
-      "readers": []
     },
     {
       "channel": "--ds-shell-inline-start-inset",
@@ -330604,14 +330592,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 102,
+          "line": 101,
           "prop": "width",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 255,
+          "line": 254,
           "prop": "margin-inline-start",
           "scalars": []
         }
@@ -330632,7 +330620,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 264,
+          "line": 263,
           "prop": "padding-block-end",
           "scalars": []
         }
@@ -330653,7 +330641,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 262,
+          "line": 261,
           "prop": "padding-block-start",
           "scalars": []
         }
@@ -330674,7 +330662,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 268,
+          "line": 267,
           "prop": "padding-inline-end",
           "scalars": []
         }
@@ -330695,7 +330683,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 267,
+          "line": 266,
           "prop": "padding-inline-start",
           "scalars": []
         }
@@ -330714,7 +330702,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/structures/shell/app-shell/index.tsx",
-          "line": 378,
+          "line": 377,
           "prop": "none",
           "scalars": []
         }
@@ -330735,7 +330723,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 213,
+          "line": 212,
           "prop": "padding",
           "decl": "padding: var( --ds-shell-navigation-body-padding, var( --ds-app-shell-navigation-body-padding, var( --ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px) ) ) )",
           "scalars": []
@@ -330757,14 +330745,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 113,
+          "line": 112,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 133,
+          "line": 132,
           "prop": "border",
           "scalars": []
         }
@@ -330785,14 +330773,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 114,
+          "line": 113,
           "prop": "border-inline-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 134,
+          "line": 133,
           "prop": "border-inline-end",
           "scalars": []
         }
@@ -330813,7 +330801,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 237,
+          "line": 236,
           "prop": "padding",
           "scalars": []
         }
@@ -330834,7 +330822,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 193,
+          "line": 192,
           "prop": "padding",
           "scalars": []
         }
@@ -330855,14 +330843,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 115,
+          "line": 114,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 135,
+          "line": 134,
           "prop": "border-radius",
           "scalars": []
         }
@@ -330881,14 +330869,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 116,
+          "line": 115,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 136,
+          "line": 135,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -330911,14 +330899,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 124,
+          "line": 123,
           "prop": "width",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/structures/shell/app-shell/index.tsx",
-          "line": 445,
+          "line": 444,
           "prop": "width",
           "scalars": []
         }
@@ -330940,7 +330928,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 256,
+          "line": 255,
           "prop": "transition",
           "scalars": []
         }
@@ -330962,7 +330950,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 188,
+          "line": 187,
           "prop": "height",
           "scalars": []
         }
@@ -330984,7 +330972,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 150,
+          "line": 149,
           "prop": "min-height",
           "scalars": []
         }
@@ -331006,7 +330994,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 110,
+          "line": 109,
           "prop": "padding-block-end",
           "scalars": []
         }
@@ -331037,7 +331025,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 64,
+          "line": 63,
           "prop": "inset-inline-start",
           "decl": "inset-inline-start: calc(var(--ds-shell-safe-area-left) + var(--ds-spacing-3, 12px))",
           "scalars": []
@@ -331045,21 +331033,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 108,
+          "line": 107,
           "prop": "padding-inline-start",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 279,
+          "line": 278,
           "prop": "--ds-shell-main-padding-inline-start",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 442,
+          "line": 441,
           "prop": "--ds-shell-main-padding-inline-end",
           "scalars": []
         },
@@ -331087,8 +331075,7 @@
         "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
       ],
       "planes": [
-        "presentation-css",
-        "tsx-inline-stamp"
+        "presentation-css"
       ],
       "paints": true,
       "paintsInModern": true,
@@ -331096,36 +331083,22 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 40,
-          "prop": "--ds-shell-inline-end-inset",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 253,
+          "line": 252,
           "prop": "--ds-shell-main-padding-inline-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 439,
+          "line": 438,
           "prop": "padding-inline-start",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 445,
+          "line": 444,
           "prop": "--ds-shell-main-padding-inline-start",
-          "scalars": []
-        },
-        {
-          "plane": "tsx-inline-stamp",
-          "file": "src/components/structures/shell/app-shell/index.tsx",
-          "line": 366,
-          "prop": "--ds-shell-inline-end-inset",
           "scalars": []
         }
       ]
@@ -331156,7 +331129,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 63,
+          "line": 62,
           "prop": "inset-block-start",
           "decl": "inset-block-start: calc(var(--ds-shell-safe-area-top) + var(--ds-spacing-3, 12px))",
           "scalars": []
@@ -331164,21 +331137,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 109,
+          "line": 108,
           "prop": "padding-block-start",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 275,
+          "line": 274,
           "prop": "--ds-shell-main-padding-block-start",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 290,
+          "line": 289,
           "prop": "padding-block-start",
           "scalars": []
         },
@@ -331282,7 +331255,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/structures/shell/contracts/index.ts",
-          "line": 135,
+          "line": 133,
           "prop": "sidebarCollapsedWidth",
           "scalars": []
         }
@@ -331304,21 +331277,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 48,
+          "line": 47,
           "prop": "--ds-shell-resolved-sidebar-header-block-size",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 52,
+          "line": 51,
           "prop": "--ds-shell-resolved-sidebar-header-min-block-size",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/components/structures/shell/contracts/index.ts",
-          "line": 138,
+          "line": 136,
           "prop": "sidebarHeaderBlockSize",
           "scalars": []
         }
@@ -331348,14 +331321,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 44,
+          "line": 43,
           "prop": "--ds-shell-resolved-drawer-inline-size",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/components/structures/shell/contracts/index.ts",
-          "line": 133,
+          "line": 131,
           "prop": "sidebarWidth",
           "scalars": []
         }
@@ -331377,7 +331350,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 288,
+          "line": 287,
           "prop": "height",
           "scalars": []
         }
@@ -331412,7 +331385,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/structures/shell/contracts/index.ts",
-          "line": 136,
+          "line": 134,
           "prop": "headerBlockSize",
           "scalars": []
         },
@@ -332427,21 +332400,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 112,
+          "line": 111,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 132,
+          "line": 131,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 238,
+          "line": 237,
           "prop": "background",
           "scalars": []
         },
@@ -332477,35 +332450,35 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 114,
+          "line": 113,
           "prop": "border-inline-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 134,
+          "line": 133,
           "prop": "border-inline-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 159,
+          "line": 158,
           "prop": "border-block-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 196,
+          "line": 195,
           "prop": "border-block-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 239,
+          "line": 238,
           "prop": "border-block-start",
           "scalars": []
         },
@@ -332583,7 +332556,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/structures/shell/contracts/index.ts",
-          "line": 135,
+          "line": 133,
           "prop": "sidebarCollapsedWidth",
           "scalars": []
         },
@@ -332619,7 +332592,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 238,
+          "line": 237,
           "prop": "background",
           "scalars": []
         },
@@ -332787,21 +332760,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 49,
+          "line": 48,
           "prop": "--ds-shell-resolved-sidebar-header-block-size",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 52,
+          "line": 51,
           "prop": "--ds-shell-resolved-sidebar-header-min-block-size",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/components/structures/shell/contracts/index.ts",
-          "line": 138,
+          "line": 136,
           "prop": "sidebarHeaderBlockSize",
           "scalars": []
         },
@@ -333115,7 +333088,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 231,
+          "line": 230,
           "prop": "padding",
           "scalars": []
         },
@@ -333168,7 +333141,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 217,
+          "line": 216,
           "prop": "padding",
           "decl": "padding: var( --ds-shell-navigation-body-padding, var( --ds-app-shell-navigation-body-padding, var( --ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px) ) ) )",
           "scalars": []
@@ -333533,14 +333506,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 44,
+          "line": 43,
           "prop": "--ds-shell-resolved-drawer-inline-size",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/components/structures/shell/contracts/index.ts",
-          "line": 133,
+          "line": 131,
           "prop": "sidebarWidth",
           "scalars": []
         },
@@ -340072,14 +340045,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 324,
+          "line": 323,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 367,
+          "line": 366,
           "prop": "--ds-sidebar-item-gap",
           "scalars": []
         },
@@ -345275,22 +345248,30 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 231,
+          "line": 230,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 244,
+          "line": 243,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 359,
+          "line": 358,
           "prop": "--ds-sidebar-item-gap",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
+          "line": 368,
+          "prop": "--ds-sidebar-shell-padding-inline",
+          "decl": "--ds-sidebar-shell-padding-inline: var(--ds-spacing-2) var(--ds-spacing-2) calc(var(--ds-spacing-2) + 28px) var(--ds-spacing-2)",
           "scalars": []
         },
         {
@@ -345304,15 +345285,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 370,
-          "prop": "--ds-sidebar-shell-padding-inline",
-          "decl": "--ds-sidebar-shell-padding-inline: var(--ds-spacing-2) var(--ds-spacing-2) calc(var(--ds-spacing-2) + 28px) var(--ds-spacing-2)",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 389,
+          "line": 388,
           "prop": "margin",
           "scalars": []
         },
@@ -349268,7 +349241,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 63,
+          "line": 62,
           "prop": "inset-block-start",
           "decl": "inset-block-start: calc(var(--ds-shell-safe-area-top) + var(--ds-spacing-3, 12px))",
           "scalars": []
@@ -349276,7 +349249,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 64,
+          "line": 63,
           "prop": "inset-inline-start",
           "decl": "inset-inline-start: calc(var(--ds-shell-safe-area-left) + var(--ds-spacing-3, 12px))",
           "scalars": []
@@ -349284,15 +349257,23 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 155,
+          "line": 154,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 156,
+          "line": 155,
           "prop": "padding",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
+          "line": 217,
+          "prop": "padding",
+          "decl": "padding: var( --ds-shell-navigation-body-padding, var( --ds-app-shell-navigation-body-padding, var( --ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px) ) ) )",
           "scalars": []
         },
         {
@@ -349306,43 +349287,35 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 219,
-          "prop": "padding",
-          "decl": "padding: var( --ds-shell-navigation-body-padding, var( --ds-app-shell-navigation-body-padding, var( --ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px) ) ) )",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 231,
+          "line": 230,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 237,
+          "line": 236,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 244,
+          "line": 243,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 305,
+          "line": 304,
           "prop": "margin-inline-end",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 358,
+          "line": 357,
           "prop": "--ds-sidebar-item-padding-inline",
           "scalars": []
         },
@@ -353106,14 +353079,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 70,
+          "line": 69,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 361,
+          "line": 360,
           "prop": "--ds-sidebar-shell-padding-inline",
           "decl": "--ds-sidebar-shell-padding-inline: var(--ds-spacing-4) var(--ds-spacing-4) calc(var(--ds-spacing-4) + 28px) var(--ds-spacing-4)",
           "scalars": []
@@ -353121,7 +353094,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 362,
+          "line": 361,
           "prop": "--ds-sidebar-shell-padding-inline",
           "decl": "--ds-sidebar-shell-padding-inline: var(--ds-spacing-4) var(--ds-spacing-4) calc(var(--ds-spacing-4) + 28px) var(--ds-spacing-4)",
           "scalars": []
@@ -354871,14 +354844,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 156,
+          "line": 155,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 193,
+          "line": 192,
           "prop": "padding",
           "scalars": []
         },
@@ -356272,7 +356245,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 225,
+          "line": 224,
           "prop": "scroll-padding-block-end",
           "decl": "scroll-padding-block-end: var( --ds-app-shell-navigation-body-scroll-padding-block-end, calc(var(--ds-spacing-6, 24px) + 76px) )",
           "scalars": []
@@ -356280,7 +356253,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 291,
+          "line": 290,
           "prop": "padding-inline",
           "scalars": []
         },
@@ -368109,21 +368082,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 57,
+          "line": 56,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 295,
+          "line": 294,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 507,
+          "line": 506,
           "prop": "background",
           "scalars": []
         },
@@ -376956,14 +376929,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 112,
+          "line": 111,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 132,
+          "line": 131,
           "prop": "background",
           "scalars": []
         },
@@ -422880,7 +422853,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 45,
+          "line": 44,
           "prop": "--ds-shell-resolved-drawer-inline-size",
           "scalars": []
         },
@@ -422929,7 +422902,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/structures/shell/app-shell/index.tsx",
-          "line": 441,
+          "line": 440,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -426417,7 +426390,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 103,
+          "line": 102,
           "prop": "z-index",
           "scalars": []
         },
@@ -427263,7 +427236,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 65,
+          "line": 64,
           "prop": "z-index",
           "scalars": []
         },
@@ -427321,7 +427294,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 287,
+          "line": 286,
           "prop": "z-index",
           "scalars": []
         },

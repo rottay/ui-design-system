@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { packageRoot as findPackageRoot } from '../../../../../../libraries/repo-root/index.mjs';
-import { adjudicatedAliveNames } from '../../index.mjs';
+import { adjudicatedAliveNames, buildReport, verifyKeepLiveClaims } from '../../index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
@@ -53,6 +53,50 @@ test('drill: a NEW dead writer fails the decrease-only gate', () => {
   const { status, out } = run('--check=dead', '--drill=dead-growth');
   assert.notEqual(status, 0);
   assert.match(out, /NEW dead writer/);
+});
+
+test('drill: a KEEP_LIVE whose named app file does not read the channel fails the dead arm', () => {
+  const { status, out } = run('--check=dead', '--drill=keep-live-unread');
+  assert.notEqual(status, 0);
+  assert.match(out, /--ds-drill-keep-live-unread — .* does not read it/);
+  assert.match(out, /--ds-drill-keep-live-unread — claims 1 app read\(s\), measured 0/);
+});
+
+test('drill: a KEEP_LIVE whose declared read count drifts from the measured one fails the dead arm', () => {
+  const { status, out } = run('--check=dead', '--drill=keep-live-count');
+  assert.notEqual(status, 0);
+  assert.match(out, /adjudication: --ds-[a-z0-9-]+ — claims \d+ app read\(s\), measured \d+/);
+});
+
+test('planted: KEEP_LIVE claims are measured, and an absent app checkout fails closed', () => {
+  const claim = { name: '--ds-planted', decision: 'KEEP_LIVE_APP_CONSUMER', readers: { apps: 1, appFiles: ['app-nowhere/src/a.css'] } };
+  const missing = verifyKeepLiveClaims([claim], { resolveRoot: () => join(ROOT, 'does-not-exist') });
+  assert.equal(missing.length, 1);
+  assert.match(missing[0], /app-nowhere is not checked out/);
+  const noVerifier = verifyKeepLiveClaims([{ name: '--ds-planted', decision: 'KEEP_LIVE_JS_CONSUMER', readers: {} }]);
+  assert.match(noVerifier[0], /has no reader verifier/);
+  assert.deepEqual(verifyKeepLiveClaims([{ name: '--ds-planted', decision: 'EXECUTED_DEFECT_FIX' }]), []);
+});
+
+test('scope: a writer read only in showroom is live, and the showroom leg is what keeps it live', () => {
+  const { report: real } = buildReport();
+  const { report: blind } = buildReport({ drill: 'showroom-blind' });
+  const showroomOnly = Object.keys(real.rows).filter((name) => {
+    const row = real.rows[name];
+    return row.writer && row.status === 'active' && row.reads.css === 0 && row.reads.ts === 0 && row.reads.showroom > 0;
+  });
+  assert.ok(showroomOnly.length > 0, 'positive control: the tree has writers read only in showroom');
+  const realDead = new Set(real.deadWriters);
+  const blindDead = new Set(blind.deadWriters);
+  for (const name of showroomOnly) {
+    assert.ok(!realDead.has(name), `${name}: read in showroom, so not dead`);
+    assert.notEqual(blind.rows[name].status, 'active', `${name}: without the showroom leg nothing reads it`);
+  }
+  assert.ok(showroomOnly.some((name) => blindDead.has(name)), 'at least one showroom-only reader turns dead when showroom is not read');
+  for (const name of real.deadWriters) {
+    const row = real.rows[name];
+    assert.equal(row.reads.css + row.reads.ts + row.reads.showroom, 0, `${name}: a dead writer is read nowhere in the corpus`);
+  }
 });
 
 /**
@@ -127,8 +171,8 @@ test('the real registries: the key reading strictly dominates the name-only read
     walkNameOnly(document);
     for (const name of adjudicatedAliveNames(document)) keyed.add(name);
   }
-  assert.equal(nameOnly.size, 13, 'the rows that carry a name field');
-  assert.equal(keyed.size, 34, 'every adjudicated-live row, however it is addressed');
+  assert.equal(nameOnly.size, 14, 'the rows that carry a name field');
+  assert.equal(keyed.size, 35, 'every adjudicated-live row, however it is addressed');
   for (const name of nameOnly) assert.ok(keyed.has(name), `${name}: the key reading must not lose a named row`);
   // A named 301-era row, so this cannot pass on an empty registry.
   assert.ok(keyed.has('--ds-input-placeholder'), 'the EXECUTED_DEFECT_FIX row that had been inert since it was written');

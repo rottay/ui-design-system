@@ -84,6 +84,13 @@ export const WIDENINGS = Object.freeze([
       'F-75: `maxSourceBytes` was raised once by name for the conn2 lot (+226 measured bytes on ./runtime/tenant-theme). '
       + 'The record is kept verbatim rather than rewritten; what is closed here is the next silent one.',
   },
+  {
+    id: 'customization-dead-writers',
+    owner: 'foundation/kernel/typography (withArabicSafeFallback reads var(--ds-font-pack-arabic-text))',
+    reason:
+      'C12 (DT ruling, documented-reason door as in fe9a0ab42): --ds-font-pack-arabic-text admitted by name with declared debt; '
+      + 'dead until the kernel arabic-safe tail reads var(), pending in f56c64974. Closes when the name leaves the anchor.',
+  },
 ]);
 
 /**
