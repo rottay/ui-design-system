@@ -37410,22 +37410,22 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-checkbox.ds-checkbox--modern[data-color='secondary'][data-active='true'] [data-part='box'] {
   border-color: var(--ds-checkbox-secondary-bg, var(--ds-color-secondary));
   background-color: var(--ds-checkbox-secondary-bg, var(--ds-color-secondary));
-  color: var(--ds-checkbox-secondary-check);
+  color: var(--ds-checkbox-secondary-check, var(--ds-color-text-on-primary));
 }
 .ds-checkbox.ds-checkbox--modern[data-color='success'][data-active='true'] [data-part='box'] {
   border-color: var(--ds-checkbox-success-bg, var(--ds-color-success));
   background-color: var(--ds-checkbox-success-bg, var(--ds-color-success));
-  color: var(--ds-checkbox-success-check);
+  color: var(--ds-checkbox-success-check, var(--ds-color-on-success));
 }
 .ds-checkbox.ds-checkbox--modern[data-color='warning'][data-active='true'] [data-part='box'] {
   border-color: var(--ds-checkbox-warning-bg, var(--ds-color-warning));
   background-color: var(--ds-checkbox-warning-bg, var(--ds-color-warning));
-  color: var(--ds-checkbox-warning-check);
+  color: var(--ds-checkbox-warning-check, var(--ds-color-on-warning));
 }
 .ds-checkbox.ds-checkbox--modern[data-color='error'][data-active='true'] [data-part='box'] {
   border-color: var(--ds-checkbox-error-bg, var(--ds-color-error));
   background-color: var(--ds-checkbox-error-bg, var(--ds-color-error));
-  color: var(--ds-checkbox-error-check);
+  color: var(--ds-checkbox-error-check, var(--ds-color-on-error));
 }
 
 /* Error frame: an unchecked box in an error field announces the problem on

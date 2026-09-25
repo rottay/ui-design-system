@@ -48,9 +48,9 @@
     "channelsWithoutReaders": 198,
     "channelsPaintsFalse": 942,
     "channelsPaintsInModernFalse": 2010,
-    "readers": 42176,
+    "readers": 42180,
     "readersByPlane": {
-      "modern-skin-css": 16318,
+      "modern-skin-css": 16322,
       "presentation-css": 12087,
       "foundation-css": 1686,
       "runtime-css": 192,
@@ -107637,6 +107637,13 @@
         },
         {
           "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "line": 172,
+          "prop": "color",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "line": 178,
           "prop": "color",
@@ -107854,6 +107861,13 @@
         },
         {
           "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "line": 162,
+          "prop": "color",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery/index.css",
           "line": 174,
           "prop": "color",
@@ -107930,6 +107944,13 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/badge/index.css",
           "line": 408,
           "prop": "--ds-badge-tone-solid-color",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "line": 167,
+          "prop": "color",
           "scalars": []
         },
         {
@@ -133579,6 +133600,13 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
           "line": 80,
+          "prop": "color",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "line": 157,
           "prop": "color",
           "scalars": []
         },
