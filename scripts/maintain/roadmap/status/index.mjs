@@ -3418,16 +3418,26 @@ export function programIndicatorLines(
 }
 
 /**
- * Family acceptance, read from the governance manifest's own rollups.
+ * The sealed manifest the family-acceptance block cites, labelled the way
+ * program-state labels its historical figures: a date and a sealing commit.
+ */
+export const SEALED_FAMILY_ACCEPTANCE = Object.freeze({
+  source: "docs/history/inventories/customization-manifest/index.json",
+  asOf: "2026-09-19 (sealed)",
+  sealedBy: "f66b1bd45",
+});
+
+/**
+ * Family acceptance, read from the sealed manifest's own rollups.
  *
  * The historical Modern Rescue manifest is evidence, not runtime truth: the
  * runtime chain is typed catalog -> family derivators -> roles/adapters ->
  * emitter. This block republishes the manifest's sealed adjudication so the
- * 0/255 figure stays visible rather than quietly retired, and states which
- * work order owns family acceptance from here.
+ * figure stays visible rather than quietly retired, and states which work
+ * order owns family acceptance from here.
  */
 export function readFamilyAcceptance(
-  manifestPath = path.join(ROOT, "docs/history/inventories/customization-manifest/index.json"),
+  manifestPath = path.join(ROOT, SEALED_FAMILY_ACCEPTANCE.source),
 ) {
   if (!fs.existsSync(manifestPath)) {
     return { measured: false, reason: "the governance manifest is not in this checkout" };
@@ -3456,7 +3466,7 @@ export function readFamilyAcceptance(
 
 /** The STATUS block for family acceptance, as lines. */
 export function familyAcceptanceLines(acceptance) {
-  const lines = ["## Family acceptance — the sealed Modern Rescue adjudication", ""];
+  const lines = [`## Family acceptance — the sealed Modern Rescue adjudication (as of ${SEALED_FAMILY_ACCEPTANCE.asOf})`, ""];
   if (!acceptance.measured) {
     lines.push(`NOT MEASURED — ${acceptance.reason}.`);
     lines.push("");
@@ -3465,7 +3475,8 @@ export function familyAcceptanceLines(acceptance) {
   lines.push(
     `**${acceptance.accepted}/${acceptance.families} families accepted** — ${acceptance.assessedNotElevated} assessed and not elevated, ` +
       `${acceptance.unreviewed} unreviewed, ${acceptance.blockedOwnerDecision} blocked on an owner decision. ` +
-      `Read live from \`docs/history/inventories/customization-manifest/index.json\` (${acceptance.controlFamilyCells} control x family cells).`,
+      `Recorded by the sealed manifest (\`${SEALED_FAMILY_ACCEPTANCE.source}\`, sealed by ${SEALED_FAMILY_ACCEPTANCE.sealedBy}; ` +
+      `${acceptance.controlFamilyCells} control x family cells). No command produces these any more; they describe the programme at the seal, not now.`,
   );
   lines.push("");
   lines.push(

@@ -20,6 +20,7 @@ import {
   programIndicatorLines,
   publishedIndicatorFreshnessErrors,
   readFamilyAcceptance,
+  SEALED_FAMILY_ACCEPTANCE,
   readProgramIndicatorMeasurement,
   reassignInProgressWorkOrder,
   reopenWorkOrder,
@@ -2446,6 +2447,9 @@ test("family acceptance republishes the manifest's own rollup and never elevates
   assert.ok(lines.includes(`${acceptance.accepted}/${acceptance.families} families accepted`));
   assert.match(lines, /SEALED/);
   assert.match(lines, /historical evidence, not runtime truth/);
+  assert.ok(lines.includes(`(as of ${SEALED_FAMILY_ACCEPTANCE.asOf})`), "the block carries the seal's date");
+  assert.ok(lines.includes(`Recorded by the sealed manifest (\`${SEALED_FAMILY_ACCEPTANCE.source}\`, sealed by ${SEALED_FAMILY_ACCEPTANCE.sealedBy}`));
+  assert.equal(/Read live/i.test(lines), false, "a sealed figure is never labelled as a live read");
   assert.match(lines, /WO-FAM-00/);
 });
 

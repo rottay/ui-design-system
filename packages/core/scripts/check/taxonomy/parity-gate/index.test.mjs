@@ -33,6 +33,7 @@ import {
   CANONICAL_LAYERS,
 } from './index.mjs';
 import {
+  REPO_SCANNED_ROOTS as SEAL_REPO_SCANNED_ROOTS,
   SCANNED_ROOTS as SEAL_SCANNED_ROOTS,
   SEAL_READERS,
   SEAL_ROOT_REL,
@@ -960,25 +961,31 @@ test('the retirement record states the last live divergence and matches the live
   for (const id of census.sealedOnly) assert.equal(liveIds.has(id), false, `${id} is folded into its surviving family`);
 });
 
-function copyScannedRoots(box) {
+function copyScannedRoots(box, repo) {
   for (const root of SEAL_SCANNED_ROOTS) {
     const from = path.join(CORE_FOR_FENCE, root);
     if (fs.existsSync(from)) fs.cpSync(from, path.join(box, root), { recursive: true });
   }
+  for (const root of SEAL_REPO_SCANNED_ROOTS) {
+    const from = path.join(REPO_ROOT_FOR_FENCE, root);
+    if (fs.existsSync(from)) fs.cpSync(from, path.join(repo, root), { recursive: true });
+  }
+  fs.copyFileSync(path.join(REPO_ROOT_FOR_FENCE, 'pnpm-workspace.yaml'), path.join(repo, 'pnpm-workspace.yaml'));
 }
 
 function fenceSandbox(mutate, options = {}) {
-  const box = fs.mkdtempSync(path.join(os.tmpdir(), 'seal-fence-'));
+  const repo = fs.mkdtempSync(path.join(os.tmpdir(), 'seal-fence-'));
+  const box = path.join(repo, 'packages/core');
   try {
-    copyScannedRoots(box);
-    const write = (rel, text) => {
-      fs.mkdirSync(path.dirname(path.join(box, rel)), { recursive: true });
-      fs.writeFileSync(path.join(box, rel), text);
+    copyScannedRoots(box, repo);
+    const writeUnder = (root) => (rel, text) => {
+      fs.mkdirSync(path.dirname(path.join(root, rel)), { recursive: true });
+      fs.writeFileSync(path.join(root, rel), text);
     };
-    mutate({ box, write });
-    return collectSealFenceFindings({ coreRoot: box, ...options });
+    mutate({ box, repo, write: writeUnder(box), writeRepo: writeUnder(repo) });
+    return collectSealFenceFindings({ coreRoot: box, repoRoot: repo, ...options });
   } finally {
-    fs.rmSync(box, { recursive: true, force: true });
+    fs.rmSync(repo, { recursive: true, force: true });
   }
 }
 
@@ -1025,6 +1032,116 @@ test('FENCE DRILL: a blocking gate that reads the family slice of the seal fails
   const advisoryFindings = fenceSandbox(plant, { readers, gates: gate(false) });
   assert.ok(blockingFindings.some((finding) => finding.startsWith('blocking gate planted-family-gate')), blockingFindings.join('\n'));
   assert.equal(advisoryFindings.some((finding) => finding.startsWith('blocking gate planted-family-gate')), false);
+});
+
+test('FENCE DRILL: importing a seal-path constant reads the seal, in every import form', () => {
+  const program = "'../../orchestration/public/program-state/index.mjs'";
+  const forms = [
+    `import { MANIFEST_INDEX_PATH } from ${program};\nexport default MANIFEST_INDEX_PATH;\n`,
+    `import { MANIFEST_INDEX_PATH as sealed } from ${program};\nexport default sealed;\n`,
+    `import * as state from ${program};\nexport default state.MANIFEST_INDEX_PATH;\n`,
+    `export async function read() {\n  const { MANIFEST_INDEX_PATH } = await import(${program});\n  return MANIFEST_INDEX_PATH;\n}\n`,
+  ];
+  for (const text of forms) {
+    const findings = fenceSandbox(({ write }) => write('scripts/check/planted/importer/index.mjs', text));
+    assert.ok(
+      findings.some((finding) => finding.startsWith('scripts/check/planted/importer/index.mjs reads the sealed customization manifest')
+        && finding.includes('through MANIFEST_INDEX_PATH from scripts/check/orchestration/public/program-state/index.mjs')),
+      `${text}\n${findings.join('\n')}`,
+    );
+  }
+});
+
+test('FENCE DRILL: a seal-path constant re-derived by an importer carries the read one more hop', () => {
+  const findings = fenceSandbox(({ write }) => {
+    write('scripts/check/planted/relay/index.mjs',
+      "import { MANIFEST_INDEX_PATH } from '../../orchestration/public/program-state/index.mjs';\nexport const RELAYED = `${MANIFEST_INDEX_PATH}#rollups`;\n");
+    write('scripts/check/planted/consumer/index.mjs',
+      "import { RELAYED } from '../relay/index.mjs';\nexport default RELAYED;\n");
+  });
+  assert.ok(
+    findings.some((finding) => finding.startsWith('scripts/check/planted/consumer/index.mjs reads the sealed customization manifest')
+      && finding.includes('through RELAYED from scripts/check/planted/relay/index.mjs')),
+    findings.join('\n'),
+  );
+});
+
+test('FENCE DRILL: importing a constant that does not resolve the seal is not a read', () => {
+  const findings = fenceSandbox(({ write }) => {
+    write('scripts/check/planted/importer/index.mjs',
+      "import { DEFAULT_TARGET } from '../../orchestration/public/program-state/index.mjs';\nexport default DEFAULT_TARGET;\n");
+  });
+  assert.deepEqual(findings, []);
+});
+
+/** A planted seal-naming module, listed so the drill isolates whether its constant seeds an importer. */
+function seedProbe(constantText) {
+  const source = 'scripts/check/planted/source/index.mjs';
+  const importer = 'scripts/check/planted/importer/index.mjs';
+  const readers = [...SEAL_READERS, { path: source, slice: 'drill', reason: 'planted by the fence drill to decide whether one exported constant is a seal-path constant' }];
+  const findings = fenceSandbox(({ write }) => {
+    write(source, `${constantText}\nexport const MARK = '${SEAL_ROOT_REL}/index.json';\n`);
+    write(importer, "import { PROBE } from '../source/index.mjs';\nexport default PROBE;\n");
+  }, { readers });
+  return findings.filter((finding) => finding.startsWith(`${importer} reads the sealed customization manifest`));
+}
+
+test('FENCE DRILL: the whole initializer is read, past an inner line that ends in a semicolon', () => {
+  const flagged = seedProbe([
+    'export const PROBE = {',
+    '  first() {',
+    '    return 1;',
+    '  },',
+    `  path: '${SEAL_ROOT_REL}/index.json',`,
+    '};',
+  ].join('\n'));
+  assert.equal(flagged.length, 1, 'a seal path after an inner `;` line still seeds the constant');
+  assert.ok(flagged[0].includes('through PROBE from scripts/check/planted/source/index.mjs'), flagged[0]);
+});
+
+test('FENCE DRILL: a seal path that sits only in a comment inside the initializer is not a read', () => {
+  const flagged = seedProbe([
+    'export const PROBE = [',
+    `  // formerly '${SEAL_ROOT_REL}/index.json'`,
+    `  /* and '${SEAL_ROOT_REL}/families' */`,
+    "  'governance/manifest/cascade',",
+    '];',
+  ].join('\n'));
+  assert.deepEqual(flagged, []);
+});
+
+test('FENCE DRILL: prose and identifiers that mention the seal are not a read', () => {
+  const flagged = seedProbe([
+    'export const PROBE = {',
+    `  reason: 'this gate was quarantined to ${SEAL_ROOT_REL} as sealed evidence',`,
+    "  id: 'modern-rescue-customization-manifest-freshness',",
+    '};',
+  ].join('\n'));
+  assert.deepEqual(flagged, []);
+});
+
+test('FENCE DRILL: a seal path literal nested deep in the initializer seeds the constant', () => {
+  const flagged = seedProbe(
+    `export const PROBE = { cells: { roots: [['${SEAL_ROOT_REL}/families', 'x'].join('/')] } };`,
+  );
+  assert.equal(flagged.length, 1, 'a nested path-shaped literal seeds');
+  const segments = seedProbe("export const PROBE = ['docs', 'history', 'inventories', 'customization-manifest', 'controls'];");
+  assert.equal(segments.length, 1, 'the seal folder as a path segment seeds');
+});
+
+test('FENCE DRILL: the repository root scripts/ is scanned beside the package', () => {
+  const findings = fenceSandbox(({ writeRepo }) => {
+    writeRepo('scripts/maintain/planted/index.mjs', `export const root = '${SEAL_ROOT_REL}/index.json';\n`);
+  });
+  assert.ok(
+    findings.some((finding) => finding.startsWith('../../scripts/maintain/planted/index.mjs reads the sealed customization manifest')),
+    findings.join('\n'),
+  );
+});
+
+test('FENCE DRILL: a repository root the fence cannot locate is a finding, never an empty scan', () => {
+  const findings = fenceSandbox(({ repo }) => fs.rmSync(path.join(repo, 'pnpm-workspace.yaml')));
+  assert.ok(findings.some((finding) => finding.includes('holds no pnpm-workspace.yaml')), findings.join('\n'));
 });
 
 test('no listed reader holds the cascade slice: the cascade tables are live', () => {
