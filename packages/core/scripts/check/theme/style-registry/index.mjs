@@ -11,7 +11,8 @@
  *   1. IS THE PARTITION TOTAL? Every catalog row is classified, no row is
  *      classified twice, and no row the catalog does not have appears. A
  *      partition with a default is a partition that admits the next row in
- *      silence.
+ *      silence. Each row's class is pinned by name in `baseline/`, because a
+ *      per-class count passes two rows trading classes.
  *   2. DOES EVERY PUBLICATION AUTHOR ONLY WHAT IT MAY? Read from the style
  *      JSONs, which are the content -- not from a summary of them.
  *   3. DOES EVERY PUBLICATION CLEAR EVERY VERTICAL IT DECLARES? The envelope
@@ -53,8 +54,9 @@ export const PARTITION_FILE = `${STYLES_ROOT}/runtime/partition/index.ts`;
 export const ENVELOPES_FILE = 'src/contracts/theme/runtime/envelopes/index.ts';
 export const ROSTER_FILE = 'src/foundation/contracts/kernel/verticals/index.ts';
 
-/** The counts the partition is pinned at, so the table cannot rot in silence (sidebar tone to style, ratified 2026-09-22). */
-export const EXPECTED_CLASS_COUNTS = Object.freeze({ style: 22, brand: 6, refused: 1 });
+/** The partition pinned row by row. A per-class count would pass two rows trading classes. */
+export const BASELINE_PATH = join(HERE, 'baseline/index.json');
+export const STYLE_CLASSES = Object.freeze(['style', 'brand', 'refused']);
 
 /** Which envelope range governs which authored dial, by decision and member. */
 export const RANGED_DIALS = Object.freeze([
@@ -215,6 +217,116 @@ export function readRegistryRoster(coreRoot = CORE_ROOT) {
   return { entries, problems };
 }
 
+/** The reviewed per-row pin, or null when it cannot be read: an unread pin refuses nothing. */
+export function readBaseline(path = BASELINE_PATH) {
+  if (!existsSync(path)) return null;
+  const baseline = JSON.parse(readFileSync(path, 'utf8'));
+  const { partition } = baseline;
+  if (partition === null || typeof partition !== 'object' || Object.keys(partition).length === 0) return null;
+  return baseline;
+}
+
+/** Why a `reclassified` entry cannot apply, or null when it names a pinned row, a known class and a written reason. */
+function reclassificationProblem(id, entry, partition) {
+  if (!(id in partition)) return `${id} is reclassified but is not a pinned row`;
+  if (!STYLE_CLASSES.includes(entry?.class)) {
+    return `${id} is reclassified to ${JSON.stringify(entry?.class)}, which is not one of ${STYLE_CLASSES.join(', ')}`;
+  }
+  if (typeof entry.reason !== 'string' || entry.reason.trim() === '') {
+    return `${id} is reclassified to ${entry.class} with no written reason; the reason IS the re-anchor`;
+  }
+  return null;
+}
+
+/** The effective pin: the frozen `partition` with every valid `reclassified` entry applied and `retired` removed.
+ *  The gate and its suite both read the pin through this one reader. */
+export function pinnedClasses(baseline) {
+  const expected = { ...baseline.partition };
+  for (const [id, entry] of Object.entries(baseline.reclassified ?? {})) {
+    if (reclassificationProblem(id, entry, baseline.partition) === null) expected[id] = entry.class;
+  }
+  for (const id of Object.keys(baseline.retired ?? {})) delete expected[id];
+  return expected;
+}
+
+/** The partition against its pin, row by row. A move lands through `reclassified` and a removal through
+ *  `retired`, each with its written reason; `rowsEverPinned` refuses a row deleted from the pin. */
+function evaluatePin(classes, baseline, findings) {
+  const where = relative(REPO_ROOT, BASELINE_PATH);
+  if (baseline === null) {
+    findings.push({
+      rule: 'PARTITION_PIN_UNREADABLE',
+      where,
+      detail: 'the per-row partition pin did not read as a non-empty row-to-class map; with no pin a row may '
+        + 'change class in silence',
+    });
+    return;
+  }
+  const retired = baseline.retired ?? {};
+  for (const [id, entry] of Object.entries(baseline.reclassified ?? {})) {
+    const problem = reclassificationProblem(id, entry, baseline.partition);
+    if (problem !== null) findings.push({ rule: 'PARTITION_REPIN_INVALID', where, detail: problem });
+  }
+  const expected = pinnedClasses(baseline);
+  for (const [id, reason] of Object.entries(retired)) {
+    if (typeof reason !== 'string' || reason.trim() === '') {
+      findings.push({
+        rule: 'PARTITION_REPIN_INVALID',
+        where,
+        detail: `${id} is retired with no written reason; the reason IS the re-anchor`,
+      });
+    }
+    if (id in baseline.partition) {
+      findings.push({ rule: 'PARTITION_REPIN_INVALID', where, detail: `${id} is both pinned and retired` });
+    }
+    if (id in classes) {
+      findings.push({
+        rule: 'PARTITION_REPIN_INVALID',
+        where,
+        detail: `${id} is retired but the partition still declares it`,
+      });
+    }
+  }
+  const union = Object.keys(baseline.partition).length + Object.keys(retired).length;
+  if (union !== baseline.rowsEverPinned) {
+    findings.push({
+      rule: 'PARTITION_PIN_SHRANK',
+      where,
+      detail: `${union} rows are pinned or retired against rowsEverPinned ${baseline.rowsEverPinned}; a row left `
+        + 'the pin without a retirement reason, or a new one arrived and nobody raised the union',
+    });
+  }
+  for (const [id, cls] of Object.entries(classes)) {
+    if (!(id in expected)) {
+      if (id in retired) continue;
+      findings.push({
+        rule: 'PARTITION_ROW_UNPINNED',
+        where: PARTITION_FILE,
+        detail: `${id} is declared ${cls} but the pin does not name it; a new or renamed row is pinned with its class `
+          + 'in the same change',
+      });
+      continue;
+    }
+    if (cls !== expected[id]) {
+      findings.push({
+        rule: 'PARTITION_ROW_MOVED',
+        where: PARTITION_FILE,
+        detail: `${id} is declared ${cls} but pinned ${expected[id]}; moving a row between classes is a decision, `
+          + 'not a refactor: record it under reclassified with its written reason',
+      });
+    }
+  }
+  for (const id of Object.keys(expected)) {
+    if (id in classes) continue;
+    findings.push({
+      rule: 'PARTITION_ROW_LOST',
+      where: PARTITION_FILE,
+      detail: `${id} is pinned ${expected[id]} but the partition no longer declares it; a row leaves only through `
+        + 'retired with its written reason',
+    });
+  }
+}
+
 /** Every registered publication, read from the JSON that IS the content, in registry order. */
 export function readPublications(coreRoot = CORE_ROOT) {
   return readRegistryRoster(coreRoot).entries.map(({ binding, folder }) => {
@@ -257,7 +369,7 @@ function dialValue(decisions, entry) {
   return authored[entry.member];
 }
 
-export function measure({ coreRoot = CORE_ROOT, repoRoot = REPO_ROOT } = {}) {
+export function measure({ coreRoot = CORE_ROOT, repoRoot = REPO_ROOT, baseline = readBaseline() } = {}) {
   const findings = [];
   const catalog = readThemeCatalog(join(coreRoot, 'src/contracts/theme/runtime/catalog/index.ts'));
   const catalogIds = catalog.map((row) => row.id);
@@ -305,18 +417,9 @@ export function measure({ coreRoot = CORE_ROOT, repoRoot = REPO_ROOT } = {}) {
       });
     }
   }
+  evaluatePin(classes, baseline, findings);
   const counts = {};
   for (const value of Object.values(classes)) counts[value] = (counts[value] ?? 0) + 1;
-  for (const [cls, expected] of Object.entries(EXPECTED_CLASS_COUNTS)) {
-    if ((counts[cls] ?? 0) !== expected) {
-      findings.push({
-        rule: 'PARTITION_COUNT_MOVED',
-        where: PARTITION_FILE,
-        detail: `the partition declares ${counts[cls] ?? 0} ${cls} row(s); the reviewed count is ${expected}. `
-          + 'Moving a row between classes is a decision, not a refactor',
-      });
-    }
-  }
 
   // 4. The floor is re-derived from the catalog's own reach, in both directions.
   const measuredNonEmitting = catalog

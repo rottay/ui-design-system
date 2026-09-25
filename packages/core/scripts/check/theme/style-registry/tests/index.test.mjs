@@ -15,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { after, describe, it } from 'node:test';
 
 import {
+  BASELINE_PATH,
   ENVELOPES_FILE,
   PARTITION_FILE,
   REGISTRY_DIR,
@@ -22,9 +23,11 @@ import {
   ROSTER_FILE,
   STYLE_DATA_ROOTS,
   measure,
+  pinnedClasses,
   readEnvelopes,
   readFirstPartyRoster,
   readPartition,
+  readBaseline,
   readPublications,
   readRegistryRoster,
 } from '../index.mjs';
@@ -58,8 +61,54 @@ function sandbox() {
   return { repo, core };
 }
 
-const options = ({ repo, core }) => ({ coreRoot: core, repoRoot: repo });
+const options = ({ repo, core }, baseline) => ({ coreRoot: core, repoRoot: repo, ...(baseline ? { baseline } : {}) });
 const rules = (result) => result.findings.map((finding) => finding.rule);
+
+/** Rewrite partition rows in the sandbox, asserting every replacement lands. */
+function mutatePartition(core, replacements) {
+  const file = join(core, PARTITION_FILE);
+  let text = readFileSync(file, 'utf8');
+  for (const [from, to] of replacements) {
+    const next = text.replace(from, to);
+    assert.notEqual(next, text, `the mutation must land: ${from}`);
+    text = next;
+  }
+  writeFileSync(file, text);
+}
+
+/** A deep copy of the real pin, so a re-pin drill never writes the reviewed file. */
+const pin = () => structuredClone(readBaseline());
+
+/** The two-row swap no fixture names, derived from the effective pin: the first two rows no publication authors
+ *  whose pinned classes differ trade places, so the per-class tally is unchanged. */
+const [FIRST, SECOND] = (() => {
+  const pinned = pinnedClasses(readBaseline());
+  const authored = new Set(readPublications(CORE_ROOT).flatMap((publication) => Object.keys(publication.document.decisions)));
+  const free = Object.keys(readPartition(CORE_ROOT).classes)
+    .filter((id) => !authored.has(id))
+    .map((id) => ({ id, cls: pinned[id] }));
+  const first = free[0];
+  return [first, free.find((row) => row.cls !== first.cls)];
+})();
+const SWAP = [
+  [`  "${FIRST.id}": "${FIRST.cls}",`, `  "${FIRST.id}": "${SECOND.cls}",`],
+  [`  "${SECOND.id}": "${SECOND.cls}",`, `  "${SECOND.id}": "${FIRST.cls}",`],
+];
+const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+const tally = (classes) => Object.values(classes).reduce((out, cls) => ({ ...out, [cls]: (out[cls] ?? 0) + 1 }), {});
+/** The real pin with the swap recorded under `reclassified`, over whatever it already carries. */
+function reclassifySwap(firstReason = 'drill: a reviewed move', secondReason = 'drill: a reviewed move') {
+  const baseline = pin();
+  baseline.reclassified = {
+    ...baseline.reclassified,
+    [FIRST.id]: { class: SECOND.cls, reason: firstReason },
+    [SECOND.id]: { class: FIRST.cls, reason: secondReason },
+  };
+  return baseline;
+}
+
+const REAL_PARTITION = readFileSync(join(CORE_ROOT, PARTITION_FILE), 'utf8');
+const REAL_PIN = readFileSync(BASELINE_PATH, 'utf8');
 
 /** Rewrite the registered publication's decisions, digest untouched: this gate
  *  reads content, and the digest is the contract's own module-load law. */
@@ -80,6 +129,8 @@ describe('theme-style-registry — the measurement', () => {
 
   it('reads the partition, the envelopes and the publications from source', () => {
     assert.equal(Object.keys(readPartition(CORE_ROOT).classes).length, 29);
+    assert.deepEqual(pinnedClasses(readBaseline()), readPartition(CORE_ROOT).classes);
+    assert.equal(readBaseline().rowsEverPinned, 29);
     assert.deepEqual(Object.keys(readEnvelopes(CORE_ROOT)).sort(), ['bithire', 'evnto', 'rottay']);
     assert.deepEqual(readFirstPartyRoster(CORE_ROOT), ['rottay', 'bithire', 'evnto']);
     assert.ok(readPublications(CORE_ROOT).length > 0);
@@ -201,7 +252,7 @@ describe('theme-style-registry — the drills', () => {
     );
     const rulesFound = rules(measure(options(box)));
     assert.ok(rulesFound.includes('PARTITION_ROW_UNCLASSIFIED'));
-    assert.ok(rulesFound.includes('PARTITION_COUNT_MOVED'));
+    assert.ok(rulesFound.includes('PARTITION_ROW_LOST'));
   });
 
   it('goes RED when a row is moved between classes without a decision', () => {
@@ -212,8 +263,100 @@ describe('theme-style-registry — the drills', () => {
     const after = before.replace('  "navigation.sidebar-tone": "style",', '  "navigation.sidebar-tone": "brand",');
     assert.notEqual(after, before, 'the mutation must land');
     writeFileSync(file, after);
-    assert.ok(rules(measure(options(box))).includes('PARTITION_COUNT_MOVED'));
+    assert.ok(rules(measure(options(box))).includes('PARTITION_ROW_MOVED'));
   });
+
+  it('goes RED on two rows trading classes that no publication authors, with the tally unchanged', () => {
+    const box = sandbox();
+    mutatePartition(box.core, SWAP);
+    const { findings, classCounts } = measure(options(box));
+    assert.deepEqual(classCounts, tally(pinnedClasses(readBaseline())));
+    assert.deepEqual(findings.map((finding) => finding.rule), ['PARTITION_ROW_MOVED', 'PARTITION_ROW_MOVED']);
+    assert.match(findings[0].detail, new RegExp(`${escape(FIRST.id)} is declared ${SECOND.cls} but pinned ${FIRST.cls}`, 'u'));
+    assert.match(findings[1].detail, new RegExp(`${escape(SECOND.id)} is declared ${FIRST.cls} but pinned ${SECOND.cls}`, 'u'));
+  });
+
+  it('goes GREEN on the same swap once each move is reclassified with a written reason', () => {
+    const box = sandbox();
+    mutatePartition(box.core, SWAP);
+    assert.deepEqual(measure(options(box, reclassifySwap())).findings, []);
+  });
+
+  it('keeps the effective pin equal to the moved source, so the reads case holds after a reasoned re-pin', () => {
+    const box = sandbox();
+    mutatePartition(box.core, SWAP);
+    const baseline = reclassifySwap();
+    assert.deepEqual(baseline.partition, readBaseline().partition, 'partition stays frozen');
+    assert.deepEqual(measure(options(box, baseline)).findings, []);
+    assert.deepEqual(pinnedClasses(baseline), readPartition(box.core).classes);
+  });
+
+  it('goes RED on a reclassification whose reason is empty, and the move stays red', () => {
+    const box = sandbox();
+    mutatePartition(box.core, SWAP);
+    // An invalid entry falls back to the frozen partition, so blank the row whose frozen class differs from its move.
+    const frozen = readBaseline().partition;
+    const blankFirst = frozen[FIRST.id] !== SECOND.cls;
+    const [row, moved] = blankFirst ? [FIRST, SECOND.cls] : [SECOND, FIRST.cls];
+    assert.notEqual(frozen[row.id], moved, 'one row of the swap must move against the frozen partition');
+    const found = measure(options(box, blankFirst ? reclassifySwap('  ') : reclassifySwap(undefined, '  '))).findings;
+    assert.deepEqual(found.map((finding) => finding.rule), ['PARTITION_REPIN_INVALID', 'PARTITION_ROW_MOVED']);
+    assert.match(found[0].detail, new RegExp(`${escape(row.id)} is reclassified to ${moved} with no written reason`, 'u'));
+    assert.match(found[1].detail, new RegExp(`${escape(row.id)} is declared ${moved} but pinned ${frozen[row.id]}`, 'u'));
+  });
+
+  it('goes RED on a re-pin that names no pinned row, an unknown class, or a retired row still declared', () => {
+    const baseline = pin();
+    baseline.reclassified = {
+      'palette.nowhere': { class: 'style', reason: 'drill' },
+      [FIRST.id]: { class: 'tenant', reason: 'drill' },
+    };
+    baseline.retired = { 'responsive.posture': 'drill' };
+    baseline.rowsEverPinned += 1;
+    const detail = measure(options(sandbox(), baseline)).findings
+      .filter((finding) => finding.rule === 'PARTITION_REPIN_INVALID')
+      .map((finding) => finding.detail);
+    assert.deepEqual(detail, [
+      'palette.nowhere is reclassified but is not a pinned row',
+      `${FIRST.id} is reclassified to "tenant", which is not one of style, brand, refused`,
+      'responsive.posture is both pinned and retired',
+      'responsive.posture is retired but the partition still declares it',
+    ]);
+    const effective = pinnedClasses(baseline);
+    assert.ok(!('responsive.posture' in effective), 'the effective pin excludes a retired row');
+    assert.equal(effective[FIRST.id], readBaseline().partition[FIRST.id], 'an invalid reclassification does not apply');
+  });
+
+  it('goes RED on a row renamed in the partition alone', () => {
+    const box = sandbox();
+    mutatePartition(box.core, [['  "shape.nesting": "style",', '  "shape.nesting-depth": "style",']]);
+    const found = rules(measure(options(box)));
+    assert.ok(found.includes('PARTITION_ROW_UNPINNED'));
+    assert.ok(found.includes('PARTITION_ROW_LOST'));
+  });
+
+  it('goes RED on a row lost from the partition and the pin together, until it is retired with a reason', () => {
+    const box = sandbox();
+    mutatePartition(box.core, [['  "responsive.posture": "style",\n', '']]);
+    const dropped = pin();
+    delete dropped.partition['responsive.posture'];
+    assert.ok(rules(measure(options(box, dropped))).includes('PARTITION_PIN_SHRANK'));
+    const unreasoned = structuredClone(dropped);
+    unreasoned.retired = { 'responsive.posture': '' };
+    assert.ok(rules(measure(options(box, unreasoned))).includes('PARTITION_REPIN_INVALID'));
+    const retired = structuredClone(dropped);
+    retired.retired = { 'responsive.posture': 'drill: a reviewed retirement' };
+    assert.deepEqual(
+      rules(measure(options(box, retired))).filter((rule) => rule.startsWith('PARTITION_') && rule !== 'PARTITION_ROW_UNCLASSIFIED'),
+      [],
+    );
+  });
+
+  it('goes RED when the pin cannot be read, because an unread pin refuses nothing', () => {
+    const box = sandbox();
+    assert.ok(rules(measure({ ...options(box), baseline: null })).includes('PARTITION_PIN_UNREADABLE'));
+  });
+
 
   it('goes RED when a vertical closes allowAnatomyVariants under a style that uses one', () => {
     // Every publication that sets an anatomy variant reds under the closed envelope, each naming evnto;
@@ -301,5 +444,10 @@ describe('theme-style-registry — the drills', () => {
     const found = measure(options(box)).findings.filter((finding) => finding.rule === 'REGISTRY_UNREADABLE');
     assert.equal(found.length, 1);
     assert.match(found[0].detail, /SOMEWHERE_ELSE_V1/u);
+  });
+
+  it('leaves the real partition and the reviewed pin byte-identical', () => {
+    assert.equal(readFileSync(join(CORE_ROOT, PARTITION_FILE), 'utf8'), REAL_PARTITION);
+    assert.equal(readFileSync(BASELINE_PATH, 'utf8'), REAL_PIN);
   });
 });
