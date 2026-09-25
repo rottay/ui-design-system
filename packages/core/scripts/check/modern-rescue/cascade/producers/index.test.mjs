@@ -137,11 +137,28 @@ const SCRIPT = join(HERE, 'index.mjs');
  * point of the decomposition.
  */
 /* Re-measured 2026-09-23 from the regenerated census (WO-EVI-02 trail 101); the
- * per-series movers since 59439fa13 are recorded on the trail, not here. */
+ * per-series movers since 59439fa13 are recorded on the trail, not here.
+ *
+ * 266199fe9 re-pin, measured by set difference with this census over isolated
+ * archives of 8b138bc05 (reproduces 6232 / 18017 / 7537 / 211) and 266199fe9;
+ * every other commit since the pin reproduces them exactly (677670244,
+ * 1f17755c7, dc79aa95f, 8b138bc05). Density wave 2c retires six selector
+ * aliases from their derivers and renames divider's private:
+ *   producerSites 6232 -> 6226 (-6): the six `--ds-divider-inset` declarations
+ *     of the divider skin (lines 63-83) are now `--_ds-divider-inset`, which is
+ *     not a public producer; the space `customStyle` site keeps its channel and
+ *     only moved offset (one id out, one in).
+ *   channelEmissions 18017 -> 17993 (-24): those six, plus 6 aliases x 3 tenant
+ *     artifacts (--ds-container-pad, --ds-divider-inset, --ds-space-gap,
+ *     --ds-sidebar-surface-aside-inline-size, --ds-tabs-responsive-height,
+ *     --ds-tabs-responsive-padding) no longer emitted by the lowering.
+ *   distinctChannels 7537 -> 7536 (-1): --ds-divider-inset, the one alias no
+ *     other producer writes. emissionsWithCausalRoot stays 211.
+ */
 const LIVE_PRODUCER_STATS = Object.freeze({
-  producerSites: 6232,
-  channelEmissions: 18017,
-  distinctChannels: 7537,
+  producerSites: 6226,
+  channelEmissions: 17993,
+  distinctChannels: 7536,
   /**
    * 196 -> 197, and it is the SAME mechanism as the ten rows above rather than
    * a new causal claim: `--ds-color-link` is written literally by two of the

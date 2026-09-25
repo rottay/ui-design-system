@@ -1034,8 +1034,15 @@ test('FENCE DRILL: a blocking gate that reads the family slice of the seal fails
   assert.equal(advisoryFindings.some((finding) => finding.startsWith('blocking gate planted-family-gate')), false);
 });
 
+/**
+ * A relative specifier for a planted module, built from segments: the wiring
+ * gate reads a quoted relative path after `from` as a real import of this file.
+ */
+const plantedSpecifier = (...segments) => `'${segments.join('/')}'`;
+const PLANTED_PROGRAM_STATE = plantedSpecifier('..', '..', 'orchestration', 'public', 'program-state', 'index.mjs');
+
 test('FENCE DRILL: importing a seal-path constant reads the seal, in every import form', () => {
-  const program = "'../../orchestration/public/program-state/index.mjs'";
+  const program = PLANTED_PROGRAM_STATE;
   const forms = [
     `import { MANIFEST_INDEX_PATH } from ${program};\nexport default MANIFEST_INDEX_PATH;\n`,
     `import { MANIFEST_INDEX_PATH as sealed } from ${program};\nexport default sealed;\n`,
@@ -1055,9 +1062,9 @@ test('FENCE DRILL: importing a seal-path constant reads the seal, in every impor
 test('FENCE DRILL: a seal-path constant re-derived by an importer carries the read one more hop', () => {
   const findings = fenceSandbox(({ write }) => {
     write('scripts/check/planted/relay/index.mjs',
-      "import { MANIFEST_INDEX_PATH } from '../../orchestration/public/program-state/index.mjs';\nexport const RELAYED = `${MANIFEST_INDEX_PATH}#rollups`;\n");
+      "import { MANIFEST_INDEX_PATH } from " + PLANTED_PROGRAM_STATE + ";\nexport const RELAYED = `${MANIFEST_INDEX_PATH}#rollups`;\n");
     write('scripts/check/planted/consumer/index.mjs',
-      "import { RELAYED } from '../relay/index.mjs';\nexport default RELAYED;\n");
+      "import { RELAYED } from " + plantedSpecifier('..', 'relay', 'index.mjs') + ";\nexport default RELAYED;\n");
   });
   assert.ok(
     findings.some((finding) => finding.startsWith('scripts/check/planted/consumer/index.mjs reads the sealed customization manifest')
@@ -1069,7 +1076,7 @@ test('FENCE DRILL: a seal-path constant re-derived by an importer carries the re
 test('FENCE DRILL: importing a constant that does not resolve the seal is not a read', () => {
   const findings = fenceSandbox(({ write }) => {
     write('scripts/check/planted/importer/index.mjs',
-      "import { DEFAULT_TARGET } from '../../orchestration/public/program-state/index.mjs';\nexport default DEFAULT_TARGET;\n");
+      "import { DEFAULT_TARGET } from " + PLANTED_PROGRAM_STATE + ";\nexport default DEFAULT_TARGET;\n");
   });
   assert.deepEqual(findings, []);
 });
@@ -1081,7 +1088,7 @@ function seedProbe(constantText) {
   const readers = [...SEAL_READERS, { path: source, slice: 'drill', reason: 'planted by the fence drill to decide whether one exported constant is a seal-path constant' }];
   const findings = fenceSandbox(({ write }) => {
     write(source, `${constantText}\nexport const MARK = '${SEAL_ROOT_REL}/index.json';\n`);
-    write(importer, "import { PROBE } from '../source/index.mjs';\nexport default PROBE;\n");
+    write(importer, "import { PROBE } from " + plantedSpecifier('..', 'source', 'index.mjs') + ";\nexport default PROBE;\n");
   }, { readers });
   return findings.filter((finding) => finding.startsWith(`${importer} reads the sealed customization manifest`));
 }
@@ -1153,7 +1160,7 @@ test('FENCE DRILL: a module that resolves the cascade tables through the seal fa
   const readers = [...SEAL_READERS, { path: planted, slice: 'drill', reason: 'planted by the fence drill to model a reader left on the seal path' }];
   const forms = [
     `export const roots = '${SEAL_ROOT_REL}/cascade/roots';\n`,
-    "import { QUARANTINE_MANIFEST_REL } from '../../../libraries/manifest/index.mjs';\nexport const catalog = [QUARANTINE_MANIFEST_REL, 'cascade/catalog/index.json'];\n",
+    "import { QUARANTINE_MANIFEST_REL } from " + plantedSpecifier('..', '..', '..', 'libraries', 'manifest', 'index.mjs') + ";\nexport const catalog = [QUARANTINE_MANIFEST_REL, 'cascade/catalog/index.json'];\n",
     "export const dir = ['docs', 'history', 'inventories', 'customization-manifest', 'cascade'];\n",
   ];
   for (const text of forms) {
