@@ -265,15 +265,13 @@ test('RESIDUE language scope: --ds-toolbar-title-letter-spacing fails on growth 
 /* ── Las clases de lectura fuera del skin Modern ─────────────────────────── */
 
 /* WO-EVI-03 found eleven; code-block's seven left through the ledger's exits,
-   followed by the family's three unrouted siblings. */
+   followed by the family's three unrouted siblings, then voice-input's and
+   loading-overlay's three. */
 const EVI_03_REMAINING = Object.freeze({
-  '--ds-voice-input-focus-ring': ['sharedPaint', 'WO-FAM-01'],
-  '--ds-loading-overlay-scrim-opacity': ['sharedPaint', 'WO-FAM-04'],
-  '--ds-export-button-toast-duration': ['sharedPaint', 'WO-FAM-08'],
   '--ds-size-touch-target': ['sharedPaint', 'WO-FAM-11'],
 });
 
-const CODE_BLOCK_EXITS = Object.freeze({
+const EXITS = Object.freeze({
   '--ds-code-block-copy-bg-hover': 'sharedPaint',
   '--ds-code-block-copied-frame': 'sharedPaint',
   '--ds-code-block-copied-ink': 'sharedPaint',
@@ -284,6 +282,9 @@ const CODE_BLOCK_EXITS = Object.freeze({
   '--ds-code-block-copy-bg-pressed': 'sharedPaint',
   '--ds-code-block-copy-ink-hover': 'sharedPaint',
   '--ds-code-block-focus-ring': 'sharedPaint',
+  '--ds-voice-input-focus-ring': 'sharedPaint',
+  '--ds-loading-overlay-scrim-opacity': 'sharedPaint',
+  '--ds-export-button-toast-duration': 'sharedPaint',
 });
 
 const readBaseline = () => JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
@@ -314,7 +315,7 @@ function plantedFindings(sandbox, { producers = PRODUCERS } = {}) {
   });
 }
 
-test('BLIND SPOT: the Modern-only corpus cannot see any of the remaining four, the read classes see every one', () => {
+test('BLIND SPOT: the Modern-only corpus cannot see the remaining WO-EVI-03 rows, the read classes see every one', () => {
   const modern = new Set(classifyReadWithoutProducer().denominator);
   const shared = classifyReadClass(collectSharedPaintFiles(), 'css', PRODUCERS);
   const inline = classifyReadClass(collectComponentInlineFiles(), 'script', PRODUCERS);
@@ -325,7 +326,7 @@ test('BLIND SPOT: the Modern-only corpus cannot see any of the remaining four, t
   }
 });
 
-test('the remaining four are named one by one in the ledger, each with its owner or proposal', () => {
+test('the remaining WO-EVI-03 rows are named one by one in the ledger, each with its owner or proposal', () => {
   const classes = readBaseline().readClasses;
   for (const [name, [cls, wo]] of Object.entries(EVI_03_REMAINING)) {
     const row = classes[cls].names[name];
@@ -335,12 +336,12 @@ test('the remaining four are named one by one in the ledger, each with its owner
   }
 });
 
-test('the ten code-block exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
+test('the thirteen exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
   const classes = readBaseline().readClasses;
   const shared = classifyReadClass(collectSharedPaintFiles(), 'css', PRODUCERS);
   const inline = classifyReadClass(collectComponentInlineFiles(), 'script', PRODUCERS);
-  assert.deepEqual(Object.keys(classes.exits.rows).sort(), Object.keys(CODE_BLOCK_EXITS).sort());
-  for (const [name, cls] of Object.entries(CODE_BLOCK_EXITS)) {
+  assert.deepEqual(Object.keys(classes.exits.rows).sort(), Object.keys(EXITS).sort());
+  for (const [name, cls] of Object.entries(EXITS)) {
     assert.ok(!classes.sharedPaint.names[name] && !classes.componentInline.names[name], `${name} is no longer a row`);
     assert.ok(!shared.debt[name] && !inline.debt[name], `${name} is no longer read without a producer`);
     assert.ok(!PRODUCERS.has(name), `${name} left by losing its read, not by gaining a producer`);
@@ -401,7 +402,7 @@ test('componentInline: an unproduced inline read fails; a commented one does not
 });
 
 test('a NEW reader of an already-pinned unproduced name is growth, not coverage', () => {
-  const name = '--ds-loading-overlay-scrim-opacity';
+  const name = '--ds-loading-overlay-z';
   withSandbox({ [AGNOSTIC_SKIN]: `.ds-drill { color: var(${name}); }\n` }, (sandbox) => {
     expectFinding(
       plantedFindings(sandbox),
@@ -412,7 +413,7 @@ test('a NEW reader of an already-pinned unproduced name is growth, not coverage'
 });
 
 test('a row whose read gained a producer fails until it is deleted (decrease-only)', () => {
-  const name = '--ds-voice-input-focus-ring';
+  const name = '--ds-export-button-toast-z';
   const findings = collectFindings({ producers: new Set([...PRODUCERS, name]) });
   expectFinding(findings, `sharedPaint SHRANK: ${name} is no longer a read without producer`, 'a silent fix must be written down');
 });

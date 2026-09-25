@@ -10,6 +10,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
+import postcss from 'postcss';
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, renderHook, screen, waitFor } from '@testing-library/react';
@@ -345,9 +346,17 @@ describe('VoiceInputButton skin ownership — Pass 1', () => {
   });
 
   it('owns a visible focus ring (Pass 2: UA outline was the only affordance)', () => {
-    expect(skin).toContain(".ds-voice-input-button[data-part='root']:focus-visible");
-    expect(skin).toContain('--ds-voice-input-focus-ring');
-    expect(skin).toContain('color-mix(in srgb, var(--ds-color-primary) 24%, transparent)');
+    const rings: string[] = [];
+    postcss.parse(skin).walkRules(".ds-voice-input-button[data-part='root']:focus-visible", (rule) => {
+      if (rule.parent?.type === 'atrule') return;
+      rule.walkDecls('box-shadow', (decl) => {
+        rings.push(decl.value.replace(/\s+/g, ' ').trim());
+      });
+    });
+    expect(rings).toEqual(['0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)']);
+    expect([...rings[0].matchAll(/var\(\s*(--ds-[\w-]+)/g)].map((match) => match[1])).toEqual([
+      '--ds-color-primary',
+    ]);
     expect(skin).toContain('@media (forced-colors: active)');
   });
 });

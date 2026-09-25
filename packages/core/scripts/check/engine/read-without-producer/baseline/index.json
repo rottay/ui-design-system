@@ -47,7 +47,7 @@
   "readClasses": {
     "law": "The ratchet was blind to every read outside engines/modern: the agnostic skin and the rest of the authored CSS that the base entrypoint imports under every engine, and literal var() reads inline in component TS/TSX, paint under Modern exactly like the Modern skin does. Measured 2026-09-25 at 6f5faa6f4 after WO-EVI-03 found 11 dead channels its tests pin that this ratchet could not see. Frozen engines (classic, rustic) stay out for the same reason as before; nothing else does.",
     "shape": "names -> { readers, family, owner, ownerProposal }. A read without producer that is not a row (or a new reader of a row) is anonymous and red; a row or reader that stopped being debt is red until deleted. No write mode: the ledger only shrinks by hand.",
-    "ownership": "owner is a work order id or null. The 11 WO-EVI-03 channels carried their proposal one by one; 7 have left (see exits) and 4 remain. Every other row is ownerProposal null: unrouted debt, measured and visible, that the DT routes by family (produce the channel in its family deriver, or retire the read). It is not an exemption: a row leaves only when its read has a producer or is gone.",
+    "ownership": "owner is a work order id or null. The 11 WO-EVI-03 channels carried their proposal one by one; 10 have left (see exits, beside the three unrouted code-block siblings that followed them) and 1 remains. Every other row is ownerProposal null: unrouted debt, measured and visible, that the DT routes by family (produce the channel in its family deriver, or retire the read). It is not an exemption: a row leaves only when its read has a producer or is gone.",
     "exits": {
       "law": "A row that leaves the ledger is written here with its disposition and the lot that moved it. An exit is not a pin: the gate reads only the two read classes' names ledgers, and a name here read again without a producer is anonymous growth and red.",
       "rows": {
@@ -120,6 +120,27 @@
           "from": "unrouted (owner null, ownerProposal null)",
           "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the fallback is built from produced channels only and is now the declared value, so the paint is unchanged and the dead name is no longer read; not re-pointed to --ds-shadow-focus-ring, whose winning :root declaration is 0 0 0 3px var(--ds-tint-24) -- an opaque oklab mix toward --ds-color-bg-primary, not the translucent srgb mix toward transparent this ring paints -- nor to --ds-focus-ring (a two-layer offset ring)",
           "mover": "WO-EVI-03 arm 2, code-block siblings (2026-09-25, working tree over 60e12b8f3)"
+        },
+        "--ds-voice-input-focus-ring": {
+          "class": "sharedPaint",
+          "family": "voice-input-button",
+          "from": "WO-FAM-01 (ownerProposal)",
+          "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the fallback 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent) is built from a produced channel only and is now the declared value, so the paint is unchanged and the dead name is no longer read; not re-pointed to --ds-shadow-focus-ring (0 0 0 3px var(--ds-tint-24), an opaque oklab mix toward --ds-color-bg-primary, not this translucent srgb mix toward transparent) nor to --ds-focus-ring (a two-layer offset ring) -- the code-block focus-ring ruling, same expression; not produced: voice-input-button is on no family-cut roster (the FAM-01 cut is button, checkbox, radio, switch/toggle, segmented)",
+          "mover": "WO-EVI-03 arm 2, voice-input and loading-overlay clusters (2026-09-25, working tree over af778022c)"
+        },
+        "--ds-loading-overlay-scrim-opacity": {
+          "class": "sharedPaint",
+          "family": "loading-overlay",
+          "from": "WO-FAM-04 (ownerProposal)",
+          "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the veil's opacity is now the declared 0.92, so the paint is unchanged and the dead name is no longer read; no live channel paints 0.92 as a scrim opacity (the bundle's opacity channels are --ds-drawer-overlay-opacity 0.8 and card-state overlays 0.3/0.42/0.68; the one 0.92 is --ds-collection-header-subtitle-opacity-editorial, a text ink of another family; --ds-overlay-scrim is a color, not an opacity); not produced: loading-overlay is on no family-cut roster, and its governance cascade-root entry (surfaces/effect-intensity) is a PRESCRIPCION for a private channel, not a producer",
+          "mover": "WO-EVI-03 arm 2, voice-input and loading-overlay clusters (2026-09-25, working tree over af778022c)"
+        },
+        "--ds-export-button-toast-duration": {
+          "class": "sharedPaint",
+          "family": "export-button",
+          "from": "WO-FAM-08 (ownerProposal)",
+          "disposition": "retired: no deriver or declaration ever produced it and the hooks contract lists it as an unadjudicated read (applications may not assign it), so the read always painted its fallback; the toast animation now declares 1.8s, so the paint is unchanged and the dead name is no longer read; no produced channel declares 1.8s or 1800ms; not produced: the fade must span the engine's fixed toast lifetime (export-button/index.tsx setTimeout 1800ms unmounts the toast), so a tenant-tunable duration could only desync paint from mount -- a shorter value hides a still-mounted toast, a longer one cuts it mid-fade -- and export-button is not on the closed WO-FAM-08 roster (18 rows, fam08-close-audit.md), whose motion-dial cascade-root entry for it is a PRESCRIPCION, not a producer",
+          "mover": "WO-EVI-03 arm 2, voice-input and loading-overlay clusters (2026-09-25, working tree over af778022c)"
         }
       }
     },
@@ -127,9 +148,9 @@
       "corpus": "libraries/tokens/producers collectAuthoredStylesheets() minus /engines/(classic|rustic)/ minus the Modern skin corpus -- the same authored-CSS walker the producer set uses",
       "measured": {
         "files": 259,
-        "denominator": 2566,
-        "debt": 327,
-        "reads": 380
+        "denominator": 2563,
+        "debt": 324,
+        "reads": 377
       },
       "names": {
         "--ds-assistant-active-signal-shadow": {
@@ -1158,15 +1179,6 @@
           "owner": null,
           "ownerProposal": null
         },
-        "--ds-export-button-toast-duration": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/export-button/index.css"
-          ],
-          "family": "export-button",
-          "owner": null,
-          "ownerProposal": "WO-FAM-08",
-          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
-        },
         "--ds-export-button-toast-z": {
           "readers": [
             "src/foundation/tokens/css/presentation/components/skin/export-button/index.css"
@@ -1431,15 +1443,6 @@
           "family": "grid-view",
           "owner": null,
           "ownerProposal": null
-        },
-        "--ds-loading-overlay-scrim-opacity": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css"
-          ],
-          "family": "loading-overlay",
-          "owner": null,
-          "ownerProposal": "WO-FAM-04",
-          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
         },
         "--ds-loading-overlay-z": {
           "readers": [
@@ -2734,15 +2737,6 @@
           "family": "voice-input-button",
           "owner": null,
           "ownerProposal": null
-        },
-        "--ds-voice-input-focus-ring": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
-          ],
-          "family": "voice-input-button",
-          "owner": null,
-          "ownerProposal": "WO-FAM-01",
-          "evidence": "measured by WO-EVI-03 (receipt-evi-03-opus.json, arm 2 instrumentFinding): a test pins this dead channel and the ratchet could not see its read; the family is in no family cut, so a roster admission is the DT/owner decision"
         },
         "--ds-voice-input-pulse-duration": {
           "readers": [

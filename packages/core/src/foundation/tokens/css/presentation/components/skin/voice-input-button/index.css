@@ -141,10 +141,7 @@
 /* focus ring (K4-B Pass 2: the button relied on the UA outline) — badge idiom. */
 .ds-voice-input-button[data-part='root']:focus-visible {
   outline: none;
-  box-shadow: var(
-    --ds-voice-input-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
-  );
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
 }
 /* forced colors: the focus ring degrades to a system outline, and every
    state keeps a FRAME (never hue alone): the base frame and the active

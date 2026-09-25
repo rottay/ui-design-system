@@ -54,7 +54,8 @@
   white-space: nowrap;
   pointer-events: none;
   transform: translateX(-50%);
-  animation: ds-export-toast-fade var(--ds-export-button-toast-duration, 1.8s) ease forwards;
+  /* the engine unmounts the toast after 1800ms; the fade spans that lifetime */
+  animation: ds-export-toast-fade 1.8s ease forwards;
 }
 
 .ds-structure.ds-export-button[data-part='root'] [data-part='toast'] [data-part='toast-label'] {

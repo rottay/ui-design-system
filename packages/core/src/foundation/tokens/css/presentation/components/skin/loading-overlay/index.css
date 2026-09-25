@@ -8,9 +8,9 @@
  * "raise the specificity" look like the fix for losing to a later layer,
  * where specificity never wins.
  *
- * THE VEIL IS A PSEUDO-ELEMENT, NOT THE ROOT. `--ds-loading-overlay-scrim-opacity`
- * was applied as `opacity` on the root, and element opacity composites the
- * WHOLE subtree: the channel that makes the scrim see-through was equally
+ * THE VEIL IS A PSEUDO-ELEMENT, NOT THE ROOT. The scrim opacity was applied
+ * as `opacity` on the root, and element opacity composites the WHOLE
+ * subtree: the value that makes the scrim see-through was equally
  * dimming the message and the dots painted on top of it, and the dots
  * multiply it by their own 0.3 keyframe floor — so the one element on screen
  * that is supposed to say "working" was the faintest thing on it. The veil
@@ -117,15 +117,16 @@
   container: ds-loading-overlay / size;
 }
 
-/* The veil. Scrim see-through stays on the family channel and keeps its
-   default, but it now dims only the ground it is a veil for — see the header
-   for why applying it to the root dimmed the overlay's own message and dots. */
+/* The veil. The scrim see-through dims only the ground it is a veil for —
+   see the header for why applying it to the root dimmed the overlay's own
+   message and dots. 0.92 is a declared value, not a channel: no layer
+   produces a scrim opacity, so it cannot be re-pointed without moving paint. */
 .ds-loading-overlay[data-part='root']::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  opacity: var(--ds-loading-overlay-scrim-opacity, 0.92);
+  opacity: 0.92;
   background: var(--ds-color-bg-primary, rgba(15,23,42,0.85));
   backdrop-filter: blur(2px);
 }

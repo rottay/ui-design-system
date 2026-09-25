@@ -93,7 +93,7 @@ describe('LoadingOverlay elevation contract', () => {
     expect(root!.decls.background).toBeUndefined();
     expect(root!.decls['backdrop-filter']).toBeUndefined();
 
-    expect(veil!.decls.opacity).toContain('--ds-loading-overlay-scrim-opacity');
+    expect(veil!.decls.opacity).toBe('0.92');
     expect(veil!.decls['backdrop-filter']).toBe('blur(2px)');
 
     // Paint order, not z-index: the content is positioned so it lands after

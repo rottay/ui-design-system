@@ -74,6 +74,24 @@
           "name": "--ds-code-block-selection-bg",
           "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the ::selection rule declares the primary tint directly; the test asserts the parsed value and that it reads only --ds-color-primary",
           "mover": "WO-EVI-03 arm 2, code-block cluster (2026-09-25, working tree over 830b41e9f)"
+        },
+        {
+          "file": "core/src/components/primitives/inputs/voice-input-button/tests/VoiceInputButton.test.tsx",
+          "name": "--ds-voice-input-focus-ring",
+          "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the :focus-visible ring declares the translucent primary mix directly; the test asserts the postcss-parsed box-shadow outside any at-rule and that it reads only --ds-color-primary",
+          "mover": "WO-EVI-03 arm 2, voice-input and loading-overlay clusters (2026-09-25, working tree over af778022c)"
+        },
+        {
+          "file": "core/src/components/structures/feedback/loading-overlay/tests/LoadingOverlay.elevation.test.tsx",
+          "name": "--ds-loading-overlay-scrim-opacity",
+          "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the veil declares opacity 0.92 directly; the test asserts the winning unconditional ::before opacity is exactly 0.92",
+          "mover": "WO-EVI-03 arm 2, voice-input and loading-overlay clusters (2026-09-25, working tree over af778022c)"
+        },
+        {
+          "file": "core/src/components/structures/workspace/tests/WorkspaceChromeBatch.contract.test.tsx",
+          "name": "--ds-export-button-toast-duration",
+          "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the toast fade declares 1.8s directly; the test asserts the parsed animation value and that the engine unmounts the toast at the same 1800ms (setTimeout in export-button/index.tsx)",
+          "mover": "WO-EVI-03 arm 2, voice-input and loading-overlay clusters (2026-09-25, working tree over af778022c)"
         }
       ]
     },
@@ -307,18 +325,6 @@
         "reason": "read by css/runtime/engines/classic/theme/index.css with no producer; slider is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
       },
       {
-        "file": "core/src/components/primitives/inputs/voice-input-button/tests/VoiceInputButton.test.tsx",
-        "name": "--ds-voice-input-focus-ring",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/voice-input-button/index.css",
-        "rwpDebt": false,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-01",
-        "family": "voice-input-button",
-        "reason": "read by css/presentation/components/skin/voice-input-button/index.css with no producer; voice-input-button is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; outside the read-without-producer corpus (engines/modern only)"
-      },
-      {
         "file": "core/src/components/primitives/navigation/back-top/tests/BackTop.modern-contract.test.tsx",
         "name": "--ds-backtop-inset-inline-end",
         "occurrences": 1,
@@ -523,18 +529,6 @@
         "reason": "read by css/runtime/engines/modern/skin/context-menu/index.css with no producer; context-menu is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
       },
       {
-        "file": "core/src/components/structures/feedback/loading-overlay/tests/LoadingOverlay.elevation.test.tsx",
-        "name": "--ds-loading-overlay-scrim-opacity",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/loading-overlay/index.css",
-        "rwpDebt": false,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-04",
-        "family": "loading-overlay",
-        "reason": "read by css/presentation/components/skin/loading-overlay/index.css with no producer; loading-overlay is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; outside the read-without-producer corpus (engines/modern only)"
-      },
-      {
         "file": "core/src/components/structures/shell/surface-chrome/tests/SurfaceChrome.cut.test.tsx",
         "name": "--ds-workspace-card-icon-bg",
         "occurrences": 1,
@@ -566,18 +560,6 @@
         "owner": "WO-FAM-08",
         "family": "active-filters-bar",
         "reason": "read by css/presentation/components/skin/active-filters-bar/index.css with no producer; counted in the active-filters-bar row of the family-cut baseline, whose cut owns its readWithoutProducer arm"
-      },
-      {
-        "file": "core/src/components/structures/workspace/tests/WorkspaceChromeBatch.contract.test.tsx",
-        "name": "--ds-export-button-toast-duration",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/export-button/index.css",
-        "rwpDebt": false,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-08",
-        "family": "export-button",
-        "reason": "read by css/presentation/components/skin/export-button/index.css with no producer; export-button is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; outside the read-without-producer corpus (engines/modern only)"
       },
       {
         "file": "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/action-dock/tests/index.test.ts",

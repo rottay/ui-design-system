@@ -1502,9 +1502,12 @@ describe("workspace chrome skins — R2 structural contract", () => {
     }
   );
 
-  it("export-button uses a family feedback-lifetime channel and honors reduced motion", () => {
+  it("export-button fades the toast over the engine's own toast lifetime and honors reduced motion", () => {
     const css = readSkin("export-button");
-    expect(css).toContain("--ds-export-button-toast-duration");
+    const fade = /\[data-part='toast'\]\s*\{[^}]*?animation:\s*([^;]+);/.exec(css)?.[1];
+    expect(fade).toBe("ds-export-toast-fade 1.8s ease forwards");
+    const engine = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../export-button/index.tsx"), "utf8");
+    expect(/setTimeout\(\(\) => setCopiedFeedback\(false\), (\d+)\)/.exec(engine)?.[1]).toBe("1800");
     expect(css).toContain("prefers-reduced-motion");
   });
 
