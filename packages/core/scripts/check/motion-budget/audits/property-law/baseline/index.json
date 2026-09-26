@@ -143,9 +143,10 @@
     "kind": "line moves only: same file, kind and property; count 68 unchanged",
     "movers": [
       "802aa2120 (B45 paint drain): stack skin re-base removed above the site, --ds-transition-rearrange 199 -> 182",
-      "a3b241626 (on-primary ink lot): tooltip skin lines inserted above the site, the six inset/left/right legs 288 -> 294"
+      "a3b241626 (on-primary ink lot): tooltip skin lines inserted above the site, the six inset/left/right legs 288 -> 294",
+      "e4d492f3c (C12 census lot): the app-shell skin dropped --ds-shell-inline-end-inset one line above the site, width 111 -> 110 (the move the notMoved note below parked while it lived only in a working tree; it is committed now, re-pinned here by the DT with the mover named)"
     ],
-    "notMoved": "skin/app-shell/index.css:111 stays: its move to 110 exists only in the working tree (the in-flight C12-continuation writer's uncommitted app-shell edit), not in any commit; that writer re-pins it with its lot"
+    "notMoved": "none pending: the app-shell width move this note parked landed in e4d492f3c and is re-pinned in the movers list above"
   },
   "sites": [
     {
@@ -168,7 +169,7 @@
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-      "line": 111,
+      "line": 110,
       "kind": "layoutProperty",
       "property": "width"
     },
