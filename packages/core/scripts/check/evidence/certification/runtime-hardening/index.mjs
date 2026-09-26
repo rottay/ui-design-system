@@ -226,6 +226,7 @@ function auditRoadmapAuthority(repositoryRoot) {
     "WO-CRA-12",
     "WO-CRA-13",
     "WO-CRA-14",
+    "WO-RET-01",
   ];
   if (!workOrder) {
     errors.push("roadmap registry lost WO-CRA-15");
