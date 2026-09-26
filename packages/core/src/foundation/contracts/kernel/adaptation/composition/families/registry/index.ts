@@ -135,6 +135,12 @@ export const LAYOUT_SENSITIVE_FAMILIES = Object.freeze([
     layoutSensitive: true,
     cut: 'WO-FAM-12',
   },
+  {
+    family: 'widget-board',
+    owner: 'src/components/patterns/data/widget-board',
+    layoutSensitive: true,
+    cut: 'WO-FAM-12',
+  },
 ] as const satisfies readonly LayoutSensitiveFamily[]);
 
 export type LayoutSensitiveFamilyId = (typeof LAYOUT_SENSITIVE_FAMILIES)[number]['family'];
