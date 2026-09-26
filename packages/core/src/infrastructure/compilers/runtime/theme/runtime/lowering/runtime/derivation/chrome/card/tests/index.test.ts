@@ -9,6 +9,10 @@
  * `--ds-card-instance-padding` is produced at the DEFAULT padding arm's
  * resting value: the skin's `[data-padding]` arms redeclare it on the card
  * element and outrank the derived statement, so the padding contract stands.
+ * The four footprint presets `--ds-card-scale-{sm,md,lg,xl}` rest at the
+ * fallback the Grid skin reads them with: their card-level readers died with
+ * the Card `scale` prop, and the grid's `[data-min-item]` rungs are the one
+ * reader (A26B-02).
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -54,6 +58,11 @@ const SKIN = readFileSync(
   "utf8"
 ).replace(/\/\*[\s\S]*?\*\//g, "");
 
+const GRID_SKIN = readFileSync(
+  resolve(process.cwd(), "src/foundation/tokens/css/runtime/engines/modern/skin/grid/index.css"),
+  "utf8"
+).replace(/\/\*[\s\S]*?\*\//g, "");
+
 const normalise = (value: string) =>
   value.replace(/\s+/g, " ").replace(/\( /g, "(").replace(/ \)/g, ")").trim();
 
@@ -93,6 +102,10 @@ const DERIVER_WIRED: Record<string, string> = {
   "--ds-card-title-font-size-sm": "var(--ds-type-body-font-size)",
   "--ds-card-body-font-size-sm": "var(--ds-type-supporting-font-size)",
   "--ds-card-title-font-size-lg": "var(--ds-type-section-title-font-size)",
+};
+
+/** Channels the deriver produces whose one reader is the Grid skin; its fallback must equal the produced string. */
+const GRID_READ: Record<string, string> = {
   "--ds-card-scale-sm": "calc(var(--ds-card-scale-md, 1) * 0.875)",
   "--ds-card-scale-md": "1",
   "--ds-card-scale-lg": "calc(var(--ds-card-scale-md, 1) * 1.25)",
@@ -126,6 +139,14 @@ describe("chrome/card", () => {
       expect({ channel, fallbacks: skinFallbacks(channel) }).toEqual({
         channel,
         fallbacks: [normalise(chain)],
+      });
+    }
+    for (const [channel, chain] of Object.entries(GRID_READ)) {
+      expect(derived[channel], channel).toBe(chain);
+      expect({ channel, cardFallbacks: skinFallbacks(channel) }).toEqual({ channel, cardFallbacks: [] });
+      expect({ channel, gridFallbacks: fallbacksIn(GRID_SKIN, channel) }).toEqual({
+        channel,
+        gridFallbacks: [normalise(chain)],
       });
     }
     for (const [channel, chain] of Object.entries(CONSTANTS_WIRED)) {
@@ -200,11 +221,6 @@ describe("chrome/card", () => {
 });
 
 /* ---- the footprint: the channels the Grid skin's auto-fit recipe reads ---- */
-
-const GRID_SKIN = readFileSync(
-  resolve(process.cwd(), "src/foundation/tokens/css/runtime/engines/modern/skin/grid/index.css"),
-  "utf8"
-).replace(/\/\*[\s\S]*?\*\//g, "");
 
 describe("chrome/card footprint", () => {
   const FOOTPRINT: Record<string, string> = {
