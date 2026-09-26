@@ -17136,8 +17136,9 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   line-height: 1.2;
 }
 
+/* The frozen engines' catalog track; Modern's catalog is the auto-fit Grid. */
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-grid[data-part="catalog-grid"] {
+  .ds-widget-board__catalog-grid[data-part="catalog-grid"]:not([data-auto-fit]) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 272px), 1fr));
   gap: var(--ds-spacing-3, 12px);
@@ -18463,7 +18464,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
 
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-grid[data-part="catalog-grid"] {
+    .ds-widget-board__catalog-grid[data-part="catalog-grid"]:not([data-auto-fit]) {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -25627,6 +25628,20 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='xl'] {
   --ds-card-instance-padding: calc(var(--ds-card-padding-xl, var(--ds-card-xl-padding)) * var(--ds-rhythm-effective-scale, 1));
+}
+
+/* footprint preset: the instance states the one factor an auto-fit grid reads */
+.ds-card.ds-card--modern[data-part='root'][data-scale='sm'] {
+  --ds-card-scale: var(--ds-card-scale-sm, calc(var(--ds-card-scale-md, 1) * 0.875));
+}
+.ds-card.ds-card--modern[data-part='root'][data-scale='md'] {
+  --ds-card-scale: var(--ds-card-scale-md, 1);
+}
+.ds-card.ds-card--modern[data-part='root'][data-scale='lg'] {
+  --ds-card-scale: var(--ds-card-scale-lg, calc(var(--ds-card-scale-md, 1) * 1.25));
+}
+.ds-card.ds-card--modern[data-part='root'][data-scale='xl'] {
+  --ds-card-scale: var(--ds-card-scale-xl, calc(var(--ds-card-scale-md, 1) * 1.5));
 }
 
 /* size axis: compact sizes de-escalate the copy, amplified sizes scale it up;
@@ -65584,6 +65599,45 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   row-gap: calc(var(--_ds-grid-row-gap) * var(--ds-rhythm-effective-scale, 1));
 }
 
+/* ---- auto-fit: empty tracks collapse, so a larger card preset absorbs the free
+        space; the contract's compact container posture takes one column ---- */
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'] {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(
+      min(
+        100%,
+        calc(
+          var(--ds-card-min-inline-size, calc(16rem * var(--ds-density-effective-scale, 1) * var(--ds-type-scale, 1)))
+          * var(--ds-card-scale, var(--ds-card-scale-md, 1))
+        )
+      ),
+      1fr
+    )
+  );
+}
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'][data-min-item='sm'] {
+  --ds-card-scale: var(--ds-card-scale-sm, calc(var(--ds-card-scale-md, 1) * 0.875));
+}
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'][data-min-item='md'] {
+  --ds-card-scale: var(--ds-card-scale-md, 1);
+}
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'][data-min-item='lg'] {
+  --ds-card-scale: var(--ds-card-scale-lg, calc(var(--ds-card-scale-md, 1) * 1.25));
+}
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'][data-min-item='xl'] {
+  --ds-card-scale: var(--ds-card-scale-xl, calc(var(--ds-card-scale-md, 1) * 1.5));
+}
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'][data-posture~='compact'] {
+  grid-template-columns: 100%;
+}
+
 /* ---- the cell ----
  * `grid-cell`, not `cell`: `cell` belongs to the table family, and a Grid.Item
  * nested inside a table would otherwise be reached by its descendant rules and
@@ -101750,12 +101804,24 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * channel (an SVG presentation attribute cannot resolve `var()`, so the
  * engine's former attribute-based fallback painted an ungoverned black
  * whenever a stat had no `color`); the sparkline geometry goes fluid at a
- * fixed block size; the card/skeleton padding fallback rides the tenant
+ * fixed block size; the card padding fallback rides the tenant
  * density plane (`--ds-density-effective-scale`, Button-skin idiom); and the
  * root gains a quiet `error` part mirroring the `empty` block. The private
  * `--_ds-stats-grid-sparkline-fill-opacity` channel governs area-fill
  * strength, exact 0.2 fallback).
+ *
+ * LAYOUT (WO-FAM-12): the root is the Grid primitive with `autoFit`; its
+ * tracks, gap and compact single column are the grid skin's. This file keeps
+ * only the root's inline size, and the loading footprint of the placeholder
+ * parts the shared `AnatomySkeleton` renderer measures (the hand-built
+ * skeleton and its shimmer bars are retired).
  */
+
+/* The root spans its container, as the inline geometry it replaces did. */
+.ds-pattern-stats-grid.ds-engine-modern[data-part="root"] {
+  inline-size: 100%;
+  box-sizing: border-box;
+}
 
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
   transition: box-shadow var(--ds-motion-reveal)
@@ -101904,29 +101970,22 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-color-error);
 }
 
-/* ---- skeleton geometry drained from the engine's inline styles (it mirrors
-        the card's padding so skeleton and content share the same frame) ---- */
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton"] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-spacing-3, 0.75rem);
-  padding: var(
-    --ds-stats-grid-card-padding,
-    calc(1.25rem * var(--ds-density-effective-scale))
-      calc(1.5rem * var(--ds-density-effective-scale))
-  );
-}
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"][data-kind="label"] {
+/* ---- loading footprint: with no data there is no copy inside the
+        placeholder card, so its parts carry the size the renderer measures
+        (the retired skeleton bars' geometry, now on the real anatomy). ---- */
+.ds-pattern-stats-grid.ds-engine-modern[data-loading="true"] [data-part="title"] {
   inline-size: 40%;
   block-size: 12px;
 }
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"][data-kind="value"] {
+.ds-pattern-stats-grid.ds-engine-modern[data-loading="true"] [data-part="value"] {
   inline-size: 65%;
   block-size: 28px;
+  margin-block-start: var(--ds-spacing-3, 0.75rem);
 }
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"][data-kind="trend"] {
+.ds-pattern-stats-grid.ds-engine-modern[data-loading="true"] [data-part="trend"] {
   inline-size: 30%;
   block-size: 16px;
+  padding: 0;
 }
 
 /* ---- sparkline: the skin owns paint (stroke + gradient stops) through the
@@ -101997,24 +102056,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: var(--ds-surface-panel);
 }
 
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton"] {
-  background: var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-1);
-  border-radius: var(--ds-radius-lg);
-}
-
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"] {
-  background: linear-gradient(
-    90deg,
-    var(--ds-surface-panel) 25%,
-    var(--ds-surface-inset) 50%,
-    var(--ds-surface-panel) 75%
-  );
-  background-size: 200% 100%;
-  animation: ds-skeleton-shimmer var(--ds-motion-attention) var(--ds-motion-ease-in-out) infinite;
-  border-radius: var(--ds-radius-sm);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
     transition: none;
@@ -102024,9 +102065,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-stats-grid.ds-engine-modern
     .ds-stats-grid__card[data-interactive="true"]:is([data-state~='pressed'], :active) {
     transform: none;
-  }
-  .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"] {
-    animation: none;
   }
 }
 
@@ -102056,14 +102094,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-stats-grid.ds-engine-modern
     .ds-stats-grid__card[data-interactive="true"]:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
-  }
-  .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton"] {
-    border: 1px solid ButtonText;
-    background: Canvas;
-    box-shadow: none;
-  }
-  .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"] {
-    background: GrayText;
   }
   .ds-pattern-stats-grid.ds-engine-modern [data-part="sparkline-area"] {
     fill: none;
@@ -103401,17 +103431,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * RTL: the checkbox overlay anchors with logical insets — it mirrors to the
  * inline-start corner under `dir="rtl"` with zero overrides.
  *
- * GEOMETRY (WO-FAM-08 B7): the gallery's track model, gap and media ratio moved
- * here out of the engine's `style` prop. The three numbers a caller can state
- * travel as family channels whose RESTING values are declared below, so the
- * reads have a producer instead of resolving to a fallback nobody can move:
- *
- *   --ds-gallery-view-columns       the `grid-template-columns` track model
- *   --ds-gallery-view-gap           the gap between cards
- *   --ds-gallery-view-aspect-ratio  the media frame's ratio
- *
- * All three resting values are byte-equivalent to what the pattern's prop
- * defaults used to compute.
+ * GEOMETRY (WO-FAM-12): the root is the Grid primitive in its auto-fit mode;
+ * the track model and the gap are the Grid skin's card recipe. The media ratio
+ * stays the family's own channel, `--ds-gallery-view-aspect-ratio`, resting at
+ * the square the pattern used to default to.
  *
  * LOADING: the family draws no skeleton of its own. The shared anatomy renderer
  * builds the loading state from this gallery's own parts, so the `skeleton-card`
@@ -103424,24 +103447,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  */
 
 .ds-pattern-gallery-view[data-part='root'] {
-  --ds-gallery-view-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
-  /* The card rhythm rides the density-scaled spacing ramp: `--ds-spacing-4` is
-     `calc(1rem * density)`, which is the 16px the prop default forced at
-     density 1 -- and now follows a denser tenant instead of ignoring it. */
-  --ds-gallery-view-gap: var(--ds-spacing-4, 16px);
   --ds-gallery-view-aspect-ratio: 1;
-}
-
-/* The card grid itself. The empty branch is NOT a grid -- it is one centered
-   message on the same root box -- so the track model is scoped to the populated
-   and loading branches, exactly as the engine scoped it. */
-.ds-pattern-gallery-view[data-part='root'][data-empty='false'] {
-  display: grid;
-  grid-template-columns: var(
-    --ds-gallery-view-columns,
-    repeat(auto-fill, minmax(min(200px, 100%), 1fr))
-  );
-  gap: var(--ds-gallery-view-gap, var(--ds-spacing-4, 16px));
 }
 
 /* ---- media frame: the image and its placeholder share one geometry. ---- */
@@ -103665,45 +103671,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * footer-*, icon-*, meter-*, number-*, value-color-hover) have no honest host
  * in this file and stay unwired pending a CONSUMER_APPLIED contract.
  *
- * GEOMETRY (WO-FAM-08 B7): the grid's own track model, gap, bleed and box
- * sizing moved here out of the engine's `style` prop. The two numbers a caller
- * can state travel as family channels whose RESTING values are declared below,
- * so the reads have a producer instead of resolving to a fallback nobody can
- * move:
- *
- *   --ds-grid-view-columns  the `grid-template-columns` track model
- *   --ds-grid-view-gap      the gap between cards
- *
- * Both resting values are byte-equivalent to what the pattern's prop defaults
- * used to compute, including the `--ds-collection-card-gap` premium socket the
- * engine used to tier through.
+ * GEOMETRY (WO-FAM-12): the root is the Grid primitive in its auto-fit mode;
+ * the track model and the gap are the Grid skin's card recipe. This file keeps
+ * only the grid-view's own bleed and box sizing.
  *
  * STATE: the shell's interaction state is decided once by the kernel and
  * arrives as `data-state`; the platform pseudo-class is PAIRED with it as the
  * fallback of one decision, never as a second authority (F-37).
  */
 
-.ds-pattern-grid-view[data-part='root'] {
-  --ds-grid-view-columns: repeat(
-    auto-fill,
-    minmax(min(var(--ds-listing-grid-min-compact-width, 280px), 100%), 1fr)
-  );
-  --ds-grid-view-gap: var(
-    --ds-collection-card-gap,
-    var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))
-  );
-}
-
-/* The card grid itself. The empty branch is NOT a grid -- it is one centered
-   message on the same root box -- so the track model is scoped to the
-   populated and loading branches, exactly as the engine scoped it. */
 .ds-pattern-grid-view[data-part='root'][data-empty='false'] {
-  display: grid;
-  grid-template-columns: var(
-    --ds-grid-view-columns,
-    repeat(auto-fill, minmax(min(var(--ds-listing-grid-min-compact-width, 280px), 100%), 1fr))
-  );
-  gap: var(--ds-grid-view-gap, var(--ds-spacing-4, 16px));
   /* One pixel of bleed on each side so a card's own ring is not clipped, and a
      bottom bleed the listing layer can tune. */
   padding-block: 1px var(--ds-listing-grid-bottom-bleed, var(--ds-spacing-2, 8px));
@@ -117764,7 +117741,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
  * cascades over; only its CSS projection is gone.
  *
  * The container ladder a tenant selects (`responsive.posture`) is a separate,
- * bounded axis and is emitted per tenant on `--ds-posture-*` by the compiler.
+ * bounded axis that travels as data to the adapt slot; it has no CSS channel.
  */
 
 :root {
@@ -121023,10 +121000,16 @@ html[lang]:lang(ar) {
   --ds-card-info-title-color: var(--ds-color-info-900);
   --ds-card-instance-padding: calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1));
   --ds-card-loading-min-height: calc(var(--ds-spacing-10) * 3);
+  --ds-card-min-inline-size: calc(16rem * var(--ds-density-effective-scale, 1) * var(--ds-type-scale, 1));
   --ds-card-nested-shadow: none;
   --ds-card-outlined-border-hover: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));
   --ds-card-padding-base: var(--ds-card-padding, var(--ds-card-md-padding));
   --ds-card-primary-title-color: var(--ds-color-primary-900);
+  --ds-card-scale: var(--ds-card-scale-md, 1);
+  --ds-card-scale-lg: calc(var(--ds-card-scale-md, 1) * 1.25);
+  --ds-card-scale-md: 1;
+  --ds-card-scale-sm: calc(var(--ds-card-scale-md, 1) * 0.875);
+  --ds-card-scale-xl: calc(var(--ds-card-scale-md, 1) * 1.5);
   --ds-card-success-title-color: var(--ds-color-success-900);
   --ds-card-title-font-size-lg: var(--ds-type-section-title-font-size);
   --ds-card-title-font-size-sm: var(--ds-type-body-font-size);
@@ -122525,10 +122508,6 @@ html[lang]:lang(ar) {
   --ds-popover-surface-lift: var(--ds-elevation-surface-3);
   --ds-popover-title-background: none;
   --ds-popover-title-divider: var(--ds-popover-title-border, var(--ds-color-border-subtle));
-  --ds-posture-container-compact-max: 759px;
-  --ds-posture-container-standard-max: 959px;
-  --ds-posture-id: compact;
-  --ds-posture-span-bias: min;
   --ds-radio-border: var(--ds-color-border-secondary);
   --ds-radio-checked-border: var(--ds-color-primary);
   --ds-radio-checked-dot: var(--ds-color-primary);
@@ -123814,6 +123793,7 @@ html[lang]:lang(ar) {
   --ds-card-footer-actions-inset: var(--ds-spacing-1);
   --ds-card-header-extra-min-height: calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-card-loading-min-height: calc(var(--ds-spacing-10) * 3);
+  --ds-card-min-inline-size: calc(16rem * var(--ds-density-effective-scale, 1) * var(--ds-type-scale, 1));
   --ds-collapse-content-lg-idle-padding-x: var(--ds-spacing-5);
   --ds-collapse-content-lg-idle-padding-y: var(--ds-spacing-5);
   --ds-collapse-content-sm-idle-padding-x: var(--ds-spacing-3);

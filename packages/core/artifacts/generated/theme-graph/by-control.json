@@ -16,7 +16,7 @@
     },
     {
       "channels": 337,
-      "channelsThroughAliases": 1208,
+      "channelsThroughAliases": 1206,
       "decision": "density.mode",
       "derivers": [
         "app-shell",
@@ -248,7 +248,7 @@
     },
     {
       "channels": 224,
-      "channelsThroughAliases": 1882,
+      "channelsThroughAliases": 1880,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -1010,8 +1010,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2514,
-      "channelsThroughAliases": 4084,
+      "channels": 2520,
+      "channelsThroughAliases": 4090,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1216,6 +1216,7 @@
         "form-sections",
         "form-surface",
         "gallery-view",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "header-hero-shared",
@@ -1364,8 +1365,8 @@
       "tier": "pro"
     },
     {
-      "channels": 2514,
-      "channelsThroughAliases": 4084,
+      "channels": 2520,
+      "channelsThroughAliases": 4090,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1570,6 +1571,7 @@
         "form-sections",
         "form-surface",
         "gallery-view",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "header-hero-shared",
@@ -1710,8 +1712,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2612,
-      "channelsThroughAliases": 4287,
+      "channels": 2618,
+      "channelsThroughAliases": 4293,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -1920,6 +1922,7 @@
         "form-sections",
         "form-surface",
         "gallery-view",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "header-hero-shared",
@@ -2060,8 +2063,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2600,
-      "channelsThroughAliases": 4263,
+      "channels": 2606,
+      "channelsThroughAliases": 4269,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",
@@ -2269,6 +2272,7 @@
         "form-sections",
         "form-surface",
         "gallery-view",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "header-hero-shared",
@@ -2410,7 +2414,7 @@
     },
     {
       "channels": 224,
-      "channelsThroughAliases": 1882,
+      "channelsThroughAliases": 1880,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",
@@ -2680,8 +2684,8 @@
       "tier": "pro"
     },
     {
-      "channels": 31,
-      "channelsThroughAliases": 32,
+      "channels": 27,
+      "channelsThroughAliases": 28,
       "decision": "responsive.posture",
       "derivers": [
         "container",
@@ -2694,7 +2698,7 @@
     },
     {
       "channels": 365,
-      "channelsThroughAliases": 1046,
+      "channelsThroughAliases": 1047,
       "decision": "shape.button-style",
       "derivers": [
         "app-shell",
@@ -2811,6 +2815,7 @@
         "form-header",
         "form-sections",
         "gallery-view",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "hover-card",
@@ -3103,8 +3108,8 @@
       "tier": "pro"
     },
     {
-      "channels": 1287,
-      "channelsThroughAliases": 1910,
+      "channels": 1293,
+      "channelsThroughAliases": 1916,
       "decision": "shape.radius-scale",
       "derivers": [
         "app-shell",
@@ -3247,6 +3252,7 @@
         "form-header",
         "form-sections",
         "gallery-view",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "hover-card",
@@ -3371,7 +3377,7 @@
     },
     {
       "channels": 336,
-      "channelsThroughAliases": 535,
+      "channelsThroughAliases": 533,
       "decision": "spacing.rhythm",
       "derivers": [
         "app-shell",
@@ -3424,7 +3430,6 @@
         "form-header",
         "form-surface",
         "grid",
-        "grid-view",
         "kbd",
         "layout",
         "layout-primitives",
@@ -3922,8 +3927,8 @@
       "tier": "standard"
     },
     {
-      "channels": 476,
-      "channelsThroughAliases": 656,
+      "channels": 482,
+      "channelsThroughAliases": 662,
       "decision": "surfaces.border-style",
       "derivers": [
         "app-shell",
@@ -4000,6 +4005,7 @@
         "form",
         "form-builder",
         "form-surface",
+        "grid",
         "guided-draft-form",
         "hover-card",
         "image",
@@ -4136,8 +4142,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1701,
-      "channelsThroughAliases": 1945,
+      "channels": 1707,
+      "channelsThroughAliases": 1951,
       "decision": "surfaces.elevation-posture",
       "derivers": [
         "action-dock",
@@ -4249,6 +4255,7 @@
         "form",
         "form-builder",
         "form-surface",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "hover-card",
@@ -4665,7 +4672,7 @@
     },
     {
       "channels": 130,
-      "channelsThroughAliases": 944,
+      "channelsThroughAliases": 945,
       "decision": "typography.pairing",
       "derivers": [
         "axes",
@@ -4769,6 +4776,7 @@
         "form-header",
         "form-sections",
         "gallery-view",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "hover-card",
@@ -5063,11 +5071,12 @@
       "tier": "standard"
     },
     {
-      "channels": 374,
-      "channelsThroughAliases": 1144,
+      "channels": 410,
+      "channelsThroughAliases": 1184,
       "decision": "typography.scale",
       "derivers": [
         "axes",
+        "card",
         "cockpit-header",
         "collection-header",
         "dashboard-header",
@@ -5182,6 +5191,7 @@
         "form-header",
         "form-sections",
         "gallery-view",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "hover-card",

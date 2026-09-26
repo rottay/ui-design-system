@@ -2693,8 +2693,18 @@
         "experience.profile",
         "motion.character",
         "motion.dial",
+        "palette.contrast-posture",
+        "palette.neutral-temperature",
+        "palette.seeds",
+        "palette.status-seeds",
         "profiles.expressive",
-        "spacing.rhythm"
+        "shape.button-style",
+        "shape.radius-scale",
+        "spacing.rhythm",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
+        "typography.pairing",
+        "typography.scale"
       ],
       "family": "grid",
       "tier": "primitive"
@@ -2713,7 +2723,6 @@
         "shape.button-style",
         "shape.control-height",
         "shape.radius-scale",
-        "spacing.rhythm",
         "states.emphasis",
         "states.focus-style",
         "surfaces.elevation-posture",

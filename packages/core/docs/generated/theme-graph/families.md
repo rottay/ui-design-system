@@ -7,7 +7,7 @@
 > 277 skin families; 264 are reached by at least one decision, 13 by none.
 > The tier is the component tier that owns the family; a family with no component folder carries none.
 
-digest: e74a5219828545a5fce6a70c5d4054eef4de1ca55ebfd875fa7523309835b5fc
+digest: 5130b1586a21106000818b3898367a7023a1a622544187371e870012a22984b1
 
 | family | tier | decisions reaching it |
 |---|---|---|
@@ -138,8 +138,8 @@ digest: e74a5219828545a5fce6a70c5d4054eef4de1ca55ebfd875fa7523309835b5fc
 | `form-sections` | structure | 18 |
 | `form-surface` | — | 10 |
 | `gallery-view` | pattern | 15 |
-| `grid` | primitive | 6 |
-| `grid-view` | pattern | 18 |
+| `grid` | primitive | 16 |
+| `grid-view` | pattern | 17 |
 | `guided-draft-form` | — | 20 |
 | `header-hero-shared` | — | 8 |
 | `hover-card` | primitive | 17 |
@@ -436,8 +436,8 @@ on the family.
 | `form-sections` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `form-surface` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `spacing.rhythm`, `surfaces.border-style`, `surfaces.elevation-posture` |
 | `gallery-view` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.pairing`, `typography.scale` |
-| `grid` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `profiles.expressive`, `spacing.rhythm` |
-| `grid-view` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.radius-scale`, `spacing.rhythm`, `states.emphasis`, `states.focus-style`, `surfaces.elevation-posture`, `typography.pairing`, `typography.scale` |
+| `grid` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `spacing.rhythm`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.pairing`, `typography.scale` |
+| `grid-view` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.elevation-posture`, `typography.pairing`, `typography.scale` |
 | `guided-draft-form` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `header-hero-shared` | `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `states.emphasis`, `states.focus-style` |
 | `hover-card` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.pairing`, `typography.scale` |

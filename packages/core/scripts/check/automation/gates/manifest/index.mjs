@@ -189,8 +189,8 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/check/tokens/cascade/channels/liveness/index.mjs', '--check'],
     blocking: false,
     excluded: {
-      reason: 'The 43 known non-LIVE rows are pinned to work orders and enforced BLOCKING by channel-liveness-dispositions. What keeps the full --check red is outside that law: the missing R1 artifact, two emitter patterns the family roster covers only by glob (typography/scale:48 and :53; axes:35 is closed through its exact produces roster), and 31 consumer sites under patterns/visualization with no family-inventory row.',
-      owner: 'WO-EVI-02 (emitter-pattern resolution + R1 artifact) and WO-RET-04 (family-inventory drift); the 43 channel rows are owned per CHANNEL_DISPOSITIONS',
+      reason: 'The 39 known non-LIVE rows are pinned to work orders and enforced BLOCKING by channel-liveness-dispositions. What keeps the full --check red is outside that law: the missing R1 artifact, two emitter patterns the family roster covers only by glob (typography/scale:48 and :53; axes:35 is closed through its exact produces roster), and 31 consumer sites under patterns/visualization with no family-inventory row.',
+      owner: 'WO-EVI-02 (emitter-pattern resolution + R1 artifact) and WO-RET-04 (family-inventory drift); the 39 channel rows are owned per CHANNEL_DISPOSITIONS',
       trackedSince: '2026-08-20',  // re-adjudicada 2026-09-11 tras la auditoria 100 (antes: censo 2026-08-20)
     },
     phase: 'pre-build',

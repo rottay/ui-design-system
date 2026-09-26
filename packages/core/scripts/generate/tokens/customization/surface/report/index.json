@@ -3,39 +3,39 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "4de49d0ef7ab7497e0229baa5168fbe047770a38a999ec7c3fc0be804da885c1",
+    "inputsDigest": "341cf84d348524ae1c54a83dc9666c4848f2631fd0850fc275c3e4ff1dbff937",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 496,
       "productionTsFiles": 2294,
-      "testFiles": 1798,
+      "testFiles": 1804,
       "artifactFiles": 3,
       "showroomReaderFiles": 362
     }
   },
   "counts": {
-    "universe": 8748,
-    "writers": 7518,
+    "universe": 8746,
+    "writers": 7516,
     "foundationTokens": 4186,
-    "componentTokens": 719,
-    "tenantChannels": 4501,
+    "componentTokens": 716,
+    "tenantChannels": 4503,
     "publicHooks": 107,
     "unadjudicatedReads": 1211,
-    "deadWriters": 271,
+    "deadWriters": 269,
     "frontierReserved": 0,
-    "modernConsumedUnique": 4788,
+    "modernConsumedUnique": 4794,
     "tsReadNames": 2876,
-    "tsWriteNames": 3903,
-    "tsMetadataNames": 3465,
+    "tsWriteNames": 3905,
+    "tsMetadataNames": 3463,
     "showroomReadNames": 123,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
   "frontierFamilies": [],
   "deadByClass": {
-    "foundation": 125,
+    "foundation": 126,
     "component": 0,
-    "tenantChannel": 200,
+    "tenantChannel": 198,
     "authoredCssLocal": 6
   },
   "controls": {
@@ -214,6 +214,7 @@
     "--ds-collection-card-footer-bg",
     "--ds-collection-card-footer-border",
     "--ds-collection-card-footer-color",
+    "--ds-collection-card-gap",
     "--ds-collection-card-icon-bg",
     "--ds-collection-card-icon-border",
     "--ds-collection-card-icon-color",
@@ -304,6 +305,7 @@
     "--ds-listing-grid-card-border",
     "--ds-listing-grid-card-gap",
     "--ds-listing-grid-card-shadow",
+    "--ds-listing-grid-min-compact-width",
     "--ds-listing-grid-min-tall-width",
     "--ds-listing-grid-selected-ring",
     "--ds-listing-grid-skeleton-bg",
@@ -318,10 +320,6 @@
     "--ds-metric-card-selected-ring",
     "--ds-metric-card-title-color",
     "--ds-popover-title-gap-current",
-    "--ds-posture-container-compact-max",
-    "--ds-posture-container-standard-max",
-    "--ds-posture-id",
-    "--ds-posture-span-bias",
     "--ds-premium-card-footer-color",
     "--ds-premium-card-glass-bg",
     "--ds-premium-card-rim",
@@ -21845,6 +21843,22 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
+    "--ds-card-min-inline-size": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "showroom": 0,
+        "tests": true,
+        "modern": true,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
     "--ds-card-nest-inset": {
       "category": "canonical-authority",
       "tier": "internal",
@@ -22132,6 +22146,86 @@
       },
       "tsWriteSites": 1,
       "tsMetadataMentions": 0
+    },
+    "--ds-card-scale": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "showroom": 0,
+        "tests": true,
+        "modern": true,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
+    "--ds-card-scale-lg": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 2,
+        "ts": 0,
+        "showroom": 0,
+        "tests": true,
+        "modern": true,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
+    "--ds-card-scale-md": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 9,
+        "ts": 4,
+        "showroom": 0,
+        "tests": true,
+        "modern": true,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
+    "--ds-card-scale-sm": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 2,
+        "ts": 0,
+        "showroom": 0,
+        "tests": true,
+        "modern": true,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
+    "--ds-card-scale-xl": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 2,
+        "ts": 0,
+        "showroom": 0,
+        "tests": true,
+        "modern": true,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-card-selected-outline-width": {
       "category": "compiler-derived-channel",
@@ -30504,13 +30598,13 @@
     "--ds-collection-card-gap": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "active",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 0,
         "ts": 0,
         "showroom": 0,
-        "tests": true,
+        "tests": false,
         "modern": false,
         "artifact": false
       },
@@ -46635,8 +46729,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 347,
-        "ts": 26,
+        "css": 346,
+        "ts": 27,
         "showroom": 1,
         "tests": true,
         "modern": true,
@@ -53031,7 +53125,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 72,
+        "css": 71,
         "ts": 33,
         "showroom": 1,
         "tests": true,
@@ -58929,38 +59023,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 1
     },
-    "--ds-gallery-view-columns": {
-      "category": "component-channel",
-      "tier": "internal",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
-    },
-    "--ds-gallery-view-gap": {
-      "category": "component-channel",
-      "tier": "internal",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
-    },
     "--ds-glass-backdrop-filter": {
       "category": "canonical-authority",
       "tier": "internal",
@@ -59263,7 +59325,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 5
     },
     "--ds-grid-pattern-color": {
       "category": "consumed-external-origin",
@@ -59295,38 +59357,6 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 1
-    },
-    "--ds-grid-view-columns": {
-      "category": "component-channel",
-      "tier": "internal",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
-    },
-    "--ds-grid-view-gap": {
-      "category": "component-channel",
-      "tier": "internal",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
       "tsMetadataMentions": 1
     },
     "--ds-guided-draft-form-heading-font-weight": {
@@ -68583,7 +68613,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 1,
         "showroom": 0,
         "tests": false,
@@ -68612,13 +68642,13 @@
     "--ds-listing-grid-min-compact-width": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "active",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
-        "css": 2,
-        "ts": 1,
+        "css": 0,
+        "ts": 0,
         "showroom": 0,
-        "tests": true,
+        "tests": false,
         "modern": false,
         "artifact": false
       },
@@ -79863,7 +79893,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 70,
+        "css": 69,
         "ts": 1,
         "showroom": 0,
         "tests": true,
@@ -79975,7 +80005,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 64,
+        "css": 63,
         "ts": 4,
         "showroom": 0,
         "tests": true,
@@ -88369,70 +88399,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-posture-container-compact-max": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "dead-writer",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 2
-    },
-    "--ds-posture-container-standard-max": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "dead-writer",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 2
-    },
-    "--ds-posture-id": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "dead-writer",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 2
-    },
-    "--ds-posture-span-bias": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "dead-writer",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 2
-    },
     "--ds-premium-card-accent": {
       "category": "canonical-authority",
       "tier": "internal",
@@ -91959,7 +91925,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 264,
+        "css": 263,
         "ts": 34,
         "showroom": 3,
         "tests": true,
@@ -92119,7 +92085,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 204,
+        "css": 203,
         "ts": 33,
         "showroom": 3,
         "tests": true,
@@ -108199,7 +108165,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 353,
+        "css": 349,
         "ts": 58,
         "showroom": 6,
         "tests": true,
@@ -110551,7 +110517,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -113479,7 +113445,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 282,
+        "css": 281,
         "ts": 85,
         "showroom": 64,
         "tests": true,
@@ -114007,7 +113973,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 96,
+        "css": 95,
         "ts": 22,
         "showroom": 5,
         "tests": true,
@@ -114135,7 +114101,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 131,
+        "css": 129,
         "ts": 26,
         "showroom": 21,
         "tests": true,
@@ -136895,8 +136861,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 37,
-        "ts": 10,
+        "css": 38,
+        "ts": 11,
         "showroom": 0,
         "tests": true,
         "modern": true,

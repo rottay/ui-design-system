@@ -9,8 +9,8 @@
       "reason": "115 -> 116 (DT ruling 2026-09-23, Fable-endorsed): cobertura nueva, no regresion — la fila bithire:THEME.typography.fontFamilyDisplay entra con 63aec5c5e (el transporte tipografico v1 lleva el rol display; presente en ese commit, ausente en su padre 30ec496c1, verificado con builds reales de ambos arboles por el writer y por Fable). 3594 -> 115. D6-2c-ii (2026-09-15): el universo pasa de las 3594 filas de los tres temas autorados a las 115 filas del baseline compuesto neutro+preset (inventario regenerado post-build, digest b874f2bfd5b3; la identidad de slot THEME.<keypath> conserva su forma, asi que las filas siguen comparables). Las filas retiradas no perdieron capacidad: son los keypaths que nadie autora ya; los que sobreviven son los que el baseline decide."
     },
     "rowsWithoutRootAttribution": {
-      "value": 30,
-      "reason": "1433 -> 30: misma mudanza de universo (ver rows). De las 115 filas compuestas, 30 no llevan atribucion de raiz: quedan como cola de adjudicacion del carril de derivacion (WO-DER-06), medidas no escondidas."
+      "value": 29,
+      "reason": "30 -> 29 (2026-09-26, G103-02 / 7866b75db): los cuatro canales de postura se retiran de la emision y las dos filas bithire THEME.responsive.* (posture, schemaVersion) dejan de emitir — en las stats del propio inventario emits-no-channel 52 -> 54 y no-persisted-membership 31 -> 29, channelEmissions 326 -> 318, distinctChannelsReached 181 -> 177; las unicas dos filas tocadas de las 116, verificado diffieando el inventario contra HEAD. Baja por retiro medido con mover nombrado, no por hallazgo nuevo. | 1433 -> 30: misma mudanza de universo (ver rows). De las 115 filas compuestas, 30 no llevan atribucion de raiz: quedan como cola de adjudicacion del carril de derivacion (WO-DER-06), medidas no escondidas."
     },
     "expressionsCarryingLiteral": {
       "value": 0,

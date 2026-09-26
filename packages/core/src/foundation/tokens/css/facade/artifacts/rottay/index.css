@@ -427,10 +427,16 @@
   --ds-card-info-title-color: var(--ds-color-info-900);
   --ds-card-instance-padding: calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1));
   --ds-card-loading-min-height: calc(var(--ds-spacing-10) * 3);
+  --ds-card-min-inline-size: calc(16rem * var(--ds-density-effective-scale, 1) * var(--ds-type-scale, 1));
   --ds-card-nested-shadow: none;
   --ds-card-outlined-border-hover: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));
   --ds-card-padding-base: var(--ds-card-padding, var(--ds-card-md-padding));
   --ds-card-primary-title-color: var(--ds-color-primary-900);
+  --ds-card-scale: var(--ds-card-scale-md, 1);
+  --ds-card-scale-lg: calc(var(--ds-card-scale-md, 1) * 1.25);
+  --ds-card-scale-md: 1;
+  --ds-card-scale-sm: calc(var(--ds-card-scale-md, 1) * 0.875);
+  --ds-card-scale-xl: calc(var(--ds-card-scale-md, 1) * 1.5);
   --ds-card-success-title-color: var(--ds-color-success-900);
   --ds-card-title-font-size-lg: var(--ds-type-section-title-font-size);
   --ds-card-title-font-size-sm: var(--ds-type-body-font-size);
@@ -1804,10 +1810,6 @@
   --ds-popover-surface-lift: var(--ds-elevation-surface-3);
   --ds-popover-title-background: none;
   --ds-popover-title-divider: var(--ds-popover-title-border, var(--ds-color-border-subtle));
-  --ds-posture-container-compact-max: 639px;
-  --ds-posture-container-standard-max: 839px;
-  --ds-posture-id: balanced;
-  --ds-posture-span-bias: preferred;
   --ds-radio-border: var(--ds-color-border-secondary);
   --ds-radio-checked-border: var(--ds-color-primary);
   --ds-radio-checked-dot: var(--ds-color-primary);
@@ -3007,6 +3009,7 @@
   --ds-card-footer-actions-inset: var(--ds-spacing-1);
   --ds-card-header-extra-min-height: calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-card-loading-min-height: calc(var(--ds-spacing-10) * 3);
+  --ds-card-min-inline-size: calc(16rem * var(--ds-density-effective-scale, 1) * var(--ds-type-scale, 1));
   --ds-collapse-content-lg-idle-padding-x: var(--ds-spacing-5);
   --ds-collapse-content-lg-idle-padding-y: var(--ds-spacing-5);
   --ds-collapse-content-sm-idle-padding-x: var(--ds-spacing-3);

@@ -788,8 +788,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // EVI-02 -> density wave 2c (measured, 2026-09-25): rottay 2951 -> 2947,
       // the four rows above: 2951 pinned by efd93b37a, +1 d4edd6420 (the
       // residual it named), +1 643c3588b, -6 266199fe9.
-      // G103-02 (2026-09-26): rottay 2947 -> 2943, the four posture channels.
-      rottay: 2943,
+      // FAM-12 packet 1 (2026-09-26, 730666676): rottay 2947 -> 2953, the six card
+      // footprint channels -- --ds-card-min-inline-size, --ds-card-scale and the four
+      // --ds-card-scale-{sm,md,lg,xl} presets, all produced and wired.
+      // G103-02 (2026-09-26): rottay 2953 -> 2949, the four posture channels.
+      rottay: 2949,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -854,8 +857,10 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // +1 d4edd6420, +0 efd93b37a (its palette already seeded the tint
       // scale), +1 643c3588b, -6 266199fe9. The offset over rottay is 136 now:
       // efd93b37a gave the other two the 25 tint rungs bithire already had.
-      // G103-02 (2026-09-26): bithire 3083 -> 3079, the four posture channels.
-      bithire: 3079,
+      // FAM-12 packet 1 (2026-09-26, 730666676): bithire 3083 -> 3089, the same six card
+      // footprint channels as the other two verticals (all produced, none a seed).
+      // G103-02 (2026-09-26): bithire 3089 -> 3085, the four posture channels.
+      bithire: 3085,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -913,8 +918,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // preset that authors a categorical series, which is not evnto's.
       // EVI-02 -> density wave 2c (measured, 2026-09-25): evnto 2951 -> 2947,
       // byte-for-byte rottay's keys on all four rows.
-      // G103-02 (2026-09-26): evnto 2947 -> 2943, the four posture channels.
-      evnto: 2943,
+      // FAM-12 packet 1 (2026-09-26, 730666676): evnto 2947 -> 2953, the six card
+      // footprint channels -- --ds-card-min-inline-size, --ds-card-scale and the four
+      // --ds-card-scale-{sm,md,lg,xl} presets, all produced and wired.
+      // G103-02 (2026-09-26): evnto 2953 -> 2949, the four posture channels.
+      evnto: 2949,
     };
     for (const vertical of VERTICALS) {
       expect(

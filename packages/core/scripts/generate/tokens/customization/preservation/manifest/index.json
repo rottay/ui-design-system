@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/generate/tokens/customization/preservation/index.mjs --write",
-  "basedOnReportDigest": "4279f90f307947339c2105b561e1611ed164fe444e82b9357fed2c542ca91478",
+  "basedOnReportDigest": "039ebcf026df8daf047755ee5add6af1eb8d5aab57238cc908499eb31d518be9",
   "laws": [
     "preserve 100% of useful premium visual capability; connect it to the canon",
     "a census dead-writer verdict is never a deletion license",
@@ -2153,12 +2153,12 @@
     ]
   },
   "deadWriters": {
-    "total": 271,
+    "total": 269,
     "byProvenance": {
       "E-reserved-frontier": 13,
       "B-modern-current": 60,
-      "A-protected-premium": 183,
-      "D-compiler-generated": 15
+      "A-protected-premium": 185,
+      "D-compiler-generated": 11
     },
     "entries": [
       {
@@ -2310,6 +2310,13 @@
       },
       {
         "name": "--ds-collection-card-footer-color",
+        "provenance": "A-protected-premium",
+        "decision": "RECONNECT_OR_PROMOTE",
+        "owner": "design-system/premium-customization",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-collection-card-gap",
         "provenance": "A-protected-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "design-system/premium-customization",
@@ -2946,6 +2953,13 @@
         "status": "dead-writer"
       },
       {
+        "name": "--ds-listing-grid-min-compact-width",
+        "provenance": "A-protected-premium",
+        "decision": "RECONNECT_OR_PROMOTE",
+        "owner": "design-system/premium-customization",
+        "status": "dead-writer"
+      },
+      {
         "name": "--ds-listing-grid-min-tall-width",
         "provenance": "A-protected-premium",
         "decision": "RECONNECT_OR_PROMOTE",
@@ -3041,34 +3055,6 @@
         "provenance": "B-modern-current",
         "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
         "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-posture-container-compact-max",
-        "provenance": "D-compiler-generated",
-        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
-        "owner": "design-system/D1-compilers",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-posture-container-standard-max",
-        "provenance": "D-compiler-generated",
-        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
-        "owner": "design-system/D1-compilers",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-posture-id",
-        "provenance": "D-compiler-generated",
-        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
-        "owner": "design-system/D1-compilers",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-posture-span-bias",
-        "provenance": "D-compiler-generated",
-        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
-        "owner": "design-system/D1-compilers",
         "status": "dead-writer"
       },
       {

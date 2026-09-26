@@ -330,7 +330,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
 
     const line = populationLine();
     assert.match(line, /shape 217 \(1 N\/A\)/);
-    assert.match(line, /typography 181 \(0 N\/A\)/);
+    assert.match(line, /typography 182 \(0 N\/A\)/);
     assert.match(line, /exclusions [0-9a-f]{16} \(1 reviewed\)/);
 
     const pilot = pilotPopulation();

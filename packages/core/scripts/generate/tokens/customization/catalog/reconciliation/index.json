@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/generate/tokens/customization/catalog/index.mjs --write",
-  "basedOnReportDigest": "4279f90f307947339c2105b561e1611ed164fe444e82b9357fed2c542ca91478",
+  "basedOnReportDigest": "039ebcf026df8daf047755ee5add6af1eb8d5aab57238cc908499eb31d518be9",
   "normative": {
-    "writers": 7518,
-    "deadWriters": 271,
+    "writers": 7516,
+    "deadWriters": 269,
     "definition": "writer names and productive reads are derived by the customization surface census"
   },
   "familyAdjudication": [
@@ -26,7 +26,7 @@
     {
       "family": "--ds-collection-card-*",
       "disposition": "COMPONENT_PRIVATE",
-      "count": 24
+      "count": 25
     },
     {
       "family": "--ds-signal-card-*",
@@ -41,7 +41,7 @@
     {
       "family": "--ds-listing-grid-*",
       "disposition": "COMPONENT_PRIVATE",
-      "count": 7
+      "count": 8
     },
     {
       "family": "--ds-premium-card-*",
@@ -86,7 +86,7 @@
     {
       "family": "remainder",
       "disposition": "KEEP_INTERNAL",
-      "count": 87
+      "count": 83
     }
   ],
   "preservationManifest": "../preservation/manifest/index.json"

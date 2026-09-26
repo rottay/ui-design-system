@@ -53,15 +53,15 @@
       "already-collapsed": 4
     },
     "byRootAttribution": {
-      "emits-no-channel": 52,
+      "emits-no-channel": 54,
       "head-exact": 26,
-      "no-persisted-membership": 31,
+      "no-persisted-membership": 29,
       "slot-spans-several-roots": 7
     },
     "rowsWithRoot": 26,
-    "rowsEmittingNoChannel": 52,
-    "channelEmissions": 326,
-    "distinctChannelsReached": 181,
+    "rowsEmittingNoChannel": 54,
+    "channelEmissions": 318,
+    "distinctChannelsReached": 177,
     "metadataRows": 21,
     "paintDenominator": 95,
     "metadataRosterSize": 4,
@@ -1435,21 +1435,11 @@
       "valueKind": "string",
       "readsVar": false,
       "isMetadata": false,
-      "emitsChannels": [
-        "--ds-posture-container-compact-max",
-        "--ds-posture-container-standard-max",
-        "--ds-posture-id",
-        "--ds-posture-span-bias"
-      ],
-      "emitsScoped": [
-        "base|--ds-posture-container-compact-max",
-        "base|--ds-posture-container-standard-max",
-        "base|--ds-posture-id",
-        "base|--ds-posture-span-bias"
-      ],
+      "emitsChannels": [],
+      "emitsScoped": [],
       "rootId": null,
       "headRootIds": [],
-      "rootAttribution": "no-persisted-membership",
+      "rootAttribution": "emits-no-channel",
       "rule": "R5",
       "verdict": "adjudicate",
       "evidence": {
@@ -1467,21 +1457,11 @@
       "valueKind": "number",
       "readsVar": false,
       "isMetadata": false,
-      "emitsChannels": [
-        "--ds-posture-container-compact-max",
-        "--ds-posture-container-standard-max",
-        "--ds-posture-id",
-        "--ds-posture-span-bias"
-      ],
-      "emitsScoped": [
-        "base|--ds-posture-container-compact-max",
-        "base|--ds-posture-container-standard-max",
-        "base|--ds-posture-id",
-        "base|--ds-posture-span-bias"
-      ],
+      "emitsChannels": [],
+      "emitsScoped": [],
       "rootId": null,
       "headRootIds": [],
-      "rootAttribution": "no-persisted-membership",
+      "rootAttribution": "emits-no-channel",
       "rule": "R5",
       "verdict": "adjudicate",
       "evidence": {
@@ -3612,5 +3592,5 @@
       }
     }
   ],
-  "digest": "56d9f6f4ee32f70c6ee981ee2d65e831b6b00b469515c8dedbd8f44228a3761d"
+  "digest": "31248643f9c3dab0a51dcf0fd9dea676411e3b60fe074091f6b68e881200f203"
 }
