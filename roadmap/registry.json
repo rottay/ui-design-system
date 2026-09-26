@@ -1,6 +1,6 @@
 {
   "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
-  "updated": "2026-09-25",
+  "updated": "2026-09-26",
   "rules": {
     "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
     "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -5931,6 +5931,11 @@
           "at": "2026-09-25 21:10",
           "by": "kimi-dt",
           "note": "notifier movido a primitives/feedback/foundation/notifier (61a2414b8, RET-04; entry GOVERNED_SUPPORT_FOLDERS retirada con razon) — el walker del theme-graph que la perdia se arreglo en 05b4c1c21. seal+packinv b9634c7a8 (claim-exactness seal+CI ref re-pineados a docs 7d5cafba2 por B39). storybook budget 3f51bac82 (el substring 'storybook' tragaba 1.52MB de stories — 1 linea) + slugs 2561848fb (getKnownTenantConfig + forceTheme + tenantOverrides; brand-x-locale y ModernVisualExcellence reportados) + gitignore artifacts/local 3e38df146. Catalogo de tokens regenerado en docs-engineering 8d126a0 (330 vistas, 4 huerfanas podadas, --ds-divider-inset listado como retirado; publicacion retenida, repo publication-held)."
+        },
+        {
+          "at": "2026-09-26 00:20",
+          "by": "kimi-dt",
+          "note": "brand-x-locale renderiza por la puerta compile (fb877645c: las 6 stories + 6 plays limpias en Chromium real; el tenant DB es un documento v2 por admission+compile+mount, bithire por el registro sin spread; el DB tenant necesita el artefacto de la vertical debajo de su delta, como una app -- hallazgo registrado. ModernVisualExcellence ya estaba por 7aee2a3c6). MobilePagination por el catalogo i18n (range_of x5 locales, precedencia override>catalogo>literal; floor 1473->1474 por --seed). Desktop modern pagination con el mismo ingles: despachada. i18n gate OK, 180/180."
         }
       ]
     },
@@ -6845,6 +6850,11 @@
           "at": "2026-09-25 22:50",
           "by": "kimi-dt",
           "note": "arms 3a/3b/3c + kbd-chain LANDED (275089607, 0ddb211af, d41d70c0c + ventanas 260bb9a5c/da9c8268b/b386f9447): el ledger baja 41 -> 5 filas. 36 nombres no-producidos retirados con el patron arm-2 (el fallback ya pintaba; pasa a ser la pintura declarada) -- pintura byte-identica medida en Chromium en cada lote (1764 + 3528 + 3696 + 288 celdas, 0 diferencias; spinner medido bajo reduce emulado; kbd-chain con el control decisivo: declarar el nombre muerto mueve 72 celdas en HEAD y 0 despues). Rulings DT: kbd-font-family retire cross-familia (producir = nuevo canal publico = decision de familia/owner); classic/rustic = lectores congelados, nunca productores (4 nombres quedan por ellos, registrados). Ratchets a la baja por sus mecanismos: RWP 494->459 (sharedPaint names ledger incluido, 323->322), cascade-wiring 2098->2079, artifact-coverage uncovered 846->810 (pin law improvement). Hooks contract -30 nombres en dos republicaciones por la puerta prebuild. STOPs honestos en el camino: ninguno forzado. Las 5 filas restantes son TODAS cut-residue (4x WO-FAM-11, 1x WO-FAM-08) -- ruteadas a los brazos readWithoutProducer de sus cuts (arm 3d). Para el cierre de la WO falta: esas 5 por sus cuts, los 3 retained restantes (lowering test, brand-compiler B-1, single-door census), y el family-cut gate verde o citado por filas (hoy 207/209 con #180/#181 esperando list-toolbar filter-chip). Gate-test repair: el mutante arm-2 perdio su sujeto vivo cuando la poblacion uncut llego a cero -- su drill ahora construye el huerfano sinteticamente (misma rama de ley, sin fila inventada al censo)."
+        },
+        {
+          "at": "2026-09-26 00:20",
+          "by": "kimi-dt",
+          "note": "closure bits landed (e271c520a): el censo de harness-consumers deja de contar al guard que PROHIBE el harness (GUARD_EXEMPT con la razon al lado; el archivo cuenta de nuevo si importa/llama/destructura en codigo) -- consumers 3 -> 2, los 2 retained restantes tienen su razon medida (prueban el piso DEBAJO de la puerta). Bit 1 STOP correcto: --ds-control-size-sm no es nombre muerto (lo lee tambien list-toolbar; el RWP baseline lo defiere al routing Q-DER06-RES abierto en roadmap/derivation.md:161) -- queda como cut-residue ruteada a Q-DER06-RES. Liveness residual re-verificado por el DT: 143/143. Estado para el cierre: gate 21/21, unproduced 5 filas (4 FAM-11 por su carril -- sus derivers pueden producirlas, NO retirar por arm-2; 1 Q-DER06-RES), baselines visuales con expiry (la REGENERACION espera el pick de identidad del owner, D-30/branding). Co-lotes de la tanda que mueven este frente: los 2 font-size de familia vuelven PRODUCIDOS (63312c844: ninguna forma de rampa rem es byte-igual bajo tenant -- raiz 15px/14.1px medida; el ceiling zero-locked de fontSizeLiterals verde otra vez; EVI-03 exits NO se reabren porque el nombre sale con productor) y cascade-wiring aprende raices por PERTENENCIA (c08279363: declarado en foundation/base = raiz aunque nadie lo use de destino; -31 debt, 43 ownedRoots; los canales de componente con literal quedan como deuda honesta §1.6 -- corregido el marco 'blind spot' de e3cdbbe69)."
         }
       ]
     },
