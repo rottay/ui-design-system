@@ -341,11 +341,9 @@ describe("ink and well contrast holds after the hue correction", () => {
     return clone as unknown as FlatTheme;
   };
 
-  // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
-  // --ds-color-neutral-900 for bithire (pending DT registration); pinned to the
-  // measured state until the lane lands. The authored theme shipped the neutral
-  // ramp; no preset decision reaches it, so the channel has no producer today.
-  it("bithire's shipped vertical emits no neutral-900: no preset decision reaches the ramp", () => {
+  // The reviewed law (Q-DER06-RES N3): the neutral ramp leans only when a
+  // tenant authors `palette.ramps.neutral`; unauthored, the foundation step stands.
+  it("bithire's shipped vertical emits no neutral-900: the temperature row reaches the anchors, not the ramp", () => {
     const { cssVariables } = compile(bithireFlatTheme, "bithire");
     expect(cssVariables["--ds-color-neutral-900"]).toBeUndefined();
   });

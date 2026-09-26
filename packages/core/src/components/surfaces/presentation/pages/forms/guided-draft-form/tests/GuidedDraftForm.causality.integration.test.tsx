@@ -142,9 +142,9 @@ describeCausality({
       holds: 'titleInk',
       in: VERTICALS,
     },
-    // MEASURED, not assumed: the neutral ramp is produced and the temperature
-    // bends it, but every colour this family paints reads a semantic channel,
-    // not the ramp — so nothing the family owns moves. The arm pins the hold.
+    // MEASURED, not assumed: the temperature reaches only the ink/paper anchors,
+    // and every colour this family paints reads a semantic channel -- so nothing
+    // the family owns moves. The arm pins the hold.
     'palette.neutral-temperature': {
       value: 'warm',
       moves: [],

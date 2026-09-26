@@ -47,15 +47,10 @@ const RUNG = "#rung [data-part='root']";
 const EXACT = "#exact [data-part='root']";
 
 /**
- * MEASURED GAP, registered rather than forced: no `palette.*` decision reaches
- * the hairline in any first-party vertical. The deriver chains
- * `chrome.layout.stackDividerColor` ahead of `--ds-color-border-subtle`, no
- * vertical authors that field, and the fallback channel is itself pinned per
- * vertical (rottay #161619, bithire and evnto #f5f5f5) rather than derived from
- * the seeds -- `neutral-temperature`, `seeds` and `contrast-posture` all leave
- * it where it is (measured, 2026-09-16). The reach belongs to whoever owns the
- * neutral ramp's derivation; this suite states that rather than pretending the
- * decision covers it.
+ * The hairline is the neutral ramp's `--ds-color-border-subtle` (`neutral-100`):
+ * no `palette.*` decision reaches it, because the neutral-temperature row leans
+ * the ramp only when a tenant authors one (Q-DER06-RES). The reviewed law is
+ * asserted below per vertical: rottay #161619, bithire and evnto #f5f5f5.
  *
  * This family renders only the caller's own children, so no scope carries debt.
  */
@@ -124,6 +119,20 @@ describe('stack rungs, hairline centring and accessibility', () => {
     expect(Number.parseFloat(r.rowInline!)).toBeLessThan(0);
     expect(r.thickness).toBe('1px');
   }, 60_000);
+
+  it('paints the hairline from the foundation ramp, which the temperature does not lean', async () => {
+    const ink = { rottay: 'rgb(22, 22, 25)', bithire: 'rgb(245, 245, 245)', evnto: 'rgb(245, 245, 245)' } as const;
+    for (const vertical of VERTICALS) {
+      const result = await measureArms({
+        vertical,
+        markup,
+        arms: { base: {}, warm: { 'palette.neutral-temperature': 'warm' } },
+        targets: [{ id: 'hairline', selector: "#divided [data-part='divider']", property: 'background-color' }],
+      });
+      expect(result.base!.hairline, vertical).toBe(ink[vertical]);
+      expect(result.warm!.hairline, `${vertical} warm`).toBe(ink[vertical]);
+    }
+  }, 120_000);
 
   it('projects the axis and alignment flags onto the computed box', async () => {
     const result = await measureArms({

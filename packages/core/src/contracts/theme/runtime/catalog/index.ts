@@ -286,27 +286,16 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
       brandTheme: "palette.neutralTemperature",
     },
     consumes: ["palette.seeds"],
+    // The 10-step ramp leans only when a tenant authors `palette.ramps.neutral`;
+    // unauthored, the row reaches the mono anchors and nothing else.
     produces: {
-      channels: [
-        "--ds-color-neutral-50",
-        "--ds-color-neutral-100",
-        "--ds-color-neutral-200",
-        "--ds-color-neutral-300",
-        "--ds-color-neutral-400",
-        "--ds-color-neutral-500",
-        "--ds-color-neutral-600",
-        "--ds-color-neutral-700",
-        "--ds-color-neutral-800",
-        "--ds-color-neutral-900",
-        "--ds-color-neutral-ink",
-        "--ds-color-neutral-paper",
-      ],
+      channels: ["--ds-color-neutral-ink", "--ds-color-neutral-paper"],
       rootAttributes: [],
     },
     minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
     envelope: "open",
     effect: "css-channels",
-    defaultBehavior: "the vertical's neutral ramp, unchanged",
+    defaultBehavior: "the mono ink/paper anchors; the foundation neutral ramp, unleaned",
   },
   {
     id: "palette.contrast-posture",

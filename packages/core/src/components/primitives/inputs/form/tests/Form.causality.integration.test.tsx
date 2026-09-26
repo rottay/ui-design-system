@@ -83,29 +83,25 @@ describeCausality({
 const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {};
 
 /**
- * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15):
- * `palette.neutral-temperature` is INERT on all three verticals. The lean is
- * applied by `deriveNeutralAxis` only to an AUTHORED `palette.ramps.neutral`,
- * and no preset document authors one, so every stop -- warm, cool, neutral --
- * leaves `--ds-color-neutral-700` at `#404040` (rottay reads the foundation
- * dark scope and is equally unmoved). Measured at HEAD the same arm moved
- * bithire `#474747` -> `#4B4640` and evnto `#404040` -> `#443F39`: the control
- * had a subject and the lot removed it. The arm is withdrawn from the causality
- * table because it can no longer move anything anywhere, and the measured
- * inertness is pinned below so the row reddens when the lane restores it.
+ * `palette.neutral-temperature` reaches the mono ink/paper anchors, not the
+ * 10-step ramp: the ramp leans only when a tenant authors `palette.ramps.neutral`,
+ * and no preset does. This family paints from the ramp, so its paint holds while
+ * the row's own anchors move -- the reviewed law of the catalog row (Q-DER06-RES N3).
  */
 describe('form adaptation, direction, language and accessibility in a real browser', () => {
-  // The dead subject named: the arm withdrawn above measured a lean this tree no
-  // longer produces. Its reading is pinned, not deleted.
-  it('registers the neutral-temperature lean that no preset can produce', async () => {
+  it('holds its paint under neutral-temperature while the row moves its own anchors', async () => {
     for (const vertical of VERTICALS) {
       const warmed = await measureArms({
         vertical,
         markup,
         arms: { base: {}, warm: { 'palette.neutral-temperature': 'warm' } },
-        targets: [{ id: 'labelInk', selector: "[data-part='label-text']", property: 'color' }],
+        targets: [
+          { id: 'labelInk', selector: "[data-part='label-text']", property: 'color' },
+          { id: 'paper', selector: "[data-part='label-text']", property: '--ds-color-neutral-paper' },
+        ],
       });
       expect(warmed.warm!.labelInk, vertical).toBe(warmed.base!.labelInk);
+      expect(warmed.warm!.paper, `${vertical} anchor`).not.toBe(warmed.base!.paper);
     }
   }, 120_000);
 

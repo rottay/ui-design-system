@@ -220,6 +220,12 @@ describe("theme control catalog", () => {
     });
   });
 
+  it("claims only the anchors palette.neutral-temperature reaches unauthored (Q-DER06-RES N3)", () => {
+    const row = themeControl("palette.neutral-temperature");
+    expect([...row.produces.channels]).toEqual(["--ds-color-neutral-ink", "--ds-color-neutral-paper"]);
+    expect(row.defaultBehavior).toBe("the mono ink/paper anchors; the foundation neutral ramp, unleaned");
+  });
+
   it("refuses an unknown control by name", () => {
     expect(() => themeControl("nope" as never)).toThrow(/unknown control "nope"/u);
   });

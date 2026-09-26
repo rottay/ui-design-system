@@ -55,6 +55,16 @@ export function derivePaletteSemanticChannels(
 }
 
 /**
+ * The hover edge: one step of the neutral ramp past the rest edge
+ * (`--ds-color-border-secondary` = `neutral-300`), so it grades with each mode.
+ */
+export function derivePaletteBorderHover(): Record<string, string> {
+  const vars: Record<string, string> = {};
+  vars["--ds-color-border-hover"] = "var(--ds-color-neutral-400)";
+  return vars;
+}
+
+/**
  * This block's ground. The other mode declares its own in its own overlay,
  * which compiles into a mode block.
  */

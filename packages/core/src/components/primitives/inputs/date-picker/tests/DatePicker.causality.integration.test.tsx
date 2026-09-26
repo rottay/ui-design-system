@@ -165,13 +165,9 @@ describe('date-picker calendar, language and accessibility', () => {
     expect(loading).toContain('data-part="calendar-icon"');
   });
 
-  // WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the neutral
-  // ramp has no producer. `deriveNeutralAxis` leans an AUTHORED
-  // `palette.ramps.neutral` and no preset authors one, so the whole
-  // palette.neutral-temperature axis is inert and the ramp keeps the foundation
-  // constants. Measured on BOTH light-default verticals, not just the one the
-  // causality loop reported first. The arm it replaces asserted cellHover moved.
-  it('pins the inert neutral-temperature axis: no lean reaches the ramp', async () => {
+  // The neutral-temperature row reaches the ink/paper anchors, not the ramp the
+  // cell hover paints from (the ramp leans only when a tenant authors one).
+  it('holds the ramp under neutral-temperature while the row moves its own anchors', async () => {
     for (const vertical of ['bithire', 'evnto'] as const) {
       const arms = await measureArms({
         vertical,
@@ -184,11 +180,13 @@ describe('date-picker calendar, language and accessibility', () => {
         targets: [
           { id: 'cellHover', selector: "#panel [data-part='cell']:not([data-selected])", property: 'background-color', attributes: { 'data-state': 'hovered' } },
           { id: 'n100', selector: "#panel [data-part='cell']", property: '--ds-color-neutral-100' },
+          { id: 'paper', selector: "#panel [data-part='cell']", property: '--ds-color-neutral-paper' },
         ],
       });
       expect(arms.warm!.cellHover, `${vertical} hover`).toBe(arms.base!.cellHover);
       expect(arms.neutral!.cellHover, `${vertical} hover`).toBe(arms.base!.cellHover);
       expect(arms.base!.n100.trim(), `${vertical} ramp`).toBe('#f5f5f5');
+      expect(arms.warm!.paper, `${vertical} anchor`).not.toBe(arms.base!.paper);
     }
   }, 120_000);
 

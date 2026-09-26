@@ -110,14 +110,9 @@ describe('mentions direction, language and accessibility in a real browser', () 
   }, 60_000);
 
   /**
-   * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the field's
-   * hover edge and its rest edge are the SAME channel value on bithire --
-   * `--ds-input-border` and `--ds-input-border-hover` both resolve to `#d4d4d4`
-   * because neither has a producer without an authored neutral ramp. Measured at
-   * HEAD: rest `#D7E2EA`, hover `#86A6C2`. rottay still moves (`#334155` ->
-   * `#1e293b`), so the kernel wiring is intact and the gap is the ramp. The
-   * hover half is pinned on bithire and asserted at full strength on rottay; the
-   * focus half never regressed and is asserted on both.
+   * The hover edge is its own produced channel: the palette deriver states
+   * `--ds-color-border-hover` one neutral step past the rest edge, so it moves in
+   * every vertical and each mode grades it (Q-DER06-RES N5). Focus still wins.
    */
   it('paints hover from the interaction kernel state and yields to focus', async () => {
     const field = renderToStaticMarkup(<ModernMentions options={OPTIONS} aria-label="Note" />);
@@ -126,12 +121,12 @@ describe('mentions direction, language and accessibility in a real browser', () 
       { id: 'hovered', selector: "[data-part='textarea']", property: 'border-top-color', attributes: { 'data-state': 'hovered' } },
       { id: 'hoveredFocused', selector: "[data-part='textarea']", property: 'border-top-color', attributes: { 'data-state': 'hovered focused' } },
     ];
-    const rottay = (await measureArms({ vertical: 'rottay', markup: field, arms: { base: {} }, targets })).base!;
-    expect(rottay.hovered, 'rottay hover edge').not.toBe(rottay.rest);
-    expect(rottay.hoveredFocused, 'rottay focus edge').not.toBe(rottay.hovered);
-    const bithire = (await measureArms({ vertical: 'bithire', markup: field, arms: { base: {} }, targets })).base!;
-    expect(bithire.hovered, 'bithire hover edge is pinned inert').toBe(bithire.rest);
-    expect(bithire.hoveredFocused, 'bithire focus edge').not.toBe(bithire.hovered);
+    const edges = { rottay: ['rgb(51, 65, 85)', 'rgb(71, 85, 105)'], bithire: ['rgb(212, 212, 212)', 'rgb(163, 163, 163)'], evnto: ['rgb(212, 212, 212)', 'rgb(163, 163, 163)'] } as const;
+    for (const vertical of VERTICALS) {
+      const read = (await measureArms({ vertical, markup: field, arms: { base: {} }, targets })).base!;
+      expect([read.rest, read.hovered], `${vertical} rest and hover edges`).toEqual([...edges[vertical]]);
+      expect(read.hoveredFocused, `${vertical} focus edge`).not.toBe(read.hovered);
+    }
   }, 120_000);
 
   it('names its field from the active catalog', () => {

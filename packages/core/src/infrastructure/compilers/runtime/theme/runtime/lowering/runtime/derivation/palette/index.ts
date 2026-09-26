@@ -18,6 +18,7 @@ import { resolveContrastPosture } from "./contrast-posture";
 import { derivePaletteInks } from "./inks";
 import { deriveNeutralAxis } from "./neutral-temperature";
 import {
+  derivePaletteBorderHover,
   derivePaletteGround,
   derivePaletteSemanticChannels,
   derivePaletteSemanticFloor,
@@ -84,6 +85,7 @@ export function derivePaletteChannels(
   };
 
   Object.assign(vars, derivePaletteSemanticFloor(palette));
+  Object.assign(vars, derivePaletteBorderHover());
   Object.assign(vars, derivePaletteSemanticChannels(palette));
   Object.assign(vars, derivePaletteInks(palette, inkPair));
   Object.assign(
