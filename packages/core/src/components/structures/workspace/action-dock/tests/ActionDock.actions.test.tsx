@@ -377,7 +377,8 @@ describe('ActionDock skin ownership (structured grammar)', () => {
 
     // Theme/density channel switches transition; reduced motion silences it.
     expect(rootRule).toContain('transition:');
-    expect(rootRule).toContain('var(--ds-motion-fast, 120ms)');
+    expect(rootRule).toContain('var(--ds-motion-feedback, 120ms)');
+    expect(rootRule).not.toContain('--ds-motion-fast');
     expect(ACTION_DOCK_SKIN).toMatch(
       /@media \(prefers-reduced-motion: reduce\)\s*\{[^}]*transition:\s*none/
     );

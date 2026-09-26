@@ -8,6 +8,7 @@ import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { TextureBackdrop } from '../../../../src/components/primitives/display';
+import { maskSourceComments } from '../../../../scripts/check/tokens/cascade/channels/liveness/index.mjs';
 
 afterEach(() => {
   cleanup();
@@ -166,10 +167,22 @@ const KNOWN_CLASSES: ReadonlySet<string> = new Set([
   "rt-typewriter__visually-hidden",
 ]);
 
+/** Prose is not production source: a comment may name an app's class without minting it. CSS
+ *  has only block comments, so a `//` inside an unquoted url() is never read as one there. */
+function maskProse(raw: string, extension: string): string {
+  return extension === ".css"
+    ? raw.replace(/\/\*[\s\S]*?\*\//g, (comment) => comment.replace(/[^\n]/g, " "))
+    : maskSourceComments(raw);
+}
+
+function productionText(file: string): string {
+  return maskProse(readFileSync(file, "utf8"), extname(file));
+}
+
 function scanTokens(pattern: RegExp, group: 0 | 1): Set<string> {
   const found = new Set<string>();
   for (const file of listSourceFiles(SOURCE_ROOT)) {
-    const content = readFileSync(file, "utf8");
+    const content = productionText(file);
     for (const match of content.matchAll(pattern)) {
       found.add(match[group] as string);
     }
@@ -187,6 +200,15 @@ describe("app-prefix namespace ratchet (decrease-only)", () => {
     const unknown = mints.filter((name) => !KNOWN_CUSTOM_PROPERTIES.has(name)).sort();
 
     expect(unknown).toEqual([]);
+  });
+
+  it("reads a class in code and not in prose", () => {
+    const classes = (raw: string, extension: string) =>
+      [...maskProse(raw, extension).matchAll(CLASS_TOKEN)].map((match) => match[1]);
+
+    expect(classes('const a = "rt-code";\n// the app owns .rt-line\n/* .rt-block */', ".tsx")).toEqual(["rt-code"]);
+    expect(classes(".rt-rule { color: red; }\n/* .rt-block */", ".css")).toEqual(["rt-rule"]);
+    expect(classes(".x { background: url(http://a.b/c.png); } .rt-after-url {}", ".css")).toEqual(["rt-after-url"]);
   });
 
   it("introduces no new .rt-* class anywhere in the package's production source", () => {

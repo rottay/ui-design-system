@@ -3,7 +3,7 @@ import { screen, act, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { PatternGalleryView } from '../presentation/gallery';
 import { ShortcutProvider, ShortcutScope } from '../../../../../infrastructure/runtime/application/interaction/shortcuts';
-import { renderWithEngine } from '@tests/support/engine';
+import { renderWithEngine, renderWithEngineContext } from '@tests/support/engine';
 
 interface Photo {
   id: string;
@@ -136,6 +136,36 @@ describe('PatternGalleryView collectionShortcuts (opt-in)', () => {
   });
 
   it('does not crash without a ShortcutProvider ancestor, and j is silently inert', async () => {
+    // Outside a DesignSystemProvider: it mounts the ShortcutProvider itself since 9779cab05.
+    // An engine error boundary would swallow a crash and still render cards, so errors are read.
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    renderWithEngineContext(
+      <React.Suspense fallback={null}>
+        <PatternGalleryView
+          data={PHOTOS}
+          imageField="url"
+          captionField="title"
+          rowKey="id"
+          onItemClick={() => {}}
+          collectionShortcuts
+        />
+      </React.Suspense>,
+      'modern'
+    );
+
+    const cards = await screen.findAllByRole('button');
+    act(() => {
+      cards[0].focus();
+    });
+    act(() => {
+      dispatchKey(document, 'j');
+    });
+    expect(document.activeElement).toBe(cards[0]); // unchanged -- no provider, so inert
+    expect(consoleError).not.toHaveBeenCalled();
+    consoleError.mockRestore();
+  });
+
+  it('under a DesignSystemProvider alone, j is live: the provider is the keyboard owner', async () => {
     renderGallery(
       <PatternGalleryView
         data={PHOTOS}
@@ -154,7 +184,7 @@ describe('PatternGalleryView collectionShortcuts (opt-in)', () => {
     act(() => {
       dispatchKey(document, 'j');
     });
-    expect(document.activeElement).toBe(cards[0]); // unchanged -- no provider, so inert
+    expect(document.activeElement).toBe(cards[1]);
   });
 
   it('j moves the active card forward and k moves it back, scoped to this gallery', async () => {
