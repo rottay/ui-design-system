@@ -201,8 +201,10 @@ describe('Modern Calendar remediation (K4-B)', () => {
     // The old var(--ds-surface-inset) hover was invisible against the root's
     // surface-card on governed sources; the rule now rides
     // --ds-color-interactive-bg-hover with a color-mix fallback.
+    // State selectors pair with the kernel token (6a42d6595), the hover lives
+    // under (hover: hover), and cells sit inside rows (6fb4885f8).
     expect(skin).toMatch(
-      /\[data-part='cell'\]:hover:not\(\[data-selected='true'\]\):not\(\[data-disabled\]\)\s*\{\s*background:\s*var\(\s*--ds-calendar-cell-hover,\s*var\(--ds-color-interactive-bg-hover,\s*color-mix\(in srgb, var\(--ds-color-primary\) 8%, transparent\)\)\s*\)\s*;/,
+      /@media \(hover: hover\) \{\s*\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='grid'\] \[data-part='cell'\]:is\(\[data-state~='hovered'\], :hover\):not\(\[data-selected='true'\]\):not\(\[data-disabled\]\) \{\s*background: var\(\s*--ds-[a-z-]+,\s*var\(--ds-color-interactive-bg-hover, color-mix\(in srgb, var\(--ds-color-primary\) 8%, transparent\)\)\s*\);/,
     );
     // The invisible-inset paint is gone from the hover rule.
     expect(skin).not.toMatch(/:hover[^{]*\{\s*background:\s*var\(--ds-surface-inset\)/);
@@ -292,9 +294,12 @@ describe('Modern Calendar remediation (K4-B)', () => {
     // Same law as Transfer's move/pagination buttons: tenant ghost tint with a
     // surface-inset floor, gated :not(:disabled), family escape hatch, and the
     // ACTIVE mode toggle excluded so selected > rest stays discernible.
-    expect(skin).toContain("[data-part='nav-button']:not(:disabled):hover,");
+    // Selector form from 6a42d6595: the disabled and hovered states pair with their kernel tokens.
     expect(skin).toContain(
-      "[data-part='mode-toggle']:not([data-active='true']):not(:disabled):hover",
+      "[data-part='nav-button']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover),",
+    );
+    expect(skin).toContain(
+      "[data-part='mode-toggle']:not([data-active='true']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover)",
     );
     expect(skin).toContain(
       'background: var(--ds-button-ghost-bg-hover, var(--ds-surface-inset))',
@@ -364,11 +369,12 @@ describe('Modern Calendar W10 second visual pass', () => {
   });
 
   it('gives the panel a single surface edge and a header hairline instead of nested boxes', () => {
+    // Both keylines read the edge vocabulary (7ef3c96b7).
     expect(skin).toContain(
-      'border: 1px solid var(--ds-calendar-border, var(--ds-color-border-subtle))',
+      'border: var(--ds-edge-hairline-width, 1px) solid var(--ds-calendar-border, var(--ds-color-border-subtle))',
     );
     expect(skin).toMatch(
-      /\[data-part='header'\]\s*\{\s*padding-block-end:\s*10px;\s*border-block-end:\s*1px solid var\(--ds-calendar-header-border, var\(--ds-color-border-subtle\)\)/,
+      /\[data-part='header'\]\s*\{\s*padding-block-end:\s*10px;\s*border-block-end:\s*var\(--ds-edge-hairline-width, 1px\) solid var\(--ds-[a-z-]+, var\(--ds-color-border-subtle\)\)/,
     );
   });
 
@@ -386,18 +392,20 @@ describe('Modern Calendar W10 second visual pass', () => {
   });
 
   it('paints keyboard focus with the canonical ring on every interactive part', () => {
+    // Focus pairs with its kernel token (6a42d6595); cells sit inside rows (6fb4885f8).
     expect(skin).toMatch(
-      /\[data-part='nav-button'\]:focus-visible,\s*\n\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='header'\] > div > \[data-part='mode-toggle'\]:focus-visible,\s*\n\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='grid'\] > \[data-part='cell'\]:focus-visible\s*\{\s*box-shadow:\s*var\(--ds-calendar-focus-ring, var\(--ds-focus-ring\)\)/,
+      /\[data-part='nav-button'\]:is\(\[data-state~='focus-visible'\], :focus-visible\),\s*\n\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='header'\] > div > \[data-part='mode-toggle'\]:is\(\[data-state~='focus-visible'\], :focus-visible\),\s*\n\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='grid'\] \[data-part='cell'\]:is\(\[data-state~='focus-visible'\], :focus-visible\)\s*\{\s*box-shadow:\s*var\(--ds-[a-z-]+, var\(--ds-focus-ring\)\)/,
     );
-    // Forced colors drops box-shadows: the ring re-maps to a Highlight outline.
-    expect(skin).toMatch(/forced-colors: active\)[\s\S]*outline:\s*2px solid Highlight/);
+    // Forced colors drops box-shadows: the ring re-maps to a Highlight outline
+    // whose width reads the ring-width channel (6a42d6595).
+    expect(skin).toMatch(/forced-colors: active\)[\s\S]*outline:\s*var\(--ds-focus-ring-width, 2px\) solid Highlight/);
   });
 
   it('adds a press channel one step deeper than hover, gated like hover, without transforms', () => {
     // Cells and header chrome both ride the WO-ENG-04 active token; the active
     // mode toggle stays excluded (same law as the hover grammar).
     expect(skin).toMatch(
-      /\[data-part='cell'\]:active:not\(\[data-selected='true'\]\):not\(\[data-disabled\]\)\s*\{\s*background:\s*var\(\s*--ds-calendar-cell-active,\s*var\(--ds-color-interactive-bg-active/,
+      /\[data-part='cell'\]:is\(\[data-state~='pressed'\], :active\):not\(\[data-selected='true'\]\):not\(\[data-disabled\]\)\s*\{\s*background:\s*var\(\s*--ds-[a-z-]+,\s*var\(--ds-color-interactive-bg-active/,
     );
     expect(skin).toMatch(
       /:not\(\[data-active='true'\]\):not\(:is\(\[data-state~='disabled'\], :disabled\)\):is\(\[data-state~='pressed'\], :active\) \{\s*background:\s*var\(--ds-color-interactive-bg-active, var\(--ds-button-ghost-bg-hover\)\);/,
@@ -412,8 +420,9 @@ describe('Modern Calendar W10 second visual pass', () => {
     // ungovernable from the skin); the unlayered skin owns the transition on
     // the repainted channels only.
     expect(engineSource).not.toContain('transition-colors');
+    // Cells sit inside rows (6fb4885f8); motion reads the feedback intent, not the fast rung (8e6b7e57b).
     expect(skin).toMatch(
-      /\[data-part='grid'\] > \[data-part='cell'\]\s*\{[^}]*transition:\s*background-color var\(--ds-motion-fast\) var\(--ds-motion-ease-out\)/,
+      /\[data-part='grid'\] \[data-part='cell'\]\s*\{[^}]*transition:\s*background-color var\(--ds-motion-feedback\) var\(--ds-motion-ease-out\)/,
     );
     expect(skin).toMatch(/prefers-reduced-motion: reduce\)\s*\{[\s\S]*transition-duration:\s*0\.01ms/);
   });

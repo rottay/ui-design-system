@@ -50,7 +50,8 @@ describe('Calendar modern premium ground', () => {
 
   it('keeps the hairline region edge, which is a real boundary', () => {
     const root = ruleBlock(base, ROOT);
-    expect(root).toContain('border: 1px solid var(--ds-calendar-border');
+    // The keyline reads the edge vocabulary (7ef3c96b7).
+    expect(root).toContain('border: var(--ds-edge-hairline-width, 1px) solid var(--ds-calendar-border');
   });
 
   it('carries no resting shadow anywhere in the family', () => {
