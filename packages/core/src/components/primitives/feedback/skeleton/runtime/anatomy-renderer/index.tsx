@@ -515,6 +515,10 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'pagination-page-button': 'block',
   'quick-jumper': 'block',
   'pagination-size-select': 'block',
+  'move-button': 'block',
+  'nav-button': 'block',
+  'now-button': 'block',
+  'today-button': 'block',
   title: 'line',
   description: 'line',
   label: 'line',
@@ -551,6 +555,7 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'tree-node-label': 'line',
   'trigger-value': 'line',
   'weekday-header': 'line',
+  'time-option': 'line',
   'action-label': 'line',
   'tab-label': 'line',
   'pagination-range': 'line',
@@ -576,6 +581,9 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'clock-icon': 'round',
   'option-icon': 'round',
   'panel-item-checkbox': 'round',
+  // A per-row remove glyph is part of the row's shape, like its checkbox; a
+  // board card's edit bar is chrome around the card, which is why it omits.
+  'panel-item-remove': 'round',
   'panel-search-icon': 'round',
   'panel-select-all': 'round',
   'preset-swatch': 'round',

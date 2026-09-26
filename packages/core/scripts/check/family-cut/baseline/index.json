@@ -33,7 +33,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 6,
-        "channelsRead": 82,
+        "channelsRead": 89,
         "classTokens": 3,
         "partsStamped": 7,
         "partsConsumed": 7
@@ -49,7 +49,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/checkbox, structural constants by presentation/components/checkbox; state decided by the interaction kernel on the root; one ds- vocabulary. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 80 -> 82. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
+      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/checkbox, structural constants by presentation/components/checkbox; state decided by the interaction kernel on the root; one ds- vocabulary. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 80 -> 82. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 82 -> 89 = a3b241626 (the on-primary ink lot: the skin reads --ds-checkbox-{secondary,success,warning,error}-check) +4 and de9dc302a (the state-check channels wire to their roots: --ds-color-on-{success,warning,error}) +3 -- coverage, every channel produced."
     },
     "radio": {
       "cut": "WO-FAM-01",
@@ -79,7 +79,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 5,
-        "channelsRead": 98,
+        "channelsRead": 99,
         "classTokens": 3,
         "partsStamped": 12,
         "partsConsumed": 12
@@ -95,7 +95,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-01: Switch and Toggle are one family (D-16); Toggle keeps the richer contract and absorbs Switch's busy semantics, click value, ref and accessible-name paths, and Switch survives only as a deprecated alias compound. Decision relations by derivation/chrome/toggle, constants by presentation/components/toggle; one ds-toggle vocabulary and one --ds-toggle-* namespace read by the skin. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
+      "cutNote": "WO-FAM-01: Switch and Toggle are one family (D-16); Toggle keeps the richer contract and absorbs Switch's busy semantics, click value, ref and accessible-name paths, and Switch survives only as a deprecated alias compound. Decision relations by derivation/chrome/toggle, constants by presentation/components/toggle; one ds-toggle vocabulary and one --ds-toggle-* namespace read by the skin. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 98 -> 99 = a3b241626 (the on-primary ink lot: --ds-color-on-error) -- coverage."
     },
     "segmented": {
       "cut": "WO-FAM-01",
@@ -433,7 +433,7 @@
         "sourceFiles": 3,
         "channelsRead": 70,
         "classTokens": 2,
-        "partsStamped": 18,
+        "partsStamped": 21,
         "partsConsumed": 21
       },
       "readWithoutProducer": 0,
@@ -447,7 +447,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-03: channels written by derivation/chrome/transfer and presentation/components/transfer; panel rows walk through runtime/collection/listbox and move, select-all and pagination controls decide state through the interaction kernel; one ds-transfer vocabulary. Transfer opens no overlay, so useFieldOverlay does not apply."
+      "cutNote": "WO-FAM-03: channels written by derivation/chrome/transfer and presentation/components/transfer; panel rows walk through runtime/collection/listbox and move, select-all and pagination controls decide state through the interaction kernel; one ds-transfer vocabulary. Transfer opens no overlay, so useFieldOverlay does not apply. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): partsStamped 18 -> 21 = 7e618e6fd (WO-EVI-02 claim-exactness: the modern engine stamps data-part statically, so +3 parts that always rendered became visible to the census, among them move-button and panel-item-remove) -- coverage; both names take skeleton roles in this packet."
     },
     "date-picker": {
       "cut": "WO-FAM-03",
@@ -457,7 +457,7 @@
         "sourceFiles": 4,
         "channelsRead": 128,
         "classTokens": 6,
-        "partsStamped": 20,
+        "partsStamped": 23,
         "partsConsumed": 23
       },
       "readWithoutProducer": 0,
@@ -471,7 +471,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-03: channels written by derivation/chrome/date-picker and presentation/components/date-picker; the grid, week start, weekday order, day labels and grid keyboard come from the calendar kernel (foundation/calendar), the panel from useFieldOverlay, and triggers, navigation, cells, Today and clear decide state through the interaction and field-action kernels; one ds-date-picker vocabulary."
+      "cutNote": "WO-FAM-03: channels written by derivation/chrome/date-picker and presentation/components/date-picker; the grid, week start, weekday order, day labels and grid keyboard come from the calendar kernel (foundation/calendar), the panel from useFieldOverlay, and triggers, navigation, cells, Today and clear decide state through the interaction and field-action kernels; one ds-date-picker vocabulary. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): partsStamped 20 -> 23 = 7e618e6fd (static data-part stamps: +3 always-rendered parts became visible, among them nav-button and today-button) -- coverage; both names take skeleton roles in this packet."
     },
     "time-picker": {
       "cut": "WO-FAM-03",
@@ -481,7 +481,7 @@
         "sourceFiles": 3,
         "channelsRead": 100,
         "classTokens": 5,
-        "partsStamped": 15,
+        "partsStamped": 17,
         "partsConsumed": 17
       },
       "readWithoutProducer": 0,
@@ -495,7 +495,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-03: channels written by derivation/chrome/time-picker and presentation/components/time-picker; columns walk through runtime/collection/listbox and hop in the reading direction, the panel rides useFieldOverlay with the contract placements mapped onto the kernel, and cells, Now and clear decide state through the interaction and field-action kernels; one ds-time-picker vocabulary."
+      "cutNote": "WO-FAM-03: channels written by derivation/chrome/time-picker and presentation/components/time-picker; columns walk through runtime/collection/listbox and hop in the reading direction, the panel rides useFieldOverlay with the contract placements mapped onto the kernel, and cells, Now and clear decide state through the interaction and field-action kernels; one ds-time-picker vocabulary. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): partsStamped 15 -> 17 = 7e618e6fd (static data-part stamps: time-option and now-button became visible) -- coverage; both take skeleton roles in this packet."
     },
     "color-picker": {
       "cut": "WO-FAM-03",
@@ -528,7 +528,7 @@
         "sourceFiles": 8,
         "channelsRead": 147,
         "classTokens": 6,
-        "partsStamped": 13,
+        "partsStamped": 14,
         "partsConsumed": 14
       },
       "readWithoutProducer": 0,
@@ -542,7 +542,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-04: every channel the Modern skin reads is written -- panel, scrim, header/footer and action relations by derivation/chrome/modal, structural constants by presentation/components/modal; one ds-modal vocabulary (header/body/footer/close compounds answer to ds-modal-*); the native dialog is promoted by the shared top-layer dialog kernel, the close and footer actions decide state through the interaction kernel; adapt/data-posture through useAdaptation with the overlay adaptation (phone -> fullscreen, 100dvh). WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 145 -> 147. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
+      "cutNote": "WO-FAM-04: every channel the Modern skin reads is written -- panel, scrim, header/footer and action relations by derivation/chrome/modal, structural constants by presentation/components/modal; one ds-modal vocabulary (header/body/footer/close compounds answer to ds-modal-*); the native dialog is promoted by the shared top-layer dialog kernel, the close and footer actions decide state through the interaction kernel; adapt/data-posture through useAdaptation with the overlay adaptation (phone -> fullscreen, 100dvh). WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 145 -> 147. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): partsStamped 13 -> 14 = 7e618e6fd (static data-part stamps: +1 always-rendered part became visible) -- coverage."
     },
     "drawer": {
       "cut": "WO-FAM-04",
@@ -710,7 +710,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 6,
-        "channelsRead": 164,
+        "channelsRead": 167,
         "classTokens": 4,
         "partsStamped": 7,
         "partsConsumed": 7
@@ -726,7 +726,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-04: the material recipes and tone bubbles by derivation/chrome/tooltip, constants by presentation/components/tooltip and the default theme's tooltip tokens; TooltipContent drains its inline chrome to the compound skin keyed on data-side; one ds-tooltip vocabulary (ds-tooltip-bubble, ds-tooltip-content, ds-tooltip-trigger). WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 154 -> 164. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
+      "cutNote": "WO-FAM-04: the material recipes and tone bubbles by derivation/chrome/tooltip, constants by presentation/components/tooltip and the default theme's tooltip tokens; TooltipContent drains its inline chrome to the compound skin keyed on data-side; one ds-tooltip vocabulary (ds-tooltip-bubble, ds-tooltip-content, ds-tooltip-trigger). WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 154 -> 164. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 164 -> 167 = a3b241626 (the on-primary ink lot: --ds-color-on-{success,warning,error}) -- coverage."
     },
     "tour": {
       "cut": "WO-FAM-04",
@@ -735,7 +735,7 @@
         "sourceFiles": 4,
         "channelsRead": 87,
         "classTokens": 2,
-        "partsStamped": 11,
+        "partsStamped": 13,
         "partsConsumed": 13
       },
       "readWithoutProducer": 0,
@@ -749,7 +749,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-04: card, title, indicator, action and focus relations by derivation/chrome/tour, constants and runtime-channel defaults by presentation/components/tour; the measured spotlight rect travels as --ds-tour-spotlight-* and the layer band as --ds-tour-layer; actions decide state through the interaction kernel and step keys resolve through the roving-focus navigation intent; one ds-tour vocabulary."
+      "cutNote": "WO-FAM-04: card, title, indicator, action and focus relations by derivation/chrome/tour, constants and runtime-channel defaults by presentation/components/tour; the measured spotlight rect travels as --ds-tour-spotlight-* and the layer band as --ds-tour-layer; actions decide state through the interaction kernel and step keys resolve through the roving-focus navigation intent; one ds-tour vocabulary. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): partsStamped 11 -> 13 = 7e618e6fd (static data-part stamps: +2 always-rendered parts became visible) -- coverage."
     },
     "alert": {
       "cut": "WO-FAM-04",
@@ -848,7 +848,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 70,
+        "channelsRead": 69,
         "classTokens": 2,
         "partsStamped": 12,
         "partsConsumed": 12
@@ -864,7 +864,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-05 lot 2: toolbar, joined controls, current page, range readout, quick jumper and size changer relations by derivation/chrome/pagination (42 --ds-pagination-* channels on the spacing ramp, the body and supporting type roles, the card material and the focus ring; the former --_ds-pagination-* prototokens are produced channels now); skin/pagination paints the engine tree on one ds-pagination vocabulary; nav and page buttons, the jumper input and the native size select decide state through the interaction kernel; the ellipsis is inert readout and no longer a pointer target; not layout-sensitive, so no adapt slot; every part carries a skeleton role. Re-pin 2026-09-20 (DT, wave window): channelsRead 71 -> 70 = - --ds-motion-instant (8e6b7e57b; same cause as breadcrumb)., measured by the gate; every move named with its lot."
+      "cutNote": "WO-FAM-05 lot 2: toolbar, joined controls, current page, range readout, quick jumper and size changer relations by derivation/chrome/pagination (42 --ds-pagination-* channels on the spacing ramp, the body and supporting type roles, the card material and the focus ring; the former --_ds-pagination-* prototokens are produced channels now); skin/pagination paints the engine tree on one ds-pagination vocabulary; nav and page buttons, the jumper input and the native size select decide state through the interaction kernel; the ellipsis is inert readout and no longer a pointer target; not layout-sensitive, so no adapt slot; every part carries a skeleton role. Re-pin 2026-09-20 (DT, wave window): channelsRead 71 -> 70 = - --ds-motion-instant (8e6b7e57b; same cause as breadcrumb)., measured by the gate; every move named with its lot. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 70 -> 69 = 7f3c67e40 (WO-EVI-02 honesty drains: the skin stops reading --ds-spacing-0) -- a read left the skin, no debt."
     },
     "stepper": {
       "cut": "WO-FAM-05",
@@ -963,7 +963,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 196,
+        "channelsRead": 201,
         "classTokens": 3,
         "partsStamped": 11,
         "partsConsumed": 9
@@ -979,7 +979,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": " Re-pin 2026-09-20 (DT, wave window): channelsRead 193 -> 196 = +--ds-focus-ring-offset +--ds-focus-ring-width (6a42d6595 states fleet lot 2, +2), the ccb6b784d motion swap net 0, and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 5 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down."
+      "cutNote": " Re-pin 2026-09-20 (DT, wave window): channelsRead 193 -> 196 = +--ds-focus-ring-offset +--ds-focus-ring-width (6a42d6595 states fleet lot 2, +2), the ccb6b784d motion swap net 0, and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 5 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 196 -> 201 = 65b88e0e2 (the Q11 touch-target floor: --ds-touch-target-min) +1 and a3b241626 (the on-primary ink lot: --ds-color-on-{error,info,success,warning}) +4 -- coverage."
     },
     "tag": {
       "cut": "WO-FAM-06",
@@ -1009,7 +1009,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 7,
-        "channelsRead": 106,
+        "channelsRead": 107,
         "classTokens": 5,
         "partsStamped": 9,
         "partsConsumed": 9
@@ -1025,7 +1025,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 84 -> 99, readWithoutProducer 0 -> 8. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew. Re-pin 2026-09-20 (DT, wave window): channelsRead 103 -> 106 = +--ds-motion-feedback (8e6b7e57b, +1) and +--ds-focus-ring-offset +--ds-focus-ring-width (6a42d6595, +2)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 7 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down."
+      "cutNote": "WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 84 -> 99, readWithoutProducer 0 -> 8. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew. Re-pin 2026-09-20 (DT, wave window): channelsRead 103 -> 106 = +--ds-motion-feedback (8e6b7e57b, +1) and +--ds-focus-ring-offset +--ds-focus-ring-width (6a42d6595, +2)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 7 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 106 -> 107 = 10194feca (WO-INV-03 contrast repairs: --ds-avatar-ink-resting) -- coverage."
     },
     "tree": {
       "cut": "WO-FAM-06",
@@ -1201,7 +1201,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 47,
+        "channelsRead": 46,
         "classTokens": 2,
         "partsStamped": 4,
         "partsConsumed": 4
@@ -1216,7 +1216,8 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
-      "dndDropZoneOwners": 0
+      "dndDropZoneOwners": 0,
+      "cutNote": "Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 47 -> 46 = 266199fe9 (density wave 2c: --ds-divider-inset became the skin's private --_ds-divider-inset) -- a read left the public namespace, no debt."
     },
     "flex": {
       "cut": "WO-FAM-07",
@@ -1245,7 +1246,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 6,
-        "channelsRead": 34,
+        "channelsRead": 32,
         "classTokens": 3,
         "partsStamped": 2,
         "partsConsumed": 2
@@ -1260,7 +1261,8 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
-      "dndDropZoneOwners": 0
+      "dndDropZoneOwners": 0,
+      "cutNote": "Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 34 -> 32 = 802aa2120 (the paint lane drains wave 2's skin defects: the skin stops re-basing on --ds-density-effective-scale and --ds-density-global-effective-scale) -- the double-count reads left, debt paid."
     },
     "grid": {
       "cut": "WO-FAM-07",
@@ -1425,7 +1427,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 174,
+        "channelsRead": 173,
         "classTokens": 1,
         "partsStamped": 37,
         "partsConsumed": 40
@@ -1441,7 +1443,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-08: the list toolbar measured at HEAD 55e61c96a, unfixed debt pinned as measured; the family stamps no data-variant and every [data-variant] rule in its skin reaches the composed Button through .ds-button, so the variant arm holds on Button's own stamp (detail.variantComposedFrom); colorLiteralsInSkin is 0 because the 8 #000 stops live in mask-image (maskAlphaStops); the decision-causality suite is ListToolbar.causality.integration.test.tsx. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. Re-pin 2026-09-20 (DT, wave window): channelsRead 172 -> 174 = +--ds-motion-attention (8e6b7e57b, +1 — the intent is added without retiring a rung other rules still read) and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 11 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down.",
+      "cutNote": "WO-FAM-08: the list toolbar measured at HEAD 55e61c96a, unfixed debt pinned as measured; the family stamps no data-variant and every [data-variant] rule in its skin reaches the composed Button through .ds-button, so the variant arm holds on Button's own stamp (detail.variantComposedFrom); colorLiteralsInSkin is 0 because the 8 #000 stops live in mask-image (maskAlphaStops); the decision-causality suite is ListToolbar.causality.integration.test.tsx. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. Re-pin 2026-09-20 (DT, wave window): channelsRead 172 -> 174 = +--ds-motion-attention (8e6b7e57b, +1 — the intent is added without retiring a rung other rules still read) and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 11 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 174 -> 173 = a3b241626 (the on-primary ink lot: --ds-color-text-on-primary leaves the skin) -- a read left the skin, no debt.",
       "openCut": {
         "workOrder": "WO-FAM-08",
         "opened": "2026-09-20",
@@ -2365,7 +2367,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 173,
+        "channelsRead": 174,
         "classTokens": 1,
         "partsStamped": 32,
         "partsConsumed": 32
@@ -2381,7 +2383,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-11 sub-lot A admission. readWithoutProducer=0 is a FALSE GREEN and is recorded as such: the family reads no channel in its own namespace at all -- its 22 reads are root tokens, `--ds-search-command-bar-*` has 0 producers and 0 readers, and the namespace has to be created before it can be drained. The pin is the gate's measurement, and the work is larger than the number. Re-pin 2026-09-20 (DT, wave window): channelsRead 167 -> 173 = +6 root reads from the FAM-11 shell-cluster wiring lot 82bffda11 (--ds-border-width-1, --ds-font-weight-bold, --ds-font-weight-semibold, --ds-line-height-normal, --ds-radius-lg, --ds-text-eyebrow-letter-spacing — 16 channels wired to governed roots, six of those root reads new names in this skin); the ccb6b784d motion swap is net 0., measured by the gate; every move named with its lot."
+      "cutNote": "WO-FAM-11 sub-lot A admission. readWithoutProducer=0 is a FALSE GREEN and is recorded as such: the family reads no channel in its own namespace at all -- its 22 reads are root tokens, `--ds-search-command-bar-*` has 0 producers and 0 readers, and the namespace has to be created before it can be drained. The pin is the gate's measurement, and the work is larger than the number. Re-pin 2026-09-20 (DT, wave window): channelsRead 167 -> 173 = +6 root reads from the FAM-11 shell-cluster wiring lot 82bffda11 (--ds-border-width-1, --ds-font-weight-bold, --ds-font-weight-semibold, --ds-line-height-normal, --ds-radius-lg, --ds-text-eyebrow-letter-spacing — 16 channels wired to governed roots, six of those root reads new names in this skin); the ccb6b784d motion swap is net 0., measured by the gate; every move named with its lot. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 173 -> 174 = bc1f738ed (WO-EVI-02 search-command-bar wiring: --ds-motion-glacial) -- coverage."
     },
     "command-palette": {
       "cut": "WO-FAM-11",
