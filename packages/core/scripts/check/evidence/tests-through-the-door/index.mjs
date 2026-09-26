@@ -55,11 +55,29 @@ export function collectTestSources({ packagesRoot = PACKAGES_ROOT } = {}) {
   return files.sort((a, b) => a.path.localeCompare(b.path));
 }
 
-export function censusHarnessConsumers(sources) {
+// Files that name the binding only to forbid it. An exempt file still counts the
+// moment it imports, calls or destructures the binding in code.
+export const GUARD_EXEMPT = new Map([
+  [
+    'core/tests/architecture/theme-lowering-single-door/index.test.ts',
+    'the single-door guard: it names the binding in the regex that forbids productive code from importing the harness and in the planted import string of its own mutation drill; it never calls the harness',
+  ],
+]);
+
+export function censusHarnessConsumers(sources, { guardExempt = GUARD_EXEMPT } = {}) {
   const binding = new RegExp(`\\b${HARNESS_BINDING}\\b`, 'u');
+  const consumes = [
+    new RegExp(`^\\s*import\\b[^;]*?\\b${HARNESS_BINDING}\\b[^;]*?\\bfrom\\b`, 'mu'),
+    new RegExp(`\\b${HARNESS_BINDING}\\s*\\(`, 'u'),
+    new RegExp(`\\{[^{}]*\\b${HARNESS_BINDING}\\b[^{}]*\\}\\s*=[^=>]`, 'u'),
+  ];
   return sources
     .filter(({ path }) => path !== HARNESS_FILE)
-    .filter(({ text }) => binding.test(maskSourceComments(text)))
+    .filter(({ path, text }) => {
+      const code = maskSourceComments(text);
+      if (!binding.test(code)) return false;
+      return !guardExempt.has(path) || consumes.some((shape) => shape.test(code));
+    })
     .map(({ path }) => path);
 }
 

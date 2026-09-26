@@ -6,10 +6,12 @@ import { after, test } from 'node:test';
 
 import {
   BASELINE_LEDGER,
+  GUARD_EXEMPT,
   HARNESS_FILE,
   TEST_LEDGER,
   UNASSIGNED_CLASS,
   censusHarnessConsumers,
+  collectTestSources,
   censusUnproducedAssertions,
   censusVisualBaselines,
   checkArms,
@@ -102,6 +104,31 @@ test('CONTROL arm 1: the binding counts in code, not in a comment or another nam
     { path: HARNESS_FILE, text: 'export function lowerFlatThemeFixture() {}' },
   ];
   assert.deepEqual(censusHarnessConsumers(sources), ['core/a.test.ts']);
+});
+
+test('CONTROL arm 1: a guard that forbids the binding is not a consumer, and still counts once it consumes', () => {
+  const [guard] = GUARD_EXEMPT.keys();
+  const forbids = [
+    'const offenders = files.filter(({ source }) => /theme-lowering|lowerFlatThemeFixture/u.test(code(source)));',
+    'const planted = `import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";\\n`;',
+  ].join('\n');
+  const consumer = { path: 'core/a.test.ts', text: 'import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";\nlowerFlatThemeFixture({});' };
+  assert.deepEqual(censusHarnessConsumers([consumer, { path: guard, text: forbids }]), ['core/a.test.ts']);
+  assert.deepEqual(censusHarnessConsumers([{ path: 'core/other-guard.test.ts', text: forbids }]), ['core/other-guard.test.ts'], 'the exemption is by name, not by shape');
+  for (const consumes of [
+    'import {\n  compileTheme,\n  lowerFlatThemeFixture,\n} from "@tests/support/theme-lowering";',
+    'const r = lowerFlatThemeFixture({ flatTheme });',
+    'const { lowerFlatThemeFixture } = await import("@tests/support/theme-lowering");',
+  ]) {
+    assert.deepEqual(censusHarnessConsumers([{ path: guard, text: `${forbids}\n${consumes}` }]), [guard], consumes);
+  }
+});
+
+test('LIVE arm 1: the live single-door guard leaves the census only through its written exemption', () => {
+  const [guard] = GUARD_EXEMPT.keys();
+  assert.match(GUARD_EXEMPT.get(guard), /forbids/u);
+  assert.ok(!live.consumers.includes(guard));
+  assert.ok(censusHarnessConsumers(collectTestSources(), { guardExempt: new Map() }).includes(guard), 'positive control: without the exemption the live guard reads as a consumer');
 });
 
 test('MUTANT arm 2: a planted assertion on a channel nobody writes is red', () => {
