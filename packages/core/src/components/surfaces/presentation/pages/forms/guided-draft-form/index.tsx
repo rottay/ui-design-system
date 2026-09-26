@@ -46,7 +46,7 @@ import {
   InlineEditor,
 } from '../../../../../structures/record/edit-fields';
 import { Progress } from '../../../../../primitives/feedback/progress';
-import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton/runtime/anatomy-renderer';
+import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import { PatternStepWizard } from '../../../../../patterns/forms/step-wizard';
 import type { WizardStep } from '../../../../../patterns/forms/step-wizard';
 import { FadeIn } from '@/graphics/motion';

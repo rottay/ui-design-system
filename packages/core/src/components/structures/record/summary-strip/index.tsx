@@ -30,7 +30,7 @@ import { type CSSProperties, type ReactNode } from 'react';
 import { Box } from '../../../primitives/layout/box';
 import { Stack } from '../../../primitives/layout/stack';
 import { Text } from '../../../primitives/display/typography/compound/text';
-import { AnatomySkeleton } from '../../../primitives/feedback/skeleton/runtime/anatomy-renderer';
+import { AnatomySkeleton } from '../../../primitives/feedback/skeleton';
 
 export interface RecordSummaryItem {
   label: string;

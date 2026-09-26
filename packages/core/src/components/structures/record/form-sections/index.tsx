@@ -44,7 +44,7 @@ import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/na
 import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
-import { AnatomySkeleton } from '@/components/primitives/feedback/skeleton/runtime/anatomy-renderer';
+import { AnatomySkeleton } from '@/components/primitives/feedback/skeleton';
 
 import { Box, Flex, Stack, Text } from '../../../primitives';
 

@@ -59,7 +59,7 @@ import { Flex } from '../../../primitives/layout/flex';
 import { Stack } from '../../../primitives/layout/stack';
 import { Text } from '../../../primitives/display/typography/compound/text';
 import { Tooltip } from '../../../primitives/display/tooltip';
-import { AnatomySkeleton } from '../../../primitives/feedback/skeleton/runtime/anatomy-renderer';
+import { AnatomySkeleton } from '../../../primitives/feedback/skeleton';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
