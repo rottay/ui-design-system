@@ -94481,7 +94481,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: transparent;
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
   outline: none;
-  min-block-size: var(--ds-control-size-md, 2.5rem);
+  /* No absolute control rung is ever produced (the shape plane is a factor). */
+  min-block-size: 2.5rem;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -96423,9 +96424,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * producer -- `derivation/chrome/active-filters-bar` emits the ground, the
  * rule, the chips measure, the eyebrow's height and ink, both padding pairs
  * and the entrance duration at exactly the resting values written here as
- * fallbacks, so a tenant can move them. The `--ds-control-size-md` rung the
- * coarse target reads is a kernel scale with no owner today and is this cut's
- * named residue, not a channel for this deriver to grow into.
+ * fallbacks, so a tenant can move them. The chip targets declare their rests
+ * (2rem, and 2.5rem in the phone posture) on the density plane directly: the
+ * shape plane is a factor, so no absolute control rung is ever produced.
  *
  * REGION VOCABULARY: ground, rule, seam and rhythm read `--ds-toolbar-*` and
  * `--ds-list-shell-section-gap` UNDER the family's own channels, so a tenant
@@ -96682,7 +96683,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="more-toggle"],
   .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="less-toggle"] {
     min-block-size: calc(
-      var(--ds-control-size-md, 2.5rem) * var(--ds-density-effective-scale, 1)
+      2.5rem * var(--ds-density-effective-scale, 1)
     );
   }
   .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="actions"] {

@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "7c493d924a0eb265941c161ba1e2b35b96ceddb200eb9cc3d4fa3d2127398f4d",
+    "inputsDigest": "4de49d0ef7ab7497e0229baa5168fbe047770a38a999ec7c3fc0be804da885c1",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 496,
@@ -14,16 +14,16 @@
     }
   },
   "counts": {
-    "universe": 8749,
+    "universe": 8748,
     "writers": 7518,
     "foundationTokens": 4186,
     "componentTokens": 719,
     "tenantChannels": 4501,
     "publicHooks": 107,
-    "unadjudicatedReads": 1212,
+    "unadjudicatedReads": 1211,
     "deadWriters": 271,
     "frontierReserved": 0,
-    "modernConsumedUnique": 4789,
+    "modernConsumedUnique": 4788,
     "tsReadNames": 2876,
     "tsWriteNames": 3903,
     "tsMetadataNames": 3465,
@@ -41875,22 +41875,6 @@
         "artifact": false
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
-    },
-    "--ds-control-size-md": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 2,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
     "--ds-control-surface": {
