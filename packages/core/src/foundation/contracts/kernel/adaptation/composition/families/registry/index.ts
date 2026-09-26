@@ -129,6 +129,12 @@ export const LAYOUT_SENSITIVE_FAMILIES = Object.freeze([
     layoutSensitive: true,
     cut: 'WO-FAM-12',
   },
+  {
+    family: 'stats-grid',
+    owner: 'src/components/patterns/data/stats-grid',
+    layoutSensitive: true,
+    cut: 'WO-FAM-12',
+  },
 ] as const satisfies readonly LayoutSensitiveFamily[]);
 
 export type LayoutSensitiveFamilyId = (typeof LAYOUT_SENSITIVE_FAMILIES)[number]['family'];
