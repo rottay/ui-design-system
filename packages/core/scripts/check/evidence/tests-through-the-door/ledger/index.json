@@ -3,7 +3,7 @@
   "workOrder": "WO-EVI-03",
   "finding": "F-48",
   "law": "Each census equals its ledger in both directions: a new row is red (route the test through the door instead), and a row the tree no longer carries is red until its exit is written here. The ledger only shrinks.",
-  "measuredAt": "2026-09-25 @ 0ddb211af + EVI-03 arm 3c/kbd-chain working tree",
+  "measuredAt": "2026-09-26 @ 9e89963bf + FAM-11 x EVI-03 working tree",
   "harnessConsumers": {
     "owner": "WO-EVI-03",
     "target": 0,
@@ -309,6 +309,24 @@
           "name": "--ds-context-menu-width",
           "exit": "retired: 14rem declared directly; per-rule assertion",
           "mover": "WO-EVI-03 arm 3c + kbd-chain (2026-09-25; paint byte-identical, 3696 + 288 Chromium cells incl. reduced-motion, receipts evi03-arm3c-opus.json and kbd-chain-opus.json)"
+        },
+        {
+          "file": "core/src/components/structures/workspace/action-dock/tests/ActionDock.actions.test.tsx",
+          "name": "--ds-size-touch-target",
+          "exit": "re-pointed to the live --ds-touch-target-min (the Q11 floor, 44px in every scope): the dead name was the same value, so no twin producer; the test pins the whole declaration and a scan proves it is the only touch-target name the skin reads",
+          "mover": "WO-FAM-11 x EVI-03 lot (2026-09-26, a21f312ff; paint byte-identical, 792 Chromium cells, receipt-fam11-evi03-rows-opus.json)"
+        },
+        {
+          "file": "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/action-dock/tests/index.test.ts",
+          "name": "--ds-size-touch-target",
+          "exit": "re-pointed to the live --ds-touch-target-min (the Q11 floor, 44px in every scope): the dead name was the same value, so no twin producer; the test pins the whole declaration and a scan proves it is the only touch-target name the skin reads",
+          "mover": "WO-FAM-11 x EVI-03 lot (2026-09-26, a21f312ff; paint byte-identical, 792 Chromium cells, receipt-fam11-evi03-rows-opus.json)"
+        },
+        {
+          "file": "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/page-shell/tests/index.test.ts",
+          "name": "--ds-page-header-subtitle-max-width",
+          "exit": "retired: nothing ever produced the shared name and FAM-11 C had measured and refused production ('one name, two rests'); the page-shell skin declares max-width: 72ch directly. collection-header keeps its read at 45rem -- FAM-10's debt, still counted by the RWP census with its owner named",
+          "mover": "WO-FAM-11 x EVI-03 lot (2026-09-26, a21f312ff; paint byte-identical, 792 Chromium cells, receipt-fam11-evi03-rows-opus.json)"
         }
       ]
     },
@@ -325,17 +343,6 @@
         "reason": "read by css/presentation/components/skin/surface-section-card/index.css with no producer; counted in the surface-chrome row of the family-cut baseline, whose cut owns its readWithoutProducer arm"
       },
       {
-        "file": "core/src/components/structures/workspace/action-dock/tests/ActionDock.actions.test.tsx",
-        "name": "--ds-size-touch-target",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/action-dock/index.css",
-        "rwpDebt": false,
-        "class": "cut-residue",
-        "owner": "WO-FAM-11",
-        "family": "action-dock",
-        "reason": "read by css/presentation/components/skin/action-dock/index.css with no producer; counted in the action-dock row of the family-cut baseline, whose cut owns its readWithoutProducer arm"
-      },
-      {
         "file": "core/src/components/structures/workspace/active-filters-bar/tests/ActiveFiltersBar.skin-reachability.test.tsx",
         "name": "--ds-control-size-sm",
         "occurrences": 1,
@@ -345,28 +352,6 @@
         "owner": "WO-FAM-08",
         "family": "active-filters-bar",
         "reason": "read by css/presentation/components/skin/active-filters-bar/index.css with no producer; counted in the active-filters-bar row of the family-cut baseline, whose cut owns its readWithoutProducer arm"
-      },
-      {
-        "file": "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/action-dock/tests/index.test.ts",
-        "name": "--ds-size-touch-target",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/action-dock/index.css",
-        "rwpDebt": false,
-        "class": "cut-residue",
-        "owner": "WO-FAM-11",
-        "family": "action-dock",
-        "reason": "read by css/presentation/components/skin/action-dock/index.css with no producer; counted in the action-dock row of the family-cut baseline, whose cut owns its readWithoutProducer arm"
-      },
-      {
-        "file": "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/page-shell/tests/index.test.ts",
-        "name": "--ds-page-header-subtitle-max-width",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/collection-header/index.css",
-        "rwpDebt": true,
-        "class": "cut-residue",
-        "owner": "WO-FAM-11",
-        "family": "page-shell",
-        "reason": "read by css/presentation/components/skin/collection-header/index.css with no producer; counted in the page-shell row of the family-cut baseline, whose cut owns its readWithoutProducer arm"
       }
     ]
   }

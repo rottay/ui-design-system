@@ -2294,12 +2294,12 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 118,
+        "channelsRead": 117,
         "classTokens": 0,
         "partsStamped": 21,
         "partsConsumed": 21
       },
-      "readWithoutProducer": 8,
+      "readWithoutProducer": 7,
       "classVocabularies": 0,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
@@ -2310,7 +2310,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-11 sub-lot A admission. The cut's cleanest large family: 121 channels read, anatomy-only (27 parts stamped, 27 consumed, zero classes -- classVocabularies=0 is the absence of a class vocabulary, not a missing one), 30 executable a11y assertions. Its 17 unproduced reads are 11 `--ds-page-header-*` (a sub-namespace not derived from the folder name -- a rename inside the family), 3 `--ds-page-shell-*` and 3 `--ds-workspace-card-*` that belong to the workspace/collection-workspace owner and that WO-FAM-10 already routed. Declared in the `surfaces.border-style` fan-out of the control catalog by this lot: it reads 2 of that row's 3 `--ds-edge-*-width` channels, so the claim is reached and fanOutUnreached stays 0."
+      "cutNote": "WO-FAM-11 sub-lot A admission. The cut's cleanest large family: 121 channels read, anatomy-only (27 parts stamped, 27 consumed, zero classes -- classVocabularies=0 is the absence of a class vocabulary, not a missing one), 30 executable a11y assertions. Its 17 unproduced reads are 11 `--ds-page-header-*` (a sub-namespace not derived from the folder name -- a rename inside the family), 3 `--ds-page-shell-*` and 3 `--ds-workspace-card-*` that belong to the workspace/collection-workspace owner and that WO-FAM-10 already routed. Declared in the `surfaces.border-style` fan-out of the control catalog by this lot: it reads 2 of that row's 3 `--ds-edge-*-width` channels, so the claim is reached and fanOutUnreached stays 0. Re-read 2026-09-26 (a21f312ff, FAM-11 x EVI-03): --ds-page-header-subtitle-max-width retired from the skin (declared 72ch directly; 'one name, two rests' measured and refused by sub-lot C) -- readWithoutProducer 8 -> 7, channelsRead 118 -> 117, no ratchet touched."
     },
     "workspace-shell": {
       "cut": "WO-FAM-11",
@@ -2445,7 +2445,7 @@
         "partsStamped": 1,
         "partsConsumed": 1
       },
-      "readWithoutProducer": 3,
+      "readWithoutProducer": 2,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 1,
       "partsStampedNotConsumed": 0,
@@ -2456,7 +2456,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-11 sub-lot A admission. The one row in this cut admitted with NO openCut: it holds every BLOCKING arm today. Its debt is entirely ratchets -- 13 unproduced `--ds-action-dock-*` names, which is the cut's one case of a family that already owns a correct folder-derived namespace and simply has no producer for it, plus `--ds-size-touch-target` and `--ds-virtual-keyboard-inset`, two roots the token lane owns and FAM-10 already routed the first of. Its 2 produced names (`--ds-action-dock-reserved-block-*`) are self-declared in its own skin as a reservation contract other surfaces consume. classVocabularies=1 / legacyNamespaceClasses=1 is the `rottay-action-dock` vocabulary (5 distinct tokens, 21 occurrences), applied from `runtime/rendering/index.tsx`. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact."
+      "cutNote": "WO-FAM-11 sub-lot A admission. The one row in this cut admitted with NO openCut: it holds every BLOCKING arm today. Its debt is entirely ratchets -- 13 unproduced `--ds-action-dock-*` names, which is the cut's one case of a family that already owns a correct folder-derived namespace and simply has no producer for it, plus `--ds-size-touch-target` and `--ds-virtual-keyboard-inset`, two roots the token lane owns and FAM-10 already routed the first of. Its 2 produced names (`--ds-action-dock-reserved-block-*`) are self-declared in its own skin as a reservation contract other surfaces consume. classVocabularies=1 / legacyNamespaceClasses=1 is the `rottay-action-dock` vocabulary (5 distinct tokens, 21 occurrences), applied from `runtime/rendering/index.tsx`. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact. Re-read 2026-09-26 (a21f312ff): --ds-size-touch-target re-pointed to the live --ds-touch-target-min (the Q11 floor it always equaled) -- readWithoutProducer 3 -> 2, no ratchet touched."
     },
     "scope-switcher": {
       "cut": "WO-FAM-11",
