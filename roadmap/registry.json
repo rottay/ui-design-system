@@ -4288,6 +4288,11 @@
           "at": "2026-09-11 13:07",
           "by": "reopen",
           "note": "REOPENED from done. Reason: not recorded. Prior claimedBy=daniel claimedAt=2026-09-11 doneAt=2026-09-11. Prior evidence (verbatim): ROOT CLOSE per owner-approved close-scope (derivation.md AMENDMENT 2026-09-10). (1) ADMISSION DOOR: shared schema-widen/conn3 evidence (WO-DER-02 close, e0dde87bc + 2c5956078); closed domains + named refusals re-verified 2026-09-11. (2) REAL DERIVATION: shape.radius-scale moves 11 channels / 5 sampled families (decisions-lit evidence); shape.nesting 2ch/1fam, shape.control-height 1ch/1fam, shape.button-style 2ch/1fam all emit (conn2 28ab609b5 + decision-reach tests prove the tenant-written value reaches the table through preview AND V2 publication); palette.neutral-temperature + contrast-posture connected (4624e4555); palette.seeds brands the mode the tenant RENDERS (seeds law, merge 861de4105: rottay 0 to 23 channels in its rendered mode, APCA-safe on-primary floor via apcaReadableInk). PRECEDENCE: pill-vs-allowed-radius-override law landed (debd08628) - painted value and provenance agree or the combination is refused by name. Palette derivers tints/inks/semantic landed (4624e4555); accent ramp removed by evidence, ramps.accent authorability routed to WO-DER-06 per the amendment. (3) TRUTHFUL EVIDENCE: channel-liveness green with named residuals - 25 AUTHORABLE_UNPROVEN_EFFECT + 6 READ rows pinned under the INV-07 obligation (owner-tagged, expires on emitter-relocation-or-reader-adoption), --ds-color-accent-* routed to WO-DER-06. (4) NEGATIVES: compiler-level refusals by name across palette/shape suites (seed-mode-routing 12 tests: out-of-domain seed + backgroundMode refused). WRITTEN GATES measured 2026-09-11: grep rgba( on foundation/base/shadows = 0; grep hex on foundation/monochrome = 0; theme-parity green (transports equal, shape.button-style arm included); channel-liveness green; dial-authority 0 conflicts. SUBCLAUSE MAPPING (no threshold reduced): the radius >=20-families computed-style bar is fleet evidence - it certifies in WO-EVI-02 with the standing threshold per the amendment; root emission + precedence are proven here. NOT CLOSED HERE: family adoption of shape/palette decisions (WO-FAM cuts), fleet axis bars (WO-EVI-02). (A first done minutes earlier carried a placeholder note from a shell cwd mishap; reopened and re-closed with this evidence - the registry preserves both entries.) Prior notes (verbatim): REOPENED BY DT minutes after close: the done carried a placeholder evidence string while I diagnosed a shell cwd issue; re-closing immediately with the complete evidence. The substantive close assessment is unchanged."
+        },
+        {
+          "at": "2026-09-26 07:55",
+          "by": "kimi-dt",
+          "note": "POST-CLOSE BLOCK (Q-DER06-RES option A, ruling DT escrito en roadmap/derivation.md 2026-09-26, ca22d6ef4): la fila --ds-control-size-sm rutea aca con status done intacto. Resuelta en 55feae6af: la bifurcacion medida primero (el shape plane produce UN factor, --ds-control-height-scale 0.9/1/1.15, y rechaza la rampa absoluta; fold = 112 celdas bajo el 0.9 propio de bithire y el chip solo contra su fila = NO limpio; retire = 2400 celdas, 0 diffs) -- el rung se retiro en ambas familias a la vez (chip target calc(2rem x density), phone action 32px) y la fila EVI-03 salio con el ruling como checkpoint. --ds-control-size-md extiende el mismo ruling por fila (misma forma, mismas dos familias, byte-igual disponible) -- su lote cierra el residuo gemelo. N4 (el lector control-height perdido en el boton de bithire) quedo registrado otra vez por la medicion: el factor llega a la raiz y NO mueve ni el chip ni los botones sm de su fila."
         }
       ],
       "doneAt": "2026-09-11",
@@ -6789,7 +6794,7 @@
       "lane": "evidence-graph",
       "order": 3,
       "size": "M",
-      "status": "in-progress",
+      "status": "done",
       "dependsOn": [
         "WO-CAT-03"
       ],
@@ -6875,8 +6880,15 @@
           "at": "2026-09-26 07:15",
           "by": "kimi-dt",
           "note": "UNA SOLA FILA (tanda de la cuenta Daniel.Avila, tras el traspaso por cuota): FAM-11 dreno sus 4 cut-residue (a21f312ff: touch-target x2 re-point a --ds-touch-target-min -- el piso Q11 que siempre valio lo mismo; page-header-subtitle-max-width retirada a 72ch directo con 'one name, two rests' medido; workspace-card-icon-bg clasificada como falso positivo del instrumento) y el censo de productores aprendio a resolver templates por sus call sites literales (664104285: 175 nombres siempre tuvieron productor; EVI-03/RWP/cascade-wiring/family-cut comparten ese censo; fail-closed ante cualquier duda). Write-downs 7c710f6bc/3fb415c6d: EVI-03 queda en UNA fila (--ds-control-size-sm, ruteada al routing Q-DER06-RES abierto en roadmap/derivation.md:161 -- NO es nombre muerto: lo leen active-filters-bar y list-toolbar, y el routing promete productor). RWP 441 -> 423, family-cut 6 familias re-leidas, PLANT drill re-discriminado. Estado para el close audit: gate 21/21, liveness 143/143, consumers 2 retained con razon, baselines visuales con expiry (regeneracion owner-held D-30). El cierre total espera SOLO la decision Q-DER06-RES (carril de derivacion). DER-05 tambien cerrado en la misma tanda (9e89963bf: sidebar-tone por el lector canonico, ley sin ofensores)."
+        },
+        {
+          "at": "2026-09-26 08:00",
+          "by": "kimi-dt",
+          "note": "WO-EVI-03 DONE (125/164). El detalle del close audit queda en `evidence`: cero filas unproduced, consumers 2 retained con razon medida, liveness 143/143, baselines con expiry (regeneracion owner-held D-30), puerta 168/168, retry 0."
         }
-      ]
+      ],
+      "doneAt": "2026-09-26",
+      "evidence": "Close audit 2026-09-26 (kimi-dt), every arm measured on the live tree. (1) unproducedChannelAssertions: ZERO rows -- the ledger went 46 to 0 across arms 1-3, FAM-11 and the two rulings (kbd-chain retire cross-family; Q-DER06-RES option A for --ds-control-size-sm, roadmap/derivation.md, ca22d6ef4), every exit with disposition and mover, paint byte-identical measured in Chromium per lot (~14.000 cells summed across the tanda, 0 differences); the two arm-2 mutants re-expressed to a planted subject pair for the zero-population end state. (2) harness consumers: 58 -> 2, both retained with measured reasons (brand-compiler B-1 and the discriminant case test the floor BELOW the door -- admission refuses their subjects by construction, so no door run can carry them; the retainedBecause law is the bounded form of the 'decrease to 0' arm, the same named-cause reading the 2026-09-10 residual amendment set for liveness). (3) liveness OPEN RESIDUAL: green end to end, 143/143, re-verified twice by the DT. (4) visual baselines: expiry notes on every set (baseline-expiry/index.json) with the arm-3 mutants green; their REGENERATION stays owner-held (the D-30 reference pick, explicitly non-blocking per the same amendment). (5) door-parity surface: transport-parity + tier-rejection + tenant-document-v2 168/168. (6) retry: 0 (vitest.config.ts:63, the comment's own law). (7) the responsive.posture S2 scare closed as a probe-form defect, NOT a product regression (956f826d9 -- and its vacuous bypass guard now bites). Gate suite 21/21, producers census resolves templates through literal call sites (664104285), RWP 423 -> 422 and cascade-wiring 2043 -> 2042 re-pinned with movers."
     },
     {
       "id": "WO-EVI-04",
