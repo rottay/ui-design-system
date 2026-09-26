@@ -312,7 +312,9 @@
 }
 
 .ds-pattern-page-shell.ds-engine-modern [data-part='subtitle'] {
-  max-width: var(--ds-page-header-subtitle-max-width, 72ch);
+  /* The supporting measure is this family's own rest: no producer ever wrote
+     a channel here, and the sibling hero card rests at a different measure. */
+  max-width: 72ch;
   text-wrap: pretty;
 }
 

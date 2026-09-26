@@ -177,17 +177,23 @@ describe("chrome/action-dock", () => {
   });
 
   /**
-   * The two names this skin reads that this cut does NOT produce, pinned so a
-   * later reading of "readWithoutProducer = 2" cannot be mistaken for an
-   * oversight: one is a kernel root the token lane owns, the other is stamped
-   * per instance by the family's own TSX from the live viewport.
+   * The two names this skin reads outside the family namespace, pinned so a
+   * later reading of the census cannot be mistaken for an oversight. The
+   * coarse floor reads the canonical touch channel, a foundation root the
+   * token lane declares (44px in every scope) and this deriver must never
+   * restate; the keyboard inset is stamped per instance by the family's own
+   * TSX from the live viewport, and stays this cut's named residue.
    */
   it("states its residue: the two reads outside the family namespace", () => {
-    expect(SKIN).toContain("var(--ds-size-touch-target, 44px)");
+    const coarse = SKIN.match(/@media \(pointer: coarse\)\s*\{([\s\S]*?)\n\}/u)?.[1] ?? "";
+    expect(coarse).toContain("min-block-size: max(44px, var(--ds-touch-target-min, 44px));");
     expect(SKIN).toContain("var(--ds-virtual-keyboard-inset, 0px)");
-    for (const name of ["--ds-size-touch-target", "--ds-virtual-keyboard-inset"]) {
+    for (const name of ["--ds-touch-target-min", "--ds-virtual-keyboard-inset"]) {
       expect(actionDockChromeDeriver.produces).not.toContain(name);
     }
+    const reads = new Set([...SKIN.matchAll(/var\(\s*(--ds-[a-z0-9-]+)/gu)].map((m) => m[1]!));
+    const foreignTouch = [...reads].filter((name) => /touch-target/u.test(name));
+    expect(foreignTouch).toEqual(["--ds-touch-target-min"]);
   });
 
   /** The app-shell band the dock sits above is B's published contract, not ours. */

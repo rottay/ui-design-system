@@ -39,12 +39,12 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
  *     it. The top placement already reaches the tenant through
  *     `--ds-shadow-navbar`.
  *
- * `--ds-size-touch-target` and `--ds-virtual-keyboard-inset` are read by this
- * skin and are NOT produced here: the first is a kernel root the token lane
- * owns (FAM-10 routed the same name), and the second is stamped per instance
- * by the family's own TSX from the live viewport, which no static compile can
- * answer. Both stay this cut's named residue rather than acquiring an invented
- * producer.
+ * `--ds-touch-target-min` and `--ds-virtual-keyboard-inset` are read by this
+ * skin and are NOT produced here: the first is the canonical touch floor, a
+ * foundation root the token lane declares (the Q11 channel, 44px in every
+ * scope), and the second is stamped per instance by the family's own TSX from
+ * the live viewport, which no static compile can answer. Neither acquires an
+ * invented producer.
  */
 export const actionDockChromeDeriver: FamilyDeriver = {
   family: "action-dock",

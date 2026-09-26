@@ -25,11 +25,15 @@
  * - `--ds-page-header-bg` is already authored at `profile` rank by the
  *   expressive `contour` motif. A `derived` producer outranks a profile, so
  *   producing it would silently retire that motif's page-header treatment.
- * - `--ds-page-header-eyebrow-size` (10px here), `-eyebrow-tracking` (0.11em),
- *   `-title-max-width` (32ch) and `-subtitle-max-width` (72ch) have a SECOND
- *   correct rest: `collection-header` reads each one through to
- *   `var(--ds-font-size-xs, 12px)`, `0.13em`, `35rem` / `42.5rem` and `45rem`.
- *   One name, two rests — producing either silently repaints the other family.
+ * - `--ds-page-header-eyebrow-size` (10px here), `-eyebrow-tracking` (0.11em)
+ *   and `-title-max-width` (32ch) have a SECOND correct rest:
+ *   `collection-header` reads each one through to
+ *   `var(--ds-font-size-xs, 12px)`, `0.13em` and `35rem` / `42.5rem`. One
+ *   name, two rests — producing either silently repaints the other family.
+ *
+ * The supporting measure left that group (WO-FAM-11 x EVI-03): nothing ever
+ * produced the shared name this skin read it through, so the read always
+ * painted its fallback, and the skin now declares that rest (72ch) directly.
  *
  * `palette.*` and `motion` are NOT claimed. The browser probes measured that
  * neither plane reaches a channel this deriver states: the panel's ground is

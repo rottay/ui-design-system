@@ -123,7 +123,6 @@ describe('PatternPageShell — the FAM-11 cut', () => {
       '--ds-page-header-eyebrow-tracking',
       '--ds-page-header-eyebrow-text-transform',
       '--ds-page-header-title-max-width',
-      '--ds-page-header-subtitle-max-width',
       '--ds-page-shell-border-width',
     ]);
 

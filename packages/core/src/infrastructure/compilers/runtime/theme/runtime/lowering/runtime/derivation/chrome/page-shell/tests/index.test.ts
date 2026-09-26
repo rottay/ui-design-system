@@ -91,7 +91,7 @@ describe("chrome/page-shell", () => {
     }
   });
 
-  it("leaves the four page-header names collection-header reads through at a second rest", () => {
+  it("leaves the three page-header names collection-header reads through at a second rest", () => {
     const derived = pageShellChromeDeriver.derive(context(), {});
     const sibling = collectionHeaderChromeDeriver.derive(context(), {});
 
@@ -103,13 +103,6 @@ describe("chrome/page-shell", () => {
       ["--ds-page-header-eyebrow-tracking", "0.11em", "0.13em"],
       ["--ds-page-header-title-max-width", "32ch", "35rem"],
     ];
-    const siblingSkin = readFileSync(
-      resolve(
-        process.cwd(),
-        "src/foundation/tokens/css/presentation/components/skin/collection-header/index.css"
-      ),
-      "utf8"
-    );
     for (const [channel, here, there] of twoRests) {
       expect(derived[channel]).toBeUndefined();
       expect(skinFallbacks(channel)).toEqual([here]);
@@ -118,11 +111,15 @@ describe("chrome/page-shell", () => {
       ).toBe(true);
     }
 
-    // The fourth is read straight from the sibling SKIN rather than through a
-    // channel of its own, at 45rem against this family's 72ch.
-    expect(derived["--ds-page-header-subtitle-max-width"]).toBeUndefined();
-    expect(skinFallbacks("--ds-page-header-subtitle-max-width")).toEqual(["72ch"]);
-    expect(siblingSkin).toContain("var(--ds-page-header-subtitle-max-width, 45rem)");
+    // The supporting measure is no longer a shared read here: nothing ever
+    // produced it, so the skin declares its own rest on the subtitle part,
+    // and no derived channel may claim a subtitle measure in its place.
+    const subtitleRules = [
+      ...SKIN.matchAll(/\.ds-pattern-page-shell\.ds-engine-modern \[data-part='subtitle'\] \{([^}]*)\}/g),
+    ].map((m) => m[1]!.replace(/\/\*[\s\S]*?\*\//g, ""));
+    const measures = subtitleRules.flatMap((body) => body.match(/max-width:[^;]*;/g) ?? []);
+    expect(measures).toEqual(["max-width: 72ch;"]);
+    expect(Object.keys(derived).filter((channel) => /subtitle/.test(channel))).toEqual([]);
   });
 
   it("leaves the panel ground to the expressive motif that already authors it", () => {

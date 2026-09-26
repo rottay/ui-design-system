@@ -319,7 +319,12 @@ describe('ActionDock skin ownership (structured grammar)', () => {
     const coarseBlock = ACTION_DOCK_SKIN.match(/@media \(pointer: coarse\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
     expect(coarseBlock).toContain(`${sel('rottay-action-dock__actions')} > :where(button, a)`);
     expect(coarseBlock).toContain(sel('rottay-action-dock__overflow-trigger'));
-    expect(coarseBlock).toContain('min-block-size: max(44px, var(--ds-size-touch-target, 44px))');
+    // The floor reads the canonical touch channel (Q11), never a bare literal
+    // alone: the whole declaration is pinned, so no other spelling can land.
+    expect(coarseBlock).toContain('min-block-size: max(44px, var(--ds-touch-target-min, 44px))');
+    expect(coarseBlock.match(/min-block-size:[^;]*;/g)).toEqual([
+      'min-block-size: max(44px, var(--ds-touch-target-min, 44px));',
+    ]);
   });
 
   it('carries a tokenized structural edge hairline that forced-colors inherits', () => {
