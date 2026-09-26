@@ -31,9 +31,11 @@ import {
   blockingDebt,
   collectDeclarationScopes,
   collectFindings,
+  creditedBlockingDebt,
   declaredFanOutFamilies,
   describeOpenDebt,
   fanOutFor,
+  judgeComposedStateCredit,
   judgeFamily,
   judgeRoutedDeclarations,
   measureDragAndDropArm,
@@ -3220,7 +3222,75 @@ test('LIVE: splitter holds the states arm through the shared ResizeHandle it han
   assert.deepEqual(measured.detail.stateComposedFrom, ['resize-handle']);
 });
 
-test("LIVE: widget-board's own stamp keeps the last word -- it receives no composed-state credit", () => {
-  const measured = measureFamily(resolveFamily('widget-board', ROOT), { producers: PRODUCERS });
-  assert.deepEqual(measured.detail.stateComposedFrom, []);
+test("LIVE: widget-board's own stamp keeps the last word on its own parts -- the resize-handle credit (1a54a9f19) is a declared record, not a waiver", () => {
+  const row = readBaseline().families['widget-board'];
+  const measured = measureFamily(resolveFamily('widget-board', ROOT, row), { producers: PRODUCERS });
+  /* Since 1a54a9f19 the edges render the shared ResizeHandle, which stamps
+   * them; the row declares exactly what the gate measures. */
+  assert.deepEqual(measured.detail.stateComposedFrom, ['resize-handle']);
+  assert.deepEqual(row.composedStateCredit.from, measured.detail.stateComposedFrom);
+  assert.equal(row.composedStateCredit.mover, '1a54a9f19');
+  /* The family's own source still holds both state arms WITHOUT the credit. */
+  assert.equal(measured.blocking.stateContract, true);
+  assert.equal(measured.blocking.stateGoverned, true);
+  assert.deepEqual(blockingDebt(measured), creditedBlockingDebt(measured, row));
+  assert.deepEqual(judgeFamily(measured, row), []);
+});
+
+// ---------------------------------------------------------------------------
+// The composed-stamp amendment: a DECLARED credit that IS the measurement
+// ---------------------------------------------------------------------------
+
+const splitterRow = () => readBaseline().families.splitter;
+const measureSplitter = () => measureFamily(resolveFamily('splitter', ROOT, splitterRow()), { producers: PRODUCERS });
+
+test('LIVE: splitter closes on its declared ResizeHandle credit -- raw arms red, credited arms held, no open cut', () => {
+  const row = splitterRow();
+  const measured = measureSplitter();
+  assert.equal(row.openCut, undefined);
+  assert.equal(measured.blocking.stateContract, false, 'the family source itself stamps no state');
+  assert.equal(measured.blocking.stateGoverned, false);
+  assert.deepEqual(measured.detail.statesNotComposed, []);
+  assert.equal(judgeComposedStateCredit(measured, row).covers, true);
+  assert.equal(creditedBlockingDebt(measured, row).stateContract, 0);
+  assert.deepEqual(judgeFamily(measured, row), []);
+});
+
+test('CONTROL: the credit is load-bearing -- splitter without its declaration fails both state arms', () => {
+  const { composedStateCredit: _dropped, ...row } = splitterRow();
+  const findings = judgeFamily(measureSplitter(), row);
+  expectFinding(findings, 'BLOCKING `data-state` is on exactly one side', 'no declaration, no credit');
+  expectFinding(findings, 'never calls `partAttributes`', 'no declaration, no credit');
+});
+
+test('NEGATIVE: a declared credit without its receipt or mover is refused, and waives nothing', () => {
+  const measured = measureSplitter();
+  for (const [field, fragment] of [['receipt', 'no `receipt`'], ['mover', 'no `mover`']]) {
+    const row = { ...splitterRow(), composedStateCredit: { ...splitterRow().composedStateCredit, [field]: '' } };
+    const findings = judgeFamily(measured, row);
+    expectFinding(findings, fragment, `${field} is required`);
+    expectFinding(findings, 'BLOCKING `data-state` is on exactly one side', 'a refused credit waives nothing');
+  }
+});
+
+test('NEGATIVE: a credit whose receipt does not measure what it declares is refused', () => {
+  const row = { ...splitterRow(), composedStateCredit: { ...splitterRow().composedStateCredit, from: ['button'] } };
+  const findings = judgeFamily(measureSplitter(), row);
+  expectFinding(findings, 'declares ["button"] but the gate measures ["resize-handle"]', 'declaration != measurement');
+  expectFinding(findings, 'never calls `partAttributes`', 'a refused credit waives nothing');
+});
+
+test('NEGATIVE: the credit is narrow -- one painted state no declared stamper answers for keeps list-toolbar red', () => {
+  const pinned = readBaseline().families['list-toolbar'];
+  const measured = measureFamily(resolveFamily('list-toolbar', ROOT, pinned), { producers: PRODUCERS });
+  assert.deepEqual(measured.detail.stateComposedFrom, ['button']);
+  const { openCut: _open, ...closed } = pinned;
+  const row = {
+    ...closed,
+    composedStateCredit: { from: ['button'], mover: 'ace98c15d', receipt: 'receipt-stamp-truth-opus.json', note: 'drill' },
+  };
+  const credit = judgeComposedStateCredit(measured, row);
+  assert.equal(credit.covers, false);
+  expectFinding(credit.findings, "hovered ds-list-toolbar[data-part='filter-chip']", 'the uncovered occurrence is named');
+  expectFinding(judgeFamily(measured, row), 'BLOCKING `data-state` is on exactly one side', 'the arms stay red');
 });

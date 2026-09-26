@@ -2291,6 +2291,11 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
       variantComposedFrom: [...variantComposedFrom].sort(),
       stateComposedFrom: [...stateComposedFrom].sort(),
       statesNotComposed,
+      stateSides: {
+        familyStamps: stampsStateAttribute,
+        familyGoverns: usesPartAttributes,
+        skinPaints: skinUsesStateAttribute,
+      },
       partsReadThroughComponent: [...anchoredParts].sort(),
       readWithoutProducer: readWithoutProducer.debt,
       readChannels: [...readNames].sort(),
@@ -2377,6 +2382,68 @@ export function blockingDebt(measured) {
   };
 }
 
+/**
+ * The composed-stamp amendment to the two state arms (WO-FAM-08, registered for
+ * splitter and list-toolbar). `stateContract` and `stateGoverned` read the
+ * family's own source: the family stamps `data-state`, through `partAttributes`.
+ * A family that hands a part to a composed primitive which stamps it is honest
+ * without that text, and the gate already MEASURES the hand-off
+ * (`stateComposedFrom`, `statesNotComposed`). The credit reaches the arms only
+ * under all three of:
+ *
+ *   1. the roster row DECLARES it: `composedStateCredit` names the stampers
+ *      (`from`), the lot that made them stamp (`mover`), the recorded
+ *      measurement (`receipt`) and why (`note`) -- an undeclared credit is never
+ *      inferred, so a new hand-off stays red until someone writes it down;
+ *   2. the declaration IS the measurement: `from` equals the live
+ *      `stateComposedFrom`, so a receipt that does not measure what it declares
+ *      is red, today and on the day the hand-off moves;
+ *   3. it is NARROW: every state the skin paints is stamped by a declared
+ *      stamper (`statesNotComposed` empty) whenever the family source stamps
+ *      nothing itself. One painted occurrence nobody stamps keeps both arms red.
+ *
+ * A family whose own source already holds the arms may still declare the credit
+ * it receives; there it changes nothing and is checked as a record.
+ */
+export function judgeComposedStateCredit(measured, pinned) {
+  const declared = pinned?.composedStateCredit;
+  if (!declared) return { covers: false, findings: [] };
+  const { family, detail } = measured;
+  const findings = [];
+  const from = Array.isArray(declared.from) ? [...declared.from].sort() : [];
+  if (from.length === 0) findings.push(`${family}: \`composedStateCredit\` names no stamper in \`from\``);
+  if (!/^[0-9a-f]{7,40}$/u.test(declared.mover ?? '')) {
+    findings.push(`${family}: \`composedStateCredit\` names no \`mover\` commit -- a credit states the lot that made the primitive stamp`);
+  }
+  if (!String(declared.receipt ?? '').trim() || !String(declared.note ?? '').trim()) {
+    findings.push(`${family}: \`composedStateCredit\` carries no \`receipt\` or no \`note\` -- a credit without its recorded measurement is a claim`);
+  }
+  const measuredFrom = detail.stateComposedFrom ?? [];
+  if (JSON.stringify(from) !== JSON.stringify(measuredFrom)) {
+    findings.push(
+      `${family}: \`composedStateCredit\` declares ${JSON.stringify(from)} but the gate measures ${JSON.stringify(measuredFrom)} -- `
+        + 'the receipt does not measure what the row declares',
+    );
+  }
+  const sides = detail.stateSides ?? {};
+  const familyHolds = Boolean(sides.familyStamps && sides.familyGoverns);
+  const uncovered = detail.statesNotComposed ?? [];
+  if (!familyHolds && uncovered.length > 0) {
+    findings.push(
+      `${family}: \`composedStateCredit\` cannot stand in for the family source: ${uncovered.length} painted state occurrence(s) `
+        + `no declared stamper answers for (${uncovered.map((row) => `${row.state} ${row.compound}`).join('; ')})`,
+    );
+  }
+  return { covers: findings.length === 0 && Boolean(sides.skinPaints), findings };
+}
+
+/** `blockingDebt` after a VALID composed-stamp credit: only the two state arms can move. */
+export function creditedBlockingDebt(measured, pinned) {
+  const debt = blockingDebt(measured);
+  if (!judgeComposedStateCredit(measured, pinned).covers) return debt;
+  return { ...debt, stateContract: 0, stateGoverned: 0 };
+}
+
 const OPEN_CUT_ARMS = Object.freeze(Object.keys(blockingDebt({
   blocking: {
     inlineStyleViolations: [], visualLiterals: [], antReads: [], stampsAnatomy: true,
@@ -2394,7 +2461,7 @@ const OPEN_CUT_ARMS = Object.freeze(Object.keys(blockingDebt({
 export function describeOpenDebt(measured, pinned) {
   const open = pinned?.openCut;
   if (!open) return [];
-  const measuredDebt = blockingDebt(measured);
+  const measuredDebt = creditedBlockingDebt(measured, pinned);
   const carried = OPEN_CUT_ARMS
     .filter((arm) => (measuredDebt[arm] ?? 0) > 0)
     .map((arm) => `${arm}=${measuredDebt[arm]}`);
@@ -2409,7 +2476,9 @@ export function judgeFamily(measured, pinned) {
   const { family, blocking, ratchets, denominators, detail } = measured;
   const open = pinned?.openCut;
   const declaredDebt = open?.debt ?? {};
-  const measuredDebt = blockingDebt(measured);
+  const credit = judgeComposedStateCredit(measured, pinned);
+  findings.push(...credit.findings);
+  const measuredDebt = creditedBlockingDebt(measured, pinned);
 
   /* A waivable BLOCKING arm. With no open cut it speaks exactly as it always
    * has, one finding per violation. With one, the arm's COUNT is pinned like a
@@ -2476,10 +2545,10 @@ export function judgeFamily(measured, pinned) {
   waivable('variantContract', () => (blocking.variantContract
     ? []
     : [`${family}: BLOCKING \`data-variant\` is on exactly one side of the contract -- stamped without a rule, or painted without a stamp`]));
-  waivable('stateContract', () => (blocking.stateContract
+  waivable('stateContract', () => (blocking.stateContract || credit.covers
     ? []
     : [`${family}: BLOCKING \`data-state\` is on exactly one side of the contract -- stamped with no rule, or painted with no stamp`]));
-  waivable('stateGoverned', () => (blocking.stateGoverned
+  waivable('stateGoverned', () => (blocking.stateGoverned || credit.covers
     ? []
     : [`${family}: BLOCKING the skin decides state through \`[data-state]\` but the source never calls \`partAttributes\` -- `
       + 'one place decides when a part is pressed, or none does (F-37)']));
