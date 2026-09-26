@@ -4,7 +4,7 @@
   "sourceId": "DS-IMP-106",
   "scope": "ParticleField plus governed Canvas and WebGL lifecycle hardening",
   "package": "@rottay/design-system@2.19.36",
-  "sourceFingerprint": "bc4a16f8349739d24cb94e4e6cc43f80dd88764144c3cfb6f876f8497d73df45",
+  "sourceFingerprint": "2b35328f00b3a97637aea12d314e13ca4ae8b7e6c2c59510a1473ee89bfdbec4",
   "structurallyPassed": true,
   "completionEligible": false,
   "checks": {
@@ -18,7 +18,8 @@
           "WO-GAT-06": "done",
           "WO-CRA-12": "done",
           "WO-CRA-13": "done",
-          "WO-CRA-14": "done"
+          "WO-CRA-14": "done",
+          "WO-RET-01": "todo"
         },
         "claimState": "locked",
         "ownerGo": "pending"
@@ -48,8 +49,9 @@
     }
   },
   "pending": [
+    "WO-RET-01 is todo, not done",
     "Phase 2C remains locked without structured owner GO",
-    "the sealed browser receipt is superseded and covers 1f9937cd1737707cb38834e3a70628a39d8033cdc8d32e5c4202124b4f2e270c, not the live bc4a16f8349739d24cb94e4e6cc43f80dd88764144c3cfb6f876f8497d73df45; cra-15/browser-receipt-superseded-by-canonical-path-refactor holds it open for C1 (RECAPTURE_INTO_A_LIVE_OWNER)"
+    "the sealed browser receipt is superseded and covers 1f9937cd1737707cb38834e3a70628a39d8033cdc8d32e5c4202124b4f2e270c, not the live 2b35328f00b3a97637aea12d314e13ca4ae8b7e6c2c59510a1473ee89bfdbec4; cra-15/browser-receipt-superseded-by-canonical-path-refactor holds it open for C1 (RECAPTURE_INTO_A_LIVE_OWNER)"
   ],
   "governance": {
     "sharedContinuousRuntimeBudget": 1,
