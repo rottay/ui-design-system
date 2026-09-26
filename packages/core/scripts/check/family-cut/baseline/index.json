@@ -1436,21 +1436,19 @@
       "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 3,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 0,
+      "unpairedStatePseudoSelectors": 1,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-08: the list toolbar measured at HEAD 55e61c96a, unfixed debt pinned as measured; the family stamps no data-variant and every [data-variant] rule in its skin reaches the composed Button through .ds-button, so the variant arm holds on Button's own stamp (detail.variantComposedFrom); colorLiteralsInSkin is 0 because the 8 #000 stops live in mask-image (maskAlphaStops); the decision-causality suite is ListToolbar.causality.integration.test.tsx. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. Re-pin 2026-09-20 (DT, wave window): channelsRead 172 -> 174 = +--ds-motion-attention (8e6b7e57b, +1 — the intent is added without retiring a rung other rules still read) and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 11 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 174 -> 173 = a3b241626 (the on-primary ink lot: --ds-color-text-on-primary leaves the skin) -- a read left the skin, no debt.",
-      "openCut": {
-        "workOrder": "WO-FAM-08",
-        "opened": "2026-09-20",
-        "lot": "states-arm composed-stamp credit (ace98c15d) + tag/avatar stamps (ff71efc8c)",
-        "debt": {
-          "stateContract": 1,
-          "stateGoverned": 1
-        },
-        "note": "8 of 9 painted parts ARE stamped at runtime by the composed Button kernel (button/engines/modern:541, P-79; stateComposedFrom: [button], ten of eleven occurrences credited, measured live in receipt-stamp-truth-opus.json). The ninth (filter-chip, a Tag with no clickable/onClick) is adjudicated non-activating: no stamp, its hover wash stays pseudo-side as a reading aid, the occurrence stays literal in statesNotComposed (FAM-08 trail 2026-09-20). The BLOCKING arms text is per-family source, so they stay red while the composed primitive decides; extending the credit to the blocking arms is the same registered contract amendment as splitters. Decrease-only: closes by removing openCut when that lands. Composed-stamp amendment 2026-09-25, measured: the credit does NOT close this row. Ten of eleven painted state occurrences are the composed Button's, but the eleventh is painted with no stamp -- `.ds-list-toolbar__filter-chip[data-part='filter-chip']:is([data-state~='hovered'], :hover)` (skin list-toolbar:1010) selects a data-state no component stamps on the chip, so the narrow amendment cannot stand in for the family source and both arms stay at 1. Closes when the paint lane drops the `[data-state~='hovered']` branch from the non-activating chip (its :hover reading aid stays) or the chip gains a stamp; then the row declares composedStateCredit {from: [button]} and removes openCut."
+      "cutNote": "WO-FAM-08: the list toolbar measured at HEAD 55e61c96a, unfixed debt pinned as measured; the family stamps no data-variant and every [data-variant] rule in its skin reaches the composed Button through .ds-button, so the variant arm holds on Button's own stamp (detail.variantComposedFrom); colorLiteralsInSkin is 0 because the 8 #000 stops live in mask-image (maskAlphaStops); the decision-causality suite is ListToolbar.causality.integration.test.tsx. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. Re-pin 2026-09-20 (DT, wave window): channelsRead 172 -> 174 = +--ds-motion-attention (8e6b7e57b, +1 — the intent is added without retiring a rung other rules still read) and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 11 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 174 -> 173 = a3b241626 (the on-primary ink lot: --ds-color-text-on-primary leaves the skin) -- a read left the skin, no debt. Composed-stamp credit 2026-09-25: the filter-chip hover rule drops its `[data-state~='hovered']` form and keeps `:hover` (byte-identical paint measured in Chromium: nothing stamps the chip, so the form never matched; a hand-stamped data-state moved the wash only in the old tree), statesNotComposed is empty, the declared {from: [button]} credit covers both state arms, and openCut {stateContract: 1, stateGoverned: 1} leaves by the decrease-only route the row declared. The same selector is now a bare `:hover` with no kernel twin, so unpairedStatePseudoSelectors 0 -> 1 BY DESIGN, the descriptions precedent: the chip has no activation API (a Tag without clickable/onClick, adjudicated non-activating on the FAM-08 trail 2026-09-20), so stamping it would install an interaction producer only to feed a selector arm. The pin names exactly `.ds-list-toolbar__filter-chip[data-part='filter-chip']:hover`; if the chip gains a stamp or loses its reading-aid wash, this pin follows down.",
+      "composedStateCredit": {
+        "from": [
+          "button"
+        ],
+        "mover": "ace98c15d",
+        "receipt": "receipt-stamp-truth-opus.json",
+        "note": "every painted state occurrence is stamped by the composed Button kernel (button/engines/modern, P-79); the one part it does not reach, filter-chip (a Tag with no clickable/onClick), is adjudicated non-activating (FAM-08 trail 2026-09-20) and paints its hover wash on the platform :hover alone, so no painted data-state lacks a stamper"
       }
     },
     "data-table": {
@@ -1848,12 +1846,12 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 157,
+        "channelsRead": 156,
         "classTokens": 1,
         "partsStamped": 16,
         "partsConsumed": 16
       },
-      "readWithoutProducer": 10,
+      "readWithoutProducer": 9,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
@@ -1864,7 +1862,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. It carries 104 of the cut's 155 inline paints and 22 of its unproduced reads, 7 of which are the `kbd` namespace read by the search hint and routed to the `kbd` owner rather than produced locally. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact. Re-pin 2026-09-20 (DT, wave window): channelsRead 158 -> 157 = four rungs swapped for three intents (8e6b7e57b, -1)., measured by the gate; every move named with its lot."
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. It carries 104 of the cut's 155 inline paints and 22 of its unproduced reads, 7 of which are the `kbd` namespace read by the search hint and routed to the `kbd` owner rather than produced locally. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact. Re-pin 2026-09-20 (DT, wave window): channelsRead 158 -> 157 = four rungs swapped for three intents (8e6b7e57b, -1)., measured by the gate; every move named with its lot. Re-pin 2026-09-25 (census re-read per the gate instruction): readWithoutProducer 10 -> 9 and channelsRead 157 -> 156 = d41d70c0c (the kbd-chain ruling: --ds-kbd-font-family leaves the keycap chain; the skin reads var(--ds-collection-header-keycap-family, var(--ds-font-family-mono))) -- a read with no producer retired, debt paid."
     },
     "dashboard-header": {
       "cut": "WO-FAM-10",

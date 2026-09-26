@@ -2900,8 +2900,10 @@ test('LIVE: the run separates the families that hold the contract from the famil
   assert.equal(open.length, 1);
   // The FAM-11 rows that hold every BLOCKING arm (page-shell, surface-chrome,
   // the switchers, action-dock, app-shell's adapt arm) count among the held
-  // rows; the open seven carry exactly the measured skeleton-role debt.
-  assert.equal(measurements.length - open.length, 106, 'the full roster minus the one open row holds the contract');
+  // rows; the open seven carry exactly the measured skeleton-role debt. 106 rows
+  // since 0735a88fa retired notifier (a support-owner folder, never a family).
+  assert.equal(measurements.length, 106, 'the roster measures 106 families');
+  assert.equal(measurements.length - open.length, 105, 'the full roster minus the one open row holds the contract');
 });
 
 // ---------------------------------------------------------------------------
@@ -3055,16 +3057,17 @@ test('PLANT: a credited state beside an uncredited one keeps the uncredited part
   assert.deepEqual(measured.detail.statesNotComposed.map((row) => `${row.state} ${row.compound}`), ['pressed ds-planted-bar']);
 });
 
-test('LIVE: list-toolbar holds the states arm only through the composed Button, and filter-chip stays on the record', () => {
+test('LIVE: list-toolbar holds the states arm only through the composed Button, and filter-chip stays pseudo-side by adjudication', () => {
   const measured = measureFamily(resolveFamily('list-toolbar', ROOT), { producers: PRODUCERS });
   assert.deepEqual(measured.detail.statesConsumedNotStamped, []);
   assert.deepEqual(measured.detail.stateComposedFrom, ['button']);
-  /* The one part the runtime probe measured as NOT stamped: its fix is a
-   * product packet, so the arm must not be the place that forgets it. */
-  assert.deepEqual(
-    measured.detail.statesNotComposed.map((row) => `${row.state} ${row.compound}`),
-    ["hovered ds-list-toolbar[data-part='filter-chip']"],
-  );
+  /* The one part nothing stamps -- filter-chip, a non-clickable Tag, adjudicated
+   * non-activating -- paints its hover wash on the platform `:hover` alone, so
+   * the skin no longer selects a data-state no component writes on it. */
+  assert.deepEqual(measured.detail.statesNotComposed, []);
+  const skin = readFileSync(join(ROOT, SKIN_ROOT, 'list-toolbar', 'index.css'), 'utf8');
+  assert.match(skin, /\.ds-list-toolbar__filter-chip\[data-part='filter-chip'\]:hover \{/);
+  assert.doesNotMatch(skin, /\.ds-list-toolbar__filter-chip\[data-part='filter-chip'\][^{]*data-state/);
 });
 
 /* How much these six still owe is the product packets' number and moves while
@@ -3280,14 +3283,18 @@ test('NEGATIVE: a credit whose receipt does not measure what it declares is refu
   expectFinding(findings, 'never calls `partAttributes`', 'a refused credit waives nothing');
 });
 
-test('NEGATIVE: the credit is narrow -- one painted state no declared stamper answers for keeps list-toolbar red', () => {
-  const pinned = readBaseline().families['list-toolbar'];
-  const measured = measureFamily(resolveFamily('list-toolbar', ROOT, pinned), { producers: PRODUCERS });
-  assert.deepEqual(measured.detail.stateComposedFrom, ['button']);
-  const { openCut: _open, ...closed } = pinned;
-  const row = {
-    ...closed,
-    composedStateCredit: { from: ['button'], mover: 'ace98c15d', receipt: 'receipt-stamp-truth-opus.json', note: 'drill' },
+test('NEGATIVE: the credit is narrow -- one painted state no declared stamper answers for keeps the arms red', () => {
+  const row = readBaseline().families['list-toolbar'];
+  const live = measureFamily(resolveFamily('list-toolbar', ROOT, row), { producers: PRODUCERS });
+  assert.equal(judgeComposedStateCredit(live, row).covers, true, 'the live row is the control: its credit covers');
+  /* The plant is the occurrence list-toolbar carried until its chip went
+   * pseudo-side: a painted `hovered` on filter-chip that no declared stamper answers for. */
+  const measured = {
+    ...live,
+    detail: {
+      ...live.detail,
+      statesNotComposed: [{ state: 'hovered', compound: "ds-list-toolbar[data-part='filter-chip']", line: 0, file: 'planted' }],
+    },
   };
   const credit = judgeComposedStateCredit(measured, row);
   assert.equal(credit.covers, false);

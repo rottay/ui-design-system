@@ -1007,7 +1007,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip']:is([data-state~='hovered'], :hover) {
+    .ds-list-toolbar__filter-chip[data-part='filter-chip']:hover {
     transform: translateY(-1px);
     border-color: var(
       --ds-filter-pill-hover-border,
