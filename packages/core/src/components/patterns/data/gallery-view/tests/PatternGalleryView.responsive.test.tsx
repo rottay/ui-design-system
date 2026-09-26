@@ -25,44 +25,45 @@ async function root(container: HTMLElement): Promise<HTMLElement> {
 }
 
 describe('PatternGalleryView responsive + style pass-through', () => {
-  it('floors the auto track at 100% of the container so it cannot overflow a narrow parent', async () => {
+  it('lays out as the auto-fit Grid at the sm tile preset and ignores the legacy column model', async () => {
     const { container } = renderWithEngine(
       <PatternGalleryView<Photo>
         data={data}
         imageField="image"
         captionField="title"
         rowKey="id"
+        columns={4}
         minColumnWidth={320}
       />,
       'modern',
     );
 
-    // The track model rides the family channel the skin consumes; the TSX
-    // paints nothing itself.
+    // The root IS the Grid primitive in its auto-fit mode: the track model and
+    // its min(100%, ...) overflow floor are the Grid skin's recipe.
     const grid = await root(container);
-    const columns = grid.style.getPropertyValue('--ds-gallery-view-columns');
-    // Without the min(..., 100%) floor the track resolves to a bare 320px
-    // minimum and overflows any container narrower than that.
-    expect(columns).toContain('min(320px, 100%)');
+    expect(grid.getAttribute('data-component')).toBe('grid');
+    expect(grid.getAttribute('data-auto-fit')).toBe('true');
+    expect(grid.getAttribute('data-min-item')).toBe('sm');
     expect(grid.style.gridTemplateColumns).toBe('');
+    expect(grid.getAttribute('style') ?? '').not.toMatch(/320|minmax|auto-fill/);
   });
 
-  it('leaves every layout channel unstamped when the caller states no number', async () => {
+  it('leaves every family channel unstamped when the caller states nothing', async () => {
     const { container } = renderWithEngine(
       <PatternGalleryView<Photo> data={data} imageField="image" rowKey="id" />,
       'modern',
     );
 
-    // Negative control for the case above and for the ratio case below: an
-    // unconditional stamp would shadow the skin's resting declarations on every
-    // render and take all three channels away from the theme.
+    // Negative control for the ratio case below: an unconditional stamp would
+    // shadow the skin's resting declaration on every render.
     const grid = await root(container);
     expect(grid.style.getPropertyValue('--ds-gallery-view-columns')).toBe('');
     expect(grid.style.getPropertyValue('--ds-gallery-view-gap')).toBe('');
     expect(grid.style.getPropertyValue('--ds-gallery-view-aspect-ratio')).toBe('');
+    expect(grid.getAttribute('data-gap-preset')).toBe('md');
   });
 
-  it('stamps the gap and media-ratio channels when the caller states them', async () => {
+  it('hands a stated gap to the Grid and stamps the media ratio it owns', async () => {
     const { container } = renderWithEngine(
       <PatternGalleryView<Photo>
         data={data}
@@ -75,8 +76,26 @@ describe('PatternGalleryView responsive + style pass-through', () => {
     );
 
     const grid = await root(container);
-    expect(grid.style.getPropertyValue('--ds-gallery-view-gap')).toBe('24px');
+    expect(grid.style.gap).toBe('24px');
     expect(grid.style.getPropertyValue('--ds-gallery-view-aspect-ratio')).toBe('16/9');
+
+    const length = await root(
+      renderWithEngine(<PatternGalleryView<Photo> data={data} imageField="image" rowKey="id" gap="1.5rem" />, 'modern')
+        .container,
+    );
+    expect(length.style.getPropertyValue('--ds-grid-gap')).toBe('1.5rem');
+  });
+
+  it('carries a stated minItem and templateColumns to the Grid, and stamps the resolved posture', async () => {
+    const grid = await root(
+      renderWithEngine(
+        <PatternGalleryView<Photo> data={data} imageField="image" rowKey="id" minItem="lg" templateColumns="1fr 2fr" />,
+        'modern',
+      ).container,
+    );
+    expect(grid.getAttribute('data-min-item')).toBe('lg');
+    expect(grid.style.gridTemplateColumns).toBe('1fr 2fr');
+    expect(grid.getAttribute('data-posture')).toMatch(/^(phone|tablet|desktop)( (compact|regular|expanded))?$/);
   });
 
   it('keeps the caller style once data arrives, not only while loading and empty', async () => {

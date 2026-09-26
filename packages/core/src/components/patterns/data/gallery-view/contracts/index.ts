@@ -9,6 +9,13 @@
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { PaginationConfig } from '../../../../../foundation/contracts/runtime/components/patterns/core';
+import type { Adapt } from '../../../../../foundation/contracts/kernel/adaptation';
+import type { GridMinItem } from '../../../../primitives/layout/grid/contracts';
+
+/** The gallery's layout-sensitive axis: a posture delta may move the tile preset. */
+export interface GalleryViewAdaptation {
+  readonly minItem?: GridMinItem;
+}
 
 /**
  * Props for the GalleryView pattern component.
@@ -27,8 +34,7 @@ import type { PaginationConfig } from '../../../../../foundation/contracts/runti
  *   imageField="url"
  *   captionField="title"
  *   rowKey="id"
- *   columns="auto"
- *   minColumnWidth={240}
+ *   minItem="md"
  *   aspectRatio="4/3"
  *   selectable
  *   onSelectionChange={(keys, items) => setSelected(items)}
@@ -71,23 +77,30 @@ export interface GalleryViewProps<T> {
   rowKey?: keyof T | ((item: T) => string);
 
   /**
-   * Number of grid columns or `'auto'` for responsive auto-fit.
-   * When set to a number, the grid uses exactly that many columns.
-   * When `'auto'`, columns are determined by `minColumnWidth`.
-   *
-   * Stating this (or `minColumnWidth`) stamps the `--ds-gallery-view-columns`
-   * channel on this instance; omitting both leaves the track model to the skin,
-   * which rests the channel at the `'auto'` + 200px model the pattern used to
-   * default to -- now movable by a theme instead of forced by a prop default on
-   * every render.
+   * The tile footprint preset the tracks are sized for (the Grid primitive's
+   * `minItem`), `'sm'` by default. The gallery lays out with the auto-fit card
+   * recipe: as many tiles as the footprint allows, the row always filled, one
+   * column in the container's compact posture.
+   * @default 'sm'
+   */
+  minItem?: GridMinItem;
+
+  /** An explicit track list; it always wins over the auto-fit recipe. */
+  templateColumns?: string;
+
+  /** Posture deltas the app declares; the family has no default of its own. */
+  adapt?: Adapt<GalleryViewAdaptation>;
+
+  /**
+   * @deprecated Ignored: the auto-fit recipe decides the column count through
+   * the card footprint channels. Use `minItem`, or `templateColumns` for an
+   * explicit track list.
    */
   columns?: number | 'auto';
 
   /**
-   * Minimum column width in pixels when `columns` is `'auto'`.
-   * The grid uses CSS `auto-fill` with `minmax(minColumnWidth, 1fr)`. Shares
-   * the `--ds-gallery-view-columns` channel with `columns`; see there for the
-   * resting value.
+   * @deprecated Ignored for the same reason as `columns`: the footprint is
+   * `--ds-card-min-inline-size` times the `minItem` preset.
    */
   minColumnWidth?: number;
 
@@ -103,13 +116,9 @@ export interface GalleryViewProps<T> {
   aspectRatio?: string;
 
   /**
-   * Gap between grid items. Accepts a number (pixels) or CSS string value.
-   *
-   * Stating it stamps the `--ds-gallery-view-gap` channel on this instance;
-   * omitting it leaves the gap to the skin, which rests the channel at
-   * `var(--ds-spacing-4, 16px)` -- the 16px the old prop default forced at
-   * density 1, now following a denser or more spacious tenant instead of
-   * ignoring it.
+   * Gap between tiles: a number is exact pixels; a Grid gap preset (`'sm'`,
+   * `'md'`, ...) or any other CSS length rides `--ds-grid-gap` and scales with
+   * the tenant rhythm. Omitted, the Grid's `md` rung applies.
    */
   gap?: number | string;
 

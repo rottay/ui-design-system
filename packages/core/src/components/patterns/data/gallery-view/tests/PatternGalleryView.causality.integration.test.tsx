@@ -5,9 +5,10 @@
  * so `readWithoutProducer` is 0 and there is nothing for a `chrome/gallery-view`
  * to emit. What this suite proves is the other half of §1.6: the decisions that
  * reach the family's own paint through the cascade roots, one probe per
- * decision with a negative control, plus the three layout channels the cut
- * introduced -- read back both at their resting declaration (the producer is
- * real, not a fallback) and at a stamped instance value.
+ * decision with a negative control, plus the auto-fit card recipe the root now
+ * lays out with (WO-FAM-12, the `sm` tile preset): the row always filled, one
+ * column in the compact container posture, a caller's gap outranking the rung,
+ * and the media ratio the family still owns.
  */
 import React from 'react';
 import { Writable } from 'node:stream';
@@ -17,6 +18,11 @@ import { describe, expect, it } from 'vitest';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { TenantConfig } from '@/foundation/contracts';
+import {
+  postureAttribute,
+  resolveContainerPosture,
+} from '@/foundation/contracts/kernel/adaptation/foundation';
+import { DEFAULT_RESPONSIVE_POSTURE } from '@/foundation/tokens/ts/presentation/responsive-postures';
 import { PatternGalleryView } from '../presentation/gallery';
 import {
   AXE_SCOPES,
@@ -240,11 +246,17 @@ describe('gallery-view causality surface', () => {
     // `data-state`, so `[data-state]` never matches a resting card and the
     // skin's eight paired arms fall through to the platform pseudo-class.
     expect(gallery).not.toContain('data-part="card" data-state');
-    // A gallery that states no layout number stamps NO layout channel.
-    expect(gallery).not.toContain('--ds-gallery-view-columns');
-    expect(gallery).not.toContain('--ds-gallery-view-gap');
+    // The root is the Grid primitive in its auto-fit mode at the sm preset, and
+    // no family track channel or literal survives: the recipe is the Grid skin's.
+    expect(gallery).toContain('data-component="grid"');
+    expect(gallery).toContain('data-auto-fit="true"');
+    expect(gallery).toContain('data-min-item="sm"');
+    for (const dead of ['--ds-gallery-view-columns', '--ds-gallery-view-gap', 'auto-fill', '200px', 'minmax']) {
+      expect(gallery).not.toContain(dead);
+    }
     expect(gallery).not.toContain('--ds-gallery-view-aspect-ratio');
-    expect(stampedMarkup).toContain('--ds-gallery-view-gap:48px');
+    // A stated number is the Grid's exact inline gap; the ratio stays the family's channel.
+    expect(stampedMarkup).toContain('gap:48px');
     expect(stampedMarkup).toContain('--ds-gallery-view-aspect-ratio:16/9');
     // Nothing else travels inline: the six paint sites this cut drained would
     // all have shown up here.
@@ -321,18 +333,18 @@ describe('gallery-view causality surface', () => {
   }, 120_000);
 
   /**
-   * The three layout channels the cut introduced, read back twice: once where
-   * the skin's own declaration is the producer (so the read resolves to a value
-   * a theme can move, not to a `var()` fallback nobody writes), and once where
-   * the instance stamp outranks it.
+   * The auto-fit recipe resolves from the card footprint channels at the sm
+   * preset, the media ratio from the family's own resting declaration, and a
+   * caller's numbers outrank both.
    */
-  it('resolves all three layout channels from a real producer, and lets the stamp outrank them', async () => {
+  it('resolves the recipe from the footprint channels and the ratio from its producer, and lets the stamp outrank them', async () => {
     const readings = await measureArms({
       vertical: 'rottay',
       markup: `${markup}${stampedMarkup}`,
       arms: { base: {}, spacious: { 'density.mode': 'spacious' } },
       targets: [
-        { id: 'restingColumns', selector: ROOT, property: '--ds-gallery-view-columns' },
+        { id: 'footprint', selector: ROOT, property: '--ds-card-min-inline-size' },
+        { id: 'preset', selector: ROOT, property: '--ds-card-scale' },
         { id: 'restingRatio', selector: ROOT, property: '--ds-gallery-view-aspect-ratio' },
         { id: 'tracks', selector: ROOT, property: 'grid-template-columns' },
         { id: 'themedGap', selector: ROOT, property: 'column-gap' },
@@ -353,13 +365,14 @@ describe('gallery-view causality surface', () => {
     });
     const base = readings.base!;
     const spacious = readings.spacious!;
-    // The producers are declarations, not fallbacks: both reads resolve.
-    expect(base.restingColumns).toContain('auto-fill');
-    expect(base.restingColumns).toContain('100%');
+    // The footprint is the derived card channel at the sm preset; the ratio's
+    // producer is the family's declaration, not a fallback.
+    expect(base.footprint).toContain('16rem');
+    expect(base.preset).toContain('0.875');
     expect(base.restingRatio.trim()).toBe('1');
     // Rounded to the computed spelling by the engine, not by the family.
     // And they reach the paint.
-    expect(base.tracks.split(' ').length).toBeGreaterThan(1);
+    expect(base.tracks.split(' ').filter((track) => track !== '0px').length).toBeGreaterThan(1);
     expect(base.frameRatio).toBe('1 / 1');
     expect(base.placeholderRatio).toBe(base.frameRatio);
     // The theme's gallery moves with density; the caller's numbers win in both.
@@ -369,6 +382,55 @@ describe('gallery-view causality surface', () => {
     expect(base.stampedRatio).toBe('16 / 9');
     expect(base.emptyDisplay).not.toBe('grid');
   }, 120_000);
+
+  /**
+   * The recipe's three promises, in every vertical and both directions: the row
+   * fills its container with no orphan gap, the compact posture the runtime
+   * measures takes one column, and the retired literal never paints again.
+   */
+  it('fills the row, takes one column in the compact posture, in every vertical and direction', async () => {
+    const compact = postureAttribute({
+      viewport: 'phone',
+      container: resolveContainerPosture(600, DEFAULT_RESPONSIVE_POSTURE),
+    });
+    expect(compact).toBe('phone compact');
+    const card = (host: string, index: number) =>
+      `${host} .ds-pattern-gallery-view[data-part='root'] > .ds-gallery-card:nth-child(${index})`;
+    const hosts = `<div id="wide" style="inline-size:90rem">${gallery}</div><div id="narrow" style="inline-size:600px">${gallery}</div>`;
+    for (const vertical of VERTICALS) {
+      for (const dir of ['ltr', 'rtl'] as const) {
+        const readings = await measureArms({
+          vertical,
+          markup: hosts,
+          arms: { base: {} },
+          targets: [
+            { id: 'wideLeft', selector: "#wide .ds-pattern-gallery-view[data-part='root']", property: '@rect.left', dir },
+            { id: 'wideRight', selector: "#wide .ds-pattern-gallery-view[data-part='root']", property: '@rect.right', dir },
+            ...[1, 2, 3].flatMap((index) => [
+              { id: `w${index}l`, selector: card('#wide', index), property: '@rect.left', dir },
+              { id: `w${index}r`, selector: card('#wide', index), property: '@rect.right', dir },
+              { id: `w${index}t`, selector: card('#wide', index), property: '@rect.top', dir },
+              {
+                id: `n${index}t`,
+                selector: card('#narrow', index),
+                property: '@rect.top',
+                dir,
+                attributes: { 'data-posture': compact },
+                attributesOn: "#narrow .ds-pattern-gallery-view[data-part='root']",
+              },
+            ]),
+          ],
+        });
+        const r = readings.base!;
+        const n = (id: string) => Number(r[id]);
+        const where = `${vertical} ${dir}`;
+        expect({ where, oneRow: n('w1t') === n('w2t') && n('w2t') === n('w3t') }).toEqual({ where, oneRow: true });
+        const edges = [n('w1l'), n('w1r'), n('w3l'), n('w3r')];
+        expect({ where, filled: Math.abs(Math.min(...edges) - n('wideLeft')) <= 2 && Math.abs(Math.max(...edges) - n('wideRight')) <= 2 }).toEqual({ where, filled: true });
+        expect({ where, stacked: n('n1t') < n('n2t') && n('n2t') < n('n3t') }).toEqual({ where, stacked: true });
+      }
+    }
+  }, 240_000);
 
   /**
    * The selection overlay anchors on the INLINE axis, so it lands in the

@@ -11,6 +11,6 @@
  * Engine-free -- uses CSS Grid directly with DS CSS variables for theming.
  */
 
-export type { GridViewProps } from './contracts';
+export type { GridViewProps, GridViewAdaptation } from './contracts';
 export { resolveGridRowKey } from './runtime/item-identity';
 export { PatternGridView } from './presentation/grid';

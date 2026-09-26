@@ -10,6 +10,6 @@
  * image-first layout. Engine-free: composes DS primitives directly.
  */
 
-export type { GalleryViewProps } from './contracts';
+export type { GalleryViewProps, GalleryViewAdaptation } from './contracts';
 export { resolveGalleryKey } from './runtime/item-identity';
 export { PatternGalleryView } from './presentation/gallery';

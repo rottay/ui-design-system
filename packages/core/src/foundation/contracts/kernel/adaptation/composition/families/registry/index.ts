@@ -117,6 +117,18 @@ export const LAYOUT_SENSITIVE_FAMILIES = Object.freeze([
     layoutSensitive: true,
     cut: 'WO-FAM-10',
   },
+  {
+    family: 'grid-view',
+    owner: 'src/components/patterns/data/grid-view',
+    layoutSensitive: true,
+    cut: 'WO-FAM-12',
+  },
+  {
+    family: 'gallery-view',
+    owner: 'src/components/patterns/data/gallery-view',
+    layoutSensitive: true,
+    cut: 'WO-FAM-12',
+  },
 ] as const satisfies readonly LayoutSensitiveFamily[]);
 
 export type LayoutSensitiveFamilyId = (typeof LAYOUT_SENSITIVE_FAMILIES)[number]['family'];

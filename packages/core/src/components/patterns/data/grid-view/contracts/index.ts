@@ -7,6 +7,13 @@
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { PaginationConfig } from '../../../../../foundation/contracts/runtime/components/patterns/core';
+import type { Adapt } from '../../../../../foundation/contracts/kernel/adaptation';
+import type { GridMinItem } from '../../../../primitives/layout/grid/contracts';
+
+/** The grid's layout-sensitive axis: a posture delta may move the card preset. */
+export interface GridViewAdaptation {
+  readonly minItem?: GridMinItem;
+}
 
 /**
  * Props for the GridView pattern component.
@@ -24,8 +31,7 @@ import type { PaginationConfig } from '../../../../../foundation/contracts/runti
  *   data={products}
  *   renderCard={(product) => <ProductCard product={product} />}
  *   rowKey="id"
- *   columns="auto"
- *   minColumnWidth={300}
+ *   minItem="lg"
  *   selectable
  *   onSelectionChange={(keys, items) => setSelected(items)}
  *   pagination={{ current: 1, pageSize: 12, total: 120, onChange: handlePage }}
@@ -60,37 +66,36 @@ export interface GridViewProps<T> {
   rowKey?: keyof T | ((item: T) => string);
 
   /**
-   * Number of columns (1-6) or `'auto'` for responsive auto-fill.
-   * When set to `'auto'`, the grid uses CSS `auto-fill` with `minColumnWidth`
-   * to determine column count responsively.
-   *
-   * Stating this (or `minColumnWidth`) stamps the `--ds-grid-view-columns`
-   * channel on this instance; omitting both leaves the track model to the skin,
-   * which rests the channel at the `'auto'` + 280px model the pattern used to
-   * default to -- now movable by a theme instead of forced by a prop default on
-   * every render.
+   * The card footprint preset the tracks are sized for (the Grid primitive's
+   * `minItem`). The grid lays out with the auto-fit card recipe: as many
+   * columns as the footprint allows, the row always filled, one column in the
+   * container's compact posture.
+   */
+  minItem?: GridMinItem;
+
+  /** An explicit track list; it always wins over the auto-fit recipe. */
+  templateColumns?: string;
+
+  /** Posture deltas the app declares; the family has no default of its own. */
+  adapt?: Adapt<GridViewAdaptation>;
+
+  /**
+   * @deprecated Ignored: the auto-fit recipe decides the column count through
+   * the card footprint channels. Use `minItem`, or `templateColumns` for an
+   * explicit track list.
    */
   columns?: number | 'auto';
 
   /**
-   * Minimum column width in pixels when `columns='auto'`.
-   * Used in the CSS `minmax()` function for responsive column sizing. Shares
-   * the `--ds-grid-view-columns` channel with `columns`; see there for the
-   * resting value.
+   * @deprecated Ignored for the same reason as `columns`: the footprint is
+   * `--ds-card-min-inline-size` times the `minItem` preset.
    */
   minColumnWidth?: number;
 
   /**
-   * Gap between grid cards. Accepts a number (pixels) or a CSS string
-   * (e.g. a DS spacing variable). Where a bundle declares the
-   * `--ds-collection-card-gap` premium channel (BitHire: 10px, an authorized
-   * deliberate delta), the channel tiers over the resolved gap; everywhere
-   * else the resting declaration governs unchanged.
-   *
-   * Stating it stamps the `--ds-grid-view-gap` channel on this instance;
-   * omitting it leaves the gap to the skin, which rests the channel at
-   * `var(--ds-collection-card-gap, var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px)))`
-   * -- the exact resolution the old prop default computed.
+   * Gap between grid cards: a number is exact pixels; a Grid gap preset
+   * (`'sm'`, `'md'`, ...) or any other CSS length rides `--ds-grid-gap` and
+   * scales with the tenant rhythm. Omitted, the Grid's `md` rung applies.
    */
   gap?: number | string;
 

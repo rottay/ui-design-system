@@ -267,10 +267,19 @@ describe('long-tail anatomy patterns/data anatomy', () => {
     );
     if (engine === 'rustic') {
       expect(['pulse', 'wave']).toContain(loadingRoot.getAttribute('data-skeleton-animation'));
+      expect(q(loading.container, '[data-part="skeleton"]')).toHaveLength(2);
+      expect(q(loading.container, '[data-part="skeleton-bar"][data-kind="label"]')).toHaveLength(2);
+      expect(q(loading.container, '[data-part="skeleton-bar"][data-kind="value"]')).toHaveLength(2);
+      expect(q(loading.container, '[data-part="skeleton-bar"][data-kind="trend"]')).toHaveLength(2);
+    } else {
+      // Modern: the shared anatomy renderer reads placeholder cards stamped
+      // with the loaded card's own parts; no hand-made skeleton remains.
+      expect(loadingRoot.closest('.ds-skeleton-anatomy')).not.toBeNull();
+      expect(q(loading.container, '[data-part="skeleton"]')).toHaveLength(0);
+      expect(q(loadingRoot, '[data-part="card"]')).toHaveLength(2);
+      for (const part of ['title', 'value', 'trend']) {
+        expect(q(loadingRoot, `[data-part="${part}"]`), part).toHaveLength(2);
+      }
     }
-    expect(q(loading.container, '[data-part="skeleton"]')).toHaveLength(2);
-    expect(q(loading.container, '[data-part="skeleton-bar"][data-kind="label"]')).toHaveLength(2);
-    expect(q(loading.container, '[data-part="skeleton-bar"][data-kind="value"]')).toHaveLength(2);
-    expect(q(loading.container, '[data-part="skeleton-bar"][data-kind="trend"]')).toHaveLength(2);
   });
 });

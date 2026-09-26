@@ -1,19 +1,19 @@
 /**
  * The grid-view family in a real browser (WO-FAM-08 B7).
  *
- * The family has NO deriver of its own: the twelve names its skin reads without
- * a producer are the ten `--ds-collection-card-*` premium sockets, the
- * `--ds-collection-card-gap` track channel, and `--ds-listing-grid-bottom-bleed`.
- * The `--ds-collection-card-*` eleven are a CROSS-FAMILY vocabulary declared in
+ * The family has NO deriver of its own: the eleven names its skin reads without
+ * a producer are the ten `--ds-collection-card-*` premium sockets and
+ * `--ds-listing-grid-bottom-bleed` (the gap left with the track model, WO-FAM-12).
+ * The `--ds-collection-card-*` ten are a CROSS-FAMILY vocabulary declared in
  * `presentation/components/patterns/index.css` and read by three skins, so a
  * `chrome/grid-view` that emitted them would make one family the producer of a
  * namespace it does not own; `--ds-listing-grid-bottom-bleed` is a listing-grid
  * name, not a grid-view one. They are pinned by category in the roster row
  * instead. What this suite proves is the other half of §1.6: the decisions that
  * reach the family's own paint through the cascade roots, one probe per
- * decision with a negative control, plus the two layout channels the cut
- * introduced -- read back both at their resting declaration (the producer is
- * real, not a fallback) and at a stamped instance value.
+ * decision with a negative control, plus the auto-fit card recipe the root now
+ * lays out with (WO-FAM-12): the row always filled, one column in the compact
+ * container posture, and a caller's gap outranking the Grid's rung.
  */
 import React from 'react';
 import { Writable } from 'node:stream';
@@ -23,6 +23,11 @@ import { describe, expect, it } from 'vitest';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { TenantConfig } from '@/foundation/contracts';
+import {
+  postureAttribute,
+  resolveContainerPosture,
+} from '@/foundation/contracts/kernel/adaptation/foundation';
+import { DEFAULT_RESPONSIVE_POSTURE } from '@/foundation/tokens/ts/presentation/responsive-postures';
 import { PatternGridView } from '../presentation/grid';
 import {
   AXE_SCOPES,
@@ -205,12 +210,16 @@ describe('grid-view causality surface', () => {
     // NO `data-state`, so `[data-state]` never matches a resting shell and the
     // skin's paired hover arm falls through to the platform pseudo-class.
     expect(grid).not.toContain('data-part="card-shell" data-state');
-    // A grid that states no layout number stamps NO layout channel.
-    expect(grid).not.toContain('--ds-grid-view-columns');
-    expect(grid).not.toContain('--ds-grid-view-gap');
-    expect(stampedMarkup).toContain('--ds-grid-view-gap:48px');
-    // Nothing else travels inline: the three paint sites this cut drained, and
-    // the three the gate could not see inside `useMemo`, would all show here.
+    // The root is the Grid primitive in its auto-fit mode, and no family
+    // channel or literal track model survives: the recipe is the Grid skin's.
+    expect(grid).toContain('data-component="grid"');
+    expect(grid).toContain('data-auto-fit="true"');
+    for (const dead of ['--ds-grid-view-columns', '--ds-grid-view-gap', 'auto-fill', '280px', 'minmax']) {
+      expect(grid).not.toContain(dead);
+    }
+    // A stated number is the Grid's exact inline gap.
+    expect(stampedMarkup).toContain('gap:48px');
+    // Nothing else travels inline.
     expect(grid).not.toContain('display:grid');
     expect(grid).not.toContain('grid-template-columns');
   });
@@ -235,18 +244,17 @@ describe('grid-view causality surface', () => {
   });
 
   /**
-   * The two layout channels the cut introduced, read back twice: once where the
-   * skin's own declaration is the producer (so the read resolves to a value a
-   * theme can move, not to a `var()` fallback nobody writes), and once where
-   * the instance stamp outranks it.
+   * The auto-fit recipe resolves from the card footprint channels: the root is
+   * a real grid whose tracks fill the 64rem host, the theme's gap moves with
+   * density, a caller's number outranks it, and the empty branch is no grid.
    */
-  it('resolves both layout channels from a real producer, and lets the stamp outrank them', async () => {
+  it('resolves the recipe from the footprint channels, and lets a stated gap outrank the rung', async () => {
     const readings = await measureArms({
       vertical: 'rottay',
       markup: `${markup}${stampedMarkup}`,
       arms: { base: {}, spacious: { 'density.mode': 'spacious' } },
       targets: [
-        { id: 'restingColumns', selector: ROOT, property: '--ds-grid-view-columns' },
+        { id: 'footprint', selector: ROOT, property: '--ds-card-min-inline-size' },
         { id: 'themedGap', selector: ROOT, property: 'column-gap' },
         { id: 'tracks', selector: ROOT, property: 'grid-template-columns' },
         { id: 'stampedGap', selector: "#stamped .ds-pattern-grid-view[data-part='root']", property: 'column-gap' },
@@ -256,18 +264,67 @@ describe('grid-view causality surface', () => {
     });
     const base = readings.base!;
     const spacious = readings.spacious!;
-    // The producer is a declaration, not a fallback: the read resolves to the
-    // same auto-fill model the prop default used to compute.
-    expect(base.restingColumns).toContain('auto-fill');
-    expect(base.restingColumns).toContain('100%');
+    // The footprint is the derived card channel, not a literal of this family.
+    expect(base.footprint).toContain('16rem');
     // And it reaches the paint: the 64rem host resolves to real tracks.
-    expect(base.tracks.split(' ').length).toBeGreaterThan(1);
+    expect(base.tracks.split(' ').filter((track) => track !== '0px').length).toBeGreaterThan(1);
     // The theme's grid moves with density; the caller's number wins in both.
     expect(spacious.themedGap).not.toBe(base.themedGap);
     expect(base.stampedGap).toBe('48px');
     expect(spacious.stampedGap).toBe('48px');
     expect(base.emptyDisplay).not.toBe('grid');
   }, 120_000);
+
+  /**
+   * The recipe's three promises, in every vertical and both directions: the row
+   * fills its container with no orphan gap, the compact posture the runtime
+   * measures takes one column, and the retired literal never paints again.
+   */
+  it('fills the row, takes one column in the compact posture, in every vertical and direction', async () => {
+    const compact = postureAttribute({
+      viewport: 'phone',
+      container: resolveContainerPosture(600, DEFAULT_RESPONSIVE_POSTURE),
+    });
+    expect(compact).toBe('phone compact');
+    const card = (host: string, index: number) =>
+      `${host} .ds-pattern-grid-view[data-part='root'] > [data-part='card-shell']:nth-child(${index})`;
+    const hosts = `<div id="wide" style="inline-size:90rem">${grid}</div><div id="narrow" style="inline-size:600px">${grid}</div>`;
+    for (const vertical of VERTICALS) {
+      for (const dir of ['ltr', 'rtl'] as const) {
+        const readings = await measureArms({
+          vertical,
+          markup: hosts,
+          arms: { base: {} },
+          targets: [
+            { id: 'wideLeft', selector: "#wide .ds-pattern-grid-view[data-part='root']", property: '@rect.left', dir },
+            { id: 'wideRight', selector: "#wide .ds-pattern-grid-view[data-part='root']", property: '@rect.right', dir },
+            ...[1, 2, 3].flatMap((index) => [
+              { id: `w${index}l`, selector: card('#wide', index), property: '@rect.left', dir },
+              { id: `w${index}r`, selector: card('#wide', index), property: '@rect.right', dir },
+              { id: `w${index}t`, selector: card('#wide', index), property: '@rect.top', dir },
+              {
+                id: `n${index}t`,
+                selector: card('#narrow', index),
+                property: '@rect.top',
+                dir,
+                attributes: { 'data-posture': compact },
+                attributesOn: "#narrow .ds-pattern-grid-view[data-part='root']",
+              },
+            ]),
+          ],
+        });
+        const r = readings.base!;
+        const n = (id: string) => Number(r[id]);
+        const where = `${vertical} ${dir}`;
+        // One row of three, the outer cards on the grid's own edges (padding 1px).
+        expect({ where, oneRow: n('w1t') === n('w2t') && n('w2t') === n('w3t') }).toEqual({ where, oneRow: true });
+        const edges = [n('w1l'), n('w1r'), n('w3l'), n('w3r')];
+        expect({ where, filled: Math.abs(Math.min(...edges) - n('wideLeft')) <= 2 && Math.abs(Math.max(...edges) - n('wideRight')) <= 2 }).toEqual({ where, filled: true });
+        // The measured compact posture stacks the three cards.
+        expect({ where, stacked: n('n1t') < n('n2t') && n('n2t') < n('n3t') }).toEqual({ where, stacked: true });
+      }
+    }
+  }, 240_000);
 
   /**
    * The checkbox overlay anchors on the INLINE axis, so it lands in the

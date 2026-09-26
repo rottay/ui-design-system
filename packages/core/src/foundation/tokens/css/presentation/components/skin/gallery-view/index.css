@@ -18,17 +18,10 @@
  * RTL: the checkbox overlay anchors with logical insets — it mirrors to the
  * inline-start corner under `dir="rtl"` with zero overrides.
  *
- * GEOMETRY (WO-FAM-08 B7): the gallery's track model, gap and media ratio moved
- * here out of the engine's `style` prop. The three numbers a caller can state
- * travel as family channels whose RESTING values are declared below, so the
- * reads have a producer instead of resolving to a fallback nobody can move:
- *
- *   --ds-gallery-view-columns       the `grid-template-columns` track model
- *   --ds-gallery-view-gap           the gap between cards
- *   --ds-gallery-view-aspect-ratio  the media frame's ratio
- *
- * All three resting values are byte-equivalent to what the pattern's prop
- * defaults used to compute.
+ * GEOMETRY (WO-FAM-12): the root is the Grid primitive in its auto-fit mode;
+ * the track model and the gap are the Grid skin's card recipe. The media ratio
+ * stays the family's own channel, `--ds-gallery-view-aspect-ratio`, resting at
+ * the square the pattern used to default to.
  *
  * LOADING: the family draws no skeleton of its own. The shared anatomy renderer
  * builds the loading state from this gallery's own parts, so the `skeleton-card`
@@ -41,24 +34,7 @@
  */
 
 .ds-pattern-gallery-view[data-part='root'] {
-  --ds-gallery-view-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
-  /* The card rhythm rides the density-scaled spacing ramp: `--ds-spacing-4` is
-     `calc(1rem * density)`, which is the 16px the prop default forced at
-     density 1 -- and now follows a denser tenant instead of ignoring it. */
-  --ds-gallery-view-gap: var(--ds-spacing-4, 16px);
   --ds-gallery-view-aspect-ratio: 1;
-}
-
-/* The card grid itself. The empty branch is NOT a grid -- it is one centered
-   message on the same root box -- so the track model is scoped to the populated
-   and loading branches, exactly as the engine scoped it. */
-.ds-pattern-gallery-view[data-part='root'][data-empty='false'] {
-  display: grid;
-  grid-template-columns: var(
-    --ds-gallery-view-columns,
-    repeat(auto-fill, minmax(min(200px, 100%), 1fr))
-  );
-  gap: var(--ds-gallery-view-gap, var(--ds-spacing-4, 16px));
 }
 
 /* ---- media frame: the image and its placeholder share one geometry. ---- */

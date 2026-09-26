@@ -26,42 +26,70 @@ async function root(container: HTMLElement): Promise<HTMLElement> {
 }
 
 describe('PatternGridView responsive + style pass-through', () => {
-  it('floors the auto track at 100% of the container so it cannot overflow a narrow parent', async () => {
+  it('lays out as the auto-fit Grid and ignores the legacy column model', async () => {
     const { container } = renderWithEngine(
-      <PatternGridView data={data} renderCard={renderCard} rowKey="id" minColumnWidth={320} />,
+      <PatternGridView data={data} renderCard={renderCard} rowKey="id" columns={3} minColumnWidth={320} />,
       'modern',
     );
 
-    // The track model rides the family channel the skin consumes; the TSX
-    // paints nothing itself.
+    // The root IS the Grid primitive in its auto-fit mode: the track model and
+    // its min(100%, ...) overflow floor are the Grid skin's recipe, so neither
+    // a number nor a family channel is written here.
     const grid = await root(container);
-    const columns = grid.style.getPropertyValue('--ds-grid-view-columns');
-    // Without the min(..., 100%) floor the track resolves to a bare 320px
-    // minimum and overflows any container narrower than that.
-    expect(columns).toContain('min(var(--ds-listing-grid-min-compact-width, 320px), 100%)');
+    expect(grid.getAttribute('data-component')).toBe('grid');
+    expect(grid.getAttribute('data-auto-fit')).toBe('true');
     expect(grid.style.gridTemplateColumns).toBe('');
+    expect(grid.style.getPropertyValue('--ds-grid-view-columns')).toBe('');
+    expect(grid.getAttribute('style') ?? '').not.toMatch(/320|minmax|auto-fill/);
   });
 
-  it('leaves both layout channels unstamped when the caller states no number', async () => {
+  it('writes no gap of its own when the caller states none: the Grid md rung applies', async () => {
     const { container } = renderWithEngine(
       <PatternGridView data={data} renderCard={renderCard} rowKey="id" />,
       'modern',
     );
 
-    // Negative control for the case above: an unconditional stamp would shadow
-    // the skin's resting declaration on every render.
     const grid = await root(container);
-    expect(grid.style.getPropertyValue('--ds-grid-view-columns')).toBe('');
+    expect(grid.getAttribute('data-gap-preset')).toBe('md');
     expect(grid.style.getPropertyValue('--ds-grid-view-gap')).toBe('');
+    expect(grid.style.gap).toBe('');
   });
 
-  it('stamps the gap channel when the caller states one', async () => {
-    const { container } = renderWithEngine(
-      <PatternGridView data={data} renderCard={renderCard} rowKey="id" gap={24} />,
-      'modern',
+  it('hands a stated gap to the Grid: a number exact, a rung by name, any other length on --ds-grid-gap', async () => {
+    const exact = await root(
+      renderWithEngine(<PatternGridView data={data} renderCard={renderCard} rowKey="id" gap={24} />, 'modern').container,
     );
+    expect(exact.style.gap).toBe('24px');
+    expect(exact.hasAttribute('data-gap-preset')).toBe(false);
 
-    expect((await root(container)).style.getPropertyValue('--ds-grid-view-gap')).toBe('24px');
+    const rung = await root(
+      renderWithEngine(<PatternGridView data={data} renderCard={renderCard} rowKey="id" gap="lg" />, 'modern').container,
+    );
+    expect(rung.getAttribute('data-gap-preset')).toBe('lg');
+
+    const length = await root(
+      renderWithEngine(<PatternGridView data={data} renderCard={renderCard} rowKey="id" gap="1.5rem" />, 'modern').container,
+    );
+    expect(length.style.getPropertyValue('--ds-grid-gap')).toBe('1.5rem');
+  });
+
+  it('keeps an explicit templateColumns sovereign over the recipe', async () => {
+    const grid = await root(
+      renderWithEngine(
+        <PatternGridView data={data} renderCard={renderCard} rowKey="id" templateColumns="200px 1fr" />,
+        'modern',
+      ).container,
+    );
+    expect(grid.style.gridTemplateColumns).toBe('200px 1fr');
+  });
+
+  it('carries the minItem preset to the Grid and stamps the resolved posture', async () => {
+    const grid = await root(
+      renderWithEngine(<PatternGridView data={data} renderCard={renderCard} rowKey="id" minItem="lg" />, 'modern')
+        .container,
+    );
+    expect(grid.getAttribute('data-min-item')).toBe('lg');
+    expect(grid.getAttribute('data-posture')).toMatch(/^(phone|tablet|desktop)( (compact|regular|expanded))?$/);
   });
 
   it('keeps the caller style on the empty state, not only on the populated grid', async () => {

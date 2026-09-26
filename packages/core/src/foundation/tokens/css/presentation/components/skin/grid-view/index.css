@@ -11,45 +11,16 @@
  * footer-*, icon-*, meter-*, number-*, value-color-hover) have no honest host
  * in this file and stay unwired pending a CONSUMER_APPLIED contract.
  *
- * GEOMETRY (WO-FAM-08 B7): the grid's own track model, gap, bleed and box
- * sizing moved here out of the engine's `style` prop. The two numbers a caller
- * can state travel as family channels whose RESTING values are declared below,
- * so the reads have a producer instead of resolving to a fallback nobody can
- * move:
- *
- *   --ds-grid-view-columns  the `grid-template-columns` track model
- *   --ds-grid-view-gap      the gap between cards
- *
- * Both resting values are byte-equivalent to what the pattern's prop defaults
- * used to compute, including the `--ds-collection-card-gap` premium socket the
- * engine used to tier through.
+ * GEOMETRY (WO-FAM-12): the root is the Grid primitive in its auto-fit mode;
+ * the track model and the gap are the Grid skin's card recipe. This file keeps
+ * only the grid-view's own bleed and box sizing.
  *
  * STATE: the shell's interaction state is decided once by the kernel and
  * arrives as `data-state`; the platform pseudo-class is PAIRED with it as the
  * fallback of one decision, never as a second authority (F-37).
  */
 
-.ds-pattern-grid-view[data-part='root'] {
-  --ds-grid-view-columns: repeat(
-    auto-fill,
-    minmax(min(var(--ds-listing-grid-min-compact-width, 280px), 100%), 1fr)
-  );
-  --ds-grid-view-gap: var(
-    --ds-collection-card-gap,
-    var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))
-  );
-}
-
-/* The card grid itself. The empty branch is NOT a grid -- it is one centered
-   message on the same root box -- so the track model is scoped to the
-   populated and loading branches, exactly as the engine scoped it. */
 .ds-pattern-grid-view[data-part='root'][data-empty='false'] {
-  display: grid;
-  grid-template-columns: var(
-    --ds-grid-view-columns,
-    repeat(auto-fill, minmax(min(var(--ds-listing-grid-min-compact-width, 280px), 100%), 1fr))
-  );
-  gap: var(--ds-grid-view-gap, var(--ds-spacing-4, 16px));
   /* One pixel of bleed on each side so a card's own ring is not clipped, and a
      bottom bleed the listing layer can tune. */
   padding-block: 1px var(--ds-listing-grid-bottom-bleed, var(--ds-spacing-2, 8px));

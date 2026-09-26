@@ -13,13 +13,20 @@
  * `imageField` and `captionField` accessors, with optional `renderCard`
  * override. Selection, click handling, and pagination follow the same
  * controlled-state conventions as the sibling data patterns.
+ *
+ * LAYOUT (WO-FAM-12): the root is the Grid primitive in its auto-fit mode (the
+ * `sm` tile preset by default), so the tile count is the card footprint
+ * recipe's and the container's compact posture takes one column. The legacy
+ * `columns`/`minColumnWidth` props are ignored.
  */
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { ImageIcon } from '../../../../../../graphics/icons';
 
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Box } from '../../../../../primitives/layout/box';
+import { Grid } from '../../../../../primitives/layout/grid';
+import { GAP_MAP, type GridGap } from '../../../../../primitives/layout/grid/contracts';
 import { Flex } from '../../../../../primitives/layout/flex';
 import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import { Stack } from '../../../../../primitives/layout/stack';
@@ -28,7 +35,8 @@ import { Checkbox } from '../../../../../primitives/inputs/checkbox';
 import { Pagination } from '../../../../../primitives/navigation/pagination';
 import { ShortcutScope } from '../../../../../../infrastructure/runtime/application/interaction/shortcuts';
 import { useOptionalTranslation } from '../../../../../../infrastructure/runtime/i18n';
-import type { GalleryViewProps } from '../../contracts';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
+import type { GalleryViewAdaptation, GalleryViewProps } from '../../contracts';
 import { resolveGalleryKey } from '../../runtime/item-identity';
 import { useGalleryKeyboardNav, GalleryCollectionShortcuts } from '../../runtime/keyboard-navigation';
 
@@ -36,8 +44,7 @@ import { useGalleryKeyboardNav, GalleryCollectionShortcuts } from '../../runtime
 // Constants
 // ---------------------------------------------------------------------------
 
-const DEFAULT_COLUMNS = 'auto' as const;
-const DEFAULT_MIN_COLUMN_WIDTH = 200;
+const DEFAULT_MIN_ITEM = 'sm' as const;
 const LOADING_CARD_COUNT = 8;
 
 function readRecordValue(value: unknown, key: PropertyKey): unknown {
@@ -49,27 +56,19 @@ function readRecordValue(value: unknown, key: PropertyKey): unknown {
 // Helpers
 // ---------------------------------------------------------------------------
 
-/**
- * Builds the CSS `grid-template-columns` value based on the columns prop.
- */
-function buildGridTemplateColumns(
-  columns: number | 'auto',
-  minColumnWidth: number,
-): string {
-  if (columns === 'auto') {
-    // Responsive law: the track floor must never exceed its own container, or
-    // a single track overflows the page below `minColumnWidth`.
-    return `repeat(auto-fill, minmax(min(${minColumnWidth}px, 100%), 1fr))`;
-  }
-  return `repeat(${Math.max(1, columns)}, 1fr)`;
-}
+const isGridGap = (gap: string): gap is GridGap => Object.prototype.hasOwnProperty.call(GAP_MAP, gap);
 
 /**
- * Normalizes the gap prop to a CSS string value.
+ * The caller's gap on the Grid's own terms: a number or a rung is the Grid's
+ * `gap`; any other CSS length rides the Grid's `--ds-grid-gap` channel.
  */
-function normalizeGap(gap: number | string): string {
-  if (typeof gap === 'number') return `${gap}px`;
-  return gap;
+function gridGap(gap: number | string | undefined): {
+  gap?: number | GridGap;
+  channel?: React.CSSProperties;
+} {
+  if (gap === undefined) return {};
+  if (typeof gap === 'number' || isGridGap(gap)) return { gap };
+  return { channel: { '--ds-grid-gap': gap } as React.CSSProperties };
 }
 
 // ---------------------------------------------------------------------------
@@ -275,7 +274,7 @@ function GalleryCardWrapper<T>({
 /**
  * Image/media-focused grid pattern for rendering collections of visual content.
  *
- * Uses CSS Grid with responsive auto-fill columns by default. Each card shows
+ * Lays out with the Grid primitive's auto-fit card recipe. Each card shows
  * an image with `object-fit: cover`, an optional caption, and supports
  * selection checkboxes that reveal on hover. Fully customizable via
  * `renderCard` for non-standard card layouts.
@@ -302,7 +301,7 @@ function GalleryCardWrapper<T>({
  *   selectable
  *   selectedKeys={selectedAssetIds}
  *   onSelectionChange={(keys, items) => setSelectedAssets(items)}
- *   columns={4}
+ *   minItem="md"
  *   aspectRatio="16/9"
  *   pagination={{ current: page, pageSize: 24, total: totalCount, onChange: setPage }}
  * />
@@ -317,8 +316,9 @@ export function PatternGalleryView<T extends object>(
     captionField,
     renderCard,
     rowKey,
-    columns,
-    minColumnWidth,
+    minItem = DEFAULT_MIN_ITEM,
+    templateColumns,
+    adapt,
     aspectRatio,
     gap,
     selectable = false,
@@ -425,27 +425,25 @@ export function PatternGalleryView<T extends object>(
   // Grid styles
   // -------------------------------------------------------------------------
 
-  /* The caller's column model and media ratio ride the family's own channels;
-     the skin applies them. Stamped ONLY when the caller states the number: an
-     unconditional stamp of the old prop defaults would shadow the skin's
-     resting declarations on every render and take the gallery's rhythm and its
-     media ratio away from the theme. */
+  // The posture this gallery is actually in, resolved through the shared runtime.
+  const rootRef = useRef<HTMLElement | null>(null);
+  const adaptationBase = useMemo<GalleryViewAdaptation>(() => ({ minItem }), [minItem]);
+  const { adaptation, postureAttribute } = useAdaptation<GalleryViewAdaptation>(adapt, {
+    base: adaptationBase,
+    containerRef: rootRef,
+  });
+  const resolvedGap = gridGap(gap);
+
+  /* The media ratio rides the family's own channel, stamped ONLY when the
+     caller states it, so the skin's resting ratio stays the theme's. */
   const gridStyle: React.CSSProperties = useMemo(
     () =>
       ({
-        ...(columns === undefined && minColumnWidth === undefined
-          ? {}
-          : {
-              '--ds-gallery-view-columns': buildGridTemplateColumns(
-                columns ?? DEFAULT_COLUMNS,
-                minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH,
-              ),
-            }),
-        ...(gap === undefined ? {} : { '--ds-gallery-view-gap': normalizeGap(gap) }),
+        ...resolvedGap.channel,
         ...(aspectRatio === undefined ? {} : { '--ds-gallery-view-aspect-ratio': aspectRatio }),
         ...style,
       }) as React.CSSProperties,
-    [columns, minColumnWidth, gap, aspectRatio, style],
+    [resolvedGap.channel, aspectRatio, style],
   );
 
   // -------------------------------------------------------------------------
@@ -460,11 +458,17 @@ export function PatternGalleryView<T extends object>(
        real gallery -- same track model, same gap, same media ratio. */
     return (
       <AnatomySkeleton>
-        <Box
+        <Grid
+          ref={rootRef}
+          autoFit
+          minItem={adaptation.minItem}
+          templateColumns={templateColumns}
+          gap={resolvedGap.gap}
           className={['ds-pattern-gallery-view', className].filter(Boolean).join(' ')}
           data-part="root"
           data-loading="true"
           data-empty="false"
+          data-posture={postureAttribute}
           style={gridStyle}
         >
           {Array.from({ length: LOADING_CARD_COUNT }, (_, index) => (
@@ -475,7 +479,7 @@ export function PatternGalleryView<T extends object>(
               </Box>
             </Box>
           ))}
-        </Box>
+        </Grid>
       </AnatomySkeleton>
     );
   }
@@ -487,10 +491,12 @@ export function PatternGalleryView<T extends object>(
   if (data.length === 0) {
     return (
       <Box
+        ref={rootRef}
         className={['ds-pattern-gallery-view', className].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="false"
         data-empty="true"
+        data-posture={postureAttribute}
         style={style}
       >
         {emptyState ?? (
@@ -504,15 +510,25 @@ export function PatternGalleryView<T extends object>(
   // Card grid
   // -------------------------------------------------------------------------
 
+  // The Grid forwards DOM attributes it does not declare; the roving handler rides that.
+  const rovingKeys: Pick<React.HTMLAttributes<HTMLElement>, 'onKeyDown'> = {
+    onKeyDown: focusable ? roving.handleKeyDown : undefined,
+  };
   const grid = (
-    <Box
+    <Grid
+      ref={rootRef}
+      autoFit
+      minItem={adaptation.minItem}
+      templateColumns={templateColumns}
+      gap={resolvedGap.gap}
       className={['ds-pattern-gallery-view', className].filter(Boolean).join(' ')}
       data-part="root"
       data-loading="false"
       data-empty="false"
       data-selectable={selectable ? 'true' : 'false'}
+      data-posture={postureAttribute}
       style={gridStyle}
-      onKeyDown={focusable ? roving.handleKeyDown : undefined}
+      {...rovingKeys}
     >
       {data.map((item, index) => {
         const key = getItemKey(item, index);
@@ -536,7 +552,7 @@ export function PatternGalleryView<T extends object>(
           />
         );
       })}
-    </Box>
+    </Grid>
   );
 
   return (

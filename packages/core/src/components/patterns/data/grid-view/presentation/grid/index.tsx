@@ -11,13 +11,10 @@
  * rendering API reusable across domains. Engine-free -- uses CSS Grid
  * directly with DS CSS variables for theming.
  *
- * PAINT (WO-FAM-08 B7): the grid's own geometry lives in the grid-view skin.
- * The only things this file puts on the `style` prop are runtime-computed
- * `--ds-*` custom properties: the caller's column model rides
- * `--ds-grid-view-columns` and `--ds-grid-view-gap`, and both are stamped ONLY
- * when the caller states a number -- a grid that states none leaves the two
- * channels to the skin's resting declarations, so a theme can move the rhythm
- * instead of a prop default forcing it on every render.
+ * LAYOUT (WO-FAM-12): the root is the Grid primitive in its auto-fit mode, so
+ * the column count is the card footprint recipe's (density, type scale and the
+ * `minItem` preset), the row always fills, and the container's compact posture
+ * takes one column. The legacy `columns`/`minColumnWidth` props are ignored.
  *
  * LOADING (WO-FAM-14): the loading state is DERIVED from this grid's own
  * `data-part` anatomy by the shared `AnatomySkeleton` renderer, which wraps
@@ -31,56 +28,47 @@
  * being a second authority on the same question.
  */
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Box } from '../../../../../primitives/layout/box';
+import { Grid } from '../../../../../primitives/layout/grid';
+import { GAP_MAP, type GridGap } from '../../../../../primitives/layout/grid/contracts';
 import { Checkbox } from '../../../../../primitives/inputs/checkbox';
 import { Flex } from '../../../../../primitives/layout/flex';
 import { Pagination } from '../../../../../primitives/navigation/pagination';
 import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import { Stack } from '../../../../../primitives/layout/stack';
 import { Text } from '../../../../../primitives/display/typography/compound/text';
-import type { GridViewProps } from '../../contracts';
+import type { GridViewAdaptation, GridViewProps } from '../../contracts';
 import { resolveGridRowKey } from '../../runtime/item-identity';
 import { useCollectionStagger } from '../../../../foundation/motion';
 import { useOptionalTranslation } from '../../../../../../infrastructure/runtime/i18n';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const DEFAULT_COLUMNS = 'auto' as const;
-const DEFAULT_MIN_COLUMN_WIDTH = 280;
 const LOADING_CARD_COUNT = 6;
-const MAX_FIXED_COLUMNS = 6;
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-/**
- * Builds the CSS `grid-template-columns` value based on the columns prop.
- */
-function buildGridTemplateColumns(
-  columns: number | 'auto',
-  minColumnWidth: number,
-): string {
-  if (columns === 'auto') {
-    // Responsive law: the track floor must never exceed its own container, or
-    // a single track overflows the page below the resolved compact width.
-    return `repeat(auto-fill, minmax(min(var(--ds-listing-grid-min-compact-width, ${minColumnWidth}px), 100%), 1fr))`;
-  }
-  const clamped = Math.max(1, Math.min(columns, MAX_FIXED_COLUMNS));
-  return `repeat(${clamped}, 1fr)`;
-}
+const isGridGap = (gap: string): gap is GridGap => Object.prototype.hasOwnProperty.call(GAP_MAP, gap);
 
 /**
- * Normalizes the gap prop to a CSS string value.
+ * The caller's gap on the Grid's own terms: a number or a rung is the Grid's
+ * `gap`; any other CSS length rides the Grid's `--ds-grid-gap` channel.
  */
-function normalizeGap(gap: number | string): string {
-  if (typeof gap === 'number') return `${gap}px`;
-  return gap;
+function gridGap(gap: number | string | undefined): {
+  gap?: number | GridGap;
+  channel?: React.CSSProperties;
+} {
+  if (gap === undefined) return {};
+  if (typeof gap === 'number' || isGridGap(gap)) return { gap };
+  return { channel: { '--ds-grid-gap': gap } as React.CSSProperties };
 }
 
 // ---------------------------------------------------------------------------
@@ -161,8 +149,9 @@ export function PatternGridView<T>(
     data,
     renderCard,
     rowKey,
-    columns,
-    minColumnWidth,
+    minItem,
+    templateColumns,
+    adapt,
     gap,
     selectable = false,
     selectedKeys: controlledSelectedKeys,
@@ -205,6 +194,15 @@ export function PatternGridView<T>(
   // calm/hidden/constrained policies, so the grid never blocks or flashes.
   const stagger = useCollectionStagger(data.length);
 
+  // The posture this grid is actually in, resolved through the shared runtime.
+  const rootRef = useRef<HTMLElement | null>(null);
+  const adaptationBase = useMemo<GridViewAdaptation>(() => ({ minItem }), [minItem]);
+  const { adaptation, postureAttribute } = useAdaptation<GridViewAdaptation>(adapt, {
+    base: adaptationBase,
+    containerRef: rootRef,
+  });
+  const resolvedGap = gridGap(gap);
+
   const toggleSelection = useCallback(
     (key: string) => {
       const nextKeys = selectedKeys.includes(key)
@@ -224,28 +222,9 @@ export function PatternGridView<T>(
   // Grid styles
   // -------------------------------------------------------------------------
 
-  /* The caller's column model rides the family's own channels; the skin
-     applies them. Stamped ONLY when the caller states a number: an
-     unconditional stamp of the old prop defaults would shadow the skin's
-     resting declarations on every render and take the grid's rhythm away from
-     the theme. The premium socket the gap used to tier through
-     (`--ds-collection-card-gap`) moved with it into that resting declaration,
-     so a bundle that declares the socket still paints it. */
   const gridChannels: React.CSSProperties = useMemo(
-    () =>
-      ({
-        ...(columns === undefined && minColumnWidth === undefined
-          ? {}
-          : {
-              '--ds-grid-view-columns': buildGridTemplateColumns(
-                columns ?? DEFAULT_COLUMNS,
-                minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH,
-              ),
-            }),
-        ...(gap === undefined ? {} : { '--ds-grid-view-gap': normalizeGap(gap) }),
-        ...style,
-      }) as React.CSSProperties,
-    [columns, minColumnWidth, gap, style],
+    () => ({ ...resolvedGap.channel, ...style }) as React.CSSProperties,
+    [resolvedGap.channel, style],
   );
 
   const gridStyle: React.CSSProperties = useMemo(
@@ -274,11 +253,17 @@ export function PatternGridView<T>(
        channels. */
     return (
       <AnatomySkeleton>
-        <Box
+        <Grid
+          ref={rootRef}
+          autoFit
+          minItem={adaptation.minItem}
+          templateColumns={templateColumns}
+          gap={resolvedGap.gap}
           className={['ds-pattern-grid-view', className].filter(Boolean).join(' ')}
           data-part="root"
           data-loading="true"
           data-empty="false"
+          data-posture={postureAttribute}
           style={gridChannels}
         >
           {Array.from({ length: LOADING_CARD_COUNT }).map((_, index) => (
@@ -286,7 +271,7 @@ export function PatternGridView<T>(
               <Box data-part="card-content" />
             </Box>
           ))}
-        </Box>
+        </Grid>
       </AnatomySkeleton>
     );
   }
@@ -298,10 +283,12 @@ export function PatternGridView<T>(
   if (data.length === 0) {
     return (
       <Box
+        ref={rootRef}
         className={['ds-pattern-grid-view', className].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="false"
         data-empty="true"
+        data-posture={postureAttribute}
         style={style}
       >
         {emptyState ?? (
@@ -317,12 +304,18 @@ export function PatternGridView<T>(
 
   return (
     <Stack spacing="md">
-      <Box
+      <Grid
+        ref={rootRef}
+        autoFit
+        minItem={adaptation.minItem}
+        templateColumns={templateColumns}
+        gap={resolvedGap.gap}
         className={['ds-pattern-grid-view', className, stagger.containerClassName].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="false"
         data-empty="false"
         data-selectable={selectable ? 'true' : 'false'}
+        data-posture={postureAttribute}
         style={gridStyle}
       >
         {data.map((item, index) => {
@@ -364,7 +357,7 @@ export function PatternGridView<T>(
             </React.Fragment>
           );
         })}
-      </Box>
+      </Grid>
 
       {/* Pagination */}
       {pagination && (
