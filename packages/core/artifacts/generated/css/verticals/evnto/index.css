@@ -52125,7 +52125,7 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
      so the button never parks under the home indicator. */
   position: fixed;
   inset-block-end: calc(var(--ds-backtop-inset-block-end, 2rem) + env(safe-area-inset-bottom, 0px));
-  inset-inline-end: var(--ds-backtop-inset-inline-end, 2rem);
+  inset-inline-end: 2rem;
   z-index: var(--ds-backtop-z-index, var(--ds-z-fixed));
   display: inline-flex;
   align-items: center;
@@ -54000,20 +54000,20 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
         44px coarse floor is an absolute law floor and stays unscaled. ---- */
 .rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle'] {
   border-radius: 50%;
-  inline-size: calc(var(--ds-floatbutton-size, 40px) * var(--ds-density-effective-scale));
-  block-size: calc(var(--ds-floatbutton-size, 40px) * var(--ds-density-effective-scale));
+  inline-size: calc(40px * var(--ds-density-effective-scale));
+  block-size: calc(40px * var(--ds-density-effective-scale));
 }
 .rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle']) {
   border-radius: var(--ds-radius-lg);
-  padding: calc(var(--ds-floatbutton-padding-block, 8px) * var(--ds-density-effective-scale)) calc(var(--ds-floatbutton-padding-inline, 12px) * var(--ds-density-effective-scale));
+  padding: calc(8px * var(--ds-density-effective-scale)) calc(var(--ds-floatbutton-padding-inline, 12px) * var(--ds-density-effective-scale));
 }
 /* K4-C Pass 2: the 40px circle misses the 44px coarse-pointer law; bump the
    footprint under coarse pointers only (square shape already exceeds it via
    padding + content). */
 @media (pointer: coarse) {
   .rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle'] {
-    inline-size: var(--ds-floatbutton-size-coarse, 44px);
-    block-size: var(--ds-floatbutton-size-coarse, 44px);
+    inline-size: var(--ds-touch-target-min, 44px);
+    block-size: var(--ds-touch-target-min, 44px);
   }
 }
 
@@ -54037,7 +54037,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
 
 .rottay-float-button--modern [data-part='badge'][data-variant='dot'] {
   inset-block-start: var(--ds-floatbutton-dot-offset-block, -4px);
-  inset-inline-end: var(--ds-floatbutton-dot-offset-inline, -4px);
+  inset-inline-end: -4px;
   inline-size: var(--ds-floatbutton-dot-size, 8px);
   block-size: var(--ds-floatbutton-dot-size, 8px);
   border-radius: var(--ds-radius-full);
@@ -54045,13 +54045,13 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
 
 .rottay-float-button--modern [data-part='badge'][data-variant='count'] {
   inset-block-start: var(--ds-floatbutton-badge-offset-block, -8px);
-  inset-inline-end: var(--ds-floatbutton-badge-offset-inline, -8px);
+  inset-inline-end: -8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--ds-floatbutton-badge-padding-block, 1px) var(--ds-floatbutton-badge-padding-inline, 6px);
-  font-size: var(--ds-floatbutton-badge-font-size, 11px);
-  line-height: var(--ds-floatbutton-badge-line-height, 16px);
+  padding: 1px 6px;
+  font-size: 11px;
+  line-height: 16px;
   /* Counts are metrics: tabular glyphs keep the pill geometry stable as the
      count changes (B9 pass 2). */
   font-variant-numeric: tabular-nums;
@@ -77839,7 +77839,7 @@ html[data-ds-motion='reduced']
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root']:not([data-position='sidebar']) [data-part='panel'] {
   inset-block-start: 100%;
   inset-inline-start: 0;
-  margin-block-start: var(--ds-workspace-switcher-panel-gap-block, 4px);
+  margin-block-start: 4px;
 }
 
 /* NARROW POSTURE (viewport, not container: the panel is absolutely positioned
@@ -77854,7 +77854,7 @@ html[data-ds-motion='reduced']
     inset-block-start: 100%;
     inset-inline-start: 0;
     margin-inline-start: 0;
-    margin-block-start: var(--ds-workspace-switcher-panel-gap-block, 4px);
+    margin-block-start: 4px;
   }
 }
 

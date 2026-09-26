@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "999345b6fe9e8e35b4a1c205ad3a5d332252af3b43bb359233ef36c639826ddd",
+    "inputsDigest": "2f2440dc313acd7485173ee3afca125492f8c1ee61600758bcad04f046364437",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 496,
@@ -14,16 +14,16 @@
     }
   },
   "counts": {
-    "universe": 8792,
+    "universe": 8782,
     "writers": 7517,
     "foundationTokens": 4184,
     "componentTokens": 719,
     "tenantChannels": 4501,
     "publicHooks": 107,
-    "unadjudicatedReads": 1257,
+    "unadjudicatedReads": 1247,
     "deadWriters": 271,
     "frontierReserved": 0,
-    "modernConsumedUnique": 4842,
+    "modernConsumedUnique": 4831,
     "tsReadNames": 2877,
     "tsWriteNames": 3903,
     "tsMetadataNames": 3465,
@@ -8939,22 +8939,6 @@
         "ts": 0,
         "showroom": 0,
         "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-backtop-inset-inline-end": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -55969,38 +55953,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-floatbutton-badge-font-size": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-floatbutton-badge-line-height": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-floatbutton-badge-offset-block": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -56011,54 +55963,6 @@
         "ts": 0,
         "showroom": 0,
         "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-floatbutton-badge-offset-inline": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-floatbutton-badge-padding-block": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-floatbutton-badge-padding-inline": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -56145,22 +56049,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-floatbutton-dot-offset-inline": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-floatbutton-dot-size": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -56219,22 +56107,6 @@
         "ts": 0,
         "showroom": 0,
         "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-floatbutton-padding-block": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -56359,27 +56231,11 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 2,
+        "css": 0,
         "ts": 2,
         "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-floatbutton-size-coarse": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 2,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
+        "tests": false,
+        "modern": false,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -132271,7 +132127,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 208,
+        "css": 210,
         "ts": 23,
         "showroom": 0,
         "tests": true,
@@ -140835,22 +140691,6 @@
         "ts": 0,
         "showroom": 0,
         "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-workspace-switcher-panel-gap-block": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 2,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
         "modern": true,
         "artifact": false
       },
