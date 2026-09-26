@@ -174,13 +174,33 @@ test('CONTROL arm 2: the literal is read whole, with its line', () => {
   assert.deepEqual(rows.map((row) => [row.name, row.line]), [['--ds-one', 3], ['--ds-two', 3]]);
 });
 
+/* The unproduced population reached ZERO on 2026-09-26 (the template-resolver
+ * and control-size-sm lots). A drill that needs a row plants one: the census
+ * row and its ledger twin, lawful in every field (owner WO-FAM-11 matches the
+ * OWNER shape, cut-residue is a declared class, reason and occurrences agree),
+ * so the ONLY finding a mutation can produce is the one it names. */
+const plantRow = (ledger) => {
+  const row = {
+    file: 'core/src/components/drill/family/tests/Drill.door.test.tsx',
+    name: '--ds-drill-planted',
+    occurrences: 1,
+    readAt: 'css/runtime/engines/modern/skin/drill/index.css',
+    rwpDebt: true,
+    class: 'cut-residue',
+    owner: 'WO-FAM-11',
+    ownerProposal: null,
+    family: 'drill',
+    reason: 'planted by the arm-2 mutants: the unproduced population is zero, and a drill that needs a row states its own subject',
+  };
+  ledger.unproducedChannelAssertions.rows.push(row);
+  return row;
+};
+
 test('MUTANT arm 2: a row without an owner, a reason or a declared class is red', () => {
-  const row = testLedger.unproducedChannelAssertions.rows.find((entry) => entry.owner !== null);
-  /* The uncut population drained to zero on 2026-09-25 (EVI-03 arms 2-3): the
-   * orphan the second drill needs is now built synthetically from `row` -- an
-   * existing row re-classed uncut with its proposal dropped exercises the same
-   * law branch (uncut + null owner + no ownerProposal) without inventing a row
-   * the census never carried. */
+  const row = {
+    file: 'core/src/components/drill/family/tests/Drill.door.test.tsx',
+    name: '--ds-drill-planted',
+  };
   for (const [mutate, pattern] of [
     [(ledger) => { ledger.unproducedChannelAssertions.rows.find((entry) => entry.file === row.file && entry.name === row.name).owner = null; }, /is not a work order/u],
     [(ledger) => { const orphan = ledger.unproducedChannelAssertions.rows.find((entry) => entry.file === row.file && entry.name === row.name); orphan.owner = null; orphan.class = UNASSIGNED_CLASS; orphan.ownerProposal = undefined; }, /is not a work order/u],
@@ -189,15 +209,19 @@ test('MUTANT arm 2: a row without an owner, a reason or a declared class is red'
     [(ledger) => { ledger.unproducedChannelAssertions.rows.find((entry) => entry.file === row.file && entry.name === row.name).occurrences += 1; }, /occurrence\(s\), the ledger records/u],
   ]) {
     const ledger = clone(testLedger);
+    plantRow(ledger);
     mutate(ledger);
-    const findings = checkArms({ ...live, testLedger: ledger, baselineLedger });
+    const censusRow = { file: row.file, name: row.name, lines: ['x'] };
+    const findings = checkArms({ ...live, unproduced: [censusRow], testLedger: ledger, baselineLedger });
     assert.equal(findings.length, 1, findings.join('\n'));
     assert.match(findings[0], pattern);
   }
 });
 
 test('MUTANT arm 2: a row whose producer landed must leave the ledger', () => {
-  const findings = check({ unproduced: live.unproduced.slice(1) });
+  const ledger = clone(testLedger);
+  plantRow(ledger);
+  const findings = check({ unproduced: [], testLedger: ledger });
   assert.equal(findings.length, 1);
   assert.match(findings[0], /left the census/u);
 });

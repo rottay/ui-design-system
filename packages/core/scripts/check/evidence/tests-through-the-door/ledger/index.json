@@ -3,7 +3,7 @@
   "workOrder": "WO-EVI-03",
   "finding": "F-48",
   "law": "Each census equals its ledger in both directions: a new row is red (route the test through the door instead), and a row the tree no longer carries is red until its exit is written here. The ledger only shrinks.",
-  "measuredAt": "2026-09-26 @ 664104285 working tree",
+  "measuredAt": "2026-09-26 @ 55feae6af working tree",
   "harnessConsumers": {
     "owner": "WO-EVI-03",
     "target": 0,
@@ -333,21 +333,15 @@
           "name": "--ds-workspace-card-icon-bg",
           "exit": "an instrument false positive, cured at the instrument: the name IS produced -- the chrome compiler emits it when a tenant sets chrome.workspaceCard.iconBg (setPremiumCardVars(vars, 'workspace-card', ...), chrome-variables:2815, name built from a template at :1083), and the shared producers census now resolves single-interpolation templates through their literal call sites (664104285, resolveThroughLiteralCallSites, fail-closed). Confirmed with a chromeToVariables probe; the hooks contract lists it as tenantChannel.",
           "mover": "template-resolver lot (2026-09-26, 664104285, receipt-template-producer-resolver-opus.json)"
+        },
+        {
+          "file": "core/src/components/structures/workspace/active-filters-bar/tests/ActiveFiltersBar.skin-reachability.test.tsx",
+          "name": "--ds-control-size-sm",
+          "exit": "retired in both families at once (the Q-DER06-RES option-A ruling, roadmap/derivation.md: the shape plane produces a FACTOR, never an absolute rung; the fork measured -- fold repaints 112 cells under bithire's own 0.9 and leaves the chip alone against its row-mates, so retire was the clean route): the chip target declares calc(2rem x density) and list-toolbar's phone action declares 32px; paint byte-identical over 2400 Chromium cells including the factor arms.",
+          "mover": "control-size-sm lot (2026-09-26, 55feae6af, receipt-control-size-sm-opus.json)"
         }
       ]
     },
-    "rows": [
-      {
-        "file": "core/src/components/structures/workspace/active-filters-bar/tests/ActiveFiltersBar.skin-reachability.test.tsx",
-        "name": "--ds-control-size-sm",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/active-filters-bar/index.css",
-        "rwpDebt": true,
-        "class": "cut-residue",
-        "owner": "WO-FAM-08",
-        "family": "active-filters-bar",
-        "reason": "read by css/presentation/components/skin/active-filters-bar/index.css with no producer; counted in the active-filters-bar row of the family-cut baseline, whose cut owns its readWithoutProducer arm"
-      }
-    ]
+    "rows": []
   }
 }
