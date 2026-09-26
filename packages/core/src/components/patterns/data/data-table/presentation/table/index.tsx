@@ -17,7 +17,7 @@ import {
   type ViewportPosture,
 } from "@/foundation/contracts/kernel/adaptation";
 import { useAdaptation } from "@/infrastructure/runtime/adaptation";
-import { useOptionalFormatter } from "@/infrastructure/runtime/i18n";
+import { useOptionalFormatter, useOptionalTranslation } from "@/infrastructure/runtime/i18n";
 import { useResponsive } from "@/infrastructure/runtime/responsive";
 import { AnatomySkeleton } from "@/components/primitives/feedback/skeleton";
 import { Box } from "@/components/primitives/layout/box";
@@ -135,6 +135,7 @@ function MobilePagination<T extends object>({
   messages?: DataTablePatternProps<T>["messages"];
 }): React.ReactElement | null {
   const format = useOptionalFormatter();
+  const i18n = useOptionalTranslation();
   if (!pagination) return null;
   const totalPages = Math.max(1, Math.ceil(pagination.total / pagination.pageSize));
   const start =
@@ -155,6 +156,11 @@ function MobilePagination<T extends object>({
     >
       <Text color="inherit" data-part="mobile-pagination-range">
         {messages?.paginationRange?.(start, end, pagination.total) ??
+          i18n?.t("components.table.range_of", {
+            start: format.number(start),
+            end: format.number(end),
+            total: format.number(pagination.total),
+          }) ??
           `${format.number(start)} – ${format.number(end)} of ${format.number(pagination.total)}`}
       </Text>
       <Flex align="center" gap={6} data-part="mobile-pagination-actions">
@@ -164,7 +170,11 @@ function MobilePagination<T extends object>({
           shape="circle"
           disabled={pagination.current <= 1}
           icon={<ArrowLeftIcon size={16} aria-hidden />}
-          aria-label={messages?.previousPage ?? "Previous page"}
+          aria-label={
+            messages?.previousPage ??
+            i18n?.t("components.table.previous_page") ??
+            "Previous page"
+          }
           onClick={() =>
             pagination.onChange(pagination.current - 1, pagination.pageSize)
           }
@@ -178,7 +188,11 @@ function MobilePagination<T extends object>({
           shape="circle"
           disabled={pagination.current >= totalPages}
           icon={<ArrowRightIcon size={16} aria-hidden />}
-          aria-label={messages?.nextPage ?? "Next page"}
+          aria-label={
+            messages?.nextPage ??
+            i18n?.t("components.table.next_page") ??
+            "Next page"
+          }
           onClick={() =>
             pagination.onChange(pagination.current + 1, pagination.pageSize)
           }

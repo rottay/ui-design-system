@@ -61,6 +61,7 @@
     "filter": "Filtrer",
     "clear_filters": "Effacer les filtres",
     "rows_selected": "{count} lignes sélectionnées",
+    "range_of": "{start} – {end} sur {total}",
     "edit_cell": "Modifier la cellule"
   },
   "upload": {

@@ -48,8 +48,52 @@ async function rangeText(locale: 'en' | 'es') {
 }
 
 describe('PatternDataTable — provider locale', () => {
-  it('formats the mobile pagination range in the provider locale', async () => {
-    expect(await rangeText('es')).toBe('4001 – 5000 of 12.345');
+  it('formats and words the mobile pagination range in the provider locale', async () => {
+    expect(await rangeText('es')).toBe('4001 – 5000 de 12.345');
     expect(await rangeText('en')).toBe('4,001 – 5,000 of 12,345');
+  });
+
+  it('names the mobile pagination steps from the catalog in the provider locale', async () => {
+    const view = renderSurface(
+      <I18nProvider locale="es">
+        <PatternDataTable<Row>
+          data={[{ id: '1', name: 'Alpha' }]}
+          rowKey="id"
+          adapt={{ phone: { presentation: 'cards' } }}
+          columns={[{ key: 'name', dataIndex: 'name', title: 'Name' } as never]}
+          pagination={{ current: 2, pageSize: 1, total: 3, onChange: () => undefined }}
+        />
+      </I18nProvider>,
+      { engine: 'modern', responsiveContext: PHONE },
+    );
+    await waitFor(() => {
+      expect(view.container.querySelector('[data-part="mobile-pagination-actions"]')).not.toBeNull();
+    });
+    const labels = [...view.container.querySelectorAll('[data-part="mobile-pagination-actions"] button')]
+      .map((button) => button.getAttribute('aria-label'));
+    view.unmount();
+    expect(labels).toEqual(['Página anterior', 'Página siguiente']);
+  });
+
+  it('keeps an explicit messages override above the catalog', async () => {
+    const view = renderSurface(
+      <I18nProvider locale="es">
+        <PatternDataTable<Row>
+          data={[{ id: '1', name: 'Alpha' }]}
+          rowKey="id"
+          adapt={{ phone: { presentation: 'cards' } }}
+          columns={[{ key: 'name', dataIndex: 'name', title: 'Name' } as never]}
+          messages={{ paginationRange: (start, end, total) => `${start}/${end}/${total}` }}
+          pagination={{ current: 1, pageSize: 1, total: 3, onChange: () => undefined }}
+        />
+      </I18nProvider>,
+      { engine: 'modern', responsiveContext: PHONE },
+    );
+    await waitFor(() => {
+      expect(view.container.querySelector('[data-part="mobile-pagination-range"]')).not.toBeNull();
+    });
+    const text = view.container.querySelector('[data-part="mobile-pagination-range"]')?.textContent;
+    view.unmount();
+    expect(text).toBe('1/1/3');
   });
 });

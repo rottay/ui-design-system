@@ -71,6 +71,7 @@
     "page": "الصفحة {current}",
     "previous_page": "الصفحة السابقة",
     "next_page": "الصفحة التالية",
+    "range_of": "{start} – {end} من {total}",
     "resize_column": "تغيير عرض العمود {column}",
     "edit_cell": "تعديل الخلية"
   },

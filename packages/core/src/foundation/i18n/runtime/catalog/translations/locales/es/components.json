@@ -71,6 +71,7 @@
     "page": "Página {current}",
     "previous_page": "Página anterior",
     "next_page": "Página siguiente",
+    "range_of": "{start} – {end} de {total}",
     "resize_column": "Redimensionar columna {column}",
     "edit_cell": "Editar celda"
   },
