@@ -23,7 +23,7 @@
       "pilotPopulation": {
         "scope": "pilot",
         "cut": "WO-FAM-01",
-        "catalogRevision": "9cf4cf074995f03f",
+        "catalogRevision": "3f42e4ddc61d0e8b",
         "decisionRows": 29,
         "exclusionsRevision": "ef3de957d72fda22",
         "families": {
@@ -94,7 +94,7 @@
         }
       },
       "revision": {
-        "digest": "9cf4cf074995f03f",
+        "digest": "3f42e4ddc61d0e8b",
         "decisionRows": 29
       },
       "browser": {
@@ -1906,7 +1906,7 @@
       "pilotPopulation": {
         "scope": "pilot",
         "cut": "WO-FAM-01",
-        "catalogRevision": "9cf4cf074995f03f",
+        "catalogRevision": "3f42e4ddc61d0e8b",
         "decisionRows": 29,
         "exclusionsRevision": "ef3de957d72fda22",
         "families": {
@@ -1977,7 +1977,7 @@
         }
       },
       "revision": {
-        "digest": "9cf4cf074995f03f",
+        "digest": "3f42e4ddc61d0e8b",
         "decisionRows": 29
       },
       "browser": {
