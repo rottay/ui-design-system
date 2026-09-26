@@ -51,13 +51,105 @@ function cssRules(css: string): Array<{ selector: string; body: string }> {
   while ((m = re.exec(noAtRules)) !== null) rules.push({ selector: m[1].trim(), body: m[2].trim() });
   return rules;
 }
-function bColumn(selector: string): number {
-  const classes = (selector.match(/\.[A-Za-z_-][\w-]*/g) || []).length;
-  const attrs = (selector.match(/\[[^\]]*\]/g) || []).length;
-  const pseudos = (selector.match(/(?<!:):[A-Za-z-]+/g) || []).length;
-  const notArgs = (selector.match(/:not\(([^)]*)\)/g) || []).reduce((n, frag) => n + bColumn(frag.slice(5, -1)), 0);
-  return classes + attrs + pseudos + notArgs;
+/**
+ * Split a selector LIST on top-level commas only. `:is([data-part="root"],
+ * [data-part="dropdown"])` -- the two-door idiom a portaled panel needs so the
+ * same chrome paints in the field and inside the panel -- is one selector, not
+ * two; splitting inside it invents fragments that belong to no rule.
+ */
+function splitSelectorList(selector: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let current = '';
+  for (const ch of selector) {
+    if (ch === '(' || ch === '[') depth += 1;
+    else if (ch === ')' || ch === ']') depth -= 1;
+    if (ch === ',' && depth === 0) {
+      parts.push(current);
+      current = '';
+      continue;
+    }
+    current += ch;
+  }
+  parts.push(current);
+  return parts.map((part) => part.trim()).filter(Boolean);
 }
+
+/** Functional pseudo-classes whose specificity is the MAX of their arguments. */
+const ARG_MAX_PSEUDOS = new Set([':is', ':matches', ':-moz-any', ':-webkit-any', ':has', ':not']);
+
+/**
+ * The specificity "b" column (classes + attributes + pseudo-classes) for one
+ * comma-free selector, per the CSS selector-specificity rules rather than a
+ * token count: `:is()`/`:not()`/`:has()` contribute the MAX of their argument
+ * list, `:where()` contributes nothing, and a `::pseudo-element` lives in the
+ * "c" column and contributes nothing here.
+ */
+function bColumn(selector: string): number {
+  let total = 0;
+  let i = 0;
+  while (i < selector.length) {
+    const ch = selector[i];
+    if (ch === '[') {
+      const end = selector.indexOf(']', i);
+      total += 1;
+      i = end === -1 ? selector.length : end + 1;
+      continue;
+    }
+    if (ch === '.') {
+      const klass = /^\.[A-Za-z_-][\w-]*/.exec(selector.slice(i));
+      if (klass) {
+        total += 1;
+        i += klass[0].length;
+        continue;
+      }
+      i += 1;
+      continue;
+    }
+    if (ch === ':') {
+      const isElement = selector[i + 1] === ':';
+      const head = /^:{1,2}([A-Za-z-]+)/.exec(selector.slice(i));
+      if (!head) {
+        i += 1;
+        continue;
+      }
+      let j = i + head[0].length;
+      let args: string | null = null;
+      if (selector[j] === '(') {
+        const start = j;
+        let depth = 0;
+        while (j < selector.length) {
+          if (selector[j] === '(') depth += 1;
+          else if (selector[j] === ')') {
+            depth -= 1;
+            if (depth === 0) {
+              j += 1;
+              break;
+            }
+          }
+          j += 1;
+        }
+        args = selector.slice(start + 1, j - 1);
+      }
+      const name = `:${head[1].toLowerCase()}`;
+      if (isElement) {
+        // pseudo-element: "c" column, contributes nothing to "b".
+      } else if (name === ':where') {
+        // :where() is specificity-zero by definition.
+      } else if (args !== null && ARG_MAX_PSEUDOS.has(name)) {
+        const inner = splitSelectorList(args).map(bColumn);
+        total += inner.length ? Math.max(...inner) : 0;
+      } else {
+        total += 1;
+      }
+      i = j;
+      continue;
+    }
+    i += 1;
+  }
+  return total;
+}
+
 function paintsBorder(body: string): boolean {
   const re = /(?:^|[\s;{])border(?:-(?:top|right|bottom|left|block|inline)(?:-(?:start|end))?)?(?:-color)?\s*:\s*([^;]+)/gi;
   let m: RegExpExecArray | null;
@@ -70,6 +162,28 @@ function paintsBorder(body: string): boolean {
   return false;
 }
 
+// The floor is only as trustworthy as the model that measures it: a checker
+// that splits inside `:not(:is(...))` invents offenders, and one that credits
+// `:where()` hides real ones. Both directions are pinned here.
+describe('pickers skin specificity model', () => {
+  it('splits a selector list on top-level commas only', () => {
+    expect(splitSelectorList('.a, .b')).toEqual(['.a', '.b']);
+    expect(splitSelectorList("button:not(:is([data-state~='disabled'], :disabled))")).toEqual([
+      "button:not(:is([data-state~='disabled'], :disabled))",
+    ]);
+  });
+
+  it('scores :is()/:not() as the max of their arguments and :where() as zero', () => {
+    expect(
+      bColumn(
+        ".ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled))",
+      ),
+    ).toBe(6);
+    expect(bColumn(".a.b:where([data-part='x'], .c)")).toBe(2);
+    expect(bColumn('.a:not(.b.c)')).toBe(3);
+  });
+});
+
 describe.each(Object.keys(SKINS))('pickers skin %s -- structural contract', (label) => {
   const rules = cssRules(SKINS[label]);
 
@@ -81,7 +195,7 @@ describe.each(Object.keys(SKINS))('pickers skin %s -- structural contract', (lab
     const offenders: string[] = [];
     for (const { selector, body } of rules) {
       if (!paintsBorder(body)) continue;
-      for (const part of selector.split(',')) if (bColumn(part) < 4) offenders.push(part.trim());
+      for (const part of splitSelectorList(selector)) if (bColumn(part) < 4) offenders.push(part);
     }
     expect(offenders, `below (0,4,0), lose color to the tenant * floor (P-48):\n${offenders.join('\n')}`).toEqual([]);
   });

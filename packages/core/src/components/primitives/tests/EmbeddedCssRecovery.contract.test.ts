@@ -278,7 +278,7 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
       ).background,
       ruleContract(
         RELOCATED.scrollAreaModern,
-        `${MODERN_SCROLL_AREA}[data-hide-scrollbar='true']:focus-visible::-webkit-scrollbar-thumb`,
+        `${MODERN_SCROLL_AREA}[data-hide-scrollbar='true']:is([data-state~='focus-visible'], :focus-visible)::-webkit-scrollbar-thumb`,
       ).background,
     ];
     expect(phaseBPaint).toEqual([
@@ -640,7 +640,7 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     expect(
       ruleContract(
         RELOCATED.scrollAreaModern,
-        `${MODERN_SCROLL_AREA}[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb`,
+        `${MODERN_SCROLL_AREA}[data-hide-scrollbar='true']:is([data-state~='hovered'], :hover)::-webkit-scrollbar-thumb`,
         false,
       )
     ).toEqual({

@@ -49,11 +49,12 @@ describe('PresenceBar composes the Avatar primitive', () => {
     const face = container.querySelector('.rottay-avatar') as HTMLElement;
     // The face size is stamped, not inlined: 6627914f0 retired the inline
     // style.width, so the governed step must resolve through the skin's
-    // [data-size] rule for the stamped size.
+    // [data-size] rule for the stamped size. The token leads the read; its
+    // spacing-root fallback is the deriver-parity chain (0ca2eb294).
     expect(face).toHaveAttribute('data-size', 'sm');
     expect(face.style.width).toBe('');
     expect(AVATAR_SKIN).toMatch(
-      /\[data-size='sm'\][^{]*\{[^}]*inline-size: var\(--ds-avatar-sm-size\)/,
+      /\[data-size='sm'\][^{]*\{[^}]*inline-size: var\(--ds-avatar-sm-size, var\(--ds-spacing-8, 2rem\)\);/,
     );
 
     const slot = container.querySelector('[data-part="avatar"]') as HTMLElement;

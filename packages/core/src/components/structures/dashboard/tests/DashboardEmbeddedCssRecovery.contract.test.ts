@@ -157,12 +157,15 @@ const LIVE_ANIMATION_CONSUMERS = [
     selector: ':where(.ds-activity-ticker) .ticker-progress',
     animation: 'ds-activity-ticker-progress-fill 5s linear',
   },
+  // The two activity slide-ins read the spring intent instead of its literal
+  // curve (8e6b7e57b); every vertical resolves it to the same
+  // cubic-bezier(0.34, 1.56, 0.64, 1).
   {
     kind: 'css',
     name: 'ds-activity-timeline-item-slide-in',
     path: ACTIVITY_CSS_PATH,
     selector: ':where(.ds-activity-timeline) .activity-item-v3',
-    animation: 'ds-activity-timeline-item-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+    animation: 'ds-activity-timeline-item-slide-in 0.5s var(--ds-motion-spring) both',
   },
   {
     kind: 'css',
@@ -176,7 +179,7 @@ const LIVE_ANIMATION_CONSUMERS = [
     name: 'ds-activity-compact-slide-in-right',
     path: ACTIVITY_CSS_PATH,
     selector: ':where(.ds-activity-compact) .activity-compact-item-v3',
-    animation: 'ds-activity-compact-slide-in-right 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+    animation: 'ds-activity-compact-slide-in-right 0.5s var(--ds-motion-spring) both',
   },
   {
     kind: 'css',
