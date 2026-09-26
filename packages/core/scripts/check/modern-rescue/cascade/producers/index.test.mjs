@@ -173,11 +173,21 @@ const SCRIPT = join(HERE, 'index.mjs');
  *   distinctChannels 7536 -> 7535 (-1): --ds-shell-inline-end-inset, the one
  *     retired name no other producer writes. closedNonObject stays 88,
  *     emissionsWithCausalRoot stays 211.
+ *
+ * 63312c844 re-pin (absorbed into the committed inventory by the 608d5b78d
+ * window, which named the digest moves but not this frozen counter -- owned
+ * here): the font-size produce lot declares two family tokens --
+ * --ds-qrcode-refresh-button-font-size (presentation/components/qrcode) and
+ * --ds-floatbutton-badge-font-size (themes/default FLOAT BUTTON block) -- each
+ * measured at exactly one css site and one emission by this census:
+ *   producerSites 6228 -> 6230, channelEmissions 17995 -> 17997,
+ *   distinctChannels 7535 -> 7537. closedNonObject stays 88,
+ *   emissionsWithCausalRoot stays 211.
  */
 const LIVE_PRODUCER_STATS = Object.freeze({
-  producerSites: 6228,
-  channelEmissions: 17995,
-  distinctChannels: 7535,
+  producerSites: 6230,
+  channelEmissions: 17997,
+  distinctChannels: 7537,
   /**
    * 196 -> 197, and it is the SAME mechanism as the ten rows above rather than
    * a new causal claim: `--ds-color-link` is written literally by two of the
