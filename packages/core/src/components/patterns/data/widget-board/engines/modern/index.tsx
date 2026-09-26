@@ -2,8 +2,17 @@
 import React, { useMemo, useRef } from 'react';
 import type { WidgetBoardAdaptation, WidgetBoardProps } from '../../contracts';
 import { WidgetBoardEngine, type WidgetBoardModernSlots } from '../foundation';
+import { createLayoutCommit } from '../../runtime/adaptive/policy';
+import type { ContainerPosture } from '../../../../runtime/adaptive-layout/foundation';
 import { ModernGrid } from '../../../../../primitives/layout/grid/engines/modern';
 import { useAdaptation } from '@/infrastructure/runtime/adaptation';
+
+/** Before the board is measured, the viewport names the posture a commit lands in. */
+const VIEWPORT_CONTAINER: Record<string, ContainerPosture> = {
+  phone: 'compact',
+  tablet: 'regular',
+  desktop: 'expanded',
+};
 
 /**
  * Modern engine for the WidgetBoard pattern.
@@ -15,13 +24,19 @@ import { useAdaptation } from '@/infrastructure/runtime/adaptation';
  * Modern also slots in the auto-fit catalog Grid and the root's measured posture.
  */
 export default function ModernWidgetBoard(props: WidgetBoardProps): React.ReactElement {
-  const { className, adapt, catalogMinItem = 'md', ...rest } = props;
+  const { className, adapt, catalogMinItem = 'md', onItemsChange, onLayoutChange, ...rest } = props;
   const rootRef = useRef<HTMLElement | null>(null);
   const base = useMemo<WidgetBoardAdaptation>(() => ({ catalogMinItem }), [catalogMinItem]);
-  const { adaptation, postureAttribute } = useAdaptation<WidgetBoardAdaptation>(adapt, {
+  const { adaptation, posture, postureAttribute } = useAdaptation<WidgetBoardAdaptation>(adapt, {
     base,
     containerRef: rootRef,
   });
+  const postureRef = useRef<ContainerPosture>('expanded');
+  postureRef.current = posture.container ?? VIEWPORT_CONTAINER[posture.viewport] ?? 'expanded';
+  const commitItems = useMemo(
+    () => createLayoutCommit(onItemsChange, onLayoutChange, () => postureRef.current),
+    [onItemsChange, onLayoutChange],
+  );
   const minItem = adaptation.catalogMinItem;
   // The catalog's identity follows its preset only, so a resize never remounts it.
   const CatalogGrid = useMemo<NonNullable<WidgetBoardModernSlots['CatalogGrid']>>(
@@ -42,6 +57,7 @@ export default function ModernWidgetBoard(props: WidgetBoardProps): React.ReactE
   return (
     <WidgetBoardEngine
       {...rest}
+      onItemsChange={commitItems}
       className={['ds-engine-modern', className].filter(Boolean).join(' ')}
       modernSlots={modernSlots}
     />

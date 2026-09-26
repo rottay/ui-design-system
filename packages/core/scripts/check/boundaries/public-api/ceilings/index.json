@@ -101,7 +101,7 @@
       "maxSourceBytes": 79926
     },
     "./patterns/widget-board": {
-      "maxReachableModules": 38,
+      "maxReachableModules": 39,
       "maxSourceBytes": 165836
     },
     "./primitives/alert": {
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "B23 container-scoped density projection (emi03-debrief-v3 §8 risk 6): ./runtime/visual-authority 80,616 -> 82,632 B (+2,016). The mount verifier rebuilds the artifact CSS by calling the producer, so the density-boundary emitter reaches this subpath: emission/css +1,258 (DENSITY_SCOPE_POSTURES, densityScopeSelector, emitDensityScopeRule, the emitThemeCss line), emission/artifact +371 (densityScopeVariables and its rule), the verifier +313 (the shape check, the expected-CSS field and the digest field), the emission barrel +74. Reachable modules unchanged (12). New comments at the two-line law.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-FAM-13 P1 (the layout model): ./patterns/widget-board direct fan-out 2 -> 3 and reachable fan-out 38 -> 39 -- the subpath's source imports the policy module directly for normalizeWidgetLayout (the persistence contract of the fiche's step 1) and its chain adds one module; measured by the gate over the settled tree; a deliberate public-surface addition, never slack",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 1 subido(s), 0 sin ancla valida; maxSourceBytes: 0 subido(s), 0 sin ancla valida"
 }

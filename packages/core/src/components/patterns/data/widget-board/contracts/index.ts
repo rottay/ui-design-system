@@ -4,6 +4,14 @@ import type { ReactNode } from "react";
 import type { PatternBaseProps } from "../../../../../foundation/contracts/runtime/components/patterns/core";
 import type { Adapt } from "../../../../../foundation/contracts/kernel/adaptation";
 import type { GridMinItem } from "../../../../primitives/layout/grid/contracts";
+import type { ContainerPosture, LayoutIntent } from "../../../runtime/adaptive-layout/foundation";
+
+/**
+ * The board layout the APP persists, one intent list per container posture:
+ * grid units and ids, never px. The DS validates it (`normalizeWidgetLayout`)
+ * and never stores it; resolved placements stay derived, never persisted.
+ */
+export type WidgetLayout = Partial<Record<ContainerPosture, readonly LayoutIntent[]>>;
 
 /** The board's layout-sensitive axis a posture delta may move: the catalog's card preset. */
 export interface WidgetBoardAdaptation {
@@ -106,8 +114,17 @@ export interface WidgetBoardProps extends PatternBaseProps {
   /** Opens the catalog initially in editable demos, tests, or guided onboarding. */
   defaultCatalogOpen?: boolean;
   narrow?: boolean;
-  /** Called after reorder, resize, add, remove or reset. */
+  /**
+   * Called after reorder, resize, add, remove or reset. Legacy path, kept for
+   * existing consumers; new code persists through `onLayoutChange`.
+   */
   onItemsChange?: (items: WidgetBoardItem[]) => void;
+  /**
+   * Modern: called on every committed change (reorder, resize, add, remove,
+   * reset) with the layout of the posture it was committed in, keyed by that
+   * posture. The app merges and persists it; the DS never stores a layout.
+   */
+  onLayoutChange?: (layout: WidgetLayout, posture: ContainerPosture) => void;
   /** Optional app-owned role default. */
   onReset?: () => WidgetBoardItem[] | void;
   emptyState?: ReactNode;

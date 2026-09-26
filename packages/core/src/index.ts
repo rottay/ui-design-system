@@ -177,7 +177,9 @@ export {
 } from './components/patterns/runtime/adaptive-layout/presentation/react';
 export {
   heightPxToRows,
+  normalizeWidgetLayout,
   widgetItemsToAdaptiveInputs,
+  widgetItemsToLayout,
 } from './components/patterns/data/widget-board/runtime/adaptive/policy';
 export type {
   AdaptiveContentMode,

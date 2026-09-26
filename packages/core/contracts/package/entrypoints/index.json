@@ -1441,8 +1441,8 @@
       "source": "src/entrypoints/public/patterns/widget-board/index.ts",
       "output": "entrypoints/public/patterns/widget-board/index",
       "budget": {
-        "maxDirectSources": 2,
-        "maxReachableModules": 38,
+        "maxDirectSources": 3,
+        "maxReachableModules": 39,
         "maxSourceBytes": 165836
       },
       "symbols": [
@@ -1453,6 +1453,14 @@
         {
           "name": "normalizeLayoutRevision",
           "kind": "value"
+        },
+        {
+          "name": "normalizeWidgetLayout",
+          "kind": "value"
+        },
+        {
+          "name": "WidgetLayout",
+          "kind": "type"
         }
       ]
     },
@@ -1778,9 +1786,9 @@
     }
   },
   "coverage": {
-    "runtimeSymbols": 107,
-    "typeSymbols": 47,
-    "totalSymbols": 154
+    "runtimeSymbols": 108,
+    "typeSymbols": 48,
+    "totalSymbols": 156
   },
   "_budgetGovernance": "Public-entrypoint budgets are decrease-only in both governed dimensions -- maxReachableModules and maxSourceBytes; increases require an explicit measured review and a matching ceiling update in scripts/check/boundaries/public-api/ceilings/index.json, taken through --write-baseline --widen --reason."
 }
