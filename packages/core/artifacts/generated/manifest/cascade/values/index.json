@@ -14,10 +14,10 @@
   "stats": {
     "verticals": 3,
     "scopes": 6,
-    "channels": 17990,
-    "unresolved": 9598,
+    "channels": 17954,
+    "unresolved": 9574,
     "unresolvedByReason": {
-      "missing": 9568,
+      "missing": 9544,
       "guaranteed-invalid": 24,
       "cascade-keyword": 6
     }
@@ -5794,13 +5794,6 @@
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-tabs-responsive-padding",
-      "reason": "missing",
-      "cause": "--ds-tabs-md-padding"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "base",
       "channel": "--ds-tabs-responsive-font-size",
       "reason": "missing",
       "cause": "--ds-tabs-md-font-size"
@@ -10549,14 +10542,14 @@
       "scope": "base",
       "channel": "--ds-tooltip-success-color",
       "reason": "missing",
-      "cause": "--ds-color-text-on-primary"
+      "cause": "--ds-color-on-success"
     },
     {
       "vertical": "rottay",
       "scope": "base",
       "channel": "--ds-tooltip-warning-color",
       "reason": "missing",
-      "cause": "--ds-color-text-on-primary"
+      "cause": "--ds-color-on-warning"
     },
     {
       "vertical": "rottay",
@@ -11730,13 +11723,6 @@
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-container-pad",
-      "reason": "missing",
-      "cause": "--ds-container-padding-md"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "base",
       "channel": "--ds-space-gap-sm",
       "reason": "missing",
       "cause": "--ds-spacing-2"
@@ -11754,13 +11740,6 @@
       "channel": "--ds-space-gap-lg",
       "reason": "missing",
       "cause": "--ds-spacing-6"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "base",
-      "channel": "--ds-space-gap",
-      "reason": "missing",
-      "cause": "--ds-space-gap-sm"
     },
     {
       "vertical": "rottay",
@@ -11817,13 +11796,6 @@
       "channel": "--ds-divider-inset-xl",
       "reason": "missing",
       "cause": "--ds-spacing-8"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "base",
-      "channel": "--ds-divider-inset",
-      "reason": "missing",
-      "cause": "--ds-divider-inset-md"
     },
     {
       "vertical": "rottay",
@@ -17890,13 +17862,6 @@
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-tabs-responsive-padding",
-      "reason": "missing",
-      "cause": "--ds-tabs-md-padding"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "light",
       "channel": "--ds-tabs-responsive-font-size",
       "reason": "missing",
       "cause": "--ds-tabs-md-font-size"
@@ -22645,14 +22610,14 @@
       "scope": "light",
       "channel": "--ds-tooltip-success-color",
       "reason": "missing",
-      "cause": "--ds-color-text-on-primary"
+      "cause": "--ds-color-on-success"
     },
     {
       "vertical": "rottay",
       "scope": "light",
       "channel": "--ds-tooltip-warning-color",
       "reason": "missing",
-      "cause": "--ds-color-text-on-primary"
+      "cause": "--ds-color-on-warning"
     },
     {
       "vertical": "rottay",
@@ -23826,13 +23791,6 @@
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-container-pad",
-      "reason": "missing",
-      "cause": "--ds-container-padding-md"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "light",
       "channel": "--ds-space-gap-sm",
       "reason": "missing",
       "cause": "--ds-spacing-2"
@@ -23850,13 +23808,6 @@
       "channel": "--ds-space-gap-lg",
       "reason": "missing",
       "cause": "--ds-spacing-6"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "light",
-      "channel": "--ds-space-gap",
-      "reason": "missing",
-      "cause": "--ds-space-gap-sm"
     },
     {
       "vertical": "rottay",
@@ -23913,13 +23864,6 @@
       "channel": "--ds-divider-inset-xl",
       "reason": "missing",
       "cause": "--ds-spacing-8"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "light",
-      "channel": "--ds-divider-inset",
-      "reason": "missing",
-      "cause": "--ds-divider-inset-md"
     },
     {
       "vertical": "rottay",
@@ -28565,13 +28509,6 @@
     {
       "vertical": "bithire",
       "scope": "base",
-      "channel": "--ds-tabs-responsive-padding",
-      "reason": "missing",
-      "cause": "--ds-tabs-md-padding"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "base",
       "channel": "--ds-tabs-responsive-font-size",
       "reason": "missing",
       "cause": "--ds-tabs-md-font-size"
@@ -33241,13 +33178,6 @@
     {
       "vertical": "bithire",
       "scope": "base",
-      "channel": "--ds-container-pad",
-      "reason": "missing",
-      "cause": "--ds-container-padding-md"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "base",
       "channel": "--ds-space-gap-sm",
       "reason": "missing",
       "cause": "--ds-spacing-2"
@@ -33265,13 +33195,6 @@
       "channel": "--ds-space-gap-lg",
       "reason": "missing",
       "cause": "--ds-spacing-6"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "base",
-      "channel": "--ds-space-gap",
-      "reason": "missing",
-      "cause": "--ds-space-gap-sm"
     },
     {
       "vertical": "bithire",
@@ -33328,13 +33251,6 @@
       "channel": "--ds-divider-inset-xl",
       "reason": "missing",
       "cause": "--ds-spacing-8"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "base",
-      "channel": "--ds-divider-inset",
-      "reason": "missing",
-      "cause": "--ds-divider-inset-md"
     },
     {
       "vertical": "bithire",
@@ -37966,13 +37882,6 @@
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-tabs-responsive-padding",
-      "reason": "missing",
-      "cause": "--ds-tabs-md-padding"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
       "channel": "--ds-tabs-responsive-font-size",
       "reason": "missing",
       "cause": "--ds-tabs-md-font-size"
@@ -42642,13 +42551,6 @@
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-container-pad",
-      "reason": "missing",
-      "cause": "--ds-container-padding-md"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
       "channel": "--ds-space-gap-sm",
       "reason": "missing",
       "cause": "--ds-spacing-2"
@@ -42666,13 +42568,6 @@
       "channel": "--ds-space-gap-lg",
       "reason": "missing",
       "cause": "--ds-spacing-6"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
-      "channel": "--ds-space-gap",
-      "reason": "missing",
-      "cause": "--ds-space-gap-sm"
     },
     {
       "vertical": "bithire",
@@ -42729,13 +42624,6 @@
       "channel": "--ds-divider-inset-xl",
       "reason": "missing",
       "cause": "--ds-spacing-8"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
-      "channel": "--ds-divider-inset",
-      "reason": "missing",
-      "cause": "--ds-divider-inset-md"
     },
     {
       "vertical": "bithire",
@@ -48788,13 +48676,6 @@
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-tabs-responsive-padding",
-      "reason": "missing",
-      "cause": "--ds-tabs-md-padding"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "base",
       "channel": "--ds-tabs-responsive-font-size",
       "reason": "missing",
       "cause": "--ds-tabs-md-font-size"
@@ -53543,14 +53424,14 @@
       "scope": "base",
       "channel": "--ds-tooltip-success-color",
       "reason": "missing",
-      "cause": "--ds-color-text-on-primary"
+      "cause": "--ds-color-on-success"
     },
     {
       "vertical": "evnto",
       "scope": "base",
       "channel": "--ds-tooltip-warning-color",
       "reason": "missing",
-      "cause": "--ds-color-text-on-primary"
+      "cause": "--ds-color-on-warning"
     },
     {
       "vertical": "evnto",
@@ -54724,13 +54605,6 @@
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-container-pad",
-      "reason": "missing",
-      "cause": "--ds-container-padding-md"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "base",
       "channel": "--ds-space-gap-sm",
       "reason": "missing",
       "cause": "--ds-spacing-2"
@@ -54748,13 +54622,6 @@
       "channel": "--ds-space-gap-lg",
       "reason": "missing",
       "cause": "--ds-spacing-6"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "base",
-      "channel": "--ds-space-gap",
-      "reason": "missing",
-      "cause": "--ds-space-gap-sm"
     },
     {
       "vertical": "evnto",
@@ -54811,13 +54678,6 @@
       "channel": "--ds-divider-inset-xl",
       "reason": "missing",
       "cause": "--ds-spacing-8"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "base",
-      "channel": "--ds-divider-inset",
-      "reason": "missing",
-      "cause": "--ds-divider-inset-md"
     },
     {
       "vertical": "evnto",
@@ -60884,13 +60744,6 @@
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-tabs-responsive-padding",
-      "reason": "missing",
-      "cause": "--ds-tabs-md-padding"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "dark",
       "channel": "--ds-tabs-responsive-font-size",
       "reason": "missing",
       "cause": "--ds-tabs-md-font-size"
@@ -65639,14 +65492,14 @@
       "scope": "dark",
       "channel": "--ds-tooltip-success-color",
       "reason": "missing",
-      "cause": "--ds-color-text-on-primary"
+      "cause": "--ds-color-on-success"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
       "channel": "--ds-tooltip-warning-color",
       "reason": "missing",
-      "cause": "--ds-color-text-on-primary"
+      "cause": "--ds-color-on-warning"
     },
     {
       "vertical": "evnto",
@@ -66820,13 +66673,6 @@
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-container-pad",
-      "reason": "missing",
-      "cause": "--ds-container-padding-md"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "dark",
       "channel": "--ds-space-gap-sm",
       "reason": "missing",
       "cause": "--ds-spacing-2"
@@ -66844,13 +66690,6 @@
       "channel": "--ds-space-gap-lg",
       "reason": "missing",
       "cause": "--ds-spacing-6"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "dark",
-      "channel": "--ds-space-gap",
-      "reason": "missing",
-      "cause": "--ds-space-gap-sm"
     },
     {
       "vertical": "evnto",
@@ -66907,13 +66746,6 @@
       "channel": "--ds-divider-inset-xl",
       "reason": "missing",
       "cause": "--ds-spacing-8"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "dark",
-      "channel": "--ds-divider-inset",
-      "reason": "missing",
-      "cause": "--ds-divider-inset-md"
     },
     {
       "vertical": "evnto",
@@ -67964,7 +67796,6 @@
         "--ds-container-measure": "1024px",
         "--ds-container-motion-duration": "calc(200ms * 1)",
         "--ds-container-motion-easing": "cubic-bezier(0.4, 0, 0.2, 1)",
-        "--ds-container-pad": "var(--ds-container-padding-md)",
         "--ds-container-padding-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-none": "var(--ds-spacing-0)",
@@ -68229,7 +68060,6 @@
         "--ds-divider-edge-basis": "5%",
         "--ds-divider-edge-segment": "5%",
         "--ds-divider-gap": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
-        "--ds-divider-inset": "var(--ds-divider-inset-md)",
         "--ds-divider-inset-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-none": "0",
@@ -69371,7 +69201,6 @@
         "--ds-sidebar-item-bg-active": "var(--ds-color-primary-200)",
         "--ds-sidebar-item-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-sidebar-item-color-active": "var(--ds-color-primary-900)",
-        "--ds-sidebar-surface-aside-inline-size": "320px",
         "--ds-sidebar-surface-aside-width": "320px",
         "--ds-sidebar-surface-collapsed-width": "5.5rem",
         "--ds-sidebar-surface-divider": "1px var(--ds-edge-standard-style) var(--ds-sidebar-border, var(--ds-color-border-subtle))",
@@ -69384,7 +69213,6 @@
         "--ds-sidebar-surface-width": "17.5rem",
         "--ds-sidebar-text": "var(--ds-color-text-primary)",
         "--ds-sidebar-text-muted": "var(--ds-color-text-muted)",
-        "--ds-space-gap": "var(--ds-space-gap-sm)",
         "--ds-space-gap-lg": "calc(var(--ds-spacing-6) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-md": "calc(var(--ds-spacing-4) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-sm": "calc(var(--ds-spacing-2) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
@@ -69549,7 +69377,7 @@
         "--ds-table-pagination-font-size": "calc(0.8125rem * 1)",
         "--ds-table-pagination-margin-block-start": "var(--ds-spacing-4)",
         "--ds-table-pagination-numeric": "tabular-nums",
-        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))",
+        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))",
         "--ds-table-sticky-top": "0",
         "--ds-table-title-font-weight": "600",
         "--ds-table-title-margin-block-end": "var(--ds-spacing-2)",
@@ -69670,9 +69498,7 @@
         "--ds-tabs-pills-list-radius": "var(--ds-radius-full)",
         "--ds-tabs-pressed-transform": "translateY(0) scale(0.985)",
         "--ds-tabs-responsive-font-size": "var(--ds-tabs-md-font-size)",
-        "--ds-tabs-responsive-height": "calc(2.25rem * 1 * 1)",
         "--ds-tabs-responsive-icon-size": "var(--ds-tabs-md-icon-size)",
-        "--ds-tabs-responsive-padding": "var(--ds-tabs-md-padding)",
         "--ds-tabs-segmented-active-bg": "var(--ds-surface-card)",
         "--ds-tabs-segmented-active-shadow": "var(--ds-tabs-active-shadow)",
         "--ds-tabs-segmented-list-bg": "color-mix(in srgb, var(--ds-surface-inset) 94%, var(--ds-color-primary) 6%)",
@@ -69965,10 +69791,10 @@
         "--ds-tooltip-shortcut-key-border": "color-mix(in srgb, currentColor 28%, transparent)",
         "--ds-tooltip-shortcut-key-shadow": "inset 0 1px 0 color-mix(in srgb, currentColor 10%, transparent)",
         "--ds-tooltip-success-bg": "var(--ds-color-success)",
-        "--ds-tooltip-success-color": "var(--ds-color-text-on-primary)",
+        "--ds-tooltip-success-color": "var(--ds-color-on-success)",
         "--ds-tooltip-tone-border": "color-mix(in srgb, currentColor 20%, transparent)",
         "--ds-tooltip-warning-bg": "var(--ds-color-warning)",
-        "--ds-tooltip-warning-color": "var(--ds-color-text-on-primary)",
+        "--ds-tooltip-warning-color": "var(--ds-color-on-warning)",
         "--ds-tour-action-font-size": "calc(0.75rem * 1)",
         "--ds-tour-action-next-bg": "var(--ds-color-primary)",
         "--ds-tour-action-next-ink": "var(--ds-color-text-on-primary)",
@@ -70919,7 +70745,6 @@
         "--ds-container-measure": "1024px",
         "--ds-container-motion-duration": "calc(200ms * 1)",
         "--ds-container-motion-easing": "cubic-bezier(0.4, 0, 0.2, 1)",
-        "--ds-container-pad": "var(--ds-container-padding-md)",
         "--ds-container-padding-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-none": "var(--ds-spacing-0)",
@@ -71184,7 +71009,6 @@
         "--ds-divider-edge-basis": "5%",
         "--ds-divider-edge-segment": "5%",
         "--ds-divider-gap": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
-        "--ds-divider-inset": "var(--ds-divider-inset-md)",
         "--ds-divider-inset-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-none": "0",
@@ -72326,7 +72150,6 @@
         "--ds-sidebar-item-bg-active": "var(--ds-color-primary-100)",
         "--ds-sidebar-item-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-sidebar-item-color-active": "var(--ds-color-primary-900)",
-        "--ds-sidebar-surface-aside-inline-size": "320px",
         "--ds-sidebar-surface-aside-width": "320px",
         "--ds-sidebar-surface-collapsed-width": "5.5rem",
         "--ds-sidebar-surface-divider": "1px var(--ds-edge-standard-style) var(--ds-sidebar-border, var(--ds-color-border-subtle))",
@@ -72339,7 +72162,6 @@
         "--ds-sidebar-surface-width": "17.5rem",
         "--ds-sidebar-text": "var(--ds-color-text-primary)",
         "--ds-sidebar-text-muted": "var(--ds-color-text-muted)",
-        "--ds-space-gap": "var(--ds-space-gap-sm)",
         "--ds-space-gap-lg": "calc(var(--ds-spacing-6) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-md": "calc(var(--ds-spacing-4) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-sm": "calc(var(--ds-spacing-2) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
@@ -72504,7 +72326,7 @@
         "--ds-table-pagination-font-size": "calc(0.8125rem * 1)",
         "--ds-table-pagination-margin-block-start": "var(--ds-spacing-4)",
         "--ds-table-pagination-numeric": "tabular-nums",
-        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))",
+        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))",
         "--ds-table-sticky-top": "0",
         "--ds-table-title-font-weight": "600",
         "--ds-table-title-margin-block-end": "var(--ds-spacing-2)",
@@ -72625,9 +72447,7 @@
         "--ds-tabs-pills-list-radius": "var(--ds-radius-full)",
         "--ds-tabs-pressed-transform": "translateY(0) scale(0.985)",
         "--ds-tabs-responsive-font-size": "var(--ds-tabs-md-font-size)",
-        "--ds-tabs-responsive-height": "calc(2.25rem * 1 * 1)",
         "--ds-tabs-responsive-icon-size": "var(--ds-tabs-md-icon-size)",
-        "--ds-tabs-responsive-padding": "var(--ds-tabs-md-padding)",
         "--ds-tabs-segmented-active-bg": "var(--ds-surface-card)",
         "--ds-tabs-segmented-active-shadow": "var(--ds-tabs-active-shadow)",
         "--ds-tabs-segmented-list-bg": "color-mix(in srgb, var(--ds-surface-inset) 94%, var(--ds-color-primary) 6%)",
@@ -72920,10 +72740,10 @@
         "--ds-tooltip-shortcut-key-border": "color-mix(in srgb, currentColor 28%, transparent)",
         "--ds-tooltip-shortcut-key-shadow": "inset 0 1px 0 color-mix(in srgb, currentColor 10%, transparent)",
         "--ds-tooltip-success-bg": "var(--ds-color-success)",
-        "--ds-tooltip-success-color": "var(--ds-color-text-on-primary)",
+        "--ds-tooltip-success-color": "var(--ds-color-on-success)",
         "--ds-tooltip-tone-border": "color-mix(in srgb, currentColor 20%, transparent)",
         "--ds-tooltip-warning-bg": "var(--ds-color-warning)",
-        "--ds-tooltip-warning-color": "var(--ds-color-text-on-primary)",
+        "--ds-tooltip-warning-color": "var(--ds-color-on-warning)",
         "--ds-tour-action-font-size": "calc(0.75rem * 1)",
         "--ds-tour-action-next-bg": "var(--ds-color-primary)",
         "--ds-tour-action-next-ink": "var(--ds-color-text-on-primary)",
@@ -73990,7 +73810,6 @@
         "--ds-container-measure": "1024px",
         "--ds-container-motion-duration": "calc(200ms * 0.8)",
         "--ds-container-motion-easing": "cubic-bezier(0.4, 0, 0.2, 1)",
-        "--ds-container-pad": "var(--ds-container-padding-md)",
         "--ds-container-padding-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-none": "var(--ds-spacing-0)",
@@ -74255,7 +74074,6 @@
         "--ds-divider-edge-basis": "5%",
         "--ds-divider-edge-segment": "5%",
         "--ds-divider-gap": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
-        "--ds-divider-inset": "var(--ds-divider-inset-md)",
         "--ds-divider-inset-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-none": "0",
@@ -75416,7 +75234,6 @@
         "--ds-sidebar-item-bg-active": "var(--ds-color-neutral-700)",
         "--ds-sidebar-item-bg-hover": "var(--ds-color-neutral-800)",
         "--ds-sidebar-item-color-active": "var(--ds-color-white)",
-        "--ds-sidebar-surface-aside-inline-size": "320px",
         "--ds-sidebar-surface-aside-width": "320px",
         "--ds-sidebar-surface-collapsed-width": "5.5rem",
         "--ds-sidebar-surface-divider": "1.5px var(--ds-edge-standard-style) var(--ds-sidebar-border, var(--ds-color-border-subtle))",
@@ -75429,7 +75246,6 @@
         "--ds-sidebar-surface-width": "17.5rem",
         "--ds-sidebar-text": "var(--ds-color-neutral-100)",
         "--ds-sidebar-text-muted": "var(--ds-color-neutral-500)",
-        "--ds-space-gap": "var(--ds-space-gap-sm)",
         "--ds-space-gap-lg": "calc(var(--ds-spacing-6) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-md": "calc(var(--ds-spacing-4) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-sm": "calc(var(--ds-spacing-2) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
@@ -75597,7 +75413,7 @@
         "--ds-table-pagination-font-size": "calc(0.8125rem * 0.94)",
         "--ds-table-pagination-margin-block-start": "var(--ds-spacing-4)",
         "--ds-table-pagination-numeric": "tabular-nums",
-        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))",
+        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))",
         "--ds-table-sticky-top": "0",
         "--ds-table-title-font-weight": "600",
         "--ds-table-title-margin-block-end": "var(--ds-spacing-2)",
@@ -75718,9 +75534,7 @@
         "--ds-tabs-pills-list-radius": "var(--ds-radius-full)",
         "--ds-tabs-pressed-transform": "translateY(0) scale(0.985)",
         "--ds-tabs-responsive-font-size": "var(--ds-tabs-md-font-size)",
-        "--ds-tabs-responsive-height": "calc(2.25rem * 1 * 0.9)",
         "--ds-tabs-responsive-icon-size": "var(--ds-tabs-md-icon-size)",
-        "--ds-tabs-responsive-padding": "var(--ds-tabs-md-padding)",
         "--ds-tabs-segmented-active-bg": "var(--ds-surface-card)",
         "--ds-tabs-segmented-active-shadow": "var(--ds-tabs-active-shadow)",
         "--ds-tabs-segmented-list-bg": "color-mix(in srgb, var(--ds-surface-inset) 94%, var(--ds-color-primary) 6%)",
@@ -76842,8 +76656,8 @@
         "--ds-color-info-900": "#EDF7FF",
         "--ds-color-info-bg": "#000B17",
         "--ds-color-info-border": "color-mix(in srgb, #0369A1 34%, transparent)",
-        "--ds-color-link": "#3F6FFD",
-        "--ds-color-link-hover": "#3E6FFD",
+        "--ds-color-link": "#5987FF",
+        "--ds-color-link-hover": "#5987FF",
         "--ds-color-neutral-ink": "#010204",
         "--ds-color-neutral-paper": "#F6FBFF",
         "--ds-color-on-error": "#ffffff",
@@ -77081,7 +76895,6 @@
         "--ds-container-measure": "1024px",
         "--ds-container-motion-duration": "calc(200ms * 0.8)",
         "--ds-container-motion-easing": "cubic-bezier(0.4, 0, 0.2, 1)",
-        "--ds-container-pad": "var(--ds-container-padding-md)",
         "--ds-container-padding-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-none": "var(--ds-spacing-0)",
@@ -77346,7 +77159,6 @@
         "--ds-divider-edge-basis": "5%",
         "--ds-divider-edge-segment": "5%",
         "--ds-divider-gap": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
-        "--ds-divider-inset": "var(--ds-divider-inset-md)",
         "--ds-divider-inset-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-none": "0",
@@ -77454,8 +77266,8 @@
         "--ds-effect-intensity": "0.2",
         "--ds-elevation-lift-strength": "0",
         "--ds-file-manager-content-min-height": "12.5rem",
-        "--ds-file-manager-link-color": "#3F6FFD",
-        "--ds-file-manager-link-hover-color": "#3E6FFD",
+        "--ds-file-manager-link-color": "#5987FF",
+        "--ds-file-manager-link-hover-color": "#5987FF",
         "--ds-file-manager-quiet-ink": "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-card))",
         "--ds-file-manager-touch-target": "44px",
         "--ds-filter-chip-bg": "var(--ds-surface-card)",
@@ -78507,7 +78319,6 @@
         "--ds-sidebar-item-bg-active": "var(--ds-color-neutral-700)",
         "--ds-sidebar-item-bg-hover": "var(--ds-color-neutral-800)",
         "--ds-sidebar-item-color-active": "var(--ds-color-neutral-100)",
-        "--ds-sidebar-surface-aside-inline-size": "320px",
         "--ds-sidebar-surface-aside-width": "320px",
         "--ds-sidebar-surface-collapsed-width": "5.5rem",
         "--ds-sidebar-surface-divider": "1.5px var(--ds-edge-standard-style) var(--ds-sidebar-border, var(--ds-color-border-subtle))",
@@ -78520,7 +78331,6 @@
         "--ds-sidebar-surface-width": "17.5rem",
         "--ds-sidebar-text": "var(--ds-color-neutral-100)",
         "--ds-sidebar-text-muted": "var(--ds-color-neutral-500)",
-        "--ds-space-gap": "var(--ds-space-gap-sm)",
         "--ds-space-gap-lg": "calc(var(--ds-spacing-6) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-md": "calc(var(--ds-spacing-4) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-sm": "calc(var(--ds-spacing-2) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
@@ -78688,7 +78498,7 @@
         "--ds-table-pagination-font-size": "calc(0.8125rem * 0.94)",
         "--ds-table-pagination-margin-block-start": "var(--ds-spacing-4)",
         "--ds-table-pagination-numeric": "tabular-nums",
-        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))",
+        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))",
         "--ds-table-sticky-top": "0",
         "--ds-table-title-font-weight": "600",
         "--ds-table-title-margin-block-end": "var(--ds-spacing-2)",
@@ -78809,9 +78619,7 @@
         "--ds-tabs-pills-list-radius": "var(--ds-radius-full)",
         "--ds-tabs-pressed-transform": "translateY(0) scale(0.985)",
         "--ds-tabs-responsive-font-size": "var(--ds-tabs-md-font-size)",
-        "--ds-tabs-responsive-height": "calc(2.25rem * 1 * 0.9)",
         "--ds-tabs-responsive-icon-size": "var(--ds-tabs-md-icon-size)",
-        "--ds-tabs-responsive-padding": "var(--ds-tabs-md-padding)",
         "--ds-tabs-segmented-active-bg": "var(--ds-surface-card)",
         "--ds-tabs-segmented-active-shadow": "var(--ds-tabs-active-shadow)",
         "--ds-tabs-segmented-list-bg": "color-mix(in srgb, var(--ds-surface-inset) 94%, var(--ds-color-primary) 6%)",
@@ -80060,7 +79868,6 @@
         "--ds-container-measure": "1024px",
         "--ds-container-motion-duration": "calc(200ms * 1)",
         "--ds-container-motion-easing": "cubic-bezier(0.4, 0, 0.2, 1)",
-        "--ds-container-pad": "var(--ds-container-padding-md)",
         "--ds-container-padding-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-none": "var(--ds-spacing-0)",
@@ -80325,7 +80132,6 @@
         "--ds-divider-edge-basis": "5%",
         "--ds-divider-edge-segment": "5%",
         "--ds-divider-gap": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
-        "--ds-divider-inset": "var(--ds-divider-inset-md)",
         "--ds-divider-inset-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-none": "0",
@@ -81467,7 +81273,6 @@
         "--ds-sidebar-item-bg-active": "var(--ds-color-primary-100)",
         "--ds-sidebar-item-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-sidebar-item-color-active": "var(--ds-color-primary-900)",
-        "--ds-sidebar-surface-aside-inline-size": "320px",
         "--ds-sidebar-surface-aside-width": "320px",
         "--ds-sidebar-surface-collapsed-width": "5.5rem",
         "--ds-sidebar-surface-divider": "1px var(--ds-edge-standard-style) var(--ds-sidebar-border, var(--ds-color-border-subtle))",
@@ -81480,7 +81285,6 @@
         "--ds-sidebar-surface-width": "17.5rem",
         "--ds-sidebar-text": "var(--ds-color-text-primary)",
         "--ds-sidebar-text-muted": "var(--ds-color-text-muted)",
-        "--ds-space-gap": "var(--ds-space-gap-sm)",
         "--ds-space-gap-lg": "calc(var(--ds-spacing-6) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-md": "calc(var(--ds-spacing-4) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-sm": "calc(var(--ds-spacing-2) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
@@ -81645,7 +81449,7 @@
         "--ds-table-pagination-font-size": "calc(0.8125rem * 1)",
         "--ds-table-pagination-margin-block-start": "var(--ds-spacing-4)",
         "--ds-table-pagination-numeric": "tabular-nums",
-        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))",
+        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))",
         "--ds-table-sticky-top": "0",
         "--ds-table-title-font-weight": "600",
         "--ds-table-title-margin-block-end": "var(--ds-spacing-2)",
@@ -81766,9 +81570,7 @@
         "--ds-tabs-pills-list-radius": "var(--ds-radius-full)",
         "--ds-tabs-pressed-transform": "translateY(0) scale(0.985)",
         "--ds-tabs-responsive-font-size": "var(--ds-tabs-md-font-size)",
-        "--ds-tabs-responsive-height": "calc(2.25rem * 1 * 1)",
         "--ds-tabs-responsive-icon-size": "var(--ds-tabs-md-icon-size)",
-        "--ds-tabs-responsive-padding": "var(--ds-tabs-md-padding)",
         "--ds-tabs-segmented-active-bg": "var(--ds-surface-card)",
         "--ds-tabs-segmented-active-shadow": "var(--ds-tabs-active-shadow)",
         "--ds-tabs-segmented-list-bg": "color-mix(in srgb, var(--ds-surface-inset) 94%, var(--ds-color-primary) 6%)",
@@ -82061,10 +81863,10 @@
         "--ds-tooltip-shortcut-key-border": "color-mix(in srgb, currentColor 28%, transparent)",
         "--ds-tooltip-shortcut-key-shadow": "inset 0 1px 0 color-mix(in srgb, currentColor 10%, transparent)",
         "--ds-tooltip-success-bg": "var(--ds-color-success)",
-        "--ds-tooltip-success-color": "var(--ds-color-text-on-primary)",
+        "--ds-tooltip-success-color": "var(--ds-color-on-success)",
         "--ds-tooltip-tone-border": "color-mix(in srgb, currentColor 20%, transparent)",
         "--ds-tooltip-warning-bg": "var(--ds-color-warning)",
-        "--ds-tooltip-warning-color": "var(--ds-color-text-on-primary)",
+        "--ds-tooltip-warning-color": "var(--ds-color-on-warning)",
         "--ds-tour-action-font-size": "calc(0.75rem * 1)",
         "--ds-tour-action-next-bg": "var(--ds-color-primary)",
         "--ds-tour-action-next-ink": "var(--ds-color-text-on-primary)",
@@ -83015,7 +82817,6 @@
         "--ds-container-measure": "1024px",
         "--ds-container-motion-duration": "calc(200ms * 1)",
         "--ds-container-motion-easing": "cubic-bezier(0.4, 0, 0.2, 1)",
-        "--ds-container-pad": "var(--ds-container-padding-md)",
         "--ds-container-padding-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-container-padding-none": "var(--ds-spacing-0)",
@@ -83280,7 +83081,6 @@
         "--ds-divider-edge-basis": "5%",
         "--ds-divider-edge-segment": "5%",
         "--ds-divider-gap": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
-        "--ds-divider-inset": "var(--ds-divider-inset-md)",
         "--ds-divider-inset-lg": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-md": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-divider-inset-none": "0",
@@ -84422,7 +84222,6 @@
         "--ds-sidebar-item-bg-active": "var(--ds-color-primary-200)",
         "--ds-sidebar-item-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-sidebar-item-color-active": "var(--ds-color-primary-900)",
-        "--ds-sidebar-surface-aside-inline-size": "320px",
         "--ds-sidebar-surface-aside-width": "320px",
         "--ds-sidebar-surface-collapsed-width": "5.5rem",
         "--ds-sidebar-surface-divider": "1px var(--ds-edge-standard-style) var(--ds-sidebar-border, var(--ds-color-border-subtle))",
@@ -84435,7 +84234,6 @@
         "--ds-sidebar-surface-width": "17.5rem",
         "--ds-sidebar-text": "var(--ds-color-text-primary)",
         "--ds-sidebar-text-muted": "var(--ds-color-text-muted)",
-        "--ds-space-gap": "var(--ds-space-gap-sm)",
         "--ds-space-gap-lg": "calc(var(--ds-spacing-6) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-md": "calc(var(--ds-spacing-4) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
         "--ds-space-gap-sm": "calc(var(--ds-spacing-2) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))",
@@ -84600,7 +84398,7 @@
         "--ds-table-pagination-font-size": "calc(0.8125rem * 1)",
         "--ds-table-pagination-margin-block-start": "var(--ds-spacing-4)",
         "--ds-table-pagination-numeric": "tabular-nums",
-        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))",
+        "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))",
         "--ds-table-sticky-top": "0",
         "--ds-table-title-font-weight": "600",
         "--ds-table-title-margin-block-end": "var(--ds-spacing-2)",
@@ -84721,9 +84519,7 @@
         "--ds-tabs-pills-list-radius": "var(--ds-radius-full)",
         "--ds-tabs-pressed-transform": "translateY(0) scale(0.985)",
         "--ds-tabs-responsive-font-size": "var(--ds-tabs-md-font-size)",
-        "--ds-tabs-responsive-height": "calc(2.25rem * 1 * 1)",
         "--ds-tabs-responsive-icon-size": "var(--ds-tabs-md-icon-size)",
-        "--ds-tabs-responsive-padding": "var(--ds-tabs-md-padding)",
         "--ds-tabs-segmented-active-bg": "var(--ds-surface-card)",
         "--ds-tabs-segmented-active-shadow": "var(--ds-tabs-active-shadow)",
         "--ds-tabs-segmented-list-bg": "color-mix(in srgb, var(--ds-surface-inset) 94%, var(--ds-color-primary) 6%)",
@@ -85016,10 +84812,10 @@
         "--ds-tooltip-shortcut-key-border": "color-mix(in srgb, currentColor 28%, transparent)",
         "--ds-tooltip-shortcut-key-shadow": "inset 0 1px 0 color-mix(in srgb, currentColor 10%, transparent)",
         "--ds-tooltip-success-bg": "var(--ds-color-success)",
-        "--ds-tooltip-success-color": "var(--ds-color-text-on-primary)",
+        "--ds-tooltip-success-color": "var(--ds-color-on-success)",
         "--ds-tooltip-tone-border": "color-mix(in srgb, currentColor 20%, transparent)",
         "--ds-tooltip-warning-bg": "var(--ds-color-warning)",
-        "--ds-tooltip-warning-color": "var(--ds-color-text-on-primary)",
+        "--ds-tooltip-warning-color": "var(--ds-color-on-warning)",
         "--ds-tour-action-font-size": "calc(0.75rem * 1)",
         "--ds-tour-action-next-bg": "var(--ds-color-primary)",
         "--ds-tour-action-next-ink": "var(--ds-color-text-on-primary)",
@@ -85220,5 +85016,5 @@
       }
     }
   },
-  "digest": "1ae522f5dd15e104251947487e7aca5980210c64721c31f315fe4224b821643c"
+  "digest": "5b4d298ea790d54cecf74ae75fd75fe7be28c6617351fccba98e7c8286f6f60b"
 }
