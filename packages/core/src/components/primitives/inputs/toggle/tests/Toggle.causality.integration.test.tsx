@@ -112,12 +112,15 @@ describe('toggle travel, direction, floors and accessibility in a real browser',
    * three under `pill`.
    */
   /**
-   * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): on evnto the
-   * hover tint of the track is the track's own fill, so `states.emphasis` moves
-   * the press but not the hover. Measured: fill `rgb(23, 23, 23)` and hoverFill
-   * `color(srgb 0.0901961 0.0901961 0.0901961)` -- the same colour -- on every
-   * emphasis stop, while rottay and bithire move both. The press half is
-   * asserted here at full strength so the arm is not lost for evnto.
+   * Q-DER06-RES ruling (2026-09-26, roadmap/derivation.md, second block): the
+   * track's hover tint mixes the fill toward `--ds-color-text-primary`, and in
+   * the neutral light foundation the primary IS the text ink (`#171717`), so no
+   * `states.emphasis` shift can move the mix -- not evnto-specific, and the
+   * deriver itself works (evnto's artifact carries the 4 % shift). The inert
+   * hover is the reviewed law, pinned here; the collision class it belongs to
+   * (the neutral foundation's primary) is registered with the owner as brand
+   * territory. The press half is asserted at full strength so the arm is not
+   * lost.
    */
   it('registers the hover tint evnto cannot move, and keeps its press', async () => {
     const measured = await measureArms({

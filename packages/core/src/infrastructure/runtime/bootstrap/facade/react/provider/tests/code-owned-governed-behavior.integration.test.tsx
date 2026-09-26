@@ -188,10 +188,13 @@ describe('code-owned governed behavior survives the runtime projection', () => {
     // the only vertical that decides one; the retired authored theme named a
     // different profile.
     expect(behavior.recipeProfile).toBe('rottay/technical-sharp@1');
-    // `entranceDuration` had no preset decision behind it: the retired authored
+    // `entranceDuration` has no preset decision behind it: the retired authored
     // theme supplied it directly, and `motion.dial` decides intensity, duration
-    // SCALE and ambient instead. Reported for the derivation lane; the shape of
-    // the block is pinned so a key appearing or vanishing is still visible.
+    // SCALE and ambient instead. Q-DER06-RES ruling (2026-09-26): accepted as
+    // law -- WO-DER-04's acceptance (calm has a rest value) is met and bithire
+    // lost nothing; the only honest carrier would be a D-27 kit row, parked
+    // with the spring amendment for the owner's 1:1. The shape of the block is
+    // pinned so a key appearing or vanishing is still visible.
     expect(Object.keys(behavior.motion!).sort()).toEqual(['intensity']);
     expect(Object.isFrozen(behavior)).toBe(true);
     expect(Object.isFrozen(behavior.motion)).toBe(true);
