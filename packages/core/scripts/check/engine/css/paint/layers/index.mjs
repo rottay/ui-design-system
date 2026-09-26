@@ -18,6 +18,7 @@ import {
   packageRoot as findPackageRoot,
   repoRoot as findRepoRoot,
 } from '../../../../../libraries/repo-root/index.mjs';
+import { collectChannelProducers } from '../../../../../libraries/tokens/producers/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(scriptDir);
@@ -87,6 +88,53 @@ const MODERN_FRAMEWORK_TOKEN_PROPERTIES = new Set([
 ]);
 
 const DIRECT_DS_TOKEN_REFERENCE = /^var\(--ds-[a-z0-9-]+\)$/;
+
+/**
+ * THE ONE ADMITTED CHAIN. A projection references one canonical token -- and a
+ * canonical token can be an ANTI-SHADOW head: declared `initial` in
+ * foundation/base on purpose (36d135d44, --ds-radius-button), so it decides
+ * nothing until a tenant sets it, and the house chain behind it paints. Such a
+ * head needs exactly one fallback, and that fallback must itself be one
+ * produced canonical token:
+ *
+ *     var(--ds-<initial-head>, var(--ds-<produced>))
+ *
+ * Anything else stays refused: a head with a real value (the fallback would be
+ * dead code shadowing a second authority), two fallbacks, a literal fallback,
+ * or a fallback to a name nobody produces.
+ */
+const ANTI_SHADOW_CHAIN = /^var\((--ds-[a-z0-9-]+),\s*var\((--ds-[a-z0-9-]+)\)\)$/;
+const FOUNDATION_BASE_DIR = resolve(packageRoot, "src/foundation/tokens/css/foundation/base");
+
+/** Names declared ONLY as `initial` across foundation/base -- the anti-shadow heads. */
+export function collectInitialHeads(dir = FOUNDATION_BASE_DIR) {
+  const initial = new Set();
+  const valued = new Set();
+  const walk = (current) => {
+    for (const entry of readdirSync(current, { withFileTypes: true })) {
+      const full = resolve(current, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== "tests") walk(full);
+        continue;
+      }
+      if (!entry.name.endsWith(".css")) continue;
+      postcss.parse(readFileSync(full, "utf8"), { from: full }).walkDecls((declaration) => {
+        if (!declaration.prop.startsWith("--ds-")) return;
+        (declaration.value.trim() === "initial" ? initial : valued).add(declaration.prop);
+      });
+    }
+  };
+  if (existsSync(dir)) walk(dir);
+  return new Set([...initial].filter((name) => !valued.has(name)));
+}
+
+/** True when a projection value references one canonical token, as the law reads it. */
+export function isCanonicalProjectionValue(value, { initialHeads, producers }) {
+  const trimmed = value.trim();
+  if (DIRECT_DS_TOKEN_REFERENCE.test(trimmed)) return true;
+  const chain = ANTI_SHADOW_CHAIN.exec(trimmed);
+  return Boolean(chain && initialHeads.has(chain[1]) && producers.has(chain[2]));
+}
 
 const IMPORT_RE = /@import\s+(['"])([^'"]+)\1\s*(?:layer\(([^)]*)\))?\s*;/g;
 const UNLAYERED_REGISTRIES = new Set(["foundation/base/properties/index.css"]);
@@ -718,6 +766,8 @@ export function auditModernThemeOwnership({
   paintPath = modernThemePaint,
   bridgePath = modernFrameworkBridge,
   indexPath = engineIndex,
+  initialHeads = collectInitialHeads(),
+  producers = collectChannelProducers().producers,
 } = {}) {
   const failures = [];
   for (const path of [projectionPath, paintPath, bridgePath, indexPath]) {
@@ -746,7 +796,7 @@ export function auditModernThemeOwnership({
         `modern framework projection owns a non-framework token: ${declaration.prop}`
       );
     }
-    if (!DIRECT_DS_TOKEN_REFERENCE.test(declaration.value.trim())) {
+    if (!isCanonicalProjectionValue(declaration.value, { initialHeads, producers })) {
       failures.push(
         `modern framework projection must directly reference one canonical --ds-* token: ${declaration.prop}: ${declaration.value}`
       );

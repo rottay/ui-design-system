@@ -27,7 +27,11 @@ import {
   rosterMountedCss,
   skinTierCensus,
   RETIRED_ENTRYPOINT_DIRS,
+  auditModernThemeOwnership,
+  collectInitialHeads,
+  isCanonicalProjectionValue,
 } from "./index.mjs";
+import { collectChannelProducers } from '../../../../../libraries/tokens/producers/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
@@ -77,9 +81,15 @@ test("Modern projects framework tokens from canonical DS authority before paint"
   projection.walkRules((rule) =>
     assert.equal(rule.selector, "[data-engine='modern']")
   );
+  // One canonical token per projection, read by the GATE's own classifier: a
+  // direct `var(--ds-x)`, or the single anti-shadow chain the law admits.
+  const law = { initialHeads: collectInitialHeads(), producers: collectChannelProducers().producers };
   projection.walkDecls((declaration) => {
     assert.doesNotMatch(declaration.prop, /^--ds-/);
-    assert.match(declaration.value.trim(), /^var\(--ds-[a-z0-9-]+\)$/);
+    assert.ok(
+      isCanonicalProjectionValue(declaration.value, law),
+      `${declaration.prop}: ${declaration.value} is not one canonical --ds-* reference`,
+    );
   });
   paint.walkDecls((declaration) =>
     assert.doesNotMatch(declaration.prop, /^--/)
@@ -92,6 +102,56 @@ test("Modern projects framework tokens from canonical DS authority before paint"
   );
   assert.doesNotMatch(bridgeCss, /\.divider(?:\b|-horizontal\b|-vertical\b)/);
   assert.doesNotMatch(bridgeCss, /\.inline-flex\.flex-row|\[style\*=["']gap["']\]/);
+});
+
+/* ---- the anti-shadow chain: one admitted shape, everything next to it refused ---- */
+
+function projectionFixture(value) {
+  const dir = mkdtempSync(join(tmpdir(), "modern-projection-drill-"));
+  const path = join(dir, "index.css");
+  writeFileSync(path, `[data-engine='modern'] {\n  --radius-field: ${value};\n}\n`);
+  return { path, cleanup: () => rmSync(dir, { recursive: true, force: true }) };
+}
+
+function projectionFailures(value, options = {}) {
+  const { path, cleanup } = projectionFixture(value);
+  try {
+    return auditModernThemeOwnership({ projectionPath: path, ...options }).filter((failure) =>
+      failure.includes("must directly reference one canonical"),
+    );
+  } finally {
+    cleanup();
+  }
+}
+
+test("ANTI-SHADOW (a): --ds-radius-button, declared initial in base, passes with its one produced fallback", () => {
+  const heads = collectInitialHeads();
+  assert.ok(heads.has("--ds-radius-button"), "36d135d44's anti-shadow head must be read as one");
+  assert.ok(!heads.has("--ds-radius-md"), "a head with a real value is not anti-shadow");
+  assert.deepEqual(projectionFailures("var(--ds-radius-button, var(--ds-radius-md))"), []);
+  assert.deepEqual(auditModernThemeOwnership(), [], "the shipped projection holds the law");
+});
+
+test("ANTI-SHADOW (b): a head with a real VALUE plus a fallback is refused", () => {
+  assert.equal(projectionFailures("var(--ds-radius-md, var(--ds-radius-sm))").length, 1);
+});
+
+test("ANTI-SHADOW (c): an initial head with TWO fallbacks is refused", () => {
+  assert.equal(projectionFailures("var(--ds-radius-button, var(--ds-radius-md, var(--ds-radius-sm)))").length, 1);
+});
+
+test("ANTI-SHADOW (d): an initial head whose fallback nobody produces is refused, and so is a literal", () => {
+  assert.equal(projectionFailures("var(--ds-radius-button, var(--ds-radius-drill-dead))").length, 1);
+  assert.equal(projectionFailures("var(--ds-radius-button, 8px)").length, 1);
+});
+
+test("ANTI-SHADOW (e): MUTANT without the clause -- the shipped chain is red again", () => {
+  assert.equal(projectionFailures("var(--ds-radius-button, var(--ds-radius-md))", { initialHeads: new Set() }).length, 1);
+  assert.equal(
+    auditModernThemeOwnership({ initialHeads: new Set() }).filter((f) => f.includes("--radius-field")).length,
+    1,
+    "the live projection needs the clause, so removing it must redden it",
+  );
 });
 
 test("canonical order must precede imports", () => {
