@@ -3167,8 +3167,12 @@ test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => 
 
 test('R-T9 the typed-relay proof reaches the ARTIFACT, not just the shape', () => {
   const out = buildProducers();
+  /* 28 -> 0: a11355f43 (2026-09-16) deleted resolveTypographyCraftStyle from the typography runtime,
+   * the `WebkitLineClamp: normalizedClamp` relay all 28 rows proved (classic, modern and rustic engines).
+   * Measured 28 at f56020c58 and 0 at a11355f43 by both the period instrument (with ef17c4f2e's cycle
+   * guard) and HEAD's over the two trees; the rows left closedProducer with their call sites. */
   const proven = out.closedProducer.filter((r) => r.evidence.typedRelays);
-  assert.equal(proven.length, 28, 'the typed-relay proof rides every row of the family that closed');
+  assert.equal(proven.length, 0, 'the typed-relay proof rides every row of the family that closed');
   for (const row of proven) {
     const list = row.evidence.typedRelays;
     assert.ok(Array.isArray(list) && list.length > 0, `${row.file}:${row.line} published an empty proof`);
@@ -3192,27 +3196,42 @@ test('R-T9 the typed-relay proof reaches the ARTIFACT, not just the shape', () =
     assert.equal(row.tenantSafe, false);
   }
   // no producer that closed by another route gains an empty or spurious field
+  // every closedProducer row since a11355f43: 56 -> 156 399c3d997, 156 -> 162 78ad4662e
   const others = out.closedProducer.filter((r) => !r.evidence.typedRelays);
-  assert.equal(others.length, 56);
+  assert.equal(others.length, 162);
   for (const row of others) assert.equal(row.evidence.typedRelays, undefined);
 });
 
 test('R-T10 NEGATIVE: tampering with a typed-relay proof moves the bound digest', () => {
   const out = buildProducers();
-  const rows = out.closedProducer.filter((r) => r.evidence.typedRelays).slice(0, 4);
+  /* The typed-relay class is empty since a11355f43 (R-T9): no live row carries a proof to tamper with.
+   * The drill runs on LIVE producers: a proof ARRIVING on a row, and every forgery of it, must move the
+   * bound digest (the closedProducerReceipts preimage) while identity stays blind. */
+  assert.equal(out.closedProducer.filter((r) => r.evidence.typedRelays).length, 0);
+  const rows = out.closedProducer.slice(0, 4);
+  assert.equal(rows.length, 4);
   const bound = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.relayKinds, r.evidence]));
   const identity = (rs) => JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason]));
+  const proof = {
+    declaredAt: 'packages/core/src/components/primitives/display/typography/runtime/index.ts:225',
+    origin: 'return-type',
+    ownerFunction: 'normalizeLineClamp',
+    typeText: 'number | undefined',
+  };
+  const plant = (list) => rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: list } }));
+  const genuine = plant([proof]);
   const mutations = {
-    'proof list emptied': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: [] } })),
-    'proof removed': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: undefined } })),
-    'owner forged': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: r.evidence.typedRelays.map((p) => ({ ...p, ownerFunction: 'somethingElse' })) } })),
-    'type widened': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: r.evidence.typedRelays.map((p) => ({ ...p, typeText: 'any' })) } })),
-    'declaration moved': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: r.evidence.typedRelays.map((p) => ({ ...p, declaredAt: 'fake:1' })) } })),
-    'origin swapped': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: r.evidence.typedRelays.map((p) => ({ ...p, origin: 'parameter' })) } })),
+    'proof planted': genuine,
+    'proof list emptied': plant([]),
+    'owner forged': plant([{ ...proof, ownerFunction: 'somethingElse' }]),
+    'type widened': plant([{ ...proof, typeText: 'any' }]),
+    'declaration moved': plant([{ ...proof, declaredAt: 'fake:1' }]),
+    'origin swapped': plant([{ ...proof, origin: 'parameter' }]),
   };
   for (const [name, mutated] of Object.entries(mutations)) {
     assert.equal(identity(rows), identity(mutated), `identity must stay blind: ${name}`);
     assert.notEqual(bound(rows), bound(mutated), `the bound digest MUST notice: ${name}`);
+    if (mutated !== genuine) assert.notEqual(bound(genuine), bound(mutated), `a forged proof must not pass for the genuine one: ${name}`);
   }
   assert.match(out.digests.closedProducerReceipts, /^[0-9a-f]{64}$/);
 });
@@ -4270,11 +4289,25 @@ test('KS-11 NEGATIVE: tampering with a static-key-set receipt moves the bound di
   }
   /* The ungoverned union has to be tampered on rows that HAVE one -- hiding an
    * absent field is a no-op and would make this drill pass vacuously. */
+  /* 3 -> 0: eabf62987 (WO-FAM-05 menu cut) renamed --rottay-menu-level and --rottay-menu-inline-indent
+   * to --ds-menu-*, governed names; the same three rows (MenuItemRow, SubmenuRow x2) now carry them as
+   * governedChannelKeys. Measured 3 at 73c6e9195 and 0 at eabf62987. The drill tampers THOSE live rows. */
   const ung = out.closedProducer.filter((r) => r.evidence.ungovernedCustomPropertyKeys?.length);
-  assert.equal(ung.length, 3, 'the ungoverned-only producers are the ones carrying that union');
-  const hidden = ung.map((r) => ({ ...r, evidence: { ...r.evidence, ungovernedCustomPropertyKeys: undefined } }));
-  assert.equal(identity(ung), identity(hidden), 'identity alone cannot see the union');
-  assert.notEqual(bound(ung), bound(hidden), 'hiding the ungoverned union did NOT move the digest');
+  assert.equal(ung.length, 0, 'the ungoverned-only producers are the ones carrying that union');
+  const carriers = out.closedProducer.filter((r) => (
+    /primitives\/navigation\/menu\/engines\/modern\//.test(r.file) && r.evidence.governedChannelKeys?.includes('--ds-menu-level')
+  ));
+  assert.equal(carriers.length, 3, 'the three former union carriers are live and governed');
+  for (const row of carriers) assert.deepEqual(row.evidence.governedChannelKeys, ['--ds-menu-inline-indent', '--ds-menu-level']);
+  const demoted = carriers.map((r) => ({
+    ...r,
+    evidence: { ...r.evidence, governedChannelKeys: [], ungovernedCustomPropertyKeys: ['--rottay-menu-inline-indent', '--rottay-menu-level'] },
+  }));
+  const hidden = carriers.map((r) => ({ ...r, evidence: { ...r.evidence, governedChannelKeys: undefined } }));
+  assert.equal(identity(carriers), identity(demoted), 'identity alone cannot see the union');
+  assert.equal(identity(carriers), identity(hidden), 'identity alone cannot see the governed keys');
+  assert.notEqual(bound(carriers), bound(demoted), 'moving the names back into an ungoverned union did NOT move the digest');
+  assert.notEqual(bound(carriers), bound(hidden), 'hiding the governed keys did NOT move the digest');
 });
 
 /* ===================================================================== *
