@@ -4,16 +4,15 @@
   "scope": "engines/modern unicamente. Classic y Rustic estan congelados (owner, 2026-09-05) y su pintura no es deuda que ninguna orden de trabajo vaya a bajar.",
   "producer": "declarado en el CSS autorado (src/foundation/tokens/css, src/components) o emitido por el compilador -- el registro de derivacion, el kernel (src/infrastructure/compilers/kernel) o lowering/foundation -- libraries/tokens/producers, el mismo conjunto que usa el arma transitiva de cascade-wiring",
   "corpus": "libraries/engine/skins/files/collectSkinFiles() filtrado a /engines/modern/ -- un solo walker, importado",
-  "denominator": 4779,
+  "denominator": 4778,
   "produced": 4357,
-  "debt": 422,
+  "debt": 421,
   "producers": 7322,
   "modernSkinFiles": 124,
   "namedResidue": {
     "list-toolbar": {
       "skin": "engines/modern/skin/list-toolbar/index.css",
       "readWithoutProducer": {
-        "--ds-control-size-md": "Q-B7-5 deferred: a shape-root producer is blocked by the open Q-DER06-RES routing (owner); migrating the reads would change scale semantics",
         "--ds-filter-pill-radius": "its resting value reads the element-scoped --ds-list-toolbar-radius-control ladder alias; resolved at the theme root it falls to --ds-radius-sm, measured 8px -> 6px in-toolbar in rottay, bithire and evnto, so a root producer at the skin fallback would change paint"
       },
       "kernelAuthorableWithoutRest": {
@@ -38,11 +37,11 @@
       }
     }
   },
-  "residueNote": "17 list-toolbar readWithoutProducer pins removed on 2026-09-23 (owner checkpoint: the DT signs this removal on the evidence below; the brief named 6, the gate named 17 -- the 6 were the first six of its alphabetical output). Each removed name is produced today and re-enters as `GREW` the moment it loses its producer (drill RESIDUE ruled exits). Remaining pins: --ds-control-size-md, --ds-filter-pill-radius. --ds-control-size-sm left 2026-09-26 under the Q-DER06-RES option-A ruling (DT, ca22d6ef4, written in roadmap/derivation.md): the shape plane produces a factor, never an absolute rung, and the fork measured fold as not-clean -- the rung retired in both families at 55feae6af, byte-identical over 2400 Chromium cells; this removal carries that ruling as its owner checkpoint, per the pin's own law. Owning lots: 08f70e4fd (fix(core): list-toolbar's 16 unproduced reads derive from decisions) gives derivation/chrome/toolbar the 16 --ds-toolbar-* channels; 85cc1085b (data-table's unproduced reads get their producers) gives derivation/chrome/filter-chip --ds-filter-chip-radius as 'the list-toolbar lot's companion edit'. Audit trail: Fable (claude-fable-5-1, session 3711c4b3, .tmp/dispatch-2026-09-17/receipt-fam08-rwp-fable.json, 2026-09-19) -- 08f70e4fd ACCEPT ('byte equality holds', 'control-gap split holds'); 85cc1085b CHANGES on two data-table channels, repaired in fa2a4fff9, with 'Filter-chip radius is correct: its expansion is byte-equal to the ladder's control rung'; registry trail kimi-dt 2026-09-19 17:43. (A) CLOSED, the pin's objection cured -- --ds-toolbar-control-radius, --ds-toolbar-controls-radius, --ds-toolbar-icon-radius, --ds-toolbar-mobile-actions-radius, --ds-toolbar-mobile-rail-radius, --ds-toolbar-saved-views-radius (08f70e4fd) and --ds-filter-chip-radius (85cc1085b): produced at the EXPANSION of the --ds-list-toolbar-radius-{control,inner} ladder, not the element-scoped alias, so the root no longer falls to --ds-radius-sm; the ladder is declared once (skin/list-toolbar :47-53) with no scope variant, so the root expansion is byte-equal in every scope. (B) CLOSED, inert -- --ds-toolbar-sheen-opacity (08f70e4fd): produced at 0, the skin fallback; the pin itself stated a 0 producer is inert, and the open paint decision (above 0 turns the sheen on) was not taken. (C) OPEN SCOPE EXPOSURE, not ruled -- --ds-toolbar-compact-padding, --ds-toolbar-controls-gap, --ds-toolbar-filter-strip-padding, --ds-toolbar-min-height, --ds-toolbar-phone-filter-strip-padding, --ds-toolbar-phone-padding, --ds-toolbar-title-gap (the density-ramp pins) and --ds-toolbar-control-gap (Q-B7-7; its split holds, but both rungs read --ds-spacing-*): produced byte-equal to the skin fallback text, but declared on the tenant artifact root, where --ds-density-effective-scale is substituted, so a nested [data-density]:not(:root) scope (foundation/base/density :37-47) no longer rescales them -- exactly the paint change the pins recorded. Fable measured it on the landed lot (min-height under a local compact scope 48px -> 60px) and routed it as 'a law question for the DT'; no ruling is on record (registry, commit trail, evidence/owner-decisions-2026-09-18), and the sibling data-table lot got the per-posture repair (fa2a4fff9) while the toolbar did not. --ds-toolbar-title-letter-spacing (the language-scope pin, R1 option a): same mechanism -- produced as var(--ds-type-section-title-letter-spacing, -0.015em) at the root, so the element-level :lang(ar) override (foundation/responsive/language-arabic :126) no longer reaches a nested lang=\"ar\" subtree; Fable's audit checked byte-equality only and did not address the language scope. These nine leave the pin list because the gate cannot express 'produced but scope-exposed'; they are routed to the DT/owner as the density/language law question, not closed by this removal.",
-  "debtNote": "423 -> 422 in the control-size-sm lot (55feae6af): the rung retires under the Q-DER06-RES option-A ruling (post-close block on WO-DER-03) -- the shape plane produces a factor, never an absolute rung, and the fork measured fold as not-clean (112 cells under bithire's own 0.9). Measured by the gate (SHRANK).",
+  "residueNote": "17 list-toolbar readWithoutProducer pins removed on 2026-09-23 (owner checkpoint: the DT signs this removal on the evidence below; the brief named 6, the gate named 17 -- the 6 were the first six of its alphabetical output). Each removed name is produced today and re-enters as `GREW` the moment it loses its producer (drill RESIDUE ruled exits). Remaining pins: --ds-filter-pill-radius. --ds-control-size-md left 2026-09-26 under the ruling's per-row extension (294eaba95, byte-identical over 1200 cells); the checkpoint is the same Q-DER06-RES option-A ruling (ca22d6ef4). --ds-control-size-sm left 2026-09-26 under the Q-DER06-RES option-A ruling (DT, ca22d6ef4, written in roadmap/derivation.md): the shape plane produces a factor, never an absolute rung, and the fork measured fold as not-clean -- the rung retired in both families at 55feae6af, byte-identical over 2400 Chromium cells; this removal carries that ruling as its owner checkpoint, per the pin's own law. Owning lots: 08f70e4fd (fix(core): list-toolbar's 16 unproduced reads derive from decisions) gives derivation/chrome/toolbar the 16 --ds-toolbar-* channels; 85cc1085b (data-table's unproduced reads get their producers) gives derivation/chrome/filter-chip --ds-filter-chip-radius as 'the list-toolbar lot's companion edit'. Audit trail: Fable (claude-fable-5-1, session 3711c4b3, .tmp/dispatch-2026-09-17/receipt-fam08-rwp-fable.json, 2026-09-19) -- 08f70e4fd ACCEPT ('byte equality holds', 'control-gap split holds'); 85cc1085b CHANGES on two data-table channels, repaired in fa2a4fff9, with 'Filter-chip radius is correct: its expansion is byte-equal to the ladder's control rung'; registry trail kimi-dt 2026-09-19 17:43. (A) CLOSED, the pin's objection cured -- --ds-toolbar-control-radius, --ds-toolbar-controls-radius, --ds-toolbar-icon-radius, --ds-toolbar-mobile-actions-radius, --ds-toolbar-mobile-rail-radius, --ds-toolbar-saved-views-radius (08f70e4fd) and --ds-filter-chip-radius (85cc1085b): produced at the EXPANSION of the --ds-list-toolbar-radius-{control,inner} ladder, not the element-scoped alias, so the root no longer falls to --ds-radius-sm; the ladder is declared once (skin/list-toolbar :47-53) with no scope variant, so the root expansion is byte-equal in every scope. (B) CLOSED, inert -- --ds-toolbar-sheen-opacity (08f70e4fd): produced at 0, the skin fallback; the pin itself stated a 0 producer is inert, and the open paint decision (above 0 turns the sheen on) was not taken. (C) OPEN SCOPE EXPOSURE, not ruled -- --ds-toolbar-compact-padding, --ds-toolbar-controls-gap, --ds-toolbar-filter-strip-padding, --ds-toolbar-min-height, --ds-toolbar-phone-filter-strip-padding, --ds-toolbar-phone-padding, --ds-toolbar-title-gap (the density-ramp pins) and --ds-toolbar-control-gap (Q-B7-7; its split holds, but both rungs read --ds-spacing-*): produced byte-equal to the skin fallback text, but declared on the tenant artifact root, where --ds-density-effective-scale is substituted, so a nested [data-density]:not(:root) scope (foundation/base/density :37-47) no longer rescales them -- exactly the paint change the pins recorded. Fable measured it on the landed lot (min-height under a local compact scope 48px -> 60px) and routed it as 'a law question for the DT'; no ruling is on record (registry, commit trail, evidence/owner-decisions-2026-09-18), and the sibling data-table lot got the per-posture repair (fa2a4fff9) while the toolbar did not. --ds-toolbar-title-letter-spacing (the language-scope pin, R1 option a): same mechanism -- produced as var(--ds-type-section-title-letter-spacing, -0.015em) at the root, so the element-level :lang(ar) override (foundation/responsive/language-arabic :126) no longer reaches a nested lang=\"ar\" subtree; Fable's audit checked byte-equality only and did not address the language scope. These nine leave the pin list because the gate cannot express 'produced but scope-exposed'; they are routed to the DT/owner as the density/language law question, not closed by this removal.",
+  "debtNote": "422 -> 421 in the control-size-md lot (294eaba95): the ruling's per-row extension -- the shape plane is a factor, never an absolute rung; retired in both families, byte-identical measured. Measured by the gate (SHRANK).",
   "producersNote": "4340 -> 4357 produced and 7147 -> 7322 producers in the template-resolver lot (664104285): the census resolves single-interpolation templates through their literal call sites -- 175 names gain their always-real producer (the 7 card namespaces of setPremiumCardVars plus setLegacyButtonHoverBgAlias); 17 of them were counted in this gate's read set. Measured by the gate.",
   "honesty": "El numero es la MEDIDA de hoy, no una meta. WO-DER-01 crea el instrumento; bajarlo es el trabajo de las WO-DER-02..04 y de los cortes por familia, que son las que dan productor a los nombres que hoy no lo tienen.",
-  "denominatorNote": "4780 -> 4779 in the control-size-sm lot (55feae6af): the retired rung's reads leave the census; measured by the gate.",
+  "denominatorNote": "4779 -> 4778 in the control-size-md lot (294eaba95): the retired rung's reads leave the census; measured by the gate.",
   "readClasses": {
     "law": "The ratchet was blind to every read outside engines/modern: the agnostic skin and the rest of the authored CSS that the base entrypoint imports under every engine, and literal var() reads inline in component TS/TSX, paint under Modern exactly like the Modern skin does. Measured 2026-09-25 at 6f5faa6f4 after WO-EVI-03 found 11 dead channels its tests pin that this ratchet could not see. Frozen engines (classic, rustic) stay out for the same reason as before; nothing else does.",
     "shape": "names -> { readers, family, owner, ownerProposal }. A read without producer that is not a row (or a new reader of a row) is anonymous and red; a row or reader that stopped being debt is red until deleted. No write mode: the ledger only shrinks by hand.",
@@ -350,6 +349,13 @@
           "from": "Q-DER06-RES option A",
           "disposition": "retired in both families at once under the Q-DER06-RES option-A ruling: the shape plane produces a factor, never an absolute rung; the chip target declares calc(2rem x density), the phone action 32px; byte-identical measured (2400 cells).",
           "mover": "control-size-sm lot (2026-09-26, 55feae6af)"
+        },
+        "--ds-control-size-md": {
+          "class": "sharedPaint",
+          "family": "active-filters-bar",
+          "from": "Q-DER06-RES option A (extended)",
+          "disposition": "retired in both families under the ruling's per-row extension: the shape plane is a factor, never an absolute rung; the phone-layout chip/toggles declare calc(2.5rem x density), the dropdown item 2.5rem; byte-identical over 1200 Chromium cells. After this lot no core source reads any --ds-control-size-* rung.",
+          "mover": "control-size-md lot (2026-09-26, 294eaba95)"
         }
       }
     },
@@ -358,7 +364,7 @@
       "measured": {
         "files": 259,
         "denominator": 2564,
-        "debt": 293,
+        "debt": 292,
         "reads": 375
       },
       "names": {
@@ -729,14 +735,6 @@
             "src/foundation/tokens/css/presentation/components/skin/compare/index.css"
           ],
           "family": "compare",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-control-size-md": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
-          ],
-          "family": "active-filters-bar",
           "owner": null,
           "ownerProposal": null
         },
