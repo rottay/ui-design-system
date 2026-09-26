@@ -94776,8 +94776,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 @container ds-list-toolbar (max-width: 480px) {
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__primary-action-mobile[data-part='primary-action-mobile'][data-part='primary-action-mobile'] {
-    inline-size: var(--ds-control-size-sm, 32px);
-    min-inline-size: var(--ds-control-size-sm, 32px);
+    /* No absolute control rung is ever produced (the shape plane is a factor). */
+    inline-size: 32px;
+    min-inline-size: 32px;
     padding-inline: 0;
   }
 
@@ -96375,9 +96376,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * producer -- `derivation/chrome/active-filters-bar` emits the ground, the
  * rule, the chips measure, the eyebrow's height and ink, both padding pairs
  * and the entrance duration at exactly the resting values written here as
- * fallbacks, so a tenant can move them. The two `--ds-control-size-*` rungs
- * the chip target reads are a kernel scale with no owner today and are this
- * cut's named residue, not channels for this deriver to grow into.
+ * fallbacks, so a tenant can move them. The `--ds-control-size-md` rung the
+ * coarse target reads is a kernel scale with no owner today and is this cut's
+ * named residue, not a channel for this deriver to grow into.
  *
  * REGION VOCABULARY: ground, rule, seam and rhythm read `--ds-toolbar-*` and
  * `--ds-list-shell-section-gap` UNDER the family's own channels, so a tenant
@@ -96420,8 +96421,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     --ds-toolbar-divider,
     var(--ds-color-border-subtle, var(--ds-color-border))
   );
+  /* The chip is a Tag, which follows density but not the control-height
+     factor; no absolute control rung is ever produced, so the rest is declared. */
   --_ds-active-filters-bar-chip-target: calc(
-    var(--ds-control-size-sm, 2rem) * var(--ds-density-effective-scale, 1)
+    2rem * var(--ds-density-effective-scale, 1)
   );
 
   /* The rail answers its own width: it mounts inside shells of very
