@@ -11,6 +11,7 @@ import { describe, expect, it, vi } from "vitest";
 import { ledgerOwnerOfLeaf } from "@/foundation/contracts/composition/tenants/themes/provenance";
 import { mergeThemePatches } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { sidebarToneToVariables } from "@/infrastructure/compilers/kernel/foundation/css/chrome-variables";
+import { verticalDefaultMode } from "@/infrastructure/compilers/kernel/foundation/modes";
 import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme/facade/runtime/compile";
 import { documentThemeIntent } from "@/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/document";
 import { draftPreviewThemeIntent } from "@/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/preview";
@@ -122,7 +123,10 @@ const ledgerOf = (intent: ReturnType<typeof compile>["intent"]) => intent.ledger
 describe("sidebar tone as a style row, through the v3 door", () => {
   it("covers both mode blocks, so the dark assertions are not vacuous", () => {
     const { compiled } = compile({ style: "tone-strong" });
-    const modes = new Set([compiled.colorScheme ?? "light", ...compiled.modeBlocks.map((block) => block.mode)]);
+    const modes = new Set([
+      compiled.colorScheme ?? verticalDefaultMode("bithire"),
+      ...compiled.modeBlocks.map((block) => block.mode),
+    ]);
     expect([...modes].sort()).toEqual(["dark", "light"]);
   });
 
