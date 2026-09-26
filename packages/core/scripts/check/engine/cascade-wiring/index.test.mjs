@@ -28,6 +28,7 @@ import {
   BASELINE_PATH,
   classifyCascadeWiring,
   collectFindings,
+  collectFoundationBaseRoots,
   reachesTerminalRoot,
   shapeFailures,
   varCalls,
@@ -237,6 +238,94 @@ test('rewiring an existing debt name to a root shrinks the debt and fails until 
   });
 });
 
+/* ---------------- regla (a) por pertenencia: las raices de foundation/base ---------------- */
+
+test('PERTENENCIA: una raiz de foundation/base leida pelada sale del denominador, no entra a la deuda', () => {
+  // `--ds-spacing-52` esta declarada solo en foundation/base y hoy ningun skin
+  // la lee: plantarla pelada es el caso limpio del defecto que --ds-z-fixed
+  // mostro en el arbol real.
+  const name = '--ds-spacing-52';
+  withPlantedCss(`.ds-cascade-ratchet-drill { margin: var(${name}); }\n`, (files) => {
+    const result = classifyCascadeWiring(files);
+    assert.ok(result.ownedRoots.includes(name), 'una raiz de la escala base es raiz aunque nadie la nombre como destino');
+    assert.ok(!result.denominator.includes(name), 'una raiz no es un canal: queda fuera del denominador');
+    assert.ok(!result.debt.includes(name));
+    assert.deepEqual(
+      collectFindings({ files }).filter((finding) => finding.includes('debt GREW')),
+      [],
+      'leer una raiz pelada no puede subir la deuda',
+    );
+  });
+  // El testigo vivo: la lectura pelada de back-top.
+  const live = classifyCascadeWiring();
+  assert.ok(live.ownedRoots.includes('--ds-z-fixed'));
+  assert.ok(!live.debt.includes('--ds-z-fixed'));
+});
+
+test('PERTENENCIA: un canal de componente declarado con literal y leido sin cadena SIGUE en deuda (§1.6)', () => {
+  const result = classifyCascadeWiring();
+  const roots = collectFoundationBaseRoots();
+  for (const name of ['--ds-qrcode-refresh-button-font-size', '--ds-floatbutton-badge-font-size']) {
+    assert.ok(!roots.has(name), `${name} es canal de componente, no raiz de la escala base`);
+    assert.ok(result.debt.includes(name), `${name} tiene productor pero ningun camino a raiz: es deuda`);
+  }
+});
+
+test('PERTENENCIA: un nombre sin productor sigue en deuda', () => {
+  // El canal del rustic congelado, y un huerfano plantado.
+  assert.ok(classifyCascadeWiring().debt.includes('--ds-calendar-radius'));
+  withPlantedCss('.ds-cascade-ratchet-drill { color: var(--ds-cascade-ratchet-drill-orphan); }\n', (files) => {
+    assert.ok(classifyCascadeWiring(files).debt.includes('--ds-cascade-ratchet-drill-orphan'));
+  });
+});
+
+test('PERTENENCIA: el tema puede re-declarar una raiz; un archivo de componente la convierte en canal', () => {
+  const sandbox = mkdtempSync(join(tmpdir(), 'cascade-base-roots-'));
+  const at = (rel, css) => {
+    const file = join(sandbox, 'src/foundation/tokens/css', rel);
+    mkdirSync(join(file, '..'), { recursive: true });
+    writeFileSync(file, css);
+    return file;
+  };
+  try {
+    const files = [
+      at('foundation/base/drill/index.css', ':root { --ds-drill-base-only: 1px; --ds-drill-base-theme: 1px; --ds-drill-base-component: 1px; }'),
+      at('foundation/themes/drill/index.css', ':root { --ds-drill-base-theme: 2px; --ds-drill-theme-only: 2px; }'),
+      at('presentation/components/drill/index.css', ':root { --ds-drill-base-component: 3px; }'),
+      at('foundation/base/drill/prose.css', '/* --ds-drill-comment-only: 1px; */'),
+    ];
+    const roots = collectFoundationBaseRoots(files);
+    assert.ok(roots.has('--ds-drill-base-only'));
+    assert.ok(roots.has('--ds-drill-base-theme'), 'un tema que re-declara el valor de una raiz no la convierte en canal');
+    assert.ok(!roots.has('--ds-drill-base-component'), 'declarada tambien en un componente: es canal');
+    assert.ok(!roots.has('--ds-drill-theme-only'), 'sin declaracion en la escala base no hay raiz por pertenencia');
+    assert.ok(!roots.has('--ds-drill-comment-only'), 'una declaracion en un comentario no es declaracion');
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+});
+
+test('MUTANTE: sin la clausula de pertenencia la raiz base vuelve a la deuda, y solo raices base se mueven', () => {
+  const name = '--ds-spacing-52';
+  withPlantedCss(`.ds-cascade-ratchet-drill { margin: var(${name}); }\n`, (files) => {
+    const off = classifyCascadeWiring(files, undefined, new Set());
+    assert.ok(off.debt.includes(name), 'sin la clausula, la lectura pelada de una raiz vuelve a contarse como deuda');
+    assert.ok(!classifyCascadeWiring(files).debt.includes(name));
+  });
+  // Conservacion: la clausula saca de la deuda SOLO raices de la escala base, y
+  // el arma transitiva se mueve exactamente por los mismos nombres.
+  const roots = collectFoundationBaseRoots();
+  const on = classifyCascadeWiring(undefined, undefined, roots);
+  const off = classifyCascadeWiring(undefined, undefined, new Set());
+  const left = off.debt.filter((name) => !on.debt.includes(name));
+  assert.ok(left.length > 0, 'el arbol tiene lecturas peladas de raices base: el mutante tiene que moverse');
+  assert.ok(left.includes('--ds-z-fixed'));
+  assert.deepEqual(on.debt.filter((name) => !off.debt.includes(name)), [], 'la clausula no puede meter nombres a la deuda');
+  for (const name of left) assert.ok(roots.has(name), `${name} salio de la deuda sin ser raiz base`);
+  assert.deepEqual(off.transitivelyUnwired.filter((name) => !on.transitivelyUnwired.includes(name)), left);
+  assert.deepEqual(on.denominator, off.denominator.filter((name) => !on.ownedRoots.includes(name)));
+});
+
 /* ---------------- invariantes de forma: el clasificador roto ---------------- */
 
 test('SHAPE: a root/ramp counted as debt fails (rule a broken)', () => {
@@ -265,6 +354,17 @@ test('SHAPE: a channel with a root-reaching fallback counted as debt fails (rule
     'has a fallback that reaches a root and must never be counted as debt',
     'la pintura que ya obedece la ley no puede contarse como deudora',
   );
+});
+
+test('SHAPE: a foundation-base root counted as debt fails (rule a by ownership broken)', () => {
+  const { failures } = shapeFailures({
+    denominator: ['--ds-z-fixed'],
+    debt: ['--ds-z-fixed'],
+    fallbackTargets: new Set(),
+    ownedRoots: ['--ds-z-fixed'],
+    reachesRoot: new Set(),
+  });
+  expectFinding(failures, 'is a foundation-base root and must never be counted as debt', 'una raiz base no es deuda');
 });
 
 test('the fallback is read to the BALANCED paren, not to the first comma', () => {

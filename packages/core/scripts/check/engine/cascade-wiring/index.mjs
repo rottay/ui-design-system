@@ -25,6 +25,13 @@
  *       a un canal huerfano un fallback a raiz -- mete esa raiz en el corpus y
  *       SUBIRIA el contador. Un ratchet que sube cuando arreglas algo no mide
  *       lo que dice medir.
+ *       Una raiz tambien se reconoce por PERTENENCIA, no solo por uso: un
+ *       nombre declarado en `foundation/base` (las escalas raiz) -- y fuera de
+ *       ahi a lo sumo re-declarado por un tema en `foundation/themes` -- es
+ *       raiz aunque ningun skin lo nombre como destino de fallback. Sin esto,
+ *       leer una raiz pelada (`z-index: var(--ds-z-fixed)`) la contaba como
+ *       canal de componente huerfano. Un canal de componente declarado con un
+ *       literal NO entra por aca: no es raiz y sigue siendo deuda (§1.6).
  *
  *   (b) UN FALLBACK FUNCIONAL QUE ALCANZA RAIZ CUENTA COMO CABLEADO, aunque la
  *       raiz venga envuelta: `var(--ds-x, color-mix(in srgb, var(--ds-raiz) 8%,
@@ -47,7 +54,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { collectSkinFiles } from '../../../libraries/engine/skins/files/index.mjs';
-import { collectChannelProducers } from '../../../libraries/tokens/producers/index.mjs';
+import { collectAuthoredStylesheets, collectChannelProducers } from '../../../libraries/tokens/producers/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const BASELINE_PATH = join(HERE, 'baseline/index.json');
@@ -87,9 +94,35 @@ export function* varCalls(text) {
 
 const DS_IN_FALLBACK = /var\(\s*(--ds-[a-zA-Z0-9_-]+)/g;
 
+const DECLARATION = /(--ds-[a-zA-Z0-9_-]+)\s*:/g;
+const FOUNDATION_BASE = '/tokens/css/foundation/base/';
+const FOUNDATION_THEMES = '/tokens/css/foundation/themes/';
+
+/**
+ * Las raices por PERTENENCIA de la regla (a): cada nombre con al menos una
+ * declaracion autorada en `foundation/base` y ninguna fuera de `foundation/base`
+ * o `foundation/themes` (un tema puede re-declarar el valor de una raiz; un
+ * archivo de componente que la declara la convierte en canal, y queda fuera).
+ * Lee el mismo corpus autorado que el censo de productores.
+ */
+export function collectFoundationBaseRoots(stylesheets = collectAuthoredStylesheets()) {
+  const inBase = new Set();
+  const outside = new Set();
+  for (const file of stylesheets) {
+    const posix = file.split('\\').join('/');
+    const owner = posix.includes(FOUNDATION_BASE) ? 'base' : posix.includes(FOUNDATION_THEMES) ? 'theme' : 'other';
+    for (const match of stripComments(readFileSync(file, 'utf8')).matchAll(DECLARATION)) {
+      if (owner === 'base') inBase.add(match[1]);
+      else if (owner === 'other') outside.add(match[1]);
+    }
+  }
+  return new Set([...inBase].filter((name) => !outside.has(name)));
+}
+
 /** La clasificacion completa, en una pasada sobre el corpus. */
-export function classifyCascadeWiring(files = collectSkinFiles(), producers) {
+export function classifyCascadeWiring(files = collectSkinFiles(), producers, baseRoots) {
   const producerSet = producers ?? collectChannelProducers().producers;
+  const foundationBaseRoots = baseRoots ?? collectFoundationBaseRoots();
   const read = new Set();
   const fallbackTargets = new Set();
   const reachesRoot = new Set();
@@ -113,8 +146,10 @@ export function classifyCascadeWiring(files = collectSkinFiles(), producers) {
     }
   }
 
-  // Regla (a): el denominador excluye los destinos.
-  const denominator = [...read].filter((name) => !fallbackTargets.has(name)).sort();
+  // Regla (a): el denominador excluye los destinos y las raices por pertenencia.
+  const ownedRoots = [...read].filter((name) => !fallbackTargets.has(name) && foundationBaseRoots.has(name)).sort();
+  const ownedRootSet = new Set(ownedRoots);
+  const denominator = [...read].filter((name) => !fallbackTargets.has(name) && !ownedRootSet.has(name)).sort();
   // Regla (b): cableado = algun sitio de lectura alcanza raiz.
   const debt = denominator.filter((name) => !reachesRoot.has(name));
   const transitivelyUnwired = denominator.filter(
@@ -126,6 +161,7 @@ export function classifyCascadeWiring(files = collectSkinFiles(), producers) {
     read: read.size,
     roots: fallbackTargets.size,
     fallbackTargets,
+    ownedRoots,
     fallbackEdges,
     reachesRoot,
     denominator,
@@ -175,6 +211,9 @@ export function shapeFailures(result) {
     // recablea bien, que es justo lo que este ratchet existe para no hacer.
     if (result.fallbackTargets?.has(name)) {
       failures.push(`shape: ${name} is a fallback destination (root/ramp) and must never be counted as debt`);
+    }
+    if (result.ownedRoots?.includes(name)) {
+      failures.push(`shape: ${name} is a foundation-base root and must never be counted as debt`);
     }
     // Invariante de la regla (b): si alcanza raiz, esta cableado. Contarlo como
     // deuda declararia deudora a la pintura que ya obedece la ley.
@@ -276,7 +315,7 @@ function main() {
   }
   console.log(
     `cascade-wiring-ratchet OK -- ${result.debt.length} names still unwired of ${result.denominator.length} ` +
-      `(${result.wired} reach a root; ${result.roots} roots/ramps excluded from the denominator; ` +
+      `(${result.wired} reach a root; ${result.roots} roots/ramps and ${result.ownedRoots.length} foundation-base roots excluded from the denominator; ` +
       `${result.files} skin files)`,
   );
   console.log(
