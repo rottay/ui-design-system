@@ -7275,7 +7275,7 @@
       "lane": "family-cuts",
       "order": 13,
       "size": "M",
-      "status": "todo",
+      "status": "in-progress",
       "dependsOn": [
         "WO-FAM-06",
         "WO-FAM-07",
@@ -7288,13 +7288,18 @@
         "audit-2026-09-05"
       ],
       "notes": "wave 4; closes F-81 (partial)",
-      "claimedBy": null,
-      "claimedAt": null,
+      "claimedBy": "Kimi K3",
+      "claimedAt": "2026-09-26",
       "progressLog": [
         {
           "at": "2026-09-12 18:50",
           "by": "Kimi K3",
           "note": "G103-02 HANDOFF (audit/103-day-direction-2026-09-12/gates.md): this WO receives 4 pinned channels from INV-07: --ds-posture-container-compact-max, --ds-posture-container-standard-max, --ds-posture-id, --ds-posture-span-bias (reason: posture consumed as data by the solver; needs a productive route or retirement in the adaptive kit). EXIT CONDITION per channel: demonstrate the effect route OR retire from contract/emission, removing the pin in the same lot; explicit adjudication if data-only."
+        },
+        {
+          "at": "2026-09-26 10:10",
+          "by": "kimi-dt",
+          "note": "CLAIM + pre-flight (scout receipt-fam12-p0-scout-opus.json) + packet 1 landed 730666676. RULINGS DT: (1) La redaccion 'container-query posture' de la WO se cumple con la postura medida por el runtime (el adapt slot de WO-INV-07: la postura se consume como DATO por el solver, la propia ley G103-02) -- NO se crea un @container nuevo. (2) La aceptacion grep minmax=0 se lee contra la POBLACION del kit (sus 4 patterns y sus skins, los Files de la WO): de los 41 hits medidos, 6 son del codigo/comentarios del kit (mueren en los paquetes 2-4), 7 en tests de stats-grid (a su verdad o retiro justificado), 14 en structures de OTRAS WOs (sus cortes son sus duenios), 7 en engines congelados (intocables por ley) y 7 en stories (su lote propio) -- quedan registrados como fuera-de-alcance con razon, no absorbidos ni perseguidos. (3) columns/minColumnWidth legacy se ignoran cuando autoFit esta presente; templateColumns explicito gana siempre. (4) La receta del literal de la WO (minmax(var(--ds-card-min-inline-size), 1fr)) es impossible con un preset de superficie: la forma real lleva el guard min(100%, ...) y el factor card-scale en la grilla (ruling del packet 1). G103-02 adjudicada para su lote: RETIRO de los 4 canales (--ds-posture-container-compact-max/-standard-max, --ds-posture-id, --ds-posture-span-bias) -- productor unico (derivation/responsive), CERO lectores medidos en src/showroom/3 apps, y la emision contradice la ley escrita de la propia capacidad (capabilities/index.ts:965: 'the ladder travels as DATA ... never a CSS channel'); la postura llega al layout por la ruta de datos (normalizedAppearance -> useContainerPosture/spanBias -> data-posture) que ya funciona. La ejecucion es un lote propio con ventana serializada (mueve el digest de slots, theme-graph y artefactos). Paquetes: P1 (730666676), P2 grid-view+gallery-view (en curso), P3 stats-grid Modern (en curso), P4a widget-board catalogo, P4b tier 639/839 (espera decision owner/coordinador: unificar con la escalera de postura o diferir a FAM-13), lote G103-02 al final."
         }
       ]
     },
