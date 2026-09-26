@@ -70,7 +70,21 @@ const SITES = {
     declaration: "padding",
     properties: ["padding-top", "padding-left"],
   },
+  // Read by the Grid skin's auto-fit recipe: the resolved track list of eight
+  // cells in a fixed 66rem box moves with the footprint the scope answers.
+  "--ds-card-min-inline-size": {
+    site: "[data-probe='auto-fit'] > [data-component='grid']",
+    declaration: "grid-template-columns",
+    properties: ["grid-template-columns"],
+  },
 } as const;
+
+const EIGHT_CELLS = "<div></div>".repeat(8);
+const AUTO_FIT_SITE = [
+  `<div data-probe="auto-fit" style="inline-size: 66rem">`,
+  `<div class="rottay-grid rottay-grid--modern" data-part="root" data-component="grid" data-auto-fit="true">${EIGHT_CELLS}</div>`,
+  `</div>`,
+].join("");
 
 type Channel = keyof typeof SITES;
 const CHANNELS = Object.keys(SITES) as Channel[];
@@ -94,7 +108,9 @@ const BOUNDED: readonly Scope[] = ["compact", "comfortable", "spacious", "nested
 const UNBOUNDED: readonly Scope[] = ["rest", "arabic"];
 
 const oracleOf = (channel: Channel) =>
-  `<div data-oracle="${channel}" style="${SITES[channel].declaration}: ${PRODUCED[channel]}"></div>`;
+  channel === "--ds-card-min-inline-size"
+    ? `<div style="inline-size: 66rem"><div data-oracle="${channel}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(${PRODUCED[channel]} * var(--ds-card-scale, 1))), 1fr))">${EIGHT_CELLS}</div></div>`
+    : `<div data-oracle="${channel}" style="${SITES[channel].declaration}: ${PRODUCED[channel]}"></div>`;
 
 /** The card anatomy the skin selects -- a loading card, and a resting card composing the header
  *  and footer compounds -- plus one oracle per channel painting its expression in place. */
@@ -112,6 +128,7 @@ function card(rootStyle = ""): string {
     `<div class="ds-card-footer" data-part="footer" data-padding="md" data-align="end">`,
     `<div data-part="actions"><button type="button">Go</button></div></div>`,
     `</div></div>`,
+    AUTO_FIT_SITE,
     CHANNELS.map(oracleOf).join(""),
     `</div>`,
   ].join("");

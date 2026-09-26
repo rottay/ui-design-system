@@ -186,6 +186,7 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
     templateRows,
     templateAreas,
     minColumnWidth,
+    autoFit,
     autoFlow,
     autoColumns,
     autoRows,
@@ -209,7 +210,10 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
   // stays here is the track geometry, which is arbitrary by contract.
   const computedStyle: CSSProperties = {};
   if (templateColumns) computedStyle.gridTemplateColumns = templateColumns;
-  else if (minColumnWidth !== undefined) {
+  else if (autoFit) {
+    // The auto-fit tracks are the skin's (`data-auto-fit`): an inline template
+    // would outrank the compact-posture single column.
+  } else if (minColumnWidth !== undefined) {
     const trackMinimum =
       typeof minColumnWidth === "number"
         ? Number.isFinite(minColumnWidth) && minColumnWidth >= 0
@@ -393,6 +397,8 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
     templateRows: _templateRows,
     templateAreas: _templateAreas,
     minColumnWidth,
+    autoFit,
+    minItem,
     autoFlow: _autoFlow,
     autoColumns: _autoColumns,
     autoRows: _autoRows,
@@ -429,7 +435,7 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
   });
   const gridId = `grid-${reactId.replace(/:/g, "")}`;
   const hasResponsiveColumns =
-    minColumnWidth === undefined && isResponsiveGridValue(columns);
+    !autoFit && minColumnWidth === undefined && isResponsiveGridValue(columns);
   const hasResponsiveRows = isResponsiveGridValue(rows);
   const needsResponsiveCSS = hasResponsiveColumns || hasResponsiveRows;
 
@@ -498,6 +504,8 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
       style: computedStyle,
       id,
       "data-posture": postureAttribute,
+      "data-auto-fit": autoFit ? "true" : undefined,
+      "data-min-item": autoFit ? minItem : undefined,
       "data-inline": props.inline ? "true" : undefined,
       "data-component": "grid",
       "data-gap-preset": gridGapPresetSpelling(

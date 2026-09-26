@@ -100,6 +100,45 @@
   row-gap: calc(var(--_ds-grid-row-gap) * var(--ds-rhythm-effective-scale, 1));
 }
 
+/* ---- auto-fit: empty tracks collapse, so a larger card preset absorbs the free
+        space; the contract's compact container posture takes one column ---- */
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'] {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(
+      min(
+        100%,
+        calc(
+          var(--ds-card-min-inline-size, calc(16rem * var(--ds-density-effective-scale, 1) * var(--ds-type-scale, 1)))
+          * var(--ds-card-scale, var(--ds-card-scale-md, 1))
+        )
+      ),
+      1fr
+    )
+  );
+}
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'][data-min-item='sm'] {
+  --ds-card-scale: var(--ds-card-scale-sm, calc(var(--ds-card-scale-md, 1) * 0.875));
+}
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'][data-min-item='md'] {
+  --ds-card-scale: var(--ds-card-scale-md, 1);
+}
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'][data-min-item='lg'] {
+  --ds-card-scale: var(--ds-card-scale-lg, calc(var(--ds-card-scale-md, 1) * 1.25));
+}
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'][data-min-item='xl'] {
+  --ds-card-scale: var(--ds-card-scale-xl, calc(var(--ds-card-scale-md, 1) * 1.5));
+}
+
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-auto-fit='true'][data-posture~='compact'] {
+  grid-template-columns: 100%;
+}
+
 /* ---- the cell ----
  * `grid-cell`, not `cell`: `cell` belongs to the table family, and a Grid.Item
  * nested inside a table would otherwise be reached by its descendant rules and

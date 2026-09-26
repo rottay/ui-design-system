@@ -2,7 +2,9 @@
  * @fileoverview The card family: its size steps on the type roles, the toned
  * title inks on the palette's deep steps, the header and image compounds on
  * the edge weight, the elevation scale and the spacing ramp, the reserved
- * loading height, and the runtime image channels with their resting defaults.
+ * loading height, the runtime image channels with their resting defaults, and
+ * the auto-fit footprint: a base the tenant moves only through density and the
+ * type scale, times an instance/surface preset that is never a tenant decision.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/card
  * @category Compilers
@@ -16,7 +18,7 @@ export const cardChromeDeriver: FamilyDeriver = {
   family: "card",
   rank: "derived",
   scopes: ["density"],
-  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.borderStyle", "surfaces.radiusScale", "typography.roles", "density"],
+  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.borderStyle", "surfaces.radiusScale", "typography.roles", "typography.scale", "density"],
   produces: [
     "--ds-card-title-font-size-sm",
     "--ds-card-title-font-size-lg",
@@ -48,6 +50,12 @@ export const cardChromeDeriver: FamilyDeriver = {
     "--ds-card-image-radius-lg",
     "--ds-card-image-placeholder-fill",
     "--ds-card-image-placeholder-ink",
+    "--ds-card-min-inline-size",
+    "--ds-card-scale",
+    "--ds-card-scale-sm",
+    "--ds-card-scale-md",
+    "--ds-card-scale-lg",
+    "--ds-card-scale-xl",
   ],
   derive: () => deriveCardChannels(),
 };
@@ -89,5 +97,15 @@ export function deriveCardChannels(): Record<string, string> {
   vars["--ds-card-image-radius-lg"] = "var(--ds-radius-lg)";
   vars["--ds-card-image-placeholder-fill"] = "var(--ds-card-image-placeholder-bg, var(--ds-surface-inset))";
   vars["--ds-card-image-placeholder-ink"] = "var(--ds-card-image-placeholder-color, var(--ds-color-text-tertiary))";
+  // The footprint: a larger preset asks for a wider track, so an auto-fit row
+  // holds fewer, larger cards instead of leaving an orphan gap.
+  vars["--ds-card-min-inline-size"] =
+    "calc(16rem * var(--ds-density-effective-scale, 1) * var(--ds-type-scale, 1))";
+  // Every preset is a multiple of the md base, so each chain lands on a produced root.
+  vars["--ds-card-scale"] = "var(--ds-card-scale-md, 1)";
+  vars["--ds-card-scale-sm"] = "calc(var(--ds-card-scale-md, 1) * 0.875)";
+  vars["--ds-card-scale-md"] = "1";
+  vars["--ds-card-scale-lg"] = "calc(var(--ds-card-scale-md, 1) * 1.25)";
+  vars["--ds-card-scale-xl"] = "calc(var(--ds-card-scale-md, 1) * 1.5)";
   return vars;
 }

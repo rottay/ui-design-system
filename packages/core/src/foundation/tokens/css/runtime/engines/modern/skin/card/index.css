@@ -303,6 +303,20 @@
   --ds-card-instance-padding: calc(var(--ds-card-padding-xl, var(--ds-card-xl-padding)) * var(--ds-rhythm-effective-scale, 1));
 }
 
+/* footprint preset: the instance states the one factor an auto-fit grid reads */
+.ds-card.ds-card--modern[data-part='root'][data-scale='sm'] {
+  --ds-card-scale: var(--ds-card-scale-sm, calc(var(--ds-card-scale-md, 1) * 0.875));
+}
+.ds-card.ds-card--modern[data-part='root'][data-scale='md'] {
+  --ds-card-scale: var(--ds-card-scale-md, 1);
+}
+.ds-card.ds-card--modern[data-part='root'][data-scale='lg'] {
+  --ds-card-scale: var(--ds-card-scale-lg, calc(var(--ds-card-scale-md, 1) * 1.25));
+}
+.ds-card.ds-card--modern[data-part='root'][data-scale='xl'] {
+  --ds-card-scale: var(--ds-card-scale-xl, calc(var(--ds-card-scale-md, 1) * 1.5));
+}
+
 /* size axis: compact sizes de-escalate the copy, amplified sizes scale it up;
    the tenant's explicit --ds-card-*-font-size stays each rule's fallback */
 .ds-card.ds-card--modern[data-part='root'][data-size='xs'],

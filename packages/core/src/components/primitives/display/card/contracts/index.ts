@@ -44,6 +44,12 @@ import type { Adapt } from '../../../../../foundation/contracts/kernel/adaptatio
 export type CardSize = Size;
 
 /**
+ * The footprint preset a card claims in an auto-fit grid. Instance or surface
+ * level (a Grid's `minItem` takes the same steps); never a tenant decision.
+ */
+export type CardScale = 'sm' | 'md' | 'lg' | 'xl';
+
+/**
  * Card variants - specific to Card component.
  */
 export type CardVariant = 'elevated' | 'outlined' | 'filled' | 'ghost';
@@ -75,6 +81,12 @@ export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChi
    * @default 'md'
    */
   size?: CardSize;
+
+  /**
+   * Footprint preset: sets `--ds-card-scale` on this card and nothing else. The
+   * tenant moves the footprint only through density and the type scale.
+   */
+  scale?: CardScale;
 
   /**
    * Card visual variant.

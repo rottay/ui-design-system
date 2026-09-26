@@ -82,6 +82,9 @@ export type GridColumnsValue =
  */
 export type GridTrackTemplate = string & {};
 
+/** The card footprint presets an auto-fit grid sizes its tracks for. */
+export type GridMinItem = "sm" | "md" | "lg" | "xl";
+
 /**
  * Grid columns prop type - a count, a keyword, an explicit track list, or a
  * responsive object of any of those.
@@ -274,6 +277,19 @@ export interface GridProps
    * supplied), Modern creates an overflow-safe auto-fit grid.
    */
   minColumnWidth?: React.CSSProperties["minWidth"];
+  /**
+   * Lays the tracks out with the card footprint recipe: as many columns as fit
+   * `--ds-card-min-inline-size` x `--ds-card-scale`, the row always filled, and
+   * one column in the container's compact posture. An explicit
+   * `templateColumns` still wins; `columns` and `minColumnWidth` are ignored.
+   */
+  autoFit?: boolean;
+  /**
+   * The card footprint preset the auto-fit tracks are sized for; it sets
+   * `--ds-card-scale` on the grid, which the cards inside inherit. Instance or
+   * surface level, never a tenant decision.
+   */
+  minItem?: GridMinItem;
 
   /**
    * CSS grid-auto-flow value

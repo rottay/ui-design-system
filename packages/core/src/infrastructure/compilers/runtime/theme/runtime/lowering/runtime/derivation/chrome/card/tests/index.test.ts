@@ -93,6 +93,10 @@ const DERIVER_WIRED: Record<string, string> = {
   "--ds-card-title-font-size-sm": "var(--ds-type-body-font-size)",
   "--ds-card-body-font-size-sm": "var(--ds-type-supporting-font-size)",
   "--ds-card-title-font-size-lg": "var(--ds-type-section-title-font-size)",
+  "--ds-card-scale-sm": "calc(var(--ds-card-scale-md, 1) * 0.875)",
+  "--ds-card-scale-md": "1",
+  "--ds-card-scale-lg": "calc(var(--ds-card-scale-md, 1) * 1.25)",
+  "--ds-card-scale-xl": "calc(var(--ds-card-scale-md, 1) * 1.5)",
 };
 
 /** Channels the card constants own; the deriver must not restate them. */
@@ -192,6 +196,58 @@ describe("chrome/card", () => {
         expect(result.provenance.get(channel)?.rank).toBe(rank);
       }
     }
+  });
+});
+
+/* ---- the footprint: the channels the Grid skin's auto-fit recipe reads ---- */
+
+const GRID_SKIN = readFileSync(
+  resolve(process.cwd(), "src/foundation/tokens/css/runtime/engines/modern/skin/grid/index.css"),
+  "utf8"
+).replace(/\/\*[\s\S]*?\*\//g, "");
+
+describe("chrome/card footprint", () => {
+  const FOOTPRINT: Record<string, string> = {
+    "--ds-card-min-inline-size": "calc(16rem * var(--ds-density-effective-scale, 1) * var(--ds-type-scale, 1))",
+    "--ds-card-scale": "var(--ds-card-scale-md, 1)",
+    "--ds-card-scale-sm": "calc(var(--ds-card-scale-md, 1) * 0.875)",
+    "--ds-card-scale-md": "1",
+    "--ds-card-scale-lg": "calc(var(--ds-card-scale-md, 1) * 1.25)",
+    "--ds-card-scale-xl": "calc(var(--ds-card-scale-md, 1) * 1.5)",
+  };
+
+  it("rests every footprint channel at the one fallback the Grid skin reads it with", () => {
+    for (const { label, theme } of FIXTURES) {
+      const derived = cardChromeDeriver.derive(buildLoweringContext({ theme }), {});
+      for (const [channel, value] of Object.entries(FOOTPRINT)) {
+        expect(derived[channel], `${label} ${channel}`).toBe(value);
+        expect({ channel, fallbacks: fallbacksIn(GRID_SKIN, channel) }).toEqual({
+          channel,
+          fallbacks: [normalise(value)],
+        });
+      }
+    }
+  });
+
+  it("moves the footprint by density and the type scale only, never the rhythm dial", () => {
+    const derived = cardChromeDeriver.derive(context(), {})["--ds-card-min-inline-size"];
+    expect(derived).toContain("var(--ds-density-effective-scale, 1)");
+    expect(derived).toContain("var(--ds-type-scale, 1)");
+    expect(derived).not.toMatch(/rhythm/);
+    expect(cardChromeDeriver.consumes).toEqual(expect.arrayContaining(["density", "typography.scale"]));
+  });
+
+  it("orders the presets so a larger one always claims a wider track", () => {
+    const derived = cardChromeDeriver.derive(context(), {});
+    const md = Number(derived["--ds-card-scale-md"]);
+    // A step is the md base times its multiplier; resolve it against the base the chain names.
+    const resolve = (value: string) => {
+      const relative = /^calc\(var\(--ds-card-scale-md, 1\) \* ([0-9.]+)\)$/.exec(value);
+      return relative ? md * Number(relative[1]) : Number(value);
+    };
+    const steps = ["sm", "md", "lg", "xl"].map((step) => resolve(derived[`--ds-card-scale-${step}`]!));
+    expect(steps).toEqual([0.875, 1, 1.25, 1.5]);
+    expect(derived["--ds-card-scale"]).toBe("var(--ds-card-scale-md, 1)");
   });
 });
 
