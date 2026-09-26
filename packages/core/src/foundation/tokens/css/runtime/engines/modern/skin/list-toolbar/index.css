@@ -535,7 +535,8 @@
   background: transparent;
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
   outline: none;
-  min-block-size: var(--ds-control-size-md, 2.5rem);
+  /* No absolute control rung is ever produced (the shape plane is a factor). */
+  min-block-size: 2.5rem;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern

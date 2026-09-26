@@ -182,6 +182,17 @@ describe("ActiveFiltersBar skin reachability", () => {
       (m) => m[1]!.replace(/\s+/g, " ").trim()
     );
     expect(target).toEqual(["calc( 2rem * var(--ds-density-effective-scale, 1) )"]);
+
+    // The phone posture raises the chips and both toggles to one 2.5rem target.
+    const phone = rules.filter(
+      (r) =>
+        r.conditions.includes("max-width: 30rem") &&
+        r.selector.includes('[data-part="less-toggle"]') &&
+        "min-block-size" in r.decls
+    );
+    expect(phone.map((r) => r.decls["min-block-size"]!.replace(/\s+/g, " ").trim())).toEqual([
+      "calc( 2.5rem * var(--ds-density-effective-scale, 1) )",
+    ]);
   });
 
   it("reads the same region channels as the sibling toolbar", () => {
