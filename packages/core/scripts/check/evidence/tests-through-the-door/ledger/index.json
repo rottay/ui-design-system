@@ -3,7 +3,7 @@
   "workOrder": "WO-EVI-03",
   "finding": "F-48",
   "law": "Each census equals its ledger in both directions: a new row is red (route the test through the door instead), and a row the tree no longer carries is red until its exit is written here. The ledger only shrinks.",
-  "measuredAt": "2026-09-26 @ 9e89963bf + FAM-11 x EVI-03 working tree",
+  "measuredAt": "2026-09-26 @ 664104285 working tree",
   "harnessConsumers": {
     "owner": "WO-EVI-03",
     "target": 0,
@@ -327,21 +327,16 @@
           "name": "--ds-page-header-subtitle-max-width",
           "exit": "retired: nothing ever produced the shared name and FAM-11 C had measured and refused production ('one name, two rests'); the page-shell skin declares max-width: 72ch directly. collection-header keeps its read at 45rem -- FAM-10's debt, still counted by the RWP census with its owner named",
           "mover": "WO-FAM-11 x EVI-03 lot (2026-09-26, a21f312ff; paint byte-identical, 792 Chromium cells, receipt-fam11-evi03-rows-opus.json)"
+        },
+        {
+          "file": "core/src/components/structures/shell/surface-chrome/tests/SurfaceChrome.cut.test.tsx",
+          "name": "--ds-workspace-card-icon-bg",
+          "exit": "an instrument false positive, cured at the instrument: the name IS produced -- the chrome compiler emits it when a tenant sets chrome.workspaceCard.iconBg (setPremiumCardVars(vars, 'workspace-card', ...), chrome-variables:2815, name built from a template at :1083), and the shared producers census now resolves single-interpolation templates through their literal call sites (664104285, resolveThroughLiteralCallSites, fail-closed). Confirmed with a chromeToVariables probe; the hooks contract lists it as tenantChannel.",
+          "mover": "template-resolver lot (2026-09-26, 664104285, receipt-template-producer-resolver-opus.json)"
         }
       ]
     },
     "rows": [
-      {
-        "file": "core/src/components/structures/shell/surface-chrome/tests/SurfaceChrome.cut.test.tsx",
-        "name": "--ds-workspace-card-icon-bg",
-        "occurrences": 1,
-        "readAt": "css/presentation/components/skin/surface-section-card/index.css",
-        "rwpDebt": true,
-        "class": "cut-residue",
-        "owner": "WO-FAM-11",
-        "family": "surface-chrome",
-        "reason": "read by css/presentation/components/skin/surface-section-card/index.css with no producer; counted in the surface-chrome row of the family-cut baseline, whose cut owns its readWithoutProducer arm"
-      },
       {
         "file": "core/src/components/structures/workspace/active-filters-bar/tests/ActiveFiltersBar.skin-reachability.test.tsx",
         "name": "--ds-control-size-sm",

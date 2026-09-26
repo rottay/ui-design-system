@@ -288,6 +288,42 @@ const EXITS = Object.freeze({
   '--ds-kbd-font-family': 'sharedPaint',
 });
 
+/* The two ways a name leaves the names ledger. EXITS: the read was retired and
+ * the name must stay unproduced, or the exit was hiding a producer. TEMPLATE_EXITS:
+ * the name was ALWAYS produced -- the chrome compiler's card templates emit it --
+ * and the census only learned to see it in 664104285; those leave by GAINING a
+ * visible producer, which is the opposite event and is checked as such. */
+const TEMPLATE_EXITS = Object.freeze({
+  '--ds-workspace-card-icon-bg': 'sharedPaint',
+  '--ds-workspace-card-icon-border': 'sharedPaint',
+  '--ds-workspace-card-icon-color': 'sharedPaint',
+  '--ds-collection-card-depth': 'sharedPaint',
+  '--ds-collection-card-gap': 'sharedPaint',
+  '--ds-collection-card-glass-bg': 'sharedPaint',
+  '--ds-collection-card-grid-bg': 'sharedPaint',
+  '--ds-collection-card-grid-size': 'sharedPaint',
+  '--ds-collection-card-hover-transform': 'sharedPaint',
+  '--ds-collection-card-min-height': 'sharedPaint',
+  '--ds-collection-card-overlay': 'sharedPaint',
+  '--ds-collection-card-sheen': 'sharedPaint',
+  '--ds-collection-card-transition': 'sharedPaint',
+  '--ds-metric-card-body-color': 'sharedPaint',
+  '--ds-metric-card-footer-bg': 'sharedPaint',
+  '--ds-metric-card-footer-border': 'sharedPaint',
+  '--ds-metric-card-footer-color': 'sharedPaint',
+  '--ds-metric-card-gap': 'sharedPaint',
+  '--ds-metric-card-glass-bg': 'sharedPaint',
+  '--ds-metric-card-grid-bg': 'sharedPaint',
+  '--ds-metric-card-grid-line': 'sharedPaint',
+  '--ds-metric-card-grid-size': 'sharedPaint',
+  '--ds-metric-card-hover-transform': 'sharedPaint',
+  '--ds-metric-card-overlay': 'sharedPaint',
+  '--ds-metric-card-status-bg': 'sharedPaint',
+  '--ds-metric-card-status-border': 'sharedPaint',
+  '--ds-metric-card-status-color': 'sharedPaint',
+  '--ds-metric-card-transition': 'sharedPaint',
+});
+
 const readBaseline = () => JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
 
 /** Planta archivos en una sandbox con forma de paquete y devuelve su raiz. */
@@ -337,15 +373,23 @@ test('the remaining WO-EVI-03 rows are named one by one in the ledger, each with
   }
 });
 
-test('the fourteen exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
+test('the 42 exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
   const classes = readBaseline().readClasses;
   const shared = classifyReadClass(collectSharedPaintFiles(), 'css', PRODUCERS);
   const inline = classifyReadClass(collectComponentInlineFiles(), 'script', PRODUCERS);
-  assert.deepEqual(Object.keys(classes.exits.rows).sort(), Object.keys(EXITS).sort());
+  assert.deepEqual(Object.keys(classes.exits.rows).sort(), [...Object.keys(EXITS), ...Object.keys(TEMPLATE_EXITS)].sort());
   for (const [name, cls] of Object.entries(EXITS)) {
     assert.ok(!classes.sharedPaint.names[name] && !classes.componentInline.names[name], `${name} is no longer a row`);
     assert.ok(!shared.debt[name] && !inline.debt[name], `${name} is no longer read without a producer`);
     assert.ok(!PRODUCERS.has(name), `${name} left by losing its read, not by gaining a producer`);
+    const exit = classes.exits.rows[name];
+    assert.equal(exit.class, cls);
+    assert.ok(exit.disposition?.trim() && exit.mover?.trim(), `${name} carries its disposition and mover`);
+  }
+  for (const [name, cls] of Object.entries(TEMPLATE_EXITS)) {
+    assert.ok(!classes.sharedPaint.names[name] && !classes.componentInline.names[name], `${name} is no longer a row`);
+    assert.ok(!shared.debt[name] && !inline.debt[name], `${name} is no longer read without a producer`);
+    assert.ok(PRODUCERS.has(name), `${name} left by GAINING its visible producer (the template, 664104285)`);
     const exit = classes.exits.rows[name];
     assert.equal(exit.class, cls);
     assert.ok(exit.disposition?.trim() && exit.mover?.trim(), `${name} carries its disposition and mover`);

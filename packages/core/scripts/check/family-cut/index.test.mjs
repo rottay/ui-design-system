@@ -2686,10 +2686,15 @@ test("PLANT: a `skins` pin naming another family's real paint turns the row red"
   // The pin decides which paint IS the family, so a wrong one pins fiction at a
   // number the gate then defends. Every swap below names a skin that really
   // exists: the drill is the WRONG file, not a missing one, which is the case
-  // the `planted-nothing` drill above already owns.
+  // the `planted-nothing` drill above already owns. The original first swap
+  // (`workspace-shell` <- `surface-section-card`) retired on 2026-09-26: its
+  // discriminant was the section card's three phantom reads, and 664104285
+  // showed them produced (the chrome card templates), so that swap can no
+  // longer tell the rows apart -- `page-shell` and `cockpit-header` carry the
+  // discriminant now.
   for (const [family, skins] of [
-    ['workspace-shell', ['surface-section-card']],
-    ['surface-chrome', ['collection-shell']],
+    ['workspace-shell', ['page-shell']],
+    ['surface-chrome', ['cockpit-header']],
     ['workspace-shell', ['app-shell']],
     ['surface-chrome', ['page-shell']],
   ]) {

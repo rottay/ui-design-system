@@ -5,9 +5,9 @@
   "producer": "declarado en el CSS autorado (src/foundation/tokens/css, src/components) o emitido por el compilador -- el registro de derivacion, el kernel (src/infrastructure/compilers/kernel) o lowering/foundation -- libraries/tokens/producers, el mismo conjunto que usa el arma transitiva de cascade-wiring",
   "corpus": "libraries/engine/skins/files/collectSkinFiles() filtrado a /engines/modern/ -- un solo walker, importado",
   "denominator": 4780,
-  "produced": 4340,
-  "debt": 440,
-  "producers": 7147,
+  "produced": 4357,
+  "debt": 423,
+  "producers": 7322,
   "modernSkinFiles": 124,
   "namedResidue": {
     "list-toolbar": {
@@ -40,10 +40,10 @@
     }
   },
   "residueNote": "17 list-toolbar readWithoutProducer pins removed on 2026-09-23 (owner checkpoint: the DT signs this removal on the evidence below; the brief named 6, the gate named 17 -- the 6 were the first six of its alphabetical output). Each removed name is produced today and re-enters as `GREW` the moment it loses its producer (drill RESIDUE ruled exits). Remaining pins: --ds-control-size-md, --ds-control-size-sm, --ds-filter-pill-radius. Owning lots: 08f70e4fd (fix(core): list-toolbar's 16 unproduced reads derive from decisions) gives derivation/chrome/toolbar the 16 --ds-toolbar-* channels; 85cc1085b (data-table's unproduced reads get their producers) gives derivation/chrome/filter-chip --ds-filter-chip-radius as 'the list-toolbar lot's companion edit'. Audit trail: Fable (claude-fable-5-1, session 3711c4b3, .tmp/dispatch-2026-09-17/receipt-fam08-rwp-fable.json, 2026-09-19) -- 08f70e4fd ACCEPT ('byte equality holds', 'control-gap split holds'); 85cc1085b CHANGES on two data-table channels, repaired in fa2a4fff9, with 'Filter-chip radius is correct: its expansion is byte-equal to the ladder's control rung'; registry trail kimi-dt 2026-09-19 17:43. (A) CLOSED, the pin's objection cured -- --ds-toolbar-control-radius, --ds-toolbar-controls-radius, --ds-toolbar-icon-radius, --ds-toolbar-mobile-actions-radius, --ds-toolbar-mobile-rail-radius, --ds-toolbar-saved-views-radius (08f70e4fd) and --ds-filter-chip-radius (85cc1085b): produced at the EXPANSION of the --ds-list-toolbar-radius-{control,inner} ladder, not the element-scoped alias, so the root no longer falls to --ds-radius-sm; the ladder is declared once (skin/list-toolbar :47-53) with no scope variant, so the root expansion is byte-equal in every scope. (B) CLOSED, inert -- --ds-toolbar-sheen-opacity (08f70e4fd): produced at 0, the skin fallback; the pin itself stated a 0 producer is inert, and the open paint decision (above 0 turns the sheen on) was not taken. (C) OPEN SCOPE EXPOSURE, not ruled -- --ds-toolbar-compact-padding, --ds-toolbar-controls-gap, --ds-toolbar-filter-strip-padding, --ds-toolbar-min-height, --ds-toolbar-phone-filter-strip-padding, --ds-toolbar-phone-padding, --ds-toolbar-title-gap (the density-ramp pins) and --ds-toolbar-control-gap (Q-B7-7; its split holds, but both rungs read --ds-spacing-*): produced byte-equal to the skin fallback text, but declared on the tenant artifact root, where --ds-density-effective-scale is substituted, so a nested [data-density]:not(:root) scope (foundation/base/density :37-47) no longer rescales them -- exactly the paint change the pins recorded. Fable measured it on the landed lot (min-height under a local compact scope 48px -> 60px) and routed it as 'a law question for the DT'; no ruling is on record (registry, commit trail, evidence/owner-decisions-2026-09-18), and the sibling data-table lot got the per-posture repair (fa2a4fff9) while the toolbar did not. --ds-toolbar-title-letter-spacing (the language-scope pin, R1 option a): same mechanism -- produced as var(--ds-type-section-title-letter-spacing, -0.015em) at the root, so the element-level :lang(ar) override (foundation/responsive/language-arabic :126) no longer reaches a nested lang=\"ar\" subtree; Fable's audit checked byte-equality only and did not address the language scope. These nine leave the pin list because the gate cannot express 'produced but scope-exposed'; they are routed to the DT/owner as the density/language law question, not closed by this removal.",
-  "debtNote": "441 -> 440 in the FAM-11 x EVI-03 lot (a21f312ff): --ds-page-header-subtitle-max-width's read retired (page-shell declares 72ch directly, 'one name, two rests' measured and refused); --ds-size-touch-target re-pointed to the live --ds-touch-target-min in action-dock. Measured by the gate (SHRANK).",
-  "producersNote": "4338 -> 4340 produced and 7146 -> 7147 producers in the font-size produce lot (63312c844): --ds-qrcode-refresh-button-font-size (presentation/components/qrcode) and --ds-floatbutton-badge-font-size (themes/default FLOAT BUTTON block) gain a producer each. Measured by the gate.",
+  "debtNote": "440 -> 423 in the template-resolver lot (664104285): 17 --ds-workspace-card-* names were always produced (setPremiumCardVars's chrome.* call sites) and the census finally resolves the template through literal call sites -- instrument catch-up, no paint change. Measured by the gate (SHRANK).",
+  "producersNote": "4340 -> 4357 produced and 7147 -> 7322 producers in the template-resolver lot (664104285): the census resolves single-interpolation templates through their literal call sites -- 175 names gain their always-real producer (the 7 card namespaces of setPremiumCardVars plus setLegacyButtonHoverBgAlias); 17 of them were counted in this gate's read set. Measured by the gate.",
   "honesty": "El numero es la MEDIDA de hoy, no una meta. WO-DER-01 crea el instrumento; bajarlo es el trabajo de las WO-DER-02..04 y de los cortes por familia, que son las que dan productor a los nombres que hoy no lo tienen.",
-  "denominatorNote": "4781 -> 4780 in the same lot: the retired name leaves the census; measured by the gate, per-name detail in receipt-fam11-evi03-rows-opus.json.",
+  "denominatorNote": "the denominator HOLDS at 4780 in the same lot: the 17 names are still read, now with a producer (debt 440 -> 423 is the whole move); measured by the gate.",
   "readClasses": {
     "law": "The ratchet was blind to every read outside engines/modern: the agnostic skin and the rest of the authored CSS that the base entrypoint imports under every engine, and literal var() reads inline in component TS/TSX, paint under Modern exactly like the Modern skin does. Measured 2026-09-25 at 6f5faa6f4 after WO-EVI-03 found 11 dead channels its tests pin that this ratchet could not see. Frozen engines (classic, rustic) stay out for the same reason as before; nothing else does.",
     "shape": "names -> { readers, family, owner, ownerProposal }. A read without producer that is not a row (or a new reader of a row) is anonymous and red; a row or reader that stopped being debt is red until deleted. No write mode: the ledger only shrinks by hand.",
@@ -148,6 +148,202 @@
           "from": "uncut-family-read (EVI-03 ledger)",
           "disposition": "retired across the whole keycap chain (kbd skin, collection-header skin, collection-header deriver): nobody ever produced the name and the hooks contract lists it as an unadjudicated read, so every read already painted its fallback; var(--ds-font-family-mono) is now the declared value everywhere in the chain, paint byte-identical measured (288 Chromium cells; control: declaring the dead name moves 72 cells in HEAD and 0 after)",
           "mover": "WO-EVI-03 kbd-chain lot (2026-09-25, receipt-kbd-chain-opus.json)"
+        },
+        "--ds-workspace-card-icon-bg": {
+          "class": "sharedPaint",
+          "family": "surface-section-card",
+          "from": "unrouted",
+          "disposition": "produced: the chrome compiler emits it when a tenant sets the matching chrome.* key (setPremiumCardVars's 'workspace-card' call site); the producers census resolves the template through its literal call sites since 664104285. Not a paint change -- the instrument finally sees the producer that was always there.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-workspace-card-icon-border": {
+          "class": "sharedPaint",
+          "family": "surface-section-card",
+          "from": "unrouted",
+          "disposition": "produced: the chrome compiler emits it when a tenant sets the matching chrome.* key (setPremiumCardVars's 'workspace-card' call site); the producers census resolves the template through its literal call sites since 664104285. Not a paint change -- the instrument finally sees the producer that was always there.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-workspace-card-icon-color": {
+          "class": "sharedPaint",
+          "family": "surface-section-card",
+          "from": "unrouted",
+          "disposition": "produced: the chrome compiler emits it when a tenant sets the matching chrome.* key (setPremiumCardVars's 'workspace-card' call site); the producers census resolves the template through its literal call sites since 664104285. Not a paint change -- the instrument finally sees the producer that was always there.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-collection-card-depth": {
+          "class": "sharedPaint",
+          "family": "grid-view",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-collection-card-gap": {
+          "class": "sharedPaint",
+          "family": "grid-view",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-collection-card-glass-bg": {
+          "class": "sharedPaint",
+          "family": "grid-view",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-collection-card-grid-bg": {
+          "class": "sharedPaint",
+          "family": "grid-view",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-collection-card-grid-size": {
+          "class": "sharedPaint",
+          "family": "grid-view",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-collection-card-hover-transform": {
+          "class": "sharedPaint",
+          "family": "grid-view",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-collection-card-min-height": {
+          "class": "sharedPaint",
+          "family": "grid-view",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-collection-card-overlay": {
+          "class": "sharedPaint",
+          "family": "grid-view",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-collection-card-sheen": {
+          "class": "sharedPaint",
+          "family": "grid-view",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-collection-card-transition": {
+          "class": "sharedPaint",
+          "family": "grid-view",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-body-color": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-footer-bg": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-footer-border": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-footer-color": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-gap": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-glass-bg": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-grid-bg": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-grid-line": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-grid-size": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-hover-transform": {
+          "class": "sharedPaint",
+          "family": "dashboard-metrics-interactions",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-overlay": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-status-bg": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-status-border": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-status-color": {
+          "class": "sharedPaint",
+          "family": "metrics-cards",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
+        },
+        "--ds-metric-card-transition": {
+          "class": "sharedPaint",
+          "family": "dashboard-metrics-interactions",
+          "from": "unrouted",
+          "disposition": "produced: setPremiumCardVars's 'collection-card'/'metric-card' call sites emit it when the tenant sets the matching chrome.* key; the producers census resolves the template through its literal call sites since 664104285. Instrument catch-up, no paint change.",
+          "mover": "template-resolver lot (2026-09-26, 664104285)"
         }
       }
     },
@@ -156,7 +352,7 @@
       "measured": {
         "files": 259,
         "denominator": 2564,
-        "debt": 322,
+        "debt": 294,
         "reads": 375
       },
       "names": {
@@ -358,86 +554,6 @@
             "src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css"
           ],
           "family": "chart-foundation",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-collection-card-depth": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
-          ],
-          "family": "grid-view",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-collection-card-gap": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
-          ],
-          "family": "grid-view",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-collection-card-glass-bg": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
-          ],
-          "family": "grid-view",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-collection-card-grid-bg": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
-          ],
-          "family": "grid-view",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-collection-card-grid-size": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
-          ],
-          "family": "grid-view",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-collection-card-hover-transform": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
-          ],
-          "family": "grid-view",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-collection-card-min-height": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
-          ],
-          "family": "grid-view",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-collection-card-overlay": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
-          ],
-          "family": "grid-view",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-collection-card-sheen": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
-          ],
-          "family": "grid-view",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-collection-card-transition": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
-          ],
-          "family": "grid-view",
           "owner": null,
           "ownerProposal": null
         },
@@ -2035,134 +2151,6 @@
           "owner": null,
           "ownerProposal": null
         },
-        "--ds-metric-card-body-color": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-footer-bg": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-footer-border": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-footer-color": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-gap": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-glass-bg": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-grid-bg": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-grid-line": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-grid-size": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-hover-transform": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions/index.css"
-          ],
-          "family": "dashboard-metrics-interactions",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-overlay": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-status-bg": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-status-border": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-status-color": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/metrics-cards/index.css"
-          ],
-          "family": "metrics-cards",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-transition": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions/index.css"
-          ],
-          "family": "dashboard-metrics-interactions",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-metric-card-value-size": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/patterns/index.css"
-          ],
-          "family": "patterns",
-          "owner": null,
-          "ownerProposal": null
-        },
         "--ds-modal-close-button-color": {
           "readers": [
             "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
@@ -2753,39 +2741,20 @@
           "owner": null,
           "ownerProposal": null
         },
-        "--ds-workspace-card-icon-bg": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
-            "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css"
-          ],
-          "family": "surface-section-card",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-workspace-card-icon-border": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
-            "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css"
-          ],
-          "family": "surface-section-card",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-workspace-card-icon-color": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
-            "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css"
-          ],
-          "family": "surface-section-card",
-          "owner": null,
-          "ownerProposal": null
-        },
         "--ds-workspace-frame-padding": {
           "readers": [
             "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
             "src/foundation/tokens/css/presentation/components/patterns/index.css"
           ],
           "family": "patterns-paint",
+          "owner": null,
+          "ownerProposal": null
+        },
+        "--ds-metric-card-value-size": {
+          "readers": [
+            "src/foundation/tokens/css/presentation/components/patterns/index.css"
+          ],
+          "family": "patterns",
           "owner": null,
           "ownerProposal": null
         }
