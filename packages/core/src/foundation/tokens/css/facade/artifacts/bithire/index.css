@@ -539,7 +539,7 @@
   --ds-collection-header-inline-meta-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   --ds-collection-header-keycap-block-size: var(--ds-spacing-5, 20px);
   --ds-collection-header-keycap-depth-width: var(--ds-border-width-2, 2px);
-  --ds-collection-header-keycap-family: var(--ds-kbd-font-family, var(--ds-font-family-mono));
+  --ds-collection-header-keycap-family: var(--ds-font-family-mono);
   --ds-collection-header-keycap-frame: var(--ds-kbd-frame, var(--ds-color-border));
   --ds-collection-header-keycap-ink: var(--ds-kbd-ink, var(--ds-color-text-muted));
   --ds-collection-header-keycap-inline-padding: var(--ds-spacing-2, 8px);

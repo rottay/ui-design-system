@@ -37822,7 +37822,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   block-size: var(--ds-slider-thumb-size, 16px);
   border-radius: var(--ds-radius-full);
   background: var(--ds-color-primary);
-  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
+  box-shadow: var(--ds-material-control-shadow, var(--ds-elevation-1));
   pointer-events: none;
   transition:
     background var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -37977,7 +37977,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   inline-size: var(--ds-slider-thumb-size, 16px);
   border-radius: 50%;
   background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
-  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
+  box-shadow: var(--ds-material-control-shadow, var(--ds-elevation-1));
   transition:
     background var(--ds-motion-feedback) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -38005,7 +38005,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   inline-size: var(--ds-slider-thumb-size, 16px);
   border-radius: 50%;
   background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
-  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
+  box-shadow: var(--ds-material-control-shadow, var(--ds-elevation-1));
   transition:
     background var(--ds-motion-feedback) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -48120,13 +48120,10 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-top-color: var(--ds-spinner-color, var(--ds-color-primary));
   /* A soft second segment gives the sweep premium depth instead of a flat
      single-pixel head. Logical, so the resting arc mirrors under RTL. */
-  border-inline-end-color: var(
-    --ds-spinner-segment-color,
-    color-mix(
-      in srgb,
-      var(--ds-spinner-color, var(--ds-color-primary)) 45%,
-      var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)))
-    )
+  border-inline-end-color: color-mix(
+    in srgb,
+    var(--ds-spinner-color, var(--ds-color-primary)) 45%,
+    var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)))
   );
   border-radius: 50%;
   /* A full 360deg sweep must stay linear (easing a closed loop reads as a
@@ -48142,7 +48139,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
        pin never constrained. This fallback is now the dormant historical
        floor, reached only if the dial is undefined. */
     var(--ds-spinner-duration, calc(var(--ds-motion-slow) * 2))
-    var(--ds-spinner-spin-easing, linear) infinite;
+    linear infinite;
 }
 
 /* Ring geometry per size: diameter + stroke, both tenant-tunable. Stroke
@@ -52944,14 +52941,14 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
 
 /* ---- floating menu panel (the <ul>) ---- */
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] {
-  inline-size: var(--ds-context-menu-width, 14rem);
+  inline-size: 14rem;
   margin: 0;
-  padding: var(--ds-context-menu-padding, var(--ds-spacing-2));
+  padding: var(--ds-spacing-2);
   list-style: none;
   /* Pass-2 coherence: the lane's overlay surfaces share Dropdown's material
      register (same widget class) -- subtle primary-tinted gradient, tinted
      border, inset highlight, elevation-3, backdrop blur, radius-xl. */
-  border-radius: var(--ds-context-menu-radius, var(--ds-radius-xl));
+  border-radius: var(--ds-radius-xl);
   /* The dark-aware luminance step is its own layer directly above the fill
      (popover.css idiom): inert until a dark surface raises
      --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
@@ -52978,7 +52975,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
      future render ever drops the data-open stamp, restore it rather than
      re-doubling the part). */
   border: var(--ds-edge-hairline-width, 1px) solid
-    var(--ds-context-menu-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)));
+    var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
 }
 
 /* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
@@ -53006,7 +53003,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
         carrying its own data-parts -- e.g. a Badge label -- is never matched) ---- */
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='divider'] {
   block-size: 1px;
-  margin-block: var(--ds-context-menu-divider-margin-block, 4px);
+  margin-block: 4px;
   margin-inline: 0;
   background: var(--ds-color-border-subtle);
 }
@@ -53016,7 +53013,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-medium);
-  letter-spacing: var(--ds-context-menu-group-letter-spacing, 0.05em);
+  letter-spacing: 0.05em;
   line-height: 1.2;
   text-transform: uppercase;
 }
@@ -54528,9 +54525,8 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
      16%-darkened mix of the tone and the state ramp darkens monotonically
      (16 -> 30 -> 42), so hover/active stay visibly deeper and every source
      clears AA: secondary/TMM 5.83:1, secondary/bithire 7.78:1,
-     primary/bithire 6.15:1 (was 4.72:1 -- no regression).
-     `--ds-link-color` remains the tenant escape hatch. */
-  color: var(--ds-link-color, color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-neutral-900) 16%));
+     primary/bithire 6.15:1 (was 4.72:1 -- no regression). */
+  color: color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-neutral-900) 16%);
 }
 
 /* ---- states. Visited precedes hover so pointer feedback always wins; the
@@ -62948,9 +62944,8 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  * with the asymmetry documented; K4-B Pass 2 LEVELLED it to the certified
  * ghost-button hover grammar (same law as Transfer's move/pagination buttons):
  * `--ds-button-ghost-bg-hover` (the tenant's brand tint over its control
- * surface) with a `--ds-surface-inset` floor, gated `:not(:disabled)`, family
- * escape hatch `--ds-calendar-nav-bg-hover`, and the active mode toggle
- * excluded so selected > rest stays discernible. The cell-hover SURFACE moved
+ * surface) with a `--ds-surface-inset` floor, gated `:not(:disabled)`, and the
+ * active mode toggle excluded so selected > rest stays discernible. The cell-hover SURFACE moved
  * off `--ds-surface-inset` in the K4-B remediation (invisible against
  * surface-card on governed sources) onto the canonical
  * `--ds-color-interactive-bg-hover` chain -- see the rule's comment.
@@ -63204,7 +63199,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
      clears AA on BOTH raw tenant primaries (5.15:1 bithire #3A6FB0, 5.47:1
      TMM #0F766E), so the raw fill stays un-deepened. Escape hatch stays raw;
      --ds-color-white falls back to literal white when undeclared. */
-  color: var(--ds-calendar-active-ink, var(--ds-color-white));
+  color: var(--ds-color-white);
 }
 
 /* The year control is a composition of two governed semantic navigation
@@ -63242,7 +63237,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 @media (hover: hover) {
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover),
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover) {
-    background: var(--ds-calendar-nav-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+    background: var(--ds-button-ghost-bg-hover, var(--ds-surface-inset));
   }
 }
 
@@ -63263,7 +63258,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
         excluded). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active),
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active) {
-  background: var(--ds-calendar-nav-bg-active, var(--ds-color-interactive-bg-active, var(--ds-button-ghost-bg-hover)));
+  background: var(--ds-color-interactive-bg-active, var(--ds-button-ghost-bg-hover));
 }
 
 /* ---- weekday column headers (W10: micro-label grammar -- a size step below
@@ -63289,7 +63284,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
         prefers-reduced-motion clamps it below. Resting background stays
         transparent by construction (the hover rule's contrast argument). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'] {
-  border-radius: var(--ds-calendar-cell-radius, var(--ds-radius-md));
+  border-radius: var(--ds-radius-md);
   /* B4-04: every cell reserves the 1px border box the today-ring uses, so
      today/rest share identical inner geometry (no 1px content shift when the
      ring appears). Transparent at rest; the today rule below owns the color. */
@@ -63309,7 +63304,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
      primaries (5.15:1 bithire, 5.47:1 TMM #0F766E); the raw fill is
      preserved. Escape hatch stays raw; --ds-color-white falls back to literal
      white when undeclared. */
-  color: var(--ds-calendar-selected-ink, var(--ds-color-white));
+  color: var(--ds-color-white);
   /* W10: the selected day reads as the grid's focal point -- semibold on the
      primary fill (the year-view month cells inherit the same weight). */
   font-weight: var(--ds-font-weight-semibold);
@@ -63699,8 +63694,8 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   /* Ground and edge stay: the arrow floats over arbitrary slide art and must
      stay legible. Elevation does not -- nothing rests raised except a tooltip. */
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
-  inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
-  block-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
+  inline-size: calc(32px * var(--ds-density-effective-scale));
+  block-size: calc(32px * var(--ds-density-effective-scale));
   font-size: var(--ds-font-size-xs);
   transition:
     border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -63720,7 +63715,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-inset);
     box-shadow:
-      0 0 0 1px var(--ds-carousel-dot-ring, var(--ds-color-alpha-black-20)),
+      0 0 0 1px var(--ds-color-alpha-black-20),
       0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
   }
 }
@@ -63750,8 +63745,8 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 
 @media (pointer: coarse) {
   .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction] {
-    inline-size: var(--ds-carousel-arrow-size-coarse, 44px);
-    block-size: var(--ds-carousel-arrow-size-coarse, 44px);
+    inline-size: var(--ds-touch-target-min, 44px);
+    block-size: var(--ds-touch-target-min, 44px);
   }
 
   /* Dots keep their 8px visual size but meet the 44px floor through an
@@ -63802,11 +63797,11 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
         ring for the unselected surface dot. ---- */
 .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true'] {
   background: var(--ds-color-primary);
-  box-shadow: 0 0 0 1px var(--ds-carousel-dot-halo, var(--ds-color-alpha-white-70));
+  box-shadow: 0 0 0 1px var(--ds-color-alpha-white-70);
 }
 .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false'] {
   background: var(--ds-carousel-dot-bg, var(--ds-surface-card));
-  box-shadow: 0 0 0 1px var(--ds-carousel-dot-ring, var(--ds-color-alpha-black-20));
+  box-shadow: 0 0 0 1px var(--ds-color-alpha-black-20);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -66243,13 +66238,13 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  font-family: var(--ds-kbd-font-family, var(--ds-font-family-mono));
+  font-family: var(--ds-font-family-mono);
   font-weight: var(--ds-kbd-font-weight, 500);
   line-height: 1;
   white-space: nowrap;
   vertical-align: var(--ds-kbd-vertical-align, middle);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-kbd-frame, var(--ds-color-border));
-  border-block-end-width: var(--ds-kbd-depth-width, 2px);
+  border-block-end-width: 2px;
   border-block-end-color: var(
     --ds-kbd-depth,
     color-mix(in srgb, var(--ds-kbd-frame, var(--ds-color-border)) 72%, var(--ds-color-neutral-900) 28%)
@@ -67452,8 +67447,8 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
         repeated attribute is needed -- 4th-wave recount). ---- */
 .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='spinner'] {
   display: inline-block;
-  inline-size: var(--ds-qrcode-spinner-size, 24px);
-  block-size: var(--ds-qrcode-spinner-size, 24px);
+  inline-size: 24px;
+  block-size: 24px;
   border: 2.5px solid var(--ds-qrcode-border-color, var(--ds-color-border));
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
@@ -67486,8 +67481,8 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
      `--ds-density-effective-scale` idiom, K4-C Pass 2). */
   block-size: calc(var(--ds-qrcode-refresh-button-size) * var(--ds-density-effective-scale));
   flex-shrink: 0;
-  padding: 0 var(--ds-qrcode-refresh-button-padding-x, 12px);
-  font-size: var(--ds-qrcode-refresh-button-font-size, 13px);
+  padding: 0 12px;
+  font-size: 13px;
   cursor: pointer;
   /* The declared design is a SOLID primary chip with light ink
      (`--ds-qrcode-refresh-button-bg: var(--ds-color-primary)` +
@@ -87286,7 +87281,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-block-size: var(--ds-collection-header-keycap-block-size, var(--ds-spacing-5, 20px));
   padding-inline: var(--ds-collection-header-keycap-inline-padding, var(--ds-spacing-2, 8px));
   border-radius: var(--ds-collection-header-keycap-radius, var(--ds-kbd-radius, var(--ds-radius-sm, 4px)));
-  font-family: var(--ds-collection-header-keycap-family, var(--ds-kbd-font-family, var(--ds-font-family-mono)));
+  font-family: var(--ds-collection-header-keycap-family, var(--ds-font-family-mono));
   font-size: var(--ds-collection-header-keycap-size, var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px)));
   font-weight: var(--ds-collection-header-keycap-weight, var(--ds-font-weight-medium, 500));
   line-height: 1;
@@ -120965,7 +120960,7 @@ html[lang]:lang(ar) {
   --ds-collection-header-inline-meta-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   --ds-collection-header-keycap-block-size: var(--ds-spacing-5, 20px);
   --ds-collection-header-keycap-depth-width: var(--ds-border-width-2, 2px);
-  --ds-collection-header-keycap-family: var(--ds-kbd-font-family, var(--ds-font-family-mono));
+  --ds-collection-header-keycap-family: var(--ds-font-family-mono);
   --ds-collection-header-keycap-frame: var(--ds-kbd-frame, var(--ds-color-border));
   --ds-collection-header-keycap-ink: var(--ds-kbd-ink, var(--ds-color-text-muted));
   --ds-collection-header-keycap-inline-padding: var(--ds-spacing-2, 8px);
