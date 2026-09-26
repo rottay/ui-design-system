@@ -44,7 +44,7 @@
      so the button never parks under the home indicator. */
   position: fixed;
   inset-block-end: calc(var(--ds-backtop-inset-block-end, 2rem) + env(safe-area-inset-bottom, 0px));
-  inset-inline-end: var(--ds-backtop-inset-inline-end, 2rem);
+  inset-inline-end: 2rem;
   z-index: var(--ds-backtop-z-index, var(--ds-z-fixed));
   display: inline-flex;
   align-items: center;

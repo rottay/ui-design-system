@@ -3,7 +3,7 @@
   "workOrder": "WO-EVI-03",
   "finding": "F-48",
   "law": "Each census equals its ledger in both directions: a new row is red (route the test through the door instead), and a row the tree no longer carries is red until its exit is written here. The ledger only shrinks.",
-  "measuredAt": "2026-09-25 @ 14a1f820c + EVI-03 arm 1 working tree",
+  "measuredAt": "2026-09-25 @ 2eb5dcb3e + EVI-03 arm 3a working tree",
   "harnessConsumers": {
     "owner": "WO-EVI-03",
     "target": 0,
@@ -92,22 +92,76 @@
           "name": "--ds-export-button-toast-duration",
           "exit": "the dead channel's read was retired (RWP ledger readClasses.exits carries the paint disposition); the toast fade declares 1.8s directly; the test asserts the parsed animation value and that the engine unmounts the toast at the same 1800ms (setTimeout in export-button/index.tsx)",
           "mover": "WO-EVI-03 arm 2, voice-input and loading-overlay clusters (2026-09-25, working tree over af778022c)"
+        },
+        {
+          "file": "core/src/components/patterns/navigation/workspace-switcher/tests/WorkspaceSwitcher.modern-rescue.test.tsx",
+          "name": "--ds-workspace-switcher-panel-gap-block",
+          "exit": "retired: 4px declared directly; the test now pins the narrow-posture gap equal to the topbar posture gap read from the skin (4px), the intent instead of the name",
+          "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/navigation/back-top/tests/BackTop.modern-contract.test.tsx",
+          "name": "--ds-backtop-inset-inline-end",
+          "exit": "retired: inset-inline-end 2rem declared directly; the logical-property law the test pins stands",
+          "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
+          "name": "--ds-floatbutton-badge-font-size",
+          "exit": "retired: 11px declared directly; postcss-parsed assertion",
+          "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
+          "name": "--ds-floatbutton-badge-line-height",
+          "exit": "retired: 16px declared directly; postcss-parsed assertion",
+          "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
+          "name": "--ds-floatbutton-badge-offset-inline",
+          "exit": "retired: -8px declared directly; postcss-parsed assertion",
+          "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
+          "name": "--ds-floatbutton-badge-padding-block",
+          "exit": "retired: padding 1px 6px declared directly (with its sibling --ds-floatbutton-badge-padding-inline, residue outside the ledger rows); postcss-parsed assertion",
+          "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
+          "name": "--ds-floatbutton-badge-padding-inline",
+          "exit": "retired with its sibling (see --ds-floatbutton-badge-padding-block)",
+          "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
+          "name": "--ds-floatbutton-dot-offset-inline",
+          "exit": "retired: -4px declared directly; postcss-parsed assertion",
+          "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
+          "name": "--ds-floatbutton-padding-block",
+          "exit": "retired: calc(8px * var(--ds-density-effective-scale)) declared directly; postcss-parsed assertion",
+          "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
+          "name": "--ds-floatbutton-size",
+          "exit": "retired: the circle footprint declares calc(40px * var(--ds-density-effective-scale)) directly (the fallback already painted); the test asserts the parsed rule values with postcss, no channel named",
+          "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
+          "name": "--ds-floatbutton-size-coarse",
+          "exit": "re-pointed to the live --ds-touch-target-min (the Q11 floor, 44px in every scope); the test asserts the coarse rule reads var(--ds-touch-target-min, 44px)",
+          "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
         }
       ]
     },
     "rows": [
-      {
-        "file": "core/src/components/patterns/navigation/workspace-switcher/tests/WorkspaceSwitcher.modern-rescue.test.tsx",
-        "name": "--ds-workspace-switcher-panel-gap-block",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/workspace-switcher/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-11",
-        "family": "workspace-switcher",
-        "reason": "read by css/runtime/engines/modern/skin/workspace-switcher/index.css with no producer; workspace-switcher is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
       {
         "file": "core/src/components/primitives/display/calendar/tests/Calendar.pass1-premium.test.tsx",
         "name": "--ds-calendar-active-ink",
@@ -323,126 +377,6 @@
         "ownerProposal": "WO-FAM-01",
         "family": "slider",
         "reason": "read by css/runtime/engines/classic/theme/index.css with no producer; slider is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/navigation/back-top/tests/BackTop.modern-contract.test.tsx",
-        "name": "--ds-backtop-inset-inline-end",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/back-top/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-05",
-        "family": "back-top",
-        "reason": "read by css/runtime/engines/modern/skin/back-top/index.css with no producer; back-top is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
-        "name": "--ds-floatbutton-badge-font-size",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/float-button/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-05",
-        "family": "float-button",
-        "reason": "read by css/runtime/engines/modern/skin/float-button/index.css with no producer; float-button is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
-        "name": "--ds-floatbutton-badge-line-height",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/float-button/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-05",
-        "family": "float-button",
-        "reason": "read by css/runtime/engines/modern/skin/float-button/index.css with no producer; float-button is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
-        "name": "--ds-floatbutton-badge-offset-inline",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/float-button/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-05",
-        "family": "float-button",
-        "reason": "read by css/runtime/engines/modern/skin/float-button/index.css with no producer; float-button is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
-        "name": "--ds-floatbutton-badge-padding-block",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/float-button/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-05",
-        "family": "float-button",
-        "reason": "read by css/runtime/engines/modern/skin/float-button/index.css with no producer; float-button is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
-        "name": "--ds-floatbutton-badge-padding-inline",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/float-button/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-05",
-        "family": "float-button",
-        "reason": "read by css/runtime/engines/modern/skin/float-button/index.css with no producer; float-button is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
-        "name": "--ds-floatbutton-dot-offset-inline",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/float-button/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-05",
-        "family": "float-button",
-        "reason": "read by css/runtime/engines/modern/skin/float-button/index.css with no producer; float-button is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
-        "name": "--ds-floatbutton-padding-block",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/float-button/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-05",
-        "family": "float-button",
-        "reason": "read by css/runtime/engines/modern/skin/float-button/index.css with no producer; float-button is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
-        "name": "--ds-floatbutton-size",
-        "occurrences": 1,
-        "readAt": "c/primitives/navigation/float-button/engines/rustic/index.tsx",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-05",
-        "family": "float-button",
-        "reason": "read by c/primitives/navigation/float-button/engines/rustic/index.tsx with no producer; float-button is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/navigation/float-button/tests/FloatButton.modern-engine-advanced.test.tsx",
-        "name": "--ds-floatbutton-size-coarse",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/float-button/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-05",
-        "family": "float-button",
-        "reason": "read by css/runtime/engines/modern/skin/float-button/index.css with no producer; float-button is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
       },
       {
         "file": "core/src/components/primitives/navigation/link/tests/Link.contrast-channels.test.tsx",

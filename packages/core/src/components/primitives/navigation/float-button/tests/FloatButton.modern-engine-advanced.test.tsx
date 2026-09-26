@@ -1,6 +1,7 @@
 import React from 'react';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import postcss from 'postcss';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -83,19 +84,33 @@ describe('FloatButton modern advanced engine coverage', () => {
     expect(modernSkin).toContain('transform: var(--ds-button-active-transform, scale(0.98))');
     expect(modernSkin).toContain('box-shadow: var(--ds-button-focus-ring)');
     expect(modernSkin).toContain('transition: var(--ds-button-transition)');
-    // Footprint + badge geometry: verbatim fallbacks for the drained literals,
+    // Footprint + badge geometry: the family's own values as declared paint,
     // density-scaled via the canonical effective-scale idiom (K4-C Pass 2).
-    expect(modernSkin).toContain('inline-size: calc(var(--ds-floatbutton-size, 40px) * var(--ds-density-effective-scale))');
-    expect(modernSkin).toContain('calc(var(--ds-floatbutton-padding-block, 8px) * var(--ds-density-effective-scale))');
+    const decls = (selector: string, media: string | null = null) => {
+      const found: Record<string, string> = {};
+      postcss.parse(modernSkin).walkRules(selector, (rule) => {
+        const parent = rule.parent?.type === 'atrule' ? (rule.parent as postcss.AtRule).params : null;
+        if (parent !== media) return;
+        rule.walkDecls((decl) => { found[decl.prop] = decl.value.replace(/\s+/g, ' ').trim(); });
+      });
+      return found;
+    };
+    const trigger = ".rottay-float-button.rottay-float-button--modern[data-part='trigger']";
+    const circle = decls(`${trigger}[data-shape='circle']`);
+    expect(circle['inline-size']).toBe('calc(40px * var(--ds-density-effective-scale))');
+    expect(circle['block-size']).toBe('calc(40px * var(--ds-density-effective-scale))');
+    expect(decls(`${trigger}:not([data-shape='circle'])`).padding).toMatch(/^calc\(8px \* var\(--ds-density-effective-scale\)\) /);
     expect(modernSkin).not.toContain('var(--ds-density-effective-scale, 1)');
-    expect(modernSkin).toContain('inset-inline-end: var(--ds-floatbutton-dot-offset-inline, -4px)');
-    expect(modernSkin).toContain('inset-inline-end: var(--ds-floatbutton-badge-offset-inline, -8px)');
-    expect(modernSkin).toContain('var(--ds-floatbutton-badge-padding-block, 1px) var(--ds-floatbutton-badge-padding-inline, 6px)');
-    expect(modernSkin).toContain('font-size: var(--ds-floatbutton-badge-font-size, 11px)');
-    expect(modernSkin).toContain('line-height: var(--ds-floatbutton-badge-line-height, 16px)');
-    // K4-C Pass 2: 44px coarse-pointer floor on the circle footprint.
-    expect(modernSkin).toContain('@media (pointer: coarse)');
-    expect(modernSkin).toContain('var(--ds-floatbutton-size-coarse, 44px)');
+    expect(decls(".rottay-float-button--modern [data-part='badge'][data-variant='dot']")['inset-inline-end']).toBe('-4px');
+    const count = decls(".rottay-float-button--modern [data-part='badge'][data-variant='count']");
+    expect(count['inset-inline-end']).toBe('-8px');
+    expect(count.padding).toBe('1px 6px');
+    expect(count['font-size']).toBe('11px');
+    expect(count['line-height']).toBe('16px');
+    // K4-C Pass 2: the coarse-pointer circle takes the governed 44px touch floor.
+    const coarse = decls(`${trigger}[data-shape='circle']`, '(pointer: coarse)');
+    expect(coarse['inline-size']).toBe('var(--ds-touch-target-min, 44px)');
+    expect(coarse['block-size']).toBe('var(--ds-touch-target-min, 44px)');
   });
 
   it('names icon-only triggers accessibly (K4-C axe button-name remediation)', () => {

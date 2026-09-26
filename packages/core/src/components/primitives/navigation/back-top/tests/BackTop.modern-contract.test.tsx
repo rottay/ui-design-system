@@ -82,7 +82,7 @@ describe('BackTop modern contract: anatomy', () => {
     const button = screen.getByRole('button', { name: 'Back to top' });
     expect(button.className).not.toContain('end-8');
     expect(button.className).not.toContain('right-8');
-    expect(SKIN).toContain('inset-inline-end: var(--ds-backtop-inset-inline-end, 2rem)');
+    expect(SKIN).toContain('inset-inline-end: 2rem;');
     expect(SKIN).not.toMatch(/\bright\s*:/);
     expect(button.className).toContain('rottay-backtop');
     expect(button.className).toContain('rottay-backtop--modern');

@@ -153,8 +153,11 @@ describe('ModernWorkspaceSwitcher — narrow posture', () => {
     expect(block).toContain('inset-inline-start: 0');
     // The inline-end offset that pushed it off-screen is explicitly cleared.
     expect(block).toContain('margin-inline-start: 0');
-    // The below-trigger gap is the topbar posture's own channel, not a literal.
-    expect(block).toContain('margin-block-start: var(--ds-workspace-switcher-panel-gap-block, 4px)');
+    // The below-trigger gap is the topbar posture's own gap, stated once per rule.
+    const skin = readFileSync(MODERN_SKIN_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    const topbar = /:not\(\[data-position='sidebar'\]\) \[data-part='panel'\] \{[^}]*margin-block-start:\s*([^;]+);/.exec(skin)?.[1];
+    expect(topbar).toBe('4px');
+    expect(block).toContain(`margin-block-start: ${topbar}`);
   });
 
   it('states the narrow posture at or above the wide sidebar rule so it wins', () => {
