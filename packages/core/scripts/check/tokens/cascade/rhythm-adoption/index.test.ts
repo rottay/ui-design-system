@@ -50,8 +50,24 @@ const RHYTHM_CHANNEL = "--ds-rhythm-effective-scale";
  * from this list is a coverage regression that must be argued in review, not
  * absorbed by a test that only counts a global total.
  */
+const MODERN_SKIN = `${CSS_ROOT}/runtime/engines/modern/skin`;
+/** The frozen engines' unscaled base; Modern's rhythm arm left it (see below). */
+const FROZEN_LAYOUT_PRIMITIVES = `${CSS_ROOT}/presentation/components/skin/layout-primitives/index.css`;
+
+/* The layout primitives once shared one skin (15 mounts in layout-primitives).
+ * The WO-FAM-07 partition moved Modern's arm out of it -- f56020c58 (batch L5:
+ * stack, flex, grid, box; the file records it: "Flex's rhythm-aware preset
+ * gaps moved to the Modern skin", "Modern's arm -- the rhythm-scaled rungs
+ * ... moved to runtime/engines/modern/skin/stack") and 89976e4c7 (batches
+ * L1-L4: space) -- and 7a67243d8 (cascade-wiring) wired the Stack and Space
+ * skins to their deriver chains, where the mounts are read today. One row per
+ * Modern skin, each at its measured count: 9 + 3 + 3 + 3 = 18, never below the
+ * family's former floor of 14. */
 const COVERED_FAMILIES = [
-  { family: "layout primitives (Stack rungs + Space presets + Flex/Grid preset gaps)", file: `${CSS_ROOT}/presentation/components/skin/layout-primitives/index.css`, minimumSites: 14 },
+  { family: "layout primitives: Stack rungs (Modern skin)", file: `${MODERN_SKIN}/stack/index.css`, minimumSites: 9 },
+  { family: "layout primitives: Flex preset gaps (Modern skin)", file: `${MODERN_SKIN}/flex/index.css`, minimumSites: 3 },
+  { family: "layout primitives: Grid preset gaps (Modern skin)", file: `${MODERN_SKIN}/grid/index.css`, minimumSites: 3 },
+  { family: "layout primitives: Space presets (Modern skin)", file: `${MODERN_SKIN}/space/index.css`, minimumSites: 3 },
   { family: "patterns (cards, listing grid, workflow, command home)", file: `${CSS_ROOT}/presentation/components/patterns/index.css`, minimumSites: 14 },
   { family: "widget board (grid seams + toolbar separation)", file: `${CSS_ROOT}/presentation/components/skin/widget-board/index.css`, minimumSites: 4 },
   { family: "page shell", file: `${CSS_ROOT}/runtime/engines/modern/skin/page-shell/index.css`, minimumSites: 6 },
@@ -252,15 +268,26 @@ describe("rhythm adoption census (drill a: the axis reaches the covered families
 });
 
 describe("numeric sovereignty (drill b: exact geometry is never scaled)", () => {
-  const LAYOUT_PRIMITIVES = `${CSS_ROOT}/presentation/components/skin/layout-primitives/index.css`;
+  /* Modern's rungs and preset gaps live in its own skins since f56020c58; the
+   * frozen engines keep their unscaled base in layout-primitives, and both
+   * must honour a caller's number. */
+  const STACK_SKINS = [`${MODERN_SKIN}/stack/index.css`, FROZEN_LAYOUT_PRIMITIVES];
+  const FLEX_GRID_SKINS = [`${MODERN_SKIN}/flex/index.css`, `${MODERN_SKIN}/grid/index.css`, FROZEN_LAYOUT_PRIMITIVES];
+  const MODERN_STACK = `${MODERN_SKIN}/stack/index.css`;
+  const PRESET_GATE = /-preset=["'](xs|sm|md|lg|xl|2xl|3xl|4xl)["']/;
+  const spacing = (rung: string) => [`[data-spacing="${rung}"]`, `[data-spacing='${rung}']`];
 
   /** Declarations belonging to rules whose selector matches. */
-  function declarationsFor(file: string, fragment: string): readonly SourceDeclaration[] {
-    return readDeclarations(file).filter((d) => d.selector.includes(fragment));
+  function declarationsFor(files: string | readonly string[], fragments: string | readonly string[]): readonly SourceDeclaration[] {
+    const wanted = typeof fragments === "string" ? [fragments] : fragments;
+    return (typeof files === "string" ? [files] : files)
+      .flatMap((file) => readDeclarations(file))
+      .filter((d) => wanted.some((fragment) => d.selector.includes(fragment)));
   }
 
   it('the Stack "custom" rung carries no rhythm -- a caller\'s numeric gap is exact', () => {
-    const custom = declarationsFor(LAYOUT_PRIMITIVES, '[data-spacing="custom"]');
+    const custom = declarationsFor(STACK_SKINS, spacing("custom"));
+    expect(declarationsFor(MODERN_STACK, spacing("custom")).length, "Modern's custom rung disappeared").toBeGreaterThan(0);
     expect(custom.length).toBeGreaterThan(0);
     for (const declaration of custom) {
       expect(declaration.value).not.toContain(RHYTHM_CHANNEL);
@@ -268,7 +295,8 @@ describe("numeric sovereignty (drill b: exact geometry is never scaled)", () => 
   });
 
   it('the Stack "none" rung carries no rhythm -- zero has no room to scale', () => {
-    const none = declarationsFor(LAYOUT_PRIMITIVES, '[data-spacing="none"]');
+    const none = declarationsFor(STACK_SKINS, spacing("none"));
+    expect(declarationsFor(MODERN_STACK, spacing("none")).length, "Modern's none rung disappeared").toBeGreaterThan(0);
     expect(none.length).toBeGreaterThan(0);
     for (const declaration of none) {
       expect(declaration.value).not.toContain(RHYTHM_CHANNEL);
@@ -278,8 +306,8 @@ describe("numeric sovereignty (drill b: exact geometry is never scaled)", () => 
   it("POSITIVE CONTROL: the preset rungs beside them DO carry rhythm", () => {
     // Without this leg the two assertions above would also pass against a file
     // where rhythm was never adopted at all, or where the channel was renamed.
-    for (const rung of ['[data-spacing="md"]', '[data-spacing="xs"]', '[data-spacing="4xl"]']) {
-      const declarations = declarationsFor(LAYOUT_PRIMITIVES, rung);
+    for (const rung of ["md", "xs", "4xl"]) {
+      const declarations = declarationsFor(MODERN_STACK, spacing(rung));
       expect(declarations.length, `${rung} has no declarations`).toBeGreaterThan(0);
       expect(
         declarations.some((d) => d.value.includes(RHYTHM_CHANNEL)),
@@ -296,7 +324,7 @@ describe("numeric sovereignty (drill b: exact geometry is never scaled)", () => 
     // `*-preset="<rung>"` match, because those attributes are stamped for rungs
     // and never for numbers. A scaled rule without that gate would reach a
     // measurement, which is the defect the enumeration exists to prevent.
-    const scaled = readDeclarations(LAYOUT_PRIMITIVES).filter(
+    const scaled = FLEX_GRID_SKINS.flatMap((file) => readDeclarations(file)).filter(
       (d) =>
         d.value.includes(RHYTHM_CHANNEL) &&
         /\.rottay-(flex|grid)/.test(d.selector)
@@ -304,17 +332,17 @@ describe("numeric sovereignty (drill b: exact geometry is never scaled)", () => 
     expect(scaled.length, "Flex/Grid lost their rhythm mounts").toBeGreaterThan(0);
     for (const declaration of scaled) {
       expect(
-        /-preset="(xs|sm|md|lg|xl|2xl|3xl|4xl)"/.test(declaration.selector),
+        PRESET_GATE.test(declaration.selector),
         `${declaration.prop} scales without gating on an enumerated preset spelling`
       ).toBe(true);
     }
   });
 
   it("the UNGATED Flex/Grid gap rules stay exact -- numbers travel there", () => {
-    const ungated = readDeclarations(LAYOUT_PRIMITIVES).filter(
+    const ungated = FLEX_GRID_SKINS.flatMap((file) => readDeclarations(file)).filter(
       (d) =>
         /\.rottay-(flex|grid)/.test(d.selector) &&
-        !/-preset="(xs|sm|md|lg|xl|2xl|3xl|4xl)"/.test(d.selector) &&
+        !PRESET_GATE.test(d.selector) &&
         /gap$/.test(d.prop)
     );
     expect(ungated.length, "the base gap rules disappeared").toBeGreaterThan(0);
@@ -327,7 +355,9 @@ describe("numeric sovereignty (drill b: exact geometry is never scaled)", () => 
   });
 
   it("`none` is never enumerated -- zero has no room to scale", () => {
-    expect(CSS_SOURCE(LAYOUT_PRIMITIVES)).not.toContain('-preset="none"');
+    for (const file of FLEX_GRID_SKINS) {
+      expect(CSS_SOURCE(file), file).not.toMatch(/-preset=["']none["']/);
+    }
   });
 });
 

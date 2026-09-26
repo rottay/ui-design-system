@@ -203,19 +203,32 @@ describe("per-vertical divergence -- the density trap, measured", () => {
   );
 
   it("shows the density scale is NOT uniform across verticals", () => {
-    const densities = new Set(
+    /* a4bc94927 (D6-2c-i) compiles each vertical from the neutral foundation +
+     * its preset (72a1a99b6: bithire the product-dense set, rottay and evnto
+     * structural-neutral per the owner's 2026-09-05 scope). The numeric
+     * --ds-density-scale is 1 in every bundle since then, and a vertical's
+     * posture rides --ds-density-mode-factor: bithire 0.85 (compact), rottay and
+     * evnto 1 -- more than one answer, which is precisely why "byte-identical"
+     * must be proven per bundle. (Before a4bc94927: 0.9 / 1 / 1.125 on the scale.) */
+    const scales = new Set(
       verticals.map(([, path]) => resolveChannel(loadBundle(path), "--ds-density-scale"))
     );
-    // bithire 0.9 / platform+rottay 1 / evnto 1.125 -- more than one answer,
-    // which is precisely why "byte-identical" must be proven per bundle.
-    expect(densities.size).toBeGreaterThan(1);
+    expect([...scales]).toEqual(["1"]);
+    const postures = new Set(
+      verticals.map(([, path]) => resolveChannel(loadBundle(path), "--ds-density-mode-factor"))
+    );
+    expect(postures.has(null)).toBe(false);
+    expect(postures.size).toBeGreaterThan(1);
   });
 
   it("FAILS a cross-vertical baseline that only holds in one bundle", () => {
-    const bithireValue = resolveChannel(loadBundle(SHIPPED_BUNDLES.bithire), "--ds-density-scale");
+    // The posture channel since a4bc94927 (see above): bithire's compact factor
+    // is not evnto's.
+    const bithireValue = resolveChannel(loadBundle(SHIPPED_BUNDLES.bithire), "--ds-density-mode-factor");
+    expect(bithireValue).not.toBeNull();
     const drill = defaultIsUnchanged(
       loadBundle(SHIPPED_BUNDLES.evnto),
-      "--ds-density-scale",
+      "--ds-density-mode-factor",
       bithireValue ?? ""
     );
     expect(drill.passed).toBe(false);
