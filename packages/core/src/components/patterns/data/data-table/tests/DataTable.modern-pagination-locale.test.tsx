@@ -1,5 +1,6 @@
 import React from 'react';
 import { renderWithEngineContext } from '@tests/support/engine';
+import { waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import type { ColumnDef } from '@/foundation/contracts/runtime/components/patterns/core';
@@ -62,6 +63,62 @@ describe('PatternDataTable modern — pagination range follows the active catalo
     expect(english).toContain('1,234,567');
     // No raw ungrouped number may appear anywhere in the formatted range.
     expect(english).not.toMatch(/(^|[^\d,])12001([^\d]|$)/);
+  });
+});
+
+/** The step buttons are the two nav slots; their Button resolves after the first commit. */
+async function stepLabels(container: HTMLElement): Promise<(string | null)[]> {
+  const labels = () =>
+    [...container.querySelectorAll('[data-part="pagination-nav-button"]')].map(
+      (slot) => slot.querySelector('button')?.getAttribute('aria-label') ?? null,
+    );
+  await waitFor(() => expect(labels().every((label) => label !== null)).toBe(true));
+  return labels();
+}
+
+const PAGE_13 = { current: 13, pageSize: 1000, total: 1234567, onChange: () => {} };
+
+describe('PatternDataTable modern — pagination copy comes from the catalog', () => {
+  it('words the range in the catalog locale', () => {
+    expect(renderRange('es')).toBe('12.001 – 13.000 de 1.234.567');
+    expect(renderRange('en')).toBe('12,001 – 13,000 of 1,234,567');
+  });
+
+  it('names the step buttons from the catalog', async () => {
+    const { container } = render(
+      <I18nProvider locale="es" fallbackLocale="es">
+        <ModernDataTable<Row> columns={columns} data={data} rowKey="id" pagination={PAGE_13} />
+      </I18nProvider>,
+    );
+    expect(await stepLabels(container)).toEqual(['Página anterior', 'Página siguiente']);
+  });
+
+  it('keeps explicit messages above the catalog', async () => {
+    const { container } = render(
+      <I18nProvider locale="es" fallbackLocale="es">
+        <ModernDataTable<Row>
+          columns={columns}
+          data={data}
+          rowKey="id"
+          pagination={PAGE_13}
+          messages={{
+            paginationRange: (start, end, total) => `${start}/${end}/${total}`,
+            previousPage: 'Atrás',
+            nextPage: 'Adelante',
+          }}
+        />
+      </I18nProvider>,
+    );
+    expect(container.querySelector('[data-part="pagination-range"]')?.textContent).toBe('12001/13000/1234567');
+    expect(await stepLabels(container)).toEqual(['Atrás', 'Adelante']);
+  });
+
+  it('keeps the English floor when no catalog provider is mounted', async () => {
+    const { container } = render(
+      <ModernDataTable<Row> columns={columns} data={data} rowKey="id" pagination={PAGE_13} />,
+    );
+    expect(container.querySelector('[data-part="pagination-range"]')?.textContent).toMatch(/ – .+ of /u);
+    expect(await stepLabels(container)).toEqual(['Previous page', 'Next page']);
   });
 });
 

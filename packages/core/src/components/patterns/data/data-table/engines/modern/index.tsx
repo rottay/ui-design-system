@@ -460,11 +460,11 @@ export default function ModernDataTable<T extends object>(
     recipe ?? (bordered ? "grid" : striped ? "zebra" : "minimal");
   const rowsAreStriped = resolvedRecipe === "zebra";
 
-  /* Copy stays consumer-owned via `messages`; this channel supplies only the
-     active locale so the built-in range floor groups digits like the catalog. */
-  const rangeLocale = useOptionalTranslation("components")?.locale;
+  /* `messages` outranks the catalog; without a provider the English floor
+     stays, grouping digits in the active locale either way. */
+  const componentCopy = useOptionalTranslation("components");
   const formatCount = (value: number): string =>
-    value.toLocaleString(rangeLocale);
+    value.toLocaleString(componentCopy?.locale);
 
   // ---------------------------------------------------------------------------
   // Internal state
@@ -2934,6 +2934,14 @@ export default function ModernDataTable<T extends object>(
             );
             const isFirstPage = pagination.current <= 1;
             const isLastPage = pagination.current >= totalPages;
+            const rangeStart =
+              pagination.total === 0
+                ? 0
+                : (pagination.current - 1) * pagination.pageSize + 1;
+            const rangeEnd = Math.min(
+              pagination.current * pagination.pageSize,
+              pagination.total
+            );
 
             // Build page number array with ellipsis
             const getPageNumbers = (): (number | "ellipsis")[] => {
@@ -2955,24 +2963,17 @@ export default function ModernDataTable<T extends object>(
               <div data-part="pagination-bar">
                 <span data-part="pagination-range">
                   {messages?.paginationRange?.(
-                    pagination.total === 0
-                      ? 0
-                      : (pagination.current - 1) * pagination.pageSize + 1,
-                    Math.min(
-                      pagination.current * pagination.pageSize,
-                      pagination.total
-                    ),
+                    rangeStart,
+                    rangeEnd,
                     pagination.total
                   ) ??
-                    `${formatCount(
-                      pagination.total === 0
-                        ? 0
-                        : (pagination.current - 1) * pagination.pageSize + 1
-                    )} \u2013 ${formatCount(
-                      Math.min(
-                        pagination.current * pagination.pageSize,
-                        pagination.total
-                      )
+                    componentCopy?.t("table.range_of", {
+                      start: formatCount(rangeStart),
+                      end: formatCount(rangeEnd),
+                      total: formatCount(pagination.total),
+                    }) ??
+                    `${formatCount(rangeStart)} \u2013 ${formatCount(
+                      rangeEnd
                     )} of ${formatCount(pagination.total)}`}
                 </span>
                 <div data-part="pagination-controls">
@@ -2994,7 +2995,11 @@ export default function ModernDataTable<T extends object>(
                           pagination.pageSize
                         )
                       }
-                      aria-label={messages?.previousPage ?? "Previous page"}
+                      aria-label={
+                        messages?.previousPage ??
+                        componentCopy?.t("table.previous_page") ??
+                        "Previous page"
+                      }
                     />
                   </span>
                   {/* Page numbers */}
@@ -3051,7 +3056,11 @@ export default function ModernDataTable<T extends object>(
                           pagination.pageSize
                         )
                       }
-                      aria-label={messages?.nextPage ?? "Next page"}
+                      aria-label={
+                        messages?.nextPage ??
+                        componentCopy?.t("table.next_page") ??
+                        "Next page"
+                      }
                     />
                   </span>
                 </div>
