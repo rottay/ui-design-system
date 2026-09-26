@@ -52,9 +52,9 @@ const DECISIONS = {
   'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['background'], holds: 'radius', in: VERTICALS },
   'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'background', in: VERTICALS },
   'shape.button-style': { value: 'pill', moves: ['radius'], holds: 'height', in: VERTICALS },
-  // `shape.control-height` moves the button's min-block-size on rottay and evnto
-  // only; bithire is pinned inert by the row below, with its channel evidence.
-  'shape.control-height': { value: 'tall', moves: ['height'], holds: 'background', in: ['rottay', 'evnto'] },
+  // `shape.control-height` moves the button's min-block-size in every vertical:
+  // the mechanical floor follows a taller factor upward (pinned exactly below).
+  'shape.control-height': { value: 'tall', moves: ['height'], holds: 'background', in: VERTICALS },
   // bithire's preset decides `density.mode: compact`, so the retired arm restated
   // the vertical's own stop and moved nothing. `spacious` is stated by no preset.
   'density.mode': { value: 'spacious', moves: ['padding'], holds: 'background', in: VERTICALS },
@@ -81,10 +81,9 @@ beforeAll(async () => {
 }, 180_000);
 
 /**
- * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): under the
- * neutral compile a governed chrome pair can reach a scope with no producer --
- * the menu ink IS the sidebar ink -- so axe reports `color-contrast` in the
- * scopes pinned below.
+ * WO-DER-06 derivation-lane registry, row R3 (mode-palette seeding, rottay
+ * dark): the link and text labels fail `color-contrast` against the ground the
+ * dark block seeds, so axe reports it in the scope pinned below.
  * Nothing is lowered: every other serious rule must still be empty, and the
  * contrast debt is pinned by the IDENTITY of every failing node, so this row
  * reddens when the debt spreads, when a node is repaired, and when one node is
@@ -121,21 +120,34 @@ describe('button causality', () => {
   }
 
   /**
-   * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15):
-   * `shape.control-height` reaches its channel on bithire and stops there. The
-   * decision moves `--ds-control-height-scale` 0.9 / 1 / 1.15 for compact /
-   * standard / tall, and the button's `min-block-size` reads 36px for all three
-   * -- while rottay moves 37.5 -> 43.125 and evnto 37.5 -> 43.125 on the same
-   * stops. Measured at HEAD, bithire moved 36 -> 37.26: this is a reach the lot
-   * lost, not a stop that coincides. Pinned so it reddens when the lane restores
-   * the reader.
+   * `shape.control-height` reaches the button in every vertical. The mechanical
+   * floor is `36px x max(1, factor)`: it follows a taller factor upward and never
+   * drops below 36px, so the default stops paint exactly what they painted
+   * before (bithire's md resolves 35.25px x 0.85 density x factor, under the
+   * floor at every stop, and now rises with `tall`).
    */
-  it('registers the control-height reach bithire lost: the channel moves, the box does not', () => {
-    const base = readings.bithire!.base!;
-    const tall = readings.bithire!['shape.control-height']!;
-    expect(tall.height, 'bithire min-block-size is pinned at the floor').toBe(base.height);
-    expect(base.height).toBe('36px');
-  });
+  it('lets the control-height factor raise the floor upward and never below it', async () => {
+    const heights: Record<string, Record<string, string>> = {};
+    for (const vertical of VERTICALS) {
+      const arms = await measureArms({
+        vertical,
+        markup,
+        arms: {
+          base: {},
+          compact: { 'shape.control-height': 'compact' },
+          standard: { 'shape.control-height': 'standard' },
+          tall: { 'shape.control-height': 'tall' },
+        },
+        targets: [{ id: 'height', selector: PRIMARY, property: 'min-block-size' }],
+      });
+      heights[vertical] = Object.fromEntries(Object.entries(arms).map(([arm, r]) => [arm, r.height!]));
+    }
+    expect(heights).toEqual({
+      rottay: { base: '37.5px', compact: '36px', standard: '37.5px', tall: '43.125px' },
+      bithire: { base: '36px', compact: '36px', standard: '36px', tall: '41.4px' },
+      evnto: { base: '37.5px', compact: '36px', standard: '37.5px', tall: '43.125px' },
+    });
+  }, 120_000);
 
   it('paints a button whose part a composite renamed exactly like a standalone one', () => {
     for (const vertical of VERTICALS) {

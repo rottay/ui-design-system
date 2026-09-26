@@ -19,6 +19,7 @@ import { buildLoweringContext, runDerivation } from "../../../../pipeline";
 import { statesDeriver } from "../../../states";
 import { elevationDeriver } from "../../../elevation";
 import { expressiveDeriver } from "../../../expressive";
+import { axesDeriver } from "../../../axes";
 import { tagChromeDeriver } from "..";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
@@ -244,3 +245,39 @@ describe("chrome/tag close focus ring", () => {
     expect(tagChromeDeriver.consumes).toContain("surfaces.focusStyle");
   });
 });
+
+describe("chrome/tag chip radius", () => {
+  const RUNGS: Record<string, string> = {
+    "--ds-tag-radius-sm": "calc(0.125rem * var(--ds-radius-scale, 1))",
+    "--ds-tag-radius-md": "calc(0.25rem * var(--ds-radius-scale, 1))",
+    "--ds-tag-radius-lg": "calc(0.5rem * var(--ds-radius-scale, 1))",
+  };
+
+  it("states each chip rung as its base times the tenant radius scale, in every fixture", () => {
+    for (const { label, theme } of FIXTURES) {
+      const derived = tagChromeDeriver.derive(buildLoweringContext({ theme }), {});
+      for (const [channel, value] of Object.entries(RUNGS)) {
+        expect(derived[channel], `${label} ${channel}`).toBe(value);
+      }
+    }
+  });
+
+  it("makes its radius-scale consume true, and chains the factor to a produced root", () => {
+    expect(tagChromeDeriver.consumes).toContain("surfaces.radiusScale");
+    const bithire = context(firstPartyFixture("bithire"));
+    const { channels } = runDerivation(bithire, [axesDeriver, tagChromeDeriver]);
+    expect(axesDeriver.produces).toContain("--ds-radius-scale");
+    expect(channels["--ds-radius-scale"]).toBe("0.8");
+    for (const channel of Object.keys(RUNGS)) {
+      expect(channels[channel]).toMatch(/\* var\(--ds-radius-scale, 1\)\)$/);
+    }
+    expect(Object.keys(tagChromeDeriver.derive(bithire, {}))).not.toContain("--ds-tag-radius-full");
+  });
+
+  it("is the channel the Modern skin paints each chip corner with", () => {
+    for (const rung of ["sm", "md", "lg"]) {
+      expect(SKIN).toMatch(new RegExp(`\\[data-radius='${rung}'\\] \\{\\s*border-radius: var\\(--ds-tag-radius-${rung}\\b`));
+    }
+  });
+});
+

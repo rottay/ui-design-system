@@ -34,12 +34,9 @@ const SOLID = "#solid [data-part='root']";
 const CLOSE = "#closable [data-part='close']";
 
 /**
- * MEASURED GAP, registered rather than forced: `shape.radius-scale` reaches
- * NEITHER corner of this family. The close affordance is a pill, whose full
- * radius legitimately never scales; and the chip's own corner resolves through
- * `--ds-tag-radius-md`, an authorable channel the kernel lowers per vertical,
- * which outranks the decision in all three. The derivation lane owns closing
- * that reach; this suite states it rather than pretending it is covered.
+ * `shape.radius-scale` reaches the chip corner: the tag deriver produces the
+ * radius rungs times the scale. The close affordance is a pill on the full
+ * radius, which never scales, so it is the negative control.
  */
 describeCausality({
   family: 'tag',
@@ -48,11 +45,13 @@ describeCausality({
     { id: 'solidFill', selector: SOLID, property: 'background-color' },
     { id: 'padInline', selector: SOLID, property: 'padding-left' },
     { id: 'closeCorner', selector: CLOSE, property: 'border-top-left-radius' },
+    { id: 'chipCorner', selector: SOLID, property: 'border-top-left-radius' },
     { id: 'focusRing', selector: SOLID, property: 'box-shadow', attributes: { 'data-state': 'focused focus-visible' } },
   ],
   decisions: {
     'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['solidFill'], holds: 'padInline', in: VERTICALS },
     'density.mode': { value: 'spacious', moves: ['padInline'], holds: 'closeCorner', in: VERTICALS },
+    'shape.radius-scale': { value: 1.2, moves: ['chipCorner'], holds: 'closeCorner', in: VERTICALS },
   },
 });
 
@@ -91,6 +90,29 @@ describe('tag derived channels and accessibility', () => {
     expect(Number.parseFloat(r.closeCorner)).toBeGreaterThan(0);
     expect(r.fullRadius.trim().length).toBeGreaterThan(0);
   }, 60_000);
+
+  it('rests the chip corner on the vertical radius scale and never scales the pill', async () => {
+    const corners: Record<string, Record<string, [string, string]>> = {};
+    for (const vertical of VERTICALS) {
+      const arms = await measureArms({
+        vertical,
+        markup,
+        arms: { base: {}, r08: { 'shape.radius-scale': 0.8 }, r12: { 'shape.radius-scale': 1.2 } },
+        targets: [
+          { id: 'chip', selector: SOLID, property: 'border-top-left-radius' },
+          { id: 'close', selector: CLOSE, property: 'border-top-left-radius' },
+        ],
+      });
+      corners[vertical] = Object.fromEntries(Object.entries(arms).map(([arm, r]) => [arm, [r.chip!, r.close!]]));
+    }
+    // rottay and evnto rest at scale 1 (0.25rem at their 15px root); bithire's
+    // own 0.8 now reaches its chips (0.25rem at 14.1px x 0.8).
+    expect(corners).toEqual({
+      rottay: { base: ['3.75px', '9999px'], r08: ['3px', '9999px'], r12: ['4.5px', '9999px'] },
+      bithire: { base: ['2.82px', '9999px'], r08: ['2.82px', '9999px'], r12: ['4.23px', '9999px'] },
+      evnto: { base: ['3.75px', '9999px'], r08: ['3px', '9999px'], r12: ['4.5px', '9999px'] },
+    });
+  }, 120_000);
 
   it('carries no serious axe finding beyond the pinned debt', async () => {
     const measured: Record<string, Readonly<Record<string, readonly string[]>>> = {};

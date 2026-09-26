@@ -1,9 +1,9 @@
 /**
  * @fileoverview The tag family: its tone fills on the palette's seeds mixed
  * toward the deep neutral, its inks on the inverse text role, the outlined inks
- * on the tone itself, the pill corners on the full radius, the padding steps on
- * the spacing ramp, the touch targets on the foundation minimum, and the focus
- * rings on the foundation ring.
+ * on the tone itself, the chip corners on the radius scale, the pill corners on
+ * the full radius, the padding steps on the spacing ramp, the touch targets on
+ * the foundation minimum, and the focus rings on the foundation ring.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/tag
  * @category Compilers
@@ -62,6 +62,9 @@ export const tagChromeDeriver: FamilyDeriver = {
     "--ds-tag-press-transform",
     "--ds-tag-shadow",
     "--ds-tag-border-width",
+    "--ds-tag-radius-sm",
+    "--ds-tag-radius-md",
+    "--ds-tag-radius-lg",
   ],
   derive: () => deriveTagChannels(),
 };
@@ -129,6 +132,12 @@ export function deriveTagChannels(): Record<string, string> {
   // The chip keyline reads the hairline role its skin fallback already names;
   // hairline rests at the component default's 1px in every vertical.
   vars["--ds-tag-border-width"] = "var(--ds-edge-hairline-width)";
+
+  // The chip corners are the base rungs times the tenant's radius scale; the
+  // pill corner rides the full radius and never scales.
+  vars["--ds-tag-radius-sm"] = "calc(0.125rem * var(--ds-radius-scale, 1))";
+  vars["--ds-tag-radius-md"] = "calc(0.25rem * var(--ds-radius-scale, 1))";
+  vars["--ds-tag-radius-lg"] = "calc(0.5rem * var(--ds-radius-scale, 1))";
 
   return vars;
 }
