@@ -21,9 +21,8 @@
  * with the asymmetry documented; K4-B Pass 2 LEVELLED it to the certified
  * ghost-button hover grammar (same law as Transfer's move/pagination buttons):
  * `--ds-button-ghost-bg-hover` (the tenant's brand tint over its control
- * surface) with a `--ds-surface-inset` floor, gated `:not(:disabled)`, family
- * escape hatch `--ds-calendar-nav-bg-hover`, and the active mode toggle
- * excluded so selected > rest stays discernible. The cell-hover SURFACE moved
+ * surface) with a `--ds-surface-inset` floor, gated `:not(:disabled)`, and the
+ * active mode toggle excluded so selected > rest stays discernible. The cell-hover SURFACE moved
  * off `--ds-surface-inset` in the K4-B remediation (invisible against
  * surface-card on governed sources) onto the canonical
  * `--ds-color-interactive-bg-hover` chain -- see the rule's comment.
@@ -277,7 +276,7 @@
      clears AA on BOTH raw tenant primaries (5.15:1 bithire #3A6FB0, 5.47:1
      TMM #0F766E), so the raw fill stays un-deepened. Escape hatch stays raw;
      --ds-color-white falls back to literal white when undeclared. */
-  color: var(--ds-calendar-active-ink, var(--ds-color-white));
+  color: var(--ds-color-white);
 }
 
 /* The year control is a composition of two governed semantic navigation
@@ -315,7 +314,7 @@
 @media (hover: hover) {
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover),
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover) {
-    background: var(--ds-calendar-nav-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+    background: var(--ds-button-ghost-bg-hover, var(--ds-surface-inset));
   }
 }
 
@@ -336,7 +335,7 @@
         excluded). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active),
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active) {
-  background: var(--ds-calendar-nav-bg-active, var(--ds-color-interactive-bg-active, var(--ds-button-ghost-bg-hover)));
+  background: var(--ds-color-interactive-bg-active, var(--ds-button-ghost-bg-hover));
 }
 
 /* ---- weekday column headers (W10: micro-label grammar -- a size step below
@@ -362,7 +361,7 @@
         prefers-reduced-motion clamps it below. Resting background stays
         transparent by construction (the hover rule's contrast argument). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'] {
-  border-radius: var(--ds-calendar-cell-radius, var(--ds-radius-md));
+  border-radius: var(--ds-radius-md);
   /* B4-04: every cell reserves the 1px border box the today-ring uses, so
      today/rest share identical inner geometry (no 1px content shift when the
      ring appears). Transparent at rest; the today rule below owns the color. */
@@ -382,7 +381,7 @@
      primaries (5.15:1 bithire, 5.47:1 TMM #0F766E); the raw fill is
      preserved. Escape hatch stays raw; --ds-color-white falls back to literal
      white when undeclared. */
-  color: var(--ds-calendar-selected-ink, var(--ds-color-white));
+  color: var(--ds-color-white);
   /* W10: the selected day reads as the grid's focal point -- semibold on the
      primary fill (the year-view month cells inherit the same weight). */
   font-weight: var(--ds-font-weight-semibold);

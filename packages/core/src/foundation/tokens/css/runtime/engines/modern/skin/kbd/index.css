@@ -47,7 +47,7 @@
   white-space: nowrap;
   vertical-align: var(--ds-kbd-vertical-align, middle);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-kbd-frame, var(--ds-color-border));
-  border-block-end-width: var(--ds-kbd-depth-width, 2px);
+  border-block-end-width: 2px;
   border-block-end-color: var(
     --ds-kbd-depth,
     color-mix(in srgb, var(--ds-kbd-frame, var(--ds-color-border)) 72%, var(--ds-color-neutral-900) 28%)

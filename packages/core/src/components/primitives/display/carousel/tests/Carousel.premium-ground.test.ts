@@ -45,8 +45,8 @@ describe('Carousel modern premium ground', () => {
   });
 
   it('keeps the dot halo: a 0-offset legibility ring, not elevation', () => {
-    expect(skin).toMatch(/box-shadow:\s*0 0 0 1px var\(--ds-carousel-dot-halo/);
-    expect(skin).toMatch(/box-shadow:\s*0 0 0 1px var\(--ds-carousel-dot-ring/);
+    expect(skin).toMatch(/box-shadow:\s*0 0 0 1px var\(--ds-color-alpha-white-70\)/);
+    expect(skin).toMatch(/box-shadow:\s*0 0 0 1px var\(--ds-color-alpha-black-20\)/);
   });
 
   it('brings no ground on the root frame', () => {

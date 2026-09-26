@@ -48,7 +48,7 @@ describe('Kbd modern engine contract', () => {
 
 describe('Kbd modern skin resilience', () => {
   it('owns the key-cap craft: frame, depth border, highlight, mono ink', () => {
-    expect(SKIN).toContain('border-block-end-width: var(--ds-kbd-depth-width, 2px);');
+    expect(SKIN).toContain('border-block-end-width: 2px;');
     expect(SKIN).toContain('--ds-kbd-font-family, var(--ds-font-family-mono');
     expect(SKIN).toContain('inset 0 1px 0');
     expect(SKIN).not.toMatch(/font-family:\s*monospace\s*;/);

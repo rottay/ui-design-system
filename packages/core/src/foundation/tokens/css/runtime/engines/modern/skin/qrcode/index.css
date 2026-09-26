@@ -111,8 +111,8 @@
         repeated attribute is needed -- 4th-wave recount). ---- */
 .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='spinner'] {
   display: inline-block;
-  inline-size: var(--ds-qrcode-spinner-size, 24px);
-  block-size: var(--ds-qrcode-spinner-size, 24px);
+  inline-size: 24px;
+  block-size: 24px;
   border: 2.5px solid var(--ds-qrcode-border-color, var(--ds-color-border));
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
@@ -145,8 +145,8 @@
      `--ds-density-effective-scale` idiom, K4-C Pass 2). */
   block-size: calc(var(--ds-qrcode-refresh-button-size) * var(--ds-density-effective-scale));
   flex-shrink: 0;
-  padding: 0 var(--ds-qrcode-refresh-button-padding-x, 12px);
-  font-size: var(--ds-qrcode-refresh-button-font-size, 13px);
+  padding: 0 12px;
+  font-size: 13px;
   cursor: pointer;
   /* The declared design is a SOLID primary chip with light ink
      (`--ds-qrcode-refresh-button-bg: var(--ds-color-primary)` +

@@ -3,7 +3,7 @@
   "workOrder": "WO-EVI-03",
   "finding": "F-48",
   "law": "Each census equals its ledger in both directions: a new row is red (route the test through the door instead), and a row the tree no longer carries is red until its exit is written here. The ledger only shrinks.",
-  "measuredAt": "2026-09-25 @ 2eb5dcb3e + EVI-03 arm 3a working tree",
+  "measuredAt": "2026-09-25 @ 260bb9a5c + EVI-03 arm 3b working tree",
   "harnessConsumers": {
     "owner": "WO-EVI-03",
     "target": 0,
@@ -158,130 +158,88 @@
           "name": "--ds-floatbutton-size-coarse",
           "exit": "re-pointed to the live --ds-touch-target-min (the Q11 floor, 44px in every scope); the test asserts the coarse rule reads var(--ds-touch-target-min, 44px)",
           "mover": "WO-EVI-03 arm 3a (2026-09-25, float-button/back-top/workspace-switcher cluster; paint byte-identical, 1764 Chromium cells, receipt-evi03-arm3a-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/calendar/tests/Calendar.pass1-premium.test.tsx",
+          "name": "--ds-calendar-active-ink",
+          "exit": "retired: the active day declares var(--ds-color-white) directly; scoped per-rule assertion",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/calendar/tests/Calendar.pass1-premium.test.tsx",
+          "name": "--ds-calendar-cell-radius",
+          "exit": "the test no longer names the channel: the Modern skin declares var(--ds-radius-md) directly; the frozen classic theme keeps its read (frozen, out of scope)",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/calendar/tests/Calendar.pass1-premium.test.tsx",
+          "name": "--ds-calendar-nav-bg-active",
+          "exit": "retired: the nav active declares var(--ds-color-interactive-bg-active, var(--ds-button-ghost-bg-hover)) directly; scoped per-rule assertion",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/calendar/tests/Calendar.pass1-premium.test.tsx",
+          "name": "--ds-calendar-nav-bg-hover",
+          "exit": "retired: the nav hover declares var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)) directly (the docblock's escape-hatch sentence went with it); scoped per-rule assertion",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/calendar/tests/Calendar.pass1-premium.test.tsx",
+          "name": "--ds-calendar-selected-ink",
+          "exit": "retired: the selected day declares var(--ds-color-white) directly; scoped per-rule assertion",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/carousel/tests/Carousel.real-engines.test.tsx",
+          "name": "--ds-carousel-arrow-size",
+          "exit": "the test no longer names the channel: the Modern skin declares calc(32px * var(--ds-density-effective-scale)) directly; the frozen rustic engine keeps its read (frozen, out of scope)",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/carousel/tests/Carousel.real-engines.test.tsx",
+          "name": "--ds-carousel-arrow-size-coarse",
+          "exit": "re-pointed to the live --ds-touch-target-min (the Q11 floor), asserted inside (pointer: coarse)",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/carousel/tests/Carousel.real-engines.test.tsx",
+          "name": "--ds-carousel-dot-halo",
+          "exit": "retired: the halo declares var(--ds-color-alpha-white-70) directly; Carousel.premium-ground re-expressed too (it named the channel without being a ledger row)",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/carousel/tests/Carousel.real-engines.test.tsx",
+          "name": "--ds-carousel-dot-ring",
+          "exit": "retired: the ring declares var(--ds-color-alpha-black-20) directly; premium-ground re-expressed likewise",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/kbd/tests/Kbd.modern-engine.test.tsx",
+          "name": "--ds-kbd-depth-width",
+          "exit": "retired: border-block-end-width 2px declared directly; per-rule assertion",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/qr-code/tests/QRCode.runtime-engines.test.tsx",
+          "name": "--ds-qrcode-refresh-button-font-size",
+          "exit": "retired: 13px declared directly; per-rule assertion",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/qr-code/tests/QRCode.runtime-engines.test.tsx",
+          "name": "--ds-qrcode-refresh-button-padding-x",
+          "exit": "retired: padding 0 12px declared directly; per-rule assertion",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
+        },
+        {
+          "file": "core/src/components/primitives/display/qr-code/tests/QRCode.runtime-engines.test.tsx",
+          "name": "--ds-qrcode-spinner-size",
+          "exit": "retired: 24px declared directly; per-rule assertion",
+          "mover": "WO-EVI-03 arm 3b (2026-09-25, calendar/carousel/kbd/qr-code cluster; paint byte-identical, 3528 Chromium cells, receipt-evi03-arm3b-opus.json)"
         }
       ]
     },
     "rows": [
-      {
-        "file": "core/src/components/primitives/display/calendar/tests/Calendar.pass1-premium.test.tsx",
-        "name": "--ds-calendar-active-ink",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/calendar/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-03",
-        "family": "calendar",
-        "reason": "read by css/runtime/engines/modern/skin/calendar/index.css with no producer; calendar is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/calendar/tests/Calendar.pass1-premium.test.tsx",
-        "name": "--ds-calendar-cell-radius",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/classic/theme/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-03",
-        "family": "calendar",
-        "reason": "read by css/runtime/engines/classic/theme/index.css with no producer; calendar is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/calendar/tests/Calendar.pass1-premium.test.tsx",
-        "name": "--ds-calendar-nav-bg-active",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/calendar/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-03",
-        "family": "calendar",
-        "reason": "read by css/runtime/engines/modern/skin/calendar/index.css with no producer; calendar is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/calendar/tests/Calendar.pass1-premium.test.tsx",
-        "name": "--ds-calendar-nav-bg-hover",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/calendar/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-03",
-        "family": "calendar",
-        "reason": "read by css/runtime/engines/modern/skin/calendar/index.css with no producer; calendar is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/calendar/tests/Calendar.pass1-premium.test.tsx",
-        "name": "--ds-calendar-selected-ink",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/calendar/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-03",
-        "family": "calendar",
-        "reason": "read by css/runtime/engines/modern/skin/calendar/index.css with no producer; calendar is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/carousel/tests/Carousel.real-engines.test.tsx",
-        "name": "--ds-carousel-arrow-size",
-        "occurrences": 1,
-        "readAt": "c/primitives/display/carousel/engines/rustic/index.tsx",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "carousel",
-        "reason": "read by c/primitives/display/carousel/engines/rustic/index.tsx with no producer; carousel is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/carousel/tests/Carousel.real-engines.test.tsx",
-        "name": "--ds-carousel-arrow-size-coarse",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/carousel/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "carousel",
-        "reason": "read by css/runtime/engines/modern/skin/carousel/index.css with no producer; carousel is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/carousel/tests/Carousel.real-engines.test.tsx",
-        "name": "--ds-carousel-dot-halo",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/carousel/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "carousel",
-        "reason": "read by css/runtime/engines/modern/skin/carousel/index.css with no producer; carousel is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/carousel/tests/Carousel.real-engines.test.tsx",
-        "name": "--ds-carousel-dot-ring",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/carousel/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "carousel",
-        "reason": "read by css/runtime/engines/modern/skin/carousel/index.css with no producer; carousel is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/kbd/tests/Kbd.modern-engine.test.tsx",
-        "name": "--ds-kbd-depth-width",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/kbd/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "kbd",
-        "reason": "read by css/runtime/engines/modern/skin/kbd/index.css with no producer; kbd is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
       {
         "file": "core/src/components/primitives/display/kbd/tests/Kbd.modern-engine.test.tsx",
         "name": "--ds-kbd-font-family",
@@ -293,42 +251,6 @@
         "ownerProposal": "WO-FAM-06",
         "family": "kbd",
         "reason": "read by css/facade/artifacts/bithire/index.css with no producer; kbd is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/qr-code/tests/QRCode.runtime-engines.test.tsx",
-        "name": "--ds-qrcode-refresh-button-font-size",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/qrcode/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "qr-code",
-        "reason": "read by css/runtime/engines/modern/skin/qrcode/index.css with no producer; qr-code is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/qr-code/tests/QRCode.runtime-engines.test.tsx",
-        "name": "--ds-qrcode-refresh-button-padding-x",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/qrcode/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "qr-code",
-        "reason": "read by css/runtime/engines/modern/skin/qrcode/index.css with no producer; qr-code is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
-      },
-      {
-        "file": "core/src/components/primitives/display/qr-code/tests/QRCode.runtime-engines.test.tsx",
-        "name": "--ds-qrcode-spinner-size",
-        "occurrences": 1,
-        "readAt": "css/runtime/engines/modern/skin/qrcode/index.css",
-        "rwpDebt": true,
-        "class": "uncut-family-read",
-        "owner": null,
-        "ownerProposal": "WO-FAM-06",
-        "family": "qr-code",
-        "reason": "read by css/runtime/engines/modern/skin/qrcode/index.css with no producer; qr-code is in no family cut (absent from the family-cut roster and from every registry title and note), so no work order drains it; counted by the read-without-producer ratchet"
       },
       {
         "file": "core/src/components/primitives/feedback/spinner/tests/Spinner.modern-engine.test.tsx",

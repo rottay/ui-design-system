@@ -123,8 +123,8 @@
   /* Ground and edge stay: the arrow floats over arbitrary slide art and must
      stay legible. Elevation does not -- nothing rests raised except a tooltip. */
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
-  inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
-  block-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
+  inline-size: calc(32px * var(--ds-density-effective-scale));
+  block-size: calc(32px * var(--ds-density-effective-scale));
   font-size: var(--ds-font-size-xs);
   transition:
     border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -144,7 +144,7 @@
   .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-inset);
     box-shadow:
-      0 0 0 1px var(--ds-carousel-dot-ring, var(--ds-color-alpha-black-20)),
+      0 0 0 1px var(--ds-color-alpha-black-20),
       0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
   }
 }
@@ -174,8 +174,8 @@
 
 @media (pointer: coarse) {
   .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction] {
-    inline-size: var(--ds-carousel-arrow-size-coarse, 44px);
-    block-size: var(--ds-carousel-arrow-size-coarse, 44px);
+    inline-size: var(--ds-touch-target-min, 44px);
+    block-size: var(--ds-touch-target-min, 44px);
   }
 
   /* Dots keep their 8px visual size but meet the 44px floor through an
@@ -226,11 +226,11 @@
         ring for the unselected surface dot. ---- */
 .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true'] {
   background: var(--ds-color-primary);
-  box-shadow: 0 0 0 1px var(--ds-carousel-dot-halo, var(--ds-color-alpha-white-70));
+  box-shadow: 0 0 0 1px var(--ds-color-alpha-white-70);
 }
 .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false'] {
   background: var(--ds-carousel-dot-bg, var(--ds-surface-card));
-  box-shadow: 0 0 0 1px var(--ds-carousel-dot-ring, var(--ds-color-alpha-black-20));
+  box-shadow: 0 0 0 1px var(--ds-color-alpha-black-20);
 }
 
 @media (prefers-reduced-motion: reduce) {

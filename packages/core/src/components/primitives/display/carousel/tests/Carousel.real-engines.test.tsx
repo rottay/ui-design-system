@@ -220,17 +220,17 @@ describe('Carousel modern real engine', () => {
     );
 
     it('owns arrow size with a coarse-pointer 44px floor (touch law)', () => {
-      expect(skin).toContain('inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));');
+      expect(skin).toContain('inline-size: calc(32px * var(--ds-density-effective-scale));');
       expect(skin).not.toContain('var(--ds-density-effective-scale, 1)');
       expect(skin).toContain('@media (pointer: coarse)');
-      expect(skin).toContain('var(--ds-carousel-arrow-size-coarse, 44px);');
+      expect(skin).toMatch(/@media \(pointer: coarse\) \{[^}]*inline-size: var\(--ds-touch-target-min, 44px\);/);
     });
 
     it('halos the dots so they read on any slide background', () => {
       // The selected primary dot was invisible on a primary slide (measured
       // teal-on-teal); both states now carry a ring.
-      expect(skin).toContain("--ds-carousel-dot-halo, var(--ds-color-alpha-white-70)");
-      expect(skin).toContain("--ds-carousel-dot-ring, var(--ds-color-alpha-black-20)");
+      expect(skin).toMatch(/\[data-selected='true'\] \{[^}]*box-shadow: 0 0 0 1px var\(--ds-color-alpha-white-70\);/);
+      expect(skin).toMatch(/\[data-selected='false'\] \{[^}]*box-shadow: 0 0 0 1px var\(--ds-color-alpha-black-20\);/);
     });
 
     it('keeps arrow geometry out of the engine inline style', () => {

@@ -116,10 +116,10 @@ describe('modern QRCode chrome (K4-C)', () => {
   );
 
   it('consolidates spinner/refresh-button/icon geometry into the skin through governed channels', () => {
-    expect(modernSkin).toContain('--ds-qrcode-spinner-size, 24px');
+    expect(modernSkin).toMatch(/\[data-part='spinner'\] \{[^}]*inline-size: 24px;[^}]*block-size: 24px;/);
     expect(modernSkin).toContain('var(--ds-qrcode-refresh-button-size)');
-    expect(modernSkin).toContain('--ds-qrcode-refresh-button-padding-x, 12px');
-    expect(modernSkin).toContain('--ds-qrcode-refresh-button-font-size, 13px');
+    expect(modernSkin).toMatch(/\[data-part='refresh-button'\] \{[^}]*padding: 0 12px;/);
+    expect(modernSkin).toMatch(/\[data-part='refresh-button'\] \{[^}]*font-size: 13px;/);
     expect(modernSkin).toContain('padding: var(--ds-qrcode-icon-padding)');
     expect(modernSkin).not.toContain('--ds-qrcode-refresh-button-size, 32px');
     expect(modernSkin).not.toContain('--ds-qrcode-icon-padding, 4px');

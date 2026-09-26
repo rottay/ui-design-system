@@ -262,10 +262,12 @@ describe('Modern Calendar remediation (K4-B)', () => {
     // (rule comments mention them only to document why).
     expect(skin).not.toMatch(/color:\s*var\(--ds-color-text-inverse/);
     expect(skin).not.toMatch(/color:\s*var\(--ds-color-text-on-primary/);
-    expect(skin).toContain(
-      'color: var(--ds-calendar-selected-ink, var(--ds-color-white))',
+    expect(skin).toMatch(
+      /\[data-part='cell'\]\[data-selected='true'\] \{[^}]*\bcolor:\s*var\(--ds-color-white\);/,
     );
-    expect(skin).toContain('color: var(--ds-calendar-active-ink, var(--ds-color-white))');
+    expect(skin).toMatch(
+      /\[data-part='mode-toggle'\]\[data-active='true'\] \{[^}]*\bcolor:\s*var\(--ds-color-white\);/,
+    );
 
     // Measured on the compiled FlatThemes (same method as the CodeBlock
     // gutter measurement): white ink on BOTH raw primaries clears AA with
@@ -295,7 +297,7 @@ describe('Modern Calendar remediation (K4-B)', () => {
       "[data-part='mode-toggle']:not([data-active='true']):not(:disabled):hover",
     );
     expect(skin).toContain(
-      'background: var(--ds-calendar-nav-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)))',
+      'background: var(--ds-button-ghost-bg-hover, var(--ds-surface-inset))',
     );
     // The old "transcribed, not levelled" header claim is gone.
     expect(skin).not.toContain('transcribed, not');
@@ -346,12 +348,12 @@ describe('Modern Calendar W10 second visual pass', () => {
     expect(engineSource).not.toContain('justify-center rounded-lg');
     expect(engineSource).not.toContain('p-4 rounded-lg');
     // Root = lg (panel), cells = md (SAME step as the header chrome) -- one
-    // geometry law, both with a family escape hatch.
+    // geometry law.
     expect(skin).toMatch(
       /\[data-part='root'\]\s*\{[^}]*border-radius:\s*var\(--ds-calendar-radius, var\(--ds-radius-lg\)\)/,
     );
-    expect(skin).toContain(
-      'border-radius: var(--ds-calendar-cell-radius, var(--ds-radius-md))',
+    expect(skin).toMatch(
+      /\[data-part='grid'\] \[data-part='cell'\] \{[^}]*border-radius:\s*var\(--ds-radius-md\);/,
     );
 
     const { container } = render(<CalendarModern defaultValue={notToday()} fullscreen={false} />);
@@ -397,7 +399,9 @@ describe('Modern Calendar W10 second visual pass', () => {
     expect(skin).toMatch(
       /\[data-part='cell'\]:active:not\(\[data-selected='true'\]\):not\(\[data-disabled\]\)\s*\{\s*background:\s*var\(\s*--ds-calendar-cell-active,\s*var\(--ds-color-interactive-bg-active/,
     );
-    expect(skin).toContain('--ds-calendar-nav-bg-active');
+    expect(skin).toMatch(
+      /:not\(\[data-active='true'\]\):not\(:is\(\[data-state~='disabled'\], :disabled\)\):is\(\[data-state~='pressed'\], :active\) \{\s*background:\s*var\(--ds-color-interactive-bg-active, var\(--ds-button-ghost-bg-hover\)\);/,
+    );
     // No transform scale anywhere: the RTL glyph flip owns `transform` on nav
     // buttons and a scaling grid cell jitters its neighbours.
     expect(skin).not.toMatch(/:active[^{]*\{[^}]*transform/);
