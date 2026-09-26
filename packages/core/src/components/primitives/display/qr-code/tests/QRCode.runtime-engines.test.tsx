@@ -119,7 +119,7 @@ describe('modern QRCode chrome (K4-C)', () => {
     expect(modernSkin).toMatch(/\[data-part='spinner'\] \{[^}]*inline-size: 24px;[^}]*block-size: 24px;/);
     expect(modernSkin).toContain('var(--ds-qrcode-refresh-button-size)');
     expect(modernSkin).toMatch(/\[data-part='refresh-button'\] \{[^}]*padding: 0 12px;/);
-    expect(modernSkin).toMatch(/\[data-part='refresh-button'\] \{[^}]*font-size: 13px;/);
+    expect(modernSkin).toMatch(/\[data-part='refresh-button'\] \{[^}]*font-size: var\(--ds-qrcode-refresh-button-font-size, 13px\);/);
     expect(modernSkin).toContain('padding: var(--ds-qrcode-icon-padding)');
     expect(modernSkin).not.toContain('--ds-qrcode-refresh-button-size, 32px');
     expect(modernSkin).not.toContain('--ds-qrcode-icon-padding, 4px');
@@ -154,6 +154,8 @@ describe('modern QRCode chrome (K4-C)', () => {
     // 32px button down to 26.5px on a 72px cell), and the radius is a
     // stadium pill instead of a 50% ellipse on the wide button.
     expect(componentTokens).toContain('--ds-qrcode-refresh-button-radius: var(--ds-radius-full, 9999px);');
+    // The label size the skin reads has its producer here, in absolute px.
+    expect(componentTokens).toContain('--ds-qrcode-refresh-button-font-size: 13px;');
     expect(modernSkin).toContain('flex-shrink: 0;');
   });
 

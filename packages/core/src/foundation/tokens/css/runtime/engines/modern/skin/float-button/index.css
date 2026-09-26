@@ -168,7 +168,9 @@
   align-items: center;
   justify-content: center;
   padding: 1px 6px;
-  font-size: 11px;
+  /* The count size is a family token (themes/default FLOAT BUTTON block):
+     no type-ramp rung is 11px once the tenant root rescales rem. */
+  font-size: var(--ds-floatbutton-badge-font-size, 11px);
   line-height: 16px;
   /* Counts are metrics: tabular glyphs keep the pill geometry stable as the
      count changes (B9 pass 2). */

@@ -1940,6 +1940,9 @@
   --ds-floatbutton-primary-color: var(--ds-color-text-on-primary);
   --ds-floatbutton-badge-bg: var(--ds-color-error);
   --ds-floatbutton-badge-color: var(--ds-color-text-on-primary);
+  /* Absolute px: the count pill is private geometry with no type-ramp rung
+     at 11px, and the rem ramp follows the tenant root. */
+  --ds-floatbutton-badge-font-size: 11px;
   --ds-floatbutton-description-color: var(--ds-color-text-secondary);
 
   /* ─────────────────────────────────────────────────────────────────────────────

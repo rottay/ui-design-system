@@ -99,6 +99,9 @@
   --ds-qrcode-refresh-button-bg: var(--ds-color-primary, #1890ff);
   --ds-qrcode-refresh-button-color: #ffffff;
   --ds-qrcode-refresh-button-size: 32px;
+  /* Absolute px, like the size above: the chip is private geometry with no
+     type-ramp rung at 13px, and the rem ramp follows the tenant root. */
+  --ds-qrcode-refresh-button-font-size: 13px;
   /* Stadium pill, not a 50% ellipse: the button is wider than tall, so 50%
      produced an accidental-looking oval (K4-C Pass 2 sighted review). */
   --ds-qrcode-refresh-button-radius: var(--ds-radius-full, 9999px);

@@ -20,6 +20,10 @@ const modernSkin = readFileSync(
   resolve(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css'),
   'utf8',
 );
+const defaultTheme = readFileSync(
+  resolve(__dirname, '../../../../../foundation/tokens/css/foundation/themes/default/index.css'),
+  'utf8',
+);
 
 describe('FloatButton modern advanced engine coverage', () => {
   it('covers modern button and anchor branches, tooltip guards, and badge rendering', () => {
@@ -105,7 +109,9 @@ describe('FloatButton modern advanced engine coverage', () => {
     const count = decls(".rottay-float-button--modern [data-part='badge'][data-variant='count']");
     expect(count['inset-inline-end']).toBe('-8px');
     expect(count.padding).toBe('1px 6px');
-    expect(count['font-size']).toBe('11px');
+    expect(count['font-size']).toBe('var(--ds-floatbutton-badge-font-size, 11px)');
+    // The count size the skin reads has its producer in the theme's FLOAT BUTTON block.
+    expect(defaultTheme).toContain('--ds-floatbutton-badge-font-size: 11px;');
     expect(count['line-height']).toBe('16px');
     // K4-C Pass 2: the coarse-pointer circle takes the governed 44px touch floor.
     const coarse = decls(`${trigger}[data-shape='circle']`, '(pointer: coarse)');
