@@ -43,9 +43,9 @@
      the single geometry owner. The block-end inset adds the device safe area
      so the button never parks under the home indicator. */
   position: fixed;
-  inset-block-end: calc(var(--ds-backtop-inset-block-end, 2rem) + env(safe-area-inset-bottom, 0px));
+  inset-block-end: calc(2rem + env(safe-area-inset-bottom, 0px));
   inset-inline-end: 2rem;
-  z-index: var(--ds-backtop-z-index, var(--ds-z-fixed));
+  z-index: var(--ds-z-fixed);
   display: inline-flex;
   align-items: center;
   justify-content: center;

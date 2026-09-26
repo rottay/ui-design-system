@@ -83,10 +83,9 @@
  * `aria-hidden` and non-interactive by construction (divs, not buttons), so
  * the APG grid contract (roving stop over current-month days) is unchanged.
  * (9) density: the root padding, header rhythm and year-cell padding scale
- * with the governed `--ds-density-effective-scale` authority through their
- * fallbacks (explicit `--ds-calendar-*` channel values keep exact tenant
- * intent). The header chrome's 32px block / 12px inline geometry is
- * test-pinned verbatim and therefore density-frozen (documented debt).
+ * with the governed `--ds-density-effective-scale` authority. The header
+ * chrome's 32px block / 12px inline geometry is test-pinned verbatim and
+ * therefore density-frozen (documented debt).
  * (10) the today ring is never color-only: it now pairs the 1px primary edge
  * with a semibold numeral, and every cell reserves the 1px border box
  * (transparent at rest) so today/rest share identical geometry -- no 1px
@@ -98,23 +97,23 @@
      The date grid is a real region boundary, so it keeps a hairline edge and
      the tenant-scaled radius -- an edge, not a card. */
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-calendar-border, var(--ds-color-border-subtle));
-  border-radius: var(--ds-calendar-radius, var(--ds-radius-lg));
+  border-radius: var(--ds-radius-lg);
   /* Drained layout (the former live `p-4` / `w-full` / `w-80` utilities):
-     fullscreen fills its container; compact reads the family width channel,
-     widening on coarse pointers so 7x44px tracks fit (the engine keeps the
-     pinned coarse utility string as an inert bridge). The fallback padding
-     scales with the governed density authority (B4-04). */
-  padding: var(--ds-calendar-padding, calc(1rem * var(--ds-density-effective-scale)));
+     fullscreen fills its container; compact is 20rem, widening on coarse
+     pointers so 7x44px tracks fit (the engine keeps the pinned coarse utility
+     string as an inert bridge). The padding scales with the governed density
+     authority (B4-04). */
+  padding: calc(1rem * var(--ds-density-effective-scale));
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='true'] {
   inline-size: 100%;
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] {
-  inline-size: var(--ds-calendar-compact-width, 20rem);
+  inline-size: 20rem;
 }
 @media (pointer: coarse) {
   .rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] {
-    inline-size: var(--ds-calendar-compact-width-coarse, 22.75rem);
+    inline-size: 22.75rem;
   }
 }
 
@@ -125,7 +124,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-block-end: var(--ds-calendar-header-margin-block-end, calc(1rem * var(--ds-density-effective-scale)));
+  margin-block-end: calc(1rem * var(--ds-density-effective-scale));
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div {
   display: flex;
@@ -201,7 +200,7 @@
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] [data-part='cell'] {
   position: relative;
-  padding: var(--ds-calendar-year-cell-padding, calc(1rem * var(--ds-density-effective-scale)));
+  padding: calc(1rem * var(--ds-density-effective-scale));
   cursor: pointer;
   text-align: center;
 }
@@ -209,7 +208,7 @@
   font-size: var(--ds-font-size-xs);
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell'][data-disabled] {
-  opacity: var(--ds-calendar-cell-disabled-opacity, 0.3);
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
@@ -235,7 +234,7 @@
         The engine's `mb-4` keeps the air below the line. ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] {
   padding-block-end: 10px;
-  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-calendar-header-border, var(--ds-color-border-subtle));
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* ---- header: the four nav arrows and the two mode toggles share one resting
@@ -325,7 +324,7 @@
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible),
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:is([data-state~='focus-visible'], :focus-visible),
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell']:is([data-state~='focus-visible'], :focus-visible) {
-  box-shadow: var(--ds-calendar-focus-ring, var(--ds-focus-ring));
+  box-shadow: var(--ds-focus-ring);
 }
 
 /* ---- W10: press feedback -- the WO-ENG-04 active channel, one step deeper
@@ -432,17 +431,13 @@
    hover now rides the canonical interactive-hover token (bithire light:
    primary-tinted rgba(10,102,194,0.06); dark: rgba(255,255,255,0.04)), which
    differs from the transparent rest by construction on every source; the
-   color-mix fallback covers tenants without the token, and a tenant's
-   explicit `--ds-calendar-cell-hover` stays raw (escape hatch). Selector
+   color-mix fallback covers tenants without the token. Selector
    re-verified against the rendered DOM: root carries both classes, grid is a
    direct child, cells are direct children carrying data-selected/data-today
    and data-disabled only when disabled. */
 @media (hover: hover) {
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell']:is([data-state~='hovered'], :hover):not([data-selected='true']):not([data-disabled]) {
-    background: var(
-      --ds-calendar-cell-hover,
-      var(--ds-color-interactive-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, transparent))
-    );
+    background: var(--ds-color-interactive-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, transparent));
   }
 }
 
@@ -450,10 +445,7 @@
         step deeper than hover (alpha-primary-10 vs the 6-8% hover tint), same
         gates. Background only, no transform (see the header press rule). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] [data-part='cell']:is([data-state~='pressed'], :active):not([data-selected='true']):not([data-disabled]) {
-  background: var(
-    --ds-calendar-cell-active,
-    var(--ds-color-interactive-bg-active, color-mix(in srgb, var(--ds-color-primary) 14%, transparent))
-  );
+  background: var(--ds-color-interactive-bg-active, color-mix(in srgb, var(--ds-color-primary) 14%, transparent));
 }
 
 /* ---- W10: reduced motion -- clamp the skin-owned state transitions (same

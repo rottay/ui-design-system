@@ -262,7 +262,7 @@
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-position='sidebar'] [data-part='panel'] {
   inset-block-start: 0;
   inset-inline-start: 100%;
-  margin-inline-start: var(--ds-workspace-switcher-panel-gap, 8px);
+  margin-inline-start: 8px;
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root']:not([data-position='sidebar']) [data-part='panel'] {

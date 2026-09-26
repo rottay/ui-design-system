@@ -36,8 +36,7 @@
  * GEOMETRY CONSOLIDATION (K4-C): the circle footprint (40px), square padding
  * (8px 12px), badge dot offsets/size (-4px, 8px) and badge count geometry
  * (offsets -8px, padding 1px/6px, font-size 11px, line-height 16px) were raw
- * inline literals; they are now token-bound rules below with VERBATIM
- * fallbacks, riding the established `--ds-floatbutton-*` token family.
+ * inline literals; they are now declared on the skin rules below.
  * P2-20 drained the REST of the engine's inline paint: trigger structure
  * (inline-flex centering, position: relative, cursor), the Group trigger's
  * zIndex literal, the panel's pinned opacity/translate utility pair, and the
@@ -124,7 +123,7 @@
 }
 .rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle']) {
   border-radius: var(--ds-radius-lg);
-  padding: calc(8px * var(--ds-density-effective-scale)) calc(var(--ds-floatbutton-padding-inline, 12px) * var(--ds-density-effective-scale));
+  padding: calc(8px * var(--ds-density-effective-scale)) calc(12px * var(--ds-density-effective-scale));
 }
 /* K4-C Pass 2: the 40px circle misses the 44px coarse-pointer law; bump the
    footprint under coarse pointers only (square shape already exceeds it via
@@ -155,15 +154,15 @@
 }
 
 .rottay-float-button--modern [data-part='badge'][data-variant='dot'] {
-  inset-block-start: var(--ds-floatbutton-dot-offset-block, -4px);
+  inset-block-start: -4px;
   inset-inline-end: -4px;
-  inline-size: var(--ds-floatbutton-dot-size, 8px);
-  block-size: var(--ds-floatbutton-dot-size, 8px);
+  inline-size: 8px;
+  block-size: 8px;
   border-radius: var(--ds-radius-full);
 }
 
 .rottay-float-button--modern [data-part='badge'][data-variant='count'] {
-  inset-block-start: var(--ds-floatbutton-badge-offset-block, -8px);
+  inset-block-start: -8px;
   inset-inline-end: -8px;
   display: inline-flex;
   align-items: center;

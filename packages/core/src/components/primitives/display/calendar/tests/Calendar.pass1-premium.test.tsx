@@ -197,14 +197,14 @@ describe('Modern Calendar guarded i18n channel (K4-B)', () => {
 });
 
 describe('Modern Calendar remediation (K4-B)', () => {
-  it('paints the day-cell hover from the canonical interactive-hover chain, with a raw escape hatch (R5)', () => {
+  it('paints the day-cell hover from the canonical interactive-hover chain (R5)', () => {
     // The old var(--ds-surface-inset) hover was invisible against the root's
     // surface-card on governed sources; the rule now rides
     // --ds-color-interactive-bg-hover with a color-mix fallback.
     // State selectors pair with the kernel token (6a42d6595), the hover lives
     // under (hover: hover), and cells sit inside rows (6fb4885f8).
     expect(skin).toMatch(
-      /@media \(hover: hover\) \{\s*\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='grid'\] \[data-part='cell'\]:is\(\[data-state~='hovered'\], :hover\):not\(\[data-selected='true'\]\):not\(\[data-disabled\]\) \{\s*background: var\(\s*--ds-[a-z-]+,\s*var\(--ds-color-interactive-bg-hover, color-mix\(in srgb, var\(--ds-color-primary\) 8%, transparent\)\)\s*\);/,
+      /@media \(hover: hover\) \{\s*\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='grid'\] \[data-part='cell'\]:is\(\[data-state~='hovered'\], :hover\):not\(\[data-selected='true'\]\):not\(\[data-disabled\]\) \{\s*background: var\(--ds-color-interactive-bg-hover, color-mix\(in srgb, var\(--ds-color-primary\) 8%, transparent\)\);/,
     );
     // The invisible-inset paint is gone from the hover rule.
     expect(skin).not.toMatch(/:hover[^{]*\{\s*background:\s*var\(--ds-surface-inset\)/);
@@ -355,7 +355,7 @@ describe('Modern Calendar W10 second visual pass', () => {
     // Root = lg (panel), cells = md (SAME step as the header chrome) -- one
     // geometry law.
     expect(skin).toMatch(
-      /\[data-part='root'\]\s*\{[^}]*border-radius:\s*var\(--ds-calendar-radius, var\(--ds-radius-lg\)\)/,
+      /\[data-part='root'\]\s*\{[^}]*border-radius:\s*var\(--ds-radius-lg\);/,
     );
     expect(skin).toMatch(
       /\[data-part='grid'\] \[data-part='cell'\] \{[^}]*border-radius:\s*var\(--ds-radius-md\);/,
@@ -374,7 +374,7 @@ describe('Modern Calendar W10 second visual pass', () => {
       'border: var(--ds-edge-hairline-width, 1px) solid var(--ds-calendar-border, var(--ds-color-border-subtle))',
     );
     expect(skin).toMatch(
-      /\[data-part='header'\]\s*\{\s*padding-block-end:\s*10px;\s*border-block-end:\s*var\(--ds-edge-hairline-width, 1px\) solid var\(--ds-[a-z-]+, var\(--ds-color-border-subtle\)\)/,
+      /\[data-part='header'\]\s*\{\s*padding-block-end:\s*10px;\s*border-block-end:\s*var\(--ds-edge-hairline-width, 1px\) solid var\(--ds-color-border-subtle\);/,
     );
   });
 
@@ -394,7 +394,7 @@ describe('Modern Calendar W10 second visual pass', () => {
   it('paints keyboard focus with the canonical ring on every interactive part', () => {
     // Focus pairs with its kernel token (6a42d6595); cells sit inside rows (6fb4885f8).
     expect(skin).toMatch(
-      /\[data-part='nav-button'\]:is\(\[data-state~='focus-visible'\], :focus-visible\),\s*\n\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='header'\] > div > \[data-part='mode-toggle'\]:is\(\[data-state~='focus-visible'\], :focus-visible\),\s*\n\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='grid'\] \[data-part='cell'\]:is\(\[data-state~='focus-visible'\], :focus-visible\)\s*\{\s*box-shadow:\s*var\(--ds-[a-z-]+, var\(--ds-focus-ring\)\)/,
+      /\[data-part='nav-button'\]:is\(\[data-state~='focus-visible'\], :focus-visible\),\s*\n\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='header'\] > div > \[data-part='mode-toggle'\]:is\(\[data-state~='focus-visible'\], :focus-visible\),\s*\n\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='grid'\] \[data-part='cell'\]:is\(\[data-state~='focus-visible'\], :focus-visible\)\s*\{\s*box-shadow:\s*var\(--ds-focus-ring\);/,
     );
     // Forced colors drops box-shadows: the ring re-maps to a Highlight outline
     // whose width reads the ring-width channel (6a42d6595).
@@ -405,7 +405,7 @@ describe('Modern Calendar W10 second visual pass', () => {
     // Cells and header chrome both ride the WO-ENG-04 active token; the active
     // mode toggle stays excluded (same law as the hover grammar).
     expect(skin).toMatch(
-      /\[data-part='cell'\]:is\(\[data-state~='pressed'\], :active\):not\(\[data-selected='true'\]\):not\(\[data-disabled\]\)\s*\{\s*background:\s*var\(\s*--ds-[a-z-]+,\s*var\(--ds-color-interactive-bg-active/,
+      /\[data-part='cell'\]:is\(\[data-state~='pressed'\], :active\):not\(\[data-selected='true'\]\):not\(\[data-disabled\]\)\s*\{\s*background:\s*var\(--ds-color-interactive-bg-active, color-mix\(in srgb, var\(--ds-color-primary\) 14%, transparent\)\);/,
     );
     expect(skin).toMatch(
       /:not\(\[data-active='true'\]\):not\(:is\(\[data-state~='disabled'\], :disabled\)\):is\(\[data-state~='pressed'\], :active\) \{\s*background:\s*var\(--ds-color-interactive-bg-active, var\(--ds-button-ghost-bg-hover\)\);/,
