@@ -460,7 +460,6 @@ describe("channel minting and CSS text have declared owners", () => {
       `${LOWERING_ROOT}/runtime/derivation/palette/neutral-temperature/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/palette/semantic/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/palette/tints/index.ts`,
-      `${LOWERING_ROOT}/runtime/derivation/responsive/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/shape/radius/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/states/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/surfaces/index.ts`,

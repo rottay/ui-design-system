@@ -128,8 +128,7 @@ type Case = { value: unknown } | { skip: string };
  * `shape.button-style` sharp -> soft (0 -> 6),
  * `surfaces.border-style` strong -> none (0 -> 3),
  * `states.emphasis` strong -> subtle (0 -> 6),
- * `navigation.sidebar-tone` inverse -> strong (0 -> 5),
- * `responsive.posture` compact -> balanced (0 -> 4).
+ * `navigation.sidebar-tone` inverse -> strong (0 -> 5).
  */
 const CASES: Readonly<Record<string, Case>> = {
   "palette.neutral-temperature": { value: "warm" },
@@ -151,7 +150,6 @@ const CASES: Readonly<Record<string, Case>> = {
   "states.focus-style": { value: "glow" },
   "motion.character": { value: "playful" },
   "navigation.sidebar-tone": { value: "strong" },
-  "responsive.posture": { value: "balanced" },
   "palette.seeds": {
     skip:
       "the keypath names four colour leaves at once and a seed change re-derives the whole ramp through the APCA " +
