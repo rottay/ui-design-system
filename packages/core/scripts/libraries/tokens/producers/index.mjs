@@ -22,7 +22,10 @@
  *       (`COMPILER_PRODUCER_ROOTS`): el registro de derivacion, el kernel del
  *       compilador y `lowering/foundation`. Fuera del registro, una clave
  *       interpolada o no literal se resuelve sobre un dominio literal cerrado o
- *       se reporta en `unresolved`; nunca se descarta en silencio.
+ *       se reporta en `unresolved`; nunca se descarta en silencio. Un dominio
+ *       literal cerrado es tambien el conjunto de call sites de una funcion
+ *       privada que recibe el hueco del template como parametro y a la que
+ *       TODOS sus llamadores pasan un literal (`resolveThroughLiteralCallSites`).
  *
  * Lo que NO cuenta como productor: un `var()` en un skin (eso es una lectura),
  * un nombre citado en un comentario, un fixture, un test o un artefacto
@@ -30,6 +33,8 @@
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
+
+import ts from 'typescript';
 
 import {
   collectFlatThemeCompilerSources,
@@ -169,12 +174,84 @@ function unreadKeyShapes(sourceText) {
 }
 
 /**
+ * Un template de una sola interpolacion cuyo hueco es un PARAMETRO de la
+ * funcion que lo emite, resuelto por los call sites de esa funcion:
+ *
+ *   function setPremiumCardVars(vars, namespace, card) {
+ *     if (card.iconBg) vars[`--ds-${namespace}-icon-bg`] = card.iconBg;
+ *   }
+ *   setPremiumCardVars(vars, "workspace-card", chrome.workspaceCard);
+ *
+ * produce `--ds-workspace-card-icon-bg`. El dominio es cerrado SOLO si nada
+ * puede llamar a la funcion con otro valor, asi que cualquier duda deja el
+ * sitio en `unresolved` (devuelve null), nunca inventa un nombre:
+ *   - la funcion es una declaracion con nombre, no exportada;
+ *   - el hueco es un parametro por identificador y el cuerpo no lo reasigna;
+ *   - hay al menos un call site, y en el archivo el nombre de la funcion solo
+ *     aparece como callee directo (pasarla como valor es una fuga);
+ *   - cada call site pasa en esa posicion un literal de string.
+ * El dominio es la union de esos literales.
+ */
+export function resolveThroughLiteralCallSites(sourceText, site) {
+  const parts = /^`([^$`]*)\$\{\s*([A-Za-z_$][\w$]*)\s*\}([^$`]*)`$/u.exec(site.raw);
+  if (parts === null) return null;
+  const [, head, param, tail] = parts;
+  const file = ts.createSourceFile('census.ts', sourceText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const at = file.getPositionOfLineAndCharacter(site.line - 1, 0);
+  let owner = null;
+  const findOwner = (node) => {
+    if (ts.isFunctionDeclaration(node) && node.body && node.getStart(file) <= at && at <= node.end) owner = node;
+    ts.forEachChild(node, findOwner);
+  };
+  findOwner(file);
+  if (owner === null || owner.name === undefined) return null;
+  if (owner.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)) return null;
+  const position = owner.parameters.findIndex(
+    (parameter) => ts.isIdentifier(parameter.name) && parameter.name.text === param,
+  );
+  if (position < 0) return null;
+
+  const fnName = owner.name.text;
+  const values = new Set();
+  let calls = 0;
+  let closed = true;
+  const walk = (node) => {
+    if (ts.isIdentifier(node) && node.text === fnName && node !== owner.name) {
+      const call = node.parent;
+      if (ts.isCallExpression(call) && call.expression === node) {
+        calls += 1;
+        const argument = call.arguments[position];
+        if (argument && (ts.isStringLiteral(argument) || ts.isNoSubstitutionTemplateLiteral(argument))) {
+          values.add(argument.text);
+        } else closed = false;
+      } else closed = false;
+    }
+    if (
+      ts.isBinaryExpression(node) &&
+      node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
+      node.operatorToken.kind <= ts.SyntaxKind.LastAssignment &&
+      ts.isIdentifier(node.left) &&
+      node.left.text === param &&
+      node.pos >= owner.body.pos &&
+      node.end <= owner.body.end
+    ) {
+      closed = false;
+    }
+    ts.forEachChild(node, walk);
+  };
+  walk(file);
+  if (!closed || calls === 0) return null;
+  return [...values].sort().map((value) => `${head}${value}${tail}`);
+}
+
+/**
  * (b) por clase: lo que emite cada raiz de `COMPILER_PRODUCER_ROOTS`, y los
  * sitios cuya clave no se pudo enumerar.
  */
 export function collectCompilerEmissions({ coreRoot = DEFAULT_ROOT, roots = COMPILER_PRODUCER_ROOTS } = {}) {
   const byKind = {};
   const unresolved = [];
+  const throughCallSites = [];
   for (const { kind, root } of roots) {
     const absoluteRoot = join(coreRoot, root);
     if (kind === 'derived') {
@@ -189,7 +266,15 @@ export function collectCompilerEmissions({ coreRoot = DEFAULT_ROOT, roots = COMP
       const path = relative(coreRoot, source.path).split(sep).join('/');
       const keyed = extractKeyedVarsEmissions(source.text, { file: source.path, coreRoot });
       for (const name of keyed.resolved.keys()) emitted.add(name);
-      for (const site of keyed.unresolved) unresolved.push({ kind, path, ...site });
+      for (const site of keyed.unresolved) {
+        const names = resolveThroughLiteralCallSites(source.text, site);
+        if (names === null) {
+          unresolved.push({ kind, path, ...site });
+          continue;
+        }
+        for (const name of names) emitted.add(name);
+        throughCallSites.push({ kind, path, raw: site.raw, line: site.line, names });
+      }
       for (const site of unreadKeyShapes(source.text)) {
         unresolved.push({
           kind,
@@ -203,7 +288,8 @@ export function collectCompilerEmissions({ coreRoot = DEFAULT_ROOT, roots = COMP
     byKind[kind] = emitted;
   }
   unresolved.sort((a, b) => a.path.localeCompare(b.path) || a.line - b.line);
-  return { byKind, unresolved };
+  throughCallSites.sort((a, b) => a.path.localeCompare(b.path) || a.line - b.line);
+  return { byKind, unresolved, throughCallSites };
 }
 
 /** (a) ∪ (b): el conjunto que las preguntas comparten. */

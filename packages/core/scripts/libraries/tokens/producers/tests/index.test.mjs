@@ -15,6 +15,7 @@ import {
   CORE_ROOT,
   DEFAULT_BRAND_THEME_COMPILER_ROOT,
   collectFlatThemeCompilerSources,
+  extractKeyedVarsEmissions,
 } from '../../../../check/tokens/cascade/channels/liveness/index.mjs';
 import * as census from '../index.mjs';
 
@@ -138,5 +139,91 @@ test('the unresolved compiler emissions are a pinned figure, not a silent gap', 
   const byKind = {};
   for (const site of LIVE.unresolved) byKind[site.kind] = (byKind[site.kind] ?? 0) + 1;
   // Resolve a site or remove it, then lower the pin; never raise it to absorb a new one.
-  assert.deepEqual(byKind, { kernel: 75, 'lowering-foundation': 40 });
+  // kernel 75 -> 19: the 56 chrome-variables templates whose hole is a parameter
+  // every literal call site binds (setPremiumCardVars x 7 namespaces, the button
+  // variant and legacy hover-bg setters) left through resolveThroughLiteralCallSites.
+  assert.deepEqual(byKind, { kernel: 19, 'lowering-foundation': 40 });
+});
+
+/* ── The template hole a literal call site binds ─────────────────────────── */
+
+const CALL_SITE_SOURCE = [
+  'function setCardVars(vars, namespace, card) {',
+  '  if (card.iconBg) vars[`--ds-${namespace}-drill-icon-bg`] = card.iconBg;',
+  '}',
+  'export function compile(vars, chrome) {',
+  '  setCardVars(vars, "alpha-card", chrome.alpha);',
+  '  setCardVars(vars, "beta-card", chrome.beta);',
+  '}',
+  '',
+].join('\n');
+const CALL_SITE = { raw: '`--ds-${namespace}-drill-icon-bg`', line: 2 };
+
+test('CALL SITE (a): a template hole every literal call site binds is produced, once per literal', () => {
+  assert.deepEqual(census.resolveThroughLiteralCallSites(CALL_SITE_SOURCE, CALL_SITE), [
+    '--ds-alpha-card-drill-icon-bg',
+    '--ds-beta-card-drill-icon-bg',
+  ]);
+  withSandbox({ [KERNEL_FILE]: CALL_SITE_SOURCE }, ({ sandbox }) => {
+    const { byKind, unresolved, throughCallSites } = census.collectCompilerEmissions({ coreRoot: sandbox });
+    assert.ok(byKind.kernel.has('--ds-alpha-card-drill-icon-bg'));
+    assert.ok(byKind.kernel.has('--ds-beta-card-drill-icon-bg'));
+    assert.deepEqual(unresolved.filter((site) => site.kind === 'kernel'), []);
+    assert.equal(throughCallSites.length, 1);
+    assert.equal(throughCallSites[0].line, 2);
+  });
+});
+
+test('CALL SITE (b): a hole no literal closes stays unresolved, never invented', () => {
+  const open = {
+    'one caller passes an identifier': CALL_SITE_SOURCE.replace('"beta-card"', 'chrome.name'),
+    'the setter is exported, so any module may call it': CALL_SITE_SOURCE.replace(
+      'function setCardVars',
+      'export function setCardVars',
+    ),
+    'the setter escapes as a value': `${CALL_SITE_SOURCE}export const table = [setCardVars];\n`,
+    'the body reassigns the parameter': CALL_SITE_SOURCE.replace(
+      '  if (card.iconBg)',
+      '  namespace = card.name;\n  if (card.iconBg)',
+    ),
+    'nobody calls the setter': CALL_SITE_SOURCE.replace(/  setCardVars\(.*\n/g, ''),
+    'the hole is a local, not a parameter': CALL_SITE_SOURCE.replace(
+      '  if (card.iconBg)',
+      '  const scope = card.name;\n  if (card.iconBg)',
+    ).replace('${namespace}-drill', '${scope}-drill'),
+  };
+  for (const [label, source] of Object.entries(open)) {
+    const line = source.split('\n').findIndex((text) => text.includes('drill-icon-bg')) + 1;
+    const raw = /vars\[(`[^`]*`)\]/.exec(source)[1];
+    assert.equal(census.resolveThroughLiteralCallSites(source, { raw, line }), null, label);
+    withSandbox({ [KERNEL_FILE]: source }, ({ sandbox }) => {
+      const { byKind, unresolved } = census.collectCompilerEmissions({ coreRoot: sandbox });
+      assert.ok(![...byKind.kernel].some((name) => name.includes('drill-icon-bg')), label);
+      assert.deepEqual(unresolved.filter((site) => site.kind === 'kernel').map((site) => site.line), [line], label);
+    });
+  }
+});
+
+test('CALL SITE (c) CONTROL: without the call-site pass the same hole is unresolved', () => {
+  const keyed = extractKeyedVarsEmissions(CALL_SITE_SOURCE);
+  assert.equal(keyed.resolved.size, 0, 'the underlying extractor binds no domain for a parameter');
+  assert.deepEqual(keyed.unresolved.map((site) => [site.raw, site.line]), [[CALL_SITE.raw, CALL_SITE.line]]);
+});
+
+test('LIVE: the tenant workspace-card tile is produced by the chrome compiler through its literal call site', () => {
+  assert.ok(LIVE.producers.has('--ds-workspace-card-icon-bg'));
+  assert.ok(LIVE.compiledByKind.kernel.has('--ds-workspace-card-icon-bg'));
+  assert.ok(!LIVE.declared.has('--ds-workspace-card-icon-bg'), 'no authored CSS declares it: the producer is the compiler');
+  const { throughCallSites } = census.collectCompilerEmissions();
+  const site = throughCallSites.find((entry) => entry.raw === '`--ds-${namespace}-icon-bg`');
+  assert.ok(site?.path.endsWith('kernel/foundation/css/chrome-variables/index.ts'), JSON.stringify(site));
+  assert.deepEqual(site.names, [
+    '--ds-collection-card-icon-bg',
+    '--ds-compact-card-icon-bg',
+    '--ds-metric-card-icon-bg',
+    '--ds-premium-card-icon-bg',
+    '--ds-signal-card-icon-bg',
+    '--ds-tall-card-icon-bg',
+    '--ds-workspace-card-icon-bg',
+  ]);
 });
