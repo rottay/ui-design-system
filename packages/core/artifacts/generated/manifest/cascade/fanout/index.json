@@ -48,9 +48,9 @@
     "channelsWithoutReaders": 199,
     "channelsPaintsFalse": 943,
     "channelsPaintsInModernFalse": 2020,
-    "readers": 42145,
+    "readers": 42151,
     "readersByPlane": {
-      "modern-skin-css": 16268,
+      "modern-skin-css": 16270,
       "presentation-css": 12072,
       "foundation-css": 1716,
       "runtime-css": 192,
@@ -62,7 +62,7 @@
       "infrastructure-tsx": 6,
       "ts-token-mirror": 1447,
       "ts-token-utils": 47,
-      "ts-other": 4733
+      "ts-other": 4737
     },
     "channelsByPlane": {
       "modern-skin-css": 4909,
@@ -1246,9 +1246,9 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 86,
+          "line": 87,
           "prop": "min-block-size",
-          "decl": "min-block-size: max( var(--_ds-button-height-floor, 36px), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
+          "decl": "min-block-size: max( calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
           "scalars": [
             "--ds-control-height-scale",
             "--ds-density-effective-scale"
@@ -1257,9 +1257,9 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 317,
+          "line": 318,
           "prop": "min-block-size",
-          "decl": "min-block-size: max( var(--_ds-button-height-floor, 36px), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
+          "decl": "min-block-size: max( calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
           "scalars": [
             "--ds-control-height-scale",
             "--ds-density-effective-scale"
@@ -1282,7 +1282,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 215,
+          "line": 216,
           "prop": "background",
           "scalars": []
         }
@@ -1303,7 +1303,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 209,
+          "line": 210,
           "prop": "inline-size",
           "decl": "inline-size: calc( var(--ds-button-resolved-icon-size) + 2 * var(--_ds-button-icon-plate-padding, 0px) )",
           "scalars": []
@@ -1311,7 +1311,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 212,
+          "line": 213,
           "prop": "block-size",
           "decl": "block-size: calc( var(--ds-button-resolved-icon-size) + 2 * var(--_ds-button-icon-plate-padding, 0px) )",
           "scalars": []
@@ -1319,7 +1319,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 214,
+          "line": 215,
           "prop": "padding",
           "scalars": []
         }
@@ -1340,7 +1340,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 216,
+          "line": 217,
           "prop": "border-radius",
           "scalars": []
         }
@@ -1361,7 +1361,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 717,
+          "line": 718,
           "prop": "background-color",
           "scalars": []
         }
@@ -1383,63 +1383,63 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 113,
+          "line": 114,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 497,
+          "line": 498,
           "prop": "border-start-start-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 498,
+          "line": 499,
           "prop": "border-end-start-radius",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 502,
-          "prop": "border-start-end-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
           "line": 503,
-          "prop": "border-end-end-radius",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 507,
-          "prop": "border-start-start-radius",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 508,
           "prop": "border-start-end-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 512,
-          "prop": "border-end-start-radius",
+          "line": 504,
+          "prop": "border-end-end-radius",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
+          "line": 508,
+          "prop": "border-start-start-radius",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
+          "line": 509,
+          "prop": "border-start-end-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
           "line": 513,
+          "prop": "border-end-start-radius",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
+          "line": 514,
           "prop": "border-end-end-radius",
           "scalars": []
         }
@@ -1460,7 +1460,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1053,
+          "line": 1054,
           "prop": "background-color",
           "scalars": []
         }
@@ -37837,7 +37837,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 855,
+          "line": 856,
           "prop": "filter",
           "scalars": []
         }
@@ -37892,7 +37892,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 854,
+          "line": 855,
           "prop": "transform",
           "scalars": []
         },
@@ -37943,7 +37943,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 660,
+          "line": 661,
           "prop": "background-color",
           "scalars": []
         },
@@ -37979,7 +37979,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 939,
+          "line": 940,
           "prop": "background-color",
           "scalars": []
         },
@@ -38009,7 +38009,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 828,
+          "line": 829,
           "prop": "background-color",
           "scalars": []
         },
@@ -38046,7 +38046,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 663,
+          "line": 664,
           "prop": "border-color",
           "scalars": []
         },
@@ -38082,7 +38082,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 941,
+          "line": 942,
           "prop": "border-color",
           "scalars": []
         },
@@ -38111,7 +38111,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 830,
+          "line": 831,
           "prop": "border-color",
           "scalars": []
         },
@@ -38142,7 +38142,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 662,
+          "line": 663,
           "prop": "color",
           "scalars": []
         },
@@ -38192,7 +38192,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 940,
+          "line": 941,
           "prop": "color",
           "scalars": []
         },
@@ -38221,7 +38221,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 829,
+          "line": 830,
           "prop": "color",
           "scalars": []
         },
@@ -38248,7 +38248,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 664,
+          "line": 665,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -38275,7 +38275,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 942,
+          "line": 943,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -38302,7 +38302,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 831,
+          "line": 832,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -38331,7 +38331,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 661,
+          "line": 662,
           "prop": "background-image",
           "scalars": []
         },
@@ -38359,7 +38359,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1098,
+          "line": 1099,
           "prop": "animation",
           "scalars": []
         }
@@ -38383,14 +38383,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 107,
+          "line": 108,
           "prop": "border-width",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1081,
+          "line": 1082,
           "prop": "outline-offset",
           "decl": "outline-offset: calc( -1 * (var(--ds-button-border-width-focus) + var(--ds-button-border-width)) )",
           "scalars": []
@@ -38438,14 +38438,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1079,
+          "line": 1080,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1081,
+          "line": 1082,
           "prop": "outline-offset",
           "decl": "outline-offset: calc( -1 * (var(--ds-button-border-width-focus) + var(--ds-button-border-width)) )",
           "scalars": []
@@ -38453,21 +38453,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1089,
+          "line": 1090,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1215,
+          "line": 1216,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1240,
+          "line": 1241,
           "prop": "border-width",
           "scalars": []
         },
@@ -38503,7 +38503,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 687,
+          "line": 688,
           "prop": "border-color",
           "scalars": []
         }
@@ -38617,7 +38617,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 624,
+          "line": 625,
           "prop": "background-color",
           "scalars": []
         },
@@ -38667,7 +38667,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 904,
+          "line": 905,
           "prop": "background-color",
           "scalars": []
         },
@@ -38697,7 +38697,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 793,
+          "line": 794,
           "prop": "background-color",
           "scalars": []
         },
@@ -38735,7 +38735,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 626,
+          "line": 627,
           "prop": "border-color",
           "scalars": []
         },
@@ -38778,7 +38778,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 906,
+          "line": 907,
           "prop": "border-color",
           "scalars": []
         },
@@ -38807,7 +38807,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 795,
+          "line": 796,
           "prop": "border-color",
           "scalars": []
         },
@@ -38836,7 +38836,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 627,
+          "line": 628,
           "prop": "border-style",
           "scalars": []
         },
@@ -38868,7 +38868,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 625,
+          "line": 626,
           "prop": "color",
           "scalars": []
         },
@@ -38925,7 +38925,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 905,
+          "line": 906,
           "prop": "color",
           "scalars": []
         },
@@ -38954,7 +38954,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 794,
+          "line": 795,
           "prop": "color",
           "scalars": []
         },
@@ -39007,7 +39007,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 628,
+          "line": 629,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -39034,7 +39034,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 907,
+          "line": 908,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -39061,7 +39061,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 796,
+          "line": 797,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -39102,7 +39102,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 603,
+          "line": 604,
           "prop": "background-color",
           "scalars": []
         },
@@ -39182,14 +39182,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 883,
+          "line": 884,
           "prop": "background-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1054,
+          "line": 1055,
           "prop": "background-color",
           "scalars": []
         },
@@ -39230,7 +39230,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 772,
+          "line": 773,
           "prop": "background-color",
           "scalars": []
         },
@@ -39299,14 +39299,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 605,
+          "line": 606,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1056,
+          "line": 1057,
           "prop": "border-color",
           "scalars": []
         },
@@ -39386,7 +39386,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 885,
+          "line": 886,
           "prop": "border-color",
           "scalars": []
         },
@@ -39424,7 +39424,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 774,
+          "line": 775,
           "prop": "border-color",
           "scalars": []
         },
@@ -39465,7 +39465,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 604,
+          "line": 605,
           "prop": "color",
           "scalars": []
         },
@@ -39545,7 +39545,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 884,
+          "line": 885,
           "prop": "color",
           "scalars": []
         },
@@ -39583,7 +39583,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 773,
+          "line": 774,
           "prop": "color",
           "scalars": []
         },
@@ -39639,7 +39639,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 606,
+          "line": 607,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -39666,7 +39666,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 886,
+          "line": 887,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -39693,7 +39693,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 775,
+          "line": 776,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -39731,7 +39731,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1124,
+          "line": 1125,
           "prop": "background",
           "scalars": []
         },
@@ -39796,7 +39796,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1126,
+          "line": 1127,
           "prop": "border-color",
           "scalars": []
         },
@@ -39834,7 +39834,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1125,
+          "line": 1126,
           "prop": "color",
           "scalars": []
         },
@@ -39870,7 +39870,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1123,
+          "line": 1124,
           "prop": "cursor",
           "scalars": []
         },
@@ -39910,7 +39910,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1128,
+          "line": 1129,
           "prop": "opacity",
           "scalars": []
         },
@@ -39981,7 +39981,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1127,
+          "line": 1128,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -40009,7 +40009,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 693,
+          "line": 694,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -40030,7 +40030,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 847,
+          "line": 848,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -40063,21 +40063,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 632,
+          "line": 633,
           "prop": "background-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 994,
+          "line": 995,
           "prop": "background-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1015,
+          "line": 1016,
           "prop": "background-color",
           "scalars": []
         },
@@ -40150,7 +40150,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 911,
+          "line": 912,
           "prop": "background-color",
           "scalars": []
         },
@@ -40197,7 +40197,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 800,
+          "line": 801,
           "prop": "background-color",
           "scalars": []
         },
@@ -40257,21 +40257,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 634,
+          "line": 635,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 973,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 981,
+          "line": 974,
           "prop": "color",
           "scalars": []
         },
@@ -40279,6 +40272,13 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
           "line": 982,
+          "prop": "color",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
+          "line": 983,
           "prop": "border-color",
           "scalars": []
         },
@@ -40322,21 +40322,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 913,
+          "line": 914,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1016,
+          "line": 1017,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1024,
+          "line": 1025,
           "prop": "border-color",
           "scalars": []
         },
@@ -40366,21 +40366,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 802,
+          "line": 803,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 995,
+          "line": 996,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1003,
+          "line": 1004,
           "prop": "border-color",
           "scalars": []
         },
@@ -40429,7 +40429,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 633,
+          "line": 634,
           "prop": "color",
           "scalars": []
         },
@@ -40494,7 +40494,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 912,
+          "line": 913,
           "prop": "color",
           "scalars": []
         },
@@ -40524,7 +40524,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 801,
+          "line": 802,
           "prop": "color",
           "scalars": []
         },
@@ -40551,7 +40551,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 635,
+          "line": 636,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -40578,7 +40578,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 914,
+          "line": 915,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -40605,7 +40605,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 803,
+          "line": 804,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -40666,7 +40666,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1091,
+          "line": 1092,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -40718,14 +40718,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1090,
+          "line": 1091,
           "prop": "outline-offset",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1216,
+          "line": 1217,
           "prop": "outline-offset",
           "scalars": []
         },
@@ -40762,7 +40762,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 98,
+          "line": 99,
           "prop": "font-family",
           "scalars": []
         },
@@ -40801,7 +40801,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 99,
+          "line": 100,
           "prop": "font-weight",
           "scalars": []
         },
@@ -40850,7 +40850,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 89,
+          "line": 90,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -40895,7 +40895,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 610,
+          "line": 611,
           "prop": "background-color",
           "scalars": []
         },
@@ -40964,7 +40964,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 890,
+          "line": 891,
           "prop": "background-color",
           "scalars": []
         },
@@ -41009,7 +41009,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 779,
+          "line": 780,
           "prop": "background-color",
           "scalars": []
         },
@@ -41093,7 +41093,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 612,
+          "line": 613,
           "prop": "border-color",
           "scalars": []
         },
@@ -41152,7 +41152,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 892,
+          "line": 893,
           "prop": "border-color",
           "scalars": []
         },
@@ -41193,7 +41193,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 781,
+          "line": 782,
           "prop": "border-color",
           "scalars": []
         },
@@ -41237,7 +41237,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 611,
+          "line": 612,
           "prop": "color",
           "scalars": []
         },
@@ -41297,7 +41297,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 891,
+          "line": 892,
           "prop": "color",
           "scalars": []
         },
@@ -41339,7 +41339,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 780,
+          "line": 781,
           "prop": "color",
           "scalars": []
         },
@@ -41394,7 +41394,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 613,
+          "line": 614,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -41421,7 +41421,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 893,
+          "line": 894,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -41448,7 +41448,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 782,
+          "line": 783,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -41477,7 +41477,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 677,
+          "line": 678,
           "prop": "background-image",
           "scalars": []
         },
@@ -41576,14 +41576,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 526,
+          "line": 527,
           "prop": "border-inline-start-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 535,
+          "line": 536,
           "prop": "border-block-start-color",
           "scalars": []
         },
@@ -41731,7 +41731,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 744,
+          "line": 745,
           "prop": "filter",
           "scalars": []
         }
@@ -41786,7 +41786,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 743,
+          "line": 744,
           "prop": "transform",
           "scalars": []
         },
@@ -41835,7 +41835,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 865,
+          "line": 866,
           "prop": "transform",
           "scalars": []
         }
@@ -41856,7 +41856,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 754,
+          "line": 755,
           "prop": "transform",
           "scalars": []
         }
@@ -42005,7 +42005,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 653,
+          "line": 654,
           "prop": "background-color",
           "scalars": []
         },
@@ -42041,7 +42041,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 932,
+          "line": 933,
           "prop": "background-color",
           "scalars": []
         },
@@ -42071,7 +42071,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 821,
+          "line": 822,
           "prop": "background-color",
           "scalars": []
         },
@@ -42108,7 +42108,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 655,
+          "line": 656,
           "prop": "border-color",
           "scalars": []
         },
@@ -42144,7 +42144,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 934,
+          "line": 935,
           "prop": "border-color",
           "scalars": []
         },
@@ -42173,7 +42173,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 823,
+          "line": 824,
           "prop": "border-color",
           "scalars": []
         },
@@ -42212,7 +42212,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 654,
+          "line": 655,
           "prop": "color",
           "scalars": []
         },
@@ -42262,7 +42262,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 933,
+          "line": 934,
           "prop": "color",
           "scalars": []
         },
@@ -42291,7 +42291,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 822,
+          "line": 823,
           "prop": "color",
           "scalars": []
         },
@@ -42318,7 +42318,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 656,
+          "line": 657,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -42345,7 +42345,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 935,
+          "line": 936,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -42372,7 +42372,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 824,
+          "line": 825,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -42400,7 +42400,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 188,
+          "line": 189,
           "prop": "translate",
           "scalars": []
         }
@@ -42422,7 +42422,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 101,
+          "line": 102,
           "prop": "letter-spacing",
           "scalars": []
         },
@@ -42490,7 +42490,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 419,
+          "line": 420,
           "prop": "font-size",
           "scalars": []
         },
@@ -42555,7 +42555,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 418,
+          "line": 419,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-lg-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -42612,7 +42612,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 413,
+          "line": 414,
           "prop": "--ds-button-resolved-height",
           "scalars": []
         },
@@ -42698,7 +42698,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 411,
+          "line": 412,
           "prop": "--ds-button-resolved-icon-size",
           "scalars": []
         },
@@ -42742,7 +42742,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 420,
+          "line": 421,
           "prop": "line-height",
           "scalars": []
         },
@@ -42832,7 +42832,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 416,
+          "line": 417,
           "prop": "padding-inline",
           "decl": "padding-inline: calc( var(--ds-button-lg-padding-x) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -42885,7 +42885,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 414,
+          "line": 415,
           "prop": "--ds-button-resolved-padding-y",
           "scalars": []
         },
@@ -42924,7 +42924,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 412,
+          "line": 413,
           "prop": "--_ds-button-resolved-radius",
           "scalars": []
         },
@@ -42969,7 +42969,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 668,
+          "line": 669,
           "prop": "background-color",
           "scalars": []
         },
@@ -43019,7 +43019,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 946,
+          "line": 947,
           "prop": "background-color",
           "scalars": []
         },
@@ -43049,7 +43049,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 835,
+          "line": 836,
           "prop": "background-color",
           "scalars": []
         },
@@ -43088,7 +43088,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 670,
+          "line": 671,
           "prop": "border-color",
           "scalars": []
         },
@@ -43145,7 +43145,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 948,
+          "line": 949,
           "prop": "border-color",
           "scalars": []
         },
@@ -43174,7 +43174,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 837,
+          "line": 838,
           "prop": "border-color",
           "scalars": []
         },
@@ -43213,7 +43213,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 669,
+          "line": 670,
           "prop": "color",
           "scalars": []
         },
@@ -43271,7 +43271,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 947,
+          "line": 948,
           "prop": "color",
           "scalars": []
         },
@@ -43309,7 +43309,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 836,
+          "line": 837,
           "prop": "color",
           "scalars": []
         },
@@ -43419,7 +43419,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 671,
+          "line": 672,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -43446,7 +43446,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 949,
+          "line": 950,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -43473,7 +43473,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 838,
+          "line": 839,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -43502,7 +43502,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 672,
+          "line": 673,
           "prop": "text-decoration",
           "scalars": []
         },
@@ -43531,7 +43531,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 839,
+          "line": 840,
           "prop": "text-decoration",
           "scalars": []
         },
@@ -43559,7 +43559,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 673,
+          "line": 674,
           "prop": "text-underline-offset",
           "scalars": []
         }
@@ -43581,7 +43581,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1138,
+          "line": 1139,
           "prop": "cursor",
           "scalars": []
         },
@@ -43671,7 +43671,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 406,
+          "line": 407,
           "prop": "font-size",
           "scalars": []
         },
@@ -43744,7 +43744,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 405,
+          "line": 406,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-md-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -43830,7 +43830,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 400,
+          "line": 401,
           "prop": "--ds-button-resolved-height",
           "scalars": []
         },
@@ -43944,7 +43944,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 398,
+          "line": 399,
           "prop": "--ds-button-resolved-icon-size",
           "scalars": []
         },
@@ -43988,7 +43988,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 407,
+          "line": 408,
           "prop": "line-height",
           "scalars": []
         },
@@ -44078,7 +44078,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 403,
+          "line": 404,
           "prop": "padding-inline",
           "decl": "padding-inline: calc( var(--ds-button-md-padding-x) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -44138,7 +44138,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 401,
+          "line": 402,
           "prop": "--ds-button-resolved-padding-y",
           "scalars": []
         },
@@ -44191,7 +44191,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 399,
+          "line": 400,
           "prop": "--_ds-button-resolved-radius",
           "scalars": []
         },
@@ -44359,7 +44359,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 589,
+          "line": 590,
           "prop": "background-color",
           "scalars": []
         },
@@ -44454,7 +44454,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 869,
+          "line": 870,
           "prop": "background-color",
           "scalars": []
         },
@@ -44511,7 +44511,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 758,
+          "line": 759,
           "prop": "background-color",
           "scalars": []
         },
@@ -44576,7 +44576,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 591,
+          "line": 592,
           "prop": "border-color",
           "scalars": []
         },
@@ -44648,7 +44648,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 871,
+          "line": 872,
           "prop": "border-color",
           "scalars": []
         },
@@ -44689,7 +44689,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 760,
+          "line": 761,
           "prop": "border-color",
           "scalars": []
         },
@@ -44747,7 +44747,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 590,
+          "line": 591,
           "prop": "color",
           "scalars": []
         },
@@ -44840,7 +44840,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 870,
+          "line": 871,
           "prop": "color",
           "scalars": []
         },
@@ -44870,7 +44870,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 759,
+          "line": 760,
           "prop": "color",
           "scalars": []
         },
@@ -44936,7 +44936,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 592,
+          "line": 593,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -44986,7 +44986,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 872,
+          "line": 873,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -45024,7 +45024,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 761,
+          "line": 762,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -45080,7 +45080,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1108,
+          "line": 1109,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -45101,7 +45101,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1104,
+          "line": 1105,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -45188,9 +45188,9 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 87,
+          "line": 88,
           "prop": "min-block-size",
-          "decl": "min-block-size: max( var(--_ds-button-height-floor, 36px), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
+          "decl": "min-block-size: max( calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
           "scalars": [
             "--ds-control-height-scale",
             "--ds-density-effective-scale"
@@ -45199,9 +45199,9 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 318,
+          "line": 319,
           "prop": "min-block-size",
-          "decl": "min-block-size: max( var(--_ds-button-height-floor, 36px), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
+          "decl": "min-block-size: max( calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
           "scalars": [
             "--ds-control-height-scale",
             "--ds-density-effective-scale"
@@ -45210,7 +45210,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 448,
+          "line": 449,
           "prop": "inline-size",
           "decl": "inline-size: calc( var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1) )",
           "scalars": [
@@ -45247,7 +45247,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 209,
+          "line": 210,
           "prop": "inline-size",
           "decl": "inline-size: calc( var(--ds-button-resolved-icon-size) + 2 * var(--_ds-button-icon-plate-padding, 0px) )",
           "scalars": []
@@ -45255,7 +45255,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 212,
+          "line": 213,
           "prop": "block-size",
           "decl": "block-size: calc( var(--ds-button-resolved-icon-size) + 2 * var(--_ds-button-icon-plate-padding, 0px) )",
           "scalars": []
@@ -45263,35 +45263,35 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 222,
+          "line": 223,
           "prop": "inline-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 223,
+          "line": 224,
           "prop": "block-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 255,
+          "line": 256,
           "prop": "flex",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 256,
+          "line": 257,
           "prop": "inline-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 257,
+          "line": 258,
           "prop": "block-size",
           "scalars": []
         }
@@ -45313,7 +45313,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 322,
+          "line": 323,
           "prop": "padding-block",
           "decl": "padding-block: calc( var(--ds-button-resolved-padding-y) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -45340,7 +45340,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 596,
+          "line": 597,
           "prop": "background-color",
           "scalars": []
         },
@@ -45404,7 +45404,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 876,
+          "line": 877,
           "prop": "background-color",
           "scalars": []
         },
@@ -45435,7 +45435,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 765,
+          "line": 766,
           "prop": "background-color",
           "scalars": []
         },
@@ -45481,7 +45481,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 598,
+          "line": 599,
           "prop": "border-color",
           "scalars": []
         },
@@ -45545,7 +45545,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 878,
+          "line": 879,
           "prop": "border-color",
           "scalars": []
         },
@@ -45574,7 +45574,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 767,
+          "line": 768,
           "prop": "border-color",
           "scalars": []
         },
@@ -45614,7 +45614,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 597,
+          "line": 598,
           "prop": "color",
           "scalars": []
         },
@@ -45685,7 +45685,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 877,
+          "line": 878,
           "prop": "color",
           "scalars": []
         },
@@ -45714,7 +45714,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 766,
+          "line": 767,
           "prop": "color",
           "scalars": []
         },
@@ -45770,7 +45770,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 599,
+          "line": 600,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -45797,7 +45797,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 879,
+          "line": 880,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -45824,7 +45824,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 768,
+          "line": 769,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -45976,7 +45976,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 393,
+          "line": 394,
           "prop": "font-size",
           "scalars": []
         },
@@ -46125,7 +46125,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 392,
+          "line": 393,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-sm-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -46190,7 +46190,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 387,
+          "line": 388,
           "prop": "--ds-button-resolved-height",
           "scalars": []
         },
@@ -46318,7 +46318,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 385,
+          "line": 386,
           "prop": "--ds-button-resolved-icon-size",
           "scalars": []
         },
@@ -46376,7 +46376,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 394,
+          "line": 395,
           "prop": "line-height",
           "scalars": []
         },
@@ -46466,7 +46466,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 390,
+          "line": 391,
           "prop": "padding-inline",
           "decl": "padding-inline: calc( var(--ds-button-sm-padding-x) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -46519,7 +46519,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 388,
+          "line": 389,
           "prop": "--ds-button-resolved-padding-y",
           "scalars": []
         },
@@ -46559,7 +46559,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 386,
+          "line": 387,
           "prop": "--_ds-button-resolved-radius",
           "scalars": []
         },
@@ -46684,7 +46684,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 258,
+          "line": 259,
           "prop": "color",
           "scalars": []
         },
@@ -46712,7 +46712,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 259,
+          "line": 260,
           "prop": "animation",
           "scalars": []
         }
@@ -46838,7 +46838,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 264,
+          "line": 265,
           "prop": "stroke-width",
           "scalars": []
         }
@@ -46859,7 +46859,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 268,
+          "line": 269,
           "prop": "opacity",
           "scalars": []
         }
@@ -46883,7 +46883,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 639,
+          "line": 640,
           "prop": "background-color",
           "scalars": []
         },
@@ -46933,7 +46933,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 918,
+          "line": 919,
           "prop": "background-color",
           "scalars": []
         },
@@ -46964,7 +46964,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 807,
+          "line": 808,
           "prop": "background-color",
           "scalars": []
         },
@@ -47008,7 +47008,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 641,
+          "line": 642,
           "prop": "border-color",
           "scalars": []
         },
@@ -47044,7 +47044,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 920,
+          "line": 921,
           "prop": "border-color",
           "scalars": []
         },
@@ -47073,7 +47073,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 809,
+          "line": 810,
           "prop": "border-color",
           "scalars": []
         },
@@ -47113,7 +47113,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 640,
+          "line": 641,
           "prop": "color",
           "scalars": []
         },
@@ -47170,7 +47170,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 919,
+          "line": 920,
           "prop": "color",
           "scalars": []
         },
@@ -47199,7 +47199,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 808,
+          "line": 809,
           "prop": "color",
           "scalars": []
         },
@@ -47226,7 +47226,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 642,
+          "line": 643,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -47253,7 +47253,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 921,
+          "line": 922,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -47280,7 +47280,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 810,
+          "line": 811,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -47309,7 +47309,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 149,
+          "line": 150,
           "prop": "background",
           "scalars": []
         }
@@ -47330,7 +47330,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 860,
+          "line": 861,
           "prop": "opacity",
           "decl": "opacity: calc( var(--ds-button-surface-highlight-active-opacity) * var(--ds-effect-intensity) )",
           "scalars": []
@@ -47352,7 +47352,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 749,
+          "line": 750,
           "prop": "opacity",
           "decl": "opacity: calc( var(--ds-button-surface-highlight-hover-opacity) * var(--ds-effect-intensity) )",
           "scalars": []
@@ -47374,7 +47374,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 151,
+          "line": 152,
           "prop": "opacity",
           "decl": "opacity: calc( var(--ds-button-surface-highlight-opacity) * var(--ds-effect-intensity) )",
           "scalars": []
@@ -47407,7 +47407,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 617,
+          "line": 618,
           "prop": "background-color",
           "scalars": []
         },
@@ -47472,7 +47472,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 897,
+          "line": 898,
           "prop": "background-color",
           "scalars": []
         },
@@ -47511,7 +47511,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 786,
+          "line": 787,
           "prop": "background-color",
           "scalars": []
         },
@@ -47557,7 +47557,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 619,
+          "line": 620,
           "prop": "border-color",
           "scalars": []
         },
@@ -47614,7 +47614,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 899,
+          "line": 900,
           "prop": "border-color",
           "scalars": []
         },
@@ -47643,7 +47643,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 788,
+          "line": 789,
           "prop": "border-color",
           "scalars": []
         },
@@ -47682,7 +47682,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 618,
+          "line": 619,
           "prop": "color",
           "scalars": []
         },
@@ -47740,7 +47740,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 898,
+          "line": 899,
           "prop": "color",
           "scalars": []
         },
@@ -47778,7 +47778,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 787,
+          "line": 788,
           "prop": "color",
           "scalars": []
         },
@@ -47838,7 +47838,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 620,
+          "line": 621,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -47865,7 +47865,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 900,
+          "line": 901,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -47892,7 +47892,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 789,
+          "line": 790,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -47921,7 +47921,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 104,
+          "line": 105,
           "prop": "text-transform",
           "scalars": []
         },
@@ -47951,14 +47951,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1146,
+          "line": 1147,
           "prop": "min-block-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1155,
+          "line": 1156,
           "prop": "min-inline-size",
           "scalars": []
         },
@@ -48053,13 +48053,6 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 117,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
           "line": 118,
           "prop": "transition",
           "scalars": []
@@ -48067,7 +48060,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 120,
+          "line": 119,
           "prop": "transition",
           "scalars": []
         },
@@ -48102,14 +48095,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 155,
+          "line": 125,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 217,
+          "line": 156,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
+          "line": 218,
           "prop": "transition",
           "scalars": []
         },
@@ -48153,13 +48153,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 117,
-          "prop": "transition",
-          "scalars": []
-        },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
@@ -48212,14 +48205,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 156,
+          "line": 125,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 218,
+          "line": 157,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
+          "line": 219,
           "prop": "transition",
           "scalars": []
         },
@@ -48264,7 +48264,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 646,
+          "line": 647,
           "prop": "background-color",
           "scalars": []
         },
@@ -48314,7 +48314,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 925,
+          "line": 926,
           "prop": "background-color",
           "scalars": []
         },
@@ -48345,7 +48345,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 814,
+          "line": 815,
           "prop": "background-color",
           "scalars": []
         },
@@ -48389,7 +48389,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 648,
+          "line": 649,
           "prop": "border-color",
           "scalars": []
         },
@@ -48425,7 +48425,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 927,
+          "line": 928,
           "prop": "border-color",
           "scalars": []
         },
@@ -48454,7 +48454,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 816,
+          "line": 817,
           "prop": "border-color",
           "scalars": []
         },
@@ -48494,7 +48494,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 647,
+          "line": 648,
           "prop": "color",
           "scalars": []
         },
@@ -48551,7 +48551,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 926,
+          "line": 927,
           "prop": "color",
           "scalars": []
         },
@@ -48580,7 +48580,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 815,
+          "line": 816,
           "prop": "color",
           "scalars": []
         },
@@ -48607,7 +48607,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 649,
+          "line": 650,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -48634,7 +48634,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 928,
+          "line": 929,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -48661,7 +48661,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 817,
+          "line": 818,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -48721,7 +48721,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 432,
+          "line": 433,
           "prop": "font-size",
           "scalars": []
         },
@@ -48771,7 +48771,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 431,
+          "line": 432,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-xl-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -48806,7 +48806,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 426,
+          "line": 427,
           "prop": "--ds-button-resolved-height",
           "scalars": []
         },
@@ -48877,7 +48877,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 424,
+          "line": 425,
           "prop": "--ds-button-resolved-icon-size",
           "scalars": []
         },
@@ -48906,7 +48906,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 433,
+          "line": 434,
           "prop": "line-height",
           "scalars": []
         },
@@ -48973,7 +48973,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 429,
+          "line": 430,
           "prop": "padding-inline",
           "decl": "padding-inline: calc( var(--ds-button-xl-padding-x) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -49012,7 +49012,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 427,
+          "line": 428,
           "prop": "--ds-button-resolved-padding-y",
           "scalars": []
         },
@@ -49042,7 +49042,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 425,
+          "line": 426,
           "prop": "--_ds-button-resolved-radius",
           "scalars": []
         },
@@ -49102,7 +49102,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 380,
+          "line": 381,
           "prop": "font-size",
           "scalars": []
         },
@@ -49152,7 +49152,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 379,
+          "line": 380,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-xs-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -49187,7 +49187,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 374,
+          "line": 375,
           "prop": "--ds-button-resolved-height",
           "scalars": []
         },
@@ -49258,7 +49258,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 372,
+          "line": 373,
           "prop": "--ds-button-resolved-icon-size",
           "scalars": []
         },
@@ -49287,7 +49287,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 381,
+          "line": 382,
           "prop": "line-height",
           "scalars": []
         },
@@ -49354,7 +49354,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 377,
+          "line": 378,
           "prop": "padding-inline",
           "decl": "padding-inline: calc( var(--ds-button-xs-padding-x) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -49393,7 +49393,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 375,
+          "line": 376,
           "prop": "--ds-button-resolved-padding-y",
           "scalars": []
         },
@@ -49423,7 +49423,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 373,
+          "line": 374,
           "prop": "--_ds-button-resolved-radius",
           "scalars": []
         },
@@ -99058,14 +99058,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 82,
+          "line": 85,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 98,
+          "line": 101,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -106022,6 +106022,13 @@
           "scalars": []
         },
         {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts",
+          "line": 63,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx",
           "line": 268,
@@ -107890,49 +107897,49 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 76,
+          "line": 79,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 78,
+          "line": 81,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 80,
+          "line": 83,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 82,
+          "line": 85,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 94,
+          "line": 97,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 96,
+          "line": 99,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 98,
+          "line": 101,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -110182,21 +110189,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1056,
+          "line": 1057,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1057,
+          "line": 1058,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1066,
+          "line": 1067,
           "prop": "color",
           "scalars": []
         },
@@ -120182,21 +120189,21 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 74,
+          "line": 77,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 91,
+          "line": 94,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 102,
+          "line": 105,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -124881,14 +124888,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 76,
+          "line": 79,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 92,
+          "line": 95,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -127547,14 +127554,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 78,
+          "line": 81,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 94,
+          "line": 97,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -141460,7 +141467,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 90,
+          "line": 93,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -148364,14 +148371,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 80,
+          "line": 83,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 96,
+          "line": 99,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -150290,28 +150297,28 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 84,
-          "prop": "inline-expr",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 85,
-          "prop": "inline-expr",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 86,
-          "prop": "inline-expr",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
           "line": 87,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
+          "line": 88,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
+          "line": 89,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
+          "line": 90,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -158115,7 +158122,18 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
           "line": 87,
           "prop": "min-block-size",
-          "decl": "min-block-size: max( var(--_ds-button-height-floor, 36px), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
+          "decl": "min-block-size: max( calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
+          "scalars": [
+            "--ds-control-height-scale",
+            "--ds-density-effective-scale"
+          ]
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
+          "line": 88,
+          "prop": "min-block-size",
+          "decl": "min-block-size: max( calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
           "scalars": [
             "--ds-control-height-scale",
             "--ds-density-effective-scale"
@@ -158126,7 +158144,7 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
           "line": 318,
           "prop": "min-block-size",
-          "decl": "min-block-size: max( var(--_ds-button-height-floor, 36px), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
+          "decl": "min-block-size: max( calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
           "scalars": [
             "--ds-control-height-scale",
             "--ds-density-effective-scale"
@@ -158135,7 +158153,18 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 448,
+          "line": 319,
+          "prop": "min-block-size",
+          "decl": "min-block-size: max( calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
+          "scalars": [
+            "--ds-control-height-scale",
+            "--ds-density-effective-scale"
+          ]
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
+          "line": 449,
           "prop": "inline-size",
           "decl": "inline-size: calc( var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1) )",
           "scalars": [
@@ -166845,9 +166874,9 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 87,
+          "line": 88,
           "prop": "min-block-size",
-          "decl": "min-block-size: max( var(--_ds-button-height-floor, 36px), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
+          "decl": "min-block-size: max( calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
           "scalars": [
             "--ds-control-height-scale",
             "--ds-density-effective-scale"
@@ -166856,7 +166885,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 89,
+          "line": 90,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -166866,9 +166895,9 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 318,
+          "line": 319,
           "prop": "min-block-size",
-          "decl": "min-block-size: max( var(--_ds-button-height-floor, 36px), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
+          "decl": "min-block-size: max( calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))), calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)) )",
           "scalars": [
             "--ds-control-height-scale",
             "--ds-density-effective-scale"
@@ -166877,7 +166906,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 322,
+          "line": 323,
           "prop": "padding-block",
           "decl": "padding-block: calc( var(--ds-button-resolved-padding-y) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -166887,7 +166916,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 377,
+          "line": 378,
           "prop": "padding-inline",
           "decl": "padding-inline: calc( var(--ds-button-xs-padding-x) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -166897,7 +166926,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 379,
+          "line": 380,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-xs-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -166907,7 +166936,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 390,
+          "line": 391,
           "prop": "padding-inline",
           "decl": "padding-inline: calc( var(--ds-button-sm-padding-x) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -166917,7 +166946,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 392,
+          "line": 393,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-sm-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -166927,7 +166956,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 403,
+          "line": 404,
           "prop": "padding-inline",
           "decl": "padding-inline: calc( var(--ds-button-md-padding-x) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -166937,7 +166966,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 405,
+          "line": 406,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-md-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -166947,7 +166976,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 416,
+          "line": 417,
           "prop": "padding-inline",
           "decl": "padding-inline: calc( var(--ds-button-lg-padding-x) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -166957,7 +166986,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 418,
+          "line": 419,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-lg-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -166967,7 +166996,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 429,
+          "line": 430,
           "prop": "padding-inline",
           "decl": "padding-inline: calc( var(--ds-button-xl-padding-x) * var(--ds-density-effective-scale) )",
           "scalars": [
@@ -166977,7 +167006,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 431,
+          "line": 432,
           "prop": "gap",
           "decl": "gap: calc(var(--ds-button-xl-gap) * var(--ds-density-effective-scale))",
           "scalars": [
@@ -166987,7 +167016,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 448,
+          "line": 449,
           "prop": "inline-size",
           "decl": "inline-size: calc( var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1) )",
           "scalars": [
@@ -182422,7 +182451,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 131,
+          "line": 134,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -182517,7 +182546,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 112,
+          "line": 113,
           "prop": "border-style",
           "scalars": []
         },
@@ -184730,7 +184759,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 151,
+          "line": 152,
           "prop": "opacity",
           "decl": "opacity: calc( var(--ds-button-surface-highlight-opacity) * var(--ds-effect-intensity) )",
           "scalars": []
@@ -184738,7 +184767,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 749,
+          "line": 750,
           "prop": "opacity",
           "decl": "opacity: calc( var(--ds-button-surface-highlight-hover-opacity) * var(--ds-effect-intensity) )",
           "scalars": []
@@ -184746,7 +184775,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 860,
+          "line": 861,
           "prop": "opacity",
           "decl": "opacity: calc( var(--ds-button-surface-highlight-active-opacity) * var(--ds-effect-intensity) )",
           "scalars": []
@@ -192535,14 +192564,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 102,
+          "line": 105,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 107,
+          "line": 110,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -208837,7 +208866,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 116,
+          "line": 119,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -242518,98 +242547,98 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 592,
+          "line": 593,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 599,
+          "line": 600,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 606,
+          "line": 607,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 613,
+          "line": 614,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 620,
+          "line": 621,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 628,
+          "line": 629,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 635,
+          "line": 636,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 642,
+          "line": 643,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 649,
+          "line": 650,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 656,
+          "line": 657,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 664,
+          "line": 665,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 671,
+          "line": 672,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 693,
+          "line": 694,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1127,
+          "line": 1128,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -242716,84 +242745,84 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 872,
+          "line": 873,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 879,
+          "line": 880,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 886,
+          "line": 887,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 893,
+          "line": 894,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 900,
+          "line": 901,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 907,
+          "line": 908,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 914,
+          "line": 915,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 921,
+          "line": 922,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 928,
+          "line": 929,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 935,
+          "line": 936,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 942,
+          "line": 943,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 949,
+          "line": 950,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -242830,91 +242859,91 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 761,
+          "line": 762,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 768,
+          "line": 769,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 775,
+          "line": 776,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 782,
+          "line": 783,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 789,
+          "line": 790,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 796,
+          "line": 797,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 803,
+          "line": 804,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 810,
+          "line": 811,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 817,
+          "line": 818,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 824,
+          "line": 825,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 831,
+          "line": 832,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 838,
+          "line": 839,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 847,
+          "line": 848,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -260207,7 +260236,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1097,
+          "line": 1098,
           "prop": "animation",
           "scalars": []
         },
@@ -262855,7 +262884,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1098,
+          "line": 1099,
           "prop": "animation",
           "scalars": []
         },
@@ -277124,7 +277153,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 119,
+          "line": 120,
           "prop": "transition",
           "scalars": []
         },
@@ -299163,21 +299192,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 450,
+          "line": 451,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 454,
+          "line": 455,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 470,
+          "line": 471,
           "prop": "border-radius",
           "scalars": []
         },
@@ -300381,14 +300410,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 109,
+          "line": 112,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 110,
+          "line": 113,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -300760,14 +300789,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 412,
+          "line": 413,
           "prop": "--_ds-button-resolved-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 467,
+          "line": 468,
           "prop": "border-radius",
           "scalars": []
         },
@@ -302967,14 +302996,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 399,
+          "line": 400,
           "prop": "--_ds-button-resolved-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 464,
+          "line": 465,
           "prop": "border-radius",
           "scalars": []
         },
@@ -305900,6 +305929,36 @@
           "line": 68,
           "prop": "inline-expr",
           "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
+          "line": 138,
+          "prop": "inline-expr",
+          "decl": "calc(0.125rem * var(--ds-radius-scale, 1))",
+          "scalars": [
+            "--ds-radius-scale"
+          ]
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
+          "line": 139,
+          "prop": "inline-expr",
+          "decl": "calc(0.25rem * var(--ds-radius-scale, 1))",
+          "scalars": [
+            "--ds-radius-scale"
+          ]
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
+          "line": 140,
+          "prop": "inline-expr",
+          "decl": "calc(0.5rem * var(--ds-radius-scale, 1))",
+          "scalars": [
+            "--ds-radius-scale"
+          ]
         }
       ]
     },
@@ -306043,28 +306102,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 241,
+          "line": 242,
           "prop": "--_ds-button-icon-plate-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 373,
+          "line": 374,
           "prop": "--_ds-button-resolved-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 386,
+          "line": 387,
           "prop": "--_ds-button-resolved-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 461,
+          "line": 462,
           "prop": "border-radius",
           "scalars": []
         },
@@ -307631,7 +307690,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 425,
+          "line": 426,
           "prop": "--_ds-button-resolved-radius",
           "scalars": []
         },
@@ -347037,7 +347096,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 119,
+          "line": 122,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-2) * 0.75)",
           "scalars": []
@@ -347045,14 +347104,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 120,
+          "line": 123,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 121,
+          "line": 124,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-2) * 1.25)",
           "scalars": []
@@ -350840,7 +350899,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 122,
+          "line": 125,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -354041,21 +354100,21 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 111,
+          "line": 114,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 123,
+          "line": 126,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 125,
+          "line": 128,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-4) * 16)",
           "scalars": []
@@ -361795,7 +361854,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 126,
+          "line": 129,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -406325,14 +406384,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 113,
+          "line": 116,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
-          "line": 114,
+          "line": 117,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -417316,7 +417375,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 193,
+          "line": 194,
           "prop": "font-variant-numeric",
           "scalars": []
         },
@@ -426536,7 +426595,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 175,
+          "line": 176,
           "prop": "z-index",
           "scalars": []
         },

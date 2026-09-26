@@ -1010,8 +1010,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2520,
-      "channelsThroughAliases": 4090,
+      "channels": 2524,
+      "channelsThroughAliases": 4096,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1365,8 +1365,8 @@
       "tier": "pro"
     },
     {
-      "channels": 2520,
-      "channelsThroughAliases": 4090,
+      "channels": 2524,
+      "channelsThroughAliases": 4096,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1712,8 +1712,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2618,
-      "channelsThroughAliases": 4293,
+      "channels": 2622,
+      "channelsThroughAliases": 4299,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -2063,8 +2063,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2606,
-      "channelsThroughAliases": 4269,
+      "channels": 2610,
+      "channelsThroughAliases": 4275,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",
@@ -3108,8 +3108,8 @@
       "tier": "pro"
     },
     {
-      "channels": 1293,
-      "channelsThroughAliases": 1916,
+      "channels": 1296,
+      "channelsThroughAliases": 1917,
       "decision": "shape.radius-scale",
       "derivers": [
         "app-shell",
@@ -3688,8 +3688,8 @@
       "tier": "standard"
     },
     {
-      "channels": 676,
-      "channelsThroughAliases": 1464,
+      "channels": 679,
+      "channelsThroughAliases": 1470,
       "decision": "states.focus-style",
       "derivers": [
         "app-shell",
@@ -3927,8 +3927,8 @@
       "tier": "standard"
     },
     {
-      "channels": 482,
-      "channelsThroughAliases": 662,
+      "channels": 485,
+      "channelsThroughAliases": 669,
       "decision": "surfaces.border-style",
       "derivers": [
         "app-shell",
@@ -4899,8 +4899,8 @@
       "tier": "standard"
     },
     {
-      "channels": 421,
-      "channelsThroughAliases": 691,
+      "channels": 424,
+      "channelsThroughAliases": 697,
       "decision": "typography.role-weights",
       "derivers": [
         "badge",

@@ -792,7 +792,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // footprint channels -- --ds-card-min-inline-size, --ds-card-scale and the four
       // --ds-card-scale-{sm,md,lg,xl} presets, all produced and wired.
       // G103-02 (2026-09-26): rottay 2953 -> 2949, the four posture channels.
-      rottay: 2949,
+      // Q-DER06-RES packets A+B (2026-09-26, 91cf964ab + 07fe238a8): rottay
+      // 2949 -> 2953, --ds-color-border-hover and the three tag radius rungs.
+      rottay: 2953,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -860,7 +862,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // FAM-12 packet 1 (2026-09-26, 730666676): bithire 3083 -> 3089, the same six card
       // footprint channels as the other two verticals (all produced, none a seed).
       // G103-02 (2026-09-26): bithire 3089 -> 3085, the four posture channels.
-      bithire: 3085,
+      // Q-DER06-RES packets A+B (2026-09-26): bithire 3085 -> 3089, the same
+      // border-hover + three tag radius rungs as the other two verticals.
+      bithire: 3089,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -922,7 +926,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // footprint channels -- --ds-card-min-inline-size, --ds-card-scale and the four
       // --ds-card-scale-{sm,md,lg,xl} presets, all produced and wired.
       // G103-02 (2026-09-26): evnto 2953 -> 2949, the four posture channels.
-      evnto: 2949,
+      // Q-DER06-RES packets A+B (2026-09-26): evnto 2949 -> 2953, the same
+      // border-hover + three tag radius rungs as rottay.
+      evnto: 2953,
     };
     for (const vertical of VERTICALS) {
       expect(

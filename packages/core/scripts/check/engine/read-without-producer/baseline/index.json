@@ -356,6 +356,13 @@
           "from": "Q-DER06-RES option A (extended)",
           "disposition": "retired in both families under the ruling's per-row extension: the shape plane is a factor, never an absolute rung; the phone-layout chip/toggles declare calc(2.5rem x density), the dropdown item 2.5rem; byte-identical over 1200 Chromium cells. After this lot no core source reads any --ds-control-size-* rung.",
           "mover": "control-size-md lot (2026-09-26, 294eaba95)"
+        },
+        "--ds-color-border-hover": {
+          "class": "sharedPaint",
+          "family": "foundation",
+          "from": "WO-FAM-06 lineage (ownerProposal null)",
+          "disposition": "produced: the palette deriver now states --ds-color-border-hover = var(--ds-color-neutral-400), one ramp step past the rest edge, grading per mode; the input hover edges move paint again in bithire and evnto (#d4d4d4 -> #a3a3a3) and rottay dark (#1e293b -> #475569), 69 cells measured; the rest edge never moves",
+          "mover": "Q-DER06-RES packet A, N5 (2026-09-26, 91cf964ab)"
         }
       }
     },
@@ -594,14 +601,6 @@
           "ownerProposal": null
         },
         "--ds-color-border-disabled": {
-          "readers": [
-            "src/foundation/tokens/css/foundation/themes/default/index.css"
-          ],
-          "family": "foundation",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-color-border-hover": {
           "readers": [
             "src/foundation/tokens/css/foundation/themes/default/index.css"
           ],

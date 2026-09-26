@@ -23751,9 +23751,10 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
      mechanical floors block) additionally clamps the DENSITY side: density
      multiplies the resolved height with no floor of its own, so a compact
      posture on a tight tenant scale could push a control below the active
-     mode's mechanical minimum (measured: 36px x 0.9 = 32.4px, F8). */
+     mode's mechanical minimum (measured: 36px x 0.9 = 32.4px, F8). The floor
+     follows a taller control-height factor upward, never below its base. */
   min-block-size: max(
-    var(--_ds-button-height-floor, 36px),
+    calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))),
     calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1))
   );
   gap: calc(var(--ds-button-gap) * var(--ds-density-effective-scale));
@@ -23984,7 +23985,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   display: flex;
   inline-size: 100%;
   min-block-size: max(
-    var(--_ds-button-height-floor, 36px),
+    calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))),
     calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1))
   );
   block-size: auto;
@@ -121157,6 +121158,7 @@ html[lang]:lang(ar) {
   --ds-collection-header-subtitle-tracking-technical: 0.135em;
   --ds-collection-header-title-measure: var(--ds-page-header-title-max-width, 35rem);
   --ds-collection-header-title-measure-editorial: var(--ds-page-header-title-max-width, 42.5rem);
+  --ds-color-border-hover: var(--ds-color-neutral-400);
   --ds-color-neutral-ink: #000000;
   --ds-color-neutral-paper: #ffffff;
   --ds-color-picker-check-halo: color-mix(in srgb, var(--ds-color-neutral-900) 85%, transparent);
@@ -123088,6 +123090,9 @@ html[lang]:lang(ar) {
   --ds-tag-press-transform: translateY(0) scale(var(--ds-state-press-scale));
   --ds-tag-primary-outlined-ink: var(--ds-color-primary);
   --ds-tag-primary-solid-bg: var(--ds-color-primary);
+  --ds-tag-radius-lg: calc(0.5rem * var(--ds-radius-scale, 1));
+  --ds-tag-radius-md: calc(0.25rem * var(--ds-radius-scale, 1));
+  --ds-tag-radius-sm: calc(0.125rem * var(--ds-radius-scale, 1));
   --ds-tag-secondary-ink: var(--ds-color-white);
   --ds-tag-secondary-outlined-ink: var(--ds-color-secondary);
   --ds-tag-secondary-solid-bg: color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%);
