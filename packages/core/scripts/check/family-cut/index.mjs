@@ -1531,8 +1531,17 @@ const KERNEL_OWNED_PROPS = new Set([
   'onKeyDown',
 ]);
 
-const KERNEL_HOOKS = new Set(['useDragSession', 'useFileDropZone']);
-const KERNEL_BAG_CALL = /(?:^|\.)(?:getSourceProps|getTargetProps)$/u;
+/**
+ * The pointer transport's bags own only the press. Keeping them a separate set
+ * leaves every HTML5 attachment measured exactly as before: a later
+ * `onPointerDown` discards a pointer bag and nothing else.
+ */
+const POINTER_OWNED_PROPS = new Set(['onPointerDown']);
+
+const KERNEL_HOOKS = new Set(['useDragSession', 'useFileDropZone', 'useResizeSession']);
+const KERNEL_BAG_CALL = /(?:^|\.)(?:getSourceProps|getTargetProps|getPointerSourceProps|getHandleProps)$/u;
+const POINTER_BAG_CALL = /(?:^|\.)(?:getPointerSourceProps|getHandleProps)$/u;
+const POINTER_LISTENED = new Set(['pointermove', 'pointerup']);
 const KERNEL_BAG_VALUE = /(?:^|\.)dropZoneProps$/u;
 
 /**
@@ -1546,6 +1555,7 @@ const NAMED_BAG_CONTRACT = {
   source: ['draggable', 'onDragStart', 'onDragEnd'],
   target: ['onDragOver', 'onDrop'],
   dropZone: ['onDragOver', 'onDragLeave', 'onDrop'],
+  pointer: ['onPointerDown'],
 };
 const DRAG_HANDLER_ATTRIBUTES = new Set([
   'onDragStart',
@@ -1597,6 +1607,8 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
   let declaresKernel = false;
   let readsTransfer = false;
   let readsTransferFiles = false;
+  let capturesPointer = false;
+  let listensPointer = false;
 
   const lineOf = (node) => source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
   const text = (node) => node.getText(source);
@@ -1650,6 +1662,11 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
     if (ts.isPropertyAccessExpression(node)) {
       const name = node.name.text;
       if (name === 'dataTransfer') readsTransfer = true;
+      if (name === 'setPointerCapture') capturesPointer = true;
+      if (name === 'addEventListener' && ts.isCallExpression(node.parent) && node.parent.expression === node) {
+        const [type] = node.parent.arguments;
+        if (type && ts.isStringLiteralLike(type) && POINTER_LISTENED.has(type.text)) listensPointer = true;
+      }
       if ((name === 'files' || name === 'items') && /dataTransfer$/u.test(text(node.expression))) {
         readsTransferFiles = true;
       }
@@ -1769,6 +1786,9 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
     || attributeNames.has('onDragStart')
     || readsTransfer;
   const transportOwner = hasDragVocabulary && sessionState.length > 0;
+  /* An independent pointer transport, BY SHAPE: it captures the pointer, follows
+   * it on a window-level listener and starts from a press it attaches itself. */
+  const pointerTransportOwner = capturesPointer && listensPointer && attributeNames.has('onPointerDown');
   const dropZoneOwner = !transportOwner
     && attributeNames.has('onDragOver')
     && attributeNames.has('onDrop')
@@ -1803,6 +1823,13 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
     return null;
   };
 
+  const ownedPropsOf = (expression) => {
+    const current = unwrapTransparent(expression);
+    return current && ts.isCallExpression(current) && POINTER_BAG_CALL.test(text(current.expression))
+      ? POINTER_OWNED_PROPS
+      : KERNEL_OWNED_PROPS;
+  };
+
   const isKernelBag = (expression) => {
     const current = unwrapTransparent(expression);
     if (!current) return false;
@@ -1823,6 +1850,7 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
     const current = unwrapTransparent(expression);
     if (!current) return null;
     if (ts.isCallExpression(current) && KERNEL_BAG_CALL.test(text(current.expression))) {
+      if (POINTER_BAG_CALL.test(text(current.expression))) return 'pointer';
       return /getSourceProps$/u.test(text(current.expression)) ? 'source' : 'target';
     }
     if (ts.isPropertyAccessExpression(current) && KERNEL_BAG_VALUE.test(text(current))) {
@@ -1850,28 +1878,35 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
     const literal = objectsByName.get(current.text);
     if (!literal) return undefined;
     let seen = false;
+    let owned = KERNEL_OWNED_PROPS;
     const overridden = [];
     for (const property of literal.properties) {
       if (ts.isSpreadAssignment(property)) {
-        if (isKernelBag(property.expression)) { seen = true; continue; }
+        if (isKernelBag(property.expression)) {
+          seen = true;
+          owned = ownedPropsOf(property.expression);
+          continue;
+        }
         if (!seen) continue;
         const keys = enumerableKeys(property.expression);
-        if (keys === null) return { kernel: true, overridden, unverified: true };
-        overridden.push(...keys.filter((key) => KERNEL_OWNED_PROPS.has(key)));
+        if (keys === null) return { kernel: true, overridden, unverified: true, owned };
+        overridden.push(...keys.filter((key) => owned.has(key)));
         continue;
       }
       if (!seen || !property.name) continue;
       const key = text(property.name).replace(/^['"]|['"]$/gu, '');
-      if (KERNEL_OWNED_PROPS.has(key)) overridden.push(key);
+      if (owned.has(key)) overridden.push(key);
     }
-    return seen ? { kernel: true, overridden, unverified: false } : undefined;
+    return seen ? { kernel: true, overridden, unverified: false, owned } : undefined;
   };
 
   /** The kernel bag spread at ONE position, raw or assembled into a local. */
   const kernelSpreadAt = (properties, position) => {
     const property = properties[position];
     if (!property || !ts.isJsxSpreadAttribute(property)) return undefined;
-    if (isKernelBag(property.expression)) return { overridden: [], unverified: false };
+    if (isKernelBag(property.expression)) {
+      return { overridden: [], unverified: false, owned: ownedPropsOf(property.expression) };
+    }
     return mergedKernelBag(property.expression);
   };
 
@@ -1883,12 +1918,14 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
     let index = -1;
     let overwritten = [];
     let unverified = false;
+    let owned = new Set();
     for (let position = 0; position < properties.length; position += 1) {
       const bag = kernelSpreadAt(properties, position);
       if (!bag) continue;
       index = position;
       overwritten = [...bag.overridden];
       unverified = bag.unverified;
+      owned = new Set(bag.owned);
       break;
     }
     /* The contract's sanctioned shape puts the source bag and the target bag
@@ -1902,6 +1939,7 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
       for (let bag = kernelSpreadAt(properties, index + 1); bag; bag = kernelSpreadAt(properties, index + 1)) {
         overwritten.push(...bag.overridden);
         unverified = unverified || bag.unverified;
+        for (const key of bag.owned) owned.add(key);
         index += 1;
       }
     }
@@ -1915,7 +1953,7 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
       for (const property of properties) {
         if (!ts.isJsxAttribute(property)) continue;
         const name = attributeName(property);
-        if (!KERNEL_OWNED_PROPS.has(name)) continue;
+        if (!KERNEL_OWNED_PROPS.has(name) && !POINTER_OWNED_PROPS.has(name)) continue;
         if (!property.initializer || !ts.isJsxExpression(property.initializer) || !property.initializer.expression) {
           continue;
         }
@@ -1951,12 +1989,12 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
       const property = properties[position];
       if (ts.isJsxAttribute(property)) {
         const name = attributeName(property);
-        if (KERNEL_OWNED_PROPS.has(name)) overwritten.push(name);
+        if (owned.has(name)) overwritten.push(name);
         continue;
       }
       const keys = enumerableKeys(property.expression);
       if (keys === null) { unverified = true; continue; }
-      overwritten.push(...keys.filter((key) => KERNEL_OWNED_PROPS.has(key)));
+      overwritten.push(...keys.filter((key) => owned.has(key)));
     }
     attachments.push({
       element: text(element.tagName),
@@ -1975,6 +2013,7 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
   return {
     file,
     transportOwner,
+    pointerTransportOwner,
     dropZoneOwner,
     declaresKernel,
     sessionState,
@@ -2062,6 +2101,7 @@ export function measureDragAndDropArm(resolved, parsed) {
   return {
     transportOwners: analyses.filter((entry) => entry.transportOwner).map((entry) => rel(entry.file)),
     dropZoneOwners: analyses.filter((entry) => entry.dropZoneOwner).map((entry) => rel(entry.file)),
+    pointerTransportOwners: analyses.filter((entry) => entry.pointerTransportOwner).map((entry) => rel(entry.file)),
     declared: analyses.some((entry) => entry.declaresKernel),
     wired,
     rows,
@@ -2302,6 +2342,7 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
       fanOut,
       dndTransportOwners: dnd.transportOwners,
       dndDropZoneOwners: dnd.dropZoneOwners,
+      dndPointerTransportOwners: dnd.pointerTransportOwners,
       dndUnverified: dnd.rows,
       dndFrozen: dnd.frozen,
       owners: resolved.componentDirs.map((dir) => toPosix(relative(root, dir))),
@@ -2757,6 +2798,9 @@ function main() {
     }
     for (const frozen of measured.detail.dndFrozen ?? []) {
       console.log(`family-cut EXCLUDED -- ${measured.family}: ${frozen.file} (${frozen.reason})`);
+    }
+    for (const file of measured.detail.dndPointerTransportOwners ?? []) {
+      console.log(`family-cut DND ${measured.family}: POINTER-TRANSPORT ${file} (own pointer drag, not the kernel)`);
     }
   }
   if (findings.length > 0) {

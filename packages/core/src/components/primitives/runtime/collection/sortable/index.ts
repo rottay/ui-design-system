@@ -44,11 +44,11 @@
  * repository's `composeHandlers` skips its second handler on a prevented
  * event and this kernel always prevents.
  *
- * SCOPE. This is the HTML5 transport session and nothing else. Pointer-transport
- * move/resize, auto-scroll, `setDragImage`, cross-window drags and D3 pointer
- * drags are outside it; the pure resolvers below are transport-neutral and are
- * what another transport may consume. External file drops are the second
- * capability in this owner, `useFileDropZone`.
+ * SCOPE. The HTML5 session, plus the opt-in pointer transport on the same tail
+ * (`pointer`, a point resolver such as `resolveGridSlot`, a `preview` the
+ * consumer paints) and `useResizeSession` for edge resizes committed at release.
+ * Auto-scroll, `setDragImage`, cross-window and D3 pointer drags stay outside;
+ * `useFileDropZone` is the external-file capability.
  *
  * @module Primitives/Runtime/Collection/Sortable
  * @package @rottay/design-system
@@ -120,6 +120,8 @@ export const SORTABLE_PROTOCOL_VOCABULARY = Object.freeze([
   'before',
   'before-after',
   'before-inside-after',
+  'block-end',
+  'block-start',
   'blocked',
   'cancelled',
   'delegated',
@@ -133,8 +135,11 @@ export const SORTABLE_PROTOCOL_VOCABULARY = Object.freeze([
   'grabbed',
   'hover',
   'immediate',
+  'inline-end',
+  'inline-start',
   'inside',
   'keyboard',
+  'keydown',
   'last',
   'move',
   'moved',
@@ -143,6 +148,9 @@ export const SORTABLE_PROTOCOL_VOCABULARY = Object.freeze([
   'next-item',
   'no-destination',
   'pointer',
+  'pointercancel',
+  'pointermove',
+  'pointerup',
   'prev-container',
   'prev-item',
   'previous',
@@ -155,6 +163,8 @@ const DEFAULT_GRAB_KEYS = Object.freeze([' ', 'Enter']);
 const CANCEL_KEY = 'Escape';
 const TRANSFER_FORMAT = 'text/plain';
 const TRANSFER_OPERATION = 'move';
+const DEFAULT_ACTIVATION_DISTANCE = 6;
+const DEFAULT_SLOT_TOLERANCE = 24;
 
 /**
  * The named refusal for an axis pair that cannot tell an item move from a
@@ -242,6 +252,184 @@ export function resolveMoveIntent(
   return null;
 }
 
+/** A viewport point, in the same space as `clientX` / `clientY`. */
+export interface PointerPoint {
+  readonly x: number;
+  readonly y: number;
+}
+
+/** A slot's box. A `DOMRect` satisfies it; the resolver never touches the DOM. */
+export interface SlotRect {
+  readonly left: number;
+  readonly top: number;
+  readonly right: number;
+  readonly bottom: number;
+}
+
+/** The slot under the point, else the nearest by edge distance (ties keep the earlier), else
+ * `null` once the point leaves `bounds` by more than `tolerance`. Arealess slots never match. */
+export function resolveGridSlot(
+  point: PointerPoint,
+  slots: readonly (SlotRect | null | undefined)[],
+  options: { readonly bounds: SlotRect; readonly tolerance?: number }
+): number | null {
+  const { bounds, tolerance = DEFAULT_SLOT_TOLERANCE } = options;
+  let closest: { index: number; distance: number } | null = null;
+
+  for (let index = 0; index < slots.length; index += 1) {
+    const rect = slots[index];
+    if (!rect || rect.right - rect.left <= 0 || rect.bottom - rect.top <= 0) continue;
+    if (
+      point.x >= rect.left &&
+      point.x <= rect.right &&
+      point.y >= rect.top &&
+      point.y <= rect.bottom
+    ) {
+      return index;
+    }
+    const distance = Math.hypot(
+      Math.max(rect.left - point.x, 0, point.x - rect.right),
+      Math.max(rect.top - point.y, 0, point.y - rect.bottom)
+    );
+    if (!closest || distance < closest.distance) closest = { index, distance };
+  }
+
+  if (
+    point.x < bounds.left - tolerance ||
+    point.x > bounds.right + tolerance ||
+    point.y < bounds.top - tolerance ||
+    point.y > bounds.bottom + tolerance
+  ) {
+    return null;
+  }
+  return closest?.index ?? null;
+}
+
+/** A logical resize edge or corner; RTL costs nothing. */
+export type ResizeEdge =
+  | 'inline-start'
+  | 'inline-end'
+  | 'block-start'
+  | 'block-end'
+  | 'block-start-inline-start'
+  | 'block-start-inline-end'
+  | 'block-end-inline-start'
+  | 'block-end-inline-end';
+
+/** Pixels per step on each axis, measured by the consumer at press time. */
+export interface ResizeStep {
+  readonly inline: number;
+  readonly block: number;
+}
+
+/** Signed whole steps per axis: positive grows, negative shrinks, 0 is untouched. */
+export interface ResizeIntent {
+  readonly edge: ResizeEdge;
+  readonly inline: number;
+  readonly block: number;
+}
+
+/** Which axes an edge moves, and whether dragging toward the end grows (+1) or shrinks (-1). */
+export function resolveResizeAxes(edge: ResizeEdge): {
+  readonly inline: -1 | 0 | 1;
+  readonly block: -1 | 0 | 1;
+} {
+  return {
+    inline: edge.endsWith('inline-end') ? 1 : edge.endsWith('inline-start') ? -1 : 0,
+    block: edge.startsWith('block-end') ? 1 : edge.startsWith('block-start') ? -1 : 0,
+  };
+}
+
+/** Travel becomes whole steps on the axes the edge owns; only the inline axis follows the
+ * reading direction, and a non-positive step moves nothing. */
+export function resolveResizeIntent(
+  edge: ResizeEdge,
+  delta: PointerPoint,
+  options: { step: ResizeStep; rtl: boolean }
+): ResizeIntent {
+  const { step, rtl } = options;
+  const axes = resolveResizeAxes(edge);
+  const steps = (distance: number, size: number): number =>
+    size > 0 ? Math.round(distance / size) + 0 : 0;
+  return {
+    edge,
+    inline: axes.inline === 0 ? 0 : steps(delta.x * (rtl ? -1 : 1) * axes.inline, step.inline),
+    block: axes.block === 0 ? 0 : steps(delta.y * axes.block, step.block),
+  };
+}
+
+// ============================================================================
+// The pointer transport
+// ============================================================================
+
+interface PointerTrack {
+  readonly move: (point: PointerPoint) => void;
+  readonly release: (point: PointerPoint) => void;
+  readonly abort: () => void;
+}
+
+/** One captured pointer followed on its window until release, cancel or `Escape`; each event
+ * reads the latest render's track, so no consumer resolver runs from a stale closure. */
+function usePointerTrack(track: PointerTrack): {
+  begin: (event: ReactPointerEvent<Element>) => void;
+  end: () => void;
+} {
+  const trackRef = useRef(track);
+  useEffect(() => {
+    trackRef.current = track;
+  });
+
+  const disposeRef = useRef<(() => void) | null>(null);
+  const end = useCallback((): void => {
+    disposeRef.current?.();
+    disposeRef.current = null;
+  }, []);
+  useEffect(() => end, [end]);
+
+  const begin = (event: ReactPointerEvent<Element>): void => {
+    end();
+    const element = event.currentTarget;
+    const view = element.ownerDocument.defaultView;
+    if (!view) return;
+    const { pointerId } = event;
+    element.setPointerCapture?.(pointerId);
+
+    const point = (next: PointerEvent): PointerPoint => ({ x: next.clientX, y: next.clientY });
+    const onMove = (next: PointerEvent): void => {
+      if (next.pointerId === pointerId) trackRef.current.move(point(next));
+    };
+    const onUp = (next: PointerEvent): void => {
+      if (next.pointerId !== pointerId) return;
+      end();
+      trackRef.current.release(point(next));
+    };
+    const onCancel = (next: PointerEvent): void => {
+      if (next.pointerId !== pointerId) return;
+      end();
+      trackRef.current.abort();
+    };
+    const onKey = (next: KeyboardEvent): void => {
+      if (next.key !== CANCEL_KEY) return;
+      next.preventDefault();
+      end();
+      trackRef.current.abort();
+    };
+
+    view.addEventListener('pointermove', onMove);
+    view.addEventListener('pointerup', onUp);
+    view.addEventListener('pointercancel', onCancel);
+    view.addEventListener('keydown', onKey);
+    disposeRef.current = () => {
+      view.removeEventListener('pointermove', onMove);
+      view.removeEventListener('pointerup', onUp);
+      view.removeEventListener('pointercancel', onCancel);
+      view.removeEventListener('keydown', onKey);
+    };
+  };
+
+  return { begin, end };
+}
+
 // ============================================================================
 // Layer 1 -- the HTML5 session core
 // ============================================================================
@@ -271,6 +459,37 @@ export interface SortableSourceProps {
 export interface SortableTargetProps {
   readonly onDragOver?: DragEventHandler<Element>;
   readonly onDrop?: DragEventHandler<Element>;
+}
+
+/** The pointer transport's source bag. Empty when the transport is off. */
+export interface SortablePointerSourceProps {
+  readonly onPointerDown?: PointerEventHandler<Element>;
+}
+
+/** No receiving element on this transport: the destination comes from the point, with the
+ * same two phases and the same meaning of `null` as `TargetResolver`. */
+export type PointerTargetResolver<TPayload extends DragPayload, TDestination> = (
+  context: {
+    readonly phase: 'hover' | 'drop';
+    readonly payload: TPayload;
+    readonly point: PointerPoint;
+    /** Travel since the press. */
+    readonly delta: PointerPoint;
+    readonly current: TDestination | null;
+  }
+) => TDestination | null;
+
+export interface SortablePointerOptions<TPayload extends DragPayload, TDestination> {
+  /** Travel in px before a press becomes a drag; a shorter release is a click. Default 6. */
+  readonly activationDistance?: number;
+  readonly resolvePointerTarget: PointerTargetResolver<TPayload, TDestination>;
+}
+
+/** What a ghost is painted from while a pointer drag is live. */
+export interface DragPreview<TPayload extends DragPayload, TDestination> {
+  readonly payload: TPayload;
+  readonly target: TDestination | null;
+  readonly delta: PointerPoint;
 }
 
 /**
@@ -422,6 +641,9 @@ export interface UseDragSessionBaseOptions<
 
   /** The announcement contract, IN the API rather than beside it. */
   readonly onAnnounce?: (event: SortableAnnounceEvent<TPayload, TDestination>) => void;
+
+  /** Opts the pointer transport in; without it `getPointerSourceProps` returns an empty bag. */
+  readonly pointer?: SortablePointerOptions<TPayload, TDestination>;
 }
 
 export type UseDragSessionOptions<
@@ -438,6 +660,15 @@ export interface UseDragSessionResult<
 > {
   /** Null between sessions. Never a partial session. */
   readonly session: DragSession<TPayload, TDestination> | null;
+
+  /** Non-null only while a pointer-transport drag is activated. */
+  readonly preview: DragPreview<TPayload, TDestination> | null;
+
+  /** Spread on a pointer-transport SOURCE (usually a handle); `eligible` defaults to `true`. */
+  getPointerSourceProps(
+    payload: TPayload,
+    options?: { readonly eligible?: boolean }
+  ): SortablePointerSourceProps;
 
   /**
    * Spread on the drag SOURCE. `eligible` is PER SOURCE and defaults to
@@ -507,6 +738,7 @@ export function useDragSession<
     pressCancel,
     keyboard,
     onAnnounce,
+    pointer,
   } = options as UseDragSessionBaseOptions<TPayload, TTarget, TDestination>;
   const { resolveTarget } = options as {
     resolveTarget?: TargetResolver<TPayload, TTarget, TDestination>;
@@ -814,6 +1046,100 @@ export function useDragSession<
     };
   };
 
+  const pressRef = useRef<{
+    readonly payload: TPayload;
+    readonly start: PointerPoint;
+    activated: boolean;
+  } | null>(null);
+  const [preview, setPreview] = useState<DragPreview<TPayload, TDestination> | null>(null);
+
+  const closePress = (): boolean => {
+    const activated = pressRef.current?.activated ?? false;
+    pressRef.current = null;
+    setPreview(null);
+    return activated;
+  };
+
+  const pointerTrack = usePointerTrack({
+    move: (point) => {
+      const press = pressRef.current;
+      if (!press || !pointer) return;
+      const delta = { x: point.x - press.start.x, y: point.y - press.start.y };
+      if (!press.activated) {
+        const distance = pointer.activationDistance ?? DEFAULT_ACTIVATION_DISTANCE;
+        if (Math.hypot(delta.x, delta.y) < distance) return;
+        press.activated = true;
+        writeSession({ payload: press.payload, target: null, origin: 'pointer', phase: 'dragging' });
+        onDragStarted?.(press.payload);
+      }
+      const open = sessionRef.current;
+      if (!open) return;
+      const next = pointer.resolvePointerTarget({
+        phase: 'hover',
+        payload: open.payload,
+        point,
+        delta,
+        current: open.target,
+      });
+      if (next !== open.target) writeSession({ ...open, target: next });
+      setPreview({ payload: open.payload, target: next, delta });
+    },
+    release: (point) => {
+      const press = pressRef.current;
+      if (!closePress() || !press || !pointer) return;
+      const open = sessionRef.current;
+      if (!open) return;
+      const destination = pointer.resolvePointerTarget({
+        phase: 'drop',
+        payload: open.payload,
+        point,
+        delta: { x: point.x - press.start.x, y: point.y - press.start.y },
+        current: open.target,
+      });
+      if (destination === null) {
+        refuse(open);
+        return;
+      }
+      finalize(open, destination);
+    },
+    abort: () => {
+      if (!closePress()) return;
+      const open = sessionRef.current;
+      if (!open) return;
+      sessionRef.current = null;
+      setSession(null);
+      onCancel?.(open.payload);
+      onAnnounce?.({ kind: 'cancelled', origin: open.origin, payload: open.payload });
+    },
+  });
+
+  const getPointerSourceProps = (
+    payload: TPayload,
+    sourceOptions?: { readonly eligible?: boolean }
+  ): SortablePointerSourceProps => {
+    if (disabled || !pointer || sourceOptions?.eligible === false) return {};
+    return {
+      onPointerDown: (event) => {
+        if (sessionRef.current || pressRef.current) return;
+        event.preventDefault();
+        pressRef.current = {
+          payload,
+          start: { x: event.clientX, y: event.clientY },
+          activated: false,
+        };
+        pointerTrack.begin(event);
+      },
+    };
+  };
+
+  const endPointerTrack = pointerTrack.end;
+  useEffect(() => {
+    if (!disabled) return;
+    endPointerTrack();
+    pressRef.current = null;
+    setPreview(null);
+  }, [disabled, endPointerTrack]);
+
   useEffect(() => {
     if (!disabled) return;
     const open = sessionRef.current;
@@ -828,6 +1154,8 @@ export function useDragSession<
 
   return {
     session,
+    preview,
+    getPointerSourceProps,
     getSourceProps,
     getTargetProps,
     registerItem,
@@ -836,6 +1164,132 @@ export function useDragSession<
     commit,
     cancel,
   };
+}
+
+// ============================================================================
+// The pointer transport for a resize
+// ============================================================================
+
+/** What a live resize is painted from; `intent` is what a release would commit. */
+export interface ResizePreview<TSubject> {
+  readonly subject: TSubject;
+  readonly edge: ResizeEdge;
+  readonly delta: PointerPoint;
+  readonly intent: ResizeIntent;
+}
+
+export interface UseResizeSessionOptions<TSubject> {
+  readonly disabled?: boolean;
+  /** Read once per press: the step is the geometry at the moment the gesture began. */
+  readonly measureStep: (subject: TSubject, edge: ResizeEdge) => ResizeStep;
+  /** Called once at release, and only for an intent that moves at least one axis. */
+  readonly onCommit: (subject: TSubject, intent: ResizeIntent) => void;
+  /** `Escape`, `pointercancel`, `cancel()` or `disabled` during a press. */
+  readonly onCancel?: (subject: TSubject) => void;
+}
+
+export interface UseResizeSessionResult<TSubject> {
+  readonly resize: ResizePreview<TSubject> | null;
+  /** Spread on a resize HANDLE; the press stops propagating, so a handle inside a
+   * pointer-transport source never also starts a move. */
+  getHandleProps(
+    subject: TSubject,
+    edge: ResizeEdge,
+    options?: { readonly eligible?: boolean }
+  ): SortablePointerSourceProps;
+  cancel(): void;
+}
+
+export function useResizeSession<TSubject>(
+  options: UseResizeSessionOptions<TSubject>
+): UseResizeSessionResult<TSubject> {
+  const { disabled = false, measureStep, onCommit, onCancel } = options;
+  const rtl = useReadingDirectionIsRtl();
+
+  const pressRef = useRef<{
+    readonly subject: TSubject;
+    readonly edge: ResizeEdge;
+    readonly start: PointerPoint;
+    readonly step: ResizeStep;
+    intent: ResizeIntent;
+  } | null>(null);
+  const [resize, setResize] = useState<ResizePreview<TSubject> | null>(null);
+
+  const close = (): void => {
+    pressRef.current = null;
+    setResize(null);
+  };
+
+  const abandon = (): void => {
+    const press = pressRef.current;
+    if (!press) return;
+    close();
+    onCancel?.(press.subject);
+  };
+
+  const track = usePointerTrack({
+    move: (point) => {
+      const press = pressRef.current;
+      if (!press) return;
+      const delta = { x: point.x - press.start.x, y: point.y - press.start.y };
+      const intent = resolveResizeIntent(press.edge, delta, { step: press.step, rtl });
+      press.intent = intent;
+      setResize({ subject: press.subject, edge: press.edge, delta, intent });
+    },
+    release: () => {
+      const press = pressRef.current;
+      if (!press) return;
+      close();
+      if (press.intent.inline !== 0 || press.intent.block !== 0) {
+        onCommit(press.subject, press.intent);
+      }
+    },
+    abort: abandon,
+  });
+
+  const cancel = (): void => {
+    track.end();
+    abandon();
+  };
+
+  const getHandleProps = (
+    subject: TSubject,
+    edge: ResizeEdge,
+    handleOptions?: { readonly eligible?: boolean }
+  ): SortablePointerSourceProps => {
+    if (disabled || handleOptions?.eligible === false) return {};
+    return {
+      onPointerDown: (event) => {
+        if (pressRef.current) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const intent: ResizeIntent = { edge, inline: 0, block: 0 };
+        const delta = { x: 0, y: 0 };
+        pressRef.current = {
+          subject,
+          edge,
+          start: { x: event.clientX, y: event.clientY },
+          step: measureStep(subject, edge),
+          intent,
+        };
+        setResize({ subject, edge, delta, intent });
+        track.begin(event);
+      },
+    };
+  };
+
+  const endTrack = track.end;
+  const abandonRef = useRef(abandon);
+  useEffect(() => {
+    abandonRef.current = abandon;
+  });
+  useEffect(() => {
+    if (!disabled) return;
+    endTrack();
+    abandonRef.current();
+  }, [disabled, endTrack]);
+
+  return { resize, getHandleProps, cancel };
 }
 
 // ============================================================================

@@ -2304,6 +2304,149 @@ export function Zone({ handlers }) {
   assert.deepEqual(measured.rows, [], 'an unrelated receiver is not a kernel claim, so it is not a row either');
 });
 
+const POINTER_KERNEL_IMPORT = "import { useDragSession, useResizeSession } from '@/components/primitives/runtime/collection/sortable';";
+
+test('D28: a pointer-transport consumer of the kernel is DECLARED and WIRED, and owns no transport', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${POINTER_KERNEL_IMPORT}
+export function Board({ items, onMove }) {
+  const drag = useDragSession({ onDrop: onMove, pointer: { resolvePointerTarget: () => null } });
+  return items.map((item) => <button key={item.id} {...drag.getPointerSourceProps({ key: item.id })} />);
+}
+`,
+  });
+
+  assert.equal(measured.declared, true);
+  assert.equal(measured.wired, true, 'the pointer bag reaching the DOM is an adoption the arm must SEE');
+  assert.deepEqual(measured.transportOwners, []);
+  assert.deepEqual(measured.pointerTransportOwners, []);
+  assert.deepEqual(measured.rows, []);
+});
+
+test('D29: the resize session attached by spread, and a pointer bag attached BY NAME, are WIRED', () => {
+  const resize = plantDndFamily({
+    'index.tsx': `
+${POINTER_KERNEL_IMPORT}
+export function Handle({ id }) {
+  const resize = useResizeSession({ measureStep: () => ({ inline: 1, block: 1 }), onCommit: () => {} });
+  return <span {...resize.getHandleProps(id, 'inline-end')} />;
+}
+`,
+  });
+  const named = plantDndFamily({
+    'index.tsx': `
+${POINTER_KERNEL_IMPORT}
+export function Cell({ id }) {
+  const drag = useDragSession({ onDrop: () => {}, pointer: { resolvePointerTarget: () => null } });
+  const press = drag.getPointerSourceProps({ key: id });
+  return <button onPointerDown={press.onPointerDown} />;
+}
+`,
+  });
+
+  assert.equal(resize.declared && resize.wired, true);
+  assert.equal(named.declared && named.wired, true);
+  assert.deepEqual([...resize.rows, ...named.rows], []);
+});
+
+test('D30: a later onPointerDown discards the pointer bag -- OVERWRITTEN, declared and NOT wired', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${POINTER_KERNEL_IMPORT}
+export function Cell({ id, onPress }) {
+  const drag = useDragSession({ onDrop: () => {}, pointer: { resolvePointerTarget: () => null } });
+  return <button {...drag.getPointerSourceProps({ key: id })} onPointerDown={onPress} />;
+}
+`,
+  });
+
+  assert.equal(measured.declared, true);
+  assert.equal(measured.wired, false);
+  assert.equal(measured.rows.length, 1);
+  assert.match(measured.rows[0], /^OVERWRITTEN .*<button> onPointerDown$/u);
+});
+
+const OWN_POINTER_DRAG = `
+import { useEffect, useRef, useState } from 'react';
+export function Board({ onMove }) {
+  const session = useRef(null);
+  const [pointerId, setPointerId] = useState(null);
+  useEffect(() => {
+    if (pointerId === null) return;
+    const follow = (event) => { if (session.current) session.current.x = event.clientX; };
+    const release = () => { onMove(session.current); session.current = null; setPointerId(null); };
+    window.addEventListener('pointermove', follow);
+    window.addEventListener('pointerup', release);
+    return () => {
+      window.removeEventListener('pointermove', follow);
+      window.removeEventListener('pointerup', release);
+    };
+  }, [pointerId]);
+  const begin = (event) => {
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    session.current = { x: event.clientX };
+    setPointerId(event.pointerId);
+  };
+  return <div onPointerDown={begin} />;
+}
+`;
+
+test('D31: an OWN pointer drag -- capture, a window listener, its own press -- is SEEN as a pointer transport', () => {
+  const measured = plantDndFamily({ 'index.tsx': OWN_POINTER_DRAG });
+
+  assert.deepEqual(measured.pointerTransportOwners, ['index.tsx'], 'the shape the kernel now owns, re-implemented');
+  assert.deepEqual(measured.transportOwners, [], 'the HTML5 ratchet is not where it is counted');
+  assert.equal(measured.declared, false);
+});
+
+test('D32: pointer capture alone, or a listener alone, is not a transport', () => {
+  const captureOnly = plantDnd(`
+export function Slider() {
+  return <div onPointerDown={(event) => event.currentTarget.setPointerCapture(event.pointerId)} />;
+}
+`);
+  const listenerOnly = plantDnd(`
+import { useEffect } from 'react';
+export function Tracker({ onPoint }) {
+  useEffect(() => {
+    window.addEventListener('pointermove', onPoint);
+    return () => window.removeEventListener('pointermove', onPoint);
+  }, [onPoint]);
+  return <div onPointerDown={onPoint} />;
+}
+`);
+
+  assert.equal(captureOnly.pointerTransportOwner, false);
+  assert.equal(listenerOnly.pointerTransportOwner, false);
+});
+
+test('D33: an HTML5 bag followed by onPointerDown reads exactly as before -- the pointer set is the pointer bag\'s alone', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+export function Card({ id, onPress }) {
+  const drag = useDragSession({ onDrop: () => {} });
+  return <div {...drag.getSourceProps({ key: id })} onPointerDown={onPress} />;
+}
+`,
+  });
+
+  assert.equal(measured.wired, true);
+  assert.deepEqual(measured.rows, []);
+  assert.deepEqual(measured.pointerTransportOwners, []);
+});
+
+test('LIVE: the widget-board own pointer drag is SEEN, as detail only -- the HTML5 ratchet holds at 0', () => {
+  const measured = measureFamily(resolveFamily('widget-board'), { producers: PRODUCERS });
+
+  assert.deepEqual(measured.detail.dndPointerTransportOwners, [
+    'src/components/patterns/data/widget-board/engines/foundation/index.tsx',
+  ]);
+  assert.equal(measured.ratchets.dndTransportOwners, 0);
+  assert.equal('dndPointerTransportOwners' in measured.ratchets, false, "a new counter is the DT's ratchet to open");
+});
+
 test('the blocking arm fires only when the kernel was DECLARED and not attached', () => {
   const measured = measureFamily(resolveFamily(FAMILY), { producers: PRODUCERS });
   const pinned = readBaseline().families[FAMILY];
