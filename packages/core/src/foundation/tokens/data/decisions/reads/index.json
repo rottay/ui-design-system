@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "Drained to the CURRENT hooks contract (WO-EVI-02 reads-ledger drain, 2026-09-22). The ledger is hand-merged and had no producer, so it kept 2603 rows while the manifest — regenerated 48 times by its own producer since — fences 1272: 1331 extra, 0 missing, plus a stale digest pin. Every extra row was censused before removal and none was a lost adjudication: 962 had gained a real owner (683 tenantChannel, 216 foundationTokens, 23 componentTokens, 32 foundation+tenant, 6 component+tenant, 1 component+foundation, 1 publicHook+component) through the FAM family-cut derivers, so the debt was discharged, not hidden; 365 reads no longer exist anywhere in the tree; 4 survive only outside the contract scan roots (a compiler emission RHS, a TS token module, a test, and the generated artifacts that shadow them). ZERO rows were live in-scope reads the manifest failed to fence, so nothing is pending a fence ceremony. Per-row attribution to the 82 landed commits that moved each read: packages/core/evidence/reads-ledger-drain-census. The digest is re-pinned to the manifest at HEAD; the row set is set-equal to it (0 extra, 0 missing). 2026-09-22: row 789 (--ds-notification-center-touch-target) retired — the channel moved to adjudicated when the notification-center chrome deriver landed (643c3588b); it no longer belongs to the unadjudicated-reads ledger. basedOnManifestDigest follows the manifest regen. 2026-09-22: digest re-pinned after the skeleton-row-bar-height and skeleton-row-control-size promotions corrected whiteLabelCompat derives-from-spacing -> not-tenant-emitted (a term outside the contract vocabulary; no compiler owner writes either channel); unadjudicatedReads untouched, the row set is unchanged. 2026-09-25: 7 rows retired (--ds-code-block-copied-frame, -copied-ink, -copy-bg-hover, -motion-duration, -selection-bg, -gutter-ink, -header-bg) — no deriver or declaration ever produced them, so every read painted its fallback; WO-EVI-03 arm 2 (code-block cluster) wrote the fallbacks, built from produced channels only, as the declared paint (copy-bg-hover and motion-duration re-pointed to the live --ds-button-ghost-bg-hover and --ds-motion-feedback), the names are no longer read and the regenerated manifest no longer fences them. byClass recomputed from the rows (MODERN_PRIVATE 725→718, total 1271→1264); basedOnManifestDigest follows the manifest regen. 2026-09-25: 3 more rows retired (--ds-code-block-copy-bg-pressed, -copy-ink-hover, -focus-ring) — the code-block family's unrouted siblings with the same defect: no deriver or declaration ever produced them, so every read painted its fallback; WO-EVI-03 arm 2 (code-block siblings) wrote the fallbacks, built from produced channels only, as the declared paint (copy-ink-hover re-pointed to the live --ds-color-text-primary), the names are no longer read and the regenerated manifest no longer fences them. byClass recomputed from the rows (MODERN_PRIVATE 718→715, total 1264→1261); basedOnManifestDigest follows the manifest regen. 2026-09-25: 3 more rows retired (--ds-voice-input-focus-ring, --ds-loading-overlay-scrim-opacity, --ds-export-button-toast-duration) — the last WO-EVI-03 channels with an owner proposal besides --ds-size-touch-target: no deriver or declaration ever produced them, so every read painted its fallback; WO-EVI-03 arm 2 (voice-input and loading-overlay clusters) wrote each fallback as the declared paint (none re-pointed: no live channel paints the same value; none produced: the three families are on no family-cut roster, and the toast fade is bound to the engine's fixed 1800ms lifetime), the names are no longer read and the regenerated manifest no longer fences them. byClass recomputed from the rows (MODERN_PRIVATE 715→712, total 1261→1258); basedOnManifestDigest follows the manifest regen. 2026-09-25: 1 row retired (--ds-color-text-on-error) — the name was never declared, so the bottom-tab-bar error pill always painted its on-primary fallback; the on-primary pair lot re-pointed the pill to the declared --ds-color-on-error (the error fill's own mode-graded ink), the name is no longer read and the regenerated manifest no longer fences it. byClass recomputed from the rows (MODERN_PRIVATE 712→711, total 1258→1257); basedOnManifestDigest follows the manifest regen.",
-  "basedOnManifestDigest": "ceb34e9779621aa15173eb7030b7b24fedf6afd27d4a68240b28d1ba87ad0e72",
+  "generatedBy": "Drained to the CURRENT hooks contract (WO-EVI-02 reads-ledger drain, 2026-09-22). The ledger is hand-merged and had no producer, so it kept 2603 rows while the manifest — regenerated 48 times by its own producer since — fences 1272: 1331 extra, 0 missing, plus a stale digest pin. Every extra row was censused before removal and none was a lost adjudication: 962 had gained a real owner (683 tenantChannel, 216 foundationTokens, 23 componentTokens, 32 foundation+tenant, 6 component+tenant, 1 component+foundation, 1 publicHook+component) through the FAM family-cut derivers, so the debt was discharged, not hidden; 365 reads no longer exist anywhere in the tree; 4 survive only outside the contract scan roots (a compiler emission RHS, a TS token module, a test, and the generated artifacts that shadow them). ZERO rows were live in-scope reads the manifest failed to fence, so nothing is pending a fence ceremony. Per-row attribution to the 82 landed commits that moved each read: packages/core/evidence/reads-ledger-drain-census. The digest is re-pinned to the manifest at HEAD; the row set is set-equal to it (0 extra, 0 missing). 2026-09-22: row 789 (--ds-notification-center-touch-target) retired — the channel moved to adjudicated when the notification-center chrome deriver landed (643c3588b); it no longer belongs to the unadjudicated-reads ledger. basedOnManifestDigest follows the manifest regen. 2026-09-22: digest re-pinned after the skeleton-row-bar-height and skeleton-row-control-size promotions corrected whiteLabelCompat derives-from-spacing -> not-tenant-emitted (a term outside the contract vocabulary; no compiler owner writes either channel); unadjudicatedReads untouched, the row set is unchanged. 2026-09-25: 7 rows retired (--ds-code-block-copied-frame, -copied-ink, -copy-bg-hover, -motion-duration, -selection-bg, -gutter-ink, -header-bg) — no deriver or declaration ever produced them, so every read painted its fallback; WO-EVI-03 arm 2 (code-block cluster) wrote the fallbacks, built from produced channels only, as the declared paint (copy-bg-hover and motion-duration re-pointed to the live --ds-button-ghost-bg-hover and --ds-motion-feedback), the names are no longer read and the regenerated manifest no longer fences them. byClass recomputed from the rows (MODERN_PRIVATE 725→718, total 1271→1264); basedOnManifestDigest follows the manifest regen. 2026-09-25: 3 more rows retired (--ds-code-block-copy-bg-pressed, -copy-ink-hover, -focus-ring) — the code-block family's unrouted siblings with the same defect: no deriver or declaration ever produced them, so every read painted its fallback; WO-EVI-03 arm 2 (code-block siblings) wrote the fallbacks, built from produced channels only, as the declared paint (copy-ink-hover re-pointed to the live --ds-color-text-primary), the names are no longer read and the regenerated manifest no longer fences them. byClass recomputed from the rows (MODERN_PRIVATE 718→715, total 1264→1261); basedOnManifestDigest follows the manifest regen. 2026-09-25: 3 more rows retired (--ds-voice-input-focus-ring, --ds-loading-overlay-scrim-opacity, --ds-export-button-toast-duration) — the last WO-EVI-03 channels with an owner proposal besides --ds-size-touch-target: no deriver or declaration ever produced them, so every read painted its fallback; WO-EVI-03 arm 2 (voice-input and loading-overlay clusters) wrote each fallback as the declared paint (none re-pointed: no live channel paints the same value; none produced: the three families are on no family-cut roster, and the toast fade is bound to the engine's fixed 1800ms lifetime), the names are no longer read and the regenerated manifest no longer fences them. byClass recomputed from the rows (MODERN_PRIVATE 715→712, total 1261→1258); basedOnManifestDigest follows the manifest regen. 2026-09-25: 1 row retired (--ds-color-text-on-error) — the name was never declared, so the bottom-tab-bar error pill always painted its on-primary fallback; the on-primary pair lot re-pointed the pill to the declared --ds-color-on-error (the error fill's own mode-graded ink), the name is no longer read and the regenerated manifest no longer fences it. byClass recomputed from the rows (MODERN_PRIVATE 712→711, total 1258→1257); basedOnManifestDigest follows the manifest regen. | Hand-merge 2026-09-25 (DT): 45 rows leave with the EVI-03 retirement lots (275089607, 0ddb211af, d41d70c0c, a8005d64b -- every name's read retired with byte-identical paint, receipts in .tmp/dispatch-2026-09-21); digest and stats recomputed over the current contract.",
+  "basedOnManifestDigest": "48e409ad35e16a8a4fc9a5757fa9807871a8c63735e1f627cb604257ca2b4345",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
@@ -24,9 +24,9 @@
     "readsLedgerDrain": "2026-09-22 WO-EVI-02: the ledger follows its authority. The hooks manifest is produced by pnpm hooks:generate; this projection is not, so drift is one-directional and silent. The drain removes only rows the manifest no longer fences and records why each left. A removed row is not a retired decision — a name that returns to unadjudicatedReads must be re-classified from scratch, not restored from git."
   },
   "counts": {
-    "total": 1257,
+    "total": 1213,
     "byClass": {
-      "MODERN_PRIVATE": 711,
+      "MODERN_PRIVATE": 667,
       "FROZEN_ENGINE_SCOPED": 481,
       "TENANT_FACING_CANDIDATE": 55,
       "FOUNDATION_SHARED": 10
@@ -1658,42 +1658,6 @@
       }
     },
     {
-      "name": "--ds-backtop-inset-block-end",
-      "family": "--ds-backtop-inset",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/back-top/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/back-top/index.css:44  inset-block-end: calc(var(--ds-backtop-inset-block-end, 2rem) + env(safe-area-inset-bottom, 0px));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-backtop-inset-inline-end",
-      "family": "--ds-backtop-inset",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/back-top/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/back-top/index.css:45  inset-inline-end: var(--ds-backtop-inset-inline-end, 2rem);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
       "name": "--ds-backtop-pressed-transform",
       "family": "--ds-backtop-pressed",
       "class": "MODERN_PRIVATE",
@@ -1990,42 +1954,6 @@
       }
     },
     {
-      "name": "--ds-calendar-active-ink",
-      "family": "--ds-calendar-active",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:267  color: var(--ds-calendar-active-ink, var(--ds-color-white));",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-calendar-cell-active",
-      "family": "--ds-calendar-cell",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:441  background: var(",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-calendar-cell-bg-hover",
       "family": "--ds-calendar-cell",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -2152,42 +2080,6 @@
       }
     },
     {
-      "name": "--ds-calendar-cell-disabled-opacity",
-      "family": "--ds-calendar-cell",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:199  opacity: var(--ds-calendar-cell-disabled-opacity, 0.3);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-calendar-cell-hover",
-      "family": "--ds-calendar-cell",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:430  background: var(",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-calendar-cell-radius",
       "family": "--ds-calendar-cell",
       "class": "MODERN_PRIVATE",
@@ -2245,24 +2137,6 @@
       }
     },
     {
-      "name": "--ds-calendar-compact-width-coarse",
-      "family": "--ds-calendar-compact",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:117  inline-size: var(--ds-calendar-compact-width-coarse, 22.75rem);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-calendar-disabled-opacity",
       "family": "--ds-calendar-disabled",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -2273,24 +2147,6 @@
       "_audit": {
         "readBuckets": {
           "rustic": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-calendar-focus-ring",
-      "family": "--ds-calendar-focus",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:316  box-shadow: var(--ds-calendar-focus-ring, var(--ds-focus-ring));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
         },
         "declBuckets": {},
         "withFallback": 1,
@@ -2313,24 +2169,6 @@
         "declBuckets": {},
         "withFallback": 0,
         "bare": 1,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-calendar-header-border",
-      "family": "--ds-calendar-header",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:225  border-block-end: 1px solid var(--ds-calendar-header-border, var(--ds-color-border-subtle));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
         "testStoryReads": 0
       }
     },
@@ -2389,24 +2227,6 @@
       }
     },
     {
-      "name": "--ds-calendar-header-margin-block-end",
-      "family": "--ds-calendar-header",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:128  margin-block-end: var(--ds-calendar-header-margin-block-end, calc(1rem * var(--ds-density-effective-scale)));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-calendar-hover-bg",
       "family": "--ds-calendar-hover",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -2422,42 +2242,6 @@
         "withFallback": 2,
         "bare": 0,
         "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-calendar-nav-bg-active",
-      "family": "--ds-calendar-nav",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:326  background: var(--ds-calendar-nav-bg-active, var(--ds-color-interactive-bg-active, var(--ds-button-ghost-bg-hover)));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-calendar-nav-bg-hover",
-      "family": "--ds-calendar-nav",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:305  background: var(--ds-calendar-nav-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
       }
     },
     {
@@ -2573,24 +2357,6 @@
       }
     },
     {
-      "name": "--ds-calendar-selected-ink",
-      "family": "--ds-calendar-selected",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:372  color: var(--ds-calendar-selected-ink, var(--ds-color-white));",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
       "name": "--ds-calendar-shadow",
       "family": "--ds-calendar-shadow",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -2659,24 +2425,6 @@
         "declBuckets": {},
         "withFallback": 0,
         "bare": 1,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-calendar-year-cell-padding",
-      "family": "--ds-calendar-year",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:191  padding: var(--ds-calendar-year-cell-padding, calc(1rem * var(--ds-density-effective-scale)));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
         "testStoryReads": 0
       }
     },
@@ -2865,24 +2613,6 @@
       }
     },
     {
-      "name": "--ds-carousel-arrow-size-coarse",
-      "family": "--ds-carousel-arrow",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:175  inline-size: var(--ds-carousel-arrow-size-coarse, 44px);",
-      "flag": "undeclared by design: 3 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 2
-        },
-        "declBuckets": {},
-        "withFallback": 3,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
       "name": "--ds-carousel-controls-z",
       "family": "--ds-carousel-controls",
       "class": "MODERN_PRIVATE",
@@ -2993,24 +2723,6 @@
       }
     },
     {
-      "name": "--ds-carousel-dot-halo",
-      "family": "--ds-carousel-dot",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:227  box-shadow: 0 0 0 1px var(--ds-carousel-dot-halo, var(--ds-color-alpha-white-70));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-carousel-dot-radius",
       "family": "--ds-carousel-dot",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -3026,24 +2738,6 @@
         "declBuckets": {},
         "withFallback": 1,
         "bare": 1,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-carousel-dot-ring",
-      "family": "--ds-carousel-dot",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:145  0 0 0 1px var(--ds-carousel-dot-ring, var(--ds-color-alpha-black-20)),",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 2
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
         "testStoryReads": 0
       }
     },
@@ -5103,24 +4797,6 @@
       }
     },
     {
-      "name": "--ds-context-menu-border-color",
-      "family": "--ds-context-menu",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:128  var(--ds-context-menu-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
       "name": "--ds-context-menu-danger-bg-active",
       "family": "--ds-context-menu",
       "class": "MODERN_PRIVATE",
@@ -5172,42 +4848,6 @@
         "withFallback": 2,
         "bare": 0,
         "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-context-menu-divider-margin-block",
-      "family": "--ds-context-menu",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:156  margin-block: var(--ds-context-menu-divider-margin-block, 4px);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-context-menu-group-letter-spacing",
-      "family": "--ds-context-menu",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:166  letter-spacing: var(--ds-context-menu-group-letter-spacing, 0.05em);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
       }
     },
     {
@@ -5337,42 +4977,6 @@
       }
     },
     {
-      "name": "--ds-context-menu-padding",
-      "family": "--ds-context-menu",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:101  padding: var(--ds-context-menu-padding, var(--ds-spacing-2));",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-context-menu-radius",
-      "family": "--ds-context-menu",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:106  border-radius: var(--ds-context-menu-radius, var(--ds-radius-xl));",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
       "name": "--ds-context-menu-shadow",
       "family": "--ds-context-menu",
       "class": "MODERN_PRIVATE",
@@ -5406,24 +5010,6 @@
         "withFallback": 1,
         "bare": 0,
         "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-context-menu-width",
-      "family": "--ds-context-menu",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:99  inline-size: var(--ds-context-menu-width, 14rem);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
       }
     },
     {
@@ -8538,114 +8124,6 @@
       }
     },
     {
-      "name": "--ds-floatbutton-badge-font-size",
-      "family": "--ds-floatbutton-badge",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:170  font-size: var(--ds-floatbutton-badge-font-size, 11px);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-floatbutton-badge-line-height",
-      "family": "--ds-floatbutton-badge",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:171  line-height: var(--ds-floatbutton-badge-line-height, 16px);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-floatbutton-badge-offset-block",
-      "family": "--ds-floatbutton-badge",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:164  inset-block-start: var(--ds-floatbutton-badge-offset-block, -8px);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-floatbutton-badge-offset-inline",
-      "family": "--ds-floatbutton-badge",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:165  inset-inline-end: var(--ds-floatbutton-badge-offset-inline, -8px);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-floatbutton-badge-padding-block",
-      "family": "--ds-floatbutton-badge",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:169  padding: var(--ds-floatbutton-badge-padding-block, 1px) var(--ds-floatbutton-badge-padding-inline, 6px);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-floatbutton-badge-padding-inline",
-      "family": "--ds-floatbutton-badge",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:169  padding: var(--ds-floatbutton-badge-padding-block, 1px) var(--ds-floatbutton-badge-padding-inline, 6px);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
       "name": "--ds-floatbutton-bottom",
       "family": "--ds-floatbutton-bottom",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -8659,60 +8137,6 @@
         },
         "declBuckets": {},
         "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-floatbutton-dot-offset-block",
-      "family": "--ds-floatbutton-dot",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:156  inset-block-start: var(--ds-floatbutton-dot-offset-block, -4px);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-floatbutton-dot-offset-inline",
-      "family": "--ds-floatbutton-dot",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:157  inset-inline-end: var(--ds-floatbutton-dot-offset-inline, -4px);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-floatbutton-dot-size",
-      "family": "--ds-floatbutton-dot",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:158  inline-size: var(--ds-floatbutton-dot-size, 8px);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 2
-        },
-        "declBuckets": {},
-        "withFallback": 2,
         "bare": 0,
         "testStoryReads": 0
       }
@@ -8749,42 +8173,6 @@
         },
         "declBuckets": {},
         "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-floatbutton-padding-block",
-      "family": "--ds-floatbutton-padding",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:125  padding: calc(var(--ds-floatbutton-padding-block, 8px) * var(--ds-density-effective-scale)) calc(var(--ds-floatbutton-padding-inline, 12px) * var(--ds-density-effective-s",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-floatbutton-padding-inline",
-      "family": "--ds-floatbutton-padding",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:125  padding: calc(var(--ds-floatbutton-padding-block, 8px) * var(--ds-density-effective-scale)) calc(var(--ds-floatbutton-padding-inline, 12px) * var(--ds-density-effective-s",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
         "bare": 0,
         "testStoryReads": 0
       }
@@ -8858,24 +8246,6 @@
         },
         "declBuckets": {},
         "withFallback": 5,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-floatbutton-size-coarse",
-      "family": "--ds-floatbutton-size",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:132  inline-size: var(--ds-floatbutton-size-coarse, 44px);",
-      "flag": "undeclared by design: 3 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 2
-        },
-        "declBuckets": {},
-        "withFallback": 3,
         "bare": 0,
         "testStoryReads": 1
       }
@@ -9973,42 +9343,6 @@
       "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:49  border-block-end-color: var(",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-kbd-depth-width",
-      "family": "--ds-kbd-depth",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:48  border-block-end-width: var(--ds-kbd-depth-width, 2px);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 1
-      }
-    },
-    {
-      "name": "--ds-kbd-font-family",
-      "family": "--ds-kbd-font",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:42  font-family: var(--ds-kbd-font-family, var(--ds-font-family-mono));",
       "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
       "_audit": {
         "readBuckets": {
@@ -14749,26 +14083,6 @@
       "evidence": "undeclared internal channel; 2 read(s) in modern, 2 with a governing fallback"
     },
     {
-      "name": "--ds-qrcode-refresh-button-font-size",
-      "family": "qrcode",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
-      ],
-      "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-qrcode-refresh-button-padding-x",
-      "family": "qrcode",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
-      ],
-      "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
       "name": "--ds-qrcode-root-padding",
       "family": "qrcode",
       "class": "MODERN_PRIVATE",
@@ -14787,16 +14101,6 @@
         "foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css"
       ],
       "evidence": "read ONLY by frozen engines (rustic), 1 read(s); outside the modern critical path, not edited"
-    },
-    {
-      "name": "--ds-qrcode-spinner-size",
-      "family": "qrcode",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
-      ],
-      "evidence": "undeclared internal channel; 2 read(s) in modern, 2 with a governing fallback"
     },
     {
       "name": "--ds-qrcode-spinner-track",
@@ -15735,16 +15039,6 @@
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
     },
     {
-      "name": "--ds-spinner-segment-color",
-      "family": "spinner",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
-      ],
-      "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
       "name": "--ds-spinner-sm-ring-width",
       "family": "spinner",
       "class": "MODERN_PRIVATE",
@@ -15753,18 +15047,6 @@
         "foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
       ],
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-spinner-spin-easing",
-      "family": "spinner",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-        "ui/primitives/feedback/Spinner/tests/Spinner.modern-engine.test.tsx"
-      ],
-      "evidence": "undeclared internal channel; 2 read(s) in modern, 2 with a governing fallback",
-      "flag": "tsx-inline-read"
     },
     {
       "name": "--ds-spinner-xl-ring-width",
@@ -18874,26 +18156,6 @@
     },
     {
       "name": "--ds-workspace-switcher-meta-numeric",
-      "family": "workspace",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css"
-      ],
-      "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-workspace-switcher-panel-gap",
-      "family": "workspace",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css"
-      ],
-      "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-workspace-switcher-panel-gap-block",
       "family": "workspace",
       "class": "MODERN_PRIVATE",
       "owner": "foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
