@@ -174,30 +174,14 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     counters['fleet.inlinePaint.total'],
     fleetPerFileKeys.reduce((sum, key) => sum + counters[key], 0)
   );
-  // 0a725ecc8 drained the avatar modern engine's last inline literal and, by
-  // the gate's order, tightened its per-file ceiling 1 -> 0. The baseline
-  // lives outside this drill's write set, and the gate reads the aggregate as
-  // a decrease-only ceiling rather than a derived sum, so the pinned total
-  // still carries the drained site. Name the retirement instead of deriving
-  // past it: the aggregate is the per-file pins plus that one adjudicated
-  // drain. A second unadjudicated tightening fails this sum the same way an
-  // unadjudicated addition fails the corpus roster.
-  const AVATAR_MODERN_INLINE_PAINT_DRAIN = 1;
-  // 950900aed pinned the Table engine parts' nine usePartInteraction spread
-  // units PER FILE while the decrease-only aggregate stayed at 201; 8c5f50a12
-  // then drained those nine to zero and lowered the aggregate by the same nine
-  // (201 -> 192), units it never carried. The aggregate therefore sits nine
-  // BELOW the derived sum -- tighter, never looser (the measured total is under
-  // it). Named like the avatar drain, so a third unadjudicated move still fails.
-  const TABLE_PARTS_AGGREGATE_OVERDRAIN = 9;
+  // --update-baseline records the aggregate as the measured sum, which retired the
+  // avatar-drain (+1) and table-parts-overdrain (-9) drift the hand-kept total carried.
   assert.equal(
     baseline['fleet.inlinePaint.total'],
-    fleetPerFileKeys.reduce((sum, key) => sum + baseline[key], 0) +
-      AVATAR_MODERN_INLINE_PAINT_DRAIN -
-      TABLE_PARTS_AGGREGATE_OVERDRAIN,
-    'the baseline aggregate no longer follows from the per-file pins plus the named avatar drain and table-parts overdrain',
+    fleetPerFileKeys.reduce((sum, key) => sum + baseline[key], 0),
+    'the baseline aggregate follows from the per-file pins',
   );
-  assert.equal(baseline['fleet.inlinePaint.surfaces/foundation/common/story-helpers/index.tsx'], 6);
+  assert.equal(baseline['fleet.inlinePaint.surfaces/foundation/common/story-helpers/index.tsx'], 5);
   /* test-utils reached zero when its unused raw tenant-color payload was removed from the anatomy
      fixture. The line stays and
      the ceiling locks at 0 rather than being deleted: a completed drain must not leave slack behind
