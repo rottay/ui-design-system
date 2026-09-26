@@ -869,7 +869,7 @@ approved as D-27/D-28 and WO-CON-03 needs them). The registry enforces this: eve
 | 1 | `WO-CAN-02..06`, `WO-EVI-04` in parallel with `WO-CON-01/02/03` -> `WO-CON-04` -> `WO-CON-05`; `WO-CAT-01` beside them | up to 9 disjoint write sets + 1 auditor |
 | 2 | `WO-CAT-02` -> `WO-CAT-03` | sequential (shared contracts, singleton owners) |
 | 3 | `WO-DER-01` -> {`WO-DER-02`, `WO-DER-03`, `WO-DER-04`}, in parallel with `WO-EMI-01`, `WO-FAM-00`, `WO-EVI-01`, `WO-EVI-03` | `WO-DER-01` first: it is the contract |
-| 4 | `WO-FAM-01..13`, `WO-INV-01..08`, `WO-DER-05` -> `WO-DER-06`, `WO-EMI-02/03`, `WO-EVI-02` | one write set per family directory; the coordinator serialises `WO-FAM-13` against `WO-RET-01` (both touch `infrastructure/runtime/application/interaction/drag-and-drop/**`) |
+| 4 | `WO-FAM-01..13`, `WO-INV-01..08`, `WO-DER-05` -> `WO-DER-06`, `WO-EMI-02/03`, `WO-EVI-02` | one write set per family directory; the coordinator serialises `WO-FAM-13` against `WO-RET-01` (both touch the shared DnD kernel, `components/primitives/runtime/collection/sortable/**` — re-pointed 2026-09-26 from the non-existent interaction/drag-and-drop path) |
 | 5 | `WO-RET-01..05` | after the consumer census |
 
 Order rules that may not be reordered: the engine policy (`WO-CAN-06`) lands before the door

@@ -7408,7 +7408,7 @@
       "lane": "family-cuts",
       "order": 14,
       "size": "L",
-      "status": "todo",
+      "status": "in-progress",
       "dependsOn": [
         "WO-FAM-08",
         "WO-FAM-12",
@@ -7420,9 +7420,15 @@
         "audit-2026-09-05"
       ],
       "notes": "wave 4; closes F-69 (partial)",
-      "claimedBy": null,
-      "claimedAt": null,
-      "progressLog": []
+      "claimedBy": "Kimi K3",
+      "claimedAt": "2026-09-26",
+      "progressLog": [
+        {
+          "at": "2026-09-26 17:20",
+          "by": "kimi-dt",
+          "note": "CLAIM + pre-flight (scout receipt-fam13-p0-scout-opus.json, claude-opus-5-5, read-only, HEAD 7120887d4; todas las dependencias done: FAM-08, FAM-12, INV-07, INV-08, FAM-14). RULINGS DT: (1) RE-POINT de la ficha: el path de DnD que nombra (infrastructure/runtime/application/interaction/drag-and-drop/**) NO existe -- el kernel FAM-08 vive en src/components/primitives/runtime/collection/sortable/ (useDragSession + useFileDropZone, 5 consumidores); la ficha y roadmap/README.md:872 (la serializacion contra RET-01) se re-apuntan al path real -- correccion de puntero muerto, no redefinicion de alcance: el kernel es el mismo que la ficha siempre quiso decir. (2) SNAPPING: los canales --ds-grid-* de tracks que la ficha nombra NO existen (solo --ds-grid-gap y --ds-grid-reflow-transition); el snap se lee contra el sistema propio del board (12 tracks/8px rows del skin + solver) y un set de canales de snap se debe SOLO si aparece un segundo lector real (misma clase que el ruling de la receta FAM-12: la forma real medida, no el literal de la WO). (3) P4b RESUELTO -- opcion A (la recomendacion del scout): el tier del solver queda en 639/839 con sus pins INTACTOS (responsive-posture.behavior.test.tsx:298-302 incluido -- unificar con la escalera del tenant reescribiria un pin deliberado y eso es decision owner aparte); el adapt por celda lee la escalera INV-07 al ancho de la CELDA, independiente del tier del board. (4) WidgetLayout lleva SOLO unidades de grilla (colSpan/rowSpan/order por postura; 'grid units and ids, never px', el precedente LayoutIntent ya exportado y validado fail-closed por normalizeLayoutRevision); el path px queda como el escape existente data-height=fixed; onItemsChange queda como path legado; el DS NUNCA persiste (grep 0 hits verificado por el scout, pineado en-test en P1). (5) Plan de paquetes (write-sets disjuntos, forma FAM-12): P1 modelo de layout + callbacks (paintless) EN PARALELO con P2 (el kernel aprende transporte pointer + resolutor de grilla 2D + intent de resize + contrato ghost -- transporte-neutral, el board dona su codigo, NO es un segundo DnD; incluye ensenar al brazo dnd del family-cut el transporte pointer, con sign-off DT por ser gate); P3 (el board adopta el kernel + reflow INV-08 useLayoutAnimation, mueren sus pointer sessions propios y su FLIP propio -- la deuda RWP --ds-widget-board-layout-x/y se retira ahi) tras P1+P2; P4 (adapt por celda + views, engines/foundation) tras P3 (mismo archivo); P5 (probe-ground/dashboard con 6 widgets + e2e teclado/axe + escena motion-budget -- el JSON del budget queda DT-owned) scaffold tras P1, aceptacion tras P4. (6) Reservas: widget-board YA esta en ambos rosters (family-cut B8 y LAYOUT_SENSITIVE FAM-12) -- ninguna admision nueva; el defecto catalog width:100%+padding (registrado para el owner de engines en P4a) toca los skins de P3/P4 -- se mide, no se arregla en silencio; el host de resize display:contents de B8 queda medido en Chromium en P3/P5 (deuda B8 heredada); los 4 spreads de wrappers los reescribe P3. Brazos de aceptacion con instrumento nombrado por el scout: (a) teclado + axe via nuevo e2e (no existe drill de teclado real para DnD en el repo -- se crea); (b) longTasks 0 via la escena motion-budget existente (DS_MOTION_BUDGET=1, su veredicto y budget JSON central); (c) drill Chromium que redimensiona el CONTENEDOR de la celda a viewport fijo; (d) brazo board-grid una columna a phone (la mitad ya cubierta por FAM-12); (e) grep pineado en-test en P1."
+        }
+      ]
     },
     {
       "id": "WO-FAM-14",
