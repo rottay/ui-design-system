@@ -1056,28 +1056,17 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
       brandTheme: "responsive.posture",
     },
     consumes: [],
-    // CC-02: this row said `data-only` with no channels after the deriver
-    // began projecting the selected posture. The EMISSION is these four; the
-    // CONSUMER status is a separate fact and stays honest below. A media query
-    // cannot read a custom property, so these are the contract's value
-    // projection, never a replacement for the thresholds a `@media` prelude
-    // spells out.
-    produces: {
-      channels: [
-        "--ds-posture-id",
-        "--ds-posture-container-compact-max",
-        "--ds-posture-container-standard-max",
-        "--ds-posture-span-bias",
-      ],
-      rootAttributes: [],
-    },
-    // Deliberately empty, and NOT an oversight: no productive `--ds-posture-*`
-    // reader exists under `src`. The adaptive solver reads the posture as data
-    // on its own route. Claiming a family here would count a serialized custom
-    // property as component behaviour; the adoption is INV-07's obligation.
+    // G103-02 (WO-FAM-12): a DATA terminal, as the capability's own law says
+    // ("the ladder travels as DATA ... never a CSS channel"). It reaches layout
+    // through normalizedAppearance -> useContainerPosture / spanBias ->
+    // data-posture. The four `--ds-posture-*` channels the deriver once emitted
+    // had no reader anywhere and are retired from emission and from this row.
+    produces: { channels: [], rootAttributes: [] },
+    // Empty: the families that adapt to the posture read it as data through
+    // the adapt slot, never as a cascade channel of this row.
     minimumFamilies: { kind: "declared-fan-out", families: [] },
     envelope: "open",
-    effect: "css-channels",
+    effect: "data-only",
     defaultBehavior: "the vertical's responsive contract, unchanged",
   },
 ] as const satisfies readonly ThemeControlRow[]);

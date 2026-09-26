@@ -238,7 +238,7 @@ describe('theme-style-registry — the drills', () => {
     const file = join(box.core, PARTITION_FILE);
     writeFileSync(
       file,
-      readFileSync(file, 'utf8').replace('Object.freeze(["recipe-profile"] as const)', 'Object.freeze([] as const)'),
+      readFileSync(file, 'utf8').replace('Object.freeze(["recipe-profile", "responsive.posture"] as const)', 'Object.freeze([] as const)'),
     );
     assert.ok(rules(measure(options(box))).includes('NON_EMITTING_LIST_DRIFTED'));
   });

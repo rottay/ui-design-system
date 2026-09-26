@@ -1,6 +1,6 @@
 /**
- * @fileoverview The responsive family: the breakpoint ladder and the governed
- * container posture, projected as channels instead of travelling as data.
+ * @fileoverview The responsive family: the breakpoint ladder, projected as
+ * channels. The governed container posture travels as data, never as a channel.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/responsive
  * @category Compilers
@@ -8,23 +8,21 @@
  */
 
 import { RESPONSIVE_BREAKPOINTS } from "@/foundation/contracts/kernel/responsive/breakpoints";
-import {
-  resolveResponsivePosture,
-  RESPONSIVE_POSTURE_SCHEMA_VERSION,
-} from "@/foundation/tokens/ts/presentation/responsive-postures";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { FamilyDeriver } from "../../../foundation/contract";
 
 /**
  * One responsive contract, projected once.
  *
- * `responsive.posture` used to enter the lowering and emit nothing: the
- * selected id travelled to the artifact as data and only the adaptive solver
- * could read it, so a tenant could not see, probe or style its own ladder. The
- * ladder is bounded data either way -- what changes here is that the ladder a
- * tenant selected is observable in the compiled block, on the same channels
- * every other family uses, next to the viewport scale it shares its vocabulary
- * with.
+ * `responsive.posture` is NOT projected here (G103-02, WO-FAM-12). The
+ * capability's own law is that the ladder "travels as DATA ... never a CSS
+ * channel" (`tenants/capabilities`, the responsive.posture row): it reaches
+ * layout through `normalizedAppearance` -> `useContainerPosture` / `spanBias`
+ * -> `data-posture`, which the auto-fit kit reads. The four `--ds-posture-*`
+ * channels this family once emitted had no reader anywhere (measured: core,
+ * the showroom and all three apps), and a `@container` prelude cannot read a
+ * custom property, so they were a second, unread authority beside the data
+ * route and are retired rather than pinned.
  *
  * The viewport steps are the ONE scale
  * (`foundation/contracts/kernel/responsive/breakpoints`); this family never
@@ -52,36 +50,18 @@ export const responsiveDeriver: FamilyDeriver = {
   family: "responsive",
   rank: "derived",
   consumes: ["responsive.posture", "responsive.schemaVersion"],
-  produces: [
-    "--ds-breakpoint-*",
-    "--ds-posture-container-compact-max",
-    "--ds-posture-container-standard-max",
-    "--ds-posture-span-bias",
-    "--ds-posture-id",
-  ],
+  produces: ["--ds-breakpoint-*"],
   derive: (context) => deriveResponsiveChannels(context.theme),
 };
 
+/** The ladder is the same for every theme; the parameter keeps the deriver shape. */
 export function deriveResponsiveChannels(
-  bt: FlatTheme
+  _theme: FlatTheme
 ): Record<string, string> {
   const vars: Record<string, string> = {};
   for (const [step, px] of Object.entries(RESPONSIVE_BREAKPOINTS)) {
     if (step === PROJECTION_FLOOR) continue;
     vars[`--ds-breakpoint-${step}`] = `${px}px`;
   }
-  const selection = bt.responsive;
-  const posture = resolveResponsivePosture(
-    selection?.posture,
-    selection?.schemaVersion ?? RESPONSIVE_POSTURE_SCHEMA_VERSION
-  );
-  vars["--ds-posture-id"] = posture.id;
-  vars[
-    "--ds-posture-container-compact-max"
-  ] = `${posture.thresholds.compactMaxPx}px`;
-  vars[
-    "--ds-posture-container-standard-max"
-  ] = `${posture.thresholds.standardMaxPx}px`;
-  vars["--ds-posture-span-bias"] = posture.spanBias;
   return vars;
 }

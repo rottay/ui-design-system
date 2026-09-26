@@ -477,13 +477,12 @@ describe("tenant capability registry reachability", () => {
     expect(artifact.variables["--ds-color-on-error"]).toBeUndefined();
   });
 
-  it("responsive.posture moves the posture channels and nothing else", () => {
-    // The axis used to be DATA-ONLY: the selected id travelled to the artifact
-    // in `normalizedAppearance` and emitted nothing, so a tenant could not
-    // see, probe or style the ladder it had chosen. WO-DER-04 projects it.
+  it("responsive.posture reaches the artifact as data and moves no channel", () => {
+    // The ladder is DATA (the capability's own law): it travels in
+    // `normalizedAppearance` to the adapt slot. G103-02 retired the four
+    // `--ds-posture-*` channels WO-DER-04 had projected, which nothing read.
     // Two compilations of the SAME document, differing only by the authored
-    // ladder, must now differ in EXACTLY the posture channels — the ladder is
-    // observable, and it still reaches nothing else.
+    // ladder, must differ in NO channel at all.
     const withoutLadder = structuredClone(FULL_SURFACE_DOCUMENT);
     if (withoutLadder.mode !== "advanced") throw new Error("advanced fixture");
     delete (withoutLadder.visualFoundation.advanced as Record<string, unknown>)
@@ -507,17 +506,7 @@ describe("tenant capability registry reachability", () => {
     const moved = Object.keys({ ...bare.variables, ...laddered.variables })
       .filter((channel) => bare.variables[channel] !== laddered.variables[channel])
       .sort();
-    expect(moved).toEqual([
-      "--ds-posture-container-compact-max",
-      "--ds-posture-container-standard-max",
-      "--ds-posture-id",
-      "--ds-posture-span-bias",
-    ]);
-    expect(laddered.variables["--ds-posture-id"]).toBe("expansive");
-    // A tenant artifact carries only what DIFFERS from its vertical baseline,
-    // and the baseline ladder IS `balanced` — so the bare compile correctly
-    // states nothing rather than restating the default.
-    expect(bare.variables["--ds-posture-id"]).toBeUndefined();
+    expect(moved).toEqual([]);
   });
 
   it("drill: declared-but-closed paths stay rejected and every opened vocabulary stays closed", () => {

@@ -1415,8 +1415,7 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   [/^--ds-control-height-scale$/, () => 'shape.control-height'],
   // The three families the recursive producer walk made visible. A census that
   // newly SEES a channel must be able to name its owner, or it has traded one
-  // hole for another. (The four `--ds-posture-*` rows are a standing unowned
-  // finding from before that walk and are deliberately left where they were.)
+  // hole for another.
   [/^--ds-font-weight-/, () => 'typography'],
   [/^--ds-z-index-/, () => 'surfaces.elevation.stacking'],
   [/^--ds-breakpoint-/, () => 'responsive'],
@@ -1444,11 +1443,6 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   // instead of restating them.
   [/^--ds-state-/, () => 'states'],
   [/^--ds-focus-ring/, () => 'states.focus'],
-  // The responsive family's value projection: the container thresholds, the
-  // span bias and the id of the posture that was admitted. No productive
-  // reader exists yet, which is a liveness verdict about them -- not a reason
-  // to leave the emitting control unnamed.
-  [/^--ds-posture-/, () => 'responsive.posture'],
   // A family cut's deriver owns its family namespace (roadmap/family-cut-template.md 1.1).
   [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-header|form-sections|form-surface|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|notification-center|alert|menu|tabs|breadcrumb|pagination|stepper|sidebar-surface|card|active-filters-bar|aspect-ratio|avatar|badge|box|calendar-view|collapse|column-menu|column-settings|container|data-table|descriptions|divider|file-manager|filter-chip|filter-panel|flex|grid|kanban-board|list|saved-views|space|splitter|stack|table|tag|toolbar|tree|widget-board|action-dock|app-shell|command-palette|page-shell|scope-switcher|search-command-bar|shortcuts-overlay|surface-chrome|view-mode-switcher|workspace-shell|cockpit-header|workbench-header|mobile-header|stats-header|section-frame|collection-header|dashboard-header|detail-header|detail-form-surface|header-surface|record|guided-draft-form|edit-header|edit-fields-if-present|wizard-surface|header)-/, (m) => `chrome.${m[1]}`],
   // Two published bands are spelled unlike their family: `--ds-section-card-*`
@@ -1649,19 +1643,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     reason:
       'the row is measured emitted and nothing emits it: derivation/responsive skips the zero floor (`if (step === PROJECTION_FLOOR) continue`) and --ds-breakpoint-xs is absent from every compiled vertical artifact, while this producer resolves vars[`--ds-breakpoint-${step}`] over the whole imported RESPONSIVE_BREAKPOINTS table and does not model the single-step guard. The retirement dropped its WO-FAM-07 pin, which left a false row unregistered and STOP NO-GO, so it is re-pinned here instead of carried silently -- a pin is not deleted to reach green. The pin retires with the row when the keyed resolver honors the emitter guard, or becomes real debt if a residual emission is ever measured',
     channels: Object.freeze(['--ds-breakpoint-xs']),
-  }),
-  Object.freeze({
-    owner: 'WO-FAM-12',
-    classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-09-12',
-    reason:
-      'the posture channels are consumed as data by the adaptation solver today and no stylesheet reads them; the auto-fit grids of the adaptive layout kit are their natural CSS reader, so this cut writes that paint route or retires the channels',
-    channels: Object.freeze([
-      '--ds-posture-container-compact-max',
-      '--ds-posture-container-standard-max',
-      '--ds-posture-id',
-      '--ds-posture-span-bias',
-    ]),
   }),
   Object.freeze({
     owner: 'WO-EVI-02',

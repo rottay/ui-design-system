@@ -654,6 +654,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      *         -6       -6       -6  266199fe9  density wave 2c retires the six selector aliases: --ds-container-pad, --ds-divider-inset, --ds-sidebar-surface-aside-inline-size, --ds-space-gap, --ds-tabs-responsive-{height,padding}
      *   2947 / 3083 / 2947  measured 2026-09-25 on the b2cc18aab tree
      *
+     * G103-02 (WO-FAM-12, 2026-09-26): the four `--ds-posture-*` channels are
+     * retired from emission (zero readers; the ladder travels as data). Only
+     * this row is recorded here; no other key moves with it (measured).
+     *         -4       -4       -4  G103-02  --ds-posture-{id,container-compact-max,container-standard-max,span-bias}
+     *
      * The D6-2c-ii row is the largest single move this table records and it is
      * measured, not inferred: both legs were compiled with the SAME
      * `lowerTheme` call this test makes, the pre-lot leg on an isolated copy of
@@ -783,7 +788,8 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // EVI-02 -> density wave 2c (measured, 2026-09-25): rottay 2951 -> 2947,
       // the four rows above: 2951 pinned by efd93b37a, +1 d4edd6420 (the
       // residual it named), +1 643c3588b, -6 266199fe9.
-      rottay: 2947,
+      // G103-02 (2026-09-26): rottay 2947 -> 2943, the four posture channels.
+      rottay: 2943,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -848,7 +854,8 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // +1 d4edd6420, +0 efd93b37a (its palette already seeded the tint
       // scale), +1 643c3588b, -6 266199fe9. The offset over rottay is 136 now:
       // efd93b37a gave the other two the 25 tint rungs bithire already had.
-      bithire: 3083,
+      // G103-02 (2026-09-26): bithire 3083 -> 3079, the four posture channels.
+      bithire: 3079,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -906,7 +913,8 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // preset that authors a categorical series, which is not evnto's.
       // EVI-02 -> density wave 2c (measured, 2026-09-25): evnto 2951 -> 2947,
       // byte-for-byte rottay's keys on all four rows.
-      evnto: 2947,
+      // G103-02 (2026-09-26): evnto 2947 -> 2943, the four posture channels.
+      evnto: 2943,
     };
     for (const vertical of VERTICALS) {
       expect(

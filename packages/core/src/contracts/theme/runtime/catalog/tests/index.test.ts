@@ -205,24 +205,15 @@ describe("theme control catalog", () => {
     });
   });
 
-  it("publishes responsive.posture's real emission while its consumer status stays honest (CC-02)", () => {
+  it("declares responsive.posture a data terminal with no channel (G103-02)", () => {
     const responsive = themeControl("responsive.posture");
-    // The row said `data-only` with no channels after its deriver had begun
-    // projecting the selected posture: catalog metadata describing a
-    // pre-DER-04 output. The EMISSION is these four.
-    expect(responsive.effect).toBe("css-channels");
-    expect([...responsive.produces.channels].sort()).toEqual([
-      "--ds-posture-container-compact-max",
-      "--ds-posture-container-standard-max",
-      "--ds-posture-id",
-      "--ds-posture-span-bias",
-    ]);
+    // The ladder reaches layout as data (normalizedAppearance -> the adapt
+    // slot's posture); the four `--ds-posture-*` channels had no reader and
+    // were retired from emission, so the row publishes none.
+    expect(responsive.effect).toBe("data-only");
+    expect(responsive.produces.channels).toHaveLength(0);
     expect(responsive.produces.rootAttributes).toHaveLength(0);
     expect(responsive.keypath.document).not.toBeNull();
-    // The CONSUMER status is a separate fact and does not move with the
-    // emission: no productive `--ds-posture-*` reader exists under `src`, so
-    // the declared fan-out stays empty. Serializing a value as a custom
-    // property is not a family adopting it, and that adoption is INV-07's.
     expect(responsive.minimumFamilies).toEqual({
       kind: "declared-fan-out",
       families: [],

@@ -23,7 +23,7 @@
  * cascades over; only its CSS projection is gone.
  *
  * The container ladder a tenant selects (`responsive.posture`) is a separate,
- * bounded axis and is emitted per tenant on `--ds-posture-*` by the compiler.
+ * bounded axis that travels as data to the adapt slot; it has no CSS channel.
  */
 
 :root {

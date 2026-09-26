@@ -1349,22 +1349,7 @@
         ],
         "assessmentStateNote": "COMPUTED_VERIFIED under the ladder amendment (L-1), whose DATA branch demands its own complete conjunction -- a cited terminalReason, fieldPath, a closed equalitySurface containing the governed field, behavioural witnesses, and a data-field-delta receipt -- instead of the five CSS-shaped fields this control has none of by design. CORRECTION OF AN EARLIER PHRASE HERE: this note previously said that no gate validated a control's calibration.assessmentState. That was imprecise, and the full characterisation is: scripts/generate/tokens/manifest/generation/index.mjs:568-586 validates the value against the vocabulary and requires non-empty sourceBindings from SOURCE_BOUND up; scripts/libraries/manifest/rules/index.mjs:1071-1095 validates the assessmentState of family SECTIONS; what did not exist was a CEILING against the cells. L-1 adds it (validateControlAssessmentCeiling), so this claim is now gated: it is legal here only because pattern/data/widget-board carries COMPUTED_VERIFIED for this control.",
         "channels": []
-      },
-      "carriedFromSeal": [
-        {
-          "field": "declaredOutputs.channels",
-          "carried": [],
-          "catalog": [
-            "--ds-posture-id",
-            "--ds-posture-container-compact-max",
-            "--ds-posture-container-standard-max",
-            "--ds-posture-span-bias"
-          ],
-          "owner": "typed catalog (WO-CAT-02) with the resolution-probe calibration (WO-EVI-02)",
-          "ruling": "pending",
-          "reason": "responsive.posture is a DATA terminal: its calibration asserts no painted channel, so the CSS guard refuses it. Declaring the four --ds-posture-* channels would route it into the painted-channel fences, which needs the owners' ruling."
-        }
-      ]
+      }
     },
     "shape.button-style": {
       "domain": {

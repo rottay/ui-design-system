@@ -490,9 +490,10 @@ const shippedLedger = JSON.parse(readFileSync(join(HERE, "obligations/index.json
 /**
  * The obligation the mechanism was written for is DISCHARGED: its `ownerLot`
  * was C2, its resolution was DELETE_DECLARATION, and its expiry fired the
- * moment C2 relocated the lowering out of `kernel/runtime/brand-theme`. The
- * ledger now carries ONE live entry instead, `emitted-but-unconsumed.posture`
- * (owner INV-07) — asserted below — and the machinery keeps its full coverage
+ * moment C2 relocated the lowering out of `kernel/runtime/brand-theme`. Its
+ * successor, INV-07's `emitted-but-unconsumed.posture`, is discharged too
+ * (G103-02 retired the four channels) — asserted below — so the shipped ledger
+ * is empty, and the machinery keeps its full coverage
  * against this synthetic ledger, which is what stops a change of contents
  * from quietly retiring the drills with it.
  */
@@ -526,7 +527,7 @@ const LIVE_FIELDS = new Set([
 const options = { resolveOwner: () => LIVE_FIELDS };
 const COUNTERS = { "declared-but-unemitted.BrandSegmentedChrome": 2 };
 
-test("Q1: C2's obligation is discharged and the ledger carries only INV-07's", () => {
+test("Q1: C2's obligation is discharged, and so is INV-07's: the shipped ledger is empty", () => {
   // The expiry was written to fire on exactly that lot, and it did: the two
   // declarations are gone from `BrandSegmentedChrome` and the entry with them.
   assert.equal(
@@ -535,7 +536,7 @@ test("Q1: C2's obligation is discharged and the ledger carries only INV-07's", (
   );
   assert.deepEqual(
     shippedLedger.obligations.map((entry) => entry.id),
-    ["emitted-but-unconsumed.posture"],
+    [],
   );
   // Scoped to the ONE interface: `focusRing` is a live field on several other
   // chrome families, so a whole-file search would pass for the wrong reason.
@@ -1162,47 +1163,34 @@ test("a category roll-up can never itself be obligated", () => {
   assert.equal(categoryOf("posture"), null);
 });
 
-test("INV-07: the shipped posture obligation holds against the live census, in both directions", () => {
+test("INV-07 discharged (G103-02): the posture channels left the census with their obligation", () => {
   const shipped = runThemeChannelParityGate();
-  const issuesByCategory = {
-    "declared-but-unemitted": shipped.graph.issues.declaredButUnemitted,
-    "emitted-but-unconsumed": shipped.graph.issues.emittedButUnconsumed,
-    "consumed-but-unowned": shipped.graph.issues.consumedButUnowned,
-  };
-  const live = { resolveOwner: (category) => new Set(issuesByCategory[category].map((issue) => issue.id)) };
-
-  const { failures, consumed } = evaluateObligations(shippedLedger, shipped.counters, live);
-  assert.deepEqual(failures, []);
-  assert.equal(consumed.size, 1);
-
-  const [obligation] = shippedLedger.obligations;
-  assert.equal(obligation.ownerLot, "INV-07");
-  assert.equal(obligation.count, obligation.fields.length);
-  for (const owner of [...obligation.legacyEmitterOwners, obligation.declaringOwner]) {
-    assert.ok(existsSync(join(CORE_ROOT, owner)), `${owner} must exist while the obligation is open`);
-  }
-
-  // Q3: the bucket is NOT also a ceiling, and its roll-up is back at the value
-  // it held before the tree walk — the ratchet reads it net of the obligation.
-  assert.equal(Object.hasOwn(baseline.ceilings, "emitted-but-unconsumed.posture"), false);
-  const ratcheted = deductObligations(shipped.counters, consumed);
+  // The four `--ds-posture-*` channels are retired from emission: the census
+  // reports no posture bucket, so an open obligation on it would be stale.
+  assert.equal(Object.hasOwn(shipped.counters, "emitted-but-unconsumed.posture"), false);
+  const posture = shipped.graph.issues.emittedButUnconsumed.filter((issue) =>
+    issue.id.startsWith("--ds-posture-"),
+  );
+  assert.deepEqual(posture, []);
   assert.equal(
-    ratcheted["emitted-but-unconsumed.total"],
-    shipped.counters["emitted-but-unconsumed.total"] - obligation.count,
+    shippedLedger.obligations.some((entry) => entry.id === "emitted-but-unconsumed.posture"),
+    false,
   );
-  assert.equal(ratcheted["emitted-but-unconsumed.total"], baseline.ceilings["emitted-but-unconsumed.total"]);
-  assert.deepEqual(evaluateParityBaseline(ratcheted, baseline).errors, [
-    "new unbaselined bucket: emitted-but-unconsumed.posture=4",
-  ]);
-
-  // The reason is checkable, not prose: the four channels are emitted by the
-  // named deriver and read by nothing under src.
-  const deriver = readFileSync(join(CORE_ROOT, obligation.legacyEmitterOwners[0]), "utf8");
-  const consumers = new Map(
-    shipped.graph.issues.emittedButUnconsumed.map((issue) => [issue.id, issue]),
+  const deriver = readFileSync(
+    join(
+      CORE_ROOT,
+      "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/responsive/index.ts",
+    ),
+    "utf8",
   );
-  for (const channel of obligation.fields) {
-    assert.ok(deriver.includes(`"${channel}"`), `${channel} is emitted by the responsive deriver`);
-    assert.ok(consumers.has(channel), `${channel} has no reader`);
+  for (const channel of [
+    "--ds-posture-container-compact-max",
+    "--ds-posture-container-standard-max",
+    "--ds-posture-id",
+    "--ds-posture-span-bias",
+  ]) {
+    assert.equal(deriver.includes(`"${channel}"`), false, `${channel} is no longer emitted`);
   }
+  // The deduction the obligation bought is gone with it: the roll-up is read raw.
+  assert.equal(Object.hasOwn(baseline.ceilings, "emitted-but-unconsumed.posture"), false);
 });

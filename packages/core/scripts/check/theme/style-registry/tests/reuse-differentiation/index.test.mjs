@@ -110,10 +110,13 @@ describe('style differentiation: two styles in one vertical, brand held fixed', 
       'typography.scale', 'typography.role-weights', 'typography.numeric', 'shape.radius-scale', 'shape.nesting',
       'shape.button-style', 'shape.control-height', 'density.mode', 'spacing.rhythm', 'surfaces.elevation-posture',
       'surfaces.border-style', 'surfaces.effect-intensity', 'states.emphasis', 'states.focus-style', 'motion.dial',
-      'motion.character', 'navigation.sidebar-tone', 'profiles.expressive', 'responsive.posture',
+      'motion.character', 'navigation.sidebar-tone', 'profiles.expressive',
     ]);
-    // recipe-profile and chrome.anatomy declare no channel; the pairing is masked by the brand's own fonts.
-    assert.deepEqual(contrasting.filter((row) => !reached.includes(row)), ['typography.pairing', 'recipe-profile', 'chrome.anatomy']);
+    // recipe-profile, chrome.anatomy and responsive.posture (data only since G103-02) declare no channel;
+    // the pairing is masked by the brand's own fonts.
+    assert.deepEqual(contrasting.filter((row) => !reached.includes(row)), [
+      'typography.pairing', 'recipe-profile', 'chrome.anatomy', 'responsive.posture',
+    ]);
   });
 
   it('the pairing is masked by the held brand fonts, not dead: without typography.families it moves its fonts', () => {

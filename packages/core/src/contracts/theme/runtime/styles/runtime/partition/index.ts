@@ -95,13 +95,14 @@ export const THEME_STYLE_CLASS_BY_DECISION: Readonly<
  * because the catalog is this owner's unranked peer and a production edge to it
  * is structural debt.
  *
- * It is a measurement, not a judgement: within the 29 rows exactly one
- * `produces` block is empty on both axes. The owner's suite and the
- * `style-registry` gate re-derive it from `THEME_CONTROL_CATALOG` in BOTH
- * directions, so this list cannot drift from the reach it names.
+ * It is a measurement, not a judgement: within the 29 rows exactly two
+ * `produces` blocks are empty on both axes (`responsive.posture` since G103-02
+ * retired its unread channels: the ladder travels as data). The owner's suite
+ * and the `style-registry` gate re-derive it from `THEME_CONTROL_CATALOG` in
+ * BOTH directions, so this list cannot drift from the reach it names.
  */
 export const THEME_STYLE_NON_EMITTING_DECISIONS: readonly ThemeDecisionId[] =
-  Object.freeze(["recipe-profile"] as const);
+  Object.freeze(["recipe-profile", "responsive.posture"] as const);
 
 /**
  * Refuse a row a style may not author, by name, at registration.
@@ -151,6 +152,6 @@ export function assertStyleEmitsSomething(
   if (emitting.length > 0) return;
   throw new ThemeStyleReferenceError(
     `style ${JSON.stringify(styleId)} authors no row that emits a channel or a root attribute; ` +
-      `${THEME_STYLE_NON_EMITTING_DECISIONS.map((id) => JSON.stringify(id)).join(", ")} is data-only`
+      `${rows.map((id) => JSON.stringify(id)).join(", ")} ${rows.length === 1 ? "is" : "are"} data-only`
   );
 }
