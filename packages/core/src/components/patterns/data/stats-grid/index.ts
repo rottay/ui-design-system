@@ -13,7 +13,7 @@
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
 import type { StatsGridProps } from './contracts';
 
-export type { StatsGridProps } from './contracts';
+export type { StatsGridProps, StatsGridAdaptation } from './contracts';
 
 /** Public stats grid entry point resolved through the current engine. */
 export const PatternStatsGrid = createEngineComponent<StatsGridProps>(

@@ -12,6 +12,7 @@ import type { StatsGridProps } from "../contracts";
 import ClassicStatsGrid from "../engines/classic";
 import ModernStatsGrid from "../engines/modern";
 import RusticStatsGrid from "../engines/rustic";
+import { SKELETON_PART_ROLES } from "../../../../primitives/feedback/skeleton/runtime/anatomy-renderer";
 
 const COMPONENTS: Record<
   StableEngineName,
@@ -67,7 +68,7 @@ describe("PatternStatsGrid advanced engine coverage", () => {
 
   it.each(STABLE_ENGINES)(
     "covers loading states through the %s engine",
-    (engine) => {
+    async (engine) => {
       const Component = COMPONENTS[engine];
       const { container } = renderWithEngine(
         <Component {...createProps()} loading />,
@@ -79,9 +80,43 @@ describe("PatternStatsGrid advanced engine coverage", () => {
       if (engine === "classic") {
         expect(container.querySelector(".ant-card-loading")).not.toBeNull();
       } else if (engine === "modern") {
-        expect(
-          container.querySelector(".ds-stats-grid-skeleton")
-        ).not.toBeNull();
+        // Built by the shared anatomy renderer from the grid's own parts: the
+        // hand-made skeleton is gone, and every placeholder card reads as the
+        // loaded card's title, value and trend.
+        expect(container.querySelector(".ds-stats-grid-skeleton")).toBeNull();
+        const renderer = container.querySelector(".ds-skeleton-anatomy");
+        expect(renderer).not.toBeNull();
+        expect(renderer).toHaveAttribute("aria-busy", "true");
+        const root = await waitFor(() => {
+          const found = renderer?.querySelector(
+            '.ds-pattern-stats-grid.ds-engine-modern[data-part="root"]'
+          );
+          expect(found).not.toBeNull();
+          return found;
+        });
+        expect(root).toHaveAttribute("data-loading", "true");
+        expect(root).toHaveAttribute("data-auto-fit", "true");
+        expect(root?.querySelectorAll('[data-part="card"]')).toHaveLength(3);
+        const bones = () =>
+          Array.from(
+            container.querySelectorAll<HTMLElement>("[data-part='bone']")
+          ).map((bone) => `${bone.dataset.sourcePart}:${bone.dataset.bone}`);
+        await waitFor(() => expect(bones().length).toBeGreaterThan(1));
+        // Every placeholder part is adjudicated, none is read by fall-through.
+        const parts = new Set(
+          Array.from(root!.querySelectorAll<HTMLElement>("[data-part]")).map(
+            (node) => node.dataset.part!
+          )
+        );
+        expect([...parts].filter((part) => !(part in SKELETON_PART_ROLES))).toEqual([]);
+        expect(bones()).toEqual([
+          "root:frame",
+          ...Array.from({ length: 3 }, () => [
+            "title:line",
+            "value:line",
+            "trend:block",
+          ]).flat(),
+        ]);
       } else {
         const root = container.querySelector(
           ".ds-pattern-stats-grid.ds-engine-rustic"
@@ -98,7 +133,9 @@ describe("PatternStatsGrid advanced engine coverage", () => {
     }
   );
 
-  it.each(STABLE_ENGINES)(
+  // The viewport ladder is the frozen engines' layout; Modern lays out with
+  // the adaptive layout kit's auto-fit recipe (next test).
+  it.each(["classic", "rustic"] as const)(
     "renders the shared phone/tablet/desktop column progression through the %s engine",
     async (engine) => {
       const Component = COMPONENTS[engine];
@@ -125,6 +162,40 @@ describe("PatternStatsGrid advanced engine coverage", () => {
       }
     }
   );
+
+  it("lays the modern root out with the auto-fit recipe, with no viewport ladder of its own", async () => {
+    for (const width of [390, 800, 1280]) {
+      mockMatchMedia(width);
+      const result = renderWithEngine(
+        <ModernStatsGrid {...createProps({ columns: 4 })} />,
+        "modern"
+      );
+      const root = result.container.firstElementChild as HTMLElement;
+
+      expect(root).toHaveAttribute("data-component", "grid");
+      expect(root).toHaveAttribute("data-auto-fit", "true");
+      expect(root).toHaveAttribute("data-part", "root");
+      await waitFor(() => {
+        expect(root.getAttribute("data-posture")).toBeTruthy();
+      });
+      // The tracks are the grid skin's: no inline template, at any width.
+      expect(root.style.gridTemplateColumns).toBe("");
+      result.unmount();
+    }
+  });
+
+  it("threads minItem and a posture-declared delta into the modern grid", async () => {
+    mockMatchMedia(1280);
+    const result = renderWithEngine(
+      <ModernStatsGrid
+        {...createProps({ minItem: "lg", adapt: { compact: { minItem: "sm" } } })}
+      />,
+      "modern"
+    );
+    const root = result.container.firstElementChild as HTMLElement;
+    expect(root).toHaveAttribute("data-min-item", "lg");
+    result.unmount();
+  });
 
   it.each(STABLE_ENGINES)(
     "preserves an explicit gridTemplateColumns style override through the %s engine",

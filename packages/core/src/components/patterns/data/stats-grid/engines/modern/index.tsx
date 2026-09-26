@@ -5,10 +5,15 @@
  *
  * Premium stat-card grid with:
  * - Clear number hierarchy (large bold value, muted label, colored trend)
- * - Fixed `columns`-count horizontal grid layout (shared with classic/rustic
- *   via resolveStatsGridColumns; the engine themes the tiles, not the layout)
+ * - The adaptive layout kit's auto-fit recipe (WO-FAM-12): the root IS the
+ *   Grid primitive with `autoFit`, so the tracks come from the card footprint
+ *   channels and the container's compact posture takes one column. The engine
+ *   makes no viewport decision of its own (classic/rustic keep the shared
+ *   `resolveStatsGridColumns` ladder; Modern no longer calls it)
+ * - `adapt` resolved at the postures in force, stamped as `data-posture`
  * - Animated value count-up with cubic ease-out
- * - Premium shimmer skeleton with card-shaped placeholders
+ * - Loading state derived from the grid's own `data-part` anatomy by the shared
+ *   `AnatomySkeleton` renderer (never a hand-built skeleton)
  * - Mini SVG sparkline charts painted by the skin through the per-stat
  *   `--ds-stats-grid-accent` channel (roles, never local literals)
  * - Quiet loading/empty/error states on the same root frame
@@ -17,25 +22,48 @@
  * @example
  * <ModernStatsGrid
  *   stats={[{ key: 'users', label: 'Active Users', value: 1234, change: 5.2, changeType: 'increase' }]}
- *   columns={4}
+ *   minItem="lg"
  *   variant="glass"
  *   animate
  * />
  */
 
-import React from "react";
+import React, { useMemo, useRef } from "react";
 import { useBreakpoints } from "@/infrastructure/runtime/responsive";
+import { useAdaptation } from "@/infrastructure/runtime/adaptation";
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import ModernStatistic from '../../../../../primitives/display/statistic/engines/modern';
 import { VisuallyHidden } from '../../../../../primitives/foundation';
+import { Grid } from '../../../../../primitives/layout/grid';
+import { GAP_MAP, type GridGap } from '../../../../../primitives/layout/grid/contracts';
+import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import { DataTrendIcon } from '@/graphics/icons/semantic/generated/roles/data-trend';
 import { DataTrendDownIcon } from '@/graphics/icons/semantic/generated/roles/data-trend-down';
 import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
-import type { StatsGridProps } from "../../contracts";
+import type { StatsGridAdaptation, StatsGridProps } from "../../contracts";
 import type { StatDef } from "../../../../../../foundation/contracts/runtime/components/patterns/core";
 import { resolveStatsGridMotion } from "../../foundation/personality";
-import { resolveStatsGridColumns } from "../../foundation/layout";
+
+/* ---------------------------------------------------------------------------
+ * Gap
+ * --------------------------------------------------------------------------- */
+
+const isGridGap = (gap: string): gap is GridGap =>
+  Object.prototype.hasOwnProperty.call(GAP_MAP, gap);
+
+/**
+ * A number or a Grid rung reaches the primitive as its own `gap`; any other
+ * CSS length rides the grid's gap channel. Unstated, the grid's rung paints.
+ */
+function gridGap(gap: number | string | undefined): {
+  gap?: number | GridGap;
+  channel?: React.CSSProperties;
+} {
+  if (gap === undefined) return {};
+  if (typeof gap === "number" || isGridGap(gap)) return { gap };
+  return { channel: { "--ds-grid-gap": gap } as React.CSSProperties };
+}
 
 /* ---------------------------------------------------------------------------
  * Sparkline
@@ -271,76 +299,30 @@ function StatCard({
 }
 
 /* ---------------------------------------------------------------------------
- * Loading skeleton
+ * Loading anatomy
  * --------------------------------------------------------------------------- */
 
 /**
- * Premium loading skeleton with shimmer effect and proper card shapes.
- * Carries the caller's className/style so the loading footprint matches the
- * loaded root exactly (the skeleton used to drop both), and exposes the
- * pending state through aria-busy (the Statistic primitive's loading idiom).
+ * One placeholder stat card, stamped with the parts a loaded card stamps
+ * (card > label-row > statistic > title + value, and the trend pill). With no
+ * data there is no copy to measure, so the skin gives these parts their
+ * loading footprint; the shared renderer reads them and draws the bones.
  */
-function LoadingSkeleton({
-  columns,
-  gap,
-  viewport,
-  className,
-  style,
-}: {
-  columns: number;
-  gap: string | number;
-  viewport: "phone" | "tablet" | "desktop";
-  className?: string;
-  style?: React.CSSProperties;
-}) {
+function PlaceholderStatCard({ variant }: { variant: StatsGridProps["variant"] }) {
   return (
     <div
-      className={[
-        "ds-pattern-stats-grid",
-        "ds-engine-modern",
-        "ds-stats-grid-skeleton",
-        className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      data-part="root"
-      data-loading="true"
-      aria-busy="true"
-      style={{
-        display: "grid",
-        width: "100%",
-        minWidth: 0,
-        gridTemplateColumns: resolveStatsGridColumns(columns, viewport),
-        gap,
-        ...style,
-      }}
+      className="ds-stats-grid__card"
+      data-part="card"
+      data-variant={variant || "default"}
+      data-interactive="false"
     >
-      {Array.from({ length: columns }).map((_, i) => (
-        <div
-          key={i}
-          className="ds-stats-grid-skeleton__item"
-          data-part="skeleton"
-        >
-          {/* Label shimmer */}
-          <div
-            className="ds-stats-grid-skeleton__bar"
-            data-part="skeleton-bar"
-            data-kind="label"
-          />
-          {/* Value shimmer */}
-          <div
-            className="ds-stats-grid-skeleton__bar"
-            data-part="skeleton-bar"
-            data-kind="value"
-          />
-          {/* Trend shimmer */}
-          <div
-            className="ds-stats-grid-skeleton__bar"
-            data-part="skeleton-bar"
-            data-kind="trend"
-          />
+      <div data-part="label-row">
+        <div data-part="statistic">
+          <div data-part="title" />
+          <div data-part="value" />
         </div>
-      ))}
+        <span className="ds-stats-grid__trend" data-part="trend" />
+      </div>
     </div>
   );
 }
@@ -352,8 +334,8 @@ function LoadingSkeleton({
 /**
  * Modern engine for the StatsGrid pattern component.
  *
- * Renders a fixed `columns`-track CSS grid of premium stat cards styled
- * entirely with DS tokens. Supports columns, sparklines, variant styles,
+ * Renders an auto-fit grid of premium stat cards styled entirely with DS
+ * tokens. Supports the card footprint preset, sparklines, variant styles,
  * animated count-up values, a quiet error posture, and custom renderStat
  * slots.
  *
@@ -362,7 +344,8 @@ function LoadingSkeleton({
  */
 export default function ModernStatsGrid(props: StatsGridProps) {
   const tokens = useTokens();
-  const { isMobile, isTablet, prefersReducedMotion } = useBreakpoints();
+  // Motion preference only: the layout makes no viewport decision here.
+  const { prefersReducedMotion } = useBreakpoints();
   // Component-owned strings with the English floor (echo-guarded): the empty
   // state reuses the catalog's generic `empty.description` ("No data"); the
   // error notice is channel-ahead-of-catalog (`statsGrid.error.description`,
@@ -377,8 +360,11 @@ export default function ModernStatsGrid(props: StatsGridProps) {
     stats,
     renderStat,
     columns = 4,
+    minItem,
+    templateColumns,
+    adapt,
     sparkline,
-    gap = "1rem",
+    gap,
     variant = "default",
     animate,
     onStatClick,
@@ -395,31 +381,56 @@ export default function ModernStatsGrid(props: StatsGridProps) {
     prefersReducedMotion,
     animate
   );
-  const viewport = isMobile ? "phone" : isTablet ? "tablet" : "desktop";
+  // The posture this grid is actually in, resolved through the shared runtime.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const adaptationBase = useMemo<StatsGridAdaptation>(() => ({ minItem }), [minItem]);
+  const { adaptation, postureAttribute } = useAdaptation<StatsGridAdaptation>(adapt, {
+    base: adaptationBase,
+    containerRef: rootRef,
+  });
+  const resolvedGap = gridGap(gap);
+  const rootClassName = ["ds-pattern-stats-grid", "ds-engine-modern", className]
+    .filter(Boolean)
+    .join(" ");
+  const gridStyle = { ...resolvedGap.channel, ...style } as React.CSSProperties;
 
-  // Column axis is a component-layer concern shared by every engine
-  // (Quiet Premium spec section 10): one track on phone, up to two on tablet,
-  // and the caller's `columns` ceiling on desktop.
-  const gridStyle: React.CSSProperties = {
-    display: "grid",
-    width: "100%",
-    minWidth: 0,
-    boxSizing: "border-box",
-    gridTemplateColumns: resolveStatsGridColumns(columns, viewport),
-    gap,
-    ...style,
-  };
+  // The column axis is the adaptive layout kit's (WO-FAM-12): the Grid
+  // primitive's auto-fit recipe sizes the tracks from the card footprint
+  // channels and the compact posture takes one column. `columns` no longer
+  // decides tracks here; an explicit `templateColumns` (or the caller's
+  // `style.gridTemplateColumns`) still wins.
+  const renderGrid = (loadingState: boolean, children: React.ReactNode) => (
+    <Grid
+      ref={rootRef}
+      autoFit
+      minItem={adaptation.minItem}
+      templateColumns={templateColumns}
+      gap={resolvedGap.gap}
+      className={rootClassName}
+      data-part="root"
+      data-loading={loadingState ? "true" : "false"}
+      data-variant={variant}
+      data-posture={postureAttribute}
+      style={gridStyle}
+    >
+      {children}
+    </Grid>
+  );
 
-  // Show placeholder skeleton during data fetching to prevent layout shift.
+  // The loading state is this grid's OWN anatomy, read by the shared
+  // renderer: `columns` placeholder cards stamped with the parts a loaded card
+  // stamps. The renderer wraps the family root, so the bones are measured
+  // against the real grid -- same track model, same gap, same posture.
   if (loading) {
     return (
-      <LoadingSkeleton
-        columns={columns}
-        gap={gap}
-        viewport={viewport}
-        className={className}
-        style={style}
-      />
+      <AnatomySkeleton>
+        {renderGrid(
+          true,
+          Array.from({ length: Math.max(1, columns) }).map((_, index) => (
+            <PlaceholderStatCard key={index} variant={variant} />
+          ))
+        )}
+      </AnatomySkeleton>
     );
   }
 
@@ -430,13 +441,13 @@ export default function ModernStatsGrid(props: StatsGridProps) {
   if (error) {
     return (
       <div
-        className={["ds-pattern-stats-grid", "ds-engine-modern", className]
-          .filter(Boolean)
-          .join(" ")}
+        ref={rootRef}
+        className={rootClassName}
         data-part="root"
         data-loading="false"
         data-error="true"
         data-variant={variant}
+        data-posture={postureAttribute}
         style={style}
       >
         <div data-part="error" role="status">
@@ -452,12 +463,12 @@ export default function ModernStatsGrid(props: StatsGridProps) {
   if (stats.length === 0) {
     return (
       <div
-        className={["ds-pattern-stats-grid", "ds-engine-modern", className]
-          .filter(Boolean)
-          .join(" ")}
+        ref={rootRef}
+        className={rootClassName}
         data-part="root"
         data-loading="false"
         data-variant={variant}
+        data-posture={postureAttribute}
         style={style}
       >
         <div data-part="empty">{tOr('empty.description', 'No data')}</div>
@@ -465,16 +476,9 @@ export default function ModernStatsGrid(props: StatsGridProps) {
     );
   }
 
-  return (
-    <div
-      className={["ds-pattern-stats-grid", "ds-engine-modern", className]
-        .filter(Boolean)
-        .join(" ")}
-      data-part="root"
-      data-loading="false"
-      data-variant={variant}
-      style={gridStyle}
-    >
+  return renderGrid(
+    false,
+    <>
       {stats.map((stat) => {
         const defaultRender = (
           <StatCard
@@ -492,6 +496,6 @@ export default function ModernStatsGrid(props: StatsGridProps) {
           </React.Fragment>
         );
       })}
-    </div>
+    </>
   );
 }

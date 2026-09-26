@@ -280,6 +280,11 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'title-icon': 'block',
   'toolbar-action': 'block',
   'toolbar-icon': 'block',
+  // Two families stamp this name: stats-grid's trend pill and the chart
+  // metric-trend's sparkline area. A block is honest for both -- the bone
+  // takes the part's own measured radius, so the pill keeps its corners
+  // (WO-FAM-12). It is also what the unroled name already fell to.
+  trend: 'block',
   'trigger-icon': 'block',
   'view-item-select': 'block',
   'view-select': 'block',
