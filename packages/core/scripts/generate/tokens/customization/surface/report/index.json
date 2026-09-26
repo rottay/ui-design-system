@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "660e61929f61372749884850766b7bc6e3fa63359dc5156adce006f529d75a3c",
+    "inputsDigest": "34e971216d4ecc70a5434cb54cf39350c7623b52261d09040905e0761665beec",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 496,
@@ -14,16 +14,16 @@
     }
   },
   "counts": {
-    "universe": 8762,
+    "universe": 8748,
     "writers": 7516,
     "foundationTokens": 4184,
     "componentTokens": 719,
     "tenantChannels": 4501,
     "publicHooks": 107,
-    "unadjudicatedReads": 1227,
+    "unadjudicatedReads": 1213,
     "deadWriters": 271,
     "frontierReserved": 0,
-    "modernConsumedUnique": 4807,
+    "modernConsumedUnique": 4789,
     "tsReadNames": 2876,
     "tsWriteNames": 3903,
     "tsMetadataNames": 3465,
@@ -8929,22 +8929,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-backtop-inset-block-end": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-backtop-pressed-transform": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -9063,11 +9047,11 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 0,
         "ts": 1,
         "showroom": 0,
         "tests": false,
-        "modern": true,
+        "modern": false,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -18645,22 +18629,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-calendar-cell-active": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-calendar-cell-bg-hover": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -18773,38 +18741,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-calendar-cell-disabled-opacity": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-calendar-cell-hover": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-calendar-cell-radius": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -18843,27 +18779,11 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 0,
         "ts": 1,
         "showroom": 0,
         "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-calendar-compact-width-coarse": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
+        "modern": false,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -18901,22 +18821,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-calendar-focus-ring": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-calendar-header-bg": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -18928,22 +18832,6 @@
         "showroom": 0,
         "tests": false,
         "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-calendar-header-border": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -19013,22 +18901,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-calendar-header-margin-block-end": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-calendar-hover-bg": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -19083,11 +18955,11 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 3,
+        "css": 2,
         "ts": 1,
         "showroom": 0,
         "tests": false,
-        "modern": true,
+        "modern": false,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -19131,11 +19003,11 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 3,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
-        "tests": true,
-        "modern": true,
+        "tests": false,
+        "modern": false,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -19264,22 +19136,6 @@
         "showroom": 0,
         "tests": false,
         "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-calendar-year-cell-padding": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -55745,22 +55601,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-floatbutton-badge-offset-block": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-floatbutton-bottom": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -55825,38 +55665,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-floatbutton-dot-offset-block": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-floatbutton-dot-size": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 2,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-floatbutton-gap": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -55896,22 +55704,6 @@
       "writer": false,
       "reads": {
         "css": 2,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-floatbutton-padding-inline": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -140346,22 +140138,6 @@
       "tsMetadataMentions": 0
     },
     "--ds-workspace-switcher-meta-numeric": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-workspace-switcher-panel-gap": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
       "status": "unwritten-hook",
