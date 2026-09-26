@@ -12,12 +12,24 @@
  * channel (an SVG presentation attribute cannot resolve `var()`, so the
  * engine's former attribute-based fallback painted an ungoverned black
  * whenever a stat had no `color`); the sparkline geometry goes fluid at a
- * fixed block size; the card/skeleton padding fallback rides the tenant
+ * fixed block size; the card padding fallback rides the tenant
  * density plane (`--ds-density-effective-scale`, Button-skin idiom); and the
  * root gains a quiet `error` part mirroring the `empty` block. The private
  * `--_ds-stats-grid-sparkline-fill-opacity` channel governs area-fill
  * strength, exact 0.2 fallback).
+ *
+ * LAYOUT (WO-FAM-12): the root is the Grid primitive with `autoFit`; its
+ * tracks, gap and compact single column are the grid skin's. This file keeps
+ * only the root's inline size, and the loading footprint of the placeholder
+ * parts the shared `AnatomySkeleton` renderer measures (the hand-built
+ * skeleton and its shimmer bars are retired).
  */
+
+/* The root spans its container, as the inline geometry it replaces did. */
+.ds-pattern-stats-grid.ds-engine-modern[data-part="root"] {
+  inline-size: 100%;
+  box-sizing: border-box;
+}
 
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
   transition: box-shadow var(--ds-motion-reveal)
@@ -166,29 +178,22 @@
   color: var(--ds-color-error);
 }
 
-/* ---- skeleton geometry drained from the engine's inline styles (it mirrors
-        the card's padding so skeleton and content share the same frame) ---- */
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton"] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-spacing-3, 0.75rem);
-  padding: var(
-    --ds-stats-grid-card-padding,
-    calc(1.25rem * var(--ds-density-effective-scale))
-      calc(1.5rem * var(--ds-density-effective-scale))
-  );
-}
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"][data-kind="label"] {
+/* ---- loading footprint: with no data there is no copy inside the
+        placeholder card, so its parts carry the size the renderer measures
+        (the retired skeleton bars' geometry, now on the real anatomy). ---- */
+.ds-pattern-stats-grid.ds-engine-modern[data-loading="true"] [data-part="title"] {
   inline-size: 40%;
   block-size: 12px;
 }
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"][data-kind="value"] {
+.ds-pattern-stats-grid.ds-engine-modern[data-loading="true"] [data-part="value"] {
   inline-size: 65%;
   block-size: 28px;
+  margin-block-start: var(--ds-spacing-3, 0.75rem);
 }
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"][data-kind="trend"] {
+.ds-pattern-stats-grid.ds-engine-modern[data-loading="true"] [data-part="trend"] {
   inline-size: 30%;
   block-size: 16px;
+  padding: 0;
 }
 
 /* ---- sparkline: the skin owns paint (stroke + gradient stops) through the
@@ -259,24 +264,6 @@
   background: var(--ds-surface-panel);
 }
 
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton"] {
-  background: var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-1);
-  border-radius: var(--ds-radius-lg);
-}
-
-.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"] {
-  background: linear-gradient(
-    90deg,
-    var(--ds-surface-panel) 25%,
-    var(--ds-surface-inset) 50%,
-    var(--ds-surface-panel) 75%
-  );
-  background-size: 200% 100%;
-  animation: ds-skeleton-shimmer var(--ds-motion-attention) var(--ds-motion-ease-in-out) infinite;
-  border-radius: var(--ds-radius-sm);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
     transition: none;
@@ -286,9 +273,6 @@
   .ds-pattern-stats-grid.ds-engine-modern
     .ds-stats-grid__card[data-interactive="true"]:is([data-state~='pressed'], :active) {
     transform: none;
-  }
-  .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"] {
-    animation: none;
   }
 }
 
@@ -318,14 +302,6 @@
   .ds-pattern-stats-grid.ds-engine-modern
     .ds-stats-grid__card[data-interactive="true"]:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
-  }
-  .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton"] {
-    border: 1px solid ButtonText;
-    background: Canvas;
-    box-shadow: none;
-  }
-  .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"] {
-    background: GrayText;
   }
   .ds-pattern-stats-grid.ds-engine-modern [data-part="sparkline-area"] {
     fill: none;
