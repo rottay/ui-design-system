@@ -6209,7 +6209,7 @@
       "lane": "retire",
       "order": 5,
       "size": "M",
-      "status": "todo",
+      "status": "in-progress",
       "dependsOn": [
         "WO-EMI-02"
       ],
@@ -6218,9 +6218,15 @@
         "audit-2026-09-05"
       ],
       "notes": "wave 5; closes F-45, F-92, F-93",
-      "claimedBy": null,
-      "claimedAt": null,
-      "progressLog": []
+      "claimedBy": "Kimi K3",
+      "claimedAt": "2026-09-26",
+      "progressLog": [
+        {
+          "at": "2026-09-26 19:40",
+          "by": "kimi-dt",
+          "note": "CLAIM + pre-flight (scout receipt-ret05-p0-scout-opus.json, claude-opus-5-5, read-only, HEAD bc00d02e0). Baselines medidos: compile grep 6 archivos (objetivo <=1; uno es comentario; el grep no ve compileTenantThemeDocumentV2 ni compileThemeIntent de torture-surface), showroom-ui 17 archivos, story-helpers 31 con default rustic + tenant inventado, storybook tenant=bithire ROJO por lectura de codigo (preview.tsx sin CSS vertical) y budget storybook ROJO pre-existente (4.27MB/3MB byte-identico -- su packet es DT/owner y precede al job CI). RULINGS DT (R-1..R-7): R-1 la aceptacion '=1' se lee como <=1 (el sitio de compilacion DB del kernel; si su migracion V2 cae dentro del lote con honestidad, mejor). R-2 el engine sweep de los probes M2 se BORRA (Modern-only, los engines congelados no reciben sweeps nuevos). R-3 el comportamiento del stamp se queda con t&& (superset null-safe). R-4 las 81 historias self-provided quedan FUERA de scope ('both Storybook decorators' se lee como M7a + M7b). R-5 evnto NO se agrega al toolbar de Storybook (D-24). R-6 DocsPanel/MetricTile/SectionDivider se re-hogar DENTRO del showroom con gramatica D-21 (promoverlos al DS es decision owner -- anti-sprawl). R-7 mountTenantTheme en el bundle de Storybook SOLO si el budget queda medible -- el packet del budget (manualChunks o re-pin medido) va PRIMERO y es del DT. ORDEN Y RESERVAS: P1 (kernel probe-ground, paintless) va ANTES de FAM-13 P5 para que el dashboard adopte el kernel (recomendacion del scout aceptada); DER-07 es dueno de probe-ground/identity/** y NO se toca hasta que cierre; P4b toma sus capturas visuales DESPUES de que A26B-02 y FAM-13 P3 aterricen (los movers no se mezclan); RET-02's Tailwind packet del showroom va DESPUES de RET-05 P4; ci.yml es solo del DT (P6 dentro de una ceremonia de sello); los editores compartidos del showroom pausan durante capturas EVI (fila README). Plan: P1 kernel (paintless) -> P2 (probes a configuraciones) paralelo con P3 (fleet showroom-tenant) -> P4a (chrome) paralelo con P4b (docs pages) -> P4c (paridad SSR/CSR, serial) -> P5 (storybook, build en ventana DT) -> P6 (CI, DT)."
+        }
+      ]
     },
     {
       "id": "WO-EVI-01",
