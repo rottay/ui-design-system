@@ -3040,8 +3040,8 @@ test('E-8 the invariants the correction must not disturb', () => {
   // Exact live total, centralized above with its own derivation.
   assert.equal(out.stats.emissionsWithCausalRoot, LIVE_PRODUCER_STATS.emissionsWithCausalRoot);
   assert.equal(out.stats.ownershipConflicts, 0);
-  // the ratified join amendment survives
-  assert.equal(out.closedProducer.filter((r) => r.occurrenceProducerSiteIds).length, 11);
+  // the ratified join amendment survives; 11 -> 19: 399c3d997, the 8 motion-recipe rows whose button pressMotion coordinates occur twice
+  assert.equal(out.closedProducer.filter((r) => r.occurrenceProducerSiteIds).length, 19);
 });
 
 /* ===================================================================== *
@@ -3842,17 +3842,19 @@ test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
   // family -- 9 source files x {member-access, spread}. The four Button rows
   // that the extractor emits twice are NOT deduplicated by this tranche: they
   // are a separate, pre-existing defect and 18 coordinates carry 22 rows.
+  // 16 -> 0 (and every count below with it): 399c3d997, the 16 motion-recipe
+  // sealed-import-relay rows left privateRelay and close as producers (Object.freeze).
   const proven = out.privateRelay.filter((r) => r.resolvedVia === SEALED_VIA);
-  assert.equal(proven.length, 16);
+  assert.equal(proven.length, 0);
   const coordinates = new Set(proven.map((r) => `${r.file}|${r.ordinal}`));
-  assert.equal(coordinates.size, 12);
-  assert.equal(new Set(proven.map((r) => r.file)).size, 6);
+  assert.equal(coordinates.size, 0);
+  assert.equal(new Set(proven.map((r) => r.file)).size, 0);
   assert.deepEqual(
     [...new Set(proven.map((r) => r.reason.split(':')[1]))].sort(),
-    ['member-access', 'spread'],
+    [],
   );
-  assert.equal(proven.filter((r) => r.reason.endsWith(':member-access')).length, 8);
-  assert.equal(proven.filter((r) => r.reason.endsWith(':spread')).length, 8);
+  assert.equal(proven.filter((r) => r.reason.endsWith(':member-access')).length, 0);
+  assert.equal(proven.filter((r) => r.reason.endsWith(':spread')).length, 0);
   // and NO authoredOpen row of this family survives
   for (const row of out.authoredOpen) {
     assert.ok(!/Motion\.variables/.test(row.template), `${row.file}:${row.line} stayed authored-open`);
