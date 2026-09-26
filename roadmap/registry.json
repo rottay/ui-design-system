@@ -6885,6 +6885,11 @@
           "at": "2026-09-26 08:00",
           "by": "kimi-dt",
           "note": "WO-EVI-03 DONE (125/164). El detalle del close audit queda en `evidence`: cero filas unproduced, consumers 2 retained con razon medida, liveness 143/143, baselines con expiry (regeneracion owner-held D-30), puerta 168/168, retry 0."
+        },
+        {
+          "at": "2026-09-26 08:30",
+          "by": "kimi-dt",
+          "note": "cola del cierre: --ds-control-size-md retirada por extension del ruling (294eaba95, 1200 celdas 0 diffs; pins EXACTOS nuevos mas estrictos que el rung -- NINGUNA fuente core lee ya ningun --ds-control-size-*). Write-downs a54fc8202 + ventanas f12be467d/4393d0d1a: RWP 422 -> 421 (los 2 residue pins fuera con el ruling como checkpoint), cascade-wiring 2041/2046/5729, family-cut list-toolbar 1 y active-filters-bar 0, exits roster en 44. Ruteados a sus carriles: la accion de telefono 32x30 (no cuadrada, duenio list-toolbar), N4 (el factor no mueve ningun control medido), --ds-filter-pill-radius (ultimo pin del residueNote)."
         }
       ],
       "doneAt": "2026-09-26",
