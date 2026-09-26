@@ -57,6 +57,6 @@ describe('Spinner modern skin reduced-motion state', () => {
 
   it('leaves the animated default untouched outside the guard', () => {
     expect(SKIN).toContain('animation: ds-spinner-modern-spin');
-    expect(SKIN).toContain('var(--ds-spinner-spin-easing, linear) infinite;');
+    expect(SKIN).toMatch(/animation: ds-spinner-modern-spin[^;]*\)\s+linear infinite;/);
   });
 });

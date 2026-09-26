@@ -116,9 +116,8 @@
      16%-darkened mix of the tone and the state ramp darkens monotonically
      (16 -> 30 -> 42), so hover/active stay visibly deeper and every source
      clears AA: secondary/TMM 5.83:1, secondary/bithire 7.78:1,
-     primary/bithire 6.15:1 (was 4.72:1 -- no regression).
-     `--ds-link-color` remains the tenant escape hatch. */
-  color: var(--ds-link-color, color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-neutral-900) 16%));
+     primary/bithire 6.15:1 (was 4.72:1 -- no regression). */
+  color: color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-neutral-900) 16%);
 }
 
 /* ---- states. Visited precedes hover so pointer feedback always wins; the

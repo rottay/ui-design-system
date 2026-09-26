@@ -189,8 +189,7 @@ export function deriveCollectionHeaderChannels(): Record<string, string> {
   vars["--ds-collection-header-keycap-block-size"] = "var(--ds-spacing-5, 20px)";
   vars["--ds-collection-header-keycap-inline-padding"] = "var(--ds-spacing-2, 8px)";
   vars["--ds-collection-header-keycap-radius"] = "var(--ds-kbd-radius, var(--ds-radius-sm, 4px))";
-  vars["--ds-collection-header-keycap-family"] =
-    "var(--ds-kbd-font-family, var(--ds-font-family-mono))";
+  vars["--ds-collection-header-keycap-family"] = "var(--ds-font-family-mono)";
   vars["--ds-collection-header-keycap-size"] =
     "var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px))";
   vars["--ds-collection-header-keycap-weight"] =

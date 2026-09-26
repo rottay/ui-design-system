@@ -643,7 +643,7 @@
   min-block-size: var(--ds-collection-header-keycap-block-size, var(--ds-spacing-5, 20px));
   padding-inline: var(--ds-collection-header-keycap-inline-padding, var(--ds-spacing-2, 8px));
   border-radius: var(--ds-collection-header-keycap-radius, var(--ds-kbd-radius, var(--ds-radius-sm, 4px)));
-  font-family: var(--ds-collection-header-keycap-family, var(--ds-kbd-font-family, var(--ds-font-family-mono)));
+  font-family: var(--ds-collection-header-keycap-family, var(--ds-font-family-mono));
   font-size: var(--ds-collection-header-keycap-size, var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px)));
   font-weight: var(--ds-collection-header-keycap-weight, var(--ds-font-weight-medium, 500));
   line-height: 1;

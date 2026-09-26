@@ -99,14 +99,14 @@
 
 /* ---- floating menu panel (the <ul>) ---- */
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] {
-  inline-size: var(--ds-context-menu-width, 14rem);
+  inline-size: 14rem;
   margin: 0;
-  padding: var(--ds-context-menu-padding, var(--ds-spacing-2));
+  padding: var(--ds-spacing-2);
   list-style: none;
   /* Pass-2 coherence: the lane's overlay surfaces share Dropdown's material
      register (same widget class) -- subtle primary-tinted gradient, tinted
      border, inset highlight, elevation-3, backdrop blur, radius-xl. */
-  border-radius: var(--ds-context-menu-radius, var(--ds-radius-xl));
+  border-radius: var(--ds-radius-xl);
   /* The dark-aware luminance step is its own layer directly above the fill
      (popover.css idiom): inert until a dark surface raises
      --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
@@ -133,7 +133,7 @@
      future render ever drops the data-open stamp, restore it rather than
      re-doubling the part). */
   border: var(--ds-edge-hairline-width, 1px) solid
-    var(--ds-context-menu-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)));
+    var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
 }
 
 /* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
@@ -161,7 +161,7 @@
         carrying its own data-parts -- e.g. a Badge label -- is never matched) ---- */
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='divider'] {
   block-size: 1px;
-  margin-block: var(--ds-context-menu-divider-margin-block, 4px);
+  margin-block: 4px;
   margin-inline: 0;
   background: var(--ds-color-border-subtle);
 }
@@ -171,7 +171,7 @@
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-medium);
-  letter-spacing: var(--ds-context-menu-group-letter-spacing, 0.05em);
+  letter-spacing: 0.05em;
   line-height: 1.2;
   text-transform: uppercase;
 }

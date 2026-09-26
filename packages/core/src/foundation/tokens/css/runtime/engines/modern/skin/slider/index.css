@@ -151,7 +151,7 @@
   block-size: var(--ds-slider-thumb-size, 16px);
   border-radius: var(--ds-radius-full);
   background: var(--ds-color-primary);
-  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
+  box-shadow: var(--ds-material-control-shadow, var(--ds-elevation-1));
   pointer-events: none;
   transition:
     background var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -306,7 +306,7 @@
   inline-size: var(--ds-slider-thumb-size, 16px);
   border-radius: 50%;
   background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
-  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
+  box-shadow: var(--ds-material-control-shadow, var(--ds-elevation-1));
   transition:
     background var(--ds-motion-feedback) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -334,7 +334,7 @@
   inline-size: var(--ds-slider-thumb-size, 16px);
   border-radius: 50%;
   background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
-  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
+  box-shadow: var(--ds-material-control-shadow, var(--ds-elevation-1));
   transition:
     background var(--ds-motion-feedback) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),

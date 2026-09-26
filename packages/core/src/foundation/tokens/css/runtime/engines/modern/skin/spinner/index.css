@@ -58,13 +58,10 @@
   border-top-color: var(--ds-spinner-color, var(--ds-color-primary));
   /* A soft second segment gives the sweep premium depth instead of a flat
      single-pixel head. Logical, so the resting arc mirrors under RTL. */
-  border-inline-end-color: var(
-    --ds-spinner-segment-color,
-    color-mix(
-      in srgb,
-      var(--ds-spinner-color, var(--ds-color-primary)) 45%,
-      var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)))
-    )
+  border-inline-end-color: color-mix(
+    in srgb,
+    var(--ds-spinner-color, var(--ds-color-primary)) 45%,
+    var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)))
   );
   border-radius: 50%;
   /* A full 360deg sweep must stay linear (easing a closed loop reads as a
@@ -80,7 +77,7 @@
        pin never constrained. This fallback is now the dormant historical
        floor, reached only if the dial is undefined. */
     var(--ds-spinner-duration, calc(var(--ds-motion-slow) * 2))
-    var(--ds-spinner-spin-easing, linear) infinite;
+    linear infinite;
 }
 
 /* Ring geometry per size: diameter + stroke, both tenant-tunable. Stroke

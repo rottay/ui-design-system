@@ -149,10 +149,14 @@ test('CONTROL arm 2: the literal is read whole, with its line', () => {
 
 test('MUTANT arm 2: a row without an owner, a reason or a declared class is red', () => {
   const row = testLedger.unproducedChannelAssertions.rows.find((entry) => entry.owner !== null);
-  const orphan = testLedger.unproducedChannelAssertions.rows.find((entry) => entry.class === UNASSIGNED_CLASS);
+  /* The uncut population drained to zero on 2026-09-25 (EVI-03 arms 2-3): the
+   * orphan the second drill needs is now built synthetically from `row` -- an
+   * existing row re-classed uncut with its proposal dropped exercises the same
+   * law branch (uncut + null owner + no ownerProposal) without inventing a row
+   * the census never carried. */
   for (const [mutate, pattern] of [
     [(ledger) => { ledger.unproducedChannelAssertions.rows.find((entry) => entry.file === row.file && entry.name === row.name).owner = null; }, /is not a work order/u],
-    [(ledger) => { ledger.unproducedChannelAssertions.rows.find((entry) => entry.file === orphan.file && entry.name === orphan.name).ownerProposal = undefined; }, /is not a work order/u],
+    [(ledger) => { const orphan = ledger.unproducedChannelAssertions.rows.find((entry) => entry.file === row.file && entry.name === row.name); orphan.owner = null; orphan.class = UNASSIGNED_CLASS; orphan.ownerProposal = undefined; }, /is not a work order/u],
     [(ledger) => { ledger.unproducedChannelAssertions.rows.find((entry) => entry.file === row.file && entry.name === row.name).reason = ''; }, /no reason/u],
     [(ledger) => { ledger.unproducedChannelAssertions.rows.find((entry) => entry.file === row.file && entry.name === row.name).class = 'accepted'; }, /is not declared/u],
     [(ledger) => { ledger.unproducedChannelAssertions.rows.find((entry) => entry.file === row.file && entry.name === row.name).occurrences += 1; }, /occurrence\(s\), the ledger records/u],

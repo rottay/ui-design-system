@@ -170,8 +170,8 @@ describe('ContextMenu modern engine — the opening side is logical', () => {
 
 describe('ContextMenu modern engine — the skin owns the drained paint', () => {
   it('owns the panel chrome', () => {
-    expect(SKIN).toContain('inline-size: var(--ds-context-menu-width, 14rem);');
-    expect(SKIN).toContain('padding: var(--ds-context-menu-padding, var(--ds-spacing-2));');
+    expect(SKIN).toMatch(/\[data-part='surface'\] \{[^}]*inline-size: 14rem;/);
+    expect(SKIN).toMatch(/\[data-part='surface'\] \{[^}]*padding: var\(--ds-spacing-2\);/);
     expect(SKIN).toContain('list-style: none;');
   });
 
@@ -183,9 +183,9 @@ describe('ContextMenu modern engine — the skin owns the drained paint', () => 
       'linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3))',
     );
     expect(SKIN).toContain('var(--ds-surface-card)');
-    expect(SKIN).toContain('var(--ds-context-menu-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)))');
+    expect(SKIN).toContain('var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%))');
     expect(SKIN).toContain('var(--ds-material-overlay-shadow, var(--ds-elevation-3))');
-    expect(SKIN).toContain('var(--ds-context-menu-radius, var(--ds-radius-xl))');
+    expect(SKIN).toMatch(/\[data-part='surface'\] \{[^}]*border-radius: var\(--ds-radius-xl\);/);
     expect(SKIN).not.toContain('background: var(--ds-surface-card);');
     expect(SKIN).not.toContain('box-shadow: var(--ds-elevation-2);');
   });
@@ -196,7 +196,7 @@ describe('ContextMenu modern engine — the skin owns the drained paint', () => 
 
   it('owns the divider geometry with logical margins', () => {
     expect(SKIN).toMatch(/\[data-part='divider'\]\s*\{[^}]*block-size: 1px;/);
-    expect(SKIN).toContain('margin-block: var(--ds-context-menu-divider-margin-block, 4px);');
+    expect(SKIN).toMatch(/\[data-part='divider'\]\s*\{[^}]*margin-block: 4px;/);
     expect(SKIN).toContain('margin-inline: 0;');
   });
 
@@ -205,7 +205,7 @@ describe('ContextMenu modern engine — the skin owns the drained paint', () => 
     expect(SKIN).toContain('font-size: var(--ds-font-size-xs);');
     expect(SKIN).toContain('font-weight: var(--ds-font-weight-medium);');
     expect(SKIN).not.toContain('var(--ds-font-size-xs, 0.75rem)');
-    expect(SKIN).toContain('letter-spacing: var(--ds-context-menu-group-letter-spacing, 0.05em);');
+    expect(SKIN).toMatch(/\[data-part='group-label'\]\s*\{[^}]*letter-spacing: 0\.05em;/);
   });
 
   it('owns the item-row layout drained from Tailwind utilities', () => {
@@ -255,10 +255,10 @@ describe('ContextMenu modern engine — overlay material commitment', () => {
     // reaches every anchored panel instead of only some of them.
     expect(SKIN).toContain('var(--ds-material-overlay-texture, none)');
     expect(SKIN).toContain('var(--ds-material-overlay-background, var(--ds-surface-card))');
-    // Family chrome stays senior, the role channel is the next rung, the old
-    // mix survives as the terminal fallback (dropdown.css ordering).
+    // The role channel leads and the old mix survives as the terminal fallback
+    // (dropdown.css ordering); no family rung sits above the role.
     expect(SKIN).toMatch(
-      /--ds-context-menu-border-color,\s*var\(\s*--ds-material-overlay-border,\s*color-mix\(in srgb, var\(--ds-color-border\) 86%, var\(--ds-color-primary\) 14%\)\s*\)/
+      /\[data-open\] \{[^}]*border: [^;]*\bvar\(\s*--ds-material-overlay-border,\s*color-mix\(in srgb, var\(--ds-color-border\) 86%, var\(--ds-color-primary\) 14%\)\s*\)/
     );
   });
 

@@ -22,17 +22,15 @@ const SKIN = readFileSync(
 
 describe('Slider modern skin control material', () => {
   it('routes thumb rest depth through the control shadow role as a whole value', () => {
-    expect(SKIN).toContain(
-      'box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));',
-    );
+    expect(SKIN.split('box-shadow: var(--ds-material-control-shadow, var(--ds-elevation-1));').length - 1).toBe(3);
   });
 
   it('never falls back to the hand-tuned shadow scale for thumb rest depth', () => {
-    expect(SKIN).not.toMatch(/var\(--ds-slider-thumb-shadow,\s*var\(--ds-shadow-sm\)\)/);
+    expect(SKIN).not.toMatch(/box-shadow:\s*var\(--ds-shadow-sm\)/);
   });
 
   it('keeps the overlay register off the thumb and never reads the retired highlight', () => {
-    expect(SKIN).not.toMatch(/--ds-slider-thumb-shadow,\s*var\(--ds-material-overlay-/);
+    expect(SKIN).not.toMatch(/box-shadow:\s*var\(--ds-material-overlay-/);
     expect(SKIN).not.toMatch(/--ds-material-overlay-highlight/);
   });
 });

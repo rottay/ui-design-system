@@ -41,7 +41,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  font-family: var(--ds-kbd-font-family, var(--ds-font-family-mono));
+  font-family: var(--ds-font-family-mono);
   font-weight: var(--ds-kbd-font-weight, 500);
   line-height: 1;
   white-space: nowrap;

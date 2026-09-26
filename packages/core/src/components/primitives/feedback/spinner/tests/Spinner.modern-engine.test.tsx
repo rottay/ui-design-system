@@ -61,9 +61,9 @@ describe('Spinner modern engine', () => {
     expect(skin).toContain('--ds-spinner-lg-size');
     expect(skin).toContain('@keyframes ds-spinner-modern-spin');
     expect(skin).toContain('var(--ds-spinner-duration, calc(var(--ds-motion-slow) * 2))');
-    expect(skin).toContain('var(--ds-spinner-spin-easing, linear) infinite');
+    expect(skin).toMatch(/animation: ds-spinner-modern-spin[^;]*\)\s+linear infinite;/);
     expect(skin).toContain('--ds-spinner-track-color');
-    expect(skin).toContain('--ds-spinner-segment-color');
+    expect(skin).toMatch(/border-inline-end-color: color-mix\(\s*in srgb,\s*var\(--ds-spinner-color, var\(--ds-color-primary\)\) 45%,/);
     expect(skin).toContain('border-inline-end-color');
     expect(skin).toContain('@media (prefers-reduced-motion: reduce)');
   });
