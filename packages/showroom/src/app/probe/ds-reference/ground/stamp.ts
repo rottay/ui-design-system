@@ -1,33 +1,8 @@
-/**
- * The lab's own root-stamp serializer.
- *
- * Deliberately the lab's own ~10 lines rather than an import from
- * `components/torture-tenant`: R1 declares `/probe/ds-reference/**` the only
- * lab-owned glob, so an import from the torture harness would create a
- * consumption edge into a tree no R1 lane owns and would make the lab's
- * evidence depend on a file this round may not change.
- *
- * The behaviour is the DS's own governed root-attribute projection, applied
- * first-in-body so no paint can precede it.
- */
+/** The lab stamps through the one root stamp; the name stays so the ground's call site is unchanged. */
+export { buildRootStampScript as buildLabRootStampScript } from '@/components/probe-ground/stamp/index.mjs';
 
 /** The attribute bag the DS's `resolveDocumentRootAttributes` produces. */
 export type LabRootAttributes = Readonly<Record<string, string>>;
-
-export function buildLabRootStampScript(attributes: LabRootAttributes): string {
-  const payload = JSON.stringify(attributes);
-  return (
-    '(function(){try{' +
-    'var r=document.documentElement,a=' +
-    payload +
-    ';' +
-    'for(var k in a)r.setAttribute(k,a[k]);' +
-    'var t=a["data-theme"];' +
-    'r.classList.toggle("dark",t==="dark");' +
-    'if(t&&t!=="base")r.style.colorScheme=t;' +
-    '}catch(e){}})()'
-  );
-}
 
 /**
  * Capture-time judging transforms.

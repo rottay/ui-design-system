@@ -7,8 +7,8 @@
  * that effect painted the DS default, which is dark on a bare `:root` — light
  * and tenant values activate exclusively through html-anchored selectors.
  *
- * This module is therefore PURE and server-safe: no React, no DOM, no relative
- * import and no JSON module. That is deliberate rather than incidental — the
+ * This module is therefore PURE and server-safe: no React, no DOM, no JSON
+ * module, and one relative import -- the plain-ESM root stamp. That is deliberate rather than incidental — the
  * file the Next build compiles is the same file the first-paint assertion loads
  * directly under `node --experimental-strip-types`, so the assertion cannot
  * drift from the code that serves the bytes. The published DB specimen is an
@@ -212,27 +212,4 @@ export function resolveTortureFirstPaint(
   return { ...base, rootAttributes: null, css: '', artifact: null };
 }
 
-/**
- * The stamp, as a string for `dangerouslySetInnerHTML`.
- *
- * It writes the projection above and the two surfaces the theme provider later
- * claims (`.dark`, `color-scheme`) and nothing else. Claiming is why this is
- * safe: the client providers replace these exact stamps and restore them on
- * cleanup, so the ground simply arrives earlier instead of gaining a second
- * owner. `base` deliberately leaves `color-scheme` to the stylesheet that
- * declares it, exactly as the provider does.
- */
-export function buildRootStampScript(attributes: DocumentRootAttributes): string {
-  const payload = JSON.stringify(attributes);
-  return (
-    '(function(){try{' +
-    'var r=document.documentElement,a=' +
-    payload +
-    ';' +
-    'for(var k in a)r.setAttribute(k,a[k]);' +
-    'var t=a["data-theme"];' +
-    'r.classList.toggle("dark",t==="dark");' +
-    'if(t!=="base")r.style.colorScheme=t;' +
-    '}catch(e){}})()'
-  );
-}
+export { buildRootStampScript } from '../probe-ground/stamp/index.mjs';
