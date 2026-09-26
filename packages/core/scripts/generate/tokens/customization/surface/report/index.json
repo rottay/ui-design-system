@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "34e971216d4ecc70a5434cb54cf39350c7623b52261d09040905e0761665beec",
+    "inputsDigest": "3788fac7400a4faa642e19c05e11532a5072399045163444e611f799aac82592",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 496,
@@ -14,16 +14,16 @@
     }
   },
   "counts": {
-    "universe": 8748,
-    "writers": 7516,
-    "foundationTokens": 4184,
+    "universe": 8750,
+    "writers": 7518,
+    "foundationTokens": 4186,
     "componentTokens": 719,
     "tenantChannels": 4501,
     "publicHooks": 107,
     "unadjudicatedReads": 1213,
     "deadWriters": 271,
     "frontierReserved": 0,
-    "modernConsumedUnique": 4789,
+    "modernConsumedUnique": 4791,
     "tsReadNames": 2876,
     "tsWriteNames": 3903,
     "tsMetadataNames": 3465,
@@ -55601,6 +55601,22 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
+    "--ds-floatbutton-badge-font-size": {
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "showroom": 0,
+        "tests": true,
+        "modern": true,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
     "--ds-floatbutton-bottom": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -90297,6 +90313,22 @@
       "reads": {
         "css": 1,
         "ts": 1,
+        "showroom": 0,
+        "tests": true,
+        "modern": true,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
+    "--ds-qrcode-refresh-button-font-size": {
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
         "showroom": 0,
         "tests": true,
         "modern": true,

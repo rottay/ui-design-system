@@ -3262,6 +3262,9 @@
   --ds-floatbutton-primary-color: var(--ds-color-text-on-primary);
   --ds-floatbutton-badge-bg: var(--ds-color-error);
   --ds-floatbutton-badge-color: var(--ds-color-text-on-primary);
+  /* Absolute px: the count pill is private geometry with no type-ramp rung
+     at 11px, and the rem ramp follows the tenant root. */
+  --ds-floatbutton-badge-font-size: 11px;
   --ds-floatbutton-description-color: var(--ds-color-text-secondary);
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -10849,6 +10852,9 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-qrcode-refresh-button-bg: var(--ds-color-primary, #1890ff);
   --ds-qrcode-refresh-button-color: #ffffff;
   --ds-qrcode-refresh-button-size: 32px;
+  /* Absolute px, like the size above: the chip is private geometry with no
+     type-ramp rung at 13px, and the rem ramp follows the tenant root. */
+  --ds-qrcode-refresh-button-font-size: 13px;
   /* Stadium pill, not a 50% ellipse: the button is wider than tall, so 50%
      produced an accidental-looking oval (K4-C Pass 2 sighted review). */
   --ds-qrcode-refresh-button-radius: var(--ds-radius-full, 9999px);
@@ -54070,7 +54076,9 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
   align-items: center;
   justify-content: center;
   padding: 1px 6px;
-  font-size: 11px;
+  /* The count size is a family token (themes/default FLOAT BUTTON block):
+     no type-ramp rung is 11px once the tenant root rescales rem. */
+  font-size: var(--ds-floatbutton-badge-font-size, 11px);
   line-height: 16px;
   /* Counts are metrics: tabular glyphs keep the pill geometry stable as the
      count changes (B9 pass 2). */
@@ -67520,7 +67528,9 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   block-size: calc(var(--ds-qrcode-refresh-button-size) * var(--ds-density-effective-scale));
   flex-shrink: 0;
   padding: 0 12px;
-  font-size: 13px;
+  /* The label size is a family token (presentation/components/qrcode, beside
+     the chip size): no type-ramp rung is 13px once the tenant root rescales rem. */
+  font-size: var(--ds-qrcode-refresh-button-font-size, 13px);
   cursor: pointer;
   /* The declared design is a SOLID primary chip with light ink
      (`--ds-qrcode-refresh-button-bg: var(--ds-color-primary)` +
