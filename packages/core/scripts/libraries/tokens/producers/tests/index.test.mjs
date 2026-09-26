@@ -10,6 +10,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
+import vm from 'node:vm';
 
 import {
   CORE_ROOT,
@@ -201,6 +202,150 @@ test('CALL SITE (b): a hole no literal closes stays unresolved, never invented',
       assert.ok(![...byKind.kernel].some((name) => name.includes('drill-icon-bg')), label);
       assert.deepEqual(unresolved.filter((site) => site.kind === 'kernel').map((site) => site.line), [line], label);
     });
+  }
+});
+
+/*
+ * A26-01 (auditoria 2026-09-26): el hueco se compara con el parametro por
+ * TEXTO, asi que cualquier otro binding del mismo nombre o cualquier escritura
+ * del parametro cierra el dominio. Cada reproductor se EJECUTA: la emision real
+ * es --ds-actual-bg, y el resolver no puede acreditar --ds-phantom-bg.
+ */
+const A26_REPRODUCERS = {
+  'A shadowing: a block const hides the parameter': [
+    'function emit(vars, namespace) {',
+    "  { const namespace = 'actual';",
+    "    vars[`--ds-${namespace}-bg`] = 'red'; }",
+    '}',
+  ],
+  'B destructuring: an array pattern writes the parameter': [
+    'function emit(vars, namespace) {',
+    "  [namespace] = ['actual'];",
+    "  vars[`--ds-${namespace}-bg`] = 'red';",
+    '}',
+  ],
+  'let shadow': ['function emit(vars, namespace) {', "  { let namespace = 'actual';", "    vars[`--ds-${namespace}-bg`] = 'red'; }", '}'],
+  'var shadow in a nested function': [
+    'function emit(vars, namespace) {',
+    "  (function () { var namespace = 'actual';",
+    "    vars[`--ds-${namespace}-bg`] = 'red'; })();",
+    '}',
+  ],
+  'a nested arrow parameter': [
+    'function emit(vars, namespace) {',
+    "  ['actual'].forEach((namespace) => {",
+    "    vars[`--ds-${namespace}-bg`] = 'red'; });",
+    '}',
+  ],
+  'a destructured binding': [
+    'function emit(vars, namespace) {',
+    "  { const { name: namespace } = { name: 'actual' };",
+    "    vars[`--ds-${namespace}-bg`] = 'red'; }",
+    '}',
+  ],
+  'a catch binding': [
+    'function emit(vars, namespace) {',
+    "  try { throw 'actual'; } catch (namespace) {",
+    "    vars[`--ds-${namespace}-bg`] = 'red'; }",
+    '}',
+  ],
+  'a for-of binding': [
+    'function emit(vars, namespace) {',
+    "  for (const namespace of ['actual']) {",
+    "    vars[`--ds-${namespace}-bg`] = 'red'; }",
+    '}',
+  ],
+  'an object pattern writes the parameter': [
+    'function emit(vars, namespace) {',
+    "  ({ name: namespace } = { name: 'actual' });",
+    "  vars[`--ds-${namespace}-bg`] = 'red';",
+    '}',
+  ],
+  'a shorthand object pattern with a default': [
+    'function emit(vars, namespace) {',
+    "  ({ namespace = 'actual' } = {});",
+    "  vars[`--ds-${namespace}-bg`] = 'red';",
+    '}',
+  ],
+  'an array pattern with a default': [
+    'function emit(vars, namespace) {',
+    "  [namespace = 'actual'] = [];",
+    "  vars[`--ds-${namespace}-bg`] = 'red';",
+    '}',
+  ],
+  'an array rest pattern': [
+    'function emit(vars, namespace) {',
+    "  [, ...namespace] = ['x', 'actual'];",
+    "  vars[`--ds-${namespace}-bg`] = 'red';",
+    '}',
+  ],
+  'a compound assignment': [
+    'function emit(vars, namespace) {',
+    "  namespace += '-actual';",
+    "  vars[`--ds-${namespace}-bg`] = 'red';",
+    '}',
+  ],
+  'a for-of head writes the parameter': [
+    'function emit(vars, namespace) {',
+    "  for (namespace of ['actual']) {}",
+    "  vars[`--ds-${namespace}-bg`] = 'red';",
+    '}',
+  ],
+  'arguments aliasing (sloppy mode)': [
+    'function emit(vars, namespace) {',
+    "  arguments[1] = 'actual';",
+    "  vars[`--ds-${namespace}-bg`] = 'red';",
+    '}',
+  ],
+};
+
+test('A26-01 NEGATIVE: shadowing, destructuring and every other write close the domain; execution proves the phantom', () => {
+  for (const [label, body] of Object.entries(A26_REPRODUCERS)) {
+    const source = [...body, 'const vars = {};', "emit(vars, 'phantom');", ''].join('\n');
+    const line = body.findIndex((text) => text.includes('vars[`')) + 1;
+    const site = { raw: '`--ds-${namespace}-bg`', line };
+
+    // Real execution: the emitted key is not the one the call site's literal names.
+    const emitted = vm.runInNewContext(`${source}vars;`);
+    assert.ok(!('--ds-phantom-bg' in emitted), `${label}: execution never emits the phantom`);
+    assert.equal(Object.keys(emitted).length, 1, label);
+
+    assert.equal(census.resolveThroughLiteralCallSites(source, site), null, label);
+    withSandbox({ [KERNEL_FILE]: source }, ({ sandbox }) => {
+      const { byKind, unresolved, throughCallSites } = census.collectCompilerEmissions({ coreRoot: sandbox });
+      assert.ok(!byKind.kernel.has('--ds-phantom-bg'), `${label}: the phantom is never credited`);
+      assert.deepEqual(throughCallSites, [], label);
+      // Either the site stays unresolved, or the underlying extractor already
+      // binds a literal domain (the for-of loop) and credits what really runs.
+      const open = unresolved.filter((entry) => entry.kind === 'kernel').map((entry) => entry.line);
+      const credited = [...byKind.kernel].filter((name) => name.endsWith('-bg'));
+      if (open.length === 0) assert.deepEqual(credited, Object.keys(emitted), label);
+      else assert.deepEqual([open, credited], [[line], []], label);
+    });
+  }
+  // The two audit reproducers emit exactly --ds-actual-bg.
+  for (const label of Object.keys(A26_REPRODUCERS).slice(0, 2)) {
+    const source = [...A26_REPRODUCERS[label], 'const vars = {};', "emit(vars, 'phantom');", 'vars;'].join('\n');
+    assert.deepEqual(Object.keys(vm.runInNewContext(source)), ['--ds-actual-bg'], label);
+  }
+});
+
+test('A26-01 CONTROL: the clean form still resolves, and a key-only mention or an unrelated binding does not close it', () => {
+  const clean = ['function emit(vars, namespace) {', "  vars[`--ds-${namespace}-bg`] = 'red';", '}'];
+  const harmless = [
+    'function emit(vars, namespace) {',
+    '  const label = { namespace: 1, other: namespace };',
+    '  const { namespace: renamed } = { namespace: 2 };',
+    "  vars[`--ds-${namespace}-bg`] = 'red';",
+    '}',
+  ];
+  for (const body of [clean, harmless]) {
+    const source = [...body, 'const vars = {};', "emit(vars, 'phantom');", ''].join('\n');
+    const line = body.findIndex((text) => text.includes('vars[`')) + 1;
+    assert.deepEqual(Object.keys(vm.runInNewContext(`${source}vars;`)), ['--ds-phantom-bg']);
+    assert.deepEqual(census.resolveThroughLiteralCallSites(source, { raw: '`--ds-${namespace}-bg`', line }), [
+      '--ds-phantom-bg',
+    ]);
   }
 });
 

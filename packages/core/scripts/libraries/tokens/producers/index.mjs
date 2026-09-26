@@ -173,6 +173,74 @@ function unreadKeyShapes(sourceText) {
   return residual;
 }
 
+/** Los nodos cuyo `name` introduce un binding de valor en su ambito. */
+const BINDING_KINDS = new Set([
+  ts.SyntaxKind.VariableDeclaration,
+  ts.SyntaxKind.Parameter,
+  ts.SyntaxKind.BindingElement,
+  ts.SyntaxKind.FunctionDeclaration,
+  ts.SyntaxKind.FunctionExpression,
+  ts.SyntaxKind.ClassDeclaration,
+  ts.SyntaxKind.ClassExpression,
+  ts.SyntaxKind.EnumDeclaration,
+  ts.SyntaxKind.ModuleDeclaration,
+  ts.SyntaxKind.ImportEqualsDeclaration,
+]);
+
+/** `node` es el nombre de un binding distinto de `except` (el parametro mismo). */
+const shadowsParameter = (node, except) =>
+  node !== except && BINDING_KINDS.has(node.parent?.kind) && node.parent.name === node;
+
+/** Los envoltorios por los que un target de asignacion sube hasta su operador. */
+const PATTERN_PARENTS = new Set([
+  ts.SyntaxKind.ParenthesizedExpression,
+  ts.SyntaxKind.ArrayLiteralExpression,
+  ts.SyntaxKind.ObjectLiteralExpression,
+  ts.SyntaxKind.SpreadElement,
+  ts.SyntaxKind.SpreadAssignment,
+  ts.SyntaxKind.ShorthandPropertyAssignment,
+  ts.SyntaxKind.AsExpression,
+  ts.SyntaxKind.SatisfiesExpression,
+  ts.SyntaxKind.TypeAssertionExpression,
+  ts.SyntaxKind.NonNullExpression,
+]);
+
+const isAssignment = (node) =>
+  ts.isBinaryExpression(node) &&
+  node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
+  node.operatorToken.kind <= ts.SyntaxKind.LastAssignment;
+
+/**
+ * `node` (una referencia) es escrito: sube por los patrones de destructuring
+ * (`[x] = …`, `({ a: x } = …)`, `[x = d] = …`, `[...x] = …`) hasta el operador
+ * que lo escribe, o es operando de `++`/`--`, o es la cabecera de un
+ * `for…in`/`for…of`. Un identificador que solo aparece DENTRO de una clave
+ * (`vars[`…${x}…`] = v`) nunca sube: su padre es un template, no un patron.
+ */
+function writesIdentifier(node) {
+  let current = node;
+  for (;;) {
+    const parent = current.parent;
+    if (parent === undefined) return false;
+    if (isAssignment(parent)) {
+      if (parent.left === current) return true;
+      // `[x = d]` dentro de un patron: el default no es el target, el left si.
+      return false;
+    }
+    if (
+      (ts.isPrefixUnaryExpression(parent) || ts.isPostfixUnaryExpression(parent)) &&
+      (parent.operator === ts.SyntaxKind.PlusPlusToken || parent.operator === ts.SyntaxKind.MinusMinusToken)
+    ) {
+      return true;
+    }
+    if ((ts.isForOfStatement(parent) || ts.isForInStatement(parent)) && parent.initializer === current) return true;
+    if (ts.isPropertyAssignment(parent)) {
+      if (parent.initializer !== current) return false;
+    } else if (!PATTERN_PARENTS.has(parent.kind)) return false;
+    current = parent;
+  }
+}
+
 /**
  * Un template de una sola interpolacion cuyo hueco es un PARAMETRO de la
  * funcion que lo emite, resuelto por los call sites de esa funcion:
@@ -186,7 +254,14 @@ function unreadKeyShapes(sourceText) {
  * puede llamar a la funcion con otro valor, asi que cualquier duda deja el
  * sitio en `unresolved` (devuelve null), nunca inventa un nombre:
  *   - la funcion es una declaracion con nombre, no exportada;
- *   - el hueco es un parametro por identificador y el cuerpo no lo reasigna;
+ *   - el hueco es un parametro por identificador y la funcion no tiene otro
+ *     binding con ese nombre (`const`/`let`/`var`, funcion, clase, `catch`,
+ *     parametro anidado): el nombre se compara por TEXTO, asi que cualquier
+ *     sombra posible cierra el dominio (`shadowsParameter`);
+ *   - el cuerpo no lo escribe por NINGUNA forma: asignacion simple o
+ *     compuesta, patron de array u objeto (con default o rest), `++`/`--`,
+ *     o cabecera de `for…in`/`for…of` (`writesIdentifier`); y no lee
+ *     `arguments` ni llama a `eval`;
  *   - hay al menos un call site, y en el archivo el nombre de la funcion solo
  *     aparece como callee directo (pasarla como valor es una fuga);
  *   - cada call site pasa en esa posicion un literal de string.
@@ -226,20 +301,22 @@ export function resolveThroughLiteralCallSites(sourceText, site) {
         } else closed = false;
       } else closed = false;
     }
-    if (
-      ts.isBinaryExpression(node) &&
-      node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
-      node.operatorToken.kind <= ts.SyntaxKind.LastAssignment &&
-      ts.isIdentifier(node.left) &&
-      node.left.text === param &&
-      node.pos >= owner.body.pos &&
-      node.end <= owner.body.end
-    ) {
-      closed = false;
-    }
     ts.forEachChild(node, walk);
   };
   walk(file);
+
+  // Dentro de la funcion (parametros y cuerpo), el nombre del hueco debe
+  // denotar SOLO al parametro y nadie debe escribirlo; ante la duda, null.
+  const own = owner.parameters[position].name;
+  const scan = (node) => {
+    if (ts.isIdentifier(node)) {
+      if (node.text === param && (shadowsParameter(node, own) || writesIdentifier(node))) closed = false;
+      if (node.text === 'arguments' || node.text === 'eval') closed = false;
+    }
+    ts.forEachChild(node, scan);
+  };
+  owner.parameters.forEach(scan);
+  scan(owner.body);
   if (!closed || calls === 0) return null;
   return [...values].sort().map((value) => `${head}${value}${tail}`);
 }
