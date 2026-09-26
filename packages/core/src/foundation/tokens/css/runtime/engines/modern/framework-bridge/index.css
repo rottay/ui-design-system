@@ -8,100 +8,6 @@
  */
 
 /* =============================================================================
-   INPUT - Mejoras adicionales
-   ============================================================================= */
-
-[data-engine='modern'] .input {
-  width: 100%;
-  height: var(--ds-input-md-height, 40px);
-  padding: 0 12px;
-  font-size: 14px;
-  background-color: var(--ds-input-bg);
-  border: 1px solid var(--ds-border-color);
-  border-radius: var(--ds-input-radius, 8px);
-  color: var(--ds-text-primary);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  outline: none;
-}
-
-[data-engine='modern'] .input::placeholder {
-  color: var(--ds-text-tertiary);
-}
-
-[data-engine='modern'] .input:hover:not(:disabled):not(:focus) {
-  border-color: var(--ds-input-border-hover);
-}
-
-[data-engine='modern'] .input:focus {
-  border-color: var(--ds-color-primary-500);
-  box-shadow: 0 0 0 3px var(--ds-color-primary-100);
-}
-
-[data-engine='modern'] .input:disabled {
-  background-color: var(--ds-input-bg-disabled);
-  color: var(--ds-text-tertiary);
-  cursor: not-allowed;
-}
-
-/* =============================================================================
-   BUTTON - Mejoras adicionales
-   ============================================================================= */
-
-[data-engine='modern'] .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: var(--ds-button-md-height, 40px);
-  min-height: var(--ds-button-md-height, 40px);
-  padding: 0 16px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: var(--ds-button-md-radius, 8px);
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-transform: none;
-  letter-spacing: normal;
-}
-
-[data-engine='modern'] .btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--ds-color-primary-100);
-}
-
-/* Primary button */
-[data-engine='modern'] .btn-primary {
-  background-color: var(--ds-color-primary-600);
-  border-color: var(--ds-color-primary-600);
-  color: var(--ds-button-primary-color);
-}
-
-[data-engine='modern'] .btn-primary:hover:not(:disabled) {
-  background-color: var(--ds-color-primary-700);
-  border-color: var(--ds-color-primary-700);
-}
-
-/* Ghost button */
-[data-engine='modern'] .btn-ghost {
-  background-color: transparent;
-  border-color: transparent;
-  color: var(--ds-text-primary);
-}
-
-[data-engine='modern'] .btn-ghost:hover:not(:disabled) {
-  background-color: var(--ds-color-neutral-100);
-}
-
-/* Disabled button */
-[data-engine='modern'] .btn:disabled,
-[data-engine='modern'] .btn[disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* =============================================================================
    SPACE - Utility for vertical/horizontal spacing
    ============================================================================= */
 
@@ -111,44 +17,6 @@
 
 [data-engine='modern'] .space-y-2 > * + * {
   margin-top: 8px;
-}
-
-/* =============================================================================
-   AVATAR - User avatars
-   ============================================================================= */
-
-[data-engine='modern'] .avatar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--ds-color-primary-100);
-  color: var(--ds-color-primary-600);
-  font-weight: 600;
-  font-size: 14px;
-  overflow: hidden;
-}
-
-[data-engine='modern'] .avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* =============================================================================
-   LOADING SPINNER
-   ============================================================================= */
-
-[data-engine='modern'] .loading {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--ds-border-color);
-  border-top-color: var(--ds-color-primary-600);
-  border-radius: 50%;
-  animation: ds-foundation-spin 0.6s linear infinite;
 }
 
 /* =============================================================================
@@ -220,113 +88,6 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-/* Responsive grid - Default columns based on data attributes */
-[data-engine='modern'] .rottay-grid[data-cols-xs="1"] {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-[data-engine='modern'] .rottay-grid[data-cols-xs="2"] {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-[data-engine='modern'] .rottay-grid[data-cols-xs="3"] {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-[data-engine='modern'] .rottay-grid[data-cols-xs="4"] {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-/* SM breakpoint (640px) */
-@media (min-width: 640px) {
-  [data-engine='modern'] .rottay-grid[data-cols-sm="1"] {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-sm="2"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-sm="3"] {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-sm="4"] {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* MD breakpoint (768px) */
-@media (min-width: 768px) {
-  [data-engine='modern'] .rottay-grid[data-cols-md="1"] {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-md="2"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-md="3"] {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-md="4"] {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* LG breakpoint (1024px) */
-@media (min-width: 1024px) {
-  [data-engine='modern'] .rottay-grid[data-cols-lg="1"] {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-lg="2"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-lg="3"] {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-lg="4"] {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-lg="5"] {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-lg="6"] {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-}
-
-/* XL breakpoint (1280px) */
-@media (min-width: 1280px) {
-  [data-engine='modern'] .rottay-grid[data-cols-xl="1"] {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-xl="2"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-xl="3"] {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-xl="4"] {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-xl="5"] {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-xl="6"] {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-}
-
-/* =============================================================================
-   INPUT FIX - Inner input inside label wrapper
-   ============================================================================= */
-
-/* When Input has prefix/suffix, outer label has .input class, inner input should be plain */
-[data-engine='modern'] label.input input,
-[data-engine='modern'] .input input {
-  border: none !important;
-  background: transparent !important;
-  outline: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  height: auto !important;
-  flex: 1;
-  min-width: 0;
-}
-
 /* =============================================================================
    FORM LAYOUT - Alignment fixes
    ============================================================================= */
@@ -389,22 +150,6 @@
 }
 
 /* =============================================================================
-   BUTTON GAP FIX - Space between buttons
-   ============================================================================= */
-
-/* Ensure buttons have gap when in flex/inline containers */
-[data-engine='modern'] .btn + .btn {
-  margin-inline-start: 8px;
-}
-
-/* Generic flex gap for button parents */
-[data-engine='modern'] div:has(> .btn + .btn),
-[data-engine='modern'] span:has(> .btn + .btn) {
-  display: inline-flex;
-  gap: 8px;
-}
-
-/* =============================================================================
    COLOR INPUT / COLOR PICKER - Styling
    ============================================================================= */
 
@@ -446,17 +191,5 @@
 @media (pointer: coarse) {
   [data-engine='modern'] .ds-input-shell--modern {
     min-height: var(--ds-touch-target-min);
-  }
-}
-
-/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
-   relaid out, or left waiting on an event that never arrives. */
-@media (prefers-reduced-motion: reduce) {
-  [data-engine='modern'] .btn,
-  [data-engine='modern'] .input,
-  [data-engine='modern'] .loading {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
   }
 }

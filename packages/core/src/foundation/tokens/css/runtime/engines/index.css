@@ -23,7 +23,6 @@
 
 /* Engine-specific themes */
 @import './classic/theme/index.css';
-@import './modern/framework-token-projection/index.css';
 @import './modern/theme/index.css';
 @import './modern/framework-bridge/index.css';
 @import './modern/interpolate-size/index.css';

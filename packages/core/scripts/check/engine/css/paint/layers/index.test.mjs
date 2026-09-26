@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import {
+  existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -29,9 +30,7 @@ import {
   RETIRED_ENTRYPOINT_DIRS,
   auditModernThemeOwnership,
   collectInitialHeads,
-  isCanonicalProjectionValue,
 } from "./index.mjs";
-import { collectChannelProducers } from '../../../../../libraries/tokens/producers/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
@@ -63,7 +62,7 @@ test("real entrypoints satisfy the deterministic cascade contract", () => {
   assert.equal(result.status, 0, result.stderr || result.stdout);
 });
 
-test("Modern projects framework tokens from canonical DS authority before paint", () => {
+test("Modern paints from the canonical DS authority with no framework projection", () => {
   const projectionPath = join(
     cssRoot,
     "runtime/engines/modern/framework-token-projection/index.css"
@@ -73,24 +72,11 @@ test("Modern projects framework tokens from canonical DS authority before paint"
     cssRoot,
     "runtime/engines/modern/framework-bridge/index.css"
   );
-  const projection = postcss.parse(readFileSync(projectionPath, "utf8"));
+  assert.equal(existsSync(projectionPath), false, "the framework projection is retired");
   const paint = postcss.parse(readFileSync(paintPath, "utf8"));
   const bridgeCss = readFileSync(bridgePath, "utf8");
   const bridge = postcss.parse(bridgeCss);
 
-  projection.walkRules((rule) =>
-    assert.equal(rule.selector, "[data-engine='modern']")
-  );
-  // One canonical token per projection, read by the GATE's own classifier: a
-  // direct `var(--ds-x)`, or the single anti-shadow chain the law admits.
-  const law = { initialHeads: collectInitialHeads(), producers: collectChannelProducers().producers };
-  projection.walkDecls((declaration) => {
-    assert.doesNotMatch(declaration.prop, /^--ds-/);
-    assert.ok(
-      isCanonicalProjectionValue(declaration.value, law),
-      `${declaration.prop}: ${declaration.value} is not one canonical --ds-* reference`,
-    );
-  });
   paint.walkDecls((declaration) =>
     assert.doesNotMatch(declaration.prop, /^--/)
   );
@@ -129,7 +115,7 @@ test("ANTI-SHADOW (a): --ds-radius-button, declared initial in base, passes with
   assert.ok(heads.has("--ds-radius-button"), "36d135d44's anti-shadow head must be read as one");
   assert.ok(!heads.has("--ds-radius-md"), "a head with a real value is not anti-shadow");
   assert.deepEqual(projectionFailures("var(--ds-radius-button, var(--ds-radius-md))"), []);
-  assert.deepEqual(auditModernThemeOwnership(), [], "the shipped projection holds the law");
+  assert.deepEqual(auditModernThemeOwnership(), [], "the shipped tree holds the ownership law");
 });
 
 test("ANTI-SHADOW (b): a head with a real VALUE plus a fallback is refused", () => {
@@ -147,11 +133,31 @@ test("ANTI-SHADOW (d): an initial head whose fallback nobody produces is refused
 
 test("ANTI-SHADOW (e): MUTANT without the clause -- the shipped chain is red again", () => {
   assert.equal(projectionFailures("var(--ds-radius-button, var(--ds-radius-md))", { initialHeads: new Set() }).length, 1);
-  assert.equal(
-    auditModernThemeOwnership({ initialHeads: new Set() }).filter((f) => f.includes("--radius-field")).length,
-    1,
-    "the live projection needs the clause, so removing it must redden it",
+});
+
+test("RETIRED PROJECTION: a resurrected file or import is refused", () => {
+  const { path, cleanup } = projectionFixture("var(--ds-radius-md)");
+  const dir = mkdtempSync(join(tmpdir(), "modern-projection-index-"));
+  const indexPath = join(dir, "index.css");
+  writeFileSync(
+    indexPath,
+    "@import './modern/framework-token-projection/index.css';\n" +
+      "@import './modern/theme/index.css';\n" +
+      "@import './modern/framework-bridge/index.css';\n"
   );
+  try {
+    assert.equal(
+      auditModernThemeOwnership({ retiredProjectionPath: path }).filter((f) => f.includes("retired modern framework projection is back")).length,
+      1,
+    );
+    assert.equal(
+      auditModernThemeOwnership({ indexPath }).filter((f) => f.includes("imports the retired")).length,
+      1,
+    );
+  } finally {
+    cleanup();
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test("canonical order must precede imports", () => {

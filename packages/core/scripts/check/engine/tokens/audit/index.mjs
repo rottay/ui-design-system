@@ -838,6 +838,7 @@ function countRecipeConsumers() {
    ============================================================================ */
 
 const themeCssPath = join(tokensCssDir, 'runtime/engines/modern/theme/index.css');
+const frameworkBridgeCssPath = join(tokensCssDir, 'runtime/engines/modern/framework-bridge/index.css');
 /** WO-GAT-02: the classic/rustic counterparts of `themeCssPath`, scanned by the same shared
  * `auditEngineTheme()` helper (see below) -- never a second scan implementation. */
 const classicThemeCssPath = join(tokensCssDir, 'runtime/engines/classic/theme/index.css');
@@ -1247,9 +1248,14 @@ function auditEngineTheme(themeFile, consumerFiles, opts = {}) {
 }
 
 /** Modern-engine caller of `auditEngineTheme()` (WO-ENG-08's original scan target). Kept as a
- * named function so the existing call site/output shape below is unchanged. */
+ * named function so the existing call site/output shape below is unchanged. `lineCount` also
+ * weighs the framework bridge, whose utilities only app renders consume (a size ratchet). */
 function auditThemeCss(files) {
-  return auditEngineTheme(themeCssPath, files);
+  const theme = auditEngineTheme(themeCssPath, files);
+  const bridgeLines = existsSync(frameworkBridgeCssPath)
+    ? (readFileSync(frameworkBridgeCssPath, 'utf8').match(/\n/g) || []).length
+    : 0;
+  return { ...theme, lineCount: theme.lineCount + bridgeLines };
 }
 
 /* ============================================================================

@@ -223,8 +223,7 @@
    ======================================================================== */
 
 .ant-badge .ant-badge-count,
-.badge,
-[data-engine] .ds-badge {
+.badge {
   border-radius: var(--ds-badge-radius);
 }
 
@@ -244,8 +243,7 @@ h6,
 .ant-typography h3,
 .ant-typography h4,
 .ant-typography h5,
-.ant-typography h6,
-[data-engine] .ds-heading {
+.ant-typography h6 {
   font-weight: var(--ds-typography-heading-font-weight);
 }
 
@@ -265,15 +263,13 @@ h6,
     .ant-typography h3,
     .ant-typography h4,
     .ant-typography h5,
-    .ant-typography h6,
-    [data-engine] .ds-heading
+    .ant-typography h6
   ):not(.rottay-typography--modern) {
   letter-spacing: var(--ds-typography-heading-letter-spacing);
 }
 
 .ant-form-item-label > label,
-.label,
-[data-engine] .ds-label {
+.label {
   text-transform: var(--ds-typography-label-transform);
 }
 
@@ -282,8 +278,7 @@ h6,
    Applies personality-driven hover transform and transition to buttons.
    ======================================================================== */
 
-.ant-btn,
-.btn {
+.ant-btn {
   transition: transform var(--ds-personality-animation-entrance-duration, 300ms),
     box-shadow var(--ds-personality-animation-entrance-duration, 300ms),
     background-color var(--ds-personality-animation-entrance-duration, 300ms),
@@ -291,13 +286,11 @@ h6,
     color var(--ds-personality-animation-entrance-duration, 300ms);
 }
 
-.ant-btn:hover,
-.btn:hover {
+.ant-btn:hover {
   transform: var(--ds-button-hover-transform, translateY(0) scale(1));
 }
 
-.ant-btn:active,
-.btn:active {
+.ant-btn:active {
   transform: var(--ds-button-active-transform, scale(0.98));
 }
 
@@ -313,8 +306,7 @@ h6,
 
 .ant-skeleton .ant-skeleton-content .ant-skeleton-title,
 .ant-skeleton .ant-skeleton-content .ant-skeleton-paragraph > li,
-.skeleton,
-[data-engine] .ds-skeleton {
+.skeleton {
   animation-duration: var(--ds-skeleton-animation-duration);
 }
 
@@ -335,8 +327,7 @@ h6,
    Adds a subtle glow effect on primary button hover.
    ======================================================================== */
 
-.ant-btn-primary:hover:not(:disabled),
-.btn-primary:hover:not(:disabled) {
+.ant-btn-primary:hover:not(:disabled) {
   box-shadow: var(--ds-card-shadow-hover),
     0 0 20px rgba(var(--ds-color-primary-rgb, 99, 102, 241), 0.15);
 }
@@ -346,8 +337,7 @@ h6,
    Accessible, visually polished focus indicators for buttons and inputs.
    ======================================================================== */
 
-.ant-btn:focus-visible,
-.btn:focus-visible {
+.ant-btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff),
     0 0 0 4px var(--ds-color-primary-400, #818cf8);
@@ -355,8 +345,7 @@ h6,
 
 .ant-input:focus-visible,
 .ant-select-focused .ant-select-selector,
-input:focus-visible,
-[data-engine] .ds-input:focus-visible {
+input:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff),
     0 0 0 4px var(--ds-color-primary-400, #818cf8);
@@ -367,16 +356,12 @@ input:focus-visible,
    Frosted-glass backdrop and elevated shadow for modals.
    ======================================================================== */
 
-.ant-modal-mask,
-.modal-backdrop,
-[data-engine] .ds-modal-overlay {
+.ant-modal-mask {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
 
-.ant-modal-content,
-.modal-box,
-[data-engine] .ds-modal-content {
+.ant-modal-content {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
@@ -409,8 +394,7 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-badge .ant-badge-count:hover,
-.badge:hover,
-[data-engine] .ds-badge:hover {
+.badge:hover {
   transform: scale(1.1);
   transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -447,9 +431,7 @@ input:focus-visible,
    Applies personality-driven transition timing to text inputs.
    ======================================================================== */
 
-.ant-input,
-.input,
-[data-engine] .ds-input {
+.ant-input {
   transition: border-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -465,8 +447,7 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-select .ant-select-selector,
-.select,
-[data-engine] .ds-select {
+.select {
   transition: border-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-select-transition-timing, ease-in-out),
@@ -543,16 +524,14 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-slider .ant-slider-rail,
-.rottay-slider__rail,
-[data-engine] .ds-slider-rail {
+.rottay-slider__rail {
   transition: background-color
     var(--ds-personality-animation-entrance-duration, 200ms)
     var(--ds-input-transition-timing, ease-in-out);
 }
 
 .ant-slider .ant-slider-track,
-.rottay-slider__track,
-[data-engine] .ds-slider-track {
+.rottay-slider__track {
   transition: width var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
     height var(--ds-personality-animation-entrance-duration, 200ms)
@@ -562,8 +541,7 @@ input:focus-visible,
 }
 
 .ant-slider .ant-slider-handle,
-.rottay-slider__handle,
-[data-engine] .ds-slider-handle {
+.rottay-slider__handle {
   transition: border-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -574,8 +552,7 @@ input:focus-visible,
 }
 
 .ant-slider .ant-slider-handle:hover,
-.rottay-slider__handle:hover,
-[data-engine] .ds-slider-handle:hover {
+.rottay-slider__handle:hover {
   transform: scale(1.2);
 }
 
@@ -584,8 +561,7 @@ input:focus-visible,
    Applies personality-driven transition and animation to calendar panels.
    ======================================================================== */
 
-.ant-picker,
-[data-engine] .ds-datepicker {
+.ant-picker {
   transition: border-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -593,15 +569,13 @@ input:focus-visible,
       var(--ds-input-transition-timing, ease-in-out);
 }
 
-.ant-picker-dropdown,
-[data-engine] .ds-datepicker-panel {
+.ant-picker-dropdown {
   animation: ds-dropdown-enter
     var(--ds-personality-animation-entrance-duration, 200ms)
     cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.ant-picker-cell-inner,
-[data-engine] .ds-datepicker-cell {
+.ant-picker-cell-inner {
   transition: background-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -614,24 +588,21 @@ input:focus-visible,
    Applies personality-driven row hover transition and header styling.
    ======================================================================== */
 
-.ant-table-thead > tr > th,
-[data-engine] .ds-table-header th {
+.ant-table-thead > tr > th {
   font-weight: var(--ds-typography-heading-font-weight, 600);
   letter-spacing: var(--ds-typography-heading-letter-spacing, normal);
   text-transform: var(--ds-typography-label-transform, none);
 }
 
 .ant-table-tbody > tr,
-.table tbody tr,
-[data-engine] .ds-table-row {
+.table tbody tr {
   transition: background-color
     var(--ds-personality-animation-entrance-duration, 200ms)
     var(--ds-input-transition-timing, ease-in-out);
 }
 
 .ant-table-tbody > tr:hover > td,
-.table tbody tr:hover,
-[data-engine] .ds-table-row:hover {
+.table tbody tr:hover {
   transition: background-color
     var(--ds-personality-animation-entrance-duration, 200ms)
     var(--ds-input-transition-timing, ease-in-out);
@@ -642,16 +613,14 @@ input:focus-visible,
    Applies personality-driven indicator animation to tab navigation.
    ======================================================================== */
 
-.ant-tabs-ink-bar,
-[data-engine] .ds-tabs-indicator {
+.ant-tabs-ink-bar {
   transition: left var(--ds-personality-animation-entrance-duration, 300ms)
       cubic-bezier(0.35, 0, 0.25, 1),
     width var(--ds-personality-animation-entrance-duration, 300ms)
       cubic-bezier(0.35, 0, 0.25, 1);
 }
 
-.ant-tabs-tab,
-[data-engine] .ds-tab {
+.ant-tabs-tab {
   transition: color var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
     background-color var(--ds-personality-animation-entrance-duration, 200ms)
@@ -664,15 +633,12 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-progress-bg,
-.progress,
-[data-engine] .ds-progress-bar {
+.progress {
   transition: width var(--ds-personality-animation-entrance-duration, 300ms)
     cubic-bezier(0.08, 0.82, 0.17, 1);
 }
 
-.ant-progress-circle-path,
-.radial-progress,
-[data-engine] .ds-progress-circle {
+.ant-progress-circle-path {
   transition: stroke-dashoffset
     var(--ds-personality-animation-entrance-duration, 300ms)
     cubic-bezier(0.08, 0.82, 0.17, 1);
@@ -709,7 +675,6 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-drawer .ant-drawer-content-wrapper,
-.drawer-side,
 .rottay-drawer,
 [data-engine] .ds-drawer {
   transition: transform var(--ds-personality-animation-entrance-duration, 300ms)
@@ -717,9 +682,7 @@ input:focus-visible,
 }
 
 .ant-drawer-mask,
-.drawer-overlay,
-.rottay-drawer-overlay,
-[data-engine] .ds-drawer-overlay {
+.rottay-drawer-overlay {
   transition: opacity var(--ds-personality-animation-entrance-duration, 300ms)
     var(--ds-input-transition-timing, ease-in-out);
   backdrop-filter: blur(4px);
@@ -733,7 +696,6 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-alert,
-.rottay-alert,
 [data-engine] .ds-alert {
   transition: opacity var(--ds-personality-animation-entrance-duration, 300ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -746,8 +708,7 @@ input:focus-visible,
    Applies personality-driven border-radius to tags.
    ======================================================================== */
 
-.ant-tag,
-[data-engine] .ds-tag {
+.ant-tag {
   border-radius: var(--ds-badge-radius, var(--ds-tag-default-radius));
   transition: opacity var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -760,16 +721,14 @@ input:focus-visible,
    Applies personality-driven border-radius to avatar components.
    ======================================================================== */
 
-.ant-avatar,
-[data-engine] .ds-avatar {
+.ant-avatar {
   transition: transform var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
     box-shadow var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out);
 }
 
-.ant-avatar:hover,
-[data-engine] .ds-avatar:hover {
+.ant-avatar:hover {
   transform: var(--ds-button-hover-transform, scale(1.05));
 }
 
@@ -781,8 +740,6 @@ input:focus-visible,
 .ant-message-notice,
 .ant-notification-notice,
 .rottay-toast-container > *,
-[data-engine] .ds-toast,
-[data-engine] .ds-message,
 [data-engine] .ds-notification {
   animation: ds-toast-enter
     var(--ds-personality-animation-entrance-duration, 300ms)
@@ -806,7 +763,6 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-collapse-content,
-.collapse-content,
 [data-engine] .ds-collapse-content {
   transition: max-height
       var(--ds-personality-animation-entrance-duration, 300ms)
@@ -816,7 +772,6 @@ input:focus-visible,
 }
 
 .ant-collapse-header,
-.collapse-title,
 [data-engine] .ds-collapse-header {
   transition: background-color
       var(--ds-personality-animation-entrance-duration, 200ms)
@@ -843,9 +798,7 @@ input:focus-visible,
    Applies personality-driven transitions to page buttons.
    ======================================================================== */
 
-.ant-pagination-item,
-.join .btn,
-[data-engine] .ds-pagination-item {
+.ant-pagination-item {
   transition: background-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),

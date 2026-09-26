@@ -1,11 +1,10 @@
 /**
  * Executable Modern/DaisyUI projection contract (Phase 3).
  *
- * Pins the adapter to the EXACT installed daisyui version: the projection file
- * must write the complete supported theme-variable set of that version and
- * nothing else; no source or generated vertical artifact may carry Daisy-4
- * legacy names; daisy variables remain implementation details sourced from
- * canonical `--ds-*` values through the single projection adapter.
+ * Pins the EXACT installed daisyui version; the projection adapter is retired
+ * (nothing read its variables), so no source CSS may declare the Daisy theme
+ * vocabulary and no source or generated vertical artifact may carry Daisy-4
+ * legacy names.
  */
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
@@ -84,27 +83,8 @@ test("the installed daisyui version matches the pinned projection contract", () 
   );
 });
 
-test("the projection writes the complete supported set and nothing else", () => {
-  const projection = readFileSync(PROJECTION_PATH, "utf8");
-  const written = new Set(
-    [...projection.matchAll(/^\s*(--[a-z][a-z0-9-]*)\s*:/gm)].map((m) => m[1])
-  );
-  const missing = SUPPORTED_THEME_VARIABLES.filter((name) => !written.has(name));
-  const extra = [...written].filter(
-    (name) => !SUPPORTED_THEME_VARIABLES.includes(name)
-  );
-  assert.deepEqual(missing, [], "projection is missing supported daisy variables");
-  assert.deepEqual(extra, [], "projection writes names outside the supported set");
-  for (const line of projection.split("\n")) {
-    const match = line.match(/^\s*--[a-z][a-z0-9-]*\s*:\s*(.+);/);
-    if (match) {
-      assert.match(
-        match[1],
-        /var\(--ds-/,
-        `projection value must source a canonical --ds-* token: ${line.trim()}`
-      );
-    }
-  }
+test("the projection adapter is retired", () => {
+  assert.equal(existsSync(PROJECTION_PATH), false, "framework-token-projection must not come back");
 });
 
 test("no source or generated vertical artifact carries Daisy-4 legacy names", () => {
@@ -124,7 +104,7 @@ test("no source or generated vertical artifact carries Daisy-4 legacy names", ()
   assert.deepEqual(offenders, [], "Daisy-4 legacy names present");
 });
 
-test("the projection is the only source authority that declares Daisy variables", () => {
+test("no source stylesheet declares Daisy variables", () => {
   const supplierNames = SUPPORTED_THEME_VARIABLES.map((name) =>
     name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
   ).join("|");
@@ -135,7 +115,7 @@ test("the projection is the only source authority that declares Daisy variables"
   const offenders = [];
 
   for (const file of walkFiles(SOURCE_ROOT)) {
-    if (!file.endsWith(".css") || file === PROJECTION_PATH) continue;
+    if (!file.endsWith(".css")) continue;
     const source = readFileSync(file, "utf8");
     if (declarationPattern.test(source)) {
       offenders.push(file.slice(CORE.length + 1));
@@ -145,7 +125,7 @@ test("the projection is the only source authority that declares Daisy variables"
   assert.deepEqual(
     offenders,
     [],
-    "Daisy variables must be declared only by framework-token-projection.css"
+    "Daisy variables have no reader; nothing may declare them"
   );
 });
 

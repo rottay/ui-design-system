@@ -1,28 +1,23 @@
 /**
- * @fileoverview Modern engine bridge contract test.
+ * @fileoverview Modern engine framework-projection retirement contract.
  *
- * The Modern engine speaks to DaisyUI through one file only:
- * `runtime/engines/modern/framework-token-projection/index.css`. That file projects
- * the resolved canonical `--ds-*` authority into DaisyUI's private variable
- * vocabulary; `theme.css` is a consumer of the canonical tokens and must never
- * declare a framework variable itself.
+ * The DaisyUI projection (`runtime/engines/modern/framework-token-projection`)
+ * is retired: nothing in the kit, the showroom or the apps read its framework
+ * vocabulary, and no Daisy plugin ships in the bundle. Modern paint reads the
+ * canonical `--ds-*` authority directly.
  *
- * This contract therefore asserts three things:
- *  1. the projection defines the full DaisyUI 5 `--color-*` contract, and every
- *     value resolves from a canonical `--ds-*` token (never a literal);
- *  2. `theme.css` does not compete as a second emitter of those variables;
- *  3. neither file reintroduces the removed DaisyUI 4 vocabulary — the
- *     `--p`/`--b1` colour short-hands or the `--rounded-*` / `--animation-*` /
- *     `--btn-focus-scale` / `--tab-*` structural names.
+ * This contract asserts:
+ *  1. the projection file is gone and the engine index does not import it;
+ *  2. no source stylesheet under `foundation/tokens/css` declares the DaisyUI 5
+ *     colour or structural vocabulary;
+ *  3. `theme.css`, the tenant artifacts and the compiled dist never reintroduce
+ *     the removed DaisyUI 4 vocabulary.
  *
- * The structural half of the projection is DaisyUI 5's own vocabulary
- * (`--radius-*`, `--size-*`, `--border`, `--depth`, `--noise`). The node gate
- * `scripts/generate/framework-class-paint/tests/index.test.mjs` enforces the same single-owner
- * law across the whole source tree and pins the installed DaisyUI version;
- * the two must be changed together.
+ * `scripts/generate/framework-class-paint/tests/index.test.mjs` enforces the
+ * same retirement across the whole source tree; the two change together.
  */
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 
@@ -42,14 +37,14 @@ const LEGACY_DAISY4_VARS = [
 ];
 
 /**
- * Removed DaisyUI 4 structural names. The projection's own header forbids them
- * by name; DaisyUI 5 replaced them with `--radius-*` / `--size-*` / `--border`.
+ * Removed DaisyUI 4 structural names.
+ * DaisyUI 5 replaced them with `--radius-*` / `--size-*` / `--border`.
  */
 const LEGACY_DAISY4_STRUCTURAL_PATTERN =
   /--(rounded-[a-z]+|animation-[a-z]+|btn-focus-scale|tab-[a-z-]+)\s*:/;
 
-/** DaisyUI 5 color variables that MUST be projected from canonical tokens. */
-const REQUIRED_DAISY5_VARS = [
+/** DaisyUI 5 colour vocabulary the retired projection used to declare. */
+const DAISY5_COLOR_VARS = [
   '--color-primary',
   '--color-primary-content',
   '--color-secondary',
@@ -68,8 +63,8 @@ const REQUIRED_DAISY5_VARS = [
   '--color-info',
 ];
 
-/** DaisyUI 5 structural vocabulary that replaced the removed Daisy 4 names. */
-const REQUIRED_DAISY5_STRUCTURAL_VARS = [
+/** DaisyUI 5 structural vocabulary the retired projection used to declare. */
+const DAISY5_STRUCTURAL_VARS = [
   '--radius-selector',
   '--radius-field',
   '--radius-box',
@@ -85,59 +80,35 @@ function definitionPattern(varName: string): RegExp {
   return new RegExp(`^\\s*${escaped}\\s*:`, 'm');
 }
 
-/** Captures the value a variable is defined with, so we can prove its source. */
-function definedValue(css: string, varName: string): string | undefined {
-  const escaped = varName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp(`^\\s*${escaped}\\s*:([^;]+);`, 'm').exec(css)?.[1].trim();
+function collectStylesheets(dir: string, out: string[] = []): string[] {
+  for (const entry of readdirSync(dir)) {
+    const path = join(dir, entry);
+    if (statSync(path).isDirectory()) collectStylesheets(path, out);
+    else if (entry.endsWith('.css')) out.push(path);
+  }
+  return out;
 }
 
-/**
- * A projection value resolves from canonical tokens when every name in it is a
- * `--ds-*` channel and nothing else survives: a chain like
- * `var(--ds-radius-button, var(--ds-radius-md))` passes, because the fallback
- * is another governed channel rather than a hardcoded corner. What the rule is
- * actually about is the literal -- `var(--ds-x, 8px)` leaves `8px` behind and
- * still fails, at any depth.
- */
-function resolvesFromCanonicalTokens(value: string | undefined): boolean {
-  if (value === undefined) return false;
-  if (!/^var\(\s*--ds-[a-z0-9-]+/.test(value)) return false;
-  const residue = value
-    .replace(/var\(/g, '')
-    .replace(/--ds-[a-z0-9-]+/g, '')
-    .replace(/[\s,)]/g, '');
-  return residue === '';
-}
-
-describe('modern engine bridge contract', () => {
+describe('modern engine framework-projection retirement', () => {
   const themeCSS = existsSync(MODERN_THEME) ? readFileSync(MODERN_THEME, 'utf8') : '';
-  const projectionCSS = existsSync(MODERN_PROJECTION)
-    ? readFileSync(MODERN_PROJECTION, 'utf8')
-    : '';
 
-  // Both sources default to '' when the file is absent, and a `.toBe(false)`
-  // assertion over '' passes for the wrong reason. This hook makes an absent or
-  // truncated input fail EVERY assertion below instead of quietly greening the
-  // four blocks that only look for what must not be there.
+  // theme.css defaults to '' when absent, and a `.toBe(false)` over '' passes
+  // for the wrong reason; an absent input must fail every assertion below.
   beforeAll(() => {
     expect(themeCSS, `${MODERN_THEME} is missing or empty; an absent input cannot certify anything`).not.toBe('');
-    expect(
-      projectionCSS,
-      `${MODERN_PROJECTION} is missing or empty; an absent input cannot certify anything`,
-    ).not.toBe('');
   });
 
   it('theme.css file should exist', () => {
     expect(existsSync(MODERN_THEME)).toBe(true);
   });
 
-  it('framework-token-projection.css file should exist', () => {
-    expect(existsSync(MODERN_PROJECTION)).toBe(true);
+  it('the framework projection is retired', () => {
+    expect(existsSync(MODERN_PROJECTION)).toBe(false);
   });
 
-  it('the projection is imported by the engine index', () => {
+  it('the engine index does not import the projection', () => {
     const engineIndex = readFileSync(join(TOKENS_ROOT, 'runtime', 'engines', 'index.css'), 'utf8');
-    expect(engineIndex).toContain("@import './modern/framework-token-projection/index.css';");
+    expect(engineIndex).not.toContain('framework-token-projection');
   });
 
   describe('no legacy DaisyUI 4 variable definitions', () => {
@@ -150,48 +121,22 @@ describe('modern engine bridge contract', () => {
         ).toBe(false);
       },
     );
-
-    it.each(LEGACY_DAISY4_VARS)(
-      'should not define %s in framework-token-projection.css',
-      (varName) => {
-        expect(
-          definitionPattern(varName).test(projectionCSS),
-          `Found legacy DaisyUI 4 variable definition "${varName}:" in the projection`,
-        ).toBe(false);
-      },
-    );
   });
 
-  describe('required DaisyUI 5 color variables', () => {
-    it.each(REQUIRED_DAISY5_VARS)(
-      'should define %s in framework-token-projection.css',
-      (varName) => {
-        expect(
-          definitionPattern(varName).test(projectionCSS),
-          `Missing required DaisyUI 5 variable "${varName}:" in framework-token-projection.css`,
-        ).toBe(true);
-      },
-    );
+  describe('no source stylesheet declares the DaisyUI 5 vocabulary', () => {
+    const stylesheets = collectStylesheets(TOKENS_ROOT);
 
-    it.each(REQUIRED_DAISY5_VARS)(
-      'should project %s from a canonical --ds-* token',
-      (varName) => {
-        const value = definedValue(projectionCSS, varName);
-        expect(value, `"${varName}" is not defined in the projection`).toBeDefined();
-        expect(
-          resolvesFromCanonicalTokens(value),
-          `"${varName}: ${value}" must resolve from a canonical --ds-* token, not a literal`,
-        ).toBe(true);
-      },
-    );
+    it('the stylesheet walk found the token tree', () => {
+      expect(stylesheets.length).toBeGreaterThan(0);
+    });
 
-    it.each(REQUIRED_DAISY5_VARS)(
-      'theme.css must not compete as a second emitter of %s',
+    it.each([...DAISY5_COLOR_VARS, ...DAISY5_STRUCTURAL_VARS])(
+      'nothing declares %s',
       (varName) => {
-        expect(
-          definitionPattern(varName).test(themeCSS),
-          `"${varName}" is declared in theme.css; the projection is the single owner`,
-        ).toBe(false);
+        const offenders = stylesheets.filter((file) =>
+          definitionPattern(varName).test(readFileSync(file, 'utf8')),
+        );
+        expect(offenders, `"${varName}" has no reader; nothing may declare it`).toEqual([]);
       },
     );
   });
@@ -245,32 +190,10 @@ describe('modern engine bridge contract', () => {
     );
   });
 
-  describe('structural vocabulary', () => {
-    it.each(REQUIRED_DAISY5_STRUCTURAL_VARS)(
-      'should project %s from a canonical --ds-* token',
-      (varName) => {
-        const value = definedValue(projectionCSS, varName);
-        expect(
-          value,
-          `Missing DaisyUI 5 structural variable "${varName}:" in the projection`,
-        ).toBeDefined();
-        expect(
-          resolvesFromCanonicalTokens(value),
-          `"${varName}: ${value}" must resolve from a canonical --ds-* token, not a literal`,
-        ).toBe(true);
-      },
-    );
-
-    it('should not reintroduce the removed DaisyUI 4 structural names', () => {
-      for (const [label, css] of [
-        ['framework-token-projection.css', projectionCSS],
-        ['theme.css', themeCSS],
-      ] as const) {
-        expect(
-          LEGACY_DAISY4_STRUCTURAL_PATTERN.test(css),
-          `Found a removed DaisyUI 4 structural definition (--rounded-*/--animation-*/--btn-focus-scale/--tab-*) in ${label}`,
-        ).toBe(false);
-      }
-    });
+  it('theme.css does not reintroduce the removed DaisyUI 4 structural names', () => {
+    expect(
+      LEGACY_DAISY4_STRUCTURAL_PATTERN.test(themeCSS),
+      'Found a removed DaisyUI 4 structural definition (--rounded-*/--animation-*/--btn-focus-scale/--tab-*) in theme.css',
+    ).toBe(false);
   });
 });

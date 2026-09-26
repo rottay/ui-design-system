@@ -762,7 +762,8 @@ export function auditSkinsAreImported({
 const MODERN_ENGINE_ROOT = "[data-engine='modern']";
 
 export function auditModernThemeOwnership({
-  projectionPath = modernFrameworkProjection,
+  retiredProjectionPath = modernFrameworkProjection,
+  projectionPath,
   paintPath = modernThemePaint,
   bridgePath = modernFrameworkBridge,
   indexPath = engineIndex,
@@ -770,16 +771,25 @@ export function auditModernThemeOwnership({
   producers = collectChannelProducers().producers,
 } = {}) {
   const failures = [];
-  for (const path of [projectionPath, paintPath, bridgePath, indexPath]) {
+  const required = [paintPath, bridgePath, indexPath];
+  if (projectionPath) required.push(projectionPath);
+  for (const path of required) {
     if (!existsSync(path)) failures.push(`modern ownership file missing: ${path}`);
   }
   if (failures.length > 0) return failures;
 
-  const projectionCss = readFileSync(projectionPath, "utf8");
+  if (existsSync(retiredProjectionPath)) {
+    failures.push(
+      `the retired modern framework projection is back: ${retiredProjectionPath}. Nothing reads its framework vocabulary; paint reads --ds-* directly`
+    );
+  }
   const paintCss = readFileSync(paintPath, "utf8");
   const bridgeCss = readFileSync(bridgePath, "utf8");
   const indexCss = readFileSync(indexPath, "utf8");
-  const projectionRoot = postcss.parse(projectionCss, { from: projectionPath });
+  const projectionRoot = postcss.parse(
+    projectionPath ? readFileSync(projectionPath, "utf8") : "",
+    { from: projectionPath }
+  );
   const paintRoot = postcss.parse(paintCss, { from: paintPath });
   const bridgeRoot = postcss.parse(bridgeCss, { from: bridgePath });
 
@@ -836,23 +846,15 @@ export function auditModernThemeOwnership({
     }
   }
 
-  const projectionImport = indexCss.indexOf(
-    "@import './modern/framework-token-projection/index.css';"
-  );
+  if (indexCss.includes("modern/framework-token-projection/")) {
+    failures.push("the engine index imports the retired modern framework projection");
+  }
   const paintImport = indexCss.indexOf("@import './modern/theme/index.css';");
   const bridgeImport = indexCss.indexOf(
     "@import './modern/framework-bridge/index.css';"
   );
-  if (
-    projectionImport < 0 ||
-    paintImport < 0 ||
-    bridgeImport < 0 ||
-    projectionImport > paintImport ||
-    paintImport > bridgeImport
-  ) {
-    failures.push(
-      "modern ownership order must be framework token projection, theme paint, framework bridge"
-    );
+  if (paintImport < 0 || bridgeImport < 0 || paintImport > bridgeImport) {
+    failures.push("modern ownership order must be theme paint, framework bridge");
   }
 
   return failures;
