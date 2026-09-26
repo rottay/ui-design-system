@@ -2,6 +2,13 @@
 
 import type { ReactNode } from "react";
 import type { PatternBaseProps } from "../../../../../foundation/contracts/runtime/components/patterns/core";
+import type { Adapt } from "../../../../../foundation/contracts/kernel/adaptation";
+import type { GridMinItem } from "../../../../primitives/layout/grid/contracts";
+
+/** The board's layout-sensitive axis a posture delta may move: the catalog's card preset. */
+export interface WidgetBoardAdaptation {
+  readonly catalogMinItem?: GridMinItem;
+}
 
 export type WidgetBoardSize = "sm" | "md" | "lg" | "wide";
 
@@ -110,4 +117,13 @@ export interface WidgetBoardProps extends PatternBaseProps {
    * or stale board. Per-widget errors stay inside `item.content`.
    */
   error?: ReactNode;
+  /**
+   * The card footprint preset the add-widget catalog is sized for (the Grid
+   * primitive's `minItem`, Modern only): as many cards as fit, the row always
+   * filled, one column in the catalog's compact posture.
+   * @default 'md'
+   */
+  catalogMinItem?: GridMinItem;
+  /** Posture deltas the app declares; the family has no default of its own. */
+  adapt?: Adapt<WidgetBoardAdaptation>;
 }

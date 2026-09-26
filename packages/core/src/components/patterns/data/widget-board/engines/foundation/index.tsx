@@ -299,6 +299,17 @@ function BoardCellControls({
   );
 }
 
+/** Modern-only compositions (the auto-fit catalog, the root posture); absent, every engine renders as before. */
+export interface WidgetBoardModernSlots {
+  readonly CatalogGrid?: React.ComponentType<{
+    className: string;
+    "data-part": string;
+    children: React.ReactNode;
+  }>;
+  readonly rootRef?: React.Ref<HTMLElement>;
+  readonly rootPosture?: string;
+}
+
 export function WidgetBoardEngine({
   items,
   labels,
@@ -313,7 +324,9 @@ export function WidgetBoardEngine({
   loading = false,
   className,
   style,
-}: WidgetBoardProps): React.ReactElement {
+  modernSlots,
+}: WidgetBoardProps & { modernSlots?: WidgetBoardModernSlots }): React.ReactElement {
+  const CatalogGrid = modernSlots?.CatalogGrid ?? "div";
   const catalogId = useId();
   const headingId = useId();
   const [layout, setLayout] = useState(items);
@@ -1027,8 +1040,10 @@ export function WidgetBoardEngine({
 
   return (
     <section
+      ref={modernSlots?.rootRef}
       className={rootClassName}
       data-part="root"
+      data-posture={modernSlots?.rootPosture}
       aria-labelledby={editable && labels.heading ? headingId : undefined}
       aria-busy={loading ? true : undefined}
       data-editing={editing ? "true" : "false"}
@@ -1213,7 +1228,7 @@ export function WidgetBoardEngine({
                     </Text>
                   </div>
                 ) : (
-              <div
+              <CatalogGrid
                 className="ds-widget-board__catalog-grid"
                 data-part="catalog-grid"
               >
@@ -1282,7 +1297,7 @@ export function WidgetBoardEngine({
                     </BoardCatalogItem>
                   );
                 })}
-              </div>
+              </CatalogGrid>
                 )}
               </>
             )}

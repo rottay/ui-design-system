@@ -182,8 +182,9 @@
   line-height: 1.2;
 }
 
+/* The frozen engines' catalog track; Modern's catalog is the auto-fit Grid. */
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-grid[data-part="catalog-grid"] {
+  .ds-widget-board__catalog-grid[data-part="catalog-grid"]:not([data-auto-fit]) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 272px), 1fr));
   gap: var(--ds-spacing-3, 12px);
@@ -1509,7 +1510,7 @@
   }
 
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-grid[data-part="catalog-grid"] {
+    .ds-widget-board__catalog-grid[data-part="catalog-grid"]:not([data-auto-fit]) {
     grid-template-columns: minmax(0, 1fr);
   }
 
