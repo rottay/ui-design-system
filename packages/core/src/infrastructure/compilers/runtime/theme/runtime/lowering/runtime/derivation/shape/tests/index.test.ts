@@ -150,6 +150,23 @@ describe("shape/control-height (kit row 14)", () => {
     // A read that did not sit in the same product as the density scale would be
     // a second size vocabulary rather than a shift of the ramp the vertical
     // authored, which is the whole reason this row is a factor and not a ramp.
+    // Density can sit beside the factor directly, or arrive inside a rung the
+    // foundation spacing scale already multiplies by it (802aa2120 removed the
+    // table control's second, literal factor: it read --ds-spacing-5 and then
+    // scaled by density again, 0.85^2). Those rungs are read off the base
+    // spacing sheet, not listed here.
+    const spacing = readFileSync(join(CSS_ROOT, "foundation/base/spacing/index.css"), "utf8");
+    const densityScaledRungs = [...spacing.matchAll(/(--ds-spacing-[a-z0-9-]+)\s*:([^;]*);/g)]
+      .filter((match) => match[2].includes("--ds-density-effective-scale"))
+      .map((match) => match[1]);
+    expect(densityScaledRungs).toContain("--ds-spacing-5");
+    const readsDensityScaledRung = (declaration: string): boolean =>
+      densityScaledRungs.some((rung) => new RegExp(`var\\(\\s*${rung}\\s*[,)]`).test(declaration));
+    // Both directions: the scaled rung counts, a bare length does not.
+    expect(readsDensityScaledRung("calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))")).toBe(true);
+    expect(readsDensityScaledRung("calc(20px * var(--ds-control-height-scale, 1))")).toBe(false);
+    expect(readsDensityScaledRung("calc(var(--ds-spacing-50) * var(--ds-control-height-scale, 1))")).toBe(false);
+
     const offenders: string[] = [];
     for (const file of styleFiles()) {
       const source = readFileSync(file, "utf8");
@@ -160,6 +177,7 @@ describe("shape/control-height (kit row 14)", () => {
         if (/--ds-control-height-scale\s*:/.test(declaration)) continue;
         if (!declaration.includes("--ds-control-height-scale")) continue;
         if (declaration.includes("--ds-density-effective-scale")) continue;
+        if (readsDensityScaledRung(declaration)) continue;
         offenders.push(`${relative(CSS_ROOT, file)}: ${declaration.trim()}`);
       }
     }

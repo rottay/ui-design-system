@@ -116,7 +116,11 @@ describe("chrome/avatar", () => {
   it("does not produce the caller-hatch ink channel", () => {
     const derived = avatarChromeDeriver.derive(context(), {});
     expect(derived["--ds-avatar-ink"]).toBeUndefined();
-    expect(skinFallbacks("--ds-avatar-ink")).toEqual(["inherit"]);
+    // Unset, the hatch falls to the variant's governed resting ink before
+    // inheriting (10194feca: an unset hatch used to paint inherited body text
+    // on every solid fill). The resting ink is skin-owned, not derived.
+    expect(derived["--ds-avatar-ink-resting"]).toBeUndefined();
+    expect(skinFallbacks("--ds-avatar-ink")).toEqual(["var(--ds-avatar-ink-resting, inherit)"]);
   });
 
   it("names only its own family namespace", () => {

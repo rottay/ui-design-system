@@ -877,8 +877,21 @@ describe("digest identity across the canonicalization extraction", () => {
     // digest moves with them. Every prior pin stays asserted.
     const POST_TWELVE_SLOT_SERIES_DIGEST =
       "sha256-68c9edfe07b222c4364854715ad40793a8930f1ca854e30f9f03b380cdc7a55e";
-    expect(artifact.digest).toBe(POST_TWELVE_SLOT_SERIES_DIGEST);
+    expect(artifact.digest).not.toBe(POST_TWELVE_SLOT_SERIES_DIGEST);
+    // Seventeenth declared move (7abe19e52, the axe contrast nodes close at the
+    // derivation): the dark link inks are now checked against the raised ground
+    // cards take as well as the canvas, so this seeded document's dark link
+    // lifts to clear AA on its card. Measured against 971e013ea through this
+    // test's own artifact: the dark delta moves --ds-color-link #2B8880 ->
+    // #419A92 and --ds-color-link-hover #36867F -> #4A9891, nothing else, and
+    // the base variables are byte-unchanged. Pinned by value below; every prior
+    // pin stays asserted. Persisted rows recompile.
+    const POST_LINK_RAISED_GROUND_DIGEST =
+      "sha256-6e3d89ae5303d56261b15eecced4ff39b4bee91ea248ecbebf45e28707829e58";
+    expect(artifact.digest).toBe(POST_LINK_RAISED_GROUND_DIGEST);
     const dark = artifact.modeDeltas?.find((delta) => delta.mode === "dark");
+    expect(dark?.variables["--ds-color-link"]).toBe("#419A92");
+    expect(dark?.variables["--ds-color-link-hover"]).toBe("#4A9891");
     expect(dark?.variables["--ds-color-primary"]).toBeUndefined();
     expect(
       { ...artifact.variables, ...dark?.variables }["--ds-color-primary"]

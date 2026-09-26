@@ -20,12 +20,14 @@ describe('BulkSelectToggle stable motion contract', () => {
   it('transitions only paint properties instead of all', () => {
     expect(BULK_SELECT_CSS).not.toMatch(/transition:\s*all\b/);
     expect(BULK_SELECT_CSS).not.toMatch(/\b0\.2s\b/);
+    // The transition reads the reveal intent, not the normal rung (8e6b7e57b).
     expect(BULK_SELECT_CSS).toContain(
-      'background-color var(--ds-motion-normal) var(--ds-motion-ease-move, ease)',
+      'background-color var(--ds-motion-reveal) var(--ds-motion-ease-move, ease)',
     );
     expect(BULK_SELECT_CSS).toContain(
-      'box-shadow var(--ds-motion-normal) var(--ds-motion-ease-move, ease)',
+      'box-shadow var(--ds-motion-reveal) var(--ds-motion-ease-move, ease)',
     );
+    expect(BULK_SELECT_CSS).not.toContain('var(--ds-motion-normal)');
     expect(BULK_SELECT_CSS).not.toContain('--ds-duration-normal');
     expect(BULK_SELECT_CSS).toMatch(
       /@media \(prefers-reduced-motion: reduce\)[\s\S]*transition: none;[\s\S]*animation: none;/,

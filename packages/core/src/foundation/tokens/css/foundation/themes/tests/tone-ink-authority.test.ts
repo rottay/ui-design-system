@@ -106,17 +106,19 @@ const EXPECTED_LIGHT = {
     '--ds-color-success-ink': 'color-mix(in srgb, #16794A 60%, #171717 40%)',
   },
   // Lower case as the foundation declares it: the pin used to carry #60A5FA,
-  // which was a casing difference only.
+  // which was a casing difference only. The error seed is the light root's
+  // step 600 since e20059e65 (the danger family follows the mode: 400 -> 600
+  // at the light root; the dark value stays #f87171).
   rottay: {
     '--ds-color-info-ink': '#60a5fa',
     '--ds-color-warning-ink': 'color-mix(in srgb, #d97706 55%, #171717 45%)',
-    '--ds-color-error-ink': 'color-mix(in srgb, #f87171 78%, #171717 22%)',
+    '--ds-color-error-ink': 'color-mix(in srgb, #dc2626 78%, #171717 22%)',
     '--ds-color-success-ink': 'color-mix(in srgb, #16a34a 60%, #171717 40%)',
   },
   evnto: {
     '--ds-color-info-ink': '#60a5fa',
     '--ds-color-warning-ink': 'color-mix(in srgb, #d97706 55%, #171717 45%)',
-    '--ds-color-error-ink': 'color-mix(in srgb, #f87171 78%, #171717 22%)',
+    '--ds-color-error-ink': 'color-mix(in srgb, #dc2626 78%, #171717 22%)',
     '--ds-color-success-ink': 'color-mix(in srgb, #16a34a 60%, #171717 40%)',
   },
 } as const;

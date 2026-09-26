@@ -22,6 +22,8 @@ import { describe, expect, it } from "vitest";
 
 import { contrastRatio } from "@/foundation/kernel/color/contrast";
 import { safeInkOnGround } from "@/foundation/kernel/color/oklch/ink";
+import { FOUNDATION_COLOR_DEFAULTS } from "@/foundation/tokens/ts/foundation/base/declared-defaults";
+import { isDarkSurface } from "@/infrastructure/compilers/kernel/foundation/css/color-math";
 import { themeModeSelector } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
 import { WCAG_AA_NORMAL_TEXT_RATIO } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { compileTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering";
@@ -817,19 +819,34 @@ describe("T0 DB mode projection through the common compiler", () => {
       }
       expect(projected["--ds-color-border-focus"]).toBe(seed);
       expect(noProvenance["--ds-color-border-focus"]).toBe(seed);
-      // The link is the same seed READ AS TEXT on this mode's own canvas, so it
-      // is the seed itself wherever the seed clears the floor and the seed's own
-      // hue at a carryable lightness where it does not -- #315D4D measures
+      // The link is the same seed READ AS TEXT on every ground this mode paints
+      // text on -- its canvas, then the raised ground its cards take
+      // (7abe19e52: the link answers the card too, not only the canvas) -- so
+      // it is the seed itself wherever the seed clears the floor and the seed's
+      // own hue at a carryable lightness where it does not; #315D4D measures
       // 3.3:1 on this theme's dark ground. Both arms still answer identically,
       // which is what this block is measuring.
+      // This document states no raised ground, so the cards take the one the
+      // foundation declares for the mode (aliases followed to the literal).
+      const declared = FOUNDATION_COLOR_DEFAULTS[mode];
+      let raised: string | undefined = declared["--ds-color-bg-elevated"];
+      for (let hops = 0; raised && /^var\(/.test(raised.trim()) && hops < 8; hops += 1) {
+        raised = declared[/^var\(\s*(--ds-[a-z0-9-]+)/i.exec(raised.trim())![1]!];
+      }
+      expect(raised, "the foundation declares a raised ground for this mode").toMatch(/^#[0-9a-f]{6}$/i);
       for (const arm of [projected, noProvenance]) {
-        const ground = arm["--ds-color-bg-primary"];
+        const canvas = arm["--ds-color-bg-primary"];
+        const sameSide = [canvas, raised!].filter(
+          (ground) => isDarkSurface(ground) === isDarkSurface(canvas)
+        );
         expect(arm["--ds-color-link"]).toBe(
-          safeInkOnGround(seed, ground, WCAG_AA_NORMAL_TEXT_RATIO)
+          sameSide.reduce((ink, ground) => safeInkOnGround(ink, ground, WCAG_AA_NORMAL_TEXT_RATIO), seed)
         );
-        expect(contrastRatio(arm["--ds-color-link"], ground)).toBeGreaterThanOrEqual(
-          WCAG_AA_NORMAL_TEXT_RATIO
-        );
+        for (const ground of sameSide) {
+          expect(contrastRatio(arm["--ds-color-link"], ground)).toBeGreaterThanOrEqual(
+            WCAG_AA_NORMAL_TEXT_RATIO
+          );
+        }
       }
 
       // Everything outside that set is untouched, which is the half of the

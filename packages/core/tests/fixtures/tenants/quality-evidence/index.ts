@@ -473,6 +473,12 @@ export const TECHNICAL_DARK_DOCUMENT = {
         // disabled ink measured Lc -10.9 against this fixture's own panel and the
         // governed disabled floor is 45. `#8FA3BA` measures -50.2 on that panel.
         "--ds-material-panel-foreground-disabled": "#8FA3BA",
+        // The raised twin, for the same reason: since 7a267f705 the materials
+        // deriver produces the raised disabled ink as `var(--ds-color-text-disabled)`,
+        // which measured Lc -8.8 on this fixture's `#14283D` and so refused the
+        // whole document at admission. The same `#8FA3BA` measures -48.0 there,
+        // past the governed disabled floor (45), and the pair is verifiable.
+        "--ds-material-raised-foreground-disabled": "#8FA3BA",
         "--ds-material-card-foreground-muted": "#A6BCD0",
         "--ds-material-control-foreground-muted": "#A6BCD0",
         // Authored for the same reason as the muted inks above them: the
