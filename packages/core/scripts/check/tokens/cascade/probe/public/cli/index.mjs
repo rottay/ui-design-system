@@ -562,9 +562,10 @@ const DATA_TERMINAL_DESCRIPTORS = Object.freeze({
       } catch {
         threw = true;
       }
-      const rendered = resolveActiveResponsivePosture({
-        appearance: { advanced: { responsivePosture: bypassId } },
-      });
+      // The reader takes the APPEARANCE itself since 441477d3a (WO-EMI-02): a
+      // `{ appearance }` wrapper resolves to the default for ANY id, which made
+      // this fail-closed check pass vacuously.
+      const rendered = resolveActiveResponsivePosture({ advanced: { responsivePosture: bypassId } });
       return {
         requestedId: bypassId,
         writeTime: { threw },
@@ -960,12 +961,15 @@ function measurePostureBehaviour({
   const ladder = Object.fromEntries(stops.map((id) => [id, resolveResponsivePosture(id)]));
 
   // --- S2: the compiled artifact resolves to the stop that was requested -----
-  // Fed the REAL compiled artifact, shaped as the production read shapes it
-  // (`config.appearance` = normalizedAppearance), so this is the consumer's own
-  // question and not a paraphrase of it.
+  // Fed the REAL compiled artifact, shaped as the production read shapes it,
+  // so this is the consumer's own question and not a paraphrase of it. Since
+  // 441477d3a (WO-EMI-02) the production read is `useActiveResponsivePosture`
+  // passing the mounted tenant APPEARANCE (= normalizedAppearance) directly;
+  // the earlier `{ appearance }` config wrapper now answers the default for
+  // every stop.
   const s2 = compiledStops.map(({ stopId, artifact }) => ({
     stopId,
-    resolvedId: resolveActiveResponsivePosture({ appearance: artifact?.normalizedAppearance })?.id ?? null,
+    resolvedId: resolveActiveResponsivePosture(artifact?.normalizedAppearance)?.id ?? null,
   }));
   witnesses.push({
     id: 'S2',
