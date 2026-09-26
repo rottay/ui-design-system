@@ -285,6 +285,7 @@ const EXITS = Object.freeze({
   '--ds-voice-input-focus-ring': 'sharedPaint',
   '--ds-loading-overlay-scrim-opacity': 'sharedPaint',
   '--ds-export-button-toast-duration': 'sharedPaint',
+  '--ds-kbd-font-family': 'sharedPaint',
 });
 
 const readBaseline = () => JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
@@ -336,7 +337,7 @@ test('the remaining WO-EVI-03 rows are named one by one in the ledger, each with
   }
 });
 
-test('the thirteen exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
+test('the fourteen exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
   const classes = readBaseline().readClasses;
   const shared = classifyReadClass(collectSharedPaintFiles(), 'css', PRODUCERS);
   const inline = classifyReadClass(collectComponentInlineFiles(), 'script', PRODUCERS);
