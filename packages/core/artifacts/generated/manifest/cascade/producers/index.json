@@ -15,10 +15,10 @@
     "failClosed": "every expression the scanner cannot resolve is ONE ROW in unknownProvenance. Under STRICT a missing producer ADMITS a fallback branch and can LOWER debt, so under-counting producers can buy a false green: it is not a safe approximation and is never treated as one."
   },
   "inputsDigest": {
-    "cssEdges": "82e8e6e3d0d4f409cb21c2ca02cd8277e5995e8e66cb8606735886b5619057a3",
+    "cssEdges": "ebf42e93e4a715465c97152680b6f359791d0704cb5cf306b94dd958ec40562c",
     "cascadeRoots": "cc6fcf8b9bffd91b1f2572dd817593fe5b747b1c4892ebf15e45480059c96856",
     "rootCatalog": "8f22e285b34483d8fab7e69686a01a6704985abbd05d5c97be2d63152db0ad0f",
-    "srcTsx": "557bd2628953dcdb247e1a124f6699333820e2fea21c88aadd4c02bfebffca45",
+    "srcTsx": "44baf8217443c5f5d08be5793748c6b21218208d536abbf86847039da8de6afe",
     "srcCompilers": "598957bf37971f3041367928f29db3bc57ee77f1ff1c481e8a466b4013fe7134",
     "artifacts": "3ae9515354adda9d8d23cfa21272e8ee52663f7adb548812c41a5570a8317660"
   },
@@ -66340,6 +66340,6 @@
   "provenance": {
     "producedBy": "cascade:producers --write",
     "writtenOn": "2026-09-26",
-    "contentDigest": "705f51756e464ecb0d23e5ef972964db67cf7ebf0b85dd82bb79b540af970725"
+    "contentDigest": "b6e1b58efdc3b6b5b53864e76c29c9100f63ed84c685bf9b7dd4e2a246f81b5b"
   }
 }

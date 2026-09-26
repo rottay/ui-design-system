@@ -183,10 +183,20 @@ const SCRIPT = join(HERE, 'index.mjs');
  *   producerSites 6228 -> 6230, channelEmissions 17995 -> 17997,
  *   distinctChannels 7535 -> 7537. closedNonObject stays 88,
  *   emissionsWithCausalRoot stays 211.
+ *
+ * 24d4d4932/621a5ba9f re-pin (the responsive re-projection): d1d231d1b added
+ * five --ds-shell-* channels to the contract and the sheet was re-projected,
+ * so each of the five gains its six posture-step declarations:
+ *   producerSites 6230 -> 6260 (+30 = 5 names x 6 steps), channelEmissions
+ *   17997 -> 18027 (+30), distinctChannels stays 7537 (the five names were
+ *   already produced through their contract path). The FAM-11 x EVI-03 lot
+ *   (a21f312ff) nets zero sites (the touch-target re-point and the page-shell
+ *   retirement are read-side moves). closedNonObject stays 88,
+ *   emissionsWithCausalRoot stays 211.
  */
 const LIVE_PRODUCER_STATS = Object.freeze({
-  producerSites: 6230,
-  channelEmissions: 17997,
+  producerSites: 6260,
+  channelEmissions: 18027,
   distinctChannels: 7537,
   /**
    * 196 -> 197, and it is the SAME mechanism as the ten rows above rather than

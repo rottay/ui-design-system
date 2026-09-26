@@ -60313,12 +60313,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 /* Coarse pointers: every direct action in the row meets the 44px physical
- * floor. min-block-size composes with Button's own height instead of
- * fighting its specificity. */
+ * floor, read from the canonical touch floor (`--ds-touch-target-min`, the
+ * Q11 channel declared 44px in every scope). min-block-size composes with
+ * Button's own height instead of fighting its specificity. */
 @media (pointer: coarse) {
   :is(.ds-action-dock__actions, .rottay-action-dock__actions) > :where(button, a),
   :is(.ds-action-dock__overflow-trigger, .rottay-action-dock__overflow-trigger) {
-    min-block-size: max(44px, var(--ds-size-touch-target, 44px));
+    min-block-size: max(44px, var(--ds-touch-target-min, 44px));
   }
 }
 
@@ -76033,7 +76034,9 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-page-shell.ds-engine-modern [data-part='subtitle'] {
-  max-width: var(--ds-page-header-subtitle-max-width, 72ch);
+  /* The supporting measure is this family's own rest: no producer ever wrote
+     a channel here, and the sibling hero card rests at a different measure. */
+  max-width: 72ch;
   text-wrap: pretty;
 }
 
