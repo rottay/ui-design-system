@@ -13,13 +13,12 @@ import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 import postcss, { type Rule } from "postcss";
 
-import type { CardProps } from "../../../display/card/contracts";
 import type { GridProps } from "../contracts";
 import { ModernGrid } from "../engines/modern";
 
-// One vocabulary, stated twice without a sibling dependency: each must accept the other.
+// The grid is the single author of the footprint: minItem names exactly the four rungs the card deriver produces.
 type Same<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
-const sameVocabulary: Same<NonNullable<GridProps["minItem"]>, NonNullable<CardProps["scale"]>> = true;
+const sameVocabulary: Same<NonNullable<GridProps["minItem"]>, "sm" | "md" | "lg" | "xl"> = true;
 
 const GRID_SKIN_PATH = "src/foundation/tokens/css/runtime/engines/modern/skin/grid/index.css";
 const CARD_SKIN_PATH = "src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css";
@@ -40,7 +39,7 @@ function rulesWith(path: string, marker: string): { selector: string; decls: Rec
 }
 
 describe("Grid autoFit -- the engine stamps, the skin lays out", () => {
-  it("shares the Card scale vocabulary", () => {
+  it("names the four footprint rungs", () => {
     expect(sameVocabulary).toBe(true);
   });
 

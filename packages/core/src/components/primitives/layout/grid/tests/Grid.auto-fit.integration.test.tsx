@@ -3,7 +3,8 @@
  * larger preset absorbs the free space (the row is always filled, fewer and
  * wider cards), density and the type scale move the footprint while rhythm
  * moves only the gap, and a phone-wide container -- or the compact posture of
- * the responsive contract -- takes one column.
+ * the responsive contract -- takes one column. The grid is the single author of
+ * the footprint: a scale stated on a card moves nothing.
  */
 import React from "react";
 import { prerenderToNodeStream } from "react-dom/static";
@@ -25,7 +26,7 @@ import {
   type ProbeVertical,
 } from "@tests/support/family-causality";
 import ModernCard from "../../../display/card/engines/modern";
-import type { CardScale } from "../../../display/card/contracts";
+import type { GridMinItem } from "../contracts";
 import { ModernGrid } from "../engines/modern";
 
 const TENANT: TenantConfig = {
@@ -56,9 +57,21 @@ async function serverMarkup(node: React.ReactElement): Promise<string> {
   return html;
 }
 
-const cards = (count: number, scale?: CardScale) =>
+const STEPS = ["sm", "md", "lg", "xl"] as const satisfies readonly GridMinItem[];
+const RUNG = {
+  sm: "var(--ds-card-scale-sm, calc(var(--ds-card-scale-md, 1) * 0.875))",
+  md: "var(--ds-card-scale-md, 1)",
+  lg: "var(--ds-card-scale-lg, calc(var(--ds-card-scale-md, 1) * 1.25))",
+  xl: "var(--ds-card-scale-xl, calc(var(--ds-card-scale-md, 1) * 1.5))",
+} as const;
+
+const cards = (count: number, cardScale?: GridMinItem) =>
   Array.from({ length: count }, (_, index) => (
-    <ModernCard key={index} scale={scale} title={`Card ${index + 1}`}>
+    <ModernCard
+      key={index}
+      style={cardScale ? ({ "--ds-card-scale": RUNG[cardScale] } as React.CSSProperties) : undefined}
+      title={`Card ${index + 1}`}
+    >
       Body
     </ModernCard>
   ));
@@ -72,11 +85,18 @@ const box = (probe: string, width: string, grid: React.ReactElement) => (
 
 const SCENES = (
   <>
-    {box("lg3", "1440px", <ModernGrid autoFit minItem="lg" gap="md">{cards(3, "lg")}</ModernGrid>)}
-    {box("md8", "1440px", <ModernGrid autoFit minItem="md" gap="md">{cards(8, "md")}</ModernGrid>)}
-    {box("lg8", "1440px", <ModernGrid autoFit minItem="lg" gap="md">{cards(8, "lg")}</ModernGrid>)}
+    {box("lg3", "1440px", <ModernGrid autoFit minItem="lg" gap="md">{cards(3)}</ModernGrid>)}
+    {box("md8", "1440px", <ModernGrid autoFit minItem="md" gap="md">{cards(8)}</ModernGrid>)}
+    {box("lg8", "1440px", <ModernGrid autoFit minItem="lg" gap="md">{cards(8)}</ModernGrid>)}
     {box("phone", "375px", <ModernGrid autoFit gap="md">{cards(3)}</ModernGrid>)}
-    {box("posture", "600px", <ModernGrid autoFit minItem="sm" gap="md">{cards(3, "sm")}</ModernGrid>)}
+    {box("posture", "600px", <ModernGrid autoFit minItem="sm" gap="md">{cards(3)}</ModernGrid>)}
+    {box("card-none", "1440px", <ModernGrid autoFit minItem="md" gap="md">{cards(8)}</ModernGrid>)}
+    {STEPS.map((step) => (
+      <React.Fragment key={step}>
+        {box(`card-${step}`, "1440px", <ModernGrid autoFit minItem="md" gap="md">{cards(8, step)}</ModernGrid>)}
+        {box(`min-${step}`, "1440px", <ModernGrid autoFit minItem={step} gap="md">{cards(8)}</ModernGrid>)}
+      </React.Fragment>
+    ))}
     <div data-probe="footprint" style={{ inlineSize: "var(--ds-card-min-inline-size)" }} />
   </>
 );
@@ -106,7 +126,16 @@ const stamped = (probe: string, widthPx: number): Partial<ProbeTarget> => ({
   attributesOn: `[data-probe='${probe}'] ${GRID}`,
 });
 
+const tracks = (probe: string): ProbeTarget => ({
+  id: `${probe}|tracks`,
+  selector: `[data-probe='${probe}'] ${GRID}`,
+  property: "grid-template-columns",
+});
+
+const ISOLATION = ["card-none", ...STEPS.flatMap((step) => [`card-${step}`, `min-${step}`])];
+
 const TARGETS: ProbeTarget[] = [
+  ...ISOLATION.flatMap((probe) => [...rectTargets(probe, 8), tracks(probe)]),
   ...rectTargets("lg3", 3),
   ...rectTargets("md8", 8),
   ...rectTargets("lg8", 8),
@@ -173,6 +202,51 @@ describe("Grid autoFit in Chromium", () => {
         md: true,
         lg: true,
       });
+    }
+  });
+
+  it("a scale stated on the card moves nothing: the grid held fixed lays identical tracks and boxes at every rung", () => {
+    for (const vertical of VERTICALS) {
+      const at = (probe: string, id: string) => n(vertical, "base", `${probe}|${id}`);
+      const layout = (probe: string) => {
+        const tops = Array.from({ length: 8 }, (_, i) => at(probe, `${i + 1}|top`));
+        const rows = [...new Set(tops)].sort((a, b) => a - b);
+        return [
+          readings[vertical]!.base[`${probe}|tracks`],
+          ...Array.from({ length: 8 }, (_, i) => [
+            at(probe, `${i + 1}|left`) - at(probe, "grid|left"),
+            at(probe, `${i + 1}|right`) - at(probe, "grid|left"),
+            rows.indexOf(tops[i]!),
+          ]).flat(),
+        ];
+      };
+      for (const step of STEPS) {
+        expect({ vertical, step, layout: layout(`card-${step}`) }).toEqual({ vertical, step, layout: layout("card-none") });
+      }
+    }
+  });
+
+  it("minItem alone moves the tracks: with the cards held fixed each larger step lays fewer, wider tracks and fills the first row", () => {
+    for (const vertical of VERTICALS) {
+      const trackList = (step: GridMinItem) => readings[vertical]!.base[`min-${step}|tracks`]!.trim().split(/\s+/).map(parseFloat);
+      const counts = STEPS.map((step) => trackList(step).length);
+      const widths = STEPS.map((step) => trackList(step)[0]!);
+      for (let i = 1; i < STEPS.length; i += 1) {
+        expect({ vertical, step: STEPS[i], fewer: counts[i]! < counts[i - 1]!, wider: widths[i]! > widths[i - 1]! }).toEqual({
+          vertical,
+          step: STEPS[i],
+          fewer: true,
+          wider: true,
+        });
+      }
+      for (const step of STEPS) {
+        expect({ vertical, step, columns: columns(vertical, "base", `min-${step}`, 8) }).toEqual({
+          vertical,
+          step,
+          columns: Math.min(8, trackList(step).length),
+        });
+        expect({ vertical, step, filled: rowFilled(vertical, "base", `min-${step}`, 8) }).toEqual({ vertical, step, filled: true });
+      }
     }
   });
 
