@@ -126,7 +126,14 @@ export async function auditAll({ coreRoot = CORE_ROOT, slugs = null } = {}) {
   return { audited, findings };
 }
 
-async function main() {
+async function main(argv = process.argv.slice(2)) {
+  // Check-only: `--check` is the explicit spelling of the one mode, and anything
+  // else is refused rather than ignored, so a caller cannot believe it asked for
+  // something this gate never does.
+  if (argv.length > 1 || (argv.length === 1 && argv[0] !== '--check')) {
+    console.error('usage: node scripts/check/tokens/cascade/roots/base-environment-freshness/index.mjs [--check]');
+    process.exit(2);
+  }
   const { audited, findings } = await auditAll();
   // A census that audits nothing is a vacuous pass, not a pass.
   if (audited === 0) {

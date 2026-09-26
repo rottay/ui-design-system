@@ -298,7 +298,18 @@ export function runProjectionDrill() {
     [...source.matchAll(/'(data-[a-z-]+)'\s*[?]?:/g)].map((match) => match[1]),
   );
   const projected = new Set(
-    Object.keys(rootAttributes({ vertical: 'rottay', theme: 'light' })).filter((name) =>
+    // Every optional posture supplied: the drill compares VOCABULARIES, so the
+    // harness must be able to emit every attribute the SSR projection can.
+    Object.keys(
+      rootAttributes({
+        vertical: 'rottay',
+        theme: 'light',
+        density: 'comfortable',
+        motion: 'reduced',
+        viewport: 'desktop',
+        recipeProfile: 'projection-drill',
+      }),
+    ).filter((name) =>
       name.startsWith('data-'),
     ),
   );

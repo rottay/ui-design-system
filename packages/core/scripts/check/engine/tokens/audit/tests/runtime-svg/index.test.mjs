@@ -113,12 +113,12 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     }, 0),
     18
   );
-  assert.equal(
-    exemptions['SKIN-EXEMPT-NOT-PAINT'].files[
-      'patterns/visualization/charts/runtime/theming/presentation/react/color-theme/index.ts'
-    ].floor,
-    4
-  );
+  // 425012314 (WO-FAM-09) retired useChartTheme: the color-theme hook and its
+  // four-key NOT-PAINT floor left together. Pinned both ways, so neither the
+  // file nor a floor for it can come back alone.
+  const retiredColorTheme = 'patterns/visualization/charts/runtime/theming/presentation/react/color-theme/index.ts';
+  assert.equal(retiredColorTheme in exemptions['SKIN-EXEMPT-NOT-PAINT'].files, false);
+  assert.equal(existsSync(resolve(packageRoot, 'src/components', retiredColorTheme)), false);
   // Every runtime-value exemption names a file the package still carries. The
   // ledger is a set of paint FLOORS, so an entry whose file is gone is a floor
   // nothing can breach and a ceiling nothing can lower -- exactly the shape a
@@ -183,10 +183,19 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   // drain. A second unadjudicated tightening fails this sum the same way an
   // unadjudicated addition fails the corpus roster.
   const AVATAR_MODERN_INLINE_PAINT_DRAIN = 1;
+  // 950900aed pinned the Table engine parts' nine usePartInteraction spread
+  // units PER FILE while the decrease-only aggregate stayed at 201; 8c5f50a12
+  // then drained those nine to zero and lowered the aggregate by the same nine
+  // (201 -> 192), units it never carried. The aggregate therefore sits nine
+  // BELOW the derived sum -- tighter, never looser (the measured total is under
+  // it). Named like the avatar drain, so a third unadjudicated move still fails.
+  const TABLE_PARTS_AGGREGATE_OVERDRAIN = 9;
   assert.equal(
     baseline['fleet.inlinePaint.total'],
-    fleetPerFileKeys.reduce((sum, key) => sum + baseline[key], 0) + AVATAR_MODERN_INLINE_PAINT_DRAIN,
-    'the baseline aggregate no longer follows from the per-file pins plus the named avatar drain',
+    fleetPerFileKeys.reduce((sum, key) => sum + baseline[key], 0) +
+      AVATAR_MODERN_INLINE_PAINT_DRAIN -
+      TABLE_PARTS_AGGREGATE_OVERDRAIN,
+    'the baseline aggregate no longer follows from the per-file pins plus the named avatar drain and table-parts overdrain',
   );
   assert.equal(baseline['fleet.inlinePaint.surfaces/foundation/common/story-helpers/index.tsx'], 6);
   /* test-utils reached zero when its unused raw tenant-color payload was removed from the anatomy

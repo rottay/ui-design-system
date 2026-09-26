@@ -408,9 +408,17 @@ test('the real tree passes with the shipped table, taxonomy included', () => {
     packageRoot: path.join(REPO_ROOT, 'packages/core'),
   });
   assert.deepEqual(result.findings, [], 'the committed public set must be clean');
+  // Per document, not a sorted bag: c457dabde registered the two theme-graph
+  // views (cheap --check-views freshness, so FRESH here); the customization
+  // controls reference stays CI-verified.
   assert.deepEqual(
-    result.generated.map((row) => row.state).sort(),
-    ['FRESH', 'VERIFIED-BY-CI'],
+    Object.fromEntries(result.generated.map((row) => [row.document, row.state])),
+    {
+      'packages/core/docs/generated/customization-controls/index.md': 'VERIFIED-BY-CI',
+      'packages/core/docs/generated/component-taxonomy/index.md': 'FRESH',
+      'packages/core/docs/generated/theme-graph/controls.md': 'FRESH',
+      'packages/core/docs/generated/theme-graph/families.md': 'FRESH',
+    },
   );
 });
 

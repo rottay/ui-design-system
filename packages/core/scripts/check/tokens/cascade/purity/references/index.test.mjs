@@ -134,7 +134,11 @@ test('sobre el arbol real: las clases PARTICIONAN la poblacion y ninguna se fabr
     assert.equal(item.headEmitted, item.class !== 'head-not-emitted');
     if (item.class === 'pure') assert.ok(item.headChannel, 'una fila pura nombra la cabeza contra la que se comparo');
   }
-  assert.equal(doc.stats.byClass.pure + doc.stats.byClass['value-shift'] + doc.stats.byClass['head-not-emitted'], doc.stats.rows);
+  // `tally` omits a class with no rows (head-not-emitted reached 0 at 9fe0e2013):
+  // an absent key IS a zero, and every key present must be a known class.
+  for (const klass of Object.keys(doc.stats.byClass)) assert.ok(CLASSES.includes(klass), `stats.byClass invented ${klass}`);
+  const count = (klass) => doc.stats.byClass[klass] ?? 0;
+  assert.equal(count('pure') + count('value-shift') + count('head-not-emitted'), doc.stats.rows);
 });
 
 /* ── string-exacto: el caso separa, el whitespace de bordes no ───────────── */

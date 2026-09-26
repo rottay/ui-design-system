@@ -228,6 +228,29 @@ test('tenant-less scope: composed from base + engine, with no artifact', async (
   assert.equal(css.includes('--ds-radius-md:'), true);
 });
 
+test('scope: the optional postures are stamped only when given, as in the SSR projection', () => {
+  // The probe's measured scopes name no posture, so their root must be exactly
+  // what it was before the postures existed (9c37ec227).
+  const plain = rootAttributes({ vertical: 'rottay', theme: 'light' });
+  for (const name of ['data-density', 'data-ds-motion', 'data-ds-viewport', 'data-recipe-profile']) {
+    assert.equal(name in plain, false, `an unrequested posture stamped ${name}`);
+  }
+  assert.equal('data-ds-motion' in rootAttributes({ vertical: 'rottay', theme: 'light', motion: 'system' }), false);
+  const full = rootAttributes({
+    vertical: 'none',
+    theme: 'dark',
+    density: 'compact',
+    motion: 'reduced',
+    viewport: 'phone',
+    recipeProfile: 'p',
+  });
+  assert.equal(full['data-density'], 'compact');
+  assert.equal(full['data-ds-motion'], 'reduced');
+  assert.equal(full['data-ds-viewport'], 'phone');
+  assert.equal(full['data-recipe-profile'], 'p');
+  assert.equal('data-tenant' in full, false, 'a posture does not bring a tenant arm with it');
+});
+
 test('tenant-less scope: carries neither tenant arm on the root', () => {
   const attributes = rootAttributes({ vertical: 'none', theme: 'light' });
 

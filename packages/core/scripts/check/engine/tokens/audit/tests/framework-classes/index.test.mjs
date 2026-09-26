@@ -490,6 +490,28 @@ const RETIRED_MERGE_WAVE_ENGINES = [
 ];
 
 /**
+ * The Table engine's stamp-truth parts. d198d6b1f (2026-09-20, WO-EVI-02/FAM-08
+ * chain) decomposed the one modern Table engine into a kernel plus presentation
+ * parts under its own `engines/modern/parts/` folder, so the skin's interaction
+ * state is stamped by the parts that render it. They are ONE capability's
+ * files, not new surfaces: each is asserted present AND inside that folder, so
+ * this list cannot carry a file from anywhere else into the formula.
+ */
+const TABLE_ENGINE_PARTS_ROOT = 'primitives/display/table/engines/modern/parts/';
+const TABLE_ENGINE_STAMP_PARTS = [
+  'primitives/display/table/engines/modern/parts/index.ts',
+  'primitives/display/table/engines/modern/parts/kernel/index.ts',
+  'primitives/display/table/engines/modern/parts/presentation/body-cell/index.tsx',
+  'primitives/display/table/engines/modern/parts/presentation/body-row/index.tsx',
+  'primitives/display/table/engines/modern/parts/presentation/expand-button/index.tsx',
+  'primitives/display/table/engines/modern/parts/presentation/field/index.tsx',
+  'primitives/display/table/engines/modern/parts/presentation/header-cell/index.tsx',
+  'primitives/display/table/engines/modern/parts/presentation/pagination-button/index.tsx',
+  'primitives/display/table/engines/modern/parts/presentation/resize-handle/index.tsx',
+  'primitives/display/table/engines/modern/parts/presentation/selection-control/index.tsx',
+];
+
+/**
  * The deep-nesting half of this test is older than the roster half and stays.
  * The corpus glob was `engines/modern(/[^/]+)?\.tsx?$` -- exactly one level.
  * `data-table/engines/modern/cell-editor/index.tsx` was therefore outside every
@@ -533,14 +555,30 @@ test('the corpus is the anchor roster plus its four adjudicated additions, and r
     );
   }
 
+  assert.equal(new Set(TABLE_ENGINE_STAMP_PARTS).size, TABLE_ENGINE_STAMP_PARTS.length);
+  for (const part of TABLE_ENGINE_STAMP_PARTS) {
+    assert.ok(part.startsWith(TABLE_ENGINE_PARTS_ROOT), `${part} is not a Table engine part`);
+    assert.ok(files.includes(part), `${part} is a named Table engine part and must be audited`);
+  }
+  // Every audited file under the parts folder is named: a new part is a new
+  // adjudication, not a silent +1.
+  assert.deepEqual(
+    files.filter((file) => file.startsWith(TABLE_ENGINE_PARTS_ROOT)).sort(),
+    [...TABLE_ENGINE_STAMP_PARTS].sort(),
+  );
+
   // `- 1` is the retirement of RETIRED_OVERLAY_MODAL_ENGINE, which existed in
   // the corpus at a5a4c3b43 and does not exist now; `- RETIRED_MERGE_WAVE_ENGINES.length`
   // is the D-16 merge wave, each retirement named above. Anchor 133, plus the
   // four named additions, minus the overlay adapter, minus the three merge
-  // retirements, is 133.
+  // retirements, is 133; plus the ten named Table engine parts, 143.
   assert.equal(
     files.length,
-    ANCHOR_ENGINE_FILE_COUNT + POST_ANCHOR_ADDITIONS.length - 1 - RETIRED_MERGE_WAVE_ENGINES.length,
+    ANCHOR_ENGINE_FILE_COUNT +
+      POST_ANCHOR_ADDITIONS.length -
+      1 -
+      RETIRED_MERGE_WAVE_ENGINES.length +
+      TABLE_ENGINE_STAMP_PARTS.length,
     'the corpus total no longer follows from the adjudicated roster',
   );
 });

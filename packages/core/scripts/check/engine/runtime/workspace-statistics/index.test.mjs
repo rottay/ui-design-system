@@ -27,7 +27,7 @@ const squash = (value) => value.replace(/\s+/g, ' ').trim();
  * Every top-level (nesting depth 0) rule in the sheet, as
  * `{ selector, body }`. Rules nested inside an at-rule such as
  * `@media (prefers-reduced-motion: reduce)` are deliberately NOT returned:
- * the reduced-motion authority zeroes `--ds-motion-slow` on the canonical
+ * the reduced-motion authority zeroes `--ds-motion-rearrange` on the canonical
  * token owners and must not be re-asserted (or shadowed) here.
  */
 function topLevelRules(css) {
@@ -91,7 +91,8 @@ function transitionArms(body) {
   return arms;
 }
 
-const TOKENISED_TIMING = 'var(--ds-motion-slow, 320ms) var(--ds-motion-ease-in-out, ease-in-out)';
+// The slot's timing reads the rearrange intent, not the slow rung (8e6b7e57b).
+const TOKENISED_TIMING = 'var(--ds-motion-rearrange, 320ms) var(--ds-motion-ease-in-out, ease-in-out)';
 
 test('stats-slot layout contract is CSS-owned and has no expanded height ceiling', () => {
   const openingTag = component.match(
@@ -107,9 +108,9 @@ test('stats-slot layout contract is CSS-owned and has no expanded height ceiling
   const base = ruleBody(BASE_SELECTOR);
   assert.equal(
     base,
-    'transition: max-height var(--ds-motion-slow, 320ms) var(--ds-motion-ease-in-out, ease-in-out),'
-      + ' opacity var(--ds-motion-slow, 320ms) var(--ds-motion-ease-in-out, ease-in-out),'
-      + ' padding var(--ds-motion-slow, 320ms) var(--ds-motion-ease-in-out, ease-in-out);'
+    'transition: max-height var(--ds-motion-rearrange, 320ms) var(--ds-motion-ease-in-out, ease-in-out),'
+      + ' opacity var(--ds-motion-rearrange, 320ms) var(--ds-motion-ease-in-out, ease-in-out),'
+      + ' padding var(--ds-motion-rearrange, 320ms) var(--ds-motion-ease-in-out, ease-in-out);'
   );
 
   const arms = transitionArms(base);

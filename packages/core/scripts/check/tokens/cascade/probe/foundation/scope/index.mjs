@@ -103,12 +103,25 @@ export const ENGINES = CASCADE_ENGINE_ORDER;
 /**
  * The complete governed root attribute set for one scope.
  *
- * Mirrors `resolveDocumentRootAttributes({ themeMode, engine, locale, tenant })`
- * for an explicit (non-`auto`) theme mode. `data-tenant-theme-mode` is emitted
+ * Mirrors `resolveDocumentRootAttributes({ themeMode, engine, locale, tenant,
+ * density, motion, viewport, recipeProfile })` for an explicit (non-`auto`)
+ * theme mode. The four postures are OPTIONAL there and here: stamped only when
+ * given (`motion` only when `reduced`), so a scope that names none of them
+ * projects exactly what it did before they existed. `data-tenant-theme-mode` is emitted
  * because the real projection always emits it and because at least one selector
  * family negates on `[data-theme]` being absent.
  */
-export function rootAttributes({ vertical, theme, engine = 'modern', locale = 'en', arm = 'both' }) {
+export function rootAttributes({
+  vertical,
+  theme,
+  engine = 'modern',
+  locale = 'en',
+  arm = 'both',
+  density,
+  motion,
+  viewport,
+  recipeProfile,
+}) {
   const spec = VERTICALS[vertical];
   if (!spec) throw new Error(`unknown vertical: ${vertical}`);
   if (!THEMES.includes(theme)) throw new Error(`unknown theme: ${theme}`);
@@ -125,15 +138,20 @@ export function rootAttributes({ vertical, theme, engine = 'modern', locale = 'e
   // The tenant-less document carries NEITHER arm. That is the whole point of
   // the scope: no `data-tenant` means no artifact rule matches, so what the
   // base layer alone resolves to becomes observable.
-  if (spec.tenantSlug === null) return attributes;
-
-  // The legacy arm is `html[data-tenant=...]`; the provider arm is
-  // `[data-ds-root][data-vertical=...]`. `both` is what SSR actually emits.
-  if (arm === 'both' || arm === 'legacy') attributes['data-tenant'] = spec.tenantSlug;
-  if (arm === 'both' || arm === 'provider') {
-    attributes['data-ds-root'] = '';
-    attributes['data-vertical'] = spec.vertical;
+  if (spec.tenantSlug !== null) {
+    // The legacy arm is `html[data-tenant=...]`; the provider arm is
+    // `[data-ds-root][data-vertical=...]`. `both` is what SSR actually emits.
+    if (arm === 'both' || arm === 'legacy') attributes['data-tenant'] = spec.tenantSlug;
+    if (arm === 'both' || arm === 'provider') {
+      attributes['data-ds-root'] = '';
+      attributes['data-vertical'] = spec.vertical;
+    }
   }
+
+  if (density) attributes['data-density'] = density;
+  if (motion === 'reduced') attributes['data-ds-motion'] = 'reduced';
+  if (viewport) attributes['data-ds-viewport'] = viewport;
+  if (recipeProfile) attributes['data-recipe-profile'] = recipeProfile;
 
   return attributes;
 }
