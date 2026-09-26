@@ -154,11 +154,30 @@ const SCRIPT = join(HERE, 'index.mjs');
  *     --ds-tabs-responsive-padding) no longer emitted by the lowering.
  *   distinctChannels 7537 -> 7536 (-1): --ds-divider-inset, the one alias no
  *     other producer writes. emissionsWithCausalRoot stays 211.
+ *
+ * 4b066f21f re-pin, measured by set difference with this census over isolated
+ * archives of 70d096a20, de9dc302a, 51914eae2 (each reproduces 6226 / 17993 /
+ * 7536) and HEAD (6228 / 17995 / 7535). The mover is the serialized edges
+ * regeneration itself: this census derives its css plane from the css-edges
+ * artifact, and 4b066f21f rewrote edges to the tree. The roots are the seven
+ * CSS lots the regen absorbed, decomposed per site:
+ *   producerSites 6226 -> 6228 (+2): a3b241626 +4 (the on-primary re-pointed
+ *     inks -- presentation checkbox --ds-checkbox-secondary-check 1 -> 2,
+ *     presentation radio --ds-radio-secondary-dot 1 -> 2, modern badge
+ *     --ds-badge-tone-solid-color 7 -> 8, modern tooltip
+ *     --ds-tooltip-ink-current 9 -> 10) and e4d492f3c -2 (C12 retires
+ *     --ds-shell-inline-end-inset from the app-shell skin, and the app-shell
+ *     rootStyle tsx-inline-stamp count falls 15 -> 14 with the KEEP_LIVE
+ *     attribution).
+ *   channelEmissions 17993 -> 17995 (+2): the same six site moves netted.
+ *   distinctChannels 7536 -> 7535 (-1): --ds-shell-inline-end-inset, the one
+ *     retired name no other producer writes. closedNonObject stays 88,
+ *     emissionsWithCausalRoot stays 211.
  */
 const LIVE_PRODUCER_STATS = Object.freeze({
-  producerSites: 6226,
-  channelEmissions: 17993,
-  distinctChannels: 7536,
+  producerSites: 6228,
+  channelEmissions: 17995,
+  distinctChannels: 7535,
   /**
    * 196 -> 197, and it is the SAME mechanism as the ten rows above rather than
    * a new causal claim: `--ds-color-link` is written literally by two of the
@@ -1072,7 +1091,9 @@ test('Z-4 boundary 523 and relay 591+22 remain unknown and non-consumable', () =
   const by = {};
   for (const r of rows) by[r.disposition] = (by[r.disposition] || 0) + 1;
   assert.equal(by.PUBLIC_BOUNDARY_CANDIDATE, 527); // -10 motion.div forwarders, +5 Slider, +1 public writer
-  assert.equal(by.RELAY_PRIVATE_UNRESOLVED, 693); // + 10 motion.div + 16 passthrough
+  // Measured by THIS classifier: 655 at aaa2c9574, 643 after 399c3d997 (12 button/tabs/modal/sheet rows close),
+  // 677 after e248b2318 (writes inside nested function bodies), unchanged since. 693 was the producer-stats count.
+  assert.equal(by.RELAY_PRIVATE_UNRESOLVED, 677);
   assert.equal(by[ZERO], 613); // + 11 closed by RESIDUAL-42
   // RESIDUAL-42: the 2 that genuinely emit did so UNCONDITIONALLY in every arm,
   // so T-BRANCH-PRODUCER published them as producers; the composite bucket drained.
@@ -1219,8 +1240,8 @@ const universeTotal = (out) => ALL_COLLECTIONS.reduce((acc, name) => acc + out[n
 test('T-1 the four cohorts have exactly the measured sizes and the residual is 352', () => {
   const out = buildProducers();
   assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 693);
-  assert.equal(out.stats.closedProducer, 56);
+  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
+  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
   assert.equal(out.stats.closedNonObject, 88);
   // stats mirror the arrays, never a bare counter
   assert.equal(out.stats.publicBoundary, out.publicBoundary.length);
@@ -2163,8 +2184,8 @@ test('B-11 the composite and every other open cohort is untouched by this tranch
   assert.equal(universeTotal(out), 2067);
   // frozen closed cohorts and producer counters
   assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 693);
-  assert.equal(out.stats.closedProducer, 56);
+  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
+  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
@@ -2429,7 +2450,7 @@ test('R-6 the live tree inherits exactly 99: 84 private and 15 public', () => {
   assert.equal(relay.length, 53);
   assert.equal(boundary.length, 14);
   assert.equal(relay.length + boundary.length, 67);
-  assert.equal(out.stats.privateRelay, 693);
+  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
   assert.equal(out.stats.publicBoundary, 527);
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.stats.openBlocking, 0);
@@ -2731,7 +2752,7 @@ test('D-10 the drain is exactly measured and openBlocking only went down', () =>
   assert.equal(universeTotal(out), 2067);
   // the cohorts this tranche must not touch
   assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 693);
+  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.branchConditionalAuthored.length, 0);
@@ -3005,12 +3026,12 @@ test('E-7 P1b NEGATIVE: setter and method are represented too', () => {
 test('E-8 the invariants the correction must not disturb', () => {
   const out = buildProducers();
   assert.equal(out.stats.closedZeroGoverned, 613);
-  assert.equal(out.stats.closedProducer, 56);
+  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
   assert.equal(out.stats.openBlocking, 0);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(universeTotal(out), 2067);
   assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 693);
+  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
@@ -3108,7 +3129,7 @@ test('R-T7 NEGATIVE: getters are still never evaluated and mutation stays open',
 test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => {
   const out = buildProducers();
   assert.equal(out.authoredOpen.length, 0);
-  assert.equal(out.stats.closedProducer, 56);
+  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
   assert.equal(out.stats.openBlocking, 0);
   // the five other OPEN buckets are untouched
   assert.equal(out.branchCompositeOpen.length, 0);
@@ -3121,7 +3142,7 @@ test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => 
   assert.equal(out.stats.closedZeroGoverned, 613);
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 693);
+  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
   assert.equal(universeTotal(out), 2067);
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
@@ -3372,10 +3393,10 @@ test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
   // closed cohorts and frozen counters
-  assert.equal(out.stats.closedProducer, 56);
+  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 693);
+  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
   assert.equal(universeTotal(out), 2067);
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
@@ -3791,7 +3812,7 @@ test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
   const out = buildProducers();
   // the two cohorts that moved, and the rollup that must only ever go down
   assert.equal(out.authoredOpen.length, 0);
-  assert.equal(out.stats.privateRelay, 693);
+  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
   assert.equal(out.stats.openBlocking, 0);
   assert.ok(1 < 142, 'openBlocking must never grow');
   assert.equal(66 - 22, 44);
@@ -3800,7 +3821,7 @@ test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
   // every other bucket, closed and open, is frozen
   assert.equal(out.stats.closedZeroGoverned, 613);
   assert.equal(out.stats.closedNonObject, 88);
-  assert.equal(out.stats.closedProducer, 56);
+  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
   assert.equal(out.stats.publicBoundary, 527);
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.branchCompositeOpen.length, 0);
@@ -4091,7 +4112,7 @@ test('KS-7 the LIVE cohort is exactly 67 rows and lands where the re-derivation 
   assert.equal(55 - 35, 20);
   assert.equal(120 - 67, 53);
   // the two closed buckets that received them
-  assert.equal(out.stats.closedProducer, 56);
+  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
   assert.equal(out.stats.closedZeroGoverned, 613);
   assert.equal(21 + 36, 57);
   assert.equal(579 + 31, 610);
@@ -4100,7 +4121,7 @@ test('KS-7 the LIVE cohort is exactly 67 rows and lands where the re-derivation 
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 693);
+  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
   assert.equal(out.branchConditionalAuthored.length, 0);
   assert.equal(out.openUnknown.length, 0, 'an admitted open VALUE must never become OPEN_UNKNOWN debt');
   assert.equal(out.computedDomainPending.length, 0);
@@ -4396,7 +4417,7 @@ test('CL-8 the live cohort is exactly 11 rows and lands where the re-derivation 
   // privateRelay on the DT's ruling (its Classic branch reaches AntD `Title`).
   assert.equal(out.callArgsPending.length, 0);
   assert.equal(out.stats.closedZeroGoverned, 613);
-  assert.equal(out.stats.privateRelay, 693);
+  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
   // 538 at CLOSURE-11. RESIDUAL-42 moved 10 historical `motion.div` rows out
   // (a third-party forwarder is not an intrinsic sink) and added 5 Slider rows.
   assert.equal(out.stats.publicBoundary, 527);
@@ -4406,7 +4427,7 @@ test('CL-8 the live cohort is exactly 11 rows and lands where the re-derivation 
   // every other bucket frozen
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.stats.closedNonObject, 88);
-  assert.equal(out.stats.closedProducer, 56);
+  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.authoredOpen.length, 0);
   assert.equal(out.branchConditionalAuthored.length, 0);
