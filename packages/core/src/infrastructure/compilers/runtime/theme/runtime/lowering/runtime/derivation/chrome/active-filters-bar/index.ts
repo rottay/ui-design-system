@@ -22,9 +22,9 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
  *
  * The region relays the rail reads UNDER its own channels (`--ds-toolbar-*`,
  * `--ds-list-shell-section-gap`) are another family's vocabulary and are not
- * produced here; neither are the two `--ds-control-size-*` rungs the chip
- * target reads, which are a kernel scale with no owner today. Both stay
- * pinned as this cut's named residue.
+ * produced here; neither is the `--ds-control-size-md` rung the coarse chip
+ * target reads, a kernel scale with no owner today. Both stay pinned as this
+ * cut's named residue; the fine chip target declares its 2rem rest directly.
  *
  * MATERIAL INVARIANT: the rail is deliberately flat, so no elevation channel
  * appears below and none may be added -- the family's tenant-reachable

@@ -174,9 +174,14 @@ describe("ActiveFiltersBar skin reachability", () => {
     expect(chip!.decls["min-block-size"]).toContain(
       "--_ds-active-filters-bar-chip-target"
     );
-    const body = readFileSync(resolve(process.cwd(), SKIN), "utf8");
-    expect(body).toContain("--ds-control-size-sm");
-    expect(body).toContain("--ds-density-effective-scale");
+    const body = readFileSync(resolve(process.cwd(), SKIN), "utf8").replace(
+      /\/\*[\s\S]*?\*\//g,
+      ""
+    );
+    const target = [...body.matchAll(/--_ds-active-filters-bar-chip-target:\s*([^;]+);/g)].map(
+      (m) => m[1]!.replace(/\s+/g, " ").trim()
+    );
+    expect(target).toEqual(["calc( 2rem * var(--ds-density-effective-scale, 1) )"]);
   });
 
   it("reads the same region channels as the sibling toolbar", () => {

@@ -25,9 +25,9 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
  * chain. Both rest here at the value their own site resolved to before either
  * had a producer, so the four sites keep their pixels.
  *
- * NOT produced here: `--ds-control-size-{sm,md}`, the two kernel rungs the
- * dropdown item and the phone primary action read -- a shared scale with no
- * owner today, the same residue the sibling active-filters-bar cut named.
+ * NOT produced here: `--ds-control-size-md`, the kernel rung the dropdown item
+ * reads -- a shared scale with no owner today, the same residue the sibling
+ * active-filters-bar cut named. The phone primary action declares its 32px.
  * `--ds-filter-pill-radius` is not produced either: the Modern skin rests it on
  * the control rung (6px) and the frozen Classic engine rests it on
  * `--ds-radius-pill` (20px), so no single root value keeps both renders.

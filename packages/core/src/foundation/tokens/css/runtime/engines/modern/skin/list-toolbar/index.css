@@ -877,8 +877,9 @@
 @container ds-list-toolbar (max-width: 480px) {
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__primary-action-mobile[data-part='primary-action-mobile'][data-part='primary-action-mobile'] {
-    inline-size: var(--ds-control-size-sm, 32px);
-    min-inline-size: var(--ds-control-size-sm, 32px);
+    /* No absolute control rung is ever produced (the shape plane is a factor). */
+    inline-size: 32px;
+    min-inline-size: 32px;
     padding-inline: 0;
   }
 
