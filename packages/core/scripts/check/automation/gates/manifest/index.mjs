@@ -298,6 +298,8 @@ export const CI_GATES = Object.freeze([
   { id: 'structure-check', run: ['node', 'scripts/check/architecture/audits/structure/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'folder-naming-drill', ratchet: 'scripts/check/architecture/audits/structure/baseline/index.json', },
   { id: 'csspaint', run: ['pnpm', 'run', 'csspaint:check'], blocking: true, phase: 'pre-build', drillId: 'csspaint-drill', },
   { id: 'csspaint-drill', run: ['node', '--test', 'scripts/check/engine/css/paint/layers/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['csspaint'], },
+  { id: 'frozen-split', run: ['node', 'scripts/check/engine/lifecycle/frozen-split/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'frozen-split-drill', },
+  { id: 'frozen-split-drill', run: ['node', '--test', 'scripts/check/engine/lifecycle/frozen-split/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['frozen-split'], },
   { id: 'containerquery', run: ['pnpm', 'run', 'containerquery:check'], blocking: true, phase: 'pre-build', drillId: 'containerquery-drill', ratchet: 'scripts/check/engine/css/container-queries/baseline/index.json', },
   { id: 'containerquery-drill', run: ['node', '--test', 'scripts/check/engine/css/container-queries/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['containerquery'], },
   // WO-INV-03 (F-47). The 44px touch floor had a shipped `@media (pointer:
