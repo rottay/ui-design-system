@@ -18,11 +18,8 @@ import {
   useTranslation,
   type TenantConfig,
 } from "@rottay/design-system";
+import { I18nProvider } from "@rottay/design-system/runtime/i18n";
 
-import {
-  ShowroomTenantProvider,
-  type ShowroomTenantSource,
-} from "@/components/showroom-tenant";
 import type {
   BrandLocaleEvidenceFixture,
   BrandLocaleEvidenceLocale,
@@ -248,18 +245,6 @@ const THE_MANAGEMENT_DB_COPY: Record<
 };
 
 /**
- * This route's two fixtures ARE the fleet's two governed sources, so they map
- * onto them instead of rebuilding them.
- */
-const EVIDENCE_TENANT_SOURCE: Record<
-  BrandLocaleEvidenceFixture,
-  ShowroomTenantSource
-> = {
-  bithire: "bithire-static",
-  themanagementmiami: "themanagement-db",
-};
-
-/**
  * Both halves come from the shared ground; this component owns neither.
  *
  * The previous `{ ...tenantConfigFor(fixture, locale), locale }` was illegal in
@@ -271,7 +256,7 @@ const EVIDENCE_TENANT_SOURCE: Record<
  * hand-authored `appearance` literal, which is visual payload that no
  * declaration admits.
  *
- * `ShowroomTenantProvider` fixes both: bithire is the registry's own object,
+ * The probe-ground kernel fixes both: bithire is the registry's own object,
  * UNSPREAD, and The Management is a validated / hydrated / compiled artifact
  * whose `<style>` mounts OUTSIDE the provider so the mount proof can see it.
  * Engine (`modern`) and ground (`light`) are the provider's own defaults, and
@@ -284,15 +269,12 @@ export function LayoutFoundationsEvidence({
   fixture: BrandLocaleEvidenceFixture;
   locale: BrandLocaleEvidenceLocale;
 }) {
-  return (
-    <ShowroomTenantProvider
-      source={EVIDENCE_TENANT_SOURCE[fixture]}
-      locale={locale}
-      {...(fixture === "themanagementmiami"
-        ? { customTranslations: THE_MANAGEMENT_DB_COPY[locale] }
-        : {})}
-    >
-      <FoundationsCanvas fixture={fixture} />
-    </ShowroomTenantProvider>
+  const canvas = <FoundationsCanvas fixture={fixture} />;
+  return fixture === "themanagementmiami" ? (
+    <I18nProvider locale={locale} customTranslations={THE_MANAGEMENT_DB_COPY[locale]}>
+      {canvas}
+    </I18nProvider>
+  ) : (
+    canvas
   );
 }

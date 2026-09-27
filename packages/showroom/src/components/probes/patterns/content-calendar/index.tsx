@@ -5,7 +5,7 @@
  *
  * One identical component tree for the four Lane-B families (CodeBlock,
  * MarkdownView, VoiceInputButton, Calendar) rendered under the two opposing
- * governed sources `@/components/showroom-tenant` owns:
+ * governed sources the probe-ground kernel (`@/components/probes/ground`) owns:
  *  - `bithire-static`: the bundled BitHire vertical, code-owned;
  *  - `themanagement-db`: a published customer document, compiled and proven.
  *
@@ -36,7 +36,6 @@ import {
   VoiceInputButton,
 } from "@rottay/design-system";
 
-import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type LaneBSource = "bithire-static" | "themanagement-db";
 export type LaneBLocale = "en" | "es" | "ar";
@@ -304,12 +303,7 @@ function SpecimenTree({
 
 export function K4LaneBProbe({ source, locale, density, state, theme }: K4LaneBProbeProps) {
   return (
-    <ShowroomTenantProvider
-      source={source}
-      locale={locale}
-      density={density}
-      theme={theme}
-    >
+    <>
       <Box
         data-testid="k4b-canvas"
         style={{
@@ -353,6 +347,6 @@ export function K4LaneBProbe({ source, locale, density, state, theme }: K4LaneBP
           </main>
         </Box>
       </Box>
-    </ShowroomTenantProvider>
+    </>
   );
 }

@@ -1,8 +1,4 @@
-"use client";
-
-import { Suspense, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
-
+import { FleetGround, probeParam, type ProbeSearchParams } from "@/components/probes/ground";
 import {
   K1LaneCProbe,
   type LaneCDensity,
@@ -29,25 +25,24 @@ function sanitizeState(value: string | null): LaneCState {
     : "rest";
 }
 
-function ProbeContent() {
-  const searchParams = useSearchParams();
-  const cell = useMemo(
-    () => ({
-      source: sanitizeSource(searchParams.get("source")),
-      locale: sanitizeLocale(searchParams.get("locale")),
-      density: sanitizeDensity(searchParams.get("density")),
-      state: sanitizeState(searchParams.get("state")),
-    }),
-    [searchParams]
-  );
+function ProbeContent({ params }: { params: ProbeSearchParams }) {
+  const cell = {
+    source: sanitizeSource(probeParam(params, "source")),
+    locale: sanitizeLocale(probeParam(params, "locale")),
+    density: sanitizeDensity(probeParam(params, "density")),
+    state: sanitizeState(probeParam(params, "state")),
+  };
 
-  return <K1LaneCProbe {...cell} />;
+  return (
+    <FleetGround source={cell.source} locale={cell.locale} density={cell.density}>
+      <K1LaneCProbe {...cell} />
+    </FleetGround>
+  );
 }
 
-export default function K1LaneCProbePage() {
+export default async function K1LaneCProbePage({ searchParams }: { searchParams: Promise<ProbeSearchParams> }) {
+  const params = await searchParams;
   return (
-    <Suspense fallback={null}>
-      <ProbeContent />
-    </Suspense>
+    <ProbeContent params={params} />
   );
 }

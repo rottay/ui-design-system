@@ -1,8 +1,4 @@
-"use client";
-
-import { Suspense, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
-
+import { FleetGround, probeParam, type ProbeSearchParams } from "@/components/probes/ground";
 import {
   K4LaneBProbe,
   type LaneBDensity,
@@ -32,26 +28,20 @@ function sanitizeTheme(value: string | null): LaneBTheme {
   return value === "dark" ? value : "light";
 }
 
-function ProbeContent() {
-  const searchParams = useSearchParams();
-  const cell = useMemo(
-    () => ({
-      source: sanitizeSource(searchParams.get("source")),
-      locale: sanitizeLocale(searchParams.get("locale")),
-      density: sanitizeDensity(searchParams.get("density")),
-      state: sanitizeState(searchParams.get("state")),
-      theme: sanitizeTheme(searchParams.get("theme")),
-    }),
-    [searchParams]
-  );
+export default async function K4LaneBProbePage({ searchParams }: { searchParams: Promise<ProbeSearchParams> }) {
+  const params = await searchParams;
+  const get = (key: string) => probeParam(params, key);
+  const cell = {
+    source: sanitizeSource(get("source")),
+    locale: sanitizeLocale(get("locale")),
+    density: sanitizeDensity(get("density")),
+    state: sanitizeState(get("state")),
+    theme: sanitizeTheme(get("theme")),
+  };
 
-  return <K4LaneBProbe {...cell} />;
-}
-
-export default function K4LaneBProbePage() {
   return (
-    <Suspense fallback={null}>
-      <ProbeContent />
-    </Suspense>
+    <FleetGround source={cell.source} locale={cell.locale} density={cell.density} theme={cell.theme}>
+      <K4LaneBProbe {...cell} />
+    </FleetGround>
   );
 }

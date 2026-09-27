@@ -32,33 +32,19 @@
  * instead of selected. The governed dials plus `rottay/editorial-round@1` are
  * what a customer actually has, so they are what the specimen shows.
  *
- * Two placements below are load-bearing rather than stylistic, both inherited
- * from `showroom-tenant`, which is where they are argued in full:
- *
- *   - the registry config is passed UNSPREAD. Code-owned identity is WeakSet
- *     object identity, so `{ ...getKnownTenantConfig('rottay'), locale }` is an
- *     ordinary tenant carrying an uncompiled `brandTheme`, and it blocks.
- *     Locale therefore travels as a provider prop on BOTH sources.
- *   - the artifact `<style>` mounts OUTSIDE the provider. The provider proves
- *     the mount during its own render, before children commit, so an artifact
- *     mounted as a child can never be seen and the cell spins forever.
- *
- * The specimen's own axis (`vertical`) is read off whichever config it mounted
- * -- `rottay` for the registry tenant, `bithire` for the customer row, whose
- * envelope bounds its document -- instead of being restated as a literal that
- * could disagree with the artifact selector.
+ * The page resolves the cell's ground on the probe-ground kernel from `./source`; this tree
+ * renders inside it and reads nothing but the cell.
  *
  * Every cell is deterministic and URL-addressable; the Playwright matrix
  * asserts DOM parity and computed-style divergence, and sighted review performs the
  * sighted inspection. No fixture value here is product content.
  */
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   Box,
   Button,
   Card,
-  DesignSystemProvider,
   Heading,
   PatternDataTable,
   Stack,
@@ -67,17 +53,10 @@ import {
   Tag,
   Text,
 } from "@rottay/design-system";
-import { getKnownTenantConfig } from "@rottay/design-system/server";
 
-import {
-  ShowroomArtifactStyle,
-  compileShowroomTenantGround,
-  type ShowroomTenantGround,
-  type ShowroomTenantIdentity,
-} from "@/components/showroom-tenant";
+import { SPECIMEN_SLUG, type SpecimenLocale, type SpecimenSource } from "./source";
 
-export type SpecimenSource = "technical-static" | "editorial-db";
-export type SpecimenLocale = "en" | "es" | "ar";
+export type { SpecimenLocale, SpecimenSource } from "./source";
 export type SpecimenState = "rest" | "focus" | "disabled" | "loading" | "selected";
 export type SpecimenStress = "default" | "long" | "dense" | "empty";
 
@@ -86,99 +65,6 @@ export interface RecipeProfileSpecimenProps {
   locale: SpecimenLocale;
   state: SpecimenState;
   stress: SpecimenStress;
-}
-
-/**
- * The trusted identity columns of the published editorial row.
- *
- * `verticalKey` is `bithire` because the envelope that bounds the document
- * below is bithire's; the profile it selects is a `rottay/` registry id, which
- * is a namespace on the governed profile registry and not a vertical claim.
- */
-const EDITORIAL_IDENTITY: ShowroomTenantIdentity = {
-  tenantId: "3f6c1d95-71ab-4e02-8c47-2d5b90ea6c18",
-  slug: "q001l-editorial",
-  verticalKey: "bithire",
-  rowVersion: 1,
-};
-
-/**
- * The published editorial document: round, soft, warm, elevated.
- *
- * Expressed as the bounded `TenantThemeDocument` a customer actually writes --
- * not a `FlatTheme` (that channel is reserved for checked-in vertical
- * identity) and not a raw `appearance` literal (that is visual payload no
- * declaration admits). Every dial sits inside the measured bithire envelope:
- * radiusScale 1.2 is its ceiling, effectIntensity 0.55 and motion intensity
- * 0.75 are inside 0-0.65 and 0-0.8, and typeScale 1.04 is inside 0.92-1.08.
- * The visual difference is carried by these governed dials plus the profile
- * selection -- nothing here restates a `--ds-*` value directly.
- */
-const EDITORIAL_DOCUMENT = {
-  schemaVersion: 1,
-  mode: "advanced",
-  visualFoundation: {
-    recipeProfile: "rottay/editorial-round@1",
-    general: {
-      palette: {
-        primary: "#B45309",
-        secondary: "#7C3F18",
-        accent: "#C26D2D",
-        background: "#FFFAF3",
-        foreground: {
-          primary: "#2C1810",
-          secondary: "#674332",
-          muted: "#886858",
-          disabled: "#AD9386",
-        },
-        border: { primary: "#D9B99D", secondary: "#EAD8C7" },
-        backgroundMode: "light",
-      },
-      typography: {
-        typePairing: "editorial",
-        fontFamilyHeading: "Fraunces, Georgia, 'Times New Roman', serif",
-        fontFamilyBase: "Fraunces, Georgia, 'Times New Roman', serif",
-        scale: 1.04,
-      },
-      shape: { buttonStyle: "pill", radiusScale: 1.2 },
-      motion: { intensity: 0.75, durationScale: 1.08 },
-      density: "spacious",
-      surfaces: { elevation: "soft", effectIntensity: 0.55 },
-    },
-  },
-} as const;
-
-/**
- * One compile for the process, and identity matters as much as cost: the
- * provider re-verifies the mounted artifact on every render, so a fresh
- * artifact object per render would churn the retained-artifact ledger for a
- * document whose bytes never changed.
- */
-let EDITORIAL_GROUND: ShowroomTenantGround | null = null;
-
-function editorialGround(): ShowroomTenantGround {
-  EDITORIAL_GROUND ??= compileShowroomTenantGround({
-    document: EDITORIAL_DOCUMENT,
-    identity: EDITORIAL_IDENTITY,
-    name: "Editorial Round",
-    theme: "light",
-  });
-  return EDITORIAL_GROUND;
-}
-
-function technicalGround(): ShowroomTenantGround {
-  // The REGISTRY's own object, unspread and uncopied. Rottay's checked-in
-  // FlatTheme is what authors `rottay/technical-sharp@1` here, and its CSS is
-  // bundled, so this side needs neither an emission nor a declaration.
-  const tenantConfig = getKnownTenantConfig("rottay");
-  if (!tenantConfig) {
-    throw new Error("The bundled rottay tenant is missing from the registry");
-  }
-  return { tenantConfig, emission: null, declaration: undefined };
-}
-
-function specimenGround(source: SpecimenSource): ShowroomTenantGround {
-  return source === "editorial-db" ? editorialGround() : technicalGround();
 }
 
 const COPY: Record<SpecimenLocale, Record<string, string>> = {
@@ -355,46 +241,32 @@ export function RecipeProfileSpecimen({
   state,
   stress,
 }: RecipeProfileSpecimenProps) {
-  const ground = useMemo(() => specimenGround(source), [source]);
-
   return (
-    <>
-      <ShowroomArtifactStyle emission={ground.emission} />
-      <DesignSystemProvider
-        tenantConfig={ground.tenantConfig}
-        vertical={ground.tenantConfig.vertical}
-        locale={locale}
-        forceEngine="modern"
-        forceTheme="light"
-        {...(ground.declaration ? { visualAuthority: ground.declaration } : {})}
+    <Box
+      data-testid="specimen-canvas"
+      style={{
+        background: "var(--ds-color-background)",
+        color: "var(--ds-color-text-primary)",
+        minHeight: "100vh",
+        inlineSize: "100%",
+      }}
+    >
+      <Box
+        data-testid="specimen-frame"
+        data-specimen-source={source}
+        data-specimen-tenant={SPECIMEN_SLUG[source]}
+        data-specimen-state={state}
+        data-specimen-stress={stress}
+        dir={locale === "ar" ? "rtl" : "ltr"}
+        style={{
+          padding: 24,
+          minHeight: "100vh",
+          maxInlineSize: 1100,
+          marginInline: "auto",
+        }}
       >
-        <Box
-          data-testid="specimen-canvas"
-          style={{
-            background: "var(--ds-color-background)",
-            color: "var(--ds-color-text-primary)",
-            minHeight: "100vh",
-            inlineSize: "100%",
-          }}
-        >
-          <Box
-            data-testid="specimen-frame"
-            data-specimen-source={source}
-            data-specimen-tenant={ground.tenantConfig.slug}
-            data-specimen-state={state}
-            data-specimen-stress={stress}
-            dir={locale === "ar" ? "rtl" : "ltr"}
-            style={{
-              padding: 24,
-              minHeight: "100vh",
-              maxInlineSize: 1100,
-              marginInline: "auto",
-            }}
-          >
-            <SpecimenTree locale={locale} state={state} stress={stress} />
-          </Box>
-        </Box>
-      </DesignSystemProvider>
-    </>
+        <SpecimenTree locale={locale} state={state} stress={stress} />
+      </Box>
+    </Box>
   );
 }

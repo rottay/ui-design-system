@@ -9,7 +9,7 @@
  *  - `bithire-static`: the bundled BitHire vertical, code-owned;
  *  - `themanagement-db`: a published customer document, compiled and proven.
  *
- * Both grounds are built by `@/components/showroom-tenant`; this probe states
+ * Both grounds are built by the probe-ground kernel (`@/components/probes/ground`); this probe states
  * WHICH one it wants and nothing about how one is made.
  *
  * The density posture sweeps compact | comfortable | spacious -- carried by
@@ -43,7 +43,6 @@ import {
 } from "@rottay/design-system";
 import { Icon } from "@rottay/design-system/icons";
 
-import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type LaneBSource = "bithire-static" | "themanagement-db";
 export type LaneBLocale = "en" | "es" | "ar";
@@ -482,7 +481,7 @@ function VariantTree({
 
 export function K3LaneBProbe({ source, locale, density, state, variant }: K3LaneBProbeProps) {
   return (
-    <ShowroomTenantProvider source={source} locale={locale} density={density}>
+    <>
       <Box
         data-testid="k3b-canvas"
         style={{
@@ -512,6 +511,6 @@ export function K3LaneBProbe({ source, locale, density, state, variant }: K3Lane
           )}
         </Box>
       </Box>
-    </ShowroomTenantProvider>
+    </>
   );
 }

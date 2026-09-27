@@ -5,7 +5,7 @@
  *
  * One identical component tree for the five Lane-A families (Avatar, Badge,
  * Tag, Link, Kbd) rendered under the two opposing governed sources that
- * `@/components/showroom-tenant` owns: the checked-in BitHire vertical
+ * the probe-ground kernel (`@/components/probes/ground`) owns: the checked-in BitHire vertical
  * (file-first path) and the compiled `themanagementmiami` document (DB-owned
  * runtime path). This probe states WHICH ground it wants and nothing about how
  * one is built -- the previous hand-built tenant literals here resolved to a
@@ -30,7 +30,6 @@ import {
   Text,
 } from "@rottay/design-system";
 
-import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type LaneASource = "bithire-static" | "themanagement-db";
 export type LaneALocale = "en" | "es" | "ar";
@@ -209,7 +208,7 @@ function SpecimenTree({
 
 export function K1LaneAProbe({ source, locale, density, state }: K1LaneAProbeProps) {
   return (
-    <ShowroomTenantProvider source={source} locale={locale} density={density}>
+    <>
       <Box
         data-testid="la-canvas"
         style={{
@@ -235,6 +234,6 @@ export function K1LaneAProbe({ source, locale, density, state }: K1LaneAProbePro
           <SpecimenTree locale={locale} state={state} />
         </Box>
       </Box>
-    </ShowroomTenantProvider>
+    </>
   );
 }

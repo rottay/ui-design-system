@@ -2,7 +2,7 @@
 
 /**
  * P1 ListToolbar probe (showroom): the elevated data-toolbar pattern under the
- * two opposing governed sources `@/components/showroom-tenant` owns:
+ * two opposing governed sources the probe-ground kernel (`@/components/probes/ground`) owns:
  *  - `bithire-static`: the bundled BitHire vertical, code-owned;
  *  - `themanagement-db`: a published customer document, compiled and proven.
  *
@@ -19,8 +19,7 @@
  *  - `density` sweeps the toolbar's own density control initial value; the
  *    second toolbar is pinned to compact so every capture contrasts the axis
  *    value against compact in the same frame;
- *  - `engine` sweeps modern | classic | rustic through `forceEngine` (classic
- *    paint moved in Pass 1; rustic re-exports classic);
+ *  - the engine is Modern only; the frozen engines take no sweeps;
  *  - `state` is accepted for forward compatibility and currently always
  *    `rest` (the lane's request).
  *
@@ -41,25 +40,21 @@ import {
   Text,
   type DensityKey,
   type FilterPillConfig,
-  type ImplementedEngineName,
   type ListToolbarProps,
   type ViewMode,
 } from "@rottay/design-system";
 import { Icon } from "@rottay/design-system/icons";
 
-import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type P1ListToolbarSource = "bithire-static" | "themanagement-db";
 export type P1ListToolbarLocale = "en" | "es" | "ar";
 export type P1ListToolbarDensity = "compact" | "comfortable" | "spacious";
-export type P1ListToolbarEngine = ImplementedEngineName;
 export type P1ListToolbarState = "rest";
 
 export interface P1ListToolbarProbeProps {
   source: P1ListToolbarSource;
   locale: P1ListToolbarLocale;
   density: P1ListToolbarDensity;
-  engine?: P1ListToolbarEngine;
   state?: P1ListToolbarState;
 }
 
@@ -314,12 +309,11 @@ export function P1ListToolbarProbe({
   source,
   locale,
   density,
-  engine = "modern",
 }: P1ListToolbarProbeProps) {
   const copy = COPY[locale];
 
   return (
-    <ShowroomTenantProvider source={source} locale={locale} engine={engine}>
+    <>
       <Box
         data-testid="p1lt-canvas"
         style={{
@@ -332,7 +326,7 @@ export function P1ListToolbarProbe({
         <Box
           data-testid="p1lt-frame"
           data-p1lt-source={source}
-          data-p1lt-engine={engine}
+          data-p1lt-engine="modern"
           data-p1lt-density={density}
           dir={locale === "ar" ? "rtl" : "ltr"}
           style={{
@@ -381,7 +375,7 @@ export function P1ListToolbarProbe({
           </main>
         </Box>
       </Box>
-    </ShowroomTenantProvider>
+    </>
   );
 }
 

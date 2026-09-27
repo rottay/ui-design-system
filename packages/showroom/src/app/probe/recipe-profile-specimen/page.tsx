@@ -1,15 +1,15 @@
-"use client";
-
-import { Suspense, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
-
+import { groundFor } from "@/components/probe-ground";
+import { FleetStage, probeParam, type ProbeSearchParams } from "@/components/probes/ground";
 import {
   RecipeProfileSpecimen,
-  type SpecimenLocale,
-  type SpecimenSource,
   type SpecimenState,
   type SpecimenStress,
 } from "@/components/recipe-profile-specimen";
+import {
+  specimenGroundRequest,
+  type SpecimenLocale,
+  type SpecimenSource,
+} from "@/components/recipe-profile-specimen/source";
 
 function sanitizeSource(value: string | null): SpecimenSource {
   return value === "editorial-db" ? value : "technical-static";
@@ -34,25 +34,18 @@ function sanitizeStress(value: string | null): SpecimenStress {
     : "default";
 }
 
-function ProbeContent() {
-  const searchParams = useSearchParams();
-  const cell = useMemo(
-    () => ({
-      source: sanitizeSource(searchParams.get("source")),
-      locale: sanitizeLocale(searchParams.get("locale")),
-      state: sanitizeState(searchParams.get("state")),
-      stress: sanitizeStress(searchParams.get("stress")),
-    }),
-    [searchParams]
-  );
-
-  return <RecipeProfileSpecimen {...cell} />;
-}
-
-export default function RecipeProfileSpecimenPage() {
+export default async function RecipeProfileSpecimenPage({ searchParams }: { searchParams: Promise<ProbeSearchParams> }) {
+  const params = await searchParams;
+  const cell = {
+    source: sanitizeSource(probeParam(params, "source")),
+    locale: sanitizeLocale(probeParam(params, "locale")),
+    state: sanitizeState(probeParam(params, "state")),
+    stress: sanitizeStress(probeParam(params, "stress")),
+  };
+  const ground = await groundFor(specimenGroundRequest(cell.source, cell.locale));
   return (
-    <Suspense fallback={null}>
-      <ProbeContent />
-    </Suspense>
+    <FleetStage ground={ground}>
+      <RecipeProfileSpecimen {...cell} />
+    </FleetStage>
   );
 }

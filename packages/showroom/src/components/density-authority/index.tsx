@@ -4,11 +4,11 @@
  * OLA-5 F2 density-authority probe (showroom).
  *
  * ONE identical public DS tree, URL-addressable, rendered through the shared
- * `ShowroomTenantProvider` and nothing else. The probe owns no tenant config,
+ * probe-ground ground and nothing else. The probe owns no tenant config,
  * no Appearance literal, no FlatTheme and no `DesignSystemProvider` call: the
  * shared module is the single place that knows how a governed source is
  * mounted, and a probe that rebuilt any of that would be photographing a
- * blank page (see `@/components/showroom-tenant` for the measured why).
+ * blank page (see `@/components/probes/ground`).
  *
  * The two axes that remain are the two this probe is about:
  *
@@ -62,7 +62,6 @@ import {
   useDensity,
 } from "@rottay/design-system";
 
-import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type DensityAuthoritySource = "bithire-static" | "themanagement-db";
 export type DensityAuthorityDensity = "compact" | "comfortable" | "spacious";
@@ -269,7 +268,7 @@ export function DensityAuthorityProbe({
   locale,
 }: DensityAuthorityProbeProps) {
   return (
-    <ShowroomTenantProvider source={source} density={density} locale={locale}>
+    <>
       <Box
         data-testid="da-canvas"
         style={{
@@ -306,6 +305,6 @@ export function DensityAuthorityProbe({
           <ProbeTree locale={locale} />
         </Box>
       </Box>
-    </ShowroomTenantProvider>
+    </>
   );
 }

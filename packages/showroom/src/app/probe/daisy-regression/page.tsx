@@ -1,26 +1,14 @@
-"use client";
-
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-
 import {
-  AlertDialog,
-  Box,
-  Button,
-  Heading,
-  PatternFilterBuilder,
-  PatternKanbanBoard,
-  PatternSavedViewsBar,
-  Text,
-} from "@rottay/design-system";
+  FleetGround,
+  probeParam,
+  type FleetDensity,
+  type FleetLocale,
+  type FleetSource,
+  type FleetTheme,
+  type ProbeSearchParams,
+} from "@/components/probes/ground";
 
-import {
-  ShowroomTenantProvider,
-  type ShowroomDensityPosture,
-  type ShowroomTenantLocale,
-  type ShowroomTenantSource,
-  type ShowroomTenantTheme,
-} from "@/components/showroom-tenant";
+import { DaisyRegressionCanvas } from "./canvas";
 
 /**
  * Daisy-regression live evidence probe (2026-07-26).
@@ -31,114 +19,31 @@ import {
  * AlertDialog modern portal/top-layer posture whose contract moved off
  * the dead Daisy class list onto the canonical rottay-* hooks.
  *
- * The tenant ground is `ShowroomTenantProvider`, which owns both governed
- * sources: the UNSPREAD registry object for `bithire-static` and the
- * validated/hydrated/compiled `TenantThemeDocument` for `themanagement-db`.
- * The axes below are the provider's own props -- a hand-built config or a
- * raw `appearance` literal blocks visual-authority resolution, and a blocked
- * resolution photographs a spinner instead of the branches under test.
+ * The tenant ground is the probe-ground kernel (`@/components/probes/ground`):
+ * the UNSPREAD registry object for `bithire-static` and the validated,
+ * compiled `TenantThemeDocument` for `themanagement-db`. The axes below are
+ * the ground's own options -- a hand-built config would block visual-authority
+ * resolution, and a blocked resolution photographs a spinner.
  *
  * URL-addressable: ?source=bithire-static|themanagement-db&locale=en|es|ar
  * &density=compact|comfortable|spacious&theme=light|dark
  */
 
-const FILTER_FIELDS = [
-  { name: "stage", label: "Stage", type: "select" as const, options: ["Screening", "Interview", "Offer"] },
-  { name: "name", label: "Name", type: "text" as const },
-];
-
-function Cells({ dialogOpen }: { dialogOpen: boolean }) {
-  return (
-    <Box data-testid="dr-cells" style={{ display: "grid", gap: 32 }}>
-      <section data-testid="dr-filter-builder-loading">
-        <Text size="xs" color="secondary">FilterBuilder — loading branch (canonical spinner)</Text>
-        <PatternFilterBuilder
-          fields={FILTER_FIELDS as never}
-          value={{ id: "root", logic: "and", rules: [] }}
-          onChange={() => undefined}
-          loading
-        />
-      </section>
-      <section data-testid="dr-kanban-loading">
-        <Text size="xs" color="secondary">KanbanBoard — loading branch (canonical spinner)</Text>
-        <PatternKanbanBoard
-          columns={[]}
-          itemKey={(item: { id: string }) => item.id}
-          onItemMove={() => undefined}
-          onItemClick={() => undefined}
-          renderCard={(item: { id: string }) => <Text>{item.id}</Text>}
-          onAddItem={() => undefined}
-          loading
-        />
-      </section>
-      <section data-testid="dr-saved-views-loading">
-        <Text size="xs" color="secondary">SavedViewsBar — loading branch (canonical spinner)</Text>
-        <PatternSavedViewsBar
-          views={[]}
-          activeViewId=""
-          onViewSelect={() => undefined}
-          onViewSave={() => undefined}
-          onViewDelete={() => undefined}
-          onViewRename={() => undefined}
-          onViewCreate={() => undefined}
-          loading
-        />
-      </section>
-      <section data-testid="dr-alert-dialog">
-        <Text size="xs" color="secondary">AlertDialog modern — portal/top-layer, tenant scope</Text>
-        {dialogOpen ? (
-          <AlertDialog
-            open
-            onOpenChange={() => undefined}
-            title="Revoke access?"
-            description="All sessions will be terminated."
-            action={<Button variant="primary">Revoke</Button>}
-          />
-        ) : null}
-      </section>
-    </Box>
-  );
-}
-
-function ProbeContent() {
-  const searchParams = useSearchParams();
-  const source: ShowroomTenantSource = searchParams.get("source") === "themanagement-db" ? "themanagement-db" : "bithire-static";
-  const locale: ShowroomTenantLocale = searchParams.get("locale") === "es" || searchParams.get("locale") === "ar" ? (searchParams.get("locale") as ShowroomTenantLocale) : "en";
-  const density: ShowroomDensityPosture = searchParams.get("density") === "compact" || searchParams.get("density") === "spacious" ? (searchParams.get("density") as ShowroomDensityPosture) : "comfortable";
-  const theme: ShowroomTenantTheme = searchParams.get("theme") === "dark" ? "dark" : "light";
+export default async function DaisyRegressionProbePage({ searchParams }: { searchParams: Promise<ProbeSearchParams> }) {
+  const params = await searchParams;
+  const source: FleetSource = probeParam(params, "source") === "themanagement-db" ? "themanagement-db" : "bithire-static";
+  const localeParam = probeParam(params, "locale");
+  const locale: FleetLocale = localeParam === "es" || localeParam === "ar" ? localeParam : "en";
+  const densityParam = probeParam(params, "density");
+  const density: FleetDensity = densityParam === "compact" || densityParam === "spacious" ? densityParam : "comfortable";
+  const theme: FleetTheme = probeParam(params, "theme") === "dark" ? "dark" : "light";
   // The dialog is opt-in (`&dialog=1`) so it does not cover the loading
   // cells in their own captures (it portals above everything by design).
-  const dialogOpen = searchParams.get("dialog") === "1";
+  const dialogOpen = probeParam(params, "dialog") === "1";
 
   return (
-    <ShowroomTenantProvider
-      source={source}
-      locale={locale}
-      density={density}
-      theme={theme}
-    >
-      <Box
-        data-testid="dr-root"
-        data-ds-root=""
-        dir={locale === "ar" ? "rtl" : "ltr"}
-        style={{
-          background: "var(--ds-color-background)",
-          color: "var(--ds-color-text-primary)",
-          minHeight: "100vh",
-          padding: 24,
-        }}
-      >
-        <Heading level="h2">Daisy-regression evidence — loading branches + AlertDialog</Heading>
-        <Cells dialogOpen={dialogOpen} />
-      </Box>
-    </ShowroomTenantProvider>
-  );
-}
-
-export default function DaisyRegressionProbePage() {
-  return (
-    <Suspense fallback={null}>
-      <ProbeContent />
-    </Suspense>
+    <FleetGround source={source} locale={locale} density={density} theme={theme}>
+      <DaisyRegressionCanvas locale={locale} dialogOpen={dialogOpen} />
+    </FleetGround>
   );
 }

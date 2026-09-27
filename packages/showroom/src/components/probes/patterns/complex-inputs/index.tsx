@@ -4,7 +4,7 @@
  * K4 Lane D probe (showroom): stress inputs — Mentions, OTPInput, Transfer.
  *
  * One deterministic component tree for the three Lane-D families, rendered
- * under the two opposing governed sources `@/components/showroom-tenant` owns:
+ * under the two opposing governed sources the probe-ground kernel (`@/components/probes/ground`) owns:
  *  - `bithire-static`: the bundled BitHire vertical, code-owned;
  *  - `themanagement-db`: a published customer document, compiled and proven.
  *
@@ -48,7 +48,6 @@ import {
   type TransferItem,
 } from "@rottay/design-system";
 
-import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type K4LaneDSource = "bithire-static" | "themanagement-db";
 export type K4LaneDLocale = "en" | "es" | "ar";
@@ -259,12 +258,7 @@ function SpecimenTree({
 
 export function K4LaneDProbe({ source, locale, density, state, ground }: K4LaneDProbeProps) {
   return (
-    <ShowroomTenantProvider
-      source={source}
-      locale={locale}
-      density={density}
-      theme={ground}
-    >
+    <>
       <Box
         data-ds-root=""
         data-testid="k4d-canvas"
@@ -309,7 +303,7 @@ export function K4LaneDProbe({ source, locale, density, state, ground }: K4LaneD
           </main>
         </Box>
       </Box>
-    </ShowroomTenantProvider>
+    </>
   );
 }
 

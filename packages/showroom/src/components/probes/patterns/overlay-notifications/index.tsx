@@ -5,7 +5,7 @@
  *
  * One identical component tree for the six Lane-A families (Toast,
  * Notification, Dropdown, ContextMenu, HoverCard, Tour) rendered under the two
- * opposing governed sources `@/components/showroom-tenant` owns:
+ * opposing governed sources the probe-ground kernel (`@/components/probes/ground`) owns:
  *  - `bithire-static`: the bundled BitHire vertical, code-owned;
  *  - `themanagement-db`: a published customer document, compiled and proven.
  *
@@ -53,7 +53,6 @@ import {
   type NotificationPlacement,
 } from "@rottay/design-system";
 
-import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type K4LaneASource = "bithire-static" | "themanagement-db";
 export type K4LaneALocale = "en" | "es" | "ar";
@@ -408,12 +407,7 @@ function SpecimenTree({
 
 export function K4LaneAProbe({ source, locale, density, state, theme = "light" }: K4LaneAProbeProps) {
   return (
-    <ShowroomTenantProvider
-      source={source}
-      locale={locale}
-      density={density}
-      theme={theme}
-    >
+    <>
       <Box
         data-testid="k4a-canvas"
         style={{
@@ -457,7 +451,7 @@ export function K4LaneAProbe({ source, locale, density, state, theme = "light" }
           </main>
         </Box>
       </Box>
-    </ShowroomTenantProvider>
+    </>
   );
 }
 

@@ -19,14 +19,14 @@ import {
   type TenantConfig,
   type SemanticSurfaceRole,
 } from "@rottay/design-system";
+import { I18nProvider } from "@rottay/design-system/runtime/i18n";
 
-import {
-  ShowroomTenantProvider,
-  type ShowroomTenantSource,
-} from "@/components/showroom-tenant";
+import type {
+  BrandLocaleEvidenceFixture,
+  BrandLocaleEvidenceLocale,
+} from "./source";
 
-export type BrandLocaleEvidenceFixture = "bithire" | "themanagementmiami";
-export type BrandLocaleEvidenceLocale = "en" | "es" | "ar";
+export type { BrandLocaleEvidenceFixture, BrandLocaleEvidenceLocale } from "./source";
 
 const THE_MANAGEMENT_DB_COPY: Record<
   BrandLocaleEvidenceLocale,
@@ -284,21 +284,6 @@ function EvidenceCanvas({
 }
 
 /**
- * The two fixtures of this route ARE two of the fleet's governed sources, so
- * they map onto them instead of rebuilding them. The third,
- * `themanagement-seeds`, is deliberately not offered here: this route contrasts
- * a bundled vertical against a fully-authored customer document, and the
- * seeds-only claim is the canary's subject, not this one's.
- */
-const EVIDENCE_TENANT_SOURCE: Record<
-  BrandLocaleEvidenceFixture,
-  ShowroomTenantSource
-> = {
-  bithire: "bithire-static",
-  themanagementmiami: "themanagement-db",
-};
-
-/**
  * Both halves come from the shared ground; this component owns neither.
  *
  * The previous `{ ...tenantConfigFor(fixture, locale), locale }` was illegal in
@@ -310,7 +295,7 @@ const EVIDENCE_TENANT_SOURCE: Record<
  * second reason: a hand-authored `appearance` is visual payload that no
  * declaration admits.
  *
- * `ShowroomTenantProvider` fixes both: bithire is the registry's own object,
+ * The probe-ground kernel fixes both: bithire is the registry's own object,
  * unspread, and The Management is a validated/hydrated/compiled artifact whose
  * `<style>` mounts OUTSIDE the provider so the mount proof can see it.
  *
@@ -327,15 +312,12 @@ export function BrandLocaleEvidence({
   fixture: BrandLocaleEvidenceFixture;
   locale: BrandLocaleEvidenceLocale;
 }) {
-  return (
-    <ShowroomTenantProvider
-      source={EVIDENCE_TENANT_SOURCE[fixture]}
-      locale={locale}
-      {...(fixture === "themanagementmiami"
-        ? { customTranslations: THE_MANAGEMENT_DB_COPY[locale] }
-        : {})}
-    >
-      <EvidenceCanvas fixture={fixture} evidenceLocale={locale} />
-    </ShowroomTenantProvider>
+  const canvas = <EvidenceCanvas fixture={fixture} evidenceLocale={locale} />;
+  return fixture === "themanagementmiami" ? (
+    <I18nProvider locale={locale} customTranslations={THE_MANAGEMENT_DB_COPY[locale]}>
+      {canvas}
+    </I18nProvider>
+  ) : (
+    canvas
   );
 }

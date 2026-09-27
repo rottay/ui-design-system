@@ -1,8 +1,4 @@
-"use client";
-
-import { Suspense, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
-
+import { FleetGround, probeParam, type ProbeSearchParams } from "@/components/probes/ground";
 import {
   P1ActionDockProbe,
   type P1ActionDockDensity,
@@ -32,26 +28,20 @@ function sanitizeTheme(value: string | null): P1ActionDockTheme {
   return value === "dark" ? value : "light";
 }
 
-function ProbeContent() {
-  const searchParams = useSearchParams();
-  const cell = useMemo(
-    () => ({
-      source: sanitizeSource(searchParams.get("source")),
-      locale: sanitizeLocale(searchParams.get("locale")),
-      density: sanitizeDensity(searchParams.get("density")),
-      state: sanitizeState(searchParams.get("state")),
-      theme: sanitizeTheme(searchParams.get("theme")),
-    }),
-    [searchParams]
-  );
+export default async function P1ActionDockProbePage({ searchParams }: { searchParams: Promise<ProbeSearchParams> }) {
+  const params = await searchParams;
+  const get = (key: string) => probeParam(params, key);
+  const cell = {
+    source: sanitizeSource(get("source")),
+    locale: sanitizeLocale(get("locale")),
+    density: sanitizeDensity(get("density")),
+    state: sanitizeState(get("state")),
+    theme: sanitizeTheme(get("theme")),
+  };
 
-  return <P1ActionDockProbe {...cell} />;
-}
-
-export default function P1ActionDockProbePage() {
   return (
-    <Suspense fallback={null}>
-      <ProbeContent />
-    </Suspense>
+    <FleetGround source={cell.source} locale={cell.locale} density={cell.density} theme={cell.theme}>
+      <P1ActionDockProbe {...cell} />
+    </FleetGround>
   );
 }

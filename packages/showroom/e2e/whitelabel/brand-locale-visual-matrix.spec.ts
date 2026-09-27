@@ -10,7 +10,7 @@ import {
 } from "@playwright/test";
 
 import { themanagementmiamiFlatTheme as canonicalManagementTheme } from "../../../core/tests/fixtures/brand-themes/themanagementmiami";
-import { SHOWROOM_TENANT_ARTIFACT_TESTID } from "../../src/components/showroom-tenant";
+import { FLEET_ARTIFACT_TESTID } from "../../src/components/probes/ground/documents";
 import { themanagementmiamiFlatTheme as showroomManagementTheme } from "../../src/components/torture-surface/fixtures";
 
 type Fixture = "bithire" | "themanagementmiami";
@@ -1178,7 +1178,7 @@ for (const viewport of Object.keys(VIEWPORTS) as Viewport[]) {
                 ),
                 artifactDeclaresAuthoredPrimary: artifactCss.includes("#0f766e"),
               };
-            }, SHOWROOM_TENANT_ARTIFACT_TESTID);
+            }, FLEET_ARTIFACT_TESTID);
             expect(documentEvidence).toMatchObject({
               tenant: fixture,
               lang: locale,
@@ -1401,7 +1401,7 @@ for (const viewport of Object.keys(VIEWPORTS) as Viewport[]) {
                 `[data-testid="${artifactTestId}"]`
               ).length,
             };
-          }, SHOWROOM_TENANT_ARTIFACT_TESTID);
+          }, FLEET_ARTIFACT_TESTID);
           expect(cleanupEvidence).toEqual({
             inlinePrimary: "",
             staleManagementArtifact: 0,

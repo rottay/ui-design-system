@@ -198,15 +198,15 @@ test.describe("canary A · the DB FULL-APPEARANCE path works, under proven autho
 
   for (const { source, count } of EXPECTED_ARTIFACTS) {
     test(`${source} mounts exactly ${count} proof-stamped artifact(s)`, async ({ page }) => {
-      const { SHOWROOM_TENANT_ARTIFACT_TESTID } = await import(
-        "../../src/components/showroom-tenant"
+      const { FLEET_ARTIFACT_TESTID } = await import(
+        "../../src/components/probes/ground/documents"
       );
       await open(page, `?source=${source}`);
       // Positive control FIRST: the tree committed. Without it, a blocked
       // authority renders a spinner and "zero artifacts" reads as a pass.
       await expect(root(page)).toBeVisible();
       await expect(
-        page.locator(`[data-testid='${SHOWROOM_TENANT_ARTIFACT_TESTID}']`)
+        page.locator(`[data-testid='${FLEET_ARTIFACT_TESTID}']`)
       ).toHaveCount(count);
     });
   }
@@ -229,7 +229,7 @@ test.describe("canary A · the DB FULL-APPEARANCE path works, under proven autho
 test.describe("canary B · seeds-only, proven structurally then downstream", () => {
   test("the authored document key set is EXACTLY the canonical seeds allowlist", async () => {
     const { seedsOnlyDocument, SEEDS_ONLY_DOCUMENT_ALLOWLIST } = await import(
-      "../../src/components/showroom-tenant"
+      "../../src/components/probes/ground/documents"
     );
     // The same builder the seeds ground publishes — not a transcription of it.
     const authored = seedsOnlyDocument() as unknown as Record<string, unknown>;
@@ -335,59 +335,6 @@ test.describe("canary B · seeds-only, proven structurally then downstream", () 
 });
 
 // -----------------------------------------------------------------------------
-// Document-claim lease contract (pure, no browser)
-// -----------------------------------------------------------------------------
-
-test.describe("canary · document claim lease is fail-closed and idempotent", () => {
-  test("second claim on the same Document throws", async () => {
-    const { claimShowroomTenantDocument } = await import(
-      "../../src/components/showroom-tenant"
-    );
-    const doc = { nodeType: 9 } as unknown as Document;
-    const release = claimShowroomTenantDocument(doc);
-    expect(() => claimShowroomTenantDocument(doc)).toThrow(
-      /already claims this Document/,
-    );
-    release();
-  });
-
-  test("different Documents claim independently", async () => {
-    const { claimShowroomTenantDocument } = await import(
-      "../../src/components/showroom-tenant"
-    );
-    const docA = { nodeType: 9 } as unknown as Document;
-    const docB = { nodeType: 9 } as unknown as Document;
-    const releaseA = claimShowroomTenantDocument(docA);
-    const releaseB = claimShowroomTenantDocument(docB);
-    expect(releaseA).not.toBe(releaseB);
-    releaseA();
-    releaseB();
-  });
-
-  test("release is idempotent, stale release is safe, and reclaim works", async () => {
-    const { claimShowroomTenantDocument } = await import(
-      "../../src/components/showroom-tenant"
-    );
-    const doc = { nodeType: 9 } as unknown as Document;
-
-    const release1 = claimShowroomTenantDocument(doc);
-    release1();
-    release1(); // idempotent
-
-    const release2 = claimShowroomTenantDocument(doc);
-    release1(); // stale: must not delete release2's claim
-    expect(() => claimShowroomTenantDocument(doc)).toThrow(
-      /already claims this Document/,
-    );
-
-    release2();
-    const release3 = claimShowroomTenantDocument(doc);
-    expect(typeof release3).toBe("function");
-    release3();
-  });
-});
-
-// -----------------------------------------------------------------------------
 // SPA transition contract: one hard load, then pushState inside the same Document
 // -----------------------------------------------------------------------------
 
@@ -408,11 +355,11 @@ declare global {
 
 test.describe("canary · SPA transition keeps one Document and style-before-root order", () => {
   test(
-    "static hard-load then pushState transitions prove same Document, lease renewal, and lawful artifact counts",
+    "static hard-load then pushState transitions prove same Document and lawful artifact counts",
     { tag: ["@browser-not-run"] },
     async ({ page }) => {
-      const { SHOWROOM_TENANT_ARTIFACT_TESTID } = await import(
-        "../../src/components/showroom-tenant"
+      const { FLEET_ARTIFACT_TESTID } = await import(
+        "../../src/components/probes/ground/documents"
       );
       const DIGEST_ATTR = "data-ds-tenant-theme-digest";
       const ROOT_TESTID = "wc-root";
@@ -500,7 +447,7 @@ test.describe("canary · SPA transition keeps one Document and style-before-root
           return id;
         },
         {
-          artifactTestid: SHOWROOM_TENANT_ARTIFACT_TESTID,
+          artifactTestid: FLEET_ARTIFACT_TESTID,
           digestAttr: DIGEST_ATTR,
           rootTestid: ROOT_TESTID,
         },
@@ -571,7 +518,7 @@ test.describe("canary · SPA transition keeps one Document and style-before-root
               });
             }),
           {
-            artifactTestid: SHOWROOM_TENANT_ARTIFACT_TESTID,
+            artifactTestid: FLEET_ARTIFACT_TESTID,
             digestAttr: DIGEST_ATTR,
             rootTestid: ROOT_TESTID,
           },

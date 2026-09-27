@@ -5,7 +5,7 @@
  *
  * One identical component tree for the six Lane-C families (Carousel, Image,
  * QRCode, ColorPicker, FloatButton, Watermark) rendered under the two opposing
- * governed sources `@/components/showroom-tenant` owns:
+ * governed sources the probe-ground kernel (`@/components/probes/ground`) owns:
  *  - `bithire-static`: the bundled BitHire vertical, code-owned;
  *  - `themanagement-db`: a published customer document, compiled and proven.
  *
@@ -43,7 +43,6 @@ import {
   Watermark,
 } from "@rottay/design-system";
 
-import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type K4LaneCSource = "bithire-static" | "themanagement-db";
 export type K4LaneCLocale = "en" | "es" | "ar";
@@ -285,12 +284,7 @@ function SpecimenTree({
 
 export function K4LaneCProbe({ source, locale, density, state, theme = "light" }: K4LaneCProbeProps) {
   return (
-    <ShowroomTenantProvider
-      source={source}
-      locale={locale}
-      density={density}
-      theme={theme}
-    >
+    <>
       <Box
         data-testid="k4c-canvas"
         style={{
@@ -334,7 +328,7 @@ export function K4LaneCProbe({ source, locale, density, state, theme = "light" }
           </main>
         </Box>
       </Box>
-    </ShowroomTenantProvider>
+    </>
   );
 }
 

@@ -2,7 +2,7 @@
 
 /**
  * P1 ActionDock probe (showroom): structured-action dock under the two opposing
- * governed sources `@/components/showroom-tenant` owns:
+ * governed sources the probe-ground kernel (`@/components/probes/ground`) owns:
  *  - `bithire-static`: the bundled BitHire vertical, code-owned;
  *  - `themanagement-db`: a published customer document, compiled and proven.
  *
@@ -39,7 +39,6 @@ import {
 } from "@rottay/design-system";
 import { Icon } from "@rottay/design-system/icons";
 
-import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type P1ActionDockSource = "bithire-static" | "themanagement-db";
 export type P1ActionDockLocale = "en" | "es" | "ar";
@@ -235,12 +234,7 @@ export function P1ActionDockProbe({
   theme = "light",
 }: P1ActionDockProbeProps) {
   return (
-    <ShowroomTenantProvider
-      source={source}
-      locale={locale}
-      density={density}
-      theme={theme}
-    >
+    <>
       <Box
         data-testid="p1ad-canvas"
         style={{
@@ -284,7 +278,7 @@ export function P1ActionDockProbe({
           </main>
         </Box>
       </Box>
-    </ShowroomTenantProvider>
+    </>
   );
 }
 

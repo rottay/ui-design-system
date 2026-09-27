@@ -1,0 +1,874 @@
+"use client";
+
+import { useState } from "react";
+
+import {
+  AnatomySkeleton,
+  Badge,
+  Box,
+  Button,
+  Card,
+  Empty,
+  Input,
+  Menu,
+  Modal,
+  Pagination,
+  PatternDataTable,
+  PatternListToolbar,
+  PatternPageShell,
+  Popover,
+  Progress,
+  Select,
+  Sheet,
+  Spinner,
+  Stack,
+  Tabs,
+  Text,
+  Tooltip,
+  WidgetBoard,
+  type ColumnDef,
+  type DensityKey,
+  type FilterPillConfig,
+  type ListToolbarProps,
+  type ViewMode,
+  type WidgetBoardItem,
+  type WidgetBoardLabels,
+} from "@rottay/design-system";
+import { Icon } from "@rottay/design-system/icons";
+
+import type { FleetDensity, FleetLocale, FleetSource } from "@/components/probes/ground/documents";
+
+/**
+ * White-label canary (2026-07-27).
+ *
+ * ONE Candidates-style composition of the six premium-elevated Modern
+ * families (shell/headers, tabs/buttons/pills, inputs/tables, cards/states,
+ * overlays, widget-board) rendered as the SAME tree under three tenants:
+ *  - `?source=bithire-static`     → BitHire's bundled FlatTheme (file-first);
+ *  - `?source=themanagement-db`   → The Management's published DB document,
+ *    authoring the full visual foundation (teal, sandstone, terracotta,
+ *    editorial pairing, radius 0.8, spacious, elevated, strong sidebar tone);
+ *  - `?source=themanagement-seeds`→ the SAME customer authoring four colours
+ *    and nothing else, so everything else on screen is demonstrably derived.
+ *
+ * Every arm mounts on the probe-ground kernel (`@/components/probes/ground`):
+ * the bundled vertical is the registry's own object UNSPREAD, and both DB arms
+ * are validated, compiled artifacts whose `<style>` mounts outside the provider
+ * under a `compiled-artifact` declaration. This canvas authors NO tenant config.
+ *
+ * Axes: ?locale=en|es|ar (ar ⇒ dir="rtl"), ?density=compact|comfortable|
+ * spacious, ?theme=light|dark, ?seedPrimary=#RRGGBB (seeds arm only). Each one
+ * travels as a governed ground option, never as a config spread.
+ * Overlays are opt-in for captures: &modal=1 / &sheet=1 (they portal above
+ * everything by design, same convention as the daisy-regression probe).
+ *
+ * All chrome copy rides DS props (components i18nize their own chrome);
+ * section labels go through a local en/es/ar dictionary so AR/RTL is real.
+ * Candidate fixture names stay English on every locale per probe convention —
+ * no fixture value here is product content.
+ *
+ * Inline styles carry layout (grid/flex/gap/padding) plus two measured paint
+ * pairs: the canary ground sets background/color from DS tokens, and the
+ * source-did-not-mount fallback hardcodes its own red so a failed mount stays
+ * legible without the DS ground. Borders and shadows come from the components.
+ * No Daisy classes, no new CSS.
+ */
+
+// The probe's axes ARE the ground's governed vocabulary, aliased rather than
+// re-declared: a locally-widened union would let this route ask for a posture
+// the ground cannot honour and fail as a visual, not as a type error.
+type Locale = FleetLocale;
+
+// ---------------------------------------------------------------------------
+// Localized copy (section labels only; fixture content stays English)
+// ---------------------------------------------------------------------------
+
+type ToolbarMessages = NonNullable<ListToolbarProps["messages"]>;
+
+interface CanaryCopy {
+  pageTitle: string;
+  pageSubtitle: string;
+  crumbWorkspace: string;
+  tabList: string;
+  tabOverview: string;
+  tabMatching: string;
+  tabCompare: string;
+  invite: string;
+  settings: string;
+  searchPlaceholder: string;
+  stageLabel: string;
+  stageScreening: string;
+  stageInterview: string;
+  sourceLabel: string;
+  sourceLinkedIn: string;
+  sourceReferral: string;
+  exportLabel: string;
+  colName: string;
+  colRole: string;
+  colStage: string;
+  colMatch: string;
+  colSource: string;
+  cardTitle: string;
+  cardSubtitle: string;
+  cardSave: string;
+  cardNote: string;
+  selectPlaceholder: string;
+  groupActive: string;
+  groupArchived: string;
+  emptyTitle: string;
+  openModal: string;
+  openSheet: string;
+  modalTitle: string;
+  modalDescription: string;
+  modalBody: string;
+  sheetTitle: string;
+  sheetBody: string;
+  tooltipContent: string;
+  popoverTitle: string;
+  popoverContent: string;
+  statesCaption: string;
+  spinnerSync: string;
+  spinnerLoading: string;
+  widgetLabels: WidgetBoardLabels;
+  /** English leaves `messages` undefined to exercise the historical defaults. */
+  messages?: ToolbarMessages;
+}
+
+const COPY: Record<Locale, CanaryCopy> = {
+  en: {
+    pageTitle: "Candidates",
+    pageSubtitle: "White-label canary — same tree, two tenants",
+    crumbWorkspace: "Workspace",
+    tabList: "List",
+    tabOverview: "Overview",
+    tabMatching: "Matching",
+    tabCompare: "Compare",
+    invite: "Invite candidate",
+    settings: "Settings",
+    searchPlaceholder: "Search candidates",
+    stageLabel: "Stage",
+    stageScreening: "Screening",
+    stageInterview: "Interview",
+    sourceLabel: "Source",
+    sourceLinkedIn: "LinkedIn",
+    sourceReferral: "Referral",
+    exportLabel: "Export",
+    colName: "Name",
+    colRole: "Role",
+    colStage: "Stage",
+    colMatch: "Match",
+    colSource: "Source",
+    cardTitle: "Pipeline actions",
+    cardSubtitle: "Bulk operations on the current view",
+    cardSave: "Save view",
+    cardNote: "Internal note",
+    selectPlaceholder: "Move to stage",
+    groupActive: "Active",
+    groupArchived: "Archived",
+    emptyTitle: "No saved views yet",
+    openModal: "Open modal",
+    openSheet: "Open sheet",
+    modalTitle: "Advance 3 candidates?",
+    modalDescription: "This moves the selection to the next stage.",
+    modalBody: "Interviewers will be notified and the pipeline report updates immediately.",
+    sheetTitle: "Candidate peek",
+    sheetBody: "A quick-look panel rendered through the Sheet portal.",
+    tooltipContent: "Match is recomputed nightly",
+    popoverTitle: "Match breakdown",
+    popoverContent: "Skills 82% · Experience 74% · Location 91%",
+    statesCaption: "Loading states",
+    spinnerSync: "Syncing",
+    spinnerLoading: "Loading board",
+    widgetLabels: {
+      context: "Pipeline intelligence",
+      heading: "Your widgets",
+      customize: "Customize",
+      done: "Done",
+      addWidget: "Add widget",
+      reset: "Reset",
+      emptyCatalog: "No more widgets available",
+      editHint: "Drag to reorder, resize from the edges",
+      readHint: "Switch to customize mode to edit",
+      move: "Move",
+      resize: "Resize",
+      remove: "Remove",
+      catalogHeading: "Add a widget",
+      catalogDescription: "Pick the signals you want on this board",
+      recommended: "Recommended",
+    },
+    messages: undefined,
+  },
+  es: {
+    pageTitle: "Candidatos",
+    pageSubtitle: "Canario white-label — mismo árbol, dos tenants",
+    crumbWorkspace: "Espacio de trabajo",
+    tabList: "Lista",
+    tabOverview: "Panorama",
+    tabMatching: "Matching",
+    tabCompare: "Comparar",
+    invite: "Invitar candidato",
+    settings: "Configuración",
+    searchPlaceholder: "Buscar candidatos",
+    stageLabel: "Etapa",
+    stageScreening: "Criba",
+    stageInterview: "Entrevista",
+    sourceLabel: "Fuente",
+    sourceLinkedIn: "LinkedIn",
+    sourceReferral: "Referido",
+    exportLabel: "Exportar",
+    colName: "Nombre",
+    colRole: "Puesto",
+    colStage: "Etapa",
+    colMatch: "Match",
+    colSource: "Fuente",
+    cardTitle: "Acciones del pipeline",
+    cardSubtitle: "Operaciones masivas sobre la vista actual",
+    cardSave: "Guardar vista",
+    cardNote: "Nota interna",
+    selectPlaceholder: "Mover a etapa",
+    groupActive: "Activas",
+    groupArchived: "Archivadas",
+    emptyTitle: "Aún no hay vistas guardadas",
+    openModal: "Abrir modal",
+    openSheet: "Abrir sheet",
+    modalTitle: "¿Avanzar 3 candidatos?",
+    modalDescription: "La selección pasará a la siguiente etapa.",
+    modalBody: "Los entrevistadores serán notificados y el informe se actualiza al momento.",
+    sheetTitle: "Vista rápida",
+    sheetBody: "Un panel de consulta rápida renderizado por el portal de Sheet.",
+    tooltipContent: "El match se recalcula cada noche",
+    popoverTitle: "Desglose del match",
+    popoverContent: "Skills 82% · Experiencia 74% · Ubicación 91%",
+    statesCaption: "Estados de carga",
+    spinnerSync: "Sincronizando",
+    spinnerLoading: "Cargando panel",
+    widgetLabels: {
+      context: "Inteligencia del pipeline",
+      heading: "Tus widgets",
+      customize: "Personalizar",
+      done: "Listo",
+      addWidget: "Añadir widget",
+      reset: "Restablecer",
+      emptyCatalog: "No hay más widgets disponibles",
+      editHint: "Arrastra para reordenar, redimensiona desde los bordes",
+      readHint: "Cambia a modo personalizar para editar",
+      move: "Mover",
+      resize: "Redimensionar",
+      remove: "Eliminar",
+      catalogHeading: "Añadir un widget",
+      catalogDescription: "Elige las señales que quieres en este panel",
+      recommended: "Recomendado",
+    },
+    messages: {
+      compact: "Compacta",
+      comfortable: "Cómoda",
+      spacious: "Espaciosa",
+      densitySuffix: "densidad",
+      rowDensity: "Densidad de fila",
+      viewMode: "Modo de vista",
+      listView: "Lista",
+      cardView: "Tarjetas",
+      columns: "Columnas",
+      density: "Densidad",
+      views: "Vistas",
+      noColumnSettings: "Sin configuración de columnas",
+      noSavedViews: "Sin vistas guardadas",
+      columnSettings: "Configuración de columnas",
+      settings: "Configuración",
+      moreOptions: "Más opciones",
+      export: "Exportar",
+      active: "Activo",
+      clearAll: "Limpiar todo",
+      searchLabel: "Buscar",
+    },
+  },
+  ar: {
+    pageTitle: "المرشحون",
+    pageSubtitle: "كناري العلامة البيضاء — الشجرة نفسها، مستأجران",
+    crumbWorkspace: "مساحة العمل",
+    tabList: "القائمة",
+    tabOverview: "نظرة عامة",
+    tabMatching: "المطابقة",
+    tabCompare: "المقارنة",
+    invite: "دعوة مرشح",
+    settings: "الإعدادات",
+    searchPlaceholder: "البحث في المرشحين",
+    stageLabel: "المرحلة",
+    stageScreening: "الفرز",
+    stageInterview: "المقابلة",
+    sourceLabel: "المصدر",
+    sourceLinkedIn: "لينكدإن",
+    sourceReferral: "إحالة",
+    exportLabel: "تصدير",
+    colName: "الاسم",
+    colRole: "الدور",
+    colStage: "المرحلة",
+    colMatch: "التطابق",
+    colSource: "المصدر",
+    cardTitle: "إجراءات خط الأنابيب",
+    cardSubtitle: "عمليات جماعية على العرض الحالي",
+    cardSave: "حفظ العرض",
+    cardNote: "ملاحظة داخلية",
+    selectPlaceholder: "نقل إلى مرحلة",
+    groupActive: "نشطة",
+    groupArchived: "مؤرشفة",
+    emptyTitle: "لا توجد مشاهدات محفوظة بعد",
+    openModal: "فتح النافذة",
+    openSheet: "فتح اللوحة",
+    modalTitle: "هل تريد ترقية 3 مرشحين؟",
+    modalDescription: "سينتقل التحديد إلى المرحلة التالية.",
+    modalBody: "سيتم إشعار المقابلين ويتحدث التقرير فورًا.",
+    sheetTitle: "نظرة سريعة",
+    sheetBody: "لوحة معاينة سريعة تُعرض عبر بوابة Sheet.",
+    tooltipContent: "يُعاد حساب التطابق ليلاً",
+    popoverTitle: "تفصيل التطابق",
+    popoverContent: "المهارات 82% · الخبرة 74% · الموقع 91%",
+    statesCaption: "حالات التحميل",
+    spinnerSync: "جارٍ المزامنة",
+    spinnerLoading: "جارٍ تحميل اللوحة",
+    widgetLabels: {
+      context: "ذكاء خط الأنابيب",
+      heading: "أدواتك",
+      customize: "تخصيص",
+      done: "تم",
+      addWidget: "إضافة أداة",
+      reset: "إعادة تعيين",
+      emptyCatalog: "لا توجد أدوات أخرى متاحة",
+      editHint: "اسحب لإعادة الترتيب، وغيّر الحجم من الحواف",
+      readHint: "بدّل إلى وضع التخصيص للتحرير",
+      move: "نقل",
+      resize: "تغيير الحجم",
+      remove: "إزالة",
+      catalogHeading: "إضافة أداة",
+      catalogDescription: "اختر الإشارات التي تريدها في هذه اللوحة",
+      recommended: "موصى به",
+    },
+    messages: {
+      compact: "مدمجة",
+      comfortable: "مريحة",
+      spacious: "واسعة",
+      densitySuffix: "الكثافة",
+      rowDensity: "كثافة الصف",
+      viewMode: "وضع العرض",
+      listView: "قائمة",
+      cardView: "بطاقات",
+      columns: "الأعمدة",
+      density: "الكثافة",
+      views: "المشاهدات",
+      noColumnSettings: "لا توجد إعدادات أعمدة",
+      noSavedViews: "لا توجد مشاهدات محفوظة",
+      columnSettings: "إعدادات الأعمدة",
+      settings: "الإعدادات",
+      moreOptions: "خيارات إضافية",
+      export: "تصدير",
+      active: "نشط",
+      clearAll: "مسح الكل",
+      searchLabel: "بحث",
+    },
+  },
+};
+
+// ---------------------------------------------------------------------------
+// wc-header — PageShell-style header + DS Tabs + Button/Button.Icon actions
+// ---------------------------------------------------------------------------
+
+function HeaderSection({ copy }: { copy: CanaryCopy }) {
+  const [tab, setTab] = useState("list");
+  return (
+    <Box data-testid="wc-header">
+      <PatternPageShell
+        title={copy.pageTitle}
+        subtitle={copy.pageSubtitle}
+        breadcrumbs={[{ label: copy.crumbWorkspace }, { label: copy.pageTitle }]}
+        actions={
+          <>
+            <Button.Icon
+              icon={<Icon name="navigation.settings" decorative />}
+              aria-label={copy.settings}
+            />
+            <Button variant="secondary" icon={<Icon name="action.download" decorative />}>
+              {copy.exportLabel}
+            </Button>
+            <Button variant="primary" icon={<Icon name="action.add" decorative />}>
+              {copy.invite}
+            </Button>
+          </>
+        }
+      >
+        <Tabs
+          type="line"
+          activeKey={tab}
+          onChange={setTab}
+          items={[
+            { key: "list", label: copy.tabList },
+            { key: "overview", label: copy.tabOverview },
+            { key: "matching", label: copy.tabMatching },
+            { key: "compare", label: copy.tabCompare },
+          ]}
+        />
+      </PatternPageShell>
+    </Box>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// wc-toolbar — PatternListToolbar with real controlled state
+// ---------------------------------------------------------------------------
+
+function ToolbarSection({ copy, initialDensity }: { copy: CanaryCopy; initialDensity: DensityKey }) {
+  const [search, setSearch] = useState("");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [density, setDensity] = useState<DensityKey>(initialDensity);
+  const [filters, setFilters] = useState<Record<string, unknown>>({
+    stage: "interview",
+    source: "linkedin",
+  });
+
+  const filterPills: FilterPillConfig[] = [
+    {
+      key: "stage",
+      label: copy.stageLabel,
+      value: String(filters.stage ?? "interview"),
+      options: [
+        { label: copy.stageScreening, value: "screening" },
+        { label: copy.stageInterview, value: "interview" },
+      ],
+    },
+    {
+      key: "source",
+      label: copy.sourceLabel,
+      value: String(filters.source ?? "linkedin"),
+      options: [
+        { label: copy.sourceLinkedIn, value: "linkedin" },
+        { label: copy.sourceReferral, value: "referral" },
+      ],
+    },
+  ];
+
+  return (
+    <Box data-testid="wc-toolbar">
+      <PatternListToolbar
+        title={copy.pageTitle}
+        totalCount={248}
+        search={search}
+        onSearchChange={setSearch}
+        searchPlaceholder={copy.searchPlaceholder}
+        messages={copy.messages}
+        filterPills={filterPills}
+        activeFilters={filters}
+        onFilterChange={(key, value) =>
+          setFilters((current) => ({ ...current, [key]: value }))
+        }
+        onClearFilters={() => setFilters({})}
+        activeFilterCount={Object.keys(filters).length}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+        density={density}
+        onDensityChange={setDensity}
+        primaryAction={{
+          label: copy.invite,
+          icon: <Icon name="action.add" decorative />,
+          onClick: () => undefined,
+        }}
+        onExport={() => undefined}
+      />
+    </Box>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// wc-table — PatternDataTable with candidate fixture rows + Pagination
+// ---------------------------------------------------------------------------
+
+type StageKey = "screening" | "interview" | "offer";
+
+interface CandidateRow {
+  id: string;
+  name: string;
+  role: string;
+  stage: StageKey;
+  match: number;
+  source: string;
+}
+
+const CANDIDATE_ROWS: CandidateRow[] = [
+  { id: "c-1", name: "Amelia Torres", role: "Product Designer", stage: "interview", match: 92, source: "LinkedIn" },
+  { id: "c-2", name: "Jonas Meyer", role: "Frontend Engineer", stage: "screening", match: 78, source: "Referral" },
+  { id: "c-3", name: "Priya Nair", role: "Data Analyst", stage: "offer", match: 88, source: "LinkedIn" },
+  { id: "c-4", name: "Marcus Chen", role: "QA Engineer", stage: "screening", match: 64, source: "Referral" },
+  { id: "c-5", name: "Sofia Rossi", role: "Engineering Manager", stage: "interview", match: 81, source: "LinkedIn" },
+];
+
+const STAGE_BADGE: Record<StageKey, { variant: "primary" | "success" | "warning" }> = {
+  screening: { variant: "warning" },
+  interview: { variant: "primary" },
+  offer: { variant: "success" },
+};
+
+function TableSection({ copy }: { copy: CanaryCopy }) {
+  const [page, setPage] = useState(1);
+
+  const columns: ColumnDef<CandidateRow>[] = [
+    { key: "name", header: copy.colName, accessorKey: "name", sortable: true, pin: "left", width: 180 },
+    { key: "role", header: copy.colRole, accessorKey: "role" },
+    {
+      key: "stage",
+      header: copy.colStage,
+      accessorKey: "stage",
+      render: (value) => {
+        const stage = value as StageKey;
+        const label =
+          stage === "screening"
+            ? copy.stageScreening
+            : stage === "interview"
+              ? copy.stageInterview
+              : "Offer";
+        return <Badge variant={STAGE_BADGE[stage].variant} badgeStyle="soft" content={label} />;
+      },
+    },
+    {
+      key: "match",
+      header: copy.colMatch,
+      accessorKey: "match",
+      width: 140,
+      render: (value) => (
+        <Box style={{ display: "flex", alignItems: "center", gap: 8, minInlineSize: 110 }}>
+          <Box style={{ flex: 1 }}>
+            <Progress.Line percent={value as number} showInfo={false} />
+          </Box>
+          <Text size="xs" color="secondary">
+            {String(value)}%
+          </Text>
+        </Box>
+      ),
+    },
+    { key: "source", header: copy.colSource, accessorKey: "source" },
+  ];
+
+  return (
+    <Box data-testid="wc-table">
+      <Stack spacing="md" fullWidth>
+        <PatternDataTable<CandidateRow>
+          data={CANDIDATE_ROWS}
+          rowKey="id"
+          columns={columns}
+          striped
+          // The canary's declared pattern consumer is the REAL table header.
+          // `autoMobileCards` defaults to true and the table measures its own
+          // container (this column is `flex: 1 1 560px`), so it switched to the
+          // mobile-card renderer at every viewport and no header row existed to
+          // probe. Pinning it keeps the header consumer deterministic; mobile
+          // posture is still covered by the viewport axis on the other parts.
+          autoMobileCards={false}
+        />
+        <Box style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Pagination current={page} total={248} pageSize={5} onChange={setPage} />
+        </Box>
+      </Stack>
+    </Box>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// wc-side — Card compound + grouped Select + Input with count + Empty
+// ---------------------------------------------------------------------------
+
+function SideSection({ copy }: { copy: CanaryCopy }) {
+  const [stage, setStage] = useState<string | undefined>(undefined);
+  return (
+    <Box data-testid="wc-side">
+      {/* navigation.sidebar-tone consumer. The capability's declared evidence
+          file is the modern Menu skin, so the canary must render a real Menu:
+          a Card standing in for a sidebar would prove nothing about it. */}
+      <Box data-testid="wc-sidebar" style={{ marginBlockEnd: 24 }}>
+        <Menu
+          mode="vertical"
+          defaultSelectedKeys={["pipeline"]}
+          items={[
+            { key: "pipeline", label: copy.tabOverview, icon: <Icon name="navigation.home" decorative /> },
+            { key: "matching", label: copy.tabMatching, icon: <Icon name="action.search" decorative /> },
+            { key: "settings", label: copy.settings, icon: <Icon name="navigation.settings" decorative /> },
+          ]}
+        />
+      </Box>
+      <Card variant="elevated">
+        <Card.Header
+          title={copy.cardTitle}
+          subtitle={copy.cardSubtitle}
+          divider
+          extra={<Button.Icon icon={<Icon name="navigation.settings" decorative />} aria-label={copy.settings} />}
+        />
+        <Card.Body>
+          <Stack spacing="md" fullWidth>
+            <Select
+              options={[
+                { value: "screening", label: copy.stageScreening, group: copy.groupActive },
+                { value: "interview", label: copy.stageInterview, group: copy.groupActive },
+                { value: "offer", label: "Offer", group: copy.groupActive },
+                { value: "rejected", label: "Rejected", group: copy.groupArchived },
+              ]}
+              value={stage}
+              placeholder={copy.selectPlaceholder}
+              onChange={(value) => setStage(value as string)}
+            />
+            <Input showCount maxLength={80} placeholder={copy.cardNote} />
+            <Empty description={copy.emptyTitle} image="simple" />
+          </Stack>
+        </Card.Body>
+        <Card.Footer
+          divider
+          align="space-between"
+          actions={[
+            <Button key="save" variant="primary" size="sm">
+              {copy.cardSave}
+            </Button>,
+          ]}
+        />
+      </Card>
+    </Box>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// wc-overlays — Modal + Sheet (portals), Tooltip + Popover
+// ---------------------------------------------------------------------------
+
+function OverlaysSection({
+  copy,
+  modalInitiallyOpen,
+  sheetInitiallyOpen,
+}: {
+  copy: CanaryCopy;
+  modalInitiallyOpen: boolean;
+  sheetInitiallyOpen: boolean;
+}) {
+  const [modalOpen, setModalOpen] = useState(modalInitiallyOpen);
+  const [sheetOpen, setSheetOpen] = useState(sheetInitiallyOpen);
+  return (
+    <Box data-testid="wc-overlays">
+      <Stack spacing="md" direction="horizontal">
+        <Button data-testid="wc-modal-trigger" variant="primary" onClick={() => setModalOpen(true)}>
+          {copy.openModal}
+        </Button>
+        <Button data-testid="wc-sheet-trigger" variant="secondary" onClick={() => setSheetOpen(true)}>
+          {copy.openSheet}
+        </Button>
+        <Tooltip content={copy.tooltipContent} placement="top">
+          <Button data-testid="wc-tooltip-trigger" variant="ghost">
+            Tooltip
+          </Button>
+        </Tooltip>
+        <Popover title={copy.popoverTitle} content={copy.popoverContent} trigger="click" arrow>
+          <Button data-testid="wc-popover-trigger" variant="ghost">
+            Popover
+          </Button>
+        </Popover>
+      </Stack>
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onCancel={() => setModalOpen(false)}
+        onOk={() => setModalOpen(false)}
+        title={copy.modalTitle}
+        description={copy.modalDescription}
+      >
+        {copy.modalBody}
+      </Modal>
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen} side="right" title={copy.sheetTitle}>
+        {copy.sheetBody}
+      </Sheet>
+    </Box>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// wc-widgets — WidgetBoard (first showroom specimen for the family)
+// ---------------------------------------------------------------------------
+
+function buildWidgetItems(): WidgetBoardItem[] {
+  return [
+    {
+      id: "w-pipeline",
+      accessibleTitle: "Pipeline by stage",
+      title: "Pipeline by stage",
+      header: {
+        eyebrow: "PIPELINE",
+        icon: <Icon name="analytics.dashboard" decorative />,
+        accessory: <Badge variant="primary" badgeStyle="soft" content="Live" />,
+      },
+      catalog: { description: "Stage distribution for the open requisitions", category: "Pipeline" },
+      content: (
+        <Stack spacing="sm" fullWidth>
+          <Progress.Line percent={62} showInfo={false} />
+          <Progress.Line percent={38} showInfo={false} />
+          <Progress.Line percent={21} showInfo={false} />
+        </Stack>
+      ),
+      size: "wide",
+      order: 0,
+      visible: true,
+    },
+    {
+      id: "w-match",
+      accessibleTitle: "Average match",
+      title: "Average match",
+      header: { eyebrow: "INTELLIGENCE", icon: <Icon name="analytics.dashboard" decorative /> },
+      catalog: { description: "Mean match score across active candidates", category: "Intelligence", recommended: true },
+      content: (
+        <Stack spacing="xs">
+          <Text size="lg">81%</Text>
+          <Text size="xs" color="secondary">
+            +4 pts this week
+          </Text>
+        </Stack>
+      ),
+      size: "sm",
+      order: 1,
+      visible: true,
+    },
+    {
+      id: "w-sources",
+      accessibleTitle: "Sources",
+      title: "Top sources",
+      header: { eyebrow: "ACQUISITION" },
+      content: (
+        <Stack spacing="xs">
+          <Text size="sm">LinkedIn · 142</Text>
+          <Text size="sm">Referral · 63</Text>
+          <Text size="sm">Inbound · 41</Text>
+        </Stack>
+      ),
+      size: "md",
+      order: 2,
+      visible: true,
+    },
+    {
+      id: "w-notes",
+      accessibleTitle: "Next actions",
+      title: "Next actions",
+      header: { eyebrow: "WORKFLOW" },
+      content: (
+        <Stack spacing="xs">
+          <Text size="sm">Schedule panel for A. Torres</Text>
+          <Text size="sm">Send offer draft to P. Nair</Text>
+        </Stack>
+      ),
+      size: "lg",
+      order: 3,
+      visible: true,
+    },
+  ];
+}
+
+function WidgetsSection({ copy }: { copy: CanaryCopy }) {
+  const [items, setItems] = useState<WidgetBoardItem[]>(() => buildWidgetItems());
+  return (
+    <Box data-testid="wc-widgets">
+      <WidgetBoard
+        items={items}
+        labels={copy.widgetLabels}
+        editable
+        onItemsChange={setItems}
+        onReset={buildWidgetItems}
+      />
+    </Box>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// wc-states — Spinner (2 sizes) + anatomy-derived Card skeleton
+// ---------------------------------------------------------------------------
+
+function StatesSection({ copy }: { copy: CanaryCopy }) {
+  return (
+    <Box data-testid="wc-states">
+      <Stack spacing="md" fullWidth>
+        <Text size="xs" color="secondary">
+          {copy.statesCaption}
+        </Text>
+        <Stack spacing="lg" direction="horizontal">
+          <Spinner size="md" label={copy.spinnerSync} />
+          <Spinner size="xl" label={copy.spinnerLoading} />
+        </Stack>
+        <AnatomySkeleton>
+          <Card title={copy.statesCaption} description={copy.spinnerLoading} />
+        </AnatomySkeleton>
+      </Stack>
+    </Box>
+  );
+}
+
+export interface WlCanaryCanvasProps {
+  readonly source: FleetSource;
+  /** The tenant the ground ACTUALLY mounted, never the one the query asked for. */
+  readonly mountedSlug: string;
+  readonly locale: FleetLocale;
+  readonly density: FleetDensity;
+  readonly modalInitiallyOpen: boolean;
+  readonly sheetInitiallyOpen: boolean;
+}
+
+export function WlCanaryCanvas({
+  source,
+  mountedSlug,
+  locale,
+  density,
+  modalInitiallyOpen,
+  sheetInitiallyOpen,
+}: WlCanaryCanvasProps) {
+  const copy = COPY[locale];
+  const appearanceDensity: DensityKey = density;
+
+  return (
+    <Box
+      data-testid="wc-root"
+      data-ds-root=""
+      // Contract markers: the suite reads the identity that ACTUALLY mounted,
+      // never the query string it asked for. Comparing the two is what makes
+      // a silent tenant substitution detectable from the DOM alone.
+      data-canary-source={source}
+      data-canary-tenant={mountedSlug}
+      data-canary-engine="modern"
+      data-canary-locale={locale}
+      dir={locale === "ar" ? "rtl" : "ltr"}
+      style={{
+        background: "var(--ds-color-background)",
+        color: "var(--ds-color-text-primary)",
+        minHeight: "100vh",
+        padding: 24,
+      }}
+    >
+      <Box
+        style={{
+          inlineSize: "100%",
+          maxInlineSize: 1280,
+          minInlineSize: 0,
+          marginInline: "auto",
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr)",
+          gap: 24,
+        }}
+      >
+        <HeaderSection copy={copy} />
+        {/* Main grid: 1fr / 340px, collapses to one column under ~900px
+            (flex-wrap: 560 + 24 gap + 320 basis ≈ 904px breakpoint). */}
+        <Box style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "flex-start" }}>
+          <Box style={{ flex: "1 1 560px", minInlineSize: 0, display: "grid", gap: 24 }}>
+            <ToolbarSection copy={copy} initialDensity={appearanceDensity} />
+            <TableSection copy={copy} />
+            <OverlaysSection
+              copy={copy}
+              modalInitiallyOpen={modalInitiallyOpen}
+              sheetInitiallyOpen={sheetInitiallyOpen}
+            />
+            <WidgetsSection copy={copy} />
+            <StatesSection copy={copy} />
+          </Box>
+          <Box style={{ flex: "1 1 320px", minInlineSize: 280, maxInlineSize: "100%" }}>
+            <SideSection copy={copy} />
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+}

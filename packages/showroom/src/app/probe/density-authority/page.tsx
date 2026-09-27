@@ -1,8 +1,4 @@
-"use client";
-
-import { Suspense, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
-
+import { FleetGround, probeParam, type ProbeSearchParams } from "@/components/probes/ground";
 import {
   DensityAuthorityProbe,
   type DensityAuthorityDensity,
@@ -29,24 +25,23 @@ function sanitizeLocale(value: string | null): DensityAuthorityLocale {
   return value === "es" || value === "ar" ? value : "en";
 }
 
-function ProbeContent() {
-  const searchParams = useSearchParams();
-  const cell = useMemo(
-    () => ({
-      source: sanitizeSource(searchParams.get("source")),
-      density: sanitizeDensity(searchParams.get("density")),
-      locale: sanitizeLocale(searchParams.get("locale")),
-    }),
-    [searchParams]
-  );
+function ProbeContent({ params }: { params: ProbeSearchParams }) {
+  const cell = {
+    source: sanitizeSource(probeParam(params, "source")),
+    density: sanitizeDensity(probeParam(params, "density")),
+    locale: sanitizeLocale(probeParam(params, "locale")),
+  };
 
-  return <DensityAuthorityProbe {...cell} />;
+  return (
+    <FleetGround source={cell.source} locale={cell.locale} density={cell.density}>
+      <DensityAuthorityProbe {...cell} />
+    </FleetGround>
+  );
 }
 
-export default function DensityAuthorityPage() {
+export default async function DensityAuthorityPage({ searchParams }: { searchParams: Promise<ProbeSearchParams> }) {
+  const params = await searchParams;
   return (
-    <Suspense fallback={null}>
-      <ProbeContent />
-    </Suspense>
+    <ProbeContent params={params} />
   );
 }

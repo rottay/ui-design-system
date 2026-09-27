@@ -1,8 +1,4 @@
-"use client";
-
-import { Suspense, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
-
+import { FleetGround, probeParam, type ProbeSearchParams } from "@/components/probes/ground";
 import {
   K3LaneBProbe,
   type LaneBDensity,
@@ -40,23 +36,24 @@ function sanitizeVariant(value: string | null): LaneBVariant | undefined {
   return VARIANTS.find((variant) => variant === value);
 }
 
-function ProbeContent() {
-  const searchParams = useSearchParams();
-  const cell = useMemo(
-    () => ({
-      source: sanitizeSource(searchParams.get("source")),
-      locale: sanitizeLocale(searchParams.get("locale")),
-      density: sanitizeDensity(searchParams.get("density")),
-      state: sanitizeState(searchParams.get("state")),
-      variant: sanitizeVariant(searchParams.get("variant")),
-    }),
-    [searchParams]
-  );
+function ProbeContent({ params }: { params: ProbeSearchParams }) {
+  const cell = {
+    source: sanitizeSource(probeParam(params, "source")),
+    locale: sanitizeLocale(probeParam(params, "locale")),
+    density: sanitizeDensity(probeParam(params, "density")),
+    state: sanitizeState(probeParam(params, "state")),
+    variant: sanitizeVariant(probeParam(params, "variant")),
+  };
 
-  return <K3LaneBProbe {...cell} />;
+  return (
+    <FleetGround source={cell.source} locale={cell.locale} density={cell.density}>
+      <K3LaneBProbe {...cell} />
+    </FleetGround>
+  );
 }
 
-export default function K3LaneBProbePage() {
+export default async function K3LaneBProbePage({ searchParams }: { searchParams: Promise<ProbeSearchParams> }) {
+  const params = await searchParams;
   return (
     <main>
       {/*
@@ -78,9 +75,7 @@ export default function K3LaneBProbePage() {
       >
         K3 lane B — navigation probe
       </h1>
-      <Suspense fallback={null}>
-        <ProbeContent />
-      </Suspense>
+      <ProbeContent params={params} />
     </main>
   );
 }

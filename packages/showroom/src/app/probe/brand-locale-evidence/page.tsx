@@ -1,13 +1,10 @@
-"use client";
-
-import { Suspense, useEffect, useMemo } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-
+import { BrandLocaleEvidence } from "@/components/brand-locale-evidence";
 import {
-  BrandLocaleEvidence,
+  evidenceSource,
   type BrandLocaleEvidenceFixture,
   type BrandLocaleEvidenceLocale,
-} from "@/components/brand-locale-evidence";
+} from "@/components/brand-locale-evidence/source";
+import { FleetGround, ProbeCellSwitch, probeParam, type ProbeSearchParams } from "@/components/probes/ground";
 
 function sanitizeFixture(value: string | null): BrandLocaleEvidenceFixture {
   return value === "themanagementmiami" ? value : "bithire";
@@ -17,46 +14,19 @@ function sanitizeLocale(value: string | null): BrandLocaleEvidenceLocale {
   return value === "es" || value === "ar" ? value : "en";
 }
 
-function ProbeContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const fixture = useMemo(
-    () => sanitizeFixture(searchParams.get("fixture")),
-    [searchParams]
-  );
-  const locale = useMemo(
-    () => sanitizeLocale(searchParams.get("locale")),
-    [searchParams]
-  );
+const CELL_AXES = {
+  fixture: { values: ["bithire", "themanagementmiami"], fallback: "bithire" },
+  locale: { values: ["en", "es", "ar"], fallback: "en" },
+};
 
-  useEffect(() => {
-    const probeWindow = window as Window & {
-      __setBrandLocaleEvidenceCell?: (next: {
-        fixture: BrandLocaleEvidenceFixture;
-        locale: BrandLocaleEvidenceLocale;
-      }) => void;
-    };
-    probeWindow.__setBrandLocaleEvidenceCell = (next) => {
-      const params = new URLSearchParams({
-        fixture: sanitizeFixture(next.fixture),
-        locale: sanitizeLocale(next.locale),
-      });
-      router.replace(`/probe/brand-locale-evidence?${params.toString()}`, {
-        scroll: false,
-      });
-    };
-    return () => {
-      delete probeWindow.__setBrandLocaleEvidenceCell;
-    };
-  }, [router]);
-
-  return <BrandLocaleEvidence fixture={fixture} locale={locale} />;
-}
-
-export default function BrandLocaleEvidencePage() {
+export default async function BrandLocaleEvidencePage({ searchParams }: { searchParams: Promise<ProbeSearchParams> }) {
+  const params = await searchParams;
+  const fixture = sanitizeFixture(probeParam(params, "fixture"));
+  const locale = sanitizeLocale(probeParam(params, "locale"));
   return (
-    <Suspense fallback={null}>
-      <ProbeContent />
-    </Suspense>
+    <FleetGround source={evidenceSource(fixture)} locale={locale}>
+      <ProbeCellSwitch hook="__setBrandLocaleEvidenceCell" route="/probe/brand-locale-evidence" axes={CELL_AXES} />
+      <BrandLocaleEvidence fixture={fixture} locale={locale} />
+    </FleetGround>
   );
 }
