@@ -61,7 +61,6 @@ export const paletteDeriver: FamilyDeriver = {
     "--ds-color-*",
     "--ds-text-primary",
     "--ds-text-secondary",
-    "--ds-text-tertiary",
     "--ds-text-disabled",
     "--ds-text-inverse",
     "--ds-border-color*",

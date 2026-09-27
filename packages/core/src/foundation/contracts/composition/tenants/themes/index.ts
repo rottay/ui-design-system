@@ -520,7 +520,6 @@ export interface BrandPalette {
 export interface BrandPaletteAliases {
   textPrimary?: string;
   textSecondary?: string;
-  textTertiary?: string;
   textDisabled?: string;
   textInverse?: string;
   borderColorDefault?: string;

@@ -954,7 +954,6 @@
   /* Text Colors */
   --ds-text-primary: var(--ds-color-text-primary);
   --ds-text-secondary: var(--ds-color-text-secondary);
-  --ds-text-tertiary: var(--ds-color-text-tertiary);
   --ds-text-disabled: var(--ds-color-text-disabled);
   --ds-text-inverse: var(--ds-color-text-on-primary);
 

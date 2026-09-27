@@ -98,7 +98,6 @@ const EXTENDED_PALETTE_CHANNELS = {
 const PALETTE_ALIAS_CHANNELS = {
   textPrimary: "--ds-text-primary",
   textSecondary: "--ds-text-secondary",
-  textTertiary: "--ds-text-tertiary",
   textDisabled: "--ds-text-disabled",
   textInverse: "--ds-text-inverse",
   borderColorDefault: "--ds-border-color-default",
