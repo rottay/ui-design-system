@@ -44,6 +44,7 @@ import type {
 } from "../../contracts";
 import { useOptionalFormatter } from "@/infrastructure/runtime/i18n";
 import { useAdaptiveBoardLayout } from "../../runtime/adaptive/react";
+import { useAdaptation } from "@/infrastructure/runtime/adaptation";
 import {
   resolveGridSlot,
   resolveResizeAxes,
@@ -354,6 +355,36 @@ const KernelReflow = React.memo(function KernelReflow({
   return null;
 });
 
+interface AdaptedCell {
+  readonly cellRef: React.MutableRefObject<HTMLElement | null>;
+  readonly posture?: string;
+  readonly content: React.ReactNode;
+}
+
+const NO_VIEW: { view?: string } = {};
+
+/* The cell's own width picks the view, through the tenant's posture ladder, not the board's tier. */
+function AdaptiveCell({
+  item,
+  children,
+}: {
+  item: WidgetBoardItem;
+  children: (adapted: AdaptedCell) => React.ReactElement;
+}): React.ReactElement {
+  const cellRef = useRef<HTMLElement | null>(null);
+  const declared = item.adapt !== undefined || item.views !== undefined;
+  const { adaptation, postureAttribute } = useAdaptation<{ view?: string }>(item.adapt, {
+    base: NO_VIEW,
+    containerRef: declared ? cellRef : undefined,
+  });
+  const view = adaptation.view !== undefined ? item.views?.[adaptation.view] : undefined;
+  return children({
+    cellRef,
+    posture: declared ? postureAttribute : undefined,
+    content: view === undefined ? item.content : view,
+  });
+}
+
 /** Modern-only compositions (the auto-fit catalog, the root posture); absent, every engine renders as before. */
 export interface WidgetBoardModernSlots {
   readonly CatalogGrid?: React.ComponentType<{
@@ -365,6 +396,8 @@ export interface WidgetBoardModernSlots {
   readonly rootPosture?: string;
   /** Drag and resize on the shared DnD kernel; absent, the legacy-frozen sessions below run. */
   readonly kernelGestures?: boolean;
+  /** Each cell adapts its own view to its own width; absent, every cell renders `content`. */
+  readonly adaptiveCells?: boolean;
 }
 
 type KernelMovePayload = { readonly key: string };
@@ -1664,11 +1697,12 @@ export function WidgetBoardEngine({
                       : {}),
                   } as CSSProperties)
                 : undefined;
-            return (
+            const renderCell = (adapted?: AdaptedCell): React.ReactElement => (
               <BoardCardShell
                 key={item.id}
                 ref={(node) => {
                   setCellRef(item.id, node);
+                  if (adapted) adapted.cellRef.current = node;
                   if (kernelGestures)
                     kernelReflowRef.current?.register(item.id)(
                       narrow || activeResizeSession?.id === item.id ? null : node
@@ -1688,6 +1722,7 @@ export function WidgetBoardEngine({
                     ? "true"
                     : "false"
                 }
+                data-posture={adapted?.posture}
                 draggable={false}
                 style={cellStyle}
               >
@@ -1968,9 +2003,16 @@ export function WidgetBoardEngine({
                   className="ds-widget-board__content"
                   data-part="card-content"
                 >
-                  {item.content}
+                  {adapted ? adapted.content : item.content}
                 </Stack>
               </BoardCardShell>
+            );
+            return modernSlots?.adaptiveCells ? (
+              <AdaptiveCell key={item.id} item={item}>
+                {renderCell}
+              </AdaptiveCell>
+            ) : (
+              renderCell()
             );
           })}
           {kernelGestures ? (

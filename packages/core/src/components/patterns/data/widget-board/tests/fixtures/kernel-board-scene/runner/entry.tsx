@@ -26,4 +26,5 @@ for (const [name, value] of Object.entries(ROOT_ATTRIBUTES)) document.documentEl
 const host = document.getElementById('root');
 if (!host) throw new Error('kernel-board runner: #root missing');
 const catalog = new URLSearchParams(window.location.search).get('catalog') === '1';
-createRoot(host).render(<KernelBoardScene catalog={catalog} />);
+const adaptive = new URLSearchParams(window.location.search).get('adapt') === '1';
+createRoot(host).render(<KernelBoardScene catalog={catalog} adaptive={adaptive} />);

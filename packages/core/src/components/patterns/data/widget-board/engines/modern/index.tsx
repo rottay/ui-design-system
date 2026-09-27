@@ -56,7 +56,7 @@ export default function ModernWidgetBoard(props: WidgetBoardProps): React.ReactE
     [onItemsChange, onLayoutChange],
   );
   const modernSlots = useMemo<WidgetBoardModernSlots>(
-    () => ({ CatalogGrid: ModernCatalogGrid, rootRef, rootPosture: postureAttribute, kernelGestures: true }),
+    () => ({ CatalogGrid: ModernCatalogGrid, rootRef, rootPosture: postureAttribute, kernelGestures: true, adaptiveCells: true }),
     [postureAttribute],
   );
   return (

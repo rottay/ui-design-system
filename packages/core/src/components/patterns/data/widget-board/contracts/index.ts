@@ -54,7 +54,15 @@ export interface WidgetBoardItem {
   header?: WidgetBoardHeader;
   /** Rich metadata for the add-widget catalog. */
   catalog?: WidgetBoardCatalogEntry;
+  /** The universal fallback, and the only node the frozen engines render. */
   content: ReactNode;
+  /**
+   * Named render nodes the app owns; the DS gives the names no meaning. Modern renders the one
+   * the item's `adapt` selects at the cell's own width, and `content` when none is selected.
+   */
+  views?: Record<string, ReactNode>;
+  /** Which view paints per posture, resolved against the cell's own width, never the board's. */
+  adapt?: Adapt<{ view: string }>;
   size: WidgetBoardSize;
   /** Optional user-owned physical height in CSS pixels. Omit for intrinsic height. */
   height?: number;

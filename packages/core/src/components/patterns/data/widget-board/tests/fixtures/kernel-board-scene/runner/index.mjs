@@ -11,6 +11,9 @@
  *   4. A real pointer resize on the inline-end edge previews whole columns and commits once at
  *      release; the separator's own keyboard arm still resizes.
  *   5. At rest nothing the kernel adds exists: no ghost, and the frozen path never has one.
+ *   7. Arm (c): an adaptive cell switches its view (number at compact, chart at expanded) as the
+ *      CELL's width changes -- by a real kernel resize and by resizing the board's container --
+ *      with the viewport fixed; the switched views are axe-clean.
  *   6. A reorder reflows the Modern cells through the motion kernel (a transform invert, fill
  *      'backwards', never the layout-x/y FLIP), and once it completes each cell's own CSS
  *      transform is live again with no inline transform left behind.
@@ -25,7 +28,7 @@
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = resolve(HERE, '../../../../../../../../..');
@@ -58,10 +61,16 @@ const REST_PROPS = [
   'width', 'height',
 ];
 
-async function openScene(page, url, { catalog = false, init } = {}) {
+async function openScene(page, url, { catalog = false, adaptive = false, init } = {}) {
   if (init) await page.addInitScript(init);
-  await page.goto(`${url}${catalog ? '?catalog=1' : ''}`, { waitUntil: 'load', timeout: 120_000 });
-  await page.waitForSelector(catalog ? '[data-part="catalog-grid"]' : `${MODERN} [aria-label="Move: a"]`, {
+  const query = catalog ? '?catalog=1' : adaptive ? '?adapt=1' : '';
+  await page.goto(`${url}${query}`, { waitUntil: 'load', timeout: 120_000 });
+  const ready = catalog
+    ? '[data-part="catalog-grid"]'
+    : adaptive
+      ? `${MODERN} [aria-label="Move: Pipeline"]`
+      : `${MODERN} [aria-label="Move: a"]`;
+  await page.waitForSelector(ready, {
     timeout: 120_000,
   });
   await page.evaluate(() => document.fonts.ready);
@@ -442,6 +451,79 @@ async function main() {
       report.legacyReflowControl = await frozenPage.evaluate(() => window.__animations);
       console.log(`MEASURE legacy FLIP on the same reorder (frozen board): ${JSON.stringify(report.legacyReflowControl)}`);
       await motion.close();
+
+      // -- 7. arm (c): the cell's own width switches its view, the viewport never moves --------
+      const axeSource = readFileSync(coreRequire.resolve('axe-core'), 'utf8');
+      const adaptPage = await fresh();
+      await openScene(adaptPage, url, { adaptive: true });
+      await adaptPage.addScriptTag({ content: axeSource });
+      const PIPE = `${MODERN} [data-widget-id="pipeline"]`;
+      const readCell = () => adaptPage.evaluate((selector) => {
+        const cell = document.querySelector(selector);
+        const views = ['content', 'number', 'chart'].filter((name) => cell.querySelector(`[data-testid="view-${name}"]`));
+        return {
+          views,
+          posture: cell.getAttribute('data-posture'),
+          width: Math.round(cell.getBoundingClientRect().width),
+          viewport: [window.innerWidth, window.innerHeight],
+        };
+      }, PIPE);
+      const settle = () => adaptPage.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
+      const axeCell = () => adaptPage.evaluate(async (selector) => {
+        const result = await window.axe.run(document.querySelector(selector), { resultTypes: ['violations'] });
+        return result.violations.filter((violation) => violation.impact === 'serious' || violation.impact === 'critical').map((violation) => violation.id);
+      }, PIPE);
+      const steps = [];
+      await settle();
+      steps.push({ step: 'rest md', ...(await readCell()), axe: await axeCell() });
+      const adaptColumn = await adaptPage.evaluate((selector) => {
+        const grid = document.querySelector(`${selector} [data-part="grid"]`);
+        const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
+        return (grid.getBoundingClientRect().width - gap * 11) / 12;
+      }, MODERN);
+      const widen = await centre(adaptPage, `${PIPE} [data-part="resize-handle"][data-edge="inline-end"]`);
+      await adaptPage.mouse.move(widen.x, widen.y);
+      await adaptPage.mouse.down();
+      await adaptPage.mouse.move(widen.x + adaptColumn * 8, widen.y, { steps: 12 });
+      await adaptPage.mouse.up();
+      await adaptPage.waitForFunction((selector) => document.querySelector(selector)?.getAttribute('data-size') === 'wide', PIPE);
+      await settle();
+      steps.push({ step: 'kernel resize md -> wide', ...(await readCell()), axe: await axeCell() });
+      await adaptPage.evaluate(() => window.__setBoardWidth(700));
+      await adaptPage.waitForFunction((selector) => document.querySelector(selector)?.getAttribute('data-posture')?.endsWith('compact'), PIPE);
+      await settle();
+      steps.push({ step: 'container 1100 -> 700px', ...(await readCell()), axe: await axeCell() });
+      await adaptPage.evaluate(() => window.__setBoardWidth(1100));
+      await adaptPage.waitForFunction((selector) => document.querySelector(selector)?.getAttribute('data-posture')?.endsWith('expanded'), PIPE);
+      await settle();
+      steps.push({ step: 'container 700 -> 1100px', ...(await readCell()), axe: await axeCell() });
+      await adaptPage.locator(`${PIPE} [data-part="resize-handle"][data-edge="inline-end"]`).focus();
+      await adaptPage.keyboard.press('ArrowLeft');
+      await adaptPage.waitForFunction((selector) => document.querySelector(selector)?.getAttribute('data-posture')?.endsWith('regular'), PIPE);
+      await settle();
+      steps.push({ step: 'separator wide -> lg', ...(await readCell()), axe: await axeCell() });
+      report.armC = steps;
+      console.log(`MEASURE arm c ${JSON.stringify(steps)}`);
+      const viewportFixed = steps.every((row) => JSON.stringify(row.viewport) === JSON.stringify(steps[0].viewport));
+      const expected = [
+        ['number', 'compact'],
+        ['chart', 'expanded'],
+        ['number', 'compact'],
+        ['chart', 'expanded'],
+        ['content', 'regular'],
+      ];
+      assert(
+        "arm (c): the adaptive cell's view follows the CELL's own posture -- number, chart, number, chart, content -- through a kernel resize, a container resize both ways and a keyboard resize, with the viewport fixed",
+        viewportFixed && steps.every((row, index) =>
+          JSON.stringify(row.views) === JSON.stringify([expected[index][0]]) && (row.posture ?? '').endsWith(expected[index][1])),
+        steps.map(({ step, views, posture, width, viewport }) => ({ step, views, posture, width, viewport })),
+      );
+      assert(
+        'the switched views are axe-clean (no serious or critical violation inside the cell)',
+        steps.every((row) => row.axe.length === 0),
+        steps.map(({ step, axe }) => ({ step, axe })),
+      );
+      await adaptPage.close();
 
       if (SELF_CHECK) {
         await page.close();
