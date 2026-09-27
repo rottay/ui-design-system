@@ -14,7 +14,7 @@ import {
 
 import { DASHBOARD_LABELS, DASHBOARD_WIDGETS } from '../widgets';
 
-import { DASHBOARD_WIDTHS } from './widths';
+import { DASHBOARD_WIDTHS } from '../widths';
 
 interface LayoutRecord {
   readonly commits: number;
