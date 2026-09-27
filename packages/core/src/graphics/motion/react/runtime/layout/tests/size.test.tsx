@@ -64,7 +64,7 @@ describe('useSizeAnimation', () => {
 
     expect(waapi.calls).toHaveLength(1);
     expect(waapi.calls[0].keyframes).toEqual([{ transform: 'scale(1, 0.25)' }, { transform: 'none' }]);
-    expect(waapi.calls[0].options).toMatchObject({ fill: 'both' });
+    expect(waapi.calls[0].options).toMatchObject({ fill: 'backwards' });
   });
 
   it('forces the measured fallback when the call site asks for it, feature support notwithstanding', () => {

@@ -95,7 +95,7 @@ export function useSizeAnimation<K extends string = string>(
     const { durationMs, easing } = readTiming(channelRoot, durationVar, easingVar);
     if (durationMs <= 0) return;
 
-    const writes: Array<[HTMLElement, Keyframe[], FillMode]> = [];
+    const writes: Array<[HTMLElement, Keyframe[]]> = [];
     nodesRef.current.forEach((node, key) => {
       const first = firstRects.get(key);
       const last = lastRects.get(key);
@@ -106,8 +106,7 @@ export function useSizeAnimation<K extends string = string>(
       if (!widthChanged && !heightChanged) return;
 
       if (strategy === 'interpolate-size') {
-        // `auto` is the endpoint keyword interpolation exists for, and the fill
-        // is backwards so the resting size stays the one the stylesheet states.
+        // `auto` is the endpoint keyword interpolation exists for.
         const from: Keyframe = {};
         const to: Keyframe = {};
         if (heightChanged) {
@@ -118,18 +117,18 @@ export function useSizeAnimation<K extends string = string>(
           from.inlineSize = `${first.width}px`;
           to.inlineSize = 'auto';
         }
-        writes.push([node, [from, to], 'backwards']);
+        writes.push([node, [from, to]]);
         return;
       }
 
       const scaleX = last.width === 0 ? 1 : first.width / last.width;
       const scaleY = last.height === 0 ? 1 : first.height / last.height;
-      writes.push([node, [{ transform: `scale(${scaleX}, ${scaleY})` }, { transform: 'none' }], 'both']);
+      writes.push([node, [{ transform: `scale(${scaleX}, ${scaleY})` }, { transform: 'none' }]]);
     });
 
-    for (const [node, keyframes, fill] of writes) {
+    for (const [node, keyframes] of writes) {
       cancelInFlight(node);
-      play(node, keyframes, durationMs, easing, fill);
+      play(node, keyframes, durationMs, easing);
     }
   });
 

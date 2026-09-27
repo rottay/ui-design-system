@@ -51,7 +51,7 @@ describe('useFlipLayout (layout kernel reflow arm)', () => {
     expect(call.options).toMatchObject({
       duration: 200,
       easing: 'cubic-bezier(0.2, 0, 0, 1)',
-      fill: 'both',
+      fill: 'backwards',
     });
     const keyframes = call.keyframes as Array<{ transform: string }>;
     expect(keyframes[0].transform).toContain('translate(-100px, 0px)');
@@ -95,7 +95,7 @@ describe('useFlipLayout (layout kernel reflow arm)', () => {
     expect(waapi.calls).toHaveLength(0);
   });
 
-  it('commits then cancels an animation already in flight before starting a new one', () => {
+  it('cancels an animation already in flight, without committing it, before starting a new one', () => {
     uninstallWaapi();
     waapi = installWaapi([{ cancel: () => {}, commitStyles: () => {} }]);
     const stub = waapi;
@@ -111,7 +111,7 @@ describe('useFlipLayout (layout kernel reflow arm)', () => {
     });
     rerender(<FlipHarness x={100} />);
 
-    expect(waapi.commitStyles).toHaveBeenCalledTimes(1);
+    expect(waapi.commitStyles).not.toHaveBeenCalled();
     expect(waapi.cancel).toHaveBeenCalledTimes(1);
   });
 
