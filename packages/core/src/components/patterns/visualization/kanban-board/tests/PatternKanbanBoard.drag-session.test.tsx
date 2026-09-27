@@ -3,6 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import ModernKanbanBoard from '../engines/modern';
+import { installModeledWaapi } from '@/graphics/motion/react/runtime/layout/tests/support';
 import type { KanbanColumnDef } from '../../../../../foundation/contracts/runtime/components/patterns/core';
 
 /**
@@ -189,6 +190,57 @@ describe('KanbanBoard (modern) FLIP coupling', () => {
       container.querySelectorAll('[data-part="column"]')[1],
     );
     expect(animated.map((node) => node.textContent)).toContain('Task A');
+  });
+
+  it('leaves no inline transform on any card once its reflows complete, interrupted ones included', () => {
+    const waapi = installModeledWaapi();
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(
+      function (this: HTMLElement) {
+        return laidOutRect(this);
+      },
+    );
+    vi.spyOn(window, 'getComputedStyle').mockImplementation(
+      () =>
+        ({
+          getPropertyValue: (name: string) =>
+            name === '--ds-motion-rearrange' ? '200ms' : 'ease-out',
+        }) as unknown as CSSStyleDeclaration,
+    );
+
+    function Harness() {
+      const [live, setLive] = useState(crossColumns);
+      return (
+        <ModernKanbanBoard<Task>
+          {...boardProps(live, {
+            onItemMove: (id: string, from: string, to: string, position: number) =>
+              setLive((current) => moveItem(current, id, from, to, position)),
+          })}
+        />
+      );
+    }
+    const { container } = render(<Harness />);
+    const drop = (title: string, target: Element) => {
+      fireEvent.dragStart(cardFor(title), startTransfer());
+      fireEvent.dragOver(target, overTransfer());
+      fireEvent.drop(target, dropTransfer(title === 'Task A' ? 'task-1' : 'task-2'));
+    };
+    const lane = (index: number) => container.querySelectorAll('[data-part="column-body"]')[index];
+    const cards = () => Array.from(container.querySelectorAll<HTMLElement>('[data-part="card"]'));
+
+    // A same-column reorder keeps both nodes mounted, so the second drop lands
+    // while the first reorder is still in flight on them.
+    drop('Task A', cardFor('Task B'));
+    expect(waapi.inEffect(cardFor('Task A'))).toBeGreaterThan(0);
+    drop('Task A', cardFor('Task B'));
+    waapi.finishAll();
+    drop('Task A', lane(1));
+    waapi.finishAll();
+
+    expect(cards()).toHaveLength(2);
+    for (const card of cards()) {
+      expect(card.style.transform).toBe('');
+      expect(waapi.inEffect(card)).toBe(0);
+    }
   });
 });
 
