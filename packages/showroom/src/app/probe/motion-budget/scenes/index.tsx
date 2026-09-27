@@ -14,6 +14,9 @@ import {
   useReducedMotion,
   useSharedElementKey,
   useSizeAnimation,
+  WidgetBoard,
+  type WidgetBoardItem,
+  type WidgetBoardLabels,
 } from '@rottay/design-system';
 
 import { MOTION_BUDGET_DOM, type MotionBudgetSceneId } from '../roster';
@@ -135,6 +138,49 @@ function PresenceRows() {
   );
 }
 
+const BOARD_LABELS: WidgetBoardLabels = {
+  customize: 'Customize',
+  done: 'Done',
+  addWidget: 'Add widget',
+  reset: 'Reset',
+  emptyCatalog: 'Empty',
+  editHint: 'Editing',
+  readHint: 'Reading',
+  move: 'Move',
+  resize: 'Resize',
+  remove: 'Remove',
+};
+
+const BOARD_ITEMS: WidgetBoardItem[] = CARD_KEYS.map((key, index) => ({
+  id: key,
+  title: key,
+  accessibleTitle: key,
+  size: 'sm',
+  order: index,
+  visible: true,
+  content: <Text {...{ [MOTION_BUDGET_DOM.subject]: key }}>{key}</Text>,
+}));
+
+// The reorder runs through the board's own keyboard move, the path that snapshots before it commits.
+function WidgetBoardReflow() {
+  const [items, setItems] = useState(BOARD_ITEMS);
+  const [forward, setForward] = useState(true);
+  const move = () => {
+    const control = document.querySelector<HTMLElement>(`[aria-label="Move: ${GROWN_KEY}"]`);
+    control?.dispatchEvent(new KeyboardEvent('keydown', { key: forward ? 'ArrowRight' : 'ArrowLeft', bubbles: true }));
+    setForward((value) => !value);
+  };
+
+  return (
+    <>
+      <Trigger label="Move the first card" onPress={move} />
+      <Box width="56rem" paddingTop="md">
+        <WidgetBoard labels={BOARD_LABELS} items={items} editable defaultEditing onItemsChange={setItems} />
+      </Box>
+    </>
+  );
+}
+
 export function MotionBudgetScene({ scene }: { scene: MotionBudgetSceneId }) {
   const [ready, setReady] = useState(false);
   const [sizeStrategy, setSizeStrategy] = useState<string | undefined>(undefined);
@@ -159,6 +205,7 @@ export function MotionBudgetScene({ scene }: { scene: MotionBudgetSceneId }) {
         {scene === 'size-interpolate' ? <SizeGrid sizeStrategy="auto" onStrategy={setSizeStrategy} /> : null}
         {scene === 'size-measured' ? <SizeGrid sizeStrategy="measured" onStrategy={setSizeStrategy} /> : null}
         {scene === 'presence' ? <PresenceRows /> : null}
+        {scene === 'widget-board' ? <WidgetBoardReflow /> : null}
       </LayoutGroup>
     </Box>
   );

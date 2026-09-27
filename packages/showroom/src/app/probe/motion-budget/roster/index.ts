@@ -1,5 +1,5 @@
 // The scene ids are the keys of budget/index.json `ratchets.droppedFrames.scenes`.
-export const MOTION_BUDGET_SCENES = ['reflow', 'size-interpolate', 'size-measured', 'presence'] as const;
+export const MOTION_BUDGET_SCENES = ['reflow', 'size-interpolate', 'size-measured', 'presence', 'widget-board'] as const;
 
 export type MotionBudgetSceneId = (typeof MOTION_BUDGET_SCENES)[number];
 
