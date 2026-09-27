@@ -101,7 +101,6 @@ const PALETTE_ALIAS_CHANNELS = {
   textTertiary: "--ds-text-tertiary",
   textDisabled: "--ds-text-disabled",
   textInverse: "--ds-text-inverse",
-  borderColor: "--ds-border-color",
   borderColorDefault: "--ds-border-color-default",
   borderColorMuted: "--ds-border-color-muted",
   borderColorStrong: "--ds-border-color-strong",

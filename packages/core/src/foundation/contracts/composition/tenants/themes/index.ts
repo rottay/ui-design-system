@@ -523,7 +523,6 @@ export interface BrandPaletteAliases {
   textTertiary?: string;
   textDisabled?: string;
   textInverse?: string;
-  borderColor?: string;
   borderColorDefault?: string;
   borderColorMuted?: string;
   borderColorStrong?: string;

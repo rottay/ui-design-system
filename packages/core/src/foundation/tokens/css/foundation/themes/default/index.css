@@ -959,7 +959,6 @@
   --ds-text-inverse: var(--ds-color-text-on-primary);
 
   /* Border Colors */
-  --ds-border-color: var(--ds-color-border);
   --ds-border-color-default: var(--ds-color-border-primary);
   --ds-border-color-muted: var(--ds-color-border-subtle);
   --ds-border-color-strong: var(--ds-color-border-secondary);

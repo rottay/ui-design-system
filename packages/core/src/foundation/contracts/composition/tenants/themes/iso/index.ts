@@ -248,7 +248,6 @@ const DEFAULT_PALETTE_ALIASES_SHAPE: BrandPaletteAliases = {
   textTertiary: undefined,
   textDisabled: undefined,
   textInverse: undefined,
-  borderColor: undefined,
   borderColorDefault: undefined,
   borderColorMuted: undefined,
   borderColorStrong: undefined,
