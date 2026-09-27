@@ -387,8 +387,15 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
   const [direction, setDirection] = useState<"ltr" | "rtl">("ltr");
   const [language, setLanguage] = useState<string | undefined>();
   const [portalScope, setPortalScope] = useState<PortalScopeAttributes>({});
-  const [portalVariables, setPortalVariables] =
-    useState<DsPortalVariableStyle>({});
+  // Only the mounted bubble reads the portal variables; while it is absent a lineage
+  // mutation marks them stale instead of walking every computed custom property.
+  const portalVariablesRef = useRef<{ stale: boolean; value: DsPortalVariableStyle }>({
+    stale: false,
+    value: {},
+  });
+  const [, setPortalVariablesVersion] = useState(0);
+  const presentRef = useRef(present);
+  presentRef.current = present;
   const positioningPlacement = toPhysicalPlacement(
     requestedPlacement,
     direction
@@ -450,19 +457,24 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
   // onto the bubble so RTL/i18n behavior is identical in both branches.
   useLayoutEffect(() => {
     if (!anchorEl || typeof window === "undefined") return undefined;
-    const update = (): void => {
+    const update = (initial: boolean): void => {
       const locale = readLocaleContext(anchorEl);
       setDirection(locale.direction);
       setLanguage(locale.language);
       setPortalScope(locale.portalScope);
-      setPortalVariables(readDsPortalVariables(anchorEl));
+      if (initial || presentRef.current) {
+        portalVariablesRef.current = { stale: false, value: readDsPortalVariables(anchorEl) };
+        setPortalVariablesVersion((version) => version + 1);
+      } else {
+        portalVariablesRef.current.stale = true;
+      }
     };
-    update();
+    update(true);
 
     const observer =
       typeof MutationObserver === "undefined"
         ? null
-        : new MutationObserver(update);
+        : new MutationObserver(() => update(false));
     let owner: HTMLElement | null = anchorEl;
     while (owner) {
       observer?.observe(owner, {
@@ -801,6 +813,11 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
     eventHandlers.onPointerUp = clearPointerActivation;
     eventHandlers.onPointerCancel = clearPointerActivation;
   }
+
+  if (present && anchorEl && portalVariablesRef.current.stale) {
+    portalVariablesRef.current = { stale: false, value: readDsPortalVariables(anchorEl) };
+  }
+  const portalVariables = portalVariablesRef.current.value;
 
   // Tooltip bubble geometry. Surface, radius, shadow and the open/closed
   // scale are keyed on data-tone/data-open in the skin; the positioning

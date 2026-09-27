@@ -108,3 +108,6 @@ packages/showroom/.tmp/
 !test-artifacts/rottay-design-platform/
 test-artifacts/rottay-design-platform/*
 !test-artifacts/rottay-design-platform/r1p-round3-evidence/
+
+# Same rule one package down: the showroom captures are generated per run.
+packages/showroom/test-artifacts/

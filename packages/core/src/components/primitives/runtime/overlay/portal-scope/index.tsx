@@ -86,6 +86,48 @@ function snapshotsEqual(
   );
 }
 
+function variablesEqual(a: DsPortalVariableStyle, b: DsPortalVariableStyle): boolean {
+  return snapshotsEqual({ ...EMPTY_SNAPSHOT, variables: a }, { ...EMPTY_SNAPSHOT, variables: b });
+}
+
+/**
+ * The `--ds-*` walk covers every computed custom property on the anchor, so it
+ * runs only when something will read the result: once on mount, on lineage
+ * mutations while a `<PortalScope>` renders this snapshot, and lazily on the
+ * next read after a mutation nobody was consuming.
+ */
+interface PortalVariableCache {
+  readonly anchor: HTMLElement;
+  stale: boolean;
+  value: DsPortalVariableStyle;
+  consumers: number;
+}
+
+const VARIABLE_CACHE = Symbol('portal-scope.variables');
+
+type CachedSnapshot = PortalScopeSnapshot & { [VARIABLE_CACHE]?: PortalVariableCache };
+
+function readCachedVariables(cache: PortalVariableCache): DsPortalVariableStyle {
+  if (cache.stale) {
+    cache.value = readDsPortalVariables(cache.anchor);
+    cache.stale = false;
+  }
+  return cache.value;
+}
+
+function cachedSnapshot(
+  base: Omit<PortalScopeSnapshot, 'variables'>,
+  cache: PortalVariableCache,
+): PortalScopeSnapshot {
+  const snapshot = { ...base } as CachedSnapshot;
+  Object.defineProperty(snapshot, 'variables', {
+    enumerable: true,
+    get: () => readCachedVariables(cache),
+  });
+  Object.defineProperty(snapshot, VARIABLE_CACHE, { value: cache });
+  return snapshot;
+}
+
 /**
  * Reads the DS scope attributes an overlay must re-stamp after portaling.
  * Requires a `[data-ds-root]` ancestor: outside a DS root there is no scope
@@ -188,22 +230,42 @@ export function usePortalScope(
 
   useLayoutEffect(() => {
     if (!anchor || typeof window === 'undefined') return undefined;
-    const update = (): void => {
+    const cache: PortalVariableCache = {
+      anchor,
+      stale: false,
+      value: readDsPortalVariables(anchor),
+      consumers: 0,
+    };
+    const publish = (variablesChanged: boolean): void => {
       const locale = readLocaleContext(anchor);
-      const next: PortalScopeSnapshot = {
-        scope: locale.portalScope,
-        direction: locale.direction,
-        language: locale.language,
-        variables: readDsPortalVariables(anchor),
-      };
-      if (snapshotsEqual(snapshotRef.current, next)) return;
+      const current = snapshotRef.current as CachedSnapshot;
+      const sameLocale =
+        current.direction === locale.direction &&
+        current.language === locale.language &&
+        SCOPE_KEYS.every((key) => current.scope[key] === locale.portalScope[key]);
+      if (sameLocale && !variablesChanged && current[VARIABLE_CACHE] === cache) return;
+      const next = cachedSnapshot(
+        { scope: locale.portalScope, direction: locale.direction, language: locale.language },
+        cache,
+      );
       snapshotRef.current = next;
       setSnapshot(next);
     };
-    update();
+    publish(true);
+
+    const onMutation = (): void => {
+      if (cache.consumers === 0) {
+        cache.stale = true;
+        publish(false);
+        return;
+      }
+      const previous = readCachedVariables(cache);
+      cache.value = readDsPortalVariables(anchor);
+      publish(!variablesEqual(previous, cache.value));
+    };
 
     const observer =
-      typeof MutationObserver === 'undefined' ? null : new MutationObserver(update);
+      typeof MutationObserver === 'undefined' ? null : new MutationObserver(onMutation);
     let owner: HTMLElement | null = anchor;
     while (owner) {
       observer?.observe(owner, {
@@ -244,6 +306,15 @@ export function PortalScope({
   snapshot,
   children,
 }: PortalScopeProps): React.ReactElement {
+  const cache = (snapshot as CachedSnapshot)[VARIABLE_CACHE];
+  // While mounted, lineage mutations re-read the variables eagerly so this wrapper re-renders.
+  useLayoutEffect(() => {
+    if (!cache) return undefined;
+    cache.consumers += 1;
+    return () => {
+      cache.consumers -= 1;
+    };
+  }, [cache]);
   return (
     <div
       data-portal-scope="true"
