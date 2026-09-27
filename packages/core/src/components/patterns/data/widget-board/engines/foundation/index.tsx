@@ -176,6 +176,17 @@ function orderSnapshot(items: WidgetBoardItem[]): readonly string[] {
     .map((item) => item.id);
 }
 
+/* What a reflow can see: the visible order and each widget's footprint. */
+function arrangementKey(items: WidgetBoardItem[]): string {
+  return JSON.stringify(
+    items
+      .filter((item) => item.visible)
+      .slice()
+      .sort((left, right) => left.order - right.order)
+      .map((item) => [item.id, item.size, item.height ?? null])
+  );
+}
+
 function sameOrder(a: readonly string[], b: readonly string[]): boolean {
   return a.length === b.length && a.every((id, index) => id === b[index]);
 }
@@ -338,20 +349,36 @@ function BoardCellControls({
 
 type KernelReflowHandle = ReflowResult<string>;
 
-/* Commits only when the placement key changes, so every play diffs the placement before it. */
+/* After each placement change, snapshot the SETTLED cells: never a kernel invert pose or a CSS
+   entry pose still in flight, which a later re-render would otherwise replay as a move. */
 const KernelReflow = React.memo(function KernelReflow({
   placementKey,
   handle,
+  cells,
 }: {
   placementKey: string;
   handle: React.MutableRefObject<KernelReflowHandle | null>;
+  cells: React.MutableRefObject<Map<string, HTMLElement>>;
 }): null {
   const reflow = useLayoutAnimation<string>({ kind: "reflow" });
   handle.current = reflow;
   const { measure } = reflow;
   useLayoutEffect(() => {
-    measure();
-  }, [placementKey, measure]);
+    const running = [...cells.current.values()]
+      .flatMap((node) => node.getAnimations?.() ?? [])
+      .filter((animation) => Number.isFinite(animation.effect?.getComputedTiming().endTime ?? Infinity));
+    if (running.length === 0) {
+      measure();
+      return;
+    }
+    let current = true;
+    void Promise.all(running.map((animation) => animation.finished.catch(() => null))).then(() => {
+      if (current) measure();
+    });
+    return () => {
+      current = false;
+    };
+  }, [placementKey, measure, cells]);
   return null;
 });
 
@@ -480,6 +507,9 @@ export function WidgetBoardEngine({
   /* It wins in the LAYOUT phase: a passive effect leaves a window where a pointerup could still
      emit a preview built from the previous items. */
   useLayoutEffect(() => {
+    // An owner's new arrangement moves the cells on the next commit: snapshot them first.
+    if (kernelGestures && arrangementKey(layoutRef.current) !== arrangementKey(items))
+      kernelReflowRef.current?.measure();
     itemsRef.current = items;
     layoutRef.current = items;
     setLayout(items);
@@ -2016,7 +2046,7 @@ export function WidgetBoardEngine({
             );
           })}
           {kernelGestures ? (
-            <KernelReflow placementKey={placementKey} handle={kernelReflowRef} />
+            <KernelReflow placementKey={placementKey} handle={kernelReflowRef} cells={cellRefs} />
           ) : null}
           {kernelGestures && ghostOrigin && kernelDrag.preview ? (
             <div

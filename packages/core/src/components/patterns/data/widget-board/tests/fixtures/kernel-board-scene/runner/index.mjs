@@ -382,7 +382,8 @@ async function main() {
           order: cells.map((cell) => cell.getAttribute('data-widget-id')),
           residue: cells.map((cell) => ({
             id: cell.getAttribute('data-widget-id'),
-            attached: cell.getAnimations().length,
+            attached: cell.getAnimations().filter((animation) => animation.constructor.name === 'Animation').length,
+            css: cell.getAnimations().filter((animation) => animation.constructor.name !== 'Animation').map((animation) => `${animation.animationName ?? animation.transitionProperty}:${animation.playState}`),
             inlineTransform: cell.style.transform,
           })),
         };
@@ -397,7 +398,7 @@ async function main() {
         reflow.calls,
       );
       assert(
-        'a completed reflow leaves nothing: no animation attached, no inline transform on any cell',
+        'a completed reflow leaves nothing of the kernel: no kernel animation attached, no inline transform on any cell (the skin\'s own CSS entry animation is its business)',
         reflow.residue.every((cell) => cell.attached === 0 && cell.inlineTransform === ''),
         reflow.residue,
       );
@@ -450,6 +451,64 @@ async function main() {
       await frozenPage.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => null))));
       report.legacyReflowControl = await frozenPage.evaluate(() => window.__animations);
       console.log(`MEASURE legacy FLIP on the same reorder (frozen board): ${JSON.stringify(report.legacyReflowControl)}`);
+
+      // -- 8. an APP-driven reorder (a new items array from the owner) reflows through the kernel too --
+      const appPage = await motion.newPage();
+      appPage.on('pageerror', (error) => pageErrors.push(String(error)));
+      await appPage.addInitScript(() => {
+        const calls = [];
+        window.__animations = calls;
+        const original = Element.prototype.animate;
+        Element.prototype.animate = function (keyframes, options) {
+          const frames = Array.isArray(keyframes) ? keyframes : [];
+          if (this.closest('[data-scene="modern"]') && this.getAttribute('data-widget-id')) {
+            const match = typeof frames[0]?.transform === 'string' ? /translate\(([-\d.]+)px, ([-\d.]+)px\)/.exec(frames[0].transform) : null;
+            calls.push({ id: this.getAttribute('data-widget-id'), dx: match ? Math.round(Number(match[1])) : null, dy: match ? Math.round(Number(match[2])) : null });
+          }
+          return original.call(this, keyframes, options);
+        };
+      });
+      await openScene(appPage, url);
+      const appReorders = [];
+      for (const pass of [1, 2]) {
+        const before = await appPage.evaluate((selector) => Object.fromEntries(
+          Array.from(document.querySelectorAll(`${selector} [data-part="card-shell"]`)).map((cell) => [cell.getAttribute('data-widget-id'), Math.round(cell.getBoundingClientRect().left)]),
+        ), MODERN);
+        await appPage.evaluate(() => {
+          window.__animations.length = 0;
+          window.__appReorder();
+        });
+        await appPage.waitForTimeout(50);
+        await appPage.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => null))));
+        const after = await appPage.evaluate((selector) => ({
+          order: Array.from(document.querySelectorAll(`${selector} [data-part="card-shell"]`)).map((cell) => cell.getAttribute('data-widget-id')),
+          lefts: Object.fromEntries(Array.from(document.querySelectorAll(`${selector} [data-part="card-shell"]`)).map((cell) => [cell.getAttribute('data-widget-id'), Math.round(cell.getBoundingClientRect().left)])),
+          calls: window.__animations.slice(),
+          residue: Array.from(document.querySelectorAll(`${selector} [data-part="card-shell"]`)).map((cell) =>
+            cell.getAnimations().filter((animation) => animation.constructor.name === 'Animation').length + (cell.style.transform ? 1 : 0)),
+          residueDetail: Array.from(document.querySelectorAll(`${selector} [data-part="card-shell"]`)).map((cell) => ({
+            id: cell.getAttribute('data-widget-id'),
+            animations: cell.getAnimations().map((animation) => `${animation.constructor.name}:${animation.animationName ?? animation.transitionProperty ?? ''}:${animation.playState}`),
+            inline: cell.style.transform,
+          })),
+        }), MODERN);
+        const travelled = Object.fromEntries(Object.keys(before).map((id) => [id, after.lefts[id] - before[id]]));
+        appReorders.push({ pass, travelled, ...after });
+      }
+      report.appReorder = appReorders;
+      console.log(`MEASURE app reorder ${JSON.stringify(appReorders.map(({ pass, travelled, calls }) => ({ pass, travelled, calls })))}`);
+      assert(
+        'an app-driven reorder (new items from the owner) animates the moved cells through the kernel, twice in a row: each invert carries the travel, no unmoved cell travels, no replay of the previous move, no kernel residue',
+        appReorders.every(({ travelled, calls, residue }) => {
+          const moved = Object.entries(travelled).filter(([, distance]) => Math.abs(distance) > 100).map(([id]) => id);
+          return moved.length === 2 && residue.every((count) => count === 0)
+            && moved.every((id) => calls.some((call) => call.id === id && call.dx !== null && Math.abs(call.dx + travelled[id]) <= 2))
+            && calls.every((call) => moved.includes(call.id) || (Math.abs(call.dx ?? 0) <= 3 && Math.abs(call.dy ?? 0) <= 10))
+            && !moved.some((id) => calls.some((call) => call.id === id && call.dx !== null && Math.abs(call.dx - travelled[id]) <= 2));
+        }),
+        appReorders.map(({ pass, travelled, calls }) => ({ pass, travelled, calls })),
+      );
+      await appPage.close();
       await motion.close();
 
       // -- 7. arm (c): the cell's own width switches its view, the viewport never moves --------

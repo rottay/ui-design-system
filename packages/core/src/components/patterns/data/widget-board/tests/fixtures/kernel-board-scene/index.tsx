@@ -79,6 +79,7 @@ declare global {
   interface Window {
     __board?: BoardRecord;
     __setBoardWidth?: (width: number) => void;
+    __appReorder?: () => void;
   }
 }
 
@@ -90,6 +91,15 @@ export function KernelBoardScene({ catalog, adaptive = false }: { catalog: boole
   const [width, setWidth] = useState(1100);
   window.__board = record;
   window.__setBoardWidth = setWidth;
+  // The owner hands the board a new array with the first and third widgets swapped.
+  window.__appReorder = () =>
+    setItems((current) => {
+      const ranked = [...current].sort((x, y) => x.order - y.order);
+      const [first, , third] = ranked;
+      return current.map((entry) =>
+        entry.id === first.id ? { ...entry, order: third.order } : entry.id === third.id ? { ...entry, order: first.order } : entry
+      );
+    });
   return (
     <DesignSystemProvider
       tenantConfig={getKnownTenantConfig('bithire')}
