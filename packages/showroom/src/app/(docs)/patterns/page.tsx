@@ -1,5 +1,6 @@
 import { ShowroomLink as Link } from "@/components/navigation/link";
-import { Badge, Box, Card, Flex, Stack, Text } from "@/components/showroom-ui";
+import { Badge, Box, Flex, Stack, Text } from "@rottay/design-system";
+import { DocsFrame } from "@/components/docs/frame";
 import { SHOWROOM_SURFACES } from "@/components/playground/tokens/surfaces";
 import {
   patternGroups,
@@ -259,9 +260,13 @@ function MetricTile({
       }}
     >
       <Text
-        size="xs"
-        weight="semibold"
+        as="div"
+        color="inherit"
+        wrap="auto"
         style={{
+          fontSize: '0.75rem',
+          fontWeight: 600,
+          textAlign: 'inherit',
           display: "block",
           color: "var(--ds-color-text-muted)",
           textTransform: "uppercase",
@@ -270,7 +275,7 @@ function MetricTile({
       >
         {label}
       </Text>
-      <Text size="xl" weight="bold" style={{ display: "block", lineHeight: 1.05 }}>
+      <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '1.375rem', fontWeight: 700, textAlign: 'inherit', display: "block", lineHeight: 1.05 }}>
         {value}
       </Text>
       <Box
@@ -283,8 +288,13 @@ function MetricTile({
         }}
       />
       <Text
-        size="xs"
+        as="div"
+        color="inherit"
+        wrap="auto"
         style={{
+          fontSize: '0.75rem',
+          fontWeight: 'inherit',
+          textAlign: 'inherit',
           display: "block",
           color: "var(--ds-color-text-secondary)",
           lineHeight: 1.5,
@@ -300,7 +310,7 @@ function MetricTile({
 export default function PatternsPage() {
   return (
     <Stack spacing="lg" fullWidth>
-      <Card
+      <DocsFrame
         style={{
           padding: 24,
           border: SUBTLE_BORDER,
@@ -351,12 +361,17 @@ export default function PatternsPage() {
               }}
             >
               <Stack spacing="sm">
-                <Text as={"h1" as any} size="2xl" weight="bold" style={{ display: "block" }}>
+                <Box as={"h1" as any} style={{ fontSize: '1.75rem', fontWeight: 700, display: "block" }}>
                   Patterns
-                </Text>
+                </Box>
                 <Text
-                  size="md"
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
                   style={{
+                    fontSize: '1rem',
+                    fontWeight: 'inherit',
+                    textAlign: 'inherit',
                     display: "block",
                     maxWidth: 760,
                     color: "var(--ds-color-text-secondary)",
@@ -368,8 +383,13 @@ export default function PatternsPage() {
                   without rebuilding workflow logic screen by screen.
                 </Text>
                 <Text
-                  size="sm"
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
                   style={{
+                    fontSize: '0.875rem',
+                    fontWeight: 'inherit',
+                    textAlign: 'inherit',
                     display: "block",
                     color: "var(--ds-color-text-muted)",
                     lineHeight: 1.55,
@@ -408,9 +428,13 @@ export default function PatternsPage() {
                 <Stack spacing="sm">
                   <Flex align="center" justify="between" gap={12} style={{ flexWrap: "wrap" }}>
                     <Text
-                      size="xs"
-                      weight="semibold"
+                      as="div"
+                      color="inherit"
+                      wrap="auto"
                       style={{
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        textAlign: 'inherit',
                         display: "block",
                         color: "var(--ds-color-text-muted)",
                         textTransform: "uppercase",
@@ -469,9 +493,13 @@ export default function PatternsPage() {
               >
                 <Stack spacing={10}>
                   <Text
-                    size="xs"
-                    weight="semibold"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      textAlign: 'inherit',
                       display: "block",
                       color: "var(--ds-color-text-muted)",
                       textTransform: "uppercase",
@@ -497,12 +525,17 @@ export default function PatternsPage() {
                         background: CARD_SURFACE,
                       }}
                     >
-                      <Text size="xs" weight="semibold" style={{ display: "block" }}>
+                      <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', display: "block" }}>
                         {item.label}
                       </Text>
                       <Text
-                        size="xs"
+                        as="div"
+                        color="inherit"
+                        wrap="auto"
                         style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 'inherit',
+                          textAlign: 'inherit',
                           display: "block",
                           marginTop: 6,
                           color: "var(--ds-color-text-secondary)",
@@ -530,12 +563,17 @@ export default function PatternsPage() {
             <Stack spacing="md">
               <Flex align="center" justify="between" gap={12} style={{ flexWrap: "wrap" }}>
                 <Box>
-                  <Text as={"h2" as any} size="lg" weight="semibold" style={{ display: "block" }}>
+                  <Box as={"h2" as any} style={{ fontSize: '1.125rem', fontWeight: 600, display: "block" }}>
                     Fast paths
-                  </Text>
+                  </Box>
                   <Text
-                    size="sm"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.875rem',
+                      fontWeight: 'inherit',
+                      textAlign: 'inherit',
                       display: "block",
                       marginTop: 6,
                       color: "var(--ds-color-text-secondary)",
@@ -586,9 +624,13 @@ export default function PatternsPage() {
                     >
                       <Flex align="center" justify="between" gap={8}>
                         <Text
-                          size="sm"
-                          weight="semibold"
+                          as="div"
+                          color="inherit"
+                          wrap="auto"
                           style={{
+                            fontSize: '0.875rem',
+                            fontWeight: 600,
+                            textAlign: 'inherit',
                             display: "block",
                             color: "var(--ds-color-text-primary)",
                             lineHeight: 1.35,
@@ -607,8 +649,13 @@ export default function PatternsPage() {
                         }}
                       />
                       <Text
-                        size="xs"
+                        as="div"
+                        color="inherit"
+                        wrap="auto"
                         style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 'inherit',
+                          textAlign: 'inherit',
                           display: "block",
                           color: "var(--ds-color-text-secondary)",
                           lineHeight: 1.5,
@@ -646,9 +693,13 @@ export default function PatternsPage() {
                       <ActivityIcon size={18} />
                       <Box style={{ minWidth: 0 }}>
                         <Text
-                          size="sm"
-                          weight="semibold"
+                          as="div"
+                          color="inherit"
+                          wrap="auto"
                           style={{
+                            fontSize: '0.875rem',
+                            fontWeight: 600,
+                            textAlign: 'inherit',
                             display: "block",
                             lineHeight: 1.4,
                             overflowWrap: "anywhere",
@@ -665,8 +716,13 @@ export default function PatternsPage() {
                           }}
                         />
                         <Text
-                          size="xs"
+                          as="div"
+                          color="inherit"
+                          wrap="auto"
                           style={{
+                            fontSize: '0.75rem',
+                            fontWeight: 'inherit',
+                            textAlign: 'inherit',
                             display: "block",
                             color: "var(--ds-color-text-secondary)",
                             lineHeight: 1.5,
@@ -684,9 +740,9 @@ export default function PatternsPage() {
             </Stack>
           </Box>
         </Stack>
-      </Card>
+      </DocsFrame>
 
-      <Card
+      <DocsFrame
         style={{
           padding: 24,
           border: SUBTLE_BORDER,
@@ -698,12 +754,17 @@ export default function PatternsPage() {
         <Stack spacing="md">
           <Flex align="center" justify="between" gap={12} style={{ flexWrap: "wrap" }}>
             <Box>
-              <Text as={"h2" as any} size="lg" weight="semibold" style={{ display: "block" }}>
+              <Box as={"h2" as any} style={{ fontSize: '1.125rem', fontWeight: 600, display: "block" }}>
                 Browse by reusable job
-              </Text>
+              </Box>
               <Text
-                size="sm"
+                as="div"
+                color="inherit"
+                wrap="auto"
                 style={{
+                  fontSize: '0.875rem',
+                  fontWeight: 'inherit',
+                  textAlign: 'inherit',
                   display: "block",
                   marginTop: 6,
                   color: "var(--ds-color-text-secondary)",
@@ -726,8 +787,13 @@ export default function PatternsPage() {
             }}
           >
             <Text
-              size="sm"
+              as="div"
+              color="inherit"
+              wrap="auto"
               style={{
+                fontSize: '0.875rem',
+                fontWeight: 'inherit',
+                textAlign: 'inherit',
                 display: "block",
                 color: "var(--ds-color-text-secondary)",
                 lineHeight: 1.5,
@@ -757,7 +823,7 @@ export default function PatternsPage() {
                   href={`/patterns/${group.slug}`}
                   style={{ textDecoration: "none" }}
                 >
-                  <Card
+                  <DocsFrame
                     hoverable
                     style={{
                       height: "100%",
@@ -801,17 +867,20 @@ export default function PatternsPage() {
                             {editorial.icon}
                           </Box>
                           <Box style={{ minWidth: 0 }}>
-                            <Text
+                            <Box
                               as={"h3" as any}
-                              size="lg"
-                              weight="semibold"
-                              style={{ display: "block", lineHeight: 1.25 }}
+                              style={{ fontSize: '1.125rem', fontWeight: 600, display: "block", lineHeight: 1.25 }}
                             >
                               {group.label}
-                            </Text>
+                            </Box>
                             <Text
-                              size="xs"
+                              as="div"
+                              color="inherit"
+                              wrap="auto"
                               style={{
+                                fontSize: '0.75rem',
+                                fontWeight: 'inherit',
+                                textAlign: 'inherit',
                                 display: "block",
                                 marginTop: 4,
                                 color: "var(--ds-color-text-muted)",
@@ -826,8 +895,13 @@ export default function PatternsPage() {
                       </Flex>
 
                       <Text
-                        size="sm"
+                        as="div"
+                        color="inherit"
+                        wrap="auto"
                         style={{
+                          fontSize: '0.875rem',
+                          fontWeight: 'inherit',
+                          textAlign: 'inherit',
                           display: "block",
                           color: "var(--ds-color-text-secondary)",
                           lineHeight: 1.6,
@@ -853,9 +927,13 @@ export default function PatternsPage() {
                           }}
                         >
                           <Text
-                            size="xs"
-                            weight="semibold"
+                            as="div"
+                            color="inherit"
+                            wrap="auto"
                             style={{
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              textAlign: 'inherit',
                               display: "block",
                               textTransform: "uppercase",
                               letterSpacing: "0.08em",
@@ -864,8 +942,13 @@ export default function PatternsPage() {
                             Use when
                           </Text>
                           <Text
-                            size="sm"
+                            as="div"
+                            color="inherit"
+                            wrap="auto"
                             style={{
+                              fontSize: '0.875rem',
+                              fontWeight: 'inherit',
+                              textAlign: 'inherit',
                               display: "block",
                               marginTop: 8,
                               color: "var(--ds-color-text-secondary)",
@@ -887,9 +970,13 @@ export default function PatternsPage() {
                           }}
                         >
                           <Text
-                            size="xs"
-                            weight="semibold"
+                            as="div"
+                            color="inherit"
+                            wrap="auto"
                             style={{
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              textAlign: 'inherit',
                               display: "block",
                               textTransform: "uppercase",
                               letterSpacing: "0.08em",
@@ -898,8 +985,13 @@ export default function PatternsPage() {
                             Best for
                           </Text>
                           <Text
-                            size="sm"
+                            as="div"
+                            color="inherit"
+                            wrap="auto"
                             style={{
+                              fontSize: '0.875rem',
+                              fontWeight: 'inherit',
+                              textAlign: 'inherit',
                               display: "block",
                               marginTop: 8,
                               color: "var(--ds-color-text-secondary)",
@@ -922,9 +1014,13 @@ export default function PatternsPage() {
                         }}
                       >
                         <Text
-                          size="xs"
-                          weight="semibold"
+                          as="div"
+                          color="inherit"
+                          wrap="auto"
                           style={{
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            textAlign: 'inherit',
                             display: "block",
                             color: "var(--ds-color-text-muted)",
                             textTransform: "uppercase",
@@ -957,9 +1053,13 @@ export default function PatternsPage() {
                         }}
                       >
                         <Text
-                          size="xs"
-                          weight="semibold"
+                          as="div"
+                          color="inherit"
+                          wrap="auto"
                           style={{
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            textAlign: 'inherit',
                             display: "block",
                             color: "var(--ds-color-text-muted)",
                             textTransform: "uppercase",
@@ -979,8 +1079,13 @@ export default function PatternsPage() {
                               }}
                             >
                               <Text
-                                size="xs"
+                                as="div"
+                                color="inherit"
+                                wrap="auto"
                                 style={{
+                                  fontSize: '0.75rem',
+                                  fontWeight: 'inherit',
+                                  textAlign: 'inherit',
                                   display: "block",
                                   color: "var(--ds-color-text-secondary)",
                                   fontFamily: "var(--font-geist-mono, monospace)",
@@ -997,13 +1102,13 @@ export default function PatternsPage() {
                         </Flex>
                       </Box>
                     </Stack>
-                  </Card>
+                  </DocsFrame>
                 </Link>
               );
             })}
           </Box>
         </Stack>
-      </Card>
+      </DocsFrame>
 
       <style>{`
         @container showroom-content (max-width: 1120px) {

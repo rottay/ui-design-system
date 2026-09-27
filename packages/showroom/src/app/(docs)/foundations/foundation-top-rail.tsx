@@ -1,5 +1,6 @@
 import { ShowroomLink as Link } from '@/components/navigation/link';
-import { Badge, Box, Card, Flex, Stack, Text } from '@/components/showroom-ui';
+import { Badge, Box, Flex, Stack, Text } from '@rottay/design-system';
+import { DocsFrame } from '@/components/docs/frame';
 
 interface RailStat {
   label: string;
@@ -99,7 +100,7 @@ export function FoundationTopRail({
   const [featuredStat, ...supportStats] = stats;
 
   return (
-    <Card
+    <DocsFrame
       style={{
         width: '100%',
         position: 'relative',
@@ -147,7 +148,7 @@ export function FoundationTopRail({
                 >
                   {backLabel}
                 </Link>
-                <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>/</Text>
+                <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-muted)' }}>/</Text>
               </>
             ) : null}
             <Badge variant="secondary">{badge}</Badge>
@@ -167,9 +168,13 @@ export function FoundationTopRail({
             >
               <Stack spacing={8} fullWidth>
                 <Text
-                  size="xs"
-                  weight="semibold"
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
                   style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    textAlign: 'inherit',
                     color: 'var(--ds-color-text-muted)',
                     textTransform: 'uppercase',
                     letterSpacing: '0.08em',
@@ -202,9 +207,13 @@ export function FoundationTopRail({
           <Stack spacing="md" fullWidth>
             <Stack spacing={10} fullWidth>
               <Text
-                size="xs"
-                weight="semibold"
+                as="div"
+                color="inherit"
+                wrap="auto"
                 style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  textAlign: 'inherit',
                   color: 'var(--ds-color-text-muted)',
                   textTransform: 'uppercase',
                   letterSpacing: '0.12em',
@@ -212,14 +221,12 @@ export function FoundationTopRail({
               >
                 Runtime editorial reference
               </Text>
-              <Text
+              <Box
                 as={"h1" as any}
-                size="3xl"
-                weight="bold"
-                style={{ maxWidth: 780, letterSpacing: '-0.04em' }}
+                style={{ fontSize: '2.25rem', fontWeight: 700, maxWidth: 780, letterSpacing: '-0.04em' }}
               >
                 {title}
-              </Text>
+              </Box>
             </Stack>
 
             <Box
@@ -232,8 +239,13 @@ export function FoundationTopRail({
               }}
             >
               <Text
-                size="md"
+                as="div"
+                color="inherit"
+                wrap="auto"
                 style={{
+                  fontSize: '1rem',
+                  fontWeight: 'inherit',
+                  textAlign: 'inherit',
                   color: 'var(--ds-color-text-secondary)',
                   maxWidth: 820,
                   lineHeight: 1.6,
@@ -262,9 +274,13 @@ export function FoundationTopRail({
               >
                 <Stack spacing={6}>
                   <Text
-                    size="xs"
-                    weight="semibold"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      textAlign: 'inherit',
                       display: 'block',
                       color:
                         featuredPanel.tone === 'dark'
@@ -277,9 +293,13 @@ export function FoundationTopRail({
                     Featured read
                   </Text>
                   <Text
-                    size="sm"
-                    weight="semibold"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.875rem',
+                      fontWeight: 600,
+                      textAlign: 'inherit',
                       display: 'block',
                       color:
                         featuredPanel.tone === 'dark'
@@ -301,8 +321,13 @@ export function FoundationTopRail({
                     }}
                   />
                   <Text
-                    size="sm"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.875rem',
+                      fontWeight: 'inherit',
+                      textAlign: 'inherit',
                       display: 'block',
                       color:
                         featuredPanel.tone === 'dark'
@@ -334,9 +359,13 @@ export function FoundationTopRail({
                 >
                   <Stack spacing={6}>
                     <Text
-                      size="xs"
-                      weight="semibold"
+                      as="div"
+                      color="inherit"
+                      wrap="auto"
                       style={{
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        textAlign: 'inherit',
                         color: 'var(--ds-color-text-muted)',
                         textTransform: 'uppercase',
                         letterSpacing: '0.08em',
@@ -344,7 +373,7 @@ export function FoundationTopRail({
                     >
                       {featuredStat.label}
                     </Text>
-                    <Text size="2xl" weight="bold" style={{ lineHeight: 1.05 }}>
+                    <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '1.75rem', fontWeight: 700, textAlign: 'inherit', lineHeight: 1.05 }}>
                       {featuredStat.value}
                     </Text>
                     {featuredStat.detail ? (
@@ -355,8 +384,13 @@ export function FoundationTopRail({
                         }}
                       >
                         <Text
-                          size="xs"
+                          as="div"
+                          color="inherit"
+                          wrap="auto"
                           style={{
+                            fontSize: '0.75rem',
+                            fontWeight: 'inherit',
+                            textAlign: 'inherit',
                             color: 'var(--ds-color-text-secondary)',
                             lineHeight: 1.5,
                             overflowWrap: 'anywhere',
@@ -394,9 +428,13 @@ export function FoundationTopRail({
                     >
                       <Stack spacing={6}>
                         <Text
-                          size="xs"
-                          weight="semibold"
+                          as="div"
+                          color="inherit"
+                          wrap="auto"
                           style={{
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            textAlign: 'inherit',
                             color: 'var(--ds-color-text-muted)',
                             textTransform: 'uppercase',
                             letterSpacing: '0.08em',
@@ -404,7 +442,7 @@ export function FoundationTopRail({
                         >
                           {stat.label}
                         </Text>
-                        <Text size="lg" weight="bold" style={{ lineHeight: 1.1 }}>
+                        <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '1.125rem', fontWeight: 700, textAlign: 'inherit', lineHeight: 1.1 }}>
                           {stat.value}
                         </Text>
                         {stat.detail ? (
@@ -415,8 +453,13 @@ export function FoundationTopRail({
                             }}
                           >
                             <Text
-                              size="xs"
+                              as="div"
+                              color="inherit"
+                              wrap="auto"
                               style={{
+                                fontSize: '0.75rem',
+                                fontWeight: 'inherit',
+                                textAlign: 'inherit',
                                 color: 'var(--ds-color-text-secondary)',
                                 lineHeight: 1.5,
                                 overflowWrap: 'anywhere',
@@ -457,9 +500,13 @@ export function FoundationTopRail({
                       >
                         <Stack spacing={6}>
                           <Text
-                            size="xs"
-                            weight="semibold"
+                            as="div"
+                            color="inherit"
+                            wrap="auto"
                             style={{
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              textAlign: 'inherit',
                               color:
                                 panel.tone === 'dark'
                                   ? 'rgba(255,255,255,0.7)'
@@ -482,8 +529,13 @@ export function FoundationTopRail({
                             }}
                           />
                           <Text
-                            size="sm"
+                            as="div"
+                            color="inherit"
+                            wrap="auto"
                             style={{
+                              fontSize: '0.875rem',
+                              fontWeight: 'inherit',
+                              textAlign: 'inherit',
                               color:
                                 panel.tone === 'dark'
                                   ? 'rgba(255,255,255,0.84)'
@@ -518,6 +570,6 @@ export function FoundationTopRail({
           }
         `}</style>
       </Stack>
-    </Card>
+    </DocsFrame>
   );
 }

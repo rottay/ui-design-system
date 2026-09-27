@@ -1,5 +1,6 @@
 import { ShowroomLink as Link } from '@/components/navigation/link';
-import { Badge, Box, Card, Flex, Stack, Text } from '@/components/showroom-ui';
+import { Badge, Box, Flex, Stack, Text } from '@rottay/design-system';
+import { DocsFrame } from '@/components/docs/frame';
 import { iconCategories } from '@/data/registry/icons';
 import { IMPLEMENTED_ENGINE_NAMES } from '@rottay/design-system/server';
 import {
@@ -147,10 +148,10 @@ function TrackVisual({ area }: { area: FoundationArea }) {
               border: '1px solid var(--ds-color-border-secondary)',
             }}
           >
-            <Text size="xs" weight="semibold" style={{ color: 'var(--ds-color-text-muted)' }}>
+            <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: 'var(--ds-color-text-muted)' }}>
               {item.label}
             </Text>
-            <Text size="sm" weight="bold" style={{ marginTop: 4 }}>
+            <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 700, textAlign: 'inherit', marginTop: 4 }}>
               {item.value}
             </Text>
           </Box>
@@ -178,7 +179,7 @@ function TrackVisual({ area }: { area: FoundationArea }) {
                 flexShrink: 0,
               }}
             />
-            <Text size="sm" weight="semibold">
+            <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit' }}>
               {item.label}
             </Text>
           </Flex>
@@ -201,9 +202,10 @@ function TrackVisual({ area }: { area: FoundationArea }) {
             }}
           >
             <Text
-              size="xs"
-              weight="semibold"
-              style={{ fontFamily: 'var(--ds-font-family-mono, monospace)' }}
+              as="div"
+              color="inherit"
+              wrap="auto"
+              style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', fontFamily: 'var(--ds-font-family-mono, monospace)' }}
             >
               {engine}
             </Text>
@@ -261,7 +263,7 @@ function FoundationTrackCard({
 }) {
   return (
     <Link href={area.href} style={{ textDecoration: 'none', display: 'block' }}>
-      <Card
+      <DocsFrame
         hoverable
         style={{
           width: '100%',
@@ -306,12 +308,17 @@ function FoundationTrackCard({
                   {area.icon}
                 </Box>
                 <Box style={{ minWidth: 0 }}>
-                  <Text as={"h3" as any} size={featured ? 'xl' : 'lg'} weight="semibold">
+                  <Box as={"h3" as any} style={{ fontSize: featured ? '1.375rem' : '1.125rem', fontWeight: 600 }}>
                     {area.title}
-                  </Text>
+                  </Box>
                   <Text
-                    size="xs"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 'inherit',
+                      textAlign: 'inherit',
                       marginTop: 4,
                       color: 'var(--ds-color-text-muted)',
                       fontFamily: 'var(--ds-font-family-mono, monospace)',
@@ -338,9 +345,13 @@ function FoundationTrackCard({
           >
             <Stack spacing={4}>
               <Text
-                size="xs"
-                weight="semibold"
+                as="div"
+                color="inherit"
+                wrap="auto"
                 style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  textAlign: 'inherit',
                   color: 'var(--ds-color-text-muted)',
                   textTransform: 'uppercase',
                   letterSpacing: '0.08em',
@@ -349,8 +360,10 @@ function FoundationTrackCard({
                 Summary
               </Text>
               <Text
-                size={featured ? 'md' : 'sm'}
-                style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}
+                as="div"
+                color="inherit"
+                wrap="auto"
+                style={{ fontSize: featured ? '1rem' : '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}
               >
                 {area.description}
               </Text>
@@ -366,9 +379,13 @@ function FoundationTrackCard({
             }}
           >
             <Text
-              size="xs"
-              weight="semibold"
+              as="div"
+              color="inherit"
+              wrap="auto"
               style={{
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                textAlign: 'inherit',
                 color: 'var(--ds-color-text-muted)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
@@ -377,8 +394,10 @@ function FoundationTrackCard({
               Open when
             </Text>
             <Text
-              size="sm"
-              style={{ marginTop: 6, color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}
+              as="div"
+              color="inherit"
+              wrap="auto"
+              style={{ fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', marginTop: 6, color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}
             >
               {area.whenToUse}
             </Text>
@@ -396,8 +415,13 @@ function FoundationTrackCard({
                 }}
               >
                 <Text
-                  size="xs"
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
                   style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 'inherit',
+                    textAlign: 'inherit',
                     color: 'var(--ds-color-text-secondary)',
                     fontFamily: 'var(--ds-font-family-mono, monospace)',
                   }}
@@ -410,7 +434,7 @@ function FoundationTrackCard({
 
           {wide ? <TrackVisual area={area} /> : null}
         </Stack>
-      </Card>
+      </DocsFrame>
     </Link>
   );
 }
@@ -443,11 +467,11 @@ function QuickRouteRow({
       <Stack spacing={6}>
         <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
           <Badge variant={highlighted ? 'primary' : 'secondary'}>{routes[0]}</Badge>
-          <Text size="sm" weight="semibold">
+          <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit' }}>
             {title}
           </Text>
         </Flex>
-        <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+        <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
           {description}
         </Text>
       </Stack>
@@ -497,10 +521,10 @@ export default function FoundationsPage() {
       <Stack spacing="md" fullWidth>
         <Flex align="center" justify="between" style={{ flexWrap: 'wrap', gap: 12 }}>
           <Box>
-            <Text as={"h2" as any} size="xl" weight="semibold">
+            <Box as={"h2" as any} style={{ fontSize: '1.375rem', fontWeight: 600 }}>
               Choose a foundation track
-            </Text>
-            <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+            </Box>
+            <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-secondary)' }}>
               Each track is framed as a quick diagnostic path, not a passive chapter.
             </Text>
           </Box>
@@ -526,7 +550,7 @@ export default function FoundationsPage() {
         <FoundationTrackCard area={FOUNDATION_AREAS[3]} wide />
       </Stack>
 
-      <Card
+      <DocsFrame
         style={{
           width: '100%',
           padding: PANEL_GAP,
@@ -539,10 +563,10 @@ export default function FoundationsPage() {
         <Stack spacing="md" fullWidth>
           <Flex align="center" justify="between" style={{ flexWrap: 'wrap', gap: 12 }}>
             <Box>
-              <Text as={"h2" as any} size="xl" weight="semibold">
+              <Box as={"h2" as any} style={{ fontSize: '1.375rem', fontWeight: 600 }}>
                 Quick routes
-              </Text>
-              <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+              </Box>
+              <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-secondary)' }}>
                 Fast entry points for branding, engine comparison, and consistency checks.
               </Text>
             </Box>
@@ -561,7 +585,7 @@ export default function FoundationsPage() {
             ))}
           </Box>
         </Stack>
-      </Card>
+      </DocsFrame>
     </Stack>
   );
 }

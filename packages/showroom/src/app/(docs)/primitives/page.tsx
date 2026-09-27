@@ -1,5 +1,6 @@
 import { ShowroomLink as Link } from '@/components/navigation/link';
-import { Badge, Box, Card, Flex, Stack, Text } from '@/components/showroom-ui';
+import { Badge, Box, Flex, Stack, Text } from '@rottay/design-system';
+import { DocsFrame } from '@/components/docs/frame';
 import {
   primitiveCategories,
   primitives,
@@ -203,9 +204,13 @@ function MetricTile({
       }}
     >
       <Text
-        size="xs"
-        weight="semibold"
+        as="div"
+        color="inherit"
+        wrap="auto"
         style={{
+          fontSize: '0.75rem',
+          fontWeight: 600,
+          textAlign: 'inherit',
           display: 'block',
           color: 'var(--ds-color-text-muted)',
           textTransform: 'uppercase',
@@ -214,7 +219,7 @@ function MetricTile({
       >
         {label}
       </Text>
-      <Text size="xl" weight="bold" style={{ display: 'block', lineHeight: 1.05 }}>
+      <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '1.375rem', fontWeight: 700, textAlign: 'inherit', display: 'block', lineHeight: 1.05 }}>
         {value}
       </Text>
       <Box
@@ -228,8 +233,13 @@ function MetricTile({
         }}
       />
       <Text
-        size="xs"
+        as="div"
+        color="inherit"
+        wrap="auto"
         style={{
+          fontSize: '0.75rem',
+          fontWeight: 'inherit',
+          textAlign: 'inherit',
           display: 'block',
           marginTop: 8,
           color: 'var(--ds-color-text-secondary)',
@@ -266,9 +276,13 @@ function LayerRail() {
           }}
         >
           <Text
-            size="xs"
-            weight="semibold"
+            as="div"
+            color="inherit"
+            wrap="auto"
             style={{
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              textAlign: 'inherit',
               color: item.active
                 ? 'var(--ds-color-primary-700)'
                 : 'var(--ds-color-text-secondary)',
@@ -278,7 +292,7 @@ function LayerRail() {
           >
             {item.label}
           </Text>
-          <Text size="xs" style={{ marginTop: 6, color: 'var(--ds-color-text-secondary)' }}>
+          <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', marginTop: 6, color: 'var(--ds-color-text-secondary)' }}>
             {item.detail}
           </Text>
         </Box>
@@ -304,9 +318,13 @@ function SectionHeading({
         <Box style={{ maxWidth: 780 }}>
           {eyebrow ? (
             <Text
-              size="xs"
-              weight="semibold"
+              as="div"
+              color="inherit"
+              wrap="auto"
               style={{
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                textAlign: 'inherit',
                 display: 'block',
                 marginBottom: 6,
                 color: 'var(--ds-color-text-muted)',
@@ -317,10 +335,10 @@ function SectionHeading({
               {eyebrow}
             </Text>
           ) : null}
-          <Text as={"h2" as any} size="xl" weight="semibold">
+          <Box as={"h2" as any} style={{ fontSize: '1.375rem', fontWeight: 600 }}>
             {title}
-          </Text>
-          <Text size="sm" style={{ marginTop: 6, color: 'var(--ds-color-text-secondary)' }}>
+          </Box>
+          <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', marginTop: 6, color: 'var(--ds-color-text-secondary)' }}>
             {description}
           </Text>
         </Box>
@@ -333,7 +351,7 @@ function SectionHeading({
 export default function PrimitivesPage() {
   return (
     <Stack spacing="lg" fullWidth>
-      <Card
+      <DocsFrame
         style={{
           overflow: 'hidden',
           border: EMPHASIS_BORDER,
@@ -373,20 +391,18 @@ export default function PrimitivesPage() {
           >
             <Stack spacing="md">
               <Stack spacing="sm">
-                <Text
+                <Box
                   as={"h1" as any}
-                  size="2xl"
-                  weight="bold"
-                  style={{ letterSpacing: '-0.04em', maxWidth: 880 }}
+                  style={{ fontSize: '1.75rem', fontWeight: 700, letterSpacing: '-0.04em', maxWidth: 880 }}
                 >
                   Browse the building blocks before you reach for bigger abstractions.
-                </Text>
-                <Text size="md" style={{ maxWidth: 860, color: 'var(--ds-color-text-secondary)' }}>
+                </Box>
+                <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '1rem', fontWeight: 'inherit', textAlign: 'inherit', maxWidth: 860, color: 'var(--ds-color-text-secondary)' }}>
                   The primitives shelf should prove the system under real product mechanics before
                   teams reach for higher-order packaging. Browse by job, compare live output, and
                   decide whether the work stays local or needs to move up into patterns.
                 </Text>
-                <Text size="sm" style={{ maxWidth: 760, color: 'var(--ds-color-text-muted)' }}>
+                <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', maxWidth: 760, color: 'var(--ds-color-text-muted)' }}>
                   This index is strongest when it behaves like a routing map: each category should
                   answer what kind of UI problem it solves, what good looks like, and when to
                   escalate.
@@ -416,9 +432,13 @@ export default function PrimitivesPage() {
                     >
                       <Badge variant="secondary">Path</Badge>
                       <Text
-                        size="sm"
-                        weight="semibold"
+                        as="div"
+                        color="inherit"
+                        wrap="auto"
                         style={{
+                          fontSize: '0.875rem',
+                          fontWeight: 600,
+                          textAlign: 'inherit',
                           display: 'block',
                           marginTop: 10,
                           color: 'var(--ds-color-text-primary)',
@@ -429,8 +449,13 @@ export default function PrimitivesPage() {
                       </Text>
                       <Box style={{ marginTop: 10, paddingTop: 10, borderTop: SUBTLE_BORDER }}>
                         <Text
-                          size="xs"
+                          as="div"
+                          color="inherit"
+                          wrap="auto"
                           style={{
+                            fontSize: '0.75rem',
+                            fontWeight: 'inherit',
+                            textAlign: 'inherit',
                             display: 'block',
                             color: 'var(--ds-color-text-secondary)',
                             lineHeight: 1.5,
@@ -487,13 +512,18 @@ export default function PrimitivesPage() {
                 <Stack spacing="sm">
                   <Flex align="center" gap={8}>
                     <LayersIcon size={18} />
-                    <Text size="sm" weight="semibold" style={{ display: 'block' }}>
+                    <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', display: 'block' }}>
                       Taxonomy fit
                     </Text>
                   </Flex>
                   <Text
-                    size="sm"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.875rem',
+                      fontWeight: 'inherit',
+                      textAlign: 'inherit',
                       display: 'block',
                       color: 'var(--ds-color-text-secondary)',
                       lineHeight: 1.55,
@@ -524,9 +554,13 @@ export default function PrimitivesPage() {
               >
                 <Stack spacing="sm">
                   <Text
-                    size="xs"
-                    weight="semibold"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      textAlign: 'inherit',
                       display: 'block',
                       color: 'var(--ds-color-text-muted)',
                       textTransform: 'uppercase',
@@ -566,12 +600,17 @@ export default function PrimitivesPage() {
                               {editorial.icon}
                             </Box>
                             <Box style={{ minWidth: 0 }}>
-                              <Text size="sm" weight="semibold" style={{ display: 'block' }}>
+                              <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', display: 'block' }}>
                                 {category.label}
                               </Text>
                               <Text
-                                size="xs"
+                                as="div"
+                                color="inherit"
+                                wrap="auto"
                                 style={{
+                                  fontSize: '0.75rem',
+                                  fontWeight: 'inherit',
+                                  textAlign: 'inherit',
                                   display: 'block',
                                   marginTop: 2,
                                   color: 'var(--ds-color-text-secondary)',
@@ -603,12 +642,17 @@ export default function PrimitivesPage() {
             <Stack spacing="md">
               <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
                 <Box style={{ minWidth: 0, maxWidth: 760 }}>
-                  <Text as={"h2" as any} size="lg" weight="semibold" style={{ display: 'block' }}>
+                  <Box as={"h2" as any} style={{ fontSize: '1.125rem', fontWeight: 600, display: 'block' }}>
                     Live DS runtime
-                  </Text>
+                  </Box>
                   <Text
-                    size="sm"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.875rem',
+                      fontWeight: 'inherit',
+                      textAlign: 'inherit',
                       display: 'block',
                       marginTop: 6,
                       color: 'var(--ds-color-text-secondary)',
@@ -630,9 +674,9 @@ export default function PrimitivesPage() {
             </Stack>
           </Box>
         </Stack>
-      </Card>
+      </DocsFrame>
 
-      <Card
+      <DocsFrame
         style={{
           border: SUBTLE_BORDER,
           background:
@@ -667,7 +711,7 @@ export default function PrimitivesPage() {
                   href={`/primitives/${category.slug}`}
                   style={{ textDecoration: 'none' }}
                 >
-                  <Card
+                  <DocsFrame
                     className="showroom-primitives-taxonomy-card"
                     hoverable
                     style={{
@@ -702,21 +746,24 @@ export default function PrimitivesPage() {
                             {editorial.icon}
                           </Box>
                           <Box style={{ minWidth: 0 }}>
-                            <Text
+                            <Box
                               as={"h3" as any}
-                              size="lg"
-                              weight="semibold"
                               style={{
-                                display: 'block',
+                                fontSize: '1.125rem', fontWeight: 600, display: 'block',
                                 lineHeight: 1.15,
                                 overflowWrap: 'anywhere',
                               }}
                             >
                               {category.label}
-                            </Text>
+                            </Box>
                             <Text
-                              size="xs"
+                              as="div"
+                              color="inherit"
+                              wrap="auto"
                               style={{
+                                fontSize: '0.75rem',
+                                fontWeight: 'inherit',
+                                textAlign: 'inherit',
                                 marginTop: 4,
                                 color: 'var(--ds-color-text-muted)',
                                 lineHeight: 1.45,
@@ -730,8 +777,13 @@ export default function PrimitivesPage() {
                       </Flex>
 
                       <Text
-                        size="sm"
+                        as="div"
+                        color="inherit"
+                        wrap="auto"
                         style={{
+                          fontSize: '0.875rem',
+                          fontWeight: 'inherit',
+                          textAlign: 'inherit',
                           color: 'var(--ds-color-text-secondary)',
                           lineHeight: 1.58,
                           overflowWrap: 'anywhere',
@@ -757,15 +809,21 @@ export default function PrimitivesPage() {
                           }}
                         >
                           <Text
-                            size="xs"
-                            weight="semibold"
-                            style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}
+                            as="div"
+                            color="inherit"
+                            wrap="auto"
+                            style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', textTransform: 'uppercase', letterSpacing: '0.08em' }}
                           >
                             Use for
                           </Text>
                           <Text
-                            size="sm"
+                            as="div"
+                            color="inherit"
+                            wrap="auto"
                             style={{
+                              fontSize: '0.875rem',
+                              fontWeight: 'inherit',
+                              textAlign: 'inherit',
                               marginTop: 8,
                               color: 'var(--ds-color-text-secondary)',
                               lineHeight: 1.55,
@@ -785,9 +843,13 @@ export default function PrimitivesPage() {
                           }}
                         >
                           <Text
-                            size="xs"
-                            weight="semibold"
+                            as="div"
+                            color="inherit"
+                            wrap="auto"
                             style={{
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              textAlign: 'inherit',
                               color: 'var(--ds-color-text-muted)',
                               textTransform: 'uppercase',
                               letterSpacing: '0.08em',
@@ -796,8 +858,13 @@ export default function PrimitivesPage() {
                             Typical outcome
                           </Text>
                           <Text
-                            size="sm"
+                            as="div"
+                            color="inherit"
+                            wrap="auto"
                             style={{
+                              fontSize: '0.875rem',
+                              fontWeight: 'inherit',
+                              textAlign: 'inherit',
                               marginTop: 8,
                               color: 'var(--ds-color-text-secondary)',
                               lineHeight: 1.55,
@@ -819,9 +886,13 @@ export default function PrimitivesPage() {
                       >
                         <Flex align="center" justify="between" gap={10} style={{ flexWrap: 'wrap' }}>
                           <Text
-                            size="xs"
-                            weight="semibold"
+                            as="div"
+                            color="inherit"
+                            wrap="auto"
                             style={{
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              textAlign: 'inherit',
                               color: 'var(--ds-color-text-muted)',
                               textTransform: 'uppercase',
                               letterSpacing: '0.08em',
@@ -847,8 +918,13 @@ export default function PrimitivesPage() {
                               }}
                             >
                               <Text
-                                size="xs"
+                                as="div"
+                                color="inherit"
+                                wrap="auto"
                                 style={{
+                                  fontSize: '0.75rem',
+                                  fontWeight: 'inherit',
+                                  textAlign: 'inherit',
                                   display: 'block',
                                   color: 'var(--ds-color-text-secondary)',
                                   fontFamily: 'var(--font-geist-mono)',
@@ -864,13 +940,13 @@ export default function PrimitivesPage() {
                         </Flex>
                       </Box>
                     </Stack>
-                  </Card>
+                  </DocsFrame>
                 </Link>
               );
             })}
           </Box>
         </Stack>
-      </Card>
+      </DocsFrame>
 
       <Box
         className="showroom-primitives-recipes-grid"
@@ -881,7 +957,7 @@ export default function PrimitivesPage() {
           alignItems: 'start',
         }}
       >
-        <Card
+        <DocsFrame
         style={{
           border: SUBTLE_BORDER,
           background:
@@ -912,13 +988,15 @@ export default function PrimitivesPage() {
                     background: PANEL_SURFACE,
                   }}
                 >
-                  <Text size="sm" weight="semibold">
+                  <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit' }}>
                     {recipe.title}
                   </Text>
                   <Box style={{ marginTop: 10, paddingTop: 10, borderTop: SUBTLE_BORDER }}>
                     <Text
-                      size="xs"
-                      style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.5 }}
+                      as="div"
+                      color="inherit"
+                      wrap="auto"
+                      style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-secondary)', lineHeight: 1.5 }}
                     >
                       {recipe.description}
                     </Text>
@@ -934,9 +1012,9 @@ export default function PrimitivesPage() {
               ))}
             </Box>
           </Stack>
-        </Card>
+        </DocsFrame>
 
-        <Card
+        <DocsFrame
           style={{
             border: SUBTLE_BORDER,
             background: CARD_SURFACE,
@@ -972,19 +1050,20 @@ export default function PrimitivesPage() {
                 }}
               >
                 <Text
-                  size="xs"
-                  weight="semibold"
-                  style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
+                  style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', textTransform: 'uppercase', letterSpacing: '0.08em' }}
                 >
                   {item.title}
                 </Text>
-                <Text size="sm" style={{ marginTop: 8, color: 'var(--ds-color-text-secondary)' }}>
+                <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', marginTop: 8, color: 'var(--ds-color-text-secondary)' }}>
                   {item.body}
                 </Text>
               </Box>
             ))}
           </Stack>
-        </Card>
+        </DocsFrame>
       </Box>
 
       <style>{`

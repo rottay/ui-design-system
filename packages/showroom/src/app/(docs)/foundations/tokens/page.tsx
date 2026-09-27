@@ -1,11 +1,9 @@
 'use client';
 
 import { ShowroomLink as Link } from '@/components/navigation/link';
-import {
-  DocsMetricTile,
-  DocsPanel,
-  SectionDivider,
-} from '@/components/showroom-ui';
+import { DocsMetricTile } from '@/components/docs/metric-tile';
+import { DocsPanel } from '@/components/docs/panel';
+import { SectionDivider } from '@/components/docs/section-divider';
 import {
   Badge,
   Box,

@@ -1,5 +1,6 @@
 import { ShowroomLink as Link } from '@/components/navigation/link';
-import { Badge, Box, Card, Flex, Stack, Text } from '@/components/showroom-ui';
+import { Badge, Box, Flex, Stack, Text } from '@rottay/design-system';
+import { DocsFrame } from '@/components/docs/frame';
 import {
   structureGroups,
   structures,
@@ -162,9 +163,13 @@ function StatCard({
     >
       <Stack spacing="sm" fullWidth>
         <Text
-          size="xs"
-          weight="semibold"
+          as="div"
+          color="inherit"
+          wrap="auto"
           style={{
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            textAlign: 'inherit',
             color: 'var(--ds-color-text-muted)',
             textTransform: 'uppercase',
             letterSpacing: '0.08em',
@@ -172,7 +177,7 @@ function StatCard({
         >
           {label}
         </Text>
-        <Text size="xl" weight="bold" style={{ lineHeight: 1.1 }}>
+        <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '1.375rem', fontWeight: 700, textAlign: 'inherit', lineHeight: 1.1 }}>
           {value}
         </Text>
         <Box
@@ -184,7 +189,7 @@ function StatCard({
               'color-mix(in srgb, var(--ds-color-primary-500) 18%, var(--ds-color-border-subtle, var(--ds-color-neutral-200)))',
           }}
         />
-        <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+        <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
           {detail}
         </Text>
       </Stack>
@@ -200,7 +205,7 @@ function QuickGuideCard({
   description: string;
 }) {
   return (
-    <Card
+    <DocsFrame
       style={{
         height: '100%',
         padding: 18,
@@ -213,9 +218,10 @@ function QuickGuideCard({
       <Stack spacing="sm" fullWidth style={{ height: '100%' }}>
         <Badge variant="secondary">{title}</Badge>
         <Text
-          size="sm"
-          weight="semibold"
-          style={{ color: 'var(--ds-color-text-primary)', lineHeight: 1.45 }}
+          as="div"
+          color="inherit"
+          wrap="auto"
+          style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', color: 'var(--ds-color-text-primary)', lineHeight: 1.45 }}
         >
           {description}
         </Text>
@@ -230,7 +236,7 @@ function QuickGuideCard({
           }}
         />
       </Stack>
-    </Card>
+    </DocsFrame>
   );
 }
 
@@ -239,7 +245,7 @@ export default function StructuresPage() {
 
   return (
     <Stack spacing="lg" fullWidth>
-      <Card
+      <DocsFrame
         style={{
           padding: 20,
           border:
@@ -276,10 +282,10 @@ export default function StructuresPage() {
               <Badge variant="secondary">{structureGroups.length} groups</Badge>
             </Flex>
             <Stack spacing="xs">
-              <Text as={"h1" as any} size="2xl" weight="bold">
+              <Box as={"h1" as any} style={{ fontSize: '1.75rem', fontWeight: 700 }}>
                 Structures
-              </Text>
-              <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', maxWidth: 720 }}>
+              </Box>
+              <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-secondary)', maxWidth: 720 }}>
                 The page-scaffolding layer for headers, command rails, record framing,
                 dashboard context, and feedback shells.
               </Text>
@@ -304,9 +310,13 @@ export default function StructuresPage() {
               <Stack spacing="sm" fullWidth>
                 <Flex align="center" justify="between" gap={10} style={{ flexWrap: 'wrap' }}>
                   <Text
-                    size="xs"
-                    weight="semibold"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      textAlign: 'inherit',
                       color: 'var(--ds-color-text-muted)',
                       textTransform: 'uppercase',
                       letterSpacing: '0.08em',
@@ -317,8 +327,10 @@ export default function StructuresPage() {
                   <Badge variant="secondary">Page chrome before surfaces</Badge>
                 </Flex>
                 <Text
-                  size="sm"
-                  style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.6 }}
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
+                  style={{ fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-secondary)', lineHeight: 1.6 }}
                 >
                   Reach for structures once the underlying pattern is chosen and the remaining
                   problem is page-level hierarchy, separators, command placement, or supporting
@@ -347,9 +359,13 @@ export default function StructuresPage() {
                       }}
                     >
                       <Text
-                        size="xs"
-                        weight="semibold"
+                        as="div"
+                        color="inherit"
+                        wrap="auto"
                         style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          textAlign: 'inherit',
                           color: item.active
                             ? 'var(--ds-color-primary)'
                             : 'var(--ds-color-text-secondary)',
@@ -360,8 +376,13 @@ export default function StructuresPage() {
                         {item.label}
                       </Text>
                       <Text
-                        size="xs"
+                        as="div"
+                        color="inherit"
+                        wrap="auto"
                         style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 'inherit',
+                          textAlign: 'inherit',
                           marginTop: 8,
                           color: 'var(--ds-color-text-secondary)',
                           lineHeight: 1.55,
@@ -405,9 +426,9 @@ export default function StructuresPage() {
             />
           </Box>
         </Box>
-      </Card>
+      </DocsFrame>
 
-      <Card
+      <DocsFrame
         style={{
           padding: 18,
           border: SUBTLE_BORDER,
@@ -419,10 +440,10 @@ export default function StructuresPage() {
         <Stack spacing="md" fullWidth>
           <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
             <Box style={{ minWidth: 0, maxWidth: 760 }}>
-              <Text as={"h2" as any} size="lg" weight="semibold">
+              <Box as={"h2" as any} style={{ fontSize: '1.125rem', fontWeight: 600 }}>
                 Read The Layer Fast
-              </Text>
-              <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.6 }}>
+              </Box>
+              <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-secondary)', lineHeight: 1.6 }}>
                 These cues should help teams decide quickly whether the problem belongs in
                 structures or should stay lower in the stack.
               </Text>
@@ -446,7 +467,7 @@ export default function StructuresPage() {
             ))}
           </Box>
         </Stack>
-      </Card>
+      </DocsFrame>
 
       <Flex
         align="center"
@@ -454,10 +475,10 @@ export default function StructuresPage() {
         style={{ gap: PANEL_GAP, flexWrap: 'wrap' }}
       >
         <Box>
-          <Text as={"h2" as any} size="xl" weight="semibold">
+          <Box as={"h2" as any} style={{ fontSize: '1.375rem', fontWeight: 600 }}>
             Browse Groups
-          </Text>
-          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+          </Box>
+          <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-secondary)' }}>
             Start with the screen responsibility, then drill into the structure export.
           </Text>
         </Box>
@@ -485,7 +506,7 @@ export default function StructuresPage() {
               href={`/structures/${group.slug}`}
               style={{ textDecoration: 'none' }}
             >
-            <Card
+            <DocsFrame
               hoverable
               style={{
                 height: '100%',
@@ -516,10 +537,10 @@ export default function StructuresPage() {
                         {editorial.icon}
                       </Box>
                       <Box style={{ minWidth: 0 }}>
-                        <Text as={"h3" as any} size="lg" weight="semibold" style={{ lineHeight: 1.2 }}>
+                        <Box as={"h3" as any} style={{ fontSize: '1.125rem', fontWeight: 600, lineHeight: 1.2 }}>
                           {group.label}
-                        </Text>
-                        <Text size="xs" style={{ color: 'var(--ds-color-text-muted)', marginTop: 4 }}>
+                        </Box>
+                        <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-muted)', marginTop: 4 }}>
                           {entries.length} exports
                         </Text>
                       </Box>
@@ -537,9 +558,13 @@ export default function StructuresPage() {
                     }}
                   >
                     <Text
-                      size="xs"
-                      weight="semibold"
+                      as="div"
+                      color="inherit"
+                      wrap="auto"
                       style={{
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        textAlign: 'inherit',
                         color: 'var(--ds-color-text-muted)',
                         textTransform: 'uppercase',
                         letterSpacing: '0.08em',
@@ -548,8 +573,13 @@ export default function StructuresPage() {
                       What this group solves
                     </Text>
                     <Text
-                      size="sm"
+                      as="div"
+                      color="inherit"
+                      wrap="auto"
                       style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 'inherit',
+                        textAlign: 'inherit',
                         marginTop: 8,
                         color: 'var(--ds-color-text-secondary)',
                         lineHeight: 1.6,
@@ -577,10 +607,10 @@ export default function StructuresPage() {
                         minHeight: 104,
                       }}
                     >
-                      <Text size="xs" weight="semibold">
+                      <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit' }}>
                         Owns
                       </Text>
-                      <Text size="xs" style={{ marginTop: 8, color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+                      <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', marginTop: 8, color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
                         {editorial.role}
                       </Text>
                     </Box>
@@ -595,10 +625,10 @@ export default function StructuresPage() {
                         minHeight: 104,
                       }}
                     >
-                      <Text size="xs" weight="semibold">
+                      <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit' }}>
                         Best for
                       </Text>
-                      <Text size="xs" style={{ marginTop: 8, color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+                      <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', marginTop: 8, color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
                         {editorial.bestFor}
                       </Text>
                     </Box>
@@ -614,7 +644,7 @@ export default function StructuresPage() {
                   >
                     <Stack spacing="xs">
                       <Flex align="center" justify="between" gap={8} style={{ flexWrap: 'wrap' }}>
-                        <Text size="xs" weight="semibold">
+                        <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit' }}>
                           Key exports
                         </Text>
                         <Badge variant="secondary">Route into detail view</Badge>
@@ -631,8 +661,13 @@ export default function StructuresPage() {
                             }}
                           >
                             <Text
-                              size="xs"
+                              as="div"
+                              color="inherit"
+                              wrap="auto"
                               style={{
+                                fontSize: '0.75rem',
+                                fontWeight: 'inherit',
+                                textAlign: 'inherit',
                                 color: 'var(--ds-color-text-secondary)',
                                 fontFamily: 'var(--font-geist-mono, monospace)',
                               }}
@@ -660,13 +695,17 @@ export default function StructuresPage() {
                   >
                     <Stack spacing="xs" fullWidth>
                       <Flex align="center" justify="between" gap={8} style={{ flexWrap: 'wrap' }}>
-                        <Text size="xs" weight="semibold">
+                        <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit' }}>
                           Pairings
                         </Text>
                         <Text
-                          size="xs"
-                          weight="semibold"
+                          as="div"
+                          color="inherit"
+                          wrap="auto"
                           style={{
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            textAlign: 'inherit',
                             color: 'var(--ds-color-primary)',
                             textTransform: 'uppercase',
                             letterSpacing: '0.08em',
@@ -686,13 +725,13 @@ export default function StructuresPage() {
                   </Box>
 
                 </Stack>
-              </Card>
+              </DocsFrame>
             </Link>
           );
         })}
       </Box>
 
-      <Card
+      <DocsFrame
         style={{
           padding: 16,
           border: SUBTLE_BORDER,
@@ -703,10 +742,10 @@ export default function StructuresPage() {
       >
         <Stack spacing="sm">
           <Flex align="center" justify="between" style={{ gap: 12, flexWrap: 'wrap' }}>
-            <Text as={"h2" as any} size="lg" weight="semibold">
+            <Box as={"h2" as any} style={{ fontSize: '1.125rem', fontWeight: 600 }}>
               Layer Fit
-            </Text>
-            <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+            </Box>
+            <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit', color: 'var(--ds-color-text-secondary)' }}>
               Structures frame the page around reusable tasks.
             </Text>
           </Flex>
@@ -738,9 +777,13 @@ export default function StructuresPage() {
                 }}
               >
                 <Text
-                  size="xs"
-                  weight="semibold"
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
                   style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    textAlign: 'inherit',
                     color: active
                       ? 'var(--ds-color-primary)'
                       : 'var(--ds-color-text-secondary)',
@@ -752,7 +795,7 @@ export default function StructuresPage() {
             ))}
           </Box>
         </Stack>
-      </Card>
+      </DocsFrame>
 
       <style>{`
         @container showroom-content (max-width: 1180px) {
