@@ -134,6 +134,7 @@ export const PUBLISHED_SUBPATHS: readonly ContractRow[] = [
   { subpath: './styles/evnto', disposition: 'retire-by', retiredBy: 'WO-CAN-03' },
   { subpath: './styles/rottay', disposition: 'retire-by', retiredBy: 'WO-CAN-03' },
   { subpath: './styles/modern', disposition: 'retire-by', retiredBy: 'WO-CAN-03' },
+  { subpath: './styles/frozen-engines', disposition: 'guaranteed', retiredBy: null },
   { subpath: './eslint', disposition: 'guaranteed', retiredBy: null },
   { subpath: './supplier-contract', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
   { subpath: './hooks-manifest', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
