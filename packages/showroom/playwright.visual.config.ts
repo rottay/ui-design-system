@@ -45,7 +45,7 @@ export default defineConfig({
   // chunks to measure the frame before hydration, which only means anything
   // against a production server — the dev server ships its own extra scripts
   // and recompiles on navigation.
-  testMatch: ['visual/**/*.spec.ts', 'whitelabel/**/*.spec.ts', 'responsive/**/*.spec.ts', 'diagnostics/**/*.spec.ts', 'first-paint/**/*.spec.ts', 'a11y/axe.spec.ts'],
+  testMatch: ['visual/**/*.spec.ts', 'whitelabel/**/*.spec.ts', 'responsive/**/*.spec.ts', 'diagnostics/**/*.spec.ts', 'first-paint/**/*.spec.ts', 'a11y/axe.spec.ts', 'probe-ground/**/*.spec.ts'],
   // One flagship gallery page serves every cell in the matrix; parallel
   // workers would fight over the same production server's compile/response
   // cache for no benefit, so this mirrors the a11y harness's single-worker,
