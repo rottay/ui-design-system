@@ -8,7 +8,7 @@
  * and tenant values activate exclusively through html-anchored selectors.
  *
  * This module is therefore PURE and server-safe: no React, no DOM, no JSON
- * module, and one relative import -- the plain-ESM root stamp. That is deliberate rather than incidental — the
+ * module, and two relative imports -- the kernel's plain-ESM stamp and legacy compile. That is deliberate rather than incidental — the
  * file the Next build compiles is the same file the first-paint assertion loads
  * directly under `node --experimental-strip-types`, so the assertion cannot
  * drift from the code that serves the bytes. The published DB specimen is an
@@ -16,15 +16,14 @@
  */
 
 import {
-  compileTenantThemeConfig,
-  getTenantThemeVerticalEnvelope,
-  hydrateTenantThemeConfig,
   isImplementedEngineName,
   resolveDocumentRootAttributes,
   type DocumentRootAttributes,
   type ImplementedEngineName,
   type TenantThemeArtifact,
 } from '@rottay/design-system/server';
+
+import { compileLegacyGroundDocument } from '../probe-ground/legacy/index.mjs';
 
 export type TortureFixture =
   | 'torture-dark'
@@ -98,13 +97,14 @@ export interface TortureThemeSpecimen {
 export function compileCanonicalManagementArtifact(
   specimen: TortureThemeSpecimen,
 ): TenantThemeArtifact {
-  const envelope = getTenantThemeVerticalEnvelope(specimen.identity.verticalKey);
-  if (!envelope) {
-    throw new Error(`No tenant-theme envelope for ${specimen.identity.verticalKey}`);
-  }
-
-  const hydrated = hydrateTenantThemeConfig(specimen.document, specimen.identity);
-  return compileTenantThemeConfig(hydrated, { verticalEnvelope: envelope });
+  const { identity } = specimen;
+  return compileLegacyGroundDocument({
+    document: specimen.document,
+    tenantId: identity.tenantId,
+    slug: identity.slug,
+    vertical: identity.verticalKey,
+    rowVersion: identity.rowVersion,
+  }).artifact;
 }
 
 /** Next's `searchParams` shape. */

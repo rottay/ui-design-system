@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   Card,
-  DesignSystemProvider,
   Flex,
   Layout,
   PatternDataTable,
@@ -19,19 +18,17 @@ import {
 } from '@rottay/design-system';
 import {
   censusRuntimeVisualPayload,
-  compileTenantThemeConfig,
   emitTenantThemeArtifactForSsr,
   getCodeOwnedRuntimeConfig,
   isCodeOwnedTenantConfig,
   resolveVisualAuthority,
   type VisualAuthorityResolution,
-  getTenantThemeVerticalEnvelope,
   tenantThemeAnatomyAttributes,
   tenantThemeArtifactRootAttributes,
   type TenantThemeArtifact,
-  type TenantThemeConfigIdentity,
-  type TenantThemeDocument,
 } from '@rottay/design-system/server';
+
+import { dbTenantConfig, type VisualAuthorityTenant } from './config';
 
 // ---------------------------------------------------------------------------
 // P0-A visual-authority probe.
@@ -39,9 +36,9 @@ import {
 // ONE tree, rendered under both authority paths, so a reviewer can photograph
 // them side by side:
 //
-//   ?tenant=themanagement  DB tenant. The document compiles through
-//                          `compileTenantThemeConfig` under the code-owned
-//                          bithire envelope, the artifact CSS mounts once, and
+//   ?tenant=themanagement  DB tenant. The page mounts the document through the
+//                          probe-ground kernel's legacy source under the
+//                          code-owned bithire envelope, the artifact CSS mounts once, and
 //                          the provider receives the TYPED declaration plus the
 //                          same `normalizedAppearance` echoed back on
 //                          `TenantConfig.appearance` -- exactly what
@@ -51,19 +48,13 @@ import {
 //   ?tenant=bithire        Bundled static vertical. No declaration, provider
 //                          authority, every emitter live. The control.
 //
-//   ?ground=light|dark|auto  optional; absent lets the tenant's own background
-//                            mode decide (themanagement dark, bithire light).
+//   ?ground=light|dark  optional; absent paints the tenant's own background
+//                       mode (themanagement dark, bithire light).
 //
 // The fact strip and `window.__visualAuthorityProbe` report the resolution the
 // provider itself computed, so the sighted check and the machine check read the
 // same numbers.
 // ---------------------------------------------------------------------------
-
-export const VISUAL_AUTHORITY_TENANTS = ['themanagement', 'bithire'] as const;
-export type VisualAuthorityTenant = (typeof VISUAL_AUTHORITY_TENANTS)[number];
-
-export const VISUAL_AUTHORITY_GROUNDS = ['light', 'dark', 'auto'] as const;
-export type VisualAuthorityGround = (typeof VISUAL_AUTHORITY_GROUNDS)[number];
 
 /** The window key the sighted-validation notes read the resolution from. */
 export const VISUAL_AUTHORITY_PROBE_KEY = '__visualAuthorityProbe';
@@ -83,37 +74,6 @@ export interface VisualAuthorityProbePayload {
 type ProbeWindow = Window & {
   [VISUAL_AUTHORITY_PROBE_KEY]?: VisualAuthorityProbePayload;
 };
-
-const THEMANAGEMENT_IDENTITY: TenantThemeConfigIdentity = {
-  tenantId: 'tenant_themanagement',
-  slug: 'themanagement',
-  verticalKey: 'bithire',
-  rowVersion: 12,
-};
-
-const THEMANAGEMENT_DOCUMENT = {
-  schemaVersion: 1,
-  mode: 'advanced',
-  visualFoundation: {
-    general: {
-      palette: { primary: '#2F6B9A', accent: '#C8842B', backgroundMode: 'dark' },
-      typography: { typePairing: 'sober', scale: 0.96 },
-      shape: { buttonStyle: 'sharp', radiusScale: 0.85 },
-      surfaces: { elevation: 'flat' },
-      density: 'compact',
-      motion: { intensity: 0.4, durationScale: 0.9, ambient: 'off' },
-      navigation: { sidebarTone: 'inverse' },
-    },
-    advanced: {
-      chrome: {
-        sidebar: { bg: '#101014', text: '#F4F4F5', anatomy: 'panel' },
-        table: { headerBg: '#17171B', anatomy: 'ruled' },
-        cardComponent: { radius: '8px', anatomy: 'framed' },
-      },
-      tokenOverrides: { '--ds-radius-md': '8px' },
-    },
-  },
-} as unknown as TenantThemeDocument;
 
 interface PipelineRow {
   id: string;
@@ -213,45 +173,16 @@ function ProbeContent({ payload }: { payload: VisualAuthorityProbePayload }) {
   );
 }
 
-/**
- * The exact envelope `buildTenantConfig` hands the provider for a DB tenant:
- * identity-only branding plus the artifact's own compiled appearance, kept so
- * the runtime can still read density, the motion dial, background mode, the
- * recipe profile and the anatomy attributes.
- */
-function dbTenantConfig(artifact: TenantThemeArtifact): TenantConfig {
-  return {
-    slug: artifact.slug,
-    name: 'The Management',
-    vertical: 'bithire',
-    theme: artifact.normalizedAppearance.general?.palette?.backgroundMode ?? 'light',
-    plan: 'enterprise',
-    features: ['*'],
-    branding: { companyName: 'The Management' },
-    appearance: artifact.normalizedAppearance,
-  } as TenantConfig;
-}
-
 export function VisualAuthorityProbe({
   tenant,
-  ground,
+  artifact,
 }: {
   tenant: VisualAuthorityTenant;
-  ground?: VisualAuthorityGround;
+  /** The artifact the page mounted; `null` for the bundled static vertical. */
+  artifact: TenantThemeArtifact | null;
 }) {
-  const artifact = useMemo(
-    () =>
-      tenant === 'themanagement'
-        ? compileTenantThemeConfig(
-            { ...THEMANAGEMENT_DOCUMENT, ...THEMANAGEMENT_IDENTITY },
-            { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire') },
-          )
-        : null,
-    [tenant],
-  );
-
-  // The element the resolver verifies, and the receipt covering the SSR pass
-  // where there is no document to verify against.
+  // The ground mounts the element; this re-mint only feeds the declaration the reported
+  // resolution is computed from, exactly as the provider receives it.
   const emission = useMemo(
     () =>
       artifact
@@ -340,32 +271,8 @@ export function VisualAuthorityProbe({
   });
 
   return (
-    <>
-      {/* OUTSIDE the provider, and that placement is the whole point of this
-          probe: the provider verifies the mount during its own render, before
-          any child has been committed. Mounted as a child — where this style
-          used to live — the artifact is invisible to the proof, the provider
-          blocks, the children never commit, and the artifact never mounts. The
-          probe would show a permanent loading screen for a document whose CSS
-          is correct. */}
-      {emission ? (
-        <style
-          {...emission.attributes}
-          data-testid="visual-authority-artifact-style"
-          dangerouslySetInnerHTML={{ __html: emission.css }}
-        />
-      ) : null}
-      <DesignSystemProvider
-        tenantConfig={tenantConfig}
-        vertical="bithire"
-        forceEngine="modern"
-        {...(declaration ? { visualAuthority: declaration } : {})}
-        {...(ground ? { forceTheme: ground } : {})}
-      >
-        <Box {...rootAttributes} {...anatomyAttributes} data-testid="visual-authority-root">
-          <ProbeContent payload={payload} />
-        </Box>
-      </DesignSystemProvider>
-    </>
+    <Box {...rootAttributes} {...anatomyAttributes} data-testid="visual-authority-root">
+      <ProbeContent payload={payload} />
+    </Box>
   );
 }

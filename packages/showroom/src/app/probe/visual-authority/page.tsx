@@ -1,15 +1,15 @@
-'use client';
-
-import { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-
+import { groundFor, GroundStage, type GroundRequest } from '@/components/probe-ground';
+import { VisualAuthorityProbe } from '@/components/visual-authority-probe';
 import {
-  VisualAuthorityProbe,
+  dbTenantConfig,
+  THEMANAGEMENT_DOCUMENT,
+  THEMANAGEMENT_IDENTITY,
+  VISUAL_AUTHORITY_DEFAULT_GROUND,
   VISUAL_AUTHORITY_GROUNDS,
   VISUAL_AUTHORITY_TENANTS,
   type VisualAuthorityGround,
   type VisualAuthorityTenant,
-} from '@/components/visual-authority-probe';
+} from '@/components/visual-authority-probe/config';
 
 // ---------------------------------------------------------------------------
 // P0-A visual-authority probe route.
@@ -17,9 +17,15 @@ import {
 //   /probe/visual-authority?tenant=themanagement   DB tenant, compiled envelope
 //   /probe/visual-authority?tenant=bithire         bundled static vertical
 //
-// Optional `?ground=light|dark|auto` forces the presentation theme; absent lets
-// each tenant's own background mode decide. Same tree either way.
+// Optional `?ground=light|dark` forces the presentation theme; absent paints
+// each tenant's own background mode. Same tree either way.
 // ---------------------------------------------------------------------------
+
+type Query = Record<string, string | string[] | undefined>;
+
+function first(value: string | string[] | undefined): string | null {
+  return (Array.isArray(value) ? value[0] : value) ?? null;
+}
 
 function isTenant(value: string | null): value is VisualAuthorityTenant {
   return value !== null && (VISUAL_AUTHORITY_TENANTS as readonly string[]).includes(value);
@@ -29,23 +35,44 @@ function isGround(value: string | null): value is VisualAuthorityGround {
   return value !== null && (VISUAL_AUTHORITY_GROUNDS as readonly string[]).includes(value);
 }
 
-function VisualAuthorityProbeContent() {
-  const params = useSearchParams();
-  const tenantParam = params.get('tenant');
-  const groundParam = params.get('ground');
-
-  return (
-    <VisualAuthorityProbe
-      tenant={isTenant(tenantParam) ? tenantParam : 'themanagement'}
-      {...(isGround(groundParam) ? { ground: groundParam } : {})}
-    />
-  );
+function requestFor(tenant: VisualAuthorityTenant, mode: VisualAuthorityGround): GroundRequest {
+  if (tenant === 'bithire') return { source: { kind: 'static' }, slug: 'bithire', mode };
+  return {
+    source: {
+      kind: 'legacy',
+      document: THEMANAGEMENT_DOCUMENT,
+      tenantId: THEMANAGEMENT_IDENTITY.tenantId,
+      rowVersion: THEMANAGEMENT_IDENTITY.rowVersion,
+      vertical: 'bithire',
+      name: 'The Management',
+    },
+    slug: THEMANAGEMENT_IDENTITY.slug,
+    mode,
+  };
 }
 
-export default function VisualAuthorityProbePage() {
+export default async function VisualAuthorityProbePage({
+  searchParams,
+}: {
+  searchParams: Promise<Query>;
+}) {
+  const query = await searchParams;
+  const tenantParam = first(query.tenant);
+  const groundParam = first(query.ground);
+  const tenant: VisualAuthorityTenant = isTenant(tenantParam) ? tenantParam : 'themanagement';
+  const mode = isGround(groundParam) ? groundParam : VISUAL_AUTHORITY_DEFAULT_GROUND[tenant];
+
+  const { stage } = await groundFor(requestFor(tenant, mode));
+
+  // Wrapper scope: the probe spreads the artifact's attributes on its own root, so this ground
+  // renders without the kernel's <html> stamp.
   return (
-    <Suspense fallback={null}>
-      <VisualAuthorityProbeContent />
-    </Suspense>
+    <GroundStage
+      {...stage}
+      tenantConfig={stage.artifact ? dbTenantConfig(stage.artifact) : null}
+      styleTestId="visual-authority-artifact-style"
+    >
+      <VisualAuthorityProbe tenant={tenant} artifact={stage.artifact} />
+    </GroundStage>
   );
 }
