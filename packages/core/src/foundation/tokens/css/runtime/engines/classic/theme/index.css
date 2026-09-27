@@ -1753,6 +1753,24 @@ html[data-tenant] .ant-list-empty-text {
    LINK - .ant-typography a
    ============================================================================= */
 
+html[data-tenant] a,
+html[data-tenant] .ant-typography a {
+  color: var(--ds-link-color);
+  text-decoration: var(--ds-link-decoration);
+  transition: var(--ds-transition-fast);
+}
+
+html[data-tenant] a:hover,
+html[data-tenant] .ant-typography a:hover {
+  color: var(--ds-link-color-hover);
+  text-decoration: var(--ds-link-decoration-hover);
+}
+
+html[data-tenant] a:active,
+html[data-tenant] .ant-typography a:active {
+  color: var(--ds-link-color-active);
+}
+
 /* =============================================================================
    TYPOGRAPHY - .ant-typography
    ============================================================================= */

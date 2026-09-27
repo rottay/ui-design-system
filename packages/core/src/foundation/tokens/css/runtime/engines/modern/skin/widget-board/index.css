@@ -57,9 +57,13 @@
 
 /* ---- move mode: the whole board reads as a grab surface, outranking the
         Button primitive's `cursor: pointer` (0,3,0, this layer) through the
-        always-stamped data-loading hook — no `!important`, no double. ---- */
+        always-stamped data-loading hook — no `!important`, no double. The
+        `:not(.ds-engine-modern)` arm keeps that win on Classic/Rustic boards,
+        whose control skins load later from the frozen-engine bundle. ---- */
 .ds-pattern-widget-board[data-part='root'][data-moving='true'][data-loading],
 .ds-pattern-widget-board[data-part='root'][data-moving='true'][data-loading]
+  *,
+.ds-pattern-widget-board[data-part='root'][data-moving='true'][data-loading]:not(.ds-engine-modern)
   * {
   cursor: grabbing;
   user-select: none;
