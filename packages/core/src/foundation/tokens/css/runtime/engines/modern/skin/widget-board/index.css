@@ -126,3 +126,33 @@
   .ds-widget-board__cell[data-part="card-shell"] {
   --_ds-widget-board-tint-origin: 0% 0%;
 }
+
+/* ---- drag ghost: exists only while a kernel pointer drag is live, positioned from its preview ---- */
+.ds-pattern-widget-board.ds-engine-modern[data-moving='true'] .ds-widget-board__grid[data-part='grid'] {
+  position: relative;
+}
+
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__drag-ghost {
+  --ds-widget-board-ghost-x: 0px;
+  --ds-widget-board-ghost-y: 0px;
+  --ds-widget-board-ghost-width: 0px;
+  --ds-widget-board-ghost-height: 0px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  inline-size: var(--ds-widget-board-ghost-width);
+  block-size: var(--ds-widget-board-ghost-height);
+  translate: var(--ds-widget-board-ghost-x) var(--ds-widget-board-ghost-y);
+  border: 2px solid color-mix(in srgb, var(--ds-color-primary) 56%, transparent);
+  border-radius: var(--ds-radius-xl);
+  background: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  box-shadow: 0 26px 54px -32px color-mix(in srgb, var(--ds-color-text-primary) 48%, transparent);
+  pointer-events: none;
+  z-index: var(--_ds-widget-board-z-dragging, 8);
+}
+
+@media (forced-colors: active) {
+  .ds-pattern-widget-board.ds-engine-modern .ds-widget-board__drag-ghost {
+    border-color: Highlight;
+  }
+}

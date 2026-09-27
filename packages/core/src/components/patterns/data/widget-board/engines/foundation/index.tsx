@@ -43,6 +43,16 @@ import type {
 } from "../../contracts";
 import { useOptionalFormatter } from "@/infrastructure/runtime/i18n";
 import { useAdaptiveBoardLayout } from "../../runtime/adaptive/react";
+import {
+  resolveGridSlot,
+  resolveResizeAxes,
+  resolveResizeIntent,
+  useDragSession,
+  useResizeSession,
+  type KeyboardTargetResolver,
+  type PointerTargetResolver,
+  type ResizeEdge,
+} from "../../../../../primitives/runtime/collection/sortable";
 
 /* Private, not exported: constraint defaults are permissive so an unconstrained item is unchanged. */
 const isWidgetMovable = (item: WidgetBoardItem): boolean => item.movable !== false;
@@ -116,6 +126,31 @@ function resizesInline(edge: WidgetResizeEdge): boolean {
 
 function resizesBlock(edge: WidgetResizeEdge): boolean {
   return edge.includes("block");
+}
+
+function kernelResizePreview(
+  start: KernelResizeStart,
+  delta: { readonly x: number; readonly y: number }
+): { previewSize: WidgetBoardSize; previewHeight?: number } {
+  let previewSize = start.size;
+  let previewHeight = start.height;
+  if (resizesInline(start.edge)) {
+    const { inline } = resolveResizeIntent(start.edge, delta, {
+      step: { inline: start.columnWidth, block: 1 },
+      rtl: start.rtl,
+    });
+    previewSize = nearestSize(Math.max(3, Math.min(12, start.startSpan + inline)));
+  }
+  if (resizesBlock(start.edge)) {
+    previewHeight = Math.max(
+      MIN_WIDGET_HEIGHT,
+      Math.min(
+        MAX_WIDGET_HEIGHT,
+        Math.round(start.startHeight + delta.y * resolveResizeAxes(start.edge).block)
+      )
+    );
+  }
+  return { previewSize, previewHeight };
 }
 
 function nearestSize(span: number): WidgetBoardSize {
@@ -308,6 +343,29 @@ export interface WidgetBoardModernSlots {
   }>;
   readonly rootRef?: React.Ref<HTMLElement>;
   readonly rootPosture?: string;
+  /** Drag and resize on the shared DnD kernel; absent, the legacy-frozen sessions below run. */
+  readonly kernelGestures?: boolean;
+}
+
+type KernelMovePayload = { readonly key: string };
+
+interface KernelResizeStart {
+  readonly id: string;
+  readonly edge: WidgetResizeEdge;
+  readonly startSpan: number;
+  readonly startHeight: number;
+  readonly columnWidth: number;
+  readonly rtl: boolean;
+  readonly size: WidgetBoardSize;
+  readonly height?: number;
+}
+
+interface KernelGhostOrigin {
+  readonly id: string;
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
 }
 
 export function WidgetBoardEngine({
@@ -327,6 +385,7 @@ export function WidgetBoardEngine({
   modernSlots,
 }: WidgetBoardProps & { modernSlots?: WidgetBoardModernSlots }): React.ReactElement {
   const CatalogGrid = modernSlots?.CatalogGrid ?? "div";
+  const kernelGestures = modernSlots?.kernelGestures === true;
   const catalogId = useId();
   const headingId = useId();
   const [layout, setLayout] = useState(items);
@@ -357,6 +416,10 @@ export function WidgetBoardEngine({
   const layoutAnimationsRef = useRef(new Map<string, Animation>());
   const gridRef = useRef<HTMLDivElement>(null);
   const cellRefs = useRef(new Map<string, HTMLElement>());
+  const kernelPointerDragRef = useRef(false);
+  const kernelResizeIdRef = useRef<string | null>(null);
+  const [kernelResizeStart, setKernelResizeStart] = useState<KernelResizeStart | null>(null);
+  const [ghostOrigin, setGhostOrigin] = useState<KernelGhostOrigin | null>(null);
 
   /* External ownership wins: incoming items cancel any live gesture so no listener can later
      emit props back to the consumer. */
@@ -439,20 +502,229 @@ export function WidgetBoardEngine({
    * redistributed instead of stranding columns, and a collapsed tier
    * resolves its own real capacity.
    */
+  const kernelMoveResolver: PointerTargetResolver<KernelMovePayload, number> = ({
+    payload,
+    point,
+  }) => {
+    const currentVisible = visibleLayout();
+    const from = currentVisible.findIndex((item) => item.id === payload.key);
+    const bounds = gridRef.current?.getBoundingClientRect();
+    const to = bounds
+      ? resolveGridSlot(
+          point,
+          currentVisible.map((item) => cellRefs.current.get(item.id)?.getBoundingClientRect()),
+          { bounds }
+        )
+      : null;
+    if (from < 0 || to === null) {
+      targetPostureRef.current = "outside";
+      return null;
+    }
+    if (from === to) {
+      targetPostureRef.current = "noop";
+      return to;
+    }
+    const accepted = previewReorder(from, to);
+    targetPostureRef.current = accepted ? "accepted" : "refused";
+    return accepted ? to : null;
+  };
+
+  const kernelKeyboardResolver: KeyboardTargetResolver<KernelMovePayload, number> = ({
+    payload,
+    intent,
+    candidate,
+  }) => {
+    const count = visibleLayout().length;
+    const from = candidate ?? visibleLayout().findIndex((item) => item.id === payload.key);
+    const backward = intent === "prev-item" || intent === "prev-container";
+    const to = backward ? Math.max(0, from - 1) : Math.min(count - 1, from + 1);
+    if (from < 0 || to === from) return { kind: "blocked" };
+    if (reorderedLayout(layoutRef.current, from, to) === layoutRef.current) return { kind: "blocked" };
+    return { kind: "target", target: to };
+  };
+
+  const endKernelMove = (revert: boolean): void => {
+    if (revert && dragOriginLayoutRef.current) {
+      layoutRef.current = dragOriginLayoutRef.current;
+      setLayout(dragOriginLayoutRef.current);
+    }
+    kernelPointerDragRef.current = false;
+    dragOriginLayoutRef.current = null;
+    dragOriginOrderRef.current = null;
+    sessionItemsRef.current = null;
+    targetPostureRef.current = "noop";
+    setDraggingId(null);
+    setOverIndex(null);
+    setGhostOrigin(null);
+  };
+
+  const kernelDrag = useDragSession<KernelMovePayload, number>({
+    disabled: !kernelGestures,
+    pointer: { resolvePointerTarget: kernelMoveResolver },
+    keyboard: { mode: "delegated", resolveKeyboardTarget: kernelKeyboardResolver },
+    onDragStarted: (payload) => {
+      const live = layoutRef.current.find((item) => item.id === payload.key);
+      if (!editing || kernelResizeIdRef.current !== null || !live || !isWidgetMovable(live)) {
+        kernelDrag.cancel();
+        return;
+      }
+      kernelPointerDragRef.current = true;
+      dragOriginLayoutRef.current = layoutRef.current;
+      dragOriginOrderRef.current = orderSnapshot(layoutRef.current);
+      sessionItemsRef.current = itemsRef.current;
+      targetPostureRef.current = "noop";
+      setDraggingId(payload.key);
+      const cell = cellRefs.current.get(payload.key)?.getBoundingClientRect();
+      const grid = gridRef.current?.getBoundingClientRect();
+      setGhostOrigin(
+        cell && grid
+          ? {
+              id: payload.key,
+              x: cell.left - grid.left,
+              y: cell.top - grid.top,
+              width: cell.width,
+              height: cell.height,
+            }
+          : null
+      );
+    },
+    onDrop: (payload, target) => {
+      if (!kernelPointerDragRef.current) {
+        reorder(visibleLayout().findIndex((item) => item.id === payload.key), target);
+        return;
+      }
+      const live = layoutRef.current.find((item) => item.id === payload.key);
+      const orderChanged =
+        dragOriginOrderRef.current !== null &&
+        !sameOrder(orderSnapshot(layoutRef.current), dragOriginOrderRef.current);
+      const legal =
+        live !== undefined &&
+        isWidgetMovable(live) &&
+        sessionItemsRef.current === itemsRef.current &&
+        (targetPostureRef.current === "accepted" || targetPostureRef.current === "noop") &&
+        orderChanged;
+      if (legal) onItemsChange?.(layoutRef.current);
+      endKernelMove(!legal);
+    },
+    onCancel: () => {
+      if (kernelPointerDragRef.current) endKernelMove(true);
+    },
+    // A refused drop closes the session without onCancel, so the preview reverts here.
+    onAnnounce: (event) => {
+      if (event.kind === "blocked" && event.origin === "pointer" && kernelPointerDragRef.current)
+        endKernelMove(true);
+    },
+  });
+
+  const kernelKeyboardMove = (id: string, index: number, direction: -1 | 1): void => {
+    if (kernelPointerDragRef.current) return;
+    kernelDrag.start({ key: id }, { target: index });
+    if (!kernelDrag.move(direction < 0 ? "prev-item" : "next-item")) {
+      kernelDrag.cancel();
+      return;
+    }
+    kernelDrag.commit();
+  };
+
+  const finishKernelResize = (commitResize: boolean, preview: WidgetResizeSession | null): void => {
+    kernelResizeIdRef.current = null;
+    setKernelResizeStart(null);
+    if (!commitResize || !preview) return;
+    const live = layoutRef.current.find((item) => item.id === preview.id);
+    if (!live) return;
+    const inlineChanges = resizesInline(preview.edge);
+    const blockChanges = resizesBlock(preview.edge);
+    if (inlineChanges && !isWidgetResizable(live, "inline")) return;
+    if (blockChanges && !isWidgetResizable(live, "block")) return;
+    const nextSize = inlineChanges ? preview.previewSize : live.size;
+    const nextHeight = blockChanges ? preview.previewHeight : live.height;
+    if (nextSize !== live.size || nextHeight !== live.height)
+      commit(
+        layoutRef.current.map((item) =>
+          item.id === preview.id ? { ...item, size: nextSize, height: nextHeight } : item
+        )
+      );
+  };
+
+  const kernelResize = useResizeSession<string>({
+    disabled: !kernelGestures || narrow,
+    // The step and the direction are the grid's own, read once at press like the legacy session.
+    measureStep: (id, edge) => {
+      const live = layoutRef.current.find((item) => item.id === id);
+      const grid = gridRef.current;
+      const gridWidth = grid?.getBoundingClientRect().width ?? 0;
+      const gridStyles = grid ? getComputedStyle(grid) : null;
+      const columnGap = Number.parseFloat(gridStyles?.columnGap ?? "0") || 0;
+      const columnWidth = Math.max(1, (gridWidth - columnGap * 11) / 12);
+      const renderedHeight = Math.max(
+        MIN_WIDGET_HEIGHT,
+        cellRefs.current.get(id)?.getBoundingClientRect().height ?? MIN_WIDGET_HEIGHT
+      );
+      kernelResizeIdRef.current = id;
+      setKernelResizeStart(
+        live
+          ? {
+              id,
+              edge,
+              startSpan: SIZE_SPAN[live.size],
+              startHeight: live.height ?? renderedHeight,
+              columnWidth,
+              rtl: gridStyles?.direction === "rtl",
+              size: live.size,
+              height: live.height,
+            }
+          : null
+      );
+      return { inline: columnWidth, block: 1 };
+    },
+    onCommit: () => finishKernelResize(true, kernelResizeSession),
+    onCancel: () => finishKernelResize(false, null),
+  });
+
+  const kernelPreview = kernelResize.resize;
+  const kernelResizeSession = useMemo<WidgetResizeSession | null>(() => {
+    if (!kernelPreview || !kernelResizeStart || kernelPreview.subject !== kernelResizeStart.id)
+      return null;
+    const { previewSize, previewHeight } = kernelResizePreview(kernelResizeStart, kernelPreview.delta);
+    return {
+      id: kernelResizeStart.id,
+      pointerId: -1,
+      edge: kernelResizeStart.edge,
+      startX: 0,
+      startY: 0,
+      startSpan: kernelResizeStart.startSpan,
+      startHeight: kernelResizeStart.startHeight,
+      columnWidth: kernelResizeStart.columnWidth,
+      inlineDirection: kernelResizeStart.rtl ? -1 : 1,
+      previewSize,
+      previewHeight,
+    };
+  }, [kernelPreview, kernelResizeStart]);
+  const activeResizeSession = resizeSession ?? kernelResizeSession;
+
+  useLayoutEffect(() => {
+    if (kernelPointerDragRef.current) {
+      dragOriginLayoutRef.current = null;
+      endKernelMove(false);
+      kernelDrag.cancel();
+    }
+    if (kernelResizeIdRef.current !== null) kernelResize.cancel();
+  }, [items]);
+
   const previewItems = useMemo(() => {
-    if (!resizeSession) return visible;
+    if (!activeResizeSession) return visible;
     return visible.map((item) =>
-      item.id === resizeSession.id
+      item.id === activeResizeSession.id
         ? {
             ...item,
-            size: resizeSession.previewSize,
-            ...(resizeSession.previewHeight !== undefined
-              ? { height: resizeSession.previewHeight }
+            size: activeResizeSession.previewSize,
+            ...(activeResizeSession.previewHeight !== undefined
+              ? { height: activeResizeSession.previewHeight }
               : {}),
           }
         : item
     );
-  }, [visible, resizeSession]);
+  }, [visible, activeResizeSession]);
   const adaptive = useAdaptiveBoardLayout({
     items: previewItems,
     gridRef,
@@ -498,7 +770,8 @@ export function WidgetBoardEngine({
       const nextRect = node.getBoundingClientRect();
       nextRects.set(id, nextRect);
       const previousRect = previousCellRectsRef.current.get(id);
-      const activeResize = resizeSessionRef.current?.id === id;
+      const activeResize =
+        resizeSessionRef.current?.id === id || kernelResizeIdRef.current === id;
       if (!previousRect || activeResize || duration === 0 || !node.animate)
         continue;
       const deltaX = previousRect.left - nextRect.left;
@@ -533,7 +806,7 @@ export function WidgetBoardEngine({
     }
 
     previousCellRectsRef.current = nextRects;
-  }, [layout, narrow, adaptiveCellStyles, resizeSession, rowSpans]);
+  }, [layout, narrow, adaptiveCellStyles, activeResizeSession, rowSpans]);
 
   useEffect(
     () => () => {
@@ -613,6 +886,7 @@ export function WidgetBoardEngine({
       .slice()
       .sort((left, right) => left.order - right.order);
 
+  /* Legacy-frozen: the classic/rustic pointer sessions below; Modern moves and resizes on the kernel. */
   const targetIndexAtPoint = (
     clientX: number,
     clientY: number
@@ -1048,13 +1322,13 @@ export function WidgetBoardEngine({
       aria-busy={loading ? true : undefined}
       data-editing={editing ? "true" : "false"}
       data-moving={draggingId ? "true" : "false"}
-      data-resizing={resizeSession ? "true" : "false"}
+      data-resizing={activeResizeSession ? "true" : "false"}
       data-resize-axis={
-        resizeSession &&
-        resizesInline(resizeSession.edge) &&
-        resizesBlock(resizeSession.edge)
+        activeResizeSession &&
+        resizesInline(activeResizeSession.edge) &&
+        resizesBlock(activeResizeSession.edge)
           ? "both"
-          : resizeSession && resizesBlock(resizeSession.edge)
+          : activeResizeSession && resizesBlock(activeResizeSession.edge)
           ? "block"
           : "inline"
       }
@@ -1318,12 +1592,12 @@ export function WidgetBoardEngine({
         >
           {visible.map((item, index) => {
             const effectiveSize =
-              resizeSession?.id === item.id
-                ? resizeSession.previewSize
+              activeResizeSession?.id === item.id
+                ? activeResizeSession.previewSize
                 : item.size;
             const effectiveHeight =
-              resizeSession?.id === item.id
-                ? resizeSession.previewHeight
+              activeResizeSession?.id === item.id
+                ? activeResizeSession.previewHeight
                 : item.height;
             const adaptiveStyle = adaptiveCellStyles[item.id];
             // Both grid lines come from the shared runtime's solver for the
@@ -1357,7 +1631,7 @@ export function WidgetBoardEngine({
                 data-height={effectiveHeight ? "fixed" : "auto"}
                 data-index={index}
                 data-has-header={item.header ? "true" : "false"}
-                data-resizing={resizeSession?.id === item.id ? "true" : "false"}
+                data-resizing={activeResizeSession?.id === item.id ? "true" : "false"}
                 data-dragging={draggingId === item.id ? "true" : "false"}
                 data-drop-target={
                   overIndex === index && draggingId !== item.id
@@ -1379,10 +1653,14 @@ export function WidgetBoardEngine({
                   <BoardCellControls
                     className="ds-widget-board__cell-controls"
                     onPointerDown={
-                      isWidgetMovable(item)
+                      !kernelGestures && isWidgetMovable(item)
                         ? (event) => beginMove(event, item)
                         : undefined
                     }
+                    {...kernelDrag.getPointerSourceProps(
+                      { key: item.id },
+                      { eligible: isWidgetMovable(item) }
+                    )}
                   >
                     {/* Forbidden controls are not rendered, so they expose no shortcut or focus target. */}
                     {isWidgetMovable(item) ? (
@@ -1398,17 +1676,20 @@ export function WidgetBoardEngine({
                             event.key === "ArrowUp"
                           ) {
                             event.preventDefault();
-                            reorder(index, Math.max(0, index - 1));
+                            if (kernelGestures) kernelKeyboardMove(item.id, index, -1);
+                            else reorder(index, Math.max(0, index - 1));
                           }
                           if (
                             event.key === "ArrowRight" ||
                             event.key === "ArrowDown"
                           ) {
                             event.preventDefault();
-                            reorder(
-                              index,
-                              Math.min(visible.length - 1, index + 1)
-                            );
+                            if (kernelGestures) kernelKeyboardMove(item.id, index, 1);
+                            else
+                              reorder(
+                                index,
+                                Math.min(visible.length - 1, index + 1)
+                              );
                           }
                         }}
                       >
@@ -1464,8 +1745,8 @@ export function WidgetBoardEngine({
                       const keyboardEdge =
                         edge === "inline-end" || edge === "block-end";
                       const active =
-                        resizeSession?.id === item.id &&
-                        resizeSession.edge === edge;
+                        activeResizeSession?.id === item.id &&
+                        activeResizeSession.edge === edge;
                       const resizeLabel = diagonal
                         ? labels.resize
                         : horizontal
@@ -1516,8 +1797,10 @@ export function WidgetBoardEngine({
                             "data-edge": edge,
                             "data-active": active ? "true" : "false",
                           }}
-                          onPointerDown={(event) =>
-                            beginResize(event, item, edge)
+                          onPointerDown={
+                            kernelGestures
+                              ? undefined
+                              : (event) => beginResize(event, item, edge)
                           }
                           onAdjust={(intent: ResizeHandleIntent) => {
                             if (widthEdge) {
@@ -1542,6 +1825,7 @@ export function WidgetBoardEngine({
                               else resizeHeightTo(item.id, MAX_WIDGET_HEIGHT);
                             }
                           }}
+                          {...kernelResize.getHandleProps(item.id, edge)}
                         >
                           <span
                             className="ds-widget-board__resize-rail"
@@ -1639,6 +1923,20 @@ export function WidgetBoardEngine({
               </BoardCardShell>
             );
           })}
+          {kernelGestures && ghostOrigin && kernelDrag.preview ? (
+            <div
+              className="ds-widget-board__drag-ghost"
+              aria-hidden
+              style={
+                {
+                  "--ds-widget-board-ghost-x": `${Math.round(ghostOrigin.x + kernelDrag.preview.delta.x)}px`,
+                  "--ds-widget-board-ghost-y": `${Math.round(ghostOrigin.y + kernelDrag.preview.delta.y)}px`,
+                  "--ds-widget-board-ghost-width": `${Math.round(ghostOrigin.width)}px`,
+                  "--ds-widget-board-ghost-height": `${Math.round(ghostOrigin.height)}px`,
+                } as CSSProperties
+              }
+            />
+          ) : null}
         </div>
       ) : loading ? (
         <AnatomySkeleton busy={false}>
