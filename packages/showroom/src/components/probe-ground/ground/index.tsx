@@ -8,6 +8,7 @@ import {
   type MountedTenantTheme,
 } from '@rottay/design-system/server';
 
+import { mountLegacyGround } from '../legacy/index.mjs';
 import { buildRootStampScript } from '../stamp/index.mjs';
 import { GroundStage, type GroundStageProps } from '../stage';
 
@@ -15,13 +16,24 @@ type CompileInput = Parameters<typeof compileTenantThemeDocumentV2>[0];
 type MountOptions = NonNullable<Parameters<typeof mountTenantTheme>[1]>;
 type Vertical = CompileInput['verticalKey'];
 
-/** The two lawful origins: the vertical's code-owned baseline, or a decision document. */
+/**
+ * The lawful origins: the vertical's code-owned baseline, a decision document, or a v1 document
+ * no decision can express (authored inks, raw token overrides, per-mode seeds).
+ */
 export type GroundSource =
   | { readonly kind: 'static'; readonly vertical?: Vertical }
   | {
       readonly kind: 'document';
       readonly vertical?: Vertical;
       readonly document: CompileInput['document'];
+      readonly tenantId: string;
+      readonly rowVersion?: number;
+      readonly name?: string;
+    }
+  | {
+      readonly kind: 'legacy';
+      readonly vertical?: Vertical;
+      readonly document: unknown;
       readonly tenantId: string;
       readonly rowVersion?: number;
       readonly name?: string;
@@ -62,6 +74,30 @@ export async function groundFor(request: GroundRequest): Promise<Ground> {
       mounted,
       stamp: buildRootStampScript(mounted.rootAttributes),
       stage: { ...stageBase, tenantConfig: null, artifact: null, styleElements: mounted.styleElements },
+    };
+  }
+
+  if (source.kind === 'legacy') {
+    const { artifact, mounted } = await mountLegacyGround(
+      { document: source.document, tenantId: source.tenantId, slug, vertical, rowVersion: source.rowVersion ?? 1 },
+      options,
+    );
+    const name = source.name ?? slug;
+    const tenantConfig = {
+      slug,
+      name,
+      vertical,
+      engine: 'modern',
+      theme: mode,
+      plan: 'enterprise',
+      features: ['*'],
+      branding: { companyName: name },
+      appearance: artifact.normalizedAppearance,
+    } as TenantConfig;
+    return {
+      mounted,
+      stamp: buildRootStampScript(mounted.rootAttributes),
+      stage: { ...stageBase, tenantConfig, artifact, styleElements: mounted.styleElements },
     };
   }
 

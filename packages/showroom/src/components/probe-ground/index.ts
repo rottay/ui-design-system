@@ -1,4 +1,5 @@
 export { buildRootStampScript } from './stamp/index.mjs';
+export { compileLegacyGroundDocument, LegacyGroundRefusal, mountLegacyGround } from './legacy/index.mjs';
 export {
   groundFor,
   ProbeGround,
