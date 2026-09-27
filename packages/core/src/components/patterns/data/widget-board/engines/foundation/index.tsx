@@ -36,6 +36,7 @@ import { LayoutGridIcon } from "@/graphics/icons/semantic/generated/roles/layout
 import { NavigationSettingsIcon } from "@/graphics/icons/semantic/generated/roles/navigation-settings";
 import { StatusVerifiedIcon } from "@/graphics/icons/semantic/generated/roles/status-verified";
 import { readTiming } from "@/graphics/motion/react/runtime/layout/kernel/measure";
+import { useLayoutAnimation, type ReflowResult } from "@/graphics/motion/react/runtime";
 import type {
   WidgetBoardItem,
   WidgetBoardProps,
@@ -334,6 +335,25 @@ function BoardCellControls({
   );
 }
 
+type KernelReflowHandle = ReflowResult<string>;
+
+/* Commits only when the placement key changes, so every play diffs the placement before it. */
+const KernelReflow = React.memo(function KernelReflow({
+  placementKey,
+  handle,
+}: {
+  placementKey: string;
+  handle: React.MutableRefObject<KernelReflowHandle | null>;
+}): null {
+  const reflow = useLayoutAnimation<string>({ kind: "reflow" });
+  handle.current = reflow;
+  const { measure } = reflow;
+  useLayoutEffect(() => {
+    measure();
+  }, [placementKey, measure]);
+  return null;
+});
+
 /** Modern-only compositions (the auto-fit catalog, the root posture); absent, every engine renders as before. */
 export interface WidgetBoardModernSlots {
   readonly CatalogGrid?: React.ComponentType<{
@@ -417,6 +437,7 @@ export function WidgetBoardEngine({
   const gridRef = useRef<HTMLDivElement>(null);
   const cellRefs = useRef(new Map<string, HTMLElement>());
   const kernelPointerDragRef = useRef(false);
+  const kernelReflowRef = useRef<KernelReflowHandle | null>(null);
   const kernelResizeIdRef = useRef<string | null>(null);
   const [kernelResizeStart, setKernelResizeStart] = useState<KernelResizeStart | null>(null);
   const [ghostOrigin, setGhostOrigin] = useState<KernelGhostOrigin | null>(null);
@@ -545,6 +566,7 @@ export function WidgetBoardEngine({
 
   const endKernelMove = (revert: boolean): void => {
     if (revert && dragOriginLayoutRef.current) {
+      armReflow();
       layoutRef.current = dragOriginLayoutRef.current;
       setLayout(dragOriginLayoutRef.current);
     }
@@ -742,8 +764,23 @@ export function WidgetBoardEngine({
    * Duration and easing come from theme tokens so restrained and expressive
    * tenants keep their own motion personality.
    */
+  const placementKey = useMemo(
+    () =>
+      JSON.stringify([
+        narrow,
+        visible.map((item) => [item.id, item.size, item.height ?? null]),
+        adaptiveCellStyles,
+        rowSpans,
+        activeResizeSession
+          ? [activeResizeSession.id, activeResizeSession.previewSize, activeResizeSession.previewHeight ?? null]
+          : null,
+      ]),
+    [narrow, visible, adaptiveCellStyles, rowSpans, activeResizeSession]
+  );
+
+  /* Legacy-frozen: the classic/rustic FLIP; Modern reflows on the motion kernel (KernelReflow). */
   useLayoutEffect(() => {
-    if (narrow || typeof window === "undefined") return;
+    if (kernelGestures || narrow || typeof window === "undefined") return;
     const grid = gridRef.current;
     if (!grid) return;
     const reducedMotion = window.matchMedia?.(
@@ -817,7 +854,13 @@ export function WidgetBoardEngine({
     []
   );
 
+  /* The kernel's own law: snapshot synchronously before the update that moves the cells. */
+  const armReflow = (): void => {
+    if (kernelGestures) kernelReflowRef.current?.measure();
+  };
+
   const commit = (next: WidgetBoardItem[]): void => {
+    armReflow();
     const normalized = normalize(next);
     layoutRef.current = normalized;
     setLayout(normalized);
@@ -874,6 +917,7 @@ export function WidgetBoardEngine({
   const previewReorder = (from: number, to: number): boolean => {
     const next = reorderedLayout(layoutRef.current, from, to);
     if (next === layoutRef.current) return false;
+    armReflow();
     layoutRef.current = next;
     setLayout(next);
     setOverIndex(to);
@@ -1623,7 +1667,13 @@ export function WidgetBoardEngine({
             return (
               <BoardCardShell
                 key={item.id}
-                ref={(node) => setCellRef(item.id, node)}
+                ref={(node) => {
+                  setCellRef(item.id, node);
+                  if (kernelGestures)
+                    kernelReflowRef.current?.register(item.id)(
+                      narrow || activeResizeSession?.id === item.id ? null : node
+                    );
+                }}
                 className="ds-widget-board__cell"
                 data-placed={placed ? "true" : "false"}
                 data-widget-id={item.id}
@@ -1923,6 +1973,9 @@ export function WidgetBoardEngine({
               </BoardCardShell>
             );
           })}
+          {kernelGestures ? (
+            <KernelReflow placementKey={placementKey} handle={kernelReflowRef} />
+          ) : null}
           {kernelGestures && ghostOrigin && kernelDrag.preview ? (
             <div
               className="ds-widget-board__drag-ghost"

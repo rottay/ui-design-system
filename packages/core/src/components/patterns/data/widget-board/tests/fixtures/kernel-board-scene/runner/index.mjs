@@ -11,6 +11,9 @@
  *   4. A real pointer resize on the inline-end edge previews whole columns and commits once at
  *      release; the separator's own keyboard arm still resizes.
  *   5. At rest nothing the kernel adds exists: no ghost, and the frozen path never has one.
+ *   6. A reorder reflows the Modern cells through the motion kernel (a transform invert, fill
+ *      'backwards', never the layout-x/y FLIP), and once it completes each cell's own CSS
+ *      transform is live again with no inline transform left behind.
  *
  * It also writes the REST computed-style snapshot of both boards (`--json`), which is what the
  * before/after paint comparison diffs, plus the resize-host and catalog-width measurements.
@@ -324,6 +327,121 @@ async function main() {
         };
       });
       console.log(`MEASURE catalog ${JSON.stringify(report.catalog)}`);
+
+      // -- 6. the reflow on the motion kernel, with motion on ------------------------------
+      const motion = await browser.newContext({ viewport: VIEWPORT, reducedMotion: 'no-preference' });
+      const reflowPage = await motion.newPage();
+      reflowPage.on('pageerror', (error) => pageErrors.push(String(error)));
+      await reflowPage.addInitScript(() => {
+        const calls = [];
+        const longTasks = [];
+        window.__animations = calls;
+        window.__longTasks = longTasks;
+        const original = Element.prototype.animate;
+        Element.prototype.animate = function (keyframes, options) {
+          const frames = Array.isArray(keyframes) ? keyframes : [];
+          calls.push({
+            id: this.getAttribute('data-widget-id'),
+            modern: Boolean(this.closest('[data-scene="modern"]')),
+            properties: [...new Set(frames.flatMap((frame) => Object.keys(frame).filter((key) => !['offset', 'easing', 'composite'].includes(key))))].sort(),
+            fill: options && typeof options === 'object' ? options.fill ?? null : null,
+            from: frames[0] && typeof frames[0].transform === 'string'
+              ? frames[0].transform
+              : frames[0] && frames[0]['--ds-widget-board-layout-x'] !== undefined
+                ? `${frames[0]['--ds-widget-board-layout-x']} ${frames[0]['--ds-widget-board-layout-y']}`
+                : null,
+          });
+          return original.call(this, keyframes, options);
+        };
+        new PerformanceObserver((list) => {
+          for (const entry of list.getEntries()) longTasks.push(Math.round(entry.duration));
+        }).observe({ type: 'longtask', buffered: true });
+      });
+      await openScene(reflowPage, url);
+      await reflowPage.evaluate(() => {
+        window.__animations.length = 0;
+        window.__longTasks.length = 0;
+      });
+      await reflowPage.locator(`${MODERN} [aria-label="Move: b"]`).focus();
+      await reflowPage.keyboard.press('ArrowRight');
+      await reflowPage.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => null))));
+      const reflow = await reflowPage.evaluate((selector) => {
+        const cells = Array.from(document.querySelectorAll(`${selector} [data-part="card-shell"]`));
+        return {
+          calls: window.__animations.filter((call) => call.modern && call.id),
+          longTasks: [...window.__longTasks],
+          order: cells.map((cell) => cell.getAttribute('data-widget-id')),
+          residue: cells.map((cell) => ({
+            id: cell.getAttribute('data-widget-id'),
+            attached: cell.getAnimations().length,
+            inlineTransform: cell.style.transform,
+          })),
+        };
+      }, MODERN);
+      report.reflow = reflow;
+      assert(
+        'the reorder reflows exactly the two moved Modern cells through the kernel: a transform invert, fill backwards, no layout-x/y FLIP',
+        JSON.stringify(reflow.order) === JSON.stringify(['a', 'c', 'b', 'd'])
+          && JSON.stringify([...new Set(reflow.calls.map((call) => call.id))].sort()) === JSON.stringify(['b', 'c'])
+          && reflow.calls.length > 0
+          && reflow.calls.every((call) => JSON.stringify(call.properties) === '["transform"]' && call.fill === 'backwards'),
+        reflow.calls,
+      );
+      assert(
+        'a completed reflow leaves nothing: no animation attached, no inline transform on any cell',
+        reflow.residue.every((cell) => cell.attached === 0 && cell.inlineTransform === ''),
+        reflow.residue,
+      );
+      const chain = await reflowPage.evaluate((selector) => {
+        const cell = document.querySelector(`${selector} [data-widget-id="b"]`);
+        const rest = getComputedStyle(cell).transform;
+        cell.style.setProperty('transition', 'none');
+        cell.style.setProperty('--ds-widget-board-interaction-scale', '0.5');
+        const pressed = getComputedStyle(cell).transform;
+        cell.style.removeProperty('--ds-widget-board-interaction-scale');
+        cell.style.removeProperty('transition');
+        return { rest, pressed };
+      }, MODERN);
+      await reflowPage.getByRole('button', { name: 'Done' }).first().click();
+      await reflowPage.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => null))));
+      const hoverTarget = await centre(reflowPage, `${MODERN} [data-widget-id="c"] [data-part="card-content"]`);
+      await reflowPage.mouse.move(hoverTarget.x, hoverTarget.y);
+      await reflowPage.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => null))));
+      const hovered = await reflowPage.evaluate((selector) => getComputedStyle(document.querySelector(`${selector} [data-widget-id="c"]`)).transform, MODERN);
+      report.transformChain = { ...chain, hovered };
+      assert(
+        "after the reflow each moved cell's own CSS transform is live: the press scale and the hover lift both reach it",
+        chain.rest === 'matrix(1, 0, 0, 1, 0, 0)' && chain.pressed.startsWith('matrix(0.5, 0, 0, 0.5')
+          && hovered === 'matrix(1, 0, 0, 1, 0, -2)',
+        report.transformChain,
+      );
+      console.log(`MEASURE reflow long tasks (dev server, unminified): ${JSON.stringify(reflow.longTasks)}`);
+      const frozenPage = await motion.newPage();
+      await frozenPage.addInitScript(() => {
+        const calls = [];
+        window.__animations = calls;
+        const original = Element.prototype.animate;
+        Element.prototype.animate = function (keyframes, options) {
+          const frames = Array.isArray(keyframes) ? keyframes : [];
+          if (this.closest('[data-scene="frozen"]') && this.getAttribute('data-widget-id')) {
+            calls.push({
+              id: this.getAttribute('data-widget-id'),
+              from: frames[0] ? JSON.stringify(frames[0]) : null,
+            });
+          }
+          return original.call(this, keyframes, options);
+        };
+      });
+      await openScene(frozenPage, url);
+      await frozenPage.evaluate(() => {
+        window.__animations.length = 0;
+      });
+      await frozenPage.locator('[data-scene="frozen"] [aria-label="Move: b"]').focus();
+      await frozenPage.keyboard.press('ArrowRight');
+      await frozenPage.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => null))));
+      report.legacyReflowControl = await frozenPage.evaluate(() => window.__animations);
+      console.log(`MEASURE legacy FLIP on the same reorder (frozen board): ${JSON.stringify(report.legacyReflowControl)}`);
+      await motion.close();
 
       if (SELF_CHECK) {
         await page.close();
