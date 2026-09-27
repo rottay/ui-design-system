@@ -118,7 +118,7 @@ export const modernThemeAdapter = defineEngineAdapter({
     },
     "shape.button-style": {
       posture: "native",
-      evidence: { kind: "channels", read: ["--ds-radius-button"] },
+      evidence: { kind: "channels", read: ["--ds-button-lg-radius", "--ds-button-md-radius", "--ds-button-sm-radius", "--ds-button-xl-radius", "--ds-button-xs-radius"] },
     },
     "density.mode": {
       posture: "native",

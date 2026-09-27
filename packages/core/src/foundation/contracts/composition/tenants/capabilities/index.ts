@@ -326,7 +326,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // been authored yet; the F4B-9 preflight census caught the prose door by
       // reading the walker and registry source directly.
       themePath: 'surfaces.buttonStyle',
-      derivedChannels: ['--ds-radius-button'],
+      derivedChannels: ['--ds-radius-button', '--ds-button-xs-radius', '--ds-button-sm-radius', '--ds-button-md-radius', '--ds-button-lg-radius', '--ds-button-xl-radius'],
       compat: 'additive, unset-to-rollback',
     },
     {

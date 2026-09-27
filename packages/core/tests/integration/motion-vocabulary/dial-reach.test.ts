@@ -29,8 +29,12 @@ const sites = motionSites();
  * stops being listed and every remaining assertion still passes. These floors
  * are what makes that visible: they are the milestone-B motion lot's measured
  * population, and they are decrease-only by review, never by a silent edit.
+ * 456 -> 455 (2026-09-26, mover 0d5fdd48d): the stats-grid hand-built
+ * skeleton-bar shimmer retires with the WO-FAM-12 packet-3 skin (the shared
+ * AnatomySkeleton's shimmer is the one renderer now, and its own site is
+ * counted in the skeleton family); a duplicate read, never a lost capability.
  */
-const PINNED_SITES = 456;
+const PINNED_SITES = 455;
 const PINNED_FAMILIES = 180;
 const CONTROL = '<div id="control">Bare control node</div>';
 

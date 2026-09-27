@@ -202,9 +202,9 @@ export const classicThemeAdapter = defineEngineAdapter({
       posture: "unsupported",
       evidence: {
         kind: "absent",
-        unaccounted: 1,
+        unaccounted: 2,
         reason:
-          "--ds-radius-button is read nowhere on the classic surface; classic buttons take the radius-scale axis instead, so sharp|soft|pill changes nothing",
+          "the classic theme reads --ds-button-{sm,md,lg}-radius on the antd button, so the silhouette reaches three sizes; xs and xl have no classic reader",
       },
     },
     "density.mode": {
