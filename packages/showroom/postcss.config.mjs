@@ -1,6 +1,6 @@
 const postcssConfig = {
   plugins: {
-    '@tailwindcss/postcss': {},
+    './postcss/tailwind-scope/index.cjs': {},
   },
 };
 
