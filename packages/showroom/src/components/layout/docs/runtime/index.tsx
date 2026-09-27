@@ -22,11 +22,15 @@ function DocsRuntimeInner({
 
   return (
     <>
+      {/* A body script waits for the head's stylesheets, so a frame can paint before it runs;
+          render stays blocked until the parser has passed the stamp (Chromium honours it). */}
+      <link rel="expect" href="#docs-ground-ready" blocking="render" />
       <script
         data-testid="docs-ground-stamp"
         data-docs-tenant={tenantSlug}
         dangerouslySetInnerHTML={{ __html: stamps[tenantSlug] }}
       />
+      <template id="docs-ground-ready" />
       <DocsProviderShell
         engine={engine}
         tenantSlug={tenantSlug}
