@@ -56,16 +56,6 @@ export const THEME_OPTIONS: PreviewOption<ShowroomTheme>[] = [
   },
 ];
 
-export const DOC_COUNTS = {
-  primitives: 97,
-  patterns: 47,
-  structures: 21,
-  surfaces: 33,
-  charts: 18,
-  icons: 109,
-  total: 325,
-};
-
 export function getPreviewOption<T extends string>(
   options: PreviewOption<T>[],
   key: T

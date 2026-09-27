@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ShowroomLink as Link } from "@/components/navigation/link";
 import { usePathname } from "next/navigation";
-import { Box, Flex, Text } from "@/components/showroom-ui";
+import { Box, Flex, Text } from "@rottay/design-system";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -24,35 +24,10 @@ import {
   getSectionOverviewPath,
   isPathActive,
 } from "../navigation/config";
-import {
-  DOC_COUNTS,
-  ENGINE_OPTIONS,
-  getPreviewOption,
-  THEME_OPTIONS,
-} from "../runtime/options";
+import { DOC_COUNTS } from "@/data/registry/counts";
+import { ENGINE_OPTIONS, getPreviewOption, THEME_OPTIONS } from "../pickers";
+import { shellActiveBg, shellActiveBorder, shellBorder, shellBorderStrong, shellShadowStrong, shellSurface, shellSurfaceStrong, shellSurfaceSubtle, shellText, shellTextSecondary, shellTextTertiary } from "../tokens";
 
-const shellBorder =
-  "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";
-const shellBorderStrong =
-  "var(--showroom-shell-border-strong, var(--ds-color-border-secondary, #2b3038))";
-const shellSurface =
-  "var(--showroom-shell-surface, var(--ds-color-bg-secondary, #111214))";
-const shellSurfaceStrong =
-  "var(--showroom-shell-surface-strong, var(--ds-color-bg-tertiary, #15171b))";
-const shellSurfaceSubtle =
-  "var(--showroom-shell-surface-subtle, var(--ds-color-bg-elevated, #1a1c21))";
-const shellText =
-  "var(--showroom-shell-text, var(--ds-color-text-primary, #f3f4f6))";
-const shellTextSecondary =
-  "var(--showroom-shell-text-secondary, var(--ds-color-text-secondary, #c0c4cc))";
-const shellTextTertiary =
-  "var(--showroom-shell-text-tertiary, var(--ds-color-text-muted, #848b98))";
-const shellActiveBg =
-  "var(--showroom-shell-active-bg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 9%, transparent))";
-const shellActiveBorder =
-  "var(--showroom-shell-active-border, var(--ds-color-border-focus, rgba(255, 255, 255, 0.18)))";
-const shellShadowStrong =
-  "var(--showroom-shell-shadow-strong, 0 28px 72px rgba(0, 0, 0, 0.38))";
 const desktopSidebarWidth =
   "var(--showroom-shell-sidebar-width, clamp(420px, 24vw, 456px))";
 const mobileSidebarWidth = "min(440px, calc(100vw - 20px))";
@@ -134,9 +109,11 @@ function NavNode({ activePath, item, level = 0, onNavigate }: NavNodeProps) {
               }}
             />
             <Text
-              size="sm"
-              weight={isActive ? "semibold" : "medium"}
+              as="div"
+              color="inherit"
+              wrap="auto"
               style={{
+                fontSize: '0.875rem', fontWeight: (isActive ? 600 : 500), textAlign: 'inherit',
                 color: metadataTone,
                 lineHeight: 1.3,
               }}
@@ -214,9 +191,11 @@ function NavNode({ activePath, item, level = 0, onNavigate }: NavNodeProps) {
               />
               <Box style={{ minWidth: 0 }}>
                 <Text
-                  size="sm"
-                  weight={isActive ? "semibold" : "medium"}
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
                   style={{
+                    fontSize: '0.875rem', fontWeight: (isActive ? 600 : 500), textAlign: 'inherit',
                     color: metadataTone,
                     lineHeight: 1.3,
                   }}
@@ -384,9 +363,11 @@ export function Sidebar({
                   }}
                   >
                     <Text
-                      size="sm"
-                      weight="bold"
+                      as="div"
+                      color="inherit"
+                      wrap="auto"
                       style={{
+                        fontSize: '0.875rem', fontWeight: 700, textAlign: 'inherit',
                         color: "inherit",
                         letterSpacing: "0.18em",
                       }}
@@ -397,9 +378,11 @@ export function Sidebar({
 
                 <Box style={{ minWidth: 0 }}>
                   <Text
-                    size="xs"
-                    weight="semibold"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
                       color: shellTextTertiary,
                       textTransform: "uppercase",
                       letterSpacing: "0.16em",
@@ -408,9 +391,11 @@ export function Sidebar({
                     Design system docs
                   </Text>
                   <Text
-                    size="md"
-                    weight="semibold"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '1rem', fontWeight: 600, textAlign: 'inherit',
                       color: shellText,
                       lineHeight: 1.1,
                       marginTop: 3,
@@ -419,8 +404,11 @@ export function Sidebar({
                     Showroom
                   </Text>
                   <Text
-                    size="xs"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit',
                       color: shellTextSecondary,
                       lineHeight: 1.45,
                       marginTop: 4,
@@ -448,9 +436,10 @@ export function Sidebar({
                         }}
                       >
                         <Text
-                          size="xs"
-                          weight="semibold"
-                          style={{ color: shellTextSecondary }}
+                          as="div"
+                          color="inherit"
+                          wrap="auto"
+                          style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: shellTextSecondary }}
                         >
                           {label}
                         </Text>
@@ -505,7 +494,7 @@ export function Sidebar({
                   }}
                 >
                   <HomeIcon size={14} />
-                  <Text size="sm" weight="medium" style={{ color: "inherit" }}>
+                  <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 500, textAlign: 'inherit', color: "inherit" }}>
                     Landing
                   </Text>
                 </Flex>
@@ -534,9 +523,10 @@ export function Sidebar({
                   <Flex align="center" gap={9}>
                     <SearchIcon size={14} />
                     <Text
-                      size="sm"
-                      weight="medium"
-                      style={{ color: "inherit" }}
+                      as="div"
+                      color="inherit"
+                      wrap="auto"
+                      style={{ fontSize: '0.875rem', fontWeight: 500, textAlign: 'inherit', color: "inherit" }}
                     >
                       Search
                     </Text>
@@ -571,9 +561,11 @@ export function Sidebar({
               <Flex align="start" justify="between" style={{ gap: 12 }}>
                 <Box style={{ minWidth: 0 }}>
                   <Text
-                    size="xs"
-                    weight="semibold"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
                       color: shellTextTertiary,
                       textTransform: "uppercase",
                       letterSpacing: "0.16em",
@@ -582,9 +574,11 @@ export function Sidebar({
                     Runtime studio
                   </Text>
                   <Text
-                    size="sm"
-                    weight="semibold"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit',
                       color: shellText,
                       marginTop: 4,
                     }}
@@ -592,8 +586,11 @@ export function Sidebar({
                     {runtime.verticalLabel} on {activeEngine.label}
                   </Text>
                   <Text
-                    size="xs"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit',
                       color: shellTextSecondary,
                       marginTop: 4,
                     }}
@@ -611,9 +608,10 @@ export function Sidebar({
                   }}
                 >
                   <Text
-                    size="xs"
-                    weight="semibold"
-                    style={{ color: shellTextSecondary }}
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
+                    style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: shellTextSecondary }}
                   >
                     {presentation.sectionMeta.eyebrow}
                   </Text>
@@ -630,9 +628,11 @@ export function Sidebar({
                 }}
               >
                 <Text
-                  size="xs"
-                  weight="semibold"
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
                   style={{
+                    fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
                     color: shellTextTertiary,
                     textTransform: "uppercase",
                     letterSpacing: "0.14em",
@@ -641,15 +641,19 @@ export function Sidebar({
                   Now viewing
                 </Text>
                 <Text
-                  size="sm"
-                  weight="semibold"
-                  style={{ color: shellText, marginTop: 5 }}
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
+                  style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', color: shellText, marginTop: 5 }}
                 >
                   {presentation.title}
                 </Text>
                 <Text
-                  size="xs"
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
                   style={{
+                    fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit',
                     color: shellTextSecondary,
                     lineHeight: 1.45,
                     marginTop: 6,
@@ -662,9 +666,10 @@ export function Sidebar({
               <Box style={{ display: "grid", gap: 10, marginTop: 12 }}>
                 <Box>
                   <Text
-                    size="xs"
-                    weight="medium"
-                    style={{ color: shellTextTertiary }}
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
+                    style={{ fontSize: '0.75rem', fontWeight: 500, textAlign: 'inherit', color: shellTextTertiary }}
                   >
                     Tenant
                   </Text>
@@ -695,9 +700,10 @@ export function Sidebar({
                               }}
                             />
                             <Text
-                              size="xs"
-                              weight={isSelected ? "semibold" : "medium"}
-                              style={{ color: "inherit" }}
+                              as="div"
+                              color="inherit"
+                              wrap="auto"
+                              style={{ fontSize: '0.75rem', fontWeight: (isSelected ? 600 : 500), textAlign: 'inherit', color: "inherit" }}
                             >
                               {theme.label}
                             </Text>
@@ -707,8 +713,11 @@ export function Sidebar({
                     })}
                   </Flex>
                   <Text
-                    size="xs"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit',
                       color: shellTextSecondary,
                       lineHeight: 1.45,
                       marginTop: 8,
@@ -720,9 +729,10 @@ export function Sidebar({
 
                 <Box>
                   <Text
-                    size="xs"
-                    weight="medium"
-                    style={{ color: shellTextTertiary }}
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
+                    style={{ fontSize: '0.75rem', fontWeight: 500, textAlign: 'inherit', color: shellTextTertiary }}
                   >
                     Engine
                   </Text>
@@ -753,9 +763,10 @@ export function Sidebar({
                               }}
                             />
                             <Text
-                              size="xs"
-                              weight={isSelected ? "semibold" : "medium"}
-                              style={{ color: "inherit" }}
+                              as="div"
+                              color="inherit"
+                              wrap="auto"
+                              style={{ fontSize: '0.75rem', fontWeight: (isSelected ? 600 : 500), textAlign: 'inherit', color: "inherit" }}
                             >
                               {option.label}
                             </Text>
@@ -765,8 +776,11 @@ export function Sidebar({
                     })}
                   </Flex>
                   <Text
-                    size="xs"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit',
                       color: shellTextSecondary,
                       lineHeight: 1.45,
                       marginTop: 8,
@@ -850,9 +864,11 @@ export function Sidebar({
                               style={{ flexWrap: "wrap" }}
                             >
                               <Text
-                                size="sm"
-                                weight="semibold"
+                                as="div"
+                                color="inherit"
+                                wrap="auto"
                                 style={{
+                                  fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit',
                                   color: shellText,
                                   lineHeight: 1.2,
                                 }}
@@ -875,8 +891,11 @@ export function Sidebar({
                             </Flex>
                             {sectionIsActive ? (
                               <Text
-                                size="xs"
+                                as="div"
+                                color="inherit"
+                                wrap="auto"
                                 style={{
+                                  fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit',
                                   color: shellTextSecondary,
                                   lineHeight: 1.4,
                                   marginTop: 3,
@@ -950,16 +969,19 @@ export function Sidebar({
             <Flex align="center" justify="between" style={{ gap: 12 }}>
               <Box>
                 <Text
-                  size="xs"
-                  weight="semibold"
-                  style={{ color: shellTextTertiary }}
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
+                  style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: shellTextTertiary }}
                 >
                   Library footprint
                 </Text>
                 <Text
-                  size="sm"
-                  weight="semibold"
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
                   style={{
+                    fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit',
                     color: shellText,
                     marginTop: 4,
                   }}
@@ -979,9 +1001,10 @@ export function Sidebar({
               >
                 <Flex align="center" gap={6}>
                   <Text
-                    size="xs"
-                    weight="semibold"
-                    style={{ color: "inherit" }}
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
+                    style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: "inherit" }}
                   >
                     Docs
                   </Text>
@@ -1014,9 +1037,10 @@ export function Sidebar({
                   }}
                 >
                   <Text
-                    size="xs"
-                    weight="medium"
-                    style={{ color: shellTextSecondary }}
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
+                    style={{ fontSize: '0.75rem', fontWeight: 500, textAlign: 'inherit', color: shellTextSecondary }}
                   >
                     {label}
                   </Text>

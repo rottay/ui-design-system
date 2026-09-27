@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import { ShowroomLink as Link } from '@/components/navigation/link';
-import { Box, Card, Flex, Stack, Text } from '@/components/showroom-ui';
+import { Box, Flex, Stack, Text } from '@rottay/design-system';
+
+import { DocsFrame } from '@/components/docs/frame';
 
 type Tone = 'default' | 'accent' | 'success' | 'warning';
 
@@ -130,7 +132,7 @@ export function DocsSectionHeader({
   const styles = getSectionToneStyles(tone);
 
   return (
-    <Card
+    <DocsFrame
       style={{
         padding: 16,
         background: styles.background,
@@ -141,9 +143,11 @@ export function DocsSectionHeader({
       <Stack spacing={10} fullWidth>
         <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
           <Text
-            size="xs"
-            weight="semibold"
+            as='div'
+            color='inherit'
+            wrap='auto'
             style={{
+              fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
               color: 'var(--ds-color-text-muted)',
               textTransform: 'uppercase',
               letterSpacing: '0.12em',
@@ -155,9 +159,10 @@ export function DocsSectionHeader({
         </Flex>
         <Text
           as={"h2" as any}
-          size="lg"
-          weight="semibold"
+          color='inherit'
+          wrap='auto'
           style={{
+            fontSize: '1.125rem', fontWeight: 600, textAlign: 'inherit',
             lineHeight: 1.1,
             letterSpacing: '-0.025em',
             overflowWrap: 'anywhere',
@@ -174,8 +179,11 @@ export function DocsSectionHeader({
           }}
         />
         <Text
-          size="sm"
+          as='div'
+          color='inherit'
+          wrap='auto'
           style={{
+            fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit',
             color: 'var(--ds-color-text-secondary)',
             lineHeight: 1.62,
             maxWidth: 760,
@@ -185,7 +193,7 @@ export function DocsSectionHeader({
           {description}
         </Text>
       </Stack>
-    </Card>
+    </DocsFrame>
   );
 }
 
@@ -226,9 +234,11 @@ export function DocsCompactList({
                   }}
                 >
                   <Text
-                    size="xs"
-                    weight="semibold"
+                    as='div'
+                    color='inherit'
+                    wrap='auto'
                     style={{
+                      fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
                       color: 'var(--ds-color-text-primary)',
                       letterSpacing: '0.08em',
                       textTransform: 'uppercase',
@@ -241,9 +251,11 @@ export function DocsCompactList({
 
               <Stack spacing={8} fullWidth>
                 <Text
-                  size="sm"
-                  weight="semibold"
+                  as='div'
+                  color='inherit'
+                  wrap='auto'
                   style={{
+                    fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit',
                     color: 'var(--ds-color-text-primary)',
                     lineHeight: 1.45,
                     overflowWrap: 'anywhere',
@@ -253,8 +265,11 @@ export function DocsCompactList({
                 </Text>
                 {item.detail ? (
                   <Text
-                    size="xs"
+                    as='div'
+                    color='inherit'
+                    wrap='auto'
                     style={{
+                      fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit',
                       color: 'var(--ds-color-text-secondary)',
                       lineHeight: 1.62,
                       overflowWrap: 'anywhere',
@@ -275,9 +290,11 @@ export function DocsCompactList({
                   >
                     {item.metaLabel ? (
                       <Text
-                        size="xs"
-                        weight="semibold"
+                        as='div'
+                        color='inherit'
+                        wrap='auto'
                         style={{
+                          fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
                           color: 'var(--ds-color-text-muted)',
                           textTransform: 'uppercase',
                           letterSpacing: '0.08em',
@@ -287,8 +304,11 @@ export function DocsCompactList({
                       </Text>
                     ) : null}
                     <Text
-                      size="xs"
+                      as='div'
+                      color='inherit'
+                      wrap='auto'
                       style={{
+                        fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit',
                         color: 'var(--ds-color-text-secondary)',
                         lineHeight: 1.55,
                         marginTop: item.metaLabel ? 6 : 0,

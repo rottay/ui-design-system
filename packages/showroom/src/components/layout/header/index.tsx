@@ -2,7 +2,7 @@
 
 import { ShowroomLink as Link } from "@/components/navigation/link";
 import { usePathname } from "next/navigation";
-import { Box, Flex, Text } from "@/components/showroom-ui";
+import { Box, Flex, Text } from "@rottay/design-system";
 import {
   ChevronRightIcon,
   MenuIcon,
@@ -10,29 +10,10 @@ import {
 } from "@rottay/design-system/icons";
 import { useShowroomRuntime } from "@/components/showroom-context";
 import { getRoutePresentation } from "../navigation/config";
-import {
-  DOC_COUNTS,
-  ENGINE_OPTIONS,
-  getPreviewOption,
-  THEME_OPTIONS,
-} from "../runtime/options";
+import { DOC_COUNTS } from "@/data/registry/counts";
+import { ENGINE_OPTIONS, getPreviewOption, THEME_OPTIONS } from "../pickers";
+import { shellBorder, shellBorderStrong, shellSurface, shellSurfaceStrong, shellSurfaceSubtle, shellText, shellTextSecondary, shellTextTertiary } from "../tokens";
 
-const shellBorder =
-  "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";
-const shellBorderStrong =
-  "var(--showroom-shell-border-strong, var(--ds-color-border-secondary, #2b3038))";
-const shellSurface =
-  "var(--showroom-shell-surface, var(--ds-color-bg-secondary, #111214))";
-const shellSurfaceStrong =
-  "var(--showroom-shell-surface-strong, var(--ds-color-bg-tertiary, #15171b))";
-const shellSurfaceSubtle =
-  "var(--showroom-shell-surface-subtle, var(--ds-color-bg-elevated, #1a1c21))";
-const shellText =
-  "var(--showroom-shell-text, var(--ds-color-text-primary, #f3f4f6))";
-const shellTextSecondary =
-  "var(--showroom-shell-text-secondary, var(--ds-color-text-secondary, #c0c4cc))";
-const shellTextTertiary =
-  "var(--showroom-shell-text-tertiary, var(--ds-color-text-muted, #848b98))";
 const shellBorderFocus =
   "var(--showroom-shell-active-border, var(--ds-color-border-focus, rgba(255, 255, 255, 0.18)))";
 const shellHeaderBackdrop =
@@ -176,9 +157,11 @@ export function Header({
                     }}
                   >
                     <Text
-                      size="xs"
-                      weight="semibold"
+                      as="div"
+                      color="inherit"
+                      wrap="auto"
                       style={{
+                        fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
                         color: shellTextTertiary,
                         textTransform: "uppercase",
                         letterSpacing: "0.16em",
@@ -195,9 +178,10 @@ export function Header({
                       }}
                     >
                       <Text
-                        size="xs"
-                        weight="semibold"
-                        style={{ color: shellTextSecondary }}
+                        as="div"
+                        color="inherit"
+                        wrap="auto"
+                        style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: shellTextSecondary }}
                       >
                         {runtime.verticalLabel}
                       </Text>
@@ -205,9 +189,11 @@ export function Header({
                   </Flex>
 
                   <Text
-                    size={isMobile ? "lg" : "xl"}
-                    weight="semibold"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: (isMobile ? '1.125rem' : '1.375rem'), fontWeight: 600, textAlign: 'inherit',
                       color: shellText,
                       lineHeight: 1.08,
                       marginTop: 5,
@@ -218,8 +204,11 @@ export function Header({
                   </Text>
 
                   <Text
-                    size={isMobile ? "sm" : "md"}
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: (isMobile ? '0.875rem' : '1rem'), fontWeight: 'inherit', textAlign: 'inherit',
                       color: shellTextSecondary,
                       lineHeight: 1.55,
                       marginTop: 8,
@@ -255,9 +244,11 @@ export function Header({
                             ) : null}
                             {isCurrent ? (
                               <Text
-                                size="xs"
-                                weight="semibold"
+                                as="div"
+                                color="inherit"
+                                wrap="auto"
                                 style={{
+                                  fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
                                   color: shellText,
                                   letterSpacing: "0.02em",
                                 }}
@@ -273,9 +264,11 @@ export function Header({
                                 }}
                               >
                                 <Text
-                                  size="xs"
-                                  weight="medium"
+                                  as="div"
+                                  color="inherit"
+                                  wrap="auto"
                                   style={{
+                                    fontSize: '0.75rem', fontWeight: 500, textAlign: 'inherit',
                                     color: shellTextSecondary,
                                     letterSpacing: "0.02em",
                                   }}
@@ -323,7 +316,7 @@ export function Header({
                 >
                   <Flex align="center" gap={10}>
                     <SearchIcon size={16} />
-                    <Text size="sm" weight="semibold" style={{ color: "inherit" }}>
+                    <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', color: "inherit" }}>
                       Search docs
                     </Text>
                   </Flex>
@@ -346,9 +339,11 @@ export function Header({
 
               {!isMobile ? (
                 <Text
-                  size="xs"
-                  weight="semibold"
+                  as="div"
+                  color="inherit"
+                  wrap="auto"
                   style={{
+                    fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
                     color: shellTextTertiary,
                     textTransform: "uppercase",
                     letterSpacing: "0.14em",
@@ -389,7 +384,7 @@ export function Header({
                         flexShrink: 0,
                       }}
                     />
-                    <Text size="xs" weight="semibold" style={{ color: shellText }}>
+                    <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: shellText }}>
                       {item.label}
                     </Text>
                   </Box>

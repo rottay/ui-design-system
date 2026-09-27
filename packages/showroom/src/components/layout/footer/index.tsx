@@ -1,10 +1,12 @@
 "use client";
 
 import { ShowroomLink as Link } from "@/components/navigation/link";
-import { Box, Flex, Text } from "@/components/showroom-ui";
+import { Box, Flex, Text } from "@rottay/design-system";
 import { ExternalLinkIcon } from "@rottay/design-system/icons";
 import { useShowroomRuntime } from "@/components/showroom-context";
-import { DOC_COUNTS, ENGINE_OPTIONS, getPreviewOption } from "../runtime/options";
+import { DOC_COUNTS } from "@/data/registry/counts";
+import { ENGINE_OPTIONS, getPreviewOption } from "../pickers";
+import { shellBorder, shellSurface, shellText, shellTextSecondary, shellTextTertiary } from "../tokens";
 
 const FOOTER_LINKS = [
   { href: "/developers/getting-started", label: "Getting Started" },
@@ -12,16 +14,6 @@ const FOOTER_LINKS = [
   { href: "https://github.com/rottay/design-system", label: "Repository" },
 ];
 
-const shellBorder =
-  "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";
-const shellSurface =
-  "var(--showroom-shell-surface, var(--ds-color-bg-secondary, #111214))";
-const shellText =
-  "var(--showroom-shell-text, var(--ds-color-text-primary, #f3f4f6))";
-const shellTextSecondary =
-  "var(--showroom-shell-text-secondary, var(--ds-color-text-secondary, #c0c4cc))";
-const shellTextTertiary =
-  "var(--showroom-shell-text-tertiary, var(--ds-color-text-muted, #848b98))";
 
 export function Footer() {
   const runtime = useShowroomRuntime();
@@ -56,9 +48,11 @@ export function Footer() {
         >
           <Box style={{ minWidth: 0, maxWidth: 720 }}>
             <Text
-              size="xs"
-              weight="semibold"
+              as="div"
+              color="inherit"
+              wrap="auto"
               style={{
+                fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
                 color: shellTextTertiary,
                 textTransform: "uppercase",
                 letterSpacing: "0.16em",
@@ -67,15 +61,19 @@ export function Footer() {
               Docs runtime
             </Text>
             <Text
-              size="lg"
-              weight="semibold"
-              style={{ color: shellText, marginTop: 6 }}
+              as="div"
+              color="inherit"
+              wrap="auto"
+              style={{ fontSize: '1.125rem', fontWeight: 600, textAlign: 'inherit', color: shellText, marginTop: 6 }}
             >
               Premium shell powered by live design-system tokens
             </Text>
             <Text
-              size="sm"
+              as="div"
+              color="inherit"
+              wrap="auto"
               style={{
+                fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit',
                 color: shellTextSecondary,
                 lineHeight: 1.55,
                 marginTop: 8,
@@ -95,7 +93,7 @@ export function Footer() {
               background: shellSurface,
             }}
           >
-            <Text size="xs" weight="semibold" style={{ color: shellText }}>
+            <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: shellText }}>
               {DOC_COUNTS.total} documented assets
             </Text>
           </Box>
@@ -122,13 +120,14 @@ export function Footer() {
                 background: shellSurface,
               }}
             >
-              <Text size="xs" style={{ color: shellTextTertiary }}>
+              <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', color: shellTextTertiary }}>
                 {item.label}
               </Text>
               <Text
-                size="sm"
-                weight="semibold"
-                style={{ color: shellText, marginTop: 6 }}
+                as="div"
+                color="inherit"
+                wrap="auto"
+                style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', color: shellText, marginTop: 6 }}
               >
                 {item.value}
               </Text>
@@ -164,9 +163,10 @@ export function Footer() {
                 >
                   <Flex align="center" gap={6}>
                     <Text
-                      size="xs"
-                      weight="semibold"
-                      style={{ color: "inherit" }}
+                      as="div"
+                      color="inherit"
+                      wrap="auto"
+                      style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: "inherit" }}
                     >
                       {link.label}
                     </Text>
@@ -183,7 +183,7 @@ export function Footer() {
                     color: shellText,
                   }}
                 >
-                  <Text size="xs" weight="semibold" style={{ color: "inherit" }}>
+                  <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: "inherit" }}>
                     {link.label}
                   </Text>
                 </Link>
@@ -191,7 +191,7 @@ export function Footer() {
             )}
           </Flex>
 
-          <Text size="xs" style={{ color: shellTextTertiary }}>
+          <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', color: shellTextTertiary }}>
             Showroom shell v0.3.0
           </Text>
         </Flex>

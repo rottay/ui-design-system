@@ -1,9 +1,3 @@
-export { EngineSwitcher } from './engine-switcher';
-export type { EngineSwitcherProps } from './engine-switcher';
-
-export { ThemeSwitcher } from './theme-switcher';
-export type { ThemeSwitcherProps } from './theme-switcher';
-
 export { CodeBlock } from './code-block';
 export type { CodeBlockProps } from './code-block';
 

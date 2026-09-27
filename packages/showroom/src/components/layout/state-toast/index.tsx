@@ -1,29 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Box, Flex, Text } from "@/components/showroom-ui";
+import { Box, Flex, Text } from "@rottay/design-system";
 import { CheckCircleIcon } from "@rottay/design-system/icons";
 import { useShowroomRuntime } from "@/components/showroom-context";
-import {
-  ENGINE_OPTIONS,
-  getPreviewOption,
-  THEME_OPTIONS,
-} from "../runtime/options";
+import { ENGINE_OPTIONS, getPreviewOption, THEME_OPTIONS } from "../pickers";
+import { shellBorder, shellBorderStrong, shellShadowStrong, shellSurface, shellSurfaceSubtle, shellText, shellTextTertiary } from "../tokens";
 
-const shellBorder =
-  "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";
-const shellBorderStrong =
-  "var(--showroom-shell-border-strong, var(--ds-color-border-secondary, #2b3038))";
-const shellSurface =
-  "var(--showroom-shell-surface, var(--ds-color-bg-secondary, #111214))";
-const shellSurfaceSubtle =
-  "var(--showroom-shell-surface-subtle, var(--ds-color-bg-elevated, #1a1c21))";
-const shellText =
-  "var(--showroom-shell-text, var(--ds-color-text-primary, #f3f4f6))";
-const shellTextTertiary =
-  "var(--showroom-shell-text-tertiary, var(--ds-color-text-muted, #848b98))";
-const shellShadowStrong =
-  "var(--showroom-shell-shadow-strong, 0 28px 72px rgba(0, 0, 0, 0.38))";
 
 interface ToastState {
   engine?: string;
@@ -128,9 +111,11 @@ export function StateToast() {
 
         <Box style={{ minWidth: 0 }}>
           <Text
-            size="xs"
-            weight="semibold"
+            as="div"
+            color="inherit"
+            wrap="auto"
             style={{
+              fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
               color: shellTextTertiary,
               textTransform: "uppercase",
               letterSpacing: "0.16em",
@@ -139,7 +124,7 @@ export function StateToast() {
             Preview Updated
           </Text>
 
-          <Text size="sm" weight="semibold" style={{ color: shellText, marginTop: 4 }}>
+          <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', color: shellText, marginTop: 4 }}>
             Runtime switched
           </Text>
 
@@ -164,9 +149,10 @@ export function StateToast() {
                     }}
                   />
                   <Text
-                    size="xs"
-                    weight="semibold"
-                    style={{ color: shellText }}
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
+                    style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: shellText }}
                   >
                     {toastState.theme}
                   </Text>
@@ -194,9 +180,10 @@ export function StateToast() {
                     }}
                   />
                   <Text
-                    size="xs"
-                    weight="semibold"
-                    style={{ color: shellText }}
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
+                    style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit', color: shellText }}
                   >
                     {toastState.engine}
                   </Text>

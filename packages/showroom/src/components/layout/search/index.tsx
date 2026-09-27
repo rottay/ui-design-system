@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ShowroomLink as Link } from "@/components/navigation/link";
 import { useRouter } from "next/navigation";
-import { Box, Flex, Stack, Text } from "@/components/showroom-ui";
+import { Box, Flex, Stack, Text } from "@rottay/design-system";
 import {
   ArrowUpRightIcon,
   SearchIcon,
@@ -16,27 +16,8 @@ import {
   getRoutePresentation,
 } from "../navigation/config";
 import { POPULAR_PATHS, SEARCHABLE_RECORDS } from "./data";
+import { shellActiveBg, shellActiveBorder, shellBorder, shellBorderStrong, shellShadowStrong, shellSurface, shellSurfaceSubtle, shellText, shellTextSecondary, shellTextTertiary } from "../tokens";
 
-const shellBorder =
-  "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";
-const shellBorderStrong =
-  "var(--showroom-shell-border-strong, var(--ds-color-border-secondary, #2b3038))";
-const shellSurface =
-  "var(--showroom-shell-surface, var(--ds-color-bg-secondary, #111214))";
-const shellSurfaceSubtle =
-  "var(--showroom-shell-surface-subtle, var(--ds-color-bg-elevated, #1a1c21))";
-const shellText =
-  "var(--showroom-shell-text, var(--ds-color-text-primary, #f3f4f6))";
-const shellTextSecondary =
-  "var(--showroom-shell-text-secondary, var(--ds-color-text-secondary, #c0c4cc))";
-const shellTextTertiary =
-  "var(--showroom-shell-text-tertiary, var(--ds-color-text-muted, #848b98))";
-const shellActiveBg =
-  "var(--showroom-shell-active-bg, color-mix(in srgb, var(--ds-color-primary, #ffffff) 9%, transparent))";
-const shellActiveBorder =
-  "var(--showroom-shell-active-border, var(--ds-color-border-focus, rgba(255, 255, 255, 0.18)))";
-const shellShadowStrong =
-  "var(--showroom-shell-shadow-strong, 0 28px 72px rgba(0, 0, 0, 0.38))";
 
 function HighlightText({ text, query }: { text: string; query: string }) {
   if (!query.trim()) {
@@ -312,8 +293,11 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               }}
             />
             <Text
-              size="xs"
+              as="div"
+              color="inherit"
+              wrap="auto"
               style={{
+                fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit',
                 color: shellTextSecondary,
                 marginTop: 4,
               }}
@@ -350,7 +334,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             <Stack spacing={14}>
               <Flex align="center" gap={10}>
                 <SparklesIcon size={16} />
-                <Text size="sm" weight="semibold" style={{ color: shellText }}>
+                <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', color: shellText }}>
                   Popular jumps
                 </Text>
               </Flex>
@@ -381,9 +365,10 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                     >
                       <Flex align="center" justify="between" gap={12}>
                         <Text
-                          size="sm"
-                          weight="semibold"
-                          style={{ color: shellText }}
+                          as="div"
+                          color="inherit"
+                          wrap="auto"
+                          style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', color: shellText }}
                         >
                           {link.label}
                         </Text>
@@ -391,8 +376,11 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                       </Flex>
 
                       <Text
-                        size="sm"
+                        as="div"
+                        color="inherit"
+                        wrap="auto"
                         style={{
+                          fontSize: '0.875rem', fontWeight: 'inherit', textAlign: 'inherit',
                           color: shellTextSecondary,
                           lineHeight: 1.6,
                           marginTop: 8,
@@ -402,9 +390,11 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                       </Text>
 
                       <Text
-                        size="xs"
-                        weight="semibold"
+                        as="div"
+                        color="inherit"
+                        wrap="auto"
                         style={{
+                          fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
                           color: shellTextTertiary,
                           marginTop: 12,
                           textTransform: "uppercase",
@@ -423,9 +413,11 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               {groupedResults.map((group) => (
                 <Box key={group.title}>
                   <Text
-                    size="xs"
-                    weight="semibold"
+                    as="div"
+                    color="inherit"
+                    wrap="auto"
                     style={{
+                      fontSize: '0.75rem', fontWeight: 600, textAlign: 'inherit',
                       color: shellTextTertiary,
                       textTransform: "uppercase",
                       letterSpacing: "0.16em",
@@ -467,9 +459,10 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                           <Flex align="start" justify="between" gap={12}>
                             <Box style={{ minWidth: 0 }}>
                               <Text
-                                size="sm"
-                                weight="semibold"
-                                style={{ color: shellText }}
+                                as="div"
+                                color="inherit"
+                                wrap="auto"
+                                style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', color: shellText }}
                               >
                                 <HighlightText
                                   text={record.item.label}
@@ -477,8 +470,11 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                                 />
                               </Text>
                               <Text
-                                size="xs"
+                                as="div"
+                                color="inherit"
+                                wrap="auto"
                                 style={{
+                                  fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit',
                                   color: shellTextSecondary,
                                   lineHeight: 1.55,
                                   marginTop: 4,
@@ -492,9 +488,11 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                             </Box>
 
                             <Text
-                              size="xs"
-                              weight="medium"
+                              as="div"
+                              color="inherit"
+                              wrap="auto"
                               style={{
+                                fontSize: '0.75rem', fontWeight: 500, textAlign: 'inherit',
                                 color: shellTextTertiary,
                                 flexShrink: 0,
                               }}
@@ -519,12 +517,15 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 textAlign: "center",
               }}
             >
-              <Text size="sm" weight="semibold" style={{ color: shellText }}>
+              <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', color: shellText }}>
                 No results found
               </Text>
               <Text
-                size="xs"
+                as="div"
+                color="inherit"
+                wrap="auto"
                 style={{
+                  fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit',
                   color: shellTextSecondary,
                   lineHeight: 1.6,
                   marginTop: 6,
@@ -548,10 +549,10 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               flexWrap: "wrap",
             }}
           >
-            <Text size="xs" style={{ color: shellTextTertiary }}>
+            <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', color: shellTextTertiary }}>
               {flatResults.length} ranked matches
             </Text>
-            <Text size="xs" style={{ color: shellTextTertiary }}>
+            <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.75rem', fontWeight: 'inherit', textAlign: 'inherit', color: shellTextTertiary }}>
               Navigate with ↑ ↓ and open with Enter
             </Text>
           </Flex>
