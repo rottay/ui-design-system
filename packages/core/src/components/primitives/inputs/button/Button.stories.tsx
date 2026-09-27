@@ -10,7 +10,6 @@ import {
   EngineComparison,
   VariantEngineMatrix,
   InteractiveEngineShowcase,
-  TenantSwitcher,
   ComponentPlayground,
 } from '../../../../../.storybook/components';
 
@@ -635,49 +634,3 @@ export const InteractiveEngines: Story = {
   ),
 };
 
-/**
- * Theme/tenant switching with live preview.
- */
-export const ThemeSwitcher: Story = {
-  name: '🎨 Theme Switcher',
-  parameters: {
-    docs: {
-      description: {
-        story: 'Switch between different themes (Spotify, Stripe, Airbnb, etc.) to see how the Button adapts to brand colors.',
-      },
-    },
-  },
-  render: () => (
-    <TenantSwitcher
-      component={Button}
-      props={{ children: 'Themed Button', variant: 'primary', size: 'md' }}
-      title="Button Theme Preview"
-      showEngineSelector
-      initialEngine="classic"
-      initialTenant="base"
-    />
-  ),
-};
-
-/**
- * Grid preview of all themes.
- */
-export const AllThemes: Story = {
-  name: '🌈 All Themes Grid',
-  parameters: {
-    docs: {
-      description: {
-        story: 'See the Button rendered in all available themes at once.',
-      },
-    },
-  },
-  render: () => (
-    <TenantSwitcher
-      component={Button}
-      props={{ children: 'Button', variant: 'primary', size: 'md' }}
-      title="Button in All Themes"
-      gridPreview
-      showEngineSelector
-    />
-  ),
-};

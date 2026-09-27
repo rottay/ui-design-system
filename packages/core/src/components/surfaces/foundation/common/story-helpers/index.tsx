@@ -3,51 +3,45 @@
  * locale fixtures used across all surface stories.
  */
 
-import React, { type ReactNode } from 'react';
+import React, { useContext, type ReactNode } from 'react';
 import type { Decorator } from '@storybook/react-vite';
 
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
-import type { EngineName, ProductProfileKey, TenantConfig } from '../../../../../foundation/contracts';
+import { getKnownTenantConfig } from '../../../../../entrypoints/public/runtime/tenant';
+import { TenantContext } from '../../../../../infrastructure/runtime/tenant/composition/react/provider';
+import type { EngineName, ProductProfileKey } from '../../../../../foundation/contracts';
 import type {
   LocaleTranslations,
   SupportedLocale,
 } from '@/foundation/i18n/kernel/contracts';
 
-const BASE_STORY_TENANT: TenantConfig = {
-  slug: 'story',
-  name: 'Story Tenant',
-  theme: 'light',
-  plan: 'enterprise',
-  features: ['all'],
-  branding: {
-    companyName: 'Story Tenant',
-  },
-};
-
 export interface SurfaceStoryProviderProps {
   children: ReactNode;
+  /** A first-party vertical slug; defaults to the enclosing provider's tenant, else `rottay`. */
+  tenant?: string;
   locale?: SupportedLocale;
   productProfile?: ProductProfileKey;
   engine?: EngineName;
-  tenantOverrides?: Partial<TenantConfig>;
   customTranslations?: Partial<LocaleTranslations>;
 }
 
 export function SurfaceStoryProvider({
   children,
+  tenant,
   locale = 'en',
   productProfile = 'generic.default',
-  engine = 'rustic',
-  tenantOverrides,
+  engine = 'modern',
   customTranslations,
 }: SurfaceStoryProviderProps): React.ReactElement {
+  const enclosing = useContext(TenantContext);
+  const slug = tenant ?? enclosing?.config.slug ?? 'rottay';
+  const tenantConfig = getKnownTenantConfig(slug);
+  if (!tenantConfig) throw new Error(`Surface story tenant "${slug}" is not a first-party vertical.`);
+
   return (
     <DesignSystemProvider
-      tenantConfig={{
-        ...BASE_STORY_TENANT,
-        locale,
-      }}
-      tenantOverrides={tenantOverrides}
+      tenantConfig={tenantConfig}
+      locale={locale}
       customTranslations={customTranslations}
       productProfile={productProfile}
       forceEngine={engine}

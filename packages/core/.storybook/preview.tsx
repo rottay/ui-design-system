@@ -1,7 +1,12 @@
 import type { Preview } from "@storybook/react-vite";
-import type { EngineName } from "../src/contracts/engine";
+import type { EngineName } from "../src/foundation/contracts";
+import type { FirstPartyVerticalId } from "../src/foundation/contracts/kernel/verticals";
 import { DesignSystemProvider } from "../src/infrastructure/runtime/bootstrap";
 import { getKnownTenantConfig } from "../src/entrypoints/public/runtime/tenant";
+import {
+  claimRootAttribute,
+  composeRootAttributeReleases,
+} from "../src/entrypoints/public/runtime/root-attributes";
 import React from "react";
 
 // Exercise the same public source facade used by symlinked consumers. Importing
@@ -12,27 +17,49 @@ import "../src/foundation/tokens/css/facade/entrypoints/base/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/humanist-text/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/grotesk-display/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/plex-mono/index.css";
+// A static vertical mounts no style element: its artifact is expected in the bundle, scoped to
+// the root attributes the loader below stamps. One per toolbar tenant.
+import "../src/foundation/tokens/css/facade/artifacts/rottay/index.css";
+import "../src/foundation/tokens/css/facade/artifacts/bithire/index.css";
 
 // Storybook preview styles
 import "./styles/index.css";
 
+const STORYBOOK_TENANTS: readonly FirstPartyVerticalId[] = ["rottay", "bithire"];
+
+let releaseRootStamp: (() => void) | null = null;
+
+/**
+ * The mount law for a static vertical, before the story renders: its engine and root attributes
+ * come from `mountTenantTheme`, claimed on <html> through the DS's own root registry.
+ */
+async function mountStorybookTenant(tenant: string, owned: boolean) {
+  releaseRootStamp?.();
+  releaseRootStamp = null;
+  if (!owned) return { engine: null };
+  if (!(STORYBOOK_TENANTS as readonly string[]).includes(tenant)) {
+    throw new Error(`Storybook tenant "${tenant}" is not a first-party vertical.`);
+  }
+  // Loaded on demand: the mount module carries the theme compiler, which stays out of the entry chunk.
+  const [{ mountTenantTheme }, { staticThemeIntent }] = await Promise.all([
+    import("../src/infrastructure/runtime/theming/composition/mount"),
+    import("../src/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/static"),
+  ]);
+  const mounted = await mountTenantTheme(staticThemeIntent(tenant as FirstPartyVerticalId), {
+    themeMode: "light",
+    locale: "en",
+  });
+  const root = document.documentElement;
+  releaseRootStamp = composeRootAttributeReleases(
+    Object.entries(mounted.rootAttributes)
+      .filter(([, value]) => value !== undefined)
+      .map(([name, value]) => claimRootAttribute(root, name, String(value)))
+  );
+  return { engine: mounted.rootAttributes["data-engine"] as EngineName };
+}
+
 const preview: Preview = {
   globalTypes: {
-    engine: {
-      name: "Engine",
-      description: "Rendering engine for components",
-      defaultValue: "modern",
-      toolbar: {
-        icon: "wrench",
-        items: [
-          { value: "modern", title: "Modern" },
-          { value: "classic", title: "Classic" },
-          { value: "rustic", title: "Rustic" },
-        ],
-        showName: true,
-        dynamicTitle: true,
-      },
-    },
     tenant: {
       name: "Tenant",
       description: "Visual theme tenant",
@@ -129,6 +156,15 @@ const preview: Preview = {
     },
   },
 
+  loaders: [
+    async (context) => ({
+      ground: await mountStorybookTenant(
+        (context.parameters.tenant || context.globals.tenant || "rottay") as string,
+        context.parameters.skipGlobalDesignSystemProvider !== true
+      ),
+    }),
+  ],
+
   decorators: [
     (Story, context) => {
       // Provider-matrix stories need to own the complete runtime boundary.
@@ -146,19 +182,18 @@ const preview: Preview = {
       const selectedTenant = (context.parameters.tenant ||
         context.globals.tenant ||
         "rottay") as string;
-      const selectedEngine = (context.parameters.engine ||
-        context.globals.engine ||
-        "modern") as EngineName;
       const tenantConfig = getKnownTenantConfig(selectedTenant);
       if (!tenantConfig) {
         throw new Error(`Storybook tenant "${selectedTenant}" is not a first-party vertical.`);
       }
+      const engine = (context.loaded.ground?.engine ?? "modern") as EngineName;
 
       return (
         <DesignSystemProvider
           tenantConfig={tenantConfig}
-          forceEngine={selectedEngine}
+          forceEngine={engine}
           forceTheme="light"
+          locale="en"
           skipCssLoading
         >
           <div className="storybook-canvas">

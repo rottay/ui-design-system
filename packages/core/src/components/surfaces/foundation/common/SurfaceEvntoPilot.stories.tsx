@@ -50,26 +50,6 @@ type Story = StoryObj;
 // Evnto tenant overrides (mirrors app-evnto/src/design-system/evnto-theme.ts)
 // ---------------------------------------------------------------------------
 
-const EVNTO_TENANT_OVERRIDES = {
-  branding: {
-    companyName: 'Evnto',
-    primaryColor: '#FF6B35',
-    accentColor: '#14B8A6',
-  },
-  tokenOverrides: {
-    densityScale: 1.02,
-    borderRadius: {
-      sm: '10px',
-      md: '14px',
-      lg: '20px',
-      xl: '28px',
-    },
-    shadows: {
-      md: '0 18px 48px rgba(17, 24, 39, 0.10)',
-      lg: '0 28px 80px rgba(17, 24, 39, 0.14)',
-    },
-  },
-} as const;
 
 // ---------------------------------------------------------------------------
 // Mock event data
@@ -179,7 +159,7 @@ export const FullPilot: Story = {
   render: () => {
     const [wizardStep, setWizardStep] = useState(0);
     return (
-      <SurfaceStoryProvider productProfile="events.organizer" tenantOverrides={EVNTO_TENANT_OVERRIDES}>
+      <SurfaceStoryProvider productProfile="events.organizer">
         <Stack spacing="xl">
           <Box>
             <Flex align="center" gap={12}>
@@ -198,7 +178,7 @@ export const FullPilot: Story = {
 
 export const DashboardOnly: Story = {
   render: () => (
-    <SurfaceStoryProvider productProfile="events.organizer" tenantOverrides={EVNTO_TENANT_OVERRIDES}>
+    <SurfaceStoryProvider productProfile="events.organizer">
       <DashboardSurface config={{ visual: {}, presentation: { chrome: { title: 'Event Operations', subtitle: 'Live metrics across all active events' }, sections: [{ key: 'live-events', title: 'Live Events', content: <PatternStatsGrid stats={[{ key: 'checked-in', label: 'Checked In', value: '2,847' }, { key: 'pending', label: 'Pending Entry', value: 153 }, { key: 'denied', label: 'Denied', value: 12 }, { key: 'bar-orders', label: 'Bar Orders', value: 489 }]} columns={4} variant="glass" /> }, { key: 'staff', title: 'Staff on Duty', content: <Stack spacing="sm"><Flex justify="between" align="center"><Text style={{ color: 'var(--ds-color-text-primary)' }}>Security</Text><Text style={{ fontWeight: 700 }}>18 / 20</Text></Flex><Flex justify="between" align="center"><Text style={{ color: 'var(--ds-color-text-primary)' }}>Bartenders</Text><Text style={{ fontWeight: 700 }}>12 / 12</Text></Flex><Flex justify="between" align="center"><Text style={{ color: 'var(--ds-color-text-primary)' }}>Technicians</Text><Text style={{ fontWeight: 700 }}>6 / 8</Text></Flex></Stack> }] }, behavior: { stats: [{ key: 'active-events', label: 'Active Events', value: 3 }, { key: 'live-now', label: 'Live Now', value: 1 }, { key: 'today-revenue', label: "Today's Revenue", value: '$18.4k' }, { key: 'satisfaction', label: 'Satisfaction', value: '94%' }] } }} />
     </SurfaceStoryProvider>
   ),
@@ -206,7 +186,7 @@ export const DashboardOnly: Story = {
 
 export const EventListCards: Story = {
   render: () => (
-    <SurfaceStoryProvider productProfile="events.organizer" tenantOverrides={EVNTO_TENANT_OVERRIDES}>
+    <SurfaceStoryProvider productProfile="events.organizer">
       <ListSurface<RawEvent, EventView> data={sampleEvents} adapter={eventAdapter} config={{ visual: { defaultView: 'cards', allowViewSwitch: true, cardMinWidth: 300 }, presentation: { chrome: { title: 'My Events', subtitle: 'Card view is the default for events.organizer profile' }, renderCard: (item) => <EventCard event={item} /> }, behavior: { columns: [{ key: 'name', fieldId: 'event.name', header: 'Event', sortable: true }, { key: 'venue', fieldId: 'event.venue', header: 'Venue' }, { key: 'date', fieldId: 'event.date', header: 'Date', sortable: true }, { key: 'status', fieldId: 'event.status', header: 'Status', render: (value) => <StatusBadge status={String(value)} />, hideInCards: true }, { key: 'revenue', fieldId: 'event.revenue', header: 'Revenue', sortable: true }], rowKey: 'id', primaryAction: { id: 'new-event', label: 'New Event', variant: 'primary' }, filters: [{ key: 'status', label: 'Status', type: 'select', options: [{ label: 'All', value: '' }, { label: 'Draft', value: 'draft' }, { label: 'Published', value: 'published' }, { label: 'Live', value: 'live' }, { label: 'Ended', value: 'ended' }] }, { key: 'venue', label: 'Venue', type: 'text' }], filterValues: {}, onFilterChange: () => undefined } }} />
     </SurfaceStoryProvider>
   ),
@@ -216,7 +196,7 @@ export const EventCreationWizard: Story = {
   render: () => {
     const [step, setStep] = useState(0);
     return (
-      <SurfaceStoryProvider productProfile="events.organizer" tenantOverrides={EVNTO_TENANT_OVERRIDES}>
+      <SurfaceStoryProvider productProfile="events.organizer">
         <WizardSurface config={{ visual: { showProgress: true }, presentation: { chrome: { title: 'Create New Event', subtitle: 'Fill in the details to launch your next event' } }, behavior: { currentStep: step, onStepChange: setStep, steps: [{ key: 'basics', title: 'Event Details', fields: [{ name: 'name', label: 'Event Name', type: 'text', required: true }, { name: 'description', label: 'Description', type: 'textarea' }, { name: 'category', label: 'Category', type: 'select', options: [{ label: 'Music', value: 'music' }, { label: 'Conference', value: 'conference' }, { label: 'Festival', value: 'festival' }, { label: 'Workshop', value: 'workshop' }, { label: 'Sports', value: 'sports' }] }] }, { key: 'venue-dates', title: 'Venue & Schedule', fields: [{ name: 'venue', label: 'Venue', type: 'text', required: true }, { name: 'address', label: 'Address', type: 'text' }, { name: 'startDate', label: 'Start Date', type: 'date' }, { name: 'endDate', label: 'End Date', type: 'date' }, { name: 'capacity', label: 'Max Capacity', type: 'number' }] }, { key: 'tickets', title: 'Ticket Configuration', content: <Stack spacing="md"><Text style={{ color: 'var(--ds-color-text-secondary)' }}>Define your ticket tiers with pricing, quantity limits, and sale windows.</Text><Card variant="outlined"><Card.Body><Stack spacing="sm"><Flex justify="between" align="center"><Text style={{ fontWeight: 600 }}>General Admission</Text><Text style={{ fontWeight: 700 }}>$40.00</Text></Flex><Flex justify="between" align="center"><Text style={{ fontWeight: 600 }}>VIP</Text><Text style={{ fontWeight: 700 }}>$120.00</Text></Flex><Button variant="outlined" size="sm">Add Ticket Tier</Button></Stack></Card.Body></Card></Stack> }, { key: 'review', title: 'Review', content: <Stack spacing="md"><Text style={{ color: 'var(--ds-color-text-secondary)' }}>Everything looks good. Your event will be saved as a draft.</Text><Card variant="outlined"><Card.Body><Stack spacing="xs"><Flex justify="between"><Text style={{ fontSize: 13, color: 'var(--ds-color-text-muted)' }}>Status after save</Text><StatusBadge status="draft" /></Flex></Stack></Card.Body></Card></Stack> }], submitAction: { id: 'save-draft', label: 'Save as Draft', variant: 'primary', onClick: async () => undefined } } }} />
       </SurfaceStoryProvider>
     );

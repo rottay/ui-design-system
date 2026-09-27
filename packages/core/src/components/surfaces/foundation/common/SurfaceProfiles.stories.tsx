@@ -61,14 +61,14 @@ function VisualizationExample(): React.ReactElement {
 export const RecruitingVsEvents: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 32 }}>
-      <SurfaceStoryProvider productProfile="recruiting.operator" tenantOverrides={{ branding: { companyName: 'BitHire', primaryColor: '#0a66c2', accentColor: '#22c55e' } }}>
+      <SurfaceStoryProvider productProfile="recruiting.operator">
         <Stack spacing="md">
           <Text style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Recruiting.Operator</Text>
           <VisualizationExample />
         </Stack>
       </SurfaceStoryProvider>
 
-      <SurfaceStoryProvider productProfile="events.organizer" tenantOverrides={{ branding: { companyName: 'Evnto', primaryColor: '#f97316', accentColor: '#ec4899' } }}>
+      <SurfaceStoryProvider productProfile="events.organizer">
         <Stack spacing="md">
           <Text style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Events.Organizer</Text>
           <VisualizationExample />
