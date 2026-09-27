@@ -596,6 +596,48 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
 }
 
 // ---------------------------------------------------------------------------
+// Session-scoped Escape
+// ---------------------------------------------------------------------------
+
+type SessionEscapeHandler = (event: KeyboardEvent) => void;
+
+interface SessionEscapeRouter {
+  readonly handlers: SessionEscapeHandler[];
+  readonly listener: (event: KeyboardEvent) => void;
+}
+
+const sessionEscapeRouters = new WeakMap<Window, SessionEscapeRouter>();
+
+/**
+ * Escape for the length of a gesture session: bubble phase, never forces
+ * preventDefault, yields to a key already handled, newest session first.
+ * Needs no provider, so a runtime primitive may hold it. Returns the unsubscribe.
+ */
+export function subscribeSessionEscape(view: Window, handler: SessionEscapeHandler): () => void {
+  let router = sessionEscapeRouters.get(view);
+  if (!router) {
+    const handlers: SessionEscapeHandler[] = [];
+    const listener = (event: KeyboardEvent): void => {
+      if (event.key !== 'Escape' || event.defaultPrevented) return;
+      handlers[handlers.length - 1]?.(event);
+    };
+    router = { handlers, listener };
+    sessionEscapeRouters.set(view, router);
+    view.addEventListener('keydown', listener);
+  }
+  const active = router;
+  active.handlers.push(handler);
+  return () => {
+    const index = active.handlers.lastIndexOf(handler);
+    if (index >= 0) active.handlers.splice(index, 1);
+    if (active.handlers.length === 0) {
+      view.removeEventListener('keydown', active.listener);
+      sessionEscapeRouters.delete(view);
+    }
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Hooks
 // ---------------------------------------------------------------------------
 

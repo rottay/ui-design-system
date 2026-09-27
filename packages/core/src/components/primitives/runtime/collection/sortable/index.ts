@@ -65,6 +65,7 @@ import type {
 } from 'react';
 
 import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
+import { subscribeSessionEscape } from '@/infrastructure/runtime/application/interaction/shortcuts';
 
 import { resolveNavigationIntent } from '../roving-focus';
 
@@ -408,22 +409,19 @@ function usePointerTrack(track: PointerTrack): {
       end();
       trackRef.current.abort();
     };
-    const onKey = (next: KeyboardEvent): void => {
-      if (next.key !== CANCEL_KEY) return;
-      next.preventDefault();
-      end();
-      trackRef.current.abort();
-    };
-
     view.addEventListener('pointermove', onMove);
     view.addEventListener('pointerup', onUp);
     view.addEventListener('pointercancel', onCancel);
-    view.addEventListener('keydown', onKey);
+    const unsubscribeEscape = subscribeSessionEscape(view, (next) => {
+      next.preventDefault();
+      end();
+      trackRef.current.abort();
+    });
     disposeRef.current = () => {
       view.removeEventListener('pointermove', onMove);
       view.removeEventListener('pointerup', onUp);
       view.removeEventListener('pointercancel', onCancel);
-      view.removeEventListener('keydown', onKey);
+      unsubscribeEscape();
     };
   };
 
