@@ -48,7 +48,7 @@ test.describe('probe-ground dashboard -- WO-FAM-13 acceptance', () => {
 
     await tabTo(page, (label) => label === 'Customize');
     await page.keyboard.press('Enter');
-    await expect(page.locator(`${BOARD} [data-part="root"]`)).toHaveAttribute('data-editing', 'true');
+    await expect(page.locator(`${BOARD} section[data-part="root"]`)).toHaveAttribute('data-editing', 'true');
     // The locked widget offers no move control at all; the fixed-size one offers no resize edge.
     await expect(page.locator(`${BOARD} [aria-label="Move: Compliance"]`)).toHaveCount(0);
     await expect(page.locator(`${BOARD} [data-widget-id="inbox"] [data-part="resize-handle"]`)).toHaveCount(0);
