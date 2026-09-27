@@ -3,6 +3,8 @@ import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { mountTenantTheme, staticThemeIntent } from '@rottay/design-system/server';
 import '@rottay/design-system/styles.css';
+// Engine comparisons render Classic and Rustic; their CSS ships behind its own subpath.
+import '@rottay/design-system/styles/frozen-engines';
 // Optional, code-owned font pack used by customer Appearance artifacts. The
 // tenant DB may select only its stable CSS-variable handle; it never owns a
 // font URL or @font-face declaration.

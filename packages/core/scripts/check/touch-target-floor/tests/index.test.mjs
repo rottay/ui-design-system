@@ -322,7 +322,7 @@ test('the real tree passes every leg of the contract', () => {
   const report = audit();
   for (const [leg, problems] of report.legs) assert.deepEqual(problems, [], `${leg}: ${problems.join('\n')}`);
   // Non-vacuity floors: a walker that stopped walking reports a clean tree.
-  assert.ok(report.sources >= 400, `only ${report.sources} files in the import graph`);
+  assert.ok(report.sources >= 350, `only ${report.sources} files in the import graph`);
   assert.ok(report.reads >= 100, `only ${report.reads} skin touch reads discovered`);
   assert.equal(report.floorPx, 44);
 });

@@ -5,6 +5,7 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import postcss from 'postcss';
+import { FROZEN_ENGINE_MOUNT, FROZEN_ENGINE_SOURCE } from '../../../../libraries/engine/frozen-mount/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -70,6 +71,10 @@ const skins = [
 const entrypoints = [
   { name: 'facade/entrypoints/base/index.css', path: join(cssRoot, 'facade/entrypoints/base/index.css') },
 ];
+/** Frozen-engine skins ship through the build's frozen-engine mount, not through `base`. */
+const frozenMount = { name: FROZEN_ENGINE_MOUNT, path: join(cssRoot, FROZEN_ENGINE_MOUNT) };
+const shippingEntrypoints = (skinPath) =>
+  FROZEN_ENGINE_SOURCE.test(join(cssRoot, skinPath)) ? [frozenMount] : entrypoints;
 
 function isInsideKeyframes(rule) {
   for (let parent = rule.parent; parent; parent = parent.parent) {
@@ -435,7 +440,7 @@ for (const skin of skins) {
 }
 
 test('both canonical entrypoints import every visualization skin skin exactly once in its owning layer', () => {
-  for (const entrypoint of entrypoints) {
+  for (const entrypoint of [...entrypoints, frozenMount]) {
     assert.ok(existsSync(entrypoint.path), `missing visualization skin entrypoint: ${entrypoint.name}`);
     const root = postcss.parse(readFileSync(entrypoint.path, 'utf8'), { from: entrypoint.path });
     const imports = [];
@@ -446,6 +451,11 @@ test('both canonical entrypoints import every visualization skin skin exactly on
     });
 
     for (const skin of skins) {
+      if (!shippingEntrypoints(skin.path).includes(entrypoint)) {
+        const target = relative(dirname(entrypoint.path), join(cssRoot, skin.path)).replaceAll('\\', '/');
+        assert.equal(imports.filter((entry) => entry.target === target).length, 0, `${entrypoint.name} must not import ${target}`);
+        continue;
+      }
       const target = relative(dirname(entrypoint.path), join(cssRoot, skin.path)).replaceAll('\\', '/');
       const matches = imports.filter((entry) => entry.target === target);
 

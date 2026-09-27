@@ -157,17 +157,18 @@ describe('Badge hover transform (P-43)', () => {
       expect(skin).not.toContain('position-transform, none)');
     });
 
-    it('imports both engine skins into the explicit engine cascade layer from the one public stylesheet', () => {
-      // `base/index.css` is the only authored entrypoint: every `./styles/*`
-      // package export is built from it plus one compiled tenant artifact.
-      const base = readFileSync(join(__dirname, '../../../../../foundation/tokens/css/facade/entrypoints/base/index.css'), 'utf-8');
+    it('imports each engine skin into the explicit engine cascade layer from the sheet that ships it', () => {
+      // `base/index.css` ships Modern in every `./styles/*` bundle; the frozen Rustic
+      // skin ships only through the frozen-engine mount (`./styles/frozen-engines`).
+      const css = join(__dirname, '../../../../../foundation/tokens/css');
+      const base = readFileSync(join(css, 'facade/entrypoints/base/index.css'), 'utf-8');
+      const frozen = readFileSync(join(css, 'runtime/engines/frozen/index.css'), 'utf-8');
 
       expect(base).toMatch(
         /@import ["']\.\.\/\.\.\/\.\.\/runtime\/engines\/modern\/skin\/badge\/index\.css["'] layer\(rottay-engines\);/
       );
-      expect(base).toMatch(
-        /@import ["']\.\.\/\.\.\/\.\.\/runtime\/engines\/rustic\/skin\/badge\/index\.css["'] layer\(rottay-engines\);/
-      );
+      expect(frozen).toMatch(/@import ["']\.\.\/rustic\/skin\/badge\/index\.css["'] layer\(rottay-engines\);/);
+      expect(base).not.toMatch(/rustic\/skin\/badge/);
     });
   });
 });

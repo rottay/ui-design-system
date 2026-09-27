@@ -5,6 +5,7 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
 import { BINDINGS_REL, readBindingsMap } from '../../../taxonomy/parity-gate/bindings/index.mjs';
+import { FROZEN_ENGINE_MOUNT, FROZEN_ENGINE_SOURCE } from '../../../../libraries/engine/frozen-mount/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
@@ -12,6 +13,8 @@ const REPO_ROOT = findRepoRoot(HERE);
 
 const CSS_ROOT = path.join(CORE_ROOT, 'src/foundation/tokens/css');
 const ENTRYPOINTS = [path.join(CSS_ROOT, 'facade/entrypoints/base/index.css')];
+/** The frozen engines ship through the build's mount, not through `base`. */
+const FROZEN_MOUNT = path.join(CSS_ROOT, FROZEN_ENGINE_MOUNT);
 const INVENTORY_ROWS = JSON.parse(
   readFileSync(path.join(CORE_ROOT, 'scripts/check/modern-rescue/family-inventory/index.json'), 'utf8'),
 ).rows;
@@ -95,11 +98,14 @@ const LIVE = ENTRYPOINTS.map((entrypoint) => ({
   entrypoint,
   imported: liveImports(entrypoint),
 }));
+const FROZEN_LIVE = { entrypoint: FROZEN_MOUNT, imported: liveImports(FROZEN_MOUNT) };
+/** A frozen-engine stylesheet ships through the mount; every other one through the entrypoints. */
+const shippingRoots = (absolute) => (FROZEN_ENGINE_SOURCE.test(absolute) ? [FROZEN_LIVE] : LIVE);
 
 test('the facade entrypoints parse into a non-empty import set', () => {
   // Parse guard. A regex that matched nothing would make every liveness check
   // below vacuous in the direction that passes.
-  for (const { entrypoint, imported } of LIVE) {
+  for (const { entrypoint, imported } of [...LIVE, FROZEN_LIVE]) {
     assert.ok(
       imported.size > 100,
       `${path.basename(entrypoint)} parsed only ${imported.size} imports`,
@@ -121,7 +127,7 @@ test('every claimed skin still ships in both facade entrypoints', () => {
   for (const [familyId, record] of Object.entries(FAMILY_SKINS)) {
     for (const skin of record.skins) {
       const absolute = path.join(REPO_ROOT, skin);
-      for (const { entrypoint, imported } of LIVE) {
+      for (const { entrypoint, imported } of shippingRoots(absolute)) {
         assert.ok(
           imported.has(absolute),
           `${familyId}: ${path.basename(skin)} is not imported by ${path.basename(entrypoint)}`,
@@ -175,7 +181,7 @@ test('a CSS path bound by any family resolves and still ships', () => {
     const absolute = path.join(REPO_ROOT, skin);
     assert.ok(existsSync(absolute), `bound CSS does not exist: ${skin}`);
     assert.ok(
-      LIVE.some(({ imported }) => imported.has(absolute)),
+      shippingRoots(absolute).some(({ imported }) => imported.has(absolute)),
       `bound CSS is not imported by any facade entrypoint: ${skin}`,
     );
   }

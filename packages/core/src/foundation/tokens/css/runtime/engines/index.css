@@ -17,13 +17,12 @@
  * @version 0.4.0
  */
 
-/* The classic Collapse skin is imported by `facade/entrypoints/base/index.css`,
-   not here: it must keep the exact position the retired `runtime/bridges/`
-   authority held. Engine themes map --ds-* tokens to library-specific classes. */
+/* The Classic and Rustic themes and skins ship only through the frozen-engine
+   mount (`frozen/index.css`); this index carries what every engine renders. */
 
 /* Engine-specific themes */
-@import './classic/theme/index.css';
+@import './shared/document-root/index.css';
 @import './modern/theme/index.css';
 @import './modern/framework-bridge/index.css';
 @import './modern/interpolate-size/index.css';
-@import './rustic/theme/index.css';
+@import './shared/class-floor/index.css';

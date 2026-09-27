@@ -123,13 +123,6 @@
    CHECKBOX - .ds-checkbox
    ============================================================================= */
 
-.ds-checkbox {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-
 .ds-checkbox__input {
   width: var(--ds-checkbox-size);
   height: var(--ds-checkbox-size);
@@ -176,13 +169,6 @@
 /* =============================================================================
    RADIO - .ds-radio
    ============================================================================= */
-
-.ds-radio {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-}
 
 .ds-radio__input {
   width: var(--ds-radio-size);
@@ -272,16 +258,6 @@
    MODAL - .ds-modal
    ============================================================================= */
 
-.ds-modal {
-  position: fixed;
-  inset: 0;
-  z-index: var(--ds-z-index-modal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
 .ds-modal__overlay {
   position: absolute;
   inset: 0;
@@ -364,16 +340,6 @@
 /* =============================================================================
    ALERT - .ds-alert
    ============================================================================= */
-
-.ds-alert {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: var(--ds-alert-padding);
-  border-radius: var(--ds-alert-radius);
-  border: 1px solid;
-  font-size: var(--ds-alert-font-size);
-}
 
 .ds-alert__icon {
   flex-shrink: 0;
@@ -590,11 +556,6 @@
    TOOLTIP - .ds-tooltip
    ============================================================================= */
 
-.ds-tooltip {
-  position: relative;
-  display: inline-block;
-}
-
 .ds-tooltip__content {
   position: absolute;
   bottom: 100%;
@@ -684,12 +645,6 @@
    DIVIDER - .ds-divider
    ============================================================================= */
 
-.ds-divider {
-  border: none;
-  border-top: var(--ds-divider-width) solid var(--ds-divider-color);
-  margin: var(--ds-divider-spacing) 0;
-}
-
 .ds-divider--vertical {
   border-top: none;
   border-left: var(--ds-divider-width) solid var(--ds-divider-color);
@@ -701,37 +656,6 @@
 /* =============================================================================
    TABLE - .ds-table
    ============================================================================= */
-
-.ds-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: var(--ds-table-bg);
-  border-radius: var(--ds-table-radius);
-  overflow: hidden;
-}
-
-.ds-table th {
-  background-color: var(--ds-table-header-bg);
-  color: var(--ds-table-header-color);
-  font-weight: var(--ds-table-header-font-weight);
-  font-size: var(--ds-table-header-font-size);
-  text-align: left;
-}
-
-.ds-table th,
-.ds-table td {
-  padding: var(--ds-table-cell-padding);
-  border-bottom: 1px solid var(--ds-table-row-border);
-}
-
-.ds-table tbody tr {
-  font-size: var(--ds-table-cell-font-size);
-  transition: var(--ds-transition-fast);
-}
-
-.ds-table tbody tr:hover {
-  background-color: var(--ds-table-row-bg-hover);
-}
 
 .ds-table--striped tbody tr:nth-child(even) {
   background-color: var(--ds-table-row-bg-striped);
@@ -776,17 +700,6 @@
    ============================================================================= */
 
 /* Visually Hidden (for accessibility) */
-.ds-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
 
 /* Focus Visible Ring */
 .ds-focus-visible:focus-visible {

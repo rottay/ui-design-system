@@ -17,13 +17,6 @@
    GLOBAL RESETS & BASE STYLES
    ============================================================================= */
 
-html[data-tenant] {
-  font-family: var(--ds-font-family-base);
-  font-size: var(--ds-font-size-base);
-  line-height: var(--ds-line-height-normal);
-  color: var(--ds-text-primary);
-}
-
 /* =============================================================================
    BUTTON - .ant-btn
    ============================================================================= */
@@ -1756,32 +1749,9 @@ html[data-tenant] .ant-list-empty-text {
    QR CODE - .ant-qrcode
    ============================================================================= */
 
-html[data-tenant] .ant-qrcode {
-  border-color: var(--ds-qrcode-border);
-  border-radius: var(--ds-qrcode-radius);
-}
-
 /* =============================================================================
    LINK - .ant-typography a
    ============================================================================= */
-
-html[data-tenant] a,
-html[data-tenant] .ant-typography a {
-  color: var(--ds-link-color);
-  text-decoration: var(--ds-link-decoration);
-  transition: var(--ds-transition-fast);
-}
-
-html[data-tenant] a:hover,
-html[data-tenant] .ant-typography a:hover {
-  color: var(--ds-link-color-hover);
-  text-decoration: var(--ds-link-decoration-hover);
-}
-
-html[data-tenant] a:active,
-html[data-tenant] .ant-typography a:active {
-  color: var(--ds-link-color-active);
-}
 
 /* =============================================================================
    TYPOGRAPHY - .ant-typography

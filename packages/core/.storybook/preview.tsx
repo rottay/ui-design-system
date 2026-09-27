@@ -14,6 +14,8 @@ import React from "react";
 // `base` is the one authored entrypoint; the vertical font packs below are what
 // the retired per-vertical entrypoints used to add on top of it.
 import "../src/foundation/tokens/css/facade/entrypoints/base/index.css";
+// The story matrices render Classic and Rustic too; their CSS is the frozen-engine mount.
+import "../src/foundation/tokens/css/runtime/engines/frozen/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/humanist-text/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/grotesk-display/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/plex-mono/index.css";

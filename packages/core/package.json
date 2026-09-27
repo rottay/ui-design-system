@@ -552,6 +552,11 @@
       "import": "./dist/modern-engine.css",
       "default": "./dist/modern-engine.css"
     },
+    "./styles/frozen-engines": {
+      "style": "./dist/frozen-engines.css",
+      "import": "./dist/frozen-engines.css",
+      "default": "./dist/frozen-engines.css"
+    },
     "./eslint": {
       "types": "./dist/eslint.d.ts",
       "import": "./dist/eslint.js",
@@ -615,6 +620,7 @@
     "dist/**/*.d.ts",
     "dist/styles.css",
     "dist/modern-engine.css",
+    "dist/frozen-engines.css",
     "dist/rottay.css",
     "dist/bithire.css",
     "dist/evnto.css",

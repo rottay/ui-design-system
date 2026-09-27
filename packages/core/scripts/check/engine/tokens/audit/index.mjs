@@ -2704,6 +2704,9 @@ function countUnwiredSkins() {
     rel,
     css: readFileSync(join(root, rel), 'utf8'),
   }));
+  // Frozen-engine skins ship through the build's mount, the one sheet that must wire them.
+  const frozenMountRel = `src/foundation/tokens/css/${FROZEN_ENGINE_MOUNT}`;
+  const frozenMount = [{ rel: frozenMountRel, css: readFileSync(join(root, frozenMountRel), 'utf8') }];
 
   let unwired = 0;
   for (const file of collectSkinFiles()) {
@@ -2714,8 +2717,12 @@ function countUnwiredSkins() {
       .slice(file.indexOf(`${sep}tokens${sep}css${sep}`) + `${sep}tokens${sep}css${sep}`.length)
       .split(sep)
       .join('/');
-    for (const { rel, css } of entrypoints) {
-      const imported = new RegExp(`@import\\s+['"][^'"]*${specifier.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}['"]`).test(
+    const frozen = FROZEN_ENGINE_SOURCE.test(file);
+    const wanted = frozen
+      ? relative(dirname(join(root, frozenMountRel)), file).split(sep).join('/')
+      : specifier;
+    for (const { rel, css } of frozen ? frozenMount : entrypoints) {
+      const imported = new RegExp(`@import\\s+['"][^'"]*${wanted.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}['"]`).test(
         css
       );
       if (!imported) {
@@ -2730,6 +2737,7 @@ function countUnwiredSkins() {
 // collectSkinFiles lives in libraries/engine/skins/files (one walker, importable
 // without executing this module's top-level census). Re-exported for compat.
 import { collectSkinFiles } from '../../../../libraries/engine/skins/files/index.mjs';
+import { FROZEN_ENGINE_MOUNT, FROZEN_ENGINE_SOURCE } from '../../../../libraries/engine/frozen-mount/index.mjs';
 export { collectSkinFiles };
 
 function countViewportMediaQueriesInSkins() {

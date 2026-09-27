@@ -73,8 +73,9 @@ describe("public CSS export surface (from package.json)", () => {
     }
   }
 
-  it("package.json has exactly 7 style subpath exports", () => {
-    expect(styleExports.length).toBe(7);
+  it("package.json has exactly 8 style subpath exports", () => {
+    expect(styleExports.length).toBe(8);
+    expect(styleExports.map(({ subpath }) => subpath)).toContain("./styles/frozen-engines");
   });
 
   // Validate every condition key resolves to a real dist file

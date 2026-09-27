@@ -19,6 +19,7 @@ import {
   repoRoot as findRepoRoot,
 } from '../../../../../libraries/repo-root/index.mjs';
 import { collectChannelProducers } from '../../../../../libraries/tokens/producers/index.mjs';
+import { FROZEN_ENGINE_MOUNT } from '../../../../../libraries/engine/frozen-mount/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(scriptDir);
@@ -665,6 +666,9 @@ export function auditGovernedFilesAreReachable({
       `first-party roster is unreadable at ${relative(packageRoot, rosterPath).replaceAll("\\", "/")}; cannot resolve which artifacts and font packs the build mounts`,
     ];
   }
+  // The frozen engines reach their own bundle through the build's mount, not an entrypoint.
+  collectReachable(resolve(cssRoot, FROZEN_ENGINE_MOUNT), cssRoot, reachable);
+
   for (const rel of mountedByRoster) {
     const file = resolve(cssRoot, rel);
     if (!existsSync(file)) {
@@ -728,6 +732,7 @@ export function auditSkinsAreImported({
 
   const reachable = new Set();
   for (const root of roots) collectReachable(root, cssRoot, reachable);
+  if (!entries) collectReachable(resolve(cssRoot, FROZEN_ENGINE_MOUNT), cssRoot, reachable);
 
   for (const skinRoot of skinRoots) {
     const dir = resolve(cssRoot, skinRoot);
@@ -1404,6 +1409,7 @@ export function auditHeaderLayerClaims({
     }
   };
   for (const root of roots) visit(root, null);
+  if (!entries) visit(resolve(cssRoot, FROZEN_ENGINE_MOUNT), null);
 
   const seen = new Set();
   for (const [rel, layer] of layerOf) {

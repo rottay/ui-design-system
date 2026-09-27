@@ -1,0 +1,90 @@
+/* Bare-class floors every engine that renders these classes shares, Modern included.
+   Engine-neutral: no frozen-engine bundle owns it. */
+
+.ds-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.ds-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.ds-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ds-z-index-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.ds-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: var(--ds-alert-padding);
+  border-radius: var(--ds-alert-radius);
+  border: 1px solid;
+  font-size: var(--ds-alert-font-size);
+}
+
+.ds-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.ds-divider {
+  border: none;
+  border-top: var(--ds-divider-width) solid var(--ds-divider-color);
+  margin: var(--ds-divider-spacing) 0;
+}
+
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--ds-table-bg);
+  border-radius: var(--ds-table-radius);
+  overflow: hidden;
+}
+
+.ds-table th {
+  background-color: var(--ds-table-header-bg);
+  color: var(--ds-table-header-color);
+  font-weight: var(--ds-table-header-font-weight);
+  font-size: var(--ds-table-header-font-size);
+  text-align: left;
+}
+
+.ds-table th,
+.ds-table td {
+  padding: var(--ds-table-cell-padding);
+  border-bottom: 1px solid var(--ds-table-row-border);
+}
+
+.ds-table tbody tr {
+  font-size: var(--ds-table-cell-font-size);
+  transition: var(--ds-transition-fast);
+}
+
+.ds-table tbody tr:hover {
+  background-color: var(--ds-table-row-bg-hover);
+}
+
+.ds-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
