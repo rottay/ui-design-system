@@ -2252,12 +2252,10 @@
   /* Text Colors */
   --ds-text-primary: var(--ds-color-text-primary);
   --ds-text-secondary: var(--ds-color-text-secondary);
-  --ds-text-tertiary: var(--ds-color-text-tertiary);
   --ds-text-disabled: var(--ds-color-text-disabled);
   --ds-text-inverse: var(--ds-color-text-on-primary);
 
   /* Border Colors */
-  --ds-border-color: var(--ds-color-border);
   --ds-border-color-default: var(--ds-color-border-primary);
   --ds-border-color-muted: var(--ds-color-border-subtle);
   --ds-border-color-strong: var(--ds-color-border-secondary);
@@ -21500,57 +21498,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 /**
- * Modern framework token projection.
- *
- * This is deliberately NOT a tenant theme. BrandTheme (first-party products)
- * and compiled Appearance (DB-authored tenants) own the canonical `--ds-*`
- * values. This file only projects that resolved authority into the private
- * DaisyUI variable vocabulary required by the Modern engine.
- *
- * Contract:
- * - framework variables only; never define a canonical `--ds-*` token here;
- * - every value must resolve from a canonical `--ds-*` token;
- * - no literal color, typography, spacing, radius, border or motion values;
- * - product/page customisation stays above this layer through DS props, slots,
- *   recipes and scoped semantic tokens.
- */
-
-[data-engine='modern'] {
-  /* DaisyUI colour vocabulary projected from the compiled DS authority. */
-  --color-primary: var(--ds-color-primary);
-  --color-primary-content: var(--ds-button-primary-color);
-  --color-secondary: var(--ds-color-secondary);
-  --color-secondary-content: var(--ds-button-secondary-color);
-  --color-accent: var(--ds-color-accent);
-  --color-accent-content: var(--ds-color-text-on-primary);
-  --color-neutral: var(--ds-color-neutral-800);
-  --color-neutral-content: var(--ds-color-text-inverse);
-  --color-base-100: var(--ds-color-bg-primary);
-  --color-base-200: var(--ds-color-bg-secondary);
-  --color-base-300: var(--ds-color-bg-tertiary);
-  --color-base-content: var(--ds-color-text-primary);
-  --color-success: var(--ds-color-success);
-  --color-success-content: var(--ds-button-success-color);
-  --color-warning: var(--ds-color-warning);
-  --color-warning-content: var(--ds-button-warning-color);
-  --color-error: var(--ds-color-error);
-  --color-error-content: var(--ds-button-error-color);
-  --color-info: var(--ds-color-info);
-  --color-info-content: var(--ds-button-info-color);
-
-  /* DaisyUI 5 structural vocabulary. Do not reintroduce the removed Daisy 4
-     `--rounded-*`, `--animation-*`, `--btn-focus-scale` or `--tab-*` names. */
-  --radius-selector: var(--ds-radius-sm);
-  --radius-field: var(--ds-radius-button, var(--ds-radius-md));
-  --radius-box: var(--ds-radius-lg);
-  --size-selector: var(--ds-spacing-1);
-  --size-field: var(--ds-spacing-1);
-  --border: var(--ds-border-width-1);
-  --depth: var(--ds-effect-intensity);
-  --noise: var(--ds-effect-intensity);
-}
-
-/**
  * Modern Engine Theme - Rottay Design System
  *
  * Maps --ds-* design tokens to Tailwind CSS and DaisyUI component classes.
@@ -21749,100 +21696,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  */
 
 /* =============================================================================
-   INPUT - Mejoras adicionales
-   ============================================================================= */
-
-[data-engine='modern'] .input {
-  width: 100%;
-  height: var(--ds-input-md-height, 40px);
-  padding: 0 12px;
-  font-size: 14px;
-  background-color: var(--ds-input-bg);
-  border: 1px solid var(--ds-border-color);
-  border-radius: var(--ds-input-radius, 8px);
-  color: var(--ds-text-primary);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  outline: none;
-}
-
-[data-engine='modern'] .input::placeholder {
-  color: var(--ds-text-tertiary);
-}
-
-[data-engine='modern'] .input:hover:not(:disabled):not(:focus) {
-  border-color: var(--ds-input-border-hover);
-}
-
-[data-engine='modern'] .input:focus {
-  border-color: var(--ds-color-primary-500);
-  box-shadow: 0 0 0 3px var(--ds-color-primary-100);
-}
-
-[data-engine='modern'] .input:disabled {
-  background-color: var(--ds-input-bg-disabled);
-  color: var(--ds-text-tertiary);
-  cursor: not-allowed;
-}
-
-/* =============================================================================
-   BUTTON - Mejoras adicionales
-   ============================================================================= */
-
-[data-engine='modern'] .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: var(--ds-button-md-height, 40px);
-  min-height: var(--ds-button-md-height, 40px);
-  padding: 0 16px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: var(--ds-button-md-radius, 8px);
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-transform: none;
-  letter-spacing: normal;
-}
-
-[data-engine='modern'] .btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--ds-color-primary-100);
-}
-
-/* Primary button */
-[data-engine='modern'] .btn-primary {
-  background-color: var(--ds-color-primary-600);
-  border-color: var(--ds-color-primary-600);
-  color: var(--ds-button-primary-color);
-}
-
-[data-engine='modern'] .btn-primary:hover:not(:disabled) {
-  background-color: var(--ds-color-primary-700);
-  border-color: var(--ds-color-primary-700);
-}
-
-/* Ghost button */
-[data-engine='modern'] .btn-ghost {
-  background-color: transparent;
-  border-color: transparent;
-  color: var(--ds-text-primary);
-}
-
-[data-engine='modern'] .btn-ghost:hover:not(:disabled) {
-  background-color: var(--ds-color-neutral-100);
-}
-
-/* Disabled button */
-[data-engine='modern'] .btn:disabled,
-[data-engine='modern'] .btn[disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* =============================================================================
    SPACE - Utility for vertical/horizontal spacing
    ============================================================================= */
 
@@ -21852,44 +21705,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 [data-engine='modern'] .space-y-2 > * + * {
   margin-top: 8px;
-}
-
-/* =============================================================================
-   AVATAR - User avatars
-   ============================================================================= */
-
-[data-engine='modern'] .avatar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--ds-color-primary-100);
-  color: var(--ds-color-primary-600);
-  font-weight: 600;
-  font-size: 14px;
-  overflow: hidden;
-}
-
-[data-engine='modern'] .avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* =============================================================================
-   LOADING SPINNER
-   ============================================================================= */
-
-[data-engine='modern'] .loading {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--ds-border-color);
-  border-top-color: var(--ds-color-primary-600);
-  border-radius: 50%;
-  animation: ds-foundation-spin 0.6s linear infinite;
 }
 
 /* =============================================================================
@@ -21961,113 +21776,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-/* Responsive grid - Default columns based on data attributes */
-[data-engine='modern'] .rottay-grid[data-cols-xs="1"] {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-[data-engine='modern'] .rottay-grid[data-cols-xs="2"] {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-[data-engine='modern'] .rottay-grid[data-cols-xs="3"] {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-[data-engine='modern'] .rottay-grid[data-cols-xs="4"] {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-/* SM breakpoint (640px) */
-@media (min-width: 640px) {
-  [data-engine='modern'] .rottay-grid[data-cols-sm="1"] {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-sm="2"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-sm="3"] {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-sm="4"] {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* MD breakpoint (768px) */
-@media (min-width: 768px) {
-  [data-engine='modern'] .rottay-grid[data-cols-md="1"] {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-md="2"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-md="3"] {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-md="4"] {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* LG breakpoint (1024px) */
-@media (min-width: 1024px) {
-  [data-engine='modern'] .rottay-grid[data-cols-lg="1"] {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-lg="2"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-lg="3"] {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-lg="4"] {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-lg="5"] {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-lg="6"] {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-}
-
-/* XL breakpoint (1280px) */
-@media (min-width: 1280px) {
-  [data-engine='modern'] .rottay-grid[data-cols-xl="1"] {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-xl="2"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-xl="3"] {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-xl="4"] {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-xl="5"] {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-  [data-engine='modern'] .rottay-grid[data-cols-xl="6"] {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-}
-
-/* =============================================================================
-   INPUT FIX - Inner input inside label wrapper
-   ============================================================================= */
-
-/* When Input has prefix/suffix, outer label has .input class, inner input should be plain */
-[data-engine='modern'] label.input input,
-[data-engine='modern'] .input input {
-  border: none !important;
-  background: transparent !important;
-  outline: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  height: auto !important;
-  flex: 1;
-  min-width: 0;
-}
-
 /* =============================================================================
    FORM LAYOUT - Alignment fixes
    ============================================================================= */
@@ -22130,22 +21838,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 /* =============================================================================
-   BUTTON GAP FIX - Space between buttons
-   ============================================================================= */
-
-/* Ensure buttons have gap when in flex/inline containers */
-[data-engine='modern'] .btn + .btn {
-  margin-inline-start: 8px;
-}
-
-/* Generic flex gap for button parents */
-[data-engine='modern'] div:has(> .btn + .btn),
-[data-engine='modern'] span:has(> .btn + .btn) {
-  display: inline-flex;
-  gap: 8px;
-}
-
-/* =============================================================================
    COLOR INPUT / COLOR PICKER - Styling
    ============================================================================= */
 
@@ -22190,18 +21882,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   }
 }
 
-/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
-   relaid out, or left waiting on an event that never arrives. */
-@media (prefers-reduced-motion: reduce) {
-  [data-engine='modern'] .btn,
-  [data-engine='modern'] .input,
-  [data-engine='modern'] .loading {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-  }
-}
-
 /**
  * Modern-engine `interpolate-size` enabler (W6-E).
  *
@@ -22239,223 +21919,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * @version 0.4.0
  * @engine Rustic (Vanilla CSS)
  */
-
-/* =============================================================================
-   RESET & BASE STYLES
-   ============================================================================= */
-
-.ds-reset {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-.ds-reset *,
-.ds-reset *::before,
-.ds-reset *::after {
-  box-sizing: inherit;
-}
-
-/* =============================================================================
-   BUTTON - .ds-btn
-   ============================================================================= */
-
-.ds-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-family: var(--ds-font-family-base);
-  font-weight: var(--ds-button-font-weight);
-  border-radius: var(--ds-button-md-radius);
-  transition: var(--ds-button-transition);
-  height: var(--ds-button-md-height);
-  padding: 0 var(--ds-button-md-padding-x);
-  font-size: var(--ds-button-md-font-size);
-  border: 1px solid transparent;
-  cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-  user-select: none;
-}
-
-.ds-btn:focus-visible {
-  outline: none;
-  box-shadow: var(--ds-button-focus-ring);
-}
-
-/* Button Sizes */
-.ds-btn--xs {
-  height: var(--ds-button-xs-height);
-  padding: 0 var(--ds-button-xs-padding-x);
-  font-size: var(--ds-button-xs-font-size);
-  border-radius: var(--ds-button-xs-radius);
-}
-
-.ds-btn--sm {
-  height: var(--ds-button-sm-height);
-  padding: 0 var(--ds-button-sm-padding-x);
-  font-size: var(--ds-button-sm-font-size);
-  border-radius: var(--ds-button-sm-radius);
-}
-
-.ds-btn--lg {
-  height: var(--ds-button-lg-height);
-  padding: 0 var(--ds-button-lg-padding-x);
-  font-size: var(--ds-button-lg-font-size);
-  border-radius: var(--ds-button-lg-radius);
-}
-
-.ds-btn--xl {
-  height: var(--ds-button-xl-height);
-  padding: 0 var(--ds-button-xl-padding-x);
-  font-size: var(--ds-button-xl-font-size);
-  border-radius: var(--ds-button-xl-radius);
-}
-
-/* Primary Button */
-.ds-btn--primary {
-  background-color: var(--ds-button-primary-bg);
-  border-color: var(--ds-button-primary-border);
-  color: var(--ds-button-primary-color);
-  box-shadow: var(--ds-button-primary-shadow);
-}
-
-.ds-btn--primary:hover:not(:disabled) {
-  background-color: var(--ds-button-primary-bg-hover);
-  border-color: var(--ds-button-primary-bg-hover);
-  box-shadow: var(--ds-button-primary-shadow-hover);
-}
-
-.ds-btn--primary:active:not(:disabled) {
-  background-color: var(--ds-button-primary-bg-active);
-}
-
-/* Secondary Button */
-.ds-btn--secondary {
-  background-color: var(--ds-button-secondary-bg);
-  border-color: var(--ds-button-secondary-border);
-  color: var(--ds-button-secondary-color);
-}
-
-.ds-btn--secondary:hover:not(:disabled) {
-  background-color: var(--ds-button-secondary-bg-hover);
-}
-
-/* Default Button */
-.ds-btn--default {
-  background-color: var(--ds-button-default-bg);
-  border-color: var(--ds-button-default-border);
-  color: var(--ds-button-default-color);
-}
-
-.ds-btn--default:hover:not(:disabled) {
-  background-color: var(--ds-button-default-bg-hover);
-  border-color: var(--ds-color-primary-400);
-  color: var(--ds-color-primary-500);
-}
-
-/* Ghost Button */
-.ds-btn--ghost {
-  background-color: var(--ds-button-ghost-bg);
-  border-color: var(--ds-button-ghost-border);
-  color: var(--ds-button-ghost-color);
-}
-
-.ds-btn--ghost:hover:not(:disabled) {
-  background-color: var(--ds-button-ghost-bg-hover);
-  color: var(--ds-color-primary-500);
-}
-
-/* Text Button */
-.ds-btn--text {
-  background-color: var(--ds-button-text-bg);
-  color: var(--ds-button-text-color);
-  border-color: transparent;
-}
-
-.ds-btn--text:hover:not(:disabled) {
-  background-color: var(--ds-button-text-bg-hover);
-  color: var(--ds-button-text-color-hover);
-}
-
-/* Link Button */
-.ds-btn--link {
-  background-color: transparent;
-  border-color: transparent;
-  color: var(--ds-button-link-color);
-  padding: 0;
-  height: auto;
-}
-
-.ds-btn--link:hover:not(:disabled) {
-  color: var(--ds-button-link-color-hover);
-  text-decoration: var(--ds-button-link-decoration-hover);
-}
-
-/* Semantic Buttons */
-.ds-btn--success {
-  background-color: var(--ds-button-success-bg);
-  border-color: var(--ds-button-success-bg);
-  color: var(--ds-button-success-color);
-}
-
-.ds-btn--success:hover:not(:disabled) {
-  background-color: var(--ds-button-success-bg-hover);
-}
-
-.ds-btn--warning {
-  background-color: var(--ds-button-warning-bg);
-  border-color: var(--ds-button-warning-bg);
-  color: var(--ds-button-warning-color);
-}
-
-.ds-btn--warning:hover:not(:disabled) {
-  background-color: var(--ds-button-warning-bg-hover);
-}
-
-.ds-btn--error {
-  background-color: var(--ds-button-error-bg);
-  border-color: var(--ds-button-error-bg);
-  color: var(--ds-button-error-color);
-}
-
-.ds-btn--error:hover:not(:disabled) {
-  background-color: var(--ds-button-error-bg-hover);
-}
-
-/* Disabled Button */
-.ds-btn:disabled,
-.ds-btn--disabled {
-  background-color: var(--ds-button-disabled-bg);
-  border-color: var(--ds-button-disabled-border);
-  color: var(--ds-button-disabled-color);
-  opacity: var(--ds-button-disabled-opacity);
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* Loading Button */
-.ds-btn--loading {
-  position: relative;
-  pointer-events: none;
-}
-
-.ds-btn--loading::after {
-  content: '';
-  position: absolute;
-  width: 1em;
-  height: 1em;
-  border: 2px solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  animation: ds-spin 0.6s linear infinite;
-}
-
-/* Full Width Button */
-.ds-btn--block {
-  width: 100%;
-}
 
 /* =============================================================================
    INPUT - .ds-input
@@ -23197,26 +22660,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 .ds-skeleton--circle {
   border-radius: 50%;
-}
-
-/* =============================================================================
-   LINK - .ds-link
-   ============================================================================= */
-
-.ds-link {
-  color: var(--ds-link-color);
-  text-decoration: var(--ds-link-decoration);
-  transition: var(--ds-transition-fast);
-  cursor: pointer;
-}
-
-.ds-link:hover {
-  color: var(--ds-link-color-hover);
-  text-decoration: var(--ds-link-decoration-hover);
-}
-
-.ds-link:active {
-  color: var(--ds-link-color-active);
 }
 
 /* =============================================================================
@@ -25629,20 +25072,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='xl'] {
   --ds-card-instance-padding: calc(var(--ds-card-padding-xl, var(--ds-card-xl-padding)) * var(--ds-rhythm-effective-scale, 1));
-}
-
-/* footprint preset: the instance states the one factor an auto-fit grid reads */
-.ds-card.ds-card--modern[data-part='root'][data-scale='sm'] {
-  --ds-card-scale: var(--ds-card-scale-sm, calc(var(--ds-card-scale-md, 1) * 0.875));
-}
-.ds-card.ds-card--modern[data-part='root'][data-scale='md'] {
-  --ds-card-scale: var(--ds-card-scale-md, 1);
-}
-.ds-card.ds-card--modern[data-part='root'][data-scale='lg'] {
-  --ds-card-scale: var(--ds-card-scale-lg, calc(var(--ds-card-scale-md, 1) * 1.25));
-}
-.ds-card.ds-card--modern[data-part='root'][data-scale='xl'] {
-  --ds-card-scale: var(--ds-card-scale-xl, calc(var(--ds-card-scale-md, 1) * 1.5));
 }
 
 /* size axis: compact sizes de-escalate the copy, amplified sizes scale it up;
@@ -96151,6 +95580,36 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   --_ds-widget-board-tint-origin: 0% 0%;
 }
 
+/* ---- drag ghost: exists only while a kernel pointer drag is live, positioned from its preview ---- */
+.ds-pattern-widget-board.ds-engine-modern[data-moving='true'] .ds-widget-board__grid[data-part='grid'] {
+  position: relative;
+}
+
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__drag-ghost {
+  --ds-widget-board-ghost-x: 0px;
+  --ds-widget-board-ghost-y: 0px;
+  --ds-widget-board-ghost-width: 0px;
+  --ds-widget-board-ghost-height: 0px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  inline-size: var(--ds-widget-board-ghost-width);
+  block-size: var(--ds-widget-board-ghost-height);
+  translate: var(--ds-widget-board-ghost-x) var(--ds-widget-board-ghost-y);
+  border: 2px solid color-mix(in srgb, var(--ds-color-primary) 56%, transparent);
+  border-radius: var(--ds-radius-xl);
+  background: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  box-shadow: 0 26px 54px -32px color-mix(in srgb, var(--ds-color-text-primary) 48%, transparent);
+  pointer-events: none;
+  z-index: var(--_ds-widget-board-z-dragging, 8);
+}
+
+@media (forced-colors: active) {
+  .ds-pattern-widget-board.ds-engine-modern .ds-widget-board__drag-ghost {
+    border-color: Highlight;
+  }
+}
+
 }
 @layer rottay-engines {
 /**
@@ -116964,8 +116423,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    ======================================================================== */
 
 .ant-badge .ant-badge-count,
-.badge,
-[data-engine] .ds-badge {
+.badge {
   border-radius: var(--ds-badge-radius);
 }
 
@@ -116985,8 +116443,7 @@ h6,
 .ant-typography h3,
 .ant-typography h4,
 .ant-typography h5,
-.ant-typography h6,
-[data-engine] .ds-heading {
+.ant-typography h6 {
   font-weight: var(--ds-typography-heading-font-weight);
 }
 
@@ -117006,15 +116463,13 @@ h6,
     .ant-typography h3,
     .ant-typography h4,
     .ant-typography h5,
-    .ant-typography h6,
-    [data-engine] .ds-heading
+    .ant-typography h6
   ):not(.rottay-typography--modern) {
   letter-spacing: var(--ds-typography-heading-letter-spacing);
 }
 
 .ant-form-item-label > label,
-.label,
-[data-engine] .ds-label {
+.label {
   text-transform: var(--ds-typography-label-transform);
 }
 
@@ -117023,8 +116478,7 @@ h6,
    Applies personality-driven hover transform and transition to buttons.
    ======================================================================== */
 
-.ant-btn,
-.btn {
+.ant-btn {
   transition: transform var(--ds-personality-animation-entrance-duration, 300ms),
     box-shadow var(--ds-personality-animation-entrance-duration, 300ms),
     background-color var(--ds-personality-animation-entrance-duration, 300ms),
@@ -117032,13 +116486,11 @@ h6,
     color var(--ds-personality-animation-entrance-duration, 300ms);
 }
 
-.ant-btn:hover,
-.btn:hover {
+.ant-btn:hover {
   transform: var(--ds-button-hover-transform, translateY(0) scale(1));
 }
 
-.ant-btn:active,
-.btn:active {
+.ant-btn:active {
   transform: var(--ds-button-active-transform, scale(0.98));
 }
 
@@ -117054,8 +116506,7 @@ h6,
 
 .ant-skeleton .ant-skeleton-content .ant-skeleton-title,
 .ant-skeleton .ant-skeleton-content .ant-skeleton-paragraph > li,
-.skeleton,
-[data-engine] .ds-skeleton {
+.skeleton {
   animation-duration: var(--ds-skeleton-animation-duration);
 }
 
@@ -117076,8 +116527,7 @@ h6,
    Adds a subtle glow effect on primary button hover.
    ======================================================================== */
 
-.ant-btn-primary:hover:not(:disabled),
-.btn-primary:hover:not(:disabled) {
+.ant-btn-primary:hover:not(:disabled) {
   box-shadow: var(--ds-card-shadow-hover),
     0 0 20px rgba(var(--ds-color-primary-rgb, 99, 102, 241), 0.15);
 }
@@ -117087,8 +116537,7 @@ h6,
    Accessible, visually polished focus indicators for buttons and inputs.
    ======================================================================== */
 
-.ant-btn:focus-visible,
-.btn:focus-visible {
+.ant-btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff),
     0 0 0 4px var(--ds-color-primary-400, #818cf8);
@@ -117096,8 +116545,7 @@ h6,
 
 .ant-input:focus-visible,
 .ant-select-focused .ant-select-selector,
-input:focus-visible,
-[data-engine] .ds-input:focus-visible {
+input:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff),
     0 0 0 4px var(--ds-color-primary-400, #818cf8);
@@ -117108,16 +116556,12 @@ input:focus-visible,
    Frosted-glass backdrop and elevated shadow for modals.
    ======================================================================== */
 
-.ant-modal-mask,
-.modal-backdrop,
-[data-engine] .ds-modal-overlay {
+.ant-modal-mask {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
 
-.ant-modal-content,
-.modal-box,
-[data-engine] .ds-modal-content {
+.ant-modal-content {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
@@ -117150,8 +116594,7 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-badge .ant-badge-count:hover,
-.badge:hover,
-[data-engine] .ds-badge:hover {
+.badge:hover {
   transform: scale(1.1);
   transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -117188,9 +116631,7 @@ input:focus-visible,
    Applies personality-driven transition timing to text inputs.
    ======================================================================== */
 
-.ant-input,
-.input,
-[data-engine] .ds-input {
+.ant-input {
   transition: border-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -117206,8 +116647,7 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-select .ant-select-selector,
-.select,
-[data-engine] .ds-select {
+.select {
   transition: border-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-select-transition-timing, ease-in-out),
@@ -117284,16 +116724,14 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-slider .ant-slider-rail,
-.rottay-slider__rail,
-[data-engine] .ds-slider-rail {
+.rottay-slider__rail {
   transition: background-color
     var(--ds-personality-animation-entrance-duration, 200ms)
     var(--ds-input-transition-timing, ease-in-out);
 }
 
 .ant-slider .ant-slider-track,
-.rottay-slider__track,
-[data-engine] .ds-slider-track {
+.rottay-slider__track {
   transition: width var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
     height var(--ds-personality-animation-entrance-duration, 200ms)
@@ -117303,8 +116741,7 @@ input:focus-visible,
 }
 
 .ant-slider .ant-slider-handle,
-.rottay-slider__handle,
-[data-engine] .ds-slider-handle {
+.rottay-slider__handle {
   transition: border-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -117315,8 +116752,7 @@ input:focus-visible,
 }
 
 .ant-slider .ant-slider-handle:hover,
-.rottay-slider__handle:hover,
-[data-engine] .ds-slider-handle:hover {
+.rottay-slider__handle:hover {
   transform: scale(1.2);
 }
 
@@ -117325,8 +116761,7 @@ input:focus-visible,
    Applies personality-driven transition and animation to calendar panels.
    ======================================================================== */
 
-.ant-picker,
-[data-engine] .ds-datepicker {
+.ant-picker {
   transition: border-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -117334,15 +116769,13 @@ input:focus-visible,
       var(--ds-input-transition-timing, ease-in-out);
 }
 
-.ant-picker-dropdown,
-[data-engine] .ds-datepicker-panel {
+.ant-picker-dropdown {
   animation: ds-dropdown-enter
     var(--ds-personality-animation-entrance-duration, 200ms)
     cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.ant-picker-cell-inner,
-[data-engine] .ds-datepicker-cell {
+.ant-picker-cell-inner {
   transition: background-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -117355,24 +116788,21 @@ input:focus-visible,
    Applies personality-driven row hover transition and header styling.
    ======================================================================== */
 
-.ant-table-thead > tr > th,
-[data-engine] .ds-table-header th {
+.ant-table-thead > tr > th {
   font-weight: var(--ds-typography-heading-font-weight, 600);
   letter-spacing: var(--ds-typography-heading-letter-spacing, normal);
   text-transform: var(--ds-typography-label-transform, none);
 }
 
 .ant-table-tbody > tr,
-.table tbody tr,
-[data-engine] .ds-table-row {
+.table tbody tr {
   transition: background-color
     var(--ds-personality-animation-entrance-duration, 200ms)
     var(--ds-input-transition-timing, ease-in-out);
 }
 
 .ant-table-tbody > tr:hover > td,
-.table tbody tr:hover,
-[data-engine] .ds-table-row:hover {
+.table tbody tr:hover {
   transition: background-color
     var(--ds-personality-animation-entrance-duration, 200ms)
     var(--ds-input-transition-timing, ease-in-out);
@@ -117383,16 +116813,14 @@ input:focus-visible,
    Applies personality-driven indicator animation to tab navigation.
    ======================================================================== */
 
-.ant-tabs-ink-bar,
-[data-engine] .ds-tabs-indicator {
+.ant-tabs-ink-bar {
   transition: left var(--ds-personality-animation-entrance-duration, 300ms)
       cubic-bezier(0.35, 0, 0.25, 1),
     width var(--ds-personality-animation-entrance-duration, 300ms)
       cubic-bezier(0.35, 0, 0.25, 1);
 }
 
-.ant-tabs-tab,
-[data-engine] .ds-tab {
+.ant-tabs-tab {
   transition: color var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
     background-color var(--ds-personality-animation-entrance-duration, 200ms)
@@ -117405,15 +116833,12 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-progress-bg,
-.progress,
-[data-engine] .ds-progress-bar {
+.progress {
   transition: width var(--ds-personality-animation-entrance-duration, 300ms)
     cubic-bezier(0.08, 0.82, 0.17, 1);
 }
 
-.ant-progress-circle-path,
-.radial-progress,
-[data-engine] .ds-progress-circle {
+.ant-progress-circle-path {
   transition: stroke-dashoffset
     var(--ds-personality-animation-entrance-duration, 300ms)
     cubic-bezier(0.08, 0.82, 0.17, 1);
@@ -117450,7 +116875,6 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-drawer .ant-drawer-content-wrapper,
-.drawer-side,
 .rottay-drawer,
 [data-engine] .ds-drawer {
   transition: transform var(--ds-personality-animation-entrance-duration, 300ms)
@@ -117458,9 +116882,7 @@ input:focus-visible,
 }
 
 .ant-drawer-mask,
-.drawer-overlay,
-.rottay-drawer-overlay,
-[data-engine] .ds-drawer-overlay {
+.rottay-drawer-overlay {
   transition: opacity var(--ds-personality-animation-entrance-duration, 300ms)
     var(--ds-input-transition-timing, ease-in-out);
   backdrop-filter: blur(4px);
@@ -117474,7 +116896,6 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-alert,
-.rottay-alert,
 [data-engine] .ds-alert {
   transition: opacity var(--ds-personality-animation-entrance-duration, 300ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -117487,8 +116908,7 @@ input:focus-visible,
    Applies personality-driven border-radius to tags.
    ======================================================================== */
 
-.ant-tag,
-[data-engine] .ds-tag {
+.ant-tag {
   border-radius: var(--ds-badge-radius, var(--ds-tag-default-radius));
   transition: opacity var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
@@ -117501,16 +116921,14 @@ input:focus-visible,
    Applies personality-driven border-radius to avatar components.
    ======================================================================== */
 
-.ant-avatar,
-[data-engine] .ds-avatar {
+.ant-avatar {
   transition: transform var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),
     box-shadow var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out);
 }
 
-.ant-avatar:hover,
-[data-engine] .ds-avatar:hover {
+.ant-avatar:hover {
   transform: var(--ds-button-hover-transform, scale(1.05));
 }
 
@@ -117522,8 +116940,6 @@ input:focus-visible,
 .ant-message-notice,
 .ant-notification-notice,
 .rottay-toast-container > *,
-[data-engine] .ds-toast,
-[data-engine] .ds-message,
 [data-engine] .ds-notification {
   animation: ds-toast-enter
     var(--ds-personality-animation-entrance-duration, 300ms)
@@ -117547,7 +116963,6 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-collapse-content,
-.collapse-content,
 [data-engine] .ds-collapse-content {
   transition: max-height
       var(--ds-personality-animation-entrance-duration, 300ms)
@@ -117557,7 +116972,6 @@ input:focus-visible,
 }
 
 .ant-collapse-header,
-.collapse-title,
 [data-engine] .ds-collapse-header {
   transition: background-color
       var(--ds-personality-animation-entrance-duration, 200ms)
@@ -117584,9 +116998,7 @@ input:focus-visible,
    Applies personality-driven transitions to page buttons.
    ======================================================================== */
 
-.ant-pagination-item,
-.join .btn,
-[data-engine] .ds-pagination-item {
+.ant-pagination-item {
   transition: background-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-input-transition-timing, ease-in-out),

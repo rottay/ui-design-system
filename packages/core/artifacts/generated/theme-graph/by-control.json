@@ -1011,7 +1011,7 @@
     },
     {
       "channels": 2524,
-      "channelsThroughAliases": 4096,
+      "channelsThroughAliases": 4094,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1366,7 +1366,7 @@
     },
     {
       "channels": 2524,
-      "channelsThroughAliases": 4096,
+      "channelsThroughAliases": 4094,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1713,7 +1713,7 @@
     },
     {
       "channels": 2622,
-      "channelsThroughAliases": 4299,
+      "channelsThroughAliases": 4297,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -2064,7 +2064,7 @@
     },
     {
       "channels": 2610,
-      "channelsThroughAliases": 4275,
+      "channelsThroughAliases": 4273,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",

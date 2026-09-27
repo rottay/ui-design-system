@@ -798,6 +798,7 @@
         "normalizeLayoutRevision",
         "normalizeSurfaceDensity",
         "normalizeSurfaceError",
+        "normalizeWidgetLayout",
         "notification",
         "pad2",
         "parseDateValue",
@@ -1032,7 +1033,8 @@
         "verticalEngine",
         "warnInDev",
         "warnOnceInDev",
-        "widgetItemsToAdaptiveInputs"
+        "widgetItemsToAdaptiveInputs",
+        "widgetItemsToLayout"
       ],
       "symbols": {
         "ActionDock": [
@@ -3095,6 +3097,7 @@
         "migrateV1",
         "normalizeLayoutRevision",
         "normalizeSurfaceError",
+        "normalizeWidgetLayout",
         "pad2",
         "parseDateValue",
         "parseInline",
@@ -3289,7 +3292,8 @@
         "verticalEngine",
         "warnInDev",
         "warnOnceInDev",
-        "widgetItemsToAdaptiveInputs"
+        "widgetItemsToAdaptiveInputs",
+        "widgetItemsToLayout"
       ]
     },
     "./server": {
@@ -4300,7 +4304,8 @@
     "./patterns/widget-board": {
       "exports": [
         "WidgetBoard",
-        "normalizeLayoutRevision"
+        "normalizeLayoutRevision",
+        "normalizeWidgetLayout"
       ],
       "symbols": {
         "WidgetBoard": [
@@ -4310,7 +4315,8 @@
         ]
       },
       "supplierFreeExports": [
-        "normalizeLayoutRevision"
+        "normalizeLayoutRevision",
+        "normalizeWidgetLayout"
       ]
     },
     "./patterns/adaptive-overlay": {

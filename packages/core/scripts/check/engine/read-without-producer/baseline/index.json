@@ -4,7 +4,7 @@
   "scope": "engines/modern unicamente. Classic y Rustic estan congelados (owner, 2026-09-05) y su pintura no es deuda que ninguna orden de trabajo vaya a bajar.",
   "producer": "declarado en el CSS autorado (src/foundation/tokens/css, src/components) o emitido por el compilador -- el registro de derivacion, el kernel (src/infrastructure/compilers/kernel) o lowering/foundation -- libraries/tokens/producers, el mismo conjunto que usa el arma transitiva de cascade-wiring",
   "corpus": "libraries/engine/skins/files/collectSkinFiles() filtrado a /engines/modern/ -- un solo walker, importado",
-  "denominator": 4784,
+  "denominator": 4788,
   "produced": 4357,
   "debt": 421,
   "producers": 7322,
@@ -41,7 +41,7 @@
   "debtNote": "422 -> 421 in the control-size-md lot (294eaba95): the ruling's per-row extension -- the shape plane is a factor, never an absolute rung; retired in both families, byte-identical measured. Measured by the gate (SHRANK).",
   "producersNote": "4340 -> 4357 produced and 7147 -> 7322 producers in the template-resolver lot (664104285): the census resolves single-interpolation templates through their literal call sites -- 175 names gain their always-real producer (the 7 card namespaces of setPremiumCardVars plus setLegacyButtonHoverBgAlias); 17 of them were counted in this gate's read set. Measured by the gate.",
   "honesty": "El numero es la MEDIDA de hoy, no una meta. WO-DER-01 crea el instrumento; bajarlo es el trabajo de las WO-DER-02..04 y de los cortes por familia, que son las que dan productor a los nombres que hoy no lo tienen.",
-  "denominatorNote": "4778 -> 4784 in WO-FAM-12 packet 1 (730666676): six new produced names join the census (--ds-card-min-inline-size, --ds-card-scale and the four --ds-card-scale-{sm,md,lg,xl} presets), all wired; debt unchanged at 421. Measured by the gate.",
+  "denominatorNote": "4784 -> 4788 in WO-FAM-13 packet 3a (4f0e6e88f): the four drag-ghost channels join the census (--ds-widget-board-ghost-{x,y,width,height}), declared at 0px in the Modern skin so the producer census sees them, each read by the ghost element only while a kernel drag is live. Debt unchanged. Measured by the gate. | 4778 -> 4784 in WO-FAM-12 packet 1 (730666676): six new produced names join the census (--ds-card-min-inline-size, --ds-card-scale and the four --ds-card-scale-{sm,md,lg,xl} presets), all wired; debt unchanged at 421. Measured by the gate.",
   "readClasses": {
     "law": "The ratchet was blind to every read outside engines/modern: the agnostic skin and the rest of the authored CSS that the base entrypoint imports under every engine, and literal var() reads inline in component TS/TSX, paint under Modern exactly like the Modern skin does. Measured 2026-09-25 at 6f5faa6f4 after WO-EVI-03 found 11 dead channels its tests pin that this ratchet could not see. Frozen engines (classic, rustic) stay out for the same reason as before; nothing else does.",
     "shape": "names -> { readers, family, owner, ownerProposal }. A read without producer that is not a row (or a new reader of a row) is anonymous and red; a row or reader that stopped being debt is red until deleted. No write mode: the ledger only shrinks by hand.",

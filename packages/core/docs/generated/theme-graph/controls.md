@@ -8,7 +8,7 @@
 > `produced` counts the channels the decision's derivers emit; `via aliases` counts what those
 > channels can still reach through the measured alias chain.
 
-digest: 00cfb7ac2372c96d2112fafb177ae21488b821b5df4d5f04188f0f244f941e46
+digest: 0b88ef124153df2567c3c99b01aa37a17cd842d3685bcdabfe8e1041a2cae820
 
 | decision | tier | derivers | produced | via aliases | families reached |
 |---|---|---|---|---|---|
@@ -18,11 +18,11 @@ digest: 00cfb7ac2372c96d2112fafb177ae21488b821b5df4d5f04188f0f244f941e46
 | `motion.character` | pro | 30 | 1056 | 1316 | 203 |
 | `motion.dial` | standard | 30 | 1056 | 1316 | 203 |
 | `navigation.sidebar-tone` | standard | 1 | 6 | 13 | 3 |
-| `palette.contrast-posture` | pro | 85 | 2524 | 4096 | 252 |
+| `palette.contrast-posture` | pro | 85 | 2524 | 4094 | 252 |
 | `palette.dark-mode` | pro | — | 0 | 0 | **none** |
-| `palette.neutral-temperature` | standard | 85 | 2524 | 4096 | 252 |
-| `palette.seeds` | standard | 89 | 2622 | 4299 | 252 |
-| `palette.status-seeds` | standard | 88 | 2610 | 4275 | 252 |
+| `palette.neutral-temperature` | standard | 85 | 2524 | 4094 | 252 |
+| `palette.seeds` | standard | 89 | 2622 | 4297 | 252 |
+| `palette.status-seeds` | standard | 88 | 2610 | 4273 | 252 |
 | `profiles.expressive` | pro | 8 | 224 | 1880 | 245 |
 | `recipe-profile` | pro | — | 0 | 0 | **none** |
 | `responsive.posture` | pro | 2 | 27 | 28 | 1 |
