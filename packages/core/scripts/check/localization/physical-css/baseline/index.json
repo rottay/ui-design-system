@@ -101,6 +101,20 @@
           "reason": "The `::after` of a selected preset swatch is the CHECKMARK itself: a left border plus a bottom border, sized `--ds-color-picker-check-width` / `--ds-color-picker-check-height` and rotated by `--ds-color-picker-check-transform` (`translate(-50%, -65%) rotate(-45deg)`, declared in presentation/components/color-picker/index.css). The two borders are the two strokes of the tick, so the pair is direction-invariant glyph geometry; `border-inline-start` would swap the strokes under RTL and draw the tick backwards. The glyph's POSITION was the separate defect of the centring pair and is now FIXED (WO-INV-01, 2026-09-17): `inset-inline-start: 50%` mirrors, so the producer re-declares the pull-back channel under `[data-part='preset-swatch']:dir(rtl)` as `translate(50%, -65%) rotate(-45deg)`. Measured in Chromium (`ColorPicker.check-centring.browser-geometry.integration.test.ts`): the check's border-box centre sat 12px off the swatch centre under `dir=rtl` on a 20px swatch and now measures 0 in both directions, with the tick drawn identically. The stroke geometry this exception class covers is unchanged."
         }
       ]
+    },
+    "runtime/engines/modern/skin/widget-board/index.css": {
+      "sites": [
+        {
+          "locator": ".ds-pattern-widget-board.ds-engine-modern .ds-widget-board__drag-ghost | left: 0",
+          "class": "measured-space",
+          "reason": "The drag ghost anchors at the origin cell's measured rect: the FAM-13 P3a kernel positions it from the DnD preview state, whose coordinates come from the pointer and getBoundingClientRect() in already-laid-out space. A logical inset-inline-start would mirror an already-mirrored measurement and place the ghost on the far side under RTL."
+        },
+        {
+          "locator": ".ds-pattern-widget-board.ds-engine-modern .ds-widget-board__drag-ghost | translate: var(--ds-widget-board-ghost-x) var(--ds-widget-board-ghost-y)",
+          "class": "measured-space",
+          "reason": "The offset channels carry the kernel's pointer-travel delta (clientX/clientY physical pixels) — the ghost follows the pointer, so the physical x IS direction-correct in both reading directions; spelling it inline would double-mirror under RTL."
+        }
+      ]
     }
   },
   "physicalStamp": {
@@ -369,6 +383,10 @@
     "runtime/engines/modern/skin/tree/index.css": {
       "sites": 1,
       "reason": "1 measured site(s): 1 x border-left-width. First: `.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical'] | border-left-width: var(--ds-tree-line-width)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "runtime/engines/shared/class-floor/index.css": {
+      "sites": 1,
+      "reason": "1 measured site: `.ds-table th | text-align: left` — the antd table-header convention restated by the engine-neutral class floor (WO-RET-02 P2's relocation made it visible: the rule sat in rustic/theme, which this scan excludes BY PATH for the freeze gate, and F-62 moved it verbatim into the shared file so EVERY engine keeps it). Rewriting to `start` would mirror header alignment under RTL — a behavior change no tenant asked for; antd hardcodes the same physical default. Declared as debt with the reason, never as an oversight: if the DS ever wants RTL-mirrored table headers, the decision belongs to the data-table family, not to an unmirrored global flip."
     }
   },
   "inert": {
