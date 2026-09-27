@@ -254,10 +254,12 @@ jobs:
           fi
 
       - name: Build Storybook
-        if: github.ref == 'refs/heads/main'
         run: pnpm --filter @rottay/design-system run build-storybook
         env:
           NODE_OPTIONS: --max-old-space-size=5120
+
+      - name: Storybook tenant mount acceptance (WO-RET-05)
+        run: node packages/core/.storybook/acceptance/tenant-primary/index.mjs
 
       - name: Security audit
         run: pnpm audit --audit-level=high || true
