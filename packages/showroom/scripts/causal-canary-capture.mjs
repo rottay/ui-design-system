@@ -172,8 +172,8 @@ const GROUNDS = {
     expectsArtifactStyle: true,
     arm: 'db-tenant-theme',
     rendering:
-      'provider diferido al cliente (ClientOnly, ground/client-only.tsx): server y primer render cliente ' +
-      'en vacio; stamp + <style> del artifact quedan SSR fuera del gate',
+      'ground server-renderizado por el kernel probe-ground (WO-RET-05 P2): stamp + <style> del artifact ' +
+      'en el HTML servido; el ClientOnly pre-P2 y su primer render en vacio quedaron retirados',
   },
 };
 
@@ -2305,7 +2305,7 @@ async function runCapture(args) {
       { path: 'packages/showroom/scripts/causal-canary-capture.mjs', sha256: selfSha },
       /* Las fuentes del ground del lab tambien pineadas: sin ellas la serie no
          puede probar por receipt que el ground fue constante. */
-      ...['ground/index.tsx', 'ground/client-only.tsx', 'ground/stamp.ts'].map((rel) => {
+      ...['ground/index.tsx', 'ground/stamp.ts'].map((rel) => {
         const relPath = `packages/showroom/src/app/probe/ds-reference/${rel}`;
         return { path: relPath, sha256: sha256(readFileSync(path.join(repoRoot, relPath))) };
       }),
