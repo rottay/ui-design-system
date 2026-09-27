@@ -1,6 +1,7 @@
 import { ProbeGround } from '@/components/probe-ground';
 
-import { DASHBOARD_WIDTHS, DashboardStage } from './stage';
+import { DASHBOARD_WIDTHS } from './widths';
+import { DashboardStage } from './stage';
 
 // ---------------------------------------------------------------------------
 // The dashboard probe-ground (WO-FAM-13 acceptance).

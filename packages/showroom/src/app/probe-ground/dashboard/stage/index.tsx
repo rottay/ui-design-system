@@ -14,7 +14,7 @@ import {
 
 import { DASHBOARD_LABELS, DASHBOARD_WIDGETS } from '../widgets';
 
-export const DASHBOARD_WIDTHS = [1500, 1100, 560, 360] as const;
+import { DASHBOARD_WIDTHS } from './widths';
 
 interface LayoutRecord {
   readonly commits: number;
