@@ -46,15 +46,15 @@ const readersOn = (row, plane) => row.readers.filter((r) => r.plane === plane);
 
 /* ── ORACULO 1 ─────────────────────────────────────────────────────────── */
 
-test('ORACULO --ds-button-xs-padding-x: lector modern-skin-css en skin/button/index.css:377 con escalar de densidad', () => {
+test('ORACULO --ds-button-xs-padding-x: lector modern-skin-css en skin/button/index.css:378 con escalar de densidad', () => {
   const row = channel('--ds-button-xs-padding-x');
   const modern = readersOn(row, 'modern-skin-css');
   const hit = modern.find(
     (r) =>
       r.file === 'src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css' &&
-      r.line === 377,
+      r.line === 378,
   );
-  assert.ok(hit, 'debe haber una lectura modern-skin-css en skin/button/index.css:377');
+  assert.ok(hit, 'debe haber una lectura modern-skin-css en skin/button/index.css:378');
   assert.ok(
     hit.scalars.includes('--ds-density-effective-scale'),
     `scalars debe contener --ds-density-effective-scale, tiene ${JSON.stringify(hit.scalars)}`,

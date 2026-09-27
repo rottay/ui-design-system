@@ -295,8 +295,16 @@ test('sobre el arbol real: ninguna via fuera del vocabulario y toda fila con su 
     assert.equal(row.evidence.coincidenceGuard, 'no-value-match-used');
   }
   /* A RATCHET of the live census, not a mechanism witness: the pin follows the
-   * census DOWN with the owning commit named, and never up. */
-  const R2_FLOOR_PIN = 13;
+   * census DOWN with the owning commit named, and never up; a rise is a
+   * population change the census owner adjudicates. 13 -> 16 (2026-09-26, DT
+   * countersign on receipt-wave-instruments-opus.json): the three new slots
+   * (bithire:surfaces.radiusScale, evnto:surfaces.buttonStyle,
+   * rottay:surfaces.buttonStyle) enter the floor because 7a79c1b89 (RET-02
+   * packet 1) deleted the Daisy projection, whose --radius-field line was the
+   * only edge attributing --ds-radius-button to a second root (radius.base);
+   * with the dead bridge gone the three slots read one root and join the floor
+   * -- population un-hidden, never new debt. */
+  const R2_FLOOR_PIN = 16;
   assert.ok(doc.stats.r2Floor <= R2_FLOOR_PIN,
     `r2Floor GREW ${R2_FLOOR_PIN} -> ${doc.stats.r2Floor} (${doc.stats.r2FloorRoots.join(', ')}): the pin never rises -- a larger floor is a population change the census owner adjudicates, not a re-pin`);
   assert.ok(doc.stats.r2Floor >= R2_FLOOR_PIN,

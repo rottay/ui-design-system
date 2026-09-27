@@ -28,14 +28,14 @@
     "parentByDesignFailures": []
   },
   "stats": {
-    "rows": 181,
+    "rows": 177,
     "byVia": {
-      "unattributed": 137,
+      "unattributed": 134,
       "head-exact": 24,
-      "declared-fallback": 20
+      "declared-fallback": 19
     },
     "byTier": {
-      "sin-tier": 177,
+      "sin-tier": 173,
       "control": 1,
       "base": 2,
       "page": 1
@@ -44,7 +44,7 @@
       "radius": 7,
       "fg": 91,
       "seed.error": 3,
-      "sin-propiedad": 58,
+      "sin-propiedad": 54,
       "seed.success": 2,
       "seed.warning": 2,
       "seed.info": 1,
@@ -60,20 +60,20 @@
       "delta.selected": 1,
       "scale": 1
     },
-    "withRoot": 44,
-    "withoutRoot": 137,
+    "withRoot": 43,
+    "withoutRoot": 134,
     "sharedHeadsResolved": 9,
     "sharedHeadsUnresolved": 0,
-    "ownersCensused": 11,
+    "ownersCensused": 10,
     "ownersAdjudicated": 174,
     "stepRulesPresent": true,
     "stepRulesAdjudicated": 260,
     "rowsRefinedByStep": 0,
     "rowsParentByDesign": 0,
     "byStep": {
-      "sin-paso": 181
+      "sin-paso": 177
     },
-    "r2Floor": 13,
+    "r2Floor": 16,
     "r2FloorRoots": [
       "control.ratio.radius",
       "motion.duration",
@@ -184,21 +184,21 @@
         "sin-propiedad": 5
       }
     },
+    "THEME.surfaces": {
+      "channels": 22,
+      "unattributed": 16,
+      "properties": {
+        "radius": 6,
+        "height": 1,
+        "sin-propiedad": 6,
+        "border": 3
+      }
+    },
     "THEME.typography": {
       "channels": 21,
       "unattributed": 16,
       "properties": {
         "sin-propiedad": 16
-      }
-    },
-    "THEME.surfaces": {
-      "channels": 22,
-      "unattributed": 15,
-      "properties": {
-        "radius": 5,
-        "height": 1,
-        "sin-propiedad": 6,
-        "border": 3
       }
     },
     "THEME.expressive": {
@@ -220,13 +220,6 @@
       "unattributed": 5,
       "properties": {
         "sin-propiedad": 5
-      }
-    },
-    "THEME.responsive": {
-      "channels": 4,
-      "unattributed": 4,
-      "properties": {
-        "sin-propiedad": 4
       }
     },
     "THEME.appearance": {
@@ -1305,7 +1298,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-error",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/badge/index.css:412",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/badge/index.css:418",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-color-error-border",
         "coincidenceGuard": "no-value-match-used"
@@ -2597,7 +2590,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-success",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/badge/index.css:398",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/badge/index.css:404",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-color-success-border",
         "coincidenceGuard": "no-value-match-used"
@@ -2894,7 +2887,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-warning",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/badge/index.css:405",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/badge/index.css:411",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-color-warning-border",
         "coincidenceGuard": "no-value-match-used"
@@ -3681,114 +3674,13 @@
       "stepNote": "sin raiz que refinar"
     },
     {
-      "channel": "--ds-posture-container-compact-max",
-      "rootId": null,
-      "via": null,
-      "evidence": {
-        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: THEME.responsive",
-        "coincidenceGuard": "no-value-match-used"
-      },
-      "tier": null,
-      "property": null,
-      "state": null,
-      "owners": [
-        "THEME.responsive"
-      ],
-      "contributingSlots": [
-        "bithire:THEME.responsive.posture",
-        "bithire:THEME.responsive.schemaVersion"
-      ],
-      "rootExposure": null,
-      "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "sin raiz que refinar"
-    },
-    {
-      "channel": "--ds-posture-container-standard-max",
-      "rootId": null,
-      "via": null,
-      "evidence": {
-        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: THEME.responsive",
-        "coincidenceGuard": "no-value-match-used"
-      },
-      "tier": null,
-      "property": null,
-      "state": null,
-      "owners": [
-        "THEME.responsive"
-      ],
-      "contributingSlots": [
-        "bithire:THEME.responsive.posture",
-        "bithire:THEME.responsive.schemaVersion"
-      ],
-      "rootExposure": null,
-      "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "sin raiz que refinar"
-    },
-    {
-      "channel": "--ds-posture-id",
-      "rootId": null,
-      "via": null,
-      "evidence": {
-        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: THEME.responsive",
-        "coincidenceGuard": "no-value-match-used"
-      },
-      "tier": null,
-      "property": null,
-      "state": null,
-      "owners": [
-        "THEME.responsive"
-      ],
-      "contributingSlots": [
-        "bithire:THEME.responsive.posture",
-        "bithire:THEME.responsive.schemaVersion"
-      ],
-      "rootExposure": null,
-      "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "sin raiz que refinar"
-    },
-    {
-      "channel": "--ds-posture-span-bias",
-      "rootId": null,
-      "via": null,
-      "evidence": {
-        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: THEME.responsive",
-        "coincidenceGuard": "no-value-match-used"
-      },
-      "tier": null,
-      "property": null,
-      "state": null,
-      "owners": [
-        "THEME.responsive"
-      ],
-      "contributingSlots": [
-        "bithire:THEME.responsive.posture",
-        "bithire:THEME.responsive.schemaVersion"
-      ],
-      "rootExposure": null,
-      "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "sin raiz que refinar"
-    },
-    {
       "channel": "--ds-radius-button",
-      "rootId": "radius.base",
-      "via": "declared-fallback",
+      "rootId": null,
+      "via": null,
       "evidence": {
-        "fallbackFrom": "--ds-radius-md",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/framework-token-projection/index.css:43",
-        "edgeClass": "decl-fallback",
-        "guardPrimary": "--ds-radius-button",
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.surfaces",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
@@ -3802,10 +3694,10 @@
         "evnto:THEME.surfaces.buttonStyle",
         "rottay:THEME.surfaces.buttonStyle"
       ],
-      "rootExposure": "tenant-dial",
-      "rootHasDerivationLaw": true,
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
       "step": null,
-      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+      "stepNote": "sin raiz que refinar"
     },
     {
       "channel": "--ds-radius-nest-inset",
@@ -4754,5 +4646,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "83a2f2ac8523f16178b726fed8ca5393c52ca8d0e351d9fe9d78c6f8cde9b50b"
+  "digest": "fa00017359255cb191a402d84a73cb9830b26e2c31a3e63e5a7693c79623c676"
 }

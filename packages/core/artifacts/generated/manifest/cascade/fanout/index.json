@@ -354138,7 +354138,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/data/widget-board/engines/foundation/index.tsx",
-          "line": 1449,
+          "line": 1526,
           "prop": "padding",
           "scalars": []
         }
