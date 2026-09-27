@@ -8,6 +8,7 @@ import {
   Flex,
   Grid,
   Heading,
+  I18nProvider,
   Popover,
   SemanticSurface,
   SemanticSurfaceSupport,
@@ -19,7 +20,6 @@ import {
   type TenantConfig,
   type SemanticSurfaceRole,
 } from "@rottay/design-system";
-import { I18nProvider } from "@rottay/design-system/runtime/i18n";
 
 import type {
   BrandLocaleEvidenceFixture,

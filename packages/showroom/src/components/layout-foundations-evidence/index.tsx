@@ -12,13 +12,13 @@ import {
   Flex,
   Grid,
   Heading,
+  I18nProvider,
   Space,
   Stack,
   Text,
   useTranslation,
   type TenantConfig,
 } from "@rottay/design-system";
-import { I18nProvider } from "@rottay/design-system/runtime/i18n";
 
 import type {
   BrandLocaleEvidenceFixture,
