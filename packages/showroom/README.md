@@ -27,7 +27,7 @@ Next.js 16 app that lives alongside `packages/core/` in the pnpm workspace.
 ```
 src/
   app/
-    page.tsx              Landing page (Tailwind, marketing exception)
+    page.tsx              Landing page
     (docs)/               Documentation shell
       foundations/         Tokens, themes, engines, icons
       primitives/          Generated component pages with live rendering
@@ -69,7 +69,7 @@ Uses `@rottay/design-system` as a `workspace:*` dependency:
 ## Tech Stack
 
 - **Framework**: Next.js 16 + React 19
-- **Styling**: Tailwind 4 (landing page only), DS components everywhere else
+- **Styling**: DS components and `@rottay/design-system` stylesheets; no Tailwind toolchain
 - **Types**: TypeScript 5.9
 - **Build**: webpack (Turbopack available via `dev:turbopack`)
 
