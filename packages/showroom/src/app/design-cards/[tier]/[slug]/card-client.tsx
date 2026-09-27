@@ -41,7 +41,7 @@ function resolvePreview(tier: string, slug: string) {
 export function CardClient({ tier, slug }: { tier: string; slug: string }) {
   const node = resolvePreview(tier, slug);
   const tenantConfig = getKnownTenantConfig(TENANT);
-  const productProfile = getShowroomProductProfileKey(TENANT, ENGINE);
+  const productProfile = getShowroomProductProfileKey(TENANT);
 
   return (
     <DesignSystemProvider

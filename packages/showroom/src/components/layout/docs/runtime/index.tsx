@@ -5,28 +5,51 @@ import {
   getShowroomProductProfileKey,
   ShowroomProvider,
   useShowroom,
+  type ShowroomSelection,
 } from '@/components/showroom-context';
+import type { DocsGroundStamps } from '../ground';
 import { DocsProviderShell } from '../provider';
 
-function DocsRuntimeInner({ children }: { children: ReactNode }) {
+function DocsRuntimeInner({
+  children,
+  stamps,
+}: {
+  children: ReactNode;
+  stamps: DocsGroundStamps;
+}) {
   const { engine, tenantSlug } = useShowroom();
-  const productProfile = getShowroomProductProfileKey(tenantSlug, engine);
+  const productProfile = getShowroomProductProfileKey(tenantSlug);
 
   return (
-    <DocsProviderShell
-      engine={engine}
-      tenantSlug={tenantSlug}
-      productProfile={productProfile}
-    >
-      {children}
-    </DocsProviderShell>
+    <>
+      <script
+        data-testid="docs-ground-stamp"
+        data-docs-tenant={tenantSlug}
+        dangerouslySetInnerHTML={{ __html: stamps[tenantSlug] }}
+      />
+      <DocsProviderShell
+        engine={engine}
+        tenantSlug={tenantSlug}
+        productProfile={productProfile}
+      >
+        {children}
+      </DocsProviderShell>
+    </>
   );
 }
 
-export function DocsRuntimeShell({ children }: { children: ReactNode }) {
+export function DocsRuntimeShell({
+  children,
+  stored,
+  stamps,
+}: {
+  children: ReactNode;
+  stored: ShowroomSelection;
+  stamps: DocsGroundStamps;
+}) {
   return (
-    <ShowroomProvider>
-      <DocsRuntimeInner>{children}</DocsRuntimeInner>
+    <ShowroomProvider stored={stored}>
+      <DocsRuntimeInner stamps={stamps}>{children}</DocsRuntimeInner>
     </ShowroomProvider>
   );
 }

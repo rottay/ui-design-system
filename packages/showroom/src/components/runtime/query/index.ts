@@ -4,11 +4,15 @@ import {
   isImplementedEngineName,
   type ImplementedEngineName,
 } from '@rottay/design-system';
+import {
+  isShowroomTenant as isCatalogTenant,
+  type ShowroomTenant,
+} from '@/components/showroom-context/catalog';
 
-export const SHOWROOM_TENANTS = ['rottay', 'bithire', 'evnto'] as const;
+export { SHOWROOM_TENANTS } from '@/components/showroom-context/catalog';
 
 export type RuntimeQueryEngine = ImplementedEngineName;
-export type RuntimeQueryTenant = (typeof SHOWROOM_TENANTS)[number];
+export type RuntimeQueryTenant = ShowroomTenant;
 
 export function isShowroomEngine(
   value: string | null
@@ -19,7 +23,7 @@ export function isShowroomEngine(
 export function isShowroomTenant(
   value: string | null
 ): value is RuntimeQueryTenant {
-  return value === 'rottay' || value === 'bithire' || value === 'evnto';
+  return isCatalogTenant(value);
 }
 
 export function readShowroomRuntimeOverride(rawSearch: string) {

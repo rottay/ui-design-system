@@ -1,4 +1,5 @@
 import type { ShowroomEngine, ShowroomTheme } from '@/components/showroom-context';
+import { SHOWROOM_CATALOG, SHOWROOM_TENANTS } from '@/components/showroom-context/catalog';
 
 export interface PreviewOption<T extends string> {
   key: T;
@@ -32,29 +33,10 @@ export const ENGINE_OPTIONS: PreviewOption<ShowroomEngine>[] = [
   },
 ];
 
-export const THEME_OPTIONS: PreviewOption<ShowroomTheme>[] = [
-  {
-    key: 'rottay',
-    label: 'Rottay',
-    shortLabel: 'RT',
-    accent: 'var(--ds-color-primary-500)',
-    hint: 'Flagship admin baseline powered by the Rottay tenant and rottay vertical preset.',
-  },
-  {
-    key: 'bithire',
-    label: 'BitHire',
-    shortLabel: 'BH',
-    accent: '#4f46e5',
-    hint: 'Recruiting tenant layered with the BitHire vertical defaults.',
-  },
-  {
-    key: 'evnto',
-    label: 'Evnto',
-    shortLabel: 'EV',
-    accent: '#db2777',
-    hint: 'Event product tenant layered with the Evnto vertical defaults.',
-  },
-];
+export const THEME_OPTIONS: PreviewOption<ShowroomTheme>[] = SHOWROOM_TENANTS.map((key) => {
+  const { name, shortLabel, accent, hint } = SHOWROOM_CATALOG[key];
+  return { key, label: name, shortLabel, accent, hint };
+});
 
 export function getPreviewOption<T extends string>(
   options: PreviewOption<T>[],

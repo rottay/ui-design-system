@@ -1,12 +1,13 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import {
   createContext,
   useCallback,
   useContext,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useState,
   type ReactNode,
 } from 'react';
@@ -14,94 +15,44 @@ import type { ProductProfileKey } from '@rottay/design-system';
 
 import {
   applyShowroomRuntimeQuery,
-  isShowroomEngine as isShowroomEngineValue,
-  isShowroomTenant as isShowroomTenantValue,
   readShowroomRuntimeOverride,
   type RuntimeQueryEngine,
-  type RuntimeQueryTenant,
 } from '@/components/runtime/query';
 
-export type ShowroomEngine = RuntimeQueryEngine;
-export type ShowroomTenant = RuntimeQueryTenant;
-export type ShowroomTheme = ShowroomTenant;
-export type ShowroomVertical = 'rottay' | 'bithire' | 'evnto';
+import {
+  DEFAULT_SHOWROOM_TENANT,
+  ENGINE_COOKIE,
+  SHOWROOM_CATALOG,
+  TENANT_COOKIE,
+  type ShowroomTenant,
+  type ShowroomVertical,
+} from './catalog';
 
-const ENGINE_STORAGE_KEY = 'rottay-showroom-engine';
-const THEME_STORAGE_KEY = 'rottay-showroom-theme';
+export type ShowroomEngine = RuntimeQueryEngine;
+export type { ShowroomTenant, ShowroomVertical };
+export type ShowroomTheme = ShowroomTenant;
+
+/** The reader's remembered choice, as the server read it from the request cookies. */
+export interface ShowroomSelection {
+  readonly tenant: ShowroomTenant | null;
+  readonly engine: ShowroomEngine | null;
+}
+
+const NO_SELECTION: ShowroomSelection = { tenant: null, engine: null };
+const DEFAULT_ENGINE: ShowroomEngine = 'modern';
 const useIsomorphicLayoutEffect =
   typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
-function isShowroomTheme(value: string | null): value is ShowroomTheme {
-  return isShowroomTenantValue(value);
-}
-
-function readRuntimeOverrideFromLocation() {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-
-  return readShowroomRuntimeOverride(window.location.search);
-}
-
-function getInitialEngine(): ShowroomEngine {
-  const runtimeOverride = readRuntimeOverrideFromLocation();
-  if (runtimeOverride?.engine) {
-    return runtimeOverride.engine;
-  }
-
-  if (typeof window === 'undefined') {
-    return 'modern' satisfies ShowroomEngine;
-  }
-
-  try {
-    const storedEngine = window.localStorage.getItem(ENGINE_STORAGE_KEY);
-    return isShowroomEngineValue(storedEngine) ? storedEngine : 'modern';
-  } catch {
-    return 'modern';
-  }
-}
-
-function getInitialTenant(): ShowroomTheme {
-  const runtimeOverride = readRuntimeOverrideFromLocation();
-  if (runtimeOverride?.tenantSlug) {
-    return runtimeOverride.tenantSlug;
-  }
-
-  if (typeof window === 'undefined') {
-    return 'rottay' satisfies ShowroomTheme;
-  }
-
-  try {
-    const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-    return isShowroomTheme(storedTheme) ? storedTheme : 'rottay';
-  } catch {
-    return 'rottay';
-  }
+function writeSelectionCookie(name: string, value: string) {
+  document.cookie = `${name}=${value}; path=/; max-age=31536000; samesite=lax`;
 }
 
 export function getShowroomVerticalKey(tenantSlug: ShowroomTenant): ShowroomVertical {
-  switch (tenantSlug) {
-    case 'bithire':
-      return 'bithire';
-    case 'evnto':
-      return 'evnto';
-    case 'rottay':
-    default:
-      return 'rottay';
-  }
+  return (SHOWROOM_CATALOG[tenantSlug] ?? SHOWROOM_CATALOG[DEFAULT_SHOWROOM_TENANT]).vertical;
 }
 
-export function getShowroomProductProfileKey(
-  tenantSlug: ShowroomTenant,
-  engine: ShowroomEngine
-): ProductProfileKey {
-  const meta = SHOWROOM_RUNTIME_META[tenantSlug];
-  const useModernProfile =
-    tenantSlug === 'rottay' && engine === 'modern' && meta.modernProfileKey;
-
-  return useModernProfile
-    ? meta.modernProfileKey ?? meta.defaultProfileKey
-    : meta.defaultProfileKey;
+export function getShowroomProductProfileKey(tenantSlug: ShowroomTenant): ProductProfileKey {
+  return (SHOWROOM_CATALOG[tenantSlug] ?? SHOWROOM_CATALOG[DEFAULT_SHOWROOM_TENANT]).profileKey;
 }
 
 interface ShowroomContextValue {
@@ -109,131 +60,45 @@ interface ShowroomContextValue {
   setEngine: (e: ShowroomEngine) => void;
   tenantSlug: ShowroomTheme;
   setTenantSlug: (s: ShowroomTheme) => void;
+  /** What a link carries forward: the explicit choice only, never the defaults. */
+  linkQuery: ShowroomSelection;
 }
 
 const ShowroomContext = createContext<ShowroomContextValue>({
-  engine: 'modern',
+  engine: DEFAULT_ENGINE,
   setEngine: () => {},
-  tenantSlug: 'rottay',
+  tenantSlug: DEFAULT_SHOWROOM_TENANT,
   setTenantSlug: () => {},
+  linkQuery: NO_SELECTION,
 });
 
-// The profile keys are `ProductProfileKey`, not `string`. The union is closed
-// on purpose -- the presets registry resolves fail-closed, so an unbacked key
-// is never PAINTED, it silently falls back to the default profile. Typing this
-// table as `string` moved that silence into the showroom: a stale `platform.*`
-// spelling would have type-checked here and then rendered the wrong profile
-// with nothing to observe. Now it is a compile error at the table.
-const SHOWROOM_RUNTIME_META: Record<
-  ShowroomTenant,
-  {
-    tenantName: string;
-    verticalKey: ShowroomVertical;
-    verticalLabel: string;
-    defaultProfileKey: ProductProfileKey;
-    defaultProfileLabel: string;
-    modernProfileKey?: ProductProfileKey;
-    modernProfileLabel?: string;
-  }
-> = {
-  rottay: {
-    tenantName: 'Rottay',
-    verticalKey: 'rottay',
-    verticalLabel: 'Rottay',
-    defaultProfileKey: 'rottay.admin',
-    defaultProfileLabel: 'Rottay Admin',
-    modernProfileKey: 'rottay.flagship',
-    modernProfileLabel: 'Rottay Flagship',
-  },
-  bithire: {
-    tenantName: 'BitHire',
-    verticalKey: 'bithire',
-    verticalLabel: 'BitHire',
-    defaultProfileKey: 'recruiting.operator',
-    defaultProfileLabel: 'Recruiting Operator',
-  },
-  evnto: {
-    tenantName: 'Evnto',
-    verticalKey: 'evnto',
-    verticalLabel: 'Evnto',
-    defaultProfileKey: 'events.organizer',
-    defaultProfileLabel: 'Events Organizer',
-  },
-};
+/** Resolves only from what the server render also sees (the query and the cookie choice), so
+ *  the first client render equals the served HTML. */
+export function ShowroomProvider({
+  children,
+  stored = NO_SELECTION,
+}: {
+  children: ReactNode;
+  stored?: ShowroomSelection;
+}) {
+  const searchParams = useSearchParams();
+  const override = readShowroomRuntimeOverride(searchParams?.toString() ?? '');
+  const [remembered, setRemembered] = useState<ShowroomSelection>(stored);
 
-export function ShowroomProvider({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
-  const [engine, setEngine] = useState<ShowroomEngine>(getInitialEngine);
-  const [tenantSlug, setTenantSlug] = useState<ShowroomTheme>(getInitialTenant);
+  const tenantSlug = override.tenantSlug ?? remembered.tenant ?? DEFAULT_SHOWROOM_TENANT;
+  const engine = override.engine ?? remembered.engine ?? DEFAULT_ENGINE;
+  const linkTenant = override.tenantSlug ?? remembered.tenant;
+  const linkEngine = override.engine ?? remembered.engine;
 
   useEffect(() => {
-    function syncFromLocation() {
-      const runtimeOverride = readRuntimeOverrideFromLocation();
-
-      if (runtimeOverride?.engine || runtimeOverride?.tenantSlug) {
-        if (runtimeOverride.engine) {
-          setEngine(runtimeOverride.engine);
-        }
-
-        if (runtimeOverride.tenantSlug) {
-          setTenantSlug(runtimeOverride.tenantSlug);
-        }
-
-        try {
-          if (runtimeOverride.engine) {
-            window.localStorage.setItem(ENGINE_STORAGE_KEY, runtimeOverride.engine);
-          }
-
-          if (runtimeOverride.tenantSlug) {
-            window.localStorage.setItem(THEME_STORAGE_KEY, runtimeOverride.tenantSlug);
-          }
-        } catch {
-          // Ignore storage failures so query-param forcing still works.
-        }
-
-        return;
-      }
-
-      try {
-        const storedEngine = window.localStorage.getItem(ENGINE_STORAGE_KEY);
-        const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-
-        if (isShowroomEngineValue(storedEngine)) {
-          setEngine(storedEngine);
-        }
-
-        if (isShowroomTheme(storedTheme)) {
-          setTenantSlug(storedTheme);
-        }
-      } catch {
-        // Fail open to in-memory defaults when storage is blocked.
-      }
-    }
-
-    syncFromLocation();
-    window.addEventListener('popstate', syncFromLocation);
-    window.addEventListener('showroom-runtime-change', syncFromLocation);
-
-    return () => {
-      window.removeEventListener('popstate', syncFromLocation);
-      window.removeEventListener('showroom-runtime-change', syncFromLocation);
-    };
-  }, []);
-
-  useEffect(() => {
-    const runtimeOverride = readRuntimeOverrideFromLocation();
-
-    if (runtimeOverride?.engine && runtimeOverride.engine !== engine) {
-      setEngine(runtimeOverride.engine);
-    }
-
-    if (
-      runtimeOverride?.tenantSlug &&
-      runtimeOverride.tenantSlug !== tenantSlug
-    ) {
-      setTenantSlug(runtimeOverride.tenantSlug);
-    }
-  }, [engine, pathname, tenantSlug]);
+    if (!override.tenantSlug && !override.engine) return;
+    if (override.tenantSlug) writeSelectionCookie(TENANT_COOKIE, override.tenantSlug);
+    if (override.engine) writeSelectionCookie(ENGINE_COOKIE, override.engine);
+    setRemembered((current) => ({
+      tenant: override.tenantSlug ?? current.tenant,
+      engine: override.engine ?? current.engine,
+    }));
+  }, [override.tenantSlug, override.engine]);
 
   useIsomorphicLayoutEffect(() => {
     document.documentElement.setAttribute('data-showroom-engine', engine);
@@ -245,66 +110,45 @@ export function ShowroomProvider({ children }: { children: ReactNode }) {
     };
   }, [engine, tenantSlug]);
 
-  const syncRuntimeUrl = useCallback(
-    (nextTenantSlug: ShowroomTheme, nextEngine: ShowroomEngine) => {
-      if (typeof window === 'undefined') {
-        return;
-      }
+  const select = useCallback((next: ShowroomSelection) => {
+    if (next.tenant) writeSelectionCookie(TENANT_COOKIE, next.tenant);
+    if (next.engine) writeSelectionCookie(ENGINE_COOKIE, next.engine);
+    setRemembered((current) => ({
+      tenant: next.tenant ?? current.tenant,
+      engine: next.engine ?? current.engine,
+    }));
 
-      const currentHref = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-      const nextHref = applyShowroomRuntimeQuery(
-        currentHref,
-        nextTenantSlug,
-        nextEngine,
-        { replaceExisting: true }
-      );
+    const currentHref = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    const nextHref = applyShowroomRuntimeQuery(currentHref, next.tenant, next.engine, {
+      replaceExisting: true,
+    });
+    if (nextHref !== currentHref) {
+      window.history.replaceState(window.history.state, '', nextHref);
+      window.dispatchEvent(new Event('showroom-runtime-change'));
+    }
+  }, []);
 
-      if (nextHref !== currentHref) {
-        window.history.replaceState(window.history.state, '', nextHref);
-        window.dispatchEvent(new Event('showroom-runtime-change'));
-      }
-    },
-    []
+  const setEngine = useCallback(
+    (value: ShowroomEngine) => select({ tenant: tenantSlug, engine: value }),
+    [select, tenantSlug],
+  );
+  const setTenantSlug = useCallback(
+    (value: ShowroomTheme) => select({ tenant: value, engine }),
+    [engine, select],
   );
 
-  const handleSetEngine = useCallback(
-    (value: ShowroomEngine) => {
-      setEngine(value);
-      syncRuntimeUrl(tenantSlug, value);
-      try {
-        window.localStorage.setItem(ENGINE_STORAGE_KEY, value);
-      } catch {
-        // Ignore storage failures so the showroom remains navigable.
-      }
-    },
-    [syncRuntimeUrl, tenantSlug]
+  const value = useMemo<ShowroomContextValue>(
+    () => ({
+      engine,
+      setEngine,
+      tenantSlug,
+      setTenantSlug,
+      linkQuery: { tenant: linkTenant, engine: linkEngine },
+    }),
+    [engine, setEngine, tenantSlug, setTenantSlug, linkTenant, linkEngine],
   );
 
-  const handleSetTenantSlug = useCallback(
-    (value: ShowroomTheme) => {
-      setTenantSlug(value);
-      syncRuntimeUrl(value, engine);
-      try {
-        window.localStorage.setItem(THEME_STORAGE_KEY, value);
-      } catch {
-        // Ignore storage failures so the showroom remains navigable.
-      }
-    },
-    [engine, syncRuntimeUrl]
-  );
-
-  return (
-    <ShowroomContext.Provider
-      value={{
-        engine,
-        setEngine: handleSetEngine,
-        tenantSlug,
-        setTenantSlug: handleSetTenantSlug,
-      }}
-    >
-      {children}
-    </ShowroomContext.Provider>
-  );
+  return <ShowroomContext.Provider value={value}>{children}</ShowroomContext.Provider>;
 }
 
 export function useShowroom() {
@@ -313,19 +157,15 @@ export function useShowroom() {
 
 export function useShowroomRuntime() {
   const { engine, tenantSlug } = useShowroom();
-  const meta = SHOWROOM_RUNTIME_META[tenantSlug];
-  const productProfileKey = getShowroomProductProfileKey(tenantSlug, engine);
-  const useModernProfile = productProfileKey === meta.modernProfileKey;
+  const entry = SHOWROOM_CATALOG[tenantSlug];
 
   return {
     engine,
-    tenantName: meta.tenantName,
+    tenantName: entry.name,
     tenantSlug,
-    verticalKey: meta.verticalKey,
-    verticalLabel: meta.verticalLabel,
-    productProfileKey,
-    productProfileLabel: useModernProfile
-      ? meta.modernProfileLabel ?? meta.defaultProfileLabel
-      : meta.defaultProfileLabel,
+    verticalKey: entry.vertical,
+    verticalLabel: entry.name,
+    productProfileKey: entry.profileKey,
+    productProfileLabel: entry.profileLabel,
   };
 }
