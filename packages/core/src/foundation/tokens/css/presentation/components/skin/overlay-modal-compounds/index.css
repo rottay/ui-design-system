@@ -14,7 +14,7 @@
  * verbatim, so the rename moved these selectors off the only elements that
  * could ever have carried them. The feedback compounds emit
  * `rottay-modal-{header,body,footer}` and `rottay-modal-close`; nothing in
- * packages/core, the Showroom, or any app emits the four classes below.
+ * packages/core, the Showroom, or any app emits the classes below.
  * The shim tree is now retired, which makes that permanent.
  *
  * It still ships from base.css and styles.css because its four
@@ -37,17 +37,6 @@
  * `data-divider` carries the compounds' `divider` prop (default `false`), whose
  * false branch painted an explicit `none` — reproduced here rather than omitted.
  */
-
-/* ---- Modal.Header + its title ---- */
-.rottay-overlay-modal-header.rottay-overlay-modal-header[data-part='header'][data-part='header'][data-divider='true'] {
-  border-bottom: 1px solid var(--ds-modal-header-border, rgba(0, 0, 0, 0.1));
-}
-.rottay-overlay-modal-header.rottay-overlay-modal-header[data-part='header'][data-part='header'][data-divider='false'] {
-  border-bottom: none;
-}
-.rottay-overlay-modal-header[data-part='header'] > [data-part='title'] {
-  color: var(--ds-modal-title-color, inherit);
-}
 
 /* ---- Modal.Body ---- */
 .rottay-overlay-modal-body[data-part='body'] {
