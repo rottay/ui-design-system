@@ -18700,7 +18700,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 
 /* Engine-specific themes */
 /* Document-root text and link paint every engine renders, plus the antd QR code the
-   Modern engine mounts. Engine-neutral: no frozen-engine bundle owns it. */
+   Modern engine mounts. Engine-neutral: no frozen-engine bundle owns it. The bridge-era
+   channel names the frozen originals read (--ds-link-color*, --ds-link-decoration*,
+   --ds-qrcode-border, --ds-qrcode-radius) have no writer anywhere, so every one of those
+   declarations dropped at computed-value time -- the rules painted exactly what they paint
+   without them, and the frozen engines' verbatim copies keep their historical inertness. */
 
 html[data-tenant] {
   font-family: var(--ds-font-family-base);
@@ -18710,26 +18714,12 @@ html[data-tenant] {
 }
 
 html[data-tenant] .ant-qrcode {
-  border-color: var(--ds-qrcode-border);
-  border-radius: var(--ds-qrcode-radius);
+  border-color: currentColor;
 }
 
 html[data-tenant] a,
 html[data-tenant] .ant-typography a {
-  color: var(--ds-link-color);
-  text-decoration: var(--ds-link-decoration);
   transition: var(--ds-transition-fast);
-}
-
-html[data-tenant] a:hover,
-html[data-tenant] .ant-typography a:hover {
-  color: var(--ds-link-color-hover);
-  text-decoration: var(--ds-link-decoration-hover);
-}
-
-html[data-tenant] a:active,
-html[data-tenant] .ant-typography a:active {
-  color: var(--ds-link-color-active);
 }
 
 /**
@@ -81905,9 +81895,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* ---- move mode: the whole board reads as a grab surface, outranking the
         Button primitive's `cursor: pointer` (0,3,0, this layer) through the
-        always-stamped data-loading hook — no `!important`, no double. ---- */
+        always-stamped data-loading hook — no `!important`, no double. The
+        `:not(.ds-engine-modern)` arm keeps that win on Classic/Rustic boards,
+        whose control skins load later from the frozen-engine bundle. ---- */
 .ds-pattern-widget-board[data-part='root'][data-moving='true'][data-loading],
 .ds-pattern-widget-board[data-part='root'][data-moving='true'][data-loading]
+  *,
+.ds-pattern-widget-board[data-part='root'][data-moving='true'][data-loading]:not(.ds-engine-modern)
   * {
   cursor: grabbing;
   user-select: none;
