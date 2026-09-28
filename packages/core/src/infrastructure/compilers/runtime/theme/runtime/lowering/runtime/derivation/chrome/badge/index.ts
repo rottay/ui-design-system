@@ -98,6 +98,7 @@ export const badgeChromeDeriver: FamilyDeriver = {
     "--ds-badge-pill-radius",
     "--ds-badge-position-transform",
     "--ds-badge-press-transform",
+    "--ds-badge-radius-sm",
     "--ds-badge-remove-bg",
     "--ds-badge-remove-border",
     "--ds-badge-remove-border-width",
@@ -249,6 +250,7 @@ export function deriveBadgeChannels(): Record<string, string> {
   vars["--ds-badge-pill-radius"] = "var(--ds-badge-radius, var(--ds-radius-full))";
   vars["--ds-badge-position-transform"] = "translateY(0)";
   vars["--ds-badge-press-transform"] = "translateY(0) scale(0.985)";
+  vars["--ds-badge-radius-sm"] = "var(--ds-radius-sm)";
   vars["--ds-badge-remove-bg"] = "color-mix(in srgb, currentColor 6%, transparent)";
   vars["--ds-badge-remove-border"] = "color-mix(in srgb, currentColor 16%, transparent)";
   vars["--ds-badge-remove-border-width"] = "var(--ds-edge-hairline-width, 1px)";

@@ -30,6 +30,8 @@ const markup = [
   `<div id="chip">${badge({ kind: 'chip' }, 'Chip')}</div>`,
   `<div id="counted">${badge({ kind: 'chip', count: 7 }, 'Inbox')}</div>`,
   `<div id="dotted">${badge({ dot: true }, 'Live')}</div>`,
+  `<div id="square">${badge({ radius: 'sm' }, 'Square')}</div>`,
+  `<div id="oracle" style="border-radius: var(--ds-radius-sm)"></div>`,
 ].join('');
 
 const SOLID = "#solid [data-part='root']";
@@ -37,6 +39,8 @@ const CHIP = "#chip [data-part='root']";
 const COUNT = "#counted [data-part='count']";
 // An indicator badge IS the dot: the root wears it, there is no child part.
 const DOT = "#dotted [data-part='root'][data-dot='true']";
+// The step a square badge shape resolves to: it rides the tenant's own radius ramp.
+const SQUARE = "#square [data-part='root']";
 
 describeCausality({
   family: 'badge',
@@ -46,12 +50,15 @@ describeCausality({
     { id: 'chipPad', selector: CHIP, property: 'padding-left' },
     { id: 'countFill', selector: COUNT, property: 'background-color' },
     { id: 'dotSize', selector: DOT, property: 'width' },
+    { id: 'squareCorner', selector: SQUARE, property: 'border-top-left-radius' },
   ],
   decisions: {
     // The palette reaches the tone the chip wears, and leaves its geometry alone.
     'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['solidFill'], holds: 'chipPad', in: VERTICALS },
     // Density reaches the chip's own inline room, and not its fill.
     'density.mode': { value: 'spacious', moves: ['chipPad'], holds: 'solidFill', in: VERTICALS },
+    // The radius dial reaches the square step's corner, and not the fill.
+    'shape.radius-scale': { value: 1.2, moves: ['squareCorner'], holds: 'solidFill', in: VERTICALS },
   },
 });
 
@@ -93,6 +100,23 @@ describe('badge derived channels and accessibility', () => {
     expect(Number.parseFloat(r.countCorner)).toBeGreaterThan(0);
     // The indicator is a dot with a real diameter, not a collapsed box.
     expect(Number.parseFloat(r.dotSize)).toBeGreaterThan(0);
+  }, 120_000);
+
+  it('paints the square step at the tenant radius-sm, in every vertical', async () => {
+    for (const vertical of VERTICALS) {
+      const r = (
+        await measureArms({
+          vertical,
+          markup,
+          arms: { base: {} },
+          targets: [
+            { id: 'corner', selector: SQUARE, property: 'border-top-left-radius' },
+            { id: 'oracle', selector: '#oracle', property: 'border-top-left-radius' },
+          ],
+        })
+      ).base!;
+      expect(r.corner, vertical).toBe(r.oracle);
+    }
   }, 120_000);
 
   it('carries no serious axe finding beyond the pinned debt', async () => {
