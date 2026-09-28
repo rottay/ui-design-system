@@ -29,14 +29,14 @@ const EXPECTED_TENANT: Record<Source, string> = {
  * capability's own evidence file, not a wrapper the probe invented.
  */
 const CONSUMERS = {
-  button: "[data-testid='wc-header'] .rottay-button.rottay-button--modern[data-variant='primary']",
+  button: "[data-testid='wc-header'] .ds-button.ds-button--modern[data-variant='primary']",
   // The header cell is the box that carries the header paint. It exists only
   // when the table renders its real header: with `autoMobileCards` left at its
   // default the table switched to the mobile-card renderer and no header
   // existed at all, which is why the probe pins that prop.
   tableHeader: "[data-testid='wc-table'] [data-part='header-cell']",
   heading: "[data-testid='wc-header'] [data-part='title']",
-  sidebar: "[data-testid='wc-sidebar'] .rottay-menu",
+  sidebar: "[data-testid='wc-sidebar'] .ds-menu",
 } as const;
 
 async function open(page: Page, query: string): Promise<void> {

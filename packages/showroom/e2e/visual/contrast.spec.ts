@@ -118,7 +118,7 @@ const CONTROLS: readonly {
     name: 'primary button',
     selectors: {
       classic: '[data-testid="probe-button"] .ant-btn-primary',
-      modern: '[data-testid="probe-button"] .rottay-button--primary',
+      modern: '[data-testid="probe-button"] .ds-button--primary',
       rustic: '[data-testid="probe-button"] .rottay-button--primary',
     },
   },

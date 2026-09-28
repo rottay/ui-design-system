@@ -100,10 +100,10 @@ interface Probe {
 const PROBES: readonly Probe[] = [
   // Button — VARIANT_STYLES drives bg/color per variant; radius resolves
   // --ds-radius-button, which the foundation aliases onto --ds-radius-md.
-  { key: 'button/primary/background-color', selector: '[data-testid="probe-button"] .rottay-button--primary', property: 'background-color', themePath: 'chrome.controls.buttonPrimary.bg', kind: 'color' },
-  { key: 'button/primary/color', selector: '[data-testid="probe-button"] .rottay-button--primary', property: 'color', themePath: 'chrome.controls.buttonPrimary.color', kind: 'color' },
-  { key: 'button/primary/border-radius', selector: '[data-testid="probe-button"] .rottay-button--primary', property: 'border-top-left-radius', themePath: 'surfaces.borderRadius.md', kind: 'length' },
-  { key: 'button/secondary/background-color', selector: '[data-testid="probe-button"] .rottay-button--secondary', property: 'background-color', themePath: 'chrome.controls.buttonSecondary.bg', kind: 'color' },
+  { key: 'button/primary/background-color', selector: '[data-testid="probe-button"] .ds-button--primary', property: 'background-color', themePath: 'chrome.controls.buttonPrimary.bg', kind: 'color' },
+  { key: 'button/primary/color', selector: '[data-testid="probe-button"] .ds-button--primary', property: 'color', themePath: 'chrome.controls.buttonPrimary.color', kind: 'color' },
+  { key: 'button/primary/border-radius', selector: '[data-testid="probe-button"] .ds-button--primary', property: 'border-top-left-radius', themePath: 'surfaces.borderRadius.md', kind: 'length' },
+  { key: 'button/secondary/background-color', selector: '[data-testid="probe-button"] .ds-button--secondary', property: 'background-color', themePath: 'chrome.controls.buttonSecondary.bg', kind: 'color' },
 
   // Input — the Default cell's bare input paints its own shell (no addons).
   { key: 'input/default/background-color', selector: '[data-testid="probe-input"] input', property: 'background-color', themePath: 'chrome.controls.input.bg', kind: 'color' },
@@ -156,8 +156,8 @@ const PROBES: readonly Probe[] = [
   { key: 'tabs/list/border-color', selector: '[data-testid="probe-tabs"] [role="tablist"]', property: 'border-bottom-color', themePath: 'chrome.tabs.border', kind: 'color' },
 
   // Modal — portaled, so it is selected at document scope after being opened.
-  { key: 'modal/dialog/background-color', selector: '[role="dialog"]', property: 'background-color', themePath: 'chrome.modal.bg', kind: 'color', requiresModal: true },
-  { key: 'modal/dialog/border-radius', selector: '[role="dialog"]', property: 'border-top-left-radius', themePath: 'surfaces.borderRadius.lg', kind: 'length', requiresModal: true },
+  { key: 'modal/dialog/background-color', selector: ".ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface']", property: 'background-color', themePath: 'chrome.modal.bg', kind: 'color', requiresModal: true },
+  { key: 'modal/dialog/border-radius', selector: ".ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface']", property: 'border-top-left-radius', themePath: 'surfaces.borderRadius.lg', kind: 'length', requiresModal: true },
 
   // Toast — the modern engine's `default` variant has no chrome.toast.*
   // FlatTheme section of its own (WO-ENG-21), so it reads the card surface
@@ -276,11 +276,12 @@ async function readProbes(page: Page, probes: Probe[]): Promise<Readings> {
 // --- page driving -----------------------------------------------------------
 
 /**
- * The DOM is ground truth over any screenshot. TenantProvider writes
- * `data-tenant` and ThemeProvider injects the compiled tenant CSS as
- * `<style id="ds-chrome-<slug>">`, both in effects after hydration, so a page
- * that has already painted its heading can still be showing the default
- * palette. Those two DOM facts are the causal signal that the tenant is live.
+ * The DOM is ground truth over any screenshot. The provider claims
+ * `data-tenant` after hydration; a dynamic fixture then either mounts its
+ * admitted CSS (`torture-legacy-brand-style`) or renders the admission door's
+ * refusal (`torture-admission-refusal`). A refused fixture has no CSS to
+ * measure, so it fails here by name instead of measuring the default palette.
+ * Bundled tenants (rottay) publish no brand theme and ship their CSS bundled.
  *
  * Ground LUMINANCE cannot serve as that signal here: the app canvas
  * (--ds-color-bg-primary) is not a FlatTheme channel. A dynamic tenant's
@@ -293,20 +294,31 @@ async function gotoFixture(page: Page, fixture: Fixture, extraParams = ''): Prom
   await page.goto(`/probe/whitelabel-torture?fixture=${fixture}${extraParams}`, { waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: /whitelabel torture/i }).waitFor({ timeout: 30_000 });
 
+  const dynamic = fixture !== 'rottay';
   await page.waitForFunction(
     ({ slug, dynamic }: { slug: string; dynamic: boolean }) => {
       if (document.documentElement.getAttribute('data-tenant') !== slug) return false;
-      // The surface publishes the active fixture's FlatTheme in the same commit
-      // that mounts the providers, so its presence pairs with the tenant attrs.
-      if (!(window as Window & { __probeBrandTheme?: unknown }).__probeBrandTheme) return false;
-      // Bundled tenants (rottay) get their variables from the static styles
-      // bundle and never emit a chrome style tag; dynamic tenants must have one.
-      if (dynamic && !document.getElementById(`ds-chrome-${slug}`)) return false;
+      if (dynamic) {
+        if (!(window as Window & { __probeBrandTheme?: unknown }).__probeBrandTheme) return false;
+        const settled = document.querySelector(
+          '[data-testid="torture-legacy-brand-style"], [data-testid="torture-admission-refusal"]',
+        );
+        if (!settled) return false;
+      }
       return window.getComputedStyle(document.documentElement).getPropertyValue('--ds-button-primary-bg').trim().length > 0;
     },
-    { slug: fixture, dynamic: fixture !== 'rottay' },
+    { slug: fixture, dynamic },
     { timeout: 20_000 },
   );
+
+  if (dynamic) {
+    const refusal = await page.evaluate(
+      () =>
+        document.querySelector('[data-testid="torture-admission-refusal"]')?.getAttribute('data-torture-admission') ?? null,
+    );
+    expect(refusal, `${fixture} was refused by the admission door, so it has no CSS to measure`).toBeNull();
+    await expect(page.locator('[data-testid="torture-legacy-brand-style"]')).toHaveCount(1);
+  }
 
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(300);

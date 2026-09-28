@@ -161,13 +161,9 @@ for (const engine of ENGINES) {
     const container = await openProbe(page, 'rottay', engine);
     await container.locator('[data-testid="probe-overlayfb-toast-trigger"]').click();
 
-    // Toast.Container is the only component in this batch that portals per
-    // its own engine-agnostic stacking layer (not per Modal/Toast-root
-    // engine); its class name predates this checkpoint and is the anchor a
-    // live personality.css rule already targets, so it is used here instead
-    // of the new data-part to keep the locator resilient to that external
-    // dependency.
-    const stackContainer = page.locator('.rottay-toast-container');
+    // Under Modern, Toast.Container renders the Notifier stack; the frozen
+    // engines keep their own rottay-toast-container markup.
+    const stackContainer = page.locator(engine === 'modern' ? '.ds-notifier-stack' : '.rottay-toast-container');
     await stackContainer.waitFor({ timeout: 10_000 });
     await page.waitForTimeout(300);
 

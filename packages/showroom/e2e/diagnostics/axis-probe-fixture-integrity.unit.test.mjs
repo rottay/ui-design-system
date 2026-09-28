@@ -25,7 +25,7 @@ import { familyElements } from '../../../core/scripts/check/theme/axis-differenc
  *
  * WHAT IS PINNED AND WHY. Seven fixtures carry a class no literal in the corpus
  * contains, because the component COMPOSES it at runtime from a base name and
- * the engine suffix (`rottay-button` + `--modern`). They are named here so the
+ * the engine suffix (`ds-button` + `--modern`). They are named here so the
  * list can only shrink, and so a genuinely invented selector -- the defect this
  * file exists for -- cannot hide among them.
  */
@@ -35,12 +35,14 @@ const COMPONENT_ROOT = path.join(CORE_ROOT, 'src/components');
 
 /** class/attribute tokens the corpus composes rather than spells. */
 const COMPOSED_TOKENS = new Map([
-  ['button', ['rottay-button--modern']],
-  ['button-icon', ['rottay-button--modern']],
+  ['button', ['ds-button--modern']],
+  ['button-icon', ['ds-button--modern']],
   ['card', ['ds-card--modern']],
-  ['tabs', ['rottay-tabs--modern']],
+  ['tabs', ['ds-tabs--modern']],
   ['upload', ['ds-upload--picture-card']],
-  ['overlay-modal-compounds', ['rottay-overlay-modal-header']],
+  // The header rules retired in 1e12293c3 (a live second authority paints ds-modal-header);
+  // the fixture now lands on the footer rule, which still ships until the token drain wave.
+  ['overlay-modal-compounds', ['rottay-overlay-modal-footer']],
   ['surface-accent-bar', ['ds-accent-bar']],
 ]);
 

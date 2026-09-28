@@ -534,7 +534,7 @@ test.describe('K1 lane keyboard evidence', () => {
 
     await test.step('alert dismiss: ring + Enter unmounts the first alert', async () => {
       const action = '[data-testid="lc-alert"] [data-part="action"]';
-      const shells = '[data-testid="lc-alert"] .rottay-alert-shell';
+      const shells = '[data-testid="lc-alert"] .ds-alert';
       await expect(page.locator(shells)).toHaveCount(2);
       await tabUntil(page, action);
       await expectActiveElement(page, action);
@@ -545,7 +545,7 @@ test.describe('K1 lane keyboard evidence', () => {
 
     await test.step('callout dismiss: ring + Enter unmounts the first callout', async () => {
       const close = '[data-testid="lc-callout"] [data-part="close-button"]';
-      const shells = '[data-testid="lc-callout"] .rottay-callout-shell';
+      const shells = '[data-testid="lc-callout"] .ds-alert';
       await expect(page.locator(shells)).toHaveCount(2);
       await tabUntil(page, close);
       await expectActiveElement(page, close);

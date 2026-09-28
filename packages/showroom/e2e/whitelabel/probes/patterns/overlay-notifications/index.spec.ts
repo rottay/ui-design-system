@@ -203,7 +203,7 @@ for (const source of SOURCES) {
 const DROPDOWN_TRIGGER = '[data-testid="k4a-dropdown-start"] button';
 const CONTEXTMENU_AREA = '[data-testid="k4a-contextmenu"]';
 const HOVERCARD_TRIGGER = '[data-testid="k4a-hovercard-start"] button, [data-testid="k4a-hovercard-start"] a, [data-testid="k4a-hovercard-start"] [data-part="trigger"]';
-const TOUR_SURFACE = '[data-part="surface"], .rottay-tour--modern';
+const TOUR_SURFACE = '[data-part="surface"]';
 const NOTIFICATION_LIVE = '[data-testid="k4a-notification-live"] button';
 
 test('k4-lane-a: interactive overlays open and respond', async ({ page }) => {
@@ -244,7 +244,7 @@ test('k4-lane-a: interactive overlays open and respond', async ({ page }) => {
     const trigger = page.locator(HOVERCARD_TRIGGER).first();
     await trigger.hover();
     // HoverCard open delay is governed; poll for any floating card content.
-    const card = page.locator('.rottay-hover-card--modern, [data-part="card"]').first();
+    const card = page.locator('[data-part="card"]').first();
     await card.waitFor({ timeout: 10_000 });
     await page.screenshot({ path: join(capturesDir(), 'k4a-hovercard-open.png') });
   });
@@ -256,11 +256,11 @@ test('k4-lane-a: interactive overlays open and respond', async ({ page }) => {
   });
 
   await test.step('notification: live trigger adds an item', async () => {
-    const before = await page.locator('[data-part="item"], .rottay-notification--modern').count();
+    const before = await page.locator('[data-part="item"], .ds-notifier--modern').count();
     const trigger = page.locator(NOTIFICATION_LIVE).first();
     await trigger.click();
     await expect
-      .poll(() => page.locator('[data-part="item"], .rottay-notification--modern').count())
+      .poll(() => page.locator('[data-part="item"], .ds-notifier--modern').count())
       .toBeGreaterThan(before);
     await page.screenshot({ path: join(capturesDir(), 'k4a-notification-live.png') });
   });

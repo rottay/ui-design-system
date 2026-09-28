@@ -76,7 +76,7 @@ const OVERLAY_FIXTURES: readonly OverlayFixtureConfig[] = [
     portaled: () => true,
     surfaceSelector: (engine) =>
       engine === 'modern'
-        ? ".rottay-overlay-modal-shell--modern [data-part='surface']"
+        ? ".ds-modal--modern [data-part='surface']"
         : ".rottay-overlay-modal-shell--rustic[data-part='surface']",
   },
   {
@@ -85,39 +85,43 @@ const OVERLAY_FIXTURES: readonly OverlayFixtureConfig[] = [
     triggerTestId: 'probe-overlay-tour-trigger',
     interaction: 'click',
     portaled: () => true,
-    surfaceSelector: (engine) => `.rottay-tour--${engine} [data-part='surface']`,
+    surfaceSelector: (engine) =>
+      engine === 'modern'
+        ? ".ds-tour--modern [data-part='surface']"
+        : ".rottay-tour--rustic [data-part='surface']",
   },
   {
-    // Portals in neither engine.
+    // Modern opens in the top layer outside the probe tree; rustic stays in-tree.
     key: 'confirmdialog',
     triggerTestId: 'probe-overlay-confirmdialog-trigger',
     interaction: 'click',
-    portaled: () => false,
+    portaled: (engine) => engine === 'modern',
     surfaceSelector: (engine) =>
       engine === 'modern'
-        ? ".rottay-confirm-dialog--modern [data-part='surface']"
+        ? ".ds-confirm-dialog--modern [data-part='surface']"
         : ".rottay-confirm-dialog-rustic [data-part='surface']",
   },
   {
-    // Portals in neither engine. Modern keeps its DaisyUI `modal`/`modal-box`
-    // class list untouched (checkpoint contract P2) -- the added
-    // `rottay-alert-dialog--modern` class rides alongside it.
+    // Modern opens in the top layer outside the probe tree; rustic stays in-tree.
     key: 'alertdialog',
     triggerTestId: 'probe-overlay-alertdialog-trigger',
     interaction: 'click',
-    portaled: () => false,
+    portaled: (engine) => engine === 'modern',
     surfaceSelector: (engine) =>
       engine === 'modern'
-        ? ".rottay-alert-dialog--modern [data-part='surface']"
+        ? ".ds-alert-dialog--modern [data-part='surface']"
         : ".rottay-alert-dialog-rustic [data-part='surface']",
   },
   {
-    // Modern in-tree; rustic portals (direct createPortal).
+    // Portals in both engines.
     key: 'sheet',
     triggerTestId: 'probe-overlay-sheet-trigger',
     interaction: 'click',
-    portaled: (engine) => engine === 'rustic',
-    surfaceSelector: (engine) => `.rottay-sheet--${engine} [data-part='surface']`,
+    portaled: () => true,
+    surfaceSelector: (engine) =>
+      engine === 'modern'
+        ? ".ds-sheet--modern [data-part='surface']"
+        : ".rottay-sheet--rustic [data-part='surface']",
   },
   {
     key: 'popconfirm',
@@ -150,7 +154,7 @@ const OVERLAY_FIXTURES: readonly OverlayFixtureConfig[] = [
     portaled: (engine) => engine === 'rustic',
     surfaceSelector: (engine) =>
       engine === 'modern'
-        ? ".rottay-popover--modern [data-part='surface']"
+        ? ".ds-popover--modern [data-part='surface']"
         : ".rottay-popover--rustic[data-part='surface']",
   },
   {
@@ -162,7 +166,7 @@ const OVERLAY_FIXTURES: readonly OverlayFixtureConfig[] = [
     portaled: (engine) => engine === 'rustic',
     surfaceSelector: (engine) =>
       engine === 'modern'
-        ? ".rottay-dropdown--modern [data-part='surface']"
+        ? ".ds-dropdown--modern [data-part='surface']"
         : ".rottay-dropdown--rustic[data-part='surface']",
   },
   {
@@ -174,7 +178,7 @@ const OVERLAY_FIXTURES: readonly OverlayFixtureConfig[] = [
     portaled: (engine) => engine === 'rustic',
     surfaceSelector: (engine) =>
       engine === 'modern'
-        ? ".rottay-hover-card--modern [data-part='surface']"
+        ? ".ds-hover-card--modern [data-part='surface']"
         : ".rottay-hover-card--rustic[data-part='surface']",
   },
 ];
@@ -339,7 +343,7 @@ test('rottay (dark) / overlay / modern: AlertDialog open (mandatory pin, P2)', a
   const container = await openProbe(page, 'rottay', 'modern');
   await triggerOpen(page, container, alertDialogFixture);
 
-  const surface = container.locator(alertDialogFixture.surfaceSelector('modern'));
+  const surface = page.locator(alertDialogFixture.surfaceSelector('modern'));
   await surface.waitFor({ timeout: 10_000 });
   await page.waitForTimeout(300);
 
