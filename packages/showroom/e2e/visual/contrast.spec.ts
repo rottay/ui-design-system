@@ -205,6 +205,18 @@ function refusesUnderClassic(tenant: string, engine: ProbeEngine): boolean {
   return engine === 'classic' && !isShowroomTenant(tenant);
 }
 
+/**
+ * Rustic is frozen and fail-closed (WO-CAN-06): no tenant document or preview
+ * may select it, so the torture surface refuses it for a DB tenant and mounts
+ * no stylesheet. The probe ground still renders, unstyled, so its readings
+ * would measure nothing; the contract is the named refusal instead.
+ */
+const RUSTIC_REFUSAL = /^Engine "rustic" is not admitted\. .*no tenant document or preview may select one/;
+
+function refusesUnderRustic(tenant: string, engine: ProbeEngine): boolean {
+  return engine === 'rustic' && !isShowroomTenant(tenant);
+}
+
 test.describe('every control is readable against its own background, in every engine', () => {
   for (const tenant of TENANTS) {
     for (const engine of ENGINES) {
@@ -219,6 +231,38 @@ test.describe('every control is readable against its own background, in every en
             timeout: 45_000,
           }).toBe(true);
           await expect(page.locator('[data-testid="probe-ground"]')).toHaveCount(0);
+        });
+        continue;
+      }
+      if (refusesUnderRustic(tenant, engine)) {
+        test(`${tenant} / ${engine}: refuses by name, and no tenant stylesheet is mounted`, async ({ page }) => {
+          const open = async (target: ProbeEngine) => {
+            await page.goto(`/probe/whitelabel-torture?fixture=${tenant}&engine=${target}`, {
+              waitUntil: 'domcontentloaded',
+            });
+            await expectHydrated(page);
+            await page.waitForFunction(
+              (expected) => document.documentElement.getAttribute('data-engine') === expected,
+              target,
+              { timeout: 45_000 }
+            );
+          };
+
+          await open(engine);
+          await expect(page.getByTestId('torture-admission-refusal')).toHaveAttribute(
+            'data-torture-admission',
+            RUSTIC_REFUSAL
+          );
+          await expect(page.getByTestId('torture-legacy-brand-style')).toHaveCount(0);
+
+          // Control: under modern the same tenant is not refused for its engine. It
+          // may still be refused for a field its document authors, so only the
+          // engine refusal is excluded.
+          await open('modern');
+          const modernAdmission = await page
+            .locator('[data-testid="torture-admission-refusal"]')
+            .evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-torture-admission') ?? ''));
+          expect(modernAdmission.some((message) => RUSTIC_REFUSAL.test(message))).toBe(false);
         });
         continue;
       }
