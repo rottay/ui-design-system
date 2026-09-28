@@ -350,18 +350,30 @@
      retirementCriteria: a governed --ds-control-height-floor-* channel ships
        and every private consumer migrates to it in one lot
 
-   The default (comfortable/no posture attribute) case is the `var(...,
-   36px)` fallback at each use site below, deliberately NOT a bare `:root`
-   producer rule here: an unconditioned `:root` selector always matches
-   `document.documentElement`, which breaks this family's own
-   container-vs-document reachability parity (Button.skin-reachability.test)
-   -- the same reason the two conditioned rules below are safe (they only
-   match when a real posture attribute is present, exactly like the existing
-   `:root[data-density='compact']` rule elsewhere in this file). */
-:root[data-density='compact'] {
+   Keyed on the NEAREST density boundary, not only the root posture: a
+   `:root`-only producer could not be re-keyed by a nested DensityScope, so a
+   button whose resolved height sits under the floor (bithire `sm` at every
+   posture) painted the ROOT posture's floor inside any local scope -- 36/36/36
+   across a compact/comfortable/spacious scope while Input scaled (the density
+   authority regression, WO-CRA-23 R1 -> density-authority spec). Every posture
+   is declared, including `comfortable`, so a comfortable scope nested under a
+   compact or spacious root re-keys back to the default instead of inheriting
+   the root's floor. `:where()` keeps specificity at zero (same law as the
+   base density projection) so an explicit hook on the boundary still wins.
+
+   The no-attribute default case stays the `var(..., 36px)` fallback at each
+   use site, deliberately NOT a bare `:root` producer rule here: an
+   unconditioned `:root` selector always matches `document.documentElement`,
+   which breaks this family's own container-vs-document reachability parity
+   -- the same reason the three conditioned rules below are safe (they only
+   match an element that carries a real posture attribute, root or nested). */
+:where([data-density='compact']) {
   --_ds-button-height-floor: 32px;
 }
-:root[data-density='spacious'] {
+:where([data-density='comfortable']) {
+  --_ds-button-height-floor: 36px;
+}
+:where([data-density='spacious']) {
   --_ds-button-height-floor: 44px;
 }
 
