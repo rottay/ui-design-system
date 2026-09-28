@@ -272,6 +272,7 @@
   --ds-badge-pill-radius: var(--ds-badge-radius, var(--ds-radius-full));
   --ds-badge-position-transform: translateY(0);
   --ds-badge-press-transform: translateY(0) scale(0.985);
+  --ds-badge-radius-sm: var(--ds-radius-sm);
   --ds-badge-remove-bg: color-mix(in srgb, currentColor 6%, transparent);
   --ds-badge-remove-border: color-mix(in srgb, currentColor 16%, transparent);
   --ds-badge-remove-border-width: var(--ds-edge-hairline-width, 1px);
