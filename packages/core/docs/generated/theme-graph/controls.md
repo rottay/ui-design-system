@@ -8,7 +8,7 @@
 > `produced` counts the channels the decision's derivers emit; `via aliases` counts what those
 > channels can still reach through the measured alias chain.
 
-digest: da9a2c4b8804eff6ecd80bf786cac4551f071104c1d861336dca58b079d70d6f
+digest: 4f2c0f860bf66b628bc2d9efe10a1bdd971a9575630d0073dce0a440eafa5842
 
 | decision | tier | derivers | produced | via aliases | families reached |
 |---|---|---|---|---|---|
@@ -18,11 +18,11 @@ digest: da9a2c4b8804eff6ecd80bf786cac4551f071104c1d861336dca58b079d70d6f
 | `motion.character` | pro | 30 | 1056 | 1316 | 203 |
 | `motion.dial` | standard | 30 | 1056 | 1316 | 203 |
 | `navigation.sidebar-tone` | standard | 1 | 6 | 13 | 3 |
-| `palette.contrast-posture` | pro | 85 | 2525 | 4095 | 252 |
+| `palette.contrast-posture` | pro | 85 | 2525 | 4098 | 252 |
 | `palette.dark-mode` | pro | — | 0 | 0 | **none** |
-| `palette.neutral-temperature` | standard | 85 | 2525 | 4095 | 252 |
-| `palette.seeds` | standard | 89 | 2623 | 4298 | 252 |
-| `palette.status-seeds` | standard | 88 | 2611 | 4274 | 252 |
+| `palette.neutral-temperature` | standard | 85 | 2525 | 4098 | 252 |
+| `palette.seeds` | standard | 89 | 2623 | 4301 | 252 |
+| `palette.status-seeds` | standard | 88 | 2611 | 4277 | 252 |
 | `profiles.expressive` | pro | 8 | 224 | 1880 | 245 |
 | `recipe-profile` | pro | — | 0 | 0 | **none** |
 | `responsive.posture` | pro | 2 | 27 | 28 | 1 |
@@ -31,8 +31,8 @@ digest: da9a2c4b8804eff6ecd80bf786cac4551f071104c1d861336dca58b079d70d6f
 | `shape.nesting` | pro | 11 | 344 | 454 | 54 |
 | `shape.radius-scale` | standard | 37 | 1297 | 1917 | 221 |
 | `spacing.rhythm` | standard | 11 | 336 | 533 | 61 |
-| `states.emphasis` | standard | 13 | 393 | 1200 | 207 |
-| `states.focus-style` | standard | 21 | 680 | 1471 | 208 |
+| `states.emphasis` | standard | 13 | 393 | 1202 | 207 |
+| `states.focus-style` | standard | 21 | 680 | 1473 | 208 |
 | `surfaces.border-style` | standard | 17 | 485 | 669 | 132 |
 | `surfaces.effect-intensity` | standard | 10 | 335 | 408 | 36 |
 | `surfaces.elevation-posture` | standard | 45 | 1708 | 1952 | 145 |

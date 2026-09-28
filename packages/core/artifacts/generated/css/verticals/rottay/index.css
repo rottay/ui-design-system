@@ -3398,6 +3398,14 @@ html.dark {
      WCAG pick flips back to the flat dark neutral on that lighter fill. */
   --ds-color-on-error: #171717;
 
+  /* The other three status washes state step 50, which is near-white here
+     under the dark ink. Only the wash owes a dark leg: those ramps also feed
+     solid fills under white ink, so they stay uninverted. Each value is the
+     stop below the light ramp's darkest, as error-50 above. */
+  --ds-color-success-bg: #052e16;
+  --ds-color-warning-bg: #451a03;
+  --ds-color-info-bg: #172554;
+
   --ds-text-primary: var(--ds-color-text-primary);
   --ds-text-secondary: var(--ds-color-text-secondary);
 
@@ -3417,6 +3425,19 @@ html.dark {
   --ds-input-border: var(--ds-color-border-primary);
   --ds-input-border-focus: var(--ds-color-primary-400);
   --ds-input-placeholder: var(--ds-color-text-tertiary);
+
+  --ds-autocomplete-bg: var(--ds-surface-control);
+  --ds-autocomplete-dropdown-bg: var(--ds-surface-overlay);
+
+  /* The table is a card-grade surface; its light literals had no dark leg. */
+  --ds-table-bg: var(--ds-surface-card);
+  --ds-table-row-bg: var(--ds-surface-card);
+  --ds-table-header-bg: var(--ds-color-bg-secondary);
+  --ds-table-row-bg-striped: var(--ds-color-bg-secondary);
+  --ds-table-header-color: var(--ds-color-text-secondary);
+  --ds-table-border: var(--ds-color-border-secondary);
+  --ds-table-row-border: var(--ds-color-border-secondary);
+  --ds-table-loading-overlay-bg: color-mix(in srgb, var(--ds-surface-card) 70%, transparent);
 
   --ds-list-background-color: var(--ds-color-bg-elevated);
   --ds-list-item-background-color: var(--ds-color-bg-elevated);
@@ -20099,6 +20120,12 @@ html[data-tenant] .ant-typography a {
   flex: 0 0 auto;
   aspect-ratio: 1;
   padding-inline: 0;
+}
+
+/* aspect-ratio alone lets a stretching column or grid size the plate from the
+   container; fit-content keeps its own padded width and the ratio squares it. */
+.ds-button.ds-button--modern[data-icon-only='true']:not([data-shape='circle'], [data-full-width='true']) {
+  inline-size: fit-content;
 }
 
 .ds-button.ds-button--modern[data-shape='circle'] {
@@ -63063,6 +63090,9 @@ html[data-ds-motion='reduced']
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'] {
   --ds-page-shell-max-width: none;
 
+  /* The inline-size container has no content width and auto margins cancel a
+     flex host's stretch, so the fill is stated; max-width clamps it. */
+  inline-size: 100%;
   max-width: var(--ds-page-shell-max-width);
   margin-inline: auto;
 }
