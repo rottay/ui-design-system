@@ -91,40 +91,16 @@ describeCausality({
 });
 
 /**
- * Measured debt, pinned by node IDENTITY, not by count: a repaired node, a new
- * node and a same-count swap all go red. The page counter, the title and the
- * header titles now fail only in the dark scopes. The fix is a mode-aware ink
- * derivation, never an axe exclusion. Registered, never hidden.
+ * Measured debt, pinned by node IDENTITY, not by count: a relapse reddens this
+ * map. CLEAN in every gated scope.
  *
- * `bithire light` and `evnto light` DRAINED entirely at the supporting-ink
- * re-grade (f73348ed5, 2026-09-21), which moved `--ds-color-text-secondary`
- * from `#A0A0A5` to `#5A5A61` in the default light `:root`. The single node
- * each carried was `pagination-range`, which inks from that rung; neither
- * vertical authors it. The page counter is therefore no longer a systemic
- * defect -- it survives only where the dark ramp reaches it.
- *
- * Measured 2026-09-22: the surviving rows above are byte-identical. Reverting
- * only `--ds-color-text-secondary` at HEAD returns exactly the node identities
- * dropped here, and the other two supporting rungs return none of them -- that
- * arm is the attribution, not the commit date. Dropped by identity, not
- * waived: a relapse of a dropped node reddens this map.
+ * `bithire light` and `evnto light` drained at the supporting-ink re-grade
+ * (f73348ed5). `bithire dark` and `rottay dark` -- the title, the page counter
+ * and the header titles -- drained when the sheet's dark scope gave the table
+ * surface channels a dark leg: `--ds-table-bg` and its header and row siblings
+ * were light literals with no dark producer, so the dark-mode ink sat on white.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      'div[data-part="title"]',
-      'span[data-part="pagination-range"]',
-      'th:nth-child(1) > div[data-part="header-content"] > span[data-part="header-title"]',
-      'th:nth-child(2) > div[data-part="header-content"] > span[data-part="header-title"]',
-    ],
-  },
-  'rottay dark': {
-    'color-contrast': [
-      'div[data-part="title"]',
-      'span[data-part="pagination-range"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('table derived channels and accessibility', () => {
   it('derives the title weight and the numeric postures from the family deriver', async () => {
