@@ -190,7 +190,7 @@ async function assertFixtureCoverage(root: Locator, engine: Engine): Promise<voi
     nodes.reduce((sum, node) => sum + Number((node as HTMLElement).dataset.sourceCount ?? 0), 0),
   );
   expect(representedSources).toBe(DECLARED_SOURCE_TOTAL);
-  expect(await root.locator('[data-part="muted-text"]').count()).toBeGreaterThan(0);
+  expect(await root.locator('[data-part="section-description"]').count()).toBeGreaterThan(0);
   expect(await root.locator('[data-part="divider"]').count()).toBeGreaterThan(0);
   expect(await root.locator('button:disabled').count()).toBeGreaterThan(0);
 
