@@ -2,6 +2,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-GAT-03 — hostile-tenant whitelabel proof (proposal P-05).
 //
@@ -346,6 +348,7 @@ async function readProbes(page: Page, probes: Probe[]): Promise<Readings> {
  */
 async function gotoFixture(page: Page, fixture: Fixture, extraParams = ''): Promise<void> {
   await page.goto(`/probe/whitelabel-torture?fixture=${fixture}${extraParams}`, { waitUntil: 'networkidle' });
+  await expectHydrated(page);
   await page.getByRole('heading', { name: /whitelabel torture/i }).waitFor({ timeout: 30_000 });
 
   const dynamic = fixture !== 'rottay';

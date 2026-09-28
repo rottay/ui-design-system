@@ -18,6 +18,7 @@
 import { devices, expect, test, type Page } from "@playwright/test";
 import { FIRST_PARTY_ARTIFACT_RUNTIME } from "../../../core/src/infrastructure/compilers/runtime/tenant-css/artifact-runtime";
 import { RECIPE_PROFILES } from "../../../core/src/foundation/tokens/ts/presentation/recipe-profiles";
+import { expectHydrated } from "../support/hydration";
 
 type Source = "technical-static" | "editorial-db";
 type Locale = "en" | "es" | "ar";
@@ -70,6 +71,7 @@ async function openCell(
   cell: Parameters<typeof cellUrl>[0]
 ): Promise<void> {
   await page.goto(cellUrl(cell), { waitUntil: "networkidle" });
+  await expectHydrated(page);
   await expect(page.getByTestId("specimen-frame")).toHaveAttribute(
     "data-specimen-source",
     cell.source

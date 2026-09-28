@@ -1,5 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-ENG-11 — modern must be tellable apart from rustic.
 //
@@ -85,6 +87,7 @@ async function loadProbe(page: Page, engine: string, slug?: string): Promise<voi
   await page.goto(`/probe/whitelabel-torture?fixture=${TENANT}&engine=${engine}${slugParam}&w=768`, {
     waitUntil: 'domcontentloaded',
   });
+  await expectHydrated(page);
   await page.waitForSelector('[data-testid="probe-ground"]', { timeout: 45_000 });
   await page.waitForFunction((e) => document.documentElement.getAttribute('data-engine') === e, engine, {
     timeout: 45_000,

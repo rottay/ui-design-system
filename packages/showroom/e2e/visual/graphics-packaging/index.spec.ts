@@ -4,6 +4,8 @@ import { resolve } from 'node:path';
 
 import { expect, test, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../../support/hydration';
+
 const TENANTS = ['bithire', 'themanagementmiami'] as const;
 const ENGINES = ['classic', 'modern', 'rustic'] as const;
 const THEMES = ['light', 'dark'] as const;
@@ -56,6 +58,7 @@ async function waitForAtlas(
   },
 ): Promise<void> {
   await page.goto(probeUrl(axes), { waitUntil: 'networkidle' });
+  await expectHydrated(page);
   const atlas = page.locator('[data-cra17-probe="semantic-assets"]');
   await expect(atlas).toHaveAttribute('data-cra17-ready', 'true');
   await expect(atlas).toHaveAttribute('data-cra17-corpus', 'canonical');
@@ -205,6 +208,7 @@ test.describe('CRA17 exact mobile optical matrix', () => {
       await page.goto(probeUrl({ ...axes, direction: 'rtl', forcedColors: true }), {
         waitUntil: 'networkidle',
       });
+      await expectHydrated(page);
       await expect(page.locator('[data-cra17-probe="semantic-assets"]')).toHaveAttribute(
         'data-cra17-direction',
         'rtl',

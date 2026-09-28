@@ -1,5 +1,7 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-ARC-09 checkpoint 3 -- FilterPanel data-part contract evidence.
 //
@@ -51,6 +53,7 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine, width: nu
     `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=${width}&slug=button&filterpanel=1`,
     { waitUntil: 'domcontentloaded' },
   );
+  await expectHydrated(page);
 
   const container = page.locator(CONTAINER_SELECTOR);
   await container.waitFor({ timeout: 30_000 });

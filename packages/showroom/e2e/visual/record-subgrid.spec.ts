@@ -1,5 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // W6-D subgrid record-alignment fixture.
 //
@@ -84,6 +86,7 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine, ground: '
   await page.goto(`/probe/record-subgrid?fixture=${fixture}&engine=${engine}`, {
     waitUntil: 'domcontentloaded',
   });
+  await expectHydrated(page);
 
   const root = page.locator(ROOT_SELECTOR);
   await root.waitFor({ timeout: 30_000 });

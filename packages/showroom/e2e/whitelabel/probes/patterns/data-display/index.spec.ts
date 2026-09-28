@@ -4,6 +4,8 @@ import { dirname, join } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../../../../support/hydration';
+
 // ---------------------------------------------------------------------------
 // K3 lane A (data display) axe + keyboard evidence.
 //
@@ -72,6 +74,7 @@ function cellUrl(source: Source, locale: Locale = 'en'): string {
 /** The deterministic render witness for one cell. */
 async function gotoCell(page: Page, source: Source, locale: Locale = 'en'): Promise<void> {
   await page.goto(cellUrl(source, locale), { waitUntil: 'networkidle' });
+  await expectHydrated(page);
   await page.getByTestId(WITNESS).waitFor({ timeout: 30_000 });
   await page.waitForFunction(
     () =>

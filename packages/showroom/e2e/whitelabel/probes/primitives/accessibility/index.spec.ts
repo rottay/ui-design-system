@@ -4,6 +4,8 @@ import { dirname, join } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../../../../support/hydration';
+
 // ---------------------------------------------------------------------------
 // K1 lane axe + keyboard evidence (R0 evidence infrastructure).
 //
@@ -94,6 +96,7 @@ function cellUrl(lane: LaneDef, source: Source): string {
  */
 async function gotoCell(page: Page, lane: LaneDef, source: Source): Promise<void> {
   await page.goto(cellUrl(lane, source), { waitUntil: 'networkidle' });
+  await expectHydrated(page);
   await page.getByTestId(lane.witness).waitFor({ timeout: 30_000 });
   await page.waitForFunction(
     () =>

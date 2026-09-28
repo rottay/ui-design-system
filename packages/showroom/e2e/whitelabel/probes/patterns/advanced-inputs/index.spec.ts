@@ -4,6 +4,8 @@ import { dirname, join } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../../../../support/hydration';
+
 // ---------------------------------------------------------------------------
 // K2 lane-v (value inputs) evidence: axe + interactive states + keyboard +
 // RTL/density/source-parity, on the /probe/primitives/advanced-inputs cells.
@@ -77,6 +79,7 @@ function cellUrl(source: Source, extra = ''): string {
 /** The deterministic render witness: lane testid + late lazy engines + compiled theme + fonts. */
 async function gotoCell(page: Page, url: string): Promise<void> {
   await page.goto(url, { waitUntil: 'networkidle' });
+  await expectHydrated(page);
   await page.getByTestId(WITNESS).waitFor({ timeout: 30_000 });
   // The lazy modern engines resolve after the shell; the value-input natives
   // are the last witnesses of a settled cell.

@@ -1,5 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../../support/hydration';
+
 // WO-SKIN-06 tenant branding inert baseline matrix. Snapshots are intentionally created
 // by the orchestrated production-build pass, never by this source-only pre-step.
 
@@ -57,6 +59,7 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine, ground: '
   await page.goto(`/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=1280&slug=button&tenantBranding=1`, {
     waitUntil: 'domcontentloaded',
   });
+  await expectHydrated(page);
 
   const root = page.locator(ROOT_SELECTOR);
   await root.waitFor({ timeout: 30_000 });

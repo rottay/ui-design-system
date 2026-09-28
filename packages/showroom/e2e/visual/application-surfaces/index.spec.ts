@@ -1,5 +1,7 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-SKIN-06 checkpoint application surfaces -- category-A patterns/misc visual evidence.
 //
@@ -79,6 +81,7 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
     `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=1280&slug=button&applicationSurfaces=1`,
     { waitUntil: 'domcontentloaded' },
   );
+  await expectHydrated(page);
 
   const root = page.locator(ROOT_SELECTOR);
   await root.waitFor({ timeout: 30_000 });

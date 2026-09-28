@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 import { recordCra15Measurement } from './runtime-hardening/measurements';
+import { expectHydrated } from '../support/hydration';
 
 const ACTIVE_RUNTIME = '[data-particle-field-runtime="active"]';
 const CANVAS = '[data-particle-field-canvas="true"]';
@@ -112,6 +113,7 @@ test.describe('ParticleField real-browser lifecycle budget', () => {
   test('bounds one live context, hands it across viewports and recovers from context loss', async ({ page }) => {
     await installRafMeasurement(page);
     await page.goto('/probe/particle-runtime', { waitUntil: 'networkidle' });
+    await expectHydrated(page);
 
     recordCra15Measurement('desktop-meta', {
       browserName: page.context().browser()?.browserType().name() ?? 'chromium',
@@ -207,6 +209,7 @@ test.describe('ParticleField real-browser lifecycle budget', () => {
       try {
         await installRafMeasurement(page);
         await page.goto('/probe/particle-runtime', { waitUntil: 'networkidle' });
+        await expectHydrated(page);
         await expect(page.locator(CANVAS)).toHaveCount(0);
         await expect(page.locator('[data-particle-field-runtime="static"]')).toHaveCount(2);
         await expect(page.getByText('Operational signal map')).toBeVisible();
@@ -229,6 +232,7 @@ test.describe('ParticleField real-browser lifecycle budget', () => {
   test('never exceeds one runtime while rapidly mounting and unmounting across viewports', async ({ page }) => {
     await installRafMeasurement(page);
     await page.goto('/probe/particle-runtime', { waitUntil: 'networkidle' });
+    await expectHydrated(page);
 
     const primary = page.locator('[data-particle-probe="primary"]');
     const secondary = page.locator('[data-particle-probe="secondary"]');

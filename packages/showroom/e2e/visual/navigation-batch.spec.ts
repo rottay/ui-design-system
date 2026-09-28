@@ -1,5 +1,7 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-SKIN-04 checkpoint N -- the navigation family (Menu, FloatButton, Tabs,
 // Steps, Stepper, Pagination, Segmented, BackTop, Breadcrumb, BottomTabBar,
@@ -60,6 +62,7 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
     `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=1280&slug=button&nav=1`,
     { waitUntil: 'domcontentloaded' },
   );
+  await expectHydrated(page);
 
   const container = page.locator(CONTAINER_SELECTOR);
   await container.waitFor({ timeout: 30_000 });

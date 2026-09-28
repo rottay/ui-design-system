@@ -2,6 +2,8 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-CRA-23 — responsive overflow gate for the DS reference lab.
 //
@@ -327,6 +329,7 @@ async function gotoCell(page: Page, cell: Cell): Promise<{ settled: boolean }> {
   const response = await page.goto(url, { waitUntil: 'networkidle' });
   if (!response) throw new Error(`no response for ${url}`);
   if (!response.ok()) throw new Error(`${url} responded ${response.status()}`);
+  await expectHydrated(page);
 
   await page.locator('script[data-testid="lab-ground-stamp"]').waitFor({ state: 'attached', timeout: 20_000 });
 

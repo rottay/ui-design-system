@@ -1,5 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-ENG-22 — a control must be readable against its own background, in every
 // mode its tenant declares a ground for.
@@ -201,6 +203,7 @@ test.describe('every control is readable against its own background, in every en
           await page.goto(`/probe/whitelabel-torture?fixture=${tenant}&engine=${engine}`, {
             waitUntil: 'domcontentloaded',
           });
+          await expectHydrated(page);
           await page.waitForSelector('[data-testid="probe-ground"]', { timeout: 45_000 });
           await page.waitForFunction(
             (slug) => document.documentElement.getAttribute('data-tenant') === slug,

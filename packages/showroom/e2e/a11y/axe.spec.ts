@@ -18,6 +18,7 @@ import {
   SCENES,
   type Finding,
 } from './baseline';
+import { expectHydrated } from '../support/hydration';
 
 // ---------------------------------------------------------------------------
 // WO-INV-03 — the route-level axe batch, over the DS reference lab.
@@ -126,6 +127,7 @@ async function settle(
   // closed can never be mistaken for one that rendered clean.
   expect(response?.status(), `${scene}: the route did not serve the scene`).toBe(200);
   await page.waitForLoadState('load', { timeout: LOAD_BUDGET_MS });
+  await expectHydrated(page, READY_BUDGET_MS);
   await page.waitForFunction(
     ({ minimum, marker }) =>
       Boolean(document.documentElement.dataset.tenant) &&

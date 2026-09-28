@@ -2,6 +2,7 @@ import { existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { test, expect, type Page } from '@playwright/test';
 import { FIRST_PARTY_ARTIFACT_RUNTIME } from '../../../../../../core/src/infrastructure/compilers/runtime/tenant-css/artifact-runtime';
+import { expectHydrated } from '../../../../support/hydration';
 
 // ---------------------------------------------------------------------------
 // K0.6 — first-party recipe-profile sighted evidence.
@@ -57,6 +58,7 @@ async function gotoCell(page: Page, cell: Cell, locale = 'en'): Promise<void> {
     `/probe/foundation/profile-variants?vertical=${cell.vertical}&locale=${locale}`,
     { waitUntil: 'networkidle' },
   );
+  await expectHydrated(page);
   await page.getByTestId('pe-title').waitFor({ timeout: 30_000 });
   await page.waitForFunction(
     () =>

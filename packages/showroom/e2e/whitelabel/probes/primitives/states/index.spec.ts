@@ -3,6 +3,8 @@ import { dirname, join } from 'node:path';
 
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../../../../support/hydration';
+
 // ---------------------------------------------------------------------------
 // K1 lane interactive-state evidence (M02 sighted evidence, R0 infrastructure).
 //
@@ -318,6 +320,7 @@ function cellUrl(lane: LaneDef): string {
 /** The deterministic render witness: lane testid + compiled theme + fonts. */
 async function gotoCell(page: Page, lane: LaneDef): Promise<void> {
   await page.goto(cellUrl(lane), { waitUntil: 'networkidle' });
+  await expectHydrated(page);
   await page.getByTestId(lane.witness).waitFor({ timeout: 30_000 });
   await page.waitForFunction(
     () =>

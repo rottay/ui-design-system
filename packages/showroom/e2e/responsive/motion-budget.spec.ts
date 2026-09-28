@@ -14,6 +14,7 @@ import {
   MOTION_BUDGET_SCENES,
   type MotionBudgetSceneId,
 } from '../../src/app/probe/motion-budget/roster';
+import { expectHydrated } from '../support/hydration';
 
 // WO-INV-08 perfection budget. Thresholds and verdicts are core's (budget/index.json + the drilled
 // authority module), read by path; this spec only measures. Gated until the DT's seeding run.
@@ -154,6 +155,7 @@ async function openScene(
 
   const response = await page.goto(`/probe/motion-budget/${scene}`, { waitUntil: 'load' });
   expect(response?.status(), `/probe/motion-budget/${scene} must be served by this build`).toBe(200);
+  await expectHydrated(page);
 
   const root = page.locator(`[${MOTION_BUDGET_DOM.scene}="${scene}"]`);
   await expect(root).toHaveAttribute(MOTION_BUDGET_DOM.ready, 'true');

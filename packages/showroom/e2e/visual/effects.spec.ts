@@ -1,5 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-ENG-14 — the premium surface tint is measured in pixels, not counted in files.
 //
@@ -122,6 +124,7 @@ async function loadFixture(page: Page, fixture: Fixture): Promise<void> {
   await page.goto(`/probe/whitelabel-torture?fixture=${fixture}&slug=card`, {
     waitUntil: 'domcontentloaded',
   });
+  await expectHydrated(page);
   await page.waitForSelector('[data-testid="probe-card"]', { timeout: 45_000 });
   // Causal readiness, not a sleep: the tenant must have taken the document.
   await page.waitForFunction(

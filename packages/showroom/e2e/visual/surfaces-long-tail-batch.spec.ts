@@ -1,5 +1,7 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-SKIN-06 checkpoint CK-I -- long-tail patterns + surfaces visual evidence.
 //
@@ -299,6 +301,7 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
     `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=1280&slug=button&longTail=1`,
     { waitUntil: 'domcontentloaded' },
   );
+  await expectHydrated(page);
 
   const root = page.locator('[data-testid="probe-long-tail"]');
   await root.waitFor({ timeout: 30_000 });

@@ -1,5 +1,7 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-SKIN-06 checkpoint CK-G -- the patterns/navigation family
 // (command-palette, environment-toggle, workspace-switcher, shortcuts-overlay,
@@ -97,6 +99,7 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
     `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=1280&slug=button&navigation=1`,
     { waitUntil: 'domcontentloaded' },
   );
+  await expectHydrated(page);
 
   const container = page.locator(CONTAINER_SELECTOR);
   await container.waitFor({ timeout: 30_000 });

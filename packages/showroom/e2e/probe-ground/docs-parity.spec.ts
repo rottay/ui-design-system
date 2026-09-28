@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // WO-RET-05 P4c acceptance: the (docs) runtime serves the tenant the client hydrates. "Served" is
 // what the document carries once the docs ground's stamp has run -- the first element of the body,
 // before any content -- and "hydrated" is the root after React has committed.
@@ -55,6 +57,7 @@ async function openDocs(page: Page, url: string) {
   });
   await traceRoot(page);
   const response = await page.goto(url, { waitUntil: 'load' });
+  await expectHydrated(page);
   const servedHtml = (await response?.text()) ?? '';
   await expect(page.locator('html')).toHaveAttribute('data-showroom-tenant', /.+/);
   await page.waitForTimeout(500);

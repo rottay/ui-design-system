@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { recordCra15Measurement } from './runtime-hardening/measurements';
+import { expectHydrated } from '../support/hydration';
 
 const LIVE = '[data-spatial-mode^="live-"]';
 const CANVAS = '[data-spatial-experience-canvas]';
@@ -19,6 +20,7 @@ test.use({
 test.describe('SpatialExperience real-browser lifecycle budget', () => {
   test('bounds one live context, hands it across viewports and retries after context loss', async ({ page }) => {
     await page.goto('/probe/spatial-runtime', { waitUntil: 'networkidle' });
+    await expectHydrated(page);
 
     const primary = page.locator('[data-spatial-probe="primary"]');
     const secondary = page.locator('[data-spatial-probe="secondary"]');
@@ -101,6 +103,7 @@ test.describe('SpatialExperience real-browser lifecycle budget', () => {
 
       try {
         await page.goto('/probe/spatial-runtime', { waitUntil: 'networkidle' });
+        await expectHydrated(page);
         await expect(page.locator(CANVAS)).toHaveCount(0);
         await expect(page.locator(LIVE)).toHaveCount(0);
         await expect(page.getByText(/(?:Reduced )?operational (?:relationship )?map/i)).toBeVisible();
@@ -130,6 +133,7 @@ test.describe('SpatialExperience real-browser lifecycle budget', () => {
       } as typeof HTMLCanvasElement.prototype.getContext;
     });
     await page.goto('/probe/spatial-runtime', { waitUntil: 'networkidle' });
+    await expectHydrated(page);
 
     await expect(page.locator(CANVAS)).toHaveCount(0);
     await expect(page.locator('[data-spatial-reason="webgl2-unsupported"]')).toHaveCount(1);

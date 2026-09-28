@@ -2,6 +2,8 @@ import { existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../../../../support/hydration';
+
 // ---------------------------------------------------------------------------
 // K1 lane capture matrix — sighted evidence for the 21 primitive families.
 //
@@ -75,6 +77,7 @@ function cellUrl(
 
 async function gotoCell(page: Page, lane: LaneDef, url: string): Promise<void> {
   await page.goto(url, { waitUntil: 'networkidle' });
+  await expectHydrated(page);
   await page.getByTestId(lane.witness).waitFor({ timeout: 30_000 });
   await page.waitForFunction(
     () =>

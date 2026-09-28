@@ -1,5 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-ARC-08 checkpoint 1 -- container-axis capture harness (proposal P-08).
 //
@@ -65,6 +67,7 @@ for (const tenant of TENANTS) {
         await page.goto(`/probe/container-axis?slug=${slug}&tenant=${tenant.id}&cw=${cw}`, {
           waitUntil: 'networkidle',
         });
+        await expectHydrated(page);
 
         const container = page.locator('[data-testid="probe-container-axis"]');
         await container.waitFor({ timeout: 30_000 });
@@ -105,6 +108,7 @@ for (const tenant of TENANTS) {
       await page.goto(`/probe/container-axis?slug=data-table&tenant=${tenant.id}&cw=${cw}&demo=collapse`, {
         waitUntil: 'networkidle',
       });
+      await expectHydrated(page);
 
       const container = page.locator('[data-testid="probe-container-axis"]');
       await container.waitFor({ timeout: 30_000 });

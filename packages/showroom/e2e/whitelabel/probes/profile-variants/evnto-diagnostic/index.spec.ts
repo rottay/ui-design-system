@@ -2,6 +2,8 @@ import { existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { test, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../../../../support/hydration';
+
 // ---------------------------------------------------------------------------
 // K0.6 diagnostic — why does the evnto probe cell wash out?
 //
@@ -63,6 +65,7 @@ test.describe('K0.6 evnto render diagnostic', () => {
 
     // 1. Artifact path: the showroom's own evnto page (bundled slug).
     await page.goto('/verticals/evnto', { waitUntil: 'networkidle' });
+    await expectHydrated(page);
     await page.waitForTimeout(1_500);
     await dumpTokens(page, 'artifact-path /verticals/evnto');
     mkdirSync(artifactDir(), { recursive: true });
@@ -75,6 +78,7 @@ test.describe('K0.6 evnto render diagnostic', () => {
     await page.goto('/probe/foundation/profile-variants?vertical=evnto&locale=en', {
       waitUntil: 'networkidle',
     });
+    await expectHydrated(page);
     await page.getByTestId('pe-title').waitFor({ timeout: 30_000 });
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);
@@ -84,6 +88,7 @@ test.describe('K0.6 evnto render diagnostic', () => {
     await page.goto('/probe/foundation/profile-variants?vertical=bithire&locale=en', {
       waitUntil: 'networkidle',
     });
+    await expectHydrated(page);
     await page.getByTestId('pe-title').waitFor({ timeout: 30_000 });
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);

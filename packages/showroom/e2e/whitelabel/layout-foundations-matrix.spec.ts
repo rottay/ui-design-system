@@ -1,5 +1,7 @@
 import { devices, expect, test, type Page } from "@playwright/test";
 
+import { expectHydrated } from "../support/hydration";
+
 type Fixture = "bithire" | "themanagementmiami";
 type Locale = "en" | "es" | "ar";
 type Viewport = "desktop" | "mobile";
@@ -109,6 +111,7 @@ async function gotoCell(
     `/probe/layout-foundations-evidence?fixture=${fixture}&locale=${locale}`,
     { waitUntil: "networkidle" }
   );
+  await expectHydrated(page);
   await waitForCell(page, fixture, locale);
 }
 

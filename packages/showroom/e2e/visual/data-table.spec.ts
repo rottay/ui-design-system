@@ -1,5 +1,7 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-ARC-09 checkpoint 6 (data-table, the compound case) -- data-part
 // contract evidence across five files and two engines.
@@ -55,6 +57,7 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine, width: nu
     `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=${width}&slug=button&datatable=1`,
     { waitUntil: 'domcontentloaded' },
   );
+  await expectHydrated(page);
 
   const container = page.locator(CONTAINER_SELECTOR);
   await container.waitFor({ timeout: 30_000 });
@@ -79,6 +82,7 @@ async function openMobileProbe(page: Page, fixture: Fixture, engine: Engine): Pr
     `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&slug=button&datatable=1`,
     { waitUntil: 'domcontentloaded' },
   );
+  await expectHydrated(page);
 
   const container = page.locator(CONTAINER_SELECTOR);
   await container.waitFor({ timeout: 30_000 });

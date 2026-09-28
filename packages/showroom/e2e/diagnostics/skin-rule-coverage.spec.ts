@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { collectRules, SKIN_DIRS } from './skin-rule-coverage.lib.mjs';
+import { expectHydrated } from '../support/hydration';
 
 // ---------------------------------------------------------------------------
 // Dead-selector audit (P-79).
@@ -76,6 +77,7 @@ test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) =>
       } catch {
         continue;
       }
+      await expectHydrated(page);
       const payload = rules.map((r) => [r.probe, r.skeleton] as const);
       const hits: Array<[boolean, boolean]> = await page.evaluate((sels) => {
         const ask = (s: string) => {

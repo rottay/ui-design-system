@@ -1,5 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 
+import { expectHydrated } from "../support/hydration";
+
 /**
  * FASE 5 — executable canary contracts.
  *
@@ -41,6 +43,7 @@ const CONSUMERS = {
 
 async function open(page: Page, query: string): Promise<void> {
   await page.goto(`${ROUTE}${query}`, { waitUntil: "networkidle" });
+  await expectHydrated(page);
 }
 
 const root = (page: Page) => page.locator("[data-testid='wc-root']");
@@ -365,6 +368,7 @@ test.describe("canary · SPA transition keeps one Document and style-before-root
       const ROOT_TESTID = "wc-root";
 
       await page.goto(`${ROUTE}?source=bithire-static`, { waitUntil: "networkidle" });
+      await expectHydrated(page);
       await expect(root(page)).toBeVisible();
       await expect(root(page)).toHaveAttribute("data-canary-source", "bithire-static");
 

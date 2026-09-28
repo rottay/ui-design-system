@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 import { recordCra15Measurement } from './runtime-hardening/measurements';
+import { expectHydrated } from '../support/hydration';
 
 // ---------------------------------------------------------------------------
 // CRA-15 mobile-device evidence (audit MOT-01, step 3).
@@ -49,6 +50,7 @@ test.describe('Governed runtimes fall back statically on a mobile device', () =>
   test('Particle keeps a mobile viewport static with no canvas and no RAF', async ({ page }) => {
     await installRafCounter(page);
     await page.goto('/probe/particle-runtime', { waitUntil: 'networkidle' });
+    await expectHydrated(page);
 
     recordCra15Measurement('mobile-meta', {
       device: 'Pixel 7',
@@ -74,6 +76,7 @@ test.describe('Governed runtimes fall back statically on a mobile device', () =>
 
   test('Spatial keeps a mobile viewport static with no live WebGL context', async ({ page }) => {
     await page.goto('/probe/spatial-runtime', { waitUntil: 'networkidle' });
+    await expectHydrated(page);
 
     await expect(page.locator(SPATIAL_CANVAS)).toHaveCount(0);
     await expect(page.locator(SPATIAL_LIVE)).toHaveCount(0);

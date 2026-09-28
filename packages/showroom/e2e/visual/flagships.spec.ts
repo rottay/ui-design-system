@@ -1,5 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-GAT-01 — pixel-diff net over the flagship galleries (proposal P-11).
 //
@@ -61,6 +63,7 @@ for (const tenant of TENANTS) {
         await page.goto(`/probe/engine-modern?tenant=${tenant.id}&slug=${slug}&w=${vw}`, {
           waitUntil: 'networkidle',
         });
+        await expectHydrated(page);
         await page.getByRole('heading', { name: /modern engine evidence/i }).waitFor({ timeout: 30_000 });
         // `document.fonts.ready` resolves for the faces that have STARTED
         // loading; a face first referenced by late-painting content can still

@@ -12,6 +12,7 @@ import {
 import { themanagementmiamiFlatTheme as canonicalManagementTheme } from "../../../core/tests/fixtures/brand-themes/themanagementmiami";
 import { FLEET_ARTIFACT_TESTID } from "../../src/components/probes/ground/documents";
 import { themanagementmiamiFlatTheme as showroomManagementTheme } from "../../src/components/torture-surface/fixtures";
+import { expectHydrated } from "../support/hydration";
 
 type Fixture = "bithire" | "themanagementmiami";
 type Locale = "en" | "es" | "ar";
@@ -854,6 +855,7 @@ async function gotoCell(
     `/probe/brand-locale-evidence?fixture=${fixture}&locale=${locale}`,
     { waitUntil: "networkidle" }
   );
+  await expectHydrated(page);
   await waitForSettledCell(page, fixture, locale);
 }
 

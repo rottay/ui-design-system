@@ -1,5 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // The client runtime consumes the artifact the server mounted.
 //
@@ -61,6 +63,7 @@ async function readingsFor(page: Page, candidate: string): Promise<Readings> {
     `/probe-ground/identity?candidate=${candidate}&mode=light&screen=list`,
     { waitUntil: 'networkidle' },
   );
+  await expectHydrated(page);
 
   // (1) The stage, not the loading screen. The provider blocks by rendering
   // `LoadingScreen` when an artifact cannot be admitted, so its absence is the

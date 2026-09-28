@@ -1,5 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../../support/hydration';
+
 // WO-SKIN-06 visualizations inert baseline. The same deterministic catalog is captured
 // before and after static paint moves so selector/anatomy work cannot hide a
 // visual, responsive or cross-engine regression.
@@ -94,6 +96,7 @@ async function openProbe(
   await page.goto(`/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=${width}&slug=button&visualizations=1`, {
     waitUntil: 'domcontentloaded',
   });
+  await expectHydrated(page);
   const root = page.locator(ROOT_SELECTOR);
   await root.waitFor({ timeout: 30_000 });
   await page.waitForFunction((expected) => document.documentElement.getAttribute('data-engine') === expected, engine);

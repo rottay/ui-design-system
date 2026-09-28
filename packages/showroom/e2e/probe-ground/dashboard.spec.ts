@@ -1,6 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // WO-FAM-13 acceptance on the probe-ground dashboard (six widgets, the Modern board, mounted
 // through the probe-ground kernel). Arm (a) is KEYBOARD ONLY: after navigation the page is driven
 // by key presses alone -- Tab to reach a control, arrows to move or resize -- and never a click.
@@ -15,6 +17,7 @@ const cellOrder = (page: Page) =>
 
 async function open(page: Page, width?: number) {
   await page.goto(width ? `${ROUTE}?width=${width}` : ROUTE, { waitUntil: 'load' });
+  await expectHydrated(page);
   await expect(page.locator('[data-testid="dashboard-probe-stamp"]')).toHaveCount(1);
   await expect(page.locator(`${BOARD} [data-part="card-shell"]`)).toHaveCount(5);
 }

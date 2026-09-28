@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-ARC-07 — the interaction states of a skin, pinned in a real browser.
 //
@@ -373,6 +375,7 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine, probe: Pr
     `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&slug=${probe.slug}${probe.query ?? ''}`,
     { waitUntil: 'domcontentloaded' }
   );
+  await expectHydrated(page);
   await page.waitForSelector(probe.selector);
   await page.waitForFunction(
     (expected) => document.documentElement.getAttribute('data-engine') === expected,

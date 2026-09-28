@@ -1,5 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 type Fixture = 'rottay' | 'bithire';
 type Engine = 'modern' | 'rustic';
 
@@ -33,6 +35,7 @@ async function openCase(
   await page.goto(`/probe/loading-overlay?fixture=${fixture}&engine=${engine}`, {
     waitUntil: 'domcontentloaded',
   });
+  await expectHydrated(page);
   await page.evaluate(() => document.fonts.ready);
   await page.waitForFunction(
     (expected) => document.documentElement.getAttribute('data-engine') === expected,

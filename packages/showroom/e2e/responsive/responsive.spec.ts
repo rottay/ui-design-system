@@ -2,6 +2,8 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-ENG-12 — responsive conformance probe (spec section 13).
 //
@@ -98,6 +100,7 @@ function ratchet(previous: string[], observed: string[]): string[] {
 async function gotoCell(page: Page, set: 'flagship' | 'responsive', slug: string, tenant: string): Promise<void> {
   const setParam = set === 'responsive' ? '&set=responsive' : '';
   await page.goto(`/probe/engine-modern?tenant=${tenant}&slug=${slug}&w=360${setParam}`, { waitUntil: 'networkidle' });
+  await expectHydrated(page);
   await page.getByRole('heading', { name: /modern engine evidence/i }).waitFor({ timeout: 30_000 });
   await page.waitForFunction((t) => document.documentElement.getAttribute('data-tenant') === t, tenant, {
     timeout: 20_000,

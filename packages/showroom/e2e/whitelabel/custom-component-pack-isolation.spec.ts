@@ -115,6 +115,8 @@ import {
   type Page,
 } from "@playwright/test";
 
+import { expectHydrated } from "../support/hydration";
+
 const CONTROL_ROUTE = "/foundations";
 const PACK_ROUTE = "/foundations/engines/custom-component-pack";
 const PROBE_ROUTE = "/probe/custom-component-pack";
@@ -568,6 +570,7 @@ async function unmountFrame(page: Page) {
  */
 async function arriveViaSpa(page: Page): Promise<RootSnapshot> {
   await page.goto(CONTROL_ROUTE);
+  await expectHydrated(page);
   await page.waitForLoadState("networkidle");
 
   // `ShowroomLink` rewrites hrefs with an engine/tenant override read from
@@ -897,6 +900,7 @@ test.describe("custom component pack — realm isolation", () => {
     // It is a separate page, so it cannot touch the page under test.
     const controlPage = await context.newPage();
     await controlPage.goto(PROBE_INDEX_ROUTE);
+    await expectHydrated(controlPage);
     await controlPage.waitForLoadState("networkidle");
     const bareProbe = await settledRoot(controlPage);
     await controlPage.close();

@@ -1,5 +1,7 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-SKIN-03 checkpoint O -- the overlays family (Modal, Drawer, Toast,
 // Message, Notification, Result) data-part contract evidence.
@@ -62,6 +64,7 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
     `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=1280&slug=button&overlayfb=1`,
     { waitUntil: 'domcontentloaded' },
   );
+  await expectHydrated(page);
 
   const container = page.locator(CONTAINER_SELECTOR);
   await container.waitFor({ timeout: 30_000 });

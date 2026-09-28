@@ -4,6 +4,8 @@ import { dirname, join } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../../../../support/hydration';
+
 // ---------------------------------------------------------------------------
 // K3 Lane C (layout & navigation chrome) whitelabel evidence.
 //
@@ -70,6 +72,7 @@ function cellUrl(source: Source, locale: Locale, density: Density, state: State)
 /** The deterministic render witness: lane testid + compiled theme + fonts. */
 async function gotoCell(page: Page, url: string): Promise<void> {
   await page.goto(url, { waitUntil: 'networkidle' });
+  await expectHydrated(page);
   await page.getByTestId(WITNESS).waitFor({ timeout: 30_000 });
   await page.waitForFunction(
     () =>

@@ -16,6 +16,7 @@ import {
   DIVERGENCE_EDITORIAL_EXPECTED_ANATOMY,
   DIVERGENCE_EDITORIAL_IDENTITY,
 } from '../../../core/tests/fixtures/brand-themes/divergence-editorial';
+import { expectHydrated } from '../support/hydration';
 
 // ---------------------------------------------------------------------------
 // W4 divergence demo — the wave exit certification (design w4-whitelabel
@@ -129,6 +130,7 @@ async function gotoDivergence(
     `/probe/whitelabel-divergence?fixture=${fixture}&route=${route}&ground=${ground}`,
     { waitUntil: 'networkidle' },
   );
+  await expectHydrated(page);
 
   await page.waitForFunction(
     (expectedSlug: string) => {

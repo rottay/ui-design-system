@@ -2,6 +2,8 @@ import { existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { test, type Page } from '@playwright/test';
 
+import { expectHydrated } from '../support/hydration';
+
 // ---------------------------------------------------------------------------
 // WO-ENG-20 — themanagementmiami vs bithire sighted comparison.
 //
@@ -48,6 +50,7 @@ const artifactDir = (): string =>
  */
 async function gotoSightedFixture(page: Page, fixture: SightedFixture): Promise<void> {
   await page.goto(`/probe/whitelabel-torture?fixture=${fixture}&w=${CAPTURE_WIDTH}`, { waitUntil: 'networkidle' });
+  await expectHydrated(page);
   await page.getByRole('heading', { name: /whitelabel torture/i }).waitFor({ timeout: 30_000 });
 
   await page.waitForFunction(

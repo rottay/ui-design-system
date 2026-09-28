@@ -57,6 +57,7 @@
  */
 import { expect, test, type Page } from "@playwright/test";
 import bithirePreset from "../../../core/src/foundation/presets/verticals/bithire/document/index.json" with { type: "json" };
+import { expectHydrated } from "../support/hydration";
 
 type Source = "bithire-static" | "themanagement-db";
 type Density = "compact" | "comfortable" | "spacious";
@@ -225,6 +226,7 @@ async function readBoundary(page: Page): Promise<BoundaryReading> {
 
 async function openCell(page: Page, cell: Cell): Promise<void> {
   await page.goto(cellUrl(cell), { waitUntil: "networkidle" });
+  await expectHydrated(page);
   await expect(page.getByTestId("da-frame")).toHaveAttribute(
     "data-da-source",
     cell.source
