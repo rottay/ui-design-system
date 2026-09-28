@@ -173,18 +173,24 @@ test('rottay (dark) / misc H2: token-inspector active with color/text rows, unpi
 
   // Dispatch the component's public Ctrl+Shift+T contract directly to window;
   // browser chrome can reserve this chord before a page-level keyboard event.
-  await page.evaluate(() => {
-    window.dispatchEvent(new KeyboardEvent('keydown', {
-      key: 'T',
-      ctrlKey: true,
-      shiftKey: true,
-      bubbles: true,
-      cancelable: true,
-    }));
-  });
-
+  // Hydration commits before every passive effect has run, so a chord can land
+  // before the inspector listens; it is re-sent only while the panel is absent,
+  // because a second chord on an open panel would toggle it shut.
   const panel = page.locator('.ds-pattern-token-inspector[data-part="panel"]');
-  await panel.waitFor({ state: 'visible' });
+  await expect(async () => {
+    if ((await panel.count()) === 0) {
+      await page.evaluate(() => {
+        window.dispatchEvent(new KeyboardEvent('keydown', {
+          key: 'T',
+          ctrlKey: true,
+          shiftKey: true,
+          bubbles: true,
+          cancelable: true,
+        }));
+      });
+    }
+    await expect(panel).toBeVisible({ timeout: 1_000 });
+  }).toPass({ timeout: 15_000 });
   await target.hover({ position: { x: 48, y: 24 } });
   await expect(panel.locator('[data-part="token-row"]').first()).toBeVisible();
   await expect(panel.locator('[data-part="token-value"][data-value-kind="color"]').first()).toBeVisible();

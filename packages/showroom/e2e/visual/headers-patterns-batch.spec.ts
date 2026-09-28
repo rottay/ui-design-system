@@ -213,6 +213,19 @@ const SCOPE: Record<string, string> = {
   workbench: '.ds-pattern-workbench-header',
 };
 
+/**
+ * The back slot is a box-less `display: contents` wrapper, so the paint lives
+ * on its inner button; the frame pads that button because the focus ring and
+ * hover chrome draw outside its border box.
+ */
+async function controlFrame(control: Locator, pad = 8): Promise<{ x: number; y: number; width: number; height: number }> {
+  const box = await control.boundingBox();
+  if (!box) throw new Error('the back control has no layout box');
+  const x = Math.floor(box.x - pad);
+  const y = Math.floor(box.y - pad);
+  return { x, y, width: Math.ceil(box.x + box.width + pad) - x, height: Math.ceil(box.y + box.height + pad) - y };
+}
+
 const band = (container: Locator, name: string): Locator =>
   container.locator(`[data-testid="probe-headers-patterns-${name}"] ${SCOPE[name]}`);
 
@@ -245,47 +258,58 @@ test('rottay (dark) / headers-patterns / modern: cockpit BackButton hovered', as
   test.setTimeout(60_000);
 
   const container = await openProbe(page, 'rottay', 'modern');
-  const back = band(container, 'cockpit').locator("[data-part='back']").first();
+  const back = band(container, 'cockpit').locator("[data-part='back'] > button").first();
+  await back.scrollIntoViewIfNeeded();
   await back.hover();
   await waitForSettled(page, back);
 
-  await expect(back).toHaveScreenshot('rottay-headers-patterns-cockpit-back-modern-hovered.png');
+  await expect(page).toHaveScreenshot('rottay-headers-patterns-cockpit-back-modern-hovered.png', {
+    clip: await controlFrame(back),
+  });
 });
 
 test('rottay (dark) / headers-patterns / modern: cockpit BackButton focused', async ({ page }) => {
   test.setTimeout(60_000);
 
   const container = await openProbe(page, 'rottay', 'modern');
-  const back = band(container, 'cockpit').locator("[data-part='back']").first();
-  // The component keys on React's onFocus, which fires for programmatic focus
-  // too -- so `.focus()` exercises exactly the condition a `:focus` rule will
-  // key on, without depending on the page's whole tab order.
+  const back = band(container, 'cockpit').locator("[data-part='back'] > button").first();
+  await back.scrollIntoViewIfNeeded();
+  // Programmatic focus with no prior pointer input matches `:focus-visible`,
+  // without depending on the page's whole tab order.
   await back.focus();
   await waitForSettled(page, back);
 
-  await expect(back).toHaveScreenshot('rottay-headers-patterns-cockpit-back-modern-focused.png');
+  await expect(page).toHaveScreenshot('rottay-headers-patterns-cockpit-back-modern-focused.png', {
+    clip: await controlFrame(back),
+  });
 });
 
 test('rottay (dark) / headers-patterns / modern: page-shell BackButton hovered', async ({ page }) => {
   test.setTimeout(60_000);
 
   const container = await openProbe(page, 'rottay', 'modern');
-  const back = band(container, 'page-shell').locator("[data-part='back']").first();
+  const back = band(container, 'page-shell').locator("[data-part='back'] > button").first();
+  await back.scrollIntoViewIfNeeded();
   await back.hover();
   await waitForSettled(page, back);
 
-  await expect(back).toHaveScreenshot('rottay-headers-patterns-pageshell-back-modern-hovered.png');
+  await expect(page).toHaveScreenshot('rottay-headers-patterns-pageshell-back-modern-hovered.png', {
+    clip: await controlFrame(back),
+  });
 });
 
 test('rottay (dark) / headers-patterns / modern: page-shell BackButton focused', async ({ page }) => {
   test.setTimeout(60_000);
 
   const container = await openProbe(page, 'rottay', 'modern');
-  const back = band(container, 'page-shell').locator("[data-part='back']").first();
+  const back = band(container, 'page-shell').locator("[data-part='back'] > button").first();
+  await back.scrollIntoViewIfNeeded();
   await back.focus();
   await waitForSettled(page, back);
 
-  await expect(back).toHaveScreenshot('rottay-headers-patterns-pageshell-back-modern-focused.png');
+  await expect(page).toHaveScreenshot('rottay-headers-patterns-pageshell-back-modern-focused.png', {
+    clip: await controlFrame(back),
+  });
 });
 
 // ---------------------------------------------------------------------------

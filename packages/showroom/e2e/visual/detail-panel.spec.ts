@@ -79,6 +79,19 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine, width: nu
   return container;
 }
 
+/**
+ * The action slot is a box-less `display: contents` wrapper, so the paint
+ * lives on its inner button; the frame pads that button because the focus
+ * ring and hover lift draw outside its border box.
+ */
+async function controlFrame(control: Locator, pad = 8): Promise<{ x: number; y: number; width: number; height: number }> {
+  const box = await control.boundingBox();
+  if (!box) throw new Error('the action control has no layout box');
+  const x = Math.floor(box.x - pad);
+  const y = Math.floor(box.y - pad);
+  return { x, y, width: Math.ceil(box.x + box.width + pad) - x, height: Math.ceil(box.y + box.height + pad) - y };
+}
+
 for (const fixture of FIXTURES) {
   for (const engine of ENGINES) {
     for (const w of WIDTHS) {
@@ -103,22 +116,28 @@ test('rottay (dark) / detail-panel / modern: primary action-button hovered', asy
   test.setTimeout(60_000);
 
   const container = await openProbe(page, 'rottay', 'modern', 1280);
-  const button = container.locator('[data-part="action-button"][data-variant="primary"]').first();
+  const button = container.locator('[data-part="action-button"][data-variant="primary"] > button').first();
+  await button.scrollIntoViewIfNeeded();
   await button.hover();
   await page.waitForTimeout(300);
 
-  await expect(button).toHaveScreenshot('rottay-detail-panel-modern-action-primary-hovered.png');
+  await expect(page).toHaveScreenshot('rottay-detail-panel-modern-action-primary-hovered.png', {
+    clip: await controlFrame(button),
+  });
 });
 
 test('rottay (dark) / detail-panel / modern: primary action-button focused', async ({ page }) => {
   test.setTimeout(60_000);
 
   const container = await openProbe(page, 'rottay', 'modern', 1280);
-  const button = container.locator('[data-part="action-button"][data-variant="primary"]').first();
+  const button = container.locator('[data-part="action-button"][data-variant="primary"] > button').first();
+  await button.scrollIntoViewIfNeeded();
   await button.focus();
   await page.waitForTimeout(300);
 
-  await expect(button).toHaveScreenshot('rottay-detail-panel-modern-action-primary-focused.png');
+  await expect(page).toHaveScreenshot('rottay-detail-panel-modern-action-primary-focused.png', {
+    clip: await controlFrame(button),
+  });
 });
 
 test('rottay (dark) / detail-panel / modern: inactive tab hovered', async ({ page }) => {
