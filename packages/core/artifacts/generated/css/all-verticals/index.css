@@ -20460,7 +20460,8 @@ html[data-tenant] .ant-typography a {
    the pressed posture below is the tactile equivalent and stays
    pointer-agnostic. `data-state` can carry hovered+pressed together, so
    every pressed rule keeps its place AFTER the hover block and wins the
-   cascade — the same order the ungated rules relied on.
+   cascade — the same order the ungated rules relied on. The guarded hover
+   transform outweighs the press rule, so it excludes `pressed` outright.
 
    Connected-group children never translate or scale on hover/press: a
    geometric lift would open a discontinuity at the shared 1px edge, so
@@ -20468,11 +20469,11 @@ html[data-tenant] .ant-typography a {
    ------------------------------------------------------------------------- */
 
 @media (hover: hover) {
-  .ds-button.ds-button--modern[data-state~='hovered']:not([data-disabled='true']):not(
-      [data-loading='true']
-    ):not([data-pending='true']):not([data-variant='link']):not([data-variant='text']):not(
-      .ds-button-group[data-connected='true'] > *
-    ) {
+  .ds-button.ds-button--modern[data-state~='hovered']:not([data-state~='pressed']):not(
+      [data-disabled='true']
+    ):not([data-loading='true']):not([data-pending='true']):not([data-variant='link']):not(
+      [data-variant='text']
+    ):not(.ds-button-group[data-connected='true'] > *) {
     transform: var(--ds-button-hover-transform);
     filter: var(--ds-button-hover-filter);
   }
@@ -21134,6 +21135,15 @@ html[data-tenant] .ant-typography a {
   transition: opacity var(--ds-card-transition-duration) var(--ds-card-transition-timing);
 }
 
+/* The personality layer paints every card's native :hover from this channel;
+   an interactive card lifts unless a personality states its own transform. */
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'] {
+  --ds-card-hover-transform: var(
+    --_ds-personality-resolved-card-hover-transform,
+    var(--ds-card-interactive-transform-hover)
+  );
+}
+
 /* Hover paint exists only where the pointer can hover; on touch the pressed
    posture below is the tactile equivalent. */
 @media (hover: hover) {
@@ -21227,21 +21237,22 @@ html[data-tenant] .ant-typography a {
 }
 
 @media (hover: hover) {
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-tone]):not([data-selected='true']):not([data-state~='disabled']) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-state~='pressed']):not([data-tone]):not([data-selected='true']):not([data-state~='disabled']) {
     background-color: var(--ds-card-bg-hover, var(--ds-material-card-background-hover, var(--ds-card-bg)));
   }
 
   .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-state~='disabled']) {
     --ds-elevation-lift: 1;
   }
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-state~='disabled']):not([data-shadowed='false']) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-state~='pressed']):not([data-state~='disabled']):not([data-shadowed='false']) {
     box-shadow: var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover));
   }
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]):not([data-state~='disabled']) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-state~='pressed']):not([data-tone]):not([data-state~='disabled']) {
     border-color: var(--ds-card-outlined-border-hover, var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary)))));
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-state~='disabled']) {
+  --ds-card-hover-transform: var(--ds-card-active-transform);
   transform: var(--ds-card-active-transform);
   color: var(--ds-card-color-active, var(--ds-card-color));
   background-color: var(--ds-card-bg-active, var(--ds-material-card-background-active, var(--ds-card-bg)));
