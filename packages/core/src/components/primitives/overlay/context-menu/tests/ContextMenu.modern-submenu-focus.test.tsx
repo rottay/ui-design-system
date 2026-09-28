@@ -117,14 +117,28 @@ describe('Modern ContextMenu disclosure relations', () => {
 
     const trigger = screen.getByRole('button', { name: 'Right-click area' });
     // Closed: no panel is mounted, so a dangling reference would point at
-    // nothing and the expanded state is meaningless.
+    // nothing. APG gives a context menu no expandable trigger, so the trigger
+    // never carries aria-expanded or aria-haspopup (the consumer's element may
+    // have no role that allows them: axe aria-allowed-attr).
     expect(trigger).not.toHaveAttribute('aria-controls');
-    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger).not.toHaveAttribute('aria-expanded');
+    expect(trigger).not.toHaveAttribute('aria-haspopup');
 
     fireEvent.contextMenu(trigger);
     const menu = await screen.findByRole('menu');
 
     expect(trigger).toHaveAttribute('aria-controls', menu.id);
-    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(trigger).not.toHaveAttribute('aria-expanded');
+    expect(trigger).not.toHaveAttribute('aria-haspopup');
+  });
+
+  it('stamps no disclosure state on a role-less trigger area', async () => {
+    render(<ModernContextMenu items={ITEMS} trigger={<div data-testid="area">Area</div>} />);
+    const area = screen.getByTestId('area');
+    fireEvent.contextMenu(area);
+    const menu = await screen.findByRole('menu');
+    expect(area).toHaveAttribute('aria-controls', menu.id);
+    expect(area).not.toHaveAttribute('aria-expanded');
+    expect(area).not.toHaveAttribute('aria-haspopup');
   });
 });

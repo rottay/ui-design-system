@@ -74,13 +74,29 @@ describe('hover-card direction, loading and accessibility', () => {
     expect(cardMarkup('rtl').placement).toBe('bottom-end');
   });
 
-  it('describes its trigger with the card it controls', () => {
+  // A hover card is supplementary content, not a disclosure (APG): the open
+  // card describes the trigger, and no aria-expanded lands on a role-less child.
+  it('describes its trigger with the open card', () => {
     render(
-      <ModernHoverCard open content={<p>Ada Lovelace, platform owner</p>} trigger={<a href="#ada">@ada</a>} />,
+      <ModernHoverCard
+        open
+        content={<p>Ada Lovelace, platform owner</p>}
+        trigger={<a href="#ada" aria-describedby="ada-hint">@ada</a>}
+      />,
     );
     const trigger = screen.getByRole('link', { name: '@ada' });
-    expect(trigger).toHaveAttribute('aria-expanded', 'true');
-    expect(document.getElementById(trigger.getAttribute('aria-controls')!)).toHaveTextContent('Ada Lovelace');
+    const [hint, card] = trigger.getAttribute('aria-describedby')!.split(' ');
+    expect(hint).toBe('ada-hint');
+    expect(document.getElementById(card)).toHaveTextContent('Ada Lovelace');
+    expect(trigger).not.toHaveAttribute('aria-expanded');
+    expect(trigger).not.toHaveAttribute('aria-controls');
+  });
+
+  it('describes nothing while closed and stamps no state on a role-less trigger', () => {
+    render(<ModernHoverCard content={<p>Ada Lovelace</p>} trigger={<span>@ada</span>} />);
+    const trigger = screen.getByText('@ada');
+    expect(trigger).not.toHaveAttribute('aria-describedby');
+    expect(trigger).not.toHaveAttribute('aria-expanded');
   });
 
   it('builds its loading state from its own anatomy', () => {

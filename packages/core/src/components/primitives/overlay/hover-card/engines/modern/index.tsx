@@ -25,8 +25,8 @@
  * ```
  *
  * The trigger MUST be a focusable element (link/button) for the card to be
- * keyboard-reachable: the engine wires focus/blur parity and clones
- * aria-controls/aria-expanded onto the trigger ELEMENT, but it never
+ * keyboard-reachable: the engine wires focus/blur parity and points the
+ * trigger ELEMENT's aria-describedby at the open card, but it never
  * fabricates interactivity on a non-interactive child (a plain <span>
  * receives no tabIndex -- a focusable-but-actionless trigger is a worse
  * accessibility outcome than a documented contract). Enforcing an
@@ -227,17 +227,18 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     layerProps,
   } = overlay;
 
-  // Disclosure semantics live on the consumer's trigger ELEMENT (Popover's
-  // describeTrigger precedent): this role-less wrapper may not carry
-  // aria-controls/aria-expanded (axe aria-allowed-attr). Non-element triggers
-  // (text, fragments) receive nothing — there is no valid host for them.
+  // A hover card is supplementary content, not a disclosure: the open card
+  // describes the trigger, which stays valid on a role-less child.
   const surfaceId = useId();
+  const cardDescribes = isOpen && shouldRender && mounted;
   const describedTrigger =
-    isValidElement(trigger) && trigger.type !== React.Fragment
-      ? cloneElement(
-          trigger as React.ReactElement<{ 'aria-controls'?: string; 'aria-expanded'?: boolean }>,
-          { 'aria-controls': surfaceId, 'aria-expanded': isOpen },
-        )
+    isValidElement<{ 'aria-describedby'?: string }>(trigger) && trigger.type !== React.Fragment
+      ? cloneElement(trigger, {
+          'aria-describedby':
+            [trigger.props['aria-describedby'], cardDescribes ? surfaceId : undefined]
+              .filter(Boolean)
+              .join(' ') || undefined,
+        })
       : trigger;
 
   // The band travels on the family layer channel; the measured positioning

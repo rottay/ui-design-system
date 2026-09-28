@@ -26,9 +26,9 @@
  * parts; `item.children` expands an INLINE (accordion) submenu, never a
  * fly-out, because the panel is a scroll container and would clip it. Every
  * menu level runs the same APG keyboard contract (arrows/Home/End/typeahead,
- * logical forward/backward submenu keys). Disclosure semantics are cloned
- * onto the consumer's trigger element (aria-haspopup/controls/expanded), and
- * an empty item list mounts no panel at all.
+ * logical forward/backward submenu keys). The consumer's trigger element
+ * gets only aria-controls while the menu is mounted (APG gives a context menu
+ * no expandable trigger), and an empty item list mounts no panel at all.
  *
  * @example
  * ```tsx
@@ -442,26 +442,14 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     handleMenuLevelKeyDown(e);
   }, []);
 
-  // Disclosure semantics live on the consumer's trigger ELEMENT (Dropdown's
-  // describeTrigger precedent): this role-less wrapper may not carry
-  // aria-haspopup/aria-expanded (axe aria-allowed-attr). Non-element triggers
-  // (text, fragments) receive nothing -- there is no valid host for them.
+  // APG gives a context menu no expandable trigger, and the consumer's element
+  // may carry no role (aria-expanded/aria-haspopup would fail aria-allowed-attr).
   const surfaceId = useId();
   const describedTrigger =
     isValidElement(trigger) && trigger.type !== React.Fragment
       ? cloneElement(
-          trigger as React.ReactElement<{
-            'aria-controls'?: string;
-            'aria-expanded'?: boolean;
-            'aria-haspopup'?: 'menu';
-          }>,
-          {
-            // Only reference a surface that exists: while closed no panel is
-            // mounted, so a permanent aria-controls pointed at nothing.
-            'aria-controls': shouldRender ? surfaceId : undefined,
-            'aria-expanded': isOpen,
-            'aria-haspopup': 'menu',
-          },
+          trigger as React.ReactElement<{ 'aria-controls'?: string }>,
+          { 'aria-controls': shouldRender ? surfaceId : undefined },
         )
       : trigger;
 
