@@ -89,6 +89,14 @@ interface Probe {
   property: string;
   /** Dot path into the tenant's FlatTheme naming the channel this part must paint from. */
   themePath: string | null;
+  /**
+   * A `--ds-*` channel the part must paint from, resolved in the part's own
+   * cascade, for a part whose channel is derived rather than FlatTheme-authored.
+   * Mutually exclusive with `themePath`.
+   */
+  channel?: string;
+  /** Read the LAST colour stop of a gradient `background-image` instead of the whole value. */
+  gradientStop?: 'last';
   kind: ProbeKind;
   /** Only reachable once the flagship's modal is opened (it renders in a portal). */
   requiresModal?: boolean;
@@ -159,10 +167,13 @@ const PROBES: readonly Probe[] = [
   { key: 'modal/dialog/background-color', selector: ".ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface']", property: 'background-color', themePath: 'chrome.modal.bg', kind: 'color', requiresModal: true },
   { key: 'modal/dialog/border-radius', selector: ".ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface']", property: 'border-top-left-radius', themePath: 'surfaces.borderRadius.lg', kind: 'length', requiresModal: true },
 
-  // Toast — the modern engine's `default` variant has no chrome.toast.*
-  // FlatTheme section of its own (WO-ENG-21), so it reads the card surface
-  // pair, the only FlatTheme-reachable neutral elevated surface today.
-  { key: 'toast/default/background-color', selector: '[data-testid="probe-extras"] [role="alert"]', property: 'background-color', themePath: 'chrome.cardComponent.bg', kind: 'color' },
+  // Toast — the notifier root paints with the `background` shorthand: a
+  // linear-gradient from the tone wash to the surface, so `background-color`
+  // computes transparent by CSS rule. The surface is the gradient's LAST stop
+  // and it must be the toast channel (`--ds-notifier-toast-bg`, derived onto the
+  // overlay material) -- no FlatTheme section authors it, so the anchor is the
+  // channel resolved in the toast's own cascade.
+  { key: 'toast/default/background-surface', selector: '[data-testid="probe-extras"] .ds-notifier[data-part="root"][role="alert"]', property: 'background-image', themePath: null, channel: '--ds-notifier-toast-bg', gradientStop: 'last', kind: 'color' },
 ];
 
 interface Reading {
@@ -230,6 +241,46 @@ async function readProbes(page: Page, probes: Probe[]): Promise<Readings> {
     const normalizeFont = (value: string): string =>
       value.replace(/["']/g, '').replace(/\s*,\s*/g, ',').trim().toLowerCase();
 
+    // The last colour stop of a computed gradient, stripped of its position.
+    // Null when the value is not a gradient, so a flat fill cannot pass as one.
+    const lastGradientStop = (value: string): string | null => {
+      const open = value.indexOf('(');
+      if (!/gradient\(/.test(value) || open < 0 || !value.endsWith(')')) return null;
+      const args: string[] = [];
+      let depth = 0;
+      let current = '';
+      for (const char of value.slice(open + 1, -1)) {
+        if (char === '(') depth += 1;
+        if (char === ')') depth -= 1;
+        if (char === ',' && depth === 0) {
+          args.push(current.trim());
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      args.push(current.trim());
+      const last = args[args.length - 1] ?? '';
+      const close = last.lastIndexOf(')');
+      const color = close >= 0 ? last.slice(0, close + 1) : last.split(/\s+/)[0];
+      return resolveThrough(color, 'color');
+    };
+
+    // A channel resolved where the part paints: a probe child inherits the
+    // part's cascade, so a scoped redeclaration is seen exactly as the part sees it.
+    const resolveChannel = (element: Element, channel: string): string | null => {
+      const probeEl = document.createElement('span');
+      probeEl.style.position = 'absolute';
+      probeEl.style.opacity = '0';
+      probeEl.style.pointerEvents = 'none';
+      probeEl.style.setProperty('color', `var(${channel})`);
+      element.appendChild(probeEl);
+      const raw = window.getComputedStyle(element).getPropertyValue(channel).trim();
+      const resolved = window.getComputedStyle(probeEl).getPropertyValue('color');
+      probeEl.remove();
+      return raw ? resolved || null : null;
+    };
+
     const brandTheme = (window as Window & { __probeBrandTheme?: unknown }).__probeBrandTheme;
 
     const atPath = (path: string): string | null => {
@@ -250,11 +301,14 @@ async function readProbes(page: Page, probes: Probe[]): Promise<Readings> {
         continue;
       }
 
-      let computed = window.getComputedStyle(element).getPropertyValue(probe.property).trim();
+      let computed: string | null = window.getComputedStyle(element).getPropertyValue(probe.property).trim();
       if (probe.kind === 'font') computed = normalizeFont(computed);
+      if (probe.gradientStop === 'last') computed = lastGradientStop(computed);
 
       let declared: string | null = null;
-      if (probe.themePath) {
+      if (probe.channel) {
+        declared = resolveChannel(element, probe.channel);
+      } else if (probe.themePath) {
         const asked = atPath(probe.themePath);
         if (asked) {
           declared =
@@ -402,15 +456,32 @@ test.describe('whitelabel torture probe', () => {
       const observed = torture[probe.key];
       const control = reference[probe.key];
 
-      if (observed.computed !== null && observed.computed === control.computed) {
+      // A channel-anchored part is only attributable to the tenant where the
+      // two tenants' channels actually disagree; a FlatTheme-anchored part has
+      // that precondition gated by the torture-fixtures unit test.
+      const tenantsDisagree = probe.channel ? observed.declared !== control.declared : true;
+      if (probe.channel && !tenantsDisagree) {
+        test.info().annotations.push({
+          type: 'differential-unattributable',
+          description: `${probe.key}: torture-dark and rottay resolve ${probe.channel} to the same ${observed.declared}, so the differential cannot see a hardcode here; the derivation check still runs`,
+        });
+      }
+
+      if (tenantsDisagree && observed.computed !== null && observed.computed === control.computed) {
         violations.push({ key: probe.key, reason: 'static-across-tenants' });
         continue;
       }
 
-      if (probe.themePath) {
+      if (probe.themePath || probe.channel) {
+        expect(
+          observed.computed,
+          `${probe.key}: ${probe.property} computed no comparable value${probe.gradientStop ? ' (no gradient stop to read)' : ''}`,
+        ).not.toBeNull();
         expect(
           observed.declared,
-          `torture-dark's FlatTheme sets nothing at ${probe.themePath}; the probe for ${probe.key} has no anchor`,
+          probe.channel
+            ? `${probe.channel} resolves to nothing on ${probe.key}; the probe has no anchor`
+            : `torture-dark's FlatTheme sets nothing at ${probe.themePath}; the probe for ${probe.key} has no anchor`,
         ).not.toBeNull();
 
         if (observed.computed !== observed.declared) {
@@ -455,6 +526,38 @@ test.describe('whitelabel torture probe', () => {
       novel.map(fingerprint),
       'new whitelabel violations: these component parts do not follow the tenant. Fix the hardcode; do not widen the baseline.',
     ).toEqual([]);
+  });
+
+  // The channel-anchored reader must be able to fail: the surface stop is
+  // moved off the toast channel (the channel itself untouched), then the fill
+  // is flattened so there is no gradient stop at all.
+  test('the toast surface anchor fails when the gradient leaves the toast channel', async ({ page }) => {
+    test.setTimeout(90_000);
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await gotoFixture(page, DIFFERENTIAL_FIXTURE);
+
+    const toast = PROBES.find((probe) => probe.channel === '--ds-notifier-toast-bg');
+    expect(toast, 'the toast probe is no longer channel-anchored').toBeDefined();
+    const target = page.locator(toast!.selector).first();
+
+    const honest = (await readProbes(page, [toast!]))[toast!.key];
+    expect(honest.missing).toBe(false);
+    expect(honest.declared).not.toBeNull();
+    expect(honest.computed).toBe(honest.declared);
+
+    await target.evaluate((element) =>
+      (element as HTMLElement).style.setProperty('--ds-notifier-surface-bg', 'rgb(1, 2, 3)'),
+    );
+    const repointed = (await readProbes(page, [toast!]))[toast!.key];
+    expect(repointed.declared, 'the toast channel itself must be untouched').toBe(honest.declared);
+    expect(repointed.computed, 'a stop off the toast channel read as derived').not.toBe(repointed.declared);
+
+    await target.evaluate((element, fill) => {
+      (element as HTMLElement).style.removeProperty('--ds-notifier-surface-bg');
+      (element as HTMLElement).style.setProperty('background', fill);
+    }, String(honest.declared));
+    const flattened = (await readProbes(page, [toast!]))[toast!.key];
+    expect(flattened.computed, 'a flat fill read as a gradient stop').toBeNull();
   });
 
   test('torture-light defines every probed channel', async () => {

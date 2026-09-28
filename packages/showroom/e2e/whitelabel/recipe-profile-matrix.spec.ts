@@ -2,25 +2,47 @@
  * DS-Q001L matrix — computed-style and DOM-parity evidence, no screenshots.
  *
  * The specimen route renders one identical tree for the six DS-S001 families
- * under the two opposing governed INGRESS PATHS: the code-owned `rottay`
- * registry tenant, whose checked-in FlatTheme authors `rottay/technical-
- * sharp@1` and whose CSS is bundled, versus a published customer document
+ * under the two opposing governed INGRESS PATHS: the code-owned first-party
+ * tenant whose published artifact runtime block selects `rottay/technical-
+ * sharp@1` (derived below, never assumed) and whose CSS is bundled, versus a published customer document
  * selecting `rottay/editorial-round@1`, compiled and mounted as a verified
  * artifact. This spec proves the machine-checkable half of the exit contract;
  * Sighted review uses the manifest in the wave handoff.
  *
  * Only the editorial side states expected colours literally: those bytes are
  * authored by the specimen's own document. The technical side's canvas is
- * Rottay's shipped identity, so it is asserted by CONTRACT — readable, and
+ * that vertical's shipped identity, so it is asserted by CONTRACT — readable, and
  * divergent from editorial — rather than by a number this spec would be
  * restating from the brand theme and silently pinning.
  */
 import { devices, expect, test, type Page } from "@playwright/test";
+import { FIRST_PARTY_ARTIFACT_RUNTIME } from "../../../core/src/infrastructure/compilers/runtime/tenant-css/artifact-runtime";
+import { RECIPE_PROFILES } from "../../../core/src/foundation/tokens/ts/presentation/recipe-profiles";
 
 type Source = "technical-static" | "editorial-db";
 type Locale = "en" | "es" | "ar";
 
 const SOURCES: readonly Source[] = ["technical-static", "editorial-db"];
+
+/**
+ * The profile whose recipe postures (outline / default / ruled) the
+ * divergence case asserts, and the first-party vertical that ships it as
+ * published. `undefined` means no vertical publishes it any more and the
+ * technical side has lost its subject.
+ */
+const TECHNICAL_PROFILE = "rottay/technical-sharp@1";
+/** The profile the specimen's own editorial document selects. */
+const EDITORIAL_PROFILE = "rottay/editorial-round@1";
+
+/** The published per-family defaults of a registry profile: the posture oracle. */
+function profileFamilies(id: string) {
+  const profile = RECIPE_PROFILES.find((entry) => entry.id === id);
+  if (!profile) throw new Error(`${id} is not in the published recipe-profile registry`);
+  return profile.families;
+}
+const TECHNICAL_VERTICAL = (
+  Object.entries(FIRST_PARTY_ARTIFACT_RUNTIME) as [string, { recipeProfile?: string }][]
+).find(([, block]) => block.recipeProfile === TECHNICAL_PROFILE)?.[0];
 const LOCALES: readonly Locale[] = ["en", "es", "ar"];
 const MOBILE = {
   userAgent: devices["Pixel 7"].userAgent,
@@ -117,10 +139,14 @@ test.describe("DS-Q001L: opposing profile sources over one tree", () => {
       'style[data-testid="showroom-tenant-artifact"]'
     );
 
+    expect(
+      TECHNICAL_VERTICAL,
+      `no first-party vertical publishes ${TECHNICAL_PROFILE}`
+    ).toBeDefined();
     await openCell(page, { source: "technical-static" });
     await expect(page.getByTestId("specimen-frame")).toHaveAttribute(
       "data-specimen-tenant",
-      "rottay"
+      TECHNICAL_VERTICAL!
     );
     // The code-owned path's CSS is bundled. An artifact here would mean the
     // specimen had synthesised a second visual authority.
@@ -166,7 +192,7 @@ test.describe("DS-Q001L: opposing profile sources over one tree", () => {
     );
     expect(canvases["editorial-db"].color).toBe("rgb(44, 24, 16)");
 
-    // Rottay's shipped canvas is not restated here; it only has to be a
+    // The technical vertical's shipped canvas is not restated here; it only has to be a
     // different ground from the customer's.
     expect(canvases["technical-static"]["background-color"]).not.toBe(
       canvases["editorial-db"]["background-color"]
@@ -210,6 +236,10 @@ test.describe("DS-Q001L: opposing profile sources over one tree", () => {
             .getByTestId("specimen-button-primary")
             .getAttribute("data-shape")) ?? "",
       };
+      captured[source].cardAttrs = {
+        variant:
+          (await page.getByTestId("specimen-card").first().getAttribute("data-variant")) ?? "",
+      };
       captured[source].tableAttrs = {
         recipe:
           (await page
@@ -222,16 +252,33 @@ test.describe("DS-Q001L: opposing profile sources over one tree", () => {
     const technical = captured["technical-static"];
     const editorial = captured["editorial-db"];
 
-    expect(technical.buttonAttrs.variant).toBe("outline");
-    expect(editorial.buttonAttrs.variant).toBe("primary");
-    expect(technical.buttonAttrs.shape).toBe("default");
-    expect(editorial.buttonAttrs.shape).toBe("round");
-    expect(technical.tableAttrs.recipe).toBe("ruled");
-    expect(editorial.tableAttrs.recipe).toBe("minimal");
+    // The technical postures below belong to TECHNICAL_PROFILE; they only
+    // apply when the mounted tenant is the vertical that publishes it.
+    expect(TECHNICAL_VERTICAL).toBeDefined();
+
+    const technicalProfile = profileFamilies(TECHNICAL_PROFILE);
+    const editorialProfile = profileFamilies(EDITORIAL_PROFILE);
+
+    // Each posture is the one its registry profile publishes, and the two
+    // profiles must actually disagree on it for the pair to prove anything.
+    const postures: [string, string, string | undefined, string | undefined][] = [
+      ["button variant", "buttonAttrs.variant", technicalProfile.button.variant, editorialProfile.button.variant],
+      ["button shape", "buttonAttrs.shape", technicalProfile.button.shape, editorialProfile.button.shape],
+      ["card variant", "cardAttrs.variant", technicalProfile.card.variant, editorialProfile.card.variant],
+      ["table recipe", "tableAttrs.recipe", technicalProfile.dataTable.recipe, editorialProfile.dataTable.recipe],
+    ];
+    for (const [name, path, technicalExpected, editorialExpected] of postures) {
+      const [group, attr] = path.split(".");
+      expect(technicalExpected, `${TECHNICAL_PROFILE} publishes no ${name}`).toBeDefined();
+      expect(editorialExpected, `${EDITORIAL_PROFILE} publishes no ${name}`).toBeDefined();
+      expect(technicalExpected, `the two profiles agree on ${name}`).not.toBe(editorialExpected);
+      expect(technical[group][attr], `technical ${name}`).toBe(technicalExpected);
+      expect(editorial[group][attr], `editorial ${name}`).toBe(editorialExpected);
+    }
 
     // Geometry divergence is asserted as divergence. The literal `0px` this
     // once pinned came from the deleted synthetic FlatTheme; the radius the
-    // registry tenant ships is Rottay's to change, and the profile contract is
+    // registry tenant ships is that vertical's to change, and the profile contract is
     // that the two postures do not agree.
     expect(technical.button["border-radius"]).not.toBe(
       editorial.button["border-radius"]
@@ -241,9 +288,6 @@ test.describe("DS-Q001L: opposing profile sources over one tree", () => {
     );
     expect(technical.heading["font-family"]).not.toBe(
       editorial.heading["font-family"]
-    );
-    expect(technical.card["background-color"]).not.toBe(
-      editorial.card["background-color"]
     );
   });
 

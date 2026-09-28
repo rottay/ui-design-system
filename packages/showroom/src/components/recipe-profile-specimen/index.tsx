@@ -5,9 +5,9 @@
  *
  * One identical component tree for the six DS-S001 families rendered under the
  * two GOVERNED INGRESS PATHS a recipe profile actually has:
- *  - `technical-static`: the code-owned `rottay` registry tenant, whose own
- *    checked-in FlatTheme authors `rottay/technical-sharp@1` (ruled, outlined,
- *    square posture -- and Rottay's real near-black canvas);
+ *  - `technical-static`: the code-owned `bithire` registry tenant, whose own
+ *    compiled artifact selects `rottay/technical-sharp@1` (ruled, outlined,
+ *    square posture -- and bithire's real shipped canvas);
  *  - `editorial-db`: a published customer document selecting
  *    `rottay/editorial-round@1`, validated, compiled and mounted as a verified
  *    artifact (rounded, soft, elevated, warm).

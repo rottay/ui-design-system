@@ -201,6 +201,8 @@ for (const source of SOURCES) {
 // ---------------------------------------------------------------------------
 
 const DROPDOWN_TRIGGER = '[data-testid="k4a-dropdown-start"] button';
+const DROPDOWN_START_MENU = '[data-testid="k4a-dropdown-start"] [role="menu"]';
+const DROPDOWN_CENTER_MENU = '[data-testid="k4a-dropdown-center"] [role="menu"]';
 const CONTEXTMENU_AREA = '[data-testid="k4a-contextmenu"]';
 const HOVERCARD_TRIGGER = '[data-testid="k4a-hovercard-start"] button, [data-testid="k4a-hovercard-start"] a, [data-testid="k4a-hovercard-start"] [data-part="trigger"]';
 const TOUR_SURFACE = '[data-part="surface"]';
@@ -212,26 +214,48 @@ test('k4-lane-a: interactive overlays open and respond', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference', forcedColors: 'none' });
   await gotoCell(page, cellUrl('bithire-static', 'en', 'comfortable', 'rest'));
 
-  await test.step('dropdown: click opens a menu surface, Escape closes it', async () => {
+  // The probe mounts all three dropdowns open and the Tour open after them,
+  // and every one of them is a blocking layer on the shared stack. Escape is
+  // served to the TOP-MOST blocking layer only, so the start menu is toggled
+  // closed and re-opened first: re-opening re-registers it above the Tour.
+  await test.step('dropdown: click toggles the menu, Escape dismisses only the top-most layer', async () => {
     const trigger = page.locator(DROPDOWN_TRIGGER).first();
+    const menu = page.locator(DROPDOWN_START_MENU);
+    const center = page.locator(DROPDOWN_CENTER_MENU);
+    await expect(menu, 'the probe mounts the start dropdown open').toBeVisible({ timeout: 10_000 });
+    await expect(center, 'the probe mounts the center dropdown open').toBeVisible();
     await trigger.click();
-    const menu = page.locator('[role="menu"]').first();
-    await menu.waitFor({ timeout: 10_000 });
+    await expect(menu).toBeHidden({ timeout: 10_000 });
+    await trigger.click();
+    await expect(menu).toBeVisible({ timeout: 10_000 });
     await page.screenshot({ path: join(capturesDir(), 'k4a-dropdown-open.png') });
     await page.keyboard.press('Escape');
     await expect(menu).toBeHidden({ timeout: 10_000 });
+    // One Escape, one layer: the lower blocking layers keep their surfaces.
+    await expect(center, 'Escape reached a layer below the top-most one').toBeVisible();
+    await expect(page.locator(TOUR_SURFACE).first()).toBeVisible();
   });
 
   await test.step('dropdown: keyboard Enter opens the menu', async () => {
     const trigger = page.locator(DROPDOWN_TRIGGER).first();
+    const menu = page.locator(DROPDOWN_START_MENU);
+    await expect(menu).toBeHidden();
     await trigger.focus();
     await page.keyboard.press('Enter');
-    const menu = page.locator('[role="menu"]').first();
-    await menu.waitFor({ timeout: 10_000 });
+    await expect(menu).toBeVisible({ timeout: 10_000 });
     await page.keyboard.press('Escape');
+    await expect(menu).toBeHidden({ timeout: 10_000 });
   });
 
   await test.step('contextmenu: right-click opens the panel', async () => {
+    // The center and end dropdowns are still open from load and sit over the
+    // context-menu target; each is closed through its own trigger, so the
+    // only menu that can appear next is the context menu's.
+    for (const id of ['k4a-dropdown-center', 'k4a-dropdown-end']) {
+      await page.locator(`[data-testid="${id}"] button`).first().click();
+      await expect(page.locator(`[data-testid="${id}"] [role="menu"]`)).toBeHidden({ timeout: 10_000 });
+    }
+    await expect(page.locator('[role="menu"]')).toHaveCount(0);
     const area = page.locator(CONTEXTMENU_AREA).first();
     await area.click({ button: 'right' });
     const menu = page.locator('[role="menu"]').first();
@@ -243,8 +267,9 @@ test('k4-lane-a: interactive overlays open and respond', async ({ page }) => {
   await test.step('hovercard: hover reveals the card', async () => {
     const trigger = page.locator(HOVERCARD_TRIGGER).first();
     await trigger.hover();
-    // HoverCard open delay is governed; poll for any floating card content.
-    const card = page.locator('[data-part="card"]').first();
+    // The probe's cards are controlled-open, so this proves the in-tree
+    // surface renders open under the hovered trigger, not that hover opens it.
+    const card = page.locator('[data-testid="k4a-hovercard-start"] [data-part="surface"][data-open="true"]');
     await card.waitFor({ timeout: 10_000 });
     await page.screenshot({ path: join(capturesDir(), 'k4a-hovercard-open.png') });
   });

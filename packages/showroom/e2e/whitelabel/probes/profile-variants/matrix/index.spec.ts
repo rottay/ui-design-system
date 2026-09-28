@@ -1,13 +1,16 @@
 import { existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { test, expect, type Page } from '@playwright/test';
+import { FIRST_PARTY_ARTIFACT_RUNTIME } from '../../../../../../core/src/infrastructure/compilers/runtime/tenant-css/artifact-runtime';
 
 // ---------------------------------------------------------------------------
 // K0.6 — first-party recipe-profile sighted evidence.
 //
 // Captures one identical accepted-family tree per first-party vertical AS IT
 // SHIPS: the code-owned registry tenant with the recipe profile its own
-// checked-in FlatTheme authored.
+// compile selected. The expected profile is read off the published artifact
+// runtime block, never restated here: the probe stamps what the live compile
+// returns, so the cell proves the two readers of one decision agree.
 //
 // The old `profile` sweep is gone and was not merely renamed. It applied the
 // profile by cloning the vertical's FlatTheme onto `tenantConfig.brandTheme`
@@ -25,15 +28,16 @@ type Vertical = 'rottay' | 'bithire' | 'evnto';
 
 interface Cell {
   readonly vertical: Vertical;
-  /** What the vertical's checked-in FlatTheme authors, verified in the DOM. */
+  /** The profile the vertical's published artifact runtime block carries, verified in the DOM. */
   readonly authoredProfile: string;
 }
 
-const CELLS: readonly Cell[] = [
-  { vertical: 'rottay', authoredProfile: 'rottay/technical-sharp@1' },
-  { vertical: 'bithire', authoredProfile: 'rottay/network-professional@1' },
-  { vertical: 'evnto', authoredProfile: 'none' },
-];
+const publishedProfile = (vertical: Vertical): string =>
+  FIRST_PARTY_ARTIFACT_RUNTIME[vertical].recipeProfile ?? 'none';
+
+const CELLS: readonly Cell[] = (['rottay', 'bithire', 'evnto'] as const).map(
+  (vertical) => ({ vertical, authoredProfile: publishedProfile(vertical) }),
+);
 
 function repoRoot(): string {
   let dir = test.info().project.testDir;
@@ -126,6 +130,49 @@ test.describe('K0.6 first-party recipe-profile evidence', () => {
       });
     });
   }
+
+  /**
+   * The per-cell stamp check alone cannot tell a working plumbing from a
+   * probe that stamps one constant everywhere when the published blocks
+   * happen to agree. So the matrix must contain a vertical that selects a
+   * profile and one that selects none, and the stamps must partition the
+   * verticals exactly as the published blocks do: equal where the blocks
+   * agree, different where they do not.
+   */
+  test('the stamped profiles discriminate exactly as the published blocks do', async ({
+    page,
+  }) => {
+    test.setTimeout(90_000);
+    await page.setViewportSize({ width: 1280, height: 900 });
+
+    const published = CELLS.map((cell) => cell.authoredProfile);
+    expect(
+      published.some((profile) => profile !== 'none'),
+      'no first-party vertical publishes a recipe profile, so the matrix cannot discriminate',
+    ).toBe(true);
+    expect(
+      published.some((profile) => profile === 'none'),
+      'every first-party vertical publishes a profile, so the none arm is unexercised',
+    ).toBe(true);
+
+    const stamped: string[] = [];
+    for (const cell of CELLS) {
+      await gotoCell(page, cell);
+      stamped.push(
+        (await page.getByTestId('pe-frame').getAttribute('data-pe-authored-profile')) ?? '',
+      );
+    }
+
+    for (let a = 0; a < CELLS.length; a += 1) {
+      for (let b = a + 1; b < CELLS.length; b += 1) {
+        expect(
+          stamped[a] === stamped[b],
+          `${CELLS[a].vertical} vs ${CELLS[b].vertical}: stamps ${stamped[a]} / ${stamped[b]} ` +
+            `against published ${published[a]} / ${published[b]}`,
+        ).toBe(published[a] === published[b]);
+      }
+    }
+  });
 
   /**
    * Anatomy parity used to be measured between `profile=none` and a matched

@@ -56,6 +56,7 @@
  * browserName skip.
  */
 import { expect, test, type Page } from "@playwright/test";
+import bithirePreset from "../../../core/src/foundation/presets/verticals/bithire/document/index.json" with { type: "json" };
 
 type Source = "bithire-static" | "themanagement-db";
 type Density = "compact" | "comfortable" | "spacious";
@@ -100,6 +101,14 @@ const ARTIFACT_SELECTOR =
 
 const DB_TENANT_SLUG = "themanagementmiami";
 const DB_TENANT_VERTICAL = "bithire";
+
+/**
+ * The posture the DB tenant's vertical baseline already decides, read off the
+ * bithire preset document. A tenant artifact carries only its deltas against
+ * that baseline, so requesting this posture legitimately emits no mode factor
+ * of its own: the bundled vertical CSS supplies it.
+ */
+const VERTICAL_BASELINE_DENSITY = bithirePreset.decisions["density.mode"] as Density;
 
 /**
  * The customer artifact's own `--ds-color-primary`, and the causal witness for
@@ -611,11 +620,32 @@ test.describe("OLA-5 F2: density authority over one identical tree", () => {
         const css = await artifact.evaluate(
           (element) => element.textContent ?? ""
         );
-        // The compiler plane, read from the bytes that were actually mounted.
         expect(
-          css,
-          `artifact must compile the ${density} posture`
-        ).toContain(`--ds-density-mode-factor: ${MODE_FACTORS[density].css};`);
+          DENSITIES,
+          "the bithire preset must decide one of the swept postures"
+        ).toContain(VERTICAL_BASELINE_DENSITY);
+        if (density === VERTICAL_BASELINE_DENSITY) {
+          // The artifact is a delta over the vertical baseline, so the posture
+          // the baseline already decides has no bytes to read. The resolved
+          // root cascade is the plane that proves it, and the artifact must not
+          // carry a factor that contradicts it.
+          await expect
+            .poll(() => rootComputedVar(page, "--ds-density-mode-factor"))
+            .toBe(MODE_FACTORS[density].css);
+          const emitted = [
+            ...css.matchAll(/--ds-density-mode-factor:\s*([^;]+);/g),
+          ].map((match) => match[1].trim());
+          expect(
+            emitted.filter((value) => value !== MODE_FACTORS[density].css),
+            `artifact must not contradict the ${density} baseline factor`
+          ).toEqual([]);
+        } else {
+          // The compiler plane, read from the bytes that were actually mounted.
+          expect(
+            css,
+            `artifact must compile the ${density} posture`
+          ).toContain(`--ds-density-mode-factor: ${MODE_FACTORS[density].css};`);
+        }
         // This fixture's document authors no structural-density override, so
         // its artifact must not carry one. A bounded advanced
         // `--ds-density-scale` would be legal for a customer -- 0.75-1.25 by

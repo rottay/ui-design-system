@@ -14,7 +14,7 @@ import { test, expect, type Page } from '@playwright/test';
 //   lane-b  lb-input (the inner <input> control itself), lb-checkbox-single
 //           (the certified single — the Group options-renderer paints
 //           data-part="option-box", not box), lb-switch
-//   lane-c  lc-alert first dismiss (data-part="action"), lc-result action
+//   lane-c  lc-alert first dismiss (data-part="close-button"), lc-result action
 //           (the extra Button)
 //
 // Per control, six deterministic cells (computed values + settle-polls, never
@@ -62,9 +62,9 @@ import { test, expect, type Page } from '@playwright/test';
 // cells.
 //
 // NOT-COMPUTABLE STATES (flagged, never faked): a pressed posture is only
-// asserted where the component actually paints one. The la-tag close button,
-// the lb-input root and the lc-alert dismiss button have NO :active rule in
-// their modern skins and their engines stamp no data-state — mouse.down()
+// asserted where the component actually paints one. The la-tag close button
+// and the lb-input root have NO :active rule in their modern skins and their
+// engines stamp no data-state — mouse.down()
 // changes nothing computable on them. Those cells are recorded in PRESSED_GAPS
 // and printed at the end of the run instead of asserting a fake diff.
 // ---------------------------------------------------------------------------
@@ -96,6 +96,11 @@ interface ControlDef {
   readonly expectPressedDataState: boolean;
   /** Include in the coarse-pointer 44px-floor test. */
   readonly coarseFloor: boolean;
+  /**
+   * The control dismisses its own subject on click, so the held press is
+   * released off the control: no click lands and the later cells still find it.
+   */
+  readonly releasePressAway?: boolean;
 }
 
 interface LaneDef {
@@ -227,23 +232,21 @@ const LANES: readonly LaneDef[] = [
     controls: [
       {
         name: 'alert',
-        // The first alert's dismiss button (Alert modern engine: data-part="action").
-        control: '[data-testid="lc-alert"] [data-part="action"]',
-        focusTarget: '[data-testid="lc-alert"] [data-part="action"]',
+        // The first alert's dismiss button (Alert modern engine: data-part="close-button").
+        control: '[data-testid="lc-alert"] [data-part="close-button"]',
+        focusTarget: '[data-testid="lc-alert"] [data-part="close-button"]',
         samples: {
-          hover: '[data-testid="lc-alert"] [data-part="action"]',
-          focus: '[data-testid="lc-alert"] [data-part="action"]',
-          pressed: '[data-testid="lc-alert"] [data-part="action"]',
-          frame: '[data-testid="lc-alert"] [data-part="action"]',
-          motion: '[data-testid="lc-alert"] [data-part="action"]',
+          hover: '[data-testid="lc-alert"] [data-part="close-button"]',
+          focus: '[data-testid="lc-alert"] [data-part="close-button"]',
+          pressed: '[data-testid="lc-alert"] [data-part="close-button"]',
+          frame: '[data-testid="lc-alert"] [data-part="close-button"]',
+          motion: '[data-testid="lc-alert"] [data-part="close-button"]',
         },
-        pressed: 'none',
-        pressedGap:
-          'lane-c/alert: alert.css defines :hover and :focus-visible for [data-part="action"] but ' +
-          'no :active rule, and the Alert engine stamps no data-state — a press changes nothing computable.',
+        pressed: 'paint', // alert.css [data-state~="pressed"] / :active scales the close button
         affordance: 'frame',
-        expectPressedDataState: false,
+        expectPressedDataState: true,
         coarseFloor: false,
+        releasePressAway: true,
       },
       {
         name: 'result',
@@ -614,6 +617,7 @@ for (const lane of LANES) {
             console.log(`${label} pressed paint diff:\n  ${diffs.join('\n  ')}`);
             await subject.screenshot({ path: artifactPath(lane.id, control.name, 'pressed') });
           } finally {
+            if (control.releasePressAway) await releasePointer(page);
             await page.mouse.up();
             await releasePointer(page);
           }

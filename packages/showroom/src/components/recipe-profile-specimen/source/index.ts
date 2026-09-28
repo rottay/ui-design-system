@@ -64,14 +64,14 @@ const EDITORIAL_DOCUMENT = {
   },
 } as const;
 
-/** The tenant each source mounts: the registry's own `rottay`, or the customer row. */
+/** The tenant each source mounts: the registry's own `bithire`, or the customer row. */
 export const SPECIMEN_SLUG: Record<SpecimenSource, string> = {
-  "technical-static": "rottay",
+  "technical-static": "bithire",
   "editorial-db": EDITORIAL_IDENTITY.slug,
 };
 
 /**
- * `rottay`'s checked-in FlatTheme authors `rottay/technical-sharp@1` and its CSS is
+ * `bithire`'s compiled artifact selects `rottay/technical-sharp@1` and its CSS is
  * bundled; the editorial row is a v1 document compiled through the kernel's legacy door.
  */
 export function specimenGroundRequest(source: SpecimenSource, locale: SpecimenLocale): GroundRequest {
@@ -90,5 +90,5 @@ export function specimenGroundRequest(source: SpecimenSource, locale: SpecimenLo
       },
     };
   }
-  return { slug: SPECIMEN_SLUG[source], mode: "light", locale, source: { kind: "static", vertical: "rottay" } };
+  return { slug: SPECIMEN_SLUG[source], mode: "light", locale, source: { kind: "static", vertical: "bithire" } };
 }
