@@ -71,15 +71,16 @@ export default async function WhitelabelDivergencePage({
   const { artifact } = mounted.stage;
   if (!artifact) throw new Error(`The ${fixture} divergence ground mounted no artifact`);
 
-  // Wrapper scope: the surface models app-bithire's SSR spread onto its own scope root, so this
-  // ground renders without the kernel's <html> stamp.
   return (
-    <GroundStage
-      {...mounted.stage}
-      tenantConfig={divergenceTenantConfig(fixture, ground)}
-      styleTestId="divergence-artifact-style"
-    >
-      <DivergenceSurface fixture={fixture} route={route} ground={ground} artifact={artifact} />
-    </GroundStage>
+    <>
+      <script data-testid="divergence-stamp" dangerouslySetInnerHTML={{ __html: mounted.stamp }} />
+      <GroundStage
+        {...mounted.stage}
+        tenantConfig={divergenceTenantConfig(fixture, ground)}
+        styleTestId="divergence-artifact-style"
+      >
+        <DivergenceSurface fixture={fixture} route={route} ground={ground} artifact={artifact} />
+      </GroundStage>
+    </>
   );
 }

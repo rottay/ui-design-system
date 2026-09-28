@@ -62,17 +62,18 @@ export default async function VisualAuthorityProbePage({
   const tenant: VisualAuthorityTenant = isTenant(tenantParam) ? tenantParam : 'themanagement';
   const mode = isGround(groundParam) ? groundParam : VISUAL_AUTHORITY_DEFAULT_GROUND[tenant];
 
-  const { stage } = await groundFor(requestFor(tenant, mode));
+  const { stage, stamp } = await groundFor(requestFor(tenant, mode));
 
-  // Wrapper scope: the probe spreads the artifact's attributes on its own root, so this ground
-  // renders without the kernel's <html> stamp.
   return (
-    <GroundStage
-      {...stage}
-      tenantConfig={stage.artifact ? dbTenantConfig(stage.artifact) : null}
-      styleTestId="visual-authority-artifact-style"
-    >
-      <VisualAuthorityProbe tenant={tenant} artifact={stage.artifact} />
-    </GroundStage>
+    <>
+      <script data-testid="visual-authority-stamp" dangerouslySetInnerHTML={{ __html: stamp }} />
+      <GroundStage
+        {...stage}
+        tenantConfig={stage.artifact ? dbTenantConfig(stage.artifact) : null}
+        styleTestId="visual-authority-artifact-style"
+      >
+        <VisualAuthorityProbe tenant={tenant} artifact={stage.artifact} />
+      </GroundStage>
+    </>
   );
 }
