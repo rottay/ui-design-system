@@ -1010,8 +1010,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2524,
-      "channelsThroughAliases": 4094,
+      "channels": 2525,
+      "channelsThroughAliases": 4095,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1365,8 +1365,8 @@
       "tier": "pro"
     },
     {
-      "channels": 2524,
-      "channelsThroughAliases": 4094,
+      "channels": 2525,
+      "channelsThroughAliases": 4095,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1712,8 +1712,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2622,
-      "channelsThroughAliases": 4297,
+      "channels": 2623,
+      "channelsThroughAliases": 4298,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -2063,8 +2063,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2610,
-      "channelsThroughAliases": 4273,
+      "channels": 2611,
+      "channelsThroughAliases": 4274,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",
@@ -3108,7 +3108,7 @@
       "tier": "pro"
     },
     {
-      "channels": 1296,
+      "channels": 1297,
       "channelsThroughAliases": 1917,
       "decision": "shape.radius-scale",
       "derivers": [
@@ -3688,8 +3688,8 @@
       "tier": "standard"
     },
     {
-      "channels": 679,
-      "channelsThroughAliases": 1470,
+      "channels": 680,
+      "channelsThroughAliases": 1471,
       "decision": "states.focus-style",
       "derivers": [
         "app-shell",
@@ -4142,8 +4142,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1707,
-      "channelsThroughAliases": 1951,
+      "channels": 1708,
+      "channelsThroughAliases": 1952,
       "decision": "surfaces.elevation-posture",
       "derivers": [
         "action-dock",
@@ -4899,8 +4899,8 @@
       "tier": "standard"
     },
     {
-      "channels": 424,
-      "channelsThroughAliases": 697,
+      "channels": 425,
+      "channelsThroughAliases": 698,
       "decision": "typography.role-weights",
       "derivers": [
         "badge",
