@@ -32,7 +32,7 @@ function declarations(css: string): Map<string, string> {
 const markup =
   `<style>${RUSTIC_AUTOCOMPLETE_SKIN}</style>` +
   renderToStaticMarkup(
-    <I18nProvider>
+    <I18nProvider locale="en">
       <div id="table">
         <ModernTable
           columns={[{ key: 'name', title: 'Name', dataIndex: 'name' }] as never}
