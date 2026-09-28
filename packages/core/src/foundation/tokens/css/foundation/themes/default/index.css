@@ -761,9 +761,10 @@
      5. DEPTH - dark-aware elevation scale
      --ds-elevation-0..5 is the sole perceived-depth ramp (0 = flat, 5 = highest).
      The values here are the light-surface treatment: layered key+ambient shadows at
-     low alpha. Dark-surface tenants override --ds-elevation-1..5 in their tenant
-     artifact with a top hairline highlight + deeper ambient + a surface-luminance
-     step, because pure-black shadows are invisible on a dark canvas.
+     low alpha. On a dark ground the compiler's elevation deriver
+     (derivation/elevation/ladder) emits --ds-elevation-0..6 with a top hairline
+     highlight + deeper ambient, because pure-black shadows are invisible on a
+     dark canvas.
      --ds-shadow-* are aliases of the elevation steps; classic/rustic components and
      the brand-theme compiler consume the --ds-shadow-* names.
      ───────────────────────────────────────────────────────────────────────────── */

@@ -8,6 +8,7 @@
  */
 
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { RampSurface } from "@/foundation/kernel/color/oklch/ramp";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import { deriveBorderPosture } from "./border";
@@ -15,7 +16,11 @@ import { deriveElevationLadder } from "./ladder";
 import { deriveZIndexBands } from "./z-index";
 
 export { deriveBorderPosture } from "./border";
-export { deriveElevationLadder } from "./ladder";
+export {
+  DARK_GROUND_ELEVATION_LADDER,
+  LIGHT_GROUND_ELEVATION_LADDER,
+  deriveElevationLadder,
+} from "./ladder";
 export { Z_INDEX_BANDS, deriveZIndexBands } from "./z-index";
 
 /**
@@ -51,7 +56,12 @@ export const elevationDeriver: FamilyDeriver = {
     "--ds-edge-emphasis-width",
   ],
   derive: (context) =>
-    deriveElevationChannels(context.theme, context.expressive.expansion),
+    deriveElevationChannels(
+      context.theme,
+      context.expressive.expansion,
+      context.surface,
+      context.modePrefix !== ""
+    ),
 };
 
 /**
@@ -64,11 +74,13 @@ export const elevationDeriver: FamilyDeriver = {
  */
 export function deriveElevationChannels(
   bt: FlatTheme,
-  expansion: ExpressiveExpansion
+  expansion: ExpressiveExpansion,
+  surface: RampSurface = "light",
+  overlay = false
 ): Record<string, string> {
   return {
     ...deriveZIndexBands(),
-    ...deriveElevationLadder(bt, expansion),
+    ...deriveElevationLadder(bt, expansion, surface, overlay),
     ...deriveBorderPosture(bt),
   };
 }

@@ -15,7 +15,11 @@ import type { FlatTheme } from "@/foundation/contracts/composition/tenants/theme
 import { buildLoweringContext } from "../../../pipeline";
 import { deriveBorderPosture } from "../border";
 import { deriveElevationChannels } from "..";
-import { deriveElevationLadder } from "../ladder";
+import {
+  DARK_GROUND_ELEVATION_LADDER,
+  LIGHT_GROUND_ELEVATION_LADDER,
+  deriveElevationLadder,
+} from "../ladder";
 import { Z_INDEX_BANDS, deriveZIndexBands } from "../z-index";
 
 const Z_INDEX_CSS = readFileSync(
@@ -35,6 +39,32 @@ const Z_INDEX_SCALE = Z_INDEX_CSS.slice(
   Z_INDEX_CSS.indexOf("THE SCALE"),
   Z_INDEX_CSS.indexOf("COMPONENT-SPECIFIC Z-INDEX")
 );
+
+const FOUNDATION_CSS = readFileSync(
+  resolve(
+    process.cwd(),
+    "src/foundation/tokens/css/foundation/themes/default/index.css"
+  ),
+  "utf8"
+);
+
+/** The dark ramp WO-ENG-03 shipped (`artifacts/rottay/index.css` at a4bc94927^). */
+const WO_ENG_03_DARK_RAMP = `
+  --ds-elevation-0: none;
+  --ds-elevation-1: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28);
+  --ds-elevation-2: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.44), 0 6px 16px rgba(0, 0, 0, 0.34);
+  --ds-elevation-3: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40);
+  --ds-elevation-4: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 12px 24px rgba(0, 0, 0, 0.50), 0 20px 44px rgba(0, 0, 0, 0.44), 0 0 24px color-mix(in srgb, var(--ds-color-primary, #ffffff) 8%, transparent);
+  --ds-elevation-5: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 20px 40px rgba(0, 0, 0, 0.56), 0 32px 64px rgba(0, 0, 0, 0.48), 0 0 32px color-mix(in srgb, var(--ds-color-primary, #ffffff) 10%, transparent);
+`;
+
+const declarations = (css: string): Record<string, string> =>
+  Object.fromEntries(
+    [...css.matchAll(/(--ds-elevation-\d): ([^;]+);/gu)].map((match) => [
+      match[1],
+      match[2],
+    ])
+  );
 
 const theme = (surfaces: FlatTheme["surfaces"]): FlatTheme => ({
   id: "t",
@@ -88,6 +118,111 @@ describe("elevation/ladder", () => {
     });
     expect(refined["--ds-elevation-2"]).toBe("0 0 0 1px hotpink");
     expect(refined["--ds-elevation-1"]).toBe(ladderOf("flat")["--ds-elevation-1"]);
+  });
+});
+
+describe("elevation/ladder on a dark ground", () => {
+  const onGround = (
+    backgroundColor: string | undefined,
+    surfaces: FlatTheme["surfaces"] = {},
+    surface: "light" | "dark" = "dark",
+    overlay = false
+  ): Record<string, string> => {
+    const bt: FlatTheme = {
+      id: "t",
+      name: "T",
+      surfaces,
+      ...(backgroundColor ? { palette: { backgroundColor } } : {}),
+    };
+    return deriveElevationLadder(
+      bt,
+      buildLoweringContext({ theme: bt }).expressive.expansion,
+      surface,
+      overlay
+    );
+  };
+
+  it("restates levels 0..5 byte for byte as the WO-ENG-03 ramp", () => {
+    const shipped = declarations(WO_ENG_03_DARK_RAMP);
+    expect(Object.keys(shipped)).toHaveLength(6);
+    for (const [channel, value] of Object.entries(shipped)) {
+      expect(DARK_GROUND_ELEVATION_LADDER[channel], channel).toBe(value);
+    }
+  });
+
+  it("continues level 6 by the ramp's own 4-to-5 increments", () => {
+    const numbers = (channel: string) =>
+      [...DARK_GROUND_ELEVATION_LADDER[channel]!.matchAll(/\d+(?:\.\d+)?/gu)].map(
+        (match) => Number(match[0])
+      );
+    const [four, five, six] = [4, 5, 6].map((level) =>
+      numbers(`--ds-elevation-${level}`)
+    );
+    expect(six).toHaveLength(five!.length);
+    six!.forEach((value, index) => {
+      const step = five![index]! - four![index]!;
+      expect(value, `number ${index}`).toBeCloseTo(five![index]! + step, 6);
+    });
+    expect(DARK_GROUND_ELEVATION_LADDER["--ds-elevation-6"]).toContain(
+      "rgba(255, 255, 255, 0.09)"
+    );
+    expect(DARK_GROUND_ELEVATION_LADDER["--ds-elevation-6"]).toContain(
+      "var(--ds-color-primary, #ffffff) 12%"
+    );
+  });
+
+  it("restates the foundation's light ladder byte for byte", () => {
+    const foundation = declarations(FOUNDATION_CSS);
+    expect(Object.keys(foundation).sort()).toEqual(
+      Object.keys(LIGHT_GROUND_ELEVATION_LADDER).sort()
+    );
+    expect(LIGHT_GROUND_ELEVATION_LADDER).toEqual(foundation);
+  });
+
+  it("the foundation names the deriver as the dark producer", () => {
+    expect(FOUNDATION_CSS).toContain("derivation/elevation/ladder");
+    expect(FOUNDATION_CSS).not.toContain("in their tenant\n     artifact");
+  });
+
+  it("emits the hairline ladder for a soft or defaulted posture on a dark ground", () => {
+    expect(onGround(undefined)).toEqual(DARK_GROUND_ELEVATION_LADDER);
+    expect(onGround("#0A0A0C", { elevation: "soft" })).toEqual(
+      DARK_GROUND_ELEVATION_LADDER
+    );
+    expect(onGround("#0A0A0C", undefined)).toEqual(DARK_GROUND_ELEVATION_LADDER);
+  });
+
+  it("reads the ground by NTSC luminance, not the declared surface", () => {
+    expect(onGround("#F5F5F5", {}, "dark")).toEqual({});
+    expect(onGround("#1E293B", {}, "light")).toEqual(
+      DARK_GROUND_ELEVATION_LADDER
+    );
+  });
+
+  it("leaves a light base block exactly as it was: nothing stated", () => {
+    expect(onGround(undefined, {}, "light")).toEqual({});
+    expect(onGround("#FFFFFF", { elevation: "soft" }, "light")).toEqual({});
+  });
+
+  it("restates the light ladder on a light overlay, so a dark base cannot leak into it", () => {
+    expect(onGround("#FFFFFF", {}, "light", true)).toEqual(
+      LIGHT_GROUND_ELEVATION_LADDER
+    );
+  });
+
+  it("yields to a stated posture and to an authored level", () => {
+    for (const posture of ["flat", "elevated"] as const) {
+      expect(onGround("#0A0A0C", { elevation: posture })).toEqual(
+        ladderFor({ elevation: posture })
+      );
+    }
+    const refined = onGround("#0A0A0C", {
+      elevations: { level2: "0 0 0 1px hotpink" },
+    });
+    expect(refined["--ds-elevation-2"]).toBe("0 0 0 1px hotpink");
+    expect(refined["--ds-elevation-1"]).toBe(
+      DARK_GROUND_ELEVATION_LADDER["--ds-elevation-1"]
+    );
   });
 });
 
