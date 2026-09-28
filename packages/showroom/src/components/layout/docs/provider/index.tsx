@@ -8,6 +8,7 @@ import {
   type ProductProfileKey,
 } from '@rottay/design-system';
 import { getShowroomVerticalKey, type ShowroomTenant } from '@/components/showroom-context';
+import { SHOWROOM_CATALOG } from '@/components/showroom-context/catalog';
 import { useFirstPartyEngineVisual } from '@/components/engine-visual';
 import { ShowroomShell } from '../../shell';
 
@@ -31,6 +32,7 @@ export function DocsProviderShell({
       key={runtimeKey}
       tenantConfig={tenantConfig ?? undefined}
       forceEngine={engine}
+      forceTheme={SHOWROOM_CATALOG[tenantSlug].mode}
       engineVisual={engineVisual}
       productProfile={productProfile}
       vertical={getShowroomVerticalKey(tenantSlug)}
