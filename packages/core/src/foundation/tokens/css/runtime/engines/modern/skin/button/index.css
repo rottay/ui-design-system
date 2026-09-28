@@ -746,7 +746,8 @@
    the pressed posture below is the tactile equivalent and stays
    pointer-agnostic. `data-state` can carry hovered+pressed together, so
    every pressed rule keeps its place AFTER the hover block and wins the
-   cascade — the same order the ungated rules relied on.
+   cascade — the same order the ungated rules relied on. The guarded hover
+   transform outweighs the press rule, so it excludes `pressed` outright.
 
    Connected-group children never translate or scale on hover/press: a
    geometric lift would open a discontinuity at the shared 1px edge, so
@@ -754,11 +755,11 @@
    ------------------------------------------------------------------------- */
 
 @media (hover: hover) {
-  .ds-button.ds-button--modern[data-state~='hovered']:not([data-disabled='true']):not(
-      [data-loading='true']
-    ):not([data-pending='true']):not([data-variant='link']):not([data-variant='text']):not(
-      .ds-button-group[data-connected='true'] > *
-    ) {
+  .ds-button.ds-button--modern[data-state~='hovered']:not([data-state~='pressed']):not(
+      [data-disabled='true']
+    ):not([data-loading='true']):not([data-pending='true']):not([data-variant='link']):not(
+      [data-variant='text']
+    ):not(.ds-button-group[data-connected='true'] > *) {
     transform: var(--ds-button-hover-transform);
     filter: var(--ds-button-hover-filter);
   }

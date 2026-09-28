@@ -149,6 +149,27 @@ describe('button causality', () => {
     });
   }, 120_000);
 
+  it('paints the press posture when hover and press stamp together', async () => {
+    for (const vertical of VERTICALS) {
+      const result = await measureArms({
+        vertical,
+        markup,
+        arms: { base: {} },
+        targets: [
+          { id: 'hovered', selector: PRIMARY, property: 'transform', attributes: { 'data-state': 'hovered' } },
+          { id: 'pressed', selector: PRIMARY, property: 'transform', attributes: { 'data-state': 'pressed' } },
+          { id: 'both', selector: PRIMARY, property: 'transform', attributes: { 'data-state': 'hovered pressed' } },
+          { id: 'pressedFilter', selector: PRIMARY, property: 'filter', attributes: { 'data-state': 'pressed' } },
+          { id: 'bothFilter', selector: PRIMARY, property: 'filter', attributes: { 'data-state': 'hovered pressed' } },
+        ],
+      });
+      const r = result.base!;
+      expect(r.pressed, vertical).not.toBe(r.hovered);
+      expect(r.both, vertical).toBe(r.pressed);
+      expect(r.bothFilter, vertical).toBe(r.pressedFilter);
+    }
+  }, 120_000);
+
   it('paints a button whose part a composite renamed exactly like a standalone one', () => {
     for (const vertical of VERTICALS) {
       const base = readings[vertical]!.base!;

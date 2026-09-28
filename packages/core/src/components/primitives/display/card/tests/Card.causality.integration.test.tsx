@@ -5,6 +5,8 @@
  * press, focus and disabled; a toned card's title wears the palette's deep
  * step; and no gated vertical mode carries a serious axe finding.
  */
+import { createRequire } from 'node:module';
+import { resolve } from 'node:path';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -17,6 +19,8 @@ import {
   auditAxe,
   describeCausality,
   measureArms,
+  mountArm,
+  resolvedBaseCss,
   seriousFindings,
 } from '@tests/support/family-causality';
 
@@ -53,6 +57,29 @@ const markup = [
 const SEED_VERTICALS = ['bithire', 'evnto'] as const;
 /** bithire pins the card radius through its vertical chrome, so the shape decision legitimately cannot move it there. */
 const RADIUS_VERTICALS = ['rottay', 'evnto'] as const;
+
+interface PointerPage {
+  setContent(html: string): Promise<void>;
+  addStyleTag(options: { content: string }): Promise<unknown>;
+  hover(selector: string): Promise<void>;
+  evaluate<R, A>(fn: (arg: A) => R, arg: A): Promise<R>;
+  close(): Promise<void>;
+}
+
+/** The harness stamps state attributes only; a native `:hover` needs the pointer itself. */
+function pointerChromium(): { launch(): Promise<{ newPage(): Promise<PointerPage>; close(): Promise<void> }> } {
+  const core = resolve(__dirname, '../../../../../..');
+  for (const root of ['package.json', '../../package.json', '../showroom/package.json']) {
+    for (const specifier of ['playwright', '@playwright/test']) {
+      try {
+        return createRequire(resolve(core, root))(specifier).chromium;
+      } catch {
+        // next root
+      }
+    }
+  }
+  throw new Error('no Playwright chromium is resolvable');
+}
 
 const PLAIN = "#plain [data-part='root']";
 const ACTION = "#action [data-part='root']";
@@ -137,6 +164,55 @@ describe('card direction, state governance, toned inks and accessibility', () =>
     expect(r.disabledCursor).toBe('not-allowed');
     expect(r.disabledEvents).toBe('none');
   }, 60_000);
+
+  it('paints the press posture when hover and press stamp together', async () => {
+    for (const vertical of VERTICALS) {
+      const result = await measureArms({
+        vertical,
+        markup,
+        arms: { base: {} },
+        targets: [
+          { id: 'hovered', selector: ACTION, property: 'background-color', attributes: { 'data-state': 'hovered' } },
+          { id: 'pressed', selector: ACTION, property: 'background-color', attributes: { 'data-state': 'pressed' } },
+          { id: 'both', selector: ACTION, property: 'background-color', attributes: { 'data-state': 'hovered pressed' } },
+        ],
+      });
+      const r = result.base!;
+      expect(r.both, vertical).toBe(r.pressed);
+    }
+  }, 120_000);
+
+  it('lifts an interactive card under a real pointer hover and keeps a static card still', async () => {
+    const browser = await pointerChromium().launch();
+    try {
+      for (const vertical of VERTICALS) {
+        const arm = await mountArm(vertical, {});
+        const page = await browser.newPage();
+        await page.setContent('<!doctype html><html><head></head><body></body></html>');
+        await page.addStyleTag({ content: resolvedBaseCss() });
+        await page.addStyleTag({ content: arm.css });
+        await page.evaluate(({ rootAttributes, html }) => {
+          for (const [name, value] of Object.entries(rootAttributes)) document.documentElement.setAttribute(name, value);
+          document.body.innerHTML = html;
+        }, { rootAttributes: arm.rootAttributes, html: markup });
+        const hover = async (selector: string, state = 'hovered') => {
+          await page.hover(selector);
+          return page.evaluate(({ target, state }) => {
+            const element = document.querySelector(target)!;
+            element.setAttribute('data-state', state);
+            for (const animation of element.getAnimations()) animation.finish();
+            return getComputedStyle(element).transform;
+          }, { target: selector, state });
+        };
+        expect(await hover(ACTION), vertical).toBe('matrix(1, 0, 0, 1, 0, -1)');
+        expect(await hover(ACTION, 'hovered pressed'), vertical).toBe('matrix(0.995, 0, 0, 0.995, 0, 0)');
+        expect(await hover(PLAIN), vertical).toMatch(/^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
+        await page.close();
+      }
+    } finally {
+      await browser.close();
+    }
+  }, 120_000);
 
   it('paints a toned title with the deep palette step of its tone', async () => {
     for (const vertical of VERTICALS) {
