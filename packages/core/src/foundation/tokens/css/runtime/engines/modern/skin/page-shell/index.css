@@ -140,6 +140,9 @@
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'] {
   --ds-page-shell-max-width: none;
 
+  /* The inline-size container has no content width and auto margins cancel a
+     flex host's stretch, so the fill is stated; max-width clamps it. */
+  inline-size: 100%;
   max-width: var(--ds-page-shell-max-width);
   margin-inline: auto;
 }
