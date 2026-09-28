@@ -272,6 +272,43 @@ describe('button environments in a real browser', () => {
   }, 120_000);
 });
 
+describe('button icon plate in a stretching parent', () => {
+  it('keeps an icon-only button at its own square in a stretching column or grid', async () => {
+    const plate = (size: 'sm' | 'md' | 'lg') =>
+      renderToStaticMarkup(<ModernButton size={size} icon={<svg aria-hidden="true" />} aria-label="Delete" />);
+    const scenes = {
+      alone: 'display: block',
+      column: 'display: flex; flex-direction: column; align-items: stretch; inline-size: 288px',
+      grid: 'display: grid; inline-size: 288px',
+    };
+    const sizes = ['sm', 'md', 'lg'] as const;
+    const markup = Object.entries(scenes)
+      .flatMap(([scene, style]) => sizes.map((size) => `<div data-scene="${scene}-${size}" style="${style}">${plate(size)}</div>`))
+      .join('');
+    const targets: ProbeTarget[] = Object.keys(scenes).flatMap((scene) =>
+      sizes.flatMap((size) =>
+        (['width', 'height'] as const).map((edge) => ({
+          id: `${scene}-${size}-${edge}`,
+          selector: `[data-scene='${scene}-${size}'] > button`,
+          property: `@rect.${edge}`,
+        })),
+      ),
+    );
+    for (const vertical of VERTICALS) {
+      const r = (await measureArms({ vertical, markup, arms: { base: {} }, targets })).base!;
+      for (const size of sizes) {
+        const side = r[`alone-${size}-height`];
+        expect(r[`alone-${size}-width`], `${vertical} ${size} alone`).toBe(side);
+        for (const scene of ['column', 'grid']) {
+          expect(`${r[`${scene}-${size}-width`]}x${r[`${scene}-${size}-height`]}`, `${vertical} ${size} ${scene}`).toBe(
+            `${side}x${side}`,
+          );
+        }
+      }
+    }
+  }, 120_000);
+});
+
 describe('button direction and accessibility in a real browser', () => {
   it('places a start icon on the inline-start side in both directions', async () => {
     const withIcon = renderToStaticMarkup(

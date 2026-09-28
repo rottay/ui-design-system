@@ -456,6 +456,12 @@
   padding-inline: 0;
 }
 
+/* aspect-ratio alone lets a stretching column or grid size the plate from the
+   container; fit-content keeps its own padded width and the ratio squares it. */
+.ds-button.ds-button--modern[data-icon-only='true']:not([data-shape='circle'], [data-full-width='true']) {
+  inline-size: fit-content;
+}
+
 .ds-button.ds-button--modern[data-shape='circle'] {
   inline-size: calc(
     var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
