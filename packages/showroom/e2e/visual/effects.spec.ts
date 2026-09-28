@@ -1,5 +1,10 @@
 import { test, expect, type Page } from '@playwright/test';
 
+import rottayPreset from '../../../core/src/foundation/presets/verticals/rottay/document/index.json' with { type: 'json' };
+import bithirePreset from '../../../core/src/foundation/presets/verticals/bithire/document/index.json' with { type: 'json' };
+import structuralNeutral from '../../../core/src/foundation/presets/styles/structural-neutral/document/index.json' with { type: 'json' };
+import technicalDense from '../../../core/src/foundation/presets/styles/technical-dense/document/index.json' with { type: 'json' };
+
 import { expectHydrated } from '../support/hydration';
 
 // ---------------------------------------------------------------------------
@@ -24,16 +29,19 @@ import { expectHydrated } from '../support/hydration';
 //
 // So the EXPECTATION comes from the tenant's declared effect intensity, and the
 // MEASUREMENT comes from decoded pixels of a screenshot. Nothing in the chain
-// asks a CSS variable whether it is doing its job.
+// asks a CSS variable whether it is doing its job. For a first-party vertical
+// the declaration is its style document (`surfaces.effect-intensity`), read
+// here from source, so the rendered dial must equal what the document says.
 //
 // THE INVARIANT
 // -------------
-//   A surface is flat if and only if the tenant turned the dial to zero.
+//   A surface is flat if and only if the tenant turned the dial to zero, and a
+//   non-zero dial paints a tint proportional to it.
 //
 // `--ds-effect-intensity: 0` is the one sanctioned way to opt out of the
-// premium layer (bithire does this deliberately). Any other route to a flat
-// card -- an inline 'none', a dropped token, a component that stopped reading
-// the gradient -- is a regression, and this test is how it is caught.
+// premium layer. Any other route to a flat card -- an inline 'none', a dropped
+// token, a component that stopped reading the gradient -- is a regression, and
+// this test is how it is caught.
 //
 // PNG decoding without a dependency: the screenshot buffer is handed back to
 // the browser as a data URL and decoded by the browser's own image decoder into
@@ -51,19 +59,42 @@ const FIXTURES: readonly Fixture[] = [
 ];
 
 /**
- * The smallest top-to-bottom luminance delta that still reads as a surface tint.
+ * The smallest top-to-bottom luminance delta, per unit of dial, that still
+ * reads as a surface tint.
  *
- * Arithmetic, not taste. Rendering here is deterministic, so a flat fill
- * measures exactly 0.000 -- there is no noise floor to clear. The smallest
- * REAL tint in the fixture set is torture-dark's, at 2.988 (its gradient runs
- * #0D0510 -> #050307, a near-black ramp). rottay's design-system default tint
- * measures 4.000. A threshold of 2.0 sits below every real tint and far above
- * the flat case.
+ * Rendering here is deterministic, so a flat fill measures exactly 0.000 --
+ * there is no noise floor to clear. The design-system default tint measured
+ * 4.0 at dial 1 and measures 0.785 on rottay at dial 0.2: it scales with the
+ * dial. Half the measured slope keeps every real tint above the floor and the
+ * flat case far below it.
  */
-const MIN_TINT_DELTA = 2.0;
+const MIN_TINT_DELTA_PER_UNIT = 2.0;
 
-/** The elevated Card is the canonical surface-tint consumer (spec section 5, role 1). */
-const CARD_SELECTOR = '[data-testid="probe-card"] .ds-card--elevated';
+/** Both card variants paint `--ds-gradient-surface`; the tenant's posture picks which one renders. */
+const CARD_SELECTOR = '[data-testid="probe-card"] .ds-card';
+
+type StyleDocument = { decisions: Record<string, unknown> };
+type VerticalDocument = StyleDocument & { style: { id: string } };
+
+const STYLE_DOCUMENTS: Record<string, StyleDocument> = {
+  'structural-neutral': structuralNeutral,
+  'technical-dense': technicalDense,
+};
+
+const FIRST_PARTY_DOCUMENTS: Partial<Record<Fixture, VerticalDocument>> = {
+  rottay: rottayPreset,
+  bithire: bithirePreset,
+};
+
+/** The vertical's own decision wins over its style's; the style document is the usual author. */
+function declaredIntensity(vertical: VerticalDocument, styles = STYLE_DOCUMENTS): number {
+  const style = styles[vertical.style.id];
+  if (!style) throw new Error(`unknown style document "${vertical.style.id}"`);
+  const value =
+    vertical.decisions['surfaces.effect-intensity'] ?? style.decisions['surfaces.effect-intensity'];
+  if (typeof value !== 'number') throw new Error(`style "${vertical.style.id}" declares no effect intensity`);
+  return value;
+}
 
 interface Sample {
   topLuma: number;
@@ -147,16 +178,30 @@ async function effectIntensity(page: Page): Promise<number> {
 }
 
 test.describe('premium surface tint renders as pixels', () => {
+  test('the oracle follows the style documents', () => {
+    const moved = { ...STYLE_DOCUMENTS, 'structural-neutral': { decisions: { 'surfaces.effect-intensity': 0.5 } } };
+    expect(declaredIntensity(rottayPreset, moved)).toBe(0.5);
+    expect(declaredIntensity(rottayPreset)).toBe(structuralNeutral.decisions['surfaces.effect-intensity']);
+    expect(declaredIntensity(bithirePreset)).toBe(technicalDense.decisions['surfaces.effect-intensity']);
+  });
+
   for (const fixture of FIXTURES) {
     test(`${fixture}: flat if and only if the intensity dial is zero`, async ({ page }) => {
       await loadFixture(page, fixture);
 
       const intensity = await effectIntensity(page);
+      const document = FIRST_PARTY_DOCUMENTS[fixture];
+      if (document) {
+        expect(
+          intensity,
+          `${fixture} renders a dial its style document "${document.style.id}" does not declare`
+        ).toBe(declaredIntensity(document));
+      }
+
       const { topLuma, bottomLuma, delta } = await measureCardTint(page);
       const reading = `intensity=${intensity} topLuma=${topLuma.toFixed(3)} bottomLuma=${bottomLuma.toFixed(3)} delta=${delta.toFixed(3)}`;
 
       if (intensity === 0) {
-        // The sanctioned opt-out. bithire is flat on purpose.
         expect(delta, `${fixture} turned the dial to zero and must be flat. ${reading}`).toBe(0);
         return;
       }
@@ -167,7 +212,7 @@ test.describe('premium surface tint renders as pixels', () => {
           `tint. A delta of zero means something killed it: an inline 'none' stamped over the ` +
           `premium.css default, a dropped token, or a component that stopped reading ` +
           `--ds-gradient-surface. ${reading}`
-      ).toBeGreaterThanOrEqual(MIN_TINT_DELTA);
+      ).toBeGreaterThanOrEqual(MIN_TINT_DELTA_PER_UNIT * intensity);
     });
   }
 });

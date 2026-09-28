@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { test, expect, type Page } from '@playwright/test';
 
 import { expectHydrated } from '../support/hydration';
+import { isShowroomTenant } from '../../src/components/showroom-context/catalog';
 
 // ---------------------------------------------------------------------------
 // WO-ARC-07 — the interaction states of a skin, pinned in a real browser.
@@ -65,6 +66,19 @@ type Engine = 'modern' | 'rustic';
 
 const FIXTURES: readonly Fixture[] = ['rottay', 'bithire', 'torture-dark'];
 const ENGINES: readonly Engine[] = ['modern', 'rustic'];
+
+/**
+ * Rustic is frozen and fail-closed (WO-CAN-06): no tenant document or preview
+ * may select it, so the torture surface refuses it for every non-showroom
+ * fixture and mounts no stylesheet. That pair has no states to pin; its
+ * contract is the named refusal, asserted below.
+ */
+const FROZEN_ENGINES: ReadonlySet<Engine> = new Set(['rustic']);
+const FROZEN_REFUSAL = /^Engine "rustic" is not admitted\. .*no tenant document or preview may select one/;
+
+function refusesFrozen(fixture: Fixture, engine: Engine): boolean {
+  return FROZEN_ENGINES.has(engine) && !isShowroomTenant(fixture);
+}
 
 /**
  * The buttons the torture probe renders, by document order, and the states each
@@ -425,6 +439,7 @@ test.describe('interaction states are pinned per component, tenant and engine', 
   for (const probe of PROBES) {
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
+        if (refusesFrozen(fixture, engine)) continue;
         test(`${probe.name} / ${fixture} / ${engine}`, async ({ page }) => {
           await openProbe(page, fixture, engine, probe);
 
@@ -450,6 +465,38 @@ test.describe('interaction states are pinned per component, tenant and engine', 
   }
 });
 
+test.describe('a frozen engine is refused by name for a non-showroom tenant', () => {
+  for (const fixture of FIXTURES) {
+    for (const engine of ENGINES) {
+      if (!refusesFrozen(fixture, engine)) continue;
+      test(`${fixture} / ${engine}: refused, and no tenant stylesheet is mounted`, async ({ page }) => {
+        const open = async (target: Engine) => {
+          await page.goto(`/probe/whitelabel-torture?fixture=${fixture}&engine=${target}&slug=button`, {
+            waitUntil: 'domcontentloaded',
+          });
+          await expectHydrated(page);
+          await page.waitForFunction(
+            (expected) => document.documentElement.getAttribute('data-engine') === expected,
+            target
+          );
+        };
+
+        await open(engine);
+        await expect(page.getByTestId('torture-admission-refusal')).toHaveAttribute(
+          'data-torture-admission',
+          FROZEN_REFUSAL
+        );
+        await expect(page.getByTestId('torture-legacy-brand-style')).toHaveCount(0);
+
+        // Control: the same fixture under modern is admitted and mounts its sheet.
+        await open('modern');
+        await expect(page.getByTestId('torture-legacy-brand-style')).toHaveCount(1);
+        await expect(page.getByTestId('torture-admission-refusal')).toHaveCount(0);
+      });
+    }
+  }
+});
+
 /** Every subject, flattened, for the invariants that read the matrix directly. */
 const ALL_SUBJECTS = PROBES.flatMap((probe) =>
   probe.subjects.map((subject) => ({ probe, subject }))
@@ -468,6 +515,7 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
 
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
+        if (refusesFrozen(fixture, engine)) continue;
         for (const { subject } of ALL_SUBJECTS) {
           const at = (state: StateName) => source()[cellKey(fixture, engine, subject.name, state)];
 
@@ -506,6 +554,7 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
   test('every focusable subject paints a keyboard focus indicator', async () => {
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
+        if (refusesFrozen(fixture, engine)) continue;
         for (const { subject } of ALL_SUBJECTS) {
           if (!has(subject, 'focus-visible')) continue;
           const rest = source()[cellKey(fixture, engine, subject.name, 'rest')];
@@ -535,6 +584,7 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
     // baseline hovers.
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
+        if (refusesFrozen(fixture, engine)) continue;
         for (const { subject } of ALL_SUBJECTS) {
           if (!has(subject, 'rest-after-hover')) continue;
           const rest = source()[cellKey(fixture, engine, subject.name, 'rest')];
@@ -551,6 +601,7 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
   test('every subject reacts to hover', async () => {
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
+        if (refusesFrozen(fixture, engine)) continue;
         for (const { subject } of ALL_SUBJECTS) {
           if (subject.name === 'primary-disabled') continue;
           // A subject that does not declare `hovered` (e.g. a pre-selected row
@@ -571,6 +622,7 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
   test('every pressable subject reacts to a press, and the press is a transform', async () => {
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
+        if (refusesFrozen(fixture, engine)) continue;
         for (const { subject } of ALL_SUBJECTS) {
           if (!has(subject, 'pressed')) continue;
           const hovered = source()[cellKey(fixture, engine, subject.name, 'hovered')];

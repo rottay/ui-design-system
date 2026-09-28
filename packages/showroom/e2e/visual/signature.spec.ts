@@ -1,5 +1,9 @@
 import { test, expect, type Page } from '@playwright/test';
 
+import rottayPreset from '../../../core/src/foundation/presets/verticals/rottay/document/index.json' with { type: 'json' };
+import structuralNeutral from '../../../core/src/foundation/presets/styles/structural-neutral/document/index.json' with { type: 'json' };
+import technicalDense from '../../../core/src/foundation/presets/styles/technical-dense/document/index.json' with { type: 'json' };
+
 import { expectHydrated } from '../support/hydration';
 
 // ---------------------------------------------------------------------------
@@ -9,10 +13,9 @@ import { expectHydrated } from '../support/hydration';
 // rustic side-by-side cannot be told apart, the engine is off-spec." This file
 // is that sentence, executed.
 //
-// It runs on `rottay`, which declares `--ds-effect-intensity: 1`. bithire
-// declares `0` — it opts out of the premium layer deliberately, so on bithire
-// modern SHOULD converge toward rustic and asserting otherwise would be
-// asserting against a tenant's own choice.
+// It runs on `rottay`, whose effect intensity is declared by its style
+// document (`surfaces.effect-intensity`) and read from source below, never
+// restated here.
 //
 // WHAT THE MEASUREMENTS ARE, AND WHAT THEY ARE NOT
 // -----------------------------------------------
@@ -32,7 +35,7 @@ import { expectHydrated } from '../support/hydration';
 //                             decoded pixels. NOT the `background-image` string:
 //                             that still reads `linear-gradient(...)` when the
 //                             intensity dial is 0, while the face goes flat.
-//                             Measured: modern 4.0 at dial 1, 0.0 at dial 0.
+//                             It scales with the dial: 4.0 at 1, 0.785 at 0.2.
 //   4. the whole surface     -> the fraction of pixels that differ between the
 //                             two engines across the flagship set. Measured on
 //                             the overlapping rectangle, because two images of
@@ -74,11 +77,25 @@ const MIN_HAIRLINE_ALPHA = 0.04;
 const MAX_HAIRLINE_ALPHA = 0.08;
 
 /**
- * Top-to-bottom luminance delta across the card face. Measured: modern 4.0 with
- * the dial at 1, and exactly 0.0 with the dial at 0. Rustic has no gradient at
- * all and measures 0.0.
+ * Top-to-bottom luminance delta across the card face, per unit of dial. Modern
+ * measured 4.0 at dial 1 and 0.785 at dial 0.2; exactly 0.0 at dial 0. Rustic
+ * has no gradient at all and measures 0.0.
  */
-const MIN_TINT_DELTA = 2;
+const MIN_TINT_DELTA_PER_UNIT = 2;
+
+const STYLE_DOCUMENTS: Record<string, { decisions: Record<string, unknown> }> = {
+  'structural-neutral': structuralNeutral,
+  'technical-dense': technicalDense,
+};
+
+/** The tenant's declared dial: its own decision, else its style document's. */
+function declaredIntensity(): number {
+  const style = STYLE_DOCUMENTS[rottayPreset.style.id];
+  const decisions: Record<string, unknown> = rottayPreset.decisions;
+  const value = decisions['surfaces.effect-intensity'] ?? style?.decisions['surfaces.effect-intensity'];
+  if (typeof value !== 'number') throw new Error(`style "${rottayPreset.style.id}" declares no effect intensity`);
+  return value;
+}
 
 const CARD_SELECTOR = '[data-testid="probe-card"] [class*="card"]';
 
@@ -312,10 +329,16 @@ test.describe('modern carries a premium signature rustic does not', () => {
   test('the card paints a surface tint in modern and none in rustic', async ({ page }) => {
     // Measured in pixels, not read off `background-image`. That string still says
     // `linear-gradient(...)` when `--ds-effect-intensity` is 0 -- the alphas go to
-    // zero and the face goes flat while the assertion stays green. Verified in a
-    // browser: intensity 1 measures a tint of 4.0 and intensity 0 measures 0.0,
-    // with the same `background-image` string in both.
+    // zero and the face goes flat while the assertion stays green.
+    const intensity = declaredIntensity();
+    expect(intensity, 'rottay\'s style document must opt into the premium layer').toBeGreaterThan(0);
+    const floor = MIN_TINT_DELTA_PER_UNIT * intensity;
+
     await loadProbe(page, 'modern', 'card');
+    const rendered = await page.evaluate(() =>
+      getComputedStyle(document.documentElement).getPropertyValue('--ds-effect-intensity').trim()
+    );
+    expect(Number.parseFloat(rendered), `rottay renders a dial its style document does not declare`).toBe(intensity);
     const modern = await surfaceTint(page, CARD_SELECTOR);
 
     await loadProbe(page, 'rustic', 'card');
@@ -325,11 +348,11 @@ test.describe('modern carries a premium signature rustic does not', () => {
       modern,
       `the modern card's face is flat (top-to-bottom luminance delta ${modern.toFixed(2)}). ` +
         `Something zeroed the surface tint: the intensity dial, an inline 'none', or a dropped token.`
-    ).toBeGreaterThanOrEqual(MIN_TINT_DELTA);
+    ).toBeGreaterThanOrEqual(floor);
     expect(
       rustic,
       `rustic's face now carries a tint of ${rustic.toFixed(2)}, so the tint is no longer modern's signature`
-    ).toBeLessThan(MIN_TINT_DELTA);
+    ).toBeLessThan(floor);
   });
 
   for (const slug of FLAGSHIPS) {
