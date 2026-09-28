@@ -20,7 +20,7 @@
  */
 
 .ds-surface.ds-dashboard
-  .ds-dashboard__section-title[data-part="root"][data-size] {
+  .ds-dashboard__section-title[data-part="section-title"][data-size] {
   font-weight: var(
     --ds-dashboard-section-title-weight,
     var(--ds-typography-heading-font-weight, 600)
@@ -28,17 +28,17 @@
 }
 
 .ds-surface.ds-dashboard[data-heading-weight="lighter"]
-  .ds-dashboard__section-title[data-part="root"][data-size] {
+  .ds-dashboard__section-title[data-part="section-title"][data-size] {
   font-weight: var(--ds-font-weight-medium, 500);
 }
 
 .ds-surface.ds-dashboard[data-heading-weight="heavier"]
-  .ds-dashboard__section-title[data-part="root"][data-size] {
+  .ds-dashboard__section-title[data-part="section-title"][data-size] {
   font-weight: var(--ds-font-weight-extrabold, 800);
 }
 
 .ds-surface.ds-dashboard
-  .ds-dashboard__muted-text[data-part="root"][data-size] {
+  .ds-dashboard__muted-text[data-part="section-description"][data-size] {
   color: var(
     --ds-dashboard-section-description-color,
     var(--ds-color-text-muted)
