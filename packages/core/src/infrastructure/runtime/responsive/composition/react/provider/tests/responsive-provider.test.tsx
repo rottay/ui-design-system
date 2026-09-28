@@ -448,6 +448,62 @@ describe('ResponsiveProvider', () => {
       await act(async () => root?.unmount());
       container.remove();
     });
+
+    it('corrects the viewport after hydration without client-rendering a boundary whose chunk is still loading', async () => {
+      const { matchMedia } = createMatchMediaMock(viewportResolver(1280, { reducedMotion: false }));
+      window.matchMedia = matchMedia as any;
+
+      function Probe(): React.ReactElement {
+        const { deviceClass, hasResolvedViewport, prefersReducedMotion } = useResponsive();
+        return (
+          <output
+            data-testid="lazy-probe"
+            data-device={deviceClass}
+            data-resolved={String(hasResolvedViewport)}
+            data-reduce={String(prefersReducedMotion)}
+          />
+        );
+      }
+      let loadChunk!: (module: { default: typeof Probe }) => void;
+      const LazyProbe = React.lazy(
+        () => new Promise<{ default: typeof Probe }>((resolve) => { loadChunk = resolve; }),
+      );
+      // The engine factory's shape: the boundary is rendered by its own component.
+      function EngineSlot({ loading }: { loading: boolean }): React.ReactElement {
+        return <React.Suspense fallback={null}>{loading ? <LazyProbe /> : <Probe />}</React.Suspense>;
+      }
+      const tree = (loading: boolean) => (
+        <ResponsiveProvider>
+          <EngineSlot loading={loading} />
+        </ResponsiveProvider>
+      );
+
+      const container = document.createElement('div');
+      container.innerHTML = renderToString(tree(false));
+      document.body.appendChild(container);
+      const serverProbe = container.querySelector('[data-testid="lazy-probe"]');
+      expect(serverProbe).toHaveAttribute('data-device', 'phone');
+      const recoverableErrors: unknown[] = [];
+      let root: Root | undefined;
+
+      await act(async () => {
+        root = hydrateRoot(container, tree(true), {
+          onRecoverableError: (error) => recoverableErrors.push(error),
+        });
+      });
+      expect(container.querySelector('[data-testid="lazy-probe"]')).toBe(serverProbe);
+
+      await act(async () => loadChunk({ default: Probe }));
+
+      expect(container.querySelector('[data-testid="lazy-probe"]')).toBe(serverProbe);
+      expect(serverProbe).toHaveAttribute('data-device', 'desktop');
+      expect(serverProbe).toHaveAttribute('data-resolved', 'true');
+      expect(serverProbe).toHaveAttribute('data-reduce', 'false');
+      expect(recoverableErrors).toEqual([]);
+
+      await act(async () => root?.unmount());
+      container.remove();
+    });
   });
 
   describe('coarse pointer detection', () => {

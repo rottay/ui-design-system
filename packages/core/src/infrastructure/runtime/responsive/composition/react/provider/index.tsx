@@ -50,6 +50,7 @@ import React, {
   useEffect,
   useMemo,
   useSyncExternalStore,
+  startTransition,
   type ReactNode,
 } from 'react';
 
@@ -301,7 +302,7 @@ export function ResponsiveProvider({
 }: ResponsiveProviderProps): React.ReactElement {
   const [virtualKeyboardSnapshot, setVirtualKeyboardSnapshot] =
     useState<VirtualKeyboardSnapshot>(SSR_VIRTUAL_KEYBOARD_SNAPSHOT);
-  const prefersReducedMotion = useMotionPreference();
+  const motionPreference = useMotionPreference();
 
   // Pure in `ssrViewport`, deliberately. This function is React's answer for
   // BOTH the server render and the hydration render, so any input the two
@@ -312,11 +313,20 @@ export function ResponsiveProvider({
     [ssrViewport],
   );
 
+  // Hydration keeps the server answer and corrects in a transition: a sync
+  // update client-renders every Suspense boundary still loading its chunk.
+  const [hydrating, setHydrating] = useState(useSyncExternalStore(noSubscribe, no, yes));
+  const prefersReducedMotion = hydrating || motionPreference;
+
   const mediaSnapshot = useSyncExternalStore(
     subscribeResponsiveMedia,
-    getResponsiveMediaSnapshot,
+    hydrating ? getServerSnapshot : getResponsiveMediaSnapshot,
     getServerSnapshot,
   );
+
+  useEffect(() => {
+    if (hydrating) startTransition(() => setHydrating(false));
+  }, [hydrating]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || typeof document === 'undefined') {
@@ -391,9 +401,10 @@ export function ResponsiveProvider({
  */
 export function useResponsive(): ResolvedResponsiveContextValue {
   const context = useContext(ResponsiveContext);
+  // Under a provider the store is unread, so hydration has nothing to correct.
   const media = useSyncExternalStore(
-    subscribeResponsiveMedia,
-    getResponsiveMediaSnapshot,
+    context ? noSubscribe : subscribeResponsiveMedia,
+    context ? getUnhintedServerSnapshot : getResponsiveMediaSnapshot,
     getUnhintedServerSnapshot,
   );
   const prefersReducedMotion = useMotionPreference();
@@ -411,6 +422,10 @@ export function useResponsive(): ResolvedResponsiveContextValue {
     [context, media, prefersReducedMotion],
   );
 }
+
+const noSubscribe = () => () => {};
+const no = () => false;
+const yes = () => true;
 
 /** The server answer for a consumer with no provider above it. */
 function getUnhintedServerSnapshot(): ResponsiveMediaSnapshot {

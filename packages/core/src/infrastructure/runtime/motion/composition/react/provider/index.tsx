@@ -1,10 +1,13 @@
 'use client';
 
 import React, {
+  startTransition,
   useContext,
   useEffect,
   useLayoutEffect,
   useMemo,
+  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from 'react';
 import { MotionConfig } from 'motion/react';
@@ -17,10 +20,18 @@ import {
   useMotionPolicy,
   type MotionContextValue,
 } from '@/infrastructure/runtime/foundation/motion/composition/react/preference';
-import { useMotionEnvironment } from '@/infrastructure/runtime/foundation/motion/runtime/browser/environment';
+import {
+  getMotionEnvironmentServerSnapshot,
+  getMotionEnvironmentSnapshot,
+  subscribeMotionEnvironment,
+} from '@/infrastructure/runtime/foundation/motion/runtime/browser/environment';
 import { claimRootAttribute } from '@/infrastructure/runtime/foundation/root-attributes';
 import { resolveMotionPolicy } from '@/infrastructure/runtime/foundation/motion/policy';
-import { useSystemReducedMotion } from '@/infrastructure/runtime/foundation/motion/runtime/browser/reduced-motion';
+import {
+  getReducedMotionServerSnapshot,
+  getReducedMotionSnapshot,
+  subscribeReducedMotion,
+} from '@/infrastructure/runtime/foundation/motion/runtime/browser/reduced-motion';
 
 export { MotionContext, useMotionPolicy, useMotionPreference };
 export type { MotionContextValue };
@@ -62,6 +73,10 @@ function registerForcedReducedMotion(): () => void {
   return claimRootAttribute(document.documentElement, 'data-ds-motion', 'reduced');
 }
 
+const noSubscribe = () => () => {};
+const no = () => false;
+const yes = () => true;
+
 /**
  * Single runtime authority for reduced motion. It also configures Motion so
  * raw motion components and DS adapters observe the same effective policy.
@@ -73,8 +88,23 @@ export function MotionProvider({
   reducedMotion = false,
 }: MotionProviderProps): React.ReactElement {
   const parentContext = useContext(MotionContext);
-  const systemPrefersReducedMotion = useSystemReducedMotion();
-  const environment = useMotionEnvironment();
+  // Hydration keeps the server answer and corrects in a transition: a sync
+  // update client-renders every Suspense boundary still loading its chunk.
+  const [hydrating, setHydrating] = useState(useSyncExternalStore(noSubscribe, no, yes));
+  const systemPrefersReducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    hydrating ? getReducedMotionServerSnapshot : getReducedMotionSnapshot,
+    getReducedMotionServerSnapshot,
+  );
+  const environment = useSyncExternalStore(
+    subscribeMotionEnvironment,
+    hydrating ? getMotionEnvironmentServerSnapshot : getMotionEnvironmentSnapshot,
+    getMotionEnvironmentServerSnapshot,
+  );
+
+  useEffect(() => {
+    if (hydrating) startTransition(() => setHydrating(false));
+  }, [hydrating]);
   const prefersReducedMotion =
     Boolean(parentContext?.prefersReducedMotion) ||
     systemPrefersReducedMotion ||

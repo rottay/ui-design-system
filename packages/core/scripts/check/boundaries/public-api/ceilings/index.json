@@ -286,7 +286,7 @@
     },
     "./runtime/responsive": {
       "maxReachableModules": 11,
-      "maxSourceBytes": 59317
+      "maxSourceBytes": 59999
     },
     "./runtime/root-attributes": {
       "maxReachableModules": 2,
@@ -310,7 +310,7 @@
     },
     "./structures/app-shell": {
       "maxReachableModules": 78,
-      "maxSourceBytes": 289988
+      "maxSourceBytes": 290534
     },
     "./structures/column-menu": {
       "maxReachableModules": 643,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-FAM-13 P1 (the layout model): ./patterns/widget-board direct fan-out 2 -> 3 and reachable fan-out 38 -> 39 -- the subpath's source imports the policy module directly for normalizeWidgetLayout (the persistence contract of the fiche's step 1) and its chain adds one module; measured by the gate over the settled tree; a deliberate public-surface addition, never slack",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 1 subido(s), 0 sin ancla valida; maxSourceBytes: 0 subido(s), 0 sin ancla valida"
+  "lastMove": "hydration remount fix: Motion/Responsive providers keep the server snapshot through hydration and correct in a transition (+682 B responsive runtime, +546 B app-shell); measured 0 body-level removals post-hydration vs ~1000-element deletions before",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 2 subido(s), 0 sin ancla valida"
 }
