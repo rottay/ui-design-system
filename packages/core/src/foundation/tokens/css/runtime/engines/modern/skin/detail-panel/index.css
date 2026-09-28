@@ -268,6 +268,16 @@
   border-color: var(--ds-color-primary-600);
   box-shadow: var(--ds-elevation-2);
 }
+/* The lift shares box-shadow with the Button's focus ring, so keyboard focus
+   restates the ring first; a `none` elevation would void the whole list. */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:is([data-state~='focus-visible'], :focus-visible):not(:is([data-state~='disabled'], :disabled)) {
+  box-shadow: var(--ds-button-focus-ring);
+}
+@container not style(--ds-elevation-2: none) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:is([data-state~='focus-visible'], :focus-visible):not(:is([data-state~='disabled'], :disabled)) {
+    box-shadow: var(--ds-button-focus-ring), var(--ds-elevation-2);
+  }
+}
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-primary-600);
   border-color: var(--ds-color-primary-600);
