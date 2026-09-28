@@ -152,14 +152,16 @@
 }
 @media (pointer: coarse) {
   /* The reach tops up whatever the rem-sized rail lacks, so rail + reach never
-     lands under the physical floor (a 5.98px 0.5rem rail + 2 x 18px reach made 41.98px). */
+     lands under the physical floor (a 5.98px 0.5rem rail + 2 x 18px reach made
+     41.98px). 45px in the formula, not 44: Chromium rounds each fractional
+     inset down per side and a bare 44 computed 43.9844, failing its own floor. */
   .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='horizontal']::before {
     inset-block: 0;
-    inset-inline: min(calc(-1 * var(--ds-splitter-gutter-reach)), calc((100% - 44px) / 2));
+    inset-inline: min(calc(-1 * var(--ds-splitter-gutter-reach)), calc((100% - 45px) / 2));
   }
   .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='vertical']::before {
     inset-inline: 0;
-    inset-block: min(calc(-1 * var(--ds-splitter-gutter-reach)), calc((100% - 44px) / 2));
+    inset-block: min(calc(-1 * var(--ds-splitter-gutter-reach)), calc((100% - 45px) / 2));
   }
 }
 

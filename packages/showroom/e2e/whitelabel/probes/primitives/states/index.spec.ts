@@ -203,7 +203,7 @@ const LANES: readonly LaneDef[] = [
       },
       {
         name: 'switch',
-        control: '[data-testid="lb-switch"] .ds-switch',
+        control: '[data-testid="lb-switch"] .ds-toggle',
         focusTarget: '[data-testid="lb-switch"] input[role="switch"]',
         samples: {
           hover: '[data-testid="lb-switch"] [data-part="track"]',
