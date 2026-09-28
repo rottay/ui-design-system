@@ -121,7 +121,7 @@
 }
 
 .ds-dropdown-surface[data-part='surface']:not([data-portaled='true'])[data-placement$='Right'] {
-  left: auto;
+  inset-inline-start: auto;
   translate: none;
   inset-inline-end: 0;
 }

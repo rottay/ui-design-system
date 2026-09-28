@@ -173,11 +173,6 @@
           "selector": ".ds-dropdown-surface[data-part='surface']:not([data-portaled='true'])[data-placement$='Left']",
           "sites": 1,
           "reason": "Keyed on `[data-placement$='Left']`, a PHYSICAL attribute the dropdown contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
-        },
-        {
-          "selector": ".ds-dropdown-surface[data-part='surface']:not([data-portaled='true'])[data-placement$='Right']",
-          "sites": 1,
-          "reason": "Keyed on `[data-placement$='Right']`, a PHYSICAL attribute the dropdown contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
         }
       ]
     },
@@ -370,7 +365,7 @@
     },
     "runtime/engines/modern/skin/dropdown/index.css": {
       "sites": 2,
-      "reason": "2 measured site(s) after the INV-01 L3 mirror lot: `border-left: 0` / `border-right: 0` on the block-placed arrow. The item/submenu sheen sweep now carries `:dir(rtl)` twins on both the rest and the hover rule, so it is counted as mirrored rather than as debt; the portaled `left` stays a named measured-space exception and the `[data-placement$='Left|Right']` pair stays a physical stamp. The two arrow shapers owe `border-inline-start|end`, which is the arrow-anatomy lot, not this one."
+      "reason": "2 measured site(s) after the INV-01 L3 mirror lot: `border-left: 0` / `border-right: 0` on the block-placed arrow. The item/submenu sheen sweep now carries `:dir(rtl)` twins on both the rest and the hover rule, so it is counted as mirrored rather than as debt; the portaled `left` stays a named measured-space exception and `[data-placement$='Left']` stays a physical stamp. The `[data-placement$='Right']` stamp retired 2026-09-28: its `left: auto` reset left the base rule's `inset-inline-start: 50%` standing under RTL (where it resolves to `right`), so the surface over-constrained and overflowed the viewport's left edge; the reset is now `inset-inline-start: auto`, the logical spelling of the property the base sets, which is `left: auto` under LTR and the missing `right: auto` under RTL. The two arrow shapers owe `border-inline-start|end`, which is the arrow-anatomy lot, not this one."
     },
     "runtime/engines/modern/skin/popover/index.css": {
       "sites": 2,
