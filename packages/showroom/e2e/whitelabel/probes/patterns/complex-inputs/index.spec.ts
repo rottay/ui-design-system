@@ -317,7 +317,7 @@ const MENTIONS_TEXTAREA = '[data-testid="k4d-mentions-primary"] textarea';
 const OTP_FIRST_SLOT = '[data-testid="k4d-otp-primary"] input';
 const TRANSFER_SEARCH = '[data-testid="k4d-transfer-primary"] input[data-part="panel-search"]';
 const TRANSFER_MOVE = '[data-testid="k4d-transfer-primary"] [data-part="operations"] [data-part="move-button"]';
-const TRANSFER_FIRST_CHECKBOX = '[data-testid="k4d-transfer-primary"] input[data-part="panel-item-checkbox"]';
+const TRANSFER_FIRST_CHECKBOX = '[data-testid="k4d-transfer-primary"] [data-part="panel-item-checkbox"] input[type="checkbox"]';
 
 test('k4-lane-d: flagship interactive states', async ({ page }) => {
   test.setTimeout(240_000);
@@ -390,7 +390,9 @@ test('k4-lane-d: flagship interactive states', async ({ page }) => {
   // ---- transfer move button: hover + pressed --------------------------------
   await test.step('transfer move button: hover and pressed repaint', async () => {
     // Move buttons are disabled until at least one item is selected.
-    await page.locator(TRANSFER_FIRST_CHECKBOX).first().check();
+    // The native input is visually clipped; the row's label is the pointer path.
+    await page.locator('[data-testid="k4d-transfer-primary"] [data-part="panel-item-checkbox"] label').first().click();
+    await expect(page.locator(TRANSFER_FIRST_CHECKBOX).first()).toBeChecked();
     const move = page.locator(TRANSFER_MOVE).first();
     await move.waitFor({ timeout: 10_000 });
     await expect(move).toBeEnabled();

@@ -212,7 +212,7 @@ test('k4-lane-b: flagship interactive states', async ({ page }) => {
   await test.step('calendar: month navigation changes the visible grid', async () => {
     const root = page.locator(CALENDAR);
     const headerBefore = await root.locator('h1, h2, h3, [data-part="header"], [data-part="title"]').first().textContent().catch(() => '');
-    const next = root.getByRole('button').last();
+    const next = root.getByRole('button', { name: 'Next month', exact: true });
     await next.click();
     await page.waitForTimeout(400);
     const headerAfter = await root.locator('h1, h2, h3, [data-part="header"], [data-part="title"]').first().textContent().catch(() => '');

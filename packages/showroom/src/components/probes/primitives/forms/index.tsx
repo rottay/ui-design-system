@@ -265,6 +265,7 @@ function SpecimenTree({
       <Stack direction="horizontal" spacing="xl" wrap data-testid="lb-switch-toggle-row">
         <div data-testid="lb-switch" style={{ flexShrink: 0 }}>
           <Switch
+            aria-label={copy.notificationsLegend}
             defaultChecked
             disabled={disabled}
             loading={loading}

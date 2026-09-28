@@ -323,13 +323,18 @@ async function expectFocusRing(page: Page, ringSelector: string, label: string):
 }
 
 test.describe('K3 lane B keyboard evidence', () => {
-  test('menu: Tab reaches the first item, ring paints, Enter selects; the submenu trigger toggles', async ({
+  test('menu: one roving tab stop; arrows reach the submenu trigger, Enter/Space toggle it', async ({
     page,
   }) => {
     await gotoCell(page, 'bithire-static');
     await injectSentinel(page);
 
+    const rows = '[data-testid="k3b-menu"] [data-part="item"], [data-testid="k3b-menu"] [data-part="trigger"]';
     const firstItem = '[data-testid="k3b-menu"] [data-part="item"]';
+    const trigger = '[data-testid="k3b-menu"] [data-part="trigger"]';
+
+    // The menu is ONE tab stop: exactly one row is tabbable, and Tab lands on it.
+    await expect(page.locator(`[data-testid="k3b-menu"] [tabindex="0"]`)).toHaveCount(1);
     await tabUntil(page, firstItem);
     await expectActiveElement(page, firstItem);
     await expectFocusRing(page, firstItem, 'k3b-menu first item');
@@ -339,17 +344,30 @@ test.describe('K3 lane B keyboard evidence', () => {
       await expect(page.locator(firstItem).first()).toHaveAttribute('data-selected', 'true');
     });
 
-    await test.step('the submenu trigger toggles aria-expanded with Enter', async () => {
-      const trigger = '[data-testid="k3b-menu"] [data-part="trigger"]';
-      await tabUntil(page, trigger);
-      await expectActiveElement(page, trigger);
+    await test.step('ArrowDown roves within the menu to the submenu trigger', async () => {
+      let reached = false;
+      for (let step = 0; step < 12 && !reached; step += 1) {
+        await page.keyboard.press('ArrowDown');
+        await expectActiveElement(page, rows);
+        reached = await page.evaluate(
+          (sel) => document.activeElement instanceof Element && document.activeElement.matches(sel),
+          trigger,
+        );
+      }
+      expect(reached, 'ArrowDown never reached the submenu trigger inside the menu').toBe(true);
+      await expect(page.locator(`[data-testid="k3b-menu"] [tabindex="0"]`)).toHaveCount(1);
+      await expect(page.locator(trigger).first()).toHaveAttribute('tabindex', '0');
       await expectFocusRing(page, trigger, 'k3b-menu submenu trigger');
+    });
+
+    await test.step('the submenu trigger toggles aria-expanded with Enter and Space', async () => {
       // The probe opens the settings submenu by default: Enter closes it.
       await expect(page.locator(trigger).first()).toHaveAttribute('aria-expanded', 'true');
       await page.keyboard.press('Enter');
       await expect(page.locator(trigger).first()).toHaveAttribute('aria-expanded', 'false');
       await page.keyboard.press(' ');
       await expect(page.locator(trigger).first()).toHaveAttribute('aria-expanded', 'true');
+      await expectActiveElement(page, trigger);
     });
   });
 
@@ -429,9 +447,7 @@ test.describe('K3 lane B keyboard evidence', () => {
     const paymentTrigger = '[data-testid="k3b-steps"] [data-part="item"]:nth-child(3) [data-part="trigger"]';
     await tabUntil(page, paymentTrigger);
     await page.keyboard.press('Enter');
-    await expect(
-      page.locator('[data-testid="k3b-steps"] [data-part="item"]:nth-child(3)'),
-    ).toHaveAttribute('aria-current', 'step');
+    await expect(page.locator(paymentTrigger)).toHaveAttribute('aria-current', 'step');
     await expect(
       page.locator('[data-testid="k3b-steps"] [data-part="item"]:nth-child(3)'),
     ).toHaveAttribute('data-status', 'process');
@@ -452,7 +468,7 @@ test.describe('K3 lane B keyboard evidence', () => {
     // process marker back to the first step.
     await page.keyboard.press('Enter');
     await expect(
-      page.locator('[data-testid="k3b-stepper"] [data-part="item"]:nth-child(1)'),
+      page.locator('[data-testid="k3b-stepper"] [data-part="item"]:nth-child(1) [data-part="trigger"]'),
     ).toHaveAttribute('aria-current', 'step');
   });
 });

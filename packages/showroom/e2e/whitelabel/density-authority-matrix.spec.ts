@@ -111,9 +111,25 @@ const DB_TENANT_VERTICAL = "bithire";
  */
 const DB_TENANT_PRIMARY = "#0f766e";
 
-/** Custom properties keep their authored token stream; compare case-folded. */
+/**
+ * `--ds-color-primary` is a registered `<color>`, so it computes to `rgb()`
+ * while the expectation is authored hex: both sides reduce to rgb(a) components.
+ */
 function normalizeColor(value: string): string {
-  return value.trim().toLowerCase();
+  const text = value.trim().toLowerCase();
+  const hex = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/.exec(text);
+  if (hex) {
+    const digits = hex[1].length <= 4 ? [...hex[1]].map((d) => d + d).join('') : hex[1];
+    const [r, g, b, a] = [0, 2, 4, 6].map((i) => Number.parseInt(digits.slice(i, i + 2) || 'ff', 16));
+    return a === 255 ? `rgb(${r}, ${g}, ${b})` : `rgba(${r}, ${g}, ${b}, ${+(a / 255).toFixed(3)})`;
+  }
+  const fn = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)(?:[\s,/]+([\d.]+%?))?\s*\)$/.exec(text);
+  if (fn) {
+    const [r, g, b] = fn.slice(1, 4).map(Number);
+    const alpha = fn[4] === undefined ? 1 : fn[4].endsWith('%') ? Number.parseFloat(fn[4]) / 100 : Number(fn[4]);
+    return alpha === 1 ? `rgb(${r}, ${g}, ${b})` : `rgba(${r}, ${g}, ${b}, ${+alpha.toFixed(3)})`;
+  }
+  return text;
 }
 
 const EFFECTIVE_TOLERANCE = 0.01;
@@ -590,7 +606,7 @@ test.describe("OLA-5 F2: density authority over one identical tree", () => {
           .poll(async () =>
             normalizeColor(await rootComputedVar(page, "--ds-color-primary"))
           )
-          .toBe(DB_TENANT_PRIMARY);
+          .toBe(normalizeColor(DB_TENANT_PRIMARY));
 
         const css = await artifact.evaluate(
           (element) => element.textContent ?? ""

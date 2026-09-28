@@ -497,12 +497,13 @@ test.describe('K1 lane keyboard evidence', () => {
       await expect(page.locator(root).first()).toHaveAttribute('data-checked', 'true');
       await page.keyboard.press(' ');
       await expect(page.locator(root).first()).toHaveAttribute('data-checked', 'false');
-      await expect(page.locator(input).first()).toHaveAttribute('aria-checked', 'false');
+      // The native checkbox carries its state natively (no aria-checked on a real input).
+      await expect(page.locator(input).first()).not.toBeChecked();
     });
 
     await test.step('switch: Tab reaches it, ring paints on the track, Space toggles', async () => {
       const input = '[data-testid="lb-switch"] input[role="switch"]';
-      const root = '[data-testid="lb-switch"] .ds-switch';
+      const root = '[data-testid="lb-switch"] .ds-toggle';
       const track = '[data-testid="lb-switch"] [data-part="track"]';
       await tabUntil(page, input);
       await expectActiveElement(page, input);
@@ -533,7 +534,7 @@ test.describe('K1 lane keyboard evidence', () => {
     await injectSentinel(page, lane);
 
     await test.step('alert dismiss: ring + Enter unmounts the first alert', async () => {
-      const action = '[data-testid="lc-alert"] [data-part="action"]';
+      const action = '[data-testid="lc-alert"] [data-part="close-button"]';
       const shells = '[data-testid="lc-alert"] .ds-alert';
       await expect(page.locator(shells)).toHaveCount(2);
       await tabUntil(page, action);

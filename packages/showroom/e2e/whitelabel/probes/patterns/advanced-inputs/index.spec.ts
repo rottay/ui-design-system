@@ -649,11 +649,18 @@ test('lane-v: Rate hover/clear/focus/keyboard', async ({ page }) => {
     await page.locator(root).screenshot({ path: capturePath('rate-hover') });
   });
 
-  await test.step('keyboard: Tab reaches the group, ring paints via data-focused, ArrowRight steps 3.5 -> 4', async () => {
+  // APG radio group with a roving tab stop: the radiogroup root is never
+  // tabbable; exactly one star is, and arrows move focus AND value together.
+  const tabStop = '[data-testid="lv-rate-interactive"] [data-part="star"][role="radio"][tabindex="0"]';
+
+  await test.step('keyboard: Tab reaches the single tabbable star, ring paints, ArrowRight steps 3.5 -> 4', async () => {
     await releasePointer(page);
     await blurEverything(page);
-    await tabUntil(page, root);
-    await expectActiveElement(page, root);
+    await expect(page.locator(root)).not.toHaveAttribute('tabindex', '0');
+    await expect(page.locator(tabStop)).toHaveCount(1);
+    await tabUntil(page, tabStop);
+    await expectActiveElement(page, tabStop);
+    await expect(page.locator(tabStop)).toHaveAttribute('aria-checked', 'true');
     const focusedStar = page.locator('[data-testid="lv-rate-interactive"] [data-part="star"][data-focused="true"]');
     await expect(focusedStar).toHaveCount(1);
     const outline = await focusedStar.evaluate((el) => {
@@ -665,17 +672,22 @@ test('lane-v: Rate hover/clear/focus/keyboard', async ({ page }) => {
     await expect(page.locator(root)).toHaveAttribute('data-value', '3.5');
     await page.keyboard.press('ArrowRight');
     await expect(page.locator(root)).toHaveAttribute('data-value', '4');
+    // Focus followed the selection to the new tab stop.
+    await expect(page.locator(tabStop)).toHaveCount(1);
+    await expectActiveElement(page, tabStop);
   });
 
   await test.step('allowClear: clicking the current value clears to 0', async () => {
-    // Re-focus the group first: End must reach the root's keydown handler
-    // (a blur here would send the key to <body> — that was the Pass-1
-    // spec bug; the handler itself correctly sets newValue = count).
-    await tabUntil(page, root);
-    await expectActiveElement(page, root);
+    // Re-focus the roving star first: End must reach the star's keydown
+    // handler, not <body>.
+    await tabUntil(page, tabStop);
+    await expectActiveElement(page, tabStop);
     await page.keyboard.press('End');
     await expect(page.locator(root)).toHaveAttribute('data-value', '5');
-    await page.locator(star(5)).click();
+    // The left half of a star is its half-point hit area; the right edge is the full value.
+    const fifth = page.locator(star(5));
+    const box = (await fifth.boundingBox())!;
+    await fifth.click({ position: { x: box.width - 2, y: box.height / 2 } });
     await expect(page.locator(root)).toHaveAttribute('data-value', '0');
   });
 
@@ -830,29 +842,32 @@ test('lane-v: Form item focus-within frame and forced-colors', async ({ page }) 
   const emailInput = '[data-testid="lv-form-email"]';
   const firstItem = '[data-testid="lv-form"] [data-part="item"]';
 
-  await test.step('Tab into the email input paints the item focus-within frame', async () => {
+  // No per-field frame by design: focus-within tints the item's label text.
+  const firstLabelText = `${firstItem} [data-part="label-text"]`;
+
+  await test.step('Tab into the email input tints the item label text (focus-within)', async () => {
     await releasePointer(page);
     await blurEverything(page);
-    const rest = await readSettled(page, firstItem);
+    const rest = await readSettled(page, firstLabelText);
     await tabUntil(page, emailInput);
     await expectActiveElement(page, emailInput);
-    const focused = await readSettled(page, firstItem);
+    const focused = await readSettled(page, firstLabelText);
     const diffs = paintDiff(rest, focused);
     expect(
       diffs.length,
-      'Form item focus-within changed no paint channel (border/box-shadow expected)',
+      'Form item focus-within changed no paint channel on the label text (color expected)',
     ).toBeGreaterThan(0);
     console.log(`lane-v/form focus-within diff:\n  ${diffs.join('\n  ')}`);
     await page.locator(firstItem).first().screenshot({ path: capturePath('form-focus-within') });
   });
 
-  await test.step('forced-colors keeps the item frame', async () => {
+  await test.step('forced-colors keeps the field frame', async () => {
     await blurEverything(page);
     await page.emulateMedia({ forcedColors: 'active' });
     try {
       await page.waitForTimeout(100);
-      const read = await readForcedColors(page, firstItem);
-      expect(hasFrame(read), 'Form item lost its frame under forced colors').toBe(true);
+      const read = await readForcedColors(page, emailInput);
+      expect(hasFrame(read), 'Form field lost its frame under forced colors').toBe(true);
       await page.locator(firstItem).first().screenshot({ path: capturePath('form-forced-colors') });
     } finally {
       await page.emulateMedia({ forcedColors: 'none' });
