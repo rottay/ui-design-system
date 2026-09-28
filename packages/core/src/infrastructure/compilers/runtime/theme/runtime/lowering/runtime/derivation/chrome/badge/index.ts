@@ -10,7 +10,22 @@
  * @package @rottay/design-system
  */
 
-import type { FamilyDeriver } from "../../../../foundation/contract";
+import { contrastRatio } from "@/foundation/kernel/color/contrast";
+import {
+  isHexColor,
+  mixColor,
+  normalizeHexColor,
+} from "@/infrastructure/compilers/kernel/foundation/css/color-math";
+import {
+  WCAG_AA_NORMAL_TEXT_RATIO,
+  measureReadableInk,
+} from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
+import type {
+  AssembledChannels,
+  FamilyDeriver,
+  LoweringContext,
+} from "../../../../foundation/contract";
+import { resolveContrastPosture } from "../../palette/contrast-posture";
 
 /** A vertical's own badge chrome outranks every relation stated here. */
 export const badgeChromeDeriver: FamilyDeriver = {
@@ -110,8 +125,63 @@ export const badgeChromeDeriver: FamilyDeriver = {
     "--ds-badge-surface",
     "--ds-badge-surface-pressed",
   ],
-  derive: () => deriveBadgeChannels(),
+  derive: (context, below) => ({
+    ...deriveBadgeChannels(),
+    "--ds-badge-selected-ink": deriveSelectedInk(context, below),
+  }),
 };
+
+const SELECTED_INK_CHAIN = "var(--ds-filter-pill-active-color, var(--ds-color-primary))";
+/** The selected surface as the cascade resolves it when nobody authored the pill or the control ground. */
+const ACTIVE_CONTROL_SURFACE =
+  "color-mix(in srgb, var(--ds-color-primary) var(--ds-state-active-shift, 7%), var(--ds-surface-control))";
+const INK_STEPS = 20;
+
+/**
+ * The selected chip reads the primary over its own active wash. Where that pair
+ * clears AA the chain stays; where it does not, the ink moves toward the
+ * posture's readable ink by the smallest step that clears it.
+ * An authored pill, badge selection or control ground, or any non-hex input,
+ * keeps the chain: the surface the ink would be measured against is not known.
+ */
+export function deriveSelectedInk(context: LoweringContext, below: AssembledChannels): string {
+  const chrome = context.theme.chrome;
+  const pill = chrome?.filterPill;
+  const badge = chrome?.badge;
+  if (pill?.activeColor || pill?.activeBg || badge?.selectedInk || badge?.selectedSurface) {
+    return SELECTED_INK_CHAIN;
+  }
+  const activeSurface = below["--ds-material-control-background-active"];
+  if (activeSurface !== undefined && activeSurface !== ACTIVE_CONTROL_SURFACE) return SELECTED_INK_CHAIN;
+  const control = below["--ds-surface-control"];
+  if (control !== undefined && !control.startsWith("var(--ds-color-bg-input")) return SELECTED_INK_CHAIN;
+
+  const primary = below["--ds-color-primary"] ?? context.theme.palette?.primaryColor;
+  const ground = below["--ds-color-bg-input"];
+  const shift = /^(\d+(?:\.\d+)?)%$/.exec((below["--ds-state-active-shift"] ?? "7%").trim());
+  if (!primary || !ground || !isHexColor(primary) || !isHexColor(ground) || !shift) {
+    return SELECTED_INK_CHAIN;
+  }
+
+  const ink = normalizeHexColor(primary);
+  const surface = mixColor(normalizeHexColor(ground), ink, Number(shift[1]) / 100);
+  const floor = WCAG_AA_NORMAL_TEXT_RATIO;
+  if (contrastRatio(ink, surface) >= floor) return SELECTED_INK_CHAIN;
+
+  const posture = resolveContrastPosture(context.theme);
+
+  const readable = measureReadableInk(surface, {
+    light: posture.inkLight,
+    dark: posture.inkDark,
+    minimumRatio: floor,
+  });
+  if (readable.status !== "measured") return SELECTED_INK_CHAIN;
+  for (let step = 1; step < INK_STEPS; step += 1) {
+    const candidate = mixColor(ink, readable.ink, step / INK_STEPS);
+    if (contrastRatio(candidate, surface) >= floor) return candidate;
+  }
+  return readable.ink;
+}
 
 /**
  * NOT produced here, by design: the channels the divergence law keeps
