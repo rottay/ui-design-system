@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 
 import { expectHydrated } from '../../support/hydration';
+import { isShowroomTenant } from '../../../src/components/showroom-context/catalog';
 
 const TENANTS = ['bithire', 'themanagementmiami'] as const;
 const ENGINES = ['classic', 'modern', 'rustic'] as const;
@@ -75,6 +76,43 @@ async function waitForAtlas(
   await page.evaluate(() => document.fonts.ready);
 }
 
+/**
+ * Classic is frozen and fail-closed (owner decision 2026-09-05): it seeds its
+ * library only from a published compiled projection, which the probe publishes
+ * for showroom tenants alone. A DB tenant's classic cells are accounted for by
+ * the named refusal, never by a render.
+ */
+const CLASSIC_REFUSAL =
+  'The "classic" engine seeds its library from the compiled projection, and none was published.';
+
+function refusesUnderClassic(tenant: string, engine: typeof ENGINES[number]): boolean {
+  return engine === 'classic' && !isShowroomTenant(tenant);
+}
+
+async function expectClassicRefusal(
+  page: Page,
+  axes: {
+    engine: typeof ENGINES[number];
+    tenant: typeof TENANTS[number];
+    theme: typeof THEMES[number];
+  },
+): Promise<void> {
+  const errors: string[] = [];
+  const onError = (error: Error): void => {
+    errors.push(error.message);
+  };
+  page.on('pageerror', onError);
+  try {
+    await page.goto(probeUrl(axes), { waitUntil: 'domcontentloaded' });
+    await expect
+      .poll(() => errors.some((message) => message.startsWith(CLASSIC_REFUSAL)), { timeout: 45_000 })
+      .toBe(true);
+    await expect(page.locator('[data-cra17-probe="semantic-assets"]')).toHaveCount(0);
+  } finally {
+    page.off('pageerror', onError);
+  }
+}
+
 test.describe.configure({ mode: 'serial' });
 
 test.describe('CRA17 exact mobile optical matrix', () => {
@@ -89,6 +127,7 @@ test.describe('CRA17 exact mobile optical matrix', () => {
     );
     const captures: CaptureRecord[] = [];
     let observedRoleCells = 0;
+    let refusedRoleCells = 0;
 
     if (captureEnabled) mkdirSync(artifactRoot, { recursive: true });
 
@@ -96,6 +135,11 @@ test.describe('CRA17 exact mobile optical matrix', () => {
       for (const engine of ENGINES) {
         for (const theme of THEMES) {
           const axes = { tenant, engine, theme } as const;
+          if (refusesUnderClassic(tenant, engine)) {
+            await expectClassicRefusal(page, axes);
+            refusedRoleCells += PAGE_ROLE_CELLS;
+            continue;
+          }
           await waitForAtlas(page, axes);
 
           const iconSection = page.locator('[data-cra17-asset-class="icon"]');
@@ -170,7 +214,7 @@ test.describe('CRA17 exact mobile optical matrix', () => {
       }
     }
 
-    expect(observedRoleCells).toBe(REQUIRED_ROLE_CELLS);
+    expect(observedRoleCells + refusedRoleCells).toBe(REQUIRED_ROLE_CELLS);
 
     if (captureEnabled) {
       writeFileSync(
@@ -186,6 +230,7 @@ test.describe('CRA17 exact mobile optical matrix', () => {
           tenantContexts: TENANTS,
           requiredRoleCells: REQUIRED_ROLE_CELLS,
           recordedRoleCells: observedRoleCells,
+          refusedRoleCells,
           screenshotCount: captures.length,
           sightedReview: 'pending',
           captures,

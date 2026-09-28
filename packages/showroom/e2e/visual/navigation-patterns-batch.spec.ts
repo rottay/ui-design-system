@@ -192,8 +192,15 @@ for (const fixture of FIXTURES) {
 // guard would light two rows and this diff is where that shows.
 // ---------------------------------------------------------------------------
 
-const cmdDialog = (container: Locator): Locator =>
-  band(container, 'command-palette').locator("[data-part='dialog']").first();
+// Modern composes the certified Modal, so the palette frame is the Modal's
+// `surface` in the top layer, portaled out of the probe band (the band keeps
+// only the Modal's anchor). Rustic still renders its `dialog` part in-tree.
+const cmdDialog = (container: Locator, engine: Engine): Locator =>
+  engine === 'modern'
+    ? container
+        .page()
+        .locator(".ds-modal--modern [data-part='surface'].ds-pattern-command-palette.ds-engine-modern")
+    : band(container, 'command-palette').locator("[data-part='dialog']").first();
 
 for (const engine of ENGINES) {
   // Hover a DIFFERENT row than the keyboard-selected one (activeIndex 0). The
@@ -203,7 +210,8 @@ for (const engine of ENGINES) {
     test.setTimeout(60_000);
 
     const container = await openProbe(page, 'rottay', engine);
-    const dialog = cmdDialog(container);
+    const dialog = cmdDialog(container, engine);
+    await expect(dialog).toHaveCount(1);
     const inactive = dialog.locator("[data-part='item'][data-active='false']").first();
     await inactive.hover();
     await waitForSettled(page, inactive);
@@ -218,7 +226,8 @@ for (const engine of ENGINES) {
     test.setTimeout(60_000);
 
     const container = await openProbe(page, 'rottay', engine);
-    const dialog = cmdDialog(container);
+    const dialog = cmdDialog(container, engine);
+    await expect(dialog).toHaveCount(1);
     const active = dialog.locator("[data-part='item'][data-active='true']").first();
     await active.hover();
     await waitForSettled(page, active);

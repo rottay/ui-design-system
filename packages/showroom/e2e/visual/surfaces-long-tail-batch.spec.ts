@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+
 import { test, expect, type Locator, type Page } from '@playwright/test';
 
 import { expectHydrated } from '../support/hydration';
@@ -42,7 +44,6 @@ const CASE_IDS = [
   'patterns-bulk-select',
   'foundation-shared',
   'foundation-personality',
-  'foundation-states-core',
   'foundation-states-lifecycle',
   'layout-collection-shell',
   'layout-header',
@@ -75,12 +76,25 @@ const CASE_IDS = [
   'operations-kanban',
 ] as const;
 
+// The fixture's own <Case> declarations are the second reader of the roster:
+// dcadb8474 folded `foundation-states-core` into `foundation-states-lifecycle`,
+// and a hand-typed list alone could not see that.
+const FIXTURE_SOURCE = readFileSync(
+  new URL('../../src/components/fixtures/surfaces/long-tail/index.tsx', import.meta.url),
+  'utf8',
+);
+const DECLARED_CASES = [...FIXTURE_SOURCE.matchAll(/<Case\s+id="([^"]+)"([\s\S]*?)>/g)].map((match) => ({
+  id: match[1],
+  sourceCount: Number(/sourceCount=\{(\d+)\}/.exec(match[2])?.[1] ?? 1),
+}));
+const DECLARED_SOURCE_TOTAL = DECLARED_CASES.reduce((sum, entry) => sum + entry.sourceCount, 0);
+
 const SURFACE_ROOTS: ReadonlyArray<readonly [caseId: string, selector: string]> = [
-  ['foundation-states-core', '.ds-loading-state'],
   ['foundation-states-lifecycle', '.ds-loading-skeleton'],
   ['layout-collection-shell', '.ds-collection-shell'],
   ['layout-header', '.ds-header'],
-  ['layout-sidebar', '.ds-sidebar'],
+  // A structure since the FAM-05 sidebar-surface cut (1ddfd6198).
+  ['layout-sidebar', '.ds-structure.ds-sidebar-surface'],
   ['workspace-collection', '.ds-collection-workspace'],
   ['workspace-command-center', '.ds-command-center'],
   ['workspace-decision-inbox', '.ds-decision-inbox'],
@@ -160,6 +174,9 @@ async function waitForSettled(page: Page, locator: Locator): Promise<void> {
 }
 
 async function assertFixtureCoverage(root: Locator, engine: Engine): Promise<void> {
+  expect([...CASE_IDS].sort(), 'CASE_IDS must name exactly the cases the fixture declares').toEqual(
+    DECLARED_CASES.map((entry) => entry.id).sort(),
+  );
   const cases = root.locator('[data-long-tail-case]');
   await expect(cases).toHaveCount(CASE_IDS.length);
 
@@ -172,7 +189,7 @@ async function assertFixtureCoverage(root: Locator, engine: Engine): Promise<voi
   const representedSources = await cases.evaluateAll((nodes) =>
     nodes.reduce((sum, node) => sum + Number((node as HTMLElement).dataset.sourceCount ?? 0), 0),
   );
-  expect(representedSources).toBe(39);
+  expect(representedSources).toBe(DECLARED_SOURCE_TOTAL);
   expect(await root.locator('[data-part="muted-text"]').count()).toBeGreaterThan(0);
   expect(await root.locator('[data-part="divider"]').count()).toBeGreaterThan(0);
   expect(await root.locator('button:disabled').count()).toBeGreaterThan(0);
@@ -226,9 +243,11 @@ async function assertFixtureCoverage(root: Locator, engine: Engine): Promise<voi
   await expect(shared.locator('[data-surface-action]').first()).toBeVisible();
   await expect(shared.locator('[role="tab"]').first()).toBeVisible();
 
+  // The decorative accent rail is retired (a33b4dddf): SurfaceAccentBar is an
+  // inert compatibility export that renders nothing.
   await expect(
     root.locator('[data-long-tail-case="foundation-personality"] .ds-accent-bar'),
-  ).toHaveCount(1);
+  ).toHaveCount(0);
   await expect(
     root.locator('[data-long-tail-case="foundation-states-lifecycle"] .ds-stale-banner[data-refreshing="true"]'),
   ).toHaveCount(1);
@@ -239,7 +258,7 @@ async function assertFixtureCoverage(root: Locator, engine: Engine): Promise<voi
   await expect(
     root.locator('[data-long-tail-case="layout-collection-shell"] .ds-collection-shell[data-focus-active="true"][data-preview-active="true"]'),
   ).toHaveCount(1);
-  await expect(root.locator('[data-long-tail-case="layout-sidebar"] .ds-sidebar[data-collapsed="false"]')).toHaveCount(1);
+  await expect(root.locator('[data-long-tail-case="layout-sidebar"] .ds-sidebar-surface[data-collapsed="false"]')).toHaveCount(1);
 
   const collection = root.locator('[data-long-tail-case="workspace-collection"]');
   await expect(collection.locator('.ds-collection-render-dispatch[data-view-mode="cards"]')).toHaveCount(1);

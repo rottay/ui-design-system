@@ -121,11 +121,22 @@ for (const fixture of FIXTURES) {
       await expect(band.locator('.ds-pattern-kanban-board [data-part="column"][data-empty="true"]')).toHaveCount(0);
       await expect(band.locator('.ds-pattern-kanban-board [data-part="column-body"][data-empty="true"]')).toHaveCount(1);
       await expect(band.locator('.ds-pattern-map-view [data-part="marker-row"][data-selected="true"]')).toHaveCount(1);
-      await expect(band.locator('.ds-pattern-tree-view [data-part="node"][data-selected="true"]')).toHaveCount(1);
+      // Modern composes the Tree primitive, whose selection lives on the
+      // treeitem `row` (the `node` part is its layout wrapper); rustic keeps it
+      // on `node`.
+      const selectedTreeNode =
+        engine === 'modern'
+          ? '[role="treeitem"][aria-selected="true"][data-part="row"][data-selected="true"]'
+          : '[data-part="node"][data-selected="true"]';
+      await expect(band.locator(`.ds-pattern-tree-view ${selectedTreeNode}`)).toHaveCount(1);
       for (const state of LOADING_FIXTURES) {
         await expect(band.locator(`[data-loading-fixture="${state}"]`)).toHaveCount(1);
       }
-      await expect(band.locator('[data-testid="probe-visualizations-loading"] [data-part="root"][data-loading="true"]')).toHaveCount(5);
+      // One loading pattern root per loading fixture; the kanban's own skeleton
+      // renderer also stamps a loading `root`, so the pattern scope is required.
+      await expect(
+        band.locator('[data-testid="probe-visualizations-loading"] [class*="ds-pattern-"][data-part="root"][data-loading="true"]')
+      ).toHaveCount(LOADING_FIXTURES.length);
 
       await expect(band).toHaveScreenshot(`${fixture.id}-visualizations-${engine}-patterns-prestep.png`, {
         maxDiffPixelRatio: 0.0005,
@@ -138,8 +149,13 @@ for (const fixture of FIXTURES) {
       const band = root.locator('[data-testid="probe-visualizations-charts"]');
 
       await expect(band.locator('.ds-chart-scaffold[data-part="chart-scaffold"][data-state="ready"]')).toHaveCount(17);
+      // One family scaffold per scope (bar twice: the loading fixture is a bar
+      // chart). Families that delegate to a React renderer stamp the family class
+      // on that inner renderer too, so the count reads the scaffold part only.
       for (const scope of CHART_SCOPES) {
-        await expect(band.locator(`.ds-chart-${scope}`)).toHaveCount(scope === 'bar' ? 2 : 1);
+        await expect(band.locator(`.ds-chart-${scope}[data-part="chart-scaffold"]`)).toHaveCount(
+          scope === 'bar' ? 2 : 1
+        );
       }
       await expect(band.locator('.ds-chart-scaffold[data-part="chart-scaffold"][data-state="loading"]')).toHaveCount(1);
       await expect(band.locator('.ds-chart-sparkline[data-part="sparkline"][data-state="ready"]')).toHaveCount(1);

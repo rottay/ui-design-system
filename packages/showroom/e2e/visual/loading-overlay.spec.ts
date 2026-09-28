@@ -62,28 +62,51 @@ for (const item of CASES) {
     await expect(root.locator('[data-testid="loading-overlay-logo-mark"]')).toHaveCount(1);
 
     await expect(stage.locator(':scope > style')).toHaveCount(0);
+    // The veil (ground, blur, scrim) is the root's ::before, so the scrim does
+    // not dim the message and dots (skin/loading-overlay header); the root
+    // itself paints no ground.
     const paint = await root.evaluate((element) => {
       const rootStyle = getComputedStyle(element);
+      const veil = getComputedStyle(element, '::before');
       const message = element.querySelector('[data-part="message"]');
       const dot = element.querySelector('[data-part="dot"]');
       const logo = element.querySelector('[data-part="logo"]');
       return {
-        background: rootStyle.backgroundColor,
-        backdropFilter: rootStyle.backdropFilter,
-        borderRadius: rootStyle.borderRadius,
+        rootBackground: rootStyle.backgroundColor,
+        veilContent: veil.content,
+        background: veil.backgroundColor,
+        backdropFilter: veil.backdropFilter,
+        borderRadius: veil.borderRadius,
         messageColor: message ? getComputedStyle(message).color : '',
         dotColor: dot ? getComputedStyle(dot).color : '',
         logoAnimation: logo ? getComputedStyle(logo).animationName : '',
         dotAnimation: dot ? getComputedStyle(dot).animationName : '',
       };
     });
+    expect(paint.rootBackground).toBe('rgba(0, 0, 0, 0)');
+    expect(paint.veilContent).not.toBe('none');
     expect(paint.background).not.toBe('rgba(0, 0, 0, 0)');
     expect(paint.backdropFilter).toBe('blur(2px)');
     expect(paint.borderRadius).not.toBe('0px');
     expect(paint.messageColor).not.toBe('');
     expect(paint.dotColor).toBe(paint.messageColor);
-    expect(paint.logoAnimation).toBe('ds-loading-overlay-pulse');
-    expect(paint.dotAnimation).toBe('ds-loading-overlay-dots');
+    // The harness runs under reduced motion, where the skin stops both loops;
+    // the animation vocabulary is certified under no-preference, then the
+    // reduced posture is restored for the screenshot.
+    expect(paint.logoAnimation).toBe('none');
+    expect(paint.dotAnimation).toBe('none');
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    const animated = await root.evaluate((element) => {
+      const logo = element.querySelector('[data-part="logo"]');
+      const dot = element.querySelector('[data-part="dot"]');
+      return {
+        logo: logo ? getComputedStyle(logo).animationName : '',
+        dot: dot ? getComputedStyle(dot).animationName : '',
+      };
+    });
+    expect(animated.logo).toBe('ds-loading-overlay-pulse');
+    expect(animated.dot).toBe('ds-loading-overlay-dots');
+    await page.emulateMedia({ reducedMotion: 'reduce' });
 
     await expect(stage).toHaveScreenshot(`loading-overlay-${item.fixture}-${item.engine}.png`);
   });

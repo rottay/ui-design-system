@@ -26,21 +26,29 @@ const SENTINEL = '[data-testid="fp-sentinel"]';
 const DEVICE = '[data-testid="fp-device-class"]';
 const HYDRATED = '[data-testid="fp-hydrated"]';
 
-/** Records every value a `data-adaptive-fullscreen` node has ever carried. */
+/**
+ * Records every presentation and posture a Modern modal dialog has ever carried.
+ * The Modern Modal stamps its adaptation as `data-presentation` (floating |
+ * fullscreen) and `data-posture` (the resolved viewport tier) since the FAM-04
+ * cut; `data-adaptive-fullscreen` is a Rustic-only stamp.
+ */
 const MODAL_POSTURE_RECORDER = `
+  window.__fpModalPresentations = [];
   window.__fpModalPostures = [];
+  const read = (el) => {
+    window.__fpModalPresentations.push(el.getAttribute('data-presentation'));
+    window.__fpModalPostures.push(el.getAttribute('data-posture'));
+  };
   const record = (node) => {
     if (!(node instanceof Element)) return;
-    for (const el of [node, ...node.querySelectorAll('[data-adaptive-fullscreen]')]) {
-      if (el.hasAttribute && el.hasAttribute('data-adaptive-fullscreen')) {
-        window.__fpModalPostures.push(el.getAttribute('data-adaptive-fullscreen'));
-      }
+    for (const el of [node, ...node.querySelectorAll('dialog[data-presentation]')]) {
+      if (el.matches && el.matches('dialog[data-presentation]')) read(el);
     }
   };
   new MutationObserver((records) => {
     for (const entry of records) {
-      if (entry.type === 'attributes') {
-        window.__fpModalPostures.push(entry.target.getAttribute('data-adaptive-fullscreen'));
+      if (entry.type === 'attributes' && entry.target.matches('dialog[data-presentation]')) {
+        read(entry.target);
       }
       entry.addedNodes.forEach(record);
     }
@@ -48,7 +56,7 @@ const MODAL_POSTURE_RECORDER = `
     subtree: true,
     childList: true,
     attributes: true,
-    attributeFilter: ['data-adaptive-fullscreen'],
+    attributeFilter: ['data-presentation', 'data-posture'],
   });
 `;
 
@@ -204,16 +212,21 @@ test.describe('first paint of /probe/first-paint', () => {
     await page.addInitScript(MODAL_POSTURE_RECORDER);
     await page.goto(`${PROBE}?modal=1`, { waitUntil: 'commit' });
 
-    const dialog = page.locator('dialog[data-adaptive-fullscreen]').first();
+    // The oracle is the overlay family's adaptation defaults: only the `phone`
+    // posture maps to the fullscreen presentation; every other tier keeps the
+    // floating base (OVERLAY_ADAPTATION_DEFAULTS, kernel/adaptation overlay).
+    const dialog = page.locator('dialog.ds-modal[data-presentation]').first();
     await dialog.waitFor({ state: 'attached' });
     await expect(page.locator(HYDRATED)).toHaveAttribute('data-hydrated', 'true');
-    await expect(dialog).toHaveAttribute('data-adaptive-fullscreen', 'false');
-    await expect(dialog).toHaveAttribute('data-fullscreen', 'false');
+    await expect(dialog).toHaveAttribute('data-presentation', 'floating');
+    await expect(dialog).toHaveAttribute('data-posture', 'desktop');
 
-    const postures = await page.evaluate(
-      () => (window as unknown as { __fpModalPostures: string[] }).__fpModalPostures,
-    );
-    expect(postures.length).toBeGreaterThan(0);
-    expect([...new Set(postures)]).toEqual(['false']);
+    const history = await page.evaluate(() => {
+      const w = window as unknown as { __fpModalPresentations: string[]; __fpModalPostures: string[] };
+      return { presentations: w.__fpModalPresentations, postures: w.__fpModalPostures };
+    });
+    expect(history.presentations.length).toBeGreaterThan(0);
+    expect([...new Set(history.presentations)]).toEqual(['floating']);
+    expect(history.postures).not.toContain('phone');
   });
 });

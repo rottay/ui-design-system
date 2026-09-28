@@ -87,8 +87,11 @@ for (const fixture of FIXTURES) {
           ).toHaveCount(1);
         }
       }
+      // Modern samples are real Buttons, which own `data-variant` (outline, not
+      // outlined); the pattern names its sample on `data-sample-variant`.
+      const sampleAttribute = engine === 'modern' ? 'data-sample-variant' : 'data-variant';
       for (const variant of ['primary', 'outlined', 'default']) {
-        await expect(preview.locator(`[data-part="button"][data-variant="${variant}"]`)).toHaveCount(1);
+        await expect(preview.locator(`[data-part="button"][${sampleAttribute}="${variant}"]`)).toHaveCount(1);
       }
       for (const status of ['active', 'pending', 'draft']) {
         await expect(preview.locator(`[data-part="badge"][data-status="${status}"]`).first()).toBeVisible();
@@ -108,14 +111,20 @@ for (const fixture of FIXTURES) {
     const sandbox = band.locator('.ds-pattern-branding-preview-sandbox[data-part="root"][data-state="full"]');
 
     await expect(sandbox).toHaveCount(1);
+    // The sandbox composes real primitives, which keep their own anatomy: the
+    // Button and Badge roots carry their own part and `data-variant` (the Badge
+    // `danger` tone stamps `error`), the error Input stamps `data-invalid`, and
+    // Card drops a consumer part, so the elevated card is found by its class.
+    const buttons = sandbox.locator('[data-part="surface"][data-state="buttons"]');
     for (const variant of ['primary', 'secondary', 'default', 'ghost']) {
-      await expect(sandbox.locator(`[data-part="button"][data-variant="${variant}"]`)).toHaveCount(1);
+      await expect(buttons.locator(`button.ds-button[data-variant="${variant}"]`)).toHaveCount(1);
     }
-    for (const state of ['active', 'warning', 'error', 'info']) {
-      await expect(sandbox.locator(`[data-part="badge"][data-state="${state}"]`).first()).toBeVisible();
+    const badges = sandbox.locator('[data-part="surface"][data-state="badges"]');
+    for (const variant of ['success', 'warning', 'error', 'info']) {
+      await expect(badges.locator(`[data-kind="badge"][data-variant="${variant}"]`)).toBeVisible();
     }
-    await expect(sandbox.locator('[data-part="input"][data-state="error"]')).toHaveCount(1);
-    await expect(sandbox.locator('[data-part="card"][data-state="elevated"]')).toHaveCount(1);
+    await expect(sandbox.locator('[data-part="input"][data-invalid="true"]')).toHaveCount(1);
+    await expect(sandbox.locator('.ds-branding-preview-sandbox__card[data-state="elevated"]')).toHaveCount(1);
     await expect(sandbox.locator('[data-part="table"]')).toHaveCount(1);
 
     await waitForSettled(page, band);

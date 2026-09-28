@@ -283,6 +283,9 @@ test.describe('the shared dark-elevation contract', () => {
 
 test.describe('modern carries a premium signature rustic does not', () => {
   test('the motion cadence differs: modern rides the canon', async ({ page }) => {
+    // The harness runs under reduced motion, which settles every recipe to its
+    // final state; cadence is only a question under no-preference.
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
     const read = async (engine: string) => {
       await loadProbe(page, engine, 'button');
       return page.evaluate(() => {
@@ -292,12 +295,18 @@ test.describe('modern carries a premium signature rustic does not', () => {
     };
 
     const modern = await read('modern');
+    // Since the FAM-01 cut the Modern Button's cadence is the feedback.press
+    // motion recipe, resolved per profile and published on the button as
+    // `--ds-recipe-enter`; the skin's transition must ride exactly that value.
+    const recipeEnter = await page.evaluate(() => {
+      const button = document.querySelector('[data-testid="probe-button"] button');
+      return button ? getComputedStyle(button).getPropertyValue('--ds-recipe-enter').trim() : null;
+    });
     const rustic = await read('rustic');
     expect(modern, 'modern must set a transition duration on its primary button').not.toBeNull();
     expect(modern, `modern (${modern}) and rustic (${rustic}) share a cadence`).not.toBe(rustic);
-    // The canon's interaction step. A literal here would mean the button stopped
-    // reading --ds-motion-fast.
-    expect(modern).toBe('0.12s');
+    expect(recipeEnter, 'modern must publish the feedback.press recipe on its button').toMatch(/^\d+(\.\d+)?ms$/);
+    expect(modern).toBe(`${Number.parseFloat(recipeEnter ?? '') / 1000}s`);
   });
 
   test('the card paints a surface tint in modern and none in rustic', async ({ page }) => {

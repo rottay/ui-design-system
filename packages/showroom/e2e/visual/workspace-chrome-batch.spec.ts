@@ -120,9 +120,11 @@ for (const fixture of FIXTURES) {
 test('rottay (dark) / workspace / modern: column-menu panel open (portaled)', async ({ page }) => {
   test.setTimeout(60_000);
   await openProbe(page, 'rottay', 'modern');
-  const trigger = page.locator('[data-testid="probe-workspace-column-menu"] [data-part="trigger"]');
+  // ColumnMenu composes Popover: its button is the `control` part inside the
+  // Popover's trigger wrapper, and the panel is the Popover `surface`.
+  const trigger = page.locator('[data-testid="probe-workspace-column-menu"] [data-part="control"].ds-column-menu-control');
   await trigger.click();
-  const panel = page.locator('[data-part="panel"].ds-column-menu-panel');
+  const panel = page.locator('[data-part="surface"].ds-column-menu-panel');
   await panel.waitFor({ state: 'visible' });
   await waitForSettled(page, panel);
   await expect(panel).toHaveScreenshot('rottay-workspace-column-menu-panel-modern.png', {

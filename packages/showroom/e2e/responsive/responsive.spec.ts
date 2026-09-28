@@ -118,7 +118,8 @@ async function exerciseCell(page: Page, set: 'flagship' | 'responsive', slug: st
 
   if (set === 'responsive' && slug === 'dropdown') {
     await page.getByRole('button', { name: 'Actions', exact: true }).first().click();
-    await page.locator('ul[data-part="surface"][data-open="true"]').waitFor();
+    // The Modern dropdown surface is a <div> wrapping the role=menu list.
+    await page.locator('.ds-dropdown-surface[data-part="surface"][data-open="true"]').waitFor();
   }
 }
 

@@ -65,7 +65,7 @@ interface OverlayFixtureConfig {
   key: string;
   triggerTestId: string;
   interaction: Interaction;
-  portaled: (engine: Engine) => boolean;
+  portaled: (engine: Engine) => boolean | 'by-strategy';
   surfaceSelector: (engine: Engine) => string;
 }
 
@@ -141,7 +141,10 @@ const OVERLAY_FIXTURES: readonly OverlayFixtureConfig[] = [
     key: 'contextmenu',
     triggerTestId: 'probe-overlay-contextmenu-trigger',
     interaction: 'right-click',
-    portaled: (engine) => engine === 'rustic',
+    // Rustic mounts through the shared overlay positioning runtime: inline in
+    // the top layer on the `anchor-css` strategy, portaled only on `js`. The
+    // surface stamps the strategy it resolved, so the posture is read from it.
+    portaled: (engine) => (engine === 'rustic' ? 'by-strategy' : false),
     surfaceSelector: (engine) =>
       engine === 'modern'
         ? ".rottay-context-menu--modern [data-part='surface']"
@@ -165,7 +168,8 @@ const OVERLAY_FIXTURES: readonly OverlayFixtureConfig[] = [
     key: 'dropdown',
     triggerTestId: 'probe-overlay-dropdown-trigger',
     interaction: 'click',
-    portaled: (engine) => engine === 'rustic',
+    // Same positioning-runtime posture as contextmenu (see there).
+    portaled: (engine) => (engine === 'rustic' ? 'by-strategy' : false),
     surfaceSelector: (engine) =>
       engine === 'modern'
         ? ".ds-dropdown--modern [data-part='surface']"
@@ -313,7 +317,18 @@ for (const fixture of OVERLAY_FIXTURES) {
       await triggerOpen(page, container, fixture);
 
       const selector = fixture.surfaceSelector(engine);
-      const isPortaled = fixture.portaled(engine);
+      const posture = fixture.portaled(engine);
+      let isPortaled: boolean;
+      if (posture === 'by-strategy') {
+        const surface = page.locator(selector);
+        await surface.waitFor({ timeout: 10_000 });
+        const strategy = await surface.getAttribute('data-ds-position-strategy');
+        expect(['anchor-css', 'js']).toContain(strategy);
+        isPortaled = strategy === 'js';
+        if (!isPortaled) expect(await container.locator(selector).count()).toBe(1);
+      } else {
+        isPortaled = posture;
+      }
 
       if (isPortaled) {
         const surface = page.locator(selector);

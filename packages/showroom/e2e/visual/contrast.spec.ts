@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
 import { expectHydrated } from '../support/hydration';
+import { isShowroomTenant } from '../../src/components/showroom-context/catalog';
 
 // ---------------------------------------------------------------------------
 // WO-ENG-22 — a control must be readable against its own background, in every
@@ -191,9 +192,36 @@ async function readControl(page: Page, selector: string): Promise<Reading> {
   }, selector);
 }
 
+/**
+ * Classic is frozen and fail-closed (owner decision 2026-09-05): it seeds antd
+ * only from a published compiled projection, and the torture surface publishes
+ * one for showroom tenants alone. A DB tenant under classic therefore has no
+ * control to read; its contract is the named refusal, asserted here instead.
+ */
+const CLASSIC_REFUSAL =
+  'The "classic" engine seeds its library from the compiled projection, and none was published.';
+
+function refusesUnderClassic(tenant: string, engine: ProbeEngine): boolean {
+  return engine === 'classic' && !isShowroomTenant(tenant);
+}
+
 test.describe('every control is readable against its own background, in every engine', () => {
   for (const tenant of TENANTS) {
     for (const engine of ENGINES) {
+      if (refusesUnderClassic(tenant, engine)) {
+        test(`${tenant} / ${engine}: refuses by name (no compiled projection published)`, async ({ page }) => {
+          const errors: string[] = [];
+          page.on('pageerror', (error) => errors.push(error.message));
+          await page.goto(`/probe/whitelabel-torture?fixture=${tenant}&engine=${engine}`, {
+            waitUntil: 'domcontentloaded',
+          });
+          await expect.poll(() => errors.some((message) => message.startsWith(CLASSIC_REFUSAL)), {
+            timeout: 45_000,
+          }).toBe(true);
+          await expect(page.locator('[data-testid="probe-ground"]')).toHaveCount(0);
+        });
+        continue;
+      }
       for (const control of CONTROLS) {
         const selector = control.selectors[engine];
         if (!selector) continue; // no honest single-element read under this engine; see CONTROLS above
