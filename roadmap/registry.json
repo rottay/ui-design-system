@@ -6116,6 +6116,11 @@
           "at": "2026-09-27 19:10",
           "by": "kimi-dt",
           "note": "WO-RET-02 DONE (129/164). El close audit completo queda en evidence: las 4 aceptaciones re-medidas hoy sobre el arbol final. Lotes: 7a79c1b89 (P1 proyeccion+muertos), 3bd90b093 + 94a858598 (P2 bundle split + gate blocking), 1f1de09ab (los 8 bordes reales de cascada cerrados por su forma medida), 118debcb2 (phantom reads), cbc780a73 (ledger physical-css), 787f660d5 (P3 toolchain Tailwind fuera del showroom), e12093222 (consumer contract admite ./styles/frozen-engines), ee4358fd4 (residuo i18n del carril RET-05), 6d06b1bac + 7f91bf7dc (regens de ventana). Rojos clasificados con duenio que NO son de este carril: whitelabel 144 (deriva de selectores rottay->ds de los family cuts desde 09-12 + stamp de tenant ausente en el torture probe, carril mount/RET-05), 4 WebGL lifecycle (reproducen en quietud, paquete de clasificacion propio), responsive-360 (clase overflow, FAM-09)."
+        },
+        {
+          "at": "2026-09-28 12:15",
+          "by": "kimi-admin-dt",
+          "note": "POST-CLOSE EVIDENCE CORRECTION (audit A27-03): the close evidence classified the whitelabel mass red (144) as not-of-this-lane. That number was measured against a STALE next-server (serving the pre-17:13 build over a newer .next; pages never hydrated -- diagnosed 2026-09-27 20:05, guard landed 25ec55fcc). Fresh-server truth: 147 passed / 48 failed / 24 declared skips, the 48 decomposed into 6 mechanisms (spec selector drift, torture wait contract, axe a11y x4 sites, density authority, keyboard/focus, overflow class). Residual closures since: 7ddc4a0d5 (spec-contract, diagnostics 169/169), 91eb8fc73 (E-spec to the current contract), 71445e90d (switch/splitter residuals), and the 2026-09-28 wave: 62d093f39 (modal lg radius + InputNumber density boundary, R28-01 adjudicated), da0d64015 (dropdown RTL logical reset), b48011ab4 (divergence/visual-authority stamps), cbf9d56e5 (docs dark->base flip), d56127f98 (6 residual spec repairs with counterfactuals), 978d7ceba (positive hydration proof wired into 69 specs with the chunkless-proxy drill), c029181dc (badge radius-sm derivation), 9fba9965d (toggle container-type collapse), 1ad1a87c0 (torture font anchor = compiled stack). Fresh-build verification 2026-09-28: torture+states+overlay-notifications 20/20 (derivation check clean: no probed channel hardcoded), focused 7-file batch 86/2/3 with both reds closed by the fixes above and confirmed in the 20/20 re-run. The lane/phase verdicts of the close audit stand; the suite-health numbers it cited do not."
         }
       ]
     },
@@ -6237,6 +6242,11 @@
           "at": "2026-09-27 11:00",
           "by": "kimi-dt",
           "note": "WO-RET-05 DONE (128/164). El close audit completo queda en `evidence`: las dos aceptaciones grep medidas en el arbol final (compile-grep exactamente 1, showroom-ui imports 0), Storybook bithire computando --ds-color-primary al preset en el build real + el job CI en PRs, la paridad SSR/CSR verde en produccion (8/8), y cada hallazgo con duenio. Lotes: 5cf5da2e4 (P1 kernel), 247d90a3c + 686efffcc (fuente legacy v1), 8d46ad7bb (P2 probes), 024e6c533 (P3 fleet), 70b8f4a0e (P4a chrome), 6f07081b3 (P4b docs), 15b62e614 + 7cb9e7fe7 (P4c paridad + la carrera de pintura), 8dbc81efd (P5 storybook), d9acdc406 + f03dde1bd (P6 CI + ceremonia de sello), a9b59b451 (canary-capture)."
+        },
+        {
+          "at": "2026-09-28 12:15",
+          "by": "kimi-admin-dt",
+          "note": "POST-CLOSE CORRECTION (audit 2026-09-28-ds-71445e90d, hallazgo R28-02): the close evidence claimed the divergence/visual-authority pages \"serve now\". A scout (receipt out-residual6-scout-opus, claude-opus-5-5) contradicted it on a fresh server: P2 rendered both with a wrapper scope and no <html> stamp, so the admission check (document.documentElement scope rule) refused the mounted artifact on hydration and React #418 left both pages blank in production. The spec waits were never the problem and were not touched. Fixed in b48011ab4: both pages render groundFor()'s kernel stamp (buildRootStampScript) before GroundStage. Verified on a fresh production build behind the BUILD_ID guard: divergence spec 9/9 with hydration proven (probe settled signals incl. --ds-chart-series-1 #326E9D sober / #A43D74 editorial, zero cross-reload diff); visual-authority has no spec and was proven by script (stamp present, React fiber attached, facts card compiled-artifact/compiled-envelope/no conflict, zero page errors). The acceptance now stands in its stronger, hydrated form."
         }
       ],
       "doneAt": "2026-09-27",
