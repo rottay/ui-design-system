@@ -99,6 +99,12 @@ interface Probe {
   channel?: string;
   /** Read the LAST colour stop of a gradient `background-image` instead of the whole value. */
   gradientStop?: 'last';
+  /**
+   * For a font probe: the compiled channel whose declaration in the mounted
+   * artifact is the anchor, admitted only while it is the `themePath` stack
+   * plus the mandatory Arabic fallback (AD-6).
+   */
+  artifactChannel?: string;
   kind: ProbeKind;
   /** Only reachable once the flagship's modal is opened (it renders in a portal). */
   requiresModal?: boolean;
@@ -153,7 +159,7 @@ const PROBES: readonly Probe[] = [
   // that reaches Badge's standalone branch and actually paints chrome. It reads
   // the palette directly, and the dark fixture's palette is the dark side.
   { key: 'badge/primary/background-color', selector: '[data-testid="probe-extras"] .rottay-badge', property: 'background-color', themePath: 'palette.primaryColor', kind: 'color' },
-  { key: 'badge/primary/font-family', selector: '[data-testid="probe-extras"] .rottay-badge', property: 'font-family', themePath: 'typography.fontFamilyBase', kind: 'font' },
+  { key: 'badge/primary/font-family', selector: '[data-testid="probe-extras"] .rottay-badge', property: 'font-family', themePath: 'typography.fontFamilyBase', artifactChannel: '--ds-font-family-base', kind: 'font' },
   { key: 'badge/primary/border-radius', selector: '[data-testid="probe-extras"] .rottay-badge', property: 'border-top-left-radius', themePath: 'surfaces.borderRadius.sm', kind: 'length' },
 
   // Table — the primitive only paints its border when `bordered`, which is why
@@ -283,6 +289,32 @@ async function readProbes(page: Page, probes: Probe[]): Promise<Readings> {
       return raw ? resolved || null : null;
     };
 
+    // AD-6 (core `lowering/tests/mandatory-font-fallback.test.ts`): the compiler
+    // inserts "Noto Sans Arabic" into every reading stack, so the raw FlatTheme
+    // string is never what a tenant's part paints. The anchor is the door's own
+    // output, and it only stands while it is the authored stack plus that tail.
+    const artifactCss =
+      document.querySelector('[data-testid="torture-legacy-brand-style"]')?.textContent ?? null;
+    const MANDATORY_FALLBACK = 'noto sans arabic';
+    const ARABIC_CAPABLE = /noto\s+(?:sans|kufi|naskh)\s+arabic|geeza\s+pro|tahoma/i;
+
+    const compiledFontAnchor = (authored: string, channel: string): string | null => {
+      if (artifactCss === null) return null;
+      const declaration = new RegExp(`(?<![\\w-])${channel}\\s*:\\s*([^;}]+)`, 'g');
+      const stacks = new Set(Array.from(artifactCss.matchAll(declaration), (match) => normalizeFont(match[1])));
+      if (stacks.size !== 1) return `unanchored: the artifact declares ${stacks.size} distinct ${channel} stacks`;
+      const [compiled] = [...stacks];
+      const wanted = normalizeFont(authored).split(',');
+      const tenantFamilies = compiled
+        .split(',')
+        .filter((family) => family !== MANDATORY_FALLBACK || wanted.includes(family));
+      if (tenantFamilies.join(',') !== wanted.join(',')) {
+        return `unanchored: ${compiled} is not the authored ${wanted.join(',')}`;
+      }
+      if (!ARABIC_CAPABLE.test(compiled)) return `unanchored: ${compiled} lacks the mandatory Arabic fallback`;
+      return compiled;
+    };
+
     const brandTheme = (window as Window & { __probeBrandTheme?: unknown }).__probeBrandTheme;
 
     const atPath = (path: string): string | null => {
@@ -316,9 +348,11 @@ async function readProbes(page: Page, probes: Probe[]): Promise<Readings> {
           declared =
             probe.kind === 'color'
               ? resolveThrough(asked, 'color')
-              : probe.kind === 'font'
-                ? normalizeFont(asked)
-                : asked;
+              : probe.kind === 'font' && probe.artifactChannel
+                ? compiledFontAnchor(asked, probe.artifactChannel)
+                : probe.kind === 'font'
+                  ? normalizeFont(asked)
+                  : asked;
         }
       }
 
@@ -561,6 +595,61 @@ test.describe('whitelabel torture probe', () => {
     }, String(honest.declared));
     const flattened = (await readProbes(page, [toast!]))[toast!.key];
     expect(flattened.computed, 'a flat fill read as a gradient stop').toBeNull();
+  });
+
+  // The font anchor must be able to fail on either half of the contract: the
+  // part dropping the tenant's family or the fallback, and the artifact itself
+  // dropping either one (the part follows, so only the anchor can see it).
+  test('the font anchor fails when the family or the Arabic fallback is dropped', async ({ page }) => {
+    test.setTimeout(90_000);
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await gotoFixture(page, DIFFERENTIAL_FIXTURE);
+
+    const font = PROBES.find((probe) => probe.artifactChannel !== undefined);
+    expect(font, 'no probe is anchored on a compiled font stack').toBeDefined();
+    const channel = font!.artifactChannel!;
+    const read = async () => (await readProbes(page, [font!]))[font!.key];
+
+    const authored = await page.evaluate((path: string) => {
+      let cursor: unknown = (window as Window & { __probeBrandTheme?: unknown }).__probeBrandTheme;
+      for (const segment of path.split('.')) cursor = (cursor as Record<string, unknown> | undefined)?.[segment];
+      return typeof cursor === 'string' ? cursor : null;
+    }, font!.themePath!);
+    expect(authored, `torture-dark authors nothing at ${font!.themePath}`).not.toBeNull();
+    const families = authored!.split(',').map((family) => family.trim());
+    const withoutFamily = [...families.slice(1, -1), '"Noto Sans Arabic"', families[families.length - 1]].join(', ');
+    const withoutFallback = authored!;
+
+    const honest = await read();
+    expect(honest.missing).toBe(false);
+    expect(honest.declared, 'the honest anchor must admit the compiled stack').not.toMatch(/^unanchored/);
+    expect(honest.declared).toContain('noto sans arabic');
+    expect(honest.computed).toBe(honest.declared);
+
+    const target = page.locator(font!.selector).first();
+    for (const [arm, stack] of [['family dropped', withoutFamily], ['fallback dropped', withoutFallback]] as const) {
+      await target.evaluate((element, value) => (element as HTMLElement).style.setProperty('font-family', value), stack);
+      const painted = await read();
+      expect(painted.declared, `painted ${arm}: the anchor must not move with the part`).toBe(honest.declared);
+      expect(painted.computed, `painted ${arm}: read as derived`).not.toBe(painted.declared);
+    }
+    await target.evaluate((element) => (element as HTMLElement).style.removeProperty('font-family'));
+
+    const style = page.locator('[data-testid="torture-legacy-brand-style"]');
+    const original = await style.evaluate((element) => element.textContent ?? '');
+    for (const [arm, stack] of [['family dropped', withoutFamily], ['fallback dropped', withoutFallback]] as const) {
+      await style.evaluate(
+        (element, { css, name, value }) => {
+          element.textContent = css.replace(new RegExp(`(?<![\\w-])(${name}\\s*:\\s*)[^;}]+`, 'g'), `$1${value}`);
+        },
+        { css: original, name: channel, value: stack },
+      );
+      const compiled = await read();
+      expect(compiled.declared, `artifact ${arm}: the anchor admitted a stack off the contract`).toMatch(/^unanchored/);
+      expect(compiled.computed, `artifact ${arm}: read as derived`).not.toBe(compiled.declared);
+    }
+    await style.evaluate((element, css) => { element.textContent = css; }, original);
+    expect((await read()).computed).toBe(honest.declared);
   });
 
   test('torture-light defines every probed channel', async () => {
