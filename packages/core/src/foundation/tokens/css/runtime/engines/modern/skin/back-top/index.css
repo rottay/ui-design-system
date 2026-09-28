@@ -66,8 +66,9 @@
   color: var(--ds-backtop-color, var(--ds-color-text-on-primary));
   box-shadow: var(--ds-backtop-shadow, var(--ds-elevation-2));
   /* The engine UNMOUNTS below the threshold, so only the ENTRANCE is
-     choreographed (there is no exit state to animate). */
-  animation: ds-backtop-enter-modern var(--ds-backtop-enter-duration, var(--ds-motion-reveal)) var(--ds-motion-ease-out) both;
+     choreographed (there is no exit state to animate). `backwards`, never
+     `forwards`/`both`: a held end keyframe pins transform over hover/pressed. */
+  animation: ds-backtop-enter-modern var(--ds-backtop-enter-duration, var(--ds-motion-reveal)) var(--ds-motion-ease-out) backwards;
   transition:
     transform var(--ds-backtop-transition-duration, var(--ds-motion-feedback))
       var(--ds-backtop-transition-timing, var(--ds-motion-ease-out)),

@@ -131,6 +131,17 @@
   align-items: center;
   gap: var(--ds-spacing-2);
 }
+/* Compact: the header (two nav groups + the period toggles) measures ~351px against a
+   ~252px content box, so the period takes its own row above the flanking nav groups. */
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] > [data-part='header'] {
+  flex-wrap: wrap;
+  row-gap: var(--ds-spacing-2);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] > [data-part='header'] > div:nth-child(2) {
+  order: -1;
+  flex-basis: 100%;
+  justify-content: center;
+}
 .rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='weekday-row'] {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
