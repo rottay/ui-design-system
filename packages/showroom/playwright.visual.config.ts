@@ -26,6 +26,9 @@ import { defineConfig, devices } from '@playwright/test';
 // same invocation as the visual suite so one production `next start` serves
 // both. It asserts computed styles, not pixels, so it takes no baselines from
 // `snapshotPathTemplate` below.
+//
+// A reused server must be THIS build: on 2026-09-27 a 10:17 next-server kept serving :7001 after
+// the 17:13 rebuild and every run passed on un-hydrated pages, so globalSetup checks the build id.
 // ---------------------------------------------------------------------------
 
 const PORT = 7001;
@@ -33,6 +36,7 @@ const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: './e2e',
+  globalSetup: './e2e/setup/build-identity/index.ts',
   // The production-server spec directories, and only those: a bare
   // `playwright test --config playwright.visual.config.ts` runs the visual
   // suite, the whitelabel probe, the responsive probe, and the dead-selector
