@@ -3119,6 +3119,7 @@
 /* === Compiled from Theme.modes.dark — do not edit === */
 :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))[data-theme='dark'], :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])).dark {
   color-scheme: dark;
+  --ds-badge-selected-ink: #597ced;
   --ds-chart-series-1: #6993FA;
   --ds-chart-series-10: #007AC2;
   --ds-chart-series-11: #EA6C59;

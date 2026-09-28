@@ -7598,6 +7598,18 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-input-number-touch-target-min: var(--ds-touch-target-min, 2.75rem);
 }
 
+/* The root aliases resolve at the root posture and inherit as lengths, so a nested
+   DensityScope re-keys the block padding at its own boundary, as it does the spacing ramp. */
+:where(
+  [data-density='compact']:not(:root),
+  [data-density='comfortable']:not(:root),
+  [data-density='spacious']:not(:root)
+) {
+  --ds-input-number-sm-padding-y: var(--ds-spacing-1);
+  --ds-input-number-md-padding-y: var(--ds-spacing-2);
+  --ds-input-number-lg-padding-y: var(--ds-spacing-3);
+}
+
 }
 @layer rottay-components {
 /**
@@ -19983,18 +19995,30 @@ html[data-tenant] .ant-typography a {
      retirementCriteria: a governed --ds-control-height-floor-* channel ships
        and every private consumer migrates to it in one lot
 
-   The default (comfortable/no posture attribute) case is the `var(...,
-   36px)` fallback at each use site below, deliberately NOT a bare `:root`
-   producer rule here: an unconditioned `:root` selector always matches
-   `document.documentElement`, which breaks this family's own
-   container-vs-document reachability parity (Button.skin-reachability.test)
-   -- the same reason the two conditioned rules below are safe (they only
-   match when a real posture attribute is present, exactly like the existing
-   `:root[data-density='compact']` rule elsewhere in this file). */
-:root[data-density='compact'] {
+   Keyed on the NEAREST density boundary, not only the root posture: a
+   `:root`-only producer could not be re-keyed by a nested DensityScope, so a
+   button whose resolved height sits under the floor (bithire `sm` at every
+   posture) painted the ROOT posture's floor inside any local scope -- 36/36/36
+   across a compact/comfortable/spacious scope while Input scaled (the density
+   authority regression, WO-CRA-23 R1 -> density-authority spec). Every posture
+   is declared, including `comfortable`, so a comfortable scope nested under a
+   compact or spacious root re-keys back to the default instead of inheriting
+   the root's floor. `:where()` keeps specificity at zero (same law as the
+   base density projection) so an explicit hook on the boundary still wins.
+
+   The no-attribute default case stays the `var(..., 36px)` fallback at each
+   use site, deliberately NOT a bare `:root` producer rule here: an
+   unconditioned `:root` selector always matches `document.documentElement`,
+   which breaks this family's own container-vs-document reachability parity
+   -- the same reason the three conditioned rules below are safe (they only
+   match an element that carries a real posture attribute, root or nested). */
+:where([data-density='compact']) {
   --_ds-button-height-floor: 32px;
 }
-:root[data-density='spacious'] {
+:where([data-density='comfortable']) {
+  --_ds-button-height-floor: 36px;
+}
+:where([data-density='spacious']) {
   --_ds-button-height-floor: 44px;
 }
 
@@ -42967,8 +42991,9 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
   color: var(--ds-backtop-color, var(--ds-color-text-on-primary));
   box-shadow: var(--ds-backtop-shadow, var(--ds-elevation-2));
   /* The engine UNMOUNTS below the threshold, so only the ENTRANCE is
-     choreographed (there is no exit state to animate). */
-  animation: ds-backtop-enter-modern var(--ds-backtop-enter-duration, var(--ds-motion-reveal)) var(--ds-motion-ease-out) both;
+     choreographed (there is no exit state to animate). `backwards`, never
+     `forwards`/`both`: a held end keyframe pins transform over hover/pressed. */
+  animation: ds-backtop-enter-modern var(--ds-backtop-enter-duration, var(--ds-motion-reveal)) var(--ds-motion-ease-out) backwards;
   transition:
     transform var(--ds-backtop-transition-duration, var(--ds-motion-feedback))
       var(--ds-backtop-transition-timing, var(--ds-motion-ease-out)),
@@ -43982,7 +44007,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
 }
 
 .ds-dropdown-surface[data-part='surface']:not([data-portaled='true'])[data-placement$='Right'] {
-  left: auto;
+  inset-inline-start: auto;
   translate: none;
   inset-inline-end: 0;
 }
@@ -45655,6 +45680,10 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-radius='md'] {
   border-radius: var(--ds-radius-md);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-radius='lg'] {
+  border-radius: var(--ds-radius-lg);
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-radius='xl'] {
@@ -52424,6 +52453,17 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   align-items: center;
   gap: var(--ds-spacing-2);
 }
+/* Compact: the header (two nav groups + the period toggles) measures ~351px against a
+   ~252px content box, so the period takes its own row above the flanking nav groups. */
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] > [data-part='header'] {
+  flex-wrap: wrap;
+  row-gap: var(--ds-spacing-2);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] > [data-part='header'] > div:nth-child(2) {
+  order: -1;
+  flex-basis: 100%;
+  justify-content: center;
+}
 .rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='weekday-row'] {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -56537,13 +56577,17 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   position: absolute;
 }
 @media (pointer: coarse) {
+  /* The reach tops up whatever the rem-sized rail lacks, so rail + reach never
+     lands under the physical floor (a 5.98px 0.5rem rail + 2 x 18px reach made
+     41.98px). 45px in the formula, not 44: Chromium rounds each fractional
+     inset down per side and a bare 44 computed 43.9844, failing its own floor. */
   .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='horizontal']::before {
     inset-block: 0;
-    inset-inline: calc(-1 * var(--ds-splitter-gutter-reach));
+    inset-inline: min(calc(-1 * var(--ds-splitter-gutter-reach)), calc((100% - 45px) / 2));
   }
   .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='vertical']::before {
     inset-inline: 0;
-    inset-block: calc(-1 * var(--ds-splitter-gutter-reach));
+    inset-block: min(calc(-1 * var(--ds-splitter-gutter-reach)), calc((100% - 45px) / 2));
   }
 }
 
