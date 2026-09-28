@@ -1,8 +1,15 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernToggle from '../engines/modern';
+
+const SKIN = readFileSync(
+  resolve(process.cwd(), 'src/foundation/tokens/css/runtime/engines/modern/skin/toggle/index.css'),
+  'utf8',
+).replace(/\/\*[\s\S]*?\*\//g, '');
 
 describe('Modern Toggle public anatomy', () => {
   it('paints nothing inline and stamps the skin contract', () => {
@@ -164,5 +171,13 @@ describe('Modern Toggle press lifecycle', () => {
     rerender(<ModernToggle label="Notifications" />);
 
     expect(root.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+});
+
+describe('Modern Toggle field layout', () => {
+  it('keeps the field wrapper sized by its content in a shrink-to-fit parent', () => {
+    const field = SKIN.match(/\.ds-toggle-field\[data-part='field'\]\s*\{([^}]*)\}/);
+    expect(field).not.toBeNull();
+    expect(field![1]).not.toMatch(/container(-type)?\s*:/);
   });
 });
