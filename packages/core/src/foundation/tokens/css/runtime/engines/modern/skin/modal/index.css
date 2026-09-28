@@ -184,6 +184,10 @@
   border-radius: var(--ds-radius-md);
 }
 
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-radius='lg'] {
+  border-radius: var(--ds-radius-lg);
+}
+
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-radius='xl'] {
   border-radius: var(--ds-radius-xl);
 }

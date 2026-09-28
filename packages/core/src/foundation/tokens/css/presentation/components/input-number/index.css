@@ -45,3 +45,15 @@
   --ds-input-number-focus-z: var(--ds-z-index-relative-above);
   --ds-input-number-touch-target-min: var(--ds-touch-target-min, 2.75rem);
 }
+
+/* The root aliases resolve at the root posture and inherit as lengths, so a nested
+   DensityScope re-keys the block padding at its own boundary, as it does the spacing ramp. */
+:where(
+  [data-density='compact']:not(:root),
+  [data-density='comfortable']:not(:root),
+  [data-density='spacious']:not(:root)
+) {
+  --ds-input-number-sm-padding-y: var(--ds-spacing-1);
+  --ds-input-number-md-padding-y: var(--ds-spacing-2);
+  --ds-input-number-lg-padding-y: var(--ds-spacing-3);
+}

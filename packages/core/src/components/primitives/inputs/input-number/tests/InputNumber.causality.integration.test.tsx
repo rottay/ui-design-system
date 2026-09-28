@@ -107,6 +107,62 @@ describe('input-number geometry, direction, language and accessibility in a real
     expect(r.rtlStartRadius).not.toBe('0px');
   }, 60_000);
 
+  it('grows its padding and height with each nested density scope', async () => {
+    const postures = ['compact', 'comfortable', 'spacious'] as const;
+    const scoped = renderToStaticMarkup(
+      <div>
+        {postures.map((posture) => (
+          <div key={posture} id={posture} data-density={posture}>
+            <ModernInputNumber defaultValue={50} aria-label="Quantity" />
+          </div>
+        ))}
+      </div>,
+    );
+    const result = await measureArms({
+      vertical: 'bithire',
+      markup: scoped,
+      arms: { base: {} },
+      targets: postures.flatMap((posture) => [
+        { id: `${posture}Height`, selector: `#${posture} [data-part='root']`, property: '@rect.height' },
+        { id: `${posture}Padding`, selector: `#${posture} [data-part='root']`, property: 'padding-top' },
+      ]),
+    });
+    const r = result.base!;
+    const px = (value: string) => Number.parseFloat(value);
+    expect(px(r.compactPadding)).toBeLessThan(px(r.comfortablePadding));
+    expect(px(r.comfortablePadding)).toBeLessThan(px(r.spaciousPadding));
+    expect(Number(r.compactHeight)).toBeLessThan(Number(r.comfortableHeight));
+    expect(Number(r.comfortableHeight)).toBeLessThan(Number(r.spaciousHeight));
+  }, 60_000);
+
+  it('keeps a root padding override outside a density scope and a boundary hook inside one', async () => {
+    const field = <ModernInputNumber defaultValue={50} aria-label="Quantity" />;
+    const scene = renderToStaticMarkup(
+      <div>
+        <style>{':root { --ds-input-number-md-padding-y: 13px; }'}</style>
+        <div id="unscoped">{field}</div>
+        <div id="scoped" data-density="compact">{field}</div>
+        <div id="hooked" data-density="compact" style={{ ['--ds-input-number-md-padding-y' as string]: '11px' }}>
+          {field}
+        </div>
+      </div>,
+    );
+    const result = await measureArms({
+      vertical: 'bithire',
+      markup: scene,
+      arms: { base: {} },
+      targets: ['unscoped', 'scoped', 'hooked'].map((id) => ({
+        id,
+        selector: `#${id} [data-part='root']`,
+        property: 'padding-top',
+      })),
+    });
+    const r = result.base!;
+    expect(r.unscoped).toBe('13px');
+    expect(r.scoped).not.toBe('13px');
+    expect(r.hooked).toBe('11px');
+  }, 60_000);
+
   it('names its steppers from the active catalog', () => {
     const spanish = renderToStaticMarkup(
       <I18nProvider locale="es" fallbackLocale="en">

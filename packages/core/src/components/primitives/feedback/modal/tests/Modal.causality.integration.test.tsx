@@ -143,6 +143,28 @@ describe('modal posture, direction, language, loading and accessibility', () => 
     expect(r.fullscreenRadius).toBe('0px');
   }, 60_000);
 
+  it('rounds the default dialog on the large radius and an xl dialog on the extra-large one', async () => {
+    const references =
+      '<div id="lg" style="border-top-left-radius: var(--ds-radius-lg)"></div>' +
+      '<div id="xl" style="border-top-left-radius: var(--ds-radius-xl)"></div>';
+    const extraLarge = dialogMarkup({ radius: 'xl', children: 'Body copy' });
+    const result = await measureArms({
+      vertical: 'bithire',
+      markup: `${references}<div id="default">${markup}</div><div id="extra">${extraLarge}</div>`,
+      arms: { base: {} },
+      targets: [
+        { id: 'lg', selector: '#lg', property: 'border-top-left-radius' },
+        { id: 'xl', selector: '#xl', property: 'border-top-left-radius' },
+        { id: 'defaultRadius', selector: `#default ${SURFACE}`, property: 'border-top-left-radius' },
+        { id: 'extraRadius', selector: `#extra ${SURFACE}`, property: 'border-top-left-radius' },
+      ],
+    });
+    const r = result.base!;
+    expect(r.lg).not.toBe(r.xl);
+    expect(r.defaultRadius).toBe(r.lg);
+    expect(r.extraRadius).toBe(r.xl);
+  }, 60_000);
+
   it('keeps the close control at the inline end of the header in both directions', async () => {
     const rtl = dialogMarkup({ children: 'Body copy' }, DESKTOP, 'rtl');
     expect(rtl).toContain('dir="rtl"');

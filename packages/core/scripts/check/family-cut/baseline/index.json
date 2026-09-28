@@ -526,7 +526,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 8,
-        "channelsRead": 147,
+        "channelsRead": 148,
         "classTokens": 6,
         "partsStamped": 14,
         "partsConsumed": 14
@@ -542,7 +542,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-04: every channel the Modern skin reads is written -- panel, scrim, header/footer and action relations by derivation/chrome/modal, structural constants by presentation/components/modal; one ds-modal vocabulary (header/body/footer/close compounds answer to ds-modal-*); the native dialog is promoted by the shared top-layer dialog kernel, the close and footer actions decide state through the interaction kernel; adapt/data-posture through useAdaptation with the overlay adaptation (phone -> fullscreen, 100dvh). WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 145 -> 147. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): partsStamped 13 -> 14 = 7e618e6fd (static data-part stamps: +1 always-rendered part became visible) -- coverage."
+      "cutNote": "WO-FAM-04: every channel the Modern skin reads is written -- panel, scrim, header/footer and action relations by derivation/chrome/modal, structural constants by presentation/components/modal; one ds-modal vocabulary (header/body/footer/close compounds answer to ds-modal-*); the native dialog is promoted by the shared top-layer dialog kernel, the close and footer actions decide state through the interaction kernel; adapt/data-posture through useAdaptation with the overlay adaptation (phone -> fullscreen, 100dvh). WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 145 -> 147. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): partsStamped 13 -> 14 = 7e618e6fd (static data-part stamps: +1 always-rendered part became visible) -- coverage. Re-pin 2026-09-28 (census re-read): channelsRead 147 -> 148 = the default radius='lg' dialog regained its own rule, [data-radius='lg'] -> var(--ds-radius-lg), a produced channel (readWithoutProducer stays 0); since the WO-FAM-04 cut the default dialog had painted --ds-radius-xl through --ds-modal-radius -- paint repair, not debt."
     },
     "drawer": {
       "cut": "WO-FAM-04",
