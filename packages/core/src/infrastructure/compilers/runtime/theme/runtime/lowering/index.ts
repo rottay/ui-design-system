@@ -174,8 +174,10 @@ export function compileTheme(
     patch: Partial<FlatTheme> | undefined,
     atMode: (modeTheme: FlatTheme) => FlatTheme = (modeTheme) => modeTheme
   ) => {
-    const base = lowerBlock({ theme, tenant: tenantFacts });
-    const modes = deriveModeThemes({ theme, tenantFacts, tenantPatch: patch }).map(
+    const requests = deriveModeThemes({ theme, tenantFacts, tenantPatch: patch });
+    const overlayModes = requests.map((request) => request.mode);
+    const base = lowerBlock({ theme, tenant: tenantFacts, overlayModes });
+    const modes = requests.map(
       (request) =>
         projectModeDelta(
           request,
@@ -189,10 +191,13 @@ export function compileTheme(
           base
         )
     );
-    return { cssVariables: base, modeBlocks: modes };
+    return { cssVariables: base, modeBlocks: modes, overlayModes };
   };
 
-  const { cssVariables, modeBlocks } = lowerWithModes(effectiveTheme, tenantPatch);
+  const { cssVariables, modeBlocks, overlayModes } = lowerWithModes(
+    effectiveTheme,
+    tenantPatch
+  );
   assertMandatoryFontFallback(cssVariables, tenantSlug);
   const colorScheme = effectiveTheme.appearance?.defaultMode;
   for (const block of modeBlocks) {
@@ -220,7 +225,7 @@ export function compileTheme(
   const densityScopeBlock = projectDensityScopeBlock(
     cssVariables,
     densityScopeMembers(FAMILY_DERIVERS, (derivers) =>
-      lowerBlock({ theme: effectiveTheme, tenant: tenantFacts }, derivers)
+      lowerBlock({ theme: effectiveTheme, tenant: tenantFacts, overlayModes }, derivers)
     ),
     [
       ...modeBlocks.map((block) => ({ label: `${block.mode} mode`, cssVariables: block.cssVariables })),

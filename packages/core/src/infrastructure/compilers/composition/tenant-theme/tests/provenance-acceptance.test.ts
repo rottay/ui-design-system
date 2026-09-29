@@ -869,7 +869,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // border-hover + three tag radius rungs as the other two verticals.
       // Badge + elevation (measured 2026-09-29): bithire 3089 -> 3090, +1
       // c029181dc (--ds-badge-radius-sm); d207e58d7 moves its light base by 0.
-      bithire: 3090,
+      // Mode-delta ruling: bithire 3090 -> 3097, the light base beside a dark
+      // overlay states the foundation --ds-elevation-0..6 ladder.
+      bithire: 3097,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -935,7 +937,8 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // border-hover + three tag radius rungs as rottay.
       // Badge + elevation (measured 2026-09-29): evnto 2953 -> 2954, +1
       // c029181dc (--ds-badge-radius-sm); d207e58d7 moves its light base by 0.
-      evnto: 2954,
+      // Mode-delta ruling: evnto 2954 -> 2961, the same seven ladder roles.
+      evnto: 2961,
     };
     for (const vertical of VERTICALS) {
       expect(
@@ -1156,11 +1159,12 @@ describe("static and DB share one lowering", () => {
 
     // And the floor reaches ONLY what it should: the two verticals without an
     // authored ladder are untouched by the change.
-    // d207e58d7 leaves light bases unstated, so bithire's delta keeps role 0
-    // where rottay's dark-ground baseline withdrew it.
+    // The mode-delta ruling has bithire's light base state the foundation
+    // ladder, whose role 0 is `none`, so its delta withdraws role 0 as
+    // rottay's dark-ground baseline already did.
     expect(
       compileFor("bithire", elevationDoc("elevated")).variables
-    ).toEqual({ "--ds-elevation-0": "none", ...PRESET.elevated });
+    ).toEqual(PRESET.elevated);
   });
 
   it("case G2: one lowering, and provenance moves only what it arbitrates", () => {

@@ -741,8 +741,9 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       // states no elevation ladder of its own, where the retired theme stated
       // `none` for role 0, so this document's `flat` posture now moves it like
       // the other six. `provenance-acceptance.test.ts` pins the same move from
-      // the posture-floor side.
-      "--ds-elevation-0",
+      // the posture-floor side. The mode-delta ruling then withdrew role 0:
+      // the light baseline states the foundation ladder, whose role 0 is the
+      // same `none`.
       "--ds-elevation-4",
       "--ds-elevation-5",
       "--ds-elevation-6",
@@ -817,8 +818,8 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       // channel. `--ds-density-mode-factor` went the other way: the preset
       // rests at this document's own `compact`, so the factor equals the
       // baseline and the delta withdraws it, which the two-sided assertion
-      // below states.
-      "--ds-elevation-0",
+      // below states. The mode-delta ruling withdrew role 0 again: the light
+      // baseline states the foundation ladder, whose role 0 is the same `none`.
       "--ds-elevation-4",
       "--ds-elevation-5",
       "--ds-elevation-6",

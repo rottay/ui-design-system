@@ -204,6 +204,17 @@ describe("elevation/ladder on a dark ground", () => {
     expect(onGround("#FFFFFF", { elevation: "soft" }, "light")).toEqual({});
   });
 
+  it("states the foundation ladder on a light base that carries a dark overlay", () => {
+    const bt: FlatTheme = { id: "t", name: "T", surfaces: {} };
+    const expansion = buildLoweringContext({ theme: bt }).expressive.expansion;
+    expect(deriveElevationLadder(bt, expansion, "light", false, true)).toEqual(
+      LIGHT_GROUND_ELEVATION_LADDER
+    );
+    expect(deriveElevationLadder(bt, expansion, "dark", false, true)).toEqual(
+      DARK_GROUND_ELEVATION_LADDER
+    );
+  });
+
   it("restates the light ladder on a light overlay, so a dark base cannot leak into it", () => {
     expect(onGround("#FFFFFF", {}, "light", true)).toEqual(
       LIGHT_GROUND_ELEVATION_LADDER

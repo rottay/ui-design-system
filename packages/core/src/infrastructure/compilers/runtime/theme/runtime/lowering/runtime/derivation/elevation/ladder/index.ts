@@ -50,8 +50,8 @@ export const DARK_GROUND_ELEVATION_LADDER: Readonly<Record<string, string>> =
   });
 
 /**
- * The foundation's light ladder, restated only where a light block would
- * otherwise inherit the dark ladder of the base block beneath it.
+ * The foundation's light ladder, restated where a light block sits beside a
+ * dark one, so the mode block stays a delta over channels the base declares.
  */
 export const LIGHT_GROUND_ELEVATION_LADDER: Readonly<Record<string, string>> =
   Object.freeze({
@@ -97,13 +97,14 @@ export function deriveElevationLadder(
   bt: FlatTheme,
   expansion: ExpressiveExpansion,
   surface: RampSurface = "light",
-  overlay = false
+  overlay = false,
+  carriesDarkOverlay = false
 ): Record<string, string> {
   const su = bt.surfaces;
   const posture = su?.elevation ?? expansion.fieldDefaults.elevation;
   const vars =
     posture === undefined || posture === "soft"
-      ? { ...groundLadder(bt, surface, overlay) }
+      ? { ...groundLadder(bt, surface, overlay || carriesDarkOverlay) }
       : posturePreset(posture);
   const authored = su?.elevations;
   if (authored) {
@@ -121,11 +122,11 @@ export function deriveElevationLadder(
 function groundLadder(
   bt: FlatTheme,
   surface: RampSurface,
-  overlay: boolean
+  besideDark: boolean
 ): Readonly<Record<string, string>> {
   const ground =
     bt.palette?.backgroundColor ??
     (surface === "dark" ? DARK_DEFAULT_GROUND : LIGHT_DEFAULT_GROUND);
   if (isDarkSurface(ground)) return DARK_GROUND_ELEVATION_LADDER;
-  return overlay ? LIGHT_GROUND_ELEVATION_LADDER : {};
+  return besideDark ? LIGHT_GROUND_ELEVATION_LADDER : {};
 }

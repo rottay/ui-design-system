@@ -37,6 +37,7 @@ export interface LoweringRequest {
   /** "" for the base block, "modes.<mode>." for a mode overlay block. */
   readonly modePrefix?: string;
   readonly tenant?: TenantFacts;
+  readonly overlayModes?: readonly FlatThemeMode[];
 }
 
 /** Which family produced each channel, and at which rank it settled. */
@@ -80,6 +81,7 @@ export function buildLoweringContext(
       ? derivePaletteTints(theme.palette, resolveContrastPosture(theme))
       : {},
     tenant: request.tenant,
+    overlayModes: request.overlayModes ?? [],
   };
 }
 

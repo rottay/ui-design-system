@@ -152,6 +152,8 @@ export interface LoweringContext {
    */
   readonly statusTints: Record<string, string>;
   readonly tenant: TenantFacts | undefined;
+  /** The modes this base block carries as overlay deltas; empty for an overlay block. */
+  readonly overlayModes: readonly FlatThemeMode[];
 }
 
 /**

@@ -60,7 +60,8 @@ export const elevationDeriver: FamilyDeriver = {
       context.theme,
       context.expressive.expansion,
       context.surface,
-      context.modePrefix !== ""
+      context.modePrefix !== "",
+      context.overlayModes.includes("dark")
     ),
 };
 
@@ -76,11 +77,12 @@ export function deriveElevationChannels(
   bt: FlatTheme,
   expansion: ExpressiveExpansion,
   surface: RampSurface = "light",
-  overlay = false
+  overlay = false,
+  carriesDarkOverlay = false
 ): Record<string, string> {
   return {
     ...deriveZIndexBands(),
-    ...deriveElevationLadder(bt, expansion, surface, overlay),
+    ...deriveElevationLadder(bt, expansion, surface, overlay, carriesDarkOverlay),
     ...deriveBorderPosture(bt),
   };
 }

@@ -83,18 +83,42 @@ describe("dark-ground elevation, first-party artifacts", () => {
     expect(declarations(light.lines)).toEqual(restated);
   });
 
-  it("every dark rule of a light-default vertical carries the hairline ladder", () => {
+  it("every dark rule of a light-default vertical resolves to the hairline ladder over its base", () => {
     for (const { slug, rendered, base } of artifacts.filter((a) => a.slug !== "rottay")) {
       expect(base.lines, slug).toContain("  color-scheme: light;");
       const dark = rendered.find((rule) => isDarkRule(rule.selector));
       expect(dark, slug).toBeDefined();
-      expect(declarations(dark!.lines), slug).toEqual(DARK_GROUND_ELEVATION_LADDER);
+      expect(
+        { ...declarations(base.lines), ...declarations(dark!.lines) },
+        slug
+      ).toEqual(DARK_GROUND_ELEVATION_LADDER);
     }
   });
 
-  it("a light-default vertical's light base rule states no elevation at all", () => {
+  // Mover: the mode-delta ruling (option a). A light base that carries a dark
+  // overlay states the foundation ladder, so the overlay names no new channel.
+  it("a light-default vertical's light base states the foundation ladder, so its dark rule is a true delta", () => {
+    for (const { slug, rendered, base } of artifacts.filter((a) => a.slug !== "rottay")) {
+      expect(declarations(base.lines), slug).toEqual(LIGHT_GROUND_ELEVATION_LADDER);
+      const dark = rendered.find((rule) => isDarkRule(rule.selector))!;
+      const baseChannels = new Set(Object.keys(declarations(base.lines)));
+      for (const channel of Object.keys(declarations(dark.lines))) {
+        expect(baseChannels.has(channel), `${slug} ${channel}`).toBe(true);
+      }
+    }
+  });
+
+  it("the light base ladder is the foundation sheet's own declaration, so its paint cannot move", () => {
+    const foundation = Object.fromEntries(
+      [
+        ...readFileSync(
+          resolve(process.cwd(), "src/foundation/tokens/css/foundation/themes/default/index.css"),
+          "utf8"
+        ).matchAll(/(--ds-elevation-\d): ([^;]+);/gu),
+      ].map((match) => [match[1]!, match[2]!])
+    );
     for (const { slug, base } of artifacts.filter((a) => a.slug !== "rottay")) {
-      expect(declarations(base.lines), slug).toEqual({});
+      expect(declarations(base.lines), slug).toEqual(foundation);
     }
   });
 
@@ -110,7 +134,12 @@ describe("dark-ground elevation, first-party artifacts", () => {
         const lightGround =
           slug === "rottay" ? false : rule === base || rule.selector.includes("data-density");
         if (lightGround) {
-          expect(rule.lines, `${slug} ${rule.selector}`).toEqual(committed[index]!.lines);
+          // Only the foundation ladder may be added to a light-ground rule.
+          const added = rule.lines.filter((line) => !committed[index]!.lines.includes(line));
+          for (const line of added) {
+            const [channel, value] = line.trim().replace(/;$/u, "").split(": ");
+            expect(LIGHT_GROUND_ELEVATION_LADDER[channel!], `${slug} ${line}`).toBe(value);
+          }
         }
       });
     }

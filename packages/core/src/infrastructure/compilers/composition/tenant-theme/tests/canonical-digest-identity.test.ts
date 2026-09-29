@@ -897,7 +897,14 @@ describe("digest identity across the canonicalization extraction", () => {
     // digest by nothing. Every prior pin stays asserted. Persisted rows recompile.
     const POST_BADGE_SELECTED_INK_DIGEST =
       "sha256-a00f8197edb006e470875149432bd2fe3bf1c1cbf30326b6d3ab2bc3c66a343c";
-    expect(artifact.digest).toBe(POST_BADGE_SELECTED_INK_DIGEST);
+    expect(artifact.digest).not.toBe(POST_BADGE_SELECTED_INK_DIGEST);
+    // Nineteenth declared move (the mode-delta ruling: a light base beside a
+    // dark overlay states the foundation elevation ladder): the baseline now
+    // declares --ds-elevation-0 `none`, so the tenant's `flat` role 0 equals it
+    // and leaves the delta, nothing else. Persisted rows recompile.
+    const POST_LIGHT_BASE_LADDER_DIGEST =
+      "sha256-3383dd08d1c3f95859b8b75bfb00243dc7bbf5edec926fa076f6982d53b036b1";
+    expect(artifact.digest).toBe(POST_LIGHT_BASE_LADDER_DIGEST);
     const dark = artifact.modeDeltas?.find((delta) => delta.mode === "dark");
     expect(dark?.variables["--ds-badge-selected-ink"]).toBe("#3f918b");
     expect(dark?.variables["--ds-color-link"]).toBe("#419A92");
@@ -958,6 +965,8 @@ describe("digest identity across the canonicalization extraction", () => {
     // removed 0 -- `--ds-chart-series-11` and `--ds-chart-series-12`, the two
     // slots the tenant authority gained so a branded tenant no longer gets ten
     // branded slots and two DS ones.
+    // 66 -> 65 (the mode-delta ruling, measured): removed 1, added 0 --
+    // `--ds-elevation-0`, whose `none` the light baseline now states.
     expect(Object.keys(artifact.variables).sort()).toEqual([
       "--ds-button-lg-radius",
       "--ds-button-md-radius",
@@ -1006,7 +1015,6 @@ describe("digest identity across the canonicalization extraction", () => {
       "--ds-color-secondary-900",
       "--ds-color-secondary-rgb",
       "--ds-density-mode-factor",
-      "--ds-elevation-0",
       "--ds-elevation-1",
       "--ds-elevation-2",
       "--ds-elevation-3",
@@ -1178,7 +1186,13 @@ describe("digest identity across the canonicalization extraction", () => {
     // tone-derived sidebar channels of CAUSE 3 no longer emitted at all.
     const POST_NEUTRAL_BASELINE_W4_DIGEST =
       "sha256-2cae5ad5680181a7cd527ae4eee0d0addefc4d0cd1aaa13f9c80153670689087";
-    expect(artifact.digest).toBe(POST_NEUTRAL_BASELINE_W4_DIGEST);
+    expect(artifact.digest).not.toBe(POST_NEUTRAL_BASELINE_W4_DIGEST);
+    // CAUSE 10 -- the mode-delta ruling: the light baseline states the
+    // foundation elevation ladder, so this document's `flat` role 0 (`none`)
+    // equals it and leaves the delta; nothing else moves.
+    const POST_LIGHT_BASE_LADDER_W4_DIGEST =
+      "sha256-bf1c92654400c4acdf7af859f486a50553f80a59aa07583df0171fde691b517e";
+    expect(artifact.digest).toBe(POST_LIGHT_BASE_LADDER_W4_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });
@@ -1235,7 +1249,8 @@ describe("digest identity across the canonicalization extraction", () => {
     // 20 -> 25: the same five per-size button radii.
     // 25 -> 27 (toggle silhouette): the two toggle corners of CAUSE 8.
     // 27 -> 32 (CAUSE 9): the neutral + preset baseline subtracts differently.
-    expect(Object.keys(artifact.variables)).toHaveLength(32);
+    // 32 -> 31 (CAUSE 10): role 0 of the `flat` ladder equals the light base's.
+    expect(Object.keys(artifact.variables)).toHaveLength(31);
   });
 
   it("produces one digest for a document authored in any key order", () => {

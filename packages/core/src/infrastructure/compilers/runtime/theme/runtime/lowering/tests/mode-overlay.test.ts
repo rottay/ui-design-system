@@ -15,6 +15,7 @@ import type { FlatTheme } from '@/foundation/contracts/composition/tenants/theme
 
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
+import { LIGHT_GROUND_ELEVATION_LADDER } from "../runtime/derivation/elevation";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 const evntoFlatTheme = firstPartyFixture('evnto');
@@ -46,7 +47,16 @@ describe('FlatTheme.modes — typed dual-mode contract', () => {
 
     // The base block is the default mode's contract. A second mode must not
     // reach back into it; that was the failure mode of the hand-written blocks.
-    expect(compile(withDark).cssVariables).toEqual(compile(MINIMAL).cssVariables);
+    // Mover: the mode-delta ruling (option a). A light base beside a dark
+    // overlay states the foundation elevation ladder, paint-neutral by value.
+    const { cssVariables: base } = compile(withDark);
+    const withoutLadder = Object.fromEntries(
+      Object.entries(base).filter(([channel]) => !(channel in LIGHT_GROUND_ELEVATION_LADDER))
+    );
+    expect(withoutLadder).toEqual(compile(MINIMAL).cssVariables);
+    for (const [channel, value] of Object.entries(LIGHT_GROUND_ELEVATION_LADDER)) {
+      expect(base[channel], channel).toBe(value);
+    }
   });
 
   it('carries a typed overlay edit into the mode block', () => {
