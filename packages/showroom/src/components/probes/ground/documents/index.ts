@@ -64,6 +64,13 @@ const THEMANAGEMENT_DARK_PALETTE = {
   backgroundMode: "dark",
 } as const;
 
+/**
+ * The card surface rides the chrome door: `--ds-card-bg` otherwise inherits bithire's
+ * elevated white, and `--ds-card-radius` is frozen at `:root`, beyond `radiusScale`'s reach.
+ */
+const THEMANAGEMENT_CARD_BG: Record<FleetTheme, string> = { light: "#FFFAF0", dark: "#211B14" };
+const THEMANAGEMENT_CARD_RADIUS = "4px";
+
 /** Every dial sits inside the bithire envelope; radiusScale 0.8 is its floor. */
 const THEMANAGEMENT_DOCUMENT = {
   schemaVersion: 1,
@@ -134,6 +141,9 @@ function themanagementDocument(theme: FleetTheme, density?: FleetDensity, recipe
         ...THEMANAGEMENT_DOCUMENT.visualFoundation.general,
         palette: theme === "dark" ? THEMANAGEMENT_DARK_PALETTE : THEMANAGEMENT_LIGHT_PALETTE,
         ...(density ? { density: DOCUMENT_DENSITY[density] } : {}),
+      },
+      advanced: {
+        chrome: { cardComponent: { bg: THEMANAGEMENT_CARD_BG[theme], radius: THEMANAGEMENT_CARD_RADIUS } },
       },
       ...(recipeProfile ? { recipeProfile } : {}),
     },
