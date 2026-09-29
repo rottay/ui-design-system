@@ -292,7 +292,10 @@ async function readLayout(page: Page) {
       // Reading only <html> would report an empty token for a tenant whose CSS
       // is correct and mounted.
       density: rootStyle.getPropertyValue("--ds-density-scale").trim(),
+      // Non-witness: --ds-radius-lg resolves once at :root (computed-value rule) and
+      // inherits resolved, so it cannot see tenant shape here; paint witnesses it.
       radiusToken: rootStyle.getPropertyValue("--ds-radius-lg").trim(),
+      primaryActionRadius: primaryActionStyle.borderTopLeftRadius,
       surfaceToken: rootStyle.getPropertyValue("--ds-surface-card").trim(),
       primaryToken: rootStyle.getPropertyValue("--ds-color-primary").trim(),
       effectIntensity: rootStyle
@@ -327,6 +330,24 @@ async function readLayout(page: Page) {
   });
 }
 
+/** A computed color reads rgb(); the authored oracle is hex. Both sides reduce to components. */
+function normalizeColor(value: string): string {
+  const text = value.trim().toLowerCase();
+  const hex = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/.exec(text);
+  if (hex) {
+    const digits = hex[1].length <= 4 ? [...hex[1]].map((d) => d + d).join('') : hex[1];
+    const [r, g, b, a] = [0, 2, 4, 6].map((i) => Number.parseInt(digits.slice(i, i + 2) || 'ff', 16));
+    return a === 255 ? `rgb(${r}, ${g}, ${b})` : `rgba(${r}, ${g}, ${b}, ${+(a / 255).toFixed(3)})`;
+  }
+  const fn = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)(?:[\s,/]+([\d.]+%?))?\s*\)$/.exec(text);
+  if (fn) {
+    const [r, g, b] = fn.slice(1, 4).map(Number);
+    const alpha = fn[4] === undefined ? 1 : fn[4].endsWith('%') ? Number.parseFloat(fn[4]) / 100 : Number(fn[4]);
+    return alpha === 1 ? `rgb(${r}, ${g}, ${b})` : `rgba(${r}, ${g}, ${b}, ${+alpha.toFixed(3)})`;
+  }
+  return text;
+}
+
 function visualFingerprint(reading: Awaited<ReturnType<typeof readLayout>>) {
   return {
     typography: [reading.rootFont, reading.headingFont, reading.headingSize],
@@ -335,7 +356,7 @@ function visualFingerprint(reading: Awaited<ReturnType<typeof readLayout>>) {
       reading.stackGap,
       ...reading.containerPaddingInline,
     ],
-    shape: [reading.radiusToken, reading.boxRadius],
+    shape: [reading.primaryActionRadius, reading.boxRadius],
     material: [
       reading.surfaceToken,
       reading.boxBackground,
@@ -470,7 +491,7 @@ for (const viewport of Object.keys(CONTEXTS) as Viewport[]) {
             // all, so it mounts no artifact and emits no runtime layer.
             if (fixture === "themanagementmiami") {
               expect(reading.artifactCount).toBe(1);
-              expect(reading.primaryToken.toLowerCase()).toBe("#0f766e");
+              expect(normalizeColor(reading.primaryToken)).toBe(normalizeColor("#0f766e"));
             } else {
               expect(reading.artifactCount).toBe(0);
               expect(reading.inlinePrimary).toBe("");
@@ -536,7 +557,7 @@ test("static to compiled artifact to static leaves no residue in any measured ch
   // this leg is proven by the mounted bytes and the tokens they declare -- not
   // by a provider-emitted inline layer, which a compiled authority forbids.
   expect(appearance.artifactCount).toBe(1);
-  expect(appearance.primaryToken.toLowerCase()).toBe("#0f766e");
+  expect(normalizeColor(appearance.primaryToken)).toBe(normalizeColor("#0f766e"));
   expect(Number.parseFloat(appearance.effectIntensity)).toBeCloseTo(0.45, 5);
   await expect(page.getByTestId("layout-foundations-evidence")).toContainText(
     EXPECTED_EMPTY_COPY.themanagementmiami.ar
