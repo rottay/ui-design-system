@@ -55,8 +55,10 @@
  *     their target. A file rendering no text of its own cannot adopt the
  *     catalog, so it is outside this denominator. The 90 % target reads off
  *     THIS measure, never off the hook-mention share: the only way to move the
- *     hook share on a text-free file is an unused hook call. Reported, not
- *     gated.
+ *     hook share on a text-free file is an unused hook call. BLOCKING: below
+ *     `modernTargetPercent` fails --check. Copy read through a local `const`
+ *     (`const label = 'Save'` rendered as `{label}`, or `LABELS.save`) is
+ *     followed one level; props, imports and a const of a const are not.
  *   - ARGUMENT-LESS toLocale: lines under `src/` outside a `tests/` folder
  *     matching `toLocale[A-Z][a-zA-Z]*()`. A call with no locale formats in
  *     the runtime's language, not the provider's; the count is a
@@ -360,40 +362,91 @@ function containsTranslationCall(node) {
   return ts.forEachChild(node, containsTranslationCall) ?? false;
 }
 
+function boundNames(name, out = []) {
+  if (ts.isIdentifier(name)) out.push(name.text);
+  else for (const element of name.elements) if (!ts.isOmittedExpression(element)) boundNames(element.name, out);
+  return out;
+}
+
+const unwrap = (node) =>
+  ts.isParenthesizedExpression(node) || ts.isAsExpression(node) || ts.isSatisfiesExpression(node) || ts.isNonNullExpression(node)
+    ? unwrap(node.expression)
+    : node;
+
+/**
+ * The initializer of the `const` binding an identifier refers to, found by
+ * walking the enclosing blocks outward. A parameter, `let`/`var` or
+ * destructured binding of the same name stops the walk: its value is unknown.
+ */
+function localConstInitializer(identifier) {
+  const name = identifier.text;
+  for (let scope = identifier.parent; scope; scope = scope.parent) {
+    if (ts.isFunctionLike(scope) && scope.parameters?.some((parameter) => boundNames(parameter.name).includes(name))) {
+      return undefined;
+    }
+    if (!ts.isSourceFile(scope) && !ts.isBlock(scope) && !ts.isModuleBlock(scope)) continue;
+    for (const statement of scope.statements) {
+      if (!ts.isVariableStatement(statement)) continue;
+      const isConst = (statement.declarationList.flags & ts.NodeFlags.Const) !== 0;
+      for (const declaration of statement.declarationList.declarations) {
+        if (!boundNames(declaration.name).includes(name)) continue;
+        return isConst && ts.isIdentifier(declaration.name) ? declaration.initializer : undefined;
+      }
+    }
+  }
+  return undefined;
+}
+
 /**
  * Collects the string literals an expression can render as-is. Only value
  * positions are followed (conditional branches, logical operands, templates);
  * call arguments are never rendered verbatim, and the right operand of a `??`
- * or `||` whose left side calls `t`/`tOr` is a catalog fallback, not debt.
+ * or `||` whose left side calls `t`/`tOr` is a catalog fallback, not debt. An
+ * identifier (or `NAME.member`) naming a local `const` is followed into its
+ * initializer ONE level: a const whose value is another binding is not chased.
  */
-function renderedLiterals(node, sourceFile, out) {
+function renderedLiterals(node, sourceFile, out, depth = 1) {
   if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
     if (carriesLetters(node.text)) out.push({ node, text: node.text });
   } else if (ts.isTemplateExpression(node)) {
     const pieces = [node.head.text, ...node.templateSpans.map((span) => span.literal.text)].join(' ');
     if (carriesLetters(pieces)) out.push({ node, text: pieces.trim() });
-    for (const span of node.templateSpans) renderedLiterals(span.expression, sourceFile, out);
+    for (const span of node.templateSpans) renderedLiterals(span.expression, sourceFile, out, depth);
   } else if (
     ts.isParenthesizedExpression(node) ||
     ts.isAsExpression(node) ||
     ts.isSatisfiesExpression(node) ||
     ts.isNonNullExpression(node)
   ) {
-    renderedLiterals(node.expression, sourceFile, out);
+    renderedLiterals(node.expression, sourceFile, out, depth);
   } else if (ts.isConditionalExpression(node)) {
-    renderedLiterals(node.whenTrue, sourceFile, out);
-    renderedLiterals(node.whenFalse, sourceFile, out);
+    renderedLiterals(node.whenTrue, sourceFile, out, depth);
+    renderedLiterals(node.whenFalse, sourceFile, out, depth);
   } else if (ts.isBinaryExpression(node)) {
     const operator = node.operatorToken.kind;
     if (operator === ts.SyntaxKind.AmpersandAmpersandToken) {
-      renderedLiterals(node.right, sourceFile, out);
+      renderedLiterals(node.right, sourceFile, out, depth);
     } else if (
       operator === ts.SyntaxKind.QuestionQuestionToken ||
       operator === ts.SyntaxKind.BarBarToken
     ) {
-      renderedLiterals(node.left, sourceFile, out);
-      if (!containsTranslationCall(node.left)) renderedLiterals(node.right, sourceFile, out);
+      renderedLiterals(node.left, sourceFile, out, depth);
+      if (!containsTranslationCall(node.left)) renderedLiterals(node.right, sourceFile, out, depth);
     }
+  } else if (depth > 0 && ts.isIdentifier(node)) {
+    const initializer = localConstInitializer(node);
+    if (initializer) renderedLiterals(initializer, sourceFile, out, depth - 1);
+  } else if (depth > 0 && ts.isPropertyAccessExpression(node) && ts.isIdentifier(node.expression)) {
+    const initializer = localConstInitializer(node.expression);
+    const object = initializer && unwrap(initializer);
+    if (!object || !ts.isObjectLiteralExpression(object)) return;
+    const member = object.properties.find(
+      (property) =>
+        ts.isPropertyAssignment(property) &&
+        (ts.isIdentifier(property.name) || ts.isStringLiteral(property.name)) &&
+        property.name.text === node.name.text
+    );
+    if (member) renderedLiterals(member.initializer, sourceFile, out, depth - 1);
   }
 }
 
@@ -405,7 +458,10 @@ function renderedLiterals(node, sourceFile, out) {
 export function findUserVisibleLiterals(source, fileName = 'index.tsx') {
   const sourceFile = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const hits = [];
+  const recorded = new Set();
   const record = (node, text) => {
+    if (recorded.has(node)) return;
+    recorded.add(node);
     const { line } = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
     hits.push(`${line + 1}:${text.replace(/\s+/g, ' ').trim()}`);
   };
@@ -550,7 +606,16 @@ export function evaluateAdoption({ adoption, toLocaleSites, baseline }) {
       `Modern adoption rose to ${adoption.modern.adopted}/${adoption.modern.total} (floor ${floor.adopted}/${floor.total}) — run --seed to raise the floor`
     );
   }
-  if (typeof target !== 'number') failures.push('baseline has no numeric `adoption.modernTargetPercent`');
+  const carrying = adoption.modernTextCarrying;
+  const targetMet = typeof target === 'number' && percent(carrying) >= target;
+  if (typeof target !== 'number') {
+    failures.push('baseline has no numeric `adoption.modernTargetPercent`');
+  } else if (!targetMet) {
+    const hardcoded = (carrying.hardcoded ?? []).map((row) => row.path);
+    failures.push(
+      `Modern text-carrying i18n adoption is BELOW TARGET: ${carrying.adopted}/${carrying.total} (${percent(carrying).toFixed(1)}%), target is ${target}%. Route the copy of these Modern entrypoints through the catalog: ${hardcoded.slice(0, 10).join(', ')}${hardcoded.length > 10 ? ', …' : ''}`
+    );
+  }
 
   const ceiling = baseline.argumentlessToLocale?.ceiling;
   if (typeof ceiling !== 'number') {
@@ -567,7 +632,7 @@ export function evaluateAdoption({ adoption, toLocaleSites, baseline }) {
   return {
     failures,
     tightenOpportunities,
-    targetMet: typeof target === 'number' && percent(adoption.modernTextCarrying) >= target,
+    targetMet,
   };
 }
 
@@ -684,7 +749,7 @@ function main() {
   console.log(
     `  adoption, Modern text-carrying (target)      : ${carrying.adopted}/${carrying.total} (${percent(carrying).toFixed(1)}%)` +
       ` — Modern entrypoints rendering copy; ${carrying.withoutText} render none and are excluded` +
-      ` — target ${result.adoptionTargetPercent}% ${result.adoptionTargetMet ? 'MET' : 'not met'}`
+      ` — target ${result.adoptionTargetPercent}% (blocking) ${result.adoptionTargetMet ? 'MET' : 'NOT MET'}`
   );
   console.log(`  adopted Modern files still rendering a literal: ${carrying.residual.length} (reported, not gated)`);
   console.log(`  argument-less toLocale*() lines              : ${result.toLocaleSites.length}`);
@@ -725,7 +790,7 @@ function main() {
     return;
   }
 
-  console.log('[i18n-key-parity-gate] OK — every mandatory locale is at 100%, no declared-partial locale grew, Modern adoption held its floor and argument-less toLocale*() held its ceiling.');
+  console.log('[i18n-key-parity-gate] OK — every mandatory locale is at 100%, no declared-partial locale grew, Modern adoption held its floor, Modern text-carrying adoption met its blocking target and argument-less toLocale*() held its ceiling.');
 }
 
 const invokedDirectly =

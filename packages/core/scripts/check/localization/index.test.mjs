@@ -367,3 +367,99 @@ test('drill: a hardcoded label planted in a text-free Modern file of a copy of t
   assert.equal(after.withoutText, before.withoutText - 1);
   assert.deepEqual(after.hardcoded.find((row) => row.path === target)?.literals.at(-1)?.split(':')[1], 'Planted label');
 });
+
+test('drill: a text-carrying population below the 90% target FAILS the gate, naming the target', () => {
+  const result = evaluateAdoption({
+    adoption: {
+      all: { adopted: 9, total: 10 },
+      modern: { adopted: 9, total: 10 },
+      modernUnadopted: [],
+      modernTextCarrying: { adopted: 8, total: 10, hardcoded: [{ path: 'x/engines/modern/index.tsx', literals: ['1:Save'] }, { path: 'y/engines/modern/index.tsx', literals: ['2:Close'] }] },
+    },
+    toLocaleSites: ['a.ts:1'],
+    baseline: ADOPTION_BASELINE,
+  });
+  assert.equal(result.targetMet, false);
+  assert.match(
+    result.failures.join('\n'),
+    /Modern text-carrying i18n adoption is BELOW TARGET: 8\/10 \(80\.0%\), target is 90%.*x\/engines\/modern\/index\.tsx, y\/engines\/modern\/index\.tsx/s
+  );
+});
+
+test('drill: the text-carrying target at exactly 90% passes, so the boundary is inclusive', () => {
+  const result = evaluateAdoption({
+    adoption: {
+      all: { adopted: 9, total: 10 },
+      modern: { adopted: 9, total: 10 },
+      modernUnadopted: [],
+      modernTextCarrying: { adopted: 9, total: 10, hardcoded: [] },
+    },
+    toLocaleSites: ['a.ts:1'],
+    baseline: ADOPTION_BASELINE,
+  });
+  assert.equal(result.targetMet, true);
+  assert.deepEqual(result.failures, []);
+});
+
+test('drill: a text-carrying regression under 90% planted into a copy of the real tree fails the whole gate', (t) => {
+  const componentsRoot = resolve(dirname(new URL(import.meta.url).pathname), '../../../src/components');
+  const copy = mkdtempSync(join(tmpdir(), 'i18n-target-drill-'));
+  t.after(() => rmSync(copy, { recursive: true, force: true }));
+  cpSync(componentsRoot, copy, { recursive: true });
+
+  const before = measureAdoption(copy).modernTextCarrying;
+  const needed = Math.ceil((before.total * 0.1 + 1) / 0.9);
+  for (let index = 0; index < needed; index += 1) {
+    const path = join(copy, `drill/planted-${index}/engines/modern/index.tsx`);
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, `export const Planted${index} = () => <Box>Hardcoded copy ${index}</Box>;\n`);
+  }
+  const result = runI18nKeyParityGate({ componentsRoot: copy });
+  assert.equal(result.adoptionTargetMet, false);
+  assert.equal(result.pass, false);
+  assert.match(result.failures.join('\n'), /Modern text-carrying i18n adoption is BELOW TARGET/);
+});
+
+test('drill: indirect visible text through a local const binding is measured (the auditor repro)', () => {
+  const source = [
+    "const label = 'Save';",
+    'export const A = () => <Button>{label}</Button>;',
+  ].join('\n');
+  assert.deepEqual(findUserVisibleLiterals(source), ['1:Save']);
+});
+
+test('local const resolution: attributes and object members resolve; a const-of-a-const (past one level), shadowing, let and t() fallbacks do not', () => {
+  const source = [
+    "const TITLE = 'Close panel';",
+    "const LABELS = { next: 'Next page', prev: 'Previous page' } as const;",
+    "const ALIAS = TITLE;",
+    "const CLASS = 'ds-root';",
+    "let mutable = 'Mutable copy';",
+    "const FALLBACK = 'Fallback copy';",
+    'export const A = ({ i18n }) => {',
+    "  const inner = 'Inner copy';",
+    '  return (',
+    '    <Box aria-label={TITLE} className={CLASS}>',
+    '      {LABELS.next}',
+    '      {inner}',
+    '      {ALIAS}',
+    '      {mutable}',
+    "      {i18n.t('k') ?? FALLBACK}",
+    '    </Box>',
+    '  );',
+    '};',
+    'export const B = ({ TITLE }) => <Box title={TITLE} />;',
+  ].join('\n');
+  assert.deepEqual(findUserVisibleLiterals(source), ['1:Close panel', '2:Next page', '8:Inner copy']);
+});
+
+test('an adopted file rendering copy only through a const is still adopted; a non-adopted one joins the text-carrying population', (t) => {
+  const root = plant({
+    'indirect/engines/modern/index.tsx': "const label = 'Save';\nexport const A = () => <Button>{label}</Button>;",
+    'adopted/engines/modern/index.tsx': "const i18n = useOptionalTranslation('common');\nexport const B = () => <Text>{i18n.t('k')}</Text>;",
+  });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const carrying = measureAdoption(root).modernTextCarrying;
+  assert.deepEqual([carrying.adopted, carrying.total, carrying.withoutText], [1, 2, 0]);
+  assert.deepEqual(carrying.hardcoded, [{ path: 'indirect/engines/modern/index.tsx', literals: ['1:Save'] }]);
+});
