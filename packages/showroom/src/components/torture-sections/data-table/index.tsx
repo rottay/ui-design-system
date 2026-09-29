@@ -33,18 +33,18 @@ const DATA_TABLE_ROWS: DataTableFixtureRow[] = [
     amount: 1200,
   },
   {
-    id: 'dt-2',
-    name: 'Grace Hopper',
-    role: 'Admiral',
-    status: 'active',
-    amount: 980,
-  },
-  {
     id: 'dt-3',
     name: 'Alan Turing',
     role: 'Researcher',
     status: 'inactive',
     amount: 640,
+  },
+  {
+    id: 'dt-2',
+    name: 'Grace Hopper',
+    role: 'Admiral',
+    status: 'active',
+    amount: 980,
   },
   {
     id: 'dt-4',
@@ -54,6 +54,10 @@ const DATA_TABLE_ROWS: DataTableFixtureRow[] = [
     amount: 1500,
   },
 ];
+
+const DATA_TABLE_PAGE_SIZE = 2;
+// Remote pagination: the caller hands the engine only the current page.
+const DATA_TABLE_PAGE_ROWS = DATA_TABLE_ROWS.slice(0, DATA_TABLE_PAGE_SIZE);
 
 const DATA_TABLE_COLUMNS: ColumnDef<DataTableFixtureRow>[] = [
   {
@@ -93,7 +97,7 @@ export function DataTableStates() {
     >
       <Stack spacing="md" fullWidth>
         <PatternDataTable<DataTableFixtureRow>
-          data={DATA_TABLE_ROWS}
+          data={DATA_TABLE_PAGE_ROWS}
           rowKey="id"
           columns={DATA_TABLE_COLUMNS}
           striped
@@ -119,7 +123,7 @@ export function DataTableStates() {
           ]}
           pagination={{
             current: 1,
-            pageSize: 2,
+            pageSize: DATA_TABLE_PAGE_SIZE,
             total: DATA_TABLE_ROWS.length,
             onChange: () => undefined,
           }}
