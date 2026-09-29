@@ -129,6 +129,8 @@ test.describe('probe-ground dashboard -- phone', () => {
 
   test('(d) at phone width the board grid stacks every widget in one column', async ({ page }) => {
     await open(page);
+    // The grid keeps its 12 tracks until the board measures its container; the measured posture joins data-posture.
+    await expect(page.locator(`${BOARD} section[data-part="root"]`)).toHaveAttribute('data-posture', /(^|\s)compact(\s|$)/);
     const boxes = await page.locator(`${BOARD} [data-part="card-shell"]`).evaluateAll((cells) =>
       cells.map((cell) => {
         const rect = cell.getBoundingClientRect();

@@ -202,6 +202,18 @@ const cmdDialog = (container: Locator, engine: Engine): Locator =>
         .locator(".ds-modal--modern [data-part='surface'].ds-pattern-command-palette.ds-engine-modern")
     : band(container, 'command-palette').locator("[data-part='dialog']").first();
 
+// Both open overlays auto-focus their input after mount, so the rustic search's inset line is a race; the
+// rest truth (the palette's focused search) is pinned and must hold half a second before the hover.
+async function pinPaletteFocus(page: Page, container: Locator): Promise<void> {
+  const input = band(container, 'command-palette').locator("[data-part='input']").first();
+  for (let attempt = 0; attempt < 10; attempt += 1) {
+    await input.focus();
+    await page.waitForTimeout(500);
+    if (await input.evaluate((node) => document.activeElement === node)) return;
+  }
+  throw new Error('the palette input never held focus');
+}
+
 for (const engine of ENGINES) {
   // Hover a DIFFERENT row than the keyboard-selected one (activeIndex 0). The
   // active row must keep its selection paint while the inactive row lights.
@@ -212,6 +224,7 @@ for (const engine of ENGINES) {
     const container = await openProbe(page, 'rottay', engine);
     const dialog = cmdDialog(container, engine);
     await expect(dialog).toHaveCount(1);
+    if (engine === 'rustic') await pinPaletteFocus(page, container);
     const inactive = dialog.locator("[data-part='item'][data-active='false']").first();
     await inactive.hover();
     await waitForSettled(page, inactive);
@@ -228,6 +241,7 @@ for (const engine of ENGINES) {
     const container = await openProbe(page, 'rottay', engine);
     const dialog = cmdDialog(container, engine);
     await expect(dialog).toHaveCount(1);
+    if (engine === 'rustic') await pinPaletteFocus(page, container);
     const active = dialog.locator("[data-part='item'][data-active='true']").first();
     await active.hover();
     await waitForSettled(page, active);

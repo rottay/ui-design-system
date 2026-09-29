@@ -49,6 +49,36 @@ async function waitForGroundPaint(page: Page, ground: 'dark' | 'light'): Promise
   );
 }
 
+// An update reaching an unhydrated engine boundary drops its subtree until the lazy chunk lands; wait
+// until no boundary under the container is dehydrated or showing its fallback.
+async function waitForBoundariesResolved(page: Page, selector: string): Promise<void> {
+  await page.waitForFunction(
+    (containerSelector) => {
+      type Fiber = { tag: number; memoizedState: unknown; return: Fiber | null; child: Fiber | null; sibling: Fiber | null; stateNode: unknown };
+      const container = document.querySelector(containerSelector);
+      const rootKey = Object.keys(document).find((name) => name.startsWith('__reactContainer$'));
+      const current = rootKey
+        ? (document as unknown as Record<string, { stateNode?: { current?: Fiber } }>)[rootKey]?.stateNode?.current
+        : undefined;
+      if (!container || !current) return false;
+      const stack: Fiber[] = [current];
+      while (stack.length > 0) {
+        const fiber = stack.pop() as Fiber;
+        if (fiber.tag === 13 && fiber.memoizedState !== null) {
+          let host = fiber.return;
+          while (host && !(host.stateNode instanceof Element)) host = host.return;
+          if (host && container.contains(host.stateNode as Element)) return false;
+        }
+        if (fiber.sibling) stack.push(fiber.sibling);
+        if (fiber.child) stack.push(fiber.child);
+      }
+      return true;
+    },
+    selector,
+    { timeout: 30_000, polling: 100 },
+  );
+}
+
 async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<Locator> {
   await page.setViewportSize({ width: 1280, height: 3400 });
   await page.goto(
@@ -67,6 +97,24 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
 
   const fixtureGround = FIXTURES.find((f) => f.id === fixture)?.ground ?? 'dark';
   await waitForGroundPaint(page, fixtureGround);
+  await waitForBoundariesResolved(page, CONTAINER_SELECTOR);
+  // Hydration paints the phone posture and corrects to desktop in a later transition; the page-level
+  // owner sits outside the container and the toolbar bands follow it.
+  await page.waitForFunction(() => document.querySelector('[data-posture~="phone"]') === null, undefined, {
+    timeout: 15_000,
+  });
+  // The bands reflow for a few frames after the posture flips; the panels anchor to trigger rects at open.
+  await page.waitForFunction(
+    (selector) => {
+      const rect = document.querySelector(selector)!.getBoundingClientRect();
+      const key = `${rect.top}|${rect.height}`;
+      const w = window as unknown as { __geometry?: { key: string; hits: number } };
+      w.__geometry = w.__geometry?.key === key ? { key, hits: w.__geometry.hits + 1 } : { key, hits: 1 };
+      return w.__geometry.hits >= 3;
+    },
+    CONTAINER_SELECTOR,
+    { timeout: 10_000, polling: 'raf' },
+  );
 
   return container;
 }
@@ -89,6 +137,19 @@ async function waitForSettled(page: Page, locator: Locator): Promise<void> {
     handle,
     { timeout: 10_000, polling: 'raf' },
   );
+}
+
+// A portaled panel's entrance runs on inner layers the settle digest does not read; two captures half a
+// second apart must be byte-equal before the baseline comparison runs.
+async function waitForPixelStable(page: Page, locator: Locator): Promise<void> {
+  let previous = await locator.screenshot({ animations: 'disabled', caret: 'hide' });
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    await page.waitForTimeout(500);
+    const next = await locator.screenshot({ animations: 'disabled', caret: 'hide' });
+    if (next.equals(previous)) return;
+    previous = next;
+  }
+  throw new Error('the capture never held two identical frames 500ms apart');
 }
 
 // ---------------------------------------------------------------------------
@@ -127,6 +188,7 @@ test('rottay (dark) / workspace / modern: column-menu panel open (portaled)', as
   const panel = page.locator('[data-part="surface"].ds-column-menu-panel');
   await panel.waitFor({ state: 'visible' });
   await waitForSettled(page, panel);
+  await waitForPixelStable(page, panel);
   await expect(panel).toHaveScreenshot('rottay-workspace-column-menu-panel-modern.png', {
     maxDiffPixelRatio: 0.0005,
   });
@@ -140,6 +202,7 @@ test('rottay (dark) / workspace / modern: saved-views-menu panel open (portaled)
   const panel = page.locator('[data-part="panel"].ds-saved-views-menu-panel');
   await panel.waitFor({ state: 'visible' });
   await waitForSettled(page, panel);
+  await waitForPixelStable(page, panel);
   await expect(panel).toHaveScreenshot('rottay-workspace-saved-views-menu-panel-modern.png', {
     maxDiffPixelRatio: 0.0005,
   });
@@ -153,6 +216,7 @@ test('rottay (dark) / workspace / modern: export-button panel open (portaled)', 
   const panel = page.locator('[data-part="panel"].ds-export-button-panel');
   await panel.waitFor({ state: 'visible' });
   await waitForSettled(page, panel);
+  await waitForPixelStable(page, panel);
   await expect(panel).toHaveScreenshot('rottay-workspace-export-button-panel-modern.png', {
     maxDiffPixelRatio: 0.0005,
   });

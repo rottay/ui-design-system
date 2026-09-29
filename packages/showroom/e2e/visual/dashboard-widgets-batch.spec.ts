@@ -87,6 +87,49 @@ async function waitForSettled(page: Page, locator: Locator): Promise<void> {
   );
 }
 
+// An update reaching an unhydrated engine boundary drops its subtree (the ticker's header and icon) until
+// the lazy chunk lands; wait until no boundary under the container is dehydrated or showing its fallback.
+async function waitForBoundariesResolved(page: Page, selector: string): Promise<void> {
+  await page.waitForFunction(
+    (containerSelector) => {
+      type Fiber = { tag: number; memoizedState: unknown; return: Fiber | null; child: Fiber | null; sibling: Fiber | null; stateNode: unknown };
+      const container = document.querySelector(containerSelector);
+      const rootKey = Object.keys(document).find((name) => name.startsWith('__reactContainer$'));
+      const current = rootKey
+        ? (document as unknown as Record<string, { stateNode?: { current?: Fiber } }>)[rootKey]?.stateNode?.current
+        : undefined;
+      if (!container || !current) return false;
+      const stack: Fiber[] = [current];
+      while (stack.length > 0) {
+        const fiber = stack.pop() as Fiber;
+        if (fiber.tag === 13 && fiber.memoizedState !== null) {
+          let host = fiber.return;
+          while (host && !(host.stateNode instanceof Element)) host = host.return;
+          if (host && container.contains(host.stateNode as Element)) return false;
+        }
+        if (fiber.sibling) stack.push(fiber.sibling);
+        if (fiber.child) stack.push(fiber.child);
+      }
+      return true;
+    },
+    selector,
+    { timeout: 30_000, polling: 100 },
+  );
+}
+
+// The raster keeps repainting card edges and glyphs for up to a second after every DOM signal is quiet;
+// two captures half a second apart must be byte-equal before the baseline comparison runs.
+async function waitForPixelStable(page: Page, locator: Locator): Promise<void> {
+  let previous = await locator.screenshot({ animations: 'disabled', caret: 'hide' });
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    await page.waitForTimeout(500);
+    const next = await locator.screenshot({ animations: 'disabled', caret: 'hide' });
+    if (next.equals(previous)) return;
+    previous = next;
+  }
+  throw new Error('the capture never held two identical frames 500ms apart');
+}
+
 async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<Locator> {
   await page.setViewportSize({ width: 1280, height: 2200 });
   await page.goto(
@@ -106,8 +149,16 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
   const fixtureGround = FIXTURES.find((f) => f.id === fixture)?.ground ?? 'dark';
   await waitForGroundPaint(page, fixtureGround);
 
+  await waitForBoundariesResolved(page, CONTAINER_SELECTOR);
+  // Hydration paints the phone posture and corrects to desktop in a later transition; the page-level
+  // owner sits outside the container and the toolbar bands follow it.
+  await page.waitForFunction(() => document.querySelector('[data-posture~="phone"]') === null, undefined, {
+    timeout: 15_000,
+  });
+
   // Settle the count-up animations + any entrance tail before diffing.
   await waitForSettled(page, container);
+  await waitForPixelStable(page, container);
 
   return container;
 }
