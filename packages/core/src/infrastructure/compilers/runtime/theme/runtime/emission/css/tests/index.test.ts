@@ -6,6 +6,9 @@
  * reimplementation gets the blank-line count wrong.
  */
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
@@ -22,6 +25,7 @@ import {
   firstPartyScope,
   tenantArtifactScope,
 } from "../..";
+import { RADIUS_CHAIN_STEPS, radiusChainValue } from "..";
 import { FIRST_PARTY_BASELINES, resolveFirstParty } from "@tests/support/theme-lowering";
 
 const modern = resolveAdapter("modern");
@@ -41,7 +45,21 @@ function referenceCss(compiled: ThemeCompilation, slug: string): string {
   const root = `html[data-tenant='${slug}']`;
   const modeSelector = (mode: string) =>
     `${root}[data-theme='${mode}'], ${root}.${mode}`;
-  const base = Object.entries(compiled.cssVariables).filter(([, v]) => v != null);
+  // A block stating a radius operand restates the `:root` step over it.
+  const chained = (variables: Readonly<Record<string, string>>) => {
+    const entries = Object.entries(variables).filter(([, v]) => v != null);
+    for (const step of ["sm", "md", "lg", "xl"]) {
+      if (`--ds-radius-${step}` in variables) continue;
+      if ("--ds-radius-scale" in variables || `--ds-radius-${step}-base` in variables) {
+        entries.push([
+          `--ds-radius-${step}`,
+          `calc(var(--ds-radius-${step}-base) * var(--ds-radius-scale, 1))`,
+        ]);
+      }
+    }
+    return entries;
+  };
+  const base = chained(compiled.cssVariables);
   const blocks: string[] = [];
   if (base.length > 0 || compiled.colorScheme) {
     blocks.push(
@@ -55,9 +73,7 @@ function referenceCss(compiled: ThemeCompilation, slug: string): string {
     blocks.push(
       rule(modeSelector(block.mode), [
         `  color-scheme: ${block.colorScheme};`,
-        ...Object.entries(block.cssVariables)
-          .filter(([, v]) => v != null)
-          .map(([k, v]) => `  ${k}: ${v};`),
+        ...chained(block.cssVariables).map(([k, v]) => `  ${k}: ${v};`),
       ])
     );
   }
@@ -284,5 +300,68 @@ describe("the guard drops no channel the first-party corpus actually emits", () 
     // spring or a card shadow again turns this red and moves the control back.
     expect([...seenShapes].sort()).toEqual([]);
     expect(NAMED_SHAPES).toHaveLength(3);
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* the radius chain: a block stating an operand re-declares the step           */
+/* -------------------------------------------------------------------------- */
+
+describe("a block that states a radius operand re-declares the dial steps", () => {
+  const ROOT_DECLARATIONS = readFileSync(
+    resolve(__dirname, "../../../../../../../../foundation/tokens/css/foundation/themes/default/index.css"),
+    "utf8"
+  );
+
+  it("restates each step exactly as themes/default declares it at :root", () => {
+    for (const step of RADIUS_CHAIN_STEPS) {
+      expect(ROOT_DECLARATIONS).toContain(`  --ds-radius-${step}: ${radiusChainValue(step)};`);
+    }
+  });
+
+  it("adds nothing to a block that states no operand", () => {
+    expect(emitDeclarations({ "--ds-color-primary": "#4f46e5" })).toEqual([
+      "  --ds-color-primary: #4f46e5;",
+    ]);
+  });
+
+  it("a stated scale re-declares all four steps", () => {
+    expect(emitDeclarations({ "--ds-radius-scale": "0.8" })).toEqual([
+      "  --ds-radius-scale: 0.8;",
+      "  --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));",
+      "  --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));",
+      "  --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));",
+      "  --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));",
+    ]);
+  });
+
+  it("a stated operand re-declares only its own step", () => {
+    expect(emitDeclarations({ "--ds-radius-lg-base": "8px" })).toEqual([
+      "  --ds-radius-lg-base: 8px;",
+      "  --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));",
+    ]);
+  });
+
+  it("a step the block names outright keeps its value", () => {
+    expect(
+      emitDeclarations({ "--ds-radius-scale": "1.2", "--ds-radius-md": "4px" }).filter((line) =>
+        line.startsWith("  --ds-radius-md")
+      )
+    ).toEqual(["  --ds-radius-md: 4px;"]);
+  });
+
+  it("a refused operand does not re-declare its step", () => {
+    expect(emitDeclarations({ "--ds-radius-lg-base": ESCAPE })).toEqual([]);
+  });
+
+  it("every first-party base block states the scale, so each carries the chain", () => {
+    for (const slug of slugs) {
+      const compiled = compileTheme(resolveFirstParty(staticThemeIntent(slug)), modern);
+      expect(compiled.cssVariables["--ds-radius-scale"]).toBeDefined();
+      const css = emitThemeCss(compiled, firstPartyScope(slug));
+      for (const step of RADIUS_CHAIN_STEPS) {
+        expect(css).toContain(`  --ds-radius-${step}: ${radiusChainValue(step)};`);
+      }
+    }
   });
 });

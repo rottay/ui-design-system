@@ -35,9 +35,38 @@ export { containerScope, firstPartyScope, tenantArtifactScope };
 export function emitDeclarations(
   variables: Readonly<Record<string, string>>
 ): string[] {
-  return Object.entries(admitCssVariables(variables)).map(
+  return Object.entries(withRadiusChain(admitCssVariables(variables))).map(
     ([name, value]) => `  ${name}: ${value};`
   );
+}
+
+/** The dial-scaled radius steps `themes/default` declares once at `:root`. */
+export const RADIUS_CHAIN_STEPS = ["sm", "md", "lg", "xl"] as const;
+
+export const RADIUS_SCALE_VARIABLE = "--ds-radius-scale";
+
+/** The `:root` declaration of one step, restated verbatim. */
+export function radiusChainValue(step: (typeof RADIUS_CHAIN_STEPS)[number]): string {
+  return `calc(var(--ds-radius-${step}-base) * var(${RADIUS_SCALE_VARIABLE}, 1))`;
+}
+
+/**
+ * A custom property resolves its `var()` where it is declared, so a step
+ * declared only at `:root` paints the root's operands under every nested scope.
+ * A block that states an operand re-declares the steps it moves; a step the
+ * block names outright keeps that value.
+ */
+export function withRadiusChain(
+  variables: Readonly<Record<string, string>>
+): Record<string, string> {
+  const chained: Record<string, string> = { ...variables };
+  const scaled = RADIUS_SCALE_VARIABLE in variables;
+  for (const step of RADIUS_CHAIN_STEPS) {
+    const name = `--ds-radius-${step}`;
+    if (name in variables) continue;
+    if (scaled || `${name}-base` in variables) chained[name] = radiusChainValue(step);
+  }
+  return chained;
 }
 
 /** One CSS rule from a selector and already-formatted declarations. */
