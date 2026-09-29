@@ -954,7 +954,7 @@ test.describe("custom component pack — realm isolation", () => {
     );
 
     await expect(exit).toBeVisible();
-    await exit.click();
+    await clickInsideRealm(page, exit, "the realm's client-side exit");
 
     // The transition really happened: the realm is gone and the pathname moved.
     await expect(realm.getByTestId("custom-pack-ground")).toHaveCount(0);
@@ -1010,12 +1010,18 @@ test.describe("custom component pack — realm isolation", () => {
     const frameAttribute = (name: string) =>
       frameAfterExit.attributes.find(([key]) => key === name)?.[1];
 
+    // The root layout stamps its own identity on every document, bare /probe
+    // included, so a released claim reads the control's value, not an absence.
     for (const channel of ["data-tenant", "data-engine", "data-theme"]) {
       expect(
         frameAttribute(channel),
         `the pack provider's ${channel} claim was never released`,
-      ).toBeUndefined();
+      ).toBe(bareProbe.attributes.find(([key]) => key === channel)?.[1]);
     }
+    expect(frameAttribute("data-tenant"), "the pack tenant still owns the root").not.toBe(
+      PACK_TENANT_SLUG,
+    );
+    expect(frameAttribute("data-engine"), "the custom engine still owns the root").not.toBe("custom");
     expect(
       (frameAttribute("class") ?? "").split(/\s+/),
       "the dark class survived the provider's release",
