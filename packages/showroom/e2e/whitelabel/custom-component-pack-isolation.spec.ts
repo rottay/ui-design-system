@@ -475,19 +475,21 @@ async function expectPackRefusals(realm: FrameLocator) {
  * at `action: none` and the interaction assertions fail describing the symptom
  * instead of the cause.
  *
- * So the parent is scrolled until the control's own centre point hit-tests to
- * the frame element, and that reachability is ASSERTED rather than assumed.
+ * So the control is revealed inside the frame's own document and the parent is
+ * scrolled until the control's centre point hit-tests to the frame element, and
+ * that reachability is ASSERTED rather than assumed.
  * Only then is the click issued -- an ordinary `locator.click()`, with no
  * `force`, no `element.click()` and no dispatched event, so every claim that
  * rests on this interaction still rests on a real one. A control that cannot be
  * reached now fails loudly, naming what owns the point instead.
  */
 async function clickInsideRealm(page: Page, target: Locator, label: string) {
-  await target.scrollIntoViewIfNeeded();
-
   await expect
     .poll(
       async () => {
+        // Re-revealed on every probe: the realm keeps laying out after it is
+        // ready and can push the control below the frame's own viewport.
+        await target.scrollIntoViewIfNeeded();
         const box = await target.boundingBox();
         if (!box) return "the control has no layout box";
 
