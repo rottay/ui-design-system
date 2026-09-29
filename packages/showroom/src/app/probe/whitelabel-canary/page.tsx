@@ -3,7 +3,9 @@ import {
   FleetStage,
   fleetGroundRequest,
   FLEET_SLUG,
+  ProbeCellSwitch,
   probeParam,
+  type ProbeCellAxis,
   type FleetDensity,
   type FleetLocale,
   type FleetSource,
@@ -15,6 +17,12 @@ import { WlCanaryCanvas } from "./canvas";
 
 /** The only mountable sources. Anything else is a hard failure. */
 const SOURCES: readonly FleetSource[] = ["bithire-static", "themanagement-db", "themanagement-seeds"];
+
+/** The cells the SPA-transition contract moves between inside one Document. */
+const CELL_AXES: Readonly<Record<string, ProbeCellAxis>> = {
+  source: { values: SOURCES, fallback: "bithire-static" },
+  seedPrimary: { values: ["#AA0000", "#FFFF00"], fallback: "" },
+};
 
 /**
  * A requested source that cannot mount must FAIL VISIBLY. The previous form
@@ -63,17 +71,20 @@ export default async function WlCanaryProbePage({ searchParams }: { searchParams
   }
 
   return (
-    <FleetStage ground={ground} density={density}>
-      <WlCanaryCanvas
-        source={source}
-        mountedSlug={mountedSlug}
-        locale={locale}
-        density={density}
-        // Overlays are opt-in (`&modal=1` / `&sheet=1`) so they do not cover the
-        // other sections in their own captures (they portal above everything).
-        modalInitiallyOpen={probeParam(params, "modal") === "1"}
-        sheetInitiallyOpen={probeParam(params, "sheet") === "1"}
-      />
-    </FleetStage>
+    <>
+      <FleetStage ground={ground} density={density}>
+        <WlCanaryCanvas
+          source={source}
+          mountedSlug={mountedSlug}
+          locale={locale}
+          density={density}
+          // Overlays are opt-in (`&modal=1` / `&sheet=1`) so they do not cover the
+          // other sections in their own captures (they portal above everything).
+          modalInitiallyOpen={probeParam(params, "modal") === "1"}
+          sheetInitiallyOpen={probeParam(params, "sheet") === "1"}
+        />
+      </FleetStage>
+      <ProbeCellSwitch hook="__setWhitelabelCanaryCell" route="/probe/whitelabel-canary" axes={CELL_AXES} />
+    </>
   );
 }

@@ -338,7 +338,7 @@ test.describe("canary B · seeds-only, proven structurally then downstream", () 
 });
 
 // -----------------------------------------------------------------------------
-// SPA transition contract: one hard load, then pushState inside the same Document
+// SPA transition contract: one hard load, then router navigations inside the same Document
 // -----------------------------------------------------------------------------
 
 declare global {
@@ -358,7 +358,7 @@ declare global {
 
 test.describe("canary · SPA transition keeps one Document and style-before-root order", () => {
   test(
-    "static hard-load then pushState transitions prove same Document and lawful artifact counts",
+    "static hard-load then router transitions prove same Document and lawful artifact counts",
     { tag: ["@browser-not-run"] },
     async ({ page }) => {
       const { FLEET_ARTIFACT_TESTID } = await import(
@@ -469,13 +469,28 @@ test.describe("canary · SPA transition keeps one Document and style-before-root
           digest: string | null;
         };
       }> {
+        // A bare history.pushState never re-runs the server page, so the ground
+        // would not move; the probe's cell switch is a real router navigation.
         await page.evaluate((q: string) => {
           window.__canarySnapshots = [];
-          const url = new URL(window.location.href);
-          url.search = q;
-          window.history.pushState({}, "", url);
+          const probe = window as Window & {
+            __setWhitelabelCanaryCell?: (next: Record<string, string>) => void;
+          };
+          if (!probe.__setWhitelabelCanaryCell) {
+            throw new Error("whitelabel-canary in-place switch hook is unavailable");
+          }
+          probe.__setWhitelabelCanaryCell(Object.fromEntries(new URLSearchParams(q)));
         }, query);
 
+        // Two cells can share a source, so the source attribute alone cannot
+        // tell that the navigation committed; the committed URL can.
+        const expectedSearch = new URLSearchParams(query);
+        expectedSearch.sort();
+        await page.waitForURL((url) => {
+          const search = new URLSearchParams(url.search);
+          search.sort();
+          return search.toString() === expectedSearch.toString();
+        });
         await expect(root(page)).toHaveAttribute("data-canary-source", expectedSource);
         await expect(root(page)).toBeVisible();
 
