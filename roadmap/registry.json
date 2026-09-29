@@ -6036,6 +6036,11 @@
           "at": "2026-09-29 09:00",
           "by": "kimi-admin-dt",
           "note": "REGISTERED RESIDUAL CASE (post-close of the hydration-remount fix 151487ba0, per the owner-audit adjustment): the writer measured a remaining shape where a parent re-render passing the SAME <Suspense> element straight through a provider context change leaves a still-loading boundary hydrating against the new value and client-rebuilding it (mismatch). createEngineComponent does NOT have that shape (its Suspense sits inside its own component, which does receive the change) -- the shipped fix covers the real composition. The writer attributes the residual to React 19.2; that attribution is the writer's claim, NOT independently verified. Owner: the runtime/responsive lane. Minimal repro (the writer's original test shape): a provider whose value changes post-hydration + a parent re-rendering with the same Suspense element + a still-loading lazy inside. Public expectation if ever supported: the boundary hydrates with the corrected context. Do not present 151487ba0 as covering every Suspense composition: the covered law is the one the DS components actually render."
+        },
+        {
+          "at": "2026-09-29 13:30",
+          "by": "kimi-admin-dt",
+          "note": "POST-CLOSE BLOCK (owner audit 2026-09-29 P1, first render): the scene-stability wave measured two FIRST-RENDER defects that its spec waits tolerate but do not repair: (1) widget-board paints a 12-column grid at phone width for the first 50-160ms, until the board measures its container and drops to one column (data-posture phone -> phone compact); (2) the dashboard tickers' lazy engine boundaries receive an update before hydrating and client-render: header, icons and controls vanish for 0.7-8s under load. Both are REAL first-paint defects users see. Owners: (1) the widget-board family owner (the board should render its posture from the container measurement contract, not flash the desktop grid — the posture authority is this WO's mechanism; the fix likely starts the board at the SSR postured guess or the collapsed safe form); (2) the ticker/lazy-boundary shape rides the registered Suspense residual on this WO (the 2026-09-28 entry). Both keep their own early-render tests; no waiting-based capture substitutes them."
         }
       ],
       "doneAt": "2026-09-12",
@@ -6209,6 +6214,11 @@
           "at": "2026-09-25 21:10",
           "by": "kimi-dt",
           "note": "F1-F4 cerrados en 2639bb9a3: la constitucion sale del sello de verdad (tier/dominio del catalogo, admission de la tabla de calibracion, F1 typography.families standard->pro). Retiro de root-checklists 68a02b951 (0 importers, 0 lectores del artefacto, sin fila CI desde 2026-09-11 — evidencia de Packet B). families/* del sello queda solo con la auto-validacion de la constitucion (el sello leyendose a si mismo, conservado a proposito) + el narrowing del probe. PENDIENTE UNICO BRAZO: evidence/code ratio — espera la decision del owner sobre la definicion autorizada de que cuenta como evidence vs producto. Todo lo demas del cierre esta medido."
+        },
+        {
+          "at": "2026-09-29 13:30",
+          "by": "kimi-admin-dt",
+          "note": "OWNER-ADOPTED CLASSIFICATION (consolidated directive §7, 2026-09-29): the evidence/code ratio arm now has its authorized definition: PRODUCT = runtime + the resources needed to ship it; ACTIVE VALIDATION = tests, fixtures, gates and live baselines (a separate category, neither product nor evidence); HISTORICAL EVIDENCE = receipts, reports, captures, traces with no active consumer. Excluded from the comparison: dependencies, caches, .git, duplicated builds. No inflating the denominator with duplicated generated files, no reclassifying evidence as product. The measurement packet follows this classification; the contractual scope and threshold stand."
         }
       ]
     },
@@ -7304,6 +7314,11 @@
           "at": "2026-09-19 17:45",
           "by": "kimi-dt",
           "note": "2026-09-19 kimi-dt: no new technical work this wave — the WO waits on the owner's D-30 pick (the final branding decision is owner-deferred by standing instruction; provisional contrasting admitted variants prove the capability meanwhile). The open accounting question (milestone B machinery vs the D-30 pick) stays registered in the WO record. Proof to close: the three candidates differing on >= 4 non-color axes, each passing admission as a pro document, the owner's pick recorded with its digest in roadmap/kit-2026-09.md, audit/** byte-unchanged."
+        },
+        {
+          "at": "2026-09-29 13:30",
+          "by": "kimi-admin-dt",
+          "note": "OWNER DECISION 2026-09-29 (consolidated directive §4): the final branding pick (D-30) is DEFERRED by the owner and does NOT gate technical validation. The experimental identity map: BitHire organic/smooth (rounded, spacious, soft depth), Rottay minimalist (sober, contained motion), Evnto graphic (squarer geometry, marked borders, emphatic states), The Management editorial (typography-led, strong hierarchy, air), and a fifth EXPERIMENTAL tenant provisionally named Atelier (technical: compact, precise, functional) as a FIXTURE over a compatible vertical — not a new app, engine or vertical. The two-tenants-of-one-vertical proof stays mandatory via fixtures using two of the experimental styles. Differences must survive a shared palette and be measured on the six axes per the existing contract. This WO stays OPEN pending the deferred pick; its capability evidence does not wait. No identity invented by the DS team."
         }
       ]
     },
