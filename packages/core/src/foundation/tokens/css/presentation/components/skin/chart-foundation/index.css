@@ -38,6 +38,13 @@
   border: 0;
 }
 
+/* The hidden summary keeps its table to the wrapper's hairline; a nowrap
+ * auto-layout table would otherwise lay its rows out far past the chart. */
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='accessible-summary'] > [data-part='summary-table'] {
+  table-layout: fixed;
+  inline-size: 1px;
+}
+
 /* Shared family legend anatomy. Families own only shape-specific overrides;
  * caller/palette paint remains a runtime value on the swatch. `:where()` keeps
  * this foundation deliberately weaker than every family skin. */

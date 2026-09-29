@@ -21,6 +21,13 @@
   font-variant-numeric: var(--ds-numeric-tabular);
 }
 
+/* Tile text sits at x=4 from the tile's left edge; under rtl its start is the
+ * right end, so the end anchors there and the text runs into the tile. */
+:where([dir='rtl']) .ds-chart-treemap [data-part='tile-label'],
+:where([dir='rtl']) .ds-chart-treemap [data-part='tile-value'] {
+  text-anchor: end;
+}
+
 /* Forced colors erase the categorical tile fills, so tiles switch to a
  * neutral surface and fall back on the renderer's data-mark-index cycle for
  * stroke-pattern differentiation; labels keep full contrast. */

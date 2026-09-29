@@ -58,6 +58,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; inde
       <Box
         className="row-shimmer"
         data-part="shimmer"
+        aria-hidden="true"
       />
 
       <Flex align="center" justify="between" style={{ position: 'relative' }}>
