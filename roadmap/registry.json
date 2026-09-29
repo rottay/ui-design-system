@@ -5951,6 +5951,11 @@
           "at": "2026-09-26 00:20",
           "by": "kimi-dt",
           "note": "brand-x-locale renderiza por la puerta compile (fb877645c: las 6 stories + 6 plays limpias en Chromium real; el tenant DB es un documento v2 por admission+compile+mount, bithire por el registro sin spread; el DB tenant necesita el artefacto de la vertical debajo de su delta, como una app -- hallazgo registrado. ModernVisualExcellence ya estaba por 7aee2a3c6). MobilePagination por el catalogo i18n (range_of x5 locales, precedencia override>catalogo>literal; floor 1473->1474 por --seed). Desktop modern pagination con el mismo ingles: despachada. i18n gate OK, 180/180."
+        },
+        {
+          "at": "2026-09-28 21:10",
+          "by": "kimi-admin-dt",
+          "note": "Adoption climb + honest measure (b79810512 + 277532552, Opus receipts out-i18n-packetA/B): the last two Modern components with real hardcoded copy (data-table cell editor, widget-board catalog search) read the catalog via 3 new keys x 5 locales, precedence override>catalog>literal proven with a positive control; frozen engines byte-identical. The 90% acceptance now reads off the TEXT-CARRYING measure the packet-B gate added: 97/97 (100%) -- the hook-mention proxy capped at 94/141 because 44 files render no copy and 3 are re-exports of translating renderers. The gate reports both measures and keeps its decrease-only floors. Arms status: parity target MET (text-carrying 100%); toLocale ceiling held (19); mandatory locales 100%, fr/pt floors re-seeded with reasons; the lun/IME arms stand from the 09-26 entries. Remaining registered debt (not blocking): 5 adopted files with residual literals (data-table, form-builder, color-picker, carousel, tenant-preview). Close audit candidate pending the milestone run."
         }
       ]
     },
