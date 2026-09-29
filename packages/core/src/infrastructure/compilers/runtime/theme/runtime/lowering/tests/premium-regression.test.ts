@@ -31,6 +31,7 @@ import {
   BUNDLED_TENANT_SLUGS,
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
+import { ROOT_ALIASES } from '../../emission/css/root-aliases';
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 const evntoFlatTheme = firstPartyFixture('evnto');
@@ -320,13 +321,70 @@ const SIDEBAR_CHROME_WITHOUT_PRODUCER = [
   '--ds-sidebar-footer-bg',
 ] as const;
 
+const ROOT_ALIAS_TEXT = new Map(ROOT_ALIASES);
+
+/**
+ * The names a sheet declares with a value of its own. Since 6a91f16ff a scope
+ * restates every root alias its operands re-resolve, verbatim; that is the
+ * `:root` text re-resolved in place, not chrome the scope compiles.
+ */
+function ownDeclaredVars(css: string): string[] {
+  const names = new Set<string>();
+  postcss.parse(css).walkDecls((decl) => {
+    if (!decl.prop.startsWith('--')) return;
+    if (ROOT_ALIAS_TEXT.get(decl.prop) === decl.value.trim()) return;
+    names.add(decl.prop);
+  });
+  return [...names];
+}
+
+function presentPrefixes(css: string, prefixes: readonly string[]): string[] {
+  const vars = ownDeclaredVars(css);
+  return prefixes.filter((prefix) => vars.some((v) => v.startsWith(prefix)));
+}
+
 function expectVarPrefixesAbsent(css: string, prefixes: readonly string[]) {
-  const vars = extractVars(css);
   for (const prefix of prefixes) {
-    const found = vars.some((v) => v.startsWith(prefix));
-    expect(found, `expected CSS NOT to contain vars starting with ${prefix}`).toBe(false);
+    expect(
+      presentPrefixes(css, [prefix]),
+      `expected CSS NOT to contain vars starting with ${prefix}`
+    ).toEqual([]);
   }
 }
+
+describe('the absence scan skips only the alias law restatement (6a91f16ff)', () => {
+  const secondaryRoot = ROOT_ALIAS_TEXT.get('--ds-button-secondary-bg');
+
+  it('names the root text it skips', () => {
+    expect(secondaryRoot).toBe('var(--ds-color-secondary-500)');
+    expect(ROOT_ALIAS_TEXT.has('--ds-layout-bg')).toBe(false);
+  });
+
+  it('skips a verbatim restatement of the root alias', () => {
+    const css = `.s {\n  --ds-button-secondary-bg: ${secondaryRoot};\n}`;
+    expect(presentPrefixes(css, ['--ds-button-secondary-bg'])).toEqual([]);
+  });
+
+  it('DRILL: an alias carrying a value of its own still trips the scan', () => {
+    for (const value of ['#ff0000', 'var(--ds-color-primary)']) {
+      const css = `.s {\n  --ds-button-secondary-bg: ${value};\n}`;
+      expect(presentPrefixes(css, ['--ds-button-secondary-bg']), value).toEqual([
+        '--ds-button-secondary-bg',
+      ]);
+    }
+  });
+
+  it('DRILL: unrelated chrome with no root alias still trips the scan', () => {
+    const css = `.s {\n  --ds-layout-bg: var(--ds-color-bg-primary);\n}`;
+    expect(presentPrefixes(css, ['--ds-layout-bg'])).toEqual(['--ds-layout-bg']);
+  });
+
+  it('DRILL: a planted chrome channel in a real artifact trips the scan', () => {
+    const css = `${readTenantCss('rottay')}\n.s {\n  --ds-table-header-bg: #F8F8FA;\n}`;
+    expect(presentPrefixes(readTenantCss('rottay'), ['--ds-table-header-bg'])).toEqual([]);
+    expect(presentPrefixes(css, ['--ds-table-header-bg'])).toEqual(['--ds-table-header-bg']);
+  });
+});
 
 describe('first-party CSS baseline: sidebar vars', () => {
   it.each(['bithire', 'rottay', 'evnto'] as const)(
