@@ -311,10 +311,10 @@
    display tracking break contextual joining in Arabic-script copy, so every
    textual tracking above collapses to `normal` under a joining-script lang.
    The score keeps its tracking: it sets numerals, not joining script. */
-.ds-pattern-decision-panorama .ds-decision-panorama__eyebrow:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
-.ds-pattern-decision-panorama .ds-decision-panorama__identity-eyebrow:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
-.ds-pattern-decision-panorama .ds-decision-panorama__title:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
-.ds-pattern-decision-panorama .ds-decision-panorama__decision-title:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+.ds-pattern-decision-panorama .ds-decision-panorama__eyebrow:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)),
+.ds-pattern-decision-panorama .ds-decision-panorama__identity-eyebrow:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)),
+.ds-pattern-decision-panorama .ds-decision-panorama__title:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)),
+.ds-pattern-decision-panorama .ds-decision-panorama__decision-title:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)) {
   letter-spacing: normal;
 }
 

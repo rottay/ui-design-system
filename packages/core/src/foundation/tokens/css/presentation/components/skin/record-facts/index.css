@@ -327,9 +327,9 @@
    mono label and the tight display tracking break contextual joining in
    Arabic-script copy, so textual tracking collapses to `normal` under a
    joining-script lang. */
-.ds-pattern-record-facts .ds-record-facts__label:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
-.ds-pattern-record-facts .ds-record-facts__title:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
-.ds-pattern-record-facts .ds-record-facts__value:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+.ds-pattern-record-facts .ds-record-facts__label:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)),
+.ds-pattern-record-facts .ds-record-facts__title:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)),
+.ds-pattern-record-facts .ds-record-facts__value:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)) {
   letter-spacing: normal;
 }
 

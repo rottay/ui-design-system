@@ -156,17 +156,21 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value,
-  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-moz-progress-bar {
+  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value {
     /* Ambient cadence rides the tenant duration-scale dial (scale 1 = the
        historical calc). */
+    animation: ds-progress-active-stripes-modern calc(var(--ds-motion-glacial) * 2 * var(--ds-motion-duration-scale, 1)) linear infinite;
+  }
+  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-moz-progress-bar {
     animation: ds-progress-active-stripes-modern calc(var(--ds-motion-glacial) * 2 * var(--ds-motion-duration-scale, 1)) linear infinite;
   }
 }
 
 /* RTL: the stripe cadence travels with the reading direction (the
    indeterminate sweep below does the same). */
-.rottay-progress-shell.rottay-progress-shell--modern[data-type='line']:dir(rtl) [data-part='fill']::-webkit-progress-value,
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='line']:dir(rtl) [data-part='fill']::-webkit-progress-value {
+  animation-direction: reverse;
+}
 .rottay-progress-shell.rottay-progress-shell--modern[data-type='line']:dir(rtl) [data-part='fill']::-moz-progress-bar {
   animation-direction: reverse;
 }
@@ -328,7 +332,10 @@
 
   /* The active status stripes sit ABOVE these rules in normal specificity, so
      they are re-flattened here explicitly: solid Highlight, no stripe image. */
-  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value,
+  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value {
+    background: Highlight;
+    background-image: none;
+  }
   .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-moz-progress-bar {
     background: Highlight;
     background-image: none;

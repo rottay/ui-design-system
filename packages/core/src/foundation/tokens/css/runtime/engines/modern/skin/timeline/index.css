@@ -265,7 +265,7 @@
 /* ---- joining-script guard: the label's tracked caps treatment breaks
         contextual joining in Arabic-script timestamps; tracking collapses to
         normal under a joining-script lang (Typography lane precedent). ---- */
-.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] > [data-part='label']:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] > [data-part='label']:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)) {
   letter-spacing: normal;
 }
 

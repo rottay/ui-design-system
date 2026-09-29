@@ -143,7 +143,7 @@
    non-normal tracking breaks contextual joining in Arabic-script headlines,
    so the ramp's tracking collapses to `normal` under a joining-script lang.
    One (0,3,0) rule outranks every hN level above (0,1,1). */
-.ds-markdown-view[data-part='root'] [data-part='heading']:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+.ds-markdown-view[data-part='root'] [data-part='heading']:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)) {
   letter-spacing: normal;
 }
 

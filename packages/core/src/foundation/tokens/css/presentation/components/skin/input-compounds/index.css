@@ -129,22 +129,22 @@
   border-color: var(--ds-input-border-focus, var(--ds-color-primary));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field:has([data-invalid='true'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field [data-invalid='true']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-input-field:has([data-invalid='true']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-input-error-border, var(--ds-color-error));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field:has([data-warning='true'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field [data-warning='true']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-input-field:has([data-warning='true']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-input-warning-border, var(--ds-color-warning));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field:has([data-success='true'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field [data-success='true']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-input-field:has([data-success='true']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-input-success-border, var(--ds-color-success));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field:has([data-disabled='true'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field [data-disabled='true']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-input-field:has([data-disabled='true']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
   background: var(--ds-input-bg-disabled, var(--ds-material-control-background-disabled));
@@ -181,17 +181,17 @@
   border-color: var(--ds-select-border-color-focus, var(--ds-input-border-focus, var(--ds-color-primary)));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell:has([data-part='trigger'][data-status='error'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell [data-part='trigger'][data-status='error']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:has([data-part='trigger'][data-status='error']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-select-error-border, var(--ds-input-error-border, var(--ds-color-error)));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell:has([data-part='trigger'][data-status='warning'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell [data-part='trigger'][data-status='warning']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:has([data-part='trigger'][data-status='warning']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-select-warning-border, var(--ds-input-warning-border, var(--ds-color-warning)));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell:has([data-part='trigger'][data-status='success'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell [data-part='trigger'][data-status='success']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:has([data-part='trigger'][data-status='success']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-select-success-border, var(--ds-input-success-border, var(--ds-color-success)));
 }
