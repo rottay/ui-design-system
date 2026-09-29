@@ -23,7 +23,7 @@ import {
   type ThemeCompilation,
 } from "@/infrastructure/compilers/runtime/theme";
 import { documentThemeIntent } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
-import { CONTRAST_POSTURES } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/contrast-posture";
+import { CONTRAST_POSTURES } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/contrast-posture";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 

@@ -25,7 +25,7 @@ import type {
   FamilyDeriver,
   LoweringContext,
 } from "../../../../foundation/contract";
-import { resolveContrastPosture } from "../../palette/contrast-posture";
+import { resolveContrastPosture } from "../../../../foundation/contrast-posture";
 
 /** A vertical's own badge chrome outranks every relation stated here. */
 export const badgeChromeDeriver: FamilyDeriver = {

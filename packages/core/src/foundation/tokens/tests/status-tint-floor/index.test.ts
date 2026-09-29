@@ -38,7 +38,7 @@ import { contrastRatio, parseHex } from "@/foundation/kernel/color/contrast";
 import {
   CONTRAST_POSTURES,
   resolveContrastPosture,
-} from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/contrast-posture";
+} from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/contrast-posture";
 import {
   derivePaletteTints,
   type TintStrengths,

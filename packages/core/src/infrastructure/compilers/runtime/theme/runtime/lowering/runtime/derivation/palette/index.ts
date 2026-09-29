@@ -14,7 +14,7 @@ import {
   setExtendedPaletteVariables,
   textGrounds,
 } from "../../../foundation/palette";
-import { resolveContrastPosture } from "./contrast-posture";
+import { resolveContrastPosture } from "../../../foundation/contrast-posture";
 import { derivePaletteInks } from "./inks";
 import { deriveNeutralAxis } from "./neutral-temperature";
 import {
@@ -24,7 +24,7 @@ import {
   derivePaletteSemanticFloor,
 } from "./semantic";
 
-export { resolveContrastPosture } from "./contrast-posture";
+export { resolveContrastPosture } from "../../../foundation/contrast-posture";
 export { derivePaletteTints } from "./tints";
 
 /**
