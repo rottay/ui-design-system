@@ -133,8 +133,9 @@
    Truncation strategy: the header row wraps as a whole, but a single long
    name or entity never pushes the badge/timestamp off-card -- user and
    entity shrink with ellipsis and expose the full string via `title`
-   (stamped by the engine). The badge (Tag) never truncates: the action
-   verb is the type channel. */
+   (stamped by the engine). The badge (Tag) keeps its full label while the
+   header can hold it; a header narrower than the Tag shrinks it to the Tag's
+   own truncation, whose title carries the whole action. */
 .ds-pattern-activity-log.ds-engine-modern [data-part='user'] {
   min-inline-size: 0;
   max-inline-size: 100%;
@@ -144,6 +145,11 @@
   color: var(--ds-color-text-primary);
   font-size: var(--ds-font-size-sm, 0.875rem);
   font-weight: var(--ds-font-weight-semibold, 600);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'] {
+  display: inline-flex;
+  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='entity'] {
   min-inline-size: 0;

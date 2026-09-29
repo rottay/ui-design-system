@@ -104,6 +104,9 @@
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] {
   margin: var(--ds-spacing-1);
   min-inline-size: 0;
+  /* A side-aligned cell is fit-content, so a nowrap child's min-content would
+     widen it past its track; the track is the ceiling. */
+  max-inline-size: 100%;
   /* `anywhere`, not `break-word`: only the former lowers min-content, and the
      track is sized from it. */
   overflow-wrap: anywhere;

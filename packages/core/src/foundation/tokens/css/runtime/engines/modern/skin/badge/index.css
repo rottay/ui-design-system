@@ -30,7 +30,7 @@
   align-items: center;
   justify-content: center;
   min-inline-size: 0;
-  max-inline-size: var(--ds-badge-max-inline-size);
+  max-inline-size: min(var(--ds-badge-max-inline-size), 100%);
   block-size: var(--ds-badge-resolved-height, var(--ds-badge-md-height));
   padding-inline: calc(
     var(--ds-badge-resolved-padding-inline, var(--ds-badge-padding-x)) *

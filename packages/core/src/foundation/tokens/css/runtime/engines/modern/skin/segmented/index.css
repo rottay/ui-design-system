@@ -84,12 +84,15 @@
   gap: calc(var(--ds-segmented-gap) * var(--ds-density-effective-scale, 1));
   min-width: 0;
   padding: calc(var(--ds-segmented-padding) * var(--ds-density-effective-scale, 1));
-  /* Narrow frames: the group scrolls inside its container instead of clipping
-     options without an affordance (pagination.css's controls-row precedent).
-     The 4px track padding matches the full focus-ring extent (offset 2px +
-     width 2px from --ds-focus-ring), so neither the ring nor the option lift
-     clips against the scrollport; `overflow-y: hidden` is a legal pair with
+  /* Narrow frames: options wrap onto further rows and a lone long label
+     shrinks to its ellipsis, so the group adapts inside its container and
+     never hides an option. The scrollport stays as the reveal mechanism's
+     host. The 4px track padding matches the full focus-ring extent (offset
+     2px + width 2px from --ds-focus-ring), so neither the ring nor the option
+     lift clips against it; `overflow-y: hidden` is a legal pair with
      `overflow-x: auto` (neither is `visible`). */
+  flex-wrap: wrap;
+  box-sizing: border-box;
   max-inline-size: 100%;
   overflow-x: auto;
   overflow-y: hidden;
@@ -251,7 +254,7 @@
 
 .ds-segmented--modern[role='radiogroup'] [data-part='option'] {
   display: inline-flex;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   align-items: center;
   justify-content: center;
   gap: calc(var(--ds-segmented-current-gap) * var(--ds-density-effective-scale, 1));

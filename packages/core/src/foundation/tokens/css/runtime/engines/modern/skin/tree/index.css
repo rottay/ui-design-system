@@ -120,8 +120,10 @@
   display: inline-flex;
   min-inline-size: 0;
   /* Shrink-to-fit resolves against max-content, so a nowrap label widened the
-     row past its own node and the document with it. */
+     row past its own node and the document with it. The depth indent is
+     padding, so the cap must include it. */
   max-inline-size: 100%;
+  box-sizing: border-box;
   align-items: center;
   /* The deriver's channels, the same two the node compound below resolves;
      the proto axes stay as the no-artifact fallback. */
@@ -500,4 +502,12 @@
 }
 .rottay-tree-node.rottay-tree-node--disabled {
   cursor: not-allowed;
+}
+
+/* The engine's node wrapper shares the compound's class but is a block that
+   stacks its row over its child group; the row owns padding and cursor. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] {
+  display: block;
+  padding: 0;
+  cursor: auto;
 }
