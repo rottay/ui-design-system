@@ -2,20 +2,32 @@
  * @fileoverview The tooltip family: its four material recipes on the overlay
  * and raised materials, the palette inks and the elevation scale; its tone
  * bubbles on the palette seeds; and its shortcut keys and focus frame on
- * currentColor and the focus decisions.
+ * currentColor and the focus decisions. An authored unqualified `bg`/`color`
+ * pair paints the two overlay recipes; unauthored, they keep the overlay material.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/tooltip
  * @category Compilers
  * @package @rottay/design-system
  */
 
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { measureReadableInk } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import type { FamilyDeriver } from "../../../../foundation/contract";
+
+const OVERLAY_RECIPES = ["bordered", "minimal"] as const;
 
 /** A vertical's own tooltip chrome outranks every relation stated here. */
 export const tooltipChromeDeriver: FamilyDeriver = {
   family: "tooltip",
   rank: "derived",
-  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "states.focus"],
+  consumes: [
+    "palette.*",
+    "surfaces.materials",
+    "surfaces.elevation",
+    "states.focus",
+    "chrome.tooltip.bg",
+    "chrome.tooltip.color",
+  ],
   produces: [
     "--ds-tooltip-bordered-background",
     "--ds-tooltip-bordered-foreground",
@@ -58,10 +70,10 @@ export const tooltipChromeDeriver: FamilyDeriver = {
     "--ds-tooltip-shortcut-key-shadow",
     "--ds-tooltip-focus-color",
   ],
-  derive: () => deriveTooltipChannels(),
+  derive: (context) => deriveTooltipChannels(context.theme),
 };
 
-export function deriveTooltipChannels(): Record<string, string> {
+export function deriveTooltipChannels(theme?: FlatTheme): Record<string, string> {
   const vars: Record<string, string> = {};
   vars["--ds-tooltip-bordered-background"] = "var(--ds-material-overlay-background)";
   vars["--ds-tooltip-bordered-foreground"] = "var(--ds-color-text-primary)";
@@ -103,5 +115,28 @@ export function deriveTooltipChannels(): Record<string, string> {
   vars["--ds-tooltip-shortcut-key-border"] = "color-mix(in srgb, currentColor 28%, transparent)";
   vars["--ds-tooltip-shortcut-key-shadow"] = "inset 0 1px 0 color-mix(in srgb, currentColor 10%, transparent)";
   vars["--ds-tooltip-focus-color"] = "var(--ds-focus-ring-color)";
+  applyAuthoredPair(vars, theme?.chrome?.tooltip);
   return vars;
+}
+
+/**
+ * The frozen engines read `--ds-tooltip-bg`/`-color` directly, so the pair is
+ * referenced only when a theme states it and the root default never reaches Modern.
+ */
+function applyAuthoredPair(
+  vars: Record<string, string>,
+  tooltip: { readonly bg?: string; readonly color?: string } | undefined
+): void {
+  const bg = tooltip?.bg;
+  const color = tooltip?.color;
+  let ink: string | undefined;
+  if (color) ink = "var(--ds-tooltip-color)";
+  else if (bg) {
+    const measured = measureReadableInk(bg);
+    if (measured.status === "measured") ink = measured.ink;
+  }
+  for (const recipe of OVERLAY_RECIPES) {
+    if (bg) vars[`--ds-tooltip-${recipe}-background`] = "var(--ds-tooltip-bg)";
+    if (ink) vars[`--ds-tooltip-${recipe}-foreground`] = ink;
+  }
 }
