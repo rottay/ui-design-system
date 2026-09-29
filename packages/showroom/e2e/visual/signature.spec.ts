@@ -36,11 +36,13 @@ import { expectHydrated } from '../support/hydration';
 //                             that still reads `linear-gradient(...)` when the
 //                             intensity dial is 0, while the face goes flat.
 //                             It scales with the dial: 4.0 at 1, 0.785 at 0.2.
-//   4. the whole surface     -> the fraction of pixels that differ between the
-//                             two engines across the flagship set. Measured on
-//                             the overlapping rectangle, because two images of
-//                             different heights differ for reasons that have
-//                             nothing to do with a premium signature.
+//   4. the whole surface     -> the fraction of painted pixels that differ
+//                             between the two engines across the flagship set.
+//                             Layout-decoupled: the denominator is the pixels
+//                             that are not ground in either image, so gallery
+//                             geometry cannot dilute it, and a pixel differs
+//                             only if it has no match within 2px in the other
+//                             image, so a sub-pixel offset cannot inflate it.
 //   5. glass overlay backdrop -> NOT asserted here. It lives on the modal
 //                             backdrop, and the flagship gallery renders only
 //                             the modal's trigger button. Asserting on a closed
@@ -58,18 +60,23 @@ const TENANT = 'rottay';
 
 /**
  * Flagships whose modern and rustic renders must differ by at least
- * MIN_PIXEL_DIVERGENCE. Measured at authoring time on the overlapping rectangle:
- * button 7.4, input 5.7, card 8.3, badge 9.4, table 8.6, tabs 11.6, select 5.9.
+ * MIN_PIXEL_DIVERGENCE. Measured modern vs rustic on rottay at w=768:
+ * button 20.5, input 38.5, card 80.6, badge 46.6, table 51.8, tabs 81.9, select 63.6.
  * `modal` is excluded: the gallery renders its trigger, not the dialog.
  */
 const FLAGSHIPS: readonly string[] = ['button', 'input', 'card', 'badge', 'table', 'tabs', 'select'];
 
 /**
- * Percent of pixels that must differ. The smallest real reading is 5.7 (input).
- * A floor of 4 sits below every measured flagship and an order of magnitude
- * above the 0.9 that a genuinely indistinct pair produces.
+ * Percent of painted pixels that must differ. Healthy anchor: the smallest
+ * modern-vs-rustic reading is 20.5 (button). Null anchor: an indistinct pair,
+ * as a duplicated load or as the same render shifted 2px+1px, reads 0.0 on six
+ * flagships and at most 1.1 on tabs. A floor of 10 sits at half the healthy minimum.
  */
-const MIN_PIXEL_DIVERGENCE = 4;
+const MIN_PIXEL_DIVERGENCE = 10;
+
+/** Per-channel difference a pixel must exceed, and the offset it may be matched across. */
+const PIXEL_CHANNEL_TOLERANCE = 8;
+const PIXEL_SHIFT_TOLERANCE = 2;
 
 /** Minimum pixel contribution and normative alpha range of the shared hairline. */
 const MIN_HAIRLINE_CONTRIBUTION = 4;
@@ -367,7 +374,7 @@ test.describe('modern carries a premium signature rustic does not', () => {
       const rustic = await capture('rustic');
 
       const pctDiffering = await page.evaluate(
-        async ({ a, b }) => {
+        async ({ a, b, channelTolerance, shiftTolerance }) => {
           const load = async (url: string) => {
             const img = new Image();
             await new Promise((res, rej) => {
@@ -389,23 +396,59 @@ test.describe('modern carries a premium signature rustic does not', () => {
           const h = Math.min(ca.height, cb.height);
           const da = ca.getContext('2d')!.getImageData(0, 0, w, h).data;
           const db = cb.getContext('2d')!.getImageData(0, 0, w, h).data;
+
+          const distance = (p: Uint8ClampedArray, i: number, q: ArrayLike<number>, j: number) =>
+            Math.max(Math.abs(p[i] - q[j]), Math.abs(p[i + 1] - q[j + 1]), Math.abs(p[i + 2] - q[j + 2]));
+
+          // The ground is each image's most frequent color.
+          const ground = (d: Uint8ClampedArray) => {
+            const counts = new Map<number, number>();
+            let best = 0;
+            let key = 0;
+            for (let i = 0; i < d.length; i += 4) {
+              const k = (d[i] << 16) | (d[i + 1] << 8) | d[i + 2];
+              const n = (counts.get(k) ?? 0) + 1;
+              counts.set(k, n);
+              if (n > best) {
+                best = n;
+                key = k;
+              }
+            }
+            return [key >> 16, (key >> 8) & 255, key & 255];
+          };
+
+          const matchesNearby = (p: Uint8ClampedArray, i: number, q: Uint8ClampedArray, x: number, y: number) => {
+            for (let dy = -shiftTolerance; dy <= shiftTolerance; dy++) {
+              for (let dx = -shiftTolerance; dx <= shiftTolerance; dx++) {
+                const nx = x + dx;
+                const ny = y + dy;
+                if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+                if (distance(p, i, q, (ny * w + nx) * 4) <= channelTolerance) return true;
+              }
+            }
+            return false;
+          };
+
+          const ga = ground(da);
+          const gb = ground(db);
+          let painted = 0;
           let differing = 0;
           for (let i = 0; i < da.length; i += 4) {
-            const d = Math.max(
-              Math.abs(da[i] - db[i]),
-              Math.abs(da[i + 1] - db[i + 1]),
-              Math.abs(da[i + 2] - db[i + 2])
-            );
-            if (d > 8) differing++;
+            if (distance(da, i, ga, 0) <= channelTolerance && distance(db, i, gb, 0) <= channelTolerance) continue;
+            painted++;
+            if (distance(da, i, db, i) <= channelTolerance) continue;
+            const x = (i / 4) % w;
+            const y = Math.floor(i / 4 / w);
+            if (!matchesNearby(da, i, db, x, y) || !matchesNearby(db, i, da, x, y)) differing++;
           }
-          return (100 * differing) / (da.length / 4);
+          return painted === 0 ? 0 : (100 * differing) / painted;
         },
-        { a: modern, b: rustic }
+        { a: modern, b: rustic, channelTolerance: PIXEL_CHANNEL_TOLERANCE, shiftTolerance: PIXEL_SHIFT_TOLERANCE }
       );
 
       expect(
         pctDiffering,
-        `only ${pctDiffering.toFixed(1)}% of ${slug}'s pixels differ between modern and rustic. ` +
+        `only ${pctDiffering.toFixed(1)}% of ${slug}'s painted pixels differ between modern and rustic. ` +
           `The spec's own test: if a screenshot of the two side by side cannot be told apart, ` +
           `the engine is off-spec.`
       ).toBeGreaterThanOrEqual(MIN_PIXEL_DIVERGENCE);
