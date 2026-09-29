@@ -108320,6 +108320,10 @@ html[lang]:lang(ar) {
   --ds-z-index-popover: 1600;
   --ds-z-index-sticky: 1100;
   --ds-z-index-tooltip: 1700;
+  --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));
+  --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
+  --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));
+  --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));
 }
 
 /* === Compiled from Theme.modes.dark — do not edit === */
