@@ -96,20 +96,21 @@
  * as a fleet percentage is explicitly forbidden by `WO-EVI-05`.
  *
  * Usage:
- *   node scripts/check/theme/axis-difference/index.mjs                  measure and publish
+ *   node scripts/check/theme/axis-difference/index.mjs                  measure and publish indicator 7
  *   node scripts/check/theme/axis-difference/index.mjs --json           the full measurement
  *   node scripts/check/theme/axis-difference/index.mjs --vertical=evnto one vertical
  *   node scripts/check/theme/axis-difference/index.mjs --threshold=80   fail below 80 % per axis
  *   node scripts/check/theme/axis-difference/index.mjs --families=button,card
  *   node scripts/check/theme/axis-difference/index.mjs --no-part-mounts   the pre-lot reading
  *   node scripts/check/theme/axis-difference/index.mjs --collapsed-roots  the pre-repair root
- *   node scripts/check/theme/axis-difference/index.mjs --no-write         no run may publish the pilot record
+ *   node scripts/check/theme/axis-difference/index.mjs --no-write         publishes nothing (pilot record, indicator 7)
  *   AXIS_DIFFERENCE_NO_WRITE=1 vitest ...axis-difference-pilot              the same, from a vitest
  *   node scripts/check/theme/axis-difference/index.mjs --no-states-disabled  the pre-lot state set
  *   node scripts/check/theme/axis-difference/index.mjs --no-as-rendered   the pre-roster root
  *   node scripts/check/theme/axis-difference/index.mjs --no-part-reach    the pre-lot part law
  */
 
+import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -134,6 +135,13 @@ import {
   skinFamilies,
   stripCssComments,
 } from '../population/index.mjs';
+import {
+  INDICATOR_PATH,
+  buildIndicator,
+  indicatorRefusal,
+  negativeControlsOf,
+  writeIndicator,
+} from './indicator/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
@@ -3017,6 +3025,14 @@ export function denominatorLine(result, key = 'populations') {
     .join(', ');
 }
 
+function headCommit() {
+  try {
+    return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: CORE_ROOT, encoding: 'utf8' }).trim();
+  } catch {
+    return null;
+  }
+}
+
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
 if (isMain) {
   const argument = (name) =>
@@ -3144,8 +3160,24 @@ if (isMain) {
   console.log(
     '  publication of the pilot record (test-artifacts/gates/axis-difference-pilot): '
     + `${refusal === null ? 'permitted under this invocation' : `REFUSED — ${refusal}`}`
-    + ' — this CLI writes no artifact of its own',
+    + ' — this CLI does not write it',
   );
+  const indicatorBlocked = indicatorRefusal(result, {
+    argv: process.argv,
+    instrumentFailures: evaluate(result),
+    writeRefusal: refusal,
+  });
+  if (indicatorBlocked === null) {
+    const indicator = buildIndicator(result, {
+      negativeControls: negativeControlsOf(SCENARIOS),
+      producedAt: new Date().toISOString(),
+      commit: headCommit(),
+    });
+    console.log(`  indicator ${INDICATOR_PATH}: ${indicator.value}`);
+    writeIndicator(indicator, CORE_ROOT);
+  } else {
+    console.log(`  indicator ${INDICATOR_PATH}: NOT PUBLISHED — ${indicatorBlocked}`);
+  }
   const failures = evaluate(result, {
     threshold: thresholdArgument === undefined ? null : Number(thresholdArgument),
   });

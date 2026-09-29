@@ -468,12 +468,12 @@ export const CI_GATES = Object.freeze([
   // in every verdict the gate can reach, and its browser half -- a NULL pair,
   // two identical documents, which must read 0 % -- runs wherever a Chromium
   // resolves and names the reason when none does.
-  { id: 'axis-difference-drill', run: ['node', '--test', 'scripts/check/theme/axis-difference/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['axis-difference'],
+  { id: 'axis-difference-drill', run: ['node', '--test', 'scripts/check/theme/axis-difference/tests/index.test.mjs', 'scripts/check/theme/axis-difference/indicator/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['axis-difference'],
     distExemption:
       'MEASURED, not assumed: the probe imports dist/server.js lazily inside `run()`, and the only case that '
       + 'calls it is the browser half, which declares `skip` when dist/server.js is absent. Run with dist/ moved '
       + 'away the suite exits 0 with 21 passing assertions and the browser case skipped by written reason '
-      + '(2026-09-11).', },
+      + '(2026-09-11). The indicator-7 suite beside it reads no dist/ output.', },
   {
     id: 'axis-difference',
     run: ['node', 'scripts/check/theme/axis-difference/index.mjs'],
