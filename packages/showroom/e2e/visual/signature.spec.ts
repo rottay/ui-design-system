@@ -312,6 +312,16 @@ test.describe('modern carries a premium signature rustic does not', () => {
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     const read = async (engine: string) => {
       await loadProbe(page, engine, 'button');
+      // The server renders the recipe settled; the no-preference policy lands
+      // only once the client subscribes to the media query.
+      await page.waitForFunction(
+        () =>
+          document
+            .querySelector('[data-testid="probe-button"] button')
+            ?.getAttribute('data-recipe-state') === 'animated',
+        undefined,
+        { timeout: 15_000 }
+      );
       return page.evaluate(() => {
         const button = document.querySelector('[data-testid="probe-button"] button');
         return button ? getComputedStyle(button).transitionDuration.split(',')[0].trim() : null;
