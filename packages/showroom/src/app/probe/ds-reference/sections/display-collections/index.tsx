@@ -80,7 +80,7 @@ export function DisplayCollectionsScene() {
     <SceneFrame title="display — collections: table + list + tree + timeline + calendar">
       {/* ---- Table ---- */}
       <SpecimenRow axis="table — reviewer roster (sortable name, notes column carries long + unbroken content)">
-        <div data-testid="lab-display-table" style={{ minInlineSize: 320, maxInlineSize: '100%' }}>
+        <div data-testid="lab-display-table" style={{ minInlineSize: 'min(320px, 100%)', maxInlineSize: '100%' }}>
           <Table<ReviewRow>
             dataSource={REVIEW_ROWS}
             columns={REVIEW_COLUMNS}
@@ -92,7 +92,7 @@ export function DisplayCollectionsScene() {
 
       {/* ---- List ---- */}
       <SpecimenRow axis="list — reviewer roster with avatar/title/description meta, actions (one long description)">
-        <div data-testid="lab-display-list" style={{ minInlineSize: 300, maxInlineSize: 420 }}>
+        <div data-testid="lab-display-list" style={{ minInlineSize: 'min(300px, 100%)', maxInlineSize: 420 }}>
           <List
             dataSource={REVIEWERS}
             bordered
@@ -116,14 +116,14 @@ export function DisplayCollectionsScene() {
 
       {/* ---- Tree ---- */}
       <SpecimenRow axis="tree — nested categories, checkable, connecting lines (one long, one unbroken node title)">
-        <div data-testid="lab-display-tree" style={{ minInlineSize: 260, maxInlineSize: 380 }}>
+        <div data-testid="lab-display-tree" style={{ minInlineSize: 'min(260px, 100%)', maxInlineSize: 380 }}>
           <Tree treeData={TREE_DATA} checkable showLine defaultExpandedKeys={['1', '1-3']} />
         </div>
       </SpecimenRow>
 
       {/* ---- Timeline ---- */}
       <SpecimenRow axis="timeline — alternating mode, colored events, pending (one long entry)">
-        <div data-testid="lab-display-timeline" style={{ minInlineSize: 320, maxInlineSize: 480 }}>
+        <div data-testid="lab-display-timeline" style={{ minInlineSize: 'min(320px, 100%)', maxInlineSize: 480 }}>
           <Timeline mode="alternate" pending="Awaiting final sign-off">
             <Timeline.Item color="green" label="2026-07-01">
               Submitted for review
@@ -147,7 +147,7 @@ export function DisplayCollectionsScene() {
           single day cell overflowing its grid box, not paragraph wrap, so the
           unbroken token is the correct torture case here (not longParagraph). */}
       <SpecimenRow axis="calendar — month panel, fixed date, one day carries an unbroken event label">
-        <div data-testid="lab-display-calendar" style={{ minInlineSize: 280, maxInlineSize: 360 }}>
+        <div data-testid="lab-display-calendar" style={{ minInlineSize: 'min(280px, 100%)', maxInlineSize: 360 }}>
           <Calendar
             defaultValue={new Date('2026-08-15T00:00:00')}
             mode="month"
@@ -174,7 +174,7 @@ export function DisplayCollectionsScene() {
       {/* ---- Composition vignette ---- */}
       <Vignette label="review workspace — roster beside category tree">
         <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-          <div style={{ minInlineSize: 300, maxInlineSize: 420, flex: '1 1 360px' }}>
+          <div style={{ minInlineSize: 'min(300px, 100%)', maxInlineSize: 420, flex: '1 1 360px' }}>
             <Table<ReviewRow>
               dataSource={REVIEW_ROWS.slice(0, 3)}
               columns={REVIEW_COLUMNS.slice(0, 3)}
@@ -183,7 +183,7 @@ export function DisplayCollectionsScene() {
               size="sm"
             />
           </div>
-          <div style={{ minInlineSize: 220, maxInlineSize: 280 }}>
+          <div style={{ minInlineSize: 'min(220px, 100%)', maxInlineSize: 280 }}>
             <Tree treeData={TREE_DATA} defaultExpandedKeys={['1']} />
           </div>
         </div>

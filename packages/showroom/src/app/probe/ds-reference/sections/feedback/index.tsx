@@ -27,25 +27,25 @@ export function FeedbackScene() {
           if the four severities become indistinguishable, meaning was carried
           by hue alone and the non-colour relay is missing. */}
       <SpecimenRow axis="status severity — must survive grayscale">
-        <div style={{ minWidth: 260 }}>
+        <div style={{ minWidth: 'min(260px, 100%)' }}>
           <Alert type="info" showIcon message="Period open" description="Twelve records await review." />
         </div>
-        <div style={{ minWidth: 260 }}>
+        <div style={{ minWidth: 'min(260px, 100%)' }}>
           <Alert type="success" showIcon message="Approved" description="The reconciliation was accepted." />
         </div>
-        <div style={{ minWidth: 260 }}>
+        <div style={{ minWidth: 'min(260px, 100%)' }}>
           <Alert type="warning" showIcon message="Closing soon" description="Two days remain in this period." />
         </div>
-        <div style={{ minWidth: 260 }}>
+        <div style={{ minWidth: 'min(260px, 100%)' }}>
           <Alert type="error" showIcon message="Rejected" description="A required approval is missing." />
         </div>
       </SpecimenRow>
 
       <SpecimenRow axis="alert — closable, no icon, long content">
-        <div style={{ minWidth: 300 }}>
+        <div style={{ minWidth: 'min(300px, 100%)' }}>
           <Alert type="info" closable message="Dismissable" description="Carries a close affordance." />
         </div>
-        <div style={{ minWidth: 300 }}>
+        <div style={{ minWidth: 'min(300px, 100%)' }}>
           <Alert type="warning" message="No icon" description={TORTURE_CONTENT.longLabel} />
         </div>
       </SpecimenRow>

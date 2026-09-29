@@ -30,7 +30,7 @@ export function ConfigMonochromeASurface({ only }: { only: string }): ReactNode 
               cut off. Same class as the CropMarks tick hazard below. */}
           <Box padding="lg">
           <Flex gap="xl" wrap="wrap">
-            <Box flex="1" minW="280px">
+            <Box flex="1" minW="min(280px, 100%)">
               <AsciiFrame variant="single" label="ENGINE">
                 <Stack spacing="sm">
                   <Text as="p" weight="semibold">
@@ -43,7 +43,7 @@ export function ConfigMonochromeASurface({ only }: { only: string }): ReactNode 
                 </Stack>
               </AsciiFrame>
             </Box>
-            <Box flex="1" minW="280px">
+            <Box flex="1" minW="min(280px, 100%)">
               <AsciiFrame variant="double" label="VERIFIED" aria-label="Verified engineering claim">
                 <Stack spacing="sm">
                   <Text as="p" weight="semibold">

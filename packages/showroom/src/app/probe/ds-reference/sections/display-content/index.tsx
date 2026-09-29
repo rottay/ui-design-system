@@ -79,7 +79,7 @@ export function DisplayContentScene() {
     <SceneFrame title="display — content: typography + markdownview + codeblock + image + carousel + qrcode">
       {/* ---- Typography ---- */}
       <SpecimenRow axis="typography — headings, text weights/colors, paragraph lineClamp, link">
-        <div data-testid="lab-display-typography" style={{ display: 'block', minInlineSize: 260, maxInlineSize: 420 }}>
+        <div data-testid="lab-display-typography" style={{ display: 'block', minInlineSize: 'min(260px, 100%)', maxInlineSize: 420 }}>
           <Heading level="h2" style={{ margin: 0 }}>
             Quarterly reconciliation
           </Heading>
@@ -105,14 +105,14 @@ export function DisplayContentScene() {
 
       {/* ---- MarkdownView ---- */}
       <SpecimenRow axis="markdownview — heading, list, link, inline code, blockquote (long), table, fenced code">
-        <div data-testid="lab-display-markdownview" style={{ minInlineSize: 320, maxInlineSize: 560 }}>
+        <div data-testid="lab-display-markdownview" style={{ minInlineSize: 'min(320px, 100%)', maxInlineSize: 560 }}>
           <MarkdownView source={MARKDOWN_SOURCE} />
         </div>
       </SpecimenRow>
 
       {/* ---- CodeBlock ---- */}
       <SpecimenRow axis="codeblock — line numbers, highlighted lines, long import line, required copy labels">
-        <div data-testid="lab-display-codeblock" style={{ minInlineSize: 320, maxInlineSize: 560 }}>
+        <div data-testid="lab-display-codeblock" style={{ minInlineSize: 'min(320px, 100%)', maxInlineSize: 560 }}>
           <CodeBlock
             code={CODE_SAMPLE}
             language="typescript"
@@ -143,7 +143,7 @@ export function DisplayContentScene() {
 
       {/* ---- Carousel ---- */}
       <SpecimenRow axis="carousel — dots, arrows, three slides (one long-content slide)">
-        <div data-testid="lab-display-carousel" style={{ minInlineSize: 320, maxInlineSize: 480, blockSize: 180 }}>
+        <div data-testid="lab-display-carousel" style={{ minInlineSize: 'min(320px, 100%)', maxInlineSize: 480, blockSize: 180 }}>
           <Carousel dots arrows>
             <Carousel.Item backgroundColor="var(--ds-color-bg-secondary)">
               <Heading level="h4" style={{ margin: 0 }}>

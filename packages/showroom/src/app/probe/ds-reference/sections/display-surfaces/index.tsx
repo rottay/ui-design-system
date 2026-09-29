@@ -27,7 +27,7 @@ export function DisplaySurfacesScene() {
     <SceneFrame title="display — surfaces: card + callout + empty + descriptions + statistic">
       {/* ---- Card ---- */}
       <SpecimenRow axis="card — variants, header/body/footer compound">
-        <div data-testid="lab-display-card" style={{ minInlineSize: 280, maxInlineSize: 360 }}>
+        <div data-testid="lab-display-card" style={{ minInlineSize: 'min(280px, 100%)', maxInlineSize: 360 }}>
           <Card variant="elevated" padding="md">
             <Card.Header title="Quarterly reconciliation" subtitle="Finance • Q3 2026" />
             <Card.Body>Twelve records were reviewed against the published ledger.</Card.Body>
@@ -36,24 +36,24 @@ export function DisplaySurfacesScene() {
         </div>
       </SpecimenRow>
       <SpecimenRow axis="card — outlined, filled, ghost">
-        <div style={{ minInlineSize: 200, maxInlineSize: 260 }}>
+        <div style={{ minInlineSize: 'min(200px, 100%)', maxInlineSize: 260 }}>
           <Card variant="outlined" padding="sm">
             <Card.Body>Outlined surface</Card.Body>
           </Card>
         </div>
-        <div style={{ minInlineSize: 200, maxInlineSize: 260 }}>
+        <div style={{ minInlineSize: 'min(200px, 100%)', maxInlineSize: 260 }}>
           <Card variant="filled" padding="sm">
             <Card.Body>Filled surface</Card.Body>
           </Card>
         </div>
-        <div style={{ minInlineSize: 200, maxInlineSize: 260 }}>
+        <div style={{ minInlineSize: 'min(200px, 100%)', maxInlineSize: 260 }}>
           <Card variant="ghost" padding="sm">
             <Card.Body>Ghost surface</Card.Body>
           </Card>
         </div>
       </SpecimenRow>
       <SpecimenRow axis="card — long content">
-        <div style={{ minInlineSize: 260, maxInlineSize: 340 }}>
+        <div style={{ minInlineSize: 'min(260px, 100%)', maxInlineSize: 340 }}>
           <Card variant="outlined" padding="md">
             <Card.Header title={TORTURE_CONTENT.longLabel} />
             <Card.Body>{TORTURE_CONTENT.longParagraph}</Card.Body>
@@ -63,36 +63,36 @@ export function DisplaySurfacesScene() {
 
       {/* ---- Callout ---- */}
       <SpecimenRow axis="callout — tone strip, closable, title">
-        <div style={{ minInlineSize: 260 }}>
+        <div style={{ minInlineSize: 'min(260px, 100%)' }}>
           <div data-testid="lab-display-callout" style={{ display: 'block' }}>
             <Callout tone="info" title="Period open">
               Twelve records await review before the period closes.
             </Callout>
           </div>
         </div>
-        <div style={{ minInlineSize: 260 }}>
+        <div style={{ minInlineSize: 'min(260px, 100%)' }}>
           <Callout tone="success" title="Approved">
             The reconciliation was accepted.
           </Callout>
         </div>
-        <div style={{ minInlineSize: 260 }}>
+        <div style={{ minInlineSize: 'min(260px, 100%)' }}>
           <Callout tone="warning" title="Closing soon" closable onClose={() => undefined}>
             Two days remain in this period.
           </Callout>
         </div>
-        <div style={{ minInlineSize: 260 }}>
+        <div style={{ minInlineSize: 'min(260px, 100%)' }}>
           <Callout tone="danger" title="Rejected" action={<Button variant="ghost">Resubmit</Button>}>
             A required approval is missing.
           </Callout>
         </div>
       </SpecimenRow>
       <SpecimenRow axis="callout — long content, ar (RTL)">
-        <div style={{ minInlineSize: 260, maxInlineSize: 380 }}>
+        <div style={{ minInlineSize: 'min(260px, 100%)', maxInlineSize: 380 }}>
           <Callout tone="warning" title={TORTURE_CONTENT.longLabel}>
             {TORTURE_CONTENT.longParagraph}
           </Callout>
         </div>
-        <div dir="rtl" lang="ar" style={{ minInlineSize: 260, maxInlineSize: 380 }}>
+        <div dir="rtl" lang="ar" style={{ minInlineSize: 'min(260px, 100%)', maxInlineSize: 380 }}>
           <Callout tone="danger" title="خطأ">
             {TORTURE_CONTENT.arabic}
           </Callout>
@@ -101,24 +101,24 @@ export function DisplaySurfacesScene() {
 
       {/* ---- Empty ---- */}
       <SpecimenRow axis="empty — default and simple image, action">
-        <div data-testid="lab-display-empty" style={{ minInlineSize: 220 }}>
+        <div data-testid="lab-display-empty" style={{ minInlineSize: 'min(220px, 100%)' }}>
           <Empty description="Your queue is empty">
             <Button variant="outline">Start review</Button>
           </Empty>
         </div>
-        <div style={{ minInlineSize: 220 }}>
+        <div style={{ minInlineSize: 'min(220px, 100%)' }}>
           <Empty image="simple" description="No matching records" />
         </div>
       </SpecimenRow>
       <SpecimenRow axis="empty — long content">
-        <div style={{ minInlineSize: 260, maxInlineSize: 340 }}>
+        <div style={{ minInlineSize: 'min(260px, 100%)', maxInlineSize: 340 }}>
           <Empty description={TORTURE_CONTENT.longParagraph} />
         </div>
       </SpecimenRow>
 
       {/* ---- Descriptions ---- */}
       <SpecimenRow axis="descriptions — title, bordered, 2-column grid">
-        <div data-testid="lab-display-descriptions" style={{ minInlineSize: 320, maxInlineSize: 480 }}>
+        <div data-testid="lab-display-descriptions" style={{ minInlineSize: 'min(320px, 100%)', maxInlineSize: 480 }}>
           <Descriptions title="Record detail" column={2} bordered>
             <Descriptions.Item label="Reviewer">Jane Doe</Descriptions.Item>
             <Descriptions.Item label="Status">Pending</Descriptions.Item>
@@ -131,7 +131,7 @@ export function DisplaySurfacesScene() {
         </div>
       </SpecimenRow>
       <SpecimenRow axis="descriptions — long value, ar (RTL), unbroken token">
-        <div style={{ minInlineSize: 280, maxInlineSize: 420 }}>
+        <div style={{ minInlineSize: 'min(280px, 100%)', maxInlineSize: 420 }}>
           <Descriptions column={1} bordered>
             <Descriptions.Item label="Summary">{TORTURE_CONTENT.longParagraph}</Descriptions.Item>
             <Descriptions.Item label="Reference">{TORTURE_CONTENT.unbroken}</Descriptions.Item>
