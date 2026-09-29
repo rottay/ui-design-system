@@ -73,7 +73,8 @@
     "next_page": "Next page",
     "range_of": "{start} – {end} of {total}",
     "resize_column": "Resize column {column}",
-    "edit_cell": "Edit cell"
+    "edit_cell": "Edit cell",
+    "save_failed": "Unable to save this change."
   },
   "upload": {
     "button": "Upload",
@@ -928,6 +929,10 @@
     "move_reorder": "Moved to position {position} in {column}",
     "move_edge": "Cannot move further in that direction",
     "empty_column": "No items"
+  },
+  "widgetBoard": {
+    "catalog_search": "Search widgets",
+    "catalog_no_results": "No widgets match the search"
   },
   "map_view": {
     "placeholder": "Map placeholder",

@@ -73,7 +73,8 @@
     "next_page": "الصفحة التالية",
     "range_of": "{start} – {end} من {total}",
     "resize_column": "تغيير عرض العمود {column}",
-    "edit_cell": "تعديل الخلية"
+    "edit_cell": "تعديل الخلية",
+    "save_failed": "تعذّر حفظ هذا التغيير."
   },
   "upload": {
     "drag_drop": "اسحب الملفات هنا أو انقر للاختيار",
@@ -928,6 +929,10 @@
     "move_reorder": "تم النقل إلى الموضع {position} في {column}",
     "move_edge": "لا يمكن النقل أكثر في هذا الاتجاه",
     "empty_column": "لا توجد عناصر"
+  },
+  "widgetBoard": {
+    "catalog_search": "البحث في الأدوات",
+    "catalog_no_results": "لا توجد أدوات تطابق البحث"
   },
   "map_view": {
     "placeholder": "عنصر نائب للخريطة",

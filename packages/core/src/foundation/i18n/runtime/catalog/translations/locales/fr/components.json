@@ -62,7 +62,8 @@
     "clear_filters": "Effacer les filtres",
     "rows_selected": "{count} lignes sélectionnées",
     "range_of": "{start} – {end} sur {total}",
-    "edit_cell": "Modifier la cellule"
+    "edit_cell": "Modifier la cellule",
+    "save_failed": "Impossible d'enregistrer cette modification."
   },
   "upload": {
     "button": "Envoyer",
@@ -1231,6 +1232,10 @@
     "add_item": "Ajouter un élément",
     "empty_board": "Aucune colonne",
     "empty_column": "Aucun élément"
+  },
+  "widgetBoard": {
+    "catalog_search": "Rechercher des widgets",
+    "catalog_no_results": "Aucun widget ne correspond à la recherche"
   },
   "tableToolbar": {
     "searchPlaceholder": "Rechercher...",

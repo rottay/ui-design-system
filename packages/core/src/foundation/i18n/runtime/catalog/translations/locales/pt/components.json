@@ -71,7 +71,8 @@
     "previous_page": "Página anterior",
     "next_page": "Próxima página",
     "range_of": "{start} – {end} de {total}",
-    "resize_column": "Redimensionar coluna {column}"
+    "resize_column": "Redimensionar coluna {column}",
+    "save_failed": "Não foi possível salvar esta alteração."
   },
   "upload": {
     "drag_drop": "Arraste arquivos aqui ou clique para selecionar",
@@ -1204,6 +1205,10 @@
     "add_item": "Adicionar item",
     "empty_board": "Sem colunas",
     "empty_column": "Nenhum item"
+  },
+  "widgetBoard": {
+    "catalog_search": "Pesquisar widgets",
+    "catalog_no_results": "Nenhum widget corresponde à pesquisa"
   },
   "map_view": {
     "viewport": "Janela do mapa"

@@ -73,7 +73,8 @@
     "next_page": "Página siguiente",
     "range_of": "{start} – {end} de {total}",
     "resize_column": "Redimensionar columna {column}",
-    "edit_cell": "Editar celda"
+    "edit_cell": "Editar celda",
+    "save_failed": "No se pudo guardar este cambio."
   },
   "upload": {
     "button": "Subir",
@@ -928,6 +929,10 @@
     "move_reorder": "Movido a la posición {position} en {column}",
     "move_edge": "No se puede mover más en esa dirección",
     "empty_column": "Sin elementos"
+  },
+  "widgetBoard": {
+    "catalog_search": "Buscar widgets",
+    "catalog_no_results": "Ningún widget coincide con la búsqueda"
   },
   "map_view": {
     "placeholder": "Marcador de posición del mapa",

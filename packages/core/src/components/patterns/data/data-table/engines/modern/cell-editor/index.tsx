@@ -11,6 +11,9 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { EditableConfig } from '@/foundation/contracts/runtime/components/patterns/core';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+
+const SAVE_FAILED_FALLBACK = 'Unable to save this change.';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -61,6 +64,7 @@ export function InlineCellEditor<T>({
   const [editValue, setEditValue] = useState<unknown>(value);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | HTMLSelectElement>(null);
+  const translate = useOptionalTranslation('components')?.t;
   // Every editor control is named after its column; without it a screen
   // reader focus landing inside the cell announces an unlabeled field.
   const accessibleName = columnLabel ?? columnKey;
@@ -92,10 +96,15 @@ export function InlineCellEditor<T>({
       await onSave(nextValue);
       return true;
     } catch (saveError) {
-      setError(saveError instanceof Error ? saveError.message : 'Unable to save this change.');
+      // A thrown Error's message outranks the catalog; no provider keeps the English floor.
+      setError(
+        saveError instanceof Error
+          ? saveError.message
+          : translate?.('table.save_failed') ?? SAVE_FAILED_FALLBACK,
+      );
       return false;
     }
-  }, [row, config, onSave]);
+  }, [row, config, onSave, translate]);
 
   const attemptSave = useCallback(
     () => saveValue(editValue),

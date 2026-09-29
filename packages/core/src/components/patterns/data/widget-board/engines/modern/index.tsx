@@ -6,6 +6,7 @@ import { createLayoutCommit } from '../../runtime/adaptive/policy';
 import type { ContainerPosture } from '../../../../runtime/adaptive-layout/foundation';
 import { ModernGrid } from '../../../../../primitives/layout/grid/engines/modern';
 import { useAdaptation } from '@/infrastructure/runtime/adaptation';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /** Before the board is measured, the viewport names the posture a commit lands in. */
 const VIEWPORT_CONTAINER: Record<string, ContainerPosture> = {
@@ -42,7 +43,20 @@ function ModernCatalogGrid({
  * Modern also slots in the auto-fit catalog Grid and the root's measured posture.
  */
 export default function ModernWidgetBoard(props: WidgetBoardProps): React.ReactElement {
-  const { className, adapt, catalogMinItem = 'md', onItemsChange, onLayoutChange, ...rest } = props;
+  const { className, adapt, catalogMinItem = 'md', onItemsChange, onLayoutChange, labels, ...rest } = props;
+  // Caller labels outrank the catalog; without a provider the shared English floor stays.
+  const translate = useOptionalTranslation('components')?.t;
+  const catalogLabels = useMemo<WidgetBoardProps['labels']>(
+    () =>
+      translate
+        ? {
+            ...labels,
+            catalogSearchPlaceholder: labels.catalogSearchPlaceholder ?? translate('widgetBoard.catalog_search'),
+            catalogNoResults: labels.catalogNoResults ?? translate('widgetBoard.catalog_no_results'),
+          }
+        : labels,
+    [labels, translate],
+  );
   const rootRef = useRef<HTMLElement | null>(null);
   const base = useMemo<WidgetBoardAdaptation>(() => ({ catalogMinItem }), [catalogMinItem]);
   const { adaptation, posture, postureAttribute } = useAdaptation<WidgetBoardAdaptation>(adapt, {
@@ -63,6 +77,7 @@ export default function ModernWidgetBoard(props: WidgetBoardProps): React.ReactE
     <CatalogMinItemContext.Provider value={adaptation.catalogMinItem ?? catalogMinItem}>
       <WidgetBoardEngine
         {...rest}
+        labels={catalogLabels}
         onItemsChange={commitItems}
         className={['ds-engine-modern', className].filter(Boolean).join(' ')}
         modernSlots={modernSlots}
