@@ -170,8 +170,11 @@ interface ChromeReadings {
 interface OverlayChromeReadings {
   tooltipBackground: string;
   tooltipRadius: string;
+  tooltipBorderColor: string;
+  tooltipShadow: string;
   popoverBackground: string;
   popoverRadius: string;
+  popoverShadow: string;
 }
 
 interface PixelDiffMetrics {
@@ -942,6 +945,8 @@ async function readOverlayChrome(page: Page): Promise<OverlayChromeReadings> {
     return {
       background: style.backgroundColor,
       radius: style.borderTopLeftRadius,
+      borderColor: style.borderTopColor,
+      shadow: style.boxShadow,
     };
   });
   await page.keyboard.press("Escape");
@@ -955,6 +960,8 @@ async function readOverlayChrome(page: Page): Promise<OverlayChromeReadings> {
     return {
       background: style.backgroundColor,
       radius: style.borderTopLeftRadius,
+      borderColor: style.borderTopColor,
+      shadow: style.boxShadow,
     };
   });
   await page.keyboard.press("Escape");
@@ -981,8 +988,11 @@ async function readOverlayChrome(page: Page): Promise<OverlayChromeReadings> {
   return {
     tooltipBackground: tooltipChrome.background,
     tooltipRadius: tooltipChrome.radius,
+    tooltipBorderColor: tooltipChrome.borderColor,
+    tooltipShadow: tooltipChrome.shadow,
     popoverBackground: popoverChrome.background,
     popoverRadius: popoverChrome.radius,
+    popoverShadow: popoverChrome.shadow,
   };
 }
 
