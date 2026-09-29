@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { collectRules, SKIN_DIRS } from './skin-rule-coverage.lib.mjs';
+import { collectRules, isForeignVendorSelector, postureSettled, probeSelectors, SKIN_DIRS } from './skin-rule-coverage.lib.mjs';
 import { expectHydrated } from '../support/hydration';
 
 // ---------------------------------------------------------------------------
@@ -49,7 +49,47 @@ const TORTURE_SECTIONS = [
   'overlayfb', 'pickers', 'rail', 'record', 'rtl', 'statusfb', 'tablestates',
 ];
 
-type Rule = { engine: string; file: string; selector: string; probe: string; skeleton: string };
+type Rule = { engine: string; file: string; selector: string; group: string; probe: string; skeleton: string };
+type Answer = 'hit' | 'miss' | 'invalid';
+
+const QUIET_MS = 300;
+const SETTLE_BUDGET_MS = 10_000;
+
+// Hydration is not the settled page: read only once every data-posture carries the
+// real viewport (post-hydration transition) and the DOM has stopped mutating.
+async function expectSettled(page: Page): Promise<boolean> {
+  await expect
+    .poll(
+      async () => {
+        const { width, postures } = await page.evaluate(() => ({
+          width: window.innerWidth,
+          postures: Array.from(document.querySelectorAll('[data-posture]'), (el) => el.getAttribute('data-posture') ?? ''),
+        }));
+        return postureSettled(postures, width);
+      },
+      { message: `posture never settled on ${page.url()}`, timeout: SETTLE_BUDGET_MS, intervals: [50] },
+    )
+    .toBe(true);
+  return page.evaluate(
+    ([quietMs, budgetMs]) =>
+      new Promise<boolean>((resolve) => {
+        let timer = setTimeout(done, quietMs, true);
+        const cap = setTimeout(done, budgetMs, false);
+        const observer = new MutationObserver(() => {
+          clearTimeout(timer);
+          timer = setTimeout(done, quietMs, true);
+        });
+        function done(quiet: boolean) {
+          observer.disconnect();
+          clearTimeout(timer);
+          clearTimeout(cap);
+          resolve(quiet);
+        }
+        observer.observe(document, { subtree: true, childList: true, attributes: true });
+      }),
+    [QUIET_MS, SETTLE_BUDGET_MS] as const,
+  );
+}
 type DeadAnchor = { file: string; selectors: string[]; liveInFile: number };
 
 /** Reviewed allow-list. deadAnchors MUST stay empty; any entry needs a reason. */
@@ -68,6 +108,12 @@ test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) =>
 
   const matched = new Set<number>();
   const skeletonMatched = new Set<number>();
+  const invalid = new Set<number>();
+  const unappliable = new Set<number>();
+  const foreignVendor = new Set<number>();
+  const droppedByGroup = new Set<number>();
+  const unvisited: string[] = [];
+  const unquiet: string[] = [];
 
   for (const engine of ['modern', 'rustic'] as const) {
     for (const section of TORTURE_SECTIONS) {
@@ -75,19 +121,23 @@ test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) =>
       try {
         await page.goto(url, { waitUntil: 'networkidle', timeout: 30_000 });
       } catch {
+        unvisited.push(url);
         continue;
       }
       await expectHydrated(page);
-      const payload = rules.map((r) => [r.probe, r.skeleton] as const);
-      const hits: Array<[boolean, boolean]> = await page.evaluate((sels) => {
-        const ask = (s: string) => {
-          try { return document.querySelector(s) !== null; } catch { return true; }
-        };
-        return sels.map(([p, k]) => [ask(p), ask(k)] as [boolean, boolean]);
-      }, payload);
-      hits.forEach(([full, skel], i) => {
-        if (full) matched.add(i);
-        if (skel) skeletonMatched.add(i);
+      if (!(await expectSettled(page))) unquiet.push(url);
+      const payload = rules.map((r) => [r.group, r.selector, r.probe, r.skeleton]);
+      const hits = (await page.evaluate(probeSelectors, payload)) as Array<[Answer, Answer, Answer, Answer]>;
+      hits.forEach(([group, source, full, skel], i) => {
+        if (source === 'invalid') {
+          (isForeignVendorSelector(rules[i].selector) ? foreignVendor : unappliable).add(i);
+          return;
+        }
+        // A valid selector listed beside an invalid one: the browser drops the whole rule.
+        if (group === 'invalid') { droppedByGroup.add(i); return; }
+        if (full === 'invalid' || skel === 'invalid') { invalid.add(i); return; }
+        if (full === 'hit') matched.add(i);
+        if (skel === 'hit') skeletonMatched.add(i);
       });
     }
   }
@@ -96,7 +146,23 @@ test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) =>
   // on any page we visited -- that is a coverage gap in the torture page, not a
   // dead rule, and we must not report it as one.
   const byFile = new Map<string, { total: number; unexercised: Rule[]; deadAnchor: Rule[] }>();
+  const invalidSelectors: Array<{ file: string; selector: string; probe: string; skeleton: string }> = [];
+  const unappliableRules: Array<{ file: string; selector: string; reason: string }> = [];
   rules.forEach((r, i) => {
+    // The browser rejects it: it matches nothing and must never count as live.
+    if (foreignVendor.has(i)) return;
+    if (unappliable.has(i) || droppedByGroup.has(i)) {
+      unappliableRules.push({
+        file: `${r.engine}/${r.file}`,
+        selector: r.selector,
+        reason: unappliable.has(i) ? 'selector rejected' : 'grouped with a selector this browser rejects',
+      });
+      return;
+    }
+    if (invalid.has(i)) {
+      invalidSelectors.push({ file: `${r.engine}/${r.file}`, selector: r.selector, probe: r.probe, skeleton: r.skeleton });
+      return;
+    }
     const key = `${r.engine}/${r.file}`;
     if (!byFile.has(key)) byFile.set(key, { total: 0, unexercised: [], deadAnchor: [] });
     const e = byFile.get(key)!;
@@ -123,6 +189,15 @@ test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) =>
   const report = {
     probeableSelectors: rules.length,
     skinFiles: byFile.size,
+    // Navigations that failed, and pages still mutating when read (both void coverage).
+    unvisitedPages: unvisited,
+    unquietPages: unquiet,
+    // Rejected by this browser (the selector, or a list member beside it): paints nothing here.
+    unappliableRules,
+    // Another engine's vendor pseudo (::-moz-*): unmeasurable in Chromium, not a finding.
+    foreignVendorSelectors: foreignVendor.size,
+    // A probe or skeleton rejected over a valid source: an instrument defect, never a match.
+    invalidSelectors,
     // The component never rendered anywhere we looked. A torture-page coverage
     // gap; says nothing about the rules themselves.
     uncoveredFiles: uncovered.sort(),
@@ -137,6 +212,7 @@ test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) =>
   writeFileSync(join(HERE, '../../dead-selector-report.json'), JSON.stringify(report, null, 2));
 
   const totalUnexercised = thinFixtures.reduce((n, f) => n + f.unexercised, 0);
+  console.log(`### unappliable skin rules: ${unappliableRules.length}; foreign-vendor selectors: ${foreignVendor.size}; instrument-invalid selectors: ${invalidSelectors.length}; unvisited pages: ${unvisited.length}; unquiet pages: ${unquiet.length}`);
   console.log(`### uncovered skin files (component never rendered — torture-page gap): ${uncovered.length}`);
   console.log(`### DEAD ANCHORS — rules whose part is absent no matter the state: ${deadAnchors.length} files`);
   for (const d of deadAnchors.slice(0, 20)) {
@@ -152,6 +228,9 @@ test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) =>
   // reason); the residual after removing them must be zero. thinFixtures and
   // uncovered are measured above and written to the report, but do not fail the
   // gate: an unphotographed state is a coverage hole, not a dead rule.
+  expect(unvisited, 'torture sections that never loaded: their components read as uncovered').toEqual([]);
+  expect(invalidSelectors, 'probe/skeleton rejected over a valid source selector: the instrument relaxed it into invalid CSS').toEqual([]);
+  expect(unappliableRules, 'skin selectors the browser rejects: the rule paints nothing in any page').toEqual([]);
   const reviewed = loadReviewedDeadAnchors();
   const reviewedByFile = new Map(reviewed.map((r) => [r.file, new Set(r.selectors)]));
   const unreviewed = deadAnchors
