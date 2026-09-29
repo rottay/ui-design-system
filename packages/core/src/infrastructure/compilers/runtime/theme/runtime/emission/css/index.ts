@@ -13,6 +13,8 @@ import {
 } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
 import { admitCssVariables } from "@/infrastructure/compilers/kernel/foundation/css/value-safety";
 
+import { rootAliasRedeclarations } from "./root-aliases";
+
 export { containerScope, firstPartyScope, tenantArtifactScope };
 
 /**
@@ -33,9 +35,23 @@ export { containerScope, firstPartyScope, tenantArtifactScope };
  * six emitters downstream of this line.
  */
 export function emitDeclarations(
+  variables: Readonly<Record<string, string>>,
+  options: { readonly alsoStated?: Iterable<string> } = {}
+): string[] {
+  return Object.entries(
+    withRootAliases(admitCssVariables(variables), options.alsoStated)
+  ).map(([name, value]) => `  ${name}: ${value};`);
+}
+
+/**
+ * A block that shares its element with the base rule (a mode, a contrast delta):
+ * the base rule's aliases already re-resolve against its operands there, and a
+ * restatement here would outrank a value the base rule names outright.
+ */
+export function emitOverlayDeclarations(
   variables: Readonly<Record<string, string>>
 ): string[] {
-  return Object.entries(withRadiusChain(admitCssVariables(variables))).map(
+  return Object.entries(admitCssVariables(variables)).map(
     ([name, value]) => `  ${name}: ${value};`
   );
 }
@@ -51,22 +67,26 @@ export function radiusChainValue(step: (typeof RADIUS_CHAIN_STEPS)[number]): str
 }
 
 /**
- * A custom property resolves its `var()` where it is declared, so a step
- * declared only at `:root` paints the root's operands under every nested scope.
- * A block that states an operand re-declares the steps it moves; a step the
- * block names outright keeps that value.
+ * The block's own channels followed by every root alias they, or `alsoStated`
+ * (operands the scope states on the same element in another rule), re-resolve.
+ * A name the block states outright keeps its value.
  */
-export function withRadiusChain(
-  variables: Readonly<Record<string, string>>
+export function withRootAliases(
+  variables: Readonly<Record<string, string>>,
+  alsoStated: Iterable<string> = []
 ): Record<string, string> {
-  const chained: Record<string, string> = { ...variables };
-  const scaled = RADIUS_SCALE_VARIABLE in variables;
-  for (const step of RADIUS_CHAIN_STEPS) {
-    const name = `--ds-radius-${step}`;
-    if (name in variables) continue;
-    if (scaled || `${name}-base` in variables) chained[name] = radiusChainValue(step);
-  }
-  return chained;
+  const own = new Set(Object.keys(variables));
+  return {
+    ...variables,
+    ...rootAliasRedeclarations([...own, ...alsoStated], own),
+  };
+}
+
+/** The admitted names of the rules that share the base rule's element. */
+export function sameElementNames(
+  blocks: readonly { readonly cssVariables: Readonly<Record<string, string>> }[]
+): string[] {
+  return blocks.flatMap((block) => Object.keys(admitCssVariables(block.cssVariables)));
 }
 
 /** One CSS rule from a selector and already-formatted declarations. */
@@ -88,7 +108,12 @@ export function emitBaseRule(
   scope: EmissionScope,
   options: { leadingDeclarations?: readonly string[] } = {}
 ): string {
-  const entries = emitDeclarations(compiled.cssVariables);
+  const entries = emitDeclarations(compiled.cssVariables, {
+    alsoStated: sameElementNames([
+      ...compiled.modeBlocks,
+      ...(compiled.contrastBlocks ?? []),
+    ]),
+  });
   const leading = options.leadingDeclarations ?? [];
   if (entries.length === 0 && leading.length === 0 && !compiled.colorScheme) return "";
   return emitRule(scope.baseSelector, [
@@ -105,7 +130,7 @@ export function emitModeRule(
 ): string {
   return emitRule(scope.modeSelector(mode.mode), [
     `  color-scheme: ${mode.colorScheme};`,
-    ...emitDeclarations(mode.cssVariables),
+    ...emitOverlayDeclarations(mode.cssVariables),
   ]);
 }
 
@@ -117,7 +142,7 @@ export function emitContrastRule(
   scope: EmissionScope
 ): string {
   const rules = blocks
-    .map((block) => ({ block, declarations: emitDeclarations(block.cssVariables) }))
+    .map((block) => ({ block, declarations: emitOverlayDeclarations(block.cssVariables) }))
     .filter(({ declarations }) => declarations.length > 0)
     .map(({ block, declarations }) =>
       emitRule(

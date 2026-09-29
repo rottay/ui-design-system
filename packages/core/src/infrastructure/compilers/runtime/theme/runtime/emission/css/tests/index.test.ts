@@ -25,7 +25,8 @@ import {
   firstPartyScope,
   tenantArtifactScope,
 } from "../..";
-import { RADIUS_CHAIN_STEPS, radiusChainValue } from "..";
+import { emitOverlayDeclarations, RADIUS_CHAIN_STEPS, radiusChainValue } from "..";
+import { ROOT_ALIASES } from "../root-aliases";
 import { FIRST_PARTY_BASELINES, resolveFirstParty } from "@tests/support/theme-lowering";
 
 const modern = resolveAdapter("modern");
@@ -45,21 +46,32 @@ function referenceCss(compiled: ThemeCompilation, slug: string): string {
   const root = `html[data-tenant='${slug}']`;
   const modeSelector = (mode: string) =>
     `${root}[data-theme='${mode}'], ${root}.${mode}`;
-  // A block stating a radius operand restates the `:root` step over it.
-  const chained = (variables: Readonly<Record<string, string>>) => {
+  // A root alias reading a name any same-element rule states is restated, in table order, in the base rule.
+  const chained = (
+    variables: Readonly<Record<string, string>>,
+    alsoStated: readonly string[] = []
+  ) => {
     const entries = Object.entries(variables).filter(([, v]) => v != null);
-    for (const step of ["sm", "md", "lg", "xl"]) {
-      if (`--ds-radius-${step}` in variables) continue;
-      if ("--ds-radius-scale" in variables || `--ds-radius-${step}-base` in variables) {
-        entries.push([
-          `--ds-radius-${step}`,
-          `calc(var(--ds-radius-${step}-base) * var(--ds-radius-scale, 1))`,
-        ]);
+    const reached = new Set([...Object.keys(variables), ...alsoStated]);
+    for (let grew = true; grew; ) {
+      grew = false;
+      for (const [name, value] of ROOT_ALIASES) {
+        if (reached.has(name)) continue;
+        if ([...value.matchAll(/var\((--[\w-]+)/g)].some((m) => reached.has(m[1] as string))) {
+          reached.add(name);
+          grew = true;
+        }
       }
+    }
+    for (const [name, value] of ROOT_ALIASES) {
+      if (reached.has(name) && !(name in variables)) entries.push([name, value]);
     }
     return entries;
   };
-  const base = chained(compiled.cssVariables);
+  const base = chained(
+    compiled.cssVariables,
+    compiled.modeBlocks.flatMap((block) => Object.keys(block.cssVariables))
+  );
   const blocks: string[] = [];
   if (base.length > 0 || compiled.colorScheme) {
     blocks.push(
@@ -73,7 +85,7 @@ function referenceCss(compiled: ThemeCompilation, slug: string): string {
     blocks.push(
       rule(modeSelector(block.mode), [
         `  color-scheme: ${block.colorScheme};`,
-        ...chained(block.cssVariables).map(([k, v]) => `  ${k}: ${v};`),
+        ...Object.entries(block.cssVariables).map(([k, v]) => `  ${k}: ${v};`),
       ])
     );
   }
@@ -203,7 +215,7 @@ describe("emitDeclarations refuses a breakout before assembling any text", () =>
   });
 
   it("keeps the safe siblings of a refused channel", () => {
-    const declarations = emitDeclarations({
+    const declarations = emitOverlayDeclarations({
       "--ds-color-primary": "#4f46e5",
       "--ds-color-accent": ESCAPE,
       "--ds-color-bg-primary": "#ffffff",
@@ -261,7 +273,7 @@ describe("the guard drops no channel the first-party corpus actually emits", () 
       "--ds-card-shadow-hover":
         "0 2px 4px rgba(0,0,0,0.06), 0 16px 32px rgba(0,0,0,0.12)",
     } as const;
-    const emitted = emitDeclarations(hard);
+    const emitted = emitOverlayDeclarations(hard);
     expect(emitted).toHaveLength(Object.keys(hard).length);
     for (const [name, value] of Object.entries(hard)) {
       expect(emitted).toContain(`  ${name}: ${value};`);
@@ -319,25 +331,26 @@ describe("a block that states a radius operand re-declares the dial steps", () =
     }
   });
 
+  const steps = (lines: readonly string[]) =>
+    lines.filter((line) => /^ {2}--ds-radius-(sm|md|lg|xl):/.test(line));
+
   it("adds nothing to a block that states no operand", () => {
-    expect(emitDeclarations({ "--ds-color-primary": "#4f46e5" })).toEqual([
-      "  --ds-color-primary: #4f46e5;",
+    expect(emitDeclarations({ "--ds-probe-unread-channel": "1px" })).toEqual([
+      "  --ds-probe-unread-channel: 1px;",
     ]);
   });
 
   it("a stated scale re-declares all four steps", () => {
-    expect(emitDeclarations({ "--ds-radius-scale": "0.8" })).toEqual([
-      "  --ds-radius-scale: 0.8;",
-      "  --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));",
-      "  --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));",
+    expect(steps(emitDeclarations({ "--ds-radius-scale": "0.8" }))).toEqual([
       "  --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));",
+      "  --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));",
+      "  --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));",
       "  --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));",
     ]);
   });
 
   it("a stated operand re-declares only its own step", () => {
-    expect(emitDeclarations({ "--ds-radius-lg-base": "8px" })).toEqual([
-      "  --ds-radius-lg-base: 8px;",
+    expect(steps(emitDeclarations({ "--ds-radius-lg-base": "8px" }))).toEqual([
       "  --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));",
     ]);
   });

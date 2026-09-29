@@ -192,8 +192,8 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
   const compiledBlock = [
     '/* === Compiled from the authored Theme via compileTheme — do not edit === */',
     emitBaseRule(
-      { cssVariables: sortedVariables, modeBlocks: [], ...(colorScheme ? { colorScheme } : {}),
-        runtime: { personality: {}, tokenOverrides: {} } },
+      { cssVariables: sortedVariables, modeBlocks: modeBlocks ?? [], contrastBlocks: contrastBlocks ?? [],
+        ...(colorScheme ? { colorScheme } : {}), runtime: { personality: {}, tokenOverrides: {} } },
       baseScope,
       { leadingDeclarations: ['  color: var(--ds-color-text-primary);'] },
     ),

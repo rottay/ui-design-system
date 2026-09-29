@@ -18,7 +18,7 @@ import { describe, expect, it } from "vitest";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme";
 
-import { withRadiusChain } from "../../emission/css";
+import { withRootAliases } from "../../emission/css";
 import { staticThemeIntent } from "../../ingress";
 
 const ARTIFACTS = resolve(
@@ -29,12 +29,12 @@ const SLUGS: readonly FirstPartyVerticalId[] = ["rottay", "bithire", "evnto"];
 
 /**
  * The compile the artifact generator runs: the preset over the neutral foundation.
- * Since fb5c2b2ca the emitter restates the `:root` radius chain beside a stated
- * scale, so the base block is read through that same step (four lines per vertical).
+ * The emitter restates every `:root` alias a stated operand re-resolves, so the
+ * base block is read through that same step.
  */
 function compiledFor(slug: FirstPartyVerticalId) {
   const compiled = compileThemeIntent(staticThemeIntent(slug)).compiled;
-  return { ...compiled, cssVariables: withRadiusChain(compiled.cssVariables) };
+  return { ...compiled, cssVariables: withRootAliases(compiled.cssVariables) };
 }
 
 /** Every `--ds-*` declaration inside the artifact block whose selector matches. */

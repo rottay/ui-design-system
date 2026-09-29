@@ -8,8 +8,10 @@ import {
   emitContrastRule,
   emitDeclarations,
   emitDensityScopeRule,
+  emitOverlayDeclarations,
   emitRule,
   PREFERS_MORE_CONTRAST,
+  sameElementNames,
 } from "../css";
 
 /** One compiled mode overlay of a tenant artifact: the delta, not the block. */
@@ -63,14 +65,20 @@ export interface TenantArtifactComposition {
  */
 export function emitTenantArtifactCss(composition: TenantArtifactComposition): string {
   const scope = tenantArtifactScope(composition.verticalKey, composition.slug);
-  const declarations = emitDeclarations(composition.variables);
+  const declarations = emitDeclarations(composition.variables, {
+    alsoStated: sameElementNames(
+      [...(composition.modeDeltas ?? []), ...(composition.contrastDeltas ?? [])].map((block) => ({
+        cssVariables: block.variables,
+      }))
+    ),
+  });
   // Under `auto` the viewer chooses, so exactly ONE media copy exists: the
   // delta block itself. A compile states a block for the mode its base rule is
   // NOT, so the block's own mode is the preference to key on -- read off the
   // artifact's shape rather than told, which is why a dark-first vertical is
   // no longer a light-first guess.
   const modeRules = (composition.modeDeltas ?? []).map((block) => {
-    const modeDeclarations = emitDeclarations(block.variables);
+    const modeDeclarations = emitOverlayDeclarations(block.variables);
     const explicitRule = emitRule(scope.modeSelector(block.mode), modeDeclarations);
     if (composition.followsSystem !== true) return explicitRule;
     const automaticRule =
@@ -92,7 +100,7 @@ export function emitTenantArtifactCss(composition: TenantArtifactComposition): s
       ? []
       : contrast.flatMap((block) => {
           if (block.mode === undefined) return [];
-          const contrastDeclarations = emitDeclarations(block.variables);
+          const contrastDeclarations = emitOverlayDeclarations(block.variables);
           if (contrastDeclarations.length === 0) return [];
           return [
             `@media ${PREFERS_MORE_CONTRAST} and (prefers-color-scheme: ${block.mode}) {\n` +
