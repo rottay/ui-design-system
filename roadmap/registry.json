@@ -5915,7 +5915,7 @@
       "lane": "platform-invariants",
       "order": 2,
       "size": "M",
-      "status": "in-progress",
+      "status": "done",
       "dependsOn": [
         "WO-DER-01"
       ],
@@ -5956,8 +5956,15 @@
           "at": "2026-09-28 21:10",
           "by": "kimi-admin-dt",
           "note": "Adoption climb + honest measure (b79810512 + 277532552, Opus receipts out-i18n-packetA/B): the last two Modern components with real hardcoded copy (data-table cell editor, widget-board catalog search) read the catalog via 3 new keys x 5 locales, precedence override>catalog>literal proven with a positive control; frozen engines byte-identical. The 90% acceptance now reads off the TEXT-CARRYING measure the packet-B gate added: 97/97 (100%) -- the hook-mention proxy capped at 94/141 because 44 files render no copy and 3 are re-exports of translating renderers. The gate reports both measures and keeps its decrease-only floors. Arms status: parity target MET (text-carrying 100%); toLocale ceiling held (19); mandatory locales 100%, fr/pt floors re-seeded with reasons; the lun/IME arms stand from the 09-26 entries. Remaining registered debt (not blocking): 5 adopted files with residual literals (data-table, form-builder, color-picker, carousel, tenant-preview). Close audit candidate pending the milestone run."
+        },
+        {
+          "at": "2026-09-29 09:40",
+          "by": "kimi-admin-dt",
+          "note": "WO-INV-02 DONE (130/164). Every acceptance arm re-measured on the final tree today: the parity gate OK (97/97 text-carrying, floors intact), the lun + IME arms re-run green (29/29), the Arabic pack shipped. The audit correction (the 90% measured over the text-carrying population, never by unused hooks) is the packet-B instrument law. Residual registered: 5 files with leftover literals, family-owned."
         }
-      ]
+      ],
+      "doneAt": "2026-09-29",
+      "evidence": "Close audit 2026-09-29 (kimi-admin-dt), every arm re-measured on the final tree. (a) Catalog adoption >=90% in Modern: MET by the honest measure the gate now publishes (277532552): text-carrying adoption 97/97 (100%) -- the 44 remaining Modern entrypoints render no copy (measured by the AST scan of BOTH populations, the drill moves the measure on a planted label); the hook-mention proxy stands at 94/141 with its decrease-only floor intact. The last two real hardcoded strings (data-table cell editor, widget-board catalog search) migrated in b79810512 with override>catalog>literal precedence proven per component and a red control against HEAD. (b) Argument-less toLocale*() ceiling: 19, held (the gate OK). (c) date-picker/calendar locale=es renders lun: Calendar.pass1-premium green (re-run today, 29/29 with the IME file). (d) IME composition Enter does not submit: submit-intent guard green in the same run. (e) The Arabic font pack ships: FONT_PACK_MANIFEST carries arabic-text (the inv-02 changesets), the roster tests pass, and the list-form :lang() defect that kept the Arabic letter-spacing rules dead in Chromium was found and fixed in this wave (82710a70a). The declared-partial locales (fr/pt) keep their ceilings with no English placeholders. The 5 adopted files with residual literals (data-table, form-builder, color-picker, carousel, tenant-preview) are the registered follow-on, owned by their families, not blocking the WO (the 90% law is met and the floor prevents regressions)."
     },
     {
       "id": "WO-INV-03",
