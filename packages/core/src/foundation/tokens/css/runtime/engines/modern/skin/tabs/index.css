@@ -589,6 +589,10 @@
     min-block-size: max(var(--ds-tabs-touch-target-min, var(--ds-touch-target-min)), var(--_ds-tabs-current-height));
   }
 
+  .ds-tabs--modern[data-part='root'] [data-part='tab-panel'] {
+    min-block-size: var(--ds-tabs-touch-target-min, var(--ds-touch-target-min));
+  }
+
   .ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more']) {
     min-inline-size: var(--ds-tabs-touch-target-min, var(--ds-touch-target-min));
     min-block-size: var(--ds-tabs-touch-target-min, var(--ds-touch-target-min));

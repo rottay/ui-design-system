@@ -90,6 +90,26 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
   const fixtureGround = FIXTURES.find((f) => f.id === fixture)?.ground ?? 'dark';
   await waitForGroundPaint(page, fixtureGround);
 
+  // No ssrViewport here: hydration paints the phone posture and corrects to desktop in a later
+  // transition. A capture before that commit shoots the shorter phone layout.
+  await page.waitForFunction(
+    (selector) => {
+      const container = document.querySelector(selector);
+      return (
+        container !== null &&
+        container.querySelector('[data-posture]') !== null &&
+        container.querySelector('[data-posture~="phone"]') === null
+      );
+    },
+    CONTAINER_SELECTOR,
+    { timeout: 15_000 },
+  );
+
+  // The probe is taller than the viewport and carries viewport-sticky rails; a viewport that holds
+  // the whole container leaves every sticky part at rest, so no scroll offset reaches the capture.
+  const bottom = await container.evaluate((node) => Math.ceil(node.getBoundingClientRect().bottom + window.scrollY));
+  await page.setViewportSize({ width: 1280, height: Math.max(1400, bottom) });
+
   // Settle any remaining transition tail beyond reducedMotion's
   // entrance-disable so the final rendered frame is what gets diffed.
   await page.waitForTimeout(300);

@@ -256,3 +256,15 @@ describe('the indicator mirror re-anchors the measured PHYSICAL offset', () => {
     expect(body).toContain('transform: translateX(var(--ds-tabs-indicator-offset))');
   });
 });
+
+describe('the focusable tab panel keeps the coarse-pointer floor', () => {
+  it('raises the panel to the touch-target minimum inside the coarse-pointer block', () => {
+    const block = TABS_SKIN.indexOf('@media (hover: none), (pointer: coarse) {');
+    expect(block).toBeGreaterThanOrEqual(0);
+    const rule = TABS_SKIN.indexOf(".ds-tabs--modern[data-part='root'] [data-part='tab-panel'] {", block);
+    expect(rule).toBeGreaterThan(block);
+    expect(rule).toBeLessThan(TABS_SKIN.indexOf('\n}\n', block));
+    const body = TABS_SKIN.slice(rule, TABS_SKIN.indexOf('}', rule));
+    expect(body).toContain('min-block-size: var(--ds-tabs-touch-target-min, var(--ds-touch-target-min));');
+  });
+});

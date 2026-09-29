@@ -321,6 +321,14 @@ describe('Modern Calendar remediation (K4-B)', () => {
     expect(engineSource).toContain('pointer-coarse:w-[22.75rem]');
   });
 
+  it('caps the compact root at its host so a narrow container never scrolls the page', () => {
+    const start = skin.indexOf(".rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] {");
+    expect(start).toBeGreaterThanOrEqual(0);
+    const body = skin.slice(start, skin.indexOf('}', start));
+    expect(body).toContain('inline-size: 20rem;');
+    expect(body).toContain('max-inline-size: 100%;');
+  });
+
   it('re-maps the state channels to system colors under forced-colors (Pass 2)', () => {
     expect(skin).toContain('@media (forced-colors: active)');
     // selected + active toggle: Highlight fill; today ring: Highlight edge;

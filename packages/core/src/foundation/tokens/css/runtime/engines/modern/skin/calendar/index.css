@@ -110,6 +110,7 @@
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] {
   inline-size: 20rem;
+  max-inline-size: 100%;
 }
 @media (pointer: coarse) {
   .rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] {
