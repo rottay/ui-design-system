@@ -22334,7 +22334,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   align-items: center;
   justify-content: center;
   min-inline-size: 0;
-  max-inline-size: var(--ds-badge-max-inline-size);
+  max-inline-size: min(var(--ds-badge-max-inline-size), 100%);
   block-size: var(--ds-badge-resolved-height, var(--ds-badge-md-height));
   padding-inline: calc(
     var(--ds-badge-resolved-padding-inline, var(--ds-badge-padding-x)) *
@@ -47336,12 +47336,15 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
   gap: calc(var(--ds-segmented-gap) * var(--ds-density-effective-scale, 1));
   min-width: 0;
   padding: calc(var(--ds-segmented-padding) * var(--ds-density-effective-scale, 1));
-  /* Narrow frames: the group scrolls inside its container instead of clipping
-     options without an affordance (pagination.css's controls-row precedent).
-     The 4px track padding matches the full focus-ring extent (offset 2px +
-     width 2px from --ds-focus-ring), so neither the ring nor the option lift
-     clips against the scrollport; `overflow-y: hidden` is a legal pair with
+  /* Narrow frames: options wrap onto further rows and a lone long label
+     shrinks to its ellipsis, so the group adapts inside its container and
+     never hides an option. The scrollport stays as the reveal mechanism's
+     host. The 4px track padding matches the full focus-ring extent (offset
+     2px + width 2px from --ds-focus-ring), so neither the ring nor the option
+     lift clips against it; `overflow-y: hidden` is a legal pair with
      `overflow-x: auto` (neither is `visible`). */
+  flex-wrap: wrap;
+  box-sizing: border-box;
   max-inline-size: 100%;
   overflow-x: auto;
   overflow-y: hidden;
@@ -47503,7 +47506,7 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
 
 .ds-segmented--modern[role='radiogroup'] [data-part='option'] {
   display: inline-flex;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   align-items: center;
   justify-content: center;
   gap: calc(var(--ds-segmented-current-gap) * var(--ds-density-effective-scale, 1));
@@ -57479,6 +57482,9 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] {
   margin: var(--ds-spacing-1);
   min-inline-size: 0;
+  /* A side-aligned cell is fit-content, so a nowrap child's min-content would
+     widen it past its track; the track is the ceiling. */
+  max-inline-size: 100%;
   /* `anywhere`, not `break-word`: only the former lowers min-content, and the
      track is sized from it. */
   overflow-wrap: anywhere;
@@ -58268,8 +58274,10 @@ html[data-ds-motion='reduced']
   display: inline-flex;
   min-inline-size: 0;
   /* Shrink-to-fit resolves against max-content, so a nowrap label widened the
-     row past its own node and the document with it. */
+     row past its own node and the document with it. The depth indent is
+     padding, so the cap must include it. */
   max-inline-size: 100%;
+  box-sizing: border-box;
   align-items: center;
   /* The deriver's channels, the same two the node compound below resolves;
      the proto axes stay as the no-artifact fallback. */
@@ -58648,6 +58656,14 @@ html[data-ds-motion='reduced']
 }
 .rottay-tree-node.rottay-tree-node--disabled {
   cursor: not-allowed;
+}
+
+/* The engine's node wrapper shares the compound's class but is a block that
+   stacks its row over its child group; the row owns padding and cursor. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] {
+  display: block;
+  padding: 0;
+  cursor: auto;
 }
 
 }
@@ -66680,8 +66696,9 @@ html[data-ds-motion='reduced']
    Truncation strategy: the header row wraps as a whole, but a single long
    name or entity never pushes the badge/timestamp off-card -- user and
    entity shrink with ellipsis and expose the full string via `title`
-   (stamped by the engine). The badge (Tag) never truncates: the action
-   verb is the type channel. */
+   (stamped by the engine). The badge (Tag) keeps its full label while the
+   header can hold it; a header narrower than the Tag shrinks it to the Tag's
+   own truncation, whose title carries the whole action. */
 .ds-pattern-activity-log.ds-engine-modern [data-part='user'] {
   min-inline-size: 0;
   max-inline-size: 100%;
@@ -66691,6 +66708,11 @@ html[data-ds-motion='reduced']
   color: var(--ds-color-text-primary);
   font-size: var(--ds-font-size-sm, 0.875rem);
   font-weight: var(--ds-font-weight-semibold, 600);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'] {
+  display: inline-flex;
+  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='entity'] {
   min-inline-size: 0;
@@ -76817,7 +76839,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   width: 100%;
   height: 100%;
   pointer-events: none;
+  visibility: hidden;
   background: var(--ds-metric-card-sheen, var(--ds-shell-shimmer-faint, linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent), transparent)));
+}
+
+/* The parked sweep is off-row; it paints only while the hover sweep runs. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .ds-metrics-rows.ds-metrics-rows [data-part='metric-row']:hover [data-part='shimmer'] {
+    visibility: visible;
+  }
 }
 
 /* row icon box — 2px border, static colour; the 40px well is drained from
@@ -96007,6 +96037,13 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   border: 0;
 }
 
+/* The hidden summary keeps its table to the wrapper's hairline; a nowrap
+ * auto-layout table would otherwise lay its rows out far past the chart. */
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='accessible-summary'] > [data-part='summary-table'] {
+  table-layout: fixed;
+  inline-size: 1px;
+}
+
 /* Shared family legend anatomy. Families own only shape-specific overrides;
  * caller/palette paint remains a runtime value on the swatch. `:where()` keeps
  * this foundation deliberately weaker than every family skin. */
@@ -98303,6 +98340,13 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   font-variant-numeric: var(--ds-numeric-tabular);
 }
 
+/* Tile text sits at x=4 from the tile's left edge; under rtl its start is the
+ * right end, so the end anchors there and the text runs into the tile. */
+:where([dir='rtl']) .ds-chart-treemap [data-part='tile-label'],
+:where([dir='rtl']) .ds-chart-treemap [data-part='tile-value'] {
+  text-anchor: end;
+}
+
 /* Forced colors erase the categorical tile fills, so tiles switch to a
  * neutral surface and fall back on the renderer's data-mark-index cycle for
  * stroke-pattern differentiation; labels keep full contrast. */
@@ -99927,6 +99971,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar'] {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--ds-spacing-3);
   margin-block-end: var(--ds-spacing-4);
