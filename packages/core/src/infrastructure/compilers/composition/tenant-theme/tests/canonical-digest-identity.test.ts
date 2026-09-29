@@ -888,8 +888,18 @@ describe("digest identity across the canonicalization extraction", () => {
     // pin stays asserted. Persisted rows recompile.
     const POST_LINK_RAISED_GROUND_DIGEST =
       "sha256-6e3d89ae5303d56261b15eecced4ff39b4bee91ea248ecbebf45e28707829e58";
-    expect(artifact.digest).toBe(POST_LINK_RAISED_GROUND_DIGEST);
+    expect(artifact.digest).not.toBe(POST_LINK_RAISED_GROUND_DIGEST);
+    // Eighteenth declared move (c68423cb2, the badge selected ink derives
+    // through the contrast floor), bisected over the 9 compiler commits after
+    // 7120887d4: the dark delta gains --ds-badge-selected-ink #3f918b (the
+    // tenant's seed against the baseline's #597ced), nothing else, and the base
+    // variables are byte-unchanged. d207e58d7, ab0bcb030 and fb5c2b2ca move this
+    // digest by nothing. Every prior pin stays asserted. Persisted rows recompile.
+    const POST_BADGE_SELECTED_INK_DIGEST =
+      "sha256-a00f8197edb006e470875149432bd2fe3bf1c1cbf30326b6d3ab2bc3c66a343c";
+    expect(artifact.digest).toBe(POST_BADGE_SELECTED_INK_DIGEST);
     const dark = artifact.modeDeltas?.find((delta) => delta.mode === "dark");
+    expect(dark?.variables["--ds-badge-selected-ink"]).toBe("#3f918b");
     expect(dark?.variables["--ds-color-link"]).toBe("#419A92");
     expect(dark?.variables["--ds-color-link-hover"]).toBe("#4A9891");
     expect(dark?.variables["--ds-color-primary"]).toBeUndefined();

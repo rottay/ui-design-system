@@ -794,7 +794,10 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // G103-02 (2026-09-26): rottay 2953 -> 2949, the four posture channels.
       // Q-DER06-RES packets A+B (2026-09-26, 91cf964ab + 07fe238a8): rottay
       // 2949 -> 2953, --ds-color-border-hover and the three tag radius rungs.
-      rottay: 2953,
+      // Badge + elevation (measured 2026-09-29 over isolated snapshots): rottay
+      // 2953 -> 2961, +1 c029181dc (--ds-badge-radius-sm) and +7 d207e58d7
+      // (--ds-elevation-0..6, the dark-ground ladder its dark base now states).
+      rottay: 2961,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -864,7 +867,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // G103-02 (2026-09-26): bithire 3089 -> 3085, the four posture channels.
       // Q-DER06-RES packets A+B (2026-09-26): bithire 3085 -> 3089, the same
       // border-hover + three tag radius rungs as the other two verticals.
-      bithire: 3089,
+      // Badge + elevation (measured 2026-09-29): bithire 3089 -> 3090, +1
+      // c029181dc (--ds-badge-radius-sm); d207e58d7 moves its light base by 0.
+      bithire: 3090,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -928,7 +933,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // G103-02 (2026-09-26): evnto 2953 -> 2949, the four posture channels.
       // Q-DER06-RES packets A+B (2026-09-26): evnto 2949 -> 2953, the same
       // border-hover + three tag radius rungs as rottay.
-      evnto: 2953,
+      // Badge + elevation (measured 2026-09-29): evnto 2953 -> 2954, +1
+      // c029181dc (--ds-badge-radius-sm); d207e58d7 moves its light base by 0.
+      evnto: 2954,
     };
     for (const vertical of VERTICALS) {
       expect(
