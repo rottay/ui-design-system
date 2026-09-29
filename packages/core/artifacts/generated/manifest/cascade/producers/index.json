@@ -15,11 +15,11 @@
     "failClosed": "every expression the scanner cannot resolve is ONE ROW in unknownProvenance. Under STRICT a missing producer ADMITS a fallback branch and can LOWER debt, so under-counting producers can buy a false green: it is not a safe approximation and is never treated as one."
   },
   "inputsDigest": {
-    "cssEdges": "68554fa65b2d7cb665ebe97fabe370bcce2030c98fac179b1e8e401702e1717f",
+    "cssEdges": "042bb2fc3ac7594da07ded8a45b721747f2886f224af5760ae4178e6a61e2f72",
     "cascadeRoots": "cc6fcf8b9bffd91b1f2572dd817593fe5b747b1c4892ebf15e45480059c96856",
     "rootCatalog": "8f22e285b34483d8fab7e69686a01a6704985abbd05d5c97be2d63152db0ad0f",
-    "srcTsx": "6e167a6196e39db6fc230c7b94fe0a84615491bef95709b8561af36d7b485e47",
-    "srcCompilers": "c96f4d60219eb53a44db37f515e1aded8cf71ed8979e082f09c14aeb566531ac",
+    "srcTsx": "3fad71de176c621f485f64ca1c6976fda0b0b408a5ee752ca3ffdd0b51ed01a7",
+    "srcCompilers": "d1298bd67955e49b3e2c53b413b1c88246dedd2c0f8df1ea6b1d1ecd2211f4a9",
     "artifacts": "4f2c01645cc6b4cb0f437c5386161e9252ee508f910d315332e553e27f5a4aa8"
   },
   "stats": {
@@ -2067,6 +2067,7 @@
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/runtime/style/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/contract/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/contrast-posture/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/expressive/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/floors/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/geometry/index.ts",
@@ -2200,7 +2201,6 @@
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/modes/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/character/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts",
-      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/contrast-posture/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/inks/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/neutral-temperature/index.ts",
@@ -66517,6 +66517,6 @@
   "provenance": {
     "producedBy": "cascade:producers --write",
     "writtenOn": "2026-09-29",
-    "contentDigest": "0a11b0d9e331edb78a1d3fe181b508556d9755cdb1178c02585a092839492f3f"
+    "contentDigest": "82da55b0223aaf6da89fe50e7860a1a44cbfdb2ae57fa4a3e1103035e6e3900c"
   }
 }
