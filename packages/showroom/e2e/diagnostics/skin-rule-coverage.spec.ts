@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { collectRules, isForeignVendorSelector, postureSettled, probeSelectors, SKIN_DIRS } from './skin-rule-coverage.lib.mjs';
+import { classifyReport, type DeadSelectorReport } from './dead-anchor-classification.lib.mjs';
 import { expectHydrated } from '../support/hydration';
 
 // ---------------------------------------------------------------------------
@@ -186,7 +187,7 @@ test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) =>
     }
   }
 
-  const report = {
+  const report: DeadSelectorReport & Record<string, unknown> = {
     probeableSelectors: rules.length,
     skinFiles: byFile.size,
     // Navigations that failed, and pages still mutating when read (both void coverage).
@@ -201,40 +202,71 @@ test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) =>
     // The component never rendered anywhere we looked. A torture-page coverage
     // gap; says nothing about the rules themselves.
     uncoveredFiles: uncovered.sort(),
-    // THE BUG CLASS (P-79): the component IS rendered, and these rules' anchors
-    // are absent from the DOM with every state attribute stripped. No value of
-    // any attribute brings them back. They reach nobody.
+    // THE RAW BUG-CLASS CANDIDATES (P-79): the component IS rendered, and these
+    // rules' anchors are absent from the DOM with every state attribute
+    // stripped. Adjudicated per row below into trueDeadAnchors (failing) and
+    // conditionalParts (named fixture-coverage holes).
     deadAnchors: deadAnchors.sort((a, b) => b.selectors.length - a.selectors.length),
     // NOT a bug, but a hole in the gate: the rule is fine, the fixture never
     // renders the state it keys on, so no baseline can catch a regression in it.
     thinFixtures: thinFixtures.sort((a, b) => b.unexercised - a.unexercised),
   };
+  // THE BUG CLASS (P-79), adjudicated per row before it is reported: a skeleton
+  // miss is a render-drop ONLY when no source evidence explains it. The
+  // conditional-coverage classifier (dead-anchor-classification.lib.mjs) proves
+  // per row whether the owning component stamps the anchor part on a DOM host
+  // behind a condition the fixture never satisfies (editing off, showTime unset,
+  // a modal never opened); those rows are fixture-coverage holes and join
+  // conditionalParts, each naming what the torture page would have to render.
+  // Everything the census cannot prove stays TRUE_DEAD and keeps failing.
+  const classification = classifyReport(report, { rules });
+  const trueDeadByFile = new Map<string, typeof classification.trueDead>();
+  for (const row of classification.trueDead) {
+    if (!trueDeadByFile.has(row.file)) trueDeadByFile.set(row.file, []);
+    trueDeadByFile.get(row.file)!.push(row);
+  }
+  report.conditionalParts = classification.conditionalParts.map((e) => ({
+    owner: e.owner,
+    part: e.part,
+    rows: e.rows,
+    skinFiles: e.skinFiles,
+    required: e.stamps.flatMap((s) => s.required.map((c) => c.text)),
+    stamp: e.stamps.map((s) => `${s.file}:${s.line}`),
+  }));
+  report.trueDeadAnchors = classification.trueDead.map((r) => ({ file: r.file, selector: r.selector, reason: r.reason }));
   writeFileSync(join(HERE, '../../dead-selector-report.json'), JSON.stringify(report, null, 2));
 
   const totalUnexercised = thinFixtures.reduce((n, f) => n + f.unexercised, 0);
   console.log(`### unappliable skin rules: ${unappliableRules.length}; foreign-vendor selectors: ${foreignVendor.size}; instrument-invalid selectors: ${invalidSelectors.length}; unvisited pages: ${unvisited.length}; unquiet pages: ${unquiet.length}`);
   console.log(`### uncovered skin files (component never rendered — torture-page gap): ${uncovered.length}`);
-  console.log(`### DEAD ANCHORS — rules whose part is absent no matter the state: ${deadAnchors.length} files`);
-  for (const d of deadAnchors.slice(0, 20)) {
-    console.log(`###   ${d.file} — ${d.selectors.length} dead`);
-    for (const sel of d.selectors.slice(0, 3)) console.log(`###       ${sel}`);
+  console.log(`### DEAD ANCHORS — skeleton misses: ${deadAnchors.length} files, ${classification.rows.length} rows`);
+  console.log(`###   classified CONDITIONAL (fixture-coverage holes, positive source evidence): ${classification.conditional.length} rows / ${classification.conditionalParts.length} distinct parts`);
+  console.log(`###   classified TRUE_DEAD (the failing class): ${classification.trueDead.length} rows in ${trueDeadByFile.size} files`);
+  for (const [file, rows] of [...trueDeadByFile].slice(0, 20)) {
+    console.log(`###   ${file} — ${rows.length} true-dead`);
+    for (const row of rows.slice(0, 3)) console.log(`###       ${row.selector} :: ${row.reason}`);
   }
   console.log(`### thin fixtures — rules NO baseline exercises at rest: ${totalUnexercised} of ${rules.length}`);
 
   // HARD ASSERTION (the whole point of the resurrection): the P-79 bug class
-  // must be empty. A dead anchor is a skin rule whose part is absent from the
-  // rendered DOM under every state -- a genuine render-drop. Reviewed, explained
-  // exceptions may be allow-listed in dead-selector-baseline.json (each with a
-  // reason); the residual after removing them must be zero. thinFixtures and
-  // uncovered are measured above and written to the report, but do not fail the
-  // gate: an unphotographed state is a coverage hole, not a dead rule.
+  // must be empty. A TRUE_DEAD anchor is a skin rule whose part is absent from
+  // the rendered DOM under every state AND whose absence no source evidence
+  // explains -- a genuine render-drop. Conditional rows (the source stamps the
+  // part behind a configuration the fixture never sets) are measured above and
+  // published in the report as conditionalParts; they are coverage holes with
+  // named owners, not dead rules. Reviewed, explained exceptions may be
+  // allow-listed in dead-selector-baseline.json (each with a reason); the
+  // residual after removing them must be zero. thinFixtures and uncovered are
+  // measured above and written to the report, but do not fail the gate: an
+  // unphotographed state is a coverage hole, not a dead rule.
   expect(unvisited, 'torture sections that never loaded: their components read as uncovered').toEqual([]);
   expect(invalidSelectors, 'probe/skeleton rejected over a valid source selector: the instrument relaxed it into invalid CSS').toEqual([]);
   expect(unappliableRules, 'skin selectors the browser rejects: the rule paints nothing in any page').toEqual([]);
   const reviewed = loadReviewedDeadAnchors();
   const reviewedByFile = new Map(reviewed.map((r) => [r.file, new Set(r.selectors)]));
-  const unreviewed = deadAnchors
-    .map((d) => ({ file: d.file, selectors: d.selectors.filter((s) => !reviewedByFile.get(d.file)?.has(s)) }))
-    .filter((d) => d.selectors.length > 0);
-  expect(unreviewed, 'dead skin anchors observed in the rendered DOM (P-79 render-drop). Fix the component to stamp the part, or add a reviewed exception with a reason to dead-selector-baseline.json.').toEqual([]);
+  const unreviewed = [...trueDeadByFile]
+    .map(([file, rows]) => ({ file, rows: rows.filter((r) => !reviewedByFile.get(file)?.has(r.selector)) }))
+    .filter((d) => d.rows.length > 0)
+    .map((d) => ({ file: d.file, selectors: d.rows.map((r) => `${r.selector} :: ${r.reason}`) }));
+  expect(unreviewed, 'true-dead skin anchors: absent from the rendered DOM and unexplained by any source stamp (P-79 render-drop). Fix the component to stamp the part, or add a reviewed exception with a reason to dead-selector-baseline.json.').toEqual([]);
 });
