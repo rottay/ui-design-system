@@ -15599,8 +15599,8 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
    tracking breaks contextual joining in Arabic-script copy, so textual
    tracking collapses to `normal` under a joining-script lang. The score
    keeps its tracking: it sets numerals, not joining script. */
-.ds-pattern-decision-comparison .ds-decision-comparison__title:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
-.ds-pattern-decision-comparison .ds-decision-comparison__context-primary:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+.ds-pattern-decision-comparison .ds-decision-comparison__title:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)),
+.ds-pattern-decision-comparison .ds-decision-comparison__context-primary:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)) {
   letter-spacing: normal;
 }
 
@@ -16118,10 +16118,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
    display tracking break contextual joining in Arabic-script copy, so every
    textual tracking above collapses to `normal` under a joining-script lang.
    The score keeps its tracking: it sets numerals, not joining script. */
-.ds-pattern-decision-panorama .ds-decision-panorama__eyebrow:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
-.ds-pattern-decision-panorama .ds-decision-panorama__identity-eyebrow:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
-.ds-pattern-decision-panorama .ds-decision-panorama__title:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
-.ds-pattern-decision-panorama .ds-decision-panorama__decision-title:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+.ds-pattern-decision-panorama .ds-decision-panorama__eyebrow:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)),
+.ds-pattern-decision-panorama .ds-decision-panorama__identity-eyebrow:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)),
+.ds-pattern-decision-panorama .ds-decision-panorama__title:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)),
+.ds-pattern-decision-panorama .ds-decision-panorama__decision-title:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)) {
   letter-spacing: normal;
 }
 
@@ -16864,9 +16864,9 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
    mono label and the tight display tracking break contextual joining in
    Arabic-script copy, so textual tracking collapses to `normal` under a
    joining-script lang. */
-.ds-pattern-record-facts .ds-record-facts__label:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
-.ds-pattern-record-facts .ds-record-facts__title:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
-.ds-pattern-record-facts .ds-record-facts__value:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+.ds-pattern-record-facts .ds-record-facts__label:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)),
+.ds-pattern-record-facts .ds-record-facts__title:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)),
+.ds-pattern-record-facts .ds-record-facts__value:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)) {
   letter-spacing: normal;
 }
 
@@ -31941,21 +31941,30 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   }
   /* The range overlay's invisible thumb pseudo is the hit region: it grows to
      the floor while the visible handle keeps its authored size. */
-  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']::-webkit-slider-thumb,
+  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']::-webkit-slider-thumb {
+    inline-size: var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px));
+    block-size: var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px));
+  }
   .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']::-moz-range-thumb {
     inline-size: var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px));
     block-size: var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   /* Vertical overlays: the grown pseudo re-centers over the visible handle. */
-  .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input'][data-variant='overlay']::-webkit-slider-thumb,
+  .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input'][data-variant='overlay']::-webkit-slider-thumb {
+    margin-inline-start: calc((var(--ds-slider-thumb-size, 16px) - var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px))) / 2);
+  }
   .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input'][data-variant='overlay']::-moz-range-thumb {
     margin-inline-start: calc((var(--ds-slider-thumb-size, 16px) - var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px))) / 2);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb,
-  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb,
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb {
+    transition: none;
+  }
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb {
+    transition: none;
+  }
   .ds-slider.ds-slider--modern [data-part='handle'] {
     transition: none;
   }
@@ -31980,7 +31989,10 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
     border-color: Canvas;
     box-shadow: none;
   }
-  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-runnable-track,
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-runnable-track {
+    background: Canvas;
+    border: 1px solid ButtonText;
+  }
   .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-track {
     background: Canvas;
     border: 1px solid ButtonText;
@@ -31988,14 +32000,26 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-progress {
     background: Highlight;
   }
-  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb,
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb {
+    background: ButtonText;
+    border-color: Canvas;
+    box-shadow: none;
+  }
   .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb {
     background: ButtonText;
     border-color: Canvas;
     box-shadow: none;
   }
-  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='focus-visible'], :focus-visible)::-webkit-slider-thumb,
-  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='focus-visible'], :focus-visible)::-moz-range-thumb,
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='focus-visible'], :focus-visible)::-webkit-slider-thumb {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
+    box-shadow: none;
+  }
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='focus-visible'], :focus-visible)::-moz-range-thumb {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
+    box-shadow: none;
+  }
   .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:is([data-state~='focus-visible'], :focus-visible) + [data-part='handle'] {
     outline: var(--ds-focus-ring-width, 2px) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset, 2px);
@@ -33870,7 +33894,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
    non-normal tracking breaks contextual joining in Arabic-script headlines,
    so the ramp's tracking collapses to `normal` under a joining-script lang.
    One (0,3,0) rule outranks every hN level above (0,1,1). */
-.ds-markdown-view[data-part='root'] [data-part='heading']:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+.ds-markdown-view[data-part='root'] [data-part='heading']:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)) {
   letter-spacing: normal;
 }
 
@@ -34078,22 +34102,22 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   border-color: var(--ds-input-border-focus, var(--ds-color-primary));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field:has([data-invalid='true'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field [data-invalid='true']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-input-field:has([data-invalid='true']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-input-error-border, var(--ds-color-error));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field:has([data-warning='true'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field [data-warning='true']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-input-field:has([data-warning='true']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-input-warning-border, var(--ds-color-warning));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field:has([data-success='true'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field [data-success='true']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-input-field:has([data-success='true']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-input-success-border, var(--ds-color-success));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field:has([data-disabled='true'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-input-field [data-disabled='true']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-input-field:has([data-disabled='true']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
   background: var(--ds-input-bg-disabled, var(--ds-material-control-background-disabled));
@@ -34130,17 +34154,17 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   border-color: var(--ds-select-border-color-focus, var(--ds-input-border-focus, var(--ds-color-primary)));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell:has([data-part='trigger'][data-status='error'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell [data-part='trigger'][data-status='error']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:has([data-part='trigger'][data-status='error']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-select-error-border, var(--ds-input-error-border, var(--ds-color-error)));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell:has([data-part='trigger'][data-status='warning'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell [data-part='trigger'][data-status='warning']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:has([data-part='trigger'][data-status='warning']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-select-warning-border, var(--ds-input-warning-border, var(--ds-color-warning)));
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell:has([data-part='trigger'][data-status='success'])),
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell [data-part='trigger'][data-status='success']),
 .ds-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:has([data-part='trigger'][data-status='success']) + .ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   border-color: var(--ds-select-success-border, var(--ds-input-success-border, var(--ds-color-success)));
 }
@@ -39681,17 +39705,21 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value,
-  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-moz-progress-bar {
+  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value {
     /* Ambient cadence rides the tenant duration-scale dial (scale 1 = the
        historical calc). */
+    animation: ds-progress-active-stripes-modern calc(var(--ds-motion-glacial) * 2 * var(--ds-motion-duration-scale, 1)) linear infinite;
+  }
+  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-moz-progress-bar {
     animation: ds-progress-active-stripes-modern calc(var(--ds-motion-glacial) * 2 * var(--ds-motion-duration-scale, 1)) linear infinite;
   }
 }
 
 /* RTL: the stripe cadence travels with the reading direction (the
    indeterminate sweep below does the same). */
-.rottay-progress-shell.rottay-progress-shell--modern[data-type='line']:dir(rtl) [data-part='fill']::-webkit-progress-value,
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='line']:dir(rtl) [data-part='fill']::-webkit-progress-value {
+  animation-direction: reverse;
+}
 .rottay-progress-shell.rottay-progress-shell--modern[data-type='line']:dir(rtl) [data-part='fill']::-moz-progress-bar {
   animation-direction: reverse;
 }
@@ -39853,7 +39881,10 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 
   /* The active status stripes sit ABOVE these rules in normal specificity, so
      they are re-flattened here explicitly: solid Highlight, no stripe image. */
-  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value,
+  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value {
+    background: Highlight;
+    background-image: none;
+  }
   .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-moz-progress-bar {
     background: Highlight;
     background-image: none;
@@ -57656,7 +57687,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 /* ---- joining-script guard: the label's tracked caps treatment breaks
         contextual joining in Arabic-script timestamps; tracking collapses to
         normal under a joining-script lang (Typography lane precedent). ---- */
-.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] > [data-part='label']:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] > [data-part='label']:is(:lang(ar), :lang(fa), :lang(ur), :lang(ps), :lang(sd), :lang(ug), :lang(ku), :lang(ckb), :lang(dv), :lang(ks)) {
   letter-spacing: normal;
 }
 
