@@ -14,6 +14,10 @@ import { describe, expect, it } from 'vitest';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
+import {
+  ROOT_ALIASES,
+  rootAliasRedeclarations,
+} from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
 
 import {
   FIRST_PARTY_ARTIFACT_SPECS,
@@ -70,7 +74,34 @@ describe('T1 · FlatTheme values propagate into the rendered artifact', () => {
 
     const beforeDecls = declarations(before);
     const moved = [...declarations(after)].filter(([name, value]) => beforeDecls.get(name) !== value);
-    expect(moved.map(([name]) => name)).toEqual(['--ds-color-text-muted']);
+    // 6a91f16ff (one scope re-resolution law for root-declared aliases): the
+    // block now states the seed, so the root aliases that read it are restated
+    // beside it -- eleven direct readers plus --ds-chart-axis-color through
+    // --ds-chart-axis. The two other direct readers (--ds-command-palette-group-color,
+    // --ds-metric-card-meter-fill-neutral) were already declared with the same
+    // text and do not move. Every restatement is the alias's own root text.
+    const RESTATED_READERS = [
+      '--ds-chart-axis',
+      '--ds-color-text-subtle',
+      '--ds-command-palette-empty-color',
+      '--ds-live-feed-empty-color',
+      '--ds-meter-fill-neutral',
+      '--ds-search-clear-color',
+      '--ds-search-icon-color',
+      '--ds-search-placeholder-color',
+      '--ds-stats-grid-description-color',
+      '--ds-stats-grid-trend-neutral',
+      '--ds-upload-dragger-icon-color',
+      '--ds-chart-axis-color',
+    ];
+    expect(moved.map(([name]) => name)).toEqual(['--ds-color-text-muted', ...RESTATED_READERS]);
+    const rootText = new Map(ROOT_ALIASES);
+    const reached = rootAliasRedeclarations(['--ds-color-text-muted'], new Set());
+    for (const [name, value] of moved.slice(1)) {
+      expect(beforeDecls.has(name), `${name} is new to the block`).toBe(false);
+      expect(value, name).toBe(rootText.get(name));
+      expect(name in reached, `${name} re-resolves the seed`).toBe(true);
+    }
   });
 
   it('an authored chrome literal is served by the compiled block, folded through the vertical dial', () => {

@@ -45,6 +45,7 @@ import {
   SCOPED_ADMITTED_FAMILY_NAMESPACES,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { readGovernedTheme } from "../foundation/intake";
+import { ROOT_ALIASES } from "../../emission/css/root-aliases";
 import { DEFAULT_CHROME_SHAPE } from "@/foundation/contracts/composition/tenants/themes/iso/shape";
 import { migrateV1 as migrateV1WithMode } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import {
@@ -754,7 +755,24 @@ describe("T0 DB mode projection through the common compiler", () => {
     );
     const darkRule = cssRuleVariables(artifact.css, darkSelector);
 
-    expect(baseRule).toEqual(artifact.variables);
+    // 6a91f16ff (one scope re-resolution law for root-declared aliases): the
+    // base rule is the delta PLUS every root alias its operands re-resolve,
+    // each restated with its own root text -- 539 here (615 declarations over
+    // the 76-channel delta). The delta itself is still carried exactly.
+    const rootText = new Map(ROOT_ALIASES);
+    const restatedAliases = Object.entries(baseRule).filter(
+      ([name]) => !(name in artifact.variables)
+    );
+    expect(
+      Object.fromEntries(
+        Object.entries(baseRule).filter(([name]) => name in artifact.variables)
+      )
+    ).toEqual(artifact.variables);
+    for (const [name, value] of restatedAliases) {
+      expect(value, name).toBe(rootText.get(name));
+    }
+    expect(Object.keys(artifact.variables)).toHaveLength(76);
+    expect(restatedAliases).toHaveLength(539);
     expect(baseRule["--ds-color-primary"]).toBe("#2F6B9A");
     expect(darkRule["--ds-color-primary"]).toBe("#315D4D");
     expect(darkRule["--ds-color-bg-primary"]).toBe("#101014");

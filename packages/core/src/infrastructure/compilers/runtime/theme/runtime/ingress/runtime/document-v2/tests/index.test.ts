@@ -33,6 +33,7 @@ import {
   emitThemeCss,
   tenantArtifactScope,
 } from "@/infrastructure/compilers/runtime/theme";
+import { ROOT_ALIASES } from "@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases";
 
 import {
   admitDocument,
@@ -891,12 +892,27 @@ describe("font packs are a registered domain", () => {
     // bithire's own preset authors `display`, so its baseline carries the
     // channel either way. What must hold everywhere is that a document which
     // does not author the role moves it no further than an empty one does.
+    // 6a91f16ff (one scope re-resolution law for root-declared aliases): where
+    // the baseline authors no display role (rottay, evnto), a document stating
+    // `base` now restates the root alias `var(--ds-font-family-base)` beside
+    // it, so display follows the tenant's base font instead of the root's.
+    // That is the alias's own root text, never a display value of its own.
     const displayOf = (text: string) =>
       /--ds-font-family-display:[^;]*;/u.exec(text)?.[0];
+    const FOLLOWS_BASE = new Set<string>(["rottay", "evnto"]);
+    const restated = `--ds-font-family-display: ${new Map(ROOT_ALIASES).get("--ds-font-family-display")};`;
+    expect(restated).toBe("--ds-font-family-display: var(--ds-font-family-base);");
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
-      expect(
-        displayOf(css(vertical, v2({ "typography.families": { base: "humanist-text" } }, "pro")))
-      ).toBe(displayOf(css(vertical, v2({}, "pro"))));
+      const empty = displayOf(css(vertical, v2({}, "pro")));
+      const based = displayOf(
+        css(vertical, v2({ "typography.families": { base: "humanist-text" } }, "pro"))
+      );
+      if (FOLLOWS_BASE.has(vertical)) {
+        expect(empty, vertical).toBeUndefined();
+        expect(based, vertical).toBe(restated);
+      } else {
+        expect(based, vertical).toBe(empty);
+      }
     }
   });
 
