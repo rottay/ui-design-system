@@ -140,8 +140,15 @@ test('a foreign vendor pseudo is not a dead rule, but it drops every selector gr
   // The browser's verdict on the whole list is what decides whether a rule applies.
   const rules = collectRules();
   assert.ok(rules.every((r) => typeof r.group === 'string' && r.group.includes(r.selector.trim())));
-  const grouped = rules.find((r) => /::-webkit-slider-thumb/.test(r.selector) && /::-moz-range-thumb/.test(r.group));
-  assert.ok(grouped, 'the slider thumb rule groups a -webkit- and a -moz- arm');
+  // 82710a70a split every mixed vendor-pseudo group (a browser rejecting one arm
+  // drops the whole list, so grouped -webkit-/-moz- arms painted nothing). The
+  // pin is now the split law itself plus the foreign classification of the
+  // surviving -moz- arms.
+  const mixed = rules.filter((r) => /::-webkit-/.test(r.group) && /::-moz-/.test(r.group));
+  assert.deepEqual(mixed.map((r) => r.selector), [], 'vendor pseudo lists stay separated (82710a70a)');
+  const mozArms = rules.filter((r) => /::-moz-/.test(r.selector));
+  assert.ok(mozArms.length > 0, 'the corpus still carries -moz- arms for the foreign classification to catch');
+  assert.ok(mozArms.every((r) => isForeignVendorSelector(r.selector)), 'every -moz- arm classifies as foreign, never as a dead rule');
 });
 
 test('the skeleton keeps no state or context pseudo-class: only classes, tags and data-part', async () => {
