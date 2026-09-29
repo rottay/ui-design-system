@@ -417,11 +417,16 @@ describe('tenant theme — divergence from the static vertical baseline', () => 
     // d207e58d7 (2026-09-28, the ground-aware elevation ladder): the baseline's
     // dark overlay now states the recovered dark-ground ladder, so the base
     // rule is read on its own and the overlay's level 1 is pinned by value.
+    // 405bde66f (same day, the mode-delta law repair): the light base states
+    // the foundation light ladder, pinned by value here, so the overlay stays
+    // a true delta over declared channels.
     const darkRuleStart = bithireCss.indexOf("[data-theme='dark']");
     expect(darkRuleStart).toBeGreaterThan(0);
     const tenantElevation = read(tenantCss, '--ds-elevation-1');
     expect(tenantElevation, 'DB tenant must emit --ds-elevation-1').toBeDefined();
-    expect(read(bithireCss.slice(0, darkRuleStart), '--ds-elevation-1')).toBeUndefined();
+    expect(read(bithireCss.slice(0, darkRuleStart), '--ds-elevation-1')).toBe(
+      '0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)',
+    );
     expect(read(bithireCss.slice(darkRuleStart), '--ds-elevation-1')).toBe(
       'inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)',
     );
