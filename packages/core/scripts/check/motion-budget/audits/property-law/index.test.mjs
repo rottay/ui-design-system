@@ -60,7 +60,11 @@ test('DRILL: a new site is REFUSED, and a drained roster entry is REFUSED as sta
 });
 
 test('DRILL: a scanner that stopped walking is REFUSED by the corpus floor', () => {
-  const raised = { ...baseline, corpus: { ...baseline.corpus, floorFiles: baseline.corpus.files + 1 } };
+  // The floor must exceed the LIVE corpus: pinning it one above the recorded
+  // corpus.files silently becomes a live floor once the corpus legitimately
+  // grows, and the drill then proves nothing.
+  const { files } = audit(baseline);
+  const raised = { ...baseline, corpus: { ...baseline.corpus, floorFiles: files + 1 } };
   assert.ok(audit(raised).problems.some((problem) => problem.includes('corpus floor')));
 });
 
@@ -160,6 +164,11 @@ test('the blind-spot count is MEASURED over the sheets, not read back from the b
   let declarations = 0;
   const owners = new Set();
   for (const path of cssFiles) {
+    // The exclusions are the measurement's: facade/artifacts mirrors the source
+    // sheets (5 generated declarations per vertical), and counting generated
+    // duplicates would read one authority as two.
+    const relativePath = path.replaceAll('\\', '/');
+    if (baseline.excluded.some((fragment) => relativePath.includes(fragment))) continue;
     const css = readFileSync(path, 'utf8');
     pattern.lastIndex = 0;
     for (const match of css.matchAll(pattern)) {
@@ -176,5 +185,9 @@ test('the blind-spot count is MEASURED over the sheets, not read back from the b
   assert.match(blindSpot.disposition, /not this lot/u);
 
   // And the class is genuinely distinct from the roster's DIRECT `all` sites.
-  assert.equal(baseline.counts.byKind.transitionAll, 1);
+  // That class is EMPTY since 7a79c1b89 (WO-RET-02 packet 1) drained the single
+  // framework-bridge site; the pin is kept at 0 as the anti-return record -- the
+  // roster is decrease-only, so a new direct `all` enters as a NEW site and the
+  // gate reddens before this assertion is ever reached.
+  assert.equal(baseline.counts.byKind.transitionAll, 0);
 });

@@ -90,16 +90,16 @@
   "countingUnit": "one site = one (file, line, kind, property). A single declaration with two layout legs is two sites; the debrief's per-declaration estimate is therefore lower than this roster by construction.",
   "termWeights": {
     "grammar": {
-      "frozen": 68,
-      "singleLineAnchored": 11,
+      "frozen": 67,
+      "singleLineAnchored": 10,
       "worth": 57
     },
     "tokenList": {
-      "frozen": 68,
-      "engineAuditKebabListOnly": 30,
+      "frozen": 67,
+      "engineAuditKebabListOnly": 29,
       "worth": 38
     },
-    "note": "Measured on this corpus with this counting unit, by the drill beside this file. Both terms are load-bearing; the grammar is the larger, which is why it is frozen before the count. The debrief's 16/1 decomposition was taken over src/** with a per-declaration unit and a different widening -- not comparable, and not carried forward."
+    "note": "Measured on this corpus with this counting unit, by the drill beside this file. Both terms are load-bearing; the grammar is the larger, which is why it is frozen before the count. Re-measured 2026-09-29 over the drained corpus (7a79c1b89 retired the one direct transition:all): frozen 68 -> 67, single-line 11 -> 10, kebab-only 30 -> 29; both worths unchanged. The debrief's 16/1 decomposition was taken over src/** with a per-declaration unit and a different widening -- not comparable, and not carried forward."
   },
   "knownBlindSpots": [
     {
@@ -121,32 +121,32 @@
         "tag"
       ],
       "evidence": "11 `--ds-<component>-transition: all var(...)` channel declarations under presentation/components/**, one per owner listed above. The DECLARATION is a channel definition, not an applied transition, and the READ names no layout property at the call site, so neither the frozen grammar nor Arm A can see it.",
-      "correction": "An earlier revision of this file said 12. That figure came from a looser `transition:\\s*all` grep over the whole stylesheet tree, which also swept in `runtime/engines/modern/framework-bridge/index.css:63` -- a DIRECT `transition: all 0.2s ease`, which is a different class and is already the single `transitionAll` row of this roster. The two classes are counted separately now; the drill measures `pattern` over `scanRoot` and refuses a baseline number that disagrees with the sheets.",
+      "correction": "An earlier revision of this file said 12. That figure came from a looser `transition:\\s*all` grep over the whole stylesheet tree, which also swept in `runtime/engines/modern/framework-bridge/index.css:63` -- a DIRECT `transition: all 0.2s ease`, a different class that was the roster's single `transitionAll` row until 7a79c1b89 (WO-RET-02 packet 1) drained it with the bridge shrink (the class is now empty; the anti-return pin lives in the drill). The two classes are counted separately; the drill measures `pattern` over `scanRoot` MINUS the baseline exclusions -- the facade/artifacts mirrors carry 5 generated copies per vertical and counting them would read one authority as two (the drill missed the exclusion filter until 2026-09-29 and read 26 where the source sheets carry 11).",
       "disposition": "OUT of this roster on purpose. The closed alias map is `--ds-transition-*` only (the adopted ruling); widening it to per-component channels would mint a second authority for `which channel expands to a layout property` that can drift from the sheets. Owner: the property-law drain programme, which is not this lot."
     }
   ],
   "corpus": {
-    "files": 383,
+    "files": 385,
     "floorFiles": 381,
-    "note": "383 stylesheets were reachable when the roster was seeded, two of which were another writer's uncommitted a11y sheets (zero sites in either). The FLOOR is 381 -- what this lot can vouch for -- because a floor exists to catch a scanner that stopped walking, not to pin an exact corpus that any legitimate new stylesheet moves."
+    "note": "385 stylesheets were reachable on the 2026-09-29 re-anchor (383 at seed, two of which were another writer's uncommitted a11y sheets, zero sites in either). The FLOOR is 381 -- what this lot can vouch for -- because a floor exists to catch a scanner that stopped walking, not to pin an exact corpus that any legitimate new stylesheet moves."
   },
   "counts": {
-    "total": 68,
+    "total": 67,
     "byKind": {
       "layoutProperty": 63,
       "layoutAlias": 4,
-      "transitionAll": 1
+      "transitionAll": 0
     }
   },
   "lastMove": {
-    "date": "2026-09-25",
-    "kind": "line moves only: same file, kind and property; count 68 unchanged",
+    "date": "2026-09-29",
+    "kind": "line moves plus one drain: 10 sites re-anchored to the same declaration at its new line; the framework-bridge transitionAll:all site drained with the bridge shrink; count 68 -> 67",
     "movers": [
-      "802aa2120 (B45 paint drain): stack skin re-base removed above the site, --ds-transition-rearrange 199 -> 182",
-      "a3b241626 (on-primary ink lot): tooltip skin lines inserted above the site, the six inset/left/right legs 288 -> 294",
-      "e4d492f3c (C12 census lot): the app-shell skin dropped --ds-shell-inline-end-inset one line above the site, width 111 -> 110 (the move the notMoved note below parked while it lived only in a working tree; it is committed now, re-pinned here by the DT with the mover named)"
+      "7a79c1b89 (WO-RET-02 packet 1): the bridge shrink 462 -> 195 deleted the direct `transition: all` at framework-bridge:63 (the roster transitionAll count goes 1 -> 0 -- a drain, the lawful direction) and the 47 dead personality list entries moved the six personality sites 556 -> 535, 647 -> 617, 669 -> 637, 811 -> 767",
+      "730666676 (WO-FAM-12 packet 1): the auto-fit grid rules moved --ds-transition-rearrange 116 -> 155",
+      "ffd812104 (WO-FAM-12 packet 4a): the catalog auto-fit rule moved the widget-board rearrange triple 423 -> 424"
     ],
-    "notMoved": "none pending: the app-shell width move this note parked landed in e4d492f3c and is re-pinned in the movers list above"
+    "notMoved": "none pending"
   },
   "sites": [
     {
@@ -283,27 +283,21 @@
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
-      "line": 423,
+      "line": 424,
       "kind": "layoutProperty",
       "property": "block-size"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
-      "line": 423,
+      "line": 424,
       "kind": "layoutProperty",
       "property": "height"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
-      "line": 423,
+      "line": 424,
       "kind": "layoutProperty",
       "property": "inline-size"
-    },
-    {
-      "file": "src/foundation/tokens/css/runtime/engines/modern/framework-bridge/index.css",
-      "line": 63,
-      "kind": "transitionAll",
-      "property": "all"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/aspect-ratio/index.css",
@@ -415,7 +409,7 @@
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/grid/index.css",
-      "line": 116,
+      "line": 155,
       "kind": "layoutAlias",
       "property": "--ds-transition-rearrange"
     },
@@ -523,37 +517,37 @@
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 556,
+      "line": 535,
       "kind": "layoutProperty",
       "property": "height"
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 556,
+      "line": 535,
       "kind": "layoutProperty",
       "property": "width"
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 647,
+      "line": 617,
       "kind": "layoutProperty",
       "property": "left"
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 647,
+      "line": 617,
       "kind": "layoutProperty",
       "property": "width"
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 669,
+      "line": 637,
       "kind": "layoutProperty",
       "property": "width"
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 811,
+      "line": 767,
       "kind": "layoutProperty",
       "property": "max-height"
     }
