@@ -1078,7 +1078,10 @@ describe("static and DB share one lowering", () => {
         // rottay's retired theme stated `none` for it as well, so the tenant's
         // flat posture moved nothing there; the preset states no elevation
         // ladder of its own, so the posture now moves role 0 like the rest.
-        "--ds-elevation-0": "none",
+        // d207e58d7 (2026-09-28, the ground-aware elevation ladder): rottay's
+        // dark-ground baseline states the recovered ladder again, role 0 `none`
+        // included, so role 0 leaves the delta on BOTH stops (asserted below);
+        // roles 1..6 are byte-unchanged.
         "--ds-elevation-1": "none",
         "--ds-elevation-2": "none",
         "--ds-elevation-3": "0 1px 2px rgba(0,0,0,0.05)",
@@ -1087,8 +1090,8 @@ describe("static and DB share one lowering", () => {
         "--ds-elevation-6": "0 2px 6px rgba(0,0,0,0.08)",
       },
       elevated: {
-        // Same move as `flat` above: role 0 joins the delta over the preset.
-        "--ds-elevation-0": "none",
+        // Same move as `flat` above: role 0 joins the delta over the preset,
+        // and leaves it again with d207e58d7.
         "--ds-elevation-1": "0 2px 4px rgba(0,0,0,0.08)",
         "--ds-elevation-2": "0 4px 8px rgba(0,0,0,0.1)",
         "--ds-elevation-3": "0 8px 16px rgba(0,0,0,0.12)",
@@ -1109,7 +1112,15 @@ describe("static and DB share one lowering", () => {
           value
         );
       }
+      // d207e58d7: withdrawn because it equals the baseline, never because the
+      // posture stopped arriving -- the baseline value it displaces is pinned.
+      expect(artifact.variables["--ds-elevation-0"], `rottay/${stop} role 0`).toBeUndefined();
     }
+    expect(
+      lowerTheme(FIRST_PARTY_BASELINES.rottay, { tenantSlug: IDENTITY.slug })
+        .cssVariables["--ds-elevation-0"],
+      "rottay's dark-ground baseline states role 0 itself (d207e58d7)"
+    ).toBe("none");
     // `soft` writes no channel at all (its preset is empty), so it is not a
     // witness for this axis on ANY vertical -- asserted so a future reader does
     // not mistake its silence for this defect returning.
@@ -1138,9 +1149,11 @@ describe("static and DB share one lowering", () => {
 
     // And the floor reaches ONLY what it should: the two verticals without an
     // authored ladder are untouched by the change.
+    // d207e58d7 leaves light bases unstated, so bithire's delta keeps role 0
+    // where rottay's dark-ground baseline withdrew it.
     expect(
       compileFor("bithire", elevationDoc("elevated")).variables
-    ).toEqual(PRESET.elevated);
+    ).toEqual({ "--ds-elevation-0": "none", ...PRESET.elevated });
   });
 
   it("case G2: one lowering, and provenance moves only what it arbitrates", () => {

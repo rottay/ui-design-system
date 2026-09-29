@@ -890,6 +890,18 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     expect(bithireDark?.cardComponent?.bg, "and the dark card bg with it").toBeUndefined();
     expect(bithireDark?.table?.headerBg, "and the dark table header bg with it").toBeUndefined();
     expect(artifact.modeDeltas ?? []).toHaveLength(0);
+    // fb5c2b2ca (2026-09-29, the radius chain re-resolves at the tenant
+    // scope): the block states `--ds-radius-md-base`, so the emitter restates
+    // that one step's `:root` chain beside it -- one css line, never a
+    // variable, and no other step because the block states no scale. Pinned
+    // here byte-exact so trimming it below hides nothing.
+    const RADIUS_MD_CHAIN_LINE =
+      "  --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));";
+    expect(
+      cssBody(artifact)
+        .split("\n")
+        .filter((line) => /^\s*--ds-radius-(sm|md|lg|xl):/.test(line))
+    ).toEqual([RADIUS_MD_CHAIN_LINE]);
     // With the sidebar pair restored, the css body needs no value rewrite at
     // all: retirements and the radius dial are the only two things still
     // standing between this document and the frozen fixture, byte for byte.
@@ -917,6 +929,8 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
           "--ds-elevation-6",
           "--ds-radius-md-base",
           "--ds-shell-topbar-height",
+          // fb5c2b2ca: the chain line pinned above; the frozen fixture predates it.
+          "--ds-radius-md",
         ]
       )
     ).toBe(

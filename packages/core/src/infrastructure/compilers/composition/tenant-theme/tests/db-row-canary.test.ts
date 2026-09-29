@@ -414,9 +414,17 @@ describe('tenant theme — divergence from the static vertical baseline', () => 
     // second vocabulary. The DB tenant declares its own concrete value, so the
     // divergence is asserted where it exists: the tenant declares, the baseline
     // consumes the same name (WO-DER-06 derivation-lane registry, 2026-09-15).
+    // d207e58d7 (2026-09-28, the ground-aware elevation ladder): the baseline's
+    // dark overlay now states the recovered dark-ground ladder, so the base
+    // rule is read on its own and the overlay's level 1 is pinned by value.
+    const darkRuleStart = bithireCss.indexOf("[data-theme='dark']");
+    expect(darkRuleStart).toBeGreaterThan(0);
     const tenantElevation = read(tenantCss, '--ds-elevation-1');
     expect(tenantElevation, 'DB tenant must emit --ds-elevation-1').toBeDefined();
-    expect(read(bithireCss, '--ds-elevation-1')).toBeUndefined();
+    expect(read(bithireCss.slice(0, darkRuleStart), '--ds-elevation-1')).toBeUndefined();
+    expect(read(bithireCss.slice(darkRuleStart), '--ds-elevation-1')).toBe(
+      'inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)',
+    );
     expect(bithireCss).toContain('var(--ds-elevation-1)');
     expect(tenantCss).not.toBe(bithireCss);
   });
