@@ -1,15 +1,18 @@
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { test } from 'node:test';
 
 import {
   evaluateAdoption,
   evaluateParity,
+  findUserVisibleLiterals,
   loadLocaleKeys,
   measureAdoption,
   measureArgumentlessToLocale,
+  moduleI18nFacts,
+  pureReExportTargets,
   readSupportedLocales,
   runI18nKeyParityGate,
 } from './index.mjs';
@@ -219,7 +222,12 @@ test('a planted Modern entrypoint without a translation hook drops the share bel
 
 test('a Modern share above the floor reports a tighten opportunity and the target verdict, not a failure', () => {
   const result = evaluateAdoption({
-    adoption: { all: { adopted: 9, total: 10 }, modern: { adopted: 9, total: 10 }, modernUnadopted: [] },
+    adoption: {
+      all: { adopted: 9, total: 10 },
+      modern: { adopted: 9, total: 10 },
+      modernUnadopted: [],
+      modernTextCarrying: { adopted: 9, total: 10 },
+    },
     toLocaleSites: ['a.ts:1'],
     baseline: ADOPTION_BASELINE,
   });
@@ -244,7 +252,12 @@ test('a planted argument-less toLocale*() past the ceiling fails', (t) => {
   t.after(() => rmSync(root, { recursive: true, force: true }));
 
   const result = evaluateAdoption({
-    adoption: { all: { adopted: 1, total: 2 }, modern: { adopted: 1, total: 2 }, modernUnadopted: [] },
+    adoption: {
+      all: { adopted: 1, total: 2 },
+      modern: { adopted: 1, total: 2 },
+      modernUnadopted: [],
+      modernTextCarrying: { adopted: 1, total: 2 },
+    },
     toLocaleSites: measureArgumentlessToLocale(root),
     baseline: ADOPTION_BASELINE,
   });
@@ -256,4 +269,101 @@ test('the real tree holds the adoption floor and the toLocale ceiling', () => {
   assert.ok(result.adoption.modern.total > 0 && result.adoption.all.total >= result.adoption.modern.total);
   assert.ok(result.toLocaleSites.every((site) => !site.includes('/tests/')));
   assert.equal(result.pass, true, result.failures.join('\n'));
+});
+
+test('user-visible literals: JSX text, text attributes and rendered branches count; comments, classes, symbols and t() fallbacks do not', () => {
+  const source = [
+    '/** <Button title="Doc example">Doc text</Button> */',
+    'export const A = ({ busy, i18n, label }) => (',
+    '  <Box className="ds-a" data-part="root" aria-label="Close panel">',
+    '    Hello world',
+    '    {busy ? "Saving" : label}',
+    '    {i18n?.t("components.a.done") ?? "Done"}',
+    '    {i18n?.tOr("components.a.x", "Fallback")}',
+    '    <Input placeholder={label ?? "Search"} title={`Page ${1}`} />',
+    '    {" · "}&nbsp;×',
+    '  </Box>',
+    ');',
+  ].join('\n');
+  assert.deepEqual(findUserVisibleLiterals(source), [
+    '3:Close panel',
+    '4:Hello world',
+    '5:Saving',
+    '8:Search',
+    '8:Page',
+  ]);
+});
+
+test('a pure re-export is measured through its target; a file declaring its own code is not a re-export', (t) => {
+  const root = plant({
+    'a/runtime/rendering/index.tsx': "const i18n = useOptionalTranslation('common');\nexport default () => <Text>{i18n.t('x')}</Text>;",
+    'a/engines/modern/index.tsx': "/** alias */\nexport { default } from '../../runtime/rendering';",
+    'b/runtime/rendering/index.tsx': 'export default () => <Text>Plain copy</Text>;',
+    'b/engines/modern/index.tsx': "export { default } from '../../runtime/rendering';",
+    'c/engines/modern/index.tsx': "export { default } from '../../runtime/rendering';\nexport const extra = 1;",
+  });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+
+  assert.deepEqual(pureReExportTargets("export { default } from './x';\nexport * from './y';"), ['./x', './y']);
+  assert.equal(pureReExportTargets("export { default } from 'pkg';"), null);
+  const a = moduleI18nFacts(join(root, 'a/engines/modern/index.tsx'));
+  assert.equal(a.hook, true);
+  assert.deepEqual(a.reExportOf, [join(root, 'a/runtime/rendering/index.tsx')]);
+  const b = moduleI18nFacts(join(root, 'b/engines/modern/index.tsx'));
+  assert.equal(b.hook, false);
+  assert.deepEqual(b.literals, ['1:Plain copy']);
+  assert.equal(moduleI18nFacts(join(root, 'c/engines/modern/index.tsx')).reExportOf, null);
+});
+
+test('text-carrying adoption excludes text-free files, follows re-exports and lists hardcoded and residual copy', (t) => {
+  const root = plant({
+    'r/runtime/rendering/index.tsx': "useOptionalTranslation('common');",
+    'r/engines/modern/index.tsx': "export { default } from '../../runtime/rendering';",
+    'adopted/engines/modern/index.tsx': "const i18n = useOptionalTranslation('common');\nexport const A = () => <Text aria-label=\"Left over\">{i18n.t('k')}</Text>;",
+    'hardcoded/engines/modern/index.tsx': 'export const H = () => <Text>Only English</Text>;',
+    'silent/engines/modern/index.tsx': 'export const S = ({ children }) => <Box>{children}</Box>;',
+  });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+
+  const adoption = measureAdoption(root);
+  assert.deepEqual(adoption.modern, { adopted: 1, total: 4 });
+  assert.deepEqual(adoption.modernFollowed, { adopted: 2, total: 4 });
+  assert.deepEqual(adoption.modernReExports, ['r/engines/modern/index.tsx']);
+  const carrying = adoption.modernTextCarrying;
+  assert.deepEqual([carrying.adopted, carrying.total, carrying.withoutText], [2, 3, 1]);
+  assert.deepEqual(carrying.hardcoded, [{ path: 'hardcoded/engines/modern/index.tsx', literals: ['1:Only English'] }]);
+  assert.deepEqual(carrying.residual, [{ path: 'adopted/engines/modern/index.tsx', literals: ['2:Left over'] }]);
+});
+
+test('the 90% target verdict reads off the text-carrying measure, not the hook-mention share', () => {
+  const result = evaluateAdoption({
+    adoption: {
+      all: { adopted: 1, total: 10 },
+      modern: { adopted: 1, total: 10 },
+      modernUnadopted: [],
+      modernTextCarrying: { adopted: 1, total: 1 },
+    },
+    toLocaleSites: ['a.ts:1'],
+    baseline: ADOPTION_BASELINE,
+  });
+  assert.equal(result.targetMet, true);
+});
+
+test('drill: a hardcoded label planted in a text-free Modern file of a copy of the real tree moves the text-carrying measure by one', (t) => {
+  const componentsRoot = resolve(dirname(new URL(import.meta.url).pathname), '../../../src/components');
+  const copy = mkdtempSync(join(tmpdir(), 'i18n-drill-'));
+  t.after(() => rmSync(copy, { recursive: true, force: true }));
+  cpSync(componentsRoot, copy, { recursive: true });
+
+  const before = measureAdoption(copy).modernTextCarrying;
+  const target = 'primitives/display/kbd/engines/modern/index.tsx';
+  assert.ok(!before.hardcoded.some((row) => row.path === target), 'the drill target must start text-free');
+  const planted = readFileSync(join(copy, target), 'utf8') + '\nexport const Drill = () => <Box aria-label="Planted label" />;\n';
+  writeFileSync(join(copy, target), planted);
+
+  const after = measureAdoption(copy).modernTextCarrying;
+  assert.equal(after.total, before.total + 1);
+  assert.equal(after.adopted, before.adopted);
+  assert.equal(after.withoutText, before.withoutText - 1);
+  assert.deepEqual(after.hardcoded.find((row) => row.path === target)?.literals.at(-1)?.split(':')[1], 'Planted label');
 });

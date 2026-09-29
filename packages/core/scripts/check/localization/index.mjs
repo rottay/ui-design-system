@@ -47,8 +47,16 @@
  *   - ADOPTION: of every `index.tsx` under `src/components` outside a `tests/`
  *     folder, the share whose text names a translation hook
  *     (`useTranslation` / `useOptionalTranslation`). The Modern slice (paths
- *     under `/engines/modern/`) carries a decrease-only FLOOR and the 90 %
- *     target; the whole-tree share is printed, not gated.
+ *     under `/engines/modern/`) carries a decrease-only FLOOR; the whole-tree
+ *     share is printed, not gated.
+ *   - TEXT-CARRYING ADOPTION: the same Modern slice restricted to files that
+ *     put copy on screen -- through the catalog or as a hardcoded JSX text
+ *     node / text-attribute literal -- with pure re-exports measured through
+ *     their target. A file rendering no text of its own cannot adopt the
+ *     catalog, so it is outside this denominator. The 90 % target reads off
+ *     THIS measure, never off the hook-mention share: the only way to move the
+ *     hook share on a text-free file is an unused hook call. Reported, not
+ *     gated.
  *   - ARGUMENT-LESS toLocale: lines under `src/` outside a `tests/` folder
  *     matching `toLocale[A-Z][a-zA-Z]*()`. A call with no locale formats in
  *     the runtime's language, not the provider's; the count is a
@@ -59,9 +67,10 @@
  *   node scripts/check/localization/index.mjs --check   # exit 1 on any violation
  *   node scripts/check/localization/index.mjs --seed    # (re)author the baseline
  */
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 import { packageRoot as findPackageRoot } from '../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -319,15 +328,194 @@ function walkFiles(root, relative = '') {
   return out;
 }
 
-/** The adoption census: component entrypoints naming a translation hook, whole tree and Modern slice. */
+/** JSX attributes whose literal value reaches the user as text or as an accessible name. */
+const TEXT_ATTRIBUTES = new Set([
+  'aria-label',
+  'aria-description',
+  'aria-placeholder',
+  'aria-roledescription',
+  'aria-valuetext',
+  'placeholder',
+  'title',
+  'label',
+  'alt',
+]);
+const TRANSLATION_CALLEES = new Set(['t', 'tOr']);
+const LETTER = /\p{L}/u;
+const HTML_ENTITY = /&(?:[a-zA-Z]+|#\d+|#x[0-9a-fA-F]+);/g;
+const RESOLVE_SUFFIXES = ['', '.tsx', '.ts', '/index.tsx', '/index.ts'];
+
+const carriesLetters = (text) => LETTER.test(text.replace(HTML_ENTITY, ''));
+
+function containsTranslationCall(node) {
+  if (ts.isCallExpression(node)) {
+    const callee = node.expression;
+    const name = ts.isIdentifier(callee)
+      ? callee.text
+      : ts.isPropertyAccessExpression(callee)
+        ? callee.name.text
+        : undefined;
+    if (name && TRANSLATION_CALLEES.has(name)) return true;
+  }
+  return ts.forEachChild(node, containsTranslationCall) ?? false;
+}
+
+/**
+ * Collects the string literals an expression can render as-is. Only value
+ * positions are followed (conditional branches, logical operands, templates);
+ * call arguments are never rendered verbatim, and the right operand of a `??`
+ * or `||` whose left side calls `t`/`tOr` is a catalog fallback, not debt.
+ */
+function renderedLiterals(node, sourceFile, out) {
+  if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
+    if (carriesLetters(node.text)) out.push({ node, text: node.text });
+  } else if (ts.isTemplateExpression(node)) {
+    const pieces = [node.head.text, ...node.templateSpans.map((span) => span.literal.text)].join(' ');
+    if (carriesLetters(pieces)) out.push({ node, text: pieces.trim() });
+    for (const span of node.templateSpans) renderedLiterals(span.expression, sourceFile, out);
+  } else if (
+    ts.isParenthesizedExpression(node) ||
+    ts.isAsExpression(node) ||
+    ts.isSatisfiesExpression(node) ||
+    ts.isNonNullExpression(node)
+  ) {
+    renderedLiterals(node.expression, sourceFile, out);
+  } else if (ts.isConditionalExpression(node)) {
+    renderedLiterals(node.whenTrue, sourceFile, out);
+    renderedLiterals(node.whenFalse, sourceFile, out);
+  } else if (ts.isBinaryExpression(node)) {
+    const operator = node.operatorToken.kind;
+    if (operator === ts.SyntaxKind.AmpersandAmpersandToken) {
+      renderedLiterals(node.right, sourceFile, out);
+    } else if (
+      operator === ts.SyntaxKind.QuestionQuestionToken ||
+      operator === ts.SyntaxKind.BarBarToken
+    ) {
+      renderedLiterals(node.left, sourceFile, out);
+      if (!containsTranslationCall(node.left)) renderedLiterals(node.right, sourceFile, out);
+    }
+  }
+}
+
+/**
+ * Hardcoded user-visible strings in one TSX source: JSX text nodes, literals
+ * rendered from a JSX child expression, and literal values of the text
+ * attributes in `TEXT_ATTRIBUTES`. Each hit is `line:text`.
+ */
+export function findUserVisibleLiterals(source, fileName = 'index.tsx') {
+  const sourceFile = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const hits = [];
+  const record = (node, text) => {
+    const { line } = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
+    hits.push(`${line + 1}:${text.replace(/\s+/g, ' ').trim()}`);
+  };
+  const visit = (node) => {
+    if (ts.isJsxText(node)) {
+      if (carriesLetters(node.text)) record(node, node.text);
+    } else if (ts.isJsxExpression(node) && node.expression && (ts.isJsxElement(node.parent) || ts.isJsxFragment(node.parent))) {
+      const literals = [];
+      renderedLiterals(node.expression, sourceFile, literals);
+      for (const literal of literals) record(literal.node, literal.text);
+    } else if (ts.isJsxAttribute(node) && TEXT_ATTRIBUTES.has(node.name.getText(sourceFile)) && node.initializer) {
+      const literals = [];
+      if (ts.isStringLiteral(node.initializer)) {
+        renderedLiterals(node.initializer, sourceFile, literals);
+      } else if (ts.isJsxExpression(node.initializer) && node.initializer.expression) {
+        renderedLiterals(node.initializer.expression, sourceFile, literals);
+      }
+      for (const literal of literals) record(literal.node, literal.text);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return hits;
+}
+
+/**
+ * The relative module specifiers of a file whose entire content is `export …
+ * from '…'` statements, or null when it declares anything of its own.
+ */
+export function pureReExportTargets(source, fileName = 'index.tsx') {
+  const sourceFile = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  if (sourceFile.statements.length === 0) return null;
+  const targets = [];
+  for (const statement of sourceFile.statements) {
+    if (!ts.isExportDeclaration(statement) || !statement.moduleSpecifier) return null;
+    const specifier = statement.moduleSpecifier.text;
+    if (!specifier.startsWith('.')) return null;
+    targets.push(specifier);
+  }
+  return targets;
+}
+
+function resolveModule(fromFile, specifier) {
+  const base = resolve(dirname(fromFile), specifier);
+  return RESOLVE_SUFFIXES.map((suffix) => `${base}${suffix}`).find((candidate) => existsSync(candidate) && statSync(candidate).isFile());
+}
+
+/**
+ * The i18n facts of one module: whether it names a translation hook and which
+ * hardcoded literals it renders. A pure re-export takes its facts from its
+ * targets -- adopted only when every target is, carrying their literals -- so a
+ * one-line engine alias of a translating renderer is measured as that renderer.
+ */
+export function moduleI18nFacts(absolutePath, seen = new Set()) {
+  const source = readFileSync(absolutePath, 'utf8');
+  const targets = seen.has(absolutePath) ? null : pureReExportTargets(source, absolutePath);
+  if (targets) {
+    seen.add(absolutePath);
+    const resolved = targets.map((specifier) => resolveModule(absolutePath, specifier));
+    if (resolved.every(Boolean)) {
+      const facts = resolved.map((target) => moduleI18nFacts(target, seen));
+      return {
+        hook: facts.every((fact) => fact.hook),
+        literals: facts.flatMap((fact) => fact.literals),
+        reExportOf: resolved,
+      };
+    }
+  }
+  return { hook: TRANSLATION_HOOK.test(source), literals: findUserVisibleLiterals(source, absolutePath), reExportOf: null };
+}
+
+/**
+ * The adoption census over component entrypoints, whole tree and Modern slice.
+ *   - `modern`: entrypoints whose own text names a translation hook (the
+ *     ratcheted row as registered).
+ *   - `modernFollowed`: the same, with pure re-exports measured through their
+ *     targets.
+ *   - `modernTextCarrying`: the honest population -- Modern entrypoints that
+ *     put copy on screen, either through the catalog or as a hardcoded literal
+ *     (re-exports followed). A file with neither renders no text of its own and
+ *     is outside the denominator. `adopted` names a hook; `residual` lists
+ *     adopted files still rendering a hardcoded literal.
+ */
 export function measureAdoption(componentsRoot = COMPONENTS_ROOT) {
   const entrypoints = walkFiles(componentsRoot).filter((path) => path === 'index.tsx' || path.endsWith('/index.tsx'));
   const adopted = entrypoints.filter((path) => TRANSLATION_HOOK.test(readFileSync(join(componentsRoot, path), 'utf8')));
   const isModern = (path) => `/${path}`.includes(MODERN_SEGMENT);
+  const modernEntrypoints = entrypoints.filter(isModern);
+  const facts = new Map(modernEntrypoints.map((path) => [path, moduleI18nFacts(join(componentsRoot, path))]));
+  const followed = modernEntrypoints.filter((path) => facts.get(path).hook);
+  const carrying = modernEntrypoints.filter((path) => facts.get(path).hook || facts.get(path).literals.length > 0);
+  const hardcoded = carrying
+    .filter((path) => !facts.get(path).hook)
+    .map((path) => ({ path, literals: facts.get(path).literals }));
+  const residual = carrying
+    .filter((path) => facts.get(path).hook && facts.get(path).literals.length > 0)
+    .map((path) => ({ path, literals: facts.get(path).literals }));
   return {
     all: { adopted: adopted.length, total: entrypoints.length },
-    modern: { adopted: adopted.filter(isModern).length, total: entrypoints.filter(isModern).length },
-    modernUnadopted: entrypoints.filter((path) => isModern(path) && !adopted.includes(path)).sort(),
+    modern: { adopted: adopted.filter(isModern).length, total: modernEntrypoints.length },
+    modernUnadopted: modernEntrypoints.filter((path) => !adopted.includes(path)).sort(),
+    modernFollowed: { adopted: followed.length, total: modernEntrypoints.length },
+    modernReExports: modernEntrypoints.filter((path) => facts.get(path).reExportOf).sort(),
+    modernTextCarrying: {
+      adopted: carrying.length - hardcoded.length,
+      total: carrying.length,
+      withoutText: modernEntrypoints.length - carrying.length,
+      hardcoded,
+      residual,
+    },
   };
 }
 
@@ -379,7 +567,7 @@ export function evaluateAdoption({ adoption, toLocaleSites, baseline }) {
   return {
     failures,
     tightenOpportunities,
-    targetMet: typeof target === 'number' && percent(adoption.modern) >= target,
+    targetMet: typeof target === 'number' && percent(adoption.modernTextCarrying) >= target,
   };
 }
 
@@ -416,6 +604,8 @@ export function runI18nKeyParityGate({
   result.tightenOpportunities.push(...adoptionRows.tightenOpportunities);
   result.adoptionTargetMet = adoptionRows.targetMet;
   result.adoptionTargetPercent = baseline.adoption?.modernTargetPercent;
+  const floor = baseline.adoption?.modernFloor;
+  result.adoptionFloor = floor ? `${floor.adopted}/${floor.total}` : 'unset';
   result.pass = result.failures.length === 0;
   return result;
 }
@@ -435,6 +625,7 @@ function seedBaseline(baselinePath) {
   const next = {
     _comment: existing._comment,
     referenceKeyCount: result.referenceKeyCount,
+    referenceKeyCountReason: existing.referenceKeyCountReason,
     mandatoryLocales: existing.mandatoryLocales,
     declaredPartialLocales: {},
   };
@@ -486,17 +677,24 @@ function main() {
     );
   }
 
-  const { all, modern } = result.adoption;
-  console.log(`  adoption, all component entrypoints          : ${all.adopted}/${all.total} (${percent(all).toFixed(1)}%)`);
+  const { all, modern, modernFollowed, modernTextCarrying: carrying } = result.adoption;
+  console.log(`  adoption, all component entrypoints          : ${all.adopted}/${all.total} (${percent(all).toFixed(1)}%) — every src/components/**/index.tsx outside tests/`);
+  console.log(`  adoption, Modern slice (hook mention, gated) : ${modern.adopted}/${modern.total} (${percent(modern).toFixed(1)}%) — every Modern entrypoint; floor ${result.adoptionFloor}`);
+  console.log(`  adoption, Modern slice, re-exports followed  : ${modernFollowed.adopted}/${modernFollowed.total} (${percent(modernFollowed).toFixed(1)}%) — same denominator`);
   console.log(
-    `  adoption, Modern slice                       : ${modern.adopted}/${modern.total} (${percent(modern).toFixed(1)}%)` +
+    `  adoption, Modern text-carrying (target)      : ${carrying.adopted}/${carrying.total} (${percent(carrying).toFixed(1)}%)` +
+      ` — Modern entrypoints rendering copy; ${carrying.withoutText} render none and are excluded` +
       ` — target ${result.adoptionTargetPercent}% ${result.adoptionTargetMet ? 'MET' : 'not met'}`
   );
+  console.log(`  adopted Modern files still rendering a literal: ${carrying.residual.length} (reported, not gated)`);
   console.log(`  argument-less toLocale*() lines              : ${result.toLocaleSites.length}`);
 
   if (mode === 'report') {
     for (const site of result.toLocaleSites) console.log(`    toLocale: ${site}`);
     for (const path of result.adoption.modernUnadopted) console.log(`    Modern without a translation hook: ${path}`);
+    for (const path of result.adoption.modernReExports) console.log(`    Modern pure re-export, measured through its target: ${path}`);
+    for (const { path, literals } of carrying.hardcoded) console.log(`    Modern hardcoded copy, no catalog: ${path} ${literals.join(' | ')}`);
+    for (const { path, literals } of carrying.residual) console.log(`    Modern adopted, literal left: ${path} ${literals.join(' | ')}`);
     for (const row of result.census) {
       if (row.missing.length === 0) continue;
       console.log(`\n  ${row.locale} missing (${row.missing.length}):`);

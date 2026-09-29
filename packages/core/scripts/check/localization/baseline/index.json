@@ -1,6 +1,7 @@
 {
-  "_comment": "Locale classification + decrease-only shortfall ledger for i18n-key-parity-gate.mjs. `mandatoryLocales` ship at 100% of the reference key set (the union of every mandatory locale's leaf keys) -- any hole fails --check and there is NO baseline escape for them. `declaredPartialLocales` ship incomplete BY DECISION; their `missing` count is a decrease-only CEILING: growth fails --check, a NEW partial locale with no entry fails --check, and a shrink reports a tighten opportunity (run --seed to lower the ceiling). Every locale in SUPPORTED_LOCALES must appear in exactly one of the two lists. `adoption.modernFloor` is a decrease-only FLOOR on the share of Modern component entrypoints naming a translation hook (a fall fails --check, a rise reports a tighten opportunity); `modernTargetPercent` is reported, not enforced. `argumentlessToLocale.ceiling` is a decrease-only CEILING on argument-less toLocale*() lines under src/ outside tests/.",
-  "referenceKeyCount": 1474,
+  "_comment": "Locale classification + decrease-only shortfall ledger for i18n-key-parity-gate.mjs. `mandatoryLocales` ship at 100% of the reference key set (the union of every mandatory locale's leaf keys) -- any hole fails --check and there is NO baseline escape for them. `declaredPartialLocales` ship incomplete BY DECISION; their `missing` count is a decrease-only CEILING: growth fails --check, a NEW partial locale with no entry fails --check, and a shrink reports a tighten opportunity (run --seed to lower the ceiling). Every locale in SUPPORTED_LOCALES must appear in exactly one of the two lists. `adoption.modernFloor` is a decrease-only FLOOR on the share of Modern component entrypoints naming a translation hook (a fall fails --check, a rise reports a tighten opportunity); `modernTargetPercent` is reported, not enforced, and reads off the TEXT-CARRYING Modern measure (Modern entrypoints rendering copy through the catalog or a hardcoded literal, pure re-exports measured through their target), never off the hook-mention share. `argumentlessToLocale.ceiling` is a decrease-only CEILING on argument-less toLocale*() lines under src/ outside tests/.",
+  "referenceKeyCount": 1477,
+  "referenceKeyCountReason": "Re-seeded 2026-09-28 from 1474 to 1477: the mandatory corpus grew by the keys b79810512 added for the data-table cell editor and widget-board catalog search; fr/pt present floors rose with it (1359/1353), missing ceilings unchanged (118/124).",
   "mandatoryLocales": [
     "en",
     "es",
@@ -9,22 +10,22 @@
   "declaredPartialLocales": {
     "fr": {
       "missing": 118,
-      "present": 1356,
+      "present": 1359,
       "reason": "French is a declared-partial, non-product locale. The 2026-07-30 Modern full-coverage wave expanded the mandatory EN/ES/AR contract from 456 to 1127 keys; French received 671 natural translations in the same wave and preserved the committed 147-key debt ceiling by shrinking it to 146. No English-copy placeholders were added to simulate translation."
     },
     "pt": {
       "missing": 124,
-      "present": 1350,
+      "present": 1353,
       "reason": "Portuguese is a declared-partial, non-product locale. The 2026-07-30 Modern full-coverage wave expanded the mandatory EN/ES/AR contract from 456 to 1127 keys; Portuguese received 670 natural translations in the same wave and preserved the committed 147-key debt ceiling. No English-copy placeholders were added to simulate translation."
     }
   },
   "adoption": {
     "modernFloor": {
-      "adopted": 92,
+      "adopted": 94,
       "total": 141
     },
     "modernTargetPercent": 90,
-    "reason": "WO-INV-02 row as registered by packet A (receipt-inv-02-packet-a-opus.json, item 4): denominator = src/components/**/index.tsx outside tests/, numerator = files naming useTranslation/useOptionalTranslation; decrease-only floor at the measured Modern share 92/141 (65.2%) with the WO's 90% target on the Modern slice. Whole tree measured 168/717 (23.4%), printed and not gated."
+    "reason": "Re-seeded 2026-09-28 (WO-INV-02 packet B) at the post-packet-A truth. Floor = hook-mention share of every Modern entrypoint (src/components/**/engines/modern/**/index.tsx outside tests/): 94/141 (66.7%), up from 92/141 after the data-table cell editor and widget-board catalog search adopted the catalog (b79810512). The 90% target moved to the text-carrying measure: of the 141, 44 render no copy of their own (no JSX text, no text-attribute literal, no catalog read) and cannot adopt without an unused hook; 3 (mobile-header, bottom-tab-bar, action-dock) are one-line re-exports of runtime/rendering renderers that call useOptionalTranslation and count through them (97/141 with re-exports followed). Text-carrying adoption measured 97/97 (100%). Whole tree 171/717, printed and not gated."
   },
   "argumentlessToLocale": {
     "ceiling": 19,
