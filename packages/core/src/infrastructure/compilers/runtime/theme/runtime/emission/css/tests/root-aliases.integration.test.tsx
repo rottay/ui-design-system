@@ -86,6 +86,7 @@ const DELTAS: Record<string, Omit<TenantArtifactComposition, 'verticalKey' | 'sl
   primary: { variables: { '--ds-color-primary': 'rgb(1, 2, 3)' } },
   typed: { variables: { '--ds-type-scale': '1.5' } },
   darkonly: { variables: {}, modeDeltas: [{ mode: 'dark', variables: { '--ds-color-primary': 'rgb(4, 5, 6)' } }] },
+  inked: { variables: { '--ds-color-info-400': 'rgb(7, 8, 9)' } },
 };
 
 function tenantArtifact(slug: string): string {
@@ -106,7 +107,7 @@ function deltaNames(slug: string): Set<string> {
   ]);
 }
 
-type Reading = { card: string; checkbox: string; fontSize: string; cardToken: string };
+type Reading = { card: string; checkbox: string; fontSize: string; cardToken: string; info: string };
 type Scene = Record<string, Reading>;
 
 const HOSTS: Record<string, Record<string, string>> = {
@@ -116,6 +117,7 @@ const HOSTS: Record<string, Record<string, string>> = {
   primary: { 'data-ds-root': '', 'data-vertical': 'bithire', 'data-tenant': 'primary' },
   typed: { 'data-ds-root': '', 'data-vertical': 'bithire', 'data-tenant': 'typed' },
   darkonly: { 'data-ds-root': '', 'data-vertical': 'bithire', 'data-tenant': 'darkonly', 'data-theme': 'dark' },
+  inked: { 'data-ds-root': '', 'data-vertical': 'bithire', 'data-tenant': 'inked' },
   rottay: { 'data-ds-root': '', 'data-vertical': 'rottay' },
 };
 
@@ -127,7 +129,7 @@ async function measure(browser: SceneBrowser, sheets: readonly string[], rootAtt
   return page.evaluate(
     ({ rootAttributes, hosts, specimen }) => {
       for (const [name, value] of Object.entries(rootAttributes)) document.documentElement.setAttribute(name, value);
-      const readings: Record<string, { card: string; checkbox: string; fontSize: string; cardToken: string }> = {};
+      const readings: Record<string, { card: string; checkbox: string; fontSize: string; cardToken: string; info: string }> = {};
       for (const [id, attributes] of Object.entries(hosts)) {
         const host = document.createElement('div');
         for (const [name, value] of Object.entries(attributes)) host.setAttribute(name, value);
@@ -139,6 +141,7 @@ async function measure(browser: SceneBrowser, sheets: readonly string[], rootAtt
           cardToken: style.getPropertyValue('--ds-card-radius').trim(),
           checkbox: style.getPropertyValue('--ds-checkbox-primary-bg').trim(),
           fontSize: style.getPropertyValue('--ds-font-size-md').replace(/\s+/g, '').trim(),
+          info: style.getPropertyValue('--ds-color-info').trim(),
         };
         host.remove();
       }
@@ -208,6 +211,12 @@ describe('a root alias re-resolves at every scope that states an operand', () =>
   it('a mode-only delta re-resolves through the base rule', () => {
     expect(before.darkonly.checkbox).not.toBe('rgb(4, 5, 6)');
     expect(after.darkonly.checkbox).toBe('rgb(4, 5, 6)');
+  });
+
+  it("a tenant's operand never reaches an alias its vertical states outright on the same element", () => {
+    expect(after.outer.info).toMatch(/^#/);
+    expect(after.inked.info).toBe(after.outer.info);
+    expect(before.inked.info).toBe(before.outer.info);
   });
 
   it('a first-party vertical nested under another paints its own Card corner', () => {

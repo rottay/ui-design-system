@@ -1,6 +1,11 @@
-import { ROOT_ALIASES } from "./generated";
+import { ROOT_ALIASES, VERTICAL_OUTRIGHT } from "./generated";
 
-export { ROOT_ALIASES };
+export { ROOT_ALIASES, VERTICAL_OUTRIGHT };
+
+/** The tabled aliases a vertical's own element rules state with other text than the root's. */
+export function verticalOutright(verticalKey: string): readonly string[] {
+  return Object.prototype.hasOwnProperty.call(VERTICAL_OUTRIGHT, verticalKey) ? VERTICAL_OUTRIGHT[verticalKey] : [];
+}
 
 let readersOf: Map<string, string[]> | undefined;
 

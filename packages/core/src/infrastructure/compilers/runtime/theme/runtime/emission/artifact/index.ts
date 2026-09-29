@@ -13,6 +13,7 @@ import {
   PREFERS_MORE_CONTRAST,
   sameElementNames,
 } from "../css";
+import { verticalOutright } from "../css/root-aliases";
 
 /** One compiled mode overlay of a tenant artifact: the delta, not the block. */
 export interface TenantArtifactModeDelta {
@@ -71,6 +72,7 @@ export function emitTenantArtifactCss(composition: TenantArtifactComposition): s
         cssVariables: block.variables,
       }))
     ),
+    alsoOutright: verticalOutright(composition.verticalKey),
   });
   // Under `auto` the viewer chooses, so exactly ONE media copy exists: the
   // delta block itself. A compile states a block for the mode its base rule is

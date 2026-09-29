@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 14,
-      "maxSourceBytes": 269746
+      "maxSourceBytes": 276908
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "the alias re-resolution law (6a91f16ff): the generated table of 2364 aliases in dependency order is the measured source cost (+186KB raw, +21.5KB gzip measured by the writer); the alternatives each lose correctness (measured in the receipt)",
+  "lastMove": "the vertical-outright rows of the alias law's generated table (dt26 fix over 6a91f16ff): 202 per-vertical names a DB tenant scope must not restate over its vertical's same-element rule -- +7162 B of generated source, no new module",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

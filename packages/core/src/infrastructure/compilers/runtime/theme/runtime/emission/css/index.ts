@@ -36,10 +36,10 @@ export { containerScope, firstPartyScope, tenantArtifactScope };
  */
 export function emitDeclarations(
   variables: Readonly<Record<string, string>>,
-  options: { readonly alsoStated?: Iterable<string> } = {}
+  options: { readonly alsoStated?: Iterable<string>; readonly alsoOutright?: Iterable<string> } = {}
 ): string[] {
   return Object.entries(
-    withRootAliases(admitCssVariables(variables), options.alsoStated)
+    withRootAliases(admitCssVariables(variables), options.alsoStated, options.alsoOutright)
   ).map(([name, value]) => `  ${name}: ${value};`);
 }
 
@@ -69,16 +69,18 @@ export function radiusChainValue(step: (typeof RADIUS_CHAIN_STEPS)[number]): str
 /**
  * The block's own channels followed by every root alias they, or `alsoStated`
  * (operands the scope states on the same element in another rule), re-resolve.
- * A name the block states outright keeps its value.
+ * A name the block, or `alsoOutright` (another rule on the same element), states
+ * outright keeps that value.
  */
 export function withRootAliases(
   variables: Readonly<Record<string, string>>,
-  alsoStated: Iterable<string> = []
+  alsoStated: Iterable<string> = [],
+  alsoOutright: Iterable<string> = []
 ): Record<string, string> {
   const own = new Set(Object.keys(variables));
   return {
     ...variables,
-    ...rootAliasRedeclarations([...own, ...alsoStated], own),
+    ...rootAliasRedeclarations([...own, ...alsoStated], new Set([...own, ...alsoOutright])),
   };
 }
 

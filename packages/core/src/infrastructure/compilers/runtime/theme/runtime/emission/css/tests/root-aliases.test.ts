@@ -9,8 +9,9 @@ import { compileTheme } from "../../../lowering";
 import { staticThemeIntent } from "../../../ingress";
 import { resolveAdapter } from "../../../../presentation/adapters";
 import { emitTenantArtifactCss } from "../../artifact";
+import { admitCssVariables } from "@/infrastructure/compilers/kernel/foundation/css/value-safety";
 import { emitDeclarations, emitOverlayDeclarations, emitThemeCss, firstPartyScope } from "..";
-import { ROOT_ALIASES, rootAliasRedeclarations } from "../root-aliases";
+import { ROOT_ALIASES, rootAliasRedeclarations, VERTICAL_OUTRIGHT } from "../root-aliases";
 import { resolveFirstParty } from "@tests/support/theme-lowering";
 import {
   FIRST_PARTY_ARTIFACT_SPECS,
@@ -55,6 +56,42 @@ describe("the root-alias table", () => {
     expect(TABLE.get("--ds-card-radius")).toBe("var(--ds-card-border-radius)");
     expect(at("--ds-radius-lg")).toBeLessThan(at("--ds-card-border-radius"));
     expect(at("--ds-card-border-radius")).toBeLessThan(at("--ds-card-radius"));
+  });
+});
+
+describe("a vertical's own element rules", () => {
+  const collapse = (value: string) =>
+    value.replace(/\s+/g, " ").replace(/\(\s/g, "(").replace(/\s\)/g, ")").trim();
+
+  for (const slug of slugs) {
+    it(`${slug}: the listed aliases are exactly the ones its compile states with other text`, () => {
+      const compiled = compileTheme(resolveFirstParty(staticThemeIntent(slug)), modern);
+      const divergent = new Set<string>();
+      for (const block of [
+        compiled.cssVariables,
+        ...compiled.modeBlocks.map((mode) => mode.cssVariables),
+        ...(compiled.contrastBlocks ?? []).map((contrast) => contrast.cssVariables),
+      ]) {
+        for (const [name, value] of Object.entries(admitCssVariables(block))) {
+          if (TABLE.has(name) && collapse(value) !== TABLE.get(name)) divergent.add(name);
+        }
+      }
+      expect(VERTICAL_OUTRIGHT[slug]).toEqual([...divergent].sort());
+    });
+  }
+
+  it("a tenant of the vertical never restates them, and the chain runs on through them", () => {
+    const css = emitTenantArtifactCss({
+      verticalKey: "bithire",
+      slug: "t",
+      compilerVersion: "v",
+      digest: "d",
+      variables: { "--ds-color-info-400": "#010203", "--ds-color-info-500": "#040506" },
+    });
+    const [base] = rules(css);
+    expect(VERTICAL_OUTRIGHT.bithire).toContain("--ds-color-info");
+    expect(base?.names).not.toContain("--ds-color-info");
+    expect(base?.names).toContain("--ds-button-info-bg");
   });
 });
 
