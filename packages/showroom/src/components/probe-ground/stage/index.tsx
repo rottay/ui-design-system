@@ -1,12 +1,13 @@
 'use client';
 
-import { createContext, useContext, useMemo, type ComponentProps, type ReactNode } from 'react';
+import { createContext, useContext, useLayoutEffect, useMemo, useState, type ComponentProps, type ReactNode } from 'react';
 import { DesignSystemProvider, getKnownTenantConfig, type TenantConfig } from '@rottay/design-system';
 import {
   emitTenantThemeArtifactForSsr,
   type MountedThemeStyleElement,
   type TenantThemeArtifact,
 } from '@rottay/design-system/server';
+import { applyRootStamp } from '../stamp/index.mjs';
 
 type ProviderProps = ComponentProps<typeof DesignSystemProvider>;
 
@@ -33,6 +34,8 @@ export interface GroundStageProps {
   readonly artifact: TenantThemeArtifact | null;
   /** Exactly what `mountTenantTheme` returned, emitted here and nowhere else. */
   readonly styleElements: readonly MountedThemeStyleElement[];
+  /** The root projection the stamp script wrote; re-applied when the ground changes in place. */
+  readonly rootAttributes: Readonly<Record<string, string>>;
   readonly styleTestId?: string;
   readonly children?: ReactNode;
 }
@@ -45,6 +48,7 @@ export function GroundStage({
   tenantConfig,
   artifact,
   styleElements,
+  rootAttributes,
   styleTestId,
   children,
 }: GroundStageProps) {
@@ -56,6 +60,15 @@ export function GroundStage({
   const bytesAgree = emission ? emission.css === styleElements[0]?.css : null;
   const digest = artifact?.digest ?? null;
   const proof = useMemo<GroundProof>(() => ({ bytesAgree, digest }), [bytesAgree, digest]);
+  // Admission reads the DOM during render, so an artifact that arrives by client
+  // navigation must commit its <style> before the provider may see its authority.
+  const [admittedDigest, setAdmittedDigest] = useState(digest);
+  const awaitingMount = digest !== null && admittedDigest !== digest;
+  useLayoutEffect(() => {
+    if (admittedDigest === digest) return;
+    applyRootStamp(rootAttributes);
+    setAdmittedDigest(digest);
+  }, [admittedDigest, digest, rootAttributes]);
 
   return (
     <>
@@ -68,20 +81,22 @@ export function GroundStage({
           dangerouslySetInnerHTML={{ __html: element.css }}
         />
       ))}
-      <DesignSystemProvider
-        forceEngine="modern"
-        forceTheme={mode}
-        tenantConfig={tenantConfig ?? getKnownTenantConfig(vertical)}
-        visualAuthority={
-          artifact && emission
-            ? { authority: 'compiled-artifact', artifact, ssrReceipt: emission.receipt }
-            : undefined
-        }
-        locale={locale}
-        {...(viewport ? { ssrViewport: viewport } : {})}
-      >
-        <GroundProofContext.Provider value={proof}>{children}</GroundProofContext.Provider>
-      </DesignSystemProvider>
+      {awaitingMount ? null : (
+        <DesignSystemProvider
+          forceEngine="modern"
+          forceTheme={mode}
+          tenantConfig={tenantConfig ?? getKnownTenantConfig(vertical)}
+          visualAuthority={
+            artifact && emission
+              ? { authority: 'compiled-artifact', artifact, ssrReceipt: emission.receipt }
+              : undefined
+          }
+          locale={locale}
+          {...(viewport ? { ssrViewport: viewport } : {})}
+        >
+          <GroundProofContext.Provider value={proof}>{children}</GroundProofContext.Provider>
+        </DesignSystemProvider>
+      )}
     </>
   );
 }

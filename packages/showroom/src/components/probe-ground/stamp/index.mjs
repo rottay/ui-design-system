@@ -24,3 +24,18 @@ export function buildRootStampScript(attributes) {
     '}catch(e){}})()'
   );
 }
+
+/**
+ * The same projection applied from a client commit: an inline script inserted by client
+ * navigation never executes, so an in-place ground switch re-stamps the root through this.
+ *
+ * @param {Readonly<Record<string, string>>} attributes
+ * @returns {void}
+ */
+export function applyRootStamp(attributes) {
+  const root = document.documentElement;
+  for (const key in attributes) root.setAttribute(key, attributes[key]);
+  const theme = attributes['data-theme'];
+  root.classList.toggle('dark', theme === 'dark');
+  if (theme && theme !== 'base') root.style.colorScheme = theme;
+}

@@ -73,7 +73,7 @@ export async function groundFor(request: GroundRequest): Promise<Ground> {
     return {
       mounted,
       stamp: buildRootStampScript(mounted.rootAttributes),
-      stage: { ...stageBase, tenantConfig: null, artifact: null, styleElements: mounted.styleElements },
+      stage: { ...stageBase, tenantConfig: null, artifact: null, styleElements: mounted.styleElements, rootAttributes: mounted.rootAttributes },
     };
   }
 
@@ -97,7 +97,7 @@ export async function groundFor(request: GroundRequest): Promise<Ground> {
     return {
       mounted,
       stamp: buildRootStampScript(mounted.rootAttributes),
-      stage: { ...stageBase, tenantConfig, artifact, styleElements: mounted.styleElements },
+      stage: { ...stageBase, tenantConfig, artifact, styleElements: mounted.styleElements, rootAttributes: mounted.rootAttributes },
     };
   }
 
@@ -123,7 +123,7 @@ export async function groundFor(request: GroundRequest): Promise<Ground> {
   return {
     mounted,
     stamp: buildRootStampScript(mounted.rootAttributes),
-    stage: { ...stageBase, tenantConfig, artifact, styleElements: mounted.styleElements },
+    stage: { ...stageBase, tenantConfig, artifact, styleElements: mounted.styleElements, rootAttributes: mounted.rootAttributes },
   };
 }
 
