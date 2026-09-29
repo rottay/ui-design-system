@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 12,
-      "maxSourceBytes": 82632
+      "maxSourceBytes": 83826
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "hydration remount fix: Motion/Responsive providers keep the server snapshot through hydration and correct in a transition (+682 B responsive runtime, +546 B app-shell); measured 0 body-level removals post-hydration vs ~1000-element deletions before",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 2 subido(s), 0 sin ancla valida"
+  "lastMove": "the 2026-09-28 derivation wave grew the shared compiler reach: the ground-aware elevation ladder (d207e58d7), the tenant-scope radius chain (fb5c2b2ca) and the tooltip authored pair (ab0bcb030) -- +1194 B of measured source, no new dependency",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
