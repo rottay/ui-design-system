@@ -18,9 +18,9 @@
     "cssEdges": "acd6a03f81f5cf537fcd03495480e8bd0449f2b4e15d4654e00349ac6b8a2e34",
     "cascadeRoots": "cc6fcf8b9bffd91b1f2572dd817593fe5b747b1c4892ebf15e45480059c96856",
     "rootCatalog": "8f22e285b34483d8fab7e69686a01a6704985abbd05d5c97be2d63152db0ad0f",
-    "srcTsx": "a9425fbf05611731d300d40d98e388bd96e8d38294a1cf519759b30dcd63ea1e",
-    "srcCompilers": "c102e37ac03f3af11a50c4aa72dd1c86490d13d9f1234fcce611f4890a2b7f5c",
-    "artifacts": "92ad6415b0fd50b10d06bb55b909fb9fbbe1d72ce4f9aa6a91ea0aa5b48d6713"
+    "srcTsx": "4447d023d8305744874a16b290fb17681bfe3446a50d3ae2626d6a016c384822",
+    "srcCompilers": "c96f4d60219eb53a44db37f515e1aded8cf71ed8979e082f09c14aeb566531ac",
+    "artifacts": "4f2c01645cc6b4cb0f437c5386161e9252ee508f910d315332e553e27f5a4aa8"
   },
   "stats": {
     "producerSites": 6280,
@@ -66517,6 +66517,6 @@
   "provenance": {
     "producedBy": "cascade:producers --write",
     "writtenOn": "2026-09-29",
-    "contentDigest": "4333e392787e452e9c85ea4c281778da542ea3647d8b33ee9ec841d035e267a0"
+    "contentDigest": "55b6df116f0c3ad68b8cd789e047494894cabffc9d8545bae6e25e8cc4ffbb64"
   }
 }
