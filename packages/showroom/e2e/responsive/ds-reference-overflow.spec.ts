@@ -31,6 +31,13 @@ import { expectHydrated } from '../support/hydration';
 // `aria-hidden` subtrees are skipped), so the two specs never disagree about
 // which elements a spill claim is about.
 //
+// WHAT COUNTS AS A SPILL is measured on the box the viewport has to hold. An
+// element scrolled out of view inside a horizontal scrollport (overflow-x
+// auto|scroll) that itself fits the viewport is not a spill; the scrollport is
+// measured instead by the same rule, so a strip past either edge fails. Content
+// cut off by an overflow:hidden|clip box still counts: that is content lost.
+// This changes the subject of the measurement, not its tolerance.
+//
 // THE MATRIX IS READ FROM DISK, never hardcoded. A hardcoded roster goes stale
 // silently, and a gate that measures zero cells reports green — which is
 // indistinguishable from a gate that passed. Hence the floor assertions in the
@@ -407,6 +414,37 @@ async function measureCell(page: Page, tolerance: number): Promise<Measurement> 
     const clientWidth = root.clientWidth;
     const spilled = new Map<string, number>();
 
+    // Identical to responsive.spec.ts. Walks the containing-block chain: a
+    // hidden/clip box that cuts the subject off is a spill; a scrollport that fits
+    // the viewport contains it, one that does not becomes the subject instead.
+    const scrolledInsideFittingStrip = (element: Element, rect: DOMRect): boolean => {
+      const createsContainingBlock = (style: CSSStyleDeclaration, forFixed: boolean): boolean =>
+        (!forFixed && style.position !== 'static') ||
+        style.transform !== 'none' ||
+        style.perspective !== 'none' ||
+        style.filter !== 'none' ||
+        /paint|layout|strict|content/.test(style.contain);
+      let position = getComputedStyle(element).position;
+      let subject = rect;
+      for (let node = element.parentElement; node && node !== document.body && node !== root; node = node.parentElement) {
+        const style = getComputedStyle(node);
+        if (position === 'absolute' || position === 'fixed') {
+          if (!createsContainingBlock(style, position === 'fixed')) continue;
+        }
+        if (style.overflowX === 'hidden' || style.overflowX === 'clip') {
+          const box = node.getBoundingClientRect();
+          if (subject.left < box.left - edgeTolerance || subject.right > box.right + edgeTolerance) return false;
+        }
+        if (style.overflowX === 'auto' || style.overflowX === 'scroll') {
+          const port = node.getBoundingClientRect();
+          if (port.left >= -edgeTolerance && port.right <= clientWidth + edgeTolerance) return true;
+          subject = port;
+        }
+        position = style.position;
+      }
+      return false;
+    };
+
     document.querySelectorAll('*').forEach((element) => {
       const rect = element.getBoundingClientRect();
       const style = getComputedStyle(element);
@@ -426,6 +464,7 @@ async function measureCell(page: Page, tolerance: number): Promise<Measurement> 
       const overshootLeft = -rect.left;
       const overshoot = Math.max(overshootRight, overshootLeft);
       if (overshoot <= edgeTolerance) return;
+      if (scrolledInsideFittingStrip(element, rect)) return;
 
       const part = element.getAttribute('data-part');
       const cls = (element.getAttribute('class') ?? '').split(' ').filter(Boolean).slice(0, 2).join('.');

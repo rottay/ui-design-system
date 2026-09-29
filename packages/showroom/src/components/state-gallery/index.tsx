@@ -54,7 +54,7 @@ export function StateGallery({ slug }: { slug: string }) {
           </Text>
           <Flex gap={16} wrap="wrap" align="end">
             {group.cells.map((cell) => (
-              <Stack key={cell.label} spacing="xs" style={{ minWidth: 0 }}>
+              <Stack key={cell.label} spacing="xs" style={{ flex: '1 1 auto', minWidth: 'min(100%, 12rem)' }}>
                 <Box>{cell.node}</Box>
                 <Text size="xs" style={{ display: 'block', color: 'var(--ds-color-text-secondary)' }}>
                   {cell.label}

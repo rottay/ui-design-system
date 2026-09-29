@@ -153,8 +153,10 @@ export function StructureScene({ only }: { only: StructureCase }) {
   return (
     <div data-testid="lab-scene">
       <div data-testid={`lab-struct-${only}`}>
+        {/* The frozen Rustic tooltip keeps its closed bubble in layout; the band
+            clips it so it cannot widen the document. */}
         {ENGINES.map((engine) => (
-          <div key={engine} data-engine-band={engine}>
+          <div key={engine} data-engine-band={engine} style={{ overflowX: 'clip' }}>
             <EngineProvider defaultEngine={engine}>
               <Family only={only} />
             </EngineProvider>

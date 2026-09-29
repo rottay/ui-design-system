@@ -12,7 +12,10 @@ import { expectHydrated } from '../support/hydration';
 //
 //   1. OVERFLOW. At a 360px viewport no capture cell may scroll the document,
 //      leave content outside either viewport edge, or silently clip local
-//      content. One violation per (set/slug/tenant) cell.
+//      content. One violation per (set/slug/tenant) cell. Content scrolled
+//      inside a horizontal scrollport that itself fits the viewport is not a
+//      spill (the scrollport is measured instead); content cut off by
+//      overflow:hidden|clip is.
 //   2. TOUCH TARGETS. Under coarse-pointer emulation every interactive part
 //      reaches at least 44x44 CSS px. One violation per
 //      (set/slug/tenant/selector/size).
@@ -147,6 +150,37 @@ test.describe('responsive conformance', () => {
         const viewportWidth = root.clientWidth;
         const spilled = new Set<string>();
         const clipped = new Set<string>();
+
+        // Identical to ds-reference-overflow.spec.ts. Walks the containing-block
+        // chain: a hidden/clip box that cuts the subject off is a spill; a scrollport
+        // that fits the viewport contains it, one that does not becomes the subject.
+        const scrolledInsideFittingStrip = (element: Element, rect: DOMRect): boolean => {
+          const createsContainingBlock = (style: CSSStyleDeclaration, forFixed: boolean): boolean =>
+            (!forFixed && style.position !== 'static') ||
+            style.transform !== 'none' ||
+            style.perspective !== 'none' ||
+            style.filter !== 'none' ||
+            /paint|layout|strict|content/.test(style.contain);
+          let position = getComputedStyle(element).position;
+          let subject = rect;
+          for (let node = element.parentElement; node && node !== document.body && node !== root; node = node.parentElement) {
+            const style = getComputedStyle(node);
+            if (position === 'absolute' || position === 'fixed') {
+              if (!createsContainingBlock(style, position === 'fixed')) continue;
+            }
+            if (style.overflowX === 'hidden' || style.overflowX === 'clip') {
+              const box = node.getBoundingClientRect();
+              if (subject.left < box.left - 1 || subject.right > box.right + 1) return false;
+            }
+            if (style.overflowX === 'auto' || style.overflowX === 'scroll') {
+              const port = node.getBoundingClientRect();
+              if (port.left >= -1 && port.right <= viewportWidth + 1) return true;
+              subject = port;
+            }
+            position = style.position;
+          }
+          return false;
+        };
         document.querySelectorAll('*').forEach((element) => {
           const rect = element.getBoundingClientRect();
           const style = getComputedStyle(element);
@@ -164,7 +198,7 @@ test.describe('responsive conformance', () => {
           const cls = (element.getAttribute('class') ?? '').split(' ').filter(Boolean).slice(0, 2).join('.');
           const descriptor = `${element.tagName.toLowerCase()}${part ? `[data-part=${part}]` : cls ? `.${cls}` : ''}`;
 
-          if (rect.left < -1 || rect.right > viewportWidth + 1) {
+          if ((rect.left < -1 || rect.right > viewportWidth + 1) && !scrolledInsideFittingStrip(element, rect)) {
             spilled.add(descriptor);
           }
 
