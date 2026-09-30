@@ -31,6 +31,7 @@ import {
   discoverStaleTypescriptFiles,
   evaluateDataPartUnresolved,
   evaluateClaimAuthority,
+  EVIDENCE_ARCHIVE_REVISION,
   evaluateDocumentationCheckoutPin,
   workspaceAbsolute,
   evaluateClaimFloor,
@@ -1220,13 +1221,29 @@ test('DRILL: CI pinning a documentation revision other than the seal is refused'
     seal.documentationRevision,
   );
   assert.equal(mismatched.ok, false);
-  assert.match(mismatched.errors[0], /the workflow must follow the seal/);
+  assert.match(mismatched.errors[0], /the workflow must follow a seal/);
   assert.equal(
     evaluateDocumentationCheckoutPin('name: ci\non: push\n', seal.documentationRevision).ok,
     false,
     'a workflow that pins nothing at all cannot supply the sealed corpus either',
   );
   assert.equal(evaluateDocumentationCheckoutPin('', seal.documentationRevision).ok, false);
+
+  // The RET-03 evidence archive is the one second seal, pinned by name in the
+  // check; any third pin is refused.
+  assert.deepEqual(
+    evaluateDocumentationCheckoutPin(
+      workflow(EVIDENCE_ARCHIVE_REVISION),
+      seal.documentationRevision,
+    ).errors,
+    [],
+  );
+  const both = `${workflow(seal.documentationRevision)}${workflow(EVIDENCE_ARCHIVE_REVISION)}`;
+  assert.deepEqual(
+    evaluateDocumentationCheckoutPin(both, seal.documentationRevision).errors,
+    [],
+    'the documentation checkout and the archive checkout ride together',
+  );
 });
 
 test('the live CI workflow pins exactly the reviewed documentation seal', () => {

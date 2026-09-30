@@ -163,6 +163,19 @@ jobs:
           path: .gat07/docs-engineering
           token: ${{ secrets.DOCS_TOOLING_TOKEN || secrets.NPM_TOKEN || github.token }}
 
+      # The RET-03 evidence archive is the second named seal
+      # (EVIDENCE_ARCHIVE_REVISION in the claim-exactness check, which refuses
+      # any third pin): the constitution, negative-controls, the roadmap status
+      # reader, the drills and the canary capture read the sealed corpus through
+      # scripts/libraries/archive from this snapshot, not from the tree.
+      - name: Checkout the RET-03 evidence archive
+        uses: actions/checkout@v4
+        with:
+          repository: rottay/docs-engineering
+          ref: 1961102e2a015c4f0d755f112f56d1409e54bf94
+          path: .ret03/docs-engineering
+          token: ${{ secrets.DOCS_TOOLING_TOKEN || secrets.NPM_TOKEN || github.token }}
+
       # CI runs `test:ci`, and npm fires `pre<name>` only for the EXACT script
       # `test` -- so the `pretest` chain never executed here and sixteen gates
       # that looked enforced were not. `gates:ci` is the single inventory
@@ -201,6 +214,8 @@ jobs:
         run: pnpm --filter @rottay/design-system run gates:ci:post-build
 
       - name: Audit machinery regression tests
+        env:
+          DS_EVIDENCE_ARCHIVE_ROOT: ${{ github.workspace }}/.ret03/docs-engineering
         run: pnpm --filter @rottay/design-system run test:scripts
 
       - name: Effect provenance and registry evidence

@@ -1124,6 +1124,27 @@ export function sealedDocumentationContentMatches(revisionContent, worktreeConte
  * reviewed authority, so the workflow follows it, and this check keeps them
  * equal by construction rather than by memory.
  */
+/**
+ * The workflow checks docs-engineering out at a pinned ref and exports it as
+ * `DOCS_ENGINEERING_ROOT`; this gate then refuses any checkout whose HEAD is
+ * not `documentationRevision`. Those two numbers were different -- the workflow
+ * pinned an ancestor of the sealed commit -- so the gate could only ever have
+ * been red in CI, and nothing in the repository said so. The seal is the
+ * reviewed authority, so the workflow follows it, and this check keeps them
+ * equal by construction rather than by memory.
+ *
+ * ONE SECOND PIN EXISTS, named rather than smuggled: the RET-03 evidence
+ * archive. The constitution, negative-controls, the roadmap status reader, the
+ * program-state and intersection drills and the canary capture all read the
+ * sealed corpus through scripts/libraries/archive, whose content lives in
+ * docs-engineering/archive/snapshots/2026-09-29-ds-ret03-evidence — a directory
+ * that does not exist at the documentation seal's revision. The archive pin is
+ * this constant, reviewed in the diff of the commit that moves it; the check
+ * refuses any docs-engineering pin that is NEITHER the seal NOR this archive
+ * pin, so "every checkout is sealed" stays true with two named seals.
+ */
+export const EVIDENCE_ARCHIVE_REVISION = '1961102e2a015c4f0d755f112f56d1409e54bf94';
+
 export function evaluateDocumentationCheckoutPin(workflowText, sealedRevision) {
   if (typeof workflowText !== 'string' || workflowText.length === 0) {
     return { ok: false, pinned: null, errors: ['the CI workflow is unreadable; the documentation pin cannot be verified'] };
@@ -1134,13 +1155,14 @@ export function evaluateDocumentationCheckoutPin(workflowText, sealedRevision) {
   if (pins.length === 0) {
     return { ok: false, pinned: null, errors: ['the CI workflow declares no pinned docs-engineering checkout'] };
   }
-  const mismatched = [...new Set(pins)].filter((pin) => pin !== sealedRevision);
+  const allowed = new Set([sealedRevision, EVIDENCE_ARCHIVE_REVISION]);
+  const mismatched = [...new Set(pins)].filter((pin) => !allowed.has(pin));
   if (mismatched.length > 0) {
     return {
       ok: false,
       pinned: pins,
       errors: mismatched.map((pin) =>
-        `CI checks out docs-engineering ${pin} but the reviewed seal is ${sealedRevision}; the workflow must follow the seal`),
+        `CI checks out docs-engineering ${pin} but the reviewed seals are ${sealedRevision} (documentation) and ${EVIDENCE_ARCHIVE_REVISION} (the RET-03 evidence archive); the workflow must follow a seal`),
     };
   }
   return { ok: true, pinned: pins, errors: [] };
