@@ -259,7 +259,7 @@
 /* ActivityIndicator bars — Command/Circuit/Matrix, success. The per-index
    stagger delay stays inline (runtime value); the cadence is owned here. */
 .ds-data-terminal-card[data-part='root'] [data-part='activity-bar'] {
-  border-radius: 1px;
+  border-radius: calc(1px * var(--ds-radius-scale, 1));
   background: var(--ds-color-success);
   animation: dtc-data-tick
     var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2))

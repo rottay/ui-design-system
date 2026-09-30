@@ -11,6 +11,10 @@
  * opacity inline); the radius is a private family detail rather than a
  * tenant-facing theme channel. */
 
+.ds-chart-area {
+  --_ds-area-marker-radius: calc(2px * var(--ds-radius-scale, 1));
+}
+
 .ds-chart-area [data-part='legend-swatch'] {
   border-radius: var(--_ds-area-marker-radius, 2px);
 }

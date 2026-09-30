@@ -6,7 +6,7 @@
  * rather than a tenant-facing theme channel. */
 
 .ds-chart-radar [data-part='legend-swatch'] {
-  border-radius: 1px;
+  border-radius: calc(1px * var(--ds-radius-scale, 1));
   transform: rotate(var(--_ds-radar-marker-rotation, 45deg)) scale(0.85);
 }
 

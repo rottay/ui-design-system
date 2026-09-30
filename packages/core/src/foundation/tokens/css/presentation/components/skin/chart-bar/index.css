@@ -10,6 +10,10 @@
  * Square marker reads as a bar; the radius is a private family detail rather
  * than a tenant-facing theme channel. */
 
+.ds-chart-bar {
+  --_ds-bar-marker-radius: calc(2px * var(--ds-radius-scale, 1));
+}
+
 .ds-chart-bar [data-part='legend-swatch'] {
   border-radius: var(--_ds-bar-marker-radius, 2px);
 }
