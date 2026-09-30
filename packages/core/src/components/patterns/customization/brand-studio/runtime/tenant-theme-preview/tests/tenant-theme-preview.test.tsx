@@ -197,7 +197,29 @@ describe('buildTenantThemePreviewScope', () => {
     expect(scope.scopeSelector).toBe(`[${PREVIEW_SCOPE_ATTRIBUTE}='preview-tenant']`);
     expect(scope.css).toContain(`[${PREVIEW_SCOPE_ATTRIBUTE}='preview-tenant'] {`);
     expect(scope.css).toContain('--ds-color-primary: #2F6B9A;');
-    expect(scope.css).not.toContain('data-ds-root');
+    // Never the provider's document-root anchor: a document-mode rule names the
+    // root only as its ancestor context, and every rule's subject is the scope.
+    expect(scope.css).not.toContain('[data-ds-root][data-vertical');
+    const subjects = [...scope.css.matchAll(/^([^\s@}][^{]*)\{/gm)].map((match) => match[1]!.trim());
+    expect(subjects.length).toBeGreaterThan(0);
+    for (const subject of subjects) {
+      for (const arm of subject.split(/,(?![^(]*\))/)) expect(arm).toContain(scope.scopeSelector);
+    }
+  });
+
+  it('follows the document mode for the channels the artifact moves in a mode', () => {
+    const artifact = compiledArtifact();
+    expect(artifact.modeDeltas?.length ?? 0).toBeGreaterThan(0);
+    const scope = buildTenantThemePreviewScope(artifact);
+    for (const delta of artifact.modeDeltas ?? []) {
+      const rule = `:where(:where(:root, [data-ds-root]):is([data-theme='${delta.mode}'], .${delta.mode})) ${scope.scopeSelector} {`;
+      const at = scope.css.indexOf(rule);
+      expect(at).toBeGreaterThan(scope.css.indexOf(`${scope.scopeSelector} {`));
+      const body = scope.css.slice(at, scope.css.indexOf('}', at));
+      for (const [name, value] of Object.entries(delta.variables)) {
+        expect(body).toContain(`  ${name}: ${value};`);
+      }
+    }
   });
 
   it('carries the readers of a moved channel through the container law, keeping the vertical outright', () => {

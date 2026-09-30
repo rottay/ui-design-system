@@ -12,7 +12,14 @@ import { staticThemeIntent } from "../../../ingress";
 import { resolveAdapter } from "../../../../presentation/adapters";
 import { emitTenantArtifactCss } from "../../artifact";
 import { admitCssVariables } from "@/infrastructure/compilers/kernel/foundation/css/value-safety";
-import { containerScope, emitDeclarations, emitOverlayDeclarations, emitThemeCss, firstPartyScope } from "..";
+import {
+  containerModeBlocks,
+  containerScope,
+  emitDeclarations,
+  emitOverlayDeclarations,
+  emitThemeCss,
+  firstPartyScope,
+} from "..";
 import {
   CONTAINER_ALIAS_CONTEXTS,
   CONTAINER_ALIASES,
@@ -266,6 +273,82 @@ describe("a container scope restates the left-out aliases its operands reach (N1
     expect(reached.has("--ds-avatar-focus-ring-offset")).toBe(true);
     expect(reached.has("--ds-avatar-focus-ring")).toBe(true);
     expect(containerReach(["--ds-focus-ring-offset"], {}).has("--ds-avatar-focus-ring")).toBe(false);
+  });
+});
+
+describe("a container scope's mode rules follow the document's mode", () => {
+  const scope = containerScope("[data-sb]");
+  const DARK_DOCUMENT = ":where(:where(:root, [data-ds-root]):is([data-theme='dark'], .dark)) [data-sb]";
+  const compiled = (
+    cssVariables: Record<string, string>,
+    dark: Record<string, string>
+  ) => ({
+    cssVariables,
+    modeBlocks: [{ mode: "dark" as const, colorScheme: "dark" as const, cssVariables: dark }],
+    runtime: { personality: {}, tokenOverrides: {} },
+  });
+
+  it("a container's mode rule is the scope under a document in that mode, after the base and context rules", () => {
+    const css = emitThemeCss(compiled({ "--ds-edge-standard-width": "0px" }, { "--ds-color-primary": "#010203" }), scope, {
+      container: {},
+    });
+    expect(css).not.toContain("[data-sb][data-theme='dark']");
+    const rule = css.indexOf(`${DARK_DOCUMENT} {\n  color-scheme: dark;\n  --ds-color-primary: #010203;\n}`);
+    expect(rule).toBeGreaterThan(css.indexOf("@media (prefers-contrast: more)"));
+  });
+
+  it("the mode rule's readers re-resolve in the base rule, where the root doors restate them", () => {
+    const css = emitThemeCss(compiled({}, { "--ds-color-primary": "#010203" }), scope, { container: {} });
+    const [base] = rules(css);
+    expect(base?.selector).toBe("[data-sb]");
+    expect(base?.names).toContain("--ds-card-header-icon-color");
+  });
+
+  it("a root door keeps the mode hook on its own element, byte for byte", () => {
+    const theme = compiled({ "--ds-color-primary": "#123456" }, { "--ds-color-primary": "#010203" });
+    const door = emitThemeCss(theme, firstPartyScope("bithire"));
+    expect(door).toContain("html[data-tenant='bithire'][data-theme='dark'], html[data-tenant='bithire'].dark {\n");
+    expect(door).not.toContain(":where(:root, [data-ds-root])");
+    const preview = emitThemeCss(theme, containerScope("[data-sb]"));
+    expect(preview).toContain("[data-sb][data-theme='dark'], [data-sb].dark {\n");
+  });
+
+  describe("containerModeBlocks", () => {
+    const untouched = {
+      cssVariables: { "--ds-color-primary": "#111111", "--ds-glow": "none", "--ds-ink": "#000000" },
+      modeBlocks: [
+        {
+          mode: "dark" as const,
+          colorScheme: "dark" as const,
+          cssVariables: { "--ds-glow": "0 0 4px var(--ds-color-primary)", "--ds-ink": "#ffffff" },
+        },
+      ],
+    };
+
+    it("a stated channel whose mode value differs from its base text is restated in that mode", () => {
+      const proposed = {
+        cssVariables: { ...untouched.cssVariables, "--ds-color-primary": "#222222" },
+        modeBlocks: [
+          { ...untouched.modeBlocks[0]!, cssVariables: { ...untouched.modeBlocks[0]!.cssVariables, "--ds-color-primary": "#333333" } },
+        ],
+      };
+      const [dark] = containerModeBlocks({ "--ds-color-primary": "#222222" }, proposed, untouched);
+      expect(dark?.mode).toBe("dark");
+      expect(dark?.cssVariables["--ds-color-primary"]).toBe("#333333");
+    });
+
+    it("a mode text that reads a stated operand its base text does not is carried in that mode", () => {
+      const proposed = { ...untouched, cssVariables: { ...untouched.cssVariables, "--ds-color-primary": "#222222" } };
+      const [dark] = containerModeBlocks({ "--ds-color-primary": "#222222" }, proposed, untouched);
+      expect(dark?.cssVariables).toEqual({ "--ds-glow": "0 0 4px var(--ds-color-primary)" });
+    });
+
+    it("nothing moved in a mode and nothing stated: no mode block, never an invented channel", () => {
+      expect(containerModeBlocks({}, untouched, untouched)).toEqual([]);
+      const [dark] = containerModeBlocks({ "--ds-ink": "#000000" }, untouched, untouched);
+      expect(dark?.cssVariables).toEqual({ "--ds-ink": "#ffffff" });
+      expect(Object.keys(dark?.cssVariables ?? {})).not.toContain("--ds-unknown");
+    });
   });
 });
 

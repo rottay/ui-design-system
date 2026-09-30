@@ -13,9 +13,12 @@ import {
 } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
 import { admitCssVariables } from "@/infrastructure/compilers/kernel/foundation/css/value-safety";
 
+import type { FlatThemeMode } from "@/foundation/contracts/composition/tenants/themes";
+
 import {
   containerAliasRedeclarations,
   type ContainerAliasContext,
+  containerReach,
   rootAliasRedeclarations,
 } from "./root-aliases";
 
@@ -109,9 +112,97 @@ export interface ContainerEmission {
 
 /** The selector a context rule is re-emitted at: the scope under a matching ancestor, or matching itself. */
 export function containerContextSelector(baseSelector: string, context: ContainerAliasContext): string {
-  const base = baseSelector.includes(",") ? `:is(${baseSelector})` : baseSelector;
-  const under = `:where(${context.selector}) ${base}`;
-  return context.rootOnly ? under : `${under}, ${base}:where(${context.selector})`;
+  const under = underContext(baseSelector, context.selector);
+  return context.rootOnly ? under : `${under}, ${asCompound(baseSelector)}:where(${context.selector})`;
+}
+
+/** A selector list as one compound, so a suffix or a descendant step applies to every arm. */
+function asCompound(selector: string): string {
+  return selector.includes(",") ? `:is(${selector})` : selector;
+}
+
+/** The scope under an ancestor matching `contextSelector`, at the scope's own weight. */
+function underContext(baseSelector: string, contextSelector: string): string {
+  return `:where(${contextSelector}) ${asCompound(baseSelector)}`;
+}
+
+/**
+ * The document root in `mode`, spelled as the DS's own mode contexts spell it:
+ * the root element or a provider root, carrying either mode hook.
+ */
+export function documentModeContext(mode: FlatThemeMode): string {
+  return `:where(:root, [data-ds-root]):is([data-theme='${mode}'], .${mode})`;
+}
+
+/**
+ * A container scope whose mode rules follow the DOCUMENT's mode. The scope's
+ * own element carries no mode hook, so the root doors' `modeSelector` (the
+ * hook on the scope element itself) never matches it. Each mode rule is the
+ * scope under a document root in that mode, at the base selector's own weight,
+ * so it outranks the base rule by order exactly where the root's mode rule
+ * outranks the root's base rule.
+ */
+export function documentModeScope(scope: EmissionScope): EmissionScope {
+  return {
+    baseSelector: scope.baseSelector,
+    modeSelector: (mode: FlatThemeMode) => underContext(scope.baseSelector, documentModeContext(mode)),
+  };
+}
+
+/** The channels a compile resolves to at the document root in `mode`: the base rule under that mode's overlay. */
+function inMode(
+  compiled: Pick<ThemeCompilation, "cssVariables" | "modeBlocks">,
+  mode: FlatThemeMode
+): Record<string, string> {
+  return {
+    ...compiled.cssVariables,
+    ...compiled.modeBlocks.find((block) => block.mode === mode)?.cssVariables,
+  };
+}
+
+/**
+ * The mode rules a container scope states (the container law's mode arm).
+ *
+ * The root states `enclosing` and its mode overlays; the scope states `stated`
+ * in its base rule and means `proposed` in every mode. Under a document in a
+ * mode the enclosing compile overlays, a base-rule channel whose `proposed`
+ * value in that mode differs from its base text would keep the base text, and a
+ * channel the scope leaves to the root would keep the root's mode value where
+ * `proposed` moves it. So each mode block states: every channel `proposed`
+ * resolves differently from `enclosing` in that mode, every stated channel
+ * whose mode value differs from its base text, and every compiled channel that
+ * reads one of those or any stated channel through a chain the root holds in
+ * that mode (`containerReach`: a mode text may read an operand its base text
+ * does not), with its `proposed` mode text. A channel `proposed` does not state
+ * in that mode is never invented.
+ */
+export function containerModeBlocks(
+  stated: Readonly<Record<string, string>>,
+  proposed: Pick<ThemeCompilation, "cssVariables" | "modeBlocks">,
+  enclosing: Pick<ThemeCompilation, "cssVariables" | "modeBlocks">
+): ThemeCompilationModeBlock[] {
+  const blocks: ThemeCompilationModeBlock[] = [];
+  for (const mode of ["light", "dark"] as const) {
+    const overlay =
+      proposed.modeBlocks.find((block) => block.mode === mode) ??
+      enclosing.modeBlocks.find((block) => block.mode === mode);
+    if (!overlay) continue;
+    const want = inMode(proposed, mode);
+    const root = inMode(enclosing, mode);
+    const isStated = (name: string) => Object.prototype.hasOwnProperty.call(stated, name);
+    const seeds = Object.keys(want).filter(
+      (name) => want[name] !== (isStated(name) ? stated[name] : root[name])
+    );
+    const cssVariables: Record<string, string> = {};
+    for (const name of new Set([...seeds, ...containerReach([...seeds, ...Object.keys(stated)], want)])) {
+      const value = want[name];
+      if (value !== undefined && !(isStated(name) && stated[name] === value)) cssVariables[name] = value;
+    }
+    if (Object.keys(cssVariables).length > 0) {
+      blocks.push({ mode, colorScheme: overlay.colorScheme, cssVariables });
+    }
+  }
+  return blocks;
 }
 
 /** The context rules, consecutive declarations of one context grouped, each wrapped in its at-rules. */
@@ -259,17 +350,20 @@ export function emitDensityScopeRule(
  * zero-mode theme emits no leading blank line.
  *
  * `container` marks a scope below the document root; every root-element door
- * omits it and emits the same bytes as before the container law existed.
+ * omits it and emits the same bytes as before the container law existed. At a
+ * container the mode rules, and the contrast deltas over them, follow the
+ * document's mode (`documentModeScope`), after the context rules they outrank.
  */
 export function emitThemeCss(
   compiled: ThemeCompilation,
   scope: EmissionScope,
   options: { container?: ContainerEmission } = {}
 ): string {
+  const modeScope = options.container ? documentModeScope(scope) : scope;
   return [
     emitBaseRule(compiled, scope, options),
-    ...compiled.modeBlocks.map((mode) => emitModeRule(mode, scope)),
-    emitContrastRule(compiled.contrastBlocks ?? [], scope),
+    ...compiled.modeBlocks.map((mode) => emitModeRule(mode, modeScope)),
+    emitContrastRule(compiled.contrastBlocks ?? [], modeScope),
     emitDensityScopeRule(compiled.densityScopeBlock, scope),
   ]
     .filter(Boolean)

@@ -14,7 +14,9 @@
  * The container is a box BELOW the document root, so the scope also carries the
  * compiled channels that read an artifact channel through a chain the root holds
  * (`containerReach`) and emits through the emission owner's container law, which
- * restates the root aliases those reads re-resolve (N1).
+ * restates the root aliases those reads re-resolve (N1). Under a document in a
+ * mode the vertical overlays, the scope states the artifact's mode values in
+ * rules that follow the document's mode (`containerModeBlocks`).
  *
  * @remarks
  * The values are double-checked with the shared `isSafePreviewCssValue`
@@ -40,10 +42,12 @@ import {
   isSafePreviewCssValue,
   sanitizePreviewSlug,
 } from '@/infrastructure/runtime/tenant/runtime/preview-scope';
+import type { ThemeCompilationModeBlock } from '@/foundation/contracts/composition/tenants/themes/compiled';
 import {
   containerScope,
   emitThemeCss,
 } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
+import { containerModeBlocks } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css';
 import { containerReach } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
 
 export { PREVIEW_SCOPE_ATTRIBUTE };
@@ -87,9 +91,10 @@ export function buildTenantThemePreviewScope(
   }
   // The artifact is a delta over the vertical's static compile, which is what
   // the enclosing root states; its readers of a moved channel keep that text.
-  const untouched = compileThemeIntent(
+  const untouchedCompile = compileThemeIntent(
     staticThemeIntent(verifiedArtifact.verticalKey, verifiedArtifact.slug),
-  ).compiled.cssVariables;
+  ).compiled;
+  const untouched = untouchedCompile.cssVariables;
   const enclosing: Record<string, string> = { ...untouched, ...verifiedArtifact.variables };
   const moved = Object.keys(verifiedArtifact.variables);
   const stated: Record<string, string> = { ...verifiedArtifact.variables };
@@ -99,17 +104,42 @@ export function buildTenantThemePreviewScope(
   }
   // The guard decides WHICH channels survive; the emission owner decides how a
   // declaration and a rule are spelled.
-  const admitted = Object.fromEntries(
-    Object.entries(stated).filter(
-      ([name, value]) => name.startsWith('--ds-') && isSafePreviewCssValue(value),
-    ),
-  );
+  const admit = (variables: Readonly<Record<string, string>>): Record<string, string> =>
+    Object.fromEntries(
+      Object.entries(variables).filter(
+        ([name, value]) => name.startsWith('--ds-') && isSafePreviewCssValue(value),
+      ),
+    );
+  const admitted = admit(stated);
+  // The artifact's mode deltas sit over the vertical's own mode block with the
+  // base delta applied (the delta owner's `themeChannelDelta`); under a
+  // document in that mode the scope states what they move.
+  const modes = new Set([
+    ...untouchedCompile.modeBlocks.map((block) => block.mode),
+    ...(verifiedArtifact.modeDeltas ?? []).map((block) => block.mode),
+  ]);
+  const proposedModeBlocks: ThemeCompilationModeBlock[] = [...modes].map((mode) => ({
+    mode,
+    colorScheme: mode,
+    cssVariables: {
+      ...untouchedCompile.modeBlocks.find((block) => block.mode === mode)?.cssVariables,
+      ...verifiedArtifact.variables,
+      ...verifiedArtifact.modeDeltas?.find((block) => block.mode === mode)?.variables,
+    },
+  }));
+  const modeBlocks = containerModeBlocks(
+    admitted,
+    { cssVariables: enclosing, modeBlocks: proposedModeBlocks },
+    untouchedCompile,
+  )
+    .map((block) => ({ ...block, cssVariables: admit(block.cssVariables) }))
+    .filter((block) => Object.keys(block.cssVariables).length > 0);
   const css =
-    Object.keys(admitted).length > 0
+    Object.keys(admitted).length > 0 || modeBlocks.length > 0
       ? emitThemeCss(
           {
             cssVariables: admitted,
-            modeBlocks: [],
+            modeBlocks,
             runtime: { personality: {}, tokenOverrides: {} },
           },
           containerScope(scopeSelector),

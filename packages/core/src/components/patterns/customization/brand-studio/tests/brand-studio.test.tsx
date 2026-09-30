@@ -13,6 +13,7 @@ import {
   applyHostileFlatTheme,
   buildSurfaceVariables,
   tryBuildSurfaceVariables,
+  surfaceScopeCss,
   DEFAULT_DARK_GROUND,
   DEFAULT_LIGHT_GROUND,
 } from '../index';
@@ -382,6 +383,39 @@ describe('PatternBrandStudio live preview repaint', () => {
     expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\) \{\n:where\(:root\) \.brand-studio-dark-/u);
     // The vertical's own outright text is never overridden with a root text.
     expect(css).toContain('--ds-button-primary-bg: var(--ds-color-primary);');
+  });
+});
+
+describe('PatternBrandStudio panels keep their ground under a document in either mode', () => {
+  const root = compileThemeIntent(staticThemeIntent('bithire', 'bithire')).compiled;
+  const rootDark = root.modeBlocks.find((block) => block.mode === 'dark')!.cssVariables;
+  const theme: FlatTheme = { id: 'g', name: 'G', palette: { primaryColor: '#4f46e5' } };
+
+  it('states every channel the vertical overlays at the ground value, never the document mode', () => {
+    const dark = buildSurfaceVariables(theme, DARK_SURFACE_UNDER_TEST);
+    const light = buildSurfaceVariables(theme, LIGHT_SURFACE_UNDER_TEST);
+    for (const name of Object.keys(rootDark)) {
+      const onDark = dark.vars[name] ?? dark.carried[name];
+      const onLight = light.vars[name] ?? light.carried[name];
+      expect(onDark, name).toBeDefined();
+      expect(onLight, name).toBeDefined();
+    }
+    // Unmoved by the draft: the untouched vertical's own value on each ground.
+    expect(dark.carried['--ds-elevation-1']).toBe(rootDark['--ds-elevation-1']);
+    expect(light.carried['--ds-elevation-1']).toBe(root.cssVariables['--ds-elevation-1']);
+    expect(light.carried['--ds-color-bg-input']).toBe(root.cssVariables['--ds-color-bg-input']);
+    // A compiled reader of an overlaid channel is carried too, so it re-resolves at the panel.
+    const reader = Object.keys(root.cssVariables).find((name) =>
+      /var\(--ds-elevation-1[,)]/u.test(root.cssVariables[name]!),
+    );
+    expect(reader).toBeDefined();
+    expect(dark.carried[reader!] ?? dark.vars[reader!]).toBeDefined();
+  });
+
+  it('emits no document-mode rule: the ground is the panel\'s mode', () => {
+    const css = surfaceScopeCss(buildSurfaceVariables(theme, LIGHT_SURFACE_UNDER_TEST), '.panel');
+    expect(css).not.toContain(":is([data-theme='dark'], .dark)) .panel {\n  color-scheme");
+    expect(css).toContain(`  --ds-elevation-1: ${root.cssVariables['--ds-elevation-1']};`);
   });
 });
 

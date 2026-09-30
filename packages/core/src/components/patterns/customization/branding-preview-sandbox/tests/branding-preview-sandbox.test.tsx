@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
 
 import { BrandingPreviewSandbox } from '..';
+import { compileThemeIntent, staticThemeIntent } from '@/infrastructure/compilers/runtime/theme';
 import { EngineProvider } from '@/infrastructure/runtime/engines/composition/react/provider';
 
 /** DS primitives read the engine from context, and context absence is refused. */
@@ -129,4 +130,32 @@ describe('BrandingPreviewSandbox', () => {
     expect(css).not.toBe('');
     expect(css).toContain('#FF0000');
   });
+
+  // bithire is light-default: its compile overlays `dark`, so a document in
+  // dark mode is the one the base rule alone would paint with light text.
+  it('restates the moved appearance under a document in the mode the vertical overlays', () => {
+    const { container } = mount(
+      <BrandingPreviewSandbox vertical="bithire" appearance={{ general: { palette: { primary: '#16a34a' } } }} />,
+    );
+    const css = container.querySelector('style')?.textContent ?? '';
+    const scope = container
+      .querySelector('.ds-pattern-branding-preview-sandbox')
+      ?.getAttributeNames()
+      .find((attribute) => attribute.startsWith('data-preview-'));
+    const rule = `:where(:where(:root, [data-ds-root]):is([data-theme='dark'], .dark)) [${scope}] {\n  color-scheme: dark;\n`;
+    const at = css.indexOf(rule);
+    expect(at).toBeGreaterThan(css.indexOf(`[${scope}] {\n`));
+    const body = css.slice(at, css.indexOf('}', at));
+    // The dark ramp the moved primary re-derives, not the base rule's light one.
+    const root = compileThemeIntent(staticThemeIntent('bithire', 'bithire')).compiled;
+    const rootDark = root.modeBlocks.find((block) => block.mode === 'dark')!.cssVariables;
+    expect(body).toMatch(/\n  --ds-color-primary-500: #[0-9A-Fa-f]{6};/u);
+    expect(body).not.toContain(`--ds-color-primary-500: ${rootDark['--ds-color-primary-500']};`);
+    // A dark text reading the moved primary that the light text does not read.
+    expect(rootDark['--ds-elevation-4']).toContain('var(--ds-color-primary');
+    expect(body).toContain(`  --ds-elevation-4: ${rootDark['--ds-elevation-4']};`);
+    // Never the scope's own mode hook: the scope element carries none.
+    expect(css).not.toContain(`[${scope}][data-theme='dark']`);
+  });
 });
+

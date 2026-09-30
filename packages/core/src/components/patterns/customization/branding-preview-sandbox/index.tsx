@@ -58,7 +58,9 @@ import {
   staticThemeIntent,
 } from '@/infrastructure/compilers/runtime/theme';
 import { containerScope } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
+import type { ThemeCompilation, ThemeCompilationModeBlock } from '@/foundation/contracts/composition/tenants/themes/compiled';
 import { emitThemeCss } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
+import { containerModeBlocks } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css';
 import { containerReach } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
 import { isSafePreviewCssValue } from '@/infrastructure/runtime/tenant/runtime/preview-scope';
 
@@ -116,21 +118,46 @@ export function previewScopeVariables(
   return vars;
 }
 
+/** The one preview guard every declaration this scope injects passes. */
+function isPreviewDeclaration(name: string, value: string): boolean {
+  return /^--ds-[a-z0-9-]+$/i.test(name) && isSafePreviewCssValue(value);
+}
+
+/**
+ * The scope's mode rules: the proposed appearance under the document's mode
+ * (`containerModeBlocks`), over what the base rule states, guarded like it.
+ */
+export function previewScopeModeBlocks(
+  stated: Readonly<Record<string, string>>,
+  proposed: ThemeCompilation,
+  untouched: ThemeCompilation,
+): ThemeCompilationModeBlock[] {
+  return containerModeBlocks(stated, proposed, untouched)
+    .map((block) => ({
+      ...block,
+      cssVariables: Object.fromEntries(
+        Object.entries(block.cssVariables).filter(([name, value]) => isPreviewDeclaration(name, value)),
+      ),
+    }))
+    .filter((block) => Object.keys(block.cssVariables).length > 0);
+}
+
 /**
  * The preview scope's CSS, through the emission owner's container law: the
- * root aliases the stated channels re-resolve are restated in the scope, and
+ * root aliases the stated channels re-resolve are restated in the scope,
  * `outright` (what the enclosing root's own rule states) is never overridden
- * with a root text.
+ * with a root text, and the mode rules follow the document's mode.
  */
 export function previewScopeCss(
   variables: Readonly<Record<string, string>>,
   outright: Iterable<string>,
   scopeSelector: string,
+  modeBlocks: readonly ThemeCompilationModeBlock[] = [],
 ): string {
   return emitThemeCss(
     {
       cssVariables: variables,
-      modeBlocks: [],
+      modeBlocks,
       runtime: { personality: {}, tokenOverrides: {} },
     },
     containerScope(scopeSelector),
@@ -171,9 +198,10 @@ export function BrandingPreviewSandbox({
    * Fail-closed: a document the migration refuses paints nothing rather than
    * falling back to a second, hand-rolled projection.
    */
-  const { cssVars, outright } = useMemo(() => {
+  const { cssVars, outright, compiles } = useMemo(() => {
     let vars: Record<string, string> = {};
     let stated: readonly string[] = [];
+    let pair: { proposed: ThemeCompilation; untouched: ThemeCompilation } | undefined;
     const document: TenantThemeDocument = appearance.advanced
       ? {
           schemaVersion: TENANT_THEME_SCHEMA_VERSION,
@@ -200,28 +228,31 @@ export function BrandingPreviewSandbox({
       ).compiled;
       vars = previewScopeVariables(proposed.cssVariables, untouched.cssVariables);
       stated = Object.keys(untouched.cssVariables);
+      pair = { proposed, untouched };
     } catch {
       // An unmigratable appearance is a refused preview, never a second door.
     }
-    return { cssVars: vars, outright: stated };
+    return { cssVars: vars, outright: stated, compiles: pair };
   }, [appearance, vertical, slug]);
 
   // This string reaches dangerouslySetInnerHTML, so every declaration passes
   // the governed preview guard before it is emitted.
   const appliedVars = useMemo(
     () =>
-      Object.entries(cssVars).filter(
-        ([name, value]) => /^--ds-[a-z0-9-]+$/i.test(name) && isSafePreviewCssValue(value),
-      ),
+      Object.entries(cssVars).filter(([name, value]) => isPreviewDeclaration(name, value)),
     [cssVars],
   );
 
   // Emission is the emission owner's, not this component's: a pattern that
   // assembles its own declarations is a second CSS grammar to keep in step.
   const scopedCss = useMemo(() => {
-    if (appliedVars.length === 0) return '';
-    return previewScopeCss(Object.fromEntries(appliedVars), outright, `[${scopeAttr}]`);
-  }, [appliedVars, outright, scopeAttr]);
+    const applied = Object.fromEntries(appliedVars);
+    const modeBlocks = compiles
+      ? previewScopeModeBlocks(applied, compiles.proposed, compiles.untouched)
+      : [];
+    if (appliedVars.length === 0 && modeBlocks.length === 0) return '';
+    return previewScopeCss(applied, outright, `[${scopeAttr}]`, modeBlocks);
+  }, [appliedVars, compiles, outright, scopeAttr]);
 
   return (
     <>

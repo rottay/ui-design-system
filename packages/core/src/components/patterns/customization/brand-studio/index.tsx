@@ -359,7 +359,9 @@ export interface SurfaceVariables {
   /**
    * Compiled channels that read a `vars` name through a chain the document root
    * holds, with their mode-resolved compiled text. The panel is a box BELOW the
-   * root, so without them it inherits their root-resolved values (N1).
+   * root, so without them it inherits their root-resolved values (N1). Also every
+   * channel the vertical's mode overlays move, and their readers, at the ground's
+   * value: the panel keeps its ground under a document in either mode.
    */
   carried: Record<string, string>;
   /** The channels the untouched vertical's root rule states outright (the container law's `outright`). */
@@ -463,11 +465,23 @@ function projectSurfaceVariables(
     surface.baseTheme !== compiledMode
       ? { ...compilation.cssVariables, ...modeOverlayOf(compilation, surface.baseTheme) }
       : compilation.cssVariables;
-  const enclosing = { ...onGround(untouched), ...onGround(compiled) };
+  const groundRoot = onGround(untouched);
+  const enclosing = { ...groundRoot, ...onGround(compiled) };
+  // The panel's mode is its GROUND, not the document's: every channel a mode
+  // overlay of the vertical moves is stated at the ground's value -- the
+  // untouched vertical's, unless the delta above moved it -- and every compiled
+  // channel reading one is carried, or a document in the other mode repaints it.
+  const modeVarying = [untouched, compiled].flatMap((compilation) =>
+    compilation.modeBlocks.flatMap((block) => Object.keys(block.cssVariables)),
+  );
   const carried: Record<string, string> = {};
-  for (const name of containerReach(Object.keys(vars), enclosing)) {
-    const value = enclosing[name];
+  for (const name of modeVarying) {
+    const value = groundRoot[name];
     if (value !== undefined && !(name in vars)) carried[name] = value;
+  }
+  for (const name of containerReach([...Object.keys(vars), ...modeVarying], enclosing)) {
+    const value = enclosing[name];
+    if (value !== undefined && !(name in vars) && !(name in carried)) carried[name] = value;
   }
   return {
     vars,
