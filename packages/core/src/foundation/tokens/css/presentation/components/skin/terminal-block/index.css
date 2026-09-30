@@ -16,7 +16,7 @@
   overflow: hidden;
   color: var(--ds-color-mono-1000);
   background: var(--ds-color-surface-ink);
-  border: 1px solid var(--ds-color-hairline);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-hairline);
   /* Corner radius is private to the terminal profile. The existing `overflow: hidden`
      clips scanlines/body to any locally scoped value. */
   border-radius: var(--_ds-terminal-block-radius, 0);

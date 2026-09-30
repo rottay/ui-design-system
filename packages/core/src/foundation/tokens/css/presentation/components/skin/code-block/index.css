@@ -42,7 +42,7 @@
   gap: var(--ds-spacing-1);
   padding: var(--ds-spacing-1) var(--ds-spacing-2);
   border-radius: var(--ds-radius-sm);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border);
   background: transparent;
   color: var(--ds-color-text-secondary);
   font: inherit;

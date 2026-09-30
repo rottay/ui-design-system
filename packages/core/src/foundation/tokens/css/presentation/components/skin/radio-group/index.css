@@ -104,7 +104,7 @@
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-radio-group.ds-radio-group--button [data-part='option'][data-part='option'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 /* Segment density: the group `size` picks the canonical font channel and a

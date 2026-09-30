@@ -22,7 +22,7 @@
   padding-block: var(--ds-spacing-4, 1rem);
   padding-inline: var(--ds-spacing-5, 1.25rem);
   color: var(--ds-surface-fg, currentColor);
-  border: 1px solid var(--ds-color-hairline);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-hairline);
   background: transparent;
 }
 
