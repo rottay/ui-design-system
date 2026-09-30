@@ -524,8 +524,8 @@ export const Dialog = ({ open }) => (
 });
 
 // ---------------------------------------------------------------------------
-// Regression pins on the real corpus: the dead skin arms retired at df09cad39
-// and c2df6644f, and the rustic modal root the repaired instrument found.
+// Regression pins on the real corpus: the dead skin arms retired at df09cad39,
+// c2df6644f and 1e2e4b737 (the rustic modal root the repaired instrument found).
 // ---------------------------------------------------------------------------
 
 const withRows = (extra) => {
@@ -544,6 +544,7 @@ test('real pins: the retired skin arms never relax, and the provable ones read a
     ['agnostic/input-compounds/index.css', ".ds-input-group[data-part='group'][data-compact='true'] > :last-child:not(:first-child) .ds-select-shell [data-part='trigger']"],
     ['agnostic/input-compounds/index.css', ".ds-input-group[data-part='group'][data-compact='true'] > :not(:first-child):not(:last-child) .ds-select-shell [data-part='trigger']"],
     ['agnostic/data-table-mobile/index.css', '.ds-pattern-data-table.ds-data-table--mobile [data-part="row-actions-menu"]'],
+    ['rustic/modal/index.css', ".rottay-modal-root--rustic > [data-part='surface']"],
   ];
   const { census } = realCorpus();
   const { rows } = classifyReport(withRows(PINS), { census });
@@ -551,8 +552,8 @@ test('real pins: the retired skin arms never relax, and the provable ones read a
   for (const r of pinned) assert.equal(r.class, 'TRUE_DEAD', `${r.selector} relaxed: ${r.reason}`);
   // The modern Popover renders content inline under strategy anchor-css: NOT a portal proof.
   assert.notEqual(pinned[4].verdict, 'dead-rule', pinned[4].reason);
-  const modal = rows.find((r) => r.file === 'rustic/modal/index.css' && r.selector.replace(/\s+/g, ' ') === ".rottay-modal-root--rustic > [data-part='surface']");
-  assert.ok(modal, 'the rustic modal root row is in the report');
+  // FocusTrap interposes a wrapper: the child combinator can never hold.
+  const modal = pinned[5];
   assert.equal(modal.verdict, 'dead-rule', modal.reason);
   assert.match(modal.reason, /its parent never carries \.rottay-modal-root--rustic/);
 });

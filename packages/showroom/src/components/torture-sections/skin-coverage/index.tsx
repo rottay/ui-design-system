@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
+  Badge,
   Box,
   Stack,
   Text,
@@ -11,6 +12,7 @@ import {
   Collapse,
   DatePicker,
   FormSections,
+  Grid,
   InlineEditSection,
   Input,
   Menu,
@@ -347,6 +349,31 @@ function DisplayCoverage() {
       <Cell testId="tree-loading" label="Tree -- node loading">
         <Tree treeData={TREE_LAZY_DATA} loadData={neverResolves} />
       </Cell>
+      <Cell testId="badge-clickable" label="Badge -- clickable">
+        <Badge clickable onClick={noop}>
+          Filter
+        </Badge>
+      </Cell>
+      <Cell testId="stack-dividers" label="Stack -- default and custom dividers">
+        <Stack divider>
+          <Text size="xs">First</Text>
+          <Text size="xs">Second</Text>
+        </Stack>
+        <Stack divider={<hr />}>
+          <Text size="xs">Third</Text>
+          <Text size="xs">Fourth</Text>
+        </Stack>
+      </Cell>
+      <Cell testId="grid-items" label="Grid -- items">
+        <Grid columns={2}>
+          <Grid.Item>
+            <Text size="xs">Cell one</Text>
+          </Grid.Item>
+          <Grid.Item>
+            <Text size="xs">Cell two</Text>
+          </Grid.Item>
+        </Grid>
+      </Cell>
     </>
   );
 }
@@ -426,6 +453,15 @@ function DataTableCoverage() {
           columns={COVERAGE_COLUMNS}
           actions={renderRowActions}
           adapt={TABLE_PRESENTATION}
+        />
+      </Cell>
+      <Cell testId="datatable-toolbar" label="DataTable -- toolbar">
+        <PatternDataTable<CoverageRow>
+          data={COVERAGE_ROWS}
+          rowKey="id"
+          columns={COVERAGE_COLUMNS}
+          adapt={TABLE_PRESENTATION}
+          toolbar={<Text size="xs">Toolbar</Text>}
         />
       </Cell>
       <Cell testId="datatable-cards-menu" label="DataTable -- cards with row-action menu">
