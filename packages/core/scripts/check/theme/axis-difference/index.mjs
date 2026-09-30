@@ -2303,6 +2303,17 @@ export const ALTERNATIVE_LIMIT = 12;
  * and produced fragments like `:focus-visible)` when the list was split on
  * every comma. Expanding is the reading that stays true to the rule, and it is
  * bounded because a nested list multiplies.
+ *
+ * Two readings this used to get wrong, both measured on the Modern skins:
+ *
+ *  - A branch may carry its own parentheses (`:is([data-state~='x'],
+ *    :has(> input:focus-visible))`, the radio-group option). The list is found
+ *    by balancing parentheses, so a nested `:has()` no longer hides it and the
+ *    branches are read as the ALTERNATIVES they are.
+ *  - A branch that names an ELEMENT leads its compound rather than being glued
+ *    onto the text before it: `.t.t--modern:is(a)` is `a.t.t--modern`, not the
+ *    class `.t.t--moderna` no node carries. A branch naming a different element
+ *    than the compound already does can never match and is dropped.
  */
 export function expandAlternatives(selector, limit = ALTERNATIVE_LIMIT) {
   let list = [selector.trim()];
@@ -2310,20 +2321,91 @@ export function expandAlternatives(selector, limit = ALTERNATIVE_LIMIT) {
     const next = [];
     let changed = false;
     for (const entry of list) {
-      const match = /:(?:is|where)\(([^()]*)\)/u.exec(entry);
-      if (match === null) {
+      const found = alternativeList(entry);
+      if (found === null) {
         next.push(entry);
         continue;
       }
       changed = true;
-      for (const alternative of selectorList(match[1])) {
-        next.push(`${entry.slice(0, match.index)}${alternative}${entry.slice(match.index + match[0].length)}`);
+      const before = entry.slice(0, found.start);
+      const after = entry.slice(found.end);
+      for (const alternative of selectorList(found.body)) {
+        const spliced = spliceAlternative(before, alternative, after);
+        if (spliced !== null) next.push(spliced);
       }
     }
     list = next.slice(0, limit);
     if (!changed) break;
   }
   return list.map((entry) => entry.replace(/\s+/gu, ' ').trim());
+}
+
+/** The first `:is(...)`/`:where(...)` in a selector, its parentheses balanced, or `null`. */
+function alternativeList(selector) {
+  const opener = /:(?:is|where)\(/gu;
+  for (let match = opener.exec(selector); match !== null; match = opener.exec(selector)) {
+    let depth = 1;
+    let quote = null;
+    for (let index = match.index + match[0].length; index < selector.length; index += 1) {
+      const character = selector[index];
+      if (quote !== null) {
+        if (character === quote) quote = null;
+        continue;
+      }
+      if (character === '\'' || character === '"') quote = character;
+      else if (character === '(') depth += 1;
+      else if (character === ')') {
+        depth -= 1;
+        if (depth === 0) {
+          return { start: match.index, end: index + 1, body: selector.slice(match.index + match[0].length, index) };
+        }
+      }
+    }
+  }
+  return null;
+}
+
+const LEADING_TYPE = /^(\*|[A-Za-z][\w-]*)/u;
+
+/** Where the compound that ends `text` starts: after its last top-level combinator, whitespace or open parenthesis. */
+function compoundStart(text) {
+  let depth = 0;
+  for (let index = text.length - 1; index >= 0; index -= 1) {
+    const character = text[index];
+    if (character === ']' || character === ')') depth += 1;
+    else if (character === '[') depth -= 1;
+    else if (character === '(') {
+      if (depth === 0) return index + 1;
+      depth -= 1;
+    } else if (depth === 0 && /[\s>+~,]/u.test(character)) return index + 1;
+  }
+  return 0;
+}
+
+/** Whether a selector is more than one compound (a combinator outside brackets and parentheses). */
+function isComplex(selector) {
+  let depth = 0;
+  for (const character of selector.trim()) {
+    if (character === '[' || character === '(') depth += 1;
+    else if (character === ']' || character === ')') depth -= 1;
+    else if (depth === 0 && /[\s>+~]/u.test(character)) return true;
+  }
+  return false;
+}
+
+/** One branch put where its `:is()` stood, an element branch leading the compound it joins; `null` when it cannot match. */
+function spliceAlternative(before, alternative, after) {
+  const branch = alternative.trim();
+  const start = compoundStart(before);
+  const head = before.slice(start);
+  const type = LEADING_TYPE.exec(branch);
+  if (head.length === 0 || type === null || isComplex(branch)) return `${before}${branch}${after}`;
+  const rest = branch.slice(type[1].length);
+  const headType = LEADING_TYPE.exec(head);
+  if (headType === null) return `${before.slice(0, start)}${type[1]}${head}${rest}${after}`;
+  if (type[1] === '*' || headType[1] === type[1]) return `${before}${rest}${after}`;
+  if (headType[1] === '*') return `${before.slice(0, start)}${type[1]}${head.slice(1)}${rest}${after}`;
+  return null;
 }
 
 const PART_CLASS_TOKEN = /\.([A-Za-z][\w-]*)/gu;
@@ -3793,6 +3875,66 @@ export async function calibrateNativeForcing(context, { variants = NATIVE_PSEUDO
   }
 }
 
+/** One `[data-state ...]`/`[data-disabled ...]` attribute selector: name, operator, value (in one of three quotings). */
+const STAMP_TOKEN = /\[(data-state|data-disabled)(?:\s*([~*^$|]?=)\s*(?:'([^']*)'|"([^"]*)"|([^\]\s]*)))?\s*\]/gu;
+
+/**
+ * Whether a stamped state of the scene writes a value that satisfies one
+ * attribute selector. The scene writes `data-state` from `STATE_VARIANTS` and
+ * the extra attributes of `STATE_STAMP_ATTRIBUTES`, and nothing else: a rule
+ * gated on `[data-state='error']`, `'empty'`, `'buttons'` is gated on a DOMAIN
+ * value a component writes about its data, and the stamp never enters it.
+ * Stripping every `data-state` token regardless of its value credited two
+ * families (branding-preview-sandbox, detail) with reach through exactly that
+ * hole (census 2026-09-30).
+ */
+function stampWrites(name, operator, value) {
+  if (operator === undefined) return true;
+  const written = name === 'data-state'
+    ? STATE_VARIANTS
+    : Object.values(STATE_STAMP_ATTRIBUTES).flatMap((attributes) => (Object.hasOwn(attributes, name) ? [attributes[name]] : []));
+  return written.some((candidate) => {
+    if (operator === '=' || operator === '~=') return candidate === value;
+    if (operator === '*=') return candidate.includes(value);
+    if (operator === '^=') return candidate.startsWith(value);
+    if (operator === '$=') return candidate.endsWith(value);
+    return candidate === value || candidate.startsWith(`${value}-`);
+  });
+}
+
+/**
+ * Whether the stamp can enter a stamped selector (negations already removed).
+ * It needs one token a stamp writes. A DOMAIN token beside it is kept in the
+ * probe when a node could carry it at rest alongside the stamp (`~=`, `*=`,
+ * `^=` over a space-separated list that the stamp only appends to); an exact,
+ * suffix or dash match on a domain value cannot hold once the stamp is added.
+ */
+function stampGate(selector) {
+  let stamps = 0;
+  let enterable = true;
+  let kernel = false;
+  for (const [, name, operator, single, double, bareValue] of selector.matchAll(STAMP_TOKEN)) {
+    const value = single ?? double ?? bareValue;
+    if (stampWrites(name, operator, value)) stamps += 1;
+    else {
+      if (name === 'data-state' && KERNEL_STATE_TOKENS.includes(value)) kernel = true;
+      if (!['~=', '*=', '^='].includes(operator)) enterable = false;
+    }
+  }
+  if (enterable && stamps > 0) return { enterable: true, reason: null };
+  return { enterable: false, reason: kernel ? 'unstamped-state' : 'domain-state-value' };
+}
+
+/**
+ * Every token the anatomy kernel serializes into `data-state`
+ * (`foundation/behavior/kernel/anatomy`, `STATE_FLAG_ORDER` through
+ * `serializeState`). `focused` is one of them and is NOT in `STATE_VARIANTS`,
+ * so a rule gated on it is a real interaction state this scene does not stamp
+ * (`unstamped-state`), which is a different finding from a rule gated on a
+ * value the component writes about its DATA (`domain-state-value`).
+ */
+export const KERNEL_STATE_TOKENS = Object.freeze(['disabled', 'hovered', 'pressed', 'focused', 'focus-visible']);
+
 /**
  * The state rules one family's skin writes, each read as a selector the scene
  * can be asked about: `vocabulary` says which half could enter it, `reason`
@@ -3819,8 +3961,10 @@ export function stateRuleProbes(css) {
         const forced = FORCED_PSEUDO.test(bare);
         const stamped = /\[data-state\b|\[data-disabled\b/u.test(bare);
         if (!forced && !stamped) continue;
+        const gate = forced || !stamped ? null : stampGate(bare);
         let reason = null;
         if (forced && stamped) reason = 'needs-pseudo-and-stamp';
+        else if (gate !== null && !gate.enterable) reason = gate.reason;
         else if (selector.includes('::')) reason = 'pseudo-element';
         else if (!custom && owners.size === 0) reason = 'unread-property';
         else if (forced && forcedPseudoHazards(selector).size > 0) reason = 'relational';
@@ -3831,7 +3975,8 @@ export function stateRuleProbes(css) {
           ? withoutForcedPseudos(selector)
           : selector
             .replace(/:not\([^()]*\[data-(?:state|disabled)\b[^()]*\)/gu, '')
-            .replace(/\[data-(?:state|disabled)(?:\s*[~*^$|]?=\s*(?:'[^']*'|"[^"]*"|[^\]]*))?\]/gu, '');
+            .replace(STAMP_TOKEN, (token, name, operator, single, double, bareValue) =>
+              (stampWrites(name, operator, single ?? double ?? bareValue) ? '' : token));
         probes.push({
           vocabulary: forced ? 'native' : 'stamped',
           selector,

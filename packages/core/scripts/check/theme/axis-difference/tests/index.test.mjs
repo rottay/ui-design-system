@@ -67,6 +67,7 @@ import {
   familyElements,
   familyOwnsBlock,
   hasOnlyStructuralHas,
+  KERNEL_STATE_TOKENS,
   logicalEdgeLonghands,
   withAsRenderedStamps,
   withoutStructuralHas,
@@ -1157,6 +1158,32 @@ describe('axis-difference — the mount is the element the family PAINTS the axi
     ]);
     const wide = `.ds-x :is(${[...Array(20).keys()].map((n) => `[data-part='p${n}']`).join(', ')})`;
     assert.equal(expandAlternatives(wide).length, ALTERNATIVE_LIMIT);
+  });
+
+  it('expands an element branch of :is() as an ELEMENT, not as text glued onto the class before it', () => {
+    // Measured on the Modern typography skin: `.t.t--modern:is(a)` expanded to
+    // `.t.t--moderna`, a class no node carries, so the link outline (the rule
+    // that reads the focus-ring width and offset) was a probe that could never
+    // match. A type selector leads its compound; a class or attribute branch
+    // appends to it.
+    assert.deepEqual(expandAlternatives(".t.t--modern:is(a)[data-color='primary']"), [
+      "a.t.t--modern[data-color='primary']",
+    ]);
+    assert.deepEqual(expandAlternatives('.r .t.t--modern:is(.cls, a):focus-visible'), [
+      '.r .t.t--modern.cls:focus-visible',
+      '.r a.t.t--modern:focus-visible',
+    ]);
+    assert.deepEqual(expandAlternatives('.t:is(a.link, button)'), ['a.t.link', 'button.t']);
+    assert.deepEqual(expandAlternatives('a:is(a, span)'), ['a'], 'a branch naming another element can never match and is dropped');
+    const probes = stateRuleProbes(".t.t--modern:is(.cls, a)[data-state~='focus-visible'] { outline-width: 2px; }");
+    assert.deepEqual(probes.map((probe) => probe.probe), ['.t.t--modern.cls', 'a.t.t--modern']);
+  });
+
+  it('expands an :is() whose branches carry their own parentheses, so a nested :has() does not hide the list', () => {
+    assert.deepEqual(
+      expandAlternatives(".rg [data-part='option']:is([data-state~='focus-visible'], :has(> input:focus-visible))"),
+      [".rg [data-part='option'][data-state~='focus-visible']", ".rg [data-part='option']:has(> input:focus-visible)"],
+    );
   });
 
   it('grafts a descendant part onto the family root and keeps the chain, because a descendant needs an ANCESTOR', () => {
@@ -2685,6 +2712,65 @@ describe('axis-difference — the native half forces what a real pointer or keyb
     assert.equal(by('.r input:focus-visible ~ .box').reason, 'relational');
     assert.equal(by('.r:has(.b:focus-visible)').reason, 'pseudo-inside-has');
     assert.equal(probes.some((probe) => probe.selector === '.r:disabled'), false, 'nothing forces :disabled, so it is no probe of either half');
+  });
+
+  it('classifies each :is() branch on its own, so a stamp-only alternative is reachable by the stamp', () => {
+    // Measured on the radio-group skin: the two arms are ALTERNATIVES, and the
+    // union of their requirements (a stamp AND a forced pseudo) is a selector
+    // no branch of the rule actually asks for.
+    const probes = stateRuleProbes(
+      ".rg [data-part='option']:is([data-state~='focus-visible'], :has(> input:focus-visible)) { outline-offset: 2px; }",
+    );
+    assert.equal(probes.some((probe) => probe.reason === 'needs-pseudo-and-stamp'), false);
+    const stamped = probes.filter((probe) => probe.vocabulary === 'stamped');
+    assert.deepEqual(stamped.map((probe) => ({ probe: probe.probe, reason: probe.reason })), [
+      { probe: ".rg [data-part='option']", reason: null },
+    ]);
+    const native = probes.filter((probe) => probe.vocabulary === 'native');
+    assert.equal(native.length, 1);
+    assert.equal(native[0].reason, 'pseudo-inside-has');
+  });
+
+  it('credits a stamped rule only when its data-state VALUE is one the scene stamps', () => {
+    const probes = stateRuleProbes([
+      ".r[data-state~='hovered'] { opacity: 0.9; }",
+      ".r[data-state='disabled'] { opacity: 0.5; }",
+      ".r[data-disabled='true'] { opacity: 0.4; }",
+      ".r[data-state~='error'] { opacity: 0.8; }",
+      ".r[data-state='buttons'] { opacity: 0.7; }",
+      ".r[data-state~='empty'] [data-part='x'] { opacity: 0.6; }",
+      ".r[data-disabled='false'] { opacity: 0.3; }",
+      ".r[data-state~='open'][data-state~='pressed'] { opacity: 0.2; }",
+      ".r[data-state='open'][data-state~='pressed'] { opacity: 0.1; }",
+      ".r[data-state] { opacity: 0.05; }",
+      ".r[data-state~='focused'] { opacity: 0.02; }",
+    ].join('\n'));
+    const by = (selector) => probes.find((probe) => probe.selector === selector);
+    for (const selector of [".r[data-state~='hovered']", ".r[data-state='disabled']", ".r[data-disabled='true']", '.r[data-state]']) {
+      assert.deepEqual({ selector, reason: by(selector).reason, probe: by(selector).probe }, { selector, reason: null, probe: '.r' });
+    }
+    for (const selector of [
+      ".r[data-state~='error']",
+      ".r[data-state='buttons']",
+      ".r[data-state~='empty'] [data-part='x']",
+      ".r[data-disabled='false']",
+      ".r[data-state='open'][data-state~='pressed']",
+    ]) {
+      assert.deepEqual({ selector, reason: by(selector).reason }, { selector, reason: 'domain-state-value' });
+    }
+    // `focused` is serialized by the kernel but never stamped by the scene: it
+    // is not reached either, and it is named apart from a domain value.
+    assert.equal(by(".r[data-state~='focused']").reason, 'unstamped-state');
+    const kernel = readFileSync(join(ROOT, 'src/foundation/behavior/kernel/anatomy/index.ts'), 'utf8');
+    const flags = /STATE_FLAG_ORDER[^=]*=\s*\[([^\]]*)\]/u.exec(kernel)[1].match(/'([A-Za-z]+)'/gu)
+      .map((flag) => flag.slice(1, -1).replace(/[A-Z]/gu, (letter) => `-${letter.toLowerCase()}`));
+    assert.deepEqual([...KERNEL_STATE_TOKENS].sort(), flags.sort(), 'the kernel tokens are read from the kernel, not remembered');
+    // A domain token beside a stamped one stays in the probe: a real mount that
+    // carries it at rest is reached, a synthesized node that does not is not.
+    assert.deepEqual(
+      { reason: by(".r[data-state~='open'][data-state~='pressed']").reason, probe: by(".r[data-state~='open'][data-state~='pressed']").probe },
+      { reason: null, probe: ".r[data-state~='open']" },
+    );
   });
 
   it('names every family NEITHER half reaches, and credits the native half only when it ran', () => {
