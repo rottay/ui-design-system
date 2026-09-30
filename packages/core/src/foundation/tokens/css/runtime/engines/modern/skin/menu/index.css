@@ -158,7 +158,6 @@
 }
 
 .ds-menu--modern[data-part='root'] [data-part='item'][data-state~='disabled'] [data-part='icon'],
-.ds-menu--modern[data-part='root'] [data-part='item'][data-state~='disabled'] [data-part='arrow-icon'],
 .ds-menu--modern[data-part='root'] [data-part='trigger'][data-state~='disabled'] [data-part='icon'],
 .ds-menu--modern[data-part='root'] [data-part='trigger'][data-state~='disabled'] [data-part='arrow-icon'] {
   opacity: var(--ds-menu-disabled-opacity);
