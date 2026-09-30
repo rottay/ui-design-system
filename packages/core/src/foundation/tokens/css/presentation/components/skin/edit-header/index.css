@@ -150,9 +150,10 @@
   border-bottom: 1px solid var(--ds-color-border-secondary);
 }
 
-/* back button (no className hook — §4 anatomy is data-part only) */
+/* back button (no className hook — §4 anatomy is data-part only); its corner
+   rides the tenant radius dial like its form-header twin (10px when unset) */
 .ds-structure.ds-edit-header [data-part='back-button'] {
-  border-radius: 10px;
+  border-radius: calc(10px * var(--ds-radius-scale, 1));
   background: transparent;
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button'] {
