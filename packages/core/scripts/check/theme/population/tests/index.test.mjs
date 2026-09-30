@@ -9,7 +9,7 @@
  * corpus and asserts the floor refuses it.
  */
 import assert from 'node:assert/strict';
-import { cpSync, mkdtempSync, mkdirSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
+import { cpSync, mkdtempSync, mkdirSync, readdirSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { dirname } from 'node:path';
@@ -29,6 +29,8 @@ import {
   declaredProperties,
   exclusionsRevision,
   familyAxisDeclarations,
+  axisUnobservable,
+  isStateDeclaration,
   normalizeCssText,
   pilotPopulation,
   populationLine,
@@ -700,3 +702,95 @@ describe('theme population — the reviewed exclusion is bound to the rule conte
     assert.equal(radio.axes.shape.excludedDeclarations.length, 1);
   });
 });
+
+describe('theme population — per-rule state evidence and the unobservable count (S5, Fable exclusion review A2 + A4)', () => {
+  const plant = (dir, family, css) => {
+    mkdirSync(join(dir, SKIN_ROOT, family), { recursive: true });
+    writeFileSync(join(dir, SKIN_ROOT, family, 'index.css'), css);
+    return familyAxisDeclarations(dir, catalogIn(dir)).get(family);
+  };
+
+  it('MUTANT (A2-7): a state needle only inside a value or a string does not declare states', () => {
+    const dir = sandbox();
+    const record = plant(dir, 'drill-needle-value', ".ds-drill-needle-value::after { content: ':hover [data-state='; opacity: 1; }\n");
+    assert.equal(record.axes.states, undefined, JSON.stringify(record.axes.states));
+  });
+
+  it('MUTANT (A2-8): an empty state rule -- the needle, zero declarations -- does not declare states', () => {
+    const dir = sandbox();
+    const record = plant(dir, 'drill-empty-state', '.ds-drill-empty-state:hover { }\n.ds-drill-empty-state { opacity: 1; }\n');
+    assert.equal(record.axes.states, undefined, JSON.stringify(record.axes.states));
+  });
+
+  it('(A2) a needle in a rule selector under an at-rule declares, and the evidence cites the rule: file, context, selector, needles', () => {
+    const dir = sandbox();
+    const record = plant(dir, 'drill-state-media', '@media (hover: hover) { .ds-drill-state-media:hover { opacity: 0.8; } }\n');
+    assert.deepEqual(record.axes.states.stateSelectors, [':hover']);
+    assert.deepEqual(record.axes.states.stateRules, [{
+      file: `${SKIN_ROOT}/drill-state-media/index.css`,
+      context: ['@media (hover: hover)'],
+      selector: '.ds-drill-state-media:hover',
+      needles: [':hover'],
+    }]);
+  });
+
+  it('(A2) every family that declares states by selector on this tree cites at least one rule, and every cited rule carries its needle', () => {
+    let cited = 0;
+    for (const [family, record] of familyAxisDeclarations(ROOT)) {
+      const states = record.axes.states;
+      if (states === undefined || states.stateSelectors.length === 0) continue;
+      assert.ok(states.stateRules.length > 0, family);
+      for (const rule of states.stateRules) {
+        assert.ok(Array.isArray(rule.context) && rule.needles.length > 0, `${family}: ${rule.selector}`);
+        for (const needle of rule.needles.filter((entry) => entry !== '[data-<ns>-state=')) assert.ok(rule.selector.includes(needle), `${family}: ${rule.selector}`);
+      }
+      cited += 1;
+    }
+    assert.ok(cited > 100, `only ${cited} families cite a state rule`);
+  });
+
+  it('PIN (A4): 8 declaring states families are unobservable on this tree -- 6 colour-only + 2 no-vocabulary -- reported beside the denominator and not subtracted', () => {
+    const report = populationReport();
+    const states = report.axes.find((entry) => entry.axis === 'states');
+    assert.equal(states.denominator, 156);
+    assert.equal(states.unobservableCount, 8);
+    assert.deepEqual(states.unobservable.map((entry) => `${entry.family}:${entry.class}`), [
+      'button-group:no-vocabulary', 'list:colour-only', 'metrics-chart:colour-only', 'metrics-rows:no-vocabulary',
+      'operational-ledger:colour-only', 'overlay-modal-compounds:colour-only', 'record-facts:colour-only', 'scope-switcher:colour-only',
+    ]);
+    for (const entry of states.unobservable) assert.ok(states.families.includes(entry.family), entry.family);
+    for (const entry of report.axes.filter((axis) => axis.axis !== 'states')) assert.equal(entry.unobservableCount, 0, entry.axis);
+  });
+
+  it('MUTANT (A4): a family that gains `transform` under :hover leaves the unobservable set; a colour-only entrant joins it; the denominator moves only by the entrant', () => {
+    const dir = sandbox();
+    const before = axisUnobservable(dir, catalogIn(dir)).get('states').map((entry) => entry.family);
+    assert.ok(before.includes('button-group'));
+    const skin = join(dir, AGNOSTIC_ROOT, 'button-group');
+    const files = readdirSyncRecursive(skin);
+    writeFileSync(files[0], `${readFileSync(files[0], 'utf8')}\n.ds-button-group:hover { transform: translateY(-1px); }\n`);
+    plant(dir, 'drill-colour-state', '.ds-drill-colour-state:hover { background-color: var(--ds-surface-inset); }\n');
+    const after = axisUnobservable(dir, catalogIn(dir)).get('states');
+    assert.ok(!after.some((entry) => entry.family === 'button-group'));
+    assert.deepEqual(after.find((entry) => entry.family === 'drill-colour-state'),
+      { family: 'drill-colour-state', class: 'colour-only', properties: ['background-color'] });
+    const states = populationReport(dir, catalogIn(dir)).axes.find((entry) => entry.axis === 'states');
+    assert.equal(states.denominator, 157, 'unobservable is reported, never subtracted');
+  });
+
+  it('a state declaration is one in a state-selected rule or one that reads a state-suffixed channel; an at-rule prelude is neither', () => {
+    const [hovered] = cssRules('.a:hover { color: red; }');
+    assert.equal(isStateDeclaration(hovered, hovered.declarations[0]), true);
+    const [channel] = cssRules('.a { --x: var(--ds-a-hover, red); }');
+    assert.equal(isStateDeclaration(channel, channel.declarations[0]), true);
+    const [rest] = cssRules('.a { color: var(--ds-a-hover-ring); }');
+    assert.equal(isStateDeclaration(rest, rest.declarations[0]), false);
+  });
+});
+
+function readdirSyncRecursive(dir) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => (entry.isDirectory()
+    ? readdirSyncRecursive(join(dir, entry.name))
+    : entry.name.endsWith('.css') ? [join(dir, entry.name)] : []));
+}
+

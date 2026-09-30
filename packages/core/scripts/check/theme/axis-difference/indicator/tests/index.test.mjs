@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 
 import { readProgramIndicatorMeasurement } from '../../../../../../../../scripts/maintain/roadmap/status/index.mjs';
 import { AXIS_IDS } from '../../../population/index.mjs';
-import { NO_WRITE_FLAG, SCENARIOS, publicationRefusal } from '../../index.mjs';
+import { NO_WRITE_FLAG, SCENARIOS, UNOBSERVABLE_FAMILIES, publicationRefusal } from '../../index.mjs';
 import {
   FLEET_THEMES,
   FLEET_VERTICALS,
@@ -54,6 +55,8 @@ function fleetResult(moved = {}) {
     themes: [...FLEET_THEMES],
     familiesFiltered: false,
     notApplicable: { shape: 1 },
+    unobservable: Object.fromEntries(AXIS_IDS.map((axis) => [axis, Object.entries(UNOBSERVABLE_FAMILIES[axis])
+      .map(([family, kind]) => ({ family, class: kind, properties: [] }))])),
     denominatorReconciliation: Object.fromEntries(AXIS_IDS.map((axis) => [axis, {
       declared: DECLARED[axis],
       excludedUnmountable: DECLARED[axis] - EFFECTIVE[axis],
@@ -162,5 +165,47 @@ describe('tenant-difference-by-axis indicator', () => {
     } finally {
       rmSync(root, { recursive: true, force: true });
     }
+  });
+
+  it('REVERSE PIN: every reproduction flag the CLI reads is one the indicator refuses -- --no-focused-stamp included', () => {
+    const cli = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../../index.mjs'), 'utf8');
+    const read = [...new Set([...cli.matchAll(/process\.argv\.includes\('(--[a-z-]+)'\)/gu)].map(([, flag]) => flag))];
+    const reproduction = read.filter((flag) => flag !== '--json' && flag !== NO_WRITE_FLAG).sort();
+    assert.ok(reproduction.includes('--no-focused-stamp'));
+    assert.deepEqual([...REPRODUCTION_FLAGS].sort(), reproduction);
+  });
+
+  it('the LIBRARY door refuses --no-focused-stamp on its own, without the CLI threading a writeRefusal', () => {
+    assert.equal(indicatorRefusal(fleetResult(), { argv: ['node', 'x', '--no-focused-stamp'] }),
+      '--no-focused-stamp reproduces an older reading');
+  });
+
+  it('publishes the unobservable count per axis beside the declared denominator, named, and never subtracts it', () => {
+    const indicator = build(fleetResult({ states: 117 }));
+    assert.equal(indicator.axes.states.declared, 156);
+    assert.equal(indicator.axes.states.unobservable, 8);
+    assert.deepEqual(indicator.axes.states.unobservableFamilies.map((entry) => entry.family),
+      Object.keys(UNOBSERVABLE_FAMILIES.states));
+    assert.equal(indicator.axes.states.worstPercentDeclared, 75);
+    for (const axis of AXIS_IDS.filter((id) => id !== 'states')) assert.equal(indicator.axes[axis].unobservable, 0, axis);
+    assert.match(indicator.basis, /never subtracted/u);
+  });
+
+  it('publishes each control\'s witness per cell IN FULL, and the measured states refusals', () => {
+    const result = fleetResult();
+    const ids = Array.from({ length: 38 }, (_, index) => `family-${index}`);
+    for (const cell of result.cells.filter((entry) => entry.scenario === 'states-emphasis-only')) {
+      cell.witness = { kind: 'axis-positive', axis: 'states', control: 'states.emphasis', positive: 'states', moved: 38, denominator: 148, movedIds: ids };
+    }
+    for (const cell of result.cells.filter((entry) => entry.scenario === 'palette-only')) {
+      cell.witness = { kind: 'effective-map', control: 'palette.seeds', channels: 23, differing: 23 };
+    }
+    result.realRender = { statesRefused: [{ row: 'column-menu', family: 'column-menu', reason: 'measured', statesReach: null }] };
+    const indicator = build(result);
+    const witnesses = indicator.negativeTest.controls['states-emphasis-only'].witnesses;
+    assert.equal(witnesses.length, 6);
+    assert.deepEqual(witnesses[0].movedIds, ids);
+    assert.equal(indicator.negativeTest.controls['palette-only'].witnesses[0].differing, 23);
+    assert.deepEqual(indicator.realRender.statesRefused.map((entry) => entry.row), ['column-menu']);
   });
 });

@@ -125,8 +125,11 @@ import {
   statesHalves,
   statesReachReport,
   withoutForcedPseudos,
+  REAL_RENDER_STATES_REFUSALS,
+  UNOBSERVABLE_FAMILIES,
+  unobservableDrift,
 } from '../index.mjs';
-import { AXIS_IDS, AXES, axisControls, axisPopulations, groupControls } from '../../population/index.mjs';
+import { AXIS_IDS, AXES, axisControls, axisPopulations, axisUnobservable, groupControls } from '../../population/index.mjs';
 import { launchBrowser, resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 import { REPRODUCTION_FLAGS } from '../indicator/index.mjs';
@@ -194,16 +197,26 @@ const control = (over = {}) => cell({
   ...over,
 });
 
-const witness = (over = {}) => ({
-  kind: 'axis-positive',
-  axis: 'states',
-  control: 'states.emphasis',
-  positive: 'states',
-  moved: 0,
-  denominator: 148,
-  movedFamilies: [],
-  ...over,
-});
+const witness = (over = {}) => {
+  const moved = over.moved ?? 0;
+  const ids = Array.from({ length: moved }, (_, index) => `witness-${index}`);
+  return {
+    kind: 'axis-positive',
+    axis: 'states',
+    control: 'states.emphasis',
+    positive: 'states',
+    moved,
+    denominator: 148,
+    // Published in full, as `witnessReading` does.
+    movedFamilies: ids.map((family) => ({ family, property: 'opacity' })),
+    movedIds: ids,
+    ...over,
+  };
+};
+
+/** The live unobservable set in the shape `run` publishes it, read off the pin. */
+const pinnedUnobservable = () => Object.fromEntries(Object.entries(UNOBSERVABLE_FAMILIES)
+  .map(([axis, families]) => [axis, Object.entries(families).map(([family, kind]) => ({ family, class: kind, properties: [] }))]));
 
 /**
  * The OTHER witness shape: what the palette control's own pair compiled to.
@@ -236,6 +249,7 @@ const result = (cells, over = {}) => ({
   cells,
   refusals: [],
   familiesFiltered: false,
+  unobservable: pinnedUnobservable(),
   families: {
     mountable: 10,
     unmountable: [...UNMOUNTABLE_FAMILIES],
@@ -3435,4 +3449,112 @@ describe('axis-difference BROWSER drill — S1: the states mounts inside a run',
     const measurement = await run({ verticals: ['bithire'], themes: ['light'], families: ['record'], scenarios: [byId('states')], statesFocused: false, nativePseudos: false });
     assert.deepEqual(measurement.limits.states.stampedStates, ['hovered', 'pressed', 'selected', 'focus-visible', 'disabled']);
   }, 120_000);
+});
+
+describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable verdicts)', () => {
+  const statesRow = (row) => ({ ...REAL_RENDER_MOUNTS[row], axes: Object.freeze(['states']) });
+
+  it('LAW: at most one roster row per family declares states; the shipped roster passes, its resting+states pairs included', () => {
+    assert.deepEqual(realRenderRosterFailures(ROOT), []);
+    // tooltip and stats-grid each carry one resting row and one states row.
+    for (const [resting, states] of [['tooltip', 'tooltip-interactive'], ['stats-grid', 'stats-grid-interactive']]) {
+      assert.ok(!REAL_RENDER_MOUNTS[resting].axes.includes('states'), resting);
+      assert.ok(REAL_RENDER_MOUNTS[states].axes.includes('states'), states);
+      assert.deepEqual(realRenderRosterFailures(ROOT, {
+        [resting]: REAL_RENDER_MOUNTS[resting], [states]: REAL_RENDER_MOUNTS[states],
+      }), [], resting);
+    }
+  });
+
+  it('MUTANT: a second states row for the same family is refused by the roster door, by name', () => {
+    const failures = realRenderRosterFailures(ROOT, {
+      tooltip: statesRow('tooltip'),
+      'tooltip-interactive': REAL_RENDER_MOUNTS['tooltip-interactive'],
+    });
+    assert.ok(failures.some((line) => line.startsWith('tooltip: 2 rows declare states (tooltip, tooltip-interactive)')), failures.join(' | '));
+  });
+
+  it('PIN: the measured states refusals are column-menu and command-palette, rows of states families that do not declare states', () => {
+    assert.deepEqual(Object.keys(REAL_RENDER_STATES_REFUSALS).sort(), ['column-menu', 'command-palette']);
+    const states = axisPopulations(ROOT).get('states');
+    for (const row of Object.keys(REAL_RENDER_STATES_REFUSALS)) {
+      assert.ok(!REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
+      assert.ok(states.includes(REAL_RENDER_MOUNTS[row].family ?? row), row);
+    }
+  });
+
+  it('MUTANT: a pinned refusal that declares states, or is gone from the roster, is refused by the roster door', () => {
+    const refusals = { 'column-menu': REAL_RENDER_STATES_REFUSALS['column-menu'] };
+    const declares = realRenderRosterFailures(ROOT, { 'column-menu': statesRow('column-menu') }, { statesRefusals: refusals });
+    assert.ok(declares.some((line) => line.startsWith('column-menu: pinned as a measured states refusal and declares states')), declares.join(' | '));
+    const gone = realRenderRosterFailures(ROOT, { avatar: REAL_RENDER_MOUNTS.avatar }, { statesRefusals: refusals });
+    assert.ok(gone.some((line) => line.startsWith('column-menu: pinned as a measured states refusal and no longer a roster row')), gone.join(' | '));
+  });
+
+  it('the record publishes every refusal with the reach the run read, and a full run that drops one FAILS', () => {
+    const mounts = realRenderMountList(new Map(Object.keys(REAL_RENDER_MOUNTS)
+      .map((row) => [REAL_RENDER_MOUNTS[row].family ?? row, { classes: ['x'], attributes: {} }])));
+    const reach = { stamped: 0, native: 2, declared: false };
+    const report = realRenderReport(mounts, { statesReach: { 'column-menu': reach } });
+    assert.deepEqual(report.statesRefused.map((entry) => entry.row), ['column-menu', 'command-palette']);
+    assert.deepEqual(report.statesRefused[0], {
+      row: 'column-menu', family: 'column-menu', reason: REAL_RENDER_STATES_REFUSALS['column-menu'], statesReach: reach,
+    });
+    assert.equal(report.statesRefused[1].statesReach, null);
+    assert.deepEqual(evaluate(result([cell()], { realRender: report })), []);
+    const dropped = evaluate(result([cell()], { realRender: { ...report, statesRefused: report.statesRefused.slice(1) } }));
+    assert.deepEqual(dropped, ['column-menu: a pinned states refusal the run did not publish in realRender.statesRefused']);
+  });
+
+  it('the witness list is published IN FULL: thirteen movers publish thirteen ids, never a 12-entry preview', () => {
+    const denominator = Array.from({ length: 13 }, (_, index) => `family-${String(index).padStart(2, '0')}`);
+    const reading = (opacity) => ({
+      base: {},
+      states: { hovered: Object.fromEntries(denominator.map((family) => [family, { opacity }])) },
+    });
+    const published = witnessReading({
+      witness: { kind: 'axis-positive', axis: 'states', control: 'states.emphasis', positive: 'states' },
+      before: reading('0.5'),
+      after: reading('0.7'),
+      denominator,
+    });
+    assert.equal(published.moved, 13);
+    assert.deepEqual(published.movedIds, denominator);
+    assert.equal(published.movedFamilies.length, 13);
+  });
+
+  it('MUTANT: a witness whose list is shorter than its count FAILS the run', () => {
+    const truncated = witness({ moved: 13 });
+    truncated.movedFamilies = truncated.movedFamilies.slice(0, 12);
+    const failures = evaluate(result([control({ axis: 'shape', witness: truncated })]));
+    assert.ok(failures.some((line) => line.includes('witness moved 13 and published 13 id(s) / 12 famil(ies)')), failures.join(' | '));
+  });
+
+  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 8 on states, 0 elsewhere', () => {
+    const live = axisUnobservable(ROOT);
+    const asRun = Object.fromEntries(AXIS_IDS.map((axis) => [axis, live.get(axis)]));
+    assert.deepEqual(unobservableDrift(asRun), []);
+    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 8);
+    assert.deepEqual(Object.values(UNOBSERVABLE_FAMILIES.states).filter((kind) => kind === 'colour-only').length, 6);
+    assert.deepEqual(Object.entries(UNOBSERVABLE_FAMILIES.states).filter(([, kind]) => kind === 'no-vocabulary').map(([family]) => family),
+      ['button-group', 'metrics-rows']);
+    for (const axis of AXIS_IDS.filter((id) => id !== 'states')) assert.deepEqual(UNOBSERVABLE_FAMILIES[axis], {}, axis);
+    // Reported, never subtracted: every unobservable family is in the declared states population.
+    const states = axisPopulations(ROOT).get('states');
+    for (const family of Object.keys(UNOBSERVABLE_FAMILIES.states)) assert.ok(states.includes(family), family);
+  });
+
+  it('MUTANT: a family that leaves or enters the unobservable set is refused on a full run, and not on a --families run', () => {
+    const left = pinnedUnobservable();
+    left.states = left.states.filter((entry) => entry.family !== 'button-group');
+    assert.ok(evaluate(result([cell()], { unobservable: left })).some((line) => line.startsWith(
+      'states: button-group is pinned unobservable (no-vocabulary) and the probe can now observe it',
+    )));
+    const entered = pinnedUnobservable();
+    entered.states.push({ family: 'badge', class: 'colour-only', properties: ['color'] });
+    assert.ok(evaluate(result([cell()], { unobservable: entered })).some((line) => line.startsWith(
+      'states: badge is unobservable (colour-only) and not in UNOBSERVABLE_FAMILIES',
+    )));
+    assert.ok(!evaluate(result([cell()], { unobservable: entered, familiesFiltered: true })).some((line) => line.includes('UNOBSERVABLE')));
+  });
 });

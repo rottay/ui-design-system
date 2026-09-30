@@ -163,6 +163,7 @@ import {
   axisControls,
   axisNotApplicable,
   axisPopulations,
+  axisUnobservable,
   catalogRevision,
   cssRules,
   groupControls,
@@ -974,6 +975,14 @@ export function asRenderedReport(elements, { applied = true, roster = AS_RENDERE
  * configurations one mount cannot hold at once (a tooltip is interactive or it
  * is not): a row keyed apart names its `family`, both mounts are read as that
  * family's real render, and law 3 is decided over their union.
+ *
+ * AT MOST ONE ROW PER FAMILY DECLARES `states` (Fable S1 review, decision 2).
+ * Law 3 over a union is sound for the resting axes, but the states halves are
+ * published per family (`movedStamped`, `movedNative`): two states rows moving
+ * on different halves would be two configurations conflated into one split.
+ * Today the two-row families (tooltip, stats-grid) carry one resting row and
+ * one states row, read on disjoint axes; a second states row is refused by the
+ * roster door until per-row halves exist.
  *
  * `--no-real-render-mounts` reproduces the pre-lot reading on the same tree.
  */
@@ -2408,6 +2417,73 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   }),
 });
 
+/**
+ * The roster rows MEASURED under law 5 and REFUSED on states: the real render
+ * moves on neither half, so the row may not declare `states`. Published in the
+ * record (`realRender.statesRefused`) and in the indicator with the reach the
+ * run read, so a refusal is evidence in the artifact and not only in a receipt
+ * (Fable S1 review, overstated claim 2). Pinned: the roster door refuses a
+ * pinned row that is missing, declares `states`, or is a real render of a
+ * family outside the states population, and `evaluate` refuses a full run that
+ * does not publish every pinned row.
+ */
+export const REAL_RENDER_STATES_REFUSALS = Object.freeze({
+  'column-menu': 'measured 2026-09-30 (S1 recheck): the open panel moves on neither states half under states.emphasis',
+  'command-palette': 'measured 2026-09-30 (S1 recheck): the open palette moves on neither states half under states.emphasis',
+});
+
+/**
+ * The declaring families the probe cannot observe, per axis, as
+ * `check/theme/population`'s `axisUnobservable` derives them: family -> class.
+ * A REPORTED number beside every denominator, NEVER subtracted from it (Fable
+ * exclusion review 2026-09-30, item A4). Pinned so it cannot drift silently: a
+ * family that gains a read property under a state leaves the set, one that
+ * whose last read property under a state goes enters, and a full run refuses either until the pin
+ * moves with it.
+ *
+ * Measured on this tree (2e0f83953): 8 on states. Fable's enumeration at
+ * a25d4f828 named command-palette where this names scope-switcher; the same
+ * derivation over an isolated archive of a25d4f828 reads 9 (both of them).
+ * command-palette left when S0 wired `--ds-state-disabled-opacity` (a states
+ * head channel) into its disabled item; scope-switcher is colour-only on both
+ * trees (Fable's own section-2 table reads it so).
+ */
+export const UNOBSERVABLE_FAMILIES = Object.freeze({
+  shape: Object.freeze({}),
+  typography: Object.freeze({}),
+  rhythm: Object.freeze({}),
+  depth: Object.freeze({}),
+  states: Object.freeze({
+    'button-group': 'no-vocabulary',
+    list: 'colour-only',
+    'metrics-chart': 'colour-only',
+    'metrics-rows': 'no-vocabulary',
+    'operational-ledger': 'colour-only',
+    'overlay-modal-compounds': 'colour-only',
+    'record-facts': 'colour-only',
+    'scope-switcher': 'colour-only',
+  }),
+  motion: Object.freeze({}),
+});
+
+/** Where the live unobservable set and a pin disagree, one line per family and axis. */
+export function unobservableDrift(live, pin = UNOBSERVABLE_FAMILIES) {
+  const failures = [];
+  for (const axis of AXIS_IDS) {
+    const measured = Object.fromEntries((live[axis] ?? []).map((entry) => [entry.family, entry.class]));
+    const pinned = pin[axis] ?? {};
+    for (const family of [...new Set([...Object.keys(measured), ...Object.keys(pinned)])].sort()) {
+      if (measured[family] === pinned[family]) continue;
+      failures.push(pinned[family] === undefined
+        ? `${axis}: ${family} is unobservable (${measured[family]}) and not in UNOBSERVABLE_FAMILIES -- re-pin it; it is reported, never subtracted`
+        : measured[family] === undefined
+          ? `${axis}: ${family} is pinned unobservable (${pinned[family]}) and the probe can now observe it -- re-pin UNOBSERVABLE_FAMILIES`
+          : `${axis}: ${family} is unobservable as ${measured[family]}, pinned as ${pinned[family]}`);
+    }
+  }
+  return failures;
+}
+
 const HTML_TAG = /<([a-z][a-z0-9-]*)((?:\s+[a-zA-Z_:][-\w:.]*(?:\s*=\s*"[^"]*")?)*)\s*\/?>/gu;
 const HTML_ATTRIBUTE = /([a-zA-Z_:][-\w:.]*)(?:\s*=\s*"([^"]*)")?/gu;
 
@@ -2471,10 +2547,34 @@ const texts = (stamp) => (Array.isArray(stamp) ? stamp : [stamp]);
  */
 export function realRenderRosterFailures(root = CORE_ROOT, roster = REAL_RENDER_MOUNTS, {
   readSource = (file) => readFileSync(file, 'utf8'),
+  statesRefusals = roster === REAL_RENDER_MOUNTS ? REAL_RENDER_STATES_REFUSALS : {},
 } = {}) {
   const failures = [];
   const skins = skinFamilies(root);
   const populations = axisPopulations(root);
+  // At most one row per family declares `states` (the single-states-row law).
+  const statesRows = new Map();
+  for (const [row, entry] of Object.entries(roster)) {
+    if (!entry.axes.includes('states')) continue;
+    const owner = realRenderFamily(row, entry);
+    statesRows.set(owner, [...(statesRows.get(owner) ?? []), row]);
+  }
+  for (const [owner, rows] of statesRows) {
+    if (rows.length > 1) {
+      failures.push(`${owner}: ${rows.length} rows declare states (${rows.join(', ')}) -- at most one row per family may, `
+        + 'because the states halves are published per family and two rows would conflate two configurations');
+    }
+  }
+  for (const [row, reason] of Object.entries(statesRefusals)) {
+    const entry = roster[row];
+    if (entry === undefined) {
+      failures.push(`${row}: pinned as a measured states refusal and no longer a roster row -- ${reason}`);
+    } else if (entry.axes.includes('states')) {
+      failures.push(`${row}: pinned as a measured states refusal and declares states -- re-measure and drop it from REAL_RENDER_STATES_REFUSALS`);
+    } else if (!populations.get('states').includes(realRenderFamily(row, entry))) {
+      failures.push(`${row}: pinned as a states refusal, but ${realRenderFamily(row, entry)} does not declare states -- not a refusal`);
+    }
+  }
   const read = (relative) => {
     const file = resolve(root, relative);
     return existsSync(file) ? readSource(file) : null;
@@ -2581,7 +2681,9 @@ export function realRenderMountList(elements, { applied = true, roster = REAL_RE
 }
 
 /** The roster as a run publishes it, with every gate resolved to the `file:line` it sits on in this tree. */
-export function realRenderReport(mounts, { applied = true, roster = REAL_RENDER_MOUNTS, root = CORE_ROOT, statesReach = null } = {}) {
+export function realRenderReport(mounts, {
+  applied = true, roster = REAL_RENDER_MOUNTS, root = CORE_ROOT, statesReach = null, statesRefusals = REAL_RENDER_STATES_REFUSALS,
+} = {}) {
   const map = {};
   for (const mount of mounts) {
     const entry = roster[mount.row ?? mount.family];
@@ -2601,7 +2703,12 @@ export function realRenderReport(mounts, { applied = true, roster = REAL_RENDER_
       ...(statesReach?.[mount.row ?? mount.family] === undefined ? {} : { statesReach: statesReach[mount.row ?? mount.family] }),
     };
   }
-  return { applied, families: new Set(mounts.map((mount) => mount.family)).size, rows: Object.keys(map).length, map };
+  // The measured refusals, in the record itself: the row, the family, why, and
+  // the reach this run read on it.
+  const statesRefused = Object.entries(statesRefusals)
+    .filter(([row]) => map[row] !== undefined)
+    .map(([row, reason]) => ({ row, family: map[row].family, reason, statesReach: map[row].statesReach ?? null }));
+  return { applied, families: new Set(mounts.map((mount) => mount.family)).size, rows: Object.keys(map).length, map, statesRefused };
 }
 
 /** The pseudo-family keys a reading carries for a mounted family: its default mount alone, and its real render alone. */
@@ -4857,7 +4964,11 @@ export function witnessReading({ witness, before, after, denominator, variablesA
     positive: witness.positive,
     moved: moved.length,
     denominator: denominator.length,
-    movedFamilies: moved.slice(0, 12),
+    // IN FULL, never a preview: a capped list read as a loss (Fable S1 review,
+    // decision 3 -- form and form-field fell off a 12-entry cap and looked
+    // lost). `evaluate` refuses a witness whose list is shorter than its count.
+    movedFamilies: moved,
+    movedIds: moved.map((entry) => entry.family),
   };
 }
 
@@ -5278,6 +5389,7 @@ export async function run({
     .map(([family]) => family);
   const populations = axisPopulations(root);
   const notApplicable = axisNotApplicable(root);
+  const unobservable = axisUnobservable(root);
   const properties = allProperties();
   const axisOf = axisByProperty();
   // The pins are read first and honoured: a family with no mountable root
@@ -5713,6 +5825,10 @@ export async function run({
     // The families a reviewed exclusion withdrew from each axis, counted beside
     // every denominator so no line of this run can be read without them.
     notApplicable: Object.fromEntries(AXIS_IDS.map((axis) => [axis, notApplicable.get(axis).length])),
+    // The declaring families this probe cannot observe, per axis, beside every
+    // denominator and NEVER subtracted from it; pinned in UNOBSERVABLE_FAMILIES.
+    unobservable: Object.fromEntries(AXIS_IDS.map((axis) => [axis, unobservable.get(axis)
+      .map((entry) => ({ family: entry.family, class: entry.class, properties: entry.properties }))])),
     effectiveFamilies: Object.fromEntries(AXIS_IDS.map((axis) => [axis, effective(axis)])),
     // THE DENOMINATOR, RECONCILED. `populations` above is the EFFECTIVE bottom
     // of every fraction this run publishes; `declaredPopulations` is the pinned
@@ -5846,6 +5962,26 @@ export function evaluate(result, {
       if (!observed.includes(family)) {
         failures.push(`${family}: pinned as unmountable and now mounts; remove it from UNMOUNTABLE_FAMILIES in this commit`);
       }
+    }
+    // THE UNOBSERVABLE SET IS PINNED BESIDE THE DENOMINATOR, never subtracted.
+    failures.push(...unobservableDrift(result.unobservable ?? {}));
+    // THE MEASURED REFUSALS ARE PUBLISHED, every pinned row of them.
+    if (result.realRender?.applied === true) {
+      const published = (result.realRender.statesRefused ?? []).map((entry) => entry.row);
+      for (const row of Object.keys(REAL_RENDER_STATES_REFUSALS)) {
+        if (!published.includes(row)) failures.push(`${row}: a pinned states refusal the run did not publish in realRender.statesRefused`);
+      }
+    }
+  }
+  // A WITNESS IS PUBLISHED IN FULL: a list shorter than its count reads as a loss.
+  for (const cell of result.cells) {
+    const witness = cell.witness;
+    if (witness === null || witness === undefined || witness.kind === 'effective-map') continue;
+    if ((witness.movedIds?.length ?? -1) !== witness.moved || (witness.movedFamilies?.length ?? -1) !== witness.moved) {
+      failures.push(
+        `${cell.vertical}/${cell.theme} ${cell.scenario}: its ${witness.control} witness moved ${witness.moved} and published `
+        + `${witness.movedIds?.length ?? 'no'} id(s) / ${witness.movedFamilies?.length ?? 'no'} famil(ies) -- the witness list is published in full`,
+      );
     }
   }
   // A ROOT THAT IS A CHAIN IS A FABRICATION, and the run that published 113 of
@@ -6166,6 +6302,13 @@ if (isMain) {
     );
   }
   console.log(
+    `  unobservable (reported, NEVER subtracted; pinned in UNOBSERVABLE_FAMILIES): ${AXIS_IDS
+      .map((axis) => `${axis} ${result.unobservable[axis].length}`).join(', ')}`,
+  );
+  for (const axis of AXIS_IDS) {
+    for (const entry of result.unobservable[axis]) console.log(`    ${axis} ${entry.family} -- ${entry.class} (${entry.properties.join(', ')})`);
+  }
+  console.log(
     `  excluded as unmountable (pinned, named): ${result.families.unmountable.length} famil(ies)`
     + ` — exactly the pin: ${result.familiesFiltered ? 'not checked (--families run)' : 'yes'}`,
   );
@@ -6204,6 +6347,9 @@ if (isMain) {
         : `; state rules selecting a node of it: stamp ${row.statesReach.stamped}, forcing ${row.statesReach.native}`
           + `${row.statesReach.declared ? '' : ' (states not declared)'}`),
     );
+  }
+  for (const entry of result.realRender.statesRefused) {
+    console.log(`    states REFUSED ${entry.row}${entry.row === entry.family ? '' : ` (${entry.family})`} -- ${entry.reason}`);
   }
   console.log(
     `  excluded as unsettled (declared, named): ${result.families.excludedUnsettled.join(', ')}`

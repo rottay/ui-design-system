@@ -402,6 +402,36 @@ function matchingExclusion(registry, family, axis, file, rule, declaration) {
   return null;
 }
 
+/** The label the namespaced domain-state matcher publishes its hits under. */
+export const NAMESPACED_STATE_NEEDLE = '[data-<ns>-state=';
+
+/**
+ * The rules through which a family declares states by SELECTOR, each cited as
+ * `cssRules` reads it: file, at-rule context, normalized selector, and the
+ * needles that selector carries.
+ *
+ * Per RULE, not per file (Fable exclusion review, 2026-09-30, accepted item):
+ * a needle that survives only in a declaration value, a string or an at-rule
+ * prelude is not a rule that applies in a state, and a state rule with no
+ * declaration paints nothing in that state. A rule under an at-rule still
+ * declares -- the context is cited, never a reason to drop it.
+ */
+export function stateRuleEvidence(rulesByFile) {
+  const spec = AXES.states;
+  const evidence = [];
+  for (const { file, rules } of rulesByFile) {
+    for (const rule of rules) {
+      if (rule.declarations.length === 0 || rule.selector.startsWith('@')) continue;
+      const needles = [
+        ...spec.stateSelectors.filter((needle) => rule.selector.includes(needle)),
+        ...(spec.stateNamespacedSelector.test(rule.selector) ? [NAMESPACED_STATE_NEEDLE] : []),
+      ];
+      if (needles.length > 0) evidence.push({ file, context: rule.atRules, selector: rule.selector, needles });
+    }
+  }
+  return evidence;
+}
+
 /**
  * family -> the axes it DECLARES it consumes, with the evidence for each, and
  * the axes a reviewed exclusion withdrew it from, with the reason.
@@ -425,7 +455,6 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
     const css = sources.map((source) => source.css).join('\n');
     const rulesByFile = sources.map((source) => ({ file: source.file, rules: cssRules(source.css) }));
     const channels = readChannels(css);
-    const stripped = stripCssComments(css);
     const axes = {};
     const notApplicable = {};
     for (const axis of AXIS_IDS) {
@@ -450,10 +479,11 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
       }
       const byProperty = spec.authored.filter((name) => declaredNames.has(name));
       const byHeadChannel = [...channelsByAxis.get(axis)].filter((channel) => channels.has(channel));
+      const stateRules = axis === 'states' ? stateRuleEvidence(rulesByFile) : [];
       const bySelector = axis === 'states'
         ? [
-            ...spec.stateSelectors.filter((needle) => stripped.includes(needle)),
-            ...(spec.stateNamespacedSelector.test(stripped) ? ['[data-<ns>-state='] : []),
+            ...spec.stateSelectors.filter((needle) => stateRules.some((rule) => rule.needles.includes(needle))),
+            ...(stateRules.some((rule) => rule.needles.includes(NAMESPACED_STATE_NEEDLE)) ? [NAMESPACED_STATE_NEEDLE] : []),
           ]
         : [];
       const byStateChannel = axis === 'states'
@@ -466,6 +496,7 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
           properties: byProperty,
           headChannels: byHeadChannel,
           stateSelectors: bySelector,
+          ...(axis === 'states' ? { stateRules } : {}),
           stateChannels: byStateChannel.slice(0, 8),
           ...(excluded.length > 0 ? { excludedDeclarations: excluded, exclusionEffective: false } : {}),
         };
@@ -481,6 +512,75 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
     declarations.set(family, { family, files: sources.map((source) => source.file), axes, notApplicable });
   }
   return declarations;
+}
+
+/** Every longhand the by-axis probe reads back off the browser, on any axis. */
+export const PROBE_PROPERTIES = Object.freeze([...new Set(AXIS_IDS.flatMap((axis) => AXES[axis].computed))]);
+
+const AUTHORED_PROPERTIES = new Set(AXIS_IDS.flatMap((axis) => AXES[axis].authored));
+const COLOUR_PROPERTY = /^(?:background|fill|stroke|(?:[a-z-]+-)?color)$/u;
+
+/** Whether a declared property paints something the probe reads: a read longhand, an authored axis property, or a shorthand of a read longhand. */
+export const probeReads = (property) => PROBE_PROPERTIES.includes(property) || AUTHORED_PROPERTIES.has(property)
+  || PROBE_PROPERTIES.some((longhand) => longhand.startsWith(`${property}-`));
+
+/** A declaration that paints in a state: it sits in a state-selected rule, or its value reads a state-suffixed channel. */
+export function isStateDeclaration(rule, declaration) {
+  const spec = AXES.states;
+  if (!rule.selector.startsWith('@')
+    && (spec.stateSelectors.some((needle) => rule.selector.includes(needle)) || spec.stateNamespacedSelector.test(rule.selector))) {
+    return true;
+  }
+  return [...declaration.value.matchAll(/var\(\s*(--[\w-]+)/gu)]
+    .some(([, channel]) => spec.stateChannelSuffixes.some((suffix) => channel.endsWith(suffix)));
+}
+
+function unobservableOf(declarations, root) {
+  const skins = skinFamilies(root);
+  const byAxis = new Map(AXIS_IDS.map((axis) => [axis, []]));
+  for (const [family, record] of declarations) {
+    for (const [axis, evidence] of Object.entries(record.axes)) {
+      // A head-channel read or an authored longhand of the axis is a position
+      // the probe reads; only the states axis declares by anything else.
+      if (evidence.headChannels.length > 0 || evidence.properties.length > 0) continue;
+      const properties = new Set();
+      for (const file of skins.get(family) ?? []) {
+        for (const rule of cssRules(readFileSync(file, 'utf8'))) {
+          for (const declaration of rule.declarations) {
+            if (isStateDeclaration(rule, declaration)) properties.add(declaration.property);
+          }
+        }
+      }
+      if ([...properties].some(probeReads)) continue;
+      const sorted = [...properties].sort();
+      byAxis.get(axis).push({
+        family,
+        class: sorted.length > 0 && sorted.every((property) => COLOUR_PROPERTY.test(property)) ? 'colour-only' : 'no-vocabulary',
+        properties: sorted,
+      });
+    }
+  }
+  for (const list of byAxis.values()) list.sort((a, b) => a.family.localeCompare(b.family));
+  return byAxis;
+}
+
+/**
+ * axis -> the DECLARING families whose declaration the by-axis probe cannot
+ * observe, each with its class and the properties it paints in a state.
+ *
+ * A REPORTED number, published beside the denominator and NEVER subtracted
+ * from it (Fable exclusion review 2026-09-30, item A4): the denominator follows
+ * the kit, the numerator is bounded by the instrument, and this is the honest
+ * annotation of the gap between the two. A family is unobservable on an axis
+ * when it reads no head channel of the axis, authors no longhand of it, and
+ * every declaration it makes in a state paints a property outside the probe's
+ * vocabulary (`PROBE_PROPERTIES`): `colour-only` when each is a colour
+ * property (the probe strips colour on every axis), `no-vocabulary` otherwise
+ * (`z-index`, `visibility`). Only states can carry such a family: every other
+ * axis declares by an authored longhand or a head channel, both read.
+ */
+export function axisUnobservable(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, exclusionsPath = EXCLUSIONS_PATH) {
+  return unobservableOf(familyAxisDeclarations(root, sourcePath, exclusionsPath), root);
 }
 
 /** axis -> the families in its denominator, sorted. The published (applicable) population. */
@@ -611,6 +711,7 @@ export function populationReport(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURC
   for (const list of notApplicable.values()) list.sort((a, b) => a.family.localeCompare(b.family));
   const controls = axisControls(sourcePath);
   const registry = readExclusions(exclusionsPath);
+  const unobservable = unobservableOf(declarations, root);
   return {
     revision,
     excludedGroup: EXCLUDED_GROUP,
@@ -630,6 +731,9 @@ export function populationReport(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURC
       families: populations.get(axis),
       notApplicableCount: notApplicable.get(axis).length,
       notApplicable: notApplicable.get(axis),
+      // Reported beside the denominator, never subtracted from it.
+      unobservableCount: unobservable.get(axis).length,
+      unobservable: unobservable.get(axis),
     })),
   };
 }
@@ -909,8 +1013,9 @@ if (isMain && process.argv.includes('--pilot')) {
       + `(${report.exclusions.entries} reviewed)`);
     for (const entry of report.axes) {
       console.log(`  ${entry.axis.padEnd(11)} denominator ${String(entry.denominator).padStart(4)} `
-        + `(${entry.notApplicableCount} N/A) — controls: ${entry.controls.join(', ') || '(none)'}`);
+        + `(${entry.notApplicableCount} N/A; ${entry.unobservableCount} unobservable, not subtracted) — controls: ${entry.controls.join(', ') || '(none)'}`);
       for (const withdrawn of entry.notApplicable) console.log(`${' '.repeat(14)}N/A ${withdrawn.family} — ${withdrawn.review}`);
+      for (const blind of entry.unobservable) console.log(`${' '.repeat(14)}unobservable ${blind.family} — ${blind.class} (${blind.properties.join(', ')})`);
     }
   }
 }

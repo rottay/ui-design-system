@@ -24,6 +24,7 @@ export const REPRODUCTION_FLAGS = Object.freeze([
   '--no-part-reach',
   '--no-native-pseudos',
   '--no-real-render-mounts',
+  '--no-focused-stamp',
 ]);
 
 const percent = (moved, denominator) => (denominator === 0 ? 0 : (moved / denominator) * 100);
@@ -87,6 +88,10 @@ export function axisReadings(result, { threshold = INDICATOR_THRESHOLD } = {}) {
       excludedUnmountable: row?.excludedUnmountable ?? null,
       excludedUnsettled: row?.excludedUnsettled ?? null,
       notApplicable: result.notApplicable?.[axis] ?? 0,
+      // Reported beside the denominator, NEVER subtracted from it: the
+      // declaring families this probe cannot observe, named with their class.
+      unobservable: (result.unobservable?.[axis] ?? []).length,
+      unobservableFamilies: (result.unobservable?.[axis] ?? []).map((entry) => ({ family: entry.family, class: entry.class })),
       worstPercentDeclared: worstDeclared?.percentDeclared ?? null,
       worstPercentEffective: worstEffective?.percentEffective ?? null,
       effectiveAtThreshold: unmeasured.length === 0 && worstEffective !== null
@@ -95,6 +100,32 @@ export function axisReadings(result, { threshold = INDICATOR_THRESHOLD } = {}) {
     };
   }
   return readings;
+}
+
+/**
+ * The witness a control stood on, once per (vertical, mode), published IN FULL:
+ * the ids of every family the control's own decision moved, never a preview.
+ */
+function witnessesOf(result, id) {
+  const witnesses = [];
+  for (const { vertical, theme } of expectedCells(result)) {
+    const cell = result.cells.find((entry) => entry.scenario === id && entry.vertical === vertical
+      && entry.theme === theme && entry.witness !== null && entry.witness !== undefined);
+    if (cell === undefined) continue;
+    const { witness } = cell;
+    witnesses.push(witness.kind === 'effective-map'
+      ? { where: `${vertical}/${theme}`, kind: witness.kind, control: witness.control, differing: witness.differing, channels: witness.channels }
+      : {
+        where: `${vertical}/${theme}`,
+        kind: witness.kind,
+        control: witness.control,
+        axis: witness.axis,
+        moved: witness.moved,
+        denominator: witness.denominator,
+        movedIds: [...(witness.movedIds ?? [])],
+      });
+  }
+  return witnesses;
 }
 
 /** A missing or non-evidential cell is NOT MEASURED, never a 0 %: `green` needs every cell measured at zero. */
@@ -127,7 +158,10 @@ export function negativeTest(result, negativeControls) {
     }
     const expected = expectedCells(result).length * control.expectZeroOn.length;
     const status = moved.length > 0 ? 'red' : unmeasured.length > 0 ? 'not-measured' : 'green';
-    controls[control.id] = { status, expectZeroOn: control.expectZeroOn, measuredAtZero: measured, expected, moved, unmeasured };
+    controls[control.id] = {
+      status, expectZeroOn: control.expectZeroOn, measuredAtZero: measured, expected, moved, unmeasured,
+      witnesses: witnessesOf(result, control.id),
+    };
   }
   const statuses = Object.values(controls).map((control) => control.status);
   let status = 'green';
@@ -192,9 +226,13 @@ export function buildIndicator(result, {
     verticals: result.verticals,
     themes: result.themes,
     threshold,
-    basis: 'declared population of check/theme/population; unmountable and unsettled families count as non-movers',
+    basis: 'declared population of check/theme/population; unmountable and unsettled families count as non-movers; '
+      + 'unobservable families are reported per axis beside the denominator and never subtracted from it',
     axes,
     negativeTest: negative,
+    // The real-render rows measured and refused on states, with the reach this
+    // run read on each: evidence in the artifact, not only in a receipt.
+    realRender: { statesRefused: result.realRender?.statesRefused ?? [] },
   };
 }
 
