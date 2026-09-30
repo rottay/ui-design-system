@@ -229,7 +229,7 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-group-header-font-size"] = "var(--ds-button-sm-font-size, var(--ds-font-size-sm))";
   vars["--ds-data-table-group-header-font-weight"] = "var(--ds-type-section-title-font-weight, 600)";
   vars["--ds-data-table-header-content-gap"] = "calc(0.375rem * var(--ds-rhythm-effective-scale, 1))";
-  vars["--ds-data-table-header-focus-shadow"] = "inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)";
+  vars["--ds-data-table-header-focus-shadow"] = "inset 0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 48%, transparent)";
   vars["--ds-data-table-header-font-family"] = "var(--ds-type-label-font-family)";
   vars["--ds-data-table-header-pinned-bg"] = "var(--ds-table-header-bg, var(--ds-surface-inset))";
   vars["--ds-data-table-leading-cell-padding-comfortable"] = "0.75rem 1rem 0.75rem 0.1875rem";

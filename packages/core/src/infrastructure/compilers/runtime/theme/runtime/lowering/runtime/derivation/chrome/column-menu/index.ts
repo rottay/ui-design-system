@@ -107,7 +107,7 @@ export function deriveColumnMenuChannels(): Record<string, string> {
     "var(--ds-material-overlay-shadow, var(--ds-elevation-4, 0 24px 64px color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)))";
   vars["--ds-column-menu-panel-backdrop"] = "none";
   // The panel is programmatically focused on open, so it owns a ring of its own.
-  vars["--ds-column-menu-panel-focus-outline"] = "2px solid var(--ds-color-border-focus)";
+  vars["--ds-column-menu-panel-focus-outline"] = "var(--ds-focus-ring-width, 2px) solid var(--ds-color-border-focus)";
   vars["--ds-column-menu-panel-focus-outline-offset"] = "-2px";
 
   // Header band, and the seam every section of the panel is cut with.

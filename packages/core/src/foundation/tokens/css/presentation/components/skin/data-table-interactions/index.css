@@ -34,7 +34,7 @@
 
 .ds-engine-modern:where(.ds-pattern-data-table)
   .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible) {
-  outline: 2px solid var(--ds-color-primary);
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-primary);
   outline-offset: -2px;
   border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
@@ -54,7 +54,7 @@
     [data-state~="focus-visible"],
     :focus-visible
   ) {
-  outline: 2px solid var(--ds-color-primary);
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-primary);
   outline-offset: -2px;
   border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
 }

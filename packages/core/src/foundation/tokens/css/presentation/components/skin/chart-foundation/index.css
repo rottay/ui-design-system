@@ -504,7 +504,7 @@
 .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
   [data-part='data-table-scroll']:focus-visible {
   outline: 3px solid var(--ds-color-focus, var(--ds-color-primary));
-  outline-offset: 2px;
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
