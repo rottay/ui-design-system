@@ -11,6 +11,11 @@
  * whitelist -- and re-anchors the artifact's already compiler-sanitized
  * variables onto the preview container.
  *
+ * The container is a box BELOW the document root, so the scope also carries the
+ * compiled channels that read an artifact channel through a chain the root holds
+ * (`containerReach`) and emits through the emission owner's container law, which
+ * restates the root aliases those reads re-resolve (N1).
+ *
  * @remarks
  * The values are double-checked with the shared `isSafePreviewCssValue`
  * as defense in depth (they already passed the compiler's `isSafeVisualValue`).
@@ -20,7 +25,14 @@
  */
 
 import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { assertTenantIdentityAllowed } from '@/foundation/presets/verticals/roster';
+import {
+  assertTenantIdentityAllowed,
+  isFirstPartyVerticalId,
+} from '@/foundation/presets/verticals/roster';
+import {
+  compileThemeIntent,
+  staticThemeIntent,
+} from '@/infrastructure/compilers/runtime/theme';
 import { verifyTenantThemeArtifactV1 } from '@/infrastructure/runtime/theming/foundation/visual-authority';
 import {
   PREVIEW_SCOPE_ATTRIBUTE,
@@ -29,9 +41,10 @@ import {
   sanitizePreviewSlug,
 } from '@/infrastructure/runtime/tenant/runtime/preview-scope';
 import {
-  emitDeclarations,
-  emitRule,
+  containerScope,
+  emitThemeCss,
 } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
+import { containerReach } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
 
 export { PREVIEW_SCOPE_ATTRIBUTE };
 
@@ -69,14 +82,39 @@ export function buildTenantThemePreviewScope(
   const verifiedArtifact = verification.artifact;
   const safeSlug = sanitizePreviewSlug(verifiedArtifact.slug);
   const scopeSelector = buildPreviewScopeSelector(safeSlug);
+  if (!isFirstPartyVerticalId(verifiedArtifact.verticalKey)) {
+    throw new TypeError('[design-system] Invalid tenant preview artifact vertical.');
+  }
+  // The artifact is a delta over the vertical's static compile, which is what
+  // the enclosing root states; its readers of a moved channel keep that text.
+  const untouched = compileThemeIntent(
+    staticThemeIntent(verifiedArtifact.verticalKey, verifiedArtifact.slug),
+  ).compiled.cssVariables;
+  const enclosing: Record<string, string> = { ...untouched, ...verifiedArtifact.variables };
+  const moved = Object.keys(verifiedArtifact.variables);
+  const stated: Record<string, string> = { ...verifiedArtifact.variables };
+  for (const name of containerReach(moved, enclosing)) {
+    const value = enclosing[name];
+    if (value !== undefined && !(name in stated)) stated[name] = value;
+  }
   // The guard decides WHICH channels survive; the emission owner decides how a
   // declaration and a rule are spelled.
   const admitted = Object.fromEntries(
-    Object.entries(verifiedArtifact.variables).filter(
+    Object.entries(stated).filter(
       ([name, value]) => name.startsWith('--ds-') && isSafePreviewCssValue(value),
     ),
   );
-  const declarations = emitDeclarations(admitted);
-  const css = declarations.length > 0 ? emitRule(scopeSelector, declarations) : '';
+  const css =
+    Object.keys(admitted).length > 0
+      ? emitThemeCss(
+          {
+            cssVariables: admitted,
+            modeBlocks: [],
+            runtime: { personality: {}, tokenOverrides: {} },
+          },
+          containerScope(scopeSelector),
+          { container: { outright: Object.keys(untouched) } },
+        )
+      : '';
   return { css, scopeSelector, safeSlug };
 }

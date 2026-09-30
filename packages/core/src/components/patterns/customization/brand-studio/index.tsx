@@ -57,9 +57,11 @@ import {
   staticThemeIntent,
 } from '@/infrastructure/compilers/runtime/theme';
 import {
-  emitDeclarations,
+  containerScope,
   emitRule,
+  emitThemeCss,
 } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
+import { containerReach } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
 import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
 import { themeDefaultMode as resolveThemeDefaultMode } from '@/infrastructure/compilers/kernel/foundation/modes';
 import { validateBrandingContrast, type BrandingColors } from '@/foundation/kernel/accessibility/branding-contrast';
@@ -354,6 +356,14 @@ export interface SurfaceVariables {
   vars: Record<string, string>;
   /** Keys `compileTheme` itself emitted for this mode (excludes ground-scaffold-only keys). */
   declaredKeys: ReadonlySet<string>;
+  /**
+   * Compiled channels that read a `vars` name through a chain the document root
+   * holds, with their mode-resolved compiled text. The panel is a box BELOW the
+   * root, so without them it inherits their root-resolved values (N1).
+   */
+  carried: Record<string, string>;
+  /** The channels the untouched vertical's root rule states outright (the container law's `outright`). */
+  outright: readonly string[];
 }
 
 /**
@@ -444,7 +454,49 @@ function projectSurfaceVariables(
   const modeVars = admitCssVariables(moved);
   const declaredKeys = new Set(Object.keys(modeVars));
   const vars = { ...PREVIEW_GROUNDS[surface.baseTheme], ...modeVars };
-  return { vars, declaredKeys };
+  // The panel sits below the document root: a compiled `var()` channel whose
+  // operand the ground or the draft moves keeps its text in the delta and would
+  // paint the root's value. The same closure the branding sandbox carries, over
+  // the untouched map too: a channel the draft's compile no longer states is
+  // still stated by the root, with its untouched text.
+  const onGround = (compilation: ThemeCompilation): Record<string, string> =>
+    surface.baseTheme !== compiledMode
+      ? { ...compilation.cssVariables, ...modeOverlayOf(compilation, surface.baseTheme) }
+      : compilation.cssVariables;
+  const enclosing = { ...onGround(untouched), ...onGround(compiled) };
+  const carried: Record<string, string> = {};
+  for (const name of containerReach(Object.keys(vars), enclosing)) {
+    const value = enclosing[name];
+    if (value !== undefined && !(name in vars)) carried[name] = value;
+  }
+  return {
+    vars,
+    declaredKeys,
+    carried: admitCssVariables(carried),
+    outright: Object.keys(untouched.cssVariables),
+  };
+}
+
+/**
+ * A panel's CSS, through the emission owner's container law: the stated and
+ * carried channels, the root aliases they re-resolve restated at the scope, and
+ * `outright` never overridden with a root text.
+ */
+export function surfaceScopeCss(
+  { vars, carried, outright }: SurfaceVariables,
+  scopeSelector: string,
+): string {
+  const css = emitThemeCss(
+    {
+      cssVariables: { ...vars, ...carried },
+      modeBlocks: [],
+      runtime: { personality: {}, tokenOverrides: {} },
+    },
+    containerScope(scopeSelector),
+    { container: { outright } },
+  );
+  // A refused draft states nothing; its panel still anchors its (empty) rule.
+  return css || emitRule(scopeSelector, []);
 }
 
 /**
@@ -479,7 +531,13 @@ export function tryBuildSurfaceVariables(
     // one. An INTENT-stage refusal has no compile -- the door refused before a
     // channel was written -- so the panel paints its ground and nothing else.
     if (!measured) {
-      return { vars: {}, declaredKeys: new Set<string>(), refusal: error.message };
+      return {
+        vars: {},
+        declaredKeys: new Set<string>(),
+        carried: {},
+        outright: [],
+        refusal: error.message,
+      };
     }
     return {
       ...projectSurfaceVariables(measured.compiled, measured.baseline, surface),
@@ -881,15 +939,15 @@ function PreviewPanel({
   const t = useBrandStudioCopy();
   const scopeClass = `brand-studio-${surface.key}-${scopeSalt}`;
 
-  const mergedVars = useMemo(
-    () => tryBuildSurfaceVariables(theme, surface).vars,
+  const surfaceVars = useMemo(
+    () => tryBuildSurfaceVariables(theme, surface),
     [theme, surface],
   );
 
-  // The rule is the emission owner's grammar; this panel owns only its scope.
+  // The rules are the emission owner's grammar; this panel owns only its scope.
   const scopedCss = useMemo(
-    () => emitRule(`.${scopeClass}`, emitDeclarations(mergedVars)),
-    [mergedVars, scopeClass],
+    () => surfaceScopeCss(surfaceVars, `.${scopeClass}`),
+    [surfaceVars, scopeClass],
   );
 
   return (

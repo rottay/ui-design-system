@@ -200,6 +200,22 @@ describe('buildTenantThemePreviewScope', () => {
     expect(scope.css).not.toContain('data-ds-root');
   });
 
+  it('carries the readers of a moved channel through the container law, keeping the vertical outright', () => {
+    const scope = buildTenantThemePreviewScope(compiledArtifact());
+
+    // The preview root sits below the document root: a compiled channel or a
+    // root alias that reads the moved primary must be stated here, or it paints
+    // the host's primary.
+    expect(scope.css).toContain('--ds-card-focus-ring: var(--ds-shadow-focus-ring);');
+    expect(scope.css).toContain(
+      '--ds-shadow-focus-ring: 0 0 0 3px var(--ds-tint-24, color-mix(in srgb, var(--ds-color-primary) 24%, transparent));',
+    );
+    // The vertical states the primary button outright; the root alias text
+    // (`--ds-color-primary-500`) painted a shade the publish never paints.
+    expect(scope.css).toContain('--ds-button-primary-bg: var(--ds-color-primary);');
+    expect(scope.css).not.toContain('--ds-button-primary-bg: var(--ds-color-primary-500);');
+  });
+
   it('rejects a counterfeit artifact whose variables no longer match its digest', () => {
     const artifact = compiledArtifact();
     const counterfeit = {

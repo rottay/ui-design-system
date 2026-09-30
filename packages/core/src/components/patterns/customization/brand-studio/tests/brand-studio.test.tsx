@@ -358,6 +358,31 @@ describe('PatternBrandStudio live preview repaint', () => {
     expect(styleText()).toContain('--ds-color-primary: #16a34a;');
     expect(styleText()).not.toContain('--ds-color-primary: #4f46e5;');
   });
+
+  it('carries the compiled channels that read the ground, and the root aliases they re-resolve', async () => {
+    const paletteOnly: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    render(
+      <Harness>
+        <PatternBrandStudio vertical="bithire" value={paletteOnly} title="Container Probe" />
+      </Harness>,
+    );
+    await screen.findByText('Container Probe');
+    const css =
+      document.querySelector('[data-part="preview-panel"][data-surface="dark"] style')?.textContent ?? '';
+
+    // The panel is a box below the document root. A compiled channel that
+    // reads a ground channel keeps its text in the delta, so without being
+    // stated here it paints the root's resolution: a white card and dark
+    // label ink on the dark ground (measured in Chromium).
+    expect(css).toContain('--ds-card-bg: var(--ds-color-bg-elevated);');
+    expect(css).toContain('--ds-checkbox-label-color: var(--ds-color-text-primary);');
+    // A left-out root alias takes its cascade-winning root text, and its
+    // context rule follows at the scope.
+    expect(css).toContain('--ds-color-bg-canvas: var(--ds-color-bg-primary);');
+    expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\) \{\n:where\(:root\) \.brand-studio-dark-/u);
+    // The vertical's own outright text is never overridden with a root text.
+    expect(css).toContain('--ds-button-primary-bg: var(--ds-color-primary);');
+  });
 });
 
 describe('PatternBrandStudio dark-mode overlay (FlatTheme.modes) controls', () => {
@@ -523,7 +548,7 @@ describe('PatternBrandStudio preview ground admits no caller CSS', () => {
     expect(styleText).not.toContain('--evil');
     // Every rule the studio injects is anchored to its own panel scope.
     for (const selector of styleText.matchAll(/(^|\})\s*([^{}]+)\{/gu)) {
-      expect(selector[2]!.trim().startsWith('.brand-studio-')).toBe(true);
+      expect(anchoredToPanel(selector[2]!.trim()), selector[2]).toBe(true);
     }
   });
 
@@ -574,6 +599,37 @@ describe('PatternBrandStudio preview ground admits no caller CSS', () => {
 // guarantee is the emission grammar's, and these assert it end to end: through
 // the rendered component, not only through the predicate.
 // ---------------------------------------------------------------------------
+
+/** Top-level parts of `text` split at `separator`, parentheses respected. */
+function topLevel(text: string, separator: ',' | ' '): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let current = '';
+  for (const char of text) {
+    if (char === '(') depth += 1;
+    if (char === ')') depth -= 1;
+    if (char === separator && depth === 0) {
+      if (current.trim()) parts.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  if (current.trim()) parts.push(current.trim());
+  return parts;
+}
+
+/**
+ * A rule the studio injects is anchored to its panel: an at-rule wrapping one,
+ * or a selector list whose every subject is the panel scope (the container
+ * law's context rules put the ancestor context in a leading `:where()`).
+ */
+function anchoredToPanel(prelude: string): boolean {
+  if (prelude.startsWith('@')) return /^@(media|supports)\b/u.test(prelude);
+  return topLevel(prelude, ',').every((selector) =>
+    (topLevel(selector, ' ').at(-1) ?? '').startsWith('.brand-studio-'),
+  );
+}
 
 const THEME_ESCAPE = '#000; } body { display: none; } .fable-escape {';
 
@@ -634,7 +690,7 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
       expect(css).not.toContain('display: none');
       expect(css).not.toContain('fable-escape');
       for (const selector of selectorsOf(css)) {
-        expect(selector.startsWith('.brand-studio-'), selector).toBe(true);
+        expect(anchoredToPanel(selector), selector).toBe(true);
       }
     });
 
