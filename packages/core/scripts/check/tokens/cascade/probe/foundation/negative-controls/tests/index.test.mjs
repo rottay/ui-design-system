@@ -28,30 +28,17 @@ import {
   requireResolvedNegativeControls,
   resolveNegativeControls,
 } from '../index.mjs';
+import { archiveRoot, openArchivedUnit, snapshotDir } from '../../../../../../../libraries/archive/index.mjs';
 import {
-  archiveRoot,
-  openArchivedUnit,
   RET03_EVIDENCE_SNAPSHOT,
-  snapshotDir,
-} from '../../../../../../../libraries/archive/index.mjs';
+  RET03_MODERN_RESCUE_PIN,
+} from '../../../../../../../libraries/archive/units/index.mjs';
 
 const MANIFEST_ROOT = QUARANTINE_MANIFEST_ROOT;
 const CONTROL_MANIFEST = readControlCalibration('spacing.rhythm');
 const FLEX_MANIFEST = readManifest(resolve(MANIFEST_ROOT, 'families/primitive/layout/flex/index.json'));
 
 const SCOPE = 'rottay/light/modern/both';
-
-/**
- * The modern-rescue proofs as archived by WO-RET-03: the unit path, and the file
- * count, byte total and unitDigest of the in-tree corpus the archive replaces
- * (HEAD df5e57b81). The historical receipts are read through this pin.
- */
-const MODERN_RESCUE_ARCHIVE_PIN = Object.freeze({
-  unit: 'packages/core/artifacts/quality/programs/modern-rescue',
-  files: 366,
-  bytes: 64201220,
-  unitDigest: '4c8ebccc9fa756cbe71199c95f9e5e5a1de8b9cc1081e2f05f9b5d8c562863aa',
-});
 
 /** The eight the control's calibration row declares today, verbatim. */
 const CONTROL_LEVEL_IDS = [
@@ -773,7 +760,7 @@ test('active evidence ids resolve to receipts, while historical receipts never b
   const receiptsUnder = 'cascade-proofs/controls';
   const archived = openArchivedUnit({
     snapshotDir: snapshotDir(archiveRoot({ repoRoot: REPO_ROOT }), RET03_EVIDENCE_SNAPSHOT),
-    pin: MODERN_RESCUE_ARCHIVE_PIN,
+    pin: RET03_MODERN_RESCUE_PIN,
   });
   let archivedInspected = 0;
   for (const path of archived.paths(receiptsUnder)) {

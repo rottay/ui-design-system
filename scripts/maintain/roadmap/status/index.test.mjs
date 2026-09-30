@@ -36,6 +36,17 @@ import {
   validateRegistryMutationIntegrity,
   validateRegistryTemporalIntegrity,
 } from "./index.mjs";
+import {
+  archiveRoot,
+  openArchivedUnit,
+  sha256,
+  snapshotDir,
+  unitDigestOf,
+} from "../../../../packages/core/scripts/libraries/archive/index.mjs";
+import {
+  RET03_EVIDENCE_SNAPSHOT,
+  RET03_SEALED_MANIFEST_PIN,
+} from "../../../../packages/core/scripts/libraries/archive/units/index.mjs";
 
 const allIds = Array.from(
   { length: 128 },
@@ -2440,9 +2451,12 @@ test("a disagreement between two recorded denominators is published, not resolve
 test("family acceptance republishes the manifest's own rollup and never elevates it", () => {
   const acceptance = readFamilyAcceptance();
   assert.equal(acceptance.measured, true);
-  assert.equal(acceptance.families, JSON.parse(fs.readFileSync(
-    new URL("../../../../docs/history/inventories/customization-manifest/index.json", import.meta.url), "utf8",
-  )).denominators.canonicalFamilies);
+  const sealed = openArchivedUnit({
+    snapshotDir: snapshotDir(archiveRoot({ repoRoot: new URL("../../../..", import.meta.url).pathname }), RET03_EVIDENCE_SNAPSHOT),
+    pin: RET03_SEALED_MANIFEST_PIN,
+  });
+  assert.equal(`${RET03_SEALED_MANIFEST_PIN.unit}/index.json`, SEALED_FAMILY_ACCEPTANCE.source);
+  assert.equal(acceptance.families, sealed.readJson("index.json").denominators.canonicalFamilies);
   const lines = familyAcceptanceLines(acceptance).join("\n");
   assert.ok(lines.includes(`${acceptance.accepted}/${acceptance.families} families accepted`));
   assert.match(lines, /SEALED/);
@@ -2453,12 +2467,67 @@ test("family acceptance republishes the manifest's own rollup and never elevates
   assert.match(lines, /WO-FAM-00/);
 });
 
-test("family acceptance says NOT MEASURED when the manifest is absent", () => {
-  const acceptance = readFamilyAcceptance("/nonexistent/manifest/index.json");
+test("family acceptance says NOT MEASURED when the archive is absent", () => {
+  const acceptance = readFamilyAcceptance({ snapshot: "/nonexistent/snapshot" });
   assert.equal(acceptance.measured, false);
+  assert.match(acceptance.reason, /MANIFEST\.json is missing/);
   const lines = familyAcceptanceLines(acceptance).join("\n");
   assert.ok(lines.includes("NOT MEASURED"));
-  assert.ok(!/0\/255/.test(lines), "an absent manifest must not publish a ratio");
+  assert.ok(!/families accepted/.test(lines), "an absent archive must not publish a ratio");
+});
+
+/** A private copy of the snapshot's MANIFEST.json and the sealed unit's files. */
+function sealedArchiveCopy() {
+  const live = snapshotDir(archiveRoot({ repoRoot: new URL("../../../..", import.meta.url).pathname }), RET03_EVIDENCE_SNAPSHOT);
+  const dir = fs.mkdtempSync(`${os.tmpdir()}/roadmap-sealed-archive-`);
+  fs.cpSync(`${live}/MANIFEST.json`, `${dir}/MANIFEST.json`);
+  fs.cpSync(`${live}/files/${RET03_SEALED_MANIFEST_PIN.unit}`, `${dir}/files/${RET03_SEALED_MANIFEST_PIN.unit}`, { recursive: true });
+  return dir;
+}
+
+test("family acceptance publishes no figure from an archive the door refuses", () => {
+  const dir = sealedArchiveCopy();
+  const index = `${dir}/files/${RET03_SEALED_MANIFEST_PIN.unit}/index.json`;
+  const original = fs.readFileSync(index);
+  const refused = (fragment, label) => {
+    const acceptance = readFamilyAcceptance({ snapshot: dir });
+    assert.equal(acceptance.measured, false, `${label} must not be measured`);
+    assert.ok(acceptance.reason.includes(fragment), `${label}: ${acceptance.reason}`);
+    assert.ok(!/families accepted/.test(familyAcceptanceLines(acceptance).join("\n")), `${label} must not publish a ratio`);
+  };
+  try {
+    assert.equal(readFamilyAcceptance({ snapshot: dir }).measured, true, "the unaltered copy is the positive control");
+
+    const flipped = Buffer.from(original);
+    flipped[flipped.indexOf(0x32)] = 0x33;
+    fs.writeFileSync(index, flipped);
+    refused("hashes to", "a changed byte in the rollup");
+    fs.writeFileSync(index, original);
+
+    fs.rmSync(index);
+    refused("is missing", "a missing index.json");
+    fs.writeFileSync(index, original);
+
+    const manifestText = fs.readFileSync(`${dir}/MANIFEST.json`, "utf8");
+    const manifest = JSON.parse(manifestText);
+    const unit = manifest.units.find((entry) => entry.path === RET03_SEALED_MANIFEST_PIN.unit);
+    const dropped = unit.entries.pop();
+    fs.rmSync(`${dir}/files/${dropped.path}`);
+    unit.files = unit.entries.length;
+    unit.bytes = unit.entries.reduce((sum, entry) => sum + entry.bytes, 0);
+    unit.unitDigest = unitDigestOf(unit.entries);
+    fs.writeFileSync(`${dir}/MANIFEST.json`, JSON.stringify(manifest));
+    refused("fewer than the", "a short, consistently re-stamped manifest");
+
+    unit.path = `${unit.path}-renamed`;
+    fs.writeFileSync(`${dir}/MANIFEST.json`, JSON.stringify(manifest));
+    refused("exactly one is required", "a renamed unit");
+    assert.equal(sha256(original), JSON.parse(manifestText).units
+      .find((entry) => entry.path === RET03_SEALED_MANIFEST_PIN.unit).entries
+      .find((entry) => entry.path.endsWith("/customization-manifest/index.json")).sha256);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test("the contract diff is read from its producer, not parsed here", () => {

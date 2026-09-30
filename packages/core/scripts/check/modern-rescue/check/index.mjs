@@ -32,12 +32,8 @@ import { parseRegistry as parseCapabilityRegistry } from '../../../generate/toke
 import { overrideTokens } from '../../orchestration/runtime/tenant-reach/index.mjs';
 import { CASCADE_MANIFEST_REPO_REL, pathForManifestId, readManifestRecords } from '../../../libraries/manifest/index.mjs';
 import { readThemeCatalogRecords } from '../../../libraries/theme-catalog/index.mjs';
-import {
-  archiveRoot,
-  RET03_EVIDENCE_SNAPSHOT,
-  snapshotDir,
-  verifyArchivedUnit,
-} from '../../../libraries/archive/index.mjs';
+import { archiveRoot, snapshotDir, verifyArchivedUnit } from '../../../libraries/archive/index.mjs';
+import { RET03_EVIDENCE_SNAPSHOT, RET03_SEALED_MANIFEST_PIN } from '../../../libraries/archive/units/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -52,19 +48,13 @@ const PROGRAM_ROOT = join(repoRoot, PROGRAM_DIR);
 const MANIFEST_DIR = 'docs/history/inventories/customization-manifest';
 
 /**
- * The sealed manifest as archived by WO-RET-03: the unit path, and the file
- * count, byte total and unitDigest of the in-tree corpus the archive replaces
- * (HEAD df5e57b81). The door refuses any archive that does not re-derive to
- * this digest or covers less than this.
+ * The sealed manifest as archived by WO-RET-03, pinned once in
+ * libraries/archive/units. The door refuses any archive that does not
+ * re-derive to the pinned digest or covers less than the replaced unit.
  */
 export const SEALED_MANIFEST_ARCHIVE = Object.freeze({
   snapshot: RET03_EVIDENCE_SNAPSHOT,
-  pin: Object.freeze({
-    unit: MANIFEST_DIR,
-    files: 281,
-    bytes: 39238078,
-    unitDigest: 'c62f8559add107fe48fc93468df233ba23f05ccf85720e940940bee255b6a5c6',
-  }),
+  pin: RET03_SEALED_MANIFEST_PIN,
 });
 
 /**

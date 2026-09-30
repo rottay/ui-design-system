@@ -45,6 +45,11 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { types as utilTypes } from "node:util";
+import { archiveRoot, snapshotDir, verifyArchivedUnit } from "../../../../packages/core/scripts/libraries/archive/index.mjs";
+import {
+  RET03_EVIDENCE_SNAPSHOT,
+  RET03_SEALED_MANIFEST_PIN,
+} from "../../../../packages/core/scripts/libraries/archive/units/index.mjs";
 
 const isProxy = utilTypes.isProxy;
 
@@ -3436,15 +3441,19 @@ export const SEALED_FAMILY_ACCEPTANCE = Object.freeze({
  * figure stays visible rather than quietly retired, and states which work
  * order owns family acceptance from here.
  */
-export function readFamilyAcceptance(
-  manifestPath = path.join(ROOT, SEALED_FAMILY_ACCEPTANCE.source),
-) {
-  if (!fs.existsSync(manifestPath)) {
-    return { measured: false, reason: "the governance manifest is not in this checkout" };
+export function readFamilyAcceptance({
+  snapshot = snapshotDir(archiveRoot({ repoRoot: ROOT }), RET03_EVIDENCE_SNAPSHOT),
+} = {}) {
+  const { failures, unit } = verifyArchivedUnit({ snapshotDir: snapshot, pin: RET03_SEALED_MANIFEST_PIN });
+  if (!unit) {
+    const shown = failures.slice(0, 3).join("; ");
+    const more = failures.length > 3 ? ` (+${failures.length - 3} more)` : "";
+    return { measured: false, reason: `the archive refused the sealed manifest: ${shown}${more}` };
   }
+  const entry = SEALED_FAMILY_ACCEPTANCE.source.slice(RET03_SEALED_MANIFEST_PIN.unit.length + 1);
   let manifest;
   try {
-    manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    manifest = unit.readJson(entry);
   } catch (error) {
     return { measured: false, reason: `the governance manifest is unreadable: ${error.message}` };
   }

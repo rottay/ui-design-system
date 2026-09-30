@@ -26,6 +26,8 @@ import {
   DEFAULT_SYNTHETIC_PATH,
   loadRows,
 } from '../../../runtime/ownership-rows/index.mjs';
+import { archiveRoot, openArchivedUnit, snapshotDir } from '../../../../../libraries/archive/index.mjs';
+import { RET03_EVIDENCE_SNAPSHOT, RET03_MODERN_RESCUE_PIN } from '../../../../../libraries/archive/units/index.mjs';
 
 const ROOT = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim();
 const CHECKER = `${ROOT}/packages/core/scripts/check/orchestration/public/write-set-intersection/index.mjs`;
@@ -35,11 +37,17 @@ const EXAMPLE_PLAN = `${ROOT}/packages/core/scripts/check/orchestration/plans/ex
 // and a second hand-written spelling of that path is a second authority.
 const INVENTORY = join(ROOT, DEFAULT_INVENTORY_PATH);
 const SYNTHETIC_ROWS = join(ROOT, DEFAULT_SYNTHETIC_PATH);
-// The sealed R0 receipt. Repo-relative, because the drill below writes it into
-// a DIFFERENT repository; `REAL_LEDGER` is the only absolute form, it is only
-// ever read, and it is never passed to a write.
+// The sealed R0 receipt, at the repo-relative path the probe repo carries it under.
 const HISTORY_LEDGER_PATH = 'packages/core/artifacts/quality/programs/modern-rescue/archive/ledgers/family-source-visitation/252-family-era/index.json';
-const REAL_LEDGER = join(ROOT, HISTORY_LEDGER_PATH);
+
+/** The receipt's bytes as the archive door verified them against the pinned unit. */
+function archivedLedger() {
+  const unit = openArchivedUnit({
+    snapshotDir: snapshotDir(archiveRoot({ repoRoot: ROOT }), RET03_EVIDENCE_SNAPSHOT),
+    pin: RET03_MODERN_RESCUE_PIN,
+  });
+  return unit.readBytes(HISTORY_LEDGER_PATH.slice(RET03_MODERN_RESCUE_PIN.unit.length + 1));
+}
 const AVATAR_ROW = 'primitive/display/avatar';
 const MOVED_OWNER = 'packages/core/src/components/primitives/display/badge';
 
@@ -83,7 +91,7 @@ function seedHistoryProbeRepo(dir) {
   const inventoryBytes = readFileSync(INVENTORY);
   const inventoryPath = writeFixture(tempRoot, DEFAULT_INVENTORY_PATH, inventoryBytes);
   const syntheticPath = writeFixture(tempRoot, DEFAULT_SYNTHETIC_PATH, readFileSync(SYNTHETIC_ROWS));
-  const ledgerPath = writeFixture(tempRoot, HISTORY_LEDGER_PATH, readFileSync(REAL_LEDGER));
+  const ledgerPath = writeFixture(tempRoot, HISTORY_LEDGER_PATH, archivedLedger());
 
   // `deriveFamilyRows` refuses a catalog whose sourceOwner is not a directory in
   // THIS tree — which is the check that makes an empty bound impossible, and
@@ -606,7 +614,7 @@ export function runDrills() {
     // the universe and the archive it is asked about into the temp tree. The
     // working tree's copy is read, hashed, and never opened for writing — there
     // is no restore step here because there is nothing to restore.
-    const realLedgerBefore = readFileSync(REAL_LEDGER);
+    const realLedgerBefore = archivedLedger();
     const realLedgerShaBefore = sha256(realLedgerBefore);
     const probe = seedHistoryProbeRepo(dir);
     const probeLedgerBefore = readFileSync(probe.ledgerPath);
@@ -690,9 +698,9 @@ export function runDrills() {
       result: run(process.execPath, [CHECKER, '--plan', probe.planPath], { cwd: probe.tempRoot }),
     });
 
-    const realLedgerAfter = readFileSync(REAL_LEDGER);
+    const realLedgerAfter = archivedLedger();
     suite.expectFact({
-      label: 'HISTORY IS NOT AUTHORITY — the working tree\'s archive was never opened for writing: identical bytes, identical hash, and no restore to trust',
+      label: 'HISTORY IS NOT AUTHORITY — the archived receipt re-verifies through the door after the drill: identical bytes, identical hash, and no restore to trust',
       ok: realLedgerAfter.equals(realLedgerBefore) && sha256(realLedgerAfter) === realLedgerShaBefore,
       details: [
         HISTORY_LEDGER_PATH,

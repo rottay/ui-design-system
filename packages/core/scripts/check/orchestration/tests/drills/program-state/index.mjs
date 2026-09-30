@@ -31,6 +31,12 @@ import { derive, isProvenance, renderBody } from '../../../public/program-state/
 // Same reason, one layer down: the archive's inertness is a claim about LANE BOUNDS as much as
 // about figures, and a bound is an object, not an exit code.
 import { loadContext, readPlan, resolveLane } from '../../../plans/index.mjs';
+import { archiveRoot, openArchivedUnit, snapshotDir } from '../../../../../libraries/archive/index.mjs';
+import {
+  RET03_EVIDENCE_SNAPSHOT,
+  RET03_MODERN_RESCUE_PIN,
+  RET03_SEALED_MANIFEST_PIN,
+} from '../../../../../libraries/archive/units/index.mjs';
 
 const ROOT = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim();
 const CHECKER = `${ROOT}/packages/core/scripts/check/orchestration/public/program-state/index.mjs`;
@@ -42,16 +48,22 @@ const INTENT_FILE = 'packages/core/scripts/check/orchestration/public/program-st
 const CARRIED = [
   STATE_FILE,
   INTENT_FILE,
-  // Sealed historical evidence. It is carried NOT because `derive()` reads it -- it no longer
-  // does -- but so the inverse drill below can prove that editing it changes nothing.
-  'packages/core/artifacts/quality/programs/modern-rescue/archive/ledgers/family-source-visitation/252-family-era/index.json',
   'packages/core/scripts/check/modern-rescue/family-inventory/index.json',
-  // The sealed customization manifest, carried for the same reason as the ledger: `derive()`
-  // no longer reads it, and the inverse drill proves that editing it moves nothing.
-  'docs/history/inventories/customization-manifest/index.json',
   'packages/core/scripts/check/orchestration/public/work-order/synthetic-ownership/index.json',
   'packages/core/scripts/check/orchestration/plans/examples/index.json',
 ];
+
+// Sealed history `derive()` does not read, carried from the verified archive so the
+// inverse drills below can prove that editing it moves nothing.
+const ARCHIVED = [
+  { pin: RET03_MODERN_RESCUE_PIN, path: 'packages/core/artifacts/quality/programs/modern-rescue/archive/ledgers/family-source-visitation/252-family-era/index.json' },
+  { pin: RET03_SEALED_MANIFEST_PIN, path: 'docs/history/inventories/customization-manifest/index.json' },
+];
+
+function archivedBytes({ pin, path }) {
+  const unit = openArchivedUnit({ snapshotDir: snapshotDir(archiveRoot({ repoRoot: ROOT }), RET03_EVIDENCE_SNAPSHOT), pin });
+  return unit.readBytes(path.slice(pin.unit.length + 1));
+}
 
 function git(repo, args) {
   return execFileSync('git', args, { cwd: repo, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
@@ -94,6 +106,10 @@ function seedRepo(dir) {
   for (const path of CARRIED) {
     mkdirSync(join(dir, dirname(path)), { recursive: true });
     copyFileSync(`${ROOT}/${path}`, join(dir, path));
+  }
+  for (const carried of ARCHIVED) {
+    mkdirSync(join(dir, dirname(carried.path)), { recursive: true });
+    writeFileSync(join(dir, carried.path), archivedBytes(carried));
   }
   // Every family's source owner, as a directory, in THIS repository.
   //
