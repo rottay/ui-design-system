@@ -137,6 +137,13 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import {
+  archiveRoot,
+  openArchivedUnit,
+  snapshotDir,
+} from '../../core/scripts/libraries/archive/index.mjs';
+import { RET03_SEALED_MANIFEST_PIN } from '../../core/scripts/libraries/archive/units/index.mjs';
+
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 
 const PORT = Number(process.env.DS_REFERENCE_CAPTURE_PORT || 7001);
@@ -199,11 +206,13 @@ const JUDGE_MODE_SELECTOR = '[data-testid="lab-judge-mode"]';
 // ---------------------------------------------------------------------------
 
 /**
- * `declaredOutputs.channels` del control (83 canales tras COH-1). Leerlo
- * del disco en vez de transcribirlo evita que esta herramienta y el manifest
- * puedan divergir en silencio; el sha256 del manifest viaja en el receipt.
+ * `declaredOutputs.channels` del control (83 canales tras COH-1). Se lee del
+ * ARCHIVO con trazabilidad a traves de la puerta (el unit sale del arbol con
+ * la remocion de RET-03): cada byte re-hasheado contra el manifiesto pineado,
+ * nunca del directorio a mano. El sha256 del manifest viaja en el receipt.
  */
 const CONTROL_MANIFEST_RELPATH = 'docs/history/inventories/customization-manifest/controls/palette/status-seeds/index.json';
+const CONTROL_MANIFEST_UNIT_REL = 'controls/palette/status-seeds/index.json';
 
 /**
  * Canales que los skins SI leen y que el control NO declara. Tras COH-1, los
@@ -2141,11 +2150,11 @@ async function runCapture(args) {
   const repoRoot = deriveRepoRoot(HERE);
   const selfSha = sha256(readFileSync(fileURLToPath(import.meta.url)));
 
-  const controlManifestPath = path.join(repoRoot, CONTROL_MANIFEST_RELPATH);
-  if (!existsSync(controlManifestPath)) {
-    throw new Error(`no se encuentra el manifest del control en ${CONTROL_MANIFEST_RELPATH}`);
-  }
-  const controlManifestRaw = readFileSync(controlManifestPath);
+  const sealedUnit = openArchivedUnit({
+    snapshotDir: snapshotDir(archiveRoot({ repoRoot }), RET03_EVIDENCE_SNAPSHOT),
+    pin: RET03_SEALED_MANIFEST_PIN,
+  });
+  const controlManifestRaw = sealedUnit.readBytes(CONTROL_MANIFEST_UNIT_REL);
   const controlManifest = JSON.parse(controlManifestRaw.toString('utf8'));
   const declaredChannels = controlManifest?.declaredOutputs?.channels;
   if (!Array.isArray(declaredChannels) || declaredChannels.length === 0) {
