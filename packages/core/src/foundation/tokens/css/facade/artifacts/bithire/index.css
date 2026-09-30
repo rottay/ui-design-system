@@ -3485,10 +3485,13 @@
   --ds-radio-transition-duration: var(--ds-motion-feedback);
   --ds-radio-transition-timing: var(--ds-motion-ease-out);
   --ds-radio-warning-dot: var(--ds-color-on-warning);
+  --ds-radius-2xl: calc(20px * var(--ds-radius-scale, 1));
+  --ds-radius-3xl: calc(24px * var(--ds-radius-scale, 1));
   --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));
   --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
   --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));
   --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));
+  --ds-radius-xs: calc(3px * var(--ds-radius-scale, 1));
   --ds-rate-active-color: var(--ds-color-warning-400);
   --ds-rate-focus-ring-color: var(--ds-color-primary-500);
   --ds-rate-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
@@ -3732,6 +3735,7 @@
   --ds-card-overlay: var(--ds-premium-card-overlay);
   --ds-card-radius-lg: var(--ds-radius-xl);
   --ds-card-radius-sm: var(--ds-radius-sm);
+  --ds-card-radius-xl: var(--ds-radius-2xl);
   --ds-card-selected-outline-width: var(--ds-card-border-width);
   --ds-card-skeleton-radius: var(--ds-radius-sm);
   --ds-card-subtitle-font-size: var(--ds-font-size-sm);
@@ -3749,6 +3753,7 @@
   --ds-checkbox-label-color-disabled: var(--ds-material-control-foreground-disabled);
   --ds-checkbox-lg-font-size: var(--ds-font-size-base);
   --ds-checkbox-md-font-size: var(--ds-font-size-sm);
+  --ds-checkbox-radius: var(--ds-radius-xs);
   --ds-checkbox-radius-lg: var(--ds-radius-sm);
   --ds-checkbox-secondary-bg: var(--ds-color-secondary);
   --ds-checkbox-secondary-border: var(--ds-color-secondary);
@@ -3911,6 +3916,7 @@
   --ds-modal-action-radius: var(--ds-radius-md);
   --ds-modal-body-font-size: var(--ds-font-size-base);
   --ds-modal-border-radius: var(--ds-radius-xl);
+  --ds-modal-bottom-sheet-border-radius-top: var(--ds-radius-2xl);
   --ds-modal-close-border-radius: var(--ds-radius-md);
   --ds-modal-mobile-border-radius: var(--ds-radius-lg);
   --ds-modal-overlay-z-index: var(--ds-z-index-modal-backdrop);
@@ -3978,6 +3984,7 @@
   --ds-search-input-bg: var(--ds-search-bg, var(--ds-surface-control, var(--ds-color-bg-input)));
   --ds-search-radius: var(--ds-toolbar-radius, var(--ds-radius-sm, 6px));
   --ds-segmented-bg: var(--ds-surface-control, #f5f5f5);
+  --ds-segmented-icon-radius: var(--ds-radius-xs);
   --ds-segmented-radius: var(--ds-radius-md);
   --ds-select-bg: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
   --ds-select-bg-focus: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
