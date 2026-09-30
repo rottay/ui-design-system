@@ -155,8 +155,8 @@ describe('CodeBlock remediation (K4-B)', () => {
     expect(channelReads(pressed)).toEqual(['--ds-color-text-primary']);
     expect(skin).toContain("[data-part='scroll']:focus-visible");
     const ring = skinDeclaration("[data-part='copy-button']:focus-visible", 'box-shadow');
-    expect(ring).toBe('0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)');
-    expect(channelReads(ring)).toEqual(['--ds-color-primary']);
+    expect(ring).toBe('0 0 0 var(--ds-focus-ring-width, 3px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent)');
+    expect(channelReads(ring)).toEqual(['--ds-focus-ring-width', '--ds-color-primary']);
     expect(skinDeclaration("[data-part='scroll']:focus-visible", 'box-shadow')).toBe(ring);
     expect(skin).toContain('@media (forced-colors: active)');
     // CI-1 checker fix: excludes the `@media (prefers-reduced-motion: reduce)`
