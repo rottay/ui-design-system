@@ -135,7 +135,7 @@
         it; the timestamp slot carried it only on the side that renders no
         timestamp of its own, which is the shipped shape. ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'] {
-  border: var(--ds-border-width-1) solid var(--ds-color-bg-tertiary);
+  border: var(--ds-edge-hairline-width, var(--ds-border-width-1)) solid var(--ds-color-bg-tertiary);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-color-bg-primary);
   padding-inline: var(--ds-spacing-4, 1rem);
