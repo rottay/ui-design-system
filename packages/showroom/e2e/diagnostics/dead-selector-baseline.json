@@ -1,6 +1,18 @@
 {
   "$schema-note": "Reviewed allow-list for the dead-selector audit (P-79). deadAnchors is the BUG class: a skin rule whose data-part anchor is absent from the DOM no matter the state, so the rule reaches nobody. It MUST stay empty; the static skins.deadParts gate already enforces 0 stamped-but-unreferenced parts, so a browser-observed dead anchor is a genuine render-drop regression. Any entry added here is an explicitly reviewed exception and REQUIRES a non-empty reason. thinFixtures and uncoveredFiles are informational (measured, not failing): an unphotographed state or an unrendered component is a torture-page coverage hole, not a dead rule.",
-  "deadAnchors": [],
+  "deadAnchors": [
+    {
+      "file": "agnostic/overlay-modal-compounds/index.css",
+      "selectors": [
+        ".rottay-overlay-modal-body[data-part='body']",
+        ".rottay-overlay-modal-footer.rottay-overlay-modal-footer[data-part='footer'][data-part='footer'][data-divider='true']",
+        ".rottay-overlay-modal-footer.rottay-overlay-modal-footer[data-part='footer'][data-part='footer'][data-divider='false']",
+        ".rottay-modal-close-button[data-part='close-button']",
+        ".rottay-modal-close-button[data-part='close-button']:hover"
+      ],
+      "reason": "Orphan rules: no component source stamps rottay-overlay-modal-body/-footer or rottay-modal-close-button (M8 classifier proof, 2026-09-29 wave). 1e12293c3 deferred their retirement to the token-drainage wave; this entry freezes the known-dead five until that wave retires them, and the entry MUST leave with them."
+    }
+  ],
   "thinFixtures": {
     "$note": "Populated on the first authenticated Playwright run under playwright.visual.config.ts. Seeded empty; the spec writes the full measured set to dead-selector-report.json for review. Not a failing assertion.",
     "reviewed": []
