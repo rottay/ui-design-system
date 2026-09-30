@@ -39,29 +39,26 @@
 }
 
 /* ---- panel surface ---- */
-.rottay-modal-root--rustic > [data-part='surface'] {
+.rottay-modal-root--rustic [data-part='surface'] {
   background-color: var(--ds-modal-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
   border-radius: var(--ds-modal-radius, var(--ds-radius-lg, 12px));
   box-shadow: var(--ds-modal-shadow, var(--ds-shadow-xl));
 }
 
 /* ---- section dividers ---- */
-.rottay-modal-root--rustic.rottay-modal-root--rustic
-  > [data-part='surface']
+.rottay-modal-root--rustic.rottay-modal-root--rustic [data-part='surface']
   > [data-part='header'][data-part='header'] {
   border-bottom: 1px solid
     var(--ds-modal-border-color, var(--ds-color-border-primary, var(--ds-color-border)));
 }
-.rottay-modal-root--rustic.rottay-modal-root--rustic
-  > [data-part='surface']
+.rottay-modal-root--rustic.rottay-modal-root--rustic [data-part='surface']
   > [data-part='footer'][data-part='footer'] {
   border-top: 1px solid
     var(--ds-modal-border-color, var(--ds-color-border-primary, var(--ds-color-border)));
 }
 
 /* ---- close button ---- */
-.rottay-modal-root--rustic
-  > [data-part='surface']
+.rottay-modal-root--rustic [data-part='surface']
   > [data-part='header']
   > [data-part='close-button'] {
   background: transparent;
@@ -69,23 +66,20 @@
 }
 
 /* ---- footer actions ---- */
-.rottay-modal-root--rustic
-  > [data-part='surface']
+.rottay-modal-root--rustic [data-part='surface']
   > [data-part='footer']
   > [data-part='action'][data-action='cancel'] {
   border-radius: var(--ds-modal-btn-radius, 4px);
   background: var(--ds-modal-cancel-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
   color: var(--ds-modal-cancel-color, var(--ds-color-text-primary, inherit));
 }
-.rottay-modal-root--rustic.rottay-modal-root--rustic
-  > [data-part='surface']
+.rottay-modal-root--rustic.rottay-modal-root--rustic [data-part='surface']
   > [data-part='footer']
   > [data-part='action'][data-action='cancel'] {
   border: 1px solid
     var(--ds-modal-cancel-border, var(--ds-color-border-secondary, var(--ds-color-border-primary)));
 }
-.rottay-modal-root--rustic
-  > [data-part='surface']
+.rottay-modal-root--rustic [data-part='surface']
   > [data-part='footer']
   > [data-part='action'][data-action='ok'] {
   border-radius: var(--ds-modal-btn-radius, 4px);
