@@ -130,6 +130,9 @@ import { AXIS_IDS, AXES, axisControls, axisPopulations, groupControls } from '..
 import { launchBrowser, resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 import { REPRODUCTION_FLAGS } from '../indicator/index.mjs';
+// S1's symbols are read off the namespace, so a drill against a tree without
+// them fails as a drill rather than as a module that will not link.
+import * as probe from '../index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
@@ -1110,7 +1113,7 @@ describe('axis-difference — a family can be measured on its own anatomy', () =
   });
 
   it('the states axis reads the non-chromatic longhands a state paints, under every stamped state', () => {
-    assert.deepEqual([...STATE_VARIANTS], ['hovered', 'pressed', 'selected', 'focus-visible', 'disabled']);
+    assert.deepEqual([...STATE_VARIANTS], ['hovered', 'pressed', 'selected', 'focus-visible', 'disabled', 'focused']);
     for (const property of ['transform', 'opacity', 'outline-width', 'outline-offset']) {
       assert.ok(AXES.states.computed.includes(property), property);
     }
@@ -2758,9 +2761,12 @@ describe('axis-difference — the native half forces what a real pointer or keyb
     ]) {
       assert.deepEqual({ selector, reason: by(selector).reason }, { selector, reason: 'domain-state-value' });
     }
-    // `focused` is serialized by the kernel but never stamped by the scene: it
-    // is not reached either, and it is named apart from a domain value.
-    assert.equal(by(".r[data-state~='focused']").reason, 'unstamped-state');
+    // `focused` is serialized by the kernel and, since S1, stamped by the
+    // scene: it is reached like every other kernel token.
+    assert.deepEqual(
+      { reason: by(".r[data-state~='focused']").reason, probe: by(".r[data-state~='focused']").probe },
+      { reason: null, probe: '.r' },
+    );
     const kernel = readFileSync(join(ROOT, 'src/foundation/behavior/kernel/anatomy/index.ts'), 'utf8');
     const flags = /STATE_FLAG_ORDER[^=]*=\s*\[([^\]]*)\]/u.exec(kernel)[1].match(/'([A-Za-z]+)'/gu)
       .map((flag) => flag.slice(1, -1).replace(/[A-Z]/gu, (letter) => `-${letter.toLowerCase()}`));
@@ -2925,6 +2931,10 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
 
   it('THE STALENESS DOOR: every shipped row is witnessed by the engine it names', () => {
     assert.deepEqual(Object.keys(REAL_RENDER_MOUNTS).sort(), [
+      'activity-log',
+      'anchor',
+      'avatar',
+      'breadcrumb-compounds',
       'column-menu',
       'column-settings',
       'command-palette',
@@ -2939,14 +2949,22 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'form',
       'guided-draft-form',
       'image-compounds',
+      'layout',
       'modal-compounds',
+      'pattern-timeline',
       'presence',
+      'record',
       'search-command-bar',
       'skeleton',
       'skeleton-anatomy',
       'stats-grid',
+      'stats-grid-interactive',
+      'stats-header',
       'time-picker',
       'tooltip',
+      'tooltip-interactive',
+      'tree-view-connector',
+      'typography',
     ]);
     assert.deepEqual(realRenderRosterFailures(ROOT), []);
     for (const entry of Object.values(REAL_RENDER_MOUNTS)) {
@@ -2984,7 +3002,8 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
     assert.ok(dressed.some((line) => line.includes('must be a bare element name')), dressed.join(' | '));
     const axes = realRenderRosterFailures(ROOT, { skeleton: { ...SKELETON, axes: ['typography', 'states', 'depth'] } });
     assert.ok(axes.some((line) => line.startsWith('skeleton/typography: a real-render mount is read only on')), axes.join(' | '));
-    assert.ok(axes.some((line) => line.startsWith('skeleton/states: a real-render mount is read only on')), axes.join(' | '));
+    // States is admitted since S1 (law 5); skeleton is not in its population.
+    assert.ok(axes.some((line) => line.startsWith('skeleton/states: the family does not declare this axis')), axes.join(' | '));
     assert.ok(axes.some((line) => line.startsWith('skeleton/depth: the family does not declare this axis')), axes.join(' | '));
   });
 
@@ -3015,9 +3034,12 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
   });
 
   it('the scene carries the mounts only when the law is on, and the report names each gate line', () => {
-    const elements = familyElements(ROOT, Object.keys(REAL_RENDER_MOUNTS));
+    const owners = [...new Set(Object.entries(REAL_RENDER_MOUNTS).map(([row, entry]) => entry.family ?? row))];
+    const elements = familyElements(ROOT, owners);
     const mounts = realRenderMountList(elements);
-    assert.deepEqual(mounts.map((mount) => mount.family).sort(), Object.keys(REAL_RENDER_MOUNTS).sort());
+    assert.deepEqual(mounts.map((mount) => mount.row).sort(), Object.keys(REAL_RENDER_MOUNTS).sort());
+    // A row keyed apart is a real render OF the family it names.
+    assert.equal(mounts.find((mount) => mount.row === 'tooltip-interactive').family, 'tooltip');
     assert.match(mounts.find((mount) => mount.family === 'skeleton-anatomy').markup, /^<table data-axis-real-host=""><tbody data-axis-real-host=""><tr /u);
     assert.deepEqual(realRenderMountList(elements, { applied: false }), []);
     const on = sceneHtml({ css: '', vertical: 'bithire', theme: 'light', elements, realRenders: mounts });
@@ -3026,7 +3048,8 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
     assert.match(on, /data-axis-real-render="dropdown" data-axis-real-axes="shape rhythm depth motion"/u);
     assert.doesNotMatch(off, /data-axis-real-render/u);
     const report = realRenderReport(mounts);
-    assert.equal(report.families, Object.keys(REAL_RENDER_MOUNTS).length);
+    assert.equal(report.rows, Object.keys(REAL_RENDER_MOUNTS).length);
+    assert.equal(report.families, owners.length);
     for (const row of Object.values(report.map)) {
       for (const gate of row.gates) assert.match(gate, /^src\/components\/.+\/index\.tsx:\d+$/u);
     }
@@ -3149,4 +3172,267 @@ describe('axis-difference BROWSER drill — the real-render mounts reach the pai
       /the real-render roster does not match the engines it names/u,
     );
   });
+});
+
+/**
+ * S1 -- THE STATES AXIS REACHES THE REAL-RENDER MOUNTS, AND THE SCENE STAMPS
+ * `focused`.
+ *
+ * Before S1 a real-render mount was read at REST only (law 4): the state stamp
+ * and the native forcing never touched it, so a family whose only state-gated
+ * paint sat on a mounted node never moved on states. Law 5 reads a mount that
+ * declares `states` under both halves, with the default scene's withholding
+ * laws, and law 3 still decides per cell. `focused` is the one kernel token
+ * the stamp left out.
+ */
+describe('axis-difference — S1: law 5 over a reading, the stamp contract, and the sixth state', () => {
+  const view = (reading, family, key) => probe.realRenderView(reading, family, key);
+  const transform = (value) => ({ transform: value });
+  const reading = ({ own, real, half = 'states', state = 'pressed' }) => ({
+    base: {},
+    [half]: { [state]: { f: { ...own, ...real }, [`f${REAL_RENDER_KEY.default}`]: own, [`f${REAL_RENDER_KEY.real}`]: real } },
+  });
+  const qualify = (arms, half = 'states') => probe.realRenderQualification({
+    before: reading({ ...arms[0], half, state: half === 'states' ? 'pressed' : 'active' }),
+    after: reading({ ...arms[1], half, state: half === 'states' ? 'pressed' : 'active' }),
+    family: 'f',
+    axis: 'states',
+  });
+
+  it('admits states as a real-render axis, but never at rest', () => {
+    assert.ok(REAL_RENDER_AXES.includes('states'));
+    assert.deepEqual([...probe.REAL_RENDER_RESTING_AXES], ['shape', 'rhythm', 'depth', 'motion']);
+  });
+
+  it('LAW 3 over states: the default mount must move on NEITHER half, and the real render on one', () => {
+    const still = transform('none');
+    const scale = (value) => transform(`matrix(${value}, 0, 0, ${value}, 0, 0)`);
+    assert.deepEqual(qualify([{ own: still, real: scale(0.98) }, { own: still, real: scale(0.94) }]), { qualified: true }, 'the stamp half moves the mount');
+    assert.deepEqual(qualify([{ own: still, real: scale(0.98) }, { own: still, real: scale(0.94) }], 'native'), { qualified: true }, 'the forced half moves the mount');
+    const moving = qualify([{ own: scale(0.98), real: scale(0.98) }, { own: scale(0.94), real: scale(0.94) }]);
+    assert.equal(moving.qualified, false);
+    assert.match(moving.reason, /default mount already MOVES on states \(the stamp half, transform\)/u);
+    const dead = qualify([{ own: still, real: scale(0.98) }, { own: still, real: scale(0.98) }]);
+    assert.equal(dead.qualified, false);
+    assert.match(dead.reason, /does not move on states under either half/u);
+    const rest = probe.realRenderQualification({ before: { base: {} }, after: { base: {} }, family: 'f', axis: 'states' });
+    assert.equal(rest.qualified, false, 'a resting reading carries no states verdict');
+  });
+
+  it('a view re-keys every state and every variant onto the family, and nothing else', () => {
+    const whole = { base: { 'f#default': { a: 1 } }, states: { hovered: { 'f#default': { b: 2 }, f: { b: 3 } } }, native: { hover: { 'f#real': { c: 4 } } } };
+    assert.deepEqual(view(whole, 'f', REAL_RENDER_KEY.default), {
+      base: { f: { a: 1 } }, states: { hovered: { f: { b: 2 } } }, native: { hover: { f: undefined } },
+    });
+  });
+
+  it('THE STAMP CONTRACT: a real mount is stamped only on the parts its engine hands `partAttributes`', () => {
+    assert.deepEqual(probe.realRenderStampedParts(REAL_RENDER_MOUNTS['drawer-compounds']), ['close-button']);
+    assert.deepEqual(probe.realRenderStampedParts(REAL_RENDER_MOUNTS.record), ['field', 'field-link-body']);
+    // The float-button trigger's `data-part` is literal: the engine never
+    // writes `data-state` on it, so it is reached by forcing alone.
+    assert.deepEqual(probe.realRenderStampedParts(REAL_RENDER_MOUNTS['float-button']), []);
+    const [mount] = realRenderMountList(new Map([['drawer-compounds', { classes: ['x'], attributes: {} }]]), {
+      roster: { 'drawer-compounds': REAL_RENDER_MOUNTS['drawer-compounds'] },
+    });
+    assert.match(sceneHtml({ css: '', vertical: 'bithire', theme: 'light', elements: new Map(), realRenders: [mount] }),
+      /data-axis-real-axes="shape motion states" data-axis-real-row="drawer-compounds" data-axis-real-stamped="close-button"/u);
+  });
+
+  it('MUTANT: a sibling-written stamp is read in the file it names, and drifts like any other', () => {
+    const source = 'src/components/structures/record/field-grid/index.tsx';
+    const drifted = (file) => {
+      const text = readFileSync(file, 'utf8');
+      return file.endsWith(source) ? text.replace('data-part="field-grid"', 'data-part="grid"') : text;
+    };
+    assert.deepEqual(realRenderRosterFailures(ROOT, { record: REAL_RENDER_MOUNTS.record }), []);
+    const failures = realRenderRosterFailures(ROOT, { record: REAL_RENDER_MOUNTS.record }, { readSource: drifted });
+    assert.ok(failures.some((line) => line === `record/attr:data-part=field-grid: ${source} no longer carries the stamp \`data-part="field-grid"\``), failures.join(' | '));
+  });
+
+  it('THE STOPPED ROW: stepper-compounds has no row, because the Modern Stepper never renders `.ds-stepper-step`', () => {
+    assert.equal(REAL_RENDER_MOUNTS['stepper-compounds'], undefined);
+    const engine = readFileSync(join(ROOT, 'src/components/primitives/navigation/stepper/engines/modern/index.tsx'), 'utf8');
+    assert.ok(!engine.includes('ds-stepper-step'), 'the Modern Stepper now writes .ds-stepper-step -- re-measure the stop');
+    assert.ok(!engine.includes('<StepperStep'), 'the Modern Stepper now renders StepperStep -- re-measure the stop');
+  });
+
+  it('every S1 row declares states only, on a family in the states population', () => {
+    const states = axisPopulations(ROOT).get('states');
+    for (const row of ['stats-grid-interactive', 'tooltip-interactive', 'stats-header', 'pattern-timeline', 'activity-log', 'avatar',
+      'layout', 'record', 'anchor', 'tree-view-connector', 'breadcrumb-compounds', 'typography']) {
+      const entry = REAL_RENDER_MOUNTS[row];
+      assert.deepEqual([...entry.axes], ['states'], row);
+      assert.ok(states.includes(entry.family ?? row), row);
+    }
+    for (const row of ['float-button', 'drawer-compounds', 'modal-compounds']) assert.ok(REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
+    // Measured and refused on 2026-09-30 (the real render does not move on
+    // states under either half), so they may not declare it.
+    for (const row of ['column-menu', 'command-palette']) assert.ok(!REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
+  });
+
+  it('THE SIXTH STATE: every kernel token is stamped, and a run without `focused` names it unstamped', () => {
+    const kernel = readFileSync(join(ROOT, 'src/foundation/behavior/kernel/anatomy/index.ts'), 'utf8');
+    const flags = /STATE_FLAG_ORDER[^=]*=\s*\[([^\]]*)\]/u.exec(kernel)[1].match(/'([A-Za-z]+)'/gu)
+      .map((flag) => flag.slice(1, -1).replace(/[A-Z]/gu, (letter) => `-${letter.toLowerCase()}`));
+    for (const flag of flags) assert.ok(STATE_VARIANTS.includes(flag), `${flag} is serialized by the kernel and not stamped`);
+    assert.equal(STATE_VARIANTS.at(-1), 'focused', 'appended last, so every earlier state reads as it did');
+    const css = ".r[data-state~='focused'] { opacity: 0.02; }";
+    assert.equal(stateRuleProbes(css)[0].reason, null);
+    const without = stateRuleProbes(css, { stamped: STATE_VARIANTS.filter((state) => state !== 'focused') });
+    assert.equal(without[0].reason, 'unstamped-state');
+    const cli = readFileSync(join(ROOT, 'scripts/check/theme/axis-difference/index.mjs'), 'utf8');
+    assert.ok(cli.includes("process.argv.includes('--no-focused-stamp')"));
+  });
+
+  it('a domain-gated rule stays refused on a mount: the stamp never writes the value it names', () => {
+    // Exact on a domain value: once the stamp appends its token the node no
+    // longer equals it, so the pair can never hold -- on a mount as anywhere.
+    const [probeRow] = stateRuleProbes(".ds-drill-pop [data-part='flagged'][data-state='error'][data-state~='pressed'] { transform: scale(0.5); }");
+    assert.equal(probeRow.reason, 'domain-state-value');
+  });
+});
+
+describe('axis-difference BROWSER drill — S1: a mount is read under the stamp AND under forcing', { skip: browserReason }, () => {
+  const ARM_A = { '--ds-state-press-scale': '0.9', '--ds-focus-ring-offset': '2px' };
+  const ARM_B = { '--ds-state-press-scale': '0.7', '--ds-focus-ring-offset': '4px' };
+  const properties = allProperties();
+  const axisOf = axisByProperty();
+  const POP = '<div class="ds-drill-pop" data-part="pop"><button type="button" data-part="knob"></button>'
+    + '<span data-part="lit"></span><i data-part="flagged" data-state="error"></i></div>';
+
+  /** Both halves of one drill scene, the default root plus one real mount, exactly as `run` separates them. */
+  const measure = async (context, css, { stampedParts = ['knob', 'flagged'], states = STATE_VARIANTS, realRender = true } = {}) => {
+    const realRenders = [{ family: 'drill', row: 'drill', axes: ['states'], stampedParts, markup: POP }];
+    const scene = sceneHtml({ css, vertical: 'bithire', theme: 'light', elements: new Map([['drill', DRILL_ELEMENT]]), realRenders });
+    const stampedPage = await context.newPage();
+    await stampedPage.setContent(scene, { waitUntil: 'load' });
+    const before = await measureCell({ page: stampedPage, variables: ARM_A, properties, axisOf, states, realRender });
+    const after = await measureCell({ page: stampedPage, variables: ARM_B, properties, axisOf, states, realRender });
+    await stampedPage.close();
+    const nativePage = await context.newPage();
+    await nativePage.setContent(scene, { waitUntil: 'load' });
+    const native = await measureNativeHalf({
+      page: nativePage, arms: [{ key: 'a', variables: ARM_A }, { key: 'b', variables: ARM_B }], properties, axisOf, realRender,
+    });
+    await nativePage.close();
+    before.native = native.readings.get('a');
+    after.native = native.readings.get('b');
+    return {
+      whole: statesHalves(before, after, 'drill'),
+      own: statesHalves(probe.realRenderView(before, 'drill', REAL_RENDER_KEY.default), probe.realRenderView(after, 'drill', REAL_RENDER_KEY.default), 'drill'),
+      real: statesHalves(probe.realRenderView(before, 'drill', REAL_RENDER_KEY.real), probe.realRenderView(after, 'drill', REAL_RENDER_KEY.real), 'drill'),
+      verdict: probe.realRenderQualification({ before, after, family: 'drill', axis: 'states' }),
+    };
+  };
+  const withBrowser = async (body) => {
+    const { browser, close } = await launchBrowser();
+    try {
+      return await body(await browser.newContext());
+    } finally {
+      await close();
+    }
+  };
+
+  it('the stamp half and the forced half each reach a mounted node; the pre-S1 reading reaches neither', async () => {
+    const STAMP = `${DRILL_ROOT_CSS}
+      .ds-drill-pop [data-part='knob'][data-state~='pressed'] { transform: scale(var(--ds-state-press-scale)); }`;
+    const FORCE = `${DRILL_ROOT_CSS}
+      .ds-drill-pop [data-part='knob']:focus-visible { outline-offset: var(--ds-focus-ring-offset); }`;
+    const [stamp, force, stampOff, forceOff] = await withBrowser(async (context) => [
+      await measure(context, STAMP), await measure(context, FORCE),
+      await measure(context, STAMP, { realRender: false }), await measure(context, FORCE, { realRender: false }),
+    ]);
+    assert.equal(stamp.real.stamped, 'transform', 'the stamp reached the kernel-stamped knob');
+    assert.equal(stamp.own.stamped, null, 'the default root paints nothing on states, or this drill proves nothing');
+    assert.deepEqual(stamp.verdict, { qualified: true });
+    assert.equal(force.real.native, 'outline-offset', 'the forcing reached the mounted knob');
+    assert.equal(force.real.stamped, null, 'a forced rule is not entered by the stamp');
+    assert.deepEqual(force.verdict, { qualified: true });
+    assert.deepEqual([stampOff.whole, forceOff.whole], [{ stamped: null, native: null }, { stamped: null, native: null }],
+      'with the mount unread under states, as before S1, neither half reaches it');
+  }, 120_000);
+
+  it('a node the engine never hands the kernel is never stamped, and is still forced', async () => {
+    const LIT = `${DRILL_ROOT_CSS}
+      .ds-drill-pop [data-part='lit'][data-state~='pressed'] { transform: scale(var(--ds-state-press-scale)); }
+      .ds-drill-pop [data-part='lit']:active { opacity: calc(var(--ds-state-press-scale) - 0.1); }`;
+    const lit = await withBrowser((context) => measure(context, LIT));
+    assert.equal(lit.real.stamped, null, 'a literal data-part was stamped: that is a fabricated configuration');
+    assert.equal(lit.real.native, 'opacity');
+  }, 120_000);
+
+  it('a domain-gated rule stays refused on a mount, and the mount is refused for carrying no signal', async () => {
+    const DOMAIN = `${DRILL_ROOT_CSS}
+      .ds-drill-pop [data-part='flagged'][data-state='error'][data-state~='pressed'] { transform: scale(var(--ds-state-press-scale)); }`;
+    const domain = await withBrowser((context) => measure(context, DOMAIN));
+    assert.deepEqual(domain.real, { stamped: null, native: null }, 'the stamp entered a rule gated on a value it never writes');
+    assert.equal(domain.verdict.qualified, false);
+    assert.match(domain.verdict.reason, /does not move on states under either half/u);
+  }, 120_000);
+
+  it('the `focused` stamp opens a rule gated on it; the five-state set does not', async () => {
+    const FOCUSED = `${DRILL_ROOT_CSS}
+      .ds-drill.ds-drill--modern[data-part='root'][data-state~='focused'] { transform: scale(var(--ds-state-press-scale)); }`;
+    const [six, five] = await withBrowser(async (context) => [
+      await measure(context, FOCUSED),
+      await measure(context, FOCUSED, { states: STATE_VARIANTS.filter((state) => state !== 'focused') }),
+    ]);
+    assert.equal(six.own.stamped, 'transform');
+    assert.equal(five.own.stamped, null, 'the rule moved without `focused` stamped, so this drill proves nothing');
+  }, 120_000);
+});
+
+describe('axis-difference BROWSER drill — S1: the states mounts inside a run', { skip: browserReason }, () => {
+  const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
+  const scenarios = [byId('states'), byId('palette-only')];
+
+  it('float-button and stats-header move on states through their mounts only; the control reads them and stays 0; no flag reproduces a move', async () => {
+    const families = ['float-button', 'stats-header'];
+    const on = await run({ verticals: ['bithire'], themes: ['light'], families, scenarios });
+    const off = await run({ verticals: ['bithire'], themes: ['light'], families, scenarios, realRenderMounts: false });
+    const cellOf = (measurement, id, axis) => measurement.cells.find((entry) => entry.scenario === id && entry.axis === axis);
+    const states = cellOf(on, 'states', 'states');
+    for (const family of families) {
+      assert.ok(states.realRender.rescued.includes(family), `${family}: ${JSON.stringify(states.realRender)}`);
+      assert.ok(!cellOf(off, 'states', 'states').movedIds.includes(family), `${family} moved on states without its mount`);
+    }
+    // float-button's trigger is literal (forcing alone); the stat card is
+    // kernel-stamped (both halves).
+    assert.equal(states.movedNative, 2);
+    assert.equal(states.movedStamped, 1);
+    const control = cellOf(on, 'palette-only', 'states');
+    assert.deepEqual([...control.realRender.credited].sort(), families);
+    assert.equal(control.moved, 0);
+    assert.equal(control.movedStamped, 0);
+    assert.equal(control.movedNative, 0);
+    assert.deepEqual(on.populations, off.populations, 'a mount may move a numerator, never a denominator');
+    assert.equal(on.realRender.map['stats-header'].statesReach.declared, true);
+    assert.deepEqual(evaluate(on), []);
+  }, 240_000);
+
+  it('MUTANT: a row declaring states where the default mount already moves is REFUSED, per cell, and named', async () => {
+    const roster = { ...REAL_RENDER_MOUNTS, dropdown: { ...REAL_RENDER_MOUNTS.dropdown, axes: [...REAL_RENDER_MOUNTS.dropdown.axes, 'states'] } };
+    const measurement = await run({ verticals: ['bithire'], themes: ['light', 'dark'], families: ['dropdown'], scenarios, realRenderRoster: roster });
+    const positives = measurement.cells.filter((entry) => entry.scenario === 'states');
+    assert.equal(positives.length, 2);
+    for (const cell of positives) {
+      const refusal = cell.realRender.refused.find((entry) => entry.family === 'dropdown');
+      assert.ok(refusal, `${cell.theme}: ${JSON.stringify(cell.realRender)}`);
+      assert.match(refusal.reason, /default mount already MOVES on states/u);
+      assert.ok(cell.movedIds.includes('dropdown'), 'the refused axis is still read on the default mount, which moves');
+      assert.ok(!cell.realRender.credited.includes('dropdown'));
+    }
+    const control = measurement.cells.find((entry) => entry.scenario === 'palette-only' && entry.axis === 'states');
+    assert.ok(!control.realRender.credited.includes('dropdown'), 'a control may not read a mount its positive refused');
+    const failures = evaluate(measurement);
+    for (const theme of ['light', 'dark']) {
+      assert.ok(failures.some((line) => line.startsWith(`dropdown: its real-render mount was REFUSED on states in bithire/${theme} states`)), failures.join(' | '));
+    }
+  }, 240_000);
+
+  it('`statesFocused: false` reproduces the five-state set', async () => {
+    const measurement = await run({ verticals: ['bithire'], themes: ['light'], families: ['record'], scenarios: [byId('states')], statesFocused: false, nativePseudos: false });
+    assert.deepEqual(measurement.limits.states.stampedStates, ['hovered', 'pressed', 'selected', 'focus-visible', 'disabled']);
+  }, 120_000);
 });
