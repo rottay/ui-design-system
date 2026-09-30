@@ -15,10 +15,10 @@
     "failClosed": "every expression the scanner cannot resolve is ONE ROW in unknownProvenance. Under STRICT a missing producer ADMITS a fallback branch and can LOWER debt, so under-counting producers can buy a false green: it is not a safe approximation and is never treated as one."
   },
   "inputsDigest": {
-    "cssEdges": "98fdb2411023e7abe79c48ea33984cf9c15cbb56b59d80d7d7db1f36a9d79810",
+    "cssEdges": "c23e21ead0bb29bc81d6b0ba6c3b36c8b8887f44ce343a25a68934dada317074",
     "cascadeRoots": "cc6fcf8b9bffd91b1f2572dd817593fe5b747b1c4892ebf15e45480059c96856",
     "rootCatalog": "8f22e285b34483d8fab7e69686a01a6704985abbd05d5c97be2d63152db0ad0f",
-    "srcTsx": "26ab65548fd2507dd402629ffe41a23f80c03b6a90aecbfabe6dc0bc1977e588",
+    "srcTsx": "2d0a37bf359596eaee7365fa2c0646d6d8255403cf96479b9181b91238178df1",
     "srcCompilers": "d1298bd67955e49b3e2c53b413b1c88246dedd2c0f8df1ea6b1d1ecd2211f4a9",
     "artifacts": "f5011a42d6e446f301589012ee138bbaa45930eff897f713fe0b42b566d2d670"
   },
@@ -96,7 +96,7 @@
     },
     "measuredCensus": {
       "scannedFiles": 2001,
-      "excludedFiles": 2138,
+      "excludedFiles": 2139,
       "styleSinks": 3164,
       "stampSites": 377,
       "distinctCustomProperties": 249,
@@ -113,8 +113,8 @@
       },
       "excludedFiles": {
         "authored": 1664,
-        "measured": 2138,
-        "delta": 474
+        "measured": 2139,
+        "delta": 475
       },
       "styleSinks": {
         "authored": 3283,
@@ -73710,6 +73710,6 @@
   "provenance": {
     "producedBy": "cascade:producers --write",
     "writtenOn": "2026-09-30",
-    "contentDigest": "ea1826d7431307fa43ef7c0e4aac26812c75866554a4cb97ef3ec96a30b26932"
+    "contentDigest": "5dc488e4be59d04aa4cd5b982bf97230b8ee9ff5710215eca92294dc11df33d6"
   }
 }
