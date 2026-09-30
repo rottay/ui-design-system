@@ -2862,39 +2862,30 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
     assert.ok(axes.some((line) => line.startsWith('skeleton/depth: the family does not declare this axis')), axes.join(' | '));
   });
 
-  it('LAW 3 over a reading: the default must compute what a bare node does, and the real render must not', () => {
-    const blank = { 'border-top-left-radius': '0px', 'border-top-right-radius': '0px', 'border-bottom-left-radius': '0px', 'border-bottom-right-radius': '0px' };
-    const radius = (value) => Object.fromEntries(Object.keys(blank).map((property) => [property, value]));
+  it('LAW 3 over a reading: the default must not MOVE between the arms, and the real render must', () => {
+    const motion = (value) => ({ 'transition-duration': value, 'animation-duration': value });
     const reading = (own, real) => ({
-      base: {
-        [REAL_RENDER_KEY.blank]: blank,
-        [`f${REAL_RENDER_KEY.default}`]: own,
-        [`f${REAL_RENDER_KEY.real}`]: real,
-      },
+      base: { [`f${REAL_RENDER_KEY.default}`]: own, [`f${REAL_RENDER_KEY.real}`]: real },
     });
-    const qualifies = realRenderQualification({
-      before: reading(radius('0px'), radius('0px | 4px')),
-      after: reading(radius('0px'), radius('0px | 6px')),
+    const qualify = (ownA, ownB, realA, realB) => realRenderQualification({
+      before: reading(motion(ownA), motion(realA)),
+      after: reading(motion(ownB), motion(realB)),
       family: 'f',
-      axis: 'shape',
+      axis: 'motion',
     });
-    assert.deepEqual(qualifies, { qualified: true });
-    const painted = realRenderQualification({
-      before: reading(radius('0px | 2px'), radius('4px')),
-      after: reading(radius('0px | 2px'), radius('6px')),
-      family: 'f',
-      axis: 'shape',
-    });
-    assert.equal(painted.qualified, false);
-    assert.match(painted.reason, /default mount already paints border-top-left-radius = 2px/u);
-    const empty = realRenderQualification({
-      before: reading(radius('0px'), radius('0px')),
-      after: reading(radius('0px'), radius('0px')),
-      family: 'f',
-      axis: 'shape',
-    });
-    assert.equal(empty.qualified, false);
-    assert.match(empty.reason, /the real render paints nothing on shape/u);
+    assert.deepEqual(qualify('0s', '0s', '0.096s', '0.156s'), { qualified: true }, 'a root that paints nothing qualifies');
+    assert.deepEqual(
+      qualify('0.2s', '0.2s', '0.096s', '0.156s'),
+      { qualified: true },
+      'a root painting a FIXED value carries no axis signal, so it does not block the mount',
+    );
+    const moving = qualify('0.096s', '0.156s', '0.096s', '0.156s');
+    assert.equal(moving.qualified, false, 'a root that already MOVES never gets the mount');
+    assert.match(moving.reason, /default mount already MOVES on transition-duration \(0\.096s -> 0\.156s\)/u);
+    const still = qualify('0.2s', '0.2s', '0.2s', '0.2s');
+    assert.equal(still.qualified, false);
+    assert.match(still.reason, /the real render does not move on motion/u);
+    assert.equal(realRenderQualification({ before: { base: {} }, after: { base: {} }, family: 'f', axis: 'motion' }).qualified, false);
   });
 
   it('the scene carries the mounts and the bare node only when the law is on, and the report names each gate line', () => {
@@ -2905,9 +2896,9 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
     assert.deepEqual(realRenderMountList(elements, { applied: false }), []);
     const on = sceneHtml({ css: '', vertical: 'bithire', theme: 'light', elements, realRenders: mounts });
     const off = sceneHtml({ css: '', vertical: 'bithire', theme: 'light', elements });
-    assert.match(on, /data-axis-blank=""/u);
     assert.match(on, /data-axis-real-render="skeleton" data-axis-real-axes="shape rhythm motion"/u);
-    assert.doesNotMatch(off, /data-axis-real-render|data-axis-blank/u);
+    assert.match(on, /data-axis-real-render="dropdown" data-axis-real-axes="shape rhythm depth motion"/u);
+    assert.doesNotMatch(off, /data-axis-real-render/u);
     const report = realRenderReport(mounts);
     assert.equal(report.families, 4);
     for (const row of Object.values(report.map)) {
@@ -2949,11 +2940,17 @@ describe('axis-difference BROWSER drill — the real-render mounts reach the pai
     }
     const rhythmOn = on.cells.find((entry) => entry.scenario === 'rhythm');
     assert.ok(rhythmOn.realRender.rescued.includes('skeleton-anatomy'));
-    assert.ok(!rhythmOn.movedIds.includes('tooltip'), 'the bordered tooltip paddings are fixed; a move would be a reading of something else');
     assert.equal(on.realRender.applied, true);
     assert.equal(off.realRender.applied, false);
     assert.equal(off.realRender.families, 0);
     assert.deepEqual(on.populations, off.populations, 'a mount may move a numerator, never a denominator');
+    // The control is decided by its axis's own positive, and then reads the
+    // credited mounts: its 0 % covers those nodes, not only the default ones.
+    const paletteShape = on.cells.find((entry) => entry.scenario === 'palette-only' && entry.axis === 'shape');
+    assert.deepEqual([...paletteShape.realRender.credited].sort(), ['dropdown', 'skeleton', 'tooltip']);
+    assert.deepEqual(paletteShape.realRender.refused, []);
+    const paletteDepth = on.cells.find((entry) => entry.scenario === 'palette-only' && entry.axis === 'depth');
+    assert.deepEqual([...paletteDepth.realRender.undecided].sort(), ['dropdown', 'tooltip'], 'no depth positive ran, so the mount is left unread');
     for (const entry of on.cells.filter((item) => item.kind === 'negative')) {
       assert.equal(entry.evidential, true);
       assert.equal(entry.moved, 0, `${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
@@ -2961,28 +2958,42 @@ describe('axis-difference BROWSER drill — the real-render mounts reach the pai
     assert.deepEqual(evaluate(on), []);
   });
 
-  it('MUTANT: a row that declares an axis its default root already paints is REFUSED and never credited', async () => {
-    // The tooltip root runs `ds-tooltip-enter` from the personality layer, so
-    // its default mount already paints motion: declaring it must not count.
-    const roster = {
-      ...REAL_RENDER_MOUNTS,
-      tooltip: { ...REAL_RENDER_MOUNTS.tooltip, axes: [...REAL_RENDER_MOUNTS.tooltip.axes, 'motion'] },
-    };
+  it('a root painting a FIXED motion value qualifies: dropdown and tooltip are credited on motion through their real render', async () => {
+    // Both roots run a constant enter animation from the personality layer
+    // (0.2s, 0.15s); identical in both arms, it carries no motion signal.
+    const on = await run({ verticals: ['bithire'], themes: ['light'], families: ['dropdown', 'tooltip'], scenarios: [byId('motion')], nativePseudos: false });
+    const off = await run({ verticals: ['bithire'], themes: ['light'], families: ['dropdown', 'tooltip'], scenarios: [byId('motion')], nativePseudos: false, realRenderMounts: false });
+    const motionOn = on.cells.find((entry) => entry.scenario === 'motion');
+    const motionOff = off.cells.find((entry) => entry.scenario === 'motion');
+    for (const family of ['dropdown', 'tooltip']) {
+      assert.ok(motionOn.realRender.credited.includes(family), JSON.stringify(motionOn.realRender));
+      assert.ok(motionOn.realRender.rescued.includes(family), `${family} did not move on motion through its real render`);
+      assert.ok(!motionOff.movedIds.includes(family), `${family} moved on motion WITHOUT its real render, so this drill proves nothing`);
+    }
+    assert.deepEqual(evaluate(on), []);
+  });
+
+  it('MUTANT: a row that declares an axis its default mount already MOVES on is REFUSED and never credited as a rescue', async () => {
+    // `skeleton-anatomy`'s bone part already moves on shape, so a mount there
+    // could only restate a move the family has.
+    const anatomy = REAL_RENDER_MOUNTS['skeleton-anatomy'];
+    const roster = { ...REAL_RENDER_MOUNTS, 'skeleton-anatomy': { ...anatomy, axes: [...anatomy.axes, 'shape'] } };
     const measurement = await run({
       verticals: ['bithire'],
       themes: ['light'],
-      families: ['tooltip'],
-      scenarios: [byId('motion')],
+      families: ['skeleton-anatomy'],
+      scenarios: [byId('shape')],
       nativePseudos: false,
       realRenderRoster: roster,
     });
-    const motion = measurement.cells.find((entry) => entry.scenario === 'motion');
-    const refusal = motion.realRender.refused.find((entry) => entry.family === 'tooltip');
-    assert.ok(refusal, JSON.stringify(motion.realRender));
-    assert.match(refusal.reason, /default mount already paints animation-duration/u);
-    assert.ok(!motion.realRender.credited.includes('tooltip'));
-    assert.ok(!motion.movedIds.includes('tooltip'), 'a refused mount was credited');
-    assert.ok(evaluate(measurement).some((line) => line.startsWith('tooltip: its real-render mount was REFUSED on motion')));
+    const shape = measurement.cells.find((entry) => entry.scenario === 'shape');
+    const refusal = shape.realRender.refused.find((entry) => entry.family === 'skeleton-anatomy');
+    assert.ok(refusal, JSON.stringify(shape.realRender));
+    assert.match(refusal.reason, /default mount already MOVES on border-/u);
+    assert.ok(!shape.realRender.credited.includes('skeleton-anatomy'));
+    assert.ok(!shape.realRender.rescued.includes('skeleton-anatomy'));
+    assert.ok(shape.movedIds.includes('skeleton-anatomy'), 'the refused axis is still read on the default mount, which moves');
+    assert.ok(evaluate(measurement).some((line) => line.startsWith('skeleton-anatomy: its real-render mount was REFUSED on shape')));
   });
 
   it('MUTANT: a drifted roster is refused before anything is mounted', async () => {

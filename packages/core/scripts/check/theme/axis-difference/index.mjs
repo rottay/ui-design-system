@@ -780,14 +780,19 @@ export function asRenderedReport(elements, { applied = true, roster = AS_RENDERE
  *     carrying no class and no attribute.
  *  3. THE FAMILY QUALIFIES PER AXIS, IN THE BROWSER. A mount is read on an
  *     axis only where the family's default mount -- root plus the parts that
- *     axis grafted -- computes EXACTLY what a node no family rule selects
- *     computes, in both arms of the cell, and the real render computes
- *     something else. Anything less is a refusal, published per cell and
- *     failed by `evaluate`, and the refused axis is read on the default mount
- *     alone. The axes are the four whose properties do not inherit (shape,
- *     rhythm, depth, motion): there "paints nothing" is a computed fact.
- *     Typography inherits, so a root that paints nothing still reads the
- *     tenant's type; states has its own two halves.
+ *     axis grafted -- paints nothing THAT MOVES on it: every property of the
+ *     axis computes the same value in both arms of the cell, and the real
+ *     render computes a different one. The unit of this instrument is an
+ *     attributable difference, so a root painting a FIXED constant (a literal
+ *     enter animation, say) carries no axis signal and does not block the
+ *     mount, while a root that already MOVES on the axis does -- there the
+ *     mount could only restate a move the family already has. Anything less
+ *     is a refusal, published per cell with what the real render alone would
+ *     have read, failed by `evaluate`, and the refused axis is read on the
+ *     default mount alone. The axes are the four whose properties do not
+ *     inherit (shape, rhythm, depth, motion); typography inherits, so every
+ *     default root already moves with the tenant's type, and states has its
+ *     own two halves.
  *  4. THE READING IS A STRICT SUPERSET. The mount is read at REST, on its
  *     declared axes only, beside the default mount -- never instead of it --
  *     so nothing that moved before can stop moving, the state stamp and the
@@ -883,7 +888,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   tooltip: Object.freeze({
     state: Object.freeze({
       name: 'the present bubble of a default tooltip (anchor-css branch: inline under its root) -- the node that '
-        + 'carries radius, padding and elevation',
+        + 'carries radius, padding, elevation and the enter transition',
       source: TOOLTIP_ENGINE,
       anchors: Object.freeze([
         'hasRenderableContent &&\n      present &&\n      mounted ? (',
@@ -891,9 +896,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       ]),
       resolves: Object.freeze([]),
     }),
-    // Not motion: the root already runs `ds-tooltip-enter` from
-    // `runtime/personality` (0.15s), so law 3 refuses it there.
-    axes: Object.freeze(['shape', 'rhythm', 'depth']),
+    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion']),
     markup: '<div class="ds-tooltip ds-tooltip--modern" data-part="root" data-disabled="false" data-open="true" '
       + 'data-trigger="hover"><div role="tooltip" class="ds-tooltip-bubble" data-part="bubble" data-tone="default" '
       + 'data-variant="bordered" data-placement="top" data-preferred-placement="top" data-radius="md" '
@@ -964,7 +967,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   dropdown: Object.freeze({
     state: Object.freeze({
       name: 'the open menu of a default dropdown (in-tree surface: no `getPopupContainer`) with a group label, two '
-        + 'items and a divider -- the surface and items carry radius, padding and elevation',
+        + 'items and a divider -- the surface and items carry radius, padding, elevation and the enter animation',
       source: DROPDOWN_ENGINE,
       anchors: Object.freeze([
         'const { shouldRender, dataState, ref: presenceRef } = usePresence(isOpen && hasItems);',
@@ -975,9 +978,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
         Object.freeze({ source: 'src/graphics/motion/react/runtime/presence/index.ts', text: "dataState: present ? 'open' : 'closed'," }),
       ]),
     }),
-    // Not motion: the trigger root already runs `ds-dropdown-enter` from
-    // `runtime/personality` (0.2s), so law 3 refuses it there.
-    axes: Object.freeze(['shape', 'rhythm', 'depth']),
+    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion']),
     markup: '<div data-part="trigger" data-open="true" data-placement="bottomLeft" class="ds-dropdown ds-dropdown--modern">'
       + '<span data-part="trigger-content"></span>'
       + '<div data-part="surface" data-open="true" data-placement="bottomLeft" class="ds-dropdown-surface">'
@@ -1174,35 +1175,33 @@ export function realRenderReport(mounts, { applied = true, roster = REAL_RENDER_
 }
 
 /** The pseudo-family keys a reading carries for a mounted family: its default mount alone, and its real render alone. */
-export const REAL_RENDER_KEY = Object.freeze({ default: '#default', real: '#real', blank: '#blank' });
+export const REAL_RENDER_KEY = Object.freeze({ default: '#default', real: '#real' });
 
 /**
- * Law 3 over one cell: does the default mount compute what a bare node
- * computes on every property of the axis, in both arms, while the real render
- * computes something else in at least one? Returns the verdict and, when
- * refused, the first reading that refused it.
+ * Law 3 over one cell: is the default mount's paint on the axis identical in
+ * both arms, while the real render's differs? Returns the verdict and, when
+ * refused, the reading that refused it.
  */
 export function realRenderQualification({ before, after, family, axis }) {
-  let realPaints = false;
-  for (const [arm, reading] of [['A', before.base], ['B', after.base]]) {
-    const blank = reading?.[REAL_RENDER_KEY.blank];
-    const own = reading?.[`${family}${REAL_RENDER_KEY.default}`];
-    const real = reading?.[`${family}${REAL_RENDER_KEY.real}`];
-    if (!blank || !own || !real) return { qualified: false, reason: `arm ${arm} carries no real-render reading` };
-    for (const property of AXES[axis].computed) {
-      const painted = own[property].split(' | ').find((value) => value !== blank[property]);
-      if (painted !== undefined) {
-        return {
-          qualified: false,
-          reason: `its default mount already paints ${property} = ${painted} (a bare node computes ${blank[property]}) in arm ${arm}`,
-        };
-      }
-      if (real[property].split(' | ').some((value) => value !== blank[property])) realPaints = true;
+  const at = (reading, key) => reading?.base?.[`${family}${key}`];
+  const [ownA, ownB, realA, realB] = [
+    at(before, REAL_RENDER_KEY.default), at(after, REAL_RENDER_KEY.default),
+    at(before, REAL_RENDER_KEY.real), at(after, REAL_RENDER_KEY.real),
+  ];
+  if (!ownA || !ownB || !realA || !realB) return { qualified: false, reason: 'a cell arm carries no real-render reading' };
+  let realMoves = false;
+  for (const property of AXES[axis].computed) {
+    if (ownA[property] !== ownB[property]) {
+      return {
+        qualified: false,
+        reason: `its default mount already MOVES on ${property} (${ownA[property]} -> ${ownB[property]}); the mount could only restate a move the family has`,
+      };
     }
+    if (realA[property] !== realB[property]) realMoves = true;
   }
-  return realPaints
+  return realMoves
     ? { qualified: true }
-    : { qualified: false, reason: `the real render paints nothing on ${axis} either -- the mount carries no paint for the axis it was declared for` };
+    : { qualified: false, reason: `the real render does not move on ${axis} either -- the mount carries no signal for the axis it was declared for` };
 }
 
 /**
@@ -2077,12 +2076,8 @@ export function sceneHtml({ css, vertical, theme, elements, mounts = null, partM
       return `<div data-axis-family="${family}" class="${classAttribute}"${extra}>${partTreeHtml(parts)}</div>`;
     })
     .join('\n');
-  // Law 3's reference: a node no family rule selects, read beside the mounts
-  // so "paints nothing" is a computed comparison and not a table of initials.
-  const real = realRenders.length === 0
-    ? ''
-    : '\n<div data-axis-blank=""></div>' + realRenders.map((mount) =>
-      `\n<div data-axis-real-render="${mount.family}" data-axis-real-axes="${mount.axes.join(' ')}">${mount.markup}</div>`).join('');
+  const real = realRenders.map((mount) =>
+    `\n<div data-axis-real-render="${mount.family}" data-axis-real-axes="${mount.axes.join(' ')}">${mount.markup}</div>`).join('');
   return `<!doctype html><html ${attributes}><head><style>${css}</style></head>`
     + `<body><div id="axis-scene">${nodes}${real}</div></body></html>`;
 }
@@ -2372,14 +2367,10 @@ const readComputed = ({ properties, axisOf, depth = null, realRender = false, ke
   }
   // The real-render mounts, read at REST only (a state or native pass leaves
   // `realRender` off) and only for the axes their row declares. The family's
-  // own reading gains them; its default mount alone, the real render alone and
-  // the bare node are published beside it so law 3 is decided off the same
-  // reading the numerator is taken from.
+  // own reading gains them; its default mount alone and the real render alone
+  // are published beside it so law 3 is decided off the same reading the
+  // numerator is taken from.
   if (realRender) {
-    const blank = document.querySelector('[data-axis-blank]');
-    if (blank !== null) {
-      out[keys.blank] = Object.fromEntries(properties.map((property) => [property, styleOf(blank).getPropertyValue(property)]));
-    }
     for (const container of document.querySelectorAll('[data-axis-real-render]')) {
       const family = container.getAttribute('data-axis-real-render');
       if (out[family] === undefined) continue;
@@ -2655,9 +2646,7 @@ export async function measureCell({
   const unsettled = new Set();
   const collect = async (plan = {}) => {
     const reading = await readSettled(page, { properties, axisOf, ...plan });
-    for (const key of reading.unsettled) {
-      if (key !== REAL_RENDER_KEY.blank) unsettled.add(key.split('#')[0]);
-    }
+    for (const key of reading.unsettled) unsettled.add(key.split('#')[0]);
     return reading.values;
   };
   const base = await collect(realRender ? { realRender: true, keys: REAL_RENDER_KEY } : {});
@@ -3399,6 +3388,39 @@ export function vacuousReasonsByCell(cells) {
   return [...byCell];
 }
 
+const PENDING_REAL = Symbol('pending real-render verdicts');
+
+/**
+ * A control cell reads a real-render mount exactly where the axis's positive,
+ * in the same vertical and mode, credited it -- so the control's 0 % covers the
+ * mounted nodes too. Where no positive of that axis ran, the mount is left
+ * unread and named `undecided`, which is the pre-lot reading.
+ */
+function resolvePendingRealRenders(cells) {
+  for (const cell of cells) {
+    const record = cell[PENDING_REAL];
+    if (record === undefined) continue;
+    delete cell[PENDING_REAL];
+    const positives = cells.filter((entry) => entry.kind === 'positive' && entry.axis === cell.axis && entry.realRender);
+    for (const { family, combined, alone } of record.pending) {
+      const refused = positives.some((entry) => entry.realRender.refused.some((row) => row.family === family));
+      if (!refused && positives.some((entry) => entry.realRender.credited.includes(family))) {
+        cell.realRender.credited.push(family);
+        if (combined && !alone) cell.realRender.rescued.push(family);
+        const at = record.moved.findIndex((entry) => entry.family === family);
+        if (combined && at < 0) record.moved.push({ family, property: combined });
+        if (!combined && at >= 0) record.moved.splice(at, 1);
+      } else if (!refused) {
+        cell.realRender.undecided.push(family);
+      }
+    }
+    cell.moved = record.moved.length;
+    cell.percent = cell.denominator === 0 ? 0 : (record.moved.length / cell.denominator) * 100;
+    cell.movedFamilies = record.moved.slice(0, 12);
+    cell.movedIds = record.moved.map((entry) => entry.family);
+  }
+}
+
 export async function run({
   verticals = ['bithire', 'evnto', 'rottay'],
   themes = ['light', 'dark'],
@@ -3696,14 +3718,22 @@ export async function run({
             const denominator = effective(axis);
             const moved = [];
             const halves = axis === 'states' ? { stamped: [], native: [] } : null;
-            const real = { credited: [], rescued: [], refused: [] };
+            const real = { credited: [], rescued: [], refused: [], undecided: [] };
+            const pending = [];
             for (const family of denominator) {
               let property;
               if (realRenderAxes.get(family)?.includes(axis)) {
-                const verdict = realRenderQualification({ before, after, family, axis });
                 const alone = (reading) => ({ base: { [family]: reading.base?.[`${family}${REAL_RENDER_KEY.default}`] } });
                 const withoutReal = differsOnAxis(axis, alone(before), alone(after), family);
-                if (verdict.qualified) {
+                // Law 3 is decided on the axis's OWN positive pair: a control
+                // moves nothing by design, so it takes that verdict below.
+                const verdict = scenario.kind === 'positive' && scenario.axis === axis
+                  ? realRenderQualification({ before, after, family, axis })
+                  : null;
+                if (verdict === null) {
+                  pending.push({ family, combined: differsOnAxis(axis, before, after, family), alone: withoutReal });
+                  property = withoutReal;
+                } else if (verdict.qualified) {
                   real.credited.push(family);
                   property = differsOnAxis(axis, before, after, family);
                   if (property && !withoutReal) real.rescued.push(family);
@@ -3777,6 +3807,7 @@ export async function run({
               // The real-render mounts this cell read (law 3 passed), the
               // families that moved ONLY through them, and every refusal.
               ...(realRenders.length === 0 ? {} : { realRender: real }),
+              ...(pending.length === 0 ? {} : { [PENDING_REAL]: { pending, moved } }),
               // The two halves of the states axis, each published beside the
               // union the percentage is taken from.
               ...(halves === null ? {} : {
@@ -3788,6 +3819,7 @@ export async function run({
             });
           }
         }
+        resolvePendingRealRenders(cells.filter((entry) => entry.vertical === vertical && entry.theme === theme));
         await page.close();
       }
     }
@@ -4046,7 +4078,7 @@ export function evaluate(result, {
       failures.push(
         `${refusal.family}: its real-render mount was REFUSED on ${cell.axis} in ${cell.vertical}/${cell.theme} `
         + `${cell.scenario} -- ${refusal.reason}; REAL_RENDER_MOUNTS may declare an axis only where the default `
-        + 'mount paints nothing and the real render paints',
+        + 'mount paints nothing that moves between the arms and the real render moves',
       );
     }
   }
