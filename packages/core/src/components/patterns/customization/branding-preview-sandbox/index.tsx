@@ -59,6 +59,7 @@ import {
 } from '@/infrastructure/compilers/runtime/theme';
 import { containerScope } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
 import { emitThemeCss } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
+import { containerReach } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
 import { isSafePreviewCssValue } from '@/infrastructure/runtime/tenant/runtime/preview-scope';
 
 interface BrandingPreviewSandboxProps {
@@ -89,6 +90,55 @@ interface BrandingPreviewSandboxProps {
 }
 
 /**
+ * The channels the preview scope states.
+ *
+ * The scope is a box BELOW the document root, so every compiled channel the
+ * root states arrives already resolved against the root's operands. A text diff
+ * keeps only the channels the appearance rewrites; a compiled `var()` channel
+ * whose operand moved keeps its text and would paint the root's value. So the
+ * scope also carries every compiled channel that reads a moved one through any
+ * chain the root holds, compiled or root alias (`containerReach`), with its
+ * proposed text. Stating the whole proposed map instead would be ~220 kB of
+ * declarations and would pin the base text over the root's dark-mode rules.
+ */
+export function previewScopeVariables(
+  proposed: Readonly<Record<string, string>>,
+  untouched: Readonly<Record<string, string>>,
+): Record<string, string> {
+  const vars: Record<string, string> = {};
+  for (const [name, value] of Object.entries(proposed)) {
+    if (untouched[name] !== value) vars[name] = value;
+  }
+  for (const name of containerReach(Object.keys(vars), proposed)) {
+    const value = proposed[name];
+    if (value !== undefined && !(name in vars)) vars[name] = value;
+  }
+  return vars;
+}
+
+/**
+ * The preview scope's CSS, through the emission owner's container law: the
+ * root aliases the stated channels re-resolve are restated in the scope, and
+ * `outright` (what the enclosing root's own rule states) is never overridden
+ * with a root text.
+ */
+export function previewScopeCss(
+  variables: Readonly<Record<string, string>>,
+  outright: Iterable<string>,
+  scopeSelector: string,
+): string {
+  return emitThemeCss(
+    {
+      cssVariables: variables,
+      modeBlocks: [],
+      runtime: { personality: {}, tokenOverrides: {} },
+    },
+    containerScope(scopeSelector),
+    { container: { outright } },
+  );
+}
+
+/**
  * Live preview sandbox for tenant branding changes.
  * Renders representative DS primitives in an isolated CSS scope.
  */
@@ -114,14 +164,16 @@ export function BrandingPreviewSandbox({
    * The appearance is migrated into the same `ThemeLayerPatch` a stored tenant
    * document produces, resolved over the baseline as a `preview` intent, and
    * lowered by `compileTheme`. What the sandbox paints is the DELTA against the
-   * untouched baseline — the same rule the DB artifact uses — so the scope still
-   * carries exactly the channels the appearance moves and nothing else.
+   * untouched baseline — the same rule the DB artifact uses — plus the compiled
+   * channels that read a moved one (`previewScopeVariables`), because this scope
+   * sits below the root and inherits their root-resolved values otherwise.
    *
    * Fail-closed: a document the migration refuses paints nothing rather than
    * falling back to a second, hand-rolled projection.
    */
-  const cssVars = useMemo(() => {
-    const vars: Record<string, string> = {};
+  const { cssVars, outright } = useMemo(() => {
+    let vars: Record<string, string> = {};
+    let stated: readonly string[] = [];
     const document: TenantThemeDocument = appearance.advanced
       ? {
           schemaVersion: TENANT_THEME_SCHEMA_VERSION,
@@ -146,13 +198,12 @@ export function BrandingPreviewSandbox({
       const untouched = compileThemeIntent(
         staticThemeIntent(vertical, slug),
       ).compiled;
-      for (const [name, value] of Object.entries(proposed.cssVariables)) {
-        if (untouched.cssVariables[name] !== value) vars[name] = value;
-      }
+      vars = previewScopeVariables(proposed.cssVariables, untouched.cssVariables);
+      stated = Object.keys(untouched.cssVariables);
     } catch {
       // An unmigratable appearance is a refused preview, never a second door.
     }
-    return vars;
+    return { cssVars: vars, outright: stated };
   }, [appearance, vertical, slug]);
 
   // This string reaches dangerouslySetInnerHTML, so every declaration passes
@@ -169,15 +220,8 @@ export function BrandingPreviewSandbox({
   // assembles its own declarations is a second CSS grammar to keep in step.
   const scopedCss = useMemo(() => {
     if (appliedVars.length === 0) return '';
-    return emitThemeCss(
-      {
-        cssVariables: Object.fromEntries(appliedVars),
-        modeBlocks: [],
-        runtime: { personality: {}, tokenOverrides: {} },
-      },
-      containerScope(`[${scopeAttr}]`),
-    );
-  }, [appliedVars, scopeAttr]);
+    return previewScopeCss(Object.fromEntries(appliedVars), outright, `[${scopeAttr}]`);
+  }, [appliedVars, outright, scopeAttr]);
 
   return (
     <>

@@ -228,6 +228,34 @@ describe('BrandingPreviewSandbox customization anatomy createElement anatomy', (
     unmount();
     expect(container.children).toHaveLength(0);
   });
+
+  it('carries the compiled channels that read a moved one, and the left-out root aliases with their contexts', () => {
+    const { container, unmount } = render(
+      <StudioHarness engine="modern">
+        <BrandingPreviewSandbox vertical="bithire" appearance={SANDBOX_APPEARANCE} />
+      </StudioHarness>,
+    );
+    const css = container.querySelector('style')?.textContent ?? '';
+    const scope = container
+      .querySelector('.ds-pattern-branding-preview-sandbox')
+      ?.getAttributeNames()
+      .find((attribute) => attribute.startsWith('data-preview-'));
+
+    // Same text in both compiles, so a text diff drops them; each reads the
+    // moved primary through a chain the root holds (the avatar ring through a
+    // left-out root alias), so the scope must state them to re-resolve.
+    expect(css).toContain(
+      '--ds-toolbar-control-focus-ring: var(--ds-material-control-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent));',
+    );
+    expect(css).toContain('--ds-avatar-focus-ring: 0 0 0 var(--ds-avatar-focus-ring-offset)');
+    // A left-out alias takes the cascade-winning root text, and its context rule
+    // follows at the scope instead of being overridden by the bare restatement.
+    expect(css).toContain('--ds-shadow-focus-ring: 0 0 0 3px var(--ds-tint-24,');
+    expect(css).toContain(
+      `@media (prefers-reduced-motion: reduce) {\n:where(:root) [${scope}] {\n  --ds-shadow-glow-primary: none;\n}\n}`,
+    );
+    unmount();
+  });
 });
 
 describe('PatternBrandStudio customization anatomy anatomy and behavior', () => {

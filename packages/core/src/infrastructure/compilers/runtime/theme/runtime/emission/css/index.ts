@@ -13,7 +13,11 @@ import {
 } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
 import { admitCssVariables } from "@/infrastructure/compilers/kernel/foundation/css/value-safety";
 
-import { rootAliasRedeclarations } from "./root-aliases";
+import {
+  containerAliasRedeclarations,
+  type ContainerAliasContext,
+  rootAliasRedeclarations,
+} from "./root-aliases";
 
 export { containerScope, firstPartyScope, tenantArtifactScope };
 
@@ -91,6 +95,48 @@ export function sameElementNames(
   return blocks.flatMap((block) => Object.keys(admitCssVariables(block.cssVariables)));
 }
 
+/**
+ * A scope on an element BELOW the document root (the branding sandbox's
+ * `[data-preview-…]` box). Such a scope inherits every root alias already
+ * resolved at the root, including the ones a root-element scope must not
+ * restate, so it takes the container law (`containerAliasRedeclarations`).
+ * `outright` names the channels the enclosing root's own rule states (a
+ * vertical's compiled channels): their root text is never restated here.
+ */
+export interface ContainerEmission {
+  readonly outright?: Iterable<string>;
+}
+
+/** The selector a context rule is re-emitted at: the scope under a matching ancestor, or matching itself. */
+export function containerContextSelector(baseSelector: string, context: ContainerAliasContext): string {
+  const base = baseSelector.includes(",") ? `:is(${baseSelector})` : baseSelector;
+  const under = `:where(${context.selector}) ${base}`;
+  return context.rootOnly ? under : `${under}, ${base}:where(${context.selector})`;
+}
+
+/** The context rules, consecutive declarations of one context grouped, each wrapped in its at-rules. */
+export function emitContainerContextRules(
+  contexts: readonly ContainerAliasContext[],
+  scope: EmissionScope
+): string[] {
+  const groups: { context: ContainerAliasContext; lines: string[] }[] = [];
+  for (const context of contexts) {
+    const last = groups[groups.length - 1];
+    const line = `  ${context.name}: ${context.value};`;
+    if (last && last.context.selector === context.selector && last.context.at.join("\u0000") === context.at.join("\u0000")) {
+      last.lines.push(line);
+    } else {
+      groups.push({ context, lines: [line] });
+    }
+  }
+  return groups.map(({ context, lines }) =>
+    context.at.reduceRight(
+      (inner, prelude) => `${prelude} {\n${inner}\n}`,
+      emitRule(containerContextSelector(scope.baseSelector, context), lines)
+    )
+  );
+}
+
 /** One CSS rule from a selector and already-formatted declarations. */
 export function emitRule(selector: string, declarations: readonly string[]): string {
   return `${selector} {\n${declarations.join("\n")}\n}`;
@@ -108,14 +154,11 @@ export function emitRule(selector: string, declarations: readonly string[]): str
 export function emitBaseRule(
   compiled: ThemeCompilation,
   scope: EmissionScope,
-  options: { leadingDeclarations?: readonly string[] } = {}
+  options: { leadingDeclarations?: readonly string[]; container?: ContainerEmission } = {}
 ): string {
-  const entries = emitDeclarations(compiled.cssVariables, {
-    alsoStated: sameElementNames([
-      ...compiled.modeBlocks,
-      ...(compiled.contrastBlocks ?? []),
-    ]),
-  });
+  const alsoStated = sameElementNames([...compiled.modeBlocks, ...(compiled.contrastBlocks ?? [])]);
+  if (options.container) return emitContainerBaseRule(compiled, scope, alsoStated, options);
+  const entries = emitDeclarations(compiled.cssVariables, { alsoStated });
   const leading = options.leadingDeclarations ?? [];
   if (entries.length === 0 && leading.length === 0 && !compiled.colorScheme) return "";
   return emitRule(scope.baseSelector, [
@@ -123,6 +166,32 @@ export function emitBaseRule(
     ...leading,
     ...entries,
   ]);
+}
+
+/** The base rule at a container scope, then the context rules its restatements carry. */
+function emitContainerBaseRule(
+  compiled: ThemeCompilation,
+  scope: EmissionScope,
+  alsoStated: readonly string[],
+  options: { leadingDeclarations?: readonly string[]; container?: ContainerEmission }
+): string {
+  const variables = admitCssVariables(compiled.cssVariables);
+  const own = Object.keys(variables);
+  const { declarations, contexts } = containerAliasRedeclarations(
+    [...own, ...alsoStated],
+    new Set([...own, ...(options.container?.outright ?? [])])
+  );
+  const entries = Object.entries({ ...variables, ...declarations }).map(([name, value]) => `  ${name}: ${value};`);
+  const leading = options.leadingDeclarations ?? [];
+  if (entries.length === 0 && leading.length === 0 && !compiled.colorScheme) return "";
+  return [
+    emitRule(scope.baseSelector, [
+      ...(compiled.colorScheme ? [`  color-scheme: ${compiled.colorScheme};`] : []),
+      ...leading,
+      ...entries,
+    ]),
+    ...emitContainerContextRules(contexts, scope),
+  ].join("\n\n");
 }
 
 /** One compiled mode's rule at a scope. */
@@ -188,10 +257,17 @@ export function emitDensityScopeRule(
  * base block is the empty string when it carries neither entries nor a
  * `colorScheme`, and `.filter(Boolean)` drops it before the `\n\n` join, so a
  * zero-mode theme emits no leading blank line.
+ *
+ * `container` marks a scope below the document root; every root-element door
+ * omits it and emits the same bytes as before the container law existed.
  */
-export function emitThemeCss(compiled: ThemeCompilation, scope: EmissionScope): string {
+export function emitThemeCss(
+  compiled: ThemeCompilation,
+  scope: EmissionScope,
+  options: { container?: ContainerEmission } = {}
+): string {
   return [
-    emitBaseRule(compiled, scope),
+    emitBaseRule(compiled, scope, options),
     ...compiled.modeBlocks.map((mode) => emitModeRule(mode, scope)),
     emitContrastRule(compiled.contrastBlocks ?? [], scope),
     emitDensityScopeRule(compiled.densityScopeBlock, scope),

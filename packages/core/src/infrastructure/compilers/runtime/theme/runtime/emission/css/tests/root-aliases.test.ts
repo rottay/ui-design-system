@@ -1,4 +1,6 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { gzipSync } from "node:zlib";
 
 import { describe, expect, it } from "vitest";
@@ -10,15 +12,28 @@ import { staticThemeIntent } from "../../../ingress";
 import { resolveAdapter } from "../../../../presentation/adapters";
 import { emitTenantArtifactCss } from "../../artifact";
 import { admitCssVariables } from "@/infrastructure/compilers/kernel/foundation/css/value-safety";
-import { emitDeclarations, emitOverlayDeclarations, emitThemeCss, firstPartyScope } from "..";
-import { ROOT_ALIASES, rootAliasRedeclarations, VERTICAL_OUTRIGHT } from "../root-aliases";
+import { containerScope, emitDeclarations, emitOverlayDeclarations, emitThemeCss, firstPartyScope } from "..";
+import {
+  CONTAINER_ALIAS_CONTEXTS,
+  CONTAINER_ALIASES,
+  containerReach,
+  ROOT_ALIASES,
+  rootAliasRedeclarations,
+  VERTICAL_OUTRIGHT,
+} from "../root-aliases";
 import { resolveFirstParty } from "@tests/support/theme-lowering";
 import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,
 } from "@/infrastructure/compilers/runtime/tenant-css/artifact-renderer";
-// @ts-expect-error untyped generator module
-import { deriveRootAliases, renderTable, TABLE_PATH } from "../../../../../../../../../scripts/generate/root-aliases/index.mjs";
+import {
+  bundleCascade,
+  deriveRootAliases,
+  renderTable,
+  rootOnlySelector,
+  specificity,
+  TABLE_PATH,
+} from "../../../../../../../../../scripts/generate/root-aliases/index.mjs";
 
 const modern = resolveAdapter("modern");
 const slugs: readonly FirstPartyVerticalId[] = ["rottay", "bithire", "evnto"];
@@ -193,4 +208,97 @@ describe("the first-party artifacts: only the base rule gains lines, and only re
       }
     });
   }
+});
+
+describe("a container scope restates the left-out aliases its operands reach (N1-a)", () => {
+  const compiled = (cssVariables: Record<string, string>) => ({
+    cssVariables,
+    modeBlocks: [],
+    runtime: { personality: {}, tokenOverrides: {} },
+  });
+  const scope = containerScope("[data-sb]");
+
+  it("a divergentRootText alias takes the cascade-winning root text in a container, never at a root door", () => {
+    const container = emitThemeCss(compiled({ "--ds-shadow-sm": "none" }), scope, { container: {} });
+    const [base] = rules(container);
+    expect(container).toContain("  --ds-card-shadow: var(--_ds-personality-resolved-card-shadow, var(--ds-shadow-sm));\n");
+    expect(base?.names).toContain("--ds-card-elevated-shadow");
+
+    const door = emitThemeCss(compiled({ "--ds-shadow-sm": "none" }), firstPartyScope("bithire"));
+    expect(door).not.toContain("--ds-card-shadow:");
+    expect(door).toBe(emitThemeCss(compiled({ "--ds-shadow-sm": "none" }), firstPartyScope("bithire"), {}));
+  });
+
+  it("a contextVarying alias is re-emitted with its context rule, after the base rule", () => {
+    const css = emitThemeCss(compiled({ "--ds-edge-standard-width": "0px" }), scope, { container: {} });
+    const base = css.indexOf("[data-sb] {\n");
+    const restated = css.indexOf("  --ds-button-border-width: var(--ds-edge-standard-width, 1px);\n");
+    const context = css.indexOf(
+      "@media (prefers-contrast: more) {\n:where(:root) [data-sb] {\n  --ds-button-border-width: 2px;\n}\n}"
+    );
+    expect(base).toBe(0);
+    expect(restated).toBeGreaterThan(base);
+    expect(context).toBeGreaterThan(restated);
+  });
+
+  it("a context that can match the scope itself is re-emitted on it as well as under it", () => {
+    const lang = CONTAINER_ALIAS_CONTEXTS.find(
+      (context) => context.name === "--ds-type-display-letter-spacing" && context.selector === ":lang(ar)"
+    );
+    expect(lang?.rootOnly).toBe(false);
+    const css = emitThemeCss(compiled({ "--ds-letter-spacing-tight": "1px" }), scope, { container: {} });
+    expect(css).toContain(
+      ":where(:lang(ar)) [data-sb], [data-sb]:where(:lang(ar)) {\n  --ds-type-display-letter-spacing: 0;"
+    );
+  });
+
+  it("a name the enclosing root states outright is never restated with root text", () => {
+    const css = emitThemeCss(compiled({ "--ds-shadow-sm": "none" }), scope, {
+      container: { outright: ["--ds-card-shadow"] },
+    });
+    expect(css).not.toContain("--ds-card-shadow:");
+  });
+
+  it("containerReach walks the enclosing texts first and the root aliases, left-out ones included, after", () => {
+    const reached = containerReach(["--ds-focus-ring-offset"], {
+      "--ds-avatar-focus-ring": "0 0 0 var(--ds-avatar-focus-ring-offset) red",
+    });
+    expect(reached.has("--ds-avatar-focus-ring-offset")).toBe(true);
+    expect(reached.has("--ds-avatar-focus-ring")).toBe(true);
+    expect(containerReach(["--ds-focus-ring-offset"], {}).has("--ds-avatar-focus-ring")).toBe(false);
+  });
+});
+
+describe("the cascade winner among a left-out alias's root texts", () => {
+  it("ranks layer, then specificity, then bundle order", () => {
+    const dir = mkdtempSync(join(tmpdir(), "root-aliases-"));
+    writeFileSync(join(dir, "low.css"), ":root { --x: low; }\n");
+    writeFileSync(join(dir, "high.css"), ":root { --x: high; }\n");
+    writeFileSync(join(dir, "plain.css"), ":root { --x: plain; }\n");
+    writeFileSync(
+      join(dir, "entry.css"),
+      '@layer a, b;\n@import "./high.css" layer(b);\n@import "./low.css" layer(a);\n@import "./plain.css";\n'
+    );
+    const { layers, files } = bundleCascade(join(dir, "entry.css"));
+    const at = (name: string) => [...files].find(([file]) => file.endsWith(`/${name}`))?.[1];
+    expect(layers).toEqual(["a", "b"]);
+    expect(at("high.css")).toMatchObject({ layer: "b", order: 0 });
+    expect(at("low.css")).toMatchObject({ layer: "a", order: 1 });
+    expect(at("plain.css")).toMatchObject({ layer: null, order: 2 });
+    expect(specificity(":root[data-theme='dark'], html.dark")).toEqual([0, 2, 0]);
+    expect(specificity(":where(:root, [data-ds-root]):is([data-theme='dark'], .dark)")).toEqual([0, 1, 0]);
+    expect(specificity("html[lang]:lang(ar)")).toEqual([0, 2, 1]);
+    expect(rootOnlySelector("html[lang]:lang(ar)")).toBe(true);
+    expect(rootOnlySelector(":where(:root, [data-ds-root]):is([data-theme='dark'], .dark)")).toBe(false);
+  });
+
+  it("the personality layer outranks the token layer; within one layer the later file wins", () => {
+    const winner = (name: string) => CONTAINER_ALIASES.find((alias) => alias.name === name);
+    expect(winner("--ds-card-shadow")).toMatchObject({
+      exclusion: "divergentRootText",
+      site: "runtime/personality/index.css:40",
+    });
+    expect(winner("--ds-shadow-focus-ring")?.site).toBe("foundation/themes/default/index.css:834");
+    expect(CONTAINER_ALIASES.length).toBe(deriveRootAliases().excluded.contextVarying.length + deriveRootAliases().excluded.divergentRootText.length);
+  });
 });

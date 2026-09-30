@@ -11,18 +11,28 @@
  * A vertical's rules sit on its DB tenants' own element, so the tabled aliases
  * they state with other text are listed per vertical from its artifact's bytes.
  *
+ * A CONTAINER scope (an element below the document root) inherits every root
+ * alias already resolved at the root, the left-out ones included. They are
+ * tabled apart for that door alone: the text the cascade gives the root (layer
+ * rank from the base entry's `@layer` statement, then specificity, then bundle
+ * order), and the context rules that reach the root or the scope, in ascending
+ * cascade order, so the scope re-emits each context where it applied. A root
+ * rule the winning text outranks never applies and is not re-emitted.
+ *
  *   node scripts/generate/root-aliases/index.mjs            print the census
  *   node scripts/generate/root-aliases/index.mjs --write    write the table
  *   node scripts/generate/root-aliases/index.mjs --check    fail on drift
  */
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const CORE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 const REPO_ROOT = resolve(CORE_ROOT, "../..");
 export const EDGES_PATH = join(CORE_ROOT, "artifacts/generated/manifest/cascade/edges/index.json");
 export const VERTICAL_ARTIFACTS_DIR = join(CORE_ROOT, "src/foundation/tokens/css/facade/artifacts");
+export const BASE_ENTRY_PATH = join(CORE_ROOT, "src/foundation/tokens/css/facade/entrypoints/base/index.css");
+const SOURCE_PREFIX = "packages/core/src/foundation/tokens/css/";
 export const TABLE_PATH = join(
   CORE_ROOT,
   "src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.ts"
@@ -112,7 +122,146 @@ function rootStateSelector(selector) {
   });
 }
 
-export function deriveRootAliases(artifact = JSON.parse(readFileSync(EDGES_PATH, "utf8"))) {
+const IMPORT = /@import\s+['"](\.[^'"]+)['"]\s*(layer\([^)]+\))?\s*;/g;
+
+/**
+ * Where each live source file sits in the served cascade: its top-level layer's
+ * rank (unlayered above every layer) and its position in bundle order, read by
+ * inlining the base entry's `@import`s exactly as the bundle composer does. A
+ * file the entry never imports is dead CSS and has no position.
+ */
+export function bundleCascade(entry = BASE_ENTRY_PATH) {
+  const strip = (text) => text.replace(/\/\*[\s\S]*?\*\//g, "");
+  const statement = strip(readFileSync(entry, "utf8")).match(/@layer\s+([\w-]+(?:\s*,\s*[\w-]+)+)\s*;/);
+  if (!statement) throw new Error(`root aliases: no @layer order statement in ${entry}`);
+  const layers = statement[1].split(/\s*,\s*/);
+  const files = new Map();
+  let order = 0;
+  const walk = (path, layer) => {
+    const file = relative(REPO_ROOT, path);
+    if (files.has(file) || !existsSync(path)) return;
+    files.set(file, null);
+    for (const [, importPath, directive] of strip(readFileSync(path, "utf8")).matchAll(IMPORT)) {
+      const child = directive ? directive.slice(6, -1).trim() : null;
+      walk(resolve(dirname(path), importPath), layer ?? child);
+    }
+    files.set(file, { layer, order: order++ });
+  };
+  walk(entry, null);
+  return { layers, files };
+}
+
+/** [a, b, c] of the most specific branch of a selector list. */
+export function specificity(selector) {
+  let best = [0, 0, 0];
+  for (const branch of splitTopLevel(selector, /,/)) {
+    const count = [0, 0, 0];
+    let rest = branch.replace(/:(where|is|not|has)\(((?:[^()]|\([^()]*\))*)\)/g, (_, fn, inner) => {
+      if (fn !== "where") specificity(inner).forEach((value, index) => (count[index] += value));
+      return " ";
+    });
+    rest = rest.replace(/::?[\w-]+\((?:[^()]|\([^()]*\))*\)/g, () => (count[1]++, " "));
+    rest = rest.replace(/\[[^\]]*\]/g, () => (count[1]++, " "));
+    rest = rest.replace(/::[\w-]+/g, () => (count[2]++, " "));
+    rest = rest.replace(/#[\w-]+/g, () => (count[0]++, " "));
+    rest = rest.replace(/[.:][\w-]+/g, () => (count[1]++, " "));
+    count[2] += (rest.match(/(?:^|[\s>+~])[a-zA-Z][\w-]*/g) ?? []).length;
+    if (compareKeys(count, best) > 0) best = count;
+  }
+  return best;
+}
+
+function compareKeys(left, right) {
+  for (let index = 0; index < Math.max(left.length, right.length); index++) {
+    const delta = (left[index] ?? 0) - (right[index] ?? 0);
+    if (delta !== 0) return delta;
+  }
+  return 0;
+}
+
+/** Whether every branch's subject compound can only be the document root (`:root`, `html`) outside a `:where`/`:is`. */
+export function rootOnlySelector(selector) {
+  return splitTopLevel(selector, /,/).every((branch) => {
+    const compounds = splitTopLevel(branch.replace(/\s*([>+~])\s*/g, " "), /\s/);
+    const subject = (compounds[compounds.length - 1] ?? "").replace(/:(?:where|is|not|has)\((?:[^()]|\([^()]*\))*\)/g, "");
+    return /:root\b/.test(subject) || /^html\b/.test(subject);
+  });
+}
+
+/** One declaration site's cascade key: layer rank, specificity, bundle order, line. Null for dead CSS. */
+function cascadeKey(cascade, entry) {
+  const position = cascade.files.get(entry.file);
+  if (!position) return null;
+  const inner = entry.chain.find((prelude) => /^@layer\b/.test(prelude));
+  const layer = position.layer ?? (inner ? inner.slice(6).trim().split(".")[0] : null);
+  const rank = layer === null ? cascade.layers.length : cascade.layers.indexOf(layer);
+  if (rank < 0) throw new Error(`root aliases: layer ${layer} of ${entry.file} is not in the entry's order`);
+  return [rank, ...specificity(entry.rule), position.order, entry.line];
+}
+
+const siteOf = (entry) => `${entry.file.replace(SOURCE_PREFIX, "")}:${entry.line}`;
+
+/**
+ * The left-out aliases a container scope restates: the root text the cascade
+ * gives the root, and the context rules that reach the root or the scope, in
+ * ascending cascade order across every alias.
+ */
+function deriveContainerAliases(excluded, sites, linesOf, cascade) {
+  const aliases = [];
+  const contexts = [];
+  const unrestatable = [];
+  const outranked = [];
+  for (const [exclusion, names] of Object.entries(excluded)) {
+    if (exclusion === "important") continue;
+    for (const name of names) {
+      const keyed = sites
+        .get(name)
+        .map((entry) => ({ ...entry, key: cascadeKey(cascade, entry) }))
+        .filter((entry) => entry.key !== null);
+      const roots = keyed.filter((entry) => isRootSelector(entry.joined));
+      if (roots.length === 0) {
+        unrestatable.push(name);
+        continue;
+      }
+      const winner = roots.reduce((best, entry) => (compareKeys(entry.key, best.key) > 0 ? entry : best));
+      aliases.push({ name, exclusion, value: declaredValue(linesOf(winner.file), winner.line, name), site: siteOf(winner) });
+      for (const entry of keyed) {
+        if (isRootSelector(entry.joined) || !rootStateSelector(entry.rule)) continue;
+        const at = entry.chain.slice(0, -1).filter((prelude) => !/^@layer\b/.test(prelude));
+        if (at.some((prelude) => !prelude.startsWith("@"))) {
+          throw new Error(`root aliases: ${name} at ${siteOf(entry)} sits in a nested style rule`);
+        }
+        const rootOnly = rootOnlySelector(entry.rule);
+        if (rootOnly && compareKeys(entry.key, winner.key) < 0) {
+          outranked.push(`${name} @ ${siteOf(entry)}`);
+          continue;
+        }
+        contexts.push({
+          name,
+          at,
+          selector: entry.rule,
+          rootOnly,
+          value: declaredValue(linesOf(entry.file), entry.line, name),
+          site: siteOf(entry),
+          key: entry.key,
+        });
+      }
+    }
+  }
+  aliases.sort((left, right) => left.name.localeCompare(right.name));
+  contexts.sort((left, right) => compareKeys(left.key, right.key) || left.name.localeCompare(right.name));
+  return {
+    aliases,
+    contexts: contexts.map(({ key, ...context }) => context),
+    unrestatable: unrestatable.sort(),
+    outranked: outranked.sort(),
+  };
+}
+
+export function deriveRootAliases(
+  artifact = JSON.parse(readFileSync(EDGES_PATH, "utf8")),
+  cascade = bundleCascade()
+) {
   const files = new Map();
   const linesOf = (file) => {
     if (!files.has(file)) files.set(file, readFileSync(join(REPO_ROOT, file), "utf8").split("\n"));
@@ -123,7 +272,7 @@ export function deriveRootAliases(artifact = JSON.parse(readFileSync(EDGES_PATH,
   const site = (name, file, line) => {
     const chain = ruleChainAt(linesOf(file), line, name);
     if (!sites.has(name)) sites.set(name, []);
-    sites.get(name).push({ file, line, joined: chain.join(" "), rule: chain[chain.length - 1] ?? "" });
+    sites.get(name).push({ file, line, chain, joined: chain.join(" "), rule: chain[chain.length - 1] ?? "" });
   };
   const declEdges = artifact.edges.filter((edge) => edge.edgeClass === "decl");
   const seen = new Set();
@@ -188,6 +337,7 @@ export function deriveRootAliases(artifact = JSON.parse(readFileSync(EDGES_PATH,
     excluded,
     edgesDigest: artifact.digests?.edges ?? null,
     verticalOutright: deriveVerticalOutright(ordered),
+    container: deriveContainerAliases(excluded, sites, linesOf, cascade),
   };
 }
 
@@ -227,7 +377,7 @@ export function deriveVerticalOutright(ordered, dir = VERTICAL_ARTIFACTS_DIR) {
   return outright;
 }
 
-export function renderTable({ ordered, edgesDigest, verticalOutright }) {
+export function renderTable({ ordered, edgesDigest, verticalOutright, container }) {
   const rows = ordered.map(([name, value]) => `  [${JSON.stringify(name)}, ${JSON.stringify(value)}],`);
   const verticalRows = Object.entries(verticalOutright).flatMap(([vertical, names]) => [
     `  ${JSON.stringify(vertical)}: [`,
@@ -249,7 +399,62 @@ export function renderTable({ ordered, edgesDigest, verticalOutright }) {
     ...verticalRows,
     "};",
     "",
+    "/** Why ROOT_ALIASES leaves an alias out. */",
+    'export type ContainerAliasExclusion = "contextVarying" | "divergentRootText";',
+    "",
+    "/** A left-out alias as a container scope restates it: the cascade-winning root text and the site it is read from. */",
+    "export interface ContainerAlias {",
+    "  readonly name: string;",
+    "  readonly exclusion: ContainerAliasExclusion;",
+    "  readonly value: string;",
+    "  readonly site: string;",
+    "}",
+    "",
+    "/** A context rule a container scope re-emits for one alias: its at-rules, its selector, and whether that selector only matches the root. */",
+    "export interface ContainerAliasContext {",
+    "  readonly name: string;",
+    "  readonly at: readonly string[];",
+    "  readonly selector: string;",
+    "  readonly rootOnly: boolean;",
+    "  readonly value: string;",
+    "  readonly site: string;",
+    "}",
+    "",
+    "/** Every alias ROOT_ALIASES leaves out, as a container scope restates it. */",
+    "export const CONTAINER_ALIASES: readonly ContainerAlias[] = [",
+    ...container.aliases.map(
+      (alias) =>
+        `  { name: ${JSON.stringify(alias.name)}, exclusion: ${JSON.stringify(alias.exclusion)}, value: ${JSON.stringify(alias.value)}, site: ${JSON.stringify(alias.site)} },`
+    ),
+    "];",
+    "",
+    "/** Their context rules, in ascending cascade order across every alias: a later rule wins where both apply. */",
+    "export const CONTAINER_ALIAS_CONTEXTS: readonly ContainerAliasContext[] = [",
+    ...container.contexts.map(
+      (context) =>
+        `  { name: ${JSON.stringify(context.name)}, at: ${JSON.stringify(context.at)}, selector: ${JSON.stringify(context.selector)}, rootOnly: ${context.rootOnly}, value: ${JSON.stringify(context.value)}, site: ${JSON.stringify(context.site)} },`
+    ),
+    "];",
+    "",
   ].join("\n");
+}
+
+/** The container table's census: restated aliases per exclusion class, contexts per context rule, and what was left out. */
+function containerCensus({ aliases, contexts, unrestatable, outranked }) {
+  const count = (items, keyOf) =>
+    Object.fromEntries(
+      [...items.reduce((map, item) => map.set(keyOf(item), (map.get(keyOf(item)) ?? 0) + 1), new Map())].sort(
+        (left, right) => right[1] - left[1] || left[0].localeCompare(right[0])
+      )
+    );
+  return {
+    aliases: aliases.length,
+    byExclusion: count(aliases, (alias) => alias.exclusion),
+    contexts: contexts.length,
+    byContext: count(contexts, (context) => [...context.at, context.selector].join(" ")),
+    unrestatable,
+    outranked: outranked.length,
+  };
 }
 
 function main(argv) {
@@ -279,6 +484,7 @@ function main(argv) {
       verticalOutright: Object.fromEntries(
         Object.entries(derived.verticalOutright).map(([vertical, names]) => [vertical, names.length])
       ),
+      containerRestated: containerCensus(derived.container),
     })}\n`
   );
 }
