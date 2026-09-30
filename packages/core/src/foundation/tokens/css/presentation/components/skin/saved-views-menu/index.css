@@ -166,7 +166,7 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] {
-  border: 1px solid var(
+  border: var(--ds-edge-hairline-width, 1px) solid var(
     --ds-material-overlay-border,
     color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent)
   );
@@ -177,7 +177,7 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='header'] {
-  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent);
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='header-description'] {
@@ -198,7 +198,7 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='active-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='active-card-description'] {
@@ -251,7 +251,7 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='view-item-select'] {
@@ -351,7 +351,7 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='empty-state'] {
-  border: 1px dashed color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) dashed color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent);
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-empty-state='persona'] {

@@ -121,7 +121,7 @@
   border-radius: var(--ds-radius-sm, 8px);
   color: var(--ds-color-primary);
   background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
 }
 
 .ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-eyebrow'] {

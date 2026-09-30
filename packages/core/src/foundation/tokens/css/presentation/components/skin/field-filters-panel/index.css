@@ -92,7 +92,7 @@
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'][data-active-count] {
-  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
 }
 
 /* header strip (geometry drained from the retired inline styles) ---------- */
@@ -141,7 +141,7 @@
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
 .ds-structure.ds-field-filters-panel [data-part='presets-pill'] {
@@ -154,7 +154,7 @@
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
 /* inline signal ------------------------------------------------------------ */
@@ -171,13 +171,13 @@
 
 .ds-structure.ds-field-filters-panel [data-part='signal'][data-tone='neutral'] {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-elevated) 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
   color: var(--ds-color-text-secondary);
 }
 
 .ds-structure.ds-field-filters-panel [data-part='signal'][data-tone='primary'] {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card)));
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
   color: var(--ds-color-primary);
 }
 
@@ -217,7 +217,7 @@
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip-icon'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
 }
 
 /* filter card ---------------------------------------------------------------- */
@@ -233,7 +233,7 @@
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
 }
 
 .ds-structure.ds-field-filters-panel [data-part='filter-card-head'] {
@@ -258,7 +258,7 @@
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-icon'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
 /* responsive card grid (drained from the retired inline style) ------------ */

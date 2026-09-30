@@ -158,7 +158,7 @@
 .ds-feature-workspace-frame__skeleton > span {
   grid-column: span 4;
   min-block-size: var(--ds-feature-workspace-skeleton-card-height, 9rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-card-border, var(--ds-color-border-secondary));
   border-radius: var(--ds-surface-card-radius, var(--ds-radius-xl));
   background: linear-gradient(

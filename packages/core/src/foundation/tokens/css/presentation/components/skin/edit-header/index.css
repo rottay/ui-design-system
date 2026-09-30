@@ -128,7 +128,7 @@
   animation: ds-header-enter var(--ds-motion-attention, 320ms) var(--ds-motion-ease-out, ease-out) both;
 }
 .ds-structure.ds-edit-header[data-part='root'][data-loading] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 /* The loading branch is the SAME card: it holds an anatomy-derived skeleton of this
    header's own parts, not a centred spinner in a padded box, so the radius, the
@@ -147,7 +147,7 @@
   background: var(--ds-color-bg-secondary);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] {
-  border-bottom: 1px solid var(--ds-color-border-secondary);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 /* back button (no className hook — §4 anatomy is data-part only); its corner
@@ -200,7 +200,7 @@
   font-variant-numeric: var(--ds-type-code-font-variant-numeric, normal);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='entity-id'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='entity-id'] {
   color: var(--ds-color-text-secondary);
@@ -307,7 +307,7 @@
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'] {
-  border: 1px solid var(--ds-edit-header-status-tone-bd, var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary)));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-edit-header-status-tone-bd, var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary)));
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='status-pill-text'] {
   color: var(--ds-edit-header-status-tone-fg, var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary)));
@@ -326,7 +326,7 @@
   background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='dirty-chip'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 26%, var(--ds-color-border-secondary));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-warning) 26%, var(--ds-color-border-secondary));
 }
 .ds-structure.ds-edit-header [data-part='dirty-dot'] {
   inline-size: 6px;
@@ -361,7 +361,7 @@
 }
 /* the single dominant boundary for the region */
 .ds-structure.ds-edit-header[data-part='root'] [data-part='context-card'] {
-  border-block-start: 1px solid var(--ds-color-border-secondary);
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 .ds-structure.ds-edit-header [data-part='context-rail'] + [data-part='context-card-children'] {
   margin-block-start: 18px;

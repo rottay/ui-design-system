@@ -108,7 +108,7 @@
    never a repeated `[data-part]` (4th-tanda law; the sister edit-header.css
    still carries the doubled form, noted for its lane). */
 .ds-structure.ds-form-header[data-part='root'][data-structure='form-header'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 /* ---- top bar: navigation only (back + breadcrumb). The commit action used to
@@ -117,7 +117,7 @@
 .ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] {
   padding-block: var(--ds-form-header-top-bar-padding-block, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   padding-inline: var(--ds-form-header-top-bar-padding-inline, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
-  border-bottom: 1px solid var(--ds-color-border-secondary);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
   background: var(--ds-color-bg-secondary);
 }
 
@@ -252,7 +252,7 @@
 }
 /* the single dominant boundary for the region */
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='context-card'] {
-  border-block-start: 1px solid var(--ds-color-border-secondary);
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 /* the rail's own gap to the children below it — the EditHeader spelling. The
    retired `[data-has-rail='true']` was a boolean the component computed and stamped

@@ -45,7 +45,7 @@
 
 /* ---- Modal.Footer ---- */
 .rottay-overlay-modal-footer.rottay-overlay-modal-footer[data-part='footer'][data-part='footer'][data-divider='true'] {
-  border-top: 1px solid var(--ds-modal-footer-border, rgba(0, 0, 0, 0.1));
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-modal-footer-border, rgba(0, 0, 0, 0.1));
 }
 .rottay-overlay-modal-footer.rottay-overlay-modal-footer[data-part='footer'][data-part='footer'][data-divider='false'] {
   border-top: none;
