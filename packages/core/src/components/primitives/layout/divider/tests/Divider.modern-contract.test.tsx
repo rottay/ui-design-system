@@ -57,7 +57,7 @@ describe("Divider modern premium contract", () => {
     });
   });
 
-  it("forwards locale and direction while preserving the owned root part", () => {
+  it("forwards locale and direction; a caller part wins and the owned data-component stays", () => {
     render(
       <ModernDivider lang="ar" dir="rtl" data-part="consumer-value">
         القسم التالي
@@ -67,7 +67,8 @@ describe("Divider modern premium contract", () => {
     const divider = screen.getByRole("separator", { name: "القسم التالي" });
     expect(divider).toHaveAttribute("lang", "ar");
     expect(divider).toHaveAttribute("dir", "rtl");
-    expect(divider).toHaveAttribute("data-part", "root");
+    expect(divider).toHaveAttribute("data-part", "consumer-value");
+    expect(divider).toHaveAttribute("data-component", "divider");
   });
 
   it("uses logical start/end positioning without locale-side inversion", () => {

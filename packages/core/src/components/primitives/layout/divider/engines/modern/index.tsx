@@ -115,6 +115,7 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
       <div
         ref={ref}
         aria-labelledby={labelsFromContent ? contentId : undefined}
+        data-part="root"
         {...rest}
         className={classNames}
         style={lineStyle}
@@ -122,7 +123,6 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
         aria-orientation={orientation}
         aria-label={ariaLabel || inferredLabel}
         data-testid={testId}
-        data-part="root"
         data-orientation={orientation}
         data-spacing={spacing}
         data-with-text="true"
@@ -143,6 +143,7 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
   return (
     <div
       ref={ref}
+      data-part="root"
       {...rest}
       className={classNames}
       style={lineStyle}
@@ -150,7 +151,6 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
       aria-orientation={orientation}
       aria-label={ariaLabel}
       data-testid={testId}
-      data-part="root"
       data-orientation={orientation}
       data-spacing={spacing}
       data-with-text="false"
