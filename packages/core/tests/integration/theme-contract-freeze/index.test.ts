@@ -275,6 +275,16 @@ describe("channel minting and CSS text have declared owners", () => {
     "infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/contrast/index.ts";
   const ADMISSION_LIMITS =
     "infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.ts";
+  // 6a91f16ff (the scope re-resolution law) made the emission an owner of
+  // channel names by construction: restating a root-declared alias in a scope
+  // IS naming it. Every name the emission states is data -- the generated
+  // table, or the radius-scale constant the chain template reads -- never an
+  // identifier the module computes with; the second half of this test holds
+  // both files to that.
+  const EMISSION_CSS =
+    "infrastructure/compilers/runtime/theme/runtime/emission/css/index.ts";
+  const EMISSION_ROOT_ALIASES_TABLE =
+    "infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.ts";
 
   const productionSources = (relative: string): string[] => {
     const out: string[] = [];
@@ -485,6 +495,8 @@ describe("channel minting and CSS text have declared owners", () => {
         INGRESS_DOCUMENT_MIGRATE,
         ADMISSION_CONTRAST,
         ADMISSION_LIMITS,
+        EMISSION_CSS,
+        EMISSION_ROOT_ALIASES_TABLE,
       ].sort(),
     );
 
