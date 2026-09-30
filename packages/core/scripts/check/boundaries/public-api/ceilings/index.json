@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 14,
-      "maxSourceBytes": 279116
+      "maxSourceBytes": 279309
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "la tabla root-aliases crece 2364 -> 2387 con los 23 canales nuevos de los lotes de ritmo dropdown/tooltip (34a54550e, b4a15de7a): +2208 B de fuente generada en visual-authority (276908 -> 279116)",
+  "lastMove": "los dos canales --_ds-(area|bar)-marker-radius producidos por el lote shape (43580fdc0): +193 B de fuente generada (279116 -> 279309)",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

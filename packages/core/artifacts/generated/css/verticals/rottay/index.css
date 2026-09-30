@@ -2013,13 +2013,14 @@
 
   /* Border Radius - Modern, Rounded */
   --ds-radius-none: 0;
-  --ds-radius-xs: 3px;
+  --ds-radius-xs: calc(3px * var(--ds-radius-scale, 1));
   /* sm/md/lg/xl carry the tenant radius dial: each is a calc() over a private
      -base literal times var(--ds-radius-scale, 1). Absent scale => fallback 1 =>
      byte-identical to the prior literal; a tenant --ds-radius-scale (0.75-1.25)
      scales these four steps at this one definition site. A tenant --ds-radius-*
      OVERRIDE from the token set replaces the calc entirely (explicit beats dial).
-     none/xs/2xl/3xl/full stay literal (0 and pill radii are not dial-scaled). */
+     xs/2xl/3xl scale the same way over their literal; none/full stay literal
+     (0 and pill radii are not dial-scaled). */
   --ds-radius-sm-base: 6px;
   --ds-radius-md-base: 8px;
   --ds-radius-lg-base: 12px;
@@ -2028,8 +2029,8 @@
   --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
   --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));
   --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));
-  --ds-radius-2xl: 20px;
-  --ds-radius-3xl: 24px;
+  --ds-radius-2xl: calc(20px * var(--ds-radius-scale, 1));
+  --ds-radius-3xl: calc(24px * var(--ds-radius-scale, 1));
   --ds-radius-full: 9999px;
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -32934,7 +32935,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-radio-group.ds-radio-group--button [data-part='option'][data-part='option'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 /* Segment density: the group `size` picks the canonical font channel and a
@@ -33535,7 +33536,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   gap: var(--ds-spacing-1);
   padding: var(--ds-spacing-1) var(--ds-spacing-2);
   border-radius: var(--ds-radius-sm);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border);
   background: transparent;
   color: var(--ds-color-text-secondary);
   font: inherit;
@@ -74134,7 +74135,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: var(--ds-color-bg-secondary);
 }
 .ds-activity-ticker.ds-activity-ticker[data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='header'] {
   /* Header geometry drained from the engine. */
@@ -74533,7 +74534,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: var(--ds-color-bg-secondary);
 }
 .ds-activity-timeline.ds-activity-timeline[data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 .ds-activity-timeline.ds-activity-timeline [data-part='header'] {
   /* Header geometry drained from the engine. */
@@ -74879,7 +74880,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: var(--ds-color-bg-secondary);
 }
 .ds-activity-compact.ds-activity-compact[data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 .ds-activity-compact.ds-activity-compact [data-part='header'] {
   /* Header geometry drained from the engine. */
@@ -75171,7 +75172,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: var(--ds-color-bg-secondary);
 }
 .ds-activity-cards.ds-activity-cards[data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 .ds-activity-cards.ds-activity-cards [data-part='header'] {
   /* Header geometry drained from the engine. */
@@ -77994,7 +77995,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ActivityIndicator bars — Command/Circuit/Matrix, success. The per-index
    stagger delay stays inline (runtime value); the cadence is owned here. */
 .ds-data-terminal-card[data-part='root'] [data-part='activity-bar'] {
-  border-radius: 1px;
+  border-radius: calc(1px * var(--ds-radius-scale, 1));
   background: var(--ds-color-success);
   animation: dtc-data-tick
     var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2))
@@ -97537,6 +97538,10 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * opacity inline); the radius is a private family detail rather than a
  * tenant-facing theme channel. */
 
+.ds-chart-area {
+  --_ds-area-marker-radius: calc(2px * var(--ds-radius-scale, 1));
+}
+
 .ds-chart-area [data-part='legend-swatch'] {
   border-radius: var(--_ds-area-marker-radius, 2px);
 }
@@ -97655,6 +97660,10 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Legend -------------------------------------------------------------------
  * Square marker reads as a bar; the radius is a private family detail rather
  * than a tenant-facing theme channel. */
+
+.ds-chart-bar {
+  --_ds-bar-marker-radius: calc(2px * var(--ds-radius-scale, 1));
+}
 
 .ds-chart-bar [data-part='legend-swatch'] {
   border-radius: var(--_ds-bar-marker-radius, 2px);
@@ -98197,7 +98206,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * rather than a tenant-facing theme channel. */
 
 .ds-chart-radar [data-part='legend-swatch'] {
-  border-radius: 1px;
+  border-radius: calc(1px * var(--ds-radius-scale, 1));
   transform: rotate(var(--_ds-radar-marker-rotation, 45deg)) scale(0.85);
 }
 
@@ -98330,7 +98339,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /** Treemap skin (visualization skin ownership), deliberately unlayered. */
 
 .ds-chart-treemap [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale, 1));
 }
 
 .ds-chart-treemap [data-part='legend-label'] {
@@ -98955,7 +98964,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   padding-block: var(--ds-spacing-4, 1rem);
   padding-inline: var(--ds-spacing-5, 1.25rem);
   color: var(--ds-surface-fg, currentColor);
-  border: 1px solid var(--ds-color-hairline);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-hairline);
   background: transparent;
 }
 
@@ -99613,7 +99622,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   overflow: hidden;
   color: var(--ds-color-mono-1000);
   background: var(--ds-color-surface-ink);
-  border: 1px solid var(--ds-color-hairline);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-hairline);
   /* Corner radius is private to the terminal profile. The existing `overflow: hidden`
      clips scanlines/body to any locally scoped value. */
   border-radius: var(--_ds-terminal-block-radius, 0);
@@ -101128,7 +101137,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
         it; the timestamp slot carried it only on the side that renders no
         timestamp of its own, which is the shipped shape. ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'] {
-  border: var(--ds-border-width-1) solid var(--ds-color-bg-tertiary);
+  border: var(--ds-edge-hairline-width, var(--ds-border-width-1)) solid var(--ds-color-bg-tertiary);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-color-bg-primary);
   padding-inline: var(--ds-spacing-4, 1rem);
@@ -108390,10 +108399,13 @@ html[lang]:lang(ar) {
   --ds-radio-sm-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
   --ds-radio-transition-duration: var(--ds-motion-feedback);
   --ds-radio-transition-timing: var(--ds-motion-ease-out);
+  --ds-radius-2xl: calc(20px * var(--ds-radius-scale, 1));
+  --ds-radius-3xl: calc(24px * var(--ds-radius-scale, 1));
   --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));
   --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
   --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));
   --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));
+  --ds-radius-xs: calc(3px * var(--ds-radius-scale, 1));
   --ds-rate-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
   --ds-rate-focus-ring-width: var(--ds-focus-ring-width, 2px);
   --ds-rhythm-effective-scale: clamp(0.8, var(--ds-rhythm-scale, 1), 1.25);
@@ -108569,6 +108581,7 @@ html[lang]:lang(ar) {
   --ds-card-meta-font-size: var(--ds-font-size-sm);
   --ds-card-radius-lg: var(--ds-radius-xl);
   --ds-card-radius-sm: var(--ds-radius-sm);
+  --ds-card-radius-xl: var(--ds-radius-2xl);
   --ds-card-selected-outline-width: var(--ds-card-border-width);
   --ds-card-skeleton-radius: var(--ds-radius-sm);
   --ds-card-subtitle-font-size: var(--ds-font-size-sm);
@@ -108583,6 +108596,7 @@ html[lang]:lang(ar) {
   --ds-checkbox-label-color-disabled: var(--ds-material-control-foreground-disabled);
   --ds-checkbox-lg-font-size: var(--ds-font-size-base);
   --ds-checkbox-md-font-size: var(--ds-font-size-sm);
+  --ds-checkbox-radius: var(--ds-radius-xs);
   --ds-checkbox-radius-lg: var(--ds-radius-sm);
   --ds-checkbox-transition: all var(--ds-checkbox-transition-duration) var(--ds-checkbox-transition-timing);
   --ds-checkbox-xl-font-size: var(--ds-font-size-lg);
@@ -108706,6 +108720,7 @@ html[lang]:lang(ar) {
   --ds-modal-action-radius: var(--ds-radius-md);
   --ds-modal-body-font-size: var(--ds-font-size-base);
   --ds-modal-border-radius: var(--ds-radius-xl);
+  --ds-modal-bottom-sheet-border-radius-top: var(--ds-radius-2xl);
   --ds-modal-close-border-radius: var(--ds-radius-md);
   --ds-modal-mobile-border-radius: var(--ds-radius-lg);
   --ds-modal-overlay-z-index: var(--ds-z-index-modal-backdrop);
@@ -108748,6 +108763,7 @@ html[lang]:lang(ar) {
   --ds-radius-input: var(--ds-radius-md);
   --ds-radius-modal: var(--ds-radius-xl);
   --ds-search-radius: var(--ds-toolbar-radius, var(--ds-radius-sm, 6px));
+  --ds-segmented-icon-radius: var(--ds-radius-xs);
   --ds-segmented-radius: var(--ds-radius-md);
   --ds-select-border-color-disabled: var(--ds-material-control-border-disabled);
   --ds-select-border-color-hover: var(--ds-material-control-border-hover);

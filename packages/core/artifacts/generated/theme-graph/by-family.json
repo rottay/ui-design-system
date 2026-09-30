@@ -61,6 +61,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -83,6 +85,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -143,6 +147,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -165,6 +171,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -421,6 +429,8 @@
         "profiles.expressive",
         "shape.button-style",
         "shape.radius-scale",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.pairing",
         "typography.scale"
       ],
@@ -997,12 +1007,18 @@
     },
     {
       "decisions": [
+        "experience.profile",
         "motion.character",
         "motion.dial",
         "palette.contrast-posture",
         "palette.neutral-temperature",
         "palette.seeds",
-        "palette.status-seeds"
+        "palette.status-seeds",
+        "profiles.expressive",
+        "shape.button-style",
+        "shape.radius-scale",
+        "typography.pairing",
+        "typography.scale"
       ],
       "family": "chart-bar"
     },
@@ -1165,12 +1181,18 @@
     },
     {
       "decisions": [
+        "experience.profile",
         "palette.contrast-posture",
         "palette.neutral-temperature",
         "palette.seeds",
         "palette.status-seeds",
+        "profiles.expressive",
+        "shape.button-style",
+        "shape.radius-scale",
         "states.emphasis",
-        "states.focus-style"
+        "states.focus-style",
+        "typography.pairing",
+        "typography.scale"
       ],
       "family": "chart-treemap"
     },
@@ -4204,6 +4226,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -5325,6 +5349,8 @@
         "profiles.expressive",
         "shape.button-style",
         "shape.radius-scale",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.pairing",
         "typography.scale"
       ],
