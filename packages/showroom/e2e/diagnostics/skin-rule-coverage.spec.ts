@@ -47,7 +47,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const TORTURE_SECTIONS = [
   'datatable', 'detailpanel', 'mediaStates', 'dataDisplayStates', 'dropdowns', 'fieldfilters',
   'fields', 'filterpanel', 'forms', 'interactive', 'layout', 'nav', 'overlay',
-  'overlayfb', 'pickers', 'rail', 'record', 'rtl', 'statusfb', 'tablestates',
+  'overlayfb', 'pickers', 'rail', 'record', 'rtl', 'skinCoverage', 'statusfb', 'tablestates',
 ];
 
 type Rule = { engine: string; file: string; selector: string; group: string; probe: string; skeleton: string };

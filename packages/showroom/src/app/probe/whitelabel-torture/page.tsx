@@ -31,6 +31,7 @@ import { WorkspaceChromeFbStates } from '@/components/torture-sections/workspace
 import { ApplicationSurfaceStates } from '@/components/torture-sections/application-surfaces';
 import { TenantBrandingStates } from '@/components/torture-sections/tenant-branding';
 import { VisualizationStates } from '@/components/torture-sections/visualizations';
+import { SkinCoverageStates } from '@/components/torture-sections/skin-coverage';
 
 // ---------------------------------------------------------------------------
 // Whitelabel torture probe (WO-GAT-03 hostile-tenant whitelabel proof)
@@ -46,6 +47,7 @@ import { VisualizationStates } from '@/components/torture-sections/visualization
 //   ?slug=button                                 capture a single flagship in isolation
 //   ?w=360|768|1280                              fixed content width for the responsive law
 //   ?longTail=1                                  CK-I surface long-tail evidence
+//   ?skinCoverage=1                              skin parts only an opened or configured mount stamps
 //   ?tenantSource=canonical-db                   themanagementmiami from the published document
 //
 // torture-dark and torture-light compile their CSS at render via the dynamic
@@ -109,6 +111,7 @@ export default async function WhitelabelTorturePage({ searchParams }: TortureRou
         {active.has('tenantBranding') && <TenantBrandingStates />}
         {active.has('visualizations') && <VisualizationStates />}
         {active.has('longTail') && <SurfacesLongTailFixture />}
+        {active.has('skinCoverage') && <SkinCoverageStates />}
       </TortureFrame>
     </>
   );

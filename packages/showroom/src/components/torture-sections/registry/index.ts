@@ -35,6 +35,7 @@ export const TORTURE_SECTION_FLAGS = [
   'tenantBranding',
   'visualizations',
   'longTail',
+  'skinCoverage',
 ] as const;
 
 export type TortureSectionFlag = (typeof TORTURE_SECTION_FLAGS)[number];
