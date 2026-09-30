@@ -490,8 +490,12 @@
 }
 
 /* ---- row actions: the menu the `menu` posture places, and the swipe record
-        the `swipe` posture wraps around each record ---- */
-.ds-pattern-data-table.ds-data-table--mobile [data-part="row-actions-menu"] {
+        the `swipe` posture wraps around each record. The menu is Popover
+        content and every Popover engine portals, so it can never sit under
+        the table: the rule anchors on the part itself (single stamp site,
+        mobile-cards/row-actions), the portaled-content pattern of the
+        sibling skins. ---- */
+[data-part="row-actions-menu"] {
   min-inline-size: 9rem;
 }
 

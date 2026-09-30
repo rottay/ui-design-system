@@ -159,17 +159,17 @@
    only the radius zeroing is select-specific (it lives on the trigger). No
    !important is needed here: these selectors outrank the trigger's own
    radius rule without contesting the contractual boosters above. */
-.ds-input-group[data-part='group'][data-compact='true'] > :first-child:not(:last-child) .ds-select-shell [data-part='trigger'] {
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:first-child:not(:last-child) [data-part='trigger'] {
   border-start-end-radius: 0;
   border-end-end-radius: 0;
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > :last-child:not(:first-child) .ds-select-shell [data-part='trigger'] {
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:last-child:not(:first-child) [data-part='trigger'] {
   border-start-start-radius: 0;
   border-end-start-radius: 0;
 }
 
-.ds-input-group[data-part='group'][data-compact='true'] > :not(:first-child):not(:last-child) .ds-select-shell [data-part='trigger'] {
+.ds-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:not(:first-child):not(:last-child) [data-part='trigger'] {
   border-radius: 0;
 }
 
