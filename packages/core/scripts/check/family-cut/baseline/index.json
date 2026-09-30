@@ -56,7 +56,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 6,
-        "channelsRead": 75,
+        "channelsRead": 76,
         "classTokens": 4,
         "partsStamped": 8,
         "partsConsumed": 8
@@ -72,7 +72,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/radio, structural constants by presentation/components/radio; state decided by the interaction kernel on the root and on each Radio.Group segment; the segment colour resolves from data-color, never from inline channels; one ds- vocabulary. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 68 -> 74. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew. Re-pin 2026-09-20 (DT, wave window): channelsRead 74 -> 75 = +--ds-motion-feedback (8e6b7e57b motion fleet lot 1; the rung it replaced is still read elsewhere in the corpus, so the swap is net +1)., measured by the gate; every move named with its lot."
+      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/radio, structural constants by presentation/components/radio; state decided by the interaction kernel on the root and on each Radio.Group segment; the segment colour resolves from data-color, never from inline channels; one ds- vocabulary. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 68 -> 74. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew. Re-pin 2026-09-20 (DT, wave window): channelsRead 74 -> 75 = +--ds-motion-feedback (8e6b7e57b motion fleet lot 1; the rung it replaced is still read elsewhere in the corpus, so the swap is net +1)., measured by the gate; every move named with its lot. channelsRead 75 -> 76 (2026-09-30 re-read): 43580fdc0 (EVI-02 shape wave: radio joins the radius dial; the skin reads the new dial channel)."
     },
     "toggle": {
       "cut": "WO-FAM-01",
@@ -1793,7 +1793,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 1,
-        "channelsRead": 78,
+        "channelsRead": 79,
         "classTokens": 1,
         "partsStamped": 20,
         "partsConsumed": 20
@@ -1809,7 +1809,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt, not as a pass. 10 of its 47 channels have no producer, 4 of them read through the shared hero skin; the one source colour literal is the `color-mix(...)` secondary arm of `getVariantTone`, whose second byte-identical copy lives in `edit-header` -- extracting the contract once clears both. 2026-09-18: sub-lot C (the header contract) landed — the openCut debt drains to the named residuals (the --ds-material-inset-highlight name the material vocabulary never had, routed; the focus-visible arm awaiting the NavigationLink contract). Re-pin 2026-09-20 (DT, wave window): channelsRead 77 -> 78 = the 8e6b7e57b motion swap net 0 and +--ds-radius-2xl (1cd0e6245 shape exposure, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 1 -> 0 — every bare pseudo now pairs with its kernel-token twin via af9289c04 states lot (the back-chip/anchor stamp twins); decrease-only, the pin follows the tree down."
+      "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt, not as a pass. 10 of its 47 channels have no producer, 4 of them read through the shared hero skin; the one source colour literal is the `color-mix(...)` secondary arm of `getVariantTone`, whose second byte-identical copy lives in `edit-header` -- extracting the contract once clears both. 2026-09-18: sub-lot C (the header contract) landed — the openCut debt drains to the named residuals (the --ds-material-inset-highlight name the material vocabulary never had, routed; the focus-visible arm awaiting the NavigationLink contract). Re-pin 2026-09-20 (DT, wave window): channelsRead 77 -> 78 = the 8e6b7e57b motion swap net 0 and +--ds-radius-2xl (1cd0e6245 shape exposure, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 1 -> 0 — every bare pseudo now pairs with its kernel-token twin via af9289c04 states lot (the back-chip/anchor stamp twins); decrease-only, the pin follows the tree down. channelsRead 78 -> 79 (2026-09-30 re-read): ef868058f (EVI-02: form-header radius literal onto the dial)."
     },
     "edit-header": {
       "cut": "WO-FAM-10",
@@ -1822,7 +1822,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 1,
-        "channelsRead": 79,
+        "channelsRead": 80,
         "classTokens": 1,
         "partsStamped": 28,
         "partsConsumed": 28
@@ -1838,7 +1838,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt. Same shared hero skin and the same single `getVariantTone` colour literal as `form-header`; 4 of its 5 unpaired state pseudo-selectors are the shared skin's. 2026-09-18: sub-lot C (the header contract) landed — the openCut debt drains to the named residuals (the --ds-material-inset-highlight name the material vocabulary never had, routed; the focus-visible arm awaiting the NavigationLink contract). Re-pin 2026-09-20 (DT, wave window): channelsRead 78 -> 79 = the 8e6b7e57b motion swap net 0 and +--ds-radius-2xl (1cd0e6245 shape exposure, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 2 -> 1 — every bare pseudo now pairs with its kernel-token twin via af9289c04 states lot (the back-chip/anchor stamp twins); decrease-only, the pin follows the tree down."
+      "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt. Same shared hero skin and the same single `getVariantTone` colour literal as `form-header`; 4 of its 5 unpaired state pseudo-selectors are the shared skin's. 2026-09-18: sub-lot C (the header contract) landed — the openCut debt drains to the named residuals (the --ds-material-inset-highlight name the material vocabulary never had, routed; the focus-visible arm awaiting the NavigationLink contract). Re-pin 2026-09-20 (DT, wave window): channelsRead 78 -> 79 = the 8e6b7e57b motion swap net 0 and +--ds-radius-2xl (1cd0e6245 shape exposure, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 2 -> 1 — every bare pseudo now pairs with its kernel-token twin via af9289c04 states lot (the back-chip/anchor stamp twins); decrease-only, the pin follows the tree down. channelsRead 79 -> 80 (2026-09-30 re-read): 34a7b69cb (EVI-02: edit-header, the form-header twin)."
     },
     "collection-header": {
       "cut": "WO-FAM-10",
@@ -2322,7 +2322,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 23,
+        "channelsRead": 24,
         "classTokens": 0,
         "partsStamped": 4,
         "partsConsumed": 4
@@ -2338,7 +2338,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-11 sub-lot A admission, S2 class. Measured through the `skins` pin above; every number here is the real skin's. `--ds-workspace-shell-*` has 4 producers in `chrome-variables` and no family skin reads any of them, and the family's own paint is also spread across the 3695-line monolith `presentation/components/patterns/index.css` -- whether draining that monolith is in scope is sub-lot C's ruling, not this row's. The family also carries the last `data-cra-*` attribute in the package (`data-cra-14-static-fallback`)."
+      "cutNote": "WO-FAM-11 sub-lot A admission, S2 class. Measured through the `skins` pin above; every number here is the real skin's. `--ds-workspace-shell-*` has 4 producers in `chrome-variables` and no family skin reads any of them, and the family's own paint is also spread across the 3695-line monolith `presentation/components/patterns/index.css` -- whether draining that monolith is in scope is sub-lot C's ruling, not this row's. The family also carries the last `data-cra-*` attribute in the package (`data-cra-14-static-fallback`). channelsRead 23 -> 24 (2026-09-30 re-read): W3a (EVI-02 depth wave 3 batch 1: a hairline edge-dial read in collection-workspace)."
     },
     "surface-chrome": {
       "cut": "WO-FAM-11",
@@ -2395,7 +2395,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 6,
-        "channelsRead": 78,
+        "channelsRead": 79,
         "classTokens": 0,
         "partsStamped": 19,
         "partsConsumed": 19
@@ -2411,7 +2411,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-11 sub-lot A admission. readWithoutProducer=0 with 25 channels read is the inverse defect: every read is a root token, so the 8 `--ds-command-palette-*` channels a tenant can already move through `chrome-variables` land nowhere. A live tenant-facing cascade with no reader is not visible in any ratchet on this row; it is stated here so sub-lot D cannot read the 0 as done. Re-pin 2026-09-20 (DT, wave window): channelsRead 76 -> 78 = +--ds-font-weight-medium (82bffda11 shell-cluster, +1), the ccb6b784d motion swap net 0, and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot."
+      "cutNote": "WO-FAM-11 sub-lot A admission. readWithoutProducer=0 with 25 channels read is the inverse defect: every read is a root token, so the 8 `--ds-command-palette-*` channels a tenant can already move through `chrome-variables` land nowhere. A live tenant-facing cascade with no reader is not visible in any ratchet on this row; it is stated here so sub-lot D cannot read the 0 as done. Re-pin 2026-09-20 (DT, wave window): channelsRead 76 -> 78 = +--ds-font-weight-medium (82bffda11 shell-cluster, +1), the ccb6b784d motion swap net 0, and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. channelsRead 78 -> 79 (2026-09-30 re-read): 8be7fd02e (S2b: the skin reads --ds-state-disabled-opacity through the item-disabled-opacity chain)."
     },
     "shortcuts-overlay": {
       "cut": "WO-FAM-11",
@@ -2441,7 +2441,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 31,
+        "channelsRead": 32,
         "classTokens": 1,
         "partsStamped": 1,
         "partsConsumed": 1
@@ -2457,7 +2457,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-11 sub-lot A admission. The one row in this cut admitted with NO openCut: it holds every BLOCKING arm today. Its debt is entirely ratchets -- 13 unproduced `--ds-action-dock-*` names, which is the cut's one case of a family that already owns a correct folder-derived namespace and simply has no producer for it, plus `--ds-size-touch-target` and `--ds-virtual-keyboard-inset`, two roots the token lane owns and FAM-10 already routed the first of. Its 2 produced names (`--ds-action-dock-reserved-block-*`) are self-declared in its own skin as a reservation contract other surfaces consume. classVocabularies=1 / legacyNamespaceClasses=1 is the `rottay-action-dock` vocabulary (5 distinct tokens, 21 occurrences), applied from `runtime/rendering/index.tsx`. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact. Re-read 2026-09-26 (a21f312ff): --ds-size-touch-target re-pointed to the live --ds-touch-target-min (the Q11 floor it always equaled) -- readWithoutProducer 3 -> 2, no ratchet touched."
+      "cutNote": "WO-FAM-11 sub-lot A admission. The one row in this cut admitted with NO openCut: it holds every BLOCKING arm today. Its debt is entirely ratchets -- 13 unproduced `--ds-action-dock-*` names, which is the cut's one case of a family that already owns a correct folder-derived namespace and simply has no producer for it, plus `--ds-size-touch-target` and `--ds-virtual-keyboard-inset`, two roots the token lane owns and FAM-10 already routed the first of. Its 2 produced names (`--ds-action-dock-reserved-block-*`) are self-declared in its own skin as a reservation contract other surfaces consume. classVocabularies=1 / legacyNamespaceClasses=1 is the `rottay-action-dock` vocabulary (5 distinct tokens, 21 occurrences), applied from `runtime/rendering/index.tsx`. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact. Re-read 2026-09-26 (a21f312ff): --ds-size-touch-target re-pointed to the live --ds-touch-target-min (the Q11 floor it always equaled) -- readWithoutProducer 3 -> 2, no ratchet touched. channelsRead 31 -> 32 (2026-09-30 re-read): W3a (EVI-02 depth wave 3 batch 1: border-block-start/-end read --ds-edge-hairline-width)."
     },
     "scope-switcher": {
       "cut": "WO-FAM-11",
