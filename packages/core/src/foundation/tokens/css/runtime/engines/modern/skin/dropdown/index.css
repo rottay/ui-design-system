@@ -71,7 +71,7 @@
   container: ds-dropdown / inline-size;
   min-inline-size: min(var(--ds-dropdown-min-width), calc(100dvw - var(--ds-dropdown-viewport-gap) - var(--ds-dropdown-viewport-gap)));
   max-inline-size: min(var(--ds-dropdown-max-width), calc(100dvw - var(--ds-dropdown-viewport-gap) - var(--ds-dropdown-viewport-gap)));
-  padding: var(--ds-dropdown-padding);
+  padding: var(--ds-dropdown-surface-padding);
   overflow: visible;
   color: var(--ds-dropdown-color, var(--ds-color-text-secondary));
   border-radius: var(--ds-dropdown-radius, var(--ds-radius-lg));
@@ -382,7 +382,7 @@
   gap: var(--ds-dropdown-item-gap);
   min-inline-size: var(--ds-dropdown-min-width);
   margin: 0;
-  padding: var(--ds-dropdown-padding);
+  padding: var(--ds-dropdown-surface-padding);
   list-style: none;
   border-radius: var(--ds-dropdown-radius, var(--ds-radius-lg));
   background:
