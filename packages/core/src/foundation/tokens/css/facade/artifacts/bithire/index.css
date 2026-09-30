@@ -754,7 +754,7 @@
   --ds-column-menu-panel-backdrop: none;
   --ds-column-menu-panel-background: var(--ds-gradient-surface, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%)));
   --ds-column-menu-panel-border: 1px solid var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent));
-  --ds-column-menu-panel-focus-outline: 2px solid var(--ds-color-border-focus);
+  --ds-column-menu-panel-focus-outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-border-focus);
   --ds-column-menu-panel-focus-outline-offset: -2px;
   --ds-column-menu-panel-inline-size: 432px;
   --ds-column-menu-panel-radius: var(--ds-radius-xl, 20px);
@@ -973,7 +973,7 @@
   --ds-data-table-group-header-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
   --ds-data-table-group-header-font-weight: var(--ds-type-section-title-font-weight, 600);
   --ds-data-table-header-content-gap: calc(0.375rem * var(--ds-rhythm-effective-scale, 1));
-  --ds-data-table-header-focus-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
+  --ds-data-table-header-focus-shadow: inset 0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
   --ds-data-table-header-font-family: var(--ds-type-label-font-family);
   --ds-data-table-header-pinned-bg: var(--ds-table-header-bg, var(--ds-surface-inset));
   --ds-data-table-leading-cell-padding-comfortable: 0.75rem 1rem 0.75rem 0.1875rem;

@@ -8,7 +8,7 @@
 > `produced` counts the channels the decision's derivers emit; `via aliases` counts what those
 > channels can still reach through the measured alias chain.
 
-digest: 3d7a4b1c48c8873cceaee67389a51a0e46571ade89e0ef7ef5ae9e97d0eb6141
+digest: a8229042f07ca8362f5d960f15f469f602aadae684e354735e9b6b516ea090b0
 
 | decision | tier | derivers | produced | via aliases | families reached |
 |---|---|---|---|---|---|
@@ -31,8 +31,8 @@ digest: 3d7a4b1c48c8873cceaee67389a51a0e46571ade89e0ef7ef5ae9e97d0eb6141
 | `shape.nesting` | pro | 11 | 344 | 454 | 55 |
 | `shape.radius-scale` | standard | 37 | 1297 | 1927 | 223 |
 | `spacing.rhythm` | standard | 11 | 336 | 533 | 61 |
-| `states.emphasis` | standard | 13 | 393 | 1202 | 207 |
-| `states.focus-style` | standard | 21 | 680 | 1473 | 208 |
+| `states.emphasis` | standard | 13 | 393 | 1204 | 207 |
+| `states.focus-style` | standard | 21 | 680 | 1475 | 208 |
 | `surfaces.border-style` | standard | 17 | 492 | 890 | 160 |
 | `surfaces.effect-intensity` | standard | 10 | 335 | 408 | 37 |
 | `surfaces.elevation-posture` | standard | 45 | 1715 | 2062 | 166 |
