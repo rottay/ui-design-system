@@ -119,6 +119,7 @@ describeCausality({
     { id: 'heroPad', selector: HERO, property: 'padding-top' },
     // The back chip's ring, resolved through the header contract's channel.
     { id: 'backRing', selector: BACK, property: '--ds-header-back-focus-ring' },
+    { id: 'backRadius', selector: BACK, property: 'border-top-left-radius' },
     // The badge's corner is a stated number on no plane at all, so it is the
     // control every arm below holds.
     { id: 'badgeRadius', selector: BADGE, property: 'border-top-left-radius' },
@@ -159,6 +160,13 @@ describeCausality({
     'states.focus-style': {
       value: 'glow',
       moves: ['backRing'],
+      holds: 'badgeRadius',
+      in: VERTICALS,
+    },
+    // The back chip's corner reads `--ds-radius-scale` directly; the badge corner stays off the dial.
+    'shape.radius-scale': {
+      value: 1.2,
+      moves: ['backRadius'],
       holds: 'badgeRadius',
       in: VERTICALS,
     },
