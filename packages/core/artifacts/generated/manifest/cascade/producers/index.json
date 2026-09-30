@@ -18,7 +18,7 @@
     "cssEdges": "8fd2374c3c35973b3ba87dfe9f8d5947179b5b46185a3e83a8e7eed544745a88",
     "cascadeRoots": "cc6fcf8b9bffd91b1f2572dd817593fe5b747b1c4892ebf15e45480059c96856",
     "rootCatalog": "8f22e285b34483d8fab7e69686a01a6704985abbd05d5c97be2d63152db0ad0f",
-    "srcTsx": "00d83123a707258fd22dab64b6220d518119518289b5f51fa487f77a65f18327",
+    "srcTsx": "8a038524d57ce161193212b0f1af4966f445ad8e6e4873fdf57b0e921993beb3",
     "srcCompilers": "d1298bd67955e49b3e2c53b413b1c88246dedd2c0f8df1ea6b1d1ecd2211f4a9",
     "artifacts": "a6949687bb0ea159ffb95b2a64b5366cbd499699b812deb423216d368b4860ea"
   },
@@ -73763,6 +73763,6 @@
   "provenance": {
     "producedBy": "cascade:producers --write",
     "writtenOn": "2026-09-30",
-    "contentDigest": "1e9c35b7b83f786086dd7b49adf007449cdcfba149f9d7de717a26b8e798a524"
+    "contentDigest": "b35dc45f87f0c4dd1a2310581f213f22012eee9ec00c1218e77a3c6ffb5414ea"
   }
 }
