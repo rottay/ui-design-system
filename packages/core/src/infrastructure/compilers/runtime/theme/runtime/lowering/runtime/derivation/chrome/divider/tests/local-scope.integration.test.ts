@@ -104,7 +104,7 @@ function divider(spacing: string, own: string, options: { orientation?: string; 
     ? `<span data-part="line-before"></span><span data-part="text">${options.text}</span><span data-part="line-after"></span>`
     : "";
   return [
-    `<div class="ds-divider ds-divider--modern" data-part="root" data-orientation="${options.orientation ?? "horizontal"}" data-spacing="${spacing}"`,
+    `<div class="ds-divider ds-divider--modern" data-part="root" data-component="divider" data-orientation="${options.orientation ?? "horizontal"}" data-spacing="${spacing}"`,
     ` data-with-text="${withText}" data-plain="false" data-text-position="center"${density} style="${options.rootStyle ?? ""}">`,
     label,
     options.inner ?? "",

@@ -738,13 +738,14 @@
 
   /* Border Radius - Modern, Rounded */
   --ds-radius-none: 0;
-  --ds-radius-xs: 3px;
+  --ds-radius-xs: calc(3px * var(--ds-radius-scale, 1));
   /* sm/md/lg/xl carry the tenant radius dial: each is a calc() over a private
      -base literal times var(--ds-radius-scale, 1). Absent scale => fallback 1 =>
      byte-identical to the prior literal; a tenant --ds-radius-scale (0.75-1.25)
      scales these four steps at this one definition site. A tenant --ds-radius-*
      OVERRIDE from the token set replaces the calc entirely (explicit beats dial).
-     none/xs/2xl/3xl/full stay literal (0 and pill radii are not dial-scaled). */
+     xs/2xl/3xl scale the same way over their literal; none/full stay literal
+     (0 and pill radii are not dial-scaled). */
   --ds-radius-sm-base: 6px;
   --ds-radius-md-base: 8px;
   --ds-radius-lg-base: 12px;
@@ -753,8 +754,8 @@
   --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
   --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));
   --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));
-  --ds-radius-2xl: 20px;
-  --ds-radius-3xl: 24px;
+  --ds-radius-2xl: calc(20px * var(--ds-radius-scale, 1));
+  --ds-radius-3xl: calc(24px * var(--ds-radius-scale, 1));
   --ds-radius-full: 9999px;
 
   /* ─────────────────────────────────────────────────────────────────────────────

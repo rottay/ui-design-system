@@ -3,8 +3,9 @@
  * (W4-B1, design section 3.2).
  *
  * Each public --ds-font-size-* / --ds-radius-{sm,md,lg,xl} is now
- * calc(var(--ds-<step>-base) * var(--ds-<axis>-scale, 1)). This test pins two
- * invariants:
+ * calc(var(--ds-<step>-base) * var(--ds-<axis>-scale, 1)), and
+ * --ds-radius-{xs,2xl,3xl} is calc(<literal> * var(--ds-radius-scale, 1)).
+ * This test pins two invariants:
  *
  *   1. With the axis absent, every step resolves to its EXACT pre-change px
  *      (the var() fallback of 1 makes the wrap byte-identical at rest). The
@@ -137,6 +138,17 @@ const RADIUS_BEFORE_PX: Record<string, number> = {
   "--ds-radius-xl": 16,
 };
 
+const RADIUS_LITERAL_BEFORE_PX: Record<string, number> = {
+  "--ds-radius-xs": 3,
+  "--ds-radius-2xl": 20,
+  "--ds-radius-3xl": 24,
+};
+
+const RADIUS_DIALED_BEFORE_PX: Record<string, number> = {
+  ...RADIUS_BEFORE_PX,
+  ...RADIUS_LITERAL_BEFORE_PX,
+};
+
 describe("type-scale + radius-scale calc ramp resolution (W4-B1)", () => {
   it("resolves every font-size step to its exact pre-change px when --ds-type-scale is absent", () => {
     for (const [token, px] of Object.entries(FONT_SIZE_BEFORE_PX)) {
@@ -145,7 +157,7 @@ describe("type-scale + radius-scale calc ramp resolution (W4-B1)", () => {
   });
 
   it("resolves every wrapped radius step to its exact pre-change px when --ds-radius-scale is absent", () => {
-    for (const [token, px] of Object.entries(RADIUS_BEFORE_PX)) {
+    for (const [token, px] of Object.entries(RADIUS_DIALED_BEFORE_PX)) {
       expect(resolvePx(token), token).toBeCloseTo(px, 6);
     }
   });
@@ -162,7 +174,7 @@ describe("type-scale + radius-scale calc ramp resolution (W4-B1)", () => {
 
   it("scales the wrapped radius steps by --ds-radius-scale at the definition site", () => {
     const scale = 1.25;
-    for (const [token, px] of Object.entries(RADIUS_BEFORE_PX)) {
+    for (const [token, px] of Object.entries(RADIUS_DIALED_BEFORE_PX)) {
       expect(
         resolvePx(token, { "--ds-radius-scale": String(scale) }),
         token
@@ -170,13 +182,10 @@ describe("type-scale + radius-scale calc ramp resolution (W4-B1)", () => {
     }
   });
 
-  it("leaves non-dial radius steps (none/xs/2xl/3xl/full) as literals, unscaled", () => {
+  it("leaves non-dial radius steps (none/full) as literals, unscaled", () => {
     const scope = combinedScope({ "--ds-radius-scale": "2" });
     for (const [token, expected] of [
       ["--ds-radius-none", "0"],
-      ["--ds-radius-xs", "3px"],
-      ["--ds-radius-2xl", "20px"],
-      ["--ds-radius-3xl", "24px"],
       ["--ds-radius-full", "9999px"],
     ] as const) {
       expect(scope.get(token), token).toBe(expected);
@@ -198,6 +207,11 @@ describe("type-scale + radius-scale calc ramp resolution (W4-B1)", () => {
     for (const token of Object.keys(RADIUS_BEFORE_PX)) {
       expect(scope.get(token), token).toMatch(
         /^calc\(\s*var\(--ds-radius-[a-z]+-base\)\s*\*\s*var\(--ds-radius-scale,\s*1\)\s*\)$/
+      );
+    }
+    for (const [token, px] of Object.entries(RADIUS_LITERAL_BEFORE_PX)) {
+      expect(scope.get(token), token).toMatch(
+        new RegExp(`^calc\\(\\s*${px}px\\s*\\*\\s*var\\(--ds-radius-scale,\\s*1\\)\\s*\\)$`)
       );
     }
   });
