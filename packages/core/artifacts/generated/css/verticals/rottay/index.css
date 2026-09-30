@@ -8941,11 +8941,12 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-dropdown-min-width: 14rem;
   --ds-dropdown-max-width: 22rem;
   --ds-dropdown-border-width: var(--ds-edge-standard-width);
+  --ds-dropdown-surface-padding: calc(0.375rem * var(--ds-density-effective-scale));
   --ds-dropdown-menu-max-block-size: min(21rem, calc(100dvh - 2rem));
-  --ds-dropdown-item-gap: 0.2rem;
+  --ds-dropdown-item-gap: calc(0.2rem * var(--ds-density-effective-scale));
   --ds-dropdown-item-height: calc(2.4rem * var(--ds-density-effective-scale));
   --ds-dropdown-item-padding-y: calc(0.45rem * var(--ds-density-effective-scale));
-  --ds-dropdown-item-padding-x: 0.55rem;
+  --ds-dropdown-item-padding-x: calc(0.55rem * var(--ds-density-effective-scale));
   --ds-dropdown-item-track-gap: var(--ds-spacing-sm);
   --ds-dropdown-indicator-size: var(--ds-icon-sm-size);
   --ds-dropdown-icon-well-size: 1.75rem;
@@ -8955,12 +8956,12 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-dropdown-submenu-nudge: 2px;
   --ds-dropdown-submenu-offset: 0.48rem;
   --ds-dropdown-submenu-inset: -0.42rem;
-  --ds-dropdown-group-margin-start: 0.35rem;
-  --ds-dropdown-group-margin-end: 0.15rem;
-  --ds-dropdown-group-padding-y: 0.38rem;
-  --ds-dropdown-group-padding-x: 0.6rem;
-  --ds-dropdown-divider-margin-y: 0.35rem;
-  --ds-dropdown-divider-margin-x: 0.3rem;
+  --ds-dropdown-group-margin-start: calc(0.35rem * var(--ds-density-effective-scale));
+  --ds-dropdown-group-margin-end: calc(0.15rem * var(--ds-density-effective-scale));
+  --ds-dropdown-group-padding-y: calc(0.38rem * var(--ds-density-effective-scale));
+  --ds-dropdown-group-padding-x: calc(0.6rem * var(--ds-density-effective-scale));
+  --ds-dropdown-divider-margin-y: calc(0.35rem * var(--ds-density-effective-scale));
+  --ds-dropdown-divider-margin-x: calc(0.3rem * var(--ds-density-effective-scale));
   --ds-dropdown-arrow-size: 0.72rem;
   --ds-dropdown-enter-y: 4px;
   --ds-dropdown-exit-y: 3px;
@@ -8997,33 +8998,33 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-tooltip-arrow-safe-min-inline-size: 2.5rem;
   --ds-tooltip-bordered-border-width: var(--ds-edge-standard-width);
   --ds-tooltip-bordered-max-width: var(--ds-tooltip-max-width);
-  --ds-tooltip-bordered-padding-block: 0.4375rem;
-  --ds-tooltip-bordered-padding-inline: 0.6875rem;
+  --ds-tooltip-bordered-padding-block: calc(0.4375rem * var(--ds-density-effective-scale, 1));
+  --ds-tooltip-bordered-padding-inline: calc(0.6875rem * var(--ds-density-effective-scale, 1));
   --ds-tooltip-bordered-radius: var(--ds-radius-md);
   --ds-tooltip-minimal-border-width: var(--ds-edge-standard-width);
   --ds-tooltip-minimal-max-width: 16rem;
-  --ds-tooltip-minimal-padding-block: 0.3125rem;
-  --ds-tooltip-minimal-padding-inline: 0.5rem;
+  --ds-tooltip-minimal-padding-block: calc(0.3125rem * var(--ds-density-effective-scale, 1));
+  --ds-tooltip-minimal-padding-inline: calc(0.5rem * var(--ds-density-effective-scale, 1));
   --ds-tooltip-minimal-radius: var(--ds-radius-sm);
   --ds-tooltip-inverse-border-width: var(--ds-edge-standard-width);
   --ds-tooltip-inverse-max-width: 18rem;
-  --ds-tooltip-inverse-padding-block: 0.375rem;
-  --ds-tooltip-inverse-padding-inline: 0.625rem;
+  --ds-tooltip-inverse-padding-block: calc(0.375rem * var(--ds-density-effective-scale, 1));
+  --ds-tooltip-inverse-padding-inline: calc(0.625rem * var(--ds-density-effective-scale, 1));
   --ds-tooltip-inverse-radius: var(--ds-radius-md);
   --ds-tooltip-rich-border-width: var(--ds-edge-standard-width);
   --ds-tooltip-rich-max-width: 24rem;
-  --ds-tooltip-rich-padding-block: 0.6875rem;
-  --ds-tooltip-rich-padding-inline: 0.8125rem;
+  --ds-tooltip-rich-padding-block: calc(0.6875rem * var(--ds-density-effective-scale, 1));
+  --ds-tooltip-rich-padding-inline: calc(0.8125rem * var(--ds-density-effective-scale, 1));
   --ds-tooltip-rich-radius: var(--ds-radius-lg);
   --ds-tooltip-rich-type: var(--ds-type-supporting);
   --ds-tooltip-rich-letter-spacing: var(--ds-type-supporting-letter-spacing);
-  --ds-tooltip-compact-padding-block: 0.25rem;
-  --ds-tooltip-compact-padding-inline: 0.5rem;
+  --ds-tooltip-compact-padding-block: calc(0.25rem * var(--ds-density-effective-scale, 1));
+  --ds-tooltip-compact-padding-inline: calc(0.5rem * var(--ds-density-effective-scale, 1));
   --ds-tooltip-compact-type: var(--ds-type-caption);
-  --ds-tooltip-comfortable-padding-block: 0.4375rem;
-  --ds-tooltip-comfortable-padding-inline: 0.6875rem;
-  --ds-tooltip-spacious-padding-block: 0.6875rem;
-  --ds-tooltip-spacious-padding-inline: 0.875rem;
+  --ds-tooltip-comfortable-padding-block: calc(0.4375rem * var(--ds-density-effective-scale, 1));
+  --ds-tooltip-comfortable-padding-inline: calc(0.6875rem * var(--ds-density-effective-scale, 1));
+  --ds-tooltip-spacious-padding-block: calc(0.6875rem * var(--ds-density-effective-scale, 1));
+  --ds-tooltip-spacious-padding-inline: calc(0.875rem * var(--ds-density-effective-scale, 1));
   --ds-tooltip-spacious-type: var(--ds-type-supporting);
   --ds-tooltip-type: var(--ds-type-caption);
   --ds-tooltip-motion-distance: 0.1875rem;
@@ -44040,7 +44041,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
   container: ds-dropdown / inline-size;
   min-inline-size: min(var(--ds-dropdown-min-width), calc(100dvw - var(--ds-dropdown-viewport-gap) - var(--ds-dropdown-viewport-gap)));
   max-inline-size: min(var(--ds-dropdown-max-width), calc(100dvw - var(--ds-dropdown-viewport-gap) - var(--ds-dropdown-viewport-gap)));
-  padding: var(--ds-dropdown-padding);
+  padding: var(--ds-dropdown-surface-padding);
   overflow: visible;
   color: var(--ds-dropdown-color, var(--ds-color-text-secondary));
   border-radius: var(--ds-dropdown-radius, var(--ds-radius-lg));
@@ -44351,7 +44352,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
   gap: var(--ds-dropdown-item-gap);
   min-inline-size: var(--ds-dropdown-min-width);
   margin: 0;
-  padding: var(--ds-dropdown-padding);
+  padding: var(--ds-dropdown-surface-padding);
   list-style: none;
   border-radius: var(--ds-dropdown-radius, var(--ds-radius-lg));
   background:
@@ -72004,9 +72005,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-bottom: 1px solid var(--ds-color-border-secondary);
 }
 
-/* back button (no className hook — §4 anatomy is data-part only) */
+/* back button (no className hook — §4 anatomy is data-part only); its corner
+   rides the tenant radius dial like its form-header twin (10px when unset) */
 .ds-structure.ds-edit-header [data-part='back-button'] {
-  border-radius: 10px;
+  border-radius: calc(10px * var(--ds-radius-scale, 1));
   background: transparent;
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button'] {
@@ -72455,10 +72457,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    declaration painted nothing — but it sat at (0,4,0), tied with the shared
    hover/active tint, and this file is imported AFTER the shared paint, so the
    no-op won and the back chip lost its tint in both states. The frame is all
-   this rule owns. */
+   this rule owns; its corner rides the tenant radius dial (10px when unset). */
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-button'] {
   border: 1px solid var(--ds-color-border);
-  border-radius: 10px;
+  border-radius: calc(10px * var(--ds-radius-scale, 1));
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);

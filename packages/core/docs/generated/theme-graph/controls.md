@@ -8,13 +8,13 @@
 > `produced` counts the channels the decision's derivers emit; `via aliases` counts what those
 > channels can still reach through the measured alias chain.
 
-digest: d07fc6285fd9975e6372827e2dea398511d93fc8cff9825ebaccd21a19ee35e2
+digest: 8fb154dcf688179f2a6fea7f4216693e36a0369c9efddbaf2bc5df0659f0c9a5
 
 | decision | tier | derivers | produced | via aliases | families reached |
 |---|---|---|---|---|---|
 | `chrome.anatomy` | pro | 1 | 6 | 13 | 3 |
-| `density.mode` | standard | 11 | 337 | 1206 | 211 |
-| `experience.profile` | standard | 8 | 224 | 1880 | 245 |
+| `density.mode` | standard | 11 | 337 | 1215 | 211 |
+| `experience.profile` | standard | 8 | 224 | 1889 | 245 |
 | `motion.character` | pro | 30 | 1056 | 1316 | 203 |
 | `motion.dial` | standard | 30 | 1056 | 1316 | 203 |
 | `navigation.sidebar-tone` | standard | 1 | 6 | 13 | 3 |
@@ -23,7 +23,7 @@ digest: d07fc6285fd9975e6372827e2dea398511d93fc8cff9825ebaccd21a19ee35e2
 | `palette.neutral-temperature` | standard | 85 | 2525 | 4098 | 252 |
 | `palette.seeds` | standard | 89 | 2623 | 4301 | 252 |
 | `palette.status-seeds` | standard | 88 | 2611 | 4277 | 252 |
-| `profiles.expressive` | pro | 8 | 224 | 1880 | 245 |
+| `profiles.expressive` | pro | 8 | 224 | 1889 | 245 |
 | `recipe-profile` | pro | — | 0 | 0 | **none** |
 | `responsive.posture` | pro | 2 | 27 | 28 | 1 |
 | `shape.button-style` | standard | 13 | 365 | 1047 | 219 |

@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 14,
-      "maxSourceBytes": 276908
+      "maxSourceBytes": 279116
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "the vertical-outright rows of the alias law's generated table (dt26 fix over 6a91f16ff): 202 per-vertical names a DB tenant scope must not restate over its vertical's same-element rule -- +7162 B of generated source, no new module",
+  "lastMove": "la tabla root-aliases crece 2364 -> 2387 con los 23 canales nuevos de los lotes de ritmo dropdown/tooltip (34a54550e, b4a15de7a): +2208 B de fuente generada en visual-authority (276908 -> 279116)",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
