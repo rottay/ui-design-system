@@ -23,6 +23,7 @@ export const REPRODUCTION_FLAGS = Object.freeze([
   '--no-as-rendered',
   '--no-part-reach',
   '--no-native-pseudos',
+  '--no-real-render-mounts',
 ]);
 
 const percent = (moved, denominator) => (denominator === 0 ? 0 : (moved / denominator) * 100);

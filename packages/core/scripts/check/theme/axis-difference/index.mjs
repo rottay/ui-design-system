@@ -100,6 +100,13 @@
  * forced pseudo driving a sibling -- withheld, not credited) is counted and
  * named per run. `--no-native-pseudos` reproduces the stamped half alone.
  *
+ * AND A FAMILY WHOSE PAINT IS NOT UNDER ITS DEFAULT ROOT AT ALL -- an open
+ * dropdown's surface, a present tooltip's bubble, the text-variant skeleton's
+ * blocks -- is mounted as the markup its engine renders in that shipped
+ * configuration, beside the root, on the axes where the root provably paints
+ * nothing. The law, the roster and the witness door are at
+ * `REAL_RENDER_MOUNTS`; `--no-real-render-mounts` reproduces the pre-lot scene.
+ *
  * THE DENOMINATOR IS NOT THIS FILE'S. It comes from `check/theme/population`,
  * read at a recorded catalog revision and published with every run, because
  * "a percentage whose denominator moved between runs is not comparable"
@@ -126,6 +133,7 @@
  *   node scripts/check/theme/axis-difference/index.mjs --no-as-rendered   the pre-roster root
  *   node scripts/check/theme/axis-difference/index.mjs --no-part-reach    the pre-lot part law
  *   node scripts/check/theme/axis-difference/index.mjs --no-native-pseudos  the stamped states half alone
+ *   node scripts/check/theme/axis-difference/index.mjs --no-real-render-mounts  the default mounts alone
  */
 
 import { execFileSync } from 'node:child_process';
@@ -726,6 +734,478 @@ export function asRenderedReport(elements, { applied = true, roster = AS_RENDERE
 }
 
 /**
+ * THE REAL-RENDER MOUNTS: the markup a family's Modern engine renders in the
+ * configuration that carries its paint, mounted BESIDE the family's root when
+ * that root provably paints nothing on an axis the render owns.
+ *
+ * WHAT WAS BROKEN. Every node this scene builds is read off the skin: the root
+ * compound, the part chains grafted under it, the as-rendered stamps. A family
+ * whose paint lives on a node that is not under its default root is therefore
+ * unreachable by construction, and it reads as a NON-MOVER on channels that
+ * are wired end to end. Measured: `dropdown` paints its radius, elevation and
+ * enter animation on `.ds-dropdown-surface`, which exists only while
+ * `usePresence` reports the menu open; `tooltip` paints them on
+ * `.ds-tooltip-bubble`, which exists only while `present && mounted`;
+ * `skeleton`'s mounted root is the shape-variant block whose radius arrives as
+ * an inline hatch the scene never stamps, while the blocks a tenant sees are
+ * the text variant's avatar/title/line under `.rottay-skeleton-wrapper`.
+ *
+ * WHY THE OLD REFUSAL IS RETIRED. The part law refused such a node as "an
+ * interaction state this probe does not enter". That conflated two things. An
+ * open menu, a present bubble and a text-variant skeleton are STATIC
+ * configurations the product ships: once opened or configured they sit at rest
+ * as ordinary DOM, which is exactly what the showroom's skin-coverage section
+ * mounts for the dead-selector audit. The interaction itself -- the pointer on
+ * the node -- is the native-pseudo half's business, and it is measured there by
+ * forcing, not here. The distinction this law keeps is the one that matters:
+ * REAL markup against FABRICATED markup.
+ *
+ * THE LAW, and every clause is checked rather than trusted:
+ *
+ *  1. THE MARKUP IS THE ENGINE'S. Every token of a mount -- tag, class,
+ *     attribute value, inline custom property -- must be witnessed in the
+ *     engine source: literally (`data-part="title"`, `'ds-dropdown-surface'`,
+ *     `<li`), or by a `stamps` row naming the dynamic stamp AND the default it
+ *     resolves from, the discipline `AS_RENDERED_ROOT_STAMPS` holds. A mount
+ *     may OMIT what the engine writes (ids, handlers, runtime layer
+ *     attributes); it may never ADD a token the engine does not write. A stamp
+ *     row nobody's markup uses is refused too, so the roster cannot rot into a
+ *     list of claims. `realRenderRosterFailures` is the door, and `run` refuses
+ *     to mount a roster that does not pass it.
+ *  2. THE CONFIGURATION IS NAMED. `state` names the configuration and the
+ *     engine source that gates it; the published record resolves it to
+ *     `file:line` on every run, so a gate that moves is re-read, not re-typed.
+ *     `host` is the one foreign structure admitted: bare elements the HTML
+ *     content model requires (a `<tr>` parses only inside `<table><tbody>`),
+ *     carrying no class and no attribute.
+ *  3. THE FAMILY QUALIFIES PER AXIS, IN THE BROWSER. A mount is read on an
+ *     axis only where the family's default mount -- root plus the parts that
+ *     axis grafted -- computes EXACTLY what a node no family rule selects
+ *     computes, in both arms of the cell, and the real render computes
+ *     something else. Anything less is a refusal, published per cell and
+ *     failed by `evaluate`, and the refused axis is read on the default mount
+ *     alone. The axes are the four whose properties do not inherit (shape,
+ *     rhythm, depth, motion): there "paints nothing" is a computed fact.
+ *     Typography inherits, so a root that paints nothing still reads the
+ *     tenant's type; states has its own two halves.
+ *  4. THE READING IS A STRICT SUPERSET. The mount is read at REST, on its
+ *     declared axes only, beside the default mount -- never instead of it --
+ *     so nothing that moved before can stop moving, the state stamp and the
+ *     native forcing never touch it, and no denominator changes.
+ *
+ * `--no-real-render-mounts` reproduces the pre-lot reading on the same tree.
+ */
+export const REAL_RENDER_AXES = Object.freeze(['shape', 'rhythm', 'depth', 'motion']);
+
+const SKELETON_ENGINE = 'src/components/primitives/feedback/skeleton/engines/modern/index.tsx';
+const SKELETON_CONTRACT = 'src/components/primitives/feedback/skeleton/contracts/index.ts';
+const SKELETON_ANATOMY = 'src/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.tsx';
+const TOOLTIP_ENGINE = 'src/components/primitives/display/tooltip/engines/modern/index.tsx';
+const TOOLTIP_CONTRACT = 'src/components/primitives/display/tooltip/contracts/index.ts';
+const DROPDOWN_ENGINE = 'src/components/primitives/overlay/dropdown/engines/modern/index.tsx';
+const DROPDOWN_CONTRACT = 'src/components/primitives/overlay/dropdown/contracts/index.ts';
+
+const SKELETON_ROWS_MARKUP = Array.from({ length: 4 }, () =>
+  '<tr class="ds-skeleton-anatomy-rows" data-part="skeleton-row" data-loading="true" data-animation="shimmer" aria-hidden="true">'
+  + '<td data-part="skeleton-cell"><span data-part="skeleton-bar" data-bone="line"></span></td></tr>').join('');
+
+export const REAL_RENDER_MOUNTS = Object.freeze({
+  skeleton: Object.freeze({
+    state: Object.freeze({
+      name: 'the default text variant with `avatar`, `title` and `paragraph` -- the blocks a loading region shows; '
+        + 'the mounted root is the shape-variant block, whose radius is an inline hatch the scene never stamps',
+      source: SKELETON_ENGINE,
+      anchors: Object.freeze(['className={`rottay-skeleton-wrapper rottay-skeleton--modern ${className}`}']),
+      resolves: Object.freeze([Object.freeze({ source: SKELETON_CONTRACT, text: "variant: 'text'," })]),
+    }),
+    axes: Object.freeze(['shape', 'rhythm', 'motion']),
+    markup: '<div data-part="root" class="rottay-skeleton-wrapper rottay-skeleton--modern" aria-hidden="true">'
+      + '<div data-part="avatar" data-animation="pulse" style="width:40px;height:40px;--ds-skeleton-avatar-radius:50%"></div>'
+      + '<div data-part="content"><div data-part="title" data-animation="pulse"></div>'
+      + '<div data-part="line" data-animation="pulse"></div><div data-part="line" data-animation="pulse"></div>'
+      + '<div data-part="line" data-animation="pulse"></div></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-part=root', stamp: "data-part={dataPart ?? 'root'}" }),
+      Object.freeze({
+        token: 'attr:data-animation=pulse',
+        stamp: 'data-animation={resolvedStyle}',
+        resolves: Object.freeze([
+          Object.freeze({ source: SKELETON_ENGINE, text: "(animation === 'pulse' ? 'pulse' : 'shimmer')" }),
+          Object.freeze({ source: SKELETON_CONTRACT, text: "animation: 'pulse'," }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'style:width=40px',
+        stamp: 'width: avatarSize,',
+        resolves: Object.freeze([Object.freeze({ source: SKELETON_CONTRACT, text: 'avatarSize: 40,' })]),
+      }),
+      Object.freeze({
+        token: 'style:height=40px',
+        stamp: 'height: avatarSize,',
+        resolves: Object.freeze([Object.freeze({ source: SKELETON_CONTRACT, text: 'avatarSize: 40,' })]),
+      }),
+      Object.freeze({
+        token: 'style:--ds-skeleton-avatar-radius=50%',
+        stamp: "'--ds-skeleton-avatar-radius': avatarShape === 'circle' ? '50%'",
+        resolves: Object.freeze([Object.freeze({ source: SKELETON_CONTRACT, text: "avatarShape: 'circle'," })]),
+      }),
+    ]),
+  }),
+  'skeleton-anatomy': Object.freeze({
+    state: Object.freeze({
+      name: "the public `mode=\"table-rows\"` render in a consumer's own table -- the rows ARE the skeleton, so its "
+        + 'cell rhythm lives on a root the block-mode root never contains',
+      source: SKELETON_ANATOMY,
+      anchors: Object.freeze(["if (mode === 'table-rows') {"]),
+      resolves: Object.freeze([
+        Object.freeze({ source: 'src/components/primitives/feedback/skeleton/index.tsx', text: 'AnatomySkeleton,' }),
+      ]),
+    }),
+    axes: Object.freeze(['rhythm']),
+    host: Object.freeze(['table', 'tbody']),
+    markup: SKELETON_ROWS_MARKUP,
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-loading=true',
+        stamp: "data-loading={loading ? 'true' : 'false'}",
+        resolves: Object.freeze([Object.freeze({ source: SKELETON_ANATOMY, text: '{ loading = true, busy = true,' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-animation=shimmer',
+        stamp: 'data-animation={animationStyle}',
+        resolves: Object.freeze([
+          Object.freeze({ source: SKELETON_ANATOMY, text: "resolvedAnimation === 'pulse' ? 'pulse' : 'shimmer'" }),
+          Object.freeze({ source: SKELETON_ANATOMY, text: ": 'wave');" }),
+        ]),
+      }),
+    ]),
+  }),
+  tooltip: Object.freeze({
+    state: Object.freeze({
+      name: 'the present bubble of a default tooltip (anchor-css branch: inline under its root) -- the node that '
+        + 'carries radius, padding and elevation',
+      source: TOOLTIP_ENGINE,
+      anchors: Object.freeze([
+        'hasRenderableContent &&\n      present &&\n      mounted ? (',
+        'strategy === "anchor-css" ? (\n          bubbleNode',
+      ]),
+      resolves: Object.freeze([]),
+    }),
+    // Not motion: the root already runs `ds-tooltip-enter` from
+    // `runtime/personality` (0.15s), so law 3 refuses it there.
+    axes: Object.freeze(['shape', 'rhythm', 'depth']),
+    markup: '<div class="ds-tooltip ds-tooltip--modern" data-part="root" data-disabled="false" data-open="true" '
+      + 'data-trigger="hover"><div role="tooltip" class="ds-tooltip-bubble" data-part="bubble" data-tone="default" '
+      + 'data-variant="bordered" data-placement="top" data-preferred-placement="top" data-radius="md" '
+      + 'data-interactive="false" data-has-shortcut="false" data-has-arrow="true" data-arrow-tracked="false" '
+      + 'data-touch-behavior="long-press" data-open="true" data-layer-kind="tooltip">'
+      + '<div data-part="content">Tooltip</div><span data-part="arrow" aria-hidden="true"></span></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-disabled=false',
+        stamp: 'data-disabled={disabled ? "true" : "false"}',
+        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'disabled: false,' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-open=true',
+        stamp: 'data-open={isVisible ? "true" : "false"}',
+        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_ENGINE, text: 'const isVisible = isControlled ? visible : internalVisible;' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-trigger=hover',
+        stamp: 'data-trigger={Array.from(triggers).join(" ")}',
+        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'trigger: "hover" as const,' })]),
+      }),
+      Object.freeze({ token: 'attr:role=tooltip', stamp: 'role={interactive ? "dialog" : "tooltip"}' }),
+      Object.freeze({
+        token: 'attr:data-tone=default',
+        stamp: 'data-tone={color}',
+        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'color: "default" as const,' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-variant=bordered',
+        stamp: 'data-variant={recipe}',
+        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'recipe: "bordered" as const,' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-placement=top',
+        stamp: 'data-placement={placementAttribute}',
+        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'placement: "top" as const,' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-preferred-placement=top',
+        stamp: 'data-preferred-placement={preferredPlacementAttribute}',
+        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'placement: "top" as const,' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-radius=md',
+        stamp: 'data-radius={radius}',
+        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'radius: "md" as const,' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-interactive=false',
+        stamp: 'data-interactive={interactive}',
+        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_ENGINE, text: 'interactive = false,' })]),
+      }),
+      Object.freeze({ token: 'attr:data-has-shortcut=false', stamp: 'data-has-shortcut={Boolean(shortcut)}' }),
+      Object.freeze({
+        token: 'attr:data-has-arrow=true',
+        stamp: 'data-has-arrow={Boolean(arrow)}',
+        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'arrow: true,' })]),
+      }),
+      Object.freeze({ token: 'attr:data-arrow-tracked=false', stamp: 'data-arrow-tracked={arrowOffset ? "true" : "false"}' }),
+      Object.freeze({
+        token: 'attr:data-touch-behavior=long-press',
+        stamp: 'data-touch-behavior={touchBehavior}',
+        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'touchBehavior: "long-press" as const,' })]),
+      }),
+    ]),
+  }),
+  dropdown: Object.freeze({
+    state: Object.freeze({
+      name: 'the open menu of a default dropdown (in-tree surface: no `getPopupContainer`) with a group label, two '
+        + 'items and a divider -- the surface and items carry radius, padding and elevation',
+      source: DROPDOWN_ENGINE,
+      anchors: Object.freeze([
+        'const { shouldRender, dataState, ref: presenceRef } = usePresence(isOpen && hasItems);',
+        'const surface = shouldRender ? (',
+        ') : surface}',
+      ]),
+      resolves: Object.freeze([
+        Object.freeze({ source: 'src/graphics/motion/react/runtime/presence/index.ts', text: "dataState: present ? 'open' : 'closed'," }),
+      ]),
+    }),
+    // Not motion: the trigger root already runs `ds-dropdown-enter` from
+    // `runtime/personality` (0.2s), so law 3 refuses it there.
+    axes: Object.freeze(['shape', 'rhythm', 'depth']),
+    markup: '<div data-part="trigger" data-open="true" data-placement="bottomLeft" class="ds-dropdown ds-dropdown--modern">'
+      + '<span data-part="trigger-content"></span>'
+      + '<div data-part="surface" data-open="true" data-placement="bottomLeft" class="ds-dropdown-surface">'
+      + '<ul role="menu" data-part="menu" aria-orientation="vertical">'
+      + '<li role="presentation" data-part="group-label" data-depth="0"><span>Group</span></li>'
+      + '<li role="none" data-part="item-shell" data-depth="0"><button type="button" role="menuitem" data-part="item" '
+      + 'data-tone="neutral"><span data-part="selection-indicator" aria-hidden="true"></span>'
+      + '<span data-part="label">First</span></button></li>'
+      + '<li role="none" data-part="item-shell" data-depth="0"><button type="button" role="menuitem" data-part="item" '
+      + 'data-tone="neutral"><span data-part="selection-indicator" aria-hidden="true"></span>'
+      + '<span data-part="label">Second</span></button></li>'
+      + '<li role="separator" data-part="divider" data-depth="0"></li></ul></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-open=true',
+        stamp: Object.freeze(["data-open={isOpen ? 'true' : 'false'}", "data-open={dataState === 'open' ? 'true' : 'false'}"]),
+      }),
+      Object.freeze({
+        token: 'attr:data-placement=bottomLeft',
+        stamp: Object.freeze(['data-placement={placement}', 'data-placement={surfacePlacement}']),
+        resolves: Object.freeze([
+          Object.freeze({ source: DROPDOWN_CONTRACT, text: "placement: 'bottomLeft'," }),
+          Object.freeze({ source: DROPDOWN_ENGINE, text: 'const surfacePlacement = portalHost ? resolvedPlacement : placement;' }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-depth=0',
+        stamp: 'data-depth={depth}',
+        resolves: Object.freeze([Object.freeze({ source: DROPDOWN_ENGINE, text: 'onClick, depth = 0 }' })]),
+      }),
+      Object.freeze({ token: 'attr:data-part=item', stamp: "{...partAttributes('item', interaction.state)}" }),
+      Object.freeze({ token: 'attr:data-tone=neutral', stamp: "data-tone={item.danger ? 'danger' : 'neutral'}" }),
+    ]),
+  }),
+});
+
+const HTML_TAG = /<([a-z][a-z0-9-]*)((?:\s+[a-zA-Z_:][-\w:.]*(?:\s*=\s*"[^"]*")?)*)\s*\/?>/gu;
+const HTML_ATTRIBUTE = /([a-zA-Z_:][-\w:.]*)(?:\s*=\s*"([^"]*)")?/gu;
+
+/**
+ * Every token a mount's markup carries, in the vocabulary the witness law
+ * reads: `tag:li`, `class:ds-dropdown-surface`, `attr:data-part=title`,
+ * `style:--ds-skeleton-avatar-radius=50%`.
+ */
+export function markupTokens(markup) {
+  const tokens = new Set();
+  for (const [, tag, attributes] of markup.matchAll(HTML_TAG)) {
+    tokens.add(`tag:${tag}`);
+    for (const [, name, value = ''] of attributes.matchAll(HTML_ATTRIBUTE)) {
+      if (name === 'class') {
+        for (const token of value.split(/\s+/u).filter(Boolean)) tokens.add(`class:${token}`);
+      } else if (name === 'style') {
+        for (const declaration of value.split(';').map((entry) => entry.trim()).filter(Boolean)) {
+          const colon = declaration.indexOf(':');
+          tokens.add(`style:${declaration.slice(0, colon).trim()}=${declaration.slice(colon + 1).trim()}`);
+        }
+      } else {
+        tokens.add(`attr:${name}=${value}`);
+      }
+    }
+  }
+  return [...tokens].sort();
+}
+
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+
+/** The literal spellings a JSX source writes a token with; a dynamic value needs a `stamps` row instead. */
+export function literalWitness(token, source) {
+  const [kind, rest] = [token.slice(0, token.indexOf(':')), token.slice(token.indexOf(':') + 1)];
+  if (kind === 'tag') return source.includes(`<${rest}`) && new RegExp(`<${escapeRegExp(rest)}[\\s>]`, 'u').test(source);
+  if (kind === 'class') return new RegExp(`['"\`\\s]${escapeRegExp(rest)}['"\`\\s$]`, 'u').test(source);
+  if (kind === 'attr') {
+    const equals = rest.indexOf('=');
+    const [name, value] = [rest.slice(0, equals), rest.slice(equals + 1)];
+    return [`${name}="${value}"`, `${name}='${value}'`, `'${name}': '${value}'`, `"${name}": "${value}"`,
+      `${name}={'${value}'}`, `${name}={"${value}"}`].some((form) => source.includes(form));
+  }
+  return false;
+}
+
+/** The first line of `source` a text starts on, 1-based, or null. */
+const lineOf = (source, text) => {
+  const at = source.indexOf(text);
+  return at < 0 ? null : source.slice(0, at).split('\n').length;
+};
+
+const texts = (stamp) => (Array.isArray(stamp) ? stamp : [stamp]);
+
+/**
+ * Every way a real-render row can be wrong, read against the tree: a token the
+ * engine does not write, a stamp or default that moved, a gate that is gone,
+ * a stamp row no markup uses, a host that carries anything, an axis the law
+ * does not admit or the family does not declare.
+ *
+ * `readSource` exists so a drill can hand in a drifted engine without writing
+ * one to disk.
+ */
+export function realRenderRosterFailures(root = CORE_ROOT, roster = REAL_RENDER_MOUNTS, {
+  readSource = (file) => readFileSync(file, 'utf8'),
+} = {}) {
+  const failures = [];
+  const skins = skinFamilies(root);
+  const populations = axisPopulations(root);
+  const read = (relative) => {
+    const file = resolve(root, relative);
+    return existsSync(file) ? readSource(file) : null;
+  };
+  for (const [family, entry] of Object.entries(roster)) {
+    const files = skins.get(family);
+    if (files === undefined) {
+      failures.push(`${family}: no Modern skin family`);
+      continue;
+    }
+    if (familyElement(files.map((file) => readFileSync(file, 'utf8')).join('\n')) === null) {
+      failures.push(`${family}: no mountable root to mount a real render beside`);
+    }
+    for (const axis of entry.axes) {
+      if (!REAL_RENDER_AXES.includes(axis)) {
+        failures.push(`${family}/${axis}: a real-render mount is read only on ${REAL_RENDER_AXES.join(', ')}`);
+      } else if (!populations.get(axis).includes(family)) {
+        failures.push(`${family}/${axis}: the family does not declare this axis in check/theme/population`);
+      }
+    }
+    for (const tag of entry.host ?? []) {
+      if (!/^[a-z][a-z0-9-]*$/u.test(tag)) failures.push(`${family}: host \`${tag}\` must be a bare element name`);
+    }
+    const engine = read(entry.state.source);
+    if (engine === null) {
+      failures.push(`${family}: ${entry.state.source} does not exist`);
+      continue;
+    }
+    for (const anchor of entry.state.anchors) {
+      if (!engine.includes(anchor)) failures.push(`${family}: ${entry.state.source} no longer carries the gate \`${anchor}\``);
+    }
+    const resolvesFailures = (where, rows) => {
+      for (const row of rows ?? []) {
+        const text = read(row.source);
+        if (text === null) failures.push(`${where}: ${row.source} does not exist`);
+        else if (!text.includes(row.text)) failures.push(`${where}: ${row.source} no longer carries the resolves \`${row.text}\``);
+      }
+    };
+    resolvesFailures(`${family}/state`, entry.state.resolves);
+    const tokens = markupTokens(entry.markup);
+    const stamped = new Map((entry.stamps ?? []).map((row) => [row.token, row]));
+    for (const token of tokens) {
+      const row = stamped.get(token);
+      if (row !== undefined) continue;
+      if (!literalWitness(token, engine)) {
+        failures.push(`${family}: \`${token}\` is not written by ${entry.state.source} -- a mount may omit what the engine renders, never add to it`);
+      }
+    }
+    for (const row of entry.stamps ?? []) {
+      const where = `${family}/${row.token}`;
+      if (!tokens.includes(row.token)) failures.push(`${where}: a stamp row no mount token uses`);
+      for (const text of texts(row.stamp)) {
+        if (!engine.includes(text)) failures.push(`${where}: ${entry.state.source} no longer carries the stamp \`${text}\``);
+      }
+      resolvesFailures(where, row.resolves);
+    }
+  }
+  return failures;
+}
+
+/** The mounts a run applies: roster rows of the families it measures, each with its host-wrapped markup. */
+export function realRenderMountList(elements, { applied = true, roster = REAL_RENDER_MOUNTS } = {}) {
+  if (!applied) return [];
+  return Object.entries(roster)
+    .filter(([family]) => elements.get(family) !== null && elements.get(family) !== undefined)
+    .map(([family, entry]) => ({
+      family,
+      axes: [...entry.axes],
+      markup: (entry.host ?? []).map((tag) => `<${tag} data-axis-real-host="">`).join('')
+        + entry.markup
+        + [...(entry.host ?? [])].reverse().map((tag) => `</${tag}>`).join(''),
+    }));
+}
+
+/** The roster as a run publishes it, with every gate resolved to the `file:line` it sits on in this tree. */
+export function realRenderReport(mounts, { applied = true, roster = REAL_RENDER_MOUNTS, root = CORE_ROOT } = {}) {
+  const map = {};
+  for (const mount of mounts) {
+    const entry = roster[mount.family];
+    const file = resolve(root, entry.state.source);
+    const source = existsSync(file) ? readFileSync(file, 'utf8') : '';
+    map[mount.family] = {
+      state: entry.state.name,
+      gates: entry.state.anchors.map((anchor) => `${entry.state.source}:${lineOf(source, anchor) ?? '?'}`),
+      axes: [...entry.axes],
+      host: [...(entry.host ?? [])],
+      tokens: markupTokens(entry.markup).length,
+    };
+  }
+  return { applied, families: Object.keys(map).length, map };
+}
+
+/** The pseudo-family keys a reading carries for a mounted family: its default mount alone, and its real render alone. */
+export const REAL_RENDER_KEY = Object.freeze({ default: '#default', real: '#real', blank: '#blank' });
+
+/**
+ * Law 3 over one cell: does the default mount compute what a bare node
+ * computes on every property of the axis, in both arms, while the real render
+ * computes something else in at least one? Returns the verdict and, when
+ * refused, the first reading that refused it.
+ */
+export function realRenderQualification({ before, after, family, axis }) {
+  let realPaints = false;
+  for (const [arm, reading] of [['A', before.base], ['B', after.base]]) {
+    const blank = reading?.[REAL_RENDER_KEY.blank];
+    const own = reading?.[`${family}${REAL_RENDER_KEY.default}`];
+    const real = reading?.[`${family}${REAL_RENDER_KEY.real}`];
+    if (!blank || !own || !real) return { qualified: false, reason: `arm ${arm} carries no real-render reading` };
+    for (const property of AXES[axis].computed) {
+      const painted = own[property].split(' | ').find((value) => value !== blank[property]);
+      if (painted !== undefined) {
+        return {
+          qualified: false,
+          reason: `its default mount already paints ${property} = ${painted} (a bare node computes ${blank[property]}) in arm ${arm}`,
+        };
+      }
+      if (real[property].split(' | ').some((value) => value !== blank[property])) realPaints = true;
+    }
+  }
+  return realPaints
+    ? { qualified: true }
+    : { qualified: false, reason: `the real render paints nothing on ${axis} either -- the mount carries no paint for the axis it was declared for` };
+}
+
+/**
  * THE PART MOUNTS: the element a family actually PAINTS the axis on.
  *
  * WHAT WAS BROKEN, measured rather than asserted. `familyElement` above mounts
@@ -783,15 +1263,17 @@ export function asRenderedReport(elements, { applied = true, roster = AS_RENDERE
  * the head compound, and those chains pass law 1 because the head IS the
  * mounted node.
  *
- * THE SECOND LIMIT STANDS, and it stands on the law rather than on effort: a
- * family whose part rules are headed by a root class of their OWN is out of
- * reach of law 1. `tooltip`'s bubble is headed by `.ds-tooltip-bubble`, not by
- * a compound under the mounted
- * `.ds-tooltip.ds-tooltip--modern[data-part='root']`, so its part rules are
- * refused as `head-not-the-family-root` and tooltip gains no parts. That bubble
- * is a portal the default render does not mount until the tooltip opens;
- * building a second root for it would measure an interaction state this probe
- * does not enter, which is the same refusal law 1 applies to a prop gate.
+ * THE SECOND LIMIT STANDS FOR THIS LAW and is lifted by another: a family
+ * whose part rules are headed by a root class of their OWN is out of reach of
+ * law 1. `tooltip`'s bubble is headed by `.ds-tooltip-bubble`, not by a
+ * compound under the mounted `.ds-tooltip.ds-tooltip--modern[data-part='root']`,
+ * so its part rules are still refused as `head-not-the-family-root` here. This
+ * law synthesizes nodes from selectors, and a second root synthesized from a
+ * selector would be fabricated markup. The bubble is reached by
+ * `REAL_RENDER_MOUNTS` instead, as the markup the engine renders when the
+ * bubble is present -- a shipped static configuration, not an interaction; the
+ * earlier refusal of it as "an interaction state this probe does not enter" is
+ * retired there, with the reasoning.
  *
  * The chain is then GRAFTED onto the family's existing root node, one nested
  * element per compound, so the scene holds the anatomy the skin describes
@@ -1579,7 +2061,7 @@ export function effectiveVariables(artifact, theme) {
  * it, the descendant parts its own skin paints the axes on -- so the same node
  * the pre-lot run read is still read, and the parts are read BESIDE it.
  */
-export function sceneHtml({ css, vertical, theme, elements, mounts = null, partMounts = null }) {
+export function sceneHtml({ css, vertical, theme, elements, mounts = null, partMounts = null, realRenders = [] }) {
   const attributes = rootAttributesToHtml(rootAttributes({ vertical, theme }));
   const nodes = [...elements]
     .filter(([family, element]) => element !== null || mounts?.[family] !== undefined)
@@ -1595,8 +2077,14 @@ export function sceneHtml({ css, vertical, theme, elements, mounts = null, partM
       return `<div data-axis-family="${family}" class="${classAttribute}"${extra}>${partTreeHtml(parts)}</div>`;
     })
     .join('\n');
+  // Law 3's reference: a node no family rule selects, read beside the mounts
+  // so "paints nothing" is a computed comparison and not a table of initials.
+  const real = realRenders.length === 0
+    ? ''
+    : '\n<div data-axis-blank=""></div>' + realRenders.map((mount) =>
+      `\n<div data-axis-real-render="${mount.family}" data-axis-real-axes="${mount.axes.join(' ')}">${mount.markup}</div>`).join('');
   return `<!doctype html><html ${attributes}><head><style>${css}</style></head>`
-    + `<body><div id="axis-scene">${nodes}</div></body></html>`;
+    + `<body><div id="axis-scene">${nodes}${real}</div></body></html>`;
 }
 
 /**
@@ -1825,7 +2313,7 @@ export function allProperties() {
   return [...new Set(AXIS_IDS.flatMap((axis) => AXES[axis].computed))];
 }
 
-const readComputed = ({ properties, axisOf, depth = null }) => {
+const readComputed = ({ properties, axisOf, depth = null, realRender = false, keys = null }) => {
   // FORCE A STYLE FLUSH BEFORE READING. Not defensive padding: writing custom
   // properties on the document element and calling getComputedStyle in the next
   // CDP round trip returns the STALE value on a document this size. Measured
@@ -1881,6 +2369,33 @@ const readComputed = ({ properties, axisOf, depth = null }) => {
           : null));
     }
     out[family] = values;
+  }
+  // The real-render mounts, read at REST only (a state or native pass leaves
+  // `realRender` off) and only for the axes their row declares. The family's
+  // own reading gains them; its default mount alone, the real render alone and
+  // the bare node are published beside it so law 3 is decided off the same
+  // reading the numerator is taken from.
+  if (realRender) {
+    const blank = document.querySelector('[data-axis-blank]');
+    if (blank !== null) {
+      out[keys.blank] = Object.fromEntries(properties.map((property) => [property, styleOf(blank).getPropertyValue(property)]));
+    }
+    for (const container of document.querySelectorAll('[data-axis-real-render]')) {
+      const family = container.getAttribute('data-axis-real-render');
+      if (out[family] === undefined) continue;
+      const axes = container.getAttribute('data-axis-real-axes').split(' ');
+      const nodes = [...container.querySelectorAll('*')].filter((node) => !node.hasAttribute('data-axis-real-host'));
+      const own = {};
+      const real = {};
+      for (const property of properties) {
+        own[property] = out[family][property];
+        if (!axes.includes(axisOf[property])) continue;
+        real[property] = nodes.map((node) => styleOf(node).getPropertyValue(property)).join(' | ');
+        out[family][property] = `${own[property]} | ${real[property]}`;
+      }
+      out[`${family}${keys.default}`] = own;
+      out[`${family}${keys.real}`] = real;
+    }
   }
   return out;
 };
@@ -2134,15 +2649,18 @@ export async function measureCell({
   properties,
   axisOf = axisByProperty(),
   states: variants = STATE_VARIANTS,
+  realRender = false,
 }) {
   const applied = await page.evaluate(applyVariables, variables);
   const unsettled = new Set();
-  const collect = async () => {
-    const reading = await readSettled(page, { properties, axisOf });
-    for (const family of reading.unsettled) unsettled.add(family);
+  const collect = async (plan = {}) => {
+    const reading = await readSettled(page, { properties, axisOf, ...plan });
+    for (const key of reading.unsettled) {
+      if (key !== REAL_RENDER_KEY.blank) unsettled.add(key.split('#')[0]);
+    }
     return reading.values;
   };
-  const base = await collect();
+  const base = await collect(realRender ? { realRender: true, keys: REAL_RENDER_KEY } : {});
   const states = {};
   const stampAttributes = STATE_STAMP_ATTRIBUTES;
   for (const state of variants) {
@@ -2925,6 +3443,13 @@ export async function run({
   /* `false` reproduces the pre-lot states axis: the stamped `[data-state]`
    * half alone, with `:hover`, `:active` and `:focus-visible` never entered. */
   nativePseudos = true,
+  /* `false` reproduces the pre-lot scene: no family's real-render mount, so a
+   * family whose paint lives outside its default root reads as it did before
+   * `REAL_RENDER_MOUNTS` existed. */
+  realRenderMounts = true,
+  /* The roster those mounts come from; a drill hands in its own, and it passes
+   * the same door the shipped one does before anything is mounted. */
+  realRenderRoster = REAL_RENDER_MOUNTS,
   /* The same export of the same compiler, handed in by a runner that reads the
    * source tree instead of `dist/`; absent, the published door is imported. */
   compile: compileOverride = null,
@@ -2942,6 +3467,15 @@ export async function run({
     }
   }
   const isMounted = (family) => mounts?.[family] !== undefined;
+  if (realRenderMounts) {
+    const rosterFailures = realRenderRosterFailures(root, realRenderRoster);
+    if (rosterFailures.length > 0) {
+      throw new Error(`axis-difference: the real-render roster does not match the engines it names -- ${rosterFailures.join(' | ')}`);
+    }
+  }
+  const realRenders = realRenderMountList(elements, { applied: realRenderMounts, roster: realRenderRoster })
+    .filter((mount) => !isMounted(mount.family));
+  const realRenderAxes = new Map(realRenders.map((mount) => [mount.family, mount.axes]));
   const mountable = [...elements]
     .filter(([family, element]) => element !== null || isMounted(family))
     .map(([family]) => family);
@@ -3038,7 +3572,7 @@ export async function run({
           const nativePage = await context.newPage();
           try {
             await nativePage.setContent(
-              sceneHtml({ css: bundle.css, vertical, theme, elements, mounts, partMounts: nativeParts }),
+              sceneHtml({ css: bundle.css, vertical, theme, elements, mounts, partMounts: nativeParts, realRenders }),
               { waitUntil: 'load' },
             );
             nativeCensus ??= await readReachCensus(nativePage, stateRules, 'native');
@@ -3058,7 +3592,7 @@ export async function run({
         }
         const page = await context.newPage();
         await page.setContent(
-          sceneHtml({ css: bundle.css, vertical, theme, elements, mounts, partMounts: mountedParts }),
+          sceneHtml({ css: bundle.css, vertical, theme, elements, mounts, partMounts: mountedParts, realRenders }),
           { waitUntil: 'load' },
         );
         stampedCensus ??= await readReachCensus(page, stateRules, 'stamped');
@@ -3094,13 +3628,17 @@ export async function run({
           const pairChannels = [...new Set([...Object.keys(variablesA), ...Object.keys(variablesB)])].sort();
           let paintDifference;
           try {
-            before = await measureCell({ page, variables: variablesA, properties, axisOf, states: stampedStates });
+            before = await measureCell({
+              page, variables: variablesA, properties, axisOf, states: stampedStates, realRender: realRenders.length > 0,
+            });
             partsA = parts ? await page.evaluate(readParts, parts) : null;
             // Arm A is still on the root here, and arm B there: each read is
             // that arm's own computed value for every channel of the pair, so
             // an alias is compared as what it paints and not as its string.
             const paintA = await readArmChannels(page, pairChannels);
-            after = await measureCell({ page, variables: variablesB, properties, axisOf, states: stampedStates });
+            after = await measureCell({
+              page, variables: variablesB, properties, axisOf, states: stampedStates, realRender: realRenders.length > 0,
+            });
             partsB = parts ? await page.evaluate(readParts, parts) : null;
             const paintB = await readArmChannels(page, pairChannels);
             paintDifference = resolvedDifference(variablesA, variablesB, baselineRoot, {
@@ -3158,8 +3696,31 @@ export async function run({
             const denominator = effective(axis);
             const moved = [];
             const halves = axis === 'states' ? { stamped: [], native: [] } : null;
+            const real = { credited: [], rescued: [], refused: [] };
             for (const family of denominator) {
-              const property = differsOnAxis(axis, before, after, family);
+              let property;
+              if (realRenderAxes.get(family)?.includes(axis)) {
+                const verdict = realRenderQualification({ before, after, family, axis });
+                const alone = (reading) => ({ base: { [family]: reading.base?.[`${family}${REAL_RENDER_KEY.default}`] } });
+                const withoutReal = differsOnAxis(axis, alone(before), alone(after), family);
+                if (verdict.qualified) {
+                  real.credited.push(family);
+                  property = differsOnAxis(axis, before, after, family);
+                  if (property && !withoutReal) real.rescued.push(family);
+                } else {
+                  // What the refused mount WOULD have read, published so a
+                  // refusal is evidence about the family and not only a gap.
+                  const only = (reading) => ({ base: { [family]: reading.base?.[`${family}${REAL_RENDER_KEY.real}`] } });
+                  real.refused.push({
+                    family,
+                    reason: verdict.reason,
+                    realMoved: firstDifference([[only(before).base, only(after).base]], AXES[axis].computed, family),
+                  });
+                  property = withoutReal;
+                }
+              } else {
+                property = differsOnAxis(axis, before, after, family);
+              }
               if (property) moved.push({ family, property });
               if (halves !== null) {
                 const split = statesHalves(before, after, family);
@@ -3213,6 +3774,9 @@ export async function run({
               percent: denominator.length === 0 ? 0 : (moved.length / denominator.length) * 100,
               movedFamilies: moved.slice(0, 12),
               movedIds: moved.map((entry) => entry.family),
+              // The real-render mounts this cell read (law 3 passed), the
+              // families that moved ONLY through them, and every refusal.
+              ...(realRenders.length === 0 ? {} : { realRender: real }),
               // The two halves of the states axis, each published beside the
               // union the percentage is taken from.
               ...(halves === null ? {} : {
@@ -3300,6 +3864,9 @@ export async function run({
     // for the same reason: an attribute the probe added is part of the node
     // the numerator was read on, and a reader must be able to see it.
     asRendered: asRenderedReport(elements, { applied: asRendered && !collapsedRoots }),
+    // THE REAL-RENDER MOUNTS this run read, each with the configuration it is
+    // and the engine lines that gate it, resolved on this tree.
+    realRender: realRenderReport(realRenders, { applied: realRenderMounts, roster: realRenderRoster, root }),
     // WHICH ELEMENT EACH FAMILY WAS MEASURED ON, per axis, published so the
     // numerator this run reports can be read against the element it was read
     // from. A mount map nobody can see is a numerator nobody can audit.
@@ -3470,6 +4037,18 @@ export function evaluate(result, {
       + 'asymptotically cannot be compared between two arms; name it there with the measurement, or fix the '
       + 'self-referential container query that causes it',
     );
+  }
+  // A REAL-RENDER ROW THAT DOES NOT QUALIFY is a roster defect, never a
+  // quieter number: the refused axis was read on the default mount alone, and
+  // the row that claimed it has to be corrected or removed.
+  for (const cell of result.cells) {
+    for (const refusal of cell.realRender?.refused ?? []) {
+      failures.push(
+        `${refusal.family}: its real-render mount was REFUSED on ${cell.axis} in ${cell.vertical}/${cell.theme} `
+        + `${cell.scenario} -- ${refusal.reason}; REAL_RENDER_MOUNTS may declare an axis only where the default `
+        + 'mount paints nothing and the real render paints',
+      );
+    }
   }
   for (const refusal of result.refusals) {
     failures.push(
@@ -3731,6 +4310,8 @@ if (isMain) {
     partReach: !process.argv.includes('--no-part-reach'),
     // The pre-lot states axis, on demand: the stamped half alone.
     nativePseudos: !process.argv.includes('--no-native-pseudos'),
+    // The pre-lot scene, on demand: no family's real-render mount.
+    realRenderMounts: !process.argv.includes('--no-real-render-mounts'),
   });
   if (process.argv.includes('--json')) console.log(JSON.stringify(result, null, 2));
 
@@ -3774,6 +4355,13 @@ if (isMain) {
     `    selectors refused by the part law, by reason: ${Object.entries(result.partMounts.refused)
       .sort((left, right) => right[1] - left[1]).map(([reason, count]) => `${reason} ${count}`).join(', ') || 'none'}`,
   );
+  console.log(
+    `  real-render mounts: ${result.realRender.applied ? 'ON' : 'OFF (default mounts only -- the pre-lot reading)'}`
+    + `, ${result.realRender.families} famil(ies)`,
+  );
+  for (const [family, row] of Object.entries(result.realRender.map)) {
+    console.log(`    ${family} [${row.axes.join(', ')}] ${row.gates[0]} -- ${row.state}`);
+  }
   console.log(
     `  excluded as unsettled (declared, named): ${result.families.excludedUnsettled.join(', ')}`
     + ` — observed this run: ${result.families.observedUnsettled.join(', ') || 'none'}`,

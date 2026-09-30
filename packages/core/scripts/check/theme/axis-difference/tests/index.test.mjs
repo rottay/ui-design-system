@@ -34,7 +34,7 @@
  * and itself is not a control passing, it is a control with nothing to read.
  */
 import assert from 'node:assert/strict';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
@@ -70,6 +70,15 @@ import {
   logicalEdgeLonghands,
   withAsRenderedStamps,
   withoutStructuralHas,
+  REAL_RENDER_AXES,
+  REAL_RENDER_KEY,
+  REAL_RENDER_MOUNTS,
+  literalWitness,
+  markupTokens,
+  realRenderMountList,
+  realRenderQualification,
+  realRenderReport,
+  realRenderRosterFailures,
   isSingleElement,
   VACUITY_PERMITTED_CONTROLS,
   NEGATIVE_CONTROLS,
@@ -119,6 +128,7 @@ import {
 import { AXIS_IDS, AXES, axisControls, axisPopulations, groupControls } from '../../population/index.mjs';
 import { launchBrowser, resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import { REPRODUCTION_FLAGS } from '../indicator/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
@@ -2788,4 +2798,200 @@ describe('axis-difference BROWSER drill — the native half reads the browser\'s
     assert.equal(held.native, null);
     assert.equal(held.native === null && held.union === null, true, 'a withheld reading must not reach the union either');
   }, 120_000);
+});
+
+describe('axis-difference — a real-render mount is the engine\'s markup, never a fabrication', () => {
+  const SKELETON = REAL_RENDER_MOUNTS.skeleton;
+  const drifted = (from, to) => (file) => {
+    const text = readFileSync(file, 'utf8');
+    return file.endsWith(SKELETON.state.source) ? text.replaceAll(from, to) : text;
+  };
+
+  it('reads a markup as the tokens the witness law checks', () => {
+    assert.deepEqual(
+      markupTokens('<ul role="menu" class="a b"><li data-part="x" style="width:40px;--ds-y:50%"></li></ul>'),
+      ['attr:data-part=x', 'attr:role=menu', 'class:a', 'class:b', 'style:--ds-y=50%', 'style:width=40px', 'tag:li', 'tag:ul'],
+    );
+    assert.equal(literalWitness('attr:data-part=title', '<div data-part="title" />'), true);
+    assert.equal(literalWitness('attr:data-part=title', 'data-part={part}'), false);
+    assert.equal(literalWitness('class:ds-a', "['ds-a', className]"), true);
+    assert.equal(literalWitness('class:ds-a', "'ds-ab'"), false);
+    assert.equal(literalWitness('tag:li', '<li role="none">'), true);
+    assert.equal(literalWitness('tag:li', '<link />'), false);
+  });
+
+  it('THE STALENESS DOOR: every shipped row is witnessed by the engine it names', () => {
+    assert.deepEqual(Object.keys(REAL_RENDER_MOUNTS).sort(), ['dropdown', 'skeleton', 'skeleton-anatomy', 'tooltip']);
+    assert.deepEqual(realRenderRosterFailures(ROOT), []);
+    for (const entry of Object.values(REAL_RENDER_MOUNTS)) {
+      assert.ok(entry.axes.length > 0 && entry.axes.every((axis) => REAL_RENDER_AXES.includes(axis)));
+    }
+  });
+
+  it('MUTANT: a fabricated token -- a part, a class or a value the engine never writes -- fails its pin', () => {
+    for (const markup of [
+      SKELETON.markup.replace('data-part="title"', 'data-part="headline"'),
+      SKELETON.markup.replace('rottay-skeleton-wrapper', 'rottay-skeleton-wrapper rottay-skeleton--glow'),
+      SKELETON.markup.replace('--ds-skeleton-avatar-radius:50%', '--ds-skeleton-avatar-radius:var(--ds-skeleton-radius)'),
+    ]) {
+      const failures = realRenderRosterFailures(ROOT, { skeleton: { ...SKELETON, markup } });
+      assert.ok(failures.some((line) => line.includes('is not written by')), failures.join(' | '));
+    }
+  });
+
+  it('MUTANT: an engine that stops rendering the pinned markup fails, whichever line drifted', () => {
+    const lost = realRenderRosterFailures(ROOT, REAL_RENDER_MOUNTS, { readSource: drifted('data-part="title"', 'data-part="heading"') });
+    assert.ok(lost.some((line) => line.startsWith('skeleton:') && line.includes('`attr:data-part=title` is not written')), lost.join(' | '));
+    const restamped = realRenderRosterFailures(ROOT, REAL_RENDER_MOUNTS, { readSource: drifted('data-animation={resolvedStyle}', 'data-motion={resolvedStyle}') });
+    assert.ok(restamped.some((line) => line.includes('no longer carries the stamp `data-animation={resolvedStyle}`')), restamped.join(' | '));
+    const ungated = realRenderRosterFailures(ROOT, REAL_RENDER_MOUNTS, { readSource: drifted('rottay-skeleton-wrapper rottay-skeleton--modern ${className}', 'rottay-skeleton-stack ${className}') });
+    assert.ok(ungated.some((line) => line.includes('no longer carries the gate')), ungated.join(' | '));
+  });
+
+  it('MUTANT: a stamp row nobody uses, a dressed host, and an axis the law or the population refuses are each named', () => {
+    const orphan = realRenderRosterFailures(ROOT, {
+      skeleton: { ...SKELETON, stamps: [...SKELETON.stamps, { token: 'attr:data-size=md', stamp: 'data-part="avatar"' }] },
+    });
+    assert.ok(orphan.some((line) => line.includes('a stamp row no mount token uses')), orphan.join(' | '));
+    const anatomy = REAL_RENDER_MOUNTS['skeleton-anatomy'];
+    const dressed = realRenderRosterFailures(ROOT, { 'skeleton-anatomy': { ...anatomy, host: ['table class="x"', 'tbody'] } });
+    assert.ok(dressed.some((line) => line.includes('must be a bare element name')), dressed.join(' | '));
+    const axes = realRenderRosterFailures(ROOT, { skeleton: { ...SKELETON, axes: ['typography', 'states', 'depth'] } });
+    assert.ok(axes.some((line) => line.startsWith('skeleton/typography: a real-render mount is read only on')), axes.join(' | '));
+    assert.ok(axes.some((line) => line.startsWith('skeleton/states: a real-render mount is read only on')), axes.join(' | '));
+    assert.ok(axes.some((line) => line.startsWith('skeleton/depth: the family does not declare this axis')), axes.join(' | '));
+  });
+
+  it('LAW 3 over a reading: the default must compute what a bare node does, and the real render must not', () => {
+    const blank = { 'border-top-left-radius': '0px', 'border-top-right-radius': '0px', 'border-bottom-left-radius': '0px', 'border-bottom-right-radius': '0px' };
+    const radius = (value) => Object.fromEntries(Object.keys(blank).map((property) => [property, value]));
+    const reading = (own, real) => ({
+      base: {
+        [REAL_RENDER_KEY.blank]: blank,
+        [`f${REAL_RENDER_KEY.default}`]: own,
+        [`f${REAL_RENDER_KEY.real}`]: real,
+      },
+    });
+    const qualifies = realRenderQualification({
+      before: reading(radius('0px'), radius('0px | 4px')),
+      after: reading(radius('0px'), radius('0px | 6px')),
+      family: 'f',
+      axis: 'shape',
+    });
+    assert.deepEqual(qualifies, { qualified: true });
+    const painted = realRenderQualification({
+      before: reading(radius('0px | 2px'), radius('4px')),
+      after: reading(radius('0px | 2px'), radius('6px')),
+      family: 'f',
+      axis: 'shape',
+    });
+    assert.equal(painted.qualified, false);
+    assert.match(painted.reason, /default mount already paints border-top-left-radius = 2px/u);
+    const empty = realRenderQualification({
+      before: reading(radius('0px'), radius('0px')),
+      after: reading(radius('0px'), radius('0px')),
+      family: 'f',
+      axis: 'shape',
+    });
+    assert.equal(empty.qualified, false);
+    assert.match(empty.reason, /the real render paints nothing on shape/u);
+  });
+
+  it('the scene carries the mounts and the bare node only when the law is on, and the report names each gate line', () => {
+    const elements = familyElements(ROOT, Object.keys(REAL_RENDER_MOUNTS));
+    const mounts = realRenderMountList(elements);
+    assert.deepEqual(mounts.map((mount) => mount.family).sort(), Object.keys(REAL_RENDER_MOUNTS).sort());
+    assert.match(mounts.find((mount) => mount.family === 'skeleton-anatomy').markup, /^<table data-axis-real-host=""><tbody data-axis-real-host=""><tr /u);
+    assert.deepEqual(realRenderMountList(elements, { applied: false }), []);
+    const on = sceneHtml({ css: '', vertical: 'bithire', theme: 'light', elements, realRenders: mounts });
+    const off = sceneHtml({ css: '', vertical: 'bithire', theme: 'light', elements });
+    assert.match(on, /data-axis-blank=""/u);
+    assert.match(on, /data-axis-real-render="skeleton" data-axis-real-axes="shape rhythm motion"/u);
+    assert.doesNotMatch(off, /data-axis-real-render|data-axis-blank/u);
+    const report = realRenderReport(mounts);
+    assert.equal(report.families, 4);
+    for (const row of Object.values(report.map)) {
+      for (const gate of row.gates) assert.match(gate, /^src\/components\/.+\/index\.tsx:\d+$/u);
+    }
+  });
+
+  it('a refused real-render axis FAILS the run, named, rather than reading as a quieter number', () => {
+    const refused = cell({
+      axis: 'motion',
+      scenario: 'motion',
+      realRender: { credited: [], rescued: [], refused: [{ family: 'tooltip', reason: 'its default mount already paints animation-duration = 0.15s', realMoved: null }] },
+    });
+    const failures = evaluate(result([refused]));
+    assert.ok(failures.some((line) => line.startsWith('tooltip: its real-render mount was REFUSED on motion')), failures.join(' | '));
+  });
+
+  it('every reproduction flag the indicator refuses is one the CLI actually reads', () => {
+    const cli = readFileSync(join(ROOT, 'scripts/check/theme/axis-difference/index.mjs'), 'utf8');
+    assert.ok(REPRODUCTION_FLAGS.includes('--no-real-render-mounts'));
+    for (const flag of REPRODUCTION_FLAGS) assert.ok(cli.includes(`process.argv.includes('${flag}')`), flag);
+  });
+});
+
+describe('axis-difference BROWSER drill — the real-render mounts reach the paint, and only where the law admits them', { skip: browserReason }, () => {
+  const FAMILIES = Object.keys(REAL_RENDER_MOUNTS);
+  const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
+
+  it('skeleton, tooltip and dropdown move on shape through their real render; the default mounts alone do not; the palette control stays 0', async () => {
+    const scenarios = [byId('shape'), byId('rhythm'), byId('palette-only')];
+    const on = await run({ verticals: ['bithire'], themes: ['light'], families: FAMILIES, scenarios, nativePseudos: false });
+    const off = await run({ verticals: ['bithire'], themes: ['light'], families: FAMILIES, scenarios, nativePseudos: false, realRenderMounts: false });
+    const shapeOn = on.cells.find((entry) => entry.scenario === 'shape');
+    const shapeOff = off.cells.find((entry) => entry.scenario === 'shape');
+    for (const family of ['skeleton', 'tooltip', 'dropdown']) {
+      assert.ok(shapeOn.movedIds.includes(family), `${family} did not move on shape with its real render mounted`);
+      assert.ok(shapeOn.realRender.rescued.includes(family), `${family} moved, but not through its real render`);
+      assert.ok(!shapeOff.movedIds.includes(family), `${family} moved on shape WITHOUT the real render, so this drill proves nothing`);
+    }
+    const rhythmOn = on.cells.find((entry) => entry.scenario === 'rhythm');
+    assert.ok(rhythmOn.realRender.rescued.includes('skeleton-anatomy'));
+    assert.ok(!rhythmOn.movedIds.includes('tooltip'), 'the bordered tooltip paddings are fixed; a move would be a reading of something else');
+    assert.equal(on.realRender.applied, true);
+    assert.equal(off.realRender.applied, false);
+    assert.equal(off.realRender.families, 0);
+    assert.deepEqual(on.populations, off.populations, 'a mount may move a numerator, never a denominator');
+    for (const entry of on.cells.filter((item) => item.kind === 'negative')) {
+      assert.equal(entry.evidential, true);
+      assert.equal(entry.moved, 0, `${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
+    }
+    assert.deepEqual(evaluate(on), []);
+  });
+
+  it('MUTANT: a row that declares an axis its default root already paints is REFUSED and never credited', async () => {
+    // The tooltip root runs `ds-tooltip-enter` from the personality layer, so
+    // its default mount already paints motion: declaring it must not count.
+    const roster = {
+      ...REAL_RENDER_MOUNTS,
+      tooltip: { ...REAL_RENDER_MOUNTS.tooltip, axes: [...REAL_RENDER_MOUNTS.tooltip.axes, 'motion'] },
+    };
+    const measurement = await run({
+      verticals: ['bithire'],
+      themes: ['light'],
+      families: ['tooltip'],
+      scenarios: [byId('motion')],
+      nativePseudos: false,
+      realRenderRoster: roster,
+    });
+    const motion = measurement.cells.find((entry) => entry.scenario === 'motion');
+    const refusal = motion.realRender.refused.find((entry) => entry.family === 'tooltip');
+    assert.ok(refusal, JSON.stringify(motion.realRender));
+    assert.match(refusal.reason, /default mount already paints animation-duration/u);
+    assert.ok(!motion.realRender.credited.includes('tooltip'));
+    assert.ok(!motion.movedIds.includes('tooltip'), 'a refused mount was credited');
+    assert.ok(evaluate(measurement).some((line) => line.startsWith('tooltip: its real-render mount was REFUSED on motion')));
+  });
+
+  it('MUTANT: a drifted roster is refused before anything is mounted', async () => {
+    const roster = {
+      skeleton: { ...REAL_RENDER_MOUNTS.skeleton, markup: REAL_RENDER_MOUNTS.skeleton.markup.replace('data-part="line"', 'data-part="row"') },
+    };
+    await assert.rejects(
+      run({ verticals: ['bithire'], themes: ['light'], families: ['skeleton'], scenarios: [byId('shape')], realRenderRoster: roster }),
+      /the real-render roster does not match the engines it names/u,
+    );
+  });
 });
