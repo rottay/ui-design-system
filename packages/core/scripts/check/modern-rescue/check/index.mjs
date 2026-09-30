@@ -32,6 +32,12 @@ import { parseRegistry as parseCapabilityRegistry } from '../../../generate/toke
 import { overrideTokens } from '../../orchestration/runtime/tenant-reach/index.mjs';
 import { CASCADE_MANIFEST_REPO_REL, pathForManifestId, readManifestRecords } from '../../../libraries/manifest/index.mjs';
 import { readThemeCatalogRecords } from '../../../libraries/theme-catalog/index.mjs';
+import {
+  archiveRoot,
+  RET03_EVIDENCE_SNAPSHOT,
+  snapshotDir,
+  verifyArchivedUnit,
+} from '../../../libraries/archive/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -41,8 +47,56 @@ const PROGRAM_DIR = 'packages/core/scripts/check/modern-rescue';
 const PROGRAM_ROOT = join(repoRoot, PROGRAM_DIR);
 // The manifest was quarantined out of the package by WO-RET-03
 // (2026-09-19): it is sealed evidence under docs/history, and every manifest
-// path is composed from here.
+// path is composed from here. Its bytes are read from the docs-engineering
+// archive through the archive door, never from this tree.
 const MANIFEST_DIR = 'docs/history/inventories/customization-manifest';
+
+/**
+ * The sealed manifest as archived by WO-RET-03: the unit path, and the file
+ * count, byte total and unitDigest of the in-tree corpus the archive replaces
+ * (HEAD df5e57b81). The door refuses any archive that does not re-derive to
+ * this digest or covers less than this.
+ */
+export const SEALED_MANIFEST_ARCHIVE = Object.freeze({
+  snapshot: RET03_EVIDENCE_SNAPSHOT,
+  pin: Object.freeze({
+    unit: MANIFEST_DIR,
+    files: 281,
+    bytes: 39238078,
+    unitDigest: 'c62f8559add107fe48fc93468df233ba23f05ccf85720e940940bee255b6a5c6',
+  }),
+});
+
+/**
+ * Opens the sealed manifest from the archive. `{ unit, failures }`: `unit` is
+ * null whenever the door refused, and every refusal reason is a failure.
+ */
+export function openSealedManifest({
+  snapshot = snapshotDir(archiveRoot({ repoRoot }), SEALED_MANIFEST_ARCHIVE.snapshot),
+  pin = SEALED_MANIFEST_ARCHIVE.pin,
+} = {}) {
+  const { failures, unit } = verifyArchivedUnit({ snapshotDir: snapshot, pin });
+  return { unit, failures: failures.map((reason) => `sealed-archive: ${reason}`) };
+}
+
+/** `readManifestRecords` over an archived unit: the same id, uniqueness and folder/index laws. */
+function sealedRecords(sealed, under, idField) {
+  const records = [];
+  const ids = new Set();
+  for (const path of sealed.paths(under)) {
+    if (!path.endsWith('/index.json')) continue;
+    const document = sealed.readJson(path);
+    const id = document?.[idField];
+    if (typeof id !== 'string' || id.length === 0) throw new Error(`${MANIFEST_DIR}/${path} is missing ${idField}`);
+    if (ids.has(id)) throw new Error(`duplicate ${idField}: ${id}`);
+    ids.add(id);
+    const observed = path.slice(`${under}/`.length);
+    const expected = `${pathForManifestId(id)}/index.json`;
+    if (observed !== expected) throw new Error(`${idField} ${id} must live at ${expected}, found ${observed}`);
+    records.push({ id, document, relativePath: observed });
+  }
+  return records;
+}
 /** The cascade root cells are live tables inside the package, not sealed evidence. */
 const CASCADE_ROOTS_REL = `${CASCADE_MANIFEST_REPO_REL}/roots`;
 const CASCADE_RETIRED_REL = `${CASCADE_MANIFEST_REPO_REL}/retired/index.json`;
@@ -186,7 +240,6 @@ const FILES = {
   readme: join(PROGRAM_DIR, 'README.md'),
   program: join(PROGRAM_DIR, 'program/index.json'),
   orchestration: join(PROGRAM_DIR, 'orchestration/index.json'),
-  schema: join(MANIFEST_DIR, 'schema/index.json'),
   rules: 'packages/core/scripts/libraries/manifest/rules/index.mjs',
 };
 
@@ -457,7 +510,7 @@ function semanticId(root, pathname) {
 // T-1 constitutional textual checks
 // ---------------------------------------------------------------------------
 
-function collectTextualFailures(contracts) {
+function collectTextualFailures(contracts, sealed) {
   const failures = [];
 
   // 1. Files exist
@@ -627,7 +680,11 @@ function collectTextualFailures(contracts) {
   }
 
   // 6. manifest schema/rules channel prefixes
-  const schema = readJson(FILES.schema);
+  let schema = null;
+  if (sealed) {
+    if (sealed.has('schema/index.json')) schema = sealed.readJson('schema/index.json');
+    else failures.push(`sealed-archive: ${MANIFEST_DIR}/schema/index.json is not in the archived unit`);
+  }
   if (schema) {
     const prefixes = schema.vocabulary?.channelPrefixes;
     if (!Array.isArray(prefixes) || prefixes.length !== 3 || !prefixes.includes('--ds-') || !prefixes.includes('--_ds-') || !prefixes.includes('data-')) {
@@ -722,9 +779,10 @@ function collectTextualFailures(contracts) {
     }
   }
 
-  const controlsDir = join(repoRoot, MANIFEST_DIR, 'controls');
-  if (existsSync(controlsDir)) {
-    for (const { document: control, relativePath: entry } of readManifestRecords(controlsDir, 'controlId')) {
+  if (sealed) {
+    const controls = sealedRecords(sealed, 'controls', 'controlId');
+    if (controls.length === 0) failures.push(`sealed-archive: ${MANIFEST_DIR}/controls holds no control cells`);
+    for (const { document: control, relativePath: entry } of controls) {
       const kind = control?.domain?.kind;
       if (!DOMAIN_KINDS.includes(kind)) {
         failures.push(
@@ -2177,10 +2235,15 @@ function collectHistoricalContractFailures(contracts) {
 
 export function validateModernRescueContracts(
   contracts,
+  { sealedArchive } = {},
 ) {
   const failures = [];
 
-  failures.push(...collectTextualFailures(contracts));
+  const opened = openSealedManifest(sealedArchive);
+  failures.push(...opened.failures);
+  const sealed = opened.unit;
+
+  failures.push(...collectTextualFailures(contracts, sealed));
   failures.push(...collectContractFailures(contracts));
   failures.push(...collectHistoricalContractFailures(contracts));
 
@@ -2229,20 +2292,20 @@ export function validateModernRescueContracts(
     'OVERLAY_OF_ROOTS',
     'NO_CSS_CHANNEL',
   ];
-  const familiesRoot = join(repoRoot, MANIFEST_DIR, 'families');
-  if (existsSync(familiesRoot)) {
+  if (sealed) {
     const bare = [];
     let cellsSeen = 0;
-    const walkGoverned = (dir, prefix) => {
-      for (const entry of readdirSync(dir, { withFileTypes: true })) {
-        const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
-        if (entry.isDirectory()) {
-          walkGoverned(join(dir, entry.name), rel);
-          continue;
+    const familyFiles = sealed.paths('families').filter((path) => path.endsWith('.json'));
+    if (familyFiles.length === 0) failures.push(`sealed-archive: ${MANIFEST_DIR}/families holds no family cells`);
+    const walkGoverned = () => {
+      for (const path of familyFiles) {
+        const familyId = path.slice('families/'.length).replace(/\.json$/u, '');
+        let doc = null;
+        try {
+          doc = sealed.readJson(path);
+        } catch {
+          doc = null;
         }
-        if (!entry.name.endsWith('.json')) continue;
-        const familyId = rel.replace(/\.json$/u, '');
-        const doc = readJson(join(MANIFEST_DIR, 'families', rel));
         for (const cell of doc?.themeControls ?? []) {
           cellsSeen += 1;
           const binding = cell?.targetBinding;
@@ -2272,12 +2335,17 @@ export function validateModernRescueContracts(
         }
       }
     };
-    walkGoverned(familiesRoot, '');
+    walkGoverned();
     // Un recorrido que ve MENOS celdas de las que el manifiesto dice tener no
     // esta limpio: esta roto, y reporta cero peladas exactamente igual que un
     // arbol sano. El denominador lo publica el propio indice, asi que la guarda
     // se mide contra la fuente y no contra un numero pegado aqui.
-    const declaredCells = readJson(join(MANIFEST_DIR, 'index.json'))?.denominators?.controlFamilyCells;
+    let declaredCells = null;
+    try {
+      declaredCells = sealed.has('index.json') ? sealed.readJson('index.json')?.denominators?.controlFamilyCells : null;
+    } catch {
+      declaredCells = null;
+    }
     // Fail-closed (correccion F6 de la auditoria Fable): antes, si el generador
     // dejaba de emitir `controlFamilyCells` -- o lo emitia como cadena -- el piso
     // se apagaba EN SILENCIO con el indice fresco. Un piso que se puede desactivar

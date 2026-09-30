@@ -17,7 +17,7 @@ import { relative, resolve } from 'node:path';
 import { test } from 'node:test';
 
 import { readControlCalibration } from '../../calibration/index.mjs';
-import { CORE_ROOT, QUARANTINE_MANIFEST_ROOT } from '../../paths/index.mjs';
+import { CORE_ROOT, QUARANTINE_MANIFEST_ROOT, REPO_ROOT } from '../../paths/index.mjs';
 import { assertKnownTargetKeys } from '../../roster/index.mjs';
 import {
   assertNegativeControlsHeld,
@@ -28,12 +28,30 @@ import {
   requireResolvedNegativeControls,
   resolveNegativeControls,
 } from '../index.mjs';
+import {
+  archiveRoot,
+  openArchivedUnit,
+  RET03_EVIDENCE_SNAPSHOT,
+  snapshotDir,
+} from '../../../../../../../libraries/archive/index.mjs';
 
 const MANIFEST_ROOT = QUARANTINE_MANIFEST_ROOT;
 const CONTROL_MANIFEST = readControlCalibration('spacing.rhythm');
 const FLEX_MANIFEST = readManifest(resolve(MANIFEST_ROOT, 'families/primitive/layout/flex/index.json'));
 
 const SCOPE = 'rottay/light/modern/both';
+
+/**
+ * The modern-rescue proofs as archived by WO-RET-03: the unit path, and the file
+ * count, byte total and unitDigest of the in-tree corpus the archive replaces
+ * (HEAD df5e57b81). The historical receipts are read through this pin.
+ */
+const MODERN_RESCUE_ARCHIVE_PIN = Object.freeze({
+  unit: 'packages/core/artifacts/quality/programs/modern-rescue',
+  files: 366,
+  bytes: 64201220,
+  unitDigest: '4c8ebccc9fa756cbe71199c95f9e5e5a1de8b9cc1081e2f05f9b5d8c562863aa',
+});
 
 /** The eight the control's calibration row declares today, verbatim. */
 const CONTROL_LEVEL_IDS = [
@@ -748,9 +766,30 @@ test('active evidence ids resolve to receipts, while historical receipts never b
   // receipt back inside its own freshness surface -- reddens assertion (1).
   // (5) THE SAME PROTECTION, by observation: no emitted receipt hashes anything
   // under the evidence root. This is what goes red if the guard is ever removed.
-  const evidenceDir = resolve(CORE_ROOT, 'artifacts/quality/programs/modern-rescue/cascade-proofs/controls');
-  let inspected = 0;
-  const pending = [evidenceDir];
+  // The historical receipts are read from the docs-engineering archive through
+  // the archive door, which refuses a missing, altered, renamed or short unit;
+  // receipts a fresh causal run writes under the evidence root are walked in the
+  // tree as well.
+  const receiptsUnder = 'cascade-proofs/controls';
+  const archived = openArchivedUnit({
+    snapshotDir: snapshotDir(archiveRoot({ repoRoot: REPO_ROOT }), RET03_EVIDENCE_SNAPSHOT),
+    pin: MODERN_RESCUE_ARCHIVE_PIN,
+  });
+  let archivedInspected = 0;
+  for (const path of archived.paths(receiptsUnder)) {
+    if (!path.endsWith('.receipt.json')) continue;
+    const receipt = archived.readJson(path);
+    archivedInspected += 1;
+    const hashedEvidence = receipt.sourceFiles.filter((sourcePath) =>
+      sourcePath.startsWith(`${evidenceRoot}/`),
+    );
+    assert.deepEqual(hashedEvidence, [], `archived ${path} hashes its own evidence root`);
+  }
+  assert.ok(archivedInspected > 0, 'the observational half must actually inspect the archived receipts');
+
+  const evidenceDir = resolve(CORE_ROOT, 'artifacts/quality/programs/modern-rescue', receiptsUnder);
+  let inspected = archivedInspected;
+  const pending = existsSync(evidenceDir) ? [evidenceDir] : [];
   while (pending.length > 0) {
     const directory = pending.pop();
     for (const entry of readdirSync(directory, { withFileTypes: true })) {

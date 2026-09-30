@@ -17,6 +17,14 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
 import { repoRoot as findRepoRoot } from '../../../libraries/repo-root/index.mjs';
+import {
+  ARCHIVE_ROOT_ENV,
+  archiveRoot,
+  RET03_EVIDENCE_SNAPSHOT,
+  sha256,
+  snapshotDir,
+  unitDigestOf,
+} from '../../../libraries/archive/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const LIVE = findRepoRoot(__dirname);
@@ -42,7 +50,9 @@ const CLOSURE_MEMBERS = [
   programDir,
   "packages/core/tests/fixtures/tenants",
   "roadmap/registry.json",
-  "docs/history/inventories/customization-manifest",
+  // The sealed customization manifest is NOT carried: the constitution reads it
+  // from the archive (SANDBOX_ARCHIVE below), and its absence here is what
+  // proves the check no longer reads the in-tree copy.
   "packages/core/governance/manifest/cascade",
   // The cascade leg reads the uncalibrated register beside the cascade tables.
   "packages/core/governance/manifest/calibration",
@@ -59,7 +69,8 @@ const CLOSURE_MEMBERS = [
   // sandbox, so every cell that names one fails to resolve it and test 1
   // reported 56 error lines -- an artefact of the copy boundary, not of the
   // manifest under test. The sandbox is a CLOSURE: a check that reads receipts
-  // needs the receipts in it.
+  // needs the receipts in it. The modern-rescue proofs are left out (see
+  // CLOSURE_EXCLUDED): nothing here reads them, and the copy proves it.
   "packages/core/artifacts/quality",
   // ...and the build outputs those receipts DECLARE as their own source.
   // Measured, not guessed: 240 receipts name build-stamp.json and server.js and
@@ -95,11 +106,32 @@ const CLOSURE_MEMBERS = [
   "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts",
 ];
 
+/** Historical units archived by WO-RET-03 that the closure must not carry. */
+const CLOSURE_EXCLUDED = [join(LIVE, "packages/core/artifacts/quality/programs/modern-rescue")];
+
 for (const rel of CLOSURE_MEMBERS) {
   const dst = join(SANDBOX, rel);
   mkdirSync(dirname(dst), { recursive: true });
-  cpSync(join(LIVE, rel), dst, { recursive: true });
+  cpSync(join(LIVE, rel), dst, {
+    recursive: true,
+    filter: (source) => !CLOSURE_EXCLUDED.some((excluded) => source === excluded || source.startsWith(`${excluded}${sep}`)),
+  });
 }
+
+// The archive the constitution reads, carried as a sandbox copy of the live
+// snapshot's MANIFEST.json and the sealed unit's files, so the seal drills
+// below can plant and re-stamp without touching docs-engineering. The module
+// resolves it through ARCHIVE_ROOT_ENV, set before the import.
+const SEALED_UNIT = "docs/history/inventories/customization-manifest";
+const LIVE_SNAPSHOT = snapshotDir(archiveRoot({ repoRoot: LIVE }), RET03_EVIDENCE_SNAPSHOT);
+const SANDBOX_ARCHIVE = join(SANDBOX, ".archive/docs-engineering");
+const SANDBOX_SNAPSHOT = snapshotDir(SANDBOX_ARCHIVE, RET03_EVIDENCE_SNAPSHOT);
+const SANDBOX_MANIFEST = join(SANDBOX_SNAPSHOT, "MANIFEST.json");
+mkdirSync(join(SANDBOX_SNAPSHOT, "files", SEALED_UNIT), { recursive: true });
+cpSync(join(LIVE_SNAPSHOT, "MANIFEST.json"), SANDBOX_MANIFEST);
+cpSync(join(LIVE_SNAPSHOT, "files", SEALED_UNIT), join(SANDBOX_SNAPSHOT, "files", SEALED_UNIT), { recursive: true });
+const MANIFEST_PRISTINE = readFileSync(SANDBOX_MANIFEST);
+process.env[ARCHIVE_ROOT_ENV] = SANDBOX_ARCHIVE;
 
 // node_modules is never a write target (every write below derives from
 // manifestRoot/programRoot), so it is reused read-only via symlink instead of
@@ -137,6 +169,7 @@ const {
   HELD_NON_ROW_ROOTS,
   heldNonRowRootFailures,
   readModernRescueContracts,
+  SEALED_MANIFEST_ARCHIVE,
   SOCKET_OWNERSHIP_RETIREMENT,
   socketOwnershipRetirementFailures,
   validateModernRescueContracts,
@@ -147,9 +180,9 @@ const { validateCascadeRoot } = await import(
 
 const repoRoot = SANDBOX;
 const programRoot = sandboxProgramDir;
-// The manifest was quarantined to docs/history by WO-RET-03; the programme
-// still validates it as sealed evidence.
-const manifestRoot = join(repoRoot, "docs/history/inventories/customization-manifest");
+// The manifest was quarantined to docs/history by WO-RET-03 and archived; the
+// programme still validates it as sealed evidence, read from the archive copy.
+const manifestRoot = join(SANDBOX_SNAPSHOT, "files", SEALED_UNIT);
 // The cascade root cells are live tables inside the package.
 const cascadeRootsDir = join(repoRoot, "packages/core/governance/manifest/cascade/roots");
 
@@ -188,6 +221,37 @@ function mutated(mutator) {
   const copy = structuredClone(baseline);
   mutator(copy);
   return validateModernRescueContracts(copy);
+}
+
+/**
+ * Re-stamps the sandbox archive over its current bytes and returns the pin
+ * that matches them. Seal drills plant a cell, re-stamp, and validate against
+ * this pin, so the planted content reaches the content laws instead of being
+ * refused by the door; the pristine MANIFEST.json is written back afterwards.
+ */
+function restampSealedUnit(mutateUnit = () => {}) {
+  const manifest = JSON.parse(readFileSync(SANDBOX_MANIFEST, "utf8"));
+  const unit = manifest.units.find((entry) => entry.path === SEALED_UNIT);
+  mutateUnit(unit);
+  for (const entry of unit.entries) {
+    const bytes = readFileSync(join(SANDBOX_SNAPSHOT, "files", entry.path));
+    entry.bytes = bytes.length;
+    entry.sha256 = sha256(bytes);
+  }
+  unit.files = unit.entries.length;
+  unit.bytes = unit.entries.reduce((sum, entry) => sum + entry.bytes, 0);
+  unit.unitDigest = unitDigestOf(unit.entries);
+  writeFileSync(SANDBOX_MANIFEST, `${JSON.stringify(manifest, null, 1)}\n`);
+  return { unit: unit.path, files: unit.files, bytes: unit.bytes, unitDigest: unit.unitDigest };
+}
+
+function validatePlanted(contracts = baseline) {
+  const pin = restampSealedUnit();
+  try {
+    return validateModernRescueContracts(contracts, { sealedArchive: { pin } });
+  } finally {
+    writeFileSync(SANDBOX_MANIFEST, MANIFEST_PRISTINE);
+  }
 }
 
 function expectError(errors, fragment, message) {
@@ -882,7 +946,7 @@ test("planted invented domain.kind fails closed", () => {
     const doc = JSON.parse(original);
     doc.domain.kind = "vibes-based";
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline);
+    const errors = validatePlanted();
     expectError(errors, "is not a governed domain kind", "invented kind must fail the gate");
   } finally {
     writeFileSync(target, original);
@@ -1360,7 +1424,7 @@ test("planted enum with neither enumValues nor calibration.catalog fails closed"
     const doc = JSON.parse(original);
     delete doc.calibration.catalog;
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline);
+    const errors = validatePlanted();
     expectError(
       errors,
       "an enum must name its vocabulary in one of the two governed domiciles",
@@ -1379,7 +1443,7 @@ test("planted closed-enum emptied of enumValues, with no catalog, fails closed",
     doc.domain.enumValues = [];
     delete doc.calibration?.catalog;
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline);
+    const errors = validatePlanted();
     expectError(
       errors,
       "an enum must name its vocabulary in one of the two governed domiciles",
@@ -1398,7 +1462,7 @@ test("CONTROL: a catalog is a real alternative domicile, not decoration", () => 
     doc.domain.enumValues = [];
     doc.calibration = { ...(doc.calibration ?? {}), catalog: { mode: ["compact", "normal", "spacious"] } };
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline);
+    const errors = validatePlanted();
     assert.equal(
       errors.filter((error) => error.includes("two governed domiciles")).length,
       0,
@@ -1514,7 +1578,7 @@ function withFamily(relPath, mutate, run) {
     const doc = JSON.parse(original);
     mutate(doc);
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    run(validateModernRescueContracts(baseline));
+    run(validatePlanted());
   } finally {
     writeFileSync(target, original);
   }
@@ -1717,7 +1781,7 @@ test("F5: an empty catalog is not a domicile", () => {
     const doc = JSON.parse(original);
     doc.calibration.catalog = {};
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline);
+    const errors = validatePlanted();
     expectError(
       errors,
       "an enum must name its vocabulary in one of the two governed domiciles",
@@ -1735,7 +1799,7 @@ test("F6: a missing controlFamilyCells denominator fails closed", () => {
     const doc = JSON.parse(original);
     delete doc.denominators.controlFamilyCells;
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline);
+    const errors = validatePlanted();
     expectError(
       errors,
       "does not publish a numeric denominators.controlFamilyCells",
@@ -1744,6 +1808,104 @@ test("F6: a missing controlFamilyCells denominator fails closed", () => {
   } finally {
     writeFileSync(target, original);
   }
+});
+
+/*
+ * ARCHIVE drills (WO-RET-03 readers arm). The seal is read from the
+ * docs-engineering archive through scripts/libraries/archive. Every way the
+ * archive can disagree with the pin must turn the constitution red; none may
+ * quietly skip the seal legs.
+ */
+const PLANT = "controls/density/mode/index.json";
+
+function withSandboxManifest(run) {
+  try {
+    run();
+  } finally {
+    writeFileSync(SANDBOX_MANIFEST, MANIFEST_PRISTINE);
+  }
+}
+
+test("the seal is read from the archive: the sandbox carries no in-tree copy and the live pin opens it", () => {
+  assert.equal(existsSync(join(repoRoot, SEALED_UNIT)), false, "the sandbox must not carry the in-tree seal");
+  assert.equal(
+    existsSync(join(repoRoot, "packages/core/artifacts/quality/programs/modern-rescue")),
+    false,
+    "the sandbox must not carry the modern-rescue proofs",
+  );
+  assert.equal(SEALED_MANIFEST_ARCHIVE.pin.unit, SEALED_UNIT);
+  assert.deepEqual(validateModernRescueContracts(baseline).filter((e) => e.startsWith("sealed-archive:")), []);
+});
+
+test("a missing archive manifest fails closed", () => {
+  const empty = join(SANDBOX, ".archive/empty-snapshot");
+  mkdirSync(empty, { recursive: true });
+  const errors = validateModernRescueContracts(baseline, { sealedArchive: { snapshot: empty } });
+  expectError(errors, "sealed-archive:", "a missing archive must fail the gate");
+  expectError(errors, "MANIFEST.json is missing", "the refusal must name the missing manifest");
+});
+
+test("a corrupted archived byte fails closed", () => {
+  const target = join(manifestRoot, PLANT);
+  const original = readFileSync(target, "utf8");
+  try {
+    writeFileSync(target, original.replace('"controlId"', '"controlID"'));
+    expectError(validateModernRescueContracts(baseline), `archived file ${SEALED_UNIT}/${PLANT} hashes to`, "a changed byte must be refused");
+  } finally {
+    writeFileSync(target, original);
+  }
+});
+
+test("a missing archived file fails closed", () => {
+  const target = join(manifestRoot, PLANT);
+  const aside = join(SANDBOX, ".archive/aside.json");
+  renameSync(target, aside);
+  try {
+    expectError(validateModernRescueContracts(baseline), `archived file ${SEALED_UNIT}/${PLANT} is missing`, "a missing file must be refused");
+  } finally {
+    renameSync(aside, target);
+  }
+});
+
+test("a renamed archived unit fails closed", () => {
+  withSandboxManifest(() => {
+    const manifest = JSON.parse(MANIFEST_PRISTINE.toString("utf8"));
+    manifest.units.find((unit) => unit.path === SEALED_UNIT).path = `${SEALED_UNIT}-renamed`;
+    writeFileSync(SANDBOX_MANIFEST, JSON.stringify(manifest));
+    expectError(validateModernRescueContracts(baseline), "exactly one is required", "a renamed unit must be refused");
+  });
+});
+
+test("a short manifest fails closed even when it re-derives consistently", () => {
+  const target = join(manifestRoot, PLANT);
+  const aside = join(SANDBOX, ".archive/aside.json");
+  renameSync(target, aside);
+  try {
+    withSandboxManifest(() => {
+      const short = restampSealedUnit((unit) => {
+        unit.entries = unit.entries.filter((entry) => entry.path !== `${SEALED_UNIT}/${PLANT}`);
+      });
+      const errors = validateModernRescueContracts(baseline, {
+        sealedArchive: { pin: { ...SEALED_MANIFEST_ARCHIVE.pin, unitDigest: short.unitDigest } },
+      });
+      expectError(errors, `fewer than the ${SEALED_MANIFEST_ARCHIVE.pin.files} files`, "a manifest that covers less than the unit must be refused");
+    });
+  } finally {
+    renameSync(aside, target);
+  }
+});
+
+test("a consistently re-stamped plant still fails against the reader's pin", () => {
+  withFamily(
+    "primitive/inputs/form/index.json",
+    (doc) => strip(doc.themeControls.find((c) => c.controlId === "density.mode")),
+    () => {
+      withSandboxManifest(() => {
+        restampSealedUnit();
+        expectError(validateModernRescueContracts(baseline), "but the reader pins", "a re-stamped archive must still match the pin");
+      });
+    },
+  );
 });
 
 const SOCKET_FAILURE = /orphan terminalReach|reverse cross-check/u;
@@ -1801,7 +1963,7 @@ test("the live constitution no longer feeds the socket clause from the sealed fa
     const doc = JSON.parse(original);
     doc.themeControls[0].internalChannels.push({ channelId: "--_ds-button-fantasma", semanticOwner: "shape.radius-scale" });
     writeFileSync(sealed, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline);
+    const errors = validatePlanted();
     assert.deepEqual(errors.filter((e) => SOCKET_FAILURE.test(e)), []);
   } finally {
     writeFileSync(sealed, original);
@@ -1850,7 +2012,7 @@ function withFile(target, mutate, check) {
     const doc = JSON.parse(original);
     mutate(doc);
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    check(validateModernRescueContracts(baseline));
+    check(validatePlanted());
   } finally {
     writeFileSync(target, original);
   }
