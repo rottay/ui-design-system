@@ -18,7 +18,7 @@
     "cssEdges": "98fdb2411023e7abe79c48ea33984cf9c15cbb56b59d80d7d7db1f36a9d79810",
     "cascadeRoots": "cc6fcf8b9bffd91b1f2572dd817593fe5b747b1c4892ebf15e45480059c96856",
     "rootCatalog": "8f22e285b34483d8fab7e69686a01a6704985abbd05d5c97be2d63152db0ad0f",
-    "srcTsx": "09afec39f911a91af3fc5e67ba50f450d43179d0181ba8c359f8a1496c7e9f5e",
+    "srcTsx": "26ab65548fd2507dd402629ffe41a23f80c03b6a90aecbfabe6dc0bc1977e588",
     "srcCompilers": "d1298bd67955e49b3e2c53b413b1c88246dedd2c0f8df1ea6b1d1ecd2211f4a9",
     "artifacts": "f5011a42d6e446f301589012ee138bbaa45930eff897f713fe0b42b566d2d670"
   },
@@ -96,7 +96,7 @@
     },
     "measuredCensus": {
       "scannedFiles": 2001,
-      "excludedFiles": 2137,
+      "excludedFiles": 2138,
       "styleSinks": 3164,
       "stampSites": 377,
       "distinctCustomProperties": 249,
@@ -113,8 +113,8 @@
       },
       "excludedFiles": {
         "authored": 1664,
-        "measured": 2137,
-        "delta": 473
+        "measured": 2138,
+        "delta": 474
       },
       "styleSinks": {
         "authored": 3283,
@@ -73710,6 +73710,6 @@
   "provenance": {
     "producedBy": "cascade:producers --write",
     "writtenOn": "2026-09-30",
-    "contentDigest": "01c9f3a79e81e96a3b88c74ee11d90dd060c53ea3d17e26b98dcf12ef5510bba"
+    "contentDigest": "ea1826d7431307fa43ef7c0e4aac26812c75866554a4cb97ef3ec96a30b26932"
   }
 }
