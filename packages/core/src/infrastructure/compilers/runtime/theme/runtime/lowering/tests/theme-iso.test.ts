@@ -45,7 +45,7 @@ import {
   SCOPED_ADMITTED_FAMILY_NAMESPACES,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { readGovernedTheme } from "../foundation/intake";
-import { ROOT_ALIASES } from "../../emission/css/root-aliases";
+import { ROOT_ALIASES, VERTICAL_OUTRIGHT } from "../../emission/css/root-aliases";
 import { DEFAULT_CHROME_SHAPE } from "@/foundation/contracts/composition/tenants/themes/iso/shape";
 import { migrateV1 as migrateV1WithMode } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import {
@@ -757,8 +757,9 @@ describe("T0 DB mode projection through the common compiler", () => {
 
     // 6a91f16ff (one scope re-resolution law for root-declared aliases): the
     // base rule is the delta PLUS every root alias its operands re-resolve,
-    // each restated with its own root text -- 539 here (615 declarations over
-    // the 76-channel delta). The delta itself is still carried exactly.
+    // each restated with its own root text -- 524 here (600 declarations over
+    // the 76-channel delta; the 15 aliases BitHire's own rule states on the
+    // same element are not restated). The delta itself is still carried exactly.
     const rootText = new Map(ROOT_ALIASES);
     const restatedAliases = Object.entries(baseRule).filter(
       ([name]) => !(name in artifact.variables)
@@ -770,9 +771,10 @@ describe("T0 DB mode projection through the common compiler", () => {
     ).toEqual(artifact.variables);
     for (const [name, value] of restatedAliases) {
       expect(value, name).toBe(rootText.get(name));
+      expect(VERTICAL_OUTRIGHT.bithire, name).not.toContain(name);
     }
     expect(Object.keys(artifact.variables)).toHaveLength(76);
-    expect(restatedAliases).toHaveLength(539);
+    expect(restatedAliases).toHaveLength(524);
     expect(baseRule["--ds-color-primary"]).toBe("#2F6B9A");
     expect(darkRule["--ds-color-primary"]).toBe("#315D4D");
     expect(darkRule["--ds-color-bg-primary"]).toBe("#101014");
