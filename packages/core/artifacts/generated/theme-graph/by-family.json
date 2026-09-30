@@ -2220,6 +2220,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -2245,6 +2247,8 @@
         "spacing.rhythm",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -2402,6 +2406,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.pairing",
         "typography.scale"
       ],
@@ -2422,6 +2428,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.pairing",
         "typography.scale"
       ],
@@ -2654,6 +2662,8 @@
         "spacing.rhythm",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -2686,6 +2696,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -2813,7 +2825,9 @@
         "palette.seeds",
         "palette.status-seeds",
         "states.emphasis",
-        "states.focus-style"
+        "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture"
       ],
       "family": "header-hero-shared"
     },
@@ -3791,6 +3805,7 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
         "surfaces.elevation-posture",
         "typography.pairing",
         "typography.scale"

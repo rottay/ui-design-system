@@ -16426,7 +16426,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 .ds-feature-workspace-frame__skeleton > span {
   grid-column: span 4;
   min-block-size: var(--ds-feature-workspace-skeleton-card-height, 9rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-card-border, var(--ds-color-border-secondary));
   border-radius: var(--ds-surface-card-radius, var(--ds-radius-xl));
   background: linear-gradient(
@@ -23894,7 +23894,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'][data-active-count] {
-  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
 }
 
 /* header strip (geometry drained from the retired inline styles) ---------- */
@@ -23943,7 +23943,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
 .ds-structure.ds-field-filters-panel [data-part='presets-pill'] {
@@ -23956,7 +23956,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
 /* inline signal ------------------------------------------------------------ */
@@ -23973,13 +23973,13 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-structure.ds-field-filters-panel [data-part='signal'][data-tone='neutral'] {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-elevated) 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
   color: var(--ds-color-text-secondary);
 }
 
 .ds-structure.ds-field-filters-panel [data-part='signal'][data-tone='primary'] {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card)));
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
   color: var(--ds-color-primary);
 }
 
@@ -24019,7 +24019,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip-icon'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
 }
 
 /* filter card ---------------------------------------------------------------- */
@@ -24035,7 +24035,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
 }
 
 .ds-structure.ds-field-filters-panel [data-part='filter-card-head'] {
@@ -24060,7 +24060,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-icon'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
 /* responsive card grid (drained from the retired inline style) ------------ */
@@ -51548,7 +51548,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* ---- Modal.Footer ---- */
 .rottay-overlay-modal-footer.rottay-overlay-modal-footer[data-part='footer'][data-part='footer'][data-divider='true'] {
-  border-top: 1px solid var(--ds-modal-footer-border, rgba(0, 0, 0, 0.1));
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-modal-footer-border, rgba(0, 0, 0, 0.1));
 }
 .rottay-overlay-modal-footer.rottay-overlay-modal-footer[data-part='footer'][data-part='footer'][data-divider='false'] {
   border-top: none;
@@ -68087,7 +68087,7 @@ html[data-ds-motion='reduced']
   border-radius: var(--ds-radius-sm, 8px);
   color: var(--ds-color-primary);
   background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
 }
 
 .ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-eyebrow'] {
@@ -68709,7 +68709,7 @@ html[data-ds-motion='reduced']
    the only box-shadow in the family. */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'] {
   border-radius: var(--ds-radius-xl, 18px);
-  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
   box-shadow: none;
   transition:
@@ -68726,7 +68726,7 @@ html[data-ds-motion='reduced']
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='soft'] {
   border-radius: var(--ds-radius-xl, 18px);
-  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
   box-shadow: none;
   transition:
@@ -68873,7 +68873,7 @@ html[data-ds-motion='reduced']
   font-size: var(--ds-font-size-2xs);
   font-weight: 700;
   border-radius: var(--ds-radius-md, 9px);
-  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: transparent;
   color: var(--ds-color-text-tertiary);
 }
@@ -68920,7 +68920,7 @@ html[data-ds-motion='reduced']
   overflow: hidden;
   white-space: nowrap;
   border-radius: 999px;
-  border: 1px solid var(--ds-form-sections-badge-border, var(--ds-color-border-secondary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-form-sections-badge-border, var(--ds-color-border-secondary));
   background: var(--ds-form-sections-badge-bg, var(--ds-color-bg-secondary));
 }
 
@@ -68939,7 +68939,7 @@ html[data-ds-motion='reduced']
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] {
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, var(--ds-color-bg-primary) 12%);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] > [data-part='section-chip-label'] {
@@ -68948,7 +68948,7 @@ html[data-ds-motion='reduced']
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] {
   background: var(--ds-color-bg-secondary);
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] > [data-part='section-chip-label'] {
@@ -68971,7 +68971,7 @@ html[data-ds-motion='reduced']
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error'] {
   padding: 4px 8px;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--ds-color-error) 38%, var(--ds-color-border-secondary));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-error) 38%, var(--ds-color-border-secondary));
   background: color-mix(in srgb, var(--ds-color-error) 7%, transparent);
 }
 
@@ -68997,7 +68997,7 @@ html[data-ds-motion='reduced']
   align-items: center;
   justify-content: center;
   border-radius: var(--ds-radius-md, 9px);
-  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: transparent;
   transform: rotate(0deg);
 }
@@ -69147,7 +69147,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] {
   --_ds-form-sections-density: var(--ds-density-global-effective-scale, 1);
   inline-size: 100%;
   border-radius: var(--ds-radius-lg, 16px);
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
   color: var(--ds-color-text-primary);
 }
@@ -71758,7 +71758,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'],
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'] {
-  border: 1px solid var(--ds-header-icon-tone-bd);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-header-icon-tone-bd);
 }
 
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='primary'],
@@ -72007,7 +72007,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   animation: ds-header-enter var(--ds-motion-attention, 320ms) var(--ds-motion-ease-out, ease-out) both;
 }
 .ds-structure.ds-edit-header[data-part='root'][data-loading] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 /* The loading branch is the SAME card: it holds an anatomy-derived skeleton of this
    header's own parts, not a centred spinner in a padded box, so the radius, the
@@ -72026,7 +72026,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: var(--ds-color-bg-secondary);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] {
-  border-bottom: 1px solid var(--ds-color-border-secondary);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 /* back button (no className hook — §4 anatomy is data-part only); its corner
@@ -72079,7 +72079,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-variant-numeric: var(--ds-type-code-font-variant-numeric, normal);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='entity-id'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='entity-id'] {
   color: var(--ds-color-text-secondary);
@@ -72186,7 +72186,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'] {
-  border: 1px solid var(--ds-edit-header-status-tone-bd, var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary)));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-edit-header-status-tone-bd, var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary)));
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='status-pill-text'] {
   color: var(--ds-edit-header-status-tone-fg, var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary)));
@@ -72205,7 +72205,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='dirty-chip'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 26%, var(--ds-color-border-secondary));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-warning) 26%, var(--ds-color-border-secondary));
 }
 .ds-structure.ds-edit-header [data-part='dirty-dot'] {
   inline-size: 6px;
@@ -72240,7 +72240,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 /* the single dominant boundary for the region */
 .ds-structure.ds-edit-header[data-part='root'] [data-part='context-card'] {
-  border-block-start: 1px solid var(--ds-color-border-secondary);
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 .ds-structure.ds-edit-header [data-part='context-rail'] + [data-part='context-card-children'] {
   margin-block-start: 18px;
@@ -72457,7 +72457,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    never a repeated `[data-part]` (4th-tanda law; the sister edit-header.css
    still carries the doubled form, noted for its lane). */
 .ds-structure.ds-form-header[data-part='root'][data-structure='form-header'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 /* ---- top bar: navigation only (back + breadcrumb). The commit action used to
@@ -72466,7 +72466,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] {
   padding-block: var(--ds-form-header-top-bar-padding-block, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   padding-inline: var(--ds-form-header-top-bar-padding-inline, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
-  border-bottom: 1px solid var(--ds-color-border-secondary);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
   background: var(--ds-color-bg-secondary);
 }
 
@@ -72601,7 +72601,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 /* the single dominant boundary for the region */
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='context-card'] {
-  border-block-start: 1px solid var(--ds-color-border-secondary);
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 /* the rail's own gap to the children below it — the EditHeader spelling. The
    retired `[data-has-rail='true']` was a boolean the component computed and stamped
@@ -83509,7 +83509,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] {
-  border: 1px solid var(
+  border: var(--ds-edge-hairline-width, 1px) solid var(
     --ds-material-overlay-border,
     color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent)
   );
@@ -83520,7 +83520,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='header'] {
-  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent);
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='header-description'] {
@@ -83541,7 +83541,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='active-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='active-card-description'] {
@@ -83594,7 +83594,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='view-item-select'] {
@@ -83694,7 +83694,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='empty-state'] {
-  border: 1px dashed color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) dashed color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent);
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-empty-state='persona'] {
@@ -98741,7 +98741,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 .ds-chart-sankey [data-part='node']:focus-visible [data-part='node-mark'] {
   stroke: var(--ds-color-focus, var(--ds-color-primary));
-  stroke-width: 2;
+  stroke-width: var(--ds-focus-ring-width, 2);
 }
 
 .ds-chart-sankey [data-part='link']:focus-visible {
