@@ -160,7 +160,9 @@ export const GridItem = forwardRef<HTMLElement, GridItemProps>((props, ref) => {
       ref: ref as Ref<HTMLElement>,
       className: `rottay-grid-item ${className}`.trim(),
       style: computedStyle,
+      "data-part": "grid-cell",
       ...restProps,
+      "data-component": "grid-item",
     },
     children
   );
