@@ -250,7 +250,7 @@
 
 .ds-chart-sankey [data-part='node']:focus-visible [data-part='node-mark'] {
   stroke: var(--ds-color-focus, var(--ds-color-primary));
-  stroke-width: 2;
+  stroke-width: var(--ds-focus-ring-width, 2);
 }
 
 .ds-chart-sankey [data-part='link']:focus-visible {
