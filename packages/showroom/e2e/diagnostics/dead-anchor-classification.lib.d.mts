@@ -6,20 +6,39 @@ import type { SkinRule } from './skin-rule-coverage.lib.mjs';
 export type ResolvedName = { name: string; kind: 'prop' | 'state' | 'param' | 'field' | 'local' | 'free' };
 
 export type Condition = {
-  kind: 'and' | 'or' | 'ternary' | 'if' | 'early-return' | 'switch' | 'iteration';
+  kind: 'and' | 'or' | 'ternary' | 'if' | 'early-return' | 'switch' | 'iteration' | 'lookup' | 'class-value' | 'unknown';
   text: string;
   file: string;
   line: number;
   names: ResolvedName[];
   gates: boolean;
+  /** A class anchor's element-level condition: the element's, not the class's (never gates the class). */
+  element?: boolean;
 };
 
-export type RenderPath = { conditions: Condition[]; end: string };
+export type ClassSet = { present: Set<string>; complete: boolean };
+
+export type ChainSibling =
+  | { kind: 'el'; tag: string; part: string | null; classes: ClassSet; optional: boolean }
+  | { kind: 'opaque'; optional: boolean };
+
+/** One level of a stamp's JSX ancestry, host first. */
+export type ChainEntry =
+  | { kind: 'el'; tag: string; part: string | null; classes: ClassSet; siblings?: ChainSibling[]; file?: string; container?: boolean }
+  | { kind: 'component'; tag: string; passed: { names: Set<string>; spread: boolean }; siblings?: ChainSibling[]; file?: string; container?: boolean }
+  | { kind: 'prop'; tag: string; prop: string | null; file: string; siblings?: ChainSibling[] }
+  | { kind: 'portal'; via: string; siblings?: ChainSibling[] };
+
+export type RenderPath = { conditions: Condition[]; end: string; chain: ChainEntry[]; hostAt: number | null };
 
 export type StampSite = {
   file: string;
+  /** A data-part, or `.class` for a class anchor. */
   part: string;
-  via: 'data-part' | 'part' | 'partAttributes' | 'd3-attr' | 'data-part-prop';
+  kind: 'part' | 'class';
+  /** A class anchor's producing literal or template prefix. */
+  match?: string;
+  via: 'data-part' | 'part' | 'partAttributes' | 'd3-attr' | 'data-part-prop' | 'className';
   lands: boolean;
   host: string | null;
   line: number;
@@ -30,6 +49,7 @@ export type Census = {
   root: string;
   files: Map<string, { src: string; gateParts: Set<string> }>;
   global: Map<string, Set<string>>;
+  srcRoot: string;
   sitesOf(file: string): StampSite[];
 };
 
@@ -39,6 +59,8 @@ export type StampEvidence = {
   file: string;
   line: number;
   via: StampSite['via'];
+  kind: 'part' | 'class';
+  match: string;
   paths: number;
   required: EvidenceCondition[];
   anyOf: EvidenceCondition[][];
@@ -50,6 +72,8 @@ export type ClassifiedRow = {
   parts: string[];
   owner?: string;
   class: 'TRUE_DEAD' | 'CONDITIONAL';
+  /** A TRUE_DEAD row whose selector the composition can never satisfy, or an orphan class: a skin bug, not a component defect. */
+  verdict?: 'dead-rule';
   reason: string;
   conditionNames?: string[];
   evidence?: Array<{ part: string; stamps: StampEvidence[] }>;
@@ -63,7 +87,10 @@ export type ConditionalPart = {
   skinFiles: string[];
 };
 
-export type PositiveControl = { atRest: Set<string>; forwardingHosts: Set<string> };
+/** `witnesses`: one condition-key set per credited live anchor, each proven on one instance; `atRest` is their union (labels only). */
+export type PositiveControl = { atRest: Set<string>; witnesses: Set<string>[]; forwardingHosts: Set<string> };
+
+export type AnchorTree = { parts: string[]; classes: string[]; groups: AnchorTree[][] };
 
 export type DeadSelectorReport = {
   deadAnchors?: Array<{ file: string; selectors: string[] }>;
@@ -76,6 +103,11 @@ export const REPORT_PATH: string;
 export function listSources(root?: string): string[];
 export function buildCensus(root?: string): Census;
 export function anchorParts(selector: string): string[];
+export function anchorTree(skeleton: string): AnchorTree;
+export function requiredAnchors(tree: AnchorTree): { parts: Set<string>; classes: Set<string> };
+export function ownerSites(census: Census, files: string[], part: string): { sites: StampSite[]; unlocatable: string[] };
+export const conditionKey: (c: Pick<Condition, 'file' | 'line' | 'text'>) => string;
+export const pathGated: (p: RenderPath, control?: Set<string> | PositiveControl) => boolean;
 export function resolveOwner(census: Census, skinFile: string, selector: string): { dir: string | null; leading: string | null; reason?: string };
 export function ownerFiles(census: Census, dir: string, engine: string): string[];
 export function positiveControl(census: Census, liveRows: Array<{ file: string; selector: string }>): PositiveControl;
