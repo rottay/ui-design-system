@@ -138,7 +138,7 @@ test('legacy compatibility is inert while functional affordances remain availabl
   const previewRailRule = workspaceSkin.match(
     /\[data-part=["']preview-rail["']\]\s*\{([\s\S]*?)\}/,
   )?.[1] ?? '';
-  assert.match(previewRailRule, /\bborder:\s*1px solid/);
+  assert.match(previewRailRule, /\bborder:\s*var\(--ds-edge-hairline-width, 1px\) solid/);
   // Every one-sided spelling is banned, not just the two that happened to be
   // removed: the physical pair, the logical pair, and the `-width`/`-style`/
   // `-color` longhands each reconstruct the same rail on their own.

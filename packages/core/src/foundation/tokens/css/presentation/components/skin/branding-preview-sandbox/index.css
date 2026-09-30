@@ -33,7 +33,7 @@
   background: var(--ds-color-bg-primary);
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-lg);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ---- eyebrow section labels (editorial hierarchy; geometry drained) ---- */
@@ -85,7 +85,7 @@
   overflow: hidden;
   margin-block-end: var(--ds-spacing-4);
   border-radius: var(--ds-radius-md);
-  border: 1px solid var(--ds-table-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border));
 }
 
 .ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head'] {
@@ -95,7 +95,7 @@
   font-weight: var(--ds-table-header-font-weight, 500);
   background: var(--ds-table-header-bg, var(--ds-color-bg-secondary));
   color: var(--ds-table-header-color, var(--ds-color-text-muted));
-  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border));
 }
 
 .ds-pattern-branding-preview-sandbox
@@ -106,7 +106,7 @@
   padding: var(--ds-table-cell-padding, 10px 16px);
   font-size: var(--ds-table-cell-font-size, 14px);
   color: var(--ds-table-cell-color, var(--ds-color-text-primary));
-  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border));
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-row-border, var(--ds-color-border));
 }
 .ds-pattern-branding-preview-sandbox
   [data-part='table']

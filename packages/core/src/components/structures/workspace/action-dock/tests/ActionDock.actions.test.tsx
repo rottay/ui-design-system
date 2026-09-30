@@ -339,10 +339,10 @@ describe('ActionDock skin ownership (structured grammar)', () => {
     )?.[1];
 
     expect(bottomRule).toContain(
-      'border-block-start: 1px solid var(--ds-action-dock-edge-color, var(--ds-color-border-primary, transparent))'
+      'border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-action-dock-edge-color, var(--ds-color-border-primary, transparent))'
     );
     expect(topRule).toContain(
-      'border-block-end: 1px solid var(--ds-action-dock-edge-color, var(--ds-color-border-primary, transparent))'
+      'border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-action-dock-edge-color, var(--ds-color-border-primary, transparent))'
     );
     // No forced-colors retouch and no physical edge properties anywhere.
     expect(ACTION_DOCK_SKIN).not.toContain('@media (forced-colors');

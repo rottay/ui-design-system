@@ -143,7 +143,7 @@
   overflow: hidden;
   container-name: ds-decision-comparison;
   container-type: inline-size;
-  border: 1px solid var(--ds-decision-comparison-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-decision-comparison-border);
   border-radius: var(--ds-decision-comparison-radius);
   background: var(--ds-decision-comparison-bg);
   box-shadow: var(--ds-decision-comparison-shadow);
@@ -171,7 +171,7 @@
   gap: var(--ds-spacing-5, 1.25rem);
   min-height: var(--ds-decision-comparison-toolbar-min-height);
   padding: var(--ds-spacing-3, 0.75rem) var(--ds-decision-comparison-pad);
-  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-decision-comparison-section-border);
   background: var(--ds-decision-comparison-toolbar-bg);
   box-shadow: inset 0 -1px 0
     color-mix(in srgb, var(--ds-decision-comparison-section-border) 54%, transparent);
@@ -199,7 +199,7 @@
   align-items: center;
   min-height: 1.625rem;
   padding-inline: var(--ds-spacing-2, 0.5rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-chip-border, var(--ds-color-border-primary));
   border-radius: var(--ds-surface-chip-radius, var(--ds-radius-full, 9999px));
   background: var(--ds-surface-chip-bg, var(--ds-color-bg-primary));
@@ -221,7 +221,7 @@
   position: relative;
   z-index: 1;
   padding: var(--ds-spacing-3, 0.75rem) var(--ds-decision-comparison-pad);
-  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-decision-comparison-section-border);
   background: var(--ds-decision-comparison-verdict-bg);
 }
 
@@ -252,7 +252,7 @@
       auto
     ) 1fr auto;
   min-width: 0;
-  border-inline-end: 1px solid var(--ds-decision-comparison-section-border);
+  border-inline-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-decision-comparison-section-border);
   background: var(--ds-decision-comparison-subject-bg);
   animation: ds-decision-comparison-subject-enter
     var(--ds-decision-comparison-motion-duration)
@@ -293,7 +293,7 @@
   min-width: 0;
   min-height: var(--ds-decision-comparison-identity-min-height);
   padding: var(--ds-decision-comparison-pad);
-  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-decision-comparison-section-border);
 }
 
 .ds-pattern-decision-comparison .ds-decision-comparison__avatar {
@@ -341,7 +341,7 @@
   min-width: 2.5rem;
   min-height: 2.5rem;
   padding-inline: var(--ds-spacing-2, 0.5rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     color-mix(
       in srgb,
       var(--ds-color-primary) 24%,
@@ -387,7 +387,7 @@
   gap: var(--ds-spacing-1, 0.25rem);
   min-height: var(--ds-decision-comparison-badges-min-height);
   padding: var(--ds-spacing-2, 0.5rem) var(--ds-decision-comparison-pad);
-  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-decision-comparison-section-border);
 }
 
 .ds-pattern-decision-comparison .ds-decision-comparison__visual {
@@ -397,7 +397,7 @@
   min-height: var(--ds-decision-comparison-visual-min-height);
   padding: var(--ds-spacing-3, 0.75rem) var(--ds-decision-comparison-pad);
   overflow: hidden;
-  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-decision-comparison-section-border);
   background: radial-gradient(
       circle at 50% 46%,
       color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
@@ -439,7 +439,7 @@
   gap: var(--ds-spacing-3, 0.75rem);
   min-height: var(--ds-decision-comparison-row-height);
   padding: var(--ds-spacing-2, 0.5rem) var(--ds-decision-comparison-pad);
-  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-decision-comparison-section-border);
   transition: background-color var(--ds-motion-feedback, 160ms)
       var(--ds-motion-ease-move, ease-out),
     box-shadow var(--ds-motion-feedback, 160ms)
@@ -563,7 +563,7 @@
   align-self: end;
   gap: var(--ds-spacing-2, 0.5rem);
   padding: var(--ds-spacing-3, 0.75rem) var(--ds-decision-comparison-pad);
-  border-top: 1px solid var(--ds-decision-comparison-section-border);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-decision-comparison-section-border);
   background: var(--ds-decision-comparison-footer-bg);
 }
 
@@ -588,7 +588,7 @@
 
 .ds-pattern-decision-comparison .ds-decision-comparison__insight {
   padding: var(--ds-spacing-3, 0.75rem) var(--ds-decision-comparison-pad);
-  border-top: 1px solid var(--ds-decision-comparison-section-border);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-decision-comparison-section-border);
   background: var(--ds-decision-comparison-insight-bg);
 }
 
