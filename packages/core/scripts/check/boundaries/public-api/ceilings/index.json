@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 14,
-      "maxSourceBytes": 279309
+      "maxSourceBytes": 355289
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "los dos canales --_ds-(area|bar)-marker-radius producidos por el lote shape (43580fdc0): +193 B de fuente generada (279116 -> 279309)",
+  "lastMove": "N1 container law (10bb90185): the emission runtime ships CONTAINER_ALIASES + CONTAINER_ALIAS_CONTEXTS (171 aliases, 151 contexts) so container scopes restate reachable excluded aliases; 279309 -> 355289 measured by the gate on the live tree",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
