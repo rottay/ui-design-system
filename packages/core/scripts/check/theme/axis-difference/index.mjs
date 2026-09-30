@@ -83,6 +83,23 @@
  * The candidate set, the mountable set, the pins and every denominator are
  * unchanged by that repair: only the node a candidate becomes changed.
  *
+ * THE STATES AXIS IS READ IN TWO HALVES. The stamped half is the kernel's
+ * `[data-state]` tokens (plus `[data-disabled]`) written on the scene, as
+ * before. The NATIVE half is `:hover`, `:active` and `:focus-visible` forced by
+ * the browser itself through the DevTools protocol on a second page of the same
+ * scene -- the browser's own pseudo matching, not a class. A pass forces one
+ * depth of every family at once: each node at that depth plus its ancestor
+ * chain (`:hover`, `:active`), or the node plus `:focus-within` on its chain
+ * (focus), and reads only that depth, so the read stays whole-page and every
+ * node is read in the state a pointer or keyboard ON it produces. A forced
+ * calibration scene must reach its paint before any family is read.
+ * THE COMBINATION RULE: a family moves on states when EITHER half, each
+ * compared arm against arm, shows an attributable computed difference; both
+ * halves and their union are published per cell. What neither half reaches
+ * (`:disabled`, `[aria-*]`, a pseudo inside `:has()`, a pseudo-element, a
+ * forced pseudo driving a sibling -- withheld, not credited) is counted and
+ * named per run. `--no-native-pseudos` reproduces the stamped half alone.
+ *
  * THE DENOMINATOR IS NOT THIS FILE'S. It comes from `check/theme/population`,
  * read at a recorded catalog revision and published with every run, because
  * "a percentage whose denominator moved between runs is not comparable"
@@ -108,6 +125,7 @@
  *   node scripts/check/theme/axis-difference/index.mjs --no-states-disabled  the pre-lot state set
  *   node scripts/check/theme/axis-difference/index.mjs --no-as-rendered   the pre-roster root
  *   node scripts/check/theme/axis-difference/index.mjs --no-part-reach    the pre-lot part law
+ *   node scripts/check/theme/axis-difference/index.mjs --no-native-pseudos  the stamped states half alone
  */
 
 import { execFileSync } from 'node:child_process';
@@ -1069,6 +1087,142 @@ export function hasOnlyStructuralHas(selector) {
 }
 
 /**
+ * The native pseudo-classes the browser can be told to match through the
+ * DevTools protocol (`CSS.forcePseudoState`), and so the only ones the native
+ * half of the states axis enters. `:disabled`, `:checked` and every other
+ * native pseudo are NOT in this list: nothing forces them, and a synthesized
+ * `div` cannot acquire them.
+ */
+export const FORCED_PSEUDO_CLASSES = Object.freeze(['hover', 'active', 'focus-visible', 'focus-within', 'focus']);
+
+const FORCED_PSEUDO = /:(?:hover|active|focus-visible|focus-within|focus)(?![\w-])/u;
+const FORCED_PSEUDO_AT = /^:(?:hover|active|focus-visible|focus-within|focus)(?![\w(-])/u;
+
+/**
+ * The selector with every TOP-LEVEL forced pseudo-class removed, brackets,
+ * parentheses and quotes respected.
+ *
+ * This is the native half's `data-state` strip (law 3 of the part law): a part
+ * whose rule paints it under `:hover` is mounted AT REST, and the browser --
+ * not the selector -- supplies the pseudo when a pass forces it. A resting
+ * read of that node cannot match the rule, because nothing is forced at rest.
+ * A pseudo inside `:not()` or `:has()` is left where it is, so the part law
+ * still refuses it as a pseudo: `:not(:hover)` is a condition on the node's
+ * own state and `:has(x:hover)` a condition on a node this pass does not read.
+ */
+export function withoutForcedPseudos(selector) {
+  let out = '';
+  let brackets = 0;
+  let parens = 0;
+  let quote = null;
+  for (let index = 0; index < selector.length; index += 1) {
+    const character = selector[index];
+    if (quote !== null) {
+      out += character;
+      if (character === quote) quote = null;
+      continue;
+    }
+    if (character === '"' || character === "'") quote = character;
+    else if (character === '[') brackets += 1;
+    else if (character === ']') brackets -= 1;
+    else if (character === '(') parens += 1;
+    else if (character === ')') parens -= 1;
+    if (character === ':' && brackets === 0 && parens === 0) {
+      const match = FORCED_PSEUDO_AT.exec(selector.slice(index));
+      if (match !== null) {
+        index += match[0].length - 1;
+        continue;
+      }
+    }
+    out += character;
+  }
+  return out.replace(/\s+/gu, ' ').trim();
+}
+
+/**
+ * The selector with every `:not(...)` removed, because the census counts rules
+ * that paint WHEN disabled and `:not([data-disabled='true'])` paints when NOT.
+ *
+ * Not a nicety: the Modern corpus writes 123 of those exclusions -- a hover
+ * rule that declines to fire on a dead control -- and counting them would have
+ * credited the stamp with reaching families whose only mention of the word is a
+ * refusal. Applied repeatedly so a nested `:not(:is(...))` is removed whole.
+ */
+const withoutNegations = (selector) => {
+  let text = selector;
+  for (let pass = 0; pass < 4; pass += 1) {
+    const next = text.replace(/:not\([^()]*\)/gu, '');
+    if (next === text) return text;
+    text = next;
+  }
+  return text;
+};
+
+/** Which native variants force a given pseudo-class, per `NATIVE_PSEUDO_FORCING`. */
+const VARIANTS_OF_PSEUDO = Object.freeze({
+  hover: ['hover', 'active'],
+  active: ['active'],
+  focus: ['focus-visible'],
+  'focus-visible': ['focus-visible'],
+  'focus-within': ['focus-visible'],
+});
+
+/**
+ * The native variants under which ONE selector would be read in a state no
+ * single pointer or keyboard produces, or an empty set.
+ *
+ * A pass forces its pseudo on every node at one depth of the scene at once --
+ * that is what keeps the read whole-page. For the node being read that is
+ * exactly a real pointer: the node and its ancestor chain match `:hover`, and
+ * no descendant does. What it is NOT is the state of that node's SIBLINGS,
+ * which a real pointer never hovers beside it. So a rule whose forced pseudo
+ * sits on a compound followed by `+` or `~`, or inside a `:has()` that reaches
+ * a sibling, can fire in a pass on a combination nothing real produces.
+ * Those are measured (6 families on this tree: checkbox, input-compounds,
+ * input-number, radio, slider, toggle) and their reading under the variant is
+ * WITHHELD rather than credited -- under-counting is the fail-closed direction.
+ */
+export function forcedPseudoHazards(selector) {
+  const variants = new Set();
+  const text = withoutNegations(selector).replace(/\[[^\]]*\]/gu, '[]');
+  for (const match of text.matchAll(new RegExp(FORCED_PSEUDO.source, 'gu'))) {
+    const pseudo = match[0].slice(1);
+    const tail = text.slice(match.index + match[0].length);
+    const before = text.slice(0, match.index);
+    const hasOpen = before.lastIndexOf(':has(');
+    let insideHas = false;
+    if (hasOpen >= 0) {
+      let depth = 0;
+      for (const character of text.slice(hasOpen + 4, match.index)) {
+        if (character === '(') depth += 1;
+        else if (character === ')') depth -= 1;
+      }
+      insideHas = depth > 0;
+    }
+    const hasContent = insideHas ? text.slice(hasOpen) : '';
+    if (/[+~]/u.test(tail) || (insideHas && /[+~]/u.test(hasContent))) {
+      for (const variant of VARIANTS_OF_PSEUDO[pseudo]) variants.add(variant);
+    }
+  }
+  return variants;
+}
+
+/** family -> variant -> the selectors that make that variant's reading unreal for the family. */
+export function familyForcedPseudoHazards(css) {
+  const hazards = {};
+  for (const rule of cssRules(css)) {
+    for (const listed of selectorList(rule.selector)) {
+      for (const selector of expandAlternatives(listed)) {
+        for (const variant of forcedPseudoHazards(selector)) {
+          (hazards[variant] ??= []).push(selector);
+        }
+      }
+    }
+  }
+  return hazards;
+}
+
+/**
  * One family's parts, read off the rules of ONE stylesheet.
  *
  * `axes` is the set the family is in the population of: a part may only be
@@ -1077,7 +1231,7 @@ export function hasOnlyStructuralHas(selector) {
  * refusals, so a selector refused for four axes is counted four times -- the
  * unit is the reading that was refused, not the string.
  */
-export function familyParts(css, rootElement, axes, { family = null, partReach = true } = {}) {
+export function familyParts(css, rootElement, axes, { family = null, partReach = true, nativePseudos = false } = {}) {
   const rules = cssRules(css);
   const parts = new Map();
   const rejected = {};
@@ -1093,14 +1247,21 @@ export function familyParts(css, rootElement, axes, { family = null, partReach =
     for (const rule of rules) {
       if (!rule.declarations.some((declaration) => authored.has(declaration.property))) continue;
       for (const listed of selectorList(rule.selector)) {
-        for (const selector of expandAlternatives(listed)) {
+        for (const authoredSelector of expandAlternatives(listed)) {
+          // The NATIVE scene mounts a node whose rule is gated on a forced
+          // pseudo, with the pseudo stripped exactly as law 3 strips
+          // `data-state`; the stamped scene never does, so its part map is the
+          // one the pre-lot run built, to the node.
+          const selector = nativePseudos && !authoredSelector.includes('::')
+            ? withoutForcedPseudos(authoredSelector)
+            : authoredSelector;
           const projection = projectPartChain(selector, rootElement);
           if (projection.rejected !== undefined) {
             const element = partReach && projection.rejected === 'root-level'
               ? familyElementPart(selector, family, rootElement)
               : null;
             if (element !== null) {
-              admit([element], selector, axis);
+              admit([element], authoredSelector, axis);
               continue;
             }
             // A `:has()` is a condition on the SCENE, so it is retried below
@@ -1111,7 +1272,7 @@ export function familyParts(css, rootElement, axes, { family = null, partReach =
             }
             continue;
           }
-          admit(projection.chain, selector, axis);
+          admit(projection.chain, authoredSelector, axis);
         }
       }
     }
@@ -1155,7 +1316,7 @@ export function familyParts(css, rootElement, axes, { family = null, partReach =
  * graft has nothing to hang on, and inventing a root for it would move a
  * denominator this lot is not entitled to move.
  */
-export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, { partReach = true } = {}) {
+export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, { partReach = true, nativePseudos = false } = {}) {
   const resolved = elements ?? familyElements(root, only);
   const populations = axisPopulations(root);
   const byFamily = new Map();
@@ -1165,7 +1326,7 @@ export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, 
     if (!rootElement) continue;
     const declared = AXIS_IDS.filter((axis) => populations.get(axis).includes(family));
     const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
-    const record = familyParts(css, rootElement, declared, { family, partReach });
+    const record = familyParts(css, rootElement, declared, { family, partReach, nativePseudos });
     if (record.parts.length === 0 && Object.keys(record.rejected).length === 0) continue;
     byFamily.set(family, record);
   }
@@ -1511,25 +1672,6 @@ const DISABLED_VOCABULARIES = Object.freeze({
 });
 
 /**
- * The selector with every `:not(...)` removed, because the census counts rules
- * that paint WHEN disabled and `:not([data-disabled='true'])` paints when NOT.
- *
- * Not a nicety: the Modern corpus writes 123 of those exclusions -- a hover
- * rule that declines to fire on a dead control -- and counting them would have
- * credited the stamp with reaching families whose only mention of the word is a
- * refusal. Applied repeatedly so a nested `:not(:is(...))` is removed whole.
- */
-const withoutNegations = (selector) => {
-  let text = selector;
-  for (let pass = 0; pass < 4; pass += 1) {
-    const next = text.replace(/:not\([^()]*\)/gu, '');
-    if (next === text) return text;
-    text = next;
-  }
-  return text;
-};
-
-/**
  * How much of the disabled corpus this scene's stamp can reach, read out of the
  * same skins the denominator is read from.
  *
@@ -1619,6 +1761,16 @@ export const STATES_AXIS_LIMITS = Object.freeze({
   ],
 });
 
+/**
+ * True when a scenario's cells read the states axis -- its positive, a control
+ * that must hold it at zero, or a witness taken on it -- and so need the
+ * native half. Every other arm is never compared under a state.
+ */
+export function readsStatesAxis(scenario) {
+  if (scenario.kind === 'positive') return scenario.axis === 'states';
+  return (scenario.expectZeroOn ?? []).includes('states') || scenario.witness?.axis === 'states';
+}
+
 /** The negative control the states-axis limits make vacuous wherever that axis reads zero. */
 export const STATES_DEPENDENT_CONTROL = 'states-emphasis-only';
 
@@ -1673,7 +1825,7 @@ export function allProperties() {
   return [...new Set(AXIS_IDS.flatMap((axis) => AXES[axis].computed))];
 }
 
-const readComputed = ({ properties, axisOf }) => {
+const readComputed = ({ properties, axisOf, depth = null }) => {
   // FORCE A STYLE FLUSH BEFORE READING. Not defensive padding: writing custom
   // properties on the document element and calling getComputedStyle in the next
   // CDP round trip returns the STALE value on a document this size. Measured
@@ -1720,7 +1872,13 @@ const readComputed = ({ properties, axisOf }) => {
       const targets = mounted
         ? anatomy
         : [node, ...parts.filter((part) => part.getAttribute('data-axis-part').split(' ').includes(axis))];
-      values[property] = targets.map((target) => styleOf(target).getPropertyValue(property)).join(' | ');
+      // A native pass reads only the nodes it forced, one entry per target so
+      // the passes merge back into the stamped reading's shape.
+      values[property] = depth === null
+        ? targets.map((target) => styleOf(target).getPropertyValue(property)).join(' | ')
+        : targets.map((target) => (Number(target.getAttribute('data-axis-depth')) === depth
+          ? styleOf(target).getPropertyValue(property)
+          : null));
     }
     out[family] = values;
   }
@@ -1957,7 +2115,7 @@ export async function readSettled(page, plan) {
     const stillMoving = new Set();
     for (const family of unsettled) {
       for (const property of properties) {
-        if (previous[family]?.[property] !== current[family]?.[property]) {
+        if (JSON.stringify(previous[family]?.[property]) !== JSON.stringify(current[family]?.[property])) {
           stillMoving.add(family);
           break;
         }
@@ -1996,6 +2154,357 @@ export async function measureCell({
 }
 
 /**
+ * THE NATIVE-PSEUDO HALF of the states axis: `:hover`, `:active` and
+ * `:focus-visible` matched by the browser itself, forced through the DevTools
+ * protocol (`CSS.forcePseudoState`) -- never a class, never a rewritten rule.
+ *
+ * Each variant forces what a real pointer or keyboard produces on the node it
+ * lands on. `:hover` and `:active` also match every ANCESTOR of that node, so
+ * the chain is forced with it; a pressed pointer is a hovered one, so `active`
+ * carries `hover`. Focus is the exception: one element holds it, and its
+ * ancestors match `:focus-within` and nothing else.
+ */
+export const NATIVE_PSEUDO_VARIANTS = Object.freeze(['hover', 'active', 'focus-visible']);
+
+export const NATIVE_PSEUDO_FORCING = Object.freeze({
+  hover: Object.freeze({ target: Object.freeze(['hover']), ancestors: Object.freeze(['hover']) }),
+  active: Object.freeze({ target: Object.freeze(['hover', 'active']), ancestors: Object.freeze(['hover', 'active']) }),
+  'focus-visible': Object.freeze({
+    target: Object.freeze(['focus', 'focus-visible', 'focus-within']),
+    ancestors: Object.freeze(['focus-within']),
+  }),
+});
+
+/**
+ * Stamps every node of every family with its depth below the family root and
+ * returns, in document order, the family, the depth and the ancestor chain of
+ * each. A mounted anatomy starts at the wrapper's children: the wrapper is the
+ * probe's, and no skin rule selects it.
+ */
+const indexNativeNodes = () => {
+  const nodes = [];
+  const walk = (element, family, depth, ancestors) => {
+    const index = nodes.length;
+    element.setAttribute('data-axis-depth', String(depth));
+    element.setAttribute('data-axis-native-node', String(index));
+    nodes.push({ family, depth, ancestors });
+    for (const child of element.children) walk(child, family, depth + 1, [...ancestors, index]);
+  };
+  for (const node of document.querySelectorAll('[data-axis-family]')) {
+    const family = node.getAttribute('data-axis-family');
+    const top = node.hasAttribute('data-axis-mount') ? [...node.children] : [node];
+    for (const element of top) walk(element, family, 0, []);
+  }
+  return nodes;
+};
+
+/**
+ * One pass per depth, merged back into one reading per family.
+ *
+ * The node read in a pass is the node the pointer is ON: it and its ancestors
+ * are forced, nothing below it is. Every target of the family at that depth is
+ * forced together, so the pass stays whole-page; siblings are the one relation
+ * where that is not a single pointer, which is what `forcedPseudoHazards`
+ * withholds.
+ */
+export function mergeDepthPasses(passes) {
+  const merged = {};
+  for (const reading of passes) {
+    for (const [family, values] of Object.entries(reading)) {
+      merged[family] ??= {};
+      for (const [property, list] of Object.entries(values)) {
+        const into = merged[family][property] ?? list.map(() => null);
+        list.forEach((value, index) => {
+          if (into[index] === null && value !== null) into[index] = value;
+        });
+        merged[family][property] = into;
+      }
+    }
+  }
+  for (const values of Object.values(merged)) {
+    for (const [property, list] of Object.entries(values)) values[property] = list.join(' | ');
+  }
+  return merged;
+}
+
+/**
+ * The native readings of every arm, keyed by `arm.key`, taken on a page whose
+ * scene is already set: `variant -> family -> property -> value`, in the shape
+ * `measureCell` returns its stamped states in.
+ *
+ * The loop is variant, then depth, then arm, so a node is forced once per pass
+ * and every arm is read under the same forcing. `withheld` is `family ->
+ * variants` whose reading is dropped rather than credited, and a family that
+ * never settles under a pass is dropped from every variant of that arm too.
+ */
+export async function measureNativeHalf({
+  page,
+  arms,
+  properties,
+  axisOf = axisByProperty(),
+  variants = NATIVE_PSEUDO_VARIANTS,
+  withheld = new Map(),
+}) {
+  const nodes = await page.evaluate(indexNativeNodes);
+  const cdp = await page.context().newCDPSession(page);
+  const unsettled = new Set();
+  const passes = new Map(arms.map((arm) => [arm.key, Object.fromEntries(variants.map((variant) => [variant, []]))]));
+  let forced = 0;
+  const depths = [...new Set(nodes.map((node) => node.depth))].sort((left, right) => left - right);
+  try {
+    await cdp.send('DOM.enable');
+    await cdp.send('CSS.enable');
+    const { root } = await cdp.send('DOM.getDocument', { depth: -1 });
+    const { nodeIds } = await cdp.send('DOM.querySelectorAll', {
+      nodeId: root.nodeId,
+      selector: '[data-axis-native-node]',
+    });
+    if (nodeIds.length !== nodes.length) {
+      throw new Error(`axis-difference: the protocol resolved ${nodeIds.length} of the ${nodes.length} scene nodes`);
+    }
+    const force = (indices, classes) => Promise.all(indices.map((index) =>
+      cdp.send('CSS.forcePseudoState', { nodeId: nodeIds[index], forcedPseudoClasses: [...classes] })));
+    for (const variant of variants) {
+      const forcing = NATIVE_PSEUDO_FORCING[variant];
+      if (forcing === undefined) throw new Error(`axis-difference: no forcing is declared for ${variant}`);
+      for (const depth of depths) {
+        const targets = nodes.flatMap((node, index) => (node.depth === depth ? [index] : []));
+        const ancestors = [...new Set(targets.flatMap((index) => nodes[index].ancestors))];
+        await force(ancestors, forcing.ancestors);
+        await force(targets, forcing.target);
+        forced += targets.length;
+        try {
+          for (const arm of arms) {
+            await page.evaluate(applyVariables, arm.variables);
+            const reading = await readSettled(page, { properties, axisOf, depth });
+            for (const family of reading.unsettled) unsettled.add(family);
+            passes.get(arm.key)[variant].push(reading.values);
+          }
+        } finally {
+          await force([...ancestors, ...targets], []);
+        }
+      }
+    }
+  } finally {
+    await cdp.detach().catch(() => {});
+  }
+  const readings = new Map();
+  for (const arm of arms) {
+    const byVariant = {};
+    for (const variant of variants) {
+      const merged = mergeDepthPasses(passes.get(arm.key)[variant]);
+      for (const family of Object.keys(merged)) {
+        if (unsettled.has(family) || (withheld.get(family) ?? []).includes(variant)) delete merged[family];
+      }
+      byVariant[variant] = merged;
+    }
+    readings.set(arm.key, byVariant);
+  }
+  return { readings, unsettled: [...unsettled].sort(), nodes: nodes.length, depths: depths.length, forced };
+}
+
+/**
+ * THE POSITIVE CONTROL OF THE FORCING, run through the same code path before
+ * any family is read: a scene whose knob paints under an ANCESTOR's `:hover`,
+ * its own `:active` and its own `:focus-visible`. A variant whose forced
+ * reading does not reach that paint, or whose resting reading afterwards is
+ * not the resting reading before, is refused for the whole run.
+ */
+export const NATIVE_CALIBRATION = Object.freeze({
+  css: [
+    ".ds-calibration[data-part='root']:hover > [data-part='knob'] { opacity: 0.25; }",
+    ".ds-calibration[data-part='root'] > [data-part='knob']:active { transform: scale(0.5); }",
+    ".ds-calibration[data-part='root'] > [data-part='knob']:focus-visible { outline-offset: 5px; }",
+  ].join('\n'),
+  element: Object.freeze({ classes: ['ds-calibration'], attributes: { 'data-part': 'root' } }),
+  parts: Object.freeze([{ chain: [{ tag: null, classes: [], attributes: { 'data-part': 'knob' } }], axes: ['states'] }]),
+  expected: Object.freeze({
+    hover: Object.freeze({ property: 'opacity', value: '1 | 0.25' }),
+    active: Object.freeze({ property: 'transform', value: 'none | matrix(0.5, 0, 0, 0.5, 0, 0)' }),
+    'focus-visible': Object.freeze({ property: 'outline-offset', value: '0px | 5px' }),
+  }),
+});
+
+export async function calibrateNativeForcing(context, { variants = NATIVE_PSEUDO_VARIANTS } = {}) {
+  const page = await context.newPage();
+  const properties = allProperties();
+  const axisOf = axisByProperty();
+  try {
+    await page.setContent(sceneHtml({
+      css: NATIVE_CALIBRATION.css,
+      vertical: 'bithire',
+      theme: 'light',
+      elements: new Map([['calibration', NATIVE_CALIBRATION.element]]),
+      partMounts: new Map([['calibration', { parts: NATIVE_CALIBRATION.parts }]]),
+    }), { waitUntil: 'load' });
+    const rest = (await readSettled(page, { properties, axisOf })).values.calibration;
+    const native = await measureNativeHalf({ page, arms: [{ key: 'calibration', variables: {} }], properties, axisOf, variants });
+    const after = (await readSettled(page, { properties, axisOf })).values.calibration;
+    const reading = native.readings.get('calibration');
+    const out = {};
+    for (const variant of variants) {
+      const { property, value } = NATIVE_CALIBRATION.expected[variant];
+      const forcedValue = reading[variant]?.calibration?.[property] ?? null;
+      out[variant] = {
+        property,
+        expected: value,
+        rest: rest[property],
+        forced: forcedValue,
+        restAfter: after[property],
+        reached: forcedValue === value && rest[property] !== value && after[property] === rest[property],
+      };
+    }
+    return out;
+  } finally {
+    await page.close();
+  }
+}
+
+/**
+ * The state rules one family's skin writes, each read as a selector the scene
+ * can be asked about: `vocabulary` says which half could enter it, `reason`
+ * why neither can when that is decided before the browser is asked, and
+ * `owners` the axes whose properties it declares (`null` when it writes a
+ * custom property, which may feed any of them).
+ */
+export function stateRuleProbes(css) {
+  const probes = [];
+  const authoredOwner = new Map();
+  for (const axis of AXIS_IDS) {
+    for (const property of partAuthored(axis)) authoredOwner.set(property, axis);
+  }
+  for (const rule of cssRules(css)) {
+    const owners = new Set();
+    let custom = false;
+    for (const declaration of rule.declarations) {
+      if (declaration.property.startsWith('--')) custom = true;
+      else if (authoredOwner.has(declaration.property)) owners.add(authoredOwner.get(declaration.property));
+    }
+    for (const listed of selectorList(rule.selector)) {
+      for (const selector of expandAlternatives(listed)) {
+        const bare = withoutNegations(selector);
+        const forced = FORCED_PSEUDO.test(bare);
+        const stamped = /\[data-state\b|\[data-disabled\b/u.test(bare);
+        if (!forced && !stamped) continue;
+        let reason = null;
+        if (forced && stamped) reason = 'needs-pseudo-and-stamp';
+        else if (selector.includes('::')) reason = 'pseudo-element';
+        else if (!custom && owners.size === 0) reason = 'unread-property';
+        else if (forced && forcedPseudoHazards(selector).size > 0) reason = 'relational';
+        else if (forced && FORCED_PSEUDO.test(withoutNegations(withoutForcedPseudos(selector)))) reason = 'pseudo-inside-has';
+        // A negation OF the stamp holds on every stamped state but one, so it
+        // goes with the stamp rather than leaving an empty `:not()` behind.
+        const probe = forced
+          ? withoutForcedPseudos(selector)
+          : selector
+            .replace(/:not\([^()]*\[data-(?:state|disabled)\b[^()]*\)/gu, '')
+            .replace(/\[data-(?:state|disabled)(?:\s*[~*^$|]?=\s*(?:'[^']*'|"[^"]*"|[^\]]*))?\]/gu, '');
+        probes.push({
+          vocabulary: forced ? 'native' : 'stamped',
+          selector,
+          probe: probe.trim().length === 0 ? '*' : probe,
+          owners: custom ? null : [...owners].sort(),
+          reason,
+        });
+      }
+    }
+  }
+  return probes;
+}
+
+/** In the page: which probes select a node the half actually READS for an axis the rule writes. */
+const censusReach = (entries) => {
+  const out = {};
+  for (const { family, probes } of entries) {
+    const result = probes.map(() => 'no-node');
+    probes.forEach((probe, index) => {
+      if (probe.reason !== null) {
+        result[index] = probe.reason;
+        return;
+      }
+      let matched;
+      try {
+        matched = [...document.querySelectorAll(probe.probe)];
+      } catch {
+        result[index] = 'invalid-selector';
+        return;
+      }
+      for (const node of matched) {
+        const owner = node.closest('[data-axis-family]');
+        if (owner === null || owner.getAttribute('data-axis-family') !== family) continue;
+        const read = node === owner
+          || owner.hasAttribute('data-axis-mount')
+          || (node.hasAttribute('data-axis-part') && (probe.owners === null
+            || node.getAttribute('data-axis-part').split(' ').some((axis) => probe.owners.includes(axis))));
+        if (read) {
+          result[index] = 'reached';
+          return;
+        }
+        result[index] = 'node-not-read';
+      }
+    });
+    out[family] = result;
+  }
+  return out;
+};
+
+/** family -> the per-probe verdicts, for the probes of one vocabulary, read off the page as it stands. */
+export async function readReachCensus(page, probesByFamily, vocabulary) {
+  const entries = [...probesByFamily]
+    .map(([family, probes]) => ({ family, probes: probes.filter((probe) => probe.vocabulary === vocabulary) }))
+    .filter((entry) => entry.probes.length > 0);
+  return page.evaluate(censusReach, entries);
+}
+
+/**
+ * The reach of both halves over the states population the run measured, and
+ * the families NEITHER reaches, each with the reasons its state rules gave.
+ */
+export function statesReachReport({ population, probesByFamily, stamped, native, applied }) {
+  const reached = (census, family) => (census?.[family] ?? []).includes('reached');
+  const reasons = { native: {}, stamped: {} };
+  for (const [vocabulary, census] of [['native', native], ['stamped', stamped]]) {
+    for (const family of population) {
+      for (const verdict of census?.[family] ?? []) reasons[vocabulary][verdict] = (reasons[vocabulary][verdict] ?? 0) + 1;
+    }
+  }
+  const declaring = (vocabulary) => population.filter((family) =>
+    (probesByFamily.get(family) ?? []).some((probe) => probe.vocabulary === vocabulary));
+  const byStamp = population.filter((family) => reached(stamped, family));
+  const byNative = applied ? population.filter((family) => reached(native, family)) : [];
+  const neither = population.filter((family) => !byStamp.includes(family) && !byNative.includes(family));
+  return {
+    applied,
+    population: population.length,
+    declaring: { native: declaring('native').length, stamped: declaring('stamped').length },
+    reached: {
+      stamped: byStamp.length,
+      native: byNative.length,
+      either: population.length - neither.length,
+      nativeOnly: byNative.filter((family) => !byStamp.includes(family)).length,
+    },
+    ruleVerdicts: reasons,
+    neither: neither.map((family) => {
+      const probes = probesByFamily.get(family) ?? [];
+      const verdicts = {};
+      for (const [vocabulary, census] of [['native', native], ['stamped', stamped]]) {
+        (census?.[family] ?? []).forEach((verdict) => {
+          const key = `${vocabulary}:${verdict}`;
+          verdicts[key] = (verdicts[key] ?? 0) + 1;
+        });
+      }
+      return {
+        family,
+        why: probes.length === 0
+          ? 'no rule gated on a forceable pseudo or a stamped state: it declares states through a channel, '
+            + ':disabled, [aria-*] or a namespaced state alone'
+          : Object.entries(verdicts).map(([key, count]) => `${key} ${count}`).join(', '),
+      };
+    }),
+  };
+}
+
+/**
  * Colour tokens, in every form a computed value can carry them.
  *
  * WHY THIS EXISTS, and it is the rule's own wording rather than a convenience:
@@ -2028,10 +2537,14 @@ export function stripColour(value) {
  * changes is not confined to one axis's longhands.
  */
 export function differsOnAxis(axis, before, after, family) {
-  const readings = axis === 'states'
-    ? STATE_VARIANTS.map((state) => [before.states[state], after.states[state]])
-    : [[before.base, after.base]];
-  const properties = axis === 'states' ? allProperties() : AXES[axis].computed;
+  if (axis === 'states') {
+    const halves = statesHalves(before, after, family);
+    return halves.stamped ?? halves.native;
+  }
+  return firstDifference([[before.base, after.base]], AXES[axis].computed, family);
+}
+
+function firstDifference(readings, properties, family) {
   for (const [left, right] of readings) {
     const a = left?.[family];
     const b = right?.[family];
@@ -2041,6 +2554,28 @@ export function differsOnAxis(axis, before, after, family) {
     }
   }
   return null;
+}
+
+/**
+ * The states axis read as its TWO halves, each against its own readings: the
+ * stamped `[data-state]` scene and the forced native pseudos. The published
+ * rule is the union -- a family moves on states when EITHER half shows an
+ * attributable difference -- and each half is published beside it.
+ */
+export function statesHalves(before, after, family) {
+  const properties = allProperties();
+  return {
+    stamped: firstDifference(
+      STATE_VARIANTS.map((state) => [before.states?.[state], after.states?.[state]]),
+      properties,
+      family,
+    ),
+    native: firstDifference(
+      NATIVE_PSEUDO_VARIANTS.map((variant) => [before.native?.[variant], after.native?.[variant]]),
+      properties,
+      family,
+    ),
+  };
 }
 
 /**
@@ -2387,6 +2922,9 @@ export async function run({
    * instrument lot the scene never stamped it, so disabled paint was outside
    * the instrument by construction and its zero was arithmetic. */
   statesDisabled = true,
+  /* `false` reproduces the pre-lot states axis: the stamped `[data-state]`
+   * half alone, with `:hover`, `:active` and `:focus-visible` never entered. */
+  nativePseudos = true,
   /* The same export of the same compiler, handed in by a runner that reads the
    * source tree instead of `dist/`; absent, the published door is imported. */
   compile: compileOverride = null,
@@ -2427,6 +2965,26 @@ export async function run({
   const effective = (axis) => populations
     .get(axis)
     .filter((family) => mountable.includes(family) && !UNSETTLED_FAMILIES.includes(family));
+  // The native scene is the stamped one plus the parts a forced pseudo gates;
+  // the stamped scene is not touched, so its half is the pre-lot reading.
+  const nativeParts = nativePseudos && partMounts !== false
+    ? familyAxisParts(root, families, elements, { partReach, nativePseudos: true })
+    : new Map();
+  const stateRules = new Map();
+  const withheld = new Map();
+  for (const [family, files] of skinFamilies(root)) {
+    if (!elements.has(family)) continue;
+    const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
+    stateRules.set(family, stateRuleProbes(css));
+    const hazards = Object.keys(familyForcedPseudoHazards(css));
+    if (hazards.length > 0) withheld.set(family, hazards.sort());
+  }
+  let stampedCensus = null;
+  let nativeCensus = null;
+  let calibration = null;
+  let nativeVariants = [];
+  const nativeUnsettled = new Set();
+  let nativeShape = null;
 
   const { browser, close, provenance } = await launchBrowser();
   const cells = [];
@@ -2436,6 +2994,10 @@ export async function run({
   const newlyUnsettled = new Set();
   try {
     const context = await browser.newContext();
+    if (nativePseudos) {
+      calibration = await calibrateNativeForcing(context);
+      nativeVariants = NATIVE_PSEUDO_VARIANTS.filter((variant) => calibration[variant].reached);
+    }
     for (const vertical of verticals) {
       const bundle = await resolveBundle({ vertical, mode: 'fresh' });
       // Compiled once per vertical because the door does not read the mode: the
@@ -2462,11 +3024,44 @@ export async function run({
         ]);
       }))].sort();
       for (const theme of themes) {
+        let nativeHalf = null;
+        if (nativeVariants.length > 0) {
+          const arms = new Map();
+          for (const scenario of scenarios) {
+            const artifacts = compiled.get(scenario.id);
+            if (artifacts.reason !== undefined || !readsStatesAxis(scenario)) continue;
+            for (const artifact of [artifacts.a, artifacts.b]) {
+              const variables = effectiveVariables(artifact, theme);
+              arms.set(JSON.stringify(variables), { key: JSON.stringify(variables), variables });
+            }
+          }
+          const nativePage = await context.newPage();
+          try {
+            await nativePage.setContent(
+              sceneHtml({ css: bundle.css, vertical, theme, elements, mounts, partMounts: nativeParts }),
+              { waitUntil: 'load' },
+            );
+            nativeCensus ??= await readReachCensus(nativePage, stateRules, 'native');
+            nativeHalf = await measureNativeHalf({
+              page: nativePage,
+              arms: [...arms.values()],
+              properties,
+              axisOf,
+              variants: nativeVariants,
+              withheld,
+            });
+            for (const family of nativeHalf.unsettled) nativeUnsettled.add(family);
+            nativeShape ??= { nodes: nativeHalf.nodes, depths: nativeHalf.depths };
+          } finally {
+            await nativePage.close();
+          }
+        }
         const page = await context.newPage();
         await page.setContent(
           sceneHtml({ css: bundle.css, vertical, theme, elements, mounts, partMounts: mountedParts }),
           { waitUntil: 'load' },
         );
+        stampedCensus ??= await readReachCensus(page, stateRules, 'stamped');
         // Before the first arm, so it is the bundle's own paint and not an
         // arm's leftovers: the value every channel an arm does not carry
         // resolves to in this cell.
@@ -2521,6 +3116,10 @@ export async function run({
             });
             continue;
           }
+          if (nativeHalf !== null && readsStatesAxis(scenario)) {
+            before.native = nativeHalf.readings.get(JSON.stringify(variablesA));
+            after.native = nativeHalf.readings.get(JSON.stringify(variablesB));
+          }
           for (const family of [...before.unsettled, ...after.unsettled]) {
             if (!UNSETTLED_FAMILIES.includes(family)) newlyUnsettled.add(family);
             observedUnsettled.add(family);
@@ -2558,9 +3157,15 @@ export async function run({
           for (const axis of axes) {
             const denominator = effective(axis);
             const moved = [];
+            const halves = axis === 'states' ? { stamped: [], native: [] } : null;
             for (const family of denominator) {
               const property = differsOnAxis(axis, before, after, family);
               if (property) moved.push({ family, property });
+              if (halves !== null) {
+                const split = statesHalves(before, after, family);
+                if (split.stamped) halves.stamped.push(family);
+                if (split.native) halves.native.push(family);
+              }
             }
             cells.push({
               vertical,
@@ -2608,6 +3213,14 @@ export async function run({
               percent: denominator.length === 0 ? 0 : (moved.length / denominator.length) * 100,
               movedFamilies: moved.slice(0, 12),
               movedIds: moved.map((entry) => entry.family),
+              // The two halves of the states axis, each published beside the
+              // union the percentage is taken from.
+              ...(halves === null ? {} : {
+                movedStamped: halves.stamped.length,
+                movedNative: halves.native.length,
+                rescuedByNative: halves.native.filter((family) => !halves.stamped.includes(family)),
+                nativeMeasured: nativeHalf !== null,
+              }),
             });
           }
         }
@@ -2619,6 +3232,48 @@ export async function run({
   }
 
   markVacuousControls(cells);
+
+  const statesPopulation = effective('states');
+  const reach = statesReachReport({
+    population: statesPopulation,
+    probesByFamily: stateRules,
+    stamped: stampedCensus,
+    native: nativeCensus,
+    applied: nativeVariants.length > 0,
+  });
+  const nativeReport = {
+    applied: nativePseudos,
+    variants: nativeVariants,
+    refusedVariants: nativePseudos
+      ? NATIVE_PSEUDO_VARIANTS.filter((variant) => !nativeVariants.includes(variant))
+      : [],
+    forcing: NATIVE_PSEUDO_FORCING,
+    calibration,
+    scene: nativeShape,
+    // Parts the native scene gained over the stamped one: nodes gated on a
+    // forced pseudo alone, mounted at rest with the pseudo stripped.
+    addedParts: [...nativeParts].reduce((total, [family, record]) =>
+      total + record.parts.length - (mountedParts.get(family)?.parts.length ?? 0), 0),
+    withheld: Object.fromEntries([...withheld].filter(([family]) => statesPopulation.includes(family))),
+    unsettled: [...nativeUnsettled].sort(),
+    reach,
+  };
+  const statesUnreachable = STATES_AXIS_LIMITS.unreachable.filter((line) => !line.startsWith(':hover and :focus-visible'));
+  if (nativeVariants.length > 0) {
+    statesUnreachable.splice(2, 0,
+      `:${nativeVariants.join(', :')} are forced through the DevTools protocol on each node and its ancestor chain; `
+      + `${reach.reached.either} of the ${reach.population} measured states families have a state rule that selects `
+      + `a node one half reads (${reach.reached.stamped} by the stamp, ${reach.reached.native} by forcing, `
+      + `${reach.reached.nativeOnly} by forcing alone), and ${reach.neither.length} reach neither `
+      + '(named at nativePseudos.reach.neither)',
+      `${Object.keys(nativeReport.withheld).length} famil(ies) read under a forced pseudo that drives a SIBLING `
+      + '(+, ~, or :has() over one): a whole-depth pass hovers the siblings too, so that variant is withheld for '
+      + 'them (nativePseudos.withheld); a pseudo inside :has() over a descendant, a pseudo-element, and a rule '
+      + 'needing a pseudo AND a stamped state are still outside both halves',
+    );
+  } else {
+    statesUnreachable.splice(2, 0, STATES_AXIS_LIMITS.unreachable.find((line) => line.startsWith(':hover and :focus-visible')));
+  }
 
   return {
     revision: catalogRevision(),
@@ -2679,15 +3334,22 @@ export async function run({
     cells,
     partReadings,
     limits: {
-      states: { ...STATES_AXIS_LIMITS, stampedStates },
+      states: { ...STATES_AXIS_LIMITS, stampedStates, unreachable: statesUnreachable },
       disabled: { ...disabledCensus, stamped: statesDisabled },
     },
-    statesNote:
-      'The states axis is measured under the attributes a component stamps: [data-state] for all five states '
-      + 'and [data-disabled] beside it for the one that comes from a prop. The :hover, :focus-visible and '
-      + ':disabled halves of the rule need a real pointer, keyboard or native control and are NOT measured '
-      + 'here; they are named rather than implied. What else this probe cannot see on that axis is '
-      + 'enumerated with its measurements in limits.states and limits.disabled.',
+    nativePseudos: nativeReport,
+    statesNote: nativeVariants.length > 0
+      ? 'The states axis is measured in two halves, published per cell: the attributes a component stamps '
+        + '([data-state] for all five states, [data-disabled] beside it for the one that comes from a prop), and '
+        + 'the native :hover, :active and :focus-visible forced by the browser on each node and its ancestor chain. '
+        + 'A family moves on states when EITHER half differs. :disabled and [aria-disabled] are reached by '
+        + 'neither and are named; what else is outside both halves is enumerated in limits.states, '
+        + 'limits.disabled and nativePseudos.reach.'
+      : 'The states axis is measured under the attributes a component stamps: [data-state] for all five states '
+        + 'and [data-disabled] beside it for the one that comes from a prop. The :hover, :focus-visible and '
+        + ':disabled halves of the rule need a real pointer, keyboard or native control and are NOT measured '
+        + 'here; they are named rather than implied. What else this probe cannot see on that axis is '
+        + 'enumerated with its measurements in limits.states and limits.disabled.',
     unsettledNote:
       'A family whose computed values converge asymptotically under repeated style invalidation (a container '
       + 'query over its own box) is excluded from every denominator of the run it was unsettled in, and named '
@@ -2792,6 +3454,14 @@ export function evaluate(result, {
     failures.push(
       `${result.roots.merged} famil(ies) were measured on a descendant chain MERGED onto one node, which is a node `
       + 'no rule of their skin selects; the root must be the compound the skin requires, not the chain',
+    );
+  }
+  for (const variant of result.nativePseudos?.refusedVariants ?? []) {
+    const reading = result.nativePseudos.calibration?.[variant];
+    failures.push(
+      `native :${variant} failed its calibration — forced ${reading?.forced ?? 'nothing'}, expected `
+      + `${reading?.expected}, rest ${reading?.rest} then ${reading?.restAfter}; the forcing is not the browser's `
+      + 'own match, so that half of the states axis was not measured',
     );
   }
   for (const family of result.families.newlyUnsettled ?? []) {
@@ -3059,6 +3729,8 @@ if (isMain) {
     // of the EVI-02 reach repair, each A/B-able on ONE tree.
     asRendered: !process.argv.includes('--no-as-rendered'),
     partReach: !process.argv.includes('--no-part-reach'),
+    // The pre-lot states axis, on demand: the stamped half alone.
+    nativePseudos: !process.argv.includes('--no-native-pseudos'),
   });
   if (process.argv.includes('--json')) console.log(JSON.stringify(result, null, 2));
 
@@ -3155,6 +3827,34 @@ if (isMain) {
     + `${result.limits.disabled.unreachedFamilies.length} — `
     + `${result.limits.disabled.unreachedFamilies.join(', ') || 'none'}`,
   );
+  const native = result.nativePseudos;
+  console.log(
+    `  native pseudos: ${native.applied ? `ON — ${native.variants.map((variant) => `:${variant}`).join(', ')}` : 'OFF (the stamped half alone — the pre-lot reading)'}`
+    + (native.applied && native.scene !== null
+      ? `, ${native.scene.nodes} node(s) over ${native.scene.depths} depth pass(es), ${native.addedParts} part(s) mounted for a forced pseudo alone`
+      : ''),
+  );
+  if (native.applied) {
+    console.log(`    calibration: ${Object.entries(native.calibration).map(([variant, reading]) =>
+      `:${variant} ${reading.reached ? 'reached' : 'REFUSED'} (${reading.property} ${reading.rest} -> ${reading.forced} -> ${reading.restAfter})`).join('; ')}`);
+    console.log(`    withheld (a forced pseudo drives a sibling): ${Object.entries(native.withheld)
+      .map(([family, variants]) => `${family}(${variants.join('/')})`).join(', ') || 'none'}`);
+    console.log(`    unsettled under a forced pseudo (native reading dropped): ${native.unsettled.join(', ') || 'none'}`);
+  }
+  console.log(
+    `    reach over ${native.reach.population} states famil(ies): stamp ${native.reach.reached.stamped}, `
+    + `forcing ${native.reach.reached.native} (${native.reach.reached.nativeOnly} alone), either ${native.reach.reached.either}, `
+    + `NEITHER ${native.reach.neither.length}`,
+  );
+  for (const entry of native.reach.neither) console.log(`      neither: ${entry.family} — ${entry.why}`);
+  for (const cell of result.cells.filter((entry) => entry.axis === 'states' && entry.movedStamped !== undefined)) {
+    console.log(
+      `    states halves ${cell.vertical}/${cell.theme} ${cell.scenario}: stamped ${cell.movedStamped}, native `
+      + (cell.nativeMeasured
+        ? `${cell.movedNative}, union ${cell.moved}/${cell.denominator} (${cell.rescuedByNative.length} by the native half alone)`
+        : `NOT MEASURED, union ${cell.moved}/${cell.denominator}`),
+    );
+  }
   for (const line of result.limits.states.unreachable) console.log(`  states axis limit: ${line}`);
   const refusal = publicationRefusal({ argv: process.argv, env: process.env });
   console.log(

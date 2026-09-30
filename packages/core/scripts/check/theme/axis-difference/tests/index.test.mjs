@@ -102,6 +102,19 @@ import {
   selectorParts,
   stripColour,
   witnessReading,
+  FORCED_PSEUDO_CLASSES,
+  NATIVE_PSEUDO_FORCING,
+  NATIVE_PSEUDO_VARIANTS,
+  calibrateNativeForcing,
+  familyForcedPseudoHazards,
+  forcedPseudoHazards,
+  measureNativeHalf,
+  mergeDepthPasses,
+  readsStatesAxis,
+  stateRuleProbes,
+  statesHalves,
+  statesReachReport,
+  withoutForcedPseudos,
 } from '../index.mjs';
 import { AXIS_IDS, AXES, axisControls, axisPopulations, groupControls } from '../../population/index.mjs';
 import { launchBrowser, resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
@@ -2503,5 +2516,276 @@ describe('axis-difference BROWSER drill — the scene becomes disabled, and a li
     assert.equal(sweep.states.hovered['state-gated'].opacity, sweep.base['state-gated'].opacity,
       'the hovered reading inherited the disabled token from the state before it');
     assert.deepEqual(settled.base, sweep.base, 'the scene did not return to rest after a disabled sweep');
+  }, 120_000);
+});
+
+/**
+ * THE NATIVE-PSEUDO HALF of the states axis: `:hover`, `:active` and
+ * `:focus-visible` matched by the browser through the DevTools protocol.
+ *
+ * Every expectation below is derived from the CSS selector semantics the
+ * forcing claims to reproduce -- the hovered node's ancestors match `:hover`,
+ * a focused node's ancestors match `:focus-within` and not `:focus-visible` --
+ * never from a reading of the fleet.
+ */
+describe('axis-difference — the native half forces what a real pointer or keyboard produces', () => {
+  it('forces the pseudo on the ancestor chain for hover and press, and ONLY focus-within above a focused node', () => {
+    assert.deepEqual([...NATIVE_PSEUDO_VARIANTS], ['hover', 'active', 'focus-visible']);
+    assert.deepEqual([...NATIVE_PSEUDO_FORCING.hover.ancestors], [...NATIVE_PSEUDO_FORCING.hover.target]);
+    assert.deepEqual([...NATIVE_PSEUDO_FORCING.active.ancestors], [...NATIVE_PSEUDO_FORCING.active.target]);
+    assert.ok(NATIVE_PSEUDO_FORCING.active.target.includes('hover'), 'a pressed pointer is a hovered pointer');
+    assert.deepEqual([...NATIVE_PSEUDO_FORCING['focus-visible'].ancestors], ['focus-within']);
+    for (const pseudo of ['focus', 'focus-visible', 'focus-within']) {
+      assert.ok(NATIVE_PSEUDO_FORCING['focus-visible'].target.includes(pseudo), pseudo);
+    }
+    for (const variant of NATIVE_PSEUDO_VARIANTS) {
+      for (const pseudo of [...NATIVE_PSEUDO_FORCING[variant].target, ...NATIVE_PSEUDO_FORCING[variant].ancestors]) {
+        assert.ok(FORCED_PSEUDO_CLASSES.includes(pseudo), `${variant} forces ${pseudo}, which is not a forced class`);
+      }
+    }
+  });
+
+  it('strips a top-level forced pseudo and leaves the ones inside :not() and :has() where they are', () => {
+    assert.equal(withoutForcedPseudos(".a:hover [data-part='x']:focus-visible"), ".a [data-part='x']");
+    assert.equal(withoutForcedPseudos('.a:not(:hover) .b'), '.a:not(:hover) .b');
+    assert.equal(withoutForcedPseudos('.a:has(.b:active) .c:active'), '.a:has(.b:active) .c');
+    assert.equal(withoutForcedPseudos(".a[data-x=':hover'] .b"), ".a[data-x=':hover'] .b");
+    assert.equal(withoutForcedPseudos('.a:focus-within .b:focus'), '.a .b');
+    assert.equal(withoutForcedPseudos('.a:disabled .b:checked'), '.a:disabled .b:checked', 'nothing forces these');
+    assert.equal(withoutForcedPseudos('.a:hovered'), '.a:hovered', 'a longer name is not the pseudo');
+  });
+
+  it('withholds a variant exactly where its pseudo drives a sibling, and nowhere else', () => {
+    const forcing = (pseudo) => NATIVE_PSEUDO_VARIANTS.filter((variant) =>
+      NATIVE_PSEUDO_FORCING[variant].target.includes(pseudo)).sort();
+    assert.deepEqual([...forcedPseudoHazards('.r input:focus-visible ~ [data-part="box"]')].sort(), forcing('focus-visible'));
+    assert.deepEqual([...forcedPseudoHazards(".r [data-part='track']:hover + [data-part='handle']")].sort(), forcing('hover'));
+    assert.deepEqual([...forcedPseudoHazards('.g > .addon:has(+ .field:focus-within)')].sort(), forcing('focus-within'));
+    assert.deepEqual([...forcedPseudoHazards('.r:hover [data-part="x"]')], [], 'an ancestor is on the pointer chain');
+    assert.deepEqual([...forcedPseudoHazards('.r [data-part="x"]:hover')], []);
+    assert.deepEqual([...forcedPseudoHazards(".r[data-state~='a'] [data-part='x']:hover")], [], '~= is an operator, not a combinator');
+    assert.deepEqual([...forcedPseudoHazards('.r:not(:hover) + .x')], [], 'a negation is not a forced state');
+    assert.deepEqual(Object.keys(familyForcedPseudoHazards('.a:hover { opacity: 1 }\n.a:focus ~ .b { opacity: 0 }')), ['focus-visible']);
+  });
+
+  it('mounts a part gated on a forced pseudo ONLY for the native scene, at rest, for the axes its own rule wrote', () => {
+    const css = `${DRILL_ROOT_CSS}
+      .ds-drill.ds-drill--modern[data-part='root']:hover > [data-part='knob'] { transform: scale(0.9); }
+      .ds-drill.ds-drill--modern[data-part='root'] > [data-part='pad'] { gap: 4px; }`;
+    const stamped = familyParts(css, DRILL_ELEMENT, ['states', 'rhythm']);
+    const native = familyParts(css, DRILL_ELEMENT, ['states', 'rhythm'], { nativePseudos: true });
+    assert.deepEqual(stamped.parts.map((part) => part.chain[0].attributes['data-part']), ['pad']);
+    assert.equal(stamped.rejected['head-pseudo'], 1);
+    const knob = native.parts.find((part) => part.chain[0].attributes['data-part'] === 'knob');
+    assert.deepEqual(knob.axes, ['states']);
+    assert.ok(knob.selector.includes(':hover'), 'the part publishes the selector its skin authored');
+    assert.ok(!partTreeHtml(native.parts).includes('hover'));
+    const padded = (record) => record.parts.find((part) => part.chain[0].attributes['data-part'] === 'pad');
+    assert.deepEqual(padded(native), padded(stamped), 'a rule with no forced pseudo is the same part in both scenes');
+    const element = familyParts(`${DRILL_ROOT_CSS}\n.ds-drill.ds-drill--modern[data-part='root'] > [data-part='x']::after:hover { opacity: 0 }`,
+      DRILL_ELEMENT, ['states'], { nativePseudos: true });
+    assert.equal(element.parts.length, 0, 'a pseudo-element is never a node the scene reads');
+  });
+
+  it('THE COMBINATION RULE: a family moves on states when EITHER half differs, and each half is reported alone', () => {
+    const resting = { base: { probe: { opacity: '1' } } };
+    const stampedOnly = [
+      { ...resting, states: { hovered: { probe: { opacity: '0.9' } } }, native: { hover: { probe: { opacity: '1' } } } },
+      { ...resting, states: { hovered: { probe: { opacity: '0.8' } } }, native: { hover: { probe: { opacity: '1' } } } },
+    ];
+    const nativeOnly = [
+      { ...resting, states: { hovered: { probe: { opacity: '1' } } }, native: { hover: { probe: { opacity: '0.9' } } } },
+      { ...resting, states: { hovered: { probe: { opacity: '1' } } }, native: { hover: { probe: { opacity: '0.8' } } } },
+    ];
+    const neither = [
+      { base: { probe: { opacity: '0.5' } }, states: { hovered: { probe: { opacity: '1' } } }, native: { hover: { probe: { opacity: '1' } } } },
+      { base: { probe: { opacity: '0.7' } }, states: { hovered: { probe: { opacity: '1' } } }, native: { hover: { probe: { opacity: '1' } } } },
+    ];
+    assert.deepEqual(statesHalves(...stampedOnly, 'probe'), { stamped: 'opacity', native: null });
+    assert.deepEqual(statesHalves(...nativeOnly, 'probe'), { stamped: null, native: 'opacity' });
+    assert.equal(differsOnAxis('states', ...stampedOnly, 'probe'), 'opacity');
+    assert.equal(differsOnAxis('states', ...nativeOnly, 'probe'), 'opacity');
+    assert.equal(differsOnAxis('states', ...neither, 'probe'), null, 'a resting change is not a states change in either half');
+    const colourOnly = [
+      { states: {}, native: { hover: { probe: { 'box-shadow': 'rgb(1, 2, 3) 0px 1px 2px' } } } },
+      { states: {}, native: { hover: { probe: { 'box-shadow': 'rgb(9, 9, 9) 0px 1px 2px' } } } },
+    ];
+    assert.equal(differsOnAxis('states', ...colourOnly, 'probe'), null, 'the native half is attributed exactly like the stamped one');
+    assert.equal(differsOnAxis('states', { states: {} }, { states: {} }, 'probe'), null, 'an absent half reads nothing');
+  });
+
+  it('takes the native half for every scenario whose cells read the states axis, and only for those', () => {
+    const reading = SCENARIOS.filter((scenario) => scenario.axis === 'states'
+      || scenario.expectZeroOn?.includes('states')
+      || scenario.witness?.axis === 'states').map((scenario) => scenario.id);
+    assert.deepEqual(SCENARIOS.filter(readsStatesAxis).map((scenario) => scenario.id), reading);
+    assert.ok(reading.includes('palette-only'), 'the palette control holds the states axis at zero, so it must see the native half');
+    assert.ok(reading.includes('states-emphasis-only'), 'its witness is read on the states axis');
+  });
+
+  it('merges the depth passes back into the stamped reading shape, one pass per node', () => {
+    const merged = mergeDepthPasses([
+      { f: { opacity: ['1', null, null] } },
+      { f: { opacity: [null, '0.5', null] } },
+      { f: { opacity: [null, null, '0.25'] } },
+    ]);
+    assert.deepEqual(merged, { f: { opacity: '1 | 0.5 | 0.25' } });
+  });
+
+  it('classifies each state rule by the half that could enter it, and why neither can', () => {
+    const probes = stateRuleProbes([
+      ".r:hover [data-part='x'] { transform: scale(0.9); }",
+      ".r[data-state~='selected'] { opacity: 0.8; }",
+      ".r[data-state~='selected']:hover { opacity: 0.7; }",
+      ".r:hover::after { opacity: 0.5; }",
+      '.r:hover { color: red; }',
+      '.r:hover { --ds-x: 1; }',
+      '.r input:focus-visible ~ .box { outline-width: 2px; }',
+      '.r:has(.b:focus-visible) { outline-offset: 2px; }',
+      '.r:disabled { opacity: 0.4; }',
+    ].join('\n'));
+    const by = (selector) => probes.find((probe) => probe.selector === selector);
+    assert.deepEqual(
+      { vocabulary: by(".r:hover [data-part='x']").vocabulary, probe: by(".r:hover [data-part='x']").probe, owners: by(".r:hover [data-part='x']").owners },
+      { vocabulary: 'native', probe: ".r [data-part='x']", owners: ['states'] },
+    );
+    assert.deepEqual({ vocabulary: by(".r[data-state~='selected']").vocabulary, probe: by(".r[data-state~='selected']").probe },
+      { vocabulary: 'stamped', probe: '.r' });
+    assert.equal(by(".r[data-state~='selected']:hover").reason, 'needs-pseudo-and-stamp');
+    assert.equal(by('.r:hover::after').reason, 'pseudo-element');
+    assert.equal(probes.filter((probe) => probe.selector === '.r:hover')[0].reason, 'unread-property');
+    assert.equal(probes.filter((probe) => probe.selector === '.r:hover')[1].owners, null, 'a custom property may feed any axis');
+    assert.equal(by('.r input:focus-visible ~ .box').reason, 'relational');
+    assert.equal(by('.r:has(.b:focus-visible)').reason, 'pseudo-inside-has');
+    assert.equal(probes.some((probe) => probe.selector === '.r:disabled'), false, 'nothing forces :disabled, so it is no probe of either half');
+  });
+
+  it('names every family NEITHER half reaches, and credits the native half only when it ran', () => {
+    const probesByFamily = new Map([
+      ['both', [{ vocabulary: 'stamped' }, { vocabulary: 'native' }]],
+      ['native-only', [{ vocabulary: 'native' }]],
+      ['channel-only', []],
+      ['refused', [{ vocabulary: 'native' }]],
+    ]);
+    const stamped = { both: ['reached'] };
+    const native = { both: ['reached'], 'native-only': ['reached'], refused: ['relational'] };
+    const population = ['both', 'native-only', 'channel-only', 'refused'];
+    const on = statesReachReport({ population, probesByFamily, stamped, native, applied: true });
+    assert.deepEqual(on.reached, { stamped: 1, native: 2, either: 2, nativeOnly: 1 });
+    assert.deepEqual(on.neither.map((entry) => entry.family), ['channel-only', 'refused']);
+    assert.match(on.neither[1].why, /native:relational 1/u);
+    const off = statesReachReport({ population, probesByFamily, stamped, native, applied: false });
+    assert.deepEqual(off.reached, { stamped: 1, native: 0, either: 1, nativeOnly: 0 });
+  });
+
+  it('MUTANT: a variant whose forcing failed its calibration fails the run and is named', () => {
+    const failures = evaluate(result([cell()], {
+      nativePseudos: {
+        refusedVariants: ['active'],
+        calibration: { active: { forced: 'none | none', expected: 'none | matrix(0.5, 0, 0, 0.5, 0, 0)', rest: 'none | none', restAfter: 'none | none' } },
+      },
+    }));
+    assert.ok(failures.some((line) => line.startsWith('native :active failed its calibration')), failures.join(' | '));
+  });
+});
+
+describe('axis-difference BROWSER drill — the native half reads the browser\'s own pseudo match', { skip: browserReason }, () => {
+  const ARM_A = { '--ds-state-press-scale': '0.9', '--ds-focus-ring-offset': '2px' };
+  const ARM_B = { '--ds-state-press-scale': '0.7', '--ds-focus-ring-offset': '4px' };
+  const properties = allProperties();
+  const axisOf = axisByProperty();
+
+  /** Both halves of one drill family, each on its own page, exactly as `run` separates them. */
+  const halves = async (context, css, { withheld = new Map(), a = ARM_A, b = ARM_B } = {}) => {
+    const scene = (partMounts) => sceneHtml({
+      css, vertical: 'bithire', theme: 'light', elements: new Map([['drill', DRILL_ELEMENT]]), partMounts,
+    });
+    const stampedPage = await context.newPage();
+    await stampedPage.setContent(scene(new Map([['drill', familyParts(css, DRILL_ELEMENT, ['states'])]])), { waitUntil: 'load' });
+    const before = await measureCell({ page: stampedPage, variables: a, properties, axisOf });
+    const after = await measureCell({ page: stampedPage, variables: b, properties, axisOf });
+    await stampedPage.close();
+    const nativePage = await context.newPage();
+    await nativePage.setContent(
+      scene(new Map([['drill', familyParts(css, DRILL_ELEMENT, ['states'], { nativePseudos: true })]])),
+      { waitUntil: 'load' },
+    );
+    const native = await measureNativeHalf({
+      page: nativePage,
+      arms: [{ key: 'a', variables: a }, { key: 'b', variables: b }],
+      properties,
+      axisOf,
+      withheld,
+    });
+    await nativePage.close();
+    before.native = native.readings.get('a');
+    after.native = native.readings.get('b');
+    return { ...statesHalves(before, after, 'drill'), union: differsOnAxis('states', before, after, 'drill'), measurement: native };
+  };
+
+  const withBrowser = async (body) => {
+    const { browser, close } = await launchBrowser();
+    try {
+      return await body(await browser.newContext());
+    } finally {
+      await close();
+    }
+  };
+
+  it('the calibration scene reaches its paint under every variant and returns to rest afterwards', async () => {
+    const calibration = await withBrowser((context) => calibrateNativeForcing(context));
+    for (const variant of NATIVE_PSEUDO_VARIANTS) {
+      assert.equal(calibration[variant].reached, true, `${variant}: ${JSON.stringify(calibration[variant])}`);
+    }
+  }, 120_000);
+
+  it('reads an ANCESTOR-gated hover the stamped half cannot see, and reads nothing once the rule goes literal', async () => {
+    const LIVE = `${DRILL_ROOT_CSS}
+      .ds-drill.ds-drill--modern[data-part='root']:hover > [data-part='knob'] { transform: scale(var(--ds-state-press-scale)); }`;
+    const DEAD = `${DRILL_ROOT_CSS}
+      .ds-drill.ds-drill--modern[data-part='root']:hover > [data-part='knob'] { transform: scale(0.9); }`;
+    const [live, dead] = await withBrowser(async (context) => [await halves(context, LIVE), await halves(context, DEAD)]);
+    assert.equal(live.stamped, null, 'the stamped half never enters :hover -- otherwise this drill proves nothing');
+    assert.equal(live.native, 'transform', 'the knob is read with its ancestor hovered, as a real pointer on it leaves it');
+    assert.equal(live.union, 'transform');
+    // Per variant, because a press forces `:hover` on the chain as well and
+    // would carry this reading on its own.
+    const hovered = (arm) => live.measurement.readings.get(arm).hover.drill.transform;
+    assert.notEqual(hovered('a'), hovered('b'), 'the hover variant itself must reach the ancestor-gated paint');
+    assert.equal(dead.native, null, 'a hover paint that stopped consuming the channel must not keep reading as a move');
+  }, 120_000);
+
+  it('a NULL pair reads nothing in the native half', async () => {
+    const LIVE = `${DRILL_ROOT_CSS}
+      .ds-drill.ds-drill--modern[data-part='root']:hover { transform: scale(var(--ds-state-press-scale)); }`;
+    const reading = await withBrowser((context) => halves(context, LIVE, { b: ARM_A }));
+    assert.equal(reading.native, null, 'the native half reported a difference between a document and itself');
+  }, 120_000);
+
+  it('focus lands on ONE node: an ancestor never matches :focus-visible for it, but does match :focus-within', async () => {
+    const ANCESTOR_FOCUS = `${DRILL_ROOT_CSS}
+      .ds-drill.ds-drill--modern[data-part='root']:focus-visible > [data-part='ring'] { outline-offset: var(--ds-focus-ring-offset); }
+      .ds-drill.ds-drill--modern[data-part='root'] > [data-part='ring'] { opacity: 1; }`;
+    const WITHIN = `${DRILL_ROOT_CSS}
+      .ds-drill.ds-drill--modern[data-part='root']:focus-within > [data-part='ring'] { outline-offset: var(--ds-focus-ring-offset); }
+      .ds-drill.ds-drill--modern[data-part='root'] > [data-part='ring'] { opacity: 1; }`;
+    const [ancestor, within] = await withBrowser(async (context) => [
+      await halves(context, ANCESTOR_FOCUS),
+      await halves(context, WITHIN),
+    ]);
+    assert.equal(ancestor.native, null, 'the ring was read while its root ALSO held focus, which no keyboard produces');
+    assert.equal(within.native, 'outline-offset', 'a focused ring leaves its root matching :focus-within');
+  }, 120_000);
+
+  it('a family whose forced pseudo drives a sibling has that variant withheld, not credited', async () => {
+    const LIVE = `${DRILL_ROOT_CSS}
+      .ds-drill.ds-drill--modern[data-part='root']:hover { transform: scale(var(--ds-state-press-scale)); }`;
+    const [open, held] = await withBrowser(async (context) => [
+      await halves(context, LIVE),
+      await halves(context, LIVE, { withheld: new Map([['drill', NATIVE_PSEUDO_VARIANTS.slice()]]) }),
+    ]);
+    assert.equal(open.native, 'transform');
+    assert.equal(held.native, null);
+    assert.equal(held.native === null && held.union === null, true, 'a withheld reading must not reach the union either');
   }, 120_000);
 });
