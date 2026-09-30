@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 14,
-      "maxSourceBytes": 355289
+      "maxSourceBytes": 397496
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "N1 container law (10bb90185): the emission runtime ships CONTAINER_ALIASES + CONTAINER_ALIAS_CONTEXTS (171 aliases, 151 contexts) so container scopes restate reachable excluded aliases; 279309 -> 355289 measured by the gate on the live tree",
+  "lastMove": "M3 (DS root mode table) + M2 (mode arm): CONTAINER_MODE_TEXTS (161 names) and the container mode-block machinery join the runtime emission path; 355289 -> 397496 measured by the gate",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

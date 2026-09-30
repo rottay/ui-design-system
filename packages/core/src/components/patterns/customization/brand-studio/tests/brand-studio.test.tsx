@@ -34,6 +34,7 @@ import {
 import { readGovernedTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 import { ThemeAdmissionError } from '@/infrastructure/compilers/runtime/theme';
 import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
+import { rootModeTexts } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
 
 const TEST_TENANT: TenantConfig = {
   slug: 'brand-studio-test',
@@ -377,9 +378,9 @@ describe('PatternBrandStudio live preview repaint', () => {
     // label ink on the dark ground (measured in Chromium).
     expect(css).toContain('--ds-card-bg: var(--ds-color-bg-elevated);');
     expect(css).toContain('--ds-checkbox-label-color: var(--ds-color-text-primary);');
-    // A left-out root alias takes its cascade-winning root text, and its
-    // context rule follows at the scope.
-    expect(css).toContain('--ds-color-bg-canvas: var(--ds-color-bg-primary);');
+    // A left-out root alias the DS root's dark block moves takes the dark
+    // ground's text; the other left-out aliases' context rules follow at the scope.
+    expect(css.slice(0, css.indexOf('\n}\n'))).toContain('--ds-color-bg-canvas: #0A0A0C;');
     expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\) \{\n:where\(:root\) \.brand-studio-dark-/u);
     // The vertical's own outright text is never overridden with a root text.
     expect(css).toContain('--ds-button-primary-bg: var(--ds-color-primary);');
@@ -410,6 +411,24 @@ describe('PatternBrandStudio panels keep their ground under a document in either
     );
     expect(reader).toBeDefined();
     expect(dark.carried[reader!] ?? dark.vars[reader!]).toBeDefined();
+  });
+
+  it('states the DS root\'s own mode channels at the ground\'s text (the dt30 title ink)', () => {
+    const dark = buildSurfaceVariables(theme, DARK_SURFACE_UNDER_TEST);
+    const light = buildSurfaceVariables(theme, LIGHT_SURFACE_UNDER_TEST);
+    // The DS base stylesheet's dark block, not the vertical's compile, moves these.
+    expect(root.cssVariables).not.toHaveProperty('--ds-color-neutral-900');
+    expect(dark.carried['--ds-color-neutral-900']).toBe(rootModeTexts('dark')['--ds-color-neutral-900']);
+    expect(dark.carried['--ds-color-neutral-900']).toBe('#f8fafc');
+    expect(light.carried['--ds-color-neutral-900']).toBe('#171717');
+    // A dark-only DS channel is undeclared at a light root: the light panel states it guaranteed-invalid.
+    expect(light.carried['--ds-color-surface-muted']).toBe('initial');
+    expect(dark.carried['--ds-color-surface-muted']).toBe('#152033');
+    // A DS mode text that reads a ground channel is carried with it (M1 class c).
+    expect(dark.carried['--ds-table-bg']).toBe('var(--ds-surface-card)');
+    const css = surfaceScopeCss(dark, '.panel');
+    expect(css).toContain('  --ds-color-neutral-900: #f8fafc;');
+    expect(css).not.toContain(":where(:root, [data-ds-root]):is([data-theme='dark'], .dark)) .panel {");
   });
 
   it('emits no document-mode rule: the ground is the panel\'s mode', () => {

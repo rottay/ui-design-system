@@ -1,13 +1,14 @@
 import {
   CONTAINER_ALIAS_CONTEXTS,
   CONTAINER_ALIASES,
+  CONTAINER_MODE_TEXTS,
   type ContainerAliasContext,
   ROOT_ALIASES,
   VERTICAL_OUTRIGHT,
 } from "./generated";
 
-export { CONTAINER_ALIAS_CONTEXTS, CONTAINER_ALIASES, ROOT_ALIASES, VERTICAL_OUTRIGHT };
-export type { ContainerAlias, ContainerAliasContext, ContainerAliasExclusion } from "./generated";
+export { CONTAINER_ALIAS_CONTEXTS, CONTAINER_ALIASES, CONTAINER_MODE_TEXTS, ROOT_ALIASES, VERTICAL_OUTRIGHT };
+export type { ContainerAlias, ContainerAliasContext, ContainerAliasExclusion, ContainerModeText } from "./generated";
 
 const readsOf = (value: string): string[] => [
   ...new Set([...value.matchAll(/var\(\s*(--[\w-]+)/g)].map((m) => m[1] as string)),
@@ -157,4 +158,23 @@ export function containerAliasRedeclarations(
   for (const [name, value] of ROOT_ALIASES) if (restated(name)) declarations[name] = value;
   for (const alias of CONTAINER_ALIASES) if (restated(alias.name)) declarations[alias.name] = alias.value;
   return { declarations, contexts: CONTAINER_ALIAS_CONTEXTS.filter((context) => restated(context.name)) };
+}
+
+/** A document root's mode state: no mode hook, or one mode's hook. */
+export type RootModeState = "light" | "dark" | null;
+
+/**
+ * The DS root's own mode channels at a document root in `mode`: every tabled
+ * name with the text the cascade gives the root there. A name the root does not
+ * declare in that state reads `initial`, the guaranteed-invalid value the root
+ * itself holds for it. `varyingOnly` keeps the names whose text in some mode
+ * differs from their text with no mode hook.
+ */
+export function rootModeTexts(mode: RootModeState, options: { readonly varyingOnly?: boolean } = {}): Record<string, string> {
+  const texts: Record<string, string> = {};
+  for (const row of CONTAINER_MODE_TEXTS) {
+    if (options.varyingOnly && row.light === row.base && row.dark === row.base) continue;
+    texts[row.name] = row[mode ?? "base"] ?? "initial";
+  }
+  return texts;
 }

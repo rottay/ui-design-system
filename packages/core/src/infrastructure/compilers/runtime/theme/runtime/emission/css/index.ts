@@ -20,6 +20,7 @@ import {
   type ContainerAliasContext,
   containerReach,
   rootAliasRedeclarations,
+  rootModeTexts,
 } from "./root-aliases";
 
 export { containerScope, firstPartyScope, tenantArtifactScope };
@@ -163,18 +164,21 @@ function inMode(
 /**
  * The mode rules a container scope states (the container law's mode arm).
  *
- * The root states `enclosing` and its mode overlays; the scope states `stated`
- * in its base rule and means `proposed` in every mode. Under a document in a
- * mode the enclosing compile overlays, a base-rule channel whose `proposed`
- * value in that mode differs from its base text would keep the base text, and a
- * channel the scope leaves to the root would keep the root's mode value where
- * `proposed` moves it. So each mode block states: every channel `proposed`
- * resolves differently from `enclosing` in that mode, every stated channel
- * whose mode value differs from its base text, and every compiled channel that
- * reads one of those or any stated channel through a chain the root holds in
- * that mode (`containerReach`: a mode text may read an operand its base text
- * does not), with its `proposed` mode text. A channel `proposed` does not state
- * in that mode is never invented.
+ * The root states `enclosing` and its mode overlays over the DS root's own mode
+ * channels (`rootModeTexts`: the base stylesheets' mode rules, which a
+ * compiled channel outranks); the scope states `stated` in its base rule and
+ * means `proposed` over the same DS layer in every mode. Under a document in a
+ * mode, a base-rule channel whose value in that mode differs from its base text
+ * would keep the base text, and a channel the scope leaves to the root would
+ * keep the root's mode value where `proposed` moves it. So each mode block
+ * states: every channel resolving differently from the root in that mode, every
+ * stated channel whose mode value differs from its base text, and every channel
+ * that reads one of those or any stated channel through a chain the root holds
+ * in that mode (`containerReach`: a mode text may read an operand its base text
+ * does not), with its mode text -- except a DS channel the base rule's own
+ * container-law restatement already gives that text. A mode is visited when a
+ * compile overlays it or the DS root declares it; nothing beyond `proposed` and
+ * the DS table is stated.
  */
 export function containerModeBlocks(
   stated: Readonly<Record<string, string>>,
@@ -182,24 +186,33 @@ export function containerModeBlocks(
   enclosing: Pick<ThemeCompilation, "cssVariables" | "modeBlocks">
 ): ThemeCompilationModeBlock[] {
   const blocks: ThemeCompilationModeBlock[] = [];
+  const modeVarying = rootModeTexts(null, { varyingOnly: true });
+  // What the scope's base rule already restates through the container law: a
+  // DS channel it restates with the same text as its mode text needs no mode rule.
+  const baseRestated = containerAliasRedeclarations(Object.keys(stated), new Set(Object.keys(stated))).declarations;
   for (const mode of ["light", "dark"] as const) {
     const overlay =
       proposed.modeBlocks.find((block) => block.mode === mode) ??
       enclosing.modeBlocks.find((block) => block.mode === mode);
-    if (!overlay) continue;
-    const want = inMode(proposed, mode);
-    const root = inMode(enclosing, mode);
+    const ds = rootModeTexts(mode);
+    if (!overlay && Object.keys(modeVarying).every((name) => ds[name] === modeVarying[name])) continue;
+    const want = { ...ds, ...inMode(proposed, mode) };
+    const root = { ...ds, ...inMode(enclosing, mode) };
     const isStated = (name: string) => Object.prototype.hasOwnProperty.call(stated, name);
     const seeds = Object.keys(want).filter(
       (name) => want[name] !== (isStated(name) ? stated[name] : root[name])
     );
     const cssVariables: Record<string, string> = {};
+    const compiled = { ...inMode(proposed, mode), ...inMode(enclosing, mode) };
+    const seeded = new Set(seeds);
     for (const name of new Set([...seeds, ...containerReach([...seeds, ...Object.keys(stated)], want)])) {
       const value = want[name];
-      if (value !== undefined && !(isStated(name) && stated[name] === value)) cssVariables[name] = value;
+      if (value === undefined || (isStated(name) && stated[name] === value)) continue;
+      if (!seeded.has(name) && !(name in compiled) && baseRestated[name] === value) continue;
+      cssVariables[name] = value;
     }
     if (Object.keys(cssVariables).length > 0) {
-      blocks.push({ mode, colorScheme: overlay.colorScheme, cssVariables });
+      blocks.push({ mode, colorScheme: overlay?.colorScheme ?? mode, cssVariables });
     }
   }
   return blocks;

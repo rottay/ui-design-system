@@ -1,6 +1,6 @@
 import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, relative, resolve } from "node:path";
 import { gzipSync } from "node:zlib";
 
 import { describe, expect, it } from "vitest";
@@ -23,9 +23,11 @@ import {
 import {
   CONTAINER_ALIAS_CONTEXTS,
   CONTAINER_ALIASES,
+  CONTAINER_MODE_TEXTS,
   containerReach,
   ROOT_ALIASES,
   rootAliasRedeclarations,
+  rootModeTexts,
   VERTICAL_OUTRIGHT,
 } from "../root-aliases";
 import { resolveFirstParty } from "@tests/support/theme-lowering";
@@ -349,6 +351,98 @@ describe("a container scope's mode rules follow the document's mode", () => {
       expect(dark?.cssVariables).toEqual({ "--ds-ink": "#ffffff" });
       expect(Object.keys(dark?.cssVariables ?? {})).not.toContain("--ds-unknown");
     });
+
+    it("a DS root mode channel the scope states is restated with the DS root's mode text", () => {
+      const [dark] = containerModeBlocks({ "--ds-color-neutral-900": "#171717" }, untouched, untouched);
+      expect(dark?.cssVariables["--ds-color-neutral-900"]).toBe("#f8fafc");
+      // What a dark document's root paints for the same channel: the DS dark block, no compile over it.
+      expect(rootModeTexts("dark")["--ds-color-neutral-900"]).toBe("#f8fafc");
+    });
+
+    it("a DS root mode text that reads a stated channel is carried in that mode (M1 class c)", () => {
+      const [dark] = containerModeBlocks({ "--ds-surface-card": "#101010" }, untouched, untouched);
+      expect(dark?.cssVariables["--ds-table-bg"]).toBe("var(--ds-surface-card)");
+      expect(dark?.cssVariables["--ds-table-row-bg"]).toBe("var(--ds-surface-card)");
+      expect(dark?.cssVariables ?? {}).not.toHaveProperty("--ds-table-header-bg");
+    });
+
+    it("a DS channel a compile states keeps the compile's text: the vertical outranks the DS layer", () => {
+      const [dark] = containerModeBlocks(
+        { "--ds-color-neutral-900": "#171717" },
+        { ...untouched, cssVariables: { ...untouched.cssVariables, "--ds-color-neutral-900": "#171717" } },
+        untouched,
+      );
+      expect(dark?.cssVariables ?? {}).not.toHaveProperty("--ds-color-neutral-900");
+    });
+
+    it("a DS alias the base rule already restates with its mode text gets no mode rule", () => {
+      const [dark] = containerModeBlocks({ "--ds-color-primary": "#222222" }, untouched, untouched);
+      expect(dark?.cssVariables ?? {}).not.toHaveProperty("--ds-menu-item-bg-active");
+    });
+  });
+});
+
+describe("the DS root's own mode channels (CONTAINER_MODE_TEXTS)", () => {
+  const derived = deriveRootAliases();
+  const row = (name: string) => CONTAINER_MODE_TEXTS.find((entry) => entry.name === name);
+
+  it("tables every name the base stylesheets declare under a root-state mode rule, none stopped", () => {
+    expect(CONTAINER_MODE_TEXTS.length).toBe(161);
+    expect(derived.modeTexts.stopped).toEqual({});
+    const tabled = new Set([
+      ...ROOT_ALIASES.map(([name]) => name),
+      ...CONTAINER_ALIASES.map((alias) => alias.name),
+      ...CONTAINER_ALIAS_CONTEXTS.map((context) => context.name),
+    ]);
+    expect(CONTAINER_MODE_TEXTS.filter((entry) => !tabled.has(entry.name)).length).toBe(116);
+  });
+
+  it("carries the cascade-winning text per mode, read from its site", () => {
+    expect(row("--ds-color-neutral-900")).toEqual({
+      name: "--ds-color-neutral-900",
+      base: "#171717",
+      light: "#171717",
+      dark: "#f8fafc",
+      sites: { base: "foundation/themes/default/index.css:62", dark: "foundation/themes/default/index.css:2100" },
+    });
+    expect(row("--ds-table-bg")).toMatchObject({ base: "#ffffff", dark: "var(--ds-surface-card)" });
+    // The components layer's bare :root rule outranks the token layer's dark block.
+    expect(row("--ds-card-bg")).toMatchObject({ dark: "var(--ds-color-bg-elevated)" });
+    expect(row("--ds-card-bg")?.sites).toEqual({ base: "presentation/components/card/index.css:26" });
+    expect(row("--ds-button-error-bg-hover")).toMatchObject({ base: "var(--ds-color-error-600)", dark: "var(--ds-color-error-400)" });
+    expect(row("--ds-color-surface-muted")).toMatchObject({ base: null, dark: "#152033" });
+    expect(rootModeTexts(null)["--ds-color-surface-muted"]).toBe("initial");
+  });
+
+  it("ranks the winner by layer, stops a mode rule under an at-rule, and never invents a text", () => {
+    const repo = resolve(TABLE_PATH.split("/packages/core/")[0] as string);
+    const dir = mkdtempSync(join(tmpdir(), "root-mode-texts-"));
+    writeFileSync(
+      join(dir, "theme.css"),
+      [
+        ":root { --a: #111; --b: #222; --m: #333; }",
+        ":root[data-theme='dark'] { --a: #eee; --b: #ddd; }",
+        "@media (prefers-color-scheme: dark) { :root[data-theme='dark'] { --m: #444; } }",
+      ].join("\n") + "\n",
+    );
+    writeFileSync(join(dir, "comp.css"), ":root { --b: #bbb; }\n");
+    writeFileSync(join(dir, "entry.css"), '@layer t, c;\n@import "./theme.css" layer(t);\n@import "./comp.css" layer(c);\n');
+    const file = (name: string) => relative(repo, join(dir, name));
+    const pin = (channel: string, name: string, line: number) => ({ channel, file: file(name), line });
+    const artifact = {
+      edges: [],
+      digests: {},
+      literalPins: [
+        pin("--a", "theme.css", 1), pin("--b", "theme.css", 1), pin("--m", "theme.css", 1),
+        pin("--a", "theme.css", 2), pin("--b", "theme.css", 2), pin("--m", "theme.css", 3),
+        pin("--b", "comp.css", 1),
+      ],
+    };
+    const { modeTexts } = deriveRootAliases(artifact, bundleCascade(join(dir, "entry.css")));
+    expect(modeTexts.texts.map((entry: { name: string }) => entry.name)).toEqual(["--a", "--b"]);
+    expect(modeTexts.texts[0]).toMatchObject({ base: "#111", light: "#111", dark: "#eee" });
+    expect(modeTexts.texts[1]).toMatchObject({ base: "#bbb", dark: "#bbb" });
+    expect(Object.keys(modeTexts.stopped)).toEqual(["--m"]);
   });
 });
 

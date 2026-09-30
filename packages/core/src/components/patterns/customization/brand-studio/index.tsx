@@ -61,7 +61,10 @@ import {
   emitRule,
   emitThemeCss,
 } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
-import { containerReach } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
+import {
+  containerReach,
+  rootModeTexts,
+} from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
 import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
 import { themeDefaultMode as resolveThemeDefaultMode } from '@/infrastructure/compilers/kernel/foundation/modes';
 import { validateBrandingContrast, type BrandingColors } from '@/foundation/kernel/accessibility/branding-contrast';
@@ -360,8 +363,9 @@ export interface SurfaceVariables {
    * Compiled channels that read a `vars` name through a chain the document root
    * holds, with their mode-resolved compiled text. The panel is a box BELOW the
    * root, so without them it inherits their root-resolved values (N1). Also every
-   * channel the vertical's mode overlays move, and their readers, at the ground's
-   * value: the panel keeps its ground under a document in either mode.
+   * channel the vertical's mode overlays move, and every DS root channel the
+   * base stylesheets' mode rules move, and their readers, at the ground's value:
+   * the panel keeps its ground under a document in either mode.
    */
   carried: Record<string, string>;
   /** The channels the untouched vertical's root rule states outright (the container law's `outright`). */
@@ -479,8 +483,18 @@ function projectSurfaceVariables(
     const value = groundRoot[name];
     if (value !== undefined && !(name in vars)) carried[name] = value;
   }
-  for (const name of containerReach([...Object.keys(vars), ...modeVarying], enclosing)) {
-    const value = enclosing[name];
+  // The DS root's own mode rules (the base stylesheets' dark block) are the
+  // ground's too: every DS channel whose text varies by mode, and that the
+  // vertical does not state, is stated at the text the root holds in the
+  // ground's mode, and its readers are resolved against that ground.
+  const dsGround = rootModeTexts(surface.baseTheme);
+  const dsVarying = Object.keys(rootModeTexts(null, { varyingOnly: true }));
+  for (const name of dsVarying) {
+    if (!(name in enclosing) && !(name in vars) && !(name in carried)) carried[name] = dsGround[name];
+  }
+  const grounded = { ...dsGround, ...enclosing };
+  for (const name of containerReach([...Object.keys(vars), ...modeVarying, ...dsVarying], grounded)) {
+    const value = grounded[name];
     if (value !== undefined && !(name in vars) && !(name in carried)) carried[name] = value;
   }
   return {

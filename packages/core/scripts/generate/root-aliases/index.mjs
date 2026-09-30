@@ -19,6 +19,13 @@
  * cascade order, so the scope re-emits each context where it applied. A root
  * rule the winning text outranks never applies and is not re-emitted.
  *
+ * The DS root's own MODE channels are tabled apart as well: every name a live
+ * base-stylesheet rule declares under a root-state mode selector (the default
+ * theme's dark block, the patterns' and button's dark contexts), with the text
+ * the same cascade law gives the root with no mode hook and in each mode. A
+ * container scope below a document in a mode restates them from there; a name
+ * whose mode reading is not a clean declaration is stopped and counted.
+ *
  *   node scripts/generate/root-aliases/index.mjs            print the census
  *   node scripts/generate/root-aliases/index.mjs --write    write the table
  *   node scripts/generate/root-aliases/index.mjs --check    fail on drift
@@ -258,6 +265,120 @@ function deriveContainerAliases(excluded, sites, linesOf, cascade) {
   };
 }
 
+const MODE_HOOK = /data-theme|\.(?:dark|light)\b/;
+
+/** The document-root states the mode table resolves: no mode hook, and each mode's hook. */
+export const ROOT_MODE_STATES = [null, "light", "dark"];
+
+const ATTRIBUTE = /^\[\s*([\w-]+)\s*(?:([~|^$*]?=)\s*(?:'([^']*)'|"([^"]*)"|([^\]\s]+))\s*)?\]$/;
+
+/**
+ * Whether a compound can match the document root carrying only `theme` as its
+ * `data-theme` (null: no hook). `undefined` when it names a token this reading
+ * does not model.
+ */
+function rootCompoundMatches(compound, theme) {
+  const tokens = compound.match(/:(?:where|is|not)\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)|::?[\w-]+(?:\((?:[^()]|\([^()]*\))*\))?|\[[^\]]*\]|\.[\w-]+|#[\w-]+|\*|[a-zA-Z][\w-]*/g) ?? [];
+  if (tokens.join("").replace(/\s+/g, "") !== compound.replace(/\s+/g, "")) return undefined;
+  let unknown = false;
+  for (const token of tokens) {
+    let matched;
+    const fn = token.match(/^:(where|is|not)\((.*)\)$/s);
+    if (fn) {
+      const arms = splitTopLevel(fn[2], /,/).map((arm) => rootSelectorMatches(arm, theme));
+      if (arms.includes(true)) matched = fn[1] !== "not";
+      else if (arms.includes(undefined)) matched = undefined;
+      else matched = fn[1] === "not";
+    } else if (token === ":root" || token === "html" || token === "*") {
+      matched = true;
+    } else if (token.startsWith("[")) {
+      const [, attr, op, ...quoted] = token.match(ATTRIBUTE) ?? [];
+      const value = quoted.find((part) => part !== undefined);
+      if (!attr) matched = undefined;
+      else if (attr !== "data-theme") matched = false;
+      else if (!op) matched = theme !== null;
+      else if (op === "=") matched = theme === value;
+      else matched = undefined;
+    } else if (/^[a-zA-Z.#]/.test(token) || token === ":host") {
+      // another element, a class (a mode class included: the state carries the attribute hook) or an id
+      matched = false;
+    } else {
+      matched = undefined;
+    }
+    if (matched === false) return false;
+    if (matched === undefined) unknown = true;
+  }
+  return unknown ? undefined : true;
+}
+
+/** Whether any branch of a selector list is a single compound matching the root in `theme`. */
+function rootSelectorMatches(selector, theme) {
+  let unknown = false;
+  for (const branch of splitTopLevel(selector, /,/)) {
+    const compounds = splitTopLevel(branch.replace(/\s*([>+~])\s*/g, " $1 "), /\s/);
+    if (compounds.length !== 1) continue;
+    const matched = rootCompoundMatches(compounds[0], theme);
+    if (matched === true) return true;
+    if (matched === undefined) unknown = true;
+  }
+  return unknown ? undefined : false;
+}
+
+/**
+ * The DS root's own mode channels: every name a live base-stylesheet rule
+ * declares under a root-state MODE selector (one that matches the document root
+ * in one mode state and not in another), with the text the cascade gives the
+ * root in each state (layer rank, then specificity, then bundle order). A name
+ * whose mode reading is not a clean declaration -- a mode rule under an
+ * at-rule or a nested rule, a root-state rule this reading cannot resolve, or a
+ * text the cascade cannot settle without another root state -- is stopped and
+ * counted, never tabled.
+ */
+function deriveContainerModeTexts(sites, linesOf, cascade) {
+  const texts = [];
+  const stopped = {};
+  const stop = (name, why) => (stopped[name] ??= why);
+  for (const [name, declared] of [...sites].sort(([left], [right]) => left.localeCompare(right))) {
+    const live = declared
+      .map((entry) => ({ ...entry, key: cascadeKey(cascade, entry) }))
+      .filter((entry) => entry.key !== null && rootStateSelector(entry.rule));
+    const scoped = [];
+    let modeScoped = false;
+    for (const entry of live) {
+      const matches = ROOT_MODE_STATES.map((theme) => rootSelectorMatches(entry.rule, theme));
+      const conditional = entry.chain.slice(0, -1).some((prelude) => !/^@layer\b/.test(prelude));
+      const varies = matches.some((matched) => matched !== matches[0]);
+      if (varies) modeScoped = true;
+      if (matches.includes(undefined)) {
+        if (varies || matches.includes(true) || MODE_HOOK.test(entry.rule)) stop(name, `unresolved root-state rule ${entry.rule} @ ${siteOf(entry)}`);
+        continue;
+      }
+      if (conditional) {
+        if (varies) stop(name, `mode rule under ${entry.chain.slice(0, -1).join(" ")} @ ${siteOf(entry)}`);
+        continue;
+      }
+      if (matches.some(Boolean)) scoped.push({ ...entry, matches });
+    }
+    if (!modeScoped || stopped[name]) continue;
+    const row = { name };
+    for (const [index, theme] of ROOT_MODE_STATES.entries()) {
+      const applying = scoped.filter((entry) => entry.matches[index]);
+      if (applying.length === 0) {
+        row[theme ?? "base"] = null;
+        continue;
+      }
+      const winner = applying.reduce((best, entry) => (compareKeys(entry.key, best.key) > 0 ? entry : best));
+      const value = declaredValue(linesOf(winner.file), winner.line, name);
+      if (value.includes("!important")) stop(name, `!important @ ${siteOf(winner)}`);
+      row[theme ?? "base"] = value;
+      row[`${theme ?? "base"}Site`] = siteOf(winner);
+    }
+    if (stopped[name]) continue;
+    texts.push(row);
+  }
+  return { texts, stopped };
+}
+
 export function deriveRootAliases(
   artifact = JSON.parse(readFileSync(EDGES_PATH, "utf8")),
   cascade = bundleCascade()
@@ -338,6 +459,7 @@ export function deriveRootAliases(
     edgesDigest: artifact.digests?.edges ?? null,
     verticalOutright: deriveVerticalOutright(ordered),
     container: deriveContainerAliases(excluded, sites, linesOf, cascade),
+    modeTexts: deriveContainerModeTexts(sites, linesOf, cascade),
   };
 }
 
@@ -377,7 +499,7 @@ export function deriveVerticalOutright(ordered, dir = VERTICAL_ARTIFACTS_DIR) {
   return outright;
 }
 
-export function renderTable({ ordered, edgesDigest, verticalOutright, container }) {
+export function renderTable({ ordered, edgesDigest, verticalOutright, container, modeTexts }) {
   const rows = ordered.map(([name, value]) => `  [${JSON.stringify(name)}, ${JSON.stringify(value)}],`);
   const verticalRows = Object.entries(verticalOutright).flatMap(([vertical, names]) => [
     `  ${JSON.stringify(vertical)}: [`,
@@ -436,6 +558,27 @@ export function renderTable({ ordered, edgesDigest, verticalOutright, container 
     ),
     "];",
     "",
+    "/** A DS-root mode channel: the text the cascade gives the document root with no mode hook and in each mode (null: undeclared there), and the sites they are read from (a mode's site omitted where it is the base site). */",
+    "export interface ContainerModeText {",
+    "  readonly name: string;",
+    "  readonly base: string | null;",
+    "  readonly light: string | null;",
+    "  readonly dark: string | null;",
+    "  readonly sites: Readonly<Partial<Record<\"base\" | \"light\" | \"dark\", string>>>;",
+    "}",
+    "",
+    "/** Every name the base stylesheets declare under a root-state mode selector, by name. */",
+    "export const CONTAINER_MODE_TEXTS: readonly ContainerModeText[] = [",
+    ...modeTexts.texts.map((row) => {
+      const sites = Object.fromEntries(
+        ["base", "light", "dark"]
+          .filter((state) => row[`${state}Site`] && (state === "base" || row[`${state}Site`] !== row.baseSite))
+          .map((state) => [state, row[`${state}Site`]])
+      );
+      return `  { name: ${JSON.stringify(row.name)}, base: ${JSON.stringify(row.base)}, light: ${JSON.stringify(row.light)}, dark: ${JSON.stringify(row.dark)}, sites: ${JSON.stringify(sites)} },`;
+    }),
+    "];",
+    "",
   ].join("\n");
 }
 
@@ -485,6 +628,12 @@ function main(argv) {
         Object.entries(derived.verticalOutright).map(([vertical, names]) => [vertical, names.length])
       ),
       containerRestated: containerCensus(derived.container),
+      containerModeTexts: {
+        names: derived.modeTexts.texts.length,
+        dark: derived.modeTexts.texts.filter((row) => row.dark !== row.base).length,
+        light: derived.modeTexts.texts.filter((row) => row.light !== row.base).length,
+        stopped: derived.modeTexts.stopped,
+      },
     })}\n`
   );
 }
