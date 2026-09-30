@@ -1510,6 +1510,23 @@ describe('axis-difference — the root is mounted AS THE DEFAULT RENDER stamps i
     assert.ok(ungated.some((line) => line.includes('no longer gates on this attribute')), ungated.join(' | '));
   });
 
+  it('MUTANT: a stamp for a gate the default render never carries fails on its fabricated default', () => {
+    // `image` stamps `data-radius={radius}` on every render, but its default is
+    // `none`: a row claiming `sm` has no source line to resolve from.
+    const failures = asRenderedRosterFailures(ROOT, {
+      image: [{
+        attribute: 'data-radius',
+        value: 'sm',
+        source: 'src/components/primitives/display/image/engines/modern/index.tsx',
+        stamp: 'data-radius={radius}',
+        resolves: "radius = 'sm'",
+      }],
+    });
+    assert.ok(failures.some((line) => line.includes('no longer carries the resolves')), failures.join(' | '));
+    assert.equal(AS_RENDERED_ROOT_STAMPS.image, undefined, 'a true-configuration gate never becomes a roster row');
+    assert.equal(AS_RENDERED_ROOT_STAMPS.box, undefined);
+  });
+
   it('THE ROW THAT ADDS NO PAINT: the value is the DEFAULT, not the one that makes a number move', () => {
     // `anchor` paints a rhythm `gap` only under `[data-direction='horizontal']`
     // and its own default is `vertical`. A roster that chose the moving value
@@ -2821,7 +2838,30 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
   });
 
   it('THE STALENESS DOOR: every shipped row is witnessed by the engine it names', () => {
-    assert.deepEqual(Object.keys(REAL_RENDER_MOUNTS).sort(), ['dropdown', 'skeleton', 'skeleton-anatomy', 'tooltip']);
+    assert.deepEqual(Object.keys(REAL_RENDER_MOUNTS).sort(), [
+      'column-menu',
+      'column-settings',
+      'command-palette',
+      'date-picker',
+      'drawer-compounds',
+      'dropdown',
+      'edit-fields',
+      'export-button',
+      'feature-workspace-frame',
+      'filter-panel',
+      'float-button',
+      'form',
+      'guided-draft-form',
+      'image-compounds',
+      'modal-compounds',
+      'presence',
+      'search-command-bar',
+      'skeleton',
+      'skeleton-anatomy',
+      'stats-grid',
+      'time-picker',
+      'tooltip',
+    ]);
     assert.deepEqual(realRenderRosterFailures(ROOT), []);
     for (const entry of Object.values(REAL_RENDER_MOUNTS)) {
       assert.ok(entry.axes.length > 0 && entry.axes.every((axis) => REAL_RENDER_AXES.includes(axis)));
@@ -2888,7 +2928,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
     assert.equal(realRenderQualification({ before: { base: {} }, after: { base: {} }, family: 'f', axis: 'motion' }).qualified, false);
   });
 
-  it('the scene carries the mounts and the bare node only when the law is on, and the report names each gate line', () => {
+  it('the scene carries the mounts only when the law is on, and the report names each gate line', () => {
     const elements = familyElements(ROOT, Object.keys(REAL_RENDER_MOUNTS));
     const mounts = realRenderMountList(elements);
     assert.deepEqual(mounts.map((mount) => mount.family).sort(), Object.keys(REAL_RENDER_MOUNTS).sort());
@@ -2900,7 +2940,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
     assert.match(on, /data-axis-real-render="dropdown" data-axis-real-axes="shape rhythm depth motion"/u);
     assert.doesNotMatch(off, /data-axis-real-render/u);
     const report = realRenderReport(mounts);
-    assert.equal(report.families, 4);
+    assert.equal(report.families, Object.keys(REAL_RENDER_MOUNTS).length);
     for (const row of Object.values(report.map)) {
       for (const gate of row.gates) assert.match(gate, /^src\/components\/.+\/index\.tsx:\d+$/u);
     }
@@ -2924,7 +2964,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
 });
 
 describe('axis-difference BROWSER drill — the real-render mounts reach the paint, and only where the law admits them', { skip: browserReason }, () => {
-  const FAMILIES = Object.keys(REAL_RENDER_MOUNTS);
+  const FAMILIES = ['dropdown', 'skeleton', 'skeleton-anatomy', 'tooltip'];
   const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
 
   it('skeleton, tooltip and dropdown move on shape through their real render; the default mounts alone do not; the palette control stays 0', async () => {
@@ -2994,6 +3034,24 @@ describe('axis-difference BROWSER drill — the real-render mounts reach the pai
     assert.ok(!shape.realRender.rescued.includes('skeleton-anatomy'));
     assert.ok(shape.movedIds.includes('skeleton-anatomy'), 'the refused axis is still read on the default mount, which moves');
     assert.ok(evaluate(measurement).some((line) => line.startsWith('skeleton-anatomy: its real-render mount was REFUSED on shape')));
+  });
+
+  it('an open panel and a close button are reached as rendered; each flag reproduces the reading it names', async () => {
+    const scenarios = [byId('shape'), byId('depth'), byId('palette-only')];
+    const families = ['column-menu', 'drawer-compounds', 'file-manager'];
+    const on = await run({ verticals: ['bithire'], themes: ['light'], families, scenarios, nativePseudos: false });
+    const noReal = await run({ verticals: ['bithire'], themes: ['light'], families, scenarios, nativePseudos: false, realRenderMounts: false });
+    const noStamps = await run({ verticals: ['bithire'], themes: ['light'], families, scenarios, nativePseudos: false, asRendered: false });
+    const cellOf = (measurement, id) => measurement.cells.find((entry) => entry.scenario === id);
+    for (const [family, axis] of [['column-menu', 'shape'], ['column-menu', 'depth'], ['drawer-compounds', 'shape']]) {
+      assert.ok(cellOf(on, axis).realRender.rescued.includes(family), `${family}/${axis}: ${JSON.stringify(cellOf(on, axis).realRender)}`);
+      assert.ok(!cellOf(noReal, axis).movedIds.includes(family), `${family}/${axis} moved without its real render`);
+    }
+    // `file-manager`'s loaded root stamps `data-loading="false"`, and its elevation lives behind that gate.
+    assert.ok(cellOf(on, 'depth').movedIds.includes('file-manager'));
+    assert.ok(!cellOf(noStamps, 'depth').movedIds.includes('file-manager'), 'file-manager moved on depth without its default-render stamp');
+    for (const entry of on.cells.filter((item) => item.kind === 'negative')) assert.equal(entry.moved, 0, `${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
+    assert.deepEqual(evaluate(on), []);
   });
 
   it('MUTANT: a drifted roster is refused before anything is mounted', async () => {

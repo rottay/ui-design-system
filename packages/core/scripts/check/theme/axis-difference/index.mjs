@@ -532,15 +532,24 @@ export function familyElement(css, { collapsedRoots = false } = {}) {
  * is how the before/after of this repair is measured with one browser.
  */
 export const AS_RENDERED_ROOT_STAMPS = Object.freeze({
-  record: Object.freeze([Object.freeze({
-    attribute: 'data-structure',
-    value: 'record',
-    source: 'src/components/structures/record/summary-strip/index.tsx',
-    stamp: 'data-structure="record"',
-    // The summary strip IS the family's mounted root, and it stamps the
-    // family's private density hook on every render.
-    resolves: 'data-part="summary-strip"',
-  })]),
+  record: Object.freeze([
+    Object.freeze({
+      attribute: 'data-structure',
+      value: 'record',
+      source: 'src/components/structures/record/summary-strip/index.tsx',
+      stamp: 'data-structure="record"',
+      // The summary strip IS the family's mounted root, and it stamps the
+      // family's private density hook on every render.
+      resolves: 'data-part="summary-strip"',
+    }),
+    Object.freeze({
+      attribute: 'data-variant',
+      value: 'default',
+      source: 'src/components/structures/record/summary-strip/index.tsx',
+      stamp: 'data-variant={variant}',
+      resolves: "variant = 'default',",
+    }),
+  ]),
   button: Object.freeze([
     Object.freeze({
       attribute: 'data-variant',
@@ -631,6 +640,141 @@ export const AS_RENDERED_ROOT_STAMPS = Object.freeze({
     stamp: 'data-size={size}',
     resolves: 'const size = toCanonicalSize(sizeProp);',
   })]),
+  avatar: Object.freeze([
+    Object.freeze({
+      attribute: 'data-shape',
+      value: 'circle',
+      source: 'src/components/primitives/display/avatar/engines/modern/index.tsx',
+      stamp: 'data-shape={shape}',
+      resolves: 'shape = AVATAR_DEFAULTS.shape,',
+    }),
+  ]),
+  'cell-renderers': Object.freeze([
+    Object.freeze({
+      attribute: 'data-variant',
+      value: 'secondary',
+      source: 'src/components/patterns/runtime/cell-renderers/index.tsx',
+      stamp: '\'data-variant\': resolvedVariant,',
+      resolves: 'variant: CellBadgeVariant = \'secondary\',',
+    }),
+  ]),
+  'chart-foundation': Object.freeze([
+    Object.freeze({
+      attribute: 'data-variant',
+      value: 'detailed',
+      source: 'src/components/patterns/visualization/charts/presentation/tooltip/index.tsx',
+      stamp: 'data-variant={variant}',
+      resolves: 'variant = \'detailed\',',
+    }),
+  ]),
+  'collection-shell': Object.freeze([
+    Object.freeze({
+      attribute: 'data-continuity',
+      value: 'seamless',
+      source: 'src/components/structures/shell/workspace-shell/index.tsx',
+      stamp: 'data-continuity={continuity}',
+      resolves: 'continuity = \'seamless\',',
+    }),
+  ]),
+  'data-terminal-card': Object.freeze([
+    Object.freeze({
+      attribute: 'data-variant',
+      value: '1',
+      source: 'src/components/structures/dashboard/data-terminal-card/index.tsx',
+      stamp: 'data-variant="1"',
+      resolves: 'const DEFAULT_PAGE_VARIANT = 1 as const;',
+    }),
+  ]),
+  'file-manager': Object.freeze([
+    Object.freeze({
+      attribute: 'data-loading',
+      value: 'false',
+      source: 'src/components/patterns/data/file-manager/engines/modern/index.tsx',
+      stamp: 'data-loading={false}',
+      resolves: 'if (loading) {',
+    }),
+  ]),
+  'invoice-template': Object.freeze([
+    Object.freeze({
+      attribute: 'data-loading',
+      value: 'false',
+      source: 'src/components/patterns/forms/invoice-template/engines/modern/index.tsx',
+      stamp: 'data-loading="false"',
+      resolves: 'if (loading) {',
+    }),
+  ]),
+  radio: Object.freeze([
+    Object.freeze({
+      attribute: 'data-checked',
+      value: 'false',
+      source: 'src/components/primitives/inputs/radio/engines/modern/index.tsx',
+      stamp: 'data-checked={isChecked ? \'true\' : \'false\'}',
+      resolves: 'defaultChecked = RADIO_DEFAULTS.defaultChecked,',
+    }),
+  ]),
+  result: Object.freeze([
+    Object.freeze({
+      attribute: 'data-tone',
+      value: 'info',
+      source: 'src/components/primitives/feedback/result/engines/modern/index.tsx',
+      stamp: 'data-tone={status}',
+      resolves: 'status = RESULT_DEFAULTS.status,',
+    }),
+  ]),
+  'saved-views-menu': Object.freeze([
+    Object.freeze({
+      attribute: 'data-open',
+      value: 'false',
+      source: 'src/components/structures/workspace/saved-views-menu/index.tsx',
+      stamp: 'data-open={isOpen}',
+      resolves: 'const [isOpen, setIsOpen] = useState(false);',
+    }),
+  ]),
+  'scroll-area': Object.freeze([
+    Object.freeze({
+      attribute: 'data-scrollbar-size',
+      value: 'normal',
+      source: 'src/components/primitives/layout/scroll-area/engines/modern/index.tsx',
+      stamp: 'data-scrollbar-size={scrollbarSize}',
+      resolves: 'scrollbarSize = SCROLL_AREA_DEFAULTS.scrollbarSize,',
+    }),
+  ]),
+  'search-command-bar': Object.freeze([
+    Object.freeze({
+      attribute: 'data-embedded',
+      value: 'false',
+      source: 'src/components/structures/workspace/search-command-bar/index.tsx',
+      stamp: 'data-embedded={embedded}',
+      resolves: 'surfaceVariant = \'default\',',
+    }),
+  ]),
+  'sidebar-surface': Object.freeze([
+    Object.freeze({
+      attribute: 'data-bordered',
+      value: 'true',
+      source: 'src/components/structures/shell/navigation/sidebar-surface/index.tsx',
+      stamp: 'data-bordered={config.visual.bordered === false ? \'false\' : \'true\'}',
+      resolves: 'config.visual.bordered === false ? \'false\' : \'true\'',
+    }),
+  ]),
+  'stepper-compounds': Object.freeze([
+    Object.freeze({
+      attribute: 'data-direction',
+      value: 'horizontal',
+      source: 'src/components/primitives/navigation/stepper/compound/step/index.tsx',
+      stamp: 'data-direction={direction}',
+      resolves: 'direction = \'horizontal\',',
+    }),
+  ]),
+  'tag-input': Object.freeze([
+    Object.freeze({
+      attribute: 'data-size',
+      value: 'md',
+      source: 'src/components/primitives/inputs/tag-input/engines/modern/index.tsx',
+      stamp: 'data-size={size}',
+      resolves: 'size = TAGINPUT_DEFAULTS.size,',
+    }),
+  ]),
 });
 
 /**
@@ -659,7 +803,11 @@ export function withAsRenderedStamps(element, rows = []) {
  * `asRendered` adds the roster's default-render stamps. It is off under
  * `collapsedRoots`, which exists to reproduce a run that predates them.
  */
-export function familyElements(root = CORE_ROOT, only = null, { collapsedRoots = false, asRendered = true } = {}) {
+export function familyElements(root = CORE_ROOT, only = null, {
+  collapsedRoots = false,
+  asRendered = true,
+  asRenderedRoster = AS_RENDERED_ROOT_STAMPS,
+} = {}) {
   const elements = new Map();
   for (const [family, files] of skinFamilies(root)) {
     if (only && !only.includes(family)) continue;
@@ -668,7 +816,7 @@ export function familyElements(root = CORE_ROOT, only = null, { collapsedRoots =
     elements.set(
       family,
       asRendered && !collapsedRoots
-        ? withAsRenderedStamps(element, AS_RENDERED_ROOT_STAMPS[family] ?? [])
+        ? withAsRenderedStamps(element, asRenderedRoster[family] ?? [])
         : element,
     );
   }
@@ -1011,6 +1159,784 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       }),
       Object.freeze({ token: 'attr:data-part=item', stamp: "{...partAttributes('item', interaction.state)}" }),
       Object.freeze({ token: 'attr:data-tone=neutral', stamp: "data-tone={item.danger ? 'danger' : 'neutral'}" }),
+    ]),
+  }),
+  'column-menu': Object.freeze({
+    state: Object.freeze({
+      name: 'the open panel of a default column menu (Popover surface carrying the family overlay class) with one visible and one hidden column -- the surface, count pill and rows carry radius, keyline and elevation',
+      source: 'src/components/structures/workspace/column-menu/index.tsx',
+      anchors: Object.freeze(['open={isOpen}', 'overlayClassName="ds-structure ds-column-menu-panel"']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/components/primitives/overlay/popover/engines/modern/index.tsx',
+          text: 'const surfaceNode = present && mounted ? (',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['shape', 'depth', 'motion']),
+    markup: '<div data-part="surface" class="ds-structure ds-column-menu-panel"><div data-part="panel">'
+      + '<div data-part="header"><div><div data-part="header-copy"></div><div>'
+      + '<div data-part="count-pill">1/2</div></div></div></div><div data-part="scroll-region"><div>'
+      + '<div data-visible="true" data-part="row"><div data-part="row-content">Name</div></div>'
+      + '<div data-visible="false" data-part="row"><div data-part="row-content">Owner</div></div></div>'
+      + '</div><div data-part="footer"></div></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: Object.freeze(['<Box', '<Flex']),
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/layout/box/engines/modern/index.tsx',
+            text: 'as: Component = BOX_DEFAULTS.as,',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/layout/box/contracts/index.ts',
+            text: 'as: "div",',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/layout/flex/engines/modern/index.tsx',
+            text: '<div\n          // P-79: the default part precedes the spread',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-part=surface',
+        stamp: 'overlayClassName="ds-structure ds-column-menu-panel"',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/overlay/popover/engines/modern/index.tsx',
+            text: 'data-part="surface"',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/overlay/popover/engines/modern/index.tsx',
+            text: 'className={overlayClassName || undefined}',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-part=panel',
+        stamp: '{...partAttributes("panel", panelInteraction.state)}',
+      }),
+      Object.freeze({
+        token: 'attr:data-part=row',
+        stamp: '{...partAttributes("row", interaction.state)}',
+      }),
+      Object.freeze({
+        token: 'attr:data-visible=true',
+        stamp: 'data-visible={isVisible}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/structures/workspace/column-menu/index.tsx',
+            text: 'const isVisible = draftVisible.includes(column.key);',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-visible=false',
+        stamp: 'data-visible={isVisible}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/structures/workspace/column-menu/index.tsx',
+            text: 'const isVisible = draftVisible.includes(column.key);',
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  'column-settings': Object.freeze({
+    state: Object.freeze({
+      name: 'the default render: header and footer are written unconditionally under the root and carry the hairline rules',
+      source: 'src/components/patterns/data/column-settings/engines/modern/index.tsx',
+      anchors: Object.freeze(['<div data-part="header">', '<div data-part="footer">']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="ds-column-settings ds-column-settings--modern" data-part="root">'
+      + '<div data-part="header"><span data-part="title">Columns</span></div>'
+      + '<div data-part="list" role="list"></div><div data-part="footer"></div></div>',
+    stamps: Object.freeze([]),
+  }),
+  'command-palette': Object.freeze({
+    state: Object.freeze({
+      name: 'the open palette (Modal surface carrying the palette classes) with two ungrouped items, the first active by default -- the search rule and the active ring',
+      source: 'src/components/patterns/navigation/command-palette/engines/modern/index.tsx',
+      anchors: Object.freeze(['open={open}', '<div data-part="search">']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/components/primitives/feedback/modal/engines/modern/index.tsx',
+          text: 'className={className || undefined}',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="ds-pattern-command-palette ds-engine-modern"><div data-part="content">'
+      + '<div data-part="search"></div><div data-part="list" role="listbox"><div>'
+      + '<div role="option" data-active="true" data-part="item"><div data-part="item-main">'
+      + '<div data-part="item-text"><div data-part="label">Open</div></div></div></div>'
+      + '<div role="option" data-active="false" data-part="item"><div data-part="item-main">'
+      + '<div data-part="item-text"><div data-part="label">Close</div></div></div></div></div></div>'
+      + '</div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-part=item',
+        stamp: '{...partAttributes(\'item\', state)}',
+      }),
+      Object.freeze({
+        token: 'attr:data-active=true',
+        stamp: 'data-active={active}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/patterns/navigation/command-palette/engines/modern/index.tsx',
+            text: 'const [activeIndex, setActiveIndex] = useState(0);',
+          }),
+          Object.freeze({
+            source: 'src/components/patterns/navigation/command-palette/engines/modern/index.tsx',
+            text: 'active={activeIndex === idx}',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-active=false',
+        stamp: 'data-active={active}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/patterns/navigation/command-palette/engines/modern/index.tsx',
+            text: 'active={activeIndex === idx}',
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  'date-picker': Object.freeze({
+    state: Object.freeze({
+      name: 'the open calendar of a default DatePicker (date mode, `showToday`) beside its trigger -- the trigger input always carries `data-status`, and the panel carries the elevation and hairlines',
+      source: 'src/components/primitives/inputs/date-picker/engines/modern/index.tsx',
+      anchors: Object.freeze(['{isOpen && (', 'const PANEL_CLASS = \'ds-date-picker-panel ds-date-picker-panel--modern\';', '{showToday && (']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/components/primitives/inputs/date-picker/engines/modern/index.tsx',
+          text: 'showToday = true,',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div data-part="root" class="ds-date-picker ds-date-picker--modern">'
+      + '<input type="text" data-part="trigger-input" data-status="default"></div><div data-part="popup">'
+      + '<div data-part="panel" data-mode="date" class="ds-date-picker-panel ds-date-picker-panel--modern" role="dialog">'
+      + '<div data-part="header"></div><div data-part="grid" role="grid">'
+      + '<div data-part="week-row" role="row">'
+      + '<button type="button" data-part="cell" role="gridcell">1</button>'
+      + '<button type="button" data-part="cell" role="gridcell">2</button></div></div>'
+      + '<div data-part="footer"><button type="button" data-part="today-button">Today</button></div>'
+      + '</div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-part=trigger-input',
+        stamp: '{...partAttributes(\'trigger-input\', trigger.state)}',
+      }),
+      Object.freeze({
+        token: 'attr:data-status=default',
+        stamp: 'data-status={status ?? \'default\'}',
+      }),
+      Object.freeze({
+        token: 'attr:data-part=cell',
+        stamp: '{...partAttributes(\'cell\', cell.state)}',
+      }),
+      Object.freeze({
+        token: 'attr:data-part=today-button',
+        stamp: '{...partAttributes(\'today-button\', today.state)}',
+      }),
+    ]),
+  }),
+  'drawer-compounds': Object.freeze({
+    state: Object.freeze({
+      name: 'a default Drawer.Header given `onClose` (closable defaults true) -- the close button that carries the compound radius and its feedback transition lives only inside that header',
+      source: 'src/components/primitives/feedback/drawer/compound/header/index.tsx',
+      anchors: Object.freeze(['{closable && onClose && (']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/components/primitives/feedback/drawer/compound/header/index.tsx',
+          text: 'closable = true,',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['shape', 'motion']),
+    markup: '<div data-part="header" data-divider="false" class="ds-drawer-header">'
+      + '<div data-part="title" role="heading">Settings</div>'
+      + '<button type="button" data-part="close-button" class="ds-drawer-close"></button></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-divider=false',
+        stamp: 'data-divider={divider ? \'true\' : \'false\'}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/feedback/drawer/compound/header/index.tsx',
+            text: 'divider = false,',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-part=close-button',
+        stamp: '{...partAttributes(\'close-button\', close.state)}',
+      }),
+    ]),
+  }),
+  'edit-fields': Object.freeze({
+    state: Object.freeze({
+      name: 'the canonical inline editor: a group holding one editor with an icon header, a primary grid with one field, and the footer -- every node below the group root',
+      source: 'src/components/structures/record/edit-fields/index.tsx',
+      anchors: Object.freeze(['{!headerless ? (', '{Icon ? (', '{hasFooter ? <InlineEditFooter {...footerProps}>{footer}</InlineEditFooter> : null}']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/components/structures/record/edit-fields/index.tsx',
+          text: 'headerless = false,',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['shape', 'rhythm', 'motion']),
+    markup: '<div class="ds-structure ds-edit-fields" data-part="group">'
+      + '<div class="ds-structure ds-edit-fields" data-part="editor"><div data-part="editor-header">'
+      + '<div data-part="editor-lead"><div data-part="editor-icon"></div><div data-part="editor-copy">'
+      + '</div></div></div><div class="ds-structure ds-edit-fields" data-part="grid" data-kind="primary">'
+      + '<div class="ds-structure ds-edit-fields" data-part="field" data-requirement="recommended">'
+      + '<div data-part="field-label-row"><label data-part="field-label">Name</label></div></div></div>'
+      + '<div class="ds-structure ds-edit-fields" data-part="footer" data-saving="false">'
+      + '<div data-part="footer-actions"></div></div></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: Object.freeze(['<Stack', '<Box', '<Flex']),
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/layout/box/contracts/index.ts',
+            text: 'as: "div",',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/layout/stack/contracts/index.ts',
+            text: 'as: "div",',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/layout/flex/engines/modern/index.tsx',
+            text: 'data-component="flex"',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'tag:label',
+        stamp: 'as="label"',
+      }),
+      Object.freeze({
+        token: 'attr:data-kind=primary',
+        stamp: 'data-kind={kind}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/structures/record/edit-fields/index.tsx',
+            text: 'kind = \'primary\',',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-requirement=recommended',
+        stamp: 'data-requirement={requirement}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/structures/record/edit-fields/index.tsx',
+            text: 'requirement = \'recommended\',',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-saving=false',
+        stamp: 'data-saving={Boolean(isSaving)}',
+      }),
+    ]),
+  }),
+  'export-button': Object.freeze({
+    state: Object.freeze({
+      name: 'the open export panel (portalled menu) -- the node carrying the elevation and the open keyline',
+      source: 'src/components/structures/workspace/export-button/index.tsx',
+      anchors: Object.freeze(['{open && dropdownPos && (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div data-part="panel" data-open="true" class="ds-structure ds-export-button-panel" role="menu">'
+      + '</div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: Object.freeze(['<Box', '<Flex']),
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/layout/box/engines/modern/index.tsx',
+            text: 'as: Component = BOX_DEFAULTS.as,',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/layout/box/contracts/index.ts',
+            text: 'as: "div",',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/layout/flex/engines/modern/index.tsx',
+            text: '<div\n          // P-79: the default part precedes the spread',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-open=true',
+        stamp: 'data-open={open}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/structures/workspace/export-button/index.tsx',
+            text: '{open && dropdownPos && (',
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  'feature-workspace-frame': Object.freeze({
+    state: Object.freeze({
+      name: 'the public `loading` render of a default frame (no navigation, fluid width) -- the three skeleton cards carry the card radius and the shimmer; the idle root never contains them',
+      source: 'src/components/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx',
+      anchors: Object.freeze(['{loading ? (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['shape', 'motion']),
+    markup: '<section class="ds-pattern-feature-workspace-frame" data-part="root" data-width="fluid" data-has-navigation="false" data-loading="true">'
+      + '<div class="ds-feature-workspace-frame__frame" data-part="frame">'
+      + '<div class="ds-feature-workspace-frame__content" data-part="content">'
+      + '<div class="ds-feature-workspace-frame__skeleton" data-part="loading-skeleton" aria-hidden="true">'
+      + '<span></span><span></span><span></span></div></div></div></section>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-width=fluid',
+        stamp: 'data-width={width}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx',
+            text: 'width = "fluid",',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-has-navigation=false',
+        stamp: 'data-has-navigation={navigation ? "true" : "false"}',
+      }),
+      Object.freeze({
+        token: 'attr:data-loading=true',
+        stamp: 'data-loading={loading ? "true" : "false"}',
+      }),
+    ]),
+  }),
+  'filter-panel': Object.freeze({
+    state: Object.freeze({
+      name: 'the option badge a select filter hands each option it enriches (no caller icon, no caller tone, wording matching no inference arm -> neutral) -- the node carrying the badge keyline',
+      source: 'src/components/patterns/forms/filter-panel/engines/modern/index.tsx',
+      anchors: Object.freeze(['options={filter.options?.map((option) => enrichFilterOption(filter, option)) ?? []}', 'icon: renderOptionIcon(filter, option),']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<span aria-hidden="true" class="ds-pattern-filter-panel__option-icon" data-part="option-icon-badge" data-tone="neutral">'
+      + '</span>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:aria-hidden=true',
+        stamp: '<span\n      aria-hidden\n      className="ds-pattern-filter-panel__option-icon"',
+      }),
+      Object.freeze({
+        token: 'attr:data-tone=neutral',
+        stamp: 'data-tone={tone}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/patterns/forms/filter-panel/engines/modern/index.tsx',
+            text: '  return \'neutral\';\n}',
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  'float-button': Object.freeze({
+    state: Object.freeze({
+      name: 'a default standalone FloatButton (button branch, type default, shape circle) -- the trigger that carries the elevation; the mounted root is the Group container',
+      source: 'src/components/primitives/navigation/float-button/engines/modern/index.tsx',
+      anchors: Object.freeze(['const buttonElement = href ? (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<button type="button" class="rottay-float-button rottay-float-button--modern" data-part="trigger" data-variant="default" data-shape="circle">'
+      + '</button>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-variant=default',
+        stamp: 'data-variant={type}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/navigation/float-button/engines/modern/index.tsx',
+            text: 'type = FLOAT_BUTTON_DEFAULTS.type,',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/navigation/float-button/contracts/index.ts',
+            text: 'type: \'default\' as const,',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-shape=circle',
+        stamp: 'data-shape={shape}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/navigation/float-button/engines/modern/index.tsx',
+            text: 'shape = FLOAT_BUTTON_DEFAULTS.shape,',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/navigation/float-button/contracts/index.ts',
+            text: 'shape: \'circle\' as const,',
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  form: Object.freeze({
+    state: Object.freeze({
+      name: 'a default (vertical) Form with one labelled Form.Item carrying a `tooltip` -- the item, label and tooltip affordance are nodes the bare form root never contains',
+      source: 'src/components/primitives/inputs/form/engines/modern/index.tsx',
+      anchors: Object.freeze(['{tooltip && <FormItemTooltip tooltip={tooltip} />}', '{label && (']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/components/primitives/inputs/form/contracts/index.ts',
+          text: 'layout: \'vertical\',',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['rhythm', 'depth', 'motion']),
+    markup: '<form role="form" class="ds-form ds-form--modern" data-part="root" data-layout="vertical">'
+      + '<div class="ds-form-item ds-form-item--modern" data-part="item" data-layout="vertical" data-validation="neutral">'
+      + '<label data-part="label"><span data-part="label-text">Name</span><span data-part="tooltip-icon">'
+      + '</span></label><div data-part="field"><div data-part="control-row"><div data-part="control">'
+      + '</div></div></div></div></form>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-layout=vertical',
+        stamp: Object.freeze(['data-layout={adaptation.layout}', 'data-layout={layout}']),
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/inputs/form/engines/modern/index.tsx',
+            text: 'layout = FORM_DEFAULTS.layout',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/inputs/form/contracts/index.ts',
+            text: 'layout: \'vertical\',',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-validation=neutral',
+        stamp: 'data-validation={feedbackStatus ?? \'neutral\'}',
+      }),
+      Object.freeze({
+        token: 'attr:data-part=tooltip-icon',
+        stamp: '{...partAttributes(\'tooltip-icon\', state)}',
+      }),
+    ]),
+  }),
+  'guided-draft-form': Object.freeze({
+    state: Object.freeze({
+      name: 'the default render: the title bar and the sticky-bottom submit bar under the surface root',
+      source: 'src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx',
+      anchors: Object.freeze(['data-part="title-bar"', '<Box data-part="submit-bar" data-action-bar={actionBarPosture}>']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="ds-surface ds-guided-draft-form" data-part="root"><div data-part="title-bar">'
+      + '<div data-part="title-copy"></div></div>'
+      + '<div data-part="submit-bar" data-action-bar="sticky-bottom"><div data-part="submit-bar-panel">'
+      + '</div></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: Object.freeze(['<Stack', '<Box', '<Flex']),
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/layout/box/contracts/index.ts',
+            text: 'as: "div",',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/layout/stack/contracts/index.ts',
+            text: 'as: "div",',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/layout/flex/engines/modern/index.tsx',
+            text: 'data-component="flex"',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-action-bar=sticky-bottom',
+        stamp: 'data-action-bar={actionBarPosture}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx',
+            text: 'actionBar: posture.actionBar ?? \'sticky-bottom\',',
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  'image-compounds': Object.freeze({
+    state: Object.freeze({
+      name: 'the default `Image.Skeleton` (animate on, radius `none`) -- a standalone compound the mounted fallback root never contains; its pulse is the family\'s only motion paint',
+      source: 'src/components/primitives/display/image/compound/skeleton/index.tsx',
+      anchors: Object.freeze(['className={`rottay-image-skeleton ${className}`}']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['motion']),
+    markup: '<div class="rottay-image-skeleton" data-part="skeleton" data-animate="true" style="--ds-image-resolved-radius:0" aria-hidden="true">'
+      + '</div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-animate=true',
+        stamp: 'data-animate={animate ? \'true\' : undefined}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/display/image/compound/skeleton/index.tsx',
+            text: 'animate = true,',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'style:--ds-image-resolved-radius=0',
+        stamp: '\'--ds-image-resolved-radius\': radiusValue,',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/display/image/compound/skeleton/index.tsx',
+            text: 'radius = \'none\',',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/display/image/contracts/index.ts',
+            text: 'none: \'0\',',
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  'modal-compounds': Object.freeze({
+    state: Object.freeze({
+      name: 'the default Modal.CloseButton (size md) -- rendered by every Modal.Header given `onClose` (closable defaults true) and exported as Modal.CloseButton',
+      source: 'src/components/primitives/feedback/modal/compound/header/close-button/index.tsx',
+      anchors: Object.freeze(['export const ModalCloseButton = forwardRef']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/components/primitives/feedback/modal/compound/header/index.tsx',
+          text: '{closable && onClose && (\n          <ModalCloseButton onClose={onClose} />',
+        }),
+        Object.freeze({
+          source: 'src/components/primitives/feedback/modal/compound/header/index.tsx',
+          text: 'closable = true,',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['shape', 'motion']),
+    markup: '<button type="button" data-part="close-button" data-size="md" class="ds-modal-close"></button>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-part=close-button',
+        stamp: '{...partAttributes(\'close-button\', interaction.state)}',
+      }),
+      Object.freeze({
+        token: 'attr:data-size=md',
+        stamp: 'data-size={size}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/feedback/modal/compound/header/close-button/index.tsx',
+            text: 'size = \'md\',',
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  presence: Object.freeze({
+    state: Object.freeze({
+      name: 'a LiveCursor (the collaboration cursor the presence pattern exports) -- its name badge carries the radius and elevation, and exists only under the cursor root',
+      source: 'src/components/patterns/communication/presence/index.tsx',
+      anchors: Object.freeze(['export function LiveCursor({']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['shape', 'depth']),
+    markup: '<div class="ds-presence-live-cursor" data-part="root" aria-hidden="true">'
+      + '<div data-part="cursor-badge">Ana</div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: '<Box',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/layout/box/engines/modern/index.tsx',
+            text: 'as: Component = BOX_DEFAULTS.as,',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/layout/box/contracts/index.ts',
+            text: 'as: "div",',
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  'search-command-bar': Object.freeze({
+    state: Object.freeze({
+      name: 'the default render: the search shell is written unconditionally and always stamps `data-voice-status` (idle before the voice hook reports support), the gate its radius, keyline and elevation sit behind',
+      source: 'src/components/structures/workspace/search-command-bar/index.tsx',
+      anchors: Object.freeze(['data-part="search-shell"', 'data-voice-status={voiceStatusForSkin}']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/infrastructure/runtime/application/automation/voice/composition/react/input/index.ts',
+          text: 'useState<VoiceStatus>(\'unsupported\')',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['shape', 'depth']),
+    markup: '<div data-part="root" data-embedded="false" data-editorial-tech="false" data-has-top-rail="false" class="ds-structure ds-search-command-bar">'
+      + '<div data-part="frame"><div data-part="bar-row"><div data-part="input-column">'
+      + '<div data-part="search-shell" class="ds-search-command-bar__search-shell" data-voice-status="idle" data-voice-active="false" data-editorial-tech="false" data-embedded="false">'
+      + '<div data-part="search-icon" class="ds-search-command-bar__search-icon"></div></div></div></div>'
+      + '</div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: Object.freeze(['<Box', '<Flex']),
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/layout/box/engines/modern/index.tsx',
+            text: 'as: Component = BOX_DEFAULTS.as,',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/layout/box/contracts/index.ts',
+            text: 'as: "div",',
+          }),
+          Object.freeze({
+            source: 'src/components/primitives/layout/flex/engines/modern/index.tsx',
+            text: '<div\n          // P-79: the default part precedes the spread',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-embedded=false',
+        stamp: 'data-embedded={embedded}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/structures/workspace/search-command-bar/index.tsx',
+            text: 'surfaceVariant = \'default\',',
+          }),
+          Object.freeze({
+            source: 'src/components/structures/workspace/search-command-bar/index.tsx',
+            text: 'const embedded = surfaceVariant === \'embedded\';',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-editorial-tech=false',
+        stamp: 'data-editorial-tech={editorialTech}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/structures/workspace/search-command-bar/index.tsx',
+            text: 'layoutVariant = \'default\',',
+          }),
+          Object.freeze({
+            source: 'src/components/structures/workspace/search-command-bar/index.tsx',
+            text: 'const editorialTech = layoutVariant === \'editorial-tech\';',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-has-top-rail=false',
+        stamp: 'data-has-top-rail={Boolean(topRailSlot)}',
+      }),
+      Object.freeze({
+        token: 'attr:data-voice-status=idle',
+        stamp: 'data-voice-status={voiceStatusForSkin}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/structures/workspace/search-command-bar/index.tsx',
+            text: ': \'idle\';',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-voice-active=false',
+        stamp: 'data-voice-active={isVoiceActive}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/structures/workspace/search-command-bar/index.tsx',
+            text: 'const isVoiceActive = voiceStatus === \'listening\' || voiceStatus === \'transcribing\';',
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  'stats-grid': Object.freeze({
+    state: Object.freeze({
+      name: 'a default loaded stats grid with one card (variant "default", no onClick) -- the card carries the default-variant elevation',
+      source: 'src/components/patterns/data/stats-grid/engines/modern/index.tsx',
+      anchors: Object.freeze(['data-variant={variant || "default"}']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="ds-pattern-stats-grid ds-engine-modern" data-part="root" data-loading="false" data-variant="default">'
+      + '<div class="ds-stats-grid__card" data-part="card" data-variant="default" data-interactive="false">'
+      + '<div data-part="label-row"><div data-part="statistic">Revenue</div></div></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-variant=default',
+        stamp: Object.freeze(['data-variant={variant}', 'data-variant={variant || "default"}']),
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/patterns/data/stats-grid/engines/modern/index.tsx',
+            text: 'variant = "default",',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-interactive=false',
+        stamp: 'data-interactive={onClick ? "true" : "false"}',
+      }),
+    ]),
+  }),
+  'time-picker': Object.freeze({
+    state: Object.freeze({
+      name: 'the open panel of a default TimePicker (`showNow`) beside its trigger -- the trigger input always carries `data-status`, and the panel carries the elevation and hairlines',
+      source: 'src/components/primitives/inputs/time-picker/engines/modern/index.tsx',
+      anchors: Object.freeze(['{isOpen && (', 'className="ds-time-picker-panel"', '{showNow && (']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/components/primitives/inputs/time-picker/engines/modern/index.tsx',
+          text: 'showNow = true,',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div data-part="root" class="ds-time-picker ds-time-picker--modern">'
+      + '<input type="text" data-part="trigger-input" data-status="default"></div><div data-part="popup">'
+      + '<div data-part="panel" class="ds-time-picker-panel" role="dialog"><div data-part="header">'
+      + '<span data-part="column-label">HH</span></div><div data-part="columns">'
+      + '<div data-part="time-column" role="listbox">'
+      + '<button type="button" role="option" data-part="time-option">00</button>'
+      + '<button type="button" role="option" data-part="time-option">01</button></div></div>'
+      + '<div data-part="footer"><button type="button" data-part="now-button">Now</button></div></div>'
+      + '</div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-part=trigger-input',
+        stamp: '{...partAttributes(\'trigger-input\', trigger.state)}',
+      }),
+      Object.freeze({
+        token: 'attr:data-status=default',
+        stamp: 'data-status={status ?? \'default\'}',
+      }),
+      Object.freeze({
+        token: 'attr:data-part=time-option',
+        stamp: '{...partAttributes(\'time-option\', cell.state)}',
+      }),
+      Object.freeze({
+        token: 'attr:data-part=now-button',
+        stamp: '{...partAttributes(\'now-button\', action.state)}',
+      }),
     ]),
   }),
 });
@@ -3472,6 +4398,9 @@ export async function run({
   /* The roster those mounts come from; a drill hands in its own, and it passes
    * the same door the shipped one does before anything is mounted. */
   realRenderRoster = REAL_RENDER_MOUNTS,
+  /* The default-render stamps, likewise: a drill or a same-tree before/after
+   * hands in its own, and it passes the same door the shipped one does. */
+  asRenderedRoster = AS_RENDERED_ROOT_STAMPS,
   /* The same export of the same compiler, handed in by a runner that reads the
    * source tree instead of `dist/`; absent, the published door is imported. */
   compile: compileOverride = null,
@@ -3482,7 +4411,13 @@ export async function run({
     throw new Error(`axis-difference: ${COMPILER_MODULE} exports no callable ${COMPILER_EXPORT}`);
   }
 
-  const elements = familyElements(root, families, { collapsedRoots, asRendered });
+  if (asRendered && !collapsedRoots && asRenderedRoster !== AS_RENDERED_ROOT_STAMPS) {
+    const rosterFailures = asRenderedRosterFailures(root, asRenderedRoster);
+    if (rosterFailures.length > 0) {
+      throw new Error(`axis-difference: the as-rendered roster does not match the tree it names -- ${rosterFailures.join(' | ')}`);
+    }
+  }
+  const elements = familyElements(root, families, { collapsedRoots, asRendered, asRenderedRoster });
   for (const family of Object.keys(mounts ?? {})) {
     if (!elements.has(family)) {
       throw new Error(`axis-difference: a mount was supplied for ${family}, which has no Modern skin family`);
@@ -3895,7 +4830,7 @@ export async function run({
     // THE DEFAULT-RENDER STAMPS this run mounted, published beside the roots
     // for the same reason: an attribute the probe added is part of the node
     // the numerator was read on, and a reader must be able to see it.
-    asRendered: asRenderedReport(elements, { applied: asRendered && !collapsedRoots }),
+    asRendered: asRenderedReport(elements, { applied: asRendered && !collapsedRoots, roster: asRenderedRoster }),
     // THE REAL-RENDER MOUNTS this run read, each with the configuration it is
     // and the engine lines that gate it, resolved on this tree.
     realRender: realRenderReport(realRenders, { applied: realRenderMounts, roster: realRenderRoster, root }),
