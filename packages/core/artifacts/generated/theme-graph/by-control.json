@@ -3468,7 +3468,7 @@
     },
     {
       "channels": 393,
-      "channelsThroughAliases": 1204,
+      "channelsThroughAliases": 1205,
       "decision": "states.emphasis",
       "derivers": [
         "app-shell",
@@ -3595,6 +3595,7 @@
         "live-feed",
         "loading-overlay",
         "locale-switcher",
+        "markdown-view",
         "marketing-surface",
         "media-surface",
         "mentions",
@@ -3698,7 +3699,7 @@
     },
     {
       "channels": 680,
-      "channelsThroughAliases": 1475,
+      "channelsThroughAliases": 1476,
       "decision": "states.focus-style",
       "derivers": [
         "app-shell",
@@ -3833,6 +3834,7 @@
         "live-feed",
         "loading-overlay",
         "locale-switcher",
+        "markdown-view",
         "marketing-surface",
         "media-surface",
         "mentions",

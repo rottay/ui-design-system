@@ -33673,7 +33673,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 .ds-code-block[data-part='root'] [data-part='copy-button']:focus-visible,
 .ds-code-block[data-part='root'] [data-part='scroll']:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 3px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
 }
 
 @media (forced-colors: active) {
@@ -33795,7 +33795,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   border-radius: var(--ds-radius-sm);
   box-shadow: var(
     --ds-markdown-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    0 0 0 var(--ds-focus-ring-width, 3px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
   );
 }
 
@@ -33889,7 +33889,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   outline: none;
   box-shadow: var(
     --ds-markdown-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    0 0 0 var(--ds-focus-ring-width, 3px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
   );
 }
 
@@ -64456,7 +64456,7 @@ html[data-ds-motion='reduced']
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='item']:is([data-state~='disabled'], [aria-disabled='true']) {
   cursor: not-allowed;
-  opacity: var(--ds-command-palette-item-disabled-opacity, 0.5);
+  opacity: var(--ds-command-palette-item-disabled-opacity, var(--ds-state-disabled-opacity, 0.5));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] {
   background: var(--ds-command-palette-item-active-bg, var(--ds-surface-inset));
@@ -96536,14 +96536,14 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   [data-part='data-pagination'] button:focus-visible,
 .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
   [data-part='data-table-scroll']:focus-visible {
-  outline: 3px solid var(--ds-color-focus, var(--ds-color-primary));
+  outline: var(--ds-focus-ring-width, 3px) solid var(--ds-color-focus, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
   [data-part='data-pagination'] button:disabled {
   cursor: not-allowed;
-  opacity: 0.55;
+  opacity: var(--ds-state-disabled-opacity, 0.55);
 }
 
 @media (hover: hover) {
@@ -105977,7 +105977,7 @@ html[lang]:lang(ar) {
   --ds-command-palette-group-label-padding-inline: var(--ds-spacing-5, 20px);
   --ds-command-palette-item-active-bg: var(--ds-surface-inset);
   --ds-command-palette-item-active-ring: inset 0 0 0 1px var(--ds-color-border-focus, var(--ds-color-primary));
-  --ds-command-palette-item-disabled-opacity: 0.5;
+  --ds-command-palette-item-disabled-opacity: var(--ds-state-disabled-opacity, 0.5);
   --ds-command-palette-item-gap: var(--ds-spacing-2, 8px);
   --ds-command-palette-item-hover-surface: var(--ds-surface-inset);
   --ds-command-palette-item-main-gap: var(--ds-spacing-2, 8px);
