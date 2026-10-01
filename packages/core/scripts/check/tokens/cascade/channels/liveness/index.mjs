@@ -1422,7 +1422,11 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   [/^--ds-letter-spacing-/, () => 'typography'],
   [/^--ds-line-height-/, () => 'typography'],
   [/^--ds-type-/, () => 'typography'],
-  [/^--ds-text-eyebrow(?:-|$)/, () => 'typography.eyebrow'],
+  // The named type ramp: the six entries and their facets, all written by one
+  // sub-owner (derivation/typography/scale, which states them literally in
+  // TYPE_SCALE_ENTRIES / TYPE_SCALE_FACET_CHANNELS). Eyebrow is an entry like
+  // the other five, not an owner of its own.
+  [/^--ds-text-(?:detail|body|emphasis|title|display|eyebrow)(?:-|$)/, () => 'typography.scale'],
   [/^--ds-rhythm-/, () => 'surfaces.rhythm'],
   [/^--ds-motion-ease-/, () => 'motion.easing'],
   [/^--ds-ease-/, () => 'motion.easing'],
@@ -1702,6 +1706,35 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     channels: Object.freeze([
       '--ds-workspace-shell-particle-primary',
       '--ds-workspace-shell-particle-secondary',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    classification: LIVENESS.unreadEmittedNoRoute,
+    registered: '2026-10-01',
+    reason:
+      'the shorthand-composition edge is REAL and this resolver is CSS-only: derivation/typography/scale:91 writes each entry shorthand as `var(--ds-text-<name>-weight) var(--ds-text-<name>-size)/var(--ds-text-<name>-line-height) var(--ds-font-family-base)`, and every one of the six shorthands this register measures paints (LIVE_EXTERNAL_CONSUMER_PAINTED through the app-bithire `font:` declarations), so each facet here reaches pixels through its sibling shorthand. The paint graph only builds edges from postcss-parsed stylesheet declarations; a var() a deriver writes into a sibling compiled channel is never an edge, so a facet whose only reader is its own shorthand measures unread -- the same class as the workspace-shell mask stop. Measured 2026-10-01 (LV-2): zero direct readers in the DS corpus and the consumerRoot for all nine. None is a retirement candidate: removing a facet empties the shorthand that paints. The pin clears per channel when the graph credits a compiled deriver-to-deriver var() as a productive route, or when a direct stylesheet reader lands -- never by dropping the facet from the shorthand',
+    channels: Object.freeze([
+      '--ds-text-body-line-height',
+      '--ds-text-body-weight',
+      '--ds-text-detail-line-height',
+      '--ds-text-detail-weight',
+      '--ds-text-display-line-height',
+      '--ds-text-display-weight',
+      '--ds-text-eyebrow-line-height',
+      '--ds-text-eyebrow-weight',
+      '--ds-text-title-line-height',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-RET-01',
+    classification: LIVENESS.unreadEmittedNoRoute,
+    registered: '2026-10-01',
+    reason:
+      'inert by construction, a retire candidate: both hold `0` (foundation/type-ramp:79, the browser default) and have zero readers anywhere -- no var() in the DS corpus, the app-bithire consumerRoot or any other Rottay source, measured 2026-10-01 (LV-2, re-grepped by LIV-2) -- and neither appears in its entry shorthand (derivation/typography/scale:91 composes weight, size and line-height only), so unlike the shorthand-fed facets there is no route for the graph to be blind to. Retirement is NOT this pin: it is a contract edit that removes the two facets from setTypeRampVariables and from TYPE_SCALE_FACET_CHANNELS together (the family suite pins those two tables equal) and deletes this pin in the same commit. --ds-text-detail-letter-spacing holds the same `0` but is NOT a candidate: it has a reader (app-bithire surface-shell/typography:19) and measures LIVE_EXTERNAL_CONSUMER_PAINTED. The pin clears only with that retirement, or if a reader lands and the row measures LIVE',
+    channels: Object.freeze([
+      '--ds-text-body-letter-spacing',
+      '--ds-text-emphasis-letter-spacing',
     ]),
   }),
 ]);
@@ -2856,45 +2889,6 @@ export const FORWARD_GAP_PINS = Object.freeze([
   Object.freeze({
     owner: 'WO-EVI-02',
     registered: '2026-09-25',
-    roster: '--ds-text-*',
-    reason: 'typography/scale emits the named ramp through two keys the resolver cannot read (:48 the facets, :53 the shorthands) over the table setTypeRampVariables fills; the family roster covers them only by glob. 27 of the 31 have no stylesheet reader, so their liveness rows will need owners the day they join',
-    channels: Object.freeze([
-      '--ds-text-body',
-      '--ds-text-body-letter-spacing',
-      '--ds-text-body-line-height',
-      '--ds-text-body-size',
-      '--ds-text-body-weight',
-      '--ds-text-detail',
-      '--ds-text-detail-letter-spacing',
-      '--ds-text-detail-line-height',
-      '--ds-text-detail-size',
-      '--ds-text-detail-weight',
-      '--ds-text-display',
-      '--ds-text-display-letter-spacing',
-      '--ds-text-display-line-height',
-      '--ds-text-display-size',
-      '--ds-text-display-weight',
-      '--ds-text-emphasis',
-      '--ds-text-emphasis-letter-spacing',
-      '--ds-text-emphasis-line-height',
-      '--ds-text-emphasis-size',
-      '--ds-text-emphasis-weight',
-      '--ds-text-eyebrow',
-      '--ds-text-eyebrow-letter-spacing',
-      '--ds-text-eyebrow-line-height',
-      '--ds-text-eyebrow-size',
-      '--ds-text-eyebrow-transform',
-      '--ds-text-eyebrow-weight',
-      '--ds-text-title',
-      '--ds-text-title-letter-spacing',
-      '--ds-text-title-line-height',
-      '--ds-text-title-size',
-      '--ds-text-title-weight',
-    ]),
-  }),
-  Object.freeze({
-    owner: 'WO-EVI-02',
-    registered: '2026-09-25',
     roster: '--ds-motion-*',
     reason: 'the motion family writes its duration, easing and offset roles through object-literal tables merged by Object.assign and through vars[channel] over MOTION_DIAL_CHANNELS and the lowering/foundation motion helpers -- shapes the source extractor does not model',
     channels: Object.freeze([
@@ -3101,9 +3095,10 @@ function main() {
 
 
   // THE OWNERSHIP LAW ON ITS OWN, which is the leg that blocks. The full
-  // `--check` additionally requires the R1 artifact and the two standing
-  // analysis findings this producer refuses to hide (three unresolved emitter
-  // patterns, the family-inventory drift); those have their own owners and are
+  // `--check` additionally requires the R1 artifact and the standing analysis
+  // finding this producer refuses to hide (the family-inventory drift; the
+  // typography/scale emitter patterns drained 2026-10-01 when the ramp was
+  // stated literally); those have their own owners and are
   // recorded as such in the gate manifest. This leg answers one question -- is
   // every non-LIVE row owned, and does every pin still find its channel in the
   // class it was registered against -- and it answers it fail-closed.

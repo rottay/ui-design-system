@@ -22,7 +22,12 @@ import {
 import { NUMERIC_POSTURE, numericOverlay } from "../numeric";
 import { deriveTypePairingChannels } from "../pairing";
 import { deriveTypeRoleChannels } from "../roles";
-import { deriveTypeScaleChannels } from "../scale";
+import { setTypeRampVariables } from "../../../../foundation/type-ramp";
+import {
+  deriveTypeScaleChannels,
+  TYPE_SCALE_ENTRIES,
+  TYPE_SCALE_FACET_CHANNELS,
+} from "../scale";
 import { deriveTypeWeightChannels, roleWeightOverlay } from "../weights";
 
 const EXPANSION = expandExpressiveProfiles({});
@@ -71,6 +76,18 @@ describe("typography/scale", () => {
   it("leaves the non-dialled facets alone", () => {
     expect(channels["--ds-text-body-weight"]).toBe("400");
     expect(channels["--ds-text-eyebrow-letter-spacing"]).toBe("0.08em");
+  });
+
+  it("states exactly the foundation ramp in its literal tables, no more and no less", () => {
+    const ramp: Record<string, string> = {};
+    setTypeRampVariables(ramp);
+    const stated = [
+      ...TYPE_SCALE_FACET_CHANNELS,
+      ...TYPE_SCALE_ENTRIES.map((name) => `--ds-text-${name}`),
+    ];
+    expect(new Set(stated).size).toBe(stated.length);
+    expect([...stated].sort()).toEqual(Object.keys(ramp).sort());
+    expect(Object.keys(channels).sort()).toEqual(Object.keys(ramp).sort());
   });
 });
 

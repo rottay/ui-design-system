@@ -433,8 +433,9 @@ test('a template over a literal table resolves to one name per key', () => {
 });
 
 test('CONTROL: a template over a table filled at RUNTIME stays an unresolved pattern', () => {
-  // `typography/scale` declares `const entries: string[] = []` and fills it in a
-  // loop. Reading that initializer literally would certify "emits nothing" for a
+  // `typography/scale` once declared `const entries: string[] = []` and filled it
+  // in a loop (stated literally as TYPE_SCALE_ENTRIES since 2026-10-01). Reading
+  // that initializer literally would certify "emits nothing" for a
   // template that emits the whole type ramp, so an empty domain is refused.
   const source = [
     'export function derive(vars, table) {',
@@ -773,8 +774,13 @@ test('classifySemanticOwner covers every declared rule and role-suffixes the tin
   assert.equal(classifySemanticOwner('--ds-motion-ease-enter'), 'motion.easing');
   assert.equal(classifySemanticOwner('--ds-ease-exit'), 'motion.easing');
   assert.equal(classifySemanticOwner('--ds-motion-spring-gentle'), 'motion.spring');
-  assert.equal(classifySemanticOwner('--ds-text-eyebrow-line-height'), 'typography.eyebrow');
-  assert.equal(classifySemanticOwner('--ds-text-body'), null);
+  for (const entry of ['detail', 'body', 'emphasis', 'title', 'display', 'eyebrow']) {
+    assert.equal(classifySemanticOwner(`--ds-text-${entry}`), 'typography.scale');
+    assert.equal(classifySemanticOwner(`--ds-text-${entry}-line-height`), 'typography.scale');
+  }
+  assert.equal(classifySemanticOwner('--ds-text-eyebrow-transform'), 'typography.scale');
+  assert.equal(classifySemanticOwner('--ds-text-inverse'), 'palette');
+  assert.equal(classifySemanticOwner('--ds-text-caption'), null);
   assert.ok(SEMANTIC_OWNER_RULES.length > 10);
 });
 
@@ -1859,19 +1865,19 @@ test('dispositionFailures is the ownership law plus the preconditions that make 
   ]);
 });
 
-test('META: the SHIPPED table is the registered set -- 39 channels, one owner each, no duplicates', () => {
+test('META: the SHIPPED table is the registered set -- 50 channels, one owner each, no duplicates', () => {
   const { index, duplicates } = buildDispositionIndex();
   assert.deepEqual(duplicates, []);
   assert.equal(
     index.size,
-    39,
-    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see) + 1 (2026-09-25, WO-RET-02: --ds-text-inverse, which joined the universe through the emission oracle -- the palette roster declares it -- and is read only by the dead themes/default --ds-sidebar-text declaration) - 4 (2026-09-26, G103-02 / WO-FAM-12: the four --ds-posture-* channels, pinned UNREAD_EMITTED_NO_KNOWN_ROUTE, retired from emission and from the responsive.posture catalog row -- zero readers in the package, the showroom and the apps, and the capability law says the ladder travels as data, never a CSS channel; the pin went with them)',
+    50,
+    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see) + 1 (2026-09-25, WO-RET-02: --ds-text-inverse, which joined the universe through the emission oracle -- the palette roster declares it -- and is read only by the dead themes/default --ds-sidebar-text declaration) - 4 (2026-09-26, G103-02 / WO-FAM-12: the four --ds-posture-* channels, pinned UNREAD_EMITTED_NO_KNOWN_ROUTE, retired from emission and from the responsive.posture catalog row -- zero readers in the package, the showroom and the apps, and the capability law says the ladder travels as data, never a CSS channel; the pin went with them) + 11 (2026-10-01, LIV-2 / WO-EVI-02: the named type ramp joined the universe when typography/scale stated its entries and facets literally; of its 31 rows 20 measure LIVE, 9 shorthand-fed facets pin to WO-EVI-02 -- a real compiled var() edge the CSS-only graph cannot see -- and the 2 inert letter-spacing facets pin to WO-RET-01 as retire candidates)',
   );
   const byClass = {};
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
   assert.deepEqual(byClass, {
     [LIVENESS.authorableUnprovenEffect]: 32,
-    [LIVENESS.unreadEmittedNoRoute]: 2,
+    [LIVENESS.unreadEmittedNoRoute]: 13,
     [LIVENESS.readUnproven]: 2,
     [LIVENESS.readNoProductiveTerminal]: 3,
   });
@@ -2030,7 +2036,8 @@ test('META: every forward-gap pin names an open work order, a reason and exact c
       seen.add(name);
     }
   }
-  assert.equal(seen.size, 91);
+  assert.equal(seen.size, 60); // 91 - 31: the --ds-text-* gap discharged 2026-10-01 when the ramp joined the universe
+  assert.ok(!FORWARD_GAP_PINS.some((pin) => pin.roster === '--ds-text-*'), 'the discharged ramp gap is back');
 });
 
 test('META: the --ds-text-inverse pin states its measured mechanism and its only clearing route', () => {
@@ -2048,4 +2055,22 @@ test('META: the --ds-text-inverse pin states its measured mechanism and its only
     'removing the relay alone drifts the row to UNREAD_EMITTED_NO_KNOWN_ROUTE',
   ]) assert.ok(pin.reason.includes(fact), `the pin reason lost: ${fact}`);
   assert.ok(!/no stylesheet reads|clears with either/u.test(pin.reason), 'the retracted claims are back');
+});
+
+test('META: the named type ramp is measured whole -- 31 rows, owned by the scale deriver, every non-LIVE row pinned with its measured effect', () => {
+  const shorthandFed = CHANNEL_DISPOSITIONS.find((group) => group.channels.includes('--ds-text-body-weight'));
+  assert.equal(shorthandFed.owner, 'WO-EVI-02');
+  assert.equal(shorthandFed.classification, LIVENESS.unreadEmittedNoRoute);
+  for (const fact of ['shorthand-composition edge is REAL', 'CSS-only', 'never an edge', 'None is a retirement candidate']) {
+    assert.ok(shorthandFed.reason.includes(fact), `the shorthand-fed pin lost: ${fact}`);
+  }
+  // Every pinned facet is one the shorthand composes; letter-spacing and transform never are.
+  for (const channel of shorthandFed.channels) assert.match(channel, /^--ds-text-[a-z]+-(?:weight|line-height)$/u);
+  const inert = CHANNEL_DISPOSITIONS.find((group) => group.channels.includes('--ds-text-body-letter-spacing'));
+  assert.equal(inert.owner, 'WO-RET-01');
+  assert.equal(inert.classification, LIVENESS.unreadEmittedNoRoute);
+  assert.deepEqual([...inert.channels], ['--ds-text-body-letter-spacing', '--ds-text-emphasis-letter-spacing']);
+  for (const fact of ['zero readers anywhere', 'neither appears in its entry shorthand', 'Retirement is NOT this pin', '--ds-text-detail-letter-spacing holds the same `0` but is NOT a candidate']) {
+    assert.ok(inert.reason.includes(fact), `the inert pin lost: ${fact}`);
+  }
 });
