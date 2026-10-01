@@ -471,6 +471,8 @@ describe("channel minting and CSS text have declared owners", () => {
       `${LOWERING_ROOT}/runtime/derivation/palette/semantic/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/palette/tints/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/shape/radius/index.ts`,
+      // D2 (2026-10-01): the vertical's radius rest, the normalized alias's divisor.
+      `${LOWERING_ROOT}/runtime/derivation/shape/rest/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/states/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/surfaces/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/tenant/index.ts`,

@@ -17,26 +17,26 @@ import {
 import type { AppearancePostureFields } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 
 /**
- * The `--ds-radius-scale` the VERTICAL's own dial position resolves to.
+ * The `--ds-radius-scale` a theme's OWN dial position resolves to: its stated
+ * `surfaces.radiusScale`, else the one its expressive geometry expands to.
  *
- * This is the divisor every authored radius is normalized against, and the
- * tenant's own statement is deliberately excluded from it. A resolved theme
- * already carries the tenant patch, so reading `surfaces.radiusScale` off it
- * gave a divisor that tracked the dial the same block emits -- the product was
- * then constant for every scale, which is the self-cancellation F-07 measured
- * across all three verticals. When the tenant re-dials, the vertical's position
- * is the geometry its expressive profile states; when it does not, the theme's
- * own value IS the vertical's.
+ * This is the divisor every authored radius is normalized against, so it is
+ * only ever asked of the VERTICAL. A static compile asks it of the theme it
+ * lowers, which is the vertical's. A tenant block must not: its theme already
+ * carries the tenant patch, and a divisor that tracked the dial the same block
+ * emits made the product constant for every scale -- the self-cancellation
+ * F-07 measured. Falling to the profile instead (the old tenant arm) divided
+ * bithire by `sharp`'s 0.85 while its own artifact divides by the 0.8 it
+ * states (F-1), so the tenant arm now carries the vertical's answer, which
+ * `compileTheme` asks of the vertical's un-patched baseline
+ * (`TenantFacts.verticalRadiusBaseline`).
  */
 export function resolveRadiusBaseline(
   theme: FlatTheme,
-  expansion: ExpressiveExpansion,
-  tenantRadiusScale: number | undefined
+  expansion: ExpressiveExpansion
 ): string {
-  const verticalScale =
-    tenantRadiusScale === undefined ? theme.surfaces?.radiusScale : undefined;
   return (
-    appearancePostureToVariables({ radiusScale: verticalScale })[
+    appearancePostureToVariables({ radiusScale: theme.surfaces?.radiusScale })[
       "--ds-radius-scale"
     ] ??
     appearancePostureToVariables(expansion.fieldDefaults)["--ds-radius-scale"] ??

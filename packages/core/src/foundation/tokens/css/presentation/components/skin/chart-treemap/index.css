@@ -1,7 +1,7 @@
 /** Treemap skin (visualization skin ownership), deliberately unlayered. */
 
 .ds-chart-treemap [data-part='legend-swatch'] {
-  border-radius: calc(2px * var(--ds-radius-scale, 1));
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-treemap [data-part='legend-label'] {

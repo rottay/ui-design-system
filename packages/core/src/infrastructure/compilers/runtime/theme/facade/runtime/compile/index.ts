@@ -131,11 +131,13 @@ export function compileThemeIntent(
   // the door derives it and the resolver never carries one of its own. An
   // intent that CARRIES a baseline was opened on something else -- a tenant's
   // already customized theme -- and composing its patch over the preset instead
-  // would drop every leaf the draft carried but did not move.
-  const resolveOver = (target: ThemeIntent) =>
-    resolveTheme(target, {
-      baseline: target.baseline ?? baselineFor(target.vertical, target.slug),
-    });
+  // would drop every leaf the draft carried but did not move. The vertical's
+  // own baseline rides along either way: the radius divisor is the vertical's
+  // and no other theme's (F-1).
+  const resolveOver = (target: ThemeIntent) => {
+    const vertical = baselineFor(target.vertical, target.slug);
+    return resolveTheme(target, { baseline: target.baseline ?? vertical, vertical });
+  };
   const resolution = resolveOver(intent);
   const adapter = resolveAdapter(options?.engine ?? verticalEngine(intent.vertical));
   admitThemeIntent({ intent, resolution, adapter });

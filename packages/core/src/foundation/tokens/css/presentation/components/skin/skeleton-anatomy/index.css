@@ -52,13 +52,13 @@
   inline-size: var(--ds-skeleton-bone-width, var(--ds-spacing-0));
   block-size: var(--ds-skeleton-bone-height, var(--ds-spacing-0));
   /* The part's own measured corner, else the tenant edge dial. */
-  border-radius: var(--ds-skeleton-bone-radius, calc(6px * var(--ds-radius-scale, 1)));
+  border-radius: var(--ds-skeleton-bone-radius, calc(6px * var(--ds-radius-scale-normalized, 1)));
 }
 
 .ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-bone='line'] {
   inset-block-start: calc(var(--ds-skeleton-bone-y, 0px) + var(--ds-skeleton-bone-height, 0px) * 0.2);
   block-size: calc(var(--ds-skeleton-bone-height, 0px) * 0.6);
-  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale-normalized, 1)));
 }
 
 .ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-bone='round'] {
@@ -184,7 +184,7 @@ html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loadi
   display: block;
   block-size: var(--ds-skeleton-bar-height, var(--ds-spacing-3));
   inline-size: 72%;
-  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale-normalized, 1)));
   background: var(
     --ds-skeleton-bg,
     var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))

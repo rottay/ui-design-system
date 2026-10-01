@@ -103,6 +103,19 @@ export interface TenantFacts {
    * chrome radius a studio draft carried along untouched.
    */
   readonly chosenButtonRadius: string | undefined;
+  /**
+   * The `--ds-radius-scale` the VERTICAL resolves to with no tenant above it --
+   * the divisor every authored radius in a tenant block is normalized against.
+   *
+   * Carried because the lowering can no longer recover it: the theme a tenant
+   * block lowers already holds the tenant's own dial, and the profile expansion
+   * is not the vertical's statement (bithire states 0.8 while its `sharp`
+   * geometry expands to 0.85). Resolved by the caller from the un-patched
+   * vertical theme through the same `resolveRadiusBaseline` a static compile
+   * runs, so a tenant re-dial and the vertical's own artifact divide by one
+   * number, and a tenant restating the vertical's rest compiles to no delta.
+   */
+  readonly verticalRadiusBaseline: string;
   readonly typography: FlatTheme["typography"] | undefined;
   readonly authoredPaths: TenantAuthoredPaths | undefined;
   /**

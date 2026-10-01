@@ -757,6 +757,13 @@
   --ds-radius-2xl: calc(20px * var(--ds-radius-scale, 1));
   --ds-radius-3xl: calc(24px * var(--ds-radius-scale, 1));
   --ds-radius-full: 9999px;
+  /* The dial relative to the vertical's own rest, for a skin corner authored as
+     the vertical's resting pixel: <px> times this channel
+     paints <px> at rest in every vertical and moves by the tenant's ratio.
+     The rest is a constant the vertical compile alone emits (bithire 0.8);
+     this text names no vertical, so the root-alias restatement law carries it
+     into every tenant and container scope unchanged. */
+  --ds-radius-scale-normalized: calc(var(--ds-radius-scale, 1) / var(--ds-radius-scale-rest, 1));
 
   /* ─────────────────────────────────────────────────────────────────────────────
      5. DEPTH - dark-aware elevation scale

@@ -19,7 +19,9 @@ import { ledgerOwnerOfLeaf } from "@/foundation/contracts/composition/tenants/th
 import type { OnToneRole } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import type { TenantFacts } from "./foundation/contract";
+import { resolveExpressiveFacts } from "./foundation/expressive";
 import { mergeThemeFloors, resolveTenantPosture } from "./foundation/floors";
+import { resolveRadiusBaseline } from "./foundation/geometry";
 import { readGovernedTheme, resolveGovernedSelections } from "./foundation/intake";
 import {
   flatThemeToPersonality,
@@ -87,6 +89,41 @@ function tenantNamedButtonRadius(
 }
 
 /**
+ * The radius dial position of the VERTICAL this tenant block sits on.
+ *
+ * Read off the vertical's un-patched baseline the resolver records, through
+ * the same `resolveRadiusBaseline` a static compile runs over it, so a tenant
+ * block and the vertical's own artifact divide every authored corner by one
+ * number: a genuine re-dial moves the corner by the tenant's ratio, and a
+ * tenant restating the vertical's rest compiles to no delta at all.
+ *
+ * A resolution assembled without the door carries no baseline. There the
+ * merged theme is the only theme in hand, so a dial the patch states is
+ * excluded (it would cancel itself, F-07) and the theme's profile geometry
+ * answers -- the pre-F-1 rule, kept only for that case.
+ */
+function verticalRadiusBaseline(
+  resolution: ThemeResolution,
+  flatTheme: FlatTheme,
+  tenantPatch: Partial<FlatTheme>
+): string {
+  if (resolution.verticalBaseline) {
+    const vertical = readGovernedTheme(resolution.verticalBaseline);
+    return resolveRadiusBaseline(
+      vertical,
+      resolveExpressiveFacts(vertical.expressive).expansion
+    );
+  }
+  const dialed = resolveTenantPosture(tenantPatch)?.radiusScale !== undefined;
+  return resolveRadiusBaseline(
+    dialed
+      ? { ...flatTheme, surfaces: { ...flatTheme.surfaces, radiusScale: undefined } }
+      : flatTheme,
+    resolveExpressiveFacts(flatTheme.expressive).expansion
+  );
+}
+
+/**
  * Lower one resolved theme, then project it onto an engine.
  *
  * `provenance.tenantAuthored` is the sole discriminant: an empty
@@ -148,6 +185,11 @@ export function compileTheme(
         chosenButtonStyle: tenantPatch.surfaces?.buttonStyle,
         chosenButtonRadius: tenantNamedButtonRadius(
           resolution.provenance.ledger
+        ),
+        verticalRadiusBaseline: verticalRadiusBaseline(
+          resolution,
+          flatTheme,
+          tenantPatch
         ),
         typography: tenantPatch.typography,
         authoredPaths: tenantAuthoredPaths,

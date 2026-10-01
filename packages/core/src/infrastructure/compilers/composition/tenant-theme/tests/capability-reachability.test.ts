@@ -274,15 +274,14 @@ const ACTIVE_CAPABILITY_PROBES = {
     // the dial this document states: a divisor that tracked the tenant's 0.9
     // reproduced the 2px preset at every dial position, which is the
     // self-cancellation the shape family ends.
-    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): the divisor is
-    // the bithire radius base, now governed by the preset where the retired
-    // theme authored 1.25; registered for DER-07 to confirm, not reverted.
-    // Measured 1.25 -> 0.85 for a document that states the dial (the vertical's
-    // own at-rest compile settles at 0.8), so the authored 0.9 moves the corner
-    // to 2px * 0.9 / 0.85.
-    expect(artifact.variables["--ds-radius-button"]).toBe(
-      "calc(2px / 0.85 * var(--ds-radius-scale, 1))"
-    ),
+    // F-1 (D2, 2026-10-01): the divisor is the vertical's own stated 0.8, read
+    // off the un-patched baseline -- it used to fall to the `sharp` profile's
+    // 0.85 whenever a document stated the dial (re-anchored from
+    // `calc(2px / 0.85 * ...)`). `sharp` is bithire's own silhouette, so the
+    // six button channels are now byte-identical to the vertical's artifact and
+    // the delta carries none of them; the authored 0.9 moves the corner to
+    // 2px * 0.9 / 0.8 = 2.25px through `--ds-radius-scale` alone.
+    expect(artifact.variables["--ds-radius-button"]).toBeUndefined(),
   "density.mode": (artifact) =>
     expect(artifact.variables["--ds-density-mode-factor"]).toBeDefined(),
   "motion.dial": (artifact) =>

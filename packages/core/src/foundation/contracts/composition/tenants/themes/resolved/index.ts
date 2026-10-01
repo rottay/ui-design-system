@@ -118,6 +118,20 @@ export interface ThemeProvenance {
 export interface ThemeResolution {
   readonly theme: Theme;
   readonly provenance: ThemeProvenance;
+  /**
+   * The VERTICAL's own baseline, un-patched: the neutral foundation with the
+   * vertical's preset admitted.
+   *
+   * Not necessarily what `theme` was merged from -- a draft opened on a
+   * customized theme (a style, a tenant's saved state) carries that theme as
+   * its baseline -- but always the vertical's. The lowering reads ONE fact off
+   * it: the radius dial position every authored corner is normalized against.
+   * `theme` cannot answer that once a tenant or a style re-dials, and the
+   * profile expansion is not the vertical's statement either (bithire states
+   * 0.8, its `sharp` geometry expands to 0.85; F-1). Set by `resolveTheme`;
+   * absent only on a resolution assembled without that door.
+   */
+  readonly verticalBaseline?: Theme;
   /** Retained for diagnostics and gates; the lowering never reads it. */
   readonly intent?: ThemeIntent;
 }

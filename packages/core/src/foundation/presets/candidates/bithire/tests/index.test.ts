@@ -200,7 +200,14 @@ describe("WO-DER-07 BitHire identity candidates", () => {
         rowVersion: 1,
       });
       expect(artifact.slug).toBe(candidate.slug);
-      expect(Object.keys(artifact.variables).length).toBeGreaterThan(0);
+      // F-1 (D2, 2026-10-01): product-dense compiled to exactly six channels on
+      // the document door -- the button radii divided by the `sharp` profile's
+      // 0.85 instead of bithire's own 0.8. With the divisor read off the
+      // vertical's baseline it paints byte-identically to bithire itself, so
+      // its delta is empty; the candidate states bithire's own rest and carries
+      // no CSS identity of its own (registered to WO-DER-07, not hidden here).
+      if (candidate.id === "product-dense") expect(artifact.variables).toEqual({});
+      else expect(Object.keys(artifact.variables).length).toBeGreaterThan(0);
 
       console.log(
         `${candidate.id} digest=sha256-${sha256Utf8(JSON.stringify(document))} ` +

@@ -152,27 +152,20 @@ describe("WO-DER-06 — the first-party verticals as decisions", () => {
 
       const compiled = compile(vertical, documentOf(getVerticalThemePreset(vertical)!));
       expect(Object.keys(compiled.dark)).toEqual([]);
-      if (vertical === "bithire") continue;
       expect(Object.keys(compiled.base)).toEqual([]);
     }
   });
 
-  // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
-  // --ds-radius-button and --ds-button-{xs,sm,md,lg,xl}-radius; pinned to the
-  // measured state until the lane lands. Re-sending bithire's own preset as a
-  // tenant document emits six button-radius channels the vertical baseline
-  // does not, which is this regression seen from the other side: the six are
-  // reachable on the document transport and unreachable on the static one.
-  it("bithire's preset as a tenant moves only the registered button-radius channels", () => {
+  // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15), CLOSED by F-1
+  // (D2, 2026-10-01): re-sending bithire's own preset as a tenant document
+  // used to emit six button-radius channels (`calc(2px / 0.85 * ...)`) the
+  // vertical baseline does not -- the document door divided by the `sharp`
+  // profile's 0.85 while the static door divides by the 0.8 the preset states.
+  // Both doors now read the divisor off the vertical's un-patched baseline, so
+  // the preset as a tenant of its own vertical moves nothing, like the other two.
+  it("bithire's preset as a tenant moves nothing: the button-radius registry entry is closed", () => {
     const compiled = compile("bithire", documentOf(getVerticalThemePreset("bithire")!));
-    expect(Object.keys(compiled.base).sort()).toEqual([
-      "--ds-button-lg-radius",
-      "--ds-button-md-radius",
-      "--ds-button-sm-radius",
-      "--ds-button-xl-radius",
-      "--ds-button-xs-radius",
-      "--ds-radius-button",
-    ]);
+    expect(Object.keys(compiled.base)).toEqual([]);
   });
 
   describe("contrast, measured at decision level (the two flags routed to WO-DER-06)", () => {

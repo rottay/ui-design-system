@@ -1961,6 +1961,7 @@
   --ds-radius-nest-inset: 0px;
   --ds-radius-nest-ratio: 0;
   --ds-radius-scale: 0.8;
+  --ds-radius-scale-rest: 0.8;
   --ds-record-canvas-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary)));
   --ds-record-heading-font-size: var(--ds-font-size-lg);
   --ds-record-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary));
@@ -3489,6 +3490,7 @@
   --ds-radius-3xl: calc(24px * var(--ds-radius-scale, 1));
   --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));
   --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
+  --ds-radius-scale-normalized: calc(var(--ds-radius-scale, 1) / var(--ds-radius-scale-rest, 1));
   --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));
   --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));
   --ds-radius-xs: calc(3px * var(--ds-radius-scale, 1));

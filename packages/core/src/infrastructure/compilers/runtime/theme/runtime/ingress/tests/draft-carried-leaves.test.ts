@@ -69,12 +69,14 @@ describe("the draft door carries what it did not move", () => {
     }
   });
 
-  it("a moved leaf still reaches the tenant floors, and the expansion still sets the divisor", () => {
+  it("a moved leaf still reaches the tenant floors, and the vertical still sets the divisor", () => {
     // The other direction, so the fix cannot invert the bug. A radius the
     // editor really typed stays in the patch and moves `--ds-radius-scale`;
-    // the button divisor still comes from the vertical's own expressive
-    // geometry (0.85) rather than from the tenant's new dial, which is the
-    // self-cancellation F-07 closed and this change must not reopen.
+    // the button divisor still comes from the VERTICAL rather than from the
+    // tenant's new dial, which is the self-cancellation F-07 closed and this
+    // change must not reopen. F-1 (D2, 2026-10-01): the vertical's answer is
+    // its own stated 0.8, read off the un-patched baseline -- this used to
+    // pin the `sharp` profile's 0.85, the divisor F-1 retired.
     const draft = draftOf("bithire");
     draft.surfaces = { ...draft.surfaces, radiusScale: 1.15 };
     const intent = draftPreviewThemeIntent({
@@ -88,7 +90,7 @@ describe("the draft door carries what it did not move", () => {
     const drafted = varsOf(intent);
     expect(drafted["--ds-radius-scale"]).toBe("1.15");
     for (const channel of RADIUS_CHANNELS) {
-      expect(drafted[channel], channel).toContain("/ 0.85 *");
+      expect(drafted[channel], channel).toContain("/ 0.8 *");
     }
   });
 

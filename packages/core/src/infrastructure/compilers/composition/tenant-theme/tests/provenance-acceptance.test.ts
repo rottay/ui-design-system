@@ -797,7 +797,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // Badge + elevation (measured 2026-09-29 over isolated snapshots): rottay
       // 2953 -> 2961, +1 c029181dc (--ds-badge-radius-sm) and +7 d207e58d7
       // (--ds-elevation-0..6, the dark-ground ladder its dark base now states).
-      rottay: 2961,
+      // D2 radius channel (2026-10-01): rottay 2961 -> 2962, +1 --ds-radius-scale-rest,
+      // the vertical's own radius dial position the normalized alias divides by.
+      rottay: 2962,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -871,7 +873,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // c029181dc (--ds-badge-radius-sm); d207e58d7 moves its light base by 0.
       // Mode-delta ruling: bithire 3090 -> 3097, the light base beside a dark
       // overlay states the foundation --ds-elevation-0..6 ladder.
-      bithire: 3097,
+      // D2 radius channel (2026-10-01): bithire 3097 -> 3098, +1 --ds-radius-scale-rest,
+      // the vertical's own radius dial position the normalized alias divides by.
+      bithire: 3098,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -938,7 +942,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // Badge + elevation (measured 2026-09-29): evnto 2953 -> 2954, +1
       // c029181dc (--ds-badge-radius-sm); d207e58d7 moves its light base by 0.
       // Mode-delta ruling: evnto 2954 -> 2961, the same seven ladder roles.
-      evnto: 2961,
+      // D2 radius channel (2026-10-01): evnto 2961 -> 2962, +1 --ds-radius-scale-rest,
+      // the vertical's own radius dial position the normalized alias divides by.
+      evnto: 2962,
     };
     for (const vertical of VERTICALS) {
       expect(

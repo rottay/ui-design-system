@@ -292,6 +292,22 @@ const variablesOf = (intent: Parameters<typeof compileThemeIntent>[0]): Record<s
 
 const BASELINE = variablesOf(staticThemeIntent(VERTICAL, SLUG));
 
+const BUTTON_RADIUS_CHANNELS: readonly string[] = [
+  "--ds-radius-button",
+  "--ds-button-xs-radius",
+  "--ds-button-sm-radius",
+  "--ds-button-md-radius",
+  "--ds-button-lg-radius",
+  "--ds-button-xl-radius",
+];
+
+/** The px a `calc(<n>px / <d> * var(--ds-radius-scale, 1))` corner paints at `scale`. */
+function paintedRadius(text: string, scale: number): string {
+  const match = /^calc\((\d*\.?\d+)px(?: \/ (\d*\.?\d+))? \* var\(--ds-radius-scale, 1\)\)$/.exec(text);
+  if (!match) throw new Error(`not a dial-reachable radius: ${text}`);
+  return `${Number(((Number(match[1]) / Number(match[2] ?? 1)) * scale).toFixed(5))}px`;
+}
+
 describe("transport parity — one decision, four doors, compared as bytes", () => {
   it("every dual-transport row is driven or has a written reason", () => {
     const accounted = Object.keys(CASES);
@@ -337,6 +353,64 @@ describe("transport parity — one decision, four doors, compared as bytes", () 
       expect(BASELINE[channel], `${channel} on the compile door`).toContain("/ 0.8 *");
       expect(draftOfBaseline[channel], `${channel} on the draft door`).toContain("/ 0.8 *");
     }
+  });
+
+  /**
+   * A GENUINE re-dial divides by the vertical's own 0.8 on every door (F-1).
+   *
+   * The pin above covers a draft that only carries the preset's radius. A
+   * tenant that actually moves the dial reached `resolveRadiusBaseline` with the
+   * vertical's statement already overwritten by its own, and the divisor fell
+   * through to the profile expansion (`sharp` = 0.85): every button corner read
+   * `/ 0.85 *` on all four doors, so parity held on the wrong number. The arm is
+   * 1.0, inside `rottay/bithire-technical@1`'s radius cap, and moves the md
+   * button from 2px to 2.5px.
+   */
+  it("divides a genuine bithire re-dial by the vertical's own 0.8 on all four doors", () => {
+    const document = v2({ "shape.radius-scale": 1 });
+    const doors: Record<string, Record<string, string>> = {
+      document: variablesOf(documentThemeIntent({ vertical: VERTICAL, slug: SLUG, document })),
+      preview: variablesOf(previewThemeIntent({ vertical: VERTICAL, slug: SLUG, document })),
+      static: variablesOf(
+        draftPreviewThemeIntent({
+          vertical: VERTICAL,
+          slug: SLUG,
+          draft: draftWith("surfaces.radiusScale", 1),
+        })
+      ),
+    };
+    const published = compileTenantThemeDocumentV2({
+      document,
+      tenantId: "tenant_transport_parity",
+      slug: SLUG,
+      verticalKey: VERTICAL,
+      rowVersion: 1,
+    }).artifact.variables as Record<string, string>;
+    for (const [door, variables] of Object.entries(doors)) {
+      expect(variables["--ds-radius-scale"], `${door} moves the dial`).toBe("1");
+      for (const channel of BUTTON_RADIUS_CHANNELS) {
+        expect(variables[channel], `${channel} on the ${door} door`).toBe(BASELINE[channel]);
+        expect(variables[channel], `${channel} on the ${door} door`).toContain("/ 0.8 *");
+      }
+      expect(paintedRadius(variables["--ds-button-md-radius"]!, 1), `md button on the ${door} door`).toBe("2.5px");
+    }
+    // The publish door carries the moved dial and no button channel: their text
+    // is the vertical's own, so the delta has nothing to restate.
+    expect(Object.keys(published).filter((channel) => BUTTON_RADIUS_CHANNELS.includes(channel))).toEqual([]);
+    expect(published["--ds-radius-scale"]).toBe("1");
+  });
+
+  /** A bithire tenant restating its own rest is the vertical, so its artifact is empty (F-1). */
+  it("compiles a bithire tenant stating its own rest to the empty delta", () => {
+    const rest = compileTenantThemeDocumentV2({
+      document: v2({ "shape.radius-scale": 0.8, "spacing.rhythm": "tight", "density.mode": "compact" }),
+      tenantId: "tenant_transport_parity",
+      slug: SLUG,
+      verticalKey: VERTICAL,
+      rowVersion: 1,
+    }).artifact;
+    expect(rest.variables).toEqual({});
+    expect(rest.modeDeltas ?? []).toEqual([]);
   });
 
   for (const row of dualTransportRows) {

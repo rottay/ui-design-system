@@ -11,7 +11,11 @@ import { join, relative, resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
+import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme";
+import { staticThemeIntent } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import { deriveControlHeightScale } from "../control-height";
 import { deriveNestingLaw } from "../nesting";
 
@@ -202,5 +206,46 @@ describe("shape/control-height (kit row 14)", () => {
     // control to its content height instead of leaving it where it was.
     expect(bare).toEqual([]);
     expect(consumers.length).toBeGreaterThan(10);
+  });
+});
+
+describe("shape/rest (the normalized radius channel's divisor)", () => {
+  const REST = "--ds-radius-scale-rest";
+  const RESTS = { bithire: "0.8", evnto: "1", rottay: "1" } as const;
+  const artifactOf = (vertical: keyof typeof RESTS, decisions: Record<string, unknown>) =>
+    compileTenantThemeDocumentV2({
+      document: { version: 2, plan: "pro", decisions } as TenantThemeDocumentV2,
+      tenantId: "tenant_shape_rest",
+      slug: "shape-rest-probe",
+      verticalKey: vertical,
+      rowVersion: 1,
+    }).artifact;
+
+  it("the vertical compile states its own rest, equal to the dial it rests at", () => {
+    for (const [vertical, rest] of Object.entries(RESTS)) {
+      const variables = compileThemeIntent(staticThemeIntent(vertical as keyof typeof RESTS, vertical)).compiled
+        .cssVariables;
+      expect({ vertical, rest: variables[REST] }).toEqual({ vertical, rest });
+      expect({ vertical, dial: variables["--ds-radius-scale"] }).toEqual({ vertical, dial: rest });
+    }
+  });
+
+  it("no tenant artifact on any vertical restates the rest, whatever it dials", () => {
+    const arms: Record<string, Record<string, unknown>> = {
+      rest: {},
+      "dial-up": { "shape.radius-scale": 1 },
+      "dial-down": { "shape.radius-scale": 0.8 },
+      "bithire rest": { "shape.radius-scale": 0.8, "spacing.rhythm": "tight", "density.mode": "compact" },
+    };
+    for (const vertical of Object.keys(RESTS) as (keyof typeof RESTS)[]) {
+      for (const [arm, decisions] of Object.entries(arms)) {
+        const artifact = artifactOf(vertical, decisions);
+        const carried = [
+          ...Object.keys(artifact.variables),
+          ...(artifact.modeDeltas ?? []).flatMap((block) => Object.keys(block.variables ?? {})),
+        ].filter((name) => name === REST);
+        expect({ vertical, arm, carried }).toEqual({ vertical, arm, carried: [] });
+      }
+    }
   });
 });

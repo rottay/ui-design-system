@@ -11,7 +11,7 @@
  * than a tenant-facing theme channel. */
 
 .ds-chart-bar {
-  --_ds-bar-marker-radius: calc(2px * var(--ds-radius-scale, 1));
+  --_ds-bar-marker-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-bar [data-part='legend-swatch'] {

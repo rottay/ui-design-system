@@ -11,6 +11,7 @@ import { deriveButtonSilhouette } from "./button";
 import { deriveControlHeightScale } from "./control-height";
 import { deriveNestingLaw } from "./nesting";
 import { deriveRadiusRamp } from "./radius";
+import { deriveRadiusRest } from "./rest";
 
 /**
  * Every channel the geometry decisions state, in one producer.
@@ -19,7 +20,9 @@ import { deriveRadiusRamp } from "./radius";
  * `shape.button-style` through the silhouette; both are normalized against the
  * vertical's own dial position so the decision moves what it declares instead
  * of reproducing the authored pixel at every position. The dial CHANNEL itself
- * stays with the scale axes: this family reads it, it does not restate it.
+ * stays with the scale axes: this family reads it, it does not restate it. The
+ * baseline itself is published as `--ds-radius-scale-rest`, the divisor of the
+ * foundation's `--ds-radius-scale-normalized` alias.
  *
  * `shape.nesting` and `shape.control-height` are the other two geometry
  * decisions, and neither restates a value another sub-owner already emits:
@@ -44,6 +47,7 @@ export const shapeDeriver: FamilyDeriver = {
     "--ds-radius-lg-base",
     "--ds-radius-xl-base",
     "--ds-radius-full",
+    "--ds-radius-scale-rest",
     "--ds-radius-button",
     "--ds-button-xs-radius",
     "--ds-button-sm-radius",
@@ -56,6 +60,7 @@ export const shapeDeriver: FamilyDeriver = {
   ],
   derive: (context) => ({
     ...deriveRadiusRamp(context.theme, context.radiusBaseline),
+    ...deriveRadiusRest(context.radiusBaseline),
     ...deriveButtonSilhouette(
       context.theme,
       context.expressive.expansion,

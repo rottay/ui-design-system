@@ -132,10 +132,11 @@
    declaration painted nothing — but it sat at (0,4,0), tied with the shared
    hover/active tint, and this file is imported AFTER the shared paint, so the
    no-op won and the back chip lost its tint in both states. The frame is all
-   this rule owns; its corner rides the tenant radius dial (10px when unset). */
+   this rule owns; its corner rides the tenant radius dial relative to the
+   vertical's rest (10px at rest in every vertical). */
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-button'] {
   border: 1px solid var(--ds-color-border);
-  border-radius: calc(10px * var(--ds-radius-scale, 1));
+  border-radius: calc(10px * var(--ds-radius-scale-normalized, 1));
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);

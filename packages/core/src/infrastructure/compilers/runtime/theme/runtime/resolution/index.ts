@@ -241,6 +241,13 @@ export interface ResolveThemeOptions {
    * the intent's slug.
    */
   readonly baseline: Theme;
+  /**
+   * The vertical's own baseline when `baseline` is something else -- a draft
+   * opened on a customized theme. Defaults to `baseline`, which is the
+   * vertical's whenever the intent carries none. Recorded on the resolution as
+   * `verticalBaseline`; never merged.
+   */
+  readonly vertical?: Theme;
 }
 
 /**
@@ -281,6 +288,7 @@ export function resolveTheme(
   assertThemeBaseline(baseline, "resolveTheme");
   return {
     theme: mergeThemePatches(baseline, intent.patch),
+    verticalBaseline: options.vertical ?? baseline,
     provenance: isTenantAuthoredOrigin(intent.origin)
       ? tenantProvenance(intent.patch, snapshotLedger(intent.ledger))
       : EMPTY_PROVENANCE,

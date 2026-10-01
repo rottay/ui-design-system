@@ -72,11 +72,9 @@ export function buildLoweringContext(
     mode: request.mode ?? themeDefaultMode(theme),
     modePrefix: request.modePrefix ?? "",
     expressive,
-    radiusBaseline: resolveRadiusBaseline(
-      theme,
-      expressive.expansion,
-      request.tenant?.posture?.radiusScale
-    ),
+    radiusBaseline:
+      request.tenant?.verticalRadiusBaseline ??
+      resolveRadiusBaseline(theme, expressive.expansion),
     statusTints: theme.palette
       ? derivePaletteTints(theme.palette, resolveContrastPosture(theme))
       : {},

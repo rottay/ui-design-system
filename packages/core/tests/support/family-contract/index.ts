@@ -42,6 +42,7 @@ export const FIXTURE_TENANT_FACTS: TenantFacts = {
   },
   chosenButtonStyle: "pill",
   chosenButtonRadius: undefined,
+  verticalRadiusBaseline: "1",
   typography: {
     fontFamilyBase: "Tenant Sans",
     fontFamilyHeading: "Tenant Display",
