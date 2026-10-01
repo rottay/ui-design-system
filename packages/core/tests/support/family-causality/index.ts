@@ -17,6 +17,7 @@ import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
 
 import {
+  compileTenantThemeDocumentV2,
   compileThemeIntent,
   documentThemeIntent,
   emitThemeCss,
@@ -24,6 +25,8 @@ import {
   mountTenantTheme,
   staticThemeIntent,
 } from '@/entrypoints/server';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
+import { flatThemeIntent } from '@tests/support/theme-door';
 
 const CORE_ROOT = resolve(__dirname, '../../..');
 const BASE_ENTRY = resolve(CORE_ROOT, 'src/foundation/tokens/css/facade/entrypoints/base/index.css');
@@ -53,6 +56,8 @@ export interface ProbeEnvironment {
   readonly forcedColors?: 'active' | 'none';
   /** A touch device: `(pointer: coarse)` and `(hover: none)` match. */
   readonly touch?: boolean;
+  /** The viewer's `prefers-color-scheme`; what an `auto` root resolves against. */
+  readonly colorScheme?: 'light' | 'dark';
 }
 
 export interface ProbeRequest {
@@ -114,6 +119,55 @@ export async function mountArm(
   };
 }
 
+/**
+ * A static arm: an authored FlatTheme compiled through the productive door, and
+ * the root attributes the server mount itself projects for the vertical --
+ * under `themeMode` when the arm states one, so a mode-block channel is read in
+ * the mode that publishes it rather than under the vertical's default.
+ */
+export async function mountFlatThemeArm(
+  vertical: ProbeVertical,
+  flatTheme: FlatTheme,
+  themeMode?: 'light' | 'dark',
+): Promise<MountedArm> {
+  const { compiled } = compileThemeIntent(flatThemeIntent({ flatTheme, tenantSlug: vertical, vertical }));
+  const mounted = await mountTenantTheme(staticThemeIntent(vertical), themeMode ? { themeMode } : {});
+  return {
+    rootAttributes: mounted.rootAttributes,
+    css: emitThemeCss(compiled, firstPartyScope(vertical)),
+  };
+}
+
+/**
+ * A document arm mounted on ITS OWN root attributes: the v2 document compiles
+ * to an artifact, and `mountTenantTheme` projects that artifact's declared
+ * mode, scope and anatomy. `mountArm` stamps the static vertical's attributes
+ * on every arm, which is blind to a decision whose effect IS a root attribute
+ * (`palette.dark-mode` flips `data-theme`); this mounter is not.
+ */
+export async function mountDocumentArm(
+  vertical: ProbeVertical,
+  decisions: ProbeDecisions,
+  plan: 'standard' | 'pro' = 'pro',
+): Promise<MountedArm> {
+  // A tenant slug, never the vertical's: a first-party slug is reserved for the
+  // code-owned identity and the document door refuses it.
+  const slug = `${vertical}-probe`;
+  const document = { version: 2, plan, decisions } as never;
+  const { artifact } = compileTenantThemeDocumentV2({
+    document,
+    tenantId: `tenant_${vertical}_probe`,
+    slug,
+    verticalKey: vertical,
+    rowVersion: 1,
+  });
+  const mounted = await mountTenantTheme(documentThemeIntent({ vertical, slug, document }), { artifact });
+  return {
+    rootAttributes: mounted.rootAttributes,
+    css: mounted.styleElements.map((element) => element.css).join('\n'),
+  };
+}
+
 /** The surface a consumer mounts a family on: the canvas ground and its ink. */
 const SURFACE_STYLE = 'background: var(--ds-color-bg-primary); color: var(--ds-color-text-primary); padding: 16px;';
 
@@ -130,7 +184,7 @@ interface ProbePage {
   setContent(html: string): Promise<void>;
   addStyleTag(options: { content: string }): Promise<unknown>;
   addScriptTag(options: { content: string }): Promise<unknown>;
-  emulateMedia(options: { reducedMotion?: string; forcedColors?: string }): Promise<void>;
+  emulateMedia(options: { reducedMotion?: string; forcedColors?: string; colorScheme?: string }): Promise<void>;
   evaluate<R, A>(fn: (arg: A) => R, arg: A): Promise<R>;
   close(): Promise<void>;
 }
@@ -156,6 +210,25 @@ function resolveChromium(): ChromiumLike {
 
 /** Measure every target under every arm, one fresh page per arm. */
 export async function measureArms(request: ProbeRequest): Promise<ProbeReadings> {
+  const arms = Object.fromEntries(
+    Object.entries(request.arms).map(([label, decisions]) => [
+      label,
+      () => mountArm(request.vertical, decisions, request.plan),
+    ]),
+  );
+  return measureMountedArms({ markup: request.markup, targets: request.targets, environment: request.environment, arms });
+}
+
+export interface MountedProbeRequest {
+  readonly markup: string;
+  /** Each arm mounts itself: its CSS AND its root attributes are its own. */
+  readonly arms: Readonly<Record<string, () => Promise<MountedArm>>>;
+  readonly targets: readonly ProbeTarget[];
+  readonly environment?: ProbeEnvironment;
+}
+
+/** Measure every target under every self-mounted arm, one fresh page per arm. */
+export async function measureMountedArms(request: MountedProbeRequest): Promise<ProbeReadings> {
   const browser = await resolveChromium().launch();
   const readings: ProbeReadings = {};
   try {
@@ -164,14 +237,15 @@ export async function measureArms(request: ProbeRequest): Promise<ProbeReadings>
       environment.touch ? { hasTouch: true, isMobile: true } : {},
     );
     const base = resolvedBaseCss();
-    for (const [label, decisions] of Object.entries(request.arms)) {
+    for (const [label, mount] of Object.entries(request.arms)) {
       const page = await context.newPage();
       await page.emulateMedia({
         reducedMotion: environment.reducedMotion ?? 'no-preference',
         forcedColors: environment.forcedColors ?? 'none',
+        ...(environment.colorScheme ? { colorScheme: environment.colorScheme } : {}),
       });
       await page.setContent('<!doctype html><html><head></head><body></body></html>');
-      const arm = await mountArm(request.vertical, decisions, request.plan);
+      const arm = await mount();
       await page.addStyleTag({ content: base });
       await page.addStyleTag({ content: arm.css });
       readings[label] = await page.evaluate(

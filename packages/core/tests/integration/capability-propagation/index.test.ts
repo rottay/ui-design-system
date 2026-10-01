@@ -64,6 +64,7 @@ import type {
   TenantThemeAdvancedDocument,
   TenantThemeConfigIdentity,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import { compileTenantThemeDocumentV2 } from '@/entrypoints/server';
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -71,6 +72,7 @@ import {
   tenantThemeAnatomyAttributes,
 } from '@/infrastructure/compilers/composition/tenant-theme';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { CAP2_STATIC_WRITES } from './drained-writes';
 import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
@@ -200,6 +202,7 @@ const MUTATORS: Record<string, Mutators> = {
     // seed leaves the derived on-primary ink at Lc -45.6, under the body floor.
     // Measured: derived white over #C2610A is Lc -73.8.
     db: (d) => { d.visualFoundation!.general!.palette!.dark!.primary = '#C2610A'; return d; },
+    static: CAP2_STATIC_WRITES['palette.dark-mode'],
   },
   'palette.status-seeds': {
     db: (d) => {
@@ -250,6 +253,7 @@ const MUTATORS: Record<string, Mutators> = {
   },
   'shape.button-style': {
     db: (d) => { d.visualFoundation!.general!.shape!.buttonStyle = 'pill'; return d; },
+    static: CAP2_STATIC_WRITES['shape.button-style'],
   },
   // The two arms start from DIFFERENT bases and therefore need different values:
   // the DB arm mutates `BASE_DOC` (a customer document, `spacious`/`airy`), the
@@ -324,6 +328,7 @@ const MUTATORS: Record<string, Mutators> = {
   },
   'experience.profile': {
     db: (d) => { d.visualFoundation!.general!.experienceProfile = 'rottay/bithire-technical@1'; return d; },
+    static: CAP2_STATIC_WRITES['experience.profile'],
   },
   'chrome.families': {
     // A clear-scheme parchment, not the near-black this once was: the card inks
@@ -367,6 +372,7 @@ const MUTATORS: Record<string, Mutators> = {
   },
   'profiles.expressive': {
     db: (d) => { (d.visualFoundation!.advanced!.profiles as Record<string, string>).edge = 'hairline'; return d; },
+    static: CAP2_STATIC_WRITES['profiles.expressive'],
   },
   'profiles.icon': {
     db: (d) => { (d.visualFoundation!.advanced!.profiles as Record<string, string>).icon = 'solid-active'; return d; },
@@ -386,49 +392,42 @@ const MUTATORS: Record<string, Mutators> = {
 };
 
 /**
- * Capabilities whose STATIC authoring point this leg does not yet mutate.
- *
- * Exact, not a floor: a capability leaving this list without gaining a `static`
- * mutator fails the coverage assertion. Cause is one of two, and both are
- * honest gaps in THIS leg rather than defects in the system:
- *
- *  - DATA-ONLY: the capability travels as normalized appearance / root
- *    attributes, and `compileTheme().cssVariables` is the wrong instrument
- *    for it (`chrome.anatomy`, `profiles.icon`, `responsive.posture`).
- *  - AUTHORING-SHAPE: the FlatTheme field that carries it is a governed
- *    selection envelope (`expressive`, `recipes`, `responsive`) or a derived
- *    ramp with no single authored field (`typography.scale`,
- *    `shape.button-style`, `token-overrides`, `palette.dark-mode`). Mutating
- *    those needs the selection catalogs, which leg 1 does not own.
- */
-/**
  * Capabilities with NO static mutator, each with the measured reason.
  *
- * F-72 asks for this set to be empty. It is not, and every remaining entry is
- * accounted for by a measurement rather than by a shrug -- three of them are
- * not a static-path question at all, and the other four were driven through the
- * catalog's own `keypath.brandTheme` and moved nothing, for reasons the
- * transport-parity suite proves independently.
+ * Exact, not a floor: a capability leaving this list without gaining a `static`
+ * mutator fails the coverage assertion below, and F-72 asks for it to be empty.
  *
- * It went from ten to four real gaps in this lot: `typography.scale`,
- * `recipe-profile` and `responsive.posture` gained working static mutators, and
- * the two entries F-72 named by hand (`surfaces.elevation-posture` writing
- * `shadows.md`, `navigation.sidebar-tone` writing `sidebar.bg`) were moved onto
- * their real keypaths, where the keypath guard below now holds them.
+ * It went from ten to seven when `typography.scale`, `recipe-profile` and
+ * `responsive.posture` gained static mutators. CAP-2 (WO-EVI-02, 2026-10-01)
+ * re-measured the remaining seven and drained four whose reasons had gone
+ * stale. Each one left with a mutator above and a per-vertical drill in
+ * `DRAINED_STATIC_DRILLS` below, and its painted effect is proven in Chromium
+ * by `computed-style.test.tsx` beside this file:
+ *
+ *  - `palette.dark-mode`: a MEASUREMENT bug, not a gap. The write moved the
+ *    dark mode block all along, and `compileStatic` read the root block only.
+ *    It now reads the mode blocks; `modes.dark.palette.primaryColor` moves 31
+ *    (bithire) and 35 (evnto) dark-mode channels and 0 root channels.
+ *  - `shape.button-style`: stale since WO-DER-03. `surfaces.buttonStyle: pill`
+ *    moves the six button radii on all three verticals.
+ *  - `experience.profile`: the explicit `expressive.profiles` keys outrank the
+ *    profile; clearing them (the `surfaces.elevation-posture` move) moves 16
+ *    on bithire and 19 on rottay and evnto.
+ *  - `profiles.expressive`: depends on the value. `edge: inset-double` moves 3 on
+ *    all three verticals; `edge: hairline` and `geometry: pill-accented` move 0.
+ *
+ * Measured registrations, NOT resolved in this lot:
+ *  - rottay's dark-mode asymmetry: dark is rottay's default mode, so the door
+ *    REFUSES a `modes.dark` overlay there, and the only write that moves rottay
+ *    (`modes.light.palette.*`) falls outside the catalog keypath
+ *    `modes.dark.palette.*`. The catalog spelling is an owner question.
+ *  - `experience.profile` envelope conflict: the catalog says
+ *    `locked-by-default`, yet the v2 document door accepts the decision on the
+ *    pro plan on all three verticals. Pinned below as REGISTERED, not resolved.
+ *  - `geometry: pill-accented` moves 0 on all three first-party baselines; it
+ *    may be an inert value. Pinned below.
  */
 const STATIC_UNCOVERED_REASONS: Readonly<Record<string, string>> = {
-  'palette.dark-mode':
-    'its brandTheme keypath is `modes.dark.palette.*`, and this leg reads the ROOT block of the static lowering '
-    + 'only; a mode delta is outside what `compileStatic` returns. Measured: 0 channels moved.',
-  'shape.button-style':
-    'bithire authors its button chrome explicitly and an explicit leaf outranks the silhouette that would '
-    + 'derive it. Measured: setting `surfaces.buttonStyle` moves 0 channels on this fixture.',
-  'experience.profile':
-    'locked-by-default (D-28 b): the vertical product posture, not a tenant taste axis, so there is no tenant '
-    + 'static authorship to mutate. Measured: 0 channels moved.',
-  'profiles.expressive':
-    'a six-key record composed into postures; one key is outranked by the explicit leaves the composition '
-    + 'writes. Measured: setting `expressive.profiles.edge` moves 0 channels.',
   'chrome.anatomy':
     'its catalog effect is `root-attributes`, not `css-channels`: it travels as a normalized root attribute and '
     + 'never reaches a CSS channel, so a static channel assertion would assert something never promised.',
@@ -532,9 +531,24 @@ function compileDb(document: Doc) {
 /** Drops the `mode:` prefix a delta channel carries, leaving the channel name. */
 const channelName = (key: string): string => key.slice(key.indexOf(':') + 1);
 
-const compileStatic = (theme: FlatTheme): Record<string, string> =>
-  compileFlatThemeThroughDoor({ flatTheme: theme, tenantSlug: 'propagation-probe' })
-    .cssVariables;
+/**
+ * The static lowering's channels: the root block AND every mode block.
+ *
+ * The same two-block fact `compileDb` reads, on the other transport. The door
+ * already returns the mode blocks; reading only `cssVariables` reported
+ * `palette.dark-mode` inert while its write moved 31 dark channels on bithire.
+ * Mode channels are keyed `mode:name`, exactly as `compileDb` keys them.
+ */
+function compileStatic(theme: FlatTheme): Record<string, string> {
+  const compiled = compileFlatThemeThroughDoor({ flatTheme: theme, tenantSlug: 'propagation-probe' });
+  const channels: Record<string, string> = { ...compiled.cssVariables };
+  for (const block of compiled.modeBlocks ?? []) {
+    for (const [name, value] of Object.entries(block.cssVariables)) {
+      channels[`${block.mode}:${name}`] = value;
+    }
+  }
+  return channels;
+}
 
 function changedKeys(
   before: Record<string, string>,
@@ -762,6 +776,114 @@ describe('static path — an authored change reaches the compiled brand', () => 
   });
 });
 
+type FirstParty = 'rottay' | 'bithire' | 'evnto';
+const FIRST_PARTY: readonly FirstParty[] = ['rottay', 'bithire', 'evnto'];
+
+/**
+ * The drills the four CAP-2 entries left STATIC_UNCOVERED with: per vertical,
+ * how many channels the static mutator moves and the channels it must move.
+ *
+ * Counts are MEASURED pins (2026-10-01, HEAD 390151e27), not floors: a count
+ * that drifts is a re-measurement, in either direction. Each was red before
+ * CAP-2 -- three had no static mutator, and `palette.dark-mode` read 0 while
+ * `compileStatic` dropped the mode blocks. A vertical absent from `moves` is
+ * registered in `refusedOn` instead, never skipped.
+ */
+const DRAINED_STATIC_DRILLS: Readonly<Record<string, {
+  readonly moves: Partial<Record<FirstParty, number>>;
+  readonly anchors: readonly string[];
+  readonly refusedOn?: Partial<Record<FirstParty, RegExp>>;
+}>> = {
+  'palette.dark-mode': {
+    moves: { bithire: 31, evnto: 35 },
+    anchors: ['dark:--ds-color-primary-500', 'dark:--ds-button-primary-bg-hover'],
+    // REGISTERED, not fixed here: dark is rottay's default mode, so its door
+    // refuses a `modes.dark` overlay, and the catalog keypath names only
+    // `modes.dark.palette.*`.
+    refusedOn: { rottay: /dark is its declared defaultMode/u },
+  },
+  'shape.button-style': {
+    moves: { rottay: 6, bithire: 6, evnto: 6 },
+    anchors: ['--ds-radius-button', '--ds-button-md-radius'],
+  },
+  'experience.profile': {
+    moves: { rottay: 19, bithire: 16, evnto: 19 },
+    anchors: ['--ds-page-header-eyebrow-text-transform', '--ds-elevation-lift-strength'],
+  },
+  'profiles.expressive': {
+    moves: { rottay: 3, bithire: 3, evnto: 3 },
+    anchors: ['--ds-edge-standard-style', '--ds-divider-style', '--ds-divider-width'],
+  },
+};
+
+describe('static path — the CAP-2 drained entries move on every first-party vertical', () => {
+  for (const [id, drill] of Object.entries(DRAINED_STATIC_DRILLS)) {
+    it(`${id}: the static mutator moves its measured channels per vertical`, () => {
+      const mutate = MUTATORS[id]?.static;
+      expect(mutate, `${id} left STATIC_UNCOVERED without a static mutator`).toBeDefined();
+      expect(STATIC_UNCOVERED.has(id), `${id} is drained and still ledgered`).toBe(false);
+      for (const vertical of FIRST_PARTY) {
+        const fixture = firstPartyFixture(vertical) as FlatTheme;
+        const refusal = drill.refusedOn?.[vertical];
+        if (refusal) {
+          expect(() => compileStatic(mutate!(clone(fixture))), `${vertical}: registered refusal`).toThrow(refusal);
+          continue;
+        }
+        const moved = changedKeys(compileStatic(clone(fixture)), compileStatic(mutate!(clone(fixture))));
+        expect(moved.length, `${vertical}: ${id} moved ${moved.join(', ')}`).toBe(drill.moves[vertical]);
+        for (const anchor of drill.anchors) {
+          expect(moved, `${vertical}: ${id} must move ${anchor}`).toContain(anchor);
+        }
+      }
+    });
+  }
+
+  it('palette.dark-mode moves the mode block only, never the root block', () => {
+    for (const vertical of ['bithire', 'evnto'] as const) {
+      const fixture = firstPartyFixture(vertical) as FlatTheme;
+      const moved = changedKeys(
+        compileStatic(clone(fixture)),
+        compileStatic(MUTATORS['palette.dark-mode']!.static!(clone(fixture))),
+      );
+      expect(moved.filter((key) => !key.startsWith('dark:')), vertical).toEqual([]);
+    }
+  });
+
+  // REGISTERED, possibly inert: named so it cannot hide. If it starts moving,
+  // the registration is stale and is re-measured, not deleted.
+  it('profiles.expressive `geometry: pill-accented` moves 0 on every first-party baseline (registered)', () => {
+    for (const vertical of FIRST_PARTY) {
+      const fixture = firstPartyFixture(vertical) as FlatTheme;
+      const mutated = clone(fixture);
+      const expressive = { ...(mutated.expressive ?? {}) } as Record<string, unknown>;
+      expressive.profiles = { ...((expressive.profiles as Record<string, unknown>) ?? {}), geometry: 'pill-accented' };
+      mutated.expressive = expressive as unknown as FlatTheme['expressive'];
+      expect(changedKeys(compileStatic(clone(fixture)), compileStatic(mutated)), vertical).toEqual([]);
+    }
+  });
+
+  // REGISTERED, NOT resolved (its own lot): the catalog says the profile is
+  // locked by default, and the v2 document door accepts it on the pro plan.
+  // Whichever side the owner rules for, this pin turns red and is re-adjudicated.
+  it('experience.profile: catalog `locked-by-default` vs the v2 door accepting it on pro (registered conflict)', () => {
+    const row = THEME_CONTROL_CATALOG.find((entry) => entry.id === 'experience.profile');
+    expect(row?.envelope).toBe('locked-by-default');
+    for (const vertical of FIRST_PARTY) {
+      expect(() => compileTenantThemeDocumentV2({
+        document: {
+          version: 2,
+          plan: 'pro',
+          decisions: { 'experience.profile': 'rottay/management-editorial@1' },
+        } as never,
+        tenantId: 'tenant_propagation_probe',
+        slug: 'propagation-probe',
+        verticalKey: vertical,
+        rowVersion: 1,
+      }), vertical).not.toThrow();
+    }
+  });
+});
+
 describe('consumer reachability — the moved channel is read by production', () => {
   it('closes the loop for the ledgered capabilities', () => {
     const baseline = compileDb(clone(BASE_DOC));
@@ -787,7 +909,7 @@ describe('consumer reachability — the moved channel is read by production', ()
         const mutated = compileStatic(
           mutators.static(clone(bithireFlatTheme) as FlatTheme)
         );
-        changedKeys(staticBaseline, mutated).forEach((k) => moved.add(k));
+        changedKeys(staticBaseline, mutated).forEach((k) => moved.add(channelName(k)));
       }
 
       const source = consumerSource(evidence.consumer);
