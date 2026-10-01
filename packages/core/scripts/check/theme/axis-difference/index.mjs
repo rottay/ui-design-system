@@ -1079,6 +1079,90 @@ export const REAL_RENDER_RESTING_AXES = Object.freeze(REAL_RENDER_AXES.filter((a
 /** The family a roster row is a real render OF: its own key, unless it names another. */
 export const realRenderFamily = (row, entry) => entry.family ?? row;
 
+/**
+ * THE CHART LEGEND SHAPE ROWS (S9, WO-EVI-02). D1 named chart-bullet,
+ * chart-waterfall and chart-c identical-but-unreached on shape: the probe
+ * mounts no node their corners are painted on. A ready chart given `legend`
+ * renders those swatches, and S8 measured these rows reaching every one of
+ * them -- then refused them, because the corners were authored literals the
+ * dial could not move. S9 bound the literals to
+ * `calc(<px> * var(--ds-radius-scale-normalized, 1))` (byte-identical at rest
+ * in all 12 cells, 12x12 swatches never clamp across 0.75-1.25), and the rows
+ * now qualify under law 3 in all four bithire/evnto cells (measured
+ * 2026-10-01: default mounts still, real renders move, 0 refusals).
+ */
+const CHARTS_ROOT = 'src/components/patterns/visualization/charts';
+const CHART_SCAFFOLD = `${CHARTS_ROOT}/presentation/scaffold/index.tsx`;
+const BULLET_FAMILY = `${CHARTS_ROOT}/families/bullet/index.tsx`;
+const WATERFALL_FAMILY = `${CHARTS_ROOT}/families/waterfall/index.tsx`;
+const HISTOGRAM_FAMILY = `${CHARTS_ROOT}/families/histogram/index.tsx`;
+
+const chartScaffoldStamps = () => [
+  Object.freeze({ token: 'class:ds-chart-scaffold', stamp: "const scaffoldClassName = ['ds-chart-scaffold', className]", source: CHART_SCAFFOLD }),
+  Object.freeze({ token: 'attr:data-part=chart-scaffold', stamp: 'data-part="chart-scaffold"', source: CHART_SCAFFOLD }),
+  Object.freeze({ token: 'attr:data-state=ready', stamp: 'data-state="ready"', source: CHART_SCAFFOLD }),
+];
+const legendItem = (attributes, label) =>
+  `<div data-part="legend-item"><span data-part="legend-swatch"${attributes}></span><span data-part="legend-label">${label}</span></div>`;
+
+const CHART_LEGEND_SHAPE_ROWS = Object.freeze({
+  'chart-bullet': Object.freeze({
+    state: Object.freeze({
+      name: 'a ready BulletChart given `legend` -- the range and value swatches carry the dialed family corners (:9, :13); the target tick stays square (:5)',
+      source: BULLET_FAMILY,
+      anchors: Object.freeze(['const legendNode = legend && canRender ? (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['shape']),
+    markup: '<div class="ds-chart-scaffold ds-chart-bullet" data-part="chart-scaffold" data-state="ready"><div data-part="legend">'
+      + legendItem(' data-variant="range"', 'Poor') + legendItem(' data-variant="value"', 'Actual')
+      + legendItem(' data-variant="target"', 'Target') + '</div></div>',
+    stamps: Object.freeze([
+      ...chartScaffoldStamps(),
+      ...['range', 'value', 'target'].map((variant) => Object.freeze({
+        token: `attr:data-variant=${variant}`,
+        stamp: 'data-variant={item.variant}',
+        resolves: Object.freeze([Object.freeze({ source: BULLET_FAMILY, text: `variant: '${variant}' }` })]),
+      })),
+    ]),
+  }),
+  'chart-waterfall': Object.freeze({
+    state: Object.freeze({
+      name: 'a ready WaterfallChart given `legend` -- every swatch carries `data-status`, so the dialed status corners (:11, :15) and the '
+        + 'square total (:20) win and the bare :4 is never what the real render paints',
+      source: WATERFALL_FAMILY,
+      anchors: Object.freeze(['const legendNode = legend ? (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['shape']),
+    markup: '<div class="ds-chart-scaffold ds-chart-waterfall" data-part="chart-scaffold" data-state="ready"><div data-part="legend">'
+      + legendItem(' data-status="increase"', 'Increase') + legendItem(' data-status="decrease"', 'Decrease')
+      + legendItem(' data-status="total"', 'Total') + '</div></div>',
+    stamps: Object.freeze([
+      ...chartScaffoldStamps(),
+      ...[['increase', 'Increase'], ['decrease', 'Decrease'], ['total', 'Total']].map(([status, label]) => Object.freeze({
+        token: `attr:data-status=${status}`,
+        stamp: 'data-status={item.label.toLowerCase()}',
+        resolves: Object.freeze([Object.freeze({ source: WATERFALL_FAMILY, text: `{ label: '${label}',` })]),
+      })),
+    ]),
+  }),
+  'chart-c-histogram-legend': Object.freeze({
+    family: 'chart-c',
+    state: Object.freeze({
+      name: 'a ready Histogram given `legend` -- the histogram series swatch carries the dialed slice corner (:14); the mounted chart-c root is the sparkline',
+      source: HISTOGRAM_FAMILY,
+      anchors: Object.freeze(['const legendNode = legend ? (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['shape']),
+    markup: '<div class="ds-chart-scaffold ds-chart-histogram" data-part="chart-scaffold" data-state="ready"><div data-part="legend">'
+      + '<div data-part="legend-item" data-series="histogram"><span data-part="legend-swatch"></span>'
+      + '<span data-part="legend-label">Frequency</span></div></div></div>',
+    stamps: Object.freeze(chartScaffoldStamps()),
+  }),
+});
+
 const SKELETON_ENGINE = 'src/components/primitives/feedback/skeleton/engines/modern/index.tsx';
 const SKELETON_CONTRACT = 'src/components/primitives/feedback/skeleton/contracts/index.ts';
 const SKELETON_ANATOMY = 'src/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.tsx';
@@ -2968,6 +3052,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       Object.freeze({ token: 'attr:data-has-actions=true', stamp: 'data-has-actions={actions ? "true" : "false"}' }),
     ]),
   }),
+  ...CHART_LEGEND_SHAPE_ROWS,
 });
 
 /**
@@ -2990,106 +3075,31 @@ export const REAL_RENDER_STATES_REFUSALS = Object.freeze({
 });
 
 /**
- * THE SHAPE ROWS D1 NAMED, MEASURED AND REFUSED (S8, WO-EVI-02). D1 read six
- * shape families as identical-but-unreached: the probe mounts no node their
- * radius is painted on. Three of them -- chart-bullet, chart-waterfall's status
- * corners, chart-c's histogram swatch -- ARE reachable, by the legend a ready
- * chart renders when given `legend`, and the rows below reach it under every
- * clause of the roster law. They are kept OUT of `REAL_RENDER_MOUNTS` because
- * law 3 refuses every one of them in all four bithire/evnto cells: the corners
- * they reach are authored literals (2px, 1px, 0, `2px 2px 0 0`, `0 0 2px 2px`),
- * not reads of `--ds-radius-scale-normalized`, so the real render computes the
- * same value in both arms. A roster row there would be a roster defect, and
- * `evaluate` says so (12 refusals, 159/203 unchanged; measured 2026-10-01).
- *
- * They are kept HERE, rather than in a receipt, for the reason
+ * THE SHAPE ROWS MEASURED AND REFUSED (S8, WO-EVI-02). A row that reaches a
+ * family's shape paint under every clause of the roster law, but that law 3
+ * refuses -- the real render computes the same corner in both arms because the
+ * corner is an authored literal, not a read of `--ds-radius-scale-normalized`
+ * -- is kept here rather than in a receipt, for the reason
  * `REAL_RENDER_STATES_REFUSALS` exists: the refusal is evidence about the
- * family, and a row that would qualify the day its skin reads the channel
- * must not rot meanwhile. `realRenderRefusedRowFailures` holds them to the
- * same door as the shipped roster, refuses one that also sits in it, and
- * `run` refuses a tree where either fails. They are never mounted.
+ * family, and a row that would qualify the day its skin reads the channel must
+ * not rot meanwhile. `realRenderRefusedRowFailures` holds them to the same door
+ * as the shipped roster, refuses one that also sits in it, and `run` refuses a
+ * tree where either fails. They are never mounted.
  *
- * The other three D1 families are STOPs, not rows: `dashboard-activity-
- * interactions` and `dashboard-metrics-interactions` paint shape only on
- * `::-webkit-scrollbar-thumb` (a UA pseudo the read law refuses by name, never
- * a node), and `statistic-compounds` has no mountable root to mount beside;
- * all three are in `UNMOUNTABLE_FAMILIES`, outside the effective denominator.
+ * S8 landed three rows here (chart-bullet, chart-waterfall, chart-c's
+ * histogram legend); S9 bound their corners to the channel and they left for
+ * the roster. The other three D1 families are STOPs, not rows:
+ * `dashboard-activity-interactions` and `dashboard-metrics-interactions` paint
+ * shape only on `::-webkit-scrollbar-thumb` (a UA pseudo the read law refuses
+ * by name, never a node), and `statistic-compounds` has no mountable root to
+ * mount beside; all three are in `UNMOUNTABLE_FAMILIES`, outside the effective
+ * denominator.
  */
-const CHARTS_ROOT = 'src/components/patterns/visualization/charts';
-const CHART_SCAFFOLD = `${CHARTS_ROOT}/presentation/scaffold/index.tsx`;
-const BULLET_FAMILY = `${CHARTS_ROOT}/families/bullet/index.tsx`;
-const WATERFALL_FAMILY = `${CHARTS_ROOT}/families/waterfall/index.tsx`;
-const HISTOGRAM_FAMILY = `${CHARTS_ROOT}/families/histogram/index.tsx`;
-const SHAPE_REFUSED = 'measured 2026-10-01 (S8): reached, every swatch computes its skin corner, but the real render does not move on shape '
-  + 'in any bithire/evnto cell -- the corners are authored literals, not reads of --ds-radius-scale-normalized; law 3 refuses the row';
-
-const chartScaffoldStamps = () => [
-  Object.freeze({ token: 'class:ds-chart-scaffold', stamp: "const scaffoldClassName = ['ds-chart-scaffold', className]", source: CHART_SCAFFOLD }),
-  Object.freeze({ token: 'attr:data-part=chart-scaffold', stamp: 'data-part="chart-scaffold"', source: CHART_SCAFFOLD }),
-  Object.freeze({ token: 'attr:data-state=ready', stamp: 'data-state="ready"', source: CHART_SCAFFOLD }),
-];
-const legendItem = (attributes, label) =>
-  `<div data-part="legend-item"><span data-part="legend-swatch"${attributes}></span><span data-part="legend-label">${label}</span></div>`;
-
 export const REAL_RENDER_SHAPE_REFUSALS = Object.freeze({
-  'chart-bullet': Object.freeze({
-    measured: SHAPE_REFUSED,
-    state: Object.freeze({
-      name: 'a ready BulletChart given `legend` -- the range, value and target swatches carry the family corners (:9, :13, :5)',
-      source: BULLET_FAMILY,
-      anchors: Object.freeze(['const legendNode = legend && canRender ? (']),
-      resolves: Object.freeze([]),
-    }),
-    axes: Object.freeze(['shape']),
-    markup: '<div class="ds-chart-scaffold ds-chart-bullet" data-part="chart-scaffold" data-state="ready"><div data-part="legend">'
-      + legendItem(' data-variant="range"', 'Poor') + legendItem(' data-variant="value"', 'Actual')
-      + legendItem(' data-variant="target"', 'Target') + '</div></div>',
-    stamps: Object.freeze([
-      ...chartScaffoldStamps(),
-      ...['range', 'value', 'target'].map((variant) => Object.freeze({
-        token: `attr:data-variant=${variant}`,
-        stamp: 'data-variant={item.variant}',
-        resolves: Object.freeze([Object.freeze({ source: BULLET_FAMILY, text: `variant: '${variant}' }` })]),
-      })),
-    ]),
-  }),
-  'chart-waterfall': Object.freeze({
-    measured: SHAPE_REFUSED,
-    state: Object.freeze({
-      name: 'a ready WaterfallChart given `legend` -- every swatch carries `data-status`, so the status corners (:11, :15, :20) '
-        + 'win and the bare :4 is never what the real render paints',
-      source: WATERFALL_FAMILY,
-      anchors: Object.freeze(['const legendNode = legend ? (']),
-      resolves: Object.freeze([]),
-    }),
-    axes: Object.freeze(['shape']),
-    markup: '<div class="ds-chart-scaffold ds-chart-waterfall" data-part="chart-scaffold" data-state="ready"><div data-part="legend">'
-      + legendItem(' data-status="increase"', 'Increase') + legendItem(' data-status="decrease"', 'Decrease')
-      + legendItem(' data-status="total"', 'Total') + '</div></div>',
-    stamps: Object.freeze([
-      ...chartScaffoldStamps(),
-      ...[['increase', 'Increase'], ['decrease', 'Decrease'], ['total', 'Total']].map(([status, label]) => Object.freeze({
-        token: `attr:data-status=${status}`,
-        stamp: 'data-status={item.label.toLowerCase()}',
-        resolves: Object.freeze([Object.freeze({ source: WATERFALL_FAMILY, text: `{ label: '${label}',` })]),
-      })),
-    ]),
-  }),
-  'chart-c-histogram-legend': Object.freeze({
-    family: 'chart-c',
-    measured: SHAPE_REFUSED,
-    state: Object.freeze({
-      name: 'a ready Histogram given `legend` -- the histogram series swatch carries the slice corner (:14); the mounted chart-c root is the sparkline',
-      source: HISTOGRAM_FAMILY,
-      anchors: Object.freeze(['const legendNode = legend ? (']),
-      resolves: Object.freeze([]),
-    }),
-    axes: Object.freeze(['shape']),
-    markup: '<div class="ds-chart-scaffold ds-chart-histogram" data-part="chart-scaffold" data-state="ready"><div data-part="legend">'
-      + '<div data-part="legend-item" data-series="histogram"><span data-part="legend-swatch"></span>'
-      + '<span data-part="legend-label">Frequency</span></div></div></div>',
-    stamps: Object.freeze(chartScaffoldStamps()),
-  }),
+  // chart-bullet, chart-waterfall and chart-c-histogram-legend left on
+  // 2026-10-01 (S9): their skins now read --ds-radius-scale-normalized, and
+  // each row is credited on shape in all four bithire/evnto cells -- they are
+  // REAL_RENDER_MOUNTS rows (CHART_LEGEND_SHAPE_ROWS).
 });
 
 /** The refused rows held to the shipped roster's door, and refused if any of them is also a roster row. */

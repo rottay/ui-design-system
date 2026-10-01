@@ -8,11 +8,11 @@
  * each bar status gets a distinct swatch silhouette (rising / falling / framed
  * total), mirroring the on-plot bar treatments below. */
 .ds-chart-waterfall [data-part='legend-swatch'][data-status='increase'] {
-  border-radius: 2px 2px 0 0;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1)) calc(2px * var(--ds-radius-scale-normalized, 1)) 0 0;
 }
 
 .ds-chart-waterfall [data-part='legend-swatch'][data-status='decrease'] {
-  border-radius: 0 0 2px 2px;
+  border-radius: 0 0 calc(2px * var(--ds-radius-scale-normalized, 1)) calc(2px * var(--ds-radius-scale-normalized, 1));
   box-shadow: inset 0 -1.5px 0 0 var(--ds-color-text-primary);
 }
 

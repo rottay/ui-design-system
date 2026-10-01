@@ -29,8 +29,62 @@ const RULES: readonly DialRule[] = [
   { family: 'chart-area', selector: ".ds-chart-area [data-part='legend-swatch']", property: 'border-radius', value: 'var(--_ds-area-marker-radius, 2px)' },
   { family: 'chart-bar', selector: '.ds-chart-bar', property: '--_ds-bar-marker-radius', value: 'calc(2px * var(--ds-radius-scale-normalized, 1))' },
   { family: 'chart-bar', selector: ".ds-chart-bar [data-part='legend-swatch']", property: 'border-radius', value: 'var(--_ds-bar-marker-radius, 2px)' },
+  {
+    family: 'chart-bullet',
+    selector: ".ds-chart-bullet [data-part='legend-swatch'][data-variant='range']",
+    property: 'border-radius',
+    value: 'calc(2px * var(--ds-radius-scale-normalized, 1))',
+  },
+  {
+    family: 'chart-bullet',
+    selector: ".ds-chart-bullet [data-part='legend-swatch'][data-variant='value']",
+    property: 'border-radius',
+    value: 'calc(1px * var(--ds-radius-scale-normalized, 1))',
+  },
+  {
+    family: 'chart-c',
+    selector: ".ds-chart-histogram [data-part='legend-item'][data-series='histogram'] [data-part='legend-swatch']",
+    property: 'border-radius',
+    value: 'calc(2px * var(--ds-radius-scale-normalized, 1))',
+  },
+  {
+    family: 'chart-c',
+    selector: ".ds-chart-gauge [data-part='legend-swatch']",
+    property: 'border-radius',
+    value: 'calc(2px * var(--ds-radius-scale-normalized, 1))',
+  },
+  {
+    family: 'chart-c',
+    selector: ".ds-chart-sankey [data-part='legend-swatch']",
+    property: 'border-radius',
+    value: 'calc(2px * var(--ds-radius-scale-normalized, 1))',
+  },
+  {
+    family: 'chart-c',
+    selector: ".ds-chart-funnel [data-part='legend-swatch']",
+    property: 'border-radius',
+    value: 'calc(2px * var(--ds-radius-scale-normalized, 1))',
+  },
+  {
+    family: 'chart-c',
+    selector: ".ds-chart-network-graph [data-part='legend-swatch'][data-shape='square']",
+    property: 'border-radius',
+    value: 'calc(2px * var(--ds-radius-scale-normalized, 1))',
+  },
   { family: 'chart-radar', selector: ".ds-chart-radar [data-part='legend-swatch']", property: 'border-radius', value: 'calc(1px * var(--ds-radius-scale-normalized, 1))' },
   { family: 'chart-treemap', selector: ".ds-chart-treemap [data-part='legend-swatch']", property: 'border-radius', value: 'calc(2px * var(--ds-radius-scale-normalized, 1))' },
+  {
+    family: 'chart-waterfall',
+    selector: ".ds-chart-waterfall [data-part='legend-swatch'][data-status='increase']",
+    property: 'border-radius',
+    value: 'calc(2px * var(--ds-radius-scale-normalized, 1)) calc(2px * var(--ds-radius-scale-normalized, 1)) 0 0',
+  },
+  {
+    family: 'chart-waterfall',
+    selector: ".ds-chart-waterfall [data-part='legend-swatch'][data-status='decrease']",
+    property: 'border-radius',
+    value: '0 0 calc(2px * var(--ds-radius-scale-normalized, 1)) calc(2px * var(--ds-radius-scale-normalized, 1))',
+  },
   {
     family: 'data-terminal-card',
     selector: ".ds-data-terminal-card[data-part='root'] [data-part='activity-bar']",
@@ -79,11 +133,12 @@ function declared(family: string, selector: string, property: string): string | 
   return new RegExp(`(?:^|;)\\s*${escape(property)}\\s*:\\s*([^;]+);`).exec(body ?? '')?.[1]?.trim();
 }
 
-/** Every authored stylesheet under the CSS root, root-relative. */
+/** Every authored stylesheet under the CSS root, root-relative. The facade artifacts are generated snapshots, not authored sources. */
 function styleFiles(): string[] {
   const found: string[] = [];
   const walk = (dir: string) => {
     for (const entry of readdirSync(dir)) {
+      if (relative(CSS_ROOT, join(dir, entry)).startsWith('facade/artifacts/')) continue;
       const absolute = join(dir, entry);
       if (statSync(absolute).isDirectory()) walk(absolute);
       else if (entry.endsWith('.css')) found.push(relative(CSS_ROOT, absolute));
@@ -132,7 +187,7 @@ describe('engine-agnostic skins -- shape reach through the radius dial', () => {
         if (!painted) orphans.push(`${file}: ${decl.property}: ${decl.value}`);
       }
     }
-    expect(readers, 'the reader census moved; re-anchor it with the movers named').toBe(10);
+    expect(readers, 'the reader census moved; re-anchor it with the movers named').toBe(19);
     expect(orphans).toEqual([]);
   });
 

@@ -11,7 +11,7 @@
 /* Histogram ---------------------------------------------------------------- */
 
 .ds-chart-histogram [data-part='legend-item'][data-series='histogram'] [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-histogram [data-part='legend-label'] {
@@ -132,7 +132,7 @@
 /* Gauge -------------------------------------------------------------------- */
 
 .ds-chart-gauge [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 /* Shape-coded zone markers: each default threshold tone gets a distinct swatch
@@ -209,7 +209,7 @@
 /* Sankey ------------------------------------------------------------------- */
 
 .ds-chart-sankey [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-sankey [data-part='legend-label'] {
@@ -321,7 +321,7 @@
 /* Funnel ------------------------------------------------------------------- */
 
 .ds-chart-funnel [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-funnel [data-part='legend-label'] {
@@ -395,7 +395,7 @@
 /* Legend swatches repeat the plot's redundant shape encoding, so a swatch
  * decodes exactly like its group mark (circle keeps the base radius above). */
 .ds-chart-network-graph [data-part='legend-swatch'][data-shape='square'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-network-graph [data-part='legend-swatch'][data-shape='diamond'] {

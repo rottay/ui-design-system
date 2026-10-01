@@ -2978,7 +2978,10 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'box',
       'breadcrumb-compounds',
       'carousel',
+      'chart-bullet',
       'chart-c',
+      'chart-c-histogram-legend',
+      'chart-waterfall',
       'column-menu',
       'column-settings',
       'command-palette',
@@ -4227,38 +4230,61 @@ describe('axis-difference BROWSER drill — the pseudo-element read law reads pa
   }, 180_000);
 });
 
-describe('axis-difference — S8: the shape rows the D1 census named, measured and refused (WO-EVI-02)', () => {
+describe('axis-difference — S8/S9: the shape rows the D1 census named, refused on literals, qualified on the channel (WO-EVI-02)', () => {
   const refusals = () => probe.REAL_RENDER_SHAPE_REFUSALS ?? {};
   const BULLET = 'src/components/patterns/visualization/charts/families/bullet/index.tsx';
+  const SKIN = 'src/foundation/tokens/css/presentation/components/skin';
+  const LEGEND_ROWS = ['chart-bullet', 'chart-c-histogram-legend', 'chart-waterfall'];
+  const NORMALIZED = 'var(--ds-radius-scale-normalized, 1)';
 
-  it('PIN: the three reachable families carry a refused shape row, each declaring shape alone, none in the roster', () => {
-    assert.deepEqual(Object.keys(refusals()).sort(), ['chart-bullet', 'chart-c-histogram-legend', 'chart-waterfall']);
-    for (const [row, entry] of Object.entries(refusals())) {
+  it('PIN (S9): the three legend rows left the refusal registry for the roster, each declaring shape alone', () => {
+    assert.deepEqual(Object.keys(refusals()), []);
+    for (const row of LEGEND_ROWS) {
+      const entry = REAL_RENDER_MOUNTS[row];
+      assert.ok(entry, row);
       assert.deepEqual([...entry.axes], ['shape'], row);
-      assert.match(entry.measured, /real render does not move on shape/u, row);
-      assert.equal(REAL_RENDER_MOUNTS[row], undefined, row);
+      assert.equal(entry.measured, undefined, `${row}: a roster row carries no refusal reason`);
     }
+    assert.equal(REAL_RENDER_MOUNTS['chart-c-histogram-legend'].family, 'chart-c');
   });
 
-  it('the refused rows pass the same roster door as the shipped ones: engine-literal markup, cited stamps', () => {
+  it('PIN (S9): every corner a legend row qualifies on reads the normalized channel; the square ticks stay literal', () => {
+    const declared = (family) => cssRules(readFileSync(join(ROOT, SKIN, family, 'index.css'), 'utf8'))
+      .flatMap((rule) => rule.declarations.filter((d) => d.property === 'border-radius').map((d) => [rule.selector, d.value]));
+    const value = (family, selector) => declared(family).find(([candidate]) => candidate === selector)?.[1];
+    const dialed = (px) => `calc(${px} * ${NORMALIZED})`;
+    assert.equal(value('chart-bullet', ".ds-chart-bullet [data-part='legend-swatch'][data-variant='range']"), dialed('2px'));
+    assert.equal(value('chart-bullet', ".ds-chart-bullet [data-part='legend-swatch'][data-variant='value']"), dialed('1px'));
+    assert.equal(value('chart-bullet', ".ds-chart-bullet [data-part='legend-swatch'][data-variant='target']"), '0');
+    assert.equal(value('chart-waterfall', ".ds-chart-waterfall [data-part='legend-swatch'][data-status='increase']"), `${dialed('2px')} ${dialed('2px')} 0 0`);
+    assert.equal(value('chart-waterfall', ".ds-chart-waterfall [data-part='legend-swatch'][data-status='decrease']"), `0 0 ${dialed('2px')} ${dialed('2px')}`);
+    assert.equal(value('chart-waterfall', ".ds-chart-waterfall [data-part='legend-swatch'][data-status='total']"), '0');
+    assert.equal(value('chart-c', ".ds-chart-histogram [data-part='legend-item'][data-series='histogram'] [data-part='legend-swatch']"), dialed('2px'));
+  });
+
+  it('the refusal door stays armed: the rows that left pass the shipped door, and the empty registry passes its own', () => {
     assert.equal(typeof probe.realRenderRefusedRowFailures, 'function');
     assert.deepEqual(probe.realRenderRefusedRowFailures(ROOT), []);
+    const legendRows = Object.fromEntries(LEGEND_ROWS.map((row) => [row, REAL_RENDER_MOUNTS[row]]));
+    assert.deepEqual(realRenderRosterFailures(ROOT, legendRows, { statesRefusals: {} }), []);
   });
 
-  it('MUTANT: a refused row whose stamp drifts is named by the door; one moved into the roster is refused', () => {
+  it('MUTANT: a legend row whose stamp drifts is named by the door; a refusal that is also a roster row is refused', () => {
     const drifted = (file) => {
       const text = readFileSync(file, 'utf8');
       return file.endsWith(BULLET) ? text.replaceAll('data-variant={item.variant}', 'data-kind={item.variant}') : text;
     };
-    const drift = probe.realRenderRefusedRowFailures(ROOT, { readSource: drifted });
+    const drift = realRenderRosterFailures(ROOT, REAL_RENDER_MOUNTS, { readSource: drifted });
     assert.ok(drift.some((line) => line.startsWith('chart-bullet/attr:data-variant=range:') && line.includes('no longer carries the stamp')), drift.join(' | '));
-    const roster = { ...REAL_RENDER_MOUNTS, 'chart-bullet': refusals()['chart-bullet'] };
-    const moved = probe.realRenderRefusedRowFailures(ROOT, { roster });
-    assert.ok(moved.some((line) => line.startsWith('chart-bullet: a measured shape refusal is also a REAL_RENDER_MOUNTS row')), moved.join(' | '));
+    const refused = { 'chart-bullet': REAL_RENDER_MOUNTS['chart-bullet'] };
+    const both = probe.realRenderRefusedRowFailures(ROOT, { refusals: refused });
+    assert.ok(both.some((line) => line.startsWith('chart-bullet: a measured shape refusal is also a REAL_RENDER_MOUNTS row')), both.join(' | '));
+    const refusedDrift = probe.realRenderRefusedRowFailures(ROOT, { refusals: refused, roster: {}, readSource: drifted });
+    assert.ok(refusedDrift.some((line) => line.startsWith('chart-bullet/attr:data-variant=range:')), refusedDrift.join(' | '));
   });
 
   it('waterfall: every swatch the row mounts carries data-status, so the bare :4 corner is never what it reads', () => {
-    const swatches = [...refusals()['chart-waterfall'].markup.matchAll(/<span data-part="legend-swatch"([^>]*)>/gu)];
+    const swatches = [...REAL_RENDER_MOUNTS['chart-waterfall'].markup.matchAll(/<span data-part="legend-swatch"([^>]*)>/gu)];
     assert.equal(swatches.length, 3);
     for (const [, attributes] of swatches) assert.match(attributes, /data-status="(increase|decrease|total)"/u);
   });

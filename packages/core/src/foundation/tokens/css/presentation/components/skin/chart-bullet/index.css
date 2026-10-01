@@ -6,11 +6,11 @@
 }
 
 .ds-chart-bullet [data-part='legend-swatch'][data-variant='range'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-bullet [data-part='legend-swatch'][data-variant='value'] {
-  border-radius: 1px;
+  border-radius: calc(1px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-bullet [data-part='legend-label'] {
