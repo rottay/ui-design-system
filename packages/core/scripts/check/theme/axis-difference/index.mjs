@@ -113,7 +113,7 @@
  * forced -- with the withholding laws the default scene already obeys; the
  * four resting axes are read exactly as before. The scene also stamps
  * `focused`, the one kernel token it used to leave out, and
- * `--no-focused-stamp` reproduces the five-state set on the same tree.
+ * `--no-focused-stamp` reproduces the pre-S1 set on the same tree (four states since `selected` left the stamp).
  *
  * AND A `::before`/`::after` THE FAMILY PAINTS AN AXIS ON IS READ ON ITS HOST.
  * The part law refuses a pseudo-element as a NODE and still does; what this
@@ -153,7 +153,7 @@
  *   node scripts/check/theme/axis-difference/index.mjs --no-part-reach    the pre-lot part law
  *   node scripts/check/theme/axis-difference/index.mjs --no-native-pseudos  the stamped states half alone
  *   node scripts/check/theme/axis-difference/index.mjs --no-real-render-mounts  the default mounts alone
- *   node scripts/check/theme/axis-difference/index.mjs --no-focused-stamp  the pre-S1 five-state set
+ *   node scripts/check/theme/axis-difference/index.mjs --no-focused-stamp  the pre-S1 set (four states)
  *   node scripts/check/theme/axis-difference/index.mjs --no-pseudo-reads  no ::before/::after read on any host
  */
 
@@ -173,6 +173,9 @@ import {
   AXES,
   AXIS_IDS,
   EXCLUDED_GROUP,
+  KERNEL_STATE_TOKENS,
+  STAMP_TOKEN,
+  STATE_STAMP_ATTRIBUTES,
   axisControls,
   axisNotApplicable,
   axisPopulations,
@@ -181,6 +184,7 @@ import {
   cssRules,
   groupControls,
   skinFamilies,
+  stampWrites,
   stripCssComments,
 } from '../population/index.mjs';
 import {
@@ -3380,6 +3384,13 @@ export function realRenderRefusedRowFailures(root = CORE_ROOT, {
  * command-palette left when S0 wired `--ds-state-disabled-opacity` (a states
  * head channel) into its disabled item; scope-switcher is colour-only on both
  * trees (Fable's own section-2 table reads it so).
+ *
+ * Re-pinned 8 -> 9 by the STATES-K population law (owner directive
+ * 2026-10-01, Fable review 2026-10-01): record-facts and scope-switcher leave
+ * because they leave the POPULATION (domain-valued / selection gates), not
+ * because of colour; edit-fields and table-toolbar (colour-only) and
+ * form-builder (`cursor`, no-vocabulary) enter with it. surface-states enters
+ * the population and is NOT here: its disabled opacity is read.
  */
 export const UNOBSERVABLE_FAMILIES = Object.freeze({
   shape: Object.freeze({}),
@@ -3388,13 +3399,14 @@ export const UNOBSERVABLE_FAMILIES = Object.freeze({
   depth: Object.freeze({}),
   states: Object.freeze({
     'button-group': 'no-vocabulary',
+    'edit-fields': 'colour-only',
+    'form-builder': 'no-vocabulary',
     list: 'colour-only',
     'metrics-chart': 'colour-only',
     'metrics-rows': 'no-vocabulary',
     'operational-ledger': 'colour-only',
     'overlay-modal-compounds': 'colour-only',
-    'record-facts': 'colour-only',
-    'scope-switcher': 'colour-only',
+    'table-toolbar': 'colour-only',
   }),
   motion: Object.freeze({}),
 });
@@ -4932,10 +4944,17 @@ export function sceneHtml({ css, vertical, theme, elements, mounts = null, partM
  * below is what a component that received it writes, and why the stamp is two
  * attributes rather than one.
  */
-export const STATE_VARIANTS = Object.freeze(['hovered', 'pressed', 'selected', 'focus-visible', 'disabled', 'focused']);
+export const STATE_VARIANTS = Object.freeze(['hovered', 'pressed', 'focus-visible', 'disabled', 'focused']);
 
 /*
- * `focused` is the sixth, since S1, and the one the scene used to leave out.
+ * `selected` LEFT the stamp with the STATES-K population law (owner directive
+ * 2026-10-01, Fable review 2026-10-01): no kernel serializes it and no product
+ * writes it into `data-state`, so by this file's own doctrine a stamped
+ * `selected` was a fabricated configuration. A rule gated on it is now
+ * reported `domain-state-value`. The set is exactly `KERNEL_STATE_TOKENS`,
+ * which the population module owns and this file imports.
+ *
+ * `focused` is the last, since S1, and the one the scene used to leave out.
  * The anatomy kernel serializes it (`foundation/behavior/kernel/anatomy`,
  * `STATE_FLAG_ORDER`: disabled, hovered, pressed, focused, focusVisible) and
  * `useInteractionState` sets it on every focus, pointer or keyboard -- a
@@ -4944,7 +4963,8 @@ export const STATE_VARIANTS = Object.freeze(['hovered', 'pressed', 'selected', '
  * leaves, not a fabrication. S0 measured 37 skin rules gated on it and reached
  * by neither half (`unstamped-state`). It is appended LAST so every state
  * read before it is read in the order, and reports the first property, it
- * always did. `--no-focused-stamp` reproduces the five-state set.
+ * always did. `--no-focused-stamp` reproduces the pre-S1 set (four states since
+ * `selected` left).
  */
 
 /**
@@ -4984,9 +5004,7 @@ export const STATE_VARIANTS = Object.freeze(['hovered', 'pressed', 'selected', '
  * counted by the census and published with the run exactly as the `:hover`
  * half of this axis is.
  */
-export const STATE_STAMP_ATTRIBUTES = Object.freeze({
-  disabled: Object.freeze({ 'data-disabled': 'true' }),
-});
+export { STATE_STAMP_ATTRIBUTES };
 
 /** Every attribute name any stamped state writes beside `data-state`. */
 export const STATE_STAMP_ATTRIBUTE_NAMES = Object.freeze([
@@ -5821,32 +5839,16 @@ export async function calibrateNativeForcing(context, { variants = NATIVE_PSEUDO
   }
 }
 
-/** One `[data-state ...]`/`[data-disabled ...]` attribute selector: name, operator, value (in one of three quotings). */
-const STAMP_TOKEN = /\[(data-state|data-disabled)(?:\s*([~*^$|]?=)\s*(?:'([^']*)'|"([^"]*)"|([^\]\s]*)))?\s*\]/gu;
-
-/**
- * Whether a stamped state of the scene writes a value that satisfies one
- * attribute selector. The scene writes `data-state` from `STATE_VARIANTS` and
- * the extra attributes of `STATE_STAMP_ATTRIBUTES`, and nothing else: a rule
- * gated on `[data-state='error']`, `'empty'`, `'buttons'` is gated on a DOMAIN
- * value a component writes about its data, and the stamp never enters it.
- * Stripping every `data-state` token regardless of its value credited two
- * families (branding-preview-sandbox, detail) with reach through exactly that
- * hole (census 2026-09-30).
+/*
+ * `STAMP_TOKEN` and `stampWrites` are the population module's (STATES-K): the
+ * scene writes `data-state` from `STATE_VARIANTS` and the extra attributes of
+ * `STATE_STAMP_ATTRIBUTES`, and nothing else, so a rule gated on
+ * `[data-state='error']`, `'empty'`, `'buttons'`, `'selected'` is gated on a
+ * value no stamp writes and the stamp never enters it. Stripping every
+ * `data-state` token regardless of its value credited two families
+ * (branding-preview-sandbox, detail) with reach through exactly that hole
+ * (census 2026-09-30).
  */
-function stampWrites(name, operator, value, stamped = STATE_VARIANTS) {
-  if (operator === undefined) return true;
-  const written = name === 'data-state'
-    ? stamped
-    : Object.values(STATE_STAMP_ATTRIBUTES).flatMap((attributes) => (Object.hasOwn(attributes, name) ? [attributes[name]] : []));
-  return written.some((candidate) => {
-    if (operator === '=' || operator === '~=') return candidate === value;
-    if (operator === '*=') return candidate.includes(value);
-    if (operator === '^=') return candidate.startsWith(value);
-    if (operator === '$=') return candidate.endsWith(value);
-    return candidate === value || candidate.startsWith(`${value}-`);
-  });
-}
 
 /**
  * Whether the stamp can enter a stamped selector (negations already removed).
@@ -5872,15 +5874,15 @@ function stampGate(selector, stamped = STATE_VARIANTS) {
 }
 
 /**
- * Every token the anatomy kernel serializes into `data-state`
- * (`foundation/behavior/kernel/anatomy`, `STATE_FLAG_ORDER` through
- * `serializeState`). Since S1 every one of them is in `STATE_VARIANTS`; a rule
- * gated on one a run does NOT stamp (`--no-focused-stamp`,
- * `--no-states-disabled`) is a real interaction state that run leaves out
- * (`unstamped-state`), which is a different finding from a rule gated on a
- * value the component writes about its DATA (`domain-state-value`).
+ * Every token the anatomy kernel serializes into `data-state`, owned by the
+ * population module (STATES-K) and re-exported here. `STATE_VARIANTS` is
+ * exactly this set; a rule gated on one a run does NOT stamp
+ * (`--no-focused-stamp`, `--no-states-disabled`) is a real interaction state
+ * that run leaves out (`unstamped-state`), which is a different finding from a
+ * rule gated on a value the component writes about its DATA
+ * (`domain-state-value`).
  */
-export const KERNEL_STATE_TOKENS = Object.freeze(['disabled', 'hovered', 'pressed', 'focused', 'focus-visible']);
+export { KERNEL_STATE_TOKENS };
 
 /**
  * The state rules one family's skin writes, each read as a selector the scene

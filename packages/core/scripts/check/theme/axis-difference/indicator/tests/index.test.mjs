@@ -6,13 +6,14 @@ import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 
 import { readProgramIndicatorMeasurement } from '../../../../../../../../scripts/maintain/roadmap/status/index.mjs';
-import { AXIS_IDS } from '../../../population/index.mjs';
+import { AXIS_IDS, AXIS_POPULATION_LAWS } from '../../../population/index.mjs';
 import { NO_WRITE_FLAG, SCENARIOS, UNOBSERVABLE_FAMILIES, publicationRefusal } from '../../index.mjs';
 import {
   FLEET_THEMES,
   FLEET_VERTICALS,
   INDICATOR_ID,
   INDICATOR_PATH,
+  EFFECTIVE_DEFINITION,
   REPRODUCTION_FLAGS,
   axisReadings,
   buildIndicator,
@@ -23,8 +24,9 @@ import {
 } from '../index.mjs';
 
 const CONTROLS = negativeControlsOf(SCENARIOS);
-const DECLARED = { shape: 217, typography: 182, rhythm: 224, depth: 199, states: 156, motion: 204 };
-const EFFECTIVE = { shape: 205, typography: 175, rhythm: 209, depth: 187, states: 148, motion: 195 };
+// states 156/148 -> 155/147 with the STATES-K population law (2026-10-01).
+const DECLARED = { shape: 217, typography: 182, rhythm: 224, depth: 199, states: 155, motion: 204 };
+const EFFECTIVE = { shape: 205, typography: 175, rhythm: 209, depth: 187, states: 147, motion: 195 };
 
 function fleetResult(moved = {}) {
   const cells = [];
@@ -188,13 +190,29 @@ describe('tenant-difference-by-axis indicator', () => {
 
   it('publishes the unobservable count per axis beside the declared denominator, named, and never subtracts it', () => {
     const indicator = build(fleetResult({ states: 117 }));
-    assert.equal(indicator.axes.states.declared, 156);
-    assert.equal(indicator.axes.states.unobservable, 8);
+    assert.equal(indicator.axes.states.declared, 155);
+    assert.equal(indicator.axes.states.unobservable, 9);
     assert.deepEqual(indicator.axes.states.unobservableFamilies.map((entry) => entry.family),
       Object.keys(UNOBSERVABLE_FAMILIES.states));
-    assert.equal(indicator.axes.states.worstPercentDeclared, 75);
+    assert.equal(indicator.axes.states.worstPercentDeclared, 75.5);
     for (const axis of AXIS_IDS.filter((id) => id !== 'states')) assert.equal(indicator.axes[axis].unobservable, 0, axis);
     assert.match(indicator.basis, /never subtracted/u);
+  });
+
+  it('STATES-K: the effective crossing is DEFINITIONAL -- 118/147 = 80.3 % effective, 118/155 = 76.1 % declared, the states status stays below the bar', () => {
+    const indicator = build(fleetResult({ states: 118 }));
+    const states = indicator.axes.states;
+    assert.equal(states.status, 'below-threshold');
+    assert.equal(states.worstPercentDeclared, 76.1);
+    assert.equal(states.worstPercentEffective, 80.3);
+    assert.equal(states.effectiveAtThreshold, true);
+    assert.equal(states.effectiveDefinition, EFFECTIVE_DEFINITION);
+    assert.match(EFFECTIVE_DEFINITION, /mountable and not unsettled/u);
+    assert.deepEqual(states.populationLaw, AXIS_POPULATION_LAWS.states);
+    assert.equal(states.populationLaw.law, 'STATES-K');
+    for (const axis of AXIS_IDS.filter((id) => id !== 'states')) assert.equal(indicator.axes[axis].populationLaw, null, axis);
+    assert.match(indicator.basis, /mountable and not unsettled/u);
+    assert.match(indicator.value, /effective-denominator reading \d\/6, never the status\)/u);
   });
 
   it('publishes each control\'s witness per cell IN FULL, and the measured states refusals', () => {

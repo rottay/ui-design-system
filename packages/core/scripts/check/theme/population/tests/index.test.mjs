@@ -43,6 +43,7 @@ import {
   stripCssComments,
   withNotApplicable,
 } from '../index.mjs';
+import * as population from '../index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -58,6 +59,10 @@ const RADIO_SKIN = `${SKIN_ROOT}/radio/index.css`;
 const RADIO_GROUP_SKIN = `${AGNOSTIC_ROOT}/radio-group/index.css`;
 const REVIEW = 'WO-EVI-05 core review 2026-09-14';
 const CHART_REVIEW = 'WO-EVI-02 chart-marks shape exclusion review 2026-09-30 (X1 dossier; Fable ACCEPT-WITH-CHANGES, conditions consolidated by the DT; Codex outside the loop by owner restriction 2026-09-19)';
+// Mover: WO-EVI-02 CL104 re-review 2026-10-01 (Fable) -- the chart-line entry is narrowed to its legend-swatch declaration.
+const CHART_LINE_REVIEW = `${CHART_REVIEW} | CL104 re-review 2026-10-01 (Fable): the skeleton-bar declaration (\`999px 999px 0 0\`, skin :104) is withdrawn from the entry: chart-foundation :1446 out-specifies it (0,5,0 over 0,2,0) and it paints nothing at dial 0.8/1.0/1.2 (measured); a declaration that paints nothing has no semantic identity. chart-line stays in shape on it, the entry is INEFFECTIVE by name, until the charts cut resolves the shadowing (defect registered under WO-FAM-09)`;
+// The one ineffective entry on this tree, published by name (CL104): never emptied, never silenced.
+const CHART_LINE_INEFFECTIVE = [{ family: 'chart-line', axis: 'shape', stillDeclares: ['border-radius'], headChannels: [] }];
 const TT_REVIEW = 'WO-EVI-02 table-toolbar shape exclusion review 2026-10-01 (X3 dossier; Fable ACCEPT-WITH-CHANGES, conditions consolidated by the DT; Codex outside the loop by owner restriction 2026-09-19)';
 const PHYSICAL_CORNERS = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius'];
 
@@ -211,42 +216,14 @@ describe('theme population drills — a shrunken denominator is refused', () => 
   it('the authored and computed vocabularies are both non-empty for every painted axis', () => {
     for (const axis of AXIS_IDS) {
       if (axis === 'states') {
-        assert.ok(AXES[axis].stateSelectors.length > 0);
+        assert.ok(AXES[axis].computed.length > 0 && population.KERNEL_STATE_TOKENS.length > 0);
         continue;
       }
       assert.ok(AXES[axis].authored.length > 0, `${axis}: no authored vocabulary`);
       assert.ok(AXES[axis].computed.length > 0, `${axis}: no computed vocabulary`);
     }
   });
-
-  it('(namespaced state) a family\'s own [data-<ns>-state=] rule declares states; the shared attribute keeps its own needle; a skin with no state selector declares none', () => {
-    const dir = sandbox();
-
-    mkdirSync(join(dir, SKIN_ROOT, 'drill-domain-state'), { recursive: true });
-    writeFileSync(
-      join(dir, SKIN_ROOT, 'drill-domain-state/index.css'),
-      '.ds-drill-domain-state[data-filter-state=\'active\'] { opacity: 0.9; }\n',
-    );
-    const domainState = familyAxisDeclarations(dir, catalogIn(dir)).get('drill-domain-state');
-    assert.deepEqual(domainState.axes.states.stateSelectors, ['[data-<ns>-state=']);
-
-    mkdirSync(join(dir, SKIN_ROOT, 'drill-shared-state'), { recursive: true });
-    writeFileSync(
-      join(dir, SKIN_ROOT, 'drill-shared-state/index.css'),
-      '.ds-drill-shared-state[data-state=\'selected\'] { opacity: 0.5; }\n',
-    );
-    const sharedState = familyAxisDeclarations(dir, catalogIn(dir)).get('drill-shared-state');
-    assert.deepEqual(sharedState.axes.states.stateSelectors, ['[data-state='],
-      'the namespaced matcher must not re-admit the shared attribute');
-
-    mkdirSync(join(dir, SKIN_ROOT, 'drill-no-state'), { recursive: true });
-    writeFileSync(
-      join(dir, SKIN_ROOT, 'drill-no-state/index.css'),
-      '.ds-drill-no-state { opacity: 1; }\n',
-    );
-    const noState = familyAxisDeclarations(dir, catalogIn(dir)).get('drill-no-state');
-    assert.equal(noState.axes.states, undefined, 'a bare absence of any state selector reads as no declaration');
-  });
+  // The namespaced-state drill of f8298d417 is reversed by STATES-K drill D5 below.
 });
 
 describe('theme population — the pilot population of WO-EVI-05', () => {
@@ -305,7 +282,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
       { family: 'table-toolbar', axis: 'shape' },
     ]);
     assert.deepEqual(registry.entries.map((entry) => [entry.family, entry.axis, entry.path, entry.review]),
-      [['radio', 'shape', 'byProperty', REVIEW], ['chart-line', 'shape', 'byProperty', CHART_REVIEW], ['chart-pie', 'shape', 'byProperty', CHART_REVIEW],
+      [['radio', 'shape', 'byProperty', REVIEW], ['chart-line', 'shape', 'byProperty', CHART_LINE_REVIEW], ['chart-pie', 'shape', 'byProperty', CHART_REVIEW],
         ['table-toolbar', 'shape', 'byProperty', TT_REVIEW]]);
     assert.deepEqual(checkExclusionRegistry().failures, []);
   });
@@ -332,18 +309,19 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const report = populationReport();
     const shape = report.axes.find((entry) => entry.axis === 'shape');
     assert.ok(!shape.families.includes('radio'));
-    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio', 'table-toolbar']);
-    assert.equal(shape.notApplicableCount, 4);
+    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), ['chart-pie', 'radio', 'table-toolbar']);
+    assert.equal(shape.notApplicableCount, 3);
     for (const entry of report.axes) {
       assert.ok(entry.families.every((family) => !entry.notApplicable.some((withdrawn) => withdrawn.family === family)),
         `${entry.axis}: applicable and not-applicable sets must be disjoint`);
       if (entry.axis !== 'shape') assert.equal(entry.notApplicableCount, 0, `${entry.axis}: no exclusion is reviewed there`);
     }
-    assert.deepEqual(report.exclusions.ineffective, []);
+    // Mover: CL104 -- chart-line is in shape on a shadowed declaration and its entry is published INEFFECTIVE by name.
+    assert.deepEqual(report.exclusions.ineffective, CHART_LINE_INEFFECTIVE);
     assert.equal(report.exclusions.revision, exclusionsRevision());
 
     const line = populationLine();
-    assert.match(line, /shape 214 \(4 N\/A\)/);
+    assert.match(line, /shape 215 \(3 N\/A\)/);
     assert.match(line, /typography 182 \(0 N\/A\)/);
     assert.match(line, /exclusions [0-9a-f]{16} \(4 reviewed\)/);
 
@@ -368,9 +346,11 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.deepEqual(pin.provenance.membershipMoves.shape.removed, ['radio']);
 
     const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
-    assert.equal(floor.axes.shape, 214);
-    assert.equal(floor.notApplicable.shape, 4);
-    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.removed, ['chart-line', 'chart-pie', 'table-toolbar']);
+    // Movers: CL104 re-review 2026-10-01 (Fable) -- chart-line re-enters shape (214 -> 215, N/A 4 -> 3).
+    assert.equal(floor.axes.shape, 215);
+    assert.equal(floor.notApplicable.shape, 3);
+    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.removed, ['chart-pie', 'table-toolbar']);
+    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.reEntered, ['chart-line']);
     assert.equal(floor.exclusionsRevision, exclusionsRevision());
     assert.equal(floor.provenance.previousPin.axes.shape, 215);
     assert.deepEqual(floor.provenance.membershipMoves.previousWave.byAxis.shape, { removed: ['radio'], added: [] });
@@ -509,7 +489,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.deepEqual(checkbox.notApplicable, {});
     const report = populationReport(dir, catalogIn(dir), path);
     assert.ok(report.axes.find((entry) => entry.axis === 'shape').families.includes('checkbox'));
-    assert.deepEqual(report.axes.find((entry) => entry.axis === 'shape').notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio', 'table-toolbar']);
+    assert.deepEqual(report.axes.find((entry) => entry.axis === 'shape').notApplicable.map((entry) => entry.family), ['chart-pie', 'radio', 'table-toolbar']);
     assert.ok(report.exclusions.ineffective.some((entry) => entry.family === 'checkbox' && entry.axis === 'shape'));
     assert.deepEqual(checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN, { exclusionsPath: path }).failures, [],
       'an ineffective entry changes no published denominator');
@@ -566,7 +546,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const before = familyAxisDeclarations(dir, catalogIn(dir)).get('radio-group');
     assert.ok(before, 'the sandbox must carry the agnostic skin root that owns radio-group');
     assert.deepEqual(before.files, [RADIO_GROUP_SKIN]);
-    assert.deepEqual(before.axes.shape, { properties: ['border-radius'], headChannels: ['--ds-radius-md'], stateSelectors: [], stateChannels: [] });
+    assert.deepEqual(before.axes.shape, { properties: ['border-radius'], headChannels: ['--ds-radius-md'] });
     assert.deepEqual(before.notApplicable, {});
     assert.deepEqual(radiiOf(join(dir, RADIO_GROUP_SKIN)), [
       { context: [], selector: ".ds-radio-group.ds-radio-group--button [data-part='option']", property: 'border-radius', value: 'var(--ds-radius-md)' },
@@ -578,7 +558,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.notEqual(severed, source);
     writeFileSync(skin, severed);
     const after = familyAxisDeclarations(dir, catalogIn(dir)).get('radio-group');
-    assert.deepEqual(after.axes.shape, { properties: ['border-radius'], headChannels: [], stateSelectors: [], stateChannels: [] });
+    assert.deepEqual(after.axes.shape, { properties: ['border-radius'], headChannels: [] });
     assert.deepEqual(after.notApplicable, {});
     const shape = populationReport(dir, catalogIn(dir)).axes.find((entry) => entry.axis === 'shape');
     assert.ok(shape.families.includes('radio-group'));
@@ -661,19 +641,35 @@ describe('theme population — the reviewed chart-marks exclusions on shape and 
   const append = (dir, file, text) => writeFileSync(join(dir, file), `${readFileSync(join(dir, file), 'utf8')}\n${text}\n`);
   const produced = (failures) => failures.filter((line) => line.includes(': PRODUCED — '));
 
-  it('names the reviewed declarations verbatim, they are the only radii each chart skin authors, and each withdraws its family', () => {
+  it('names the reviewed declarations verbatim: chart-pie\'s are its only radii and withdraw it; chart-line\'s legend cap is excluded but its shadowed skeleton radius keeps it in shape', () => {
     const entries = readExclusions().entries.filter((entry) => entry.family.startsWith('chart-'));
     assert.deepEqual(entries.map((entry) => [entry.family, entry.skin, entry.reviewedAt.commit]),
-      [['chart-line', CHART_LINE_SKIN, '2e5419620'], ['chart-pie', CHART_PIE_SKIN, '2e5419620']]);
-    for (const entry of entries) {
-      assert.deepEqual(radiiOf(join(ROOT, entry.skin)), entry.declarations, entry.family);
-      const declared = familyAxisDeclarations().get(entry.family);
-      assert.ok(!declared.axes.shape, `${entry.family} leaves shape`);
-      assert.equal(declared.notApplicable.shape.review, CHART_REVIEW);
-    }
+      [['chart-line', CHART_LINE_SKIN, 'be58473b9'], ['chart-pie', CHART_PIE_SKIN, '2e5419620']]);
+    const [line, pie] = entries;
+
+    assert.deepEqual(radiiOf(join(ROOT, pie.skin)), pie.declarations);
+    const declaredPie = familyAxisDeclarations().get('chart-pie');
+    assert.ok(!declaredPie.axes.shape, 'chart-pie leaves shape');
+    assert.equal(declaredPie.notApplicable.shape.review, CHART_REVIEW);
+
+    // Mover: CL104 re-review 2026-10-01 (Fable). The skeleton-bar radius left the entry (chart-foundation :1446
+    // out-specifies it; it paints nothing) but the skin still authors it, so chart-line stays in shape on it.
+    assert.deepEqual(line.declarations, [{
+      context: [], selector: ".ds-chart-line [data-part='legend-swatch']", property: 'border-radius', value: 'var(--_ds-line-marker-radius, 999px)',
+    }]);
+    assert.deepEqual(radiiOf(join(ROOT, line.skin)), [...line.declarations, {
+      context: [], selector: ".ds-chart-line [data-part='skeleton-bar']", property: 'border-radius', value: '999px 999px 0 0',
+    }]);
+    const declaredLine = familyAxisDeclarations().get('chart-line');
+    assert.ok(declaredLine.axes.shape, 'chart-line stays in shape on the shadowed declaration');
+    assert.equal(declaredLine.axes.shape.exclusionEffective, false);
+    assert.deepEqual(declaredLine.axes.shape.excludedDeclarations,
+      line.declarations.map((declaration) => ({ file: CHART_LINE_SKIN, ...declaration, review: CHART_LINE_REVIEW })));
+    assert.deepEqual(declaredLine.notApplicable, {});
+
     assert.ok(!readExclusions().entries.some((entry) => entry.family === 'chart-waterfall'), 'chart-waterfall is not excluded (Fable REJECT)');
     assert.ok(familyAxisDeclarations().get('chart-waterfall').axes.shape, 'chart-waterfall stays in shape and must move');
-    assert.deepEqual(populationReport().exclusions.ineffective, []);
+    assert.deepEqual(populationReport().exclusions.ineffective, CHART_LINE_INEFFECTIVE);
   });
 
   it('derives the private channels from the reviewed values, and none of them is produced anywhere in src on this tree', () => {
@@ -688,9 +684,12 @@ describe('theme population — the reviewed chart-marks exclusions on shape and 
   it('MUTANT (C1-a): a producer planted in the family\'s OWN skin leaves the entry matching, and the guard fails it by site on every gate', () => {
     const dir = sandbox();
     // A literal producer reads no head channel, so nothing else in the population notices it: the entry still
-    // matches verbatim and, without the guard, the family would stay N/A while its marker repaints.
+    // matches verbatim and, without the guard, the legend declaration would stay excluded while its marker repaints.
     append(dir, CHART_LINE_SKIN, '.ds-chart-line { --_ds-line-marker-radius: 2px; }');
-    assert.ok(familyAxisDeclarations(dir, catalogIn(dir)).get('chart-line').notApplicable.shape);
+    // Mover: CL104 -- the legend declaration still matches (excluded) while chart-line stays in shape on its skeleton radius.
+    const planted = familyAxisDeclarations(dir, catalogIn(dir)).get('chart-line');
+    assert.equal(planted.axes.shape.exclusionEffective, false);
+    assert.deepEqual(planted.axes.shape.excludedDeclarations.map((declaration) => declaration.selector), [".ds-chart-line [data-part='legend-swatch']"]);
     const failures = produced(checkExclusionRegistry(dir, EXCLUSIONS).failures);
     assert.equal(failures.length, 1, failures.join(' | '));
     assert.match(failures[0], /^entry 1 \(chart-line\/shape\): PRODUCED — --_ds-line-marker-radius, read by a reviewed declaration of .*chart-line\/index\.css, is produced at .*chart-line\/index\.css:\d+ `/u);
@@ -851,41 +850,45 @@ describe('theme population — per-rule state evidence and the unobservable coun
     assert.equal(record.axes.states, undefined, JSON.stringify(record.axes.states));
   });
 
-  it('(A2) a needle in a rule selector under an at-rule declares, and the evidence cites the rule: file, context, selector, needles', () => {
+  it('(A2) a kernel gate in a rule selector under an at-rule declares, and the evidence cites the rule: file, context, selector, gates', () => {
     const dir = sandbox();
     const record = plant(dir, 'drill-state-media', '@media (hover: hover) { .ds-drill-state-media:hover { opacity: 0.8; } }\n');
-    assert.deepEqual(record.axes.states.stateSelectors, [':hover']);
+    assert.deepEqual(record.axes.states.stateGates, [':hover']);
     assert.deepEqual(record.axes.states.stateRules, [{
       file: `${SKIN_ROOT}/drill-state-media/index.css`,
       context: ['@media (hover: hover)'],
       selector: '.ds-drill-state-media:hover',
-      needles: [':hover'],
+      gates: [':hover'],
     }]);
   });
 
-  it('(A2) every family that declares states by selector on this tree cites at least one rule, and every cited rule carries its needle', () => {
+  it('(A2) every family that declares states by K1 on this tree cites at least one rule, and every cited rule carries its gate', () => {
     let cited = 0;
     for (const [family, record] of familyAxisDeclarations(ROOT)) {
       const states = record.axes.states;
-      if (states === undefined || states.stateSelectors.length === 0) continue;
+      if (states === undefined || states.stateGates.length === 0) continue;
       assert.ok(states.stateRules.length > 0, family);
       for (const rule of states.stateRules) {
-        assert.ok(Array.isArray(rule.context) && rule.needles.length > 0, `${family}: ${rule.selector}`);
-        for (const needle of rule.needles.filter((entry) => entry !== '[data-<ns>-state=')) assert.ok(rule.selector.includes(needle), `${family}: ${rule.selector}`);
+        assert.ok(Array.isArray(rule.context) && rule.gates.length > 0, `${family}: ${rule.selector}`);
+        for (const gate of rule.gates) assert.ok(rule.selector.includes(gate.replace(/\]$/u, '')), `${family}: ${rule.selector}`);
       }
       cited += 1;
     }
     assert.ok(cited > 100, `only ${cited} families cite a state rule`);
   });
 
-  it('PIN (A4): 8 declaring states families are unobservable on this tree -- 6 colour-only + 2 no-vocabulary -- reported beside the denominator and not subtracted', () => {
+  it('PIN (A4): 9 declaring states families are unobservable on this tree -- 6 colour-only + 3 no-vocabulary -- reported beside the denominator and not subtracted', () => {
+    // Movers of the pin (8 -> 9, STATES-K 2026-10-01): record-facts and
+    // scope-switcher leave with the population; edit-fields, table-toolbar
+    // (colour-only) and form-builder (cursor) enter with it.
     const report = populationReport();
     const states = report.axes.find((entry) => entry.axis === 'states');
-    assert.equal(states.denominator, 156);
-    assert.equal(states.unobservableCount, 8);
+    assert.equal(states.denominator, 155);
+    assert.equal(states.unobservableCount, 9);
     assert.deepEqual(states.unobservable.map((entry) => `${entry.family}:${entry.class}`), [
-      'button-group:no-vocabulary', 'list:colour-only', 'metrics-chart:colour-only', 'metrics-rows:no-vocabulary',
-      'operational-ledger:colour-only', 'overlay-modal-compounds:colour-only', 'record-facts:colour-only', 'scope-switcher:colour-only',
+      'button-group:no-vocabulary', 'edit-fields:colour-only', 'form-builder:no-vocabulary', 'list:colour-only',
+      'metrics-chart:colour-only', 'metrics-rows:no-vocabulary', 'operational-ledger:colour-only',
+      'overlay-modal-compounds:colour-only', 'table-toolbar:colour-only',
     ]);
     for (const entry of states.unobservable) assert.ok(states.families.includes(entry.family), entry.family);
     for (const entry of report.axes.filter((axis) => axis.axis !== 'states')) assert.equal(entry.unobservableCount, 0, entry.axis);
@@ -904,16 +907,232 @@ describe('theme population — per-rule state evidence and the unobservable coun
     assert.deepEqual(after.find((entry) => entry.family === 'drill-colour-state'),
       { family: 'drill-colour-state', class: 'colour-only', properties: ['background-color'] });
     const states = populationReport(dir, catalogIn(dir)).axes.find((entry) => entry.axis === 'states');
-    assert.equal(states.denominator, 157, 'unobservable is reported, never subtracted');
+    assert.equal(states.denominator, 156, 'unobservable is reported, never subtracted');
   });
 
-  it('a state declaration is one in a state-selected rule or one that reads a state-suffixed channel; an at-rule prelude is neither', () => {
+  it('a state declaration is one in a K1 rule; a state-suffixed channel name, a domain value and an at-rule prelude are not', () => {
     const [hovered] = cssRules('.a:hover { color: red; }');
-    assert.equal(isStateDeclaration(hovered, hovered.declarations[0]), true);
+    assert.equal(isStateDeclaration(hovered), true);
     const [channel] = cssRules('.a { --x: var(--ds-a-hover, red); }');
-    assert.equal(isStateDeclaration(channel, channel.declarations[0]), true);
-    const [rest] = cssRules('.a { color: var(--ds-a-hover-ring); }');
-    assert.equal(isStateDeclaration(rest, rest.declarations[0]), false);
+    assert.equal(isStateDeclaration(channel), false);
+    const [domain] = cssRules(".a[data-state='empty'] { color: red; }");
+    assert.equal(isStateDeclaration(domain), false);
+    const [twin] = cssRules('.a, .a:focus-within { color: red; }');
+    assert.equal(isStateDeclaration(twin), false);
+  });
+});
+
+/**
+ * STATES-K, the states population law (owner directive 2026-10-01; Fable
+ * review 2026-10-01, ACCEPT-WITH-CHANGES). Twelve drills, each red against the
+ * pre-amendment rule (the needle list `:hover`, `:active`, `:focus-visible`,
+ * `[data-state=`, the namespaced door and the channel-suffix door).
+ */
+describe('theme population — STATES-K: a family declares states iff kernel-gated paint (K1) or a states head channel (K2)', () => {
+  // The states mover set of indicator 15 (fleet run d7b25dfd7, 2026-10-01T08:42Z): the families whose
+  // computed style moved on the states positive cell, identical in all six cells (bithire/evnto/rottay x
+  // light/dark), re-derived by Fable (ST-A review 2026-10-01). Every one must be a member after STATES-K.
+  const MOVERS = Object.freeze([
+    'activity-cards', 'activity-compact', 'activity-log', 'activity-ticker', 'activity-timeline', 'alert', 'anchor',
+    'app-shell', 'approval-inbox', 'approval-workflow', 'ascii-diagram', 'auto-complete', 'avatar', 'back-top', 'badge',
+    'bottom-tab-bar', 'breadcrumb', 'breadcrumb-compounds', 'button', 'calendar', 'carousel', 'cascader', 'checkbox',
+    'code-block', 'collapse', 'collection-workspace', 'collection-workspace-render-dispatch', 'color-picker',
+    'column-menu', 'column-settings', 'command-palette', 'context-menu', 'dashboard-header', 'data-table-interactions',
+    'data-table-mobile', 'data-terminal-card', 'date-picker', 'detail-panel', 'drawer', 'drawer-compounds', 'dropdown',
+    'edit-header', 'file-manager', 'float-button', 'form', 'form-field', 'form-sections', 'gallery-view',
+    'header-hero-shared', 'hover-card', 'image', 'input-number', 'invoice-template', 'layout', 'link', 'list-toolbar',
+    'live-feed', 'locale-switcher', 'markdown-view', 'mentions', 'menu', 'menu-compounds', 'modal', 'modal-compounds',
+    'moderation-gallery', 'notifier', 'otp-input', 'page-shell', 'pagination', 'password-input',
+    'pattern-calendar-view', 'pattern-kanban-board', 'pattern-map-view', 'pattern-timeline', 'popover', 'pricing-table',
+    'qrcode', 'radio', 'radio-group', 'rate', 'record', 'saved-views', 'saved-views-menu', 'scheduler-surface',
+    'scroll-area', 'search', 'segmented', 'select', 'select-compounds', 'sheet', 'shift-matrix', 'slider', 'splitter',
+    'stats-grid', 'stats-header', 'status-filter-pills', 'stepper', 'table', 'tabs', 'tag', 'tag-input',
+    'tenant-preview', 'textarea', 'time-picker', 'toggle', 'tooltip', 'tour', 'transfer', 'tree', 'tree-select',
+    'tree-view-connector', 'typography', 'upload', 'user-profile-card', 'virtual-list', 'voice-input-button',
+    'workbench-header', 'workspace-switcher',
+  ]);
+  const LEAVERS = ['active-filters-bar', 'branding-preview-sandbox', 'detail', 'record-facts', 'scope-switcher'];
+  const ENTRANTS = ['edit-fields', 'form-builder', 'surface-states', 'table-toolbar'];
+  const gatesOf = (selector) => population.stateRuleGates(selector);
+  /** Plants one family per selector in one sandbox and returns family -> its states evidence (or undefined). */
+  const plantAll = (cases) => {
+    const dir = sandbox();
+    const names = cases.map((_, index) => `drill-k-${index}`);
+    cases.forEach(([css], index) => {
+      mkdirSync(join(dir, SKIN_ROOT, names[index]), { recursive: true });
+      writeFileSync(join(dir, SKIN_ROOT, names[index], 'index.css'), `${css}\n`);
+    });
+    const declarations = familyAxisDeclarations(dir, catalogIn(dir));
+    return cases.map(([css, expected], index) => ({ css, expected, states: declarations.get(names[index]).axes.states }));
+  };
+
+  it('D0: ONE kernel vocabulary, owned here: the five tokens serializeState writes, `selected` not among them', () => {
+    assert.deepEqual([...population.KERNEL_STATE_TOKENS], ['disabled', 'hovered', 'pressed', 'focused', 'focus-visible']);
+    const kernel = readFileSync(join(ROOT, 'src/foundation/behavior/kernel/anatomy/index.ts'), 'utf8');
+    const flags = /STATE_FLAG_ORDER[^=]*=\s*\[([^\]]*)\]/u.exec(kernel)[1].match(/'([A-Za-z]+)'/gu)
+      .map((flag) => flag.slice(1, -1).replace(/[A-Z]/gu, (letter) => `-${letter.toLowerCase()}`));
+    assert.deepEqual([...population.KERNEL_STATE_TOKENS], flags, 'read against the kernel, in its order');
+    assert.deepEqual(population.STATE_STAMP_ATTRIBUTES, { disabled: { 'data-disabled': 'true' } });
+    assert.deepEqual([...population.KERNEL_PSEUDO_CLASSES], [':hover', ':active', ':focus', ':focus-within', ':focus-visible']);
+    assert.equal(population.stampWrites('data-state', '~=', 'selected'), false);
+    assert.equal(population.stampWrites('data-state', '~=', 'focus-visible'), true);
+  });
+
+  it('D1: every native kernel pseudo-class declares, each cited by its gate', () => {
+    for (const { css, expected, states } of plantAll([
+      ['.x:hover { opacity: 0.5; }', [':hover']],
+      ['.x:active { opacity: 0.5; }', [':active']],
+      ['.x:focus { opacity: 0.5; }', [':focus']],
+      ['.x:focus-within { opacity: 0.5; }', [':focus-within']],
+      ['.x:focus-visible { opacity: 0.5; }', [':focus-visible']],
+    ])) {
+      assert.ok(states, `${css} must declare states`);
+      assert.deepEqual(states.stateGates, expected, css);
+    }
+  });
+
+  it('D1: the kernel attribute and the disabled-prop attribute declare, bare or on a written value', () => {
+    for (const { css, expected, states } of plantAll([
+      [".x[data-state~='hovered'] { opacity: 0.5; }", ['[data-state]']],
+      [".x[data-state='focused'] { opacity: 0.5; }", ['[data-state]']],
+      ['.x[data-state] { opacity: 0.5; }', ['[data-state]']],
+      ['.x[data-disabled] { opacity: 0.5; }', ['[data-disabled]']],
+      [".x[data-disabled='true'] { opacity: 0.5; }", ['[data-disabled]']],
+    ])) {
+      assert.ok(states, `${css} must declare states`);
+      assert.deepEqual(states.stateGates, expected, css);
+    }
+  });
+
+  it('D1: a gate on an ancestor compound or inside :has() declares', () => {
+    for (const { css, expected, states } of plantAll([
+      [":is([data-state~='pressed'], :active) .x { opacity: 0.5; }", [':active', '[data-state]']],
+      ['.x:has(+ .y:focus-within) { opacity: 0.5; }', [':focus-within']],
+    ])) {
+      assert.ok(states, `${css} must declare states`);
+      assert.deepEqual(states.stateGates, expected, css);
+    }
+  });
+
+  it('D2: a domain value, `selected`, a namespaced state, data-active, :disabled, :checked, aria-* and data-disabled=false declare nothing', () => {
+    for (const { css, states } of plantAll([
+      [".x[data-state='error'] { opacity: 0.5; }"],
+      [".x[data-state~='selected'] { opacity: 0.5; }"],
+      [".x[data-filter-state='draft'] { opacity: 0.5; }"],
+      [".x[data-active='true'] { opacity: 0.5; }"],
+      ['.x:disabled { opacity: 0.5; }'],
+      ['.x:checked { opacity: 0.5; }'],
+      [".x[aria-selected='true'] { opacity: 0.5; }"],
+      [".x[data-disabled='false'] { opacity: 0.5; }"],
+    ])) {
+      assert.equal(states, undefined, `${css} declared ${JSON.stringify(states)}`);
+    }
+  });
+
+  it('D2: a gate only inside :not(), an empty state rule, a gate in a comment or in a declaration value declare nothing', () => {
+    for (const { css, states } of plantAll([
+      ['.x:not(:hover) { opacity: 0.5; }'],
+      ['.x:hover { }\n.x { opacity: 1; }'],
+      ['/* .x:hover { opacity: 0.5; } */\n.x { opacity: 1; }'],
+      [".x::after { content: ':hover [data-state~=hovered]'; opacity: 1; }"],
+    ])) {
+      assert.equal(states, undefined, `${css} declared ${JSON.stringify(states)}`);
+    }
+  });
+
+  it('D3: the channel-suffix door is retired; a states head channel still declares through K2, cited', () => {
+    const [suffix, head] = plantAll([
+      ['.x { --y: var(--ds-x-hover); }'],
+      ['.x { outline-width: var(--ds-focus-ring-width); }'],
+    ]);
+    assert.equal(suffix.states, undefined, JSON.stringify(suffix.states));
+    assert.ok(head.states);
+    assert.deepEqual(head.states.headChannels, ['--ds-focus-ring-width']);
+    assert.deepEqual(head.states.stateRules, []);
+  });
+
+  it('D4: a branch whose gate-stripped twin is in the same rule declares nothing; a real gate survives a :not() beside it', () => {
+    const [twin, alone, negated] = plantAll([
+      ['.x, .x:focus-within { inline-size: 100%; }'],
+      ['.x:focus-within { inline-size: 100%; }', [':focus-within']],
+      [".x:not([data-state~='disabled']):hover { opacity: 0.5; }", [':hover']],
+    ]);
+    assert.equal(twin.states, undefined, JSON.stringify(twin.states));
+    assert.deepEqual(alone.states.stateGates, alone.expected);
+    assert.deepEqual(negated.states.stateGates, negated.expected);
+    assert.deepEqual(gatesOf('.x, .x:focus-within'), []);
+    assert.deepEqual(gatesOf(".x:not([data-state~='disabled']):hover"), [':hover']);
+  });
+
+  it('D5: the namespaced door of e8c78c576 is reversed; the shared attribute declares only on a kernel token', () => {
+    const [namespaced, selected, hovered] = plantAll([
+      [".ds-drill-domain-state[data-filter-state='active'] { opacity: 0.9; }"],
+      [".ds-drill-shared-state[data-state='selected'] { opacity: 0.5; }"],
+      [".ds-drill-shared-state[data-state~='hovered'] { opacity: 0.5; }", ['[data-state]']],
+    ]);
+    assert.equal(namespaced.states, undefined, 'a domain state on its own attribute is not interaction state');
+    assert.equal(selected.states, undefined, 'the kernel writes no `selected`');
+    assert.deepEqual(hovered.states.stateGates, hovered.expected);
+  });
+
+  it('D6: on this tree the states population is 155 -- five leavers, four entrants, every indicator-15 mover a member, the other axes unmoved', () => {
+    const report = populationReport();
+    const byAxis = Object.fromEntries(report.axes.map((entry) => [entry.axis, entry]));
+    const states = byAxis.states.families;
+    assert.equal(report.skinFamilies, 277);
+    assert.equal(byAxis.states.denominator, 155);
+    for (const family of LEAVERS) assert.ok(!states.includes(family), `${family} must leave states`);
+    for (const family of ENTRANTS) assert.ok(states.includes(family), `${family} must enter states`);
+    assert.equal(MOVERS.length, 118);
+    assert.deepEqual(MOVERS.filter((family) => !states.includes(family)), [], 'a mover may never leave the population');
+    assert.deepEqual(Object.fromEntries(['shape', 'typography', 'rhythm', 'depth', 'motion'].map((axis) => [axis, byAxis[axis].denominator])),
+      { shape: 215, typography: 182, rhythm: 224, depth: 199, motion: 204 });
+    assert.deepEqual(Object.fromEntries(report.axes.map((entry) => [entry.axis, entry.notApplicableCount])),
+      { shape: 3, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
+    // The two ruled-out alternatives, measured: the twin clause keeps out
+    // exactly filter-panel (a reviewed delegation, its selector paint-free),
+    // and counting a gate inside :not() would admit nobody.
+    const keptOutBy = { twin: new Set(), negation: new Set() };
+    for (const [family, record] of familyAxisDeclarations()) {
+      if (record.axes.states) continue;
+      for (const file of record.files) {
+        for (const rule of cssRules(readFileSync(join(ROOT, file), 'utf8'))) {
+          if (rule.declarations.length === 0 || rule.selector.startsWith('@')) continue;
+          for (const branch of population.stateBranches(rule.selector)) {
+            if (branch.gates.length > 0 && branch.redundant) keptOutBy.twin.add(family);
+            if (branch.gates.length === 0 && branch.negatedGates.length > 0) keptOutBy.negation.add(family);
+          }
+        }
+      }
+    }
+    assert.deepEqual([...keptOutBy.twin], ['filter-panel']);
+    assert.deepEqual([...keptOutBy.negation], []);
+  });
+
+  it('D7: the floor holds at 155; the pre-amendment pin (156) is refused BELOW, a pin at 154 ABOVE', () => {
+    assert.deepEqual(checkPopulationFloor().failures, []);
+    const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
+    assert.equal(floor.axes.states, 155);
+    const dir = mkdtempSync(join(tmpdir(), 'evi02-states-k-'));
+    sandboxes.push(dir);
+    const at = (states) => {
+      const path = join(dir, `floor-${states}.json`);
+      writeFileSync(path, JSON.stringify({ ...floor, axes: { ...floor.axes, states } }));
+      return checkPopulationFloor(ROOT, undefined, path).failures;
+    };
+    assert.ok(at(156).some((line) => line.startsWith('states: denominator 155 is BELOW its floor 156')), at(156).join(' | '));
+    assert.ok(at(154).some((line) => line.startsWith('states: denominator 155 is ABOVE its pin 154')), at(154).join(' | '));
+  });
+
+  it('D8: 9 declaring states families are unobservable -- surface-states is not one (opacity is read) -- and none is subtracted', () => {
+    const states = populationReport().axes.find((entry) => entry.axis === 'states');
+    assert.deepEqual(states.unobservable.map((entry) => `${entry.family}:${entry.class}`), [
+      'button-group:no-vocabulary', 'edit-fields:colour-only', 'form-builder:no-vocabulary', 'list:colour-only',
+      'metrics-chart:colour-only', 'metrics-rows:no-vocabulary', 'operational-ledger:colour-only',
+      'overlay-modal-compounds:colour-only', 'table-toolbar:colour-only',
+    ]);
+    assert.ok(!states.unobservable.some((entry) => entry.family === 'surface-states'));
+    for (const entry of states.unobservable) assert.ok(states.families.includes(entry.family), entry.family);
   });
 });
 

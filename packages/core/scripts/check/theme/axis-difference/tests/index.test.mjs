@@ -129,7 +129,10 @@ import {
   UNOBSERVABLE_FAMILIES,
   unobservableDrift,
 } from '../index.mjs';
-import { AXIS_IDS, AXES, axisControls, axisPopulations, axisUnobservable, cssRules, groupControls, skinFamilies } from '../../population/index.mjs';
+import {
+  AXIS_IDS, AXES, axisControls, axisPopulations, axisUnobservable, cssRules, groupControls, skinFamilies,
+  KERNEL_STATE_TOKENS as POPULATION_KERNEL_STATE_TOKENS, STATE_STAMP_ATTRIBUTES as POPULATION_STAMP_ATTRIBUTES,
+} from '../../population/index.mjs';
 import { launchBrowser, resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 import { REPRODUCTION_FLAGS } from '../indicator/index.mjs';
@@ -1127,7 +1130,8 @@ describe('axis-difference — a family can be measured on its own anatomy', () =
   });
 
   it('the states axis reads the non-chromatic longhands a state paints, under every stamped state', () => {
-    assert.deepEqual([...STATE_VARIANTS], ['hovered', 'pressed', 'selected', 'focus-visible', 'disabled', 'focused']);
+    // `selected` left the stamp with STATES-K (2026-10-01): no kernel writes it.
+    assert.deepEqual([...STATE_VARIANTS], ['hovered', 'pressed', 'focus-visible', 'disabled', 'focused']);
     for (const property of ['transform', 'opacity', 'outline-width', 'outline-offset']) {
       assert.ok(AXES.states.computed.includes(property), property);
     }
@@ -2723,8 +2727,9 @@ describe('axis-difference — the native half forces what a real pointer or keyb
   it('classifies each state rule by the half that could enter it, and why neither can', () => {
     const probes = stateRuleProbes([
       ".r:hover [data-part='x'] { transform: scale(0.9); }",
-      ".r[data-state~='selected'] { opacity: 0.8; }",
-      ".r[data-state~='selected']:hover { opacity: 0.7; }",
+      ".r[data-state~='pressed'] { opacity: 0.8; }",
+      ".r[data-state~='pressed']:hover { opacity: 0.7; }",
+      ".r[data-state~='selected'] { opacity: 0.6; }",
       ".r:hover::after { opacity: 0.5; }",
       '.r:hover { color: red; }',
       '.r:hover { --ds-x: 1; }',
@@ -2737,9 +2742,11 @@ describe('axis-difference — the native half forces what a real pointer or keyb
       { vocabulary: by(".r:hover [data-part='x']").vocabulary, probe: by(".r:hover [data-part='x']").probe, owners: by(".r:hover [data-part='x']").owners },
       { vocabulary: 'native', probe: ".r [data-part='x']", owners: ['states'] },
     );
-    assert.deepEqual({ vocabulary: by(".r[data-state~='selected']").vocabulary, probe: by(".r[data-state~='selected']").probe },
+    assert.deepEqual({ vocabulary: by(".r[data-state~='pressed']").vocabulary, probe: by(".r[data-state~='pressed']").probe },
       { vocabulary: 'stamped', probe: '.r' });
-    assert.equal(by(".r[data-state~='selected']:hover").reason, 'needs-pseudo-and-stamp');
+    assert.equal(by(".r[data-state~='pressed']:hover").reason, 'needs-pseudo-and-stamp');
+    // STATES-K: no kernel writes `selected`, so a rule gated on it is domain data to the stamp.
+    assert.equal(by(".r[data-state~='selected']").reason, 'domain-state-value');
     // RESTATED: under the pseudo-element read law a `:hover::after` is asked
     // through its HOST, the forced pseudo stripped, and the page decides
     // whether the box is generated; with the law off it is the old refusal.
@@ -2811,6 +2818,10 @@ describe('axis-difference — the native half forces what a real pointer or keyb
     const flags = /STATE_FLAG_ORDER[^=]*=\s*\[([^\]]*)\]/u.exec(kernel)[1].match(/'([A-Za-z]+)'/gu)
       .map((flag) => flag.slice(1, -1).replace(/[A-Z]/gu, (letter) => `-${letter.toLowerCase()}`));
     assert.deepEqual([...KERNEL_STATE_TOKENS].sort(), flags.sort(), 'the kernel tokens are read from the kernel, not remembered');
+    // ONE vocabulary (STATES-K): the instrument imports the population's, and stamps exactly it.
+    assert.equal(KERNEL_STATE_TOKENS, POPULATION_KERNEL_STATE_TOKENS);
+    assert.equal(STATE_STAMP_ATTRIBUTES, POPULATION_STAMP_ATTRIBUTES);
+    assert.deepEqual([...STATE_VARIANTS].sort(), [...KERNEL_STATE_TOKENS].sort());
     // A domain token beside a stamped one stays in the probe: a real mount that
     // carries it at rest is reached, a synthesized node that does not is not.
     assert.deepEqual(
@@ -3512,7 +3523,7 @@ describe('axis-difference BROWSER drill — S1: the states mounts inside a run',
 
   it('`statesFocused: false` reproduces the five-state set', async () => {
     const measurement = await run({ verticals: ['bithire'], themes: ['light'], families: ['record'], scenarios: [byId('states')], statesFocused: false, nativePseudos: false });
-    assert.deepEqual(measurement.limits.states.stampedStates, ['hovered', 'pressed', 'selected', 'focus-visible', 'disabled']);
+    assert.deepEqual(measurement.limits.states.stampedStates, ['hovered', 'pressed', 'focus-visible', 'disabled']);
   }, 120_000);
 });
 
@@ -3640,14 +3651,17 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     assert.ok(failures.some((line) => line.includes('witness moved 13 and published 13 id(s) / 12 famil(ies)')), failures.join(' | '));
   });
 
-  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 8 on states, 0 elsewhere', () => {
+  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 9 on states, 0 elsewhere', () => {
     const live = axisUnobservable(ROOT);
     const asRun = Object.fromEntries(AXIS_IDS.map((axis) => [axis, live.get(axis)]));
     assert.deepEqual(unobservableDrift(asRun), []);
-    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 8);
+    // Movers of the pin (8 -> 9, STATES-K 2026-10-01): record-facts and scope-switcher
+    // leave with the population; edit-fields, table-toolbar and form-builder enter with it.
+    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 9);
     assert.deepEqual(Object.values(UNOBSERVABLE_FAMILIES.states).filter((kind) => kind === 'colour-only').length, 6);
     assert.deepEqual(Object.entries(UNOBSERVABLE_FAMILIES.states).filter(([, kind]) => kind === 'no-vocabulary').map(([family]) => family),
-      ['button-group', 'metrics-rows']);
+      ['button-group', 'form-builder', 'metrics-rows']);
+    assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'surface-states'), false, 'its disabled opacity is read');
     for (const axis of AXIS_IDS.filter((id) => id !== 'states')) assert.deepEqual(UNOBSERVABLE_FAMILIES[axis], {}, axis);
     // Reported, never subtracted: every unobservable family is in the declared states population.
     const states = axisPopulations(ROOT).get('states');

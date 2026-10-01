@@ -25,6 +25,15 @@
  * names verbatim -- the same properties the probe then reads back off the
  * browser. One vocabulary, declared in one place, used by both halves.
  *
+ * Every axis also declares through K2, the shared head-channel door: a skin
+ * that reads a head channel of a catalog row of the axis has taken a position
+ * on it. States is the one axis that declares by a SELECTOR as well (K1,
+ * kernel-gated paint, the STATES-K law on `AXES.states`): a rule that applies
+ * only under an interaction state the anatomy kernel writes. Nothing else
+ * declares states -- not a domain value on `data-state`, not a namespaced
+ * state attribute, not a channel name -- and membership never depends on what
+ * the paint is or on whether the probe reaches it.
+ *
  * SCOPE: MODERN ONLY (owner decision 2026-09-05). Classic and Rustic are
  * frozen; counting their paint would put frozen debt in a denominator that
  * exists to be certified against.
@@ -72,6 +81,53 @@ const DEFAULT_ROOT = findPackageRoot(HERE);
  * computed as four corners, `padding` as four sides. A gate that read one list
  * for both halves would either miss declarations or miss differences.
  */
+/**
+ * Every token the anatomy kernel serializes into `data-state`
+ * (`foundation/behavior/kernel/anatomy`, `STATE_FLAG_ORDER` through
+ * `serializeState`), in its order. The ONE kernel vocabulary of the states
+ * axis: STATES-K's attribute gate is satisfied by these tokens alone, and the
+ * probe imports them. `selected` is not among them -- no kernel writes it.
+ */
+export const KERNEL_STATE_TOKENS = Object.freeze(['disabled', 'hovered', 'pressed', 'focused', 'focus-visible']);
+
+/**
+ * What a component that receives the `disabled` PROP writes beside the kernel's
+ * `data-state~='disabled'`: `partAttributes` writes the token, the
+ * component's own root props write `data-disabled='true'` on the same node
+ * (the modern Button is the reference). Both are the state, and the probe
+ * stamps both; see `check/theme/axis-difference` for the measured census.
+ */
+export const STATE_STAMP_ATTRIBUTES = Object.freeze({
+  disabled: Object.freeze({ 'data-disabled': 'true' }),
+});
+
+/** The native pseudo-classes the platform writes from the same interactions the kernel serializes. */
+export const KERNEL_PSEUDO_CLASSES = Object.freeze([':hover', ':active', ':focus', ':focus-within', ':focus-visible']);
+
+/** One `[data-state ...]`/`[data-disabled ...]` attribute selector: name, operator, value (in one of three quotings). */
+export const STAMP_TOKEN = /\[(data-state|data-disabled)(?:\s*([~*^$|]?=)\s*(?:'([^']*)'|"([^"]*)"|([^\]\s]*)))?\s*\]/gu;
+
+/**
+ * Whether a written state satisfies one attribute selector. `data-state` is
+ * written from `stamped` (the kernel's tokens unless a caller narrows them),
+ * `data-disabled` from `STATE_STAMP_ATTRIBUTES`; a bare attribute is satisfied
+ * by any written value. A rule gated on `[data-state='error']`, `'empty'`,
+ * `'selected'` is gated on a value no kernel writes.
+ */
+export function stampWrites(name, operator, value, stamped = KERNEL_STATE_TOKENS) {
+  if (operator === undefined) return true;
+  const written = name === 'data-state'
+    ? stamped
+    : Object.values(STATE_STAMP_ATTRIBUTES).flatMap((attributes) => (Object.hasOwn(attributes, name) ? [attributes[name]] : []));
+  return written.some((candidate) => {
+    if (operator === '=' || operator === '~=') return candidate === value;
+    if (operator === '*=') return candidate.includes(value);
+    if (operator === '^=') return candidate.startsWith(value);
+    if (operator === '$=') return candidate.endsWith(value);
+    return candidate === value || candidate.startsWith(`${value}-`);
+  });
+}
+
 export const AXES = Object.freeze({
   shape: {
     group: 'shape',
@@ -115,23 +171,58 @@ export const AXES = Object.freeze({
      */
     computed: ['transform', 'opacity', 'outline-style', 'outline-width', 'outline-offset'],
     /**
-     * States is the one axis whose declaration is not a property name. A
-     * family declares it consumes states by having a rule that only applies in
-     * a state -- `:hover`, `:active`, `[data-state='selected']` -- or by
-     * reading a `*-hover`/`*-active`/`*-selected` channel. The probe reads the
-     * same element twice, once in the state, which is why the declaration has
-     * to be about the SELECTOR rather than about a longhand.
+     * States is the one axis whose declaration is not a property name: the
+     * probe reads the same element twice, once in the state, so the
+     * declaration is about the SELECTOR rather than about a longhand. Which
+     * selectors count is a law, not a needle list:
      *
-     * A family whose state is DOMAIN data, not kernel interaction state,
-     * carries it on its own namespaced attribute (`[data-filter-state=...]`,
-     * e8c78c576) instead of the shared `data-state`. The namespaced matcher
-     * requires a non-empty namespace, so the shared attribute keeps its own
-     * literal needle above and can never be re-admitted through the namespace
-     * door.
+     * STATES-K -- the states population law (owner directive 2026-10-01;
+     * Fable review 2026-10-01).
+     * A Modern skin family declares the states axis if and only if K1 or K2
+     * holds.
+     * K1, kernel-gated paint. Some rule of the family's own skin, carrying at
+     * least one declaration and not an at-rule prelude, has a selector branch
+     * that, after every `:not(...)` argument is removed, carries a kernel
+     * gate, and whose gate-stripped form is not itself another branch of the
+     * same rule. The kernel gates are a closed list: the native pseudo-classes
+     * `:hover`, `:active`, `:focus`, `:focus-within`, `:focus-visible`; the
+     * kernel attribute `[data-state]` bare, or `[data-state OP value]` where
+     * the operator and value are satisfied by a token the anatomy kernel
+     * serializes (`STATE_FLAG_ORDER`: `disabled`, `hovered`, `pressed`,
+     * `focused`, `focus-visible`); and the disabled-prop attribute
+     * `[data-disabled]` bare or `[data-disabled='true']`.
+     * K2, head channel. The family reads a head channel of a catalog states
+     * row. This door is shared by all six axes and a head-channel read is
+     * never withdrawn.
+     * Nothing else declares states: not a `data-state` value the kernel does
+     * not write, not a namespaced `data-<ns>-state`, not `data-active`,
+     * `aria-*`, `:disabled` or `:checked`, not a `var()` read by name suffix,
+     * not a kernel gate that appears only inside `:not(...)`, not a branch
+     * whose gate-stripped twin is in the same rule.
+     * Membership never depends on what the paint is or on whether the probe
+     * reaches it. Colour-only, z-index-only and outside-vocabulary state paint
+     * keeps a family in the denominator and is published by class in the
+     * unobservable report. A probe mount gap, an unproduced channel or dead
+     * paint is a product or instrument finding, never a subtraction.
+     *
+     * The twin clause is a SYNTACTIC test, not a cascade proof: `X,
+     * X:focus-within { P }` paints the same at rest and in the state, so the
+     * rule takes no position on the state. The redundant branch has the higher
+     * specificity and could in principle win a fight a plain `X` loses; the
+     * clause is about what the family authors. `:is(Y, Y:hover)` inside one
+     * branch is not expanded, so it counts as declaring (the conservative
+     * direction).
+     *
+     * Consequence, stated plainly: SELECTION is not a states-axis state.
+     * `data-active`, `aria-selected`, `aria-current` and `data-state='selected'`
+     * declare nothing because the kernel writes none of them; putting
+     * selection in the axis is a kernel change (a new `InteractionState` flag
+     * serialized by `serializeState`), not a population change.
+     *
+     * The vocabulary is `KERNEL_PSEUDO_CLASSES`, `KERNEL_STATE_TOKENS` and
+     * `STATE_STAMP_ATTRIBUTES` below; `check/theme/axis-difference` imports
+     * them, so the population and the probe's stamp can never name two sets.
      */
-    stateSelectors: [':hover', ':active', ':focus-visible', '[data-state='],
-    stateNamespacedSelector: /\[data-[a-z0-9-]+-state=/,
-    stateChannelSuffixes: ['-hover', '-active', '-selected', '-pressed'],
   },
   motion: {
     group: 'motion',
@@ -141,6 +232,24 @@ export const AXES = Object.freeze({
 });
 
 export const AXIS_IDS = Object.freeze(Object.keys(AXES));
+
+/**
+ * The membership law an axis is read under when it is more than "authors a
+ * longhand or reads a head channel", with the ruling that set it. Published
+ * beside every reading of the axis, so a reading that moves because the
+ * DEFINITION moved is never read as the product moving.
+ */
+export const AXIS_POPULATION_LAWS = Object.freeze({
+  states: Object.freeze({
+    law: 'STATES-K',
+    ruled: '2026-10-01',
+    by: 'owner directive 2026-10-01; Fable review 2026-10-01 (ACCEPT-WITH-CHANGES)',
+    rule: 'K1 kernel-gated paint (:hover, :active, :focus, :focus-within, :focus-visible, [data-state] on a kernel token, '
+      + "[data-disabled] / [data-disabled='true']; :not() arguments stripped; the twin clause) or K2 a states head channel",
+    move: 'declared 156 -> 155 at d073e2693 (leave: active-filters-bar, branding-preview-sandbox, detail, record-facts, '
+      + 'scope-switcher; enter: edit-fields, form-builder, surface-states, table-toolbar); no mover leaves',
+  }),
+});
 
 /** The chromatic group the by-axis probe excludes, named so the exclusion is checkable. */
 export const EXCLUDED_GROUP = 'color';
@@ -470,31 +579,118 @@ export function privateChannelProducers(root, channels) {
   return producers;
 }
 
-/** The label the namespaced domain-state matcher publishes its hits under. */
-export const NAMESPACED_STATE_NEEDLE = '[data-<ns>-state=';
+/** The selector list of one rule, split on its TOP-LEVEL commas (brackets, parentheses and quotes respected). */
+export function selectorBranches(selector) {
+  const branches = [];
+  let depth = 0;
+  let quote = null;
+  let current = '';
+  for (const char of selector) {
+    if (quote !== null) {
+      if (char === quote) quote = null;
+    } else if (char === '"' || char === "'") {
+      quote = char;
+    } else if (char === '(' || char === '[') {
+      depth += 1;
+    } else if (char === ')' || char === ']') {
+      depth = Math.max(0, depth - 1);
+    } else if (char === ',' && depth === 0) {
+      branches.push(current);
+      current = '';
+      continue;
+    }
+    current += char;
+  }
+  branches.push(current);
+  return branches.map(normalizeCssText).filter(Boolean);
+}
+
+/** One branch with every `:not(...)` removed whole, nested arguments included. */
+export function withoutNegations(branch) {
+  let text = branch;
+  for (let at = text.indexOf(':not('); at >= 0; at = text.indexOf(':not(')) {
+    let depth = 0;
+    let end = at + 4;
+    for (; end < text.length; end += 1) {
+      if (text[end] === '(') depth += 1;
+      else if (text[end] === ')' && --depth === 0) break;
+    }
+    text = text.slice(0, at) + text.slice(end + 1);
+  }
+  return text;
+}
+
+const KERNEL_PSEUDO = /:(?:hover|active|focus-within|focus-visible|focus)(?![\w-])/gu;
+/** Attribute brackets and quoted strings blanked, so a pseudo-class is only ever read where it is a pseudo-class. */
+const blankAttributes = (text) => text.replace(/\[[^\]]*\]/gu, (match) => `[${' '.repeat(match.length - 2)}]`);
+const GATE_ORDER = [...KERNEL_PSEUDO_CLASSES, '[data-state]', '[data-disabled]'];
+
+/** The kernel gates one selector text carries, by label, in vocabulary order. */
+function gatesIn(text) {
+  const gates = new Set();
+  for (const match of blankAttributes(text).matchAll(KERNEL_PSEUDO)) gates.add(match[0]);
+  for (const [, name, operator, single, double, bare] of text.matchAll(STAMP_TOKEN)) {
+    if (stampWrites(name, operator, single ?? double ?? bare)) gates.add(`[${name}]`);
+  }
+  return GATE_ORDER.filter((gate) => gates.has(gate));
+}
+
+/** The branch with its negations and every kernel gate removed: what it selects at rest. */
+function gateStripped(branch) {
+  const bare = withoutNegations(branch);
+  const pseudos = [...blankAttributes(bare).matchAll(KERNEL_PSEUDO)].map((match) => match.index).reverse();
+  let text = bare;
+  for (const index of pseudos) text = text.slice(0, index) + text.slice(index).replace(KERNEL_PSEUDO_ONCE, '');
+  text = text.replace(STAMP_TOKEN, (token, name, operator, single, double, bare) =>
+    (stampWrites(name, operator, single ?? double ?? bare) ? '' : token));
+  return normalizeCssText(text);
+}
+const KERNEL_PSEUDO_ONCE = /^:(?:hover|active|focus-within|focus-visible|focus)(?![\w-])/u;
 
 /**
- * The rules through which a family declares states by SELECTOR, each cited as
+ * Every branch of one rule's selector, read by STATES-K: `gates` are the kernel
+ * gates outside every `:not(...)`, `negatedGates` the ones a branch carries
+ * only inside one, and `redundant` whether its gate-stripped form is textually
+ * another branch of the same rule (the twin clause).
+ */
+export function stateBranches(selector) {
+  const branches = selectorBranches(selector);
+  return branches.map((branch, index) => {
+    const gates = gatesIn(withoutNegations(branch));
+    const stripped = gates.length > 0 ? gateStripped(branch) : null;
+    return {
+      branch,
+      gates,
+      negatedGates: gates.length === 0 ? gatesIn(branch) : [],
+      redundant: stripped !== null && branches.some((other, at) => at !== index && other === stripped),
+    };
+  });
+}
+
+/** The kernel gates through which one selector declares states (K1); empty when it declares nothing. */
+export function stateRuleGates(selector) {
+  const gates = new Set(stateBranches(selector).filter((entry) => !entry.redundant).flatMap((entry) => entry.gates));
+  return GATE_ORDER.filter((gate) => gates.has(gate));
+}
+
+/**
+ * The rules through which a family declares states by K1, each cited as
  * `cssRules` reads it: file, at-rule context, normalized selector, and the
- * needles that selector carries.
+ * kernel gates that selector carries.
  *
  * Per RULE, not per file (Fable exclusion review, 2026-09-30, accepted item):
- * a needle that survives only in a declaration value, a string or an at-rule
+ * a gate that survives only in a declaration value, a string or an at-rule
  * prelude is not a rule that applies in a state, and a state rule with no
  * declaration paints nothing in that state. A rule under an at-rule still
  * declares -- the context is cited, never a reason to drop it.
  */
 export function stateRuleEvidence(rulesByFile) {
-  const spec = AXES.states;
   const evidence = [];
   for (const { file, rules } of rulesByFile) {
     for (const rule of rules) {
       if (rule.declarations.length === 0 || rule.selector.startsWith('@')) continue;
-      const needles = [
-        ...spec.stateSelectors.filter((needle) => rule.selector.includes(needle)),
-        ...(spec.stateNamespacedSelector.test(rule.selector) ? [NAMESPACED_STATE_NEEDLE] : []),
-      ];
-      if (needles.length > 0) evidence.push({ file, context: rule.atRules, selector: rule.selector, needles });
+      const gates = stateRuleGates(rule.selector);
+      if (gates.length > 0) evidence.push({ file, context: rule.atRules, selector: rule.selector, gates });
     }
   }
   return evidence;
@@ -547,25 +743,16 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
       }
       const byProperty = spec.authored.filter((name) => declaredNames.has(name));
       const byHeadChannel = [...channelsByAxis.get(axis)].filter((channel) => channels.has(channel));
+      // STATES-K: K1 is the kernel-gated rule, K2 the head channel above.
       const stateRules = axis === 'states' ? stateRuleEvidence(rulesByFile) : [];
-      const bySelector = axis === 'states'
-        ? [
-            ...spec.stateSelectors.filter((needle) => stateRules.some((rule) => rule.needles.includes(needle))),
-            ...(stateRules.some((rule) => rule.needles.includes(NAMESPACED_STATE_NEEDLE)) ? [NAMESPACED_STATE_NEEDLE] : []),
-          ]
-        : [];
-      const byStateChannel = axis === 'states'
-        ? [...channels].filter((channel) => spec.stateChannelSuffixes.some((suffix) => channel.endsWith(suffix)))
-        : [];
-      const declared = byProperty.length > 0 || byHeadChannel.length > 0
-        || bySelector.length > 0 || byStateChannel.length > 0;
+      const declared = byProperty.length > 0 || byHeadChannel.length > 0 || stateRules.length > 0;
       if (declared) {
         axes[axis] = {
           properties: byProperty,
           headChannels: byHeadChannel,
-          stateSelectors: bySelector,
-          ...(axis === 'states' ? { stateRules } : {}),
-          stateChannels: byStateChannel.slice(0, 8),
+          ...(axis === 'states'
+            ? { stateGates: GATE_ORDER.filter((gate) => stateRules.some((rule) => rule.gates.includes(gate))), stateRules }
+            : {}),
           ...(excluded.length > 0 ? { excludedDeclarations: excluded, exclusionEffective: false } : {}),
         };
       } else if (excluded.length > 0) {
@@ -592,15 +779,14 @@ const COLOUR_PROPERTY = /^(?:background|fill|stroke|(?:[a-z-]+-)?color)$/u;
 export const probeReads = (property) => PROBE_PROPERTIES.includes(property) || AUTHORED_PROPERTIES.has(property)
   || PROBE_PROPERTIES.some((longhand) => longhand.startsWith(`${property}-`));
 
-/** A declaration that paints in a state: it sits in a state-selected rule, or its value reads a state-suffixed channel. */
-export function isStateDeclaration(rule, declaration) {
-  const spec = AXES.states;
-  if (!rule.selector.startsWith('@')
-    && (spec.stateSelectors.some((needle) => rule.selector.includes(needle)) || spec.stateNamespacedSelector.test(rule.selector))) {
-    return true;
-  }
-  return [...declaration.value.matchAll(/var\(\s*(--[\w-]+)/gu)]
-    .some(([, channel]) => spec.stateChannelSuffixes.some((suffix) => channel.endsWith(suffix)));
+/**
+ * A declaration that paints in a state: it sits in a rule that declares states
+ * by K1. The same classifier as membership, twin clause included, so the
+ * unobservable report and the denominator share one definition; a channel's
+ * NAME makes no declaration a state declaration.
+ */
+export function isStateDeclaration(rule) {
+  return !rule.selector.startsWith('@') && stateRuleGates(rule.selector).length > 0;
 }
 
 function unobservableOf(declarations, root) {
@@ -614,9 +800,8 @@ function unobservableOf(declarations, root) {
       const properties = new Set();
       for (const file of skins.get(family) ?? []) {
         for (const rule of cssRules(readFileSync(file, 'utf8'))) {
-          for (const declaration of rule.declarations) {
-            if (isStateDeclaration(rule, declaration)) properties.add(declaration.property);
-          }
+          if (!isStateDeclaration(rule)) continue;
+          for (const declaration of rule.declarations) properties.add(declaration.property);
         }
       }
       if ([...properties].some(probeReads)) continue;

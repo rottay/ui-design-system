@@ -1,6 +1,6 @@
 {
   "purpose": "The CLOSED registry of semantic-identity exclusions of the population owner: a declaration listed here does not count as that family's authored position on that axis. An entry is bound to one family, one axis, one skin file and the exact rule it was reviewed with: its at-rule context (an empty list means a top-level rule), selector, property and value, whitespace-normalized, comments removed. It acts on the byProperty derivation only; a head-channel read is never excluded. A declaration that changes value, gains a channel, is repeated under the same selector, moves under an at-rule or moves to another part no longer matches and the family re-enters the axis by itself.",
-  "review": "WO-EVI-05 core review 2026-09-14 (Codex CHANGES + Fable CHANGES, conditions consolidated by the DT; owner direction 2026-09-14) | WO-EVI-02 X1 dossier + Fable review 2026-09-30 (chart-line/shape and chart-pie/shape admitted ACCEPT-WITH-CHANGES with the producer guard C1; chart-waterfall/shape REJECTED, the family stays in shape and must move) | WO-EVI-02 X3 dossier + Fable review 2026-10-01 (table-toolbar/shape admitted ACCEPT-WITH-CHANGES with the half-box pin G1; bottom-tab-bar/shape REFUSED: its focus ring reads --ds-radius-md, a head channel, and the law never excludes a head-channel read)",
+  "review": "WO-EVI-05 core review 2026-09-14 (Codex CHANGES + Fable CHANGES, conditions consolidated by the DT; owner direction 2026-09-14) | WO-EVI-02 X1 dossier + Fable review 2026-09-30 (chart-line/shape and chart-pie/shape admitted ACCEPT-WITH-CHANGES with the producer guard C1; chart-waterfall/shape REJECTED, the family stays in shape and must move) | WO-EVI-02 X3 dossier + Fable review 2026-10-01 (table-toolbar/shape admitted ACCEPT-WITH-CHANGES with the half-box pin G1; bottom-tab-bar/shape REFUSED: its focus ring reads --ds-radius-md, a head channel, and the law never excludes a head-channel read) | WO-EVI-02 CL104 re-review 2026-10-01 (Fable): chart-line/shape narrowed to the legend-swatch declaration; chart-line re-enters shape on a shadowed declaration (declared 215, N/A 3) and is published INEFFECTIVE until the charts cut rules",
   "admitted": [
     {
       "family": "radio",
@@ -62,25 +62,18 @@
           "selector": ".ds-chart-line [data-part='legend-swatch']",
           "property": "border-radius",
           "value": "var(--_ds-line-marker-radius, 999px)"
-        },
-        {
-          "context": [],
-          "selector": ".ds-chart-line [data-part='skeleton-bar']",
-          "property": "border-radius",
-          "value": "999px 999px 0 0"
         }
       ],
-      "reason": "semantic identity: the legend marker is a 3px stroke segment and its radius is the HTML rendition of a line-cap, a quantity of the chart grammar's marks posture (data-chart-marks), not a corner of a box; the skeleton's pill-topped bars are the same cap geometry stood on end and are bound to the marker. Neither value is a rung: both are the literal full end of the ramp, which the dial does not scale (--ds-radius-full is 9999px in every vertical, bithire 0.8 included), and on a 3px box every radius above 1.5px paints the same pill. No shape decision in the catalog may lawfully move either declaration. The plotted line is SVG (stroke-linecap), which kit rule 4 does not count as shape. --_ds-line-marker-radius has no producer at the reviewed commit; the fallback always paints.",
-      "review": "WO-EVI-02 chart-marks shape exclusion review 2026-09-30 (X1 dossier; Fable ACCEPT-WITH-CHANGES, conditions consolidated by the DT; Codex outside the loop by owner restriction 2026-09-19)",
-      "reviewedOn": "2026-09-30",
+      "reason": "semantic identity: the legend marker is a 3px stroke segment and its radius is the HTML rendition of a line-cap, a quantity of the chart grammar's marks posture (data-chart-marks), not a corner of a box. The value is not a rung: it is the literal full end of the ramp, which the dial does not scale (--ds-radius-full is 9999px in every vertical, bithire 0.8 included), and on a 3px box every radius above 1.5px paints the same pill. No shape decision in the catalog may lawfully move this declaration. The plotted line is SVG (stroke-linecap), which kit rule 4 does not count as shape. --_ds-line-marker-radius has no producer at the reviewed commit; the fallback always paints.",
+      "review": "WO-EVI-02 chart-marks shape exclusion review 2026-09-30 (X1 dossier; Fable ACCEPT-WITH-CHANGES, conditions consolidated by the DT; Codex outside the loop by owner restriction 2026-09-19) | CL104 re-review 2026-10-01 (Fable): the skeleton-bar declaration (`999px 999px 0 0`, skin :104) is withdrawn from the entry: chart-foundation :1446 out-specifies it (0,5,0 over 0,2,0) and it paints nothing at dial 0.8/1.0/1.2 (measured); a declaration that paints nothing has no semantic identity. chart-line stays in shape on it, the entry is INEFFECTIVE by name, until the charts cut resolves the shadowing (defect registered under WO-FAM-09)",
+      "reviewedOn": "2026-10-01",
       "reviewedAt": {
-        "commit": "2e5419620",
+        "commit": "be58473b9",
         "skinLines": [
-          17,
-          104
+          17
         ]
       },
-      "lawfulShapeOwner": "chart-foundation (presentation/components/skin/chart-foundation/index.css: tooltip, frame, state and data-access corners on the --ds-radius-sm/md/lg rungs, reads --ds-radius-md), a separate population family that stays shape-applicable. The legend cap not following rottay's technical-sharp marks is a marks-lane follow-up, not a shape-axis position."
+      "lawfulShapeOwner": "chart-foundation (presentation/components/skin/chart-foundation/index.css: tooltip, frame, state and data-access corners on the --ds-radius-sm/md/lg rungs, reads --ds-radius-md), a separate population family that stays shape-applicable. The legend cap not following rottay's technical-sharp marks is a marks-lane follow-up, not a shape-axis position. Today it also paints the chart-line skeleton corner (:1446, --ds-radius-sm) by out-specifying the family skin; that is the registered defect, not an ownership."
     },
     {
       "family": "chart-pie",

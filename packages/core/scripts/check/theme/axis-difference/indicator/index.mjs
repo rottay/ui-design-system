@@ -6,12 +6,22 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
-import { AXIS_IDS } from '../../population/index.mjs';
+import { AXIS_IDS, AXIS_POPULATION_LAWS } from '../../population/index.mjs';
 
 export const INDICATOR_ID = 'tenant-difference-by-axis';
 export const INDICATOR_PATH = `artifacts/quality/indicators/${INDICATOR_ID}/index.json`;
 export const INDICATOR_GATE = 'axis-difference (`capability-propagation` by axis, WO-EVI-02)';
 export const INDICATOR_THRESHOLD = 80;
+
+/**
+ * What the EFFECTIVE reading divides by, printed with it. It is a reported
+ * reading and never an axis status: the status reads the declared basis (kit
+ * rule 4), so a crossing on the effective reading alone -- for instance the one
+ * the STATES-K population law makes on states (118/147 = 80.3 % effective,
+ * 118/155 = 76.1 % declared) -- is definitional and moves no status.
+ */
+export const EFFECTIVE_DEFINITION = 'declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); '
+  + 'reported, never the status';
 export const FLEET_VERTICALS = Object.freeze(['bithire', 'evnto', 'rottay']);
 export const FLEET_THEMES = Object.freeze(['light', 'dark']);
 
@@ -86,6 +96,8 @@ export function axisReadings(result, { threshold = INDICATOR_THRESHOLD } = {}) {
       status,
       declared,
       effective: row?.effective ?? null,
+      effectiveDefinition: EFFECTIVE_DEFINITION,
+      populationLaw: AXIS_POPULATION_LAWS[axis] ?? null,
       excludedUnmountable: row?.excludedUnmountable ?? null,
       excludedUnsettled: row?.excludedUnsettled ?? null,
       notApplicable: result.notApplicable?.[axis] ?? 0,
@@ -184,7 +196,7 @@ export function headline(axes, negative, { threshold = INDICATOR_THRESHOLD } = {
         : `not measured on ${control.unmeasured.length}/${control.expected}`}`)
     .join(', ');
   return `${at.length}/${AXIS_IDS.length} axes at >= ${threshold} % of declaring families`
-    + ` (${at.length > 0 ? at.join(', ') : 'none'}; effective-denominator reading ${effective}/${AXIS_IDS.length})`
+    + ` (${at.length > 0 ? at.join(', ') : 'none'}; effective-denominator reading ${effective}/${AXIS_IDS.length}, never the status)`
     + (unmeasured.length > 0 ? `; NOT MEASURED: ${unmeasured.join(', ')}` : '')
     + `; negative test ${negative.status.toUpperCase()} — ${controls}`;
 }
@@ -228,7 +240,8 @@ export function buildIndicator(result, {
     themes: result.themes,
     threshold,
     basis: 'declared population of check/theme/population; unmountable and unsettled families count as non-movers; '
-      + 'unobservable families are reported per axis beside the denominator and never subtracted from it',
+      + 'unobservable families are reported per axis beside the denominator and never subtracted from it; '
+      + `the effective reading is ${EFFECTIVE_DEFINITION}`,
     axes,
     negativeTest: negative,
     // The real-render rows measured and refused on states, with the reach this
