@@ -2949,16 +2949,19 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'anchor',
       'avatar',
       'breadcrumb-compounds',
+      'chart-c',
       'column-menu',
       'column-settings',
       'command-palette',
       'date-picker',
+      'detail',
       'drawer-compounds',
       'dropdown',
       'edit-fields',
       'export-button',
       'feature-workspace-frame',
       'filter-panel',
+      'flex',
       'float-button',
       'form',
       'guided-draft-form',
@@ -2967,6 +2970,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'modal-compounds',
       'pattern-timeline',
       'presence',
+      'presence-typing',
       'record',
       'search-command-bar',
       'skeleton',
@@ -2979,6 +2983,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'tooltip-interactive',
       'tree-view-connector',
       'typography',
+      'visual-excellence-preview',
     ]);
     assert.deepEqual(realRenderRosterFailures(ROOT), []);
     for (const entry of Object.values(REAL_RENDER_MOUNTS)) {
@@ -3274,12 +3279,14 @@ describe('axis-difference — S1: law 5 over a reading, the stamp contract, and 
   it('every S1 row declares states only, on a family in the states population', () => {
     const states = axisPopulations(ROOT).get('states');
     for (const row of ['stats-grid-interactive', 'tooltip-interactive', 'stats-header', 'pattern-timeline', 'activity-log', 'avatar',
-      'layout', 'record', 'anchor', 'tree-view-connector', 'breadcrumb-compounds', 'typography']) {
+      'record', 'anchor', 'tree-view-connector', 'breadcrumb-compounds', 'typography']) {
       const entry = REAL_RENDER_MOUNTS[row];
       assert.deepEqual([...entry.axes], ['states'], row);
       assert.ok(states.includes(entry.family ?? row), row);
     }
-    for (const row of ['float-button', 'drawer-compounds', 'modal-compounds']) assert.ok(REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
+    for (const row of ['float-button', 'drawer-compounds', 'modal-compounds', 'layout']) assert.ok(REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
+    // R2a gave layout's S1 row a resting axis; its states declaration is untouched.
+    assert.deepEqual([...REAL_RENDER_MOUNTS.layout.axes], ['rhythm', 'states']);
     // Measured and refused on 2026-09-30 (the real render does not move on
     // states under either half), so they may not declare it.
     for (const row of ['column-menu', 'command-palette']) assert.ok(!REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
@@ -3556,5 +3563,107 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
       'states: badge is unobservable (colour-only) and not in UNOBSERVABLE_FAMILIES',
     )));
     assert.ok(!evaluate(result([cell()], { unobservable: entered, familiesFiltered: true })).some((line) => line.includes('UNOBSERVABLE')));
+  });
+});
+
+describe('axis-difference — R2a: the rhythm reach rows the R1 census measured moving', () => {
+  const R2A_REAL_ROWS = ['chart-c', 'detail', 'flex', 'presence-typing', 'visual-excellence-preview'];
+
+  it('each new real-render row declares rhythm alone, on a family in the rhythm population, and passes the door on its own', () => {
+    const rhythm = axisPopulations(ROOT).get('rhythm');
+    for (const row of R2A_REAL_ROWS) {
+      const entry = REAL_RENDER_MOUNTS[row];
+      assert.ok(entry !== undefined, `${row} has no roster row`);
+      assert.deepEqual([...entry.axes], ['rhythm'], row);
+      assert.ok(rhythm.includes(entry.family ?? row), row);
+      assert.deepEqual(realRenderRosterFailures(ROOT, { [row]: entry }), [], row);
+    }
+    // layout reads its existing S1 markup on rhythm too; the markup is unchanged.
+    assert.ok(rhythm.includes('layout'));
+    assert.ok(REAL_RENDER_MOUNTS.layout.axes.includes('rhythm'));
+    assert.match(REAL_RENDER_MOUNTS.layout.markup, /data-part="trigger"/u);
+  });
+
+  it('presence carries two rows -- the cursor (shape, depth) and the typing indicator (rhythm) -- on disjoint axes, neither declaring states', () => {
+    const rows = Object.entries(REAL_RENDER_MOUNTS).filter(([row, entry]) => (entry.family ?? row) === 'presence');
+    assert.deepEqual(rows.map(([row]) => row).sort(), ['presence', 'presence-typing']);
+    const [cursor, typing] = [REAL_RENDER_MOUNTS.presence.axes, REAL_RENDER_MOUNTS['presence-typing'].axes];
+    assert.equal(cursor.some((axis) => typing.includes(axis)), false);
+    assert.equal([...cursor, ...typing].includes('states'), false);
+  });
+
+  it('detail mounts a DOMAIN lifecycle value the scene never stamps, on a row that is never stamped or forced', () => {
+    const tokens = markupTokens(REAL_RENDER_MOUNTS.detail.markup);
+    assert.ok(tokens.includes('attr:data-state=error'));
+    assert.equal(STATE_VARIANTS.includes('error'), false);
+    assert.equal(REAL_RENDER_MOUNTS.detail.axes.includes('states'), false);
+  });
+
+  it('flex stays OFF the as-rendered roster (law 1) and reaches its rung only as a named configuration', () => {
+    assert.equal(AS_RENDERED_ROOT_STAMPS.flex, undefined);
+    const tokens = markupTokens(REAL_RENDER_MOUNTS.flex.markup);
+    for (const token of ['attr:data-gap=uniform', 'attr:data-gap-preset=md', 'style:--ds-flex-gap=var(--ds-spacing-4, 1rem)']) {
+      assert.ok(tokens.includes(token), token);
+    }
+  });
+
+  it('MUTANT: a sibling resolver or scaffold that stops writing the pinned token fails the row, named', () => {
+    const drift = (suffix, from, to) => (file) => {
+      const text = readFileSync(file, 'utf8');
+      return file.endsWith(suffix) ? text.replaceAll(from, to) : text;
+    };
+    const flex = realRenderRosterFailures(ROOT, { flex: REAL_RENDER_MOUNTS.flex }, {
+      readSource: drift('flex/runtime/presentation/index.ts', 'attributes["data-gap-preset"] = flexGapPresetSpelling(scalarGap);', 'attributes["data-gap-preset"] = undefined;'),
+    });
+    assert.ok(flex.some((line) => line.startsWith('flex/attr:data-gap-preset=md:') && line.includes('no longer carries the stamp')), flex.join(' | '));
+    const rung = realRenderRosterFailures(ROOT, { flex: REAL_RENDER_MOUNTS.flex }, {
+      readSource: drift('flex/contracts/index.ts', 'md: "var(--ds-spacing-4, 1rem)",', 'md: "var(--ds-spacing-3, 0.75rem)",'),
+    });
+    assert.ok(rung.some((line) => line.includes('no longer carries the resolves `md: "var(--ds-spacing-4, 1rem)",`')), rung.join(' | '));
+    const funnel = realRenderRosterFailures(ROOT, { 'chart-c': REAL_RENDER_MOUNTS['chart-c'] }, {
+      readSource: drift('funnel-chart/index.tsx', 'overlay={fallbackMessage ? (', 'overlay={null && ('),
+    });
+    assert.ok(funnel.some((line) => line.startsWith('chart-c:') && line.includes('no longer carries the gate')), funnel.join(' | '));
+    const scaffold = realRenderRosterFailures(ROOT, { 'chart-c': REAL_RENDER_MOUNTS['chart-c'] }, {
+      readSource: drift('charts/presentation/scaffold/index.tsx', 'data-state="ready"', 'data-state={resolvedState}'),
+    });
+    assert.ok(scaffold.some((line) => line.startsWith('chart-c/attr:data-state=ready:')), scaffold.join(' | '));
+    const detail = realRenderRosterFailures(ROOT, { detail: REAL_RENDER_MOUNTS.detail }, {
+      readSource: drift('pages/data/detail/index.tsx', 'data-state="error"', 'data-state="failed"'),
+    });
+    assert.ok(detail.some((line) => line.includes('`attr:data-state=error` is not written by')), detail.join(' | '));
+  });
+
+  it('the three as-rendered stamps are the DEFAULT render, and each mounts on its root', () => {
+    assert.deepEqual(AS_RENDERED_ROOT_STAMPS.descriptions.map((row) => [row.attribute, row.value]), [['data-layout', 'horizontal']]);
+    assert.deepEqual(AS_RENDERED_ROOT_STAMPS['input-number'].map((row) => [row.attribute, row.value]), [['data-size', 'md']]);
+    assert.deepEqual(AS_RENDERED_ROOT_STAMPS.progress.map((row) => [row.attribute, row.value]), [['data-type', 'line']]);
+    const elements = familyElements(ROOT, ['descriptions', 'input-number', 'progress']);
+    assert.equal(elements.get('descriptions').attributes['data-layout'], 'horizontal');
+    assert.equal(elements.get('input-number').attributes['data-size'], 'md');
+    assert.equal(elements.get('progress').attributes['data-type'], 'line');
+    const contract = readFileSync(join(ROOT, 'src/components/primitives/display/descriptions/contracts/index.ts'), 'utf8');
+    assert.ok(contract.includes("layout: 'horizontal' as const,"), 'DESCRIPTIONS_DEFAULTS.layout moved -- re-read the row');
+    const progress = readFileSync(join(ROOT, 'src/components/primitives/feedback/progress/contracts/index.ts'), 'utf8');
+    assert.ok(progress.includes("type: 'line',"), 'PROGRESS_DEFAULTS.type moved -- re-read the row');
+  });
+
+  it('MUTANT: a two-step default is pinned on BOTH lines -- a re-spelled legacy default fails the input-number row', () => {
+    const [row] = AS_RENDERED_ROOT_STAMPS['input-number'];
+    assert.deepEqual(asRenderedRosterFailures(ROOT, { 'input-number': [row] }), []);
+    const respelled = asRenderedRosterFailures(ROOT, {
+      'input-number': [{ ...row, resolves: ["size = 'small',", "const sizeKey = toCanonicalSize(size) ?? 'md';"] }],
+    });
+    assert.deepEqual(respelled, ["input-number/data-size: src/components/primitives/inputs/input-number/engines/modern/index.tsx no longer carries the resolves `size = 'small',`"]);
+  });
+
+  it('the part law admits the rhythm chains the stamps open, and no others than the gate names', () => {
+    const elements = familyElements(ROOT, ['descriptions', 'progress']);
+    const parts = familyAxisParts(ROOT, ['descriptions', 'progress'], elements);
+    const rhythmSelectors = (family) => parts.get(family).parts.filter((part) => part.axes.includes('rhythm')).map((part) => part.selector);
+    assert.ok(rhythmSelectors('descriptions').includes(
+      ".rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal'] > [data-part='body'] > [data-part='rows']"));
+    assert.ok(rhythmSelectors('progress').includes(".rottay-progress-shell.rottay-progress-shell--modern[data-type='line'] [data-part='label']"));
+    assert.equal(rhythmSelectors('descriptions').some((selector) => selector.includes("[data-layout='vertical']")), false);
   });
 });

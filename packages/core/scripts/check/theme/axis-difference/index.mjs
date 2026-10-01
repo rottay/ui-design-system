@@ -784,6 +784,43 @@ export const AS_RENDERED_ROOT_STAMPS = Object.freeze({
       resolves: 'size = TAGINPUT_DEFAULTS.size,',
     }),
   ]),
+  // R2a (WO-EVI-02, rhythm reach). Each row was measured moving by the R1
+  // census before it was written, and each is the DEFAULT render's value.
+  descriptions: Object.freeze([
+    Object.freeze({
+      attribute: 'data-layout',
+      value: 'horizontal',
+      source: 'src/components/primitives/display/descriptions/engines/modern/index.tsx',
+      // `DESCRIPTIONS_DEFAULTS.layout` is `'horizontal' as const` (contracts),
+      // and the root stamps the resolved layout on every render; the rows'
+      // dial-read padding and gap sit behind it.
+      stamp: 'data-layout={layout}',
+      resolves: 'layout = DESCRIPTIONS_DEFAULTS.layout,',
+    }),
+  ]),
+  'input-number': Object.freeze([
+    Object.freeze({
+      attribute: 'data-size',
+      value: 'md',
+      source: 'src/components/primitives/inputs/input-number/engines/modern/index.tsx',
+      // The default `size` is the legacy spelling `'default'`, which
+      // `toCanonicalSize` maps to `md` (`CANON_SIZE_BY_LEGACY.default`); both
+      // lines are pinned, so a re-spelled default fails the row.
+      stamp: 'data-size={sizeKey}',
+      resolves: Object.freeze(["size = 'default',", "const sizeKey = toCanonicalSize(size) ?? 'md';"]),
+    }),
+  ]),
+  progress: Object.freeze([
+    Object.freeze({
+      attribute: 'data-type',
+      value: 'line',
+      source: 'src/components/primitives/feedback/progress/engines/modern/index.tsx',
+      // `PROGRESS_DEFAULTS.type` is `'line'` (contracts); every non-circle
+      // render returns the line branch, which writes the attribute literally.
+      stamp: 'data-type="line"',
+      resolves: 'type = PROGRESS_DEFAULTS.type,',
+    }),
+  ]),
 });
 
 /**
@@ -872,7 +909,9 @@ export function asRenderedRosterFailures(root = CORE_ROOT, roster = AS_RENDERED_
         continue;
       }
       const source = readFileSync(file, 'utf8');
-      for (const [label, text] of [['stamp', row.stamp], ['resolves', row.resolves]]) {
+      // `resolves` may name more than one line when the default is resolved in
+      // two steps (a legacy spelling, then its canonical mapping).
+      for (const [label, text] of [['stamp', row.stamp], ...texts(row.resolves).map((line) => ['resolves', line])]) {
         if (!source.includes(text)) failures.push(`${where}: ${row.source} no longer carries the ${label} \`${text}\``);
       }
     }
@@ -2246,14 +2285,15 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   }),
   layout: Object.freeze({
     state: Object.freeze({
-      name: 'a `collapsible` Layout.Sider (expanded by default, light theme) -- the trigger button exists only under that prop; its ring rule is the family\'s state paint',
+      name: 'a `collapsible` Layout.Sider (expanded by default, light theme) -- the trigger button exists only under that prop; its ring rule is the family\'s state paint, '
+        + 'and its dial-read inline padding and block-start margin are the family\'s rhythm paint (R2a: the default root is flat on rhythm)',
       source: 'src/components/primitives/layout/system/engines/modern/index.tsx',
       anchors: Object.freeze(['{collapsible && (']),
       resolves: Object.freeze([
         Object.freeze({ source: 'src/components/primitives/layout/system/engines/modern/index.tsx', text: 'collapsible = false,' }),
       ]),
     }),
-    axes: Object.freeze(['states']),
+    axes: Object.freeze(['rhythm', 'states']),
     markup: '<aside class="rottay-layout-sider rottay-layout-sider--modern" data-part="sider" data-theme="light" data-collapsed="false">'
       + '<button type="button" data-part="trigger" data-collapsed="false" aria-expanded="true">'
       + '<span data-part="trigger-icon" aria-hidden="true"></span></button></aside>',
@@ -2411,6 +2451,156 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
         resolves: Object.freeze([
           Object.freeze({ source: 'src/components/primitives/display/typography/engines/modern/index.tsx', text: 'const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.link.size;' }),
           Object.freeze({ source: 'src/components/primitives/display/typography/contracts/index.ts', text: "size: 'md' as const," }),
+        ]),
+      }),
+    ]),
+  }),
+  // R2a (WO-EVI-02, rhythm reach): the rows the R1 census measured moving on
+  // rhythm with the mount alone. Each declares rhythm and nothing else, so
+  // every other axis reads exactly as before.
+  'chart-c': Object.freeze({
+    state: Object.freeze({
+      name: 'a FunnelChart given a stage it cannot draw (a negative value) -- the scaffold renders ready and the funnel overlays its '
+        + '`data-fallback` status in place of the plot; the mounted family root is the sparkline, which never contains it',
+      source: 'src/components/patterns/visualization/charts/families/funnel-chart/index.tsx',
+      anchors: Object.freeze(['overlay={fallbackMessage ? (']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/index.ts',
+          text: "return 'Funnel charts cannot represent negative stages.';",
+        }),
+        Object.freeze({ source: 'src/components/patterns/visualization/charts/presentation/scaffold/index.tsx', text: "return 'ready';" }),
+      ]),
+    }),
+    axes: Object.freeze(['rhythm']),
+    markup: '<div class="ds-chart-scaffold ds-chart-funnel" data-part="chart-scaffold" data-state="ready">'
+      + '<div data-part="data-fallback" role="status">Funnel charts cannot represent negative stages.</div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'class:ds-chart-scaffold',
+        stamp: "const scaffoldClassName = ['ds-chart-scaffold', className]",
+        source: 'src/components/patterns/visualization/charts/presentation/scaffold/index.tsx',
+      }),
+      Object.freeze({
+        token: 'attr:data-part=chart-scaffold',
+        stamp: 'data-part="chart-scaffold"',
+        source: 'src/components/patterns/visualization/charts/presentation/scaffold/index.tsx',
+      }),
+      Object.freeze({
+        token: 'attr:data-state=ready',
+        stamp: 'data-state="ready"',
+        source: 'src/components/patterns/visualization/charts/presentation/scaffold/index.tsx',
+      }),
+    ]),
+  }),
+  detail: Object.freeze({
+    state: Object.freeze({
+      name: 'a DetailSurface given an `error` -- the error branch renders the root with the domain lifecycle value `data-state="error"` '
+        + '(not a value the scene stamps), the node whose state gap is the family\'s only rhythm paint',
+      source: 'src/components/surfaces/presentation/pages/data/detail/index.tsx',
+      anchors: Object.freeze(['if (hasSurfaceError(error)) {']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['rhythm']),
+    markup: '<div class="ds-surface ds-detail-surface" data-part="root" data-state="error">'
+      + '<div data-part="error-state" aria-live="polite"></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: '<Box',
+        resolves: Object.freeze([
+          Object.freeze({ source: 'src/components/primitives/layout/box/engines/modern/index.tsx', text: 'as: Component = BOX_DEFAULTS.as,' }),
+          Object.freeze({ source: 'src/components/primitives/layout/box/contracts/index.ts', text: 'as: "div",' }),
+        ]),
+      }),
+    ]),
+  }),
+  flex: Object.freeze({
+    state: Object.freeze({
+      name: 'a Flex given `gap="md"` -- a preset gap is the only configuration that stamps `data-gap` and `data-gap-preset`, '
+        + 'the gates every dial-scaled gap rule sits behind; the default Flex writes neither (law 1 keeps it off the as-rendered roster)',
+      source: 'src/components/primitives/layout/flex/engines/modern/index.tsx',
+      anchors: Object.freeze(['{...presentationAttributes}', 'const parameterStyle = resolveFlexParameterStyle(props, { motion: "stamped" });']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/components/primitives/layout/flex/runtime/presentation/index.ts',
+          text: 'if (props.gap !== undefined && !isResponsiveValue(props.gap)) {',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['rhythm']),
+    markup: '<div data-part="root" class="rottay-flex rottay-flex--modern" style="--ds-flex-gap:var(--ds-spacing-4, 1rem)" '
+      + 'data-gap="uniform" data-gap-preset="md" data-component="flex"></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-gap=uniform',
+        stamp: 'attributes["data-gap"] = "uniform";',
+        source: 'src/components/primitives/layout/flex/runtime/presentation/index.ts',
+      }),
+      Object.freeze({
+        token: 'attr:data-gap-preset=md',
+        stamp: 'attributes["data-gap-preset"] = flexGapPresetSpelling(scalarGap);',
+        source: 'src/components/primitives/layout/flex/runtime/presentation/index.ts',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/layout/flex/contracts/index.ts',
+            text: 'return (FLEX_GAP_RHYTHM_PRESETS as readonly string[]).includes(value)',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'style:--ds-flex-gap=var(--ds-spacing-4, 1rem)',
+        stamp: 'style["--ds-flex-gap"] = resolveFlexGapValue(scalarGap);',
+        source: 'src/components/primitives/layout/flex/runtime/presentation/index.ts',
+        resolves: Object.freeze([
+          Object.freeze({ source: 'src/components/primitives/layout/flex/contracts/index.ts', text: 'md: "var(--ds-spacing-4, 1rem)",' }),
+        ]),
+      }),
+    ]),
+  }),
+  'presence-typing': Object.freeze({
+    family: 'presence',
+    state: Object.freeze({
+      name: 'a PresenceTypingIndicator with no one typing -- the live region renders unconditionally (`isTyping` gates only its dots and label), '
+        + 'and its gap is the family\'s rhythm paint; a second row because a cursor and an indicator are two components one mount cannot be',
+      source: 'src/components/patterns/communication/presence/index.tsx',
+      anchors: Object.freeze(['export function PresenceTypingIndicator({']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['rhythm']),
+    markup: '<div class="ds-presence-typing-indicator" data-part="root" role="status" aria-live="polite"></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: '<Box',
+        resolves: Object.freeze([
+          Object.freeze({ source: 'src/components/primitives/layout/box/engines/modern/index.tsx', text: 'as: Component = BOX_DEFAULTS.as,' }),
+          Object.freeze({ source: 'src/components/primitives/layout/box/contracts/index.ts', text: 'as: "div",' }),
+        ]),
+      }),
+    ]),
+  }),
+  'visual-excellence-preview': Object.freeze({
+    state: Object.freeze({
+      name: 'the tenant-theme preview fixture\'s command bar, rendered unconditionally at its head -- every rhythm rule of the family is headed by a '
+        + '`.ds-visual-excellence__*` element, none of which is the mounted root',
+      source: 'src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/visual-excellence/index.tsx',
+      anchors: Object.freeze(['export function VisualExcellencePreviewFixture(): React.ReactElement {', '<header className="ds-visual-excellence__command-bar">']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['rhythm']),
+    markup: '<main class="ds-visual-excellence" data-part="visual-excellence-fixture">'
+      + '<header class="ds-visual-excellence__command-bar">'
+      + '<div class="ds-visual-excellence__command-context"><span aria-hidden="true"></span></div>'
+      + '<button class="ds-visual-excellence__command-search" type="button"><span></span><kbd></kbd></button>'
+      + '<div class="ds-visual-excellence__command-account"></div></header></main>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: '<Box',
+        resolves: Object.freeze([
+          Object.freeze({ source: 'src/components/primitives/layout/box/engines/modern/index.tsx', text: 'as: Component = BOX_DEFAULTS.as,' }),
+          Object.freeze({ source: 'src/components/primitives/layout/box/contracts/index.ts', text: 'as: "div",' }),
         ]),
       }),
     ]),

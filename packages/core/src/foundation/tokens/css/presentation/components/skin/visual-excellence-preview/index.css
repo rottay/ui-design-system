@@ -94,7 +94,7 @@
 .ds-visual-excellence__command-search:hover,
 .ds-visual-excellence__command-search:focus-visible {
   border-color: color-mix(in srgb, var(--ds-color-primary) 46%, var(--ds-color-border-primary));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 3px) color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
   outline: none;
 }
 
