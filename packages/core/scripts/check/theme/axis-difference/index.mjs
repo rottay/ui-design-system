@@ -834,6 +834,22 @@ export const AS_RENDERED_ROOT_STAMPS = Object.freeze({
       resolves: 'type = PROGRESS_DEFAULTS.type,',
     }),
   ]),
+  // S10 (WO-EVI-02, shape reach). Measured moving on shape with the stamp
+  // alone (SC1 census), and the DEFAULT render's value: the root writes
+  // `data-radius={radius}` on every render, resolved from `TAG_DEFAULTS.radius`
+  // ('md', contracts) when neither the caller nor a recipe profile names one.
+  // CAVEAT: all three recipe profiles override it (technical-sharp `none`,
+  // network-professional and editorial-round `full`), so an app that mounts a
+  // RecipeProfileProvider paints a corner this row does not read.
+  tag: Object.freeze([
+    Object.freeze({
+      attribute: 'data-radius',
+      value: 'md',
+      source: 'src/components/primitives/display/tag/engines/modern/index.tsx',
+      stamp: 'data-radius={radius}',
+      resolves: 'TAG_DEFAULTS.radius;',
+    }),
+  ]),
   // R3 (WO-EVI-02, depth reach). Each row was measured moving on depth with
   // the stamp alone before it was written, and each is the DEFAULT render's value.
   'table-toolbar': Object.freeze([
@@ -1160,6 +1176,230 @@ const CHART_LEGEND_SHAPE_ROWS = Object.freeze({
       + '<div data-part="legend-item" data-series="histogram"><span data-part="legend-swatch"></span>'
       + '<span data-part="legend-label">Frequency</span></div></div></div>',
     stamps: Object.freeze(chartScaffoldStamps()),
+  }),
+});
+
+const COLLAPSE_ENGINE = 'src/components/primitives/layout/collapse/engines/modern/index.tsx';
+const FORM_ENGINE = 'src/components/primitives/inputs/form/engines/modern/index.tsx';
+const TYPOGRAPHY_ENGINE = 'src/components/primitives/display/typography/engines/modern/index.tsx';
+const TYPOGRAPHY_CONTRACT = 'src/components/primitives/display/typography/contracts/index.ts';
+const AVATAR_ENGINE = 'src/components/primitives/display/avatar/engines/modern/index.tsx';
+const AVATAR_CONTRACT = 'src/components/primitives/display/avatar/contracts/index.ts';
+const IMAGE_ENGINE = 'src/components/primitives/display/image/engines/modern/index.tsx';
+const BOX_ENGINE = 'src/components/primitives/layout/box/engines/modern/index.tsx';
+const BOX_CONTRACT = 'src/components/primitives/layout/box/contracts/index.ts';
+const FLOAT_BUTTON_ENGINE = 'src/components/primitives/navigation/float-button/engines/modern/index.tsx';
+const FLOAT_BUTTON_CONTRACT = 'src/components/primitives/navigation/float-button/contracts/index.ts';
+
+/**
+ * THE SHAPE REACH ROWS (S10, WO-EVI-02). The SC1 census measured each family
+ * a shape non-mover only because no mounted node carries its dial-read corner.
+ * `collapse` is the DEFAULT render (`ghost = false`; the probe's root is the
+ * ghost compound, whose panel corner is forced to 0). The rest are the DT's
+ * prop-configuration ruling on the R2a/Flex precedent: a public prop the
+ * engine ships, named and gated like any row -- `badge` is excluded as a fleet
+ * truth, and `stepper-compounds` is a STOP (every Stepper engine flattens
+ * `Stepper.Step` into items and drops its `onClick`, so `.ds-stepper-step
+ * [data-clickable]` is never rendered inside a Stepper; pinned in the suite).
+ * Each row declares shape alone, so every other axis reads as before.
+ */
+const SHAPE_REACH_ROWS = Object.freeze({
+  collapse: Object.freeze({
+    state: Object.freeze({
+      name: 'a default Collapse (bordered, not ghost) with one Panel -- the panel carries the dial-read corner; the mounted root is the '
+        + '`--ghost` compound, whose panel corner is forced to 0',
+      source: COLLAPSE_ENGINE,
+      anchors: Object.freeze(['ghost = false,', "className={`rottay-collapse${ghost ? ' rottay-collapse--ghost' : ''}"]),
+      resolves: Object.freeze([
+        Object.freeze({ source: 'src/components/primitives/layout/collapse/contracts/index.ts', text: 'bordered: true,' }),
+      ]),
+    }),
+    axes: Object.freeze(['shape']),
+    markup: '<div class="rottay-collapse" data-part="root" data-size="md"><div data-part="panel"></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-size=md',
+        stamp: 'data-size={normalizeCollapseSize(size)}',
+        resolves: Object.freeze([
+          Object.freeze({ source: COLLAPSE_ENGINE, text: 'size = COLLAPSE_DEFAULTS.size,' }),
+          Object.freeze({ source: 'src/components/primitives/layout/collapse/contracts/index.ts', text: "size: 'middle' as const," }),
+          Object.freeze({ source: COLLAPSE_ENGINE, text: "    default:\n      return 'md';" }),
+        ]),
+      }),
+    ]),
+  }),
+  'form-error-list': Object.freeze({
+    family: 'form',
+    state: Object.freeze({
+      name: 'a default (vertical) Form with a field in error and a Form.ErrorList -- the list renders only while validation errors exist, '
+        + 'and its `var(--ds-radius-lg)` corner is a separate rule from the depth graft the default scene holds',
+      source: FORM_ENGINE,
+      anchors: Object.freeze(['if (!errors || errors.length === 0) return null;', 'ErrorList: FormErrorList']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['shape']),
+    markup: '<form role="form" class="ds-form ds-form--modern" data-part="root" data-layout="vertical">'
+      + '<ul data-part="error-list" role="alert" class="ds-form-error-list ds-form-error-list--modern"><li data-part="error-item"></li></ul></form>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-layout=vertical',
+        stamp: 'data-layout={adaptation.layout}',
+        resolves: Object.freeze([
+          Object.freeze({ source: FORM_ENGINE, text: 'layout = FORM_DEFAULTS.layout' }),
+          Object.freeze({ source: 'src/components/primitives/inputs/form/contracts/index.ts', text: 'layout: \'vertical\',' }),
+        ]),
+      }),
+    ]),
+  }),
+  'typography-code': Object.freeze({
+    family: 'typography',
+    state: Object.freeze({
+      name: 'a Typography.Text given `as="code"` -- the engine renders `as` as the element, and the inline-code chip corner is gated on `:is(code)`',
+      source: TYPOGRAPHY_ENGINE,
+      anchors: Object.freeze(['export const ModernText = forwardRef<HTMLElement, TextProps>(', 'const Component = as;']),
+      resolves: Object.freeze([Object.freeze({ source: TYPOGRAPHY_CONTRACT, text: "    | 'code'" })]),
+    }),
+    axes: Object.freeze(['shape']),
+    markup: '<code class="rottay-typography rottay-typography--modern" data-part="root" data-color="default" data-size="md">code</code>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:code',
+        stamp: 'const Component = as;',
+        resolves: Object.freeze([Object.freeze({ source: TYPOGRAPHY_CONTRACT, text: "    | 'code'" })]),
+      }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: 'data-part={dataPart ?? "root"}' }),
+      Object.freeze({
+        token: 'attr:data-color=default',
+        stamp: 'data-color={color}',
+        resolves: Object.freeze([
+          Object.freeze({ source: TYPOGRAPHY_ENGINE, text: 'color = TYPOGRAPHY_DEFAULTS.text.color,' }),
+          Object.freeze({ source: TYPOGRAPHY_CONTRACT, text: "color: 'default' as const," }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-size=md',
+        stamp: 'data-size={size}',
+        resolves: Object.freeze([
+          Object.freeze({ source: TYPOGRAPHY_ENGINE, text: 'const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.text.size;' }),
+          Object.freeze({ source: TYPOGRAPHY_CONTRACT, text: "size: 'md' as const," }),
+        ]),
+      }),
+    ]),
+  }),
+  'avatar-square': Object.freeze({
+    family: 'avatar',
+    state: Object.freeze({
+      name: 'an Avatar given `shape="square"` -- the mask corner reads `var(--ds-radius-md)`; the default circle paints a fixed pill',
+      source: AVATAR_ENGINE,
+      anchors: Object.freeze(['data-shape={shape}', 'data-part="mask"']),
+      resolves: Object.freeze([Object.freeze({ source: AVATAR_CONTRACT, text: 'shape?: AvatarShape;' })]),
+    }),
+    axes: Object.freeze(['shape']),
+    markup: '<div class="rottay-avatar rottay-avatar--modern" data-part="root" data-variant="default" data-shape="square" data-size="md">'
+      + '<div data-part="mask"></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-part=root', stamp: '{...partAttributes(dataPart ?? "root", isInteractive ? interaction : {})}' }),
+      Object.freeze({
+        token: 'attr:data-variant=default',
+        stamp: 'data-variant={variant}',
+        resolves: Object.freeze([
+          Object.freeze({ source: AVATAR_ENGINE, text: 'variant: variantProp = AVATAR_DEFAULTS.variant,' }),
+          Object.freeze({ source: AVATAR_CONTRACT, text: "variant: 'default' as const," }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-shape=square',
+        stamp: 'data-shape={shape}',
+        resolves: Object.freeze([
+          Object.freeze({ source: 'src/foundation/contracts/kernel/common/index.ts', text: "export type Shape = 'circle' | 'square' | 'rounded';" }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-size=md',
+        stamp: 'data-size={size}',
+        resolves: Object.freeze([
+          Object.freeze({ source: AVATAR_ENGINE, text: 'size = AVATAR_DEFAULTS.size,' }),
+          Object.freeze({ source: AVATAR_CONTRACT, text: "size: 'md' as const," }),
+        ]),
+      }),
+    ]),
+  }),
+  'image-radius': Object.freeze({
+    family: 'image',
+    state: Object.freeze({
+      name: 'an Image given `radius="lg"` (the engine\'s own usage example) -- the root stamps the rung, the gate its dial-read corner sits '
+        + 'behind; the default `none` paints 0',
+      source: IMAGE_ENGINE,
+      anchors: Object.freeze(['radius = IMAGE_DEFAULTS.radius as ImageRadius,', 'data-radius={radius}']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['shape']),
+    markup: '<div class="rottay-image rottay-image--modern" data-radius="lg" data-part="root"></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-radius=lg',
+        stamp: 'data-radius={radius}',
+        resolves: Object.freeze([
+          Object.freeze({ source: 'src/components/primitives/display/image/contracts/index.ts', text: "radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';" }),
+        ]),
+      }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: "{...partAttributes(dataPart ?? 'root', interaction)}" }),
+    ]),
+  }),
+  'box-rounded': Object.freeze({
+    family: 'box',
+    state: Object.freeze({
+      name: 'a Box given `rounded="md"` -- a radius rung is the only configuration that stamps `data-radius`, the gate every corner rule of '
+        + 'the family sits behind; the default Box writes none',
+      source: BOX_ENGINE,
+      anchors: Object.freeze(['const radiusValue = props.borderRadius || props.rounded;', '!callerOwnsRadius && radiusValue && radiusValue !== "none"']),
+      resolves: Object.freeze([Object.freeze({ source: BOX_CONTRACT, text: 'rounded?: BoxBorderRadius;' })]),
+    }),
+    axes: Object.freeze(['shape']),
+    markup: '<div data-part="box-surface" class="rottay-box rottay-box--modern" data-radius="md" data-component="box"></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: 'React.createElement(ElementType, elementProps)',
+        resolves: Object.freeze([
+          Object.freeze({ source: BOX_ENGINE, text: 'as: Component = BOX_DEFAULTS.as,' }),
+          Object.freeze({ source: BOX_CONTRACT, text: 'as: "div",' }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-radius=md',
+        stamp: '? radiusValue',
+        resolves: Object.freeze([Object.freeze({ source: BOX_CONTRACT, text: 'export type BoxBorderRadius =\n  | "none"\n  | "xs"\n  | "sm"\n  | "md"' })]),
+      }),
+    ]),
+  }),
+  'float-button-square': Object.freeze({
+    family: 'float-button',
+    state: Object.freeze({
+      name: 'a standalone FloatButton given `shape="square"` (button branch, type default) -- the trigger corner reads `var(--ds-radius-lg)`; '
+        + 'the default circle paints a fixed 50%',
+      source: FLOAT_BUTTON_ENGINE,
+      anchors: Object.freeze(['const buttonElement = href ? (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['shape']),
+    markup: '<button type="button" class="rottay-float-button rottay-float-button--modern" data-part="trigger" data-variant="default" data-shape="square">'
+      + '</button>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-variant=default',
+        stamp: 'data-variant={type}',
+        resolves: Object.freeze([
+          Object.freeze({ source: FLOAT_BUTTON_ENGINE, text: 'type = FLOAT_BUTTON_DEFAULTS.type,' }),
+          Object.freeze({ source: FLOAT_BUTTON_CONTRACT, text: 'type: \'default\' as const,' }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-shape=square',
+        stamp: 'data-shape={shape}',
+        resolves: Object.freeze([Object.freeze({ source: FLOAT_BUTTON_CONTRACT, text: "shape?: 'circle' | 'square';" })]),
+      }),
+    ]),
   }),
 });
 
@@ -2424,14 +2664,15 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   layout: Object.freeze({
     state: Object.freeze({
       name: 'a `collapsible` Layout.Sider (expanded by default, light theme) -- the trigger button exists only under that prop; its ring rule is the family\'s state paint, '
-        + 'and its dial-read inline padding and block-start margin are the family\'s rhythm paint (R2a: the default root is flat on rhythm)',
+        + 'and its dial-read inline padding and block-start margin are the family\'s rhythm paint (R2a: the default root is flat on rhythm); '
+        + 'its `var(--ds-radius-md)` corner is the family\'s shape paint (S10: the default root paints no radius)',
       source: 'src/components/primitives/layout/system/engines/modern/index.tsx',
       anchors: Object.freeze(['{collapsible && (']),
       resolves: Object.freeze([
         Object.freeze({ source: 'src/components/primitives/layout/system/engines/modern/index.tsx', text: 'collapsible = false,' }),
       ]),
     }),
-    axes: Object.freeze(['rhythm', 'states']),
+    axes: Object.freeze(['shape', 'rhythm', 'states']),
     markup: '<aside class="rottay-layout-sider rottay-layout-sider--modern" data-part="sider" data-theme="light" data-collapsed="false">'
       + '<button type="button" data-part="trigger" data-collapsed="false" aria-expanded="true">'
       + '<span data-part="trigger-icon" aria-hidden="true"></span></button></aside>',
@@ -2970,12 +3211,13 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   }),
   list: Object.freeze({
     state: Object.freeze({
-      name: 'a List given `bordered` (the engine\'s own usage example) -- the root stamps `data-bordered="true"` only then, the gate its frame sits behind',
+      name: 'a List given `bordered` (the engine\'s own usage example) -- the root stamps `data-bordered="true"` only then, the gate its frame '
+        + 'and its `--ds-list-border-radius` corner (S10: shape) sit behind',
       source: 'src/components/primitives/display/list/engines/modern/index.tsx',
       anchors: Object.freeze(["data-bordered={bordered ? 'true' : 'false'}"]),
       resolves: Object.freeze([]),
     }),
-    axes: Object.freeze(['depth']),
+    axes: Object.freeze(['shape', 'depth']),
     markup: '<div class="rottay-list rottay-list--modern" data-part="root" data-bordered="true"></div>',
     stamps: Object.freeze([
       Object.freeze({ token: 'attr:data-part=root', stamp: "data-part={dataPart ?? 'root'}" }),
@@ -3053,6 +3295,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
     ]),
   }),
   ...CHART_LEGEND_SHAPE_ROWS,
+  ...SHAPE_REACH_ROWS,
 });
 
 /**

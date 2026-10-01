@@ -2975,13 +2975,16 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'anchor',
       'assistant-preview-diff',
       'avatar',
+      'avatar-square',
       'box',
+      'box-rounded',
       'breadcrumb-compounds',
       'carousel',
       'chart-bullet',
       'chart-c',
       'chart-c-histogram-legend',
       'chart-waterfall',
+      'collapse',
       'column-menu',
       'column-settings',
       'command-palette',
@@ -2998,10 +3001,13 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'filter-panel',
       'flex',
       'float-button',
+      'float-button-square',
       'form',
+      'form-error-list',
       'guided-draft-form',
       'image',
       'image-compounds',
+      'image-radius',
       'layout',
       'list',
       'modal-compounds',
@@ -3026,6 +3032,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'tree',
       'tree-view-connector',
       'typography',
+      'typography-code',
       'visual-excellence-preview',
     ]);
     assert.deepEqual(realRenderRosterFailures(ROOT), []);
@@ -3329,8 +3336,8 @@ describe('axis-difference — S1: law 5 over a reading, the stamp contract, and 
       assert.ok(states.includes(entry.family ?? row), row);
     }
     for (const row of ['float-button', 'drawer-compounds', 'modal-compounds', 'layout', 'stats-header']) assert.ok(REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
-    // R2a gave layout's S1 row a resting axis, R3 gave stats-header's one; their states declarations are untouched.
-    assert.deepEqual([...REAL_RENDER_MOUNTS.layout.axes], ['rhythm', 'states']);
+    // R2a gave layout's S1 row a resting axis (S10 a second), R3 gave stats-header's one; their states declarations are untouched.
+    assert.deepEqual([...REAL_RENDER_MOUNTS.layout.axes], ['shape', 'rhythm', 'states']);
     assert.deepEqual([...REAL_RENDER_MOUNTS['stats-header'].axes], ['depth', 'states']);
     // Measured and refused on 2026-09-30 (S7: law 3, the default mount already
     // moves), so it may not declare it. column-menu left the pin in S7.
@@ -3761,8 +3768,13 @@ describe('axis-difference — R2a: the rhythm reach rows the R1 census measured 
 describe('axis-difference — R3: the depth reach rows the R3 census measured moving', () => {
   // Default renders first, then the configurations a public prop ships.
   const R3_REAL_ROWS = ['sidebar-surface', 'saved-views-menu', 'skeleton-anatomy-block', 'table', 'assistant-preview-diff', 'tree', 'descriptions',
-    'carousel', 'image', 'box', 'list', 'drawer-compounds-divider', 'modal-compounds-divider', 'data-table-actions'];
+    'carousel', 'image', 'box', 'drawer-compounds-divider', 'modal-compounds-divider', 'data-table-actions'];
   const R3_JOINED = { 'edit-fields': ['shape', 'rhythm', 'depth', 'motion'], 'feature-workspace-frame': ['shape', 'depth', 'motion'], 'stats-header': ['depth', 'states'] };
+  // R3 landed `list` declaring depth alone; S10 added shape on the same markup (the bordered root's corner).
+  it('list reads depth on its R3 row, and since S10 shape on the same unchanged markup', () => {
+    assert.deepEqual([...REAL_RENDER_MOUNTS.list.axes], ['shape', 'depth']);
+    assert.deepEqual(realRenderRosterFailures(ROOT, { list: REAL_RENDER_MOUNTS.list }), []);
+  });
   const R3_STAMPED = ['table-toolbar', 'user-profile-card'];
   const drift = (suffix, from, to) => (file) => {
     const text = readFileSync(file, 'utf8');
@@ -4307,4 +4319,118 @@ describe('axis-difference — S8/S9: the shape rows the D1 census named, refused
     const css = skinFamilies(ROOT).get('statistic-compounds').map((file) => readFileSync(file, 'utf8')).join('\n');
     assert.equal(familyElement(css), null);
   });
+});
+
+/**
+ * S10 (WO-EVI-02, shape reach). The SC1 census named four default-render
+ * reaches (layout, list, tag, collapse) and the DT ruled seven prop
+ * configurations (form, stepper-compounds, typography, avatar, image, box,
+ * float-button; badge excluded as a fleet truth). Stepper-compounds is a STOP:
+ * no Stepper engine renders the clickable `.ds-stepper-step`.
+ */
+describe('axis-difference — S10: the shape reach rows the SC1 census measured', () => {
+  const S10_ROWS = { collapse: 'collapse', 'form-error-list': 'form', 'typography-code': 'typography', 'avatar-square': 'avatar',
+    'image-radius': 'image', 'box-rounded': 'box', 'float-button-square': 'float-button' };
+  const drift = (suffix, from, to) => (file) => {
+    const text = readFileSync(file, 'utf8');
+    return file.endsWith(suffix) ? text.replaceAll(from, to) : text;
+  };
+
+  it('each new row declares shape alone, names its family, sits in the shape population and passes the door on its own', () => {
+    const shape = axisPopulations(ROOT).get('shape');
+    for (const [row, family] of Object.entries(S10_ROWS)) {
+      const entry = REAL_RENDER_MOUNTS[row];
+      assert.ok(entry !== undefined, `${row} has no roster row`);
+      assert.deepEqual([...entry.axes], ['shape'], row);
+      assert.equal(entry.family ?? row, family, row);
+      assert.ok(shape.includes(family), row);
+      assert.deepEqual(realRenderRosterFailures(ROOT, { [row]: entry }), [], row);
+    }
+    assert.deepEqual(realRenderRosterFailures(ROOT), []);
+  });
+
+  it('layout and list read shape on their UNCHANGED markup, which already holds the corner node', () => {
+    assert.deepEqual([...REAL_RENDER_MOUNTS.layout.axes], ['shape', 'rhythm', 'states']);
+    assert.match(REAL_RENDER_MOUNTS.layout.markup, /<button type="button" data-part="trigger"/u);
+    assert.deepEqual([...REAL_RENDER_MOUNTS.list.axes], ['shape', 'depth']);
+    assert.match(REAL_RENDER_MOUNTS.list.markup, /data-bordered="true"/u);
+  });
+
+  it('the collapse row is the DEFAULT render, beside a mounted root that is the ghost compound', () => {
+    assert.match(REAL_RENDER_MOUNTS.collapse.markup, /^<div class="rottay-collapse" data-part="root"/u);
+    assert.ok(!REAL_RENDER_MOUNTS.collapse.markup.includes('--ghost') && !REAL_RENDER_MOUNTS.collapse.markup.includes('--borderless'));
+    assert.ok(familyElements(ROOT, ['collapse']).get('collapse').classes.includes('rottay-collapse--ghost'));
+  });
+
+  it('tag mounts as rendered with data-radius="md"; the caveat is pinned: all three recipe profiles override it', () => {
+    assert.deepEqual(AS_RENDERED_ROOT_STAMPS.tag.map((row) => [row.attribute, row.value]), [['data-radius', 'md']]);
+    assert.equal(familyElements(ROOT, ['tag']).get('tag').attributes['data-radius'], 'md');
+    assert.deepEqual(asRenderedRosterFailures(ROOT), []);
+    const contract = readFileSync(join(ROOT, 'src/components/primitives/display/tag/contracts/index.ts'), 'utf8');
+    assert.ok(contract.includes("radius: 'md' as const,"), 'TAG_DEFAULTS.radius moved -- re-measure the row');
+    const profiles = readFileSync(join(ROOT, 'src/foundation/tokens/ts/presentation/recipe-profiles/index.ts'), 'utf8');
+    assert.deepEqual([...profiles.matchAll(/tag: \{[^}]*radius: '([a-z]+)'/gu)].map((match) => match[1]), ['none', 'full', 'full'],
+      'the recipe profiles\' tag radius overrides changed -- update the caveat on the tag row');
+  });
+
+  it('STOP: every Stepper engine flattens Stepper.Step into items and drops onClick, so no row mounts a clickable step', () => {
+    for (const row of Object.values(REAL_RENDER_MOUNTS)) assert.notEqual(row.family, 'stepper-compounds');
+    assert.equal(REAL_RENDER_MOUNTS['stepper-compounds'], undefined);
+    for (const engine of ['modern', 'classic', 'rustic']) {
+      const source = readFileSync(join(ROOT, `src/components/primitives/navigation/stepper/engines/${engine}/index.tsx`), 'utf8');
+      assert.ok(source.includes("displayName === 'Stepper.Step'"), `${engine}: no longer flattens Stepper.Step -- re-measure the stop`);
+    }
+    const modern = readFileSync(join(ROOT, 'src/components/primitives/navigation/stepper/engines/modern/index.tsx'), 'utf8');
+    const flatten = modern.slice(modern.indexOf("if (displayName === 'Stepper.Step') {"), modern.indexOf('if (childItems.length > 0)'));
+    assert.ok(flatten.length > 0 && !flatten.includes('onClick'), 'the Modern Stepper now carries a step onClick -- re-measure the stop');
+  });
+
+  it('badge is excluded by ruling: no row mounts it', () => {
+    for (const [row, entry] of Object.entries(REAL_RENDER_MOUNTS)) assert.notEqual(entry.family ?? row, 'badge', row);
+  });
+
+  it('MUTANT: a moved default, a vanished gate or a fabricated value fails the row it pins, named', () => {
+    const tag = asRenderedRosterFailures(ROOT, { tag: AS_RENDERED_ROOT_STAMPS.tag.map((row) => ({ ...row, resolves: 'TAG_DEFAULTS.corner;' })) });
+    assert.deepEqual(tag, ['tag/data-radius: src/components/primitives/display/tag/engines/modern/index.tsx no longer carries the resolves `TAG_DEFAULTS.corner;`']);
+    const form = realRenderRosterFailures(ROOT, { 'form-error-list': REAL_RENDER_MOUNTS['form-error-list'] }, {
+      readSource: drift('inputs/form/engines/modern/index.tsx', 'if (!errors || errors.length === 0) return null;', 'return null;'),
+    });
+    assert.ok(form.some((line) => line.startsWith('form-error-list:') && line.includes('no longer carries the gate')), form.join(' | '));
+    const collapse = realRenderRosterFailures(ROOT, { collapse: REAL_RENDER_MOUNTS.collapse }, {
+      readSource: drift('layout/collapse/engines/modern/index.tsx', 'ghost = false,', 'ghost = true,'),
+    });
+    assert.ok(collapse.some((line) => line.includes('no longer carries the gate `ghost = false,`')), collapse.join(' | '));
+    const avatar = { ...REAL_RENDER_MOUNTS['avatar-square'], markup: REAL_RENDER_MOUNTS['avatar-square'].markup.replace('data-shape="square"', 'data-shape="hexagon"') };
+    assert.ok(realRenderRosterFailures(ROOT, { 'avatar-square': avatar }).some((line) => line.includes('`attr:data-shape=hexagon` is not written by')));
+  });
+});
+
+describe('axis-difference BROWSER drill — S10: the shape reach rows move shape through their mount, and only through it', { skip: browserReason }, () => {
+  const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
+  const REAL = ['layout', 'list', 'collapse', 'form', 'typography', 'avatar', 'image', 'box', 'float-button'];
+  const STAMPED = ['tag'];
+
+  it('the families move on shape with their mount and not without it; the palette control stays 0 over the credited mounts', async () => {
+    const families = [...REAL, ...STAMPED];
+    const scenarios = [byId('shape'), byId('palette-only')];
+    const before = Object.fromEntries(Object.entries(AS_RENDERED_ROOT_STAMPS).filter(([family]) => !STAMPED.includes(family)));
+    const on = await run({ verticals: ['bithire'], themes: ['light'], families, scenarios, nativePseudos: false });
+    const off = await run({
+      verticals: ['bithire'], themes: ['light'], families, scenarios, nativePseudos: false, realRenderMounts: false, asRenderedRoster: before,
+    });
+    const shapeOn = on.cells.find((entry) => entry.scenario === 'shape');
+    const shapeOff = off.cells.find((entry) => entry.scenario === 'shape');
+    for (const family of families) {
+      assert.ok(shapeOn.movedIds.includes(family), `${family} did not move on shape with its S10 mount`);
+      assert.ok(!shapeOff.movedIds.includes(family), `${family} moved on shape WITHOUT its S10 mount, so this drill proves nothing`);
+    }
+    assert.deepEqual([...shapeOn.realRender.rescued].sort(), [...REAL].sort());
+    assert.deepEqual(shapeOn.realRender.refused, []);
+    assert.deepEqual(on.populations, off.populations, 'a mount may move a numerator, never a denominator');
+    for (const entry of on.cells.filter((item) => item.kind === 'negative')) {
+      assert.equal(entry.evidential, true);
+      assert.equal(entry.moved, 0, `${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
+    }
+    assert.deepEqual(evaluate(on), []);
+  }, 600_000);
 });
