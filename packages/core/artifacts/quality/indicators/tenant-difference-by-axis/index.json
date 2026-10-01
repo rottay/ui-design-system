@@ -1,11 +1,11 @@
 {
   "id": "tenant-difference-by-axis",
   "gate": "axis-difference (`capability-propagation` by axis, WO-EVI-02)",
-  "producedAt": "2026-10-01T08:42:22.951Z",
-  "value": "5/6 axes at >= 80 % of declaring families (shape, typography, rhythm, depth, motion; effective-denominator reading 5/6); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
+  "producedAt": "2026-10-01T13:30:04.230Z",
+  "value": "5/6 axes at >= 80 % of declaring families (shape, typography, rhythm, depth, motion; effective-denominator reading 6/6, never the status); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
   "target": "6/6 axes at >= 80 % and the negative test green",
   "met": false,
-  "commit": "cfafec8d508228019dbca1ef2094cd74e86ae0bf",
+  "commit": "85ca079cf7b795d456869cc69533851e0cdf0347",
   "catalogRevision": "3f42e4ddc61d0e8b",
   "browser": "149.0.7827.55",
   "bundleMode": "fresh",
@@ -19,19 +19,21 @@
     "dark"
   ],
   "threshold": 80,
-  "basis": "declared population of check/theme/population; unmountable and unsettled families count as non-movers; unobservable families are reported per axis beside the denominator and never subtracted from it",
+  "basis": "declared population of check/theme/population; unmountable and unsettled families count as non-movers; unobservable families are reported per axis beside the denominator and never subtracted from it; the effective reading is declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
   "axes": {
     "shape": {
       "status": "at-threshold",
-      "declared": 214,
-      "effective": 202,
+      "declared": 215,
+      "effective": 203,
+      "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
+      "populationLaw": null,
       "excludedUnmountable": 6,
       "excludedUnsettled": 6,
-      "notApplicable": 4,
+      "notApplicable": 3,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 80.4,
-      "worstPercentEffective": 85.1,
+      "worstPercentDeclared": 80,
+      "worstPercentEffective": 84.7,
       "effectiveAtThreshold": true,
       "cells": [
         {
@@ -39,60 +41,60 @@
           "theme": "light",
           "measured": true,
           "moved": 172,
-          "declared": 214,
-          "effective": 202,
-          "percentDeclared": 80.4,
-          "percentEffective": 85.1
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 80,
+          "percentEffective": 84.7
         },
         {
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
           "moved": 172,
-          "declared": 214,
-          "effective": 202,
-          "percentDeclared": 80.4,
-          "percentEffective": 85.1
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 80,
+          "percentEffective": 84.7
         },
         {
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
           "moved": 172,
-          "declared": 214,
-          "effective": 202,
-          "percentDeclared": 80.4,
-          "percentEffective": 85.1
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 80,
+          "percentEffective": 84.7
         },
         {
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
           "moved": 172,
-          "declared": 214,
-          "effective": 202,
-          "percentDeclared": 80.4,
-          "percentEffective": 85.1
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 80,
+          "percentEffective": 84.7
         },
         {
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
           "moved": 172,
-          "declared": 214,
-          "effective": 202,
-          "percentDeclared": 80.4,
-          "percentEffective": 85.1
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 80,
+          "percentEffective": 84.7
         },
         {
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
           "moved": 172,
-          "declared": 214,
-          "effective": 202,
-          "percentDeclared": 80.4,
-          "percentEffective": 85.1
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 80,
+          "percentEffective": 84.7
         }
       ]
     },
@@ -100,6 +102,8 @@
       "status": "at-threshold",
       "declared": 182,
       "effective": 175,
+      "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
+      "populationLaw": null,
       "excludedUnmountable": 2,
       "excludedUnsettled": 5,
       "notApplicable": 0,
@@ -175,6 +179,8 @@
       "status": "at-threshold",
       "declared": 224,
       "effective": 209,
+      "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
+      "populationLaw": null,
       "excludedUnmountable": 9,
       "excludedUnsettled": 6,
       "notApplicable": 0,
@@ -250,6 +256,8 @@
       "status": "at-threshold",
       "declared": 199,
       "effective": 187,
+      "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
+      "populationLaw": null,
       "excludedUnmountable": 6,
       "excludedUnsettled": 6,
       "notApplicable": 0,
@@ -323,15 +331,31 @@
     },
     "states": {
       "status": "below-threshold",
-      "declared": 156,
-      "effective": 148,
+      "declared": 155,
+      "effective": 147,
+      "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
+      "populationLaw": {
+        "law": "STATES-K",
+        "ruled": "2026-10-01",
+        "by": "owner directive 2026-10-01; Fable review 2026-10-01 (ACCEPT-WITH-CHANGES)",
+        "rule": "K1 kernel-gated paint (:hover, :active, :focus, :focus-within, :focus-visible, [data-state] on a kernel token, [data-disabled] / [data-disabled='true']; :not() arguments stripped; the twin clause) or K2 a states head channel",
+        "move": "declared 156 -> 155 at d073e2693 (leave: active-filters-bar, branding-preview-sandbox, detail, record-facts, scope-switcher; enter: edit-fields, form-builder, surface-states, table-toolbar); no mover leaves"
+      },
       "excludedUnmountable": 3,
       "excludedUnsettled": 5,
       "notApplicable": 0,
-      "unobservable": 8,
+      "unobservable": 9,
       "unobservableFamilies": [
         {
           "family": "button-group",
+          "class": "no-vocabulary"
+        },
+        {
+          "family": "edit-fields",
+          "class": "colour-only"
+        },
+        {
+          "family": "form-builder",
           "class": "no-vocabulary"
         },
         {
@@ -355,77 +379,73 @@
           "class": "colour-only"
         },
         {
-          "family": "record-facts",
-          "class": "colour-only"
-        },
-        {
-          "family": "scope-switcher",
+          "family": "table-toolbar",
           "class": "colour-only"
         }
       ],
-      "worstPercentDeclared": 75.6,
-      "worstPercentEffective": 79.7,
-      "effectiveAtThreshold": false,
+      "worstPercentDeclared": 76.1,
+      "worstPercentEffective": 80.3,
+      "effectiveAtThreshold": true,
       "cells": [
         {
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
           "moved": 118,
-          "declared": 156,
-          "effective": 148,
-          "percentDeclared": 75.6,
-          "percentEffective": 79.7
+          "declared": 155,
+          "effective": 147,
+          "percentDeclared": 76.1,
+          "percentEffective": 80.3
         },
         {
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
           "moved": 118,
-          "declared": 156,
-          "effective": 148,
-          "percentDeclared": 75.6,
-          "percentEffective": 79.7
+          "declared": 155,
+          "effective": 147,
+          "percentDeclared": 76.1,
+          "percentEffective": 80.3
         },
         {
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
           "moved": 118,
-          "declared": 156,
-          "effective": 148,
-          "percentDeclared": 75.6,
-          "percentEffective": 79.7
+          "declared": 155,
+          "effective": 147,
+          "percentDeclared": 76.1,
+          "percentEffective": 80.3
         },
         {
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
           "moved": 118,
-          "declared": 156,
-          "effective": 148,
-          "percentDeclared": 75.6,
-          "percentEffective": 79.7
+          "declared": 155,
+          "effective": 147,
+          "percentDeclared": 76.1,
+          "percentEffective": 80.3
         },
         {
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
           "moved": 118,
-          "declared": 156,
-          "effective": 148,
-          "percentDeclared": 75.6,
-          "percentEffective": 79.7
+          "declared": 155,
+          "effective": 147,
+          "percentDeclared": 76.1,
+          "percentEffective": 80.3
         },
         {
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
           "moved": 118,
-          "declared": 156,
-          "effective": 148,
-          "percentDeclared": 75.6,
-          "percentEffective": 79.7
+          "declared": 155,
+          "effective": 147,
+          "percentDeclared": 76.1,
+          "percentEffective": 80.3
         }
       ]
     },
@@ -433,6 +453,8 @@
       "status": "at-threshold",
       "declared": 204,
       "effective": 195,
+      "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
+      "populationLaw": null,
       "excludedUnmountable": 3,
       "excludedUnsettled": 6,
       "notApplicable": 0,
@@ -584,7 +606,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 148,
+            "denominator": 147,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -633,7 +655,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 148,
+            "denominator": 147,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -682,7 +704,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 148,
+            "denominator": 147,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -731,7 +753,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 148,
+            "denominator": 147,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -780,7 +802,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 148,
+            "denominator": 147,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -829,7 +851,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 148,
+            "denominator": 147,
             "movedIds": [
               "alert",
               "approval-workflow",
