@@ -35,6 +35,8 @@ import {
   pilotPopulation,
   populationLine,
   populationReport,
+  privateChannelProducers,
+  privateChannelsRead,
   readChannels,
   readExclusions,
   skinFamilies,
@@ -55,6 +57,7 @@ const EXCLUSIONS = join(ROOT, 'scripts/check/theme/population/exclusions/index.j
 const RADIO_SKIN = `${SKIN_ROOT}/radio/index.css`;
 const RADIO_GROUP_SKIN = `${AGNOSTIC_ROOT}/radio-group/index.css`;
 const REVIEW = 'WO-EVI-05 core review 2026-09-14';
+const CHART_REVIEW = 'WO-EVI-02 chart-marks shape exclusion review 2026-09-30 (X1 dossier; Fable ACCEPT-WITH-CHANGES, conditions consolidated by the DT; Codex outside the loop by owner restriction 2026-09-19)';
 const PHYSICAL_CORNERS = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius'];
 
 const sandboxes = [];
@@ -290,11 +293,16 @@ describe('theme population — the pilot population of WO-EVI-05', () => {
 });
 
 describe('theme population — the reviewed semantic-identity exclusion of radio/shape (WO-EVI-05)', () => {
-  it('admits exactly radio/shape, on the byProperty path only, and validates green on the tree', () => {
+  it('admits exactly radio/shape, chart-line/shape and chart-pie/shape, on the byProperty path only, and validates green on the tree', () => {
     const registry = readExclusions();
-    assert.deepEqual(registry.admitted, [{ family: 'radio', axis: 'shape' }]);
+    // Mover of the pin (radio only -> + chart-line, chart-pie): WO-EVI-02 X1 dossier + Fable review 2026-09-30.
+    assert.deepEqual(registry.admitted, [
+      { family: 'radio', axis: 'shape' },
+      { family: 'chart-line', axis: 'shape' },
+      { family: 'chart-pie', axis: 'shape' },
+    ]);
     assert.deepEqual(registry.entries.map((entry) => [entry.family, entry.axis, entry.path, entry.review]),
-      [['radio', 'shape', 'byProperty', REVIEW]]);
+      [['radio', 'shape', 'byProperty', REVIEW], ['chart-line', 'shape', 'byProperty', CHART_REVIEW], ['chart-pie', 'shape', 'byProperty', CHART_REVIEW]]);
     assert.deepEqual(checkExclusionRegistry().failures, []);
   });
 
@@ -320,8 +328,8 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const report = populationReport();
     const shape = report.axes.find((entry) => entry.axis === 'shape');
     assert.ok(!shape.families.includes('radio'));
-    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), ['radio']);
-    assert.equal(shape.notApplicableCount, 1);
+    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio']);
+    assert.equal(shape.notApplicableCount, 3);
     for (const entry of report.axes) {
       assert.ok(entry.families.every((family) => !entry.notApplicable.some((withdrawn) => withdrawn.family === family)),
         `${entry.axis}: applicable and not-applicable sets must be disjoint`);
@@ -331,9 +339,9 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.equal(report.exclusions.revision, exclusionsRevision());
 
     const line = populationLine();
-    assert.match(line, /shape 217 \(1 N\/A\)/);
+    assert.match(line, /shape 215 \(3 N\/A\)/);
     assert.match(line, /typography 182 \(0 N\/A\)/);
-    assert.match(line, /exclusions [0-9a-f]{16} \(1 reviewed\)/);
+    assert.match(line, /exclusions [0-9a-f]{16} \(3 reviewed\)/);
 
     const pilot = pilotPopulation();
     assert.deepEqual(pilot.families.radio, ['typography', 'rhythm', 'depth', 'states', 'motion']);
@@ -356,8 +364,9 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.deepEqual(pin.provenance.membershipMoves.shape.removed, ['radio']);
 
     const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
-    assert.equal(floor.axes.shape, 217);
-    assert.equal(floor.notApplicable.shape, 1);
+    assert.equal(floor.axes.shape, 215);
+    assert.equal(floor.notApplicable.shape, 3);
+    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.removed, ['chart-line', 'chart-pie']);
     assert.equal(floor.exclusionsRevision, exclusionsRevision());
     assert.equal(floor.provenance.previousPin.axes.shape, 215);
     assert.deepEqual(floor.provenance.membershipMoves.previousWave.byAxis.shape, { removed: ['radio'], added: [] });
@@ -496,7 +505,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.deepEqual(checkbox.notApplicable, {});
     const report = populationReport(dir, catalogIn(dir), path);
     assert.ok(report.axes.find((entry) => entry.axis === 'shape').families.includes('checkbox'));
-    assert.deepEqual(report.axes.find((entry) => entry.axis === 'shape').notApplicable.map((entry) => entry.family), ['radio']);
+    assert.deepEqual(report.axes.find((entry) => entry.axis === 'shape').notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio']);
     assert.ok(report.exclusions.ineffective.some((entry) => entry.family === 'checkbox' && entry.axis === 'shape'));
     assert.deepEqual(checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN, { exclusionsPath: path }).failures, [],
       'an ineffective entry changes no published denominator');
@@ -634,6 +643,89 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
       { selector: '.b, .c', atRules: [], declarations: [{ property: 'color', value: 'red' }] },
       { selector: '.d', atRules: [], declarations: [{ property: 'content', value: '";"' }, { property: 'padding', value: '0' }] },
     ]);
+  });
+});
+
+describe('theme population — the reviewed chart-marks exclusions on shape and the producer guard (WO-EVI-02 X1, Fable C1)', () => {
+  const CHART_LINE_SKIN = `${AGNOSTIC_ROOT}/chart-line/index.css`;
+  const CHART_PIE_SKIN = `${AGNOSTIC_ROOT}/chart-pie/index.css`;
+  const CHART_FOUNDATION_SKIN = `${AGNOSTIC_ROOT}/chart-foundation/index.css`;
+  const plant = (dir, file, text) => {
+    mkdirSync(dirname(join(dir, file)), { recursive: true });
+    writeFileSync(join(dir, file), text);
+  };
+  const append = (dir, file, text) => writeFileSync(join(dir, file), `${readFileSync(join(dir, file), 'utf8')}\n${text}\n`);
+  const produced = (failures) => failures.filter((line) => line.includes(': PRODUCED — '));
+
+  it('names the reviewed declarations verbatim, they are the only radii each chart skin authors, and each withdraws its family', () => {
+    const entries = readExclusions().entries.filter((entry) => entry.family.startsWith('chart-'));
+    assert.deepEqual(entries.map((entry) => [entry.family, entry.skin, entry.reviewedAt.commit]),
+      [['chart-line', CHART_LINE_SKIN, '2e5419620'], ['chart-pie', CHART_PIE_SKIN, '2e5419620']]);
+    for (const entry of entries) {
+      assert.deepEqual(radiiOf(join(ROOT, entry.skin)), entry.declarations, entry.family);
+      const declared = familyAxisDeclarations().get(entry.family);
+      assert.ok(!declared.axes.shape, `${entry.family} leaves shape`);
+      assert.equal(declared.notApplicable.shape.review, CHART_REVIEW);
+    }
+    assert.ok(!readExclusions().entries.some((entry) => entry.family === 'chart-waterfall'), 'chart-waterfall is not excluded (Fable REJECT)');
+    assert.ok(familyAxisDeclarations().get('chart-waterfall').axes.shape, 'chart-waterfall stays in shape and must move');
+    assert.deepEqual(populationReport().exclusions.ineffective, []);
+  });
+
+  it('derives the private channels from the reviewed values, and none of them is produced anywhere in src on this tree', () => {
+    const reads = Object.fromEntries(readExclusions().entries.map((entry) =>
+      [entry.family, [...new Set(entry.declarations.flatMap((declaration) => privateChannelsRead(declaration.value)))]]));
+    assert.deepEqual(reads, { radio: [], 'chart-line': ['--_ds-line-marker-radius'], 'chart-pie': ['--_ds-pie-marker-radius'] });
+    const producers = privateChannelProducers(ROOT, ['--_ds-line-marker-radius', '--_ds-pie-marker-radius']);
+    assert.deepEqual(Object.fromEntries(producers), { '--_ds-line-marker-radius': [], '--_ds-pie-marker-radius': [] });
+    assert.deepEqual(checkExclusionRegistry().failures, []);
+  });
+
+  it('MUTANT (C1-a): a producer planted in the family\'s OWN skin leaves the entry matching, and the guard fails it by site on every gate', () => {
+    const dir = sandbox();
+    // A literal producer reads no head channel, so nothing else in the population notices it: the entry still
+    // matches verbatim and, without the guard, the family would stay N/A while its marker repaints.
+    append(dir, CHART_LINE_SKIN, '.ds-chart-line { --_ds-line-marker-radius: 2px; }');
+    assert.ok(familyAxisDeclarations(dir, catalogIn(dir)).get('chart-line').notApplicable.shape);
+    const failures = produced(checkExclusionRegistry(dir, EXCLUSIONS).failures);
+    assert.equal(failures.length, 1, failures.join(' | '));
+    assert.match(failures[0], /^entry 1 \(chart-line\/shape\): PRODUCED — --_ds-line-marker-radius, read by a reviewed declaration of .*chart-line\/index\.css, is produced at .*chart-line\/index\.css:\d+ `/u);
+    assert.match(failures[0], /the entry must return to review$/u);
+    assert.ok(checkPopulationFloor(dir, catalogIn(dir), FLOOR, EXCLUSIONS).failures
+      .some((line) => line.startsWith('exclusion registry: ') && line.includes('PRODUCED — --_ds-line-marker-radius')));
+    assert.ok(checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN, { exclusionsPath: EXCLUSIONS }).failures
+      .some((line) => line.startsWith('exclusion registry: ') && line.includes('PRODUCED — --_ds-line-marker-radius')));
+  });
+
+  it('MUTANT (C1-b): a producer in a FOREIGN file -- chart-foundation, an @property registration, a TS emitter -- fails by name too', () => {
+    const dir = sandbox();
+    append(dir, CHART_FOUNDATION_SKIN, ".ds-chart[data-chart-marks='technical-sharp'] { --_ds-line-marker-radius: 0; }");
+    plant(dir, 'src/foundation/tokens/css/foundation/registry/index.css',
+      "@property --_ds-pie-marker-radius { syntax: '<length-percentage>'; inherits: true; initial-value: 4px; }");
+    plant(dir, 'src/components/patterns/visualization/charts/emitter/index.ts',
+      "export const marks = (radius: string) => ({ ['--_ds-pie-marker-radius']: radius });");
+    const failures = produced(checkExclusionRegistry(dir, EXCLUSIONS).failures);
+    assert.equal(failures.length, 3, failures.join(' | '));
+    assert.ok(failures.some((line) => line.startsWith('entry 1 (chart-line/shape): PRODUCED — --_ds-line-marker-radius')
+      && line.includes(`${CHART_FOUNDATION_SKIN}:`)), failures.join(' | '));
+    assert.ok(failures.some((line) => line.startsWith('entry 2 (chart-pie/shape): PRODUCED — --_ds-pie-marker-radius')
+      && line.includes('src/foundation/tokens/css/foundation/registry/index.css:1')), failures.join(' | '));
+    assert.ok(failures.some((line) => line.startsWith('entry 2 (chart-pie/shape): PRODUCED — --_ds-pie-marker-radius')
+      && line.includes('src/components/patterns/visualization/charts/emitter/index.ts:1')), failures.join(' | '));
+  });
+
+  it('a read, a commented-out producer, a test fixture, a story and a longer channel sharing the prefix are not productions', () => {
+    const dir = sandbox();
+    append(dir, CHART_FOUNDATION_SKIN, [
+      '.ds-chart-line [data-part="marker"] { inline-size: var(--_ds-line-marker-radius, 2px); }',
+      '/* .ds-chart-line { --_ds-line-marker-radius: 0; } */',
+      '.ds-chart-pie { --_ds-pie-marker-radius-hover: 2px; }',
+    ].join('\n'));
+    plant(dir, 'src/components/patterns/visualization/charts/tests/marks.test.ts', "const style = { '--_ds-line-marker-radius': '0' };");
+    plant(dir, 'src/components/patterns/visualization/charts/marks.stories.tsx', "const style = { '--_ds-pie-marker-radius': '0' };");
+    plant(dir, 'src/components/patterns/visualization/charts/reader/index.ts',
+      "// style['--_ds-line-marker-radius'] = '0';\nexport const cap = 'var(--_ds-line-marker-radius, 999px)';");
+    assert.deepEqual(checkExclusionRegistry(dir, EXCLUSIONS).failures, []);
   });
 });
 

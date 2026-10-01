@@ -402,6 +402,74 @@ function matchingExclusion(registry, family, axis, file, rule, declaration) {
   return null;
 }
 
+/**
+ * The PRIVATE channels a reviewed value reads (`var(--_*)`), derived from the
+ * value itself so the guard below never keeps a second listing. A public
+ * `--ds-*` read is the catalog's business; a private socket has no governor,
+ * so the only thing that keeps a reviewed value constant is that nothing
+ * produces the socket.
+ */
+export const privateChannelsRead = (value) =>
+  [...new Set([...stripCssComments(value).matchAll(/var\(\s*(--_[\w-]+)/g)].map((match) => match[1]))];
+
+const SOURCE_EXTENSIONS = ['.css', '.ts', '.tsx', '.js', '.mjs'];
+const NOT_SHIPPED = /(^|[\\/])(tests|__tests__)[\\/]|\.(test|spec|stories)\.[cm]?[jt]sx?$/u;
+
+/** Comments blanked to spaces, newlines kept, so a match index still maps to its source line. */
+const blankComments = (text, lineComments) => {
+  const blank = (comment) => comment.replace(/[^\n]/g, ' ');
+  const stripped = text.replace(/\/\*[\s\S]*?\*\//g, blank);
+  return lineComments ? stripped.replace(/^[ \t]*\/\/.*$/gmu, blank) : stripped;
+};
+
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * Every site under `src` that PRODUCES one of `channels`: a CSS declaration
+ * (`--_x:`, comments removed), an `@property` registration, or the name as a
+ * string literal of its own in a TS/JS emitter (an inline-style key, a
+ * `setProperty` argument, an emitted channel list). A `var(--_x)` read is not
+ * a production. Tests and stories are not shipped and produce nothing.
+ */
+export function privateChannelProducers(root, channels) {
+  const producers = new Map(channels.map((channel) => [channel, []]));
+  if (channels.length === 0) return producers;
+  const base = join(root, 'src');
+  if (!existsSync(base)) return producers;
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== 'node_modules') walk(full);
+        continue;
+      }
+      if (!SOURCE_EXTENSIONS.some((extension) => entry.name.endsWith(extension))) continue;
+      const file = relativeTo(root, full);
+      if (NOT_SHIPPED.test(file)) continue;
+      const raw = readFileSync(full, 'utf8');
+      const present = channels.filter((channel) => raw.includes(channel));
+      if (present.length === 0) continue;
+      const text = blankComments(raw, !entry.name.endsWith('.css'));
+      for (const channel of present) {
+        const name = escapeRegExp(channel);
+        const forms = [
+          new RegExp(`(?<![\\w-])${name}(?![\\w-])\\s*:`, 'gu'),
+          new RegExp(`@property\\s+${name}(?![\\w-])`, 'gu'),
+          new RegExp(`(['"\`])${name}\\1`, 'gu'),
+        ];
+        for (const form of forms) {
+          for (const match of text.matchAll(form)) {
+            const line = text.slice(0, match.index).split('\n').length;
+            producers.get(channel).push(`${file}:${line} \`${raw.split('\n')[line - 1].trim()}\``);
+          }
+        }
+      }
+    }
+  };
+  walk(base);
+  return producers;
+}
+
 /** The label the namespaced domain-state matcher publishes its hits under. */
 export const NAMESPACED_STATE_NEEDLE = '[data-<ns>-state=';
 
@@ -613,7 +681,8 @@ export function axisNotApplicable(root = DEFAULT_ROOT, sourcePath = CATALOG_SOUR
  * not own, a selector absent from the comment-stripped skin (a selector that
  * survives only in a comment is the F-23 class), and a reviewed declaration
  * the skin no longer authors verbatim -- that family has re-entered by itself
- * and the entry must return to review rather than sit stale.
+ * and the entry must return to review rather than sit stale -- and a private
+ * channel a reviewed value reads that something in `src` now produces.
  */
 export function checkExclusionRegistry(root = DEFAULT_ROOT, exclusionsPath = EXCLUSIONS_PATH) {
   const failures = [];
@@ -682,6 +751,21 @@ export function checkExclusionRegistry(root = DEFAULT_ROOT, exclusionsPath = EXC
         failures.push(
           `${label}: STALE — ${entry.skin} no longer authors ${key} verbatim (the selector is authored under `
           + `${contextsOf(selector).join(', ')}); the family has re-entered ${entry.axis} and the entry must be re-reviewed or removed`,
+        );
+      }
+    }
+    // The producer guard (WO-EVI-02 X1, Fable C1). A reviewed value that reads
+    // a private socket is constant only while nothing produces that socket; a
+    // producer anywhere in `src` -- the family's own skin, chart-foundation, a
+    // grammar or an emitter -- can move the family while the skin text, and so
+    // the entry, still match. Derived from the values, never listed.
+    const read = [...new Set(declarations.flatMap((reviewed) => privateChannelsRead(reviewed.value ?? '')))];
+    for (const [channel, sites] of privateChannelProducers(root, read)) {
+      for (const site of sites) {
+        failures.push(
+          `${label}: PRODUCED — ${channel}, read by a reviewed declaration of ${entry.skin}, is produced at ${site}; `
+          + `the reviewed value no longer always paints its fallback, ${entry.family} can move on ${entry.axis} behind `
+          + 'the exclusion, and the entry must return to review',
         );
       }
     }
