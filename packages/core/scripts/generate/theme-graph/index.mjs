@@ -174,8 +174,11 @@ function readJsonViews() {
  * mounts) each named in their commits; no removal, no new consumer class.
  * Same day, +10: 10,034,729 -> 10,034,739 — R2c wires the column-menu deriver
  * onto --ds-density-effective-scale (six channels gain the calc chain).
+ * Same day, +1,606: 10,034,739 -> 10,036,345 — D2's normalized radius channel
+ * (the rest constant + the alias + its readers' edges) and the F-1 fix's
+ * vertical-baseline plumbing.
  */
-export const SIZE_BUDGET_BYTES = 10_034_739;
+export const SIZE_BUDGET_BYTES = 10_036_345;
 
 /** A key no id can collide with, used only to sort and de-duplicate pairs. */
 const SEP = "\u241F";

@@ -4,8 +4,8 @@
   "formatVersion": 1,
   "vertical": "bithire",
   "mode": "dark",
-  "channelCount": 4262,
-  "digest": "833d25ee8ee69afe41f867ce0918681745c61060f06c8db1aeaa5eebe0f22542",
+  "channelCount": 4263,
+  "digest": "1450dcc0e1b1c44edcbfcd05d88682642950e0af840c9b961d0ecd9d60d2a547",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -2873,6 +2873,7 @@
     "--ds-radius-nest-inset": "4px",
     "--ds-radius-nest-ratio": "0.5",
     "--ds-radius-none": "0",
+    "--ds-radius-scale-normalized": "calc(var(--ds-radius-scale, 1) / var(--ds-radius-scale-rest, 1))",
     "--ds-radius-sm": "calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1))",
     "--ds-radius-sm-base": "6px",
     "--ds-radius-xl": "calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1))",

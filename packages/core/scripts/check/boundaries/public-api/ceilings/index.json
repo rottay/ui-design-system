@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 14,
-      "maxSourceBytes": 397496
+      "maxSourceBytes": 397600
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "M3 (DS root mode table) + M2 (mode arm): CONTAINER_MODE_TEXTS (161 names) and the container mode-block machinery join the runtime emission path; 355289 -> 397496 measured by the gate",
+  "lastMove": "D2 normalized radius channel (1b): the ROOT_ALIASES row for --ds-radius-scale-normalized (+104 B, the row bytes measured) — 397,496 -> 397,600",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

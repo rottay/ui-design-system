@@ -2079,6 +2079,13 @@
   --ds-radius-2xl: calc(20px * var(--ds-radius-scale, 1));
   --ds-radius-3xl: calc(24px * var(--ds-radius-scale, 1));
   --ds-radius-full: 9999px;
+  /* The dial relative to the vertical's own rest, for a skin corner authored as
+     the vertical's resting pixel: <px> times this channel
+     paints <px> at rest in every vertical and moves by the tenant's ratio.
+     The rest is a constant the vertical compile alone emits (bithire 0.8);
+     this text names no vertical, so the root-alias restatement law carries it
+     into every tenant and container scope unchanged. */
+  --ds-radius-scale-normalized: calc(var(--ds-radius-scale, 1) / var(--ds-radius-scale-rest, 1));
 
   /* ─────────────────────────────────────────────────────────────────────────────
      5. DEPTH - dark-aware elevation scale
@@ -40560,13 +40567,13 @@ html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern 
   inline-size: var(--ds-skeleton-bone-width, var(--ds-spacing-0));
   block-size: var(--ds-skeleton-bone-height, var(--ds-spacing-0));
   /* The part's own measured corner, else the tenant edge dial. */
-  border-radius: var(--ds-skeleton-bone-radius, calc(6px * var(--ds-radius-scale, 1)));
+  border-radius: var(--ds-skeleton-bone-radius, calc(6px * var(--ds-radius-scale-normalized, 1)));
 }
 
 .ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-bone='line'] {
   inset-block-start: calc(var(--ds-skeleton-bone-y, 0px) + var(--ds-skeleton-bone-height, 0px) * 0.2);
   block-size: calc(var(--ds-skeleton-bone-height, 0px) * 0.6);
-  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale-normalized, 1)));
 }
 
 .ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-bone='round'] {
@@ -40692,7 +40699,7 @@ html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loadi
   display: block;
   block-size: var(--ds-skeleton-bar-height, var(--ds-spacing-3));
   inline-size: 72%;
-  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale-normalized, 1)));
   background: var(
     --ds-skeleton-bg,
     var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
@@ -72054,9 +72061,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* back button (no className hook — §4 anatomy is data-part only); its corner
-   rides the tenant radius dial like its form-header twin (10px when unset) */
+   rides the tenant radius dial like its form-header twin (10px at rest) */
 .ds-structure.ds-edit-header [data-part='back-button'] {
-  border-radius: calc(10px * var(--ds-radius-scale, 1));
+  border-radius: calc(10px * var(--ds-radius-scale-normalized, 1));
   background: transparent;
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button'] {
@@ -72505,10 +72512,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    declaration painted nothing — but it sat at (0,4,0), tied with the shared
    hover/active tint, and this file is imported AFTER the shared paint, so the
    no-op won and the back chip lost its tint in both states. The frame is all
-   this rule owns; its corner rides the tenant radius dial (10px when unset). */
+   this rule owns; its corner rides the tenant radius dial relative to the
+   vertical's rest (10px at rest in every vertical). */
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-button'] {
   border: 1px solid var(--ds-color-border);
-  border-radius: calc(10px * var(--ds-radius-scale, 1));
+  border-radius: calc(10px * var(--ds-radius-scale-normalized, 1));
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);
@@ -78042,7 +78050,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ActivityIndicator bars — Command/Circuit/Matrix, success. The per-index
    stagger delay stays inline (runtime value); the cadence is owned here. */
 .ds-data-terminal-card[data-part='root'] [data-part='activity-bar'] {
-  border-radius: calc(1px * var(--ds-radius-scale, 1));
+  border-radius: calc(1px * var(--ds-radius-scale-normalized, 1));
   background: var(--ds-color-success);
   animation: dtc-data-tick
     var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2))
@@ -97586,7 +97594,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * tenant-facing theme channel. */
 
 .ds-chart-area {
-  --_ds-area-marker-radius: calc(2px * var(--ds-radius-scale, 1));
+  --_ds-area-marker-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-area [data-part='legend-swatch'] {
@@ -97709,7 +97717,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * than a tenant-facing theme channel. */
 
 .ds-chart-bar {
-  --_ds-bar-marker-radius: calc(2px * var(--ds-radius-scale, 1));
+  --_ds-bar-marker-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-bar [data-part='legend-swatch'] {
@@ -98253,7 +98261,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * rather than a tenant-facing theme channel. */
 
 .ds-chart-radar [data-part='legend-swatch'] {
-  border-radius: calc(1px * var(--ds-radius-scale, 1));
+  border-radius: calc(1px * var(--ds-radius-scale-normalized, 1));
   transform: rotate(var(--_ds-radar-marker-rotation, 45deg)) scale(0.85);
 }
 
@@ -98386,7 +98394,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /** Treemap skin (visualization skin ownership), deliberately unlayered. */
 
 .ds-chart-treemap [data-part='legend-swatch'] {
-  border-radius: calc(2px * var(--ds-radius-scale, 1));
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-treemap [data-part='legend-label'] {
@@ -107127,6 +107135,7 @@ html[lang]:lang(ar) {
   --ds-radius-nest-inset: 0px;
   --ds-radius-nest-ratio: 0;
   --ds-radius-scale: 1;
+  --ds-radius-scale-rest: 1;
   --ds-record-canvas-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary)));
   --ds-record-heading-font-size: var(--ds-font-size-lg);
   --ds-record-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary));
@@ -108453,6 +108462,7 @@ html[lang]:lang(ar) {
   --ds-radius-3xl: calc(24px * var(--ds-radius-scale, 1));
   --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));
   --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
+  --ds-radius-scale-normalized: calc(var(--ds-radius-scale, 1) / var(--ds-radius-scale-rest, 1));
   --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));
   --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));
   --ds-radius-xs: calc(3px * var(--ds-radius-scale, 1));
@@ -111494,6 +111504,7 @@ html[lang]:lang(ar) {
   --ds-radius-nest-inset: 0px;
   --ds-radius-nest-ratio: 0;
   --ds-radius-scale: 0.8;
+  --ds-radius-scale-rest: 0.8;
   --ds-record-canvas-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary)));
   --ds-record-heading-font-size: var(--ds-font-size-lg);
   --ds-record-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary));
@@ -113022,6 +113033,7 @@ html[lang]:lang(ar) {
   --ds-radius-3xl: calc(24px * var(--ds-radius-scale, 1));
   --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));
   --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
+  --ds-radius-scale-normalized: calc(var(--ds-radius-scale, 1) / var(--ds-radius-scale-rest, 1));
   --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));
   --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));
   --ds-radius-xs: calc(3px * var(--ds-radius-scale, 1));
@@ -116215,6 +116227,7 @@ html[lang]:lang(ar) {
   --ds-radius-nest-inset: 0px;
   --ds-radius-nest-ratio: 0;
   --ds-radius-scale: 1;
+  --ds-radius-scale-rest: 1;
   --ds-record-canvas-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary)));
   --ds-record-heading-font-size: var(--ds-font-size-lg);
   --ds-record-quiet-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary));
@@ -117541,6 +117554,7 @@ html[lang]:lang(ar) {
   --ds-radius-3xl: calc(24px * var(--ds-radius-scale, 1));
   --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));
   --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
+  --ds-radius-scale-normalized: calc(var(--ds-radius-scale, 1) / var(--ds-radius-scale-rest, 1));
   --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));
   --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));
   --ds-radius-xs: calc(3px * var(--ds-radius-scale, 1));

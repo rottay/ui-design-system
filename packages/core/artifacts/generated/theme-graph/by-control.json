@@ -247,8 +247,8 @@
       "tier": "standard"
     },
     {
-      "channels": 224,
-      "channelsThroughAliases": 1901,
+      "channels": 225,
+      "channelsThroughAliases": 1903,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -2415,8 +2415,8 @@
       "tier": "standard"
     },
     {
-      "channels": 224,
-      "channelsThroughAliases": 1901,
+      "channels": 225,
+      "channelsThroughAliases": 1903,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",
@@ -2701,8 +2701,8 @@
       "tier": "pro"
     },
     {
-      "channels": 365,
-      "channelsThroughAliases": 1059,
+      "channels": 366,
+      "channelsThroughAliases": 1061,
       "decision": "shape.button-style",
       "derivers": [
         "app-shell",
@@ -2945,8 +2945,8 @@
       "tier": "standard"
     },
     {
-      "channels": 503,
-      "channelsThroughAliases": 639,
+      "channels": 504,
+      "channelsThroughAliases": 645,
       "decision": "shape.control-height",
       "derivers": [
         "app-shell",
@@ -2980,7 +2980,11 @@
         "card",
         "card-compounds",
         "cascader",
+        "chart-area",
+        "chart-bar",
         "chart-foundation",
+        "chart-radar",
+        "chart-treemap",
         "cockpit-header",
         "code-block",
         "collection-header",
@@ -2994,14 +2998,17 @@
         "data-table-actions",
         "data-table-interactions",
         "data-table-mobile",
+        "data-terminal-card",
         "date-picker",
         "detail-panel",
         "drawer",
         "dropdown",
+        "edit-header",
         "empty-state",
         "float-button",
         "form",
         "form-field",
+        "form-header",
         "grid-view",
         "input",
         "input-compounds",
@@ -3024,6 +3031,8 @@
         "sheet",
         "shortcuts-overlay",
         "sidebar-surface",
+        "skeleton",
+        "skeleton-anatomy",
         "splitter",
         "stats-grid",
         "status-filter-pills",
@@ -3039,8 +3048,8 @@
       "tier": "standard"
     },
     {
-      "channels": 344,
-      "channelsThroughAliases": 454,
+      "channels": 345,
+      "channelsThroughAliases": 460,
       "decision": "shape.nesting",
       "derivers": [
         "app-shell",
@@ -3070,7 +3079,11 @@
         "calendar",
         "card",
         "cascader",
+        "chart-area",
+        "chart-bar",
         "chart-foundation",
+        "chart-radar",
+        "chart-treemap",
         "code-block",
         "collection-header",
         "collection-shell",
@@ -3078,14 +3091,17 @@
         "command-palette",
         "confirm-dialog",
         "data-table",
+        "data-terminal-card",
         "date-picker",
         "detail-panel",
         "drawer",
         "dropdown",
+        "edit-header",
         "empty-state",
         "float-button",
         "form",
         "form-field",
+        "form-header",
         "input",
         "input-compounds",
         "input-number",
@@ -3103,6 +3119,8 @@
         "sheet",
         "shortcuts-overlay",
         "sidebar-surface",
+        "skeleton",
+        "skeleton-anatomy",
         "splitter",
         "stats-grid",
         "status-filter-pills",
@@ -3116,7 +3134,7 @@
     },
     {
       "channels": 1297,
-      "channelsThroughAliases": 1927,
+      "channelsThroughAliases": 1928,
       "decision": "shape.radius-scale",
       "derivers": [
         "app-shell",
@@ -4766,7 +4784,7 @@
     },
     {
       "channels": 130,
-      "channelsThroughAliases": 957,
+      "channelsThroughAliases": 958,
       "decision": "typography.pairing",
       "derivers": [
         "axes",
@@ -5168,7 +5186,7 @@
     },
     {
       "channels": 410,
-      "channelsThroughAliases": 1196,
+      "channelsThroughAliases": 1197,
       "decision": "typography.scale",
       "derivers": [
         "axes",
