@@ -188,10 +188,13 @@ import {
   stripCssComments,
 } from '../population/index.mjs';
 import {
+  CHROMATIC_FORBIDDEN_KEYS,
   INDICATOR_PATH,
   buildIndicator,
+  chromaticStatesReading,
   indicatorRefusal,
   negativeControlsOf,
+  negativeTest,
   writeIndicator,
 } from './indicator/index.mjs';
 
@@ -5561,7 +5564,10 @@ export const UNMOUNTABLE_FAMILIES = Object.freeze([
  * denominator gets shrunk to reach a threshold.
  */
 export async function readSettled(page, plan) {
-  const { properties } = plan;
+  // Settling is decided on the six axes' vocabulary alone (`settleOn`): the
+  // chromatic read set rides on the same readings and must not be able to
+  // drop a family from any axis's denominator.
+  const { properties, settleOn = properties } = plan;
   let previous = await page.evaluate(readComputed, plan);
   let unsettled = new Set(Object.keys(previous));
   let current = previous;
@@ -5570,7 +5576,7 @@ export async function readSettled(page, plan) {
     current = await page.evaluate(readComputed, plan);
     const stillMoving = new Set();
     for (const family of unsettled) {
-      for (const property of properties) {
+      for (const property of settleOn) {
         if (JSON.stringify(previous[family]?.[property]) !== JSON.stringify(current[family]?.[property])) {
           stillMoving.add(family);
           break;
@@ -5588,6 +5594,7 @@ export async function measureCell({
   page,
   variables,
   properties,
+  settleOn = properties,
   axisOf = axisByProperty(),
   states: variants = STATE_VARIANTS,
   realRender = false,
@@ -5596,7 +5603,7 @@ export async function measureCell({
   const applied = await page.evaluate(applyVariables, variables);
   const unsettled = new Set();
   const collect = async (plan = {}) => {
-    const reading = await readSettled(page, { properties, axisOf, pseudoReads, ...plan });
+    const reading = await readSettled(page, { properties, settleOn, axisOf, pseudoReads, ...plan });
     for (const key of reading.unsettled) unsettled.add(key.split('#')[0]);
     return reading.values;
   };
@@ -5713,6 +5720,7 @@ export async function measureNativeHalf({
   page,
   arms,
   properties,
+  settleOn = properties,
   axisOf = axisByProperty(),
   variants = NATIVE_PSEUDO_VARIANTS,
   withheld = new Map(),
@@ -5751,7 +5759,7 @@ export async function measureNativeHalf({
           for (const arm of arms) {
             await page.evaluate(applyVariables, arm.variables);
             const reading = await readSettled(page, {
-              properties, axisOf, depth, pseudoReads, ...(realRender ? { realStates: true, keys: REAL_RENDER_KEY } : {}),
+              properties, settleOn, axisOf, depth, pseudoReads, ...(realRender ? { realStates: true, keys: REAL_RENDER_KEY } : {}),
             });
             for (const family of reading.unsettled) unsettled.add(family.split('#')[0]);
             passes.get(arm.key)[variant].push(reading.values);
@@ -6178,9 +6186,11 @@ function firstDifference(readings, properties, family) {
  * stamped `[data-state]` scene and the forced native pseudos. The published
  * rule is the union -- a family moves on states when EITHER half shows an
  * attributable difference -- and each half is published beside it.
+ *
+ * `properties` is the drill's injection point (a mutant vocabulary, to prove
+ * a colour longhand there is still stripped); the run never passes it.
  */
-export function statesHalves(before, after, family) {
-  const properties = allProperties();
+export function statesHalves(before, after, family, properties = allProperties()) {
   return {
     stamped: firstDifference(
       STATE_VARIANTS.map((state) => [before.states?.[state], after.states?.[state]]),
@@ -6193,6 +6203,197 @@ export function statesHalves(before, after, family) {
       family,
     ),
   };
+}
+
+/**
+ * THE CHROMATIC STATES READING, reported APART from the six axes (owner
+ * directive 2026-10-01; measured by CR-1, shape ruled by the CR-1 review).
+ *
+ * The six axes stay non-chromatic, and not by promise: the palette-only control
+ * moves colour under states on most of the population, so colour counted into
+ * any axis's numerator turns that control non-zero in every cell and the
+ * negative test RED. (A colour longhand merely added to a vocabulary is still
+ * compared through `stripColour` and reads 0; the drill measures both.) What a states pair does to COLOUR is still a fact worth
+ * publishing, so it is read on the same run, from the same readings, over the
+ * same states denominator -- and published as `chromaticStates`, a sibling of
+ * `axes` with no status, no threshold and no `met`, never added to a numerator.
+ *
+ * Two classes of property. The PURE colour longhands are compared whole. The
+ * EMBEDDING ones are non-chromatic longhands whose computed value carries a
+ * colour (`box-shadow`, `text-shadow`, `background-image`); only their colour
+ * tokens are compared, so a geometry move there is never read as chromatic and
+ * the depth reading and this one do not overlap.
+ *
+ * Scene: the non-chromatic one -- the family root plus the parts tagged for
+ * `states`. A part is tagged only when its rule authored a states-vocabulary
+ * property, so a state rule that paints colour alone mounts no part and its
+ * paint is unread: the reading is a LOWER BOUND, and the colour-only
+ * unobservable families are named beside it, never subtracted.
+ */
+export const CHROMATIC_PROPERTIES = Object.freeze([
+  'color',
+  'background-color',
+  'border-top-color',
+  'border-right-color',
+  'border-bottom-color',
+  'border-left-color',
+  'outline-color',
+  'text-decoration-color',
+  'fill',
+  'stroke',
+  'caret-color',
+  'column-rule-color',
+]);
+export const CHROMATIC_EMBEDDED = Object.freeze(['box-shadow', 'text-shadow', 'background-image']);
+export const CHROMATIC_SCENE = 'the non-chromatic scene: root plus states-tagged parts; a colour-only state rule mounts '
+  + 'no part, so this is a lower bound';
+
+/**
+ * THE FAMILIES WHOSE ONLY STATES MOVEMENT IS CHROMATIC, pinned by name and
+ * checked on a full run in every states cell, both directions. `data-table`
+ * paints its `focus-visible` as a background tint and nothing else, so it is a
+ * states NON-mover on the six axes and the one family a merge of this reading
+ * would add: 118 -> 119 with `data-table` in `movedIds` is the fingerprint of a
+ * leak, and this pin is what turns it into a failure. Re-pinned only with the
+ * measurement, like `UNOBSERVABLE_FAMILIES`.
+ */
+export const CHROMATIC_ONLY_STATES = Object.freeze(['data-table']);
+
+/** The read set the chromatic reading adds to the run: what the six axes do not already read. */
+export function chromaticReadProperties() {
+  const read = allProperties();
+  return [...CHROMATIC_PROPERTIES, ...CHROMATIC_EMBEDDED].filter((property) => !read.includes(property));
+}
+
+// Wider than `COLOUR_TOKEN` on purpose: `transparent` and `currentcolor` are
+// colours here, where they are only noise to strip on the six axes.
+const CHROMATIC_TOKEN =
+  /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color|color-mix|light-dark)\([^()]*(?:\([^()]*\)[^()]*)*\)|\b(?:transparent|currentcolor)\b/giu;
+const colourTokens = (value) => (typeof value === 'string' ? (value.match(CHROMATIC_TOKEN) ?? []).join(',') : value);
+
+/** The colour channels on which two readings of one family differ: pure longhands whole, embedding ones by token. */
+export function chromaticDifference(a, b) {
+  const channels = [];
+  if (!a || !b) return channels;
+  for (const property of CHROMATIC_PROPERTIES) {
+    if (a[property] !== undefined && a[property] !== b[property]) channels.push(property);
+  }
+  for (const property of CHROMATIC_EMBEDDED) {
+    if (a[property] !== undefined && colourTokens(a[property]) !== colourTokens(b[property])) channels.push(`${property}(colour)`);
+  }
+  return channels;
+}
+
+/**
+ * One family's chromatic reading of a pair, under both halves of the states
+ * axis. `rest` is what already differs before any state; the ISOLATED halves
+ * drop those channels from every state, which is stricter than the axes' own
+ * states reading (that one never subtracts rest), so it is published second.
+ */
+export function chromaticStatesOf(before, after, family) {
+  const rest = chromaticDifference(before.base?.[family], after.base?.[family]);
+  const half = (left = {}, right = {}) => {
+    const out = {};
+    for (const variant of Object.keys(left)) {
+      const channels = chromaticDifference(left[variant]?.[family], right?.[variant]?.[family]);
+      if (channels.length > 0) out[variant] = channels;
+    }
+    return out;
+  };
+  const stamped = half(before.states, after.states);
+  const native = half(before.native, after.native);
+  const isolate = (byVariant) => Object.fromEntries(Object.entries(byVariant)
+    .map(([variant, channels]) => [variant, channels.filter((channel) => !rest.includes(channel))])
+    .filter(([, channels]) => channels.length > 0));
+  return { rest, stamped, native, stampedIsolated: isolate(stamped), nativeIsolated: isolate(native) };
+}
+
+/**
+ * One cell's chromatic reading over a denominator. NEVER a `cells` entry: it
+ * has no axis, and nothing here is read by `differsOnAxis`, `axisReadings` or
+ * `negativeTest`.
+ */
+export function chromaticCell(before, after, denominator) {
+  const union = (...halves) => [...new Set(halves.flatMap((half) => Object.values(half).flat()))].sort();
+  const moved = [];
+  const restIsolated = [];
+  const byChannel = {};
+  const halves = { stamped: 0, native: 0 };
+  const families = {};
+  for (const family of denominator) {
+    const reading = chromaticStatesOf(before, after, family);
+    const channels = union(reading.stamped, reading.native);
+    if (channels.length === 0) continue;
+    moved.push(family);
+    if (union(reading.stampedIsolated, reading.nativeIsolated).length > 0) restIsolated.push(family);
+    for (const channel of channels) byChannel[channel] = (byChannel[channel] ?? 0) + 1;
+    if (Object.keys(reading.stamped).length > 0) halves.stamped += 1;
+    if (Object.keys(reading.native).length > 0) halves.native += 1;
+    families[family] = {
+      channels,
+      stamped: Object.keys(reading.stamped),
+      native: Object.keys(reading.native),
+      ...(reading.rest.length === 0 ? {} : { rest: reading.rest }),
+    };
+  }
+  return {
+    moved: moved.length,
+    movedIds: moved,
+    restIsolated: restIsolated.length,
+    restIsolatedIds: restIsolated,
+    byChannel: Object.fromEntries(Object.entries(byChannel).sort(([left], [right]) => left.localeCompare(right))),
+    halves,
+    families,
+  };
+}
+
+/**
+ * THE SEPARATION, checked on every run. The vocabulary half is static: no pure
+ * colour longhand may enter an axis, and no axis property may look like one.
+ * The result half: no cell carries an axis outside the six, the chromatic
+ * block carries no status, and -- on a full run -- the chromatic-only set in
+ * every states cell is exactly `CHROMATIC_ONLY_STATES`.
+ */
+export function chromaticSeparationFailures(result = null, { pin = CHROMATIC_ONLY_STATES } = {}) {
+  const failures = [];
+  const read = allProperties();
+  for (const property of CHROMATIC_PROPERTIES) {
+    if (read.includes(property)) failures.push(`${property}: a colour longhand entered an axis vocabulary; the six axes stay non-chromatic`);
+  }
+  for (const property of read) {
+    if (/^(?:background|fill|stroke|(?:[a-z-]+-)?color)$/u.test(property)) {
+      failures.push(`${property}: an axis vocabulary property reads as colour; the six axes stay non-chromatic`);
+    }
+  }
+  if (result === null) return failures;
+  for (const axis of new Set((result.cells ?? []).map((cell) => cell.axis))) {
+    if (!AXIS_IDS.includes(axis)) failures.push(`${axis}: a cell on an axis outside the six; the chromatic reading is never a cell`);
+  }
+  // `run` always takes the reading (no flag turns it off; pinned by the null
+  // pair drill). A result without it is a hand-built fixture or a pre-CR-2 run.
+  const block = result.chromaticStates;
+  if (block === undefined) return failures;
+  const keyed = [block, ...(block.cells ?? [])];
+  for (const key of CHROMATIC_FORBIDDEN_KEYS) {
+    if (keyed.some((entry) => Object.hasOwn(entry, key))) failures.push(`chromaticStates carries \`${key}\`; it is reported apart, never a status`);
+  }
+  if (result.familiesFiltered !== true) {
+    for (const cell of (block.cells ?? []).filter((entry) => entry.scenario === 'states')) {
+      const where = `${cell.vertical}/${cell.theme}`;
+      for (const family of cell.chromaticOnly ?? []) {
+        if (!pin.includes(family)) {
+          failures.push(`${where} ${family}: moves on states by colour ALONE and is not in CHROMATIC_ONLY_STATES -- re-pin it with the measurement`);
+        }
+      }
+      for (const family of pin) {
+        if (!(cell.chromaticOnly ?? []).includes(family)) {
+          failures.push(`${where} ${family}: pinned chromatic-only on states and it is not -- a states numerator that now `
+            + 'counts it is the fingerprint of colour leaking into an axis; otherwise re-pin CHROMATIC_ONLY_STATES');
+        }
+      }
+    }
+  }
+  return failures;
 }
 
 /**
@@ -6662,8 +6863,14 @@ export async function run({
   const populations = axisPopulations(root);
   const notApplicable = axisNotApplicable(root);
   const unobservable = axisUnobservable(root);
-  const properties = allProperties();
-  const axisOf = axisByProperty();
+  // The six axes' vocabulary, and beside it the chromatic read set, read on the
+  // same nodes as `states` (the root plus its states-tagged parts). The axes
+  // compare only their own vocabulary, and settling is decided on it alone, so
+  // the widening cannot move an axis number.
+  const axisProperties = allProperties();
+  const chromaticRead = chromaticReadProperties();
+  const properties = [...axisProperties, ...chromaticRead];
+  const axisOf = { ...axisByProperty(), ...Object.fromEntries(chromaticRead.map((property) => [property, 'states'])) };
   // The pins are read first and honoured: a family with no mountable root
   // gains no parts, so `UNMOUNTABLE_FAMILIES` and every denominator below it
   // are exactly the ones the pre-lot run published.
@@ -6707,6 +6914,9 @@ export async function run({
 
   const { browser, close, provenance } = await launchBrowser();
   const cells = [];
+  // The chromatic states reading, one per (vertical, mode, pair that reads the
+  // states axis); never pushed into `cells`.
+  const chromaticReadings = [];
   const partReadings = [];
   const refusals = [];
   const observedUnsettled = new Set();
@@ -6765,6 +6975,7 @@ export async function run({
               page: nativePage,
               arms: [...arms.values()],
               properties,
+              settleOn: axisProperties,
               axisOf,
               variants: nativeVariants,
               withheld,
@@ -6823,7 +7034,7 @@ export async function run({
           const armChannels = [...new Set([...pairChannels, ...pinChannels])];
           try {
             before = await measureCell({
-              page, variables: variablesA, properties, axisOf, states: stampedStates, realRender: realRenders.length > 0,
+              page, variables: variablesA, properties, settleOn: axisProperties, axisOf, states: stampedStates, realRender: realRenders.length > 0,
               pseudoReads: pseudoPlan,
             });
             partsA = parts ? await page.evaluate(readParts, parts) : null;
@@ -6832,7 +7043,7 @@ export async function run({
             // an alias is compared as what it paints and not as its string.
             paintA = await readArmChannels(page, armChannels);
             after = await measureCell({
-              page, variables: variablesB, properties, axisOf, states: stampedStates, realRender: realRenders.length > 0,
+              page, variables: variablesB, properties, settleOn: axisProperties, axisOf, states: stampedStates, realRender: realRenders.length > 0,
               pseudoReads: pseudoPlan,
             });
             partsB = parts ? await page.evaluate(readParts, parts) : null;
@@ -6853,6 +7064,16 @@ export async function run({
           if (nativeHalf !== null && readsStatesAxis(scenario)) {
             before.native = nativeHalf.readings.get(JSON.stringify(variablesA));
             after.native = nativeHalf.readings.get(JSON.stringify(variablesB));
+          }
+          if (readsStatesAxis(scenario)) {
+            chromaticReadings.push({
+              vertical,
+              theme,
+              scenario: scenario.id,
+              kind: scenario.kind,
+              nativeMeasured: before.native !== undefined,
+              ...chromaticCell(before, after, effective('states')),
+            });
           }
           for (const family of [...before.unsettled, ...after.unsettled]) {
             if (!UNSETTLED_FAMILIES.includes(family)) newlyUnsettled.add(family);
@@ -7188,6 +7409,24 @@ export async function run({
     })),
     refusals,
     cells,
+    // REPORTED APART from every cell above: no axis, no status, never a
+    // numerator. `chromaticOnly` is read against the SAME pair's own states
+    // cell where it has one (the states positive, the palette control).
+    chromaticStates: {
+      properties: [...CHROMATIC_PROPERTIES],
+      embedded: [...CHROMATIC_EMBEDDED],
+      scene: CHROMATIC_SCENE,
+      pinnedChromaticOnly: [...CHROMATIC_ONLY_STATES],
+      cells: chromaticReadings.map((reading) => {
+        const own = cells.find((cell) => cell.vertical === reading.vertical && cell.theme === reading.theme
+          && cell.scenario === reading.scenario && cell.axis === 'states');
+        return {
+          ...reading,
+          nonChromatic: own === undefined ? null : own.moved,
+          chromaticOnly: own === undefined ? null : reading.movedIds.filter((family) => !own.movedIds.includes(family)),
+        };
+      }),
+    },
     partReadings,
     limits: {
       states: { ...STATES_AXIS_LIMITS, stampedStates, unreachable: statesUnreachable },
@@ -7326,9 +7565,13 @@ export function evaluate(result, {
   inertPairs = INERT_PAIRS,
   vacuityPermitted = VACUITY_PERMITTED_CONTROLS,
   pseudoOnlyCredits = PSEUDO_ONLY_CREDITS,
+  chromaticOnlyStates = CHROMATIC_ONLY_STATES,
 } = {}) {
   const failures = [];
   if (result.cells.length === 0) failures.push('no cell measured — the probe ran nothing');
+  // THE CHROMATIC READING STAYS APART: vocabulary, cells, block, and the
+  // chromatic-only pin on a full run.
+  failures.push(...chromaticSeparationFailures(result, { pin: chromaticOnlyStates }));
   if (result.families.mountable === 0) {
     failures.push('no family could be mounted — the selector reader is broken');
   }
@@ -7866,6 +8109,16 @@ if (isMain) {
     );
   }
   for (const line of result.limits.states.unreachable) console.log(`  states axis limit: ${line}`);
+  // Printed on every run, published or not: the reading is always taken.
+  const chromatic = chromaticStatesReading(result, negativeTest(result, negativeControlsOf(SCENARIOS)));
+  console.log(`  ${chromatic.line}`);
+  for (const cell of chromatic.cells.filter((entry) => entry.measured)) {
+    console.log(
+      `    chromatic states ${cell.vertical}/${cell.theme}: ${cell.moved}/${chromatic.declared} declared, `
+      + `rest-isolated ${cell.restIsolated}, non-chromatic ${cell.nonChromatic}, chromatic-only ${cell.chromaticOnly.join(', ') || 'none'}`
+      + ` (${Object.entries(cell.byChannel).map(([channel, count]) => `${channel} ${count}`).join(', ')})`,
+    );
+  }
   // `--no-focused-stamp` reproduces an older reading exactly as the flags the
   // indicator already names do, so nothing is published under it either.
   const refusal = publicationRefusal({ argv: process.argv, env: process.env })

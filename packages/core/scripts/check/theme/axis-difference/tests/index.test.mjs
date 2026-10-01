@@ -4473,3 +4473,210 @@ describe('axis-difference BROWSER drill — S10: the shape reach rows move shape
     assert.deepEqual(evaluate(on), []);
   }, 600_000);
 });
+
+/**
+ * CR-2: THE CHROMATIC STATES READING, reported APART from the six axes (owner
+ * directive 2026-10-01; shape ruled by the CR-1 review). Its symbols are read
+ * off the namespace, so a tree without them fails here as a drill.
+ *
+ * P1 the vocabularies are disjoint; P3 data-table's shape is a states
+ * non-mover and a chromatic mover, and the chromatic reading merged into the
+ * states verdict turns a palette-like control non-zero (the lock, proven);
+ * P4 the chromatic-only set is pinned by name and a leak is its fingerprint.
+ * P2 (the artifact is the same with or without the block) is in the
+ * indicator's own drill.
+ */
+describe('axis-difference CR-2 — the chromatic states reading stays apart', () => {
+  const PURE = ['color', 'background-color', 'border-top-color', 'border-right-color', 'border-bottom-color',
+    'border-left-color', 'outline-color', 'text-decoration-color', 'fill', 'stroke', 'caret-color', 'column-rule-color'];
+  const COLOUR = /^(?:background|fill|stroke|(?:[a-z-]+-)?color)$/u; // check/theme/population's COLOUR_PROPERTY
+
+  // A reading shape `differsOnAxis` and `chromaticStatesOf` both take: rest,
+  // five stamped states, three native variants; `over` replaces one family's
+  // values under the named keys.
+  const reading = (family, values, over = {}) => {
+    const of = (key) => ({ [family]: { ...values, ...(over[key] ?? {}) } });
+    return {
+      base: of('base'),
+      states: Object.fromEntries(STATE_VARIANTS.map((state) => [state, of(`s:${state}`)])),
+      native: Object.fromEntries(NATIVE_PSEUDO_VARIANTS.map((variant) => [variant, of(`n:${variant}`)])),
+    };
+  };
+  const resting = () => ({
+    ...Object.fromEntries(allProperties().map((property) => [property, '0px'])),
+    ...Object.fromEntries(PURE.map((property) => [property, 'rgb(0, 0, 0)'])),
+    'box-shadow': 'rgb(0, 0, 255) 0px 0px 0px 2px',
+    'text-shadow': 'none',
+    'background-image': 'none',
+  });
+
+  it('P1: no colour longhand is in any axis vocabulary, and no axis property reads as colour', () => {
+    assert.deepEqual([...probe.CHROMATIC_PROPERTIES], PURE);
+    assert.deepEqual([...probe.CHROMATIC_EMBEDDED], ['box-shadow', 'text-shadow', 'background-image']);
+    const read = allProperties();
+    assert.deepEqual(PURE.filter((property) => read.includes(property)), []);
+    assert.deepEqual(read.filter((property) => COLOUR.test(property)), []);
+    for (const axis of AXIS_IDS) assert.deepEqual(AXES[axis].computed.filter((property) => COLOUR.test(property)), [], axis);
+    // box-shadow is depth's and is compared there with its colour stripped;
+    // the other two embedding longhands are read for this reading alone.
+    assert.ok(read.includes('box-shadow'));
+    assert.deepEqual(probe.chromaticReadProperties(), [...PURE, 'text-shadow', 'background-image']);
+    assert.deepEqual(probe.chromaticSeparationFailures(), []);
+  });
+
+  it('the embedding class compares colour tokens alone: geometry is never chromatic, a tint is', () => {
+    const base = resting();
+    const diff = (over) => probe.chromaticDifference(base, { ...base, ...over });
+    assert.deepEqual(diff({ 'box-shadow': 'rgb(0, 0, 255) 0px 0px 0px 4px' }), []);
+    assert.deepEqual(diff({ 'box-shadow': 'rgb(9, 9, 255) 0px 0px 0px 2px' }), ['box-shadow(colour)']);
+    const shadowed = { ...base, 'text-shadow': 'rgb(0, 0, 0) 1px 1px 0px' };
+    assert.deepEqual(probe.chromaticDifference(shadowed, { ...shadowed, 'text-shadow': 'rgb(0, 0, 0) 2px 2px 0px' }), []);
+    assert.deepEqual(probe.chromaticDifference(shadowed, { ...shadowed, 'text-shadow': 'rgb(1, 0, 0) 1px 1px 0px' }), ['text-shadow(colour)']);
+    const gradient = { ...base, 'background-image': 'linear-gradient(rgb(0, 0, 0), transparent)' };
+    assert.deepEqual(probe.chromaticDifference(gradient, { ...gradient, 'background-image': 'linear-gradient(90deg, rgb(0, 0, 0), transparent)' }), []);
+    assert.deepEqual(probe.chromaticDifference(gradient, { ...gradient, 'background-image': 'linear-gradient(rgb(0, 0, 0), rgb(1, 1, 1))' }), ['background-image(colour)']);
+    assert.deepEqual(diff({ 'background-color': 'rgb(1, 1, 1)' }), ['background-color']);
+  });
+
+  it('P3a: data-table\'s shape -- a background tint under focus-visible and nothing else -- is a states NON-mover and a chromatic mover', () => {
+    const values = resting();
+    const tint = { 'background-color': 'rgb(240, 240, 255)' };
+    const before = reading('data-table', values);
+    const after = reading('data-table', values, { 's:focus-visible': tint, 'n:focus-visible': tint });
+    assert.equal(differsOnAxis('states', before, after, 'data-table'), null);
+    assert.deepEqual(statesHalves(before, after, 'data-table'), { stamped: null, native: null });
+    const cell = probe.chromaticCell(before, after, ['data-table']);
+    assert.equal(cell.moved, 1);
+    assert.deepEqual(cell.movedIds, ['data-table']);
+    assert.equal(cell.restIsolated, 1);
+    assert.deepEqual(cell.byChannel, { 'background-color': 1 });
+    assert.deepEqual(cell.halves, { stamped: 1, native: 1 });
+    assert.deepEqual(cell.families['data-table'], { channels: ['background-color'], stamped: ['focus-visible'], native: ['focus-visible'] });
+  });
+
+  it('rest isolation: a colour that already differs at rest is dropped from the stricter reading, never from the raw one', () => {
+    const values = resting();
+    const tint = { 'box-shadow': 'rgb(9, 9, 255) 0px 0px 0px 2px' };
+    const everywhere = Object.fromEntries(['base', ...STATE_VARIANTS.map((state) => `s:${state}`),
+      ...NATIVE_PSEUDO_VARIANTS.map((variant) => `n:${variant}`)].map((key) => [key, tint]));
+    const cell = probe.chromaticCell(reading('data-table-mobile', values), reading('data-table-mobile', values, everywhere), ['data-table-mobile']);
+    assert.equal(cell.moved, 1);
+    assert.equal(cell.restIsolated, 0);
+    assert.deepEqual(cell.families['data-table-mobile'].rest, ['box-shadow(colour)']);
+  });
+
+  it('P3b MUTANT: the chromatic reading merged into the states verdict turns a palette-like control RED -- the lock, measured', () => {
+    // A palette pair: the rest and every state repaint the fill and the ring
+    // tint, and nothing else moves -- the shape palette has on 115/147 families.
+    const values = resting();
+    const paint = { 'background-color': 'rgb(20, 20, 20)', 'box-shadow': 'rgb(9, 9, 255) 0px 0px 0px 2px' };
+    const everywhere = Object.fromEntries(['base', ...STATE_VARIANTS.map((state) => `s:${state}`),
+      ...NATIVE_PSEUDO_VARIANTS.map((variant) => `n:${variant}`)].map((key) => [key, paint]));
+    const before = reading('button', values);
+    const after = reading('button', values, everywhere);
+    const lawful = statesHalves(before, after, 'button');
+    assert.deepEqual(lawful, { stamped: null, native: null }, 'the shipped states verdict reads the palette pair at 0');
+    // A second lock, measured here so nobody leans on the first alone: a colour
+    // longhand INJECTED into the vocabulary is still compared through
+    // `stripColour`, so it reads 0 too. Colour reaches a numerator only by
+    // counting the chromatic reading itself.
+    assert.deepEqual(statesHalves(before, after, 'button', [...allProperties(), 'background-color']), { stamped: null, native: null });
+    const merged = (left, right, family) => {
+      const own = statesHalves(left, right, family);
+      const colour = probe.chromaticStatesOf(left, right, family);
+      return {
+        stamped: own.stamped ?? Object.values(colour.stamped)[0]?.[0] ?? null,
+        native: own.native ?? Object.values(colour.native)[0]?.[0] ?? null,
+      };
+    };
+    const mutant = merged(before, after, 'button');
+    assert.equal(mutant.stamped, 'background-color', 'the merged verdict reads the palette pair as a states move');
+    const control = (moved) => ({
+      vertical: 'bithire', theme: 'light', scenario: 'palette-only', kind: 'negative', axis: 'states',
+      evidential: true, compiledA: 3, compiledB: 3, appliedA: 3, appliedB: 3, channels: 3, resolvedDiffering: 3,
+      moved: moved.length, movedIds: moved.map((entry) => entry.family), movedFamilies: moved, denominator: 147,
+      percent: (moved.length / 147) * 100, witness: { kind: 'effective-map', control: 'palette.seeds', channels: 3, differing: 3 },
+    });
+    const at = (halves) => (halves.stamped ?? halves.native ? [{ family: 'button', property: halves.stamped ?? halves.native }] : []);
+    assert.deepEqual(evaluate(result([control(at(lawful))])).filter((line) => line.startsWith('NEGATIVE CONTROL')), []);
+    assert.ok(evaluate(result([control(at(mutant))])).some((line) => line.startsWith('NEGATIVE CONTROL palette-only moved 1/147')
+      && line.includes('button(background-color)')));
+  });
+
+  const chromaticResult = ({ chromaticOnly = ['data-table'], over = {}, cellOver = {}, extraCells = [] } = {}) => result([
+    cell({ scenario: 'states', axis: 'states', moved: 118 }),
+    ...extraCells,
+  ], {
+    chromaticStates: {
+      properties: PURE,
+      embedded: ['box-shadow', 'text-shadow', 'background-image'],
+      scene: 'fixture',
+      pinnedChromaticOnly: ['data-table'],
+      cells: FLEET.map(([vertical, theme]) => ({
+        vertical, theme, scenario: 'states', kind: 'positive', moved: 52, movedIds: [], restIsolated: 51,
+        restIsolatedIds: [], byChannel: {}, halves: { stamped: 50, native: 43 }, families: {}, nonChromatic: 118,
+        chromaticOnly, ...cellOver,
+      })),
+      ...over,
+    },
+  });
+  const FLEET = ['bithire', 'evnto', 'rottay'].flatMap((vertical) => ['light', 'dark'].map((theme) => [vertical, theme]));
+  const chromaticFailures = (measurement, options) => evaluate(measurement, options)
+    .filter((line) => /chromatic|CHROMATIC_ONLY_STATES|outside the six/u.test(line));
+
+  it('P4: the chromatic-only set is pinned by name -- data-table, in every states cell, both directions', () => {
+    assert.deepEqual([...probe.CHROMATIC_ONLY_STATES], ['data-table']);
+    assert.deepEqual(chromaticFailures(chromaticResult()), []);
+    // THE LEAK FINGERPRINT: a merge would count data-table on states, so it
+    // stops being chromatic-only -- and the run is refused, cell by cell.
+    const leaked = chromaticFailures(chromaticResult({ chromaticOnly: [] }));
+    assert.equal(leaked.length, 6, leaked.join(' | '));
+    assert.match(leaked[0], /^bithire\/light data-table: pinned chromatic-only on states and it is not -- a states numerator that now counts it is the fingerprint/u);
+    const entered = chromaticFailures(chromaticResult({ chromaticOnly: ['data-table', 'tree'] }));
+    assert.equal(entered.length, 6);
+    assert.match(entered[0], /tree: moves on states by colour ALONE and is not in CHROMATIC_ONLY_STATES/u);
+    // A --families run measures a subset; the pin is a fleet fact.
+    assert.deepEqual(chromaticFailures({ ...chromaticResult({ chromaticOnly: [] }), familiesFiltered: true }), []);
+    assert.deepEqual(chromaticFailures(chromaticResult({ chromaticOnly: ['tree'] }), { chromaticOnlyStates: ['tree'] }), []);
+  });
+
+  it('MUTANT: a status on the chromatic block, at either depth, or a chromatic cell beside the axes, is refused', () => {
+    for (const key of ['status', 'threshold', 'met', 'effectiveAtThreshold']) {
+      assert.ok(chromaticFailures(chromaticResult({ over: { [key]: 'at-threshold' } }))
+        .some((line) => line === `chromaticStates carries \`${key}\`; it is reported apart, never a status`), key);
+      assert.ok(chromaticFailures(chromaticResult({ cellOver: { [key]: true } })).some((line) => line.includes(`\`${key}\``)), key);
+    }
+    const merged = chromaticFailures(chromaticResult({
+      extraCells: [cell({ scenario: 'states', axis: 'states-chromatic', moved: 52 })],
+    }));
+    assert.deepEqual(merged, ['states-chromatic: a cell on an axis outside the six; the chromatic reading is never a cell']);
+  });
+});
+
+describe('axis-difference CR-2 BROWSER drill — the chromatic reading is always taken, and data-table moves by colour alone', { skip: browserReason }, () => {
+  it('data-table: a states non-mover on the six axes, a chromatic mover, named chromatic-only; a null pair reads 0 chromatic', async () => {
+    const states = SCENARIOS.find((scenario) => scenario.id === 'states');
+    const families = ['data-table', 'button', 'tag'];
+    const measurement = await run({
+      verticals: ['bithire'],
+      themes: ['light'],
+      families,
+      scenarios: [states, { ...states, id: 'null-states', b: states.a }],
+    });
+    assert.deepEqual(measurement.refusals, [], JSON.stringify(measurement.refusals));
+    const block = measurement.chromaticStates;
+    assert.ok(block, 'the run took no chromatic states reading; it has no flag and is always on');
+    assert.deepEqual(block.pinnedChromaticOnly, ['data-table']);
+    const axisCell = measurement.cells.find((entry) => entry.scenario === 'states' && entry.axis === 'states');
+    const chromatic = block.cells.find((entry) => entry.scenario === 'states');
+    assert.ok(!axisCell.movedIds.includes('data-table'), 'data-table moved on the states AXIS: colour leaked into a numerator');
+    assert.ok(chromatic.movedIds.includes('data-table'));
+    assert.deepEqual(chromatic.families['data-table'].channels, ['background-color']);
+    assert.deepEqual(chromatic.chromaticOnly, ['data-table']);
+    assert.equal(chromatic.nonChromatic, axisCell.moved);
+    assert.ok(measurement.cells.every((entry) => AXIS_IDS.includes(entry.axis)));
+    const nullChromatic = block.cells.find((entry) => entry.scenario === 'null-states');
+    assert.equal(nullChromatic.moved, 0, JSON.stringify(nullChromatic.families));
+    assert.deepEqual(evaluate(measurement).filter((line) => /chromatic/iu.test(line)), []);
+  }, 600_000);
+});
