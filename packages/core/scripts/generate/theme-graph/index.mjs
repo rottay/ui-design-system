@@ -172,8 +172,10 @@ function readJsonViews() {
  * RE-ANCHORED 2026-09-30, 10,033,491 -> 10,034,729 (+1,238): the day's EVI-02
  * waves (S2/S2b states dial reads, W3a-W3e hairline edge-dial reads, R2a rhythm
  * mounts) each named in their commits; no removal, no new consumer class.
+ * Same day, +10: 10,034,729 -> 10,034,739 — R2c wires the column-menu deriver
+ * onto --ds-density-effective-scale (six channels gain the calc chain).
  */
-export const SIZE_BUDGET_BYTES = 10_034_729;
+export const SIZE_BUDGET_BYTES = 10_034_739;
 
 /** A key no id can collide with, used only to sort and de-duplicate pairs. */
 const SEP = "\u241F";

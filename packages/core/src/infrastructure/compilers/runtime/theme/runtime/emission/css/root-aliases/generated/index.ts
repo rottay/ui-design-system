@@ -2955,8 +2955,8 @@ export const CONTAINER_ALIAS_CONTEXTS: readonly ContainerAliasContext[] = [
   { name: "--ds-type-caption-letter-spacing", at: [], selector: "html[lang]:lang(ar)", rootOnly: true, value: "0", site: "foundation/responsive/language-arabic-root/index.css:60" },
   { name: "--ds-type-code-letter-spacing", at: [], selector: "html[lang]:lang(ar)", rootOnly: true, value: "0", site: "foundation/responsive/language-arabic-root/index.css:61" },
   { name: "--ds-type-numeric-letter-spacing", at: [], selector: "html[lang]:lang(ar)", rootOnly: true, value: "0", site: "foundation/responsive/language-arabic-root/index.css:62" },
-  { name: "--ds-avatar-focus-ring-width", at: ["@media (prefers-contrast: more)"], selector: "html[data-engine=\"modern\"][data-theme]", rootOnly: true, value: "3px", site: "foundation/a11y/contrast/index.css:48" },
-  { name: "--ds-avatar-focus-ring-offset", at: ["@media (prefers-contrast: more)"], selector: "html[data-engine=\"modern\"][data-theme]", rootOnly: true, value: "3px", site: "foundation/a11y/contrast/index.css:49" },
+  { name: "--ds-avatar-focus-ring-width", at: ["@media (prefers-contrast: more)"], selector: "html[data-engine=\"modern\"][data-theme]", rootOnly: true, value: "3px", site: "foundation/a11y/contrast/index.css:51" },
+  { name: "--ds-avatar-focus-ring-offset", at: ["@media (prefers-contrast: more)"], selector: "html[data-engine=\"modern\"][data-theme]", rootOnly: true, value: "3px", site: "foundation/a11y/contrast/index.css:52" },
 ];
 
 /** A DS-root mode channel: the text the cascade gives the document root with no mode hook and in each mode (null: undeclared there), and the sites they are read from (a mode's site omitted where it is the base site). */
