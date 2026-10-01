@@ -323,8 +323,47 @@ export const DEFAULT_CONSUMER_ROOTS = Object.freeze([
     label: 'app-bithire (external consuming app; read-only, source-bound)',
     root: resolve(REPO_ROOT, 'app-bithire/src'),
     required: true,
+    // The compiled artifact this app renders under; it decides which DS
+    // declarations a consumer read actually resolves through (see `computeJoinedPaint`).
+    vertical: 'bithire',
   }),
 ]);
+
+/**
+ * The compiled first-party tenant artifacts: one `<vertical>/index.css` per
+ * vertical, the committed compileTheme output the parity gates hold equal to
+ * the compiler. They enter the measurement in two roles and no other:
+ *
+ *   - EMISSION: a name declared in an artifact is emitted, whatever the source
+ *     extractor can or cannot see (the tint and colour ramps are written by
+ *     lowering helpers outside the derivation root).
+ *   - CUSTOM-PROPERTY EDGES: `--a: var(--b)` in an artifact is the value one
+ *     compiler step hands another (`--ds-alert-error-wash-subtle:
+ *     var(--ds-tint-error-4)`), so it is an edge exactly like an authored one.
+ *
+ * Never a TERMINAL: a non-custom declaration in an artifact is the compiler's
+ * own scope chrome, and letting the compiler's output certify the compiler's
+ * channels would be the instrument grading itself. Paint is still only proven
+ * at an authored stylesheet terminal (DS or consumerRoot).
+ */
+export const DEFAULT_COMPILED_ARTIFACT_ROOT = resolve(CORE_ROOT, 'src/foundation/tokens/css/facade/artifacts');
+
+/** Every `<vertical>/index.css` under the artifact root, as `{ vertical, file, text }`. */
+export function loadCompiledArtifacts(root = DEFAULT_COMPILED_ARTIFACT_ROOT) {
+  if (!existsSync(root)) return [];
+  return readdirSync(root, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && existsSync(join(root, entry.name, 'index.css')))
+    .map((entry) => entry.name)
+    .sort()
+    .map((vertical) => {
+      const path = join(root, vertical, 'index.css');
+      return {
+        vertical,
+        file: relative(CORE_ROOT, path).split(sep).join('/'),
+        text: readFileSync(path, 'utf8'),
+      };
+    });
+}
 
 const ANY_VAR_REF_RE = /var\(\s*(--[a-zA-Z0-9_-]+)/g;
 
@@ -723,7 +762,7 @@ export function extractInterpolatedAssignments(sourceText) {
   const re = /vars\[\s*`([^`]*)`\s*\]\s*=/g;
   let match;
   while ((match = re.exec(sourceText)) !== null) {
-    sites.push({ raw: match[1], line: lineForOffset(offsets, match.index) });
+    sites.push({ raw: match[1], line: lineForOffset(offsets, match.index), index: match.index });
   }
   return sites;
 }
@@ -965,26 +1004,140 @@ export function extractIdentifierVarsAssignments(sourceText) {
   return sites;
 }
 
-/** The iterable a `for (const <key> ...  of <iterable>)` binds `key` over, or null. */
-function binderIterable(sourceText, key) {
-  const re = new RegExp(
-    `for\\s*\\(\\s*const\\s+(?:\\[\\s*${key}\\s*(?:,[^\\]]*)?\\]|${key})\\s+of\\s+`,
-    'u',
-  );
-  const match = re.exec(sourceText);
-  if (!match) return null;
-  const rest = sourceText.slice(match.index + match[0].length);
+/**
+ * The brace depth before each offset of `text`, counted from zero at its start;
+ * braces inside quoted strings are not structure.
+ */
+function braceDepths(text) {
+  const depths = new Array(text.length + 1);
   let depth = 0;
-  for (let index = 0; index < rest.length; index += 1) {
-    const ch = rest[index];
-    if (ch === '(' || ch === '[' || ch === '{') depth += 1;
-    else if (ch === ']' || ch === '}') depth -= 1;
-    else if (ch === ')') {
-      if (depth === 0) return rest.slice(0, index).trim();
-      depth -= 1;
+  let quote = null;
+  for (let index = 0; index < text.length; index += 1) {
+    depths[index] = depth;
+    const ch = text[index];
+    if (quote) {
+      if (ch === '\\') {
+        index += 1;
+        depths[index] = depth;
+      } else if (ch === quote) quote = null;
+    } else if (ch === '"' || ch === "'") quote = ch;
+    else if (ch === '{') depth += 1;
+    else if (ch === '}') depth -= 1;
+  }
+  depths[text.length] = depth;
+  return depths;
+}
+
+/**
+ * Whether the loop body that starts at `span`'s first byte still encloses its
+ * end: a braced body never returns to depth zero, an unbraced one never leaves
+ * its single statement.
+ */
+function bodyEncloses(span) {
+  const depths = braceDepths(span);
+  const open = /^\s*/u.exec(span)[0].length;
+  if (span[open] === '{') {
+    for (let index = open + 1; index <= span.length; index += 1) if (depths[index] < 1) return false;
+    return true;
+  }
+  for (let index = 0; index < span.length; index += 1) {
+    if (depths[index] < 0 || (depths[index] === 0 && span[index] === ';')) return false;
+  }
+  return depths[span.length] >= 0;
+}
+
+/**
+ * The nearest `for (const <key> ...  of <iterable>)` before `siteIndex` whose
+ * body encloses the site: the iterable it binds `key` over, every name the
+ * header binds, and the offset where the header closes, or null.
+ */
+function binderIterable(sourceText, key, siteIndex = sourceText.length) {
+  const scanned = maskSourceComments(sourceText);
+  const re = new RegExp(
+    `for\\s*\\(\\s*const\\s+(\\[\\s*${key}\\s*(?:,[^\\]]*)?\\]|${key})\\s+of\\s+`,
+    'gu',
+  );
+  const headers = [];
+  let match;
+  while ((match = re.exec(scanned)) !== null && match.index < siteIndex) headers.push(match);
+  for (const header of headers.reverse()) {
+    const bindings = header[1].replace(/^\[|\]$/gu, '').split(',').map((name) => name.trim()).filter((name) => /^[A-Za-z_$][\w$]*$/u.test(name));
+    const start = header.index + header[0].length;
+    const rest = scanned.slice(start, siteIndex);
+    let depth = 0;
+    let headerEnd = null;
+    for (let index = 0; index < rest.length; index += 1) {
+      const ch = rest[index];
+      if (ch === '(' || ch === '[' || ch === '{') depth += 1;
+      else if (ch === ']' || ch === '}') depth -= 1;
+      else if (ch === ')') {
+        if (depth === 0) {
+          headerEnd = start + index + 1;
+          break;
+        }
+        depth -= 1;
+      }
     }
+    if (headerEnd === null || !bodyEncloses(scanned.slice(headerEnd, siteIndex))) continue;
+    return { iterable: rest.slice(0, headerEnd - start - 1).trim(), bindings, headerEnd };
   }
   return null;
+}
+
+/**
+ * The keys a loop body skips before it reaches the assignment.
+ *
+ * `derivation/responsive` iterates the whole breakpoint table and skips its
+ * floor (`if (step === PROJECTION_FLOOR) continue`), so the floor is a member of
+ * the table and never an emission. Reading the table without the guard measured
+ * `--ds-breakpoint-xs` emitted while no compile produces it.
+ *
+ * `span` runs from the end of the nearest loop header whose body encloses the
+ * assignment to the assignment. A `continue` guard is read only when it sits
+ * directly in that body (brace depth one) as its own statement (preceded by
+ * `{`, `;` or `}`); a guard nested under another `if`, inside an inner loop
+ * or block, or in an unbraced body returns null. A read guard is classified by
+ * what its condition tests:
+ *   - the key against one literal (`key === X` / `X === key`, X stated or a
+ *     constant enumerating to exactly one): that key is skipped for every theme;
+ *   - any name the loop header binds (the key or a destructured sibling such as
+ *     the table value) in any other bare position (`key !== X`,
+ *     `SET.has(key)`, `px < 1`): a structural filter over a constant table that
+ *     this reader cannot enumerate -- null;
+ *   - only theme data, including data indexed by the key (`if (!roles[key])`,
+ *     `if (!tokens)`): a tenant-conditional emission, read exactly like an
+ *     `if (x) vars[...] = ...` around the assignment -- it skips no key.
+ * Any `continue` in the span that is not the body of a read guard returns
+ * null: a skip this reader cannot name is never read as "skips nothing".
+ */
+export function loopSkippedKeys(span, key, facts, cache, coreRoot, bindings = [key]) {
+  const scanned = maskSourceComments(span);
+  const depths = braceDepths(scanned);
+  const skipped = new Set();
+  let read = 0;
+  const guardStart = /\bif\s*\(/gu;
+  let match;
+  while ((match = guardStart.exec(scanned)) !== null) {
+    const condition = extractBracketBlock(scanned.slice(match.index), match[0], '(', ')');
+    if (condition === null) return null;
+    const after = scanned.slice(match.index + match[0].length + condition.length + 1);
+    if (!/^\s*\{?\s*continue\b/u.test(after)) continue;
+    const preceding = /\S?\s*$/u.exec(scanned.slice(0, match.index))[0].trim();
+    if (depths[match.index] !== 1 || !['{', ';', '}'].includes(preceding)) return null;
+    read += 1;
+    const equality = new RegExp(`^\\s*(?:${key}\\s*===?\\s*([^\\s()]+)|([^\\s()]+)\\s*===?\\s*${key})\\s*$`, 'u').exec(condition);
+    if (equality) {
+      const values = enumerateLiterals(equality[1] ?? equality[2], facts, cache, coreRoot, 0);
+      if (values === null || values.length !== 1) return null;
+      skipped.add(values[0]);
+      continue;
+    }
+    const bound = bindings.map((name) => name.replace(/\$/gu, '\\$')).join('|');
+    const bareBinding = new RegExp(`(?<![\\w$.]|\\[\\s*)(?:${bound})(?![\\w$]|\\s*\\])`, 'u');
+    if (bareBinding.test(condition)) return null;
+  }
+  const continues = scanned.match(/\bcontinue\b/gu)?.length ?? 0;
+  return continues === read ? skipped : null;
 }
 
 /**
@@ -1000,8 +1153,19 @@ export function extractKeyedVarsEmissions(sourceText, { file = null, coreRoot = 
 
   for (const site of findUnresolvedInterpolatedAssignments(sourceText)) {
     const parts = /^([^$]*)\$\{\s*([A-Za-z_$][\w$]*)\s*\}([^$]*)$/u.exec(site.raw);
-    const iterable = parts === null ? null : binderIterable(sourceText, parts[2]);
-    const keys = iterable === null ? null : nonEmpty(enumerateLiterals(iterable, facts, cache, coreRoot, 0));
+    const binder = parts === null ? null : binderIterable(sourceText, parts[2], site.index);
+    const keys = binder === null ? null : nonEmpty(enumerateLiterals(binder.iterable, facts, cache, coreRoot, 0));
+    const skipped = keys === null
+      ? null
+      : loopSkippedKeys(sourceText.slice(binder.headerEnd, site.index), parts[2], facts, cache, coreRoot, binder.bindings);
+    if (keys !== null && skipped === null) {
+      unresolved.push({
+        raw: `\`${site.raw}\``,
+        line: site.line,
+        reason: `the loop over \`${parts[2]}\` skips keys through a \`continue\` this resolver cannot read, so the emitted subset of the table is not enumerable`,
+      });
+      continue;
+    }
     if (keys === null) {
       unresolved.push({
         raw: `\`${site.raw}\``,
@@ -1012,7 +1176,7 @@ export function extractKeyedVarsEmissions(sourceText, { file = null, coreRoot = 
       });
       continue;
     }
-    for (const key of keys) add(`${parts[1]}${key}${parts[3]}`, site.line);
+    for (const key of keys) if (!skipped.has(key)) add(`${parts[1]}${key}${parts[3]}`, site.line);
   }
 
   for (const site of extractIdentifierVarsAssignments(sourceText)) {
@@ -1202,7 +1366,9 @@ export function buildPaintGraph(stylesheets, scopeClassifier = () => 'engine-neu
   const customEdges = new Map();
   const terminalEdges = new Map();
   const parseErrors = [];
-  for (const { file, text } of stylesheets) {
+  // name -> Set<vertical> for every custom property a compiled artifact declares.
+  const compiledDeclarations = new Map();
+  for (const { file, text, compiledVertical = null } of stylesheets) {
     let root;
     try {
       root = postcss.parse(text, { from: file });
@@ -1215,6 +1381,11 @@ export function buildPaintGraph(stylesheets, scopeClassifier = () => 'engine-neu
       const prop = String(decl.prop ?? '');
       const value = String(decl.value ?? '');
       const isCustomTarget = prop.startsWith('--');
+      // A compiled artifact contributes declarations and custom-property edges, never a terminal.
+      if (compiledVertical !== null && !isCustomTarget) return;
+      if (compiledVertical !== null) {
+        compiledDeclarations.set(prop, (compiledDeclarations.get(prop) ?? new Set()).add(compiledVertical));
+      }
       const re = new RegExp(ANY_VAR_REF_RE.source, 'g');
       let match;
       while ((match = re.exec(value)) !== null) {
@@ -1223,7 +1394,9 @@ export function buildPaintGraph(stylesheets, scopeClassifier = () => 'engine-neu
         const line = decl.source?.start?.line ?? 0;
         if (isCustomTarget) {
           const list = customEdges.get(referenced) ?? [];
-          list.push({ file, line, targetProp: prop, scope });
+          list.push(compiledVertical === null
+            ? { file, line, targetProp: prop, scope }
+            : { file, line, targetProp: prop, scope, compiledVertical });
           customEdges.set(referenced, list);
         } else {
           const list = terminalEdges.get(referenced) ?? [];
@@ -1233,7 +1406,7 @@ export function buildPaintGraph(stylesheets, scopeClassifier = () => 'engine-neu
       }
     });
   }
-  return { customEdges, terminalEdges, parseErrors };
+  return { customEdges, terminalEdges, parseErrors, compiledDeclarations };
 }
 
 /**
@@ -1263,6 +1436,58 @@ export function computePaint(graph, startName) {
     painted: terminalSites.length > 0,
     terminalSites,
     reachedCustomProps: [...visited],
+  };
+}
+
+/**
+ * The consumer-side paint of a channel, with the DS graph JOINED to the
+ * consumer graph.
+ *
+ * A consumerRoot reads DS channels the DS composes: app-bithire paints
+ * `font: var(--ds-text-body)`, and `--ds-text-body` is composed from
+ * `--ds-text-body-weight` in the compiled artifact. Two separate graphs never
+ * see that facet reach the consumer's `font:`. This walk expands every node
+ * through the consumer's own edges AND the DS edges that resolve under the
+ * consumer's vertical, and counts only CONSUMER terminals (DS terminals are
+ * `computePaint(dsGraph)`'s, never re-credited here).
+ *
+ * Which DS edges resolve under the vertical is cascade, and it is modeled once:
+ * the vertical's compiled artifact is unlayered and tenant-scoped, so when it
+ * declares a property, an authored DS declaration of that same property (an
+ * `@layer` `:root` relay) never computes for this consumer, and its edges do not
+ * join. Another vertical's artifact never joins at all. The rule is applied per
+ * property, whatever selector inside the artifact declares it -- a property the
+ * artifact declares only in one mode shadows the relay in both, which can only
+ * under-credit, never invent a route. `--ds-text-inverse` is that case: the
+ * `themes/default` relay `--ds-sidebar-text: var(--ds-text-inverse)` is what the
+ * consumer would reach, and the bithire artifact re-declares `--ds-sidebar-text`.
+ */
+export function computeJoinedPaint(dsGraph, consumerGraph, startName, vertical) {
+  const shadowed = (prop) => dsGraph.compiledDeclarations?.get(prop)?.has(vertical) === true;
+  const resolves = (edge) => (edge.compiledVertical === undefined ? !shadowed(edge.targetProp) : edge.compiledVertical === vertical);
+  const visited = new Set([startName]);
+  const queue = [startName];
+  const terminalSites = [];
+  const joinedVia = [];
+  while (queue.length > 0) {
+    const node = queue.shift();
+    for (const terminal of consumerGraph.terminalEdges.get(node) ?? []) terminalSites.push({ ...terminal, via: node });
+    const next = [
+      ...(consumerGraph.customEdges.get(node) ?? []).map((edge) => ({ edge, side: 'consumer' })),
+      ...(dsGraph.customEdges.get(node) ?? []).filter(resolves).map((edge) => ({ edge, side: 'ds' })),
+    ];
+    for (const { edge, side } of next) {
+      if (visited.has(edge.targetProp)) continue;
+      visited.add(edge.targetProp);
+      queue.push(edge.targetProp);
+      if (side === 'ds') joinedVia.push({ file: edge.file, line: edge.line, from: node, targetProp: edge.targetProp });
+    }
+  }
+  return {
+    painted: terminalSites.length > 0,
+    terminalSites,
+    reachedCustomProps: [...visited],
+    joinedVia,
   };
 }
 
@@ -1642,31 +1867,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
   }),
   Object.freeze({
     owner: 'WO-EVI-02',
-    classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-09-17',
-    reason:
-      'the row is measured emitted and nothing emits it: derivation/responsive skips the zero floor (`if (step === PROJECTION_FLOOR) continue`) and --ds-breakpoint-xs is absent from every compiled vertical artifact, while this producer resolves vars[`--ds-breakpoint-${step}`] over the whole imported RESPONSIVE_BREAKPOINTS table and does not model the single-step guard. The retirement dropped its WO-FAM-07 pin, which left a false row unregistered and STOP NO-GO, so it is re-pinned here instead of carried silently -- a pin is not deleted to reach green. The pin retires with the row when the keyed resolver honors the emitter guard, or becomes real debt if a residual emission is ever measured',
-    channels: Object.freeze(['--ds-breakpoint-xs']),
-  }),
-  Object.freeze({
-    owner: 'WO-EVI-02',
-    classification: LIVENESS.authorableUnprovenEffect,
-    registered: '2026-09-14',
-    reason:
-      'the same instrument gap on two steps of the status ramp: step 12 is read inside derivation/chrome/notifier (the tone icon wells the notifier skin paints) and step 4 inside derivation/chrome/alert (--ds-alert-<tone>-wash-subtle, the lighter wash the folded Callout kept, which measures LIVE_MODERN_PAINTED at skin/alert background-color). The liveness graph does not follow a family deriver VALUE into the skin terminal that paints it, and the family-cut contract forbids the alternative -- a cut family skin may not read a compiler-emitted ramp step directly, which is readWithoutProducer. So the route is real on both steps and only the graph cannot see it; the causal-gates lane owns proving it',
-    channels: Object.freeze([
-      '--ds-tint-error-4',
-      '--ds-tint-info-4',
-      '--ds-tint-success-4',
-      '--ds-tint-warning-4',
-      '--ds-tint-error-12',
-      '--ds-tint-info-12',
-      '--ds-tint-success-12',
-      '--ds-tint-warning-12',
-    ]),
-  }),
-  Object.freeze({
-    owner: 'WO-EVI-02',
     classification: LIVENESS.readUnproven,
     registered: '2026-09-17',
     reason:
@@ -1686,16 +1886,8 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     classification: LIVENESS.readNoProductiveTerminal,
     registered: '2026-09-25',
     reason:
-      'dead by CASCADE, not by absence: the palette roster declares the ink (it joins the universe through the emission oracle) and its only DS read is the legacy relay themes/default:973 `--ds-sidebar-text: var(--ds-text-inverse)` on :root inside @layer rottay-tokens, which the consumerRoot does read (app-bithire sidebar styles, seven terminal color declarations). Every first-party artifact re-declares --ds-sidebar-text on its html[data-tenant]/[data-vertical] scope, outranking the relay, but that emission is conditional (chrome-variables `if (chrome.text)` / `if (s.text)`), so the relay WOULD compute for a tenant whose sidebar tone lowers no text. The RNPT reading also hides an instrument limit owned by WO-EVI-02: cross-corpus relay blindness -- the relay sits in the DS graph and its terminals in the consumer graph, and the two are never joined. The pin clears ONLY when the ink retires WITH its palette roster entry, or a DS reader is wired; removing the relay alone drifts the row to UNREAD_EMITTED_NO_KNOWN_ROUTE, which this register accuses as a drifted pin. Owner re-adjudicated 2026-10-01: WO-RET-02 is done, WO-DER-06 measured done the same day, so the pin moves to WO-RET-01, the open retirement lane whose acceptance the exit text already describes',
+      'dead by CASCADE, not by absence: the palette roster declares the ink (it joins the universe through the emission oracle) and its only DS read is the legacy relay themes/default:973 `--ds-sidebar-text: var(--ds-text-inverse)` on :root inside @layer rottay-tokens, which the consumerRoot does read (app-bithire sidebar styles, seven terminal color declarations). Every first-party artifact re-declares --ds-sidebar-text on its html[data-tenant]/[data-vertical] scope, outranking the relay, but that emission is conditional (chrome-variables `if (chrome.text)` / `if (s.text)`), so the relay WOULD compute for a tenant whose sidebar tone lowers no text. The cross-corpus relay blindness WO-EVI-02 owned is closed (LIV-3): the join follows the relay into the consumer graph and measures it outranked, because the bithire artifact the consumerRoot renders under declares --ds-sidebar-text itself -- so the RNPT reading is the cascade, not the instrument. The pin clears ONLY when the ink retires WITH its palette roster entry, or a DS reader is wired; removing the relay alone drifts the row to UNREAD_EMITTED_NO_KNOWN_ROUTE, which this register accuses as a drifted pin. Owner re-adjudicated 2026-10-01: WO-RET-02 is done, WO-DER-06 measured done the same day, so the pin moves to WO-RET-01, the open retirement lane whose acceptance the exit text already describes',
     channels: Object.freeze(['--ds-text-inverse']),
-  }),
-  Object.freeze({
-    owner: 'WO-EVI-02',
-    classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-09-24',
-    reason:
-      'the row measures unread while its reader is its own deriver: derivation/chrome/workspace-shell emits the stop and its `ramp()` writes `var(--ds-workspace-shell-mask-stop)` into --ds-workspace-shell-orbital-mask and --ds-workspace-shell-ambient-mask, both measured LIVE_MODERN_PAINTED at the collection-shell skin (-webkit-mask); every shipped facade artifact carries that chain. The graph does not follow a compiled value into a sibling compiled channel -- the class the breakpoint pin carried until the Container skin read the steps directly. The pin clears when the graph counts a compiled deriver-to-deriver chain as a productive route, or when the stop folds into its two masks and retires',
-    channels: Object.freeze(['--ds-workspace-shell-mask-stop']),
   }),
   Object.freeze({
     owner: 'WO-EVI-02',
@@ -1706,24 +1898,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     channels: Object.freeze([
       '--ds-workspace-shell-particle-primary',
       '--ds-workspace-shell-particle-secondary',
-    ]),
-  }),
-  Object.freeze({
-    owner: 'WO-EVI-02',
-    classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-10-01',
-    reason:
-      'the shorthand-composition edge is REAL and this resolver is CSS-only: derivation/typography/scale:91 writes each entry shorthand as `var(--ds-text-<name>-weight) var(--ds-text-<name>-size)/var(--ds-text-<name>-line-height) var(--ds-font-family-base)`, and every one of the six shorthands this register measures paints (LIVE_EXTERNAL_CONSUMER_PAINTED through the app-bithire `font:` declarations), so each facet here reaches pixels through its sibling shorthand. The paint graph only builds edges from postcss-parsed stylesheet declarations; a var() a deriver writes into a sibling compiled channel is never an edge, so a facet whose only reader is its own shorthand measures unread -- the same class as the workspace-shell mask stop. Measured 2026-10-01 (LV-2): zero direct readers in the DS corpus and the consumerRoot for all nine. None is a retirement candidate: removing a facet empties the shorthand that paints. The pin clears per channel when the graph credits a compiled deriver-to-deriver var() as a productive route, or when a direct stylesheet reader lands -- never by dropping the facet from the shorthand',
-    channels: Object.freeze([
-      '--ds-text-body-line-height',
-      '--ds-text-body-weight',
-      '--ds-text-detail-line-height',
-      '--ds-text-detail-weight',
-      '--ds-text-display-line-height',
-      '--ds-text-display-weight',
-      '--ds-text-eyebrow-line-height',
-      '--ds-text-eyebrow-weight',
-      '--ds-text-title-line-height',
     ]),
   }),
   Object.freeze({
@@ -2010,6 +2184,7 @@ export function computeInputsDigest({
   cssStylesheets,
   tsStylesheets,
   consumerCorpora = [],
+  compiledArtifacts = [],
 }) {
   const parts = [
     `gate-script:${sha256(gateScriptSource)}`,
@@ -2024,6 +2199,7 @@ export function computeInputsDigest({
   }
   for (const { file, text } of cssStylesheets) parts.push(`css:${file}:${sha256(text)}`);
   for (const { file, text } of tsStylesheets) parts.push(`ts:${file}:${sha256(text)}`);
+  for (const { file, text } of compiledArtifacts) parts.push(`compiled-artifact:${file}:${sha256(text)}`);
   for (const consumer of consumerCorpora) {
     for (const { file, text } of consumer.cssStylesheets ?? []) {
       parts.push(`consumer-css:${consumer.id}:${file}:${sha256(text)}`);
@@ -2157,6 +2333,7 @@ export function analyzeChannelLiveness({
   cssStylesheets,
   tsStylesheets,
   consumerRoots = [],
+  compiledArtifacts = undefined,
   previousArtifact = null,
   enforceArtifactFreshness = false,
   dispositions = CHANNEL_DISPOSITIONS,
@@ -2165,6 +2342,22 @@ export function analyzeChannelLiveness({
 }) {
   const failures = [];
   const analysisLimitations = [];
+
+  // `undefined` is a hermetic fixture that models no compile; an EMPTY list is
+  // a broken read of the artifact root, which would silently drop every
+  // compiled edge and every compiled emission.
+  if (Array.isArray(compiledArtifacts) && compiledArtifacts.length === 0) {
+    failures.push('zero corpus: the compiled first-party artifacts (facade/artifacts/<vertical>/index.css) resolved to zero files');
+  }
+  const artifacts = compiledArtifacts ?? [];
+  const compiledVerticals = new Set(artifacts.map((artifact) => artifact.vertical));
+  for (const consumerRoot of consumerRoots) {
+    if (consumerRoot.vertical !== undefined && !compiledVerticals.has(consumerRoot.vertical)) {
+      failures.push(
+        `consumer join unreadable: consumerRoot "${consumerRoot.id}" renders under vertical "${consumerRoot.vertical}" and no compiled artifact for it was read -- without it the join cannot tell which DS declaration a consumer read resolves through`,
+      );
+    }
+  }
 
   // The canonical z-scale roster is measured from its declaration site once
   // per run. An unreadable site is a broken measurement and fails by name; it
@@ -2345,13 +2538,43 @@ export function analyzeChannelLiveness({
   }
 
   // --- Paint graphs (defect 1) ------------------------------------------
-  const dsGraph = buildPaintGraph(cssStylesheets, (file) => classifyConsumerScope(file));
-  for (const error of dsGraph.parseErrors) failures.push(`corpus parse error: ${error.file}: ${error.message}`);
-  const externalGraph = buildPaintGraph(
-    consumerResults.flatMap(({ load }) => load.cssStylesheets),
-    () => 'external-consumer',
+  const dsGraph = buildPaintGraph(
+    [
+      ...(cssStylesheets ?? []),
+      ...artifacts.map(({ vertical, file, text }) => ({ file, text, compiledVertical: vertical })),
+    ],
+    (file) => classifyConsumerScope(file),
   );
-  for (const error of externalGraph.parseErrors) failures.push(`corpus parse error (consumerRoot): ${error.file}: ${error.message}`);
+  for (const error of dsGraph.parseErrors) failures.push(`corpus parse error: ${error.file}: ${error.message}`);
+  // One graph per consumerRoot, so each joins the DS under its own vertical.
+  const consumerGraphs = consumerResults.map(({ consumerRoot, load }) => {
+    const graph = buildPaintGraph(load.cssStylesheets, () => 'external-consumer');
+    for (const error of graph.parseErrors) failures.push(`corpus parse error (consumerRoot): ${error.file}: ${error.message}`);
+    return { consumerRoot, graph };
+  });
+  const externalGraph = {
+    customEdges: new Map(),
+    terminalEdges: new Map(),
+  };
+  for (const { graph } of consumerGraphs) {
+    for (const key of ['customEdges', 'terminalEdges']) {
+      for (const [name, edges] of graph[key]) externalGraph[key].set(name, [...(externalGraph[key].get(name) ?? []), ...edges]);
+    }
+  }
+  const externalPaintOf = (name) => {
+    const terminalSites = [];
+    for (const { consumerRoot, graph } of consumerGraphs) {
+      const own = computePaint(graph, name);
+      const ownSites = new Set(own.terminalSites.map((site) => `${site.file}:${site.line}:${site.prop}`));
+      const reached = consumerRoot.vertical !== undefined && compiledVerticals.has(consumerRoot.vertical)
+        ? computeJoinedPaint(dsGraph, graph, name, consumerRoot.vertical)
+        : own;
+      for (const site of reached.terminalSites) {
+        terminalSites.push({ ...site, joined: !ownSites.has(`${site.file}:${site.line}:${site.prop}`) });
+      }
+    }
+    return { painted: terminalSites.length > 0, terminalSites };
+  };
 
   const tsReadsDs = scanTsReads(tsStylesheets);
   const tsReadsExternal = scanTsReads(consumerResults.flatMap(({ load }) => load.tsStylesheets));
@@ -2412,7 +2635,7 @@ export function analyzeChannelLiveness({
 
   for (const name of [...universe].sort()) {
     const dsPaint = computePaint(dsGraph, name);
-    const externalPaint = computePaint(externalGraph, name);
+    const externalPaint = externalPaintOf(name);
     const dsModernPainted = dsPaint.terminalSites.some((site) => site.scope !== 'frozen-engine');
     const dsFrozenOnlyPainted = dsPaint.painted && !dsModernPainted;
     const externalConsumerPainted = !dsPaint.painted && externalPaint.painted;
@@ -2434,9 +2657,10 @@ export function analyzeChannelLiveness({
     const externalCustomRefSites = externalGraph.customEdges.get(name) ?? [];
     const familyIds = new Set();
     let sharedFamilyAttribution = false;
+    // A compiled artifact is not an authored read site, so it attributes to no family.
     const allDsSites = [
       ...dsPaint.terminalSites.map((s) => ({ file: s.file, line: s.line })),
-      ...dsCustomRefSites.map((s) => ({ file: s.file, line: s.line })),
+      ...dsCustomRefSites.filter((s) => s.compiledVertical === undefined).map((s) => ({ file: s.file, line: s.line })),
       ...dsTsSites,
     ];
     for (const site of allDsSites) {
@@ -2472,18 +2696,26 @@ export function analyzeChannelLiveness({
 
     const consumerSites = [
       ...dsPaint.terminalSites.map((s) => `ds-terminal:${s.file}:${s.line} (${s.prop})`),
-      ...externalPaint.terminalSites.map((s) => `external-terminal:${s.file}:${s.line} (${s.prop})`),
-      ...dsCustomRefSites.map((s) => `ds-custom-ref:${s.file}:${s.line} (feeds --${s.targetProp.replace(/^--/, '')})`),
+      ...externalPaint.terminalSites.map((s) => `${s.joined ? 'external-terminal-joined' : 'external-terminal'}:${s.file}:${s.line} (${s.prop}${s.joined ? ` via ${s.via}` : ''})`),
+      ...dsCustomRefSites.map((s) => `${s.compiledVertical === undefined ? 'ds-custom-ref' : 'ds-compiled-ref'}:${s.file}:${s.line} (feeds --${s.targetProp.replace(/^--/, '')})`),
       ...externalCustomRefSites.map((s) => `external-custom-ref:${s.file}:${s.line} (feeds --${s.targetProp.replace(/^--/, '')})`),
       ...dsTsSites.map((s) => `ds-ts-unproven:${s.file}:${s.line}`),
       ...externalTsSites.map((s) => `external-ts-unproven:${s.file}:${s.line}`),
     ];
 
+    // Emitted is a fact about output: the source extractor's proof OR a
+    // first-party compiled artifact that declares the name. `compiledIn` names
+    // which artifacts, so a source-only emission (tenant-conditional) stays
+    // distinguishable from one every vertical ships.
+    const compiledIn = [...(dsGraph.compiledDeclarations.get(name) ?? [])].sort();
+    const sourceEmitted = emittedNames.has(name);
     channels.push({
       name,
       declaredOverride: declaredOverride.has(name),
       declaredReference: declaredReference.has(name),
-      emitted: emittedNames.has(name),
+      emitted: sourceEmitted || compiledIn.length > 0,
+      sourceEmitted,
+      compiledIn,
       emittedVia: tintEmission.names.has(name)
         ? 'tint-ramp'
         : directEmission.has(name)
@@ -2492,7 +2724,9 @@ export function analyzeChannelLiveness({
             ? 'keyed-resolved'
             : oracleEmission.has(name)
               ? 'produces-roster'
-              : null,
+              : compiledIn.length > 0
+                ? 'compiled-artifact'
+                : null,
       producer,
       semanticOwner,
       familyIds: [...familyIds].sort(),
@@ -2522,6 +2756,8 @@ export function analyzeChannelLiveness({
       declaredOverride: false,
       declaredReference: false,
       emitted: true,
+      sourceEmitted: true,
+      compiledIn: [],
       emittedVia: null,
       producer: null,
       semanticOwner: null,
@@ -2575,6 +2811,7 @@ export function analyzeChannelLiveness({
       cssStylesheets: load.cssStylesheets,
       tsStylesheets: load.tsStylesheets,
     })),
+    compiledArtifacts: artifacts,
   });
 
   if (previousArtifact) {
@@ -2637,6 +2874,9 @@ export function analyzeChannelLiveness({
       declaredOverride: declaredOverride.size,
       declaredReference: declaredReference.size,
       emitted: emittedNames.size,
+      emittedRows: channels.filter((row) => row.emitted).length,
+      compiledRows: channels.filter((row) => row.compiledIn?.length > 0).length,
+      compiledArtifacts: artifacts.length,
       attributedReadSites,
       unattributedReadSites,
       unattributedSharedReadSites,
@@ -2670,6 +2910,7 @@ export function runGate({
   flatThemeCompilerRoot = DEFAULT_BRAND_THEME_COMPILER_ROOT,
   familyInventoryPath = DEFAULT_FAMILY_INVENTORY,
   cssRoots = DEFAULT_CSS_ROOTS,
+  compiledArtifactRoot = DEFAULT_COMPILED_ARTIFACT_ROOT,
   consumerRoots = DEFAULT_CONSUMER_ROOTS,
   evidenceRoot = DEFAULT_EVIDENCE_ROOT,
   round = DEFAULT_ROUND,
@@ -2686,6 +2927,7 @@ export function runGate({
   const tsFiles = collectSourceFiles(cssRoots, ['.ts', '.tsx'], CORE_ROOT);
   const cssStylesheets = readStylesheets(cssFiles, CORE_ROOT);
   const tsStylesheets = readStylesheets(tsFiles, CORE_ROOT);
+  const compiledArtifacts = loadCompiledArtifacts(compiledArtifactRoot);
 
   const resolvedArtifactPath = artifactPath === undefined ? defaultArtifactPath({ evidenceRoot, round }) : artifactPath;
 
@@ -2722,6 +2964,7 @@ export function runGate({
     cssStylesheets,
     tsStylesheets,
     consumerRoots,
+    compiledArtifacts,
     previousArtifact,
     enforceArtifactFreshness: requireArtifact,
     dispositions,
@@ -2739,6 +2982,7 @@ export function runGate({
       cssFileCount: cssFiles.length,
       tsFileCount: tsFiles.length,
       compilerFileCount: flatThemeSources.length,
+      compiledArtifactCount: compiledArtifacts.length,
     },
   };
 }
@@ -2764,6 +3008,8 @@ export function buildArtifact(gateRun, { round = DEFAULT_ROUND, evidenceRoot = D
       ciGatesManifest: relative(CORE_ROOT, DEFAULT_CI_GATES_MANIFEST).split(sep).join('/'),
       packageJson: relative(CORE_ROOT, DEFAULT_PACKAGE_JSON).split(sep).join('/'),
       cssRoots: DEFAULT_CSS_ROOTS.map((root) => relative(CORE_ROOT, root).split(sep).join('/')),
+      compiledArtifactRoot: relative(CORE_ROOT, DEFAULT_COMPILED_ARTIFACT_ROOT).split(sep).join('/'),
+      compiledArtifactCount: corpus.compiledArtifactCount ?? 0,
       cssFileCount: corpus.cssFileCount,
       tsFileCount: corpus.tsFileCount,
     },
@@ -2783,7 +3029,10 @@ export function formatReport(gateRun, { effectBlocks = true } = {}) {
   lines.push(
     `channel-liveness-gate: universe=${result.counts.universe} declaredOverride=${result.counts.declaredOverride} declaredReference=${result.counts.declaredReference} emitted=${result.counts.emitted}`,
   );
-  lines.push(`  corpus: css=${corpus.cssFileCount} ts=${corpus.tsFileCount}`);
+  lines.push(`  corpus: css=${corpus.cssFileCount} ts=${corpus.tsFileCount} compiledArtifacts=${corpus.compiledArtifactCount ?? 0}`);
+  lines.push(
+    `  emission: ${result.counts.emittedRows ?? result.counts.emitted} row(s) emitted (source proof or compiled artifact), ${result.counts.compiledRows ?? 0} declared by a compiled first-party artifact`,
+  );
   lines.push(
     `  family attribution: resolved=${result.counts.attributedReadSites} unattributed=${result.counts.unattributedReadSites} unattributedShared=${result.counts.unattributedSharedReadSites} unknown=${result.counts.unknownFamilySites}`,
   );
@@ -2863,6 +3112,7 @@ export function mayWriteArtifact(result) {
 const DISPOSITION_PRECONDITION_PREFIXES = Object.freeze([
   'zero corpus',
   'required consumerRoot missing',
+  'consumer join unreadable',
   'unclassified output',
   'z-scale owner unreadable',
   'unresolved roster member',

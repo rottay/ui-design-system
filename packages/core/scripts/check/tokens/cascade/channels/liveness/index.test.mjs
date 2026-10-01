@@ -44,7 +44,10 @@ import {
   // paint graph (defect 1)
   buildPaintGraph,
   computePaint,
+  computeJoinedPaint,
   scanTsReads,
+  loadCompiledArtifacts,
+  DEFAULT_COMPILED_ARTIFACT_ROOT,
   // family attribution (defect 4)
   loadFamilyRows,
   buildFamilyIndex,
@@ -1865,19 +1868,19 @@ test('dispositionFailures is the ownership law plus the preconditions that make 
   ]);
 });
 
-test('META: the SHIPPED table is the registered set -- 50 channels, one owner each, no duplicates', () => {
+test('META: the SHIPPED table is the registered set -- 31 channels, one owner each, no duplicates', () => {
   const { index, duplicates } = buildDispositionIndex();
   assert.deepEqual(duplicates, []);
   assert.equal(
     index.size,
-    50,
-    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see) + 1 (2026-09-25, WO-RET-02: --ds-text-inverse, which joined the universe through the emission oracle -- the palette roster declares it -- and is read only by the dead themes/default --ds-sidebar-text declaration) - 4 (2026-09-26, G103-02 / WO-FAM-12: the four --ds-posture-* channels, pinned UNREAD_EMITTED_NO_KNOWN_ROUTE, retired from emission and from the responsive.posture catalog row -- zero readers in the package, the showroom and the apps, and the capability law says the ladder travels as data, never a CSS channel; the pin went with them) + 11 (2026-10-01, LIV-2 / WO-EVI-02: the named type ramp joined the universe when typography/scale stated its entries and facets literally; of its 31 rows 20 measure LIVE, 9 shorthand-fed facets pin to WO-EVI-02 -- a real compiled var() edge the CSS-only graph cannot see -- and the 2 inert letter-spacing facets pin to WO-RET-01 as retire candidates)',
+    31,
+    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see) + 1 (2026-09-25, WO-RET-02: --ds-text-inverse, which joined the universe through the emission oracle -- the palette roster declares it -- and is read only by the dead themes/default --ds-sidebar-text declaration) - 4 (2026-09-26, G103-02 / WO-FAM-12: the four --ds-posture-* channels, pinned UNREAD_EMITTED_NO_KNOWN_ROUTE, retired from emission and from the responsive.posture catalog row -- zero readers in the package, the showroom and the apps, and the capability law says the ladder travels as data, never a CSS channel; the pin went with them) + 11 (2026-10-01, LIV-2 / WO-EVI-02: the named type ramp joined the universe when typography/scale stated its entries and facets literally; of its 31 rows 20 measure LIVE, 9 shorthand-fed facets pin to WO-EVI-02 -- a real compiled var() edge the CSS-only graph cannot see -- and the 2 inert letter-spacing facets pin to WO-RET-01 as retire candidates) - 19 (2026-10-01, LIV-3 / WO-EVI-02, instrument truth: the compiled facade artifacts became custom-property edges and emission evidence, and the consumer graph joins the DS under its vertical -- the 8 status tint 4/12 steps and the workspace-shell mask stop measure LIVE_MODERN_PAINTED through their compiled alert/notifier/mask channels, the 9 shorthand-fed type facets measure LIVE_EXTERNAL_CONSUMER_PAINTED through the app-bithire font: shorthands, and --ds-breakpoint-xs left the universe once the keyed resolver honored the responsive emitter\'s floor skip, so its pin went stale)',
   );
   const byClass = {};
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
   assert.deepEqual(byClass, {
-    [LIVENESS.authorableUnprovenEffect]: 32,
-    [LIVENESS.unreadEmittedNoRoute]: 13,
+    [LIVENESS.authorableUnprovenEffect]: 24,
+    [LIVENESS.unreadEmittedNoRoute]: 2,
     [LIVENESS.readUnproven]: 2,
     [LIVENESS.readNoProductiveTerminal]: 3,
   });
@@ -2051,21 +2054,19 @@ test('META: the --ds-text-inverse pin states its measured mechanism and its only
     '`if (chrome.text)`',
     'cross-corpus relay blindness',
     'WO-EVI-02',
+    'measures it outranked',
     'clears ONLY when the ink retires WITH its palette roster entry',
     'removing the relay alone drifts the row to UNREAD_EMITTED_NO_KNOWN_ROUTE',
   ]) assert.ok(pin.reason.includes(fact), `the pin reason lost: ${fact}`);
   assert.ok(!/no stylesheet reads|clears with either/u.test(pin.reason), 'the retracted claims are back');
 });
 
-test('META: the named type ramp is measured whole -- 31 rows, owned by the scale deriver, every non-LIVE row pinned with its measured effect', () => {
-  const shorthandFed = CHANNEL_DISPOSITIONS.find((group) => group.channels.includes('--ds-text-body-weight'));
-  assert.equal(shorthandFed.owner, 'WO-EVI-02');
-  assert.equal(shorthandFed.classification, LIVENESS.unreadEmittedNoRoute);
-  for (const fact of ['shorthand-composition edge is REAL', 'CSS-only', 'never an edge', 'None is a retirement candidate']) {
-    assert.ok(shorthandFed.reason.includes(fact), `the shorthand-fed pin lost: ${fact}`);
-  }
-  // Every pinned facet is one the shorthand composes; letter-spacing and transform never are.
-  for (const channel of shorthandFed.channels) assert.match(channel, /^--ds-text-[a-z]+-(?:weight|line-height)$/u);
+test('META: the named type ramp is measured whole -- the shorthand-fed facets carry no pin, the two inert facets keep theirs', () => {
+  // The nine shorthand-fed facets measure LIVE through the joined consumer graph
+  // (LIV-3), so no pin may cover a weight or line-height facet any more.
+  const pinnedFacets = CHANNEL_DISPOSITIONS.flatMap((group) => group.channels)
+    .filter((channel) => /^--ds-text-[a-z]+-(?:weight|line-height)$/u.test(channel));
+  assert.deepEqual(pinnedFacets, []);
   const inert = CHANNEL_DISPOSITIONS.find((group) => group.channels.includes('--ds-text-body-letter-spacing'));
   assert.equal(inert.owner, 'WO-RET-01');
   assert.equal(inert.classification, LIVENESS.unreadEmittedNoRoute);
@@ -2073,4 +2074,307 @@ test('META: the named type ramp is measured whole -- 31 rows, owned by the scale
   for (const fact of ['zero readers anywhere', 'neither appears in its entry shorthand', 'Retirement is NOT this pin', '--ds-text-detail-letter-spacing holds the same `0` but is NOT a candidate']) {
     assert.ok(inert.reason.includes(fact), `the inert pin lost: ${fact}`);
   }
+});
+
+/* ---------------------------------------------------------------------- */
+/* LIV-3: instrument-truth drills (compiled edges, consumer join, emitter  */
+/* guard, artifact emission). Each one is red against the pre-LIV-3 gate.  */
+/* ---------------------------------------------------------------------- */
+
+function tenantSource(overrides, references) {
+  return `
+export const TENANT_THEME_OVERRIDE_TOKENS = [
+${overrides.map((name) => `  "${name}",`).join('\n')}
+] as const;
+
+export const TENANT_THEME_REFERENCE_TOKENS = new Set([
+  ...TENANT_THEME_OVERRIDE_TOKENS,
+${references.map((name) => `  "${name}",`).join('\n')}
+]);
+`;
+}
+
+const LIV3_SKIN = 'src/foundation/tokens/css/runtime/engines/modern/skin/drill/index.css';
+const liv3Artifact = (vertical, body) => ({
+  vertical,
+  file: `src/foundation/tokens/css/facade/artifacts/${vertical}/index.css`,
+  text: `:is(html[data-tenant='${vertical}']) {\n${body}\n}\n`,
+});
+
+function liv3Analyze({ references, sheets = [], compiledArtifacts, consumerRoots = [] }) {
+  return analyzeChannelLiveness({
+    tenantThemeSource: tenantSource(['--ds-color-primary'], references),
+    flatThemeSource: 'vars["--ds-color-primary"] = "#111111";\n',
+    familyRows: FIXTURE_FAMILY_ROWS,
+    cssStylesheets: [css(LIV3_SKIN, '.drill { color: var(--ds-color-primary); }'), ...sheets],
+    tsStylesheets: [css('src/components/drill/index.tsx', 'export {};\n')],
+    consumerRoots,
+    compiledArtifacts,
+    dispositions: [],
+  });
+}
+
+test('DRILL (LIV-3 facade read): a step read only inside a compiled artifact paints through the authored skin terminal of the channel it feeds', () => {
+  const references = ['--ds-tint-error-4'];
+  const skin = css(`${LIV3_SKIN.replace('drill', 'alert')}`, '.alert { background-color: var(--ds-alert-error-wash-subtle); }');
+  const artifacts = [liv3Artifact('bithire', '  --ds-alert-error-wash-subtle: var(--ds-tint-error-4);')];
+  const row = (result) => result.channels.find((entry) => entry.name === '--ds-tint-error-4');
+
+  const joined = liv3Analyze({ references, sheets: [skin], compiledArtifacts: artifacts });
+  assert.equal(row(joined).classification, LIVENESS.modernPainted);
+  assert.ok(row(joined).consumerSites.some((site) => site.startsWith('ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css')));
+  assert.ok(row(joined).consumerSites.some((site) => site.startsWith('ds-terminal:') && site.includes('(background-color)')));
+
+  // The planted negative: the same corpus with no compile modeled is unproven.
+  assert.equal(row(liv3Analyze({ references, sheets: [skin] })).classification, LIVENESS.authorableUnprovenEffect);
+});
+
+test('DRILL (LIV-3 facade read): an artifact declaration is an edge, never a terminal -- the compiler cannot certify its own channel', () => {
+  const result = liv3Analyze({
+    references: ['--ds-tint-error-4'],
+    compiledArtifacts: [liv3Artifact('bithire', '  color: var(--ds-tint-error-4);\n  --ds-dead-end: var(--ds-tint-error-4);')],
+  });
+  const row = result.channels.find((entry) => entry.name === '--ds-tint-error-4');
+  assert.equal(row.classification, LIVENESS.readNoProductiveTerminal, 'an artifact-only read is a read, and only an authored terminal is paint');
+  assert.equal(row.reads.dsTerminal, 0);
+});
+
+test('DRILL (LIV-3 facade read): an artifact root that reads as EMPTY is a broken measurement on the ownership leg, never a smaller graph', () => {
+  const result = liv3Analyze({ references: ['--ds-tint-error-4'], compiledArtifacts: [] });
+  const failure = result.failures.find((entry) => entry.startsWith('zero corpus: the compiled first-party artifacts'));
+  assert.ok(failure);
+  assert.ok(dispositionFailures(result).includes(failure));
+});
+
+function liv3ConsumerRoot(files, vertical) {
+  const dir = mkdtempSync(join(tmpdir(), 'channel-liveness-liv3-'));
+  for (const [path, text] of Object.entries(files)) {
+    mkdirSync(dirname(join(dir, path)), { recursive: true });
+    writeFileSync(join(dir, path), text);
+  }
+  return { dir, root: { id: 'app-bithire', root: dir, required: true, ...(vertical === undefined ? {} : { vertical }) } };
+}
+
+test('DRILL (LIV-3 consumer join): a facet composed into a DS shorthand the consumer paints is LIVE_EXTERNAL through the joined graph', () => {
+  const { dir, root } = liv3ConsumerRoot({ 'header/index.css': '.header { font: var(--ds-text-body); }\n' }, 'bithire');
+  try {
+    const artifacts = [liv3Artifact('bithire', '  --ds-text-body: var(--ds-text-body-weight) 14px/var(--ds-text-body-line-height) sans-serif;')];
+    const references = ['--ds-text-body-weight', '--ds-text-body-line-height'];
+    const joined = liv3Analyze({ references, compiledArtifacts: artifacts, consumerRoots: [root] });
+    for (const name of references) {
+      const row = joined.channels.find((entry) => entry.name === name);
+      assert.equal(row.classification, LIVENESS.externalConsumerPainted, name);
+      assert.ok(row.consumerSites.some((site) => site.startsWith('external-terminal-joined:app-bithire/header/index.css:1 (font via --ds-text-body)')), name);
+    }
+    // The planted negative: the same consumer with no declared vertical keeps the two graphs apart.
+    const apart = liv3Analyze({ references, compiledArtifacts: artifacts, consumerRoots: [{ ...root, vertical: undefined }] });
+    assert.equal(apart.channels.find((entry) => entry.name === '--ds-text-body-weight').classification, LIVENESS.readNoProductiveTerminal);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('DRILL (LIV-3 consumer join): an authored relay the consumer vertical\'s artifact re-declares is outranked; another vertical\'s artifact never joins', () => {
+  const relay = css('src/foundation/tokens/css/foundation/themes/default/index.css', ':root { --ds-sidebar-text: var(--ds-text-inverse); }');
+  const { dir, root } = liv3ConsumerRoot({ 'sidebar/index.css': '.sidebar { color: var(--ds-sidebar-text); }\n' }, 'bithire');
+  try {
+    const references = ['--ds-text-inverse', '--ds-ink-other'];
+    const classOf = (result, name) => result.channels.find((entry) => entry.name === name).classification;
+    // The bithire artifact declares --ds-sidebar-text: the relay never computes for this consumer.
+    const shadowed = liv3Analyze({
+      references,
+      sheets: [relay],
+      compiledArtifacts: [liv3Artifact('bithire', '  --ds-sidebar-text: var(--ds-color-primary);'), liv3Artifact('evnto', '  --ds-sidebar-text: var(--ds-ink-other);')],
+      consumerRoots: [root],
+    });
+    assert.equal(classOf(shadowed, '--ds-text-inverse'), LIVENESS.readNoProductiveTerminal);
+    assert.notEqual(classOf(shadowed, '--ds-ink-other'), LIVENESS.externalConsumerPainted, 'the evnto artifact is not what app-bithire renders under');
+    // When the consumer's own artifact does not re-declare it, the relay is the route.
+    const unshadowed = liv3Analyze({
+      references,
+      sheets: [relay],
+      compiledArtifacts: [liv3Artifact('bithire', '  --ds-other: 1;')],
+      consumerRoots: [root],
+    });
+    assert.equal(classOf(unshadowed, '--ds-text-inverse'), LIVENESS.externalConsumerPainted);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('DRILL (LIV-3 consumer join): a consumer vertical with no compiled artifact read fails closed on the ownership leg', () => {
+  const { dir, root } = liv3ConsumerRoot({ 'a/index.css': '.a { color: red; }\n' }, 'bithire');
+  try {
+    const result = liv3Analyze({ references: [], compiledArtifacts: [liv3Artifact('evnto', '  --ds-x: 1;')], consumerRoots: [root] });
+    const failure = result.failures.find((entry) => entry.startsWith('consumer join unreadable: consumerRoot "app-bithire" renders under vertical "bithire"'));
+    assert.ok(failure);
+    assert.ok(dispositionFailures(result).includes(failure));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('computeJoinedPaint counts only consumer terminals and never re-credits a DS terminal', () => {
+  const ds = buildPaintGraph([
+    { file: 'skin.css', text: '.x { color: var(--ds-a); }' },
+    { file: 'art.css', text: ':root { --ds-b: var(--ds-a); }', compiledVertical: 'bithire' },
+  ]);
+  const consumer = buildPaintGraph([{ file: 'app.css', text: '.y { color: var(--ds-b); }' }]);
+  const joined = computeJoinedPaint(ds, consumer, '--ds-a', 'bithire');
+  assert.deepEqual(joined.terminalSites.map((site) => `${site.file}:${site.via}`), ['app.css:--ds-b']);
+  assert.equal(computeJoinedPaint(ds, consumer, '--ds-a', 'evnto').painted, false);
+});
+
+const LIV3_RESPONSIVE = `
+const LADDER = { xs: 0, sm: 640, md: 768 } as const;
+const FLOOR = "xs";
+export function derive() {
+  const vars: Record<string, string> = {};
+  for (const [step, px] of Object.entries(LADDER)) {
+    if (step === FLOOR) continue;
+    vars[\`--ds-breakpoint-\${step}\`] = \`\${px}px\`;
+  }
+  return vars;
+}
+`;
+
+test('DRILL (LIV-3 phantom): a loop that skips its floor never emits the floor', () => {
+  const { resolved, unresolved } = extractKeyedVarsEmissions(LIV3_RESPONSIVE);
+  assert.deepEqual([...resolved.keys()].sort(), ['--ds-breakpoint-md', '--ds-breakpoint-sm']);
+  assert.deepEqual(unresolved, []);
+  // A literal operand on either side is the same guard.
+  const literal = LIV3_RESPONSIVE.replace('step === FLOOR', '"md" === step');
+  assert.deepEqual([...extractKeyedVarsEmissions(literal).resolved.keys()].sort(), ['--ds-breakpoint-sm', '--ds-breakpoint-xs']);
+});
+
+test('DRILL (LIV-3 phantom): a skip this reader cannot name is an unresolved pattern, never "skips nothing"', () => {
+  const opaque = LIV3_RESPONSIVE.replace('step === FLOOR', 'px < 1');
+  const { resolved, unresolved } = extractKeyedVarsEmissions(opaque);
+  assert.equal(resolved.size, 0);
+  assert.equal(unresolved.length, 1);
+  assert.match(unresolved[0].reason, /skips keys through a `continue` this resolver cannot read/);
+  // A continue in a comment is prose, not a skip.
+  const commented = LIV3_RESPONSIVE.replace('if (step === FLOOR) continue;', '// a floor could continue here');
+  assert.equal(extractKeyedVarsEmissions(commented).resolved.size, 3);
+});
+
+test('CONTROL (LIV-3 phantom): a skip on THEME data is a conditional emission, not a key filter, so every key stays emitted', () => {
+  // lowering/foundation/materials: `if (!surfaceRoleTokens) continue;` -- a tenant
+  // that authors no tokens for a role emits nothing for it, which is the same
+  // reading as an `if (x) vars[...] = ...` around the assignment.
+  const conditional = `
+const ROLES = ["page", "panel"] as const;
+export function emit(roles: Record<string, string | undefined>) {
+  const vars: Record<string, string> = {};
+  for (const role of ROLES) {
+    const tokens = roles[role];
+    if (!tokens) continue;
+    if (!roles[ role ]) { continue; }
+    vars[\`--ds-surface-\${role}\`] = tokens;
+  }
+  return vars;
+}
+`;
+  const { resolved, unresolved } = extractKeyedVarsEmissions(conditional);
+  assert.deepEqual([...resolved.keys()].sort(), ['--ds-surface-page', '--ds-surface-panel']);
+  assert.deepEqual(unresolved, []);
+  // A filter on the key itself through a roster is structural, and not enumerable here.
+  const filtered = conditional.replace('if (!tokens) continue;', 'if (SKIP.has(role)) continue;');
+  assert.equal(extractKeyedVarsEmissions(filtered).unresolved.length, 1);
+});
+
+test('DRILL (LIV-3b phantom): a floor guard nested under another condition is unresolved, never a skip for every theme', () => {
+  for (const nested of [
+    'if (theme.compact) if (step === FLOOR) continue;',
+    'if (theme.compact) { if (step === FLOOR) continue; }',
+  ]) {
+    const { resolved, unresolved } = extractKeyedVarsEmissions(LIV3_RESPONSIVE.replace('if (step === FLOOR) continue;', nested));
+    assert.equal(resolved.size, 0, nested);
+    assert.equal(unresolved.length, 1, nested);
+    assert.match(unresolved[0].reason, /skips keys through a `continue` this resolver cannot read/);
+  }
+});
+
+test('DRILL (LIV-3b phantom): an inner loop that continues on the key does not skip the outer loop', () => {
+  const inner = LIV3_RESPONSIVE.replace(
+    'if (step === FLOOR) continue;',
+    'for (const mode of MODES) { if (step === FLOOR) continue; }',
+  );
+  const { resolved, unresolved } = extractKeyedVarsEmissions(inner);
+  assert.equal(resolved.size, 0);
+  assert.equal(unresolved.length, 1);
+});
+
+test('DRILL (LIV-3b phantom): a second loop over the same key is read from its own header, not the first loop\'s guard', () => {
+  const twoLoops = LIV3_RESPONSIVE.replace(
+    '  return vars;',
+    `  for (const [step, px] of Object.entries(LADDER)) {
+    vars[\`--ds-gutter-\${step}\`] = \`\${px}px\`;
+  }
+  return vars;`,
+  );
+  const { resolved, unresolved } = extractKeyedVarsEmissions(twoLoops);
+  assert.deepEqual(
+    [...resolved.keys()].sort(),
+    ['--ds-breakpoint-md', '--ds-breakpoint-sm', '--ds-gutter-md', '--ds-gutter-sm', '--ds-gutter-xs'],
+  );
+  assert.deepEqual(unresolved, []);
+});
+
+test('CONTROL (LIV-3b phantom): the corpus shape -- one guard at loop-body depth -- still reads the skip', () => {
+  const corpus = readFileSync(
+    join(CORE_ROOT, 'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/responsive/index.ts'),
+    'utf8',
+  );
+  assert.match(corpus, /\n {4}if \(step === PROJECTION_FLOOR\) continue;\n/);
+  const { resolved, unresolved } = extractKeyedVarsEmissions(LIV3_RESPONSIVE);
+  assert.deepEqual([...resolved.keys()].sort(), ['--ds-breakpoint-md', '--ds-breakpoint-sm']);
+  assert.deepEqual(unresolved, []);
+  const braced = LIV3_RESPONSIVE.replace('if (step === FLOOR) continue;', 'const half = px / 2; if (step === FLOOR) { continue; }');
+  assert.deepEqual([...extractKeyedVarsEmissions(braced).resolved.keys()].sort(), ['--ds-breakpoint-md', '--ds-breakpoint-sm']);
+});
+
+test('DRILL (LIV-3 emitted-misreport): a name only a compiled artifact declares is emitted, and says where', () => {
+  const result = liv3Analyze({
+    references: ['--ds-tint-error-16', '--ds-color-accent-50'],
+    compiledArtifacts: [liv3Artifact('bithire', '  --ds-tint-error-16: #fff;'), liv3Artifact('rottay', '  --ds-tint-error-16: #eee;')],
+  });
+  const ramp = result.channels.find((entry) => entry.name === '--ds-tint-error-16');
+  assert.equal(ramp.emitted, true);
+  assert.equal(ramp.sourceEmitted, false);
+  assert.deepEqual(ramp.compiledIn, ['bithire', 'rottay']);
+  assert.equal(ramp.emittedVia, 'compiled-artifact');
+  // Declaration is not emission: an allowlisted name nothing compiles stays unemitted.
+  const allowlistOnly = result.channels.find((entry) => entry.name === '--ds-color-accent-50');
+  assert.equal(allowlistOnly.emitted, false);
+  assert.deepEqual(allowlistOnly.compiledIn, []);
+  assert.equal(result.counts.compiledRows, 1);
+});
+
+test('LIVE (LIV-3): the real gate measures the compiled routes, the joined facets, the phantom floor and the artifact emissions', () => {
+  assert.ok(loadCompiledArtifacts(DEFAULT_COMPILED_ARTIFACT_ROOT).length >= 3);
+  const { result } = runGate({ requireArtifact: false });
+  const byName = new Map(result.channels.map((row) => [row.name, row]));
+  assert.equal(byName.has('--ds-breakpoint-xs'), false, 'the responsive deriver skips the floor, so nothing emits it');
+  for (const tone of ['error', 'info', 'success', 'warning']) {
+    for (const step of [4, 12]) {
+      const row = byName.get(`--ds-tint-${tone}-${step}`);
+      assert.equal(row.classification, LIVENESS.modernPainted, row.name);
+      assert.ok(row.consumerSites.some((site) => site.startsWith('ds-compiled-ref:')), row.name);
+    }
+    for (const step of [16, 24]) {
+      const row = byName.get(`--ds-tint-${tone}-${step}`);
+      assert.equal(row.emitted, true, `${row.name} ships in every artifact`);
+      assert.deepEqual(row.compiledIn, ['bithire', 'evnto', 'rottay'], row.name);
+    }
+  }
+  assert.equal(byName.get('--ds-workspace-shell-mask-stop').classification, LIVENESS.modernPainted);
+  for (const facet of ['body-line-height', 'body-weight', 'detail-line-height', 'detail-weight', 'display-line-height', 'display-weight', 'eyebrow-line-height', 'eyebrow-weight', 'title-line-height']) {
+    const row = byName.get(`--ds-text-${facet}`);
+    assert.equal(row.classification, LIVENESS.externalConsumerPainted, row.name);
+    assert.ok(row.consumerSites.some((site) => site.startsWith('external-terminal-joined:app-bithire/')), row.name);
+  }
+  assert.equal(byName.get('--ds-text-inverse').classification, LIVENESS.readNoProductiveTerminal, 'the relay is outranked by the bithire artifact');
+  assert.deepEqual(byName.get('--ds-color-accent-50').compiledIn, [], 'the compiler retired the accent steps');
+  assert.deepEqual(dispositionFailures(result), []);
 });
