@@ -10,7 +10,7 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants";
+import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,

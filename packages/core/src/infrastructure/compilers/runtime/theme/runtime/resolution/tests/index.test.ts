@@ -87,8 +87,8 @@ describe("there is no intentless arm", () => {
     expect(resolveTheme.length).toBe(2);
   });
 
-  it("declares exactly `baseline` as its option surface", () => {
-    expectTypeOf<keyof ResolveThemeOptions>().toEqualTypeOf<"baseline">();
+  it("declares `baseline` and `vertical` as its option surface", () => {
+    expectTypeOf<keyof ResolveThemeOptions>().toEqualTypeOf<"baseline" | "vertical">();
   });
 
   it("refuses a call with no intent at all", () => {

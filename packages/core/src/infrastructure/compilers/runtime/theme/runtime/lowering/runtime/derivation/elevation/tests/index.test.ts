@@ -132,7 +132,7 @@ describe("elevation/ladder on a dark ground", () => {
       id: "t",
       name: "T",
       surfaces,
-      ...(backgroundColor ? { palette: { backgroundColor } } : {}),
+      ...(backgroundColor ? { palette: { backgroundColor, primaryColor: "#101010" } } : {}),
     };
     return deriveElevationLadder(
       bt,

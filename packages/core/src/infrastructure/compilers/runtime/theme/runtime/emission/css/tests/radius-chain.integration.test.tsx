@@ -105,7 +105,7 @@ async function measure(): Promise<Record<ScopeId, Reading>> {
   ];
   const specimen = renderToStaticMarkup(
     <>
-      <ModernBox rounded="lg" data-probe="box" padding="4">
+      <ModernBox rounded="lg" data-probe="box" padding="md">
         box
       </ModernBox>
       <ModernCard data-probe="card">card</ModernCard>
