@@ -329,6 +329,219 @@ export const DEFAULT_CONSUMER_ROOTS = Object.freeze([
   }),
 ]);
 
+/** The checkout a cited probe spec path is relative to (the workspace root, never a sibling repo). */
+export const CHECKOUT_ROOT = findRepoRoot(SCRIPTS_DIR);
+
+/**
+ * Declared browser-probe evidence: the same declaration family as
+ * `DEFAULT_CONSUMER_ROOTS` -- a frozen, read-only source this producer walks
+ * but never executes -- for a terminal no stylesheet graph can contain (canvas
+ * pixels, an inline style stamped on a portalled node). A valid entry
+ * classifies its channel `LIVE_PROBE_PAINTED`, which is NARROWER than every
+ * graph class in one stated way: it certifies paint through the cited probe,
+ * not through the cascade graph. The citation is the contract and the spec's
+ * own e2e leg is the execution, so the instrument proves only that the
+ * citation still resolves, and it fails closed when it does not:
+ *
+ *   - the spec must exist under the checkout (`probe evidence spec missing`);
+ *   - the comment-masked spec must contain no `.skip(` / `.fixme(` anywhere:
+ *     a disabled probe is not evidence, and a certification spec is not where
+ *     parked tests live (`probe evidence disabled`);
+ *   - every cited title must be the verbatim first argument of a `test(...)`
+ *     call in the comment-masked spec, so a renamed test breaks the gate
+ *     (`probe evidence title missing`);
+ *   - a LITERAL title binds only the channel its own call names: the channel
+ *     literal, or a const bound to it, must appear between the title and the
+ *     end of that `test(...)` call (`probe evidence unbound`);
+ *   - a TEMPLATED title (`${...}`) is bound at spec level only: the spec must
+ *     name the channel as a string literal somewhere. That proves the spec
+ *     probes the channel, NOT that the cited parameterized test is the case
+ *     that does (`probe evidence unbound`);
+ *   - the channel must still be measured, and must not already paint through
+ *     the graph -- a graph terminal is stronger evidence and the entry is then
+ *     deleted (`probe evidence stale` / `probe evidence superseded`).
+ *
+ * A pin for a channel entered here is discharged by the ownership law in the
+ * same commit: the row is LIVE, so `adjudicateDispositions` accuses the pin.
+ * A probe row's residual design decision is registered with its owning work
+ * order in the roadmap, never in this register.
+ */
+export const DEFAULT_PROBE_EVIDENCE = Object.freeze([
+  Object.freeze({
+    channel: '--ds-app-shell-navigation-drawer-body-padding',
+    spec: 'packages/showroom/e2e/liveness/paint-probes.spec.ts',
+    tests: Object.freeze(['--ds-app-shell-navigation-drawer-body-padding paints the Modern Sheet body']),
+    proves:
+      'the computed padding of the portalled Modern Sheet body follows the channel 0 -> 7px -> 13px -> 0 through the inline bodyStyle the app shell stamps',
+    registered: '2026-10-01',
+  }),
+  Object.freeze({
+    channel: '--ds-workspace-shell-particle-primary',
+    spec: 'packages/showroom/e2e/liveness/paint-probes.spec.ts',
+    tests: Object.freeze(['${probe.channel}: paints the canvas pixels at rest and under an override']),
+    proves:
+      'the workspace-shell canvas pixels (getImageData) carry the pinned rest ink, and an override of the channel lands as the dominant ink at a share above 0.9',
+    registered: '2026-10-01',
+  }),
+  Object.freeze({
+    channel: '--ds-workspace-shell-particle-secondary',
+    spec: 'packages/showroom/e2e/liveness/paint-probes.spec.ts',
+    tests: Object.freeze(['${probe.channel}: paints the canvas pixels at rest and under an override']),
+    proves:
+      'the workspace-shell ambient canvas pixels (getImageData) carry the pinned rest ink, and an override of the channel lands as the dominant ink at a share above 0.9',
+    registered: '2026-10-01',
+  }),
+]);
+
+const TEST_CALL_RE = /(?<![.\w$])test(?:\.only)?(\()\s*(['"`])/dg;
+
+function skipQuoted(text, index) {
+  const quote = text[index];
+  let cursor = index + 1;
+  while (cursor < text.length && text[cursor] !== quote) cursor += text[cursor] === '\\' ? 2 : 1;
+  return cursor + 1;
+}
+
+/** The index just past the `)` that closes the call opened at `open`. */
+function callEnd(text, open) {
+  const closers = [')'];
+  let cursor = open + 1;
+  while (cursor < text.length && closers.length > 0) {
+    const char = text[cursor];
+    if (closers.at(-1) === '`') {
+      if (char === '\\') cursor += 2;
+      else if (char === '`') (closers.pop(), (cursor += 1));
+      else if (char === '$' && text[cursor + 1] === '{') (closers.push('}'), (cursor += 2));
+      else cursor += 1;
+      continue;
+    }
+    if (char === "'" || char === '"') {
+      cursor = skipQuoted(text, cursor);
+      continue;
+    }
+    if (char === '`') closers.push('`');
+    else if (char === '(') closers.push(')');
+    else if (char === '{') closers.push('}');
+    else if (char === '[') closers.push(']');
+    else if (char === ')' || char === '}' || char === ']') closers.pop();
+    cursor += 1;
+  }
+  return Math.min(cursor, text.length);
+}
+
+/** Every `test(...)` call in a comment-masked spec: verbatim title, whether it is a `${...}` template, and its span to the closing paren. */
+export function extractSpecTests(specText) {
+  const scanned = maskSourceComments(specText);
+  const tests = [];
+  for (const match of scanned.matchAll(TEST_CALL_RE)) {
+    const quote = match[2];
+    const start = match.indices[2][1];
+    const close = skipQuoted(scanned, start - 1) - 1;
+    const title = scanned.slice(start, close);
+    tests.push({
+      title,
+      templated: quote === '`' && title.includes('${'),
+      span: scanned.slice(start - 1, callEnd(scanned, match.indices[1][0])),
+    });
+  }
+  return tests;
+}
+
+/** The verbatim first-argument titles of every `test(...)` call in a comment-masked spec. */
+export function extractSpecTestTitles(specText) {
+  return new Set(extractSpecTests(specText).map((entry) => entry.title));
+}
+
+/**
+ * Validate every declared probe citation against the spec text on disk.
+ * Returns the channels whose citation resolves, and a named failure for every
+ * one that does not; an invalid entry never classifies its channel.
+ */
+export function loadProbeEvidence(entries = DEFAULT_PROBE_EVIDENCE, { checkoutRoot = CHECKOUT_ROOT } = {}) {
+  const failures = [];
+  const valid = new Map();
+  const specs = [];
+  const seen = new Set();
+  for (const entry of entries) {
+    const label = entry?.channel ?? '(no channel)';
+    if (seen.has(entry?.channel)) {
+      failures.push(`probe evidence duplicate: ${label} is cited more than once -- a channel has exactly one probe citation`);
+      continue;
+    }
+    seen.add(entry?.channel);
+    const malformed =
+      typeof entry?.channel !== 'string' ||
+      !entry.channel.startsWith('--ds-') ||
+      typeof entry.spec !== 'string' ||
+      entry.spec.startsWith('/') ||
+      entry.spec.split('/').includes('..') ||
+      !Array.isArray(entry.tests) ||
+      entry.tests.length === 0 ||
+      entry.tests.some((title) => typeof title !== 'string' || title.trim() === '') ||
+      typeof entry.proves !== 'string' ||
+      entry.proves.trim() === '' ||
+      entry.proves.includes('\n');
+    if (malformed) {
+      failures.push(
+        `probe evidence malformed: ${label} -- an entry names a --ds-* channel, a checkout-relative spec path, at least one test title and a one-line statement of what the probe proves`,
+      );
+      continue;
+    }
+    const specPath = resolve(checkoutRoot, entry.spec);
+    let specText;
+    try {
+      specText = readFileSync(specPath, 'utf8');
+    } catch {
+      failures.push(
+        `probe evidence spec missing: ${entry.channel} cites ${entry.spec}, which does not exist under the checkout -- a moved or deleted probe spec leaves the citation proving nothing`,
+      );
+      continue;
+    }
+    specs.push({ file: entry.spec, text: specText });
+    const scanned = maskSourceComments(specText);
+    const disabled = /\.(?:skip|fixme)\(/.test(scanned);
+    if (disabled) {
+      failures.push(
+        `probe evidence disabled: ${entry.channel} cites ${entry.spec}, which contains .skip( or .fixme( -- a disabled probe proves nothing, and a certification spec carries no parked tests`,
+      );
+    }
+    const declared = extractSpecTests(specText);
+    const missing = entry.tests.filter((title) => !declared.some((probe) => probe.title === title));
+    for (const title of missing) {
+      failures.push(
+        `probe evidence title missing: ${entry.channel} cites "${title}" in ${entry.spec}, and no test(...) in that spec declares that title verbatim -- a renamed test is a broken citation, never a silent one`,
+      );
+    }
+    const escaped = entry.channel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const literal = new RegExp(`(['"\`])${escaped}\\1`);
+    const aliases = [...scanned.matchAll(new RegExp(`\\b(?:const|let|var)\\s+([A-Za-z_$][\\w$]*)\\s*(?::[^=;]+)?=\\s*(['"\`])${escaped}\\2`, 'g'))].map(
+      (match) => new RegExp(`(?<![\\w$.])${match[1].replace(/\$/g, '\\$')}(?![\\w$])`),
+    );
+    const names = (text) => literal.test(text) || aliases.some((alias) => alias.test(text));
+    let bound = true;
+    for (const title of entry.tests.filter((cited) => !missing.includes(cited))) {
+      const cases = declared.filter((probe) => probe.title === title);
+      if (cases.some((probe) => probe.templated)) {
+        if (!literal.test(scanned)) {
+          bound = false;
+          failures.push(
+            `probe evidence unbound: ${entry.spec} never names ${entry.channel} as a string literal -- the cited probe cannot be proving a channel it does not mention`,
+          );
+        }
+      } else if (!cases.some((probe) => names(probe.span))) {
+        bound = false;
+        failures.push(
+          `probe evidence unbound: ${entry.channel} cites "${title}" in ${entry.spec}, and that test's own call never names the channel (a string literal or a const bound to one) -- a literal title binds only the channel its own probe reads`,
+        );
+      }
+    }
+    if (missing.length === 0 && bound && !disabled) {
+      valid.set(entry.channel, { spec: entry.spec, tests: [...entry.tests], proves: entry.proves, registered: entry.registered ?? null });
+    }
+  }
+  return { valid, failures, specs };
+}
+
 /**
  * The compiled first-party tenant artifacts: one `<vertical>/index.css` per
  * vertical, the committed compileTheme output the parity gates hold equal to
@@ -1702,6 +1915,7 @@ export const LIVENESS = Object.freeze({
   modernPainted: 'LIVE_MODERN_PAINTED',
   frozenEnginePainted: 'LIVE_FROZEN_ENGINE_PAINTED',
   externalConsumerPainted: 'LIVE_EXTERNAL_CONSUMER_PAINTED',
+  probePainted: 'LIVE_PROBE_PAINTED',
   readNoProductiveTerminal: 'READ_NO_PRODUCTIVE_TERMINAL',
   readUnproven: 'READ_UNPROVEN',
   authorableUnprovenEffect: 'AUTHORABLE_UNPROVEN_EFFECT',
@@ -1710,12 +1924,15 @@ export const LIVENESS = Object.freeze({
   structuralConstant: 'STRUCTURAL_CONSTANT',
 });
 
-/** The three (and only three) classifications that count as proven liveness. */
-export const LIVE_CLASSIFICATIONS = new Set([
+/** The three classifications that prove paint through the cascade graph. */
+export const GRAPH_LIVE_CLASSIFICATIONS = new Set([
   LIVENESS.modernPainted,
   LIVENESS.frozenEnginePainted,
   LIVENESS.externalConsumerPainted,
 ]);
+
+/** Proven liveness: the graph classes plus a resolving browser-probe citation (`DEFAULT_PROBE_EVIDENCE`). */
+export const LIVE_CLASSIFICATIONS = new Set([...GRAPH_LIVE_CLASSIFICATIONS, LIVENESS.probePainted]);
 
 /**
  * Every classification that is NOT proven liveness. Per defect 3 and defect
@@ -1874,31 +2091,12 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     channels: Object.freeze(['--ds-color-secondary-400']),
   }),
   Object.freeze({
-    owner: 'WO-FAM-11',
-    classification: LIVENESS.readUnproven,
-    registered: '2026-09-24',
-    reason:
-      'the drawer body padding is read only by an inline restatement the shell chose: app-shell/index.tsx:435 hands Sheet `padding: var(--ds-app-shell-navigation-drawer-body-padding, 0)` through `bodyStyle`, and sheet/engines/modern:205 stamps that bodyStyle on the body inline, so on Modern the inline read is what paints -- the showroom probe e2e/liveness/paint-probes.spec.ts measures the computed body padding following the channel 0 -> 7px -> 13px -> 0 against an unrelated-name control (LIV-4). The graph cannot credit it because a TS inline read stays unproven. Without the restatement Modern would paint skin/sheet:248 `var(--ds-sheet-body-padding)`, and the frozen engines their own body padding: classic the antd drawer body default, rustic its inline `var(--ds-spacing-4, 16px)` (sheet/engines/rustic:260), which no stylesheet outranks without !important. So a skin/app-shell padding declaration (the drawer-body rule at skin/app-shell:138, at a specificity that beats skin/sheet:244) can replace the restatement on Modern only; dropping the restatement repaints both frozen engines and needs a frozen-engine paint decision first. The pin clears when a CSS route lands and the inline restatement goes without repainting a shipped engine, or when the channel retires with its chrome/app-shell producer -- never by counting a TS occurrence as paint',
-    channels: Object.freeze(['--ds-app-shell-navigation-drawer-body-padding']),
-  }),
-  Object.freeze({
     owner: 'WO-RET-01',
     classification: LIVENESS.readNoProductiveTerminal,
     registered: '2026-09-25',
     reason:
       'dead by CASCADE, not by absence: the palette roster declares the ink (it joins the universe through the emission oracle) and its only DS read is the legacy relay themes/default:973 `--ds-sidebar-text: var(--ds-text-inverse)` on :root inside @layer rottay-tokens, which the consumerRoot does read (app-bithire sidebar styles, seven terminal color declarations). Every first-party artifact re-declares --ds-sidebar-text on its html[data-tenant]/[data-vertical] scope, outranking the relay, but that emission is conditional (chrome-variables `if (chrome.text)` / `if (s.text)`), so the relay WOULD compute for a tenant whose sidebar tone lowers no text. The cross-corpus relay blindness WO-EVI-02 owned is closed (LIV-3): the join follows the relay into the consumer graph and measures it outranked, because the bithire artifact the consumerRoot renders under declares --ds-sidebar-text itself -- so the RNPT reading is the cascade, not the instrument. The pin clears ONLY when the ink retires WITH its palette roster entry, or a DS reader is wired; removing the relay alone drifts the row to UNREAD_EMITTED_NO_KNOWN_ROUTE, which this register accuses as a drifted pin. Owner re-adjudicated 2026-10-01: WO-RET-02 is done, WO-DER-06 measured done the same day, so the pin moves to WO-RET-01, the open retirement lane whose acceptance the exit text already describes',
     channels: Object.freeze(['--ds-text-inverse']),
-  }),
-  Object.freeze({
-    owner: 'WO-EVI-02',
-    classification: LIVENESS.readNoProductiveTerminal,
-    registered: '2026-09-24',
-    reason:
-      'the particle inks paint on a canvas the graph cannot see: the collection-shell skin resolves each into --_ds-workspace-shell-particle-*-resolved, workspace-shell/index.tsx:200/216 hands that var() to ParticleField as `color`, and runtime/canvas resolves it through computed style (resolveConcreteParticleColor) into ctx.fillStyle. The only test today (WorkspaceShell.cut) asserts the source text, not the painted ink. The pin clears when a browser probe proves the canvas ink follows the channel, or when the inks retire with their producer',
-    channels: Object.freeze([
-      '--ds-workspace-shell-particle-primary',
-      '--ds-workspace-shell-particle-secondary',
-    ]),
   }),
   Object.freeze({
     owner: 'WO-RET-01',
@@ -2104,6 +2302,7 @@ export function classifyLiveness({
   dsModernPainted,
   dsFrozenOnlyPainted,
   externalConsumerPainted,
+  probePainted = false,
   cssReadNoTerminal,
   tsReadOnly,
   canonicalRosterMember = false,
@@ -2124,6 +2323,12 @@ export function classifyLiveness({
     return {
       classification: LIVENESS.externalConsumerPainted,
       reason: 'zero in-repo (DS) terminal paint, but a finite PostCSS chain from this channel reaches a terminal declaration in a required external consumerRoot (app-bithire) -- KEEP because of that external terminal chain only',
+    };
+  }
+  if (probePainted) {
+    return {
+      classification: LIVENESS.probePainted,
+      reason: 'zero terminal paint through the cascade graph (DS or consumerRoot); paint is certified by a declared browser probe whose cited spec and test titles resolve -- NOT through the cascade graph: the instrument proves the citation, the probe spec\'s own e2e leg proves the paint, and only for the scene that probe renders',
     };
   }
   if (cssReadNoTerminal) {
@@ -2185,6 +2390,7 @@ export function computeInputsDigest({
   tsStylesheets,
   consumerCorpora = [],
   compiledArtifacts = [],
+  probeSpecs = [],
 }) {
   const parts = [
     `gate-script:${sha256(gateScriptSource)}`,
@@ -2200,6 +2406,7 @@ export function computeInputsDigest({
   for (const { file, text } of cssStylesheets) parts.push(`css:${file}:${sha256(text)}`);
   for (const { file, text } of tsStylesheets) parts.push(`ts:${file}:${sha256(text)}`);
   for (const { file, text } of compiledArtifacts) parts.push(`compiled-artifact:${file}:${sha256(text)}`);
+  for (const { file, text } of probeSpecs) parts.push(`probe-spec:${file}:${sha256(text)}`);
   for (const consumer of consumerCorpora) {
     for (const { file, text } of consumer.cssStylesheets ?? []) {
       parts.push(`consumer-css:${consumer.id}:${file}:${sha256(text)}`);
@@ -2333,6 +2540,8 @@ export function analyzeChannelLiveness({
   cssStylesheets,
   tsStylesheets,
   consumerRoots = [],
+  probeEvidence = [],
+  checkoutRoot = CHECKOUT_ROOT,
   compiledArtifacts = undefined,
   previousArtifact = null,
   enforceArtifactFreshness = false,
@@ -2537,6 +2746,10 @@ export function analyzeChannelLiveness({
     }
   }
 
+  // --- Declared browser-probe evidence ----------------------------------
+  const probes = loadProbeEvidence(probeEvidence, { checkoutRoot });
+  failures.push(...probes.failures);
+
   // --- Paint graphs (defect 1) ------------------------------------------
   const dsGraph = buildPaintGraph(
     [
@@ -2639,6 +2852,8 @@ export function analyzeChannelLiveness({
     const dsModernPainted = dsPaint.terminalSites.some((site) => site.scope !== 'frozen-engine');
     const dsFrozenOnlyPainted = dsPaint.painted && !dsModernPainted;
     const externalConsumerPainted = !dsPaint.painted && externalPaint.painted;
+    const probe = probes.valid.get(name) ?? null;
+    const probePainted = probe !== null && !dsPaint.painted && !externalPaint.painted;
 
     const dsCssEvidence = dsPaint.painted || dsGraph.customEdges.has(name);
     const externalCssEvidence = externalPaint.painted || externalGraph.customEdges.has(name);
@@ -2689,12 +2904,14 @@ export function analyzeChannelLiveness({
       dsModernPainted,
       dsFrozenOnlyPainted,
       externalConsumerPainted,
+      probePainted,
       cssReadNoTerminal,
       tsReadOnly,
       canonicalRosterMember: canonicalZScaleRoster.has(name),
     });
 
     const consumerSites = [
+      ...(probePainted ? probe.tests.map((title) => `probe-painted:${probe.spec} :: ${title}`) : []),
       ...dsPaint.terminalSites.map((s) => `ds-terminal:${s.file}:${s.line} (${s.prop})`),
       ...externalPaint.terminalSites.map((s) => `${s.joined ? 'external-terminal-joined' : 'external-terminal'}:${s.file}:${s.line} (${s.prop}${s.joined ? ` via ${s.via}` : ''})`),
       ...dsCustomRefSites.map((s) => `${s.compiledVertical === undefined ? 'ds-custom-ref' : 'ds-compiled-ref'}:${s.file}:${s.line} (feeds --${s.targetProp.replace(/^--/, '')})`),
@@ -2741,6 +2958,15 @@ export function analyzeChannelLiveness({
       dsModernPainted,
       dsFrozenOnlyPainted,
       externalConsumerPainted,
+      probePainted,
+      // Which kind of proof a LIVE row stands on; a probe row is certified by
+      // its cited probe, never by the cascade graph.
+      paintEvidence: GRAPH_LIVE_CLASSIFICATIONS.has(classification)
+        ? 'css-graph'
+        : classification === LIVENESS.probePainted
+          ? 'browser-probe'
+          : null,
+      probeEvidence: probePainted ? { ...probe, certifies: 'paint through the cited browser probe, not through the cascade graph' } : null,
       cssReadNoTerminal,
       tsReadOnly,
       consumerSites: consumerSites.slice(0, CONSUMER_SITE_CAP),
@@ -2767,6 +2993,9 @@ export function analyzeChannelLiveness({
       dsModernPainted: false,
       dsFrozenOnlyPainted: false,
       externalConsumerPainted: false,
+      probePainted: false,
+      paintEvidence: null,
+      probeEvidence: null,
       cssReadNoTerminal: false,
       tsReadOnly: false,
       consumerSites: [],
@@ -2774,6 +3003,20 @@ export function analyzeChannelLiveness({
       classification: null,
       classificationReason: null,
     });
+  }
+
+  const rowByName = new Map(channels.map((row) => [row.name, row]));
+  for (const [channel, probe] of probes.valid) {
+    const row = rowByName.get(channel);
+    if (row === undefined) {
+      failures.push(
+        `probe evidence stale: ${channel} is cited to ${probe.spec} and no longer exists in the measured universe -- delete the entry in the same commit that removed the channel`,
+      );
+    } else if (GRAPH_LIVE_CLASSIFICATIONS.has(row.classification)) {
+      failures.push(
+        `probe evidence superseded: ${channel} is cited to ${probe.spec} and now classifies ${row.classification} through the cascade graph -- a graph terminal is the stronger proof, so delete the entry; this table only shrinks`,
+      );
+    }
   }
 
   const unclassified = channels.filter((row) => !row.classification || !row.semanticOwner);
@@ -2812,6 +3055,7 @@ export function analyzeChannelLiveness({
       tsStylesheets: load.tsStylesheets,
     })),
     compiledArtifacts: artifacts,
+    probeSpecs: probes.specs,
   });
 
   if (previousArtifact) {
@@ -2859,6 +3103,13 @@ export function analyzeChannelLiveness({
       byInvariant: adjudication.byInvariant,
       pinned: [...adjudication.pinned].sort((a, b) => a.channel.localeCompare(b.channel)),
       structural: [...adjudication.structural].sort((a, b) => a.channel.localeCompare(b.channel)),
+    },
+    probeEvidence: {
+      declared: probeEvidence.length,
+      valid: probes.valid.size,
+      rows: channels
+        .filter((row) => row.classification === LIVENESS.probePainted)
+        .map((row) => ({ channel: row.name, ...row.probeEvidence })),
     },
     consumerRoots: consumerResults.map(({ consumerRoot, load }) => ({
       id: consumerRoot.id,
@@ -2912,6 +3163,7 @@ export function runGate({
   cssRoots = DEFAULT_CSS_ROOTS,
   compiledArtifactRoot = DEFAULT_COMPILED_ARTIFACT_ROOT,
   consumerRoots = DEFAULT_CONSUMER_ROOTS,
+  probeEvidence = DEFAULT_PROBE_EVIDENCE,
   evidenceRoot = DEFAULT_EVIDENCE_ROOT,
   round = DEFAULT_ROUND,
   artifactPath = undefined,
@@ -2964,6 +3216,7 @@ export function runGate({
     cssStylesheets,
     tsStylesheets,
     consumerRoots,
+    probeEvidence,
     compiledArtifacts,
     previousArtifact,
     enforceArtifactFreshness: requireArtifact,
@@ -3014,6 +3267,7 @@ export function buildArtifact(gateRun, { round = DEFAULT_ROUND, evidenceRoot = D
       tsFileCount: corpus.tsFileCount,
     },
     consumerRoots: result.consumerRoots,
+    probeEvidence: result.probeEvidence,
     counts: result.counts,
     analysisLimitations: result.analysisLimitations,
     // The ledger records WHO owns every standing non-LIVE row it publishes, so
@@ -3046,6 +3300,14 @@ export function formatReport(gateRun, { effectBlocks = true } = {}) {
     lines.push(
       `    ${consumer.id}: ${consumer.ok ? `ok css=${consumer.cssFileCount} ts=${consumer.tsFileCount}` : `FAILED -- ${consumer.error}`}`,
     );
+  }
+  if (result.probeEvidence) {
+    lines.push(
+      `  probe-painted rows (certified by a cited browser probe, NOT through the cascade graph): ${result.probeEvidence.rows.length} of ${result.probeEvidence.declared} declared citation(s)`,
+    );
+    for (const row of result.probeEvidence.rows) {
+      lines.push(`    ${row.channel}: ${row.spec} :: ${row.tests.map((title) => `"${title}"`).join(', ')} -- ${row.proves}`);
+    }
   }
   lines.push('  by classification:');
   for (const [classification, count] of Object.entries(result.counts.byClassification)) {
@@ -3116,6 +3378,7 @@ const DISPOSITION_PRECONDITION_PREFIXES = Object.freeze([
   'unclassified output',
   'z-scale owner unreadable',
   'unresolved roster member',
+  'probe evidence',
 ]);
 
 /** Exactly the ownership law, plus the preconditions that make it readable. */

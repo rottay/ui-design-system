@@ -78,6 +78,12 @@ import {
   // consumerRoots (defect 7)
   loadConsumerRootCorpus,
   DEFAULT_CONSUMER_ROOTS,
+  // declared browser-probe evidence
+  DEFAULT_PROBE_EVIDENCE,
+  GRAPH_LIVE_CLASSIFICATIONS,
+  extractSpecTestTitles,
+  extractSpecTests,
+  loadProbeEvidence,
   // analyzer + CLI plumbing
   analyzeChannelLiveness,
   runGate,
@@ -1193,6 +1199,259 @@ test('the sibling root is the MAIN checkout\'s parent, so a linked worktree stil
 });
 
 /* ---------------------------------------------------------------------- */
+/* 10b. Declared browser-probe evidence                                    */
+/* ---------------------------------------------------------------------- */
+
+const PROBE_SPEC = 'e2e/probe.spec.ts';
+const PROBE_TITLE = '--ds-tint-8 paints the probed canvas';
+const PROBE_SPEC_TEXT = `import { test } from '@playwright/test';
+// test('a commented-out title is not a test')
+const CHANNEL = '--ds-tint-8';
+test.describe('probe', () => {
+  test('${PROBE_TITLE}', async () => { void CHANNEL; });
+  for (const probe of [{ channel: '--ds-tint-8' }]) {
+    test(\`\${probe.channel}: paints at rest\`, async () => {});
+  }
+});
+`;
+
+function probeCheckout(specText = PROBE_SPEC_TEXT) {
+  const root = mkdtempSync(join(tmpdir(), 'liveness-probe-checkout-'));
+  if (specText !== null) {
+    mkdirSync(join(root, dirname(PROBE_SPEC)), { recursive: true });
+    writeFileSync(join(root, PROBE_SPEC), specText);
+  }
+  return root;
+}
+
+const probeEntry = (overrides = {}) => ({
+  channel: '--ds-tint-8',
+  spec: PROBE_SPEC,
+  tests: [PROBE_TITLE],
+  proves: 'the probed canvas carries the channel ink',
+  registered: '2026-10-01',
+  ...overrides,
+});
+
+const TINT_8_PIN = Object.freeze({
+  owner: 'WO-EVI-02',
+  classification: LIVENESS.unreadEmittedNoRoute,
+  registered: '2026-10-01',
+  reason: 'fixture pin: the tint step paints only where no stylesheet graph can see it',
+  channels: Object.freeze(['--ds-tint-8']),
+});
+
+function probeAnalyzerArgs(checkoutRoot, probeEvidence, overrides = {}) {
+  return {
+    tenantThemeSource: FIXTURE_TENANT_THEME_SOURCE,
+    flatThemeSource: FIXTURE_BRAND_THEME_SOURCE,
+    familyRows: FIXTURE_FAMILY_ROWS,
+    cssStylesheets: [css('src/foundation/tokens/css/theme.css', ':root { color: var(--ds-color-primary); }')],
+    tsStylesheets: [css('src/components/primitives/display/Button/index.tsx', 'const s = 1;')],
+    consumerRoots: [],
+    dispositions: [TINT_8_PIN],
+    probeEvidence,
+    checkoutRoot,
+    ...overrides,
+  };
+}
+
+test('PROBE: the title reader takes verbatim test(...) first arguments, template sources included, and never a commented-out one', () => {
+  const titles = extractSpecTestTitles(PROBE_SPEC_TEXT);
+  assert.ok(titles.has(PROBE_TITLE));
+  assert.ok(titles.has('${probe.channel}: paints at rest'));
+  assert.ok(!titles.has('a commented-out title is not a test'));
+  assert.ok(!titles.has('probe'), 'a describe title is not a test title');
+
+  // A dot before `test(` is a method call, never a Playwright test.
+  assert.ok(!extractSpecTestTitles("const ok = /x/.test('a regex probe is not a title');").has('a regex probe is not a title'));
+  const [literal, templated] = extractSpecTests(PROBE_SPEC_TEXT);
+  assert.equal(literal.templated, false);
+  assert.match(literal.span, /void CHANNEL; \}\)$/, 'a literal span runs from its title to the end of its own call');
+  assert.equal(templated.templated, true);
+});
+
+test('PROBE DRILL 1: a cited spec that does not exist fails by name, and the row stays non-LIVE', () => {
+  const root = probeCheckout(null);
+  const result = analyzeChannelLiveness(probeAnalyzerArgs(root, [probeEntry()]));
+  const named = result.failures.filter((f) => f.startsWith('probe evidence spec missing: --ds-tint-8 cites e2e/probe.spec.ts'));
+  assert.equal(named.length, 1, result.failures.join(' | '));
+  assert.ok(dispositionFailures(result).includes(named[0]), 'a broken citation blocks the ownership leg');
+  const row = result.channels.find((entry) => entry.name === '--ds-tint-8');
+  assert.equal(row.classification, LIVENESS.unreadEmittedNoRoute);
+  assert.equal(row.paintEvidence, null);
+  assert.ok(result.effect.rows.includes('--ds-tint-8'));
+  rmSync(root, { recursive: true, force: true });
+});
+
+test('PROBE DRILL 2: a cited test title missing from the spec fails by name, and the row stays non-LIVE', () => {
+  const root = probeCheckout(PROBE_SPEC_TEXT.replace(PROBE_TITLE, '--ds-tint-8 renamed probe'));
+  const result = analyzeChannelLiveness(probeAnalyzerArgs(root, [probeEntry()]));
+  const named = result.failures.filter((f) => f.startsWith(`probe evidence title missing: --ds-tint-8 cites "${PROBE_TITLE}" in e2e/probe.spec.ts`));
+  assert.equal(named.length, 1, result.failures.join(' | '));
+  assert.ok(dispositionFailures(result).includes(named[0]));
+  assert.equal(result.channels.find((entry) => entry.name === '--ds-tint-8').classification, LIVENESS.unreadEmittedNoRoute);
+
+  // A title that survives only inside a comment is still a renamed test.
+  const commented = probeCheckout(PROBE_SPEC_TEXT.replace(`test('${PROBE_TITLE}'`, `// test('${PROBE_TITLE}'`));
+  const again = analyzeChannelLiveness(probeAnalyzerArgs(commented, [probeEntry()]));
+  assert.ok(again.failures.some((f) => f.startsWith('probe evidence title missing: --ds-tint-8')), again.failures.join(' | '));
+  rmSync(root, { recursive: true, force: true });
+  rmSync(commented, { recursive: true, force: true });
+});
+
+test('PROBE DRILL 3: a valid entry moves the row to LIVE_PROBE_PAINTED and out of the effect red set; its pin becomes unowed and the law retires it', () => {
+  const root = probeCheckout();
+  const aboutTint8 = (result) => result.dispositions.failures.filter((f) => f.includes('--ds-tint-8'));
+  const control = analyzeChannelLiveness(probeAnalyzerArgs(root, []));
+  assert.ok(control.effect.rows.includes('--ds-tint-8'), 'precondition: without the citation the row is an effect finding');
+  assert.deepEqual(aboutTint8(control), [], 'precondition: without the citation the pin is owed');
+  assert.ok(control.dispositions.pinned.some((pin) => pin.channel === '--ds-tint-8'));
+
+  const entered = analyzeChannelLiveness(probeAnalyzerArgs(root, [probeEntry()]));
+  const row = entered.channels.find((entry) => entry.name === '--ds-tint-8');
+  assert.equal(row.classification, LIVENESS.probePainted);
+  assert.ok(LIVE_CLASSIFICATIONS.has(row.classification));
+  assert.ok(!GRAPH_LIVE_CLASSIFICATIONS.has(row.classification), 'a probe row is not graph-proven');
+  assert.ok(!entered.effect.rows.includes('--ds-tint-8'));
+  assert.ok(!entered.failures.some((f) => f.startsWith('probe evidence')), entered.failures.join(' | '));
+  assert.deepEqual(aboutTint8(entered), [
+    `discharged pin: --ds-tint-8 is pinned to WO-EVI-02 as ${LIVENESS.unreadEmittedNoRoute} and now classifies ${LIVENESS.probePainted} -- the work landed, so delete the pin; this table only shrinks`,
+  ]);
+
+  const retired = analyzeChannelLiveness(probeAnalyzerArgs(root, [probeEntry()], { dispositions: [] }));
+  assert.deepEqual(aboutTint8(retired), []);
+  assert.ok(!retired.dispositions.failures.some((f) => f.startsWith('STOP NO-GO') && f.includes('--ds-tint-8')), 'a LIVE row owes no pin');
+  assert.equal(retired.counts.byClassification[LIVENESS.probePainted], 1);
+
+  // A parameterized title is citable only when the spec names the channel literally.
+  const parameterized = analyzeChannelLiveness(
+    probeAnalyzerArgs(root, [probeEntry({ tests: ['${probe.channel}: paints at rest'] })], { dispositions: [] }),
+  );
+  assert.equal(parameterized.channels.find((entry) => entry.name === '--ds-tint-8').classification, LIVENESS.probePainted);
+  rmSync(root, { recursive: true, force: true });
+});
+
+test('PROBE DRILL 4: a probe-class row reports its evidence class distinctly in --json and in the report', () => {
+  const root = probeCheckout();
+  const result = analyzeChannelLiveness(probeAnalyzerArgs(root, [probeEntry()], { dispositions: [] }));
+  const artifact = JSON.parse(JSON.stringify(buildArtifact({ result, corpus: { cssFileCount: 1, tsFileCount: 1 } })));
+  const probeRow = artifact.channels.find((entry) => entry.name === '--ds-tint-8');
+  assert.equal(probeRow.paintEvidence, 'browser-probe');
+  assert.equal(probeRow.probePainted, true);
+  assert.deepEqual(probeRow.probeEvidence.tests, [PROBE_TITLE]);
+  assert.equal(probeRow.probeEvidence.spec, PROBE_SPEC);
+  assert.match(probeRow.probeEvidence.certifies, /not through the cascade graph/);
+  assert.match(probeRow.classificationReason, /NOT through the cascade graph/);
+  assert.ok(probeRow.consumerSites.includes(`probe-painted:${PROBE_SPEC} :: ${PROBE_TITLE}`));
+  const graphRow = artifact.channels.find((entry) => entry.name === '--ds-color-primary');
+  assert.equal(graphRow.paintEvidence, 'css-graph');
+  assert.equal(graphRow.probeEvidence, null);
+  assert.deepEqual(artifact.probeEvidence.rows.map((entry) => entry.channel), ['--ds-tint-8']);
+
+  const report = formatReport({ ok: true, failures: [], result, corpus: { cssFileCount: 1, tsFileCount: 1 } });
+  assert.match(report, /probe-painted rows \(certified by a cited browser probe, NOT through the cascade graph\): 1 of 1/);
+  assert.match(report, /--ds-tint-8: e2e\/probe\.spec\.ts :: "--ds-tint-8 paints the probed canvas" -- the probed canvas carries the channel ink/);
+  rmSync(root, { recursive: true, force: true });
+});
+
+test('PROBE: an unbound, stale, superseded, duplicated or malformed citation fails by name', () => {
+  const root = probeCheckout();
+  const unbound = analyzeChannelLiveness(
+    probeAnalyzerArgs(root, [probeEntry({ channel: '--ds-color-primary', tests: [PROBE_TITLE] })], { dispositions: [] }),
+  );
+  assert.ok(
+    unbound.failures.some((f) => f.startsWith(`probe evidence unbound: --ds-color-primary cites "${PROBE_TITLE}" in e2e/probe.spec.ts, and that test's own call never names the channel`)),
+    unbound.failures.join(' | '),
+  );
+  const unboundTemplate = analyzeChannelLiveness(
+    probeAnalyzerArgs(root, [probeEntry({ channel: '--ds-color-primary', tests: ['${probe.channel}: paints at rest'] })], { dispositions: [] }),
+  );
+  assert.ok(unboundTemplate.failures.some((f) => f.startsWith('probe evidence unbound: e2e/probe.spec.ts never names --ds-color-primary')), unboundTemplate.failures.join(' | '));
+
+  const staleRoot = probeCheckout(PROBE_SPEC_TEXT.replaceAll('--ds-tint-8', '--ds-tint-gone'));
+  const stale = analyzeChannelLiveness(
+    probeAnalyzerArgs(staleRoot, [probeEntry({ channel: '--ds-tint-gone', tests: ['--ds-tint-gone paints the probed canvas'] })]),
+  );
+  assert.ok(stale.failures.some((f) => f.startsWith('probe evidence stale: --ds-tint-gone')), stale.failures.join(' | '));
+
+  const graphRoot = probeCheckout(`${PROBE_SPEC_TEXT}const OTHER = '--ds-color-primary';\ntest('--ds-color-primary paints', async () => { void OTHER; });\n`);
+  const superseded = analyzeChannelLiveness(
+    probeAnalyzerArgs(graphRoot, [probeEntry({ channel: '--ds-color-primary', tests: ['--ds-color-primary paints'] })], { dispositions: [] }),
+  );
+  const primary = superseded.channels.find((entry) => entry.name === '--ds-color-primary');
+  assert.equal(primary.classification, LIVENESS.modernPainted, 'the graph outranks a probe');
+  assert.ok(superseded.failures.some((f) => f.startsWith('probe evidence superseded: --ds-color-primary')), superseded.failures.join(' | '));
+
+  const loaded = loadProbeEvidence([probeEntry(), probeEntry(), probeEntry({ channel: '--ds-tint-4', spec: '../outside.spec.ts' })], { checkoutRoot: root });
+  assert.ok(loaded.failures.some((f) => f.startsWith('probe evidence duplicate: --ds-tint-8')));
+  assert.ok(loaded.failures.some((f) => f.startsWith('probe evidence malformed: --ds-tint-4')));
+  assert.deepEqual([...loaded.valid.keys()], ['--ds-tint-8']);
+  for (const dir of [root, staleRoot, graphRoot]) rmSync(dir, { recursive: true, force: true });
+});
+
+test('PROBE DRILL 5: a literal title binds only the channel its own call names -- a channel named elsewhere in the spec is unbound', () => {
+  const root = probeCheckout(`${PROBE_SPEC_TEXT}test('--ds-color-secondary probe', async () => { void '--ds-color-secondary'; });\n`);
+  const borrowed = loadProbeEvidence([probeEntry({ channel: '--ds-color-secondary', tests: [PROBE_TITLE] })], { checkoutRoot: root });
+  assert.deepEqual([...borrowed.valid.keys()], []);
+  assert.ok(
+    borrowed.failures.some((f) => f.startsWith(`probe evidence unbound: --ds-color-secondary cites "${PROBE_TITLE}" in e2e/probe.spec.ts, and that test's own call never names the channel`)),
+    borrowed.failures.join(' | '),
+  );
+  const own = loadProbeEvidence([probeEntry({ channel: '--ds-color-secondary', tests: ['--ds-color-secondary probe'] })], { checkoutRoot: root });
+  assert.deepEqual(own.failures, []);
+  rmSync(root, { recursive: true, force: true });
+});
+
+test('PROBE DRILL 5 (shipped spec): the particle-primary channel citing the drawer title fails closed', () => {
+  const drawer = DEFAULT_PROBE_EVIDENCE.find((entry) => entry.channel === '--ds-app-shell-navigation-drawer-body-padding');
+  const { valid, failures } = loadProbeEvidence([{ ...drawer, channel: '--ds-workspace-shell-particle-primary' }]);
+  assert.equal(valid.size, 0);
+  assert.ok(
+    failures.some((f) => f.startsWith(`probe evidence unbound: --ds-workspace-shell-particle-primary cites "${drawer.tests[0]}"`)),
+    failures.join(' | '),
+  );
+});
+
+test('PROBE DRILL 6: a spec that parks the cited test under describe.skip is not evidence, and the row stays non-LIVE', () => {
+  const root = probeCheckout(PROBE_SPEC_TEXT.replace("test.describe('probe'", "test.describe.skip('probe'"));
+  const result = analyzeChannelLiveness(probeAnalyzerArgs(root, [probeEntry()]));
+  const named = result.failures.filter((f) => f.startsWith('probe evidence disabled: --ds-tint-8 cites e2e/probe.spec.ts'));
+  assert.equal(named.length, 1, result.failures.join(' | '));
+  assert.equal(result.channels.find((entry) => entry.name === '--ds-tint-8').classification, LIVENESS.unreadEmittedNoRoute);
+  const fixmeRoot = probeCheckout(`${PROBE_SPEC_TEXT}test.fixme('parked', async () => {});\n`);
+  const fixme = loadProbeEvidence([probeEntry()], { checkoutRoot: fixmeRoot });
+  assert.ok(fixme.failures.some((f) => f.startsWith('probe evidence disabled: --ds-tint-8')), fixme.failures.join(' | '));
+  for (const dir of [root, fixmeRoot]) rmSync(dir, { recursive: true, force: true });
+});
+
+test('classifyLiveness: a probe never outranks the graph, and outranks every unproven read', () => {
+  for (const signal of ['dsModernPainted', 'dsFrozenOnlyPainted', 'externalConsumerPainted']) {
+    const both = classifyLiveness({ ...BASE_CLASSIFY_INPUT, [signal]: true, probePainted: true });
+    assert.notEqual(both.classification, LIVENESS.probePainted, signal);
+  }
+  for (const signal of ['cssReadNoTerminal', 'tsReadOnly', 'declaredReference', 'declaredOverride', 'canonicalRosterMember']) {
+    const both = classifyLiveness({ ...BASE_CLASSIFY_INPUT, [signal]: true, probePainted: true });
+    assert.equal(both.classification, LIVENESS.probePainted, signal);
+  }
+});
+
+test('META: the SHIPPED probe citations resolve against the real showroom spec -- exactly the three canvas/inline rows', () => {
+  const { valid, failures } = loadProbeEvidence();
+  assert.deepEqual(failures, []);
+  assert.deepEqual([...valid.keys()].sort(), [
+    '--ds-app-shell-navigation-drawer-body-padding',
+    '--ds-workspace-shell-particle-primary',
+    '--ds-workspace-shell-particle-secondary',
+  ]);
+  assert.ok(!DEFAULT_PROBE_EVIDENCE.some((entry) => entry.channel === '--ds-color-secondary-400'), 'secondary-400 has no probe and stays pinned');
+  for (const entry of DEFAULT_PROBE_EVIDENCE) {
+    assert.ok(Object.isFrozen(entry) && Object.isFrozen(entry.tests));
+    assert.ok(!entry.proves.includes('\n'), `${entry.channel}: what the probe proves is one line`);
+  }
+});
+
+/* ---------------------------------------------------------------------- */
 /* 11. analyzeChannelLiveness — end-to-end hermetic scenarios              */
 /* ---------------------------------------------------------------------- */
 
@@ -1868,21 +2127,21 @@ test('dispositionFailures is the ownership law plus the preconditions that make 
   ]);
 });
 
-test('META: the SHIPPED table is the registered set -- 31 channels, one owner each, no duplicates', () => {
+test('META: the SHIPPED table is the registered set -- 28 channels, one owner each, no duplicates', () => {
   const { index, duplicates } = buildDispositionIndex();
   assert.deepEqual(duplicates, []);
   assert.equal(
     index.size,
-    31,
-    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see) + 1 (2026-09-25, WO-RET-02: --ds-text-inverse, which joined the universe through the emission oracle -- the palette roster declares it -- and is read only by the dead themes/default --ds-sidebar-text declaration) - 4 (2026-09-26, G103-02 / WO-FAM-12: the four --ds-posture-* channels, pinned UNREAD_EMITTED_NO_KNOWN_ROUTE, retired from emission and from the responsive.posture catalog row -- zero readers in the package, the showroom and the apps, and the capability law says the ladder travels as data, never a CSS channel; the pin went with them) + 11 (2026-10-01, LIV-2 / WO-EVI-02: the named type ramp joined the universe when typography/scale stated its entries and facets literally; of its 31 rows 20 measure LIVE, 9 shorthand-fed facets pin to WO-EVI-02 -- a real compiled var() edge the CSS-only graph cannot see -- and the 2 inert letter-spacing facets pin to WO-RET-01 as retire candidates) - 19 (2026-10-01, LIV-3 / WO-EVI-02, instrument truth: the compiled facade artifacts became custom-property edges and emission evidence, and the consumer graph joins the DS under its vertical -- the 8 status tint 4/12 steps and the workspace-shell mask stop measure LIVE_MODERN_PAINTED through their compiled alert/notifier/mask channels, the 9 shorthand-fed type facets measure LIVE_EXTERNAL_CONSUMER_PAINTED through the app-bithire font: shorthands, and --ds-breakpoint-xs left the universe once the keyed resolver honored the responsive emitter\'s floor skip, so its pin went stale)',
+    28,
+    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see) + 1 (2026-09-25, WO-RET-02: --ds-text-inverse, which joined the universe through the emission oracle -- the palette roster declares it -- and is read only by the dead themes/default --ds-sidebar-text declaration) - 4 (2026-09-26, G103-02 / WO-FAM-12: the four --ds-posture-* channels, pinned UNREAD_EMITTED_NO_KNOWN_ROUTE, retired from emission and from the responsive.posture catalog row -- zero readers in the package, the showroom and the apps, and the capability law says the ladder travels as data, never a CSS channel; the pin went with them) + 11 (2026-10-01, LIV-2 / WO-EVI-02: the named type ramp joined the universe when typography/scale stated its entries and facets literally; of its 31 rows 20 measure LIVE, 9 shorthand-fed facets pin to WO-EVI-02 -- a real compiled var() edge the CSS-only graph cannot see -- and the 2 inert letter-spacing facets pin to WO-RET-01 as retire candidates) - 19 (2026-10-01, LIV-3 / WO-EVI-02, instrument truth: the compiled facade artifacts became custom-property edges and emission evidence, and the consumer graph joins the DS under its vertical -- the 8 status tint 4/12 steps and the workspace-shell mask stop measure LIVE_MODERN_PAINTED through their compiled alert/notifier/mask channels, the 9 shorthand-fed type facets measure LIVE_EXTERNAL_CONSUMER_PAINTED through the app-bithire font: shorthands, and --ds-breakpoint-xs left the universe once the keyed resolver honored the responsive emitter\'s floor skip, so its pin went stale) - 3 (2026-10-01, LIV-7 / WO-EVI-02: the declared browser-probe door -- the drawer body padding (its WO-FAM-11 pin) and the two workspace-shell particle inks (WO-EVI-02) cite showroom e2e/liveness/paint-probes.spec.ts and classify LIVE_PROBE_PAINTED, paint certified by the cited probe rather than the cascade graph, so their pins are discharged)',
   );
   const byClass = {};
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
   assert.deepEqual(byClass, {
     [LIVENESS.authorableUnprovenEffect]: 24,
     [LIVENESS.unreadEmittedNoRoute]: 2,
-    [LIVENESS.readUnproven]: 2,
-    [LIVENESS.readNoProductiveTerminal]: 3,
+    [LIVENESS.readUnproven]: 1,
+    [LIVENESS.readNoProductiveTerminal]: 1,
   });
   for (const pin of index.values()) {
     assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(pin.registered), `${pin.channel}: a pin without a registration date is an excuse`);
