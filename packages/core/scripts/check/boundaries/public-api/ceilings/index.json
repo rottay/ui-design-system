@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 14,
-      "maxSourceBytes": 397600
+      "maxSourceBytes": 398269
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "D2 normalized radius channel (1b): the ROOT_ALIASES row for --ds-radius-scale-normalized (+104 B, the row bytes measured) — 397,496 -> 397,600",
+  "lastMove": "ST-B (STATES-K population law) + M4 (emission precedence/ratchet) + FP: the population/instrument exports reached by the runtime emission path; 397,600 -> 398,269 measured by the gate",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
