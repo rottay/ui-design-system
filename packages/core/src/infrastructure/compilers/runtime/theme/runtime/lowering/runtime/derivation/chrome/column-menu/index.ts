@@ -32,14 +32,18 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
  * ground, the header wash, the row states and the title/description ink;
  * `surfaces.radiusScale` closes the panel, the rows and the count pill on three
  * rungs of one ramp; `typography.roles` sets the header and caption steps;
- * `motion.*` times the row transition. No `density` is declared, because the
- * family's rhythm is stated in px by the values below and no density channel is
- * read anywhere in its skin -- declaring it would be an inert consumes.
+ * `motion.*` times the row transition; `density` scales the panel's rhythm
+ * (header, scroll region, row, trailing section and footer insets) through
+ * `--ds-density-effective-scale`, so a vertical at density 1 paints the very px
+ * it always did and a vertical with an authored factor tightens or loosens the
+ * panel with the rest of its chrome. The count pill's inline padding stays a
+ * px constant: the pill's block and minimum inline size are fixed, and a padding
+ * that scaled inside a box that does not would only crowd its numerals.
  */
 export const columnMenuChromeDeriver: FamilyDeriver = {
   family: "column-menu",
   rank: "derived",
-  consumes: ["palette.*", "surfaces.radiusScale", "typography.roles", "motion.*"],
+  consumes: ["palette.*", "surfaces.radiusScale", "typography.roles", "motion.*", "density"],
   produces: [
     "--ds-column-menu-body-background",
     "--ds-column-menu-body-max-block-size",
@@ -111,7 +115,7 @@ export function deriveColumnMenuChannels(): Record<string, string> {
   vars["--ds-column-menu-panel-focus-outline-offset"] = "-2px";
 
   // Header band, and the seam every section of the panel is cut with.
-  vars["--ds-column-menu-header-padding"] = "18px 20px 16px";
+  vars["--ds-column-menu-header-padding"] = "calc(18px * var(--ds-density-effective-scale, 1)) calc(20px * var(--ds-density-effective-scale, 1)) calc(16px * var(--ds-density-effective-scale, 1))";
   vars["--ds-column-menu-section-border"] =
     "1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent)";
   vars["--ds-column-menu-header-background"] =
@@ -123,7 +127,7 @@ export function deriveColumnMenuChannels(): Record<string, string> {
   // above and below it, and its recessed ground.
   vars["--ds-column-menu-body-max-block-size"] = "430px";
   vars["--ds-column-menu-viewport-reservation"] = "152px";
-  vars["--ds-column-menu-body-padding"] = "14px";
+  vars["--ds-column-menu-body-padding"] = "calc(14px * var(--ds-density-effective-scale, 1))";
   vars["--ds-column-menu-body-background"] =
     "color-mix(in srgb, var(--ds-color-bg-primary) 5%, transparent)";
 
@@ -149,7 +153,7 @@ export function deriveColumnMenuChannels(): Record<string, string> {
     "color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-primary) 6%)";
   vars["--ds-column-menu-row-shadow"] =
     "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent)";
-  vars["--ds-column-menu-row-padding"] = "13px 15px";
+  vars["--ds-column-menu-row-padding"] = "calc(13px * var(--ds-density-effective-scale, 1)) calc(15px * var(--ds-density-effective-scale, 1))";
   vars["--ds-column-menu-row-active-background"] =
     "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))";
   vars["--ds-column-menu-row-active-shadow"] =
@@ -166,9 +170,9 @@ export function deriveColumnMenuChannels(): Record<string, string> {
     "var(--ds-motion-feedback, var(--ds-motion-fast, 120ms))";
 
   // The trailing action section and the footer rail.
-  vars["--ds-column-menu-section-gap"] = "8px";
-  vars["--ds-column-menu-section-padding-block-start"] = "14px";
-  vars["--ds-column-menu-footer-padding"] = "12px";
+  vars["--ds-column-menu-section-gap"] = "calc(8px * var(--ds-density-effective-scale, 1))";
+  vars["--ds-column-menu-section-padding-block-start"] = "calc(14px * var(--ds-density-effective-scale, 1))";
+  vars["--ds-column-menu-footer-padding"] = "calc(12px * var(--ds-density-effective-scale, 1))";
   vars["--ds-column-menu-footer-background"] =
     "color-mix(in srgb, var(--ds-color-bg-primary) 24%, transparent)";
 

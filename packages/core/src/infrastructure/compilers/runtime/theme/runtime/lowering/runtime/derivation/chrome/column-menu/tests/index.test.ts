@@ -12,7 +12,7 @@ import {
 } from "@tests/support/family-contract";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { FAMILY_DERIVERS } from "../../..";
-import { columnMenuChromeDeriver } from "..";
+import { columnMenuChromeDeriver, deriveColumnMenuChannels } from "..";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
 
@@ -42,5 +42,28 @@ describe("chrome/column-menu", () => {
     ).toHaveLength(1);
     expect(columnMenuChromeDeriver.family).toBe("column-menu");
     expect(columnMenuChromeDeriver.rank).toBe("derived");
+  });
+
+  it("rides the panel rhythm on the density scale, at today's px when the dial is unset", () => {
+    const dense = (px: number) => `calc(${px}px * var(--ds-density-effective-scale, 1))`;
+    const vars = deriveColumnMenuChannels();
+    expect(columnMenuChromeDeriver.consumes).toContain("density");
+    expect({
+      header: vars["--ds-column-menu-header-padding"],
+      body: vars["--ds-column-menu-body-padding"],
+      row: vars["--ds-column-menu-row-padding"],
+      sectionGap: vars["--ds-column-menu-section-gap"],
+      sectionPadding: vars["--ds-column-menu-section-padding-block-start"],
+      footer: vars["--ds-column-menu-footer-padding"],
+    }).toEqual({
+      header: `${dense(18)} ${dense(20)} ${dense(16)}`,
+      body: dense(14),
+      row: `${dense(13)} ${dense(15)}`,
+      sectionGap: dense(8),
+      sectionPadding: dense(14),
+      footer: dense(12),
+    });
+    // The count pill's box is fixed, so its inline padding is too.
+    expect(vars["--ds-column-menu-count-padding-inline"]).toBe("8px");
   });
 });

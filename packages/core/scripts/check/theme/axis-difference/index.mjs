@@ -1256,7 +1256,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
         }),
       ]),
     }),
-    axes: Object.freeze(['shape', 'depth', 'motion']),
+    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion']),
     markup: '<div data-part="surface" class="ds-structure ds-column-menu-panel"><div data-part="panel">'
       + '<div data-part="header"><div><div data-part="header-copy"></div><div>'
       + '<div data-part="count-pill">1/2</div></div></div></div><div data-part="scroll-region"><div>'

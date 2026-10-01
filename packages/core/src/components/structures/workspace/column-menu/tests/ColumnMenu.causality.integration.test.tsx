@@ -99,8 +99,8 @@ describeCausality({
     { id: 'titleSize', selector: TITLE, property: 'font-size' },
     // `motion.*`: the row's state changes read the dial-bent feedback role.
     { id: 'rowMotion', selector: ROW, property: 'transition-duration' },
-    // The control: the scroll region's rhythm is a px constant behind a family
-    // channel, so no decision in the catalog may move it.
+    // `density`: the scroll region's inset rides the density scale, and is
+    // the control every other arm holds -- none of them states a density.
     { id: 'bodyPad', selector: BODY, property: 'padding-top' },
   ],
   decisions: {
@@ -126,6 +126,12 @@ describeCausality({
       value: { durationScale: 1.3 },
       moves: ['rowMotion'],
       holds: 'bodyPad',
+      in: VERTICALS,
+    },
+    'density.mode': {
+      value: 'spacious',
+      moves: ['bodyPad'],
+      holds: 'panelCorner',
       in: VERTICALS,
     },
   },
@@ -199,13 +205,18 @@ describe('column-menu causality surface', () => {
         // And the paint those channels land on.
         { id: 'countCorner', selector: COUNT, property: 'border-top-left-radius' },
         { id: 'rowPadTop', selector: ROW, property: 'padding-top' },
+        { id: 'rowContentPadTop', selector: `${ROW} [data-part='row-content']`, property: 'padding-top' },
         { id: 'panelOutline', selector: PANEL, property: 'outline-style' },
       ],
     });
     const r = readings.base!;
     // Produced, not fallen back on.
     expect(r.panelInline.trim()).toBe('432px');
-    expect(r.rowPad.trim()).toBe('13px 15px');
+    // The produced row padding is the density chain, never the bare fallback;
+    // at rottay's density of 1 it still paints today's 13px.
+    expect(r.rowPad.trim()).not.toBe('13px 15px');
+    expect(r.rowPad).toMatch(/^\s*calc\(13px \*[\s\S]*calc\(15px \*/);
+    expect(r.rowContentPadTop).toBe('13px');
     expect(r.countRadius.trim()).not.toBe('');
     expect(r.rowMotionChannel.trim()).not.toBe('');
     expect(r.focusOutline.trim()).not.toBe('');
