@@ -97804,11 +97804,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-chart-bullet [data-part='legend-swatch'][data-variant='range'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-bullet [data-part='legend-swatch'][data-variant='value'] {
-  border-radius: 1px;
+  border-radius: calc(1px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-bullet [data-part='legend-label'] {
@@ -98466,11 +98466,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * each bar status gets a distinct swatch silhouette (rising / falling / framed
  * total), mirroring the on-plot bar treatments below. */
 .ds-chart-waterfall [data-part='legend-swatch'][data-status='increase'] {
-  border-radius: 2px 2px 0 0;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1)) calc(2px * var(--ds-radius-scale-normalized, 1)) 0 0;
 }
 
 .ds-chart-waterfall [data-part='legend-swatch'][data-status='decrease'] {
-  border-radius: 0 0 2px 2px;
+  border-radius: 0 0 calc(2px * var(--ds-radius-scale-normalized, 1)) calc(2px * var(--ds-radius-scale-normalized, 1));
   box-shadow: inset 0 -1.5px 0 0 var(--ds-color-text-primary);
 }
 
@@ -98534,7 +98534,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Histogram ---------------------------------------------------------------- */
 
 .ds-chart-histogram [data-part='legend-item'][data-series='histogram'] [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-histogram [data-part='legend-label'] {
@@ -98655,7 +98655,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Gauge -------------------------------------------------------------------- */
 
 .ds-chart-gauge [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 /* Shape-coded zone markers: each default threshold tone gets a distinct swatch
@@ -98732,7 +98732,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Sankey ------------------------------------------------------------------- */
 
 .ds-chart-sankey [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-sankey [data-part='legend-label'] {
@@ -98844,7 +98844,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Funnel ------------------------------------------------------------------- */
 
 .ds-chart-funnel [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-funnel [data-part='legend-label'] {
@@ -98918,7 +98918,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Legend swatches repeat the plot's redundant shape encoding, so a swatch
  * decodes exactly like its group mark (circle keeps the base radius above). */
 .ds-chart-network-graph [data-part='legend-swatch'][data-shape='square'] {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
 .ds-chart-network-graph [data-part='legend-swatch'][data-shape='diamond'] {
