@@ -79,7 +79,7 @@
   color: var(--ds-toolbar-color, inherit);
 }
 .ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
 }
 
