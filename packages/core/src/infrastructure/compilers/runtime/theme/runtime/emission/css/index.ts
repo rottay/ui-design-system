@@ -128,8 +128,15 @@ function underContext(baseSelector: string, contextSelector: string): string {
 }
 
 /**
- * The document root in `mode`, spelled as the DS's own mode contexts spell it:
- * the root element or a provider root, carrying either mode hook.
+ * An ancestor in `mode`: the root element or any `[data-ds-root]` provider root
+ * carrying either mode hook. This is wider than the foundation's dark block,
+ * which matches the document root only, and it does not pick the NEAREST root.
+ *
+ * Limit (bounded, unreached by any shipped surface): a container scope inside a
+ * root of the opposite mode matches both and diverges from that root's own door
+ * -- 178 names for a light island under a dark document, 9 in reverse, 0 on
+ * same-mode nesting, 0 leaking to siblings. Registered under "The mode arm" in
+ * docs-engineering/engineering/design-system/runtime/compilers/README.md.
  */
 export function documentModeContext(mode: FlatThemeMode): string {
   return `:where(:root, [data-ds-root]):is([data-theme='${mode}'], .${mode})`;
@@ -139,7 +146,7 @@ export function documentModeContext(mode: FlatThemeMode): string {
  * A container scope whose mode rules follow the DOCUMENT's mode. The scope's
  * own element carries no mode hook, so the root doors' `modeSelector` (the
  * hook on the scope element itself) never matches it. Each mode rule is the
- * scope under a document root in that mode, at the base selector's own weight,
+ * scope under an ancestor root in that mode, at the base selector's own weight,
  * so it outranks the base rule by order exactly where the root's mode rule
  * outranks the root's base rule.
  */
