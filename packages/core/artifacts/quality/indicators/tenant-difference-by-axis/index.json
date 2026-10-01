@@ -1,11 +1,11 @@
 {
   "id": "tenant-difference-by-axis",
   "gate": "axis-difference (`capability-propagation` by axis, WO-EVI-02)",
-  "producedAt": "2026-09-30T23:55:11.384Z",
-  "value": "2/6 axes at >= 80 % of declaring families (typography, motion; effective-denominator reading 3/6); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
+  "producedAt": "2026-10-01T01:02:31.402Z",
+  "value": "3/6 axes at >= 80 % of declaring families (typography, rhythm, motion; effective-denominator reading 3/6); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
   "target": "6/6 axes at >= 80 % and the negative test green",
   "met": false,
-  "commit": "6abf897420943a037ac9aef2d5485a6c22d142ef",
+  "commit": "e192a8605bfbed2d73c3ea5dd6c24786383c3f03",
   "catalogRevision": "3f42e4ddc61d0e8b",
   "browser": "149.0.7827.55",
   "bundleMode": "fresh",
@@ -172,7 +172,7 @@
       ]
     },
     "rhythm": {
-      "status": "below-threshold",
+      "status": "at-threshold",
       "declared": 224,
       "effective": 209,
       "excludedUnmountable": 9,
@@ -180,69 +180,69 @@
       "notApplicable": 0,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 77.7,
-      "worstPercentEffective": 83.3,
+      "worstPercentDeclared": 81.7,
+      "worstPercentEffective": 87.6,
       "effectiveAtThreshold": true,
       "cells": [
         {
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
-          "moved": 174,
+          "moved": 183,
           "declared": 224,
           "effective": 209,
-          "percentDeclared": 77.7,
-          "percentEffective": 83.3
+          "percentDeclared": 81.7,
+          "percentEffective": 87.6
         },
         {
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
-          "moved": 174,
+          "moved": 183,
           "declared": 224,
           "effective": 209,
-          "percentDeclared": 77.7,
-          "percentEffective": 83.3
+          "percentDeclared": 81.7,
+          "percentEffective": 87.6
         },
         {
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
-          "moved": 174,
+          "moved": 183,
           "declared": 224,
           "effective": 209,
-          "percentDeclared": 77.7,
-          "percentEffective": 83.3
+          "percentDeclared": 81.7,
+          "percentEffective": 87.6
         },
         {
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
-          "moved": 174,
+          "moved": 183,
           "declared": 224,
           "effective": 209,
-          "percentDeclared": 77.7,
-          "percentEffective": 83.3
+          "percentDeclared": 81.7,
+          "percentEffective": 87.6
         },
         {
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
-          "moved": 174,
+          "moved": 183,
           "declared": 224,
           "effective": 209,
-          "percentDeclared": 77.7,
-          "percentEffective": 83.3
+          "percentDeclared": 81.7,
+          "percentEffective": 87.6
         },
         {
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
-          "moved": 174,
+          "moved": 183,
           "declared": 224,
           "effective": 209,
-          "percentDeclared": 77.7,
-          "percentEffective": 83.3
+          "percentDeclared": 81.7,
+          "percentEffective": 87.6
         }
       ]
     },
@@ -255,69 +255,69 @@
       "notApplicable": 0,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 67.3,
-      "worstPercentEffective": 71.7,
+      "worstPercentDeclared": 69.8,
+      "worstPercentEffective": 74.3,
       "effectiveAtThreshold": false,
       "cells": [
         {
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
-          "moved": 134,
+          "moved": 139,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 67.3,
-          "percentEffective": 71.7
+          "percentDeclared": 69.8,
+          "percentEffective": 74.3
         },
         {
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
-          "moved": 134,
+          "moved": 139,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 67.3,
-          "percentEffective": 71.7
+          "percentDeclared": 69.8,
+          "percentEffective": 74.3
         },
         {
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
-          "moved": 134,
+          "moved": 139,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 67.3,
-          "percentEffective": 71.7
+          "percentDeclared": 69.8,
+          "percentEffective": 74.3
         },
         {
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
-          "moved": 134,
+          "moved": 139,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 67.3,
-          "percentEffective": 71.7
+          "percentDeclared": 69.8,
+          "percentEffective": 74.3
         },
         {
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
-          "moved": 134,
+          "moved": 139,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 67.3,
-          "percentEffective": 71.7
+          "percentDeclared": 69.8,
+          "percentEffective": 74.3
         },
         {
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
-          "moved": 134,
+          "moved": 139,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 67.3,
-          "percentEffective": 71.7
+          "percentDeclared": 69.8,
+          "percentEffective": 74.3
         }
       ]
     },
