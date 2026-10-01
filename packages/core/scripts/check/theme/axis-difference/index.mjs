@@ -1246,9 +1246,14 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   }),
   'column-menu': Object.freeze({
     state: Object.freeze({
-      name: 'the open panel of a default column menu (Popover surface carrying the family overlay class) with one visible and one hidden column -- the surface, count pill and rows carry radius, keyline and elevation',
+      name: 'the open panel of a default column menu (Popover surface carrying the family overlay class) with one visible and one hidden column -- the surface, count pill and rows carry radius, keyline and elevation; '
+        + 'the engine focuses the panel on open, so its focus ring (`--ds-focus-ring-width`) is the states reading (S7)',
       source: 'src/components/structures/workspace/column-menu/index.tsx',
-      anchors: Object.freeze(['open={isOpen}', 'overlayClassName="ds-structure ds-column-menu-panel"']),
+      anchors: Object.freeze([
+        'open={isOpen}',
+        'overlayClassName="ds-structure ds-column-menu-panel"',
+        'window.requestAnimationFrame(() => panelRef.current?.focus());',
+      ]),
       resolves: Object.freeze([
         Object.freeze({
           source: 'src/components/primitives/overlay/popover/engines/modern/index.tsx',
@@ -1256,7 +1261,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
         }),
       ]),
     }),
-    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion']),
+    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion', 'states']),
     markup: '<div data-part="surface" class="ds-structure ds-column-menu-panel"><div data-part="panel">'
       + '<div data-part="header"><div><div data-part="header-copy"></div><div>'
       + '<div data-part="count-pill">1/2</div></div></div></div><div data-part="scroll-region"><div>'
@@ -2609,7 +2614,8 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
 
 /**
  * The roster rows MEASURED under law 5 and REFUSED on states: the real render
- * moves on neither half, so the row may not declare `states`. Published in the
+ * moves on neither half, or law 3 refuses it because the default mount
+ * already moves (S7), so the row may not declare `states`. Published in the
  * record (`realRender.statesRefused`) and in the indicator with the reach the
  * run read, so a refusal is evidence in the artifact and not only in a receipt
  * (Fable S1 review, overstated claim 2). Pinned: the roster door refuses a
@@ -2618,8 +2624,11 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
  * does not publish every pinned row.
  */
 export const REAL_RENDER_STATES_REFUSALS = Object.freeze({
-  'column-menu': 'measured 2026-09-30 (S1 recheck): the open panel moves on neither states half under states.emphasis',
-  'command-palette': 'measured 2026-09-30 (S1 recheck): the open palette moves on neither states half under states.emphasis',
+  // column-menu left on 2026-09-30 (S7): with 40a9f2862 its panel ring reads
+  // `--ds-focus-ring-width`, the engine focuses the panel on open, and the row
+  // is credited on states in all four bithire/evnto cells.
+  'command-palette': 'measured 2026-09-30 (S7): the real render moves (opacity, the disabled item rule under the stamp) but the '
+    + 'default mount already moves on the stamp half since 8be7fd02e -- law 3 refuses the restatement; the family is a states mover on its default mount',
 });
 
 /**

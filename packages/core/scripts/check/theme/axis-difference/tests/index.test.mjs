@@ -3287,9 +3287,9 @@ describe('axis-difference — S1: law 5 over a reading, the stamp contract, and 
     for (const row of ['float-button', 'drawer-compounds', 'modal-compounds', 'layout']) assert.ok(REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
     // R2a gave layout's S1 row a resting axis; its states declaration is untouched.
     assert.deepEqual([...REAL_RENDER_MOUNTS.layout.axes], ['rhythm', 'states']);
-    // Measured and refused on 2026-09-30 (the real render does not move on
-    // states under either half), so they may not declare it.
-    for (const row of ['column-menu', 'command-palette']) assert.ok(!REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
+    // Measured and refused on 2026-09-30 (S7: law 3, the default mount already
+    // moves), so it may not declare it. column-menu left the pin in S7.
+    assert.ok(!REAL_RENDER_MOUNTS['command-palette'].axes.includes('states'));
   });
 
   it('THE SIXTH STATE: every kernel token is stamped, and a run without `focused` names it unstamped', () => {
@@ -3481,8 +3481,8 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     assert.ok(failures.some((line) => line.startsWith('tooltip: 2 rows declare states (tooltip, tooltip-interactive)')), failures.join(' | '));
   });
 
-  it('PIN: the measured states refusals are column-menu and command-palette, rows of states families that do not declare states', () => {
-    assert.deepEqual(Object.keys(REAL_RENDER_STATES_REFUSALS).sort(), ['column-menu', 'command-palette']);
+  it('PIN: the measured states refusal is command-palette, a row of a states family that does not declare states', () => {
+    assert.deepEqual(Object.keys(REAL_RENDER_STATES_REFUSALS).sort(), ['command-palette']);
     const states = axisPopulations(ROOT).get('states');
     for (const row of Object.keys(REAL_RENDER_STATES_REFUSALS)) {
       assert.ok(!REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
@@ -3491,26 +3491,71 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
   });
 
   it('MUTANT: a pinned refusal that declares states, or is gone from the roster, is refused by the roster door', () => {
-    const refusals = { 'column-menu': REAL_RENDER_STATES_REFUSALS['column-menu'] };
-    const declares = realRenderRosterFailures(ROOT, { 'column-menu': statesRow('column-menu') }, { statesRefusals: refusals });
-    assert.ok(declares.some((line) => line.startsWith('column-menu: pinned as a measured states refusal and declares states')), declares.join(' | '));
+    const refusals = { 'command-palette': REAL_RENDER_STATES_REFUSALS['command-palette'] };
+    const declares = realRenderRosterFailures(ROOT, { 'command-palette': statesRow('command-palette') }, { statesRefusals: refusals });
+    assert.ok(declares.some((line) => line.startsWith('command-palette: pinned as a measured states refusal and declares states')), declares.join(' | '));
     const gone = realRenderRosterFailures(ROOT, { avatar: REAL_RENDER_MOUNTS.avatar }, { statesRefusals: refusals });
-    assert.ok(gone.some((line) => line.startsWith('column-menu: pinned as a measured states refusal and no longer a roster row')), gone.join(' | '));
+    assert.ok(gone.some((line) => line.startsWith('command-palette: pinned as a measured states refusal and no longer a roster row')), gone.join(' | '));
   });
 
   it('the record publishes every refusal with the reach the run read, and a full run that drops one FAILS', () => {
     const mounts = realRenderMountList(new Map(Object.keys(REAL_RENDER_MOUNTS)
       .map((row) => [REAL_RENDER_MOUNTS[row].family ?? row, { classes: ['x'], attributes: {} }])));
     const reach = { stamped: 0, native: 2, declared: false };
-    const report = realRenderReport(mounts, { statesReach: { 'column-menu': reach } });
-    assert.deepEqual(report.statesRefused.map((entry) => entry.row), ['column-menu', 'command-palette']);
+    const report = realRenderReport(mounts, { statesReach: { 'command-palette': reach } });
+    assert.deepEqual(report.statesRefused.map((entry) => entry.row), ['command-palette']);
     assert.deepEqual(report.statesRefused[0], {
-      row: 'column-menu', family: 'column-menu', reason: REAL_RENDER_STATES_REFUSALS['column-menu'], statesReach: reach,
+      row: 'command-palette', family: 'command-palette', reason: REAL_RENDER_STATES_REFUSALS['command-palette'], statesReach: reach,
     });
-    assert.equal(report.statesRefused[1].statesReach, null);
+    assert.equal(realRenderReport(mounts).statesRefused[0].statesReach, null);
     assert.deepEqual(evaluate(result([cell()], { realRender: report })), []);
     const dropped = evaluate(result([cell()], { realRender: { ...report, statesRefused: report.statesRefused.slice(1) } }));
-    assert.deepEqual(dropped, ['column-menu: a pinned states refusal the run did not publish in realRender.statesRefused']);
+    assert.deepEqual(dropped, ['command-palette: a pinned states refusal the run did not publish in realRender.statesRefused']);
+  });
+
+  it('S7 MEASURED: column-menu declares states -- the panel the engine focuses on open is a stamped part its focus rule reaches -- and left the pin', () => {
+    const entry = REAL_RENDER_MOUNTS['column-menu'];
+    assert.deepEqual([...entry.axes], ['shape', 'rhythm', 'depth', 'motion', 'states']);
+    assert.ok(probe.realRenderStampedParts(entry).includes('panel'));
+    assert.equal(Object.hasOwn(REAL_RENDER_STATES_REFUSALS, 'column-menu'), false);
+    // The configuration the row reads under a state is the engine's own: the
+    // panel is focused on open, and its ring rule carries both halves.
+    const engine = readFileSync(join(ROOT, 'src/components/structures/workspace/column-menu/index.tsx'), 'utf8');
+    assert.ok(engine.includes('window.requestAnimationFrame(() => panelRef.current?.focus());'));
+    const skin = readFileSync(join(ROOT, 'src/foundation/tokens/css/presentation/components/skin/column-menu/index.css'), 'utf8');
+    assert.ok(skin.includes('[data-part="panel"]:is([data-state~="focus-visible"], :focus-visible) {'));
+    assert.deepEqual(realRenderRosterFailures(ROOT, { 'column-menu': entry }), []);
+  });
+
+  it('S7 STALE PIN: a row that credits on states and is still pinned as a refusal is refused by the roster door', () => {
+    const failures = realRenderRosterFailures(ROOT, { 'column-menu': REAL_RENDER_MOUNTS['column-menu'] }, {
+      statesRefusals: { 'column-menu': 'measured 2026-09-30 (S1 recheck): the open panel moves on neither states half' },
+    });
+    assert.deepEqual(failures, [
+      'column-menu: pinned as a measured states refusal and declares states -- re-measure and drop it from REAL_RENDER_STATES_REFUSALS',
+    ]);
+  });
+
+  it('S7 MEASURED: command-palette stays pinned, and the pin names law 3 -- the default mount already moves on the disabled stamp', () => {
+    // The shape of the S7 reading (bithire+evnto, light+dark): the default
+    // mount's item and the real render's item both move `opacity` under the
+    // disabled stamp, so a states declaration could only restate a move.
+    const reading = (opacity) => ({
+      base: {},
+      states: {
+        disabled: {
+          'command-palette': { opacity },
+          [`command-palette${REAL_RENDER_KEY.default}`]: { opacity },
+          [`command-palette${REAL_RENDER_KEY.real}`]: { opacity },
+        },
+      },
+    });
+    const verdict = realRenderQualification({ before: reading('0.5'), after: reading('0.6'), family: 'command-palette', axis: 'states' });
+    assert.equal(verdict.qualified, false);
+    assert.match(verdict.reason, /default mount already MOVES on states \(the stamp half, opacity\)/u);
+    assert.ok(!REAL_RENDER_MOUNTS['command-palette'].axes.includes('states'));
+    assert.match(REAL_RENDER_STATES_REFUSALS['command-palette'], /default mount already moves on the stamp half/u);
+    assert.doesNotMatch(REAL_RENDER_STATES_REFUSALS['command-palette'], /moves on neither states half/u);
   });
 
   it('the witness list is published IN FULL: thirteen movers publish thirteen ids, never a 12-entry preview', () => {
