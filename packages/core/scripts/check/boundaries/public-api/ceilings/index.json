@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 14,
-      "maxSourceBytes": 398269
+      "maxSourceBytes": 398759
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "ST-B (STATES-K population law) + M4 (emission precedence/ratchet) + FP: the population/instrument exports reached by the runtime emission path; 397,600 -> 398,269 measured by the gate",
+  "lastMove": "visual-authority +490 source bytes: the M2/M3 review condition-3 docstring (nested-root limit registered with its numbers, 3a022f003) — comment-only, no runtime growth; measured 398269 -> 398759, the exact file delta",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
