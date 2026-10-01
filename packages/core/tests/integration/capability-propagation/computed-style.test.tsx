@@ -18,6 +18,11 @@
  *    shape that hid the dark-mode write -- a dark-mode channel read under a
  *    light root does not paint.
  *
+ * CAP-3 adds `chrome.anatomy`, whose effect is a ROOT ATTRIBUTE the card skin
+ * selects (`[data-anatomy-card=...]`): its fault is the wrong root too -- the
+ * pre-CAP-3 static root that stamped no anatomy, and on the v2 path the static
+ * vertical's root instead of the arm's own.
+ *
  * ## Registered, not resolved here
  *
  * - rottay has no static dark-mode leg: dark is its default mode and the door
@@ -47,10 +52,11 @@ import {
   type ProbeReadings,
   type ProbeTarget,
   type ProbeVertical,
+  withoutAnatomy,
 } from '@tests/support/family-causality';
 import { firstPartyFixture } from '@tests/support/theme-lowering';
 
-import { CAP2_STATIC_WRITES } from './drained-writes';
+import { CAP2_STATIC_WRITES, CAP3_STATIC_WRITES } from './drained-writes';
 
 const SCENE = renderToStaticMarkup(
   <>
@@ -68,6 +74,7 @@ const TARGETS: readonly ProbeTarget[] = [
   { id: 'button-radius', selector: '[data-probe=button] .ds-button', property: 'border-top-left-radius' },
   { id: 'button-bg', selector: '[data-probe=button] .ds-button', property: 'background-color' },
   { id: 'outlined-edge', selector: `[data-probe=outlined] ${CARD}`, property: 'border-top-style' },
+  { id: 'outlined-top', selector: `[data-probe=outlined] ${CARD}`, property: 'border-top-width' },
   { id: 'elevated-edge', selector: `[data-probe=elevated] ${CARD}`, property: 'border-top-style' },
   { id: 'elevated-lift', selector: `[data-probe=elevated] ${CARD}`, property: 'background-image' },
   { id: 'eyebrow-case', selector: "[data-probe=shell] [data-part='eyebrow']", property: 'text-transform' },
@@ -103,6 +110,9 @@ const STATIC_LEGS: Readonly<Record<StaticEntry, Leg & { readonly sever: string }
 };
 
 const DARK_LEG: Leg = { moves: ['button-bg'], holds: 'canvas-bg' };
+/** `underline` drops the card's top edge; the button is the control. */
+const ANATOMY_LEG: Leg = { moves: ['outlined-top'], holds: 'button-bg' };
+const ANATOMY = { 'chrome.anatomy': { cardComponent: 'underline' } };
 const MODE_LEG: Leg = { moves: ['canvas-bg'], holds: 'button-radius' };
 
 /** Every way an arm fails its leg, by name; empty means causal. */
@@ -136,7 +146,7 @@ interface VerticalReadings {
 
 const readings: Partial<Record<ProbeVertical, VerticalReadings>> = {};
 
-describe('capability propagation — the CAP-2 drained entries paint (computed style)', () => {
+describe('capability propagation — the CAP-2 and CAP-3 drained entries paint (computed style)', () => {
   beforeAll(async () => {
     for (const vertical of FIRST_PARTY_VERTICALS) {
       const staticArms: Record<string, () => Promise<MountedArm>> = {
@@ -146,6 +156,11 @@ describe('capability propagation — the CAP-2 drained entries paint (computed s
         staticArms[entry] = () => mountFlatThemeArm(vertical, written(entry, vertical));
       }
       const sceneArms = { ...staticArms };
+      const anatomyWrite = () => mountFlatThemeArm(vertical, CAP3_STATIC_WRITES['chrome.anatomy'](clone(fixture(vertical))));
+      sceneArms['chrome.anatomy'] = anatomyWrite;
+      // WRONG ROOT: the pre-CAP-3 static root, which stamped no anatomy.
+      sceneArms['anatomy:pre-base'] = async () => withoutAnatomy(await mountFlatThemeArm(vertical, clone(fixture(vertical))));
+      sceneArms['anatomy:pre-write'] = async () => withoutAnatomy(await anatomyWrite());
       if (STATIC_DARK.includes(vertical)) {
         sceneArms['dark:base'] = () => mountFlatThemeArm(vertical, clone(fixture(vertical)), 'dark');
         sceneArms['dark:write'] = () => mountFlatThemeArm(vertical, written('palette.dark-mode', vertical), 'dark');
@@ -170,6 +185,8 @@ describe('capability propagation — the CAP-2 drained entries paint (computed s
           // WRONG ROOT: `mountArm` stamps the static vertical's attributes on every arm.
           'wrong-root:base': () => mountArm(vertical, SEEDS),
           'wrong-root:other': () => mountArm(vertical, { ...SEEDS, 'palette.dark-mode': otherMode(vertical) }),
+          anatomy: () => mountDocumentArm(vertical, { ...SEEDS, ...ANATOMY }),
+          'wrong-root:anatomy': () => mountArm(vertical, { ...SEEDS, ...ANATOMY }),
         },
       });
 
@@ -192,6 +209,37 @@ describe('capability propagation — the CAP-2 drained entries paint (computed s
       }
     });
   }
+
+  it('chrome.anatomy (static): the write repaints the card edge on every vertical', () => {
+    for (const vertical of FIRST_PARTY_VERTICALS) {
+      const { scene } = readings[vertical]!;
+      expect(legFailures(scene.base!, scene['chrome.anatomy']!, ANATOMY_LEG), vertical).toEqual([]);
+    }
+  });
+
+  it('chrome.anatomy (static): on the pre-CAP-3 root, the same write paints nothing (mutant)', () => {
+    for (const vertical of FIRST_PARTY_VERTICALS) {
+      const { scene } = readings[vertical]!;
+      expect(legFailures(scene['anatomy:pre-base']!, scene['anatomy:pre-write']!, ANATOMY_LEG), vertical).not.toEqual([]);
+    }
+  });
+
+  it('chrome.anatomy (v2): the decision repaints the card edge on every vertical', () => {
+    for (const vertical of FIRST_PARTY_VERTICALS) {
+      const { document } = readings[vertical]!;
+      expect(legFailures(document.base!, document.anatomy!, ANATOMY_LEG), vertical).toEqual([]);
+    }
+  });
+
+  it('chrome.anatomy (v2): mounted on the static root, the decision is invisible (mutant)', () => {
+    for (const vertical of FIRST_PARTY_VERTICALS) {
+      const { document } = readings[vertical]!;
+      expect(
+        legFailures(document['wrong-root:base']!, document['wrong-root:anatomy']!, ANATOMY_LEG),
+        vertical,
+      ).not.toEqual([]);
+    }
+  });
 
   it('palette.dark-mode (static): the dark write paints the primary button under a dark root', () => {
     for (const vertical of STATIC_DARK) {

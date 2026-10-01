@@ -47,6 +47,7 @@ import type {
   ThemeIntent,
   ThemeIntentOrigin,
 } from '@/foundation/contracts/composition/tenants/themes/intent';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import { tenantThemeAnatomyAttributes } from '@/infrastructure/compilers/composition/tenant-theme';
@@ -54,7 +55,7 @@ import {
   declaredDocumentMode,
   verticalDefaultMode,
 } from '@/infrastructure/compilers/kernel/foundation/modes';
-import { verticalEngine } from '@/infrastructure/compilers/runtime/theme';
+import { baselineFor, verticalEngine } from '@/infrastructure/compilers/runtime/theme';
 import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,
@@ -248,6 +249,23 @@ function firstPartyArtifact(vertical: FirstPartyVerticalId): FirstPartyArtifact 
   return artifact;
 }
 
+/**
+ * A resolved theme's `chrome.*.anatomy` selections as `data-anatomy-*` root
+ * attributes, through the SAME closed-enum law the tenant path projects with
+ * (`tenantThemeAnatomyAttributes`): `default`/absent stamps nothing, and a
+ * value outside its family's enum is dropped, never interpolated.
+ *
+ * CAP-3 (WO-EVI-02): the static mount used to stamp `{}` here, so a vertical
+ * whose preset selects an anatomy (bithire: card `framed`, sidebar `rail`,
+ * table `zebra`) compiled it and painted none of it -- the skins select on the
+ * root attribute, and the static root never carried one.
+ */
+export function flatThemeAnatomyAttributes(theme: Pick<FlatTheme, 'chrome'>): Record<string, string> {
+  return tenantThemeAnatomyAttributes({
+    normalizedAppearance: { advanced: { chrome: theme.chrome } },
+  } as unknown as Pick<TenantThemeArtifact, 'normalizedAppearance'>);
+}
+
 interface MountedBytes {
   readonly css: string;
   readonly digest: string;
@@ -309,7 +327,9 @@ function mountStaticVertical(intent: ThemeIntent, options: MountTenantThemeOptio
     digest: `sha256-${sha256Utf8(artifact.css)}`,
     declaredMode: verticalDefaultMode(intent.vertical),
     styleElements: [],
-    anatomyAttributes: {},
+    // The baseline the static compile resolves over (neutral + the vertical's
+    // preset), so the attributes are the anatomy those bytes were compiled for.
+    anatomyAttributes: flatThemeAnatomyAttributes(baselineFor(intent.vertical, intent.slug)),
     scopeSelector: artifact.selector,
     scopeAttributes: { 'data-tenant': intent.slug },
     ...(artifact.recipeProfile === undefined

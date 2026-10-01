@@ -26,6 +26,7 @@ import {
   staticThemeIntent,
 } from '@/entrypoints/server';
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
+import { flatThemeAnatomyAttributes } from '@/infrastructure/runtime/theming/composition/mount';
 import { flatThemeIntent } from '@tests/support/theme-door';
 
 const CORE_ROOT = resolve(__dirname, '../../..');
@@ -119,22 +120,42 @@ export async function mountArm(
   };
 }
 
+const ANATOMY_ATTRIBUTE = /^data-anatomy-/u;
+
 /**
  * A static arm: an authored FlatTheme compiled through the productive door, and
  * the root attributes the server mount itself projects for the vertical --
  * under `themeMode` when the arm states one, so a mode-block channel is read in
  * the mode that publishes it rather than under the vertical's default.
+ *
+ * The anatomy attributes are the ARM'S OWN (CAP-3): the static mount projects
+ * the vertical's preset anatomy, so an arm that writes `chrome.*.anatomy`
+ * replaces those with what its own resolved theme selects, through the same
+ * `flatThemeAnatomyAttributes` law the mount uses.
  */
 export async function mountFlatThemeArm(
   vertical: ProbeVertical,
   flatTheme: FlatTheme,
   themeMode?: 'light' | 'dark',
 ): Promise<MountedArm> {
-  const { compiled } = compileThemeIntent(flatThemeIntent({ flatTheme, tenantSlug: vertical, vertical }));
+  const { compiled, resolution } = compileThemeIntent(flatThemeIntent({ flatTheme, tenantSlug: vertical, vertical }));
   const mounted = await mountTenantTheme(staticThemeIntent(vertical), themeMode ? { themeMode } : {});
+  const rootAttributes = Object.fromEntries(
+    Object.entries(mounted.rootAttributes).filter(([name]) => !ANATOMY_ATTRIBUTE.test(name)),
+  );
   return {
-    rootAttributes: mounted.rootAttributes,
+    rootAttributes: { ...rootAttributes, ...flatThemeAnatomyAttributes(resolution.theme) },
     css: emitThemeCss(compiled, firstPartyScope(vertical)),
+  };
+}
+
+/** The arm with every `data-anatomy-*` root attribute removed: the pre-CAP-3 static root. */
+export function withoutAnatomy(arm: MountedArm): MountedArm {
+  return {
+    ...arm,
+    rootAttributes: Object.fromEntries(
+      Object.entries(arm.rootAttributes).filter(([name]) => !ANATOMY_ATTRIBUTE.test(name)),
+    ),
   };
 }
 

@@ -48,3 +48,29 @@ export const CAP2_STATIC_WRITES = {
     return b;
   },
 } as const satisfies Readonly<Record<string, (theme: FlatTheme) => FlatTheme>>;
+
+/**
+ * The two static writes CAP-3 (WO-EVI-02) drained, shared the same way. Their
+ * effect is DATA, not a channel: `chrome.anatomy` reaches paint through a root
+ * attribute, `profiles.icon` through the glyph a weight table selects.
+ */
+export const CAP3_STATIC_WRITES = {
+  // CAP-3: `underline`, which no first-party preset selects -- bithire's preset
+  // states `framed`, rottay and evnto state none -- so it moves on all three.
+  'chrome.anatomy': (b: FlatTheme): FlatTheme => {
+    const chrome = b as unknown as { chrome?: Record<string, Record<string, unknown>> };
+    chrome.chrome = {
+      ...(chrome.chrome ?? {}),
+      cardComponent: { ...(chrome.chrome?.cardComponent ?? {}), anatomy: 'underline' },
+    };
+    return b;
+  },
+  // CAP-3: `duotone`, not bithire's own `strong-outline`, so the write is a
+  // value change there. The registry's themePath is `expressive.profiles.icon`.
+  'profiles.icon': (b: FlatTheme): FlatTheme => {
+    const expressive = { ...(b.expressive ?? {}) } as Record<string, unknown>;
+    expressive.profiles = { ...((expressive.profiles as Record<string, unknown>) ?? {}), icon: 'duotone' };
+    b.expressive = expressive as unknown as FlatTheme['expressive'];
+    return b;
+  },
+} as const satisfies Readonly<Record<string, (theme: FlatTheme) => FlatTheme>>;

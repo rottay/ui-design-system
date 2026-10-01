@@ -40,10 +40,15 @@
  *
  * `chrome.anatomy`, `profiles.icon` and `responsive.posture` declare
  * `derivedRootAttributes` instead of CSS channels — they travel to the provider
- * as root attributes / normalized appearance, and asserting a computed style for
- * them would be asserting a thing the system never promised. Their leg 2 is a
- * root-attribute / normalized-appearance assertion, driven off the registry's own
- * `derivedRootAttributes` presence rather than off a hardcoded id list.
+ * as root attributes / normalized appearance, so a CSS CHANNEL assertion has no
+ * subject for them. Their leg 2 is a root-attribute / normalized-appearance
+ * assertion, driven off the registry's own `derivedRootAttributes` presence
+ * rather than off a hardcoded id list.
+ *
+ * Data is not the same as unpainted (CAP-3): `data-anatomy-card` is selected by
+ * the card skin, so `chrome.anatomy` reaches computed style on both paths
+ * (`computed-style.test.tsx`), and `profiles.icon` reaches the rendered glyph.
+ * Their static legs are `STATIC_DATA_LEGS` below.
  *
  * ## Measurement window
  *
@@ -55,16 +60,30 @@
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 import { describe, expect, it } from 'vitest';
 
-import { THEME_CONTROL_CATALOG } from '@/contracts/theme/runtime/catalog';
+import { THEME_CATALOG_RETIRED, THEME_CONTROL_CATALOG } from '@/contracts/theme/runtime/catalog';
 import { TENANT_CAPABILITY_REGISTRY } from '@/foundation/contracts/composition/tenants/capabilities';
 import type {
   TenantThemeAdvancedDocument,
   TenantThemeConfigIdentity,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { compileTenantThemeDocumentV2 } from '@/entrypoints/server';
+import {
+  compileTenantThemeDocumentV2,
+  compileThemeIntent,
+  mountTenantTheme,
+  staticThemeIntent,
+} from '@/entrypoints/server';
+import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
+import { firstPartyGovernedBehavior } from '@/infrastructure/compilers/runtime/tenant-css/artifact-renderer';
+import {
+  IconExpressiveProfileContext,
+  resolveActiveIconExpressiveProfile,
+} from '@/infrastructure/runtime/foundation/icons/active-profile';
+import { flatThemeAnatomyAttributes } from '@/infrastructure/runtime/theming/composition/mount';
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -72,8 +91,8 @@ import {
   tenantThemeAnatomyAttributes,
 } from '@/infrastructure/compilers/composition/tenant-theme';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
-import { CAP2_STATIC_WRITES } from './drained-writes';
-import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
+import { CAP2_STATIC_WRITES, CAP3_STATIC_WRITES } from './drained-writes';
+import { compileFlatThemeThroughDoor, flatThemeIntent } from "@tests/support/theme-door";
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 const bithireFlatTheme = firstPartyFixture('bithire');
@@ -355,6 +374,7 @@ const MUTATORS: Record<string, Mutators> = {
       (d.visualFoundation!.advanced!.chrome as Record<string, Record<string, unknown>>).cardComponent!.anatomy = 'framed';
       return d;
     },
+    static: CAP3_STATIC_WRITES['chrome.anatomy'],
   },
   'token-overrides': {
     db: (d) => {
@@ -376,6 +396,7 @@ const MUTATORS: Record<string, Mutators> = {
   },
   'profiles.icon': {
     db: (d) => { (d.visualFoundation!.advanced!.profiles as Record<string, string>).icon = 'solid-active'; return d; },
+    static: CAP3_STATIC_WRITES['profiles.icon'],
   },
   // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
   // bithire's preset decides `responsive.posture: compact`, so the STATIC mutator
@@ -416,6 +437,17 @@ const MUTATORS: Record<string, Mutators> = {
  *  - `profiles.expressive`: depends on the value. `edge: inset-double` moves 3 on
  *    all three verticals; `edge: hairline` and `geometry: pill-accented` move 0.
  *
+ * CAP-3 (WO-EVI-02, 2026-10-01) re-measured the last three and drained two:
+ *
+ *  - `chrome.anatomy`: the static door always carried the selection (the
+ *    resolved theme holds it); the static MOUNT dropped it, stamping `{}` where
+ *    the tenant mount stamps `data-anatomy-*`. The mount now projects the
+ *    vertical's preset anatomy (bithire: card `framed`, sidebar `rail`, table
+ *    `zebra`), and the write moves `data-anatomy-card` on all three verticals.
+ *  - `profiles.icon`: not a CSS effect -- the profile selects a weight table,
+ *    the weight selects a different glyph. Measured as rendered markup on
+ *    bithire; INERT on rottay and evnto, registered below.
+ *
  * Measured registrations, NOT resolved in this lot:
  *  - rottay's dark-mode asymmetry: dark is rottay's default mode, so the door
  *    REFUSES a `modes.dark` overlay there, and the only write that moves rottay
@@ -426,17 +458,26 @@ const MUTATORS: Record<string, Mutators> = {
  *    pro plan on all three verticals. Pinned below as REGISTERED, not resolved.
  *  - `geometry: pill-accented` moves 0 on all three first-party baselines; it
  *    may be an inert value. Pinned below.
+ *  - `profiles.icon` on rottay and evnto (CAP-3): the governed seam
+ *    (`firstPartyGovernedBehavior`) reads `expressive` only when it states a
+ *    `schemaVersion`, and neither preset does, so the write reaches the
+ *    resolved theme and paints no glyph. With `schemaVersion` stated it moves.
+ *    Whether those verticals open the expressive family is an owner question.
+ *  - `token-overrides` stays ledgered: see its reason and the registration pin.
  */
 const STATIC_UNCOVERED_REASONS: Readonly<Record<string, string>> = {
-  'chrome.anatomy':
-    'its catalog effect is `root-attributes`, not `css-channels`: it travels as a normalized root attribute and '
-    + 'never reaches a CSS channel, so a static channel assertion would assert something never promised.',
+  // CAP-3 measured (2026-10-01): every door but v1 refuses it -- the static
+  // door with `unknown key(s) "tokenOverrides"`, v2 with `unsupported decision`
+  // -- because the CATALOG retires it (THEME_CATALOG_RETIRED, replaced by
+  // `overrides.chrome.<family>.<channel>`) while the REGISTRY still says
+  // `status: 'active'`. Deliberately not extended with a v1 legacy leg and not
+  // reconciled here: the mismatch is the owner's ruling (retire the registry
+  // row, or keep v1 as a sanctioned legacy door), routed through WO-EVI-02.
   'token-overrides':
-    'not one of the 29 catalog decisions -- a retired row the registry still names. It has no brandTheme keypath '
-    + 'to mutate.',
-  'profiles.icon':
-    'not a catalog decision either, and it declares `derivedRootAttributes`: it travels as data, which the '
-    + 'data-only leg below asserts instead.',
+    'retired in the catalog (THEME_CATALOG_RETIRED, replaced by overrides.chrome.<family>.<channel>) and active '
+    + 'in the registry: the static door refuses `tokenOverrides` as an unknown key and v2 refuses the decision, so '
+    + 'no static write exists. Only the v1 DB path compiles it. Owner ruling pending (WO-EVI-02): retire the '
+    + 'registry row, or keep v1 as a sanctioned legacy door.',
 };
 
 const STATIC_UNCOVERED = new Set(Object.keys(STATIC_UNCOVERED_REASONS));
@@ -623,9 +664,15 @@ describe('capability propagation — every mutator probes the control own door (
   const catalogById = new Map(THEME_CONTROL_CATALOG.map((row) => [row.id as string, row]));
 
   for (const capability of ACTIVE) {
-    const row = catalogById.get(capability.id);
+    // A row outside the catalog (`profiles.icon` is an annex entry,
+    // `chrome.families` and `token-overrides` are retired) is guarded against
+    // the REGISTRY's own doors instead of skipped: CAP-3 found those mutators
+    // unguarded.
+    const row = catalogById.get(capability.id) ?? {
+      keypath: { brandTheme: capability.themePath, document: capability.documentPath },
+    };
     const mutators = MUTATORS[capability.id];
-    if (!row || !mutators) continue;
+    if (!mutators) continue;
 
     if (mutators.static) {
       it(`${capability.id}: the static mutator writes its own keypath.brandTheme`, () => {
@@ -768,6 +815,8 @@ describe('static path — an authored change reaches the compiled brand', () => 
       // CATALOG's own `effect`, never off an id list, so a fourth data-only
       // row is excluded here for the same stated reason.
       if (catalogEffectById.get(capability.id) === 'data-only') continue;
+      // Root-attribute and glyph effects are measured by `STATIC_DATA_LEGS`.
+      if (capability.id in STATIC_DATA_LEGS) continue;
       const mutated = compileStatic(mutate(clone(bithireFlatTheme) as FlatTheme));
       if (changedKeys(baseline, mutated).length === 0) inert.push(capability.id);
     }
@@ -881,6 +930,189 @@ describe('static path — the CAP-2 drained entries move on every first-party ve
         rowVersion: 1,
       }), vertical).not.toThrow();
     }
+  });
+});
+
+/**
+ * The static legs whose effect is DATA (CAP-3, WO-EVI-02): each reads what the
+ * productive door resolved for an arm and projects it through the SAME law
+ * production uses -- the mount's anatomy projection, and the governed icon seam
+ * the provider reads -- so the reading is the attribute or glyph that ships.
+ */
+const resolvedStaticTheme = (vertical: FirstParty, theme: FlatTheme) =>
+  compileThemeIntent(flatThemeIntent({ flatTheme: theme, tenantSlug: vertical, vertical })).resolution;
+
+const IconProfile = IconExpressiveProfileContext!;
+/** One semantic icon rendered under a profile: its weight attribute and its glyph path. */
+const renderIcon = (profile: ReturnType<typeof resolveActiveIconExpressiveProfile>): string =>
+  renderToStaticMarkup(
+    createElement(IconProfile.Provider, { value: profile }, createElement(NavigationSettingsIcon, { decorative: true })),
+  );
+const iconWeight = (markup: string): string | undefined => markup.match(/data-icon-weight="([^"]*)"/u)?.[1];
+
+const STATIC_DATA_LEGS: Readonly<Record<string, (vertical: FirstParty, theme: FlatTheme) => Record<string, string>>> = {
+  'chrome.anatomy': (vertical, theme) => flatThemeAnatomyAttributes(resolvedStaticTheme(vertical, theme).theme),
+  'profiles.icon': (vertical, theme) => {
+    const profile = resolveActiveIconExpressiveProfile({
+      expressive: firstPartyGovernedBehavior(resolvedStaticTheme(vertical, theme)).expressive,
+    });
+    const markup = renderIcon(profile);
+    return { profile: String(profile), weight: String(iconWeight(markup)), markup };
+  },
+};
+
+/**
+ * Per vertical, the data keys each write moves, MEASURED (2026-10-01, HEAD
+ * b869a3707). A vertical in `inertOn` is a registered defect, pinned so it
+ * turns red the day it starts moving -- never skipped.
+ */
+const DATA_DRILLS: Readonly<Record<string, {
+  readonly moves: Partial<Record<FirstParty, readonly string[]>>;
+  readonly inertOn?: Partial<Record<FirstParty, string>>;
+}>> = {
+  'chrome.anatomy': {
+    moves: { rottay: ['data-anatomy-card'], bithire: ['data-anatomy-card'], evnto: ['data-anatomy-card'] },
+  },
+  'profiles.icon': {
+    // bithire: strong-outline (weight bold) -> duotone (weight duotone).
+    moves: { bithire: ['markup', 'profile', 'weight'] },
+    inertOn: {
+      rottay: 'the preset states no expressive schemaVersion, so the governed seam drops expressive',
+      evnto: 'the preset states no expressive schemaVersion, so the governed seam drops expressive',
+    },
+  },
+};
+
+describe('static path — the CAP-3 data legs move what ships', () => {
+  it('names exactly the rows the channel law skips', () => {
+    expect(Object.keys(STATIC_DATA_LEGS).sort()).toEqual(Object.keys(DATA_DRILLS).sort());
+    for (const id of Object.keys(STATIC_DATA_LEGS)) {
+      expect(MUTATORS[id]?.static, `${id} has a data leg and no static mutator`).toBeDefined();
+      expect(STATIC_UNCOVERED.has(id), `${id} is drained and still ledgered`).toBe(false);
+    }
+  });
+
+  for (const [id, drill] of Object.entries(DATA_DRILLS)) {
+    it(`${id}: the static write moves its measured data per vertical`, () => {
+      const measure = STATIC_DATA_LEGS[id]!;
+      for (const vertical of FIRST_PARTY) {
+        const fixture = firstPartyFixture(vertical) as FlatTheme;
+        const moved = changedKeys(
+          measure(vertical, clone(fixture)),
+          measure(vertical, MUTATORS[id]!.static!(clone(fixture))),
+        );
+        if (drill.inertOn?.[vertical]) {
+          expect(moved, `${vertical}: registered inert (${drill.inertOn[vertical]})`).toEqual([]);
+          continue;
+        }
+        expect(moved, vertical).toEqual(drill.moves[vertical]);
+      }
+    });
+  }
+
+  it('chrome.anatomy: the static mount projects the vertical preset anatomy (was `{}`)', async () => {
+    const expected: Record<FirstParty, Record<string, string>> = {
+      rottay: {},
+      bithire: { 'data-anatomy-card': 'framed', 'data-anatomy-sidebar': 'rail', 'data-anatomy-table': 'zebra' },
+      evnto: {},
+    };
+    for (const vertical of FIRST_PARTY) {
+      const { rootAttributes } = await mountTenantTheme(staticThemeIntent(vertical));
+      const anatomy = Object.fromEntries(
+        Object.entries(rootAttributes).filter(([name]) => name.startsWith('data-anatomy-')),
+      );
+      expect(anatomy, vertical).toEqual(expected[vertical]);
+      expect(anatomy, vertical).toEqual(STATIC_DATA_LEGS['chrome.anatomy']!(vertical, firstPartyFixture(vertical) as FlatTheme));
+    }
+  });
+
+  it('chrome.anatomy: read off the static intent instead of the arm, the write moves nothing (mutant)', async () => {
+    // The pre-CAP-3 shape of the measurement: the attributes come from the
+    // vertical's static mount, so no write can reach them.
+    for (const vertical of FIRST_PARTY) {
+      const { rootAttributes } = await mountTenantTheme(staticThemeIntent(vertical));
+      const before = { ...rootAttributes };
+      MUTATORS['chrome.anatomy']!.static!(clone(firstPartyFixture(vertical)) as FlatTheme);
+      const after = { ...(await mountTenantTheme(staticThemeIntent(vertical))).rootAttributes };
+      expect(changedKeys(before, after), vertical).toEqual([]);
+    }
+  });
+
+  it('profiles.icon: the profile changes the weight attribute AND the glyph path', () => {
+    const base = renderIcon('strong-outline');
+    const moved = renderIcon('duotone');
+    expect([iconWeight(base), iconWeight(moved)]).toEqual(['bold', 'duotone']);
+    const paths = (markup: string) => [...markup.matchAll(/ d="([^"]*)"/gu)].map((match) => match[1]);
+    expect(paths(base).length).toBeGreaterThan(0);
+    expect(paths(moved)).not.toEqual(paths(base));
+  });
+
+  it('profiles.icon: rendered without the profile seam, the write moves nothing (mutant)', () => {
+    const fixture = firstPartyFixture('bithire') as FlatTheme;
+    const severed = (theme: FlatTheme) => {
+      firstPartyGovernedBehavior(resolvedStaticTheme('bithire', theme));
+      return { markup: renderIcon(undefined) };
+    };
+    expect(changedKeys(
+      severed(clone(fixture)),
+      severed(MUTATORS['profiles.icon']!.static!(clone(fixture))),
+    )).toEqual([]);
+  });
+
+  it('profiles.icon: on rottay and evnto the inertness is the schemaVersion gate, not the instrument', () => {
+    for (const vertical of ['rottay', 'evnto'] as const) {
+      const opened = (theme: FlatTheme): FlatTheme => {
+        theme.expressive = { schemaVersion: 1, ...(theme.expressive ?? {}) } as FlatTheme['expressive'];
+        return theme;
+      };
+      const fixture = firstPartyFixture(vertical) as FlatTheme;
+      const measure = STATIC_DATA_LEGS['profiles.icon']!;
+      const moved = changedKeys(
+        measure(vertical, opened(clone(fixture))),
+        measure(vertical, MUTATORS['profiles.icon']!.static!(opened(clone(fixture)))),
+      );
+      expect(moved, vertical).toEqual(['markup', 'profile', 'weight']);
+    }
+  });
+
+  it('profiles.icon (DB): the authored posture reaches the rendered glyph', () => {
+    const glyph = (document: Doc) => renderIcon(resolveActiveIconExpressiveProfile({
+      appearance: JSON.parse(compileDb(document).normalized),
+    }));
+    expect(glyph(MUTATORS['profiles.icon']!.db!(clone(BASE_DOC)))).not.toBe(glyph(clone(BASE_DOC)));
+  });
+});
+
+/**
+ * REGISTERED, not resolved (CAP-3): `token-overrides` is retired in the catalog
+ * and active in the registry, and only the v1 DB path compiles it. Every half
+ * of the mismatch is pinned, so the owner's ruling -- either way -- turns this
+ * red and the ledger entry is re-adjudicated, never silently dropped.
+ */
+describe('token-overrides — the measured catalog/registry mismatch (registered)', () => {
+  it('is retired in the catalog, active in the registry, and refused by the static and v2 doors', () => {
+    expect(THEME_CATALOG_RETIRED.map((entry) => entry.id)).toContain('token-overrides');
+    expect(THEME_CONTROL_CATALOG.some((row) => (row.id as string) === 'token-overrides')).toBe(false);
+    expect(TENANT_CAPABILITY_REGISTRY.find((row) => row.id === 'token-overrides')?.status).toBe('active');
+
+    const withOverrides = clone(bithireFlatTheme) as FlatTheme & { tokenOverrides?: Record<string, string> };
+    withOverrides.tokenOverrides = { '--ds-color-error': '#00404f' };
+    expect(() => compileStatic(withOverrides)).toThrow(/unknown key\(s\) "tokenOverrides"/u);
+
+    for (const vertical of FIRST_PARTY) {
+      expect(() => compileTenantThemeDocumentV2({
+        document: { version: 2, plan: 'pro', decisions: { 'token-overrides': { '--ds-color-error': '#00404f' } } } as never,
+        tenantId: 'tenant_propagation_probe',
+        slug: 'propagation-probe',
+        verticalKey: vertical,
+        rowVersion: 1,
+      }), vertical).toThrow(/unsupported decision "token-overrides"/u);
+    }
+  });
+
+  it('still compiles on the v1 DB path: --ds-color-error moves', () => {
+    const moved = compileDb(MUTATORS['token-overrides']!.db!(clone(BASE_DOC)));
+    expect(moved.variables['--ds-color-error']).not.toBe(compileDb(clone(BASE_DOC)).variables['--ds-color-error']);
   });
 });
 
