@@ -1,6 +1,6 @@
 {
   "purpose": "The CLOSED registry of semantic-identity exclusions of the population owner: a declaration listed here does not count as that family's authored position on that axis. An entry is bound to one family, one axis, one skin file and the exact rule it was reviewed with: its at-rule context (an empty list means a top-level rule), selector, property and value, whitespace-normalized, comments removed. It acts on the byProperty derivation only; a head-channel read is never excluded. A declaration that changes value, gains a channel, is repeated under the same selector, moves under an at-rule or moves to another part no longer matches and the family re-enters the axis by itself.",
-  "review": "WO-EVI-05 core review 2026-09-14 (Codex CHANGES + Fable CHANGES, conditions consolidated by the DT; owner direction 2026-09-14) | WO-EVI-02 X1 dossier + Fable review 2026-09-30 (chart-line/shape and chart-pie/shape admitted ACCEPT-WITH-CHANGES with the producer guard C1; chart-waterfall/shape REJECTED, the family stays in shape and must move)",
+  "review": "WO-EVI-05 core review 2026-09-14 (Codex CHANGES + Fable CHANGES, conditions consolidated by the DT; owner direction 2026-09-14) | WO-EVI-02 X1 dossier + Fable review 2026-09-30 (chart-line/shape and chart-pie/shape admitted ACCEPT-WITH-CHANGES with the producer guard C1; chart-waterfall/shape REJECTED, the family stays in shape and must move) | WO-EVI-02 X3 dossier + Fable review 2026-10-01 (table-toolbar/shape admitted ACCEPT-WITH-CHANGES with the half-box pin G1; bottom-tab-bar/shape REFUSED: its focus ring reads --ds-radius-md, a head channel, and the law never excludes a head-channel read)",
   "admitted": [
     {
       "family": "radio",
@@ -12,6 +12,10 @@
     },
     {
       "family": "chart-pie",
+      "axis": "shape"
+    },
+    {
+      "family": "table-toolbar",
       "axis": "shape"
     }
   ],
@@ -108,6 +112,30 @@
         ]
       },
       "lawfulShapeOwner": "chart-foundation (presentation/components/skin/chart-foundation/index.css, the tooltip/frame/state/data-access corners on the radius rungs, reads --ds-radius-md), a separate population family that stays shape-applicable"
+    },
+    {
+      "family": "table-toolbar",
+      "axis": "shape",
+      "path": "byProperty",
+      "skin": "src/foundation/tokens/css/presentation/components/skin/table-toolbar/index.css",
+      "declarations": [
+        {
+          "context": [],
+          "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider']",
+          "property": "border-radius",
+          "value": "1px"
+        }
+      ],
+      "reason": "semantic identity: the divider is a 2px stroke, a vertical hairline with a paper highlight, and its 1px radius is the stroke's end-cap, the HTML rendition of a line-cap on a 2px line, not a corner of a box. 1px is half the authored inline-size, so it is the box's own geometry and not a rung: on this box every radius from 1px to the full rung paints the same pixels (1px, 1.15px, 1.25px, 2px and 9999px are hash-identical at 1x, 2x and 3x, because the browser clamps a radius to half the box), while below half the cap opens into a rounded rectangle (0.75px, the dial's floor, and 0.8px repaint). A radius-scale dial-up would therefore be credited by the probe as a computed-style move with no paint behind it, and a dial-down would break the mark. The radius-scale dial does not scale the full rung (--ds-radius-full is the constant 9999px in every vertical) and this cap reads no channel of any shape row. It is the only shape declaration the skin authors. No shape decision may lawfully move this radius without breaking what the mark is. The premise is the 2px inline-size authored in the same rule, pinned in the population tests; a box change returns the entry to review.",
+      "review": "WO-EVI-02 table-toolbar shape exclusion review 2026-10-01 (X3 dossier; Fable ACCEPT-WITH-CHANGES, conditions consolidated by the DT; Codex outside the loop by owner restriction 2026-09-19)",
+      "reviewedOn": "2026-10-01",
+      "reviewedAt": {
+        "commit": "14f368b50",
+        "skinLines": [
+          121
+        ]
+      },
+      "lawfulShapeOwner": "button and input (the composed clear-filters ghost Button and the search Input, primitives imported at structures/workspace/table-toolbar/runtime/rendering/index.tsx:60), separate population families that stay shape-applicable; the toolbar skin paints none of their corners (its search-field rules measure only, paint is relayed)"
     }
   ]
 }

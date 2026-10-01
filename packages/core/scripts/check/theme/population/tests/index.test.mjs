@@ -58,6 +58,7 @@ const RADIO_SKIN = `${SKIN_ROOT}/radio/index.css`;
 const RADIO_GROUP_SKIN = `${AGNOSTIC_ROOT}/radio-group/index.css`;
 const REVIEW = 'WO-EVI-05 core review 2026-09-14';
 const CHART_REVIEW = 'WO-EVI-02 chart-marks shape exclusion review 2026-09-30 (X1 dossier; Fable ACCEPT-WITH-CHANGES, conditions consolidated by the DT; Codex outside the loop by owner restriction 2026-09-19)';
+const TT_REVIEW = 'WO-EVI-02 table-toolbar shape exclusion review 2026-10-01 (X3 dossier; Fable ACCEPT-WITH-CHANGES, conditions consolidated by the DT; Codex outside the loop by owner restriction 2026-09-19)';
 const PHYSICAL_CORNERS = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius'];
 
 const sandboxes = [];
@@ -293,16 +294,19 @@ describe('theme population — the pilot population of WO-EVI-05', () => {
 });
 
 describe('theme population — the reviewed semantic-identity exclusion of radio/shape (WO-EVI-05)', () => {
-  it('admits exactly radio/shape, chart-line/shape and chart-pie/shape, on the byProperty path only, and validates green on the tree', () => {
+  it('admits exactly radio/shape, chart-line/shape, chart-pie/shape and table-toolbar/shape, on the byProperty path only, and validates green on the tree', () => {
     const registry = readExclusions();
-    // Mover of the pin (radio only -> + chart-line, chart-pie): WO-EVI-02 X1 dossier + Fable review 2026-09-30.
+    // Movers of the pin (radio only -> + chart-line, chart-pie): WO-EVI-02 X1 dossier + Fable review 2026-09-30;
+    // (+ table-toolbar): WO-EVI-02 X3 dossier + Fable review 2026-10-01.
     assert.deepEqual(registry.admitted, [
       { family: 'radio', axis: 'shape' },
       { family: 'chart-line', axis: 'shape' },
       { family: 'chart-pie', axis: 'shape' },
+      { family: 'table-toolbar', axis: 'shape' },
     ]);
     assert.deepEqual(registry.entries.map((entry) => [entry.family, entry.axis, entry.path, entry.review]),
-      [['radio', 'shape', 'byProperty', REVIEW], ['chart-line', 'shape', 'byProperty', CHART_REVIEW], ['chart-pie', 'shape', 'byProperty', CHART_REVIEW]]);
+      [['radio', 'shape', 'byProperty', REVIEW], ['chart-line', 'shape', 'byProperty', CHART_REVIEW], ['chart-pie', 'shape', 'byProperty', CHART_REVIEW],
+        ['table-toolbar', 'shape', 'byProperty', TT_REVIEW]]);
     assert.deepEqual(checkExclusionRegistry().failures, []);
   });
 
@@ -328,8 +332,8 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const report = populationReport();
     const shape = report.axes.find((entry) => entry.axis === 'shape');
     assert.ok(!shape.families.includes('radio'));
-    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio']);
-    assert.equal(shape.notApplicableCount, 3);
+    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio', 'table-toolbar']);
+    assert.equal(shape.notApplicableCount, 4);
     for (const entry of report.axes) {
       assert.ok(entry.families.every((family) => !entry.notApplicable.some((withdrawn) => withdrawn.family === family)),
         `${entry.axis}: applicable and not-applicable sets must be disjoint`);
@@ -339,9 +343,9 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.equal(report.exclusions.revision, exclusionsRevision());
 
     const line = populationLine();
-    assert.match(line, /shape 215 \(3 N\/A\)/);
+    assert.match(line, /shape 214 \(4 N\/A\)/);
     assert.match(line, /typography 182 \(0 N\/A\)/);
-    assert.match(line, /exclusions [0-9a-f]{16} \(3 reviewed\)/);
+    assert.match(line, /exclusions [0-9a-f]{16} \(4 reviewed\)/);
 
     const pilot = pilotPopulation();
     assert.deepEqual(pilot.families.radio, ['typography', 'rhythm', 'depth', 'states', 'motion']);
@@ -364,9 +368,9 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.deepEqual(pin.provenance.membershipMoves.shape.removed, ['radio']);
 
     const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
-    assert.equal(floor.axes.shape, 215);
-    assert.equal(floor.notApplicable.shape, 3);
-    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.removed, ['chart-line', 'chart-pie']);
+    assert.equal(floor.axes.shape, 214);
+    assert.equal(floor.notApplicable.shape, 4);
+    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.removed, ['chart-line', 'chart-pie', 'table-toolbar']);
     assert.equal(floor.exclusionsRevision, exclusionsRevision());
     assert.equal(floor.provenance.previousPin.axes.shape, 215);
     assert.deepEqual(floor.provenance.membershipMoves.previousWave.byAxis.shape, { removed: ['radio'], added: [] });
@@ -505,7 +509,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.deepEqual(checkbox.notApplicable, {});
     const report = populationReport(dir, catalogIn(dir), path);
     assert.ok(report.axes.find((entry) => entry.axis === 'shape').families.includes('checkbox'));
-    assert.deepEqual(report.axes.find((entry) => entry.axis === 'shape').notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio']);
+    assert.deepEqual(report.axes.find((entry) => entry.axis === 'shape').notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio', 'table-toolbar']);
     assert.ok(report.exclusions.ineffective.some((entry) => entry.family === 'checkbox' && entry.axis === 'shape'));
     assert.deepEqual(checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN, { exclusionsPath: path }).failures, [],
       'an ineffective entry changes no published denominator');
@@ -675,7 +679,7 @@ describe('theme population — the reviewed chart-marks exclusions on shape and 
   it('derives the private channels from the reviewed values, and none of them is produced anywhere in src on this tree', () => {
     const reads = Object.fromEntries(readExclusions().entries.map((entry) =>
       [entry.family, [...new Set(entry.declarations.flatMap((declaration) => privateChannelsRead(declaration.value)))]]));
-    assert.deepEqual(reads, { radio: [], 'chart-line': ['--_ds-line-marker-radius'], 'chart-pie': ['--_ds-pie-marker-radius'] });
+    assert.deepEqual(reads, { radio: [], 'chart-line': ['--_ds-line-marker-radius'], 'chart-pie': ['--_ds-pie-marker-radius'], 'table-toolbar': [] });
     const producers = privateChannelProducers(ROOT, ['--_ds-line-marker-radius', '--_ds-pie-marker-radius']);
     assert.deepEqual(Object.fromEntries(producers), { '--_ds-line-marker-radius': [], '--_ds-pie-marker-radius': [] });
     assert.deepEqual(checkExclusionRegistry().failures, []);
@@ -726,6 +730,39 @@ describe('theme population — the reviewed chart-marks exclusions on shape and 
     plant(dir, 'src/components/patterns/visualization/charts/reader/index.ts',
       "// style['--_ds-line-marker-radius'] = '0';\nexport const cap = 'var(--_ds-line-marker-radius, 999px)';");
     assert.deepEqual(checkExclusionRegistry(dir, EXCLUSIONS).failures, []);
+  });
+});
+
+describe('theme population — the reviewed table-toolbar divider exclusion on shape and its half-box premise (WO-EVI-02 X3, Fable G1/G2)', () => {
+  const TABLE_TOOLBAR_SKIN = `${AGNOSTIC_ROOT}/table-toolbar/index.css`;
+  const DIVIDER = ".ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider']";
+  const entry = () => readExclusions().entries.find((candidate) => candidate.family === 'table-toolbar');
+
+  it('names the reviewed declaration verbatim, it is the only radius the skin authors, and it withdraws the family', () => {
+    const reviewed = entry();
+    assert.equal(reviewed.skin, TABLE_TOOLBAR_SKIN);
+    assert.equal(reviewed.reviewedAt.commit, '14f368b50');
+    assert.deepEqual(radiiOf(join(ROOT, reviewed.skin)), reviewed.declarations);
+    assert.deepEqual(reviewed.declarations, [{ context: [], selector: DIVIDER, property: 'border-radius', value: '1px' }]);
+    const declared = familyAxisDeclarations().get('table-toolbar');
+    assert.ok(!declared.axes.shape, 'table-toolbar leaves shape');
+    assert.equal(declared.notApplicable.shape.review, TT_REVIEW);
+    assert.ok(!readExclusions().entries.some((candidate) => candidate.family === 'bottom-tab-bar'),
+      'bottom-tab-bar is not excluded (Fable G4: its focus ring reads --ds-radius-md, a head channel)');
+  });
+
+  it('G1: the reviewed rule authors inline-size 2px beside border-radius 1px, and the selector\'s at-rule variants declare no shape longhand and no inline-size', () => {
+    const rules = cssRules(readFileSync(join(ROOT, TABLE_TOOLBAR_SKIN), 'utf8')).filter((rule) => rule.selector === DIVIDER);
+    const premise = 'the table-toolbar exclusion rests on 1px being half the 2px stroke; a box change returns the entry to review';
+    assert.deepEqual(rules.map((rule) => rule.atRules), [[], ['@container ds-table-toolbar (max-width: 40rem)'], ['@media (forced-colors: active)']], premise);
+    const [reviewed, ...variants] = rules;
+    const valueOf = (rule, property) => rule.declarations.filter((declaration) => declaration.property === property).map((declaration) => declaration.value);
+    assert.deepEqual(valueOf(reviewed, 'inline-size'), ['2px'], premise);
+    assert.deepEqual(valueOf(reviewed, 'border-radius'), ['1px'], premise);
+    for (const variant of variants) {
+      assert.ok(!variant.declarations.some((declaration) => AXES.shape.authored.includes(declaration.property) || declaration.property === 'inline-size'),
+        `${variant.atRules.join(' ')}: ${premise}`);
+    }
   });
 });
 
