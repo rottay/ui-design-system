@@ -1,11 +1,11 @@
 {
   "id": "tenant-difference-by-axis",
   "gate": "axis-difference (`capability-propagation` by axis, WO-EVI-02)",
-  "producedAt": "2026-10-01T02:50:58.677Z",
-  "value": "3/6 axes at >= 80 % of declaring families (typography, rhythm, motion; effective-denominator reading 3/6); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
+  "producedAt": "2026-10-01T03:51:03.121Z",
+  "value": "3/6 axes at >= 80 % of declaring families (typography, rhythm, motion; effective-denominator reading 4/6); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
   "target": "6/6 axes at >= 80 % and the negative test green",
   "met": false,
-  "commit": "2555b019dc95622fdecac2d72937e55dda145c25",
+  "commit": "69933cb3dc237eb42934646383dc58f3e6760cf1",
   "catalogRevision": "3f42e4ddc61d0e8b",
   "browser": "149.0.7827.55",
   "bundleMode": "fresh",
@@ -23,15 +23,15 @@
   "axes": {
     "shape": {
       "status": "below-threshold",
-      "declared": 217,
-      "effective": 205,
+      "declared": 215,
+      "effective": 203,
       "excludedUnmountable": 6,
       "excludedUnsettled": 6,
-      "notApplicable": 1,
+      "notApplicable": 3,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 73.3,
-      "worstPercentEffective": 77.6,
+      "worstPercentDeclared": 74,
+      "worstPercentEffective": 78.3,
       "effectiveAtThreshold": false,
       "cells": [
         {
@@ -39,60 +39,60 @@
           "theme": "light",
           "measured": true,
           "moved": 159,
-          "declared": 217,
-          "effective": 205,
-          "percentDeclared": 73.3,
-          "percentEffective": 77.6
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 74,
+          "percentEffective": 78.3
         },
         {
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
           "moved": 159,
-          "declared": 217,
-          "effective": 205,
-          "percentDeclared": 73.3,
-          "percentEffective": 77.6
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 74,
+          "percentEffective": 78.3
         },
         {
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
           "moved": 159,
-          "declared": 217,
-          "effective": 205,
-          "percentDeclared": 73.3,
-          "percentEffective": 77.6
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 74,
+          "percentEffective": 78.3
         },
         {
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
           "moved": 159,
-          "declared": 217,
-          "effective": 205,
-          "percentDeclared": 73.3,
-          "percentEffective": 77.6
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 74,
+          "percentEffective": 78.3
         },
         {
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
           "moved": 159,
-          "declared": 217,
-          "effective": 205,
-          "percentDeclared": 73.3,
-          "percentEffective": 77.6
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 74,
+          "percentEffective": 78.3
         },
         {
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
           "moved": 159,
-          "declared": 217,
-          "effective": 205,
-          "percentDeclared": 73.3,
-          "percentEffective": 77.6
+          "declared": 215,
+          "effective": 203,
+          "percentDeclared": 74,
+          "percentEffective": 78.3
         }
       ]
     },
@@ -255,69 +255,69 @@
       "notApplicable": 0,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 70.4,
-      "worstPercentEffective": 74.9,
-      "effectiveAtThreshold": false,
+      "worstPercentDeclared": 79.9,
+      "worstPercentEffective": 85,
+      "effectiveAtThreshold": true,
       "cells": [
         {
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
-          "moved": 140,
+          "moved": 159,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 70.4,
-          "percentEffective": 74.9
+          "percentDeclared": 79.9,
+          "percentEffective": 85
         },
         {
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
-          "moved": 140,
+          "moved": 159,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 70.4,
-          "percentEffective": 74.9
+          "percentDeclared": 79.9,
+          "percentEffective": 85
         },
         {
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
-          "moved": 140,
+          "moved": 159,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 70.4,
-          "percentEffective": 74.9
+          "percentDeclared": 79.9,
+          "percentEffective": 85
         },
         {
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
-          "moved": 140,
+          "moved": 159,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 70.4,
-          "percentEffective": 74.9
+          "percentDeclared": 79.9,
+          "percentEffective": 85
         },
         {
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
-          "moved": 140,
+          "moved": 159,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 70.4,
-          "percentEffective": 74.9
+          "percentDeclared": 79.9,
+          "percentEffective": 85
         },
         {
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
-          "moved": 140,
+          "moved": 159,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 70.4,
-          "percentEffective": 74.9
+          "percentDeclared": 79.9,
+          "percentEffective": 85
         }
       ]
     },
