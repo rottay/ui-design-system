@@ -43,6 +43,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const columnMenuChromeDeriver: FamilyDeriver = {
   family: "column-menu",
   rank: "derived",
+  scopes: ["density"],
   consumes: ["palette.*", "surfaces.radiusScale", "typography.roles", "motion.*", "density"],
   produces: [
     "--ds-column-menu-body-background",

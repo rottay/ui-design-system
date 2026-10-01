@@ -204,8 +204,8 @@ describe("density-scope roster", () => {
     expect(census[2]).toEqual(census[0]);
     // What is unclaimed is exactly what the two registries name, family for family and channel for channel.
     expect(census[0]).toEqual({
-      density: [49, 345],
-      direct: 344,
+      density: [50, 351],
+      direct: 350,
       arabic: [13, 23],
       unclaimed: census[0].named,
       named: census[0].named,
@@ -267,15 +267,16 @@ describe("density-scope roster", () => {
     }
   });
 
-  it("the claimants are the forty-two adopting families, and their arabic-axis channels are named masked pins", () => {
+  it("the claimants are the forty-three adopting families, and their arabic-axis channels are named masked pins", () => {
     expect(FAMILY_DERIVERS.filter(claimsDensityScope).map((deriver) => deriver.family)).toEqual([
       "textarea", "menu", "tabs", "breadcrumb", "stepper", "sidebar-surface", "form-header",
       "workbench-header", "section-frame", "mobile-header", "stats-header", "surface-lifecycle",
       "app-shell", "action-dock", "scope-switcher", "command-palette", "shortcuts-overlay",
       "search-command-bar", "surface-chrome", "collection-header", "dashboard-header",
       "detail-header", "form-surface", "wizard-surface", "detail-form-surface", "card", "table",
-      "tag", "badge", "tree", "kanban-board", "widget-board", "column-settings", "filter-panel",
-      "toolbar", "descriptions", "container", "space", "divider", "stack", "collapse", "splitter",
+      "tag", "badge", "tree", "kanban-board", "widget-board", "column-menu", "column-settings",
+      "filter-panel", "toolbar", "descriptions", "container", "space", "divider", "stack", "collapse",
+      "splitter",
     ]);
     for (const vertical of VERTICALS) {
       const { arabic, family, claimed } = roster(vertical);

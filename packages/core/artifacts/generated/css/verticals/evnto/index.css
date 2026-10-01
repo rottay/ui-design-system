@@ -109289,6 +109289,12 @@ html[lang]:lang(ar) {
   --ds-collection-header-subtitle-row-gap-treated: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   --ds-collection-header-subtitle-row-inline-gap-editorial: var(--ds-spacing-3, 12px);
   --ds-collection-header-subtitle-row-rule-gap: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-column-menu-body-padding: calc(14px * var(--ds-density-effective-scale, 1));
+  --ds-column-menu-footer-padding: calc(12px * var(--ds-density-effective-scale, 1));
+  --ds-column-menu-header-padding: calc(18px * var(--ds-density-effective-scale, 1)) calc(20px * var(--ds-density-effective-scale, 1)) calc(16px * var(--ds-density-effective-scale, 1));
+  --ds-column-menu-row-padding: calc(13px * var(--ds-density-effective-scale, 1)) calc(15px * var(--ds-density-effective-scale, 1));
+  --ds-column-menu-section-gap: calc(8px * var(--ds-density-effective-scale, 1));
+  --ds-column-menu-section-padding-block-start: calc(14px * var(--ds-density-effective-scale, 1));
   --ds-column-settings-row-gap: var(--ds-spacing-2, 8px);
   --ds-command-palette-argument-error-margin-block-start: var(--ds-spacing-1, 4px);
   --ds-command-palette-argument-panel-padding-block: var(--ds-spacing-3, 12px);
