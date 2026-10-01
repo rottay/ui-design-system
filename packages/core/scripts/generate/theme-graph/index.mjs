@@ -168,8 +168,12 @@ function readJsonViews() {
  * reference. Exact rather than rounded because `compareGraph` already reddens on
  * any byte of drift, so this pin's only job is to make growth re-anchor
  * deliberately; headroom would only buy a quieter alarm, never a green check.
+ *
+ * RE-ANCHORED 2026-09-30, 10,033,491 -> 10,034,729 (+1,238): the day's EVI-02
+ * waves (S2/S2b states dial reads, W3a-W3e hairline edge-dial reads, R2a rhythm
+ * mounts) each named in their commits; no removal, no new consumer class.
  */
-export const SIZE_BUDGET_BYTES = 10_033_491;
+export const SIZE_BUDGET_BYTES = 10_034_729;
 
 /** A key no id can collide with, used only to sort and de-duplicate pairs. */
 const SEP = "\u241F";

@@ -674,6 +674,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -4667,6 +4669,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.pairing",
         "typography.scale"
       ],
@@ -4831,6 +4835,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.pairing",
         "typography.scale"
       ],
@@ -5016,6 +5022,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -5185,6 +5193,8 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -5233,7 +5243,9 @@
         "profiles.expressive",
         "spacing.rhythm",
         "states.emphasis",
-        "states.focus-style"
+        "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture"
       ],
       "family": "table-toolbar",
       "tier": "structure"

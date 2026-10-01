@@ -17000,7 +17000,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      ever exceeds it in the previously-defective case. */
   min-height: 72px;
   padding: var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-card-border-strong, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-xl, 16px);
   /* The band angle is direction-aware: 112deg physical in LTR, mirrored to
@@ -17052,7 +17052,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   width: 38px;
   height: 38px;
   place-items: center;
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-lg, 11px);
   background: var(--ds-workspace-card-icon-bg, var(--ds-surface-card-bg));
@@ -17164,7 +17164,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-width: 0;
   min-height: 188px;
   padding: var(--ds-spacing-4, 16px);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-card-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-lg, 12px);
   background: color-mix(in srgb, var(--ds-surface-card-bg) 92%, transparent);
@@ -17203,7 +17203,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   width: 36px;
   height: 36px;
   place-items: center;
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-lg, 11px);
   background: var(--ds-workspace-card-icon-bg, var(--ds-surface-panel-bg));
@@ -17245,7 +17245,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   width: fit-content;
   min-height: 22px;
   padding-inline: var(--ds-spacing-2, 8px);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     color-mix(
       in srgb,
       var(--ds-color-primary) 20%,
@@ -17285,7 +17285,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   align-items: center;
   min-height: 38px;
   padding: var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     color-mix(in srgb, var(--ds-surface-card-border) 72%, transparent);
   border-radius: var(--ds-radius-md, 9px);
   background: color-mix(in srgb, var(--ds-surface-panel-bg) 68%, transparent);
@@ -17307,7 +17307,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   justify-content: center;
   gap: var(--ds-spacing-2, 8px);
   min-height: 96px;
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-card-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-lg, 12px);
   color: var(--ds-color-text-muted);
@@ -17357,7 +17357,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-width: 0;
   min-height: 132px;
   overflow: hidden;
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-card-border-strong, var(--ds-color-border-secondary));
   border-radius: var(--ds-radius-xl, 16px);
   background: radial-gradient(
@@ -17707,7 +17707,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-width: 0;
   min-height: 70px;
   padding: var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px);
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-card-header-border, var(--ds-surface-card-border));
   background: var(
     --ds-card-header-bg,
@@ -17760,7 +17760,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   width: 38px;
   height: 38px;
   place-items: center;
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-lg, 11px);
   background: var(--ds-workspace-card-icon-bg, var(--ds-surface-card-bg));
@@ -17859,7 +17859,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   gap: var(--ds-spacing-2, 8px);
   min-height: 44px;
   padding: 6px var(--ds-spacing-3, 12px);
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-card-border, var(--ds-color-border-primary));
   background: color-mix(
     in srgb,
@@ -17884,7 +17884,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-height: 28px;
   margin-inline-start: auto;
   padding-inline: 9px;
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-card-border, var(--ds-color-border-primary));
   border-radius: 999px;
   background: color-mix(in srgb, var(--ds-surface-card-bg) 82%, transparent);
@@ -18161,7 +18161,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-width: 66px;
   height: 36px;
   padding-inline: 9px;
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-card-border-strong, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-md, 8px);
   background: var(--ds-surface-card-bg, var(--ds-color-bg-elevated));
@@ -18354,7 +18354,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-height: 220px;
   padding: var(--ds-spacing-6, 24px);
   place-items: center;
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(
       --ds-empty-state-border,
       var(--ds-surface-card-border, var(--ds-color-border-primary))
@@ -18372,7 +18372,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-height: 220px;
   padding: var(--ds-spacing-6, 24px);
   place-items: center;
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     color-mix(
       in srgb,
       var(--ds-color-error) 32%,
@@ -24598,7 +24598,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   flex: 0 1 clamp(320px, 29vw, 380px);
   inline-size: min(100%, 380px);
   min-inline-size: min(100%, 320px);
-  border-inline-start: 1px solid var(--ds-color-border-subtle);
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   background: transparent;
   container-type: inline-size;
   container-name: ds-rail;
@@ -24612,7 +24612,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   flex: 0 1 clamp(320px, 29vw, 380px);
   inline-size: min(100%, 380px);
   min-inline-size: min(100%, 320px);
-  border-inline-start: 1px solid var(--ds-color-border-subtle);
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-elevated) 6%), var(--ds-surface-card));
   container-type: inline-size;
   container-name: ds-rail;
@@ -24641,7 +24641,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='custom-sticky-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
 /* The ghost close button: b6 through the real ancestor chain (contract test
@@ -24671,7 +24671,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
 /* card body padding drained from inline ('18px 18px 16px'); the default
@@ -24706,7 +24706,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-panel'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
 }
 
 /* the intrinsic icon wrapper owns color; the nested glyph inherits currentColor */
@@ -24723,11 +24723,11 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header'] {
-  border-bottom: 1px solid var(--ds-color-border-subtle);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   /* drained from inline ('14px 18px') */
   padding-block: 14px;
   padding-inline: 18px;
@@ -24740,7 +24740,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'] {
-  border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent);
+  border-top: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent);
   /* drained from inline ('12px 18px'; the block rung is exact) */
   padding-block: var(--ds-spacing-3, 12px);
   padding-inline: 18px;
@@ -28037,7 +28037,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table[data-has-actions="true"]
   [data-part="actions-cell"][data-part="actions-cell"] {
   background: var(--ds-table-action-bg, var(--ds-surface-card));
-  border-inline-start: 1px solid
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-table-action-border, var(--ds-table-row-border, transparent));
   box-shadow: var(--ds-data-table-action-shadow, none);
 }
@@ -40529,7 +40529,7 @@ html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern 
 }
 
 .ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-part='bone'][data-bone='frame'] {
-  border: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-skeleton-border, var(--ds-color-border));
 }
 
 /* ---- flat fill ---- */
@@ -77464,7 +77464,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease);
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] {
-  border: 1px solid var(--ds-stats-header-card-frame, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-stats-header-card-frame, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'] {
   cursor: pointer;
@@ -79608,7 +79608,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-assistant-preview-diff-card [data-part='diff-row'][data-part='diff-row'][data-part='diff-row'] {
   /* was an inline 6px paddingTop -- snapped to the canonical step */
   padding-block-start: var(--ds-spacing-2);
-  border-top: 1px solid var(--ds-color-border);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'] {
@@ -84963,14 +84963,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'] {
   border-radius: var(--ds-radius-full, 9999px);
   background: var(--ds-filter-pill-count-bg, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
-  border: 1px solid var(--ds-filter-pill-count-border, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-filter-pill-count-border, transparent);
   box-shadow: var(--ds-filter-pill-count-ring, none);
 }
 
 .ds-pattern-status-filter-pills
   .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true'] {
   background: var(--ds-filter-pill-count-active-bg, var(--ds-filter-pill-active-color, var(--ds-color-primary)));
-  border: 1px solid var(--ds-filter-pill-count-active-border, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-filter-pill-count-active-border, transparent);
   box-shadow: var(--ds-filter-pill-count-active-ring, none);
 }
 
@@ -85140,7 +85140,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-toolbar-color, inherit);
 }
 .ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
 }
 
@@ -88322,7 +88322,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         floor inline; everything below is the skin's. ---- */
 .ds-surface-lifecycle-error[data-part='root'] {
   padding: var(--ds-spacing-6, 24px);
-  border: 1px solid var(--ds-surface-lifecycle-error-border, color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border)));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-surface-lifecycle-error-border, color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border)));
   border-radius: var(--ds-radius-lg, 8px);
   background: var(--ds-surface-lifecycle-error-bg, color-mix(in oklab, var(--ds-color-error) 8%, var(--ds-color-bg-primary)));
   color: var(--ds-surface-lifecycle-error-color, color-mix(in oklab, var(--ds-color-error) 60%, var(--ds-color-text-primary)));
@@ -88407,7 +88407,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-stale-banner[data-part='banner'][data-part='banner'] {
-  border: 1px solid var(--ds-color-info-border, color-mix(in srgb, var(--ds-color-info) 20%, transparent));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-info-border, color-mix(in srgb, var(--ds-color-info) 20%, transparent));
 }
 
 .ds-surface.ds-stale-banner > [data-part='description'][data-part='description'][data-part='description'] {
@@ -88440,7 +88440,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-surface.ds-capability-anatomy [data-part='capability'] {
   min-inline-size: 0;
   padding: var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px);
-  border: 1px solid var(--ds-color-border, currentColor);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border, currentColor);
   border-radius: var(--ds-radius-md, 8px);
   opacity: var(--ds-capability-opacity, 0.72);
 }
@@ -95144,7 +95144,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-brand-studio__preview-content[data-part='preview-content'][data-part='preview-content'],
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel {
-  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary, var(--ds-color-border));
 }
 
 .ds-pattern-brand-studio
@@ -95222,7 +95222,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-brand-studio__tenant-preview-scope[data-part='tenant-preview-scope'][data-part='tenant-preview-scope'] {
   display: block;
   padding: var(--ds-spacing-5);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-radius: var(--ds-radius-xl);
   background: var(--ds-color-bg-primary);
   color: var(--ds-color-text-primary, var(--ds-color-text));
@@ -95239,7 +95239,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-brand-studio__preview-pack-warnings[data-part='preview-pack-warnings'][data-part='preview-pack-warnings'] {
   margin-block-start: var(--ds-spacing-3);
   padding: var(--ds-spacing-3);
-  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary, var(--ds-color-border));
   border-radius: var(--ds-radius-lg);
   background: var(--ds-color-bg-surface, var(--ds-color-bg-secondary));
 }
@@ -95252,7 +95252,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-brand-studio__preview-pack-warning[data-part='preview-pack-warning'][data-part='preview-pack-warning'] {
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-spacing-3);
-  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary, var(--ds-color-border));
   border-radius: var(--ds-radius-md);
   background: var(--ds-color-bg-primary);
 }
@@ -95422,7 +95422,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-visual-excellence__command-search:hover,
 .ds-visual-excellence__command-search:focus-visible {
   border-color: color-mix(in srgb, var(--ds-color-primary) 46%, var(--ds-color-border-primary));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 3px) color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
   outline: none;
 }
 

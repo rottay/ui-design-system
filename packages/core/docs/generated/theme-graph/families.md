@@ -7,7 +7,7 @@
 > 277 skin families; 265 are reached by at least one decision, 12 by none.
 > The tier is the component tier that owns the family; a family with no component folder carries none.
 
-digest: 0c9fab884beb9afc4bd5f9f7f5bd6753150309a4076d343200fead90a015d2fa
+digest: 510fe2e91817dfe1805b629964c4a4984998853bffed44412b9eb598f4f90a1f
 
 | family | tier | decisions reaching it |
 |---|---|---|
@@ -42,7 +42,7 @@ digest: 0c9fab884beb9afc4bd5f9f7f5bd6753150309a4076d343200fead90a015d2fa
 | `billing` | — | 7 |
 | `bottom-tab-bar` | structure | 16 |
 | `box` | primitive | 12 |
-| `brand-studio` | pattern | 16 |
+| `brand-studio` | pattern | 18 |
 | `branding-preview-sandbox` | pattern | 18 |
 | `breadcrumb` | primitive | 24 |
 | `breadcrumb-compounds` | — | 13 |
@@ -224,14 +224,14 @@ digest: 0c9fab884beb9afc4bd5f9f7f5bd6753150309a4076d343200fead90a015d2fa
 | `segmented` | primitive | 24 |
 | `select` | primitive | 22 |
 | `select-compounds` | — | 17 |
-| `selection-preview-rail` | structure | 13 |
+| `selection-preview-rail` | structure | 15 |
 | `settings` | — | 7 |
 | `sheet` | primitive | 24 |
 | `shift-matrix` | pattern | 20 |
 | `shortcuts-overlay` | pattern | 24 |
 | `sidebar-surface` | — | 19 |
 | `skeleton` | primitive | 15 |
-| `skeleton-anatomy` | — | 15 |
+| `skeleton-anatomy` | — | 17 |
 | `slider` | primitive | 20 |
 | `space` | primitive | 6 |
 | `spinner` | primitive | 16 |
@@ -240,7 +240,7 @@ digest: 0c9fab884beb9afc4bd5f9f7f5bd6753150309a4076d343200fead90a015d2fa
 | `statistic` | primitive | 20 |
 | `statistic-compounds` | — | 4 |
 | `stats-grid` | pattern | 21 |
-| `stats-header` | structure | 18 |
+| `stats-header` | structure | 20 |
 | `stats-header-keyframes` | — | 8 |
 | `status-filter-pills` | pattern | 24 |
 | `step-wizard` | pattern | 20 |
@@ -248,9 +248,9 @@ digest: 0c9fab884beb9afc4bd5f9f7f5bd6753150309a4076d343200fead90a015d2fa
 | `stepper-compounds` | — | 19 |
 | `surface-accent-bar` | — | **none** |
 | `surface-section-card` | — | 19 |
-| `surface-states` | — | 16 |
+| `surface-states` | — | 18 |
 | `table` | primitive | 21 |
-| `table-toolbar` | structure | 12 |
+| `table-toolbar` | structure | 14 |
 | `tabs` | primitive | 20 |
 | `tag` | primitive | 20 |
 | `tag-compounds` | — | 3 |
@@ -341,7 +341,7 @@ on the family.
 | `billing` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive` |
 | `bottom-tab-bar` | `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.pairing`, `typography.scale` |
 | `box` | `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.pairing`, `typography.scale` |
-| `brand-studio` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
+| `brand-studio` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `branding-preview-sandbox` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `breadcrumb` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `spacing.rhythm`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.effect-intensity`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `breadcrumb-compounds` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.elevation-posture` |
@@ -517,14 +517,14 @@ on the family.
 | `segmented` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `spacing.rhythm`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.effect-intensity`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `select` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `select-compounds` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
-| `selection-preview-rail` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.pairing`, `typography.scale` |
+| `selection-preview-rail` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.pairing`, `typography.scale` |
 | `settings` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive` |
 | `sheet` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `spacing.rhythm`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.effect-intensity`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `shift-matrix` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `shortcuts-overlay` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `spacing.rhythm`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.effect-intensity`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `sidebar-surface` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `spacing.rhythm`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.effect-intensity`, `surfaces.elevation-posture` |
 | `skeleton` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.pairing`, `typography.scale` |
-| `skeleton-anatomy` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.pairing`, `typography.scale` |
+| `skeleton-anatomy` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.pairing`, `typography.scale` |
 | `slider` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `space` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `profiles.expressive`, `spacing.rhythm` |
 | `spinner` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
@@ -533,16 +533,16 @@ on the family.
 | `statistic` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `statistic-compounds` | `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds` |
 | `stats-grid` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `spacing.rhythm`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.effect-intensity`, `surfaces.elevation-posture`, `typography.pairing`, `typography.scale` |
-| `stats-header` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
+| `stats-header` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `stats-header-keyframes` | `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `states.focus-style`, `typography.scale` |
 | `status-filter-pills` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `spacing.rhythm`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.effect-intensity`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `step-wizard` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `stepper` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `stepper-compounds` | `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `surface-section-card` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
-| `surface-states` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
+| `surface-states` | `density.mode`, `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `table` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
-| `table-toolbar` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `spacing.rhythm`, `states.emphasis`, `states.focus-style` |
+| `table-toolbar` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `spacing.rhythm`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture` |
 | `tabs` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `tag` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `tag-compounds` | `density.mode`, `experience.profile`, `profiles.expressive` |
