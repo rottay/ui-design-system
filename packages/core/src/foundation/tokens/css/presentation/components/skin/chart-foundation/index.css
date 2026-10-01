@@ -1442,8 +1442,10 @@
  * same anatomy without a markup change. The container paints the chart
  * baseline the placeholder bars stand on, so the footprint reads as a chart
  * rather than loose blocks; the hairline is a content-box background so it
- * lands exactly under the bars regardless of the scaffold-owned padding. */
-.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] [data-part='skeleton-bar'] {
+ * lands exactly under the bars regardless of the scaffold-owned padding.
+ * The bar paint is a fallback: `:where()` keeps it (0,1,0), weaker than every
+ * family skin's skeleton-bar rule, as the legend rules above. */
+:where(.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true']) [data-part='skeleton-bar'] {
   background: var(--ds-color-bg-secondary);
   border-radius: var(--ds-radius-sm);
 }

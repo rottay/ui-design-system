@@ -27,8 +27,20 @@ interface DialRule {
 const RULES: readonly DialRule[] = [
   { family: 'chart-area', selector: '.ds-chart-area', property: '--_ds-area-marker-radius', value: 'calc(2px * var(--ds-radius-scale-normalized, 1))' },
   { family: 'chart-area', selector: ".ds-chart-area [data-part='legend-swatch']", property: 'border-radius', value: 'var(--_ds-area-marker-radius, 2px)' },
+  {
+    family: 'chart-area',
+    selector: ".ds-chart-area [data-part='skeleton-bar']",
+    property: 'border-radius',
+    value: 'calc(2px * var(--ds-radius-scale-normalized, 1)) calc(2px * var(--ds-radius-scale-normalized, 1)) 0 0',
+  },
   { family: 'chart-bar', selector: '.ds-chart-bar', property: '--_ds-bar-marker-radius', value: 'calc(2px * var(--ds-radius-scale-normalized, 1))' },
   { family: 'chart-bar', selector: ".ds-chart-bar [data-part='legend-swatch']", property: 'border-radius', value: 'var(--_ds-bar-marker-radius, 2px)' },
+  {
+    family: 'chart-bar',
+    selector: ".ds-chart-bar [data-part='skeleton-bar']",
+    property: 'border-radius',
+    value: 'calc(2px * var(--ds-radius-scale-normalized, 1)) calc(2px * var(--ds-radius-scale-normalized, 1)) 0 0',
+  },
   {
     family: 'chart-bullet',
     selector: ".ds-chart-bullet [data-part='legend-swatch'][data-variant='range']",
@@ -187,7 +199,7 @@ describe('engine-agnostic skins -- shape reach through the radius dial', () => {
         if (!painted) orphans.push(`${file}: ${decl.property}: ${decl.value}`);
       }
     }
-    expect(readers, 'the reader census moved; re-anchor it with the movers named').toBe(19);
+    expect(readers, 'the reader census moved; re-anchor it with the movers named').toBe(21);
     expect(orphans).toEqual([]);
   });
 
