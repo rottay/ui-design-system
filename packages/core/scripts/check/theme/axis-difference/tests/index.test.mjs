@@ -129,7 +129,7 @@ import {
   UNOBSERVABLE_FAMILIES,
   unobservableDrift,
 } from '../index.mjs';
-import { AXIS_IDS, AXES, axisControls, axisPopulations, axisUnobservable, groupControls } from '../../population/index.mjs';
+import { AXIS_IDS, AXES, axisControls, axisPopulations, axisUnobservable, cssRules, groupControls, skinFamilies } from '../../population/index.mjs';
 import { launchBrowser, resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 import { REPRODUCTION_FLAGS } from '../indicator/index.mjs';
@@ -4225,4 +4225,60 @@ describe('axis-difference BROWSER drill — the pseudo-element read law reads pa
     assert.deepEqual(forced.halves, { stamped: null, native: 'transform' }, 'forcing the host reaches its own pseudo; the stamp never enters :hover');
     assert.equal(withheld.moved, null, 'a withheld family is withheld on its pseudo too -- never credited');
   }, 180_000);
+});
+
+describe('axis-difference — S8: the shape rows the D1 census named, measured and refused (WO-EVI-02)', () => {
+  const refusals = () => probe.REAL_RENDER_SHAPE_REFUSALS ?? {};
+  const BULLET = 'src/components/patterns/visualization/charts/families/bullet/index.tsx';
+
+  it('PIN: the three reachable families carry a refused shape row, each declaring shape alone, none in the roster', () => {
+    assert.deepEqual(Object.keys(refusals()).sort(), ['chart-bullet', 'chart-c-histogram-legend', 'chart-waterfall']);
+    for (const [row, entry] of Object.entries(refusals())) {
+      assert.deepEqual([...entry.axes], ['shape'], row);
+      assert.match(entry.measured, /real render does not move on shape/u, row);
+      assert.equal(REAL_RENDER_MOUNTS[row], undefined, row);
+    }
+  });
+
+  it('the refused rows pass the same roster door as the shipped ones: engine-literal markup, cited stamps', () => {
+    assert.equal(typeof probe.realRenderRefusedRowFailures, 'function');
+    assert.deepEqual(probe.realRenderRefusedRowFailures(ROOT), []);
+  });
+
+  it('MUTANT: a refused row whose stamp drifts is named by the door; one moved into the roster is refused', () => {
+    const drifted = (file) => {
+      const text = readFileSync(file, 'utf8');
+      return file.endsWith(BULLET) ? text.replaceAll('data-variant={item.variant}', 'data-kind={item.variant}') : text;
+    };
+    const drift = probe.realRenderRefusedRowFailures(ROOT, { readSource: drifted });
+    assert.ok(drift.some((line) => line.startsWith('chart-bullet/attr:data-variant=range:') && line.includes('no longer carries the stamp')), drift.join(' | '));
+    const roster = { ...REAL_RENDER_MOUNTS, 'chart-bullet': refusals()['chart-bullet'] };
+    const moved = probe.realRenderRefusedRowFailures(ROOT, { roster });
+    assert.ok(moved.some((line) => line.startsWith('chart-bullet: a measured shape refusal is also a REAL_RENDER_MOUNTS row')), moved.join(' | '));
+  });
+
+  it('waterfall: every swatch the row mounts carries data-status, so the bare :4 corner is never what it reads', () => {
+    const swatches = [...refusals()['chart-waterfall'].markup.matchAll(/<span data-part="legend-swatch"([^>]*)>/gu)];
+    assert.equal(swatches.length, 3);
+    for (const [, attributes] of swatches) assert.match(attributes, /data-status="(increase|decrease|total)"/u);
+  });
+
+  it('STOP: the dashboard interaction families paint shape only on ::-webkit-scrollbar-thumb, which no law can read', () => {
+    for (const family of ['dashboard-activity-interactions', 'dashboard-metrics-interactions']) {
+      const css = skinFamilies(ROOT).get(family).map((file) => readFileSync(file, 'utf8')).join('\n');
+      const radius = cssRules(css).filter((rule) => rule.declarations.some((d) => /radius/u.test(d.property)));
+      assert.ok(radius.length > 0, family);
+      for (const rule of radius) {
+        assert.match(rule.selector, /::-webkit-scrollbar-thumb$/u, `${family}: ${rule.selector}`);
+        assert.equal(probe.pseudoReadEntry(rule.selector, 'shape').refused, 'ua-shadow-pseudo', rule.selector);
+      }
+      assert.ok(UNMOUNTABLE_FAMILIES.includes(family), family);
+    }
+  });
+
+  it('STOP: statistic-compounds has no mountable root, so no real render may be mounted beside it', () => {
+    assert.ok(UNMOUNTABLE_FAMILIES.includes('statistic-compounds'));
+    const css = skinFamilies(ROOT).get('statistic-compounds').map((file) => readFileSync(file, 'utf8')).join('\n');
+    assert.equal(familyElement(css), null);
+  });
 });
