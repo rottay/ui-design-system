@@ -1198,9 +1198,14 @@ const FLOAT_BUTTON_CONTRACT = 'src/components/primitives/navigation/float-button
  * ghost compound, whose panel corner is forced to 0). The rest are the DT's
  * prop-configuration ruling on the R2a/Flex precedent: a public prop the
  * engine ships, named and gated like any row -- `badge` is excluded as a fleet
- * truth, and `stepper-compounds` is a STOP (every Stepper engine flattens
- * `Stepper.Step` into items and drops its `onClick`, so `.ds-stepper-step
- * [data-clickable]` is never rendered inside a Stepper; pinned in the suite).
+ * truth, and `stepper-compounds` has no row here. Its clickable paint is NOT
+ * dead (owner ruling 2026-10-01): it is reachable through the standalone
+ * public `<StepperStep onClick>` path and unreachable through the container
+ * path, because every Stepper engine flattens `Stepper.Step` children into
+ * items and drops their `onClick`, so `.ds-stepper-step[data-clickable]` is
+ * never rendered INSIDE a Stepper. Both paths are pinned in the suite and
+ * measured in the stepper family tests; whether the standalone path joins
+ * this roster is the DT's row decision, not this file's.
  * Each row declares shape alone, so every other axis reads as before.
  */
 const SHAPE_REACH_ROWS = Object.freeze({

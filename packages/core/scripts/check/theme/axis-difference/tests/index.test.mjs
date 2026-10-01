@@ -3320,11 +3320,17 @@ describe('axis-difference — S1: law 5 over a reading, the stamp contract, and 
     assert.ok(failures.some((line) => line === `record/attr:data-part=field-grid: ${source} no longer carries the stamp \`data-part="field-grid"\``), failures.join(' | '));
   });
 
-  it('THE STOPPED ROW: stepper-compounds has no row, because the Modern Stepper never renders `.ds-stepper-step`', () => {
+  // Reclassified by owner ruling 2026-10-01: the measurement stands, the
+  // framing does not. The CONTAINER path never renders `.ds-stepper-step`;
+  // the STANDALONE public path does, with its clickable paint. Not dead paint.
+  it('NO ROW, TWO PATHS: stepper-compounds has no row; the Modern Stepper container never renders `.ds-stepper-step`, the standalone StepperStep does', () => {
     assert.equal(REAL_RENDER_MOUNTS['stepper-compounds'], undefined);
     const engine = readFileSync(join(ROOT, 'src/components/primitives/navigation/stepper/engines/modern/index.tsx'), 'utf8');
-    assert.ok(!engine.includes('ds-stepper-step'), 'the Modern Stepper now writes .ds-stepper-step -- re-measure the stop');
-    assert.ok(!engine.includes('<StepperStep'), 'the Modern Stepper now renders StepperStep -- re-measure the stop');
+    assert.ok(!engine.includes('ds-stepper-step'), 'the Modern Stepper container now writes .ds-stepper-step -- re-measure the container path');
+    assert.ok(!engine.includes('<StepperStep'), 'the Modern Stepper container now renders StepperStep -- re-measure the container path');
+    const step = readFileSync(join(ROOT, 'src/components/primitives/navigation/stepper/compound/step/index.tsx'), 'utf8');
+    assert.ok(step.includes('className={`ds-stepper-step ${className}`.trim()}'), 'the standalone StepperStep no longer writes .ds-stepper-step -- re-measure the standalone path');
+    assert.ok(step.includes('data-clickable={isClickable || undefined}'), 'the standalone StepperStep no longer stamps data-clickable -- re-measure the standalone path');
   });
 
   it('every S1 row declares states only, on a family in the states population', () => {
@@ -4325,8 +4331,13 @@ describe('axis-difference — S8/S9: the shape rows the D1 census named, refused
  * S10 (WO-EVI-02, shape reach). The SC1 census named four default-render
  * reaches (layout, list, tag, collapse) and the DT ruled seven prop
  * configurations (form, stepper-compounds, typography, avatar, image, box,
- * float-button; badge excluded as a fleet truth). Stepper-compounds is a STOP:
- * no Stepper engine renders the clickable `.ds-stepper-step`.
+ * float-button; badge excluded as a fleet truth). Stepper-compounds has no
+ * row, but its clickable paint is NOT dead (owner ruling 2026-10-01): no
+ * Stepper engine renders the clickable `.ds-stepper-step` (the container
+ * path), while the exported standalone `<StepperStep onClick>` does (the
+ * public standalone path). Both paths are measured in
+ * `stepper/tests/Stepper.compound-paths.integration.test.tsx`; a future
+ * unification must preserve the standalone contract.
  */
 describe('axis-difference — S10: the shape reach rows the SC1 census measured', () => {
   const S10_ROWS = { collapse: 'collapse', 'form-error-list': 'form', 'typography-code': 'typography', 'avatar-square': 'avatar',
@@ -4373,16 +4384,30 @@ describe('axis-difference — S10: the shape reach rows the SC1 census measured'
       'the recipe profiles\' tag radius overrides changed -- update the caveat on the tag row');
   });
 
-  it('STOP: every Stepper engine flattens Stepper.Step into items and drops onClick, so no row mounts a clickable step', () => {
+  it('CONTAINER PATH: every Stepper engine flattens Stepper.Step into items and drops onClick, so the clickable step is unreachable INSIDE a Stepper (and no row mounts one)', () => {
     for (const row of Object.values(REAL_RENDER_MOUNTS)) assert.notEqual(row.family, 'stepper-compounds');
     assert.equal(REAL_RENDER_MOUNTS['stepper-compounds'], undefined);
     for (const engine of ['modern', 'classic', 'rustic']) {
       const source = readFileSync(join(ROOT, `src/components/primitives/navigation/stepper/engines/${engine}/index.tsx`), 'utf8');
-      assert.ok(source.includes("displayName === 'Stepper.Step'"), `${engine}: no longer flattens Stepper.Step -- re-measure the stop`);
+      assert.ok(source.includes("displayName === 'Stepper.Step'"), `${engine}: no longer flattens Stepper.Step -- re-measure the container path`);
     }
     const modern = readFileSync(join(ROOT, 'src/components/primitives/navigation/stepper/engines/modern/index.tsx'), 'utf8');
     const flatten = modern.slice(modern.indexOf("if (displayName === 'Stepper.Step') {"), modern.indexOf('if (childItems.length > 0)'));
-    assert.ok(flatten.length > 0 && !flatten.includes('onClick'), 'the Modern Stepper now carries a step onClick -- re-measure the stop');
+    assert.ok(flatten.length > 0 && !flatten.includes('onClick'), 'the Modern Stepper now carries a step onClick -- re-measure the container path');
+  });
+
+  it('STANDALONE PATH: StepperStep is exported with onClick and paints clickable through the stepper-compounds skin -- reachable, not dead', () => {
+    const barrel = readFileSync(join(ROOT, 'src/components/primitives/navigation/stepper/index.tsx'), 'utf8');
+    assert.ok(barrel.includes('export { StepperStep, StepperContent };'), 'StepperStep is no longer exported -- the standalone path is gone');
+    const contracts = readFileSync(join(ROOT, 'src/components/primitives/navigation/stepper/contracts/index.ts'), 'utf8');
+    assert.match(contracts, /onClick\?: \(\) => void;/u, 'StepProps lost onClick -- the standalone path is gone');
+    const step = readFileSync(join(ROOT, 'src/components/primitives/navigation/stepper/compound/step/index.tsx'), 'utf8');
+    assert.ok(step.includes('const isClickable = Boolean(onClick) && !disabled;'), 'the standalone clickable gate moved -- re-measure');
+    assert.ok(step.includes('data-clickable={isClickable || undefined}'), 'the standalone step no longer stamps data-clickable -- re-measure');
+    const skin = readFileSync(join(ROOT, 'src/foundation/tokens/css/presentation/components/skin/stepper-compounds/index.css'), 'utf8');
+    assert.ok(skin.includes(".ds-stepper-step[data-clickable='true'] {"), 'the stepper-compounds clickable paint is gone');
+    const paths = readFileSync(join(ROOT, 'src/components/primitives/navigation/stepper/tests/Stepper.compound-paths.integration.test.tsx'), 'utf8');
+    assert.ok(paths.includes("describe('Stepper.Step: the container path and the standalone path'"), 'the both-paths family test is gone');
   });
 
   it('badge is excluded by ruling: no row mounts it', () => {
