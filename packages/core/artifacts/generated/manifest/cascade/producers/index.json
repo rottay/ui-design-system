@@ -15,12 +15,12 @@
     "failClosed": "every expression the scanner cannot resolve is ONE ROW in unknownProvenance. Under STRICT a missing producer ADMITS a fallback branch and can LOWER debt, so under-counting producers can buy a false green: it is not a safe approximation and is never treated as one."
   },
   "inputsDigest": {
-    "cssEdges": "02dc03c1c63b0c8ac2f998229f918dba415f2348d79c0e508078882afa243946",
+    "cssEdges": "5659c0bf9dd4f56218e305448a1febd29397e673b76908e29904683b65b1e974",
     "cascadeRoots": "cc6fcf8b9bffd91b1f2572dd817593fe5b747b1c4892ebf15e45480059c96856",
     "rootCatalog": "8f22e285b34483d8fab7e69686a01a6704985abbd05d5c97be2d63152db0ad0f",
-    "srcTsx": "73e2cd6d83b5d5069c7e1149187993fd38204ee1c6fd99c740db8548d8fed625",
+    "srcTsx": "d65cefe81c2ad6dab1a24c123efc2e6e4dddc014b4e3e47fe7fa3fbf98284968",
     "srcCompilers": "8f2bda09779519c5b5d2065904b428e55b33674af5614017ab509600bdb68377",
-    "artifacts": "b9ad6b0a973ccaae467abb99ff37ee973fa2bd3196977bcd9b3d930dca197d84"
+    "artifacts": "16d0f62a3442411ebec01e8e5b9033a9d8466032bf39dd4653b3011ff30a4616"
   },
   "stats": {
     "producerSites": 6283,
@@ -56,7 +56,7 @@
     "closedNonObject": 88,
     "closedZeroGoverned": 613,
     "publicBoundary": 523,
-    "privateRelay": 677,
+    "privateRelay": 676,
     "closedProducer": 170,
     "branchCompositeOpen": 0,
     "authoredOpen": 0,
@@ -2430,11 +2430,11 @@
     "closedNonObject": "c5333d476b7b6ef24b56dc7aee7264451f5f241fa924d5aa778188405a465dca",
     "closedZeroGoverned": "c06fcee9eb356b60b54de17cb03d774577f4caf0aa1a57d88b6a7b2f01a6cecc",
     "publicBoundary": "7ab2d34381894682d9a434fb0f50fa5588d67d0803195327aa7d5529a3d25463",
-    "privateRelay": "c35ed51f866e84cba5e90ae1a37d2c176861af69cd130d7423b22b7a7f01f146",
+    "privateRelay": "bbb37e2bc0476ac075480dcb07f80d55d727ae5162bfb5b332b9cade95fcd1e0",
     "closedProducer": "a121e41a8f2974a0a0060bd79a22ad628dff539811e45ed45a99922ebfc3b498",
     "closedZeroGovernedReceipts": "f612aab1c28832c0ff34b4585eb78c5d6cf23ce15df105946e1b2dc26d09f20d",
     "publicBoundaryReceipts": "03db16c1208ad7d50e77c8c81b32495c3df8f9b9da7b72f9c777a919418a2a00",
-    "privateRelayReceipts": "f4b629f62c789f1cf34f60b429fe3ae97186a4d8fc3c6879f56416aaf9150094",
+    "privateRelayReceipts": "73451282f8729084832fbd501ec2386eeaac373a2b877692bc6c48ccd037ccb0",
     "closedProducerReceipts": "9c72fe0baebd72348b5be6197d5c21c0b795bfcc0ae88d50e7bb2e07b8b51cc7",
     "branchCompositeOpen": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "authoredOpen": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -73563,10 +73563,9 @@
     {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/icons/semantic/runtime/create-icon/index.tsx","symbol":"Component","line":194,"ordinal":6099,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["Glyph"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/marks/presentation/brand-mark/index.tsx","symbol":"BrandMark","line":87,"ordinal":2401,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["TheSvgBrandMarkAdapter"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/marks/presentation/cloud-service-mark/index.tsx","symbol":"CloudServiceMark","line":77,"ordinal":2201,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["TheSvgCloudServiceMarkAdapter"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/motion/react/presentation/effects/particles/index.tsx","symbol":"resolvedStyle","line":74,"ordinal":1802,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/motion/react/presentation/effects/particles/index.tsx","symbol":"resolvedStyle","line":74,"ordinal":1799,"template":"...style","reason":"private-relay-unresolved:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/motion/react/presentation/effects/particles/index.tsx","symbol":"ParticleFieldLoadingFallback","line":112,"ordinal":2728,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["ParticleFieldShell"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/motion/react/presentation/effects/particles/index.tsx","symbol":"ParticleField","line":194,"ordinal":5299,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["ParticleFieldShell"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/motion/react/presentation/effects/particles/index.tsx","symbol":"ParticleFieldShell","line":81,"ordinal":2099,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}},
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/motion/react/presentation/effects/particles/index.tsx","symbol":"ParticleFieldLoadingFallback","line":106,"ordinal":2607,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["ParticleFieldShell"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}},
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/motion/react/presentation/effects/particles/index.tsx","symbol":"ParticleField","line":188,"ordinal":5178,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["ParticleFieldShell"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/motion/react/presentation/effects/particles/runtime/canvas/index.tsx","symbol":"ParticleField","line":689,"ordinal":20392,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/motion/react/presentation/effects/particles/runtime/canvas/index.tsx","symbol":"ParticleField","line":689,"ordinal":20389,"template":"...style","reason":"private-relay-unresolved:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/motion/react/presentation/primitives/fade-in/index.tsx","symbol":"FadeIn","line":180,"ordinal":7053,"template":"resolvedStyle.style","reason":"public-style-passthrough:member-access","consumable":false,"tenantSafe":false,"nonConsumableCause":"composition-whose-only-open-operand-is-the-callers-own-style-object","sinkTags":["motion.div"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"branches","stylePassthrough":true,"path":["terminal-at-sink","localConst","useMemo/useCallback-arg","callToImport","import"]},"resolvedVia":"public-style-passthrough"},
@@ -73769,13 +73768,13 @@
       "CALL_ARGS_PENDING": 0
     },
     "universe": {
-      "tsxSitesScanned": 2072,
-      "accountedRows": 2072,
+      "tsxSitesScanned": 2071,
+      "accountedRows": 2071,
       "unknownProvenance": 0,
       "closedNonObject": 88,
       "closedZeroGoverned": 613,
       "publicBoundary": 523,
-      "privateRelay": 677,
+      "privateRelay": 676,
       "closedProducer": 170,
       "openBlocking": 1
     }
@@ -73792,6 +73791,6 @@
   "provenance": {
     "producedBy": "cascade:producers --write",
     "writtenOn": "2026-10-01",
-    "contentDigest": "61df4e28601a91564644dcc31b6003b2dff78fb429e7bd59c039f757e1364fbb"
+    "contentDigest": "2b4b9ac252d48b79df64a5a30356dfd55430e2824584d410484112262d7e3438"
   }
 }

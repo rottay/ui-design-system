@@ -79,7 +79,7 @@ export function deriveWorkspaceShellChannels(): Record<string, string> {
   vars["--ds-workspace-shell-particle-primary"] =
     "color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%)";
   vars["--ds-workspace-shell-particle-secondary"] =
-    "color-mix( in srgb, var(--ds-color-primary) 18%, var(--ds-color-text-secondary) 24%, transparent )";
+    "color-mix(in srgb, color-mix(in srgb, var(--ds-color-primary) 42.857%, var(--ds-color-text-secondary)) 42%, transparent)";
 
   // Each canvas fades out downward; the orbital field carries further.
   vars["--ds-workspace-shell-orbital-mask"] = ramp(

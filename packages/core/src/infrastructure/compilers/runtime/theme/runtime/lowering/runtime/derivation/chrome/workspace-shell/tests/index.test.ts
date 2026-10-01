@@ -164,7 +164,11 @@ describe("chrome/workspace-shell", () => {
     // relay and the value lives here.
     const derived = workspaceShellChromeDeriver.derive(context(), {});
     expect(derived["--ds-workspace-shell-particle-primary"]).toContain("var(--ds-color-primary) 34%");
-    expect(derived["--ds-workspace-shell-particle-secondary"]).toContain("var(--ds-color-primary) 18%");
+    // A three-input `color-mix()` is invalid and left the canvas on its default
+    // ink; the nested mix keeps 18% primary, 24% text-secondary, alpha 0.42.
+    expect(derived["--ds-workspace-shell-particle-secondary"]).toBe(
+      "color-mix(in srgb, color-mix(in srgb, var(--ds-color-primary) 42.857%, var(--ds-color-text-secondary)) 42%, transparent)",
+    );
   });
 
   it("yields every channel to a vertical or tenant statement of it", () => {

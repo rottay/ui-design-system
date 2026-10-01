@@ -3111,7 +3111,7 @@
       color-mix(in srgb, var(--ds-workspace-shell-mask-stop) 8%, transparent) 100%
     );
   --ds-workspace-shell-particle-primary: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%);
-  --ds-workspace-shell-particle-secondary: color-mix( in srgb, var(--ds-color-primary) 18%, var(--ds-color-text-secondary) 24%, transparent );
+  --ds-workspace-shell-particle-secondary: color-mix(in srgb, color-mix(in srgb, var(--ds-color-primary) 42.857%, var(--ds-color-text-secondary)) 42%, transparent);
   --ds-z-index-base: 0;
   --ds-z-index-drawer: 1400;
   --ds-z-index-dropdown: 1000;

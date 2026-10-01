@@ -42,24 +42,12 @@ function DrawerScene() {
   );
 }
 
-// The shipped field collapses to zero height: ParticleField's inline
-// `position: relative` outranks the skin's `position: absolute; inset: 0`.
-// `geometry=assisted` restores the skin's geometry so the ink edge is measurable.
-const ASSISTED_GEOMETRY = `
-  .liveness-geometry-assisted > .ds-collection-shell__orbital-field,
-  .liveness-geometry-assisted > .ds-collection-shell__ambient-field {
-    position: absolute !important;
-  }
-`;
-
 function ParticleScene({
   scene,
   override,
-  assisted,
 }: {
   scene: Exclude<Scene, 'drawer'>;
   override: string | null;
-  assisted: boolean;
 }) {
   const style = (override ? { [PARTICLE_CHANNEL[scene]]: override } : {}) as CSSProperties;
   return (
@@ -67,9 +55,7 @@ function ParticleScene({
       profile="expressive"
       tenantDial={{ ambient: 'subtle', durationScale: 1, intensity: 1 }}
     >
-      {assisted ? <style>{ASSISTED_GEOMETRY}</style> : null}
       <WorkspaceShell
-        className={assisted ? 'liveness-geometry-assisted' : undefined}
         variant="ai-field"
         mood="calm"
         fieldPattern={scene === 'particle-primary' ? 'orbital' : 'ambient'}
@@ -87,7 +73,6 @@ function LivenessPaintProbeContent() {
   const searchParams = useSearchParams();
   const scene = readScene(searchParams.get('scene'));
   const override = readOverride(searchParams.get('override'));
-  const assisted = searchParams.get('geometry') === 'assisted';
 
   return (
     <TortureSurface fixture="bithire" engine="modern">
@@ -95,10 +80,9 @@ function LivenessPaintProbeContent() {
         data-testid="probe-liveness-paint"
         data-scene={scene}
         data-override={override ?? 'none'}
-        data-geometry={assisted ? 'assisted' : 'shipped'}
         style={{ minHeight: '100vh', background: 'var(--ds-color-bg-primary)' }}
       >
-        {scene === 'drawer' ? <DrawerScene /> : <ParticleScene scene={scene} override={override} assisted={assisted} />}
+        {scene === 'drawer' ? <DrawerScene /> : <ParticleScene scene={scene} override={override} />}
       </main>
     </TortureSurface>
   );

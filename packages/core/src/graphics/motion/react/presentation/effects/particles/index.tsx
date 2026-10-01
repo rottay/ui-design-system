@@ -68,12 +68,6 @@ function ParticleFieldShell({
   runtime,
   style,
 }: ParticleFieldShellProps) {
-  const resolvedStyle: CSSProperties = {
-    position: 'relative',
-    isolation: 'isolate',
-    ...style,
-  };
-
   return (
     <div
       ref={ownerRef}
@@ -84,7 +78,7 @@ function ParticleFieldShell({
       data-particle-field-policy={runtime === 'static' ? 'blocked' : 'eligible'}
       data-particle-field-raf="none"
       data-particle-field-runtime={runtime}
-      style={resolvedStyle}
+      style={style}
     >
       {effect}
       {children ? (

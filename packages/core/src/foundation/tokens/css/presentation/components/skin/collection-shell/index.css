@@ -1,7 +1,7 @@
 /**
- * WorkspaceShell skin (long-tail skin ownership). Engine-agnostic and deliberately
- * unlayered so its extracted paint keeps precedence over resets while a caller
- * `style` prop continues to win inline.
+ * WorkspaceShell skin (long-tail skin ownership). Engine-agnostic; the base
+ * entrypoint imports it into `layer(rottay-structures)`, so its paint outranks
+ * resets and earlier layers while a caller `style` prop continues to win inline.
  *
  * The family id is `workspace-shell`; the class root is `ds-collection-shell`
  * and STAYS so. It is not the component's name to change: `skin/collection-workspace`
@@ -18,6 +18,13 @@
  * TypeScript strings. Every value below is that paint verbatim; the structure
  * now carries only anatomy, state and the caller's own `style`.
  */
+
+/* ParticleField's own floor: a standalone field contains its absolutely placed
+   canvas. Zero specificity, so a field the shell places below takes its geometry. */
+:where([data-particle-field-runtime]) {
+  position: relative;
+  isolation: isolate;
+}
 
 /* ---- the shell's own stacking context: the fields and the overlay are
         absolutely positioned inside it, and the content rides above both. ---- */
@@ -121,8 +128,7 @@
     --ds-workspace-shell-particle-secondary,
     color-mix(
       in srgb,
-      var(--ds-color-primary) 18%,
-      var(--ds-color-text-secondary) 24%,
+      color-mix(in srgb, var(--ds-color-primary) 42.857%, var(--ds-color-text-secondary)) 42%,
       transparent
     )
   );

@@ -436,11 +436,11 @@ describe('ParticleField loading boundary', () => {
     );
 
     expect(fieldRoot(container)).toHaveAttribute('data-particle-field-runtime', 'loading');
-    expect(fieldRoot(container)).toHaveStyle({
-      isolation: 'isolate',
-      minHeight: '200px',
-      position: 'relative',
-    });
+    // The relative floor is the stylesheet's zero-specificity rule, so a placed
+    // field (WorkspaceShell's skin) can take absolute geometry over it.
+    expect(fieldRoot(container)).toHaveStyle({ minHeight: '200px' });
+    expect(fieldRoot(container).style.position).toBe('');
+    expect(fieldRoot(container).style.isolation).toBe('');
     expect(container.querySelector('[data-particle-field-content="true"]')).not.toBeNull();
     expect(screen.getByText('Stable fallback child')).toBeVisible();
   });

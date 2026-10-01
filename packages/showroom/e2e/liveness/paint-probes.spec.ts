@@ -138,8 +138,8 @@ const PARTICLE_CASES = [
     override: '#ff00ff',
     rgb: [255, 0, 255] as [number, number, number],
     minAlpha: 24,
-    // The authored rest resolves to a concrete colour of its own.
-    authoredInk: null,
+    // bithire's primary mixed 34% into the card surface.
+    restInk: 'rgba(184, 199, 247, 1)',
   },
   {
     scene: 'particle-secondary',
@@ -148,17 +148,19 @@ const PARTICLE_CASES = [
     override: '#00ff00',
     rgb: [0, 255, 0] as [number, number, number],
     minAlpha: 4,
-    // The authored rest is a three-colour color-mix(), invalid in Chromium, so
-    // the canvas paints the runtime's DEFAULT_COLOR instead of the channel's rest.
-    authoredInk: 'rgba(255, 255, 255, 0.88)',
+    // The nested mix: 18% primary + 24% text-secondary at alpha 0.42.
+    restInk: 'rgba(72, 90, 155, 0.42)',
   },
 ] as const;
+
+// The runtime's DEFAULT_COLOR, which a canvas paints when its channel is not a colour.
+const RUNTIME_DEFAULT_INK = 'rgba(255, 255, 255, 0.88)';
 
 test.describe('workspace-shell particle inks reach canvas pixels', () => {
   test.use({ contextOptions: { reducedMotion: 'no-preference' } });
 
   for (const probe of PARTICLE_CASES) {
-    test(`${probe.channel}: the shipped field geometry collapses the canvas`, async ({ page }) => {
+    test(`${probe.channel}: the field fills the shell and sizes the canvas`, async ({ page }) => {
       await page.goto(
         `${ROUTE}?scene=${probe.scene}&override=${encodeURIComponent(probe.override)}`,
         { waitUntil: 'networkidle' },
@@ -172,13 +174,13 @@ test.describe('workspace-shell particle inks reach canvas pixels', () => {
       const geometry = await field.evaluate((element) => ({
         position: getComputedStyle(element).position,
         fieldHeight: element.getBoundingClientRect().height,
-        shellHeight: element.parentElement!.getBoundingClientRect().height,
+        shellPaddingBox: element.parentElement!.clientHeight,
         canvasHeight: (element.querySelector('[data-particle-field-canvas="true"]') as HTMLCanvasElement).height,
       }));
-      expect(geometry.position).toBe('relative');
-      expect(geometry.fieldHeight).toBe(0);
-      expect(geometry.shellHeight).toBeGreaterThan(600);
-      expect(geometry.canvasHeight).toBeLessThanOrEqual(1);
+      expect(geometry.position).toBe('absolute');
+      expect(geometry.shellPaddingBox).toBeGreaterThan(600);
+      expect(geometry.fieldHeight).toBeCloseTo(geometry.shellPaddingBox, 0);
+      expect(geometry.canvasHeight).toBeGreaterThan(1);
 
       test.info().annotations.push({
         type: 'liveness-paint',
@@ -186,8 +188,8 @@ test.describe('workspace-shell particle inks reach canvas pixels', () => {
       });
     });
 
-    test(`${probe.channel}: paints the canvas pixels once the field has the skin geometry`, async ({ page }) => {
-      await page.goto(`${ROUTE}?scene=${probe.scene}&geometry=assisted`, { waitUntil: 'networkidle' });
+    test(`${probe.channel}: paints the canvas pixels at rest and under an override`, async ({ page }) => {
+      await page.goto(`${ROUTE}?scene=${probe.scene}`, { waitUntil: 'networkidle' });
       await expectHydrated(page);
       await expect(page.locator('[data-particle-field-mode="live"]')).toHaveCount(1);
 
@@ -196,14 +198,15 @@ test.describe('workspace-shell particle inks reach canvas pixels', () => {
         .evaluate((element, name) => getComputedStyle(element).getPropertyValue(name).trim(), probe.channel);
       expect(authored).not.toBe('');
       const authoredIsColor = await page.evaluate((value) => CSS.supports('color', value), authored);
-      expect(authoredIsColor).toBe(probe.authoredInk === null);
+      expect(authoredIsColor).toBe(true);
       const baseline = await readCanvasInk(page, probe.fieldClass, probe.minAlpha);
       expect(baseline.inked).toBeGreaterThan(20);
       expect(baseline.color).not.toBe(`rgba(${probe.rgb.join(', ')}, 1)`);
-      if (probe.authoredInk !== null) expect(baseline.color).toBe(probe.authoredInk);
+      expect(baseline.color).not.toBe(RUNTIME_DEFAULT_INK);
+      expect(baseline.color).toBe(probe.restInk);
 
       await page.goto(
-        `${ROUTE}?scene=${probe.scene}&geometry=assisted&override=${encodeURIComponent(probe.override)}`,
+        `${ROUTE}?scene=${probe.scene}&override=${encodeURIComponent(probe.override)}`,
         { waitUntil: 'networkidle' },
       );
       await expectHydrated(page);
@@ -220,4 +223,49 @@ test.describe('workspace-shell particle inks reach canvas pixels', () => {
       });
     });
   }
+});
+
+test.describe('standalone ParticleField floor contains its canvas', () => {
+  test.use({ contextOptions: { reducedMotion: 'no-preference' } });
+
+  test(':where([data-particle-field-runtime]) positions both standalone roots', async ({ page }) => {
+    await page.goto('/probe/particle-runtime', { waitUntil: 'networkidle' });
+    await expectHydrated(page);
+
+    for (const probe of ['primary', 'secondary']) {
+      const field = page.locator(`[data-particle-probe="${probe}"] > [data-particle-field-runtime]`);
+      await expect(field).toHaveCount(1);
+      await field.scrollIntoViewIfNeeded();
+      const canvas = field.locator('[data-particle-field-canvas="true"]');
+      await expect(canvas).toHaveCount(1);
+      await expect
+        .poll(async () => Number(await canvas.getAttribute('data-particle-count')))
+        .toBeGreaterThan(0);
+
+      const geometry = await field.evaluate((element) => {
+        const computed = getComputedStyle(element);
+        const node = element.querySelector('[data-particle-field-canvas="true"]') as HTMLCanvasElement;
+        return {
+          position: computed.position,
+          isolation: computed.isolation,
+          inlinePosition: (element as HTMLElement).style.position,
+          fieldHeight: element.getBoundingClientRect().height,
+          fieldPaddingBox: element.clientHeight,
+          canvasHeight: node.getBoundingClientRect().height,
+          viewportHeight: window.innerHeight,
+        };
+      });
+      expect(geometry.position).toBe('relative');
+      expect(geometry.isolation).toBe('isolate');
+      expect(geometry.inlinePosition).toBe('');
+      expect(geometry.fieldHeight).toBeLessThan(geometry.viewportHeight);
+      // The bordered field: an inset-0 canvas fills its padding box.
+      expect(geometry.canvasHeight).toBeCloseTo(geometry.fieldPaddingBox, 0);
+
+      test.info().annotations.push({
+        type: 'liveness-paint',
+        description: JSON.stringify({ probe, geometry }),
+      });
+    }
+  });
 });
