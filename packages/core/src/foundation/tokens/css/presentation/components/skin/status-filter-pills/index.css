@@ -161,14 +161,14 @@
   .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'] {
   border-radius: var(--ds-radius-full, 9999px);
   background: var(--ds-filter-pill-count-bg, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
-  border: 1px solid var(--ds-filter-pill-count-border, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-filter-pill-count-border, transparent);
   box-shadow: var(--ds-filter-pill-count-ring, none);
 }
 
 .ds-pattern-status-filter-pills
   .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true'] {
   background: var(--ds-filter-pill-count-active-bg, var(--ds-filter-pill-active-color, var(--ds-color-primary)));
-  border: 1px solid var(--ds-filter-pill-count-active-border, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-filter-pill-count-active-border, transparent);
   box-shadow: var(--ds-filter-pill-count-active-ring, none);
 }
 

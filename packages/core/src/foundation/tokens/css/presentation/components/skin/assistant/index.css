@@ -286,7 +286,7 @@
 .ds-assistant-preview-diff-card [data-part='diff-row'][data-part='diff-row'][data-part='diff-row'] {
   /* was an inline 6px paddingTop -- snapped to the canonical step */
   padding-block-start: var(--ds-spacing-2);
-  border-top: 1px solid var(--ds-color-border);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'] {

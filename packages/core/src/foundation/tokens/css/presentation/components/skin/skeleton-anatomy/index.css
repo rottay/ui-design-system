@@ -68,7 +68,7 @@
 }
 
 .ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-part='bone'][data-bone='frame'] {
-  border: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-skeleton-border, var(--ds-color-border));
 }
 
 /* ---- flat fill ---- */

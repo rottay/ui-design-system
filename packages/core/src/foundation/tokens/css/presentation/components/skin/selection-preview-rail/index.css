@@ -95,7 +95,7 @@
   flex: 0 1 clamp(320px, 29vw, 380px);
   inline-size: min(100%, 380px);
   min-inline-size: min(100%, 320px);
-  border-inline-start: 1px solid var(--ds-color-border-subtle);
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   background: transparent;
   container-type: inline-size;
   container-name: ds-rail;
@@ -109,7 +109,7 @@
   flex: 0 1 clamp(320px, 29vw, 380px);
   inline-size: min(100%, 380px);
   min-inline-size: min(100%, 320px);
-  border-inline-start: 1px solid var(--ds-color-border-subtle);
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-elevated) 6%), var(--ds-surface-card));
   container-type: inline-size;
   container-name: ds-rail;
@@ -138,7 +138,7 @@
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='custom-sticky-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
 /* The ghost close button: b6 through the real ancestor chain (contract test
@@ -168,7 +168,7 @@
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
 /* card body padding drained from inline ('18px 18px 16px'); the default
@@ -203,7 +203,7 @@
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-panel'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
 }
 
 /* the intrinsic icon wrapper owns color; the nested glyph inherits currentColor */
@@ -220,11 +220,11 @@
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header'] {
-  border-bottom: 1px solid var(--ds-color-border-subtle);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   /* drained from inline ('14px 18px') */
   padding-block: 14px;
   padding-inline: 18px;
@@ -237,7 +237,7 @@
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'] {
-  border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent);
+  border-top: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent);
   /* drained from inline ('12px 18px'; the block rung is exact) */
   padding-block: var(--ds-spacing-3, 12px);
   padding-inline: 18px;
