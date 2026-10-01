@@ -1975,7 +1975,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 4,
-        "channelsRead": 57,
+        "channelsRead": 58,
         "classTokens": 1,
         "partsStamped": 15,
         "partsConsumed": 16
@@ -1991,7 +1991,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 12 unpaired state pseudo-selectors, the cut's second largest F-37 debt, and no executable a11y assertion of its own."
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 12 unpaired state pseudo-selectors, the cut's second largest F-37 debt, and no executable a11y assertion of its own. channelsRead 57 -> 58 (2026-09-30 re-read): 7da38d1f4 (W3d: hairline edge-dial read)."
     },
     "section-frame": {
       "cut": "WO-FAM-10",
@@ -2238,7 +2238,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 30,
+        "channelsRead": 31,
         "classTokens": 2,
         "partsStamped": 8,
         "partsConsumed": 13
@@ -2265,7 +2265,7 @@
         },
         "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot G (surface-lifecycle) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
-      "cutNote": "WO-FAM-10 sub-lot G. Admitted at its measured debt. All 20 inline paints and all 6 source colour literals live in one file, `surface-lifecycle/error-boundary/index.tsx`: an error boundary paints itself inline so it still renders when the stylesheet is the thing that failed. That is a product constraint the cut answers with a static fallback rule in the skin, not a sweep. classVocabularies 0 -> 1 (2026-09-18, sub-lot G): the family gained exactly its one governed namespace (ds-surface-lifecycle-error/loading) — the template target, not a split; the prefix set is [ds]."
+      "cutNote": "WO-FAM-10 sub-lot G. Admitted at its measured debt. All 20 inline paints and all 6 source colour literals live in one file, `surface-lifecycle/error-boundary/index.tsx`: an error boundary paints itself inline so it still renders when the stylesheet is the thing that failed. That is a product constraint the cut answers with a static fallback rule in the skin, not a sweep. classVocabularies 0 -> 1 (2026-09-18, sub-lot G): the family gained exactly its one governed namespace (ds-surface-lifecycle-error/loading) — the template target, not a split; the prefix set is [ds]. channelsRead 30 -> 31 (2026-09-30 re-read): 7da38d1f4 (W3d: hairline edge-dial read)."
     },
     "app-shell": {
       "cut": "WO-FAM-11",
