@@ -2035,7 +2035,7 @@ test('META: every forward-gap pin names an open work order, a reason and exact c
 
 test('META: the --ds-text-inverse pin states its measured mechanism and its only clearing route', () => {
   const pin = CHANNEL_DISPOSITIONS.find((group) => group.channels.includes('--ds-text-inverse'));
-  assert.equal(pin.owner, 'WO-RET-02');
+  assert.equal(pin.owner, 'WO-RET-01'); // re-adjudicated 2026-10-01: RET-02 and DER-06 are both done; the open retirement lane owns the exit
   assert.equal(pin.classification, LIVENESS.readNoProductiveTerminal);
   for (const fact of [
     'dead by CASCADE, not by absence',

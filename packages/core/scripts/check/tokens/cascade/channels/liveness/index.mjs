@@ -1678,11 +1678,11 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     channels: Object.freeze(['--ds-app-shell-navigation-drawer-body-padding']),
   }),
   Object.freeze({
-    owner: 'WO-RET-02',
+    owner: 'WO-RET-01',
     classification: LIVENESS.readNoProductiveTerminal,
     registered: '2026-09-25',
     reason:
-      'dead by CASCADE, not by absence: the palette roster declares the ink (it joins the universe through the emission oracle) and its only DS read is the legacy relay themes/default:973 `--ds-sidebar-text: var(--ds-text-inverse)` on :root inside @layer rottay-tokens, which the consumerRoot does read (app-bithire sidebar styles, seven terminal color declarations). Every first-party artifact re-declares --ds-sidebar-text on its html[data-tenant]/[data-vertical] scope, outranking the relay, but that emission is conditional (chrome-variables `if (chrome.text)` / `if (s.text)`), so the relay WOULD compute for a tenant whose sidebar tone lowers no text. The RNPT reading also hides an instrument limit owned by WO-EVI-02: cross-corpus relay blindness -- the relay sits in the DS graph and its terminals in the consumer graph, and the two are never joined. The pin clears ONLY when the ink retires WITH its palette roster entry, or a DS reader is wired; removing the relay alone drifts the row to UNREAD_EMITTED_NO_KNOWN_ROUTE, which this register accuses as a drifted pin',
+      'dead by CASCADE, not by absence: the palette roster declares the ink (it joins the universe through the emission oracle) and its only DS read is the legacy relay themes/default:973 `--ds-sidebar-text: var(--ds-text-inverse)` on :root inside @layer rottay-tokens, which the consumerRoot does read (app-bithire sidebar styles, seven terminal color declarations). Every first-party artifact re-declares --ds-sidebar-text on its html[data-tenant]/[data-vertical] scope, outranking the relay, but that emission is conditional (chrome-variables `if (chrome.text)` / `if (s.text)`), so the relay WOULD compute for a tenant whose sidebar tone lowers no text. The RNPT reading also hides an instrument limit owned by WO-EVI-02: cross-corpus relay blindness -- the relay sits in the DS graph and its terminals in the consumer graph, and the two are never joined. The pin clears ONLY when the ink retires WITH its palette roster entry, or a DS reader is wired; removing the relay alone drifts the row to UNREAD_EMITTED_NO_KNOWN_ROUTE, which this register accuses as a drifted pin. Owner re-adjudicated 2026-10-01: WO-RET-02 is done, WO-DER-06 measured done the same day, so the pin moves to WO-RET-01, the open retirement lane whose acceptance the exit text already describes',
     channels: Object.freeze(['--ds-text-inverse']),
   }),
   Object.freeze({
