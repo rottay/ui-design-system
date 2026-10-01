@@ -1227,6 +1227,15 @@ describe('axis-difference — the mount is the element the family PAINTS the axi
     for (const [reason, selector] of Object.entries(refusals)) {
       assert.equal(projectPartChain(selector, DRILL_ELEMENT).rejected, reason, selector);
     }
+    // RESTATED for the pseudo-element read law: still a NODE refusal -- the
+    // part law never builds a pseudo -- and now the entry the read law reads
+    // on its host, so the refusal count and the census share one unit.
+    const record = familyParts(`${refusals['pseudo-element']} { box-shadow: 0 0 1px black; }`, DRILL_ELEMENT, ['depth']);
+    assert.deepEqual(record.parts, []);
+    assert.equal(record.rejected['pseudo-element'], 1);
+    assert.deepEqual(record.pseudoReads.reads, [
+      { axis: 'depth', host: ".ds-drill.ds-drill--modern[data-part='root'] [data-part='x']", pseudo: '::after' },
+    ]);
   });
 
   it('strips the kernel state stamp rather than baking it into the part', () => {
@@ -1662,7 +1671,10 @@ describe('axis-difference — a `:has()` is a condition on the SCENE, and it sta
   it('is structural ONLY when no other pseudo rides with it, because this probe never enters an interaction', () => {
     assert.equal(hasOnlyStructuralHas(".ds-a:has([data-part='x']) [data-part='y']"), true);
     assert.equal(hasOnlyStructuralHas(".ds-a:has([data-part='x']):hover [data-part='y']"), false);
+    // RESTATED: a pseudo-element is never retried as a `:has()` NODE; the read
+    // law reads it on its host instead, so this stays false.
     assert.equal(hasOnlyStructuralHas(".ds-a::after"), false);
+    assert.equal(hasOnlyStructuralHas(".ds-a:has([data-part='x'])::after"), false);
     assert.equal(hasOnlyStructuralHas(".ds-a [data-part='y']"), false);
   });
 
@@ -2655,7 +2667,12 @@ describe('axis-difference — the native half forces what a real pointer or keyb
     assert.deepEqual(padded(native), padded(stamped), 'a rule with no forced pseudo is the same part in both scenes');
     const element = familyParts(`${DRILL_ROOT_CSS}\n.ds-drill.ds-drill--modern[data-part='root'] > [data-part='x']::after:hover { opacity: 0 }`,
       DRILL_ELEMENT, ['states'], { nativePseudos: true });
-    assert.equal(element.parts.length, 0, 'a pseudo-element is never a node the scene reads');
+    // RESTATED: a pseudo-element is never a NODE the scene builds, in either
+    // scene; `::after:hover` (a trailing pseudo-class) is not even a read --
+    // it is refused by name, and that refusal is what the census publishes.
+    assert.equal(element.parts.length, 0, 'a pseudo-element is never a node the scene builds');
+    assert.deepEqual(element.pseudoReads.reads, []);
+    assert.deepEqual(element.pseudoReads.entries.map((entry) => entry.refused), ['ua-shadow-pseudo']);
   });
 
   it('THE COMBINATION RULE: a family moves on states when EITHER half differs, and each half is reported alone', () => {
@@ -2723,7 +2740,16 @@ describe('axis-difference — the native half forces what a real pointer or keyb
     assert.deepEqual({ vocabulary: by(".r[data-state~='selected']").vocabulary, probe: by(".r[data-state~='selected']").probe },
       { vocabulary: 'stamped', probe: '.r' });
     assert.equal(by(".r[data-state~='selected']:hover").reason, 'needs-pseudo-and-stamp');
-    assert.equal(by('.r:hover::after').reason, 'pseudo-element');
+    // RESTATED: under the pseudo-element read law a `:hover::after` is asked
+    // through its HOST, the forced pseudo stripped, and the page decides
+    // whether the box is generated; with the law off it is the old refusal.
+    assert.deepEqual(
+      { reason: by('.r:hover::after').reason, vocabulary: by('.r:hover::after').vocabulary, probe: by('.r:hover::after').probe, pseudo: by('.r:hover::after').pseudo },
+      { reason: null, vocabulary: 'native', probe: '.r', pseudo: '::after' },
+    );
+    const off = stateRuleProbes('.r:hover::after { opacity: 0.5; }', { pseudoReads: false });
+    assert.equal(off[0].reason, 'pseudo-element');
+    assert.equal(stateRuleProbes('.r:hover::-webkit-slider-thumb { opacity: 0.5; }')[0].reason, 'ua-shadow-pseudo');
     assert.equal(probes.filter((probe) => probe.selector === '.r:hover')[0].reason, 'unread-property');
     assert.equal(probes.filter((probe) => probe.selector === '.r:hover')[1].owners, null, 'a custom property may feed any axis');
     assert.equal(by('.r input:focus-visible ~ .box').reason, 'relational');
@@ -3841,4 +3867,362 @@ describe('axis-difference BROWSER drill — R3: the depth reach rows move depth 
     }
     assert.deepEqual(evaluate(on), []);
   });
+});
+
+/**
+ * THE PSEUDO-ELEMENT READ LAW (WO-EVI-02 instrument lot; Fable review
+ * 2026-10-01, ACCEPT-WITH-CHANGES, C1-C8). Offline: the law's bounds, the
+ * census reconciliation, the pin in both directions, one family per cell, the
+ * reproduction flag. Read off the namespace so a tree without the law fails
+ * here as a drill.
+ */
+describe('axis-difference — the pseudo-element read law: bounds, census, pin', () => {
+  const ROOT = ".ds-drill.ds-drill--modern[data-part='root']";
+
+  it('reads ::before/::after at the END of a selector on its host, forced pseudo-classes stripped; refuses every other :: by name', () => {
+    assert.deepEqual(probe.pseudoReadEntry(`${ROOT} [data-part='x']:hover::after`, 'states'),
+      { axis: 'states', selector: `${ROOT} [data-part='x']:hover::after`, host: `${ROOT} [data-part='x']`, pseudo: '::after' });
+    assert.equal(probe.pseudoReadEntry(`${ROOT}::before`, 'depth').host, ROOT);
+    for (const selector of [
+      `${ROOT} input::-webkit-slider-thumb`, `${ROOT} input::placeholder`, `${ROOT} li::marker`,
+      `${ROOT}::-moz-range-thumb`, `${ROOT}::after:hover`, `${ROOT}::view-transition-old(root)`,
+    ]) {
+      assert.equal(probe.pseudoReadEntry(selector, 'states').refused, 'ua-shadow-pseudo', selector);
+    }
+  });
+
+  it('derives the hosts INSIDE the instrument, one census row per node refusal, reads deduplicated per (axis, host, pseudo)', () => {
+    const css = [
+      `${ROOT}::after { content: ''; box-shadow: 0 0 1px black; }`,
+      `${ROOT}::after { border-width: 1px; }`,
+      `${ROOT} input::-webkit-slider-thumb { border-radius: 4px; }`,
+      `${ROOT}[data-variant='ghost']::before { border-radius: 2px; }`,
+    ].join('\n');
+    const record = familyParts(css, DRILL_ELEMENT, ['shape', 'depth'], { family: 'drill' });
+    assert.equal(record.rejected['pseudo-element'], 4);
+    assert.equal(record.pseudoReads.entries.length, 4, 'the census unit is the refusal unit');
+    assert.deepEqual(record.pseudoReads.reads.map((read) => `${read.axis} ${read.host}${read.pseudo}`), [
+      `shape ${ROOT}[data-variant='ghost']::before`,
+      `depth ${ROOT}::after`,
+    ]);
+    assert.equal(probe.setPseudoHosts, undefined, 'no injected host map: the instrument derives its own');
+    const report = partMountReport(new Map([['drill', record]]));
+    assert.deepEqual(report.pseudoReads, { drill: { shape: [`${ROOT}[data-variant='ghost']::before`], depth: [`${ROOT}::after`] } },
+      'the hosts are published per family beside the parts');
+  });
+
+  it('(e) a pseudo rule writing only `gap` is a RHYTHM read and lends shape nothing', () => {
+    const record = familyParts(`${ROOT}::after { content: ''; gap: 2px; }`, DRILL_ELEMENT, ['shape', 'rhythm']);
+    assert.deepEqual(record.pseudoReads.reads.map((read) => read.axis), ['rhythm']);
+  });
+
+  it('the census gives every refusal one outcome, reconciles with the node refusals, and says not-read when the law is off', () => {
+    const css = [
+      `${ROOT}::after { content: ''; box-shadow: 0 0 1px black; }`,
+      `${ROOT}::before { box-shadow: 0 0 1px black; }`,
+      `${ROOT}[data-variant='ghost']::after { box-shadow: 0 0 1px black; }`,
+      `${ROOT}::-webkit-scrollbar { box-shadow: 0 0 1px black; }`,
+    ].join('\n');
+    const byFamily = new Map([['drill', familyParts(css, DRILL_ELEMENT, ['depth'])]]);
+    const plan = probe.pseudoReadPlan(byFamily);
+    const seen = new Map();
+    // What a page reports: `::after` read (2), `::before` matched and not generated (1), the ghost never matched.
+    const key = (read) => `drill\u0000${read.axis}\u0000${read.host}\u0000${read.pseudo}`;
+    seen.set(key(plan.drill[0]), 2);
+    seen.set(key(plan.drill[1]), 1);
+    const census = probe.pseudoReadCensus(byFamily, seen, { nodeRefusals: 4 });
+    assert.deepEqual(census.census, { read: 1, 'host-absent': 1, ungenerated: 1, 'ua-shadow-pseudo': 1 });
+    assert.deepEqual(census.reconciliation, { nodeRefusals: 4, entries: 4, equal: true });
+    const off = probe.pseudoReadCensus(byFamily, seen, { applied: false, nodeRefusals: 4 });
+    assert.equal(off.census['not-read'], 3);
+    assert.equal(off.census.read, 0);
+    assert.equal(probe.pseudoReadPlan(byFamily, { applied: false }), null, 'the reproduction flag reads no pseudo at all');
+  });
+
+  /** A full-run result carrying the read law, with one positive cell per axis given. */
+  const lawResult = (cells, over = {}) => result(cells, {
+    pseudoReads: { applied: true, census: { read: 1, 'host-absent': 0, ungenerated: 0, 'ua-shadow-pseudo': 0 }, reconciliation: { nodeRefusals: 1, entries: 1, equal: true } },
+    partMounts: { applied: true },
+    ...over,
+  });
+  const stepperCell = (over = {}) => cell({
+    scenario: 'depth', axis: 'depth', moved: 1, movedIds: ['stepper'], movedFamilies: [{ family: 'stepper', property: 'border-top-width' }],
+    pseudoOnly: [{ family: 'stepper', property: 'border-top-width' }],
+    pseudoChannels: { stepper: { moves: { channel: '--ds-edge-standard-width', a: '0px', b: '1.5px' }, holds: { channel: '--ds-edge-standard-style', a: 'solid', b: 'solid' } } },
+    ...over,
+  });
+  const recordFactsCell = (over = {}) => cell({
+    scenario: 'motion', axis: 'motion', moved: 1, movedIds: ['record-facts'], movedFamilies: [{ family: 'record-facts', property: 'animation-duration' }],
+    pseudoOnly: [{ family: 'record-facts', property: 'animation-duration' }],
+    pseudoChannels: { 'record-facts': { moves: { channel: '--ds-motion-duration-scale', a: '0.8', b: '1.3' } } },
+    ...over,
+  });
+
+  it('C5: pins exactly stepper on depth (the WIDTH channel) and record-facts on motion (the shimmer duration)', () => {
+    assert.deepEqual(Object.keys(probe.PSEUDO_ONLY_CREDITS).sort(), ['depth', 'motion']);
+    assert.deepEqual(Object.keys(probe.PSEUDO_ONLY_CREDITS.depth), ['stepper']);
+    assert.deepEqual(Object.keys(probe.PSEUDO_ONLY_CREDITS.motion), ['record-facts']);
+    assert.equal(probe.PSEUDO_ONLY_CREDITS.depth.stepper.moves, '--ds-edge-standard-width');
+    assert.equal(probe.PSEUDO_ONLY_CREDITS.depth.stepper.holds, '--ds-edge-standard-style', 'the style channel reads solid in both arms');
+    assert.equal(probe.PSEUDO_ONLY_CREDITS.depth.stepper.property, 'border-top-width');
+    assert.equal(probe.PSEUDO_ONLY_CREDITS.motion['record-facts'].property, 'animation-duration');
+    assert.deepEqual(evaluate(lawResult([stepperCell(), recordFactsCell()])), [], 'the green arm');
+  });
+
+  it('C5 RED: a pinned credit that stops moving through its pseudo fails, on every cell it stops in', () => {
+    const failures = evaluate(lawResult([stepperCell({ pseudoOnly: [], moved: 0, movedIds: [], movedFamilies: [] }), recordFactsCell()]));
+    assert.ok(failures.some((line) => line.startsWith('stepper: pinned in PSEUDO_ONLY_CREDITS on depth and NOT credited')), failures.join(' | '));
+  });
+
+  it('C5 RED: an UNPINNED pseudo-only credit fails until it is pinned', () => {
+    const failures = evaluate(lawResult([
+      stepperCell({ moved: 2, movedIds: ['stepper', 'badge'], pseudoOnly: [{ family: 'stepper', property: 'border-top-width' }, { family: 'badge', property: 'box-shadow' }] }),
+      recordFactsCell(),
+    ]));
+    assert.ok(failures.some((line) => line.startsWith('badge: credited on bithire/light depth through a ::before/::after reading ALONE')), failures.join(' | '));
+  });
+
+  it('C5 RED: the pin reads its property and its channels -- width must move, style must hold', () => {
+    const wrongProperty = evaluate(lawResult([stepperCell({ pseudoOnly: [{ family: 'stepper', property: 'border-top-style' }] }), recordFactsCell()]));
+    assert.ok(wrongProperty.some((line) => line.includes('the pin reads border-top-width')), wrongProperty.join(' | '));
+    const still = evaluate(lawResult([stepperCell({ pseudoChannels: { stepper: { moves: { a: '1px', b: '1px' }, holds: { a: 'solid', b: 'solid' } } } }), recordFactsCell()]));
+    assert.ok(still.some((line) => line.includes('--ds-edge-standard-width did not move')), still.join(' | '));
+    const style = evaluate(lawResult([stepperCell({ pseudoChannels: { stepper: { moves: { a: '0px', b: '1.5px' }, holds: { a: 'none', b: 'solid' } } } }), recordFactsCell()]));
+    assert.ok(style.some((line) => line.includes('--ds-edge-standard-style moved')), style.join(' | '));
+  });
+
+  it('C5: the pin is a full-run check -- a --families run, a run with the law off, or without part mounts reproduces another reading', () => {
+    const lost = [stepperCell({ pseudoOnly: [] }), recordFactsCell()];
+    assert.deepEqual(probe.pseudoOnlyDrift(lawResult(lost, { familiesFiltered: true })), []);
+    assert.deepEqual(probe.pseudoOnlyDrift(lawResult(lost, { pseudoReads: { applied: false } })), []);
+    assert.deepEqual(probe.pseudoOnlyDrift(lawResult(lost, { partMounts: { applied: false } })), []);
+    assert.ok(probe.pseudoOnlyDrift(lawResult(lost)).length > 0);
+  });
+
+  it('C3 RED: a census that does not reconcile with the node refusals fails the run', () => {
+    const failures = evaluate(lawResult([stepperCell(), recordFactsCell()], {
+      pseudoReads: { applied: true, census: { read: 1, 'host-absent': 0, ungenerated: 0, 'ua-shadow-pseudo': 0 }, reconciliation: { nodeRefusals: 2, entries: 1, equal: false } },
+    }));
+    assert.ok(failures.some((line) => line.startsWith('pseudo-element read law: 2 node refusal(s) and 1 census entr(ies)')), failures.join(' | '));
+  });
+
+  it('(g) a family counts ONCE per cell: a duplicated id or a count that disagrees with its ids fails', () => {
+    assert.deepEqual(evaluate(result([cell({ moved: 2, movedIds: ['a', 'b'] })])), []);
+    const twice = evaluate(result([cell({ moved: 2, movedIds: ['a', 'a'] })]));
+    assert.ok(twice.some((line) => line.includes('moved 2 over 2 id(s), 1 distinct')), twice.join(' | '));
+    const short = evaluate(result([cell({ moved: 2, movedIds: ['a'] })]));
+    assert.ok(short.some((line) => line.includes('moved 2 over 1 id(s)')), short.join(' | '));
+  });
+
+  it('(g) pseudo-only is decided AFTER law 3 and adds no mover: host movers, credited real movers and non-movers are not pseudo-only', () => {
+    const sources = [
+      { family: 'only', hosts: null, pseudo: 'box-shadow', real: null },
+      { family: 'both', hosts: 'box-shadow', pseudo: 'box-shadow', real: null },
+      { family: 'real', hosts: null, pseudo: 'box-shadow', real: 'box-shadow' },
+      { family: 'still', hosts: null, pseudo: null, real: null },
+      { family: 'unmoved', hosts: null, pseudo: 'box-shadow', real: null },
+    ];
+    const target = { moved: 4, movedIds: ['only', 'both', 'real', 'still'], realRender: { credited: ['real'] } };
+    const untouched = cell({ ...target });
+    probe.resolvePseudoOnly([untouched]);
+    assert.equal(untouched.pseudoOnly, undefined, 'a cell with no pending record is left alone');
+    const resolved = probe.resolvePseudoOnlyFrom(cell({ ...target }), { sources, channels: {} });
+    assert.deepEqual(resolved.pseudoOnly, [{ family: 'only', property: 'box-shadow' }]);
+    assert.deepEqual(resolved.pseudoMoved, ['only', 'both', 'real', 'unmoved']);
+    assert.deepEqual(resolved.movedIds, target.movedIds, 'the verdict never edits the numerator');
+  });
+
+  it('C4: --no-pseudo-reads is a run option, read off argv, named in the usage header, and refused by the indicator', () => {
+    const cli = readFileSync(join(HERE, '../index.mjs'), 'utf8');
+    assert.ok(cli.includes("pseudoReads: !process.argv.includes('--no-pseudo-reads')"));
+    assert.match(cli, /^ \*   node scripts\/check\/theme\/axis-difference\/index\.mjs --no-pseudo-reads /mu);
+    assert.ok(REPRODUCTION_FLAGS.includes('--no-pseudo-reads'));
+    assert.match(probe.publicationRefusal({ argv: [] }) ?? 'permitted', /permitted/u);
+  });
+});
+
+/**
+ * THE PSEUDO-ELEMENT READ LAW IN A BROWSER, one drill per class the law
+ * refuses and one per withholding law, each with its red arm. Only a real
+ * browser can say whether a host MATCHES and whether a box is GENERATED.
+ */
+describe('axis-difference BROWSER drill — the pseudo-element read law reads paint already there, and nothing else', { skip: browserReason }, () => {
+  const ROOT = ".ds-drill.ds-drill--modern[data-part='root']";
+  const ARM_A = { '--ds-drill-blur': '2px', '--ds-state-disabled-opacity': '0.5', '--ds-state-press-scale': '0.9', '--ds-drill-op': '0.9' };
+  const ARM_B = { '--ds-drill-blur': '6px', '--ds-state-disabled-opacity': '0.3', '--ds-state-press-scale': '0.7', '--ds-drill-op': '0.6' };
+  const properties = allProperties();
+  const axisOf = axisByProperty();
+
+  const withPage = async (body) => {
+    const { browser, close } = await launchBrowser();
+    try {
+      const context = await browser.newContext();
+      return await body(context);
+    } finally {
+      await close();
+    }
+  };
+
+  /**
+   * Both arms of one drill family, stamped half (and the native half when
+   * asked), with the read law on or off. `familyCss` is what the part law and
+   * the read law are derived from; `sceneCss` is what the page paints with.
+   */
+  const measure = async (context, familyCss, { axes, pseudo = true, sceneCss = familyCss, native = false, withheld = new Map() }) => {
+    const stamped = familyParts(familyCss, DRILL_ELEMENT, axes, { family: 'drill' });
+    const byFamily = new Map([['drill', stamped]]);
+    const plan = probe.pseudoReadPlan(byFamily, { applied: pseudo });
+    const page = await context.newPage();
+    await page.setContent(sceneHtml({
+      css: sceneCss, vertical: 'bithire', theme: 'light', elements: new Map([['drill', DRILL_ELEMENT]]), partMounts: byFamily,
+    }), { waitUntil: 'load' });
+    const before = await measureCell({ page, variables: ARM_A, properties, axisOf, pseudoReads: plan });
+    const after = await measureCell({ page, variables: ARM_B, properties, axisOf, pseudoReads: plan });
+    const seen = await probe.collectPseudoSeen(page, plan, new Map());
+    await page.close();
+    if (native) {
+      const nativeParts = new Map([['drill', familyParts(familyCss, DRILL_ELEMENT, axes, { family: 'drill', nativePseudos: true })]]);
+      const nativePage = await context.newPage();
+      await nativePage.setContent(sceneHtml({
+        css: sceneCss, vertical: 'bithire', theme: 'light', elements: new Map([['drill', DRILL_ELEMENT]]), partMounts: nativeParts,
+      }), { waitUntil: 'load' });
+      const nativePlan = probe.pseudoReadPlan(nativeParts, { applied: pseudo });
+      const half = await measureNativeHalf({
+        page: nativePage, arms: [{ key: 'a', variables: ARM_A }, { key: 'b', variables: ARM_B }], properties, axisOf, withheld, pseudoReads: nativePlan,
+      });
+      await probe.collectPseudoSeen(nativePage, nativePlan, seen);
+      await nativePage.close();
+      before.native = half.readings.get('a');
+      after.native = half.readings.get('b');
+    }
+    const census = probe.pseudoReadCensus(byFamily, seen, { applied: pseudo, nodeRefusals: stamped.rejected['pseudo-element'] ?? 0 });
+    const axis = axes[0];
+    return {
+      moved: differsOnAxis(axis, before, after, 'drill'),
+      halves: axis === 'states' ? statesHalves(before, after, 'drill') : null,
+      sources: plan === null ? null : probe.pseudoSources({ before, after, family: 'drill', axis }),
+      census,
+    };
+  };
+
+  const LIVE = `${DRILL_ROOT_CSS}\n${ROOT}::after { content: ''; box-shadow: 0 0 var(--ds-drill-blur) black; }`;
+  const LITERAL = `${DRILL_ROOT_CSS}\n${ROOT}::after { content: ''; box-shadow: 0 0 4px black; }`;
+  const DRILL_PIN = Object.freeze({ depth: Object.freeze({ drill: Object.freeze({ pseudo: `${ROOT}::after`, property: 'box-shadow', moves: '--ds-drill-blur' }) }) });
+
+  /** The positive depth cell `run` would publish for the drill family off one measurement. */
+  const depthCell = (reading) => {
+    const moved = reading.moved === null ? [] : [{ family: 'drill', property: reading.moved }];
+    return probe.resolvePseudoOnlyFrom(cell({
+      scenario: 'depth', axis: 'depth', denominator: 1, moved: moved.length, percent: moved.length * 100,
+      movedFamilies: moved, movedIds: moved.map((entry) => entry.family),
+    }), {
+      sources: reading.sources === null ? [] : [reading.sources],
+      channels: { drill: { moves: { channel: '--ds-drill-blur', a: ARM_A['--ds-drill-blur'], b: ARM_B['--ds-drill-blur'] } } },
+    });
+  };
+  const lawRun = (cells) => result(cells, {
+    pseudoReads: { applied: true, census: { read: 1, 'host-absent': 0, ungenerated: 0, 'ua-shadow-pseudo': 0 }, reconciliation: { nodeRefusals: 1, entries: 1, equal: true } },
+    partMounts: { applied: true },
+  });
+
+  it('(a) reads a generated pseudo the host does not paint, reads nothing with the law off, and the PIN catches the pseudo that stops differing', async () => {
+    const [blind, seeing, red] = await withPage(async (context) => [
+      await measure(context, LIVE, { axes: ['depth'], pseudo: false }),
+      await measure(context, LIVE, { axes: ['depth'] }),
+      await measure(context, LITERAL, { axes: ['depth'] }),
+    ]);
+    assert.equal(blind.moved, null, 'with the law off the box is invisible -- otherwise this drill proves nothing');
+    assert.equal(seeing.moved, 'box-shadow', 'the pseudo must carry the dial to the page');
+    assert.deepEqual({ hosts: seeing.sources.hosts, pseudo: seeing.sources.pseudo }, { hosts: null, pseudo: 'box-shadow' }, 'a pseudo-only credit');
+    assert.equal(seeing.census.census.read, 1);
+    assert.equal(red.moved, null, 'a pseudo that went literal must NOT keep reporting a difference');
+    assert.deepEqual(probe.pseudoOnlyDrift(lawRun([depthCell(seeing)]), DRILL_PIN), [], 'the green arm of the pin');
+    const caught = probe.pseudoOnlyDrift(lawRun([depthCell(red)]), DRILL_PIN);
+    assert.ok(caught.some((line) => line.startsWith('drill: pinned in PSEUDO_ONLY_CREDITS on depth and NOT credited')), caught.join(' | '));
+  }, 120_000);
+
+  it('(b) UNGENERATED: a `content: none` pseudo whose box-shadow differs is not credited and publishes `ungenerated`', async () => {
+    const NONE = `${DRILL_ROOT_CSS}\n${ROOT}::after { content: none; box-shadow: 0 0 var(--ds-drill-blur) black; }`;
+    const [ungenerated, generated] = await withPage(async (context) => [
+      await measure(context, NONE, { axes: ['depth'] }),
+      await measure(context, LIVE, { axes: ['depth'] }),
+    ]);
+    assert.equal(ungenerated.moved, null, 'the browser hands back a box-shadow for a box it never generated; crediting it is the lie');
+    assert.deepEqual(ungenerated.census.census, { read: 0, 'host-absent': 0, ungenerated: 1, 'ua-shadow-pseudo': 0 });
+    assert.equal(generated.moved, 'box-shadow', 'the red arm: the same rule with content generated moves');
+  }, 120_000);
+
+  it('(c) UA-SHADOW: a `::-webkit-slider-thumb` rule is refused by name and never read, because the browser answers with the HOST', async () => {
+    const css = `${DRILL_ROOT_CSS}
+      ${ROOT} > input[data-part='range'] { opacity: var(--ds-drill-op); }
+      ${ROOT} > input[data-part='range']::-webkit-slider-thumb { opacity: 0.4; }`;
+    const naive = await withPage(async (context) => {
+      const byFamily = new Map([['drill', familyParts(css, DRILL_ELEMENT, ['states'], { family: 'drill' })]]);
+      const page = await context.newPage();
+      await page.setContent(sceneHtml({
+        css, vertical: 'bithire', theme: 'light', elements: new Map([['drill', DRILL_ELEMENT]]), partMounts: byFamily,
+      }), { waitUntil: 'load' });
+      const read = (arm) => page.evaluate((variables) => {
+        for (const [name, value] of Object.entries(variables)) document.documentElement.style.setProperty(name, value);
+        const input = document.querySelector("[data-part='range']");
+        return { thumb: getComputedStyle(input, '::-webkit-slider-thumb').opacity, host: getComputedStyle(input).opacity };
+      }, arm);
+      const out = { a: await read(ARM_A), b: await read(ARM_B), record: byFamily.get('drill') };
+      await page.close();
+      return out;
+    });
+    // THE RED ARM, the hazard itself: read naively, the "thumb" is the host.
+    assert.equal(naive.a.thumb, naive.a.host, `the browser returned ${naive.a.thumb} for the thumb and ${naive.a.host} for its host`);
+    assert.notEqual(naive.a.thumb, naive.b.thumb, 'a naive read would credit the HOST\'s move to a box nobody read');
+    assert.notEqual(naive.a.thumb, '0.4');
+    // THE LAW: refused by name, absent from the plan, published in the census.
+    assert.deepEqual(naive.record.pseudoReads.entries.map((entry) => entry.refused), ['ua-shadow-pseudo']);
+    assert.equal(probe.pseudoReadPlan(new Map([['drill', naive.record]])), null);
+    const census = probe.pseudoReadCensus(new Map([['drill', naive.record]]), new Map(), { nodeRefusals: 1 });
+    assert.deepEqual(census.census, { read: 0, 'host-absent': 0, ungenerated: 0, 'ua-shadow-pseudo': 1 });
+  }, 120_000);
+
+  it('(d) HOST-ABSENT: a variant-gated host publishes `host-absent`, not silence, and the ungated host is read', async () => {
+    const GATED = `${DRILL_ROOT_CSS}\n${ROOT}[data-variant='ghost']::after { content: ''; box-shadow: 0 0 var(--ds-drill-blur) black; }`;
+    const [gated, open] = await withPage(async (context) => [
+      await measure(context, GATED, { axes: ['depth'] }),
+      await measure(context, LIVE, { axes: ['depth'] }),
+    ]);
+    assert.equal(gated.moved, null, 'a configuration the default render does not produce is not mounted to make a number move');
+    assert.deepEqual(gated.census.entries.map((entry) => entry.outcome), ['host-absent']);
+    assert.equal(gated.census.reconciliation.equal, true);
+    assert.deepEqual(open.census.entries.map((entry) => entry.outcome), ['read'], 'the red arm');
+  }, 120_000);
+
+  it('(e) PER AXIS: a pseudo rule writing only `gap` lends the shape axis nothing, even when the box\'s radius moves', async () => {
+    const GAP = `${DRILL_ROOT_CSS}\n${ROOT}::after { content: ''; gap: 2px; }`;
+    const RADIUS = `[data-part='root']::after { border-radius: var(--ds-drill-blur); }`;
+    const [lent, owned] = await withPage(async (context) => [
+      await measure(context, GAP, { axes: ['shape', 'rhythm'], sceneCss: `${GAP}\n${RADIUS}` }),
+      await measure(context, `${GAP}\n${RADIUS}`, { axes: ['shape', 'rhythm'] }),
+    ]);
+    assert.equal(lent.moved, null, 'the shape axis read a pseudo only a rhythm rule wrote');
+    assert.equal(owned.moved, 'border-top-left-radius', 'the red arm: a shape rule on the same box is a shape read');
+  }, 120_000);
+
+  it('(f) WITHHOLDING through the host: a stamped `::after` credits states under the stamp; a `:hover::after` under forcing, and is withheld where the family is', async () => {
+    const STAMPED = `${DRILL_ROOT_CSS}
+      ${ROOT}::after { content: ''; }
+      ${ROOT}[data-state~='disabled']::after { opacity: var(--ds-state-disabled-opacity); }`;
+    const HOVER = `${DRILL_ROOT_CSS}
+      ${ROOT}::after { content: ''; }
+      ${ROOT}:hover::after { transform: scale(var(--ds-state-press-scale)); }`;
+    assert.equal(familyParts(HOVER, DRILL_ELEMENT, ['states']).pseudoReads.reads[0].host, ROOT,
+      'the host is matched with the forced pseudo stripped, and the cascade decides');
+    const [stamp, stampOff, forced, withheld] = await withPage(async (context) => [
+      await measure(context, STAMPED, { axes: ['states'] }),
+      await measure(context, STAMPED, { axes: ['states'], pseudo: false }),
+      await measure(context, HOVER, { axes: ['states'], native: true }),
+      await measure(context, HOVER, { axes: ['states'], native: true, withheld: new Map([['drill', NATIVE_PSEUDO_VARIANTS.slice()]]) }),
+    ]);
+    assert.deepEqual(stamp.halves, { stamped: 'opacity', native: null }, 'the stamp on the host reaches its pseudo');
+    assert.equal(stampOff.moved, null, 'the red arm: with the law off the stamped pseudo is unseen');
+    assert.deepEqual(forced.halves, { stamped: null, native: 'transform' }, 'forcing the host reaches its own pseudo; the stamp never enters :hover');
+    assert.equal(withheld.moved, null, 'a withheld family is withheld on its pseudo too -- never credited');
+  }, 180_000);
 });

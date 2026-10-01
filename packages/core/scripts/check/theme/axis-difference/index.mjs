@@ -96,9 +96,10 @@
  * THE COMBINATION RULE: a family moves on states when EITHER half, each
  * compared arm against arm, shows an attributable computed difference; both
  * halves and their union are published per cell. What neither half reaches
- * (`:disabled`, `[aria-*]`, a pseudo inside `:has()`, a pseudo-element, a
- * forced pseudo driving a sibling -- withheld, not credited) is counted and
- * named per run. `--no-native-pseudos` reproduces the stamped half alone.
+ * (`:disabled`, `[aria-*]`, a pseudo inside `:has()`, a pseudo-element other
+ * than a `::before`/`::after` on a host already in the scene, a forced pseudo
+ * driving a sibling -- withheld, not credited) is counted and named per run.
+ * `--no-native-pseudos` reproduces the stamped half alone.
  *
  * AND A FAMILY WHOSE PAINT IS NOT UNDER ITS DEFAULT ROOT AT ALL -- an open
  * dropdown's surface, a present tooltip's bubble, the text-variant skeleton's
@@ -113,6 +114,17 @@
  * four resting axes are read exactly as before. The scene also stamps
  * `focused`, the one kernel token it used to leave out, and
  * `--no-focused-stamp` reproduces the five-state set on the same tree.
+ *
+ * AND A `::before`/`::after` THE FAMILY PAINTS AN AXIS ON IS READ ON ITS HOST.
+ * The part law refuses a pseudo-element as a NODE and still does; what this
+ * lot adds is the browser's computed style of the box it generates, read on a
+ * host the DEFAULT scene already holds, for the axis whose own rule wrote the
+ * property, and only where `content` is generated. Every other `::` is refused
+ * by name (`ua-shadow-pseudo`), real-render mounts are out of scope, every
+ * refusal entry publishes its outcome and the credits that rest on a pseudo
+ * alone are pinned. That is instrument visibility of paint already there, not
+ * fleet improvement. The law is at `pseudoReadEntry`; `--no-pseudo-reads`
+ * reproduces the pre-lot reading on the same tree.
  *
  * THE DENOMINATOR IS NOT THIS FILE'S. It comes from `check/theme/population`,
  * read at a recorded catalog revision and published with every run, because
@@ -142,6 +154,7 @@
  *   node scripts/check/theme/axis-difference/index.mjs --no-native-pseudos  the stamped states half alone
  *   node scripts/check/theme/axis-difference/index.mjs --no-real-render-mounts  the default mounts alone
  *   node scripts/check/theme/axis-difference/index.mjs --no-focused-stamp  the pre-S1 five-state set
+ *   node scripts/check/theme/axis-difference/index.mjs --no-pseudo-reads  no ::before/::after read on any host
  */
 
 import { execFileSync } from 'node:child_process';
@@ -3368,7 +3381,11 @@ export function realRenderQualification({ before, after, family, axis }) {
  *  4. Pseudo-classes, pseudo-elements, sibling combinators and `*` are refused
  *     outright -- exactly as `isSingleElement` refuses them for the root. This
  *     probe does not simulate `:hover`, and a mount that dropped `:hover` from
- *     a selector would read a hover rule as resting paint.
+ *     a selector would read a hover rule as resting paint. A pseudo-element is
+ *     still never a NODE; since the pseudo-element read law (`pseudoReadEntry`)
+ *     a `::before`/`::after` refused here is READ as its host's pseudo when that
+ *     host is already in the scene, and every such refusal publishes its
+ *     outcome, so `pseudo-element` in the refusal count keeps its meaning.
  *
  * THE FIRST OF THE TWO LIMITS THAT LOT NAMED IS LIFTED at `rootCompound`
  * above: a merged root carried its LAST compound's attribute values, so a
@@ -3757,7 +3774,9 @@ export function withoutStructuralHas(selector) {
  * whether the condition holds. `tree-select` is the measured case: its moving
  * `margin-inline-start` is declared under
  * `[data-part='root']:has([data-part='clear-button'])`, and the clear button
- * is a node the scene builds from the family's own rules.
+ * is a node the scene builds from the family's own rules. A selector ending in
+ * a pseudo-element is never retried here: it builds no node, and the
+ * pseudo-element read law reads it on its host instead.
  */
 export function hasOnlyStructuralHas(selector) {
   if (!selector.includes(STRUCTURAL_HAS)) return false;
@@ -3915,6 +3934,7 @@ export function familyParts(css, rootElement, axes, { family = null, partReach =
   const parts = new Map();
   const rejected = {};
   const deferred = [];
+  const pseudoEntries = [];
   const admit = (chain, selector, axis) => {
     const id = chain.map(compoundKey).join(' > ');
     if (!parts.has(id)) parts.set(id, { id, selector, chain, axes: new Set() });
@@ -3930,7 +3950,8 @@ export function familyParts(css, rootElement, axes, { family = null, partReach =
           // The NATIVE scene mounts a node whose rule is gated on a forced
           // pseudo, with the pseudo stripped exactly as law 3 strips
           // `data-state`; the stamped scene never does, so its part map is the
-          // one the pre-lot run built, to the node.
+          // one the pre-lot run built, to the node. A pseudo-element selector
+          // is left whole in both, so both scenes derive the same pseudo reads.
           const selector = nativePseudos && !authoredSelector.includes('::')
             ? withoutForcedPseudos(authoredSelector)
             : authoredSelector;
@@ -3948,6 +3969,10 @@ export function familyParts(css, rootElement, axes, { family = null, partReach =
             if (partReach && hasOnlyStructuralHas(selector)) deferred.push({ selector, axis });
             else if (projection.rejected !== 'root-level') {
               rejected[projection.rejected] = (rejected[projection.rejected] ?? 0) + 1;
+              // Still a node refusal; the PSEUDO-ELEMENT READ LAW below decides
+              // whether the paint is read on the host instead, one entry per
+              // refusal so the census reconciles with the count above.
+              if (projection.rejected === 'pseudo-element') pseudoEntries.push(pseudoReadEntry(authoredSelector, axis));
             }
             continue;
           }
@@ -3979,8 +4004,231 @@ export function familyParts(css, rootElement, axes, { family = null, partReach =
   return {
     parts: [...parts.values()].map((part) => ({ ...part, axes: [...part.axes].sort() })),
     rejected,
+    pseudoReads: pseudoReadsOf(pseudoEntries),
   };
 }
+
+/**
+ * THE PSEUDO-ELEMENT READ LAW (WO-EVI-02 instrument lot, Fable review
+ * 2026-10-01, ACCEPT-WITH-CHANGES). A rule that paints an axis on `::before` or
+ * `::after` paints a box the BROWSER generates from the family's own CSS; the
+ * part law refuses it as a node (law 4, and it still does -- `pseudo-element`
+ * in `partMounts.refused` keeps that meaning), and until this lot nothing read
+ * it at all. `stepper` is the measured case: its circle is
+ * `[data-part='item']::after { border: var(--ds-edge-standard-width) ... }`,
+ * the WIDTH channel moves 0px -> 1.5px between the depth arms (the style
+ * channel reads `solid` in both), the pseudo computes 0px -> 1px, and the host
+ * `item` itself paints no border at all. That is instrument visibility of
+ * paint the family already ships, not a fleet change.
+ *
+ * WHAT IS READ, and the bounds are the law:
+ *
+ *  1. `::before` / `::after` at the END of the selector, and nothing else.
+ *     Every other `::` -- `::placeholder`, `::marker`, `::-webkit-*`,
+ *     `::-moz-*`, `::view-transition-*`, or `::after:hover` with a trailing
+ *     pseudo-class -- is refused BY NAME as `ua-shadow-pseudo`:
+ *     `getComputedStyle(input, '::-webkit-slider-thumb')` returns the HOST's
+ *     style, so reading it would credit the host's paint to a box nobody read.
+ *  2. The host is the selector minus its pseudo-element, forced pseudo-classes
+ *     stripped, and it is read only where it matches a node ALREADY IN THE
+ *     DEFAULT SCENE -- the family root, a part mount, a block-element part
+ *     (or a supplied anatomy mount) -- under whatever law mounted that node.
+ *     Nothing is mounted for a pseudo, and the host gains no axis: a pseudo is
+ *     read for the axis whose OWN rule wrote the property and for no other
+ *     (the per-axis law of the part mounts, unchanged). `record-facts`' shimmer
+ *     is read because the block-element law already mounts
+ *     `__skeleton-line`; the read inherits that law's reach and nothing more.
+ *     A host the scene does not hold is `host-absent`, published, not silent.
+ *  3. Credited only when `content` computes GENERATED. Chrome hands back full
+ *     computed values for an ungenerated pseudo (a `content: none` box still
+ *     returns its `box-shadow`), so a box that is not painted reads
+ *     `ungenerated` and moves nothing.
+ *  4. State reaches the pseudo THROUGH THE HOST: the stamp is written on the
+ *     host and the host is matched with forced pseudo-classes stripped, so the
+ *     cascade -- not this file -- decides whether `[data-state~='disabled']
+ *     ::after` or `:hover::after` holds; a native pass reads a pseudo at its
+ *     host's depth. `forcedPseudoHazards` withholds exactly as before.
+ *  5. REAL-RENDER MOUNTS ARE OUT OF SCOPE in this lot: pseudos are read inside
+ *     the default scene only, never inside a `REAL_RENDER_MOUNTS` container.
+ *     The pseudo reading IS part of the default mount's reading, so law 3 of
+ *     those mounts now sees it: a default mount whose pseudo moves on an axis
+ *     refuses a real-render row declaring that axis, which is the correct
+ *     direction and `evaluate` fails such a refusal loudly.
+ *
+ * Every refusal entry gets an outcome per run (`read`, `host-absent`,
+ * `ungenerated`, `ua-shadow-pseudo`) and the four sum to the `pseudo-element`
+ * node refusals. The families credited through a pseudo ALONE are pinned in
+ * `PSEUDO_ONLY_CREDITS`. `--no-pseudo-reads` reproduces the pre-lot reading.
+ */
+const PSEUDO_READ = /::(before|after)\s*$/u;
+
+/** One `pseudo-element` refusal of the part law, as the read the law permits on it, or the reason it permits none. */
+export function pseudoReadEntry(selector, axis) {
+  const match = PSEUDO_READ.exec(selector);
+  if (match === null) return { axis, selector, refused: 'ua-shadow-pseudo' };
+  return { axis, selector, host: withoutForcedPseudos(selector.slice(0, match.index)), pseudo: `::${match[1]}` };
+}
+
+/** The entries of one family as its published reads (one per axis, host and pseudo) and its census rows. */
+export function pseudoReadsOf(entries) {
+  const reads = [];
+  const rows = entries.map((entry) => {
+    if (entry.refused !== undefined) return { axis: entry.axis, selector: entry.selector, read: null, refused: entry.refused };
+    let at = reads.findIndex((read) => read.axis === entry.axis && read.host === entry.host && read.pseudo === entry.pseudo);
+    if (at < 0) {
+      at = reads.length;
+      reads.push({ axis: entry.axis, host: entry.host, pseudo: entry.pseudo });
+    }
+    return { axis: entry.axis, selector: entry.selector, read: at, refused: null };
+  });
+  return { reads, entries: rows };
+}
+
+/** The outcome of each census row, in the order a reader is told why: refused by name, never matched, matched but not painted, read. */
+export const PSEUDO_READ_OUTCOMES = Object.freeze(['read', 'host-absent', 'ungenerated', 'ua-shadow-pseudo']);
+
+/** What the page reports per read: 1 = a host matched and the box was not generated, 2 = a generated box was read. */
+const PSEUDO_SEEN_UNGENERATED = 1;
+const PSEUDO_SEEN_READ = 2;
+
+/**
+ * THE PSEUDO-ONLY CREDITS, pinned for exact equality on a full run in both
+ * directions, exactly as `UNMOUNTABLE_FAMILIES` is: a pinned family that stops
+ * moving through its pseudo alone fails, and a new one that starts fails until
+ * it is pinned here with its measurement.
+ *
+ * "Pseudo-only" is the family's HOST reading not moving, its real render (if a
+ * row credited one) not moving, and its pseudo reading moving. Each entry
+ * names the property that reading must move first, the channel that must move
+ * between the arms (and, for stepper, the one that must NOT), read on the root
+ * of the same page in every positive cell of the axis.
+ *
+ * Measured 2026-10-01 (P1, Fable-reproduced) in all six cells: depth crosses
+ * the 80 % bar by ONE family on the declared denominator (160/199), and this
+ * pin is what makes losing it loud.
+ */
+export const PSEUDO_ONLY_CREDITS = Object.freeze({
+  depth: Object.freeze({
+    stepper: Object.freeze({
+      pseudo: ".ds-stepper--modern[data-part='root'] [data-part='item'][data-part='item']::after",
+      property: 'border-top-width',
+      moves: '--ds-edge-standard-width',
+      holds: '--ds-edge-standard-style',
+    }),
+  }),
+  motion: Object.freeze({
+    'record-facts': Object.freeze({
+      pseudo: '.ds-pattern-record-facts .ds-record-facts__skeleton-line::after',
+      property: 'animation-duration',
+      moves: '--ds-motion-duration-scale',
+    }),
+  }),
+});
+
+/** family -> the reads a page takes, off a part map; `null` when the law is off or nothing is read. */
+export function pseudoReadPlan(byFamily, { applied = true } = {}) {
+  if (!applied) return null;
+  const plan = {};
+  for (const [family, record] of byFamily) {
+    const reads = record.pseudoReads?.reads ?? [];
+    if (reads.length > 0) plan[family] = reads;
+  }
+  return Object.keys(plan).length === 0 ? null : plan;
+}
+
+const pseudoReadKey = (family, read) => `${family}\u0000${read.axis}\u0000${read.host}\u0000${read.pseudo}`;
+
+/** In the page: what every read of this page saw over all its readings, `family -> read index -> 1 | 2`. */
+const takePseudoSeen = () => window.__axisPseudoSeen ?? {};
+
+/** Folds one page's sightings into `into` (read key -> strongest sighting), keyed by the read, not its index. */
+export async function collectPseudoSeen(page, plan, into) {
+  if (plan === null) return into;
+  const seen = await page.evaluate(takePseudoSeen);
+  for (const [family, byIndex] of Object.entries(seen)) {
+    for (const [index, mark] of Object.entries(byIndex)) {
+      const read = plan[family]?.[Number(index)];
+      if (read === undefined) continue;
+      const key = pseudoReadKey(family, read);
+      into.set(key, Math.max(into.get(key) ?? 0, mark));
+    }
+  }
+  return into;
+}
+
+/**
+ * The per-entry census: every `pseudo-element` refusal of the part law with
+ * the outcome the read law gave it this run, reconciled against the node
+ * refusal count it was taken from. A reader can see from this alone that the
+ * lot read pseudos without un-refusing a single node.
+ */
+export function pseudoReadCensus(byFamily, seen, { applied = true, nodeRefusals = 0 } = {}) {
+  const entries = [];
+  for (const [family, record] of byFamily) {
+    const { reads = [], entries: rows = [] } = record.pseudoReads ?? {};
+    for (const row of rows) {
+      let outcome;
+      if (row.refused !== null) outcome = row.refused;
+      else if (!applied) outcome = 'not-read';
+      else {
+        const mark = seen.get(pseudoReadKey(family, reads[row.read])) ?? 0;
+        outcome = mark >= PSEUDO_SEEN_READ ? 'read' : mark >= PSEUDO_SEEN_UNGENERATED ? 'ungenerated' : 'host-absent';
+      }
+      entries.push({ family, axis: row.axis, selector: row.selector, outcome });
+    }
+  }
+  const census = Object.fromEntries([...PSEUDO_READ_OUTCOMES, ...(applied ? [] : ['not-read'])].map((outcome) => [outcome, 0]));
+  for (const entry of entries) census[entry.outcome] = (census[entry.outcome] ?? 0) + 1;
+  return {
+    census,
+    reconciliation: { nodeRefusals, entries: entries.length, equal: nodeRefusals === entries.length },
+    entries,
+  };
+}
+
+/**
+ * One family's three sources on one axis of one cell: its host reading, its
+ * pseudo reading and its real render, each compared arm against arm. A credit
+ * is pseudo-ONLY when the pseudo source alone moves.
+ */
+export function pseudoSources({ before, after, family, axis, real = false }) {
+  const source = (key) => differsOnAxis(axis, realRenderView(before, family, key), realRenderView(after, family, key), family);
+  return {
+    family,
+    hosts: source('#hosts'),
+    pseudo: source('#pseudo'),
+    real: real ? source(REAL_RENDER_KEY.real) : null,
+  };
+}
+
+const PENDING_PSEUDO = Symbol('pending pseudo-only verdicts');
+
+/** After law 3 has settled a cell's credits: which of its movers moved through the pseudo reading alone. */
+export function resolvePseudoOnly(cells) {
+  for (const cell of cells) {
+    const record = cell[PENDING_PSEUDO];
+    if (record === undefined) continue;
+    delete cell[PENDING_PSEUDO];
+    resolvePseudoOnlyFrom(cell, record);
+  }
+}
+
+/** One cell's verdict off its pending sources; it reads `movedIds` and never edits it. */
+export function resolvePseudoOnlyFrom(cell, { sources, channels }) {
+  const credited = cell.realRender?.credited ?? [];
+  cell.pseudoMoved = sources.filter((entry) => entry.pseudo !== null).map((entry) => entry.family);
+  cell.pseudoOnly = sources
+    .filter((entry) => (cell.movedIds ?? []).includes(entry.family) && entry.pseudo !== null && entry.hosts === null
+      && !(entry.real !== null && credited.includes(entry.family)))
+    .map((entry) => ({ family: entry.family, property: entry.pseudo }));
+  cell.pseudoChannels = channels;
+  return cell;
+}
+
+/** Every channel a pseudo-only pin names, read on each arm's root beside the pair's own. */
+export const pseudoPinChannels = (pins = PSEUDO_ONLY_CREDITS) => [...new Set(Object.values(pins)
+  .flatMap((byFamily) => Object.values(byFamily))
+  .flatMap((pin) => [pin.moves, pin.holds].filter(Boolean)))].sort();
 
 /**
  * family -> the parts its own Modern skin paints each axis on, plus the
@@ -4021,7 +4269,10 @@ export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, 
  * noise. `head-variant-gated` and `part-variant-gated` are the prop-gated
  * cluster the wiring lots own -- mounting them here would measure a
  * configuration the default render does not produce -- and `part-pseudo` is the
- * `:hover` half of the states rule this probe already names as unmeasured. The
+ * `:hover` half of the states rule this probe already names as unmeasured.
+ * `pseudo-element` is a NODE refusal and stays one: the pseudo-element read law
+ * reads the box on its host instead, and `pseudoReads` (here per family, and
+ * the run's census) accounts for every one of those refusals. The
  * `has-*` reasons are the second pass's own: a `:has()` selector that still
  * does not project (`has-head-variant-gated`) or whose target node the scene
  * never built (`has-node-not-in-scene`), which is the fail-closed direction --
@@ -4031,10 +4282,16 @@ export function partMountReport(byFamily, { applied = true, partReach = true, un
   const perAxis = Object.fromEntries(AXIS_IDS.map((axis) => [axis, { families: 0, parts: 0 }]));
   const refused = {};
   const map = {};
+  const pseudoReads = {};
   let nodes = 0;
   for (const [family, record] of byFamily) {
     for (const [reason, count] of Object.entries(record.rejected)) {
       refused[reason] = (refused[reason] ?? 0) + count;
+    }
+    // The hosts the pseudo-element read law derived for this family, beside
+    // its parts: `axis -> host::pseudo`, the reads a run may take.
+    for (const read of record.pseudoReads?.reads ?? []) {
+      ((pseudoReads[family] ??= {})[read.axis] ??= []).push(`${read.host}${read.pseudo}`);
     }
     if (record.parts.length === 0) continue;
     const byAxis = {};
@@ -4061,6 +4318,7 @@ export function partMountReport(byFamily, { applied = true, partReach = true, un
     // denominator because they publish no root to graft it onto.
     pinnedUnmountableWithPartPaint: unmountableCandidates,
     map,
+    pseudoReads,
   };
 }
 
@@ -4521,7 +4779,9 @@ export function allProperties() {
   return [...new Set(AXIS_IDS.flatMap((axis) => AXES[axis].computed))];
 }
 
-const readComputed = ({ properties, axisOf, depth = null, realRender = false, realStates = false, keys = null }) => {
+const readComputed = ({
+  properties, axisOf, depth = null, realRender = false, realStates = false, keys = null, pseudoReads = null,
+}) => {
   // FORCE A STYLE FLUSH BEFORE READING. Not defensive padding: writing custom
   // properties on the document element and calling getComputedStyle in the next
   // CDP round trip returns the STALE value on a document this size. Measured
@@ -4577,6 +4837,58 @@ const readComputed = ({ properties, axisOf, depth = null, realRender = false, re
           : null));
     }
     out[family] = values;
+    // THE PSEUDO-ELEMENT READ LAW (`pseudoReadsOf`): a `::before`/`::after`
+    // the family's own rule paints an axis on, read on a host the DEFAULT
+    // scene already holds -- the root, a part, or a supplied anatomy -- for
+    // that axis alone, and credited only where its box is generated. The
+    // family's reading gains it; the host reading alone (`#hosts`) and the
+    // pseudo reading alone (`#pseudo`) are kept beside it so a credit that
+    // rests on the pseudo ALONE can be told apart and pinned.
+    const reads = pseudoReads?.[family];
+    if (reads !== undefined && reads.length > 0) {
+      const seen = (window.__axisPseudoSeen ??= {});
+      const hosts = mounted ? anatomy : [node, ...parts];
+      const matched = reads.map((read) => hosts.filter((host) => {
+        try {
+          return host.matches(read.host);
+        } catch {
+          return false;
+        }
+      }));
+      const boxes = new Map();
+      const boxOf = (host, pseudo) => {
+        const key = boxes.get(host) ?? {};
+        key[pseudo] ??= getComputedStyle(host, pseudo);
+        boxes.set(host, key);
+        return key[pseudo];
+      };
+      const pseudoValues = {};
+      out[`${family}#hosts`] = { ...values };
+      for (const property of properties) {
+        const axis = axisOf[property];
+        const taken = [];
+        reads.forEach((read, index) => {
+          if (read.axis !== axis) return;
+          for (const host of matched[index]) {
+            if (depth !== null && Number(host.getAttribute('data-axis-depth')) !== depth) {
+              taken.push(null);
+              continue;
+            }
+            const box = boxOf(host, read.pseudo);
+            const content = box.getPropertyValue('content');
+            const generated = content !== 'none' && content !== 'normal' && content !== '';
+            const mark = generated ? 2 : 1;
+            const familySeen = (seen[family] ??= {});
+            familySeen[index] = Math.max(familySeen[index] ?? 0, mark);
+            taken.push(generated ? `${read.pseudo}=${box.getPropertyValue(property)}` : `${read.pseudo}=ungenerated`);
+          }
+        });
+        pseudoValues[property] = depth === null ? taken.join(' | ') : taken;
+        if (taken.length === 0) continue;
+        values[property] = depth === null ? `${values[property]} || ${taken.join(' | ')}` : [...values[property], ...taken];
+      }
+      out[`${family}#pseudo`] = pseudoValues;
+    }
   }
   // The real-render mounts. At REST (`realRender`) a mount is read on the
   // resting axes its row declares; under a stamped state or a forced pass
@@ -4885,11 +5197,12 @@ export async function measureCell({
   axisOf = axisByProperty(),
   states: variants = STATE_VARIANTS,
   realRender = false,
+  pseudoReads = null,
 }) {
   const applied = await page.evaluate(applyVariables, variables);
   const unsettled = new Set();
   const collect = async (plan = {}) => {
-    const reading = await readSettled(page, { properties, axisOf, ...plan });
+    const reading = await readSettled(page, { properties, axisOf, pseudoReads, ...plan });
     for (const key of reading.unsettled) unsettled.add(key.split('#')[0]);
     return reading.values;
   };
@@ -5010,6 +5323,7 @@ export async function measureNativeHalf({
   variants = NATIVE_PSEUDO_VARIANTS,
   withheld = new Map(),
   realRender = false,
+  pseudoReads = null,
 }) {
   const nodes = await page.evaluate(indexNativeNodes, realRender);
   const cdp = await page.context().newCDPSession(page);
@@ -5043,7 +5357,7 @@ export async function measureNativeHalf({
           for (const arm of arms) {
             await page.evaluate(applyVariables, arm.variables);
             const reading = await readSettled(page, {
-              properties, axisOf, depth, ...(realRender ? { realStates: true, keys: REAL_RENDER_KEY } : {}),
+              properties, axisOf, depth, pseudoReads, ...(realRender ? { realStates: true, keys: REAL_RENDER_KEY } : {}),
             });
             for (const family of reading.unsettled) unsettled.add(family.split('#')[0]);
             passes.get(arm.key)[variant].push(reading.values);
@@ -5199,7 +5513,7 @@ export const KERNEL_STATE_TOKENS = Object.freeze(['disabled', 'hovered', 'presse
  * `owners` the axes whose properties it declares (`null` when it writes a
  * custom property, which may feed any of them).
  */
-export function stateRuleProbes(css, { stamped = STATE_VARIANTS } = {}) {
+export function stateRuleProbes(css, { stamped = STATE_VARIANTS, pseudoReads = true } = {}) {
   const probes = [];
   const authoredOwner = new Map();
   for (const axis of AXIS_IDS) {
@@ -5213,7 +5527,13 @@ export function stateRuleProbes(css, { stamped = STATE_VARIANTS } = {}) {
       else if (authoredOwner.has(declaration.property)) owners.add(authoredOwner.get(declaration.property));
     }
     for (const listed of selectorList(rule.selector)) {
-      for (const selector of expandAlternatives(listed)) {
+      for (const authored of expandAlternatives(listed)) {
+        // Under the pseudo-element read law a `::before`/`::after` state rule
+        // is asked about through its HOST, and the page says whether the box
+        // is generated there; any other `::` is refused by name.
+        const pseudoMatch = pseudoReads && authored.includes('::') ? PSEUDO_READ.exec(authored) : null;
+        const pseudo = pseudoMatch === null ? null : `::${pseudoMatch[1]}`;
+        const selector = pseudo === null ? authored : authored.slice(0, pseudoMatch.index).trim();
         const bare = withoutNegations(selector);
         const forced = FORCED_PSEUDO.test(bare);
         const stampedRule = /\[data-state\b|\[data-disabled\b/u.test(bare);
@@ -5222,7 +5542,7 @@ export function stateRuleProbes(css, { stamped = STATE_VARIANTS } = {}) {
         let reason = null;
         if (forced && stampedRule) reason = 'needs-pseudo-and-stamp';
         else if (gate !== null && !gate.enterable) reason = gate.reason;
-        else if (selector.includes('::')) reason = 'pseudo-element';
+        else if (selector.includes('::')) reason = pseudoReads ? 'ua-shadow-pseudo' : 'pseudo-element';
         else if (!custom && owners.size === 0) reason = 'unread-property';
         else if (forced && forcedPseudoHazards(selector).size > 0) reason = 'relational';
         else if (forced && FORCED_PSEUDO.test(withoutNegations(withoutForcedPseudos(selector)))) reason = 'pseudo-inside-has';
@@ -5236,10 +5556,11 @@ export function stateRuleProbes(css, { stamped = STATE_VARIANTS } = {}) {
               (stampWrites(name, operator, single ?? double ?? bareValue, stamped) ? '' : token));
         probes.push({
           vocabulary: forced ? 'native' : 'stamped',
-          selector,
+          selector: authored,
           probe: probe.trim().length === 0 ? '*' : probe,
           owners: custom ? null : [...owners].sort(),
           reason,
+          ...(pseudo === null ? {} : { pseudo }),
         });
       }
     }
@@ -5258,9 +5579,15 @@ const censusReach = (entries) => {
     }
     return false;
   };
+  // A pseudo-element probe is reached only where its host's box is GENERATED;
+  // a host that matches and paints nothing is not reach (the read law, 3).
+  const generated = (node, pseudo) => {
+    const content = getComputedStyle(node, pseudo).getPropertyValue('content');
+    return content !== 'none' && content !== 'normal' && content !== '';
+  };
   const out = {};
   for (const { family, probes } of entries) {
-    const result = probes.map(() => 'no-node');
+    const result = probes.map((probe) => (probe.pseudo === undefined ? 'no-node' : 'pseudo-element-host-absent'));
     probes.forEach((probe, index) => {
       if (probe.reason !== null) {
         result[index] = probe.reason;
@@ -5279,6 +5606,9 @@ const censusReach = (entries) => {
         // under a state.
         const container = node.closest('[data-axis-real-render]');
         if (container !== null) {
+          // The read law is bounded to the default scene: a pseudo inside a
+          // real-render mount is never read.
+          if (probe.pseudo !== undefined) continue;
           if (container.getAttribute('data-axis-real-render') !== family || node.hasAttribute('data-axis-real-host')) continue;
           if (container.getAttribute('data-axis-real-axes').split(' ').includes('states')
             && (probe.vocabulary !== 'stamped' || stampedPartOn(container, node))) {
@@ -5290,6 +5620,17 @@ const censusReach = (entries) => {
         }
         const owner = node.closest('[data-axis-family]');
         if (owner === null || owner.getAttribute('data-axis-family') !== family) continue;
+        if (probe.pseudo !== undefined) {
+          // The host must be a node the scene reads -- root, part or anatomy --
+          // and the box must be generated on it.
+          if (node !== owner && !owner.hasAttribute('data-axis-mount') && !node.hasAttribute('data-axis-part')) continue;
+          if (generated(node, probe.pseudo)) {
+            result[index] = 'reached';
+            return;
+          }
+          result[index] = 'pseudo-element-ungenerated';
+          continue;
+        }
         const read = node === owner
           || owner.hasAttribute('data-axis-mount')
           || (node.hasAttribute('data-axis-part') && (probe.owners === null
@@ -5327,7 +5668,8 @@ const censusRealReach = (entries) => {
       return false;
     };
     for (const probe of probes) {
-      if (probe.reason !== null) continue;
+      // A pseudo is read in the default scene only, never in a real render.
+      if (probe.reason !== null || probe.pseudo !== undefined) continue;
       let matched = [];
       try {
         matched = [...container.querySelectorAll(probe.probe)];
@@ -5882,6 +6224,11 @@ export async function run({
    * family whose paint lives outside its default root reads as it did before
    * `REAL_RENDER_MOUNTS` existed. */
   realRenderMounts = true,
+  /* `false` reproduces the pre-lot reading: no `::before`/`::after` is read on
+   * any host, exactly the scene and numerator before the pseudo-element read
+   * law. The hosts and the census are still derived and published, with every
+   * readable entry `not-read`. */
+  pseudoReads = true,
   /* The roster those mounts come from; a drill hands in its own, and it passes
    * the same door the shipped one does before anything is mounted. */
   realRenderRoster = REAL_RENDER_MOUNTS,
@@ -5954,12 +6301,18 @@ export async function run({
   const nativeParts = nativePseudos && partMounts !== false
     ? familyAxisParts(root, families, elements, { partReach, nativePseudos: true })
     : new Map();
+  // The pseudo-element read law: hosts derived HERE, off the same part maps,
+  // one plan per scene. The default scene only -- never a real-render mount.
+  const pseudoPlan = pseudoReadPlan(mountedParts, { applied: pseudoReads });
+  const nativePseudoPlan = pseudoReadPlan(nativeParts, { applied: pseudoReads });
+  const pseudoSeen = new Map();
+  const pinChannels = pseudoPinChannels();
   const stateRules = new Map();
   const withheld = new Map();
   for (const [family, files] of skinFamilies(root)) {
     if (!elements.has(family)) continue;
     const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
-    stateRules.set(family, stateRuleProbes(css, { stamped: stampedStates }));
+    stateRules.set(family, stateRuleProbes(css, { stamped: stampedStates, pseudoReads: pseudoReads && partMounts !== false }));
     const hazards = Object.keys(familyForcedPseudoHazards(css));
     if (hazards.length > 0) withheld.set(family, hazards.sort());
   }
@@ -6035,7 +6388,9 @@ export async function run({
               variants: nativeVariants,
               withheld,
               realRender: realRenders.length > 0,
+              pseudoReads: nativePseudoPlan,
             });
+            await collectPseudoSeen(nativePage, nativePseudoPlan, pseudoSeen);
             for (const family of nativeHalf.unsettled) nativeUnsettled.add(family);
             nativeShape ??= { nodes: nativeHalf.nodes, depths: nativeHalf.depths };
           } finally {
@@ -6080,20 +6435,27 @@ export async function run({
           const mapDifference = effectiveMapDifference(variablesA, variablesB);
           const pairChannels = [...new Set([...Object.keys(variablesA), ...Object.keys(variablesB)])].sort();
           let paintDifference;
+          let paintA;
+          let paintB;
+          // The pair's own channels plus the ones a pseudo-only pin names, so
+          // the pin can be held to the channel it claims moves (or holds).
+          const armChannels = [...new Set([...pairChannels, ...pinChannels])];
           try {
             before = await measureCell({
               page, variables: variablesA, properties, axisOf, states: stampedStates, realRender: realRenders.length > 0,
+              pseudoReads: pseudoPlan,
             });
             partsA = parts ? await page.evaluate(readParts, parts) : null;
             // Arm A is still on the root here, and arm B there: each read is
             // that arm's own computed value for every channel of the pair, so
             // an alias is compared as what it paints and not as its string.
-            const paintA = await readArmChannels(page, pairChannels);
+            paintA = await readArmChannels(page, armChannels);
             after = await measureCell({
               page, variables: variablesB, properties, axisOf, states: stampedStates, realRender: realRenders.length > 0,
+              pseudoReads: pseudoPlan,
             });
             partsB = parts ? await page.evaluate(readParts, parts) : null;
-            const paintB = await readArmChannels(page, pairChannels);
+            paintB = await readArmChannels(page, armChannels);
             paintDifference = resolvedDifference(variablesA, variablesB, baselineRoot, {
               resolvedA: paintA,
               resolvedB: paintB,
@@ -6161,7 +6523,13 @@ export async function run({
             const halves = axis === 'states' ? { stamped: [], native: [] } : null;
             const real = { credited: [], rescued: [], refused: [], undecided: [] };
             const pending = [];
+            const sources = [];
             for (const family of denominator) {
+              if (pseudoPlan?.[family]?.some((read) => read.axis === axis || axis === 'states')) {
+                sources.push(pseudoSources({
+                  before, after, family, axis, real: realRenderAxes.get(family)?.includes(axis) === true,
+                }));
+              }
               let property;
               // The readings the states halves are split on: the family's
               // whole reading where its real render counts, its default
@@ -6264,6 +6632,18 @@ export async function run({
               // families that moved ONLY through them, and every refusal.
               ...(realRenders.length === 0 ? {} : { realRender: real }),
               ...(pending.length === 0 ? {} : { [PENDING_REAL]: { pending, moved, halves } }),
+              // Decided after law 3 settles this cell's real-render credits.
+              ...(pseudoPlan === null ? {} : {
+                [PENDING_PSEUDO]: {
+                  sources,
+                  channels: Object.fromEntries(Object.entries(PSEUDO_ONLY_CREDITS[axis] ?? {}).map(([family, pin]) => [family, {
+                    moves: { channel: pin.moves, a: paintA?.[pin.moves] ?? null, b: paintB?.[pin.moves] ?? null },
+                    ...(pin.holds === undefined ? {} : {
+                      holds: { channel: pin.holds, a: paintA?.[pin.holds] ?? null, b: paintB?.[pin.holds] ?? null },
+                    }),
+                  }])),
+                },
+              }),
               // The two halves of the states axis, each published beside the
               // union the percentage is taken from.
               ...(halves === null ? {} : {
@@ -6276,6 +6656,8 @@ export async function run({
           }
         }
         resolvePendingRealRenders(cells.filter((entry) => entry.vertical === vertical && entry.theme === theme));
+        resolvePseudoOnly(cells.filter((entry) => entry.vertical === vertical && entry.theme === theme));
+        await collectPseudoSeen(page, pseudoPlan, pseudoSeen);
         await page.close();
       }
     }
@@ -6310,6 +6692,34 @@ export async function run({
     unsettled: [...nativeUnsettled].sort(),
     reach,
   };
+  const partMountsReport = partMountReport(mountedParts, {
+    applied: partMounts !== false,
+    partReach,
+    unmountableCandidates: families === null ? unmountablePartCandidates(root, unmountable) : [],
+  });
+  const pseudoCensus = pseudoReadCensus(mountedParts, pseudoSeen, {
+    applied: pseudoReads,
+    nodeRefusals: partMountsReport.refused['pseudo-element'] ?? 0,
+  });
+  const pseudoOnlyByAxis = Object.fromEntries(AXIS_IDS.map((axis) => [axis, [...new Set(cells
+    .filter((cell) => cell.kind === 'positive' && cell.axis === axis && cell.evidential)
+    .flatMap((cell) => (cell.pseudoOnly ?? []).map((entry) => entry.family)))].sort()]));
+  const pseudoReadReport = {
+    applied: pseudoReads,
+    scope: 'the default scene only: ::before/::after at the end of a selector, on a host the root, a part mount or a '
+      + 'block-element part already put in the scene, for the axis whose own rule wrote the property, credited only '
+      + 'where content computes generated; real-render mounts are out of scope in this lot',
+    families: Object.keys(partMountsReport.pseudoReads).length,
+    reads: Object.values(partMountsReport.pseudoReads).reduce((total, byAxis) =>
+      total + Object.values(byAxis).reduce((sum, list) => sum + list.length, 0), 0),
+    perAxis: Object.fromEntries(AXIS_IDS.map((axis) => [axis, Object.values(partMountsReport.pseudoReads)
+      .filter((byAxis) => byAxis[axis] !== undefined).length])),
+    census: pseudoCensus.census,
+    reconciliation: pseudoCensus.reconciliation,
+    pseudoOnly: pseudoOnlyByAxis,
+    pinned: PSEUDO_ONLY_CREDITS,
+    entries: pseudoCensus.entries,
+  };
   const statesUnreachable = STATES_AXIS_LIMITS.unreachable.filter((line) => !line.startsWith(':hover and :focus-visible'));
   if (nativeVariants.length > 0) {
     statesUnreachable.splice(2, 0,
@@ -6320,8 +6730,11 @@ export async function run({
       + '(named at nativePseudos.reach.neither)',
       `${Object.keys(nativeReport.withheld).length} famil(ies) read under a forced pseudo that drives a SIBLING `
       + '(+, ~, or :has() over one): a whole-depth pass hovers the siblings too, so that variant is withheld for '
-      + 'them (nativePseudos.withheld); a pseudo inside :has() over a descendant, a pseudo-element, and a rule '
-      + 'needing a pseudo AND a stamped state are still outside both halves',
+      + 'them (nativePseudos.withheld); a pseudo inside :has() over a descendant, '
+      + (pseudoReads
+        ? 'a pseudo-element other than ::before/::after on a host already in the scene (pseudoReads), '
+        : 'a pseudo-element, ')
+      + 'and a rule needing a pseudo AND a stamped state are still outside both halves',
     );
   } else {
     statesUnreachable.splice(2, 0, STATES_AXIS_LIMITS.unreachable.find((line) => line.startsWith(':hover and :focus-visible')));
@@ -6360,11 +6773,12 @@ export async function run({
     // WHICH ELEMENT EACH FAMILY WAS MEASURED ON, per axis, published so the
     // numerator this run reports can be read against the element it was read
     // from. A mount map nobody can see is a numerator nobody can audit.
-    partMounts: partMountReport(mountedParts, {
-      applied: partMounts !== false,
-      partReach,
-      unmountableCandidates: families === null ? unmountablePartCandidates(root, unmountable) : [],
-    }),
+    partMounts: partMountsReport,
+    // THE PSEUDO-ELEMENT READ LAW, as this run applied it: the hosts derived
+    // per family (also at partMounts.pseudoReads), every refusal entry with
+    // its outcome, the reconciliation against partMounts.refused
+    // ['pseudo-element'], and the credits that rest on a pseudo alone.
+    pseudoReads: pseudoReadReport,
     populations: Object.fromEntries(AXIS_IDS.map((axis) => [axis, effective(axis).length])),
     // The families a reviewed exclusion withdrew from each axis, counted beside
     // every denominator so no line of this run can be read without them.
@@ -6439,6 +6853,55 @@ export async function run({
  */
 export const VACUITY_PERMITTED_CONTROLS = Object.freeze([STATES_DEPENDENT_CONTROL]);
 
+/**
+ * The pseudo-only pin over a run: every evidential positive cell of an axis
+ * credits through a pseudo alone EXACTLY the pinned families, each first on
+ * its pinned property, with its pinned channel moving between the arms (and
+ * the channel it pins as steady not moving). Checked on a full run with the
+ * read law and the part mounts on; any other run reproduces another reading.
+ */
+export function pseudoOnlyDrift(result, pins = PSEUDO_ONLY_CREDITS) {
+  if (result.familiesFiltered === true || result.pseudoReads?.applied !== true || result.partMounts?.applied === false) return [];
+  const failures = [];
+  for (const cell of result.cells) {
+    if (cell.kind !== 'positive' || !cell.evidential) continue;
+    const where = `${cell.vertical}/${cell.theme} ${cell.axis}`;
+    const pinned = pins[cell.axis] ?? {};
+    // A cell that carries no verdict credits nothing, which a pin then names.
+    const pseudoOnly = cell.pseudoOnly ?? [];
+    const observed = pseudoOnly.map((entry) => entry.family);
+    for (const family of observed) {
+      if (!Object.hasOwn(pinned, family)) {
+        failures.push(
+          `${family}: credited on ${where} through a ::before/::after reading ALONE and NOT pinned in PSEUDO_ONLY_CREDITS; `
+          + 'pin it with the measurement in this commit, or find why its host stopped carrying the paint',
+        );
+      }
+    }
+    for (const [family, pin] of Object.entries(pinned)) {
+      const entry = pseudoOnly.find((candidate) => candidate.family === family);
+      if (entry === undefined) {
+        failures.push(
+          `${family}: pinned in PSEUDO_ONLY_CREDITS on ${cell.axis} and NOT credited through its pseudo alone on ${where} `
+          + `(${pin.pseudo}); the pin is the margin -- restore the paint or re-pin with the measurement`,
+        );
+        continue;
+      }
+      if (entry.property !== pin.property) {
+        failures.push(`${family}: its pseudo moved first on ${entry.property} on ${where}; the pin reads ${pin.property}`);
+      }
+      const channels = cell.pseudoChannels?.[family];
+      if (channels?.moves === undefined || channels.moves.a === channels.moves.b) {
+        failures.push(`${family}: ${pin.moves} did not move between the arms on ${where} (${channels?.moves?.a} / ${channels?.moves?.b}); the pin names the channel that carries the credit`);
+      }
+      if (pin.holds !== undefined && (channels?.holds === undefined || channels.holds.a !== channels.holds.b)) {
+        failures.push(`${family}: ${pin.holds} moved between the arms on ${where} (${channels?.holds?.a} / ${channels?.holds?.b}); the pin says the credit is NOT that channel`);
+      }
+    }
+  }
+  return failures;
+}
+
 /** The opt-out a measurement takes when it must not touch a published artifact. */
 export const NO_WRITE_FLAG = '--no-write';
 export const NO_WRITE_ENV = 'AXIS_DIFFERENCE_NO_WRITE';
@@ -6481,6 +6944,7 @@ export function evaluate(result, {
   threshold = null,
   inertPairs = INERT_PAIRS,
   vacuityPermitted = VACUITY_PERMITTED_CONTROLS,
+  pseudoOnlyCredits = PSEUDO_ONLY_CREDITS,
 } = {}) {
   const failures = [];
   if (result.cells.length === 0) failures.push('no cell measured — the probe ran nothing');
@@ -6509,12 +6973,39 @@ export function evaluate(result, {
     }
     // THE UNOBSERVABLE SET IS PINNED BESIDE THE DENOMINATOR, never subtracted.
     failures.push(...unobservableDrift(result.unobservable ?? {}));
+    // THE PSEUDO-ONLY CREDITS ARE PINNED, both directions, cell by cell.
+    failures.push(...pseudoOnlyDrift(result, pseudoOnlyCredits));
     // THE MEASURED REFUSALS ARE PUBLISHED, every pinned row of them.
     if (result.realRender?.applied === true) {
       const published = (result.realRender.statesRefused ?? []).map((entry) => entry.row);
       for (const row of Object.keys(REAL_RENDER_STATES_REFUSALS)) {
         if (!published.includes(row)) failures.push(`${row}: a pinned states refusal the run did not publish in realRender.statesRefused`);
       }
+    }
+  }
+  // A FAMILY COUNTS ONCE PER CELL. The pseudo reads append to a family's
+  // reading; they never add an entry, and a numerator that disagrees with its
+  // own id list -- or names a family twice -- is not a count of families.
+  for (const cell of result.cells) {
+    if (cell.movedIds === undefined) continue;
+    const unique = new Set(cell.movedIds);
+    if (cell.moved !== cell.movedIds.length || unique.size !== cell.movedIds.length) {
+      failures.push(
+        `${cell.vertical}/${cell.theme} ${cell.scenario} ${cell.axis}: moved ${cell.moved} over ${cell.movedIds.length} `
+        + `id(s), ${unique.size} distinct -- a family is counted once per cell`,
+      );
+    }
+  }
+  // THE PSEUDO CENSUS RECONCILES with the node refusals it was taken from.
+  if (result.pseudoReads?.applied === true) {
+    const { reconciliation, census } = result.pseudoReads;
+    const sum = PSEUDO_READ_OUTCOMES.reduce((total, outcome) => total + (census?.[outcome] ?? 0), 0);
+    if (reconciliation?.equal !== true || sum !== reconciliation.nodeRefusals) {
+      failures.push(
+        `pseudo-element read law: ${reconciliation?.nodeRefusals ?? '?'} node refusal(s) and ${sum} census entr(ies) `
+        + `(${PSEUDO_READ_OUTCOMES.map((outcome) => `${outcome} ${census?.[outcome] ?? 0}`).join(', ')}); every refusal `
+        + 'must carry exactly one outcome',
+      );
     }
   }
   // A WITNESS IS PUBLISHED IN FULL: a list shorter than its count reads as a loss.
@@ -6829,6 +7320,8 @@ if (isMain) {
     realRenderMounts: !process.argv.includes('--no-real-render-mounts'),
     // The pre-S1 state set, on demand: `focused` never stamped.
     statesFocused: !process.argv.includes('--no-focused-stamp'),
+    // The pre-lot reading, on demand: no `::before`/`::after` read on a host.
+    pseudoReads: !process.argv.includes('--no-pseudo-reads'),
   });
   if (process.argv.includes('--json')) console.log(JSON.stringify(result, null, 2));
 
@@ -6878,6 +7371,21 @@ if (isMain) {
   console.log(
     `    selectors refused by the part law, by reason: ${Object.entries(result.partMounts.refused)
       .sort((left, right) => right[1] - left[1]).map(([reason, count]) => `${reason} ${count}`).join(', ') || 'none'}`,
+  );
+  const pseudo = result.pseudoReads;
+  console.log(
+    `  pseudo-element reads: ${pseudo.applied ? 'ON' : 'OFF (no ::before/::after read -- the pre-lot reading)'}`
+    + `, ${pseudo.reads} read(s) over ${pseudo.families} famil(ies), default scene only (real-render mounts out of scope)`,
+  );
+  console.log(
+    `    census of the ${pseudo.reconciliation.nodeRefusals} pseudo-element node refusal(s): `
+    + `${Object.entries(pseudo.census).map(([outcome, count]) => `${outcome} ${count}`).join(', ')}`
+    + ` -- reconciled: ${pseudo.reconciliation.equal ? 'yes' : 'NO'}`,
+  );
+  console.log(
+    `    credited through a pseudo ALONE (pinned in PSEUDO_ONLY_CREDITS): ${AXIS_IDS
+      .filter((axis) => pseudo.pseudoOnly[axis].length > 0)
+      .map((axis) => `${axis} ${pseudo.pseudoOnly[axis].join(', ')}`).join('; ') || 'none'}`,
   );
   console.log(
     `  real-render mounts: ${result.realRender.applied ? 'ON' : 'OFF (default mounts only -- the pre-lot reading)'}`

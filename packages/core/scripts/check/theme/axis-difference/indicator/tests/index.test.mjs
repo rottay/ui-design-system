@@ -180,6 +180,12 @@ describe('tenant-difference-by-axis indicator', () => {
       '--no-focused-stamp reproduces an older reading');
   });
 
+  it('the LIBRARY door refuses --no-pseudo-reads: the pre-lot reading of the pseudo-element read law is not the fleet measurement', () => {
+    assert.ok(REPRODUCTION_FLAGS.includes('--no-pseudo-reads'));
+    assert.equal(indicatorRefusal(fleetResult(), { argv: ['node', 'x', '--no-pseudo-reads'] }),
+      '--no-pseudo-reads reproduces an older reading');
+  });
+
   it('publishes the unobservable count per axis beside the declared denominator, named, and never subtracts it', () => {
     const indicator = build(fleetResult({ states: 117 }));
     assert.equal(indicator.axes.states.declared, 156);
