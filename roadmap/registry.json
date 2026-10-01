@@ -5719,6 +5719,11 @@
      "at": "2026-10-01 06:57",
      "by": "Kimi K3",
      "note": "2026-10-01 REMAINING ACCEPTANCE (owner item 7). To close FAM-11: (1) the app-side migration of the 4 registered files to :is() (app-bithire first, per R1) — HELD until the target repos are quiet, with explicit reservations; (2) the rottay-* hook retirement after the post-bump validation; (3) the no-rottay-class arm closes with those; (4) the density-adoption assignment (one claim line per family + the B23-shape acceptance test per family). The dual-class window landed (f32287e2c, Fable ACCEPT); the roster's fail-closed close trigger is the clock."
+    },
+    {
+     "at": "2026-10-01 16:00",
+     "by": "Kimi K3",
+     "note": "2026-10-01 DEN-1 census (out-den1-census-opus.json, Opus, repo untouched): the density-adoption acceptance item (4) has NO claim lines left for this cut — all 7 density-exposed FAM-11 families (app-shell, command-palette, shortcuts-overlay, action-dock, scope-switcher, search-command-bar, surface-chrome) already claim; page-shell, workspace-shell, view-mode-switcher expose 0 density channels (page-shell reads rescale locally via the boundary's spacing re-declaration — a claim would project nothing). Item (4) therefore reduces to the B23-shape acceptance tests for the 7 claiming families, batchable disjointly per family. The census also found column-menu unclaimed-and-unnamed (a FAM-08 family, not this cut's) — its disposition rides EVI-02 (DEN-2). Remaining acceptance stays: (1) app-side :is() migration HELD until target repos quiet, (2) rottay-* hook retirement post-bump, (3) no-rottay-class arm closes with those."
     }
    ]
   },
@@ -7041,6 +7046,21 @@
      "at": "2026-10-01 14:49",
      "by": "Kimi K3",
      "note": "2026-10-01 tanda 8d: FAM09-SH LANDED b0c03e196 (the chart-foundation skeleton rule wears :where() — the 3 family skins' paint + forced-colors Canvas restored; chart-bar/area skeleton corners bind the authored 2px to the normalized channel, the intended repaint named per cell; chart-line's authored dome now paints, its re-review rides WO-FAM-09). CR-2 LANDED bb4009b74: chromaticStates publishes reported-apart (52/155 = 33.5% declared, never a status or a numerator; data-table pinned by name; controls green; Fable's shape exactly). INDICATOR 16 (7ef80a846): 5/6 declared at the bar + the chromatic block. **dt34, the batch's closing certification over 7ef80a846 (quiet window, frozen inputs, 57 min): 717 PASS / 1 FAIL (dead-selector, by design) / 35 SKIP, + 1 FLAKE (the custom-pack realm-isolation cleanup assertion — timing under full-suite load; GREEN on the focal rerun over the same tree, 6.8s; registered as a flake to watch).** Evidence durable at .tmp/dispatch-2026-09-21/dt34-evidence/. The FAM09-SH repaint is the intended, measured one (its receipt's per-cell table)."
+    },
+    {
+     "at": "2026-10-01 15:46",
+     "by": "Kimi K3",
+     "note": "2026-10-01 tanda 8e: CAP-3 LANDED fe328a2bb — STATIC_UNCOVERED 3 -> 1. chrome.anatomy drained (the static mount projected NOTHING although the resolved theme carried the preset anatomy — PRODUCT CONSEQUENCE named: bithire's root now carries data-anatomy-card=framed/sidebar=rail/table=zebra; its cards/sidebar/tables paint the authored anatomy; rottay/evnto unchanged; the visual diffs ride the next certification window). profiles.icon drained via the render-markup leg (glyph moves; REGISTERED INERT on rottay/evnto — no expressive.schemaVersion in their presets; pinned to go red the day it moves; opening the expressive family there is an owner call). token-overrides stays ledgered with the measured catalog-vs-registry mismatch (owner rules). The pre-existing AppShell.causality red (bithire light a[href$=inbox] axe finding) reproduces without this lot — registered to the axe lane. Suites 87/87 + 66/66 foreground (DT re-ran)."
+    },
+    {
+     "at": "2026-10-01 16:00",
+     "by": "Kimi K3",
+     "note": "2026-10-01 tanda 8f (start): DEN-1 density census (out-den1-census-opus.json, Opus, read-only) found the density-scope roster red at HEAD from the R2c lot: column-menu reads the axis (6 channels) with no registry disposition. DT ruling: column-menu CLAIMS density — the only unclaimed family with no paint blocker on record; the scout verified the claim compiles cleanly on all 3 verticals, hits neither fail-closed refusal class, projects the 6 channels at final values. The B23-shape paint acceptance test for column-menu under nested [data-density] is REGISTERED PENDING (same pattern as the FAM-11 families' B23 tests). DEN-2 (Opus) lands the claim + roster re-anchor; Fable reviews before commit (emission-adjacent). The other unclaimed families keep their registry dispositions: data-table/popover EXEMPT (measured paint), flex/grid PENDING inert-by-measurement, cockpit-header/edit-header PENDING paint lane, pagination PENDING owner decision (nav square only in md)."
+    },
+    {
+     "at": "2026-10-01 16:17",
+     "by": "Kimi K3",
+     "note": "2026-10-01 tanda 8f (close): DEN-2 LANDED 7cc871a27 — column-menu claims density, roster green 13/13, census re-anchored to R2c's measurement (the claim's own effect: unclaimed 8/57 -> 7/51). Regen chain clean (extract/root-aliases/build/derive/views/producers; diff = exactly the 6 projected channels x 3 verticals + digests). Fable ACCEPT (out-den2-review-fable.json) with 3 registered notes: (1) the claim is LIVE in one first-party surface — collection-workspace stamps data-density on its content stack (collection-workspace/index.tsx:2140), the ColumnMenu trigger renders inside, the Popover portal copies data-density onto the portaled surface; factor 1 at comfortable (no paint change), 0.85/1.15 at compact/spacious (designed, unmeasured) — the pending B23 acceptance test must probe the PORTALED popover root, not the trigger's ancestor; (2) dt34's 717/1/35 never covered the density-scope vitest suite (its evidence held gates + Playwright only) — the next certification must include it; (3) the census re-anchor follows R2c, named in the commit. Focal suites green post-integration: density-scope 13/13, axis-difference, indicator, population."
     }
    ]
   },
