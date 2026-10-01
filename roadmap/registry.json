@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-30",
+ "updated": "2026-10-01",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -6936,6 +6936,41 @@
      "at": "2026-09-30 19:03",
      "by": "Kimi K3",
      "note": "2026-09-30 tanda 5j: M3 LANDED (c9930f953 + producers re-anchor 1d33d23d1): CONTAINER_MODE_TEXTS tables the DS root's own 161 mode-scoped names (116 previously untabled), the container mode rules restate them, brand-studio panels hold their ground in either document mode; the dt30 defect (dark-on-dark title) repaired to the root-on-dark value; DS-layer mismatch floor drains 10,931 -> 0 (36/36 cells); M1's --ds-table-bg gap fixed inside the mechanism; 33/33 root-door hashes identical; visual-authority budget widened through the governed door (355,289 -> 397,496, M2+M3 runtime tables). The two brand-studio baselines re-recorded over the repaired paint after DT visual review (c1d45dfac). **dt31 CLOSING CERTIFICATION over c1d45dfac (quiet window, frozen inputs, build+run 57 min): 718 PASS / 1 FAIL / 35 SKIP — the only red is dead-selector BY DESIGN (41 TRUE_DEAD, named and registered).** Evidence durable at .tmp/dispatch-2026-09-21/dt31-evidence/. The N1 nested-scope risk is CLOSED end-to-end (reproduction -> law -> M2 mode arm -> M3 DS mode table -> certified preview==root behavior). States axis stands at 75.0% declared with the unobservable 8 published and never subtracted; the remaining path to 80 runs through the owner decisions registered in entry 116, not through exclusions."
+    },
+    {
+     "at": "2026-09-30 19:57",
+     "by": "Kimi K3",
+     "note": "2026-09-30 tanda 6: W3b LANDED 616278cf6 (9 families, +5 depth movers -> 134/199 declared = 67.3%); S6 LANDED 0dfa20e45 (sankey ring to the dial; 13 measured STOPs; DT rulings: halo binds S2b-class next batch, hover transforms rejected for --ds-motion-intensity); W3c NET-ZERO with the measured finding that bithire's authored radius-scale 0.8 repaints any dial-bound corner — 43580fdc0's byte-identity claim is FALSIFIED for bithire cells (the repaint stands as lawful tenant identity; the false claim is registered); foundation-lane gap registered: baseline-normalized dial channel (the compiler does calc(v/0.8*scale), skins cannot). Avatar ruling FALSIFIED by measurement (emphasis not in the contrast floor) — A1 registered: emphasis joins the contrast floor or the thinner ring is accepted, fleet effect to be measured first. Indicator 10 published (22e5dbbbe). In flight: W3d (depth batch 3), R1 (rhythm cause census scout — 180/224 needs +6). Suites on the settled tree: axis-difference 211/211, population 44/44, family-cut 216/216 (6 W3b movers re-pinned with names, b772b9b32)."
+    },
+    {
+     "at": "2026-09-30 20:32",
+     "by": "Kimi K3",
+     "note": "2026-09-30 tanda 6b: W3d LANDED 7da38d1f4 (8 families, 21 sites, depth 134->138/187 = 69.3% declared; STOPs measured: anchor, bulk-select-toggle, carousel, scheduler-surface + per-site) + re-pin 6127d8596. R1 rhythm census LANDED: 35 effective non-movers classified; the +6 to 180/224 can come from REACH with zero paint change (9 measured mount movers -> 183/224 = 81.7%): R2a dispatched (mount rows chart-c funnel / detail error / flex gap=md + AS_RENDERED stamps descriptions layout=horizontal, input-number size=md + the ruled halo binding). R2b STOP-all, STRUCTURAL: bithire's authored density/rhythm rest is 0.85 (owner doctrine 72a1a99b6) and spacing rungs are rem-based against a 15px/14.1px legacy root font — no byte-identical chain exists; the baseline-normalized dial channel is registered as a DER-lane gap. DT RULING: the rhythm literal lot is HELD (R2a's reach movers suffice for the bar; the x0.85 bithire tightening — dropdown-precedented — will land only with per-screen visual evidence, not as a numeric push). button-icon flagged by R1: probable cascade defect (sim moves padding although both skins declare 0) — registered, do not credit until explained. In flight: R2a (bash-8bnwckol)."
+    },
+    {
+     "at": "2026-09-30 21:39",
+     "by": "Kimi K3",
+     "note": "2026-09-30 tanda 6d/6e: W3e LANDED 109eab93c — the depth literal class is FINISHED (16 swaps: widget-board 15 + table-toolbar 1; 49 residual sites measured STOPs by class: shadow-geometry-no-channel / state-gated-only / control-border mismatch / semantic identity incl. token-inspector's debugger paint by design). Depth 139->140/187 = 70.4% declared. table-toolbar bound but reach-blocked ([data-structure] root stamp — registered). Re-pin + theme-graph size re-anchor + regen 8bb82eeb5. R2b STOP-all structural (bithire rest 0.85 + rem-vs-15px-root) — rhythm literal lot HELD by DT ruling (the bar was reached via reach; the bithire tightening lands only with per-screen visual evidence). A1 MEASURED and RULED (a): emphasis joins the contrast floor (fixes the measured inversion: table header rule thinner than cell dividers under contrast-more in rottay/evnto); avatar 2px frames are cut-outs, stay literal (the W3b premise was wrong twice over — binding would thin them at rest). In flight: A1-impl (bash-8txmk43g), R2c column-menu deriver (bash-53q8vsu4, DT ruling: bithire x0.85 declared, evnto/rottay byte-identical)."
+    },
+    {
+     "at": "2026-09-30 22:51",
+     "by": "Kimi K3",
+     "note": "2026-09-30 tanda 6f: A1 LANDED 6e09d5f0a (emphasis joins the contrast floor; the measured inversion dies; pins moved with movers named; suites 21/21). R2c LANDED 9779b4073 + regen 3325ce375 (column-menu deriver rides density: evnto/rottay byte-identical, bithire x0.85 named per site; the count pill pinned fixed; roster row gains rhythm — column-menu MOVES). S7 LANDED 2555b019d (column-menu states mover on both halves, 118/148; command-palette stays pinned with the corrected law-3 restatement — it already moved via its default mount since S2b; suite 222/222). INDICATOR 12: rhythm 82.1% / states 75.6% / depth 70.4%; 3/6 at the bar. Docs: the container law's mode arm + CONTAINER_MODE_TEXTS documented (docs-engineering 849643d). Next: depth reach wave (variant-gated/node-not-in-scene), chart semantic-identity exclusion dossier (shape, the existing procedure), R2b2 (held: bithire x0.85 rhythm tightening awaits per-screen visual evidence)."
+    },
+    {
+     "at": "2026-09-30 23:51",
+     "by": "Kimi K3",
+     "note": "2026-09-30 tanda 6g: X2 LANDED 0c67eb5ac — chart-line + chart-pie admitted as reviewed semantic identity on shape (Fable ACCEPT-WITH-CHANGES; waterfall REJECTED, stays in and must move) with the C1 producer guard (entry fails if a private channel its values read is produced anywhere in src; drills both directions). R3 LANDED 69933cb3d — 19 mounts/stamps, depth 140 -> 159/187 (85.0% effective), declared 79.9%: HONESTLY ONE SHORT of the bar; the 28 remaining are measured STOPs by class; the nearest lever (stepper ::after) needs the pseudo-element read law — registered as an instrument decision. INDICATOR 13 (2e5419620->now): depth 79.9% declared / shape 74.0% / states 75.6% / rhythm 82.1% / typo 95.6% / motion 81.4%. Suites on the settled tree: 229/229 + 13/13 + population 49/49. Remaining to the fleet bar: depth +1 (the pseudo-element law or a lawful mount), states +7 (owner decisions from entry 116), shape +15 on 215 (the scale-normalization gap is the blocker — DER lane)."
+    },
+    {
+     "at": "2026-10-01 00:43",
+     "by": "Kimi K3",
+     "note": "2026-10-01 tanda 6h: D1 study + Fable ACCEPT-WITH-CHANGES (1b radius-only; rhythm/density held; F-1 compiler divisor defect in the same lot; adoption bounded — the two pill sites route to the exclusion registry; repair class taken; reader pin; bithire envelope gap to the catalog lane). D2 dispatched (bash-9v41iujq). P1 measured proposal: ::before/::after reads on mounted hosts move depth to 160/199 = 80.4% declared and motion to 167/204. Fable ACCEPT-WITH-CHANGES + AUTHORITY RULING: within the instrument's existing authority (kit rule 4 fixes unit/population/threshold/controls, not the scene; the fail-closed classes keep it lawful); the DT may land it after the 8 required changes; the owner gets NOTIFIED of the depth crossing as a milestone, not asked. P2 dispatched with the 8 changes as the acceptance spec (bash-w40kubrb)."
+    },
+    {
+     "at": "2026-10-01 01:59",
+     "by": "Kimi K3",
+     "note": "2026-10-01 tanda 6i: P2 LANDED 61932d4c3 — the pseudo-element read law with all 8 Fable changes (bounded to the default scene, hosts derived in-instrument, per-entry census reconciled to the 301 refusals, --no-pseudo-reads everywhere flags live, pseudo-only credits pinned both directions, refuse-class drills). Depth 160/199 = 80.4% declared — THE FOURTH AXIS AT THE BAR (one-family margin, named per Fable's framing); motion 167/204. Suite 248/248 (DT re-run). Pilot record republished by the gate's own mechanism over the X2 exclusions (8e5cd6da9, 9/9). D2 LANDED cce27b97d + regen b1d77771f (the 1b normalized radius channel + F-1 divisor fix with Fable's two pins + the repair class restoring bithire's authored values + the reader pin; governed widen 397,496 -> 397,600). Owner milestone to notify: depth crossed the bar on one family's margin (stepper's ::after width reading the edge dial — existing paint, now visible). In flight: S8 shape mounts over the channel (bash-…). Registered for the owner: the bithire-technical envelope (radius cap 1.0, density compact/normal) has NO enforcement in src — catalog lane."
     }
    ]
   },
