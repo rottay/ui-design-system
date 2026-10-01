@@ -6,7 +6,7 @@
  * value under the preference is a FUNCTION of a tenant decision — the on-tone
  * inks, the posture mix ratios — is the lowering's to state, not this file's.
  *
- * WHY UNLAYERED, AND WHY TWO ATTRIBUTES. Seven of the nine channels below are
+ * WHY UNLAYERED, AND WHY TWO ATTRIBUTES. Eight of the eleven channels below are
  * declared by every compiled tenant artifact, and tenant paint is unlayered by
  * law (cascade-layers: TENANT_PAINT_IS_UNLAYERED), so it outranks every layer
  * regardless of specificity: a layered guard would reach none of them. The same
@@ -26,11 +26,13 @@
  * stating the minimum a user who asked for more contrast gets, which is the
  * same number whatever the tenant decided.
  *
+ * Emphasis joins because an unfloored emphasis INVERTED the hierarchy under
+ * contrast-more: the table header rule sat at 1px below 2px cell dividers.
  * MODERN FENCE. Classic and Rustic are frozen and fail-closed; new floor
  * content must not reach them.
  *
  * DRIFT: the channel list is pinned, row for row, by
- * `tests/contrast-root-guard/index.test.ts`. A tenth channel fails until the
+ * `tests/contrast-root-guard/index.test.ts`. A twelfth channel fails until the
  * pinned table is revisited.
  */
 
@@ -40,6 +42,7 @@
     --ds-focus-ring-offset: 3px;
     --ds-edge-hairline-width: 2px;
     --ds-edge-standard-width: 2px;
+    --ds-edge-emphasis-width: 2px;
     --ds-breadcrumb-separator-opacity: 1;
     --ds-stack-divider-opacity: 1;
     --ds-toolbar-divider-opacity: 1;

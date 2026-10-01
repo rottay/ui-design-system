@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test';
 // vertical by a real media emulation.
 //
 // The floor is an UNLAYERED root guard, `html[data-engine='modern'][data-theme]`
-// at (0,2,1), which beats the tenant artifact's (0,1,1). Seven of its ten
+// at (0,2,1), which beats the tenant artifact's (0,1,1). Eight of its eleven
 // channels are artifact-declared in all three verticals, so a hand-injected
 // `:root` block would lose to the artifact and read as "nothing moved" — the
 // arm here is `page.emulateMedia({ contrast })`, not an injected block.
@@ -25,6 +25,7 @@ const PINNED: Record<string, string> = {
   '--ds-focus-ring-offset': '3px',
   '--ds-edge-hairline-width': '2px',
   '--ds-edge-standard-width': '2px',
+  '--ds-edge-emphasis-width': '2px',
   '--ds-breadcrumb-separator-opacity': '1',
   '--ds-stack-divider-opacity': '1',
   '--ds-toolbar-divider-opacity': '1',
@@ -34,6 +35,13 @@ const PINNED: Record<string, string> = {
 };
 
 const CHANNELS = Object.keys(PINNED);
+/**
+ * Channels a vertical already rests at the floor for (WO-EVI-02: bithire's
+ * emphasis is 2px at rest). They must still READ the floor; they cannot move.
+ */
+const RESTS_AT_THE_FLOOR: Record<string, readonly string[]> = {
+  '--ds-edge-emphasis-width': ['bithire'],
+};
 /** Non-vacuity: a run that measures less than this proves nothing. */
 const MINIMUM_CHANNELS = 9;
 
@@ -91,6 +99,7 @@ test.describe('increased-contrast floor — channel arms', () => {
         expect(raised[channel], `${channel} does not reach the floor in ${vertical}`).toBe(
           PINNED[channel],
         );
+        if (RESTS_AT_THE_FLOOR[channel]?.includes(vertical)) continue;
         expect(resting[channel], `${channel} already sits at the floor in ${vertical}`).not.toBe(
           raised[channel],
         );

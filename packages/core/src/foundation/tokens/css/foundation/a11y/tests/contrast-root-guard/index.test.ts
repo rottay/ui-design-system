@@ -1,7 +1,7 @@
 /**
  * The increased-contrast geometry floor — the root case.
  *
- * Seven of its nine rows are declared by every compiled tenant artifact, and
+ * Eight of its eleven rows are declared by every compiled tenant artifact, and
  * tenant paint is unlayered by law, so a LAYERED floor would reach none of them
  * in any vertical. The guard mirrors the Arabic root-guard device instead:
  * unlayered, (0,2,1), no `!important`.
@@ -45,9 +45,13 @@ const ARTIFACT_SCOPE =
   ":is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))";
 
 /**
- * The PINNED table. Rows 1-7 are artifact-declared in all three verticals with
- * the resting values below; rows 8-9 are not, and ride the same guard so that
- * one law has one place to read. A tenth channel fails case 4.
+ * The PINNED table. Rows 1-8 are artifact-declared in all three verticals with
+ * the resting values below; rows 9-11 are not, and ride the same guard so that
+ * one law has one place to read. A twelfth channel fails case 4.
+ *
+ * Row 5 (`--ds-edge-emphasis-width`) moved in with WO-EVI-02, the A1 ruling:
+ * left out, it stayed at 1px in rottay and evnto under contrast-more while
+ * hairline and standard went to 2px, inverting the hierarchy (case 11).
  */
 const PINNED = [
   {
@@ -71,6 +75,11 @@ const PINNED = [
     resting: { bithire: '1.5px', evnto: '1px', rottay: '1px' },
   },
   {
+    channel: '--ds-edge-emphasis-width',
+    floor: '2px',
+    resting: { bithire: '2px', evnto: '1px', rottay: '1px' },
+  },
+  {
     channel: '--ds-breadcrumb-separator-opacity',
     floor: '1',
     resting: { bithire: '0.72', evnto: '0.72', rottay: '0.72' },
@@ -91,6 +100,23 @@ const PINNED = [
 ] as const;
 
 const ARTIFACT_DECLARED = PINNED.filter((row) => row.resting !== null);
+
+/**
+ * Rows whose floor a vertical ALREADY rests at, so the floor moves nothing
+ * there. bithire's emphasis is 2px at rest; the row is pinned for the two
+ * verticals it does move (WO-EVI-02). Any other floor equal to its resting
+ * value still fails case 5.
+ */
+const RESTS_AT_THE_FLOOR: Readonly<Record<string, readonly (typeof VERTICALS)[number][]>> = {
+  '--ds-edge-emphasis-width': ['bithire'],
+};
+
+/** The edge-width ladder, thinnest first. Case 11 refuses an inversion of it. */
+const EDGE_LADDER = [
+  '--ds-edge-hairline-width',
+  '--ds-edge-standard-width',
+  '--ds-edge-emphasis-width',
+] as const;
 
 const importLine = entrypoint
   .split('\n')
@@ -182,7 +208,7 @@ describe('increased-contrast root guard', () => {
   });
 
   it('5. every artifact-declared row is really artifact-declared, at the pinned resting value', () => {
-    expect(ARTIFACT_DECLARED.length).toBe(7);
+    expect(ARTIFACT_DECLARED.length).toBe(8);
     for (const row of ARTIFACT_DECLARED) {
       for (const vertical of VERTICALS) {
         const resting = row.resting?.[vertical];
@@ -190,7 +216,12 @@ describe('increased-contrast root guard', () => {
           artifacts[vertical],
           `${row.channel} is no longer declared as ${resting} in ${vertical}`,
         ).toContain(`${row.channel}: ${resting};`);
-        // A floor equal to the resting value would move nothing.
+        // A floor equal to the resting value would move nothing -- unless the
+        // vertical is registered as already resting there.
+        if (RESTS_AT_THE_FLOOR[row.channel]?.includes(vertical)) {
+          expect(row.floor, `${row.channel} is registered at rest in ${vertical}`).toBe(resting);
+          continue;
+        }
         expect(row.floor, `${row.channel} does not move in ${vertical}`).not.toBe(resting);
       }
     }
@@ -312,6 +343,52 @@ describe('increased-contrast root guard', () => {
     expect(planted, 'the planting anchor did not match the artifact').not.toBe(artifacts.bithire);
     expect(scan(planted)).toEqual([
       { selector: modeBlock?.selector, channel: '--ds-edge-hairline-width' },
+    ]);
+  });
+
+  it('11. the edge ladder is not inverted under contrast-more, in any vertical', () => {
+    // Under the preference a channel resolves to the guard's value when the
+    // guard declares it (case 2: it outranks the artifact; case 10: no mode
+    // block ties it), else to the artifact's resting value.
+    const resolveUnderMore = (
+      floor: string,
+      vertical: (typeof VERTICALS)[number],
+    ): Record<(typeof EDGE_LADDER)[number], number> => {
+      const floored = new Map(declaredChannels(floor).map(({ channel, value }) => [channel, value]));
+      return Object.fromEntries(
+        EDGE_LADDER.map((channel) => {
+          const resting = artifacts[vertical].match(
+            new RegExp(`${channel}: (\\d+(?:\\.\\d+)?)px;`),
+          )?.[1];
+          expect(resting, `${channel} is not artifact-declared in ${vertical}`).toBeDefined();
+          return [channel, Number.parseFloat(floored.get(channel) ?? `${resting}px`)];
+        }),
+      ) as Record<(typeof EDGE_LADDER)[number], number>;
+    };
+    const inversions = (floor: string): string[] =>
+      VERTICALS.flatMap((vertical) => {
+        const widths = resolveUnderMore(floor, vertical);
+        return EDGE_LADDER.slice(1).flatMap((channel, index) =>
+          widths[channel] < widths[EDGE_LADDER[index]]
+            ? [`${vertical}: ${channel} ${widths[channel]}px < ${EDGE_LADDER[index]} ${widths[EDGE_LADDER[index]]}px`]
+            : [],
+        );
+      });
+
+    expect(inversions(guard)).toEqual([]);
+    // Reverse pin: the floor reaches exactly the three ladder rungs, no fourth
+    // edge channel, and hairline/standard stay floored at 2px.
+    expect(
+      declaredChannels(guard).filter(({ channel }) => channel.startsWith('--ds-edge-')),
+    ).toEqual(EDGE_LADDER.map((channel) => ({ channel, value: '2px' })));
+
+    // Drill: the guard as it stood before WO-EVI-02 (emphasis unfloored) is
+    // the measured inversion, named in exactly the two verticals that showed it.
+    const unfloored = guard.replace(/^\s*--ds-edge-emphasis-width: 2px;\n/m, '');
+    expect(unfloored, 'the drill did not remove the emphasis row').not.toBe(guard);
+    expect(inversions(unfloored)).toEqual([
+      'evnto: --ds-edge-emphasis-width 1px < --ds-edge-standard-width 2px',
+      'rottay: --ds-edge-emphasis-width 1px < --ds-edge-standard-width 2px',
     ]);
   });
 });
