@@ -2947,15 +2947,21 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
     assert.deepEqual(Object.keys(REAL_RENDER_MOUNTS).sort(), [
       'activity-log',
       'anchor',
+      'assistant-preview-diff',
       'avatar',
+      'box',
       'breadcrumb-compounds',
+      'carousel',
       'chart-c',
       'column-menu',
       'column-settings',
       'command-palette',
+      'data-table-actions',
       'date-picker',
+      'descriptions',
       'detail',
       'drawer-compounds',
+      'drawer-compounds-divider',
       'dropdown',
       'edit-fields',
       'export-button',
@@ -2965,22 +2971,30 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'float-button',
       'form',
       'guided-draft-form',
+      'image',
       'image-compounds',
       'layout',
+      'list',
       'modal-compounds',
+      'modal-compounds-divider',
       'pattern-timeline',
       'presence',
       'presence-typing',
       'record',
+      'saved-views-menu',
       'search-command-bar',
+      'sidebar-surface',
       'skeleton',
       'skeleton-anatomy',
+      'skeleton-anatomy-block',
       'stats-grid',
       'stats-grid-interactive',
       'stats-header',
+      'table',
       'time-picker',
       'tooltip',
       'tooltip-interactive',
+      'tree',
       'tree-view-connector',
       'typography',
       'visual-excellence-preview',
@@ -3118,7 +3132,8 @@ describe('axis-difference BROWSER drill — the real-render mounts reach the pai
     assert.deepEqual([...paletteShape.realRender.credited].sort(), ['dropdown', 'skeleton', 'tooltip']);
     assert.deepEqual(paletteShape.realRender.refused, []);
     const paletteDepth = on.cells.find((entry) => entry.scenario === 'palette-only' && entry.axis === 'depth');
-    assert.deepEqual([...paletteDepth.realRender.undecided].sort(), ['dropdown', 'tooltip'], 'no depth positive ran, so the mount is left unread');
+    // R3: skeleton-anatomy's block-mode row declares depth, so it joins the undecided set.
+    assert.deepEqual([...paletteDepth.realRender.undecided].sort(), ['dropdown', 'skeleton-anatomy', 'tooltip'], 'no depth positive ran, so the mount is left unread');
     for (const entry of on.cells.filter((item) => item.kind === 'negative')) {
       assert.equal(entry.evidential, true);
       assert.equal(entry.moved, 0, `${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
@@ -3278,15 +3293,16 @@ describe('axis-difference — S1: law 5 over a reading, the stamp contract, and 
 
   it('every S1 row declares states only, on a family in the states population', () => {
     const states = axisPopulations(ROOT).get('states');
-    for (const row of ['stats-grid-interactive', 'tooltip-interactive', 'stats-header', 'pattern-timeline', 'activity-log', 'avatar',
+    for (const row of ['stats-grid-interactive', 'tooltip-interactive', 'pattern-timeline', 'activity-log', 'avatar',
       'record', 'anchor', 'tree-view-connector', 'breadcrumb-compounds', 'typography']) {
       const entry = REAL_RENDER_MOUNTS[row];
       assert.deepEqual([...entry.axes], ['states'], row);
       assert.ok(states.includes(entry.family ?? row), row);
     }
-    for (const row of ['float-button', 'drawer-compounds', 'modal-compounds', 'layout']) assert.ok(REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
-    // R2a gave layout's S1 row a resting axis; its states declaration is untouched.
+    for (const row of ['float-button', 'drawer-compounds', 'modal-compounds', 'layout', 'stats-header']) assert.ok(REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
+    // R2a gave layout's S1 row a resting axis, R3 gave stats-header's one; their states declarations are untouched.
     assert.deepEqual([...REAL_RENDER_MOUNTS.layout.axes], ['rhythm', 'states']);
+    assert.deepEqual([...REAL_RENDER_MOUNTS['stats-header'].axes], ['depth', 'states']);
     // Measured and refused on 2026-09-30 (S7: law 3, the default mount already
     // moves), so it may not declare it. column-menu left the pin in S7.
     assert.ok(!REAL_RENDER_MOUNTS['command-palette'].axes.includes('states'));
@@ -3710,5 +3726,119 @@ describe('axis-difference — R2a: the rhythm reach rows the R1 census measured 
       ".rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal'] > [data-part='body'] > [data-part='rows']"));
     assert.ok(rhythmSelectors('progress').includes(".rottay-progress-shell.rottay-progress-shell--modern[data-type='line'] [data-part='label']"));
     assert.equal(rhythmSelectors('descriptions').some((selector) => selector.includes("[data-layout='vertical']")), false);
+  });
+});
+
+describe('axis-difference — R3: the depth reach rows the R3 census measured moving', () => {
+  // Default renders first, then the configurations a public prop ships.
+  const R3_REAL_ROWS = ['sidebar-surface', 'saved-views-menu', 'skeleton-anatomy-block', 'table', 'assistant-preview-diff', 'tree', 'descriptions',
+    'carousel', 'image', 'box', 'list', 'drawer-compounds-divider', 'modal-compounds-divider', 'data-table-actions'];
+  const R3_JOINED = { 'edit-fields': ['shape', 'rhythm', 'depth', 'motion'], 'feature-workspace-frame': ['shape', 'depth', 'motion'], 'stats-header': ['depth', 'states'] };
+  const R3_STAMPED = ['table-toolbar', 'user-profile-card'];
+  const drift = (suffix, from, to) => (file) => {
+    const text = readFileSync(file, 'utf8');
+    return file.endsWith(suffix) ? text.replaceAll(from, to) : text;
+  };
+
+  it('each new real-render row declares depth alone, on a family in the depth population, and passes the door on its own', () => {
+    const depth = axisPopulations(ROOT).get('depth');
+    for (const row of R3_REAL_ROWS) {
+      const entry = REAL_RENDER_MOUNTS[row];
+      assert.ok(entry !== undefined, `${row} has no roster row`);
+      assert.deepEqual([...entry.axes], ['depth'], row);
+      assert.ok(depth.includes(entry.family ?? row), row);
+      assert.deepEqual(realRenderRosterFailures(ROOT, { [row]: entry }), [], row);
+    }
+  });
+
+  it('three existing rows read depth on their UNCHANGED markup, which already holds the node the depth rule paints', () => {
+    for (const [row, axes] of Object.entries(R3_JOINED)) assert.deepEqual([...REAL_RENDER_MOUNTS[row].axes], axes, row);
+    assert.match(REAL_RENDER_MOUNTS['edit-fields'].markup, /data-part="editor"><div data-part="editor-header">.*data-part="editor-icon"/u);
+    assert.match(REAL_RENDER_MOUNTS['feature-workspace-frame'].markup, /ds-feature-workspace-frame__skeleton" [^>]*><span><\/span>/u);
+    assert.match(REAL_RENDER_MOUNTS['stats-header'].markup, /data-part="stat-card" data-accent="primary"/u);
+  });
+
+  it('a second row of a family names it, declares no states, and leaves the single-states-row law intact', () => {
+    for (const [row, family] of [['skeleton-anatomy-block', 'skeleton-anatomy'], ['drawer-compounds-divider', 'drawer-compounds'],
+      ['modal-compounds-divider', 'modal-compounds'], ['assistant-preview-diff', 'assistant']]) {
+      assert.equal(REAL_RENDER_MOUNTS[row].family, family, row);
+      assert.equal(REAL_RENDER_MOUNTS[row].axes.includes('states'), false, row);
+    }
+    assert.deepEqual(realRenderRosterFailures(ROOT), []);
+  });
+
+  it('the two as-rendered stamps are the DEFAULT render, and each mounts on its root', () => {
+    assert.deepEqual(AS_RENDERED_ROOT_STAMPS['table-toolbar'].map((row) => [row.attribute, row.value]), [['data-structure', 'table-toolbar']]);
+    assert.deepEqual(AS_RENDERED_ROOT_STAMPS['user-profile-card'].map((row) => [row.attribute, row.value]), [['data-loading', 'false'], ['data-variant', 'full']]);
+    assert.deepEqual(asRenderedRosterFailures(ROOT), []);
+    const elements = familyElements(ROOT, R3_STAMPED);
+    assert.equal(elements.get('table-toolbar').attributes['data-structure'], 'table-toolbar');
+    assert.equal(elements.get('user-profile-card').attributes['data-loading'], 'false');
+    assert.equal(elements.get('user-profile-card').attributes['data-variant'], 'full');
+  });
+
+  it('MUTANT: a moved default or a vanished gate fails the row it pins, named', () => {
+    const table = realRenderRosterFailures(ROOT, { table: REAL_RENDER_MOUNTS.table }, {
+      readSource: drift('display/table/engines/modern/index.tsx', 'headerBordered = true,', 'headerBordered = false,'),
+    });
+    assert.ok(table.some((line) => line.startsWith('table/state:') && line.includes('no longer carries the resolves `headerBordered = true,`')), table.join(' | '));
+    const sidebar = realRenderRosterFailures(ROOT, { 'sidebar-surface': REAL_RENDER_MOUNTS['sidebar-surface'] }, {
+      readSource: drift('navigation/sidebar-surface/index.tsx', '{ stacked: false };', '{ stacked: true };'),
+    });
+    assert.ok(sidebar.some((line) => line.startsWith('sidebar-surface/attr:data-stacked=false:')), sidebar.join(' | '));
+    const bones = realRenderRosterFailures(ROOT, { 'skeleton-anatomy-block': REAL_RENDER_MOUNTS['skeleton-anatomy-block'] }, {
+      readSource: drift('skeleton/runtime/anatomy-renderer/index.tsx', "  root: 'frame',", "  root: 'block',"),
+    });
+    assert.ok(bones.some((line) => line.startsWith('skeleton-anatomy-block/attr:data-bone=frame:')), bones.join(' | '));
+    const tree = realRenderRosterFailures(ROOT, { tree: REAL_RENDER_MOUNTS.tree }, {
+      readSource: drift('display/tree/engines/modern/index.tsx', '{showLine && level > 0 && (', '{false && ('),
+    });
+    assert.ok(tree.some((line) => line.startsWith('tree:') && line.includes('no longer carries the gate')), tree.join(' | '));
+    const card = asRenderedRosterFailures(ROOT, {
+      'user-profile-card': AS_RENDERED_ROOT_STAMPS['user-profile-card'].map((row) => (row.attribute === 'data-variant' ? { ...row, resolves: "variant = 'compact'," } : row)),
+    });
+    assert.deepEqual(card, ["user-profile-card/data-variant: src/components/patterns/identity/profile/user-profile-card/engines/modern/index.tsx no longer carries the resolves `variant = 'compact',`"]);
+  });
+
+  it('MUTANT: a token the engine never writes -- a fabricated variant, an invented part -- is refused, never mounted', () => {
+    const box = { ...REAL_RENDER_MOUNTS.box, markup: REAL_RENDER_MOUNTS.box.markup.replace('data-component="box"', 'data-component="box" data-elevated="true"') };
+    assert.ok(realRenderRosterFailures(ROOT, { box }).some((line) => line.includes('`attr:data-elevated=true` is not written by')));
+    const tree = { ...REAL_RENDER_MOUNTS.tree, markup: REAL_RENDER_MOUNTS.tree.markup.replace('data-span="half"', 'data-span="quarter"') };
+    assert.ok(realRenderRosterFailures(ROOT, { tree }).some((line) => line.includes('`attr:data-span=quarter` is not written by')));
+    // A stamp row nobody's markup uses rots the roster into claims; refused too.
+    const list = { ...REAL_RENDER_MOUNTS.list, markup: REAL_RENDER_MOUNTS.list.markup.replace(' data-bordered="true"', '') };
+    assert.ok(realRenderRosterFailures(ROOT, { list }).some((line) => line.startsWith('list/attr:data-bordered=true: a stamp row no mount token uses')));
+  });
+});
+
+describe('axis-difference BROWSER drill — R3: the depth reach rows move depth through their mount, and only through it', { skip: browserReason }, () => {
+  const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
+  const REAL = ['sidebar-surface', 'saved-views-menu', 'table', 'stats-header'];
+  const STAMPED = ['table-toolbar', 'user-profile-card'];
+
+  it('the rows move on depth with their mount and not without it; the palette control stays 0 over the credited mounts', async () => {
+    const families = [...REAL, ...STAMPED];
+    const scenarios = [byId('depth'), byId('palette-only')];
+    const before = Object.fromEntries(Object.entries(AS_RENDERED_ROOT_STAMPS).filter(([family]) => !STAMPED.includes(family)));
+    const on = await run({ verticals: ['bithire'], themes: ['light'], families, scenarios, nativePseudos: false });
+    const off = await run({
+      verticals: ['bithire'], themes: ['light'], families, scenarios, nativePseudos: false, realRenderMounts: false, asRenderedRoster: before,
+    });
+    const depthOn = on.cells.find((entry) => entry.scenario === 'depth');
+    const depthOff = off.cells.find((entry) => entry.scenario === 'depth');
+    for (const family of families) {
+      assert.ok(depthOn.movedIds.includes(family), `${family} did not move on depth with its R3 mount`);
+      assert.ok(!depthOff.movedIds.includes(family), `${family} moved on depth WITHOUT its R3 mount, so this drill proves nothing`);
+    }
+    for (const family of REAL) assert.ok(depthOn.realRender.rescued.includes(family), `${family} moved, but not through its real render`);
+    assert.deepEqual(depthOn.realRender.refused, []);
+    assert.deepEqual(on.populations, off.populations, 'a mount may move a numerator, never a denominator');
+    const paletteDepth = on.cells.find((entry) => entry.scenario === 'palette-only' && entry.axis === 'depth');
+    assert.deepEqual([...paletteDepth.realRender.credited].sort(), [...REAL].sort());
+    for (const entry of on.cells.filter((item) => item.kind === 'negative')) {
+      assert.equal(entry.evidential, true);
+      assert.equal(entry.moved, 0, `${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
+    }
+    assert.deepEqual(evaluate(on), []);
   });
 });

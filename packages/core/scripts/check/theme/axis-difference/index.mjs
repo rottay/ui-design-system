@@ -821,6 +821,39 @@ export const AS_RENDERED_ROOT_STAMPS = Object.freeze({
       resolves: 'type = PROGRESS_DEFAULTS.type,',
     }),
   ]),
+  // R3 (WO-EVI-02, depth reach). Each row was measured moving on depth with
+  // the stamp alone before it was written, and each is the DEFAULT render's value.
+  'table-toolbar': Object.freeze([
+    Object.freeze({
+      attribute: 'data-structure',
+      value: 'table-toolbar',
+      source: 'src/components/structures/workspace/table-toolbar/runtime/rendering/index.tsx',
+      // The family's own "always-present specificity hook", written literally
+      // on the one root every render returns; the root keyline sits behind it.
+      stamp: 'data-structure="table-toolbar"',
+      resolves: 'className="ds-structure ds-table-toolbar"',
+    }),
+  ]),
+  'user-profile-card': Object.freeze([
+    Object.freeze({
+      attribute: 'data-loading',
+      value: 'false',
+      source: 'src/components/patterns/identity/profile/user-profile-card/engines/modern/index.tsx',
+      // `loading` has no default, so the default render skips the loading
+      // branch and both remaining branches write the literal `false`.
+      stamp: 'data-loading={false}',
+      resolves: 'if (loading) {',
+    }),
+    Object.freeze({
+      attribute: 'data-variant',
+      value: 'full',
+      source: 'src/components/patterns/identity/profile/user-profile-card/engines/modern/index.tsx',
+      // The default variant is `full`; the card's resting elevation sits
+      // behind `[data-loading='false'][data-variant='full']`.
+      stamp: 'data-variant={variant}',
+      resolves: "variant = 'full',",
+    }),
+  ]),
 });
 
 /**
@@ -1471,7 +1504,8 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   }),
   'edit-fields': Object.freeze({
     state: Object.freeze({
-      name: 'the canonical inline editor: a group holding one editor with an icon header, a primary grid with one field, and the footer -- every node below the group root',
+      name: 'the canonical inline editor: a group holding one editor with an icon header, a primary grid with one field, and the footer -- every node below the group root; '
+        + 'the editor icon\'s keyline is the family\'s depth paint (R3: the default root is flat on depth)',
       source: 'src/components/structures/record/edit-fields/index.tsx',
       anchors: Object.freeze(['{!headerless ? (', '{Icon ? (', '{hasFooter ? <InlineEditFooter {...footerProps}>{footer}</InlineEditFooter> : null}']),
       resolves: Object.freeze([
@@ -1481,7 +1515,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
         }),
       ]),
     }),
-    axes: Object.freeze(['shape', 'rhythm', 'motion']),
+    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion']),
     markup: '<div class="ds-structure ds-edit-fields" data-part="group">'
       + '<div class="ds-structure ds-edit-fields" data-part="editor"><div data-part="editor-header">'
       + '<div data-part="editor-lead"><div data-part="editor-icon"></div><div data-part="editor-copy">'
@@ -1582,12 +1616,13 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   }),
   'feature-workspace-frame': Object.freeze({
     state: Object.freeze({
-      name: 'the public `loading` render of a default frame (no navigation, fluid width) -- the three skeleton cards carry the card radius and the shimmer; the idle root never contains them',
+      name: 'the public `loading` render of a default frame (no navigation, fluid width) -- the three skeleton cards carry the card radius, the shimmer '
+        + 'and (R3) the card keyline; the idle root never contains them',
       source: 'src/components/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx',
       anchors: Object.freeze(['{loading ? (']),
       resolves: Object.freeze([]),
     }),
-    axes: Object.freeze(['shape', 'motion']),
+    axes: Object.freeze(['shape', 'depth', 'motion']),
     markup: '<section class="ds-pattern-feature-workspace-frame" data-part="root" data-width="fluid" data-has-navigation="false" data-loading="true">'
       + '<div class="ds-feature-workspace-frame__frame" data-part="frame">'
       + '<div class="ds-feature-workspace-frame__content" data-part="content">'
@@ -2139,14 +2174,15 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   }),
   'stats-header': Object.freeze({
     state: Object.freeze({
-      name: 'a one-stat header whose stat carries `onClick` -- the stat card becomes a button, `data-clickable="true"`, the node the lift, press and ring rules are gated on (kernel-stamped)',
+      name: 'a one-stat header whose stat carries `onClick` -- the stat card becomes a button, `data-clickable="true"`, the node the lift, press and ring rules are gated on (kernel-stamped); '
+        + 'every stat card stamps `data-accent` (clickable or not), the gate its keyline sits behind -- the family\'s depth paint (R3)',
       source: 'src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx',
       anchors: Object.freeze(['const isClickable = !!stat.onClick;', '<StatCard key={stat.key} stat={stat} />']),
       resolves: Object.freeze([
         Object.freeze({ source: 'src/components/structures/dashboard/stats-header/contracts/index.ts', text: 'onClick?: () => void;' }),
       ]),
     }),
-    axes: Object.freeze(['states']),
+    axes: Object.freeze(['depth', 'states']),
     markup: '<div class="ds-stats-header" data-part="root" data-columns="1" data-loading="false">'
       + '<div data-part="card-grid"><div data-part="stat-card" data-accent="primary" data-clickable="true" role="button" tabindex="0">'
       + '</div></div></div>',
@@ -2608,6 +2644,315 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
           Object.freeze({ source: 'src/components/primitives/layout/box/contracts/index.ts', text: 'as: "div",' }),
         ]),
       }),
+    ]),
+  }),
+  // R3 (WO-EVI-02, depth reach): the rows the R3 census measured moving on
+  // depth with the mount alone. Each declares depth and nothing else, so every
+  // other axis reads exactly as before. Default renders first, then the
+  // configurations a public prop ships, each with its gate cited.
+  'sidebar-surface': Object.freeze({
+    state: Object.freeze({
+      name: 'the default render at a desktop viewport (not stacked, `bordered` unset) -- the main region is written unconditionally, and its '
+        + 'inline-start separator (a `border-inline-start` shorthand the part vocabulary does not list) is the family\'s depth paint',
+      source: 'src/components/structures/shell/navigation/sidebar-surface/index.tsx',
+      anchors: Object.freeze(['<Box data-part="main">']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="ds-structure ds-sidebar-surface" data-part="root" data-stacked="false" data-bordered="true">'
+      + '<div data-part="main"></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: '<Box',
+        resolves: Object.freeze([
+          Object.freeze({ source: 'src/components/primitives/layout/box/engines/modern/index.tsx', text: 'as: Component = BOX_DEFAULTS.as,' }),
+          Object.freeze({ source: 'src/components/primitives/layout/box/contracts/index.ts', text: 'as: "div",' }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-stacked=false',
+        stamp: "data-stacked={adaptation.stacked ? 'true' : 'false'}",
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/structures/shell/navigation/sidebar-surface/index.tsx',
+            text: 'const BASE_ADAPTATION: ResolvedSidebarSurfaceAdaptation = { stacked: false };',
+          }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-bordered=true',
+        stamp: "data-bordered={config.visual.bordered === false ? 'false' : 'true'}",
+      }),
+    ]),
+  }),
+  'saved-views-menu': Object.freeze({
+    state: Object.freeze({
+      name: 'the open panel of a default SavedViewsMenu (portalled dialog with its header) -- the panel keyline and the header rule; '
+        + 'the mounted root is the closed trigger, which never contains the panel',
+      source: 'src/components/structures/workspace/saved-views-menu/index.tsx',
+      anchors: Object.freeze(['{isOpen && (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div data-part="panel" data-open="true" class="ds-structure ds-saved-views-menu-panel" role="dialog">'
+      + '<div data-part="header"></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: '<Box',
+        resolves: Object.freeze([
+          Object.freeze({ source: 'src/components/primitives/layout/box/engines/modern/index.tsx', text: 'as: Component = BOX_DEFAULTS.as,' }),
+          Object.freeze({ source: 'src/components/primitives/layout/box/contracts/index.ts', text: 'as: "div",' }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-open=true',
+        stamp: 'data-open={isOpen}',
+        resolves: Object.freeze([
+          Object.freeze({ source: 'src/components/structures/workspace/saved-views-menu/index.tsx', text: '{isOpen && (' }),
+        ]),
+      }),
+    ]),
+  }),
+  'skeleton-anatomy-block': Object.freeze({
+    family: 'skeleton-anatomy',
+    state: Object.freeze({
+      name: 'the default `mode="block"` render, loading and measured, over a child whose root stamps `data-part="root"` (every DS root does) -- '
+        + 'that part reads as a `frame` bone, the node the outline hairline is gated on; a second row because the table-rows render is another root',
+      source: SKELETON_ANATOMY,
+      anchors: Object.freeze(['{bones && (', "mode = 'block',"]),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div data-part="root" data-loading="true" data-measured="true" data-animation="shimmer" class="ds-skeleton-anatomy">'
+      + '<div data-part="bones" aria-hidden="true"><span data-part="bone" data-bone="frame"></span></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-loading=true',
+        stamp: "data-loading={loading ? 'true' : 'false'}",
+        resolves: Object.freeze([Object.freeze({ source: SKELETON_ANATOMY, text: '{ loading = true, busy = true,' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-measured=true',
+        stamp: "data-measured={bones ? 'true' : 'false'}",
+        resolves: Object.freeze([Object.freeze({ source: SKELETON_ANATOMY, text: 'if (loading) measure();' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-animation=shimmer',
+        stamp: 'data-animation={animationStyle}',
+        resolves: Object.freeze([
+          Object.freeze({ source: SKELETON_ANATOMY, text: "resolvedAnimation === 'pulse' ? 'pulse' : 'shimmer'" }),
+          Object.freeze({ source: SKELETON_ANATOMY, text: ": 'wave');" }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-bone=frame',
+        stamp: 'data-bone={bone.role}',
+        resolves: Object.freeze([Object.freeze({ source: SKELETON_ANATOMY, text: "  root: 'frame'," })]),
+      }),
+    ]),
+  }),
+  table: Object.freeze({
+    state: Object.freeze({
+      name: 'a default Table with one column (`headerBordered` defaults true) -- every header cell carries `data-hairline`, the gate the '
+        + 'header/body rule sits behind; the mounted root is the wrapper, and the table, header and cells are nodes the bare root never contains',
+      source: 'src/components/primitives/display/table/engines/modern/index.tsx',
+      anchors: Object.freeze(['{showHeader && (', 'const showHeaderHairline = bordered || headerBordered;']),
+      resolves: Object.freeze([
+        Object.freeze({ source: 'src/components/primitives/display/table/engines/modern/index.tsx', text: 'headerBordered = true,' }),
+      ]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="ds-table ds-table--modern"><table role="grid" data-part="table"><thead><tr>'
+      + '<th data-part="header-cell" data-hairline="true"></th></tr></thead></table></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-part=header-cell',
+        stamp: "{...partAttributes('header-cell', state)}",
+        source: 'src/components/primitives/display/table/engines/modern/parts/presentation/header-cell/index.tsx',
+      }),
+      Object.freeze({
+        token: 'attr:data-hairline=true',
+        stamp: "data-hairline={showHeaderHairline ? 'true' : undefined}",
+      }),
+    ]),
+  }),
+  tree: Object.freeze({
+    state: Object.freeze({
+      name: 'a Tree given `showLine` with one expanded parent and one (last) child -- the connectors exist only under that prop and only for a '
+        + 'node below the top level; their line width is the family\'s depth paint (the parent node is omitted: the rules are descendant matches)',
+      source: 'src/components/primitives/display/tree/engines/modern/index.tsx',
+      anchors: Object.freeze(['{showLine && level > 0 && (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="rottay-tree rottay-tree--modern" data-part="root" role="tree">'
+      + '<div class="rottay-tree-node" data-part="node"><div data-part="connector" data-axis="horizontal"></div>'
+      + '<div data-part="connector" data-axis="vertical" data-span="half"></div></div></div>',
+  }),
+  descriptions: Object.freeze({
+    state: Object.freeze({
+      name: 'a Descriptions given a `title` -- the header exists only then, and the root stamps `data-has-header="true"`, the gate its keyline sits behind',
+      source: 'src/components/primitives/display/descriptions/engines/modern/index.tsx',
+      anchors: Object.freeze(['{(title || extra) && (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="rottay-descriptions rottay-descriptions--modern" data-part="root" data-has-header="true">'
+      + '<div class="rottay-descriptions-title" data-part="header"></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-part=root', stamp: "data-part={dataPart ?? 'root'}" }),
+      Object.freeze({
+        token: 'attr:data-has-header=true',
+        stamp: 'data-has-header={hasHeader}',
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/display/descriptions/engines/modern/index.tsx',
+            text: 'const hasHeader = !!(title || extra);',
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  carousel: Object.freeze({
+    state: Object.freeze({
+      name: 'a Carousel given `arrows` (infinite by default, so neither arrow is disabled) -- the prev/next buttons exist only under that prop and their '
+        + 'keyline is the family\'s depth paint',
+      source: 'src/components/primitives/display/carousel/engines/modern/index.tsx',
+      anchors: Object.freeze(['{arrows && (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="rottay-carousel rottay-carousel--modern" data-part="root">'
+      + '<button data-part="arrow" data-direction="prev" type="button"></button></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-part=arrow', stamp: "{...partAttributes('arrow', prevArrowState.state)}" }),
+    ]),
+  }),
+  image: Object.freeze({
+    state: Object.freeze({
+      name: 'an Image given `shadow` (the engine\'s own usage example) -- the root stamps `data-shadow="true"` only then, the gate its elevation sits behind',
+      source: 'src/components/primitives/display/image/engines/modern/index.tsx',
+      anchors: Object.freeze(["data-shadow={shadow ? 'true' : undefined}"]),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="rottay-image rottay-image--modern" data-shadow="true" data-part="root"></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-shadow=true', stamp: "data-shadow={shadow ? 'true' : undefined}" }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: "{...partAttributes(dataPart ?? 'root', interaction)}" }),
+    ]),
+  }),
+  box: Object.freeze({
+    state: Object.freeze({
+      name: 'a Box given `shadow="md"` -- a shadow rung is the only configuration that stamps `data-shadow`, the gate every elevation rule of the '
+        + 'family sits behind; the default Box writes none',
+      source: 'src/components/primitives/layout/box/engines/modern/index.tsx',
+      anchors: Object.freeze(['!callerOwnsShadow && props.shadow && props.shadow !== "none"']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: 'src/components/primitives/layout/box/contracts/index.ts',
+          text: 'export type BoxShadow = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div data-part="box-surface" class="rottay-box rottay-box--modern" data-shadow="md" data-component="box"></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: 'React.createElement(ElementType, elementProps)',
+        resolves: Object.freeze([
+          Object.freeze({ source: 'src/components/primitives/layout/box/engines/modern/index.tsx', text: 'as: Component = BOX_DEFAULTS.as,' }),
+          Object.freeze({ source: 'src/components/primitives/layout/box/contracts/index.ts', text: 'as: "div",' }),
+        ]),
+      }),
+      Object.freeze({ token: 'attr:data-shadow=md', stamp: '? props.shadow' }),
+    ]),
+  }),
+  list: Object.freeze({
+    state: Object.freeze({
+      name: 'a List given `bordered` (the engine\'s own usage example) -- the root stamps `data-bordered="true"` only then, the gate its frame sits behind',
+      source: 'src/components/primitives/display/list/engines/modern/index.tsx',
+      anchors: Object.freeze(["data-bordered={bordered ? 'true' : 'false'}"]),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="rottay-list rottay-list--modern" data-part="root" data-bordered="true"></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-part=root', stamp: "data-part={dataPart ?? 'root'}" }),
+      Object.freeze({ token: 'attr:data-bordered=true', stamp: "data-bordered={bordered ? 'true' : 'false'}" }),
+    ]),
+  }),
+  'drawer-compounds-divider': Object.freeze({
+    family: 'drawer-compounds',
+    state: Object.freeze({
+      name: 'a Drawer.Header given `divider` -- the header stamps `data-divider="true"` only then, the gate its block-end rule sits behind; '
+        + 'a second row because the close-button row is a header without it',
+      source: 'src/components/primitives/feedback/drawer/compound/header/index.tsx',
+      anchors: Object.freeze(['divider = false,']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div data-part="header" data-divider="true" class="ds-drawer-header"></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-divider=true', stamp: "data-divider={divider ? 'true' : 'false'}" }),
+    ]),
+  }),
+  'modal-compounds-divider': Object.freeze({
+    family: 'modal-compounds',
+    state: Object.freeze({
+      name: 'a Modal.Header given `divider` -- the header stamps `data-divider="true"` only then, the gate its block-end rule sits behind; '
+        + 'a second row because the close-button row is a different node',
+      source: 'src/components/primitives/feedback/modal/compound/header/index.tsx',
+      anchors: Object.freeze(['divider = false,']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div data-part="header" data-divider="true" class="ds-modal-header"></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-divider=true', stamp: "data-divider={divider ? 'true' : 'false'}" }),
+    ]),
+  }),
+  'assistant-preview-diff': Object.freeze({
+    family: 'assistant',
+    state: Object.freeze({
+      name: 'a PreviewDiffCard with one row (the assistant pattern exports it beside the streaming text the family root mounts) -- every diff row '
+        + 'carries the hairline rule that is the family\'s depth paint; the card and its body wrappers are omitted (the rule is a descendant match)',
+      source: 'src/components/patterns/communication/assistant/index.tsx',
+      anchors: Object.freeze(['export function PreviewDiffCard({', '{rows.map((row, index) => {']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="ds-assistant-preview-diff-card"><div data-part="diff-row"></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: Object.freeze(['<Card className="ds-assistant-preview-diff-card"', '<Stack']),
+        resolves: Object.freeze([
+          Object.freeze({
+            source: 'src/components/primitives/display/card/engines/modern/index.tsx',
+            text: '<div\n      {...rest}\n      ref={setRootElement}\n      className={cardClassName}',
+          }),
+          Object.freeze({ source: 'src/components/primitives/layout/stack/contracts/index.ts', text: 'as: "div",' }),
+        ]),
+      }),
+    ]),
+  }),
+  'data-table-actions': Object.freeze({
+    state: Object.freeze({
+      name: 'a DataTable given `actions` (the row-actions column) -- the root stamps `data-has-actions="true"` only then, and the actions header '
+        + 'cell exists only then; its inline-start keyline is the family\'s depth paint (the wrappers between root and table are omitted)',
+      source: 'src/components/patterns/data/data-table/engines/modern/index.tsx',
+      anchors: Object.freeze(['{/* Actions column header */}\n                  {actions && (']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['depth']),
+    markup: '<div class="ds-pattern-data-table" data-has-actions="true" data-part="root"><table><thead><tr>'
+      + '<th data-cell-kind="actions" data-part="header-cell"></th></tr></thead></table></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-has-actions=true', stamp: 'data-has-actions={actions ? "true" : "false"}' }),
     ]),
   }),
 });
