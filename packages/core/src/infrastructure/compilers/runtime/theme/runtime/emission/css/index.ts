@@ -364,19 +364,31 @@ export function emitDensityScopeRule(
  *
  * `container` marks a scope below the document root; every root-element door
  * omits it and emits the same bytes as before the container law existed. At a
- * container the mode rules, and the contrast deltas over them, follow the
- * document's mode (`documentModeScope`), after the context rules they outrank.
+ * container the mode rules, and the mode-tagged contrast deltas over them,
+ * follow the document's mode (`documentModeScope`), after the context rules
+ * they outrank. A root door's mode rule outranks its mode-less contrast delta
+ * by specificity (the mode hook on its own element); a container's rules all
+ * sit at the scope's weight, so the same lattice (base < contrast < mode <
+ * mode contrast) is spelled by order: the mode-less delta before the mode
+ * rules, the mode-tagged deltas after them.
  */
 export function emitThemeCss(
   compiled: ThemeCompilation,
   scope: EmissionScope,
   options: { container?: ContainerEmission } = {}
 ): string {
-  const modeScope = options.container ? documentModeScope(scope) : scope;
+  const contrast = compiled.contrastBlocks ?? [];
+  const modes = (modeScope: EmissionScope) => compiled.modeBlocks.map((mode) => emitModeRule(mode, modeScope));
+  const overlays = options.container
+    ? [
+        emitContrastRule(contrast.filter((block) => block.mode === undefined), scope),
+        ...modes(documentModeScope(scope)),
+        emitContrastRule(contrast.filter((block) => block.mode !== undefined), documentModeScope(scope)),
+      ]
+    : [...modes(scope), emitContrastRule(contrast, scope)];
   return [
     emitBaseRule(compiled, scope, options),
-    ...compiled.modeBlocks.map((mode) => emitModeRule(mode, modeScope)),
-    emitContrastRule(compiled.contrastBlocks ?? [], modeScope),
+    ...overlays,
     emitDensityScopeRule(compiled.densityScopeBlock, scope),
   ]
     .filter(Boolean)

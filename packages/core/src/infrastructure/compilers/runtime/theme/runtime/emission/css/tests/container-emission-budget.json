@@ -1,0 +1,180 @@
+{
+  "doors": {
+    "brand-studio:bithire:EMPTY:dark": {
+      "bytes": 175945,
+      "declarations": {
+        "base": 2262,
+        "context": 7,
+        "mode": 0
+      }
+    },
+    "brand-studio:bithire:EMPTY:light": {
+      "bytes": 176987,
+      "declarations": {
+        "base": 2262,
+        "context": 7,
+        "mode": 0
+      }
+    },
+    "brand-studio:bithire:RICH:dark": {
+      "bytes": 201158,
+      "declarations": {
+        "base": 2570,
+        "context": 8,
+        "mode": 0
+      }
+    },
+    "brand-studio:bithire:RICH:light": {
+      "bytes": 202201,
+      "declarations": {
+        "base": 2570,
+        "context": 8,
+        "mode": 0
+      }
+    },
+    "brand-studio:evnto:EMPTY:dark": {
+      "bytes": 160916,
+      "declarations": {
+        "base": 2021,
+        "context": 4,
+        "mode": 0
+      }
+    },
+    "brand-studio:evnto:EMPTY:light": {
+      "bytes": 161971,
+      "declarations": {
+        "base": 2021,
+        "context": 4,
+        "mode": 0
+      }
+    },
+    "brand-studio:evnto:RICH:dark": {
+      "bytes": 201135,
+      "declarations": {
+        "base": 2576,
+        "context": 8,
+        "mode": 0
+      }
+    },
+    "brand-studio:evnto:RICH:light": {
+      "bytes": 202132,
+      "declarations": {
+        "base": 2576,
+        "context": 8,
+        "mode": 0
+      }
+    },
+    "brand-studio:rottay:EMPTY:dark": {
+      "bytes": 160916,
+      "declarations": {
+        "base": 2021,
+        "context": 4,
+        "mode": 0
+      }
+    },
+    "brand-studio:rottay:EMPTY:light": {
+      "bytes": 161971,
+      "declarations": {
+        "base": 2021,
+        "context": 4,
+        "mode": 0
+      }
+    },
+    "brand-studio:rottay:RICH:dark": {
+      "bytes": 201649,
+      "declarations": {
+        "base": 2585,
+        "context": 8,
+        "mode": 0
+      }
+    },
+    "brand-studio:rottay:RICH:light": {
+      "bytes": 202646,
+      "declarations": {
+        "base": 2585,
+        "context": 8,
+        "mode": 0
+      }
+    },
+    "sandbox:bithire:PRIMARY": {
+      "bytes": 65341,
+      "declarations": {
+        "base": 686,
+        "context": 1,
+        "mode": 43
+      }
+    },
+    "sandbox:bithire:RICH": {
+      "bytes": 79531,
+      "declarations": {
+        "base": 908,
+        "context": 3,
+        "mode": 37
+      }
+    },
+    "sandbox:evnto:PRIMARY": {
+      "bytes": 69453,
+      "declarations": {
+        "base": 737,
+        "context": 4,
+        "mode": 41
+      }
+    },
+    "sandbox:evnto:RICH": {
+      "bytes": 81712,
+      "declarations": {
+        "base": 940,
+        "context": 4,
+        "mode": 35
+      }
+    },
+    "sandbox:rottay:PRIMARY": {
+      "bytes": 70732,
+      "declarations": {
+        "base": 753,
+        "context": 4,
+        "mode": 28
+      }
+    },
+    "sandbox:rottay:RICH": {
+      "bytes": 81832,
+      "declarations": {
+        "base": 940,
+        "context": 4,
+        "mode": 35
+      }
+    },
+    "tenant-preview:bithire": {
+      "bytes": 66979,
+      "declarations": {
+        "base": 701,
+        "context": 1,
+        "mode": 43
+      }
+    },
+    "tenant-preview:evnto": {
+      "bytes": 71278,
+      "declarations": {
+        "base": 754,
+        "context": 4,
+        "mode": 41
+      }
+    },
+    "tenant-preview:rottay": {
+      "bytes": 72583,
+      "declarations": {
+        "base": 770,
+        "context": 4,
+        "mode": 28
+      }
+    }
+  },
+  "history": [
+    {
+      "date": "2026-10-01",
+      "change": "anchor (M4, WO-EVI-02)",
+      "reason": "First pin, after M2 (mode arm) and M3 (CONTAINER_MODE_TEXTS): the growth Fable's M2/M3 review measured (brand-studio 161-203 kB and 2,021-2,585 base declarations per panel) is the anchored state. Brand-studio's ground pin is a near-constant of the DS (the root-only foundation dark block), not of the draft.",
+      "totalBytes": 2869068
+    }
+  ]
+}

@@ -315,6 +315,42 @@ describe("a container scope's mode rules follow the document's mode", () => {
     expect(preview).toContain("[data-sb][data-theme='dark'], [data-sb].dark {\n");
   });
 
+  describe("the contrast deltas keep the root's lattice by order (M4: base < contrast < mode < mode contrast)", () => {
+    const theme = {
+      cssVariables: { "--ds-x": "base" },
+      modeBlocks: [{ mode: "dark" as const, colorScheme: "dark" as const, cssVariables: { "--ds-x": "dark" } }],
+      contrastBlocks: [
+        { cssVariables: { "--ds-x": "contrast-base" } },
+        { mode: "dark" as const, cssVariables: { "--ds-x": "contrast-dark" } },
+      ],
+      runtime: { personality: {}, tokenOverrides: {} },
+    };
+
+    it("a container emits the mode-less delta before the mode rules and the mode-tagged delta after them", () => {
+      const css = emitThemeCss(theme, scope, { container: {} });
+      const contrastBase = css.indexOf("@media (prefers-contrast: more) {\n[data-sb] {\n  --ds-x: contrast-base;\n}\n}");
+      const mode = css.indexOf(`${DARK_DOCUMENT} {\n  color-scheme: dark;\n  --ds-x: dark;\n}`);
+      const contrastDark = css.indexOf(
+        `@media (prefers-contrast: more) {\n${DARK_DOCUMENT} {\n  --ds-x: contrast-dark;\n}\n}`
+      );
+      expect(contrastBase).toBeGreaterThan(0);
+      expect(mode).toBeGreaterThan(contrastBase);
+      expect(contrastDark).toBeGreaterThan(mode);
+    });
+
+    it("a root door keeps one contrast rule after its mode rules, byte for byte", () => {
+      const door = emitThemeCss(theme, firstPartyScope("bithire"));
+      expect(door).toBe(
+        [
+          "html[data-tenant='bithire'] {\n  --ds-x: base;\n}",
+          "html[data-tenant='bithire'][data-theme='dark'], html[data-tenant='bithire'].dark {\n  color-scheme: dark;\n  --ds-x: dark;\n}",
+          "@media (prefers-contrast: more) {\nhtml[data-tenant='bithire'] {\n  --ds-x: contrast-base;\n}\n" +
+            "html[data-tenant='bithire'][data-theme='dark'], html[data-tenant='bithire'].dark {\n  --ds-x: contrast-dark;\n}\n}",
+        ].join("\n\n")
+      );
+    });
+  });
+
   describe("containerModeBlocks", () => {
     const untouched = {
       cssVariables: { "--ds-color-primary": "#111111", "--ds-glow": "none", "--ds-ink": "#000000" },
@@ -403,7 +439,7 @@ describe("the DS root's own mode channels (CONTAINER_MODE_TEXTS)", () => {
       base: "#171717",
       light: "#171717",
       dark: "#f8fafc",
-      sites: { base: "foundation/themes/default/index.css:62", dark: "foundation/themes/default/index.css:2100" },
+      sites: { base: "foundation/themes/default/index.css:62", dark: "foundation/themes/default/index.css:2107" },
     });
     expect(row("--ds-table-bg")).toMatchObject({ base: "#ffffff", dark: "var(--ds-surface-card)" });
     // The components layer's bare :root rule outranks the token layer's dark block.
@@ -446,6 +482,30 @@ describe("the DS root's own mode channels (CONTAINER_MODE_TEXTS)", () => {
   });
 });
 
+describe("the mode table and the context table never contest a name (M4)", () => {
+  // A container's mode rules follow its context rules at equal weight, so a
+  // mode-table name that also had a context rule would let the mode rule
+  // outrank it by order. Today the only contexts the two tables share are the
+  // DS's own plain dark rules, and those carry the table's dark text, so a mode
+  // rule can only restate them. A regen that breaks either fact stops here.
+  const modeRow = new Map(CONTAINER_MODE_TEXTS.map((row) => [row.name, row]));
+  const isDarkContext = (selector: string) => /\[data-theme='dark'\]/.test(selector) && /\.dark\b/.test(selector);
+  const shared = CONTAINER_ALIAS_CONTEXTS.filter((context) => modeRow.has(context.name));
+
+  it("no mode-table name has an at-rule, density, :lang or other non-mode context", () => {
+    const contested = shared.filter((context) => context.at.length > 0 || !isDarkContext(context.selector));
+    expect(contested.map((context) => `${context.name} @ ${context.at.join(" ")} ${context.selector}`)).toEqual([]);
+  });
+
+  it("every dark context is a mode-table name carrying the table's dark text", () => {
+    const dark = CONTAINER_ALIAS_CONTEXTS.filter((context) => isDarkContext(context.selector));
+    expect(dark.length).toBe(32);
+    expect(shared.length).toBe(32);
+    const drift = dark.filter((context) => modeRow.get(context.name)?.dark !== context.value);
+    expect(drift.map((context) => `${context.name}: ${context.value} vs ${modeRow.get(context.name)?.dark}`)).toEqual([]);
+  });
+});
+
 describe("the cascade winner among a left-out alias's root texts", () => {
   it("ranks layer, then specificity, then bundle order", () => {
     const dir = mkdtempSync(join(tmpdir(), "root-aliases-"));
@@ -475,7 +535,7 @@ describe("the cascade winner among a left-out alias's root texts", () => {
       exclusion: "divergentRootText",
       site: "runtime/personality/index.css:40",
     });
-    expect(winner("--ds-shadow-focus-ring")?.site).toBe("foundation/themes/default/index.css:834");
+    expect(winner("--ds-shadow-focus-ring")?.site).toBe("foundation/themes/default/index.css:841");
     expect(CONTAINER_ALIASES.length).toBe(deriveRootAliases().excluded.contextVarying.length + deriveRootAliases().excluded.divergentRootText.length);
   });
 });
