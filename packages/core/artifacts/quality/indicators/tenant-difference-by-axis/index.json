@@ -1,11 +1,11 @@
 {
   "id": "tenant-difference-by-axis",
   "gate": "axis-difference (`capability-propagation` by axis, WO-EVI-02)",
-  "producedAt": "2026-10-01T03:51:03.121Z",
-  "value": "3/6 axes at >= 80 % of declaring families (typography, rhythm, motion; effective-denominator reading 4/6); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
+  "producedAt": "2026-10-01T07:47:54.234Z",
+  "value": "4/6 axes at >= 80 % of declaring families (typography, rhythm, depth, motion; effective-denominator reading 5/6); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
   "target": "6/6 axes at >= 80 % and the negative test green",
   "met": false,
-  "commit": "69933cb3dc237eb42934646383dc58f3e6760cf1",
+  "commit": "4417f4ce43cd70e8fdc6043348efd19974128f4a",
   "catalogRevision": "3f42e4ddc61d0e8b",
   "browser": "149.0.7827.55",
   "bundleMode": "fresh",
@@ -23,76 +23,76 @@
   "axes": {
     "shape": {
       "status": "below-threshold",
-      "declared": 215,
-      "effective": 203,
+      "declared": 214,
+      "effective": 202,
       "excludedUnmountable": 6,
       "excludedUnsettled": 6,
-      "notApplicable": 3,
+      "notApplicable": 4,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 74,
-      "worstPercentEffective": 78.3,
-      "effectiveAtThreshold": false,
+      "worstPercentDeclared": 75.7,
+      "worstPercentEffective": 80.2,
+      "effectiveAtThreshold": true,
       "cells": [
         {
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
-          "moved": 159,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 74,
-          "percentEffective": 78.3
+          "moved": 162,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 75.7,
+          "percentEffective": 80.2
         },
         {
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
-          "moved": 159,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 74,
-          "percentEffective": 78.3
+          "moved": 162,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 75.7,
+          "percentEffective": 80.2
         },
         {
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
-          "moved": 159,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 74,
-          "percentEffective": 78.3
+          "moved": 162,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 75.7,
+          "percentEffective": 80.2
         },
         {
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
-          "moved": 159,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 74,
-          "percentEffective": 78.3
+          "moved": 162,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 75.7,
+          "percentEffective": 80.2
         },
         {
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
-          "moved": 159,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 74,
-          "percentEffective": 78.3
+          "moved": 162,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 75.7,
+          "percentEffective": 80.2
         },
         {
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
-          "moved": 159,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 74,
-          "percentEffective": 78.3
+          "moved": 162,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 75.7,
+          "percentEffective": 80.2
         }
       ]
     },
@@ -247,7 +247,7 @@
       ]
     },
     "depth": {
-      "status": "below-threshold",
+      "status": "at-threshold",
       "declared": 199,
       "effective": 187,
       "excludedUnmountable": 6,
@@ -255,69 +255,69 @@
       "notApplicable": 0,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 79.9,
-      "worstPercentEffective": 85,
+      "worstPercentDeclared": 80.4,
+      "worstPercentEffective": 85.6,
       "effectiveAtThreshold": true,
       "cells": [
         {
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
-          "moved": 159,
+          "moved": 160,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 79.9,
-          "percentEffective": 85
+          "percentDeclared": 80.4,
+          "percentEffective": 85.6
         },
         {
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
-          "moved": 159,
+          "moved": 160,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 79.9,
-          "percentEffective": 85
+          "percentDeclared": 80.4,
+          "percentEffective": 85.6
         },
         {
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
-          "moved": 159,
+          "moved": 160,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 79.9,
-          "percentEffective": 85
+          "percentDeclared": 80.4,
+          "percentEffective": 85.6
         },
         {
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
-          "moved": 159,
+          "moved": 160,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 79.9,
-          "percentEffective": 85
+          "percentDeclared": 80.4,
+          "percentEffective": 85.6
         },
         {
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
-          "moved": 159,
+          "moved": 160,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 79.9,
-          "percentEffective": 85
+          "percentDeclared": 80.4,
+          "percentEffective": 85.6
         },
         {
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
-          "moved": 159,
+          "moved": 160,
           "declared": 199,
           "effective": 187,
-          "percentDeclared": 79.9,
-          "percentEffective": 85
+          "percentDeclared": 80.4,
+          "percentEffective": 85.6
         }
       ]
     },
@@ -438,69 +438,69 @@
       "notApplicable": 0,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 81.4,
-      "worstPercentEffective": 85.1,
+      "worstPercentDeclared": 81.9,
+      "worstPercentEffective": 85.6,
       "effectiveAtThreshold": true,
       "cells": [
         {
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
-          "moved": 166,
+          "moved": 167,
           "declared": 204,
           "effective": 195,
-          "percentDeclared": 81.4,
-          "percentEffective": 85.1
+          "percentDeclared": 81.9,
+          "percentEffective": 85.6
         },
         {
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
-          "moved": 166,
+          "moved": 167,
           "declared": 204,
           "effective": 195,
-          "percentDeclared": 81.4,
-          "percentEffective": 85.1
+          "percentDeclared": 81.9,
+          "percentEffective": 85.6
         },
         {
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
-          "moved": 166,
+          "moved": 167,
           "declared": 204,
           "effective": 195,
-          "percentDeclared": 81.4,
-          "percentEffective": 85.1
+          "percentDeclared": 81.9,
+          "percentEffective": 85.6
         },
         {
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
-          "moved": 166,
+          "moved": 167,
           "declared": 204,
           "effective": 195,
-          "percentDeclared": 81.4,
-          "percentEffective": 85.1
+          "percentDeclared": 81.9,
+          "percentEffective": 85.6
         },
         {
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
-          "moved": 166,
+          "moved": 167,
           "declared": 204,
           "effective": 195,
-          "percentDeclared": 81.4,
-          "percentEffective": 85.1
+          "percentDeclared": 81.9,
+          "percentEffective": 85.6
         },
         {
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
-          "moved": 166,
+          "moved": 167,
           "declared": 204,
           "effective": 195,
-          "percentDeclared": 81.4,
-          "percentEffective": 85.1
+          "percentDeclared": 81.9,
+          "percentEffective": 85.6
         }
       ]
     }
