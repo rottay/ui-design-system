@@ -503,14 +503,14 @@
   [data-part='data-pagination'] button:focus-visible,
 .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
   [data-part='data-table-scroll']:focus-visible {
-  outline: var(--ds-focus-ring-width, 3px) solid var(--ds-color-focus, var(--ds-color-primary));
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-focus, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
   [data-part='data-pagination'] button:disabled {
   cursor: not-allowed;
-  opacity: var(--ds-state-disabled-opacity, 0.55);
+  opacity: var(--ds-state-disabled-opacity, 0.6);
 }
 
 @media (hover: hover) {

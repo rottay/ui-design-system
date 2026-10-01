@@ -822,7 +822,7 @@
   --ds-command-palette-group-label-padding-inline: var(--ds-spacing-5, 20px);
   --ds-command-palette-item-active-bg: var(--ds-surface-inset);
   --ds-command-palette-item-active-ring: inset 0 0 0 1px var(--ds-color-border-focus, var(--ds-color-primary));
-  --ds-command-palette-item-disabled-opacity: var(--ds-state-disabled-opacity, 0.5);
+  --ds-command-palette-item-disabled-opacity: var(--ds-state-disabled-opacity, 0.6);
   --ds-command-palette-item-gap: var(--ds-spacing-2, 8px);
   --ds-command-palette-item-hover-surface: var(--ds-surface-inset);
   --ds-command-palette-item-main-gap: var(--ds-spacing-2, 8px);

@@ -62,7 +62,7 @@
   border-radius: var(--ds-radius-sm);
   box-shadow: var(
     --ds-markdown-focus-ring,
-    0 0 0 var(--ds-focus-ring-width, 3px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
   );
 }
 
@@ -156,7 +156,7 @@
   outline: none;
   box-shadow: var(
     --ds-markdown-focus-ring,
-    0 0 0 var(--ds-focus-ring-width, 3px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
   );
 }
 

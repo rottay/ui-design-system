@@ -156,7 +156,7 @@
 .ds-code-block[data-part='root'] [data-part='copy-button']:focus-visible,
 .ds-code-block[data-part='root'] [data-part='scroll']:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 3px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
 }
 
 @media (forced-colors: active) {

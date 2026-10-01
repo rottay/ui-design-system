@@ -152,7 +152,7 @@
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='item']:is([data-state~='disabled'], [aria-disabled='true']) {
   cursor: not-allowed;
-  opacity: var(--ds-command-palette-item-disabled-opacity, var(--ds-state-disabled-opacity, 0.5));
+  opacity: var(--ds-command-palette-item-disabled-opacity, var(--ds-state-disabled-opacity, 0.6));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] {
   background: var(--ds-command-palette-item-active-bg, var(--ds-surface-inset));
