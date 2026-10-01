@@ -97507,8 +97507,10 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * same anatomy without a markup change. The container paints the chart
  * baseline the placeholder bars stand on, so the footprint reads as a chart
  * rather than loose blocks; the hairline is a content-box background so it
- * lands exactly under the bars regardless of the scaffold-owned padding. */
-.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] [data-part='skeleton-bar'] {
+ * lands exactly under the bars regardless of the scaffold-owned padding.
+ * The bar paint is a fallback: `:where()` keeps it (0,1,0), weaker than every
+ * family skin's skeleton-bar rule, as the legend rules above. */
+:where(.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true']) [data-part='skeleton-bar'] {
   background: var(--ds-color-bg-secondary);
   border-radius: var(--ds-radius-sm);
 }
@@ -97676,7 +97678,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-chart-area [data-part='skeleton-bar'] {
-  border-radius: 2px 2px 0 0;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1)) calc(2px * var(--ds-radius-scale-normalized, 1)) 0 0;
   background: linear-gradient(
     to top,
     color-mix(in srgb, var(--ds-chart-mark-color, var(--ds-color-primary)) 22%, var(--ds-color-bg-secondary)),
@@ -97768,7 +97770,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-chart-bar [data-part='skeleton-bar'] {
-  border-radius: 2px 2px 0 0;
+  border-radius: calc(2px * var(--ds-radius-scale-normalized, 1)) calc(2px * var(--ds-radius-scale-normalized, 1)) 0 0;
   background: color-mix(
     in srgb,
     var(--ds-chart-mark-color, var(--ds-color-primary)) 16%,

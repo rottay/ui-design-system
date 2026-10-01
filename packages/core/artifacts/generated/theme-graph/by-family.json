@@ -1032,10 +1032,18 @@
     },
     {
       "decisions": [
+        "experience.profile",
         "palette.contrast-posture",
         "palette.neutral-temperature",
         "palette.seeds",
-        "palette.status-seeds"
+        "palette.status-seeds",
+        "profiles.expressive",
+        "shape.button-style",
+        "shape.control-height",
+        "shape.nesting",
+        "shape.radius-scale",
+        "typography.pairing",
+        "typography.scale"
       ],
       "family": "chart-bullet"
     },
@@ -1051,6 +1059,8 @@
         "palette.status-seeds",
         "profiles.expressive",
         "shape.button-style",
+        "shape.control-height",
+        "shape.nesting",
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
@@ -1210,10 +1220,18 @@
     },
     {
       "decisions": [
+        "experience.profile",
         "palette.contrast-posture",
         "palette.neutral-temperature",
         "palette.seeds",
-        "palette.status-seeds"
+        "palette.status-seeds",
+        "profiles.expressive",
+        "shape.button-style",
+        "shape.control-height",
+        "shape.nesting",
+        "shape.radius-scale",
+        "typography.pairing",
+        "typography.scale"
       ],
       "family": "chart-waterfall"
     },
