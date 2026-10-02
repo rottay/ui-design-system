@@ -7201,6 +7201,11 @@
      "at": "2026-10-02 03:11",
      "by": "Kimi K3",
      "note": "2026-10-02 **dt36 over 249dfc6af (quiet window, frozen inputs, 58 min): 714 PASS / 11 unexpected / 35 SKIP.** The dead-selector gate ran GREEN for the first time (the TRUE_DEAD wave). The 11 reds were ALL the CAP-3/ANAT-3b authored bithire anatomy landing in the cells the ANAT-3b focal sweep missed (my error — the fixture change touches every bithire torture scene; named in the trail as the lesson: a root-attribute change gets a FULL visual run, never a named-spec sweep): 8 screenshot cells + 3 interaction-state pins, all the framed/zebra/rail paint, sighted-reviewed and re-recorded (1e299ca66: 12 baselines + the state matrix's border pair; the 6 specs re-run 69/69 green). dt36's honest form: 714/11/35 with the 11 classified intended-repaint and re-baselined, equivalent to dt31's re-record ceremony. The next certification should confirm 0 unexpected. Evidence: .tmp/dispatch-2026-09-21/dt36-evidence/."
+    },
+    {
+     "at": "2026-10-02 04:12",
+     "by": "Kimi K3",
+     "note": "2026-10-02 **dt37 over 9aba2e641 (quiet window, frozen inputs, 58 min): 725 PASS / 0 unexpected / 35 SKIP / 0 flaky — the program's first fully clean certification run: zero reds needing classification, the dead-selector gate green, the authored anatomy painting under the re-recorded baselines.** This is the confirmation run dt36's registration promised. Evidence: .tmp/dispatch-2026-09-21/dt37-evidence/. Remaining for the milestone: the owner package (4+1 rulings) gates the R1 artifact write; the final certification runs over the post-ruling tree."
     }
    ]
   },
