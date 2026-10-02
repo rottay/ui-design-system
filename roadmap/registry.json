@@ -7141,6 +7141,16 @@
      "at": "2026-10-01 21:36",
      "by": "Kimi K3",
      "note": "2026-10-02 tanda 9c: PORTAL-1 LANDED 5713eb2e3 — the PortalScope media-freeze residual (registered from the SHEET-1 review) is REPAIRED: runtime-derived media query set (no fixed list; the compiler's prefers-color-scheme class pinned by its own arm), listeners only while a consumer is registered, republish on the portaled surface only, lazy re-read while closed. Fable ACCEPT-WITH-CHANGES discharged (color-scheme arm + 2 doc lines). Red-first 4/0 vs HEAD; 15/15 + 641/641 consumers. The sheet :root-frozen density class is named in the token file's header (4be22d946, comment-only + regen). Batch-close indicators over the portal wave: axis-difference 273/273, indicator 19/19, population 62/62. dt35's repaint classification adds: the portaled drawer following local density (SHEET-1's intended repair)."
+    },
+    {
+     "at": "2026-10-01 22:54",
+     "by": "Kimi K3",
+     "note": "2026-10-02 **dt35 CLOSING CERTIFICATION over abd9ff4bf (quiet window, frozen inputs, preflight with fresh build stamps + ds:derive:check, 58 min): 724 PASS / 1 FAIL / 35 SKIP / 0 flaky.** The one red is the dead-selector audit (BY DESIGN, owned rows). The dt34 flake (custom-pack realm isolation) did NOT recur. The +7 over dt34's 717 is the liveness probe leg (6, running inside the visual config for the first time — the CI-leg change works) + one new spec. The preflight caught and fixed a silent red: the theme-graph size check is NOT in the prebuild chain and had drifted +1 byte since LIV-6b (re-anchored abd9ff4bf with the mover named). PENDING CLASSIFICATION (registered, scout ANAT-1 in flight): the predicted CAP-3 anatomy repaint produced ZERO visual diffs in the covered cells — either a coverage hole or the paint is pixel-null there; the answer lands in the trail before dt36. Evidence durable at .tmp/dispatch-2026-09-21/dt35-evidence/."
+    },
+    {
+     "at": "2026-10-01 22:56",
+     "by": "Kimi K3",
+     "note": "2026-10-02 ANAT-1 (out-anat1-opus.json, Opus, read-only): the CAP-3 anatomy repaint is a COVERAGE HOLE, not pixel-null. CAP-3 only changed mountStaticVertical (reachable via mountTenantTheme); the showroom's torture route (the ~35 bithire visual scenes) builds root attributes via resolveDocumentRootAttributes DIRECTLY, bypassing the single mount door — so no covered scene carries data-anatomy-* and dt35's zero diffs mean UNTESTED, not confirmed. Correction registered: CAP-3's commit message overclaimed ('visual baselines move at the next certification' — the harness couldn't see it). The fix (ANAT-2, dispatching): the torture bithire plan carries the anatomy via flatThemeAnatomyAttributes(baselineFor('bithire')); the bithire baselines in data-table (zebra, 1280), layout-batch (rail), effects/dashboard-widgets (framed) will move INTENTIONALLY and get re-baselined with my visual review + a focal re-run. Also registered: the torture route is a SECOND root-attribute path that bypasses the single mount door the layout's comment warns about."
     }
    ]
   },

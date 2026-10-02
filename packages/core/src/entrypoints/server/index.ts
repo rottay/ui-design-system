@@ -564,7 +564,10 @@ export {
  * fields. Any input here is retired only by a versioned breaking change with a
  * codemod (the 3.0 changeset of WO-RET-01 under the WO-CON-05 protocol).
  */
-export { mountTenantTheme } from '../../infrastructure/runtime/theming/composition/mount';
+export {
+  mountTenantTheme,
+  staticVerticalAnatomyAttributes,
+} from '../../infrastructure/runtime/theming/composition/mount';
 export type {
   MountTenantThemeOptions,
   MountedTenantTheme,

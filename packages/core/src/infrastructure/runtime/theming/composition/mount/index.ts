@@ -266,6 +266,12 @@ export function flatThemeAnatomyAttributes(theme: Pick<FlatTheme, 'chrome'>): Re
   } as unknown as Pick<TenantThemeArtifact, 'normalizedAppearance'>);
 }
 
+/** A vertical's `data-anatomy-*` root attributes, empty when it selects none.
+ * Reads the authored baseline (neutral + preset), never tenant overrides. */
+export function staticVerticalAnatomyAttributes(vertical: FirstPartyVerticalId): Record<string, string> {
+  return flatThemeAnatomyAttributes(baselineFor(vertical, vertical));
+}
+
 interface MountedBytes {
   readonly css: string;
   readonly digest: string;
