@@ -1,83 +1,86 @@
-/**
- * A list surface page that composes the surface posture contract the way an
- * app does: the page owns the per-device postures, the DS resolves them.
- *
- * The page renders inside the real AppShell, fed by the same posture
- * declaration through `surfacePosturesToShellAdapt`: the phone posture puts
- * app navigation on a persistent bottom bar, the desktop posture keeps the
- * sidebar track. The phone posture drops the column menu and the preview rail
- * and surfaces a bottom bar instead; the desktop paint keeps the full chrome.
- * Region disposition is resolved on the server from the request's viewport
- * hint, so the phone HTML ships without the hidden regions. The page stays on
- * plain semantics so the server paint does not depend on the engine runtime.
- */
 import {
   AppShell,
-  SurfaceRegion,
+  ListSurface,
   surfacePosturesToShellAdapt,
+  type EntityAdapter,
+  type ListSurfaceConfig,
   type SurfacePostures,
-} from '@rottay/design-system';
+} from "@rottay/design-system";
 
 export const POSTURE_LIST_POSTURES: SurfacePostures = {
   phone: {
-    regions: {
-      'column-menu': 'hide',
-      'preview-rail': 'hide',
-      'bottom-bar': 'render',
-    },
-    primaryAction: 'bottom-bar',
+    regions: { "column-menu": "hide", "preview-rail": "hide" },
+    density: "spacious",
+    primaryAction: "bottom-bar",
   },
-  desktop: {
-    regions: { 'bottom-bar': 'hide' },
-    primaryAction: 'app-bar',
+  tablet: {
+    regions: { "preview-rail": "collapse" },
+    density: "comfortable",
+    primaryAction: "floating",
   },
+  desktop: { density: "compact", primaryAction: "app-bar" },
+};
+
+type PostureListRow = { id: string; label: string };
+
+const adapter: EntityAdapter<PostureListRow, PostureListRow> = {
+  entity: "role",
+  version: "1",
+  map: (row) => row,
+  fields: [{ key: "label", fieldId: "role.label" }],
 };
 
 export interface PostureListPageProps {
-  rows: readonly { id: string; label: string }[];
+  rows: readonly PostureListRow[];
+  postures?: SurfacePostures;
+  onCreate?: () => void;
+  actionDisabled?: boolean;
 }
 
-export default function PostureListPage({ rows }: PostureListPageProps) {
+export default function PostureListPage({
+  rows,
+  postures = POSTURE_LIST_POSTURES,
+  onCreate,
+  actionDisabled,
+}: PostureListPageProps) {
+  const config: ListSurfaceConfig<PostureListRow> = {
+    visual: { allowViewSwitch: false },
+    presentation: {
+      chrome: { title: "Open roles" },
+      toolbarStart: (
+        <details>
+          <summary>Column menu</summary>
+          <p>All columns · Sort · Group</p>
+        </details>
+      ),
+      previewRail: <p>Preview rail body</p>,
+    },
+    behavior: {
+      rowKey: "id",
+      columns: [{ key: "label", fieldId: "role.label", header: "Role" }],
+      primaryAction: {
+        id: "create-role",
+        label: "New role",
+        onClick: onCreate,
+        disabled: actionDisabled,
+      },
+    },
+  };
+
   return (
     <AppShell
-      adapt={surfacePosturesToShellAdapt(POSTURE_LIST_POSTURES, 'app-shell')}
-      sidebar={{ navigationLabel: 'Primary navigation', nav: <a href="/roles">Roles</a> }}
+      adapt={surfacePosturesToShellAdapt(postures, "app-shell")}
+      sidebar={{
+        navigationLabel: "Primary navigation",
+        nav: <a href="/roles">Roles</a>,
+      }}
     >
-      <div data-testid="posture-list-page">
-        <h1>Open roles</h1>
-
-        <SurfaceRegion
-          name="column-menu"
-          postures={POSTURE_LIST_POSTURES}
-          label="Column menu"
-        >
-          <p>All columns · Sort · Group</p>
-        </SurfaceRegion>
-
-        <SurfaceRegion name="results" postures={POSTURE_LIST_POSTURES} label="Results">
-          <ul data-testid="posture-list-results">
-            {rows.map((row) => (
-              <li key={row.id}>{row.label}</li>
-            ))}
-          </ul>
-        </SurfaceRegion>
-
-        <SurfaceRegion
-          name="preview-rail"
-          postures={POSTURE_LIST_POSTURES}
-          label="Preview rail"
-        >
-          <p>Preview rail body</p>
-        </SurfaceRegion>
-
-        <SurfaceRegion
-          name="bottom-bar"
-          postures={POSTURE_LIST_POSTURES}
-          label="Record actions"
-        >
-          <p>New role</p>
-        </SurfaceRegion>
-      </div>
+      <ListSurface
+        data={[...rows]}
+        adapter={adapter}
+        config={config}
+        postures={postures}
+      />
     </AppShell>
   );
 }

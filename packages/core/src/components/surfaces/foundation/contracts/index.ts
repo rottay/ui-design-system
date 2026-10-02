@@ -360,6 +360,8 @@ export interface ListSurfacePresentationConfig<TView> {
   toolbarStart?: ReactNode;
   /** Extra toolbar content on the trailing side (e.g., export button). */
   toolbarEnd?: ReactNode;
+  /** Supporting preview content; posture region `preview-rail`. */
+  previewRail?: ReactNode;
   /** Custom card renderer used in card view. Falls back to an auto-generated card. */
   renderCard?: (item: TView, index: number) => ReactNode;
   /** Per-column cell overrides, keyed by column `fieldId`. */

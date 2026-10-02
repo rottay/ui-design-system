@@ -30,6 +30,13 @@ import type { ViewMode } from "../../../../../patterns/data/list-toolbar";
 import { FadeIn, recordTransitionName } from "@/graphics/motion";
 import { useCollectionStagger } from "../../../../../patterns/foundation/motion";
 import { useBreakpoints } from "@/infrastructure/runtime/responsive";
+import type { SurfacePostures } from "../../../../foundation/contracts/postures";
+import {
+  SurfacePostureScope,
+  SurfacePostureSlot,
+  SurfacePostureAction,
+  useScopedSurfacePosture,
+} from "../../../../runtime/postures/scope";
 import {
   countActiveFilters,
   resolveSurfaceAction,
@@ -303,10 +310,21 @@ export interface ListSurfaceProps<TRaw, TView extends object> {
   loading?: boolean;
   error?: unknown;
   onRetry?: () => void | Promise<void>;
+  postures?: SurfacePostures;
 }
 
 /** Full list-page shell with data mapping, final access filtering, and responsive view switching. */
-export function ListSurface<TRaw, TView extends object>({
+export function ListSurface<TRaw, TView extends object>(
+  props: ListSurfaceProps<TRaw, TView>
+): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="list">
+      <ListSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function ListSurfaceContent<TRaw, TView extends object>({
   data,
   adapter,
   config,
@@ -319,13 +337,18 @@ export function ListSurface<TRaw, TView extends object>({
   );
   const { tSurface } = useSurfaceTranslations();
   const { isMobile } = useBreakpoints();
+  const posture = useScopedSurfacePosture();
+  const primaryActionPlacement = posture?.primaryAction ?? "app-bar";
   // Visual defaults cascade: explicit surface config -> product profile -> DS defaults.
   // This three-tier resolution lets apps override per-page while the product
   // profile provides a consistent baseline.
   const resolvedDefaultView =
     config.visual.defaultView ?? profileDefaults.listView;
   const resolvedMobileView = config.visual.mobileDefaultView ?? "cards";
-  const resolvedCompact = config.visual.compact ?? profileDefaults.listCompact;
+  const resolvedCompact =
+    posture?.density === undefined
+      ? config.visual.compact ?? profileDefaults.listCompact
+      : posture.density === "compact";
   const resolvedCardMinWidth =
     config.visual.cardMinWidth ?? profileDefaults.listCardMinWidth;
   const [activeView, setActiveView] =
@@ -373,21 +396,43 @@ export function ListSurface<TRaw, TView extends object>({
 
   // Build the toolbar's primaryAction descriptor from the surface's resolved action.
   const toolbarPrimaryAction = useMemo(() => {
-    if (!primaryAction) return undefined;
+    // Configured postures use the full Button below, including disabled/loading.
+    // Only the omitted-posture path retains the toolbar's reduced descriptor.
+    if (!primaryAction || posture) return undefined;
     return {
       label: primaryAction.label,
       onClick: () => primaryAction.onClick?.(undefined as void),
       icon: primaryAction.icon,
     };
-  }, [primaryAction]);
+  }, [primaryAction, posture]);
+
+  const primaryActionButton = primaryAction ? (
+    <Button
+      variant={resolveSurfaceButtonVariant(primaryAction.variant ?? "primary")}
+      disabled={primaryAction.disabled}
+      loading={primaryAction.loading}
+      onClick={() => primaryAction.onClick?.(undefined as void)}
+      icon={primaryAction.icon}
+    >
+      {primaryAction.label}
+    </Button>
+  ) : null;
 
   // When the toolbar is active, the PageShellSurface header only renders
   // toolbarEnd and any extra items -- the toolbar owns the view switch and
   // primary action.  When the toolbar is absent, we keep the legacy layout.
   const headerActions = hasToolbar ? (
-    config.presentation.toolbarEnd ? (
+    config.presentation.toolbarEnd ||
+    (posture && primaryActionButton && primaryActionPlacement === "app-bar") ? (
       <Flex gap={8} wrap="wrap" justify="end">
         {config.presentation.toolbarEnd}
+        {posture &&
+          primaryActionButton &&
+          primaryActionPlacement === "app-bar" && (
+            <SurfacePostureAction label={primaryAction?.label}>
+              {primaryActionButton}
+            </SurfacePostureAction>
+          )}
       </Flex>
     ) : undefined
   ) : (
@@ -419,18 +464,10 @@ export function ListSurface<TRaw, TView extends object>({
         </Flex>
       )}
 
-      {primaryAction && (
-        <Button
-          variant={resolveSurfaceButtonVariant(
-            primaryAction.variant ?? "primary"
-          )}
-          disabled={primaryAction.disabled}
-          loading={primaryAction.loading}
-          onClick={() => primaryAction.onClick?.(undefined as void)}
-          icon={primaryAction.icon}
-        >
-          {primaryAction.label}
-        </Button>
+      {primaryActionButton && primaryActionPlacement === "app-bar" && (
+        <SurfacePostureAction label={primaryAction?.label}>
+          {primaryActionButton}
+        </SurfacePostureAction>
       )}
     </Flex>
   );
@@ -447,6 +484,11 @@ export function ListSurface<TRaw, TView extends object>({
         loading={false}
       >
         <SurfaceErrorState error={error} onRetry={onRetry} />
+        {primaryActionButton && primaryActionPlacement !== "app-bar" && (
+          <SurfacePostureAction label={primaryAction?.label}>
+            {primaryActionButton}
+          </SurfacePostureAction>
+        )}
       </PageShellSurface>
     );
   }
@@ -458,75 +500,60 @@ export function ListSurface<TRaw, TView extends object>({
       data-view={effectiveView}
       data-mobile={isMobile ? "true" : "false"}
       data-loading={loading ? "true" : "false"}
+      data-posture={posture?.viewport}
       spacing={resolvedSectionSpacing}
     >
       {/* --------------------------------------------------------------- */}
       {/* Toolbar: canonical PatternListToolbar when config.toolbar is set */}
       {/* --------------------------------------------------------------- */}
       {hasToolbar && config.toolbar && (
-        <PatternListToolbar
-          title={config.toolbar.title}
-          showTitleSection={config.toolbar.showTitleSection}
-          icon={config.toolbar.icon}
-          totalCount={config.toolbar.totalCount}
-          search={config.toolbar.search}
-          onSearchChange={config.toolbar.onSearchChange}
-          searchPlaceholder={config.toolbar.searchPlaceholder}
-          filterPills={config.toolbar.filterPills}
-          activeFilters={config.toolbar.activeFilters}
-          onFilterChange={config.toolbar.onFilterChange}
-          onClearFilters={config.toolbar.onClearFilters}
-          activeFilterCount={config.toolbar.activeFilterCount}
-          viewMode={surfaceViewToToolbarMode(activeView)}
-          onViewModeChange={handleToolbarViewModeChange}
-          density={config.toolbar.density}
-          onDensityChange={config.toolbar.onDensityChange}
-          columnSettingsContent={config.toolbar.columnSettingsContent}
-          savedViewsContent={config.toolbar.savedViewsContent}
-          primaryAction={toolbarPrimaryAction}
-          onExport={config.toolbar.onExport}
-        />
+        <SurfacePostureSlot name="toolbar">
+          <PatternListToolbar
+            title={config.toolbar.title}
+            showTitleSection={config.toolbar.showTitleSection}
+            icon={config.toolbar.icon}
+            totalCount={config.toolbar.totalCount}
+            search={config.toolbar.search}
+            onSearchChange={config.toolbar.onSearchChange}
+            searchPlaceholder={config.toolbar.searchPlaceholder}
+            filterPills={config.toolbar.filterPills}
+            activeFilters={config.toolbar.activeFilters}
+            onFilterChange={config.toolbar.onFilterChange}
+            onClearFilters={config.toolbar.onClearFilters}
+            activeFilterCount={config.toolbar.activeFilterCount}
+            viewMode={surfaceViewToToolbarMode(activeView)}
+            onViewModeChange={handleToolbarViewModeChange}
+            density={posture?.density ?? config.toolbar.density}
+            onDensityChange={config.toolbar.onDensityChange}
+            columnSettingsContent={
+              posture?.regions["column-menu"] === "hide" ||
+              posture?.regions["column-menu"] === "collapse"
+                ? undefined
+                : config.toolbar.columnSettingsContent
+            }
+            savedViewsContent={config.toolbar.savedViewsContent}
+            primaryAction={toolbarPrimaryAction}
+            onExport={config.toolbar.onExport}
+          />
+        </SurfacePostureSlot>
       )}
 
       {/* Extra toolbar slots (kept for backward compatibility / injection) */}
-      {config.presentation.toolbarStart}
+      <SurfacePostureSlot name="column-menu">
+        {config.presentation.toolbarStart}
+      </SurfacePostureSlot>
 
-      {config.behavior.filters &&
-        config.behavior.filters.length > 0 &&
-        (config.visual.filterPanelChrome === "plain" ? (
-          /* Plain chrome: the breathing room is skin-owned (logical,
+      <SurfacePostureSlot name="filters" asChild>
+        {config.behavior.filters &&
+          config.behavior.filters.length > 0 &&
+          (config.visual.filterPanelChrome === "plain" ? (
+            /* Plain chrome: the breathing room is skin-owned (logical,
              density-scaled); nothing inline. */
-          <Box
-            className="ds-list__filters-plain"
-            data-part="filters-plain"
-            data-mobile={isMobile ? "true" : "false"}
-          >
-            <PatternFilterPanel
-              filters={config.behavior.filters}
-              values={config.behavior.filterValues ?? {}}
-              onChange={(values) => config.behavior.onFilterChange?.(values)}
-              onReset={config.behavior.onFilterReset}
-              showReset={
-                !!config.behavior.onFilterReset && activeFilterCount > 0
-              }
-              showApply={!!config.behavior.onFilterApply}
-              onApply={config.behavior.onFilterApply}
-              activeCount={activeFilterCount}
-              title={
-                isMobile || config.behavior.filters.length > 1
-                  ? tSurface("list.filters_title")
-                  : undefined
-              }
-              layout={
-                isMobile
-                  ? config.visual.mobileFiltersLayout ?? "stacked"
-                  : "inline"
-              }
-            />
-          </Box>
-        ) : (
-          <Card variant={profileDefaults.cardVariant}>
-            <Card.Body>
+            <Box
+              className="ds-list__filters-plain"
+              data-part="filters-plain"
+              data-mobile={isMobile ? "true" : "false"}
+            >
               <PatternFilterPanel
                 filters={config.behavior.filters}
                 values={config.behavior.filterValues ?? {}}
@@ -549,81 +576,118 @@ export function ListSurface<TRaw, TView extends object>({
                     : "inline"
                 }
               />
-            </Card.Body>
-          </Card>
-        ))}
+            </Box>
+          ) : (
+            <Card variant={profileDefaults.cardVariant}>
+              <Card.Body>
+                <PatternFilterPanel
+                  filters={config.behavior.filters}
+                  values={config.behavior.filterValues ?? {}}
+                  onChange={(values) =>
+                    config.behavior.onFilterChange?.(values)
+                  }
+                  onReset={config.behavior.onFilterReset}
+                  showReset={
+                    !!config.behavior.onFilterReset && activeFilterCount > 0
+                  }
+                  showApply={!!config.behavior.onFilterApply}
+                  onApply={config.behavior.onFilterApply}
+                  activeCount={activeFilterCount}
+                  title={
+                    isMobile || config.behavior.filters.length > 1
+                      ? tSurface("list.filters_title")
+                      : undefined
+                  }
+                  layout={
+                    isMobile
+                      ? config.visual.mobileFiltersLayout ?? "stacked"
+                      : "inline"
+                  }
+                />
+              </Card.Body>
+            </Card>
+          ))}
+      </SurfacePostureSlot>
 
-      {effectiveView === "table" ? (
-        <PatternDataTable<TView>
-          data={mappedItems}
-          columns={permittedColumns
-            .filter((column) => !column.hideInTable)
-            .map((column) => ({
-              ...column,
-              render: (value, item, index) =>
-                buildSurfaceCellRenderer(
-                  config,
-                  column.key,
-                  column.fieldId,
-                  value,
-                  item as TView,
-                  index,
-                  column.render
-                ),
-            }))}
-          rowKey={config.behavior.rowKey}
-          sorting={config.behavior.sorting}
-          onSortChange={config.behavior.onSortChange}
-          pagination={config.behavior.pagination}
-          compact={resolvedCompact}
-          stickyHeader={config.visual.stickyHeader}
-          maxHeight={config.visual.maxHeight}
-          onRowClick={config.behavior.onRowClick}
-          selectable={config.behavior.selectable}
-          selectedKeys={config.behavior.selectedKeys}
-          onSelectionChange={config.behavior.onSelectionChange}
-          bulkActions={config.behavior.bulkActions}
-          onRowDoubleClick={config.behavior.onRowDoubleClick}
-          expandedRow={config.behavior.expandedRow}
-          resizable={config.visual.columnResizable}
-          columnWidths={config.visual.columnWidths}
-          onColumnResize={config.visual.onColumnResize}
-          reorderable={config.visual.columnReorderable}
-          columnOrder={config.visual.columnOrder}
-          onColumnReorder={config.visual.onColumnReorder}
-          columnVisibility={config.visual.columnVisibilityEnabled}
-          visibleColumns={config.visual.columnVisibility}
-          onVisibleColumnsChange={config.visual.onColumnVisibilityChange}
-          actions={
-            rowActions.length > 0
-              ? (item: TView) => (
-                  <Flex gap={8} justify="end" wrap="wrap">
-                    {rowActions.map((action) =>
-                      renderActionButton(action, item)
-                    )}
-                  </Flex>
-                )
-              : undefined
-          }
-          emptyState={
-            config.presentation.emptyState ?? (
-              <SurfaceEmptyState
-                title={tSurface("list.empty_title")}
-                description={tSurface("list.empty_description")}
-              />
-            )
-          }
-        />
-      ) : (
-        <DefaultCardView
-          items={mappedItems}
-          config={config}
-          columns={permittedColumns}
-          rowActions={rowActions}
-          cardMinWidth={resolvedCardMinWidth}
-          cardVariant={profileDefaults.cardVariant}
-          animateEntrance={profileDefaults.animateEntrance}
-        />
+      <SurfacePostureSlot name="results">
+        {effectiveView === "table" ? (
+          <PatternDataTable<TView>
+            data={mappedItems}
+            columns={permittedColumns
+              .filter((column) => !column.hideInTable)
+              .map((column) => ({
+                ...column,
+                render: (value, item, index) =>
+                  buildSurfaceCellRenderer(
+                    config,
+                    column.key,
+                    column.fieldId,
+                    value,
+                    item as TView,
+                    index,
+                    column.render
+                  ),
+              }))}
+            rowKey={config.behavior.rowKey}
+            sorting={config.behavior.sorting}
+            onSortChange={config.behavior.onSortChange}
+            pagination={config.behavior.pagination}
+            compact={resolvedCompact}
+            density={posture?.density}
+            stickyHeader={config.visual.stickyHeader}
+            maxHeight={config.visual.maxHeight}
+            onRowClick={config.behavior.onRowClick}
+            selectable={config.behavior.selectable}
+            selectedKeys={config.behavior.selectedKeys}
+            onSelectionChange={config.behavior.onSelectionChange}
+            bulkActions={config.behavior.bulkActions}
+            onRowDoubleClick={config.behavior.onRowDoubleClick}
+            expandedRow={config.behavior.expandedRow}
+            resizable={config.visual.columnResizable}
+            columnWidths={config.visual.columnWidths}
+            onColumnResize={config.visual.onColumnResize}
+            reorderable={config.visual.columnReorderable}
+            columnOrder={config.visual.columnOrder}
+            onColumnReorder={config.visual.onColumnReorder}
+            columnVisibility={config.visual.columnVisibilityEnabled}
+            visibleColumns={config.visual.columnVisibility}
+            onVisibleColumnsChange={config.visual.onColumnVisibilityChange}
+            actions={
+              rowActions.length > 0
+                ? (item: TView) => (
+                    <Flex gap={8} justify="end" wrap="wrap">
+                      {rowActions.map((action) =>
+                        renderActionButton(action, item)
+                      )}
+                    </Flex>
+                  )
+                : undefined
+            }
+            emptyState={
+              config.presentation.emptyState ?? (
+                <SurfaceEmptyState
+                  title={tSurface("list.empty_title")}
+                  description={tSurface("list.empty_description")}
+                />
+              )
+            }
+          />
+        ) : (
+          <DefaultCardView
+            items={mappedItems}
+            config={config}
+            columns={permittedColumns}
+            rowActions={rowActions}
+            cardMinWidth={resolvedCardMinWidth}
+            cardVariant={profileDefaults.cardVariant}
+            animateEntrance={profileDefaults.animateEntrance}
+          />
+        )}
+      </SurfacePostureSlot>
+      {config.presentation.previewRail && (
+        <SurfacePostureSlot name="preview-rail">
+          {config.presentation.previewRail}
+        </SurfacePostureSlot>
       )}
     </Stack>
   );
@@ -644,6 +708,11 @@ export function ListSurface<TRaw, TView extends object>({
             </FadeIn>
           ) : (
             listContent
+          )}
+          {primaryActionButton && primaryActionPlacement !== "app-bar" && (
+            <SurfacePostureAction label={primaryAction?.label}>
+              {primaryActionButton}
+            </SurfacePostureAction>
           )}
         </Box>
       </SurfaceAccentBarWrapper>

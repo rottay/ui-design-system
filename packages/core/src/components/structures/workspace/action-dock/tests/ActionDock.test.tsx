@@ -22,6 +22,27 @@ const COLLECTION_WORKSPACE_SKIN = readFileSync(
 );
 
 describe('ActionDock', () => {
+  it('forwards surface posture annotations without replacing toolbar semantics', async () => {
+    const { findByTestId } = renderWithEngine(
+      <ActionDock
+        mode="sticky"
+        aria-label="Record actions"
+        data-surface-region="bottom-bar"
+        data-region-disposition="render"
+        data-posture="phone"
+      >
+        <button type="button">Create record</button>
+      </ActionDock>,
+      'modern'
+    );
+    const dock = await findByTestId('action-dock');
+    expect(dock).toHaveAttribute('data-surface-region', 'bottom-bar');
+    expect(dock).toHaveAttribute('data-region-disposition', 'render');
+    expect(dock).toHaveAttribute('data-posture', 'phone');
+    expect(dock).toHaveAttribute('role', 'toolbar');
+    expect(dock).toHaveAttribute('aria-label', 'Record actions');
+    expect(dock).toHaveAttribute('data-mode', 'sticky');
+  });
   it.each(STABLE_ENGINES)('renders the real component as a fixed bottom dock under %s', async (engine) => {
     const { findByTestId } = renderWithEngine(
       <ActionDock>

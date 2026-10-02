@@ -103,6 +103,9 @@ export function ActionDock({
   className,
   'data-testid': dataTestId = 'action-dock',
   'aria-label': ariaLabel,
+  'data-surface-region': surfaceRegion,
+  'data-region-disposition': regionDisposition,
+  'data-posture': viewportPosture,
   style,
 }: ActionDockProps) {
   const rootClassName = ['ds-action-dock', className].filter(Boolean).join(' ');
@@ -268,6 +271,9 @@ export function ActionDock({
       className={rootClassName}
       style={responsiveStyle}
       data-testid={dataTestId}
+      data-surface-region={surfaceRegion}
+      data-region-disposition={regionDisposition}
+      data-posture={viewportPosture}
       role="toolbar"
       aria-label={resolvedAriaLabel}
       data-part="root"

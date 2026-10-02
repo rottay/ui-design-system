@@ -11,6 +11,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
+import type { ViewportPosture } from '@/foundation/contracts/kernel/adaptation/foundation';
 
 /**
  * Priority grammar slot for a structured dock action.
@@ -141,6 +142,9 @@ export interface ActionDockProps {
   'aria-label'?: string;
   /** Additional inline styles merged with the dock container. */
   style?: CSSProperties;
+  'data-surface-region'?: string;
+  'data-region-disposition'?: 'render' | 'collapse' | 'hide';
+  'data-posture'?: ViewportPosture;
 }
 
 /**

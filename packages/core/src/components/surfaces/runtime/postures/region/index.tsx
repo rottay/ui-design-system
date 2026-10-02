@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Surface postures runtime: `useSurfacePosture` resolves the
@@ -14,28 +14,36 @@
  * chrome.
  */
 
-import { useMemo, type ReactNode } from 'react';
+import {
+  cloneElement,
+  Fragment,
+  isValidElement,
+  useMemo,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 
-import { useResponsive } from '@/infrastructure/runtime/responsive/composition/react/provider';
+import { useResponsive } from "@/infrastructure/runtime/responsive/composition/react/provider";
 import {
   resolveSurfacePostures,
   type SurfaceFamily,
   type SurfacePostures,
   type SurfaceRegionDisposition,
-} from '../../../foundation/contracts/postures';
+  type ResolvedSurfacePosture,
+} from "../../../foundation/contracts/postures";
 
 /**
  * The posture in force for the current viewport, resolved during render.
  */
 export function useSurfacePosture(
   postures: SurfacePostures | undefined,
-  family: SurfaceFamily = 'list',
+  family: SurfaceFamily = "list"
 ): ReturnType<typeof resolveSurfacePostures> {
   const { deviceClass } = useResponsive();
 
   return useMemo(
     () => resolveSurfacePostures(postures, deviceClass, family),
-    [postures, deviceClass, family],
+    [postures, deviceClass, family]
   );
 }
 
@@ -59,23 +67,50 @@ export function SurfaceRegion({
   children,
 }: SurfaceRegionProps): React.ReactElement | null {
   const resolved = useSurfacePosture(postures, family);
-  const disposition: SurfaceRegionDisposition = resolved.regions[name] ?? 'render';
+  return (
+    <ResolvedSurfaceRegion name={name} label={label} posture={resolved}>
+      {children}
+    </ResolvedSurfaceRegion>
+  );
+}
 
-  if (disposition === 'hide') {
+export function ResolvedSurfaceRegion({
+  name,
+  label,
+  posture: resolved,
+  children,
+  asChild = false,
+}: {
+  name: string;
+  label?: string;
+  posture: ResolvedSurfacePosture;
+  children?: ReactNode;
+  asChild?: boolean;
+}): React.ReactElement | null {
+  const disposition: SurfaceRegionDisposition =
+    resolved.regions[name] ?? "render";
+
+  if (disposition === "hide") {
     return null;
   }
 
+  const attributes = {
+    "data-surface-region": name,
+    "data-region-disposition": disposition,
+    "data-posture": resolved.viewport,
+  };
+  if (asChild && isValidElement(children) && children.type !== Fragment) {
+    return cloneElement(children as ReactElement<Record<string, unknown>>, {
+      ...attributes,
+      ...(disposition === "collapse" ? { children: undefined } : {}),
+    });
+  }
+
   return (
-    <div
-      role="region"
-      aria-label={label ?? name}
-      data-surface-region={name}
-      data-region-disposition={disposition}
-      data-posture={resolved.viewport}
-    >
-      {disposition === 'render' ? children : null}
+    <div role="region" aria-label={label ?? name} {...attributes}>
+      {disposition === "render" ? children : null}
     </div>
   );
 }
 
-SurfaceRegion.displayName = 'SurfaceRegion';
+SurfaceRegion.displayName = "SurfaceRegion";
