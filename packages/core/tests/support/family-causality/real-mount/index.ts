@@ -95,6 +95,12 @@ export async function bundleRealMount(request: RealMountBundleRequest): Promise<
   return result.outputFiles[0].text;
 }
 
+/** Real input on the step's element, dispatched by Playwright so the component's own handlers fire. */
+export type RealMountInput =
+  | { readonly kind: 'click' }
+  | { readonly kind: 'fill'; readonly text: string }
+  | { readonly kind: 'press'; readonly key: string };
+
 /** A change applied to the mounted page while the component stays open. */
 export interface RealMountStep {
   readonly id: string;
@@ -103,6 +109,8 @@ export interface RealMountStep {
   readonly attributes?: Readonly<Record<string, string>>;
   /** Inline properties set on the element, custom properties included. */
   readonly style?: Readonly<Record<string, string>>;
+  /** Applied after the attributes and the style. */
+  readonly input?: RealMountInput;
 }
 
 /** `property` is a computed property, `@attr.<name>` an attribute, or `@inline.<name>` the element's own inline value. */
@@ -130,7 +138,14 @@ export interface RealMountRequest {
   readonly scenes: readonly RealMountScene[];
 }
 
-type EventedPage = ProbePage & { on(event: 'pageerror', listener: (error: Error) => void): void };
+type EventedPage = ProbePage & {
+  on(event: 'pageerror', listener: (error: Error) => void): void;
+  click(selector: string, options: { timeout: number }): Promise<void>;
+  fill(selector: string, value: string, options: { timeout: number }): Promise<void>;
+  press(selector: string, key: string, options: { timeout: number }): Promise<void>;
+};
+
+const INPUT_TIMEOUT = 5_000;
 
 /**
  * Mount every scene in turn on one page and read its targets after mount and
@@ -201,18 +216,32 @@ export async function measureRealMount(request: RealMountRequest): Promise<Probe
 
       readings[scene.id] = await read(scene.targets);
       for (const step of scene.steps ?? []) {
-        const applied = await page.evaluate(async (current: RealMountStep) => {
+        if (!step.attributes && !step.style && !step.input) {
+          throw new Error(`real-mount: step ${scene.id}>${step.id} declares no change`);
+        }
+        const matches = await page.evaluate(
+          (current: RealMountStep) => document.querySelectorAll(current.selector).length,
+          step,
+        );
+        if (matches === 0) throw new Error(`real-mount: step ${scene.id}>${step.id} matched no ${step.selector}`);
+        if (step.input && matches > 1) {
+          throw new Error(`real-mount: input step ${scene.id}>${step.id} matched ${matches} elements for ${step.selector}`);
+        }
+        await page.evaluate((current: RealMountStep) => {
           const element = document.querySelector<HTMLElement>(current.selector);
-          if (!element) return false;
-          for (const [name, value] of Object.entries(current.attributes ?? {})) element.setAttribute(name, value);
-          for (const [name, value] of Object.entries(current.style ?? {})) element.style.setProperty(name, value);
+          for (const [name, value] of Object.entries(current.attributes ?? {})) element?.setAttribute(name, value);
+          for (const [name, value] of Object.entries(current.style ?? {})) element?.style.setProperty(name, value);
+        }, step);
+        const input = step.input;
+        if (input?.kind === 'click') await page.click(step.selector, { timeout: INPUT_TIMEOUT });
+        else if (input?.kind === 'fill') await page.fill(step.selector, input.text, { timeout: INPUT_TIMEOUT });
+        else if (input?.kind === 'press') await page.press(step.selector, input.key, { timeout: INPUT_TIMEOUT });
+        await page.evaluate(async () => {
           const settle = () => new Promise((done) => requestAnimationFrame(() => setTimeout(done, 30)));
           await settle();
           await settle();
-          return true;
-        }, step);
+        }, undefined);
         failOnPageError(`at ${scene.id}>${step.id}`);
-        if (!applied) throw new Error(`real-mount: step ${scene.id}>${step.id} matched no ${step.selector}`);
         readings[`${scene.id}>${step.id}`] = await read(scene.targets);
       }
 

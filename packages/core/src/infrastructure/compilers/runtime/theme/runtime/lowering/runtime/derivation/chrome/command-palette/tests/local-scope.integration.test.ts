@@ -230,10 +230,11 @@ const REAL_PROPS = `({ open: true, onOpenChange() {}, footer: "Enter to run",
   ] })`;
 const READY = "dialog [data-part='search']";
 
-/** The argument panel needs a parameterized item selected, so it is not mounted. The empty state
- *  renders from props alone, in its own scene; the command list renders every other part. */
-const UNRENDERED_PARTS = new Set(["argument-panel", "argument-error"]);
-const REAL_CHANNELS = CHANNELS.filter((channel) => !UNRENDERED_PARTS.has(SITES[channel].part));
+/** The argument panel opens only by selecting a parameterized item, so it has its own interactive
+ *  scenes. The empty state renders from props alone, in its own scene; the command list renders the rest. */
+const ARGUMENT_PARTS = new Set(["argument-panel", "argument-error"]);
+const REAL_CHANNELS = CHANNELS.filter((channel) => !ARGUMENT_PARTS.has(SITES[channel].part));
+const ARGUMENT_CHANNELS = CHANNELS.filter((channel) => ARGUMENT_PARTS.has(SITES[channel].part));
 const EMPTY_CHANNELS = REAL_CHANNELS.filter((channel) => SITES[channel].part === "empty");
 const LIST_CHANNELS = REAL_CHANNELS.filter((channel) => SITES[channel].part !== "empty");
 const EMPTY_PROPS = { items: [], recentItems: [] };
@@ -276,6 +277,37 @@ function realScenes(
   }));
 }
 
+/** A parameterized command whose validator refuses an empty value. */
+const ARGUMENT_PROPS = `({ open: true, onOpenChange() {}, footer: "Enter to run", recentItems: [],
+  items: [{ id: "rename", label: "Rename", group: "Actions", onSelect() {}, onSubmit() {},
+    parameter: { prompt: "Name", placeholder: "Name", validate: (value) => (value.trim() ? null : "Required") } }] })`;
+const argumentScene = (scope: Scope) => `${scope}|argument`;
+const ENTERED = "entered";
+const REFUSED = "refused";
+
+/** Real input only: a click on the command enters argument mode, Enter on the empty value raises the error. */
+function argumentScenes(): RealMountScene[] {
+  return SCOPE_NAMES.map((scope) => ({
+    id: argumentScene(scope),
+    markup: SCOPES[scope](`<div data-real-mount></div>${ARGUMENT_CHANNELS.map(oracleOf).join("")}`),
+    ready: READY,
+    targets: [
+      STAMPS[0],
+      { id: "mode", selector: "dialog [data-part='content']", property: "@attr.data-mode" },
+      ...ARGUMENT_CHANNELS.flatMap((channel) =>
+        SITES[channel].properties.flatMap((property) => [
+          { id: `site|${channel}|${property}`, selector: realPartSelector(SITES[channel].part), property },
+          { id: `oracle|${channel}|${property}`, selector: `[data-oracle='${channel}']`, property },
+        ])
+      ),
+    ],
+    steps: [
+      { id: ENTERED, selector: "dialog [data-part='list'] [data-part='item']", input: { kind: "click" } },
+      { id: REFUSED, selector: "dialog [data-part='search'] input", input: { kind: "press", key: "Enter" } },
+    ],
+  }));
+}
+
 const GAP_SITE = "site|--ds-command-palette-search-gap|column-gap";
 const GAP_ORACLE = "oracle|--ds-command-palette-search-gap|column-gap";
 
@@ -312,6 +344,7 @@ let realRootStated: ProbeReadings;
 let realCarried: ProbeReadings;
 let realDbCarried: ProbeReadings;
 let realDbUncarried: ProbeReadings;
+let realArgument: ProbeReadings;
 
 const site = (from: ProbeReadings, scope: Scope, channel: Channel, property: string) =>
   from.base[`site|${scope}|${channel}|${property}`];
@@ -353,6 +386,11 @@ describe("chrome/command-palette channels under a local scope", () => {
     realCarried = await mountReal(realScenes(undefined, SEARCH_GAP), [CARRIED_CSS]);
     realDbCarried = await mountReal(realScenes(dbLineage, SEARCH_GAP), [dbCss(true)]);
     realDbUncarried = await mountReal(realScenes(dbLineage, SEARCH_GAP), [dbCss(false)]);
+    const argumentBundle = await bundleRealMount({
+      module: "src/components/patterns/navigation/command-palette/engines/modern",
+      props: ARGUMENT_PROPS,
+    });
+    realArgument = await measureRealMount({ vertical: "bithire", bundle: argumentBundle, scenes: argumentScenes() });
   }, 180_000);
 
   it("probes the parts the engine stamps, on the certified Modal it composes", () => {
@@ -466,6 +504,54 @@ describe("chrome/command-palette channels under a local scope", () => {
     expect(drift).toEqual([]);
     for (const scope of ["compact", "spacious"] as const) {
       expect({ scope, gap: real[scope][GAP_ORACLE] }).not.toEqual({ scope, gap: real.rest[GAP_ORACLE] });
+    }
+  });
+
+  it("(a) real mount: real input opens the argument panel, whose trio paints the anchor's local answer", () => {
+    const measured = [real, realArgument].flatMap((from) =>
+      Object.values(from).flatMap((scene) =>
+        Object.entries(scene).filter(([id, value]) => id.startsWith("site|") && !value.startsWith("<no match"))
+      )
+    );
+    const unmeasured = CHANNELS.filter((channel) => !measured.some(([id]) => id.startsWith(`site|${channel}|`)));
+    expect(unmeasured).toEqual([]);
+    expect(ARGUMENT_CHANNELS).toEqual([
+      "--ds-command-palette-argument-panel-padding-block",
+      "--ds-command-palette-argument-panel-padding-inline",
+      "--ds-command-palette-argument-error-margin-block-start",
+    ]);
+    const drift: string[] = [];
+    for (const scope of SCOPE_NAMES) {
+      const before = realArgument[argumentScene(scope)];
+      const entered = realArgument[`${argumentScene(scope)}>${ENTERED}`];
+      const refused = realArgument[`${argumentScene(scope)}>${REFUSED}`];
+      expect({ scope, mode: before.mode, panel: before["site|--ds-command-palette-argument-panel-padding-block|padding-top"] }).toEqual({
+        scope,
+        mode: "search",
+        panel: expect.stringMatching(/^<no match/),
+      });
+      expect({ scope, mode: entered.mode, density: entered.density }).toEqual({ scope, mode: "argument", density: NEAREST_DENSITY[scope] });
+      expect({ scope, error: entered["site|--ds-command-palette-argument-error-margin-block-start|margin-top"] }).toEqual({
+        scope,
+        error: expect.stringMatching(/^<no match/),
+      });
+      expect({ scope, mode: refused.mode }).toEqual({ scope, mode: "argument" });
+      for (const channel of ARGUMENT_CHANNELS) {
+        const readAt = SITES[channel].part === "argument-error" ? [refused] : [entered, refused];
+        for (const at of readAt) {
+          for (const property of SITES[channel].properties) {
+            const painted = at[`site|${channel}|${property}`];
+            const expected = at[`oracle|${channel}|${property}`];
+            if (painted !== expected) drift.push(`${scope} ${channel} ${property}: painted ${painted}, local answer ${expected}`);
+          }
+        }
+      }
+    }
+    expect(drift).toEqual([]);
+    const panel = "oracle|--ds-command-palette-argument-panel-padding-block|padding-top";
+    const rest = realArgument[`${argumentScene("rest")}>${ENTERED}`][panel];
+    for (const scope of ["compact", "spacious"] as const) {
+      expect({ scope, panel: realArgument[`${argumentScene(scope)}>${ENTERED}`][panel] }).not.toEqual({ scope, panel: rest });
     }
   });
 
