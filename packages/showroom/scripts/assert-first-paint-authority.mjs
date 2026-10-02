@@ -146,6 +146,7 @@ check('resolver: DRILL — compiling twice yields one digest', () => {
 // The other half of "no flash": ground that arrives early must not be repainted
 // by a second emitter. The declaration TortureSurface mounts is exactly this.
 const { resolveVisualAuthority, TENANT_THEME_V1_COVERAGE } = await import('@rottay/design-system');
+const { emitTenantThemeArtifactForSsr } = await import('@rottay/design-system/server');
 
 const managementPayload = {
   visualBranding: false,
@@ -153,9 +154,17 @@ const managementPayload = {
   appearance: managementPlan.artifact.normalizedAppearance,
 };
 
+// No DOM exists here, so admission needs the receipt the server door mints when
+// it emits the artifact element; this script stands in for that server.
+const managementEmission = emitTenantThemeArtifactForSsr(managementPlan.artifact);
+
 check('authority: the compiled artifact silences every channel it covers', () => {
   const resolution = resolveVisualAuthority({
-    declaration: { authority: 'compiled-artifact', artifact: managementPlan.artifact },
+    declaration: {
+      authority: 'compiled-artifact',
+      artifact: managementPlan.artifact,
+      ssrReceipt: managementEmission.receipt,
+    },
     slug: managementPlan.artifact.slug,
     hasBundledArtifact: false,
     payload: managementPayload,
@@ -163,6 +172,20 @@ check('authority: the compiled artifact silences every channel it covers', () =>
   assert.equal(resolution.authority, 'compiled-artifact');
   assert.equal(resolution.conflict, null);
   assert.deepEqual([...resolution.suppressedChannels].sort(), [...TENANT_THEME_V1_COVERAGE].sort());
+});
+
+check('authority: DRILL — a structurally identical receipt the runtime never minted is refused', () => {
+  const forged = { ...managementEmission.receipt };
+  assert.deepEqual(forged, managementEmission.receipt);
+  const resolution = resolveVisualAuthority({
+    declaration: { authority: 'compiled-artifact', artifact: managementPlan.artifact, ssrReceipt: forged },
+    slug: managementPlan.artifact.slug,
+    hasBundledArtifact: false,
+    payload: managementPayload,
+  });
+  assert.equal(resolution.origin, 'unprovable-ssr-mount');
+  assert.equal(resolution.artifact, null);
+  assert.match(resolution.conflict ?? '', /not minted by this runtime/);
 });
 
 check('authority: DRILL — without the declaration the provider paints a second layer', () => {
