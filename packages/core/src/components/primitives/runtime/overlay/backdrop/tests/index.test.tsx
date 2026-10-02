@@ -23,6 +23,9 @@ const SKIN = resolve(
 );
 
 type Overrides = Record<string, string>;
+type Step = 'light' | 'medium' | 'heavy';
+
+const CANONICAL_SCRIM = 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, rgba(0, 0, 0, 0.5)))';
 
 function compileWith(edit: (overrides: Overrides) => void): string {
   const row = structuredClone({
@@ -43,7 +46,7 @@ function declared(css: string, name: string): string | undefined {
   return value;
 }
 
-function intensityRule(step: 'light' | 'heavy') {
+function intensityRule(step: Step) {
   const rules: postcss.Rule[] = [];
   postcss.parse(readFileSync(SKIN, 'utf8')).walkRules((rule) => {
     if (rule.selector.includes(`[data-intensity='${step}']`)) rules.push(rule);
@@ -52,7 +55,7 @@ function intensityRule(step: 'light' | 'heavy') {
   return rules[0]!;
 }
 
-function paintFor(step: 'light' | 'heavy', tenantCss: string): string {
+function paintFor(step: Step, tenantCss: string): string {
   const channel = `--ds-overlay-${step}`;
   let terminal = '';
   intensityRule(step).walkDecls('background-color', (decl) => {
@@ -66,7 +69,7 @@ function paintFor(step: 'light' | 'heavy', tenantCss: string): string {
 }
 
 describe('Overlay paints the tenant overlay ladder through its skin', () => {
-  it.each(['light', 'heavy'] as const)('stamps the %s step the skin selects, with no inline veil', (step) => {
+  it.each(['light', 'medium', 'heavy'] as const)('stamps the %s step the skin selects, with no inline veil', (step) => {
     const { container } = render(<Overlay visible intensity={step} />);
     const root = container.firstElementChild as HTMLElement;
 
@@ -74,14 +77,22 @@ describe('Overlay paints the tenant overlay ladder through its skin', () => {
     expect(renderToStaticMarkup(<Overlay visible intensity={step} />)).not.toContain('background-color');
   });
 
-  it('keeps the canonical scrim inline when no step is asked for', () => {
+  it('defaults to the medium step, whose fallback is the canonical scrim byte for byte', () => {
     const { container } = render(<Overlay visible />);
     const root = container.firstElementChild as HTMLElement;
+    let terminal = '';
+    intensityRule('medium').walkDecls('background-color', (decl) => {
+      terminal = decl.value;
+    });
 
-    expect(root.hasAttribute('data-intensity')).toBe(false);
-    expect(renderToStaticMarkup(<Overlay visible />)).toContain(
-      'background-color:var(--ds-overlay-bg, var(--ds-modal-overlay-bg, rgba(0, 0, 0, 0.5)))',
-    );
+    expect(root.getAttribute('data-intensity')).toBe('medium');
+    expect(root.matches(intensityRule('medium').selector)).toBe(true);
+    expect(renderToStaticMarkup(<Overlay visible />)).not.toContain('background-color');
+    expect(terminal).toBe(`var(--ds-overlay-medium, ${CANONICAL_SCRIM})`);
+  });
+
+  it('leaves the medium step unset when no tenant authors it, so the canonical scrim paints', () => {
+    expect(declared(compileWith(() => {}), '--ds-overlay-medium')).toBeUndefined();
   });
 
   it('lets an explicit backgroundColor win over the step', () => {
@@ -93,16 +104,20 @@ describe('Overlay paints the tenant overlay ladder through its skin', () => {
   it('paints the tenant-authored step value from the compiled artifact, and moves with it', () => {
     const first = compileWith((overrides) => {
       overrides['--ds-overlay-light'] = 'rgba(12, 12, 12, 0.3)';
+      overrides['--ds-overlay-medium'] = 'rgba(12, 12, 12, 0.5)';
       overrides['--ds-overlay-heavy'] = 'rgba(12, 12, 12, 0.7)';
     });
     const moved = compileWith((overrides) => {
       overrides['--ds-overlay-light'] = 'rgba(40, 20, 0, 0.25)';
+      overrides['--ds-overlay-medium'] = 'rgba(40, 20, 0, 0.45)';
       overrides['--ds-overlay-heavy'] = 'rgba(40, 20, 0, 0.8)';
     });
 
     expect(paintFor('light', first)).toBe('rgba(12, 12, 12, 0.3)');
+    expect(paintFor('medium', first)).toBe('rgba(12, 12, 12, 0.5)');
     expect(paintFor('heavy', first)).toBe('rgba(12, 12, 12, 0.7)');
     expect(paintFor('light', moved)).toBe('rgba(40, 20, 0, 0.25)');
+    expect(paintFor('medium', moved)).toBe('rgba(40, 20, 0, 0.45)');
     expect(paintFor('heavy', moved)).toBe('rgba(40, 20, 0, 0.8)');
   });
 });

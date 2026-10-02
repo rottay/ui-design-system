@@ -3,12 +3,8 @@
  * Supports optional blur, configurable background color, smooth opacity transitions,
  * and click-to-dismiss.
  *
- * No in-package component imports it: the Modal engines render their own
- * backdrop element so they can drive it from the motion recipe. It is published
- * for consumers building an overlay the DS does not ship. (The previous note
- * here named `overlay/Modal`'s rustic engine as its importer; that engine was a
- * re-export shim onto `feedback/Modal`, which imports `Portal` and `FocusTrap`
- * from this runtime but not `Overlay`.)
+ * Internal and unpublished: no package subpath exports it and no component
+ * imports it (the Modal engines render their own motion-driven backdrop).
  *
  * @example
  * ```tsx
@@ -35,8 +31,8 @@ export interface OverlayProps {
   blurAmount?: number;
   /** Background color/opacity; overrides `intensity` when set */
   backgroundColor?: string;
-  /** Tenant overlay step painted by the skin; omit for the canonical scrim */
-  intensity?: 'light' | 'heavy';
+  /** Tenant overlay step painted by the skin; `medium` falls back to the canonical scrim */
+  intensity?: 'light' | 'medium' | 'heavy';
   /** Z-index of the overlay */
   zIndex?: number;
   /** Additional class name */
@@ -61,10 +57,8 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
       clickable = true,
       blur = false,
       blurAmount = 4,
-      intensity,
-      backgroundColor = intensity
-        ? undefined
-        : 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, rgba(0, 0, 0, 0.5)))',
+      intensity = 'medium',
+      backgroundColor,
       zIndex = 999,
       className = '',
       style = {},

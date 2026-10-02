@@ -8,10 +8,14 @@
  * seed itself stays referenceable.
  */
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import postcss from "postcss";
 import { describe, expect, it } from "vitest";
 
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import {
+  TENANT_THEME_OVERRIDE_TOKENS,
   TENANT_THEME_REFERENCE_TOKENS,
   TENANT_THEME_RETIRED_REFERENCE_TOKENS,
   type TenantThemeDocument,
@@ -170,5 +174,64 @@ describe("the accent ramp steps are retired from the reference allowlist", () =>
       );
       expect(issues).toEqual([]);
     }
+  });
+});
+
+describe("an authored overlay-medium is admitted and paints, never refused", () => {
+  const LIVE_TENANT_VALUE = "rgba(32, 48, 40, 0.05)";
+  const SKIN = resolve(
+    process.cwd(),
+    "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
+  );
+
+  it("stays an override key and a reference, never a retired one", () => {
+    expect(TENANT_THEME_OVERRIDE_TOKENS).toContain("--ds-overlay-medium");
+    expect(TENANT_THEME_REFERENCE_TOKENS).toContain("--ds-overlay-medium");
+    expect(TENANT_THEME_RETIRED_REFERENCE_TOKENS).not.toContain("--ds-overlay-medium");
+  });
+
+  it("compiles the live tenant row's authored value into the artifact the medium step reads first", () => {
+    const document = {
+      schemaVersion: 1,
+      mode: "advanced",
+      visualFoundation: {
+        advanced: { tokenOverrides: { "--ds-overlay-medium": LIVE_TENANT_VALUE } },
+      },
+    } as unknown as TenantThemeDocument;
+    const { css } = compileTenantThemeConfig(
+      hydrateTenantThemeConfig(document, {
+        tenantId: SLUG,
+        slug: SLUG,
+        verticalKey: VERTICAL,
+        rowVersion: 1,
+      } as never),
+      { verticalEnvelope: getTenantThemeVerticalEnvelope(VERTICAL) }
+    );
+    const emitted: string[] = [];
+    postcss.parse(css).walkDecls("--ds-overlay-medium", (decl) => {
+      emitted.push(decl.value.trim());
+    });
+    expect(emitted).toContain(LIVE_TENANT_VALUE);
+
+    const reads: string[] = [];
+    postcss.parse(readFileSync(SKIN, "utf8")).walkRules((rule) => {
+      if (!rule.selector.includes("[data-intensity='medium']")) return;
+      rule.walkDecls("background-color", (decl) => {
+        reads.push(decl.value);
+      });
+    });
+    expect(reads).toHaveLength(1);
+    expect(reads[0]).toMatch(/^var\(--ds-overlay-medium,/);
+  });
+
+  it("admits a reference to it on the schema node judge", () => {
+    const issues: ThemeAdmissionIssue[] = [];
+    validateTenantThemeNode(
+      "var(--ds-overlay-medium)",
+      { type: "string", format: "visual-value" } as never,
+      "$.probe",
+      issues as never
+    );
+    expect(issues).toEqual([]);
   });
 });
