@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "d5e363922c4c686e6cad0ca64f203eea6ecf1a33261a3178eaead98c99951313"
+    "semanticHash": "6c80e626a0643d6d2d1f848c6c31f5c1e65f65e6c80fee001060b1d62dc89e5d"
   },
   "divergentInputs": [
     {
@@ -133,7 +133,7 @@
       },
       "live": {
         "bytes": 26575,
-        "sha256": "fbd3dbec3fdff857caa1715173e71fec066833121f11cfedf45e70a1ee5a4932"
+        "sha256": "3d7c17220ee4e5077e61aabca845480b0f3cfe9ec80dec0393b2b541c27a2210"
       }
     },
     {
@@ -262,7 +262,7 @@
       },
       "live": {
         "bytes": 166,
-        "sha256": "b44f71b68f8067373730902057950d4c6e581ba281e9f872231880932181d150"
+        "sha256": "577ba776c4d4f6d486204f1bc84010b6c9e331c0f007a79ace84d2542acf2e8d"
       }
     },
     {

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "bb53bd7e17ab8ce3403afa919e9483dd4ddc01292ed9158b3dcd95694e6f3f83",
+    "authorityDigest": "206c5870f9204032542c7c401564f6d9e80bfe1bf35bc1625e90f965a04015b3",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "24995b5089c917932fc6b4463470afbe5dc589f9",
+    "documentationRevision": "e9eddf820efc2e3b79a4b7458c85d3ad2c5e8c26",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -223,7 +223,7 @@
           "workspace-toolchain"
         ],
         "bytes": 26575,
-        "sha256": "fbd3dbec3fdff857caa1715173e71fec066833121f11cfedf45e70a1ee5a4932"
+        "sha256": "3d7c17220ee4e5077e61aabca845480b0f3cfe9ec80dec0393b2b541c27a2210"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -332,7 +332,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "b44f71b68f8067373730902057950d4c6e581ba281e9f872231880932181d150"
+        "sha256": "577ba776c4d4f6d486204f1bc84010b6c9e331c0f007a79ace84d2542acf2e8d"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
@@ -47800,7 +47800,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "bb53bd7e17ab8ce3403afa919e9483dd4ddc01292ed9158b3dcd95694e6f3f83"
+    "digest": "206c5870f9204032542c7c401564f6d9e80bfe1bf35bc1625e90f965a04015b3"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3351 counters; 3255 completed zeros locked exactly; 86 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -121013,8 +121013,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "d5e363922c4c686e6cad0ca64f203eea6ecf1a33261a3178eaead98c99951313",
-      "d5e363922c4c686e6cad0ca64f203eea6ecf1a33261a3178eaead98c99951313"
+      "6c80e626a0643d6d2d1f848c6c31f5c1e65f65e6c80fee001060b1d62dc89e5d",
+      "6c80e626a0643d6d2d1f848c6c31f5c1e65f65e6c80fee001060b1d62dc89e5d"
     ],
     "agree": true
   }
