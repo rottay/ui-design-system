@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-01",
+ "updated": "2026-10-02",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -5749,6 +5749,16 @@
      "at": "2026-10-01 21:09",
      "by": "Kimi K3",
      "note": "2026-10-02 item (4) CLOSED: the density-adoption acceptance is fully discharged — the 7 families' B23-shape tests exist and pass (waves 2a/2b), the portaled-root arms now tell the truth: command-palette's re-ruled arm on the real mount (B23-D 193f12ad2, Fable ACCEPT-WITH-CHANGES discharged) and the app-shell drawer's portaled arm (B23-E b32748db4, 16/16, A/B red against the pre-SHEET-1 engine). Two real product defects this item surfaced are FIXED: Sheet's missing PortalScope (SHEET-1 7ea79090c, Fable ACCEPT-WITH-CHANGES discharged) and the Modal/Tour zero-consumer variable cache (MODAL-1 4a0629822 Fable ACCEPT + TOUR-1 0b0e32bf0). REMAINING for the WO: (2) the app-side :is() migration (HELD until the target repos are quiet), (3) the rottay-* hook retirement post-bump, (1->3) the no-rottay-class arm closes with those. The standing drawer frozen-engine decision stays registered, unscheduled."
+    },
+    {
+     "at": "2026-10-01 23:50",
+     "by": "Kimi K3",
+     "note": "2026-10-02 COV-1 (out-cov1-opus.json, Opus, in-memory unclaim A/B on a scratch copy — the harness valid at 16/16 unmutated): the wave-2a '6 of 11' was TEST BLOCKS, not channels — at CHANNEL level every one of the 11 density-exposed app-shell channels drifts without the claim (64 in-tree drift cells across compact/spacious/nested/reverseNested). The 5 green blocks never depended on the claim by design (TSX probe, oracle-only, the skip-link zero pin, b1). Verdict: the claim proves all 11. ONE honest caveat, registered: skip-link's proof rides the reader twin — the FOCUSED link can't be probed yet (harness can't focus; the HAR-1 interaction step could close it). The B23-E portaled arm is claim-sensitive for its 4 channels (24 cells drift without the claim) but was never their only proof — no gap existed."
+    },
+    {
+     "at": "2026-10-02 00:06",
+     "by": "Kimi K3",
+     "note": "2026-10-02 tanda 9g: HAR-1 LANDED a99195e64 (Fable ACCEPT; the readings-based coverage check replaces the tautological union). The harness now drives real input (click/fill/press, loud pre-checks); command-palette's real mount covers all 23/23 density channels incl. the argument-panel trio. COV-1 closed the wave-2a ambiguity: the claim proves all 11 app-shell channels at the channel level (64 drift cells without it). The skip-link focused-link caveat stays registered (the interaction step could close it — cheap follow-up, not scheduled). Fable's second tightening (multi-match refusal for attribute/style steps) registered, not applied."
     }
    ]
   },
