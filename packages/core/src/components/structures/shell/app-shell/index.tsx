@@ -6,7 +6,8 @@
  * Provides sidebar + header + content layout with:
  * - Controlled/uncontrolled collapse (desktop only)
  * - A navigation presentation resolved through the shared adaptation kernel:
- *   a fixed track, or an overlay drawer that never inherits desktop collapsed
+ *   a fixed track, an overlay drawer that never inherits desktop collapsed,
+ *   or a persistent bottom bar that never opens as an overlay
  * - Canonical safe-area and fixed-bottom-chrome inset ownership
  * - DS token-driven geometry and styling
  * - Slot-based composition (app provides content, DS owns chrome)
@@ -181,6 +182,7 @@ export function AppShell({
   >(adapt, { base: BASE_ADAPTATION, defaults: NAVIGATION_DEFAULTS });
   const posture = resolvedPosture.viewport;
   const isCompact = adaptation.navigation === 'drawer';
+  const isBottomBar = adaptation.navigation === 'bottom-bar';
 
   const openNavigation = useCallback(() => setNavigationOpen(true), []);
   const closeNavigation = useCallback(() => setNavigationOpen(false), []);
@@ -240,7 +242,7 @@ export function AppShell({
   const activeSidebarInlineSize = collapsed ? sidebarCollapsedInlineSize : sidebarInlineSize;
   const hasHeader = Boolean(header || (isCompact && sidebar));
   const desktopSidebarInset =
-    sidebar && !isCompact
+    sidebar && !isCompact && !isBottomBar
       ? `calc(${activeSidebarInlineSize} + var(--ds-shell-safe-area-left))`
       : '0px';
 
@@ -363,7 +365,9 @@ export function AppShell({
       ? 'var(--ds-shell-safe-area-left)'
       : desktopSidebarInset,
     // The overlay presentation has no track to slide, so it has no transition
-    // at all; otherwise the app's own `--ds-shell-main-transition` escape
+    // at all; neither does the bottom-bar presentation (its track does not
+    // move with collapse). Otherwise the app's own
+    // `--ds-shell-main-transition` escape
     // hatch wins over the collapse cadence, resolved on this element so a
     // consumer statement on the same root still reaches it. The cadence read
     // ends in a literal so the chain can never be invalid at computed-value
@@ -371,9 +375,10 @@ export function AppShell({
     // deriver is registered drops the whole declaration and the main column
     // stops animating. The literal is the shell's pre-derivation paint, and
     // it is dead wherever the channel has a producer.
-    '--ds-shell-resolved-main-transition': isCompact
-      ? 'none'
-      : `var(--ds-shell-main-transition, margin-inline-start ${SHELL_COLLAPSE_TRANSITION_READ})`,
+    '--ds-shell-resolved-main-transition':
+      isCompact || isBottomBar
+        ? 'none'
+        : `var(--ds-shell-main-transition, margin-inline-start ${SHELL_COLLAPSE_TRANSITION_READ})`,
     ...style,
   };
 
@@ -398,7 +403,7 @@ export function AppShell({
         </a>
 
         {/* ---- Desktop sidebar ---- */}
-        {sidebar && !isCompact && (
+        {sidebar && !isCompact && !isBottomBar && (
           <aside
             className="ds-app-shell__navigation-sidebar"
             data-part="navigation-sidebar"
@@ -408,6 +413,18 @@ export function AppShell({
           >
             {renderSidebarContent(false)}
           </aside>
+        )}
+
+        {/* ---- Persistent bottom bar (phone-class track replacement) ---- */}
+        {sidebar && isBottomBar && (
+          <nav
+            className="ds-app-shell__navigation-bottom-bar"
+            data-part="navigation-bottom-bar"
+            data-compact="false"
+            aria-label={navigationLabel}
+          >
+            {renderSidebarContent(false)}
+          </nav>
         )}
 
         {/* ---- Phone/tablet drawer (expanded, independent of collapsed) ---- */}

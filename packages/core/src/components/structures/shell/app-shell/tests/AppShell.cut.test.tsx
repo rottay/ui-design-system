@@ -43,6 +43,7 @@ const OWNED_PARTS = [
   'root',
   'skip-link',
   'navigation-sidebar',
+  'navigation-bottom-bar',
   'navigation-logo',
   'navigation-body',
   'navigation-footer',
@@ -185,15 +186,21 @@ describe('AppShell (WO-FAM-11 cut) — the anatomy contract', () => {
     const stamped = new Set(
       [...container.querySelectorAll('[data-part]')].map((node) => node.getAttribute('data-part')!),
     );
-    // Two exclusions, both stated. The drawer-only parts render in the
-    // compact arm, measured below. `root` is selected by the class and not by
-    // its stamp on purpose: every other rule is scoped under it, and adding
-    // the attribute would lift the root rule above the (0,1,0) background
-    // statement app-bithire already makes on the same element.
+    // Three exclusions, all stated. The drawer-only parts render in the
+    // compact arm, measured below; the bottom-bar part renders only when the
+    // resolved presentation is the persistent bottom bar, measured in the
+    // bottom-bar suite beside this one. `root` is selected by the class and
+    // not by its stamp on purpose: every other rule is scoped under it, and
+    // adding the attribute would lift the root rule above the (0,1,0)
+    // background statement app-bithire already makes on the same element.
     const DRAWER_ONLY = ['navigation-drawer-header', 'navigation-close', 'navigation-trigger'];
+    const BOTTOM_BAR_ONLY = ['navigation-bottom-bar'];
     for (const part of OWNED_PARTS) {
-      if (part === 'root' || DRAWER_ONLY.includes(part)) continue;
+      if (part === 'root' || DRAWER_ONLY.includes(part) || BOTTOM_BAR_ONLY.includes(part)) continue;
       expect({ part, stamped: stamped.has(part) }).toEqual({ part, stamped: true });
+      expect(SKIN, `skin rule for ${part}`).toContain(`[data-part="${part}"]`);
+    }
+    for (const part of BOTTOM_BAR_ONLY) {
       expect(SKIN, `skin rule for ${part}`).toContain(`[data-part="${part}"]`);
     }
     expect(stamped.has('root')).toBe(true);
@@ -229,6 +236,7 @@ const CANONICAL_CLASSES = [
   'ds-app-shell',
   'ds-app-shell__skip-link',
   'ds-app-shell__navigation-sidebar',
+  'ds-app-shell__navigation-bottom-bar',
   'ds-app-shell__navigation-logo',
   'ds-app-shell__navigation-body',
   'ds-app-shell__navigation-footer',

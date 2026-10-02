@@ -299,8 +299,8 @@ describe('useCollectionWorkspace', () => {
       },
     };
 
-    // We can't easily test matchMedia in unit tests, but we verify
-    // the hook doesn't crash and returns a boolean
+    // The hook resolves the flag from the responsive runtime's snapshot; the
+    // drill verifies it resolves to a boolean without crashing.
     const { result } = renderHook(() =>
       useCollectionWorkspace({ config }),
     );
@@ -1715,77 +1715,52 @@ describe('CollectionWorkspaceSurface', () => {
   });
 
   it('lets adaptive posture exclusively own the renderer and toolbar mode', async () => {
-    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({
-      matches: true,
-      media: '(max-width: 768px)',
-      onchange: null,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    }));
+    const { container } = await renderToolbarSurface(
+      <ResponsiveContext.Provider value={TABLET_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: {
+              desktop: { collection: 'table' },
+              tablet: { collection: 'table' },
+              phone: { collection: 'cards' },
+            },
+            presentation: {
+              responsive: {
+                mobileBreakpoint: 'md',
+                mobileView: 'cards',
+              },
+            },
+            controls: {
+              viewMode: {
+                enabled: true,
+                modes: ['table', 'cards'],
+              },
+            },
+            mobileCard: (row) => (
+              <div data-testid={`adaptive-card-${row.id}`}>{row.name}</div>
+            ),
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
 
-    try {
-      const { container } = await renderToolbarSurface(
-        <ResponsiveContext.Provider value={TABLET_RESPONSIVE_CONTEXT}>
-          <CollectionWorkspaceSurface
-            {...buildProps({
-              adaptive: {
-                desktop: { collection: 'table' },
-                tablet: { collection: 'table' },
-                phone: { collection: 'cards' },
-              },
-              presentation: {
-                responsive: {
-                  mobileBreakpoint: 'md',
-                  mobileView: 'cards',
-                },
-              },
-              controls: {
-                viewMode: {
-                  enabled: true,
-                  modes: ['table', 'cards'],
-                },
-              },
-              mobileCard: (row) => (
-                <div data-testid={`adaptive-card-${row.id}`}>{row.name}</div>
-              ),
-            })}
-          />
-        </ResponsiveContext.Provider>,
-      );
-
-      await screen.findByText('Test Collection');
-      // By CLASS: `data-component` belongs to the engine's own root primitive,
-      // so the surface's anatomy is its className, not that attribute.
-      const root = container.querySelector('.ds-collection-workspace');
-      expect(root).toHaveAttribute('data-view-mode', 'table');
-      expect(container.querySelector('table')).toBeInTheDocument();
-      expect(screen.queryByTestId('adaptive-card-1')).not.toBeInTheDocument();
-      const cardsButton = queryViewModeControl(container);
-      expect(cardsButton).toBeInTheDocument();
-      if (!cardsButton) throw new Error('Cards view button not found');
-      fireEvent.click(cardsButton);
-      expect(root).toHaveAttribute('data-view-mode', 'table');
-      expect(container.querySelector('table')).toBeInTheDocument();
-      expect(screen.queryByTestId('adaptive-card-1')).not.toBeInTheDocument();
-    } finally {
-      vi.unstubAllGlobals();
-    }
+    await screen.findByText('Test Collection');
+    // By CLASS: `data-component` belongs to the engine's own root primitive,
+    // so the surface's anatomy is its className, not that attribute.
+    const root = container.querySelector('.ds-collection-workspace');
+    expect(root).toHaveAttribute('data-view-mode', 'table');
+    expect(container.querySelector('table')).toBeInTheDocument();
+    expect(screen.queryByTestId('adaptive-card-1')).not.toBeInTheDocument();
+    const cardsButton = queryViewModeControl(container);
+    expect(cardsButton).toBeInTheDocument();
+    if (!cardsButton) throw new Error('Cards view button not found');
+    fireEvent.click(cardsButton);
+    expect(root).toHaveAttribute('data-view-mode', 'table');
+    expect(container.querySelector('table')).toBeInTheDocument();
+    expect(screen.queryByTestId('adaptive-card-1')).not.toBeInTheDocument();
   });
 
   it('resolves adaptive posture from a narrow collection inside a wide viewport', async () => {
-    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({
-      matches: false,
-      media: '(max-width: 768px)',
-      onchange: null,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    }));
 
     let resizeCallback: ResizeObserverCallback | undefined;
     const resizeObserver = {

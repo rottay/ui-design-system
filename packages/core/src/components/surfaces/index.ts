@@ -111,6 +111,25 @@ export type {
 } from './foundation/contracts/adaptive';
 export { resolveSurfacePosture } from './foundation/contracts/adaptive';
 
+// Surface posture contract: app-owned per-device postures (regions,
+// navigation mode, density, primary action) resolved from the responsive
+// runtime's viewport, with SurfaceRegion as the implementing primitive.
+export type {
+  PrimaryActionPlacement,
+  ResolvedSurfacePosture,
+  SurfaceFamily,
+  SurfaceNavigationMode,
+  SurfacePostureDeclaration,
+  SurfacePostures,
+  SurfaceRegionDisposition,
+} from './foundation/contracts/postures';
+export {
+  DEFAULT_SURFACE_POSTURES,
+  resolveSurfacePostures,
+} from './foundation/contracts/postures';
+export { SurfaceRegion, surfacePosturesToShellAdapt, useSurfacePosture } from './runtime/postures';
+export type { SurfaceRegionProps, SurfaceShellNavigationAdapt } from './runtime/postures';
+
 // Runtime profile defaults + per-surface override hook
 export {
   useSurfaceProfileDefaults,

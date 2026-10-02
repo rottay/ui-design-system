@@ -169,7 +169,7 @@ export interface ShellHeaderSlots {
 // ---------------------------------------------------------------------------
 
 /** How the shell presents its navigation at a posture. */
-export type ShellNavigationPresentation = 'sidebar' | 'drawer';
+export type ShellNavigationPresentation = 'sidebar' | 'drawer' | 'bottom-bar';
 
 /**
  * The shell's adaptation. An app declares deltas per posture, never a
