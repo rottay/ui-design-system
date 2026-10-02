@@ -211,6 +211,42 @@ export const CI_GATES = Object.freeze([
     prerequisites: ['fresh-dist'],
     drillId: 'channel-liveness-drill',
   },
+  // The consumer census (WO-RET-01 step 1): the decrease-only anchor every
+  // retirement lot cites. Per published subpath, which of the four consumer
+  // roots (showroom, app-bithire, app-evnto, app-platform) imports it; plus
+  // the internal reachability census (unreachable / test-only modules,
+  // unreferenced styles). Fail-closed on a missing required consumer root —
+  // never a skip. Drill first: a census computed by a broken scanner reports
+  // plausible sets and looks exactly like a clean tree.
+  { id: 'consumer-census-drill', run: ['node', '--test', 'scripts/check/consumer-census/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['consumer-census'], },
+  // BLOCKING is the wrong word for what CI can do here: the gate requires all
+  // four consumer roots and this job checks out only app-bithire explicitly,
+  // so a blocking entry would read PREREQ-MISSING on every run — which is how
+  // a gate gets downgraded (F-76). The drill above is blocking and runs
+  // everywhere; the gate itself runs by hand (`node scripts/check/consumer-census/index.mjs
+  // --check`) in the workspace that carries the four roots, and the exclusion
+  // returns to blocking with the same CI checkout wiring the app-ds-hook-contract
+  // entry documents. NOT a softened law: the baseline only moves by --write,
+  // growth fails by name, shrinkage never fails.
+  {
+    id: 'consumer-census',
+    run: ['node', 'scripts/check/consumer-census/index.mjs', '--check'],
+    blocking: false,
+    excluded: {
+      reason:
+        'Requires all four consumer roots (showroom in-repo; app-bithire, app-evnto, app-platform '
+        + 'as sibling checkouts). The CI gates job checks out only app-bithire explicitly, so a blocking '
+        + 'entry would fail closed on three missing roots on every run. Locally and in any job that '
+        + 'checks the siblings out, `node scripts/check/consumer-census/index.mjs --check` enforces the '
+        + 'decrease-only ratchet: growth in consumerlessSubpaths / unreachableModules / testOnlyModules '
+        + 'fails naming every new member; a missing required root is a hard failure in every mode.',
+      owner: 'WO-RET-01 (the retirement lots that cite this anchor; CI checkout wiring per the app-ds-hook-contract entry)',
+      trackedSince: '2026-10-02',
+    },
+    phase: 'pre-build',
+    drillId: 'consumer-census-drill',
+    ratchet: 'scripts/check/consumer-census/baseline/index.json',
+  },
   // One responsive authority: no per-instance stylesheet, 100vh/vw, width query
   // outside `runtime/responsive` or unnamed @container; every surface adopts it.
   { id: 'responsive-single-authority-drill', run: ['node', '--test', 'scripts/check/responsive/single-authority/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['responsive-single-authority'], },

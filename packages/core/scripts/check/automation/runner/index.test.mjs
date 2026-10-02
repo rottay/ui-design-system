@@ -119,9 +119,18 @@ test('every excluded gate names its reason and its owner', () => {
   // the same browser-wiring class as axis-difference -- its browser half skips with a
   // written reason where no Chromium is reachable, and it goes blocking with the same
   // EVI-02 browser wiring, never by hand.
+  // `consumer-census` joined on 2026-10-02 (WO-RET-01 step 1, the retirement
+  // anchor): a corpus class like axis-difference, not a debt class -- the gate
+  // requires all four consumer roots and is GREEN on the workspace that
+  // carries them, its drill is blocking and green, and what the CI gates job
+  // does not provide is three of the four checkouts (only app-bithire is
+  // explicit), so a blocking entry would fail closed PREREQ-MISSING on every
+  // run. It returns to blocking with the same sibling-checkout wiring the
+  // app-ds-hook-contract entry documents, never by hand and never by
+  // softening the missing-root law.
   assert.deepEqual(
     excluded.map((g) => g.id).sort(),
-    ['axis-difference', 'channel-liveness', 'channel-liveness-reconcile', 'style-reuse-differentiation', 'theme-keypath-coverage'],
+    ['axis-difference', 'channel-liveness', 'channel-liveness-reconcile', 'consumer-census', 'style-reuse-differentiation', 'theme-keypath-coverage'],
     'la lista de exclusiones cambio; adjudicala antes de moverla',
   );
   for (const gate of excluded) {
