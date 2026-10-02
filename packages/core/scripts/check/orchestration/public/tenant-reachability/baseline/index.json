@@ -452,7 +452,6 @@
     "--ds-tag-warning-border",
     "--ds-tag-warning-color",
     "--ds-text-disabled",
-    "--ds-text-inverse",
     "--ds-text-primary",
     "--ds-text-secondary",
     "--ds-text-tertiary",

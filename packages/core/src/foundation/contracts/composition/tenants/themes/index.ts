@@ -521,7 +521,6 @@ export interface BrandPaletteAliases {
   textPrimary?: string;
   textSecondary?: string;
   textDisabled?: string;
-  textInverse?: string;
   borderColorDefault?: string;
   borderColorMuted?: string;
   borderColorStrong?: string;

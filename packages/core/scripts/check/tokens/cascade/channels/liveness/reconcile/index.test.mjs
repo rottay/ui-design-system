@@ -118,8 +118,10 @@ test('FAIL-CLOSED: a vertical whose compile throws is refused loudly, never skip
  */
 const CENSUS_2026_10_02 = Object.freeze({
   forward: 60,
-  reverse: 117,
-  reverseBuckets: Object.freeze({ 'produces-roster': 51, 'direct-literal': 58, 'compiled-artifact': 8 }),
+  // reverse 117 -> 116 on 2026-10-02 (RET-01-CH): --ds-text-inverse retired
+  // with its producers, so it left the produces-roster bucket (51 -> 50).
+  reverse: 116,
+  reverseBuckets: Object.freeze({ 'produces-roster': 50, 'direct-literal': 58, 'compiled-artifact': 8 }),
 });
 
 /*

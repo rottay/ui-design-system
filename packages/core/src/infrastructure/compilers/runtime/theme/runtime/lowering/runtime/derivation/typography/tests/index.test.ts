@@ -91,6 +91,36 @@ describe("typography/scale", () => {
   });
 });
 
+describe("typography/scale: the retired body/emphasis letter-spacing facets", () => {
+  const RETIRED = [
+    "--ds-text-body-letter-spacing",
+    "--ds-text-emphasis-letter-spacing",
+  ];
+  const derived = deriveTypeScaleChannels();
+
+  it("emits nothing for the two inert facets while the live letter-spacing facets stay", () => {
+    const ramp: Record<string, string> = {};
+    setTypeRampVariables(ramp);
+    for (const channel of RETIRED) {
+      expect(Object.keys(ramp)).not.toContain(channel);
+      expect(TYPE_SCALE_FACET_CHANNELS.has(channel)).toBe(false);
+      expect(Object.keys(derived)).not.toContain(channel);
+    }
+    // The live readers: detail (app-bithire surface-shell/typography) and the
+    // title/display/eyebrow tracking facets all stay emitted.
+    for (const channel of [
+      "--ds-text-detail-letter-spacing",
+      "--ds-text-title-letter-spacing",
+      "--ds-text-display-letter-spacing",
+      "--ds-text-eyebrow-letter-spacing",
+    ]) {
+      expect(ramp[channel]).toBeDefined();
+      expect(TYPE_SCALE_FACET_CHANNELS.has(channel)).toBe(true);
+      expect(derived[channel]).toBeDefined();
+    }
+  });
+});
+
 describe("typography/weights", () => {
   it("moves the heading and display weights with headingWeightBias", () => {
     const lighter = deriveTypeWeightChannels(

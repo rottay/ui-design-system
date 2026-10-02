@@ -964,7 +964,6 @@
   --ds-text-primary: var(--ds-color-text-primary);
   --ds-text-secondary: var(--ds-color-text-secondary);
   --ds-text-disabled: var(--ds-color-text-disabled);
-  --ds-text-inverse: var(--ds-color-text-on-primary);
 
   /* Border Colors */
   --ds-border-color-default: var(--ds-color-border-primary);
@@ -979,7 +978,7 @@
 
   /* Sidebar Colors - Uses only existing palette tokens */
   --ds-sidebar-bg: var(--ds-color-primary-900);
-  --ds-sidebar-text: var(--ds-text-inverse);
+  --ds-sidebar-text: var(--ds-color-text-on-primary);
   --ds-sidebar-text-muted: var(--ds-color-neutral-400);
   --ds-sidebar-border: var(--ds-color-neutral-700);
   --ds-sidebar-item-bg-hover: var(--ds-color-neutral-800);

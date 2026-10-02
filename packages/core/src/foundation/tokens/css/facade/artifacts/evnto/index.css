@@ -137,10 +137,12 @@
   --ds-app-shell-navigation-body-scroll-padding-block-end: calc(var(--ds-spacing-6, 24px) + 76px);
   --ds-app-shell-navigation-border: 0;
   --ds-app-shell-navigation-border-inline-end: 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle));
+  --ds-app-shell-navigation-color: var(--ds-sidebar-text, var(--ds-color-text-primary));
   --ds-app-shell-navigation-drawer-body-padding: 0;
   --ds-app-shell-navigation-drawer-header-padding: 0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px);
   --ds-app-shell-navigation-footer-background: var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg));
   --ds-app-shell-navigation-footer-border: 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle));
+  --ds-app-shell-navigation-footer-color: light-dark(var(--ds-color-text-on-primary), var(--ds-sidebar-text, var(--ds-color-text-primary)));
   --ds-app-shell-navigation-footer-padding: var(--ds-spacing-3, 12px);
   --ds-app-shell-navigation-footer-padding-collapsed: var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px);
   --ds-app-shell-navigation-header-background: transparent;
@@ -2548,7 +2550,6 @@
   --ds-tag-xl-padding-inline: var(--ds-spacing-4);
   --ds-tag-xs-padding-inline: calc(var(--ds-spacing-2) * 0.75);
   --ds-text-body: var(--ds-text-body-weight) var(--ds-text-body-size)/var(--ds-text-body-line-height) var(--ds-font-family-base);
-  --ds-text-body-letter-spacing: 0;
   --ds-text-body-line-height: calc(1.25rem * var(--ds-type-scale, 1));
   --ds-text-body-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-text-body-weight: 400;
@@ -2563,7 +2564,6 @@
   --ds-text-display-size: calc(2rem * var(--ds-type-scale, 1));
   --ds-text-display-weight: 700;
   --ds-text-emphasis: var(--ds-text-emphasis-weight) var(--ds-text-emphasis-size)/var(--ds-text-emphasis-line-height) var(--ds-font-family-base);
-  --ds-text-emphasis-letter-spacing: 0;
   --ds-text-emphasis-line-height: calc(1.5rem * var(--ds-type-scale, 1));
   --ds-text-emphasis-size: calc(1rem * var(--ds-type-scale, 1));
   --ds-text-emphasis-weight: 600;

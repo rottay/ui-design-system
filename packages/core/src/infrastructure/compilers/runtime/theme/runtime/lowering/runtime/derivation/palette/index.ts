@@ -62,7 +62,6 @@ export const paletteDeriver: FamilyDeriver = {
     "--ds-text-primary",
     "--ds-text-secondary",
     "--ds-text-disabled",
-    "--ds-text-inverse",
     "--ds-border-color*",
   ],
   derive: (context) => derivePaletteChannels(context.theme, context.statusTints, context.mode),

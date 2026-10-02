@@ -53,17 +53,28 @@ const TYPE_RAMP = [
 ] as const;
 
 /**
+ * Tracking facets the ramp does not emit: body and emphasis tracking is the
+ * browser default (`0`) and no surface reads it, so the facet is not a
+ * channel. Every other letter-spacing facet — detail, title, display and
+ * eyebrow — has a live reader and stays.
+ */
+const RETIRED_TRACKING_FACETS = new Set(["body", "emphasis"]);
+
+/**
  * Emit the composite type ramp --ds-text-{detail,body,emphasis,title,display}
  * plus the --ds-text-eyebrow variant (design-language §2.1).
  *
  * Each ramp entry is emitted as a bare `font`-shorthand token (`--ds-text-<name>`
  * = `<weight> <size>/<line-height> <family>`, the headline composite the §2.1
- * table names) AND as the four addressable facets
+ * table names) AND as the addressable facets
  * `--ds-text-<name>-{size,weight,line-height,letter-spacing}` (tracking cannot
  * ride the `font` shorthand, so it is a separate facet; the facet names match the
  * existing foundation composite-text convention in
- * foundation/tokens/css/foundation/base/typography/index.css). The eyebrow reuses the detail size
- * at weight 600 with +0.08em tracking and is the sole uppercase in the product
+ * foundation/tokens/css/foundation/base/typography/index.css). The body and
+ * emphasis letter-spacing facets are NOT emitted — their tracking is the
+ * browser default and no surface reads the channel (RET-01-CH). The eyebrow
+ * reuses the detail size at weight 600 with +0.08em tracking and is the sole
+ * uppercase in the product
  * (S1) — it carries a `-transform: uppercase` facet; every other ramp entry is
  * sentence case. The ramp is a fixed, tenant-independent closed set, so it is
  * emitted for every compiled FlatTheme.
@@ -76,7 +87,9 @@ export function setTypeRampVariables(vars: Record<string, string>): void {
     vars[`--ds-text-${name}-size`] = size;
     vars[`--ds-text-${name}-weight`] = String(weight);
     vars[`--ds-text-${name}-line-height`] = lineHeight;
-    vars[`--ds-text-${name}-letter-spacing`] = tracking;
+    if (!RETIRED_TRACKING_FACETS.has(name)) {
+      vars[`--ds-text-${name}-letter-spacing`] = tracking;
+    }
   }
 
   // Eyebrow — detail size, weight 600, +0.08em tracking, uppercase (the sole

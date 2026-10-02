@@ -2286,7 +2286,6 @@
   --ds-text-primary: var(--ds-color-text-primary);
   --ds-text-secondary: var(--ds-color-text-secondary);
   --ds-text-disabled: var(--ds-color-text-disabled);
-  --ds-text-inverse: var(--ds-color-text-on-primary);
 
   /* Border Colors */
   --ds-border-color-default: var(--ds-color-border-primary);
@@ -2301,7 +2300,7 @@
 
   /* Sidebar Colors - Uses only existing palette tokens */
   --ds-sidebar-bg: var(--ds-color-primary-900);
-  --ds-sidebar-text: var(--ds-text-inverse);
+  --ds-sidebar-text: var(--ds-color-text-on-primary);
   --ds-sidebar-text-muted: var(--ds-color-neutral-400);
   --ds-sidebar-border: var(--ds-color-neutral-700);
   --ds-sidebar-item-bg-hover: var(--ds-color-neutral-800);
@@ -51103,6 +51102,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   padding-block-end: var(--ds-shell-safe-area-bottom);
   transition: width var(--ds-shell-collapse-transition, var(--ds-motion-rearrange, var(--ds-motion-normal)) var(--ds-motion-ease-move));
   background: var(--ds-app-shell-navigation-background, var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated))));
+  color: var(--ds-app-shell-navigation-color, var(--ds-sidebar-text, var(--ds-color-text-primary)));
   border: var(--ds-shell-navigation-border, var(--ds-app-shell-navigation-border, 0));
   border-inline-end: var(--ds-shell-navigation-border-inline-end, var(--ds-app-shell-navigation-border-inline-end, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))));
   border-radius: var(--ds-shell-navigation-radius, var(--ds-app-shell-navigation-radius, 0));
@@ -51123,6 +51123,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   padding-block-end: env(safe-area-inset-bottom, 0px);
   padding-inline-start: env(safe-area-inset-left, 0px);
   background: var(--ds-app-shell-navigation-background, var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated))));
+  color: var(--ds-app-shell-navigation-color, var(--ds-sidebar-text, var(--ds-color-text-primary)));
   border: var(--ds-shell-navigation-border, var(--ds-app-shell-navigation-border, 0));
   border-inline-end: var(--ds-shell-navigation-border-inline-end, var(--ds-app-shell-navigation-border-inline-end, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))));
   border-radius: var(--ds-shell-navigation-radius, var(--ds-app-shell-navigation-radius, 0));
@@ -51229,7 +51230,22 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   flex-shrink: 0;
   padding: var(--ds-shell-navigation-footer-padding, var(--ds-app-shell-navigation-footer-padding, var(--ds-spacing-3, 12px)));
   background: var(--ds-app-shell-navigation-footer-background, var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg)));
+  color: var(--ds-app-shell-navigation-footer-color, light-dark(var(--ds-color-text-on-primary), var(--ds-sidebar-text, var(--ds-color-text-primary))));
   border-block-start: var(--ds-app-shell-navigation-footer-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
+}
+
+/* Slot anchors: the UA default link blue is not a DS decision, and a tone the
+   canvas ink cannot pair may rest under it. Raw anchors take the region ink
+   like every other slot content; slotted components keep their own class. */
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
+  :where(
+    [data-part="navigation-logo"],
+    [data-part="navigation-body"],
+    [data-part="navigation-footer"],
+    [data-part="navigation-drawer-header"]
+  )
+  :where(a, a:visited) {
+  color: inherit;
 }
 
 :is(.ds-app-shell, .ds-app-shell__navigation-drawer)
@@ -105427,10 +105443,12 @@ html[lang]:lang(ar) {
   --ds-app-shell-navigation-body-scroll-padding-block-end: calc(var(--ds-spacing-6, 24px) + 76px);
   --ds-app-shell-navigation-border: 0;
   --ds-app-shell-navigation-border-inline-end: 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle));
+  --ds-app-shell-navigation-color: var(--ds-sidebar-text, var(--ds-color-text-primary));
   --ds-app-shell-navigation-drawer-body-padding: 0;
   --ds-app-shell-navigation-drawer-header-padding: 0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px);
   --ds-app-shell-navigation-footer-background: var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg));
   --ds-app-shell-navigation-footer-border: 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle));
+  --ds-app-shell-navigation-footer-color: light-dark(var(--ds-color-text-on-primary), var(--ds-sidebar-text, var(--ds-color-text-primary)));
   --ds-app-shell-navigation-footer-padding: var(--ds-spacing-3, 12px);
   --ds-app-shell-navigation-footer-padding-collapsed: var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px);
   --ds-app-shell-navigation-header-background: transparent;
@@ -107838,7 +107856,6 @@ html[lang]:lang(ar) {
   --ds-tag-xl-padding-inline: var(--ds-spacing-4);
   --ds-tag-xs-padding-inline: calc(var(--ds-spacing-2) * 0.75);
   --ds-text-body: var(--ds-text-body-weight) var(--ds-text-body-size)/var(--ds-text-body-line-height) var(--ds-font-family-base);
-  --ds-text-body-letter-spacing: 0;
   --ds-text-body-line-height: calc(1.25rem * var(--ds-type-scale, 1));
   --ds-text-body-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-text-body-weight: 400;
@@ -107853,7 +107870,6 @@ html[lang]:lang(ar) {
   --ds-text-display-size: calc(2rem * var(--ds-type-scale, 1));
   --ds-text-display-weight: 700;
   --ds-text-emphasis: var(--ds-text-emphasis-weight) var(--ds-text-emphasis-size)/var(--ds-text-emphasis-line-height) var(--ds-font-family-base);
-  --ds-text-emphasis-letter-spacing: 0;
   --ds-text-emphasis-line-height: calc(1.5rem * var(--ds-type-scale, 1));
   --ds-text-emphasis-size: calc(1rem * var(--ds-type-scale, 1));
   --ds-text-emphasis-weight: 600;
@@ -109672,10 +109688,12 @@ html[lang]:lang(ar) {
   --ds-app-shell-navigation-body-scroll-padding-block-end: calc(var(--ds-spacing-6, 24px) + 76px);
   --ds-app-shell-navigation-border: 0;
   --ds-app-shell-navigation-border-inline-end: 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle));
+  --ds-app-shell-navigation-color: var(--ds-sidebar-text, var(--ds-color-text-primary));
   --ds-app-shell-navigation-drawer-body-padding: 0;
   --ds-app-shell-navigation-drawer-header-padding: 0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px);
   --ds-app-shell-navigation-footer-background: var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg));
   --ds-app-shell-navigation-footer-border: 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle));
+  --ds-app-shell-navigation-footer-color: light-dark(var(--ds-color-text-on-primary), var(--ds-sidebar-text, var(--ds-color-text-primary)));
   --ds-app-shell-navigation-footer-padding: var(--ds-spacing-3, 12px);
   --ds-app-shell-navigation-footer-padding-collapsed: var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px);
   --ds-app-shell-navigation-header-background: transparent;
@@ -112219,7 +112237,6 @@ html[lang]:lang(ar) {
   --ds-tag-xl-padding-inline: var(--ds-spacing-4);
   --ds-tag-xs-padding-inline: calc(var(--ds-spacing-2) * 0.75);
   --ds-text-body: var(--ds-text-body-weight) var(--ds-text-body-size)/var(--ds-text-body-line-height) var(--ds-font-family-base);
-  --ds-text-body-letter-spacing: 0;
   --ds-text-body-line-height: calc(1.25rem * var(--ds-type-scale, 1));
   --ds-text-body-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-text-body-weight: 400;
@@ -112234,7 +112251,6 @@ html[lang]:lang(ar) {
   --ds-text-display-size: calc(2rem * var(--ds-type-scale, 1));
   --ds-text-display-weight: 700;
   --ds-text-emphasis: var(--ds-text-emphasis-weight) var(--ds-text-emphasis-size)/var(--ds-text-emphasis-line-height) var(--ds-font-family-base);
-  --ds-text-emphasis-letter-spacing: 0;
   --ds-text-emphasis-line-height: calc(1.5rem * var(--ds-type-scale, 1));
   --ds-text-emphasis-size: calc(1rem * var(--ds-type-scale, 1));
   --ds-text-emphasis-weight: 600;
@@ -113103,7 +113119,6 @@ html[lang]:lang(ar) {
   --ds-text-heading-4-weight: var(--ds-font-weight-semibold);
   --ds-text-heading-5-weight: var(--ds-font-weight-semibold);
   --ds-text-heading-6-weight: var(--ds-font-weight-semibold);
-  --ds-text-inverse: var(--ds-color-text-on-primary);
   --ds-text-label-weight: var(--ds-font-weight-medium);
   --ds-textarea-count-limit-font-weight: var(--ds-font-weight-semibold);
   --ds-textarea-count-line-height: var(--ds-type-caption-line-height);
@@ -114531,10 +114546,12 @@ html[lang]:lang(ar) {
   --ds-app-shell-navigation-body-scroll-padding-block-end: calc(var(--ds-spacing-6, 24px) + 76px);
   --ds-app-shell-navigation-border: 0;
   --ds-app-shell-navigation-border-inline-end: 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle));
+  --ds-app-shell-navigation-color: var(--ds-sidebar-text, var(--ds-color-text-primary));
   --ds-app-shell-navigation-drawer-body-padding: 0;
   --ds-app-shell-navigation-drawer-header-padding: 0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px);
   --ds-app-shell-navigation-footer-background: var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg));
   --ds-app-shell-navigation-footer-border: 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle));
+  --ds-app-shell-navigation-footer-color: light-dark(var(--ds-color-text-on-primary), var(--ds-sidebar-text, var(--ds-color-text-primary)));
   --ds-app-shell-navigation-footer-padding: var(--ds-spacing-3, 12px);
   --ds-app-shell-navigation-footer-padding-collapsed: var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px);
   --ds-app-shell-navigation-header-background: transparent;
@@ -116942,7 +116959,6 @@ html[lang]:lang(ar) {
   --ds-tag-xl-padding-inline: var(--ds-spacing-4);
   --ds-tag-xs-padding-inline: calc(var(--ds-spacing-2) * 0.75);
   --ds-text-body: var(--ds-text-body-weight) var(--ds-text-body-size)/var(--ds-text-body-line-height) var(--ds-font-family-base);
-  --ds-text-body-letter-spacing: 0;
   --ds-text-body-line-height: calc(1.25rem * var(--ds-type-scale, 1));
   --ds-text-body-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-text-body-weight: 400;
@@ -116957,7 +116973,6 @@ html[lang]:lang(ar) {
   --ds-text-display-size: calc(2rem * var(--ds-type-scale, 1));
   --ds-text-display-weight: 700;
   --ds-text-emphasis: var(--ds-text-emphasis-weight) var(--ds-text-emphasis-size)/var(--ds-text-emphasis-line-height) var(--ds-font-family-base);
-  --ds-text-emphasis-letter-spacing: 0;
   --ds-text-emphasis-line-height: calc(1.5rem * var(--ds-type-scale, 1));
   --ds-text-emphasis-size: calc(1rem * var(--ds-type-scale, 1));
   --ds-text-emphasis-weight: 600;

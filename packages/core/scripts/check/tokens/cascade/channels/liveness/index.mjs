@@ -3307,25 +3307,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
       'a reader without a stamper (GLASS-2-b): the route is wired -- the Overlay intensity step stamps data-intensity and the overlay-modal-compounds skin reads each weight under .rottay-overlay[data-intensity=light|medium|heavy] -- but NO product surface adopts it: Overlay is internal (no package subpath exports it, no DS module imports it, no consumerRoot imports it), and the rustic modal stamps .rottay-overlay without data-intensity, so the three rules match no rendered node and paint nobody. GLASS-1 discharged light/heavy and RET-OVM-b called medium live paint on the graph reading alone; DEFAULT_UNSTAMPED_ANCHORS withdraws exactly those three terminals, measured, and the unchanged classifier reads the rest. --ds-overlay-medium additionally has a live tenant AUTHOR: one stored tenant document writes it, and that value does NOT paint today -- painting awaits a stamping surface. The graph\'s general blindness to stamps (a skin terminal under a selector no product renders counts as paint) is registered for the instrument lane and is NOT closed by this pin or by the anchor register, which covers only these three rules. Exit: a product surface adopts Overlay and declares an intensity -- the anchor entries then red as adopted, entries and pin are deleted in the same commit and the rows measure LIVE, discharging the pin; or a weight retires with its skin rule, its allowlist entry and its catalog listing in one commit (medium only after its stored author is migrated)',
     channels: Object.freeze(['--ds-overlay-heavy', '--ds-overlay-light', '--ds-overlay-medium']),
   }),
-  Object.freeze({
-    owner: 'WO-RET-01',
-    classification: LIVENESS.readNoProductiveTerminal,
-    registered: '2026-09-25',
-    reason:
-      'dead by CASCADE, not by absence: the palette roster declares the ink (it joins the universe through the emission oracle) and its only DS read is the legacy relay themes/default:973 `--ds-sidebar-text: var(--ds-text-inverse)` on :root inside @layer rottay-tokens, which the consumerRoot does read (app-bithire sidebar styles, seven terminal color declarations). Every first-party artifact re-declares --ds-sidebar-text on its html[data-tenant]/[data-vertical] scope, outranking the relay, but that emission is conditional (chrome-variables `if (chrome.text)` / `if (s.text)`), so the relay WOULD compute for a tenant whose sidebar tone lowers no text. The cross-corpus relay blindness WO-EVI-02 owned is closed (LIV-3): the join follows the relay into the consumer graph and measures it outranked, because the bithire artifact the consumerRoot renders under declares --ds-sidebar-text itself -- so the RNPT reading is the cascade, not the instrument. The pin clears ONLY when the ink retires WITH its palette roster entry, or a DS reader is wired; removing the relay alone drifts the row to UNREAD_EMITTED_NO_KNOWN_ROUTE, which this register accuses as a drifted pin. Owner re-adjudicated 2026-10-01: WO-RET-02 is done, WO-DER-06 measured done the same day, so the pin moves to WO-RET-01, the open retirement lane whose acceptance the exit text already describes',
-    channels: Object.freeze(['--ds-text-inverse']),
-  }),
-  Object.freeze({
-    owner: 'WO-RET-01',
-    classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-10-01',
-    reason:
-      'inert by construction, a retire candidate: both hold `0` (foundation/type-ramp:79, the browser default) and have zero readers anywhere -- no var() in the DS corpus, the app-bithire consumerRoot or any other Rottay source, measured 2026-10-01 (LV-2, re-grepped by LIV-2) -- and neither appears in its entry shorthand (derivation/typography/scale:91 composes weight, size and line-height only), so unlike the shorthand-fed facets there is no route for the graph to be blind to. Retirement is NOT this pin: it is a contract edit that removes the two facets from setTypeRampVariables and from TYPE_SCALE_FACET_CHANNELS together (the family suite pins those two tables equal) and deletes this pin in the same commit. --ds-text-detail-letter-spacing holds the same `0` but is NOT a candidate: it has a reader (app-bithire surface-shell/typography:19) and measures LIVE_EXTERNAL_CONSUMER_PAINTED. The pin clears only with that retirement, or if a reader lands and the row measures LIVE',
-    channels: Object.freeze([
-      '--ds-text-body-letter-spacing',
-      '--ds-text-emphasis-letter-spacing',
-    ]),
-  }),
 ]);
 
 /** A pin addresses a work order, never a person, a lane or a date. */

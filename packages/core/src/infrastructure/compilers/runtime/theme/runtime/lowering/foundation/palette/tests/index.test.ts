@@ -43,8 +43,9 @@ describe("palette alias lowering", () => {
   });
 });
 
-describe("palette alias lowering: the retired --ds-text-tertiary alias", () => {
+describe("palette alias lowering: the retired --ds-text-tertiary and --ds-text-inverse aliases", () => {
   const RETIRED_TEXT = "--ds-text-tertiary";
+  const RETIRED_INVERSE = "--ds-text-inverse";
 
   it("lowers the surviving text aliases onto their channels", () => {
     const vars = lower({ aliases: { textSecondary: "#121212", textDisabled: "#232323" } });
@@ -52,16 +53,20 @@ describe("palette alias lowering: the retired --ds-text-tertiary alias", () => {
     expect(vars["--ds-text-disabled"]).toBe("#232323");
   });
 
-  it("emits nothing for a document that still carries the retired textTertiary leaf", () => {
+  it("emits nothing for a document that still carries the retired textTertiary or textInverse leaf", () => {
     const vars = lower({ aliases: { textTertiary: "#343434", textInverse: "#454545" } });
     expect(Object.keys(vars)).not.toContain(RETIRED_TEXT);
     expect(Object.values(vars)).not.toContain("#343434");
-    expect(vars["--ds-text-inverse"]).toBe("#454545");
+    expect(Object.keys(vars)).not.toContain(RETIRED_INVERSE);
+    expect(Object.values(vars)).not.toContain("#454545");
   });
 
-  it("declares no default-theme floor for the retired alias while its siblings keep theirs", () => {
+  it("declares no default-theme floor for the retired aliases while their siblings keep theirs", () => {
     const css = readFileSync(DEFAULT_THEME, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
     expect(css).not.toMatch(/--ds-text-tertiary\s*:/);
-    expect(css).toMatch(/--ds-text-secondary\s*:/);
+    expect(css).not.toMatch(/--ds-text-inverse\s*:/);
+    for (const sibling of ["--ds-text-primary", "--ds-text-secondary", "--ds-text-disabled"]) {
+      expect(css).toMatch(new RegExp(`${sibling}\\s*:`));
+    }
   });
 });
