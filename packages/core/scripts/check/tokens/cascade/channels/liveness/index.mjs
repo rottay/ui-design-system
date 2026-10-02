@@ -64,6 +64,11 @@
  *      `var(--ds-x)` occurrence is never a graph node — it is always
  *      `READ_UNPROVEN`, never PAINT. Comments never count because only
  *      `postcss`-parsed `decl.value` text is scanned (never raw text).
+ *      The one TSX shape that joins is a PAIR, not an occurrence: a
+ *      consumerRoot's inline custom-property setter whose same-file value
+ *      resolves to the channel, read by a stylesheet of that same root into a
+ *      terminal, and it moves a row only through its admission
+ *      (`DEFAULT_INLINE_ROUTE_ADMISSIONS`).
  *   2. The R1 evidence artifact is mandatory under `--check`: missing,
  *      corrupt, or stale (source digest mismatch) all fail closed. `--write`
  *      refuses when the pure analysis is red (`failures.length > 0`) or
@@ -169,6 +174,8 @@ import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../
 const require = createRequire(import.meta.url);
 const postcssModule = require('postcss');
 const postcss = postcssModule.default ?? postcssModule;
+const tsModule = require('typescript');
+const ts = tsModule.default ?? tsModule;
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPTS_DIR = dirname(SCRIPT_PATH);
@@ -300,6 +307,8 @@ export const DEFAULT_CSS_ROOTS = Object.freeze([
   resolve(CORE_ROOT, 'src/foundation/tokens/css'),
   resolve(CORE_ROOT, 'src/components'),
 ]);
+/** The adoption-exit corpus of `loadUnstampedAnchors`: every authored TS/TSX module of the package source. */
+export const DEFAULT_ADOPTION_ROOTS = Object.freeze([resolve(CORE_ROOT, 'src')]);
 /**
  * The single declaration site of the `--ds-z-index-*` scale. The canonical
  * roster is MEASURED from this file on every run (`deriveCanonicalZScaleRoster`),
@@ -402,6 +411,67 @@ export const DEFAULT_PROBE_EVIDENCE = Object.freeze([
     registered: '2026-10-01',
   }),
 ]);
+
+/**
+ * Admitted TSX-inline routes: a consumer's TSX sets a custom property inline
+ * (`style={{ '--x': value }}` or `setProperty('--x', value)`) whose value
+ * resolves, within that one file, to `var(--ds-channel)`, and a CSS rule of the
+ * SAME consumerRoot reads `--x` into a terminal. The instrument measures every
+ * such pair (`scanInlineCustomPropertySetters`) and the join follows the
+ * consumer-join law unchanged: the setter joins only its own consumer's graph,
+ * DS edges resolve under that consumer's vertical, and a DS TSX setter or a
+ * root outside `DEFAULT_CONSUMER_ROOTS` is never scanned.
+ *
+ * A measured pair moves a row only through this register. A row that would
+ * newly classify LIVE through an UNADMITTED pair keeps its measured class and is
+ * published under `inlineRoutes.candidates` for the DT to adjudicate. An entry
+ * names the consumer, the setter TSX and the reader stylesheet, and fails closed
+ * (`inline route ...`): malformed, duplicate, outside a registered consumerRoot,
+ * stale (channel gone), unbound (the cited pair no longer measures) or
+ * superseded (the row paints without the inline hop). A pin on the row is
+ * discharged by the ownership law in the same commit.
+ */
+export const DEFAULT_INLINE_ROUTE_ADMISSIONS = Object.freeze([
+  Object.freeze({
+    channel: '--ds-color-secondary-400',
+    consumer: 'app-bithire',
+    setter: 'app-bithire/features/home/surface/screens/activity/view/sections/feed/widgets/index.tsx',
+    reader: 'app-bithire/features/home/surface/screens/activity/view/sections/feed/styles/index.css',
+    proves:
+      'the eighth ranked member of the team-activity dock takes TEAM_ACTIVITY_COLORS[7] = var(--ds-chart-category-8, var(--ds-color-secondary-400)) as member.color, stamped inline as --rt-activity-team-accent on .activity-team-dock__focus-card, and the feed stylesheet reads that property into the card border, background and rank colour; the step paints only as the fallback of --ds-chart-category-8 and only when the dock ranks eight or more members',
+    registered: '2026-10-02',
+  }),
+]);
+
+/** Shape-check every admission; the measured pair is bound later, against the row. */
+export function loadInlineRouteAdmissions(entries = DEFAULT_INLINE_ROUTE_ADMISSIONS, { consumerRoots = [] } = {}) {
+  const failures = [];
+  const valid = new Map();
+  const registered = new Set(consumerRoots.map((root) => root.id));
+  for (const entry of entries) {
+    const label = typeof entry?.channel === 'string' ? entry.channel : JSON.stringify(entry);
+    const wellFormed =
+      typeof entry?.channel === 'string' && entry.channel.startsWith('--ds-')
+      && typeof entry.consumer === 'string' && typeof entry.setter === 'string' && /\.tsx?$/.test(entry.setter)
+      && typeof entry.reader === 'string' && entry.reader.endsWith('.css')
+      && typeof entry.proves === 'string' && entry.proves.trim().length > 0
+      && typeof entry.registered === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(entry.registered);
+    if (!wellFormed) {
+      failures.push(`inline route malformed: ${label} -- an admission names a --ds-* channel, its consumerRoot, the setter TSX, the reader stylesheet, what the pair proves and its registration date`);
+      continue;
+    }
+    if (valid.has(entry.channel)) {
+      failures.push(`inline route duplicate: ${entry.channel} is admitted more than once -- a channel has exactly one admitted inline pair`);
+      continue;
+    }
+    if (!registered.has(entry.consumer) || !entry.setter.startsWith(`${entry.consumer}/`) || !entry.reader.startsWith(`${entry.consumer}/`)) {
+      failures.push(`inline route outside a registered consumerRoot: ${entry.channel} cites consumer "${entry.consumer}" (${entry.setter} -> ${entry.reader}) -- only a registered consumerRoot's own setter and stylesheet can carry a route`);
+      continue;
+    }
+    valid.set(entry.channel, entry);
+  }
+  return { valid, failures };
+}
 
 const testCallRe = (callees) => new RegExp(`(?<![.\\w$])(?:${callees.join('|')})(?:\\.only)?(\\()\\s*(['"\`])`, 'dg');
 
@@ -565,10 +635,13 @@ export function loadProbeEvidence(entries = DEFAULT_PROBE_EVIDENCE, { checkoutRo
  *     (`unstamped anchor stale`): a removed or renamed rule leaves nothing to withdraw;
  *   - the owner module that stamps the anchor must still be in the DS corpus
  *     (`unstamped anchor stale`);
- *   - ADOPTION is the exit: any non-test DS module that imports the owner, or any
+ *   - ADOPTION is the exit: any non-test module under `src/**` (components,
+ *     entrypoints, infrastructure alike; `DEFAULT_ADOPTION_ROOTS`) whose import
+ *     resolves into the owner through `importTargets` (relative or `@/`), or any
  *     consumerRoot module that imports `exportName` from `@rottay/design-system`,
  *     makes the entry `unstamped anchor adopted` -- the terminal is restored, the
- *     row measures LIVE, and the entry and its pin are deleted together.
+ *     row measures LIVE, and the entry and its pin are deleted together. The
+ *     consumer leg is the consumer-join law's: registered consumerRoots only.
  */
 export const DEFAULT_UNSTAMPED_ANCHORS = Object.freeze(
   ['light', 'medium', 'heavy'].map((step) =>
@@ -585,27 +658,14 @@ export const DEFAULT_UNSTAMPED_ANCHORS = Object.freeze(
   ),
 );
 
-const IMPORT_SPECIFIER_RE = /(?:\bfrom\s*|\bimport\s*\(\s*|\brequire\s*\(\s*|^\s*import\s+)(['"])([^'"]+)\1/gm;
 const DS_NAMED_IMPORT_RE = /\bimport\s+(?:type\s+)?(?:[\w$]+\s*,\s*)?\{([^}]*)\}\s*from\s*(['"])@rottay\/design-system(?:\/[^'"]*)?\2/g;
-
-/** Every relative import of a module, resolved to a checkout-relative posix path with any `/index` suffix and extension dropped. */
-function relativeImportTargets(file, text) {
-  const targets = [];
-  for (const match of maskSourceComments(text).matchAll(IMPORT_SPECIFIER_RE)) {
-    const spec = match[2];
-    if (!spec.startsWith('.')) continue;
-    const target = posix.normalize(posix.join(posix.dirname(file), spec)).replace(/\.(?:m?[jt]sx?)$/u, '').replace(/\/index$/u, '');
-    targets.push(target);
-  }
-  return targets;
-}
 
 /**
  * Validate every declared unstamped anchor against the measured graph and the
  * TS corpora. Returns channel -> the withdrawn terminal key (`file\0selector`)
  * for each valid entry, and a named failure for every one that is not.
  */
-export function loadUnstampedAnchors(entries, { dsGraph, tsStylesheets = [], consumerTsStylesheets = [], universe = new Set() }) {
+export function loadUnstampedAnchors(entries, { dsGraph, adoptionStylesheets = [], consumerTsStylesheets = [], universe = new Set(), coreRoot = CORE_ROOT }) {
   const failures = [];
   const valid = new Map();
   const seen = new Set();
@@ -644,15 +704,16 @@ export function loadUnstampedAnchors(entries, { dsGraph, tsStylesheets = [], con
       continue;
     }
     const ownerPrefix = `${entry.owner}/`;
-    if (!tsStylesheets.some(({ file }) => file.startsWith(ownerPrefix))) {
+    if (!adoptionStylesheets.some(({ file }) => file.startsWith(ownerPrefix))) {
       failures.push(
         `unstamped anchor stale: ${entry.channel} names ${entry.owner} as the stamper, and no module of it is in the DS corpus -- a moved owner leaves the adoption leg measuring nothing`,
       );
       continue;
     }
-    const importers = tsStylesheets
+    const ownerPath = join(coreRoot, entry.owner);
+    const importers = adoptionStylesheets
       .filter(({ file }) => !file.startsWith(ownerPrefix))
-      .filter(({ file, text }) => relativeImportTargets(file, text).some((target) => target === entry.owner || target.startsWith(ownerPrefix)))
+      .filter(({ file, text }) => [...importTargets(join(coreRoot, file), text, coreRoot)].some((target) => target === ownerPath || target.startsWith(`${ownerPath}/`)))
       .map(({ file }) => file);
     for (const { file, text } of consumerTsStylesheets) {
       for (const match of maskSourceComments(text).matchAll(DS_NAMED_IMPORT_RE)) {
@@ -675,7 +736,7 @@ export function loadUnstampedAnchors(entries, { dsGraph, tsStylesheets = [], con
       registered: entry.registered ?? null,
     });
   }
-  return { valid, failures, normalize };
+  return { valid, failures, normalize, scanned: adoptionStylesheets.length };
 }
 
 /**
@@ -1763,6 +1824,18 @@ export function buildPaintGraph(stylesheets, scopeClassifier = () => 'engine-neu
   return { customEdges, terminalEdges, parseErrors, compiledDeclarations, authoredDeclarations };
 }
 
+/** The inline setter a node was first reached through, carried down the walk to the terminals it feeds. */
+function inheritInlineOrigin(origin, from, edge) {
+  const carried = edge.inline === undefined
+    ? origin.get(from)
+    : { file: edge.file, line: edge.line, sets: edge.targetProp, from, shape: edge.inline.shape, via: edge.inline.via };
+  if (carried !== undefined) origin.set(edge.targetProp, carried);
+}
+
+function withInlineOrigin(site, setter) {
+  return setter === undefined ? site : { ...site, inlineSetter: setter };
+}
+
 /**
  * Cycle-safe (visited-set) BFS from `startName` over `graph.customEdges`,
  * collecting every terminal edge reachable via a FINITE chain. A cycle
@@ -1774,15 +1847,17 @@ export function computePaint(graph, startName) {
   const visited = new Set([startName]);
   const queue = [startName];
   const terminalSites = [];
+  const origin = new Map();
   while (queue.length > 0) {
     const node = queue.shift();
     const terminals = graph.terminalEdges.get(node) ?? [];
-    for (const terminal of terminals) terminalSites.push({ ...terminal, via: node });
+    for (const terminal of terminals) terminalSites.push(withInlineOrigin({ ...terminal, via: node }, origin.get(node)));
     const next = graph.customEdges.get(node) ?? [];
     for (const edge of next) {
       if (!visited.has(edge.targetProp)) {
         visited.add(edge.targetProp);
         queue.push(edge.targetProp);
+        inheritInlineOrigin(origin, node, edge);
       }
     }
   }
@@ -1823,9 +1898,10 @@ export function computeJoinedPaint(dsGraph, consumerGraph, startName, vertical) 
   const queue = [startName];
   const terminalSites = [];
   const joinedVia = [];
+  const origin = new Map();
   while (queue.length > 0) {
     const node = queue.shift();
-    for (const terminal of consumerGraph.terminalEdges.get(node) ?? []) terminalSites.push({ ...terminal, via: node });
+    for (const terminal of consumerGraph.terminalEdges.get(node) ?? []) terminalSites.push(withInlineOrigin({ ...terminal, via: node }, origin.get(node)));
     const next = [
       ...(consumerGraph.customEdges.get(node) ?? []).map((edge) => ({ edge, side: 'consumer' })),
       ...(dsGraph.customEdges.get(node) ?? []).filter(resolves).map((edge) => ({ edge, side: 'ds' })),
@@ -1834,6 +1910,7 @@ export function computeJoinedPaint(dsGraph, consumerGraph, startName, vertical) 
       if (visited.has(edge.targetProp)) continue;
       visited.add(edge.targetProp);
       queue.push(edge.targetProp);
+      inheritInlineOrigin(origin, node, edge);
       if (side === 'ds') joinedVia.push({ file: edge.file, line: edge.line, from: node, targetProp: edge.targetProp });
     }
   }
@@ -1845,7 +1922,7 @@ export function computeJoinedPaint(dsGraph, consumerGraph, startName, vertical) 
   };
 }
 
-/** Raw-text `var(--ds-x)` reads in TS/TSX inline-style carriers — always READ_UNPROVEN, never PAINT. */
+/** Raw-text `var(--ds-x)` reads in TS/TSX inline-style carriers — never PAINT on their own (an admitted inline pair is `scanInlineCustomPropertySetters`). */
 export function scanTsReads(stylesheets) {
   const reads = new Map();
   for (const { file, text } of stylesheets) {
@@ -1859,6 +1936,170 @@ export function scanTsReads(stylesheets) {
     }
   }
   return reads;
+}
+
+/**
+ * Every `var(--x)` read in a value, with the names whose `var()` encloses it as
+ * a fallback: `var(--a, var(--b))` reads `--a` and reads `--b` only while `--a`
+ * is undeclared, so `--b` carries `fallbackOf: ['--a']`.
+ */
+export function varReadsWithFallbacks(text, outer = []) {
+  const reads = [];
+  const re = /var\(\s*(--[a-zA-Z0-9_-]+)\s*(,?)/g;
+  let match;
+  while ((match = re.exec(text)) !== null) {
+    reads.push({ name: match[1], fallbackOf: outer });
+    if (match[2] !== ',') continue;
+    let depth = 1;
+    let cursor = re.lastIndex;
+    for (; cursor < text.length && depth > 0; cursor += 1) {
+      if (text[cursor] === '(') depth += 1;
+      else if (text[cursor] === ')') depth -= 1;
+    }
+    reads.push(...varReadsWithFallbacks(text.slice(re.lastIndex, cursor - 1), [...outer, match[1]]));
+    re.lastIndex = cursor;
+  }
+  return reads;
+}
+
+const INLINE_SETTER_HINT = /setProperty\(\s*["'`]--|["'`]--[\w-]+["'`]\s*:/;
+const INLINE_RESOLVE_DEPTH = 8;
+
+function unwrapExpression(node) {
+  let current = node;
+  while (
+    ts.isParenthesizedExpression(current)
+    || ts.isAsExpression(current)
+    || ts.isSatisfiesExpression(current)
+    || ts.isNonNullExpression(current)
+    || ts.isTypeAssertionExpression(current)
+  ) current = current.expression;
+  return current;
+}
+
+function propertyKey(name) {
+  if (ts.isIdentifier(name) || ts.isStringLiteralLike(name)) return name.text;
+  if (ts.isComputedPropertyName(name) && ts.isStringLiteralLike(name.expression)) return name.expression.text;
+  return null;
+}
+
+/**
+ * Custom properties a TS/TSX source sets INLINE -- a `--x` key of the object a
+ * JSX `style` attribute receives, or `setProperty('--x', value)` -- with the
+ * `var()` reads its value resolves to inside the SAME file. The resolver is
+ * bounded and same-file only: string and template literals are read, a `const`
+ * identifier follows its initializer, an array is the union of its elements, an
+ * element access is its array, `a.b` follows every `b:` property assignment in
+ * the file, and a conditional or `??`/`||`/`&&` is the union of its branches.
+ * Anything else (a call, an import, a parameter) resolves to nothing, so a
+ * setter whose value the file cannot name contributes no edge.
+ */
+export function scanInlineCustomPropertySetters(sources) {
+  const setters = [];
+  for (const { file, text } of sources) {
+    if (!INLINE_SETTER_HINT.test(text)) continue;
+    const sourceFile = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, file.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+    const lineOf = (node) => sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line + 1;
+    const consts = new Map();
+    const properties = new Map();
+    const found = [];
+    const add = (map, key, node) => map.set(key, [...(map.get(key) ?? []), node]);
+    const visit = (node) => {
+      if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer && (ts.getCombinedNodeFlags(node) & ts.NodeFlags.Const) !== 0) {
+        add(consts, node.name.text, node.initializer);
+      } else if (ts.isPropertyAssignment(node)) {
+        const key = propertyKey(node.name);
+        if (key !== null) add(properties, key, node.initializer);
+      } else if (ts.isShorthandPropertyAssignment(node)) {
+        add(properties, node.name.text, node.name);
+      }
+      if (ts.isJsxAttribute(node) && node.name.getText(sourceFile) === 'style' && node.initializer && ts.isJsxExpression(node.initializer) && node.initializer.expression) {
+        const object = unwrapExpression(node.initializer.expression);
+        if (ts.isObjectLiteralExpression(object)) {
+          for (const property of object.properties) {
+            const key = ts.isPropertyAssignment(property) ? propertyKey(property.name) : null;
+            if (key?.startsWith('--')) found.push({ targetProp: key, value: property.initializer, line: lineOf(property), shape: 'style-attribute' });
+          }
+        }
+      }
+      if (ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && node.expression.name.text === 'setProperty' && node.arguments.length >= 2 && ts.isStringLiteralLike(node.arguments[0]) && node.arguments[0].text.startsWith('--')) {
+        found.push({ targetProp: node.arguments[0].text, value: node.arguments[1], line: lineOf(node), shape: 'set-property' });
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sourceFile);
+
+    const resolveReads = (raw, via, depth, seen) => {
+      const node = unwrapExpression(raw);
+      if (depth > INLINE_RESOLVE_DEPTH || seen.has(node)) return [];
+      const path = new Set(seen).add(node);
+      const follow = (child, step) => resolveReads(child, step === null ? via : [...via, step], depth + 1, path);
+      const fromText = (value) => varReadsWithFallbacks(value).map((read) => ({ ...read, via }));
+      if (ts.isStringLiteralLike(node)) return fromText(node.text);
+      if (ts.isTemplateExpression(node)) {
+        return [
+          ...fromText(node.head.text),
+          ...node.templateSpans.flatMap((span) => [...follow(span.expression, null), ...fromText(span.literal.text)]),
+        ];
+      }
+      if (ts.isIdentifier(node)) {
+        return (consts.get(node.text) ?? []).flatMap((init) => follow(init, `const ${node.text} (${file}:${lineOf(init)})`));
+      }
+      if (ts.isArrayLiteralExpression(node)) {
+        return node.elements.flatMap((element) => follow(ts.isSpreadElement(element) ? element.expression : element, null));
+      }
+      if (ts.isElementAccessExpression(node)) return follow(node.expression, null);
+      if (ts.isPropertyAccessExpression(node)) {
+        const key = node.name.text;
+        return (properties.get(key) ?? []).flatMap((init) => follow(init, `property ${key} (${file}:${lineOf(init)})`));
+      }
+      if (ts.isConditionalExpression(node)) return [...follow(node.whenTrue, null), ...follow(node.whenFalse, null)];
+      if (ts.isBinaryExpression(node) && [ts.SyntaxKind.QuestionQuestionToken, ts.SyntaxKind.BarBarToken, ts.SyntaxKind.AmpersandAmpersandToken].includes(node.operatorToken.kind)) {
+        return [...follow(node.left, null), ...follow(node.right, null)];
+      }
+      return [];
+    };
+
+    for (const setter of found) {
+      const reads = new Map();
+      for (const read of resolveReads(setter.value, [], 0, new Set())) {
+        if (read.name !== setter.targetProp && !reads.has(read.name)) reads.set(read.name, read);
+      }
+      setters.push({ file, line: setter.line, targetProp: setter.targetProp, shape: setter.shape, reads: [...reads.values()] });
+    }
+  }
+  return setters;
+}
+
+/**
+ * The inline setters of ONE consumerRoot as custom-property edges of that
+ * root's graph. A read held as a fallback never joins when the vertical the
+ * consumer renders under declares an enclosing name (its compiled artifact, an
+ * authored DS declaration or the consumer's own stylesheets): the fallback never
+ * computes, which can only under-credit.
+ */
+export function inlineSetterEdges(setters, { dsGraph = null, consumerGraph = null, vertical } = {}) {
+  const declared = (name) =>
+    dsGraph?.compiledDeclarations?.get(name)?.has(vertical) === true
+    || dsGraph?.authoredDeclarations?.has(name) === true
+    || consumerGraph?.authoredDeclarations?.has(name) === true;
+  const edges = new Map();
+  for (const setter of setters) {
+    for (const read of setter.reads) {
+      if (read.fallbackOf.some(declared)) continue;
+      edges.set(read.name, [
+        ...(edges.get(read.name) ?? []),
+        {
+          file: setter.file,
+          line: setter.line,
+          targetProp: setter.targetProp,
+          scope: 'external-consumer',
+          inline: { shape: setter.shape, via: read.via, fallbackOf: read.fallbackOf },
+        },
+      ]);
+    }
+  }
+  return edges;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -2070,11 +2311,13 @@ export const DEFAULT_BASE_ENTRYPOINT = resolve(CORE_ROOT, 'src/foundation/tokens
 
 const posixRelative = (path) => relative(CORE_ROOT, path).split(sep).join('/');
 
+const IMPORT_SPECIFIER_RE = /(?:\bfrom\s*|\bimport\s*\(\s*|\brequire\s*\(\s*|^\s*import\s+)(['"])([^'"]+)\1/gm;
+
 /** The in-package files a module's import statements name, without touching the filesystem. */
 function importTargets(file, text, coreRoot = CORE_ROOT) {
   const targets = new Set();
-  for (const match of maskSourceComments(text).matchAll(/\bfrom\s*["']([^"']+)["']/gu)) {
-    const specifier = match[1];
+  for (const match of maskSourceComments(text).matchAll(IMPORT_SPECIFIER_RE)) {
+    const specifier = match[2];
     const base = specifier.startsWith('@/')
       ? join(coreRoot, 'src', specifier.slice(2))
       : specifier.startsWith('.') ? resolve(dirname(file), specifier) : null;
@@ -3043,7 +3286,7 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     acceptance: Object.freeze(DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE.map((entry) => entry.spec)),
     registered: '2026-10-02',
     reason:
-      'the status steps the preset conversion closed without deciding (owner ruling 2, WO-EVI-02): the 16/24 steps of the four status tint ramps and --ds-color-info-300 are public scale steps a tenant may cite, with a proven capability and no reader. They left the WO-EVI-02 owner pin on 2026-10-02: nothing is owed, so the pin names the catalog row whose capability the acceptance proves, not a work order. Resolution is proven, paint is NOT, and the rows are never LIVE. Two base-theme laws are part of the claim: the base dark scope re-seeds only the error and neutral ramps, so --ds-color-info-300 is mode-invariant on evnto and rottay by that law (C3), while bithire seeds infoColor and re-derives it per mode (C2); and the acceptance proves resolution at the document root and under same-mode nesting -- an opposite-mode island under its own [data-ds-root] is the compiler\'s registered limit and outside this claim (C1.d). The acceptance is necessary for R1 and not sufficient: --ds-color-secondary-400, --ds-text-inverse, the two letter-spacing facets and the unknown-family drift keep the gate red on their own owners. Exit: a reader lands (the documented tinted-pill recipe, background at tint 8 and border at tint 24 of the tone, has no implementation) and the row measures LIVE, discharging the pin; or the step retires with its producer, its allowlist entry and its catalog listing in one commit -- never by deleting a step to reach green',
+      'the status steps the preset conversion closed without deciding (owner ruling 2, WO-EVI-02): the 16/24 steps of the four status tint ramps and --ds-color-info-300 are public scale steps a tenant may cite, with a proven capability and no reader. They left the WO-EVI-02 owner pin on 2026-10-02: nothing is owed, so the pin names the catalog row whose capability the acceptance proves, not a work order. Resolution is proven, paint is NOT, and the rows are never LIVE. Two base-theme laws are part of the claim: the base dark scope re-seeds only the error and neutral ramps, so --ds-color-info-300 is mode-invariant on evnto and rottay by that law (C3), while bithire seeds infoColor and re-derives it per mode (C2); and the acceptance proves resolution at the document root and under same-mode nesting -- an opposite-mode island under its own [data-ds-root] is the compiler\'s registered limit and outside this claim (C1.d). The acceptance is necessary for R1 and not sufficient: --ds-text-inverse, the two letter-spacing facets and the unknown-family drift keep the gate red on their own owners. Exit: a reader lands (the documented tinted-pill recipe, background at tint 8 and border at tint 24 of the tone, has no implementation) and the row measures LIVE, discharging the pin; or the step retires with its producer, its allowlist entry and its catalog listing in one commit -- never by deleting a step to reach green',
     channels: Object.freeze([
       '--ds-color-info-300',
       '--ds-tint-error-16',
@@ -3063,14 +3306,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     reason:
       'a reader without a stamper (GLASS-2-b): the route is wired -- the Overlay intensity step stamps data-intensity and the overlay-modal-compounds skin reads each weight under .rottay-overlay[data-intensity=light|medium|heavy] -- but NO product surface adopts it: Overlay is internal (no package subpath exports it, no DS module imports it, no consumerRoot imports it), and the rustic modal stamps .rottay-overlay without data-intensity, so the three rules match no rendered node and paint nobody. GLASS-1 discharged light/heavy and RET-OVM-b called medium live paint on the graph reading alone; DEFAULT_UNSTAMPED_ANCHORS withdraws exactly those three terminals, measured, and the unchanged classifier reads the rest. --ds-overlay-medium additionally has a live tenant AUTHOR: one stored tenant document writes it, and that value does NOT paint today -- painting awaits a stamping surface. The graph\'s general blindness to stamps (a skin terminal under a selector no product renders counts as paint) is registered for the instrument lane and is NOT closed by this pin or by the anchor register, which covers only these three rules. Exit: a product surface adopts Overlay and declares an intensity -- the anchor entries then red as adopted, entries and pin are deleted in the same commit and the rows measure LIVE, discharging the pin; or a weight retires with its skin rule, its allowlist entry and its catalog listing in one commit (medium only after its stored author is migrated)',
     channels: Object.freeze(['--ds-overlay-heavy', '--ds-overlay-light', '--ds-overlay-medium']),
-  }),
-  Object.freeze({
-    owner: 'WO-EVI-02',
-    classification: LIVENESS.readUnproven,
-    registered: '2026-09-17',
-    reason:
-      'the only evidence is a raw TS/TSX var() occurrence with no stylesheet terminal, so the step is read without being painted. WO-DER-06 went done on 2026-09-15 without deciding it and the preset conversion it named as the decider is finished, so the proof belongs to the causal gates. The pin clears when the TSX read is proven to reach a terminal or a stylesheet reader is wired, or when the step retires from the secondary ramp with its producers -- never by counting a TS occurrence as paint',
-    channels: Object.freeze(['--ds-color-secondary-400']),
   }),
   Object.freeze({
     owner: 'WO-RET-01',
@@ -3353,6 +3588,7 @@ export function classifyLiveness({
   dsModernPainted,
   dsFrozenOnlyPainted,
   externalConsumerPainted,
+  externalInlineRoute = false,
   probePainted = false,
   cssReadNoTerminal,
   tsReadOnly,
@@ -3369,6 +3605,12 @@ export function classifyLiveness({
     return {
       classification: LIVENESS.frozenEnginePainted,
       reason: 'a finite PostCSS chain from this channel reaches a terminal declaration, but every such terminal site is confined to a frozen Classic/Rustic engine file; paints nothing under the Modern engine',
+    };
+  }
+  if (externalConsumerPainted && externalInlineRoute) {
+    return {
+      classification: LIVENESS.externalConsumerPainted,
+      reason: 'zero in-repo (DS) terminal paint; the admitted TSX-inline pair carries it: a required consumerRoot sets a custom property inline whose value resolves, in that same file, to this channel, and a stylesheet of the same consumerRoot reads that property into a terminal declaration -- the setter and the reader are both named in consumerSites',
     };
   }
   if (externalConsumerPainted) {
@@ -3446,6 +3688,7 @@ export function computeInputsDigest({
   familyInventoryRaw,
   cssStylesheets,
   tsStylesheets,
+  adoptionStylesheets = [],
   consumerCorpora = [],
   compiledArtifacts = [],
   probeSpecs = [],
@@ -3464,6 +3707,7 @@ export function computeInputsDigest({
   }
   for (const { file, text } of cssStylesheets) parts.push(`css:${file}:${sha256(text)}`);
   for (const { file, text } of tsStylesheets) parts.push(`ts:${file}:${sha256(text)}`);
+  for (const { file, text } of adoptionStylesheets) parts.push(`adoption-ts:${file}:${sha256(text)}`);
   for (const { file, text } of compiledArtifacts) parts.push(`compiled-artifact:${file}:${sha256(text)}`);
   for (const { file, text } of probeSpecs) parts.push(`probe-spec:${file}:${sha256(text)}`);
   for (const { file, text } of capabilitySources) parts.push(`capability-source:${file}:${sha256(text)}`);
@@ -3599,8 +3843,10 @@ export function analyzeChannelLiveness({
   familyRows,
   cssStylesheets,
   tsStylesheets,
+  adoptionStylesheets = tsStylesheets,
   consumerRoots = [],
   probeEvidence = [],
+  inlineRouteAdmissions = [],
   unstampedAnchors = [],
   checkoutRoot = CHECKOUT_ROOT,
   compiledArtifacts = undefined,
@@ -3856,6 +4102,8 @@ export function analyzeChannelLiveness({
   // --- Declared browser-probe evidence ----------------------------------
   const probes = loadProbeEvidence(probeEvidence, { checkoutRoot });
   failures.push(...probes.failures);
+  const inlineAdmissions = loadInlineRouteAdmissions(inlineRouteAdmissions, { consumerRoots });
+  failures.push(...inlineAdmissions.failures);
 
   // --- Paint graphs (defect 1) ------------------------------------------
   const dsGraph = buildPaintGraph(
@@ -3870,7 +4118,13 @@ export function analyzeChannelLiveness({
   const consumerGraphs = consumerResults.map(({ consumerRoot, load }) => {
     const graph = buildPaintGraph(load.cssStylesheets, () => 'external-consumer');
     for (const error of graph.parseErrors) failures.push(`corpus parse error (consumerRoot): ${error.file}: ${error.message}`);
-    return { consumerRoot, graph };
+    // The inline setters join only this root's own graph, and only for the paint walk: a setter is never CSS read evidence.
+    const setters = scanInlineCustomPropertySetters(load.tsStylesheets);
+    const customEdges = new Map(graph.customEdges);
+    for (const [name, edges] of inlineSetterEdges(setters, { dsGraph, consumerGraph: graph, vertical: consumerRoot.vertical })) {
+      customEdges.set(name, [...(customEdges.get(name) ?? []), ...edges]);
+    }
+    return { consumerRoot, graph, inlineGraph: { ...graph, customEdges }, setters };
   });
   const externalGraph = {
     customEdges: new Map(),
@@ -3881,24 +4135,47 @@ export function analyzeChannelLiveness({
       for (const [name, edges] of graph[key]) externalGraph[key].set(name, [...(externalGraph[key].get(name) ?? []), ...edges]);
     }
   }
+  const siteKey = (site) => `${site.file}:${site.line}:${site.prop}`;
   const externalPaintOf = (name) => {
     const terminalSites = [];
-    for (const { consumerRoot, graph } of consumerGraphs) {
+    const inlineSites = [];
+    for (const { consumerRoot, graph, inlineGraph } of consumerGraphs) {
       const own = computePaint(graph, name);
-      const ownSites = new Set(own.terminalSites.map((site) => `${site.file}:${site.line}:${site.prop}`));
-      const reached = consumerRoot.vertical !== undefined && compiledVerticals.has(consumerRoot.vertical)
-        ? computeJoinedPaint(dsGraph, graph, name, consumerRoot.vertical)
-        : own;
+      const ownSites = new Set(own.terminalSites.map(siteKey));
+      const joins = consumerRoot.vertical !== undefined && compiledVerticals.has(consumerRoot.vertical);
+      const walk = (target) => (joins ? computeJoinedPaint(dsGraph, target, name, consumerRoot.vertical) : computePaint(target, name));
+      const reached = joins ? walk(graph) : own;
+      const reachedSites = new Set(reached.terminalSites.map(siteKey));
       for (const site of reached.terminalSites) {
-        terminalSites.push({ ...site, joined: !ownSites.has(`${site.file}:${site.line}:${site.prop}`) });
+        terminalSites.push({ ...site, joined: !ownSites.has(siteKey(site)) });
+      }
+      // Only what the inline hop adds; every such terminal carries the setter it was reached through.
+      for (const site of walk(inlineGraph).terminalSites) {
+        if (reachedSites.has(siteKey(site)) || site.inlineSetter === undefined) continue;
+        reachedSites.add(siteKey(site));
+        inlineSites.push({ ...site, consumer: consumerRoot.id, joined: !ownSites.has(siteKey(site)) });
       }
     }
-    return { painted: terminalSites.length > 0, terminalSites };
+    return { painted: terminalSites.length > 0, terminalSites, inlineSites };
   };
+  const inlineCandidates = [];
+  const inlineAdmittedRows = [];
+  const inlineSiteLabel = (site) =>
+    `${site.file}:${site.line} (${site.prop} via ${site.via}, set inline at ${site.inlineSetter.file}:${site.inlineSetter.line} as ${site.inlineSetter.sets})`;
+  const inlinePairs = (sites) => sites.map((site) => ({
+    consumer: site.consumer,
+    setter: `${site.inlineSetter.file}:${site.inlineSetter.line}`,
+    sets: site.inlineSetter.sets,
+    shape: site.inlineSetter.shape,
+    resolvedVia: site.inlineSetter.via,
+    reader: `${site.file}:${site.line}`,
+    prop: site.prop,
+    selector: site.selector ?? null,
+  }));
 
   const anchors = loadUnstampedAnchors(unstampedAnchors, {
     dsGraph,
-    tsStylesheets,
+    adoptionStylesheets,
     consumerTsStylesheets: consumerResults.flatMap(({ load }) => load.tsStylesheets),
     universe,
   });
@@ -3984,7 +4261,18 @@ export function analyzeChannelLiveness({
     const dsPaint = unstampedSites.length === 0
       ? graphPaint
       : { ...graphPaint, terminalSites: graphPaint.terminalSites.filter((site) => !isUnstamped(site)), painted: graphPaint.terminalSites.some((site) => !isUnstamped(site)) };
-    const externalPaint = externalPaintOf(name);
+    const graphExternalPaint = externalPaintOf(name);
+    // A row moves through an inline pair only when nothing else paints it and the pair is the admitted one.
+    const inlineOnly = !dsPaint.painted && !graphExternalPaint.painted && graphExternalPaint.inlineSites.length > 0;
+    const admission = inlineAdmissions.valid.get(name) ?? null;
+    const admittedSites = admission === null
+      ? []
+      : graphExternalPaint.inlineSites.filter((site) => site.consumer === admission.consumer && site.inlineSetter.file === admission.setter && site.file === admission.reader);
+    const inlineAdmitted = inlineOnly && admittedSites.length > 0;
+    const unadmittedInlineSites = graphExternalPaint.inlineSites.filter((site) => !(inlineAdmitted && admittedSites.includes(site)));
+    const externalPaint = inlineAdmitted
+      ? { painted: true, terminalSites: admittedSites }
+      : graphExternalPaint;
     const dsModernPainted = dsPaint.terminalSites.some((site) => site.scope !== 'frozen-engine');
     const dsFrozenOnlyPainted = dsPaint.painted && !dsModernPainted;
     const externalConsumerPainted = !dsPaint.painted && externalPaint.painted;
@@ -4040,6 +4328,7 @@ export function analyzeChannelLiveness({
       dsModernPainted,
       dsFrozenOnlyPainted,
       externalConsumerPainted,
+      externalInlineRoute: inlineAdmitted,
       probePainted,
       cssReadNoTerminal,
       tsReadOnly,
@@ -4051,7 +4340,10 @@ export function analyzeChannelLiveness({
       ...(probePainted ? probe.tests.map((title) => `probe-painted:${probe.spec} :: ${title}`) : []),
       ...dsPaint.terminalSites.map((s) => `ds-terminal:${s.file}:${s.line} (${s.prop})`),
       ...unstampedSites.map((s) => `ds-terminal-unstamped:${s.file}:${s.line} (${s.prop} under ${s.selector})`),
-      ...externalPaint.terminalSites.map((s) => `${s.joined ? 'external-terminal-joined' : 'external-terminal'}:${s.file}:${s.line} (${s.prop}${s.joined ? ` via ${s.via}` : ''})`),
+      ...externalPaint.terminalSites.map((s) => (s.inlineSetter !== undefined
+        ? `external-terminal-inline:${inlineSiteLabel(s)}`
+        : `${s.joined ? 'external-terminal-joined' : 'external-terminal'}:${s.file}:${s.line} (${s.prop}${s.joined ? ` via ${s.via}` : ''})`)),
+      ...(inlineOnly ? unadmittedInlineSites.map((s) => `external-inline-unadmitted:${inlineSiteLabel(s)}`) : []),
       ...dsCustomRefSites.map((s) => `${s.compiledVertical === undefined ? 'ds-custom-ref' : 'ds-compiled-ref'}:${s.file}:${s.line} (feeds --${s.targetProp.replace(/^--/, '')})`),
       ...externalCustomRefSites.map((s) => `external-custom-ref:${s.file}:${s.line} (feeds --${s.targetProp.replace(/^--/, '')})`),
       ...dsTsSites.map((s) => `ds-ts-unproven:${s.file}:${s.line}`),
@@ -4101,7 +4393,9 @@ export function analyzeChannelLiveness({
       probePainted,
       // Which kind of proof a LIVE row stands on; a probe row is certified by
       // its cited probe, never by the cascade graph.
-      paintEvidence: GRAPH_LIVE_CLASSIFICATIONS.has(classification)
+      paintEvidence: inlineAdmitted
+        ? 'css-graph-via-tsx-inline'
+        : GRAPH_LIVE_CLASSIFICATIONS.has(classification)
         ? 'css-graph'
         : classification === LIVENESS.probePainted
           ? 'browser-probe'
@@ -4113,7 +4407,12 @@ export function analyzeChannelLiveness({
       consumerSitesTruncated: consumerSites.length > CONSUMER_SITE_CAP,
       classification,
       classificationReason: reason,
+      inlineRoute: inlineOnly
+        ? { admitted: inlineAdmitted, pairs: inlinePairs(inlineAdmitted ? admittedSites : graphExternalPaint.inlineSites) }
+        : null,
     });
+    if (inlineAdmitted) inlineAdmittedRows.push({ channel: name, classification, pairs: inlinePairs(admittedSites) });
+    else if (inlineOnly) inlineCandidates.push({ channel: name, classification, pairs: inlinePairs(graphExternalPaint.inlineSites) });
   }
 
   if (drill === 'unclassified-output') {
@@ -4142,6 +4441,7 @@ export function analyzeChannelLiveness({
       consumerSitesTruncated: false,
       classification: null,
       classificationReason: null,
+      inlineRoute: null,
     });
   }
 
@@ -4156,6 +4456,20 @@ export function analyzeChannelLiveness({
       failures.push(
         `probe evidence superseded: ${channel} is cited to ${probe.spec} and now classifies ${row.classification} through the cascade graph -- a graph terminal is the stronger proof, so delete the entry; this table only shrinks`,
       );
+    }
+  }
+
+  for (const [channel, admission] of inlineAdmissions.valid) {
+    const row = rowByName.get(channel);
+    const pair = `${admission.setter} -> ${admission.reader}`;
+    if (row === undefined) {
+      failures.push(`inline route stale: ${channel} is admitted through ${pair} and no longer exists in the measured universe -- delete the admission in the same commit that removed the channel`);
+    } else if (row.inlineRoute?.admitted === true) {
+      continue;
+    } else if (row.dsModernPainted || row.dsFrozenOnlyPainted || row.externalConsumerPainted) {
+      failures.push(`inline route superseded: ${channel} is admitted through ${pair} and now classifies ${row.classification} without the inline hop -- delete the admission; this table only shrinks`);
+    } else {
+      failures.push(`inline route unbound: ${channel} is admitted through ${pair} and that pair no longer measures (the setter, its same-file value resolution or the reader's terminal is gone) -- the row keeps its measured class ${row.classification}`);
     }
   }
 
@@ -4231,6 +4545,7 @@ export function analyzeChannelLiveness({
     familyInventoryRaw: JSON.stringify(familyRows),
     cssStylesheets,
     tsStylesheets,
+    adoptionStylesheets,
     consumerCorpora: consumerResults.map(({ consumerRoot, load }) => ({
       id: consumerRoot.id,
       cssStylesheets: load.cssStylesheets,
@@ -4313,6 +4628,18 @@ export function analyzeChannelLiveness({
         .filter((row) => CAPABILITY_CLASSIFICATIONS.has(row.classification))
         .map((row) => ({ channel: row.name, accepted: capability.byChannel.get(row.name)?.ok === true, failed: capability.byChannel.get(row.name)?.failed ?? [] })),
     },
+    // A measured inline pair moves a row only through its admission; every other row it would move is listed for adjudication.
+    inlineRoutes: {
+      admissions: inlineRouteAdmissions.length,
+      setters: consumerGraphs.reduce((total, { setters }) => total + setters.length, 0),
+      admitted: inlineAdmittedRows,
+      candidates: inlineCandidates,
+    },
+    unstampedAnchors: {
+      declared: unstampedAnchors.length,
+      withdrawn: [...anchors.valid.keys()].sort(),
+      adoptionModulesScanned: anchors.scanned,
+    },
     probeEvidence: {
       declared: probeEvidence.length,
       valid: probes.valid.size,
@@ -4370,9 +4697,11 @@ export function runGate({
   flatThemeCompilerRoot = DEFAULT_BRAND_THEME_COMPILER_ROOT,
   familyInventoryPath = DEFAULT_FAMILY_INVENTORY,
   cssRoots = DEFAULT_CSS_ROOTS,
+  adoptionRoots = DEFAULT_ADOPTION_ROOTS,
   compiledArtifactRoot = DEFAULT_COMPILED_ARTIFACT_ROOT,
   consumerRoots = DEFAULT_CONSUMER_ROOTS,
   probeEvidence = DEFAULT_PROBE_EVIDENCE,
+  inlineRouteAdmissions = DEFAULT_INLINE_ROUTE_ADMISSIONS,
   unstampedAnchors = DEFAULT_UNSTAMPED_ANCHORS,
   evidenceRoot = DEFAULT_EVIDENCE_ROOT,
   round = DEFAULT_ROUND,
@@ -4403,6 +4732,7 @@ export function runGate({
   const tsFiles = collectSourceFiles(cssRoots, ['.ts', '.tsx'], CORE_ROOT);
   const cssStylesheets = readStylesheets(cssFiles, CORE_ROOT);
   const tsStylesheets = readStylesheets(tsFiles, CORE_ROOT);
+  const adoptionStylesheets = readStylesheets(collectSourceFiles(adoptionRoots, ['.ts', '.tsx'], CORE_ROOT), CORE_ROOT);
   const compiledArtifacts = loadCompiledArtifacts(compiledArtifactRoot);
 
   const resolvedArtifactPath = artifactPath === undefined ? defaultArtifactPath({ evidenceRoot, round }) : artifactPath;
@@ -4439,8 +4769,10 @@ export function runGate({
     familyRows,
     cssStylesheets,
     tsStylesheets,
+    adoptionStylesheets,
     consumerRoots,
     probeEvidence,
+    inlineRouteAdmissions,
     unstampedAnchors,
     compiledArtifacts,
     previousArtifact,
@@ -4494,6 +4826,7 @@ export function buildArtifact(gateRun, { round = DEFAULT_ROUND, evidenceRoot = D
     },
     consumerRoots: result.consumerRoots,
     probeEvidence: result.probeEvidence,
+    inlineRoutes: result.inlineRoutes,
     counts: result.counts,
     analysisLimitations: result.analysisLimitations,
     // The ledger records WHO owns every standing non-LIVE row it publishes, so
@@ -4535,6 +4868,22 @@ export function formatReport(gateRun, { effectBlocks = true } = {}) {
     for (const row of result.probeEvidence.rows) {
       lines.push(`    ${row.channel}: ${row.spec} :: ${row.tests.map((title) => `"${title}"`).join(', ')} -- ${row.proves}`);
     }
+  }
+  if (result.inlineRoutes) {
+    lines.push(
+      `  tsx-inline routes (a consumer's inline setter + its own stylesheet's reader): ${result.inlineRoutes.admitted.length} admitted row(s) of ${result.inlineRoutes.admissions} admission(s), ${result.inlineRoutes.setters} inline setter(s) scanned`,
+    );
+    for (const row of result.inlineRoutes.admitted) {
+      lines.push(`    admitted ${row.channel} -> ${row.classification}: ${row.pairs.map((pair) => `${pair.setter} sets ${pair.sets}, read at ${pair.reader} (${pair.prop})`).join('; ')}`);
+    }
+    for (const row of result.inlineRoutes.candidates) {
+      lines.push(`    UNADMITTED ${row.channel} (stays ${row.classification}, for DT adjudication): ${row.pairs.map((pair) => `${pair.setter} sets ${pair.sets}, read at ${pair.reader} (${pair.prop})`).join('; ')}`);
+    }
+  }
+  if (result.unstampedAnchors) {
+    lines.push(
+      `  unstamped anchors: ${result.unstampedAnchors.withdrawn.length} withdrawn of ${result.unstampedAnchors.declared} declared, adoption exit scanned over ${result.unstampedAnchors.adoptionModulesScanned} src module(s)`,
+    );
   }
   lines.push('  by classification:');
   for (const [classification, count] of Object.entries(result.counts.byClassification)) {
@@ -4618,6 +4967,7 @@ const DISPOSITION_PRECONDITION_PREFIXES = Object.freeze([
   'z-scale owner unreadable',
   'unresolved roster member',
   'probe evidence',
+  'inline route',
   'scale producer',
   'ramp roster unreadable',
   'ramp write',

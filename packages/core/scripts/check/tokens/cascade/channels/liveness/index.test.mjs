@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, sep } from 'node:path';
+import { dirname, join, relative, sep } from 'node:path';
 
 import {
   // parsing primitives
@@ -33,6 +33,7 @@ import {
   // corpus
   isScannableCorpusFile,
   collectSourceFiles,
+  DEFAULT_ADOPTION_ROOTS,
   readStylesheets,
   classifyConsumerScope,
   FROZEN_ENGINE_PATH,
@@ -46,6 +47,11 @@ import {
   computePaint,
   computeJoinedPaint,
   scanTsReads,
+  scanInlineCustomPropertySetters,
+  inlineSetterEdges,
+  varReadsWithFallbacks,
+  loadInlineRouteAdmissions,
+  DEFAULT_INLINE_ROUTE_ADMISSIONS,
   loadCompiledArtifacts,
   DEFAULT_COMPILED_ARTIFACT_ROOT,
   // family attribution (defect 4)
@@ -1467,7 +1473,7 @@ test('META: the SHIPPED probe citations resolve against the real showroom spec -
     '--ds-workspace-shell-particle-primary',
     '--ds-workspace-shell-particle-secondary',
   ]);
-  assert.ok(!DEFAULT_PROBE_EVIDENCE.some((entry) => entry.channel === '--ds-color-secondary-400'), 'secondary-400 has no probe and stays pinned');
+  assert.ok(!DEFAULT_PROBE_EVIDENCE.some((entry) => entry.channel === '--ds-color-secondary-400'), 'secondary-400 has no probe: its route is the admitted TSX-inline pair');
   for (const entry of DEFAULT_PROBE_EVIDENCE) {
     assert.ok(Object.isFrozen(entry) && Object.isFrozen(entry.tests));
     assert.ok(!entry.proves.includes('\n'), `${entry.channel}: what the probe proves is one line`);
@@ -2150,13 +2156,13 @@ test('dispositionFailures is the ownership law plus the preconditions that make 
   ]);
 });
 
-test('META: the SHIPPED table is the registered set -- 18 channels, one owner each, no duplicates', () => {
+test('META: the SHIPPED table is the registered set -- 15 channels, one owner each, no duplicates', () => {
   const { index, duplicates } = buildDispositionIndex();
   assert.deepEqual(duplicates, []);
   assert.equal(
     index.size,
-    16,
-    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see) + 1 (2026-09-25, WO-RET-02: --ds-text-inverse, which joined the universe through the emission oracle -- the palette roster declares it -- and is read only by the dead themes/default --ds-sidebar-text declaration) - 4 (2026-09-26, G103-02 / WO-FAM-12: the four --ds-posture-* channels, pinned UNREAD_EMITTED_NO_KNOWN_ROUTE, retired from emission and from the responsive.posture catalog row -- zero readers in the package, the showroom and the apps, and the capability law says the ladder travels as data, never a CSS channel; the pin went with them) + 11 (2026-10-01, LIV-2 / WO-EVI-02: the named type ramp joined the universe when typography/scale stated its entries and facets literally; of its 31 rows 20 measure LIVE, 9 shorthand-fed facets pin to WO-EVI-02 -- a real compiled var() edge the CSS-only graph cannot see -- and the 2 inert letter-spacing facets pin to WO-RET-01 as retire candidates) - 19 (2026-10-01, LIV-3 / WO-EVI-02, instrument truth: the compiled facade artifacts became custom-property edges and emission evidence, and the consumer graph joins the DS under its vertical -- the 8 status tint 4/12 steps and the workspace-shell mask stop measure LIVE_MODERN_PAINTED through their compiled alert/notifier/mask channels, the 9 shorthand-fed type facets measure LIVE_EXTERNAL_CONSUMER_PAINTED through the app-bithire font: shorthands, and --ds-breakpoint-xs left the universe once the keyed resolver honored the responsive emitter\'s floor skip, so its pin went stale) - 3 (2026-10-01, LIV-7 / WO-EVI-02: the declared browser-probe door -- the drawer body padding (its WO-FAM-11 pin) and the two workspace-shell particle inks (WO-EVI-02) cite showroom e2e/liveness/paint-probes.spec.ts and classify LIVE_PROBE_PAINTED, paint certified by the cited probe rather than the cascade graph, so their pins are discharged) - 10 (2026-10-02, RET-ACC / owner ruling 1 of WO-EVI-02: the ten --ds-color-accent-{50..900} steps, never emitted and never read, left TENANT_THEME_REFERENCE_TOKENS and are refused by name at admission, so they left the universe and their pins went with them) - 4 (2026-10-02, GLASS-1 / owner ruling 3 of WO-EVI-02: the by-axis effect proof landed a terminal per channel -- the glass pair paints through the new glass-card skin and the overlay light/heavy pair through the Overlay intensity route -- so the four classify LIVE_MODERN_PAINTED and their pins discharge by the pin\'s own law) - 1 (2026-10-02, RET-OVM-b / owner ruling 3 of WO-EVI-02: --ds-overlay-medium could not retire -- a live tenant row authors it -- so the wiring branch landed its terminal: the Overlay backdrop\'s default medium step reads it first in the overlay skin, and the pin discharges by its own law) + 0 (2026-10-02, TINT-SCALE / owner ruling 2 of WO-EVI-02: the nine status scale steps -- the 16/24 steps of the four status tints and --ds-color-info-300 -- left the WO-EVI-02 owner pin for one capability pin on palette.status-seeds: they measure CAPABILITY_SCALE_STEP_UNREAD from the two scale producers, and the pin names no owner because nothing is owed) + 2 (2026-10-02, GLASS-2-b / WO-EVI-02: --ds-overlay-light and --ds-overlay-heavy return to an owner pin as AUTHORABLE_UNPROVEN_EFFECT -- GLASS-1 discharged them on a skin terminal under .rottay-overlay[data-intensity=light|heavy] that no product stamps, since Overlay is internal and unimported; DEFAULT_UNSTAMPED_ANCHORS withdraws exactly those two terminals, so the rows measure what they are, a reader without a stamper) + 1 (2026-10-02, GLASS-2-b DT ruling: --ds-overlay-medium joins the same pin -- RET-OVM-b read it LIVE through the same unstamped .rottay-overlay[data-intensity=medium] rule; one stored tenant authors it, and that value paints nothing until a surface stamps the anchor)',
+    15,
+    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see) + 1 (2026-09-25, WO-RET-02: --ds-text-inverse, which joined the universe through the emission oracle -- the palette roster declares it -- and is read only by the dead themes/default --ds-sidebar-text declaration) - 4 (2026-09-26, G103-02 / WO-FAM-12: the four --ds-posture-* channels, pinned UNREAD_EMITTED_NO_KNOWN_ROUTE, retired from emission and from the responsive.posture catalog row -- zero readers in the package, the showroom and the apps, and the capability law says the ladder travels as data, never a CSS channel; the pin went with them) + 11 (2026-10-01, LIV-2 / WO-EVI-02: the named type ramp joined the universe when typography/scale stated its entries and facets literally; of its 31 rows 20 measure LIVE, 9 shorthand-fed facets pin to WO-EVI-02 -- a real compiled var() edge the CSS-only graph cannot see -- and the 2 inert letter-spacing facets pin to WO-RET-01 as retire candidates) - 19 (2026-10-01, LIV-3 / WO-EVI-02, instrument truth: the compiled facade artifacts became custom-property edges and emission evidence, and the consumer graph joins the DS under its vertical -- the 8 status tint 4/12 steps and the workspace-shell mask stop measure LIVE_MODERN_PAINTED through their compiled alert/notifier/mask channels, the 9 shorthand-fed type facets measure LIVE_EXTERNAL_CONSUMER_PAINTED through the app-bithire font: shorthands, and --ds-breakpoint-xs left the universe once the keyed resolver honored the responsive emitter\'s floor skip, so its pin went stale) - 3 (2026-10-01, LIV-7 / WO-EVI-02: the declared browser-probe door -- the drawer body padding (its WO-FAM-11 pin) and the two workspace-shell particle inks (WO-EVI-02) cite showroom e2e/liveness/paint-probes.spec.ts and classify LIVE_PROBE_PAINTED, paint certified by the cited probe rather than the cascade graph, so their pins are discharged) - 10 (2026-10-02, RET-ACC / owner ruling 1 of WO-EVI-02: the ten --ds-color-accent-{50..900} steps, never emitted and never read, left TENANT_THEME_REFERENCE_TOKENS and are refused by name at admission, so they left the universe and their pins went with them) - 4 (2026-10-02, GLASS-1 / owner ruling 3 of WO-EVI-02: the by-axis effect proof landed a terminal per channel -- the glass pair paints through the new glass-card skin and the overlay light/heavy pair through the Overlay intensity route -- so the four classify LIVE_MODERN_PAINTED and their pins discharge by the pin\'s own law) - 1 (2026-10-02, RET-OVM-b / owner ruling 3 of WO-EVI-02: --ds-overlay-medium could not retire -- a live tenant row authors it -- so the wiring branch landed its terminal: the Overlay backdrop\'s default medium step reads it first in the overlay skin, and the pin discharges by its own law) + 0 (2026-10-02, TINT-SCALE / owner ruling 2 of WO-EVI-02: the nine status scale steps -- the 16/24 steps of the four status tints and --ds-color-info-300 -- left the WO-EVI-02 owner pin for one capability pin on palette.status-seeds: they measure CAPABILITY_SCALE_STEP_UNREAD from the two scale producers, and the pin names no owner because nothing is owed) + 2 (2026-10-02, GLASS-2-b / WO-EVI-02: --ds-overlay-light and --ds-overlay-heavy return to an owner pin as AUTHORABLE_UNPROVEN_EFFECT -- GLASS-1 discharged them on a skin terminal under .rottay-overlay[data-intensity=light|heavy] that no product stamps, since Overlay is internal and unimported; DEFAULT_UNSTAMPED_ANCHORS withdraws exactly those two terminals, so the rows measure what they are, a reader without a stamper) + 1 (2026-10-02, GLASS-2-b DT ruling: --ds-overlay-medium joins the same pin -- RET-OVM-b read it LIVE through the same unstamped .rottay-overlay[data-intensity=medium] rule; one stored tenant authors it, and that value paints nothing until a surface stamps the anchor) - 1 (2026-10-02, SEC-400 / WO-EVI-02: --ds-color-secondary-400, pinned READ_UNPROVEN since 2026-09-17 on a raw TSX var() occurrence, classifies LIVE_EXTERNAL_CONSUMER_PAINTED through the admitted TSX-inline pair -- the app-bithire team-activity widgets set --rt-activity-team-accent inline from TEAM_ACTIVITY_COLORS[7] and the feed stylesheet reads it into the focus-card border, background and rank colour -- so its pin discharges by its own law; the instrument gained the class, the admission register moves this row alone)',
   );
   const byClass = {};
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
@@ -2164,7 +2170,6 @@ test('META: the SHIPPED table is the registered set -- 18 channels, one owner ea
     [LIVENESS.capabilityScaleStepUnread]: 9,
     [LIVENESS.authorableUnprovenEffect]: 3,
     [LIVENESS.unreadEmittedNoRoute]: 2,
-    [LIVENESS.readUnproven]: 1,
     [LIVENESS.readNoProductiveTerminal]: 1,
   });
   for (const pin of index.values()) {
@@ -2392,14 +2397,15 @@ const liv3Artifact = (vertical, body) => ({
   text: `:is(html[data-tenant='${vertical}']) {\n${body}\n}\n`,
 });
 
-function liv3Analyze({ references, sheets = [], compiledArtifacts, consumerRoots = [] }) {
+function liv3Analyze({ references, sheets = [], tsSheets = [], compiledArtifacts, consumerRoots = [], inlineRouteAdmissions = [] }) {
   return analyzeChannelLiveness({
     tenantThemeSource: tenantSource(['--ds-color-primary'], references),
     flatThemeSource: 'vars["--ds-color-primary"] = "#111111";\n',
     familyRows: FIXTURE_FAMILY_ROWS,
     cssStylesheets: [css(LIV3_SKIN, '.drill { color: var(--ds-color-primary); }'), ...sheets],
-    tsStylesheets: [css('src/components/drill/index.tsx', 'export {};\n')],
+    tsStylesheets: [css('src/components/drill/index.tsx', 'export {};\n'), ...tsSheets],
     consumerRoots,
+    inlineRouteAdmissions,
     compiledArtifacts,
     dispositions: [],
   });
@@ -2514,6 +2520,154 @@ test('computeJoinedPaint counts only consumer terminals and never re-credits a D
   const joined = computeJoinedPaint(ds, consumer, '--ds-a', 'bithire');
   assert.deepEqual(joined.terminalSites.map((site) => `${site.file}:${site.via}`), ['app.css:--ds-b']);
   assert.equal(computeJoinedPaint(ds, consumer, '--ds-a', 'evnto').painted, false);
+});
+
+/* ---------------------------------------------------------------------- */
+/* SEC-400: the TSX-inline pair. A consumer's inline setter + a stylesheet */
+/* of the same consumer reading it is a route; either half alone is not.   */
+/* ---------------------------------------------------------------------- */
+
+const SEC_STEP = '--ds-drill-step';
+const SEC_SETTER = 'feed/widgets/index.tsx';
+const SEC_READER = 'feed/styles/index.css';
+const secSetterSource = (setter = 'style={{ "--rt-accent": member.color } as CSSProperties}') => `
+const COLORS = ["var(--ds-drill-category, var(${SEC_STEP}))"];
+const members = rows.map((row, index) => ({ ...row, color: COLORS[index % COLORS.length] }));
+export const Card = ({ member }) => <button ${setter} />;
+`;
+const SEC_READER_SOURCE = '.card {\n  border-color: color-mix(in srgb, var(--rt-accent) 24%, transparent);\n}\n';
+const secAdmission = (overrides = {}) => ({
+  channel: SEC_STEP,
+  consumer: 'app-bithire',
+  setter: `app-bithire/${SEC_SETTER}`,
+  reader: `app-bithire/${SEC_READER}`,
+  proves: 'the drill card takes the step inline as --rt-accent and the drill stylesheet reads it into the border',
+  registered: '2026-10-02',
+  ...overrides,
+});
+
+function secRun({ files, admissions = [secAdmission()], artifactBody = '  --ds-other: 1;', extraArtifacts = [], tsSheets = [] }) {
+  const { dir, root } = liv3ConsumerRoot(files, 'bithire');
+  try {
+    const result = liv3Analyze({
+      references: [SEC_STEP],
+      tsSheets,
+      compiledArtifacts: [liv3Artifact('bithire', artifactBody), ...extraArtifacts],
+      consumerRoots: [root],
+      inlineRouteAdmissions: admissions,
+    });
+    return { result, row: result.channels.find((entry) => entry.name === SEC_STEP) };
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+test('DRILL (SEC-400 pair): an inline setter resolved through const -> array -> property, read by the same consumer\'s stylesheet, is LIVE_EXTERNAL with both sites named', () => {
+  const { result, row } = secRun({ files: { [SEC_SETTER]: secSetterSource(), [SEC_READER]: SEC_READER_SOURCE } });
+  assert.equal(row.classification, LIVENESS.externalConsumerPainted);
+  assert.equal(row.paintEvidence, 'css-graph-via-tsx-inline');
+  assert.ok(row.consumerSites.includes(`external-terminal-inline:app-bithire/${SEC_READER}:2 (border-color via --rt-accent, set inline at app-bithire/${SEC_SETTER}:4 as --rt-accent)`), row.consumerSites.join(' | '));
+  assert.equal(row.inlineRoute.admitted, true);
+  assert.deepEqual(row.inlineRoute.pairs[0].resolvedVia, [
+    `property color (app-bithire/${SEC_SETTER}:3)`,
+    `const COLORS (app-bithire/${SEC_SETTER}:2)`,
+  ]);
+  assert.deepEqual(result.inlineRoutes.admitted.map((entry) => entry.channel), [SEC_STEP]);
+  assert.deepEqual(result.inlineRoutes.candidates, []);
+  assert.deepEqual(result.failures.filter((failure) => failure.startsWith('inline route')), []);
+});
+
+test('DRILL (SEC-400 pair): the setProperty shape is a setter too', () => {
+  const setter = `export function paint(node) { node.style.setProperty("--rt-accent", "var(${SEC_STEP})"); }\n`;
+  const { row } = secRun({ files: { [SEC_SETTER]: setter, [SEC_READER]: SEC_READER_SOURCE } });
+  assert.equal(row.classification, LIVENESS.externalConsumerPainted);
+  assert.equal(row.inlineRoute.pairs[0].shape, 'set-property');
+});
+
+test('DRILL (SEC-400 half): a TSX-set property with no CSS reader does NOT classify, and its admission is unbound', () => {
+  const { result, row } = secRun({ files: { [SEC_SETTER]: secSetterSource(), [SEC_READER]: '.card { color: red; }\n' } });
+  assert.equal(row.classification, LIVENESS.readUnproven, 'the raw TSX occurrence is all that is left');
+  assert.equal(row.inlineRoute, null);
+  const failure = result.failures.find((entry) => entry.startsWith(`inline route unbound: ${SEC_STEP}`));
+  assert.ok(failure, result.failures.join(' | '));
+  assert.ok(dispositionFailures(result).includes(failure), 'an admission that stopped measuring is red on the blocking leg');
+});
+
+test('DRILL (SEC-400 half): a CSS read with no TSX setter does NOT classify', () => {
+  const noSetter = secSetterSource('className="card"');
+  const { result, row } = secRun({ files: { [SEC_SETTER]: noSetter, [SEC_READER]: SEC_READER_SOURCE } });
+  assert.equal(row.classification, LIVENESS.readUnproven);
+  assert.ok(result.failures.some((entry) => entry.startsWith(`inline route unbound: ${SEC_STEP}`)));
+});
+
+test('DRILL (SEC-400 admission): an unadmitted pair moves nothing -- the row keeps its class and is reported for adjudication, not failed', () => {
+  const { result, row } = secRun({ files: { [SEC_SETTER]: secSetterSource(), [SEC_READER]: SEC_READER_SOURCE }, admissions: [] });
+  assert.equal(row.classification, LIVENESS.readUnproven);
+  assert.equal(row.inlineRoute.admitted, false);
+  assert.ok(row.consumerSites.some((site) => site.startsWith(`external-inline-unadmitted:app-bithire/${SEC_READER}:2`)));
+  assert.deepEqual(result.inlineRoutes.candidates.map((entry) => [entry.channel, entry.classification]), [[SEC_STEP, LIVENESS.readUnproven]]);
+  assert.deepEqual(result.failures.filter((failure) => failure.startsWith('inline route')), []);
+});
+
+test('DRILL (SEC-400 roots): a setter outside the registered consumerRoots never counts, and an admission naming an unregistered consumer is refused', () => {
+  const dsSetter = css('src/components/drill/card/index.tsx', secSetterSource());
+  const { result, row } = secRun({ files: { [SEC_READER]: SEC_READER_SOURCE }, tsSheets: [dsSetter], admissions: [secAdmission(), secAdmission({ channel: '--ds-color-primary', consumer: 'app-evnto', setter: 'app-evnto/a/index.tsx', reader: 'app-evnto/a/index.css' })] });
+  assert.equal(row.classification, LIVENESS.readUnproven, 'a DS TSX setter is not a consumer setter');
+  assert.ok(result.failures.some((entry) => entry.startsWith('inline route outside a registered consumerRoot: --ds-color-primary cites consumer "app-evnto"')));
+  assert.ok(result.failures.some((entry) => entry.startsWith(`inline route unbound: ${SEC_STEP}`)));
+});
+
+test('DRILL (SEC-400 join law): the consumer vertical\'s own artifact outranks a fallback read; another vertical\'s artifact never shadows it', () => {
+  const files = { [SEC_SETTER]: secSetterSource(), [SEC_READER]: SEC_READER_SOURCE };
+  const shadowed = secRun({ files, artifactBody: '  --ds-drill-category: #123456;' });
+  assert.equal(shadowed.row.classification, LIVENESS.readUnproven, 'bithire declares the enclosing name, so the fallback never computes');
+  const foreign = secRun({ files, extraArtifacts: [liv3Artifact('evnto', '  --ds-drill-category: #123456;')] });
+  assert.equal(foreign.row.classification, LIVENESS.externalConsumerPainted, 'the evnto artifact is not what app-bithire renders under');
+});
+
+test('DRILL (SEC-400 admission): superseded, stale and miscited admissions fail closed by name', () => {
+  const direct = secRun({ files: { [SEC_SETTER]: secSetterSource(), [SEC_READER]: `${SEC_READER_SOURCE}.rank { color: var(${SEC_STEP}); }\n` } });
+  assert.equal(direct.row.classification, LIVENESS.externalConsumerPainted);
+  assert.equal(direct.row.inlineRoute, null, 'a row the graph already paints takes no inline route');
+  assert.ok(direct.result.failures.some((entry) => entry.startsWith(`inline route superseded: ${SEC_STEP}`)));
+  for (const miscited of [{ reader: 'app-bithire/other/index.css' }, { setter: 'app-bithire/other/index.tsx' }]) {
+    const run = secRun({ files: { [SEC_SETTER]: secSetterSource(), [SEC_READER]: SEC_READER_SOURCE }, admissions: [secAdmission(miscited)] });
+    assert.equal(run.row.classification, LIVENESS.readUnproven, `${JSON.stringify(miscited)}: an admission binds the exact pair it names`);
+    assert.ok(run.result.failures.some((entry) => entry.startsWith(`inline route unbound: ${SEC_STEP}`)));
+  }
+  const stale = secRun({ files: { [SEC_READER]: SEC_READER_SOURCE }, admissions: [secAdmission({ channel: '--ds-drill-gone' })] });
+  assert.ok(stale.result.failures.some((entry) => entry.startsWith('inline route stale: --ds-drill-gone')));
+  assert.ok(loadInlineRouteAdmissions([secAdmission(), secAdmission()], { consumerRoots: [{ id: 'app-bithire' }] }).failures.some((entry) => entry.startsWith('inline route duplicate')));
+  assert.ok(loadInlineRouteAdmissions([secAdmission({ proves: '' })], { consumerRoots: [{ id: 'app-bithire' }] }).failures.some((entry) => entry.startsWith('inline route malformed')));
+});
+
+test('scanInlineCustomPropertySetters resolves within the file only and never through a call', () => {
+  const [setter] = scanInlineCustomPropertySetters([css('a.tsx', 'export const A = () => <div style={{ "--x": pick(), "--y": `calc(${"var(--ds-b)"})` }} />;\n')]);
+  assert.equal(setter.targetProp, '--x');
+  assert.deepEqual(setter.reads, [], 'a call resolves to nothing');
+  const all = scanInlineCustomPropertySetters([css('a.tsx', 'export const A = () => <div style={{ "--x": pick(), "--y": `calc(${"var(--ds-b)"})` }} />;\n')]);
+  assert.deepEqual(all[1].reads.map((read) => read.name), ['--ds-b']);
+  assert.deepEqual(scanInlineCustomPropertySetters([css('b.tsx', 'export const B = { "--x": "var(--ds-b)" };\n')]), [], 'an object outside a style attribute is not a setter');
+  assert.deepEqual(varReadsWithFallbacks('var(--a, var(--b, var(--c))) var(--d)').map((read) => [read.name, read.fallbackOf]), [
+    ['--a', []],
+    ['--b', ['--a']],
+    ['--c', ['--a', '--b']],
+    ['--d', []],
+  ]);
+  const edges = inlineSetterEdges([{ file: 'a.tsx', line: 1, targetProp: '--x', shape: 'style-attribute', reads: [{ name: '--b', fallbackOf: ['--a'], via: [] }] }], { dsGraph: { compiledDeclarations: new Map([['--a', new Set(['bithire'])]]), authoredDeclarations: new Map() }, vertical: 'bithire' });
+  assert.equal(edges.size, 0);
+});
+
+test('META (SEC-400): the shipped admission moves --ds-color-secondary-400 alone, through the app-bithire team-activity pair, and no other row would move', () => {
+  const result = baselineRun();
+  assert.deepEqual(DEFAULT_INLINE_ROUTE_ADMISSIONS.map((entry) => entry.channel), ['--ds-color-secondary-400']);
+  const row = rowOf(result, '--ds-color-secondary-400');
+  assert.equal(row.classification, LIVENESS.externalConsumerPainted);
+  assert.equal(row.inlineRoute.admitted, true);
+  assert.ok(row.inlineRoute.pairs.every((pair) => pair.sets === '--rt-activity-team-accent' && pair.setter.startsWith(`${DEFAULT_INLINE_ROUTE_ADMISSIONS[0].setter}:`) && pair.reader.startsWith(`${DEFAULT_INLINE_ROUTE_ADMISSIONS[0].reader}:`)));
+  assert.deepEqual(result.inlineRoutes.admitted.map((entry) => entry.channel), ['--ds-color-secondary-400']);
+  assert.deepEqual(result.inlineRoutes.candidates, [], 'a new unadmitted inline-only row is a DT adjudication, never a silent move');
+  for (const entry of DEFAULT_INLINE_ROUTE_ADMISSIONS) assert.ok(Object.isFrozen(entry) && !entry.proves.includes('\n'));
 });
 
 const LIV3_RESPONSIVE = `
@@ -2725,6 +2879,7 @@ function capabilityRun({
     tsStylesheets: input.tsStylesheets,
     consumerRoots,
     probeEvidence: DEFAULT_PROBE_EVIDENCE,
+    inlineRouteAdmissions: DEFAULT_INLINE_ROUTE_ADMISSIONS,
     unstampedAnchors: DEFAULT_UNSTAMPED_ANCHORS,
     compiledArtifacts: artifacts(input.compiledArtifacts),
     dispositions,
@@ -2878,7 +3033,7 @@ test('NEGATIVE 8: the class is exactly the roster members no paint, probe or rea
   const measured = result.channels.filter((entry) => entry.classification === LIVENESS.capabilityScaleStepUnread).map((entry) => entry.name).sort();
   assert.deepEqual(measured, expected);
   assert.ok(result.channels.every((entry) => entry.classification !== LIVENESS.capabilityScaleStepUnread || roster.has(entry.name)), 'no row outside a roster is a capability step');
-  assert.equal(rowOf(result, '--ds-color-secondary-400').classification, LIVENESS.readUnproven, 'a half-wired read of a step stays a READ_* finding');
+  assert.equal(rowOf(result, '--ds-color-secondary-400').classification, LIVENESS.externalConsumerPainted, 'a ramp step a consumer paints through its admitted inline pair is LIVE, never a capability row');
 });
 
 test('NEGATIVE C1.b: a vertical that declares the ground in its base rule and not in its mode rule reds -- both modes reach one terminal', () => {
@@ -3006,7 +3161,7 @@ const anchorEntry = (overrides = {}) => ({
 });
 const anchorInputs = ({ css = ".rottay-overlay[data-intensity='light'] { background-color: var(--ds-overlay-light, #000); }", ts = [], consumer = [] } = {}) => ({
   dsGraph: buildPaintGraph([{ file: ANCHOR_SKIN, text: css }]),
-  tsStylesheets: [{ file: `${ANCHOR_OWNER}/index.tsx`, text: 'export const Overlay = () => null;' }, ...ts],
+  adoptionStylesheets: [{ file: `${ANCHOR_OWNER}/index.tsx`, text: 'export const Overlay = () => null;' }, ...ts],
   consumerTsStylesheets: consumer,
   universe: new Set(['--ds-overlay-light']),
 });
@@ -3022,6 +3177,28 @@ test('DRILL (GLASS-2-b anchor adopted): a DS module importing the owner is the a
   const { valid, failures } = loadUnstampedAnchors([anchorEntry()], anchorInputs({ ts }));
   assert.equal(valid.size, 0);
   assert.ok(failures.some((f) => f.startsWith('unstamped anchor adopted: --ds-overlay-light') && f.includes('src/components/patterns/sheet/index.tsx')), failures.join(' | '));
+});
+
+test('DRILL (GLASS-3 anchor adopted): an @/-alias import from an entrypoint or infrastructure module is the adoption exit', () => {
+  for (const ts of [
+    [{ file: 'src/entrypoints/primitives/index.ts', text: "export { Overlay } from '@/components/primitives/runtime/overlay/backdrop';" }],
+    [{ file: 'src/infrastructure/runtime/scrim/index.tsx', text: "const lazy = import('@/components/primitives/runtime/overlay/backdrop/index.tsx');" }],
+  ]) {
+    const { valid, failures } = loadUnstampedAnchors([anchorEntry()], anchorInputs({ ts }));
+    assert.equal(valid.size, 0);
+    assert.ok(failures.some((f) => f.startsWith('unstamped anchor adopted: --ds-overlay-light') && f.includes(ts[0].file)), failures.join(' | '));
+  }
+  const sibling = [{ file: 'src/entrypoints/primitives/index.ts', text: "export { Backdrop } from '@/components/primitives/runtime/overlay/backdrop-legacy';" }];
+  assert.deepEqual(loadUnstampedAnchors([anchorEntry()], anchorInputs({ ts: sibling })).failures, []);
+});
+
+test('LIVE (GLASS-3): the adoption exit scans every authored src module, entrypoints and infrastructure included', () => {
+  const { result } = runGate({ requireArtifact: false });
+  const scanned = result.unstampedAnchors.adoptionModulesScanned;
+  const roots = collectSourceFiles(DEFAULT_ADOPTION_ROOTS, ['.ts', '.tsx'], CORE_ROOT).map((file) => relative(CORE_ROOT, file).split(sep).join('/'));
+  assert.equal(scanned, roots.length);
+  for (const owner of ['src/entrypoints/', 'src/infrastructure/', 'src/components/']) assert.ok(roots.some((file) => file.startsWith(owner)), owner);
+  assert.deepEqual(result.unstampedAnchors.withdrawn, ['--ds-overlay-heavy', '--ds-overlay-light', '--ds-overlay-medium']);
 });
 
 test('DRILL (GLASS-2-b anchor adopted): a consumerRoot importing the export from the package is the adoption exit', () => {
