@@ -55,6 +55,7 @@ import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { Portal } from '../../../../runtime/overlay/portal';
 import {
   usePortalScope,
+  usePortalScopeConsumer,
   type PortalScopeSnapshot,
 } from '../../../../runtime/overlay/portal-scope';
 import { useTourSpotlightRect } from '../../runtime/spotlight-rect';
@@ -440,6 +441,9 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     // may live under a different scope owner), and the hook re-resolves on
     // every anchor change, so no step-keyed effect is needed here.
     const portalScope = usePortalScope(targetEl ?? scopeMarkerEl);
+    // The chrome spreads the snapshot's variables itself, so it registers as
+    // their live reader while open.
+    usePortalScopeConsumer(portalScope, Boolean(open));
 
     const currentStep = controlledCurrent ?? internalCurrent;
     const step = steps[currentStep];
