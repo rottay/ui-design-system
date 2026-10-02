@@ -1,0 +1,27 @@
+/*
+ * The four selectors the apps author against the DS shell and dock anatomy,
+ * written in the canonical ds- spelling an app migrates to.
+ */
+
+@media (max-width: 1023px) {
+  .ds-action-dock.rt-detail-mobile-action-tray[data-part="root"][data-placement="bottom"][data-mode="fixed"] {
+    --ds-action-dock-gap: var(--rt-record-action-tray-gap, var(--ds-spacing-2, 8px));
+  }
+
+  .rt-detail-mobile-action-tray .ds-action-dock__actions {
+    min-width: 0;
+  }
+}
+
+[data-anatomy-sidebar="panel"]
+  :is(.rt-app-shell, .ds-app-shell__navigation-drawer) {
+  --ds-shell-navigation-radius: var(--ds-radius-xl);
+}
+
+@media (min-width: 769px) {
+  [data-anatomy-sidebar="panel"]
+    .rt-app-shell
+    > .ds-app-shell__navigation-sidebar {
+    inset: var(--ds-spacing-3) auto var(--ds-spacing-3) var(--ds-spacing-3);
+  }
+}
