@@ -62506,23 +62506,20 @@ html[data-ds-motion='reduced']
   }
 }
 
-/* ---- reduced motion: skeleton shimmer, progress fill, content enter, and
-        every skin-owned transition go quiet (the primitives silence their
-        own). ---- */
+/* ---- reduced motion: skeleton shimmer, content enter, and every
+        skin-owned transition go quiet (the primitives, Progress included,
+        silence their own). ---- */
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-progress'],
   .ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-content'],
   .ds-pattern-step-wizard.ds-engine-modern [data-part='content'] {
     animation: none;
   }
-  .ds-pattern-step-wizard.ds-engine-modern [data-part='progress-fill'] {
-    transition: none;
-  }
 }
 
-/* ---- forced colors: the pattern-owned hairlines read as ButtonText, the
-        progress fill as Highlight (current-step chrome — indicator and check
-        shapes — is forced by the Steps primitive's own skin). ---- */
+/* ---- forced colors: the pattern-owned hairlines read as ButtonText (the
+        progress fill and current-step chrome are forced by the Progress and
+        Steps primitives' own skins). ---- */
 @media (forced-colors: active) {
   .ds-pattern-step-wizard.ds-engine-modern[data-part='root'] [data-part='nav-bar'] {
     border-top-color: ButtonText;
@@ -62530,10 +62527,6 @@ html[data-ds-motion='reduced']
 
   .ds-pattern-step-wizard.ds-engine-modern[data-part='root'] [data-part='error-panel']:has(> span) {
     border-color: ButtonText;
-  }
-
-  .ds-pattern-step-wizard.ds-engine-modern [data-part='progress-fill'] {
-    background: Highlight;
   }
 }
 
@@ -88180,10 +88173,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   display: inline-flex;
   align-items: center;
   gap: var(--ds-section-card-tab-label-gap, var(--ds-spacing-2, 8px));
-}
-
-.ds-surface.ds-section-card > .ds-section-card__body[data-part='body'] {
-  min-inline-size: 0;
 }
 
 .ds-surface.ds-section-card [data-part='content'] {

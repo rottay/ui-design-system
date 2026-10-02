@@ -15,10 +15,10 @@
     "failClosed": "every expression the scanner cannot resolve is ONE ROW in unknownProvenance. Under STRICT a missing producer ADMITS a fallback branch and can LOWER debt, so under-counting producers can buy a false green: it is not a safe approximation and is never treated as one."
   },
   "inputsDigest": {
-    "cssEdges": "5e4fdc49877ba2ddb1b23f903e7d8a2957ae1bc9e329017bd1686d09cf6e2602",
+    "cssEdges": "220a255dd1253003a29b319befd908a95258058814cb118049b2220a5b10e5c0",
     "cascadeRoots": "cc6fcf8b9bffd91b1f2572dd817593fe5b747b1c4892ebf15e45480059c96856",
     "rootCatalog": "8f22e285b34483d8fab7e69686a01a6704985abbd05d5c97be2d63152db0ad0f",
-    "srcTsx": "e41416fd94827caa1c32f56f614f0151129cccaf7411fb8dd55bcb0839922f85",
+    "srcTsx": "cef29633d1349e1a259ab10b359275e6324da039d6337e5753bec047b9d20553",
     "srcCompilers": "8f2bda09779519c5b5d2065904b428e55b33674af5614017ab509600bdb68377",
     "artifacts": "16d0f62a3442411ebec01e8e5b9033a9d8466032bf39dd4653b3011ff30a4616"
   },
@@ -96,7 +96,7 @@
     },
     "measuredCensus": {
       "scannedFiles": 2002,
-      "excludedFiles": 2149,
+      "excludedFiles": 2150,
       "styleSinks": 3164,
       "stampSites": 377,
       "distinctCustomProperties": 249,
@@ -113,8 +113,8 @@
       },
       "excludedFiles": {
         "authored": 1664,
-        "measured": 2149,
-        "delta": 485
+        "measured": 2150,
+        "delta": 486
       },
       "styleSinks": {
         "authored": 3283,
@@ -2434,7 +2434,7 @@
     "closedProducer": "a121e41a8f2974a0a0060bd79a22ad628dff539811e45ed45a99922ebfc3b498",
     "closedZeroGovernedReceipts": "7ae298a4d7c9dcf3d15c92ed681acbc79443412813e8e3f7b2eda7b4396f9c3a",
     "publicBoundaryReceipts": "ef16ff6d8b073ddbffe5cac4673ae01acd7af64a8321cdfbc856d65c86463654",
-    "privateRelayReceipts": "76b5f239f634ba0d90dee0ca06c0b69fd9b831ba1bd5c0d1a5117b05606a13e8",
+    "privateRelayReceipts": "985d8f3daa96f1fd489d86c860a4ae62866b4ef0f8640ef75e9cf3cce798799d",
     "closedProducerReceipts": "9c72fe0baebd72348b5be6197d5c21c0b795bfcc0ae88d50e7bb2e07b8b51cc7",
     "branchCompositeOpen": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "authoredOpen": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -73534,8 +73534,8 @@
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/runtime/overlay/backdrop/index.tsx","symbol":"overlayStyle","line":107,"ordinal":3698,"template":"...style","reason":"private-relay-unresolved:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":[],"relayKinds":[],"occurrences":1,"evidence":{"inheritedFrom":"RELAY_PRIVATE_UNRESOLVED","terminalCount":2,"relayTerminalCount":1,"authoredTerminalCount":1,"authoredTerminalsSilent":true,"authoredScanComplete":true,"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"relayBindingKinds":["param"],"relayOwners":["Overlay"],"exportEvidence":[],"resolvedVia":"branch-relay-inheritance","path":["terminal-at-sink","destructuredLocal-source","directParam"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/runtime/overlay/focus-management/focus-trap/index.tsx","symbol":"containerStyle","line":200,"ordinal":6173,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":[],"relayKinds":[],"occurrences":1,"evidence":{"inheritedFrom":"RELAY_PRIVATE_UNRESOLVED","terminalCount":2,"relayTerminalCount":1,"authoredTerminalCount":1,"authoredTerminalsSilent":true,"authoredScanComplete":true,"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"relayBindingKinds":["param"],"relayOwners":["FocusTrap"],"exportEvidence":[],"resolvedVia":"branch-relay-inheritance","path":["terminal-at-sink","destructuredLocal-source","directParam"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/runtime/overlay/focus-management/focus-trap/index.tsx","symbol":"containerStyle","line":200,"ordinal":6170,"template":"...style","reason":"private-relay-unresolved:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":[],"relayKinds":[],"occurrences":1,"evidence":{"inheritedFrom":"RELAY_PRIVATE_UNRESOLVED","terminalCount":2,"relayTerminalCount":1,"authoredTerminalCount":1,"authoredTerminalsSilent":true,"authoredScanComplete":true,"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"relayBindingKinds":["param"],"relayOwners":["FocusTrap"],"exportEvidence":[],"resolvedVia":"branch-relay-inheritance","path":["terminal-at-sink","destructuredLocal-source","directParam"]}},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/runtime/overlay/portal-scope/index.tsx","symbol":"PortalScope","line":437,"ordinal":15497,"template":"snapshot.variables","reason":"private-relay-unresolved:member-access","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam","propertyLookupThroughOpaque"]}},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/runtime/overlay/portal-scope/index.tsx","symbol":"PortalScope","line":437,"ordinal":15494,"template":"...snapshot.variables","reason":"private-relay-unresolved:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam","propertyLookupThroughOpaque"]}},
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/runtime/overlay/portal-scope/index.tsx","symbol":"PortalScope","line":439,"ordinal":15706,"template":"snapshot.variables","reason":"private-relay-unresolved:member-access","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam","propertyLookupThroughOpaque"]}},
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/runtime/overlay/portal-scope/index.tsx","symbol":"PortalScope","line":439,"ordinal":15703,"template":"...snapshot.variables","reason":"private-relay-unresolved:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam","propertyLookupThroughOpaque"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/structures/headers/mobile-header/runtime/rendering/index.tsx","symbol":"MobileHeader","line":138,"ordinal":5423,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["Box"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/structures/record/action-bar/index.tsx","symbol":"RecordActionBar","line":99,"ordinal":3490,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["Flex"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/structures/record/edit-fields/index.tsx","symbol":"InlineEditorGroup","line":249,"ordinal":9556,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["Stack"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}},
@@ -73791,6 +73791,6 @@
   "provenance": {
     "producedBy": "cascade:producers --write",
     "writtenOn": "2026-10-02",
-    "contentDigest": "af648c77cfae5078f0352f3429abd76bbb0c5bf2a906ad27dd98fd5519e92fbc"
+    "contentDigest": "154e292632856e968af7a5880f3780756de0bb409f67f4b62b79ac5743213c94"
   }
 }

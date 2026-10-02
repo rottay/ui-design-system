@@ -52,10 +52,6 @@
   gap: var(--ds-section-card-tab-label-gap, var(--ds-spacing-2, 8px));
 }
 
-.ds-surface.ds-section-card > .ds-section-card__body[data-part='body'] {
-  min-inline-size: 0;
-}
-
 .ds-surface.ds-section-card [data-part='content'] {
   min-inline-size: 0;
 }
