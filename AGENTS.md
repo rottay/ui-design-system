@@ -1,5 +1,16 @@
 # Agent Constitution — Modern Rescue (WO-CRA-23)
 
+## Current owner succession — 2026-10-02
+
+The owner explicitly appointed Codex as the autonomous DT, implementation owner,
+reviewer and integrator of the current Design System roadmap on main at
+`/Users/daniel/Developer/Rottay/ui-design-system`. This supersedes the
+2026-09-19 Codex exclusion for the active continuation only. Kimi 2.8 may perform
+bounded delegated work; Claude Opus may join after the owner-confirmed quota
+reset on 2026-10-03 at 03:00 America/New_York. Model names must match real
+provider receipts. Independent review of code written by the DT still applies.
+The sealed Modern Rescue programme below remains historical evidence.
+
 ## Current owner restriction — 2026-09-19: Codex outside the loop
 
 Codex has no autonomous role in this project: not DT, writer, auditor,

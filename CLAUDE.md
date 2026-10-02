@@ -1,5 +1,18 @@
 # Claude Code Rules - Design System
 
+## Current owner succession — 2026-10-02
+
+Codex now owns autonomous direction, implementation, review and integration of
+the current roadmap on main in `/Users/daniel/Developer/Rottay/ui-design-system`,
+by the owner's explicit instruction. This supersedes the Codex exclusion and
+older coordinator/account/checkout assignments below for this continuation.
+Kimi 2.8 supports bounded delegated work. Claude Opus becomes available after
+the owner-confirmed reset on 2026-10-03 at 03:00 America/New_York; verify the
+effective account and model before dispatch. Do not restart completed packets.
+Independent review is required for product code authored by the coordinator.
+Read the current succession in `roadmap/README.md`; the existing registry, DAG,
+acceptance criteria, DS-only scope and proportional validation policy remain.
+
 ## Owner restriction — 2026-09-19: never invoke Codex
 
 Codex is completely outside autonomous execution, including consultation,

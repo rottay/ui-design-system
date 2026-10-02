@@ -1,5 +1,27 @@
 # Design System Roadmap — Modern Engine Premium Uplift
 
+## Current owner succession — 2026-10-02
+
+The owner appointed Codex as the autonomous DT, implementation owner, reviewer
+and integrator of the current programme, directly on main in
+`/Users/daniel/Developer/Rottay/ui-design-system`. This supersedes older Codex
+exclusions, coordinator assignments and checkout paths for this continuation;
+the sealed Modern Rescue programme is not reopened. Kimi 2.8 may assist with
+bounded research, mechanical edits and other suitable independent packets.
+Claude Opus may join after the owner-confirmed quota reset on 2026-10-03 at
+03:00 America/New_York. Verify each executable, account and provider model;
+never label a Kimi process Opus or Fable.
+
+Codex owns the registry, shared generators, validation windows, index and
+functional commits on main. Product code written by Codex receives an
+independent review before integration. Preserve delivered WIP, follow the
+existing dependencies, close complete outcomes and keep all acceptance
+thresholds. Parallelize useful packets with disjoint write sets and stable
+contracts. Use focal checks per lot and complete verification at milestones.
+Applications are read-only consumers now; their adaptation follows the DS.
+Existing authorization for audited publication is unchanged; no force-push,
+package publication or deployment is inferred from this succession.
+
 - **Status**: canonical operative backlog. Takes the `modern` engine from its audited state
   ("hand-made, mid-tier; near-indistinguishable from `rustic`") to the Quiet Premium target.
 - **Normative law** (read FIRST, it is the spec every WO implements): the modern-engine
