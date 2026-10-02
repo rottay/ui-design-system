@@ -61,6 +61,7 @@ import {
   LIVE_CLASSIFICATIONS,
   UNPROVEN_CLASSIFICATIONS,
   STRUCTURAL_CLASSIFICATIONS,
+  CAPABILITY_CLASSIFICATIONS,
   classifyLiveness,
   deriveCanonicalZScaleRoster,
   DEFAULT_Z_INDEX_SCALE_OWNER,
@@ -80,6 +81,8 @@ import {
   DEFAULT_CONSUMER_ROOTS,
   // declared browser-probe evidence
   DEFAULT_PROBE_EVIDENCE,
+  DEFAULT_UNSTAMPED_ANCHORS,
+  loadUnstampedAnchors,
   GRAPH_LIVE_CLASSIFICATIONS,
   extractSpecTestTitles,
   extractSpecTests,
@@ -94,6 +97,23 @@ import {
   DEFAULT_EVIDENCE_ROOT,
   DEFAULT_ROUND,
   ARTIFACT_FILE_NAME,
+  // scale-step capability (owner ruling 2, WO-EVI-02)
+  DEFAULT_SCALE_PRODUCER_HELPERS,
+  DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE,
+  DEFAULT_RAMP_KERNEL,
+  DEFAULT_RAMP_INGRESS,
+  DEFAULT_THEME_CATALOG,
+  DEFAULT_BASE_THEME,
+  DEFAULT_BASE_ENTRYPOINT,
+  RAMP_HELPER_TEMPLATES,
+  attachScaleProducerHelpers,
+  extractRampHelperEmissions,
+  collectCascadeDeclarations,
+  resolveOnRoot,
+  evaluateSelector,
+  documentRoot,
+  readCatalogChannels,
+  readLiteralList,
 } from './index.mjs';
 
 /* ---------------------------------------------------------------------- */
@@ -934,14 +954,17 @@ test('META: no LIVENESS classification constant contains the word "dead"', () =>
   }
 });
 
-test('META: LIVE / UNPROVEN / STRUCTURAL partition every LIVENESS value into exactly one set with no overlap', () => {
+test('META: LIVE / UNPROVEN / STRUCTURAL / CAPABILITY partition every LIVENESS value into exactly one set with no overlap', () => {
   const all = Object.values(LIVENESS);
+  const partitions = [LIVE_CLASSIFICATIONS, UNPROVEN_CLASSIFICATIONS, STRUCTURAL_CLASSIFICATIONS, CAPABILITY_CLASSIFICATIONS];
   for (const value of all) {
-    const memberships = [LIVE_CLASSIFICATIONS, UNPROVEN_CLASSIFICATIONS, STRUCTURAL_CLASSIFICATIONS].filter((set) => set.has(value)).length;
-    assert.equal(memberships, 1, `"${value}" must be in exactly one of LIVE / UNPROVEN / STRUCTURAL`);
+    const memberships = partitions.filter((set) => set.has(value)).length;
+    assert.equal(memberships, 1, `"${value}" must be in exactly one of LIVE / UNPROVEN / STRUCTURAL / CAPABILITY`);
   }
-  assert.equal(LIVE_CLASSIFICATIONS.size + UNPROVEN_CLASSIFICATIONS.size + STRUCTURAL_CLASSIFICATIONS.size, all.length);
+  assert.equal(partitions.reduce((sum, set) => sum + set.size, 0), all.length);
   assert.deepEqual([...STRUCTURAL_CLASSIFICATIONS], [LIVENESS.structuralConstant]);
+  assert.deepEqual([...CAPABILITY_CLASSIFICATIONS], [LIVENESS.capabilityScaleStepUnread]);
+  assert.ok(!LIVE_CLASSIFICATIONS.has(LIVENESS.capabilityScaleStepUnread), 'a capability step is never LIVE');
 });
 
 /* ---------------------------------------------------------------------- */
@@ -2132,13 +2155,14 @@ test('META: the SHIPPED table is the registered set -- 18 channels, one owner ea
   assert.deepEqual(duplicates, []);
   assert.equal(
     index.size,
-    14,
-    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see) + 1 (2026-09-25, WO-RET-02: --ds-text-inverse, which joined the universe through the emission oracle -- the palette roster declares it -- and is read only by the dead themes/default --ds-sidebar-text declaration) - 4 (2026-09-26, G103-02 / WO-FAM-12: the four --ds-posture-* channels, pinned UNREAD_EMITTED_NO_KNOWN_ROUTE, retired from emission and from the responsive.posture catalog row -- zero readers in the package, the showroom and the apps, and the capability law says the ladder travels as data, never a CSS channel; the pin went with them) + 11 (2026-10-01, LIV-2 / WO-EVI-02: the named type ramp joined the universe when typography/scale stated its entries and facets literally; of its 31 rows 20 measure LIVE, 9 shorthand-fed facets pin to WO-EVI-02 -- a real compiled var() edge the CSS-only graph cannot see -- and the 2 inert letter-spacing facets pin to WO-RET-01 as retire candidates) - 19 (2026-10-01, LIV-3 / WO-EVI-02, instrument truth: the compiled facade artifacts became custom-property edges and emission evidence, and the consumer graph joins the DS under its vertical -- the 8 status tint 4/12 steps and the workspace-shell mask stop measure LIVE_MODERN_PAINTED through their compiled alert/notifier/mask channels, the 9 shorthand-fed type facets measure LIVE_EXTERNAL_CONSUMER_PAINTED through the app-bithire font: shorthands, and --ds-breakpoint-xs left the universe once the keyed resolver honored the responsive emitter\'s floor skip, so its pin went stale) - 3 (2026-10-01, LIV-7 / WO-EVI-02: the declared browser-probe door -- the drawer body padding (its WO-FAM-11 pin) and the two workspace-shell particle inks (WO-EVI-02) cite showroom e2e/liveness/paint-probes.spec.ts and classify LIVE_PROBE_PAINTED, paint certified by the cited probe rather than the cascade graph, so their pins are discharged) - 10 (2026-10-02, RET-ACC / owner ruling 1 of WO-EVI-02: the ten --ds-color-accent-{50..900} steps, never emitted and never read, left TENANT_THEME_REFERENCE_TOKENS and are refused by name at admission, so they left the universe and their pins went with them) - 4 (2026-10-02, GLASS-1 / owner ruling 3 of WO-EVI-02: the by-axis effect proof landed a terminal per channel -- the glass pair paints through the new glass-card skin and the overlay light/heavy pair through the Overlay intensity route -- so the four classify LIVE_MODERN_PAINTED and their pins discharge by the pin\'s own law)',
+    16,
+    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together) - 2 (the card cut paints --ds-color-error-900 and --ds-color-success-900 through the toned title inks derivation/chrome/card emits, so their WO-FAM-06 pin is discharged) - 1 (D6-2d-resto retired --ds-color-text-page: zero readers in the package, the apps and the showroom, so the channel, its palette/semantic emission, its BrandPalette field and its pin went together) - 5 (2026-09-24: the five --ds-breakpoint-{sm,md,lg,xl,2xl} rows, pinned to WO-EVI-02 on 2026-09-17 as UNREAD_EMITTED_NO_KNOWN_ROUTE until the graph saw the Container chain, classify LIVE_MODERN_PAINTED since the Container skin reads each step as the fallback of --ds-container-<step>, 7a67243d8) - 1 (2026-09-24: --ds-z-index-base, pinned to the z-index-single-scale invariant on 2026-09-14 as STRUCTURAL_CONSTANT, classifies LIVE_MODERN_PAINTED only through skin/card:46 `var(--ds-z-index-relative-base, var(--ds-z-index-base, 0))`, 0ca2eb294. That reader is DEAD: --ds-z-index-relative-base: 0 is declared at :root in the authored base bundle (dist/styles.css:1315, not the facade artifacts), so the inner fallback never computes and the floor still paints nothing. Round-trip law for the card owner: when the card drops the dead fallback the row re-measures STRUCTURAL_CONSTANT, and an unpinned structural row is a STOP NO-GO, so the z-index-single-scale structural pin returns in the SAME commit) + 4 (2026-09-24: the app-shell drawer body padding, WO-FAM-11 -- an inline restatement the shell chose, the Modern Sheet does not force it, the CSS route is skin/app-shell:139; and, WO-EVI-02, the workspace-shell mask stop read by its own compiled masks and the two particle inks painted on canvas -- real routes the graph cannot see) + 1 (2026-09-25, WO-RET-02: --ds-text-inverse, which joined the universe through the emission oracle -- the palette roster declares it -- and is read only by the dead themes/default --ds-sidebar-text declaration) - 4 (2026-09-26, G103-02 / WO-FAM-12: the four --ds-posture-* channels, pinned UNREAD_EMITTED_NO_KNOWN_ROUTE, retired from emission and from the responsive.posture catalog row -- zero readers in the package, the showroom and the apps, and the capability law says the ladder travels as data, never a CSS channel; the pin went with them) + 11 (2026-10-01, LIV-2 / WO-EVI-02: the named type ramp joined the universe when typography/scale stated its entries and facets literally; of its 31 rows 20 measure LIVE, 9 shorthand-fed facets pin to WO-EVI-02 -- a real compiled var() edge the CSS-only graph cannot see -- and the 2 inert letter-spacing facets pin to WO-RET-01 as retire candidates) - 19 (2026-10-01, LIV-3 / WO-EVI-02, instrument truth: the compiled facade artifacts became custom-property edges and emission evidence, and the consumer graph joins the DS under its vertical -- the 8 status tint 4/12 steps and the workspace-shell mask stop measure LIVE_MODERN_PAINTED through their compiled alert/notifier/mask channels, the 9 shorthand-fed type facets measure LIVE_EXTERNAL_CONSUMER_PAINTED through the app-bithire font: shorthands, and --ds-breakpoint-xs left the universe once the keyed resolver honored the responsive emitter\'s floor skip, so its pin went stale) - 3 (2026-10-01, LIV-7 / WO-EVI-02: the declared browser-probe door -- the drawer body padding (its WO-FAM-11 pin) and the two workspace-shell particle inks (WO-EVI-02) cite showroom e2e/liveness/paint-probes.spec.ts and classify LIVE_PROBE_PAINTED, paint certified by the cited probe rather than the cascade graph, so their pins are discharged) - 10 (2026-10-02, RET-ACC / owner ruling 1 of WO-EVI-02: the ten --ds-color-accent-{50..900} steps, never emitted and never read, left TENANT_THEME_REFERENCE_TOKENS and are refused by name at admission, so they left the universe and their pins went with them) - 4 (2026-10-02, GLASS-1 / owner ruling 3 of WO-EVI-02: the by-axis effect proof landed a terminal per channel -- the glass pair paints through the new glass-card skin and the overlay light/heavy pair through the Overlay intensity route -- so the four classify LIVE_MODERN_PAINTED and their pins discharge by the pin\'s own law) - 1 (2026-10-02, RET-OVM-b / owner ruling 3 of WO-EVI-02: --ds-overlay-medium could not retire -- a live tenant row authors it -- so the wiring branch landed its terminal: the Overlay backdrop\'s default medium step reads it first in the overlay skin, and the pin discharges by its own law) + 0 (2026-10-02, TINT-SCALE / owner ruling 2 of WO-EVI-02: the nine status scale steps -- the 16/24 steps of the four status tints and --ds-color-info-300 -- left the WO-EVI-02 owner pin for one capability pin on palette.status-seeds: they measure CAPABILITY_SCALE_STEP_UNREAD from the two scale producers, and the pin names no owner because nothing is owed) + 2 (2026-10-02, GLASS-2-b / WO-EVI-02: --ds-overlay-light and --ds-overlay-heavy return to an owner pin as AUTHORABLE_UNPROVEN_EFFECT -- GLASS-1 discharged them on a skin terminal under .rottay-overlay[data-intensity=light|heavy] that no product stamps, since Overlay is internal and unimported; DEFAULT_UNSTAMPED_ANCHORS withdraws exactly those two terminals, so the rows measure what they are, a reader without a stamper) + 1 (2026-10-02, GLASS-2-b DT ruling: --ds-overlay-medium joins the same pin -- RET-OVM-b read it LIVE through the same unstamped .rottay-overlay[data-intensity=medium] rule; one stored tenant authors it, and that value paints nothing until a surface stamps the anchor)',
   );
   const byClass = {};
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
   assert.deepEqual(byClass, {
-    [LIVENESS.authorableUnprovenEffect]: 10,
+    [LIVENESS.capabilityScaleStepUnread]: 9,
+    [LIVENESS.authorableUnprovenEffect]: 3,
     [LIVENESS.unreadEmittedNoRoute]: 2,
     [LIVENESS.readUnproven]: 1,
     [LIVENESS.readNoProductiveTerminal]: 1,
@@ -2146,6 +2170,14 @@ test('META: the SHIPPED table is the registered set -- 18 channels, one owner ea
   for (const pin of index.values()) {
     assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(pin.registered), `${pin.channel}: a pin without a registration date is an excuse`);
     assert.ok(pin.reason.length > 40, `${pin.channel}: a pin without a stated obligation is an allowlist entry`);
+    if (CAPABILITY_CLASSIFICATIONS.has(pin.classification)) {
+      assert.equal(pin.owner, undefined, `${pin.channel}: a capability pin owes nothing, so it names no owner`);
+      assert.equal(pin.invariant, undefined, `${pin.channel}: a capability pin sustains no invariant`);
+      assert.equal(pin.exposure, 'public-reference', `${pin.channel}: public-reference is the one admitted exposure`);
+      assert.ok(typeof pin.capability === 'string' && pin.capability.length > 0, `${pin.channel}: a capability pin names its catalog row`);
+      assert.ok(pin.acceptance.length > 0, `${pin.channel}: a capability pin cites its acceptance suites`);
+      continue;
+    }
     if (STRUCTURAL_CLASSIFICATIONS.has(pin.classification)) {
       assert.equal(pin.owner, undefined, `${pin.channel}: a structural pin names an invariant, never an owner`);
       assert.ok(typeof pin.invariant === 'string' && pin.invariant.trim().length > 0, `${pin.channel}: a structural pin without an invariant registers nothing`);
@@ -2637,5 +2669,388 @@ test('LIVE (LIV-3): the real gate measures the compiled routes, the joined facet
   for (const step of [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]) {
     assert.equal(byName.has(`--ds-color-accent-${step}`), false, 'the accent steps retired from emission and from the reference allowlist');
   }
+  assert.deepEqual(dispositionFailures(result), []);
+});
+
+/* ---------------------------------------------------------------------- */
+/* 14. The scale-step capability: the fourth partition and its acceptance */
+/* ---------------------------------------------------------------------- */
+
+let capabilityInputsCache = null;
+
+/** The real tree's inputs, read once; every drill mutates a copy in memory, never a file. */
+function capabilityInputs() {
+  capabilityInputsCache ??= {
+    tenantThemeSource: readFileSync(DEFAULT_TENANT_THEME_CONTRACT, 'utf8'),
+    compilerSources: collectFlatThemeCompilerSources(),
+    helperTexts: Object.fromEntries(DEFAULT_SCALE_PRODUCER_HELPERS.map((helper) => [helper.scale, readFileSync(helper.path, 'utf8')])),
+    familyRows: loadFamilyRows(DEFAULT_FAMILY_INVENTORY).rows,
+    cssStylesheets: readStylesheets(collectSourceFiles(DEFAULT_CSS_ROOTS, ['.css'], CORE_ROOT), CORE_ROOT),
+    tsStylesheets: readStylesheets(collectSourceFiles(DEFAULT_CSS_ROOTS, ['.ts', '.tsx'], CORE_ROOT), CORE_ROOT),
+    compiledArtifacts: loadCompiledArtifacts(),
+    capability: {
+      rampKernelText: readFileSync(DEFAULT_RAMP_KERNEL, 'utf8'),
+      rampIngressText: readFileSync(DEFAULT_RAMP_INGRESS, 'utf8'),
+      catalogText: readFileSync(DEFAULT_THEME_CATALOG, 'utf8'),
+      baseThemeText: readFileSync(DEFAULT_BASE_THEME, 'utf8'),
+      baseThemeFile: 'src/foundation/tokens/css/foundation/themes/default/index.css',
+      baseEntrypointText: readFileSync(DEFAULT_BASE_ENTRYPOINT, 'utf8'),
+    },
+  };
+  return capabilityInputsCache;
+}
+
+const same = (value) => value;
+
+function capabilityRun({
+  helper = {},
+  helpers = undefined,
+  sources = same,
+  tenant = same,
+  css: cssMutation = same,
+  artifacts = same,
+  capability = same,
+  dispositions = CHANNEL_DISPOSITIONS,
+  evidence = DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE,
+  consumerRoots = [],
+} = {}) {
+  const input = capabilityInputs();
+  const declared = helpers ?? DEFAULT_SCALE_PRODUCER_HELPERS.map((entry) => ({ ...entry, text: (helper[entry.scale] ?? same)(input.helperTexts[entry.scale]) }));
+  const attached = attachScaleProducerHelpers(sources(input.compilerSources.map((source) => ({ ...source }))), declared);
+  return analyzeChannelLiveness({
+    tenantThemeSource: tenant(input.tenantThemeSource),
+    flatThemeSources: attached.sources,
+    familyRows: input.familyRows,
+    cssStylesheets: cssMutation(input.cssStylesheets),
+    tsStylesheets: input.tsStylesheets,
+    consumerRoots,
+    probeEvidence: DEFAULT_PROBE_EVIDENCE,
+    unstampedAnchors: DEFAULT_UNSTAMPED_ANCHORS,
+    compiledArtifacts: artifacts(input.compiledArtifacts),
+    dispositions,
+    scaleCapability: { ...capability({ ...input.capability }), helperFailures: attached.failures, evidence },
+  });
+}
+
+const rowOf = (result, name) => result.channels.find((entry) => entry.name === name);
+const acceptanceOf = (result, name) => result.capability.rows.find((entry) => entry.channel === name);
+const failedIds = (result, name) => [...new Set((acceptanceOf(result, name)?.failed ?? []).map((entry) => entry.id))];
+const replaceOnce = (text, from, to) => {
+  assert.ok(text.includes(from), `drill precondition: the source still carries ${JSON.stringify(from)}`);
+  return text.replace(from, to);
+};
+const CAPABILITY_ROWS = [
+  '--ds-color-info-300',
+  '--ds-tint-error-16',
+  '--ds-tint-error-24',
+  '--ds-tint-info-16',
+  '--ds-tint-info-24',
+  '--ds-tint-success-16',
+  '--ds-tint-success-24',
+  '--ds-tint-warning-16',
+  '--ds-tint-warning-24',
+];
+
+let capabilityBaseline = null;
+const baselineRun = () => (capabilityBaseline ??= capabilityRun({ consumerRoots: DEFAULT_CONSUMER_ROOTS }));
+
+test('LIVE (TINT-SCALE): the nine status steps classify CAPABILITY_SCALE_STEP_UNREAD, carry their capability pin, and every acceptance obligation measures green', () => {
+  const result = baselineRun();
+  assert.deepEqual(dispositionFailures(result), []);
+  const capabilityRows = result.channels.filter((entry) => CAPABILITY_CLASSIFICATIONS.has(entry.classification)).map((entry) => entry.name).sort();
+  assert.deepEqual(capabilityRows, CAPABILITY_ROWS);
+  assert.equal(result.counts.byClassification[LIVENESS.capabilityScaleStepUnread], 9);
+  for (const name of CAPABILITY_ROWS) {
+    assert.deepEqual(acceptanceOf(result, name), { channel: name, accepted: true, failed: [] }, name);
+    assert.equal(rowOf(result, name).paintEvidence, null, `${name}: a capability step carries no paint evidence`);
+    assert.equal(result.effect.rows.includes(name), false, `${name}: an accepted capability row is out of the effect red`);
+  }
+  assert.deepEqual(result.dispositions.byCapability, { 'palette.status-seeds': CAPABILITY_ROWS });
+  assert.equal(result.capability.rosters.tint.length, 25);
+  assert.equal(result.capability.rosters.ramps.length, 60);
+  assert.deepEqual(result.capability.baseDarkRampRoles, ['error', 'neutral'], 'C3: the base dark scope re-seeds only the error and neutral ramps');
+  for (const [vertical, modes] of Object.entries(result.capability.resolution)) {
+    assert.notEqual(modes.light['--ds-color-bg-primary'], modes.dark['--ds-color-bg-primary'], `${vertical}: C1.b`);
+  }
+  const report = formatReport({ ok: result.ok, failures: result.failures, evidenceNote: null, result, corpus: { cssFileCount: 1, tsFileCount: 1 }, resolvedArtifactPath: null });
+  assert.ok(report.includes('capability-proven scale steps (resolution proven, paint NOT proven, never LIVE): 9 accepted of 9 row(s)'), report);
+});
+
+test('A1 (producer named): every capability step names its foundation write site and the deriver it inherits family and rank from', () => {
+  const result = baselineRun();
+  const tint = rowOf(result, '--ds-tint-error-24').producer;
+  assert.equal(tint.kind, 'tint-ramp');
+  assert.match(tint.callSite, /lowering\/foundation\/tint\/index\.ts:\d+$/u);
+  assert.equal(tint.family, 'tint');
+  assert.equal(tint.rank, 'derived');
+  assert.deepEqual(tint.deriver, ['packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tint/index.ts']);
+  const ramp = rowOf(result, '--ds-color-info-300').producer;
+  assert.equal(ramp.kind, 'scale-ramp');
+  assert.equal(ramp.family, 'ramps');
+  assert.equal(ramp.rank, 'derived');
+  assert.equal(ramp.sites.length, 2, 'the derived write and the authored restatement');
+  assert.equal(rowOf(result, '--ds-color-info-300').sourceEmitted, true);
+});
+
+test('A1 DRILL: a scale helper no deriver imports is unattached, and one two families import is ambiguous -- both fail by name', () => {
+  const input = capabilityInputs();
+  const unattached = attachScaleProducerHelpers(input.compilerSources, [{ scale: 'tint', path: join(CORE_ROOT, 'src/nowhere/tint/index.ts'), text: input.helperTexts.tint }]);
+  assert.match(unattached.failures.join('\n'), /^scale producer unattached: tint/mu);
+  const twice = input.compilerSources.map((source) => (source.family === 'palette' && source.relativePath.endsWith('derivation/palette/index.ts')
+    ? { ...source, text: `import { setTintScaleVariables } from "../../../foundation/tint";\n${source.text}` }
+    : source));
+  const ambiguous = attachScaleProducerHelpers(twice, DEFAULT_SCALE_PRODUCER_HELPERS.filter((entry) => entry.scale === 'tint'));
+  assert.match(ambiguous.failures.join('\n'), /^scale producer ambiguous: tint .* imported by 2 families \(palette, tint\)/mu);
+  const result = capabilityRun({ helpers: [{ scale: 'tint', path: join(CORE_ROOT, 'src/nowhere/tint/index.ts'), text: input.helperTexts.tint }, DEFAULT_SCALE_PRODUCER_HELPERS[1]] });
+  assert.ok(dispositionFailures(result).some((failure) => failure.startsWith('scale producer unattached')), 'an unattached producer is a precondition of the ownership leg');
+  assert.equal(rowOf(result, '--ds-tint-error-24').classification, LIVENESS.authorableUnprovenEffect, 'with no producer the tint steps leave the roster');
+});
+
+test('NEGATIVE 1: deleting the -24 line shrinks the tint roster to 20 -- B1 reds on the admitted-but-unproduced steps and their pins drift', () => {
+  const result = capabilityRun({ helper: { tint: (text) => replaceOnce(text, '  vars[`${scale}-24`] = tintStep(colorVar, 24);\n', '') } });
+  assert.equal(result.capability.rosters.tint.length, 20);
+  const b1 = result.capability.globalFailures.find((entry) => entry.id === 'B1');
+  for (const name of ['--ds-tint-error-24', '--ds-tint-info-24', '--ds-tint-success-24', '--ds-tint-warning-24']) {
+    assert.ok(b1?.detail.includes(name), `B1 names ${name}`);
+    assert.equal(rowOf(result, name).classification, LIVENESS.authorableUnprovenEffect);
+    assert.ok(dispositionFailures(result).some((failure) => failure.startsWith(`drifted pin: ${name} `)), `${name} drifts`);
+  }
+  assert.equal(acceptanceOf(result, '--ds-tint-error-16').accepted, false, 'a global obligation reds every capability row');
+});
+
+test('NEGATIVE 2: a second writer of a tint step in any deriver reds A2 as a tint-by-direct overlap', () => {
+  const result = capabilityRun({
+    sources: (list) => list.map((source) => (source.relativePath.endsWith('derivation/palette/inks/index.ts')
+      ? { ...source, text: `${source.text}\nexport function rogue(vars) { vars["--ds-tint-error-24"] = "red"; }\n` }
+      : source)),
+  });
+  assert.ok(failedIds(result, '--ds-tint-error-24').includes('A2'));
+  assert.ok(result.failures.some((failure) => failure.startsWith('tint x direct overlap: --ds-tint-error-24')));
+  assert.ok(dispositionFailures(result).some((failure) => failure.startsWith('invalid capability pin: --ds-tint-error-24') && failure.includes('A2')));
+});
+
+test('NEGATIVE 3: a step the scale emits but the reference allowlist drops reds B2, per channel and as an invalid public-reference pin', () => {
+  const result = capabilityRun({
+    tenant: (text) => replaceOnce(text, '...(["success", "warning", "error", "info"] as const).flatMap((role) =>', '...(["success", "warning", "info"] as const).flatMap((role) =>'),
+  });
+  assert.ok(acceptanceOf(result, '--ds-tint-error-24').failed.some((entry) => entry.id === 'B2' && entry.detail === 'not on TENANT_THEME_REFERENCE_TOKENS'), 'the per-channel leg names the row itself');
+  assert.ok(result.capability.globalFailures.some((entry) => entry.id === 'B2' && entry.detail.includes('--ds-tint-error-24')));
+  assert.ok(dispositionFailures(result).some((failure) => failure.startsWith('invalid capability pin: --ds-tint-error-24 -- its exposure is public-reference')));
+});
+
+test('NEGATIVE 4: re-pointing the formula at a mode-scoped-only channel reds C1 (C1.a and C1.b)', () => {
+  const result = capabilityRun({ helper: { tint: (text) => replaceOnce(text, 'var(--ds-color-bg-primary))`', 'var(--ds-mode-only-ground))`') } });
+  const c1 = result.capability.globalFailures.filter((entry) => entry.id === 'C1').map((entry) => entry.detail).join('\n');
+  assert.match(c1, /C1\.a: formula input\(s\) not declared in the base :root: --ds-mode-only-ground/u);
+  assert.match(c1, /C1\.b: --ds-mode-only-ground does not resolve/u);
+  assert.equal(acceptanceOf(result, '--ds-tint-info-16').accepted, false);
+});
+
+test('NEGATIVE 5: dropping 300 from RAMP_STEPS reds B5, and info-300 drifts to AUTHORABLE_UNPROVEN_EFFECT', () => {
+  const result = capabilityRun({ capability: (inputs) => ({ ...inputs, rampKernelText: replaceOnce(inputs.rampKernelText, '[50, 100, 200, 300, 400,', '[50, 100, 200, 400,') }) });
+  assert.ok(result.capability.globalFailures.some((entry) => entry.id === 'B5' && entry.detail.startsWith('TENANT_THEME_COLOR_STEPS')));
+  assert.equal(rowOf(result, '--ds-color-info-300').classification, LIVENESS.authorableUnprovenEffect);
+  assert.ok(dispositionFailures(result).some((failure) => failure.startsWith('drifted pin: --ds-color-info-300 ')));
+});
+
+test('NEGATIVE 6: a capability pin on a name outside every measured roster is an invalid capability pin on the blocking leg', () => {
+  const rogue = { ...CHANNEL_DISPOSITIONS[0], channels: Object.freeze([...CHANNEL_DISPOSITIONS[0].channels, '--ds-tint-error-32']) };
+  const result = capabilityRun({ dispositions: [rogue, ...CHANNEL_DISPOSITIONS.slice(1)] });
+  assert.ok(dispositionFailures(result).includes('invalid capability pin: --ds-tint-error-32 -- the channel is not a member of any measured scale roster'));
+});
+
+test('NEGATIVE 7: a Modern skin reading a capability step makes it LIVE, and its pin is DISCHARGED -- the exit, never a silent shrink', () => {
+  const result = capabilityRun({
+    css: (list) => [...list, css('src/foundation/tokens/css/runtime/engines/modern/skin/drill/index.css', '.ds-drill { border-color: var(--ds-tint-error-24); }')],
+  });
+  assert.equal(rowOf(result, '--ds-tint-error-24').classification, LIVENESS.modernPainted);
+  assert.ok(dispositionFailures(result).some((failure) => failure.startsWith('discharged pin: --ds-tint-error-24 is pinned to capability palette.status-seeds')));
+});
+
+test('NEGATIVE 8: the class is exactly the roster members no paint, probe or read claimed -- derived from the rosters, never pinned to nine', () => {
+  const result = baselineRun();
+  const roster = new Set([...result.capability.rosters.tint, ...result.capability.rosters.ramps]);
+  const expected = result.channels
+    .filter((entry) => roster.has(entry.name))
+    .filter((entry) => !entry.dsModernPainted && !entry.dsFrozenOnlyPainted && !entry.externalConsumerPainted && !entry.probePainted && !entry.cssReadNoTerminal && !entry.tsReadOnly)
+    .map((entry) => entry.name)
+    .sort();
+  const measured = result.channels.filter((entry) => entry.classification === LIVENESS.capabilityScaleStepUnread).map((entry) => entry.name).sort();
+  assert.deepEqual(measured, expected);
+  assert.ok(result.channels.every((entry) => entry.classification !== LIVENESS.capabilityScaleStepUnread || roster.has(entry.name)), 'no row outside a roster is a capability step');
+  assert.equal(rowOf(result, '--ds-color-secondary-400').classification, LIVENESS.readUnproven, 'a half-wired read of a step stays a READ_* finding');
+});
+
+test('NEGATIVE C1.b: a vertical that declares the ground in its base rule and not in its mode rule reds -- both modes reach one terminal', () => {
+  const result = capabilityRun({
+    artifacts: (list) => list.map((artifact) => (artifact.vertical === 'evnto'
+      ? { ...artifact, text: artifact.text.replace(/(:is\(html\[data-tenant='evnto'\], :where\(\[data-ds-root\]\[data-vertical='evnto'\]\)\) \{\n)/u, '$1  --ds-color-bg-primary: #fafafa;\n') }
+      : artifact)),
+  });
+  assert.ok(result.capability.globalFailures.some((entry) => entry.id === 'C1' && entry.detail === 'C1.b: --ds-color-bg-primary resolves to #fafafa in both modes on evnto -- the ground does not carry the mode'));
+});
+
+test('NEGATIVE C2 (static WRONG ROOT): the seeded vertical\'s dark rule losing info-300 reds C2', () => {
+  const result = capabilityRun({
+    artifacts: (list) => list.map((artifact) => {
+      if (artifact.vertical !== 'bithire') return artifact;
+      const dark = artifact.text.indexOf("[data-theme='dark']");
+      const at = artifact.text.indexOf('--ds-color-info-300:', dark);
+      const end = artifact.text.indexOf('\n', at);
+      return { ...artifact, text: artifact.text.slice(0, at) + artifact.text.slice(end + 1) };
+    }),
+  });
+  assert.ok((acceptanceOf(result, '--ds-color-info-300')?.failed ?? []).some((entry) => entry.id === 'C2' && entry.detail.includes('bithire seeds info and its mode rule omits --ds-color-info-300')));
+});
+
+test('GUARD (neutral): dropping `neutral` from the authored-ramp guard collides with the palette family and splits the two ramp rosters', () => {
+  const result = capabilityRun({ helper: { ramps: (text) => replaceOnce(text, 'if (role === "neutral" || UNREAD_RAMP_ROLES.has(role)) continue;', 'if (UNREAD_RAMP_ROLES.has(role)) continue;') } });
+  assert.ok(result.failures.some((failure) => failure.startsWith('duplicate producer: --ds-color-neutral-50 is emitted at rank "derived" by 2 different family files')));
+  assert.ok(result.failures.some((failure) => failure.startsWith('ramp write rosters disagree')));
+});
+
+test('GUARD (accent): emptying UNREAD_RAMP_ROLES puts the retired accent steps on the authored write -- B2 reds', () => {
+  const result = capabilityRun({ helper: { ramps: (text) => replaceOnce(text, 'new Set(["accent"])', 'new Set([])') } });
+  assert.ok(result.capability.globalFailures.some((entry) => entry.id === 'B2' && entry.detail.includes('--ds-color-accent-500')));
+});
+
+test('RAMP RESOLVER: the two templates are admitted site-exact; a third interpolated write in the helper stays an unresolved pattern', () => {
+  const input = capabilityInputs();
+  const ramps = extractRampHelperEmissions(input.helperTexts.ramps, input.capability);
+  assert.deepEqual(ramps.failures, []);
+  assert.deepEqual([...ramps.resolvedRaw].sort(), [RAMP_HELPER_TEMPLATES.authored, RAMP_HELPER_TEMPLATES.derived].sort());
+  assert.deepEqual([...ramps.derived.names].sort(), [...ramps.authored.names].sort(), 'write 2 is pinned equal to write 1 as sets');
+  assert.equal(ramps.derived.names.size, 60);
+  assert.deepEqual(ramps.authored.excluded, ['accent', 'neutral']);
+  const result = capabilityRun({ helper: { ramps: (text) => `${text}\nexport function rogue(vars, role) { vars[\`--ds-color-\${role}-950\`] = "x"; }\n` } });
+  assert.ok(result.failures.some((failure) => failure.startsWith('unresolved emission pattern: vars[`--ds-color-${role}-950`]')));
+});
+
+test('CITATION: a renamed cited title fails on the blocking leg, every capability row loses its acceptance, and --write refuses', () => {
+  const evidence = DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE.map((entry) => (entry.obligation === 'B4' ? { ...entry, tests: ['a title no suite declares'] } : entry));
+  const result = capabilityRun({ evidence });
+  assert.ok(dispositionFailures(result).some((failure) => failure.startsWith('capability evidence title missing: B4')));
+  for (const name of CAPABILITY_ROWS) assert.ok(failedIds(result, name).includes('B4'), name);
+  assert.ok(result.effect.failures.some((failure) => failure.startsWith('capability acceptance FAIL: --ds-tint-error-24 ')));
+  assert.equal(mayWriteArtifact(result), false);
+});
+
+test('EFFECT LEG: a capability row is green only with a green acceptance -- with none measured it is red, never discharged by its class', () => {
+  const rows = [{ name: '--ds-tint-error-24', classification: LIVENESS.capabilityScaleStepUnread }];
+  assert.deepEqual(assessChannelEffect(rows, new Map([['--ds-tint-error-24', { ok: true, failed: [] }]])), { ok: true, failures: [], rows: [] });
+  const red = assessChannelEffect(rows);
+  assert.equal(red.ok, false);
+  assert.deepEqual(red.rows, ['--ds-tint-error-24']);
+  assert.match(red.failures[0], /^capability acceptance FAIL: --ds-tint-error-24 \(CAPABILITY_SCALE_STEP_UNREAD\) -- all: no acceptance measured$/u);
+});
+
+test('PIN LAW: a measured capability row without a capability pin is STOP NO-GO, and a capability pin naming an owner is invalid', () => {
+  const rows = [{ name: '--ds-tint-error-24', classification: LIVENESS.capabilityScaleStepUnread, declaredReference: true }];
+  const roster = new Set(['--ds-tint-error-24']);
+  const unpinned = adjudicateDispositions(rows, { dispositions: [], capabilityRoster: roster });
+  assert.match(unpinned.failures[0], /^STOP NO-GO: 1 channel\(s\) classified CAPABILITY_SCALE_STEP_UNREAD with NO registered capability pin/u);
+  const owned = adjudicateDispositions(rows, {
+    dispositions: [{ ...CHANNEL_DISPOSITIONS[0], owner: 'WO-EVI-02', channels: ['--ds-tint-error-24'] }],
+    capabilityRoster: roster,
+    capabilityAcceptance: new Map([['--ds-tint-error-24', { ok: true, failed: [] }]]),
+  });
+  assert.ok(owned.failures.some((failure) => failure.startsWith('invalid capability pin: --ds-tint-error-24 -- it names an owner or an invariant')));
+});
+
+test('CASCADE: an unlayered declaration outranks a layered one whatever its specificity; within a tier specificity, then order, decide; var() resolves through the winner set', () => {
+  const base = collectCascadeDeclarations(":root { --g: #111; --r: var(--g); }\n:root[data-theme='dark'], html.dark { --g: #222; }", { file: 'base.css', layered: true });
+  const own = collectCascadeDeclarations(":where([data-ds-root][data-vertical='v']) { --g: #333; }\n@media (min-width: 1px) { :root { --g: #444; } }", { file: 'v.css', layered: false });
+  const index = new Map();
+  for (const decl of [...base.declarations, ...own.declarations]) index.set(decl.prop, [...(index.get(decl.prop) ?? []), decl]);
+  assert.equal(resolveOnRoot(index, documentRoot('v', 'dark'), '--r'), '#333', 'a zero-specificity unlayered rule beats the layered dark scope');
+  const reversed = new Map([...index].map(([prop, decls]) => [prop, [...decls].reverse()]));
+  assert.equal(resolveOnRoot(reversed, documentRoot('v', 'dark'), '--r'), '#333', 'the layer decides before source order: a layered rule read later never outranks an unlayered one');
+  const ordered = collectCascadeDeclarations(":root[data-theme='dark'] { --s: #a; }\n:root { --s: #b; }", { file: 'o.css', layered: true }).declarations;
+  assert.equal(resolveOnRoot(new Map([['--s', ordered]]), documentRoot('v', 'dark'), '--s'), '#a', 'within a tier the higher specificity wins over a later, weaker rule');
+  assert.equal(own.conditional.length, 1, 'a rule under @media is recorded outside the claim, never read');
+  const layeredOnly = new Map([['--g', base.declarations.filter((decl) => decl.prop === '--g')], ['--r', base.declarations.filter((decl) => decl.prop === '--r')]]);
+  assert.equal(resolveOnRoot(layeredOnly, documentRoot('v', 'dark'), '--r'), '#222');
+  assert.equal(resolveOnRoot(layeredOnly, documentRoot('v', 'light'), '--r'), '#111');
+  assert.equal(evaluateSelector(':root [data-theme="dark"]', documentRoot('v', 'dark')).matched, false, 'a descendant selector never selects the root');
+  assert.throws(() => evaluateSelector(':root:hover', documentRoot('v', 'dark')), /unreadable selector/u);
+});
+
+test('B3 / B5 readers: the catalog row lists its channels from source, and the step tables read as literal lists', () => {
+  const input = capabilityInputs();
+  const listed = readCatalogChannels(input.capability.catalogText, 'palette.status-seeds');
+  for (const name of CAPABILITY_ROWS) assert.ok(listed.includes(name), name);
+  assert.equal(readCatalogChannels(input.capability.catalogText, 'no.such-row'), null);
+  assert.deepEqual(readLiteralList(input.capability.rampKernelText, 'RAMP_STEPS'), ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900']);
+});
+
+test('NEGATIVE C1.d: a mode-hooked rule that declares a formula input below the document root reds -- the opposite-mode island stays out of the claim', () => {
+  const result = capabilityRun({
+    artifacts: (list) => list.map((artifact) => (artifact.vertical === 'rottay'
+      ? { ...artifact, text: `${artifact.text}\n[data-theme='dark'] .island { --ds-color-bg-primary: #000000; }\n` }
+      : artifact)),
+  });
+  assert.ok(result.capability.globalFailures.some((entry) => entry.id === 'C1' && entry.detail.startsWith('C1.d:') && entry.detail.includes(".island")));
+});
+
+const ANCHOR_SKIN = 'src/skin/overlay.css';
+const ANCHOR_OWNER = 'src/components/primitives/runtime/overlay/backdrop';
+const anchorEntry = (overrides = {}) => ({
+  channel: '--ds-overlay-light',
+  stylesheet: ANCHOR_SKIN,
+  selector: ".rottay-overlay[data-intensity='light']",
+  owner: ANCHOR_OWNER,
+  exportName: 'Overlay',
+  proves: 'nothing stamps the anchor',
+  registered: '2026-10-02',
+  ...overrides,
+});
+const anchorInputs = ({ css = ".rottay-overlay[data-intensity='light'] { background-color: var(--ds-overlay-light, #000); }", ts = [], consumer = [] } = {}) => ({
+  dsGraph: buildPaintGraph([{ file: ANCHOR_SKIN, text: css }]),
+  tsStylesheets: [{ file: `${ANCHOR_OWNER}/index.tsx`, text: 'export const Overlay = () => null;' }, ...ts],
+  consumerTsStylesheets: consumer,
+  universe: new Set(['--ds-overlay-light']),
+});
+
+test('CONTROL (GLASS-2-b anchor): an unimported owner and a live rule withdraw exactly that terminal', () => {
+  const { valid, failures } = loadUnstampedAnchors([anchorEntry()], anchorInputs());
+  assert.deepEqual(failures, []);
+  assert.equal(valid.get('--ds-overlay-light').key, `${ANCHOR_SKIN}\0.rottay-overlay[data-intensity='light']`);
+});
+
+test('DRILL (GLASS-2-b anchor adopted): a DS module importing the owner is the adoption exit, and nothing is withdrawn', () => {
+  const ts = [{ file: 'src/components/patterns/sheet/index.tsx', text: "import { Overlay } from '../../primitives/runtime/overlay/backdrop';" }];
+  const { valid, failures } = loadUnstampedAnchors([anchorEntry()], anchorInputs({ ts }));
+  assert.equal(valid.size, 0);
+  assert.ok(failures.some((f) => f.startsWith('unstamped anchor adopted: --ds-overlay-light') && f.includes('src/components/patterns/sheet/index.tsx')), failures.join(' | '));
+});
+
+test('DRILL (GLASS-2-b anchor adopted): a consumerRoot importing the export from the package is the adoption exit', () => {
+  const consumer = [{ file: 'app-bithire/modal.tsx', text: "import { Button, Overlay as Scrim } from '@rottay/design-system/primitives';" }];
+  const { valid, failures } = loadUnstampedAnchors([anchorEntry()], anchorInputs({ consumer }));
+  assert.equal(valid.size, 0);
+  assert.ok(failures.some((f) => f.startsWith('unstamped anchor adopted:') && f.includes('app-bithire/modal.tsx')), failures.join(' | '));
+  const unrelated = [{ file: 'app-bithire/x.tsx', text: "import { OverlayTrigger } from '@rottay/design-system';" }];
+  assert.deepEqual(loadUnstampedAnchors([anchorEntry()], anchorInputs({ consumer: unrelated })).failures, []);
+});
+
+test('DRILL (GLASS-2-b anchor stale): a renamed rule, a moved owner and a retired channel each red by name', () => {
+  const renamed = loadUnstampedAnchors([anchorEntry()], anchorInputs({ css: ".rottay-overlay[data-weight='light'] { background-color: var(--ds-overlay-light); }" }));
+  assert.ok(renamed.failures.some((f) => f.startsWith('unstamped anchor stale:') && f.includes('no terminal under')), renamed.failures.join(' | '));
+  const moved = loadUnstampedAnchors([anchorEntry({ owner: 'src/components/elsewhere' })], anchorInputs());
+  assert.ok(moved.failures.some((f) => f.startsWith('unstamped anchor stale:') && f.includes('no module of it')), moved.failures.join(' | '));
+  const retired = loadUnstampedAnchors([anchorEntry()], { ...anchorInputs(), universe: new Set() });
+  assert.ok(retired.failures.some((f) => f.startsWith('unstamped anchor stale:') && f.includes('measured universe')), retired.failures.join(' | '));
+  assert.equal(renamed.valid.size + moved.valid.size + retired.valid.size, 0);
+});
+
+test('LIVE (GLASS-2-b): the three overlay weights measure AUTHORABLE_UNPROVEN_EFFECT through the withdrawn unstamped terminals, pinned to WO-EVI-02', () => {
+  const { result } = runGate({ requireArtifact: false });
+  const byName = new Map(result.channels.map((row) => [row.name, row]));
+  for (const step of ['light', 'medium', 'heavy']) {
+    const row = byName.get(`--ds-overlay-${step}`);
+    assert.equal(row.classification, LIVENESS.authorableUnprovenEffect, row.name);
+    assert.ok(row.consumerSites.length > 0 && row.consumerSites.every((site) => site.startsWith('ds-terminal-unstamped:') && site.includes(`[data-intensity='${step}']`)), row.consumerSites.join(' | '));
+  }
+  assert.deepEqual(result.dispositions.byOwner['WO-EVI-02'].filter((channel) => channel.startsWith('--ds-overlay-')), ['--ds-overlay-heavy', '--ds-overlay-light', '--ds-overlay-medium']);
   assert.deepEqual(dispositionFailures(result), []);
 });

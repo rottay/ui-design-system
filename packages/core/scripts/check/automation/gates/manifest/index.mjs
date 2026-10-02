@@ -189,8 +189,8 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/check/tokens/cascade/channels/liveness/index.mjs', '--check'],
     blocking: false,
     excluded: {
-      reason: 'The 31 known non-LIVE rows are pinned to work orders and enforced BLOCKING by channel-liveness-dispositions. What keeps the full --check red is outside that law: the missing R1 artifact, two emitter patterns the family roster covers only by glob (typography/scale:48 and :53; axes:35 is closed through its exact produces roster), and 31 consumer sites with no family-inventory row (27 chart sites + 4 structures/shell/contracts).',
-      owner: 'WO-EVI-02 (emitter-pattern resolution + R1 artifact) and WO-RET-04 (family-inventory drift); the 31 channel rows are owned per CHANNEL_DISPOSITIONS',
+      reason: 'Every non-LIVE row is pinned and enforced BLOCKING by channel-liveness-dispositions; the nine status scale steps (tint 16/24 of the four status tones, --ds-color-info-300) classify CAPABILITY_SCALE_STEP_UNREAD under a capability pin and leave the effect red only while their acceptance measures green, which it does. What keeps the full --check red: the effect verdict on four rows (--ds-color-secondary-400 READ_UNPROVEN, --ds-text-inverse READ_NO_PRODUCTIVE_TERMINAL, --ds-text-body-letter-spacing and --ds-text-emphasis-letter-spacing UNREAD_EMITTED_NO_KNOWN_ROUTE), the missing R1 artifact that --write refuses to produce while that verdict is red, and 31 consumer sites with no family-inventory row (27 chart sites + 4 structures/shell/contracts).',
+      owner: 'WO-EVI-02 (--ds-color-secondary-400 + R1 artifact), WO-RET-01 (--ds-text-inverse and the two letter-spacing facets) and WO-RET-04 (family-inventory drift); every channel row is owned per CHANNEL_DISPOSITIONS',
       trackedSince: '2026-08-20',  // re-adjudicada 2026-09-11 tras la auditoria 100 (antes: censo 2026-08-20)
     },
     phase: 'pre-build',

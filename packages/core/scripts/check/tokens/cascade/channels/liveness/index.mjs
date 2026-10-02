@@ -74,7 +74,11 @@
  *      liveness: a channel declared there with no proven terminal (in-repo
  *      or external) classifies `AUTHORABLE_UNPROVEN_EFFECT`, and — like
  *      every other non-LIVE classification — is a standing NO-GO row (see
- *      point 8), not a protected bucket.
+ *      point 8), not a protected bucket. The one exception is MEASURED, not
+ *      granted: a step of a public scale (the tint scale, a colour ramp)
+ *      enumerated from its producer outranks the allowlist and classifies
+ *      `CAPABILITY_SCALE_STEP_UNREAD`, a fourth partition that is never LIVE
+ *      (see point 8).
  *   4. `attributeFamily` returns the FULL `Set<canonicalId>` for a
  *      `sourceOwner` shared by more than one family row (never the first
  *      row); a read site landing on a shared owner is tallied
@@ -115,7 +119,13 @@
  *      `UNREAD_EMITTED_NO_KNOWN_ROUTE`) is a STANDING failure row, listed
  *      exactly, every run — not just on a live-to-unread regression. There
  *      is deliberately no baseline/allowlist file that could "accept" one of
- *      these rows into silence.
+ *      these rows into silence. The fourth partition,
+ *      `CAPABILITY_SCALE_STEP_UNREAD`, is no protected bucket either: its
+ *      membership is measured from the scale producers, a measured row needs
+ *      a capability pin, and it leaves the effect red only while EVERY
+ *      obligation of its acceptance (`assessScaleCapability`) measures green
+ *      for that exact channel. It proves resolution, never paint, is
+ *      published apart from LIVE, and a reader on the step discharges its pin.
  *
  * ============================================================================
  * WHY NO BASELINE FILE
@@ -151,7 +161,7 @@ import {
   statSync,
   writeFileSync,
 } from 'node:fs';
-import { dirname, join, relative, resolve, sep } from 'node:path';
+import { dirname, join, posix, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../../libraries/repo-root/index.mjs';
@@ -393,7 +403,7 @@ export const DEFAULT_PROBE_EVIDENCE = Object.freeze([
   }),
 ]);
 
-const TEST_CALL_RE = /(?<![.\w$])test(?:\.only)?(\()\s*(['"`])/dg;
+const testCallRe = (callees) => new RegExp(`(?<![.\\w$])(?:${callees.join('|')})(?:\\.only)?(\\()\\s*(['"\`])`, 'dg');
 
 function skipQuoted(text, index) {
   const quote = text[index];
@@ -430,10 +440,10 @@ function callEnd(text, open) {
 }
 
 /** Every `test(...)` call in a comment-masked spec: verbatim title, whether it is a `${...}` template, and its span to the closing paren. */
-export function extractSpecTests(specText) {
+export function extractSpecTests(specText, { callees = ['test'] } = {}) {
   const scanned = maskSourceComments(specText);
   const tests = [];
-  for (const match of scanned.matchAll(TEST_CALL_RE)) {
+  for (const match of scanned.matchAll(testCallRe(callees))) {
     const quote = match[2];
     const start = match.indices[2][1];
     const close = skipQuoted(scanned, start - 1) - 1;
@@ -540,6 +550,132 @@ export function loadProbeEvidence(entries = DEFAULT_PROBE_EVIDENCE, { checkoutRo
     }
   }
   return { valid, failures, specs };
+}
+
+/**
+ * Declared unstamped anchors: a skin rule that reads a channel inside a selector
+ * no product renders. The graph sees the rule's terminal and would call the
+ * channel painted; nothing stamps the anchor, so the terminal paints nobody. A
+ * valid entry withdraws exactly that terminal (stylesheet + selector) from the
+ * channel's DS paint, and the row falls to whatever the unchanged classifier
+ * reads without it. It narrows the graph by a measured fact, never widens it,
+ * and it fails closed in both directions:
+ *
+ *   - the rule must still exist in the graph as a terminal of the channel
+ *     (`unstamped anchor stale`): a removed or renamed rule leaves nothing to withdraw;
+ *   - the owner module that stamps the anchor must still be in the DS corpus
+ *     (`unstamped anchor stale`);
+ *   - ADOPTION is the exit: any non-test DS module that imports the owner, or any
+ *     consumerRoot module that imports `exportName` from `@rottay/design-system`,
+ *     makes the entry `unstamped anchor adopted` -- the terminal is restored, the
+ *     row measures LIVE, and the entry and its pin are deleted together.
+ */
+export const DEFAULT_UNSTAMPED_ANCHORS = Object.freeze(
+  ['light', 'medium', 'heavy'].map((step) =>
+    Object.freeze({
+      channel: `--ds-overlay-${step}`,
+      stylesheet: 'src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css',
+      selector: `.rottay-overlay[data-intensity='${step}']`,
+      owner: 'src/components/primitives/runtime/overlay/backdrop',
+      exportName: 'Overlay',
+      registered: '2026-10-02',
+      proves:
+        'Overlay is the only stamper of data-intensity on .rottay-overlay; no DS module imports it, no package subpath exports it and no consumerRoot imports it, so the rule matches no rendered node',
+    }),
+  ),
+);
+
+const IMPORT_SPECIFIER_RE = /(?:\bfrom\s*|\bimport\s*\(\s*|\brequire\s*\(\s*|^\s*import\s+)(['"])([^'"]+)\1/gm;
+const DS_NAMED_IMPORT_RE = /\bimport\s+(?:type\s+)?(?:[\w$]+\s*,\s*)?\{([^}]*)\}\s*from\s*(['"])@rottay\/design-system(?:\/[^'"]*)?\2/g;
+
+/** Every relative import of a module, resolved to a checkout-relative posix path with any `/index` suffix and extension dropped. */
+function relativeImportTargets(file, text) {
+  const targets = [];
+  for (const match of maskSourceComments(text).matchAll(IMPORT_SPECIFIER_RE)) {
+    const spec = match[2];
+    if (!spec.startsWith('.')) continue;
+    const target = posix.normalize(posix.join(posix.dirname(file), spec)).replace(/\.(?:m?[jt]sx?)$/u, '').replace(/\/index$/u, '');
+    targets.push(target);
+  }
+  return targets;
+}
+
+/**
+ * Validate every declared unstamped anchor against the measured graph and the
+ * TS corpora. Returns channel -> the withdrawn terminal key (`file\0selector`)
+ * for each valid entry, and a named failure for every one that is not.
+ */
+export function loadUnstampedAnchors(entries, { dsGraph, tsStylesheets = [], consumerTsStylesheets = [], universe = new Set() }) {
+  const failures = [];
+  const valid = new Map();
+  const seen = new Set();
+  const normalize = (selector) => String(selector ?? '').replace(/\s+/g, ' ').replace(/"/g, "'").trim();
+  for (const entry of entries) {
+    const label = entry?.channel ?? '(no channel)';
+    if (seen.has(entry?.channel)) {
+      failures.push(`unstamped anchor duplicate: ${label} is declared more than once -- a channel has exactly one entry`);
+      continue;
+    }
+    seen.add(entry?.channel);
+    const malformed =
+      typeof entry?.channel !== 'string' ||
+      !entry.channel.startsWith('--ds-') ||
+      [entry.stylesheet, entry.selector, entry.owner, entry.exportName, entry.proves].some((field) => typeof field !== 'string' || field.trim() === '') ||
+      entry.owner.startsWith('/') ||
+      entry.owner.split('/').includes('..');
+    if (malformed) {
+      failures.push(
+        `unstamped anchor malformed: ${label} -- an entry names a --ds-* channel, the stylesheet and selector of the withdrawn rule, the core-relative owner module that stamps the anchor, its export name and a statement of what is measured`,
+      );
+      continue;
+    }
+    if (!universe.has(entry.channel)) {
+      failures.push(`unstamped anchor stale: ${entry.channel} is no longer in the measured universe -- delete the entry`);
+      continue;
+    }
+    const selector = normalize(entry.selector);
+    const terminal = (dsGraph.terminalEdges.get(entry.channel) ?? []).some(
+      (edge) => edge.file === entry.stylesheet && normalize(edge.selector) === selector,
+    );
+    if (!terminal) {
+      failures.push(
+        `unstamped anchor stale: ${entry.channel} has no terminal under "${entry.selector}" in ${entry.stylesheet} -- the rule the entry withdraws is gone, so delete the entry`,
+      );
+      continue;
+    }
+    const ownerPrefix = `${entry.owner}/`;
+    if (!tsStylesheets.some(({ file }) => file.startsWith(ownerPrefix))) {
+      failures.push(
+        `unstamped anchor stale: ${entry.channel} names ${entry.owner} as the stamper, and no module of it is in the DS corpus -- a moved owner leaves the adoption leg measuring nothing`,
+      );
+      continue;
+    }
+    const importers = tsStylesheets
+      .filter(({ file }) => !file.startsWith(ownerPrefix))
+      .filter(({ file, text }) => relativeImportTargets(file, text).some((target) => target === entry.owner || target.startsWith(ownerPrefix)))
+      .map(({ file }) => file);
+    for (const { file, text } of consumerTsStylesheets) {
+      for (const match of maskSourceComments(text).matchAll(DS_NAMED_IMPORT_RE)) {
+        const bindings = match[1].split(',').map((binding) => binding.trim().replace(/^type\s+/u, '').split(/\s+as\s+/u)[0]);
+        if (bindings.includes(entry.exportName)) importers.push(file);
+      }
+    }
+    if (importers.length > 0) {
+      failures.push(
+        `unstamped anchor adopted: ${entry.channel} -- ${[...new Set(importers)].sort().join(', ')} import(s) ${entry.exportName}, so a product may stamp "${entry.selector}"; the adoption exit landed, so delete the entry and its pin in the same commit`,
+      );
+      continue;
+    }
+    valid.set(entry.channel, {
+      key: `${entry.stylesheet}\0${selector}`,
+      stylesheet: entry.stylesheet,
+      selector: entry.selector,
+      owner: entry.owner,
+      proves: entry.proves,
+      registered: entry.registered ?? null,
+    });
+  }
+  return { valid, failures, normalize };
 }
 
 /**
@@ -1581,6 +1717,8 @@ export function buildPaintGraph(stylesheets, scopeClassifier = () => 'engine-neu
   const parseErrors = [];
   // name -> Set<vertical> for every custom property a compiled artifact declares.
   const compiledDeclarations = new Map();
+  // name -> Set<file> for every custom property an AUTHORED stylesheet declares.
+  const authoredDeclarations = new Map();
   for (const { file, text, compiledVertical = null } of stylesheets) {
     let root;
     try {
@@ -1598,6 +1736,8 @@ export function buildPaintGraph(stylesheets, scopeClassifier = () => 'engine-neu
       if (compiledVertical !== null && !isCustomTarget) return;
       if (compiledVertical !== null) {
         compiledDeclarations.set(prop, (compiledDeclarations.get(prop) ?? new Set()).add(compiledVertical));
+      } else if (isCustomTarget) {
+        authoredDeclarations.set(prop, (authoredDeclarations.get(prop) ?? new Set()).add(file));
       }
       const re = new RegExp(ANY_VAR_REF_RE.source, 'g');
       let match;
@@ -1613,13 +1753,14 @@ export function buildPaintGraph(stylesheets, scopeClassifier = () => 'engine-neu
           customEdges.set(referenced, list);
         } else {
           const list = terminalEdges.get(referenced) ?? [];
-          list.push({ file, line, prop, scope });
+          const selector = decl.parent?.type === 'rule' ? decl.parent.selector : null;
+          list.push({ file, line, prop, scope, selector });
           terminalEdges.set(referenced, list);
         }
       }
     });
   }
-  return { customEdges, terminalEdges, parseErrors, compiledDeclarations };
+  return { customEdges, terminalEdges, parseErrors, compiledDeclarations, authoredDeclarations };
 }
 
 /**
@@ -1902,14 +2043,832 @@ export function classifySemanticOwner(name) {
 }
 
 /* ---------------------------------------------------------------------- */
+/* 7b. Scale-step capability -- the producers, the rosters, the cascade    */
+/* ---------------------------------------------------------------------- */
+
+/**
+ * The two lowering helpers that write the public scale steps. They sit outside
+ * the derivation root, so the corpus walk never reaches them and every step
+ * read `producer: null`. They join the compiler corpus here as producer
+ * sources; family and rank are not listed with them but INHERITED from the one
+ * deriver whose import statement names the file, under the same law a
+ * sub-owner inherits its family's rank.
+ */
+export const SCALE_HELPER_ROOT = resolve(
+  CORE_ROOT,
+  'src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation',
+);
+export const DEFAULT_SCALE_PRODUCER_HELPERS = Object.freeze([
+  Object.freeze({ scale: 'tint', path: resolve(SCALE_HELPER_ROOT, 'tint/index.ts') }),
+  Object.freeze({ scale: 'ramps', path: resolve(SCALE_HELPER_ROOT, 'ramps/index.ts') }),
+]);
+export const DEFAULT_RAMP_KERNEL = resolve(CORE_ROOT, 'src/foundation/kernel/color/oklch/ramp/index.ts');
+export const DEFAULT_RAMP_INGRESS = resolve(CORE_ROOT, 'src/foundation/contracts/composition/tenants/themes/iso/index.ts');
+export const DEFAULT_THEME_CATALOG = resolve(CORE_ROOT, 'src/contracts/theme/runtime/catalog/index.ts');
+export const DEFAULT_BASE_THEME = resolve(CORE_ROOT, 'src/foundation/tokens/css/foundation/themes/default/index.css');
+export const DEFAULT_BASE_ENTRYPOINT = resolve(CORE_ROOT, 'src/foundation/tokens/css/facade/entrypoints/base/index.css');
+
+const posixRelative = (path) => relative(CORE_ROOT, path).split(sep).join('/');
+
+/** The in-package files a module's import statements name, without touching the filesystem. */
+function importTargets(file, text, coreRoot = CORE_ROOT) {
+  const targets = new Set();
+  for (const match of maskSourceComments(text).matchAll(/\bfrom\s*["']([^"']+)["']/gu)) {
+    const specifier = match[1];
+    const base = specifier.startsWith('@/')
+      ? join(coreRoot, 'src', specifier.slice(2))
+      : specifier.startsWith('.') ? resolve(dirname(file), specifier) : null;
+    if (base === null) continue;
+    for (const suffix of ['', ...TS_MODULE_SUFFIXES]) targets.add(`${base}${suffix}`);
+  }
+  return targets;
+}
+
+/**
+ * Attach each declared scale helper to the deriver that imports it. Exactly
+ * one importing FAMILY is the law: none leaves the helper unowned, two leave
+ * its rank undecidable, and both fail by name rather than guessing.
+ */
+export function attachScaleProducerHelpers(sources, helpers = DEFAULT_SCALE_PRODUCER_HELPERS, { coreRoot = CORE_ROOT } = {}) {
+  const failures = [];
+  const attached = [];
+  const helperSources = [];
+  for (const helper of helpers) {
+    const label = `${helper.scale} (${posixRelative(helper.path)})`;
+    let text = helper.text;
+    if (text === undefined) {
+      try {
+        text = readFileSync(helper.path, 'utf8');
+      } catch {
+        failures.push(`scale producer missing: ${label} cannot be read -- the scale it writes has no measurable producer`);
+        continue;
+      }
+    }
+    const importers = sources.filter((source) => source.path && importTargets(source.path, source.text, coreRoot).has(helper.path));
+    const families = [...new Set(importers.map((source) => source.family))].sort();
+    if (families.length !== 1) {
+      failures.push(
+        families.length === 0
+          ? `scale producer unattached: ${label} is imported by no family deriver -- a helper that writes channels inherits its family and rank from its importer, and with none it owns nothing`
+          : `scale producer ambiguous: ${label} is imported by ${families.length} families (${families.join(', ')}) -- its rank is undecidable`,
+      );
+      continue;
+    }
+    const ranks = [...new Set(importers.map((source) => source.rank))];
+    const importer = importers[0];
+    const entry = {
+      scale: helper.scale,
+      path: helper.path,
+      relativePath: `packages/core/${posixRelative(helper.path)}`,
+      family: families[0],
+      rank: ranks.length === 1 ? ranks[0] : 'unranked',
+      importedBy: importers.map((source) => source.relativePath).sort(),
+    };
+    attached.push(entry);
+    helperSources.push({
+      path: helper.path,
+      relativePath: entry.relativePath,
+      text,
+      rank: entry.rank,
+      family: entry.family,
+      declaresRank: false,
+      scaleHelper: helper.scale,
+      importedBy: entry.importedBy,
+      importerRelativePath: importer.relativePath,
+    });
+  }
+  return { sources: [...sources, ...helperSources], helpers: attached, failures };
+}
+
+/** A `const NAME = [ ... ]` (any annotation, any `as const`) read as a flat list of string/number literals, or null. */
+export function readLiteralList(sourceText, name) {
+  const expression = topLevelConstExpressions(maskSourceComments(sourceText)).get(name);
+  if (expression === undefined) return null;
+  const body = extractBracketBlock(expression.replace(/\s+as\s+const\s*$/u, ''), '[', '[', ']');
+  if (body === null) return null;
+  const values = [];
+  for (const item of splitTopLevelListItems(body)) {
+    const literal = /^(?:(['"])([^'"]*)\1|(-?\d+))$/u.exec(item);
+    if (!literal) return null;
+    values.push(literal[2] ?? literal[3]);
+  }
+  return values.length === 0 ? null : values;
+}
+
+/**
+ * The two admitted ramp templates, admitted in exactly the ramps helper.
+ *
+ * Write 1 derives one ramp per spec `rampRoleSpecs` returns: its roles are the
+ * `name:` literals of those object literals and its steps are `RAMP_STEPS`, one
+ * import hop into the kernel. Write 2 restates authored steps by iterating the
+ * tenant's own `palette.ramps` keys, so its names cannot come from the loop.
+ * They come from the only ingress that shapes that object, `DEFAULT_RAMP_ROLES`
+ * x `DEFAULT_RAMP_STEPS`, minus every role the loop's `continue` guard names.
+ * That complement is admitted here and nowhere else, because its universe is a
+ * literal the contract states; the two rosters must then be equal as sets.
+ */
+export const RAMP_HELPER_TEMPLATES = Object.freeze({
+  derived: '--ds-color-${role.name}-${step}',
+  authored: '--ds-color-${role}-${step}',
+});
+
+export function extractRampHelperEmissions(sourceText, { rampKernelText, rampIngressText }) {
+  const failures = [];
+  const scanned = maskSourceComments(sourceText);
+  const sites = extractInterpolatedAssignments(scanned);
+  const siteOf = (raw) => sites.find((site) => site.raw === raw) ?? null;
+  const product = (roles, steps) => new Set(roles.flatMap((role) => steps.map((step) => `--ds-color-${role}-${step}`)));
+
+  const unreadExpression = topLevelConstExpressions(scanned).get('UNREAD_RAMP_ROLES');
+  const unread = unreadExpression === undefined ? null : enumerateLiterals(unreadExpression, { file: null, text: scanned, consts: topLevelConstExpressions(scanned), imports: new Map() }, new Map(), CORE_ROOT, 0);
+  if (unread === null) failures.push('ramp roster unreadable: UNREAD_RAMP_ROLES is not a literal set in the ramps helper');
+
+  const steps = readLiteralList(rampKernelText ?? '', 'RAMP_STEPS');
+  if (steps === null) failures.push('ramp roster unreadable: RAMP_STEPS is not a literal list in the kernel ramp module');
+
+  let derived = null;
+  const derivedSite = siteOf(RAMP_HELPER_TEMPLATES.derived);
+  const specsIndex = scanned.indexOf('function rampRoleSpecs');
+  const specsBody = specsIndex === -1 ? null : extractBracketBlock(scanned.slice(scanned.indexOf('{', specsIndex)), '{', '{', '}');
+  const returned = specsBody === null ? null : extractBracketBlock(specsBody.slice(specsBody.indexOf('return [')), 'return [', '[', ']');
+  const roles = returned === null
+    ? null
+    : splitTopLevelListItems(returned).map((item) => /\bname:\s*(['"])([a-z]+)\1/u.exec(item)?.[2] ?? null);
+  if (derivedSite === null) failures.push(`ramp write missing: vars[\`${RAMP_HELPER_TEMPLATES.derived}\`] is not in the ramps helper`);
+  else if (roles === null || roles.length === 0 || roles.includes(null)) failures.push('ramp roster unreadable: rampRoleSpecs does not return object literals that each state a literal name');
+  else if (steps !== null && unread !== null) {
+    const kept = roles.filter((role) => !unread.includes(role));
+    derived = { template: RAMP_HELPER_TEMPLATES.derived, line: derivedSite.line, roles: kept, steps, names: product(kept, steps) };
+  }
+
+  let authored = null;
+  const authoredSite = siteOf(RAMP_HELPER_TEMPLATES.authored);
+  if (authoredSite !== null) {
+    const header = /for\s*\(\s*const\s*\[\s*role\s*,[^\]]*\]\s+of\s+Object\.entries\(\s*palette\.ramps\b/gu;
+    let loop = null;
+    for (const match of scanned.matchAll(header)) if (match.index < authoredSite.index) loop = match;
+    const span = loop === null ? '' : scanned.slice(loop.index, authoredSite.index);
+    const guard = /\bif\s*\(([^)]*\)?[^)]*)\)\s*continue\s*;/u.exec(span);
+    const universeRoles = readLiteralList(rampIngressText ?? '', 'DEFAULT_RAMP_ROLES');
+    const universeSteps = readLiteralList(rampIngressText ?? '', 'DEFAULT_RAMP_STEPS');
+    const condition = guard?.[1] ?? null;
+    const literals = condition === null ? [] : [...condition.matchAll(/\brole\s*===\s*(['"])([a-z]+)\1/gu)].map((match) => match[2]);
+    const sets = condition === null ? [] : [...condition.matchAll(/\b([A-Z_][A-Z0-9_]*)\.has\(\s*role\s*\)/gu)].map((match) => match[1]);
+    const residue = condition === null
+      ? null
+      : condition.replace(/\brole\s*===\s*(['"])[a-z]+\1/gu, '').replace(/\b[A-Z_][A-Z0-9_]*\.has\(\s*role\s*\)/gu, '').replace(/\|\||\s/gu, '');
+    const setMembers = sets.map((set) => (set === 'UNREAD_RAMP_ROLES' ? unread : null));
+    if (loop === null || universeRoles === null || universeSteps === null) {
+      failures.push('ramp roster unreadable: the authored-ramp write is not bound by `for (const [role, ...] of Object.entries(palette.ramps ...))` over the ingress DEFAULT_RAMP_ROLES x DEFAULT_RAMP_STEPS');
+    } else if (residue === null || residue !== '' || setMembers.includes(null)) {
+      failures.push('ramp roster unreadable: the authored-ramp loop guard is not a disjunction of `role === "<literal>"` and `UNREAD_RAMP_ROLES.has(role)` terms, so its complement is not enumerable');
+    } else {
+      const excluded = new Set([...literals, ...setMembers.flat()]);
+      const kept = universeRoles.filter((role) => !excluded.has(role));
+      authored = { template: RAMP_HELPER_TEMPLATES.authored, line: authoredSite.line, roles: kept, steps: universeSteps, excluded: [...excluded].sort(), names: product(kept, universeSteps) };
+    }
+  }
+  if (derived !== null && authored !== null) {
+    const left = [...derived.names].sort();
+    const right = [...authored.names].sort();
+    if (left.join('\n') !== right.join('\n')) {
+      failures.push(
+        `ramp write rosters disagree: the authored restatement writes ${right.filter((name) => !derived.names.has(name)).join(', ') || 'nothing extra'} beyond the derived ramp and omits ${left.filter((name) => !authored.names.has(name)).join(', ') || 'nothing'} -- one channel family, one roster`,
+      );
+    }
+  }
+  const resolvedRaw = new Set([derived && RAMP_HELPER_TEMPLATES.derived, authored && RAMP_HELPER_TEMPLATES.authored].filter(Boolean));
+  return { derived, authored, unread: unread ?? [], steps: steps ?? [], resolvedRaw, failures };
+}
+
+/* -- the cascade on one synthetic document root -------------------------- */
+
+const COMBINATOR_RE = /[\s>+~]/u;
+
+function splitTopLevel(text, separator) {
+  const parts = [];
+  let depth = 0;
+  let quote = null;
+  let current = '';
+  for (const ch of text) {
+    if (quote) {
+      current += ch;
+      if (ch === quote) quote = null;
+      continue;
+    }
+    if (ch === '"' || ch === "'") quote = ch;
+    else if (ch === '(' || ch === '[') depth += 1;
+    else if (ch === ')' || ch === ']') depth -= 1;
+    if (depth === 0 && ch === separator) {
+      parts.push(current.trim());
+      current = '';
+      continue;
+    }
+    current += ch;
+  }
+  parts.push(current.trim());
+  return parts.filter((part) => part.length > 0);
+}
+
+const addSpecificity = (left, right) => [left[0] + right[0], left[1] + right[1], left[2] + right[2]];
+const compareSpecificity = (left, right) => left[0] - right[0] || left[1] - right[1] || left[2] - right[2];
+
+/** The compounds of a complex selector, split at top-level combinators. */
+function compoundsOf(selector) {
+  const compounds = [];
+  let depth = 0;
+  let quote = null;
+  let current = '';
+  for (const ch of selector.trim()) {
+    if (quote) {
+      current += ch;
+      if (ch === quote) quote = null;
+      continue;
+    }
+    if (ch === '"' || ch === "'") quote = ch;
+    else if (ch === '(' || ch === '[') depth += 1;
+    else if (ch === ')' || ch === ']') depth -= 1;
+    if (depth === 0 && COMBINATOR_RE.test(ch)) {
+      if (current.trim()) compounds.push(current.trim());
+      current = '';
+      continue;
+    }
+    current += ch;
+  }
+  if (current.trim()) compounds.push(current.trim());
+  return compounds;
+}
+
+function evaluateCompound(text, root) {
+  let specificity = [0, 0, 0];
+  let matched = true;
+  let index = 0;
+  while (index < text.length) {
+    const rest = text.slice(index);
+    let token;
+    if ((token = /^\*/u.exec(rest))) {
+      index += 1;
+      continue;
+    }
+    if ((token = /^html(?![\w-])/u.exec(rest))) {
+      specificity = addSpecificity(specificity, [0, 0, 1]);
+      index += token[0].length;
+      continue;
+    }
+    if ((token = /^\[\s*([a-zA-Z-]+)\s*(?:=\s*(?:(['"])([^'"]*)\2|([\w-]+)))?\s*\]/u.exec(rest))) {
+      const [, name, , quoted, bare] = token;
+      const expected = quoted ?? bare;
+      const actual = root.attributes[name];
+      if (actual === undefined || (expected !== undefined && actual !== expected)) matched = false;
+      specificity = addSpecificity(specificity, [0, 1, 0]);
+      index += token[0].length;
+      continue;
+    }
+    if ((token = /^\.([\w-]+)/u.exec(rest))) {
+      if (!root.classes.includes(token[1])) matched = false;
+      specificity = addSpecificity(specificity, [0, 1, 0]);
+      index += token[0].length;
+      continue;
+    }
+    if ((token = /^:root(?![\w-])/u.exec(rest))) {
+      specificity = addSpecificity(specificity, [0, 1, 0]);
+      index += token[0].length;
+      continue;
+    }
+    if ((token = /^:(is|where|not)\(/u.exec(rest))) {
+      const inner = extractBracketBlock(rest, token[0], '(', ')');
+      if (inner === null) throw new Error(`unreadable selector: ${text}`);
+      const results = splitTopLevel(inner, ',').map((argument) => evaluateSelector(argument, root));
+      const best = results.reduce((max, entry) => (compareSpecificity(entry.specificity, max) > 0 ? entry.specificity : max), [0, 0, 0]);
+      const any = results.some((entry) => entry.matched);
+      if (token[1] === 'not' ? any : !any) matched = false;
+      if (token[1] !== 'where') specificity = addSpecificity(specificity, best);
+      index += token[0].length + inner.length + 1;
+      continue;
+    }
+    throw new Error(`unreadable selector: ${text}`);
+  }
+  return { matched, specificity };
+}
+
+/**
+ * One complex selector against the document root: whether it selects the root
+ * and the specificity it carries either way. The root has no ancestor or
+ * sibling, so a selector with a combinator never selects it. A simple selector
+ * outside the read set (`html`, `*`, `:root`, attributes, classes, `:is`,
+ * `:where`, `:not`) throws: an unreadable selector is a broken measurement,
+ * never a non-match.
+ */
+export function evaluateSelector(selector, root) {
+  const compounds = compoundsOf(selector);
+  let specificity = [0, 0, 0];
+  let matched = compounds.length === 1;
+  for (const compound of compounds) {
+    const result = evaluateCompound(compound, root);
+    specificity = addSpecificity(specificity, result.specificity);
+    if (!result.matched) matched = false;
+  }
+  return { matched, specificity };
+}
+
+/** True when a complex selector carries a combinator outside parentheses and brackets. */
+function hasTopLevelCombinator(selector) {
+  return compoundsOf(selector).length > 1;
+}
+
+/**
+ * Every custom-property declaration a sheet contributes to the cascade, with
+ * the layer state it carries. A declaration under any at-rule other than
+ * `@layer` is outside the claim and is recorded, not read.
+ */
+export function collectCascadeDeclarations(text, { file, layered }) {
+  const declarations = [];
+  const conditional = [];
+  const root = postcss.parse(text, { from: file });
+  root.walkRules((rule) => {
+    let parent = rule.parent;
+    let layer = layered;
+    while (parent && parent.type !== 'root') {
+      if (parent.type === 'atrule' && parent.name === 'layer') layer = true;
+      else if (parent.type === 'atrule') {
+        conditional.push({ file, line: rule.source?.start?.line ?? 0, selector: rule.selector });
+        return;
+      } else if (parent.type === 'rule') return;
+      parent = parent.parent;
+    }
+    rule.each((decl) => {
+      if (decl.type !== 'decl' || !String(decl.prop).startsWith('--')) return;
+      declarations.push({
+        prop: decl.prop,
+        value: String(decl.value).trim(),
+        important: Boolean(decl.important),
+        selector: rule.selector,
+        file,
+        line: decl.source?.start?.line ?? 0,
+        layered: layer,
+      });
+    });
+  });
+  return { declarations, conditional };
+}
+
+/** The winning declaration of `name` on the root: layer, then specificity, then order. */
+function cascadeWinner(index, name, root) {
+  let winner = null;
+  for (const [order, decl] of (index.get(name) ?? []).entries()) {
+    let best = null;
+    for (const selector of splitTopLevel(decl.selector, ',')) {
+      const result = evaluateSelector(selector, root);
+      if (result.matched && (best === null || compareSpecificity(result.specificity, best) > 0)) best = result.specificity;
+    }
+    if (best === null) continue;
+    const candidate = { decl, specificity: best, order };
+    if (winner === null || outranks(candidate, winner) > 0) winner = candidate;
+  }
+  return winner?.decl ?? null;
+}
+
+function outranks(candidate, incumbent) {
+  const tier = (entry) => (entry.decl.important ? (entry.decl.layered ? 3 : 2) : entry.decl.layered ? 0 : 1);
+  return tier(candidate) - tier(incumbent) || compareSpecificity(candidate.specificity, incumbent.specificity) || candidate.order - incumbent.order;
+}
+
+/**
+ * Resolve `name` on the root to a terminal value, substituting every `var()`
+ * from the same cascade. Null is an unresolved channel (no winner, a cycle, or
+ * a reference with no value and no fallback).
+ */
+export function resolveOnRoot(index, root, name, seen = new Set()) {
+  if (seen.has(name)) return null;
+  const decl = cascadeWinner(index, name, root);
+  if (decl === null) return null;
+  return substituteVars(index, root, decl.value, new Set([...seen, name]));
+}
+
+function substituteVars(index, root, value, seen) {
+  let out = '';
+  let cursor = 0;
+  while (cursor < value.length) {
+    const at = value.indexOf('var(', cursor);
+    if (at === -1) {
+      out += value.slice(cursor);
+      break;
+    }
+    out += value.slice(cursor, at);
+    const inner = extractBracketBlock(value.slice(at), 'var(', '(', ')');
+    if (inner === null) return null;
+    const [reference, ...fallback] = splitTopLevel(inner, ',');
+    let resolved = resolveOnRoot(index, root, reference.trim(), seen);
+    if (resolved === null && fallback.length > 0) resolved = substituteVars(index, root, fallback.join(', '), seen);
+    if (resolved === null) return null;
+    out += resolved;
+    cursor = at + 'var('.length + inner.length + 1;
+  }
+  return out.trim();
+}
+
+/** The product cascade for one vertical: the layered base theme under the unlayered artifact. */
+export function buildVerticalCascade({ baseThemeText, baseThemeFile, artifact }) {
+  const base = collectCascadeDeclarations(baseThemeText, { file: baseThemeFile, layered: true });
+  const own = collectCascadeDeclarations(artifact.text, { file: artifact.file, layered: false });
+  const index = new Map();
+  for (const decl of [...base.declarations, ...own.declarations]) index.set(decl.prop, [...(index.get(decl.prop) ?? []), decl]);
+  return { index, declarations: [...base.declarations, ...own.declarations], conditional: [...base.conditional, ...own.conditional] };
+}
+
+export const CAPABILITY_MODES = Object.freeze(['light', 'dark']);
+
+/** The document root a first-party vertical mounts on, in one mode. */
+export function documentRoot(vertical, mode) {
+  return {
+    attributes: { 'data-tenant': vertical, 'data-vertical': vertical, 'data-ds-root': '', 'data-theme': mode },
+    classes: [],
+  };
+}
+
+const MODE_HOOK_RE = /\[data-theme\b|\.(?:dark|light)(?![\w-])/u;
+
+/* -- the cited resolution evidence (never the paint-probe register) ------ */
+
+/**
+ * Suites the acceptance CITES for the legs a stylesheet reading cannot prove:
+ * the admission doors (B4), the browser computed-style arm of C1, and the tint
+ * formula and placement pin (C1.e). A separate register from
+ * `DEFAULT_PROBE_EVIDENCE`, because a resolution proof is not paint: nothing
+ * here can make a row LIVE. The citation law is the probe one -- the spec
+ * exists, nothing in it is parked, every cited title is a verbatim `it(...)` /
+ * `test(...)` first argument -- and each covered channel must be named in the
+ * spec as a string literal, or by its scale stem (`--ds-tint-error` for
+ * `--ds-tint-error-24`) when the suite enumerates the steps.
+ */
+export const DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE = Object.freeze([
+  Object.freeze({
+    obligation: 'B4',
+    scales: Object.freeze(['tint', 'ramps']),
+    spec: 'packages/core/src/infrastructure/compilers/runtime/theme/facade/foundation/admission/tests/scale-step-references.test.ts',
+    tests: Object.freeze([
+      'admits a chrome override citing each capability step on preview, document and publication, and carries the reference unchanged',
+      'admits a v1 token override value citing each capability step',
+    ]),
+    proves: 'every door admits var() of each capability step and the compiled output carries the reference unchanged',
+    registered: '2026-10-02',
+  }),
+  Object.freeze({
+    obligation: 'C1-browser',
+    scales: Object.freeze(['tint', 'ramps']),
+    spec: 'packages/core/tests/integration/capability-propagation/scale-steps.test.tsx',
+    tests: Object.freeze([
+      'the 16 and 24 tint steps compute a different mix under the light and the dark root, equal to that root\'s role over its ground',
+      'info-300 follows the mode on the seeded vertical and holds by base-theme law on the unseeded ones',
+      'WRONG ROOT: the dark arm mounted under the light root computes the light values (mutant)',
+    ]),
+    proves: 'on the harness probe element the capability steps resolve per mode root, and the wrong-root fault collapses the difference',
+    registered: '2026-10-02',
+  }),
+  Object.freeze({
+    obligation: 'C1.e',
+    scales: Object.freeze(['tint']),
+    spec: 'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tint/tests/index.test.ts',
+    tests: Object.freeze([
+      'declares all 25 rungs, whether or not the preset seeds the role',
+      'keeps the scale out of the mode delta',
+    ]),
+    proves: 'the 25 exact color-mix(in oklab, ...) formulas and that no mode block re-emits a rung',
+    registered: '2026-10-02',
+  }),
+]);
+
+/** The obligations a cited suite carries; every other obligation is static and binds the pin. */
+export const CITED_CAPABILITY_OBLIGATIONS = new Set(DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE.map((entry) => entry.obligation));
+
+/** Validate the capability citations; returns per-entry state and named failures. */
+export function loadCapabilityEvidence(entries = DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE, { checkoutRoot = CHECKOUT_ROOT } = {}) {
+  const failures = [];
+  const valid = [];
+  const specs = [];
+  for (const entry of entries) {
+    const label = `${entry?.obligation ?? '(no obligation)'} -> ${entry?.spec ?? '(no spec)'}`;
+    const malformed =
+      typeof entry?.obligation !== 'string' ||
+      !Array.isArray(entry.scales) ||
+      entry.scales.length === 0 ||
+      typeof entry.spec !== 'string' ||
+      entry.spec.startsWith('/') ||
+      entry.spec.split('/').includes('..') ||
+      !Array.isArray(entry.tests) ||
+      entry.tests.length === 0 ||
+      typeof entry.proves !== 'string' ||
+      entry.proves.trim() === '';
+    if (malformed) {
+      failures.push(`capability evidence malformed: ${label} -- an entry names an obligation, the scales it covers, a checkout-relative spec, at least one test title and what it proves`);
+      continue;
+    }
+    let text;
+    try {
+      text = readFileSync(resolve(checkoutRoot, entry.spec), 'utf8');
+    } catch {
+      failures.push(`capability evidence spec missing: ${label} does not exist under the checkout`);
+      continue;
+    }
+    specs.push({ file: entry.spec, text });
+    const scanned = maskSourceComments(text);
+    if (/\.(?:skip|fixme|todo|skipIf|runIf)\(/u.test(scanned)) {
+      failures.push(`capability evidence disabled: ${label} parks a test (.skip/.fixme/.todo/.skipIf/.runIf) -- a parked suite proves nothing`);
+      continue;
+    }
+    const declared = extractSpecTests(text, { callees: ['it', 'test'] });
+    const missing = entry.tests.filter((title) => !declared.some((test) => test.title === title));
+    for (const title of missing) failures.push(`capability evidence title missing: ${label} cites "${title}", which no it(...)/test(...) declares verbatim`);
+    if (missing.length === 0) valid.push({ ...entry, text: scanned });
+  }
+  return { valid, failures, specs };
+}
+
+/** The scale stem of a capability step: `--ds-tint-error-24` -> `--ds-tint-error`. */
+const scaleStem = (channel) => channel.replace(/-\d+$/u, '');
+
+/* -- the acceptance ------------------------------------------------------ */
+
+/** Read the catalog row's `produces.channels` literals from the typed catalog source. */
+export function readCatalogChannels(catalogText, id) {
+  const scanned = maskSourceComments(catalogText ?? '');
+  const ids = [...scanned.matchAll(/\bid:\s*(['"])([^'"]+)\1/gu)];
+  const at = ids.findIndex((match) => match[2] === id);
+  if (at === -1) return null;
+  const region = scanned.slice(ids[at].index, ids[at + 1]?.index ?? scanned.length);
+  const channels = region.indexOf('channels: [');
+  if (channels === -1) return null;
+  const body = extractBracketBlock(region.slice(channels), 'channels: [', '[', ']');
+  return body === null ? null : [...body.matchAll(/(['"])(--ds-[a-z0-9-]+)\1/gu)].map((match) => match[2]);
+}
+
+/**
+ * Every obligation of the scale-step capability, measured per channel.
+ *
+ * A row of the capability class is green only when every obligation measures
+ * green for that exact channel. The static legs are measured here; B4, the
+ * browser arm of C1 and C1.e are cited suites whose citation must resolve.
+ */
+export function assessScaleCapability({
+  roster,
+  channels,
+  helpers,
+  helperFailures,
+  tint,
+  ramps,
+  emissions,
+  familyRosters,
+  declaredReference,
+  tenantThemeSource,
+  rampKernelText,
+  catalogText,
+  pins,
+  authoredDeclarations,
+  baseThemeText,
+  baseThemeFile,
+  baseEntrypointText,
+  artifacts,
+  evidence,
+}) {
+  const global = [];
+  const fail = (id, detail) => global.push({ id, detail });
+  const perChannel = new Map();
+  const note = (channel, id, detail) => {
+    const entry = perChannel.get(channel) ?? [];
+    entry.push({ id, detail });
+    perChannel.set(channel, entry);
+  };
+  const tintHelper = helpers.find((helper) => helper.scale === 'tint') ?? null;
+  const rampHelper = helpers.find((helper) => helper.scale === 'ramps') ?? null;
+  for (const failure of helperFailures) fail('A1', failure);
+  for (const failure of ramps?.failures ?? []) fail('A1', failure);
+
+  // B5: the step tables, pinned equal.
+  const contractSteps = extractFlatLiteralArray(tenantThemeSource, 'TENANT_THEME_COLOR_STEPS');
+  const kernelSteps = readLiteralList(rampKernelText ?? '', 'RAMP_STEPS') ?? [];
+  if (contractSteps.join(',') !== kernelSteps.join(',')) {
+    fail('B5', `TENANT_THEME_COLOR_STEPS [${contractSteps.join(', ')}] != RAMP_STEPS [${kernelSteps.join(', ')}]`);
+  }
+  const allowTint = /\[([\d,\s]+)\]\.map\(\(step\)\s*=>\s*`--ds-tint-\$\{role\}-\$\{step\}`\)/u.exec(tenantThemeSource)?.[1]
+    ?.split(',').map((step) => step.trim()).filter(Boolean) ?? [];
+  const measuredSuffixes = (tint?.suffixes ?? []).map((suffix) => suffix.slice(1));
+  if (tintHelper !== null && allowTint.join(',') !== measuredSuffixes.join(',')) {
+    fail('B5', `the reference allowlist's tint steps [${allowTint.join(', ')}] != the steps setTintRampVariables writes [${measuredSuffixes.join(', ')}]`);
+  }
+
+  // B1 (admitted -> produced) and B2 (produced -> admitted), over the scale-shaped names.
+  const tintShaped = (name) => /^--ds-tint(?:-[a-z]+)?-\d+$/u.test(name);
+  const rampRoles = new Set(extractFlatLiteralArray(tenantThemeSource, 'TENANT_THEME_COLOR_ROLES'));
+  const rampShaped = (name) => {
+    const match = /^--ds-color-([a-z]+)-(\d+)$/u.exec(name);
+    return match !== null && rampRoles.has(match[1]) && contractSteps.includes(match[2]);
+  };
+  const admittedUnproduced = [...declaredReference]
+    .filter((name) => (tintHelper !== null && tintShaped(name)) || (rampHelper !== null && rampShaped(name)))
+    .filter((name) => !roster.has(name))
+    .sort();
+  if (admittedUnproduced.length > 0) fail('B1', `admitted but produced by no scale helper: ${admittedUnproduced.join(', ')}`);
+  const helperWrites = new Set([...(tint?.names ?? []), ...(ramps?.derived?.names ?? []), ...(ramps?.authored?.names ?? [])]);
+  const producedUnadmitted = [...helperWrites].filter((name) => !declaredReference.has(name)).sort();
+  if (producedUnadmitted.length > 0) fail('B2', `produced but not on TENANT_THEME_REFERENCE_TOKENS: ${producedUnadmitted.join(', ')}`);
+
+  // A3: the palette glob resolves to zero scale-step writes.
+  const paletteWrites = [...emissions].filter(([, sites]) => sites.some((site) => site.family === 'palette')).map(([name]) => name);
+  const paletteSteps = paletteWrites.filter((name) => roster.has(name)).sort();
+  if (paletteSteps.length > 0) fail('A3', `the palette family writes scale steps: ${paletteSteps.join(', ')}`);
+
+  // The cascade premise: the base theme sits in @layer rottay-tokens, the artifact is unlayered.
+  const baseLayered = /@import\s+["'][^"']*themes\/default\/index\.css["']\s+layer\(\s*rottay-tokens\s*\)/u.test(baseEntrypointText ?? '');
+  const artifactLayered = artifacts.filter((artifact) => /@layer\b/u.test(artifact.text)).map((artifact) => artifact.vertical);
+  if (!baseLayered) fail('C1', 'cascade premise drift: the base entrypoint no longer imports themes/default in layer(rottay-tokens)');
+  if (artifactLayered.length > 0) fail('C1', `cascade premise drift: the ${artifactLayered.join(', ')} artifact declares a cascade layer`);
+
+  const cascades = new Map();
+  for (const artifact of artifacts) {
+    try {
+      cascades.set(artifact.vertical, buildVerticalCascade({ baseThemeText, baseThemeFile, artifact }));
+    } catch (error) {
+      fail('C1', `cascade unreadable for ${artifact.vertical}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+  const resolution = {};
+  const resolveFor = (vertical, mode, name) => {
+    const cascade = cascades.get(vertical);
+    if (!cascade) return null;
+    try {
+      return resolveOnRoot(cascade.index, documentRoot(vertical, mode), name);
+    } catch (error) {
+      fail('C1', `cascade unreadable for ${vertical}/${mode} ${name}: ${error instanceof Error ? error.message : String(error)}`);
+      return null;
+    }
+  };
+
+  // C1.a: the formula inputs, read from the tint helper, are declared in the base :root.
+  const tintText = tintHelper === null ? '' : maskSourceComments(tint?.helperText ?? '');
+  const formulaBody = /function\s+tintStep[^{]*\{([\s\S]*?)\n\}/u.exec(tintText)?.[1] ?? '';
+  const ground = [...formulaBody.matchAll(/var\((--ds-[a-z0-9-]+)\)/gu)].map((match) => match[1]);
+  const inputs = [...new Set([...(tint?.callSites ?? []).filter((site) => site.file === tintHelper?.relativePath).map((site) => site.colorVar), ...ground])].sort();
+  const formulaReadsOnlyInputs = /var\(\$\{colorVar\}\)/u.test(formulaBody) && [...formulaBody.matchAll(/var\(/gu)].length === ground.length + 1;
+  if (tintHelper !== null && (!formulaReadsOnlyInputs || ground.length !== 1)) {
+    fail('C1', 'C1.a: tintStep no longer reads exactly its role channel and one ground');
+  }
+  const baseRoot = collectCascadeDeclarations(baseThemeText ?? '', { file: baseThemeFile, layered: true }).declarations
+    .filter((decl) => decl.selector.trim() === ':root');
+  const rootDeclared = new Set(baseRoot.map((decl) => decl.prop));
+  const missingInputs = inputs.filter((name) => !rootDeclared.has(name));
+  if (tintHelper !== null && missingInputs.length > 0) fail('C1', `C1.a: formula input(s) not declared in the base :root: ${missingInputs.join(', ')}`);
+
+  // C1.b / C1.c: per vertical and mode, through the product cascade.
+  const groundName = ground[0] ?? '--ds-color-bg-primary';
+  for (const artifact of artifacts) {
+    const row = {};
+    for (const mode of CAPABILITY_MODES) {
+      row[mode] = Object.fromEntries(inputs.map((name) => [name, resolveFor(artifact.vertical, mode, name)]));
+    }
+    resolution[artifact.vertical] = row;
+    if (tintHelper === null) continue;
+    const light = row.light[groundName];
+    const dark = row.dark[groundName];
+    if (light == null || dark == null) fail('C1', `C1.b: ${groundName} does not resolve on ${artifact.vertical} in ${light == null ? 'light' : 'dark'}`);
+    else if (light === dark) fail('C1', `C1.b: ${groundName} resolves to ${light} in both modes on ${artifact.vertical} -- the ground does not carry the mode`);
+    for (const name of inputs.filter((input) => input !== groundName)) {
+      for (const mode of CAPABILITY_MODES) {
+        if (row[mode][name] == null) fail('C1', `C1.c: ${name} does not resolve on ${artifact.vertical} in ${mode}`);
+      }
+    }
+  }
+
+  // C1.d: every mode-hooked rule declaring a formula input is anchored at the document root.
+  const unanchored = [];
+  for (const cascade of cascades.values()) {
+    for (const decl of cascade.declarations) {
+      if (!inputs.includes(decl.prop) || !MODE_HOOK_RE.test(decl.selector)) continue;
+      for (const selector of splitTopLevel(decl.selector, ',')) {
+        if (MODE_HOOK_RE.test(selector) && hasTopLevelCombinator(selector)) unanchored.push(`${decl.file}:${decl.line} (${selector})`);
+      }
+    }
+  }
+  if (tintHelper !== null && unanchored.length > 0) fail('C1', `C1.d: mode-hooked rule(s) declaring a formula input are not anchored at the document root: ${[...new Set(unanchored)].join(', ')}`);
+
+  // The seeded vertical's mode rules and the base dark scope, for C2/C3.
+  const baseDarkRoles = new Set();
+  for (const decl of collectCascadeDeclarations(baseThemeText ?? '', { file: baseThemeFile, layered: true }).declarations) {
+    const match = /^--ds-color-([a-z]+)-\d+$/u.exec(decl.prop);
+    if (match && MODE_HOOK_RE.test(decl.selector)) baseDarkRoles.add(match[1]);
+  }
+  const artifactRules = new Map();
+  for (const artifact of artifacts) {
+    try {
+      artifactRules.set(artifact.vertical, collectCascadeDeclarations(artifact.text, { file: artifact.file, layered: false }).declarations);
+    } catch {
+      artifactRules.set(artifact.vertical, []);
+    }
+  }
+
+  // Cited evidence, per scale.
+  const evidenceFor = (scale) => evidence.valid.filter((entry) => entry.scales.includes(scale));
+  const citedObligations = DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE.map((entry) => entry.obligation);
+
+  for (const name of [...roster].sort()) {
+    const isTint = tint?.names?.has(name) ?? false;
+    const scale = isTint ? 'tint' : 'ramps';
+    const helper = isTint ? tintHelper : rampHelper;
+    // A1: the producer named from source, inside its importing family's roster.
+    const familyRoster = helper === null ? undefined : familyRosters.get(helper.family);
+    if (helper === null) note(name, 'A1', 'no attached scale producer');
+    else if (!familyRoster || !rosterCovers(familyRoster, name)) note(name, 'A1', `${helper.family}'s produces: roster does not cover it`);
+    // A2: one producing file at the helper's rank; the static declaration law.
+    const sites = emissions.get(name) ?? [];
+    // A tint step has one producer at every rank (the tint x direct law is rank-blind); a ramp step one per rank.
+    const files = new Set(sites.filter((site) => helper !== null && (isTint || site.rank === helper.rank)).map((site) => site.file));
+    if (files.size !== 1 || (helper !== null && !files.has(helper.relativePath))) {
+      note(name, 'A2', `${files.size} producing file(s)${isTint ? '' : ` at rank ${helper?.rank ?? '?'}`}: ${[...files].sort().join(', ') || 'none'}`);
+    }
+    const statics = [...(authoredDeclarations.get(name) ?? [])].sort();
+    if (isTint && statics.length > 0) note(name, 'A2', `authored static declaration(s): ${statics.join(', ')}`);
+    if (!isTint && (statics.length !== 1 || statics[0] !== posixRelative(DEFAULT_BASE_THEME))) {
+      note(name, 'A2', `static declaration sites ${statics.join(', ') || 'none'} -- exactly one, the base theme`);
+    }
+    if (paletteSteps.includes(name)) note(name, 'A3', 'written by the palette family');
+    // B1 per channel: resolves on every first-party root, in both modes.
+    for (const artifact of artifacts) {
+      for (const mode of CAPABILITY_MODES) {
+        if (resolveFor(artifact.vertical, mode, name) === null) note(name, 'B1', `does not resolve on ${artifact.vertical} in ${mode}`);
+      }
+    }
+    if (!declaredReference.has(name)) note(name, 'B2', 'not on TENANT_THEME_REFERENCE_TOKENS');
+    // B3: the pinned capability row lists the channel.
+    const pin = pins.get(name);
+    if (pin !== undefined) {
+      const listed = readCatalogChannels(catalogText, pin.capability);
+      if (listed === null) note(name, 'B3', `catalog row "${pin.capability}" not found`);
+      else if (!listed.includes(name)) note(name, 'B3', `catalog row "${pin.capability}" does not list it`);
+    }
+    // C2 / C3: a ramp step resolves per mode by the seeding of its vertical.
+    if (!isTint) {
+      const role = /^--ds-color-([a-z]+)-\d+$/u.exec(name)?.[1];
+      const roleSteps = (ramps?.steps ?? []).map((step) => `--ds-color-${role}-${step}`);
+      for (const artifact of artifacts) {
+        const decls = artifactRules.get(artifact.vertical) ?? [];
+        const seeded = decls.some((decl) => roleSteps.includes(decl.prop) && !MODE_HOOK_RE.test(decl.selector));
+        const light = resolveFor(artifact.vertical, 'light', name);
+        const dark = resolveFor(artifact.vertical, 'dark', name);
+        if (seeded) {
+          const modeSelectors = [...new Set(decls.filter((decl) => MODE_HOOK_RE.test(decl.selector)).map((decl) => decl.selector))];
+          for (const selector of modeSelectors) {
+            const declared = new Set(decls.filter((decl) => decl.selector === selector).map((decl) => decl.prop));
+            const absent = roleSteps.filter((step) => !declared.has(step));
+            if (absent.length > 0) note(name, 'C2', `${artifact.vertical} seeds ${role} and its mode rule omits ${absent.join(', ')}`);
+          }
+          if (light !== null && light === dark) note(name, 'C2', `${artifact.vertical} seeds ${role} and resolves ${light} in both modes`);
+        } else if (light === null || dark === null) {
+          note(name, 'C3', `unseeded on ${artifact.vertical} and unresolved in ${light === null ? 'light' : 'dark'}`);
+        }
+      }
+    }
+    for (const obligation of citedObligations) {
+      const scales = DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE.find((entry) => entry.obligation === obligation).scales;
+      if (!scales.includes(scale)) continue;
+      const entry = evidenceFor(scale).find((candidate) => candidate.obligation === obligation);
+      if (!entry) note(name, obligation, 'cited suite does not resolve');
+      else if (!new RegExp(`(['"\`])(?:${name}|${scaleStem(name)})\\1`, 'u').test(entry.text)) note(name, obligation, `${entry.spec} never names it or its stem ${scaleStem(name)}`);
+    }
+  }
+
+  const seenGlobal = new Set();
+  const globalUnique = global.filter((entry) => !seenGlobal.has(`${entry.id}:${entry.detail}`) && seenGlobal.add(`${entry.id}:${entry.detail}`));
+  global.length = 0;
+  global.push(...globalUnique);
+  const byChannel = new Map();
+  for (const name of roster) {
+    const failed = [...global, ...(perChannel.get(name) ?? [])];
+    byChannel.set(name, { ok: failed.length === 0, failed });
+  }
+  return {
+    byChannel,
+    global,
+    rosters: {
+      tint: [...(tint?.names ?? [])].sort(),
+      ramps: [...(ramps?.derived?.names ?? [])].sort(),
+    },
+    formulaInputs: inputs,
+    resolution,
+    baseDarkRampRoles: [...baseDarkRoles].sort(),
+    helpers,
+  };
+}
+
+/* ---------------------------------------------------------------------- */
 /* 8. Liveness classification — no "dead" wording, but no protected bucket */
 /* ---------------------------------------------------------------------- */
 
 /**
- * Three partitions, none of them protected: LIVE (a proven terminal chain),
- * UNPROVEN (a standing effect finding that must carry a work-order pin) and
- * STRUCTURAL (a measured constant that must carry an invariant pin). A row
- * lands in exactly one, and every partition has a law that can turn it red.
+ * Four partitions, none of them protected: LIVE (a proven terminal chain),
+ * UNPROVEN (a standing effect finding that must carry a work-order pin),
+ * STRUCTURAL (a measured constant that must carry an invariant pin) and
+ * CAPABILITY (a measured step of a public scale that must carry a capability
+ * pin and earn its acceptance every run). A row lands in exactly one, and
+ * every partition has a law that can turn it red.
  */
 export const LIVENESS = Object.freeze({
   modernPainted: 'LIVE_MODERN_PAINTED',
@@ -1922,6 +2881,7 @@ export const LIVENESS = Object.freeze({
   unreadOverrideOnly: 'UNREAD_OVERRIDE_ONLY_NO_KNOWN_ROUTE',
   unreadEmittedNoRoute: 'UNREAD_EMITTED_NO_KNOWN_ROUTE',
   structuralConstant: 'STRUCTURAL_CONSTANT',
+  capabilityScaleStepUnread: 'CAPABILITY_SCALE_STEP_UNREAD',
 });
 
 /** The three classifications that prove paint through the cascade graph. */
@@ -1973,6 +2933,24 @@ export const UNPROVEN_CLASSIFICATIONS = new Set([
  * re-reads what would otherwise fall to the final unread-emitted fallback.
  */
 export const STRUCTURAL_CLASSIFICATIONS = new Set([LIVENESS.structuralConstant]);
+
+/**
+ * The fourth partition: a step of a public scale whose CAPABILITY is proven
+ * and which nobody reads. Adjacent to STRUCTURAL and not the same: a structural
+ * constant is declared never to be read, so a reader is a defect; a scale step
+ * is declared so that it CAN be read, so a reader is the welcome exit (the row
+ * goes LIVE and its pin is discharged).
+ *
+ * It is never LIVE: `paintEvidence` stays null and `counts.byClassification`
+ * publishes it on its own line. Nor is it a protected bucket. Membership is
+ * MEASURED from the scale producers (the tint helper's call sites x its
+ * suffixes; the ramps helper's roles x RAMP_STEPS minus UNREAD_RAMP_ROLES),
+ * never listed; a measured row needs a capability pin (`adjudicateDispositions`);
+ * and the row stays out of the effect red only while every obligation of the
+ * acceptance (`assessScaleCapability`) measures green for that exact channel
+ * -- otherwise it is red under `capability acceptance FAIL`.
+ */
+export const CAPABILITY_CLASSIFICATIONS = new Set([LIVENESS.capabilityScaleStepUnread]);
 
 /**
  * The canonical z-scale roster, derived from the declaration site's text:
@@ -2038,6 +3016,15 @@ export function deriveCanonicalZScaleRoster(cssText) {
  * (a missing pin, a stale pin, a discharged pin, a drifted pin all fail). It
  * is retired in the same commit that retires the band from the canonical roster.
  *
+ * A CAPABILITY pin names neither: it covers a measured scale step
+ * (`CAPABILITY_CLASSIFICATIONS`), so it names the catalog row whose capability
+ * is proven (`capability`), the exposure it is measured against (`exposure`,
+ * only `public-reference` today, measured against the reference allowlist) and
+ * the suites the acceptance cites (`acceptance`). It owes nothing and sustains
+ * no invariant. A pin on a channel outside the measured scale rosters, or on a
+ * step whose static obligations measure red, is an `invalid capability pin`;
+ * the four laws above apply unchanged.
+ *
  * WHY IN THE SCRIPT AND NOT IN A JSON FILE. `computeInputsDigest` already
  * covers this script's own source, so a pin edit invalidates the evidence
  * artifact exactly like a classifier edit does -- no second digest input, no
@@ -2050,14 +3037,15 @@ export function deriveCanonicalZScaleRoster(cssText) {
  */
 export const CHANNEL_DISPOSITIONS = Object.freeze([
   Object.freeze({
-    owner: 'WO-EVI-02',
-    classification: LIVENESS.authorableUnprovenEffect,
-    registered: '2026-09-17',
+    capability: 'palette.status-seeds',
+    exposure: 'public-reference',
+    classification: LIVENESS.capabilityScaleStepUnread,
+    acceptance: Object.freeze(DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE.map((entry) => entry.spec)),
+    registered: '2026-10-02',
     reason:
-      'the authorable set the preset conversion closed without deciding: --ds-color-info-300, the overlay-medium surface, and the 16/24 steps of the four status tint ramps. The ten accent ramp steps left this pin on 2026-10-02 by retirement (owner ruling 1, WO-EVI-02): never emitted, never read, removed from TENANT_THEME_REFERENCE_TOKENS and refused by name at admission, so they left the universe. The same day the glass pair and overlay light/heavy cleared by the pin\'s own law (GLASS-1, owner ruling 3): the by-axis effect proof landed a terminal for each — the glass channels paint through the new glass-card skin, and the two overlay weights through the Overlay intensity route — so they classify LIVE_MODERN_PAINTED. WO-DER-06 went done on 2026-09-15 with all 24 rows still non-LIVE, and its own reader-or-retire lot disposed only what it could measure (the switch namespace, the two profiles, --ds-color-text-page, --ds-elevation-border-style); proving or refusing an effect is the causal-gates obligation, and a change of owner is not resolution. The pin clears per channel when the by-axis effect proof lands a terminal for it, or when the channel retires together with its producers and its authorable catalog entry in the same commit -- never by deleting a ramp step to reach green',
+      'the status steps the preset conversion closed without deciding (owner ruling 2, WO-EVI-02): the 16/24 steps of the four status tint ramps and --ds-color-info-300 are public scale steps a tenant may cite, with a proven capability and no reader. They left the WO-EVI-02 owner pin on 2026-10-02: nothing is owed, so the pin names the catalog row whose capability the acceptance proves, not a work order. Resolution is proven, paint is NOT, and the rows are never LIVE. Two base-theme laws are part of the claim: the base dark scope re-seeds only the error and neutral ramps, so --ds-color-info-300 is mode-invariant on evnto and rottay by that law (C3), while bithire seeds infoColor and re-derives it per mode (C2); and the acceptance proves resolution at the document root and under same-mode nesting -- an opposite-mode island under its own [data-ds-root] is the compiler\'s registered limit and outside this claim (C1.d). The acceptance is necessary for R1 and not sufficient: --ds-color-secondary-400, --ds-text-inverse, the two letter-spacing facets and the unknown-family drift keep the gate red on their own owners. Exit: a reader lands (the documented tinted-pill recipe, background at tint 8 and border at tint 24 of the tone, has no implementation) and the row measures LIVE, discharging the pin; or the step retires with its producer, its allowlist entry and its catalog listing in one commit -- never by deleting a step to reach green',
     channels: Object.freeze([
       '--ds-color-info-300',
-      '--ds-overlay-medium',
       '--ds-tint-error-16',
       '--ds-tint-error-24',
       '--ds-tint-info-16',
@@ -2067,6 +3055,14 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
       '--ds-tint-warning-16',
       '--ds-tint-warning-24',
     ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    classification: LIVENESS.authorableUnprovenEffect,
+    registered: '2026-10-02',
+    reason:
+      'a reader without a stamper (GLASS-2-b): the route is wired -- the Overlay intensity step stamps data-intensity and the overlay-modal-compounds skin reads each weight under .rottay-overlay[data-intensity=light|medium|heavy] -- but NO product surface adopts it: Overlay is internal (no package subpath exports it, no DS module imports it, no consumerRoot imports it), and the rustic modal stamps .rottay-overlay without data-intensity, so the three rules match no rendered node and paint nobody. GLASS-1 discharged light/heavy and RET-OVM-b called medium live paint on the graph reading alone; DEFAULT_UNSTAMPED_ANCHORS withdraws exactly those three terminals, measured, and the unchanged classifier reads the rest. --ds-overlay-medium additionally has a live tenant AUTHOR: one stored tenant document writes it, and that value does NOT paint today -- painting awaits a stamping surface. The graph\'s general blindness to stamps (a skin terminal under a selector no product renders counts as paint) is registered for the instrument lane and is NOT closed by this pin or by the anchor register, which covers only these three rules. Exit: a product surface adopts Overlay and declares an intensity -- the anchor entries then red as adopted, entries and pin are deleted in the same commit and the rows measure LIVE, discharging the pin; or a weight retires with its skin rule, its allowlist entry and its catalog listing in one commit (medium only after its stored author is migrated)',
+    channels: Object.freeze(['--ds-overlay-heavy', '--ds-overlay-light', '--ds-overlay-medium']),
   }),
   Object.freeze({
     owner: 'WO-EVI-02',
@@ -2114,6 +3110,9 @@ export function buildDispositionIndex(dispositions = CHANNEL_DISPOSITIONS) {
         channel,
         owner: group.owner,
         invariant: group.invariant,
+        capability: group.capability,
+        exposure: group.exposure,
+        acceptance: group.acceptance,
         classification: group.classification,
         registered: group.registered,
         reason: group.reason,
@@ -2131,7 +3130,7 @@ export function buildDispositionIndex(dispositions = CHANNEL_DISPOSITIONS) {
  * dead channel through. Every pinned row is returned so the report can keep
  * printing it WITH its owner: a pinned finding is still a finding.
  */
-export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOSITIONS } = {}) {
+export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOSITIONS, capabilityRoster = new Set(), capabilityAcceptance = new Map() } = {}) {
   const failures = [];
   const { index, duplicates } = buildDispositionIndex(dispositions);
   for (const channel of duplicates) {
@@ -2140,8 +3139,24 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
     );
   }
   const isStructuralPin = (pin) => STRUCTURAL_CLASSIFICATIONS.has(pin.classification);
-  const pinAddress = (pin) => (isStructuralPin(pin) ? `invariant ${pin.invariant}` : pin.owner);
+  const isCapabilityPin = (pin) => CAPABILITY_CLASSIFICATIONS.has(pin.classification);
+  const pinAddress = (pin) => (isStructuralPin(pin) ? `invariant ${pin.invariant}` : isCapabilityPin(pin) ? `capability ${pin.capability}` : pin.owner);
+  const measuredRows = new Map(channels.filter((row) => row.classification).map((row) => [row.name, row]));
   for (const pin of index.values()) {
+    if (isCapabilityPin(pin)) {
+      const problems = [];
+      if (pin.owner !== undefined || pin.invariant !== undefined) problems.push('it names an owner or an invariant -- a capability step owes no work and sustains no invariant');
+      if (typeof pin.capability !== 'string' || pin.capability.trim() === '') problems.push('it names no capability');
+      if (pin.exposure !== 'public-reference') problems.push(`exposure "${pin.exposure}" is not the one admitted exposure, public-reference`);
+      else if (measuredRows.get(pin.channel)?.declaredReference === false) problems.push('its exposure is public-reference and the channel is not on TENANT_THEME_REFERENCE_TOKENS');
+      if (!Array.isArray(pin.acceptance) || pin.acceptance.length === 0) problems.push('it cites no acceptance suite');
+      if (!capabilityRoster.has(pin.channel)) problems.push('the channel is not a member of any measured scale roster');
+      const acceptance = capabilityAcceptance.get(pin.channel);
+      const statics = (acceptance?.failed ?? []).filter((entry) => !CITED_CAPABILITY_OBLIGATIONS.has(entry.id));
+      if (statics.length > 0) problems.push(`its static obligations measure red: ${statics.map((entry) => `${entry.id} ${entry.detail}`).join('; ')}`);
+      for (const problem of problems) failures.push(`invalid capability pin: ${pin.channel} -- ${problem}`);
+      continue;
+    }
     if (isStructuralPin(pin)) {
       if (typeof pin.invariant !== 'string' || pin.invariant.trim() === '') {
         failures.push(
@@ -2165,11 +3180,22 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
   const measured = new Map(channels.filter((row) => row.classification).map((row) => [row.name, row]));
   const pinned = [];
   const structural = [];
+  const capability = [];
   const unregistered = new Map();
   const unpinnedStructural = [];
+  const unpinnedCapability = [];
   for (const row of channels) {
     if (!row.classification) continue;
     const pin = index.get(row.name);
+    if (CAPABILITY_CLASSIFICATIONS.has(row.classification)) {
+      if (pin !== undefined && pin.classification === row.classification) {
+        capability.push({ ...pin });
+        continue;
+      }
+      if (pin !== undefined) continue;
+      unpinnedCapability.push(row.name);
+      continue;
+    }
     // The symmetric law for the third partition: a measured structural row is
     // not a finding, but it is not free either -- it must carry a structural
     // pin, and a drifted pin is accused once, below, against the PIN.
@@ -2194,6 +3220,11 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
     list.push(row.name);
     unregistered.set(row.classification, list);
   }
+  if (unpinnedCapability.length > 0) {
+    failures.push(
+      `STOP NO-GO: ${unpinnedCapability.length} channel(s) classified ${LIVENESS.capabilityScaleStepUnread} with NO registered capability pin (a measured scale step must name the capability its acceptance proves, or it is an authorable step nobody adjudicated) -- exact rows: ${unpinnedCapability.sort().join(', ')}`,
+    );
+  }
   if (unpinnedStructural.length > 0) {
     failures.push(
       `STOP NO-GO: ${unpinnedStructural.length} channel(s) classified ${LIVENESS.structuralConstant} with NO registered structural pin (a measured structural constant must name the invariant that sustains it, or it is an unread emission wearing a different word) -- exact rows: ${unpinnedStructural.sort().join(', ')}`,
@@ -2216,7 +3247,9 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
     }
     if (LIVE_CLASSIFICATIONS.has(row.classification)) {
       failures.push(
-        isStructuralPin(pin)
+        isCapabilityPin(pin)
+          ? `discharged pin: ${pin.channel} is pinned to ${address} as ${pin.classification} and now classifies ${row.classification} -- a reader landed, which is the exit this pin waited for, so delete it; this table only shrinks`
+          : isStructuralPin(pin)
           ? `discharged pin: ${pin.channel} is pinned to ${address} as ${pin.classification} and now classifies ${row.classification} -- a band that gained a reader is no longer a structural constant, so delete the pin; this table only shrinks`
           : `discharged pin: ${pin.channel} is pinned to ${address} as ${pin.classification} and now classifies ${row.classification} -- the work landed, so delete the pin; this table only shrinks`,
       );
@@ -2237,16 +3270,24 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
   for (const entry of [...structural].sort((a, b) => a.channel.localeCompare(b.channel))) {
     (byInvariant[entry.invariant] ??= []).push(entry.channel);
   }
+  const byCapability = {};
+  for (const entry of [...capability].sort((a, b) => a.channel.localeCompare(b.channel))) {
+    (byCapability[entry.capability] ??= []).push(entry.channel);
+  }
   const structuralPins = [...index.values()].filter(isStructuralPin).length;
+  const capabilityPins = [...index.values()].filter(isCapabilityPin).length;
   return {
     failures,
     pinned,
     structural,
+    capability,
     byOwner,
     byInvariant,
+    byCapability,
     registered: index.size,
-    ownerPins: index.size - structuralPins,
+    ownerPins: index.size - structuralPins - capabilityPins,
     structuralPins,
+    capabilityPins,
   };
 }
 
@@ -2256,12 +3297,27 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
  * not. A STRUCTURAL row is not counted: it is not an emission waiting for an
  * effect, and its own law (measured membership plus a structural pin) is
  * enforced by `adjudicateDispositions`, never relaxed here.
+ *
+ * The third leg: a CAPABILITY row is green only when every obligation of its
+ * acceptance measures green for that exact channel, and red under
+ * `capability acceptance FAIL` otherwise. A proven capability never discharges
+ * the red by reclassification alone -- with no acceptance measured, the row is red.
  */
-export function assessChannelEffect(channels) {
+export function assessChannelEffect(channels, capabilityAcceptance = new Map()) {
   const rows = [];
   const byClassification = new Map();
+  const capabilityRed = [];
   for (const row of channels) {
-    if (!row.classification || !UNPROVEN_CLASSIFICATIONS.has(row.classification)) continue;
+    if (!row.classification) continue;
+    if (CAPABILITY_CLASSIFICATIONS.has(row.classification)) {
+      const acceptance = capabilityAcceptance.get(row.name);
+      if (acceptance?.ok !== true) {
+        capabilityRed.push({ name: row.name, failed: acceptance?.failed ?? [{ id: 'all', detail: 'no acceptance measured' }] });
+        rows.push(row.name);
+      }
+      continue;
+    }
+    if (!UNPROVEN_CLASSIFICATIONS.has(row.classification)) continue;
     rows.push(row.name);
     const list = byClassification.get(row.classification) ?? [];
     list.push(row.name);
@@ -2271,6 +3327,11 @@ export function assessChannelEffect(channels) {
     ([classification, names]) =>
       `unproven effect: ${names.length} channel(s) classified ${classification} (no proven terminal, no proven external evidence, no retirement; a pin registers who owes the effect, not the effect) -- exact rows: ${names.sort().join(', ')}`,
   );
+  for (const entry of capabilityRed.sort((a, b) => a.name.localeCompare(b.name))) {
+    failures.push(
+      `capability acceptance FAIL: ${entry.name} (${LIVENESS.capabilityScaleStepUnread}) -- ${entry.failed.map((failed) => `${failed.id}: ${failed.detail}`).join('; ')}`,
+    );
+  }
   return { ok: failures.length === 0, failures, rows: rows.sort() };
 }
 
@@ -2281,6 +3342,10 @@ export function assessChannelEffect(channels) {
  * branch below is reachable, none is dead code. `canonicalRosterMember` is
  * read LAST, immediately before the unread-emitted fallback, so it can only
  * re-read a row that no paint, read or tenant-allowlist signal claimed.
+ * `scaleRosterMember` is read after every paint and read signal and before
+ * the allowlists: a step is on the reference allowlist BECAUSE it is a public
+ * scale step, so the capability must outrank it, while a half-wired read of a
+ * step stays a READ_* finding.
  */
 export function classifyLiveness({
   declaredOverride,
@@ -2291,6 +3356,7 @@ export function classifyLiveness({
   probePainted = false,
   cssReadNoTerminal,
   tsReadOnly,
+  scaleRosterMember = false,
   canonicalRosterMember = false,
 }) {
   if (dsModernPainted) {
@@ -2327,6 +3393,12 @@ export function classifyLiveness({
     return {
       classification: LIVENESS.readUnproven,
       reason: 'the only evidence for this channel is a raw var() occurrence in TS/TSX inline-style source (DS or consumerRoot); a raw TS/TSX occurrence is never treated as proof of paint',
+    };
+  }
+  if (scaleRosterMember) {
+    return {
+      classification: LIVENESS.capabilityScaleStepUnread,
+      reason: 'a measured step of a public scale (the tint scale or a colour ramp, enumerated from its producer) with zero proven terminal: the capability is what the acceptance proves -- a single producer, admission and emission in agreement, resolution in every supported mode -- never paint, and never LIVE',
     };
   }
   if (declaredReference) {
@@ -2377,6 +3449,7 @@ export function computeInputsDigest({
   consumerCorpora = [],
   compiledArtifacts = [],
   probeSpecs = [],
+  capabilitySources = [],
 }) {
   const parts = [
     `gate-script:${sha256(gateScriptSource)}`,
@@ -2393,6 +3466,7 @@ export function computeInputsDigest({
   for (const { file, text } of tsStylesheets) parts.push(`ts:${file}:${sha256(text)}`);
   for (const { file, text } of compiledArtifacts) parts.push(`compiled-artifact:${file}:${sha256(text)}`);
   for (const { file, text } of probeSpecs) parts.push(`probe-spec:${file}:${sha256(text)}`);
+  for (const { file, text } of capabilitySources) parts.push(`capability-source:${file}:${sha256(text)}`);
   for (const consumer of consumerCorpora) {
     for (const { file, text } of consumer.cssStylesheets ?? []) {
       parts.push(`consumer-css:${consumer.id}:${file}:${sha256(text)}`);
@@ -2527,16 +3601,21 @@ export function analyzeChannelLiveness({
   tsStylesheets,
   consumerRoots = [],
   probeEvidence = [],
+  unstampedAnchors = [],
   checkoutRoot = CHECKOUT_ROOT,
   compiledArtifacts = undefined,
   previousArtifact = null,
   enforceArtifactFreshness = false,
   dispositions = CHANNEL_DISPOSITIONS,
   zScaleOwnerPath = DEFAULT_Z_INDEX_SCALE_OWNER,
+  scaleCapability = null,
   drill = null,
 }) {
   const failures = [];
   const analysisLimitations = [];
+  // The scale producers attach outside this function (`attachScaleProducerHelpers`);
+  // an attachment that failed is a broken producer measurement, named here.
+  for (const failure of scaleCapability?.helperFailures ?? []) failures.push(failure);
 
   // `undefined` is a hermetic fixture that models no compile; an EMPTY list is
   // a broken read of the artifact root, which would silently drop every
@@ -2605,7 +3684,42 @@ export function analyzeChannelLiveness({
   const unresolvedInterpolated = [];
   const familyOfFile = new Map();
   const familyRosters = new Map();
+  const scaleEmission = new Map();
+  const scaleHelpers = [];
+  let scaleTint = null;
+  let scaleRamps = null;
   for (const source of compilerSources) {
+    if (source.scaleHelper !== undefined) {
+      scaleHelpers.push({
+        scale: source.scaleHelper,
+        relativePath: source.relativePath,
+        family: source.family,
+        rank: source.rank,
+        importedBy: source.importedBy ?? [],
+      });
+    }
+    if (source.scaleHelper === 'tint') {
+      const tint = extractTintRampEmissions(source.text);
+      scaleTint = {
+        names: tint.names,
+        suffixes: tint.suffixes,
+        callSites: tint.callSites.map((site) => ({ ...site, file: source.relativePath, rank: source.rank })),
+        helperText: source.text,
+      };
+    }
+    if (source.scaleHelper === 'ramps') {
+      scaleRamps = extractRampHelperEmissions(source.text, {
+        rampKernelText: scaleCapability?.rampKernelText ?? '',
+        rampIngressText: scaleCapability?.rampIngressText ?? '',
+      });
+      failures.push(...scaleRamps.failures);
+      for (const write of [scaleRamps.derived, scaleRamps.authored]) {
+        if (write === null) continue;
+        for (const name of write.names) {
+          scaleEmission.set(name, [...(scaleEmission.get(name) ?? []), { line: write.line, file: source.relativePath, rank: source.rank, template: write.template }]);
+        }
+      }
+    }
     if (source.family !== undefined) {
       familyOfFile.set(source.relativePath, source.family);
       const roster = extractProducesRoster(source.text, { file: source.path ?? null });
@@ -2643,6 +3757,8 @@ export function analyzeChannelLiveness({
       rosterEmission.set(name, merged);
     }
     for (const site of keyed.unresolved) {
+      // The two ramp templates are resolved site-exact above, in the ramps helper only.
+      if (source.scaleHelper === 'ramps' && scaleRamps?.resolvedRaw.has(site.raw.replace(/^`|`$/gu, ''))) continue;
       unresolvedInterpolated.push({ ...site, file: source.relativePath });
     }
   }
@@ -2695,7 +3811,9 @@ export function analyzeChannelLiveness({
       `unresolved emission pattern: vars[${site.raw}] at ${site.file ?? 'brand-theme/index.ts'}:${site.line} is an emission this producer cannot resolve to concrete channel names -- ${site.reason ?? 'the key is not a literal'}; the corpus is never shrunk to avoid this finding`,
     );
   }
-  for (const collision of findCrossFileProducerCollisions(directEmission, rosterEmission)) {
+  const keyedAndScaleEmission = new Map(rosterEmission);
+  for (const [name, sites] of scaleEmission) keyedAndScaleEmission.set(name, [...(keyedAndScaleEmission.get(name) ?? []), ...sites]);
+  for (const collision of findCrossFileProducerCollisions(directEmission, keyedAndScaleEmission)) {
     failures.push(
       `duplicate producer: ${collision.name} is emitted at rank "${collision.rank}" by ${collision.files.length} different family files (${collision.files.join(', ')}) -- a channel has exactly one producing family per rank`,
     );
@@ -2705,6 +3823,7 @@ export function analyzeChannelLiveness({
   const resolvedWrites = [
     ...[...directEmission].flatMap(([name, sites]) => sites.map((site) => ({ name, site }))),
     ...[...rosterEmission].flatMap(([name, sites]) => sites.map((site) => ({ name, site }))),
+    ...[...scaleEmission].flatMap(([name, sites]) => sites.map((site) => ({ name, site }))),
     ...tintEmission.callSites.flatMap((site) => tintEmission.suffixes.map((suffix) => ({ name: `${site.scale}${suffix}`, site }))),
   ];
   const outsideRoster = new Set();
@@ -2718,7 +3837,9 @@ export function analyzeChannelLiveness({
     failures.push(`produced outside its roster: ${entry} -- a family's produces: roster is its declared output, so a write it does not declare is either a stale roster or an undeclared emission`);
   }
 
-  const emittedNames = new Set([...tintEmission.names, ...directEmission.keys(), ...rosterEmission.keys(), ...oracleEmission.keys()]);
+  const emittedNames = new Set([...tintEmission.names, ...directEmission.keys(), ...rosterEmission.keys(), ...scaleEmission.keys(), ...oracleEmission.keys()]);
+  // The capability rosters: measured from the two scale producers, never listed.
+  const capabilityRoster = new Set([...(scaleTint?.names ?? []), ...(scaleRamps?.derived?.names ?? [])]);
   const universe = new Set([...declaredOverride, ...declaredReference, ...emittedNames]);
 
   // --- consumerRoots (defect 7) ----------------------------------------
@@ -2775,6 +3896,14 @@ export function analyzeChannelLiveness({
     return { painted: terminalSites.length > 0, terminalSites };
   };
 
+  const anchors = loadUnstampedAnchors(unstampedAnchors, {
+    dsGraph,
+    tsStylesheets,
+    consumerTsStylesheets: consumerResults.flatMap(({ load }) => load.tsStylesheets),
+    universe,
+  });
+  failures.push(...anchors.failures);
+
   const tsReadsDs = scanTsReads(tsStylesheets);
   const tsReadsExternal = scanTsReads(consumerResults.flatMap(({ load }) => load.tsStylesheets));
 
@@ -2790,12 +3919,27 @@ export function analyzeChannelLiveness({
       const site = tintEmission.callSites.find((candidate) =>
         tintEmission.suffixes.some((suffix) => `${candidate.scale}${suffix}` === name),
       );
+      const helper = scaleHelpers.find((entry) => entry.relativePath === site?.file);
       return {
         kind: 'tint-ramp',
         scale: site?.scale ?? null,
         colorVar: site?.colorVar ?? null,
         callSite: site ? siteLabel(site) : null,
         definitionSite: tintEmission.definitionSite,
+        family: site ? familyOfFile.get(site.file) ?? null : null,
+        rank: site?.rank ?? null,
+        ...(helper ? { deriver: helper.importedBy } : {}),
+      };
+    }
+    if (scaleEmission.has(name)) {
+      const sites = scaleEmission.get(name);
+      const helper = scaleHelpers.find((entry) => entry.relativePath === sites[0].file);
+      return {
+        kind: 'scale-ramp',
+        family: helper?.family ?? null,
+        rank: helper?.rank ?? null,
+        deriver: helper?.importedBy ?? [],
+        sites: sites.map((site) => `${siteLabel(site)} (${site.template})`),
       };
     }
     if (directEmission.has(name)) {
@@ -2833,7 +3977,13 @@ export function analyzeChannelLiveness({
   const unknownFamilyFindings = [];
 
   for (const name of [...universe].sort()) {
-    const dsPaint = computePaint(dsGraph, name);
+    const graphPaint = computePaint(dsGraph, name);
+    const anchor = anchors.valid.get(name) ?? null;
+    const isUnstamped = (site) => anchor !== null && `${site.file}\0${anchors.normalize(site.selector)}` === anchor.key;
+    const unstampedSites = graphPaint.terminalSites.filter(isUnstamped);
+    const dsPaint = unstampedSites.length === 0
+      ? graphPaint
+      : { ...graphPaint, terminalSites: graphPaint.terminalSites.filter((site) => !isUnstamped(site)), painted: graphPaint.terminalSites.some((site) => !isUnstamped(site)) };
     const externalPaint = externalPaintOf(name);
     const dsModernPainted = dsPaint.terminalSites.some((site) => site.scope !== 'frozen-engine');
     const dsFrozenOnlyPainted = dsPaint.painted && !dsModernPainted;
@@ -2893,12 +4043,14 @@ export function analyzeChannelLiveness({
       probePainted,
       cssReadNoTerminal,
       tsReadOnly,
+      scaleRosterMember: capabilityRoster.has(name),
       canonicalRosterMember: canonicalZScaleRoster.has(name),
     });
 
     const consumerSites = [
       ...(probePainted ? probe.tests.map((title) => `probe-painted:${probe.spec} :: ${title}`) : []),
       ...dsPaint.terminalSites.map((s) => `ds-terminal:${s.file}:${s.line} (${s.prop})`),
+      ...unstampedSites.map((s) => `ds-terminal-unstamped:${s.file}:${s.line} (${s.prop} under ${s.selector})`),
       ...externalPaint.terminalSites.map((s) => `${s.joined ? 'external-terminal-joined' : 'external-terminal'}:${s.file}:${s.line} (${s.prop}${s.joined ? ` via ${s.via}` : ''})`),
       ...dsCustomRefSites.map((s) => `${s.compiledVertical === undefined ? 'ds-custom-ref' : 'ds-compiled-ref'}:${s.file}:${s.line} (feeds --${s.targetProp.replace(/^--/, '')})`),
       ...externalCustomRefSites.map((s) => `external-custom-ref:${s.file}:${s.line} (feeds --${s.targetProp.replace(/^--/, '')})`),
@@ -2925,6 +4077,8 @@ export function analyzeChannelLiveness({
           ? 'direct-literal'
           : rosterEmission.has(name)
             ? 'keyed-resolved'
+            : scaleEmission.has(name)
+              ? 'scale-ramp'
             : oracleEmission.has(name)
               ? 'produces-roster'
               : compiledIn.length > 0
@@ -3021,9 +4175,51 @@ export function analyzeChannelLiveness({
   // 8), and it must additionally carry a registered owner. The adjudication
   // reds on an unregistered row, a stale pin, a discharged pin and a drifted
   // pin; the effect verdict keeps every non-LIVE row red, pinned or not.
-  const adjudication = adjudicateDispositions(channels, { dispositions });
+  // --- The scale-step capability acceptance ------------------------------
+  const capabilityEvidence = scaleCapability === null
+    ? { valid: [], failures: [], specs: [] }
+    : loadCapabilityEvidence(scaleCapability.evidence ?? DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE, { checkoutRoot });
+  failures.push(...capabilityEvidence.failures);
+  const producingSites = new Map();
+  const addProducing = (name, site) => producingSites.set(name, [...(producingSites.get(name) ?? []), { file: site.file ?? 'brand-theme/index.ts', rank: site.rank ?? 'unranked', family: familyOfFile.get(site.file) ?? null }]);
+  for (const emission of [directEmission, rosterEmission, scaleEmission]) {
+    for (const [name, sites] of emission) for (const site of sites) addProducing(name, site);
+  }
+  for (const site of tintEmission.callSites) {
+    for (const suffix of tintEmission.suffixes) addProducing(`${site.scale}${suffix}`, site);
+  }
+  const capabilityPins = new Map(
+    [...buildDispositionIndex(dispositions).index.values()]
+      .filter((pin) => CAPABILITY_CLASSIFICATIONS.has(pin.classification))
+      .map((pin) => [pin.channel, pin]),
+  );
+  const capability = capabilityRoster.size === 0
+    ? { byChannel: new Map(), global: [], rosters: { tint: [], ramps: [] }, formulaInputs: [], resolution: {}, baseDarkRampRoles: [], helpers: scaleHelpers }
+    : assessScaleCapability({
+      roster: capabilityRoster,
+      channels,
+      helpers: scaleHelpers,
+      helperFailures: scaleCapability?.helperFailures ?? [],
+      tint: scaleTint,
+      ramps: scaleRamps,
+      emissions: producingSites,
+      familyRosters,
+      declaredReference,
+      tenantThemeSource,
+      rampKernelText: scaleCapability?.rampKernelText ?? '',
+      catalogText: scaleCapability?.catalogText ?? '',
+      pins: capabilityPins,
+      authoredDeclarations: dsGraph.authoredDeclarations,
+      baseThemeText: scaleCapability?.baseThemeText ?? '',
+      baseThemeFile: scaleCapability?.baseThemeFile ?? posixRelative(DEFAULT_BASE_THEME),
+      baseEntrypointText: scaleCapability?.baseEntrypointText ?? '',
+      artifacts,
+      evidence: capabilityEvidence,
+    });
+
+  const adjudication = adjudicateDispositions(channels, { dispositions, capabilityRoster, capabilityAcceptance: capability.byChannel });
   failures.push(...adjudication.failures);
-  const effect = assessChannelEffect(channels);
+  const effect = assessChannelEffect(channels, capability.byChannel);
 
   const sourceDigest = computeInputsDigest({
     gateScriptSource: readFileSync(SCRIPT_PATH, 'utf8'),
@@ -3042,6 +4238,16 @@ export function analyzeChannelLiveness({
     })),
     compiledArtifacts: artifacts,
     probeSpecs: probes.specs,
+    capabilitySources: scaleCapability === null
+      ? []
+      : [
+        { file: 'ramp-kernel', text: scaleCapability.rampKernelText ?? '' },
+        { file: 'ramp-ingress', text: scaleCapability.rampIngressText ?? '' },
+        { file: 'theme-catalog', text: scaleCapability.catalogText ?? '' },
+        { file: 'base-entrypoint', text: scaleCapability.baseEntrypointText ?? '' },
+        { file: 'base-theme', text: scaleCapability.baseThemeText ?? '' },
+        ...capabilityEvidence.specs,
+      ],
   });
 
   if (previousArtifact) {
@@ -3080,15 +4286,32 @@ export function analyzeChannelLiveness({
       registered: adjudication.registered,
       ownerPins: adjudication.ownerPins,
       structuralPins: adjudication.structuralPins,
+      capabilityPins: adjudication.capabilityPins,
       pinnedRows: adjudication.pinned.length,
       structuralRows: adjudication.structural.length,
+      capabilityRows: adjudication.capability.length,
       // The subset of `failures` the ownership law itself produced, so the
       // blocking leg can be exactly that law and nothing else.
       failures: adjudication.failures,
       byOwner: adjudication.byOwner,
       byInvariant: adjudication.byInvariant,
+      byCapability: adjudication.byCapability,
       pinned: [...adjudication.pinned].sort((a, b) => a.channel.localeCompare(b.channel)),
       structural: [...adjudication.structural].sort((a, b) => a.channel.localeCompare(b.channel)),
+      capability: [...adjudication.capability].sort((a, b) => a.channel.localeCompare(b.channel)),
+    },
+    // Published apart from LIVE: resolution proven, paint NOT proven, never LIVE.
+    capability: {
+      rosters: capability.rosters,
+      helpers: capability.helpers,
+      formulaInputs: capability.formulaInputs,
+      baseDarkRampRoles: capability.baseDarkRampRoles,
+      resolution: capability.resolution,
+      globalFailures: capability.global,
+      evidence: capabilityEvidence.valid.map(({ obligation, spec, tests, proves, registered }) => ({ obligation, spec, tests, proves, registered })),
+      rows: channels
+        .filter((row) => CAPABILITY_CLASSIFICATIONS.has(row.classification))
+        .map((row) => ({ channel: row.name, accepted: capability.byChannel.get(row.name)?.ok === true, failed: capability.byChannel.get(row.name)?.failed ?? [] })),
     },
     probeEvidence: {
       declared: probeEvidence.length,
@@ -3150,15 +4373,30 @@ export function runGate({
   compiledArtifactRoot = DEFAULT_COMPILED_ARTIFACT_ROOT,
   consumerRoots = DEFAULT_CONSUMER_ROOTS,
   probeEvidence = DEFAULT_PROBE_EVIDENCE,
+  unstampedAnchors = DEFAULT_UNSTAMPED_ANCHORS,
   evidenceRoot = DEFAULT_EVIDENCE_ROOT,
   round = DEFAULT_ROUND,
   artifactPath = undefined,
   requireArtifact = false,
   dispositions = CHANNEL_DISPOSITIONS,
+  scaleProducerHelpers = DEFAULT_SCALE_PRODUCER_HELPERS,
+  capabilityEvidence = DEFAULT_CAPABILITY_RESOLUTION_EVIDENCE,
   drill = null,
 } = {}) {
   const tenantThemeSource = readFileSync(tenantThemeContractPath, 'utf8');
-  const flatThemeSources = collectFlatThemeCompilerSources(flatThemeCompilerRoot);
+  const attached = attachScaleProducerHelpers(collectFlatThemeCompilerSources(flatThemeCompilerRoot), scaleProducerHelpers);
+  const flatThemeSources = attached.sources;
+  const readOrEmpty = (path) => (existsSync(path) ? readFileSync(path, 'utf8') : '');
+  const scaleCapability = {
+    helperFailures: attached.failures,
+    rampKernelText: readOrEmpty(DEFAULT_RAMP_KERNEL),
+    rampIngressText: readOrEmpty(DEFAULT_RAMP_INGRESS),
+    catalogText: readOrEmpty(DEFAULT_THEME_CATALOG),
+    baseThemeText: readOrEmpty(DEFAULT_BASE_THEME),
+    baseThemeFile: posixRelative(DEFAULT_BASE_THEME),
+    baseEntrypointText: readOrEmpty(DEFAULT_BASE_ENTRYPOINT),
+    evidence: capabilityEvidence,
+  };
   const { rows: familyRows } = loadFamilyRows(familyInventoryPath);
 
   const cssFiles = collectSourceFiles(cssRoots, ['.css'], CORE_ROOT);
@@ -3203,10 +4441,12 @@ export function runGate({
     tsStylesheets,
     consumerRoots,
     probeEvidence,
+    unstampedAnchors,
     compiledArtifacts,
     previousArtifact,
     enforceArtifactFreshness: requireArtifact,
     dispositions,
+    scaleCapability,
     drill,
   });
 
@@ -3238,7 +4478,7 @@ export function buildArtifact(gateRun, { round = DEFAULT_ROUND, evidenceRoot = D
     roundId: round ?? DEFAULT_ROUND,
     sourceDigest: result.sourceDigest,
     scopeLaw:
-      'Tenant-channel liveness ledger scoped to TENANT_THEME_OVERRIDE_TOKENS ∪ TENANT_THEME_REFERENCE_TOKENS ∪ brand-theme-compiler-emitted names, plus the app-bithire external consumerRoot. NOT the customization-surface-census.mjs dead-writer census. NOT tenant-channel-consumer-gate.mjs. NOT theme-channel-parity-gate.mjs. No classification asserts a channel is dead, but membership on TENANT_THEME_REFERENCE_TOKENS never protects a row from a NO-GO finding by itself -- only a proven finite terminal-paint chain (in-repo or via a required consumerRoot) does that.',
+      'Tenant-channel liveness ledger scoped to TENANT_THEME_OVERRIDE_TOKENS ∪ TENANT_THEME_REFERENCE_TOKENS ∪ brand-theme-compiler-emitted names, plus the app-bithire external consumerRoot. NOT the customization-surface-census.mjs dead-writer census. NOT tenant-channel-consumer-gate.mjs. NOT theme-channel-parity-gate.mjs. No classification asserts a channel is dead, but membership on TENANT_THEME_REFERENCE_TOKENS never protects a row from a NO-GO finding by itself -- only a proven finite terminal-paint chain (in-repo or via a required consumerRoot) does that. A CAPABILITY_SCALE_STEP_UNREAD row is published apart from LIVE: a measured step of a public scale whose capability (single producer, admission and emission in agreement, resolution in every supported mode) the acceptance proves and whose paint nothing proves; it is never counted LIVE and leaves the effect red only while its acceptance measures green for that exact channel.',
     inputs: {
       tenantThemeContract: relative(CORE_ROOT, DEFAULT_TENANT_THEME_CONTRACT).split(sep).join('/'),
       flatThemeCompiler: relative(CORE_ROOT, DEFAULT_BRAND_THEME_COMPILER_ROOT).split(sep).join('/'),
@@ -3259,6 +4499,7 @@ export function buildArtifact(gateRun, { round = DEFAULT_ROUND, evidenceRoot = D
     // The ledger records WHO owns every standing non-LIVE row it publishes, so
     // a reader of the artifact alone can tell an owned debt from an orphan one.
     dispositions: result.dispositions,
+    capability: result.capability,
     channels: result.channels,
   };
 }
@@ -3316,6 +4557,18 @@ export function formatReport(gateRun, { effectBlocks = true } = {}) {
       lines.push(`    ${invariant} (${names.length}): ${names.join(', ')}`);
     }
   }
+  if (result.capability) {
+    const rows = result.capability.rows ?? [];
+    lines.push(
+      `  capability-proven scale steps (resolution proven, paint NOT proven, never LIVE): ${rows.filter((row) => row.accepted).length} accepted of ${rows.length} row(s) (rosters: tint=${result.capability.rosters.tint.length} ramps=${result.capability.rosters.ramps.length}; ${result.dispositions?.capabilityPins ?? 0} capability pin(s))`,
+    );
+    for (const [capability, names] of Object.entries(result.dispositions?.byCapability ?? {})) {
+      lines.push(`    ${capability} (${names.length}): ${names.join(', ')}`);
+    }
+    for (const row of rows.filter((entry) => !entry.accepted)) {
+      lines.push(`    NOT accepted ${row.channel}: ${row.failed.map((entry) => `${entry.id} ${entry.detail}`).join('; ')}`);
+    }
+  }
   if (resolvedArtifactPath) {
     lines.push(`  artifact path (freshness/ratchet anchor): ${relative(CORE_ROOT, resolvedArtifactPath)}`);
   }
@@ -3365,6 +4618,10 @@ const DISPOSITION_PRECONDITION_PREFIXES = Object.freeze([
   'z-scale owner unreadable',
   'unresolved roster member',
   'probe evidence',
+  'scale producer',
+  'ramp roster unreadable',
+  'ramp write',
+  'capability evidence',
 ]);
 
 /** Exactly the ownership law, plus the preconditions that make it readable. */
