@@ -22,7 +22,7 @@ import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { Portal } from '../../../../runtime/overlay/portal';
-import { usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import { usePortalScope, usePortalScopeConsumer } from '../../../../runtime/overlay/portal-scope';
 import { TopLayerHostProvider, useTopLayerDialog } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
@@ -223,6 +223,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
       if (dialogRef.current?.open) dialogRef.current.close();
     },
   });
+  // The dialog spreads the snapshot's variables itself, so it registers as
+  // their live reader while rendered.
+  usePortalScopeConsumer(portalScope, shouldRender);
 
   useModalInertSiblings(shouldRender);
 

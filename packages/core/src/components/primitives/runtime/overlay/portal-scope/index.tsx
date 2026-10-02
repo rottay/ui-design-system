@@ -14,7 +14,12 @@
  * - `readPortalScope(anchor)` / `readLocaleContext(anchor)` -- pure readers.
  * - `usePortalScope(anchor)` -- reactive snapshot; a MutationObserver over
  *   the anchor's lineage re-synchronizes when a shell switches locale, theme
- *   or tenant at runtime.
+ *   or tenant at runtime. Its `--ds-*` variables re-publish on lineage
+ *   mutations while a consumer is registered, and lazily on the next read
+ *   after one nobody consumed (see `usePortalScopeConsumer`).
+ * - `usePortalScopeConsumer(snapshot, active)` -- registers a live reader of
+ *   the snapshot's variables. `<PortalScope>` calls it; an owner that spreads
+ *   `snapshot.variables` directly must call it or its copy stays stale.
  * - `<PortalScope snapshot>` -- a `display: contents` wrapper that stamps
  *   `data-portal-scope="true"`, the scope attributes, `dir`/`lang` and the
  *   snapshotted `--ds-*` variables around portaled content.
@@ -93,8 +98,8 @@ function variablesEqual(a: DsPortalVariableStyle, b: DsPortalVariableStyle): boo
 /**
  * The `--ds-*` walk covers every computed custom property on the anchor, so it
  * runs only when something will read the result: once on mount, on lineage
- * mutations while a `<PortalScope>` renders this snapshot, and lazily on the
- * next read after a mutation nobody was consuming.
+ * mutations while a consumer is registered through `usePortalScopeConsumer`,
+ * and lazily on the next read after a mutation nobody was consuming.
  */
 interface PortalVariableCache {
   readonly anchor: HTMLElement;
@@ -218,6 +223,8 @@ export function readLocaleContext(anchor: HTMLElement, withScope = true): {
  * locale/theme switches are common in white-labelled shells, so a
  * MutationObserver tracks only the inheritable DS/locale attributes along the
  * anchor's lineage (never whole document subtrees) and re-projects them.
+ * Scope and locale stay live unconditionally; `variables` stays live only
+ * while a consumer is registered via {@link usePortalScopeConsumer}.
  */
 export function usePortalScope(
   anchor: HTMLElement | null,
@@ -290,6 +297,26 @@ export function usePortalScope(
   return snapshot;
 }
 
+/**
+ * Registers a live reader of `snapshot.variables`: while `active`, lineage
+ * mutations re-read the variables eagerly and re-publish the snapshot. An
+ * owner that spreads the variables itself instead of rendering
+ * `<PortalScope>` must call this, or its copy stays at the last read.
+ */
+export function usePortalScopeConsumer(
+  snapshot: PortalScopeSnapshot,
+  active = true,
+): void {
+  const cache = (snapshot as CachedSnapshot)[VARIABLE_CACHE];
+  useLayoutEffect(() => {
+    if (!cache || !active) return undefined;
+    cache.consumers += 1;
+    return () => {
+      cache.consumers -= 1;
+    };
+  }, [cache, active]);
+}
+
 export interface PortalScopeProps {
   /** Snapshot produced by {@link usePortalScope} for the overlay's anchor. */
   snapshot: PortalScopeSnapshot;
@@ -306,15 +333,7 @@ export function PortalScope({
   snapshot,
   children,
 }: PortalScopeProps): React.ReactElement {
-  const cache = (snapshot as CachedSnapshot)[VARIABLE_CACHE];
-  // While mounted, lineage mutations re-read the variables eagerly so this wrapper re-renders.
-  useLayoutEffect(() => {
-    if (!cache) return undefined;
-    cache.consumers += 1;
-    return () => {
-      cache.consumers -= 1;
-    };
-  }, [cache]);
+  usePortalScopeConsumer(snapshot);
   return (
     <div
       data-portal-scope="true"
