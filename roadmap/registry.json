@@ -7251,6 +7251,11 @@
      "at": "2026-10-02 10:53",
      "by": "Kimi K3",
      "note": "2026-10-02 QUOTA EVENT (confirmed, the amendment's trigger): claude-admin hit its weekly limit (resets Oct 4) mid-dispatch — the Fable batch-2 review and FAM11-L2a/L2b never started (nothing in the tree from them; verified). SCHEME PER THE AMENDMENT, now active: K3 (Kimi) directs AND implements; K2.8 writes bounded lots via the verified alias kimi-code/kimi-for-coding (display 'K2.8 Preview' — the real identifier, verified in config, not a rename); every delivery is audited by K3 against code+tests; the Opus/Fable review requirement stays EXPLICITLY PENDING per lot landed in this window (registered in each commit's message and the trail — never invented), and the pending reviews are the FIRST thing to collect when the quota returns; a critical K3-written lot gets a second K3 session's review (a separate instance that didn't write it). The DS-only scope, main, no-push-except-the-authorized-ritual, and Codex outside the circuit are unchanged. The in-flight state at the event: the wave's lots were all committed (through e778e743d); the only uncommitted content is the trail itself."
+    },
+    {
+     "at": "2026-10-02 10:59",
+     "by": "Kimi K3",
+     "note": "2026-10-02 PUBLICATION (owner-authorized 2026-10-02, executed under the K3/K2.8 scheme): docs-engineering pushed first (the seal's remote leg): c16845d..e9eddf8 — 12 commits, all the program's (the DS-law docs, the token-catalog regens, the RET-03 archive snapshot, the owner decision package). Then ui-design-system: 341c47159..f5d27de7c — 303 commits, all davila23, fast-forward clean, zero foreign commits, no force-push, NO package publishing and no deploys (the npm publish stays untouched). The CI evidence stops being nominal-only: the remote now has the tree. The changesets for the unpublished wave ride the push; the version bump itself stays the owner's release call."
     }
    ]
   },
