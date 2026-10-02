@@ -7101,6 +7101,11 @@
      "at": "2026-10-01 20:03",
      "by": "Kimi K3",
      "note": "2026-10-01 tanda 8k: PROD-1 LANDED 9b97ba38f — the producers suite (outside gates:ci, unrun since 09-26) re-pinned green 238/238 (DT re-ran, 23 min), every mover named and verified against the manifest history (18f2c0b66 / 87f56a451 / 55cfb8017). Registered: this suite needs a cadence — a census suite red for 5 days unnoticed is a coverage hole; propose it joins the consolidated-indicator ritual per tanda close (cheap enough at 23 min when the window is already open). THE OWNER DECISION PACKAGE is ready at .tmp/dispatch-2026-09-21/owner-decisions-liveness-retirements.md: 4 rulings (accent ramp x10, tint 16/24 x8, glass x2 + overlay x3, info-300) gate the R1 artifact's --write — the effect verdict greens only when those 24 AUE rows retire or keep-with-reason. Everything else in the 50-row wave is adjudicated and landed."
+    },
+    {
+     "at": "2026-10-01 20:12",
+     "by": "Kimi K3",
+     "note": "2026-10-01 tanda 8l: the chromatic line's post-publication Fable review (owner directive — evidence apart, never a numerator): ACCEPT (out-cr2-postreview-fable.json). Verified on the exact candidate: the exclusion is STRUCTURAL (chromatic readings never enter result.cells; the indicator's status reads only cells + the reconciliation row; STATUS row 7 cannot see the block); the data-table chromatic-only pin is fail-closed and drift-refused in BOTH directions (injected drift fails evaluate() per cell); 52/155 traced correct (declared 155, the 6 colour-only families named in unreached, unobservable 9 reported beside, nothing subtracted); controls 36/36 + 12/12 green; focal suites re-run 292/0/0. Non-blocking notes registered: the forbidden-key guard does not cover the controls sub-objects; the drift refusal lives in the instrument, not the artifact; trail labels corrected (CR-1 = tanda 8, CR-2 = tanda 8d)."
     }
    ]
   },
