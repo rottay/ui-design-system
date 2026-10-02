@@ -1016,7 +1016,7 @@
     },
     {
       "channels": 2525,
-      "channelsThroughAliases": 4095,
+      "channelsThroughAliases": 4096,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1266,6 +1266,7 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
+        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -1370,7 +1371,7 @@
     },
     {
       "channels": 2525,
-      "channelsThroughAliases": 4095,
+      "channelsThroughAliases": 4096,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1620,6 +1621,7 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
+        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -1716,7 +1718,7 @@
     },
     {
       "channels": 2623,
-      "channelsThroughAliases": 4298,
+      "channelsThroughAliases": 4299,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -1970,6 +1972,7 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
+        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -2066,7 +2069,7 @@
     },
     {
       "channels": 2611,
-      "channelsThroughAliases": 4274,
+      "channelsThroughAliases": 4275,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",
@@ -2319,6 +2322,7 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
+        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -3500,7 +3504,7 @@
     },
     {
       "channels": 393,
-      "channelsThroughAliases": 1204,
+      "channelsThroughAliases": 1205,
       "decision": "states.emphasis",
       "derivers": [
         "app-shell",
@@ -3648,6 +3652,7 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
+        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -3731,7 +3736,7 @@
     },
     {
       "channels": 680,
-      "channelsThroughAliases": 1475,
+      "channelsThroughAliases": 1476,
       "decision": "states.focus-style",
       "derivers": [
         "app-shell",
@@ -3887,6 +3892,7 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
+        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -4233,7 +4239,7 @@
     },
     {
       "channels": 1715,
-      "channelsThroughAliases": 2059,
+      "channelsThroughAliases": 2060,
       "decision": "surfaces.elevation-posture",
       "derivers": [
         "action-dock",
@@ -4400,6 +4406,7 @@
         "notifier",
         "operational-ledger",
         "otp-input",
+        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",

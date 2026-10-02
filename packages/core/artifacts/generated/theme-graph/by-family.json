@@ -3848,7 +3848,15 @@
       "tier": "primitive"
     },
     {
-      "decisions": [],
+      "decisions": [
+        "palette.contrast-posture",
+        "palette.neutral-temperature",
+        "palette.seeds",
+        "palette.status-seeds",
+        "states.emphasis",
+        "states.focus-style",
+        "surfaces.elevation-posture"
+      ],
       "family": "overlay-modal-compounds"
     },
     {

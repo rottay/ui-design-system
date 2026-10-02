@@ -4,10 +4,10 @@
 > Source: `packages/core/artifacts/generated/theme-graph/by-family.json`, itself derived by `scripts/generate/theme-graph` from a dry-run of the
 > compiler over 3 verticals x 2 modes plus the measured read census. Every number below is measured;
 > a fact that was not measured has no row rather than a cell saying so.
-> 278 skin families; 265 are reached by at least one decision, 13 by none.
+> 278 skin families; 266 are reached by at least one decision, 12 by none.
 > The tier is the component tier that owns the family; a family with no component folder carries none.
 
-digest: e81b18278c45bec9a3a9d4bd8d91ba1063842fbaf6e4f7f419c4d825e575ae32
+digest: aaffa087266c010655ef2f5e880e4892694953bf3f34ffcded250349a7ab3f79
 
 | family | tier | decisions reaching it |
 |---|---|---|
@@ -186,7 +186,7 @@ digest: e81b18278c45bec9a3a9d4bd8d91ba1063842fbaf6e4f7f419c4d825e575ae32
 | `operational-ledger` | pattern | 20 |
 | `operational-surface` | — | 14 |
 | `otp-input` | primitive | 22 |
-| `overlay-modal-compounds` | — | **none** |
+| `overlay-modal-compounds` | — | 7 |
 | `page-shell` | pattern | 24 |
 | `page-shell-surface` | structure | **none** |
 | `pagination` | primitive | 20 |
@@ -301,7 +301,6 @@ on the family.
 - `carousel-compounds`
 - `data-terminal-card-keyframes`
 - `layout-header`
-- `overlay-modal-compounds`
 - `page-shell-surface` (structure)
 - `primitive-motion`
 - `profile` (pattern)
@@ -484,6 +483,7 @@ on the family.
 | `operational-ledger` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `operational-surface` | `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.pairing`, `typography.scale` |
 | `otp-input` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
+| `overlay-modal-compounds` | `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `states.emphasis`, `states.focus-style`, `surfaces.elevation-posture` |
 | `page-shell` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `spacing.rhythm`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.effect-intensity`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `pagination` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `password-input` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
