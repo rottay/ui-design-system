@@ -8798,6 +8798,14 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
  * Structural constants of the sheet family and the defaults of its runtime
  * channels. Its decision relations are emitted by the compiler family
  * `derivation/chrome/sheet`.
+ *
+ * The padding channels below bake `--ds-density-effective-scale` into a calc
+ * declared on `:root`, so they resolve once with the ROOT posture: a nested
+ * `[data-density]` scope never re-triggers them (the frozen-`:root`-input
+ * class, same shape as the popover exemption in the density roster). Local
+ * scaling reaches the parts only through the skin's own fallback expressions,
+ * which read the scale live. Registered on the density roster lane
+ * (WO-EVI-02); a real local-density consumer cell is what reopens this.
  */
 
 :root {
