@@ -7,6 +7,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { measureArms, type ProbeReadings, type ProbeTarget } from "@tests/support/family-causality";
+import { bundleRealMount, measureRealMount, type RealMountScene } from "@tests/support/family-causality/real-mount";
 import { compileThemeIntent, emitThemeCss, firstPartyScope, staticThemeIntent } from "@/entrypoints/server";
 import { themeChannelDelta } from "@/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits";
 import { emitTenantArtifactCss } from "@/infrastructure/compilers/runtime/theme/runtime/emission";
@@ -130,6 +131,16 @@ type Scope = keyof typeof SCOPES;
 const SCOPE_NAMES = Object.keys(SCOPES) as Scope[];
 const BOUNDED: readonly Scope[] = ["compact", "comfortable", "spacious", "nested", "reverseNested"];
 const UNBOUNDED: readonly Scope[] = ["rest", "arabic"];
+/** The nearest density stamp PortalScope re-stamps on the portaled drawer. */
+const NEAREST_DENSITY: Readonly<Record<Scope, string>> = {
+  rest: "<absent>",
+  compact: "compact",
+  comfortable: "comfortable",
+  spacious: "spacious",
+  nested: "compact",
+  reverseNested: "spacious",
+  arabic: "<absent>",
+};
 
 const oracleOf = (channel: Channel) =>
   `<div data-oracle="${channel}" style="${SITES[channel].declaration}: ${PRODUCED[channel]}"></div>`;
@@ -242,6 +253,77 @@ const dbCss = (withBoundary: boolean) =>
 const dbRoot = (css: string) =>
   `<style>${css}</style><div data-ds-root data-vertical="bithire" data-tenant="acme">${markup()}</div>`;
 
+/** The real shell in its drawer posture, under the engine provider the engine-switched Sheet requires.
+ *  The Sheet portals the drawer out of the anchor's lineage and PortalScope carries it across; the
+ *  header opener clicks the real trigger once the shell has settled. */
+const REAL_PROPS = `({ defaultEngine: "modern", children: React.createElement(require("./src/components/structures/shell/app-shell").AppShell, {
+  adapt: { desktop: { navigation: "drawer" } },
+  sidebar: { logo: "Logo", nav: "Inbox", footer: "Signed in" },
+  header: {
+    right: React.createElement(function Opener() {
+      const ref = React.useRef(null);
+      React.useEffect(() => {
+        const timer = setTimeout(() => ref.current.closest("header").querySelector("[data-part='navigation-trigger']").click(), 0);
+        return () => clearTimeout(timer);
+      }, []);
+      return React.createElement("span", { ref }, "A");
+    }),
+  },
+  children: "Content",
+}) })`;
+const DRAWER = ".ds-app-shell__navigation-drawer";
+const READY = `${DRAWER} [data-part='navigation-footer']`;
+
+/** The drawer renders the expanded navigation only: the logo row, both collapsed states, the header
+ *  chrome and the skip link stay in the shell's lineage, covered by the in-tree matrix above. */
+const DRAWER_SITES: Readonly<Partial<Record<Channel, string>>> = {
+  "--ds-app-shell-navigation-drawer-header-padding": `${DRAWER} [data-part='navigation-drawer-header']`,
+  "--ds-app-shell-navigation-body-padding": `${DRAWER} [data-part='navigation-body']`,
+  "--ds-app-shell-navigation-body-scroll-padding-block-end": `${DRAWER} [data-part='navigation-body']`,
+  "--ds-app-shell-navigation-footer-padding": `${DRAWER} [data-part='navigation-footer']`,
+};
+const DRAWER_CHANNELS = Object.keys(DRAWER_SITES) as Channel[];
+const DRAWER_BODY_PADDING = "--ds-app-shell-navigation-drawer-body-padding";
+
+const DRAWER_STAMPS = [
+  { id: "density", selector: "[data-portal-scope='true']", property: "@attr.data-density" },
+  { id: "tenant", selector: "[data-portal-scope='true']", property: "@attr.data-tenant" },
+  { id: "inAnchorLineage", selector: `[data-real-mount-host] ${DRAWER}`, property: "display" },
+  /* The drawer body's padding is the shell's inline restatement over the Sheet's own, so no drawer
+     part reads a --ds-sheet-* padding (those resolve once at :root, registered on the density roster). */
+  { id: "bodyInline", selector: `${DRAWER}-body`, property: "@inline.padding" },
+  { id: "bodyPadding", selector: `${DRAWER}-body`, property: "padding-top" },
+];
+
+const drawerTargets = (channels: readonly Channel[]) => [
+  ...DRAWER_STAMPS,
+  ...channels.flatMap((channel) =>
+    SITES[channel].properties.flatMap((property) => [
+      { id: `site|${channel}|${property}`, selector: DRAWER_SITES[channel] as string, property },
+      { id: `oracle|${channel}|${property}`, selector: `[data-oracle='${channel}']`, property },
+    ])
+  ),
+];
+
+/** One scene per scope: the mount point and one oracle per drawer channel sit in the anchor's lineage. */
+const DRAWER_SCENES: RealMountScene[] = SCOPE_NAMES.map((scope) => ({
+  id: scope,
+  markup: SCOPES[scope](`<div data-real-mount></div>${DRAWER_CHANNELS.map(oracleOf).join("")}`),
+  ready: READY,
+  targets: drawerTargets(DRAWER_CHANNELS),
+}));
+
+/** The scope flips posture while the drawer is open; the lineage observer re-stamps the portal. */
+const DRAWER_FLIP: RealMountScene = {
+  id: "flip",
+  markup: `<div id="flip-scope" data-density="compact"><div data-real-mount></div>${DRAWER_CHANNELS.map(oracleOf).join("")}</div>`,
+  ready: READY,
+  targets: drawerTargets(DRAWER_CHANNELS),
+  steps: [{ id: "spacious", selector: "#flip-scope", attributes: { "data-density": "spacious" } }],
+};
+
+let drawer: ProbeReadings;
+
 let readings: ProbeReadings;
 let rootStated: ProbeReadings;
 let shellStated: ProbeReadings;
@@ -274,6 +356,13 @@ describe("chrome/app-shell channels under a local scope", () => {
     for (const [name, css] of Object.entries(LAYER_DRILLS)) {
       drills[name] = await probe(markup(`<style>${css}</style>`), targets(SLOT_GAP));
     }
+
+    const bundle = await bundleRealMount({
+      module: "src/infrastructure/runtime/engines/composition/react/provider",
+      exportName: "EngineProvider",
+      props: REAL_PROPS,
+    });
+    drawer = await measureRealMount({ vertical: "bithire", bundle, scenes: [...DRAWER_SCENES, DRAWER_FLIP] });
   }, 180_000);
 
   it("probes the parts the engine stamps", () => {
@@ -372,6 +461,70 @@ describe("chrome/app-shell channels under a local scope", () => {
     expect(slotGap(drills.layeredHeavy, "compact")).toBe(local);
     expect(slotGap(drills.unlayeredLighter, "compact")).toBe(local);
     expect(slotGap(drills.unlayeredHeavier, "compact")).toBe(OVERRIDE);
+  });
+
+  it("real mount: the drawer leaves the anchor's lineage and re-stamps its nearest scope", () => {
+    for (const scope of SCOPE_NAMES) {
+      const at = drawer[scope];
+      expect({ scope, inAnchorLineage: at.inAnchorLineage }).toEqual({ scope, inAnchorLineage: expect.stringMatching(/^<no match/) });
+      expect({ scope, density: at.density, tenant: at.tenant }).toEqual({ scope, density: NEAREST_DENSITY[scope], tenant: "bithire" });
+    }
+  });
+
+  it("(a) real mount: every drawer channel on the portaled surface paints the anchor's local answer", () => {
+    const drift: string[] = [];
+    for (const scope of SCOPE_NAMES) {
+      for (const channel of DRAWER_CHANNELS) {
+        for (const property of SITES[channel].properties) {
+          const painted = drawer[scope][`site|${channel}|${property}`];
+          const expected = drawer[scope][`oracle|${channel}|${property}`];
+          if (painted !== expected) drift.push(`${scope} ${channel} ${property}: painted ${painted}, local answer ${expected}`);
+        }
+      }
+    }
+    expect(drift).toEqual([]);
+  });
+
+  it("real mount: the compact drawer equals the in-tree compact control and leaves the root posture", () => {
+    for (const channel of DRAWER_CHANNELS) {
+      for (const property of SITES[channel].properties) {
+        const portaled = drawer.compact[`site|${channel}|${property}`];
+        expect({ channel, property, portaled }).toEqual({ channel, property, portaled: site(readings, "compact", channel, property) });
+        expect({ channel, property, portaled }).not.toEqual({ channel, property, portaled: drawer.rest[`site|${channel}|${property}`] });
+        expect({ channel, property, rest: drawer.rest[`site|${channel}|${property}`] }).toEqual({
+          channel,
+          property,
+          rest: site(readings, "rest", channel, property),
+        });
+      }
+    }
+  });
+
+  it("real mount: a posture flip on the open drawer's scope re-stamps the portal, which follows", () => {
+    const before = drawer.flip;
+    const after = drawer["flip>spacious"];
+    expect(before.density).toBe("compact");
+    expect(after.density).toBe("spacious");
+    for (const channel of DRAWER_CHANNELS) {
+      for (const property of SITES[channel].properties) {
+        const id = `site|${channel}|${property}`;
+        expect({ id, before: before[id] }).toEqual({ id, before: before[`oracle|${channel}|${property}`] });
+        expect({ id, after: after[id] }).toEqual({ id, after: after[`oracle|${channel}|${property}`] });
+        expect({ id, after: after[id] }).not.toEqual({ id, after: before[id] });
+      }
+    }
+  });
+
+  it("pin: the drawer body padding is a flat zero outside the density set, restated inline over the Sheet's", () => {
+    expect(PRODUCED[DRAWER_BODY_PADDING]).toBe("0");
+    expect(CHANNELS).not.toContain(DRAWER_BODY_PADDING);
+    for (const scope of SCOPE_NAMES) {
+      expect({ scope, inline: drawer[scope].bodyInline, painted: drawer[scope].bodyPadding }).toEqual({
+        scope,
+        inline: `var(${DRAWER_BODY_PADDING}, 0)`,
+        painted: "0px",
+      });
+    }
   });
 
   it("(c) the compiler projects exactly the app-shell channels whose value reads a density-scope name, none on the arabic axis", () => {
