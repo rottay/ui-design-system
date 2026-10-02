@@ -100,9 +100,8 @@ const SITES = {
     properties: ["column-gap"],
   },
   /* The skip link paints its channel only under :focus -- unfocused, the visually-hidden rule
-     zeroes the padding -- and the probe cannot focus. Its site is a reader twin: a box inside the
-     shell painting the INHERITED channel, which is all the focused link reads (nothing on the
-     link re-declares it). The unfocused zero is pinned below. */
+     zeroes the padding -- and the static probe cannot focus. Its site here is a reader twin
+     painting the inherited channel; the real link, focused by a real Tab, is measured below. */
   "--ds-app-shell-skip-link-padding": {
     site: "[data-reader='--ds-app-shell-skip-link-padding']",
     declaration: "padding",
@@ -322,7 +321,32 @@ const DRAWER_FLIP: RealMountScene = {
   steps: [{ id: "spacious", selector: "#flip-scope", attributes: { "data-density": "spacious" } }],
 };
 
+/** The shell in its sidebar posture with no drawer open, so nothing traps or steals focus. A real
+ *  Tab from the button just before the shell lets the browser's own focus order reach the link. */
+const FOCUS_PROPS = `({ defaultEngine: "modern", children: React.createElement(require("./src/components/structures/shell/app-shell").AppShell, {
+  sidebar: { logo: "Logo", nav: "Inbox", footer: "Signed in" },
+  header: { right: "A" },
+  children: "Content",
+}) })`;
+const SKIP = "[data-real-mount-host] [data-part='skip-link']";
+const SKIP_PROPERTIES = ["padding-left", "padding-right"] as const;
+
+const FOCUS_SCENES: RealMountScene[] = SCOPE_NAMES.map((scope) => ({
+  id: scope,
+  markup: SCOPES[scope](`<button data-tab-origin type="button">Before</button><div data-real-mount></div>${oracleOf(SKIP_LINK)}`),
+  ready: SKIP,
+  targets: [
+    { id: "focusVisible", selector: `${SKIP}:focus-visible`, property: "position" },
+    ...SKIP_PROPERTIES.flatMap((property) => [
+      { id: `site|${property}`, selector: SKIP, property },
+      { id: `oracle|${property}`, selector: `[data-oracle='${SKIP_LINK}']`, property },
+    ]),
+  ],
+  steps: [{ id: "tab", selector: "[data-tab-origin]", input: { kind: "press", key: "Tab" } }],
+}));
+
 let drawer: ProbeReadings;
+let focused: ProbeReadings;
 
 let readings: ProbeReadings;
 let rootStated: ProbeReadings;
@@ -363,6 +387,13 @@ describe("chrome/app-shell channels under a local scope", () => {
       props: REAL_PROPS,
     });
     drawer = await measureRealMount({ vertical: "bithire", bundle, scenes: [...DRAWER_SCENES, DRAWER_FLIP] });
+
+    const focusBundle = await bundleRealMount({
+      module: "src/infrastructure/runtime/engines/composition/react/provider",
+      exportName: "EngineProvider",
+      props: FOCUS_PROPS,
+    });
+    focused = await measureRealMount({ vertical: "bithire", bundle: focusBundle, scenes: FOCUS_SCENES });
   }, 180_000);
 
   it("probes the parts the engine stamps", () => {
@@ -413,6 +444,29 @@ describe("chrome/app-shell channels under a local scope", () => {
       expect({ scope, painted: readings.base[`skip|${scope}`] }).toEqual({ scope, painted: "0px" });
     }
     expect(site(readings, "rest", SKIP_LINK, "padding-left")).not.toBe("0px");
+  });
+
+  it("(a) real mount: a real Tab focuses the skip link, which then paints the local answer in every scope", () => {
+    const drift: string[] = [];
+    for (const scope of SCOPE_NAMES) {
+      const before = focused[scope];
+      const after = focused[`${scope}>tab`];
+      expect({ scope, focusVisible: before.focusVisible }).toEqual({ scope, focusVisible: expect.stringMatching(/^<no match/) });
+      expect({ scope, focusVisible: after.focusVisible }).toEqual({ scope, focusVisible: "fixed" });
+      for (const property of SKIP_PROPERTIES) {
+        expect({ scope, property, unfocused: before[`site|${property}`] }).toEqual({ scope, property, unfocused: "0px" });
+        const painted = after[`site|${property}`];
+        const expected = after[`oracle|${property}`];
+        if (painted !== expected) drift.push(`${scope} ${property}: painted ${painted}, local answer ${expected}`);
+        expect({ scope, property, painted }).toEqual({ scope, property, painted: site(readings, scope, SKIP_LINK, "padding-left") });
+      }
+    }
+    expect(drift).toEqual([]);
+    const at = (scope: Scope) => focused[`${scope}>tab`]["site|padding-left"];
+    expect(at("compact")).not.toBe(at("rest"));
+    expect(at("spacious")).not.toBe(at("rest"));
+    expect(at("nested")).toBe(at("compact"));
+    expect(at("reverseNested")).toBe(at("spacious"));
   });
 
   it("(b1) a statement at or below the boundary wins in every scope", () => {
