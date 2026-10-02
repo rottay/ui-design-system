@@ -47,7 +47,6 @@ import type {
   ShellPosture,
 } from '../contracts';
 import { SHELL_DEFAULTS, SHELL_GEOMETRY_READS } from '../contracts';
-import { APP_SHELL_CLASSES } from '../../foundation/class-window';
 import type { Adapt } from '@/foundation/contracts/kernel/adaptation';
 import { partAttributes } from '@/foundation/behavior/kernel/anatomy';
 import { useInteractionState } from '@/foundation/behavior/runtime/interaction-state';
@@ -278,7 +277,7 @@ export function AppShell({
     <>
       {isDrawer && (
         <div
-          className={APP_SHELL_CLASSES['rottay-app-shell__navigation-drawer-header']}
+          className="ds-app-shell__navigation-drawer-header"
           data-part="navigation-drawer-header"
           data-compact="true"
           style={
@@ -287,10 +286,10 @@ export function AppShell({
             } as ShellCustomProperties
           }
         >
-          <div className={APP_SHELL_CLASSES['rottay-app-shell__navigation-drawer-logo']}>{sidebar?.logo}</div>
+          <div className="ds-app-shell__navigation-drawer-logo">{sidebar?.logo}</div>
           <button
             type="button"
-            className={APP_SHELL_CLASSES['rottay-app-shell__navigation-close']}
+            className="ds-app-shell__navigation-close"
             {...partAttributes('navigation-close', closeInteraction.state)}
             {...closeInteraction.handlers}
             onClick={closeNavigation}
@@ -302,7 +301,7 @@ export function AppShell({
       )}
       {!isDrawer && sidebar?.logo && (
         <div
-          className={APP_SHELL_CLASSES['rottay-app-shell__navigation-logo']}
+          className="ds-app-shell__navigation-logo"
           data-part="navigation-logo"
           data-collapsed={collapsed ? 'true' : 'false'}
           data-compact="false"
@@ -317,7 +316,7 @@ export function AppShell({
       )}
       {sidebar?.nav && (
         <div
-          className={APP_SHELL_CLASSES['rottay-app-shell__navigation-body']}
+          className="ds-app-shell__navigation-body"
           data-part="navigation-body"
           data-collapsed={!isDrawer && collapsed ? 'true' : 'false'}
           data-compact={isDrawer ? 'true' : 'false'}
@@ -327,7 +326,7 @@ export function AppShell({
       )}
       {sidebar?.footer && (
         <div
-          className={APP_SHELL_CLASSES['rottay-app-shell__navigation-footer']}
+          className="ds-app-shell__navigation-footer"
           data-part="navigation-footer"
           data-collapsed={!isDrawer && collapsed ? 'true' : 'false'}
           data-compact={isDrawer ? 'true' : 'false'}
@@ -381,7 +380,7 @@ export function AppShell({
   return (
     <ShellContext.Provider value={contextValue}>
       <div
-        className={[APP_SHELL_CLASSES['rottay-app-shell'], className].filter(Boolean).join(' ')}
+        className={['ds-app-shell', className].filter(Boolean).join(' ')}
         data-part="root"
         data-posture={postureAttribute}
         data-collapsed={collapsed ? 'true' : 'false'}
@@ -391,7 +390,7 @@ export function AppShell({
         {/* ---- Skip link: first tab stop, targets the content landmark ---- */}
         <a
           href={`#${contentId}`}
-          className={APP_SHELL_CLASSES['rottay-app-shell__skip-link']}
+          className="ds-app-shell__skip-link"
           {...partAttributes('skip-link', skipLinkInteraction.state)}
           {...skipLinkInteraction.handlers}
         >
@@ -401,7 +400,7 @@ export function AppShell({
         {/* ---- Desktop sidebar ---- */}
         {sidebar && !isCompact && (
           <aside
-            className={APP_SHELL_CLASSES['rottay-app-shell__navigation-sidebar']}
+            className="ds-app-shell__navigation-sidebar"
             data-part="navigation-sidebar"
             data-collapsed={collapsed ? 'true' : 'false'}
             data-compact="false"
@@ -424,8 +423,8 @@ export function AppShell({
             restoreFocus
             id={navigationDialogId}
             aria-label={navigationLabel}
-            surfaceClassName={APP_SHELL_CLASSES['rottay-app-shell__navigation-drawer']}
-            bodyClassName={APP_SHELL_CLASSES['rottay-app-shell__navigation-drawer-body']}
+            surfaceClassName="ds-app-shell__navigation-drawer"
+            bodyClassName="ds-app-shell__navigation-drawer-body"
             bodyStyle={{
               // The Sheet engine writes its scroll-body padding/overflow inline.
               // The drawer body is a slot compositor, not a scroll region (the
@@ -451,7 +450,7 @@ export function AppShell({
 
         {/* ---- Main area ---- */}
         <div
-          className={APP_SHELL_CLASSES['rottay-app-shell__main']}
+          className="ds-app-shell__main"
           data-part="main-area"
           data-compact={isCompact ? 'true' : 'false'}
           data-has-header={hasHeader ? 'true' : 'false'}
@@ -459,7 +458,7 @@ export function AppShell({
           {/* Header */}
           {hasHeader && (
             <header
-              className={APP_SHELL_CLASSES['rottay-app-shell__header']}
+              className="ds-app-shell__header"
               data-part="header"
               data-compact={isCompact ? 'true' : 'false'}
             >
@@ -467,7 +466,7 @@ export function AppShell({
               {isCompact && sidebar && (
                 <button
                   type="button"
-                  className={APP_SHELL_CLASSES['rottay-app-shell__navigation-trigger']}
+                  className="ds-app-shell__navigation-trigger"
                   {...partAttributes('navigation-trigger', triggerInteraction.state)}
                   {...triggerInteraction.handlers}
                   onClick={openNavigation}
@@ -478,17 +477,17 @@ export function AppShell({
                   <NavigationMenuIcon decorative size={22} />
                 </button>
               )}
-              <div className={APP_SHELL_CLASSES['rottay-app-shell__header-slot']} data-part="header-left">
+              <div className="ds-app-shell__header-slot" data-part="header-left">
                 {header?.left}
               </div>
               <div
-                className={`${APP_SHELL_CLASSES['rottay-app-shell__header-slot']} ${APP_SHELL_CLASSES['rottay-app-shell__header-slot--center']}`}
+                className="ds-app-shell__header-slot ds-app-shell__header-slot--center"
                 data-part="header-center"
               >
                 {header?.center}
               </div>
               <div
-                className={`${APP_SHELL_CLASSES['rottay-app-shell__header-slot']} ${APP_SHELL_CLASSES['rottay-app-shell__header-slot--right']}`}
+                className="ds-app-shell__header-slot ds-app-shell__header-slot--right"
                 data-part="header-right"
               >
                 {header?.right}
@@ -500,7 +499,7 @@ export function AppShell({
           <main
             id={contentId}
             tabIndex={-1}
-            className={APP_SHELL_CLASSES['rottay-app-shell__content']}
+            className="ds-app-shell__content"
             data-part="content"
           >
             {children}
@@ -508,7 +507,7 @@ export function AppShell({
 
           {/* Footer */}
           {footer && (
-            <footer className={APP_SHELL_CLASSES['rottay-app-shell__footer']} data-part="footer">
+            <footer className="ds-app-shell__footer" data-part="footer">
               {footer}
             </footer>
           )}

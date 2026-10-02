@@ -67,7 +67,7 @@ function renderShell(responsive: ResponsiveContextValue, props: Partial<AppShell
 }
 
 function getShellRoot(container: HTMLElement): HTMLElement {
-  return container.querySelector('.rottay-app-shell[data-part="root"]') as HTMLElement;
+  return container.querySelector('.ds-app-shell[data-part="root"]') as HTMLElement;
 }
 
 describe('AppShell responsive contract', () => {
@@ -91,9 +91,9 @@ describe('AppShell responsive contract', () => {
     expect(logo.style.getPropertyValue('--ds-shell-resolved-sidebar-header-block-size')).toBe(
       READS.sidebarHeaderBlockSize,
     );
-    expect(logo).toHaveClass('rottay-app-shell__navigation-logo');
+    expect(logo).toHaveClass('ds-app-shell__navigation-logo');
     expect(logo.style.height).toBe('');
-    expect(header).toHaveClass('rottay-app-shell__header');
+    expect(header).toHaveClass('ds-app-shell__header');
     expect(header.style.height).toBe('');
     expect(logo.style.height).toBe('');
   });
@@ -113,7 +113,7 @@ describe('AppShell responsive contract', () => {
     expect(root).toHaveAttribute('data-compact', 'false');
     expect(root.style.minHeight).toBe('');
     expect(sidebar).toHaveAccessibleName('Primary navigation');
-    expect(sidebar).toHaveClass('rottay-app-shell__navigation-sidebar');
+    expect(sidebar).toHaveClass('ds-app-shell__navigation-sidebar');
     expect(sidebar).toHaveAttribute('data-collapsed', 'true');
     // The stated collapsed track travels on the published channel; the
     // resolution beside it reads that channel and nothing else.
@@ -122,7 +122,7 @@ describe('AppShell responsive contract', () => {
       `calc(${READS.sidebarCollapsedWidth} + var(--ds-shell-safe-area-left))`,
     );
     expect(sidebar.style.width).toBe('');
-    expect(mainArea).toHaveClass('rottay-app-shell__main');
+    expect(mainArea).toHaveClass('ds-app-shell__main');
     expect(mainArea).toHaveAttribute('data-compact', 'false');
     expect(mainArea.style.minHeight).toBe('');
     expect(mainArea.style.marginLeft).toBe('');
@@ -143,7 +143,7 @@ describe('AppShell responsive contract', () => {
     expect(root).toHaveAttribute('data-compact', 'true');
     expect(container.querySelector('[data-part="navigation-sidebar"]')).toBeNull();
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
-    expect(trigger).toHaveClass('rottay-app-shell__navigation-trigger');
+    expect(trigger).toHaveClass('ds-app-shell__navigation-trigger');
     expect(trigger.style.width).toBe('');
     expect(trigger.style.height).toBe('');
   });
@@ -160,7 +160,7 @@ describe('AppShell responsive contract', () => {
     expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
       `calc(${READS.headerBlockSize} + var(--ds-shell-safe-area-top))`,
     );
-    expect(mainArea).toHaveClass('rottay-app-shell__main');
+    expect(mainArea).toHaveClass('ds-app-shell__main');
     expect(mainArea).toHaveAttribute('data-compact', 'true');
     expect(mainArea.style.paddingBlockEnd).toBe('');
     expect(mainArea.style.boxSizing).toBe('');
@@ -223,7 +223,7 @@ describe('AppShell responsive contract', () => {
 
     expect(dialog).toHaveAttribute('aria-modal', 'true');
     expect(dialog).toHaveAttribute('data-placement', 'left');
-    expect(dialog).toHaveClass('rottay-app-shell__navigation-drawer');
+    expect(dialog).toHaveClass('ds-app-shell__navigation-drawer');
     expect(dialog.style.boxSizing).toBe('');
     expect(dialog.style.getPropertyValue('--ds-shell-resolved-drawer-inline-size')).toBe(
       `min(${READS.sidebarWidth}, var(--ds-viewport-inline-size))`,
@@ -235,10 +235,10 @@ describe('AppShell responsive contract', () => {
     expect(
       drawerHeader.style.getPropertyValue('--ds-shell-resolved-sidebar-header-min-block-size'),
     ).toBe(`max(${READS.sidebarHeaderBlockSize}, 44px)`);
-    expect(drawerHeader).toHaveClass('rottay-app-shell__navigation-drawer-header');
+    expect(drawerHeader).toHaveClass('ds-app-shell__navigation-drawer-header');
     expect(drawerHeader.style.minHeight).toBe('');
     expect(drawerHeader.style.minHeight).toBe('');
-    expect(close).toHaveClass('rottay-app-shell__navigation-close');
+    expect(close).toHaveClass('ds-app-shell__navigation-close');
     expect(close.style.width).toBe('');
     expect(close.style.height).toBe('');
     expect(document.body.style.overflow).toBe('hidden');

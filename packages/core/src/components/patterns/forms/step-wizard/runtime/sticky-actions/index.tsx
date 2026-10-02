@@ -26,7 +26,7 @@ export function StickyWizardActions({ children }: StickyWizardActionsProps) {
 
   return (
     <Box
-      className="rottay-action-dock ds-step-wizard__action-dock"
+      className="ds-action-dock ds-step-wizard__action-dock"
       style={style}
       data-testid="step-wizard-action-dock"
       role="toolbar"
@@ -36,7 +36,7 @@ export function StickyWizardActions({ children }: StickyWizardActionsProps) {
       data-mode="fixed"
       data-keyboard-open={isVirtualKeyboardOpen ? 'true' : 'false'}
     >
-      <Flex className="rottay-action-dock__actions" align="center">
+      <Flex className="ds-action-dock__actions" align="center">
         {children}
       </Flex>
     </Box>

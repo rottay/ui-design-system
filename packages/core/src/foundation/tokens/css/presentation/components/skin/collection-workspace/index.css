@@ -956,7 +956,7 @@
 /* -------------------------------------------------------------------------
    Sticky action dock (phone posture) — surface overrides on ActionDock.
    ------------------------------------------------------------------------- */
-.ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar.rottay-action-dock[data-mode="sticky"] {
+.ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar.ds-action-dock[data-mode="sticky"] {
   background: var(--ds-color-bg-primary);
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }

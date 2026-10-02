@@ -10,7 +10,6 @@ import { describe, expect, it } from 'vitest';
 import { renderWithEngine, STABLE_ENGINES } from '@tests/support/engine';
 import { ResponsiveContext, type ResponsiveContextValue } from '../../../../../infrastructure/runtime/responsive';
 import { ActionDock } from '..';
-import { CLASS_MIGRATION_WINDOWS } from '@/components/structures/foundation/class-window';
 
 const ACTION_DOCK_SKIN = readFileSync(
   join(__dirname, '../../../../../foundation/tokens/css/presentation/components/skin/action-dock/index.css'),
@@ -40,7 +39,7 @@ describe('ActionDock', () => {
     expect(dock).toHaveTextContent('Save');
   });
 
-  it('carries both spellings of every windowed class in the rendered DOM', async () => {
+  it('stamps the canonical dock classes and nothing else in the rendered DOM', async () => {
     const { findByTestId } = renderWithEngine(
       <ActionDock
         actions={[{ key: 'save', label: 'Save', priority: 'primary', 'data-testid': 'dock-save' }]}
@@ -51,21 +50,12 @@ describe('ActionDock', () => {
     // so the sweep waits for the ACTION, not just the dock root, or it would
     // measure an empty row and pass for the wrong reason.
     await findByTestId('dock-save');
-    const pairs = CLASS_MIGRATION_WINDOWS.find((entry) => entry.family === 'action-dock')!.pairs as
-      Readonly<Record<string, string>>;
-
-    // Whatever this render reaches, it reaches under BOTH names. The window is
-    // class addition: a consumer pinned to a version that never emitted the
-    // canonical spelling keeps every selector it authored.
-    for (const [superseded, canonical] of Object.entries(pairs)) {
-      const bySuperseded = [...document.querySelectorAll(`.${superseded}`)];
-      const byCanonical = [...document.querySelectorAll(`.${canonical}`)];
-      expect({ superseded, nodes: byCanonical }).toEqual({ superseded, nodes: bySuperseded });
-    }
+    // The retired spelling must not survive anywhere in this render.
+    expect(document.querySelectorAll('[class*="rottay-action-dock"]')).toHaveLength(0);
     // Not vacuous: this fixture renders the root, the row and one action.
     expect(document.querySelectorAll('.ds-action-dock').length).toBe(1);
     expect(document.querySelectorAll('.ds-action-dock__actions').length).toBe(1);
-    expect(document.querySelectorAll('.rottay-action-dock__action').length).toBe(1);
+    expect(document.querySelectorAll('.ds-action-dock__action').length).toBe(1);
   });
 
   it('supports a sticky top dock without stamping global horizontal offsets inline', async () => {
@@ -100,7 +90,7 @@ describe('ActionDock', () => {
 
     const dock = await findByTestId('candidate-action-dock');
     expect(dock).toHaveAttribute('id', 'candidate-actions');
-    expect(dock).toHaveClass('rottay-action-dock', 'candidate-actions');
+    expect(dock).toHaveClass('ds-action-dock', 'candidate-actions');
     expect(dock).toHaveAttribute('aria-label', 'Candidate actions');
     expect(dock).toHaveStyle({ background: 'green' });
   });
@@ -179,7 +169,7 @@ describe('ActionDock', () => {
 
   it('keeps collection integration selectors aligned with composed component anatomy', () => {
     expect(COLLECTION_WORKSPACE_SKIN).toMatch(
-      /\.ds-collection-workspace__sticky-action-bar\.rottay-action-dock\[data-mode=["']sticky["']\]/
+      /\.ds-collection-workspace__sticky-action-bar\.ds-action-dock\[data-mode=["']sticky["']\]/
     );
     expect(COLLECTION_WORKSPACE_SKIN).toContain('[data-variant].ds-collection-workspace__sticky-primary-action');
     expect(COLLECTION_WORKSPACE_SKIN).not.toContain("[data-part='sticky-action-bar']");

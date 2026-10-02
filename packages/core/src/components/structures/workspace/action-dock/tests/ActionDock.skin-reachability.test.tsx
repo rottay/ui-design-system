@@ -112,9 +112,7 @@ function countPlain(selector: string): [number, number, number] {
 /**
  * `a,b,c` specificity. `:is()`, `:not()` and `:has()` contribute their MOST
  * SPECIFIC argument and `:where()` contributes nothing, so each is resolved to
- * that argument — innermost first, to a fixed point — before counting. Without
- * this the open class window's `:is(.ds-…, .rottay-…)` pairs would read as
- * zero classes and the z-index arithmetic below would compare two blanks.
+ * that argument — innermost first, to a fixed point — before counting.
  */
 function specificity(selector: string): [number, number, number] {
   let resolved = selector;
@@ -150,9 +148,9 @@ describe('ActionDock skin reachability', () => {
     // The dock's z-index is authored twice: once unconditionally and once for
     // the sticky mode. A sticky dock that loses the second declaration stacks
     // in the fixed band, and `--ds-action-dock-sticky-z-index` never resolves.
-    // Both sides read (0,4,0) — one class pair plus three attributes — so the
-    // mode rule wins on source order, exactly as it did before the window.
-    expect(specificity(":is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement][data-mode]")).toEqual([0, 4, 0]);
+    // Both sides read (0,4,0) — one class plus three attributes — so the
+    // mode rule wins on source order.
+    expect(specificity(".ds-action-dock[data-part='root'][data-placement][data-mode]")).toEqual([0, 4, 0]);
     const rules = readSkinRules('action-dock');
     const base = rules.filter((rule) => /\[data-placement\]\[data-mode\]$/.test(rule.selector));
     const modes = rules.filter((rule) => /\[data-mode='(fixed|sticky)'\]/.test(rule.selector));
@@ -172,19 +170,19 @@ describe('ActionDock skin reachability', () => {
   });
 
   it('the shrink guard names the row item, not the control two levels inside it', async () => {
-    // The Dropdown wraps the trigger, so `> .rottay-action-dock__overflow-trigger`
+    // The Dropdown wraps the trigger, so `> .ds-action-dock__overflow-trigger`
     // matched nothing and the more-actions control could be squeezed by the
     // growing primary. The guard belongs on the Dropdown root.
     const { container, getByTestId } = await renderEveryPosture();
     const trigger = getByTestId('dock-keyboard-overflow');
-    expect(trigger.parentElement?.classList.contains('rottay-action-dock__actions')).toBe(false);
+    expect(trigger.parentElement?.classList.contains('ds-action-dock__actions')).toBe(false);
 
     const item = container.querySelector(
-      '.rottay-action-dock__actions > .rottay-action-dock__overflow'
+      '.ds-action-dock__actions > .ds-action-dock__overflow'
     );
     expect(item).not.toBeNull();
     expect(item?.contains(trigger)).toBe(true);
     // The coarse-pointer floor stays on the control itself.
-    expect(trigger.classList.contains('rottay-action-dock__overflow-trigger')).toBe(true);
+    expect(trigger.classList.contains('ds-action-dock__overflow-trigger')).toBe(true);
   });
 });

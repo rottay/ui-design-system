@@ -98,9 +98,9 @@ function oracleOf(channel: Channel): string {
 function dock(own: Scope["own"], rootStyle = ""): string {
   const density = own ? ` data-density="${own}"` : "";
   return [
-    `<div class="ds-action-dock rottay-action-dock" role="toolbar" data-part="root" data-placement="bottom"`,
+    `<div class="ds-action-dock" role="toolbar" data-part="root" data-placement="bottom"`,
     ` data-mode="sticky"${density} data-keyboard-open="false" style="${rootStyle}">`,
-    `<div class="ds-action-dock__actions rottay-action-dock__actions" style="display: flex">`,
+    `<div class="ds-action-dock__actions" style="display: flex">`,
     `<button type="button">Save</button><button type="button">Cancel</button></div>`,
     CHANNELS.map(oracleOf).join(""),
     `</div>`,
@@ -227,7 +227,7 @@ describe("chrome/action-dock channels under a local scope", () => {
 
   it("probes the anatomy the rendering stamps: the density attribute sits on the dock's own root", () => {
     expect(RENDERING).toMatch(/data-part="root"\s+data-placement=\{position\}\s+data-mode=\{mode\}\s+data-density=\{density\}/);
-    expect(RENDERING).toContain("ACTION_DOCK_CLASSES['rottay-action-dock__actions']");
+    expect(RENDERING).toContain('className="ds-action-dock__actions"');
   });
 
   it("measures a real read site and a real oracle for every channel in every scope", () => {

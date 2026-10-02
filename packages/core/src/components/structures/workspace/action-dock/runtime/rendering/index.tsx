@@ -36,7 +36,6 @@ import { Dropdown } from '@/components/primitives/overlay/dropdown';
 import { NavigationMoreIcon } from '@/graphics/icons/semantic/generated/roles/navigation-more';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
-import { ACTION_DOCK_CLASSES } from '@/components/structures/foundation/class-window';
 
 import type { ActionDockAction, ActionDockPriority, ActionDockProps } from '../../contracts';
 
@@ -106,7 +105,7 @@ export function ActionDock({
   'aria-label': ariaLabel,
   style,
 }: ActionDockProps) {
-  const rootClassName = [ACTION_DOCK_CLASSES['rottay-action-dock'], className].filter(Boolean).join(' ');
+  const rootClassName = ['ds-action-dock', className].filter(Boolean).join(' ');
   const { virtualKeyboardInset, isVirtualKeyboardOpen, isPhone } = useResponsive();
   const responsiveStyle = {
     ...style,
@@ -215,7 +214,7 @@ export function ActionDock({
       <Button
         key={action.key}
         variant={PRIORITY_VARIANT[priority]}
-        className={ACTION_DOCK_CLASSES['rottay-action-dock__action']}
+        className="ds-action-dock__action"
         data-priority={priority}
         data-action-key={action.key}
         tabIndex={action.key === activeKey ? 0 : -1}
@@ -238,7 +237,7 @@ export function ActionDock({
       key={OVERFLOW_FOCUS_KEY}
       // The Dropdown root is the row's flex item; the Button is two levels in.
       // The shrink guard has to name the item, not the control.
-      className={ACTION_DOCK_CLASSES['rottay-action-dock__overflow']}
+      className="ds-action-dock__overflow"
       trigger={['click']}
       placement={position === 'top' ? 'bottomRight' : 'topRight'}
       menu={{
@@ -253,7 +252,7 @@ export function ActionDock({
     >
       <Button
         variant="ghost"
-        className={ACTION_DOCK_CLASSES['rottay-action-dock__overflow-trigger']}
+        className="ds-action-dock__overflow-trigger"
         data-action-key={OVERFLOW_FOCUS_KEY}
         tabIndex={OVERFLOW_FOCUS_KEY === activeKey ? 0 : -1}
         icon={<NavigationMoreIcon decorative />}
@@ -278,7 +277,7 @@ export function ActionDock({
       data-keyboard-open={isVirtualKeyboardOpen ? 'true' : 'false'}
     >
       <Flex
-        className={ACTION_DOCK_CLASSES['rottay-action-dock__actions']}
+        className="ds-action-dock__actions"
         align="center"
         onKeyDown={handleToolbarKeyDown}
         onFocus={handleActionFocus}

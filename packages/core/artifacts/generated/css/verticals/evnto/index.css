@@ -49671,20 +49671,17 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * elevation, and stacking tokens so tenants can tune the dock without
  * application-owned CSS.
  *
- * CLASS WINDOW (`components/structures/foundation/class-window`): the dock
- * stamps the canonical `ds-action-dock*` spelling beside the superseded
- * `rottay-action-dock*` one, and every selector below names the pair through a
- * single `:is()` — specificity is that of its most specific argument, so each
- * rule keeps the exact (a,b,c) it had as one class and the z-index arithmetic
- * below is unchanged. The superseded arm also keeps `step-wizard`'s
- * sticky-actions owner and `collection-workspace`'s sticky action bar, which
- * both author the old spelling, on these rules.
+ * CLASS SPELLING: the dock stamps the canonical `ds-action-dock*` spelling
+ * only, and every selector below names the canonical class, keeping the exact
+ * (a,b,c) each rule had as one class so the z-index arithmetic below is
+ * unchanged. `step-wizard`'s sticky-actions owner and `collection-workspace`'s
+ * sticky action bar author the canonical spelling and stay on these rules.
  *
  * SPECIFICITY (P-48): `background` and `box-shadow` are non-border paint;
  * selectors remain rooted in the component class plus explicit state data.
  *
  * PRIORITY GRAMMAR: structured actions carry the dock-owned
- * `rottay-action-dock__action` class + `data-priority`. The grammar paints
+ * `ds-action-dock__action` class + `data-priority`. The grammar paints
  * LAYOUT ONLY (flex growth, separation margin, shrink guard); the composed
  * Button keeps full ownership of its own paint. Danger actions lead the DOM
  * order and get an auto inline-end margin, which pushes the secondary+primary
@@ -49780,7 +49777,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * gap), so the row, the safe areas, and the priority grammar all mirror.
  */
 
-:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement][data-mode] {
+.ds-action-dock[data-part='root'][data-placement][data-mode] {
   box-sizing: border-box;
   width: 100%;
   padding-inline: var(--ds-action-dock-padding-inline, var(--ds-spacing-4, 1rem));
@@ -49800,7 +49797,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
     var(--ds-motion-ease-out, ease-out) both;
 }
 
-:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-mode='fixed'] {
+.ds-action-dock[data-part='root'][data-mode='fixed'] {
   position: fixed;
   inset-inline: 0;
 }
@@ -49811,12 +49808,12 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    `--ds-action-dock-sticky-z-index` never resolved. Tie on specificity, win on
    source order. The family test pins that every mode rule outranks the root
    rule for each property both declare. */
-:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement][data-mode='sticky'] {
+.ds-action-dock[data-part='root'][data-placement][data-mode='sticky'] {
   position: sticky;
   z-index: var(--ds-action-dock-sticky-z-index, var(--ds-z-index-sticky, 1100));
 }
 
-:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'] {
+.ds-action-dock[data-part='root'][data-placement='bottom'] {
   /* Public reservation hook (the S02 `--ds-bottom-tab-bar-reserved-block-end`
      precedent): pages keep their content clear of the fixed dock with
      `padding-block-end: var(--ds-action-dock-reserved-block-end)`. The 60px
@@ -49845,19 +49842,19 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
     );
 }
 
-:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'][data-mode='fixed'] {
+.ds-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'] {
   inset-block-end: calc(var(--ds-shell-bottom-inset, 0px) + var(--ds-virtual-keyboard-inset, 0px));
 }
 
-:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'][data-mode='fixed'][data-keyboard-open='true'] {
+.ds-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'][data-keyboard-open='true'] {
   inset-block-end: var(--ds-virtual-keyboard-inset, 0px);
 }
 
-:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'][data-mode='sticky'] {
+.ds-action-dock[data-part='root'][data-placement='bottom'][data-mode='sticky'] {
   inset-block-end: 0;
 }
 
-:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='top'] {
+.ds-action-dock[data-part='root'][data-placement='top'] {
   /* Top-placement mirror of the bottom reservation hook. */
   --ds-action-dock-reserved-block-start: calc(
     60px + var(--ds-action-dock-safe-area-top, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
@@ -49880,25 +49877,25 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
     var(--ds-action-dock-shadow-top, var(--ds-shadow-navbar));
 }
 
-:is(.ds-action-dock__actions, .rottay-action-dock__actions) {
+.ds-action-dock__actions {
   width: 100%;
   gap: var(--ds-action-dock-gap, var(--ds-spacing-3, 0.75rem));
 }
 
 /* Shrink guard: row children may shrink below content width so labels
  * ellipsize (Button label contract) instead of overflowing the dock. */
-:is(.ds-action-dock__actions, .rottay-action-dock__actions) > * {
+.ds-action-dock__actions > * {
   min-inline-size: 0;
 }
 
 /* Priority grammar (layout only — Button owns its paint):
  * primary grows into the freed space; danger hugs the start edge and the auto
  * margin separates it from the action cluster at the end edge. */
-:is(.ds-action-dock__actions, .rottay-action-dock__actions) > :is(.ds-action-dock__action, .rottay-action-dock__action)[data-priority='primary'] {
+.ds-action-dock__actions > .ds-action-dock__action[data-priority='primary'] {
   flex: 1 1 auto;
 }
 
-:is(.ds-action-dock__actions, .rottay-action-dock__actions) > :is(.ds-action-dock__action, .rottay-action-dock__action)[data-priority='danger'] {
+.ds-action-dock__actions > .ds-action-dock__action[data-priority='danger'] {
   margin-inline-end: auto;
 }
 
@@ -49907,7 +49904,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * rule matched nothing, and the more-actions control could be squeezed by the
  * growing primary — `__overflow` names the item, `__overflow-trigger` stays on
  * the Button for the coarse-pointer floor below. */
-:is(.ds-action-dock__actions, .rottay-action-dock__actions) > :is(.ds-action-dock__overflow, .rottay-action-dock__overflow) {
+.ds-action-dock__actions > .ds-action-dock__overflow {
   flex: 0 0 auto;
 }
 
@@ -49916,8 +49913,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * Q11 channel declared 44px in every scope). min-block-size composes with
  * Button's own height instead of fighting its specificity. */
 @media (pointer: coarse) {
-  :is(.ds-action-dock__actions, .rottay-action-dock__actions) > :where(button, a),
-  :is(.ds-action-dock__overflow-trigger, .rottay-action-dock__overflow-trigger) {
+  .ds-action-dock__actions > :where(button, a),
+  .ds-action-dock__overflow-trigger {
     min-block-size: max(44px, var(--ds-touch-target-min, 44px));
   }
 }
@@ -49938,7 +49935,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 /* Reduced motion: the surface transition (theme/density channel switches)
  * and the entrance are silenced; layout and the coarse floor are unaffected. */
 @media (prefers-reduced-motion: reduce) {
-  :is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement][data-mode] {
+  .ds-action-dock[data-part='root'][data-placement][data-mode] {
     transition: none;
     animation: none;
   }
@@ -50990,20 +50987,11 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  *
  * Selection is on the anatomy the structure stamps (`data-part`,
  * `data-state`); the class vocabulary is a SCOPE, not a paint surface.
- *
- * That scope is inside an open class migration window (see
- * `components/structures/foundation/class-window`): the structure stamps the
- * canonical `ds-app-shell*` spelling beside the superseded `rottay-app-shell*`
- * one, and every rule below selects the pair through a single `:is()`, whose
- * specificity is that of its most specific argument — so each selector keeps
- * the exact (a,b,c) it carried as one class. Both arms stay while the window
- * is open: a consumer pinned to a DS version that never emitted the canonical
- * class, and the in-DS `step-wizard` sticky-actions owner that borrows the
- * dock's chrome, still reach these rules. Drop the superseded argument only
- * when the window's own drill says so.
+ * That scope is the canonical `ds-app-shell*` spelling, stamped alone on
+ * the structure; no rule below names the superseded spelling.
  */
 
-:is(.ds-app-shell, .rottay-app-shell) {
+.ds-app-shell {
   /* Resting values for the channels the React root re-stamps per instance:
      the physical inset bridges, the resolved insets a server render needs
      before hydration, and the default-geometry main transition. */
@@ -51039,7 +51027,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 /* Skip link: first tab stop, hidden until focused, revealed above all chrome. */
-:is(.ds-app-shell, .rottay-app-shell) [data-part="skip-link"] {
+.ds-app-shell [data-part="skip-link"] {
   position: fixed;
   inset-block-start: calc(var(--ds-shell-safe-area-top) + var(--ds-spacing-3, 12px));
   inset-inline-start: calc(var(--ds-shell-safe-area-left) + var(--ds-spacing-3, 12px));
@@ -51056,7 +51044,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   box-shadow: var(--ds-app-shell-skip-link-shadow, var(--ds-elevation-2, none));
   text-decoration: none;
 }
-:is(.ds-app-shell, .rottay-app-shell) [data-part="skip-link"]:not(:focus) {
+.ds-app-shell [data-part="skip-link"]:not(:focus) {
   width: 1px;
   height: 1px;
   min-height: 0;
@@ -51070,13 +51058,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 /* The ring is the kernel's decision, with the platform pseudo as the same
    rule's fallback arm. */
-:is(.ds-app-shell, .rottay-app-shell) [data-part="skip-link"]:is([data-state~="focus-visible"], :focus-visible) {
+.ds-app-shell [data-part="skip-link"]:is([data-state~="focus-visible"], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"] {
+.ds-app-shell [data-part="navigation-sidebar"] {
   position: fixed;
   inset-block: 0;
   inset-inline-start: 0;
@@ -51100,8 +51088,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 /* The drawer surface is the Sheet's own part in the Sheet's own portal. The
    shell selects it by its own class, tripled to hold the specificity the
    `[data-part='surface']` qualifier used to carry, without consuming a part
-   this family never stamps. Three `:is()` pairs are still (0,3,0). */
-:is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer) {
+   this family never stamps. Three class repetitions are still (0,3,0). */
+.ds-app-shell__navigation-drawer.ds-app-shell__navigation-drawer.ds-app-shell__navigation-drawer {
   width: var(--ds-shell-resolved-drawer-inline-size);
   max-width: 100dvw;
   height: 100dvh;
@@ -51117,7 +51105,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   box-shadow: var(--ds-shell-navigation-shadow, var(--ds-elevation-3));
 }
 
-:is(.ds-app-shell__navigation-drawer-body, .rottay-app-shell__navigation-drawer-body) {
+.ds-app-shell__navigation-drawer-body {
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -51126,7 +51114,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
      `!important` is needed here. Layout-only declarations stay in the skin. */
 }
 
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   [data-part="navigation-drawer-header"] {
   min-height: var(--ds-shell-resolved-sidebar-header-min-block-size);
   flex-shrink: 0;
@@ -51140,12 +51128,12 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   border-block-end: var(--ds-app-shell-navigation-header-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
 }
 
-:is(.ds-app-shell__navigation-drawer-logo, .rottay-app-shell__navigation-drawer-logo) {
+.ds-app-shell__navigation-drawer-logo {
   min-width: 0;
   overflow: hidden;
 }
 
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   :is([data-part="navigation-close"], [data-part="navigation-trigger"]) {
   width: 44px;
   min-width: 44px;
@@ -51159,13 +51147,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   cursor: pointer;
 }
 
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   [data-part="navigation-close"] {
   background: transparent;
   border: 0;
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-logo"] {
+.ds-app-shell [data-part="navigation-logo"] {
   height: var(--ds-shell-resolved-sidebar-header-block-size);
   flex-shrink: 0;
   display: flex;
@@ -51177,12 +51165,12 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   border-block-end: var(--ds-app-shell-navigation-header-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-logo"][data-collapsed="true"] {
+.ds-app-shell [data-part="navigation-logo"][data-collapsed="true"] {
   justify-content: center;
   padding: var(--ds-app-shell-navigation-logo-padding-collapsed, 0);
 }
 
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   [data-part="navigation-body"] {
   flex: 1;
   overflow-y: auto;
@@ -51207,12 +51195,12 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   );
 }
 
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   [data-part="navigation-body"][data-collapsed="true"] {
   padding: var(--ds-app-shell-navigation-body-padding-collapsed, var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)));
 }
 
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   [data-part="navigation-footer"] {
   flex-shrink: 0;
   padding: var(--ds-shell-navigation-footer-padding, var(--ds-app-shell-navigation-footer-padding, var(--ds-spacing-3, 12px)));
@@ -51220,12 +51208,12 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   border-block-start: var(--ds-app-shell-navigation-footer-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
 }
 
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   [data-part="navigation-footer"][data-collapsed="true"] {
   padding: var(--ds-app-shell-navigation-footer-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px));
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"] {
+.ds-app-shell [data-part="main-area"] {
   /* The structural padding defaults are declared per arm rather than read
      with a different fallback in each rule: one channel, one value, and the
      arm that needs the notch says so where the arm is. */
@@ -51252,16 +51240,16 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   box-shadow: var(--ds-app-shell-main-shadow, none);
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"][data-has-header="false"] {
+.ds-app-shell [data-part="main-area"][data-has-header="false"] {
   --ds-shell-main-padding-block-start: var(--ds-shell-safe-area-top);
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"][data-compact="true"] {
+.ds-app-shell [data-part="main-area"][data-compact="true"] {
   --ds-shell-main-padding-inline-start: var(--ds-shell-safe-area-left);
   margin-inline-start: 0;
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="header"] {
+.ds-app-shell [data-part="header"] {
   position: sticky;
   inset-block-start: var(--ds-shell-header-inset-block-start, var(--ds-app-shell-header-inset-block-start, 0));
   inset-inline: var(--ds-shell-header-inset-inline, var(--ds-app-shell-header-inset-inline, 0));
@@ -51282,30 +51270,30 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   -webkit-backdrop-filter: var(--ds-app-shell-header-backdrop, var(--ds-layout-header-backdrop, blur(12px)));
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-trigger"] {
+.ds-app-shell [data-part="navigation-trigger"] {
   margin-inline-end: var(--ds-app-shell-navigation-trigger-margin-inline-end, var(--ds-spacing-3, 12px));
   background: transparent;
   border: 0;
 }
 
-:is(.ds-app-shell, .rottay-app-shell)
+.ds-app-shell
   :is([data-part="header-left"], [data-part="header-center"], [data-part="header-right"]) {
   flex: 1;
   min-width: 0;
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="header-center"] {
+.ds-app-shell [data-part="header-center"] {
   display: flex;
   justify-content: center;
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="header-right"] {
+.ds-app-shell [data-part="header-right"] {
   display: flex;
   justify-content: flex-end;
   gap: var(--ds-app-shell-header-slot-gap, var(--ds-spacing-1, 4px));
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="content"] {
+.ds-app-shell [data-part="content"] {
   flex: 1;
   min-width: 0;
   padding: var(--ds-app-shell-content-padding, 0);
@@ -51313,7 +51301,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   border: var(--ds-app-shell-content-border, 0);
 }
 
-:is(.ds-app-shell, .rottay-app-shell) [data-part="footer"] {
+.ds-app-shell [data-part="footer"] {
   flex-shrink: 0;
   padding: var(--ds-app-shell-footer-padding, 0);
   background: var(--ds-app-shell-footer-background, transparent);
@@ -51335,7 +51323,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * ------------------------------------------------------------------------- */
 
 /* sidebar panel: roomy, reading-first rhythm (the comfortable default). */
-[data-anatomy-sidebar='panel'] :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"] {
+[data-anatomy-sidebar='panel'] .ds-app-shell [data-part="navigation-sidebar"] {
   --ds-sidebar-item-padding-inline: var(--ds-spacing-3);
   --ds-sidebar-item-gap: var(--ds-spacing-2);
   --ds-sidebar-shell-padding-inline:
@@ -51344,7 +51332,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 /* sidebar rail: narrow, scan-first; tight rhythm and compact padding. */
-[data-anatomy-sidebar='rail'] :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"] {
+[data-anatomy-sidebar='rail'] .ds-app-shell [data-part="navigation-sidebar"] {
   --ds-sidebar-item-gap: var(--ds-spacing-1);
   --ds-sidebar-shell-padding-inline:
     var(--ds-spacing-2) var(--ds-spacing-2)
@@ -51353,7 +51341,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* layout flat: the shell header merges with the canvas — no rule, radius,
    elevation or backdrop tint. */
-[data-anatomy-layout='flat'] :is(.ds-app-shell, .rottay-app-shell) [data-part="header"] {
+[data-anatomy-layout='flat'] .ds-app-shell [data-part="header"] {
   border-block-end: 0;
   border-radius: 0;
   box-shadow: none;
@@ -51363,7 +51351,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* layout floating: the shell header lifts into an inset, rounded, elevated
    card (mirrors the modern Layout.Header floating anatomy). */
-[data-anatomy-layout='floating'] :is(.ds-app-shell, .rottay-app-shell) [data-part="header"] {
+[data-anatomy-layout='floating'] .ds-app-shell [data-part="header"] {
   border-block-end: 0;
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-2);
@@ -51385,7 +51373,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * `:has()` skip the rule: the app's explicit `geometry.bottomInset` contract
  * keeps working as before (graceful degradation, not a new requirement).
  * ------------------------------------------------------------------------- */
-:is(.ds-app-shell, .rottay-app-shell):has(.rottay-bottom-tab-bar[data-part='root']) [data-part="main-area"] {
+.ds-app-shell:has(.rottay-bottom-tab-bar[data-part='root']) [data-part="main-area"] {
   --ds-shell-main-padding-block-end: max(
     var(--ds-shell-bottom-inset),
     calc(50px + env(safe-area-inset-bottom, 0px))
@@ -51404,7 +51392,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * shell geometry — this channel only tells the menu to follow it, including
  * through the collapse width transition.
  * ------------------------------------------------------------------------- */
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   [data-part="navigation-body"][data-collapsed='true'] {
   --_ds-menu-collapsed-inline-size: 100%;
 }
@@ -51416,16 +51404,16 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    consumption flips. The published `--ds-shell-inline-start-inset` calc keeps
    its LTR reading on desktop (safe-area insets are 0px there in practice);
    the residual desktop-RTL notch asymmetry in that calc is registered debt. */
-[dir='rtl'] :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"] {
+[dir='rtl'] .ds-app-shell [data-part="navigation-sidebar"] {
   padding-inline-start: var(--ds-shell-safe-area-right);
 }
-[dir='rtl'] :is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"] {
+[dir='rtl'] .ds-app-shell [data-part="main-area"] {
   --ds-shell-main-padding-inline-end: var(--ds-shell-safe-area-left);
 }
-[dir='rtl'] :is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"][data-compact='true'] {
+[dir='rtl'] .ds-app-shell [data-part="main-area"][data-compact='true'] {
   --ds-shell-main-padding-inline-start: var(--ds-shell-safe-area-right);
 }
-[dir='rtl'] :is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer) {
+[dir='rtl'] .ds-app-shell__navigation-drawer.ds-app-shell__navigation-drawer.ds-app-shell__navigation-drawer {
   padding-inline-start: env(safe-area-inset-right, 0px);
 }
 
@@ -51433,7 +51421,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    the keyboard ring once and serializes it into `data-state`; the platform
    pseudo is the fallback arm of the same rule, never a second decision. */
 
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   :is([data-part="navigation-close"], [data-part="navigation-trigger"]) {
   border-radius: var(--ds-radius-md, 8px);
   transition:
@@ -51443,7 +51431,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* Hover microinteraction: quiet wash, no accent — the shell chrome stays
    neutral so the single blue accent keeps its scarcity. */
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   :is([data-part="navigation-close"], [data-part="navigation-trigger"]):is(
     [data-state~="hovered"],
     :hover
@@ -51451,7 +51439,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   background: var(--ds-app-shell-navigation-action-hover-bg, var(--ds-color-neutral-100));
 }
 
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   :is([data-part="navigation-close"], [data-part="navigation-trigger"]):is(
     [data-state~="pressed"],
     :active
@@ -51459,7 +51447,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   background: var(--ds-app-shell-navigation-action-active-bg, var(--ds-color-neutral-200, var(--ds-color-neutral-100)));
 }
 
-:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
   :is([data-part="navigation-close"], [data-part="navigation-trigger"]):is(
     [data-state~="focus-visible"],
     :focus-visible
@@ -51470,9 +51458,9 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"],
-  :is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"],
-  :is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+  .ds-app-shell [data-part="navigation-sidebar"],
+  .ds-app-shell [data-part="main-area"],
+  :is(.ds-app-shell, .ds-app-shell__navigation-drawer)
     :is([data-part="navigation-close"], [data-part="navigation-trigger"]) {
     transition: none;
   }
@@ -51482,7 +51470,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    affordance only — drop it (and the translucent wash it softens) so the
    header reads as a solid surface (sheet.css precedent). */
 @media (prefers-reduced-transparency: reduce) {
-  :is(.ds-app-shell, .rottay-app-shell) [data-part="header"] {
+  .ds-app-shell [data-part="header"] {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: var(--ds-shell-header-background, var(--ds-app-shell-header-background, var(--ds-layout-header-bg, var(--ds-surface-canvas))));
@@ -51490,7 +51478,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 @media (forced-colors: active) {
-  :is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+  :is(.ds-app-shell, .ds-app-shell__navigation-drawer)
     :is([data-part="navigation-close"], [data-part="navigation-trigger"]) {
     border: 1px solid ButtonText;
     color: ButtonText;
@@ -51500,19 +51488,19 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   /* The chrome hairlines (sidebar edge, header rule, drawer edge, footer
      frame) re-key to a system color so the region separation survives when
      the tenant palette is forced away. */
-  :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"],
-  :is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer),
-  :is(.ds-app-shell, .rottay-app-shell) [data-part="header"],
-  :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-logo"],
-  :is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+  .ds-app-shell [data-part="navigation-sidebar"],
+  .ds-app-shell__navigation-drawer.ds-app-shell__navigation-drawer.ds-app-shell__navigation-drawer,
+  .ds-app-shell [data-part="header"],
+  .ds-app-shell [data-part="navigation-logo"],
+  :is(.ds-app-shell, .ds-app-shell__navigation-drawer)
     [data-part="navigation-drawer-header"],
-  :is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
+  :is(.ds-app-shell, .ds-app-shell__navigation-drawer)
     [data-part="navigation-footer"] {
     border-color: CanvasText;
   }
 
   /* The skip link keeps a real frame and readable system ink. */
-  :is(.ds-app-shell, .rottay-app-shell) [data-part="skip-link"]:focus {
+  .ds-app-shell [data-part="skip-link"]:focus {
     border: 1px solid ButtonText;
     background: Canvas;
     color: ButtonText;
@@ -90539,7 +90527,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* -------------------------------------------------------------------------
    Sticky action dock (phone posture) — surface overrides on ActionDock.
    ------------------------------------------------------------------------- */
-.ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar.rottay-action-dock[data-mode="sticky"] {
+.ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar.ds-action-dock[data-mode="sticky"] {
   background: var(--ds-color-bg-primary);
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }

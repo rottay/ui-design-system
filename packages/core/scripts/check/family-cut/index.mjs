@@ -75,7 +75,6 @@ import {
   readLayoutSensitiveFamilies,
   readPostureVocabulary,
 } from './adapt-slot/index.mjs';
-import { windowedCanonicalClasses } from './class-window/index.mjs';
 import { classifyReadWithoutProducer } from '../engine/read-without-producer/index.mjs';
 import { collectSkinFiles } from '../../libraries/engine/skins/files/index.mjs';
 import { packageRoot as findPackageRoot } from '../../libraries/repo-root/index.mjs';
@@ -2224,12 +2223,9 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
     const remainder = token.slice(token.indexOf('-') + 1);
     return remainder === family || remainder.startsWith(`${family}-`);
   }).sort();
-  /* A declared class window is ONE row mid-rename, not two vocabularies: the
-   * canonical twin is set aside while its superseded partner is still stamped,
-   * so starting a migration cannot read as new debt and finishing one drops
-   * the legacy count. See `./class-window`. */
-  const windowedClasses = windowedCanonicalClasses(family, namedClassTokens);
-  const ownClassTokens = namedClassTokens.filter((token) => !windowedClasses.has(token));
+  /* The class window retired (WO-FAM-11, 2026-10-02): the canonical spelling
+   * is the only one stamped, so the census counts tokens directly. */
+  const ownClassTokens = namedClassTokens;
   const vocabularies = [...new Set(ownClassTokens.map((token) => token.slice(0, token.indexOf('-'))))].sort();
   const legacyNamespaceClasses = ownClassTokens.filter((token) => !token.startsWith('ds-'));
 
@@ -2320,7 +2316,6 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
     },
     detail: {
       vocabularies,
-      windowedClasses: [...windowedClasses].sort(),
       legacyNamespaceClasses,
       partsStampedNotConsumed,
       partsConsumedNotStamped,

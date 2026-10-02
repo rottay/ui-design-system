@@ -40,55 +40,21 @@ const SUPERSEDED_NAME = /^rottay-(?:app-shell|action-dock)(?:$|__|--)/;
 const SUPERSEDED_IN_TEXT = /\brottay-(?:app-shell|action-dock)[\w-]*/g;
 
 /**
- * The dual-class window as observed today. The retirement lot (WO-FAM-11 L2)
- * flips all three to `[]`, and nothing else in this file changes.
+ * The dual-class window is RETIRED (WO-FAM-11 L2, 2026-10-02): no superseded
+ * spelling is stamped, selected or dock-only. These three lists stay as the
+ * standing proof — a legacy class returning to the corpus reds this suite.
  */
 const CLASS_WINDOW = {
   /** Superseded classes still stamped beside their `ds-` twin. */
-  emitted: [
-    'rottay-action-dock',
-    'rottay-action-dock__action',
-    'rottay-action-dock__actions',
-    'rottay-action-dock__overflow',
-    'rottay-action-dock__overflow-trigger',
-    'rottay-app-shell',
-    'rottay-app-shell__content',
-    'rottay-app-shell__footer',
-    'rottay-app-shell__header',
-    'rottay-app-shell__header-slot',
-    'rottay-app-shell__header-slot--center',
-    'rottay-app-shell__header-slot--right',
-    'rottay-app-shell__main',
-    'rottay-app-shell__navigation-body',
-    'rottay-app-shell__navigation-close',
-    'rottay-app-shell__navigation-drawer',
-    'rottay-app-shell__navigation-drawer-body',
-    'rottay-app-shell__navigation-drawer-header',
-    'rottay-app-shell__navigation-drawer-logo',
-    'rottay-app-shell__navigation-footer',
-    'rottay-app-shell__navigation-logo',
-    'rottay-app-shell__navigation-sidebar',
-    'rottay-app-shell__navigation-trigger',
-    'rottay-app-shell__skip-link',
-  ],
+  emitted: [] as readonly string[],
   /** Superseded classes the packed `styles.css` still selects. */
-  selected: [
-    'rottay-action-dock',
-    'rottay-action-dock__action',
-    'rottay-action-dock__actions',
-    'rottay-action-dock__overflow',
-    'rottay-action-dock__overflow-trigger',
-    'rottay-app-shell',
-    'rottay-app-shell__navigation-drawer',
-    'rottay-app-shell__navigation-drawer-body',
-    'rottay-app-shell__navigation-drawer-logo',
-  ],
+  selected: [] as readonly string[],
   /**
    * Docks stamped with the superseded spelling ONLY. StepWizard's sticky dock
    * hand-builds the dock anatomy without the `ds-` twin, so no canonical app
    * selector reaches it until the retirement lot migrates it.
    */
-  legacyOnlyDocks: ['step-wizard-action-dock'],
+  legacyOnlyDocks: [] as readonly string[],
 } as const;
 
 /** The classes the Modern skins select by name; every other anatomy hook is read by `data-part`. */
@@ -312,9 +278,13 @@ function observe(observation: Observation, width: number) {
       for (const name of canonicalClassesOf(selector)) if (node.classList.contains(name)) carried.add(name);
     }
     // The old spelling reaches exactly the new one's nodes while its names are
-    // pinned, and nothing once they leave the pin.
+    // pinned, and nothing once they leave the pin. The twin inherits the
+    // selector's non-DS arms (the fixture's own classes), so the measurement is
+    // the nodes carrying a superseded CLASS, not the selector's whole reach.
     const twin = supersededTwin(selector);
-    const twinMatched = [...document.querySelectorAll(twin)];
+    const twinMatched = [...document.querySelectorAll(twin)].filter((node) =>
+      /\brottay-(?:app-shell|action-dock)/.test(node.className),
+    );
     const twinEmitted = canonicalClassesOf(selector).every((name) =>
       (CLASS_WINDOW.emitted as readonly string[]).includes(name.replace(/^ds-/, 'rottay-')),
     );

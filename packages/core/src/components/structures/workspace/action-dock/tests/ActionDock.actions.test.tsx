@@ -17,7 +17,6 @@ import { ResponsiveContext, type ResponsiveContextValue } from '../../../../../i
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import { ActionDock } from '..';
 import type { ActionDockAction } from '..';
-import { CLASS_MIGRATION_WINDOWS } from '@/components/structures/foundation/class-window';
 
 const ACTION_DOCK_SKIN = readFileSync(
   join(__dirname, '../../../../../foundation/tokens/css/presentation/components/skin/action-dock/index.css'),
@@ -87,7 +86,7 @@ describe('ActionDock structured actions', () => {
       'secondary',
       'primary',
     ]);
-    expect(rendered.every((node) => node.classList.contains('rottay-action-dock__action'))).toBe(true);
+    expect(rendered.every((node) => node.classList.contains('ds-action-dock__action'))).toBe(true);
   });
 
   it.each(STABLE_ENGINES)('runs a single-tab-stop roving tabindex under %s', async (engine) => {
@@ -276,7 +275,7 @@ describe('ActionDock structured actions', () => {
       'modern'
     );
     const dock = await findByTestId('action-dock');
-    const row = dock.querySelector('.rottay-action-dock__actions') as HTMLElement;
+    const row = dock.querySelector('.ds-action-dock__actions') as HTMLElement;
 
     expect(row.firstElementChild).toHaveAttribute('data-action-key', 'save');
     expect(row.lastElementChild).toHaveTextContent('Extra');
@@ -284,29 +283,26 @@ describe('ActionDock structured actions', () => {
 });
 
 /**
- * The paired selector the open class window authors for one superseded class.
- * Built from the declaration so these assertions cannot drift from it, and so
- * they collapse to a single class the day the window closes.
+ * The canonical selector the skin authors for one dock class, so these
+ * assertions cannot drift from the source.
  */
-const DOCK_WINDOW = CLASS_MIGRATION_WINDOWS.find((entry) => entry.family === 'action-dock')!.pairs as Readonly<Record<string, string>>;
-const sel = (superseded: keyof typeof DOCK_WINDOW): string =>
-  `:is(.${DOCK_WINDOW[superseded]}, .${String(superseded)})`;
+const sel = (canonical: string): string => `.${canonical}`;
 
 describe('ActionDock skin ownership (structured grammar)', () => {
   it('paints the priority grammar as dock-owned layout, not inline or cross-component paint', () => {
     expect(NORMALIZED_ACTION_DOCK_SKIN).toContain(
-      `${sel('rottay-action-dock__actions')} > * { min-inline-size: 0; }`
+      `${sel('ds-action-dock__actions')} > * { min-inline-size: 0; }`
     );
     expect(NORMALIZED_ACTION_DOCK_SKIN).toContain(
-      `${sel('rottay-action-dock__actions')} > ${sel('rottay-action-dock__action')}[data-priority='primary'] { flex: 1 1 auto; }`
+      `${sel('ds-action-dock__actions')} > ${sel('ds-action-dock__action')}[data-priority='primary'] { flex: 1 1 auto; }`
     );
     expect(NORMALIZED_ACTION_DOCK_SKIN).toContain(
-      `${sel('rottay-action-dock__actions')} > ${sel('rottay-action-dock__action')}[data-priority='danger'] { margin-inline-end: auto; }`
+      `${sel('ds-action-dock__actions')} > ${sel('ds-action-dock__action')}[data-priority='danger'] { margin-inline-end: auto; }`
     );
     // The shrink guard names the Dropdown root (`__overflow`), which is the
     // row's flex item; keyed on the Button class it matched nothing.
     expect(NORMALIZED_ACTION_DOCK_SKIN).toContain(
-      `${sel('rottay-action-dock__actions')} > ${sel('rottay-action-dock__overflow')} { flex: 0 0 auto; }`
+      `${sel('ds-action-dock__actions')} > ${sel('ds-action-dock__overflow')} { flex: 0 0 auto; }`
     );
     // No physical-properties leak in the grammar (RTL mirrors for free).
     const grammarRules = ACTION_DOCK_SKIN.match(/\.ds-action-dock__action[^{]*\{[^}]*\}/g) ?? [];
@@ -317,8 +313,8 @@ describe('ActionDock skin ownership (structured grammar)', () => {
 
   it('levels the 44px physical floor on coarse pointers', () => {
     const coarseBlock = ACTION_DOCK_SKIN.match(/@media \(pointer: coarse\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
-    expect(coarseBlock).toContain(`${sel('rottay-action-dock__actions')} > :where(button, a)`);
-    expect(coarseBlock).toContain(sel('rottay-action-dock__overflow-trigger'));
+    expect(coarseBlock).toContain(`${sel('ds-action-dock__actions')} > :where(button, a)`);
+    expect(coarseBlock).toContain(sel('ds-action-dock__overflow-trigger'));
     // The floor reads the canonical touch channel (Q11), never a bare literal
     // alone: the whole declaration is pinned, so no other spelling can land.
     expect(coarseBlock).toContain('min-block-size: max(44px, var(--ds-touch-target-min, 44px))');
@@ -351,7 +347,7 @@ describe('ActionDock skin ownership (structured grammar)', () => {
 
   it('reads as a frosted chrome sheet with placement-aware elevation (W10)', () => {
     const rootRule = ACTION_DOCK_SKIN.match(
-      /:is\(\.ds-action-dock, \.rottay-action-dock\)\[data-part=["']root["']\]\[data-placement\]\[data-mode\]\s*\{([^}]*)\}/
+      /\.ds-action-dock\[data-part=["']root["']\]\[data-placement\]\[data-mode\]\s*\{([^}]*)\}/
     )?.[1];
     const bottomRule = ACTION_DOCK_SKIN.match(
       /\[data-placement=["']bottom["']\]\s*\{([^}]*)\}/

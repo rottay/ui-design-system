@@ -24,7 +24,6 @@ import {
 } from '@/infrastructure/runtime/responsive';
 import { appShellChromeDeriver } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell';
 import { AppShell } from '..';
-import { CLASS_MIGRATION_WINDOWS } from '../../../foundation/class-window';
 import {
   SHELL_PUBLISHED_CHANNELS,
   SHELL_RESOLVED_CHANNELS,
@@ -198,9 +197,8 @@ describe('AppShell (WO-FAM-11 cut) — the anatomy contract', () => {
       expect(SKIN, `skin rule for ${part}`).toContain(`[data-part="${part}"]`);
     }
     expect(stamped.has('root')).toBe(true);
-    // The root is selected through the open class window's pair, which is
-    // (0,1,0) exactly like the single class it replaced.
-    expect(SKIN).toContain(':is(.ds-app-shell, .rottay-app-shell) {');
+    // The root is selected through its canonical class alone, at (0,1,0).
+    expect(SKIN).toContain('.ds-app-shell {');
     // And the converse: no skin rule hangs on a part this structure never stamps.
     for (const match of SKIN.matchAll(/\[data-part="([a-z-]+)"\]/g)) {
       expect(OWNED_PARTS, match[1]).toContain(match[1]);
@@ -226,25 +224,55 @@ describe('AppShell (WO-FAM-11 cut) — the anatomy contract', () => {
   });
 });
 
-describe('AppShell (WO-FAM-11 cut) — the open class window', () => {
-  it('carries both spellings of every rendered windowed class', () => {
+/** The canonical anatomy vocabulary the structure stamps. */
+const CANONICAL_CLASSES = [
+  'ds-app-shell',
+  'ds-app-shell__skip-link',
+  'ds-app-shell__navigation-sidebar',
+  'ds-app-shell__navigation-logo',
+  'ds-app-shell__navigation-body',
+  'ds-app-shell__navigation-footer',
+  'ds-app-shell__navigation-drawer',
+  'ds-app-shell__navigation-drawer-body',
+  'ds-app-shell__navigation-drawer-header',
+  'ds-app-shell__navigation-drawer-logo',
+  'ds-app-shell__navigation-close',
+  'ds-app-shell__navigation-trigger',
+  'ds-app-shell__main',
+  'ds-app-shell__header',
+  'ds-app-shell__header-slot',
+  'ds-app-shell__header-slot--center',
+  'ds-app-shell__header-slot--right',
+  'ds-app-shell__content',
+  'ds-app-shell__footer',
+] as const;
+
+/** The superseded spelling of every canonical class: stamped by nothing. */
+const SUPERSEDED_CLASSES = CANONICAL_CLASSES.map((name) =>
+  name.replace(/^ds-/, 'rottay-'),
+) as readonly string[];
+
+describe('AppShell (WO-FAM-11 cut) — the canonical class vocabulary', () => {
+  it('stamps the canonical spelling of every class, and never the superseded one', () => {
     // Two renders, because the drawer-only classes live in the Sheet's portal
-    // and the desktop-only ones do not exist in the compact arm.
-    const desktop = renderShell(DESKTOP_CONTEXT);
-    const pairs = CLASS_MIGRATION_WINDOWS.find((entry) => entry.family === 'app-shell')!.pairs as
-      Readonly<Record<string, string>>;
+    // and the desktop-only ones do not exist in the compact arm. The compact
+    // drawer opens so the portal-mounted classes exist in the document.
+    renderShell(DESKTOP_CONTEXT);
+    renderShell(TABLET_CONTEXT);
+    fireEvent.click(screen.getByRole('button', { name: 'Open Primary navigation' }));
 
     let reached = 0;
-    for (const [superseded, canonical] of Object.entries(pairs)) {
-      const bySuperseded = [...desktop.container.querySelectorAll(`.${superseded}`)];
-      const byCanonical = [...desktop.container.querySelectorAll(`.${canonical}`)];
-      // Every node one spelling reaches, the other reaches — including none.
-      expect({ superseded, nodes: byCanonical }).toEqual({ superseded, nodes: bySuperseded });
-      reached += bySuperseded.length;
+    for (const canonical of CANONICAL_CLASSES) {
+      reached += document.querySelectorAll(`.${canonical}`).length;
     }
-    // Not vacuous: the desktop arm renders root, skip link, sidebar, logo,
-    // body, footer, main, header, three header slots, content and footer.
+    // Not vacuous: across the two arms every class lands at least once —
+    // desktop renders root, skip link, sidebar, logo, body, footer, main,
+    // header, three header slots, content and footer; the open compact drawer
+    // adds the drawer, its body, header, logo and close control and the trigger.
     expect(reached).toBeGreaterThanOrEqual(13);
+    for (const superseded of SUPERSEDED_CLASSES) {
+      expect(document.querySelectorAll(`.${superseded}`)).toHaveLength(0);
+    }
   });
 });
 
