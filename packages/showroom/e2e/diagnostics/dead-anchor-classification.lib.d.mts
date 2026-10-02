@@ -6,7 +6,7 @@ import type { SkinRule } from './skin-rule-coverage.lib.mjs';
 export type ResolvedName = { name: string; kind: 'prop' | 'state' | 'param' | 'field' | 'local' | 'free' };
 
 export type Condition = {
-  kind: 'and' | 'or' | 'ternary' | 'if' | 'early-return' | 'switch' | 'iteration' | 'lookup' | 'class-value' | 'unknown';
+  kind: 'and' | 'or' | 'ternary' | 'if' | 'early-return' | 'switch' | 'iteration' | 'lookup' | 'class-value' | 'tag' | 'mount' | 'unknown';
   text: string;
   file: string;
   line: number;
@@ -18,27 +18,43 @@ export type Condition = {
 
 export type ClassSet = { present: Set<string>; complete: boolean };
 
-export type ChainSibling =
-  | { kind: 'el'; tag: string; part: string | null; classes: ClassSet; optional: boolean }
-  | { kind: 'opaque'; optional: boolean };
+/** A host tag bound to a typed prop (`const Component = as`): its declared intrinsic union and default. */
+export type PropTag = { prop: string; values: string[]; def: string; file: string; line: number };
+
+/** An intrinsic element: `tags` it can render as (null when only `tagPrefix` is known), and its opening tag node. */
+export type ElementShape = {
+  kind: 'el';
+  tag: string;
+  tags?: string[] | null;
+  tagPrefix?: string | null;
+  tagProp?: PropTag | null;
+  part: string | null;
+  classes: ClassSet;
+  at?: unknown;
+};
+
+export type ChainSibling = (ElementShape & { optional: boolean }) | { kind: 'opaque'; optional: boolean };
 
 /** One level of a stamp's JSX ancestry, host first. */
 export type ChainEntry =
-  | { kind: 'el'; tag: string; part: string | null; classes: ClassSet; siblings?: ChainSibling[]; file?: string; container?: boolean }
+  | (ElementShape & { siblings?: ChainSibling[]; file?: string; container?: boolean })
   | { kind: 'component'; tag: string; passed: { names: Set<string>; spread: boolean }; siblings?: ChainSibling[]; file?: string; container?: boolean }
-  | { kind: 'prop'; tag: string; prop: string | null; file: string; siblings?: ChainSibling[] }
+  | { kind: 'prop'; tag: string; prop: string | null; file: string; line: number; passed: { names: Set<string>; spread: boolean }; siblings?: ChainSibling[] }
   | { kind: 'portal'; via: string; siblings?: ChainSibling[] };
 
-export type RenderPath = { conditions: Condition[]; end: string; chain: ChainEntry[]; hostAt: number | null };
+/** `hostAttr`: the JSX attribute the path enters its host through (`className`, `data-state`, ...), when known. */
+export type RenderPath = { conditions: Condition[]; end: string; chain: ChainEntry[]; hostAt: number | null; hostAttr?: string | null };
 
 export type StampSite = {
   file: string;
   /** A data-part, or `.class` for a class anchor. */
   part: string;
   kind: 'part' | 'class';
-  /** A class anchor's producing literal or template prefix. */
+  /** A class anchor's producing literal, template prefix, recipe call (`r.resolve`) or pair-table key. */
   match?: string;
-  via: 'data-part' | 'part' | 'partAttributes' | 'd3-attr' | 'data-part-prop' | 'className';
+  via: 'data-part' | 'part' | 'partAttributes' | 'd3-attr' | 'data-part-prop' | 'className' | 'recipe-slot' | 'class-window';
+  /** A class site read as a class-only row's subject (the element's own gates count). */
+  full?: boolean;
   lands: boolean;
   host: string | null;
   line: number;

@@ -22,6 +22,12 @@
 // lookup-table members and prop-driven class tokens; an unreadable selection is
 // unanalysable, never 'no condition'.
 //
+// Producers are read where the source holds them: a tag bound to a prop typed as a union
+// of intrinsic names (the selector's tag becomes the gate), recipe slot tables and
+// class-window pair tables (both spellings at the keyed read). A `>` parent the stamp's
+// ancestry cannot see must be an element that renders composed children; a prop a host
+// mounts only behind its own gate (an overlay's `content`) carries that gate.
+//
 // Conservative bias is the law: a row leaves the failing class ONLY with positive
 // source evidence. These never count as a gate: iteration (`.map` over data the
 // fixture may well hold), hydration flags that are true at rest, conditions the
@@ -129,12 +135,214 @@ function isIntrinsicTagValue(n) {
   return false;
 }
 
-/** `<div>`, `<svg:g>`, or a variable tag bound to an intrinsic name (`const Heading = \`h${level}\``). */
-function isIntrinsicTag(tagNode) {
+/**
+ * `<div>`, `<svg:g>`, a variable tag bound to an intrinsic name (`const Heading = \`h${level}\``),
+ * or one bound to a prop whose declared type is a union of intrinsic names (`const Component = as`).
+ */
+function isIntrinsicTag(tagNode, ctx = null) {
   if (INTRINSIC_TAG.test(tagNode.getText())) return true;
   if (!ts.isIdentifier(tagNode)) return false;
   const init = localInitializer(tagNode);
-  return Boolean(init) && isIntrinsicTagValue(init);
+  return (Boolean(init) && isIntrinsicTagValue(init)) || Boolean(propTagOf(tagNode, ctx));
+}
+
+const isTypeDecl = (st) => ts.isInterfaceDeclaration(st) || ts.isTypeAliasDeclaration(st);
+
+/** The interface or type alias `name` resolves to in a census file, through type and value imports. */
+function resolveTypeName(census, file, name, seen = new Set()) {
+  const key = `n|${file}|${name}`;
+  if (seen.has(key) || !census.files.has(file)) return null;
+  seen.add(key);
+  const { sf } = census.ctxOf(file);
+  for (const st of sf.statements) {
+    if (isTypeDecl(st) && st.name.text === name) return { file, node: st };
+    const named = ts.isImportDeclaration(st) && ts.isStringLiteral(st.moduleSpecifier) ? st.importClause?.namedBindings : null;
+    if (!named || !ts.isNamedImports(named)) continue;
+    const el = named.elements.find((x) => x.name.text === name);
+    if (!el) continue;
+    const target = census.resolveSpecifier(file, st.moduleSpecifier.text);
+    return target ? resolveTypeExport(census, target, (el.propertyName ?? el.name).text, seen) : null;
+  }
+  return null;
+}
+
+/** An exported interface or type alias, following re-export barrels. */
+function resolveTypeExport(census, file, name, seen) {
+  const key = `e|${file}|${name}`;
+  if (seen.has(key) || !census.files.has(file)) return null;
+  seen.add(key);
+  const local = resolveTypeName(census, file, name, seen);
+  if (local) return local;
+  for (const st of census.ctxOf(file).sf.statements) {
+    if (!ts.isExportDeclaration(st)) continue;
+    const clause = st.exportClause && ts.isNamedExports(st.exportClause) ? st.exportClause : null;
+    const el = clause?.elements.find((x) => x.name.text === name);
+    if (!st.moduleSpecifier) {
+      if (el) return resolveTypeName(census, file, (el.propertyName ?? el.name).text, seen);
+      continue;
+    }
+    const target = ts.isStringLiteral(st.moduleSpecifier) ? census.resolveSpecifier(file, st.moduleSpecifier.text) : null;
+    if (!target) continue;
+    if (!st.exportClause) { const found = resolveTypeExport(census, target, name, seen); if (found) return found; }
+    else if (el) return resolveTypeExport(census, target, (el.propertyName ?? el.name).text, seen);
+  }
+  return null;
+}
+
+/** The string literals a type can hold, or null when it can hold anything else. */
+function stringLiteralUnion(census, file, type, depth = 0) {
+  if (!type || depth > 6) return null;
+  if (ts.isParenthesizedTypeNode(type)) return stringLiteralUnion(census, file, type.type, depth + 1);
+  if (ts.isLiteralTypeNode(type)) return ts.isStringLiteral(type.literal) ? [type.literal.text] : null;
+  if (ts.isUnionTypeNode(type)) {
+    const out = [];
+    for (const t of type.types) {
+      const v = stringLiteralUnion(census, file, t, depth + 1);
+      if (!v) return null;
+      out.push(...v);
+    }
+    return [...new Set(out)];
+  }
+  if (ts.isTypeReferenceNode(type) && ts.isIdentifier(type.typeName) && !type.typeArguments) {
+    const decl = resolveTypeName(census, file, type.typeName.text);
+    return decl && ts.isTypeAliasDeclaration(decl.node) ? stringLiteralUnion(census, decl.file, decl.node.type, depth + 1) : null;
+  }
+  return null;
+}
+
+/** `{ file, type }` of a member `prop` of a props type (interfaces, their bases, literals, intersections). */
+function propMemberType(census, file, type, prop, depth = 0) {
+  if (!type || depth > 8) return null;
+  const inMembers = (members, f) => {
+    const m = members.find((x) => ts.isPropertySignature(x) && x.name && propertyKeyText(x.name) === prop);
+    return m ? (m.type ? { file: f, type: m.type } : null) : undefined;
+  };
+  if (ts.isParenthesizedTypeNode(type)) return propMemberType(census, file, type.type, prop, depth + 1);
+  if (ts.isTypeLiteralNode(type)) return inMembers(type.members, file) ?? null;
+  if (ts.isIntersectionTypeNode(type)) {
+    for (const t of type.types) { const hit = propMemberType(census, file, t, prop, depth + 1); if (hit) return hit; }
+    return null;
+  }
+  if (!ts.isTypeReferenceNode(type) || !ts.isIdentifier(type.typeName) || type.typeArguments) return null;
+  const decl = resolveTypeName(census, file, type.typeName.text);
+  if (!decl) return null;
+  if (ts.isTypeAliasDeclaration(decl.node)) return propMemberType(census, decl.file, decl.node.type, prop, depth + 1);
+  const own = inMembers(decl.node.members, decl.file);
+  if (own !== undefined) return own;
+  for (const clause of decl.node.heritageClauses ?? []) {
+    for (const base of clause.types) {
+      if (!ts.isIdentifier(base.expression) || base.typeArguments) continue;
+      const hit = propMemberType(census, decl.file, ts.factory.createTypeReferenceNode(base.expression.text), prop, depth + 1);
+      if (hit) return hit;
+    }
+  }
+  return null;
+}
+
+/** The props type a component function declares: its parameter annotation or `forwardRef<R, P>`. */
+function componentPropsType(fn) {
+  const param = fn.parameters?.[0];
+  if (param?.type) return param.type;
+  let outer = fn;
+  while (outer.parent && ts.isParenthesizedExpression(outer.parent)) outer = outer.parent;
+  const call = outer.parent;
+  if (call && ts.isCallExpression(call) && call.arguments[0] === outer && /(^|\.)forwardRef$/.test(calleeName(call)) && call.typeArguments?.length === 2) return call.typeArguments[1];
+  return null;
+}
+
+/** The object literal an expression always evaluates to (`DEFAULTS.text`), across imports. */
+function constObject(census, file, expr, depth = 0) {
+  const e = stripTypeWrappers(expr);
+  if (!e || depth > 6) return null;
+  if (ts.isObjectLiteralExpression(e)) return { file, node: e };
+  if (ts.isIdentifier(e)) {
+    const local = localInitializer(e);
+    if (local) return constObject(census, file, local, depth + 1);
+    const decl = resolveLocalBinding(census, file, e.text, new Set());
+    return decl ? constObject(census, decl.file, decl.node, depth + 1) : null;
+  }
+  if (ts.isPropertyAccessExpression(e)) {
+    const obj = constObject(census, file, e.expression, depth + 1);
+    const prop = obj?.node.properties.find((p) => ts.isPropertyAssignment(p) && propertyKeyText(p.name) === e.name.text);
+    return prop ? constObject(census, obj.file, prop.initializer, depth + 1) : null;
+  }
+  return null;
+}
+
+/** The string an expression always evaluates to (`'span'`, `DEFAULTS.text.as`), across imports; else null. */
+function constString(census, file, expr, depth = 0) {
+  const e = stripTypeWrappers(expr);
+  if (!e || depth > 6) return null;
+  if (ts.isStringLiteral(e) || ts.isNoSubstitutionTemplateLiteral(e)) return e.text;
+  if (ts.isIdentifier(e)) {
+    const local = localInitializer(e);
+    if (local) return constString(census, file, local, depth + 1);
+    const decl = resolveLocalBinding(census, file, e.text, new Set());
+    return decl ? constString(census, decl.file, decl.node, depth + 1) : null;
+  }
+  if (ts.isPropertyAccessExpression(e)) {
+    const obj = constObject(census, file, e.expression, depth + 1);
+    const prop = obj?.node.properties.find((p) => ts.isPropertyAssignment(p) && propertyKeyText(p.name) === e.name.text);
+    return prop ? constString(census, obj.file, prop.initializer, depth + 1) : null;
+  }
+  return null;
+}
+
+/**
+ * A variable tag bound to a destructured prop (`const Component = as`) whose declared type is a
+ * union of intrinsic names and whose default is one of them: `{ prop, values, def, file, line }`.
+ * An untyped, widened (`string`) or default-less prop is no proof.
+ */
+function propTagOf(tagNode, ctx) {
+  const census = ctx?.census;
+  if (!census || !ts.isIdentifier(tagNode)) return null;
+  census.propTagCache ??= new Map();
+  if (census.propTagCache.has(tagNode)) return census.propTagCache.get(tagNode);
+  let result = null;
+  const init = stripTypeWrappers(localInitializer(tagNode));
+  if (init && ts.isIdentifier(init)) {
+    for (let fn = tagNode.parent; fn && !result; fn = fn.parent) {
+      if (!isFunctionLike(fn)) continue;
+      const bound = destructuredProps(fn).get(init.text);
+      if (!bound) continue;
+      const propsType = bound.def ? componentPropsType(fn) : null;
+      const member = propsType ? propMemberType(census, ctx.file, propsType, bound.prop) : null;
+      const values = member ? stringLiteralUnion(census, member.file, member.type) : null;
+      const def = values ? constString(census, ctx.file, bound.def) : null;
+      if (values && values.length > 0 && values.every((v) => INTRINSIC_TAG.test(v)) && def !== null && values.includes(def)) {
+        result = { prop: bound.prop, values, def, file: ctx.file, line: ctx.sf.getLineAndCharacterOfPosition(init.getStart(ctx.sf)).line + 1 };
+      }
+      break;
+    }
+  }
+  census.propTagCache.set(tagNode, result);
+  return result;
+}
+
+const literalTagValues = (n) => {
+  n = stripTypeWrappers(n);
+  if (!n) return null;
+  if (ts.isStringLiteral(n) || ts.isNoSubstitutionTemplateLiteral(n)) return INTRINSIC_TAG.test(n.text) ? [n.text.toLowerCase()] : null;
+  if (ts.isConditionalExpression(n)) {
+    const a = literalTagValues(n.whenTrue);
+    const b = literalTagValues(n.whenFalse);
+    return a && b ? [...new Set([...a, ...b])] : null;
+  }
+  return null;
+};
+
+/** The tags an intrinsic host can render as: `{ tags, prefix, prop }` (`tags` null when only a prefix is known). */
+function tagShape(tagNode, ctx) {
+  const textTag = tagNode.getText();
+  if (INTRINSIC_TAG.test(textTag)) return { tags: [textTag.toLowerCase()], prefix: null, prop: null };
+  const none = { tags: null, prefix: null, prop: null };
+  if (!ts.isIdentifier(tagNode)) return none;
+  const init = stripTypeWrappers(localInitializer(tagNode));
+  const literal = init ? literalTagValues(init) : null;
+  if (literal) return { tags: literal, prefix: null, prop: null };
+  if (init && ts.isTemplateExpression(init) && /^[a-z]/.test(init.head.text)) return { tags: null, prefix: init.head.text, prop: null };
+  const prop = propTagOf(tagNode, ctx);
+  return prop ? { tags: prop.values, prefix: null, prop } : none;
 }
 
 /**
@@ -143,16 +351,16 @@ function isIntrinsicTag(tagNode) {
  * variable intrinsic tag) or a D3 `.attr` counts here; a component host is
  * proven later by the forwarding analysis or the browser's positive control.
  */
-function landsOnDom(site) {
+function landsOnDom(site, ctx = null) {
   if (site.via === 'd3-attr') return { lands: true, host: null };
   if (site.via === 'part' || site.via === 'data-part-prop') return { lands: false, host: null };
   const element = hostElement(site.node);
   if (!element) return { lands: false, host: null };
-  return { lands: isIntrinsicTag(element.tagName), host: element.tagName.getText() };
+  return { lands: isIntrinsicTag(element.tagName, ctx), host: element.tagName.getText() };
 }
 
 /** Every literal part stamp in a source, located. `{ part, node, via, lands, host }` */
-export function findStampSites(sf) {
+export function findStampSites(sf, ctx = null) {
   const sites = [];
   const visit = (n) => {
     if (ts.isJsxAttribute(n) && (attrName(n) === 'data-part' || attrName(n) === 'part') && n.initializer) {
@@ -174,7 +382,7 @@ export function findStampSites(sf) {
     ts.forEachChild(n, visit);
   };
   visit(sf);
-  return sites.map((site) => ({ ...site, ...landsOnDom(site) }));
+  return sites.map((site) => ({ ...site, ...landsOnDom(site, ctx) }));
 }
 
 // ---------------------------------------------------------------------------
@@ -393,9 +601,9 @@ function staticClasses(init, depth = 0, subst = null) {
 }
 
 /** What a selector compound can be checked against on one JSX element. */
-function describeElement(opening, subst = null) {
+function describeElement(opening, subst = null, ctx = null) {
   const tag = opening.tagName.getText();
-  if (!isIntrinsicTag(opening.tagName)) {
+  if (!isIntrinsicTag(opening.tagName, ctx)) {
     const names = new Set();
     let spread = false;
     for (const a of opening.attributes.properties) { if (ts.isJsxSpreadAttribute(a)) spread = true; else names.add(a.name.getText()); }
@@ -419,7 +627,8 @@ function describeElement(opening, subst = null) {
     if (name === 'data-part') part = staticString(a.initializer, subst) ?? '?';
     else if (name === 'className' || name === 'class') classes = staticClasses(a.initializer, 0, subst);
   }
-  return { kind: 'el', tag: INTRINSIC_TAG.test(tag) ? tag.toLowerCase() : '?', part, classes };
+  const shape = tagShape(opening.tagName, ctx);
+  return { kind: 'el', tag: INTRINSIC_TAG.test(tag) ? tag.toLowerCase() : '?', tags: shape.tags, tagPrefix: shape.prefix, tagProp: shape.prop, part, classes, at: opening };
 }
 
 /** Preceding siblings of `child` among JSX children, in DOM order; `optional` ones may be absent. */
@@ -480,6 +689,7 @@ export function renderPaths(start, ctx, hops = 0, visiting = new Set(), opts = {
   let skipTagElement = Boolean(opts.viaTag);
   let hostDone = Boolean(opts.viaTag || opts.hostDone);
   let hostAt = null;
+  let hostAttr = opts.hostAttr ?? null;
   let lastAttr = null;
   let lookup = null;
   let child = start;
@@ -491,9 +701,9 @@ export function renderPaths(start, ctx, hops = 0, visiting = new Set(), opts = {
   };
   const done = (end) => {
     if (lookup) conditions.push(unknownCondition(lookup.node, `object member '${lookup.key}' with no readable selection`, ctx));
-    return [{ conditions, end, chain, hostAt }];
+    return [{ conditions, end, chain, hostAt, hostAttr }];
   };
-  const carry = () => ({ sibAcc, iterated, lookup, hostAt });
+  const carry = () => ({ sibAcc, iterated, lookup, hostAt, hostAttr });
   for (let n = start.parent; n; child = n, n = n.parent) {
     if (ts.isBinaryExpression(n) && child === n.right) {
       const op = n.operatorToken.kind;
@@ -525,11 +735,15 @@ export function renderPaths(start, ctx, hops = 0, visiting = new Set(), opts = {
       const opening = ts.isJsxElement(n) ? n.openingElement : n;
       if (!ts.isJsxElement(n) || child === n.openingElement) {
         if (skipTagElement) skipTagElement = false; // a component element: its rendered root is already the chain's top
-        else if (!hostDone) { chain.push(describeElement(opening)); hostDone = true; hostAt = conditions.length; }
-        else chain.push({ kind: 'prop', tag: opening.tagName.getText(), prop: lastAttr, file: ctx.file });
+        else if (!hostDone) { chain.push(describeElement(opening, null, ctx)); hostDone = true; hostAt = conditions.length; hostAttr = lastAttr; }
+        else {
+          const line = ctx.sf.getLineAndCharacterOfPosition(opening.getStart(ctx.sf)).line + 1;
+          const passed = describeElement(opening).passed ?? { names: new Set(), spread: true };
+          chain.push({ kind: 'prop', tag: opening.tagName.getText(), prop: lastAttr, file: ctx.file, line, passed });
+        }
       } else if (n.children.includes(child)) {
         attach(precedingSiblings(n.children, child));
-        chain.push(PORTAL_TAGS.has(opening.tagName.getText()) ? { kind: 'portal', via: opening.tagName.getText() } : { ...describeElement(opening), file: ctx.file, container: true });
+        chain.push(PORTAL_TAGS.has(opening.tagName.getText()) ? { kind: 'portal', via: opening.tagName.getText() } : { ...describeElement(opening, null, ctx), file: ctx.file, container: true });
       }
     } else if (ts.isJsxFragment(n) && n.children.includes(child)) {
       sibAcc = [...precedingSiblings(n.children, child), ...sibAcc];
@@ -590,13 +804,13 @@ function followUsages(name, declNode, conditions, chain, ctx, hops, visiting, ca
   const key = `${ctx.file}:${name}@${declNode.pos}`;
   // Recursion re-entering itself only adds conditions to a path its outer usage already walks.
   if (visiting.has(key)) return [];
-  if (hops >= MAX_HOPS) return [{ conditions, end: 'hop-limit', chain, hostAt: carry.hostAt }];
+  if (hops >= MAX_HOPS) return [{ conditions, end: 'hop-limit', chain, hostAt: carry.hostAt, hostAttr: carry.hostAttr }];
   const next = new Set(visiting).add(key);
   const paths = [];
   const exported = exportNameOf(declNode, ctx.sf);
-  if (exported) paths.push(...crossFilePaths(exported, conditions, chain, ctx, hops, next, carry.hostAt));
+  if (exported) paths.push(...crossFilePaths(exported, conditions, chain, ctx, hops, next, carry.hostAt, carry.hostAttr));
   const uses = usagesOf(ctx.sf, name, declNode).filter((u) => !ts.isExportAssignment(u.parent));
-  if (uses.length === 0 && !exported) return [{ conditions, end: 'unused', chain, hostAt: carry.hostAt }];
+  if (uses.length === 0 && !exported) return [{ conditions, end: 'unused', chain, hostAt: carry.hostAt, hostAttr: carry.hostAttr }];
   for (const use of uses) {
     const extra = lookupConditions(use, carry.lookup, ctx);
     if (extra === null) continue;
@@ -605,7 +819,7 @@ function followUsages(name, declNode, conditions, chain, ctx, hops, visiting, ca
     const opts = { hostDone: chain.length > 0, viaTag: isTagUse(use), sibAcc: carry.sibAcc, iterated: carry.iterated, outerTop: head[head.length - 1] };
     for (const p of renderPaths(use, ctx, hops + 1, next, opts)) {
       const hostAt = carry.hostAt ?? (p.hostAt === null ? null : conditions.length + extra.length + p.hostAt);
-      paths.push({ conditions: [...conditions, ...extra, ...p.conditions], end: p.end, chain: [...head, ...p.chain], hostAt });
+      paths.push({ conditions: [...conditions, ...extra, ...p.conditions], end: p.end, chain: [...head, ...p.chain], hostAt, hostAttr: carry.hostAttr ?? p.hostAttr });
     }
   }
   return paths;
@@ -616,9 +830,9 @@ function followUsages(name, declNode, conditions, chain, ctx, hops, visiting, ca
  * barrel re-export, a dynamic import, or no importer at all means a consumer
  * outside the census may render it directly: that stays an ungated `root`.
  */
-function crossFilePaths(exportName, conditions, chain, ctx, hops, visiting, outerHostAt = null) {
+function crossFilePaths(exportName, conditions, chain, ctx, hops, visiting, outerHostAt = null, outerHostAttr = null) {
   const importers = ctx.importersOf?.(ctx.file, exportName);
-  if (!importers || importers.length === 0) return [{ conditions, end: 'root', chain, hostAt: outerHostAt }];
+  if (!importers || importers.length === 0) return [{ conditions, end: 'root', chain, hostAt: outerHostAt, hostAttr: outerHostAttr }];
   const paths = [];
   for (const { ctx: other, local } of importers) {
     const uses = usagesOf(other.sf, local, null);
@@ -627,11 +841,11 @@ function crossFilePaths(exportName, conditions, chain, ctx, hops, visiting, oute
       const head = chain.length > 0 ? [...chain.slice(0, -1), { ...chain[chain.length - 1] }] : [];
       for (const p of renderPaths(use, other, hops + 1, visiting, { hostDone: chain.length > 0, viaTag: isTagUse(use), outerTop: head[head.length - 1] })) {
         const hostAt = outerHostAt ?? (p.hostAt === null ? null : conditions.length + p.hostAt);
-        paths.push({ conditions: [...conditions, ...p.conditions], end: p.end, chain: [...head, ...p.chain], hostAt });
+        paths.push({ conditions: [...conditions, ...p.conditions], end: p.end, chain: [...head, ...p.chain], hostAt, hostAttr: outerHostAttr ?? p.hostAttr });
       }
     }
   }
-  return paths.length > 0 ? paths : [{ conditions, end: 'root', chain, hostAt: outerHostAt }];
+  return paths.length > 0 ? paths : [{ conditions, end: 'root', chain, hostAt: outerHostAt, hostAttr: outerHostAttr }];
 }
 
 export const conditionKey = (c) => `${c.file}:${c.line}:${c.text}`;
@@ -669,12 +883,14 @@ export function buildCensus(root = COMPONENTS_ROOT) {
     files.set(file, { src, gateParts, sites: null, ctx: null });
   }
   const { imports, reexports, publicFiles, importMap, exportFrom } = indexImports(files, root);
+  let census = null;
   const ctxOf = (file) => {
     const entry = files.get(file);
     entry.ctx ??= {
       file,
       sf: ts.createSourceFile(file, entry.src, ts.ScriptTarget.Latest, true, file.endsWith('x') ? ts.ScriptKind.TSX : ts.ScriptKind.TS),
       importersOf,
+      get census() { return census; },
     };
     return entry.ctx;
   };
@@ -695,7 +911,7 @@ export function buildCensus(root = COMPONENTS_ROOT) {
     const entry = files.get(file);
     if (entry.sites) return entry.sites;
     const ctx = ctxOf(file);
-    entry.sites = findStampSites(ctx.sf).map((site) => ({
+    entry.sites = findStampSites(ctx.sf, ctx).map((site) => ({
       file,
       part: site.part,
       kind: 'part',
@@ -707,7 +923,8 @@ export function buildCensus(root = COMPONENTS_ROOT) {
     }));
     return entry.sites;
   };
-  return { root, srcRoot: dirname(root), files, global, sitesOf, ctxOf, importMap, exportFrom, resolveSpecifier: (importer, spec) => resolveSpecifier(files, root, importer, spec) };
+  census = { root, srcRoot: dirname(root), files, global, sitesOf, ctxOf, importMap, exportFrom, resolveSpecifier: (importer, spec) => resolveSpecifier(files, root, importer, spec) };
+  return census;
 }
 
 /** A relative or `@/` specifier from a census file, resolved to a census file (or null). */
@@ -984,38 +1201,235 @@ function findClassSites(sf, token) {
   return out;
 }
 
+const CLASS_ATTRS = new Set(['className', 'class']);
+
 /** The owner-file sites that produce a class, shaped like part stamp sites. */
 function classSitesOf(census, file, token, full = false) {
   const entry = census.files.get(file);
   entry.classSites ??= new Map();
   const key = `${token}|${full}`;
   if (entry.classSites.has(key)) return entry.classSites.get(key);
-  let sites = [];
-  if (textProducesClass(entry.src, token)) {
-    const ctx = census.ctxOf(file);
-    sites = findClassSites(ctx.sf, token).map((s) => {
-      const value = s.suffix === undefined ? [] : [makeCondition('class-value', s.expr, false, ctx, `${text(s.expr)} === ${JSON.stringify(s.suffix)}`)];
-      // Only gates inside the className expression select the class; the element's own render path is the element's.
-      // (A class-only row's subject IS the classed element: there, `full` keeps the element's gates.)
-      const own = (p) => (full ? p.conditions : p.conditions.map((c, i) => (p.hostAt !== null && i >= p.hostAt && c.gates ? { ...c, gates: false, element: true } : c)));
-      const paths = renderPaths(s.node, ctx).map((p) => ({ ...p, conditions: [...value, ...own(p)] }));
-      const hosts = paths.map((p) => p.chain[0]);
-      const lands = hosts.length > 0 && hosts.every((h) => h?.kind === 'el');
-      return {
-        file,
-        part: `.${token}`,
-        kind: 'class',
-        via: 'className',
-        match: s.match,
-        lands,
-        host: hosts.find((h) => h?.kind === 'component')?.tag ?? null,
-        line: ctx.sf.getLineAndCharacterOfPosition(s.node.getStart(ctx.sf)).line + 1,
-        paths,
-      };
-    });
-  }
+  const ctx = census.ctxOf(file);
+  const textual = textProducesClass(entry.src, token) ? findClassSites(ctx.sf, token) : [];
+  const covered = (node) => textual.some((s) => s.node.pos >= node.pos && s.node.end <= node.end);
+  const derived = tableClassSites(census, file, token).filter((s) => !covered(s.node));
+  const sites = [...textual, ...derived].map((s) => {
+    const value = s.suffix === undefined ? [] : [makeCondition('class-value', s.expr, false, ctx, `${text(s.expr)} === ${JSON.stringify(s.suffix)}`)];
+    // Only gates inside the className expression select the class; the element's own render path is the element's.
+    // (A class-only row's subject IS the classed element: there, `full` keeps the element's gates.)
+    const own = (p) => (full ? p.conditions : p.conditions.map((c, i) => (p.hostAt !== null && i >= p.hostAt && c.gates ? { ...c, gates: false, element: true } : c)));
+    // A utility token is a class only where it reaches its host through `className`; elsewhere it is any string (`data-state="press"`).
+    const asClass = (p) => isDsClass(token) || CLASS_ATTRS.has(p.hostAttr);
+    const paths = renderPaths(s.node, ctx).filter(asClass).map((p) => ({ ...p, conditions: [...value, ...own(p)] }));
+    const hosts = paths.map((p) => p.chain[0]);
+    const lands = hosts.length > 0 && hosts.every((h) => h?.kind === 'el');
+    return {
+      file,
+      part: `.${token}`,
+      kind: 'class',
+      via: s.via ?? 'className',
+      match: s.match,
+      full,
+      lands,
+      host: hosts.find((h) => h?.kind === 'component')?.tag ?? null,
+      line: ctx.sf.getLineAndCharacterOfPosition(s.node.getStart(ctx.sf)).line + 1,
+      paths,
+    };
+  }).filter((site) => isDsClass(token) || site.paths.length > 0);
   entry.classSites.set(key, sites);
   return sites;
+}
+
+// ---------------------------------------------------------------------------
+// Class tables: classes a source produces through data it reads, not literals it holds
+// ---------------------------------------------------------------------------
+
+/** A module under `src/` resolved from a specifier, parsed once: `{ abs, sf }` or null. */
+function moduleAt(census, fromAbs, spec) {
+  const base = spec.startsWith('@/') ? join(census.srcRoot, spec.slice(2)) : spec.startsWith('.') ? join(dirname(fromAbs), spec) : null;
+  if (!base) return null;
+  census.moduleCache ??= new Map();
+  for (const abs of [base, `${base}.ts`, `${base}.tsx`, join(base, 'index.ts'), join(base, 'index.tsx')]) {
+    if (census.moduleCache.has(abs)) return census.moduleCache.get(abs);
+    if (!existsSync(abs) || !/\.tsx?$/.test(abs)) continue;
+    const mod = { abs, sf: ts.createSourceFile(abs, readFileSync(abs, 'utf8'), ts.ScriptTarget.Latest, true, abs.endsWith('x') ? ts.ScriptKind.TSX : ts.ScriptKind.TS) };
+    census.moduleCache.set(abs, mod);
+    return mod;
+  }
+  return null;
+}
+
+/** The initializer of a const a module exports (directly or through re-exports), in any source under `src/`. */
+function moduleConst(census, mod, name, seen = new Set()) {
+  if (!mod || seen.has(`${mod.abs}|${name}`)) return null;
+  seen.add(`${mod.abs}|${name}`);
+  for (const st of mod.sf.statements) {
+    if (ts.isVariableStatement(st) && hasExportModifier(st)) {
+      for (const d of st.declarationList.declarations) if (ts.isIdentifier(d.name) && d.name.text === name && d.initializer) return d.initializer;
+    }
+    if (!ts.isExportDeclaration(st) || !st.moduleSpecifier || !ts.isStringLiteral(st.moduleSpecifier)) continue;
+    const el = st.exportClause && ts.isNamedExports(st.exportClause) ? st.exportClause.elements.find((x) => x.name.text === name) : null;
+    if (st.exportClause && !el) continue;
+    const found = moduleConst(census, moduleAt(census, mod.abs, st.moduleSpecifier.text), el ? (el.propertyName ?? el.name).text : name, seen);
+    if (found) return found;
+  }
+  return null;
+}
+
+/** The object literal an identifier read in a census file evaluates to, through imports reaching outside `components/`. */
+function importedObject(census, file, expr) {
+  const e = stripTypeWrappers(expr);
+  if (!e) return null;
+  if (ts.isObjectLiteralExpression(e)) return e;
+  if (!ts.isIdentifier(e)) return null;
+  const local = localInitializer(e);
+  if (local) return importedObject(census, file, local);
+  for (const st of census.ctxOf(file).sf.statements) {
+    const named = ts.isImportDeclaration(st) && ts.isStringLiteral(st.moduleSpecifier) ? st.importClause?.namedBindings : null;
+    const el = named && ts.isNamedImports(named) ? named.elements.find((x) => x.name.text === e.text) : null;
+    if (!el) continue;
+    const init = moduleConst(census, moduleAt(census, join(census.root, file), st.moduleSpecifier.text), (el.propertyName ?? el.name).text);
+    const obj = stripTypeWrappers(init);
+    return obj && ts.isObjectLiteralExpression(obj) ? obj : null;
+  }
+  return null;
+}
+
+const literalWords = (n) => {
+  n = stripTypeWrappers(n);
+  if (!n) return null;
+  if (ts.isStringLiteral(n) || ts.isNoSubstitutionTemplateLiteral(n)) return n.text.split(/\s+/).filter(Boolean);
+  if (ts.isArrayLiteralExpression(n)) {
+    const out = [];
+    for (const x of n.elements) { const w = literalWords(x); if (!w) return null; out.push(...w); }
+    return out;
+  }
+  return null;
+};
+
+/** Recipe bindings of a source (`const r = defineRecipe(DEF)`): local -> slot -> classes. Unreadable slots are absent. */
+function recipeSlotsOf(census, file) {
+  const entry = census.files.get(file);
+  if (entry.recipeSlots) return entry.recipeSlots;
+  const out = new Map();
+  const visit = (n) => {
+    if (ts.isVariableDeclaration(n) && ts.isIdentifier(n.name) && n.initializer) {
+      const call = stripTypeWrappers(n.initializer);
+      if (call && ts.isCallExpression(call) && /(^|\.)defineRecipe$/.test(calleeName(call)) && call.arguments[0]) {
+        const def = importedObject(census, file, call.arguments[0]);
+        const slots = def?.properties.find((p) => ts.isPropertyAssignment(p) && propertyKeyText(p.name) === 'slots');
+        const table = slots && stripTypeWrappers(slots.initializer);
+        if (table && ts.isObjectLiteralExpression(table)) {
+          const map = new Map();
+          for (const p of table.properties) {
+            const words = ts.isPropertyAssignment(p) ? literalWords(p.initializer) : null;
+            if (words) map.set(propertyKeyText(p.name), words);
+          }
+          out.set(n.name.text, map);
+        }
+      }
+    }
+    ts.forEachChild(n, visit);
+  };
+  visit(census.ctxOf(file).sf);
+  entry.recipeSlots = out;
+  return out;
+}
+
+/** `windowFor('x').pairs` style: a local finder over a const array of object literals, selected by a literal. */
+function finderSelection(census, file, call) {
+  const callee = stripTypeWrappers(call.expression);
+  const arg = stripTypeWrappers(call.arguments[0]);
+  if (!ts.isIdentifier(callee) || !arg || !ts.isStringLiteral(arg)) return null;
+  const decl = resolveLocalBinding(census, file, callee.text, new Set());
+  const fn = decl && stripTypeWrappers(decl.node);
+  if (!fn || !isFunctionLike(fn) || !fn.body || fn.parameters.length !== 1 || !ts.isIdentifier(fn.parameters[0].name)) return null;
+  const param = fn.parameters[0].name.text;
+  let picked = null;
+  const visit = (n) => {
+    if (picked !== null) return;
+    if (ts.isCallExpression(n) && ts.isPropertyAccessExpression(n.expression) && n.expression.name.text === 'find' && n.arguments[0] && ts.isArrowFunction(n.arguments[0])) {
+      const cb = n.arguments[0];
+      const body = stripTypeWrappers(cb.body);
+      const item = cb.parameters[0] && ts.isIdentifier(cb.parameters[0].name) ? cb.parameters[0].name.text : null;
+      if (item && body && ts.isBinaryExpression(body) && body.operatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken) {
+        const [l, r] = [stripTypeWrappers(body.left), stripTypeWrappers(body.right)];
+        const access = ts.isPropertyAccessExpression(l) && ts.isIdentifier(r) && r.text === param ? l : ts.isPropertyAccessExpression(r) && ts.isIdentifier(l) && l.text === param ? r : null;
+        const list = access && ts.isIdentifier(access.expression) && access.expression.text === item ? stripTypeWrappers(localInitializer(stripTypeWrappers(n.expression.expression))) : null;
+        if (list && ts.isArrayLiteralExpression(list)) {
+          const keyName = access.name.text;
+          picked = list.elements.map(stripTypeWrappers).find((o) => o && ts.isObjectLiteralExpression(o) && o.properties.some((p) => ts.isPropertyAssignment(p) && propertyKeyText(p.name) === keyName && ts.isStringLiteral(stripTypeWrappers(p.initializer)) && stripTypeWrappers(p.initializer).text === arg.text)) ?? false;
+        }
+      }
+    }
+    ts.forEachChild(n, visit);
+  };
+  visit(fn.body);
+  return picked || null;
+}
+
+/**
+ * Pair tables (`const T = pairedClasses(PAIRS)`) visible to a census file: local -> key -> classes.
+ * `pairedClasses` must have the pairing shape: each `[key, value]` of its argument maps to `\`${value} ${key}\``.
+ */
+function pairedTablesOf(census, file) {
+  const entry = census.files.get(file);
+  if (entry.pairedTables) return entry.pairedTables;
+  const out = new Map();
+  const locals = new Set([...(census.importMap.get(file)?.keys() ?? [])]);
+  for (const st of census.ctxOf(file).sf.statements) if (ts.isVariableStatement(st)) for (const d of st.declarationList.declarations) if (ts.isIdentifier(d.name)) locals.add(d.name.text);
+  for (const local of locals) {
+    const decl = resolveLocalBinding(census, file, local, new Set());
+    const call = decl && stripTypeWrappers(decl.node);
+    if (!call || !ts.isCallExpression(call) || !ts.isIdentifier(call.expression) || call.arguments.length !== 1) continue;
+    const pairer = resolveLocalBinding(census, decl.file, call.expression.text, new Set());
+    const fn = pairer && stripTypeWrappers(pairer.node);
+    if (!fn || !isFunctionLike(fn) || !fn.body || !fn.parameters[0] || !ts.isIdentifier(fn.parameters[0].name)) continue;
+    const body = fn.body.getText();
+    const m = body.match(new RegExp(`for\\s*\\(\\s*const\\s*\\[\\s*(\\w+)\\s*,\\s*(\\w+)\\s*\\]\\s*of\\s*Object\\.entries\\(\\s*${escapeRe(fn.parameters[0].name.text)}\\s*\\)\\s*\\)`));
+    if (!m || !body.includes(`\`\${${m[2]}} \${${m[1]}}\``)) continue;
+    let arg = stripTypeWrappers(call.arguments[0]);
+    if (arg && ts.isPropertyAccessExpression(arg) && ts.isCallExpression(stripTypeWrappers(arg.expression))) {
+      const picked = finderSelection(census, decl.file, stripTypeWrappers(arg.expression));
+      const prop = picked?.properties.find((p) => ts.isPropertyAssignment(p) && propertyKeyText(p.name) === arg.name.text);
+      arg = prop ? stripTypeWrappers(prop.initializer) : null;
+    } else {
+      arg = constObject(census, decl.file, arg)?.node ?? null;
+    }
+    if (!arg || !ts.isObjectLiteralExpression(arg)) continue;
+    const table = new Map();
+    for (const p of arg.properties) {
+      const v = ts.isPropertyAssignment(p) ? stripTypeWrappers(p.initializer) : null;
+      const k = ts.isPropertyAssignment(p) ? propertyKeyText(p.name) : null;
+      if (k && v && ts.isStringLiteral(v)) table.set(k, [v.text, k]);
+    }
+    out.set(local, table);
+  }
+  entry.pairedTables = out;
+  return out;
+}
+
+/** Sites in a census file that produce a class through a recipe slot table or a pair table. */
+function tableClassSites(census, file, token) {
+  const recipes = recipeSlotsOf(census, file);
+  const pairs = pairedTablesOf(census, file);
+  if (recipes.size === 0 && pairs.size === 0) return [];
+  const out = [];
+  const visit = (n) => {
+    if (ts.isCallExpression(n) && ts.isPropertyAccessExpression(n.expression) && n.expression.name.text === 'resolve' && ts.isIdentifier(n.expression.expression) && recipes.has(n.expression.expression.text)) {
+      const slots = recipes.get(n.expression.expression.text);
+      const pick = n.parent && ts.isPropertyAccessExpression(n.parent) && n.parent.expression === n ? n.parent.name.text : null;
+      const words = pick ? slots.get(pick) ?? [] : [...slots.values()].flat();
+      if (words.includes(token)) out.push({ node: n, match: `${n.expression.expression.text}.resolve`, via: 'recipe-slot' });
+    } else if ((ts.isElementAccessExpression(n) || ts.isPropertyAccessExpression(n)) && ts.isIdentifier(n.expression) && pairs.has(n.expression.text)) {
+      const keyNode = ts.isElementAccessExpression(n) ? stripTypeWrappers(n.argumentExpression) : n.name;
+      const k = keyNode && (ts.isStringLiteral(keyNode) || ts.isIdentifier(keyNode)) ? keyNode.text : null;
+      if (k && pairs.get(n.expression.text).get(k)?.includes(token)) out.push({ node: n, match: k, via: 'class-window' });
+    }
+    ts.forEachChild(n, visit);
+  };
+  visit(census.ctxOf(file).sf);
+  return out;
 }
 
 /** Census files that can produce a class token (namespace-only templates aside). */
@@ -1270,6 +1684,125 @@ function functionPortalsProp(census, file, fn, prop, engine, depth) {
   });
 }
 
+// Third-party overlays that mount these props only once opened, unless an open or force attribute says otherwise.
+const THIRD_PARTY_LAZY = { antd: { Popover: ['content', 'title'], Tooltip: ['title'], Popconfirm: ['title', 'description'], Dropdown: ['menu', 'dropdownRender', 'overlay'], Modal: ['children', 'title', 'footer'], Drawer: ['children', 'title', 'footer'] } };
+const LAZY_OPEN_ATTRS = ['open', 'defaultOpen', 'visible', 'defaultVisible'];
+const LAZY_FORCE_ATTRS = ['forceRender', 'forceMount'];
+
+/**
+ * The gate a host puts on a prop it renders, as seen from one call site: every engine renders
+ * every read of the prop behind a condition that call site does not set (the host's own state,
+ * or a prop it neither passes nor defaults). `{ text, names }`, or null when any read escapes.
+ */
+function propMountGate(census, file, tag, prop, engine, passed, depth = 0) {
+  if (!prop || !tag || !passed || passed.spread || depth > MAX_COMPONENT_DEPTH) return null;
+  const key = `${file}|${tag}|${prop}|${engine}|${[...passed.names].sort().join(',')}`;
+  census.mountGateCache ??= new Map();
+  if (census.mountGateCache.has(key)) return census.mountGateCache.get(key);
+  census.mountGateCache.set(key, null);
+  let result = null;
+  const fns = componentFunctions(census, resolveTag(census, file, tag), engine);
+  if (fns && fns.length > 0) {
+    const gates = [];
+    for (const { file: f, fn } of fns) {
+      const gate = functionMountGate(census, f, fn, prop, engine, passed, depth);
+      if (!gate) { gates.length = 0; break; }
+      gates.push(gate);
+    }
+    if (gates.length > 0) {
+      const names = [...new Map(gates.flatMap((g) => g.names).map((n) => [`${n.kind}:${n.name}`, n])).values()];
+      result = { text: [...new Set(gates.map((g) => g.text))].join(' | '), names };
+    }
+  }
+  census.mountGateCache.set(key, result);
+  return result;
+}
+
+function functionMountGate(census, file, fn, prop, engine, passed, depth) {
+  const { local } = propBindings(fn, prop);
+  if (!local || !fn.body) return null;
+  const ctx = census.ctxOf(file);
+  const bound = destructuredProps(fn);
+  // An unpassed prop is unset at rest unless its default is truthy (`defaultOpen = false` stays unset).
+  const falsy = (d) => { d = stripTypeWrappers(d); return d.kind === ts.SyntaxKind.FalseKeyword || d.kind === ts.SyntaxKind.NullKeyword || (ts.isIdentifier(d) && d.text === 'undefined'); };
+  const truthyDefault = new Set([...bound.values()].filter((b) => b.def && !falsy(b.def)).map((b) => b.prop));
+  const outerProp = (name) => !passed.names.has(name) && !truthyDefault.has(name) && name !== prop;
+  // A state counts only when its initial value reads nothing the call site sets.
+  const stateUnset = (name) => {
+    let ok = false;
+    const visit = (n) => {
+      if (ok) return;
+      if (ts.isVariableDeclaration(n) && n.initializer && ts.isCallExpression(unparen(n.initializer)) && bindingIn(n.name, name)) {
+        ok = unparen(n.initializer).arguments.every((a) => resolveNames(a).every((x) => x.kind === 'prop' ? outerProp(x.name) : x.kind !== 'free'));
+        return;
+      }
+      ts.forEachChild(n, visit);
+    };
+    visit(fn.body);
+    return ok;
+  };
+  const counts = (c) => c.gates && c.names.length > 0 && c.names.every((n) => (n.kind === 'state' ? stateUnset(n.name) : n.kind === 'prop' && outerProp(n.name)));
+  const [from, to] = [fn.getStart(ctx.sf), fn.getEnd()];
+  const lineOf = (pos) => ctx.sf.getLineAndCharacterOfPosition(pos).line + 1;
+  const [fromLine, toLine] = [lineOf(from), lineOf(to)];
+  const reads = [];
+  const visit = (n) => {
+    if (ts.isIdentifier(n) && n.text === local) {
+      const p = n.parent;
+      const isName = (ts.isBindingElement(p) && (p.name === n || p.propertyName === n)) || (ts.isPropertyAccessExpression(p) && p.name === n) || (ts.isPropertyAssignment(p) && p.name === n) || (ts.isJsxAttribute(p) && p.name === n);
+      if (!isName) reads.push(n);
+    }
+    ts.forEachChild(n, visit);
+  };
+  visit(fn.body);
+  if (reads.length === 0) return null;
+  const third = new Map(Object.entries(THIRD_PARTY_LAZY).flatMap(([pkg, table]) => [...packageImports(census.files.get(file).src, pkg)].filter(([, name]) => table[name]).map(([l, name]) => [l, table[name]])));
+  const texts = new Set();
+  const names = [];
+  for (const read of reads) {
+    let expr = read;
+    while (expr.parent && (ts.isParenthesizedExpression(expr.parent) || ts.isAsExpression(expr.parent) || ts.isNonNullExpression(expr.parent))) expr = expr.parent;
+    const holder = expr.parent;
+    if (!holder || !ts.isJsxExpression(holder)) return null;
+    if (ts.isJsxAttribute(holder.parent)) {
+      const opening = ownerOpening(holder.parent);
+      const tagName = opening.tagName.getText();
+      const attr = holder.parent.name.getText();
+      if (isIntrinsicTag(opening.tagName, ctx)) return null;
+      const table = third.get(tagName);
+      if (table) {
+        if (!table.includes(attr)) return null;
+        const attrs = opening.attributes.properties;
+        if (attrs.some((a) => ts.isJsxSpreadAttribute(a) || LAZY_FORCE_ATTRS.includes(a.name.getText()))) return null;
+        for (const a of attrs) {
+          if (!LAZY_OPEN_ATTRS.includes(a.name.getText())) continue;
+          const v = a.initializer && ts.isJsxExpression(a.initializer) ? stripTypeWrappers(a.initializer.expression) : null;
+          const via = v && ts.isIdentifier(v) ? bound.get(v.text) : null;
+          if (!via || !outerProp(via.prop)) return null;
+          names.push({ name: via.prop, kind: 'prop' });
+        }
+        texts.add(`${tagName}.${attr} mounts once opened`);
+        names.push({ name: `${tagName}:open`, kind: 'state' });
+        continue;
+      }
+      const inner = propMountGate(census, file, tagName, attr, engine, describeElement(opening).passed, depth + 1);
+      if (!inner) return null;
+      texts.add(inner.text);
+      names.push(...inner.names);
+      continue;
+    }
+    const parent = holder.parent;
+    if (!parent || !(ts.isJsxElement(parent) || ts.isJsxFragment(parent)) || !parent.children.includes(holder)) return null;
+    for (const p of renderPaths(read, ctx)) {
+      if (p.end !== 'root') return null;
+      const own = p.conditions.filter((c) => c.file === file && c.line >= fromLine && c.line <= toLine && counts(c));
+      if (own.length === 0) return null;
+      for (const c of own) { texts.add(c.text); names.push(...c.names); }
+    }
+  }
+  return { text: [...texts].join(' & '), names };
+}
+
 // ---------------------------------------------------------------------------
 // Selector structure
 // ---------------------------------------------------------------------------
@@ -1420,6 +1953,13 @@ export function anchorParts(selector) {
 function compoundContradiction(c, el) {
   if (!el || el.kind !== 'el') return null;
   if (c.tag && el.tag !== '?' && c.tag !== el.tag) return `<${el.tag}> is not <${c.tag}>`;
+  const want = requiredTags(c);
+  if (want) {
+    const can = el.tags ?? (el.tag !== '?' ? [el.tag] : null);
+    const wanted = [...want].map((t) => `<${t}>`).join(' or ');
+    if (can && !can.some((t) => want.has(t))) return `renders only as ${can.map((t) => `<${t}>`).join(', ')}, never ${wanted}`;
+    if (!can && el.tagPrefix && ![...want].some((t) => t.startsWith(el.tagPrefix))) return `renders only as <${el.tagPrefix}…>, never ${wanted}`;
+  }
   for (const p of c.parts) {
     if (el.part === '?') continue;
     if (el.part !== p) return el.part === null ? `carries no data-part, not [data-part='${p}']` : `is [data-part='${el.part}'], not [data-part='${p}']`;
@@ -1427,6 +1967,36 @@ function compoundContradiction(c, el) {
   for (const cls of c.classes) if (el.classes.complete && !el.classes.present.has(cls)) return `never carries .${cls}`;
   for (const cls of c.notClasses) if (el.classes.present.has(cls)) return `always carries .${cls} (the selector excludes it)`;
   return null;
+}
+
+const BARE_TAG = /^[a-z][a-z0-9]*$/i;
+
+/** The tags a compound admits (`code`, or every arm of `:is(sub, sup)`), or null when any tag can match. */
+function requiredTags(c) {
+  if (c.tagsCache !== undefined) return c.tagsCache;
+  let want = c.tag ? new Set([c.tag]) : null;
+  for (const alt of c.alts) {
+    if (alt.name === 'has') continue;
+    const arms = splitTop(alt.args);
+    if (arms.length === 0 || !arms.every((a) => BARE_TAG.test(a))) continue;
+    const set = new Set(arms.map((a) => a.toLowerCase()));
+    want = want ? new Set([...want].filter((t) => set.has(t))) : set;
+  }
+  Object.defineProperty(c, 'tagsCache', { value: want, enumerable: false });
+  return want;
+}
+
+/**
+ * The gate a prop-bound host tag adds when the compound admits only some of its tags:
+ * `as === "code"`. Null when the default tag already satisfies the compound.
+ */
+function tagGate(c, el) {
+  const want = el?.kind === 'el' && el.tagProp ? requiredTags(c) : null;
+  if (!want || want.has(el.tagProp.def)) return null;
+  const { prop, values, file, line } = el.tagProp;
+  const allowed = values.filter((v) => want.has(v));
+  const textGate = allowed.length === 1 ? `${prop} === ${JSON.stringify(allowed[0])}` : `${prop} in ${JSON.stringify(allowed)}`;
+  return { kind: 'tag', text: textGate, file, line, names: [{ name: prop, kind: 'prop' }], gates: true };
 }
 
 /** A component's destructured props: local -> { prop, def } (from the parameter or `const {...} = props`). */
@@ -1548,9 +2118,17 @@ const portalRegionFits = (compounds) => compounds.every((c) => c.parts.length ==
  * Whether a render path can put the anchor under the selector: `{ ok, why }`. What the path cannot
  * see (a component's output, a prop, the consumer) is permissive; only a proven contradiction rejects.
  */
-function pathSatisfies(census, path, seq, anchor, engine) {
+function pathSatisfies(census, path, seq, anchor, engine, depth = 0) {
   const compounds = seq.filter((x) => typeof x !== 'string');
   const combs = seq.filter((x) => typeof x === 'string');
+  return pathSatisfiesAt(census, path, compounds, combs, anchor, engine, depth, null, false);
+}
+
+/**
+ * `pathSatisfies` over parsed compounds; `onlyAt` pins the anchor to one compound index. `strict`
+ * also refuses an element no producer of a required DS class reaches (see `classCarriers`). `{ ok, why, gate }`
+ */
+function pathSatisfiesAt(census, path, compounds, combs, anchor, engine, depth, onlyAt, strict) {
   census.expandedChains ??= new WeakMap();
   let byEngine = census.expandedChains.get(path);
   if (!byEngine) census.expandedChains.set(path, (byEngine = new Map()));
@@ -1558,6 +2136,7 @@ function pathSatisfies(census, path, seq, anchor, engine) {
   const chain = byEngine.get(engine);
   let why = null;
   const reject = (w) => { why ??= w; return false; };
+  const contradiction = (c, el) => compoundContradiction(c, el) ?? (strict ? carrierContradiction(census, c, el) : null);
   const marker = (entry) => {
     if (!entry || entry.kind === 'component') return 'open';
     if (entry.kind === 'portal') return 'portal';
@@ -1570,6 +2149,11 @@ function pathSatisfies(census, path, seq, anchor, engine) {
     if (list === undefined) return undefined;
     return node.sib === null ? list : list.slice(0, node.sib);
   };
+  // An unknown parent under `>` must still be an element that can be the target and renders composed children.
+  const openParent = (k) => {
+    const closed = closedParent(census, compounds, combs, k - 1, engine, depth);
+    return closed ? reject(closed) : true;
+  };
   const sat = (k, node) => {
     if (k === 0) return true;
     const comb = combs[k - 1];
@@ -1577,36 +2161,163 @@ function pathSatisfies(census, path, seq, anchor, engine) {
     if (comb === '>' || comb === ' ') {
       for (let j = node.level + 1; j < chain.length; j++) {
         const kind = marker(chain[j]);
-        if (kind === 'open') return true;
+        if (kind === 'open') return comb === '>' ? openParent(k) : true;
         if (kind === 'portal') return portalFits(k - 1, chain[j].via ?? `${chain[j].tag}.${chain[j].prop}`);
-        const contra = compoundContradiction(target, chain[j]);
+        const contra = contradiction(target, chain[j]);
         if (!contra && sat(k - 1, { level: j, sib: null })) return true;
         if (comb === '>') return contra ? reject(`its parent ${contra}`) : false;
       }
-      return true; // above the owner's root: the consumer's composition
+      return comb === '>' ? openParent(k) : true; // above the owner's root: the consumer's composition
     }
     const list = siblingsOf(node);
     if (list === undefined) return true;
     for (let i = list.length - 1; i >= 0; i--) {
       const s = list[i];
       if (s.kind === 'opaque') return true;
-      const contra = compoundContradiction(target, s);
+      const contra = contradiction(target, s);
       if (!contra && sat(k - 1, { level: node.level, sib: i })) return true;
       if (comb === '+' && !s.optional) return reject(`its preceding sibling ${contra ?? 'cannot continue the selector'}`);
     }
     return reject(`no preceding sibling can be ${describeCompound(target)}`);
   };
   for (let k = 0; k < compounds.length; k++) {
+    if (onlyAt !== null && k !== onlyAt) continue;
     const c = compounds[k];
     if (anchor.kind === 'part' ? !c.parts.includes(anchor.name) : !c.classes.includes(anchor.name)) continue;
     const host = chain[0];
-    const contra = host?.kind === 'el' ? compoundContradiction(c, host) : null;
+    const contra = host?.kind === 'el' ? contradiction(c, host) : null;
     if (contra) { reject(`its host ${contra}`); continue; }
-    if (sat(k, { level: 0, sib: null })) return { ok: true };
+    if (sat(k, { level: 0, sib: null })) return { ok: true, gate: tagGate(c, host) };
   }
   // The anchor only appears inside an alternation or :has(): its placement is not read.
-  if (why === null) return { ok: true };
+  if (why === null) return { ok: true, gate: null };
   return { ok: false, why };
+}
+
+const MAX_PARENT_DEPTH = 3;
+
+/** Whether an element's direct children are all known elements: no slot for composed content. */
+function closedChildren(el, ctx) {
+  const opening = el?.at;
+  if (!opening || !isIntrinsicTag(opening.tagName, ctx)) return false;
+  const attrs = opening.attributes.properties;
+  if (attrs.some((a) => ts.isJsxAttribute(a) && a.name.getText() === 'children')) return false;
+  // Nested children override a spread's `children`; a self-closing element takes them from the spread.
+  if (ts.isJsxSelfClosingElement(opening)) return !attrs.some((a) => ts.isJsxSpreadAttribute(a));
+  const intrinsicJsx = (e) => {
+    e = stripTypeWrappers(e);
+    if (!e) return false;
+    if (ts.isBinaryExpression(e) && e.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken) return intrinsicJsx(e.right);
+    if (ts.isConditionalExpression(e)) return intrinsicJsx(e.whenTrue) && intrinsicJsx(e.whenFalse);
+    if (e.kind === ts.SyntaxKind.NullKeyword || e.kind === ts.SyntaxKind.FalseKeyword || (ts.isIdentifier(e) && e.text === 'undefined')) return true;
+    if (ts.isJsxElement(e) || ts.isJsxSelfClosingElement(e)) return isIntrinsicTag((ts.isJsxElement(e) ? e.openingElement : e).tagName, ctx);
+    return false;
+  };
+  return opening.parent.children.every((c) => {
+    if (ts.isJsxText(c)) return true;
+    if (ts.isJsxExpression(c)) return !c.expression || intrinsicJsx(c.expression);
+    if (ts.isJsxElement(c) || ts.isJsxSelfClosingElement(c)) return isIntrinsicTag((ts.isJsxElement(c) ? c.openingElement : c).tagName, ctx);
+    return false;
+  });
+}
+
+/**
+ * Whether no element can be compound `idx` AND hold, as a direct child, content composed
+ * outside its own file: a reason string when proven, else null. Candidates are every census
+ * stamp of the compound's first part; one with a slot whose ancestry can satisfy the selector
+ * up to `idx` (or any unreadable one) defeats the proof.
+ */
+function closedParent(census, compounds, combs, idx, engine, depth) {
+  const target = compounds[idx];
+  const part = target?.parts[0];
+  if (!target || depth >= MAX_PARENT_DEPTH) return null;
+  const prefix = compounds.slice(0, idx + 1);
+  const key = `${engine}|${depth}|${JSON.stringify([prefix, combs.slice(0, idx)])}`;
+  census.closedParentCache ??= new Map();
+  if (census.closedParentCache.has(key)) return census.closedParentCache.get(key);
+  census.closedParentCache.set(key, null);
+  const excluded = EXCLUDED_ENGINES[engine] ?? [];
+  const inEngine = (f) => !excluded.some((e) => f.includes(`/engines/${e}/`));
+  // Every element that can be the target: the carriers of one of its DS classes, else every stamp of its part.
+  let candidates = null;
+  let anchor = null;
+  for (const cls of target.classes.filter(isDsClass)) {
+    if (!classCarriers(census, cls)) continue;
+    candidates = classCarrierSites(census, cls).filter((s) => inEngine(s.file));
+    anchor = { kind: 'class', name: cls };
+    break;
+  }
+  if (!candidates && part) {
+    const files = [...(census.global.get(part) ?? [])].filter(inEngine);
+    const { sites, unlocatable } = ownerSites(census, files, part);
+    if (files.length > 0 && unlocatable.length === 0) { candidates = sites; anchor = { kind: 'part', name: part }; }
+  }
+  let result = null;
+  if (candidates) {
+    const closedAt = new Set();
+    const open = candidates.some((s) => s.paths.some((p) => {
+      const host = p.chain[0];
+      if (host?.kind === 'el' && closedChildren(host, census.ctxOf(s.file))) { closedAt.add(`components/${s.file}:${s.line}`); return false; }
+      return pathSatisfiesAt(census, p, prefix, combs.slice(0, idx), anchor, engine, depth + 1, idx, true).ok;
+    }));
+    if (!open) {
+      const listed = [...closedAt];
+      result = `its parent must be ${describeCompound(target)}, and no element that can be one renders composed children (${listed.length > 3 ? `${listed.slice(0, 3).join(', ')} and ${listed.length - 3} more` : listed.join(', ') || 'none in reach'})`;
+    }
+  }
+  census.closedParentCache.set(key, result);
+  return result;
+}
+
+/** Class sites of a DS class across the census (namespace templates included), for carrier proofs. */
+function classCarrierSites(census, cls) {
+  return [...census.files].filter(([, e]) => textProducesClass(e.src, cls)).flatMap(([f]) => classSitesOf(census, f, cls, true));
+}
+
+/**
+ * The elements a DS class can reach, as the set of their opening tags, or null when it can reach
+ * an element the census cannot name: a producer outside `components/`, or a producer whose
+ * class lands on a component (which may forward it anywhere). The orphan law's premise: a DS
+ * class reaches the DOM only through a source that produces it.
+ */
+function classCarriers(census, cls) {
+  census.carrierCache ??= new Map();
+  if (census.carrierCache.has(cls)) return census.carrierCache.get(cls);
+  let result = null;
+  if (isDsClass(cls) && !classGeneratedOutside(census, cls)) {
+    const sites = classCarrierSites(census, cls);
+    const hosts = sites.flatMap((s) => s.paths.map((p) => p.chain[0]));
+    if (sites.length > 0 && hosts.length > 0 && hosts.every((h) => h?.kind === 'el' && h.at)) result = new Set(hosts.map((h) => h.at));
+  }
+  census.carrierCache.set(cls, result);
+  return result;
+}
+
+/** A required DS class whose every carrier is known, on an element that is none of them. */
+function carrierContradiction(census, c, el) {
+  if (!el || el.kind !== 'el' || !el.at) return null;
+  for (const cls of c.classes.filter(isDsClass)) {
+    const carriers = classCarriers(census, cls);
+    if (carriers && !carriers.has(el.at)) return `never carries .${cls} (no producer of it lands there)`;
+  }
+  return null;
+}
+
+/** Whether a production source under `src/` but outside `components/` can produce the class. */
+function classGeneratedOutside(census, token) {
+  if (!census.outsideCorpus) {
+    const corpus = [];
+    const walk = (dir) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const abs = join(dir, entry.name);
+        if (entry.isDirectory()) { if (entry.name !== 'node_modules' && abs !== census.root) walk(abs); }
+        else if (isProductionSource(abs)) corpus.push(readFileSync(abs, 'utf8'));
+      }
+    };
+    walk(census.srcRoot);
+    census.outsideCorpus = corpus;
+  }
+  return census.outsideCorpus.some((src) => textProducesClass(src, token, { specific: true }));
 }
 
 function describeCompound(c) {
@@ -1620,24 +2331,52 @@ function probeSequences(census, probe) {
   return census.seqCache.get(probe);
 }
 
-/** Whether a site can satisfy the row selector on at least one render path: `{ ok, why }`. */
+/**
+ * Whether a site can satisfy the row selector on at least one render path: `{ ok, why, paths }`.
+ * Each fitting path also carries the gates its placement adds: the tag a prop-bound host must
+ * take, and the prop a host mounts only behind its own gate.
+ */
 function siteFits(census, site, probe, engine) {
   if (!probe || site.paths.length === 0) return { ok: true, paths: site.paths };
   const anchor = { kind: site.kind === 'class' ? 'class' : 'part', name: site.kind === 'class' ? site.part.slice(1) : site.part };
   const seqs = probeSequences(census, probe);
+  // A class qualifier on a part row is selected by its className expression alone: the element's gates are the element's.
+  const own = (c) => (site.kind === 'class' && !site.full ? { ...c, gates: false, element: true } : c);
   let why = null;
-  const paths = site.paths.filter((path) => seqs.some((seq) => {
-    const r = pathSatisfies(census, path, seq, anchor, engine);
-    if (!r.ok) why ??= r.why;
-    return r.ok;
-  }));
+  const paths = [];
+  for (const path of site.paths) {
+    let fit = null;
+    for (const seq of seqs) {
+      const r = pathSatisfies(census, path, seq, anchor, engine);
+      if (r.ok) { fit = r; break; }
+      why ??= r.why;
+    }
+    if (!fit) continue;
+    const extra = [];
+    if (fit.gate) extra.push(own(fit.gate));
+    for (const entry of path.chain) {
+      if (entry.kind !== 'prop') continue;
+      const gate = propMountGate(census, entry.file, entry.tag, entry.prop, engine, entry.passed);
+      if (gate) extra.push(own({ kind: 'mount', text: `<${entry.tag}> mounts ${entry.prop} only behind ${gate.text}`, file: entry.file, line: entry.line, names: gate.names, gates: true }));
+    }
+    paths.push(extra.length > 0 ? { ...path, conditions: [...path.conditions, ...extra] } : path);
+  }
   return paths.length > 0 ? { ok: true, paths } : { ok: false, why };
 }
 
-/** The site narrowed to the render paths that can satisfy the selector, or null when none can. */
+/** The site narrowed to the render paths that can satisfy the selector (landing re-read on them), or null when none can. */
 function fittingSite(census, site, probe, engine) {
   const fit = siteFits(census, site, probe, engine);
-  return fit.ok ? (fit.paths.length === site.paths.length ? site : { ...site, paths: fit.paths }) : null;
+  if (!fit.ok) return null;
+  if (fit.paths.length === site.paths.length && fit.paths.every((p, i) => p === site.paths[i])) return site;
+  return narrowSite(site, fit.paths);
+}
+
+/** A site on a subset of its paths: a class site's landing is decided by the hosts of those paths only. */
+function narrowSite(site, paths) {
+  if (site.kind !== 'class') return { ...site, paths };
+  const hosts = paths.map((p) => p.chain[0]);
+  return { ...site, paths, lands: hosts.length > 0 && hosts.every((h) => h?.kind === 'el'), host: hosts.find((h) => h?.kind === 'component')?.tag ?? null };
 }
 
 // ---------------------------------------------------------------------------
@@ -1803,7 +2542,7 @@ function judgeAnchor(census, files, kind, name, probe, engine, control, owner, f
     return { status: 'defect', reason: `${label}: no owner source produces the class` };
   }
   const fits = sites.map((s) => ({ s, fit: siteFits(census, s, probe, engine) }));
-  const fitting = fits.filter((x) => x.fit.ok).map((x) => ({ ...x.s, paths: mergeComplements(x.fit.paths) }));
+  const fitting = fits.filter((x) => x.fit.ok).map((x) => narrowSite(x.s, mergeComplements(x.fit.paths)));
   if (fitting.length === 0 && unlocatable.length === 0) {
     const why = fits.map((x) => `components/${x.s.file}:${x.s.line} ${x.fit.why}`).join('; ');
     return { status: 'dead', reason: `DEAD RULE: ${label} can never satisfy the selector -- ${why}` };
@@ -1911,12 +2650,14 @@ function classifyClassOnly(census, base, tree, files, probe, engine, control, ow
   const classes = flattenTree(tree, 'classes').filter(isDsClass);
   if (classes.length === 0) return { ...base, owner: owner.dir, class: 'TRUE_DEAD', reason: 'class-only anchor with no DS class: nothing to prove' };
   const verdicts = new Map();
+  // A utility class (`font-mono`) the owner stamps behind a gate is evidence like a DS class; the row still needs a DS class to name its owner.
   const judge = (kind, name) => {
-    if (kind !== 'class' || !isDsClass(name)) return { status: 'defect', reason: `'${name}': not a DS class` };
+    if (kind !== 'class') return { status: 'defect', reason: `'${name}': not a class` };
     if (!verdicts.has(name)) verdicts.set(name, judgeAnchor(census, files, 'class', name, probe, engine, control, owner.dir, true));
     return verdicts.get(name);
   };
-  for (const c of classes) judge('class', c);
+  const all = flattenTree(tree, 'classes');
+  for (const c of all) judge('class', c);
   if (treeSettledBy(tree, (kind, name) => judge(kind, name).status === 'explained')) {
     const evidence = [...verdicts.values()].filter((v) => v.status === 'explained').map((v) => v.evidence);
     const conditionNames = [...new Set(evidence.flatMap((e) => e.stamps.flatMap(namesOf)))].sort();
@@ -1925,7 +2666,7 @@ function classifyClassOnly(census, base, tree, files, probe, engine, control, ow
   if (treeSettledBy(tree, (kind, name) => judge(kind, name).status === 'dead')) {
     return { ...base, owner: owner.dir, class: 'TRUE_DEAD', verdict: 'dead-rule', reason: [...verdicts.values()].filter((v) => v.status === 'dead').map((v) => v.reason).join(' | ') };
   }
-  const defects = classes.map((c) => judge('class', c)).filter((v) => v.status !== 'explained').map((v) => v.reason);
+  const defects = all.map((c) => judge('class', c)).filter((v) => v.status !== 'explained').map((v) => v.reason);
   return { ...base, owner: owner.dir, class: 'TRUE_DEAD', reason: `class-only anchor: ${defects.join(' | ')}` };
 }
 

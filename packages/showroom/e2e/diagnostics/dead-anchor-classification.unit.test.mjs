@@ -650,3 +650,221 @@ test('real pin: .ds-stepper-step is generated only by the standalone Step compou
   assert.match(r.owner, /^primitives\/navigation\/stepper(\/|$)/);
   assert.match(r.reason, /stepper\/compound\/step\/index\.tsx:\d+ on an ungated render path/);
 });
+
+// ---------------------------------------------------------------------------
+// TD-4: the five producer shapes the TD-1 adjudication found misread (a
+// variable tag bound to a typed prop, a recipe slot table, a class-window pair
+// table, an engine stamp shadowed by a same-named compound, an overlay prop the
+// host mounts only once open). One mutant each, with the fail-closed twin.
+// ---------------------------------------------------------------------------
+
+const evidenceOf = (r, part) => r.evidence.find((e) => e.part === part).stamps;
+
+test('S1: a tag bound to a typed prop lands, and the selector\'s tag is the gate', (t) => {
+  const census = syntheticTree(t, {
+    'primitives/display/type/contracts/index.ts': `
+export type Level = 'h1' | 'h2';
+export interface BaseProps { className?: string }
+export interface TextProps extends BaseProps { as?: 'span' | 'code' | 'mark'; monospace?: boolean }
+export interface HeadingProps extends BaseProps { level?: Level }
+export const DEFAULTS = { text: { as: 'span' as const } };
+`,
+    'primitives/display/type/engines/modern/index.tsx': `
+import React, { forwardRef } from 'react';
+import type { TextProps, HeadingProps } from '../../contracts';
+import { DEFAULTS } from '../../contracts';
+const SCOPE = 'ds-type ds-type--modern';
+export const Text = forwardRef<HTMLElement, TextProps>(({ as = DEFAULTS.text.as, monospace = false, className, ...props }, ref) => {
+  const Component = as;
+  const classes = [SCOPE, monospace ? 'font-mono' : '', className].filter(Boolean).join(' ');
+  return <Component ref={ref} className={classes} {...props} />;
+});
+export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(({ level = 'h2', className, ...props }, ref) => {
+  const Component = level;
+  return <Component ref={ref} className={[SCOPE, className].join(' ')} {...props} />;
+});
+export const Para = ({ className }) => <p className={[SCOPE, className].join(' ')} />;
+export const Loose = ({ as = 'span' }: { as?: string }) => {
+  const Tag = as;
+  return <Tag className="ds-loose" />;
+};
+`,
+  });
+  const SKIN = 'modern/type/index.css';
+  const code = classifyRow(census, SKIN, '.ds-type.ds-type--modern:is(code)');
+  assert.equal(code.class, 'CONDITIONAL', code.reason);
+  const [stamp] = evidenceOf(code, '.ds-type');
+  assert.deepEqual(stamp.required.map((c) => c.text), ['as === "code"'], 'Heading (h1|h2) and Para (<p>) can never be <code>');
+  assert.deepEqual(stamp.required[0].names, [{ name: 'as', kind: 'prop' }]);
+  const heading = classifyRow(census, SKIN, '.ds-type.ds-type--modern:is(h1)');
+  assert.equal(heading.class, 'CONDITIONAL', heading.reason);
+  assert.deepEqual(evidenceOf(heading, '.ds-type')[0].required.map((c) => c.text), ['level === "h1"']);
+  const mono = classifyRow(census, SKIN, '.ds-type.ds-type--modern.font-mono');
+  assert.equal(mono.class, 'CONDITIONAL', mono.reason);
+  assert.deepEqual(evidenceOf(mono, '.font-mono')[0].required.map((c) => c.text), ['monospace']);
+  // Fail-closed: the default tag satisfies the selector, and a `string`-typed tag proves no landing.
+  const span = classifyRow(census, SKIN, '.ds-type.ds-type--modern:is(span)');
+  assert.equal(span.class, 'TRUE_DEAD');
+  assert.match(span.reason, /ungated render path/);
+  const loose = classifyRow(census, 'modern/loose/index.css', '.ds-loose:is(code)');
+  assert.equal(loose.class, 'TRUE_DEAD');
+  assert.match(loose.reason, /non-DOM host: landing unproven/);
+});
+
+test('S1b: a utility token counts as a class only where it reaches its host through className', (t) => {
+  const census = syntheticTree(t, {
+    'primitives/inputs/pressy/engines/modern/index.tsx': `
+export const Pressy = ({ pressed, compact }) => (
+  <button className={compact ? 'ds-pressy dense' : 'ds-pressy'} data-state={pressed ? 'press' : 'idle'} />
+);
+`,
+  });
+  const SKIN = 'modern/pressy/index.css';
+  // `press` is a data-state value: no source makes it a class, so its gate explains nothing.
+  const press = classifyRow(census, SKIN, '.ds-pressy.press');
+  assert.equal(press.class, 'TRUE_DEAD', press.reason);
+  assert.match(press.reason, /'\.press': no owner source produces the class/);
+  // The same shape through className is a class, behind its gate.
+  const dense = classifyRow(census, SKIN, '.ds-pressy.dense');
+  assert.equal(dense.class, 'CONDITIONAL', dense.reason);
+  assert.deepEqual(evidenceOf(dense, '.dense')[0].required.map((c) => c.text), ['compact']);
+});
+
+test('S2: a recipe slot table produces its classes at the resolve call', (t) => {
+  const census = syntheticTree(t, {
+    '../infrastructure/recipes/families/chip/index.ts': "export const CHIP_RECIPE = { name: 'chip', slots: { root: ['ds-chip', 'ds-chip--modern'], label: 'ds-chip__label' }, axes: {} };\n",
+    '../infrastructure/recipes/families/index.ts': "export { CHIP_RECIPE } from './chip';\n",
+    '../infrastructure/recipes/engine/index.ts': 'export const defineRecipe = (d) => ({ resolve: () => ({}) });\n',
+    'primitives/display/chip/engines/modern/index.tsx': `
+import { defineRecipe } from '@/infrastructure/recipes/engine';
+import { CHIP_RECIPE } from '@/infrastructure/recipes/families';
+const chipRecipe = defineRecipe(CHIP_RECIPE);
+export const Chip = ({ removable, className }) => {
+  const classes = chipRecipe.resolve({}, { root: className }).root;
+  return removable ? <span className={classes} /> : null;
+};
+`,
+    'primitives/display/tag/engines/modern/index.tsx': `
+import { defineRecipe } from '@/infrastructure/recipes/engine';
+import { CHIP_RECIPE } from '@/infrastructure/recipes/families';
+const tagRecipe = defineRecipe(CHIP_RECIPE);
+export const Tag = ({ className }) => <i className={tagRecipe.resolve({}, { root: className }).root} />;
+`,
+  });
+  const r = classifyRow(census, 'modern/chip/index.css', '.ds-chip.ds-chip--modern');
+  assert.equal(r.class, 'CONDITIONAL', r.reason);
+  const [stamp] = evidenceOf(r, '.ds-chip');
+  assert.equal(stamp.via, 'recipe-slot');
+  assert.equal(stamp.match, 'chipRecipe.resolve');
+  assert.equal(stamp.line, 6);
+  assert.deepEqual(stamp.required.map((c) => c.text), ['removable']);
+  // Fail-closed: the producer found, an ungated render stays unexplained.
+  const tag = classifyRow(census, 'modern/tag/index.css', '.ds-chip.ds-chip--modern');
+  assert.equal(tag.class, 'TRUE_DEAD');
+  assert.match(tag.reason, /tag\/engines\/modern\/index\.tsx:5 on an ungated render path/);
+  // `.root` selects one slot: the label slot is not produced here.
+  assert.match(classifyRow(census, 'modern/tag/index.css', '.ds-chip__label').reason, /'\.ds-chip__label': no owner source produces the class/);
+});
+
+test('S3: a class-window pair table produces both spellings at the keyed read', (t) => {
+  const census = syntheticTree(t, {
+    'structures/foundation/class-window/index.ts': `
+const WINDOWS = [{ family: 'dock', pairs: { 'rottay-dock__item': 'ds-dock__item' } }] as const;
+function pairedClasses(pairs) {
+  const paired = {};
+  for (const [superseded, canonical] of Object.entries(pairs)) {
+    paired[superseded] = \`\${canonical} \${superseded}\`;
+  }
+  return paired;
+}
+function windowFor(family) {
+  const found = WINDOWS.find((entry) => entry.family === family);
+  if (!found) throw new Error(family);
+  return found;
+}
+export const DOCK_CLASSES = pairedClasses(windowFor('dock').pairs);
+export const LOOSE_CLASSES = Object.fromEntries([['rottay-dock__tail', 'ds-dock__tail']]);
+`,
+    'structures/workspace/dock/index.tsx': `
+import { DOCK_CLASSES, LOOSE_CLASSES } from '@/components/structures/foundation/class-window';
+export const Dock = ({ expanded }) => (
+  <div className="ds-dock">
+    {expanded && <span className={DOCK_CLASSES['rottay-dock__item']} />}
+    {expanded && <span className={LOOSE_CLASSES['rottay-dock__tail']} />}
+  </div>
+);
+`,
+  });
+  const SKIN = 'agnostic/dock/index.css';
+  const r = classifyRow(census, SKIN, '.ds-dock .ds-dock__item');
+  assert.equal(r.class, 'CONDITIONAL', r.reason);
+  const [stamp] = evidenceOf(r, '.ds-dock__item');
+  assert.equal(stamp.match, 'rottay-dock__item');
+  assert.equal(stamp.via, 'class-window');
+  assert.deepEqual(stamp.required.map((c) => c.text), ['expanded']);
+  // A table built some other way proves nothing about its canonical spelling.
+  assert.match(classifyRow(census, SKIN, '.ds-dock .ds-dock__tail').reason, /'\.ds-dock__tail': no owner source produces the class/);
+});
+
+test('S4: a compound composed as children cannot be the engine\'s direct child; an open slot keeps it possible', (t) => {
+  const census = syntheticTree(t, {
+    'primitives/feedback/dlg/engines/modern/index.tsx': `
+export const Dlg = ({ footer, children }) => (
+  <div className="ds-dlg" data-part="root">
+    <div data-part="surface">
+      <div data-part="body">{children}</div>
+      {footer && <div data-part="footer">{footer}</div>}
+    </div>
+  </div>
+);
+`,
+    'primitives/feedback/dlg/compound/footer/index.tsx': 'export const DlgFooter = ({ children }) => <div data-part="footer">{children}</div>;\n',
+    'primitives/overlay/sheet/engines/modern/index.tsx': 'export const Sheet = ({ children }) => <section data-part="surface">{children}</section>;\n',
+    'index.ts': "export { DlgFooter } from './primitives/feedback/dlg/compound/footer';\nexport { Sheet } from './primitives/overlay/sheet/engines/modern';\n",
+  });
+  const SKIN = 'modern/dlg/index.css';
+  const child = classifyRow(census, SKIN, ".ds-dlg[data-part='root'] > [data-part='surface'] > [data-part='footer']");
+  assert.equal(child.class, 'CONDITIONAL', child.reason);
+  const stamps = evidenceOf(child, 'footer');
+  assert.deepEqual(stamps.map((s) => s.file), ['components/primitives/feedback/dlg/engines/modern/index.tsx'], 'the compound sits under body, never under surface');
+  assert.deepEqual(stamps[0].required.map((c) => c.text), ['footer']);
+  // Fail-closed: a Sheet surface (an open slot) inside the dialog body may hold the compound.
+  const nested = classifyRow(census, SKIN, ".ds-dlg [data-part='surface'] > [data-part='footer']");
+  assert.equal(nested.class, 'TRUE_DEAD');
+  assert.match(nested.reason, /compound\/footer\/index\.tsx:1 on an ungated render path/);
+});
+
+test('S5: an overlay prop the host mounts only once open carries the host\'s gate', (t) => {
+  const census = syntheticTree(t, {
+    'primitives/overlay/pop/engines/modern/index.tsx': `
+import React, { useState } from 'react';
+export const Pop = ({ content, title, children }) => {
+  const [open, setOpen] = useState(false);
+  const surface = open ? <div data-part="surface"><div data-part="body">{content}</div></div> : null;
+  return <span className="ds-pop" onClick={() => setOpen(true)}><b>{title}</b>{children}{surface}</span>;
+};
+export const Gated = ({ show, content }) => (show ? <div>{content}</div> : null);
+`,
+    'patterns/data/menu/index.tsx': `
+import { Pop, Gated } from '../../../primitives/overlay/pop/engines/modern';
+export const RowMenu = ({ label }) => (
+  <>
+    <Pop content={<div data-part="row-menu" />} title={<i data-part="row-title" />}>
+      <button data-part="row-trigger">{label}</button>
+    </Pop>
+    <Gated show content={<div data-part="row-shown" />} />
+  </>
+);
+`,
+  });
+  const SKIN = 'agnostic/menu/index.css';
+  const menu = classifyRow(census, SKIN, "[data-part='row-menu']");
+  assert.equal(menu.class, 'CONDITIONAL', menu.reason);
+  const [gate] = evidenceOf(menu, 'row-menu')[0].required;
+  assert.equal(gate.kind, 'mount');
+  assert.match(gate.text, /^<Pop> mounts content only behind open$/);
+  assert.deepEqual(gate.names, [{ name: 'open', kind: 'state' }]);
+  // Fail-closed: a prop the host renders at rest, and a gate the call site itself sets.
+  assert.match(classifyRow(census, SKIN, "[data-part='row-title']").reason, /ungated render path \(root; no condition\)/);
+  assert.match(classifyRow(census, SKIN, "[data-part='row-shown']").reason, /ungated render path \(root; no condition\)/);
+});
