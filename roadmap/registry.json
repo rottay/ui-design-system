@@ -5759,6 +5759,11 @@
      "at": "2026-10-02 00:06",
      "by": "Kimi K3",
      "note": "2026-10-02 tanda 9g: HAR-1 LANDED a99195e64 (Fable ACCEPT; the readings-based coverage check replaces the tautological union). The harness now drives real input (click/fill/press, loud pre-checks); command-palette's real mount covers all 23/23 density channels incl. the argument-panel trio. COV-1 closed the wave-2a ambiguity: the claim proves all 11 app-shell channels at the channel level (64 drift cells without it). The skip-link focused-link caveat stays registered (the interaction step could close it — cheap follow-up, not scheduled). Fable's second tightening (multi-match refusal for attribute/style steps) registered, not applied."
+    },
+    {
+     "at": "2026-10-02 00:14",
+     "by": "Kimi K3",
+     "note": "2026-10-02 COV-2 LANDED ac915b277: the skip-link caveat closes — the focused link is proven by a real Tab through the harness's input step (focus-visible asserted; the browser's own tab order, nothing programmatic); the A/B restatement mutant reds ONLY the focused arm. 17/17. With this, the density wave's FAM-11 coverage is complete: 7/7 families with local-scope proofs, portaled arms honest, every channel claim-proven."
     }
    ]
   },
