@@ -21,6 +21,27 @@ no rule):
 | `./eslint` | 1 |
 | `./styles/evnto` | 1 |
 
+### WO-FAM-11 class retirement — measured impact (2026-10-02)
+
+The deferred packet carries this register; nothing here executes until the
+owner returns app-evnto to scope. The design-system major
+`.changeset/fam-11-legacy-class-retirement.md` retires the
+`rottay-app-shell*` / `rottay-action-dock*` vocabulary, and app-evnto
+selects the old spelling in exactly one file —
+`src/vertical/surface/shell/__tests__/phone-navigation.test.tsx` (7 lines):
+`:213, :264, :308` query `.rottay-app-shell[data-part="root"]`,
+`:222` asserts `toHaveClass('rottay-app-shell__navigation-trigger')`,
+`:223` reads `dsDeclarations('.rottay-app-shell__navigation-trigger')`,
+`:281`/`:282` assert `toHaveClass('rottay-app-shell__main')` and read
+`dsDeclarations('.rottay-app-shell__main')`. At the bump past the major the
+queries null-deref and the assertions fail; the migration is the class-for-
+class rename to `ds-app-shell*` (the file moved to
+`src/vertical/surface/shell/__tests__/` in R098 — any roster pointing at the
+old path is stale). The two `dsDeclarations` reads should be re-checked
+against what they meant, since the skin never selected the trigger by class.
+Full table and verification:
+[cross-app guide](../legacy-class-retirement.md).
+
 ## What will be in the packet when it is written
 
 - **X-01** — visual-authority declaration: app-evnto sends a bare string today.

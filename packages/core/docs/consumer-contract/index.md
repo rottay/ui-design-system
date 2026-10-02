@@ -406,6 +406,66 @@ monta un host escrito a la vieja usanza detrás del puente y, en el mismo
 archivo, fija con `@ts-expect-error` que la firma antigua es rechazada en
 compilación (`typecheck:tests`).
 
+### 2.2 Vocabulario de clases del shell y del dock: ruptura declarada y su sustituto (WO-FAM-11, ruling 8 del owner)
+
+`AppShell` y `ActionDock` emiten desde esta versión **solo** la grafía
+canónica `ds-app-shell*` / `ds-action-dock*`. Las 24 clases superadas
+(`rottay-app-shell*`, 19; `rottay-action-dock*`, 5) se retiran sin brazo de
+compatibilidad ni shim: la declaración de release es
+`.changeset/fam-11-legacy-class-retirement.md` (major). La ventana de doble
+grafía que anunció el renombrado (`.changeset/fam-11-class-window.md`,
+minor) nunca llegó a una versión publicada — se elimina sin consumir, y su
+promesa («las apps en versiones fijadas siguen funcionando; migran en su
+próxima subida») queda falseada: la ventana abre y cierra en la misma
+versión, de modo que para todo consumidor el efecto neto es un renombrado
+duro `rottay-*` → `ds-*` en un major.
+
+**Quién está afectado:** cualquier consumidor que seleccione la grafía vieja
+en hojas de estilo o en tests. La búsqueda en la app:
+
+```
+grep -rnE 'rottay-(app-shell|action-dock)' src tests
+```
+
+Cero coincidencias: no hay trabajo. El registro medido (2026-10-02) lleva 13
+sitios: app-bithire 6 selectores en 3 archivos CSS (override de la bandeja
+de acciones móvil, del drawer y del sidebar) y app-evnto 7 líneas en un
+archivo de test; app-platform: 0. La tabla de renombrado exacta (con el
+`data-part` de cada nodo), las reglas de la migración y el paso de
+verificación viven en la guía
+[`migration/legacy-class-retirement.md`](migration/legacy-class-retirement.md);
+las secciones de impacto por app, en los paquetes
+[`app-bithire`](migration/app-bithire/index.md) (paso 7) y
+[`app-evnto`](migration/app-evnto/index.md).
+
+Reglas de la migración:
+
+- El sustituto es el renombrado clase por clase (`ds-action-dock*`,
+  `ds-app-shell*`) en el mismo PR que sube de versión; la especificidad no
+  cambia — una clase por una clase conserva el `(a,b,c)` exacto de cada
+  regla, también dentro de un brazo `:is()`.
+- Donde el nodo lleva `data-part` (la tabla de la guía lo nombra por fila),
+  preferir el `data-part` en el selector de reemplazo y recaer en la clase
+  `ds-*` solo donde no existe parte. En app-bithire el ratchet de
+  boundaries-imports ya contaba estos alcances como alcances de anatomía
+  privada: migrar al gancho público vacía esa fila en vez de renombrar la
+  deuda.
+- Dos consumidores internos migraron en el mismo lote: el dock fijo de
+  StepWizard (`actionPosture="sticky-bottom"`) estampa ahora
+  `ds-action-dock` / `ds-action-dock__actions`, y el selector de la barra
+  sticky de collection-workspace sigue la grafía canónica. Quien sobreescriba
+  esas superficies selecciona las mismas clases canónicas.
+- Prohibido: reintroducir la grafía vieja o añadir un alias local de
+  compatibilidad. No queda ventana con la que ser compatible.
+
+El consumidor migrado está ejecutado, no sólo documentado:
+`tests/integration/consumer/shell-canon.test.tsx` fija — desde el árbol de
+fuente y desde el tarball publicado (la pierna packed) — que cada clase
+canónica aterriza en el nodo que el contrato nombra, que los cuatro
+selectores de sustitución alcanzan cada uno su nodo a la especificidad de la
+grafía que reemplazan, y que cero tokens superados sobreviven en el DOM
+rendido ni en el `dist/styles.css` construido.
+
 ## 3. Documento de tenant v2 (lo que escribe app-platform)
 
 ```ts

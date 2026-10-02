@@ -39,7 +39,11 @@ its accessible name, which is the one thing the composition cannot delegate.
 
 No behavior changes for consumers. No public export moved.
 
-`rottay-action-dock` is NOT renamed. `app-bithire` selects
-`.rottay-action-dock` and `.rottay-action-dock__actions` from
-`src/ui/details/surface-shell/mobile-tray/styles.css`, so the rename is a
-breaking change for a live consumer and stays owed.
+`rottay-action-dock` is NOT renamed — in this changeset. `app-bithire`
+selects `.rottay-action-dock` and `.rottay-action-dock__actions` from
+`src/ui/details/surface-shell/mobile-tray/styles.css`, so the rename was a
+breaking change for a live consumer and stayed owed at authoring time. It
+ships in the same release as this note: the major
+`.changeset/fam-11-legacy-class-retirement.md` (WO-FAM-11, owner ruling 8)
+retires the whole `rottay-action-dock*` / `rottay-app-shell*` vocabulary;
+this line records the debt, that changeset collects it.

@@ -8,6 +8,12 @@ A packet is a BRIEF, not an execution log. Each one is executed in its own
 repository by its own owners; the design-system track never edits an app
 repository (contract §7).
 
+Cross-app guides, applying to every consumer at once:
+
+- [`legacy-class-retirement.md`](./legacy-class-retirement.md) — WO-FAM-11
+  (owner ruling 8): the `rottay-app-shell*` / `rottay-action-dock*` rename to
+  `ds-*`; what changed, who is affected, the exact rename table, verification.
+
 | Packet | Status |
 |---|---|
 | [`app-bithire/`](./app-bithire/index.md) | active — the only APP track in flight (owner, 2026-09-05) |

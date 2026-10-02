@@ -25,6 +25,7 @@ Scope note (owner, 2026-09-05): app-bithire is the only APP track in flight.
 | Rule findings when the rule reaches the app | **14** — 11 in `src/**`, 3 in `tests/**` | contract §1.4 |
 | Findings by subpath | `./icons/presets/bithire` 11 · `./tenant-theme-canary-fixtures` 2 · `./hooks-manifest` 1 | contract §1.4 |
 | Hand-written mount files | `src/core/lib/theme/runtime-tenant-theme/{ssr,contracts,artifact-resolution,visual-authority,presentation-profile,provider-guard}` | X-02 |
+| Legacy shell/dock class selectors | 6 selectors in 3 CSS files (`rottay-app-shell*` / `rottay-action-dock*`) | WO-FAM-11 ruling 8 — [guide](../legacy-class-retirement.md), step 7 below |
 
 The pinned tarball does **not** contain `@rottay/no-unsanctioned-ds-subpath`
 (its `dist/eslint.js` has zero matches) and still exports `./commercial`,
@@ -241,7 +242,43 @@ A row whose dials are outside those vocabularies therefore does NOT migrate
 silently: fix the value at the source row, or leave the row on v1 until you
 can.
 
-### Step 7 — `oauth-transition` leaves the design system
+### Step 7 — Rename the shell/dock class selectors (WO-FAM-11, owner ruling 8)
+
+The design-system major `.changeset/fam-11-legacy-class-retirement.md`
+retires the whole `rottay-app-shell*` / `rottay-action-dock*` vocabulary:
+from that version on, AppShell and ActionDock stamp only the canonical
+`ds-*` spelling, with no compatibility arm. The app is affected — measured,
+6 selectors in 3 files:
+
+| File | Line | Selector |
+| --- | --- | --- |
+| `src/ui/details/surface-shell/mobile-tray/styles.css` | 20 | `.rottay-action-dock.rt-detail-mobile-action-tray[data-part="root"][data-placement="bottom"][data-mode="fixed"]` |
+| `src/ui/details/surface-shell/mobile-tray/styles.css` | 28 | `.rt-detail-mobile-action-tray .rottay-action-dock__actions` |
+| `src/ui/details/surface-shell/mobile-tray/styles.css` | 68 | `.rottay-action-dock.rt-detail-mobile-action-tray[data-part="root"][data-placement="bottom"][data-mode="fixed"]` (second block) |
+| `src/vertical/surface/shell/app-layout/styles/index.css` | 15 | `:is(.rt-app-shell, .rottay-app-shell__navigation-drawer)` |
+| `src/vertical/surface/shell/app-layout/styles/index.css` | 44 | `> .rottay-app-shell__navigation-sidebar` |
+| `src/vertical/surface/shell/sidebar/styles/index.css` | 948 | `:is(.rt-app-shell, .rottay-app-shell__navigation-drawer)` |
+
+Land the renames in the **same pull request** that bumps the app past the
+major. The substitution is class for class (`ds-action-dock*`,
+`ds-app-shell*`), which keeps every rule's specificity byte-equal; the full
+rename table — including the `data-part` each node carries — is in the
+[cross-app guide](../legacy-class-retirement.md). Where a `data-part` exists
+on the node (`:44`'s sidebar has `data-part="navigation-sidebar"`), prefer
+the `data-part` selector: the boundaries-imports ratchet already counts these
+three reaches as private-anatomy reaches, and migrating to the public hook
+empties that ratchet row instead of renaming the debt.
+
+```bash
+grep -rnE 'rottay-(app-shell|action-dock)' src tests   # expect: nothing
+pnpm test                                              # the app's own suites
+```
+
+Visual spot-check after the bump: the mobile action tray and the navigation
+drawer + sidebar paint exactly as before; a renamed selector at equal
+specificity cannot move a pixel.
+
+### Step 8 — `oauth-transition` leaves the design system
 
 See §3. It is last because it is the only step that removes symbols from the
 GUARANTEED root surface, and the app is protected from it only by its version
@@ -417,7 +454,10 @@ The packet is done when all of the following hold in `app-bithire`:
    hydration survives.
 6. The four `oauth-transition` symbols resolve from `@/components/oauth-transition`,
    and both routes render against the `dbe18dea` baselines.
-7. `pnpm typecheck && pnpm build && pnpm test` pass, and the app runs on a
+7. `grep -rnE 'rottay-(app-shell|action-dock)' src tests` returns nothing —
+   the WO-FAM-11 class rename rode in the same pull request as the bump past
+   the major that retired the old spelling.
+8. `pnpm typecheck && pnpm build && pnpm test` pass, and the app runs on a
    design-system version published from a tree that carries WO-CON-01…04.
 
 ## 5. What the design system will NOT do for you
