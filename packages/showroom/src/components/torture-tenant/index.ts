@@ -18,6 +18,7 @@
 import {
   isImplementedEngineName,
   resolveDocumentRootAttributes,
+  staticVerticalAnatomyAttributes,
   type DocumentRootAttributes,
   type ImplementedEngineName,
   type TenantThemeArtifact,
@@ -76,7 +77,9 @@ export function surfaceGroundFor(fixture: TortureFixture): 'dark' | 'light' {
  * scoped to `data-vertical='rottay'`, and stamping its slug there would ship
  * a scope no rule matches.
  */
-const BUNDLED_VERTICAL_BY_FIXTURE: Partial<Record<TortureFixture, string>> = {
+const BUNDLED_VERTICAL_BY_FIXTURE: Partial<
+  Record<TortureFixture, Parameters<typeof staticVerticalAnatomyAttributes>[0]>
+> = {
   rottay: 'rottay',
   bithire: 'bithire',
   evnto: 'evnto',
@@ -198,12 +201,17 @@ export function resolveTortureFirstPaint(
   if (verticalKey) {
     return {
       ...base,
-      rootAttributes: resolveDocumentRootAttributes({
-        themeMode: ground,
-        engine,
-        locale,
-        tenant: { slug: fixture, verticalKey },
-      }),
+      // The vertical's authored anatomy, last, as `mountTenantTheme` merges it;
+      // only bithire authors one, so rottay and evnto spread nothing.
+      rootAttributes: {
+        ...resolveDocumentRootAttributes({
+          themeMode: ground,
+          engine,
+          locale,
+          tenant: { slug: fixture, verticalKey },
+        }),
+        ...staticVerticalAnatomyAttributes(verticalKey),
+      },
       css: '',
       artifact: null,
     };
