@@ -101,8 +101,6 @@
     "./surfaces/collection-workspace"
   ],
   "unreachableModules": [
-    "src/components/patterns/data/column-settings/engines/rustic/index.tsx",
-    "src/components/patterns/data/list-toolbar/engines/rustic/index.tsx",
     "src/components/surfaces/foundation/common/story-helpers/index.tsx",
     "src/foundation/contracts/kernel/adaptation/composition/families/registry/index.ts"
   ],

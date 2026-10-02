@@ -628,6 +628,18 @@
       "reason": "9d924e9f2 (WO-FAM-01): the .ds-switch block is deleted, 52 lines removed and none added, following the D-16 merge of Switch into Toggle. Measured: no ds-switch__* class has a consumer anywhere in packages/core/src.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/ui/patterns/data/column-settings/engines/rustic/index.tsx": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "WO-RET-01: the census measures both modules unreachable (zero importers across the package, the showroom and the three apps) and both families declare rustic: null — the factory resolves the absence to a named refusal without a module load, so the files are dead code under the frozen tree. Deletion, not modification; authorized per the retirement wave's per-file exception rule.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/patterns/data/list-toolbar/engines/rustic/index.tsx": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "WO-RET-01: the census measures both modules unreachable (zero importers across the package, the showroom and the three apps) and both families declare rustic: null — the factory resolves the absence to a named refusal without a module load, so the files are dead code under the frozen tree. Deletion, not modification; authorized per the retirement wave's per-file exception rule.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/ui/primitives/inputs/Switch/engines/classic/index.tsx": {
       "blob": null,
       "relocationDigest": null,
