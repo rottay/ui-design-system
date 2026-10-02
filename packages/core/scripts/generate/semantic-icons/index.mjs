@@ -496,40 +496,6 @@ export function getGeneratedIconMetadata(name: GeneratedIconName): GeneratedIcon
 `;
 }
 
-function generateAdapterModule(adapter, fingerprint) {
-  const entries = adapter.entries
-    .map((entry) => `  { id: ${JSON.stringify(entry.id)}, module: ${JSON.stringify(entry.module)}, exportName: ${JSON.stringify(entry.exportName)} },`)
-    .join('\n');
-  return `${GENERATED_HEADER}import type { GeneratedIconName } from '../corpus';
-
-export const GENERATED_PHOSPHOR_PROVENANCE = Object.freeze({
-  supplier: ${JSON.stringify(adapter.supplier)},
-  packageName: ${JSON.stringify(adapter.packageName)},
-  packageVersion: ${JSON.stringify(adapter.packageVersion)},
-  rendering: ${JSON.stringify(adapter.rendering)},
-  manifestFingerprint: ${JSON.stringify(fingerprint)},
-} as const);
-
-export interface GeneratedPhosphorAdapterEntry {
-  readonly id: GeneratedIconName;
-  readonly module: \`${MODULE_PREFIX}\${string}\`;
-  readonly exportName: \`\${string}Icon\`;
-}
-
-export const GENERATED_PHOSPHOR_ADAPTER = [
-${entries}
-] as const satisfies readonly GeneratedPhosphorAdapterEntry[];
-
-const GENERATED_PHOSPHOR_ADAPTER_BY_ID = new Map<GeneratedIconName, GeneratedPhosphorAdapterEntry>(
-  GENERATED_PHOSPHOR_ADAPTER.map((entry) => [entry.id, entry]),
-);
-
-export function getGeneratedPhosphorAdapterEntry(name: GeneratedIconName): GeneratedPhosphorAdapterEntry {
-  return GENERATED_PHOSPHOR_ADAPTER_BY_ID.get(name) as GeneratedPhosphorAdapterEntry;
-}
-`;
-}
-
 function generateRoleModule(corpusEntry, adapterEntry) {
   const definitionFields = [
     `name: ${JSON.stringify(corpusEntry.id)}`,
@@ -677,19 +643,11 @@ export const BitHireIconPreset = /* @__PURE__ */ forwardRef<SVGSVGElement, BitHi
 `;
 }
 
-function manifestFingerprint(corpus, adapter) {
-  return createHash('sha256')
-    .update(JSON.stringify({ corpus, adapter }))
-    .digest('hex');
-}
-
 export function buildGeneratedFiles(corpus, adapter, bithirePreset) {
   const files = new Map();
   const adapterById = new Map(adapter.entries.map((entry) => [entry.id, entry]));
-  const fingerprint = manifestFingerprint(corpus, adapter);
 
   files.set('corpus.ts', generateCorpusModule(corpus));
-  files.set('phosphor-adapter.ts', generateAdapterModule(adapter, fingerprint));
   for (const entry of corpus.entries) {
     files.set(`roles/${roleFileName(entry.id)}`, generateRoleModule(entry, adapterById.get(entry.id)));
   }
@@ -701,19 +659,11 @@ export function buildGeneratedFiles(corpus, adapter, bithirePreset) {
     'presets/bithire/index.tsx',
     generateBitHirePresetModule(bithirePreset, corpus),
   );
-  files.set('packs/index.ts', `${GENERATED_HEADER}${ICON_PACKS.map((pack) => `export * from './${pack}';`).join('\n')}\n`);
-  files.set(
-    'index.ts',
-    `${GENERATED_HEADER}export * from './corpus';\nexport * from './packs';\n`,
-  );
   return files;
 }
 
 function generatedOutputPath(logicalPath) {
   if (logicalPath === 'corpus.ts') return resolve(GENERATED_ROOT, 'corpus/index.ts');
-  if (logicalPath === 'phosphor-adapter.ts') {
-    return resolve(GENERATED_ROOT, 'phosphor-adapter/index.ts');
-  }
   return resolve(GENERATED_ROOT, logicalPath);
 }
 

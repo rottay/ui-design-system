@@ -2,7 +2,6 @@
   "familyId": "primitive/inputs/radio",
   "sourceBindings": [
     "packages/core/src/components/primitives/inputs/radio/compound/group/index.tsx",
-    "packages/core/src/components/primitives/inputs/radio/compound/index.ts",
     "packages/core/src/components/primitives/inputs/radio/contracts/index.ts",
     "packages/core/src/components/primitives/inputs/radio/engines/classic/index.tsx",
     "packages/core/src/components/primitives/inputs/radio/engines/modern/index.tsx",

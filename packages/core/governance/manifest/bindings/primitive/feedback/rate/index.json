@@ -1,7 +1,6 @@
 {
   "familyId": "primitive/feedback/rate",
   "sourceBindings": [
-    "packages/core/src/components/primitives/feedback/rate/compound/index.ts",
     "packages/core/src/components/primitives/feedback/rate/contracts/index.ts",
     "packages/core/src/components/primitives/feedback/rate/engines/classic/index.tsx",
     "packages/core/src/components/primitives/feedback/rate/engines/modern/index.tsx",

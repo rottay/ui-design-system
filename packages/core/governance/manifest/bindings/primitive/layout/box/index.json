@@ -1,7 +1,6 @@
 {
   "familyId": "primitive/layout/box",
   "sourceBindings": [
-    "packages/core/src/components/primitives/layout/box/compound/index.ts",
     "packages/core/src/components/primitives/layout/box/contracts/index.ts",
     "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx",
     "packages/core/src/components/primitives/layout/box/engines/modern/index.tsx",

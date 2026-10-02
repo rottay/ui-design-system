@@ -12,7 +12,6 @@
     "packages/core/src/components/patterns/data/data-table/presentation/table/index.tsx",
     "packages/core/src/components/patterns/data/data-table/presentation/table/mobile-cards/index.tsx",
     "packages/core/src/components/patterns/data/data-table/runtime/grouping/index.ts",
-    "packages/core/src/components/patterns/data/data-table/runtime/index.ts",
     "packages/core/src/components/patterns/data/data-table/runtime/inline-editing/index.ts",
     "packages/core/src/components/patterns/data/data-table/runtime/row-resolution/index.ts",
     "packages/core/src/components/patterns/data/data-table/runtime/state/index.ts",

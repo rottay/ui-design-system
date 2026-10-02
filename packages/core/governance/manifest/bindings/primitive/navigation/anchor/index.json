@@ -1,7 +1,6 @@
 {
   "familyId": "primitive/navigation/anchor",
   "sourceBindings": [
-    "packages/core/src/components/primitives/navigation/anchor/compound/index.ts",
     "packages/core/src/components/primitives/navigation/anchor/contracts/index.ts",
     "packages/core/src/components/primitives/navigation/anchor/engines/classic/index.tsx",
     "packages/core/src/components/primitives/navigation/anchor/engines/modern/index.tsx",

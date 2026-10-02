@@ -7,12 +7,16 @@
  *
  *   1. Per public subpath of packages/core (the package.json `exports` map):
  *      which consumer roots import it. A consumer import is a static
- *      `import`/`export ... from`, a dynamic `import()` or a `require()` whose
- *      module specifier is a STRING LITERAL naming the package (`@rottay/
+ *      `import`/`export ... from`, a dynamic `import()`, a `require()`,
+ *      `require.resolve()` or `createRequire(...).resolve()` whose module
+ *      specifier is a STRING LITERAL naming the package (`@rottay/
  *      design-system` or `@rottay/design-system/<subpath>`), parsed with the
- *      TypeScript compiler API. A specifier inside a comment or an ordinary
- *      string never reaches the AST as a module specifier, so prose cannot
- *      certify consumption.
+ *      TypeScript compiler API; plus an `@import` in a consumer `.css` file
+ *      (string or `url(...)` form) naming the package, after CSS comments are
+ *      stripped. A specifier inside a comment or an ordinary string never
+ *      reaches the AST as a module specifier, so prose cannot certify
+ *      consumption; a commented-out `@import` is stripped before matching, so
+ *      it cannot either.
  *   2. Internal reachability: every module under src/ that no export
  *      entrypoint reaches is `unreachable`; a module reachable only from
  *      test files is `test-only`. CSS files under src that no JS module
@@ -168,7 +172,13 @@ export function parseModuleSpecifiers(filePath, text) {
       const callee = node.expression;
       const isRequire = ts.isIdentifier(callee) && callee.text === 'require';
       const isDynamicImport = callee.kind === ts.SyntaxKind.ImportKeyword;
-      if ((isRequire || isDynamicImport) && node.arguments.length >= 1) {
+      const isResolveCall = ts.isPropertyAccessExpression(callee)
+        && callee.name.text === 'resolve'
+        && ((ts.isIdentifier(callee.expression) && callee.expression.text === 'require')
+          || (ts.isCallExpression(callee.expression)
+            && ts.isIdentifier(callee.expression.expression)
+            && callee.expression.expression.text === 'createRequire'));
+      if ((isRequire || isDynamicImport || isResolveCall) && node.arguments.length >= 1) {
         const argument = node.arguments[0];
         if (ts.isStringLiteral(argument) || ts.isNoSubstitutionTemplateLiteral(argument)) {
           specifiers.push(argument.text);
@@ -178,6 +188,31 @@ export function parseModuleSpecifiers(filePath, text) {
     ts.forEachChild(node, visit);
   };
   visit(sourceFile);
+  return specifiers;
+}
+
+const CSS_COMMENT_PATTERN = /\/\*[\s\S]*?\*\//g;
+const CSS_IMPORT_PATTERNS = [
+  /@import\s+["']([^"']+)["']/g,
+  /@import\s+url\(\s*(?:["']([^"']+)["']|([^)\s]+))\s*\)/g,
+];
+
+/**
+ * The `@import` specifiers one stylesheet names, after CSS comments are
+ * stripped so a commented-out import cannot certify consumption. Covers the
+ * string form (`@import "..."`) and the `url(...)` form, quoted or bare.
+ */
+export function parseCssImports(text) {
+  const stripped = text.replace(CSS_COMMENT_PATTERN, '');
+  const specifiers = [];
+  for (const pattern of CSS_IMPORT_PATTERNS) {
+    pattern.lastIndex = 0;
+    let match;
+    while ((match = pattern.exec(stripped)) !== null) {
+      const specifier = match[1] ?? match[2];
+      if (specifier) specifiers.push(specifier);
+    }
+  }
   return specifiers;
 }
 
@@ -335,11 +370,17 @@ export function measureConsumers({ packageRoot, consumerRoots }) {
       if (root.required) unreadable.push(root.id);
       continue;
     }
-    const files = walkFiles(root.root, (path) => CONSUMER_SOURCE_EXTENSIONS.has(extnameOf(path)));
+    const files = walkFiles(root.root, (path) => {
+      const extension = extnameOf(path);
+      return CONSUMER_SOURCE_EXTENSIONS.has(extension) || extension === '.css';
+    });
     for (const file of files) {
       let specifiers;
       try {
-        specifiers = parseModuleSpecifiers(file, readFileSync(file, 'utf8'));
+        const text = readFileSync(file, 'utf8');
+        specifiers = extnameOf(file) === '.css'
+          ? parseCssImports(text)
+          : parseModuleSpecifiers(file, text);
       } catch (error) {
         throw new Error(`consumer-census: cannot parse ${file}: ${error.message}`);
       }

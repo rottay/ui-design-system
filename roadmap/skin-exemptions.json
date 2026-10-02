@@ -136,10 +136,6 @@
         "floor": 2,
         "why": "`TooltipValue`'s and `TooltipSeries`'s swatch `backgroundColor: color`/`backgroundColor: item.color` -- both a caller-supplied per-series/per-value color passed into the shared tooltip components every chart in the family mounts. The other 9 sites in this file (TOOLTIP_STYLE ×5, SWATCH_STYLE ×1, label colors ×3) are all static tokens."
       },
-      "patterns/visualization/charts/presentation/crosshair/index.ts": {
-        "runtimeSvgFloor": 1,
-        "why": "The crosshair dot's `.attr('fill', (d) => d.color)` paints the per-datum colour supplied to the D3 overlay. CK-E's direct inventory identifies this exact B-runtime setter; runtimeSvgFloor protects it in the AST channel."
-      },
       "patterns/visualization/kanban-board/engines/rustic/index.tsx": {
         "floor": 1,
         "why": "Same shape as modern: column header `borderTop`, keyed on the caller-supplied `column.color`."

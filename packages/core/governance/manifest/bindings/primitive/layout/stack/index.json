@@ -1,7 +1,6 @@
 {
   "familyId": "primitive/layout/stack",
   "sourceBindings": [
-    "packages/core/src/components/primitives/layout/stack/compound/index.ts",
     "packages/core/src/components/primitives/layout/stack/contracts/index.ts",
     "packages/core/src/components/primitives/layout/stack/engines/classic/index.tsx",
     "packages/core/src/components/primitives/layout/stack/engines/modern/index.tsx",

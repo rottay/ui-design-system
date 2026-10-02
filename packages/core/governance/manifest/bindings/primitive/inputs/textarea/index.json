@@ -1,7 +1,6 @@
 {
   "familyId": "primitive/inputs/textarea",
   "sourceBindings": [
-    "packages/core/src/components/primitives/inputs/textarea/compound/index.ts",
     "packages/core/src/components/primitives/inputs/textarea/contracts/index.ts",
     "packages/core/src/components/primitives/inputs/textarea/engines/classic/index.tsx",
     "packages/core/src/components/primitives/inputs/textarea/engines/modern/index.tsx",

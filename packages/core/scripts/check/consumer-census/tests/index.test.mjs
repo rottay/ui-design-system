@@ -48,9 +48,12 @@ function plant(root, rel, contents) {
  * A fake package and two fake consumers. `used` is consumed statically,
  * re-exported, dynamically imported and required; `unused` is named only in
  * a comment and a string literal; `dyn-only` and `req-only` are reached by
- * exactly one dynamic import / one require each; `roles/*` is a wildcard
- * export. `helper` is imported only by a test file; `grown` is planted later
- * as the unreachable-module growth probe.
+ * exactly one dynamic import / one require each; `resolve-only` and
+ * `cr-only` by `require.resolve` / `createRequire(...).resolve`;
+ * `styles.css` and a `dist/*.css` wildcard are consumed only from a
+ * stylesheet `@import` (one of them through `url(...)`); `roles/*` is a
+ * wildcard export. `helper` is imported only by a test file; `grown` is
+ * planted later as the unreachable-module growth probe.
  */
 function buildFixture() {
   const tmp = mkdtempSync(join(tmpdir(), 'consumer-census-'));
@@ -64,6 +67,10 @@ function buildFixture() {
       './unused': { import: './dist/unused.js' },
       './dyn-only': { import: './dist/dyn-only.js' },
       './req-only': { import: './dist/req-only.js' },
+      './resolve-only': { import: './dist/resolve-only.js' },
+      './cr-only': { import: './dist/cr-only.js' },
+      './styles.css': './dist/styles.css',
+      './dist/*.css': './dist/*.css',
       './roles/*': { import: './dist/roles/*.js' },
     },
   }, null, 2)}\n`);
@@ -96,8 +103,24 @@ function buildFixture() {
     "import '@fixture/ds/gone-sub';",
     'export const a = root;',
   ].join('\n'));
+  plant(tmp, 'consumer-a/app.css', [
+    "@import '@fixture/ds/styles.css';",
+    '@import url("@fixture/ds/dist/wild.css");',
+    '/* @import "@fixture/ds/unused"; a commented-out import must not count */',
+    "@import url(@fixture/ds/dist/bare.css);",
+    "/* a multi-line",
+    '   comment @import "@fixture/ds/req-only"; */',
+    "@import '@fixture/ds/dist/style.js';",
+    "@import '../styles/animations.css';",
+  ].join('\n'));
   plant(tmp, 'consumer-a/dyn.ts', "export const load = () => import('@fixture/ds/dyn-only');\n");
-  plant(tmp, 'consumer-a/req.js', "const { reqOnly } = require('@fixture/ds/req-only');\nmodule.exports = reqOnly;\n");
+  plant(tmp, 'consumer-a/req.js', [
+    "const { createRequire } = require('node:module');",
+    "const { reqOnly } = require('@fixture/ds/req-only');",
+    "module.exports = reqOnly;",
+    "module.exports.resolved = require.resolve('@fixture/ds/resolve-only');",
+    "module.exports.resolvedViaCreateRequire = createRequire(__filename).resolve('@fixture/ds/cr-only');",
+  ].join('\n'));
   plant(tmp, 'consumer-b/b.ts', "import '@fixture/ds';\n");
 
   const consumerRoots = [
@@ -143,8 +166,37 @@ test('fixture census: consumed vs consumerless, comments and strings not counted
     // comment naming ./unused must NOT, or ./unused would leave the bucket.
     assert.deepEqual(measured.perSubpathConsumers['./used'], ['a']);
     assert.deepEqual(measured.consumerlessSubpaths, ['./roles/*', './unused']);
-    assert.deepEqual(Object.keys(measured.unmatchedSpecifiers), ['@fixture/ds/gone-sub']);
+    assert.deepEqual(Object.keys(measured.unmatchedSpecifiers), ['@fixture/ds/dist/style.js', '@fixture/ds/gone-sub']);
     assert.deepEqual(measured.unmatchedSpecifiers['@fixture/ds/gone-sub'], ['a']);
+  } finally {
+    rmSync(fixture.tmp, { recursive: true, force: true });
+  }
+});
+
+test('fixture census: CSS @import counts, commented-out and non-wildcard do not', (t) => {
+  const fixture = buildFixture();
+  try {
+    const measured = measure({ packageRoot: fixture.pkg, consumerRoots: fixture.consumerRoots });
+    // String form and both url(...) forms land on the exact key and the wildcard.
+    assert.deepEqual(measured.perSubpathConsumers['./styles.css'], ['a']);
+    assert.deepEqual(measured.perSubpathConsumers['./dist/*.css'], ['a']);
+    // The commented-out import of ./unused must NOT count: it stays consumerless.
+    assert.ok(measured.consumerlessSubpaths.includes('./unused'));
+    // The wildcard does not swallow non-.css specifiers: they are reported unmatched.
+    assert.deepEqual(measured.unmatchedSpecifiers['@fixture/ds/dist/style.js'], ['a']);
+    // A relative CSS import names no package and reaches no bucket.
+    assert.ok(!Object.keys(measured.unmatchedSpecifiers).includes('../styles/animations.css'));
+  } finally {
+    rmSync(fixture.tmp, { recursive: true, force: true });
+  }
+});
+
+test('fixture census: require.resolve and createRequire(...).resolve counted', (t) => {
+  const fixture = buildFixture();
+  try {
+    const measured = measure({ packageRoot: fixture.pkg, consumerRoots: fixture.consumerRoots });
+    assert.deepEqual(measured.perSubpathConsumers['./resolve-only'], ['a']);
+    assert.deepEqual(measured.perSubpathConsumers['./cr-only'], ['a']);
   } finally {
     rmSync(fixture.tmp, { recursive: true, force: true });
   }
@@ -249,7 +301,7 @@ test('report mode exits 0 and accounts for every subpath exactly once', (t) => {
   try {
     const outcome = cli(['--package-root', fixture.pkg, '--consumers', consumersFlag(fixture.consumerRoots)]);
     assert.equal(outcome.status, 0, outcome.stderr);
-    assert.match(outcome.stdout, /6 published subpaths — 4 consumed, 2 consumerless/u);
+    assert.match(outcome.stdout, /10 published subpaths — 8 consumed, 2 consumerless/u);
   } finally {
     rmSync(fixture.tmp, { recursive: true, force: true });
   }
@@ -272,6 +324,12 @@ test('live tree: the census is internally consistent and the committed baseline 
   // The module buckets are disjoint and cover the census universe.
   const overlap = measured.unreachableModules.filter((member) => measured.testOnlyModules.includes(member));
   assert.deepEqual(overlap, []);
+
+  // Stylesheet and resolve-based consumption is measured: the vertical skins
+  // load through CSS @import and the platform CSS through the wildcard.
+  assert.ok(measured.perSubpathConsumers['./styles/bithire'].includes('app-bithire'), `./styles/bithire consumers: ${measured.perSubpathConsumers['./styles/bithire']}`);
+  assert.ok(measured.perSubpathConsumers['./styles/evnto'].includes('app-evnto'), `./styles/evnto consumers: ${measured.perSubpathConsumers['./styles/evnto']}`);
+  assert.ok(measured.perSubpathConsumers['./dist/*.css'].includes('app-platform'), `./dist/*.css consumers: ${measured.perSubpathConsumers['./dist/*.css']}`);
 
   // The committed baseline parses and pins exactly what the tree measures:
   // --check exits 0 and names nothing.

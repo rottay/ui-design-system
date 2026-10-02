@@ -1,7 +1,6 @@
 {
   "familyId": "primitive/navigation/pagination",
   "sourceBindings": [
-    "packages/core/src/components/primitives/navigation/pagination/compound/index.ts",
     "packages/core/src/components/primitives/navigation/pagination/contracts/index.ts",
     "packages/core/src/components/primitives/navigation/pagination/engines/classic/index.tsx",
     "packages/core/src/components/primitives/navigation/pagination/engines/modern/index.tsx",

@@ -1,7 +1,6 @@
 {
   "familyId": "primitive/feedback/spinner",
   "sourceBindings": [
-    "packages/core/src/components/primitives/feedback/spinner/compound/index.ts",
     "packages/core/src/components/primitives/feedback/spinner/contracts/index.ts",
     "packages/core/src/components/primitives/feedback/spinner/engines/classic/index.tsx",
     "packages/core/src/components/primitives/feedback/spinner/engines/modern/index.tsx",

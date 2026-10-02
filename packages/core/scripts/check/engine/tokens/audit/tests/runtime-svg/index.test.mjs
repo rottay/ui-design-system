@@ -87,11 +87,10 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   // for the Google/LinkedIn/Microsoft glyphs) left the package with
   // `oauth-transition` in WO-CAN-04, and its exemption left the ledger in the
   // same lot. Nothing is unpinned by its departure: `presence` above and the
-  // seven `ckERuntimeFloors` below still pin a non-zero counter against its
+  // six `ckERuntimeFloors` below still pin a non-zero counter against its
   // exemption floor, which is the pairing this assertion exists for.
   const runtimeExemptions = exemptions['SKIN-EXEMPT-RUNTIME-VALUE'].files;
   assert.equal(runtimeExemptions['patterns/communication/presence/index.tsx'].runtimeSvgFloor, 1);
-  assert.equal(runtimeExemptions['patterns/visualization/charts/presentation/crosshair/index.ts'].runtimeSvgFloor, 1);
   assert.equal(runtimeExemptions['patterns/visualization/charts/runtime/exporting/foundation/file/index.ts'].runtimeSvgFloor, 5);
   const ckERuntimeFloors = new Map([
     // W5: the 13 R/N-class family floors moved off the family facades with a
@@ -103,7 +102,6 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     ['patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/radar/index.tsx', 4],
     ['patterns/visualization/charts/families/network-graph/index.tsx', 1],
     ['patterns/visualization/charts/families/sankey/index.tsx', 2],
-    ['patterns/visualization/charts/presentation/crosshair/index.ts', 1],
     ['patterns/visualization/charts/runtime/exporting/foundation/file/index.ts', 5],
   ]);
   assert.equal(
@@ -111,7 +109,7 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
       assert.equal(runtimeExemptions[path]?.runtimeSvgFloor, floor, `${path} runtime SVG floor drifted`);
       return sum + floor;
     }, 0),
-    18
+    17
   );
   // 425012314 (WO-FAM-09) retired useChartTheme: the color-theme hook and its
   // four-key NOT-PAINT floor left together. Pinned both ways, so neither the

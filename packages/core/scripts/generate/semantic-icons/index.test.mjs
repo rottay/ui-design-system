@@ -137,7 +137,7 @@ test('generation is deterministic and emits bounded per-role and pack outputs', 
     structuredClone(bithirePreset),
   );
   assert.deepEqual([...first], [...second]);
-  assert.equal(first.size, 293);
+  assert.equal(first.size, 290);
   assert.equal([...first.keys()].filter((path) => path.startsWith('roles/')).length, 282);
   assert.match(
     first.get('roles/action-add.ts'),
@@ -162,7 +162,6 @@ test('generation is deterministic and emits bounded per-role and pack outputs', 
   assert.match(first.get('packs/operations.tsx'), /"workflow\.branch": WorkflowBranchIcon/u);
   assert.match(first.get('packs/operations.tsx'), /export const OperationsIcon = \/\* @__PURE__ \*\/ forwardRef/u);
   assert.doesNotMatch(first.get('packs/operations.tsx'), /"identity\.|"analytics\.|Phosphor|@phosphor/u);
-  assert.match(first.get('phosphor-adapter.ts'), /packageVersion: "2\.1\.10"/u);
   assert.match(first.get('facade-map/index.tsx'), /resolveGeneratedIcon/u);
   assert.match(first.get('presets/bithire/index.tsx'), /export const BitHireIconPreset/u);
   assert.match(first.get('presets/bithire/index.tsx'), /"bithire\.candidate": BithireCandidateIcon/u);
@@ -173,16 +172,13 @@ test('generation is deterministic and emits bounded per-role and pack outputs', 
     1,
   );
   assert.doesNotMatch(first.get('presets/bithire/index.tsx'), /Phosphor|@phosphor/u);
-  assert.doesNotMatch(first.get('index.ts'), /phosphor|supplier/iu);
 });
 
 test('generated public source and declarations expose only supplier-free component types', async () => {
   const { corpus, adapter, bithirePreset } = await loadAndValidateManifests();
   const files = buildGeneratedFiles(corpus, adapter, bithirePreset);
   const publicSources = [
-    files.get('index.ts'),
     files.get('corpus.ts'),
-    files.get('packs/index.ts'),
     files.get('packs/foundation.tsx'),
     files.get('packs/bithire.tsx'),
     files.get('packs/identity.tsx'),
@@ -229,7 +225,7 @@ test('generated public source and declarations expose only supplier-free compone
       },
       files: [
         declarationEnvironment,
-        resolve(SEMANTIC_ROOT, 'generated/index.ts'),
+        resolve(SEMANTIC_ROOT, 'generated/corpus/index.ts'),
         resolve(SEMANTIC_ROOT, 'generated/presets/bithire/index.tsx'),
         resolve(SEMANTIC_ROOT, 'presentation/icon/index.tsx'),
       ],

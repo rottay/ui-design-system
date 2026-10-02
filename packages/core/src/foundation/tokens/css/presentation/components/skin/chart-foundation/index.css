@@ -250,13 +250,6 @@
     color-mix(in srgb, var(--ds-chart-accent, var(--ds-color-primary)) 34%, var(--ds-color-border-subtle));
 }
 
-.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] [data-part='crosshair-line'] {
-  stroke: var(--ds-color-border);
-}
-
-.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] [data-part='crosshair-dot'] {
-  stroke: var(--ds-color-bg-primary);
-}
 
 /* VIZ-01 — renderer-neutral ChartFrame anatomy. The frame owns chrome and
  * semantic states only; projected renderers retain ownership of their marks. */

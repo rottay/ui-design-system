@@ -1,7 +1,6 @@
 {
   "familyId": "primitive/layout/divider",
   "sourceBindings": [
-    "packages/core/src/components/primitives/layout/divider/compound/index.ts",
     "packages/core/src/components/primitives/layout/divider/contracts/index.ts",
     "packages/core/src/components/primitives/layout/divider/engines/classic/index.tsx",
     "packages/core/src/components/primitives/layout/divider/engines/modern/index.tsx",
