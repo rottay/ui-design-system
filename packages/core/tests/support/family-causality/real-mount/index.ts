@@ -104,7 +104,7 @@ export type RealMountInput =
 /** A change applied to the mounted page while the component stays open. */
 export interface RealMountStep {
   readonly id: string;
-  /** Document-scoped selector of the element that changes. */
+  /** Document-scoped selector of the element that changes; it must match exactly one element. */
   readonly selector: string;
   readonly attributes?: Readonly<Record<string, string>>;
   /** Inline properties set on the element, custom properties included. */
@@ -224,8 +224,8 @@ export async function measureRealMount(request: RealMountRequest): Promise<Probe
           step,
         );
         if (matches === 0) throw new Error(`real-mount: step ${scene.id}>${step.id} matched no ${step.selector}`);
-        if (step.input && matches > 1) {
-          throw new Error(`real-mount: input step ${scene.id}>${step.id} matched ${matches} elements for ${step.selector}`);
+        if (matches > 1) {
+          throw new Error(`real-mount: step ${scene.id}>${step.id} matched ${matches} elements for ${step.selector}`);
         }
         await page.evaluate((current: RealMountStep) => {
           const element = document.querySelector<HTMLElement>(current.selector);
