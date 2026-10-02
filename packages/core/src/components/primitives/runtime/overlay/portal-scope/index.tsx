@@ -16,7 +16,9 @@
  *   the anchor's lineage re-synchronizes when a shell switches locale, theme
  *   or tenant at runtime. Its `--ds-*` variables re-publish on lineage
  *   mutations while a consumer is registered, and lazily on the next read
- *   after one nobody consumed (see `usePortalScopeConsumer`).
+ *   after one nobody consumed (see `usePortalScopeConsumer`). The same holds
+ *   for a change of any media condition the loaded stylesheets declare
+ *   `--ds-*` values under (see `readPortalMediaQueries`).
  * - `usePortalScopeConsumer(snapshot, active)` -- registers a live reader of
  *   the snapshot's variables. `<PortalScope>` calls it; an owner that spreads
  *   `snapshot.variables` directly must call it or its copy stays stale.
@@ -105,7 +107,68 @@ interface PortalVariableCache {
   readonly anchor: HTMLElement;
   stale: boolean;
   value: DsPortalVariableStyle;
+  /** Media match state at the last walk; compared on unconsumed reads. */
+  media: string;
   consumers: number;
+  /** Attaches the media listeners on the first consumer; returns the detach. */
+  watchMedia: (() => () => void) | null;
+  unwatchMedia: (() => void) | null;
+}
+
+const MEDIA_RULE_QUERIES = new WeakMap<CSSStyleSheet, string[]>();
+const DS_DECLARATION = /--ds-[\w-]*\s*:/;
+
+function collectMediaQueries(rules: CSSRuleList, into: Set<string>): void {
+  for (let index = 0; index < rules.length; index += 1) {
+    const rule = rules[index] as CSSRule & { media?: MediaList; cssRules?: CSSRuleList };
+    if (rule.media && DS_DECLARATION.test(rule.cssText)) into.add(rule.media.mediaText);
+    if (rule.cssRules) collectMediaQueries(rule.cssRules, into);
+  }
+}
+
+/**
+ * The media conditions under which the document's loaded stylesheets declare
+ * `--ds-*` values (width breakpoints, reduced motion, contrast, print...),
+ * derived from the CSSOM rather than a fixed list so tenant sheets count too.
+ * Cross-origin sheets are unreadable and skipped: a stylesheet served from
+ * another origin without CORS silently disables the media re-read for it.
+ */
+export function readPortalMediaQueries(doc: Document): string[] {
+  const queries = new Set<string>();
+  for (const sheet of Array.from(doc.styleSheets)) {
+    let cached = MEDIA_RULE_QUERIES.get(sheet);
+    if (!cached) {
+      const found = new Set<string>();
+      try {
+        collectMediaQueries(sheet.cssRules, found);
+      } catch {
+        // Cross-origin stylesheet.
+      }
+      cached = Array.from(found);
+      MEDIA_RULE_QUERIES.set(sheet, cached);
+    }
+    for (const query of cached) queries.add(query);
+  }
+  return Array.from(queries);
+}
+
+function portalMediaLists(anchor: HTMLElement): MediaQueryList[] {
+  const view = anchor.ownerDocument.defaultView;
+  if (!view || typeof view.matchMedia !== 'function') return [];
+  return readPortalMediaQueries(anchor.ownerDocument).map((query) => view.matchMedia(query));
+}
+
+function mediaState(anchor: HTMLElement): string {
+  return portalMediaLists(anchor)
+    .map((list) => `${list.media}=${list.matches ? 1 : 0}`)
+    .join('|');
+}
+
+function walkVariables(cache: PortalVariableCache): DsPortalVariableStyle {
+  cache.value = readDsPortalVariables(cache.anchor);
+  cache.media = mediaState(cache.anchor);
+  cache.stale = false;
+  return cache.value;
 }
 
 const VARIABLE_CACHE = Symbol('portal-scope.variables');
@@ -113,11 +176,11 @@ const VARIABLE_CACHE = Symbol('portal-scope.variables');
 type CachedSnapshot = PortalScopeSnapshot & { [VARIABLE_CACHE]?: PortalVariableCache };
 
 function readCachedVariables(cache: PortalVariableCache): DsPortalVariableStyle {
-  if (cache.stale) {
-    cache.value = readDsPortalVariables(cache.anchor);
-    cache.stale = false;
+  // Unconsumed caches hold no media listeners, so a media flip is detected here.
+  if (cache.consumers === 0 && !cache.stale && mediaState(cache.anchor) !== cache.media) {
+    cache.stale = true;
   }
-  return cache.value;
+  return cache.stale ? walkVariables(cache) : cache.value;
 }
 
 function cachedSnapshot(
@@ -237,12 +300,17 @@ export function usePortalScope(
 
   useLayoutEffect(() => {
     if (!anchor || typeof window === 'undefined') return undefined;
+    let disposed = false;
     const cache: PortalVariableCache = {
       anchor,
-      stale: false,
-      value: readDsPortalVariables(anchor),
+      stale: true,
+      value: {},
+      media: '',
       consumers: 0,
+      watchMedia: null,
+      unwatchMedia: null,
     };
+    walkVariables(cache);
     const publish = (variablesChanged: boolean): void => {
       const locale = readLocaleContext(anchor);
       const current = snapshotRef.current as CachedSnapshot;
@@ -260,15 +328,32 @@ export function usePortalScope(
     };
     publish(true);
 
+    const rewalk = (): void => {
+      if (disposed) return;
+      const previous = readCachedVariables(cache);
+      publish(!variablesEqual(previous, walkVariables(cache)));
+    };
+
     const onMutation = (): void => {
       if (cache.consumers === 0) {
         cache.stale = true;
         publish(false);
         return;
       }
-      const previous = readCachedVariables(cache);
-      cache.value = readDsPortalVariables(anchor);
-      publish(!variablesEqual(previous, cache.value));
+      rewalk();
+    };
+
+    // Re-reads only; the lineage is never written, so no feedback loop. The query
+    // set is captured on attach: a sheet or insertRule added mid-overlay waits for the next open.
+    cache.watchMedia = () => {
+      const listeners = portalMediaLists(anchor).map((list) => {
+        const onChange = (): void => rewalk();
+        list.addEventListener('change', onChange);
+        return () => list.removeEventListener('change', onChange);
+      });
+      return () => {
+        for (const remove of listeners) remove();
+      };
     };
 
     const observer =
@@ -291,7 +376,12 @@ export function usePortalScope(
       });
       owner = owner.parentElement;
     }
-    return () => observer?.disconnect();
+    return () => {
+      disposed = true;
+      observer?.disconnect();
+      cache.unwatchMedia?.();
+      cache.unwatchMedia = null;
+    };
   }, [anchor]);
 
   return snapshot;
@@ -299,7 +389,8 @@ export function usePortalScope(
 
 /**
  * Registers a live reader of `snapshot.variables`: while `active`, lineage
- * mutations re-read the variables eagerly and re-publish the snapshot. An
+ * mutations and media-condition changes re-read the variables eagerly and
+ * re-publish the snapshot; media listeners exist only while one is active. An
  * owner that spreads the variables itself instead of rendering
  * `<PortalScope>` must call this, or its copy stays at the last read.
  */
@@ -311,8 +402,13 @@ export function usePortalScopeConsumer(
   useLayoutEffect(() => {
     if (!cache || !active) return undefined;
     cache.consumers += 1;
+    if (cache.consumers === 1) cache.unwatchMedia = cache.watchMedia?.() ?? null;
     return () => {
       cache.consumers -= 1;
+      if (cache.consumers === 0) {
+        cache.unwatchMedia?.();
+        cache.unwatchMedia = null;
+      }
     };
   }, [cache, active]);
 }
