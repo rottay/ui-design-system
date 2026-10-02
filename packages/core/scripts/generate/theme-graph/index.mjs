@@ -178,8 +178,13 @@ function readJsonViews() {
  * Same day, +924: 10,036,345 -> 10,037,269 — FAM09-SH (the normalized-channel
  * reads on the chart-bar/area skeleton corners) + LIV-2's typography ramp
  * unroll + the STATES-K population law's edges.
+ * RE-ANCHORED 2026-10-02, 10,041,269 -> 10,041,270 (+1): LIV-6b's floor rule
+ * shifted the collection-shell skin's line numbers and one nodes.json line
+ * reference widened by a digit. The check sits outside the prebuild chain, so
+ * the drift surfaced at the dt35 preflight, not at the lot. (The 10,037,269 ->
+ * 10,041,269 step is 6c404dcd0's, whose comment line was never added here.)
  */
-export const SIZE_BUDGET_BYTES = 10_041_269;
+export const SIZE_BUDGET_BYTES = 10_041_270;
 
 /** A key no id can collide with, used only to sort and de-duplicate pairs. */
 const SEP = "\u241F";
