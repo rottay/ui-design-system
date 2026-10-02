@@ -19,7 +19,12 @@ export async function compileFirstPartyEmission(distRoot = CORE_ROOT) {
   }
   const compiled = new Map();
   for (const vertical of door.FIRST_PARTY_VERTICAL_SLUGS) {
-    const { compiled: output } = door.compileThemeIntent(door.staticThemeIntent(vertical));
+    let output;
+    try {
+      ({ compiled: output } = door.compileThemeIntent(door.staticThemeIntent(vertical)));
+    } catch (error) {
+      throw new Error(`channel-liveness --reconcile: the first-party compile of ${vertical} failed: ${error?.message ?? error}`, { cause: error });
+    }
     const names = new Set(Object.keys(output.cssVariables));
     for (const block of output.modeBlocks ?? []) for (const name of Object.keys(block.cssVariables ?? {})) names.add(name);
     compiled.set(vertical, names);
