@@ -60,9 +60,10 @@ const RADIO_GROUP_SKIN = `${AGNOSTIC_ROOT}/radio-group/index.css`;
 const REVIEW = 'WO-EVI-05 core review 2026-09-14';
 const CHART_REVIEW = 'WO-EVI-02 chart-marks shape exclusion review 2026-09-30 (X1 dossier; Fable ACCEPT-WITH-CHANGES, conditions consolidated by the DT; Codex outside the loop by owner restriction 2026-09-19)';
 // Mover: WO-EVI-02 CL104 re-review 2026-10-01 (Fable) -- the chart-line entry is narrowed to its legend-swatch declaration.
-const CHART_LINE_REVIEW = `${CHART_REVIEW} | CL104 re-review 2026-10-01 (Fable): the skeleton-bar declaration (\`999px 999px 0 0\`, skin :104) is withdrawn from the entry: chart-foundation :1446 out-specifies it (0,5,0 over 0,2,0) and it paints nothing at dial 0.8/1.0/1.2 (measured); a declaration that paints nothing has no semantic identity. chart-line stays in shape on it, the entry is INEFFECTIVE by name, until the charts cut resolves the shadowing (defect registered under WO-FAM-09)`;
-// The one ineffective entry on this tree, published by name (CL104): never emptied, never silenced.
-const CHART_LINE_INEFFECTIVE = [{ family: 'chart-line', axis: 'shape', stillDeclares: ['border-radius'], headChannels: [] }];
+// Mover: FAM09-CL re-review 2026-10-02 -- the skeleton-bar declaration re-enters the entry (the dome paints; the shadowing resolved with WO-FAM-09's ruling).
+const CHART_LINE_REVIEW = `${CHART_REVIEW} | CL104 re-review 2026-10-01 (Fable): the skeleton-bar declaration (\`999px 999px 0 0\`, skin :104) is withdrawn from the entry: chart-foundation :1446 out-specifies it (0,5,0 over 0,2,0) and it paints nothing at dial 0.8/1.0/1.2 (measured); a declaration that paints nothing has no semantic identity. chart-line stays in shape on it, the entry is INEFFECTIVE by name, until the charts cut resolves the shadowing (defect registered under WO-FAM-09) | FAM09-CL re-review 2026-10-02 (WO-FAM-09's owner-ruled waterfall arm landed and the charts cut resolved the shadowing): the skeleton-bar declaration re-enters the entry — the dome paints at the reviewed commit (the chart-foundation :1446 shadowing is gone, measured both ways in Chromium: restoring the pre-fix selector in memory flips the corners back to the foundation fallback), the consumer law holds by the generic cascade route, forced-colors keeps the corners on all verticals; the INEFFECTIVE publication discharges and chart-line leaves shape N/A on both declarations. K2.8 re-review under the K3/K2.8 quota scheme; Fable's rule on the reason text is registered pending (quota), not waived`;
+// No ineffective entry on this tree: the CL104 publication discharged with FAM09-CL (2026-10-02).
+const CHART_LINE_INEFFECTIVE = [];
 const TT_REVIEW = 'WO-EVI-02 table-toolbar shape exclusion review 2026-10-01 (X3 dossier; Fable ACCEPT-WITH-CHANGES, conditions consolidated by the DT; Codex outside the loop by owner restriction 2026-09-19)';
 const PHYSICAL_CORNERS = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius'];
 
@@ -309,8 +310,8 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const report = populationReport();
     const shape = report.axes.find((entry) => entry.axis === 'shape');
     assert.ok(!shape.families.includes('radio'));
-    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), ['chart-pie', 'radio', 'table-toolbar']);
-    assert.equal(shape.notApplicableCount, 3);
+    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio', 'table-toolbar']);
+    assert.equal(shape.notApplicableCount, 4);
     for (const entry of report.axes) {
       assert.ok(entry.families.every((family) => !entry.notApplicable.some((withdrawn) => withdrawn.family === family)),
         `${entry.axis}: applicable and not-applicable sets must be disjoint`);
@@ -321,7 +322,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.equal(report.exclusions.revision, exclusionsRevision());
 
     const line = populationLine();
-    assert.match(line, /shape 215 \(3 N\/A\)/);
+    assert.match(line, /shape 214 \(4 N\/A\)/);
     assert.match(line, /typography 182 \(0 N\/A\)/);
     assert.match(line, /exclusions [0-9a-f]{16} \(4 reviewed\)/);
 
@@ -348,13 +349,14 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
     // Movers: CL104 re-review 2026-10-01 (Fable) -- chart-line re-enters shape (214 -> 215, N/A 4 -> 3);
     // OVM 2026-10-02 (owner ruling 4 + Fable) -- the overlay-modal-compounds orphans retire (215 -> 214);
-    // GLASS-1 (owner ruling 3) -- the glass-card skin enters shape and depth (214 -> 215).
-    assert.equal(floor.axes.shape, 215);
+    // GLASS-1 (owner ruling 3) -- the glass-card skin enters shape and depth (214 -> 215);
+    // FAM09-CL 2026-10-02 -- the skeleton-bar dome re-enters the chart-line exclusion (215 -> 214, N/A 3 -> 4).
+    assert.equal(floor.axes.shape, 214);
     assert.deepEqual(floor.provenance.membershipMoves.orphanRetirement.byAxis,
       Object.fromEntries(['shape', 'depth', 'states'].map((axis) => [axis, { removed: ['overlay-modal-compounds'], added: [] }])));
-    assert.equal(floor.notApplicable.shape, 3);
-    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.removed, ['chart-pie', 'table-toolbar']);
-    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.reEntered, ['chart-line']);
+    assert.equal(floor.notApplicable.shape, 4);
+    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.removed, ['chart-line', 'chart-pie', 'table-toolbar']);
+    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.reEntered, []);
     assert.equal(floor.exclusionsRevision, exclusionsRevision());
     assert.equal(floor.provenance.previousPin.axes.shape, 215);
     assert.deepEqual(floor.provenance.membershipMoves.previousWave.byAxis.shape, { removed: ['radio'], added: [] });
@@ -493,7 +495,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.deepEqual(checkbox.notApplicable, {});
     const report = populationReport(dir, catalogIn(dir), path);
     assert.ok(report.axes.find((entry) => entry.axis === 'shape').families.includes('checkbox'));
-    assert.deepEqual(report.axes.find((entry) => entry.axis === 'shape').notApplicable.map((entry) => entry.family), ['chart-pie', 'radio', 'table-toolbar']);
+    assert.deepEqual(report.axes.find((entry) => entry.axis === 'shape').notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio', 'table-toolbar']);
     assert.ok(report.exclusions.ineffective.some((entry) => entry.family === 'checkbox' && entry.axis === 'shape'));
     assert.deepEqual(checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN, { exclusionsPath: path }).failures, [],
       'an ineffective entry changes no published denominator');
@@ -645,10 +647,10 @@ describe('theme population — the reviewed chart-marks exclusions on shape and 
   const append = (dir, file, text) => writeFileSync(join(dir, file), `${readFileSync(join(dir, file), 'utf8')}\n${text}\n`);
   const produced = (failures) => failures.filter((line) => line.includes(': PRODUCED — '));
 
-  it('names the reviewed declarations verbatim: chart-pie\'s are its only radii and withdraw it; chart-line\'s legend cap is excluded but its shadowed skeleton radius keeps it in shape', () => {
+  it('names the reviewed declarations verbatim: chart-pie\'s are its only radii and withdraw it; chart-line\'s legend cap and skeleton dome are both excluded and withdraw it (FAM09-CL)', () => {
     const entries = readExclusions().entries.filter((entry) => entry.family.startsWith('chart-'));
     assert.deepEqual(entries.map((entry) => [entry.family, entry.skin, entry.reviewedAt.commit]),
-      [['chart-line', CHART_LINE_SKIN, 'be58473b9'], ['chart-pie', CHART_PIE_SKIN, '2e5419620']]);
+      [['chart-line', CHART_LINE_SKIN, '366993b06'], ['chart-pie', CHART_PIE_SKIN, '2e5419620']]);
     const [line, pie] = entries;
 
     assert.deepEqual(radiiOf(join(ROOT, pie.skin)), pie.declarations);
@@ -656,20 +658,17 @@ describe('theme population — the reviewed chart-marks exclusions on shape and 
     assert.ok(!declaredPie.axes.shape, 'chart-pie leaves shape');
     assert.equal(declaredPie.notApplicable.shape.review, CHART_REVIEW);
 
-    // Mover: CL104 re-review 2026-10-01 (Fable). The skeleton-bar radius left the entry (chart-foundation :1446
-    // out-specifies it; it paints nothing) but the skin still authors it, so chart-line stays in shape on it.
+    // Mover: FAM09-CL re-review 2026-10-02 -- the skeleton-bar radius re-entered the entry (the dome paints;
+    // the chart-foundation shadowing resolved with WO-FAM-09's ruling), so chart-line leaves shape on both.
     assert.deepEqual(line.declarations, [{
       context: [], selector: ".ds-chart-line [data-part='legend-swatch']", property: 'border-radius', value: 'var(--_ds-line-marker-radius, 999px)',
-    }]);
-    assert.deepEqual(radiiOf(join(ROOT, line.skin)), [...line.declarations, {
+    }, {
       context: [], selector: ".ds-chart-line [data-part='skeleton-bar']", property: 'border-radius', value: '999px 999px 0 0',
     }]);
+    assert.deepEqual(radiiOf(join(ROOT, line.skin)), line.declarations);
     const declaredLine = familyAxisDeclarations().get('chart-line');
-    assert.ok(declaredLine.axes.shape, 'chart-line stays in shape on the shadowed declaration');
-    assert.equal(declaredLine.axes.shape.exclusionEffective, false);
-    assert.deepEqual(declaredLine.axes.shape.excludedDeclarations,
-      line.declarations.map((declaration) => ({ file: CHART_LINE_SKIN, ...declaration, review: CHART_LINE_REVIEW })));
-    assert.deepEqual(declaredLine.notApplicable, {});
+    assert.ok(!declaredLine.axes.shape, 'chart-line leaves shape');
+    assert.equal(declaredLine.notApplicable.shape.review, CHART_LINE_REVIEW);
 
     assert.ok(!readExclusions().entries.some((entry) => entry.family === 'chart-waterfall'), 'chart-waterfall is not excluded (Fable REJECT)');
     assert.ok(familyAxisDeclarations().get('chart-waterfall').axes.shape, 'chart-waterfall stays in shape and must move');
@@ -690,10 +689,9 @@ describe('theme population — the reviewed chart-marks exclusions on shape and 
     // A literal producer reads no head channel, so nothing else in the population notices it: the entry still
     // matches verbatim and, without the guard, the legend declaration would stay excluded while its marker repaints.
     append(dir, CHART_LINE_SKIN, '.ds-chart-line { --_ds-line-marker-radius: 2px; }');
-    // Mover: CL104 -- the legend declaration still matches (excluded) while chart-line stays in shape on its skeleton radius.
+    // Mover: FAM09-CL -- both declarations match (excluded); the planted producer changes no membership, only the guard notices.
     const planted = familyAxisDeclarations(dir, catalogIn(dir)).get('chart-line');
-    assert.equal(planted.axes.shape.exclusionEffective, false);
-    assert.deepEqual(planted.axes.shape.excludedDeclarations.map((declaration) => declaration.selector), [".ds-chart-line [data-part='legend-swatch']"]);
+    assert.ok(!planted.axes.shape, 'chart-line stays out of shape: the entry still matches verbatim');
     const failures = produced(checkExclusionRegistry(dir, EXCLUSIONS).failures);
     assert.equal(failures.length, 1, failures.join(' | '));
     assert.match(failures[0], /^entry 1 \(chart-line\/shape\): PRODUCED — --_ds-line-marker-radius, read by a reviewed declaration of .*chart-line\/index\.css, is produced at .*chart-line\/index\.css:\d+ `/u);
@@ -1093,9 +1091,9 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     assert.equal(MOVERS.length, 118);
     assert.deepEqual(MOVERS.filter((family) => !states.includes(family)), [], 'a mover may never leave the population');
     assert.deepEqual(Object.fromEntries(['shape', 'typography', 'rhythm', 'depth', 'motion'].map((axis) => [axis, byAxis[axis].denominator])),
-      { shape: 215, typography: 182, rhythm: 224, depth: 199, motion: 204 });
+      { shape: 214, typography: 182, rhythm: 224, depth: 199, motion: 204 });
     assert.deepEqual(Object.fromEntries(report.axes.map((entry) => [entry.axis, entry.notApplicableCount])),
-      { shape: 3, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
+      { shape: 4, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
     // The two ruled-out alternatives, measured: the twin clause keeps out
     // exactly filter-panel (a reviewed delegation, its selector paint-free),
     // and counting a gate inside :not() would admit nobody.

@@ -5,8 +5,8 @@
   "cut": "WO-FAM-01",
   "catalogRevision": "3f42e4ddc61d0e8b",
   "decisionRows": 29,
-  "exclusionsRevision": "af18c0dbb3906358",
-  "exclusionsReview": "WO-EVI-05 core review 2026-09-14",
+  "exclusionsRevision": "4b2d422333c2d1b9",
+  "exclusionsReview": "WO-EVI-05 core review 2026-09-14 | re-published 2026-10-02 under registry revision 4b2d422333c2d1b9 (FAM09-CL re-extends chart-line/shape to the skeleton-bar dome, the INEFFECTIVE publication discharges; no pilot membership move)",
   "families": {
     "button": [
       "shape",
