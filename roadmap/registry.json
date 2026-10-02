@@ -5414,7 +5414,7 @@
    "lane": "family-cuts",
    "order": 10,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -5534,8 +5534,15 @@
      "at": "2026-10-02 06:49",
      "by": "Kimi K3",
      "note": "2026-10-02 OWNER RULING (the waterfall question): APPROVED — the SVG bar shape joins the cascade. An explicit consumer barRadius (INCLUDING 0) keeps precedence; omitted, it derives from the family's canonical shape channel/role. Useful geometry, clamps and data legibility stand. One owner, no second compiler, no fixed-identity reads ignoring the tenant. Kimi + Fable agree the technical debrief; Opus implements with focal attribute/effective-CSS tests (default and override). The chart-line dome re-review is NOT blocked by association — only a real file/contract dependency would hold it."
+    },
+    {
+     "at": "2026-10-02 14:58",
+     "by": "Kimi K3",
+     "note": "2026-10-02 FAM09-CL re-review (K2.8, Chromium-measured, 3 verticals x dial envelope x forced-colors): the skeleton dome PAINTS — the CL104 premise falsified, the shadowing resolved by the owner-ruled waterfall arm. Entry re-extended to the skeleton-bar declaration (exclusions af18c0dbb3906358 -> 4b2d422333c2d1b9), INEFFECTIVE discharged, shape 215 -> 214, N/A 3 -> 4, corpus 278 unmoved. Population 62/62; the chart-skin certification roster admits the waterfall renderer anchor (604afa147, the WF lot's missed gate). Fable's rule on the reason text PENDING under the K3/K2.8 quota scheme, registered not waived."
     }
-   ]
+   ],
+   "doneAt": "2026-10-02",
+   "evidence": "FAM09-CL verdict EFFECTIVE (out-fam09-cl-k28.txt): dome paints, consumer law holds by the generic cascade route, forced-colors intact; 76799ef74 (exclusion re-extension + floor/pilot re-pin, population 62/62) + 604afa147 (certification roster, gate 29/29); the waterfall ruling implemented (d44625605, dt-certified); pending review registered: Fable rules the reason text"
   },
   {
    "id": "WO-FAM-10",
@@ -6166,7 +6173,7 @@
    "lane": "retire",
    "order": 1,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-EMI-02",
     "WO-FAM-01",
@@ -6186,8 +6193,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 5; closes F-42, F-94, F-91, F-88, F-109, F-110, F-111, F-113, F-115, F-84; supersedes: WO-CRA-15, WO-CRA-17, WO-ARC-16, WO-CRA-21",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi-dt",
+   "claimedAt": "2026-10-02",
    "progressLog": []
   },
   {
@@ -7263,6 +7270,11 @@
      "at": "2026-10-02 14:15",
      "by": "Kimi K3",
      "note": "2026-10-02 tanda 11d (the K3/K2.8 scheme's first wave): FAM11-L2 e71cab066 (the window retires atomically — L2a/L2b by K2.8, the tail by the DT) + L3 910afedaa (the major changeset + the migration guide + the per-app impact registers) + AXE-NAV d5250c385 (the navigation ink channels; the axe debt drains 4 findings; the two UA-blue repaints named) + RET-01-CH 5e92f1b89 (the three channels retire with their producers; BrandPaletteAliases.textInverse leaves with the named substitute; byte-identical paint; the writer hit the dispatch timeout mid-verification and the DT finished + audited it) + the seal follows the docs (404bc67e4, docs 9239a8b4 — pushed: docs e9eddf8..9239a8b, DS f5d27de7c..404bc67e4). FAM-11 is DONE (132/164). The effect verdict stands at 3 rows (the overlay weights, honestly pinned — a stamping surface is their exit). R1's --write still refuses on those 3 + the unknown-family 31 (WO-RET-04). PENDING REVIEWS under the quota amendment, to collect when the quota returns: the wave's lots (TINT-SCALE, RET-OVM-b, SEC-400, GLASS-2/3, HARD-2, FAM11-L1/L2/L3, FC-SC, AXE-NAV, RET-01-CH) — each carries the registration in its commit message."
+    },
+    {
+     "at": "2026-10-02 15:27",
+     "by": "Kimi K3",
+     "note": "2026-10-02 tanda 12 (post-resume): FAM09-CL re-review (K2.8, Chromium-measured 3 verticals x dial envelope x forced-colors) — the chart-line skeleton dome PAINTS, the CL104 premise falsified; the entry re-extends (exclusions af18c0dbb3906358 -> 4b2d422333c2d1b9), INEFFECTIVE discharged, shape 215 -> 214, N/A 3 -> 4 (76799ef74; population 62/62). The WF arm's missed gate fixed: the chart-skin certification roster admits the waterfall renderer anchor (604afa147, 29/29). WO-FAM-09 DONE (133/164) — its acceptance evidence: the EFFECTIVE verdict + the two commits; Fable's rule on the reason text registered PENDING (quota), not waived. OVM-ADOPT 80b70d31e (K2.8, DT-audited): the modern Modal/Sheet gain the public overlayIntensity prop stamping data-intensity on their rendered backdrops (custom Modal scrim keeps precedence); the modern skins read the ladder under those real selectors with the exact previous default as fallback (byte-identical paint without the tokens). The gate's own verdict: the three overlay weights measure LIVE_MODERN_PAINTED — the GLASS-2-b pin discharged in the same commit by its own law (pin table 12 -> 9, all capability class; the .rottay-overlay anchor withdrawals STAND — Overlay stays internal/unimported). Liveness 208/208. The effect verdict is now WITHOUT unclassified red rows. The contract-changeset gate's derived leg got its contract-diff rows for ModalProps/SheetProps. PENDING REVIEWS added: FAM09-CL reason text (Fable), OVM-ADOPT (Fable/Opus). INV-06 in flight (K2.8): posture contract landed + verified (137/137 focal, gates green); the app-shell bottom-bar presentation is the remaining step (INV06-SHELL dispatched)."
     }
    ]
   },
@@ -7742,7 +7754,7 @@
    "lane": "platform-invariants",
    "order": 6,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-INV-04",
     "WO-FAM-10",
@@ -7753,9 +7765,11 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-46 (partial)",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-dt",
+   "claimedAt": "2026-10-02",
+   "progressLog": [],
+   "doneAt": "2026-10-02",
+   "evidence": "c9629834a: posture contract (postures prop, SurfaceRegion, DEFAULT_SURFACE_POSTURES, resolveSurfacePostures) + runtime over the WO-INV-04 SSR hint (no matchMedia outside the runtime — acceptance grep measures 0) + AppShell bottom-bar presentation via the adapt slot (NAVIGATION_DEFAULTS unchanged) + surfacePosturesToShellAdapt bridge (structural typing, no cross-tier import; architecture gate clean) + the WO-CON-04 consumer fixture SSR-proven (phone: column-menu/preview-rail absent, bottom bar present; desktop: full chrome). DT-verified: 113/113 focal, CollectionWorkspace 72/72, tsc clean, population 62/62, contract-changeset green with 14 contract-diff rows. Written by K2.8 under the quota amendment; Fable/Opus review registered PENDING, not waived."
   },
   {
    "id": "WO-FAM-12",
