@@ -59,6 +59,13 @@ import {
   ENGINE_TOKEN_MINIMUM as MIN,
 } from '../../../../libraries/engine/tokens/index.mjs';
 import postcss from 'postcss';
+import {
+  SKIN_LITERAL_CLASSES,
+  countInlineGeometryInFile,
+  countSkinLiterals,
+  duplicateRootDeclarations,
+} from './hardcodes/index.mjs';
+import { KNOWN_DUPLICATE_ROOT_DECLARATIONS } from './hardcodes/exclusions/index.mjs';
 import { resolve, dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // WO-GAT-04 (accessibility CI, proposal P-10): APCA is the perceptually-accurate contrast model
@@ -405,14 +412,14 @@ function rootScopedDeclarations(text) {
 }
 
 /** Build a name -> raw-value map from every foundation CSS file's base :root block.
- * `themes/default.css` is read first and wins ties: it is the file the CSS entrypoint
+ * `themes/default/index.css` is read first and wins ties: it is the file the CSS entrypoint
  * imports LAST among the foundation layer (entrypoints/base/index.css), so for any name
  * declared in more than one foundation file, its value is the one that actually wins
  * the cascade (e.g. base/spacing.css's semantic --ds-spacing-xs..xl ladder duplicates
  * different values than default.css's - default.css is the one real pages render). */
 function buildTokenDefinitions() {
   const defs = new Map();
-  const priorityFile = join(foundationDir, 'themes/default.css');
+  const priorityFile = join(foundationDir, 'themes/default/index.css');
   const rest = cssFilesUnder(foundationDir).filter((f) => f !== priorityFile);
   for (const f of [priorityFile, ...rest]) {
     if (!existsSync(f)) continue;
@@ -513,6 +520,171 @@ function countFallbackParityViolations() {
   }
   walk(srcDir);
   return violations;
+}
+
+/** Every `var(--ds-x, <fallback>)` in a text, with its balanced fallback. */
+function dsVarFallbacks(text) {
+  const out = [];
+  const opener = /var\(\s*(--ds-[a-zA-Z0-9-]+)\s*,/g;
+  for (const m of text.matchAll(opener)) {
+    let depth = 1;
+    let i = m.index + m[0].length;
+    while (i < text.length && depth > 0) {
+      if (text[i] === '(') depth += 1;
+      else if (text[i] === ')') depth -= 1;
+      i += 1;
+    }
+    out.push({ token: m[1], fallback: text.slice(m.index + m[0].length, i - 1).trim(), index: m.index });
+  }
+  return out;
+}
+
+const NAMED_PARITY_COLORS = { white: [255, 255, 255, 1], black: [0, 0, 0, 1], transparent: [0, 0, 0, 0] };
+
+/** Normalize a plain colour literal (hex, rgb()/rgba(), white/black/transparent) to [r,g,b,a]. */
+function normalizeColor(value) {
+  const v = value.trim().toLowerCase();
+  if (NAMED_PARITY_COLORS[v]) return NAMED_PARITY_COLORS[v];
+  const hex = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/.exec(v);
+  if (hex) {
+    let digits = hex[1];
+    if (digits.length <= 4) digits = [...digits].map((d) => d + d).join('');
+    const n = (i) => Number.parseInt(digits.slice(i, i + 2), 16);
+    return [n(0), n(2), n(4), digits.length === 8 ? Math.round((n(6) / 255) * 1000) / 1000 : 1];
+  }
+  const fn = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)(?:\s*[,/]\s*([\d.]+%?))?\s*\)$/.exec(v);
+  if (fn) {
+    const alpha = fn[4] === undefined ? 1 : fn[4].endsWith('%') ? Number.parseFloat(fn[4]) / 100 : Number(fn[4]);
+    return [Number(fn[1]), Number(fn[2]), Number(fn[3]), Math.round(alpha * 1000) / 1000];
+  }
+  return null;
+}
+
+/**
+ * Component channels that resolve through the root: a `--ds-*` name declared,
+ * anywhere in the authored CSS, as exactly one `var(--root ...)` alias. A name
+ * aliased to two different targets is ambiguous and stays unresolved.
+ */
+function buildChannelAliases(defs) {
+  const aliases = new Map();
+  const files = cssFilesUnder(tokensCssDir).filter(
+    (f) => !f.includes(`${sep}facade${sep}artifacts${sep}`) && !f.includes(`${sep}facade${sep}legacy${sep}`),
+  );
+  const declRe = /(--ds-[a-zA-Z0-9-]+)\s*:\s*var\(\s*(--[a-zA-Z0-9-]+)\s*[,)]/g;
+  for (const f of files) {
+    const text = stripBlockComments(readFileSync(f, 'utf8'));
+    for (const m of text.matchAll(declRe)) {
+      if (defs.has(m[1])) continue;
+      if (!aliases.has(m[1])) aliases.set(m[1], new Set());
+      aliases.get(m[1]).add(m[2]);
+    }
+  }
+  return new Map([...aliases].filter(([, targets]) => targets.size === 1).map(([name, targets]) => [name, [...targets][0]]));
+}
+
+/** Compare a fallback with a resolved root value: scalar or colour, or null when incomparable. */
+function fallbackDisagrees(fallback, resolved) {
+  const fs = normalizeScalar(fallback);
+  const rs = normalizeScalar(resolved);
+  if (fs && rs) return fs[0] === rs[0] ? Math.abs(fs[1] - rs[1]) > 1e-6 : null;
+  const fc = normalizeColor(fallback);
+  const rc = normalizeColor(resolved);
+  if (fc && rc) return fc.some((channel, i) => Math.abs(channel - rc[i]) > (i === 3 ? 0.002 : 0.5));
+  return null;
+}
+
+/**
+ * The two DEF axes `countFallbackParityViolations` leaves out (HARD-2):
+ *  - `color`: a colour-literal fallback of a ROOT-defined token that differs
+ *    from the root's own colour value (hex/rgb/rgba/white/black/transparent).
+ *  - `channel`: a scalar or colour fallback of a COMPONENT channel the root
+ *    does not define but that resolves to a root token through exactly one
+ *    authored `--ds-x: var(--root)` alias, differing from that root value.
+ * Same corpus and the same exclusions as the scalar counter. A token resolving
+ * to anything else (color-mix, a shorthand, an unresolved name) is skipped.
+ */
+function countFallbackParityExtensions() {
+  const defs = buildTokenDefinitions();
+  const aliases = buildChannelAliases(defs);
+  const srcDir = join(root, 'src');
+  const result = { color: 0, channel: 0, files: {} };
+
+  function walk(dir) {
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry);
+      const rel = full.slice(srcDir.length + 1).replace(/\\/g, '/');
+      if (rel.startsWith('foundation/tokens/css/facade/artifacts/') || rel.startsWith('foundation/tokens/css/facade/legacy/')) continue;
+      if (statSync(full).isDirectory()) {
+        walk(full);
+        continue;
+      }
+      if (!/\.(tsx?|css)$/.test(full)) continue;
+      if (/__tests__|\.(test|spec|stories)\./.test(rel)) continue;
+      scanFile(full, rel);
+    }
+  }
+
+  function scanFile(full, rel) {
+    const text = readFileSync(full, 'utf8');
+    for (const { token, fallback, index } of dsVarFallbacks(text)) {
+      if (/[$`{]/.test(fallback) || fallback.includes('var(')) continue;
+      const precedingContext = text.slice(Math.max(0, index - 40), index);
+      if (/\.attr\(\s*['"][a-zA-Z-]+['"]\s*,\s*['"]?$/.test(precedingContext)) continue;
+      let axis;
+      let resolved;
+      if (defs.has(token)) {
+        if (!normalizeColor(fallback)) continue; // scalar root fallbacks: countFallbackParityViolations
+        axis = 'color';
+        resolved = resolveToken(token, defs);
+      } else if (aliases.has(token)) {
+        axis = 'channel';
+        resolved = resolveToken(aliases.get(token), defs);
+      } else continue;
+      if (resolved === null) continue;
+      if (fallbackDisagrees(fallback, resolved) === true) {
+        result[axis] += 1;
+        const key = `fallbackParity.${axis}.${rel}`;
+        result.files[key] = (result.files[key] ?? 0) + 1;
+        if (process.env.DEBUG_FALLBACK_PARITY) {
+          const line = text.slice(0, index).split('\n').length;
+          console.error(`[fallback-parity:${axis}] ${rel}:${line} ${token} fallback=${fallback} resolved=${resolved}`);
+        }
+      }
+    }
+  }
+  walk(srcDir);
+  if (hardcodeFixtures.skin) scanFile(hardcodeFixtures.skin, `foundation/tokens/css/${FIXTURE_SKIN_ANCHOR}`);
+  return result;
+}
+
+/**
+ * DUP (HARD-2): tokens declared at bare `:root` by more than one foundation
+ * file. Two declarers of one root token means the value that wins depends on
+ * import order, and the loser is a dead second authority. The known set is
+ * pinned BY NAME in `hardcodes/exclusions` (with its owner), so a rename or a
+ * swap is roster drift even when the count holds.
+ */
+function duplicateRootDeclarationCounters() {
+  const byFile = cssFilesUnder(foundationDir)
+    .filter((f) => !f.includes(`${sep}tests${sep}`))
+    .map((f) => [relative(foundationDir, f).split(sep).join('/'), rootScopedDeclarations(readFileSync(f, 'utf8')).map(([n]) => n)]);
+  if (hardcodeFixtures.foundation) {
+    byFile.push(['fixture', rootScopedDeclarations(readFileSync(hardcodeFixtures.foundation, 'utf8')).map(([n]) => n)]);
+  }
+  const duplicates = duplicateRootDeclarations(byFile);
+  const known = new Set(Object.keys(KNOWN_DUPLICATE_ROOT_DECLARATIONS));
+  const unlisted = [...duplicates.keys()].filter((name) => !known.has(name));
+  const stale = [...known].filter((name) => !duplicates.has(name));
+  for (const name of unlisted) {
+    console.error(`  - root token declared by ${duplicates.get(name).join(' + ')} is not a known duplicate: ${name}`);
+  }
+  for (const name of stale) {
+    console.error(`  - known duplicate is no longer duplicated; drop it from hardcodes/exclusions: ${name}`);
+  }
+  return {
+    'scale.duplicateRootDeclarations': duplicates.size,
+    'scale.duplicateRootRosterDrift': unlisted.length + stale.length,
+  };
 }
 
 /**
@@ -763,6 +935,141 @@ function embeddedCssPaintCounters() {
     const rel = relative(componentsDir, file).replaceAll('\\', '/');
     out[`embeddedCssPaint.${rel}`] = counts.count;
   }
+  return out;
+}
+
+/**
+ * Path keys for the HARD-2 censuses are SPARSE: a file/class pair is emitted
+ * when it counts above zero or when the baseline already pins it. A new
+ * non-zero pair is therefore an unbaselined key (red), a drained pair stays
+ * emitted at 0 until the baseline is tightened, and a deleted file disappears
+ * (red) -- the fleet guarantees without thousands of permanent zero rows.
+ */
+const baselineKeys = existsSync(baselinePath)
+  ? new Set(Object.keys(JSON.parse(readFileSync(baselinePath, 'utf8'))))
+  : new Set();
+
+function sparse(out, key, count) {
+  if (count > 0 || baselineKeys.has(key)) out[key] = count;
+}
+
+/**
+ * Drill seam for the HARD-2 counters (`tests/hardcodes`): a planted file is
+ * read by the production classifiers and its counts land on a real anchor
+ * key -- a rostered skin, a non-rostered component -- so a drill reds exactly
+ * as the same edit in the tree would. Normal runs pass none.
+ */
+const HARDCODE_FIXTURE_FLAGS = {
+  skin: '--hardcode-fixture-skin',
+  source: '--hardcode-fixture-source',
+  foundation: '--hardcode-fixture-foundation',
+};
+const FIXTURE_SKIN_ANCHOR = 'runtime/engines/modern/skin/button/index.css';
+const FIXTURE_SOURCE_ANCHOR = 'patterns/customization/token-inspector/index.tsx';
+const hardcodeFixtures = Object.fromEntries(
+  Object.entries(HARDCODE_FIXTURE_FLAGS).map(([kind, flag]) => {
+    const value = argumentValue(flag);
+    if (value === undefined) return [kind, null];
+    const path = resolve(value);
+    if (!existsSync(path) || !statSync(path).isFile()) throw new Error(`${flag} fixture does not exist: ${path}`);
+    return [kind, path];
+  }),
+);
+const hardcodeFixtureActive = Object.values(hardcodeFixtures).some(Boolean);
+
+function componentRelOf(file) {
+  return file === hardcodeFixtures.source
+    ? FIXTURE_SOURCE_ANCHOR
+    : relative(componentsDir, file).split(sep).join('/');
+}
+
+function withSourceFixture(sourceFiles) {
+  return hardcodeFixtures.source ? [...sourceFiles, hardcodeFixtures.source] : sourceFiles;
+}
+
+const FROZEN_SKIN_RE = /[\\/]engines[\\/](?:classic|rustic)[\\/]/;
+
+/**
+ * HARD-2 / owner ruling 7: hardcode-census's per-class skin literal census
+ * (F.1-F.10, F-63), folded into this audit. Productive skins (modern +
+ * presentation) are keyed `skinLiterals.<class>.<path below tokens/css>`;
+ * the frozen classic/rustic skins are ratcheted per class in aggregate. The
+ * classifier and its one TEC/FLOOR exclusion file live in `./hardcodes`.
+ * `DEBUG_SKIN_LITERALS=<class>` prints every counted site of that class.
+ */
+function skinLiteralCounters() {
+  const all = collectSkinFiles();
+  const productive = all.filter((f) => !FROZEN_SKIN_RE.test(f));
+  const frozen = all.filter((f) => FROZEN_SKIN_RE.test(f));
+  const relOf = (f) => relative(tokensCssDir, f).split(sep).join('/');
+  const live = countSkinLiterals(productive, relOf);
+  if (hardcodeFixtures.skin) {
+    const planted = countSkinLiterals([hardcodeFixtures.skin], () => 'fixture');
+    for (const klass of SKIN_LITERAL_CLASSES) {
+      live.perFile[FIXTURE_SKIN_ANCHOR].counts[klass] += planted.totals[klass];
+      live.totals[klass] += planted.totals[klass];
+    }
+    live.parseFailures += planted.parseFailures;
+  }
+  const cold = countSkinLiterals(frozen, relOf);
+  const out = { 'skinLiterals.parseFailures': live.parseFailures + cold.parseFailures };
+  for (const klass of SKIN_LITERAL_CLASSES) {
+    out[`skinLiterals.${klass}.total`] = live.totals[klass];
+    out[`skinLiterals.frozen.${klass}`] = cold.totals[klass];
+  }
+  const debugClass = process.env.DEBUG_SKIN_LITERALS;
+  for (const [rel, result] of Object.entries(live.perFile)) {
+    for (const klass of SKIN_LITERAL_CLASSES) sparse(out, `skinLiterals.${klass}.${rel}`, result.counts[klass]);
+    if (debugClass) {
+      for (const site of result.sites.filter((s) => s.klass === debugClass)) {
+        console.error(`[skin-literals:${debugClass}] ${rel}:${site.line} ${site.text.replace(/\s+/g, ' ')}`);
+      }
+    }
+  }
+  return out;
+}
+
+/**
+ * HARD-2: the colour-purity corpus widened from `engines/modern` to every
+ * productive component source (classic/rustic/agnostic engines, patterns,
+ * structures, surfaces). Same per-text rule as `color.modern*`; per-file keys
+ * are hex+rgba combined, the two totals split them.
+ */
+function componentColorCounters(sourceFiles) {
+  const out = {};
+  const perPath = new Map();
+  let hex = 0;
+  let rgba = 0;
+  for (const file of withSourceFixture(sourceFiles)) {
+    const perFile = countColorLiterals([file]);
+    hex += perFile.hex;
+    rgba += perFile.rgba;
+    const key = `color.componentLiterals.${componentRelOf(file)}`;
+    perPath.set(key, (perPath.get(key) ?? 0) + perFile.hex + perFile.rgba);
+  }
+  for (const [key, count] of perPath) sparse(out, key, count);
+  out['color.componentHexLiterals'] = hex;
+  out['color.componentRgbaLiterals'] = rgba;
+  return out;
+}
+
+/**
+ * HARD-2 / F-64: static geometry literals in JSX `style={{}}` over every
+ * productive component source -- the layout half `fleet.inlinePaint` never
+ * counted. See `countInlineGeometryInFile` for what counts.
+ */
+function inlineGeometryCounters(sourceFiles) {
+  const out = {};
+  const perPath = new Map();
+  let total = 0;
+  for (const file of withSourceFixture(sourceFiles)) {
+    const count = countInlineGeometryInFile(readFileSync(file, 'utf8'), file);
+    total += count;
+    const key = `inlineGeometry.${componentRelOf(file)}`;
+    perPath.set(key, (perPath.get(key) ?? 0) + count);
+  }
+  for (const [key, count] of perPath) sparse(out, key, count);
+  out['inlineGeometry.total'] = total;
   return out;
 }
 
@@ -2507,6 +2814,17 @@ function countCompositorOnlyViolations(fileList) {
   return count;
 }
 
+const productiveComponentSources = collectRuntimeSvgSourceFiles(componentsDir, { productionOnly: true });
+const fallbackParityExtensions = countFallbackParityExtensions();
+
+/** Per-file keys for the two DEF extensions (sparse, see `sparse`), so a drain cannot pay for a regression. */
+function fallbackParityFileCounters() {
+  const out = {};
+  for (const key of baselineKeys) if (key.startsWith('fallbackParity.')) out[key] = 0;
+  for (const [key, count] of Object.entries(fallbackParityExtensions.files)) out[key] = count;
+  return out;
+}
+
 const counters = {
   'motion.cubicBezierLiterals': motion.cubicBezier,
   'motion.rawDurationLiterals': motion.rawDuration,
@@ -2616,6 +2934,15 @@ const counters = {
   ...fleetInlinePaintCounters(),
   ...runtimeSvgPaintCounters(),
   ...embeddedCssPaintCounters(),
+  // HARD-2 (owner ruling 7, WO-EVI-02): hardcode-census's obligations, folded
+  // into this audit rather than a second census.
+  ...skinLiteralCounters(),
+  ...componentColorCounters(productiveComponentSources),
+  ...inlineGeometryCounters(productiveComponentSources),
+  'scale.fallbackParityColorViolations': fallbackParityExtensions.color,
+  'scale.fallbackParityChannelViolations': fallbackParityExtensions.channel,
+  ...fallbackParityFileCounters(),
+  ...duplicateRootDeclarationCounters(),
 };
 
 /**
@@ -2783,8 +3110,8 @@ const mode = process.argv.includes('--current-json')
   : 'report';
 
 if (mode === 'update') {
-  if (evasionFixture) {
-    console.error('engine-token-audit: --update-baseline cannot run with --gat07-evasion-fixture');
+  if (evasionFixture || hardcodeFixtureActive) {
+    console.error('engine-token-audit: --update-baseline cannot run with a drill fixture');
     process.exit(1);
   }
   if (!existsSync(baselinePath)) {
