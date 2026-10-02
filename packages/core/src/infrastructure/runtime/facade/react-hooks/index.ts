@@ -354,7 +354,3 @@ export type {
   HighlightSegment,
   UseGlobalSearchReturn,
 } from '../../application/navigation/search';
-
-// Tenant branding 2-step hook
-export { useTenantBranding } from '../../tenant';
-export type { UseTenantBrandingOptions, UseTenantBrandingReturn, TenantBrandingSession } from '../../tenant';

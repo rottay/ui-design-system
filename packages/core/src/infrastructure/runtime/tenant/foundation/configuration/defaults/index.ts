@@ -24,7 +24,7 @@ import type { TenantConfig } from '../../../../../../foundation/contracts';
  *   the vertical and bottoms out at `PRIMARY_ENGINE`. A default tenant that
  *   claimed an engine would outrank the vertical that declares one.
  */
-export const DEFAULT_TENANT_CONFIG: TenantConfig = {
+const DEFAULT_TENANT_CONFIG: TenantConfig = {
   slug: 'default',
   name: 'Default Tenant',
   theme: 'base',

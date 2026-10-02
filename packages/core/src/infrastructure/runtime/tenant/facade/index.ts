@@ -28,15 +28,6 @@ export {
 } from '../composition/react/provider';
 export type { TenantProviderProps } from '../composition/react/provider';
 
-// Runtime branding resolution: synchronous vertical/identity baseline plus
-// bounded DB-owned tenant configuration.
-export { useTenantBranding } from '../composition/react/branding';
-export type {
-  UseTenantBrandingOptions,
-  UseTenantBrandingReturn,
-  TenantBrandingSession,
-} from '../composition/react/branding';
-
 // ── Authoring (tenant creation utilities) ──
 export { createTenantConfig } from '../runtime/authoring/configuration';
 export type { TenantCreationConfig } from '../runtime/authoring/configuration';
@@ -60,7 +51,6 @@ export {
 // ── Defaults ──
 // Baseline config for when no tenant source is available at all.
 export {
-  DEFAULT_TENANT_CONFIG,
   getDefaultTenantConfig,
   getUnresolvedTenantConfig,
 } from '../foundation/configuration/defaults';

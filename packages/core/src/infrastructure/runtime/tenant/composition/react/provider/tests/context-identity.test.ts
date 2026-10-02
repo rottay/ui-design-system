@@ -530,7 +530,7 @@ describe('production source predicate', () => {
 describe('tenant context consumer inventory', () => {
   const inventory = discoverTenantContextConsumers();
 
-  it('is exactly the eight registered live consumers -- a ninth, or a reverted specifier, fails', () => {
+  it('is exactly the nine registered live consumers -- a tenth, or a reverted specifier, fails', () => {
     expect(inventory).toEqual([
       // The inventory is sorted by path, and the UI tier now lives under
       // `components/`, which sorts before `infrastructure/`.
@@ -558,6 +558,15 @@ describe('tenant context consumer inventory', () => {
       // the active posture from the tenant's own appearance, which the merged
       // token graph cannot answer, so it reads the same one context. Inherited
       // consumer, registered in D6-2b.
+      // WO-RET-05 packet 5 (8dbc81efd): the story-helpers decorator reads the
+      // enclosing TenantContext to follow the provider around it instead of
+      // contradicting the root — a consumer the RET-05 lot left unregistered
+      // here (its registration debt, collected 2026-10-02 under WO-RET-01).
+      {
+        file: 'components/surfaces/foundation/common/story-helpers/index.tsx',
+        binding: 'TenantContext',
+        specifier: '../../../../../infrastructure/runtime/tenant/composition/react/provider',
+      },
       {
         file: 'infrastructure/runtime/adaptation/runtime/container-posture/index.ts',
         binding: 'TenantContext',
