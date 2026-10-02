@@ -41,6 +41,11 @@ import {
 import { TENANT_THEME_V1_COVERAGE } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { RAMP_STEPS, deriveOklchRamp } from "@/foundation/kernel/color/oklch/ramp";
 import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
+import {
+  sameElementNames,
+  withRootAliases,
+} from "@/infrastructure/compilers/runtime/theme/runtime/emission/css";
+import { verticalOutright } from "@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases";
 
 const FIXTURE_DIR = resolve(
   process.cwd(),
@@ -366,6 +371,57 @@ const withoutTokens = (css: string, tokens: readonly string[]): string =>
       return !match || !tokens.includes(match[1]);
     })
     .join("\n");
+
+/**
+ * The root-alias restatements the N1/D2 emission law appends to the base rule:
+ * a one-argument `emitDeclarations` now restates every root alias its own
+ * channels reach (behavioural note of the delivery changeset 5c9c5a95c). The
+ * frozen fixtures predate the law, so this suite sat red outside the prebuild
+ * chain until 2026-10-02. Derived by calling the emitter's own law with the
+ * inputs `emitTenantArtifactCss` gives it, never enumerated by hand.
+ */
+const aliasRestatements = (
+  artifact: Pick<
+    TenantThemeArtifact,
+    "variables" | "verticalKey" | "modeDeltas" | "contrastDeltas"
+  >
+): Record<string, string> => {
+  const restated = withRootAliases(
+    artifact.variables,
+    sameElementNames(
+      [...(artifact.modeDeltas ?? []), ...(artifact.contrastDeltas ?? [])].map(
+        (block) => ({ cssVariables: block.variables })
+      )
+    ),
+    verticalOutright(artifact.verticalKey)
+  );
+  return Object.fromEntries(
+    Object.entries(restated).filter(([name]) => !(name in artifact.variables))
+  );
+};
+
+/** The W4 pin document's restatement count under the N1/D2 law. */
+const ALIAS_RESTATEMENT_COUNT = 255;
+
+/**
+ * Strip the restatement block from the artifact side. It must sit, whole and in
+ * law order, directly before the base rule's closing brace; anything else reds.
+ */
+const withoutAliasRestatements = (
+  css: string,
+  restated: Readonly<Record<string, string>>
+): string => {
+  const lines = css.split("\n");
+  const block = Object.entries(restated).map(
+    ([name, value]) => `  ${name}: ${value};`
+  );
+  const close = lines.indexOf("}");
+  expect(
+    lines.slice(close - block.length, close),
+    "the base rule ends with exactly the law's restatement block"
+  ).toEqual(block);
+  return [...lines.slice(0, close - block.length), ...lines.slice(close)].join("\n");
+};
 
 /** The artifact css minus its digest banner line. */
 const cssBody = (artifact: Pick<TenantThemeArtifact, "css">): string =>
@@ -903,12 +959,24 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
         .split("\n")
         .filter((line) => /^\s*--ds-radius-(sm|md|lg|xl):/.test(line))
     ).toEqual([RADIUS_MD_CHAIN_LINE]);
+    // The N1/D2 restatement set, pinned by count so a drift in the law or the
+    // alias table reds here; the chain line above is one of its members.
+    const restated = aliasRestatements(artifact);
+    expect(artifact.contrastDeltas ?? []).toHaveLength(0);
+    expect(Object.keys(restated)).toHaveLength(ALIAS_RESTATEMENT_COUNT);
+    expect(`  --ds-radius-md: ${restated["--ds-radius-md"]};`).toBe(
+      RADIUS_MD_CHAIN_LINE
+    );
     // With the sidebar pair restored, the css body needs no value rewrite at
-    // all: retirements and the radius dial are the only two things still
-    // standing between this document and the frozen fixture, byte for byte.
+    // all: retirements, the radius dial and the alias restatements are the only
+    // things still standing between this document and the frozen fixture.
     expect(
       withoutTokens(
-        withoutModeDeltaBlocks(withoutDensityModeFactor(cssBody(artifact))),
+        withoutModeDeltaBlocks(
+          withoutDensityModeFactor(
+            withoutAliasRestatements(cssBody(artifact), restated)
+          )
+        ),
         // The chosen silhouette's five per-size radii, trimmed on the ARTIFACT
         // side because the frozen fixture predates them: `shape.button-style`
         // now derives at the tenant rank instead of expanding into a vertical
@@ -930,8 +998,6 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
           "--ds-elevation-6",
           "--ds-radius-md-base",
           "--ds-shell-topbar-height",
-          // fb5c2b2ca: the chain line pinned above; the frozen fixture predates it.
-          "--ds-radius-md",
         ]
       )
     ).toBe(
