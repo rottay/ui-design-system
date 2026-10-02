@@ -7151,6 +7151,11 @@
      "at": "2026-10-01 22:56",
      "by": "Kimi K3",
      "note": "2026-10-02 ANAT-1 (out-anat1-opus.json, Opus, read-only): the CAP-3 anatomy repaint is a COVERAGE HOLE, not pixel-null. CAP-3 only changed mountStaticVertical (reachable via mountTenantTheme); the showroom's torture route (the ~35 bithire visual scenes) builds root attributes via resolveDocumentRootAttributes DIRECTLY, bypassing the single mount door — so no covered scene carries data-anatomy-* and dt35's zero diffs mean UNTESTED, not confirmed. Correction registered: CAP-3's commit message overclaimed ('visual baselines move at the next certification' — the harness couldn't see it). The fix (ANAT-2, dispatching): the torture bithire plan carries the anatomy via flatThemeAnatomyAttributes(baselineFor('bithire')); the bithire baselines in data-table (zebra, 1280), layout-batch (rail), effects/dashboard-widgets (framed) will move INTENTIONALLY and get re-baselined with my visual review + a focal re-run. Also registered: the torture route is a SECOND root-attribute path that bypasses the single mount door the layout's comment warns about."
+    },
+    {
+     "at": "2026-10-01 23:35",
+     "by": "Kimi K3",
+     "note": "2026-10-02 tanda 9e: the ANAT chain CLOSED. ANAT-3a 3b26db8fc (staticVerticalAnatomyAttributes on ./server, Fable ACCEPT-WITH-CHANGES discharged: STATUS contract-diff republished by its producer, tenancy README names the sanctioned consumer; supplier contract regen exact) + ANAT-3b 81e11a852 (torture bithire plan carries the anatomy; the TWO measurable repaints re-recorded after my sighted review: bithire modern w360 framed cards +982px, bithire rustic w1280 zebra 604->602px; everything else green: data-table 19/19, layout/effects/widgets/flagships 72/72, divergence 9/9). HONEST STANDING: dt35 (724/1/35 over abd9ff4bf) certified the tree WITHOUT the anatomy reaching the scenes; HEAD now carries it with the two re-recorded cells re-run green — the NEXT certification covers the whole. Registered: the desktop-modern zebra is below the screenshot threshold (instrument decision, not made); framed/rail pixel-null in the covered scenes (ANAT-1's caveat confirmed); test:first-paint's themanagement authority row is red at HEAD pre-existing (no SSR emission receipt — reproduce-confirmed, needs its own lot)."
     }
    ]
   },
