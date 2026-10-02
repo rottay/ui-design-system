@@ -44,6 +44,7 @@ export interface SvgWaterfallRendererProps {
   readonly showConnectors?: boolean;
   readonly showValues?: boolean;
   readonly formatValue?: (value: number) => string;
+  /** Explicit corner radius (0 included) wins; omitted, the skin derives it from the radius dial. */
   readonly barRadius?: number;
   readonly insets?: ChartGeometryInsets;
   readonly maxTicks?: number;
@@ -75,7 +76,7 @@ export function SvgWaterfallRenderer({
   showConnectors = true,
   showValues = true,
   formatValue,
-  barRadius = 2,
+  barRadius,
   insets,
   maxTicks,
   interaction,
@@ -100,7 +101,7 @@ export function SvgWaterfallRenderer({
     }),
     [data, geometryWidth, height, insets, maxTicks, orientation],
   );
-  const radius = Number.isFinite(barRadius) ? Math.max(0, barRadius) : 2;
+  const radius = barRadius !== undefined && Number.isFinite(barRadius) ? Math.max(0, barRadius) : undefined;
   const formatVal = (value: number): string => (formatValue ? formatValue(value) : String(value));
   const paintForType = (type: SvgWaterfallType): string => {
     if (type === 'increase') return increasePaint;
@@ -279,7 +280,7 @@ export function SvgWaterfallRenderer({
                     y={hitY}
                     width={hitWidth}
                     height={hitHeight}
-                    rx={Math.max(radius, 4)}
+                    rx={radius === undefined ? undefined : Math.max(radius, 4)}
                     aria-hidden="true"
                   />
                 </>

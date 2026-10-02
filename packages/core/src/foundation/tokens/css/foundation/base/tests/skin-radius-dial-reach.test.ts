@@ -86,6 +86,18 @@ const RULES: readonly DialRule[] = [
   { family: 'chart-radar', selector: ".ds-chart-radar [data-part='legend-swatch']", property: 'border-radius', value: 'calc(1px * var(--ds-radius-scale-normalized, 1))' },
   { family: 'chart-treemap', selector: ".ds-chart-treemap [data-part='legend-swatch']", property: 'border-radius', value: 'calc(2px * var(--ds-radius-scale-normalized, 1))' },
   {
+    family: 'chart-foundation',
+    selector: ".ds-chart-renderer-waterfall.ds-chart-renderer-waterfall[data-part='chart-renderer'] [data-part='bar']:not([rx])",
+    property: 'rx',
+    value: 'calc(2px * var(--ds-radius-scale-normalized, 1))',
+  },
+  {
+    family: 'chart-foundation',
+    selector: ".ds-chart-renderer-waterfall.ds-chart-renderer-waterfall[data-part='chart-renderer'] [data-part='interaction-halo']:not([rx])",
+    property: 'rx',
+    value: 'max(4px, calc(2px * var(--ds-radius-scale-normalized, 1)))',
+  },
+  {
     family: 'chart-waterfall',
     selector: ".ds-chart-waterfall [data-part='legend-swatch'][data-status='increase']",
     property: 'border-radius',
@@ -168,7 +180,8 @@ function declarations(css: string): { property: string; value: string }[] {
   }));
 }
 
-const SHAPE_LONGHAND = /^border(?:-(?:top|bottom|start|end)-(?:left|right|start|end))?-radius$/;
+/** SVG marks carry their corner as the `rx` geometry property, the shape longhand of a `<rect>`. */
+const SHAPE_LONGHAND = /^(?:border(?:-(?:top|bottom|start|end)-(?:left|right|start|end))?-radius|r[xy])$/;
 const reads = (value: string, name: string) => new RegExp(`var\\(\\s*${name}\\s*[,)]`).test(value);
 
 describe('engine-agnostic skins -- shape reach through the radius dial', () => {
@@ -182,7 +195,8 @@ describe('engine-agnostic skins -- shape reach through the radius dial', () => {
    * `shape.radius-scale`, so a reader that stopped painting a corner would leave
    * the denominator silently. Every reader must therefore end in a radius
    * longhand in its own file -- directly, or through the private socket it
-   * declares.
+   * declares. An SVG `rx`/`ry` confers dial-reach membership ONLY: the shape
+   * population and axis-difference read the border-radius family, never `rx`.
    */
   it('every reader of the normalized channel authors a shape longhand', () => {
     const orphans: string[] = [];
@@ -199,7 +213,7 @@ describe('engine-agnostic skins -- shape reach through the radius dial', () => {
         if (!painted) orphans.push(`${file}: ${decl.property}: ${decl.value}`);
       }
     }
-    expect(readers, 'the reader census moved; re-anchor it with the movers named').toBe(21);
+    expect(readers, 'the reader census moved; re-anchor it with the movers named').toBe(23);
     expect(orphans).toEqual([]);
   });
 
