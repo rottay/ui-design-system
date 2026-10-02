@@ -5654,7 +5654,7 @@
    "lane": "family-cuts",
    "order": 12,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -5780,7 +5780,9 @@
      "by": "Kimi K3",
      "note": "2026-10-02 OWNER RULING — the DS-only stage law: the app-side migration is DEFERRED (apps adapt later; the owner accepts the adaptation cost). The legacy hooks retirement + the dual-class window retirement are AUTHORIZED when the DS + showroom + fixtures under its ownership consume the canon and pass. StepWizard is INSIDE the DS and in scope. The post-bump validation of the new contract happens in a DS-OWNED test consumer, never waiting on the real apps. Known external consumers get read-only identification + registered impact + the substitute contract + breaking changeset + migration guide; apps are NOT modified. No permanent aliases or double implementations for old apps. FAM-11's acceptance adjusts formally to this scope; the deferred app-side obligations stay traceable, never counted as executed. This unblocks items (1)(2)(3) of the close conditions."
     }
-   ]
+   ],
+   "doneAt": "2026-10-02",
+   "evidence": "CLOSED 2026-10-02 under the owner's DS-only ruling (the resume document, ruling 8). Every acceptance arm measured on main: (1) read-without-producer 0 for the cut's channels (the gate green); (2) top-hardcodes-curated 0 (family-cut OK — 105 cuts + 1 admitted with declared debt; HARD-2's census measures the classes); (3) the contract census 0 mismatches; (4) the causality probes per family green, including the B23 local-scope series WITH the portaled-root arms (B23-E app-shell drawer, B23-D command-palette) and COV-2's focused skip-link; (5) axe without serious violations — the navigation ink channels (AXE-NAV, d5250c385) drained the last pinned debt (measured 1.05-2.28 -> 12.2-21:1, the pin drained to {}, the negative proof measured); (6) no rottay-* class emitted: the dual-class window retired (L2, e71cab066 — atomic per the scout's map: emitters canonical-only, the 78 :is() pairs collapsed, the class-window module + census arm deleted, the families' legacyNamespaceClasses 1 -> 0 by the gate's own decrease-only law) and the DS-owned consumer (L1, 52fc451b4) proves it from source AND the packed tarball with the standing guard red on any return. The publication contract: L3 (910afedaa) — the major changeset with the 24-class mapping, the migration guide, the 13 measured external sites (bithire 6, evnto 7, platform 0 — registered, apps untouched per the ruling), the never-consumed minor deleted. The DS-only adjustment is registered: the app-side migration is DEFERRED by the owner (not executed, fully traceable — the guide + the per-app packets are the record); the old R1 arm 'no removal while named consumers need the old API' was superseded by the owner's 2026-10-02 law (breaking changes carry contract + versioning + guide). K2.8 wrote L2a/L2b/L3 (verified alias kimi-code/kimi-for-coding); the DT wrote the L2 tail + AXE-NAV's audit; Opus/Fable reviews of the quota-window lots stay explicitly PENDING (registered, collected first when the quota returns). dt37 (725/0/35/0) precedes the L2/AXE-NAV lots; the next certification covers them."
   },
   {
    "id": "WO-INV-01",
@@ -7256,6 +7258,11 @@
      "at": "2026-10-02 10:59",
      "by": "Kimi K3",
      "note": "2026-10-02 PUBLICATION (owner-authorized 2026-10-02, executed under the K3/K2.8 scheme): docs-engineering pushed first (the seal's remote leg): c16845d..e9eddf8 — 12 commits, all the program's (the DS-law docs, the token-catalog regens, the RET-03 archive snapshot, the owner decision package). Then ui-design-system: 341c47159..f5d27de7c — 303 commits, all davila23, fast-forward clean, zero foreign commits, no force-push, NO package publishing and no deploys (the npm publish stays untouched). The CI evidence stops being nominal-only: the remote now has the tree. The changesets for the unpublished wave ride the push; the version bump itself stays the owner's release call."
+    },
+    {
+     "at": "2026-10-02 14:15",
+     "by": "Kimi K3",
+     "note": "2026-10-02 tanda 11d (the K3/K2.8 scheme's first wave): FAM11-L2 e71cab066 (the window retires atomically — L2a/L2b by K2.8, the tail by the DT) + L3 910afedaa (the major changeset + the migration guide + the per-app impact registers) + AXE-NAV d5250c385 (the navigation ink channels; the axe debt drains 4 findings; the two UA-blue repaints named) + RET-01-CH 5e92f1b89 (the three channels retire with their producers; BrandPaletteAliases.textInverse leaves with the named substitute; byte-identical paint; the writer hit the dispatch timeout mid-verification and the DT finished + audited it) + the seal follows the docs (404bc67e4, docs 9239a8b4 — pushed: docs e9eddf8..9239a8b, DS f5d27de7c..404bc67e4). FAM-11 is DONE (132/164). The effect verdict stands at 3 rows (the overlay weights, honestly pinned — a stamping surface is their exit). R1's --write still refuses on those 3 + the unknown-family 31 (WO-RET-04). PENDING REVIEWS under the quota amendment, to collect when the quota returns: the wave's lots (TINT-SCALE, RET-OVM-b, SEC-400, GLASS-2/3, HARD-2, FAM11-L1/L2/L3, FC-SC, AXE-NAV, RET-01-CH) — each carries the registration in its commit message."
     }
    ]
   },
