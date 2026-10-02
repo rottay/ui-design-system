@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   ActionDock,
+  Avatar,
   Badge,
   Box,
   Stack,
@@ -357,6 +358,10 @@ function DisplayCoverage() {
       </Cell>
       <Cell testId="tree-loading" label="Tree -- node loading">
         <Tree treeData={TREE_LAZY_DATA} loadData={neverResolves} />
+      </Cell>
+      <Cell testId="avatar-empty-fallback" label="Avatar -- empty fallback glyph">
+        {/* No src, name, alt, initials or children: the entity.person glyph fills the fallback. */}
+        <Avatar />
       </Cell>
       <Cell testId="badge-clickable" label="Badge -- clickable">
         <Badge clickable onClick={noop}>
