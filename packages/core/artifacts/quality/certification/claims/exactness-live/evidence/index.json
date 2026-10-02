@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "e3c7287966e7cc8e569a6478e1bfe5a897129cdd1b59e357b1bf8f8839de8909",
+    "authorityDigest": "71447c1be9861f30b3b0a017fc61d39df44f9e9e4c8389ed218c79537dff0d55",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "e9eddf820efc2e3b79a4b7458c85d3ad2c5e8c26",
+    "documentationRevision": "9239a8b418dc8693d2b9531a3bfc84d383895d30",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -187,8 +187,8 @@
           "data-part-corpus",
           "documentation-seal"
         ],
-        "bytes": 179175,
-        "sha256": "33c2227b770391d426b48b016d9b16dc1aea7be6bc9246343096d52bc6487cb4"
+        "bytes": 178924,
+        "sha256": "cc52dfdcece8270baeea0de694a85f7d463d4e84ed5ef4f56f1c97a4fc13833d"
       },
       {
         "path": "docs-engineering/engineering/design-system/runtime/tenancy/README.md",
@@ -223,7 +223,7 @@
           "workspace-toolchain"
         ],
         "bytes": 26575,
-        "sha256": "3d7c17220ee4e5077e61aabca845480b0f3cfe9ec80dec0393b2b541c27a2210"
+        "sha256": "3c6b04b7ffff02e3cb4bf7570d08d6e18a26e2b2d7f2cb9ed68edf2e8d07c77b"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5614289,
-        "sha256": "267724a855d6cff473049d36883786cf4b5796fa13c47b65e419451f0863a5db"
+        "bytes": 5610737,
+        "sha256": "111c74c440949c3e0fdd91fb76492b78cfe6714e6d862eb7a67c4e111f293a56"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 4980311,
-        "sha256": "bb6fa8dc5dcba1292206b0b092a194aea52e8c309ee9aab5d642d836012b4be9"
+        "bytes": 4976759,
+        "sha256": "09afe6ab278739d08f62372a99090806731eac6e67829d929f27d76626cd12b7"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 4941310,
-        "sha256": "6da923d9b49e19603f645b4c694ec8725b1ad516507c14403c7f398c3ce5ab96"
+        "bytes": 4937758,
+        "sha256": "d9f0ed482d80aabb313b0b736a427c310ea4676c7ccc71540e389e0a5602eedc"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 4940570,
-        "sha256": "a8fb226156414a41ec912af22e7fbbb607e4f226517b4001a4af02b684087e78"
+        "bytes": 4937018,
+        "sha256": "0f3b3c5497733d4c177e635d35ac93114970e4de58c45cb1b6f3cde1248b3c46"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -332,7 +332,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "577ba776c4d4f6d486204f1bc84010b6c9e331c0f007a79ace84d2542acf2e8d"
+        "sha256": "67b31ba03c045337eb8f986c828ed7b67545d16d2b931a6184460560dd750910"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
@@ -3626,8 +3626,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 1500,
-        "sha256": "8cab2f490e0861775c565a6f14c498d04dc8e2e89fb1437c25c2defa9e52d44f"
+        "bytes": 1492,
+        "sha256": "2c6312a3fcf5a1de2a0fdf54617131bd35419f9d77638ffb3a8fe531dce8a915"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/forms/step-wizard/StepWizard.stories.tsx",
@@ -21089,24 +21089,6 @@
         "sha256": "c84e3f708c85e17c7019c5a9599064de66d9e2c6dcb91010ad321133fa42eb2d"
       },
       {
-        "path": "ui-design-system/packages/core/src/components/structures/foundation/class-window/index.ts",
-        "roles": [
-          "audit-input",
-          "claim-census",
-          "stale-claim-corpus"
-        ],
-        "bytes": 5600,
-        "sha256": "892ff8535d7ad7d3440b6b70079cf6264ecced7b9f352df57a9840b97c0b731f"
-      },
-      {
-        "path": "ui-design-system/packages/core/src/components/structures/foundation/class-window/tests/index.test.ts",
-        "roles": [
-          "audit-input"
-        ],
-        "bytes": 16196,
-        "sha256": "155278008ef0549cb0944ea36373fefb524c8184b53b1fe7120a7febe6d41a18"
-      },
-      {
         "path": "ui-design-system/packages/core/src/components/structures/headers/collection/index.tsx",
         "roles": [
           "audit-input",
@@ -21730,8 +21712,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 20836,
-        "sha256": "70d6f9800f1788d5c900cb339086f11109eddbcb345508d23f2c74c7f907eed4"
+        "bytes": 20230,
+        "sha256": "e3be5e63d1ecd8cf3495065055b42dc1dc9f5bdd5bc752c52e43b9e23c961ef1"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/shell/app-shell/tests/AppShell.causality.integration.test.tsx",
@@ -21746,16 +21728,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 12325,
-        "sha256": "32904c0151e2a3215ee5e5567ab4d65cc3f88f07a9e7694982126602d75de0c7"
+        "bytes": 13146,
+        "sha256": "b7a8fd3842cb194e26f7bf47ccfc3e0c2054832a689071e8ac279f3a6c8eb714"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/shell/app-shell/tests/AppShell.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 13301,
-        "sha256": "e01e34c22d186875883a3414de384ebc1bb70bf46a6d6dedbcef1f2390b4349e"
+        "bytes": 13261,
+        "sha256": "0ba4e701d4eb653f23c2399fa807a3110bf24feabcba08f6245a9586c02d843f"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/shell/app-shell/tests/shell-superseded-window.test.ts",
@@ -22104,32 +22086,32 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 11938,
-        "sha256": "6869bb13013059805109d13c907f0194ce05285a248f768b888ee8b1c8d6ef63"
+        "bytes": 11718,
+        "sha256": "cb93b19d1baadfd8eba1ff47a611080cdb945bbe516f0d0fab868d0d7081b71f"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/workspace/action-dock/tests/ActionDock.actions.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 20325,
-        "sha256": "4017a2aaac41effb95895aef7fee791bfc6ea11914fb5ae09811db4ce5095773"
+        "bytes": 19857,
+        "sha256": "dd1a5bc89442a268acf9427464a135a4ff0b1f14692440ab788b79a93fd05d8a"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/workspace/action-dock/tests/ActionDock.skin-reachability.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 7736,
-        "sha256": "f6a0c8ecccbc0711ab812176b95d1920fb93fd20d22655389ba4544d2fd7408f"
+        "bytes": 7485,
+        "sha256": "d538b1198de7e1d175de8704c992ea252b78b545e2c343eb2b435c2715c6c43b"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/workspace/action-dock/tests/ActionDock.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 8353,
-        "sha256": "4b89b6a5d1ee9148a0024c694b5be226f16985dc6be307ca146b118eb3baed71"
+        "bytes": 7734,
+        "sha256": "554fc6d4dc4c9c0e312cf94a5ae2c6277cb4aff7465c79d90ae2dbc508690e77"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/workspace/active-filters-bar/contracts/index.ts",
@@ -27831,8 +27813,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 15291,
-        "sha256": "80ae314e9a21cccd3d4b2c82870fcbb7c60c90d24364b3e17c7026f4d7ecc0b2"
+        "bytes": 14494,
+        "sha256": "ba0adb1de084782b2d421026b235ddfdf114924e017b957b75f5111debba71ee"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
@@ -27921,8 +27903,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 26436,
-        "sha256": "c33902766f0c6ec682449d3ac4b3741aa2c6f47c9371008770b26753076dfd31"
+        "bytes": 23685,
+        "sha256": "e24ff4207a071cc2f3a4e118a50c8021b7439a2aa2be75361f4132a931ed9621"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css",
@@ -28291,8 +28273,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 41111,
-        "sha256": "4538eace214a294020a97962f81fcef93e635d75b8c066c8aa3a653116a36d0b"
+        "bytes": 41107,
+        "sha256": "fcbea3476aa23164b1345fd19e6a12b3bbfc065ef95207da1131f0fc8233d91b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/column-menu/index.css",
@@ -37984,7 +37966,7 @@
           "stale-claim-corpus"
         ],
         "bytes": 296367,
-        "sha256": "159f1192e43c5d67c88161f992acf23538e35a4748883e4f1682fa67159cfe1f"
+        "sha256": "e5bd9894f69f0cbdb3248b495670c00dacff88d670060ddd16386effe3a666cc"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/index.ts",
@@ -38697,8 +38679,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 16836,
-        "sha256": "4d48befdcaa1099ecb3a676b7815d27d2da0a76a9408e2d1524b8eb4bfaa6d07"
+        "bytes": 16774,
+        "sha256": "e61068eef107358a2d2fe6f06f91605bc7ed1b5ee16e4b5216151ac9fd00eb22"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/active-filters-bar/index.ts",
@@ -47858,19 +47840,19 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "e3c7287966e7cc8e569a6478e1bfe5a897129cdd1b59e357b1bf8f8839de8909"
+    "digest": "71447c1be9861f30b3b0a017fc61d39df44f9e9e4c8389ed218c79537dff0d55"
   },
   "paintAudit": {
-    "output": "engine-token-audit --check OK (4283 counters; 3264 completed zeros locked exactly; 1009 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
+    "output": "engine-token-audit --check OK (4280 counters; 3261 completed zeros locked exactly; 1009 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
     "baseline": {
       "path": "ui-design-system/packages/core/scripts/check/engine/tokens/audit/baseline/index.json",
-      "sha256": "b82541b38521739c3fa801b68f509c71d3dd3d618ce3328b900e0af1c96a9a24",
+      "sha256": "e244608d1debb6621ef6f223c4af09637ba9094f2ba07dfd3cffe2a43e2a1f4b",
       "ok": true,
       "errors": [],
-      "counters": 4283,
-      "zeroLocked": 3264,
+      "counters": 4280,
+      "zeroLocked": 3261,
       "positiveGoverned": 1019,
-      "ordinaryCeilings": 4262,
+      "ordinaryCeilings": 4259,
       "positiveOrdinaryCeilings": 1009,
       "exactInvariants": 14,
       "positiveExactInvariants": 3,
@@ -49432,7 +49414,7 @@
     ],
     "documentation": {
       "path": "docs-engineering/engineering/design-system/runtime/skins/data-part-contracts/README.md",
-      "sha256": "33c2227b770391d426b48b016d9b16dc1aea7be6bc9246343096d52bc6487cb4"
+      "sha256": "cc52dfdcece8270baeea0de694a85f7d463d4e84ed5ef4f56f1c97a4fc13833d"
     },
     "documentedEntries": 541,
     "inspectedSourceFiles": 403,
@@ -54493,7 +54475,7 @@
       "content": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 326
+          "line": 317
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/button-icon/index.css",
@@ -59984,7 +59966,7 @@
       "footer": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 334
+          "line": 325
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/card-compounds/index.css",
@@ -61504,23 +61486,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 282
+          "line": 273
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 374
+          "line": 365
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 384
+          "line": 375
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 503
+          "line": 494
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 521
+          "line": 512
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
@@ -69752,39 +69734,39 @@
       "root": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
-          "line": 129
+          "line": 126
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
-          "line": 149
+          "line": 146
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
-          "line": 160
+          "line": 157
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
-          "line": 165
+          "line": 162
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
-          "line": 194
+          "line": 191
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
-          "line": 198
+          "line": 195
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
-          "line": 202
+          "line": 199
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
-          "line": 206
+          "line": 203
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
-          "line": 287
+          "line": 284
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
@@ -69996,7 +69978,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 406
+          "line": 397
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
@@ -118034,7 +118016,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx",
-            "line": 274,
+            "line": 273,
             "syntax": "jsx-canonical-forwarder",
             "sinkKind": "canonical-forwarder",
             "provenance": {
@@ -118056,7 +118038,7 @@
       {
         "section": "Affix",
         "part": "root",
-        "documentationLine": 1920,
+        "documentationLine": 1917,
         "engines": [
           "modern",
           "rustic",
@@ -118135,7 +118117,7 @@
       {
         "section": "Anchor",
         "part": "root",
-        "documentationLine": 1936,
+        "documentationLine": 1933,
         "engines": [
           "modern",
           "rustic"
@@ -118174,7 +118156,7 @@
       {
         "section": "Anchor",
         "part": "item",
-        "documentationLine": 1937,
+        "documentationLine": 1934,
         "engines": [
           "modern",
           "rustic"
@@ -118213,7 +118195,7 @@
       {
         "section": "BackTop",
         "part": "trigger",
-        "documentationLine": 1950,
+        "documentationLine": 1947,
         "engines": [
           "modern",
           "rustic"
@@ -118257,7 +118239,7 @@
       {
         "section": "BottomTabBar",
         "part": "root",
-        "documentationLine": 1963,
+        "documentationLine": 1960,
         "engines": [
           "shared"
         ],
@@ -118287,7 +118269,7 @@
       {
         "section": "BottomTabBar",
         "part": "tab-button",
-        "documentationLine": 1964,
+        "documentationLine": 1961,
         "engines": [
           "shared"
         ],
@@ -118317,7 +118299,7 @@
       {
         "section": "BottomTabBar",
         "part": "icon",
-        "documentationLine": 1965,
+        "documentationLine": 1962,
         "engines": [
           "shared"
         ],
@@ -118347,7 +118329,7 @@
       {
         "section": "BottomTabBar",
         "part": "badge",
-        "documentationLine": 1966,
+        "documentationLine": 1963,
         "engines": [
           "shared"
         ],
@@ -118377,7 +118359,7 @@
       {
         "section": "BottomTabBar",
         "part": "label",
-        "documentationLine": 1967,
+        "documentationLine": 1964,
         "engines": [
           "shared"
         ],
@@ -118407,7 +118389,7 @@
       {
         "section": "Breadcrumb",
         "part": "root",
-        "documentationLine": 1981,
+        "documentationLine": 1978,
         "engines": [
           "modern",
           "rustic"
@@ -118446,7 +118428,7 @@
       {
         "section": "Breadcrumb",
         "part": "crumb",
-        "documentationLine": 1982,
+        "documentationLine": 1979,
         "engines": [
           "modern",
           "rustic",
@@ -118597,7 +118579,7 @@
       {
         "section": "Breadcrumb",
         "part": "separator",
-        "documentationLine": 1983,
+        "documentationLine": 1980,
         "engines": [
           "modern",
           "rustic"
@@ -118636,7 +118618,7 @@
       {
         "section": "FloatButton",
         "part": "root",
-        "documentationLine": 2009,
+        "documentationLine": 2006,
         "engines": [
           "modern",
           "rustic"
@@ -118675,7 +118657,7 @@
       {
         "section": "FloatButton",
         "part": "trigger",
-        "documentationLine": 2010,
+        "documentationLine": 2007,
         "engines": [
           "modern",
           "rustic"
@@ -118792,7 +118774,7 @@
       {
         "section": "FloatButton",
         "part": "panel",
-        "documentationLine": 2011,
+        "documentationLine": 2008,
         "engines": [
           "modern",
           "rustic"
@@ -118831,7 +118813,7 @@
       {
         "section": "FloatButton",
         "part": "badge",
-        "documentationLine": 2012,
+        "documentationLine": 2009,
         "engines": [
           "modern",
           "rustic"
@@ -118896,7 +118878,7 @@
       {
         "section": "Link",
         "part": "root",
-        "documentationLine": 2027,
+        "documentationLine": 2024,
         "engines": [
           "modern",
           "rustic"
@@ -118940,7 +118922,7 @@
       {
         "section": "Menu",
         "part": "root",
-        "documentationLine": 2040,
+        "documentationLine": 2037,
         "engines": [
           "modern",
           "rustic"
@@ -118982,7 +118964,7 @@
       {
         "section": "Menu",
         "part": "item",
-        "documentationLine": 2041,
+        "documentationLine": 2038,
         "engines": [
           "modern",
           "rustic",
@@ -119048,7 +119030,7 @@
       {
         "section": "Menu",
         "part": "icon",
-        "documentationLine": 2042,
+        "documentationLine": 2039,
         "engines": [
           "modern",
           "rustic",
@@ -119140,7 +119122,7 @@
       {
         "section": "Menu",
         "part": "label",
-        "documentationLine": 2043,
+        "documentationLine": 2040,
         "engines": [
           "modern",
           "rustic",
@@ -119232,7 +119214,7 @@
       {
         "section": "Menu",
         "part": "divider",
-        "documentationLine": 2044,
+        "documentationLine": 2041,
         "engines": [
           "modern",
           "rustic",
@@ -119288,7 +119270,7 @@
       {
         "section": "Menu",
         "part": "group",
-        "documentationLine": 2045,
+        "documentationLine": 2042,
         "engines": [
           "modern",
           "rustic",
@@ -119344,7 +119326,7 @@
       {
         "section": "Menu",
         "part": "group-label",
-        "documentationLine": 2046,
+        "documentationLine": 2043,
         "engines": [
           "modern",
           "rustic",
@@ -119397,7 +119379,7 @@
       {
         "section": "Menu",
         "part": "panel",
-        "documentationLine": 2047,
+        "documentationLine": 2044,
         "engines": [
           "modern",
           "rustic",
@@ -119489,7 +119471,7 @@
       {
         "section": "Menu",
         "part": "trigger",
-        "documentationLine": 2048,
+        "documentationLine": 2045,
         "engines": [
           "modern",
           "rustic",
@@ -119552,7 +119534,7 @@
       {
         "section": "Menu",
         "part": "arrow-icon",
-        "documentationLine": 2049,
+        "documentationLine": 2046,
         "engines": [
           "modern",
           "rustic",
@@ -119605,7 +119587,7 @@
       {
         "section": "MobileHeader",
         "part": "root",
-        "documentationLine": 2076,
+        "documentationLine": 2073,
         "engines": [
           "shared"
         ],
@@ -119635,7 +119617,7 @@
       {
         "section": "MobileHeader",
         "part": "trigger",
-        "documentationLine": 2077,
+        "documentationLine": 2074,
         "engines": [
           "shared"
         ],
@@ -119665,7 +119647,7 @@
       {
         "section": "MobileHeader",
         "part": "label",
-        "documentationLine": 2078,
+        "documentationLine": 2075,
         "engines": [
           "shared"
         ],
@@ -119695,7 +119677,7 @@
       {
         "section": "Pagination",
         "part": "root",
-        "documentationLine": 2090,
+        "documentationLine": 2087,
         "engines": [
           "modern",
           "rustic"
@@ -119734,7 +119716,7 @@
       {
         "section": "Pagination",
         "part": "pagination-range",
-        "documentationLine": 2091,
+        "documentationLine": 2088,
         "engines": [
           "modern",
           "rustic"
@@ -119773,7 +119755,7 @@
       {
         "section": "Pagination",
         "part": "pagination-nav-button",
-        "documentationLine": 2092,
+        "documentationLine": 2089,
         "engines": [
           "modern",
           "rustic"
@@ -119830,7 +119812,7 @@
       {
         "section": "Pagination",
         "part": "pagination-page-button",
-        "documentationLine": 2093,
+        "documentationLine": 2090,
         "engines": [
           "modern",
           "rustic"
@@ -119874,7 +119856,7 @@
       {
         "section": "Pagination",
         "part": "ellipsis",
-        "documentationLine": 2094,
+        "documentationLine": 2091,
         "engines": [
           "modern",
           "rustic"
@@ -119913,7 +119895,7 @@
       {
         "section": "Segmented",
         "part": "root",
-        "documentationLine": 2106,
+        "documentationLine": 2103,
         "engines": [
           "modern",
           "rustic"
@@ -119960,7 +119942,7 @@
       {
         "section": "Segmented",
         "part": "option",
-        "documentationLine": 2107,
+        "documentationLine": 2104,
         "engines": [
           "modern",
           "rustic"
@@ -120004,7 +119986,7 @@
       {
         "section": "Segmented",
         "part": "icon",
-        "documentationLine": 2108,
+        "documentationLine": 2105,
         "engines": [
           "modern"
         ],
@@ -120029,7 +120011,7 @@
       {
         "section": "Stepper",
         "part": "root",
-        "documentationLine": 2125,
+        "documentationLine": 2122,
         "engines": [
           "modern",
           "rustic"
@@ -120071,7 +120053,7 @@
       {
         "section": "Stepper",
         "part": "item",
-        "documentationLine": 2126,
+        "documentationLine": 2123,
         "engines": [
           "modern",
           "rustic",
@@ -120124,7 +120106,7 @@
       {
         "section": "Stepper",
         "part": "label",
-        "documentationLine": 2127,
+        "documentationLine": 2124,
         "engines": [
           "modern",
           "rustic",
@@ -120177,7 +120159,7 @@
       {
         "section": "Stepper",
         "part": "description",
-        "documentationLine": 2128,
+        "documentationLine": 2125,
         "engines": [
           "modern",
           "rustic",
@@ -120230,7 +120212,7 @@
       {
         "section": "Stepper",
         "part": "icon",
-        "documentationLine": 2129,
+        "documentationLine": 2126,
         "engines": [
           "modern",
           "rustic",
@@ -120283,7 +120265,7 @@
       {
         "section": "Stepper",
         "part": "subtitle",
-        "documentationLine": 2130,
+        "documentationLine": 2127,
         "engines": [
           "modern",
           "rustic",
@@ -120336,7 +120318,7 @@
       {
         "section": "Stepper",
         "part": "connector",
-        "documentationLine": 2131,
+        "documentationLine": 2128,
         "engines": [
           "rustic",
           "shared"
@@ -120375,7 +120357,7 @@
       {
         "section": "Stepper",
         "part": "panel",
-        "documentationLine": 2137,
+        "documentationLine": 2134,
         "engines": [
           "shared"
         ],
@@ -120400,7 +120382,7 @@
       {
         "section": "Steps",
         "part": "root",
-        "documentationLine": 2171,
+        "documentationLine": 2168,
         "engines": [
           "modern",
           "rustic"
@@ -120442,7 +120424,7 @@
       {
         "section": "Steps",
         "part": "item",
-        "documentationLine": 2172,
+        "documentationLine": 2169,
         "engines": [
           "modern",
           "rustic",
@@ -120495,7 +120477,7 @@
       {
         "section": "Steps",
         "part": "icon",
-        "documentationLine": 2173,
+        "documentationLine": 2170,
         "engines": [
           "modern",
           "rustic",
@@ -120548,7 +120530,7 @@
       {
         "section": "Steps",
         "part": "label",
-        "documentationLine": 2174,
+        "documentationLine": 2171,
         "engines": [
           "modern",
           "rustic",
@@ -120601,7 +120583,7 @@
       {
         "section": "Steps",
         "part": "subtitle",
-        "documentationLine": 2175,
+        "documentationLine": 2172,
         "engines": [
           "modern",
           "rustic",
@@ -120654,7 +120636,7 @@
       {
         "section": "Steps",
         "part": "description",
-        "documentationLine": 2176,
+        "documentationLine": 2173,
         "engines": [
           "modern",
           "rustic",
@@ -120707,7 +120689,7 @@
       {
         "section": "Steps",
         "part": "connector",
-        "documentationLine": 2177,
+        "documentationLine": 2174,
         "engines": [
           "rustic",
           "shared"
@@ -120746,7 +120728,7 @@
       {
         "section": "Tabs",
         "part": "root",
-        "documentationLine": 2195,
+        "documentationLine": 2192,
         "engines": [
           "modern",
           "rustic"
@@ -120785,7 +120767,7 @@
       {
         "section": "Tabs",
         "part": "tab-list",
-        "documentationLine": 2196,
+        "documentationLine": 2193,
         "engines": [
           "modern",
           "rustic"
@@ -120824,7 +120806,7 @@
       {
         "section": "Tabs",
         "part": "tab-button",
-        "documentationLine": 2197,
+        "documentationLine": 2194,
         "engines": [
           "modern",
           "rustic"
@@ -120868,7 +120850,7 @@
       {
         "section": "Tabs",
         "part": "icon",
-        "documentationLine": 2198,
+        "documentationLine": 2195,
         "engines": [
           "modern"
         ],
@@ -120893,7 +120875,7 @@
       {
         "section": "Tabs",
         "part": "tab-badge",
-        "documentationLine": 2199,
+        "documentationLine": 2196,
         "engines": [
           "classic",
           "modern",
@@ -120946,7 +120928,7 @@
       {
         "section": "Tabs",
         "part": "indicator",
-        "documentationLine": 2200,
+        "documentationLine": 2197,
         "engines": [
           "modern"
         ],
@@ -120971,7 +120953,7 @@
       {
         "section": "Tabs",
         "part": "tab-panel",
-        "documentationLine": 2201,
+        "documentationLine": 2198,
         "engines": [
           "modern",
           "rustic"
@@ -121032,7 +121014,7 @@
           "includeTests": false
         }
       ],
-      "typescriptFiles": 2733,
+      "typescriptFiles": 2732,
       "cssRoots": [
         "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components",
         "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines"
@@ -121051,8 +121033,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "1e210150e005769c52f47f1114aa32cb416dfdafaabf116deb1a58196188a6a9",
-      "1e210150e005769c52f47f1114aa32cb416dfdafaabf116deb1a58196188a6a9"
+      "dc4f076e005f689d867054ecbe2925671d872f4628005774cb11d488b83a07ef",
+      "dc4f076e005f689d867054ecbe2925671d872f4628005774cb11d488b83a07ef"
     ],
     "agree": true
   }
