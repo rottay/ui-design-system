@@ -3277,6 +3277,13 @@ export function deriveCanonicalZScaleRoster(cssText) {
  * owner per class group, reproducing the run it was registered against:
  * 25 AUTHORABLE_UNPROVEN_EFFECT + 13 UNREAD_EMITTED_NO_KNOWN_ROUTE +
  * 5 READ_NO_PRODUCTIVE_TERMINAL + 1 READ_UNPROVEN = 44 channels.
+ *
+ * DISCHARGED 2026-10-02 (OVM-ADOPT): the three overlay weights left the table --
+ * the modern Modal/Sheet engines stamp data-intensity on their backdrops from
+ * the public overlayIntensity prop and the modern skins read the ladder under
+ * those rendered selectors, so the rows measure LIVE_MODERN_PAINTED. The
+ * .rottay-overlay anchor withdrawals STAND: Overlay stays internal and
+ * unimported, so those rules still paint nobody.
  */
 export const CHANNEL_DISPOSITIONS = Object.freeze([
   Object.freeze({
@@ -3298,14 +3305,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
       '--ds-tint-warning-16',
       '--ds-tint-warning-24',
     ]),
-  }),
-  Object.freeze({
-    owner: 'WO-EVI-02',
-    classification: LIVENESS.authorableUnprovenEffect,
-    registered: '2026-10-02',
-    reason:
-      'a reader without a stamper (GLASS-2-b): the route is wired -- the Overlay intensity step stamps data-intensity and the overlay-modal-compounds skin reads each weight under .rottay-overlay[data-intensity=light|medium|heavy] -- but NO product surface adopts it: Overlay is internal (no package subpath exports it, no DS module imports it, no consumerRoot imports it), and the rustic modal stamps .rottay-overlay without data-intensity, so the three rules match no rendered node and paint nobody. GLASS-1 discharged light/heavy and RET-OVM-b called medium live paint on the graph reading alone; DEFAULT_UNSTAMPED_ANCHORS withdraws exactly those three terminals, measured, and the unchanged classifier reads the rest. --ds-overlay-medium additionally has a live tenant AUTHOR: one stored tenant document writes it, and that value does NOT paint today -- painting awaits a stamping surface. The graph\'s general blindness to stamps (a skin terminal under a selector no product renders counts as paint) is registered for the instrument lane and is NOT closed by this pin or by the anchor register, which covers only these three rules. Exit: a product surface adopts Overlay and declares an intensity -- the anchor entries then red as adopted, entries and pin are deleted in the same commit and the rows measure LIVE, discharging the pin; or a weight retires with its skin rule, its allowlist entry and its catalog listing in one commit (medium only after its stored author is migrated)',
-    channels: Object.freeze(['--ds-overlay-heavy', '--ds-overlay-light', '--ds-overlay-medium']),
   }),
 ]);
 

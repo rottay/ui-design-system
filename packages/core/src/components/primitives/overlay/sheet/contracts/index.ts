@@ -37,6 +37,8 @@ export interface SheetProps extends EngineAwareProps {
   showHandle?: boolean;
   /** Whether to show overlay backdrop */
   showOverlay?: boolean;
+  /** Selects the tenant overlay ladder step painted on the backdrop; absent keeps the default scrim chain. */
+  overlayIntensity?: 'light' | 'medium' | 'heavy';
   /** Whether pressing Escape closes the sheet */
   closeOnEscape?: boolean;
   /** Whether clicking the overlay closes the sheet */

@@ -67,6 +67,18 @@
   -webkit-backdrop-filter: var(--ds-sheet-overlay-backdrop, var(--ds-glass-backdrop-filter));
 }
 
+.ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='backdrop'][data-intensity='light'] {
+  background-color: var(--ds-overlay-light, var(--ds-sheet-overlay-bg, var(--ds-color-bg-overlay)));
+}
+
+.ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='backdrop'][data-intensity='medium'] {
+  background-color: var(--ds-overlay-medium, var(--ds-sheet-overlay-bg, var(--ds-color-bg-overlay)));
+}
+
+.ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='backdrop'][data-intensity='heavy'] {
+  background-color: var(--ds-overlay-heavy, var(--ds-sheet-overlay-bg, var(--ds-color-bg-overlay)));
+}
+
 .ds-sheet.ds-sheet--modern[data-part='root'][data-motion='animated'] > [data-part='backdrop'][data-open='true'] {
   animation: ds-sheet-backdrop-enter var(--ds-sheet-enter-duration, var(--ds-motion-reveal)) var(--ds-sheet-enter-curve, var(--ds-motion-ease-enter)) both;
 }

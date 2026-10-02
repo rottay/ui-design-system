@@ -511,6 +511,12 @@ export interface ModalProps extends BaseComponentProps, EngineAwareProps {
    */
   blurBackdrop?: boolean;
 
+  /**
+   * Selects the tenant overlay ladder step painted on the backdrop; absent keeps the default scrim chain.
+   * Ignored when `overlayOpacity` sets a custom scrim — the custom scrim keeps precedence.
+   */
+  overlayIntensity?: 'light' | 'medium' | 'heavy';
+
   // ---------------------------------------------------------------------------
   // Confirmation Dialog Props
   // ---------------------------------------------------------------------------

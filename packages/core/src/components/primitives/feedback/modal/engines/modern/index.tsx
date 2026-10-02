@@ -120,6 +120,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     closable = MODAL_DEFAULTS.closable ?? true,
     showBackdrop = MODAL_DEFAULTS.showBackdrop ?? true,
     overlayOpacity,
+    overlayIntensity,
     blurBackdrop = MODAL_DEFAULTS.blurBackdrop ?? false,
     centered = MODAL_DEFAULTS.centered ?? true,
     placement = 'center',
@@ -306,6 +307,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     overlayOpacity == null
       ? undefined
       : ({ '--ds-modal-overlay-strength': `${Math.min(Math.max(overlayOpacity, 0), 1) * 100}%` } as React.CSSProperties);
+  // A custom scrim keeps precedence: its paint wins, so the ladder attribute
+  // stays off the backdrop and the skin never applies an intensity step.
+  const backdropIntensity = overlayIntensity && !scrim ? overlayIntensity : undefined;
 
   // The anchor must render even while closed: it is the component's own DOM
   // position, the lineage source the portal scope snapshot reads from.
@@ -352,6 +356,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                   data-open={dataState === 'open' ? 'true' : 'false'}
                   data-blur={blurBackdrop !== false ? 'true' : 'false'}
                   data-scrim={scrim ? 'custom' : undefined}
+                  data-intensity={backdropIntensity}
                   style={scrim}
                 />
               )}

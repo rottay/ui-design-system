@@ -68,6 +68,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
     footer,
     showHandle = SHEET_DEFAULTS.showHandle,
     showOverlay = SHEET_DEFAULTS.showOverlay,
+    overlayIntensity,
     closeOnEscape = SHEET_DEFAULTS.closeOnEscape,
     closeOnOverlayClick = SHEET_DEFAULTS.closeOnOverlayClick,
     adapt,
@@ -166,6 +167,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
               <div
                 data-part="backdrop"
                 data-open={dataState === 'open' ? 'true' : 'false'}
+                data-intensity={overlayIntensity}
                 onClick={closeOnOverlayClick ? handleClose : undefined}
               />
             )}

@@ -106,6 +106,18 @@
   -webkit-backdrop-filter: var(--ds-modal-overlay-backdrop, var(--ds-glass-backdrop-filter));
 }
 
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='backdrop'][data-intensity='light'] {
+  background-color: var(--ds-overlay-light, var(--ds-modal-overlay-bg, var(--ds-color-bg-overlay)));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='backdrop'][data-intensity='medium'] {
+  background-color: var(--ds-overlay-medium, var(--ds-modal-overlay-bg, var(--ds-color-bg-overlay)));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='backdrop'][data-intensity='heavy'] {
+  background-color: var(--ds-overlay-heavy, var(--ds-modal-overlay-bg, var(--ds-color-bg-overlay)));
+}
+
 .ds-modal.ds-modal--modern[data-part='root'][data-motion='animated'] > [data-part='backdrop'][data-open='true'] {
   animation: ds-modal-backdrop-enter var(--ds-modal-enter-duration, var(--ds-motion-reveal)) var(--ds-modal-enter-curve, var(--ds-motion-ease-enter)) both;
 }
