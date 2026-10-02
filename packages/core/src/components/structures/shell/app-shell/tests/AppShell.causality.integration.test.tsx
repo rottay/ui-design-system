@@ -178,35 +178,17 @@ describeCausality({
 /**
  * Measured debt, pinned by node IDENTITY rather than by count: a repaired node,
  * a new node and a same-count swap all go red and must be re-adjudicated.
+ *
+ * DRAINED (WO-FAM-11 axe arm): the navigation region owes its ink channel and
+ * the footer strip its on-colour pair, so the pin is empty. The structure now
+ * reads `--ds-app-shell-navigation-color` (the sidebar's own on-surface chain)
+ * on the track and the drawer, `--ds-app-shell-navigation-footer-color` (the
+ * on-colour law in light, the nav ink in dark) on the footer strip, and raw
+ * slot anchors take the region ink — the UA default link blue was never a DS
+ * decision. Verified per cell: every pinned node ≥ 4.5:1 in all four scopes.
+ * The empty record is the pin: any serious finding re-opens it by identity.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  // The navigation region paints a tone-aware SURFACE and no ink to go with
-  // it: `--ds-app-shell-navigation-background` rests on `--ds-sidebar-bg`, which
-  // an inverse sidebar tone darkens, while slot content inherits the canvas
-  // ink. Every node below is the fixture's own raw slot content, not chrome
-  // this family renders — a consumer that passes `Text` inherits the sidebar
-  // role instead. The family owes a navigation ink channel beside the
-  // background; that is a paint decision with a cross-tenant consequence and
-  // it is routed rather than taken here.
-  //
-  // The selectors name the CANONICAL class because axe builds a selector from
-  // the element's first class and the open class window stamps that one first.
-  // These are the same three nodes the debt has always been; only the spelling
-  // moved.
-  'bithire dark': {
-    'color-contrast': [
-      '.ds-app-shell__navigation-footer > span',
-      '.ds-app-shell__navigation-logo > span',
-      'a[href$="inbox"]',
-    ],
-  },
-  'bithire light': {
-    'color-contrast': ['.ds-app-shell__navigation-footer > span'],
-  },
-  'evnto light': {
-    'color-contrast': ['.ds-app-shell__navigation-footer > span'],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('app-shell causality surface', () => {
   it('serves the anatomy every probe reads', () => {
