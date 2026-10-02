@@ -7136,6 +7136,11 @@
      "at": "2026-10-01 20:57",
      "by": "Kimi K3",
      "note": "2026-10-02 tanda 9b: SHEET-1 LANDED 7ea79090c (Fable ACCEPT-WITH-CHANGES discharged: ds-sheet-anchor class + display:contents skin rule + family-cut re-pin 10->11 from the gate's own output; the gate never ran in the writer's acceptance list — CAUGHT BY FABLE, process note: gate must be in every component lot's acceptance). MODAL-1 LANDED 4a0629822 (Fable ACCEPT; portal-scope gains usePortalScopeConsumer; Modal registers gated on shouldRender; the docs now state the spread-snapshot contract). TOUR-1 LANDED 0b0e32bf0 (same design, Fable-covered; DT-audited; 82/82). TWO ROUTED FINDINGS: (1) the sheet's own --ds-sheet-* paddings are :root-declared and never rescale locally even in-tree (sheet skin index.css:20-30) — the density roster's frozen-root-input class, SAME shape as popover's exemption; routed to the density roster lane for a PENDING/EXEMPT disposition with the measured reason; (2) PortalScope's flatten freezes media-driven channels (breakpoints/reduced-motion/contrast/print) while an overlay stays open — a residual of EVERY PortalScope adopter, sheet the most resize-exposed; routed to the portal lane (needs a re-read trigger on media change, a designed fix, not incidental). wo-skin-04's stale portal claims carry a dated supersession note (doc correction, DT)."
+    },
+    {
+     "at": "2026-10-01 21:36",
+     "by": "Kimi K3",
+     "note": "2026-10-02 tanda 9c: PORTAL-1 LANDED 5713eb2e3 — the PortalScope media-freeze residual (registered from the SHEET-1 review) is REPAIRED: runtime-derived media query set (no fixed list; the compiler's prefers-color-scheme class pinned by its own arm), listeners only while a consumer is registered, republish on the portaled surface only, lazy re-read while closed. Fable ACCEPT-WITH-CHANGES discharged (color-scheme arm + 2 doc lines). Red-first 4/0 vs HEAD; 15/15 + 641/641 consumers. The sheet :root-frozen density class is named in the token file's header (4be22d946, comment-only + regen). Batch-close indicators over the portal wave: axis-difference 273/273, indicator 19/19, population 62/62. dt35's repaint classification adds: the portaled drawer following local density (SHEET-1's intended repair)."
     }
    ]
   },
