@@ -33,8 +33,10 @@ export interface OverlayProps {
   blur?: boolean;
   /** Blur intensity (in pixels) */
   blurAmount?: number;
-  /** Background color/opacity */
+  /** Background color/opacity; overrides `intensity` when set */
   backgroundColor?: string;
+  /** Tenant overlay step painted by the skin; omit for the canonical scrim */
+  intensity?: 'light' | 'heavy';
   /** Z-index of the overlay */
   zIndex?: number;
   /** Additional class name */
@@ -59,7 +61,10 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
       clickable = true,
       blur = false,
       blurAmount = 4,
-      backgroundColor = 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, rgba(0, 0, 0, 0.5)))',
+      intensity,
+      backgroundColor = intensity
+        ? undefined
+        : 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, rgba(0, 0, 0, 0.5)))',
       zIndex = 999,
       className = '',
       style = {},
@@ -118,6 +123,7 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
         // when the overlay is not visible.
         aria-hidden={!visible}
         data-visible={visible}
+        data-intensity={intensity}
       >
         {children}
       </div>

@@ -5,9 +5,9 @@
  *
  * A glassmorphism container that applies backdrop blur, a translucent
  * background, and a subtle semi-transparent border to simulate frosted
- * glass. All visual properties fall through to CSS custom properties
- * (`--ds-glass-*`) first, enabling tenant-level theming without prop
- * changes, then fall back to the inline defaults.
+ * glass. Its skin (`presentation/components/skin/glass-card`) paints from the
+ * tenant glass channels (`--ds-glass-*`), so tenant theming needs no prop
+ * changes; the props only feed the innermost fallback.
  *
  * @example
  * <GlassCard blur={16} bgOpacity={0.15}>
@@ -41,23 +41,14 @@ export const GlassCard: React.FC<GlassCardProps> = ({
 }) => {
   return (
     <div
-      className={className}
+      className={className ? `ds-glass-card ${className}` : 'ds-glass-card'}
+      data-part="root"
       style={{
-        // Both standard and WebKit-prefixed backdrop-filter are required
-        // because Safari still needs the prefix as of 2025.
-        backdropFilter: `blur(var(--ds-glass-blur, ${blur}px))`,
-        WebkitBackdropFilter: `blur(var(--ds-glass-blur, ${blur}px))`,
-        // Three-layer CSS variable cascade:
-        //   1. --ds-glass-bg  (tenant/page override)
-        //   2. --ds-color-alpha-white-10  (design-token alpha)
-        //   3. rgba() fallback  (hard default for non-themed contexts)
-        background: `var(--ds-glass-bg, var(--ds-color-alpha-white-10, rgba(255, 255, 255, ${bgOpacity})))`,
-        border: `1px solid var(--ds-glass-border, var(--ds-color-alpha-white-20, rgba(255, 255, 255, ${borderOpacity})))`,
-        borderRadius: 'var(--ds-radius-lg, 12px)',
-        // overflow: hidden ensures child content respects the border-radius
-        // rounding and doesn't bleed outside the frosted area.
-        position: 'relative',
-        overflow: 'hidden',
+        // The skin paints from the tenant glass channels; the props only feed
+        // the innermost fallback for an untokenised page.
+        ['--_ds-glass-card-blur' as string]: `${blur}px`,
+        ['--_ds-glass-card-bg' as string]: `rgba(255, 255, 255, ${bgOpacity})`,
+        ['--_ds-glass-card-border' as string]: `rgba(255, 255, 255, ${borderOpacity})`,
         ...style,
       }}
     >

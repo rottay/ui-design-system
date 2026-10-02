@@ -1,0 +1,19 @@
+/**
+ * GlassCard — the frosted-glass effect container (`effects/glass-card`).
+ *
+ * Paint reads the surfaces family's glass channels, which a tenant authors
+ * through `surfaces.glass` or the `--ds-glass-*` tokenOverrides door; the
+ * component's numeric props stamp only the innermost private fallbacks.
+ *
+ * LAYER: imported layer(rottay-components) by the base entrypoint.
+ */
+
+.ds-glass-card[data-part='root'] {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ds-glass-border, var(--ds-color-alpha-white-20, var(--_ds-glass-card-border)));
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-glass-bg, var(--ds-color-alpha-white-10, var(--_ds-glass-card-bg)));
+  backdrop-filter: blur(var(--ds-glass-blur, var(--_ds-glass-card-blur)));
+  -webkit-backdrop-filter: blur(var(--ds-glass-blur, var(--_ds-glass-card-blur)));
+}

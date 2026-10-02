@@ -550,6 +550,8 @@
   layer(rottay-components);
 @import "../../../presentation/components/skin/chart-c/index.css"
   layer(rottay-components);
+@import "../../../presentation/components/skin/glass-card/index.css"
+  layer(rottay-components);
 
 /* Monochrome owners (ex-"commercial kit"). Reclassified by role, not by where they
    are sold: primitives, patterns and a structure that paint through the grayscale
