@@ -7,7 +7,7 @@ import React, { useContext, type ReactNode } from 'react';
 import type { Decorator } from '@storybook/react-vite';
 
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
-import { getKnownTenantConfig } from '../../../../../entrypoints/public/runtime/tenant';
+import { getKnownTenantConfig } from '../../../../../infrastructure/runtime/tenant/foundation/configuration/registry';
 import { TenantContext } from '../../../../../infrastructure/runtime/tenant/composition/react/provider';
 import type { EngineName, ProductProfileKey } from '../../../../../foundation/contracts';
 import type {

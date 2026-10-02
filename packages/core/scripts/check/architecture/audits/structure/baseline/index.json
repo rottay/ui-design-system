@@ -4,10 +4,14 @@
     "mode": "finding-identity-subset-ratchet",
     "physicalRoots": [
       "foundation",
+      "contracts",
+      "kernel",
+      "tokens",
+      "compilers",
       "infrastructure",
+      "runtime",
       "graphics",
-      "components",
-      "tooling"
+      "components"
     ],
     "classifiedSupportRoots": [
       "entrypoints"
@@ -21,21 +25,21 @@
   },
   "snapshot": {
     "inventory": {
-      "totalFiles": 2914,
-      "sourceFiles": 2462,
-      "cssFiles": 426,
+      "totalFiles": 4639,
+      "sourceFiles": 4058,
+      "cssFiles": 503,
       "authoredLeafModules": 0,
-      "productionIndexes": 1461,
-      "barrels": 197,
-      "implementationIndexes": 1264,
+      "productionIndexes": 1869,
+      "barrels": 194,
+      "implementationIndexes": 1675,
       "ignoredByKind": {
         "declaration": 1,
-        "entrypoint": 21,
-        "fixture": 3,
-        "generated": 272,
-        "story": 120,
-        "test": 583,
-        "test-support": 1
+        "entrypoint": 24,
+        "fixture": 8,
+        "generated": 292,
+        "story": 123,
+        "test": 1718,
+        "test-support": 23
       },
       "rootEntrypoints": [
         "entrypoints/charts/access/index.ts",
@@ -43,25 +47,41 @@
         "entrypoints/charts/renderers/index.ts",
         "entrypoints/charts/spec/index.ts",
         "entrypoints/eslint/index.ts",
-        "entrypoints/graphics/effects/index.ts",
+        "entrypoints/graphics/marks/brand/index.ts",
+        "entrypoints/graphics/marks/cloud/index.ts",
         "entrypoints/graphics/marks/index.ts",
         "entrypoints/graphics/motion/index.ts",
         "entrypoints/graphics/pictograms/index.ts",
         "entrypoints/graphics/spatial/index.ts",
-        "entrypoints/graphics/spatial/spec/index.ts",
         "entrypoints/icons/bithire/index.ts",
         "entrypoints/icons/corpus/index.ts",
         "entrypoints/icons/foundation/index.ts",
+        "entrypoints/icons/full/index.ts",
         "entrypoints/icons/identity/index.ts",
         "entrypoints/icons/index.ts",
         "entrypoints/icons/intelligence/index.ts",
         "entrypoints/icons/operations/index.ts",
+        "entrypoints/icons/presets/bithire/index.ts",
+        "entrypoints/public/patterns/charts/index.ts",
         "entrypoints/server/index.ts",
+        "entrypoints/suppliers/cli/index.mjs",
         "index.ts"
       ],
-      "findingsByRule": {},
-      "findingsByTopLevelScope": {}
+      "findingsByRule": {
+        "sibling-owner-dependency": 5
+      },
+      "findingsByTopLevelScope": {
+        "components": 5
+      }
     },
-    "findings": {}
+    "findings": {
+      "sibling-owner-dependency": [
+        "sibling-owner-dependency:components/primitives/display/callout/index.tsx->components/primitives/feedback/alert/index.tsx",
+        "sibling-owner-dependency:components/primitives/display/list/engines/modern/index.tsx->components/primitives/feedback/skeleton/index.tsx",
+        "sibling-owner-dependency:components/primitives/display/table/engines/modern/index.tsx->components/primitives/feedback/skeleton/index.tsx",
+        "sibling-owner-dependency:components/primitives/inputs/voice-input-button/index.tsx->components/primitives/display/tooltip/index.tsx",
+        "sibling-owner-dependency:components/primitives/inputs/voice-input-button/index.tsx->components/primitives/layout/box/index.ts"
+      ]
+    }
   }
 }

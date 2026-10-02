@@ -5,7 +5,10 @@ trabajo en `5bfae6097` (`packages/core/package.json` v2.19.36, 121 subpaths
 publicados); `./surfaces/oauth-transition` salió del paquete con WO-CAN-04
 (F-18) y `./fonts/arabic-text.css` entró con WO-INV-02, de modo que la
 superficie vigente fue 121; WO-RET-02 publicó `./styles/frozen-engines` (la
-separación del bundle de los motores congelados), de modo que hoy son 122. Este documento es la **única fuente** de la tabla de disposiciones:
+separación del bundle de los motores congelados), de modo que llegaron a 122; y
+RET-01-E (WO-RET-01, 2026-10-02) retiró del mapa 79 subpaths públicos sin
+consumidores medidos por el consumer-census (showroom + 3 apps), de modo que
+hoy son 43. Este documento es la **única fuente** de la tabla de disposiciones:
 la regla de lint `@rottay/no-unsanctioned-ds-subpath` la ejecuta y un test la
 compara byte a byte contra el espejo de código.
 
@@ -21,7 +24,7 @@ contrato puede desaparecer (D-07) sin aviso a las apps.
 | Espejo | `packages/core/src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/index.ts` | copia derivada que la regla importa (sin `node:fs`, funciona publicada) |
 | Lector | `.../no-unsanctioned-ds-subpath/contract/parse/index.ts` | parser puro markdown → filas |
 | Regla | `.../no-unsanctioned-ds-subpath/index.ts`, publicada como `@rottay/design-system/eslint` → `@rottay/no-unsanctioned-ds-subpath` | falla en todo lo que no está `guaranteed` |
-| Anti-deriva | `.../no-unsanctioned-ds-subpath/tests/index.test.ts` | reparsea este archivo, exige igualdad exacta con el espejo, exige 122/122 contra `package.json` `exports` (mismo conjunto y mismo orden) |
+| Anti-deriva | `.../no-unsanctioned-ds-subpath/tests/index.test.ts` | reparsea este archivo, exige igualdad exacta con el espejo, exige 43/43 contra `package.json` `exports` (mismo conjunto y mismo orden) |
 
 La regla es **fail-closed**: un especificador `@rottay/design-system…` que no
 aparezca como `guaranteed` en §1.2 se reporta, incluso si no está en ninguna
@@ -46,7 +49,7 @@ el showroom es parte del propio paquete y sus sondas no son consumo de producto
 (mismo criterio que ya aplicaba el borrador a `./spatial` y a
 `./tenant-theme-canary-fixtures`).
 
-## 1. Superficie de importación sancionada (122/122)
+## 1. Superficie de importación sancionada (43/43)
 
 Censo: `app-bithire` y `packages/showroom` (alcance del owner, 2026-09-05).
 Se cuentan especificadores de módulo reales (`from`, `import`, `import()`,
@@ -58,97 +61,22 @@ disposición es la parte normativa y es la que no puede derivar.
 
 | Métrica | Valor |
 | --- | --- |
-| Subpaths publicados | 122 |
+| Subpaths publicados | 43 |
 | `guaranteed` | 19 |
-| `retire-by WO-RET-01` | 96 |
-| `retire-by WO-CAN-03` | 7 |
-| Subpaths publicados con 0 consumidores en alcance (bithire + showroom) | 96 |
+| `retire-by WO-RET-01` | 19 |
+| `retire-by WO-CAN-03` | 5 |
+| Subpaths publicados con 0 consumidores en alcance (bithire + showroom) | 19 |
 | Importaciones a superficie garantizada | bithire 2086 · showroom 325 |
 | Importaciones a superficie no garantizada (línea base, decrece) | bithire 16 · showroom 14 |
 
-### 1.2 Tabla ejecutable: los 122 subpaths publicados
+### 1.2 Tabla ejecutable: los 43 subpaths publicados
 
 <!-- consumer-contract:published:start -->
 | Subpath | Disposition | Retire-by | app-bithire | showroom |
 | --- | --- | --- | --- | --- |
 | `.` | guaranteed | — | 1179 | 259 |
 | `./server` | guaranteed | — | 9 | 10 |
-| `./contracts/foundation` | retire-by | WO-RET-01 | 0 | 0 |
-| `./contracts/patterns` | retire-by | WO-RET-01 | 0 | 0 |
-| `./contracts/i18n` | retire-by | WO-RET-01 | 0 | 0 |
-| `./contracts/runtime` | retire-by | WO-RET-01 | 0 | 0 |
-| `./contracts/primitives` | retire-by | WO-RET-01 | 0 | 0 |
-| `./contracts/structures` | retire-by | WO-RET-01 | 0 | 0 |
-| `./contracts/surfaces` | retire-by | WO-RET-01 | 0 | 0 |
-| `./runtime/i18n` | retire-by | WO-RET-01 | 0 | 0 |
-| `./runtime/motion` | retire-by | WO-RET-01 | 0 | 0 |
-| `./runtime/navigation` | retire-by | WO-RET-01 | 0 | 0 |
-| `./runtime/forms` | retire-by | WO-RET-01 | 0 | 0 |
-| `./runtime/cross-tab-sync` | retire-by | WO-RET-01 | 0 | 0 |
-| `./runtime/provider` | retire-by | WO-RET-01 | 0 | 0 |
-| `./runtime/root-attributes` | retire-by | WO-RET-01 | 0 | 1 |
-| `./runtime/responsive` | retire-by | WO-RET-01 | 0 | 0 |
-| `./runtime/tenant` | retire-by | WO-RET-01 | 0 | 0 |
-| `./runtime/visual-authority` | retire-by | WO-RET-01 | 0 | 1 |
-| `./runtime/tenant-theme` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/button` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/checkbox` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/date-picker` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/input` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/input-number` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/radio` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/select` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/slider` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/switch` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/textarea` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/toggle` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/breadcrumb` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/float-button` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/segmented` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/steps` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/tabs` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/box` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/divider` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/flex` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/grid` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/responsive` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/stack` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/avatar` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/badge` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/card` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/empty` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/image` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/table` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/tag` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/tooltip` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/typography` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/alert` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/message` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/modal` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/progress` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/skeleton` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/spinner` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/toast` | retire-by | WO-RET-01 | 0 | 0 |
-| `./primitives/dropdown` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/presence` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/data-table` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/list-toolbar` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/record-facts` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/stats-grid` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/widget-board` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/adaptive-overlay` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/empty-state` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/command-palette` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/shortcuts-overlay` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/feature-workspace-frame` | retire-by | WO-RET-01 | 0 | 0 |
-| `./patterns/kanban-board` | retire-by | WO-RET-01 | 0 | 0 |
 | `./patterns/charts` | retire-by | WO-RET-01 | 0 | 0 |
-| `./structures/dashboard-header` | retire-by | WO-RET-01 | 0 | 0 |
-| `./structures/record-summary` | retire-by | WO-RET-01 | 0 | 0 |
-| `./structures/app-shell` | retire-by | WO-RET-01 | 0 | 0 |
-| `./structures/action-dock` | retire-by | WO-RET-01 | 0 | 0 |
-| `./structures/column-menu` | retire-by | WO-RET-01 | 0 | 0 |
-| `./surfaces/collection-workspace` | retire-by | WO-RET-01 | 0 | 0 |
 | `./public-entrypoints-manifest` | retire-by | WO-RET-01 | 0 | 0 |
 | `./icons` | guaranteed | — | 864 | 53 |
 | `./icons/full` | retire-by | WO-RET-01 | 0 | 0 |
@@ -169,12 +97,8 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./charts/access` | guaranteed | — | 2 | 0 |
 | `./charts/renderers` | guaranteed | — | 5 | 0 |
 | `./motion` | guaranteed | — | 4 | 0 |
-| `./effects` | retire-by | WO-RET-01 | 0 | 0 |
 | `./spatial` | retire-by | WO-RET-01 | 0 | 2 |
-| `./spatial/spec` | retire-by | WO-RET-01 | 0 | 0 |
-| `./styles` | retire-by | WO-CAN-03 | 0 | 0 |
 | `./styles.css` | guaranteed | — | 0 | 1 |
-| `./styles/default` | retire-by | WO-CAN-03 | 0 | 0 |
 | `./styles/bithire` | retire-by | WO-CAN-03 | 2 | 0 |
 | `./styles/evnto` | retire-by | WO-CAN-03 | 0 | 0 |
 | `./styles/rottay` | retire-by | WO-CAN-03 | 0 | 0 |
@@ -239,14 +163,16 @@ Estado de ejecución por árbol (medido 2026-09-05):
 
 - **`packages/showroom`: ejecuta la regla.**
   `packages/showroom/eslint.config.mjs` monta `@rottay/no-unsanctioned-ds-subpath`
-  en `error` con los nueve subpaths medidos como línea base
-  (`allowSubpaths`), y **solo** esa regla: no monta `configs.recommended`, cuyas
+  en `error` con los siete subpaths medidos como línea base
+  (`allowSubpaths`; eran nueve en la medición 2026-09-05 — `./runtime/root-attributes`
+  y `./runtime/visual-authority` salieron de la lista con RET-01-E, que retiró
+  esos subpaths del mapa), y **solo** esa regla: no monta `configs.recommended`, cuyas
   reglas de HTML crudo y color añadirían rojos nuevos al árbol de marketing del
   showroom. Con esa línea base el showroom da **0** hallazgos de contrato; sin
   ella da 14. El array es decrece-only y está fijado por un test
   (`rules/no-unsanctioned-ds-subpath/tests/index.test.ts`): cada entrada debe ser
   una fila **no** garantizada con conteo de showroom mayor que 0 en §1.2, y no
-  puede haber más de nueve.
+  puede haber más de siete.
 
 - **`app-bithire`: todavía no ejecuta la regla, y no puede hacerlo hoy.**
   La app fija `@rottay/design-system` **2.19.37** (`app-bithire/package.json`,

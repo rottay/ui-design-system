@@ -461,21 +461,6 @@ export interface StepsProps {
   engine?: EngineName;
 }
 
-/**
- * Defaults of the deprecated `Steps` name.
- * @deprecated since 2026-09-15: see {@link STEPPER_DEFAULTS}.
- */
-export const STEPS_DEFAULTS: Partial<StepsProps> = {
-  current: 0,
-  direction: 'horizontal',
-  initial: 0,
-  labelPlacement: 'horizontal',
-  responsive: true,
-  size: 'default',
-  status: 'process',
-  type: 'default',
-};
-
 // ============================================================================
 // Default Values
 // ============================================================================

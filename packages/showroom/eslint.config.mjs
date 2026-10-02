@@ -29,8 +29,6 @@ export default defineConfig([
             './icons/intelligence',
             './icons/operations',
             './pictograms',
-            './runtime/root-attributes',
-            './runtime/visual-authority',
             './spatial',
             './tenant-theme-canary-fixtures',
           ],

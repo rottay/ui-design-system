@@ -476,9 +476,9 @@ const MemoizedChildren = memo(function MemoizedChildren({
  * Exported so the drill can assert against THIS declaration instead of a copy.
  * A test that restates the tuple proves only that it agrees with itself, and
  * would stay green through any widening of the real set. The export is
- * module-internal by construction: every barrel above this file enumerates its
- * exports by name (`bootstrap/facade/index.ts`, `entrypoints/public/runtime/
- * provider/index.ts`), so nothing reaches the package API.
+ * module-internal by construction: the barrel above this file enumerates its
+ * exports by name (`bootstrap/facade/index.ts`), so nothing reaches the package
+ * API.
  */
 export const BEHAVIOR_OVERRIDE_KEYS = [
   'locale',

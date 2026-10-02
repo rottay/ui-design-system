@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  SPATIAL_SCENE_MODULE_VERSION,
-  isSpatialSceneModule,
-} from '../../../../../../entrypoints/graphics/spatial/spec';
+import { SPATIAL_SCENE_MODULE_VERSION } from '../../../../../../foundation/contracts/kernel/spatial';
+import { isSpatialSceneModule } from '../index';
 
 function Scene(): null {
   return null;

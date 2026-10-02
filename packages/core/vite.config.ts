@@ -73,9 +73,7 @@ export default defineConfig({
         'chart-access': resolve(__dirname, 'src/entrypoints/charts/access/index.ts'),
         'chart-renderers': resolve(__dirname, 'src/entrypoints/charts/renderers/index.ts'),
         motion: resolve(__dirname, 'src/entrypoints/graphics/motion/index.ts'),
-        effects: resolve(__dirname, 'src/entrypoints/graphics/effects/index.ts'),
         spatial: resolve(__dirname, 'src/entrypoints/graphics/spatial/index.ts'),
-        'spatial-spec': resolve(__dirname, 'src/entrypoints/graphics/spatial/spec/index.ts'),
         eslint: resolve(__dirname, 'src/entrypoints/eslint/index.ts'),
         'entrypoints/suppliers/cli/index': resolve(__dirname, 'src/entrypoints/suppliers/cli/index.mjs'),
         // Only real package.json exports are listed as entries.

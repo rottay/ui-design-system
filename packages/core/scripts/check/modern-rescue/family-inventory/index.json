@@ -1060,6 +1060,7 @@
       "divergenceProfile": "pattern-chart",
       "publicExports": [
         "GalleryViewProps",
+        "GalleryViewAdaptation",
         "resolveGalleryKey",
         "PatternGalleryView"
       ],
@@ -1085,6 +1086,7 @@
       "divergenceProfile": "pattern-chart",
       "publicExports": [
         "GridViewProps",
+        "GridViewAdaptation",
         "resolveGridRowKey",
         "PatternGridView"
       ],
@@ -1110,6 +1112,7 @@
       "divergenceProfile": "pattern-chart",
       "publicExports": [
         "StatsGridProps",
+        "StatsGridAdaptation",
         "PatternStatsGrid"
       ],
       "declaredComponentsPublic": [
@@ -1244,10 +1247,14 @@
         "WidgetBoardProps",
         "WidgetBoardResizeAxes",
         "WidgetBoardSize",
+        "WidgetBoardAdaptation",
+        "WidgetLayout",
         "PatternWidgetBoard",
         "WidgetBoard",
         "heightPxToRows",
-        "widgetItemsToAdaptiveInputs"
+        "normalizeWidgetLayout",
+        "widgetItemsToAdaptiveInputs",
+        "widgetItemsToLayout"
       ],
       "declaredComponentsPublic": [
         "WidgetBoard"
@@ -4675,7 +4682,6 @@
         "StepsProps",
         "ProgressDotInfo",
         "STEPPER_DEFAULTS",
-        "STEPS_DEFAULTS",
         "STEPPER_SIZE_MAP",
         "STEPPER_FONT_SIZE_MAP",
         "StepperStep",

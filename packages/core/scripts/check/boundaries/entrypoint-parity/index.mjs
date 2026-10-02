@@ -15,12 +15,11 @@
  *     if (OWNERS.some((owner) => subpath.startsWith(`./${owner}/`)) && !governed.has(subpath))
  *
  * so it only notices an ungoverned subpath under `contracts/`, `runtime/`,
- * `primitives/`, `patterns/`, `structures/` or `surfaces/`. The package
- * publishes 120 subpaths; 76 are governed and 44 are outside that reverse rule
- * entirely -- `./icons`, `./marks`, `./charts`, `./styles/*`, `./fonts/*`,
- * `./eslint`, `./server`, the CSS glob. Not one of them is wrong, and that is
- * the point: nothing checks them, so a 121st could join them without being
- * looked at.
+ * `primitives/`, `patterns/`, `structures/` or `surfaces/`. Subpaths outside
+ * those owners -- `./icons`, `./marks`, `./charts`, `./styles/*`, `./fonts/*`,
+ * `./eslint`, `./server`, the CSS glob -- bypass that reverse rule entirely.
+ * Not one of them is wrong, and that is the point: nothing checks them, so
+ * one more could join them without being looked at.
  *
  * THE LAW HERE. Every published subpath matches exactly one declared CLASS,
  * each class states why it is not in the governed manifest, and each class must

@@ -12,7 +12,6 @@ import {
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
 } from '..';
-import { resolveVisualAuthority as resolveFromPublic } from '@/entrypoints/public/runtime/visual-authority';
 import * as retention from '../runtime/retention';
 import type { RuntimeVisualPayloadCensus } from '../foundation/admission';
 import { stampTenantThemeScope } from './mount-fixture';
@@ -91,8 +90,7 @@ describe('visual-authority admission', () => {
     document.head.innerHTML = '';
   });
 
-  it('exports resolveVisualAuthority from public, facade and admission as one value', () => {
-    expect(resolveFromPublic).toBe(resolveFromAdmission);
+  it('exports resolveVisualAuthority from facade and admission as one value', () => {
     expect(resolveFromFacade).toBe(resolveFromAdmission);
   });
 
@@ -111,7 +109,7 @@ describe('visual-authority admission', () => {
     })).toEqual({ ok: true, artifact: expect.objectContaining({ digest: FIXTURE.digest }) });
   });
 
-  it('resolves the handcoded fixture through all three entrypoints', () => {
+  it('resolves the handcoded fixture through the facade and admission entrypoints', () => {
     mountArtifact();
     const declaration = { authority: 'compiled-artifact' as const, artifact: FIXTURE };
     const input = {
@@ -123,12 +121,10 @@ describe('visual-authority admission', () => {
 
     const fromAdmission = resolveFromAdmission(input);
     const fromFacade = resolveFromFacade(input);
-    const fromPublic = resolveFromPublic(input);
 
     expect(fromAdmission.conflict).toBeNull();
     expect(fromAdmission.origin).toBe('compiled-envelope');
     expect(fromFacade).toEqual(fromAdmission);
-    expect(fromPublic).toEqual(fromAdmission);
   });
 
   describe('hostile verifier mutants', () => {

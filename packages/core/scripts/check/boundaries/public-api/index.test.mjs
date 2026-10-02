@@ -403,108 +403,39 @@ test('TECHO — el arbol REAL esta en su ancla, techo por techo y dimension por 
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
   const live = readCeilings(manifest);
   // 77 -> 76 (WO-CAN-04): `./surfaces/oauth-transition` left the package with
-  // the surface it published. Decrece-solo, como los dos techos que gobierna.
-  assert.equal(Object.keys(live).length, 76, 'los 76 subpaths del asiento E-2, medidos');
+  // the surface it published; 76 -> 1 (RET-01-E, WO-RET-01 2026-10-02): every
+  // governed subpath left the export map except `./patterns/charts`, retained
+  // because the chart-facade parity machinery is CI-bound to it. Decrece-solo.
+  assert.equal(Object.keys(live).length, 1, 'el subpath gobernado retenido, medido');
   assert.deepEqual(evaluateCeilings(live, baseline), []);
   // Cada techo real cubre las DOS dimensiones: ni una entrada a medias.
   for (const [subpath, anchored] of Object.entries(baseline.ceilings)) {
     assert.deepEqual(Object.keys(anchored).sort(), [...GOVERNED_BUDGET_DIMENSIONS].sort(), `${subpath} no ancla las dos dimensiones`);
   }
-  // Los 18 de la ampliacion E-2 salen de su propio tag en el manifest, no de una lista a mano.
+  // Los candidatos a consolidacion salen de su propio tag en el manifest, no de una lista a mano.
   const tagged = Object.entries(manifest.entries).filter(([, entry]) => entry.budgetNote).map(([subpath]) => subpath);
-  assert.equal(tagged.length, 18);
+  assert.equal(tagged.length, 1);
   assert.deepEqual(baseline.consolidationCandidates, tagged.sort());
 });
 
-test('C2/EXACTO — el techo de `./runtime/visual-authority` es el grafo MEDIDO, no holgura', () => {
-  /* El lote C2 movio este subpath en las DOS dimensiones y el informe dijo que
-   * los modulos no se habian movido. Aqui queda clavado lo que de verdad mide el
-   * gate, para que la proxima diferencia se vea contra un numero y no contra una
-   * frase.
-   *
-   * 62115 -> 63931 (WO-CON-06): `TenantThemeArtifact` gana el metadato de
-   * procedencia serializado, y el verificador de mount valida su forma y lo
-   * mete en el digest que recomputa. Los modulos NO se mueven: el duenio del
-   * ledger no se importa aqui a proposito, porque un vocabulario que este lado
-   * recomputara seria un vocabulario que un transporte podria falsificar.
-   *
-   * 63931 -> 67603 (WO-EMI-02): la admision gana la PRUEBA DE SCOPE -- el
-   * verificador que compara la raiz del documento contra los descriptores de
-   * scope del artefacto, y la clase de conflicto cerrada que la nombra. Los
-   * modulos siguen sin moverse: la gramatica de selectores no se importa, se
-   * leen los descriptores que el propio artefacto ya trae.
-   *
-   * 67603 -> 68733 (WO-EMI-02, ronda de reparacion): la prueba RETENIDA vuelve
-   * a hacer la pregunta de scope, no solo la de bytes. Entra el vocabulario
-   * cerrado de atributos de scope, la re-verificacion dentro del audit retenido
-   * y el juicio por registro sobre la raiz del documento. Los modulos siguen sin
-   * moverse: retention ya importaba admission.
-   *
-   * 68733 -> 69393 (WO-EMI-02, segunda ronda): el juicio por registro se
-   * reemplaza por el REPLAY del lote -- cada estado intermedio de la raiz pasa
-   * por la misma ley de scope, que admission ahora expone sobre un lector-- y
-   * el observer se engancha ademas al elemento de scope cuando la raiz provista
-   * no lo contiene. Los modulos siguen sin moverse: no entra ningun import
-   * nuevo, solo la ley compartida y el segundo observe.
-   *
-   * 69393 -> 70112 (WO-EMI-02, tercera ronda): la prueba de montaje se niega
-   * por nombre ante una raiz que NO esta en el documento -- unos bytes fuera
-   * del arbol no pintan nada, y el scope se responderia con el
-   * `documentElement` real al que no estan pegados-- y el observer del elemento
-   * de scope pasa a mirar tambien su subarbol, que es el unico sitio donde el
-   * desprendimiento del contenedor es audible. Los modulos siguen sin moverse:
-   * no entra ningun import nuevo.
-   *
-   * 70112 -> 71610 (WO-DER-07): el artefacto persiste la mitad NO-CSS de su
-   * propio compile y esa mitad gobierna un render, asi que entra al digest y
-   * el verificador la rechaza POR FORMA antes de que gobierne: un declarante
-   * de engine visual con modos repetidos, con una semilla que no es escalar o
-   * con un nombre `--ds-*` como clave de semilla -- que seria un segundo
-   * escritor de CSS llegando por un campo JSON -- no se admite. Los modulos
-   * siguen sin moverse: no entra ningun import nuevo.
-   *
-   * 71610 -> 73141 (WO-DER-05): la copia `auto` de un bloque de modo se
-   * enclava en la preferencia del modo que el bloque declara, no en `dark`
-   * fijo. +502 en tenant-selectors (el selector de la copia pasa a su unico
-   * duenio), +727 en emission (`backgroundMode` con default claro se vuelve el
-   * booleano `followsSystem`) y +302 en admission (el verificador lo lee del
-   * artefacto igual que el productor). El techo lo amplio DER-05 con `--widen`
-   * y su `lastMove`; este ancla no se habia re-medido. Los modulos siguen sin
-   * moverse: no entra ningun import nuevo.
-   *
-   * 73141 -> 73544 (2026-09-15, lote textura D6-2c-i, commit 449e86e55): +403
-   * en UNA hoja, kernel/foundation/css/value-safety (6303 -> 6706): la palabra
-   * export, los dos nombres repeating-*-gradient y el docblock de doctrina
-   * single-source que cierra el drift admission/emision (revision focal: Codex
-   * ACCEPT + Fable ACCEPT, evidence/der-06-texture-review/). Los modulos siguen
-   * en 9: no entra ningun import nuevo.
-   *
-   * 73544 -> 73535 (2026-09-16, lote DER-08 sobre f61a9da9f BrandTheme->FlatTheme):
-   * -9 en dos hojas ya alcanzadas (tenant-selectors -7, runtime -2). Los modulos
-   * siguen en 9.
-   *
-   * 73535 -> 74751 (2026-09-19, lote S19-A01 d5a3e1a74, reparacion estructural que
-   * baja las gramaticas compartidas bajo sus lectores): +1 modulo
-   * (kernel/foundation/css/value-functions ENTRA al grafo) y value-safety
-   * 6706 -> 6165; neto +1216. El baseline ya sigue este movimiento (f17c6a87c);
-   * este ancla lo alcanza, medido 2026-09-20 con la clausura del propio gate.
-   *
-   * 74751 -> 82632 y 10 -> 12 modulos: cuatro ampliaciones `--widen` con su
-   * `lastMove` movieron el baseline sin re-medir este ancla. Bisect por commit
-   * (el gate sobre `git archive` de cada padre e hijo), cada paso solo:
-   * a3a8f7bac (WO-EMI-03) +2 modulos, emission/css y emission/artifact entran al
-   * partirse el duenio en carpetas, +874; d4edd6420 (WO-EVI-02 value-safety,
-   * env() safe-area) +1802; 7efadbf1f (WO-INV-03 contrastDeltas) +3189;
-   * 95bd44651 (B23 density boundary) +2016. fb877645c no mueve el grafo. */
+test('C2/MEDIDO — el grafo MEDIDO del subpath retenido queda clavado, numero contra numero', () => {
+  /* El lote C2 clavo el techo de `./runtime/visual-authority` a su grafo medido;
+   * ese subpath se retiro con RET-01-E (WO-RET-01, 2026-10-02). El unico
+   * subpath gobernado que sobrevive es `./patterns/charts`: aqui queda clavado
+   * lo que de verdad mide el gate, para que la proxima diferencia se vea contra
+   * un numero y no contra una frase. Su presupuesto declarado (242 modulos /
+   * 2482000 bytes, anclado en revision) tiene holgura sobre la medicion; la ley
+   * de la holgura cero del lote C2 sigue siendo drillada por los TECHO
+   * sinteticos de arriba. */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
-    .filter((entry) => entry.subpath === './runtime/visual-authority');
+    .filter((entry) => entry.subpath === './patterns/charts');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 12, sourceBytes: 82632 },
+    { reachableModules: 180, sourceBytes: 1216380 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(12, 82632), 'el ancla es el valor medido, sin holgura');
+  assert.deepEqual(baseline.ceilings['./patterns/charts'], ceiling(242, 2482000), 'el ancla del retenido es el valor revisado en HEAD, sin cambio');
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */
@@ -761,7 +692,7 @@ test('SCHEMA — el ancla REAL declara la version que el gate lee', () => {
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
   assert.equal(baseline.schemaVersion, CEILINGS_SCHEMA_VERSION);
-  assert.equal(Object.keys(baseline.ceilings).length, 76, 'los 76 techos, intactos');
+  assert.equal(Object.keys(baseline.ceilings).length, 1, 'el techo del subpath retenido, intacto');
   assert.deepEqual(Object.keys(baseline).filter((key) => !CEILINGS_ROOT_KEYS.includes(key)), [],
     'el ancla real no lleva ninguna clave de raiz que el gate no lea');
 });

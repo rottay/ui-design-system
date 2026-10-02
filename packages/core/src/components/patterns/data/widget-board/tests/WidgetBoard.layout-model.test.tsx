@@ -15,7 +15,6 @@ import {
   normalizeWidgetLayout as rootNormalizeWidgetLayout,
   widgetItemsToLayout as rootWidgetItemsToLayout,
 } from "../../../../../index";
-import { normalizeWidgetLayout as doorNormalizeWidgetLayout } from "../../../../../entrypoints/public/patterns/widget-board";
 
 const labels: WidgetBoardLabels = {
   customize: "Customize",
@@ -101,10 +100,9 @@ describe("WidgetLayout: a per-posture intent list in grid units, validated fail-
     expect(normalizeWidgetLayout(stored)).toEqual({ compact: LAYOUT.compact });
   });
 
-  it("is exported through the precedent's doors: the package root and the widget-board subpath", () => {
+  it("is exported through the package root door", () => {
     expect(rootNormalizeWidgetLayout).toBe(normalizeWidgetLayout);
     expect(rootWidgetItemsToLayout).toBe(widgetItemsToLayout);
-    expect(doorNormalizeWidgetLayout).toBe(normalizeWidgetLayout);
   });
 });
 

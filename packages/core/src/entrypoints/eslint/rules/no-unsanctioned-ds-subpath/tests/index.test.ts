@@ -76,21 +76,23 @@ describe('consumer contract: document is the single source', () => {
     expect(parsed.published.map((row) => row.subpath)).toEqual(exportKeys);
   });
 
-  it('publishes 122 subpaths and states that count in the document', () => {
+  it('publishes 43 subpaths and states that count in the document', () => {
     // 121 until `./surfaces/oauth-transition` left the package with WO-CAN-04
     // (F-18: a parallel design system with product identity and its own private
     // token namespace), and 121 again since WO-INV-02 published
     // `./fonts/arabic-text.css`, and 122 since WO-RET-02 published
-    // `./styles/frozen-engines` (the frozen-engine bundle split). The count is asserted three ways on purpose --
+    // `./styles/frozen-engines` (the frozen-engine bundle split). RET-01-E
+    // (WO-RET-01, 2026-10-02) retired 79 consumerless subpaths from the export
+    // map, leaving 43. The count is asserted three ways on purpose --
     // the export map, the parsed table and the prose -- so a retirement that
     // updates only one of them is a failure rather than a silent drift.
-    expect(exportKeys).toHaveLength(122);
-    expect(parsed.published).toHaveLength(122);
+    expect(exportKeys).toHaveLength(43);
+    expect(parsed.published).toHaveLength(43);
     expect(documentMarkdown).toContain(
-      '| Subpaths publicados | 122 |',
+      '| Subpaths publicados | 43 |',
     );
     expect(documentMarkdown).toContain(
-      '## 1. Superficie de importación sancionada (122/122)',
+      '## 1. Superficie de importación sancionada (43/43)',
     );
   });
 
@@ -131,16 +133,16 @@ describe('consumer contract: document is the single source', () => {
 
   it('rejects a document whose table drifts from its own grammar', () => {
     const broken = documentMarkdown.replace(
-      '| `./effects` | retire-by | WO-RET-01 |',
-      '| `./effects` | retire-by | — |',
+      '| `./styles/modern` | retire-by | WO-CAN-03 |',
+      '| `./styles/modern` | retire-by | — |',
     );
     expect(() => parseConsumerContract(broken)).toThrow(
       /retire-by but names no work order/,
     );
 
     const invented = documentMarkdown.replace(
-      '| `./effects` | retire-by | WO-RET-01 |',
-      '| `./effects` | allowed | — |',
+      '| `./styles/modern` | retire-by | WO-CAN-03 |',
+      '| `./styles/modern` | allowed | — |',
     );
     expect(() => parseConsumerContract(invented)).toThrow(
       /unknown disposition "allowed"/,
@@ -160,7 +162,7 @@ describe('consumer contract: document is the single source', () => {
  * assertion independent of the showroom's Next/ESLint dependency tree.
  */
 describe('showroom mounts the rule with a decrease-only baseline', () => {
-  const SHOWROOM_BASELINE_CAP = 9;
+  const SHOWROOM_BASELINE_CAP = 7;
 
   function showroomAllowSubpaths(config: string): string[] {
     const block = /allowSubpaths:\s*\[([^\]]*)\]/.exec(config);
@@ -206,8 +208,8 @@ describe('showroom mounts the rule with a decrease-only baseline', () => {
     expect(classifySubpath('./icons')?.disposition).toBe('guaranteed');
 
     // An unsanctioned subpath with no showroom consumer must never be baselined.
-    expect(classifySubpath('./effects')?.disposition).toBe('retire-by');
-    expect(measuredBySubpath.get('./effects')?.showroom).toBe(0);
+    expect(classifySubpath('./styles/modern')?.disposition).toBe('retire-by');
+    expect(measuredBySubpath.get('./styles/modern')?.showroom).toBe(0);
 
     // The cap is the current measurement: the list may only shrink.
     expect(baseline.length).toBeLessThanOrEqual(SHOWROOM_BASELINE_CAP);
@@ -230,17 +232,17 @@ describe('no-unsanctioned-ds-subpath', () => {
     }
   });
 
-  it('fails on a per-component subpath scheduled for retirement', () => {
+  it('fails on a governed subpath scheduled for retirement', () => {
     const { created, reports } = visitors();
     created.ImportDeclaration?.({
-      source: { value: '@rottay/design-system/primitives/button' },
+      source: { value: '@rottay/design-system/patterns/charts' },
     });
 
     expect(reports).toHaveLength(1);
     expect(reports[0]?.messageId).toBe('retireBy');
     expect(reports[0]?.data).toMatchObject({
-      specifier: '@rottay/design-system/primitives/button',
-      subpath: './primitives/button',
+      specifier: '@rottay/design-system/patterns/charts',
+      subpath: './patterns/charts',
       retiredBy: 'WO-RET-01',
     });
   });
@@ -286,18 +288,18 @@ describe('no-unsanctioned-ds-subpath', () => {
 
   it('covers re-exports, require and dynamic import', () => {
     const { created, reports } = visitors();
-    const source = { value: '@rottay/design-system/effects' };
+    const source = { value: '@rottay/design-system/styles/modern' };
 
     created.ExportAllDeclaration?.({ source });
     created.ExportNamedDeclaration?.({ source });
     created.ImportExpression?.({ source });
     created.CallExpression?.({
       callee: { type: 'Identifier', name: 'require' },
-      arguments: [{ value: '@rottay/design-system/effects' }],
+      arguments: [{ value: '@rottay/design-system/styles/modern' }],
     });
     created.CallExpression?.({
       callee: { type: 'Import' },
-      arguments: [{ value: '@rottay/design-system/effects' }],
+      arguments: [{ value: '@rottay/design-system/styles/modern' }],
     });
     created.ExportNamedDeclaration?.({});
 
@@ -315,7 +317,7 @@ describe('no-unsanctioned-ds-subpath', () => {
     ).toEqual([]);
 
     expect(
-      importFrom('@rottay/design-system/effects', [
+      importFrom('@rottay/design-system/styles/modern', [
         { allowSubpaths: ['./icons/presets/bithire'] },
       ]),
     ).toEqual(['retireBy']);

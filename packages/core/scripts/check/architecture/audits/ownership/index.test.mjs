@@ -260,15 +260,10 @@ test('root-attributes seam: one registry leaf, a consuming presentation leaf, a 
     'root-attributes facade must carry the exact 8-name surface',
   );
 
-  // (d) The public wrapper draws from ONE source, the registry leaf.
-  const wrapper = parse('entrypoints/public/runtime/root-attributes/index.ts');
-  const wrapperSpecifiers = [...moduleSpecifiers(wrapper), ...importSpecifiers(wrapper)];
-  assert.equal(wrapperSpecifiers.length, 1, 'public root-attributes wrapper must have exactly one specifier');
-  assert.equal(
-    resolveSourceModule('entrypoints/public/runtime/root-attributes/index.ts', wrapperSpecifiers[0]),
-    REGISTRY_LEAF,
-    'public root-attributes wrapper must resolve to the registry leaf',
-  );
+  // (d) RET-01-E (WO-RET-01, 2026-10-02) retired the public wrapper
+  // (`entrypoints/public/runtime/root-attributes`) with the rest of the
+  // consumerless governed subpaths; the seam law above is owned by the
+  // infrastructure owner itself, which stays.
 
   // (e) Attribute-only claimants narrow to the registry leaf; theming, the one
   // style/class consumer, draws from both leaves and never from the facade.

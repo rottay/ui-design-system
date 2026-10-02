@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { DesignSystemProvider } from "@/infrastructure/runtime/bootstrap";
-import { getKnownTenantConfig } from "@/entrypoints/public/runtime/tenant";
+import { getKnownTenantConfig } from "@/infrastructure/runtime/tenant/foundation/configuration/registry";
 import { BithireCandidateIcon } from "@/graphics/icons/semantic/generated/roles/bithire-candidate";
 import { ActionAddIcon } from "@/graphics/icons/semantic/generated/roles/action-add";
 import { NavigationSettingsIcon } from "@/graphics/icons/semantic/generated/roles/navigation-settings";

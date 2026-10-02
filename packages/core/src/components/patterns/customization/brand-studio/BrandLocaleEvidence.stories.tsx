@@ -15,11 +15,11 @@ import { expect, within } from 'storybook/test';
 import type { TenantConfig } from '@/foundation/contracts';
 import { useTranslation } from '@/infrastructure/runtime/i18n/composition';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
-import { getKnownTenantConfig } from '@/entrypoints/public/runtime/tenant';
+import { getKnownTenantConfig } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import {
   claimRootAttribute,
   composeRootAttributeReleases,
-} from '@/entrypoints/public/runtime/root-attributes';
+} from '@/infrastructure/runtime/foundation/root-attributes/registry';
 import {
   compileTenantThemeDocumentV2,
   documentThemeAdmission,
@@ -27,7 +27,7 @@ import {
   staticThemeIntent,
 } from '@/entrypoints/server';
 import type { TenantThemeDocumentV2 } from '@/entrypoints/server';
-import type { VisualAuthorityDeclaration } from '@/entrypoints/public/contracts/runtime';
+import type { VisualAuthorityDeclaration } from '@/infrastructure/runtime/theming/foundation/visual-authority';
 import bithireVerticalArtifact from '@/foundation/tokens/css/facade/artifacts/bithire/index.css?raw';
 import { Box } from '@/components/primitives/layout/box';
 import { Grid } from '@/components/primitives/layout/grid';
