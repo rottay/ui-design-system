@@ -607,6 +607,13 @@ tokens instead (contrast Tour and Popconfirm above, where the missing-token-surf
 gap on modern was an unintentional asymmetry, not a documented design decision).
 
 ## PORTAL VERDICT -- same in-tree/portal split as Popconfirm
+
+> SUPERSEDED 2026-10-02 (SHEET-1, commit 7ea79090c): the modern Sheet portals
+> through the shared kernel (`Portal` + `PortalScope`, anchor always rendered).
+> The "modern does not portal" claims here and at lines ~1377/~1447/~1449, and
+> the `SHEET_STYLES` injection / empty-fragment unmount descriptions (~664/~672),
+> describe the pre-kernel engine and survive only as the historical record.
+
 **Modern does not portal** -- in-tree `position:fixed` wrapper rendered wherever
 `<Sheet>` mounts (239-248). **Rustic portals directly** -- `createPortal(...,
 document.body)` (own `react-dom` import, not the shared `Portal` util, same as every

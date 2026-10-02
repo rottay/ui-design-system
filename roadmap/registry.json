@@ -5524,6 +5524,11 @@
      "at": "2026-10-01 10:38",
      "by": "Kimi K3",
      "note": "2026-10-01 waterfall barRadius lot: measured STOP (out-fam09-wf-opus.json). The dial law (skin-radius-dial-reach) admits only border-*-radius — SVG rx/ry need a ruling from that law's owner; no JS route exists (useResolvedChartGrammar reads vertical identity, not the tenant dial); a skin rx rule would override a caller's barRadius (stylesheet > presentation attribute) with no precedence pattern. The gap needs the chart-grammar design decision (SVG geometry in the dial law + caller precedence), registered here — NOT closed by the shape indicator passing. The renderer prop contract stays untouched."
+    },
+    {
+     "at": "2026-10-01 20:16",
+     "by": "Kimi K3",
+     "note": "2026-10-02 CLOSE CONDITIONS (finite list): (1) OWNER RULING — waterfall SVG barRadius: the dial law admits only border-*-radius; SVG rx/ry needs the chart-grammar design decision (SVG geometry in the dial law + caller precedence — a skin rx rule would override a caller's barRadius). Lote responsable: chart-grammar design packet once ruled; evidencia: the ruling + per-cell paint measurement. (2) chart-line's authored dome re-review rides that ruling (its registry entry publishes INEFFECTIVE until then). (3) The rest of the cut's acceptances are DONE (one series paint resolver + pure geometry, dt34-certified)."
     }
    ]
   },
@@ -5729,6 +5734,16 @@
      "at": "2026-10-01 18:40",
      "by": "Kimi K3",
      "note": "2026-10-01 drawer-padding registration (from the LIV wave): --ds-app-shell-navigation-drawer-body-padding is PROVEN PAINTED (LIV-4 probe, 0/7px/13px/0 through the Modern Sheet body) and now classifies LIVE_PROBE_PAINTED (LIV-7). Its liveness pin is discharged; the RESIDUAL concern lives HERE: the application is an inline bodyStyle (app-shell/index.tsx:435) that exists to beat the frozen engines' own inline body padding (rustic sheet:260, classic on antd's drawer body). Moving it to a CSS route repaints classic and rustic drawers at rest — a frozen-engine paint decision, STANDING, not scheduled. The cut law (WorkspaceShell.cut.test.tsx:36) independently forbids position fixes in the structure TS."
+    },
+    {
+     "at": "2026-10-01 20:16",
+     "by": "Kimi K3",
+     "note": "2026-10-02 CLOSE CONDITIONS (finite list, owner directive #1): (1) B23-shape density acceptance tests for the 7 claiming families (app-shell, command-palette, shortcuts-overlay, action-dock, scope-switcher, search-command-bar, surface-chrome) — DISPATCHED today in two disjoint lots (B23-A/B23-B), portaled roots included per the DEN-2 lesson; evidencia: per-family local-scope integration tests green with b1/b2/b3 arms. (2) App-side :is() migration of the 4 registered files — HELD until the target repos are quiet (explicit reservations stand). (3) rottay-* hook retirement after the post-bump validation. (4) no-rottay-class arm closes with (2)+(3). (5) STANDING decision (not closing): the drawer padding's inline application beats the frozen engines' inline padding — a frozen-engine paint decision, registered, unscheduled."
+    },
+    {
+     "at": "2026-10-01 20:23",
+     "by": "Kimi K3",
+     "note": "2026-10-02 CORRECTION to item (4) of the close conditions: the 7 families' B23-shape local-scope tests ALREADY EXIST and pass (landed in the density waves e845336c3 / 1f17755c7 / 8b138bc05 / 802aa2120 — the DEN-1 premise that they were pending was stale; verified by both dispatched lots, focal runs: app-shell 11/11, action-dock 11/11, surface-chrome 10/10, the four overlay families 43 tests green). What item (4) actually owed was the PORTALED-ROOT arms — and scouting them exposed a REAL DEFECT: the modern Sheet portals WITHOUT PortalScope (WO-CAN-05 prescribes Portal+PortalScope for every panel family), so the app-shell drawer ignores local density scopes AND tenant attributes (measured in a live render: the drawer under data-density=compact computes the root posture). SHEET-1 dispatched (PortalScope adoption, at-rest identity proof required). A second finding: command-palette's existing portal arms pin markup the runtime never builds (the real Modal stamps data-density + inlines the lineage's computed --ds-* via readDsPortalVariables with a live MutationObserver); B23-C dispatched (honest arm + helper extension + CARRIED pin re-rule). Also registered: app-shell's commit message records 6/11 channels red without the claim — 5/11 are NOT proven by the claim (named for a follow-up look); wo-skin-04-overlay-inventory.md says modern Sheet does not portal — stale, exact line pending the SHEET-1 receipt."
     }
    ]
   },
@@ -7106,6 +7121,16 @@
      "at": "2026-10-01 20:12",
      "by": "Kimi K3",
      "note": "2026-10-01 tanda 8l: the chromatic line's post-publication Fable review (owner directive — evidence apart, never a numerator): ACCEPT (out-cr2-postreview-fable.json). Verified on the exact candidate: the exclusion is STRUCTURAL (chromatic readings never enter result.cells; the indicator's status reads only cells + the reconciliation row; STATUS row 7 cannot see the block); the data-table chromatic-only pin is fail-closed and drift-refused in BOTH directions (injected drift fails evaluate() per cell); 52/155 traced correct (declared 155, the 6 colour-only families named in unreached, unobservable 9 reported beside, nothing subtracted); controls 36/36 + 12/12 green; focal suites re-run 292/0/0. Non-blocking notes registered: the forbidden-key guard does not cover the controls sub-objects; the drift refusal lives in the instrument, not the artifact; trail labels corrected (CR-1 = tanda 8, CR-2 = tanda 8d)."
+    },
+    {
+     "at": "2026-10-01 20:16",
+     "by": "Kimi K3",
+     "note": "2026-10-02 CLOSE CONDITIONS (owner directive 2026-10-01 #1-2 — the finite list, lote responsable y evidencia): (a) LIVENESS/R1 — owner rulings on the 24 readerless AUE rows (package: .tmp/dispatch-2026-09-21/owner-decisions-liveness-retirements.md — accent x10 / tints 16-24 x8 / glass x2 + overlay x3 / info-300; retirement is a contract decision with named impact, never a green-chasing move), then effect verdict greens and --write emits R1 (evidence: the artifact + gate green). Pending instrument debts registered: secondary-400 inline-TSX limitation, reconcile oracle gap 117. (b) CAPABILITY-PROPAGATION — owner rulings: token-overrides (catalog vs registry mismatch, measured) and opening the expressive family on rottay/evnto; the computed-style 3x2 leg lands in CI at publication. (c) HARDCODE-CENSUS — owner ruling: named gate vs family-cut+engine-token-audit coverage. (d) CONTRACTS — DONE: gate green vs origin/main, delivery changeset 5c9c5a95c (re-verified 10-01). (e) CI EVIDENCE — nominal until the owner authorizes publication; the liveness probe leg already rides the visual config. (f) dt35 CERTIFICATION at the next defined checkpoint: must include the density-scope suite (dt34 never covered it) and my visual classification of the CAP-3 anatomy repaint + LIV-6 particle paint. The six axes stand 5/6 + states 76.1% under STATES-K — no population cut without a contractual justification."
+    },
+    {
+     "at": "2026-10-01 20:57",
+     "by": "Kimi K3",
+     "note": "2026-10-02 tanda 9b: SHEET-1 LANDED 7ea79090c (Fable ACCEPT-WITH-CHANGES discharged: ds-sheet-anchor class + display:contents skin rule + family-cut re-pin 10->11 from the gate's own output; the gate never ran in the writer's acceptance list — CAUGHT BY FABLE, process note: gate must be in every component lot's acceptance). MODAL-1 LANDED 4a0629822 (Fable ACCEPT; portal-scope gains usePortalScopeConsumer; Modal registers gated on shouldRender; the docs now state the spread-snapshot contract). TOUR-1 LANDED 0b0e32bf0 (same design, Fable-covered; DT-audited; 82/82). TWO ROUTED FINDINGS: (1) the sheet's own --ds-sheet-* paddings are :root-declared and never rescale locally even in-tree (sheet skin index.css:20-30) — the density roster's frozen-root-input class, SAME shape as popover's exemption; routed to the density roster lane for a PENDING/EXEMPT disposition with the measured reason; (2) PortalScope's flatten freezes media-driven channels (breakpoints/reduced-motion/contrast/print) while an overlay stays open — a residual of EVERY PortalScope adopter, sheet the most resize-exposed; routed to the portal lane (needs a re-read trigger on media change, a designed fix, not incidental). wo-skin-04's stale portal claims carry a dated supersession note (doc correction, DT)."
     }
    ]
   },
@@ -7571,6 +7596,11 @@
      "at": "2026-09-29 13:30",
      "by": "kimi-admin-dt",
      "note": "OWNER DECISION 2026-09-29 (consolidated directive §4): the final branding pick (D-30) is DEFERRED by the owner and does NOT gate technical validation. The experimental identity map: BitHire organic/smooth (rounded, spacious, soft depth), Rottay minimalist (sober, contained motion), Evnto graphic (squarer geometry, marked borders, emphatic states), The Management editorial (typography-led, strong hierarchy, air), and a fifth EXPERIMENTAL tenant provisionally named Atelier (technical: compact, precise, functional) as a FIXTURE over a compatible vertical — not a new app, engine or vertical. The two-tenants-of-one-vertical proof stays mandatory via fixtures using two of the experimental styles. Differences must survive a shared palette and be measured on the six axes per the existing contract. This WO stays OPEN pending the deferred pick; its capability evidence does not wait. No identity invented by the DS team."
+    },
+    {
+     "at": "2026-10-01 20:16",
+     "by": "Kimi K3",
+     "note": "2026-10-02 CLOSE CONDITIONS (finite list): the single pending acceptance is the owner's deferred final branding pick (D-30, deferred 2026-09-29 — does not gate technical validation). Everything technical stands: the experimental identity map (5 tenants incl. Atelier as fixture), the two-tenants-of-one-vertical fixture proof, six-axis measured differences surviving a shared palette. Evidencia para cerrar: la decisión del owner registrada acá. No identity invented by the DS team."
     }
    ]
   },
