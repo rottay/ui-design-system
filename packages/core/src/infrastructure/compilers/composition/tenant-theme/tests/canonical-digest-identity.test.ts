@@ -524,11 +524,25 @@ describe("digest identity across the canonicalization extraction", () => {
       "sha256-4a7dd8ef14d9102a67b61b3420bf1a24b4a2d39379686776ef23eee22b42b326";
     const POST_ARABIC_FONT_PACK_CONFIG_DIGEST =
       "sha256-3062ff22278b26bf6d8ae59e6a8ead8f91035072811ba6a3df5f53447e0459e5";
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       POST_ARABIC_FONT_PACK_DOCUMENT_DIGEST
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_ARABIC_FONT_PACK_CONFIG_DIGEST
+    );
+    // RET-ACC (2026-10-02, owner ruling 1 of WO-EVI-02): a declared NARROWING.
+    // The ten accent ramp steps left the reference-token roster and are refused
+    // by name at admission. Attributed by A/B: with the three source files of
+    // this lot at their HEAD content both sentinels measure the pair above.
+    const POST_ACCENT_RAMP_RETIREMENT_DOCUMENT_DIGEST =
+      "sha256-d9f15eb2a0a3eee6e160c6bfdedd2063a8a55ad6d29ef2da3fada0e5c8129f30";
+    const POST_ACCENT_RAMP_RETIREMENT_CONFIG_DIGEST =
+      "sha256-0ffe6baf9b180cfb1da5bc82b6b14f56f60e50ed1e3d4d5ef15608bfc4f1b368";
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      POST_ACCENT_RAMP_RETIREMENT_DOCUMENT_DIGEST
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      POST_ACCENT_RAMP_RETIREMENT_CONFIG_DIGEST
     );
   });
 

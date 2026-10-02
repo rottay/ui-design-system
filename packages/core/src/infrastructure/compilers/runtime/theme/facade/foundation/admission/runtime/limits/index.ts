@@ -44,6 +44,8 @@ import {
 import {
   TENANT_THEME_CONFIG_SCHEMA,
   isSafeVisualValue,
+  retiredReferenceMessage,
+  retiredVisualReference,
   type TenantThemeSchemaNode,
 } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme";
 import type { ThemeAdmissionIssue } from "../../foundation/issues";
@@ -176,6 +178,15 @@ export function authoredValueIssues(
           code: "unsafe_value",
           path,
           message: `Reference cycle: var(${cyclic}) resolves to a channel this override writes`,
+        });
+        return;
+      }
+      const retired = retiredVisualReference(value);
+      if (retired !== null) {
+        issues.push({
+          code: "unsafe_value",
+          path,
+          message: retiredReferenceMessage(retired),
         });
         return;
       }

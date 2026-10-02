@@ -516,11 +516,21 @@ describe("TenantThemeConfig v1 server contract", () => {
     // copies of the parent `db8e57542` (which measures the superseded pair
     // byte-exact) and of `90b75bfd5`, the window's other schema-shaped lot,
     // which moves neither digest.
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       "sha256-4a7dd8ef14d9102a67b61b3420bf1a24b4a2d39379686776ef23eee22b42b326"
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-3062ff22278b26bf6d8ae59e6a8ead8f91035072811ba6a3df5f53447e0459e5"
+    );
+    // RET-ACC (2026-10-02, owner ruling 1 of WO-EVI-02): a declared NARROWING.
+    // The ten accent ramp steps left the reference-token roster -- never
+    // emitted, never read -- and are refused by name at admission. Nothing else
+    // in either schema moved, so the superseded pins drop to `not.toBe`.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      "sha256-d9f15eb2a0a3eee6e160c6bfdedd2063a8a55ad6d29ef2da3fada0e5c8129f30"
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      "sha256-0ffe6baf9b180cfb1da5bc82b6b14f56f60e50ed1e3d4d5ef15608bfc4f1b368"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(

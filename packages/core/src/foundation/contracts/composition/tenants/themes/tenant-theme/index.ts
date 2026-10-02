@@ -256,7 +256,6 @@ export const TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS = [
 const TENANT_THEME_COLOR_ROLES = [
   "primary",
   "secondary",
-  "accent",
   "success",
   "warning",
   "error",
@@ -265,6 +264,13 @@ const TENANT_THEME_COLOR_ROLES = [
 const TENANT_THEME_COLOR_STEPS = [
   50, 100, 200, 300, 400, 500, 600, 700, 800, 900,
 ] as const;
+
+/**
+ * Referenceable once and retired: the compiler emits no accent ramp step, so a
+ * `var()` citing one would resolve to nothing. Admission refuses it by name.
+ */
+export const TENANT_THEME_RETIRED_REFERENCE_TOKENS: readonly string[] =
+  Object.freeze(TENANT_THEME_COLOR_STEPS.map((step) => `--ds-color-accent-${step}`));
 
 /**
  * Public semantic variables an authored Advanced value may reference with

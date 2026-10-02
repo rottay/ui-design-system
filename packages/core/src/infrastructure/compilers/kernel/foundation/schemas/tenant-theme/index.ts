@@ -19,6 +19,7 @@ import {
   TENANT_THEME_OVERRIDE_TOKENS,
   TENANT_THEME_RADIUS_SCALE_BOUNDS,
   TENANT_THEME_REFERENCE_TOKENS,
+  TENANT_THEME_RETIRED_REFERENCE_TOKENS,
   TENANT_THEME_FONT_PACK_IDS,
   TENANT_THEME_SCHEMA_VERSION,
   TENANT_THEME_TYPE_SCALE_BOUNDS,
@@ -2261,6 +2262,23 @@ function admitsSidebarGeometryReset(path: string, field: string): boolean {
   );
 }
 
+const RETIRED_REFERENCES: ReadonlySet<string> = new Set(
+  TENANT_THEME_RETIRED_REFERENCE_TOKENS
+);
+
+/** The first retired channel an authored value cites with `var()`, or null. */
+export function retiredVisualReference(value: string): string | null {
+  for (const match of value.matchAll(/var\(\s*(--[a-z0-9-]+)/gi)) {
+    if (RETIRED_REFERENCES.has(match[1])) return match[1];
+  }
+  return null;
+}
+
+/** The refusal an authored value citing a retired channel receives. */
+export function retiredReferenceMessage(channel: string): string {
+  return `Retired reference: var(${channel}) is no longer a tenant-referenceable channel; the compiler emits no value for it`;
+}
+
 /**
  * True when a value cannot terminate its declaration, open a comment, fetch,
  * or exceed an authored cap.
@@ -2513,9 +2531,19 @@ export function validateTenantThemeNode(
     case "font-family":
       valid = isSafeFontFamily(value);
       break;
-    case "visual-value":
+    case "visual-value": {
+      const retired = retiredVisualReference(value);
+      if (retired !== null) {
+        issues.push({
+          code: "unsafe_value",
+          path,
+          message: retiredReferenceMessage(retired),
+        });
+        return;
+      }
       valid = isSafeVisualValue(value, path);
       break;
+    }
   }
   if (!valid)
     issues.push({
