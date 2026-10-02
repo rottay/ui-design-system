@@ -3651,14 +3651,15 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     assert.ok(failures.some((line) => line.includes('witness moved 13 and published 13 id(s) / 12 famil(ies)')), failures.join(' | '));
   });
 
-  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 9 on states, 0 elsewhere', () => {
+  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 8 on states, 0 elsewhere', () => {
     const live = axisUnobservable(ROOT);
     const asRun = Object.fromEntries(AXIS_IDS.map((axis) => [axis, live.get(axis)]));
     assert.deepEqual(unobservableDrift(asRun), []);
     // Movers of the pin (8 -> 9, STATES-K 2026-10-01): record-facts and scope-switcher
     // leave with the population; edit-fields, table-toolbar and form-builder enter with it.
-    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 9);
-    assert.deepEqual(Object.values(UNOBSERVABLE_FAMILIES.states).filter((kind) => kind === 'colour-only').length, 6);
+    // 9 -> 8 (OVM 2026-10-02): overlay-modal-compounds leaves with its retired orphan rules.
+    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 8);
+    assert.deepEqual(Object.values(UNOBSERVABLE_FAMILIES.states).filter((kind) => kind === 'colour-only').length, 5);
     assert.deepEqual(Object.entries(UNOBSERVABLE_FAMILIES.states).filter(([, kind]) => kind === 'no-vocabulary').map(([family]) => family),
       ['button-group', 'form-builder', 'metrics-rows']);
     assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'surface-states'), false, 'its disabled opacity is read');

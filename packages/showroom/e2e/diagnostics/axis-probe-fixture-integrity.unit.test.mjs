@@ -23,7 +23,7 @@ import { familyElements } from '../../../core/scripts/check/theme/axis-differenc
  * the design system claims to paint correspond to what the components render --
  * and `test:diagnostics` is the one inventory that asks it.
  *
- * WHAT IS PINNED AND WHY. Seven fixtures carry a class no literal in the corpus
+ * WHAT IS PINNED AND WHY. Six fixtures carry a class no literal in the corpus
  * contains, because the component COMPOSES it at runtime from a base name and
  * the engine suffix (`ds-button` + `--modern`). They are named here so the
  * list can only shrink, and so a genuinely invented selector -- the defect this
@@ -40,9 +40,6 @@ const COMPOSED_TOKENS = new Map([
   ['card', ['ds-card--modern']],
   ['tabs', ['ds-tabs--modern']],
   ['upload', ['ds-upload--picture-card']],
-  // The header rules retired in 1e12293c3 (a live second authority paints ds-modal-header);
-  // the fixture now lands on the footer rule, which still ships until the token drain wave.
-  ['overlay-modal-compounds', ['rottay-overlay-modal-footer']],
   ['surface-accent-bar', ['ds-accent-bar']],
 ]);
 

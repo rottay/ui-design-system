@@ -192,7 +192,7 @@ describe('tenant-difference-by-axis indicator', () => {
   it('publishes the unobservable count per axis beside the declared denominator, named, and never subtracts it', () => {
     const indicator = build(fleetResult({ states: 117 }));
     assert.equal(indicator.axes.states.declared, 155);
-    assert.equal(indicator.axes.states.unobservable, 9);
+    assert.equal(indicator.axes.states.unobservable, 8);
     assert.deepEqual(indicator.axes.states.unobservableFamilies.map((entry) => entry.family),
       Object.keys(UNOBSERVABLE_FAMILIES.states));
     assert.equal(indicator.axes.states.worstPercentDeclared, 75.5);
@@ -320,7 +320,7 @@ describe('tenant-difference-by-axis indicator', () => {
     assert.deepEqual(block.chromaticOnlyPinned, ['data-table']);
     assert.deepEqual(block.unreached, Object.entries(UNOBSERVABLE_FAMILIES.states)
       .filter(([, kind]) => kind === 'colour-only').map(([family]) => family));
-    assert.deepEqual(block.unreached, ['edit-fields', 'list', 'metrics-chart', 'operational-ledger', 'overlay-modal-compounds', 'table-toolbar']);
+    assert.deepEqual(block.unreached, ['edit-fields', 'list', 'metrics-chart', 'operational-ledger', 'table-toolbar']);
     // The controls: 36 + 12 = 48 non-chromatic cells at the law (not 54).
     assert.equal(block.controls['palette-only'].nonChromatic, '0 on 36/36 (the law)');
     assert.equal(block.controls['palette-only'].chromatic, 115);
@@ -329,7 +329,7 @@ describe('tenant-difference-by-axis indicator', () => {
     assert.equal(block.controls['states-emphasis-only'].chromatic, 22);
     assert.deepEqual(block.controls['states-emphasis-only'].channels, ['background-color']);
     assert.equal(block.line, 'chromatic-states (reported apart, never a status): 52/155 declared (33.5 %), 52/147 effective '
-      + '(35.4 %), every cell; rest-isolated 51; chromatic-only: data-table; unreached: 6 colour-only families; '
+      + '(35.4 %), every cell; rest-isolated 51; chromatic-only: data-table; unreached: 5 colour-only families; '
       + 'palette-only non-chromatic 0 on 36/36 | chromatic 115 (reference)');
     const keys = Object.keys(indicator);
     assert.equal(keys.indexOf('chromaticStates'), keys.indexOf('axes') + 1);

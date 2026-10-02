@@ -346,8 +346,12 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.deepEqual(pin.provenance.membershipMoves.shape.removed, ['radio']);
 
     const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
-    // Movers: CL104 re-review 2026-10-01 (Fable) -- chart-line re-enters shape (214 -> 215, N/A 4 -> 3).
+    // Movers: CL104 re-review 2026-10-01 (Fable) -- chart-line re-enters shape (214 -> 215, N/A 4 -> 3);
+    // OVM 2026-10-02 (owner ruling 4 + Fable) -- the overlay-modal-compounds orphans retire (215 -> 214);
+    // GLASS-1 (owner ruling 3) -- the glass-card skin enters shape and depth (214 -> 215).
     assert.equal(floor.axes.shape, 215);
+    assert.deepEqual(floor.provenance.membershipMoves.orphanRetirement.byAxis,
+      Object.fromEntries(['shape', 'depth', 'states'].map((axis) => [axis, { removed: ['overlay-modal-compounds'], added: [] }])));
     assert.equal(floor.notApplicable.shape, 3);
     assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.removed, ['chart-pie', 'table-toolbar']);
     assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.reEntered, ['chart-line']);
@@ -877,18 +881,19 @@ describe('theme population — per-rule state evidence and the unobservable coun
     assert.ok(cited > 100, `only ${cited} families cite a state rule`);
   });
 
-  it('PIN (A4): 9 declaring states families are unobservable on this tree -- 6 colour-only + 3 no-vocabulary -- reported beside the denominator and not subtracted', () => {
+  it('PIN (A4): 8 declaring states families are unobservable on this tree -- 5 colour-only + 3 no-vocabulary -- reported beside the denominator and not subtracted', () => {
     // Movers of the pin (8 -> 9, STATES-K 2026-10-01): record-facts and
     // scope-switcher leave with the population; edit-fields, table-toolbar
-    // (colour-only) and form-builder (cursor) enter with it.
+    // (colour-only) and form-builder (cursor) enter with it. 9 -> 8 (OVM
+    // 2026-10-02): overlay-modal-compounds leaves with its retired orphan rules.
     const report = populationReport();
     const states = report.axes.find((entry) => entry.axis === 'states');
-    assert.equal(states.denominator, 155);
-    assert.equal(states.unobservableCount, 9);
+    assert.equal(states.denominator, 154);
+    assert.equal(states.unobservableCount, 8);
     assert.deepEqual(states.unobservable.map((entry) => `${entry.family}:${entry.class}`), [
       'button-group:no-vocabulary', 'edit-fields:colour-only', 'form-builder:no-vocabulary', 'list:colour-only',
       'metrics-chart:colour-only', 'metrics-rows:no-vocabulary', 'operational-ledger:colour-only',
-      'overlay-modal-compounds:colour-only', 'table-toolbar:colour-only',
+      'table-toolbar:colour-only',
     ]);
     for (const entry of states.unobservable) assert.ok(states.families.includes(entry.family), entry.family);
     for (const entry of report.axes.filter((axis) => axis.axis !== 'states')) assert.equal(entry.unobservableCount, 0, entry.axis);
@@ -907,7 +912,7 @@ describe('theme population — per-rule state evidence and the unobservable coun
     assert.deepEqual(after.find((entry) => entry.family === 'drill-colour-state'),
       { family: 'drill-colour-state', class: 'colour-only', properties: ['background-color'] });
     const states = populationReport(dir, catalogIn(dir)).axes.find((entry) => entry.axis === 'states');
-    assert.equal(states.denominator, 156, 'unobservable is reported, never subtracted');
+    assert.equal(states.denominator, 155, 'unobservable is reported, never subtracted');
   });
 
   it('a state declaration is one in a K1 rule; a state-suffixed channel name, a domain value and an at-rule prelude are not', () => {
@@ -1075,12 +1080,14 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     assert.deepEqual(hovered.states.stateGates, hovered.expected);
   });
 
-  it('D6: on this tree the states population is 155 -- five leavers, four entrants, every indicator-15 mover a member, the other axes unmoved', () => {
+  it('D6: on this tree the states population is 154 -- five leavers, four entrants, every indicator-15 mover a member, the other axes unmoved', () => {
     const report = populationReport();
     const byAxis = Object.fromEntries(report.axes.map((entry) => [entry.axis, entry]));
     const states = byAxis.states.families;
-    assert.equal(report.skinFamilies, 277);
-    assert.equal(byAxis.states.denominator, 155);
+    // 277 -> 278 (GLASS-1): the glass-card skin enters the corpus, shape and depth.
+    assert.equal(report.skinFamilies, 278);
+    // 155 -> 154 (OVM 2026-10-02): overlay-modal-compounds leaves states, shape and depth with its orphan rules.
+    assert.equal(byAxis.states.denominator, 154);
     for (const family of LEAVERS) assert.ok(!states.includes(family), `${family} must leave states`);
     for (const family of ENTRANTS) assert.ok(states.includes(family), `${family} must enter states`);
     assert.equal(MOVERS.length, 118);
@@ -1109,10 +1116,10 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     assert.deepEqual([...keptOutBy.negation], []);
   });
 
-  it('D7: the floor holds at 155; the pre-amendment pin (156) is refused BELOW, a pin at 154 ABOVE', () => {
+  it('D7: the floor holds at 154; the pre-amendment pin (156) is refused BELOW, a pin at 153 ABOVE', () => {
     assert.deepEqual(checkPopulationFloor().failures, []);
     const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
-    assert.equal(floor.axes.states, 155);
+    assert.equal(floor.axes.states, 154);
     const dir = mkdtempSync(join(tmpdir(), 'evi02-states-k-'));
     sandboxes.push(dir);
     const at = (states) => {
@@ -1120,16 +1127,16 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
       writeFileSync(path, JSON.stringify({ ...floor, axes: { ...floor.axes, states } }));
       return checkPopulationFloor(ROOT, undefined, path).failures;
     };
-    assert.ok(at(156).some((line) => line.startsWith('states: denominator 155 is BELOW its floor 156')), at(156).join(' | '));
-    assert.ok(at(154).some((line) => line.startsWith('states: denominator 155 is ABOVE its pin 154')), at(154).join(' | '));
+    assert.ok(at(156).some((line) => line.startsWith('states: denominator 154 is BELOW its floor 156')), at(156).join(' | '));
+    assert.ok(at(153).some((line) => line.startsWith('states: denominator 154 is ABOVE its pin 153')), at(153).join(' | '));
   });
 
-  it('D8: 9 declaring states families are unobservable -- surface-states is not one (opacity is read) -- and none is subtracted', () => {
+  it('D8: 8 declaring states families are unobservable -- surface-states is not one (opacity is read) -- and none is subtracted', () => {
     const states = populationReport().axes.find((entry) => entry.axis === 'states');
     assert.deepEqual(states.unobservable.map((entry) => `${entry.family}:${entry.class}`), [
       'button-group:no-vocabulary', 'edit-fields:colour-only', 'form-builder:no-vocabulary', 'list:colour-only',
       'metrics-chart:colour-only', 'metrics-rows:no-vocabulary', 'operational-ledger:colour-only',
-      'overlay-modal-compounds:colour-only', 'table-toolbar:colour-only',
+      'table-toolbar:colour-only',
     ]);
     assert.ok(!states.unobservable.some((entry) => entry.family === 'surface-states'));
     for (const entry of states.unobservable) assert.ok(states.families.includes(entry.family), entry.family);

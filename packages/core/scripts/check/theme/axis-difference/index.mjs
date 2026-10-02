@@ -3394,6 +3394,9 @@ export function realRenderRefusedRowFailures(root = CORE_ROOT, {
  * because of colour; edit-fields and table-toolbar (colour-only) and
  * form-builder (`cursor`, no-vocabulary) enter with it. surface-states enters
  * the population and is NOT here: its disabled opacity is read.
+ *
+ * Re-pinned 9 -> 8 by the OVM orphan retirement (owner ruling 4, Fable
+ * 2026-10-02): overlay-modal-compounds leaves the population with its rules.
  */
 export const UNOBSERVABLE_FAMILIES = Object.freeze({
   shape: Object.freeze({}),
@@ -3408,7 +3411,6 @@ export const UNOBSERVABLE_FAMILIES = Object.freeze({
     'metrics-chart': 'colour-only',
     'metrics-rows': 'no-vocabulary',
     'operational-ledger': 'colour-only',
-    'overlay-modal-compounds': 'colour-only',
     'table-toolbar': 'colour-only',
   }),
   motion: Object.freeze({}),
