@@ -16,6 +16,21 @@ import { resolveVisualAuthority as resolveFromPublic } from '@/entrypoints/publi
 import * as retention from '../runtime/retention';
 import type { RuntimeVisualPayloadCensus } from '../foundation/admission';
 import { stampTenantThemeScope } from './mount-fixture';
+import { withRootAliases } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css';
+import { verticalOutright } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
+
+const FIXTURE_VARIABLES = { '--ds-color-primary': '#123456' } as const;
+
+/**
+ * The root-alias restatements the N1/D2 emission law appends to the base rule
+ * (changeset 5c9c5a95c); the handcoded CSS predates the law and sat red until
+ * 2026-10-02. Derived from the law, never pasted; the frame around it stays literal.
+ */
+const ALIAS_RESTATEMENTS = Object.entries(
+  withRootAliases(FIXTURE_VARIABLES, [], verticalOutright('rottay')),
+).filter(([name]) => !(name in FIXTURE_VARIABLES));
+const ALIAS_RESTATEMENT_COUNT = 239;
+const ALIAS_RESTATEMENT_LINES = ALIAS_RESTATEMENTS.map(([name, value]) => `  ${name}: ${value};\n`).join('');
 
 /**
  * A hand-authored artifact fixture, NOT produced by `compileTenantThemeConfig`.
@@ -30,7 +45,7 @@ const FIXTURE: TenantThemeArtifact = {
   compilerVersion: 'tenant-theme-compiler@4',
   coverage: ['visual-branding', 'token-overrides', 'appearance', 'brand-chrome'] as const,
   normalizedAppearance: {},
-  variables: { '--ds-color-primary': '#123456' },
+  variables: FIXTURE_VARIABLES,
   scopes: {
     root: {
       attribute: 'data-ds-root',
@@ -49,7 +64,7 @@ const FIXTURE: TenantThemeArtifact = {
     combinedSelector: '[data-ds-root][data-vertical="rottay"][data-tenant][data-tenant="manual"]',
   },
   digest: 'sha256-0d97e85c7d2b63427c3d3f8317b0239b86f808e5d3d5f39c108b0f7977ea2c4c',
-  css: '/* TenantThemeArtifact v1 | tenant-theme-compiler@4 | sha256-0d97e85c7d2b63427c3d3f8317b0239b86f808e5d3d5f39c108b0f7977ea2c4c */\n[data-ds-root][data-vertical="rottay"][data-tenant][data-tenant="manual"] {\n  --ds-color-primary: #123456;\n}\n',
+  css: `/* TenantThemeArtifact v1 | tenant-theme-compiler@4 | sha256-0d97e85c7d2b63427c3d3f8317b0239b86f808e5d3d5f39c108b0f7977ea2c4c */\n[data-ds-root][data-vertical="rottay"][data-tenant][data-tenant="manual"] {\n  --ds-color-primary: #123456;\n${ALIAS_RESTATEMENT_LINES}}\n`,
 };
 
 const EMPTY_PAYLOAD: RuntimeVisualPayloadCensus = {
@@ -83,6 +98,10 @@ describe('visual-authority admission', () => {
 
   it('does not expose the retention ledger as part of the public export set', () => {
     expect('RETENTION_LEDGERS' in retention).toBe(false);
+  });
+
+  it('pins the N1/D2 restatement set the handcoded CSS carries', () => {
+    expect(ALIAS_RESTATEMENTS).toHaveLength(ALIAS_RESTATEMENT_COUNT);
   });
 
   it('accepts the handcoded v1 artifact fixture', () => {
