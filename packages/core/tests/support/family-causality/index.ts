@@ -192,7 +192,7 @@ export async function mountDocumentArm(
 /** The surface a consumer mounts a family on: the canvas ground and its ink. */
 const SURFACE_STYLE = 'background: var(--ds-color-bg-primary); color: var(--ds-color-text-primary); padding: 16px;';
 
-interface ChromiumLike {
+export interface ChromiumLike {
   launch(): Promise<{
     newContext(options?: { hasTouch?: boolean; isMobile?: boolean }): Promise<{
       newPage(): Promise<ProbePage>;
@@ -201,7 +201,7 @@ interface ChromiumLike {
   }>;
 }
 
-interface ProbePage {
+export interface ProbePage {
   setContent(html: string): Promise<void>;
   addStyleTag(options: { content: string }): Promise<unknown>;
   addScriptTag(options: { content: string }): Promise<unknown>;
@@ -210,7 +210,7 @@ interface ProbePage {
   close(): Promise<void>;
 }
 
-function resolveChromium(): ChromiumLike {
+export function resolveChromium(): ChromiumLike {
   const roots = [
     resolve(CORE_ROOT, 'package.json'),
     resolve(CORE_ROOT, '../../package.json'),
