@@ -65,9 +65,9 @@
     "componentSuppliers": 374,
     "reads": 7699,
     "hooks": 107,
-    "unadjudicatedReads": 1209,
+    "unadjudicatedReads": 1205,
     "promoted": 107,
-    "styleFiles": 499,
+    "styleFiles": 500,
     "componentFiles": 1324
   },
   "declaredSlots": {
@@ -2087,10 +2087,6 @@
     "--ds-modal-btn-font-size",
     "--ds-modal-btn-padding",
     "--ds-modal-btn-radius",
-    "--ds-modal-close-button-color",
-    "--ds-modal-close-button-hover-bg",
-    "--ds-modal-close-button-hover-color",
-    "--ds-modal-close-button-radius",
     "--ds-notification-center-list-max-height",
     "--ds-notification-center-message-color",
     "--ds-notification-center-panel-width",

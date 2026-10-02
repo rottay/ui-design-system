@@ -2783,6 +2783,26 @@
       "decisions": [
         "density.mode",
         "experience.profile",
+        "profiles.expressive",
+        "shape.button-style",
+        "shape.control-height",
+        "shape.nesting",
+        "shape.radius-scale",
+        "spacing.rhythm",
+        "states.emphasis",
+        "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.effect-intensity",
+        "surfaces.elevation-posture",
+        "typography.pairing",
+        "typography.scale"
+      ],
+      "family": "glass-card"
+    },
+    {
+      "decisions": [
+        "density.mode",
+        "experience.profile",
         "motion.character",
         "motion.dial",
         "palette.contrast-posture",
@@ -3828,22 +3848,7 @@
       "tier": "primitive"
     },
     {
-      "decisions": [
-        "experience.profile",
-        "palette.contrast-posture",
-        "palette.neutral-temperature",
-        "palette.seeds",
-        "palette.status-seeds",
-        "profiles.expressive",
-        "shape.button-style",
-        "shape.radius-scale",
-        "states.emphasis",
-        "states.focus-style",
-        "surfaces.border-style",
-        "surfaces.elevation-posture",
-        "typography.pairing",
-        "typography.scale"
-      ],
+      "decisions": [],
       "family": "overlay-modal-compounds"
     },
     {

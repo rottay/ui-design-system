@@ -51546,72 +51546,11 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 @layer rottay-components {
 /**
- * overlay/Modal compounds + shared utils (WO-SKIN-04 checkpoint P).
- *
- * INERT AS SHIPPED — do not read the rules below as live paint.
+ * Shared overlay utils: the rustic engine's backdrop (`.rottay-overlay`) and
+ * the FocusTrap reset. Modal compound paint lives in `modal-compounds`.
  *
  * DELIBERATELY UNLAYERED, same rationale as every engine skin (P-47).
- *
- * This file was written when `primitives/overlay/Modal` looked like a second
- * compound family, and checkpoint P renamed its selectors to
- * `rottay-overlay-modal-{header,body,footer}` / `rottay-modal-close-button` to
- * stop them colliding with `primitives/feedback/Modal`'s shipped compound skin
- * (`components/skin/modal-compounds.css`, WO-SKIN-03). The second family was
- * never real: overlay/Modal's compounds re-exported the feedback compounds
- * verbatim, so the rename moved these selectors off the only elements that
- * could ever have carried them. The feedback compounds emit
- * `rottay-modal-{header,body,footer}` and `rottay-modal-close`; nothing in
- * packages/core, the Showroom, or any app emits the classes below.
- * The shim tree is now retired, which makes that permanent.
- *
- * It still ships from base.css and styles.css because its four
- * `--ds-modal-close-button-*` channels are declared and read ONLY here, and
- * those reads are pinned into `contracts/css/hooks/index.json` by digest for
- * `reads-adjudication-gate`. Dropping the file therefore belongs to the token
- * drain wave, which regenerates that manifest — not to a source edit. Until
- * then this is dead weight in the stylesheet, not a contract: do not add rules
- * here, and do not cite it as evidence that a compound is painted.
- *
- * These compounds are engine-agnostic (one render tree, no engine split), so they
- * live in a single file rather than a modern/rustic pair. `Modal.Header` composes
- * `Modal.CloseButton`, so the close-button rules must not depend on the header.
- *
- * SPECIFICITY (P-48): the tenant `*` border-color floor sits at (0,3,1). Each
- * compound carries exactly one class plus its own `data-part`, so a colored border
- * buys b >= 4 by repeating BOTH (class + class + part + part). Color-free `none`
- * resets are exempt.
- *
- * `data-divider` carries the compounds' `divider` prop (default `false`), whose
- * false branch painted an explicit `none` — reproduced here rather than omitted.
  */
-
-/* ---- Modal.Body ---- */
-.rottay-overlay-modal-body[data-part='body'] {
-  color: var(--ds-modal-body-color, inherit);
-}
-
-/* ---- Modal.Footer ---- */
-.rottay-overlay-modal-footer.rottay-overlay-modal-footer[data-part='footer'][data-part='footer'][data-divider='true'] {
-  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-modal-footer-border, rgba(0, 0, 0, 0.1));
-}
-.rottay-overlay-modal-footer.rottay-overlay-modal-footer[data-part='footer'][data-part='footer'][data-divider='false'] {
-  border-top: none;
-}
-
-/* ---- Modal.CloseButton: the removed imperative hover becomes a :hover rule. The
-        mouseleave handler restored exactly the resting values below. Its token
-        chain is its OWN (`--ds-modal-close-button-*` first), deliberately distinct
-        from the two engines' internal close buttons. ---- */
-.rottay-modal-close-button[data-part='close-button'] {
-  border: none;
-  border-radius: var(--ds-modal-close-button-radius, var(--ds-radius-sm, 6px));
-  background-color: transparent;
-  color: var(--ds-modal-close-button-color, var(--ds-modal-close-color, var(--ds-color-text-tertiary)));
-}
-.rottay-modal-close-button[data-part='close-button']:hover {
-  background-color: var(--ds-modal-close-button-hover-bg, var(--ds-modal-close-bg-hover, var(--ds-color-bg-tertiary)));
-  color: var(--ds-modal-close-button-hover-color, var(--ds-modal-close-color-hover, var(--ds-color-text-primary)));
-}
 
 /* ---- utils/Overlay: the rustic engine's backdrop. Engine-agnostic and reusable
         (its `backgroundColor`/`blur`/`blurAmount` are public props), so it is
@@ -51620,10 +51559,17 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
         `--ds-overlay-backdrop-filter` (a custom property, not a paint key) and this
         rule consumes it for both the prefixed and unprefixed form. Its
         `background-color` stays INLINE: it is a consumer-facing prop with a
-        documented default, not component-internal paint. ---- */
+        documented default, not component-internal paint. An `intensity` step
+        drops the inline default and paints the tenant's overlay ladder below. ---- */
 .rottay-overlay {
   backdrop-filter: var(--ds-overlay-backdrop-filter, none);
   -webkit-backdrop-filter: var(--ds-overlay-backdrop-filter, none);
+}
+.rottay-overlay[data-intensity='light'] {
+  background-color: var(--ds-overlay-light, var(--ds-color-alpha-black-30));
+}
+.rottay-overlay[data-intensity='heavy'] {
+  background-color: var(--ds-overlay-heavy, var(--ds-color-alpha-black-70));
 }
 
 /* ---- utils/FocusTrap: an unstyled wrapper whose only paint is the focus reset. ---- */
@@ -96848,6 +96794,16 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   fill: var(--ds-chart-mark-color, var(--ds-color-primary));
 }
 
+/* Waterfall corners follow the radius dial only when the caller stated no
+ * barRadius: a stated one (0 included) is an rx attribute these rules never match. */
+.ds-chart-renderer-waterfall.ds-chart-renderer-waterfall[data-part='chart-renderer'] [data-part='bar']:not([rx]) {
+  rx: calc(2px * var(--ds-radius-scale-normalized, 1));
+}
+
+.ds-chart-renderer-waterfall.ds-chart-renderer-waterfall[data-part='chart-renderer'] [data-part='interaction-halo']:not([rx]) {
+  rx: max(4px, calc(2px * var(--ds-radius-scale-normalized, 1)));
+}
+
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='value-label'] {
   fill: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-base);
@@ -98995,6 +98951,28 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-chart-network-graph [data-part='node']:focus-visible [data-part='node-mark'] {
     stroke: Highlight;
   }
+}
+
+}
+@layer rottay-components {
+/**
+ * GlassCard — the frosted-glass effect container (`effects/glass-card`).
+ *
+ * Paint reads the surfaces family's glass channels, which a tenant authors
+ * through `surfaces.glass` or the `--ds-glass-*` tokenOverrides door; the
+ * component's numeric props stamp only the innermost private fallbacks.
+ *
+ * LAYER: imported layer(rottay-components) by the base entrypoint.
+ */
+
+.ds-glass-card[data-part='root'] {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ds-glass-border, var(--ds-color-alpha-white-20, var(--_ds-glass-card-border)));
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-glass-bg, var(--ds-color-alpha-white-10, var(--_ds-glass-card-bg)));
+  backdrop-filter: blur(var(--ds-glass-blur, var(--_ds-glass-card-blur)));
+  -webkit-backdrop-filter: blur(var(--ds-glass-blur, var(--_ds-glass-card-blur)));
 }
 
 }

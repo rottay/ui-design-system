@@ -2146,38 +2146,6 @@
           "owner": null,
           "ownerProposal": null
         },
-        "--ds-modal-close-button-color": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
-          ],
-          "family": "overlay-modal-compounds",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-modal-close-button-hover-bg": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
-          ],
-          "family": "overlay-modal-compounds",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-modal-close-button-hover-color": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
-          ],
-          "family": "overlay-modal-compounds",
-          "owner": null,
-          "ownerProposal": null
-        },
-        "--ds-modal-close-button-radius": {
-          "readers": [
-            "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
-          ],
-          "family": "overlay-modal-compounds",
-          "owner": null,
-          "ownerProposal": null
-        },
         "--ds-overlay-backdrop-filter": {
           "readers": [
             "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"

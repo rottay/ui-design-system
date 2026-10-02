@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "206c5870f9204032542c7c401564f6d9e80bfe1bf35bc1625e90f965a04015b3",
+    "authorityDigest": "256774e2932155e87563ca0af9b71da84ed6d22c8a748dc39b320a6a0bddaee9",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5615538,
-        "sha256": "a4210d021778033089e9a4a2152e2decddd1662a9b2369019110839f5fec6646"
+        "bytes": 5613871,
+        "sha256": "a2200d1c17d993ee26f8c751fc7314593ccb02b658c5c38e09423045ee1be5ee"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 4981560,
-        "sha256": "184f18dcfcd6cf44d8e6097c86ffe14291e560927e9a3c6b47417d3f227053de"
+        "bytes": 4979893,
+        "sha256": "98ee27e08a687efdf0f35646c2c33efa4ece94b626ad545b9a47d5ed9bfaa02f"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 4942559,
-        "sha256": "7a9287558a554feebb20f48fe1b92f3ddc55bb513edc2068a93b09f5e50614c8"
+        "bytes": 4940892,
+        "sha256": "10da9921dac11670faa445a396ce0b46e0ea6a54acb491f7e2c4940b69b49aa7"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 4941819,
-        "sha256": "44e95398f51e8b11a648f369a36239a2a6971bc9dd3ea8b1803caa2bee02e8fd"
+        "bytes": 4940152,
+        "sha256": "68cdd0ceb9d22eb7523b346c6f47a1b6271b6a431ca549c5170598004109385e"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -6106,8 +6106,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 11982,
-        "sha256": "413520ca202aa5159506885c6cb05d2fb59c6cc8e6f8ca6254e671ca898f3912"
+        "bytes": 12150,
+        "sha256": "94c2783f60e82e830ef2ba694f20ecfc7d9c716bba8efe7b9f36e6bbd4c491df"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/waterfall/tests/WaterfallBarRadius.integration.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5476,
+        "sha256": "536c52f8875e72b7b1ddaebf41245b31b7b56fe56c8ba0262b219b3884fdbff3"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/visualization/charts/runtime/chart-engine/runtime/dimensions/index.ts",
@@ -20249,8 +20257,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 4189,
-        "sha256": "dbdefb6eb97597e686fdab00f9454da80d4db6594f80598e48e04feaff6863d5"
+        "bytes": 4425,
+        "sha256": "abb297220c03516ca68c41abf9bf5078a102a2113fa07cf428b594f01f0247a5"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/runtime/overlay/backdrop/tests/index.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 4274,
+        "sha256": "d26d52fe08598d870ba4b6f779cfbc283fe3932d21c1c6e6dbb885637a45add9"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/runtime/overlay/dialog-attributes/index.ts",
@@ -25504,8 +25520,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 26695,
-        "sha256": "deff5a15a47de35c2d34c0447ec5e4254dff0f29e5f975741b6898678ced5e04"
+        "bytes": 27008,
+        "sha256": "c7d5bedb0a32b25b45227a066ccbe83c632b502b36c7cecc0abb553a2fc654b0"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/tests/artifact-protocol.test.ts",
@@ -26910,8 +26926,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 39969,
-        "sha256": "f7f8ccc38aedf0bd975558d0b86093f9f9c94d339877b87fc44f84437f9ad641"
+        "bytes": 40066,
+        "sha256": "c7150fe812da2864917a393f44c4581a9462da66c75f5623b018d8701e76e443"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/entrypoints/tests/touch-target-floor.test.ts",
@@ -27094,8 +27110,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 10459,
-        "sha256": "3599d9f4f5f101487557c71dbf45afd7dc816fa3b86f97bdb6df80c1df938846"
+        "bytes": 11243,
+        "sha256": "7b18653dc2bafac60a657624f82fed5c098980a582c82dc51939c157eb2e059b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
@@ -28135,8 +28151,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 66055,
-        "sha256": "554be2e77b500a9594856a686f6b7c26d8238551d7d61ba90014f33f147ffe48"
+        "bytes": 66588,
+        "sha256": "d0d46ceb701b983f7304d840c66b997bf12f106ea15c86e175a2753d53c31b3e"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-gantt/index.css",
@@ -28609,6 +28625,16 @@
         "sha256": "66b5aea7fe08714a4ea1788b2dfef094d8f360755f5dcf4da3e90dd21ea7833b"
       },
       {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/glass-card/index.css",
+        "roles": [
+          "audit-input",
+          "data-part-corpus",
+          "stale-claim-corpus"
+        ],
+        "bytes": 856,
+        "sha256": "44e15dd98dea31c894d0d3f1b53b463850ba2e795717cf1b95615b1992f6dfb9"
+      },
+      {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
         "roles": [
           "audit-input",
@@ -28885,8 +28911,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 4558,
-        "sha256": "afbed75210cab22dfa2a6e92e0d3231ccf16260d937a802a8bf6d9ceede94b50"
+        "bytes": 1472,
+        "sha256": "42e128a7ecc280b3c13a4eae73fd9bc5a12eaf6f97a1b921bc6f37a1e643638b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/page-shell-surface/index.css",
@@ -36273,8 +36299,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 2649,
-        "sha256": "d80f72d10157c9570016f60de7c2f85fb76271ccc3584a9a33a8c8fa0781974e"
+        "bytes": 2116,
+        "sha256": "b12b56d9afdcfebea8f7dcbd778695d43e079b2257ba467724d97242e55bfe85"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/presentation/effects/glass-card/tests/index.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 4659,
+        "sha256": "46209de0260dd9f83487fecaf889dbdda40039afd4294d5d88ecd12e2d7ec0bf"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/motion/react/presentation/effects/glow-effect/index.tsx",
@@ -37073,8 +37107,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 71815,
-        "sha256": "559e220477413fd6c2e1ce334a07f741268a7bafde8e1f88792a2094b84bcde7"
+        "bytes": 72630,
+        "sha256": "cd1a49f5b3ea9d79c42beb0bce71485687fc5dfef267e17f8797bd24ff8a8a13"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/capability-reachability.test.ts",
@@ -37257,8 +37291,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 78361,
-        "sha256": "171ede5512f78bd9fce8749b6c31e2e096a5cad9d9ac4839ed282255495709e8"
+        "bytes": 78958,
+        "sha256": "64152ba1f1545ca1d18d8239e57e682139789286a1a74d64c21b8757443d96fb"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/v1-write-schema-catalog-closure.test.ts",
@@ -37511,8 +37545,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 64399,
-        "sha256": "8ca5b585798e371eb99542c68aa511f1f7b09e37f8aee2e63b63ac9cd8f5a2dd"
+        "bytes": 65360,
+        "sha256": "33e94777c0d41738ed1bbb13e4d4ce7427cc677c7f53fc3a265e0bc1d9d368f9"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/index.ts",
@@ -37695,8 +37729,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 17706,
-        "sha256": "f24bbcb57a43c79f72c22e2fec1ad5d0b3e5e6c2fb71af7d4d278073f578dacc"
+        "bytes": 18001,
+        "sha256": "e63b5dc7e0c2b515ad3f2ed4a8f4be9a239543d19ec9f0d4d1fdfe4bf6c6b1f8"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/tests/index.test.ts",
@@ -37731,6 +37765,14 @@
         ],
         "bytes": 9545,
         "sha256": "3bfad1284cc7463e53696a30a935b0aab417f640e6aa543520de0a29a6bbe06a"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/facade/foundation/admission/tests/retired-references.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5904,
+        "sha256": "1870a4b9fa65af1172674b8a13d0283487e8cd254b2e6db6473c351daab89beb"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/facade/presentation/engine-visual/index.ts",
@@ -37926,7 +37968,7 @@
           "stale-claim-corpus"
         ],
         "bytes": 296367,
-        "sha256": "e3be3d94165a4f3ba5db1ef72231f7bdef952de8d764c5cb3a0f5874b1e43b5e"
+        "sha256": "47c2b0339220a3954e90e0698ea23bcad9e4dfb9ce35cd105ec5805a8f121400"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/index.ts",
@@ -47800,7 +47842,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "206c5870f9204032542c7c401564f6d9e80bfe1bf35bc1625e90f965a04015b3"
+    "digest": "256774e2932155e87563ca0af9b71da84ed6d22c8a748dc39b320a6a0bddaee9"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3351 counters; 3255 completed zeros locked exactly; 86 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -51536,10 +51578,6 @@
           "line": 57
         },
         {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css",
-          "line": 42
-        },
-        {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/page-shell-surface/index.css",
           "line": 20
         },
@@ -52781,23 +52819,23 @@
       "cell": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 809
+          "line": 819
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 940
+          "line": 950
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1180
+          "line": 1190
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1242
+          "line": 1252
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1275
+          "line": 1285
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
@@ -53982,14 +54020,6 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/modal-compounds/index.css",
           "line": 157
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css",
-          "line": 58
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css",
-          "line": 64
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
@@ -60097,22 +60127,6 @@
           "line": 84
         },
         {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css",
-          "line": 47
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css",
-          "line": 47
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css",
-          "line": 50
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css",
-          "line": 50
-        },
-        {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector/index.css",
           "line": 164
         },
@@ -65570,7 +65584,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1479
+          "line": 1489
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/mobile-header/index.css",
@@ -66054,31 +66068,23 @@
       "line": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 785
+          "line": 795
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1118
+          "line": 1128
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1124
+          "line": 1134
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1131
+          "line": 1141
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1269
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1321
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1326
+          "line": 1279
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
@@ -66087,6 +66093,14 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
           "line": 1336
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
+          "line": 1341
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
+          "line": 1346
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-line/index.css",
@@ -70102,27 +70116,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1479
+          "line": 1489
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1483
+          "line": 1493
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1487
+          "line": 1497
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1491
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1495
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1499
+          "line": 1501
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
@@ -70134,7 +70140,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1513
+          "line": 1515
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
+          "line": 1519
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
+          "line": 1523
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/checkbox-group/index.css",
@@ -72427,6 +72441,10 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "line": 188
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/glass-card/index.css",
+          "line": 11
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
@@ -87472,15 +87490,15 @@
       "row": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1505
+          "line": 1515
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1509
+          "line": 1519
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1513
+          "line": 1523
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/column-menu/index.css",
@@ -89126,7 +89144,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1430
+          "line": 1440
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -96726,7 +96744,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
-          "line": 1483
+          "line": 1493
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-terminal-card/index.css",
@@ -97833,7 +97851,7 @@
           }
         ],
         "skinSelectorCorpusKey": "footer",
-        "skinSelectorCount": 140
+        "skinSelectorCount": 136
       },
       {
         "section": "Table",
@@ -97959,7 +97977,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "FieldFiltersPanel",
@@ -98401,7 +98419,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "FilterPanel",
@@ -99134,7 +99152,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "SelectionPreviewRail",
@@ -99794,7 +99812,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "DetailPanel",
@@ -100429,7 +100447,7 @@
           }
         ],
         "skinSelectorCorpusKey": "footer",
-        "skinSelectorCount": 140
+        "skinSelectorCount": 136
       },
       {
         "section": "DataTable",
@@ -100482,7 +100500,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "DataTable",
@@ -102205,7 +102223,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "FormField",
@@ -102405,7 +102423,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Textarea",
@@ -102488,7 +102506,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "TagInput",
@@ -102679,7 +102697,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "InputNumber",
@@ -102936,7 +102954,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "PasswordInput",
@@ -103141,7 +103159,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Switch",
@@ -103302,7 +103320,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Toggle",
@@ -103566,7 +103584,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Radio",
@@ -103780,7 +103798,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Radio",
@@ -103959,7 +103977,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Checkbox",
@@ -104160,7 +104178,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Checkbox",
@@ -104289,7 +104307,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Slider",
@@ -104562,7 +104580,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "OTPInput",
@@ -104684,7 +104702,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Form",
@@ -105091,7 +105109,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Select",
@@ -106252,7 +106270,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "AutoComplete",
@@ -106535,7 +106553,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Mentions",
@@ -106721,7 +106739,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "TreeSelect",
@@ -107430,7 +107448,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Cascader",
@@ -108090,7 +108108,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Transfer",
@@ -108708,7 +108726,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Upload",
@@ -109434,7 +109452,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "DatePicker",
@@ -110413,7 +110431,7 @@
           }
         ],
         "skinSelectorCorpusKey": "footer",
-        "skinSelectorCount": 140
+        "skinSelectorCount": 136
       },
       {
         "section": "DatePicker",
@@ -110522,7 +110540,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "TimePicker",
@@ -110893,7 +110911,7 @@
           }
         ],
         "skinSelectorCorpusKey": "footer",
-        "skinSelectorCount": 140
+        "skinSelectorCount": 136
       },
       {
         "section": "TimePicker",
@@ -110962,7 +110980,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "ColorPicker",
@@ -111479,7 +111497,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Input",
@@ -111867,7 +111885,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Input",
@@ -111988,7 +112006,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Input",
@@ -112486,7 +112504,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Skeleton",
@@ -112571,7 +112589,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Skeleton",
@@ -112727,7 +112745,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Alert",
@@ -112960,7 +112978,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Progress",
@@ -113243,7 +113261,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Spinner",
@@ -113332,7 +113350,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Rate",
@@ -113410,7 +113428,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Modal",
@@ -113672,7 +113690,7 @@
           }
         ],
         "skinSelectorCorpusKey": "body",
-        "skinSelectorCount": 127
+        "skinSelectorCount": 126
       },
       {
         "section": "Modal",
@@ -113725,7 +113743,7 @@
           }
         ],
         "skinSelectorCorpusKey": "footer",
-        "skinSelectorCount": 140
+        "skinSelectorCount": 136
       },
       {
         "section": "Modal",
@@ -113845,7 +113863,7 @@
           }
         ],
         "skinSelectorCorpusKey": "close-button",
-        "skinSelectorCount": 86
+        "skinSelectorCount": 84
       },
       {
         "section": "Drawer",
@@ -114092,7 +114110,7 @@
           }
         ],
         "skinSelectorCorpusKey": "close-button",
-        "skinSelectorCount": 86
+        "skinSelectorCount": 84
       },
       {
         "section": "Drawer",
@@ -114145,7 +114163,7 @@
           }
         ],
         "skinSelectorCorpusKey": "body",
-        "skinSelectorCount": 127
+        "skinSelectorCount": 126
       },
       {
         "section": "Drawer",
@@ -114198,7 +114216,7 @@
           }
         ],
         "skinSelectorCorpusKey": "footer",
-        "skinSelectorCount": 140
+        "skinSelectorCount": 136
       },
       {
         "section": "Toast",
@@ -114237,7 +114255,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Toast",
@@ -114287,7 +114305,7 @@
           }
         ],
         "skinSelectorCorpusKey": "body",
-        "skinSelectorCount": 127
+        "skinSelectorCount": 126
       },
       {
         "section": "Toast",
@@ -114337,7 +114355,7 @@
           }
         ],
         "skinSelectorCorpusKey": "close-button",
-        "skinSelectorCount": 86
+        "skinSelectorCount": 84
       },
       {
         "section": "Toast",
@@ -114426,7 +114444,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Toast",
@@ -114552,7 +114570,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Message",
@@ -114628,7 +114646,7 @@
           }
         ],
         "skinSelectorCorpusKey": "body",
-        "skinSelectorCount": 127
+        "skinSelectorCount": 126
       },
       {
         "section": "Message",
@@ -114653,7 +114671,7 @@
           }
         ],
         "skinSelectorCorpusKey": "close-button",
-        "skinSelectorCount": 86
+        "skinSelectorCount": 84
       },
       {
         "section": "Notification",
@@ -114703,7 +114721,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Notification",
@@ -114816,7 +114834,7 @@
           }
         ],
         "skinSelectorCorpusKey": "body",
-        "skinSelectorCount": 127
+        "skinSelectorCount": 126
       },
       {
         "section": "Notification",
@@ -114866,7 +114884,7 @@
           }
         ],
         "skinSelectorCorpusKey": "close-button",
-        "skinSelectorCount": 86
+        "skinSelectorCount": 84
       },
       {
         "section": "Result",
@@ -114905,7 +114923,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Result",
@@ -115282,7 +115300,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Modal (overlay)",
@@ -115544,7 +115562,7 @@
           }
         ],
         "skinSelectorCorpusKey": "body",
-        "skinSelectorCount": 127
+        "skinSelectorCount": 126
       },
       {
         "section": "Modal (overlay)",
@@ -115597,7 +115615,7 @@
           }
         ],
         "skinSelectorCorpusKey": "footer",
-        "skinSelectorCount": 140
+        "skinSelectorCount": 136
       },
       {
         "section": "Modal (overlay)",
@@ -115660,7 +115678,7 @@
           }
         ],
         "skinSelectorCorpusKey": "close-button",
-        "skinSelectorCount": 86
+        "skinSelectorCount": 84
       },
       {
         "section": "Tour",
@@ -115699,7 +115717,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Tour",
@@ -115938,7 +115956,7 @@
           }
         ],
         "skinSelectorCorpusKey": "close-button",
-        "skinSelectorCount": 86
+        "skinSelectorCount": 84
       },
       {
         "section": "Tour",
@@ -115977,7 +115995,7 @@
           }
         ],
         "skinSelectorCorpusKey": "footer",
-        "skinSelectorCount": 140
+        "skinSelectorCount": 136
       },
       {
         "section": "Tour",
@@ -116393,7 +116411,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "AlertDialog",
@@ -116627,7 +116645,7 @@
           }
         ],
         "skinSelectorCorpusKey": "footer",
-        "skinSelectorCount": 140
+        "skinSelectorCount": 136
       },
       {
         "section": "AlertDialog",
@@ -116980,7 +116998,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Sheet",
@@ -117219,7 +117237,7 @@
           }
         ],
         "skinSelectorCorpusKey": "close-button",
-        "skinSelectorCount": 86
+        "skinSelectorCount": 84
       },
       {
         "section": "Sheet",
@@ -117258,7 +117276,7 @@
           }
         ],
         "skinSelectorCorpusKey": "body",
-        "skinSelectorCount": 127
+        "skinSelectorCount": 126
       },
       {
         "section": "ContextMenu",
@@ -117944,7 +117962,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Watermark",
@@ -118013,7 +118031,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Affix",
@@ -118092,7 +118110,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Anchor",
@@ -118131,7 +118149,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Anchor",
@@ -118244,7 +118262,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "BottomTabBar",
@@ -118403,7 +118421,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Breadcrumb",
@@ -118632,7 +118650,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "FloatButton",
@@ -118897,7 +118915,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Menu",
@@ -118939,7 +118957,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Menu",
@@ -119592,7 +119610,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "MobileHeader",
@@ -119691,7 +119709,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Pagination",
@@ -119917,7 +119935,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Segmented",
@@ -120028,7 +120046,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Stepper",
@@ -120399,7 +120417,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Steps",
@@ -120742,7 +120760,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4438
+        "skinSelectorCount": 4439
       },
       {
         "section": "Tabs",
@@ -120999,7 +121017,7 @@
         "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components",
         "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines"
       ],
-      "cssFiles": 463
+      "cssFiles": 464
     },
     "staleInline": [],
     "evidencedInline": [],
@@ -121013,8 +121031,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "6c80e626a0643d6d2d1f848c6c31f5c1e65f65e6c80fee001060b1d62dc89e5d",
-      "6c80e626a0643d6d2d1f848c6c31f5c1e65f65e6c80fee001060b1d62dc89e5d"
+      "44dd86e7974ab4422ecdf1a38fac4b9473c0845cea180c42d8db060e1f2fec4f",
+      "44dd86e7974ab4422ecdf1a38fac4b9473c0845cea180c42d8db060e1f2fec4f"
     ],
     "agree": true
   }
