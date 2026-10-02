@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
+  ActionDock,
   Badge,
   Box,
   Stack,
@@ -13,6 +14,7 @@ import {
   DatePicker,
   FormSections,
   Grid,
+  GuidedDraftFormSurface,
   InlineEditSection,
   Input,
   Menu,
@@ -22,12 +24,14 @@ import {
   Pagination,
   PatternDataTable,
   PatternFormBuilder,
+  PatternStepWizard,
   Popconfirm,
   RecordField,
   Result,
   Select,
   Slider,
   Stepper,
+  SurfaceSectionCard,
   Textarea,
   TimePicker,
   Toast,
@@ -149,7 +153,7 @@ function DropdownsCoverage() {
   return (
     <>
       <Cell testId="cascader-open" label="Cascader -- open">
-        <Cascader options={CASCADER_OPTIONS} open={cascaderOpen} onChange={noop} />
+        <Cascader options={CASCADER_OPTIONS} defaultValue={['us', 'us-ca']} open={cascaderOpen} onChange={noop} />
       </Cell>
       <Cell testId="select-variants" label="Select -- filled, flushed">
         <Select options={SELECT_OPTIONS} variant="filled" defaultValue="design" />
@@ -241,6 +245,11 @@ function OverlayCoverage() {
           </Modal.Footer>
           <Modal.CloseButton size="sm" onClose={noop} />
           <Modal.CloseButton size="lg" onClose={noop} />
+        </Modal>
+      </Cell>
+      <Cell testId="modal-props" label="Modal -- title, description and footer props">
+        <Modal open title="Archive project" description="Members keep read access." divider onOk={noop} onCancel={noop}>
+          <Text size="xs">Body</Text>
         </Modal>
       </Cell>
       <Cell testId="toast-container-action" label="Toast.Container -- fired toast with action">
@@ -364,6 +373,34 @@ function DisplayCoverage() {
           <Text size="xs">Fourth</Text>
         </Stack>
       </Cell>
+      <Cell testId="typography-tags" label="Text -- code, mark, sub, sup, monospace">
+        <Text as="code">code</Text>
+        <Text as="mark">mark</Text>
+        <Text>
+          H<Text as="sub">2</Text>O and x<Text as="sup">2</Text>
+        </Text>
+        <Text monospace>monospace</Text>
+      </Cell>
+      <Cell testId="button-group-connected" label="Button.Group -- connected, horizontal and vertical">
+        {(['horizontal', 'vertical'] as const).map((orientation) => (
+          <Button.Group key={orientation} connected orientation={orientation}>
+            <Button variant="default">First</Button>
+            <Button variant="outline">Middle</Button>
+            <Button variant="ghost">Last</Button>
+          </Button.Group>
+        ))}
+      </Cell>
+      <Cell testId="section-card-header" label="SurfaceSectionCard -- icon, eyebrow, description">
+        <SurfaceSectionCard
+          icon={<Text size="xs">R</Text>}
+          eyebrow="Workspace"
+          title="Retention policy"
+          description="Applies to every collection."
+          actions={<Button size="xs">Edit</Button>}
+        >
+          <Text size="xs">Section body</Text>
+        </SurfaceSectionCard>
+      </Cell>
       <Cell testId="grid-items" label="Grid -- items">
         <Grid columns={2}>
           <Grid.Item>
@@ -394,6 +431,23 @@ const ERROR_SECTIONS = [
   },
 ];
 
+const WIZARD_STEPS = [
+  { key: 'details', title: 'Details', content: <Text size="xs">Details</Text> },
+  { key: 'review', title: 'Review', content: <Text size="xs">Review</Text> },
+];
+
+const WARNING_SECTIONS = [
+  { key: 'basics', title: 'Basics', render: () => <Text size="xs">Basics content</Text> },
+];
+
+const WARNING_ISSUES = [{ field: 'Budget', message: 'Budget looks unusually high', severity: 'warning' as const }];
+
+const ACTION_DOCK_ACTIONS = [
+  { key: 'delete', label: 'Delete', priority: 'danger' as const, onClick: noop },
+  { key: 'cancel', label: 'Cancel', priority: 'secondary' as const, onClick: noop },
+  { key: 'save', label: 'Save', priority: 'primary' as const, onClick: noop },
+];
+
 function FormsCoverage() {
   return (
     <>
@@ -410,6 +464,24 @@ function FormsCoverage() {
         <InlineEditSection title="Contact" description="How we reach you">
           <Text size="xs">Section fields</Text>
         </InlineEditSection>
+      </Cell>
+      <Cell testId="step-wizard-sticky" label="StepWizard -- sticky-bottom actions">
+        {/* The dock is position: fixed; the transform makes this box its containing block. */}
+        <Box style={{ position: 'relative', transform: 'translateZ(0)', minHeight: 160 }}>
+          <PatternStepWizard steps={WIZARD_STEPS} onComplete={noop} actionPosture="sticky-bottom" />
+        </Box>
+      </Cell>
+      <Cell testId="guided-draft-warning" label="GuidedDraftFormSurface -- warning-only validation">
+        <GuidedDraftFormSurface
+          title="New record"
+          sections={WARNING_SECTIONS}
+          mode="wizard"
+          onSubmit={noop}
+          validationIssues={WARNING_ISSUES}
+        />
+      </Cell>
+      <Cell testId="action-dock-actions" label="ActionDock -- structured actions by priority">
+        <ActionDock position="bottom" actions={ACTION_DOCK_ACTIONS} style={{ position: 'static' }} />
       </Cell>
     </>
   );
@@ -444,6 +516,10 @@ const CARDS_WITH_MENU_ACTIONS = Object.fromEntries(
 );
 
 function DataTableCoverage() {
+  useClickUntil(
+    "[data-testid='probe-skin-coverage-datatable-cards-selected'] [data-part='row-actions-trigger']",
+    "[data-part='row-actions-menu']",
+  );
   return (
     <>
       <Cell testId="datatable-actions" label="DataTable -- row actions column">
@@ -471,6 +547,18 @@ function DataTableCoverage() {
           columns={COVERAGE_COLUMNS}
           actions={renderRowActions}
           adapt={CARDS_WITH_MENU_ACTIONS}
+        />
+      </Cell>
+      <Cell testId="datatable-cards-selected" label="DataTable -- cards with a selected row, row-action menu open">
+        <PatternDataTable<CoverageRow>
+          data={COVERAGE_ROWS}
+          rowKey="id"
+          columns={COVERAGE_COLUMNS}
+          actions={renderRowActions}
+          adapt={CARDS_WITH_MENU_ACTIONS}
+          selectable
+          selectedKeys={['r2']}
+          onSelectionChange={noop}
         />
       </Cell>
     </>
