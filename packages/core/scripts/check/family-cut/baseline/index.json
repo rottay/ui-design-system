@@ -573,9 +573,9 @@
         "skinFiles": 1,
         "sourceFiles": 3,
         "channelsRead": 87,
-        "classTokens": 3,
-        "partsStamped": 10,
-        "partsConsumed": 10
+        "classTokens": 4,
+        "partsStamped": 11,
+        "partsConsumed": 11
       },
       "readWithoutProducer": 0,
       "classVocabularies": 1,
@@ -588,7 +588,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-04: relations by derivation/chrome/sheet, constants by presentation/components/sheet; one ds-sheet vocabulary; layer band on --ds-sheet-layer; adapt/data-posture through useAdaptation, with the fullscreen default only for side sheets (a bottom sheet is already the phone posture)."
+      "cutNote": "WO-FAM-04: relations by derivation/chrome/sheet, constants by presentation/components/sheet; one ds-sheet vocabulary; layer band on --ds-sheet-layer; adapt/data-posture through useAdaptation, with the fullscreen default only for side sheets (a bottom sheet is already the phone posture). WO-FAM-11 (SHEET-1): the modern sheet adopts PortalScope through an inline ds-sheet-anchor lineage anchor the skin renders display: contents, so classTokens 3->4, partsStamped and partsConsumed 10->11, all re-read from the gate measurement."
     },
     "alert-dialog": {
       "cut": "WO-FAM-04",

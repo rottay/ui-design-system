@@ -364,3 +364,8 @@
     border: 1px solid ButtonText;
   }
 }
+
+/* The inline portal anchor only feeds the lineage snapshot and never creates a box. */
+.ds-sheet-anchor[data-part='anchor'] {
+  display: contents;
+}

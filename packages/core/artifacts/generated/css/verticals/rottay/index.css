@@ -48060,6 +48060,11 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
   }
 }
 
+/* The inline portal anchor only feeds the lineage snapshot and never creates a box. */
+.ds-sheet-anchor[data-part='anchor'] {
+  display: contents;
+}
+
 }
 @layer rottay-engines {
 /**

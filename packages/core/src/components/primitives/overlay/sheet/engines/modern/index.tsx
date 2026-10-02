@@ -13,7 +13,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useCallback, useId, useMemo } from 'react';
+import React, { useCallback, useId, useMemo, useState } from 'react';
 import type { SheetProps } from '../../contracts';
 import { SHEET_DEFAULTS } from '../../contracts';
 import {
@@ -23,6 +23,7 @@ import {
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { Portal } from '../../../../runtime/overlay/portal';
+import { PortalScope } from '../../../../runtime/overlay/portal-scope';
 import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { usePresence } from '@/graphics/motion/react/runtime';
@@ -51,8 +52,8 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
  * Modern engine implementation of Sheet.
  *
  * Locks body scroll while open (and through the exit animation), routes Escape
- * through the shared layer stack, and returns an empty fragment once presence
- * reports the exit finished so no DOM nodes remain in the tree.
+ * through the shared layer stack, and once presence reports the exit finished
+ * renders only its inline scope anchor, so no portaled nodes remain.
  */
 export default function ModernSheet(props: SheetProps): React.ReactElement {
   // Optional channel with an English floor: the sheet renders standalone
@@ -112,12 +113,17 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
     onOpenChange(false);
   }, [onOpenChange]);
 
+  // Inline anchor: the component's DOM position carries the tenant/locale/
+  // density lineage that PortalScope re-stamps onto the portaled sheet.
+  const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
+
   // Shared overlay contract: the sheet's layer band with a stack offset, the
   // single Escape router and the ref-counted body scroll lock, held through
   // the slide-out. `restoreFocus` is off because the FocusTrap below restores.
   const overlay = useFieldOverlay({
     kind: 'sheet',
     open: shouldRender,
+    anchor: anchorEl,
     surface: 'viewport',
     modal: true,
     lockScroll: true,
@@ -138,83 +144,89 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
     [overlay.zIndex, overlayMotion.variables, style, rootStyle],
   );
 
-  if (!shouldRender) return <></>;
+  const anchor = <span ref={setAnchorEl} data-part="anchor" className="ds-sheet-anchor" />;
+  if (!shouldRender) return anchor;
 
   const isBottom = side === 'bottom';
   const surfaceOverrides = panelStyle || surfaceStyle ? { ...panelStyle, ...surfaceStyle } : undefined;
 
   return (
-    <Portal>
-      <div
-        data-part="root"
-        {...overlayMotion.attributes}
-        data-motion={motionIsFinal ? 'final' : 'animated'}
-        className={`ds-sheet ds-sheet--modern ${className || ''} ${rootClassName || ''}`.trim()}
-        style={rootChannels}
-      >
-        {showOverlay && (
+    <>
+      {anchor}
+      <Portal>
+        <PortalScope snapshot={overlay.scope}>
           <div
-            data-part="backdrop"
-            data-open={dataState === 'open' ? 'true' : 'false'}
-            onClick={closeOnOverlayClick ? handleClose : undefined}
-          />
-        )}
-
-        <div
-          ref={presenceRef}
-          id={id}
-          role="dialog"
-          aria-modal="true"
-          aria-label={ariaLabel}
-          aria-labelledby={!ariaLabel && title ? titleId : undefined}
-          aria-describedby={ariaDescribedBy}
-          data-testid={dataTestId}
-          data-part="surface"
-          data-open={dataState === 'open' ? 'true' : 'false'}
-          data-placement={side}
-          data-presentation={adaptation.presentation}
-          data-posture={postureAttribute}
-          className={surfaceClassName || panelClassName || undefined}
-          style={surfaceOverrides}
-        >
-          <FocusTrap
-            active={open}
-            autoFocus={autoFocus}
-            restoreFocus={restoreFocus}
-            initialFocus={initialFocus}
-            finalFocus={finalFocus}
-            className="ds-sheet-focus-scope"
+            data-part="root"
+            {...overlayMotion.attributes}
+            data-motion={motionIsFinal ? 'final' : 'animated'}
+            className={`ds-sheet ds-sheet--modern ${className || ''} ${rootClassName || ''}`.trim()}
+            style={rootChannels}
           >
-            {isBottom && showHandle && (
-              <div data-part="handle-area">
-                <div data-part="handle" />
-              </div>
+            {showOverlay && (
+              <div
+                data-part="backdrop"
+                data-open={dataState === 'open' ? 'true' : 'false'}
+                onClick={closeOnOverlayClick ? handleClose : undefined}
+              />
             )}
 
-            {/* The header always renders: Sheet has no closable=false, so the
-                panel always exposes a visible dismiss control. */}
-            <div data-part="header">
-              {title ? (
-                <div id={titleId} data-part="title" title={typeof title === 'string' ? title : undefined}>
-                  {title}
+            <div
+              ref={presenceRef}
+              id={id}
+              role="dialog"
+              aria-modal="true"
+              aria-label={ariaLabel}
+              aria-labelledby={!ariaLabel && title ? titleId : undefined}
+              aria-describedby={ariaDescribedBy}
+              data-testid={dataTestId}
+              data-part="surface"
+              data-open={dataState === 'open' ? 'true' : 'false'}
+              data-placement={side}
+              data-presentation={adaptation.presentation}
+              data-posture={postureAttribute}
+              className={surfaceClassName || panelClassName || undefined}
+              style={surfaceOverrides}
+            >
+              <FocusTrap
+                active={open}
+                autoFocus={autoFocus}
+                restoreFocus={restoreFocus}
+                initialFocus={initialFocus}
+                finalFocus={finalFocus}
+                className="ds-sheet-focus-scope"
+              >
+                {isBottom && showHandle && (
+                  <div data-part="handle-area">
+                    <div data-part="handle" />
+                  </div>
+                )}
+
+                {/* The header always renders: Sheet has no closable=false, so the
+                    panel always exposes a visible dismiss control. */}
+                <div data-part="header">
+                  {title ? (
+                    <div id={titleId} data-part="title" title={typeof title === 'string' ? title : undefined}>
+                      {title}
+                    </div>
+                  ) : null}
+                  <CloseButton onClick={handleClose} label={i18n?.tOr('drawer.close', 'Close') ?? 'Close'} />
                 </div>
-              ) : null}
-              <CloseButton onClick={handleClose} label={i18n?.tOr('drawer.close', 'Close') ?? 'Close'} />
-            </div>
 
-            <div data-part="body" className={bodyClassName} style={bodyStyle}>
-              {children}
-            </div>
+                <div data-part="body" className={bodyClassName} style={bodyStyle}>
+                  {children}
+                </div>
 
-            {footer != null && (
-              <div data-part="footer" className={footerClassName} style={footerStyle}>
-                {footer}
-              </div>
-            )}
-          </FocusTrap>
-        </div>
-      </div>
-    </Portal>
+                {footer != null && (
+                  <div data-part="footer" className={footerClassName} style={footerStyle}>
+                    {footer}
+                  </div>
+                )}
+              </FocusTrap>
+            </div>
+          </div>
+        </PortalScope>
+      </Portal>
+    </>
   );
 }
 
