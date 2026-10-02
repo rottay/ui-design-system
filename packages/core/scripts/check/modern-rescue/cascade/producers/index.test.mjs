@@ -193,11 +193,23 @@ const SCRIPT = join(HERE, 'index.mjs');
  *   (a21f312ff) nets zero sites (the touch-target re-point and the page-shell
  *   retirement are read-side moves). closedNonObject stays 88,
  *   emissionsWithCausalRoot stays 211.
+ *
+ * PROD-1 re-pin (WO-EVI-02), each committed-manifest window from 4393d0d1a as
+ * sites / emissions / distinct / causal deltas:
+ *   18f2c0b66 0/+6/-2/0 WO-FAM-12 + G103-02; 7120887d4 0/+13/+1/0 Q-DER06-RES;
+ *   51bfdde00 +2/-1/+2/0 RET-02; 87f56a451 +3/+6/0/0 day skin+deriver chain;
+ *   5c02909f7 +13/+13/0/0 dark-surfaces/button/page-shell/provider;
+ *   a94ad65cd 0/+21/0/+6 elevation hairline + dashboard; 5839e5b18 +2/+2/0/0
+ *   press/hover + card-lift; 2c0010096 0/+12/0/+12 derivation wave;
+ *   6ca620661 0/+3174/0/+10 alias law; 4f084cf7b +1/+1/+1/0 rhythm lots;
+ *   a898a2625 0/+21/0/+9 shape lot 43580fdc0; 3325ce375 +1/+1/0/0 R2c;
+ *   b1d77771f +1/+9/+2/0 D2. Totals 6260 -> 6283, 18027 -> 21305,
+ *   7537 -> 7541, 211 -> 248. closedNonObject stays 88.
  */
 const LIVE_PRODUCER_STATS = Object.freeze({
-  producerSites: 6260,
-  channelEmissions: 18027,
-  distinctChannels: 7537,
+  producerSites: 6283,
+  channelEmissions: 21305,
+  distinctChannels: 7541,
   /**
    * 196 -> 197, and it is the SAME mechanism as the ten rows above rather than
    * a new causal claim: `--ds-color-link` is written literally by two of the
@@ -208,8 +220,18 @@ const LIVE_PRODUCER_STATS = Object.freeze({
    * `lowering/foundation/palette/index.ts:1`, carrying the SAME causal root as
    * the row that already existed. No channel and no root is new.
    */
-  emissionsWithCausalRoot: 211,
+  emissionsWithCausalRoot: 248,
 });
+
+/* The open backlog by identity. 0 -> 1 at 87f56a451, absorbing 0f74d094e (the
+ * portal readers read through a ref): tooltip Modern's `portalVariables` left
+ * privateRelay (custom-property-namespace-relay) for OPEN_UNKNOWN, a member
+ * access through a mutated ref. It is real open debt, so openBlocking is 1 and
+ * lot B is shut until it drains; every open-count pin below reads this list. */
+const LIVE_OPEN_UNKNOWN = Object.freeze([
+  'packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx|portalVariables|portalVariablesRef.current.value',
+]);
+const openUnknownId = (r) => `${r.file}|${r.symbol}|${r.template}`;
 
 function withFiles(files, run) {
   const sandbox = mkdtempSync(join(tmpdir(), 'cascade-producers-drill-'));
@@ -946,7 +968,7 @@ test('P-2 (C-1) the drained set IS the recomputed cohort, by count, never by id 
   assert.equal(out.stats.unknownProvenance, out.unknownProvenance.length);
   // T-FINAL-352 took the buckets from six to thirteen; the conservation law is
   // unchanged in spirit -- every one of the 2024 sites is in exactly one.
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
   // disjoint by construction: a site is EITHER closed by proof OR unresolved
   const closedKeys = out.closedNonObject.map((r) => `${r.file}|${r.line}|${r.ordinal}`);
   const unknownKeys = new Set(out.unknownProvenance.map((r) => r.detail));
@@ -1034,7 +1056,7 @@ test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other bu
   assert.deepEqual(byReason, {});
   assert.equal(out.stats.unknownProvenance, 0);
   // the reasons did NOT evaporate: they moved, with their forms, into the seven
-  assert.equal(openRows(out).length, 0);
+  assert.equal(openRows(out).length, LIVE_OPEN_UNKNOWN.length);
   /* The last dynamic sink is closed, so no OPEN row carries that form any
    * more -- but the form itself did not evaporate either. It survives on the
    * closed rows that inherited it, which is what "the reasons moved" means.
@@ -1080,7 +1102,7 @@ test('Z-1 the drain is exactly the proven ZERO cohort, and the universe is conse
   assert.equal(out.stats.closedZeroGoverned, out.closedZeroGoverned.length);
   assert.equal(out.stats.unknownProvenance, 0);
   // conservation: nothing vanished, everything is in exactly one bucket
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
 });
 
 test('Z-2 every drained row carries the ZERO disposition in the subsystem (no allowlist)', () => {
@@ -1110,17 +1132,17 @@ test('Z-4 boundary 523 and relay 591+22 remain unknown and non-consumable', () =
   const { rows } = classifyCrossFileRows();
   const by = {};
   for (const r of rows) by[r.disposition] = (by[r.disposition] || 0) + 1;
-  assert.equal(by.PUBLIC_BOUNDARY_CANDIDATE, 527); // -10 motion.div forwarders, +5 Slider, +1 public writer
+  assert.equal(by.PUBLIC_BOUNDARY_CANDIDATE, 523); // -10 motion.div forwarders, +5 Slider, +1 public writer; 527 -> 523: 18f2c0b66 (WO-FAM-12)
   // Measured by THIS classifier: 655 at aaa2c9574, 643 after 399c3d997 (12 button/tabs/modal/sheet rows close),
   // 677 after e248b2318 (writes inside nested function bodies), unchanged since. 693 was the producer-stats count.
-  assert.equal(by.RELAY_PRIVATE_UNRESOLVED, 677);
+  assert.equal(by.RELAY_PRIVATE_UNRESOLVED, 676); // 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
   assert.equal(by[ZERO], 613); // + 11 closed by RESIDUAL-42
   // RESIDUAL-42: the 2 that genuinely emit did so UNCONDITIONALLY in every arm,
   // so T-BRANCH-PRODUCER published them as producers; the composite bucket drained.
   assert.equal(by.BRANCH_CONDITIONAL_AUTHORED, undefined);
   assert.equal(by.BRANCH_COMPOSITE_OPEN, undefined);
   assert.equal(by.CLOSED_NONOBJECT, 88); // 68 reachable by A4 + 1 member-access
-  assert.equal(Object.values(by).reduce((a, b) => a + b, 0), 2067);
+  assert.equal(Object.values(by).reduce((a, b) => a + b, 0), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
 });
 
 test('Z-5 the drained buckets decompose exactly as the cohort does', () => {
@@ -1213,7 +1235,7 @@ test('Z-10 ZERO and PRODUCER are disjoint, and PRODUCER is never drained', () =>
   }
   // 3 original + 9 reached once T-COMPUTED-DOMAIN enumerated their lookups,
   // + the dynamic sink whose record T-ENTRIES-RECORD enumerated
-  assert.equal(producers.length, 162, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell)');
+  assert.equal(producers.length, 170, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell) + 8 resolvedGap.channel rows (18f2c0b66, WO-FAM-12)');
 });
 
 test('Z-11 the frozen producer counters do not move with this tranche', () => {
@@ -1229,7 +1251,7 @@ test('Z-11 the frozen producer counters do not move with this tranche', () => {
 test('Z-12 the subsystem is PURE: importing it neither writes nor mutates the inventory', () => {
   const before = readFileSync(OUT_PATH, 'utf8');
   const { rows } = classifyCrossFileRows();
-  assert.equal(rows.length, 2067);
+  assert.equal(rows.length, 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
   assert.equal(readFileSync(OUT_PATH, 'utf8'), before);
 });
 
@@ -1259,9 +1281,9 @@ const universeTotal = (out) => ALL_COLLECTIONS.reduce((acc, name) => acc + out[n
 
 test('T-1 the four cohorts have exactly the measured sizes and the residual is 352', () => {
   const out = buildProducers();
-  assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
-  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
+  assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
+  assert.equal(out.stats.closedProducer, 170); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows); 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
   assert.equal(out.stats.closedNonObject, 88);
   // stats mirror the arrays, never a bare counter
   assert.equal(out.stats.publicBoundary, out.publicBoundary.length);
@@ -1270,7 +1292,7 @@ test('T-1 the four cohorts have exactly the measured sizes and the residual is 3
   // T-TYPED-1118 moved exactly 1118 rows; T-FINAL-352 moved the remaining 352
   assert.equal(523 + 591 + 3 + 1, 1118);
   assert.equal(1470 - 1118, 352);
-  assert.equal(out.stats.openBlocking, 0); // RESIDUAL-42 closed 41; T-ENTRIES-RECORD closed the 42nd
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length); // RESIDUAL-42 closed 41; T-ENTRIES-RECORD closed the 42nd; 0 -> 1 at 87f56a451
   assert.equal(out.stats.unknownProvenance, 0);
 });
 
@@ -1308,7 +1330,7 @@ test('T-3 NEGATIVE: a relay row is never a producer and never joins the ZERO dra
   // 675 + the 10 historical `motion.div` rows the intrinsic-sink correction moved
   assert.equal(out.privateRelay.filter((r) => r.reason.startsWith('private-relay-unresolved:')).length, 652);
   assert.equal(out.privateRelay.filter((r) => r.reason.startsWith('public-style-passthrough:')).length, 21);
-  assert.equal(out.privateRelay.filter((r) => r.reason.startsWith('custom-property-namespace-relay:')).length, 4);
+  assert.equal(out.privateRelay.filter((r) => r.reason.startsWith('custom-property-namespace-relay:')).length, 3); // 4 -> 3: 87f56a451 (0f74d094e: tooltip portalVariables leaves for openUnknown)
   assert.equal(652 + 21 + 4 + 16, 693);
 });
 
@@ -1336,7 +1358,7 @@ test('T-4 the six collections are pairwise DISJOINT and total the 2024 sites', (
     }
   }
   const total = Object.values(sections).reduce((a, rows) => a + rows.length, 0);
-  assert.equal(total, 2067);
+  assert.equal(total, 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
 });
 
 test('T-5 every cohort row carries a receipt sufficient to audit origin and reason', () => {
@@ -1376,7 +1398,7 @@ test('T-5 every cohort row carries a receipt sufficient to audit origin and reas
 
 test('T-6 every producer row carries a full causal receipt and invents no root', () => {
   const out = buildProducers();
-  assert.equal(out.closedProducer.length, 162, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell)');
+  assert.equal(out.closedProducer.length, 170, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell) + 8 resolvedGap.channel rows (18f2c0b66, WO-FAM-12)');
   // Two identity shapes, kept apart on purpose. A coordinate with ONE producer
   // occurrence publishes its scalar identity. A coordinate with SEVERAL cannot:
   // `governedProducerSiteId` is minted per occurrence, so publishing one of
@@ -1385,8 +1407,8 @@ test('T-6 every producer row carries a full causal receipt and invents no root',
   const single = out.closedProducer.filter((r) => !r.occurrenceProducerSiteIds);
   const multi = out.closedProducer.filter((r) => r.occurrenceProducerSiteIds);
   // the T-ENTRIES-RECORD arrival is single-occurrence, so it lands in `single`
-  assert.equal(single.length, 143, '45 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 8 single-occurrence motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows');
-  assert.equal(multi.length, 19, '11 + 8 motion-recipe rows (Object.freeze): the button pressMotion coordinates occur twice');
+  assert.equal(single.length, 147, '45 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 8 single-occurrence motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows + 4 grid-view/stats-grid resolvedGap.channel rows (18f2c0b66)');
+  assert.equal(multi.length, 23, '11 + 8 motion-recipe rows (Object.freeze): the button pressMotion coordinates occur twice; + 4 gallery resolvedGap.channel rows, whose coordinates also occur twice (18f2c0b66)');
   for (const row of multi) {
     assert.equal(row.evidence.governedProducerSiteId, undefined, 'a multi-occurrence coordinate must not publish one arbitrary id');
     assert.equal(row.evidence.sourcePartRefs, undefined);
@@ -1496,13 +1518,13 @@ test('T-9 per-sink evidence MERGES instead of being overwritten by the last row'
 test('T-10 the live tree joins WITHOUT conflict over its 66 duplicated coordinates', () => {
   const { rows } = classifyCrossFileRows();
   const index = dispositionIndex(rows);
-  assert.equal(rows.length, 2067);
-  assert.equal(index.size, 1979);
+  assert.equal(rows.length, 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(index.size, 1981); // 1979 -> 1982: 18f2c0b66; -> 1981: 55cfb8017 (LIV-6b)
   const multi = [...index.values()].filter((e) => e.occurrences > 1);
-  assert.equal(multi.length, 68, 'the duplicated coordinates are a measured fact, not an estimate');
+  assert.equal(multi.length, 70, 'the duplicated coordinates are a measured fact, not an estimate'); // 68 -> 70: 18f2c0b66 (the gallery resolvedGap.channel pair)
   // those 66 coordinates carry 154 rows between them; the other 1870 are singletons
-  assert.equal(multi.reduce((a, e) => a + e.occurrences, 0), 156);
-  assert.equal(index.size - multi.length + 156, rows.length);
+  assert.equal(multi.reduce((a, e) => a + e.occurrences, 0), 160); // 156 -> 160: 18f2c0b66
+  assert.equal(index.size - multi.length + 160, rows.length);
 });
 
 test('T-10b the producer and the disposition walks enumerate the SAME sites, occurrence for occurrence', () => {
@@ -1585,12 +1607,12 @@ test('T-12 the typed OPEN backlog is drained and lot B opens, pinned by the IMPL
    * the seven names must shut lot B again, and this implication makes it. */
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.unknownProvenance.length, 0);
-  assert.equal(out.stats.openBlocking, 0);
-  assert.equal(out.openBacklogRollup.blocking, false);
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
+  assert.equal(out.openBacklogRollup.blocking, LIVE_OPEN_UNKNOWN.length > 0);
   /* The gate flips only when BOTH conditions hold, so pin the IMPLICATION and
    * not just today's value: an open row reappearing must shut it again. */
   assert.equal(out.openBacklogRollup.lotBOpen, out.stats.unknownProvenance === 0 && openRows(out).length === 0);
-  assert.equal(out.openBacklogRollup.lotBOpen, true, 'the backlog is drained, so lot B opens');
+  assert.equal(out.openBacklogRollup.lotBOpen, false, 'an open row is back (LIVE_OPEN_UNKNOWN), so lot B is shut again');
   // the residual dispositions are the ones NO tranche has proven anything about
   const { rows } = classifyCrossFileRows();
   const drained = new Set([
@@ -1598,7 +1620,7 @@ test('T-12 the typed OPEN backlog is drained and lot B opens, pinned by the IMPL
     'RELAY_PRIVATE_UNRESOLVED', 'CLOSED_PRODUCER', 'CLOSED_NONOBJECT',
   ]);
   const residual = rows.filter((r) => !drained.has(r.disposition));
-  assert.equal(residual.length, 0);
+  assert.equal(residual.length, LIVE_OPEN_UNKNOWN.length);
   const byDisposition = {};
   for (const r of residual) byDisposition[r.disposition] = (byDisposition[r.disposition] || 0) + 1;
   // COMPUTED_DOMAIN_PENDING is absent, not zero: this map counts rows, and
@@ -1607,8 +1629,8 @@ test('T-12 the typed OPEN backlog is drained and lot B opens, pinned by the IMPL
   // RESIDUAL-42 left exactly one open row; T-ENTRIES-RECORD closed it. Every
   // disposition is now absent because the residual carries NO rows at all --
   // which this map states more strongly than a bucket of zeroes could.
-  assert.deepEqual(byDisposition, {});
-  assert.equal(residual.length, 0);
+  assert.deepEqual(byDisposition, { OPEN_UNKNOWN: LIVE_OPEN_UNKNOWN.length });
+  assert.equal(residual.length, LIVE_OPEN_UNKNOWN.length);
 });
 
 test('T-13 boundedReceiptOf returns null for a disposition it cannot vouch for', () => {
@@ -1732,7 +1754,7 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
     BRANCH_COMPOSITE_OPEN: 0,
     AUTHORED_OPEN: 0,
     BRANCH_CONDITIONAL_AUTHORED: 0,
-    OPEN_UNKNOWN: 0,
+    OPEN_UNKNOWN: LIVE_OPEN_UNKNOWN.length,
     COMPUTED_DOMAIN_PENDING: 0,
     DYNAMIC_SINK_PENDING: 0,
     CALL_ARGS_PENDING: 0,
@@ -1740,16 +1762,16 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.authoredOpen.length, 0);
   assert.equal(out.branchConditionalAuthored.length, 0);
-  assert.equal(out.openUnknown.length, 0);
+  assert.deepEqual(out.openUnknown.map(openUnknownId), LIVE_OPEN_UNKNOWN);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
-  assert.equal(openRows(out).length, 0);
-  assert.equal(out.stats.openBlocking, 0);
+  assert.equal(openRows(out).length, LIVE_OPEN_UNKNOWN.length);
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
   // TOTAL conservation across every collection, closed and open
-  assert.equal(universeTotal(out), 2067);
-  assert.equal(out.openBacklogRollup.universe.tsxSitesScanned, 2067);
-  assert.equal(out.openBacklogRollup.universe.accountedRows, 2067);
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(out.openBacklogRollup.universe.tsxSitesScanned, 2071);
+  assert.equal(out.openBacklogRollup.universe.accountedRows, 2071);
 });
 
 test('T-17 coverage is 1:1: every site is in exactly ONE collection', () => {
@@ -1770,7 +1792,7 @@ test('T-17 coverage is 1:1: every site is in exactly ONE collection', () => {
       owner.set(key, name);
     }
   }
-  assert.equal(rowCount, 2067, 'every scanned site is carried by exactly one collection');
+  assert.equal(rowCount, 2071, 'every scanned site is carried by exactly one collection'); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
   assert.ok(owner.size <= rowCount);
   // and the open/closed split is a partition of those coordinates
   const openKeys = new Set(openRows(out).map((r) => `${r.file}|${r.ordinal}`));
@@ -1795,7 +1817,7 @@ test('T-17 coverage is 1:1: every site is in exactly ONE collection', () => {
 test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed', () => {
   const out = buildProducers();
   const rows = openRows(out);
-  assert.equal(rows.length, 0);
+  assert.equal(rows.length, LIVE_OPEN_UNKNOWN.length);
   for (const row of rows) {
     assert.equal(row.blocking, true, `${row.file}:${row.line} open row must stay blocking`);
     assert.equal(row.consumable, false);
@@ -1825,10 +1847,10 @@ test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed',
     }
   }
   // the rollup agrees with the rows, and does not pretend lot B is still shut
-  assert.equal(out.openBacklogRollup.total, 0);
-  assert.equal(out.openBacklogRollup.blocking, false);
+  assert.equal(out.openBacklogRollup.total, LIVE_OPEN_UNKNOWN.length);
+  assert.equal(out.openBacklogRollup.blocking, LIVE_OPEN_UNKNOWN.length > 0);
   assert.equal(out.openBacklogRollup.lotBOpen, out.stats.unknownProvenance === 0 && openRows(out).length === 0);
-  assert.equal(out.openBacklogRollup.lotBOpen, true);
+  assert.equal(out.openBacklogRollup.lotBOpen, false); // the open row of LIVE_OPEN_UNKNOWN shuts it
   assert.match(out.openBacklogRollup.statement, /CLASSIFIED, not resolved/);
 });
 
@@ -1879,9 +1901,9 @@ test('T-20 NEGATIVE: mutating or removing an open receipt moves the receipt dige
   // silently-emptied bucket still cannot hide behind the branch above.
   assert.deepEqual(OPEN_COLLECTIONS.filter((n) => out[n].length === 0).sort(), [
     'authoredOpen', 'branchCompositeOpen', 'branchConditionalAuthored',
-    'callArgsPending', 'computedDomainPending', 'dynamicSinkPending', 'openUnknown',
+    'callArgsPending', 'computedDomainPending', 'dynamicSinkPending',
   ]);
-  assert.deepEqual(OPEN_COLLECTIONS.filter((n) => out[n].length > 0), []);
+  assert.deepEqual(OPEN_COLLECTIONS.filter((n) => out[n].length > 0), ['openUnknown']); // 87f56a451, see LIVE_OPEN_UNKNOWN
   /* Identity alone cannot see the receipt; the receipt-bound tuple must. With
    * every open collection drained there is no open receipt left to tamper
    * with, so the drill runs against receipts that DO exist -- the claim is
@@ -1949,9 +1971,9 @@ test('T-22 reordering the classifier input changes NEITHER output NOR digest', (
 test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched', () => {
   const out = buildProducers();
   // closed cohorts from the previous tranches
-  assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 677, '693 - 16 motion-recipe sealed-import-relay rows now closed producers (Object.freeze)');
-  assert.equal(out.stats.closedProducer, 162, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell)');
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
+  assert.equal(out.stats.privateRelay, 676, '693 - 16 motion-recipe sealed-import-relay rows now closed producers (Object.freeze); then 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1');
+  assert.equal(out.stats.closedProducer, 170, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell) + 8 resolvedGap.channel rows (18f2c0b66, WO-FAM-12)');
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.closedZeroGoverned, 613);
   // producer counters
@@ -2172,7 +2194,7 @@ test('B-9 the live tree drains 43 branch rows and the 2 survivors name their cha
     assert.ok(!('causalRootIds' in row));
     assert.ok(!('ownerId' in row));
   }
-  assert.equal(out.stats.openBlocking, 0);
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
 });
 
 test('B-10 NEGATIVE: mutating a branch witness moves the receipt digest', () => {
@@ -2195,17 +2217,17 @@ test('B-11 the composite and every other open cohort is untouched by this tranch
   const out = buildProducers();
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.authoredOpen.length, 0);
-  assert.equal(out.openUnknown.length, 0);
+  assert.equal(out.openUnknown.length, LIVE_OPEN_UNKNOWN.length);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
   assert.equal(out.branchConditionalAuthored.length, 0);
-  assert.equal(openRows(out).length, 0);
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(openRows(out).length, LIVE_OPEN_UNKNOWN.length);
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
   // frozen closed cohorts and producer counters
-  assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
-  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
+  assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
+  assert.equal(out.stats.closedProducer, 170); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows); 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
@@ -2239,8 +2261,8 @@ test('C-1 the composite bucket is 162 - 8 nested - 99 relay-inherited = 55', () 
   );
   assert.equal(relayInherited.length, 67);
   assert.equal(162 - 8 - 99, 55); // the pre-T-STATIC-KEYSET composite total
-  assert.equal(out.stats.openBlocking, 0);
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
 });
 
 test('C-2 every newly closed row carries an EXHAUSTIVE recursive receipt', () => {
@@ -2470,11 +2492,11 @@ test('R-6 the live tree inherits exactly 99: 84 private and 15 public', () => {
   assert.equal(relay.length, 53);
   assert.equal(boundary.length, 14);
   assert.equal(relay.length + boundary.length, 67);
-  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
-  assert.equal(out.stats.publicBoundary, 527);
+  assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
   assert.equal(out.branchCompositeOpen.length, 0);
-  assert.equal(out.stats.openBlocking, 0);
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
 });
 
 test('R-7 every inherited row is non-consumable and keeps ONE typed disposition', () => {
@@ -2538,7 +2560,7 @@ test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
   // 591 + the 10 historical `motion.div` rows the intrinsic-sink correction moved
   assert.equal(directRelay.length, 599);
   // 523 - 10 `motion.div` forwarders + 5 Slider public tails + 1 public writer
-  assert.equal(directBoundary.length, 513);
+  assert.equal(directBoundary.length, 509); // 513 -> 509: 18f2c0b66 (037b02544 retires the stats-grid LoadingSkeleton pair; its gridStyle pair turns private)
   // they keep the DIRECT receipt shape, untouched by this tranche
   for (const row of directBoundary) {
     assert.ok(row.evidence.entrypoint, 'a direct boundary keeps its inline entrypoint');
@@ -2551,10 +2573,10 @@ test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
   // and the other cohorts did not move at all
   assert.equal(out.stats.closedZeroGoverned, 613);
   assert.equal(out.stats.closedNonObject, 88);
-  assert.equal(out.stats.closedProducer, 162, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell)');
+  assert.equal(out.stats.closedProducer, 170, '56 + 84 responsive socket rows (Object.freeze and T-SOCKET-LOOP-FILL) + 16 motion-recipe rows (Object.freeze) + 6 data-table pinned-inset rows (both insets stamped on every cell) + 8 resolvedGap.channel rows (18f2c0b66, WO-FAM-12)');
   assert.equal(out.branchConditionalAuthored.length, 0);
   assert.equal(out.authoredOpen.length, 0);
-  assert.equal(out.openUnknown.length, 0);
+  assert.equal(out.openUnknown.length, LIVE_OPEN_UNKNOWN.length);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
@@ -2761,7 +2783,7 @@ test('D-9 NEGATIVE: tampering with the domain receipt moves the bound digest', (
 test('D-10 the drain is exactly measured and openBlocking only went down', () => {
   const out = buildProducers();
   assert.equal(out.computedDomainPending.length, 0);
-  assert.equal(out.stats.openBlocking, 0);
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length); // grew 0 -> 1 at 87f56a451: a regression, pinned so its drain is seen
   assert.ok(1 < 210, 'openBlocking must never grow');
   // 21 direct rows: 18 ZERO + 3 producer
   const directZero = out.closedZeroGoverned.filter((r) => r.resolvedVia === DOMAIN_VIA).length;
@@ -2769,10 +2791,10 @@ test('D-10 the drain is exactly measured and openBlocking only went down', () =>
   assert.equal(directZero, 8);
   assert.equal(directProducer, 2);
   assert.equal(directZero + directProducer, 10);
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
   // the cohorts this tranche must not touch
-  assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
+  assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.branchConditionalAuthored.length, 0);
@@ -3046,12 +3068,12 @@ test('E-7 P1b NEGATIVE: setter and method are represented too', () => {
 test('E-8 the invariants the correction must not disturb', () => {
   const out = buildProducers();
   assert.equal(out.stats.closedZeroGoverned, 613);
-  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
-  assert.equal(out.stats.openBlocking, 0);
+  assert.equal(out.stats.closedProducer, 170); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows); 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
   assert.equal(out.computedDomainPending.length, 0);
-  assert.equal(universeTotal(out), 2067);
-  assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
+  assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
@@ -3061,7 +3083,7 @@ test('E-8 the invariants the correction must not disturb', () => {
   assert.equal(out.stats.emissionsWithCausalRoot, LIVE_PRODUCER_STATS.emissionsWithCausalRoot);
   assert.equal(out.stats.ownershipConflicts, 0);
   // the ratified join amendment survives; 11 -> 19: 399c3d997, the 8 motion-recipe rows whose button pressMotion coordinates occur twice
-  assert.equal(out.closedProducer.filter((r) => r.occurrenceProducerSiteIds).length, 19);
+  assert.equal(out.closedProducer.filter((r) => r.occurrenceProducerSiteIds).length, 23); // 19 -> 23: 18f2c0b66 (the 4 gallery resolvedGap.channel rows)
 });
 
 /* ===================================================================== *
@@ -3149,21 +3171,21 @@ test('R-T7 NEGATIVE: getters are still never evaluated and mutation stays open',
 test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => {
   const out = buildProducers();
   assert.equal(out.authoredOpen.length, 0);
-  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
-  assert.equal(out.stats.openBlocking, 0);
+  assert.equal(out.stats.closedProducer, 170); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows); 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
   // the five other OPEN buckets are untouched
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.branchConditionalAuthored.length, 0);
-  assert.equal(out.openUnknown.length, 0);
+  assert.equal(out.openUnknown.length, LIVE_OPEN_UNKNOWN.length);
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
   assert.equal(out.computedDomainPending.length, 0);
   // every closed cohort except closedProducer is untouched
   assert.equal(out.stats.closedZeroGoverned, 613);
   assert.equal(out.stats.closedNonObject, 88);
-  assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
+  assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
@@ -3218,7 +3240,7 @@ test('R-T9 the typed-relay proof reaches the ARTIFACT, not just the shape', () =
   // no producer that closed by another route gains an empty or spurious field
   // every closedProducer row since a11355f43: 56 -> 156 399c3d997, 156 -> 162 78ad4662e
   const others = out.closedProducer.filter((r) => !r.evidence.typedRelays);
-  assert.equal(others.length, 162);
+  assert.equal(others.length, 170); // 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
   for (const row of others) assert.equal(row.evidence.typedRelays, undefined);
 });
 
@@ -3423,8 +3445,8 @@ test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
     assert.ok(row.file.endsWith('typography/engines/modern/index.tsx'));
     assert.match(row.template, /resolveTypeRoleStyle/);
   }
-  assert.equal(out.openUnknown.length, 0);
-  assert.equal(out.stats.openBlocking, 0);
+  assert.equal(out.openUnknown.length, LIVE_OPEN_UNKNOWN.length);
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
   // the five other open buckets are untouched
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.authoredOpen.length, 0);
@@ -3432,11 +3454,11 @@ test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
   // closed cohorts and frozen counters
-  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
+  assert.equal(out.stats.closedProducer, 170); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows); 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
   assert.equal(out.stats.closedNonObject, 88);
-  assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
+  assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
@@ -3793,7 +3815,7 @@ test('SR-5 the proof reaches the ARTIFACT and never becomes governance', () => {
       `${row.file}:${row.line} published an unexpected relay route ${row.resolvedVia}`,
     );
   }
-  assert.equal(out.privateRelay.filter((r) => r.resolvedVia === 'custom-property-namespace-relay').length, 4);
+  assert.equal(out.privateRelay.filter((r) => r.resolvedVia === 'custom-property-namespace-relay').length, 3); // 4 -> 3: 87f56a451 (0f74d094e)
   assert.equal(out.privateRelay.filter((r) => r.resolvedVia === undefined).length, 652);
 });
 
@@ -3851,8 +3873,8 @@ test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
   const out = buildProducers();
   // the two cohorts that moved, and the rollup that must only ever go down
   assert.equal(out.authoredOpen.length, 0);
-  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
-  assert.equal(out.stats.openBlocking, 0);
+  assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
   assert.ok(1 < 142, 'openBlocking must never grow');
   assert.equal(66 - 22, 44);
   assert.equal(675 + 22, 697);
@@ -3860,16 +3882,16 @@ test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
   // every other bucket, closed and open, is frozen
   assert.equal(out.stats.closedZeroGoverned, 613);
   assert.equal(out.stats.closedNonObject, 88);
-  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
-  assert.equal(out.stats.publicBoundary, 527);
+  assert.equal(out.stats.closedProducer, 170); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows); 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.branchConditionalAuthored.length, 0);
-  assert.equal(out.openUnknown.length, 0);
+  assert.equal(out.openUnknown.length, LIVE_OPEN_UNKNOWN.length);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
@@ -4148,12 +4170,12 @@ test('KS-7 the LIVE cohort is exactly 67 rows and lands where the re-derivation 
   // the two open buckets that drained
   assert.equal(out.authoredOpen.length, 0);
   assert.equal(out.branchCompositeOpen.length, 0);
-  assert.equal(out.stats.openBlocking, 0);
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
   assert.equal(44 - 32, 12);
   assert.equal(55 - 35, 20);
   assert.equal(120 - 67, 53);
   // the two closed buckets that received them
-  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
+  assert.equal(out.stats.closedProducer, 170); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows); 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
   assert.equal(out.stats.closedZeroGoverned, 613);
   assert.equal(21 + 36, 57);
   assert.equal(579 + 31, 610);
@@ -4161,14 +4183,15 @@ test('KS-7 the LIVE cohort is exactly 67 rows and lands where the re-derivation 
   // every OTHER bucket is frozen -- no third destination, no new open debt
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.stats.closedNonObject, 88);
-  assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
+  assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
   assert.equal(out.branchConditionalAuthored.length, 0);
-  assert.equal(out.openUnknown.length, 0, 'an admitted open VALUE must never become OPEN_UNKNOWN debt');
+  assert.equal(out.openUnknown.length, LIVE_OPEN_UNKNOWN.length, 'an admitted open VALUE must never become OPEN_UNKNOWN debt');
+  assert.equal(out.openUnknown.filter((r) => r.evidence?.openLeafValues).length, 0);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
   assert.equal(out.stats.ownershipConflicts, 0);
@@ -4243,7 +4266,7 @@ test('KS-9 the 3 PREFLIGHT CORRECTIONS are enumerated computed domains, not new 
 test('KS-10 every arrival publishes its route, its key union and its admission', () => {
   const out = buildProducers();
   const admitted = out.closedProducer.filter((r) => r.evidence.openLeafValues);
-  assert.equal(admitted.length, 127, 'the producers resting on admitted open values: 43 + 84 responsive socket rows whose for-of value is open (Object.freeze and T-SOCKET-LOOP-FILL)');
+  assert.equal(admitted.length, 135, 'the producers resting on admitted open values: 43 + 84 responsive socket rows whose for-of value is open (Object.freeze and T-SOCKET-LOOP-FILL) + 8 resolvedGap.channel rows (18f2c0b66, WO-FAM-12)');
   for (const row of admitted) {
     assert.ok(row.evidence.openLeafValues > 0);
     assert.ok(Array.isArray(row.evidence.openLeafValueKinds) && row.evidence.openLeafValueKinds.length > 0);
@@ -4465,29 +4488,29 @@ test('CL-7 NEGATIVE: an external base, an alias, a dynamic key, delete or an esc
 
 test('CL-8 the live cohort is exactly 11 rows and lands where the re-derivation said', () => {
   const out = buildProducers();
-  assert.equal(out.stats.openBlocking, 0);
-  assert.equal(out.openUnknown.length, 0);
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
+  assert.equal(out.openUnknown.length, LIVE_OPEN_UNKNOWN.length);
   assert.equal(out.dynamicSinkPending.length, 0);
   // CLOSURE-11 excluded the Heading rest-param row; RESIDUAL-42 closed it to
   // privateRelay on the DT's ruling (its Classic branch reaches AntD `Title`).
   assert.equal(out.callArgsPending.length, 0);
   assert.equal(out.stats.closedZeroGoverned, 613);
-  assert.equal(out.stats.privateRelay, 677); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze)
+  assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
   // 538 at CLOSURE-11. RESIDUAL-42 moved 10 historical `motion.div` rows out
   // (a third-party forwarder is not an intrinsic sink) and added 5 Slider rows.
-  assert.equal(out.stats.publicBoundary, 527);
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
   assert.equal(53 - 11, 42);
   assert.equal(610 + 6, 616);
   assert.equal(697 + 5, 702);
   // every other bucket frozen
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.stats.closedNonObject, 88);
-  assert.equal(out.stats.closedProducer, 162); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows)
+  assert.equal(out.stats.closedProducer, 170); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows); 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.authoredOpen.length, 0);
   assert.equal(out.branchConditionalAuthored.length, 0);
   assert.equal(out.computedDomainPending.length, 0);
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
   // C-02b (2026-08-27): 4872 -> 4873 = la seed nueva --ds-textarea-clear-offset (ver C-a4)
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   assert.equal(out.stats.ownershipConflicts, 0);
@@ -4502,7 +4525,7 @@ test('CL-9 the rows CLOSURE-11 excluded were each closed, and by WHICH route', (
    * enumerating its record. Every one of them is pinned to the route that
    * closed it, so no arrival can drift into a bucket that did not earn it. */
   const out = buildProducers();
-  assert.equal(out.openUnknown.length, 0, 'the CLOSURE-11 survivors are closed');
+  assert.deepEqual(out.openUnknown.map(openUnknownId), LIVE_OPEN_UNKNOWN, 'the CLOSURE-11 survivors are closed; the one open row is the tooltip ref');
   assert.equal(out.dynamicSinkPending.filter((r) => r.file.includes('root-attributes')).length, 0,
     'the package-public writer became a boundary, not a pending sink');
   assert.equal(out.dynamicSinkPending.filter((r) => r.file.includes('css-variables-bridge')).length, 0,
@@ -4516,13 +4539,13 @@ test('CL-9 the rows CLOSURE-11 excluded were each closed, and by WHICH route', (
     'and the survivor stays pinned to the route that closed it -- not drifting into a softer bucket');
   assert.equal(out.callArgsPending.filter((r) => r.file.includes('Typography/compound/Heading')).length, 0);
   // and nothing is left open anywhere in the inventory
-  assert.equal(openRows(out).length, 0);
+  assert.equal(openRows(out).length, LIVE_OPEN_UNKNOWN.length);
 });
 
 test('CL-10 every arrival publishes its route and invents no key, tenant or root', () => {
   const out = buildProducers();
   const ns = out.privateRelay.filter((r) => r.resolvedVia === CL_NS_VIA);
-  assert.equal(ns.length, 4);
+  assert.equal(ns.length, 3); // 4 -> 3: 87f56a451 (0f74d094e: tooltip portalVariables leaves for openUnknown)
   for (const row of ns) {
     assert.match(row.reason, /^custom-property-namespace-relay:/);
     assert.equal(row.nonConsumableCause, 'namespace-bounded-passthrough-whose-key-set-is-not-statically-enumerable');
@@ -4831,8 +4854,8 @@ test('R42-8 the final inventory: 41 closed by RESIDUAL-42, the 42nd retired with
       'flatRowNodes governed-producer-object:call', 'flatRowNodes governed-producer-object:spread',
       'groupedRowNodes governed-producer-object:call', 'groupedRowNodes governed-producer-object:spread'],
   );
-  assert.equal(out.stats.openBlocking, 0);
-  assert.equal(out.openUnknown.length, 0);
+  assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
+  assert.equal(out.openUnknown.length, LIVE_OPEN_UNKNOWN.length);
   assert.equal(out.callArgsPending.length, 0);
   assert.equal(out.computedDomainPending.length, 0);
   /* RESIDUAL-42's 42nd debt, writePersonalityDeclarations, closed as an
@@ -4847,14 +4870,14 @@ test('R42-8 the final inventory: 41 closed by RESIDUAL-42, the 42nd retired with
    * the T-SOCKET-LOOP-FILL rule reading the --_ds-rsp-* private sockets) and
    * +16 motion-recipe .variables rows (RECIPE_CURVE_CSS's Object.freeze table)
    * in; the same 16 left privateRelay (693→677). 156→162: the 6 data-table insets above. */
-  assert.equal(out.stats.closedProducer, 162);
-  assert.equal(out.stats.publicBoundary, 527);
-  assert.equal(out.stats.privateRelay, 677);
+  assert.equal(out.stats.closedProducer, 170); // 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
+  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
+  assert.equal(out.stats.privateRelay, 676); // 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.unknownProvenance, 0);
-  assert.equal(universeTotal(out), 2067);
+  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
   assert.equal(out.openBacklogRollup.lotBOpen, out.stats.unknownProvenance === 0 && openRows(out).length === 0);
-  assert.equal(out.openBacklogRollup.lotBOpen, true, 'no open row is left, so lot B opens');
+  assert.equal(out.openBacklogRollup.lotBOpen, false, 'the LIVE_OPEN_UNKNOWN row shuts lot B');
 });
 
 /* ===================================================================== *
