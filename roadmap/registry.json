@@ -6195,7 +6195,13 @@
    "notes": "wave 5; closes F-42, F-94, F-91, F-88, F-109, F-110, F-111, F-113, F-115, F-84; supersedes: WO-CRA-15, WO-CRA-17, WO-ARC-16, WO-CRA-21",
    "claimedBy": "kimi-dt",
    "claimedAt": "2026-10-02",
-   "progressLog": []
+   "progressLog": [
+    {
+     "at": "2026-10-02 16:38",
+     "by": "Kimi K3",
+     "note": "2026-10-02 tanda 13: the census gate landed (RET-01-CEN 804ea9ecd — 122 subpaths measured against showroom + 3 apps, 4 roots required, fail-closed; drill blocking in CI, gate excluded-by-corpus adjudicated) + its forced correction (CEN2: CSS @import + require.resolve + wildcard attribution — ./styles/bithire, ./styles/evnto, ./dist/*.css proven CONSUMED, they were false negatives; consumerless 97 -> 94). Tranches A+B retired 35 census-unreachable modules (11175802a) with per-module verification; 4 refused WITH evidence (the adapt registry read by-path by family-cut; the story-helpers feeding 12 stories; the two rustic engines awaiting the engine-freeze --authorize act). Cascades named: 12 governance bindings, the skin-exemptions crosshair entry, the two dead crosshair skin rules (stroke-only, no axis channels), the eta baseline rewrite (56 out / 11 in / only widenings = INV-06's reviewed bottom-bar literals). Liveness 208/208, population 62/62, parity+rescue 153/0, tsc clean. Remaining per the WO: the consumerless-subpath export trim (the 3.0 changeset), the icons relocations (bithire pack -> preset, legacy catalog -> ./icons/legacy with EOL), the 75 @deprecated sweep, the dead transports, D-19 dispositions, and the two freeze-gate authorizations."
+    }
+   ]
   },
   {
    "id": "WO-RET-02",
