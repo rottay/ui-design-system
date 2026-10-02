@@ -18,6 +18,7 @@ import {
   compileTenantThemeConfig,
   hydrateTenantThemeConfig,
 } from "@/infrastructure/compilers/composition/tenant-theme";
+import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
 import {
   compileThemeIntent,
   documentThemeIntent,
@@ -331,22 +332,74 @@ describe("the door refuses, and the refusal names what it refused", () => {
     }
   });
 
-  it("refuses an unknown experienceProfile instead of deleting the channels", () => {
+  it("refuses an unknown experienceProfile instead of deleting the channels, on every door", () => {
     // F-61: an invalid id expanded to nothing, so twelve of the vertical's own
     // channels vanished and no one was told.
+    const doc = {
+      version: 2,
+      plan: "standard",
+      decisions: { "experience.profile": "rottay/nope@1" },
+    } as unknown as TenantThemeDocument;
+    const doors = [
+      () =>
+        compileThemeIntent(
+          previewThemeIntent({ vertical: VERTICAL, slug: SLUG, document: doc })
+        ),
+      () =>
+        compileThemeIntent(
+          documentThemeIntent({ vertical: VERTICAL, slug: SLUG, document: doc })
+        ),
+      () =>
+        compileTenantThemeDocumentV2({
+          document: doc,
+          tenantId: SLUG,
+          slug: SLUG,
+          verticalKey: VERTICAL,
+          rowVersion: 1,
+        } as never),
+    ];
+    for (const door of doors) {
+      try {
+        door();
+        expect.unreachable("a door admitted an unregistered experience profile");
+      } catch (error) {
+        expect(error).toBeInstanceOf(ThemeAdmissionError);
+        expect((error as ThemeAdmissionError).issues).toEqual([
+          {
+            code: "invalid_value",
+            path: "$.theme.expressive.experienceProfile",
+            message: "Experience profile rejected: unknown-id",
+          },
+        ]);
+      }
+    }
+  });
+
+  it("admits a registered experienceProfile on the standard plan, on every door", () => {
+    const doc = {
+      version: 2,
+      plan: "standard",
+      decisions: { "experience.profile": "rottay/management-editorial@1" },
+    } as unknown as TenantThemeDocument;
     expect(() =>
       compileThemeIntent(
-        previewThemeIntent({
-          vertical: VERTICAL,
-          slug: SLUG,
-          document: {
-            version: 2,
-            plan: "standard",
-            decisions: { "experience.profile": "nope" },
-          } as unknown as TenantThemeDocument,
-        })
+        previewThemeIntent({ vertical: VERTICAL, slug: SLUG, document: doc })
       )
-    ).toThrow(/Experience profile rejected/u);
+    ).not.toThrow();
+    expect(() =>
+      compileThemeIntent(
+        documentThemeIntent({ vertical: VERTICAL, slug: SLUG, document: doc })
+      )
+    ).not.toThrow();
+    expect(() =>
+      compileTenantThemeDocumentV2({
+        document: doc,
+        tenantId: SLUG,
+        slug: SLUG,
+        verticalKey: VERTICAL,
+        rowVersion: 1,
+      } as never)
+    ).not.toThrow();
   });
 
   it("compiles the vertical's own baseline under every first-party slug", () => {

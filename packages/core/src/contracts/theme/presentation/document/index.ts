@@ -31,6 +31,7 @@ import {
   assertThemeStyleReference,
   type ThemeStyleReference,
 } from "@/contracts/theme/runtime/styles";
+import { THEME_CATALOG_RETIRED } from "@/contracts/theme/runtime/catalog";
 
 /**
  * The decision contract travels with the document, so a writer needs ONE
@@ -210,6 +211,9 @@ export function assertSupportedDocumentVersion(document: unknown): void {
 }
 
 const DECISION_ID_SET = new Set<string>(THEME_DECISION_IDS);
+const RETIRED_DECISION_BY_ID = new Map(
+  THEME_CATALOG_RETIRED.map((entry) => [entry.id, entry])
+);
 
 /**
  * Validates a v2 document fail-closed and returns it narrowed.
@@ -310,6 +314,10 @@ function assertThemeDocument(
   }
   const entitled = THEME_PLAN_TIERS[plan as ThemePlan];
   for (const id of Object.keys(decisions as object)) {
+    const retired = RETIRED_DECISION_BY_ID.get(id);
+    if (retired) {
+      refuse(`unsupported decision "${id}": retired; ${retired.replacedBy}`);
+    }
     if (!DECISION_ID_SET.has(id)) {
       refuse(
         `unsupported decision "${id}"; the catalog is closed at ${THEME_DECISION_IDS.length} ids`
