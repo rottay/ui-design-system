@@ -106,7 +106,6 @@ export type {
   ButtonHtmlType,
   ButtonGroupProps as ButtonGroupPropsType,
   IconButtonProps,
-  ButtonLoadingConfig,
 } from './contracts';
 export { BUTTON_DEFAULTS, SIZE_MAP, VARIANT_MAP, SHAPE_MAP } from './contracts';
 

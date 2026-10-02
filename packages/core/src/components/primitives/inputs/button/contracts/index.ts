@@ -310,9 +310,9 @@ export interface ButtonProps extends BaseComponentProps, EngineAwareProps, Loada
  *    mutually exclusive flags -- they are two ways to request the same
  *    "disabled + aria-busy" posture.
  * 3. `label` is `pendingLabel` if set, else the deprecated `loadingText` if
- *    set, else `undefined`. `ButtonLoadingConfig.loadingText` is excluded
- *    from this resolution: that type has never been wired to a `ButtonProps`
- *    field, so there is nothing to read from it.
+ *    set, else `undefined`. The legacy `ButtonLoadingConfig` shape (retired)
+ *    was excluded from this resolution: it was never wired to a `ButtonProps`
+ *    field, so there was nothing to read from it.
  */
 export interface ResolvedButtonBusyState {
   /** True when the button should render `disabled` + `aria-busy` (from `pending` or `loading`). */
@@ -399,25 +399,6 @@ export interface IconButtonProps extends Omit<ButtonProps, 'icon' | 'iconPositio
    * Tooltip to show on hover.
    */
   tooltip?: string;
-}
-
-/**
- * @deprecated Dormant config object: no `ButtonProps` field has ever accepted
- * a `ButtonLoadingConfig`, so none of these fields are read by any engine.
- * Use `pending` + `pendingLabel` (or the deprecated `loading` + `loadingText`)
- * directly on `ButtonProps` instead -- see {@link resolveButtonBusyState}.
- * Kept exported for backward compatibility with consumers that reference the
- * type; not removed because published apps pin this package.
- */
-export interface ButtonLoadingConfig {
-  /** Whether loading */
-  loading: boolean;
-  /** Text during loading */
-  loadingText?: string;
-  /** Custom loading icon */
-  loadingIcon?: ReactNode;
-  /** Whether to disable during loading */
-  disableWhileLoading?: boolean;
 }
 
 // ============================================================================

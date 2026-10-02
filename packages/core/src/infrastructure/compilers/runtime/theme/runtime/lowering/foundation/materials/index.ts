@@ -140,10 +140,3 @@ export function semanticSurfaceRolesToSurfaceVariables(
     )
   );
 }
-
-/**
- * @deprecated Use `semanticSurfaceRolesToCssVariables`.
- * Kept for one compatibility cycle; this does not represent Material UI.
- */
-export const semanticMaterialsToCssVariables =
-  semanticSurfaceRolesToCssVariables;

@@ -176,11 +176,3 @@ export interface SwitchProps {
   name?: string;
   'aria-label'?: string;
 }
-
-/** @deprecated since 2026-09-12 (D-16): use `TOGGLE_DEFAULTS`. */
-export const SWITCH_DEFAULTS: Partial<SwitchProps> = {
-  size: 'default',
-  disabled: false,
-  loading: false,
-  defaultChecked: false,
-};

@@ -4,8 +4,8 @@
  * Organized into three categories:
  *
  * 1. **Entrance animations** -- FadeIn, SlideIn, ScaleIn, ScrollReveal, StaggerChildren.
- *    Most consume `BaseMotionProps`; ScrollReveal retains its timing fields
- *    only as deprecated source compatibility because its CSS timeline ignores them.
+ *    All except ScrollReveal consume `BaseMotionProps` timing; ScrollReveal's
+ *    CSS scroll-timeline path cannot honor explicit timing.
  *
  * 2. **Interactive effects** -- Parallax, Magnetic, TextReveal, CountUp, Morph.
  *    Driven by scroll position, pointer movement, or numeric interpolation.
@@ -148,26 +148,6 @@ export interface ScaleInProps extends BaseMotionProps {
  * `threshold` and `rootMargin` mirror the IntersectionObserver API.
  */
 export interface ScrollRevealProps extends BaseMotionProps {
-  /**
-   * @deprecated ScrollReveal's CSS scroll-timeline path cannot honor explicit
-   * timing. This prop remains accepted for source compatibility and is ignored.
-   */
-  durationMs?: number;
-  /**
-   * @deprecated ScrollReveal's CSS scroll-timeline path cannot honor explicit
-   * timing. This prop remains accepted for source compatibility and is ignored.
-   */
-  delayMs?: number;
-  /**
-   * @deprecated ScrollReveal never consumed this legacy timing prop. It remains
-   * accepted for source compatibility and is ignored.
-   */
-  duration?: number;
-  /**
-   * @deprecated ScrollReveal never consumed this legacy timing prop. It remains
-   * accepted for source compatibility and is ignored.
-   */
-  delay?: number;
   /** Fraction of element visible before triggering (0-1). */
   threshold?: number;
   /** CSS margin string applied to the observer root. */

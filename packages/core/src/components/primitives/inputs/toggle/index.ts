@@ -87,7 +87,6 @@ export {
   type SwitchProps,
   type SwitchSize,
   TOGGLE_DEFAULTS,
-  SWITCH_DEFAULTS,
   SIZE_MAP,
   COLOR_MAP,
 } from './contracts';

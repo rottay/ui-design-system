@@ -27,13 +27,9 @@ export type {
   SemanticSurfaceRole,
   SemanticSurfaceRoleTokens,
   SemanticSurfaceRoleMap,
-  SemanticMaterialRole,
-  SemanticMaterialRoleTokens,
-  SemanticMaterialTokens,
 } from "./materials";
 export {
   SEMANTIC_SURFACE_ROLES,
-  SEMANTIC_MATERIAL_ROLES,
 } from "./materials";
 export type {
   SemanticTypographyRole,

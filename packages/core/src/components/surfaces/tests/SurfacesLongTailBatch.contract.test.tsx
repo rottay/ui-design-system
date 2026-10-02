@@ -4,7 +4,6 @@ import { waitFor } from '@testing-library/react';
 
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 import { renderSurface } from '../foundation/common/test-utils';
-import { SurfaceAccentBar } from '../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import {
   SurfaceActionBar,
   SurfaceSectionCard,
@@ -142,9 +141,6 @@ describe('long-tail anatomy foundation anatomy (I-1)', () => {
   it('pins every multi-export anatomy island and its selector-bearing state', async () => {
     const { container } = renderSurface(
       <div>
-        <SurfaceAccentBar position="top" thickness={3} barStyle="animated" />
-        <SurfaceAccentBar position="left" thickness={4} barStyle="gradient" />
-
         <SurfaceActionBar
           actions={[
             { id: 'enabled', label: 'Enabled', onClick: () => undefined },
@@ -191,7 +187,6 @@ describe('long-tail anatomy foundation anatomy (I-1)', () => {
       '.ds-surface.ds-offline-banner',
     ]);
 
-    expect(q(container, '.ds-surface.ds-accent-bar')).toHaveLength(0);
     expect(q(container, '[data-surface-action="enabled"]')).toHaveLength(1);
     expect(q(container, '[data-surface-action="disabled"]')).toHaveLength(1);
     expect(q(container, '.ds-section-card__body')).toHaveLength(1);

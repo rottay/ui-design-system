@@ -53,15 +53,6 @@ export interface AccentBarProps {
 }
 
 /**
- * @deprecated Decorative colored edge rails are forbidden across every
- * engine, vertical, and tenant. Kept temporarily so existing surface call
- * sites remain source-compatible while they migrate away from this API.
- */
-export function SurfaceAccentBar(_props: AccentBarProps): null {
-  return null;
-}
-
-/**
  * @deprecated Transparent compatibility wrapper for the retired accent-bar
  * API. It must never add layout, clipping, padding, or DOM anatomy.
  */

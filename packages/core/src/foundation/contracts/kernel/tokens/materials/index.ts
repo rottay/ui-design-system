@@ -80,12 +80,3 @@ export interface SemanticSurfaceRoleTokens {
 export type SemanticSurfaceRoleMap = Partial<
   Record<SemanticSurfaceRole, SemanticSurfaceRoleTokens>
 >;
-
-/** @deprecated Use `SEMANTIC_SURFACE_ROLES`. Removed in the next schema major. */
-export const SEMANTIC_MATERIAL_ROLES = SEMANTIC_SURFACE_ROLES;
-/** @deprecated Use `SemanticSurfaceRole`. */
-export type SemanticMaterialRole = SemanticSurfaceRole;
-/** @deprecated Use `SemanticSurfaceRoleTokens`. */
-export type SemanticMaterialRoleTokens = SemanticSurfaceRoleTokens;
-/** @deprecated Use `SemanticSurfaceRoleMap`. */
-export type SemanticMaterialTokens = SemanticSurfaceRoleMap;

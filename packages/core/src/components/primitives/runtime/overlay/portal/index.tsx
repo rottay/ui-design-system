@@ -42,14 +42,6 @@ export interface PortalProps {
    * can therefore pass their unresolved `null` without special-casing.
    */
   container?: Element | null;
-  /**
-   * Unique key for the portal container.
-   *
-   * @deprecated Inert. `key` is reserved by React and stripped from props, so
-   * this field can never reach the component and is always `undefined` here.
-   * Kept only to preserve the published `PortalProps` shape.
-   */
-  key?: string;
 }
 
 /**
@@ -76,7 +68,7 @@ function isAttachedElement(container: Element | null | undefined): container is 
  *   2. the active top-layer host (see `../top-layer-host`)
  *   3. the shared `#rottay-portal-root`
  */
-export function Portal({ children, container, key }: PortalProps): React.ReactPortal | null {
+export function Portal({ children, container }: PortalProps): React.ReactPortal | null {
   const [mounted, setMounted] = useState(false);
   const [portalContainer, setPortalContainer] = useState<Element | null>(null);
   // A dialog promoted by `showModal()` lives in the browser top layer, which
@@ -124,7 +116,7 @@ export function Portal({ children, container, key }: PortalProps): React.ReactPo
     return null;
   }
 
-  return createPortal(children, portalContainer, key);
+  return createPortal(children, portalContainer);
 }
 
 Portal.displayName = 'Portal';

@@ -145,19 +145,11 @@ export type OverlayPlacement =
   | 'inline-end-end';
 
 /**
- * The retired PHYSICAL spellings of the inline sides. Accepted on input and
- * mapped through {@link OVERLAY_PLACEMENT_ALIASES}; never produced.
- *
- * @deprecated Pass the logical spelling: `left` -> `inline-start`,
- * `right` -> `inline-end` (and the aligned forms alongside them). The physical
- * names are kept so callers that predate the logical vocabulary -- including
- * the frozen Classic/Rustic engines, which may not be edited -- keep
- * compiling. The alias resolves to the logical NAME only; whether that name
- * mirrors is {@link OverlayPositionRequest.inlineSides}, which defaults to
- * `'physical'`, so an alias keeps the exact edge it names in BOTH reading
- * directions unless its caller declares otherwise.
+ * The retired PHYSICAL spellings of the inline sides, still accepted on input
+ * and mapped through {@link OVERLAY_PLACEMENT_ALIASES}; never produced. Module-
+ * local: the logical spelling is the only vocabulary a caller needs to name.
  */
-export type LegacyPhysicalOverlayPlacement =
+type LegacyPhysicalOverlayPlacement =
   | 'left'
   | 'left-start'
   | 'left-end'
@@ -203,7 +195,7 @@ export function normalizeOverlayPlacement(placement: OverlayPlacementInput): Ove
  * The same table inverted: logical spelling -> the physical one a caller that
  * does NOT implement the logical vocabulary can use instead. Derived rather
  * than restated, so the six refusable spellings below are exactly the six
- * deprecations above and the two cannot drift.
+ * physical input spellings above and the two cannot drift.
  */
 const PHYSICAL_SPELLING: Readonly<Record<string, LegacyPhysicalOverlayPlacement>> = Object.freeze(
   Object.fromEntries(
