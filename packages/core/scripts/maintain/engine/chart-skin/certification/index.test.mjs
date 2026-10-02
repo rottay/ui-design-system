@@ -25,6 +25,7 @@ const skins = [
       '.ds-chart-renderer-line',
       '.ds-chart-renderer-pie',
       '.ds-chart-renderer-scatter',
+      '.ds-chart-renderer-waterfall',
       '.ds-chart-metric-trend',
       '.ds-chart-ranked-rows',
       '.ds-chart-brush',
