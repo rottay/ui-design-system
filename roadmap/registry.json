@@ -7096,6 +7096,11 @@
      "at": "2026-10-01 18:56",
      "by": "Kimi K3",
      "note": "2026-10-01 tanda 8j: LIV-6b+c LANDED 55cfb8017 (ParticleField geometry floor + valid particle-secondary; Fable ACCEPT-WITH-CHANGES discharged via LIV-6c; 6/6 DT post-regen). LIV-7+7b LANDED 44e4c3468 (the LIVE_PROBE_PAINTED door; Fable ACCEPT-WITH-CHANGES, 4 changes discharged incl. the CI leg: the visual config's testMatch gains liveness/**, verified 6/6 against the production build; until CI executes it, the class means proven at the last recorded run). Non-LIVE 50 -> 28 (24 AUE readerless awaiting the owner's rulings, 2 UENR + 1 RNPT with RET-01, 1 RU secondary-400 instrument limitation). IN FLIGHT: PROD-1 (producers suite re-pin — 38 failing pins, red since the 09-26 window 18f2c0b66 because the suite sits outside gates:ci; each mover named; LIV-6b's own movers: privateRelay 677->676, private-relay-unresolved 652->651). NEXT after PROD-1: the R1 --write still waits on the owner's 4 retirement rulings (the effect verdict greens only when those rows retire or keep with proven effect)."
+    },
+    {
+     "at": "2026-10-01 20:03",
+     "by": "Kimi K3",
+     "note": "2026-10-01 tanda 8k: PROD-1 LANDED 9b97ba38f — the producers suite (outside gates:ci, unrun since 09-26) re-pinned green 238/238 (DT re-ran, 23 min), every mover named and verified against the manifest history (18f2c0b66 / 87f56a451 / 55cfb8017). Registered: this suite needs a cadence — a census suite red for 5 days unnoticed is a coverage hole; propose it joins the consolidated-indicator ritual per tanda close (cheap enough at 23 min when the window is already open). THE OWNER DECISION PACKAGE is ready at .tmp/dispatch-2026-09-21/owner-decisions-liveness-retirements.md: 4 rulings (accent ramp x10, tint 16/24 x8, glass x2 + overlay x3, info-300) gate the R1 artifact's --write — the effect verdict greens only when those 24 AUE rows retire or keep-with-reason. Everything else in the 50-row wave is adjudicated and landed."
     }
    ]
   },
