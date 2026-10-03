@@ -494,14 +494,6 @@
   white-space: nowrap;
 }
 
-/* ---- focus rings for the three composed buttons ---- */
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
-}
-
 /* The row control now takes REAL focus. Its ring draws INSIDE the box: the
    list scrolls and the panel clips, so an outset ring would be shaved off. */
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible) {
