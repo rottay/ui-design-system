@@ -90,6 +90,7 @@
   border-color: var(--ds-otp-input-slot-border-focus, var(--ds-color-primary));
 }
 
+/* A validation frame survives focus: the ring arrives, the hue stays; an authored status ring replaces it. */
 .ds-otp-input.ds-otp-input--modern [data-part='slot']:is([data-state~='focused'], :focus) {
   box-shadow: var(--ds-otp-input-slot-shadow-focus, var(--ds-focus-ring));
 }
@@ -149,8 +150,8 @@
   }
 
   .ds-otp-input.ds-otp-input--modern[data-part='root'] [data-part='slot']:is([data-state~='focused'], :focus) {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;
   }
 

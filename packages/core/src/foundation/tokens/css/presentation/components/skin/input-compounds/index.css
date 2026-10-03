@@ -317,15 +317,20 @@
 .ds-input-textarea[data-part='root'][data-state~='focused']:not([data-disabled='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) [data-part='control'] {
   background: var(--ds-input-bg-focus, var(--ds-input-bg));
   border-color: var(--ds-input-border-focus);
-  box-shadow: var(--ds-input-shadow-focus);
+}
+
+/* A validation frame survives focus: the ring arrives, the hue stays; an authored status ring replaces it. */
+.ds-input-textarea[data-part='root'][data-state~='focused']:not([data-disabled='true']) [data-part='control'] {
+  box-shadow: var(--ds-input-focus-ring, var(--ds-focus-ring));
 }
 
 .ds-input-textarea[data-part='root'][data-invalid='true'] [data-part='control'] {
   background: var(--ds-input-error-bg, var(--ds-input-bg));
   border-color: var(--ds-input-error-border);
 }
-.ds-input-textarea[data-part='root'][data-state~='focused'][data-invalid='true'] [data-part='control'] {
-  box-shadow: var(--ds-input-error-shadow-focus, var(--ds-input-shadow-focus));
+
+.ds-input-textarea[data-part='root'][data-state~='focused'][data-invalid='true']:not([data-disabled='true']) [data-part='control'] {
+  box-shadow: var(--ds-input-focus-ring-error, var(--ds-focus-ring));
 }
 
 .ds-input-textarea[data-part='root'][data-warning='true'] [data-part='control'] {
@@ -463,8 +468,8 @@
   }
 
   .ds-input-textarea[data-part='root'][data-state~='focused'] [data-part='control'] {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
   }
 
   .ds-input-textarea[data-part='root'][data-disabled='true'] [data-part='control'] {

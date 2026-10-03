@@ -46,7 +46,7 @@ export function deriveTagInputChannels(): Record<string, string> {
   vars["--ds-tag-input-border"] = "var(--ds-color-border)";
   vars["--ds-tag-input-border-hover"] = "var(--ds-material-control-border-hover)";
   vars["--ds-tag-input-border-focus"] = "var(--ds-color-primary)";
-  vars["--ds-tag-input-shadow-focus"] = "var(--ds-shadow-focus-ring)";
+  vars["--ds-tag-input-shadow-focus"] = "var(--ds-focus-ring)";
   vars["--ds-tag-input-error-border"] = "var(--ds-color-error)";
   vars["--ds-tag-input-rejected-ink"] = "var(--ds-color-warning-ink)";
   vars["--ds-tag-input-disabled-opacity"] = "var(--ds-state-disabled-opacity)";

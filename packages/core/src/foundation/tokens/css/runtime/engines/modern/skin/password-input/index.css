@@ -223,7 +223,11 @@
 .ds-password-input.ds-password-input--modern[data-part='root'][data-state~='focused']:not([data-disabled='true']):not([data-error='true']):not([data-variant='unstyled']) {
   background: var(--ds-input-bg-focus, var(--ds-password-input-bg, var(--ds-surface-control)));
   border-color: var(--ds-input-border-focus, var(--ds-color-primary));
-  box-shadow: var(--ds-input-shadow-focus, var(--ds-focus-ring));
+}
+
+/* A validation frame survives focus: the ring arrives, the hue stays; an authored status ring replaces it. */
+.ds-password-input.ds-password-input--modern[data-part='root'][data-state~='focused']:not([data-disabled='true']) {
+  box-shadow: var(--ds-input-focus-ring, var(--ds-focus-ring));
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-variant='filled'][data-state~='focused']:not([data-error='true']) {
@@ -236,7 +240,7 @@
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-error='true'][data-state~='focused']:not([data-disabled='true']) {
-  box-shadow: var(--ds-input-error-shadow-focus, var(--ds-focus-ring));
+  box-shadow: var(--ds-input-focus-ring-error, var(--ds-focus-ring));
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-readonly='true']:not([data-disabled='true']):not([data-variant='unstyled']) {
@@ -381,8 +385,8 @@
   }
 
   .ds-password-input.ds-password-input--modern[data-part='root'][data-state~='focused'] {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
   }
 
   .ds-password-input.ds-password-input--modern[data-part='root'][data-disabled='true'] {

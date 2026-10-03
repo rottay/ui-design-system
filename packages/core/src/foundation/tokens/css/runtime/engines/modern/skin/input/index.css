@@ -347,7 +347,11 @@ input.ds-input-shell.ds-input-shell--modern::selection {
 .ds-input-shell.ds-input-shell--modern[data-state~='focused']:not([data-disabled='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']) {
   background: var(--ds-input-bg-focus, var(--ds-input-bg));
   border-color: var(--ds-input-border-focus, var(--ds-color-primary));
-  box-shadow: var(--ds-input-shadow-focus, var(--ds-focus-ring));
+}
+
+/* A validation frame survives focus: the ring arrives, the hue stays; an authored status ring replaces it. */
+.ds-input-shell.ds-input-shell--modern[data-state~='focused']:not([data-disabled='true']) {
+  box-shadow: var(--ds-input-focus-ring, var(--ds-focus-ring));
 }
 
 .ds-input-shell.ds-input-shell--modern[data-variant='filled'][data-state~='focused']:not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) {
@@ -361,7 +365,7 @@ input.ds-input-shell.ds-input-shell--modern::selection {
 }
 
 .ds-input-shell.ds-input-shell--modern[data-invalid='true'][data-state~='focused']:not([data-disabled='true']) {
-  box-shadow: var(--ds-input-error-shadow-focus, var(--ds-input-shadow-focus));
+  box-shadow: var(--ds-input-focus-ring-error, var(--ds-focus-ring));
 }
 
 .ds-input-shell.ds-input-shell--modern[data-warning='true']:not([data-invalid='true']):not([data-variant='unstyled']) {
@@ -370,7 +374,7 @@ input.ds-input-shell.ds-input-shell--modern::selection {
 }
 
 .ds-input-shell.ds-input-shell--modern[data-warning='true'][data-state~='focused']:not([data-invalid='true']):not([data-disabled='true']) {
-  box-shadow: var(--ds-input-warning-shadow-focus, var(--ds-input-shadow-focus));
+  box-shadow: var(--ds-input-focus-ring-warning, var(--ds-focus-ring));
 }
 
 .ds-input-shell.ds-input-shell--modern[data-success='true']:not([data-invalid='true']):not([data-warning='true']):not([data-variant='unstyled']) {
@@ -379,7 +383,7 @@ input.ds-input-shell.ds-input-shell--modern::selection {
 }
 
 .ds-input-shell.ds-input-shell--modern[data-success='true'][data-state~='focused']:not([data-disabled='true']) {
-  box-shadow: var(--ds-input-success-shadow-focus, var(--ds-input-shadow-focus));
+  box-shadow: var(--ds-input-focus-ring-success, var(--ds-focus-ring));
 }
 
 .ds-input-shell.ds-input-shell--modern[data-readonly='true']:not([data-disabled='true']):not([data-variant='unstyled']) {
@@ -605,8 +609,8 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   }
 
   .ds-input-shell.ds-input-shell--modern[data-state~='focused'] {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
   }
 
   .ds-input-shell.ds-input-shell--modern[data-disabled='true'] {

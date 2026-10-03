@@ -46,8 +46,8 @@ export function deriveOtpInputChannels(): Record<string, string> {
   vars["--ds-otp-input-filled-keyline"] = "var(--ds-material-control-border-strong)";
   vars["--ds-otp-input-slot-border-focus"] = "var(--ds-input-border-focus, var(--ds-color-primary))";
   vars["--ds-otp-input-slot-border-error"] = "var(--ds-color-error)";
-  vars["--ds-otp-input-slot-shadow-focus"] = "var(--ds-input-shadow-focus, var(--ds-focus-ring))";
-  vars["--ds-otp-input-slot-shadow-focus-error"] = "var(--ds-input-error-shadow-focus, var(--ds-focus-ring))";
+  vars["--ds-otp-input-slot-shadow-focus"] = "var(--ds-input-focus-ring, var(--ds-focus-ring))";
+  vars["--ds-otp-input-slot-shadow-focus-error"] = "var(--ds-input-focus-ring-error, var(--ds-focus-ring))";
   vars["--ds-otp-input-error-ink"] = "color-mix(in srgb, var(--ds-color-error) 70%, var(--ds-color-text-primary) 30%)";
   return vars;
 }

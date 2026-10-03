@@ -52,7 +52,7 @@ export function deriveTransferChannels(): Record<string, string> {
   vars["--ds-transfer-search-bg"] = "var(--ds-input-bg, var(--ds-material-control-background))";
   vars["--ds-transfer-search-border"] = "var(--ds-color-border)";
   vars["--ds-transfer-search-border-focus"] = "var(--ds-color-primary)";
-  vars["--ds-transfer-search-shadow-focus"] = "var(--ds-input-shadow-focus, var(--ds-focus-ring))";
+  vars["--ds-transfer-search-shadow-focus"] = "var(--ds-input-focus-ring, var(--ds-focus-ring))";
   vars["--ds-transfer-search-placeholder-color"] = "var(--ds-input-color-placeholder, var(--ds-type-color-muted))";
   vars["--ds-transfer-item-bg-hover"] = "var(--ds-material-inset-background)";
   vars["--ds-transfer-item-bg-selected"] = "color-mix(in srgb, var(--ds-color-primary) 8%, transparent)";

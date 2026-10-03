@@ -56,13 +56,18 @@
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-error='true'] {
   border-color: var(--ds-tag-input-error-border, var(--ds-color-error));
 }
-.ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within {
+.ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within:not([data-error='true']) {
   border-color: var(--ds-tag-input-border-focus, var(--ds-color-primary));
-  box-shadow: var(--ds-tag-input-shadow-focus, var(--ds-shadow-focus-ring));
+}
+/* A validation frame survives focus: the ring arrives, the hue stays. */
+.ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within {
+  box-shadow: var(--ds-tag-input-shadow-focus, var(--ds-focus-ring));
 }
 /* A refused tag flashes the warning frame while the reason is announced; never hue alone. */
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-rejected] {
   border-color: var(--ds-tag-input-rejected-ink, var(--ds-color-warning));
+}
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-rejected]:not(:focus-within) {
   box-shadow: 0 0 0 var(--ds-tag-input-rejected-halo-width, var(--ds-focus-ring-width))
     color-mix(in srgb, var(--ds-tag-input-rejected-ink, var(--ds-color-warning)) 24%, transparent);
 }
@@ -134,8 +139,8 @@
   }
   .ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within,
   .ds-tag-input.ds-tag-input--modern[data-part='root'][data-rejected] {
-    outline: var(--ds-focus-ring-width) solid Highlight;
-    outline-offset: 1px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;
   }
   .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:is([data-state~='pressed'], :active):not([data-disabled='true']) {

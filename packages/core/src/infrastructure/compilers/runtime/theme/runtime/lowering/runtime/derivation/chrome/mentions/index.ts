@@ -65,11 +65,11 @@ export function deriveMentionsChannels(): Record<string, string> {
   vars["--ds-mentions-ink-readonly"] = "var(--ds-input-readonly-color, var(--ds-color-text-primary))";
   vars["--ds-mentions-caret"] = "var(--ds-input-border-focus, var(--ds-color-primary))";
   vars["--ds-mentions-placeholder-color"] = "var(--ds-input-color-placeholder, var(--ds-type-color-muted))";
-  vars["--ds-mentions-shadow-focus"] = "var(--ds-input-shadow-focus, var(--ds-focus-ring))";
+  vars["--ds-mentions-shadow-focus"] = "var(--ds-input-focus-ring, var(--ds-focus-ring))";
   vars["--ds-mentions-error-border"] = "var(--ds-color-error)";
   vars["--ds-mentions-warning-border"] = "var(--ds-color-warning)";
-  vars["--ds-mentions-error-shadow-focus"] = "var(--ds-input-error-shadow-focus, var(--ds-focus-ring))";
-  vars["--ds-mentions-warning-shadow-focus"] = "var(--ds-input-warning-shadow-focus, var(--ds-focus-ring))";
+  vars["--ds-mentions-error-shadow-focus"] = "var(--ds-input-focus-ring-error, var(--ds-focus-ring))";
+  vars["--ds-mentions-warning-shadow-focus"] = "var(--ds-input-focus-ring-warning, var(--ds-focus-ring))";
   vars["--ds-mentions-dropdown-bg"] = "var(--ds-material-overlay-background)";
   vars["--ds-mentions-dropdown-border"] = "var(--ds-color-border-subtle)";
   vars["--ds-mentions-dropdown-shadow"] = "var(--ds-elevation-3)";

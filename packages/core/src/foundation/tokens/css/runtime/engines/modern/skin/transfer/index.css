@@ -340,6 +340,11 @@
     color: FieldText;
   }
 
+  .ds-transfer.ds-transfer--modern [data-part='panel-search']:is([data-state~='focused'], :focus) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+  }
+
   .ds-transfer.ds-transfer--modern [data-part='panel-item'][data-selected='true'],
   .ds-transfer.ds-transfer--modern [data-part='panel-item']:is([data-state~='pressed'], :active):not([data-disabled='true']) {
     background: Highlight;

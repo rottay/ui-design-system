@@ -69,13 +69,13 @@ export function deriveInputNumberChannels(): Record<string, string> {
   vars["--ds-input-number-border-hover"] = "var(--ds-input-border-hover)";
   vars["--ds-input-number-border-focus"] = "var(--ds-input-border-focus)";
   vars["--ds-input-number-border-disabled"] = "var(--ds-input-border-disabled)";
-  vars["--ds-input-number-shadow-focus"] = "var(--ds-input-shadow-focus)";
+  vars["--ds-input-number-shadow-focus"] = "var(--ds-input-focus-ring, var(--ds-focus-ring))";
   vars["--ds-input-number-error-border"] = "var(--ds-input-error-border)";
   vars["--ds-input-number-error-bg"] = "var(--ds-input-error-bg)";
-  vars["--ds-input-number-error-shadow-focus"] = "var(--ds-input-error-shadow-focus)";
+  vars["--ds-input-number-error-shadow-focus"] = "var(--ds-input-focus-ring-error, var(--ds-focus-ring))";
   vars["--ds-input-number-warning-border"] = "var(--ds-input-warning-border)";
   vars["--ds-input-number-warning-bg"] = "var(--ds-input-warning-bg)";
-  vars["--ds-input-number-warning-shadow-focus"] = "var(--ds-input-warning-shadow-focus)";
+  vars["--ds-input-number-warning-shadow-focus"] = "var(--ds-input-focus-ring-warning, var(--ds-focus-ring))";
   vars["--ds-input-number-readonly-color"] = "var(--ds-input-readonly-color)";
   vars["--ds-input-number-readonly-bg"] = "var(--ds-input-readonly-bg)";
   vars["--ds-input-number-readonly-border"] = "var(--ds-input-readonly-border)";

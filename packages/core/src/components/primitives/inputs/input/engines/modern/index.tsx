@@ -17,7 +17,7 @@
  * - Surface: `--ds-input-bg` (falls back to `--ds-surface-control`)
  * - Border: `--ds-input-border` (resting), `--ds-input-border-focus` (focus)
  * - Radius: `--ds-input-responsive-radius` → `--ds-radius-input` → `--ds-radius-md`
- * - Focus ring: `--ds-input-shadow-focus` (fallback `--ds-focus-ring`), keyed
+ * - Focus ring: `--ds-input-focus-ring` (fallback `--ds-focus-ring`), keyed
  *   on `data-state~='focused'` -- a text field's border is not a
  *   keyboard-only affordance, so pointer clicks earn the ring too.
  * - Motion: `--ds-input-transition-duration` / `--ds-input-transition-timing`

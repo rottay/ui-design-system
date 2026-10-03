@@ -145,6 +145,7 @@
   cursor: var(--ds-input-readonly-cursor, default);
 }
 
+/* A validation frame survives focus: the ring arrives, the hue stays; an authored status ring replaces it. */
 .ds-textarea.ds-textarea--modern[data-part='root']:is([data-state~='focused'], :focus):not([data-disabled='true']) {
   box-shadow: var(--ds-textarea-shadow-focus, var(--ds-focus-ring));
 }
@@ -306,8 +307,8 @@
   }
 
   .ds-textarea.ds-textarea--modern[data-part='root']:is([data-state~='focused'], :focus) {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
   }
 
   .ds-textarea.ds-textarea--modern[data-part='root'][data-disabled='true'] {

@@ -391,16 +391,30 @@ describe('TENANT-COLOR PROPAGATION · the reach a palette-only tenant has', () =
     // ring now follows the seed instead of resting on a frozen constant. The
     // error seed still owns the authored branch; this is the fallback branch
     // moving with the channel it names.
+    //
+    // The field focus rings bring it to 25: `--ds-input-focus-ring`, its three
+    // status rings, the two InputNumber status rings that rest on them and
+    // `--ds-tag-input-shadow-focus` all rest on the tenant focus signature,
+    // which follows the seed through the ring colour.
+    // `--ds-otp-input-slot-shadow-focus-error` now names the input family's
+    // gated error ring instead of the halo: the authored branch is still the
+    // error leaf's, the fallback branch is still the ring.
     expect(primaryReach.filter(FAMILIES.inputs)).toEqual([
       '--ds-input-border-focus',
       '--ds-input-caret-color',
+      '--ds-input-focus-ring',
+      '--ds-input-focus-ring-error',
+      '--ds-input-focus-ring-success',
+      '--ds-input-focus-ring-warning',
       '--ds-input-loading-color',
       '--ds-input-number-border-focus',
       '--ds-input-number-caret',
+      '--ds-input-number-error-shadow-focus',
       '--ds-input-number-selection-bg',
       '--ds-input-number-shadow-focus',
       '--ds-input-number-stepper-bg-hover',
       '--ds-input-number-stepper-color-hover',
+      '--ds-input-number-warning-shadow-focus',
       '--ds-input-selection-bg',
       '--ds-input-shadow-focus',
       '--ds-otp-input-caret-color',
@@ -410,9 +424,10 @@ describe('TENANT-COLOR PROPAGATION · the reach a palette-only tenant has', () =
       '--ds-password-input-strength-good',
       '--ds-tag-input-border-focus',
       '--ds-tag-input-caret',
+      '--ds-tag-input-shadow-focus',
     ]);
     expect(BASE['--ds-otp-input-slot-shadow-focus-error']).toContain(
-      '--ds-input-error-shadow-focus'
+      '--ds-input-focus-ring-error'
     );
     // The background seed is a separate authority and gains nothing here: cards
     // still reach their ground through the alias chain, not through the primary

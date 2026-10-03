@@ -177,7 +177,26 @@
     box-shadow: none;
   }
   50% {
-    box-shadow: var(--ds-input-number-warning-shadow-focus, var(--ds-focus-ring));
+    box-shadow: var(--ds-input-warning-shadow-focus, var(--ds-focus-ring));
+  }
+}
+
+/* Focus stays visible through the cue: the signature holds and the cue joins it. */
+.ds-input-number.ds-input-number--modern[data-part='root'][data-bounds-hit]:is([data-state~='focus-visible'], :focus-visible) {
+  animation: none;
+}
+
+@container not style(--ds-input-warning-shadow-focus: none) {
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-bounds-hit]:is([data-state~='focus-visible'], :focus-visible) {
+    animation: ds-input-number-bounds-hit-focused calc(var(--ds-motion-feedback) * 2) var(--ds-motion-ease-out) 1;
+  }
+}
+
+@keyframes ds-input-number-bounds-hit-focused {
+  50% {
+    box-shadow:
+      var(--ds-input-number-shadow-focus, var(--ds-focus-ring)),
+      var(--ds-input-warning-shadow-focus, var(--ds-focus-ring));
   }
 }
 
@@ -303,8 +322,9 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 
 .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:is([data-state~='focus-visible'], :focus-visible) {
   color: var(--ds-input-number-stepper-color-hover, var(--ds-color-primary));
-  outline: var(--ds-focus-ring-width) solid var(--ds-input-number-border-focus, var(--ds-color-primary));
-  outline-offset: 1px;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 
 .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:is([data-state~='disabled'], :disabled) {
@@ -370,6 +390,10 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
     color: GrayText;
     opacity: 1;
   }
+  .ds-input-number.ds-input-number--modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+  }
   .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
     color: ButtonText;
   }
@@ -377,7 +401,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
     color: GrayText;
   }
   .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:is([data-state~='focus-visible'], :focus-visible) {
-    outline-color: Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
   }
   [data-part='addon-before']:has(~ div > .ds-input-number.ds-input-number--modern[data-part='root']),
   div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-part='addon-after'] {
@@ -392,7 +416,8 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
     transition: none;
   }
-  .ds-input-number.ds-input-number--modern[data-part='root'][data-bounds-hit] {
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-bounds-hit],
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-bounds-hit]:is([data-state~='focus-visible'], :focus-visible) {
     animation: none;
   }
 }

@@ -83,7 +83,7 @@
   border-color: var(--ds-mentions-warning-border, var(--ds-color-warning));
 }
 
-/* The frame follows any focus; status frames keep their hue and take a status ring. */
+/* The frame follows any focus; a validation frame keeps its hue; an authored status ring replaces the ring. */
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-part='textarea']:is([data-state~='focused'], :focus):not([data-disabled='true']):not([data-status]) {
   border-color: var(--ds-mentions-border-focus, var(--ds-color-primary));
 }
@@ -214,6 +214,11 @@
     border-color: ButtonText;
     background: Field;
     color: FieldText;
+  }
+
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:is([data-state~='focused'], :focus) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
   }
 
   .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-disabled='true'] {
