@@ -1,4 +1,6 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -26,6 +28,16 @@ function buildProps(overrides: Partial<NotificationCenterProps> = {}): Notificat
 }
 
 const settle = () => act(async () => {});
+
+const MODERN_SKIN = readFileSync(
+  resolve(
+    __dirname,
+    '../../../../../foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css',
+  ),
+  'utf8',
+).replace(/\/\*[\s\S]*?\*\//g, '');
+
+const BUTTON_SKIN_STATE_HOST = '.ds-button.ds-button--modern[data-variant]';
 
 describe('NotificationCenter modern engine row action names', () => {
   it('distinguishes the dismiss control of each row', async () => {
@@ -80,6 +92,67 @@ describe('NotificationCenter modern engine dismiss focus handoff', () => {
     // Without the handoff focus lands on <body> and the next Tab restarts from
     // the top of the document, throwing the user out of the panel.
     expect(document.activeElement).toBe(container.querySelector('[data-part="panel"]'));
+  });
+});
+
+describe('NotificationCenter modern engine keyboard state contract', () => {
+  it('renders every action as a tabbable Button the Button skin states select', async () => {
+    const { container } = render(
+      <ModernNotificationCenter
+        {...buildProps({
+          onRead: vi.fn(),
+          onReadAll: vi.fn(),
+          onClear: vi.fn(),
+          onClearAll: vi.fn(),
+          notifications: [notification({ action: { label: 'View', onClick: vi.fn() } })],
+        })}
+      />,
+    );
+    await settle();
+
+    for (const part of ['trigger', 'mark-all-read', 'clear-all', 'action', 'mark-read', 'dismiss']) {
+      const control = container.querySelector<HTMLElement>(`[data-part="${part}"]`);
+      expect(control, part).toBeTruthy();
+      expect(control!.tagName, part).toBe('BUTTON');
+      expect(control!.matches(BUTTON_SKIN_STATE_HOST), part).toBe(true);
+      expect(control!.tabIndex, part).toBe(0);
+      expect(control!.hasAttribute('disabled'), part).toBe(false);
+    }
+  });
+
+  it('reveals the quiet row actions when keyboard focus reaches the row', () => {
+    for (const part of ['mark-read', 'dismiss']) {
+      expect(MODERN_SKIN).toContain(`[data-part='row']:focus-within [data-part='${part}']`);
+      expect(MODERN_SKIN).toContain(
+        `[data-part='${part}']:is([data-state~='focus-visible'], :focus-visible)`,
+      );
+    }
+  });
+
+  it('leaves the composed Buttons their own ring and paints only the panel anchor', async () => {
+    const { container } = render(<ModernNotificationCenter {...buildProps({ onClear: vi.fn() })} />);
+    await settle();
+
+    const panel = container.querySelector<HTMLElement>('[data-part="panel"]');
+    expect(panel?.tabIndex).toBe(-1);
+
+    const panelRing =
+      ".ds-pattern-notification-center.ds-engine-modern [data-part='panel']:is([data-state~='focus-visible'], :focus-visible)";
+    const ringRules = [...MODERN_SKIN.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .map(([, selector, body]) => ({ selector: selector.trim(), body }))
+      .filter(({ body }) => /(^|[\s;])outline(-color)?\s*:/.test(body));
+    expect(ringRules.length).toBeGreaterThan(0);
+    for (const rule of ringRules) expect(rule.selector).toBe(panelRing);
+
+    const base = ringRules.find(({ body }) => /(^|[\s;])outline\s*:/.test(body));
+    expect(base?.body).toContain('var(--ds-focus-ring-width, 2px)');
+    expect(base?.body).toContain('var(--ds-focus-ring-color, var(--ds-color-primary))');
+    expect(base?.body).toContain('var(--ds-focus-ring-offset, 2px)');
+
+    const forcedColors = MODERN_SKIN.slice(MODERN_SKIN.indexOf('@media (forced-colors: active)'));
+    expect(forcedColors).toMatch(
+      /\[data-part='panel'\]:is\(\[data-state~='focus-visible'\], :focus-visible\)\s*\{\s*outline-color:\s*Highlight;/,
+    );
   });
 });
 
