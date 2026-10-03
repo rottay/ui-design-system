@@ -18,7 +18,8 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { partAttributes, useInteractionState } from "@/foundation/behavior";
 import type { AvatarProps } from "../../contracts";
-import { AVATAR_DEFAULTS, TONE_TO_AVATAR_VARIANT } from "../../contracts";
+import { AVATAR_DEFAULTS } from "../../contracts";
+import { TONE_TO_VARIANT } from "@/foundation/contracts/kernel/common";
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
 import { EntityPersonIcon } from "@/graphics/icons/semantic/generated/roles/entity-person";
 
@@ -92,7 +93,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
 
   // tone (semantic) takes precedence over the deprecated variant prop; the skin's
   // per-variant fill rules are keyed by the same internal color-token name either way.
-  const variant = tone ? TONE_TO_AVATAR_VARIANT[tone] : variantProp;
+  const variant = tone ? TONE_TO_VARIANT[tone] : variantProp;
 
   // Track image load failures so we can fall back to initials/children
   const [imageError, setImageError] = useState(false);

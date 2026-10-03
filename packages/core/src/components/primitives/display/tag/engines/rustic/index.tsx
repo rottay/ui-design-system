@@ -39,7 +39,8 @@
 
 import React, { useCallback } from 'react';
 import type { TagProps } from '../../contracts';
-import { TAG_DEFAULTS, SIZE_MAP, TONE_TO_TAG_VARIANT } from '../../contracts';
+import { TAG_DEFAULTS, SIZE_MAP } from '../../contracts';
+import { TONE_TO_VARIANT } from '@/foundation/contracts/kernel/common';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 
 /**
@@ -85,7 +86,7 @@ export default function RusticTag(props: TagProps): React.ReactElement {
 
   // tone (semantic) takes precedence over the deprecated variant prop; VARIANT_COLORS
   // below is keyed by the same internal color-token name either way.
-  const variant = tone ? TONE_TO_TAG_VARIANT[tone] : variantProp;
+  const variant = tone ? TONE_TO_VARIANT[tone] : variantProp;
 
   /**
    * Handles tag click events when clickable.

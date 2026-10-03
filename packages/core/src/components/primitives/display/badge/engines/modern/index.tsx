@@ -22,7 +22,8 @@ import {
 } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 
 import type { BadgePosition, BadgeProps, BadgeSize } from '../../contracts';
-import { BADGE_DEFAULTS, DOT_SIZE_MAP, SIZE_MAP, TONE_TO_BADGE_VARIANT } from '../../contracts';
+import { BADGE_DEFAULTS, DOT_SIZE_MAP, SIZE_MAP } from '../../contracts';
+import { TONE_TO_VARIANT } from '@/foundation/contracts/kernel/common';
 
 function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
   if (value === undefined || value === null || isResponsiveValue(value)) return undefined;
@@ -178,7 +179,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   const effectiveMax = max ?? overflowCount ?? BADGE_DEFAULTS.overflowCount;
   const statusVariant = status ? STATUS_VARIANT[status] : undefined;
   const variant = tone
-    ? TONE_TO_BADGE_VARIANT[tone]
+    ? TONE_TO_VARIANT[tone]
     : variantProp ?? statusVariant ?? BADGE_DEFAULTS.variant;
   const isFamilyLabel = kind !== 'badge';
   const hasOverlayAnchor = Boolean(children) && !isFamilyLabel && (

@@ -1,0 +1,11 @@
+---
+"@rottay/design-system": major
+---
+
+WO-RET-01 (RET-01-TONE, the tone-axis bridge lot). The three deprecated per-component tone bridges `TONE_TO_AVATAR_VARIANT`, `TONE_TO_TAG_VARIANT` and `TONE_TO_BADGE_VARIANT` retire from the package root. Each was declared as `= TONE_TO_VARIANT`: the same object reference as the kernel map under a component-local name and a narrower static type, never a second table. The consumer census measured zero productive consumers of the three names across the package, the showroom and the three vertical apps; their only readers were the Avatar, Tag and Badge engines (classic, modern, rustic), which now index the kernel `TONE_TO_VARIANT` directly — the exact object the aliases re-exported — so the `tone` prop resolves to the same internal color-token key on every engine and nothing renders differently. Everything else deprecated in these families is out of this lot and stays: the `variant` props, the `AvatarVariant` / `TagVariant` / `BadgeVariant` types, `Badge.overflowCount` and `Badge.closable`. Downstream apps: an import of any of the three retired names fails at compile time on upgrade; replace it with `TONE_TO_VARIANT` from the package root (`@rottay/design-system`), which was and remains published there, and note that it is typed as the six-key `Tone` map rather than the per-component narrowed record.
+
+```contract-diff
+export .#TONE_TO_AVATAR_VARIANT — removed; identity alias of the kernel `TONE_TO_VARIANT`, zero productive consumers across package, showroom and the three apps; Avatar engines read `TONE_TO_VARIANT` directly, zero behavior change; migrate to `TONE_TO_VARIANT` from the package root (RET-01-TONE)
+export .#TONE_TO_TAG_VARIANT — removed; identity alias of the kernel `TONE_TO_VARIANT`, zero productive consumers across package, showroom and the three apps; Tag engines read `TONE_TO_VARIANT` directly, zero behavior change; migrate to `TONE_TO_VARIANT` from the package root (RET-01-TONE)
+export .#TONE_TO_BADGE_VARIANT — removed; identity alias of the kernel `TONE_TO_VARIANT`, zero productive consumers across package, showroom and the three apps; Badge engines read `TONE_TO_VARIANT` directly, zero behavior change; migrate to `TONE_TO_VARIANT` from the package root (RET-01-TONE)
+```

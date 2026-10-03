@@ -13,7 +13,8 @@
 
 import React, { useId } from 'react';
 import type { BadgeProps, BadgeSize } from '../../contracts';
-import { BADGE_DEFAULTS, SIZE_MAP, DOT_SIZE_MAP, VARIANT_COLOR_MAP, VARIANT_SOFT_COLOR_MAP, VARIANT_SOFT_TEXT_COLOR_MAP, VARIANT_SOLID_TEXT_COLOR_MAP, TONE_TO_BADGE_VARIANT } from '../../contracts';
+import { BADGE_DEFAULTS, SIZE_MAP, DOT_SIZE_MAP, VARIANT_COLOR_MAP, VARIANT_SOFT_COLOR_MAP, VARIANT_SOFT_TEXT_COLOR_MAP, VARIANT_SOLID_TEXT_COLOR_MAP } from '../../contracts';
+import { TONE_TO_VARIANT } from '@/foundation/contracts/kernel/common';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
@@ -68,7 +69,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
 
   // tone (semantic) takes precedence over the deprecated variant prop; VARIANT_COLOR_MAP
   // and its soft-style siblings below are keyed by the same internal color-token name either way.
-  const variant = tone ? TONE_TO_BADGE_VARIANT[tone] : variantProp;
+  const variant = tone ? TONE_TO_VARIANT[tone] : variantProp;
 
   // Responsive size handling
   const reactId = useId();

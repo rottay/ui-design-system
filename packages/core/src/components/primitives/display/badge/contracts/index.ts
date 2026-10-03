@@ -45,7 +45,6 @@ import type {
   Variant,
   WithChildren,
 } from '../../../../../foundation/contracts/kernel/common';
-import { TONE_TO_VARIANT } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
@@ -57,17 +56,6 @@ export type BadgeSize = Size;
  * one release so existing values keep compiling.
  */
 export type BadgeVariant = Variant;
-
-/**
- * @deprecated Use the kernel {@link TONE_TO_VARIANT} map directly; this export now folds into
- * it and is retained under Badge's name for one release. Every {@link Tone} value Badge accepts
- * through the `tone` prop, mapped to the internal color-token key the engines render ('gradient'
- * and 'secondary' have no Tone equivalent and remain reachable only through the deprecated
- * `variant` prop). `'info'` is a real, already color-tokened key the engines' internal
- * `VARIANT_TOKENS` maps define but the deprecated `BadgeVariant` union never named, so it is
- * typed here rather than narrowed to `BadgeVariant`.
- */
-export const TONE_TO_BADGE_VARIANT: Record<Tone, BadgeVariant | 'info'> = TONE_TO_VARIANT;
 
 /**
  * Badge visual style.

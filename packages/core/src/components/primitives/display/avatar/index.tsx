@@ -27,7 +27,7 @@ import type { AvatarProps } from './contracts';
 import { AvatarGroup, AvatarBadge, AvatarFallback } from './compound';
 
 export type { AvatarProps, AvatarSize, AvatarShape, AvatarStatus, AvatarVariant, AvatarTone } from './contracts';
-export { AVATAR_DEFAULTS, TONE_TO_AVATAR_VARIANT } from './contracts';
+export { AVATAR_DEFAULTS } from './contracts';
 
 export { AvatarGroup, AvatarBadge, AvatarFallback };
 export type { AvatarGroupProps, AvatarBadgeProps, BadgeStatus, AvatarFallbackProps } from './compound';

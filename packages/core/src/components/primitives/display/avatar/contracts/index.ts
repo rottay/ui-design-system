@@ -37,7 +37,6 @@
 
 import type { ReactNode } from 'react';
 import type { BaseComponentProps, Size, Tone, Variant, Shape, WithChildren, BorderedProps } from '../../../../../foundation/contracts/kernel/common';
-import { TONE_TO_VARIANT } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 
 /** Avatar size type alias derived from the global Size scale. */
@@ -56,15 +55,6 @@ export type AvatarVariant = Variant;
  * 'gradient').
  */
 export type AvatarTone = Exclude<Tone, 'info'>;
-
-/**
- * @deprecated Use the kernel {@link TONE_TO_VARIANT} map directly; this export now folds into
- * it and is retained under Avatar's name for one release. Every {@link AvatarTone} value mapped
- * to the internal color-token key `variant` has always used ('danger' is the canonical Tone
- * spelling; Avatar's internal key has always been 'error'). `TONE_TO_VARIANT`'s extra `info` key
- * is harmless here: this binding's `Record<AvatarTone, AvatarVariant>` type does not require it.
- */
-export const TONE_TO_AVATAR_VARIANT: Record<AvatarTone, AvatarVariant> = TONE_TO_VARIANT;
 
 /**
  * Avatar shapes.

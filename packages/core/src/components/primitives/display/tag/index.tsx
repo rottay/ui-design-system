@@ -29,7 +29,7 @@ import type { TagProps } from './contracts';
 import { TagGroup } from './compound';
 
 export type { TagProps, TagSize, TagVariant, TagTone, TagRadius } from './contracts';
-export { TAG_DEFAULTS, SIZE_MAP, RADIUS_MAP, VARIANT_COLORS, TONE_TO_TAG_VARIANT } from './contracts';
+export { TAG_DEFAULTS, SIZE_MAP, RADIUS_MAP, VARIANT_COLORS } from './contracts';
 
 export { TagGroup };
 export type { TagGroupProps } from './compound';

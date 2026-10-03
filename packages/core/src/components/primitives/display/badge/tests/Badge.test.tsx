@@ -157,8 +157,8 @@ describe('Badge', () => {
 
     // `info` is absent above because it is a Tone, never a Variant:
     // `BadgeVariant = Variant` has no `info` member, and the only path to the
-    // `info` color-token key is `TONE_TO_BADGE_VARIANT`
-    // (`Record<Tone, BadgeVariant | 'info'>`), which the engine stub in this
+    // `info` color-token key is the `tone` prop, resolved by the engines
+    // through the kernel `TONE_TO_VARIANT` map, which the engine stub in this
     // file does not model. That resolution is covered against the real engines
     // in Badge.labelled-chrome.test.tsx.
   });

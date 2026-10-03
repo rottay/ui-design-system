@@ -13,7 +13,8 @@
 
 import React, { useState, useEffect } from 'react';
 import type { AvatarProps } from '../../contracts';
-import { AVATAR_DEFAULTS, TONE_TO_AVATAR_VARIANT } from '../../contracts';
+import { AVATAR_DEFAULTS } from '../../contracts';
+import { TONE_TO_VARIANT } from '@/foundation/contracts/kernel/common';
 
 /**
  * Derives up to two uppercase initials from a display name or alt text.
@@ -71,7 +72,7 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
 
   // tone (semantic) takes precedence over the deprecated variant prop; the
   // --ds-avatar-{variant}-* tokens below are keyed by the same internal name either way.
-  const variant = tone ? TONE_TO_AVATAR_VARIANT[tone] : variantProp;
+  const variant = tone ? TONE_TO_VARIANT[tone] : variantProp;
 
   // Track image load failures so we can fall back to initials/children
   const [imageError, setImageError] = useState(false);

@@ -36,7 +36,8 @@ import { TAG_RECIPE_DEFINITION } from '@/infrastructure/runtime/foundation/recip
 import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { TagProps } from '../../contracts';
-import { TAG_DEFAULTS, TONE_TO_TAG_VARIANT } from '../../contracts';
+import { TAG_DEFAULTS } from '../../contracts';
+import { TONE_TO_VARIANT } from '@/foundation/contracts/kernel/common';
 
 /**
  * DS-S001 recipe: the modern Tag shell classes. Variant/size/radius stay on
@@ -112,7 +113,7 @@ export default function ModernTag(props: TagProps): React.ReactElement {
   // tone (semantic) takes precedence over the deprecated variant prop; the skin's
   // fill/frame rules are keyed by the same internal color-token name either way.
   const variant = tone
-    ? TONE_TO_TAG_VARIANT[tone]
+    ? TONE_TO_VARIANT[tone]
     : variantProp ?? TAG_DEFAULTS.variant;
 
   /**

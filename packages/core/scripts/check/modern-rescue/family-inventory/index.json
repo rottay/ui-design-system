@@ -2052,7 +2052,6 @@
         "AvatarStatus",
         "AvatarVariant",
         "AvatarTone",
-        "TONE_TO_AVATAR_VARIANT",
         "AvatarGroup",
         "AvatarBadge",
         "AvatarFallback",
@@ -2089,7 +2088,6 @@
         "BadgeStatus",
         "BadgeKind",
         "BadgePosition",
-        "TONE_TO_BADGE_VARIANT",
         "Badge"
       ],
       "declaredComponentsPublic": [
@@ -2536,7 +2534,6 @@
         "TagVariant",
         "TagTone",
         "TagRadius",
-        "TONE_TO_TAG_VARIANT",
         "TagGroup",
         "TagGroupProps",
         "Tag"

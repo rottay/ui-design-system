@@ -5,7 +5,6 @@
 
 export { Avatar, AvatarGroup, AvatarBadge, AvatarFallback } from './avatar';
 export type { AvatarProps, AvatarSize, AvatarShape, AvatarStatus, AvatarVariant, AvatarTone, AvatarGroupProps, AvatarBadgeProps, AvatarFallbackProps } from './avatar';
-export { TONE_TO_AVATAR_VARIANT } from './avatar';
 
 export { Badge } from './badge';
 export type {
@@ -17,7 +16,6 @@ export type {
   BadgeKind,
   BadgePosition,
 } from './badge';
-export { TONE_TO_BADGE_VARIANT } from './badge';
 
 export { Card } from './card';
 export type { CardProps, CardVariant } from './card';
@@ -27,7 +25,6 @@ export type { ImageProps, ImageFallbackProps, ImageSkeletonProps, ImageFit, Imag
 
 export { Tag, TagGroup } from './tag';
 export type { TagProps, TagSize, TagVariant, TagTone, TagRadius, TagGroupProps } from './tag';
-export { TONE_TO_TAG_VARIANT } from './tag';
 
 export { Tooltip } from './tooltip';
 export type {

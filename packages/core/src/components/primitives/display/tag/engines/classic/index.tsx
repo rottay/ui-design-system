@@ -41,7 +41,8 @@
 import React, { useCallback } from 'react';
 import { Tag as AntTag } from 'antd';
 import type { TagProps } from '../../contracts';
-import { TAG_DEFAULTS, TONE_TO_TAG_VARIANT } from '../../contracts';
+import { TAG_DEFAULTS } from '../../contracts';
+import { TONE_TO_VARIANT } from '@/foundation/contracts/kernel/common';
 
 /**
  * Maps design system variants to Ant Design color presets.
@@ -98,7 +99,7 @@ export default function ClassicTag(props: TagProps): React.ReactElement {
 
   // tone (semantic) takes precedence over the deprecated variant prop; VARIANT_TO_ANT_COLOR
   // below is keyed by the same internal color-token name either way.
-  const variant = tone ? TONE_TO_TAG_VARIANT[tone] : variantProp;
+  const variant = tone ? TONE_TO_VARIANT[tone] : variantProp;
 
   /**
    * Handles close events with proper callback invocation.
