@@ -751,10 +751,21 @@ export interface BrandSurfaces {
 }
 
 /**
- * @deprecated Open-ended brand motion is retained for one compatibility minor
- * while bundled themes migrate. Runtime choreography now resolves through the
- * vertical MotionProfile plus the bounded TenantMotionDial; DB tenants must
- * not author springs, bounce, keyframes or loop topology.
+ * @deprecated The open-ended fields (`entrance`, `entranceDuration`,
+ * `hoverLift`, `hoverScale`, `useSpring`, `springTension`, `springFriction`,
+ * `pulseSpeed`, `skeletonStyle`, `staggerDelay`, `staggerMax`,
+ * `countUpEnabled`) are superseded. No bundled preset authors this interface
+ * any more: the evnto experience baseline is authored against
+ * `AnimationPersonalityTokens`. The interface still types `FlatTheme.motion`,
+ * `DEFAULT_MOTION_SHAPE` in `themes/iso` states its whole shape, and the
+ * theme-document schema admits and lowers those fields from a theme document.
+ * The Brand Studio editor authors six of them into drafts (`entrance`,
+ * `entranceDuration`, `hoverLift`, `hoverScale`, `pulseSpeed`,
+ * `skeletonStyle`) and its file export reads `entranceDuration`. Runtime
+ * choreography resolves through the vertical MotionProfile plus the bounded
+ * TenantMotionDial; DB tenants must not author springs, bounce, keyframes or
+ * loop topology. The four governed fields are `intensity`, `durationScale`,
+ * `ambient` and `character`, and they stay.
  */
 export interface BrandMotion {
   intensity?: number;
@@ -770,9 +781,9 @@ export interface BrandMotion {
    * and entrance-offset roles, never a duration -- so a tenant can ask for
    * mechanical motion without also asking for fast motion.
    *
-   * One of the three GOVERNED fields on this otherwise deprecated interface
-   * (see `intensity` and `durationScale`): bounded, closed, and admissible on
-   * both transports. Absent -> `organic`, the engine's own eases.
+   * One of the four GOVERNED fields on this otherwise deprecated interface
+   * (see `intensity`, `durationScale` and `ambient`): bounded, closed, and
+   * admissible on both transports. Absent -> `organic`, the engine's own eases.
    */
   character?: "mechanical" | "organic" | "playful";
   entrance?: "none" | "fade" | "slideUp" | "spring" | "bounce";

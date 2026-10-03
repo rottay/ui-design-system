@@ -1,4 +1,5 @@
-import type { BrandMotion, BrandSurfaces } from '@/foundation/contracts/composition/tenants/themes';
+import type { BrandSurfaces } from '@/foundation/contracts/composition/tenants/themes';
+import type { AnimationPersonalityTokens } from '@/foundation/contracts/kernel/tokens/personality';
 
 /**
  * Canonical structural and motion axes for every bundled/custom Evnto path.
@@ -46,6 +47,6 @@ export const EVNTO_CANONICAL_MOTION = {
   pulseSpeed: 'fast',
   skeletonStyle: 'wave',
   countUpEnabled: true,
-} satisfies BrandMotion;
+} satisfies AnimationPersonalityTokens;
 
 Object.freeze(EVNTO_CANONICAL_MOTION);
