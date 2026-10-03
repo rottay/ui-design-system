@@ -4776,6 +4776,8 @@
         "palette.status-seeds",
         "profiles.expressive",
         "shape.button-style",
+        "shape.control-height",
+        "shape.nesting",
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",

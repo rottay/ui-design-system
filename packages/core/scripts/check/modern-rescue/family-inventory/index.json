@@ -2142,7 +2142,6 @@
         "CalloutTone",
         "CALLOUT_DEFAULTS",
         "CALLOUT_COLORS",
-        "TONE_TO_CALLOUT_VARIANT",
         "Callout"
       ],
       "declaredComponentsPublic": [
@@ -3200,7 +3199,6 @@
         "AutoCompleteProps",
         "AutoCompleteOption",
         "AutoCompleteSize",
-        "LegacyAutoCompleteSize",
         "AUTOCOMPLETE_DEFAULTS",
         "AutoComplete"
       ],
@@ -3255,7 +3253,6 @@
         "CascaderOption",
         "CascaderValue",
         "CascaderSize",
-        "LegacyCascaderSize",
         "CascaderExpandTrigger",
         "CASCADER_DEFAULTS",
         "Cascader"
@@ -3316,7 +3313,6 @@
         "Color",
         "ColorFormat",
         "ColorPickerSize",
-        "LegacyColorPickerSize",
         "ColorPickerTrigger",
         "COLORPICKER_DEFAULTS",
         "ColorPicker"
@@ -3805,7 +3801,6 @@
         "TreeSelectNode",
         "TreeSelectValue",
         "TreeSelectSize",
-        "LegacyTreeSelectSize",
         "TREESELECT_DEFAULTS",
         "TreeSelect"
       ],
@@ -3945,8 +3940,6 @@
         "BoxOverflow",
         "BoxMotion",
         "BoxTextAlign",
-        "BoxTextAlignInput",
-        "LegacyPhysicalBoxTextAlign",
         "BOX_DEFAULTS",
         "SPACING_MAP",
         "RADIUS_MAP",
@@ -3977,7 +3970,6 @@
         "CollapseProps",
         "CollapsePanelProps",
         "CollapseSize",
-        "LegacyCollapseSize",
         "COLLAPSE_DEFAULTS",
         "useCollapseTokens",
         "UseCollapseTokensOptions",

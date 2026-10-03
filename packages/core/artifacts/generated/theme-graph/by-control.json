@@ -515,8 +515,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1058,
-      "channelsThroughAliases": 1318,
+      "channels": 1059,
+      "channelsThroughAliases": 1319,
       "decision": "motion.character",
       "derivers": [
         "action-dock",
@@ -758,8 +758,8 @@
       "tier": "pro"
     },
     {
-      "channels": 1058,
-      "channelsThroughAliases": 1318,
+      "channels": 1059,
+      "channelsThroughAliases": 1319,
       "decision": "motion.dial",
       "derivers": [
         "action-dock",
@@ -1015,8 +1015,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2527,
-      "channelsThroughAliases": 4099,
+      "channels": 2532,
+      "channelsThroughAliases": 4106,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1370,8 +1370,8 @@
       "tier": "pro"
     },
     {
-      "channels": 2527,
-      "channelsThroughAliases": 4099,
+      "channels": 2532,
+      "channelsThroughAliases": 4106,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1717,8 +1717,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2625,
-      "channelsThroughAliases": 4302,
+      "channels": 2630,
+      "channelsThroughAliases": 4309,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -2068,8 +2068,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2613,
-      "channelsThroughAliases": 4278,
+      "channels": 2618,
+      "channelsThroughAliases": 4285,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",
@@ -2953,7 +2953,7 @@
     },
     {
       "channels": 506,
-      "channelsThroughAliases": 647,
+      "channelsThroughAliases": 649,
       "decision": "shape.control-height",
       "derivers": [
         "app-shell",
@@ -3040,6 +3040,7 @@
         "segmented",
         "select",
         "sheet",
+        "shift-matrix",
         "shortcuts-overlay",
         "sidebar-surface",
         "skeleton",
@@ -3132,6 +3133,7 @@
         "segmented",
         "select",
         "sheet",
+        "shift-matrix",
         "shortcuts-overlay",
         "sidebar-surface",
         "skeleton",
@@ -3148,8 +3150,8 @@
       "tier": "pro"
     },
     {
-      "channels": 1299,
-      "channelsThroughAliases": 1929,
+      "channels": 1300,
+      "channelsThroughAliases": 1932,
       "decision": "shape.radius-scale",
       "derivers": [
         "app-shell",
@@ -3504,7 +3506,7 @@
     },
     {
       "channels": 395,
-      "channelsThroughAliases": 1212,
+      "channelsThroughAliases": 1218,
       "decision": "states.emphasis",
       "derivers": [
         "app-shell",
@@ -3736,7 +3738,7 @@
     },
     {
       "channels": 682,
-      "channelsThroughAliases": 1483,
+      "channelsThroughAliases": 1489,
       "decision": "states.focus-style",
       "derivers": [
         "app-shell",
@@ -4239,7 +4241,7 @@
     },
     {
       "channels": 1717,
-      "channelsThroughAliases": 2064,
+      "channelsThroughAliases": 2066,
       "decision": "surfaces.elevation-posture",
       "derivers": [
         "action-dock",
@@ -5037,8 +5039,8 @@
       "tier": "standard"
     },
     {
-      "channels": 423,
-      "channelsThroughAliases": 697,
+      "channels": 427,
+      "channelsThroughAliases": 701,
       "decision": "typography.role-weights",
       "derivers": [
         "badge",
