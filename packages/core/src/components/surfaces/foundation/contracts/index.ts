@@ -468,8 +468,6 @@ export interface DetailSurfaceTab<TView> {
   visible?: boolean | ((item: TView) => boolean);
   /** Stable capability ID used by final app-resolved presentation access. Defaults to `key`. */
   capabilityId?: string;
-  /** @deprecated Use `capabilityId`; retained as a type-only migration alias. */
-  permissionId?: string;
   /** Render function receiving the entity item. Called only when the tab is active. */
   content: (item: TView) => ReactNode;
 }

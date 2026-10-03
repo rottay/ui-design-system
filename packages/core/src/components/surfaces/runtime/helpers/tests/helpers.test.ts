@@ -169,6 +169,52 @@ describe('normalizeSurfaceError', () => {
     expect(filterSurfaceTabbedViews([tab], access)).toEqual([tab]);
   });
 
+  it('keeps resolving tabbed views through permissionId when capabilityId is absent', () => {
+    const views = [
+      { key: 'billing', label: 'Billing', content: null, permissionId: 'settings.billing' },
+      { key: 'security', label: 'Security', content: null, permissionId: 'settings.security' },
+      { key: 'audit', label: 'Audit', content: null, permissionId: 'settings.audit' },
+    ];
+    const access = {
+      mode: 'resolved' as const,
+      capabilities: [
+        { kind: 'tab' as const, id: 'settings.billing', visible: true },
+        { kind: 'tab' as const, id: 'settings.security', visible: false },
+        { kind: 'tab' as const, id: 'settings.audit', visible: true, disabled: true },
+        { kind: 'tab' as const, id: 'security', visible: true },
+      ],
+    };
+
+    expect(filterSurfaceTabbedViews(views, access)).toEqual([
+      views[0],
+      { ...views[2], disabled: true },
+    ]);
+    expect(filterSurfaceTabbedViews(views, { mode: 'all' })).toEqual(views);
+  });
+
+  it('resolves detail tabs through capabilityId or key only', () => {
+    const content = () => null;
+    const tabs = [
+      { key: 'overview', label: 'Overview', content },
+      { key: 'security', label: 'Security', capabilityId: 'workspace.security', content },
+      { key: 'audit', label: 'Audit', capabilityId: 'workspace.audit', content },
+    ];
+    const access = {
+      mode: 'resolved' as const,
+      capabilities: [
+        { kind: 'tab' as const, id: 'overview', visible: true },
+        { kind: 'tab' as const, id: 'workspace.security', visible: false },
+        { kind: 'tab' as const, id: 'security', visible: true },
+        { kind: 'tab' as const, id: 'workspace.audit', visible: true, disabled: true },
+      ],
+    };
+
+    expect(filterDetailSurfaceTabs(tabs, access, {})).toEqual([
+      tabs[0],
+      { ...tabs[2], disabled: true },
+    ]);
+  });
+
   it('fails closed for missing final decisions and never evaluates app policy', () => {
     const access = {
       mode: 'resolved' as const,

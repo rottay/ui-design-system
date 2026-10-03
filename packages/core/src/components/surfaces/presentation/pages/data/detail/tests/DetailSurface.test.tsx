@@ -53,7 +53,7 @@ function buildConfig(overrides?: Partial<DetailSurfaceConfig<WorkspaceView>>): D
         {
           key: 'security',
           label: 'Security',
-          permissionId: 'workspace.security',
+          capabilityId: 'workspace.security',
           content: () => <div>Security content</div>,
         },
       ],

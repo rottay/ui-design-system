@@ -82,7 +82,7 @@ function resolveDetailErrorCapabilities<TRaw, TView>(
       .filter((tab) => includeStaticHidden || tab.visible !== false)
       .map((tab) => ({
         kind: "tab" as const,
-        id: tab.capabilityId ?? tab.permissionId ?? tab.key,
+        id: tab.capabilityId ?? tab.key,
         label: tab.label,
         disabled: tab.disabled,
       })),
