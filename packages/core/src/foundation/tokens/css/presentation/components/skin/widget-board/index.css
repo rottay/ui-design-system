@@ -668,9 +668,8 @@
   }
 
   .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="focus-visible"], :focus-visible) {
-    outline: 2px solid Highlight;
-    outline-offset: 1px;
-    box-shadow: none;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
   }
 }
 
@@ -1034,9 +1033,34 @@
   outline: none;
 }
 
-.ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="focus-visible"], :focus-visible) {
-  border-radius: 999px;
+/* The card clips its edge separators, so the card carries the signature of the
+   focused one; that separator's rail and readout mark which edge holds focus. */
+.ds-pattern-widget-board
+  .ds-widget-board__cell[data-part="card-shell"]:has(
+    > .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="focus-visible"], :focus-visible)
+  )::after {
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  z-index: var(--_ds-widget-board-z-handle, 7);
+  border-radius: max(
+    0px,
+    calc(
+      var(--ds-radius-xl, 16px) - var(--ds-edge-hairline-width, 1px) -
+        var(--ds-focus-ring-offset) - var(--ds-focus-ring-width)
+    )
+  );
   box-shadow: var(--ds-focus-ring);
+  content: "";
+  pointer-events: none;
+}
+
+@media (forced-colors: active) {
+  .ds-pattern-widget-board
+    .ds-widget-board__cell[data-part="card-shell"]:has(
+      > .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="focus-visible"], :focus-visible)
+    )::after {
+    box-shadow: none;
+  }
 }
 
 .ds-pattern-widget-board .ds-widget-board__resize-rail {

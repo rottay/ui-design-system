@@ -75,16 +75,38 @@ const tabStops = (scope: HTMLElement): HTMLElement[] =>
     )
   ).filter((node) => node.tabIndex >= 0);
 
-/** The selectors of every skin rule that paints the tenant focus signature. */
-function signatureSelectors(): string[] {
-  const found: string[] = [];
-  const rule = /([^{}]+)\{([^{}]*)\}/g;
-  for (const match of SKIN.matchAll(rule)) {
-    if (/box-shadow:\s*var\(\s*--ds-focus-ring\b/.test(match[2])) {
-      found.push(match[1].replace(/\s+/g, " ").trim());
-    }
-  }
-  return found;
+interface SkinRule {
+  readonly selector: string;
+  readonly body: string;
+}
+
+const SKIN_RULES: readonly SkinRule[] = Array.from(
+  SKIN.replace(/\/\*[\s\S]*?\*\//g, "").matchAll(/([^{}]+)\{([^{}]*)\}/g),
+  (match) => ({
+    selector: match[1].replace(/\s+/g, " ").trim(),
+    body: match[2],
+  })
+);
+
+/** Every skin rule that paints the tenant focus signature. */
+const signatureRules = (): SkinRule[] =>
+  SKIN_RULES.filter((rule) =>
+    /box-shadow:\s*var\(\s*--ds-focus-ring\b/.test(rule.body)
+  );
+
+const CARRIER = /^(.*\[data-part="card-shell"\]):has\( > (.+) \)::after$/;
+
+/** The card that hosts the carrier and the separator state that turns it on. */
+function carrierAnatomy(): { card: string; separator: string } {
+  const rules = signatureRules();
+  expect(rules).toHaveLength(1);
+  const parts = CARRIER.exec(rules[0].selector);
+  if (!parts) throw new Error(`not a card carrier: ${rules[0].selector}`);
+  expect(parts[2]).toContain(FOCUS_ARM);
+  return {
+    card: parts[1],
+    separator: parts[2].replace(FOCUS_ARM, '[data-state~="focus-visible"]'),
+  };
 }
 
 describe("the widget board's own keyboard focus targets", () => {
@@ -135,21 +157,23 @@ describe("the widget board's own keyboard focus targets", () => {
     }
   });
 
-  it("stamps a keyboard-focused separator with the anatomy the skin's signature rule selects", () => {
-    const selectors = signatureSelectors();
-    expect(selectors).toHaveLength(1);
-    expect(selectors[0]).toContain(FOCUS_ARM);
-    const stamped = selectors[0].replace(FOCUS_ARM, '[data-state~="focus-visible"]');
+  it("hosts the signature on the card, which clips its separators, while one of them holds keyboard focus", () => {
+    const { card, separator: stamped } = carrierAnatomy();
 
     const container = board();
+    const cell = cellOf(container, "alpha");
+    expect(cell.closest(".ds-pattern-widget-board")?.querySelector(card)).toBe(
+      cell
+    );
     const separators = Array.from(
-      cellOf(container, "alpha").querySelectorAll<HTMLElement>(
+      cell.querySelectorAll<HTMLElement>(
         '[data-part="resize-handle"][role="separator"]'
       )
     );
     expect(separators).toHaveLength(2);
 
     for (const separator of separators) {
+      expect(separator.parentElement).toBe(cell);
       expect(separator.matches(stamped)).toBe(false);
       fireEvent.focus(separator);
       expect(separator.matches(stamped)).toBe(true);
@@ -158,11 +182,69 @@ describe("the widget board's own keyboard focus targets", () => {
     }
   });
 
-  it("takes no signature from a pointer press", () => {
-    const stamped = signatureSelectors()[0].replace(
-      FOCUS_ARM,
-      '[data-state~="focus-visible"]'
+  it("paints the carrier as an inert overlay inset by the signature's own reach", () => {
+    const [carrier] = signatureRules();
+
+    expect(carrier.body).toMatch(/position:\s*absolute/);
+    expect(carrier.body).toMatch(
+      /inset:\s*calc\(var\(--ds-focus-ring-offset\) \+ var\(--ds-focus-ring-width\)\)/
     );
+    expect(carrier.body).toMatch(/pointer-events:\s*none/);
+  });
+
+  it("marks which separator holds focus with that separator's own rail and readout", () => {
+    const marks = SKIN_RULES.filter(
+      (rule) =>
+        rule.selector.includes(":focus-visible") &&
+        /\.ds-widget-board__resize-(rail|indicator)$/.test(rule.selector) &&
+        /opacity:\s*1/.test(rule.body)
+    ).map((rule) => rule.selector.split(" ").pop());
+
+    expect(marks).toEqual(
+      expect.arrayContaining([
+        ".ds-widget-board__resize-rail",
+        ".ds-widget-board__resize-indicator",
+      ])
+    );
+
+    const cell = cellOf(board(), "alpha");
+    for (const edge of ["inline-end", "block-end"]) {
+      const separator = cell.querySelector<HTMLElement>(
+        `[data-part="resize-handle"][data-edge="${edge}"]`
+      );
+      expect(
+        separator?.querySelector(":scope > .ds-widget-board__resize-rail")
+      ).not.toBeNull();
+      expect(
+        separator?.querySelector(":scope > .ds-widget-board__resize-indicator")
+      ).not.toBeNull();
+    }
+  });
+
+  it("never draws a separator's focus as a solid outline outside forced colors", () => {
+    const outlines = SKIN_RULES.filter(
+      (rule) =>
+        rule.selector.includes("resize-handle") &&
+        rule.selector.includes("focus-visible")
+    ).flatMap((rule) =>
+      Array.from(rule.body.matchAll(/outline:\s*([^;]+);/g), (match) =>
+        match[1].trim()
+      )
+    );
+
+    expect(outlines.length).toBeGreaterThan(0);
+    for (const outline of outlines) {
+      expect(outline).toMatch(/^none$|solid Highlight$/);
+    }
+    for (const rule of SKIN_RULES) {
+      if (/__resize-handle\[data-part="resize-handle"\][^ ]*$/.test(rule.selector)) {
+        expect(rule.body).not.toMatch(/box-shadow:\s*var\(\s*--ds-focus-ring\b/);
+      }
+    }
+  });
+
+  it("takes no signature from a pointer press", () => {
+    const { separator: stamped } = carrierAnatomy();
     const separator = cellOf(board(), "alpha").querySelector<HTMLElement>(
       '[data-part="resize-handle"][data-edge="inline-end"]'
     );
