@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedBy": "FASE H residue drain — per-token, resolved against the shipped bundles styles/{bithire,platform,evnto}.css, and against real consumers in app-bithire/app-evnto/app-platform and packages/showroom",
+  "generatedBy": "FASE H residue drain — per-token, resolved against the shipped bundles styles/{bithire,rottay,evnto}.css, and against real consumers in app-bithire/app-evnto/app-platform and packages/showroom",
   "law": "A census dead-writer verdict is never a deletion license. RETIRE is only ever RETIRE_PROPOSED and never executed without owner sign-off.",
   "laws": [
     "A multiplier (density/effect scale) NEVER counts as an upstream connection.",
@@ -1301,7 +1301,8 @@
     "FASE K-EXEC: a phantom read is not automatically a defect. --ds-font-family-sans sat in a fallback tier that is unreachable because the first tier is floored twice in first-party source, so the 'broken' chain painted correctly all along. Check whether the earlier tier can ever be unset before calling a fallback dead.",
     "FASE K-EXEC addendum: 'no emitter exists' does not prove a seam is dead. --ds-density-spacing-* has no declaration and no emitter anywhere, and its own file documents it as the hook a density-aware white-label override should author. An authoring hook is populated by a tenant, so an empty one is doing its job. Read the file's own prose before concluding a var() fallback arm is vestigial.",
     "FASE F5: the census and an app-aware index disagree in BOTH directions. Over the same nominal population the census missed 149 dead names and, worse, called 53 live ones dead because it never looks outside the DS. A DS-scoped census is a projection for gates; it must never be the instrument behind a deletion.",
-    "FASE 2 slice-1: 'tokenise the hardcodes' is not uniformly an improvement. In a file with ZERO token usage, converting the minority that happens to match a rung buys nothing at scale=1 and breaks the type hierarchy at any other scale. Governance is a per-FILE property before it is a per-declaration one."
+    "FASE 2 slice-1: 'tokenise the hardcodes' is not uniformly an improvement. In a file with ZERO token usage, converting the minority that happens to match a rung buys nothing at scale=1 and breaks the type hierarchy at any other scale. Governance is a per-FILE property before it is a per-declaration one.",
+    "2026-10-03 alias correction -- the bundle alias `platform` (the stylesheet of that name under styles/, byte-identical to styles/rottay.css at becf692f9) is renamed to `rottay` in this file: per-vertical keys, bundle arrays and bundle-list prose. The measurements themselves ran against the alias-named stylesheet. Mentions of the sibling application `app-platform` are unchanged."
   ],
   "faseHExecution": {
     "date": "2026-08-02",
@@ -1397,7 +1398,7 @@
         "question": "Let the live accent paint, replacing the current --ds-color-accent?",
         "resolved": {
           "bithire": "accent-live #69a6d5 vs accent #86A6C2 — WOULD CHANGE",
-          "platform": "accent-live #16A34A vs accent #6B6B6B — WOULD CHANGE (grey to green)",
+          "rottay": "accent-live #16A34A vs accent #6B6B6B — WOULD CHANGE (grey to green)",
           "evnto": "accent-live var(--ds-color-success) vs accent #A89880 — WOULD CHANGE"
         },
         "why": "One rule, three outcomes. Two verticals would visibly repaint today, so this cannot ride in as zero-delta even though the third is cheap."
@@ -1407,7 +1408,7 @@
         "question": "Adopt the primary-tinted shadow anywhere, or retire it?",
         "resolved": {
           "bithire": "0 4px 14px 0 color-mix(in oklch, var(--ds-color-primary) 25%, transparent), 0 8px 24px ... 12%",
-          "platform": "0 2px 8px rgba(10, 10, 10, 0.08), 0 4px 16px rgba(10, 10, 10, 0.04)",
+          "rottay": "0 2px 8px rgba(10, 10, 10, 0.08), 0 4px 16px rgba(10, 10, 10, 0.04)",
           "evnto": "same primary-tinted pair as bithire"
         },
         "note": "The three verticals do not agree on what this token MEANS, which is the real blocker: bithire and evnto carry a primary-tinted colour pair, platform carries neutral rgba. Adopting it would not be one decision applied three times.",
@@ -1441,7 +1442,7 @@
         "question": "Should the Result icon follow a Result-specific colour or the tenant's semantic colour?",
         "resolved": {
           "bithire": "tenant success #5ca6cf vs token #22c55e",
-          "platform": "#16A34A vs #22c55e",
+          "rottay": "#16A34A vs #22c55e",
           "evnto": "#15803D vs #22c55e"
         },
         "why": "Today the skin follows the tenant. Reconnecting the token would override that in all three. Recommended instead: DERIVE the dead tokens onto the canon."
@@ -1472,7 +1473,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "calc(\n    60px + var(--ds-action-dock-safe-area-bottom, var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px)))\n  )",
@@ -1497,7 +1498,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "calc(\n    60px + var(--ds-action-dock-safe-area-top, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))\n  )",
@@ -1522,7 +1523,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-border-secondary)",
@@ -1567,7 +1568,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -1602,7 +1603,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "500ms",
@@ -1630,7 +1631,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "150ms",
@@ -1658,7 +1659,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#f5f5f5",
@@ -1697,7 +1698,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#f5f5f5",
-          "platform": "#f5f5f5",
+          "rottay": "#f5f5f5",
           "evnto": "#f5f5f5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -1732,7 +1733,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#e5e5e5",
@@ -1771,7 +1772,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -1806,7 +1807,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1px",
@@ -1865,7 +1866,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-avatar-md-font-size)",
@@ -1930,7 +1931,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-avatar-circle-radius)",
@@ -1967,7 +1968,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-avatar-circle-radius)",
-          "platform": "var(--ds-avatar-circle-radius)",
+          "rottay": "var(--ds-avatar-circle-radius)",
           "evnto": "var(--ds-avatar-circle-radius)"
         }
       },
@@ -1980,7 +1981,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-avatar-sm-size)",
@@ -2051,7 +2052,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-avatar-sm-status-size)",
@@ -2104,7 +2105,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#fecaca",
@@ -2143,7 +2144,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#fecaca",
-          "platform": "#fecaca",
+          "rottay": "#fecaca",
           "evnto": "#fecaca"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -2178,7 +2179,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "transparent",
@@ -2217,7 +2218,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "transparent",
-          "platform": "transparent",
+          "rottay": "transparent",
           "evnto": "transparent"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -2252,7 +2253,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#ffffff",
@@ -2291,7 +2292,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#ffffff",
-          "platform": "#ffffff",
+          "rottay": "#ffffff",
           "evnto": "#ffffff"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -2326,7 +2327,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1",
@@ -2371,7 +2372,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#171717",
@@ -2410,7 +2411,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#171717",
-          "platform": "#171717",
+          "rottay": "#171717",
           "evnto": "#171717"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -2445,7 +2446,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#e5e5e5",
@@ -2484,7 +2485,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -2519,7 +2520,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#bbf7d0",
@@ -2558,7 +2559,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#bbf7d0",
-          "platform": "#bbf7d0",
+          "rottay": "#bbf7d0",
           "evnto": "#bbf7d0"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -2593,7 +2594,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#fde68a",
@@ -2632,7 +2633,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#fde68a",
-          "platform": "#fde68a",
+          "rottay": "#fde68a",
           "evnto": "#fde68a"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -2667,7 +2668,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#000000",
@@ -2706,7 +2707,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#000000",
-          "platform": "#000000",
+          "rottay": "#000000",
           "evnto": "#000000"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -2741,7 +2742,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-radius-full)",
@@ -2778,7 +2779,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-radius-full)",
-          "platform": "var(--ds-radius-full)",
+          "rottay": "var(--ds-radius-full)",
           "evnto": "var(--ds-radius-full)"
         }
       },
@@ -2791,7 +2792,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-border)",
@@ -2830,7 +2831,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-border)",
-          "platform": "var(--ds-badge-border-color)",
+          "rottay": "var(--ds-badge-border-color)",
           "evnto": "var(--ds-badge-border-color)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -2864,7 +2865,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-badge-md-font-size)",
@@ -2901,7 +2902,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-badge-md-font-size)",
-          "platform": "var(--ds-badge-md-font-size)",
+          "rottay": "var(--ds-badge-md-font-size)",
           "evnto": "var(--ds-badge-md-font-size)"
         }
       },
@@ -2914,7 +2915,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-badge-md-height)",
@@ -2951,7 +2952,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-badge-md-height)",
-          "platform": "var(--ds-badge-md-height)",
+          "rottay": "var(--ds-badge-md-height)",
           "evnto": "var(--ds-badge-md-height)"
         }
       },
@@ -2964,7 +2965,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-badge-md-min-width)",
@@ -3001,7 +3002,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-badge-md-min-width)",
-          "platform": "var(--ds-badge-md-min-width)",
+          "rottay": "var(--ds-badge-md-min-width)",
           "evnto": "var(--ds-badge-md-min-width)"
         }
       },
@@ -3014,7 +3015,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-badge-radius-full)",
@@ -3051,7 +3052,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-badge-radius-full)",
-          "platform": "var(--ds-badge-radius-full)",
+          "rottay": "var(--ds-badge-radius-full)",
           "evnto": "var(--ds-badge-radius-full)"
         }
       },
@@ -3064,7 +3065,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-badge-dot-md-size)",
@@ -3101,7 +3102,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-badge-dot-md-size)",
-          "platform": "var(--ds-badge-dot-md-size)",
+          "rottay": "var(--ds-badge-dot-md-size)",
           "evnto": "var(--ds-badge-dot-md-size)"
         }
       },
@@ -3114,7 +3115,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(--ds-color-error) 24%,\n    var(--ds-color-border)\n  )",
@@ -3153,7 +3154,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "color-mix(\n    in srgb,\n    var(--ds-color-error) 24%,\n    var(--ds-color-border)\n  )",
-          "platform": "var(--ds-badge-error-bg)",
+          "rottay": "var(--ds-badge-error-bg)",
           "evnto": "var(--ds-badge-error-bg)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -3187,7 +3188,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(--ds-color-info, var(--ds-color-secondary, var(--ds-color-primary))) 24%,\n    var(--ds-color-border)\n  )",
@@ -3226,7 +3227,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "color-mix(\n    in srgb,\n    var(--ds-color-info, var(--ds-color-secondary, var(--ds-color-primary))) 24%,\n    var(--ds-color-border)\n  )",
-          "platform": "var(--ds-badge-info-bg)",
+          "rottay": "var(--ds-badge-info-bg)",
           "evnto": "var(--ds-badge-info-bg)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -3260,7 +3261,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-control-brand-border)",
@@ -3299,7 +3300,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-control-brand-border)",
-          "platform": "var(--ds-badge-primary-bg)",
+          "rottay": "var(--ds-badge-primary-bg)",
           "evnto": "var(--ds-badge-primary-bg)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -3333,7 +3334,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.6",
@@ -3370,7 +3371,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0.6",
-          "platform": "0.6",
+          "rottay": "0.6",
           "evnto": "0.6"
         }
       },
@@ -3383,7 +3384,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-border)",
@@ -3422,7 +3423,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-border)",
-          "platform": "var(--ds-badge-secondary-bg)",
+          "rottay": "var(--ds-badge-secondary-bg)",
           "evnto": "var(--ds-badge-secondary-bg)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -3456,7 +3457,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(--ds-color-success) 24%,\n    var(--ds-color-border)\n  )",
@@ -3495,7 +3496,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "color-mix(\n    in srgb,\n    var(--ds-color-success) 24%,\n    var(--ds-color-border)\n  )",
-          "platform": "var(--ds-badge-success-bg)",
+          "rottay": "var(--ds-badge-success-bg)",
           "evnto": "var(--ds-badge-success-bg)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -3529,7 +3530,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(--ds-color-warning) 28%,\n    var(--ds-color-border)\n  )",
@@ -3568,7 +3569,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "color-mix(\n    in srgb,\n    var(--ds-color-warning) 28%,\n    var(--ds-color-border)\n  )",
-          "platform": "var(--ds-badge-warning-bg)",
+          "rottay": "var(--ds-badge-warning-bg)",
           "evnto": "var(--ds-badge-warning-bg)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -3602,7 +3603,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-neutral-200)",
@@ -3641,7 +3642,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-neutral-200)",
-          "platform": "var(--ds-color-neutral-200)",
+          "rottay": "var(--ds-color-neutral-200)",
           "evnto": "var(--ds-color-neutral-200)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -3676,7 +3677,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-bg-subtle)",
@@ -3715,7 +3716,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-bg-subtle)",
-          "platform": "var(--ds-color-bg-subtle)",
+          "rottay": "var(--ds-color-bg-subtle)",
           "evnto": "var(--ds-color-bg-subtle)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -3750,7 +3751,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-bg-hover)",
@@ -3789,7 +3790,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-bg-hover)",
-          "platform": "var(--ds-color-bg-hover)",
+          "rottay": "var(--ds-color-bg-hover)",
           "evnto": "var(--ds-color-bg-hover)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -3824,7 +3825,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-bg-tertiary)",
@@ -3863,7 +3864,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-bg-tertiary)",
-          "platform": "var(--ds-color-bg-tertiary)",
+          "rottay": "var(--ds-color-bg-tertiary)",
           "evnto": "var(--ds-color-bg-tertiary)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -3898,7 +3899,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "calc(50px + env(safe-area-inset-bottom, 0px))",
@@ -3923,7 +3924,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1536px",
@@ -3960,7 +3961,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "1536px",
-          "platform": "1536px",
+          "rottay": "1536px",
           "evnto": "1536px"
         }
       },
@@ -3973,7 +3974,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1024px",
@@ -4010,7 +4011,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "1024px",
-          "platform": "1024px",
+          "rottay": "1024px",
           "evnto": "1024px"
         }
       },
@@ -4023,7 +4024,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "768px",
@@ -4060,7 +4061,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "768px",
-          "platform": "768px",
+          "rottay": "768px",
           "evnto": "768px"
         }
       },
@@ -4073,7 +4074,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "640px",
@@ -4110,7 +4111,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "640px",
-          "platform": "640px",
+          "rottay": "640px",
           "evnto": "640px"
         }
       },
@@ -4123,7 +4124,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1280px",
@@ -4160,7 +4161,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "1280px",
-          "platform": "1280px",
+          "rottay": "1280px",
           "evnto": "1280px"
         }
       },
@@ -4173,7 +4174,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-dashed-border)",
@@ -4210,7 +4211,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-dashed-border)",
-          "platform": "var(--ds-button-dashed-border)",
+          "rottay": "var(--ds-button-dashed-border)",
           "evnto": "var(--ds-button-dashed-border)"
         }
       },
@@ -4223,7 +4224,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-default-border)",
@@ -4262,7 +4263,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-default-border)",
-          "platform": "var(--ds-button-default-border)",
+          "rottay": "var(--ds-button-default-border)",
           "evnto": "var(--ds-button-default-border)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -4296,7 +4297,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-md-font-size)",
@@ -4333,7 +4334,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-md-font-size)",
-          "platform": "var(--ds-button-md-font-size)",
+          "rottay": "var(--ds-button-md-font-size)",
           "evnto": "var(--ds-button-md-font-size)"
         }
       },
@@ -4346,7 +4347,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-md-height)",
@@ -4383,7 +4384,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-md-height)",
-          "platform": "var(--ds-button-md-height)",
+          "rottay": "var(--ds-button-md-height)",
           "evnto": "var(--ds-button-md-height)"
         }
       },
@@ -4396,7 +4397,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-md-padding-x)",
@@ -4433,7 +4434,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-md-padding-x)",
-          "platform": "var(--ds-button-md-padding-x)",
+          "rottay": "var(--ds-button-md-padding-x)",
           "evnto": "var(--ds-button-md-padding-x)"
         }
       },
@@ -4446,7 +4447,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-md-padding-y)",
@@ -4483,7 +4484,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-md-padding-y)",
-          "platform": "var(--ds-button-md-padding-y)",
+          "rottay": "var(--ds-button-md-padding-y)",
           "evnto": "var(--ds-button-md-padding-y)"
         }
       },
@@ -4496,7 +4497,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-error-border)",
@@ -4533,7 +4534,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-error-border)",
-          "platform": "var(--ds-button-error-border)",
+          "rottay": "var(--ds-button-error-border)",
           "evnto": "var(--ds-button-error-border)"
         }
       },
@@ -4546,7 +4547,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-ghost-border)",
@@ -4583,7 +4584,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-ghost-border)",
-          "platform": "var(--ds-button-ghost-border)",
+          "rottay": "var(--ds-button-ghost-border)",
           "evnto": "var(--ds-button-ghost-border)"
         }
       },
@@ -4596,7 +4597,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.5rem",
@@ -4633,7 +4634,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0.5rem",
-          "platform": "0.5rem",
+          "rottay": "0.5rem",
           "evnto": "0.5rem"
         }
       },
@@ -4646,7 +4647,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1.25",
@@ -4683,7 +4684,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "1.25",
-          "platform": "1.25",
+          "rottay": "1.25",
           "evnto": "1.25"
         }
       },
@@ -4696,7 +4697,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-link-border)",
@@ -4733,7 +4734,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-link-border)",
-          "platform": "var(--ds-button-link-border)",
+          "rottay": "var(--ds-button-link-border)",
           "evnto": "var(--ds-button-link-border)"
         }
       },
@@ -4746,7 +4747,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-primary-bg)",
@@ -4774,7 +4775,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-secondary-border)",
@@ -4813,7 +4814,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-secondary-border)",
-          "platform": "var(--ds-button-secondary-border)",
+          "rottay": "var(--ds-button-secondary-border)",
           "evnto": "var(--ds-button-secondary-border)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -4847,7 +4848,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-success-border)",
@@ -4884,7 +4885,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-success-border)",
-          "platform": "var(--ds-button-success-border)",
+          "rottay": "var(--ds-button-success-border)",
           "evnto": "var(--ds-button-success-border)"
         }
       },
@@ -4897,7 +4898,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-text-border)",
@@ -4934,7 +4935,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-text-border)",
-          "platform": "var(--ds-button-text-border)",
+          "rottay": "var(--ds-button-text-border)",
           "evnto": "var(--ds-button-text-border)"
         }
       },
@@ -4947,7 +4948,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-warning-border)",
@@ -4984,7 +4985,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-warning-border)",
-          "platform": "var(--ds-button-warning-border)",
+          "rottay": "var(--ds-button-warning-border)",
           "evnto": "var(--ds-button-warning-border)"
         }
       },
@@ -4997,7 +4998,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#f5f5f5",
@@ -5036,7 +5037,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#f5f5f5",
-          "platform": "#f5f5f5",
+          "rottay": "#f5f5f5",
           "evnto": "#f5f5f5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -5071,7 +5072,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#171717",
@@ -5110,7 +5111,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#171717",
-          "platform": "#171717",
+          "rottay": "#171717",
           "evnto": "#171717"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -5145,7 +5146,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#f5f5f5",
@@ -5184,7 +5185,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#f5f5f5",
-          "platform": "#f5f5f5",
+          "rottay": "#f5f5f5",
           "evnto": "#f5f5f5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -5219,7 +5220,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#171717",
@@ -5258,7 +5259,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#171717",
-          "platform": "#171717",
+          "rottay": "#171717",
           "evnto": "#171717"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -5293,7 +5294,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#ffffff",
@@ -5332,7 +5333,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#ffffff",
-          "platform": "#ffffff",
+          "rottay": "#ffffff",
           "evnto": "#ffffff"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -5367,7 +5368,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.5rem",
@@ -5404,7 +5405,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0.5rem",
-          "platform": "0.5rem",
+          "rottay": "0.5rem",
           "evnto": "0.5rem"
         }
       },
@@ -5417,7 +5418,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-border-secondary)",
@@ -5447,7 +5448,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "ds-foundation-shimmer 2s infinite",
@@ -5484,7 +5485,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "ds-foundation-shimmer 2s infinite",
-          "platform": "ds-foundation-shimmer 2s infinite",
+          "rottay": "ds-foundation-shimmer 2s infinite",
           "evnto": "ds-foundation-shimmer 2s infinite"
         }
       },
@@ -5497,7 +5498,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-neutral-100)",
@@ -5534,7 +5535,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-neutral-100)",
-          "platform": "var(--ds-color-neutral-100)",
+          "rottay": "var(--ds-color-neutral-100)",
           "evnto": "var(--ds-color-neutral-100)"
         }
       },
@@ -5547,7 +5548,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "linear-gradient(\n    90deg,\n    transparent 0%,\n    rgba(255, 255, 255, 0.5) 50%,\n    transparent 100%\n  )",
@@ -5584,7 +5585,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "linear-gradient(\n    90deg,\n    transparent 0%,\n    rgba(255, 255, 255, 0.5) 50%,\n    transparent 100%\n  )",
-          "platform": "linear-gradient(\n    90deg,\n    transparent 0%,\n    rgba(255, 255, 255, 0.5) 50%,\n    transparent 100%\n  )",
+          "rottay": "linear-gradient(\n    90deg,\n    transparent 0%,\n    rgba(255, 255, 255, 0.5) 50%,\n    transparent 100%\n  )",
           "evnto": "linear-gradient(\n    90deg,\n    transparent 0%,\n    rgba(255, 255, 255, 0.5) 50%,\n    transparent 100%\n  )"
         }
       },
@@ -5642,7 +5643,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1.5rem",
@@ -5671,7 +5672,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-shadow-lg)",
@@ -5702,7 +5703,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-meter-fill)",
@@ -5729,7 +5730,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "inset 0 1px 1px\n    color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent)",
@@ -5755,7 +5756,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(--ds-surface-panel-bg) 78%,\n    var(--ds-surface-card-bg)\n  )",
@@ -5781,7 +5782,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(--ds-surface-card-border) 78%,\n    transparent\n  )",
@@ -5807,7 +5808,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-control-brand-tint)",
@@ -5836,7 +5837,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-control-brand-border)",
@@ -5865,7 +5866,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-control-ink-muted)",
@@ -5893,7 +5894,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "currentColor",
@@ -5919,7 +5920,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "inset 0 1px 0\n      color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent),\n    0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)",
@@ -5945,7 +5946,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-primary)",
@@ -5974,7 +5975,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-chart-panel-bg)",
@@ -6000,7 +6001,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#e5e5e5",
@@ -6039,7 +6040,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -6074,7 +6075,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-checkbox-md-border-width)",
@@ -6111,7 +6112,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-checkbox-md-border-width)",
-          "platform": "var(--ds-checkbox-md-border-width)",
+          "rottay": "var(--ds-checkbox-md-border-width)",
           "evnto": "var(--ds-checkbox-md-border-width)"
         }
       },
@@ -6124,7 +6125,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-checkbox-md-font-size)",
@@ -6161,7 +6162,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-checkbox-md-font-size)",
-          "platform": "var(--ds-checkbox-md-font-size)",
+          "rottay": "var(--ds-checkbox-md-font-size)",
           "evnto": "var(--ds-checkbox-md-font-size)"
         }
       },
@@ -6174,7 +6175,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-checkbox-radius-sm)",
@@ -6211,7 +6212,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-checkbox-radius-sm)",
-          "platform": "var(--ds-checkbox-radius-sm)",
+          "rottay": "var(--ds-checkbox-radius-sm)",
           "evnto": "var(--ds-checkbox-radius-sm)"
         }
       },
@@ -6224,7 +6225,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-checkbox-md-size)",
@@ -6261,7 +6262,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-checkbox-md-size)",
-          "platform": "var(--ds-checkbox-md-size)",
+          "rottay": "var(--ds-checkbox-md-size)",
           "evnto": "var(--ds-checkbox-md-size)"
         }
       },
@@ -6274,7 +6275,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(--ds-collection-border) 62%,\n    transparent\n  )",
@@ -6311,7 +6312,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "color-mix(\n    in srgb,\n    var(--ds-collection-border) 62%,\n    transparent\n  )",
-          "platform": "color-mix(\n    in srgb,\n    var(--ds-collection-border) 62%,\n    transparent\n  )",
+          "rottay": "color-mix(\n    in srgb,\n    var(--ds-collection-border) 62%,\n    transparent\n  )",
           "evnto": "color-mix(\n    in srgb,\n    var(--ds-collection-border) 62%,\n    transparent\n  )"
         }
       },
@@ -6324,7 +6325,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0 1px 2px\n      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),\n    0 12px 28px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),\n    inset 0 1px 0 color-mix(in srgb, var(",
@@ -6361,7 +6362,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0 1px 2px\n      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),\n    0 12px 28px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),\n    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent)",
-          "platform": "0 1px 2px\n      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),\n    0 12px 28px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),\n    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent)",
+          "rottay": "0 1px 2px\n      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),\n    0 12px 28px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),\n    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent)",
           "evnto": "0 1px 2px\n      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),\n    0 12px 28px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),\n    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent)"
         }
       },
@@ -6374,7 +6375,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(--ds-color-primary) 44%,\n    transparent\n  )",
@@ -6411,7 +6412,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "color-mix(\n    in srgb,\n    var(--ds-color-primary) 44%,\n    transparent\n  )",
-          "platform": "color-mix(\n    in srgb,\n    var(--ds-color-primary) 44%,\n    transparent\n  )",
+          "rottay": "color-mix(\n    in srgb,\n    var(--ds-color-primary) 44%,\n    transparent\n  )",
           "evnto": "color-mix(\n    in srgb,\n    var(--ds-color-primary) 44%,\n    transparent\n  )"
         }
       },
@@ -6424,7 +6425,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-table-row-bg-hover)",
@@ -6461,7 +6462,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-table-row-bg-hover)",
-          "platform": "var(--ds-table-row-bg-hover)",
+          "rottay": "var(--ds-table-row-bg-hover)",
           "evnto": "var(--ds-table-row-bg-hover)"
         }
       },
@@ -6474,7 +6475,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#69a6d5",
@@ -6504,7 +6505,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#132b40",
@@ -6545,7 +6546,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "rgba(34, 197, 94, 0.08)",
-          "platform": "rgba(34, 197, 94, 0.08)",
+          "rottay": "rgba(34, 197, 94, 0.08)",
           "evnto": "rgba(34, 197, 94, 0.08)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -6586,7 +6587,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "rgba(59, 130, 246, 0.20)",
@@ -6625,7 +6626,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "rgba(59, 130, 246, 0.20)",
-          "platform": "rgba(59, 130, 246, 0.20)",
+          "rottay": "rgba(59, 130, 246, 0.20)",
           "evnto": "rgba(59, 130, 246, 0.20)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -6660,7 +6661,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#0f1520",
@@ -6702,7 +6703,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#A6C6DF",
@@ -6734,7 +6735,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#6BB5F5",
@@ -6766,7 +6767,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#7CB7E8",
@@ -6798,7 +6799,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#f4f8fd",
@@ -6830,7 +6831,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#c4d2de",
@@ -6913,7 +6914,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-surface-panel-bg)",
@@ -6940,7 +6941,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "'SF Mono', 'Fira Code', Menlo, monospace",
@@ -6974,7 +6975,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "none",
@@ -7003,7 +7004,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "transparent",
@@ -7032,7 +7033,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0",
@@ -7063,7 +7064,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "none",
@@ -7092,7 +7093,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "3s",
@@ -7129,7 +7130,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "3s",
-          "platform": "3s",
+          "rottay": "3s",
           "evnto": "3s"
         }
       },
@@ -7288,7 +7289,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-disabled-bg)",
@@ -7325,7 +7326,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-disabled-bg)",
-          "platform": "var(--ds-button-disabled-bg)",
+          "rottay": "var(--ds-button-disabled-bg)",
           "evnto": "var(--ds-button-disabled-bg)"
         }
       },
@@ -7338,7 +7339,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-disabled-border)",
@@ -7375,7 +7376,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-disabled-border)",
-          "platform": "var(--ds-button-disabled-border)",
+          "rottay": "var(--ds-button-disabled-border)",
           "evnto": "var(--ds-button-disabled-border)"
         }
       },
@@ -7388,7 +7389,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-disabled-color)",
@@ -7425,7 +7426,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-disabled-color)",
-          "platform": "var(--ds-button-disabled-color)",
+          "rottay": "var(--ds-button-disabled-color)",
           "evnto": "var(--ds-button-disabled-color)"
         }
       },
@@ -7438,7 +7439,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-button-disabled-opacity)",
@@ -7475,7 +7476,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-button-disabled-opacity)",
-          "platform": "var(--ds-button-disabled-opacity)",
+          "rottay": "var(--ds-button-disabled-opacity)",
           "evnto": "var(--ds-button-disabled-opacity)"
         }
       },
@@ -7488,7 +7489,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#525252",
@@ -7527,7 +7528,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#525252",
-          "platform": "#525252",
+          "rottay": "#525252",
           "evnto": "#525252"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -7562,7 +7563,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#a3a3a3",
@@ -7601,7 +7602,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#a3a3a3",
-          "platform": "#a3a3a3",
+          "rottay": "#a3a3a3",
           "evnto": "#a3a3a3"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -7637,7 +7638,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(\n    --ds-density-card-padding-spacious,\n    calc(\n      1.125rem *\n        var(--ds-density-global-effective-scale, var(--ds-density-scale, 1))\n    )\n  )",
@@ -7667,7 +7668,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1.5rem",
@@ -7704,7 +7705,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "1.5rem",
-          "platform": "1.5rem",
+          "rottay": "1.5rem",
           "evnto": "1.5rem"
         }
       },
@@ -7717,7 +7718,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#e5e5e5",
@@ -7756,7 +7757,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -7791,7 +7792,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0s",
@@ -7819,7 +7820,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0s",
@@ -7847,7 +7848,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(\n    --_ds-personality-resolved-duration-slow,\n    var(--duration-normal)\n  )",
@@ -7880,7 +7881,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1))",
@@ -7906,7 +7907,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "cubic-bezier(0.87, 0, 0.13, 1)",
@@ -7943,7 +7944,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "cubic-bezier(0.87, 0, 0.13, 1)",
-          "platform": "cubic-bezier(0.87, 0, 0.13, 1)",
+          "rottay": "cubic-bezier(0.87, 0, 0.13, 1)",
           "evnto": "cubic-bezier(0.87, 0, 0.13, 1)"
         }
       },
@@ -7956,7 +7957,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-ease-premium, cubic-bezier(0.16, 1, 0.3, 1))",
@@ -7983,7 +7984,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "cubic-bezier(0.19, 1, 0.22, 1)",
@@ -8020,7 +8021,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "cubic-bezier(0.19, 1, 0.22, 1)",
-          "platform": "cubic-bezier(0.19, 1, 0.22, 1)",
+          "rottay": "cubic-bezier(0.19, 1, 0.22, 1)",
           "evnto": "cubic-bezier(0.19, 1, 0.22, 1)"
         }
       },
@@ -8033,7 +8034,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "cubic-bezier(0.25, 0.1, 0.25, 1)",
@@ -8070,7 +8071,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "cubic-bezier(0.25, 0.1, 0.25, 1)",
-          "platform": "cubic-bezier(0.25, 0.1, 0.25, 1)",
+          "rottay": "cubic-bezier(0.25, 0.1, 0.25, 1)",
           "evnto": "cubic-bezier(0.25, 0.1, 0.25, 1)"
         }
       },
@@ -8083,7 +8084,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 0%), transparent)",
@@ -8111,7 +8112,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 1%), transparent)",
@@ -8139,7 +8140,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 2%), transparent)",
@@ -8167,7 +8168,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 5%), transparent)",
@@ -8195,7 +8196,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-empty-state-bg)",
@@ -8221,7 +8222,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-empty-state-border)",
@@ -8247,7 +8248,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.25rem",
@@ -8284,7 +8285,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0.25rem",
-          "platform": "0.25rem",
+          "rottay": "0.25rem",
           "evnto": "0.25rem"
         }
       },
@@ -8297,7 +8298,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-empty-state-icon-bg)",
@@ -8323,7 +8324,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-empty-state-icon-border)",
@@ -8349,7 +8350,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#525252",
@@ -8378,7 +8379,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-font-size-base, 15px)",
@@ -8415,7 +8416,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-font-size-base, 15px)",
-          "platform": "var(--ds-font-size-base, 15px)",
+          "rottay": "var(--ds-font-size-base, 15px)",
           "evnto": "var(--ds-font-size-base, 15px)"
         }
       },
@@ -8428,7 +8429,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-font-weight-medium, 500)",
@@ -8465,7 +8466,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-font-weight-medium, 500)",
-          "platform": "var(--ds-font-weight-medium, 500)",
+          "rottay": "var(--ds-font-weight-medium, 500)",
           "evnto": "var(--ds-font-weight-medium, 500)"
         }
       },
@@ -8478,7 +8479,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1rem",
@@ -8515,7 +8516,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "1rem",
-          "platform": "1rem",
+          "rottay": "1rem",
           "evnto": "1rem"
         }
       },
@@ -8528,7 +8529,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "linear-gradient(\n    145deg,\n    color-mix(in srgb, var(--ds-color-error) 7%, var(--ds-surface-card-bg)),\n    var(--ds-surface-panel-bg)\n  )",
@@ -8554,7 +8555,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(--ds-color-error) 28%,\n    var(--ds-surface-card-border)\n  )",
@@ -8580,7 +8581,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(--ds-color-error) 10%,\n    var(--ds-surface-card-bg)\n  )",
@@ -8606,7 +8607,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-command-home-compact-action-height)",
@@ -8643,7 +8644,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-command-home-compact-action-height)",
-          "platform": "var(--ds-command-home-compact-action-height)",
+          "rottay": "var(--ds-command-home-compact-action-height)",
           "evnto": "var(--ds-command-home-compact-action-height)"
         }
       },
@@ -8656,7 +8657,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-command-home-grid-line)",
@@ -8693,7 +8694,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-command-home-grid-line)",
-          "platform": "var(--ds-command-home-grid-line)",
+          "rottay": "var(--ds-command-home-grid-line)",
           "evnto": "var(--ds-command-home-grid-line)"
         }
       },
@@ -8706,7 +8707,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-command-home-panel-border)",
@@ -8743,7 +8744,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-command-home-panel-border)",
-          "platform": "var(--ds-command-home-panel-border)",
+          "rottay": "var(--ds-command-home-panel-border)",
           "evnto": "var(--ds-command-home-panel-border)"
         }
       },
@@ -8756,7 +8757,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-command-home-panel-shadow)",
@@ -8793,7 +8794,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-command-home-panel-shadow)",
-          "platform": "var(--ds-command-home-panel-shadow)",
+          "rottay": "var(--ds-command-home-panel-shadow)",
           "evnto": "var(--ds-command-home-panel-shadow)"
         }
       },
@@ -8806,7 +8807,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#f5f5f5",
@@ -8845,7 +8846,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#f5f5f5",
-          "platform": "#f5f5f5",
+          "rottay": "#f5f5f5",
           "evnto": "#f5f5f5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -8880,7 +8881,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#e5e5e5",
@@ -8919,7 +8920,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -8954,7 +8955,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-font-size-sm)",
@@ -8991,7 +8992,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-font-size-sm)",
-          "platform": "var(--ds-font-size-sm)",
+          "rottay": "var(--ds-font-size-sm)",
           "evnto": "var(--ds-font-size-sm)"
         }
       },
@@ -9004,7 +9005,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.25rem",
@@ -9041,7 +9042,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0.25rem",
-          "platform": "0.25rem",
+          "rottay": "0.25rem",
           "evnto": "0.25rem"
         }
       },
@@ -9054,7 +9055,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-input-md-font-size)",
@@ -9091,7 +9092,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-input-md-font-size)",
-          "platform": "var(--ds-input-md-font-size)",
+          "rottay": "var(--ds-input-md-font-size)",
           "evnto": "var(--ds-input-md-font-size)"
         }
       },
@@ -9104,7 +9105,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-input-md-height)",
@@ -9141,7 +9142,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-input-md-height)",
-          "platform": "var(--ds-input-md-height)",
+          "rottay": "var(--ds-input-md-height)",
           "evnto": "var(--ds-input-md-height)"
         }
       },
@@ -9154,7 +9155,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-input-md-padding-x)",
@@ -9191,7 +9192,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-input-md-padding-x)",
-          "platform": "var(--ds-input-md-padding-x)",
+          "rottay": "var(--ds-input-md-padding-x)",
           "evnto": "var(--ds-input-md-padding-x)"
         }
       },
@@ -9204,7 +9205,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-input-md-padding-y)",
@@ -9241,7 +9242,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-input-md-padding-y)",
-          "platform": "var(--ds-input-md-padding-y)",
+          "rottay": "var(--ds-input-md-padding-y)",
           "evnto": "var(--ds-input-md-padding-y)"
         }
       },
@@ -9254,7 +9255,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-neutral-100)",
@@ -9291,7 +9292,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-neutral-100)",
-          "platform": "var(--ds-color-neutral-100)",
+          "rottay": "var(--ds-color-neutral-100)",
           "evnto": "var(--ds-color-neutral-100)"
         }
       },
@@ -9304,7 +9305,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-neutral-200)",
@@ -9341,7 +9342,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-neutral-200)",
-          "platform": "var(--ds-color-neutral-200)",
+          "rottay": "var(--ds-color-neutral-200)",
           "evnto": "var(--ds-color-neutral-200)"
         }
       },
@@ -9354,7 +9355,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-neutral-700)",
@@ -9391,7 +9392,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-neutral-700)",
-          "platform": "var(--ds-color-neutral-700)",
+          "rottay": "var(--ds-color-neutral-700)",
           "evnto": "var(--ds-color-neutral-700)"
         }
       },
@@ -9404,7 +9405,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.5rem 1rem",
@@ -9441,7 +9442,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0.5rem 1rem",
-          "platform": "0.5rem 1rem",
+          "rottay": "0.5rem 1rem",
           "evnto": "0.5rem 1rem"
         }
       },
@@ -9454,7 +9455,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-neutral-50)",
@@ -9491,7 +9492,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-neutral-50)",
-          "platform": "var(--ds-color-neutral-50)",
+          "rottay": "var(--ds-color-neutral-50)",
           "evnto": "var(--ds-color-neutral-50)"
         }
       },
@@ -9504,7 +9505,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-neutral-100)",
@@ -9541,7 +9542,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-neutral-100)",
-          "platform": "var(--ds-color-neutral-100)",
+          "rottay": "var(--ds-color-neutral-100)",
           "evnto": "var(--ds-color-neutral-100)"
         }
       },
@@ -9554,7 +9555,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-neutral-300)",
@@ -9591,7 +9592,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-neutral-300)",
-          "platform": "var(--ds-color-neutral-300)",
+          "rottay": "var(--ds-color-neutral-300)",
           "evnto": "var(--ds-color-neutral-300)"
         }
       },
@@ -9604,7 +9605,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-neutral-600)",
@@ -9641,7 +9642,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-neutral-600)",
-          "platform": "var(--ds-color-neutral-600)",
+          "rottay": "var(--ds-color-neutral-600)",
           "evnto": "var(--ds-color-neutral-600)"
         }
       },
@@ -9654,7 +9655,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1.5rem",
@@ -9691,7 +9692,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "1.5rem",
-          "platform": "1.5rem",
+          "rottay": "1.5rem",
           "evnto": "1.5rem"
         }
       },
@@ -9704,7 +9705,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-neutral-500)",
@@ -9741,7 +9742,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-neutral-500)",
-          "platform": "var(--ds-color-neutral-500)",
+          "rottay": "var(--ds-color-neutral-500)",
           "evnto": "var(--ds-color-neutral-500)"
         }
       },
@@ -9754,7 +9755,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-neutral-700)",
@@ -9791,7 +9792,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-color-neutral-700)",
-          "platform": "var(--ds-color-neutral-700)",
+          "rottay": "var(--ds-color-neutral-700)",
           "evnto": "var(--ds-color-neutral-700)"
         }
       },
@@ -9804,7 +9805,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1.25rem",
@@ -9841,7 +9842,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "1.25rem",
-          "platform": "1.25rem",
+          "rottay": "1.25rem",
           "evnto": "1.25rem"
         }
       },
@@ -9854,7 +9855,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-text-tertiary)",
@@ -9917,7 +9918,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#AEBCC8",
@@ -9946,7 +9947,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-success-600)",
@@ -9972,7 +9973,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-font-size-sm)",
@@ -9998,7 +9999,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.25rem",
@@ -10024,7 +10025,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#d4d4d4",
@@ -10063,7 +10064,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#d4d4d4",
-          "platform": "#d4d4d4",
+          "rottay": "#d4d4d4",
           "evnto": "#d4d4d4"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -10098,7 +10099,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#171717",
@@ -10137,7 +10138,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#171717",
-          "platform": "#171717",
+          "rottay": "#171717",
           "evnto": "#171717"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -10172,7 +10173,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0",
@@ -10202,7 +10203,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0",
@@ -10232,7 +10233,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0",
@@ -10262,7 +10263,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1.4",
@@ -10299,7 +10300,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "1.4",
-          "platform": "1.4",
+          "rottay": "1.4",
           "evnto": "1.4"
         }
       },
@@ -10312,7 +10313,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#e5e5e5",
@@ -10351,7 +10352,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -10386,7 +10387,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.75rem 1rem",
@@ -10423,7 +10424,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0.75rem 1rem",
-          "platform": "0.75rem 1rem",
+          "rottay": "0.75rem 1rem",
           "evnto": "0.75rem 1rem"
         }
       },
@@ -10436,7 +10437,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(--ds-surface-card-border) 82%,\n    transparent\n  )",
@@ -10467,7 +10468,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-modal-md-width)",
@@ -10504,7 +10505,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-modal-md-width)",
-          "platform": "var(--ds-modal-md-width)",
+          "rottay": "var(--ds-modal-md-width)",
           "evnto": "var(--ds-modal-md-width)"
         }
       },
@@ -10517,7 +10518,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(\n    --ds-table-row-border,\n    var(--ds-color-border-subtle)\n  )",
@@ -10547,7 +10548,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1",
@@ -10590,7 +10591,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0",
-          "platform": "0",
+          "rottay": "0",
           "evnto": "0"
         }
       },
@@ -10603,7 +10604,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.98",
@@ -10629,7 +10630,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#e5e5e5",
@@ -10668,7 +10669,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -10703,7 +10704,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#525252",
@@ -10742,7 +10743,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#525252",
-          "platform": "#525252",
+          "rottay": "#525252",
           "evnto": "#525252"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -10777,7 +10778,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#171717",
@@ -10816,7 +10817,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#171717",
-          "platform": "#171717",
+          "rottay": "#171717",
           "evnto": "#171717"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -10851,7 +10852,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-chip-bg)",
@@ -10888,7 +10889,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-chip-bg)",
-          "platform": "var(--ds-chip-bg)",
+          "rottay": "var(--ds-chip-bg)",
           "evnto": "var(--ds-chip-bg)"
         }
       },
@@ -10901,7 +10902,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-chip-border)",
@@ -10938,7 +10939,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-chip-border)",
-          "platform": "var(--ds-chip-border)",
+          "rottay": "var(--ds-chip-border)",
           "evnto": "var(--ds-chip-border)"
         }
       },
@@ -10951,7 +10952,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-chip-color)",
@@ -10988,7 +10989,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-chip-color)",
-          "platform": "var(--ds-chip-color)",
+          "rottay": "var(--ds-chip-color)",
           "evnto": "var(--ds-chip-color)"
         }
       },
@@ -11001,7 +11002,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(\n    --ds-popover-spacious-title-gap,\n    var(--ds-popover-title-gap, var(--ds-spacing-md))\n  )",
@@ -11027,7 +11028,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.5rem",
@@ -11064,7 +11065,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0.5rem",
-          "platform": "0.5rem",
+          "rottay": "0.5rem",
           "evnto": "0.5rem"
         }
       },
@@ -11077,7 +11078,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.25rem",
@@ -11114,7 +11115,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0.25rem",
-          "platform": "0.25rem",
+          "rottay": "0.25rem",
           "evnto": "0.25rem"
         }
       },
@@ -11127,7 +11128,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#e5e5e5",
@@ -11166,7 +11167,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -11201,7 +11202,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#ffffff",
@@ -11240,7 +11241,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#ffffff",
-          "platform": "#ffffff",
+          "rottay": "#ffffff",
           "evnto": "#ffffff"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -11275,7 +11276,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#171717",
@@ -11314,7 +11315,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#171717",
-          "platform": "#171717",
+          "rottay": "#171717",
           "evnto": "#171717"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -11349,7 +11350,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#e5e5e5",
@@ -11388,7 +11389,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -11423,7 +11424,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#ffffff",
@@ -11462,7 +11463,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#ffffff",
-          "platform": "#ffffff",
+          "rottay": "#ffffff",
           "evnto": "#ffffff"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -11497,7 +11498,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-radius-sm)",
@@ -11534,7 +11535,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-radius-sm)",
-          "platform": "var(--ds-radius-sm)",
+          "rottay": "var(--ds-radius-sm)",
           "evnto": "var(--ds-radius-sm)"
         }
       },
@@ -11547,7 +11548,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-radio-md-border-width)",
@@ -11584,7 +11585,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-radio-md-border-width)",
-          "platform": "var(--ds-radio-md-border-width)",
+          "rottay": "var(--ds-radio-md-border-width)",
           "evnto": "var(--ds-radio-md-border-width)"
         }
       },
@@ -11597,7 +11598,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-radio-md-font-size)",
@@ -11634,7 +11635,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-radio-md-font-size)",
-          "platform": "var(--ds-radio-md-font-size)",
+          "rottay": "var(--ds-radio-md-font-size)",
           "evnto": "var(--ds-radio-md-font-size)"
         }
       },
@@ -11647,7 +11648,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-radio-md-size)",
@@ -11684,7 +11685,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-radio-md-size)",
-          "platform": "var(--ds-radio-md-size)",
+          "rottay": "var(--ds-radio-md-size)",
           "evnto": "var(--ds-radio-md-size)"
         }
       },
@@ -11697,7 +11698,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#ef4444",
@@ -11734,7 +11735,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#ef4444",
-          "platform": "#ef4444",
+          "rottay": "#ef4444",
           "evnto": "#ef4444"
         }
       },
@@ -11747,7 +11748,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#3b82f6",
@@ -11784,7 +11785,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#3b82f6",
-          "platform": "#3b82f6",
+          "rottay": "#3b82f6",
           "evnto": "#3b82f6"
         }
       },
@@ -11797,7 +11798,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#22c55e",
@@ -11823,7 +11824,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#f59e0b",
@@ -11849,7 +11850,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-select-md-font-size)",
@@ -11886,7 +11887,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-select-md-font-size)",
-          "platform": "var(--ds-select-md-font-size)",
+          "rottay": "var(--ds-select-md-font-size)",
           "evnto": "var(--ds-select-md-font-size)"
         }
       },
@@ -11899,7 +11900,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-select-md-height)",
@@ -11936,7 +11937,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-select-md-height)",
-          "platform": "var(--ds-select-md-height)",
+          "rottay": "var(--ds-select-md-height)",
           "evnto": "var(--ds-select-md-height)"
         }
       },
@@ -11949,7 +11950,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-select-md-padding)",
@@ -11986,7 +11987,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-select-md-padding)",
-          "platform": "var(--ds-select-md-padding)",
+          "rottay": "var(--ds-select-md-padding)",
           "evnto": "var(--ds-select-md-padding)"
         }
       },
@@ -11999,7 +12000,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-select-md-padding-x)",
@@ -12036,7 +12037,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-select-md-padding-x)",
-          "platform": "var(--ds-select-md-padding-x)",
+          "rottay": "var(--ds-select-md-padding-x)",
           "evnto": "var(--ds-select-md-padding-x)"
         }
       },
@@ -12049,7 +12050,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0 4px 14px 0 rgba(239, 68, 68, 0.15), 0 8px 24px rgba(239, 68, 68, 0.08)",
@@ -12088,7 +12089,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0 4px 14px 0 rgba(239, 68, 68, 0.15), 0 8px 24px rgba(239, 68, 68, 0.08)",
-          "platform": "0 4px 14px 0 rgba(239, 68, 68, 0.15), 0 8px 24px rgba(239, 68, 68, 0.08)",
+          "rottay": "0 4px 14px 0 rgba(239, 68, 68, 0.15), 0 8px 24px rgba(239, 68, 68, 0.08)",
           "evnto": "0 4px 14px 0 rgba(239, 68, 68, 0.15), 0 8px 24px rgba(239, 68, 68, 0.08)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -12123,7 +12124,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0 4px 14px 0 color-mix(in oklch, var(--ds-color-primary) 25%, transparent), 0 8px 24px color-mix(in oklch, var(--ds-color-primary) 12%, transparent)",
@@ -12153,7 +12154,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0 4px 14px 0 rgba(34, 197, 94, 0.15), 0 8px 24px rgba(34, 197, 94, 0.08)",
@@ -12192,7 +12193,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0 4px 14px 0 rgba(34, 197, 94, 0.15), 0 8px 24px rgba(34, 197, 94, 0.08)",
-          "platform": "0 4px 14px 0 rgba(34, 197, 94, 0.15), 0 8px 24px rgba(34, 197, 94, 0.08)",
+          "rottay": "0 4px 14px 0 rgba(34, 197, 94, 0.15), 0 8px 24px rgba(34, 197, 94, 0.08)",
           "evnto": "0 4px 14px 0 rgba(34, 197, 94, 0.15), 0 8px 24px rgba(34, 197, 94, 0.08)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -12227,7 +12228,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0 4px 14px 0 rgba(245, 158, 11, 0.15), 0 8px 24px rgba(245, 158, 11, 0.08)",
@@ -12266,7 +12267,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0 4px 14px 0 rgba(245, 158, 11, 0.15), 0 8px 24px rgba(245, 158, 11, 0.08)",
-          "platform": "0 4px 14px 0 rgba(245, 158, 11, 0.15), 0 8px 24px rgba(245, 158, 11, 0.08)",
+          "rottay": "0 4px 14px 0 rgba(245, 158, 11, 0.15), 0 8px 24px rgba(245, 158, 11, 0.08)",
           "evnto": "0 4px 14px 0 rgba(245, 158, 11, 0.15), 0 8px 24px rgba(245, 158, 11, 0.08)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -12301,7 +12302,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#EDF2F6",
@@ -12330,7 +12331,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0 12px 30px rgba(20, 40, 59, 0.10), 0 2px 8px rgba(20, 40, 59, 0.06)",
@@ -12359,7 +12360,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "linear-gradient(\n    90deg,\n    transparent,\n    var(--ds-surface-highlight-medium),\n    transparent\n  )",
@@ -12387,7 +12388,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "linear-gradient(\n    90deg,\n    transparent,\n    var(--ds-surface-highlight-soft),\n    transparent\n  )",
@@ -12415,7 +12416,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "linear-gradient(\n    90deg,\n    transparent,\n    var(--ds-surface-highlight-strong),\n    transparent\n  )",
@@ -12443,7 +12444,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#5a7085",
@@ -12477,7 +12478,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0 2px 4px rgba(0, 0, 0, 0.2)",
@@ -12516,7 +12517,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0 2px 4px rgba(0, 0, 0, 0.2)",
-          "platform": "0 2px 4px rgba(0, 0, 0, 0.2)",
+          "rottay": "0 2px 4px rgba(0, 0, 0, 0.2)",
           "evnto": "0 2px 4px rgba(0, 0, 0, 0.2)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -12551,7 +12552,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#171717",
@@ -12590,7 +12591,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#171717",
-          "platform": "#171717",
+          "rottay": "#171717",
           "evnto": "#171717"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -12625,7 +12626,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#ffffff",
@@ -12664,7 +12665,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#ffffff",
-          "platform": "#ffffff",
+          "rottay": "#ffffff",
           "evnto": "#ffffff"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -12699,7 +12700,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-radius-sm)",
@@ -12736,7 +12737,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-radius-sm)",
-          "platform": "var(--ds-radius-sm)",
+          "rottay": "var(--ds-radius-sm)",
           "evnto": "var(--ds-radius-sm)"
         }
       },
@@ -12749,7 +12750,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "clamp(0.25rem, 0.1522rem + 0.4348cqi, 0.5rem)",
@@ -12777,7 +12778,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "clamp(2.5rem, 2.4022rem + 0.4348cqi, 2.75rem)",
@@ -12805,7 +12806,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "clamp(3rem, 2.8043rem + 0.8696cqi, 3.5rem)",
@@ -12833,7 +12834,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "clamp(0.5rem, 0.4022rem + 0.4348cqi, 0.75rem)",
@@ -12861,7 +12862,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "clamp(0.75rem, 0.6522rem + 0.4348cqi, 1rem)",
@@ -12889,7 +12890,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "clamp(1rem, 0.9022rem + 0.4348cqi, 1.25rem)",
@@ -12917,7 +12918,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "clamp(1.5rem, 1.4022rem + 0.4348cqi, 1.75rem)",
@@ -12945,7 +12946,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "clamp(2rem, 1.9022rem + 0.4348cqi, 2.25rem)",
@@ -12973,7 +12974,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "1rem",
@@ -13010,7 +13011,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "1rem",
-          "platform": "1rem",
+          "rottay": "1rem",
           "evnto": "1rem"
         }
       },
@@ -13023,7 +13024,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "4%",
@@ -13053,7 +13054,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "background-color var(--ds-motion-fast) var(--ds-motion-ease-out),\n    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),\n    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),\n    ",
@@ -13079,7 +13080,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-shadow-md)",
@@ -13118,7 +13119,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-shadow-md)",
-          "platform": "var(--ds-shadow-md)",
+          "rottay": "var(--ds-shadow-md)",
           "evnto": "var(--ds-shadow-md)"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -13153,7 +13154,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#171717",
@@ -13192,7 +13193,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#171717",
-          "platform": "#171717",
+          "rottay": "#171717",
           "evnto": "#171717"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -13227,7 +13228,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#ffffff",
@@ -13264,7 +13265,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#ffffff",
-          "platform": "#ffffff",
+          "rottay": "#ffffff",
           "evnto": "#ffffff"
         }
       },
@@ -13277,7 +13278,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-border-subtle)",
@@ -13310,7 +13311,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(\n    --ds-material-card-foreground-muted,\n    var(--ds-color-text-secondary)\n  )",
@@ -13336,7 +13337,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(\n    in srgb,\n    var(\n        --rt-premium-card-accent,\n        var(--ds-signal-card-accent, var(--ds-color-primary))\n      )\n      8%,\n    transparent\n  )",
@@ -13364,7 +13365,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0 0 0 3px\n    color-mix(in srgb, var(--ds-color-primary) 14%, transparent)",
@@ -13393,7 +13394,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#e5e5e5",
@@ -13432,7 +13433,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -13467,7 +13468,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "88px",
@@ -13493,7 +13494,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-tag-md-padding)",
@@ -13530,7 +13531,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-tag-md-padding)",
-          "platform": "var(--ds-tag-md-padding)",
+          "rottay": "var(--ds-tag-md-padding)",
           "evnto": "var(--ds-tag-md-padding)"
         }
       },
@@ -13543,7 +13544,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.75rem",
@@ -13580,7 +13581,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0.75rem",
-          "platform": "0.75rem",
+          "rottay": "0.75rem",
           "evnto": "0.75rem"
         }
       },
@@ -13593,7 +13594,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0.5rem",
@@ -13630,7 +13631,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "0.5rem",
-          "platform": "0.5rem",
+          "rottay": "0.5rem",
           "evnto": "0.5rem"
         }
       },
@@ -13676,7 +13677,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(\n    --_ds-personality-resolved-toast-enter-duration,\n    initial\n  )",
@@ -13704,7 +13705,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(\n    --_ds-personality-resolved-toast-enter-easing,\n    initial\n  )",
@@ -13732,7 +13733,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-toggle-md-dot)",
@@ -13769,7 +13770,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-toggle-md-dot)",
-          "platform": "var(--ds-toggle-md-dot)",
+          "rottay": "var(--ds-toggle-md-dot)",
           "evnto": "var(--ds-toggle-md-dot)"
         }
       },
@@ -13782,7 +13783,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-toggle-md-height)",
@@ -13819,7 +13820,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-toggle-md-height)",
-          "platform": "var(--ds-toggle-md-height)",
+          "rottay": "var(--ds-toggle-md-height)",
           "evnto": "var(--ds-toggle-md-height)"
         }
       },
@@ -13832,7 +13833,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-toggle-md-width)",
@@ -13869,7 +13870,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-toggle-md-width)",
-          "platform": "var(--ds-toggle-md-width)",
+          "rottay": "var(--ds-toggle-md-width)",
           "evnto": "var(--ds-toggle-md-width)"
         }
       },
@@ -13882,7 +13883,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "opacity var(--ds-motion-feedback)\n      var(--ds-motion-ease-enter),\n    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter),\n    filter var(--ds-motion-feedback) var(--ds-motion-ease-ente",
@@ -13919,7 +13920,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "opacity var(--ds-motion-feedback)\n      var(--ds-motion-ease-enter),\n    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter),\n    filter var(--ds-motion-feedback) var(--ds-motion-ease-enter)",
-          "platform": "opacity var(--ds-motion-feedback)\n      var(--ds-motion-ease-enter),\n    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter),\n    filter var(--ds-motion-feedback) var(--ds-motion-ease-enter)",
+          "rottay": "opacity var(--ds-motion-feedback)\n      var(--ds-motion-ease-enter),\n    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter),\n    filter var(--ds-motion-feedback) var(--ds-motion-ease-enter)",
           "evnto": "opacity var(--ds-motion-feedback)\n      var(--ds-motion-ease-enter),\n    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter),\n    filter var(--ds-motion-feedback) var(--ds-motion-ease-enter)"
         }
       },
@@ -13932,7 +13933,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "background-color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    border-color var(--ds-motion-feedback) var(--ds-motion-ea",
@@ -13969,7 +13970,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "background-color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    transform var(--ds-motion-feedback) var(--ds-motion-ease-out)",
-          "platform": "background-color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    transform var(--ds-motion-feedback) var(--ds-motion-ease-out)",
+          "rottay": "background-color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    transform var(--ds-motion-feedback) var(--ds-motion-ease-out)",
           "evnto": "background-color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    transform var(--ds-motion-feedback) var(--ds-motion-ease-out)"
         }
       },
@@ -13982,7 +13983,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    border-color var(--ds-motion-feedback) var(--ds-motion-ea",
@@ -14019,7 +14020,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out)",
-          "platform": "color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out)",
+          "rottay": "color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out)",
           "evnto": "color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out)"
         }
       },
@@ -14032,7 +14033,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "grid-template-rows var(--ds-motion-disclosure)\n      var(--ds-motion-ease-move),\n    opacity var(--ds-motion-disclosure) var(--ds-motion-ease-enter),\n    transform var(--ds-motion-disclosure) var(--ds",
@@ -14069,7 +14070,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "grid-template-rows var(--ds-motion-disclosure)\n      var(--ds-motion-ease-move),\n    opacity var(--ds-motion-disclosure) var(--ds-motion-ease-enter),\n    transform var(--ds-motion-disclosure) var(--ds-motion-ease-enter)",
-          "platform": "grid-template-rows var(--ds-motion-disclosure)\n      var(--ds-motion-ease-move),\n    opacity var(--ds-motion-disclosure) var(--ds-motion-ease-enter),\n    transform var(--ds-motion-disclosure) var(--ds-motion-ease-enter)",
+          "rottay": "grid-template-rows var(--ds-motion-disclosure)\n      var(--ds-motion-ease-move),\n    opacity var(--ds-motion-disclosure) var(--ds-motion-ease-enter),\n    transform var(--ds-motion-disclosure) var(--ds-motion-ease-enter)",
           "evnto": "grid-template-rows var(--ds-motion-disclosure)\n      var(--ds-motion-ease-move),\n    opacity var(--ds-motion-disclosure) var(--ds-motion-ease-enter),\n    transform var(--ds-motion-disclosure) var(--ds-motion-ease-enter)"
         }
       },
@@ -14082,7 +14083,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "opacity var(--ds-motion-reveal)\n    var(--ds-motion-ease-out)",
@@ -14112,7 +14113,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "border-color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    background-color var(--ds-motion-feedback) var(--ds-moti",
@@ -14149,7 +14150,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "border-color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out)",
-          "platform": "border-color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out)",
+          "rottay": "border-color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out)",
           "evnto": "border-color var(--ds-motion-feedback)\n      var(--ds-motion-ease-out),\n    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),\n    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out)"
         }
       },
@@ -14162,7 +14163,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "opacity var(--ds-motion-reveal)\n      var(--ds-motion-ease-out),\n    transform var(--ds-motion-reveal) var(--ds-motion-ease-out)",
@@ -14199,7 +14200,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "opacity var(--ds-motion-reveal)\n      var(--ds-motion-ease-out),\n    transform var(--ds-motion-reveal) var(--ds-motion-ease-out)",
-          "platform": "opacity var(--ds-motion-reveal)\n      var(--ds-motion-ease-out),\n    transform var(--ds-motion-reveal) var(--ds-motion-ease-out)",
+          "rottay": "opacity var(--ds-motion-reveal)\n      var(--ds-motion-ease-out),\n    transform var(--ds-motion-reveal) var(--ds-motion-ease-out)",
           "evnto": "opacity var(--ds-motion-reveal)\n      var(--ds-motion-ease-out),\n    transform var(--ds-motion-reveal) var(--ds-motion-ease-out)"
         }
       },
@@ -14212,7 +14213,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "background-color var(--ds-motion-reveal)\n      var(--ds-motion-ease-out),\n    color var(--ds-motion-reveal) var(--ds-motion-ease-out)",
@@ -14249,7 +14250,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "background-color var(--ds-motion-reveal)\n      var(--ds-motion-ease-out),\n    color var(--ds-motion-reveal) var(--ds-motion-ease-out)",
-          "platform": "background-color var(--ds-motion-reveal)\n      var(--ds-motion-ease-out),\n    color var(--ds-motion-reveal) var(--ds-motion-ease-out)",
+          "rottay": "background-color var(--ds-motion-reveal)\n      var(--ds-motion-ease-out),\n    color var(--ds-motion-reveal) var(--ds-motion-ease-out)",
           "evnto": "background-color var(--ds-motion-reveal)\n      var(--ds-motion-ease-out),\n    color var(--ds-motion-reveal) var(--ds-motion-ease-out)"
         }
       },
@@ -14262,7 +14263,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "#e5e5e5",
@@ -14301,7 +14302,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "#e5e5e5",
-          "platform": "#e5e5e5",
+          "rottay": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
         "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
@@ -14336,7 +14337,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0",
@@ -14384,7 +14385,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-line-height-body, 1.6)",
@@ -14429,7 +14430,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "0",
@@ -14477,7 +14478,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-line-height-display, 1)",
@@ -14522,7 +14523,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-line-height-heading, 1.2)",
@@ -14567,7 +14568,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(in srgb, var(--ds-color-primary) 14%, transparent)",
@@ -14606,7 +14607,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "color-mix(in srgb, var(--ds-color-primary) 14%, transparent)",
-          "platform": "color-mix(in srgb, var(--ds-color-primary) 14%, transparent)",
+          "rottay": "color-mix(in srgb, var(--ds-color-primary) 14%, transparent)",
           "evnto": "color-mix(in srgb, var(--ds-color-primary) 14%, transparent)"
         }
       },
@@ -14619,7 +14620,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(in srgb, var(--ds-color-primary) 8%, transparent)",
@@ -14658,7 +14659,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "color-mix(in srgb, var(--ds-color-primary) 8%, transparent)",
-          "platform": "color-mix(in srgb, var(--ds-color-primary) 8%, transparent)",
+          "rottay": "color-mix(in srgb, var(--ds-color-primary) 8%, transparent)",
           "evnto": "color-mix(in srgb, var(--ds-color-primary) 8%, transparent)"
         }
       },
@@ -14671,7 +14672,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
@@ -14710,7 +14711,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
-          "platform": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
+          "rottay": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
           "evnto": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)"
         }
       },
@@ -14723,7 +14724,7 @@
       "executed": false,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "32px",
@@ -14750,7 +14751,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-z-index-base, 0)",
@@ -14787,7 +14788,7 @@
         "zeroDelta": "By definition: a declaration with zero consumers contributes to no resolved value. No consumption site changed because none exists.",
         "declaredValueBeforePerVertical": {
           "bithire": "var(--ds-z-index-base, 0)",
-          "platform": "var(--ds-z-index-base, 0)",
+          "rottay": "var(--ds-z-index-base, 0)",
           "evnto": "var(--ds-z-index-base, 0)"
         }
       },
@@ -14800,7 +14801,7 @@
       "executed": true,
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-z-index-fixed, 1200)",
@@ -14833,7 +14834,7 @@
       "executedOn": "2026-08-02",
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-surface-chip-bg)",
@@ -14898,7 +14899,7 @@
       "executedOn": "2026-08-02",
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-surface-chip-border)",
@@ -14963,7 +14964,7 @@
       "executedOn": "2026-08-02",
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-surface-chip-color)",
@@ -15028,7 +15029,7 @@
       "executedOn": "2026-08-02",
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "color-mix( in srgb, var(--ds-color-primary) 11%, var(--ds-color-border) )",
@@ -15099,7 +15100,7 @@
         "convention": "Kept BARE, matching the file's local idiom (the sibling :focus rule reads --ds-color-primary-500 and --ds-color-primary-100 bare).",
         "resolvedPerVertical": {
           "bithire": "#F8F8F8",
-          "platform": "#18181B",
+          "rottay": "#18181B",
           "evnto": "#FAFAFA"
         },
         "delta": "REAL AND CORRECT PER VERTICAL. The fill appears where nothing painted: light greys on the two light verticals, #18181B on platform's dark canvas. The rule already set color: var(--ds-text-tertiary), which is live, so the disabled state had tertiary ink on a transparent ground.",
@@ -15139,7 +15140,7 @@
         "convention": "Fallback structure preserved exactly; only the inner name changed.",
         "resolvedPerVertical": {
           "bithire": "'Space Grotesk', ui-sans-serif, ... (heading, unchanged)",
-          "platform": "'Inter', -apple-system, ... (heading, unchanged)",
+          "rottay": "'Inter', -apple-system, ... (heading, unchanged)",
           "evnto": "'Inter', -apple-system, ... (heading, unchanged)"
         },
         "delta": "ZERO in all three -- the retargeted tier is unreachable. Classified as hygiene, not a defect fix: it removes three references to a name nothing declares, so if the heading floor is ever withdrawn the chain lands on a live token instead of on nothing.",
@@ -15192,7 +15193,7 @@
       "note": "NOT EXECUTED -- correct in isolation, wrong in the system. The retarget is the right NAME: --ds-color-background-subtle is declared nowhere and --ds-color-bg-subtle is the live canon. But it resolves to #0D0D10 -- near-black -- in ALL THREE bundles, including the two light verticals, because the DS default theme is dark-first and neither bithire nor evnto overrides this channel. The nine reads are `background:` on DataTerminalCard parts whose own source comment calls them a 'subtle background'. Executing would turn nine surfaces near-black on a light UI, which is not what 'subtle' means and is very unlikely to be the intent.",
       "measuredPerVertical": {
         "bithire": "#0D0D10 on a #F4F8FB canvas",
-        "platform": "#0D0D10 on a #0A0A0C canvas (plausible)",
+        "rottay": "#0D0D10 on a #0A0A0C canvas (plausible)",
         "evnto": "#0D0D10 on a #FFFFFF canvas"
       },
       "hypothesis": "The likelier root defect is one level up and is the same shape as --ds-color-text-inverse: --ds-color-bg-subtle has no LIGHT floor, so the light verticals inherit the dark-first default. Flooring it per vertical would make the retarget safe and correct; retargeting first would ship the dark value to two light products.",
@@ -15211,7 +15212,7 @@
           "bg-tertiary": "#e8eef6",
           "bg-subtle(today)": "#0D0D10"
         },
-        "platform": {
+        "rottay": {
           "bg-primary": "#0A0A0C",
           "bg-secondary": "#0F0F12",
           "bg-tertiary": "#141417",
@@ -15232,7 +15233,7 @@
       "expectedDeltaPerVertical": {
         "bithire": "#0D0D10 -> #f3f2ef",
         "evnto": "#0D0D10 -> #fafafa",
-        "platform": "unchanged (authors its own literal)"
+        "rottay": "unchanged (authors its own literal)"
       },
       "knownRedAtHandoff": "foundation/themes/tests/default-theme-neutral-derivation.test.ts pins this channel byte-identically and is RED until its pin is updated by the lane that made the change. FASE B did not touch it."
     },
@@ -15257,17 +15258,17 @@
       "measuredPerVertical": {
         "--ds-color-success-bg": {
           "bithire": "#F0F9FF",
-          "platform": "rgba(34, 197, 94, 0.08)",
+          "rottay": "rgba(34, 197, 94, 0.08)",
           "evnto": "#F5FFF6"
         },
         "--ds-color-on-success": {
           "bithire": "#ffffff",
-          "platform": "#171717",
+          "rottay": "#171717",
           "evnto": "#ffffff"
         },
         "--ds-color-success-ink": {
           "bithire": "color-mix(in srgb, #327CA8 60%, #171717 40%)",
-          "platform": "color-mix(in srgb, #22C55E 60%, #171717 40%)",
+          "rottay": "color-mix(in srgb, #22C55E 60%, #171717 40%)",
           "evnto": "color-mix(in srgb, #15803D 60%, #171717 40%)"
         }
       },
@@ -15290,7 +15291,7 @@
             "background": "#F0F9FF",
             "ink": "color-mix(in srgb, #327CA8 60%, #171717 40%)"
           },
-          "platform": {
+          "rottay": {
             "background": "rgba(34, 197, 94, 0.08)",
             "ink": "color-mix(in srgb, #22C55E 60%, #171717 40%)"
           },
@@ -15447,7 +15448,7 @@
       "provenanceClass": "D-compiler-generated",
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": null,
@@ -15480,7 +15481,7 @@
       "provenanceClass": "D-compiler-generated",
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": null,
@@ -15508,7 +15509,7 @@
       "provenanceClass": "D-compiler-generated",
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": null,
@@ -15543,7 +15544,7 @@
       "finalState": "EXECUTED",
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-bg-primary)",
@@ -15592,7 +15593,7 @@
       "finalState": "EXECUTED",
       "declaredInBundles": [
         "bithire",
-        "platform",
+        "rottay",
         "evnto"
       ],
       "shippedValue": "var(--ds-color-bg-secondary)",
@@ -16073,7 +16074,7 @@
         "whyNotTheOtherTwoOptions": "Flooring the channel in themes/default.css was rejected: it would newly declare 5 tenant-paint channels on :root across all three verticals to fix one consumer, and it is a separate decision about whether the material texture family owes a static floor at all. Renaming the upstream was rejected because the upstream is real and correctly named.",
         "deltaPerVertical": {
           "bithire": "<unresolved> -> none",
-          "platform": "<unresolved> -> none",
+          "rottay": "<unresolved> -> none",
           "evnto": "<unresolved> -> none"
         },
         "paintedDelta": "ZERO in all three. The only consumer is `background-image: var(--ds-button-ai-texture)` at runtime/engines/modern/skin/button.css:387 on .rottay-button--modern[data-variant='ai']. background-image is not an inherited property, so the declaration was invalid at computed-value time and already computed to the initial value, which is `none`. The fix removes the IACVT hazard rather than repainting: an IACVT kills the WHOLE declaration, so the moment anyone layers a second background-image value on that rule the layer would have died with it.",
@@ -16096,7 +16097,7 @@
         "whyThisUpstream": "--ds-color-text-on-primary, not the dark block's --ds-color-neutral-0. The DS already encodes this mapping: the legacy alias --ds-text-inverse in this same file resolves to var(--ds-color-text-on-primary). It is also the only choice that stays correct per vertical, because it is tenant-derived: bithire and evnto ship light canvases so their inverse ink resolves white (#ffffff), while platform ships a DARK canvas (--ds-color-bg-primary #0A0A0C, text #ECECEC) so its inverse ground is light and its ink correctly resolves near-black (#0C0C0E). Mirroring the dark block's neutral-0 would have hardcoded white in all three and made platform's inverse text invisible.",
         "deltaPerVertical": {
           "bithire": "light: <unresolved> (inherited) -> #ffffff",
-          "platform": "light: <unresolved> (inherited) -> #0C0C0E",
+          "rottay": "light: <unresolved> (inherited) -> #0C0C0E",
           "evnto": "light: <unresolved> (inherited) -> #ffffff",
           "darkAllThree": "UNCHANGED -- :root[data-theme='dark'] still declares var(--ds-color-neutral-0) and outranks the new :root floor by specificity."
         },
@@ -16108,7 +16109,7 @@
     },
     "artifactResidue": {
       "count": 60,
-      "detail": "60 of the 172 retired names still ship because a first-party tenant artifact re-declares them: 10 via facade/artifacts/bithire, 51 via facade/artifacts/rottay (which feeds the platform bundle), 0 via evnto.",
+      "detail": "60 of the 172 retired names still ship because a first-party tenant artifact re-declares them: 10 via facade/artifacts/bithire, 51 via facade/artifacts/rottay (which feeds the rottay bundle), 0 via evnto.",
       "verified": "Every one of the 60 remaining declarations in src/ is inside facade/artifacts/. Zero non-artifact sites remain, so nothing was missed in the fenced source.",
       "nextStep": "Those artifacts are build products assembled from the BrandTheme .ts plus a declared _source/extension.css; draining them means editing the extension.css inputs (or the .ts) and re-running build:vertical-css. That is a separate pass outside the FASE-B fence, and it is what stands between 'retired in source' and 'gone from every bundle'."
     },

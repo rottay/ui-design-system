@@ -70,6 +70,10 @@ const REACH_CORPUS = Object.freeze([
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/modes/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts',
+  'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/inks/index.ts',
+  'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/neutral-temperature/index.ts',
+  'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts',
+  'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/ramps/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/seeds/index.ts',
   // WO-DER-03: the shape family joins the reach corpus for the same reason.

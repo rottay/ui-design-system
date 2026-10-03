@@ -296,7 +296,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
 
   // F-37: the hover/press/focus triad the skin decides through
   // `:is([data-state~='x'], :x)` is produced once, here; the pseudo-class arm
-  // stays as the platform fallback. The row is the roving tab stop and carries
+  // stays as the pseudo-class fallback. The row is the roving tab stop and carries
   // the click, so it is interactive whenever it is not disabled; the Move
   // control is its own part and owns its own triad.
   const rowInteraction = useInteractionState({ disabled: Boolean(disabled) });

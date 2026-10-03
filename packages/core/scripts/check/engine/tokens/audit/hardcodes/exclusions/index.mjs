@@ -54,7 +54,7 @@ export const SKIN_LITERAL_EXCLUSIONS = Object.freeze({
     tec: [
       {
         token: 'generic-family-after-token',
-        reason: 'a generic family closing a token-led stack is the platform fallback',
+        reason: 'a generic family closing a token-led stack is the user-agent fallback',
       },
     ],
     floor: [],

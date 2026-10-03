@@ -46,15 +46,18 @@ const readersOn = (row, plane) => row.readers.filter((r) => r.plane === plane);
 
 /* ── ORACULO 1 ─────────────────────────────────────────────────────────── */
 
-test('ORACULO --ds-button-xs-padding-x: lector modern-skin-css en skin/button/index.css:378 con escalar de densidad', () => {
+test('ORACULO --ds-button-xs-padding-x: lector modern-skin-css en el padding-inline de skin/button/index.css con escalar de densidad', () => {
   const row = channel('--ds-button-xs-padding-x');
+  const skinFile = 'src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css';
   const modern = readersOn(row, 'modern-skin-css');
-  const hit = modern.find(
-    (r) =>
-      r.file === 'src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css' &&
-      r.line === 378,
+  const hits = modern.filter((r) => r.file === skinFile && r.prop === 'padding-inline');
+  assert.equal(hits.length, 1, 'debe haber exactamente una lectura modern-skin-css en el padding-inline de skin/button/index.css');
+  const [hit] = hits;
+  const sourceLine = readFileSync(new URL(`../../../../../${skinFile}`, import.meta.url), 'utf8').split('\n')[hit.line - 1] ?? '';
+  assert.ok(
+    sourceLine.includes('var(--ds-button-xs-padding-x)'),
+    `la linea registrada (${hit.line}) debe ser la que lee el canal en la fuente, es: ${sourceLine.trim()}`,
   );
-  assert.ok(hit, 'debe haber una lectura modern-skin-css en skin/button/index.css:378');
   assert.ok(
     hit.scalars.includes('--ds-density-effective-scale'),
     `scalars debe contener --ds-density-effective-scale, tiene ${JSON.stringify(hit.scalars)}`,

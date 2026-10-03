@@ -166,7 +166,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
   // F-37: the hover/press/focus triad is decided once, here, and the skin reads
   // it off `data-state` on the ROOT -- which is where its rules are keyed, even
   // though the lift and the ring land on the mask child. The `:hover`/`:active`
-  // /`:focus-visible` arm remains the platform fallback.
+  // /`:focus-visible` arm remains the pseudo-class fallback.
   const { state: interaction, handlers: interactionHandlers } = useInteractionState();
 
   const handleKeyDown = useCallback(

@@ -462,7 +462,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     const prevArrowRef = useRef<HTMLButtonElement>(null);
     const nextArrowRef = useRef<HTMLButtonElement>(null);
     // Arrow press feedback is the kernel's decision; the skin's `:active` arm
-    // is that decision's platform fallback.
+    // is that decision's pseudo-class fallback.
     const prevArrowState = useInteractionState({ disabled: prevDisabled });
     const nextArrowState = useInteractionState({ disabled: nextDisabled });
     useEffect(() => {
