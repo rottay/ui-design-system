@@ -9,6 +9,8 @@ import {
   emitThemeCss,
 } from "@/infrastructure/compilers/runtime/theme/runtime/emission/css";
 import {
+  CONTAINER_ALIAS_CONTEXTS,
+  CONTAINER_ALIASES,
   containerAliasRedeclarations,
   ROOT_ALIASES,
 } from "@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases";
@@ -101,6 +103,47 @@ describe("the Button disabled opacity follows the dial of its own scope", () => 
     );
     const css = emitThemeCss(compiled, containerScope("[data-states-probe]"), { container: {} });
     expect(declarationsOf(css, BUTTON)).toEqual(["0.3"]);
+  });
+});
+
+describe("the Button focus offset follows the signature of its own scope", () => {
+  const OFFSET = "--ds-focus-ring-offset";
+  const BUTTON_OFFSET = "--ds-button-focus-ring-offset";
+  const ALIAS = `var(${OFFSET}, 2px)`;
+  const SIGNATURES = [
+    ["ring", "2px"],
+    ["underline", "0px"],
+    ["glow", "0px"],
+  ] as const;
+  const signed = (focusStyle: (typeof SIGNATURES)[number][0]) =>
+    deriveStateChannels({ id: "focus-probe", name: "Focus probe", surfaces: { focusStyle } });
+
+  it("is tabled as a root alias of the signature offset, with no context left to re-emit", () => {
+    expect(new Map(ROOT_ALIASES).get(BUTTON_OFFSET)).toBe(ALIAS);
+    expect(CONTAINER_ALIASES.map((alias) => alias.name)).not.toContain(BUTTON_OFFSET);
+    expect(CONTAINER_ALIAS_CONTEXTS.map((context) => context.name)).not.toContain(BUTTON_OFFSET);
+  });
+
+  for (const [signature, offset] of SIGNATURES) {
+    it(`${signature}: a tenant scope restates the alias beside the offset it states`, () => {
+      const css = tenantDelta(signed(signature));
+      expect(declarationsOf(css, OFFSET)).toEqual([offset]);
+      expect(declarationsOf(css, BUTTON_OFFSET)).toEqual([ALIAS]);
+    });
+
+    it(`${signature}: the container door restates it in the base rule and re-emits no context for it`, () => {
+      const { compiled } = compileThemeIntent(
+        flatThemeIntent({ flatTheme: { id: "focus-probe", name: "Focus probe", surfaces: { focusStyle: signature } } })
+      );
+      const css = emitThemeCss(compiled, containerScope("[data-states-probe]"), { container: {} });
+      expect(declarationsOf(css, OFFSET)).toEqual([offset]);
+      expect(declarationsOf(css, BUTTON_OFFSET)).toEqual([ALIAS]);
+    });
+  }
+
+  it("an authored Button offset keeps its value in the scope that states it", () => {
+    const css = tenantDelta({ ...signed("glow"), [BUTTON_OFFSET]: "4px" });
+    expect(declarationsOf(css, BUTTON_OFFSET)).toEqual(["4px"]);
   });
 });
 

@@ -34,7 +34,6 @@
   :root {
     --ds-button-border-width: 2px;
     --ds-button-border-width-focus: 3px;
-    --ds-button-focus-ring-offset: 3px;
   }
 }
 
