@@ -545,9 +545,9 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/modal/index.css": {
-      "blob": "73fcf840db3e48cc948ca3c1a48619020b835e5cdef35577b380e6662ce12e8d",
-      "relocationDigest": "7455ab2889590ab2ed942108c7f9edb9cda538574bb0395ba57c3d18e6404b9c",
-      "reason": "Move Rustic Modal backdrop and blur paint out of inline styles while reusing the canonical --ds-glass-blur-sm hook; no new public channel and no API change.",
+      "blob": "865c7cafeb0230ee9ce554a65582ab211c8dec91024ad508cfa80dbc3b9f4eff",
+      "relocationDigest": "90413a69d5434e961e9ada8c406b8e5ce852e54b34351b6cc593d3c489c65016",
+      "reason": "1e2e4b737 R-MODAL (owner ruling 2026-10-03, named exception): seven Rustic modal selectors change the child combinator to a descendant combinator so the sealed skin paints through FocusTrap's wrapper; no rule, declaration, token or capability added; not a general authorization to evolve Rustic.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/overlay-modal.css": {
