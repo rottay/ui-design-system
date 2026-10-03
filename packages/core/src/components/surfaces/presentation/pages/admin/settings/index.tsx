@@ -22,7 +22,7 @@ import { Card, Grid, Stack, Tabs, Text } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
 import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
-import { filterSurfaceTabbedViews, hasSurfaceError } from '../../../../runtime/helpers';
+import { filterSurfaceActions, filterSurfaceTabbedViews, hasSurfaceError } from '../../../../runtime/helpers';
 import type { SettingsSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
@@ -80,20 +80,25 @@ function SettingsSurfaceContent({
   const { tSurfaceOr } = useSurfaceTranslations();
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const isCompact = (posture?.density ?? profileDefaults.density) === 'compact';
-  const primaryAction = posture
-    ? config.behavior.actions?.find((action) => action.variant === 'primary')
+  const resolvedActions = posture
+    ? filterSurfaceActions(config.behavior.actions, config.access)
     : undefined;
-  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const primaryAction = resolvedActions?.find((action) => action.variant === 'primary');
+  const remainingActions = primaryAction
+    ? resolvedActions?.filter((action) => action !== primaryAction)
+    : resolvedActions;
+  const actionsAccess = posture ? { mode: 'all' as const } : config.access;
+  const dockPrimaryAction = !!primaryAction && !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
   const primaryActionNode = primaryAction ? (
     <SurfacePostureAction label={primaryAction.label}>
-      <SurfaceActionBar actions={[primaryAction]} access={config.access} />
+      <SurfaceActionBar actions={[primaryAction]} access={actionsAccess} />
     </SurfacePostureAction>
   ) : null;
   const actionsNode = (
     <SurfacePostureSlot name="toolbar">
       <SurfaceActionBar
-        actions={primaryAction ? config.behavior.actions?.filter((action) => action !== primaryAction) : config.behavior.actions}
-        access={config.access}
+        actions={posture ? remainingActions : config.behavior.actions}
+        access={actionsAccess}
       />
       {!dockPrimaryAction && primaryActionNode}
     </SurfacePostureSlot>

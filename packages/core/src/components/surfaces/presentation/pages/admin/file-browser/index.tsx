@@ -31,7 +31,7 @@ import { useTokens } from '@/infrastructure/runtime/theming/composition/react/to
 import type { FileBrowserSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
-import { hasSurfaceError } from '../../../../runtime/helpers';
+import { filterSurfaceActions, hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
@@ -183,20 +183,25 @@ function FileBrowserSurfaceContent({
       ? 'pulse'
       : 'wave';
 
-  const primaryAction = posture
-    ? config.behavior.actions?.find((action) => action.variant === 'primary')
+  const resolvedActions = posture
+    ? filterSurfaceActions(config.behavior.actions, config.access)
     : undefined;
-  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const primaryAction = resolvedActions?.find((action) => action.variant === 'primary');
+  const remainingActions = primaryAction
+    ? resolvedActions?.filter((action) => action !== primaryAction)
+    : resolvedActions;
+  const actionsAccess = posture ? { mode: 'all' as const } : config.access;
+  const dockPrimaryAction = !!primaryAction && !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
   const primaryActionNode = primaryAction ? (
     <SurfacePostureAction label={primaryAction.label}>
-      <SurfaceActionBar actions={[primaryAction]} access={config.access} />
+      <SurfaceActionBar actions={[primaryAction]} access={actionsAccess} />
     </SurfacePostureAction>
   ) : null;
   const actionsNode = (
     <SurfacePostureSlot name="toolbar">
       <SurfaceActionBar
-        actions={primaryAction ? config.behavior.actions?.filter((action) => action !== primaryAction) : config.behavior.actions}
-        access={config.access}
+        actions={posture ? remainingActions : config.behavior.actions}
+        access={actionsAccess}
       />
       {!dockPrimaryAction && primaryActionNode}
     </SurfacePostureSlot>

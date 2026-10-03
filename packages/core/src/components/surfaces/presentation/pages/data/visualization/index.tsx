@@ -17,7 +17,7 @@ import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScope
 import { Box, Card, Flex, Grid, Stack, Tabs, Text } from '../../../../../primitives';
 import type { GridColumns } from '../../../../../primitives/layout/grid/contracts';
 import { PatternStatsGrid } from '../../../../../patterns';
-import { filterSurfaceTabbedViews, hasSurfaceError } from '../../../../runtime/helpers';
+import { filterSurfaceActions, filterSurfaceTabbedViews, hasSurfaceError } from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import type { VisualizationSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
@@ -153,20 +153,25 @@ function VisualizationSurfaceContent({
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
   };
-  const primaryAction = posture
-    ? config.behavior.actions?.find((action) => action.variant === 'primary')
+  const resolvedActions = posture
+    ? filterSurfaceActions(config.behavior.actions, config.access)
     : undefined;
-  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const primaryAction = resolvedActions?.find((action) => action.variant === 'primary');
+  const remainingActions = primaryAction
+    ? resolvedActions?.filter((action) => action !== primaryAction)
+    : resolvedActions;
+  const actionsAccess = posture ? { mode: 'all' as const } : config.access;
+  const dockPrimaryAction = !!primaryAction && !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
   const primaryActionNode = primaryAction ? (
     <SurfacePostureAction label={primaryAction.label}>
-      <SurfaceActionBar actions={[primaryAction]} access={config.access} />
+      <SurfaceActionBar actions={[primaryAction]} access={actionsAccess} />
     </SurfacePostureAction>
   ) : null;
   const actionsNode = (
     <SurfacePostureSlot name="toolbar">
       <SurfaceActionBar
-        actions={primaryAction ? config.behavior.actions?.filter((action) => action !== primaryAction) : config.behavior.actions}
-        access={config.access}
+        actions={posture ? remainingActions : config.behavior.actions}
+        access={actionsAccess}
       />
       {!dockPrimaryAction && primaryActionNode}
     </SurfacePostureSlot>
