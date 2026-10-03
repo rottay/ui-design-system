@@ -62,7 +62,7 @@ export function sourceForDistTarget(target) {
 /**
  * The bundler's own entry map. Most published subpaths mirror their source
  * path under `dist/`, but the flat bundles (`dist/server.js`,
- * `dist/icons-full.js`, `dist/marks-brand.js`) are named by the build config
+ * `dist/icons-legacy.js`, `dist/marks.js`) are named by the build config
  * and mirror nothing. Reading that config is reading the authority; guessing a
  * path for them would drop those subpaths out of the surface silently.
  */

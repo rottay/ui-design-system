@@ -13,7 +13,7 @@
  *   node scripts/check/automation/bundle/index.mjs --chart-access  # bounded data-access facade budgets only
  *   node scripts/check/automation/bundle/index.mjs --chart-spec  # server-safe chart contract purity/budget only
  *   node scripts/check/automation/bundle/index.mjs --effects  # EffectRegistry purity/budget only
- *   node scripts/check/automation/bundle/index.mjs --spatial  # Spatial spec/host purity and isolation only
+ *   node scripts/check/automation/bundle/index.mjs --spatial  # Spatial host purity and isolation only (the ./spatial/spec door retired with RET-01-E)
  *   node scripts/check/automation/bundle/index.mjs --asset-retention  # semantic asset closure budgets only
  *
  * Exit codes:
@@ -47,10 +47,7 @@ import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../
 const SPATIAL_BASELINE_BYTES = Object.freeze({
   spatialEsmRaw: 296,
   spatialCjsRaw: 356,
-  spatialSpecEsmRaw: 688,
-  spatialSpecCjsRaw: 724,
   spatialHostFixtureGzip: 7_064,
-  spatialSpecFixtureGzip: 1_097,
 });
 
 function deriveSpatialBudget(measuredBytes) {
@@ -61,13 +58,10 @@ function deriveSpatialBudget(measuredBytes) {
 const SPATIAL_RAW_BUDGET = Object.freeze({
   'dist/spatial.js': deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialEsmRaw),
   'dist/spatial.cjs': deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialCjsRaw),
-  'dist/spatial-spec.js': deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialSpecEsmRaw),
-  'dist/spatial-spec.cjs': deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialSpecCjsRaw),
 });
 
 const SPATIAL_FIXTURE_BUDGET = Object.freeze({
   host: deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialHostFixtureGzip),
-  spec: deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialSpecFixtureGzip),
 });
 
 /** Maximum uncompressed size in bytes for each entry-point file. */
@@ -441,8 +435,8 @@ async function runComponentBudgets() {
  * both formats because it is an application singleton peer.
  *
  * The existing route budgets remain authoritative. The exhaustive synchronous
- * registry is measured through the explicit `./icons/full` compatibility
- * boundary and has its own measured +10% regression ratchet; that larger
+ * registry is measured through the canonical `./icons` facade and has its
+ * own measured +10% regression ratchet; that larger
  * envelope is never represented as the route-sized 40 KB icon budget.
  */
 const FULL_CORPUS_COMPATIBILITY_BASELINE_BYTES = Object.freeze({
@@ -503,11 +497,11 @@ const ASSET_RETENTION_FIXTURES = Object.freeze({
     budgetClass: 'route-payload',
   }),
   dynamicIconFull: Object.freeze({
-    label: `Icon (explicit full ${SEMANTIC_ROLE_COUNT}-role compatibility)`,
-    entryEsm: 'dist/icons-full.js',
-    entryCjs: 'dist/icons-full.cjs',
+    label: `Icon (canonical ${SEMANTIC_ROLE_COUNT}-role registry)`,
+    entryEsm: 'dist/icons.js',
+    entryCjs: 'dist/icons.cjs',
     exportName: 'Icon',
-    publicSubpath: './icons/full',
+    publicSubpath: './icons',
     budgetClass: 'full-corpus-compatibility-ratchet',
   }),
   brandMark: Object.freeze({
@@ -831,14 +825,14 @@ async function runAssetRetentionBudgets() {
       implemented: [
         'Generated per-role ESM/CJS subpaths prevent a named semantic role from executing an entire pack barrel.',
         'The SSR-safe BitHire preset contains the exact 104-role productive application inventory.',
-        'The exhaustive synchronous registry is explicit at ./icons/full and uses a separate measured regression ratchet without pretending to be a sub-40-KB route payload.',
+        'The exhaustive synchronous registry is measured at ./icons with a separate regression ratchet; it is not a sub-40-KB route payload.',
         'Brand and cloud CJS public entrypoints are split so neither asset class executes the other adapter.',
       ],
       constraints: [
         'Do not remove any of the governed semantic roles.',
         'Do not widen the 40-KB icon or 30-KB mark ceiling to silence this gate.',
         'The BitHire preset ceiling is the exact measured post-Phosphor-migration size (75275/81828 gzip bytes) and is decrease-only; shrinking it is owned by the W5 generator-level weight-pruning work order.',
-        'Preserve supplier-free public props, SSR output, hydration and one-minor compatibility aliases.',
+        'Preserve supplier-free public props, SSR output and hydration; document the D-07 target-major public glyph and duplicate-door retirements without a compatibility alias.',
       ],
     },
     fixtures: measurements,
@@ -1536,25 +1530,15 @@ const SPATIAL_ENTRY = join(ROOT, 'dist', 'spatial.js');
 const SPATIAL_CJS_ENTRY = join(ROOT, 'dist', 'spatial.cjs');
 const SPATIAL_TYPES_ENTRY = join(ROOT, 'dist', 'spatial.d.ts');
 const SPATIAL_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'entrypoints', 'graphics', 'spatial', 'index.d.ts');
-const SPATIAL_SPEC_ENTRY = join(ROOT, 'dist', 'spatial-spec.js');
-const SPATIAL_SPEC_CJS_ENTRY = join(ROOT, 'dist', 'spatial-spec.cjs');
-const SPATIAL_SPEC_TYPES_ENTRY = join(ROOT, 'dist', 'spatial-spec.d.ts');
-const SPATIAL_SPEC_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'entrypoints', 'graphics', 'spatial', 'spec', 'index.d.ts');
 
 const SPATIAL_HOST_FIXTURE_EXPORTS = Object.freeze([
   'SPATIAL_SCENE_MODULE_VERSION',
   'SpatialExperience',
 ]);
-const SPATIAL_SPEC_FIXTURE_EXPORTS = Object.freeze([
-  'SPATIAL_QUALITY_BUDGETS',
-  'SPATIAL_SCENE_MODULE_VERSION',
-  'downgradeSpatialMode',
-  'isSpatialSceneModule',
-  'resolveSpatialPolicy',
-  'resolveSpatialQualityBudget',
-]);
-
-const SPATIAL_SPEC_ARTIFACT_FRAGMENTS = Object.freeze([
+// The spatial runtime modules the host closure legitimately bundles. They used
+// to double as the retired ./spatial/spec door's allowlist; the door is gone
+// (RET-01-E), the runtime stays.
+const SPATIAL_RUNTIME_ARTIFACT_FRAGMENTS = Object.freeze([
   '/foundation/contracts/kernel/spatial/',
   '/infrastructure/runtime/spatial/index.',
   '/infrastructure/runtime/spatial/facade/index.',
@@ -1601,22 +1585,13 @@ function isChartAccessArtifact(file) {
     || CHART_ACCESS_ARTIFACT_FRAGMENTS.some((fragment) => normalized.includes(fragment));
 }
 
-function isSpatialSpecArtifact(file) {
-  const normalized = file.replaceAll('\\', '/');
-  return normalized === SPATIAL_SPEC_ENTRY.replaceAll('\\', '/')
-    || normalized === SPATIAL_SPEC_CJS_ENTRY.replaceAll('\\', '/')
-    || normalized === SPATIAL_SPEC_TYPES_ENTRY.replaceAll('\\', '/')
-    || normalized === SPATIAL_SPEC_SOURCE_TYPES_ENTRY.replaceAll('\\', '/')
-    || SPATIAL_SPEC_ARTIFACT_FRAGMENTS.some((fragment) => normalized.includes(fragment));
-}
-
 function isSpatialHostArtifact(file) {
   const normalized = file.replaceAll('\\', '/');
   return normalized === SPATIAL_ENTRY.replaceAll('\\', '/')
     || normalized === SPATIAL_CJS_ENTRY.replaceAll('\\', '/')
     || normalized === SPATIAL_TYPES_ENTRY.replaceAll('\\', '/')
     || normalized === SPATIAL_SOURCE_TYPES_ENTRY.replaceAll('\\', '/')
-    || isSpatialSpecArtifact(file)
+    || SPATIAL_RUNTIME_ARTIFACT_FRAGMENTS.some((fragment) => normalized.includes(fragment))
     || SPATIAL_HOST_BRIDGE_ARTIFACT_FRAGMENTS.some((fragment) => normalized.includes(fragment));
 }
 
@@ -2637,17 +2612,10 @@ async function runSpatialFixtureBudgets() {
     supplierContract.entrypoints?.['./spatial'],
     SPATIAL_HOST_FIXTURE_EXPORTS,
   );
-  const specContractErrors = validateSpatialPublicContract(
-    supplierContract.entrypoints?.['./spatial/spec'],
-    SPATIAL_SPEC_FIXTURE_EXPORTS,
-  );
-  if (hostContractErrors.length > 0 || specContractErrors.length > 0) {
+  if (hostContractErrors.length > 0) {
     console.error(
       '\x1b[31mSpatial supplier contract failed: '
-      + [
-        ...hostContractErrors.map((error) => `host ${error}`),
-        ...specContractErrors.map((error) => `spec ${error}`),
-      ].join('; ')
+      + hostContractErrors.map((error) => `host ${error}`).join('; ')
       + '.\x1b[0m\n',
     );
     return 1;
@@ -2655,66 +2623,10 @@ async function runSpatialFixtureBudgets() {
 
   try {
     // Sequential builds keep peak memory bounded during normal CI analysis.
-    const spec = await buildSpatialFixture(
-      'spec',
-      SPATIAL_SPEC_ENTRY,
-    );
     const host = await buildSpatialFixture(
       'host',
       SPATIAL_ENTRY,
     );
-
-    const specIsolationErrors = validateSpatialRuntimeExports(
-      spec,
-      SPATIAL_SPEC_FIXTURE_EXPORTS,
-    );
-    const specForeignModules = [...spec.modules.keys()].filter((moduleId) => (
-      moduleId !== spec.virtualId && !isSpatialSpecArtifact(moduleId)
-    ));
-    if (spec.imports.size > 0) {
-      specIsolationErrors.push(`external imports retained: ${[...spec.imports].join(', ')}`);
-    }
-    if (spec.dynamicImports.size > 0) {
-      specIsolationErrors.push(`dynamic imports retained: ${[...spec.dynamicImports].join(', ')}`);
-    }
-    if (spec.sourceDynamicImports.size > 0) {
-      specIsolationErrors.push(`source dynamic imports found: ${[...spec.sourceDynamicImports].join(', ')}`);
-    }
-    if (spec.emittedAssets.length > 0) {
-      specIsolationErrors.push(`assets emitted: ${spec.emittedAssets.join(', ')}`);
-    }
-    if (spec.assetModuleIds.length > 0) {
-      specIsolationErrors.push(`asset modules retained: ${spec.assetModuleIds.join(', ')}`);
-    }
-    if (SPATIAL_INLINE_ASSET_PATTERN.test(spec.code)) {
-      specIsolationErrors.push('inline asset retained');
-    }
-    if (spec.bundledExternalModules.length > 0) {
-      specIsolationErrors.push('external supplier module bundled');
-    }
-    if (specForeignModules.length > 0) {
-      specIsolationErrors.push(`client/foreign runtime retained: ${specForeignModules.join(', ')}`);
-    }
-    if (SPATIAL_BROWSER_RUNTIME_PATTERN.test(spec.code)) {
-      specIsolationErrors.push('browser runtime retained');
-    }
-    if (/(?:^|[;\n])\s*['"]use client['"]/.test(spec.code)) {
-      specIsolationErrors.push('client directive retained');
-    }
-    specIsolationErrors.push(...auditSpatialCjsClosure({
-      entry: SPATIAL_SPEC_CJS_ENTRY,
-      label: 'Spatial spec',
-      isAllowedArtifact: isSpatialSpecArtifact,
-      browserSafe: true,
-      reactRequired: false,
-    }));
-    specIsolationErrors.push(...auditSpatialDeclarationClosure({
-      entry: SPATIAL_SPEC_TYPES_ENTRY,
-      label: 'Spatial spec',
-      isAllowedArtifact: isSpatialSpecArtifact,
-      browserSafe: true,
-      reactRequired: false,
-    }));
 
     const hostIsolationErrors = validateSpatialRuntimeExports(
       host,
@@ -2772,42 +2684,19 @@ async function runSpatialFixtureBudgets() {
       inspectSpatialRawFacade(SPATIAL_ENTRY, 'spatialEsmRaw'),
       inspectSpatialRawFacade(SPATIAL_CJS_ENTRY, 'spatialCjsRaw'),
     ];
-    const specRaw = [
-      inspectSpatialRawFacade(SPATIAL_SPEC_ENTRY, 'spatialSpecEsmRaw'),
-      inspectSpatialRawFacade(SPATIAL_SPEC_CJS_ENTRY, 'spatialSpecCjsRaw'),
-    ];
-    const pendingBaselines = [
-      ...hostRaw,
-      ...specRaw,
-    ].filter(({ limit }) => limit === null).map(({ baselineKey }) => baselineKey);
+    const pendingBaselines = hostRaw
+      .filter(({ limit }) => limit === null).map(({ baselineKey }) => baselineKey);
     if (SPATIAL_FIXTURE_BUDGET.host === null) {
       pendingBaselines.push('spatialHostFixtureGzip');
     }
-    if (SPATIAL_FIXTURE_BUDGET.spec === null) {
-      pendingBaselines.push('spatialSpecFixtureGzip');
-    }
     const hostRawErrors = hostRaw.flatMap(({ errors }) => errors);
-    const specRawErrors = specRaw.flatMap(({ errors }) => errors);
     const hostOverBudget = SPATIAL_FIXTURE_BUDGET.host !== null
       && host.gzip > SPATIAL_FIXTURE_BUDGET.host;
-    const specOverBudget = SPATIAL_FIXTURE_BUDGET.spec !== null
-      && spec.gzip > SPATIAL_FIXTURE_BUDGET.spec;
     const hostFailed = hostIsolationErrors.length > 0
       || hostRawErrors.length > 0
       || hostOverBudget
-      || pendingBaselines.some((key) => key.startsWith('spatial') && !key.startsWith('spatialSpec'));
-    const specFailed = specIsolationErrors.length > 0
-      || specRawErrors.length > 0
-      || specOverBudget
-      || pendingBaselines.some((key) => key.startsWith('spatialSpec'));
+      || pendingBaselines.length > 0;
 
-    console.log(
-      `Spatial spec | raw facades ${formatSpatialRawFacades(specRaw)} | `
-      + `fixture ${spec.raw} B raw / ${spec.gzip} B gzip `
-      + `(limit ${SPATIAL_FIXTURE_BUDGET.spec === null ? 'PENDING' : `${SPATIAL_FIXTURE_BUDGET.spec} B`}) | `
-      + `${specIsolationErrors.length === 0 ? 'no imports/React/DOM/browser/Three/R3F/assets/dynamic' : specIsolationErrors.join('; ')} | `
-      + `${specFailed ? 'FAIL' : 'PASS'}\n`,
-    );
     console.log(
       `Spatial host | raw facades ${formatSpatialRawFacades(hostRaw)} | `
       + `fixture ${host.raw} B raw / ${host.gzip} B gzip `
@@ -2817,14 +2706,14 @@ async function runSpatialFixtureBudgets() {
     );
     if (pendingBaselines.length > 0) {
       console.error(
-        '\x1b[31mSpatial byte baseline pending. Paste the six exact measurements into '
+        '\x1b[31mSpatial byte baseline pending. Paste the three exact measurements into '
         + `SPATIAL_BASELINE_BYTES: ${pendingBaselines.join(', ')}.\x1b[0m\n`,
       );
     }
-    if (hostRawErrors.length > 0 || specRawErrors.length > 0) {
-      console.error(`\x1b[31mSpatial raw facade failures: ${[...hostRawErrors, ...specRawErrors].join('; ')}.\x1b[0m\n`);
+    if (hostRawErrors.length > 0) {
+      console.error(`\x1b[31mSpatial raw facade failures: ${hostRawErrors.join('; ')}.\x1b[0m\n`);
     }
-    return hostFailed || specFailed ? 1 : 0;
+    return hostFailed ? 1 : 0;
   } catch (error) {
     console.error(`\x1b[31mSpatial fixture build failed: ${error instanceof Error ? error.message : String(error)}\x1b[0m\n`);
     return 1;

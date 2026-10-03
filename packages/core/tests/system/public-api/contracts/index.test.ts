@@ -40,11 +40,14 @@ describe('public api contract', () => {
       exports: Record<string, unknown>;
     };
 
-    // Current canonical exports: root, focused runtime boundaries and styles.
+    // Current canonical exports: root, server, icons and the canonical CSS door.
+    // RET-01-E (2026-10-02): the per-family subpaths, ./styles, ./styles/default,
+    // ./effects and ./spatial/spec retired census-backed (zero consumers measured);
+    // ./styles/rottay and ./styles/modern stay (app-platform's next.config consumes them).
     const currentExports = Object.keys(packageJson.exports).sort();
 
     // Required subpaths that must exist
-    const required = ['.', './server', './icons', './styles', './styles.css'];
+    const required = ['.', './server', './icons', './styles.css'];
     for (const path of required) {
       expect(currentExports, `missing required export: ${path}`).toContain(path);
     }
@@ -56,9 +59,7 @@ describe('public api contract', () => {
       './charts/access',
       './charts/renderers',
       './motion',
-      './effects',
       './spatial',
-      './spatial/spec',
     ];
     for (const path of focusedRuntimeBoundaries) {
       expect(currentExports, `missing focused export: ${path}`).toContain(path);
@@ -73,12 +74,10 @@ describe('public api contract', () => {
     // Engine-specific styles exist as optimization path (not required by apps)
     expect(currentExports).toContain('./styles/modern');
 
-    // Neutral consumers can request the same canonical Rottay bundle without
-    // introducing a second vertical identity.
-    expect(currentExports).toContain('./styles/default');
+    // Neutral consumers request the canonical bundle through ./styles.css.
 
     // No ghost exports from previous API versions
-    const forbidden = ['./tokens', './foundation/tokens/css', './foundation/tokens/css/*', './i18n'];
+    const forbidden = ['./tokens', './foundation/tokens/css', './foundation/tokens/css/*', './i18n', './effects', './spatial/spec', './styles', './styles/default'];
     for (const path of forbidden) {
       expect(currentExports, `ghost export should not exist: ${path}`).not.toContain(path);
     }

@@ -110,21 +110,36 @@ Component skins, interaction states and keyframes live in the stylesheet.
 | --------------------------------------- | ------------------------------------------------ |
 | `@rottay/design-system`                 | Components, providers, hooks                     |
 | `@rottay/design-system/server`          | Server-side utilities                            |
-| `@rottay/design-system/icons`           | Governed 282-name semantic facade + compatibility |
-| `@rottay/design-system/icons/{foundation,bithire,identity,intelligence,operations}` | Generated packs (282 names total) |
+| `@rottay/design-system/icons`           | Governed 282-role semantic facade, metadata, controls and structural helpers |
+| `@rottay/design-system/icons/{foundation,identity,intelligence,operations}` | Generated packs over the governed corpus |
+| `@rottay/design-system/icons/presets/bithire` | Bounded 104-role application preset |
 | `@rottay/design-system/marks`           | Governed brand and cloud-provider marks          |
 | `@rottay/design-system/charts`          | Focused chart components                         |
 | `@rottay/design-system/charts/spec`     | Server-safe visualization contracts              |
 | `@rottay/design-system/charts/access`   | Accessible chart data companion                  |
 | `@rottay/design-system/charts/renderers`| Isolated chart renderer family                    |
 | `@rottay/design-system/motion`          | Semantic motion policy and recipes               |
-| `@rottay/design-system/effects`         | Supplier-neutral effect governance               |
 | `@rottay/design-system/spatial`         | Optional React spatial lifecycle host            |
-| `@rottay/design-system/spatial/spec`    | Server-safe spatial policy and module contract   |
 | `@rottay/design-system/styles.css`      | Full CSS bundle (code-owned verticals/dev)       |
 | `@rottay/design-system/styles/rottay`   | CSS bundle for the Rottay vertical               |
 | `@rottay/design-system/styles/bithire`  | CSS bundle for BitHire app                       |
 | `@rottay/design-system/styles/evnto`    | CSS bundle for Evnto app                         |
+
+The RET-01/D07 target major removes the 328 public vendor-named glyph exports,
+not semantic roles or private DS component owners. App-platform has existing
+named-glyph consumers, and 52 Showroom files import this door; named-glyph
+usages need adaptation after the DS-first API change. This is not a
+zero-consumer retirement. Use `Icon` with a semantic `name` and either
+`label` or `decorative={true}`, or a focused role/preset entry. `IconProps` accepts the
+documented visual/anatomy attributes, not arbitrary SVG props; custom SVGs
+retain `BaseIcon`/`SvgIconProps` and `createIcon`/`DSIconProps`.
+The first-party `AlertIcon` wrapper stays explicit from its existing leaf owner:
+329 private-barrel bindings become 328 public removals plus one preserved helper.
+See the [migration guide](../../docs/api.md#6-icons-and-marks) and
+[exact removed symbols](../../.changeset/ret-01-icons-doors.md).
+No legacy door or supplier-name aliases are introduced.
+Showroom migration is required before closing RET-01 or certifying it against
+this major; its existing named-glyph imports do not compile unchanged.
 
 Spatial scenes stay app-owned and lazy. The host owns SSR fallback, device and
 motion admission, WebGL2 capability, one-context leasing, suspension, quality,

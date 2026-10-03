@@ -12,7 +12,7 @@ sources:
 
 # Retire: dead code, legacy CSS, manifest and evidence quarantine, physical tree, showroom
 
-Removal lots. Nothing here is deleted before the consumer census gate proves zero productive consumers; the owner authorized breaking legacy public APIs (D-07).
+Removal lots. Private capability deletion requires a consumer census proving zero productive consumers. An explicit D-07 target-major public boundary retirement may instead preserve the useful private implementation and document the real consumer migration, as specified in its amendment; it is never certified as a zero-consumer deletion.
 
 Lane-wide rules (binding on every WO):
 
@@ -52,9 +52,36 @@ Lane-wide rules (binding on every WO):
   RET-01-F therefore retires three icon doors (43 to 40 subpaths), not five.
   Keep the split ESM/CJS fixtures and original retention budgets; availability
   through the aggregate is not evidence of isolated execution.
+  Their existing `retire-by` disposition is unchanged: preserving a necessary
+  resource boundary does not grant a new `guaranteed` promise or waive the
+  consumer-admission rule. Final admission/disposition remains part of RET-01.
+- **AMENDMENT (2026-10-02, measured CommonJS cost and D-07 major retirement)** —
+  The first consolidated candidate measured 319,099 B gzip in CommonJS against
+  the unchanged 226,000 B full-corpus ceiling. The canonical door transitively
+  executed the historical glyph catalog; ESM tree-shaking did not prove CJS
+  isolation. Retire its 328 vendor-named public glyph bindings in the major
+  changeset instead of widening that ceiling or adding a compatibility door.
+  Keep the complete 282-role semantic inventory, metadata, runtime governance,
+  explicit non-catalog helpers/types and privately consumed implementations.
+  This is a deliberate public break with real consumers, not a zero-consumer
+  deletion. The consumer fixture uses semantic `Icon` and must remain green;
+  app adaptation is documented and remains read-only in this stage. Showroom
+  migration and its certification are still DS work and must be resolved before
+  RET-01 closes. The proposed one-minor compatibility promise is superseded only
+  by this major target; no release or publication is implied.
+- **D-19 disposition (2026-10-02, bounded application preferences)** —
+  Retire the unadopted `useRouterState` and `useNotificationPreferences`
+  implementations, their exclusive tests and their eight root/facade bindings.
+  The current DS, Showroom and three app trees have no productive consumers of
+  these bindings. URL routing and notification settings remain app-owned state
+  passed through controlled component props, not a second DS authority.
+  Preserve `useLayoutPreference`: command-palette productively uses it for
+  frecency persistence. Verify that real callback/storage path alongside the
+  retirement guards; deleting the exclusive tests is not acceptance evidence.
+  This disposes of two capabilities only and does not close all D-19 or RET-01.
 - **Files** — `packages/core/src/components/**`; `packages/core/src/infrastructure/runtime/application/**`; `packages/core/src/entrypoints/**`; `packages/core/package.json`; `packages/core/src/graphics/**`; `.changeset/**`.
 - **Acceptance gate** — Import graph: 0 unreachable modules; `exports` with a censused consumer per subpath; `grep -rn "@deprecated" src | wc -l` = 0; `grep -c '"pack": "bithire"' corpus/manifest.json` = 0.
-- **Do NOT** — Do not delete anything whose census shows a consumer without first migrating that consumer (consumer notes X-01…X-06).
+- **Do NOT** — Do not delete a productively consumed implementation without migrating its consumers. The explicit target-major public glyph/door retirement above preserves useful private implementations and documents deferred app adaptation; its Showroom migration remains a prerequisite to closing this WO (consumer notes X-01…X-06).
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-01 (Retire code without productive consumers and the legacy public API (changeset 3.0)) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-42, F-94, F-91, F-88, F-109, F-110, F-111, F-113, F-115, F-84 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.
 
@@ -98,6 +125,16 @@ Lane-wide rules (binding on every WO):
 - **Acceptance gate** — Repeated-path-word script = 0; `wc -l` max in `compilers/theme/**` ≤ 250 and no authored file > 800; `structure:check` in the gate manifest, green; `find packages/core/src -type d -empty` empty.
 - **AMENDMENT (R4, 2026-09-08; the original acceptance above stands, this is added to it)** — Cross-note from the derivation lane: this WO owns the **final** structure-gate and `CLAUDE.md` alignment for every owner the derivation and family-cut lanes leave outside the D-21 (b) first-level grammar. New code born after `WO-CAT-02` uses the grammar already, so what reaches this WO is the un-rewritten remainder plus any stray; neither a lane nor a cut may widen the `structure:check` identity baseline to absorb its own stray instead of leaving it here. The baseline stays decrease-only.
 - **Owner amendment (2026-09-20, Fable-reviewed)** — The registered reusable-style WOs CAT-04 (`catalog-door.md`) and DER-09 (`derivation.md`) do not authorize a parallel tree rewrite. If WO-DER-09 introduces the bounded `foundation/presets/styles/` data exception, include it with the vertical preset data in this WO's single final move; agree the final data owner/dependency direction and preserve the one-authority/source-truth gates. New style contracts use the target `contracts/` grammar. Do not duplicate authored documents and family fragments, widen identity baselines, or leave permanent internal forwarding wrappers. Coordinate the style registry/generator reservation and follow the registered dependencies.
+- **Prepared first cut (2026-10-02, not authorized to start before dependencies)** —
+  The private `infrastructure/runtime/foundation/change-key` owner and its
+  owning tests can move atomically to `kernel/change-key`: two files, unchanged
+  implementation, no external import or path-keyed paint identities measured.
+  Preserve the test's relative import and remove the old owner without a shim.
+  Run its 11 focal cases, structure check and explicit relocation dry-run;
+  update the architecture document's materialization statement. This is physical
+  preparation, not evidence of productive adoption: no productive caller was
+  found. RET-01 must finish first; do not claim this packet or widen a baseline
+  while that prerequisite remains open.
 - **Do NOT** — Do not perform the global move before the derivation lane lands (it would move code that is about to be rewritten).
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-04 (Physical tree normalization: D-21 grammar applied to what remains, monoliths split, repeated path words removed) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-44, F-96, F-98, F-99, F-101, F-116, F-82 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.

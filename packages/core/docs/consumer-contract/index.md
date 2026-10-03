@@ -8,7 +8,13 @@ superficie vigente fue 121; WO-RET-02 publicó `./styles/frozen-engines` (la
 separación del bundle de los motores congelados), de modo que llegaron a 122; y
 RET-01-E (WO-RET-01, 2026-10-02) retiró del mapa 79 subpaths públicos sin
 consumidores medidos por el consumer-census (showroom + 3 apps), de modo que
-hoy son 43. Este documento es la **única fuente** de la tabla de disposiciones:
+eran 43. RET-01-F (WO-RET-01, 2026-10-02) retira tres puertas:
+`./icons/bithire`, `./icons/full` y `./icons/corpus`. El renderer y los
+metadatos siguen por `./icons`, y el preset por `./icons/presets/bithire`.
+`./marks` agrega ambas clases; `./marks/brand` y `./marks/cloud` conservan
+fronteras de recursos separadas para CommonJS y SSR síncrono, sin duplicar
+implementaciones. No se agrega una puerta de compatibilidad; quedan 40 subpaths. Este documento es la
+**única fuente** de la tabla de disposiciones:
 la regla de lint `@rottay/no-unsanctioned-ds-subpath` la ejecuta y un test la
 compara byte a byte contra el espejo de código.
 
@@ -24,7 +30,7 @@ contrato puede desaparecer (D-07) sin aviso a las apps.
 | Espejo | `packages/core/src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/index.ts` | copia derivada que la regla importa (sin `node:fs`, funciona publicada) |
 | Lector | `.../no-unsanctioned-ds-subpath/contract/parse/index.ts` | parser puro markdown → filas |
 | Regla | `.../no-unsanctioned-ds-subpath/index.ts`, publicada como `@rottay/design-system/eslint` → `@rottay/no-unsanctioned-ds-subpath` | falla en todo lo que no está `guaranteed` |
-| Anti-deriva | `.../no-unsanctioned-ds-subpath/tests/index.test.ts` | reparsea este archivo, exige igualdad exacta con el espejo, exige 43/43 contra `package.json` `exports` (mismo conjunto y mismo orden) |
+| Anti-deriva | `.../no-unsanctioned-ds-subpath/tests/index.test.ts` | reparsea este archivo, exige igualdad exacta con el espejo, exige 40/40 contra `package.json` `exports` (mismo conjunto y mismo orden) |
 
 La regla es **fail-closed**: un especificador `@rottay/design-system…` que no
 aparezca como `guaranteed` en §1.2 se reporta, incluso si no está en ninguna
@@ -49,7 +55,7 @@ el showroom es parte del propio paquete y sus sondas no son consumo de producto
 (mismo criterio que ya aplicaba el borrador a `./spatial` y a
 `./tenant-theme-canary-fixtures`).
 
-## 1. Superficie de importación sancionada (43/43)
+## 1. Superficie de importación sancionada (40/40)
 
 Censo: `app-bithire` y `packages/showroom` (alcance del owner, 2026-09-05).
 Se cuentan especificadores de módulo reales (`from`, `import`, `import()`,
@@ -61,15 +67,15 @@ disposición es la parte normativa y es la que no puede derivar.
 
 | Métrica | Valor |
 | --- | --- |
-| Subpaths publicados | 43 |
+| Subpaths publicados | 40 |
 | `guaranteed` | 19 |
-| `retire-by WO-RET-01` | 19 |
+| `retire-by WO-RET-01` | 16 |
 | `retire-by WO-CAN-03` | 5 |
-| Subpaths publicados con 0 consumidores en alcance (bithire + showroom) | 19 |
+| Subpaths publicados con 0 consumidores en alcance (bithire + showroom) | 14 |
 | Importaciones a superficie garantizada | bithire 2086 · showroom 325 |
 | Importaciones a superficie no garantizada (línea base, decrece) | bithire 16 · showroom 14 |
 
-### 1.2 Tabla ejecutable: los 43 subpaths publicados
+### 1.2 Tabla ejecutable: los 40 subpaths publicados
 
 <!-- consumer-contract:published:start -->
 | Subpath | Disposition | Retire-by | app-bithire | showroom |
@@ -79,12 +85,9 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./patterns/charts` | retire-by | WO-RET-01 | 0 | 0 |
 | `./public-entrypoints-manifest` | retire-by | WO-RET-01 | 0 | 0 |
 | `./icons` | guaranteed | — | 864 | 53 |
-| `./icons/full` | retire-by | WO-RET-01 | 0 | 0 |
 | `./icons/presets/bithire` | retire-by | WO-RET-01 | 11 | 0 |
 | `./icons/roles/*` | retire-by | WO-RET-01 | 0 | 0 |
-| `./icons/corpus` | retire-by | WO-RET-01 | 0 | 0 |
 | `./icons/foundation` | retire-by | WO-RET-01 | 0 | 3 |
-| `./icons/bithire` | retire-by | WO-RET-01 | 0 | 0 |
 | `./icons/identity` | retire-by | WO-RET-01 | 0 | 1 |
 | `./icons/intelligence` | retire-by | WO-RET-01 | 0 | 1 |
 | `./icons/operations` | retire-by | WO-RET-01 | 0 | 1 |

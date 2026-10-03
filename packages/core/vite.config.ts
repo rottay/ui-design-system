@@ -56,11 +56,8 @@ export default defineConfig({
         server: resolve(__dirname, 'src/entrypoints/server/index.ts'),
         ...publicEntries,
         icons: resolve(__dirname, 'src/entrypoints/icons/index.ts'),
-        'icons-full': resolve(__dirname, 'src/entrypoints/icons/full/index.ts'),
         'icons-preset-bithire': resolve(__dirname, 'src/entrypoints/icons/presets/bithire/index.ts'),
-        'icons-corpus': resolve(__dirname, 'src/entrypoints/icons/corpus/index.ts'),
         'icons-foundation': resolve(__dirname, 'src/entrypoints/icons/foundation/index.ts'),
-        'icons-bithire': resolve(__dirname, 'src/entrypoints/icons/bithire/index.ts'),
         'icons-identity': resolve(__dirname, 'src/entrypoints/icons/identity/index.ts'),
         'icons-intelligence': resolve(__dirname, 'src/entrypoints/icons/intelligence/index.ts'),
         'icons-operations': resolve(__dirname, 'src/entrypoints/icons/operations/index.ts'),
@@ -120,7 +117,6 @@ export default defineConfig({
         // historical vendor-named compatibility catalog
         // (src/graphics/icons/glyphs/presentation/catalog). Every entry above shares
         // one Rollup module graph with `preserveModules: true`, so any SSR
-        // module reachable from ANY entry -- not just `icons`/`icons-full` --
         // is vendored into dist/node_modules once. That includes the root
         // `index` entry: several first-party ui/** primitives, patterns and
         // structures (Button's compound Icon, data-table, workspace chrome,

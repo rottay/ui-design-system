@@ -64,7 +64,7 @@ const EXPECTED_BUNDLE_FIXTURES = Object.freeze({
     subpath: './icons/presets/bithire',
     exportName: 'BitHireIconPreset',
   },
-  dynamicIconFull: { subpath: './icons/full', exportName: 'Icon' },
+  dynamicIconFull: { subpath: './icons', exportName: 'Icon' },
   brandMark: { subpath: './marks/brand', exportName: 'BrandMark' },
   cloudServiceMark: {
     subpath: './marks/cloud',

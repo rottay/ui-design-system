@@ -3,14 +3,11 @@
   "policy": "decrease-only",
   "purpose": "Consumer census anchor (WO-RET-01 step 1): every published subpath classified by consumption across the four consumer roots, plus the internal reachability census. Growth in consumerlessSubpaths / unreachableModules / testOnlyModules fails --check naming every new member; shrinkage never fails (retirements shrink it). stylesUnreferenced is reported, not ratcheted. exportsDigest pins the published subpath map; a drifted digest means the map moved and the baseline must be rewritten by a sighted --write.",
   "measured": "consumer-census",
-  "exportsDigest": "sha256-543ec9080367390c0ee80c9c3ed36731028bb3d98a8749b04e5c8ebc55912fc6",
+  "exportsDigest": "sha256-2baa9ef04729ef5c50a28aa7b8fc5382462e46d0646badcf5192c41a2c222014",
   "consumerlessSubpaths": [
     "./eslint",
     "./fonts/arabic-text.css",
     "./hooks-manifest",
-    "./icons/bithire",
-    "./icons/corpus",
-    "./icons/full",
     "./icons/roles/*",
     "./marks/brand",
     "./marks/cloud",
@@ -32,9 +29,7 @@
     "src/foundation/presets/candidates/bithire/documents/index.ts",
     "src/foundation/presets/candidates/bithire/index.ts",
     "src/infrastructure/runtime/foundation/change-key/index.ts",
-    "src/infrastructure/runtime/foundation/icons/active-profile/index.ts",
-    "src/infrastructure/runtime/spatial/facade/index.ts",
-    "src/infrastructure/runtime/spatial/index.ts"
+    "src/infrastructure/runtime/foundation/icons/active-profile/index.ts"
   ],
   "stylesUnreferenced": [
     "src/foundation/tokens/css/presentation/components/index.css",

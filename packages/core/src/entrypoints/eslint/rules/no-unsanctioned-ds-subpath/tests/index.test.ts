@@ -76,23 +76,15 @@ describe('consumer contract: document is the single source', () => {
     expect(parsed.published.map((row) => row.subpath)).toEqual(exportKeys);
   });
 
-  it('publishes 43 subpaths and states that count in the document', () => {
-    // 121 until `./surfaces/oauth-transition` left the package with WO-CAN-04
-    // (F-18: a parallel design system with product identity and its own private
-    // token namespace), and 121 again since WO-INV-02 published
-    // `./fonts/arabic-text.css`, and 122 since WO-RET-02 published
-    // `./styles/frozen-engines` (the frozen-engine bundle split). RET-01-E
-    // (WO-RET-01, 2026-10-02) retired 79 consumerless subpaths from the export
-    // map, leaving 43. The count is asserted three ways on purpose --
-    // the export map, the parsed table and the prose -- so a retirement that
-    // updates only one of them is a failure rather than a silent drift.
-    expect(exportKeys).toHaveLength(43);
-    expect(parsed.published).toHaveLength(43);
+  it('publishes 40 subpaths and states that count in the document', () => {
+    // The export map, disposition table and prose carry the same live count.
+    expect(exportKeys).toHaveLength(40);
+    expect(parsed.published).toHaveLength(40);
     expect(documentMarkdown).toContain(
-      '| Subpaths publicados | 43 |',
+      '| Subpaths publicados | 40 |',
     );
     expect(documentMarkdown).toContain(
-      '## 1. Superficie de importación sancionada (43/43)',
+      '## 1. Superficie de importación sancionada (40/40)',
     );
   });
 

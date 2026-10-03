@@ -2022,12 +2022,11 @@ test('runtime export inventory includes the public CLI import and every CJS cond
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts/access')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/charts/renderers')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts/renderers')));
-  for (const iconPack of ['bithire', 'corpus', 'foundation', 'identity', 'intelligence', 'operations']) {
+  for (const iconPack of ['foundation', 'identity', 'intelligence', 'operations']) {
     assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith(`/icons/${iconPack}`)));
     assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith(`/icons/${iconPack}`)));
   }
   for (const assetSubpath of [
-    '/icons/full',
     '/icons/presets/bithire',
     '/marks/brand',
     '/marks/cloud',
@@ -2037,12 +2036,13 @@ test('runtime export inventory includes the public CLI import and every CJS cond
   }
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/motion')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/motion')));
-  assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/effects')));
-  assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/effects')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/spatial')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/spatial')));
-  assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/spatial/spec')));
-  assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/spatial/spec')));
+  for (const retiredSubpath of ['/effects', '/spatial/spec', '/icons/full', '/icons/corpus', '/icons/bithire']) {
+    for (const mode of ['import', 'require']) {
+      assert.equal(fixtures[mode].some((entry) => entry.specifier.endsWith(retiredSubpath)), false, retiredSubpath);
+    }
+  }
 });
 
 test('offline runtime fixtures localize required packages and omit unavailable optional packages', () => {

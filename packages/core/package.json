@@ -37,11 +37,6 @@
       "import": "./dist/icons.js",
       "require": "./dist/icons.cjs"
     },
-    "./icons/full": {
-      "types": "./dist/icons-full.d.ts",
-      "import": "./dist/icons-full.js",
-      "require": "./dist/icons-full.cjs"
-    },
     "./icons/presets/bithire": {
       "types": "./dist/icons-preset-bithire.d.ts",
       "import": "./dist/icons-preset-bithire.js",
@@ -52,20 +47,10 @@
       "import": "./dist/graphics/icons/semantic/generated/roles/*.js",
       "require": "./dist/graphics/icons/semantic/generated/roles/*.cjs"
     },
-    "./icons/corpus": {
-      "types": "./dist/icons-corpus.d.ts",
-      "import": "./dist/icons-corpus.js",
-      "require": "./dist/icons-corpus.cjs"
-    },
     "./icons/foundation": {
       "types": "./dist/icons-foundation.d.ts",
       "import": "./dist/icons-foundation.js",
       "require": "./dist/icons-foundation.cjs"
-    },
-    "./icons/bithire": {
-      "types": "./dist/icons-bithire.d.ts",
-      "import": "./dist/icons-bithire.js",
-      "require": "./dist/icons-bithire.cjs"
     },
     "./icons/identity": {
       "types": "./dist/icons-identity.d.ts",
@@ -371,11 +356,8 @@
       "./server": "entrypoints/server/index.ts",
       "./patterns/charts": "entrypoints/public/patterns/charts/index.ts",
       "./icons": "entrypoints/icons/index.ts",
-      "./icons/full": "entrypoints/icons/full/index.ts",
       "./icons/presets/bithire": "entrypoints/icons/presets/bithire/index.ts",
-      "./icons/corpus": "entrypoints/icons/corpus/index.ts",
       "./icons/foundation": "entrypoints/icons/foundation/index.ts",
-      "./icons/bithire": "entrypoints/icons/bithire/index.ts",
       "./icons/identity": "entrypoints/icons/identity/index.ts",
       "./icons/intelligence": "entrypoints/icons/intelligence/index.ts",
       "./icons/operations": "entrypoints/icons/operations/index.ts",

@@ -22,7 +22,6 @@ const ts = require('typescript');
 
 export const CRA17_PUBLIC_ASSET_SUBPATHS = Object.freeze([
   './icons',
-  './icons/full',
   './icons/presets/bithire',
   './icons/roles/action-add',
   './marks',

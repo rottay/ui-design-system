@@ -25,7 +25,7 @@ async function importPackedEntry(fileName: string): Promise<Record<string, unkno
 
 async function loadEsmFacades(): Promise<PackedFacades> {
   const [icons, brand, cloud, pictograms] = await Promise.all([
-    importPackedEntry('icons-full.js'),
+    importPackedEntry('icons.js'),
     importPackedEntry('marks-brand.js'),
     importPackedEntry('marks-cloud.js'),
     importPackedEntry('pictograms.js'),
@@ -39,7 +39,7 @@ async function loadEsmFacades(): Promise<PackedFacades> {
 }
 
 function loadCjsFacades(): PackedFacades {
-  const icons = require(resolve(packageRoot, 'dist/icons-full.cjs')) as Record<string, unknown>;
+  const icons = require(resolve(packageRoot, 'dist/icons.cjs')) as Record<string, unknown>;
   const brand = require(resolve(packageRoot, 'dist/marks-brand.cjs')) as Record<string, unknown>;
   const cloud = require(resolve(packageRoot, 'dist/marks-cloud.cjs')) as Record<string, unknown>;
   const pictograms = require(resolve(packageRoot, 'dist/pictograms.cjs')) as Record<string, unknown>;
@@ -77,10 +77,10 @@ describe('packed four-facade certification', () => {
       exports: Record<string, { types?: string; import?: string; require?: string }>;
     };
 
-    expect(manifest.exports['./icons/full']).toEqual({
-      types: './dist/icons-full.d.ts',
-      import: './dist/icons-full.js',
-      require: './dist/icons-full.cjs',
+    expect(manifest.exports['./icons']).toEqual({
+      types: './dist/icons.d.ts',
+      import: './dist/icons.js',
+      require: './dist/icons.cjs',
     });
     expect(manifest.exports['./marks/brand']).toEqual({
       types: './dist/marks-brand.d.ts',
@@ -142,7 +142,7 @@ describe('packed four-facade certification', () => {
   it('imports and resolves all four packed facades under the React server condition', () => {
     const script = [
       "const [icons, brand, cloud, pictograms] = await Promise.all([",
-      "  import('./dist/icons-full.js'),",
+      "  import('./dist/icons.js'),",
       "  import('./dist/marks-brand.js'),",
       "  import('./dist/marks-cloud.js'),",
       "  import('./dist/pictograms.js'),",
