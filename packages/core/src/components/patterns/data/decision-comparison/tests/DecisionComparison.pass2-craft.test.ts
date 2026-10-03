@@ -51,15 +51,63 @@ describe("DecisionComparison Pass 2 craft contract", () => {
     expect(skin).toContain("outline: 2px solid Highlight");
   });
 
-  it("rings the focused scrollport from the states dials and never the static fact rows", () => {
-    const ring = skin.match(
-      /\.ds-pattern-decision-comparison\.ds-engine-modern\s+\.ds-decision-comparison__viewport:focus-visible\s*\{([^}]*)\}/
+  it("wears the tenant focus signature on the root while the scrollport holds keyboard focus", () => {
+    const condition =
+      String.raw`\.ds-pattern-decision-comparison\.ds-engine-modern\[data-part="root"\]:has\(\s*>\s*\.ds-decision-comparison__viewport:focus-visible\s*\)`;
+    const bodies = (selector: string): string[] =>
+      [...skin.matchAll(new RegExp(`${selector}\\s*\\{([^}]*)\\}`, "g"))].map(
+        (match) => match[1] ?? ""
+      );
+    const declaration = (body: string, property: string): string | undefined =>
+      body.match(new RegExp(`(?:^|[;\\s])${property}:\\s*([^;]+);`))?.[1].trim();
+
+    const [root, forcedRoot, ...extraRoot] = bodies(condition);
+    const [overlay, forcedOverlay, ...extraOverlay] = bodies(`${condition}::after`);
+    expect(extraRoot).toEqual([]);
+    expect(extraOverlay).toEqual([]);
+
+    expect(declaration(root ?? "", "box-shadow")).toBe(
+      "var(--ds-focus-ring), var(--ds-decision-comparison-shadow)"
     );
-    expect(ring).not.toBeNull();
-    const body = ring?.[1] ?? "";
-    expect(body).toContain("var(--ds-focus-ring-width, 2px)");
-    expect(body).toContain("var(--ds-focus-ring-color, var(--ds-color-primary))");
-    expect(body).toContain("calc(var(--ds-focus-ring-offset, 2px) * -1)");
+    expect(declaration(root ?? "", "outline")).toBe(
+      "var(--ds-focus-ring-width) solid transparent"
+    );
+    expect(declaration(root ?? "", "outline-offset")).toBe("var(--ds-focus-ring-offset)");
+
+    expect(declaration(overlay ?? "", "box-shadow")).toBe("var(--ds-focus-ring)");
+    expect(declaration(overlay ?? "", "content")).toBe('""');
+    expect(declaration(overlay ?? "", "position")).toBe("absolute");
+    expect(declaration(overlay ?? "", "inset")).toBe("0");
+    expect(declaration(overlay ?? "", "pointer-events")).toBe("none");
+    expect(overlay).not.toContain("border-radius");
+
+    expect(declaration(forcedRoot ?? "", "outline")).toBe(
+      "var(--ds-focus-ring-width) solid Highlight"
+    );
+    expect(declaration(forcedRoot ?? "", "box-shadow")).toBe("none");
+    expect(declaration(forcedOverlay ?? "", "box-shadow")).toBe("none");
+    const forcedColors = skin.slice(skin.lastIndexOf("@media (forced-colors: active)"));
+    expect(forcedColors).toContain(forcedRoot);
+    expect(forcedColors).toContain(forcedOverlay);
+
+    const viewport = bodies(
+      String.raw`\.ds-pattern-decision-comparison\.ds-engine-modern\s+\.ds-decision-comparison__viewport:focus-visible`
+    );
+    expect(viewport).toHaveLength(1);
+    expect(viewport[0]?.trim()).toBe("outline: none;");
+
+    const focusRules = [...skin.matchAll(/([^{}]*)\{([^{}]*)\}/g)].filter(
+      ([, , body]) => (body ?? "").includes("--ds-focus-ring")
+    );
+    expect(focusRules).toHaveLength(3);
+    for (const [, selector, body] of focusRules) {
+      expect(selector).toMatch(new RegExp(condition));
+      expect(body).not.toMatch(
+        /outline(?:-color)?:[^;]*(?:--ds-focus-ring-color|--ds-color-primary)/
+      );
+    }
+    expect(skin).not.toMatch(/:has\([^)]*:focus-within/);
+    expect(skin).not.toMatch(/__viewport:focus(?!-visible)/);
     expect(skin).not.toMatch(/__fact[^,{]*:focus/);
   });
 

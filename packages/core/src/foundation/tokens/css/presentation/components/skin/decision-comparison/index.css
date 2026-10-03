@@ -870,19 +870,47 @@
     ) 1fr auto;
 }
 
-/* The scrollport is a tab stop; its ring sits inside the edge because the root
-   clips overflow and would swallow an outward one. */
+/* The scrollport is a tab stop, but the root clips it and the subjects cover
+   it, so the root wears the focus signature while the scrollport holds focus. */
+.ds-pattern-decision-comparison.ds-engine-modern[data-part="root"]:has(
+    > .ds-decision-comparison__viewport:focus-visible
+  ) {
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring), var(--ds-decision-comparison-shadow);
+}
+
+/* An inset signature would sit under the columns; this square overlay lifts it
+   above them, and the root clips every outward layer so nothing paints twice. */
+.ds-pattern-decision-comparison.ds-engine-modern[data-part="root"]:has(
+    > .ds-decision-comparison__viewport:focus-visible
+  )::after {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  content: "";
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
+}
+
 .ds-pattern-decision-comparison.ds-engine-modern
   .ds-decision-comparison__viewport:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(var(--ds-focus-ring-offset, 2px) * -1);
+  outline: none;
 }
 
 @media (forced-colors: active) {
-  .ds-pattern-decision-comparison.ds-engine-modern
-    .ds-decision-comparison__viewport:focus-visible {
-    outline-color: Highlight;
+  .ds-pattern-decision-comparison.ds-engine-modern[data-part="root"]:has(
+      > .ds-decision-comparison__viewport:focus-visible
+    ) {
+    outline: var(--ds-focus-ring-width) solid Highlight;
+    outline-offset: var(--ds-focus-ring-width);
+    box-shadow: none;
+  }
+
+  .ds-pattern-decision-comparison.ds-engine-modern[data-part="root"]:has(
+      > .ds-decision-comparison__viewport:focus-visible
+    )::after {
+    box-shadow: none;
   }
 
   /* The tone dot is the "never hue alone" marker, and forced colors replaces a
