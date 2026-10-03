@@ -41,7 +41,7 @@ describeCausality({
   targets: [
     { id: 'ringWidth', selector: ROOT, property: 'outline-width', attributes: FOCUSED },
     { id: 'ringOffset', selector: ROOT, property: 'outline-offset', attributes: FOCUSED },
-    { id: 'ringInk', selector: ROOT, property: 'outline-color', attributes: FOCUSED },
+    { id: 'ringInk', selector: ROOT, property: 'box-shadow', attributes: FOCUSED },
     // The control: the scrollbar rail is a closed size enum no tenant decision
     // reaches, so a decision that moves it has escaped its own group.
     { id: 'railSize', selector: ROOT, property: '--ds-scroll-area-scrollbar-size' },

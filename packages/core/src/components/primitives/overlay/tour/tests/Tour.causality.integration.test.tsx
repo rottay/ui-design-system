@@ -51,7 +51,7 @@ describeCausality({
     { id: 'padding', selector: SURFACE, property: 'padding-top' },
     { id: 'titleSize', selector: "[data-part='title']", property: 'font-size' },
     { id: 'nextBg', selector: NEXT, property: 'background-color' },
-    { id: 'focusRing', selector: CLOSE, property: 'outline-color', attributes: { 'data-state': 'focused focus-visible' } },
+    { id: 'focusRing', selector: CLOSE, property: 'box-shadow', attributes: { 'data-state': 'focused focus-visible' } },
     { id: 'duration', selector: CLOSE, property: 'transition-duration' },
   ],
   decisions: {
@@ -130,7 +130,7 @@ describe('focus ring seed reach', () => {
         vertical,
         markup,
         arms: { base: {}, seeds: { 'palette.seeds': { primary: '#2F6B9A' } } },
-        targets: [{ id: 'focusRing', selector: CLOSE, property: 'outline-color', attributes: { 'data-state': 'focused focus-visible' } }],
+        targets: [{ id: 'focusRing', selector: CLOSE, property: 'box-shadow', attributes: { 'data-state': 'focused focus-visible' } }],
       });
       const base = reading.base!.focusRing;
       const seeded = reading.seeds!.focusRing;

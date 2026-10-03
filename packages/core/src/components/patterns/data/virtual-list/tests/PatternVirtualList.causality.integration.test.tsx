@@ -124,7 +124,7 @@ describeCausality({
   targets: [
     // The scrollport is a real tab stop (scrollable-region law), so the focus
     // signature is the family's own seeded paint.
-    { id: 'focusInk', selector: ROOT, property: 'outline-color', attributes: { 'data-state': 'focus-visible' } },
+    { id: 'focusInk', selector: ROOT, property: 'box-shadow', attributes: { 'data-state': 'focus-visible' } },
     { id: 'focusRing', selector: ROOT, property: 'outline-width', attributes: { 'data-state': 'focus-visible' } },
     { id: 'focusCorner', selector: ROOT, property: 'border-top-left-radius', attributes: { 'data-state': 'focus-visible' } },
     // The reserved scrollbar gutter is NEUTRAL ink, measured as the control the

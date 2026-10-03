@@ -139,8 +139,9 @@
 /* ---- gutter: keyboard focus ring (the K3-C engine made gutters real
         `role="separator"` tab stops). ---- */
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color);
+  outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-splitter-gutter-focus-ring-offset, var(--ds-edge-hairline-width, 1px));
+  box-shadow: var(--ds-focus-ring);
 }
 
 /* ---- gutter: coarse-pointer hit expansion. The rail keeps its own size in
@@ -183,6 +184,8 @@
     background: ButtonText;
   }
   .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-splitter-gutter-focus-ring-offset, var(--ds-edge-hairline-width, 1px));
+    box-shadow: none;
   }
 }

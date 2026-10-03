@@ -86,7 +86,7 @@ describeCausality({
     {
       id: 'ring',
       selector: CLOSED_HEADER,
-      property: 'outline-color',
+      property: 'box-shadow',
       attributes: { 'data-state': 'focus-visible' },
     },
   ],

@@ -355,10 +355,13 @@
     color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))
   );
 }
+/* The header row's own padding gives the toggle the clearance its tenant
+   focus signature paints into. */
 .rottay-collapse[data-part='root'] [data-part='header']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(-1 * var(--ds-focus-ring-offset));
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
   border-radius: var(--ds-collapse-header-focus-ring-radius, var(--ds-radius-md));
+  box-shadow: var(--ds-focus-ring);
 }
 
 /* collapsible='icon': the arrow carries the toggle role, the cursor and the
@@ -375,16 +378,18 @@
   color: var(--ds-collapse-arrow-hover-color, var(--ds-color-primary));
 }
 .rottay-collapse[data-part='root'] [data-part='arrow']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   border-radius: var(--ds-collapse-arrow-focus-ring-radius, var(--ds-radius-sm));
+  box-shadow: var(--ds-focus-ring);
 }
 
 @media (forced-colors: active) {
   .rottay-collapse[data-part='root'] [data-part='header']:is([data-state~='focus-visible'], :focus-visible),
   .rottay-collapse[data-part='root'] [data-part='arrow']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
   .rottay-collapse[data-part='root'] [data-part='header'][data-disabled='true'] {
     color: GrayText;

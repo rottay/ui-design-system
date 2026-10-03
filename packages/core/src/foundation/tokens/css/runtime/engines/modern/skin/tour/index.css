@@ -76,9 +76,19 @@
     var(--ds-tour-primary-border-color, var(--ds-color-primary));
 }
 
-.ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface']:focus-within {
-  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, var(--ds-focus-ring-color));
+/* Focus is parked on the surface on open and on every step. It wears the
+   tenant focus signature in front of its elevation; the two share box-shadow,
+   and a `none` elevation would void the list. The outline is transparent until
+   a tenant states a focus colour. */
+.ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, transparent);
   outline-offset: var(--ds-tour-focus-ring-offset, var(--ds-focus-ring-offset));
+  box-shadow: var(--ds-focus-ring);
+}
+@container not (style(--ds-tour-surface-shadow: none) or style(--ds-elevation-3: none)) {
+  .ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface']:is([data-state~='focus-visible'], :focus-visible) {
+    box-shadow: var(--ds-focus-ring), var(--ds-tour-surface-shadow, var(--ds-elevation-3));
+  }
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] [data-part='close-button'] {
@@ -180,11 +190,6 @@
   color: var(--ds-tour-action-next-ink, var(--ds-color-text-on-primary));
 }
 
-.ds-tour.ds-tour--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']):is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, var(--ds-focus-ring-color));
-  outline-offset: var(--ds-tour-focus-ring-offset, var(--ds-focus-ring-offset));
-}
-
 @media (hover: hover) {
   .ds-tour.ds-tour--modern[data-part='root'] [data-part='action'][data-action='prev']:is([data-state~='hovered'], :hover) {
     background: var(--ds-tour-action-prev-bg-hover, transparent);
@@ -215,9 +220,24 @@
   background: var(--ds-tour-close-bg-hover, transparent);
 }
 
+/* Stated after hover and press, and one part heavier, so a focused control
+   keeps the signature while it is hovered or pressed. */
+.ds-tour.ds-tour--modern[data-part='root'] :is([data-part='action'], [data-part='close-button'])[data-part]:is([data-state~='focus-visible'], :focus-visible) {
+  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, transparent);
+  outline-offset: var(--ds-tour-focus-ring-offset, var(--ds-focus-ring-offset));
+  box-shadow: var(--ds-focus-ring);
+}
+
 @media (forced-colors: active) {
   .ds-tour.ds-tour--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']):is([data-state~='hovered'], :hover) {
     outline: 1px solid;
+  }
+
+  .ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-tour.ds-tour--modern[data-part='root'] :is([data-part='action'], [data-part='close-button'])[data-part]:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: var(--ds-tour-focus-ring-offset, var(--ds-focus-ring-offset));
+    box-shadow: none;
   }
 
   .ds-tour.ds-tour--modern[data-part='root'] [data-part='indicator'] {

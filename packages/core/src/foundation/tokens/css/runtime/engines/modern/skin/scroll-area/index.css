@@ -50,9 +50,10 @@
 
 /* ---- keyboard focus ring (the root is a focusable scroll region). ---- */
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-scroll-area-focus-ring-offset, var(--ds-focus-ring-offset, 2px));
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-scroll-area-focus-ring-offset, var(--ds-focus-ring-offset));
   border-radius: var(--ds-scroll-area-focus-ring-radius, var(--ds-radius-sm));
+  box-shadow: var(--ds-focus-ring);
 }
 
 /* ---- overflow contract (was engine utilities), keyed on data-orientation. ---- */
@@ -233,7 +234,9 @@
 
 @media (forced-colors: active) {
   .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-scroll-area-focus-ring-offset, var(--ds-focus-ring-offset));
+    box-shadow: none;
   }
 
   /* The custom bar re-expresses in system colors when authored color is

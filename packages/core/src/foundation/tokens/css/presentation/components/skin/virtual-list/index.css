@@ -96,14 +96,16 @@
    region carries a focus ring; `:focus-visible` is that decision's native
    fallback, not a second opinion. */
 .ds-pattern-virtual-list[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(var(--ds-focus-ring-offset, 2px) * -1);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
   border-radius: var(--ds-radius-sm, 6px);
+  box-shadow: var(--ds-focus-ring);
 }
 
 @media (forced-colors: active) {
   .ds-pattern-virtual-list[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: 2px solid Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 }
