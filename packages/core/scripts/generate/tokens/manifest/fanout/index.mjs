@@ -36,6 +36,7 @@ export const PLANES = [
   'presentation-css',
   'foundation-css',
   'runtime-css',
+  'engines-shared-css',
   'facade-entrypoints-css',
   'classic-css',
   'rustic-css',
@@ -53,6 +54,7 @@ export const PAINT_PLANES = [
   'presentation-css',
   'foundation-css',
   'runtime-css',
+  'engines-shared-css',
   'facade-entrypoints-css',
   'classic-css',
   'rustic-css',
@@ -63,15 +65,17 @@ export const PAINT_PLANES = [
 ];
 
 /**
- * Planos que pintan en modern. `runtime-css` y `facade-entrypoints-css` son la
- * capa comun que el skin modern consume, asi que cuentan. `tsx-inline-stamp`
- * solo cuenta cuando el archivo vive bajo un `engines/modern/`.
+ * Planos que pintan en modern. `runtime-css`, `engines-shared-css` y
+ * `facade-entrypoints-css` son la capa comun que el skin modern consume, asi
+ * que cuentan. `tsx-inline-stamp` solo cuenta cuando el archivo vive bajo un
+ * `engines/modern/`.
  */
 export const MODERN_PAINT_PLANES = [
   'modern-skin-css',
   'presentation-css',
   'foundation-css',
   'runtime-css',
+  'engines-shared-css',
   'facade-entrypoints-css',
   'tsx-inline-stamp',
   'graphics-tsx',
@@ -183,6 +187,7 @@ const CSS_CLASSIC = 'src/foundation/tokens/css/runtime/engines/classic/';
 const CSS_RUSTIC = 'src/foundation/tokens/css/runtime/engines/rustic/';
 const CSS_RUNTIME = 'src/foundation/tokens/css/runtime/';
 const CSS_RUNTIME_ENGINES = 'src/foundation/tokens/css/runtime/engines/';
+const CSS_ENGINES_SHARED = 'src/foundation/tokens/css/runtime/engines/shared/';
 const CSS_FACADE_ENTRYPOINTS = 'src/foundation/tokens/css/facade/entrypoints/';
 const UI_ROOT = 'src/components/';
 const GRAPHICS_ROOT = 'src/graphics/';
@@ -199,6 +204,8 @@ export function classifyPlane(relPath) {
     if (relPath.startsWith(CSS_FOUNDATION)) return 'foundation-css';
     if (relPath.startsWith(CSS_CLASSIC)) return 'classic-css';
     if (relPath.startsWith(CSS_RUSTIC)) return 'rustic-css';
+    // engines/shared/**: pisos neutros que el bundle modern importa; ningun motor congelado los posee
+    if (relPath.startsWith(CSS_ENGINES_SHARED)) return 'engines-shared-css';
     // runtime/** que NO cuelga de engines/: personality.css, bridges/*
     if (relPath.startsWith(CSS_RUNTIME) && !relPath.startsWith(CSS_RUNTIME_ENGINES)) {
       return 'runtime-css';

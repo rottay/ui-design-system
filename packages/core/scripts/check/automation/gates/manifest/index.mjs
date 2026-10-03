@@ -363,7 +363,7 @@ export const CI_GATES = Object.freeze([
   // repair; the two measure different questions and neither subsumes the other.
   { id: 'touch-target-floor-drill', run: ['node', '--test', 'scripts/check/touch-target-floor/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['touch-target-floor'], },
   { id: 'touch-target-floor', run: ['node', 'scripts/check/touch-target-floor/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'touch-target-floor-drill', },
-  // The audit's own six suites. `engine-token-audit` computes 3,326 counters;
+  // The audit's own seven suites. `engine-token-audit` computes 3,326 counters;
   // a classifier that stopped classifying reports plausible numbers and looks
   // exactly like a clean tree -- `themeCss.unreferencedSelectors` read 0 for
   // months for exactly that reason (see `tests/theme-css-consumers`).
@@ -373,6 +373,7 @@ export const CI_GATES = Object.freeze([
     'scripts/check/engine/tokens/audit/tests/framework-classes/index.test.mjs',
     'scripts/check/engine/tokens/audit/tests/motion-recipes/index.test.mjs',
     'scripts/check/engine/tokens/audit/tests/runtime-svg/index.test.mjs',
+    'scripts/check/engine/tokens/audit/tests/shadow-scales/index.test.mjs',
     'scripts/check/engine/tokens/audit/tests/theme-css-consumers/index.test.mjs',
   ], blocking: true, phase: 'pre-build', drillFor: ['engine-token-audit'], },
   // RE-ARMED 2026-09-07 (WO-RET-02 drain, correction packet #2). This entry was

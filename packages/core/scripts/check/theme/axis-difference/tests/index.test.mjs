@@ -1131,6 +1131,33 @@ describe('axis-difference drills — every verdict is reachable', () => {
     assert.match(cli, /writeRefusal: refusal,\n  \}\) \?\? provenanceRefusal\(readPublicationProvenance\(result\)\);/u);
   });
 
+  it('the verdict line states both bases: an axis at the bar on the effective denominator and below it on the declared one is named', () => {
+    const positive = (axis, moved, denominator) => cell({ scenario: axis, axis, moved, denominator, percent: (moved / denominator) * 100 });
+    const declared = { shape: 100, typography: 100, rhythm: 100, depth: 204, states: 100, motion: 100 };
+    const measured = result(AXIS_IDS.map((axis) => (axis === 'depth' ? positive(axis, 162, 198) : positive(axis, 90, 100))), {
+      verticals: ['bithire'],
+      themes: ['light'],
+      denominatorReconciliation: Object.fromEntries(AXIS_IDS.map((axis) => [axis, { declared: declared[axis] }])),
+    });
+    // The run's own threshold passes: depth is 81.8 % on its effective denominator.
+    assert.deepEqual(evaluate(measured, { threshold: 80 }).filter((line) => line.includes('%')), []);
+    assert.equal(probe.verdictLine(measured, { threshold: 80 }),
+      'axis-difference OK — every evidential negative-control cell at 0 %, every axis at or above 80 % on the effective denominator '
+      + '(declared-basis status: 5/6 at threshold; depth below at 79.4 % — the indicator reads the declared basis)');
+    const met = result(AXIS_IDS.map((axis) => positive(axis, 90, 100)), {
+      verticals: ['bithire'],
+      themes: ['light'],
+      denominatorReconciliation: Object.fromEntries(AXIS_IDS.map((axis) => [axis, { declared: 100 }])),
+    });
+    assert.match(probe.verdictLine(met, { threshold: 80 }), /\(declared-basis status: 6\/6 at threshold — the indicator reads the declared basis\)$/u);
+    const partial = result([positive('shape', 90, 100)], { verticals: ['bithire'], themes: ['light'], denominatorReconciliation: { shape: { declared: 100 } } });
+    assert.match(probe.verdictLine(partial, { threshold: 80 }), /declared-basis status: 1\/6 at threshold; typography not measured on every cell, /u);
+    assert.equal(probe.verdictLine(measured),
+      'axis-difference OK — every evidential negative-control cell at 0 %; no threshold applied (the fleet bar is WO-EVI-02 acceptance, not this run)');
+    const cli = readFileSync(join(HERE, '../index.mjs'), 'utf8');
+    assert.ok(!/every axis at or above \$\{thresholdArgument\} %`/u.test(cli), 'the CLI must print the verdict through verdictLine');
+  });
+
   it('MUTANT: an axis under the threshold is named, and only when a threshold is asked for', () => {
     const cells = [cell({ axis: 'shape', moved: 10, denominator: 100, percent: 10 })];
     assert.deepEqual(evaluate(result(cells)).filter((line) => line.startsWith('shape:')), []);

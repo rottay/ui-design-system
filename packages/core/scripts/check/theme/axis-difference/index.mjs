@@ -195,6 +195,7 @@ import {
   INDICATOR_PATH,
   buildIndicator,
   chromaticStatesReading,
+  axisReadings,
   indicatorRefusal,
   provenanceRefusal,
   negativeControlsOf,
@@ -8333,6 +8334,25 @@ export function readPublicationProvenance(result, { root = CORE_ROOT } = {}) {
   };
 }
 
+/**
+ * The verdict a passing run prints. `evaluate` judges the threshold on each
+ * cell's EFFECTIVE denominator; the indicator's status reads the DECLARED one,
+ * so the line states both and names every axis the declared basis leaves
+ * short. It never says more than the indicator does.
+ */
+export function verdictLine(result, { threshold = null } = {}) {
+  const head = 'axis-difference OK — every evidential negative-control cell at 0 %';
+  if (threshold === null) return `${head}; no threshold applied (the fleet bar is WO-EVI-02 acceptance, not this run)`;
+  const readings = axisReadings(result, { threshold });
+  const short = AXIS_IDS.filter((axis) => readings[axis].status !== 'at-threshold').map((axis) => (
+    readings[axis].status === 'below-threshold'
+      ? `${axis} below at ${readings[axis].worstPercentDeclared} %`
+      : `${axis} not measured on every cell`));
+  return `${head}, every axis at or above ${threshold} % on the effective denominator `
+    + `(declared-basis status: ${AXIS_IDS.length - short.length}/${AXIS_IDS.length} at threshold`
+    + `${short.length === 0 ? '' : `; ${short.join(', ')}`} — the indicator reads the declared basis)`;
+}
+
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
 if (isMain) {
   const argument = (name) =>
@@ -8609,10 +8629,5 @@ if (isMain) {
       console.log(`    ${control} ${where}: ${reason}`);
     }
   }
-  console.log(
-    'axis-difference OK — every evidential negative-control cell at 0 %'
-    + (thresholdArgument === undefined
-      ? '; no threshold applied (the fleet bar is WO-EVI-02 acceptance, not this run)'
-      : `, every axis at or above ${thresholdArgument} %`),
-  );
+  console.log(verdictLine(result, { threshold: thresholdArgument === undefined ? null : Number(thresholdArgument) }));
 }

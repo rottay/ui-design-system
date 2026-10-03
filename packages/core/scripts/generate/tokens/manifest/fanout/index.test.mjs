@@ -74,11 +74,16 @@ test('ORACULO --ds-button-xs-padding-x: lector modern-skin-css en el padding-inl
 
 test('ORACULO --ds-badge-sm-padding-x: solo estampado inline en el tsx modern, sin skin CSS', () => {
   const row = channel('--ds-badge-sm-padding-x');
-  const stamps = readersOn(row, 'tsx-inline-stamp');
-  const hit = stamps.find(
-    (r) => r.file === 'src/components/primitives/display/badge/engines/modern/index.tsx' && r.line === 52,
+  const badgeFile = 'src/components/primitives/display/badge/engines/modern/index.tsx';
+  const stamps = readersOn(row, 'tsx-inline-stamp').filter((r) => r.file === badgeFile);
+  assert.equal(stamps.length, 1, 'debe haber exactamente un tsx-inline-stamp en badge/engines/modern/index.tsx');
+  const [hit] = stamps;
+  // la linea es la del hecho, no un literal del oraculo: se la ata a la fuente
+  const sourceLine = readFileSync(new URL(`../../../../../${badgeFile}`, import.meta.url), 'utf8').split('\n')[hit.line - 1] ?? '';
+  assert.ok(
+    sourceLine.includes("paddingInline: 'var(--ds-badge-sm-padding-x)'"),
+    `la lectura debe estar en la linea del estampado; ${badgeFile}:${hit.line} tiene: ${sourceLine.trim()}`,
   );
-  assert.ok(hit, 'debe haber un tsx-inline-stamp en badge/engines/modern/index.tsx:52');
   // sin calc() en la declaracion, el texto no se conserva: file+line+scalars alcanzan
   assert.equal(hit.decl, undefined, 'una lectura sin calc() no debe cargar decl');
   assert.deepEqual(hit.scalars, []);
@@ -182,9 +187,10 @@ test('ts-token-mirror y ts-other son los unicos planos que no pintan', () => {
   assert.ok(!MODERN_PAINT_PLANES.includes('rustic-css'));
 });
 
-test('runtime-css, facade-entrypoints-css, graphics-tsx e infrastructure-tsx pintan, y cuentan para modern', () => {
+test('runtime-css, engines-shared-css, facade-entrypoints-css, graphics-tsx e infrastructure-tsx pintan, y cuentan para modern', () => {
   for (const plane of [
     'runtime-css',
+    'engines-shared-css',
     'facade-entrypoints-css',
     'graphics-tsx',
     'infrastructure-tsx',
@@ -212,6 +218,8 @@ test('classifyPlane mapea cada raiz a su plano', () => {
     ['src/foundation/tokens/css/runtime/personality.css', 'runtime-css'],
     ['src/foundation/tokens/css/runtime/bridges/collapse.css', 'runtime-css'],
     ['src/foundation/tokens/css/facade/entrypoints/base.css', 'facade-entrypoints-css'],
+    ['src/foundation/tokens/css/runtime/engines/shared/class-floor/index.css', 'engines-shared-css'],
+    ['src/foundation/tokens/css/runtime/engines/shared/document-root/index.css', 'engines-shared-css'],
     ['src/graphics/icons/glyphs/runtime/factory/index.tsx', 'graphics-tsx'],
     ['src/graphics/motion/react/presentation/effects/aurora/index.tsx', 'graphics-tsx'],
     [
@@ -230,6 +238,23 @@ test('runtime-css excluye lo que cuelga de engines/, que ya tiene su propio plan
     'modern-skin-css',
   );
   assert.equal(classifyPlane('src/foundation/tokens/css/runtime/engines/index.css'), null);
+  // engines/shared/** tampoco es runtime-css: tiene su propio plano, y el motor congelado no lo hereda
+  assert.equal(classifyPlane('src/foundation/tokens/css/runtime/engines/shared/class-floor/index.css'), 'engines-shared-css');
+  assert.equal(classifyPlane('src/foundation/tokens/css/runtime/engines/frozen/index.css'), null);
+  assert.notEqual(classifyPlane('src/foundation/tokens/css/runtime/engines/classic/theme/index.css'), 'engines-shared-css');
+});
+
+test('engines/shared se clasifica en vivo: el arbol no deja ninguna lectura sin plano, y las suyas llevan engines-shared-css', () => {
+  const live = buildFacts();
+  assert.deepEqual([...new Set(live.unclassified.map((row) => row.file))], [], 'hueco en el vocabulario de planos');
+  const shared = live.channels.flatMap((row) => row.readers.filter((reader) => reader.plane === 'engines-shared-css')
+    .map((reader) => ({ channel: row.channel, file: reader.file, paintsInModern: row.paintsInModern })));
+  assert.ok(shared.length > 0, 'engines/shared debe tener lectores');
+  for (const reader of shared) {
+    assert.ok(reader.file.startsWith('src/foundation/tokens/css/runtime/engines/shared/'), reader.file);
+    assert.equal(reader.paintsInModern, true, `${reader.channel} se lee en el piso compartido y debe pintar en modern`);
+  }
+  assert.equal(live.summary.readersByPlane['engines-shared-css'], shared.length);
 });
 
 test('facade/artifacts sigue excluido pese a que facade/entrypoints ahora es un plano', () => {
@@ -361,10 +386,10 @@ test('cada lectura trae la propiedad objetivo, y nunca es "?"', () => {
 });
 
 test('el estampado inline resuelve la propiedad JS del objeto de estilo', () => {
-  const badge = channel('--ds-badge-sm-padding-x').readers.find(
-    (r) => r.file === 'src/components/primitives/display/badge/engines/modern/index.tsx' && r.line === 52,
+  const badgeReaders = channel('--ds-badge-sm-padding-x').readers.filter(
+    (r) => r.file === 'src/components/primitives/display/badge/engines/modern/index.tsx',
   );
-  assert.equal(badge.prop, 'paddingInline');
+  assert.deepEqual(badgeReaders.map((r) => r.prop), ['paddingInline']);
 
   const errorBoundary = channel('--ds-color-error-700').readers.find((r) =>
     r.file.includes('component-factory/error-boundary'),

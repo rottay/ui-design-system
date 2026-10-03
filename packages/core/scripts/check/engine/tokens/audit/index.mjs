@@ -66,6 +66,7 @@ import {
   duplicateRootDeclarations,
 } from './hardcodes/index.mjs';
 import { KNOWN_DUPLICATE_ROOT_DECLARATIONS } from './hardcodes/exclusions/index.mjs';
+import { shadowScaleDefinitions } from './shadow-scales/index.mjs';
 import { resolve, dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // WO-GAT-04 (accessibility CI, proposal P-10): APCA is the perceptually-accurate contrast model
@@ -272,9 +273,7 @@ function countShadowScales() {
   ];
   let scales = 0;
   for (const f of files) {
-    const t = readFileSync(f, 'utf8');
-    if (/--ds-elevation-1:\s*(?!var\()[^;]*(?:rgba?\(|px|none)/.test(t)) scales += 1;
-    if (/--ds-shadow-(?:sm|md|lg):\s*(?!var\()[^;]*(?:rgba?\(|px)/.test(t)) scales += 1;
+    scales += shadowScaleDefinitions(readFileSync(f, 'utf8'));
   }
   return scales;
 }
