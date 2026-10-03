@@ -18,10 +18,8 @@ import {
 // The AUTHORED theme, read from where it is authored and deliberately not from
 // the tenant config: that is what this suite proves.
 import { useMotionPolicy } from '../../../../../motion';
-import {
-  resolveActiveIconExpressiveProfile,
-  useActiveIconExpressiveProfile,
-} from '@/infrastructure/runtime/foundation/icons/active-profile';
+import { useActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/foundation/read';
+import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';
 import { DesignSystemProvider } from '..';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 

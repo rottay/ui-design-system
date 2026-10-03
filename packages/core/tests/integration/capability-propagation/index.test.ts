@@ -79,10 +79,8 @@ import {
 } from '@/entrypoints/server';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
 import { firstPartyGovernedBehavior } from '@/infrastructure/compilers/runtime/tenant-css/artifact-renderer';
-import {
-  IconExpressiveProfileContext,
-  resolveActiveIconExpressiveProfile,
-} from '@/infrastructure/runtime/foundation/icons/active-profile';
+import { IconExpressiveProfileContext } from '@/infrastructure/runtime/foundation/icons/active-profile/foundation/read';
+import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';
 import { flatThemeAnatomyAttributes } from '@/infrastructure/runtime/theming/composition/mount';
 import {
   compileTenantThemeConfig,

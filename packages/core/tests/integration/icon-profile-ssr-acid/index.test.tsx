@@ -17,11 +17,9 @@ import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
 import type { ExpressiveIconProfile } from '@/foundation/tokens/ts/presentation/expressive-profiles';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
-import {
-  IconExpressiveProfileContext,
-  provideServerIconExpressiveProfile,
-  resolveActiveIconExpressiveProfile,
-} from '..';
+import { IconExpressiveProfileContext } from '@/infrastructure/runtime/foundation/icons/active-profile/foundation/read';
+import { provideServerIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/runtime/provider';
+import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
