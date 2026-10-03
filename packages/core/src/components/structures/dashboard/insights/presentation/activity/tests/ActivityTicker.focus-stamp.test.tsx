@@ -42,6 +42,33 @@ describe('ActivityTicker control focus stamp', () => {
     expect(skin).not.toMatch(new RegExp(`\\[data-part='${part}'\\]:focus-visible\\s*\\{`, 'u'));
   });
 
+  it.each(['nav-button', 'ticker-dot'])('wears the focus signature on %s, never a solid outline', (part) => {
+    const css = skin.replace(/\/\*[\s\S]*?\*\//g, '');
+    const focus = `.ds-activity-ticker.ds-activity-ticker [data-part='${part}']:is([data-state~='focus-visible'], :focus-visible)`;
+    const forcedStart = css.indexOf('@media (forced-colors: active)');
+    const bodyOf = (source: string) => {
+      const at = source.search(new RegExp(`${focus.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*[,{]`));
+      expect(at).toBeGreaterThan(-1);
+      return source
+        .slice(source.indexOf('{', at) + 1, source.indexOf('}', at))
+        .split(';')
+        .map((declaration) => declaration.trim().replace(/\s+/g, ' '))
+        .filter(Boolean);
+    };
+
+    expect(bodyOf(css.slice(0, forcedStart))).toEqual([
+      'outline: var(--ds-focus-ring-width) solid transparent',
+      'outline-offset: var(--ds-focus-ring-offset)',
+      'box-shadow: var(--ds-focus-ring)',
+    ]);
+    expect(bodyOf(css.slice(forcedStart))).toEqual([
+      'outline: max(2px, var(--ds-focus-ring-width)) solid Highlight',
+      'outline-offset: var(--ds-focus-ring-offset)',
+      'box-shadow: none',
+    ]);
+    expect(css).not.toContain('--ds-focus-ring-color');
+  });
+
   it.each(['nav-button', 'ticker-dot'])('leaves %s silent at rest', async (part) => {
     const { container } = renderWithEngine(<ActivityTicker items={ITEMS} />, 'modern');
     await waitFor(() => expect(container.querySelector(`[data-part="${part}"]`)).not.toBeNull());

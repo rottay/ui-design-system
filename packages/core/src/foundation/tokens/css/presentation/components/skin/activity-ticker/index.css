@@ -138,15 +138,24 @@
 
 /* view-all pill ------------------------------------------------------------- */
 
-/* Anchor reset + focus ring (the engine's former inline textDecoration). */
+/* Anchor reset (the engine's former inline textDecoration). The pill covers
+   the anchor, so an overlay carries the tenant focus signature above it. */
 .ds-activity-ticker.ds-activity-ticker .view-all-anchor {
   text-decoration: none;
   border-radius: var(--ds-radius-md, 8px);
 }
 .ds-activity-ticker.ds-activity-ticker .view-all-anchor:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  position: relative;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+}
+.ds-activity-ticker.ds-activity-ticker .view-all-anchor:is([data-state~='focus-visible'], :focus-visible)::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  border-radius: inherit;
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'] {
   /* Pill padding + cadence drained from the engine. */
@@ -281,9 +290,9 @@
   border: 1px solid var(--ds-color-border-secondary);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 /* The prev/next chevrons point at the logical direction: they mirror under
    RTL so "previous" keeps facing inline-start. */
@@ -308,9 +317,9 @@
   border-radius: 999px;
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='false'] {
   background: var(--ds-color-neutral-200);
@@ -410,5 +419,18 @@
   }
   .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'] {
     background: Highlight;
+  }
+  .ds-activity-ticker.ds-activity-ticker .view-all-anchor:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+  }
+  .ds-activity-ticker.ds-activity-ticker .view-all-anchor:is([data-state~='focus-visible'], :focus-visible)::after {
+    box-shadow: none;
+  }
+  .ds-activity-ticker.ds-activity-ticker [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 }

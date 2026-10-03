@@ -91,9 +91,9 @@
  * Values transcribed verbatim from index.tsx (the `DS` token map + the two
  * threshold/binary selectors).
  *
- * MATERIAL INVARIANT — DELIBERATELY FLAT (structure-material wave). Across
- * 1300+ lines this family declares zero `box-shadow`, and the ROOT section
- * already says why in one line: the card is a full-body link that answers
+ * MATERIAL INVARIANT — DELIBERATELY FLAT (structure-material wave). This
+ * family declares no elevation `box-shadow` (the link's focus overlay is its
+ * only one), and the ROOT section says why: the card is a full-body link that answers
  * hover and press with "a quiet border shift … never a lift or glow". A
  * terminal/HUD surface is defined by its frame, its ground and its instrument
  * layers; depth would read as a different product, not a themed one. Its
@@ -631,12 +631,22 @@
   color: var(--ds-color-text-subtle);
 }
 
-/* The card's full-body link: keyboard focus reads as a ring around the card.
-   The anchor is a consumer-adapted node (no data-part), so the hook is the
-   family's own link class. */
+/* The card's full-body link: keyboard focus wears the tenant focus signature
+   around the card. The card covers the link, so an overlay carries it above
+   the card. The anchor is a consumer-adapted node (no data-part), so the hook
+   is the family's own link class. */
 .ds-data-terminal-card__link:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  position: relative;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+}
+.ds-data-terminal-card__link:focus-visible::after {
+  position: absolute;
+  inset: 0;
+  z-index: var(--ds-z-index-relative-above, 1);
+  content: '';
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 /* The details arrow is directional chrome: it mirrors under RTL. (The trend
@@ -1427,6 +1437,10 @@
 
   /* the card link's keyboard ring re-expresses in system highlight */
   .ds-data-terminal-card__link:focus-visible {
-    outline-color: Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+  }
+  .ds-data-terminal-card__link:focus-visible::after {
+    box-shadow: none;
   }
 }

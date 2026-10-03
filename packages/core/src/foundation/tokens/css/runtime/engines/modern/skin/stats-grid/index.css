@@ -230,12 +230,28 @@
   color: var(--ds-stats-grid-accent, var(--ds-color-text-secondary));
 }
 
-/* Interactive cards are focusable (role=button), so they need a visible
-   focus channel -- the canonical DS focus ring token. */
+/* Interactive cards are focusable (role=button), so they wear the tenant
+   focus signature. It shares box-shadow with the card elevation; a `none`
+   elevation would void the list, so the composition is guarded. */
 .ds-pattern-stats-grid.ds-engine-modern
   .ds-stats-grid__card[data-interactive="true"]:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
+}
+@container not style(--ds-elevation-1: none) {
+  .ds-pattern-stats-grid.ds-engine-modern
+    .ds-stats-grid__card[data-variant="default"][data-interactive="true"]:is([data-state~='focus-visible'], :focus-visible) {
+    box-shadow: var(--ds-focus-ring), var(--ds-elevation-1);
+  }
+}
+@media (hover: hover) {
+  @container not style(--ds-elevation-2: none) {
+    .ds-pattern-stats-grid.ds-engine-modern
+      .ds-stats-grid__card[data-interactive="true"]:is([data-state~='focus-visible'], :focus-visible):is([data-state~='hovered'], :hover) {
+      box-shadow: var(--ds-focus-ring), var(--ds-elevation-2);
+    }
+  }
 }
 
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__description {
@@ -301,7 +317,9 @@
   }
   .ds-pattern-stats-grid.ds-engine-modern
     .ds-stats-grid__card[data-interactive="true"]:is([data-state~='focus-visible'], :focus-visible) {
-    outline-color: Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
   .ds-pattern-stats-grid.ds-engine-modern [data-part="sparkline-area"] {
     fill: none;

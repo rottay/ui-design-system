@@ -178,9 +178,20 @@
   }
 }
 
+/* The card clips its own box and its media and caption cover it, so the
+   tenant focus signature rides an inset overlay above the content. */
 .ds-pattern-gallery-view .ds-gallery-card:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
+}
+
+.ds-pattern-gallery-view .ds-gallery-card:is([data-state~='focus-visible'], :focus-visible)::after {
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  content: '';
+  border-radius: inherit;
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 /* ---- empty state ---- */
@@ -230,9 +241,14 @@
     border-color: ButtonText;
   }
 
-  .ds-pattern-gallery-view .ds-gallery-card:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-focus-ring-width) solid Highlight;
+  .ds-pattern-gallery-view
+    .ds-gallery-card[data-part='card']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
+  }
+
+  .ds-pattern-gallery-view .ds-gallery-card:is([data-state~='focus-visible'], :focus-visible)::after {
+    box-shadow: none;
   }
 
   .ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox {

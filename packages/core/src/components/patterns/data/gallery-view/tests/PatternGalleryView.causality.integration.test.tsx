@@ -139,13 +139,14 @@ describeCausality({
   markup,
   targets: [
     // A selected card is the family's own seeded signal, on its border and its
-    // ring; the focus ring is the second.
+    // ring; the focus signature, carried on the card's overlay, is the second.
     { id: 'selectedInk', selector: CARD, property: 'border-top-color' },
     { id: 'selectedRing', selector: CARD, property: 'box-shadow' },
     {
       id: 'focusInk',
       selector: CARD,
-      property: 'outline-color',
+      property: 'box-shadow',
+      pseudo: '::after',
       attributes: { 'data-state': 'focus-visible' },
     },
     {
@@ -193,10 +194,11 @@ describeCausality({
       holds: 'cardCorner',
       in: VERTICALS,
     },
-    // A card is a real tab stop, so the focus signature is its own ring width.
+    // A card is a real tab stop: the signature on its overlay and the width of
+    // its forced-colours outline both follow the tenant's focus style.
     'states.focus-style': {
       value: 'glow',
-      moves: ['focusRing'],
+      moves: ['focusInk', 'focusRing'],
       holds: 'cardCorner',
       in: VERTICALS,
     },

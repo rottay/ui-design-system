@@ -175,10 +175,11 @@
   margin-block-end: var(--ds-spacing-6, 1.5rem);
   overflow-x: auto;
 }
-/* The scroll wrapper is a real tab stop, so it carries the canonical ring. */
+/* The scroll wrapper is a real tab stop, so it wears the tenant focus signature. */
 .ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 .ds-pattern-invoice-template.ds-engine-modern [data-part='items-table'] {
   inline-size: 100%;
@@ -314,5 +315,10 @@
   .ds-pattern-invoice-template.ds-engine-modern [data-part='notes'] {
     border: 1px solid ButtonText;
     background: Canvas;
+  }
+  .ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 }

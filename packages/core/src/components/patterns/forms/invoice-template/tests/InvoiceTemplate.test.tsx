@@ -262,15 +262,36 @@ describe('PatternInvoiceTemplate modern document-table reachability', () => {
     expect(document.activeElement).toBe(wrapper);
   });
 
-  it('gives the new tab stop the canonical focus ring in the modern skin', () => {
+  it('gives the new tab stop the tenant focus signature in the modern skin', () => {
     // State is decided once (F-37): the engine runs the scroll group through
     // the interaction kernel, so the arm pairs the kernel token with the
     // platform pseudo-class it stands for rather than trusting the pseudo alone.
-    expect(modernSkin).toContain(
+    const focus =
       ".ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper']"
-        + ":is([data-state~='focus-visible'], :focus-visible)",
-    );
-    expect(modernSkin).toContain('var(--ds-focus-ring-color, var(--ds-color-primary))');
+        + ":is([data-state~='focus-visible'], :focus-visible)";
+    const declarationsOf = (css: string) => {
+      const at = css.indexOf(`${focus} {`);
+      expect(at).toBeGreaterThan(-1);
+      return css
+        .slice(css.indexOf('{', at) + 1, css.indexOf('}', at))
+        .split(';')
+        .map((declaration) => declaration.trim().replace(/\s+/g, ' '))
+        .filter(Boolean);
+    };
+    const forcedStart = modernSkin.indexOf('@media (forced-colors: active)');
+    expect(forcedStart).toBeGreaterThan(-1);
+
+    expect(declarationsOf(modernSkin.slice(0, forcedStart))).toEqual([
+      'outline: var(--ds-focus-ring-width) solid transparent',
+      'outline-offset: var(--ds-focus-ring-offset)',
+      'box-shadow: var(--ds-focus-ring)',
+    ]);
+    expect(declarationsOf(modernSkin.slice(forcedStart))).toEqual([
+      'outline: max(2px, var(--ds-focus-ring-width)) solid Highlight',
+      'outline-offset: var(--ds-focus-ring-offset)',
+      'box-shadow: none',
+    ]);
+    expect(modernSkin).not.toContain('--ds-focus-ring-color');
   });
 
   it('releases the table scroll clip on paper so no amount column is lost in print', () => {
