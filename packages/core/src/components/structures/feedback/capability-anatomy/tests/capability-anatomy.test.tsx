@@ -48,6 +48,33 @@ describe('SurfaceCapabilityAnatomy', () => {
     ).not.toHaveAttribute('style');
   });
 
+  it('stamps the disabled anatomy the skin dims only on disabled capabilities', async () => {
+    const { container } = renderSurface(
+      <SurfaceCapabilityAnatomy
+        capabilities={[
+          { kind: 'action', id: 'export', label: 'Export' },
+          { kind: 'tab', id: 'kanban', disabled: true },
+        ]}
+      />,
+      { engine: 'modern' },
+    );
+
+    await waitFor(() => {
+      expect(container.querySelector('[data-part="capability-anatomy"]')).not.toBeNull();
+    });
+
+    const dimmed = container.querySelectorAll(
+      ".ds-surface.ds-capability-anatomy [data-part='capability'][data-disabled='true']",
+    );
+    expect(dimmed).toHaveLength(1);
+    expect(dimmed[0]).toHaveAttribute('data-capability-id', 'kanban');
+    expect(dimmed[0]).toHaveAttribute('role', 'listitem');
+
+    const enabled = container.querySelector('[data-capability-id="export"]');
+    expect(enabled).not.toBeNull();
+    expect(enabled).not.toHaveAttribute('data-disabled');
+  });
+
   it('renders nothing when the surface registered no capabilities', () => {
     const { container } = renderSurface(<SurfaceCapabilityAnatomy capabilities={[]} />, {
       engine: 'modern',
