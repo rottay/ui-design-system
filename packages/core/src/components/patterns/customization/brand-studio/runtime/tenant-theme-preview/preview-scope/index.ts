@@ -35,7 +35,7 @@ import {
   compileThemeIntent,
   staticThemeIntent,
 } from '@/infrastructure/compilers/runtime/theme';
-import { verifyTenantThemeArtifactV1 } from '@/infrastructure/runtime/theming/foundation/visual-authority';
+import { verifyTenantThemeArtifactV1 } from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import {
   PREVIEW_SCOPE_ATTRIBUTE,
   buildPreviewScopeSelector,

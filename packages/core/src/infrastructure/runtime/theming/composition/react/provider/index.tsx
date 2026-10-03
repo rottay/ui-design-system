@@ -93,7 +93,7 @@ export const ThemeContext = createContext<ThemeContextValue | null>(null);
  * Visual authority is resolved before this provider mounts. The re-export is
  * retained as a contract type; ThemeProvider itself owns no visual emitter.
  */
-export type { VisualAuthority } from '@/infrastructure/runtime/theming/foundation/visual-authority';
+export type { VisualAuthority } from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 
 // ─────────────────────────────────────────────────────────────────
 // PROVIDER

@@ -69,7 +69,7 @@ import {
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
   tenantThemeArtifactElementId,
   verifyTenantThemeArtifactV1,
-} from '@/infrastructure/runtime/theming/foundation/visual-authority';
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import { assertTenantIdentityAllowed } from '@/foundation/presets/verticals/roster';
 
 /**

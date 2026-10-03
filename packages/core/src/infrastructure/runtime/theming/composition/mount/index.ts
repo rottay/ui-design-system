@@ -70,8 +70,8 @@ import type {
   TenantThemeMode,
 } from '@/infrastructure/runtime/foundation/root-attributes/ssr';
 import { resolveDocumentRootAttributes } from '@/infrastructure/runtime/foundation/root-attributes/ssr';
-import type { TenantThemeArtifactSsrEmissionReceipt } from '../../foundation/visual-authority';
-import { emitTenantThemeArtifactForSsr } from '../../foundation/visual-authority';
+import type { TenantThemeArtifactSsrEmissionReceipt } from '../../foundation/visual-authority/foundation/admission';
+import { emitTenantThemeArtifactForSsr } from '../../foundation/visual-authority/foundation/admission';
 
 /** Everything the mount needs that a `ThemeIntent` deliberately does not name. */
 export interface MountTenantThemeOptions {

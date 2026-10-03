@@ -142,12 +142,12 @@ export {
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
-} from '../../infrastructure/runtime/theming/foundation/visual-authority';
+} from '../../infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 export type {
   TenantThemeArtifactSsrEmission,
   TenantThemeArtifactSsrEmissionReceipt,
   TenantThemeArtifactExpectation,
-} from '../../infrastructure/runtime/theming/foundation/visual-authority';
+} from '../../infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 
 /**
  * The READER half of the same contract.
@@ -166,13 +166,13 @@ export type {
 export {
   censusRuntimeVisualPayload,
   resolveVisualAuthority,
-} from '../../infrastructure/runtime/theming/foundation/visual-authority';
+} from '../../infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 export type {
   RuntimeVisualPayloadCensus,
   VisualAuthorityResolution,
   VisualAuthorityOrigin,
   VisualAuthorityConflictKind,
-} from '../../infrastructure/runtime/theming/foundation/visual-authority';
+} from '../../infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 export {
   isCodeOwnedTenantConfig,
   getCodeOwnedRuntimeConfig,

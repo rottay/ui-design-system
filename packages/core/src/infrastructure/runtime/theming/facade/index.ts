@@ -41,17 +41,10 @@ export type {
 export {
   censusRuntimeVisualPayload,
   resolveVisualAuthority,
-  reportVisualAuthorityConflict,
-  resetVisualAuthorityDiagnostics,
   appearanceMatchesArtifact,
   verifyTenantThemeArtifactV1,
   verifyMountedTenantThemeArtifact,
   auditRetainedTenantThemeArtifact,
-  retainMountedTenantThemeArtifact,
-  // `armMountedTenantThemeArtifact` is deliberately NOT re-exported. It is the
-  // ledger's commit-phase write, and the only supported way to reach it is the
-  // claim below, which keeps render read-only.
-  prepareMountedTenantThemeArtifactClaim,
   emitTenantThemeArtifactForSsr,
   auditTenantThemeArtifactSsrReceipt,
   tenantThemeArtifactElementId,
@@ -60,10 +53,18 @@ export {
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
-} from '../foundation/visual-authority';
+} from '../foundation/visual-authority/foundation/admission';
+export {
+  reportVisualAuthorityConflict,
+  resetVisualAuthorityDiagnostics,
+  retainMountedTenantThemeArtifact,
+  // `armMountedTenantThemeArtifact` is deliberately NOT re-exported. It is the
+  // ledger's commit-phase write, and the only supported way to reach it is the
+  // claim below, which keeps render read-only.
+  prepareMountedTenantThemeArtifactClaim,
+} from '../foundation/visual-authority/runtime/retention';
 export type {
   CompiledArtifactDeclaration,
-  PreparedTenantThemeArtifactClaim,
   ProviderDeclaration,
   RuntimeVisualPayloadCensus,
   VisualAuthorityDeclaration,
@@ -76,7 +77,8 @@ export type {
   MountedTenantThemeArtifactVerification,
   TenantThemeArtifactSsrEmission,
   TenantThemeArtifactSsrEmissionReceipt,
-} from '../foundation/visual-authority';
+} from '../foundation/visual-authority/foundation/admission';
+export type { PreparedTenantThemeArtifactClaim } from '../foundation/visual-authority/runtime/retention';
 
 export {
   ROTTAY_CASCADE_LAYER_ORDER,

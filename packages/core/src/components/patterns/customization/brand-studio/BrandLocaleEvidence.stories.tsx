@@ -27,7 +27,7 @@ import {
   staticThemeIntent,
 } from '@/entrypoints/server';
 import type { TenantThemeDocumentV2 } from '@/entrypoints/server';
-import type { VisualAuthorityDeclaration } from '@/infrastructure/runtime/theming/foundation/visual-authority';
+import type { VisualAuthorityDeclaration } from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import bithireVerticalArtifact from '@/foundation/tokens/css/facade/artifacts/bithire/index.css?raw';
 import { Box } from '@/components/primitives/layout/box';
 import { Grid } from '@/components/primitives/layout/grid';

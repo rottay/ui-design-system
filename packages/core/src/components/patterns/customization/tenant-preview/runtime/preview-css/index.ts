@@ -55,7 +55,7 @@ import {
   governedTenantTheme,
   emitThemeCss,
 } from '@/infrastructure/compilers/runtime/theme';
-import { verifyTenantThemeArtifactV1 } from '../../../../../../infrastructure/runtime/theming/foundation/visual-authority';
+import { verifyTenantThemeArtifactV1 } from '../../../../../../infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import {
   createTenantTheme,
   type TenantCreationConfig,
