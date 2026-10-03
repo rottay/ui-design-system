@@ -693,7 +693,6 @@ function GridViewPreview() {
       <PatternGridView<GalleryAsset>
         data={GALLERY_ITEMS}
         rowKey="id"
-        minColumnWidth={240}
         renderCard={(item) => (
           <Card style={{ boxShadow: 'none' }}>
             <Card.Body>
@@ -730,7 +729,6 @@ function GalleryViewPreview() {
         rowKey="id"
         imageField="image"
         captionField="title"
-        minColumnWidth={220}
         aspectRatio="4/3"
       />
     </Box>

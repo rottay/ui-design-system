@@ -191,7 +191,6 @@ function PatternsFamily() {
           imageField="image"
           captionField="name"
           rowKey="id"
-          columns={3}
           aspectRatio="4/3"
           selectable
           selectedKeys={['lt-1']}
@@ -205,7 +204,6 @@ function PatternsFamily() {
         <PatternGridView
           data={LONG_TAIL_ROWS}
           rowKey="id"
-          columns={3}
           selectable
           selectedKeys={['lt-2']}
           onSelectionChange={noop}

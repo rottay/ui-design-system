@@ -16,8 +16,7 @@
  *
  * LAYOUT (WO-FAM-12): the root is the Grid primitive in its auto-fit mode (the
  * `sm` tile preset by default), so the tile count is the card footprint
- * recipe's and the container's compact posture takes one column. The legacy
- * `columns`/`minColumnWidth` props are ignored.
+ * recipe's and the container's compact posture takes one column.
  */
 
 import React, { useCallback, useMemo, useRef, useState } from 'react';

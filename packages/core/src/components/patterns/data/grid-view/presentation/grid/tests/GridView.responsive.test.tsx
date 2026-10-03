@@ -26,9 +26,9 @@ async function root(container: HTMLElement): Promise<HTMLElement> {
 }
 
 describe('PatternGridView responsive + style pass-through', () => {
-  it('lays out as the auto-fit Grid and ignores the legacy column model', async () => {
+  it('lays out as the auto-fit Grid and writes no column model of its own', async () => {
     const { container } = renderWithEngine(
-      <PatternGridView data={data} renderCard={renderCard} rowKey="id" columns={3} minColumnWidth={320} />,
+      <PatternGridView data={data} renderCard={renderCard} rowKey="id" />,
       'modern',
     );
 

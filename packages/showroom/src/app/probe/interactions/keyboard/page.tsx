@@ -115,8 +115,6 @@ function GalleryKeyboardProbe() {
         imageField="url"
         captionField="title"
         rowKey="id"
-        columns={4}
-        minColumnWidth={140}
         aspectRatio="4/3"
         selectable
         selectedKeys={selectedKeys}

@@ -25,15 +25,13 @@ async function root(container: HTMLElement): Promise<HTMLElement> {
 }
 
 describe('PatternGalleryView responsive + style pass-through', () => {
-  it('lays out as the auto-fit Grid at the sm tile preset and ignores the legacy column model', async () => {
+  it('lays out as the auto-fit Grid at the sm tile preset and writes no column model of its own', async () => {
     const { container } = renderWithEngine(
       <PatternGalleryView<Photo>
         data={data}
         imageField="image"
         captionField="title"
         rowKey="id"
-        columns={4}
-        minColumnWidth={320}
       />,
       'modern',
     );

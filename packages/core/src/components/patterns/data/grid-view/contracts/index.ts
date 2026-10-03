@@ -80,19 +80,6 @@ export interface GridViewProps<T> {
   adapt?: Adapt<GridViewAdaptation>;
 
   /**
-   * @deprecated Ignored: the auto-fit recipe decides the column count through
-   * the card footprint channels. Use `minItem`, or `templateColumns` for an
-   * explicit track list.
-   */
-  columns?: number | 'auto';
-
-  /**
-   * @deprecated Ignored for the same reason as `columns`: the footprint is
-   * `--ds-card-min-inline-size` times the `minItem` preset.
-   */
-  minColumnWidth?: number;
-
-  /**
    * Gap between grid cards: a number is exact pixels; a Grid gap preset
    * (`'sm'`, `'md'`, ...) or any other CSS length rides `--ds-grid-gap` and
    * scales with the tenant rhythm. Omitted, the Grid's `md` rung applies.

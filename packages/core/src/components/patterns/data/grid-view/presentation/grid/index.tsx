@@ -14,7 +14,7 @@
  * LAYOUT (WO-FAM-12): the root is the Grid primitive in its auto-fit mode, so
  * the column count is the card footprint recipe's (density, type scale and the
  * `minItem` preset), the row always fills, and the container's compact posture
- * takes one column. The legacy `columns`/`minColumnWidth` props are ignored.
+ * takes one column.
  *
  * LOADING (WO-FAM-14): the loading state is DERIVED from this grid's own
  * `data-part` anatomy by the shared `AnatomySkeleton` renderer, which wraps

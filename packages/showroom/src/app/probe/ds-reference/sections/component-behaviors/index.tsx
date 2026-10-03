@@ -1417,7 +1417,6 @@ export function ComponentBehaviorScene({ only }: { only: ComponentBehaviorCase }
             <PatternGridView
               data={[{ id: 'a', name: 'Alpha' }, { id: 'b', name: 'Beta' }]}
               renderCard={(row: { id: string; name: string }) => <span>{row.name}</span>}
-              columns="auto"
             />
           </div>
         </SpecimenRow>
@@ -1430,8 +1429,6 @@ export function ComponentBehaviorScene({ only }: { only: ComponentBehaviorCase }
               data={[{ id: 'a', title: 'Alpha', url: '' }, { id: 'b', title: 'Beta', url: '' }]}
               imageField="url"
               renderCard={(row) => <span>{row.title}</span>}
-              columns="auto"
-              minColumnWidth={240}
             />
           </div>
         </SpecimenRow>

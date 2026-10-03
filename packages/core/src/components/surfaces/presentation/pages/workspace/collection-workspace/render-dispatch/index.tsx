@@ -776,8 +776,6 @@ export function CollectionRenderDispatch<T extends object>(
         data={data}
         renderCard={(item, index) => cardRenderer(item, index, createCardContext(item, index))}
         rowKey={rowKey}
-        columns={gc.columns}
-        minColumnWidth={typeof gc.minCardWidth === 'number' ? gc.minCardWidth : undefined}
         gap={gc.gap}
         selectable={props.selectable}
         selectedKeys={props.selectedKeys}
@@ -800,9 +798,7 @@ export function CollectionRenderDispatch<T extends object>(
         captionField={gl.captionField}
         renderCard={gl.renderItem}
         rowKey={rowKey}
-        columns={gl.columns}
         aspectRatio={gl.aspectRatio}
-        minColumnWidth={typeof gl.minThumbnailWidth === 'number' ? gl.minThumbnailWidth : undefined}
         selectable={props.selectable}
         selectedKeys={props.selectedKeys}
         onSelectionChange={props.onSelectionChange}

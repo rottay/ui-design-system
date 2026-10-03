@@ -92,19 +92,6 @@ export interface GalleryViewProps<T> {
   adapt?: Adapt<GalleryViewAdaptation>;
 
   /**
-   * @deprecated Ignored: the auto-fit recipe decides the column count through
-   * the card footprint channels. Use `minItem`, or `templateColumns` for an
-   * explicit track list.
-   */
-  columns?: number | 'auto';
-
-  /**
-   * @deprecated Ignored for the same reason as `columns`: the footprint is
-   * `--ds-card-min-inline-size` times the `minItem` preset.
-   */
-  minColumnWidth?: number;
-
-  /**
    * CSS aspect-ratio value for card images.
    * Controls the height of the image container relative to its width.
    * Common values: `'1'` (square), `'4/3'`, `'16/9'`, `'3/2'`.
