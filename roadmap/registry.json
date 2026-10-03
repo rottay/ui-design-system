@@ -6295,6 +6295,16 @@
      "at": "2026-10-03 00:33",
      "by": "codex-dt",
      "note": "Root-audited S1 e44a58638 retires only three unused policy types, preserves live permissionId fallbacks, and tightens legacy redeclaration refusal: 4/4 boundary tests, exact non-policy bytes unchanged. Root-audited S2 0e8a98b28 retires private test-only icon-profile barrel, preserves SSR/hydration suite at integration owner: writer 80+7 focal tests, root body byteidentity and structure PASS with five preexisting debts unchanged. Current census measured testOnly 7 to 6, other buckets unchanged; no baseline seed/build repeated. Whole RET-01 stays in-progress. Next bounded K2.8 S3 exec95702 removes private visual-authority facade with public ./server exports conserved and cross-owner tests retained; no apps/push."
+    },
+    {
+     "at": "2026-10-03 01:13",
+     "by": "codex-dt",
+     "note": "S3 phase 1A 9fd2fd28a and phase 1B 5f8eae7e4 root-audited/integrated on main: eight productive import/re-export sources now target existing admission/retention owners; ./server retains actual 9 values + 7 types, no invented ./theming door. Corrected changeset actual parser16rows PASS. Root preserved21test/fixture bodies/comments and all value/type/namespace bindings, public-server parity executed; writer20focalfiles242tests PASS, rootstructure5olddebts unchanged. Existing private facade remains until bounded phase2 exec54430 verifies resolved consumers zero and retires it. No build/globalsuite/baseline repeated, apps/push untouched; wholeWO in-progress."
+    },
+    {
+     "at": "2026-10-03 01:22",
+     "by": "codex-dt",
+     "note": "S3 phase2: resolved consumer census of the private visual-authority facade found zero of22910 import/export/dynamic specifiers, including relative chains;59-line aggregate retired after productive+test migrations. Root structuralcheck PASS five preexisting debts unchanged, admission/retention/publicfacades/tests exactbyte unchanged; no242suite/build/census/baseline repeat. Finalrelease prose one-fileK2.8 update dispatched, plus bounded badge/tag/avatar compat census for a next safe mechanical lot; live capability/public API conserved. WholeRET01 remains in-progress134/164."
     }
    ]
   },
