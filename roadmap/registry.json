@@ -6192,8 +6192,8 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "wave 5; closes F-42, F-94, F-91, F-88, F-109, F-110, F-111, F-113, F-115, F-84; supersedes: WO-CRA-15, WO-CRA-17, WO-ARC-16, WO-CRA-21",
-   "claimedBy": "kimi-dt",
+   "notes": "wave 5; closes F-42, F-94, F-91, F-88, F-109, F-110, F-111, F-113, F-115, F-84; supersedes: WO-CRA-15, WO-CRA-17, WO-ARC-16, WO-CRA-21. Owner succession 2026-10-02; preserve delivered RET-01-F and D-19, integrate reviewed lots on main.",
+   "claimedBy": "codex-dt",
    "claimedAt": "2026-10-02",
    "progressLog": [
     {
@@ -6205,6 +6205,26 @@
      "at": "2026-10-02 18:17",
      "by": "Kimi K3",
      "note": "2026-10-02 tanda 14: RET-01-E d2edce40d — the 3.0 export trim: 122 -> 43 published subpaths (79 removed, census-backed, one contract-diff row each; BREAKING with the root export unchanged). 9 refused with evidence (the widened net — configs/scripts/CI/manifests, not just src imports — found real consumers: ./eslint, ./hooks-manifest, ./supplier-contract, ./supplier-honesty-cli, ./public-entrypoints-manifest, ./fonts/arabic-text.css, ./styles/rottay, ./styles/modern, ./patterns/charts). 77 entrypoint wrappers retired; mirrors updated (releaseSync, governed manifest 156 -> 18, ceilings, vite entries, consumer-contract tallies, eslint mirror, showroom allowSubpaths). RET-01-G rides along: STEPS_DEFAULTS retired; SwitchProps/SwitchSize/ProgressDotInfo/LegacyPhysicalBoxTextAlign REFUSED as the live Switch/Steps API chain — their retirement is an API decision, registered. Family-inventory re-pinned (5 rows, sanctioned --write). Structure baseline re-snapshot records 5 named pre-existing sibling-owner couplings (the retired wrappers' exemptions gone). Census re-pinned: 43 published / 28 consumed / 15 consumerless / 2 unreachable (both evidenced refusals) / 9 test-only (+2 spatial facade modules, D-19 territory). DT-verified: tsc clean, entrypoint-parity OK, public-api 34/0, contract-changeset OK, navigation+eslint 801/801, structure clean, census --check OK. REMAINING for the WO: the icons/marks relocations (RET-01-F), the D-19 dispositions (effects/spatial/application-runtime), the IconFrame/Meter decision, and the close audit against every closure criterion."
+    },
+    {
+     "at": "2026-10-02 18:19",
+     "by": "Kimi K3",
+     "note": "2026-10-02 DT DECISIONS for the icons/marks lot (RET-01-F), reading the WO text against the measured tree: (1) ./icons/bithire RETIRES — its preset successor ./icons/presets/bithire exists and is app-bithire's live door; the old full-pack door has zero consumers; the changeset names the substitute. (2) The legacy icon CATALOG (./icons/full, the full-corpus compatibility boundary, + ./icons/corpus, the metadata door) moves to ./icons/legacy with the end-of-life stated (the 4.0 release line) — a renamed door, not a deletion: the package is published and the census covers only the four known roots. (3) ./marks/brand and ./marks/cloud retire as consumerless doors (the marks stay via ./marks); the 'marks/pictograms by preset' direction belongs to WO-CRA-20 (preset weight pruning) — this WO does not design new preset doors. (4) ./icons/roles/* (the generated per-role door) is deferred to WO-CRA-20 with a note: zero consumers today, but the pruning decision owns its fate. Each candidate still passes the wide-net verification (configs/scripts/CI/manifests, all four roots) before anything moves."
+    },
+    {
+     "at": "2026-10-02 19:40",
+     "by": "codex-dt",
+     "note": "Active coordinator reassigned from kimi-dt to codex-dt; the work-order summary now reflects the current operating model."
+    },
+    {
+     "at": "2026-10-02 19:45",
+     "by": "codex-dt",
+     "note": "RET-01-F continuation: consolidate semantic Icon/role metadata at existing ./icons and both marks at ./marks; retire five duplicate doors without icons/legacy. Preserve live BitHire preset roles. Exact candidate review and package proof pending; source reservations for INV-06 are disjoint."
+    },
+    {
+     "at": "2026-10-02 19:53",
+     "by": "codex-dt",
+     "note": "2026-10-02 independent Kimi review R1 found stale suppliers snapshot, missing canonical asset controls and superseded writer report. Narrow disposition: 43->38 consolidation at icons/marks (no legacy door); all original full-facade runtime controls and types now preserved at icons; changeset explicitly retires renderer-free metadata-only module boundary. Original 43->39 RET-01-F report is historical, not acceptance for this candidate. Official supplier generation, current asset-retention measurement and final frozen-diff review still required. No WO closure claimed."
     }
    ]
   },
@@ -6428,8 +6448,8 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "wave 4; closes F-23, F-72, F-74, F-75, F-76, F-86, F-54; supersedes: WO-GAT-09, WO-ARC-19, WO-GAT-11, WO-SKIN-08",
-   "claimedBy": "Kimi K3",
+   "notes": "wave 4; closes F-23, F-72, F-74, F-75, F-76, F-86, F-54; supersedes: WO-GAT-09, WO-ARC-19, WO-GAT-11, WO-SKIN-08. Owner succession 2026-10-02; preserve existing evidence and advance after pending producer/path dependencies.",
+   "claimedBy": "codex-dt",
    "claimedAt": "2026-09-11",
    "progressLog": [
     {
@@ -7286,6 +7306,11 @@
      "at": "2026-10-02 15:27",
      "by": "Kimi K3",
      "note": "2026-10-02 tanda 12 (post-resume): FAM09-CL re-review (K2.8, Chromium-measured 3 verticals x dial envelope x forced-colors) — the chart-line skeleton dome PAINTS, the CL104 premise falsified; the entry re-extends (exclusions af18c0dbb3906358 -> 4b2d422333c2d1b9), INEFFECTIVE discharged, shape 215 -> 214, N/A 3 -> 4 (76799ef74; population 62/62). The WF arm's missed gate fixed: the chart-skin certification roster admits the waterfall renderer anchor (604afa147, 29/29). WO-FAM-09 DONE (133/164) — its acceptance evidence: the EFFECTIVE verdict + the two commits; Fable's rule on the reason text registered PENDING (quota), not waived. OVM-ADOPT 80b70d31e (K2.8, DT-audited): the modern Modal/Sheet gain the public overlayIntensity prop stamping data-intensity on their rendered backdrops (custom Modal scrim keeps precedence); the modern skins read the ladder under those real selectors with the exact previous default as fallback (byte-identical paint without the tokens). The gate's own verdict: the three overlay weights measure LIVE_MODERN_PAINTED — the GLASS-2-b pin discharged in the same commit by its own law (pin table 12 -> 9, all capability class; the .rottay-overlay anchor withdrawals STAND — Overlay stays internal/unimported). Liveness 208/208. The effect verdict is now WITHOUT unclassified red rows. The contract-changeset gate's derived leg got its contract-diff rows for ModalProps/SheetProps. PENDING REVIEWS added: FAM09-CL reason text (Fable), OVM-ADOPT (Fable/Opus). INV-06 in flight (K2.8): posture contract landed + verified (137/137 focal, gates green); the app-shell bottom-bar presentation is the remaining step (INV06-SHELL dispatched)."
+    },
+    {
+     "at": "2026-10-02 19:40",
+     "by": "codex-dt",
+     "note": "Active coordinator reassigned from Kimi K3 to codex-dt; the work-order summary now reflects the current operating model."
     }
    ]
   },
@@ -7765,7 +7790,7 @@
    "lane": "platform-invariants",
    "order": 6,
    "size": "M",
-   "status": "done",
+   "status": "in-progress",
    "dependsOn": [
     "WO-INV-04",
     "WO-FAM-10",
@@ -7775,12 +7800,23 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "wave 4; closes F-46 (partial)",
-   "claimedBy": "kimi-dt",
+   "notes": "wave 4; closes F-46 (partial). Preserve c9629834a helpers and bottom-bar; complete surface adoption, density and primary-action effects with real consumer tests. Codex DT 2026-10-02.",
+   "claimedBy": "codex-dt",
    "claimedAt": "2026-10-02",
-   "progressLog": [],
-   "doneAt": "2026-10-02",
-   "evidence": "c9629834a: posture contract (postures prop, SurfaceRegion, DEFAULT_SURFACE_POSTURES, resolveSurfacePostures) + runtime over the WO-INV-04 SSR hint (no matchMedia outside the runtime — acceptance grep measures 0) + AppShell bottom-bar presentation via the adapt slot (NAVIGATION_DEFAULTS unchanged) + surfacePosturesToShellAdapt bridge (structural typing, no cross-tier import; architecture gate clean) + the WO-CON-04 consumer fixture SSR-proven (phone: column-menu/preview-rail absent, bottom bar present; desktop: full chrome). DT-verified: 113/113 focal, CollectionWorkspace 72/72, tsc clean, population 62/62, contract-changeset green with 14 contract-diff rows. Written by K2.8 under the quota amendment; Fable/Opus review registered PENDING, not waived."
+   "progressLog": [
+    {
+     "at": "2026-10-02 19:40",
+     "by": "reopen",
+     "note": "REOPENED from done. Reason: Owner-requested continuation: code audit found no postures prop/adoption on real ListSurface; the consumer proof builds a standalone ul and does not prove the WO outcome.. Prior claimedBy=kimi-dt claimedAt=2026-10-02 doneAt=2026-10-02. Prior evidence (verbatim): c9629834a: posture contract (postures prop, SurfaceRegion, DEFAULT_SURFACE_POSTURES, resolveSurfacePostures) + runtime over the WO-INV-04 SSR hint (no matchMedia outside the runtime — acceptance grep measures 0) + AppShell bottom-bar presentation via the adapt slot (NAVIGATION_DEFAULTS unchanged) + surfacePosturesToShellAdapt bridge (structural typing, no cross-tier import; architecture gate clean) + the WO-CON-04 consumer fixture SSR-proven (phone: column-menu/preview-rail absent, bottom bar present; desktop: full chrome). DT-verified: 113/113 focal, CollectionWorkspace 72/72, tsc clean, population 62/62, contract-changeset green with 14 contract-diff rows. Written by K2.8 under the quota amendment; Fable/Opus review registered PENDING, not waived. Prior notes (verbatim): wave 4; closes F-46 (partial)"
+    },
+    {
+     "at": "2026-10-02 19:59",
+     "by": "codex-dt",
+     "note": "Pilot integrated on main 28baf99cc: actual public ListSurface accepts postures; real SSR/client isolated proof, 33 focal tests PASS (five suites,25.14s), no parallel responsive authority, scoped density, once-only full-state action, typed ActionDock root attrs and direct sticky containing block. Independent native Codex reviewer PASS plus tiny type-narrowing followup PASS; production tsc exit0 on candidate before commit. Remaining34recipes prepared in disjoint workers; data/admin14 HOLD on Integration tab loading parity and SurfaceActionBar attr forwarding (correction dispatched); other20 under independent review, Wizard composition gap explicitly open. Whole WO stays in progress."
+    }
+   ],
+   "doneAt": null,
+   "evidence": null
   },
   {
    "id": "WO-FAM-12",

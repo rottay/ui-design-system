@@ -34,6 +34,15 @@ Lane-wide rules (binding on every WO):
   1. Consumer census gate (`entrypoint → consumers` across showroom + 3 apps) as a decrease-only anchor; then delete in lots with the 3.0 changeset and codemods.
   2. Icons: legacy subpath with EOL; `bithire` pack to a preset; marks/pictograms by preset.
   3. D-19 dispositions recorded per capability.
+- **AMENDMENT (2026-10-02, current owner direction: DS canon before app adaptation)** —
+  The measured `./icons/full` facade duplicates the renderer and complete role
+  inventory already exposed by `./icons`; `./icons/corpus` is a pure metadata
+  re-export. Consolidate the useful metadata at `./icons` and retire the duplicate
+  doors rather than adding `./icons/legacy` solely for compatibility. Both mark
+  facades remain at `./marks`. Preserve the six corpus roles consumed by the live
+  BitHire preset and the generator's frozen prefix; a zero `pack: bithire` grep
+  is not permission to delete them. Final domain ownership must be resolved through
+  the preset/corpus producer, with content conservation and a generator check.
 - **Files** — `packages/core/src/components/**`; `packages/core/src/infrastructure/runtime/application/**`; `packages/core/src/entrypoints/**`; `packages/core/package.json`; `packages/core/src/graphics/**`; `.changeset/**`.
 - **Acceptance gate** — Import graph: 0 unreachable modules; `exports` with a censused consumer per subpath; `grep -rn "@deprecated" src | wc -l` = 0; `grep -c '"pack": "bithire"' corpus/manifest.json` = 0.
 - **Do NOT** — Do not delete anything whose census shows a consumer without first migrating that consumer (consumer notes X-01…X-06).
