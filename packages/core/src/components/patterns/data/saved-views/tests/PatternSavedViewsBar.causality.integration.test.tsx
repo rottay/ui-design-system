@@ -9,11 +9,13 @@ import { createRequire } from 'node:module';
 import { resolve as resolvePath } from 'node:path';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { EngineProvider } from '@/infrastructure/runtime/engines/composition/react/provider';
 import type { SavedView } from '../contracts';
 import ModernSavedViewsBar from '../engines/modern';
+import ModernInput from '../../../../primitives/inputs/input/engines/modern';
 import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
@@ -193,5 +195,179 @@ describe('saved-views declared consumes', () => {
       // Negative control: the pill's rhythm is geometry, not focus.
       expect(glow[id].pillPad, `${id} control pillPad`).toBe(base[id].pillPad);
     }
+  }, 180_000);
+});
+
+/* ---------------------------------------------------------------------------
+ * The rename and create fields, under real focus.
+ *
+ * Both compose the unstyled DS Input, so the Input skin is their only focus
+ * author: each must compute exactly what a plain unstyled Input computes, and
+ * a tenant statement on the Input's own channel must reach them.
+ * ------------------------------------------------------------------------ */
+
+const FIELD_TARGETS = {
+  rename: "#rename [data-part='rename-input']",
+  create: "#create [data-part='create-input']",
+  plain: '#plain input',
+} as const;
+
+const TENANT_INPUT_RING = '0 0 0 3px rgb(200, 0, 100)';
+
+interface FieldReading {
+  readonly focused: boolean;
+  readonly boxShadow: string;
+  readonly outlineStyle: string;
+  readonly outlineWidth: string;
+  readonly outlineColor: string;
+  readonly outlineOffset: string;
+}
+
+/** The three fields as the engines render them; the focus stamp is left to the page. */
+function fieldMarkup(): string {
+  const props = {
+    views,
+    activeViewId: 'all',
+    onViewSelect: noop,
+    onViewRename: noop,
+    onViewCreate: noop,
+    allowRename: true,
+    allowCreate: true,
+  };
+  const unstamped = (html: string) => html.replace(/ data-state="[^"]*focus[^"]*"/g, '');
+
+  const renaming = render(
+    <EngineProvider defaultEngine="modern">
+      <ModernSavedViewsBar {...props} />
+    </EngineProvider>,
+  );
+  act(() => {
+    fireEvent.click(screen.getByLabelText('Active only options'));
+  });
+  act(() => {
+    fireEvent.click(screen.getByText('Rename'));
+  });
+  const rename = unstamped(renaming.container.innerHTML);
+  cleanup();
+
+  const creating = render(
+    <EngineProvider defaultEngine="modern">
+      <ModernSavedViewsBar {...props} />
+    </EngineProvider>,
+  );
+  act(() => {
+    fireEvent.click(screen.getByTestId('create-view-button'));
+  });
+  const create = unstamped(creating.container.innerHTML);
+  cleanup();
+
+  const plain = renderToStaticMarkup(
+    <EngineProvider defaultEngine="modern">
+      <ModernInput variant="unstyled" size="sm" aria-label="Plain unstyled" value="" onChange={noop} />
+    </EngineProvider>,
+  );
+
+  return `<section id="rename">${rename}</section><section id="create">${create}</section><section id="plain">${plain}</section>`;
+}
+
+async function fieldReadings(
+  arms: Readonly<Record<string, { decisions: Readonly<Record<string, unknown>>; tenantRing?: string }>>,
+): Promise<Record<string, Record<keyof typeof FIELD_TARGETS, FieldReading>>> {
+  const html = fieldMarkup();
+  const browser = await chromiumDriver().launch();
+  try {
+    const context = await browser.newContext();
+    const out: Record<string, Record<keyof typeof FIELD_TARGETS, FieldReading>> = {};
+    for (const [label, arm] of Object.entries(arms)) {
+      const page = await context.newPage();
+      const mounted = await mountArm('rottay', arm.decisions as never);
+      await page.setContent('<!doctype html><html><head></head><body></body></html>');
+      await page.addStyleTag({ content: resolvedBaseCss() });
+      await page.addStyleTag({ content: mounted.css });
+      out[label] = (await page.evaluate(
+        ({ rootAttributes, html, selectors, tenantRing }: { rootAttributes: Record<string, string>; html: string; selectors: Record<string, string>; tenantRing: string | null }) => {
+          for (const [name, value] of Object.entries(rootAttributes)) {
+            document.documentElement.setAttribute(name, value);
+          }
+          const host = document.createElement('div');
+          host.setAttribute('style', 'background: var(--ds-color-bg-primary); color: var(--ds-color-text-primary); padding: 24px;');
+          if (tenantRing) host.style.setProperty('--ds-input-focus-ring', tenantRing);
+          host.innerHTML = html;
+          document.body.append(host);
+          const readings: Record<string, unknown> = {};
+          for (const [id, selector] of Object.entries(selectors)) {
+            const element = host.querySelector(selector) as HTMLElement;
+            element.focus();
+            // The Input engine stamps `focused` on focus; static markup carries no React.
+            element.setAttribute('data-state', 'focused focus-visible');
+            document.getAnimations().forEach((animation) => animation.finish());
+            const computed = getComputedStyle(element);
+            readings[id] = {
+              focused: document.activeElement === element,
+              boxShadow: computed.boxShadow,
+              outlineStyle: computed.outlineStyle,
+              outlineWidth: computed.outlineWidth,
+              outlineColor: computed.outlineColor,
+              outlineOffset: computed.outlineOffset,
+            };
+            element.removeAttribute('data-state');
+            element.blur();
+          }
+          return readings;
+        },
+        { rootAttributes: mounted.rootAttributes, html, selectors: FIELD_TARGETS, tenantRing: arm.tenantRing ?? null },
+      )) as Record<keyof typeof FIELD_TARGETS, FieldReading>;
+      await page.close();
+    }
+    return out;
+  } finally {
+    await browser.close();
+  }
+}
+
+/** What the field paints as a focus indicator; an unpainted outline keeps the ink it inherits. */
+function indicator(reading: FieldReading): Record<string, string> {
+  return reading.outlineStyle === 'none'
+    ? { boxShadow: reading.boxShadow, outlineStyle: 'none' }
+    : {
+        boxShadow: reading.boxShadow,
+        outlineStyle: reading.outlineStyle,
+        outlineWidth: reading.outlineWidth,
+        outlineColor: reading.outlineColor,
+        outlineOffset: reading.outlineOffset,
+      };
+}
+
+describe('saved-views composed fields', () => {
+  it('compute what a plain unstyled Input computes under every focus signature, and a tenant ring wins', async () => {
+    const readings = await fieldReadings({
+      ring: { decisions: {} },
+      underline: { decisions: { 'states.focus-style': 'underline' } },
+      glow: { decisions: { 'states.focus-style': 'glow' } },
+      tenant: { decisions: { 'states.focus-style': 'glow' }, tenantRing: TENANT_INPUT_RING },
+    });
+
+    for (const [arm, fields] of Object.entries(readings)) {
+      expect(fields.plain.focused, `${arm} plain really holds focus`).toBe(true);
+      expect(fields.plain.boxShadow, `${arm} plain signature`).not.toBe('none');
+      for (const id of ['rename', 'create'] as const) {
+        expect(fields[id].focused, `${arm} ${id} really holds focus`).toBe(true);
+        // One author: no family rule may add to or void what the Input paints.
+        expect(indicator(fields[id]), `${arm} ${id} equals the plain unstyled Input`).toEqual(indicator(fields.plain));
+        expect(
+          fields[id].outlineStyle === 'none' || fields[id].outlineColor === 'rgba(0, 0, 0, 0)',
+          `${arm} ${id} paints no solid outline`,
+        ).toBe(true);
+      }
+    }
+
+    const signatures = [readings.ring.create.boxShadow, readings.underline.create.boxShadow, readings.glow.create.boxShadow];
+    expect(new Set(signatures).size, 'the three signatures differ').toBe(3);
+    expect(readings.underline.create.boxShadow).toContain('inset');
+    expect(readings.glow.create.boxShadow).toContain('12px');
+
+    // The Input's own tenant channel outranks the signature on the composed fields too.
+    expect(readings.tenant.rename.boxShadow).toBe('rgb(200, 0, 100) 0px 0px 0px 3px');
+    expect(readings.tenant.create.boxShadow).toBe('rgb(200, 0, 100) 0px 0px 0px 3px');
   }, 180_000);
 });

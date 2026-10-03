@@ -385,8 +385,6 @@
   background: var(--ds-surface-inset);
   color: inherit;
   font-size: var(--ds-saved-views-input-font-size, 13px);
-  outline: none;
-  box-shadow: none;
   transition:
     border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
@@ -397,14 +395,6 @@
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__create-input[data-part='field'] [data-part='create-input'].ds-input-shell--modern {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
-}
-
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] [data-part='rename-input']:is([data-state~='focused'], :focus),
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] [data-part='create-input']:is([data-state~='focused'], :focus) {
-  border-color: var(--ds-focus-ring-color);
-  box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color);
 }
 
 /* ---- create form wrapper (geometry was engine inline styles). ---- */

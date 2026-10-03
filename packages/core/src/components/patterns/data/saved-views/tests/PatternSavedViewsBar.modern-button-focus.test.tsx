@@ -1,7 +1,7 @@
 import React from 'react';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { render } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernSavedViewsBar from '../engines/modern';
@@ -87,8 +87,6 @@ describe('ModernSavedViewsBar — composed controls wear the Button focus signat
   });
 
   it('paints no focus indicator of its own on the composed Buttons', () => {
-    // A family outline tied the Button ring rule and drew a solid contour over
-    // the `underline` and `glow` signatures.
     for (const part of BUTTON_PARTS) {
       const named = [...AUTHORED, ...rulesOf(FORCED)].filter((rule) =>
         rule.selector.includes(`[data-part='${part}']`),
@@ -107,5 +105,74 @@ describe('ModernSavedViewsBar — composed controls wear the Button focus signat
     expect(pillFocus.map((rule) => declarations(rule.body))).toEqual([
       ['border-radius: var(--ds-saved-views-focus-ring-radius, var(--ds-radius-sm))'],
     ]);
+  });
+});
+
+describe('ModernSavedViewsBar — the rename and create fields wear the Input focus signature', () => {
+  const FIELD_PARTS = ['rename-input', 'create-input'];
+
+  it('renders both fields as the unstyled DS Input, stamped by its own engine', () => {
+    const props = {
+      views: [
+        { id: 'view-1', name: 'All Items', isDefault: true, config: {} },
+        { id: 'view-2', name: 'Active Only', config: {} },
+      ],
+      activeViewId: 'view-1',
+      onViewSelect: vi.fn(),
+      onViewRename: vi.fn(),
+      onViewCreate: vi.fn(),
+      allowRename: true,
+      allowCreate: true,
+    };
+
+    const renaming = render(<ModernSavedViewsBar {...props} />);
+    act(() => {
+      fireEvent.click(screen.getByLabelText('Active Only options'));
+    });
+    act(() => {
+      fireEvent.click(screen.getByText('Rename'));
+    });
+    const rename = screen.getByLabelText('Rename');
+    renaming.unmount();
+
+    render(<ModernSavedViewsBar {...props} />);
+    act(() => {
+      fireEvent.click(screen.getByTestId('create-view-button'));
+    });
+    const create = screen.getByTestId('new-view-input');
+
+    for (const [field, part] of [
+      [rename, 'rename-input'],
+      [create, 'create-input'],
+    ] as const) {
+      expect(field.tagName).toBe('INPUT');
+      expect(field).toHaveClass('ds-input-shell', 'ds-input-shell--modern');
+      expect(field).toHaveAttribute('data-variant', 'unstyled');
+      expect(field).toHaveAttribute('data-part', part);
+    }
+    // The Input skin selects this stamp; the field took focus on mount.
+    expect(create).toHaveFocus();
+    expect(create.getAttribute('data-state')).toContain('focused');
+  });
+
+  it('states no focus rule, outline or shadow of its own on the composed Input', () => {
+    for (const part of FIELD_PARTS) {
+      const named = [...AUTHORED, ...rulesOf(FORCED)].filter((rule) =>
+        rule.selector.includes(`[data-part='${part}']`),
+      );
+      expect(named.length).toBeGreaterThan(0);
+      for (const rule of named) {
+        expect(rule.selector, rule.selector).not.toMatch(/focus/);
+        expect(paintsFocusIndicator(rule), rule.selector).toBe(false);
+        expect(paintsSolidOutline(rule), rule.selector).toBe(false);
+        // A reset here would outrank the Input focus rule and void its channel.
+        expect(
+          declarations(rule.body).filter((declaration) => /^box-shadow\s*:/.test(declaration)),
+          rule.selector,
+        ).toEqual([]);
+      }
+    }
+    expect(SKIN).not.toContain('--ds-focus-ring-color');
+    expect(SKIN).not.toContain('--ds-input-focus-ring');
   });
 });
