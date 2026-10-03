@@ -114,7 +114,9 @@ export function deriveTooltipChannels(theme?: FlatTheme): Record<string, string>
   vars["--ds-tooltip-shortcut-key-background"] = "color-mix(in srgb, currentColor 10%, transparent)";
   vars["--ds-tooltip-shortcut-key-border"] = "color-mix(in srgb, currentColor 28%, transparent)";
   vars["--ds-tooltip-shortcut-key-shadow"] = "inset 0 1px 0 color-mix(in srgb, currentColor 10%, transparent)";
-  vars["--ds-tooltip-focus-color"] = "var(--ds-focus-ring-color)";
+  // The bubble's frame rests on the tenant's focus signature; this outline colour
+  // stays transparent until a tenant states one.
+  vars["--ds-tooltip-focus-color"] = "transparent";
   applyAuthoredPair(vars, theme?.chrome?.tooltip);
   return vars;
 }

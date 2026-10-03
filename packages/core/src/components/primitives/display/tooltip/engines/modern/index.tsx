@@ -87,6 +87,7 @@ import {
   type FieldOverlayDismissReason,
 } from "../../../../runtime/overlay/field-overlay";
 import { resolveExitFallbackMs } from "@/graphics/motion/react/runtime/presence/duration";
+import { partAttributes } from "@/foundation/behavior";
 
 type OpenReason = "hover" | "focus" | "click" | "content" | "touch";
 
@@ -376,6 +377,16 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
     content !== null && content !== undefined && content !== false;
   const requestedVisibleRef = useRef(Boolean(isVisible));
   const [present, setPresent] = useState(Boolean(isVisible));
+  // Keyboard focus held by a control inside an interactive bubble, read from the
+  // platform on the control that took it; a bubble destroyed with focus inside
+  // never blurs.
+  const [bubbleFocus, setBubbleFocus] = useState({ focused: false, focusVisible: false });
+  useEffect(() => {
+    if (isVisible) return;
+    setBubbleFocus((current) =>
+      current.focused ? { focused: false, focusVisible: false } : current
+    );
+  }, [isVisible]);
   // One normalization point: a deprecated physical spelling becomes its
   // logical equivalent here, so nothing downstream carries two vocabularies.
   const requestedPlacement = normalizeOverlayPlacement(placement);
@@ -867,7 +878,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
       dir={direction}
       lang={language}
       className="ds-tooltip-bubble"
-      data-part="bubble"
+      {...partAttributes("bubble", bubbleFocus)}
       {...(strategy === "js" ? portalScope : {})}
       data-tone={color}
       data-variant={recipe}
@@ -890,10 +901,21 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
       style={bubbleStyle}
       onPointerEnter={interactive ? () => show("content") : undefined}
       onPointerLeave={interactive ? () => hide("content") : undefined}
-      onFocus={interactive ? () => show("focus") : undefined}
+      onFocus={
+        interactive
+          ? (event) => {
+              setBubbleFocus({
+                focused: true,
+                focusVisible: event.target.matches(":focus-visible"),
+              });
+              show("focus");
+            }
+          : undefined
+      }
       onBlur={
         interactive
           ? (event) => {
+              setBubbleFocus({ focused: false, focusVisible: false });
               const nextTarget = event.relatedTarget as Node | null;
               if (nextTarget && anchorEl?.contains(nextTarget)) return;
               hide("focus");

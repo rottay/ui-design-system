@@ -90,8 +90,11 @@
   overflow: visible;
 }
 
-.ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface']:focus-within {
-  outline: var(--ds-focus-ring-width) var(--ds-edge-standard-style) var(--ds-hover-card-focus-color, var(--ds-focus-ring-color));
+/* The card is never a focus target: the control the keyboard holds inside it
+   wears its own indicator. The outline is transparent until a tenant states a
+   focus colour. */
+.ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface']:is([data-state~='focus-visible'], :has(:focus-visible)) {
+  outline: var(--ds-focus-ring-width) var(--ds-edge-standard-style) var(--ds-hover-card-focus-color, transparent);
   outline-offset: var(--ds-focus-ring-offset);
 }
 
@@ -111,5 +114,11 @@
 @media (forced-colors: active) {
   .ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'][data-placement] {
     border: 1px solid CanvasText;
+  }
+
+  /* Forced colors repaint a transparent outline: the focused control inside
+     keeps the only one. */
+  .ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface']:is([data-state~='focus-visible'], :has(:focus-visible)) {
+    outline: none;
   }
 }

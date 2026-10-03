@@ -27,7 +27,8 @@ import {
 } from "@tests/support/family-contract";
 import { compileVerticalThroughDoor } from "@tests/support/theme-door";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
-import { buildLoweringContext } from "../../../../pipeline";
+import type { FamilyDeriver } from "../../../../../foundation/contract";
+import { buildLoweringContext, runDerivation } from "../../../../pipeline";
 import { tooltipChromeDeriver } from "..";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
@@ -207,5 +208,34 @@ describe("the frozen engines keep the legacy pair", () => {
     ]) {
       expect(read(path)).not.toMatch(/--ds-tooltip-(bordered|minimal)-/);
     }
+  });
+});
+
+describe("the bubble's focus colour", () => {
+  it("stays transparent on every theme, so the bubble's frame rests on the tenant's focus signature", () => {
+    for (const fixture of FIXTURES) {
+      const derived = tooltipChromeDeriver.derive(
+        buildLoweringContext({ theme: fixture.theme, tenant: fixture.tenant }),
+        {}
+      );
+      expect(derived["--ds-tooltip-focus-color"], fixture.label).toBe("transparent");
+    }
+    expect(tooltipChromeDeriver.produces).toContain("--ds-tooltip-focus-color");
+  });
+
+  it("lets a tenant statement of the colour outrank the transparent default", () => {
+    const tenant: FamilyDeriver = {
+      family: "stated-tenant-tooltip-focus",
+      rank: "tenant",
+      consumes: ["chrome.*"],
+      produces: ["--ds-tooltip-focus-color"],
+      derive: () => ({ "--ds-tooltip-focus-color": "currentColor" }),
+    };
+    const result = runDerivation(buildLoweringContext({ theme: firstPartyFixture("bithire") }), [
+      tooltipChromeDeriver,
+      tenant,
+    ]);
+    expect(result.channels["--ds-tooltip-focus-color"]).toBe("currentColor");
+    expect(result.provenance.get("--ds-tooltip-focus-color")?.rank).toBe("tenant");
   });
 });
