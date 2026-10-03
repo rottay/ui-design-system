@@ -116,8 +116,6 @@ export type {
   BoxOverflow,
   BoxMotion,
   BoxTextAlign,
-  BoxTextAlignInput,
-  LegacyPhysicalBoxTextAlign,
 } from "./contracts";
 
 export type { ResponsiveValue } from "@/foundation/contracts/kernel/responsive/values";

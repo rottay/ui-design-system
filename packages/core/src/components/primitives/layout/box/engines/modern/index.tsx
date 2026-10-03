@@ -31,7 +31,7 @@ import React, {
   type CSSProperties,
 } from "react";
 import type { BoxProps, BoxSpacing } from "../../contracts";
-import { BOX_DEFAULTS, SPACING_MAP, isVoidElement, normalizeBoxTextAlign } from "../../contracts";
+import { BOX_DEFAULTS, SPACING_MAP, isVoidElement } from "../../contracts";
 import {
   generateResponsiveCSS,
   scalarOrUndefined,
@@ -304,10 +304,8 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
     style.gridArea = props.gridArea;
   }
 
-  // Text -- the deprecated physical aliases become logical here, so the DOM
-  // never carries an alignment the reading direction cannot move.
   if (props.textAlign !== undefined) {
-    style.textAlign = normalizeBoxTextAlign(props.textAlign);
+    style.textAlign = props.textAlign;
   }
   if (props.color !== undefined) {
     style.color = props.color;
