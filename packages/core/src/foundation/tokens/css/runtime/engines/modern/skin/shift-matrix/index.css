@@ -193,12 +193,15 @@
   display: contents;
 }
 
-/* Single inset outline ring: the primitive's own box-shadow focus ring is
-   suppressed so the family keeps exactly one focus affordance. */
-.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
-  box-shadow: none;
+/* The cell fills its table cell and the scroll region clips it, so the tenant
+   focus signature rides an overlay inset by its own reach. */
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  content: '';
+  border-radius: inherit;
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 /* State paint: bg + ink from the semantic triplets (border rides the cell). */
@@ -359,8 +362,12 @@
   }
 
   .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
-    outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px));
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
+  }
+
+  .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+    box-shadow: none;
   }
 }
 
