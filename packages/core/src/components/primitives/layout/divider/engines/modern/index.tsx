@@ -55,12 +55,10 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
     dashed = DIVIDER_DEFAULTS.dashed,
     children,
     textPosition: textPositionProp,
-    orientationMargin,
     plain = DIVIDER_DEFAULTS.plain!,
     color,
     thickness = DIVIDER_DEFAULTS.thickness,
     spacing: spacingProp,
-    margin,
     className = "",
     style,
     "data-testid": testId,
@@ -74,9 +72,9 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
     ? "dashed"
     : variantProp || DIVIDER_DEFAULTS.variant!;
   const textPosition: DividerLogicalTextPosition = resolveDividerTextPosition(
-    textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition
+    textPositionProp || DIVIDER_DEFAULTS.textPosition
   );
-  const spacing = spacingProp || margin || DIVIDER_DEFAULTS.spacing!;
+  const spacing = spacingProp || DIVIDER_DEFAULTS.spacing!;
 
   const isHorizontal = orientation === "horizontal";
   // Inline text is only supported in horizontal orientation

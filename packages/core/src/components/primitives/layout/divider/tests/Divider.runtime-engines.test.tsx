@@ -93,7 +93,7 @@ describe("Divider runtime engines", () => {
           orientation="vertical"
           variant="dotted"
           color={ENGINE_COLORS[engine as keyof typeof ENGINE_COLORS]}
-          margin="lg"
+          spacing="lg"
           thickness={3}
           style={{ minHeight: 48 }}
         >
@@ -140,7 +140,7 @@ describe("Divider runtime engines", () => {
         <Component
           data-testid={`divider-alias-${engine}`}
           type="horizontal"
-          orientationMargin="right"
+          textPosition="right"
           spacing="sm"
         >
           Aliased

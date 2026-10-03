@@ -142,6 +142,12 @@
       "reason": "6cc7faa37 RET-01-TONE: the deprecated per-component tone bridge (an identity alias of the kernel TONE_TO_VARIANT) retired from the contract; this engine follows the owner — one import removed, one kernel import added, one lookup identifier — same object, zero behaviour change. Shared-contract compile fix; independently audited.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/components/primitives/display/calendar/engines/classic/index.tsx": {
+      "blob": "0f95aba318cde1623ee04b4b772ebe47b72154a388c6cb29388a3eb2b9160c07",
+      "relocationDigest": "f1d84e0c4ca1b383aeca0fc5cfbd67bdf81523ca6cc04196d174846ec1535fb8",
+      "reason": "WO-RET-01: delete the two destructure-and-discard lines for dateFullCellRender and monthFullCellRender; the props were never read by any engine and the engine has no rest spread, nothing else changes.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/components/primitives/display/card/engines/classic/index.tsx": {
       "blob": "a555ef03334989a920e68c1084fec478e4cf2f9d5eb9c30e10bdd38ac63b5c7e",
       "relocationDigest": "9c6dd61c2d6f7094934ce2d1f648c9d5609e23dcbf3f3370c64fe91e2deecfe5",
@@ -353,15 +359,15 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/divider/engines/classic/index.tsx": {
-      "blob": "eeb18bafc91c13c9e06f924fa9916e67c9de77b7f53272ad8620372a16075226",
-      "relocationDigest": "c22aefc5fbeee21ecc99249e931baec478e24efc387c1f0b0a734303aab8e848",
-      "reason": "the frozen engine's own last-resort colour default moves into the engine file that owns it, value and consumer unchanged; the shared contract stops carrying frozen-engine paint",
+      "blob": "e6b6a35e346f89454a97483df1b9f78dbf5366fdc0d111bc3ecadb9dfe23811d",
+      "relocationDigest": "42ec28c1c93a19ddd10b6c396e63974da81e0766d1c0a5ff99a4cf9c086a8bcf",
+      "reason": "WO-RET-01: retire the forwarding aliases orientationMargin and margin (destructures, the two || fallback terms behind textPosition and spacing, and the stale alias comment); canonical path byte-identical, zero alias callers across package, showroom and apps. Also carries the earlier authorized change: the engine's own last-resort colour default lives in this file, value and consumer unchanged.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/divider/engines/rustic/index.tsx": {
-      "blob": "fd12795efb3acae8bb5c615442c7f26b125233fd4c162a9d78dd487313d627f0",
-      "relocationDigest": "15b67b2b9f02a1af7afde5e9c8be2ba8219a73ab34c892e80dfcae8d87fcf0bb",
-      "reason": "the frozen engine's own last-resort colour default moves into the engine file that owns it, value and consumer unchanged; the shared contract stops carrying frozen-engine paint",
+      "blob": "c8811e652eb76620e04c20be16365ef8d50edeb804cf6fd69c177ac8decb9c23",
+      "relocationDigest": "094fb5111c6c923efb23a83b5ea7669f1d0e978e08331dfe8b0390e30dc885f3",
+      "reason": "WO-RET-01: retire the forwarding aliases orientationMargin and margin (destructures and the two || fallback terms behind textPosition and spacing); canonical path byte-identical, zero alias callers across package, showroom and apps. Also carries the earlier authorized change: the engine's own last-resort colour default lives in this file, value and consumer unchanged.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/flex/engines/classic/index.tsx": {

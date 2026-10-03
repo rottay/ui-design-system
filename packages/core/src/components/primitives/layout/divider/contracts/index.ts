@@ -106,11 +106,6 @@ export interface DividerProps extends BaseComponentProps, EngineAwareProps {
    */
   textPosition?: DividerTextPosition;
   /**
-   * Alias for textPosition prop (for backwards compatibility with some libraries).
-   * @deprecated Use textPosition instead
-   */
-  orientationMargin?: DividerTextPosition;
-  /**
    * Display text without styling (plain text).
    * When true, text won't have extra font styling.
    * @default false
@@ -132,11 +127,6 @@ export interface DividerProps extends BaseComponentProps, EngineAwareProps {
    * @default 'md'
    */
   spacing?: DividerSpacing;
-  /**
-   * Alias for spacing prop (legacy support).
-   * @deprecated Use spacing instead
-   */
-  margin?: DividerSpacing;
   /**
    * Additional CSS class name(s) for the component.
    */

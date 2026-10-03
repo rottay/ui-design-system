@@ -175,22 +175,6 @@ export interface CalendarProps extends BaseComponentProps, EngineAwareProps {
   monthCellRender?: (date: Date) => ReactNode;
 
   /**
-   * Custom render function for entire date cell.
-   * @deprecated Use fullCellRender instead
-   * @param date - The date being rendered
-   * @returns Custom element to replace the entire cell
-   */
-  dateFullCellRender?: (date: Date) => ReactNode;
-
-  /**
-   * Custom render function for entire month cell.
-   * @deprecated Use fullCellRender instead
-   * @param date - The first day of the month being rendered
-   * @returns Custom element to replace the entire cell
-   */
-  monthFullCellRender?: (date: Date) => ReactNode;
-
-  /**
    * Custom render function for cell content (new API).
    * @param date - The date being rendered
    * @param info - Additional information about the cell

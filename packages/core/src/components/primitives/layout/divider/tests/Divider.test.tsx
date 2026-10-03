@@ -28,12 +28,10 @@ vi.mock(
             variant,
             dashed,
             textPosition,
-            orientationMargin,
             plain,
             color,
             thickness,
             spacing,
-            margin,
             className,
             style,
             "data-testid": testId,
@@ -43,9 +41,8 @@ vi.mock(
         ) => {
           const resolvedOrientation = orientation || type || "horizontal";
           const resolvedVariant = dashed ? "dashed" : variant || "solid";
-          const resolvedTextPosition =
-            textPosition || orientationMargin || "center";
-          const resolvedSpacing = spacing || margin || "md";
+          const resolvedTextPosition = textPosition || "center";
+          const resolvedSpacing = spacing || "md";
           const isHorizontal = resolvedOrientation === "horizontal";
           const hasChildren = !!children && isHorizontal;
 
@@ -237,18 +234,6 @@ describe("Divider", () => {
       }
     );
 
-    it("supports orientationMargin as alias for textPosition", () => {
-      render(
-        <Divider orientationMargin="left" data-testid="divider">
-          Text
-        </Divider>
-      );
-      expect(screen.getByTestId("divider")).toHaveAttribute(
-        "data-text-position",
-        "left"
-      );
-    });
-
     it("text position not set when no children", () => {
       render(<Divider textPosition="left" data-testid="divider" />);
       expect(screen.getByTestId("divider")).not.toHaveAttribute(
@@ -346,22 +331,6 @@ describe("Divider", () => {
         );
       }
     );
-
-    it("supports margin prop as alias for spacing", () => {
-      render(<Divider margin="lg" data-testid="divider" />);
-      expect(screen.getByTestId("divider")).toHaveAttribute(
-        "data-spacing",
-        "lg"
-      );
-    });
-
-    it("spacing prop takes precedence over margin prop", () => {
-      render(<Divider spacing="sm" margin="lg" data-testid="divider" />);
-      expect(screen.getByTestId("divider")).toHaveAttribute(
-        "data-spacing",
-        "sm"
-      );
-    });
   });
 
   describe("Accessibility", () => {

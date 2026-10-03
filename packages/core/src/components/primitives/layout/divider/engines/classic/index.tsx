@@ -58,30 +58,26 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
       dashed = DIVIDER_DEFAULTS.dashed,
       children,
       textPosition: textPositionProp,
-      orientationMargin,
       plain = DIVIDER_DEFAULTS.plain!,
       color,
       thickness = DIVIDER_DEFAULTS.thickness,
       spacing: spacingProp,
-      margin,
       className = "",
       style = {},
       "data-testid": testId,
       ...rest
     } = props;
 
-    // Resolve prop aliases: `type` is the legacy name for `orientation`,
-    // `orientationMargin` is the Ant Design alias for `textPosition`,
-    // and `margin` is the legacy alias for `spacing`
+    // Resolve prop aliases: `type` is the legacy name for `orientation`
     const orientation =
       orientationProp || type || DIVIDER_DEFAULTS.orientation!;
     const variant: DividerVariant = dashed
       ? "dashed"
       : variantProp || DIVIDER_DEFAULTS.variant!;
     const textPosition: DividerLogicalTextPosition = resolveDividerTextPosition(
-      textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition
+      textPositionProp || DIVIDER_DEFAULTS.textPosition
     );
-    const spacing = spacingProp || margin || DIVIDER_DEFAULTS.spacing!;
+    const spacing = spacingProp || DIVIDER_DEFAULTS.spacing!;
 
     const isHorizontal = orientation === "horizontal";
     // Text is only rendered inside horizontal dividers
