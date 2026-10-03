@@ -300,11 +300,15 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       value: resolvedSizeProp,
       resolve: (v: ButtonSize) => `var(--ds-button-${v}-icon-size)`,
     } as ResponsivePropEntry<any>);
-    responsiveEntries.push({
-      cssProperty: '--_ds-button-resolved-radius',
-      value: resolvedSizeProp,
-      resolve: (v: ButtonSize) => `var(--ds-button-${v}-radius)`,
-    } as ResponsivePropEntry<any>);
+    // A shape or an explicit radius owns the published radius; only a joined
+    // child still reads the size step, for its exterior corners.
+    if ((shape === 'default' && radius === undefined) || nativeButtonProps['data-connected'] === 'true') {
+      responsiveEntries.push({
+        cssProperty: '--ds-button-resolved-radius',
+        value: resolvedSizeProp,
+        resolve: (v: ButtonSize) => `var(--ds-button-${v}-radius)`,
+      } as ResponsivePropEntry<any>);
+    }
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;

@@ -62,7 +62,7 @@
      button with a card's corner. A tenant still reaches this through
      --ds-radius-* wherever it authors no control geometry, because the base
      layer resolves --ds-button-{size}-radius to that same ramp step. */
-  --_ds-button-resolved-radius: var(--ds-button-md-radius, var(--ds-radius-md));
+  --ds-button-resolved-radius: var(--ds-button-md-radius, var(--ds-radius-md));
   --ds-button-resolved-height: var(--ds-button-md-height);
   --ds-button-resolved-padding-y: var(--ds-button-md-padding-y);
 
@@ -111,7 +111,7 @@
      3px double keyline is its identity. The dashed variant's own style rule
      below still wins (equal specificity, later in the file). */
   border-style: var(--ds-edge-standard-style, solid);
-  border-radius: var(--_ds-button-resolved-radius);
+  border-radius: var(--ds-button-resolved-radius, var(--ds-radius-md));
   outline: none;
 
   transition:
@@ -383,7 +383,7 @@
 
 .ds-button.ds-button--modern[data-size='xs']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-xs-icon-size);
-  --_ds-button-resolved-radius: var(--ds-button-xs-radius, var(--ds-radius-sm));
+  --ds-button-resolved-radius: var(--ds-button-xs-radius, var(--ds-radius-sm));
   --ds-button-resolved-height: var(--ds-button-xs-height);
   --ds-button-resolved-padding-y: var(--ds-button-xs-padding-y);
   padding-inline: calc(
@@ -396,7 +396,7 @@
 
 .ds-button.ds-button--modern[data-size='sm']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-sm-icon-size);
-  --_ds-button-resolved-radius: var(--ds-button-sm-radius, var(--ds-radius-sm));
+  --ds-button-resolved-radius: var(--ds-button-sm-radius, var(--ds-radius-sm));
   --ds-button-resolved-height: var(--ds-button-sm-height);
   --ds-button-resolved-padding-y: var(--ds-button-sm-padding-y);
   padding-inline: calc(
@@ -409,7 +409,7 @@
 
 .ds-button.ds-button--modern[data-size='md']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
-  --_ds-button-resolved-radius: var(--ds-button-md-radius, var(--ds-radius-md));
+  --ds-button-resolved-radius: var(--ds-button-md-radius, var(--ds-radius-md));
   --ds-button-resolved-height: var(--ds-button-md-height);
   --ds-button-resolved-padding-y: var(--ds-button-md-padding-y);
   padding-inline: calc(
@@ -422,7 +422,7 @@
 
 .ds-button.ds-button--modern[data-size='lg']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-lg-icon-size);
-  --_ds-button-resolved-radius: var(--ds-button-lg-radius, var(--ds-radius-lg));
+  --ds-button-resolved-radius: var(--ds-button-lg-radius, var(--ds-radius-lg));
   --ds-button-resolved-height: var(--ds-button-lg-height);
   --ds-button-resolved-padding-y: var(--ds-button-lg-padding-y);
   padding-inline: calc(
@@ -435,7 +435,7 @@
 
 .ds-button.ds-button--modern[data-size='xl']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-xl-icon-size);
-  --_ds-button-resolved-radius: var(--ds-button-xl-radius, var(--ds-radius-xl));
+  --ds-button-resolved-radius: var(--ds-button-xl-radius, var(--ds-radius-xl));
   --ds-button-resolved-height: var(--ds-button-xl-height);
   --ds-button-resolved-padding-y: var(--ds-button-xl-padding-y);
   padding-inline: calc(
@@ -489,6 +489,28 @@
   border-radius: var(--ds-radius-full);
 }
 
+/* The published radius follows the shape and the explicit radius, so a carrier
+   drawn from it stays concentric. A joined child keeps its size step: its
+   exterior corners are the only rounded ones. */
+.ds-button.ds-button--modern:is([data-shape='circle'], [data-shape='round']):not([data-connected='true']) {
+  --ds-button-resolved-radius: var(--ds-radius-full);
+}
+.ds-button.ds-button--modern[data-shape='default'][data-radius='none']:not([data-connected='true']) {
+  --ds-button-resolved-radius: 0px;
+}
+.ds-button.ds-button--modern[data-shape='default'][data-radius='sm']:not([data-connected='true']) {
+  --ds-button-resolved-radius: var(--ds-radius-sm);
+}
+.ds-button.ds-button--modern[data-shape='default'][data-radius='md']:not([data-connected='true']) {
+  --ds-button-resolved-radius: var(--ds-radius-md);
+}
+.ds-button.ds-button--modern[data-shape='default'][data-radius='lg']:not([data-connected='true']) {
+  --ds-button-resolved-radius: var(--ds-radius-lg);
+}
+.ds-button.ds-button--modern[data-shape='default'][data-radius='full']:not([data-connected='true']) {
+  --ds-button-resolved-radius: var(--ds-radius-full);
+}
+
 /* -------------------------------------------------------------------------
    Connected-group geometry (Button.Group, F7, R1 unit 1).
 
@@ -513,23 +535,23 @@
 
 .ds-button-group[data-orientation='horizontal']
   > .ds-button.ds-button--modern[data-connected='true'][data-group-position~='first'] {
-  border-start-start-radius: var(--_ds-button-resolved-radius);
-  border-end-start-radius: var(--_ds-button-resolved-radius);
+  border-start-start-radius: var(--ds-button-resolved-radius);
+  border-end-start-radius: var(--ds-button-resolved-radius);
 }
 .ds-button-group[data-orientation='horizontal']
   > .ds-button.ds-button--modern[data-connected='true'][data-group-position~='last'] {
-  border-start-end-radius: var(--_ds-button-resolved-radius);
-  border-end-end-radius: var(--_ds-button-resolved-radius);
+  border-start-end-radius: var(--ds-button-resolved-radius);
+  border-end-end-radius: var(--ds-button-resolved-radius);
 }
 .ds-button-group[data-orientation='vertical']
   > .ds-button.ds-button--modern[data-connected='true'][data-group-position~='first'] {
-  border-start-start-radius: var(--_ds-button-resolved-radius);
-  border-start-end-radius: var(--_ds-button-resolved-radius);
+  border-start-start-radius: var(--ds-button-resolved-radius);
+  border-start-end-radius: var(--ds-button-resolved-radius);
 }
 .ds-button-group[data-orientation='vertical']
   > .ds-button.ds-button--modern[data-connected='true'][data-group-position~='last'] {
-  border-end-start-radius: var(--_ds-button-resolved-radius);
-  border-end-end-radius: var(--_ds-button-resolved-radius);
+  border-end-start-radius: var(--ds-button-resolved-radius);
+  border-end-end-radius: var(--ds-button-resolved-radius);
 }
 
 /* Governed seam: the shared 1px edge inside a joined quiet cluster reads the

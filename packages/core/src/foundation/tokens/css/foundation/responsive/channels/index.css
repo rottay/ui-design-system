@@ -184,10 +184,6 @@
   width: var(--_ds-rsp-width-xs);
 }
 
-[data-ds-responsive~="_ds-button-resolved-radius@xs"] {
-  --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-xs);
-}
-
 [data-ds-responsive~="_ds-input-responsive-height@xs"] {
   --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-xs);
 }
@@ -230,6 +226,10 @@
 
 [data-ds-responsive~="ds-button-resolved-padding-y@xs"] {
   --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-xs);
+}
+
+[data-ds-responsive~="ds-button-resolved-radius@xs"] {
+  --ds-button-resolved-radius: var(--_ds-rsp-ds-button-resolved-radius-xs);
 }
 
 [data-ds-responsive~="ds-card-instance-padding@xs"] {
@@ -485,10 +485,6 @@
     width: var(--_ds-rsp-width-sm);
   }
 
-  [data-ds-responsive~="_ds-button-resolved-radius@sm"] {
-    --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-sm);
-  }
-
   [data-ds-responsive~="_ds-input-responsive-height@sm"] {
     --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-sm);
   }
@@ -531,6 +527,10 @@
 
   [data-ds-responsive~="ds-button-resolved-padding-y@sm"] {
     --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-sm);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-radius@sm"] {
+    --ds-button-resolved-radius: var(--_ds-rsp-ds-button-resolved-radius-sm);
   }
 
   [data-ds-responsive~="ds-card-instance-padding@sm"] {
@@ -787,10 +787,6 @@
     width: var(--_ds-rsp-width-md);
   }
 
-  [data-ds-responsive~="_ds-button-resolved-radius@md"] {
-    --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-md);
-  }
-
   [data-ds-responsive~="_ds-input-responsive-height@md"] {
     --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-md);
   }
@@ -833,6 +829,10 @@
 
   [data-ds-responsive~="ds-button-resolved-padding-y@md"] {
     --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-md);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-radius@md"] {
+    --ds-button-resolved-radius: var(--_ds-rsp-ds-button-resolved-radius-md);
   }
 
   [data-ds-responsive~="ds-card-instance-padding@md"] {
@@ -1089,10 +1089,6 @@
     width: var(--_ds-rsp-width-lg);
   }
 
-  [data-ds-responsive~="_ds-button-resolved-radius@lg"] {
-    --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-lg);
-  }
-
   [data-ds-responsive~="_ds-input-responsive-height@lg"] {
     --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-lg);
   }
@@ -1135,6 +1131,10 @@
 
   [data-ds-responsive~="ds-button-resolved-padding-y@lg"] {
     --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-lg);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-radius@lg"] {
+    --ds-button-resolved-radius: var(--_ds-rsp-ds-button-resolved-radius-lg);
   }
 
   [data-ds-responsive~="ds-card-instance-padding@lg"] {
@@ -1391,10 +1391,6 @@
     width: var(--_ds-rsp-width-xl);
   }
 
-  [data-ds-responsive~="_ds-button-resolved-radius@xl"] {
-    --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-xl);
-  }
-
   [data-ds-responsive~="_ds-input-responsive-height@xl"] {
     --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-xl);
   }
@@ -1437,6 +1433,10 @@
 
   [data-ds-responsive~="ds-button-resolved-padding-y@xl"] {
     --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-xl);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-radius@xl"] {
+    --ds-button-resolved-radius: var(--_ds-rsp-ds-button-resolved-radius-xl);
   }
 
   [data-ds-responsive~="ds-card-instance-padding@xl"] {
@@ -1693,10 +1693,6 @@
     width: var(--_ds-rsp-width-2xl);
   }
 
-  [data-ds-responsive~="_ds-button-resolved-radius@2xl"] {
-    --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-2xl);
-  }
-
   [data-ds-responsive~="_ds-input-responsive-height@2xl"] {
     --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-2xl);
   }
@@ -1739,6 +1735,10 @@
 
   [data-ds-responsive~="ds-button-resolved-padding-y@2xl"] {
     --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-2xl);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-radius@2xl"] {
+    --ds-button-resolved-radius: var(--_ds-rsp-ds-button-resolved-radius-2xl);
   }
 
   [data-ds-responsive~="ds-card-instance-padding@2xl"] {

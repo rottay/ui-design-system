@@ -96,7 +96,7 @@ describe('Modern ShiftMatrix — the assignable cell wears the tenant focus sign
           'position: absolute',
           'inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width))',
           "content: ''",
-          'border-radius: max( 0px, calc(var(--_ds-button-resolved-radius) - var(--ds-focus-ring-offset) - var(--ds-focus-ring-width)) )',
+          'border-radius: max( 0px, calc(var(--ds-button-resolved-radius) - var(--ds-focus-ring-offset) - var(--ds-focus-ring-width)) )',
           'box-shadow: var(--ds-focus-ring)',
           'pointer-events: none',
         ],

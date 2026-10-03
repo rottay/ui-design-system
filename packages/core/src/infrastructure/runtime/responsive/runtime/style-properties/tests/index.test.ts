@@ -410,12 +410,12 @@ describe('generateResponsiveCSS keeps every shape its resolvers really emit', ()
     const projection = generateResponsiveCSS([
       { cssProperty: '--ds-button-resolved-height', value: { xs: 'var(--ds-button-lg-height)' } },
       { cssProperty: '--_ds-stack-gap-current', value: { xs: 'var(--ds-spacing-4, 1rem)' } },
-      { cssProperty: '--_ds-button-resolved-radius', value: { xs: 'var(--ds-button-2xl-radius)' } },
+      { cssProperty: '--ds-button-resolved-radius', value: { xs: 'var(--ds-button-2xl-radius)' } },
     ]);
     expect(declarationsOf(projection)).toEqual({
       '--ds-button-resolved-height@xs': 'var(--ds-button-lg-height)',
       '--_ds-stack-gap-current@xs': 'var(--ds-spacing-4, 1rem)',
-      '--_ds-button-resolved-radius@xs': 'var(--ds-button-2xl-radius)',
+      '--ds-button-resolved-radius@xs': 'var(--ds-button-2xl-radius)',
     });
   });
 });

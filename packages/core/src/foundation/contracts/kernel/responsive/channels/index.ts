@@ -79,7 +79,6 @@ export const RESPONSIVE_STANDARD_CHANNELS = [
  * them without contesting compiled tenant paint.
  */
 export const RESPONSIVE_CUSTOM_CHANNELS = [
-  '--_ds-button-resolved-radius',
   '--_ds-input-responsive-height',
   '--_ds-stack-divider-gap-block',
   '--_ds-stack-divider-gap-inline',
@@ -91,6 +90,7 @@ export const RESPONSIVE_CUSTOM_CHANNELS = [
   '--ds-button-resolved-height',
   '--ds-button-resolved-icon-size',
   '--ds-button-resolved-padding-y',
+  '--ds-button-resolved-radius',
   '--ds-card-instance-padding',
   '--ds-input-responsive-gap',
   '--ds-input-responsive-radius',
