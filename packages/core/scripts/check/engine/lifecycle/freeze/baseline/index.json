@@ -130,16 +130,28 @@
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/components/primitives/display/avatar/engines/classic/index.tsx": {
+      "blob": "ed451b32a94c09c692d91379e3ae494dc92ebc63f2cb32f34f6deac2981d1a28",
+      "relocationDigest": "75d67d1a563ae357268f011899297f431143df8f5f12d0fc627495daeb90fe29",
+      "reason": "6cc7faa37 RET-01-TONE: the deprecated per-component tone bridge (an identity alias of the kernel TONE_TO_VARIANT) retired from the contract; this engine follows the owner — one import removed, one kernel import added, one lookup identifier — same object, zero behaviour change. Shared-contract compile fix; independently audited.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/display/avatar/engines/rustic/index.tsx": {
+      "blob": "85a8ebdf6bedb34743f859f704b66464a8e8bf66afabb646a961cea785c96199",
+      "relocationDigest": "b6add626902a97e697d11d4da7c6265d575d00a83624000ed94560e1f5bf7a7e",
+      "reason": "6cc7faa37 RET-01-TONE: the deprecated per-component tone bridge (an identity alias of the kernel TONE_TO_VARIANT) retired from the contract; this engine follows the owner — one import removed, one kernel import added, one lookup identifier — same object, zero behaviour change. Shared-contract compile fix; independently audited.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/components/primitives/display/badge/engines/classic/index.tsx": {
-      "blob": "ef8abeae88240d92296b1c860375f48cd78c7aaff5a9de0268d1218098decffc",
-      "relocationDigest": "1b7416c1496678a703a3f7307c25a24a370931dbc1b62035d6a9d1c89f3906a0",
-      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
+      "blob": "530351cbdcbc2882f0ce620e2ec3565d5ef08f01ec2fd4ebf77b224c64548498",
+      "relocationDigest": "cd0d1122d526462a75f58aea81504df4ced84a83bc8ab57f93996069cda9b8c7",
+      "reason": "6cc7faa37 RET-01-TONE: the deprecated per-component tone bridge (an identity alias of the kernel TONE_TO_VARIANT) retired from the contract; this engine follows the owner — one import removed, one kernel import added, one lookup identifier — same object, zero behaviour change. Shared-contract compile fix; independently audited.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/display/badge/engines/rustic/index.tsx": {
-      "blob": "5a01f3cf936114a5d5fde06869b3f9c467bce1fbe5a398364704b4add1aa2ff6",
-      "relocationDigest": "f90a53c171f8f3e689ade99eb919dcbe385639e8c7326045747a7fd51cf4b781",
-      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
+      "blob": "b0fd1d6e54150a554321de68ac8efca7c91bd1a8d3df00248c5ab87255b0fc65",
+      "relocationDigest": "5d20dcb432b8288f1614053d00ef5764633743ab517a6bcb4ec1eec848eef45b",
+      "reason": "6cc7faa37 RET-01-TONE: the deprecated per-component tone bridge (an identity alias of the kernel TONE_TO_VARIANT) retired from the contract; this engine follows the owner — one import removed, one kernel import added, one lookup identifier — same object, zero behaviour change. Shared-contract compile fix; independently audited.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/display/card/engines/classic/index.tsx": {
@@ -161,15 +173,15 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/display/tag/engines/classic/index.tsx": {
-      "blob": "5d943bababf89e30f81e6120682d7d0c218ed77e79ab41dbe6aff2f102c66d58",
-      "relocationDigest": "a19d9263ec2a591eb75a0976ce5ea705cd2ee313ee1b125396661c71a506f4b7",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "17ba81d845ad19dedba1092972a227744cce59b3a4c39f67ab6bcef85c7009a2",
+      "relocationDigest": "18832732eca86da56219aa548b819c6d2026bb24098b7cfbfeff28fcd096dfdb",
+      "reason": "6cc7faa37 RET-01-TONE: the deprecated per-component tone bridge (an identity alias of the kernel TONE_TO_VARIANT) retired from the contract; this engine follows the owner — one import removed, one kernel import added, one lookup identifier — same object, zero behaviour change. Shared-contract compile fix; independently audited.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/display/tag/engines/rustic/index.tsx": {
-      "blob": "8649c0427d6099de6518eb78932ec767e43e6de105a535906810d4cef80b8bab",
-      "relocationDigest": "bd994ae7cb3b31cc3b1cc8ac137c25797ff4b41dc31fe38f72318e1eef82e242",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "8487cfad3a2021d781f15bd34508ed341fe191db3ff24acfcbb3db01dad72fe6",
+      "relocationDigest": "b124c72425bcbd71ccfc926996682ce106480f107c2d5959741193a2559f2d3a",
+      "reason": "6cc7faa37 RET-01-TONE: the deprecated per-component tone bridge (an identity alias of the kernel TONE_TO_VARIANT) retired from the contract; this engine follows the owner — one import removed, one kernel import added, one lookup identifier — same object, zero behaviour change. Shared-contract compile fix; independently audited.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx": {
@@ -491,9 +503,9 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css": {
-      "blob": "1c833bd8e1579755494be8733526f9694a0193e31a2f8b5060be022d3d7fd608",
-      "relocationDigest": "63a9e5e3cbb30784dd49bbedb96efa72c8eb98cd975c06032f9b83773cc008af",
-      "reason": "L6/STOP-3, on the STOP-2 precedent: the seven classic scrollbar rules, their prefers-reduced-motion guard and the classic third of the shared size enum move into the engine theme that already owns .rottay-sheet-classic, declarations byte-identical and the same producer at scroll-area/engines/classic/index.tsx:70. Same layer promotion, measured inert. The relocated guard stays observed: reduced-motion-guard.test.ts follows it by named selector rather than by roster membership, because this file animates an antd surface it does not guard and a roster row would claim coverage it lacks.",
+      "blob": "97b7f455e3e37ced8027aa460a981863eb864c23fab6a8eda856df1a05c464af",
+      "relocationDigest": "a8ff952ba59f7e3e8bd47cd087f6ff14c36ff2bd71e4006a8284dbe9ffc0477e",
+      "reason": "3bd90b093 WO-RET-02 bundle split: engine-neutral rules moved VERBATIM to engines/shared; then 1f1de09ab: the three antd link rules return VERBATIM to their sealed position after the split moved them; cascade-order repair measured in Chromium (frozen-engine-cascade drill), no new rule.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css": {
@@ -568,6 +580,12 @@
       "reason": "L6/STOP-3, on the STOP-2 precedent: the six rustic scrollbar rules and the rustic third of the shared size enum move out of presentation/components/skin/scroll-area into the engine that owns them, declarations byte-identical and the same producer at scroll-area/engines/rustic/index.tsx:77. The rules were outside the freeze gate's reach at their old path; this brings them under it. Cascade measured inert: layer(rottay-components) -> layer(rottay-engines), and no rule in that layer or later targets .rottay-scroll-area-rustic anywhere in src. Per-engine cascade projection byte-identical against HEAD.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/search-command-bar/index.css": {
+      "blob": "4ed35f8af27eb2420ce51a417fbc2cd6a898d717e2507f4736a2a3a471c6e713",
+      "relocationDigest": "beaa000e6f42a8b6f09cf5e646082a8008f6d8ef5914d1f788ca3eb127454e9e",
+      "reason": "3bd90b093 WO-RET-02 bundle split: engine-neutral rules moved VERBATIM to engines/shared (classic/theme -30, rustic/theme -87) and the six Rustic search-command-bar selector members split into rustic/skin/search-command-bar with identical declarations; relocation of frozen paint, no rule text changed; DT-ratified in the commit.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select/index.css": {
       "blob": "140ba0b5876da39555728e2d0c46ae24f2b9a53993938229d557a5407d9c3a99",
       "relocationDigest": "dc6197ad5bdeda1743f4c24b8bfe7ee9eb004430388dbb67b90627b1c59dad7c",
@@ -623,9 +641,9 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css": {
-      "blob": "37978f3806cdad542eb963a717b18ace7e338feb49c2920dfea7a66c9643152d",
-      "relocationDigest": "fd2f49d594f893e65470d0f3aee38ce60a79f30b363441d680e6a477085d6abe",
-      "reason": "9d924e9f2 (WO-FAM-01): the .ds-switch block is deleted, 52 lines removed and none added, following the D-16 merge of Switch into Toggle. Measured: no ds-switch__* class has a consumer anywhere in packages/core/src.",
+      "blob": "09d11c7b0221c7720bf8464b92dbf84e4398ff32dd0c3712f0b53a8876e95d7f",
+      "relocationDigest": "0b4e3e34e7853639a883d2bfb0b6b94ef119b1d533df6c2de426c22d838e2ae3",
+      "reason": "7a79c1b89 WO-RET-02 packet 1: 34+ rules measured unread by the selector census deleted, none added, per retire.md:89/98 (delete only what is provably unreachable); deadSelectorsRustic ratchet 132->98; then 3bd90b093 bundle split: engine-neutral rules moved VERBATIM to engines/shared, no rule text changed.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/ui/patterns/data/column-settings/engines/rustic/index.tsx": {
