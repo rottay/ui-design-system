@@ -90,11 +90,11 @@ describe('saved-views accessibility', () => {
 /* ---------------------------------------------------------------------------
  * The focus signature, under real focus.
  *
- * The family paints its focus ring from `:focus-visible`, which no stamped
- * attribute produces: the probe gives the pill and the menu trigger real DOM
- * focus, asserts the element really holds it and really matches
- * `:focus-visible`, and reads the outline back. A ring that only appears when
- * a test writes `data-state` is not evidence that a keyboard user sees one.
+ * The pill and the menu trigger are composed Buttons, so the focus signature
+ * they wear is the Button's: the probe gives each real DOM focus, asserts the
+ * element really holds it and really matches `:focus-visible`, and reads the
+ * signature back. A ring that only appears when a test writes `data-state` is
+ * not evidence that a keyboard user sees one.
  * ------------------------------------------------------------------------ */
 
 function chromiumDriver(): { launch(): Promise<any> } {
@@ -113,8 +113,9 @@ function chromiumDriver(): { launch(): Promise<any> } {
 interface FocusReading {
   readonly focused: boolean;
   readonly focusVisible: boolean;
-  readonly outlineWidth: string;
-  readonly outlineOffset: string;
+  readonly boxShadow: string;
+  readonly outlineStyle: string;
+  readonly outlineColor: string;
   readonly pillPad: string;
 }
 
@@ -152,8 +153,9 @@ async function focusReadings(
           out[id] = {
             focused: document.activeElement === element,
             focusVisible: element.matches(':focus-visible'),
-            outlineWidth: computed.outlineWidth,
-            outlineOffset: computed.outlineOffset,
+            boxShadow: computed.boxShadow,
+            outlineStyle: computed.outlineStyle,
+            outlineColor: computed.outlineColor,
             pillPad: getComputedStyle(pill).paddingTop,
           };
           element.blur();
@@ -168,7 +170,7 @@ async function focusReadings(
 }
 
 describe('saved-views declared consumes', () => {
-  it('moves the real focus ring with the focus signature and holds the pill geometry', async () => {
+  it('wears the tenant focus signature under real focus and holds the pill geometry', async () => {
     const base = await focusReadings({});
     const glow = await focusReadings({ 'states.focus-style': 'glow' });
     for (const id of ['pill', 'trigger'] as const) {
@@ -176,9 +178,18 @@ describe('saved-views declared consumes', () => {
       expect(base[id].focused, `${id} really holds focus`).toBe(true);
       expect(base[id].focusVisible, `${id} really matches :focus-visible`).toBe(true);
       expect(glow[id].focused).toBe(true);
-      // `consumes: surfaces.focusStyle` -- the family's own outline follows the signature.
-      expect(glow[id].outlineWidth, `${id} outline width`).not.toBe(base[id].outlineWidth);
-      expect(glow[id].outlineOffset, `${id} outline offset`).not.toBe(base[id].outlineOffset);
+      // `consumes: surfaces.focusStyle` -- the signature is a shadow and moves with the decision.
+      expect(base[id].boxShadow, `${id} base signature`).not.toBe('none');
+      expect(glow[id].boxShadow, `${id} glow signature`).not.toBe('none');
+      expect(glow[id].boxShadow, `${id} signature`).not.toBe(base[id].boxShadow);
+      expect(glow[id].boxShadow, `${id} glow halo`).toContain('12px');
+      // A solid outline would draw the same contour under every signature.
+      for (const reading of [base[id], glow[id]]) {
+        expect(
+          reading.outlineStyle === 'none' || reading.outlineColor === 'rgba(0, 0, 0, 0)',
+          `${id} paints no solid outline`,
+        ).toBe(true);
+      }
       // Negative control: the pill's rhythm is geometry, not focus.
       expect(glow[id].pillPad, `${id} control pillPad`).toBe(base[id].pillPad);
     }

@@ -237,8 +237,6 @@
 
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__pill [data-part='pill-select']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
   border-radius: var(--ds-saved-views-focus-ring-radius, var(--ds-radius-sm));
 }
 
@@ -364,12 +362,6 @@
   background: var(--ds-color-alpha-white-20);
 }
 
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
-}
-
 /* ---- inputs (rename + create): the primitive's field wrapper carries the
         pattern class; the unstyled control inside is painted here. ---- */
 .ds-pattern-saved-views.ds-engine-modern
@@ -470,12 +462,6 @@
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__create-button[data-part='create-button']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
-}
-
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part='create-button']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 /* ---- coarse pointers: the pill and the create button meet the physical
