@@ -110,9 +110,10 @@ describeCausality({
     { id: 'gridCorner', selector: GRID, property: 'border-top-left-radius' },
     { id: 'eventCorner', selector: EVENT, property: 'border-top-left-radius' },
     {
-      id: 'focusRing',
+      id: 'focusSignature',
       selector: CELL,
-      property: 'outline-width',
+      property: 'box-shadow',
+      pseudo: '::after',
       attributes: { 'data-state': 'focus-visible' },
     },
     { id: 'weekdayPad', selector: WEEKDAY, property: 'padding-top' },
@@ -143,11 +144,11 @@ describeCausality({
       holds: 'eventGround',
       in: VERTICALS,
     },
-    // `consumes: states.focus` -- a day cell is a real roving tab stop, so the
-    // focus signature is the width of its own inset ring.
+    // `consumes: states.focus` -- a day cell is a real roving tab stop, so it
+    // wears the tenant focus signature on its inset overlay.
     'states.focus-style': {
       value: 'glow',
-      moves: ['focusRing'],
+      moves: ['focusSignature'],
       holds: 'gridCorner',
       in: VERTICALS,
     },

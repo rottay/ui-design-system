@@ -206,12 +206,24 @@
   background: var(--ds-surface-inset);
 }
 
-/* ---- gridcell keyboard ring: inset (the grid hairlines own the borders) ---- */
+/* ---- gridcell keyboard focus: the grid clips its cells, so the tenant focus
+        signature rides an overlay inset by its own reach, only while the
+        cell itself holds focus (F2 hands focus to a chip inside it) ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell'][data-empty='false']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
+  position: relative;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: calc(-1 * var(--ds-focus-ring-width));
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  [data-part='day-cell'][data-empty='false']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  content: '';
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 /* ---- selected day: SHAPE frame on the primary axis (never hue alone) ---- */
@@ -283,12 +295,15 @@
   [data-part='event']:is([data-state~='pressed'], :active) {
   filter: brightness(0.94);
 }
+/* Positioned so the signature paints above the neighbouring chips. */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell']
   [data-part='event']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  position: relative;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
@@ -394,7 +409,13 @@
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell'][data-empty='false']:is([data-state~='focus-visible'], :focus-visible) {
-    outline-color: Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
+  }
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    [data-part='day-cell'][data-empty='false']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+    box-shadow: none;
   }
 
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
@@ -415,7 +436,9 @@
     > [data-part='grid']
     [data-part='day-cell']
     [data-part='event']:is([data-state~='focus-visible'], :focus-visible) {
-    outline-color: Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
