@@ -24,7 +24,7 @@ consumer wrapper, a spread, a props object, a namespace or dynamic import, a
 name reached through a consumer-owned alias, a replacement name the file
 already shadows.
 
-The 3.0 map (`maps/3.0/index.json`) has 578 entries: 132 can rewrite and 446
+The 3.0 map (`maps/3.0/index.json`) has 607 entries: 155 can rewrite and 452
 are report-only. Per class:
 
 - `subpath-removed` (86). 83 re-point: the 75 granular per-tier subpaths and
@@ -38,7 +38,7 @@ are report-only. Per class:
   import; inside a stylesheet it is reported, never rewritten. 3 are
   report-only because no public substitute is named: `./effects`,
   `./spatial/spec`, `./commercial.css`.
-- `symbol-removed` (20). Rewritten: the import binding moves to the published
+- `symbol-removed` (21). Rewritten: the import binding moves to the published
   replacement name and every reference bound to it follows; a name retired on
   a removed door moves to its successor on the target door under its local
   name (`TreeViewConnector as TreeView`). Reported: a cross-door replacement
@@ -58,15 +58,18 @@ are report-only. Per class:
   from `Calendar`, when the value has no side effect. Reported there: a value
   with a side effect, a spread, a props object, a consumer wrapper. 1 is
   report-only: `loading` on `ChartScaffold`, which becomes `state="loading"`.
-- `union-member-removed` (17). Rewritten: a string literal on a prop of an
-  element proven to be the design-system component (`small` / `middle` /
+- `union-member-removed` (41). 39 rewrite a string literal on a prop of an
+  element proven to be the design-system component: `small` / `middle` /
   `large` to `sm` / `md` / `lg` on `AutoComplete`, `Cascader`, `Collapse`,
-  `ColorPicker` and `TreeSelect`; `left` / `right` to `start` / `end` on `Box`
-  only under `--assume-ltr`). Reported: a non-literal value, a spread, a
-  consumer wrapper.
-- `symbol-removed-no-replacement` (62). Report-only: nothing public replaces
+  `ColorPicker` and `TreeSelect`; those three and `default` to `md` on
+  `Table`, `Form`, `InputNumber`, `TimePicker` and `DatePicker`; `middle` and
+  `default` to `md` on `Switch`; `left` / `right` to `start` / `end` on `Box`
+  only under `--assume-ltr`. Reported there: a non-literal value, a spread, a
+  consumer wrapper. 2 are report-only: `small` and `large` on `Switch`, which
+  render a different step on Classic and Rustic once renamed.
+- `symbol-removed-no-replacement` (65). Report-only: nothing public replaces
   the export, so every design-system-resolved use is listed with its guidance.
-- `member-changed` (34). Report-only: every design-system-resolved use of the
+- `member-changed` (35). Report-only: every design-system-resolved use of the
   owning export is listed with what changed.
 - `css-class-renamed` (2 entries, 24 class names). Report-only: each exact
   class token is listed with its canonical name.

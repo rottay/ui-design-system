@@ -244,3 +244,12 @@ test('the 3.0 map moves the commercial tree import to the connector names, and a
     assert.deepEqual(read(), written);
   });
 });
+
+test('an imported name the module exports locally keeps the module\'s own exported name', () => {
+  const fixture = CASES.find((item) => item.name === 'symbol-removed/local-reexport');
+  const expected = snapshot(fixture.expected);
+  assert.equal(expected['index.ts'], "import type { DensityPosture } from '@rottay/design-system';\n\n"
+    + "export type { DensityPosture as DensityKey };\n\nexport const fallback: DensityPosture = 'comfortable';\n");
+  assert.equal(expected['barrel.ts'], "export type { DensityPosture as DensityKey } from '@rottay/design-system';\n");
+  assert.ok(reportOf(fixture.name).every((row) => row.action === 'rewrite' && row.id === 'symbol-removed/.#DensityKey'));
+});

@@ -222,6 +222,7 @@ test('the entries that need a decision per site are report-only, whatever their 
     'prop-renamed/.#CountUpProps.delay', 'prop-renamed/.#CountUpProps.duration',
     'prop-renamed/.#StaggerChildrenProps.delayChildren', 'prop-renamed/.#StaggerChildrenProps.staggerDelay',
     'prop-renamed/.#TextRevealProps.delay', 'prop-renamed/.#TextRevealProps.duration',
+    'union-member-removed/.#SwitchProps.large', 'union-member-removed/.#SwitchProps.small',
   ]);
   for (const entry of decided) assert.equal(entry.replacement?.values, undefined, `${entry.id}: no value-table workaround`);
   assert.equal(map.byId.has('prop-renamed/.#ChartScaffoldProps.loading'), false);
@@ -230,8 +231,8 @@ test('the entries that need a decision per site are report-only, whatever their 
 test('the literal renames of the retired size and alignment spellings are authored member by member', () => {
   const entries = of('union-member-removed');
   const sizes = entries.filter((entry) => entry.prop === 'size');
-  assert.equal(sizes.length, 15);
-  for (const entry of sizes) assert.equal(entry.replacement.member, { small: 'sm', middle: 'md', large: 'lg' }[entry.member], entry.id);
+  assert.equal(sizes.length, 39);
+  for (const entry of sizes) assert.equal(entry.replacement.member, { small: 'sm', middle: 'md', large: 'lg', default: 'md' }[entry.member], entry.id);
   const sides = entries.filter((entry) => entry.prop === 'textAlign');
   assert.deepEqual(sides.map((entry) => [entry.member, entry.replacement.member, entry.directional]), [['left', 'start', true], ['right', 'end', true]]);
   assert.equal(entries.length, sizes.length + sides.length);

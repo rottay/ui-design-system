@@ -373,6 +373,36 @@
       "changeset": null
     },
     {
+      "file": "src/components/primitives/display/table/contracts/index.ts",
+      "anchor": "TablePaginationConfig.size",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "Ant Design pagination size (`default | small`): the frozen Classic Table engine hands the whole `pagination` object to the Ant table, which is the only implementer of that spelling; no Modern or Rustic code reads the member, so it leaves with Classic.",
+      "scope": "One optional member of `TablePaginationConfig`, a different member from the `size` prop of `Table`. No caller was measured for this row; the changeset census covers the `size` prop of the six components, not this member.",
+      "replacement": "none: the Ant pagination size has no design-system counterpart, and Modern and Rustic size the pager from the table itself",
+      "canonicalOwner": "src/components/primitives/display/table/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-10-03",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/table/engines/classic/index.tsx",
+          "needle": "pagination={pagination as any}",
+          "absentNeedle": "pagination.size",
+          "note": "The engine has no pagination code of its own: the needle is the pass-through of the whole object to Ant Design, and it never reads or maps the member."
+        },
+        {
+          "kind": "census-receipt",
+          "path": "packages/core/src/components/primitives/display/table/contracts/index.ts",
+          "needle": "size?: 'default' | 'small';",
+          "note": "Measured: the member keeps its Ant type and is marked deprecated in the contract. Not measured: call sites that pass `pagination.size` in the showroom or the three apps."
+        }
+      ],
+      "codemod": null,
+      "changeset": ".changeset/ret-01-size-type-and-legacy-size-values.md"
+    },
+    {
       "file": "src/components/primitives/display/tag/contracts/index.ts",
       "anchor": "TagVariant",
       "class": "compat-consumed",
@@ -825,7 +855,7 @@
       "file": "src/components/primitives/inputs/toggle/contracts/index.ts",
       "anchor": "SwitchSize",
       "class": "compat-consumed",
-      "reason": "Size vocabulary of the `Switch` alias, including the Ant spelling `small` that app-platform passes; `ToggleSize` has no `small`, so the value needs a codemod mapping.",
+      "reason": "Size type of the deprecated `Switch` alias, now `sm | md | lg`: the Ant spellings left it in 3.0. It stays because app-platform still renders `Switch` with a `size`, and that call site passes `small`, which the codemod only reports because the rename changes the rendered step on Classic and Rustic.",
       "scope": "Exported type alias. No direct import of the name was found in the four consumer roots; it is reached through `SwitchProps.size`.",
       "replacement": "`ToggleSize`",
       "canonicalOwner": "src/components/primitives/inputs/toggle/index.ts",
@@ -1292,57 +1322,55 @@
       "file": "src/foundation/contracts/composition/tenants/themes/index.ts",
       "anchor": "BrandMotion",
       "class": "debt",
-      "reason": "Its own condition (\"while bundled themes migrate\") is unmet: the bundled evnto experience baseline still authors springs, stagger and pulse against it, so the interface is owed a migration, not a longer window.",
-      "scope": "Exported interface. Authored by foundation/presets/policy/experience-baselines/evnto, read by the provider bridge and the brand-studio file export. Whether stored tenant payloads carry the open-ended fields was not measured.",
+      "reason": "No bundled preset authors the interface any more, but it is still live: the theme-document iso schema admits its twelve open-ended fields and the personality lowering reads them, and the Brand Studio editor authors six of them, so retiring it is owed a migration of that door first.",
+      "scope": "Exported interface; it types `FlatTheme.motion`. The Brand Studio editor authors entrance, entranceDuration, hoverLift, hoverScale, pulseSpeed and skeletonStyle into drafts and its file export reads entranceDuration. The four governed fields (intensity, durationScale, ambient, character) stay. Whether stored tenant payloads carry the open-ended fields was not measured.",
       "replacement": "the vertical `MotionProfile` plus the bounded `TenantMotionDial`",
       "canonicalOwner": null,
       "blocker": null,
       "receiver": "WO-RET-01",
       "since": "2026-07-16",
       "removeIn": "3.0",
-      "evidence": [],
-      "codemod": null,
-      "changeset": null
-    },
-    {
-      "file": "src/foundation/contracts/kernel/common/index.ts",
-      "anchor": "SizeType",
-      "class": "debt",
-      "reason": "Ant size vocabulary kept for the Classic bridge, but no module under `src/` imports it any more; only the `no-size-type-outside-classic` lint rule still names it.",
-      "scope": "Exported type alias. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Zero importers in packages/core/src outside the lint rule that restricts it.",
-      "replacement": "`Size` (`sm | md | lg`)",
-      "canonicalOwner": null,
-      "blocker": null,
-      "receiver": "WO-RET-01",
-      "since": "2026-07-10",
-      "removeIn": "3.0",
-      "evidence": [],
+      "evidence": [
+        {
+          "kind": "census-receipt",
+          "path": "packages/core/src/foundation/contracts/composition/tenants/themes/iso/schema/index.ts",
+          "needle": "\"motion.entranceDuration\": NUMBER",
+          "note": "Measured: the theme-document schema admits the open-ended motion fields. Not measured: stored tenant documents."
+        },
+        {
+          "kind": "census-receipt",
+          "path": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality/index.ts",
+          "needle": "entranceDuration: bt.motion?.entranceDuration",
+          "note": "Measured: the personality lowering reads the open-ended fields from the flat theme."
+        }
+      ],
       "codemod": null,
       "changeset": null
     },
     {
       "file": "src/foundation/contracts/kernel/common/index.ts",
       "anchor": "LegacySizeAlias",
-      "class": "compat-consumed",
-      "reason": "Six undeprecated size contracts (Table, TimePicker, DatePicker, Form, InputNumber, Switch) are widened with it, and app-platform passes `size=\"small\"` through them; narrowing needs the value codemod.",
-      "scope": "Exported type alias, the Ant-spelling half of six `*Size` unions.",
+      "class": "debt",
+      "reason": "No `*Size` contract is widened with it and it has zero importers; it stays published only because the sizing gate draws the Ant spellings of Descriptions, List, Space, Segmented and Steps from it, and it leaves when those five move to the canonical steps or the gate states that vocabulary inline.",
+      "scope": "Exported type alias, the literal union `small | middle | large | default`. Zero importers in packages/core/src, packages/showroom/src and the src roots of the three apps; its one reader is `SANCTIONED_KERNEL_SIZE_EXPORTS` in scripts/check/boundaries/components/sizing.",
       "replacement": "`Size` (`sm | md | lg`)",
-      "canonicalOwner": "src/foundation/contracts/kernel/common/index.ts",
-      "blocker": "parity-unproven",
+      "canonicalOwner": null,
+      "blocker": null,
       "receiver": "WO-RET-01",
       "since": "2026-07-18",
       "removeIn": "3.0",
       "evidence": [
         {
-          "kind": "consumer",
-          "path": "packages/core/src/components/primitives/display/table/contracts/index.ts",
-          "needle": "export type TableSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;"
+          "kind": "census-receipt",
+          "path": "packages/core/scripts/check/boundaries/components/sizing/index.mjs",
+          "needle": "const SANCTIONED_KERNEL_SIZE_EXPORTS = ['Size', 'LegacySizeAlias', 'ModalSize'];",
+          "note": "Measured: the sizing gate resolves its allowed literal set from this export and throws if the kernel stops exporting it. Not measured: which of the five components still need each Ant spelling."
         },
         {
-          "kind": "consumer",
-          "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
-          "needle": "Card, Button, Badge, Input, Modal, Select, Spinner, Switch } from '@rottay/design-system';",
-          "note": "The same file renders `<Switch ... size=\"small\" />` at :426-430."
+          "kind": "census-receipt",
+          "path": "packages/core/src/foundation/contracts/kernel/common/index.ts",
+          "needle": "export type LegacySizeAlias = 'small' | 'middle' | 'large' | 'default';",
+          "note": "Measured: the type is a literal union of its own, no longer an alias of the removed `SizeType`, and no module under src imports it."
         }
       ],
       "codemod": null,
@@ -1352,8 +1380,8 @@
       "file": "src/foundation/contracts/kernel/common/index.ts",
       "anchor": "Variant",
       "class": "compat-consumed",
-      "reason": "Base union of the undeprecated `ButtonVariant` and `ToastVariant` and of the deprecated badge, tag and avatar variants; it cannot leave while those contracts are built on it.",
-      "scope": "Exported type alias. No direct import of the name was found in the three apps; it is reached through the component variant types.",
+      "reason": "Base union of the deprecated `BadgeVariant`, `TagVariant` and `AvatarVariant` (and of `AvatarProps.variant` through the last) only; no undeprecated contract is built on it any more, so it leaves with those three.",
+      "scope": "Exported type alias. Inside the package only the badge, tag and avatar contracts import it. No direct import of the name was found in the three apps; it is reached through the three component variant types.",
       "replacement": "`Tone` for semantic colour, plus the component's own structural variant",
       "canonicalOwner": "src/foundation/contracts/kernel/common/index.ts",
       "blocker": "parity-unproven",
@@ -1363,13 +1391,18 @@
       "evidence": [
         {
           "kind": "consumer",
-          "path": "packages/core/src/components/primitives/inputs/button/contracts/index.ts",
-          "needle": "import type { BaseComponentProps, Variant, LoadableProps, DisableableProps }"
+          "path": "packages/core/src/components/primitives/display/badge/contracts/index.ts",
+          "needle": "export type BadgeVariant = Variant;"
         },
         {
           "kind": "consumer",
-          "path": "packages/core/src/components/primitives/feedback/toast/contracts/index.ts",
-          "needle": "import type { BaseComponentProps, Variant }"
+          "path": "packages/core/src/components/primitives/display/tag/contracts/index.ts",
+          "needle": "export type TagVariant = Variant;"
+        },
+        {
+          "kind": "consumer",
+          "path": "packages/core/src/components/primitives/display/avatar/contracts/index.ts",
+          "needle": "export type AvatarVariant = Variant;"
         }
       ],
       "codemod": null,

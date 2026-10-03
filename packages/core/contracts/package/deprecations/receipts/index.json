@@ -486,24 +486,6 @@
       "auditedAt": "2026-10-03",
       "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
       "integrity": "sha256:e48c0200e6c3f1e2f14b39eaa36e10edcfa494dd41e109cbf75f0e4f70e39f53"
-    },
-    {
-      "file": "src/foundation/contracts/kernel/common/index.ts",
-      "anchor": "LegacySizeAlias",
-      "kind": "consumer",
-      "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
-      "needle": "Card, Button, Badge, Input, Modal, Select, Spinner, Switch } from '@rottay/design-system';",
-      "repository": "https://github.com/rottay/app-platform.git",
-      "commit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
-      "fileDigest": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
-      "matchLine": 61,
-      "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
-      "rowDigest": "sha256:505c8737f24115f846aa4390e6f3381a079fa5d1cf950c11d98ce0e07145a2c2",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:8713a8d45f949f153141ac75c44fa70982c76b6d0737cba3fd499f50e795c64e"
     }
   ]
 }
