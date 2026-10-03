@@ -1,0 +1,18 @@
+[
+  {
+    "file": "barrel/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "rewrite",
+    "id": "symbol-removed/.#DensityKey",
+    "reason": "re-export"
+  },
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "rewrite",
+    "id": "symbol-removed/.#DensityKey",
+    "reason": "import-binding"
+  }
+]

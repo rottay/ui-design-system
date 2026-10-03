@@ -7,7 +7,7 @@ import { DEFAULT_MAP, loadMap, runCodemods } from '../../index.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 
 export const KIT_ROOT = path.resolve(HERE, '../..');
-export const FIXTURES = path.join(KIT_ROOT, 'fixtures');
+export const FIXTURES = path.join(KIT_ROOT, 'tests/fixtures');
 
 function stubSurface(file) {
   const raw = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -27,7 +27,7 @@ function firstExisting(...candidates) {
   return candidates.find((candidate) => fs.existsSync(candidate)) ?? null;
 }
 
-/** Every `fixtures/<class>/<case>/input` tree, with the map and surface the case runs under. */
+/** Every `tests/fixtures/<class>/<case>/input` tree, with the map and surface the case runs under. */
 export function loadFixtureCases() {
   const cases = [];
   for (const className of fs.readdirSync(FIXTURES).sort()) {
@@ -36,15 +36,15 @@ export function loadFixtureCases() {
     for (const caseName of fs.readdirSync(classRoot).sort()) {
       const caseRoot = path.join(classRoot, caseName);
       if (!fs.existsSync(path.join(caseRoot, 'input'))) continue;
-      const surfaceFile = firstExisting(path.join(caseRoot, 'surface.json'), path.join(classRoot, 'surface.json'));
+      const surfaceFile = firstExisting(path.join(caseRoot, 'surface/index.json'), path.join(classRoot, 'surface/index.json'));
       cases.push({
         name: `${className}/${caseName}`,
         className,
         caseName,
         input: path.join(caseRoot, 'input'),
         expected: path.join(caseRoot, 'expected'),
-        report: path.join(caseRoot, 'report.json'),
-        mapPath: firstExisting(path.join(caseRoot, 'map.json'), path.join(classRoot, 'map.json')) ?? DEFAULT_MAP,
+        report: path.join(caseRoot, 'report/index.json'),
+        mapPath: firstExisting(path.join(caseRoot, 'map/index.json'), path.join(classRoot, 'map/index.json')) ?? DEFAULT_MAP,
         surface: surfaceFile ? stubSurface(surfaceFile) : null,
       });
     }
@@ -52,9 +52,20 @@ export function loadFixtureCases() {
   return cases;
 }
 
+// The scripts tree stores every file as `folder/index.*`; TypeScript only reads a config named `tsconfig.json`.
+const STORED_CONFIG = /(^|\/)tsconfig\/index\.json$/;
+
+function consumerName(relative) {
+  return relative.replace(STORED_CONFIG, '$1tsconfig.json');
+}
+
 export function workingCopy(fixture) {
   const work = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'codemods-')));
-  fs.cpSync(fixture.input, work, { recursive: true });
+  for (const [relative, text] of Object.entries(snapshot(fixture.input))) {
+    const target = path.join(work, relative);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.writeFileSync(target, text);
+  }
   return work;
 }
 
@@ -64,7 +75,7 @@ export function snapshot(root) {
     for (const item of fs.readdirSync(directory, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
       const target = path.join(directory, item.name);
       if (item.isDirectory()) visit(target);
-      else files[path.relative(root, target).split(path.sep).join('/')] = fs.readFileSync(target, 'utf8');
+      else files[consumerName(path.relative(root, target).split(path.sep).join('/'))] = fs.readFileSync(target, 'utf8');
     }
   };
   visit(root);

@@ -24,7 +24,7 @@ consumer wrapper, a spread, a props object, a namespace or dynamic import, a
 name reached through a consumer-owned alias, a replacement name the file
 already shadows.
 
-The 3.0 map (`maps/3.0/index.json`) has 607 entries: 155 can rewrite and 452
+The 3.0 map (`release-3-0-map/index.json`) has 607 entries: 155 can rewrite and 452
 are report-only. Per class:
 
 - `subpath-removed` (86). 83 re-point: the 75 granular per-tier subpaths and

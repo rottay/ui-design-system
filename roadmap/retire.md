@@ -201,7 +201,7 @@ Lane-wide rules (binding on every WO):
      exactly the six `pack: bithire` rows, in order, each in the bithire preset.
   R5 `node packages/core/scripts/maintain/codemods/index.mjs --check
      packages/core/src packages/showroom/src`: zero findings; and
-     `node --test packages/core/scripts/maintain/codemods/tests/*.test.mjs`
+     `node --test packages/core/scripts/maintain/codemods/tests/*/index.test.mjs`
      green.
   R6 `node packages/core/scripts/check/contract-changeset/index.mjs
      --base=origin/main --head=HEAD`: every published removal or change in the

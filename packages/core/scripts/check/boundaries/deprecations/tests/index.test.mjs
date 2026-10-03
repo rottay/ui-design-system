@@ -464,7 +464,7 @@ describe('deprecations — negatives', () => {
       const bare = check((parts) => { rehome(parts); rowOf(parts, 'WidgetProps.variant').blocker = blocker; }, { codemods });
       assertRedOnlyFor(bare, new RegExp(`blocker \`${blocker}\` is not one of`), 1);
       const nowhere = check((parts) => { rehome(parts); rowOf(parts, 'WidgetProps.variant').blocker = `${blocker}:prop-renamed/nowhere`; }, { codemods });
-      assertRedOnlyFor(nowhere, /no fixture directory at scripts\/maintain\/codemods\/fixtures\/prop-renamed\/nowhere/, 1);
+      assertRedOnlyFor(nowhere, /no fixture directory at scripts\/maintain\/codemods\/tests\/fixtures\/prop-renamed\/nowhere/, 1);
       const hollow = (parts) => {
         rehome(parts);
         parts.files[`packages/core/${CODEMOD_FIXTURES_PATH}/prop-renamed/hollow/input/index.tsx`] = 'export {};\n';
@@ -475,7 +475,7 @@ describe('deprecations — negatives', () => {
       }
       const tested = (parts) => {
         hollow(parts);
-        parts.files[`packages/core/${CODEMOD_TESTS_PATH}/fixtures.test.mjs`] = "test('prop-renamed/hollow', () => {});\n";
+        parts.files[`packages/core/${CODEMOD_TESTS_PATH}/fixtures/index.test.mjs`] = "test('prop-renamed/hollow', () => {});\n";
       };
       assertGreen(check(tested, { codemods, assumeDone: [OWNER] }));
     }

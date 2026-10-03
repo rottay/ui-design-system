@@ -20,7 +20,7 @@ import { transform as unionMemberRemoved } from './transforms/union-member-remov
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 
-export const DEFAULT_MAP = path.join(SCRIPT_DIR, 'maps/3.0/index.json');
+export const DEFAULT_MAP = path.join(SCRIPT_DIR, 'release-3-0-map/index.json');
 
 /** Subpath re-pointing runs first so a later pass sees symbols on the door the map keys them by. */
 export const TRANSFORMS = Object.freeze([
@@ -415,7 +415,7 @@ const USAGE = `Usage: node scripts/maintain/codemods/index.mjs [--dry-run | --wr
   --dry-run          plan and report; write nothing (default)
   --write            apply every proven rewrite; reports are still printed
   --check            dry-run that exits 1 while any finding remains
-  --map <path>       codemod map (default: maps/3.0/index.json)
+  --map <path>       codemod map (default: release-3-0-map/index.json)
   --class <name>     limit to one change class (repeatable)
   --only <id>        limit to one map entry id (repeatable)
   --assume-ltr       allow physical -> logical side rewrites

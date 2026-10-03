@@ -3,6 +3,9 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, dirname, extname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import ts from 'typescript';
+
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -31,6 +34,68 @@ const NAMED_DATED_ARTIFACTS = new Set([
   // Historical measurements are not live product identity.
   'packages/core/scripts/check/tokens/customization/visual-worklist/index.json',
 ]);
+
+/**
+ * Migration sources. A codemod release map names a retired door as the thing a
+ * consumer is migrated AWAY from; without that spelling the codemod matches
+ * nothing. The exemption is by path AND by JSON position, never the file: in a
+ * map at this path, inside an entry of `entries` whose `class` is
+ * `subpath-removed`, the `subpath` value, the `id` that restates it, and the
+ * occurrences of that same door inside the entry's own prose. A `replacement`,
+ * any other entry, any other name and the map's header stay under the law.
+ */
+const CODEMOD_RELEASE_MAP = /^packages\/core\/scripts\/maintain\/codemods\/release-[a-z0-9]+(?:-[a-z0-9]+)*-map\/index\.json$/u;
+const MIGRATION_SOURCE_CLASS = 'subpath-removed';
+const MIGRATION_SOURCE_PROSE = new Set(['resolves', 'impossible', 'guidance', 'census', 'note']);
+
+export function isCodemodReleaseMap(rel) {
+  return CODEMOD_RELEASE_MAP.test(normalized(rel));
+}
+
+/**
+ * The text of a codemod release map with its migration-source positions
+ * blanked, offsets preserved. A file that is not such a map, or that does not
+ * parse to the expected shape, is returned unchanged and is scanned whole.
+ */
+export function blankMigrationSources(text, rel) {
+  if (!isCodemodReleaseMap(rel)) return text;
+  const source = ts.parseJsonText(rel, text);
+  if (source.parseDiagnostics.length > 0) return text;
+  const root = source.statements[0]?.expression;
+  if (!root || !ts.isObjectLiteralExpression(root)) return text;
+  const member = (object, name) => object.properties.find(
+    (property) => ts.isPropertyAssignment(property) && ts.isStringLiteral(property.name) && property.name.text === name,
+  )?.initializer;
+  const entries = member(root, 'entries');
+  if (!entries || !ts.isArrayLiteralExpression(entries)) return text;
+
+  const ranges = [];
+  const inside = (literal) => [literal.getStart(source) + 1, literal.end - 1];
+  for (const entry of entries.elements) {
+    if (!ts.isObjectLiteralExpression(entry)) continue;
+    const kind = member(entry, 'class');
+    const subpath = member(entry, 'subpath');
+    if (!kind || !ts.isStringLiteral(kind) || kind.text !== MIGRATION_SOURCE_CLASS) continue;
+    if (!subpath || !ts.isStringLiteral(subpath) || !/^\.\/[A-Za-z0-9._/-]+$/u.test(subpath.text)) continue;
+    ranges.push(inside(subpath));
+    const id = member(entry, 'id');
+    if (id && ts.isStringLiteral(id) && id.text === `${MIGRATION_SOURCE_CLASS}/${subpath.text}#*`) ranges.push(inside(id));
+    const door = subpath.text.slice(2);
+    for (const property of entry.properties) {
+      if (!ts.isPropertyAssignment(property) || !ts.isStringLiteral(property.name)) continue;
+      if (!MIGRATION_SOURCE_PROSE.has(property.name.text) || !ts.isStringLiteral(property.initializer)) continue;
+      const [start, end] = inside(property.initializer);
+      for (let at = text.indexOf(door, start); at !== -1 && at + door.length <= end; at = text.indexOf(door, at + door.length)) {
+        ranges.push([at, at + door.length]);
+      }
+    }
+  }
+  let blanked = text;
+  for (const [start, end] of ranges) {
+    blanked = `${blanked.slice(0, start)}${' '.repeat(end - start)}${blanked.slice(end)}`;
+  }
+  return blanked;
+}
 
 const CONTENT_RULES = Object.freeze([
   ['style-export', new RegExp(`(?:\\./)?styles[/\\\\]${RETIRED}(?:\\.css)?\\b`, 'gi')],
@@ -146,7 +211,7 @@ export function collectRetiredIdentityFindings({
     const rel = normalized(relative(uiRoot, path));
     const pathMatch = new RegExp(`(?:^|/)(?:${RETIRED}|${RETIRED}\\.css)(?:/|$)`).exec(rel);
     if (pathMatch) findings.push({ path: rel, rule: 'source-path', line: 1, column: 1, match: pathMatch[0] });
-    findings.push(...findRetiredIdentity(readFileSync(path, 'utf8'), rel));
+    findings.push(...findRetiredIdentity(blankMigrationSources(readFileSync(path, 'utf8'), rel), rel));
   }
   return findings.sort((a, b) => a.path.localeCompare(b.path) || a.line - b.line || a.rule.localeCompare(b.rule));
 }

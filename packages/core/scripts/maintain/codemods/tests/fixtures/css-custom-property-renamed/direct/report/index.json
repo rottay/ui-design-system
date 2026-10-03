@@ -1,0 +1,98 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 2,
+    "column": 36,
+    "action": "report",
+    "id": "css-custom-property-renamed/./commercial.css#*",
+    "reason": "string-literal"
+  },
+  {
+    "file": "index.tsx",
+    "line": 2,
+    "column": 76,
+    "action": "report",
+    "id": "css-custom-property-renamed/./commercial.css#*",
+    "reason": "string-literal"
+  },
+  {
+    "file": "index.tsx",
+    "line": 2,
+    "column": 76,
+    "action": "report",
+    "id": "css-custom-property-renamed/./commercial.css#*",
+    "reason": "string-literal"
+  },
+  {
+    "file": "index.tsx",
+    "line": 3,
+    "column": 21,
+    "action": "report",
+    "id": "css-custom-property-renamed/./commercial.css#*",
+    "reason": "string-literal"
+  },
+  {
+    "file": "index.tsx",
+    "line": 4,
+    "column": 24,
+    "action": "report",
+    "id": "css-custom-property-renamed/.#BrandPaletteAliases",
+    "reason": "string-literal"
+  },
+  {
+    "file": "index.tsx",
+    "line": 7,
+    "column": 36,
+    "action": "report",
+    "id": "css-custom-property-renamed/./commercial.css#*",
+    "reason": "string-literal"
+  },
+  {
+    "file": "index.tsx",
+    "line": 7,
+    "column": 78,
+    "action": "report",
+    "id": "css-custom-property-renamed/./commercial.css#*",
+    "reason": "string-literal"
+  },
+  {
+    "file": "panel/index.css",
+    "line": 3,
+    "column": 19,
+    "action": "report",
+    "id": "css-custom-property-renamed/./commercial.css#*",
+    "reason": "stylesheet"
+  },
+  {
+    "file": "panel/index.css",
+    "line": 4,
+    "column": 25,
+    "action": "report",
+    "id": "css-custom-property-renamed/./commercial.css#*",
+    "reason": "stylesheet"
+  },
+  {
+    "file": "panel/index.css",
+    "line": 5,
+    "column": 3,
+    "action": "report",
+    "id": "css-custom-property-renamed/.#BrandInputNumberChrome",
+    "reason": "stylesheet"
+  },
+  {
+    "file": "panel/index.css",
+    "line": 5,
+    "column": 28,
+    "action": "report",
+    "id": "css-custom-property-renamed/./server#TENANT_THEME_REFERENCE_TOKENS",
+    "reason": "stylesheet"
+  },
+  {
+    "file": "panel/index.css",
+    "line": 6,
+    "column": 12,
+    "action": "report",
+    "id": "css-custom-property-renamed/.#BrandSwitchChrome",
+    "reason": "stylesheet"
+  }
+]
