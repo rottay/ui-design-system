@@ -72,7 +72,7 @@ function tenant(locale: 'en' | 'es'): TenantConfig {
 /**
  * The family's server markup, kept whole as the list-toolbar precedent keeps
  * it. The phone posture renders the custom mobile-card projection, which is the
- * only data-table surface that paints a focus channel.
+ * only data-table surface that paints a focus channel on an element box.
  *
  * The desktop prelude defers four boundaries (`B:0`..`B:3`) whose content React
  * emits into `<div hidden id="S:n">` completion containers: the page-14 and
@@ -202,7 +202,9 @@ describeCausality({
     { id: 'sortInk', selector: SORT_ICON, property: 'color' },
     { id: 'rowSelectedBg', selector: "#grid [data-part='body-row'][data-selected='true']", property: 'background-color' },
     { id: 'bulkBg', selector: BULK_BAR, property: 'background-color' },
-    { id: 'headFocusRing', selector: `${HEAD}[data-sortable='true']`, property: 'box-shadow', attributes: { 'data-state': 'focus-visible' } },
+    { id: 'headFocusRing', selector: `${HEAD}[data-sortable='true']`, property: 'box-shadow', pseudo: '::after', attributes: { 'data-state': 'focus-visible' } },
+    { id: 'rowFocusRing', selector: "#grid [data-part='body-row']", property: 'box-shadow', pseudo: '::after', attributes: { 'data-state': 'focus-visible' } },
+    { id: 'rowFocusInset', selector: "#grid [data-part='body-row']", property: 'top', pseudo: '::after', attributes: { 'data-state': 'focus-visible' } },
     { id: 'cardSelectedInk', selector: CUSTOM_CARD, property: 'outline-color' },
     { id: 'bulkCorner', selector: BULK_BAR, property: 'border-end-start-radius' },
     { id: 'pageBarCorner', selector: PAGE_BAR, property: 'border-end-start-radius' },
@@ -219,8 +221,8 @@ describeCausality({
   ],
   decisions: {
     // `consumes: palette.*` -- the sort ink, the selected row and bulk-bar
-    // grounds, the sortable header's focus shadow and the selected mobile
-    // card's ring all resolve from the seeded ramp. The phone bulk bar carries
+    // grounds, the row and sortable-header focus overlays and the selected
+    // mobile card's ring all resolve from the seeded ramp. The phone bulk bar carries
     // both halves of one pair: the seed tints its ground, and its quiet ink is
     // derived from that same ground, so the ink follows the seed with it.
     'palette.seeds': {
@@ -230,6 +232,7 @@ describeCausality({
         'rowSelectedBg',
         'bulkBg',
         'headFocusRing',
+        'rowFocusRing',
         'cardSelectedInk',
         'mobileBulkGround',
         'mobileBulkInk',
@@ -262,11 +265,12 @@ describeCausality({
       holds: 'bulkCorner',
       in: VERTICALS,
     },
-    // `consumes: states.focus` -- the selected mobile card's ring width is the
-    // family's single reader of a focus-signature channel.
+    // `consumes: states.focus` -- the row and the sortable header wear the
+    // signature on their `::after` overlay, inset by its offset and width; the
+    // selected mobile card's ring reads the width.
     'states.focus-style': {
       value: 'glow',
-      moves: ['cardSelectedRing'],
+      moves: ['headFocusRing', 'rowFocusRing', 'rowFocusInset', 'cardSelectedRing'],
       holds: 'bulkCorner',
       in: VERTICALS,
     },

@@ -50,6 +50,8 @@ export interface ProbeTarget {
   readonly attributesOn?: string;
   /** Direction of the probe host. */
   readonly dir?: 'ltr' | 'rtl';
+  /** Read the computed property on this pseudo-element of the matched node; the node itself when absent. */
+  readonly pseudo?: '::before' | '::after';
 }
 
 export interface ProbeEnvironment {
@@ -286,7 +288,7 @@ export async function measureMountedArms(request: MountedProbeRequest): Promise<
             }
             return target.property.startsWith('@rect.')
               ? String(Math.round(element.getBoundingClientRect()[target.property.slice(6) as 'left']))
-              : getComputedStyle(element).getPropertyValue(target.property);
+              : getComputedStyle(element, target.pseudo ?? null).getPropertyValue(target.property);
           };
           // No target stamps attributes or a direction: one host carries the
           // whole scene — identical readings, one parse instead of one per target.

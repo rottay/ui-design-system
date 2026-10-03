@@ -23,6 +23,13 @@ const mobileSkin = readFileSync(
   ),
   "utf8"
 );
+const interactionsSkin = readFileSync(
+  join(
+    here,
+    "../../../../../foundation/tokens/css/presentation/components/skin/data-table-interactions/index.css"
+  ),
+  "utf8"
+);
 const storySource = readFileSync(join(here, "../DataTable.stories.tsx"), "utf8");
 
 describe("DataTable pass 2 craft contract", () => {
@@ -93,6 +100,161 @@ describe("DataTable pass 2 craft contract", () => {
     expect(mobileSkin).not.toMatch(
       /ds-data-table__mobile-card--selected[^{}]*\{[^}]*border-inline-start/
     );
+  });
+
+  describe("keyboard focus wears the tenant focus signature", () => {
+    const skin = modernSkin.replace(/\/\*[\s\S]*?\*\//g, "");
+    const FOCUS = String.raw`:is\(\[data-state~="focus-visible"\], :focus-visible\)`;
+    const ROW = String.raw`\[data-part="body-row"\]${FOCUS}`;
+    const GROUP_ROW = String.raw`\[data-part="group-header-row"\]${FOCUS}`;
+    const HEADER = String.raw`\[data-part="header-cell"\]\[data-sortable="true"\]${FOCUS}`;
+    const bodies = (selector: string): string[] =>
+      [...skin.matchAll(new RegExp(`${selector}\\s*[,{][^{}]*\\{([^}]*)\\}|${selector}\\s*\\{([^}]*)\\}`, "g"))].map(
+        (match) => match[1] ?? match[2] ?? ""
+      );
+    const declaration = (body: string, property: string): string | undefined =>
+      body.match(new RegExp(`(?:^|[;\\s])${property}:\\s*([^;]+);`))?.[1].trim();
+    const forcedColors = skin.slice(skin.lastIndexOf("@media (forced-colors: active)"));
+
+    it.each([
+      ["a body row", ROW, "var(--ds-table-row-focus-shadow, var(--ds-focus-ring))", "2"],
+      ["a group header row", GROUP_ROW, "var(--ds-table-row-focus-shadow, var(--ds-focus-ring))", "2"],
+      [
+        "a sortable header cell",
+        HEADER,
+        "var(--ds-data-table-header-focus-shadow, var(--ds-focus-ring))",
+        undefined,
+      ],
+    ])("hosts one overlay on %s, and a system-colour outline in forced colors", (_label, node, shadow, zIndex) => {
+      const [overlay, forced, ...extra] = bodies(`${node}::after`);
+      expect(extra).toEqual([]);
+      expect(declaration(overlay ?? "", "content")).toBe('""');
+      expect(declaration(overlay ?? "", "position")).toBe("absolute");
+      expect(declaration(overlay ?? "", "inset")).toBe(
+        "calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width))"
+      );
+      expect(declaration(overlay ?? "", "pointer-events")).toBe("none");
+      expect(declaration(overlay ?? "", "box-shadow")).toBe(shadow);
+      expect(declaration(overlay ?? "", "z-index")).toBe(zIndex);
+      expect(overlay).not.toContain("outline");
+
+      expect(declaration(forced ?? "", "outline")).toBe(
+        "max(2px, var(--ds-focus-ring-width)) solid Highlight"
+      );
+      expect(declaration(forced ?? "", "inset")).toBe(
+        "calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width)))"
+      );
+      expect(declaration(forced ?? "", "outline-offset")).toBe("var(--ds-focus-ring-offset)");
+      expect(declaration(forced ?? "", "box-shadow")).toBe("none");
+      expect(forcedColors).toContain(forced);
+    });
+
+    it("keeps the row overlay above its pinned cells and under the sticky header", () => {
+      const pinned = skin.match(
+        /\[data-part="data-cell"\]\[data-pinned="true"\]\s*\{[^}]*z-index:\s*(\d+);/
+      )?.[1];
+      const stickyHead = skin.match(
+        /\[data-part="table-head"\]\[data-sticky="true"\]\s*\{[^}]*z-index:\s*(\d+);/
+      )?.[1];
+      expect(pinned).toBe("2");
+      expect(Number(stickyHead)).toBeGreaterThan(2);
+    });
+
+    it("never pins a sticky header cell back to relative while it holds focus", () => {
+      const positioned = [...skin.matchAll(new RegExp(`(${HEADER}[^{}]*)\\{([^}]*)\\}`, "g"))].filter(
+        ([, , body]) => /position:\s*relative/.test(body ?? "")
+      );
+      expect(positioned).toHaveLength(1);
+      expect(positioned[0]?.[1]).toContain(':not([data-pinned="true"])');
+    });
+
+    it("paints no per-cell band and no ring rebuilt from the width or colour operands", () => {
+      expect(bodies(`${ROW} > td`)).toEqual([]);
+      expect(skin).not.toMatch(new RegExp(`${ROW}\\s*>\\s*\\[data-part="data-cell"\\]`));
+      expect(skin).not.toMatch(new RegExp(`${HEADER}\\[data-pinned="true"\\]`));
+      const focusRules = [...skin.matchAll(/([^{}]*)\{([^{}]*)\}/g)].filter(([, selector]) =>
+        new RegExp(`${ROW}|${GROUP_ROW}|${HEADER}`).test(selector ?? "")
+      );
+      expect(focusRules.length).toBeGreaterThan(0);
+      for (const [, , body] of focusRules) {
+        expect(body).not.toMatch(/inset 0 0 0 var\(--ds-focus-ring-width/);
+        expect(body).not.toMatch(/outline(?:-color)?:[^;]*(?:--ds-focus-ring-color|--ds-color-primary)/);
+        expect(body).not.toMatch(/box-shadow:[^;]*--ds-focus-ring-(?:width|color|offset)/);
+      }
+    });
+  });
+
+  describe("the shared interactions and mobile skins state no focus recipe of their own", () => {
+    const interactions = interactionsSkin.replace(/\/\*[\s\S]*?\*\//g, "");
+    const mobile = mobileSkin.replace(/\/\*[\s\S]*?\*\//g, "");
+    const rules = (source: string): [string, string][] =>
+      [...source.matchAll(/([^{}]*)\{([^{}]*)\}/g)].map(([, selector, body]) => [
+        (selector ?? "").replace(/\s+/g, " ").trim(),
+        body ?? "",
+      ]);
+
+    it("leaves the row and the sortable header to the engine skin, forced colors included", () => {
+      const focusSelectors = rules(interactions)
+        .map(([selector]) => selector)
+        .filter((selector) => selector.includes("focus-visible"));
+      expect(focusSelectors.length).toBeGreaterThan(0);
+      for (const selector of focusSelectors) {
+        expect(selector).toContain(".ds-resize-handle");
+        expect(selector).not.toMatch(/\btr\[|\bth\[/);
+      }
+    });
+
+    it("hosts the resize handle's focus on an overlay wearing the signature", () => {
+      const HANDLE =
+        '.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible)';
+      const own = rules(interactions).filter(([selector]) => selector === HANDLE);
+      const overlays = rules(interactions).filter(([selector]) => selector === `${HANDLE}::after`);
+      expect(own).toHaveLength(1);
+      expect(own[0]?.[1]).toMatch(/outline:\s*none;/);
+      expect(overlays).toHaveLength(2);
+      const [overlay, forced] = overlays.map(([, body]) => body);
+      expect(overlay).toMatch(/box-shadow:\s*var\(--ds-focus-ring\);/);
+      expect(overlay).toMatch(
+        /inset:\s*calc\(var\(--ds-focus-ring-offset\) \+ var\(--ds-focus-ring-width\)\);/
+      );
+      expect(overlay).toMatch(/pointer-events:\s*none;/);
+      expect(forced).toMatch(/outline:\s*max\(2px, var\(--ds-focus-ring-width\)\) solid Highlight;/);
+      expect(forced).toMatch(/box-shadow:\s*none;/);
+      expect(interactions.slice(interactions.indexOf("@media (forced-colors: active)"))).toContain(forced);
+    });
+
+    it("builds no solid outline or ring from the width and colour operands on a focused node", () => {
+      for (const [selector, body] of [...rules(interactions), ...rules(mobile)]) {
+        if (!selector.includes("focus-visible") || selector.includes("__bar")) continue;
+        expect(body, selector).not.toMatch(/outline:[^;]*solid\s+var\(--ds-(?:color-primary|focus-ring-color)/);
+        expect(body, selector).not.toMatch(/box-shadow:[^;]*--ds-focus-ring-(?:width|color|offset)/);
+      }
+    });
+
+    it("delivers the mobile card's focus on the channel the Card engine skin paints from", () => {
+      const FOCUS = ':is([data-state~="focus-visible"], :focus-visible)';
+      const card = rules(mobile).filter(
+        ([selector]) => selector.includes(".ds-data-table__mobile-card") && selector.endsWith(FOCUS)
+      );
+      expect(card).toHaveLength(2);
+      const [[selector, body], [, forced]] = card as [[string, string], [string, string]];
+      const resting = rules(mobile).find(
+        ([candidate, declarations]) =>
+          candidate.includes(".ds-data-table__mobile-card.ds-data-table__mobile-card") &&
+          !candidate.includes("[data-recipe") &&
+          /box-shadow:\s*var\(--ds-collection-card-shadow, none\);/.test(declarations)
+      );
+      expect(resting).toBeDefined();
+      expect(selector).toBe(`${resting?.[0]}${FOCUS}`);
+      const SIGNATURE = String.raw`var\(--ds-data-table-mobile-card-focus-ring, var\(--ds-focus-ring\)\);`;
+      expect(body).toMatch(new RegExp(`--ds-card-bordered-shadow:\\s*${SIGNATURE}`));
+      expect(body).toMatch(new RegExp(`box-shadow:\\s*${SIGNATURE}`));
+      expect(body).toMatch(/outline:\s*var\(--ds-focus-ring-width\) solid transparent;/);
+      expect(forced).toMatch(/outline:\s*max\(2px, var\(--ds-focus-ring-width\)\) solid Highlight;/);
+      expect(forced).toMatch(/--ds-card-focus-ring-color:\s*Highlight;/);
+      expect(forced).toMatch(/--ds-card-bordered-shadow:\s*none;/);
+      expect(mobile.slice(mobile.lastIndexOf("@media (forced-colors: active)"))).toContain(forced);
+    });
   });
 
   it("keeps a same-anatomy white-label proof with divergent tokens and locales", () => {

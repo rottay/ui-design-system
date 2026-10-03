@@ -18,7 +18,8 @@ import {
   type FamilyFixture,
 } from "@tests/support/family-contract";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
-import { buildLoweringContext } from "../../../../pipeline";
+import type { FamilyDeriver } from "../../../../../foundation/contract";
+import { buildLoweringContext, runDerivation } from "../../../../pipeline";
 import { FAMILY_DERIVERS } from "../../..";
 import { dataTableChromeDeriver } from "..";
 
@@ -269,8 +270,7 @@ const DRAINED: Record<string, string> = {
     "calc(0.625rem * var(--ds-rhythm-effective-scale, 1))",
   "--ds-data-table-mobile-bulk-padding":
     "calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(0.75rem * var(--ds-rhythm-effective-scale, 1))",
-  "--ds-data-table-mobile-card-focus-ring":
-    "0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 42%, transparent), var(--ds-collection-card-shadow-hover, var(--ds-premium-card-shadow-hover, var(--ds-elevation-2)))",
+  "--ds-data-table-mobile-card-focus-ring": "var(--ds-focus-ring)",
   "--ds-data-table-mobile-card-hover-lift": "-1px",
   "--ds-data-table-mobile-control-size": "var(--ds-spacing-9, 2.25rem)",
   "--ds-data-table-mobile-pagination-padding":
@@ -345,6 +345,49 @@ function appStillReadsTheBand(): boolean {
   if (!existsSync(APP_TABLE_SKIN)) return true;
   return readFileSync(APP_TABLE_SKIN, "utf8").includes(RESIDUAL.windowed);
 }
+
+describe("chrome/data-table focus", () => {
+  it("rests the sortable header's focus on the tenant's focus signature, never on a recipe of its own", () => {
+    for (const fixture of FIXTURES) {
+      const derived = dataTableChromeDeriver.derive(
+        buildLoweringContext({ theme: fixture.theme, tenant: fixture.tenant }),
+        {}
+      );
+      expect(derived["--ds-data-table-header-focus-shadow"], fixture.label).toBe(
+        "var(--ds-focus-ring)"
+      );
+    }
+    expect(skinFallbacks("--ds-data-table-header-focus-shadow")).toEqual(["var(--ds-focus-ring)"]);
+    expect(skinFallbacks("--ds-table-row-focus-shadow")).toEqual(["var(--ds-focus-ring)"]);
+  });
+
+  it("rests the mobile card's focus on the same signature, with no width or colour recipe", () => {
+    const derived = dataTableChromeDeriver.derive(context(), {});
+    expect(derived["--ds-data-table-mobile-card-focus-ring"]).toBe("var(--ds-focus-ring)");
+    expect(familyFallbacks("--ds-data-table-mobile-card-focus-ring")).toEqual(["var(--ds-focus-ring)"]);
+    for (const name of [
+      "--ds-data-table-header-focus-shadow",
+      "--ds-data-table-mobile-card-focus-ring",
+    ]) {
+      expect(derived[name], name).not.toMatch(/--ds-focus-ring-(?:width|color|offset)|--ds-color-primary/);
+    }
+  });
+
+  it("lets a tenant statement of the header focus outrank the signature reference", () => {
+    const tenant: FamilyDeriver = {
+      family: "stated-tenant-focus",
+      rank: "tenant",
+      consumes: ["chrome.*"],
+      produces: ["--ds-data-table-header-focus-shadow"],
+      derive: () => ({ "--ds-data-table-header-focus-shadow": "inset 0 0 0 3px currentColor" }),
+    };
+    const result = runDerivation(context(), [dataTableChromeDeriver, tenant]);
+    expect(result.channels["--ds-data-table-header-focus-shadow"]).toBe(
+      "inset 0 0 0 3px currentColor"
+    );
+    expect(result.provenance.get("--ds-data-table-header-focus-shadow")?.rank).toBe("tenant");
+  });
+});
 
 describe("chrome/data-table drained channels", () => {
   it("produces each one at the single fallback its skins state", () => {
@@ -526,14 +569,14 @@ describe("chrome/data-table drained channels", () => {
     const derived = dataTableChromeDeriver.derive(context(), {});
     /* Ten read sites disagreed on one name. Nine are box controls on the
        radius scale's md rung -- the Modern ladder (which five parts read),
-       two focus rings and six mobile surfaces -- and the tenth is the
+       two focus overlays and six mobile surfaces -- and the tenth is the
        group-header count chip, which rests full-round. Two surfaces, two
        channels; the shared name is gone from every skin the family paints
        from, and from the family's stories. */
     expect(readSiteCounts("--ds-table-control-radius")).toEqual([0, 0, 0, 0]);
     expect(familyFallbacks("--ds-table-control-radius")).toEqual([]);
     expect(STORIES).not.toContain("--ds-table-control-radius");
-    expect(readSiteCounts("--ds-data-table-control-radius")).toEqual([0, 2, 6, 1]);
+    expect(readSiteCounts("--ds-data-table-control-radius")).toEqual([0, 1, 6, 2]);
     expect(readSiteCounts("--ds-data-table-control-pill-radius")).toEqual([0, 0, 0, 1]);
     expect(derived["--ds-data-table-control-radius"]).toBe(
       "var(--ds-radius-md, 0.5rem)"

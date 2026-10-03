@@ -34,9 +34,19 @@
 
 .ds-engine-modern:where(.ds-pattern-data-table)
   .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-primary);
-  outline-offset: -2px;
+  outline: none;
   border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
+}
+/* The handle spans the header's full height and the scroller clips it, so it
+   hosts the focus signature on an overlay instead of painting outward. */
+.ds-engine-modern:where(.ds-pattern-data-table)
+  .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible)::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  border-radius: inherit;
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 @media (hover: hover) {
@@ -47,34 +57,6 @@
       color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)
     );
   }
-}
-
-.ds-engine-modern:where(.ds-pattern-data-table)
-  th[data-col-key][data-sortable="true"]:is(
-    [data-state~="focus-visible"],
-    :focus-visible
-  ) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-primary);
-  outline-offset: -2px;
-  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
-}
-
-.ds-engine-modern:where(.ds-pattern-data-table)
-  tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible) {
-  outline: none;
-  background-color: var(
-    --ds-table-row-bg-selected,
-    color-mix(in srgb, var(--ds-color-primary) 6%, transparent)
-  );
-}
-/* The ring itself paints per cell: a box-shadow on the <tr> does not render
-   under border-collapse (same td rule the modern skin and the primitive
-   table.css selection keyline follow). */
-.ds-engine-modern:where(.ds-pattern-data-table)
-  tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible)
-  > td {
-  box-shadow: inset 0 0 0 1px
-    color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"] {
@@ -176,14 +158,10 @@
   }
 
   .ds-engine-modern:where(.ds-pattern-data-table)
-    th[data-col-key][data-sortable="true"]:is(
-      [data-state~="focus-visible"],
-      :focus-visible
-    ),
-  .ds-engine-modern:where(.ds-pattern-data-table)
-    tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible) {
-    outline: 2px solid Highlight;
-    outline-offset: -2px;
+    .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible)::after {
+    inset: calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width)));
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;
   }
 }

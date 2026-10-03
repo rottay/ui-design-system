@@ -1268,6 +1268,7 @@
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible) {
+  position: relative;
   outline: none;
   background-color: var(
     --ds-table-row-bg-selected,
@@ -1275,12 +1276,22 @@
   );
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible) > td {
-  box-shadow: var(
-    --ds-table-row-focus-shadow,
-    inset 0 0 0 var(--ds-focus-ring-width, 2px)
-      color-mix(in srgb, var(--ds-color-primary) 52%, transparent)
-  );
+  [data-part="group-header-row"]:is([data-state~="focus-visible"], :focus-visible) {
+  position: relative;
+  outline: none;
+}
+/* A row cannot paint outward (the scroller clips it) and a shadow on a <tr>
+   does not paint: the row hosts one overlay, above its own pinned cells. */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)::after,
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="group-header-row"]:is([data-state~="focus-visible"], :focus-visible)::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  z-index: 2;
+  box-shadow: var(--ds-table-row-focus-shadow, var(--ds-focus-ring));
+  pointer-events: none;
 }
 @media (hover: hover) {
   .ds-pattern-data-table.ds-engine-modern
@@ -1799,11 +1810,19 @@
 .ds-pattern-data-table.ds-engine-modern
   [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible) {
   outline: none;
-  box-shadow: var(
-    --ds-data-table-header-focus-shadow,
-    inset 0 0 0 var(--ds-focus-ring-width, 2px)
-      color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
-  );
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible):not([data-pinned="true"]) {
+  position: relative;
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
+  box-shadow: var(--ds-data-table-header-focus-shadow, var(--ds-focus-ring));
+  pointer-events: none;
 }
 
 /* ===========================================================================
@@ -1848,7 +1867,7 @@
 
 /* Row states compose WITH the edge keyline on pinned cells: the state band
    (painted per cell, above) and the pin hairline occupy different shadow
-   slots, so a selected/hovered/focused row keeps both readings. */
+   slots, so a selected/hovered row keeps both readings. */
 .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"][data-selected="true"]
   > [data-part="data-cell"][data-pinned="true"][data-pin-side="left"] {
@@ -1890,47 +1909,6 @@
       ),
       var(--_ds-data-table-pin-edge-end);
   }
-}
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)
-  > [data-part="data-cell"][data-pinned="true"][data-pin-side="left"] {
-  box-shadow: var(
-      --ds-table-row-focus-shadow,
-      inset 0 0 0 var(--ds-focus-ring-width, 2px)
-        color-mix(in srgb, var(--ds-color-primary) 52%, transparent)
-    ),
-    var(--_ds-data-table-pin-edge-start);
-}
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)
-  > [data-part="data-cell"][data-pinned="true"][data-pin-side="right"] {
-  box-shadow: var(
-      --ds-table-row-focus-shadow,
-      inset 0 0 0 var(--ds-focus-ring-width, 2px)
-        color-mix(in srgb, var(--ds-color-primary) 52%, transparent)
-    ),
-    var(--_ds-data-table-pin-edge-end);
-}
-
-/* A pinned SORTABLE header cell keeps its keyboard ring without losing the
-   edge keyline. */
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)[data-pinned="true"][data-pin-side="left"] {
-  box-shadow: var(
-      --ds-data-table-header-focus-shadow,
-      inset 0 0 0 var(--ds-focus-ring-width, 2px)
-        color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
-    ),
-    var(--_ds-data-table-pin-edge-start);
-}
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)[data-pinned="true"][data-pin-side="right"] {
-  box-shadow: var(
-      --ds-data-table-header-focus-shadow,
-      inset 0 0 0 var(--ds-focus-ring-width, 2px)
-        color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
-    ),
-    var(--_ds-data-table-pin-edge-end);
 }
 
 /* A pinned sorted header keeps its ordering keyline next to the edge line. */
@@ -2338,6 +2316,18 @@
     :is([data-part="header-cell"], [data-part="data-cell"])[data-pinned="true"]:not([data-cell-kind="actions"]) {
     outline: 1px solid CanvasText;
     outline-offset: -1px;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)::after,
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="group-header-row"]:is([data-state~="focus-visible"], :focus-visible)::after,
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)::after {
+    inset: calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width)));
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 
   .ds-pattern-data-table.ds-engine-modern

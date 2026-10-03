@@ -165,23 +165,6 @@
   );
 }
 
-.ds-pattern-data-table.ds-data-table--mobile
-  .ds-data-table__mobile-card:is(
-    [data-state~="focus-visible"],
-    :focus-visible
-  ) {
-  outline: none;
-  box-shadow: var(
-    --ds-data-table-mobile-card-focus-ring,
-    0 0 0 var(--ds-focus-ring-width, 2px)
-      color-mix(in srgb, var(--ds-color-primary) 42%, transparent),
-    var(
-      --ds-collection-card-shadow-hover,
-      var(--ds-premium-card-shadow-hover, var(--ds-elevation-2))
-    )
-  );
-}
-
 .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-card-primary"] {
   flex: 1;
   min-width: 0;
@@ -242,6 +225,17 @@
   .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card {
   --ds-card-border: var(--ds-table-border, var(--ds-color-border-secondary));
   border-color: var(--ds-table-border, var(--ds-color-border-secondary));
+}
+
+/* Keyboard focus wears the tenant focus signature. The Card engine skin paints
+   its outlined shadow from --ds-card-bordered-shadow in a later layer, so the
+   ring travels on that channel; the box-shadow serves an unlayered import. */
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card:is([data-state~="focus-visible"], :focus-visible) {
+  --ds-card-bordered-shadow: var(--ds-data-table-mobile-card-focus-ring, var(--ds-focus-ring));
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-data-table-mobile-card-focus-ring, var(--ds-focus-ring));
 }
 
 .ds-pattern-data-table.ds-data-table--mobile[data-recipe="zebra"]
@@ -573,5 +567,22 @@
     border-color: Highlight;
     outline: 2px solid Highlight;
     outline-offset: 2px;
+  }
+
+  /* The card opts out of forced colours, so its focus is restated in the
+     system colour; the Card's own stamped outline reads the two channels. */
+  .ds-pattern-data-table.ds-data-table--mobile
+    .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card:is([data-state~="focus-visible"], :focus-visible) {
+    --ds-card-bordered-shadow: none;
+    --ds-card-focus-ring-color: Highlight;
+    --ds-card-focus-ring-width: max(2px, var(--ds-focus-ring-width));
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
+  }
+
+  .ds-pattern-data-table.ds-data-table--mobile
+    .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card:focus-visible:not([data-state~="focus-visible"]) {
+    --ds-card-bordered-shadow: 0 0 0 max(2px, var(--ds-focus-ring-width)) Highlight;
   }
 }
