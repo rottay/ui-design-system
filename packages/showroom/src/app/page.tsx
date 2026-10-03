@@ -11,7 +11,7 @@ import { EngineSignaturesSection } from '@/components/landing/sections/engine-si
 import { MarketingHero } from '@/components/landing/sections/hero';
 import ValueProofSection from '@/components/landing/sections/value-proof';
 import { BrandShiftSection } from '@/components/landing/sections/brand-shift';
-import { ArrowRightIcon } from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 import { ActionOpenExternalIcon } from '@rottay/design-system/icons/foundation';
 
 export const metadata: Metadata = {
@@ -123,7 +123,7 @@ function PrimaryLink({
   return (
     <Link className={`landing-cta ${tone === 'dark' ? 'landing-cta-dark' : ''}`.trim()} href={href}>
       <span>{label}</span>
-      <ArrowRightIcon size={14} />
+      <Icon name="navigation.forward" decorative size={14} />
     </Link>
   );
 }

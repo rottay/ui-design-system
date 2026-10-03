@@ -79,8 +79,8 @@ const FOUNDATION_AREAS: FoundationArea[] = [
   {
     title: 'Icons',
     href: '/foundations/icons',
-    badge: `${ICON_TOTAL} curated assets`,
-    metric: '10 semantic buckets',
+    badge: `${ICON_TOTAL} semantic roles`,
+    metric: `${iconCategories.length} corpus domains`,
     description:
       'The icon catalog provides a shared visual vocabulary for navigation, actions, status, data, and system chrome.',
     whenToUse:

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, type ElementType } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Badge,
   Box,
@@ -11,13 +11,14 @@ import {
   Text,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import * as AllIcons from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 import { CodeBlock } from '@/components/playground';
 import {
+  buildIconSnippet,
   iconCategories,
-  icons as curatedIcons,
+  icons as corpusIcons,
   type IconCategory,
-  type IconEntry as CuratedIconEntry,
+  type IconEntry,
 } from '@/data/registry/icons';
 import { FoundationTopRail } from '../foundation-top-rail';
 
@@ -32,91 +33,45 @@ const CATEGORY_LABELS: Record<IconCategory, string> = iconCategories.reduce(
 );
 const FILTER_CATEGORIES: Array<'all' | IconCategory> = ['all', ...CATEGORY_ORDER];
 
-interface IconEntry extends CuratedIconEntry {
-  component: ElementType<{ size?: number }>;
-  usesFallback: boolean;
-}
-
-const ICON_EXPORTS = AllIcons as Record<string, unknown>;
-const ICON_FALLBACK = AllIcons.SearchIcon as ElementType<{ size?: number }>;
-
-function normalizeIconSearchValue(value: string) {
-  return value.toLowerCase().replace(/icon$/g, '').replace(/[\s_-]+/g, '');
-}
-
-function resolveIconComponent(
-  name: CuratedIconEntry['name'],
-): { component: ElementType<{ size?: number }>; usesFallback: boolean } {
-  const component = ICON_EXPORTS[name];
-
-  if (!component) {
-    return {
-      component: ICON_FALLBACK,
-      usesFallback: true,
-    };
-  }
-
-  return {
-    component: component as ElementType<{ size?: number }>,
-    usesFallback: false,
-  };
-}
-
-const ICON_REGISTRY: IconEntry[] = curatedIcons
-  .map((entry) => {
-    const { component, usesFallback } = resolveIconComponent(entry.name);
-
-    return {
-      slug: entry.slug,
-      name: entry.name,
-      searchAlias: entry.searchAlias,
-      component,
-      category: entry.category,
-      usesFallback,
-    } satisfies IconEntry;
-  })
-  .sort((a, b) => {
-    const categoryDelta = CATEGORY_ORDER.indexOf(a.category) -
-      CATEGORY_ORDER.indexOf(b.category);
-    if (categoryDelta !== 0) return categoryDelta;
-    return a.name.localeCompare(b.name);
-  });
-
-const MISSING_ICON_EXPORTS = ICON_REGISTRY.filter((entry) => entry.usesFallback);
+const ICON_REGISTRY: IconEntry[] = [...corpusIcons].sort((a, b) => {
+  const categoryDelta = CATEGORY_ORDER.indexOf(a.category) -
+    CATEGORY_ORDER.indexOf(b.category);
+  if (categoryDelta !== 0) return categoryDelta;
+  return a.name.localeCompare(b.name);
+});
 
 const ICON_SPOTLIGHTS = [
   {
     title: 'Navigation',
     detail: 'Wayfinding, switchers, and shell chrome.',
-    icons: [AllIcons.MenuIcon, AllIcons.ArrowLeftIcon, AllIcons.ChevronRightIcon],
+    names: ['navigation.menu', 'navigation.back', 'navigation.forward'],
   },
   {
     title: 'Action',
     detail: 'Primary verbs and direct manipulation.',
-    icons: [AllIcons.PlusIcon, AllIcons.CheckIcon, AllIcons.DownloadIcon],
+    names: ['action.add', 'action.confirm', 'action.download'],
   },
   {
     title: 'Status',
     detail: 'Success, warnings, and operational states.',
-    icons: [
-      AllIcons.CheckCircleIcon,
-      AllIcons.AlertTriangleIcon,
-      AllIcons.LoaderCircleIcon,
-    ],
+    names: ['status.success', 'status.warning', 'status.loading'],
   },
 ] as const;
+
+function normalizeIconSearchValue(value: string) {
+  return value.toLowerCase().replace(/icon$/g, '').replace(/[\s._-]+/g, '');
+}
 
 function IconCell({ entry }: { entry: IconEntry }) {
   const tokens = useTokens();
   const [copied, setCopied] = useState(false);
-  const Icon = entry.component;
 
   return (
     <Box
       as="button"
       onClick={() => {
         navigator.clipboard
-          .writeText(`import { ${entry.name} } from '@rottay/design-system/icons';`)
+          .writeText(buildIconSnippet(entry.name))
           .then(() => {
             setCopied(true);
             setTimeout(() => setCopied(false), 1500);
@@ -154,7 +109,7 @@ function IconCell({ entry }: { entry: IconEntry }) {
           color: copied ? 'var(--ds-color-success-700)' : 'var(--ds-color-text-primary)',
         }}
       >
-        <Icon size={24} />
+        <Icon name={entry.name} decorative size={24} />
       </Box>
 
       <Stack spacing="xs" fullWidth style={{ minWidth: 0, alignItems: 'center', textAlign: 'center' }}>
@@ -167,7 +122,7 @@ function IconCell({ entry }: { entry: IconEntry }) {
             overflowWrap: 'anywhere',
           }}
         >
-          {copied ? 'Copied import' : entry.name.replace(/Icon$/, '')}
+          {copied ? 'Copied import' : entry.name}
         </Text>
         <Text
           size="xs"
@@ -175,11 +130,10 @@ function IconCell({ entry }: { entry: IconEntry }) {
             display: 'block',
             color: 'var(--ds-color-text-muted)',
             lineHeight: 1.35,
-            fontFamily: 'var(--font-geist-mono, monospace)',
             overflowWrap: 'anywhere',
           }}
         >
-          {entry.slug}
+          {entry.intent}
         </Text>
       </Stack>
 
@@ -191,11 +145,12 @@ function IconCell({ entry }: { entry: IconEntry }) {
           borderTop: '1px solid var(--ds-color-border-secondary)',
           display: 'flex',
           justifyContent: 'center',
+          gap: 6,
+          flexWrap: 'wrap',
         }}
       >
-        <Badge variant={entry.usesFallback ? 'warning' : 'secondary'}>
-          {entry.usesFallback ? 'fallback glyph' : CATEGORY_LABELS[entry.category]}
-        </Badge>
+        <Badge variant="secondary">{CATEGORY_LABELS[entry.category]}</Badge>
+        <Badge variant="secondary">{entry.status}</Badge>
       </Box>
     </Box>
   );
@@ -217,8 +172,8 @@ export default function IconsPage() {
         entry.name,
         entry.slug,
         entry.searchAlias,
+        entry.intent,
         CATEGORY_LABELS[entry.category],
-        entry.name.replace(/Icon$/, ''),
       ];
 
       return searchableValues.some((value) =>
@@ -276,7 +231,7 @@ export default function IconsPage() {
           },
           {
             title: 'Rendering contract',
-            body: 'All icons are wrapped for consistent sizing and currentColor behavior across themes and engines.',
+            body: 'Every role renders through the public semantic Icon facade with consistent sizing and currentColor behavior across themes and engines.',
             tone: 'dark',
           },
         ]}
@@ -288,35 +243,12 @@ export default function IconsPage() {
           { label: 'Layout' },
         ]}
         stats={[
-          { label: 'Icons', value: `${ICON_REGISTRY.length}`, detail: 'Curated DS icon exports' },
-          { label: 'Categories', value: `${CATEGORY_ORDER.length}`, detail: 'Organized by UI intent' },
+          { label: 'Icons', value: `${ICON_REGISTRY.length}`, detail: 'Governed semantic roles' },
+          { label: 'Categories', value: `${CATEGORY_ORDER.length}`, detail: 'Canonical corpus domains' },
           { label: 'Copy flow', value: '1 click', detail: 'Import statement to clipboard' },
           { label: 'Sizing', value: 'currentColor', detail: 'Portable across surfaces' },
         ]}
       />
-
-      {MISSING_ICON_EXPORTS.length > 0 && (
-        <Card
-          style={{
-            width: '100%',
-            padding: tokens.spacing[4],
-            border: '1px solid var(--ds-color-warning-200)',
-            background:
-              'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-warning-100) 76%, white) 0%, var(--ds-color-white) 100%)',
-          }}
-        >
-          <Stack spacing="xs">
-            <Text as={"h2" as any} size="lg" weight="semibold">
-              Some curated icons are using a safe fallback
-            </Text>
-            <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
-              {MISSING_ICON_EXPORTS.length} registry entries are not resolving to a dedicated icon export.
-              The catalog keeps rendering instead of collapsing to an empty page so QA can keep moving while those
-              exports are reconciled.
-            </Text>
-          </Stack>
-        </Card>
-      )}
 
       <Card style={{ width: '100%', padding: tokens.spacing[5] }}>
         <Stack spacing="md" fullWidth>
@@ -337,52 +269,55 @@ export default function IconsPage() {
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
-              gap: tokens.spacing[4],
-            }}
-          >
-            {ICON_SPOTLIGHTS.map((spotlight) => (
-              <Box
-                key={spotlight.title}
-                style={{
-                  padding: tokens.spacing[4],
-                  borderRadius: tokens.borderRadius.lg,
-                  border: '1px solid var(--ds-color-border-secondary)',
-                  background:
-                    'linear-gradient(180deg, var(--ds-color-bg-overlay), var(--ds-color-bg-elevated))',
-                }}
-              >
-                <Stack spacing="md">
-                  <Box>
-                    <Text size="sm" weight="semibold">
-                      {spotlight.title}
-                    </Text>
-                    <Text size="xs" style={{ marginTop: 4, color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
-                      {spotlight.detail}
-                    </Text>
-                  </Box>
-                  <Flex gap={8} style={{ flexWrap: 'wrap' }}>
-                    {spotlight.icons.map((IconComponent) => (
-                      <Box
-                        key={IconComponent.displayName || IconComponent.name}
-                      style={{
-                        width: 42,
-                        height: 42,
-                        borderRadius: 14,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        background: 'var(--ds-color-white)',
-                        border: '1px solid var(--ds-color-neutral-200)',
-                      }}
-                    >
-                        <IconComponent size={18} />
-                      </Box>
-                    ))}
-                  </Flex>
-                </Stack>
-              </Box>
-            ))}
-          </Box>
+                gap: tokens.spacing[4],
+              }}
+            >
+              {ICON_SPOTLIGHTS.map((spotlight) => (
+                <Box
+                  key={spotlight.title}
+                  style={{
+                    padding: tokens.spacing[4],
+                    borderRadius: tokens.borderRadius.lg,
+                    border: '1px solid var(--ds-color-border-secondary)',
+                    background:
+                      'linear-gradient(180deg, var(--ds-color-bg-overlay), var(--ds-color-bg-elevated))',
+                  }}
+                >
+                  <Stack spacing="md">
+                    <Box>
+                      <Flex align="center" gap={8}>
+                        <Icon name={spotlight.names[0]} decorative size={14} />
+                        <Text size="sm" weight="semibold">
+                          {spotlight.title}
+                        </Text>
+                      </Flex>
+                      <Text size="xs" style={{ marginTop: 4, color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+                        {spotlight.detail}
+                      </Text>
+                    </Box>
+                    <Flex gap={8} style={{ flexWrap: 'wrap' }}>
+                      {spotlight.names.map((name) => (
+                        <Box
+                          key={name}
+                          style={{
+                            width: 42,
+                            height: 42,
+                            borderRadius: 14,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: 'var(--ds-color-white)',
+                            border: '1px solid var(--ds-color-neutral-200)',
+                          }}
+                        >
+                          <Icon name={name} decorative size={18} />
+                        </Box>
+                      ))}
+                    </Flex>
+                  </Stack>
+                </Box>
+              ))}
+            </Box>
         </Stack>
       </Card>
 
@@ -394,7 +329,7 @@ export default function IconsPage() {
                 placeholder="Search icons..."
                 value={search}
                 onChange={(value: string) => setSearch(value)}
-                prefix={<AllIcons.SearchIcon size={16} />}
+                prefix={<Icon name="action.search" decorative size={16} />}
               />
             </Box>
             <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
@@ -542,7 +477,7 @@ export default function IconsPage() {
                       justifyContent: 'center',
                     }}
                   >
-                    <AllIcons.SearchIcon size={size} />
+                    <Icon name="action.search" decorative size={size} />
                   </Box>
                   <Text
                     size="xs"
@@ -563,10 +498,10 @@ export default function IconsPage() {
       <CodeBlock
         title="Icon import"
         language="tsx"
-        code={`import { SearchIcon, PlusIcon, CheckIcon } from '@rottay/design-system/icons';
+        code={`import { Icon } from '@rottay/design-system/icons';
 
 <Button variant="primary">
-  <PlusIcon size={16} />
+  <Icon name="action.add" decorative size={16} />
   Add record
 </Button>`}
       />

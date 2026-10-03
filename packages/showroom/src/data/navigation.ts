@@ -5,6 +5,8 @@
  * Each node maps to a route segment under /showroom/.
  */
 
+import { icons } from './registry/icons';
+
 export interface NavItem {
   slug: string;
   label: string;
@@ -41,7 +43,7 @@ const foundations: NavSection = {
       label: 'Component packs',
       path: '/foundations/engines/custom-component-pack',
     },
-    { slug: 'icons', label: 'Icons', path: '/foundations/icons', badge: '109' },
+    { slug: 'icons', label: 'Icons', path: '/foundations/icons', badge: `${icons.length}` },
   ],
 };
 
