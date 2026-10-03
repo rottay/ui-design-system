@@ -239,7 +239,11 @@ export const CI_GATES = Object.freeze([
         + 'entry would fail closed on three missing roots on every run. Locally and in any job that '
         + 'checks the siblings out, `node scripts/check/consumer-census/index.mjs --check` enforces the '
         + 'decrease-only ratchet: growth in consumerlessSubpaths / unreachableModules / testOnlyModules '
-        + 'fails naming every new member; a missing required root is a hard failure in every mode.',
+        + 'fails naming every new member; a missing required root is a hard failure in every mode. '
+        + 'It also enforces the class law: an unreachable module outside a proven class (story, test or '
+        + 'gate-script reader re-found on every run) is red by name, baseline or not; a consumerless door '
+        + 'needs a verified file:line attribution or a `lab` / `retire-by` disposition naming an open work '
+        + 'order; `--assume-done=<WO>` simulates a closure.',
       owner: 'WO-RET-01 (the retirement lots that cite this anchor; CI checkout wiring per the app-ds-hook-contract entry)',
       trackedSince: '2026-10-02',
     },
@@ -247,6 +251,13 @@ export const CI_GATES = Object.freeze([
     drillId: 'consumer-census-drill',
     ratchet: 'scripts/check/consumer-census/baseline/index.json',
   },
+  // Every remaining `@deprecated` marker carries one ledger row (class, reason,
+  // scope, replacement, receiver, re-verified evidence). Sibling-app evidence is
+  // verified where the app is checked out and reported unverified where it is not.
+  { id: 'deprecations-drill', run: ['node', '--test', 'scripts/check/boundaries/deprecations/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['deprecations'], },
+  { id: 'deprecations', run: ['node', 'scripts/check/boundaries/deprecations/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'deprecations-drill', },
+  { id: 'consumer-contract-drift', run: ['pnpm', 'exec', 'vitest', 'run', 'src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/tests/index.test.ts'], blocking: true, phase: 'pre-build', noDrillReason:
+    'This entry IS a mutant-carrying suite, not a script with a separate drill. It reparses docs/consumer-contract/index.md and requires the code mirror, the package.json export map and the stated disposition tally to equal it, and it is the only reader of package.json releaseSync.lab. Its planted negatives rewrite the live document in memory and assert each is refused: an unknown disposition, a retire-by or lab row with no work order, a lab row outside the published table, a tally that no longer matches the table, a lab owner that is done or unregistered, a releaseSync.lab key set that differs from the lab rows, a missing or already reached reviewBy release line, and an import of a lab subpath that is not allow-listed.', },
   // One responsive authority: no per-instance stylesheet, 100vh/vw, width query
   // outside `runtime/responsive` or unnamed @container; every surface adopts it.
   { id: 'responsive-single-authority-drill', run: ['node', '--test', 'scripts/check/responsive/single-authority/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['responsive-single-authority'], },
