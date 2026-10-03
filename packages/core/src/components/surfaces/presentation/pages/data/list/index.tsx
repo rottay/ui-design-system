@@ -59,7 +59,6 @@ import { useSurfaceTranslations } from "../../../../../structures/foundation/chr
 import { useSurfaceProfileDefaultsWithOverrides } from "../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides";
 import {
   resolveStackSpacing,
-  SurfaceAccentBarWrapper,
 } from "../../../../../structures/foundation/chrome/runtime/profile-defaults/personality";
 import {
   SurfaceEmptyState,
@@ -698,24 +697,22 @@ function ListSurfaceContent<TRaw, TView extends object>({
       actions={headerActions}
       loading={loading}
     >
-      <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {/* Coarse view-transition seam wrapping the list body. Inert outside an
-            active view transition. */}
-        <Box style={{ viewTransitionName: "ds-vt-list-body" }}>
-          {profileDefaults.animateEntrance ? (
-            <FadeIn durationMs={profileDefaults.entranceDuration}>
-              {listContent}
-            </FadeIn>
-          ) : (
-            listContent
-          )}
-          {primaryActionButton && primaryActionPlacement !== "app-bar" && (
-            <SurfacePostureAction label={primaryAction?.label}>
-              {primaryActionButton}
-            </SurfacePostureAction>
-          )}
-        </Box>
-      </SurfaceAccentBarWrapper>
+      {/* Coarse view-transition seam wrapping the list body. Inert outside an
+          active view transition. */}
+      <Box style={{ viewTransitionName: "ds-vt-list-body" }}>
+        {profileDefaults.animateEntrance ? (
+          <FadeIn durationMs={profileDefaults.entranceDuration}>
+            {listContent}
+          </FadeIn>
+        ) : (
+          listContent
+        )}
+        {primaryActionButton && primaryActionPlacement !== "app-bar" && (
+          <SurfacePostureAction label={primaryAction?.label}>
+            {primaryActionButton}
+          </SurfacePostureAction>
+        )}
+      </Box>
     </PageShellSurface>
   );
 }

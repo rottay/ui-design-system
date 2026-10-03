@@ -30,7 +30,7 @@ import {
 } from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
-import { resolveStackSpacing, SurfaceAccentBarWrapper } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import type { DetailFormSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import type { Adapt } from '../../../../../../foundation/contracts/kernel/adaptation';
@@ -274,13 +274,11 @@ function DetailFormSurfaceContent({
     // FormBuilder's own skeleton -- field rows and action bar shaped like the
     // form -- is what the user sees instead of the generic page skeleton.
     <PageShellSurface chrome={chrome} loading={false}>
-      <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>{content}</FadeIn>
-        ) : (
-          content
-        )}
-      </SurfaceAccentBarWrapper>
+      {profileDefaults.animateEntrance ? (
+        <FadeIn durationMs={profileDefaults.entranceDuration}>{content}</FadeIn>
+      ) : (
+        content
+      )}
     </PageShellSurface>
   );
 }

@@ -73,7 +73,6 @@ import { useSurfaceProfileDefaults } from '../../../../../structures/foundation/
 import {
   resolveStackSpacing,
   resolveHeadingFontWeight,
-  SurfaceAccentBarWrapper,
 } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import { hasSurfaceError } from '../../../../runtime/helpers';
@@ -1161,13 +1160,9 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
     </Stack>
   );
 
-  return (
-    <SurfaceAccentBarWrapper defaults={profileDefaults}>
-      {profileDefaults.animateEntrance ? (
-        <FadeIn durationMs={profileDefaults.entranceDuration}>{content}</FadeIn>
-      ) : (
-        content
-      )}
-    </SurfaceAccentBarWrapper>
+  return profileDefaults.animateEntrance ? (
+    <FadeIn durationMs={profileDefaults.entranceDuration}>{content}</FadeIn>
+  ) : (
+    content
   );
 }

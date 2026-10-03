@@ -63,7 +63,6 @@ import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/resp
 import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import {
   resolveStackSpacing,
-  SurfaceAccentBarWrapper,
 } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 
@@ -518,13 +517,11 @@ function NotificationSurfaceContent({
        anatomy (dashboard/chat idiom), so the page chrome and section headings
        stay live and the swap to real content is paint-only. */
     <PageShellSurface chrome={config.presentation.chrome} actions={dockActions ? undefined : actionsNode} loading={false}>
-      <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>{content}</FadeIn>
-        ) : (
-          content
-        )}
-      </SurfaceAccentBarWrapper>
+      {profileDefaults.animateEntrance ? (
+        <FadeIn durationMs={profileDefaults.entranceDuration}>{content}</FadeIn>
+      ) : (
+        content
+      )}
       {dockActions && actionsNode}
     </PageShellSurface>
   );

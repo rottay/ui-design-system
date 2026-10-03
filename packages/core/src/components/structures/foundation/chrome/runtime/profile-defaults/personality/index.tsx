@@ -4,13 +4,12 @@
  * @fileoverview Personality rendering helpers for the surface layer.
  * @description Translates personality profile defaults into concrete visual
  * decisions such as heading weights, label text transforms, and section
- * spacing. The former decorative accent-bar API remains as an inert
- * compatibility boundary: white-label differentiation must come from semantic
- * surface recipes, never from a colored edge rail.
+ * spacing. White-label differentiation must come from semantic surface
+ * recipes, never from a colored edge rail.
  */
 
-import React from 'react';
-import type { SurfaceSectionSpacing, ResolvedSurfaceProfileDefaults } from '..';
+import type React from 'react';
+import type { SurfaceSectionSpacing } from '..';
 
 // ---------------------------------------------------------------------------
 // Section spacing
@@ -50,19 +49,6 @@ export interface AccentBarProps {
   position: 'top' | 'left' | 'none';
   thickness: number;
   barStyle: 'solid' | 'gradient' | 'animated';
-}
-
-/**
- * @deprecated Transparent compatibility wrapper for the retired accent-bar
- * API. It must never add layout, clipping, padding, or DOM anatomy.
- */
-export function SurfaceAccentBarWrapper({
-  children,
-}: {
-  children: React.ReactNode;
-  defaults: ResolvedSurfaceProfileDefaults;
-}): React.ReactElement {
-  return <>{children}</>;
 }
 
 // ---------------------------------------------------------------------------

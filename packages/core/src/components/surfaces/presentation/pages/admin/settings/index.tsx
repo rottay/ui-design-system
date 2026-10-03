@@ -30,7 +30,6 @@ import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/resp
 import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import {
   resolveStackSpacing,
-  SurfaceAccentBarWrapper,
 } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import { SurfaceActionBar, SurfaceTabbedLabel } from '../../../../../structures/shell/surface-chrome';
 import {
@@ -264,15 +263,13 @@ function SettingsSurfaceContent({
       actions={actionsNode}
       loading={false}
     >
-      <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>
-            {settingsContent}
-          </FadeIn>
-        ) : (
-          settingsContent
-        )}
-      </SurfaceAccentBarWrapper>
+      {profileDefaults.animateEntrance ? (
+        <FadeIn durationMs={profileDefaults.entranceDuration}>
+          {settingsContent}
+        </FadeIn>
+      ) : (
+        settingsContent
+      )}
       {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );

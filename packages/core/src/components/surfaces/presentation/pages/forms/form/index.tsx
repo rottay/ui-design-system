@@ -42,7 +42,6 @@ import { surfaceStackingValue } from '../../../../../structures/foundation/chrom
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import {
   resolveStackSpacing,
-  SurfaceAccentBarWrapper,
 } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 
@@ -271,13 +270,11 @@ function FormSurfaceContent({ config, loading = false, error, onRetry, adapt }: 
     // FormBuilder's own skeleton -- title, field rows, action bar shaped like
     // the form -- is what the user sees instead of the generic page skeleton.
     <PageShellSurface chrome={chrome} loading={false}>
-      <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>{formContent}</FadeIn>
-        ) : (
-          formContent
-        )}
-      </SurfaceAccentBarWrapper>
+      {profileDefaults.animateEntrance ? (
+        <FadeIn durationMs={profileDefaults.entranceDuration}>{formContent}</FadeIn>
+      ) : (
+        formContent
+      )}
     </PageShellSurface>
   );
 }

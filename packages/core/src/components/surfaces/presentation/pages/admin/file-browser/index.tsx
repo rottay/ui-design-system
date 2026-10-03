@@ -37,7 +37,6 @@ import { useSurfaceTranslations } from '../../../../../structures/foundation/chr
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import {
   resolveStackSpacing,
-  SurfaceAccentBarWrapper,
 } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 
 export interface FileBrowserSurfaceProps {
@@ -282,13 +281,11 @@ function FileBrowserSurfaceContent({
   // unmount title/actions).
   return (
     <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
-      <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>{browserBody}</FadeIn>
-        ) : (
-          browserBody
-        )}
-      </SurfaceAccentBarWrapper>
+      {profileDefaults.animateEntrance ? (
+        <FadeIn durationMs={profileDefaults.entranceDuration}>{browserBody}</FadeIn>
+      ) : (
+        browserBody
+      )}
       {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );

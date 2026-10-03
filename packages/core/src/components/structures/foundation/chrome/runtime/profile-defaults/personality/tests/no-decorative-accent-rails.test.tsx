@@ -1,35 +1,19 @@
-import React from 'react';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { render } from '@testing-library/react';
 
-import type { ResolvedSurfaceProfileDefaults } from '../..';
-import { SurfaceAccentBarWrapper } from '..';
+const COMPONENTS_ROOT = join(__dirname, '../../../../../../..');
 
-const SURFACE_DEFAULTS: ResolvedSurfaceProfileDefaults = {
-  density: 'comfortable',
-  listView: 'table',
-  schedulerView: 'month',
-  tabsType: 'line',
-  listCompact: false,
-  listCardMinWidth: 280,
-  compareCompact: false,
-  cardVariant: 'outlined',
-  sectionSpacing: 'md',
-  headerWeight: 'normal',
-  animateEntrance: false,
-  badgeShape: 'rounded',
-  labelStyle: 'sentence',
-  entranceStyle: 'none',
-  entranceDuration: 0,
-  staggerDelay: 0,
-  countUpEnabled: false,
-  pulseSpeed: 'none',
-  accentPosition: 'left',
-  accentBarThickness: 24,
-  accentBarStyle: 'gradient',
-};
+const ACCENT_RAIL_OWNERS = [
+  join(COMPONENTS_ROOT, 'structures/foundation/chrome'),
+  join(COMPONENTS_ROOT, 'surfaces/presentation/pages'),
+];
+
+function productionSources(root: string): string[] {
+  return readdirSync(root, { recursive: true, encoding: 'utf8' })
+    .filter((entry) => /\.tsx?$/.test(entry) && !/(^|\/)tests\//.test(entry))
+    .map((entry) => join(root, entry));
+}
 
 const ACCENT_BAR_SKIN = readFileSync(
   join(
@@ -40,16 +24,11 @@ const ACCENT_BAR_SKIN = readFileSync(
 );
 
 describe('decorative accent-rail prohibition', () => {
-  it('keeps the compatibility wrapper transparent', () => {
-    const { container, getByTestId } = render(
-      <SurfaceAccentBarWrapper defaults={SURFACE_DEFAULTS}>
-        <section data-testid="content">Content</section>
-      </SurfaceAccentBarWrapper>,
-    );
+  it('stamps no accent-rail anatomy from the surface chrome or the surface pages', () => {
+    const sources = ACCENT_RAIL_OWNERS.flatMap(productionSources);
 
-    expect(getByTestId('content')).toBe(container.firstElementChild);
-    expect(container.children).toHaveLength(1);
-    expect(container.querySelector('.ds-accent-bar')).toBeNull();
+    expect(sources.length).toBeGreaterThan(0);
+    expect(sources.filter((source) => readFileSync(source, 'utf8').includes('ds-accent-bar'))).toEqual([]);
   });
 
   it('keeps the legacy skin inert and free of decorative paint', () => {

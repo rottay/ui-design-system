@@ -39,7 +39,6 @@ import { useSurfaceTranslations } from '../../../../../structures/foundation/chr
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import {
   resolveStackSpacing,
-  SurfaceAccentBarWrapper,
 } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
@@ -300,13 +299,11 @@ function EditorSurfaceContent({
       actions={dockActions ? undefined : actionsNode}
       loading={false}
     >
-      <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>{editorContent}</FadeIn>
-        ) : (
-          editorContent
-        )}
-      </SurfaceAccentBarWrapper>
+      {profileDefaults.animateEntrance ? (
+        <FadeIn durationMs={profileDefaults.entranceDuration}>{editorContent}</FadeIn>
+      ) : (
+        editorContent
+      )}
       {dockActions && actionsNode}
     </PageShellSurface>
   );

@@ -49,7 +49,6 @@ import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/resp
 import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import {
   resolveStackSpacing,
-  SurfaceAccentBarWrapper,
 } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import type { ChatSurfaceConfig, ChatSurfaceMessage } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
@@ -433,15 +432,13 @@ function ChatSurfaceContent({
       actions={<SurfacePostureSlot name="header-actions"><SurfaceActionBar actions={config.behavior.actions} access={config.access} /></SurfacePostureSlot>}
       loading={false}
     >
-      <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>
-            {chatContent}
-          </FadeIn>
-        ) : (
-          chatContent
-        )}
-      </SurfaceAccentBarWrapper>
+      {profileDefaults.animateEntrance ? (
+        <FadeIn durationMs={profileDefaults.entranceDuration}>
+          {chatContent}
+        </FadeIn>
+      ) : (
+        chatContent
+      )}
       {!loading && dockActions && surfacePosture?.regions.composer !== 'hide' && surfacePosture?.regions.composer !== 'collapse' && sendActionsNode}
     </PageShellSurface>
   );

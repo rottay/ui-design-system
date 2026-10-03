@@ -50,7 +50,6 @@ import {
 } from "../../../../../structures/foundation/chrome/contracts";
 import {
   resolveStackSpacing,
-  SurfaceAccentBarWrapper,
 } from "../../../../../structures/foundation/chrome/runtime/profile-defaults/personality";
 import {
   SurfaceEmptyState,
@@ -502,17 +501,15 @@ function DashboardSurfaceContent({
       actions={actionsNode}
       loading={false}
     >
-      <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>
-            <StaggerChildren staggerDelayMs={profileDefaults.staggerDelay}>
-              {dashboardContent}
-            </StaggerChildren>
-          </FadeIn>
-        ) : (
-          dashboardContent
-        )}
-      </SurfaceAccentBarWrapper>
+      {profileDefaults.animateEntrance ? (
+        <FadeIn durationMs={profileDefaults.entranceDuration}>
+          <StaggerChildren staggerDelayMs={profileDefaults.staggerDelay}>
+            {dashboardContent}
+          </StaggerChildren>
+        </FadeIn>
+      ) : (
+        dashboardContent
+      )}
       {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );

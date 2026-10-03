@@ -44,7 +44,6 @@ import { useSurfaceTranslations } from '../../../../../structures/foundation/chr
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import {
   resolveStackSpacing,
-  SurfaceAccentBarWrapper,
 } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import type { MediaSurfaceConfig, MediaSurfaceItem } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
@@ -506,13 +505,11 @@ function MediaSurfaceContent({
       // gallery anatomy. The surface owns a mirror skeleton instead.
       loading={false}
     >
-      <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>{mediaContent}</FadeIn>
-        ) : (
-          mediaContent
-        )}
-      </SurfaceAccentBarWrapper>
+      {profileDefaults.animateEntrance ? (
+        <FadeIn durationMs={profileDefaults.entranceDuration}>{mediaContent}</FadeIn>
+      ) : (
+        mediaContent
+      )}
       {dockActions && actionsNode}
     </PageShellSurface>
   );

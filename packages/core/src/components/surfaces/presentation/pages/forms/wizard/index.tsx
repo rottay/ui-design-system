@@ -22,7 +22,7 @@ import {
 } from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
-import { resolveStackSpacing, SurfaceAccentBarWrapper } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import type {
   WizardSurfaceConfig,
   WizardSurfaceStepConfig,
@@ -472,13 +472,11 @@ function WizardSurfaceContent({ config, loading = false, error, onRetry, adapt }
     // StepWizard's own skeleton -- progress + content shaped like the wizard --
     // is what the user sees instead of the generic page skeleton.
     <PageShellSurface chrome={chrome} loading={false}>
-      <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>{wizardContent}</FadeIn>
-        ) : (
-          wizardContent
-        )}
-      </SurfaceAccentBarWrapper>
+      {profileDefaults.animateEntrance ? (
+        <FadeIn durationMs={profileDefaults.entranceDuration}>{wizardContent}</FadeIn>
+      ) : (
+        wizardContent
+      )}
     </PageShellSurface>
   );
 }
