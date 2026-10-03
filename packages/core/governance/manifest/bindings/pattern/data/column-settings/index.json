@@ -5,7 +5,6 @@
     "packages/core/src/components/patterns/data/column-settings/contracts/index.ts",
     "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
     "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx",
-    "packages/core/src/components/patterns/data/column-settings/engines/rustic/index.tsx",
     "packages/core/src/components/patterns/data/column-settings/index.ts",
     "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
     "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts"

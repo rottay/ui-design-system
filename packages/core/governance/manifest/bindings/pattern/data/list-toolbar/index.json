@@ -5,7 +5,6 @@
     "packages/core/src/components/patterns/data/list-toolbar/contracts/index.ts",
     "packages/core/src/components/patterns/data/list-toolbar/engines/classic/index.tsx",
     "packages/core/src/components/patterns/data/list-toolbar/engines/modern/index.tsx",
-    "packages/core/src/components/patterns/data/list-toolbar/engines/rustic/index.tsx",
     "packages/core/src/components/patterns/data/list-toolbar/foundation/tokens/index.ts",
     "packages/core/src/components/patterns/data/list-toolbar/index.ts",
     "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css"

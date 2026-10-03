@@ -323,39 +323,59 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 289,
-          "maxFiles": 129,
-          "digest": "99ce9eb7770a39533131eec558beeca2e7a30d440da9b2a955f100a52798e4d5",
+          "maxCount": 285,
+          "maxFiles": 128,
+          "digest": "f840154f977be22e4e247faf65b75ecfd1f2fd42421a4aa443e18ae5fdc6f2b0",
           "lastMove": {
-            "date": "2026-09-25",
+            "date": "2026-10-03",
             "from": "289/129",
-            "to": "289/129",
-            "kind": "body rewrite only, digest re-pinned via --print-baseline --repositories ui-design-system; count and files unchanged, no new author",
+            "to": "285/128",
+            "kind": "removal only, re-pinned DOWN via --print-baseline --repositories ui-design-system; no body added or rewritten, no new author",
             "movers": [
-              "47c2c681e: skin/export-button/index.css, `var(--ds-export-button-toast-duration, 1.8s)` -> `1.8s` (WO-EVI-03 arm 2: the channel was never produced, so the read always painted its fallback; the fallback became the declared paint because the toast fade is bound to the engine's fixed 1800ms lifetime). Measured by scanning 787d8215f and HEAD with the same scanner: 1 body removed, 1 added, nothing else moved"
+              "7a79c1b89 (WO-RET-02 packet 1): -3 in engines/modern/framework-bridge/index.css, the dead bridge rules at lines 23 (`transition: border-color 0.2s ease, box-shadow 0.2s ease`), 63 (`transition: all 0.2s ease`) and 151 (`animation: ds-foundation-spin 0.6s linear infinite`); the file keeps no finding, hence -1 file",
+              "7a79c1b89 (same commit): -1 in engines/rustic/theme/index.css, one of the two `animation: ds-spin 0.6s linear infinite` bodies left with the dead .ds-btn rules. Measured by scanning `git archive 1d3837c67` (which reproduces the previous digest byte-exact) and the working tree with the same scanner: 4 bodies removed, 0 added"
             ],
             "previous": {
-              "date": "2026-09-24",
-              "from": "304/138",
+              "date": "2026-09-25",
+              "from": "289/129",
               "to": "289/129",
-              "kind": "measured rewrite and removal; no new author (the 0ca2eb294 widget-board literal was introduced and retired within the window)",
+              "kind": "body rewrite only, digest re-pinned via --print-baseline --repositories ui-design-system; count and files unchanged, no new author",
               "movers": [
-                "8e6b7e57b: +45/-47 in its own diff, -45 of the pin's rows, motion reads rewritten from primitive rungs to dial-driven intents",
-                "dd3060fa2: -2 (approval-workflow modern skin, the 720ms fallbacks rewritten; their surviving form lands with 8e6b7e57b)",
-                "d495324e5: +1/-1, frozen scrollbar paint relocated from skin/scroll-area to engines/classic/theme",
-                "8c901556d: +1/-1, page-shell sheen channel renamed",
-                "-2 each: 9779cab05, a9e48ebc1, e5c3a7334, 0a725ecc8; -1 each: e31c1174e, 0d29e9fe8, b5eca0e4b, 0d154c0d4, d524ec1d6 (family cuts retiring raw timings)",
-                "the commit carrying this row: skin/widget-board transform/inline-size fallback reads --ds-motion-deliberate instead of repeating 320ms"
-              ]
+                "47c2c681e: skin/export-button/index.css, `var(--ds-export-button-toast-duration, 1.8s)` -> `1.8s` (WO-EVI-03 arm 2: the channel was never produced, so the read always painted its fallback; the fallback became the declared paint because the toast fade is bound to the engine's fixed 1800ms lifetime). Measured by scanning 787d8215f and HEAD with the same scanner: 1 body removed, 1 added, nothing else moved"
+              ],
+              "previous": {
+                "date": "2026-09-24",
+                "from": "304/138",
+                "to": "289/129",
+                "kind": "measured rewrite and removal; no new author (the 0ca2eb294 widget-board literal was introduced and retired within the window)",
+                "movers": [
+                  "8e6b7e57b: +45/-47 in its own diff, -45 of the pin's rows, motion reads rewritten from primitive rungs to dial-driven intents",
+                  "dd3060fa2: -2 (approval-workflow modern skin, the 720ms fallbacks rewritten; their surviving form lands with 8e6b7e57b)",
+                  "d495324e5: +1/-1, frozen scrollbar paint relocated from skin/scroll-area to engines/classic/theme",
+                  "8c901556d: +1/-1, page-shell sheen channel renamed",
+                  "-2 each: 9779cab05, a9e48ebc1, e5c3a7334, 0a725ecc8; -1 each: e31c1174e, 0d29e9fe8, b5eca0e4b, 0d154c0d4, d524ec1d6 (family cuts retiring raw timings)",
+                  "the commit carrying this row: skin/widget-board transform/inline-size fallback reads --ds-motion-deliberate instead of repeating 320ms"
+                ]
+              }
             }
           }
         },
         {
           "repo": "ui-design-system",
           "scope": "showroom",
-          "maxCount": 42,
-          "maxFiles": 16,
-          "digest": "9053b0b84301684ee004abc46864082451d98c130414eefc8fd1f7aec7fd8871"
+          "maxCount": 41,
+          "maxFiles": 15,
+          "digest": "cc7ad5a38eafcdea34ece0a34c7df0a09e5623aa77a2016bf0128ddb9364b9fa",
+          "lastMove": {
+            "date": "2026-10-03",
+            "from": "42/16",
+            "to": "41/15",
+            "kind": "net removal (-2 +1), re-pinned DOWN via --print-baseline --repositories ui-design-system; NOT removal-only: one finding identity is new to the scanner, though its timing body is not new to the tree",
+            "movers": [
+              "70b8f4a0e (WO-RET-05 packet 4a): -2, the unused playground/engine-switcher/index.tsx:52 and playground/theme-switcher/index.tsx:50 inline transitions deleted with their files",
+              "70b8f4a0e (same commit): +1 at components/docs/frame/index.tsx:19, `transition: hoverable ? 'transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease' : undefined`. The same 180ms body sat in the deleted components/showroom-ui/index.tsx:222-224 (from 9abd639d3) with the literal on a continuation line, which the single-line scanner never counted; re-homed onto one line it is now counted. The literal is still raw and stays owed to a governed motion channel. Measured by scanning `git archive 1d3837c67` (which reproduces the previous digest byte-exact) and the working tree with the same scanner: 2 bodies removed, 1 added; files -2 +1 (showroom-ui carried no counted finding)"
+            ]
+          }
         },
         {
           "repo": "ui-design-system",
@@ -543,9 +563,18 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 27,
-          "maxFiles": 19,
-          "digest": "1c075161df28ec3b9a3129bb1bf7a7c1cd49a28817e87397713e4769fb83e05e"
+          "maxCount": 26,
+          "maxFiles": 18,
+          "digest": "d4b9b4db40f1201f5619ccafaa2451826f182f65d97399700cc661727b718e86",
+          "lastMove": {
+            "date": "2026-10-03",
+            "from": "27/19",
+            "to": "26/18",
+            "kind": "removal only, re-pinned DOWN via --print-baseline --repositories ui-design-system; no body added or rewritten, no new author",
+            "movers": [
+              "7a79c1b89 (WO-RET-02 packet 1): -1, engines/modern/framework-bridge/index.css:63 `transition: all 0.2s ease` retired with the dead bridge rules; the file keeps no finding, hence -1 file. Measured by scanning `git archive 1d3837c67` (which reproduces the previous digest byte-exact) and the working tree with the same scanner: 1 body removed, 0 added"
+            ]
+          }
         },
         {
           "repo": "ui-design-system",

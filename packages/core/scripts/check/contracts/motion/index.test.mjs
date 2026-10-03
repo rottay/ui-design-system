@@ -425,9 +425,9 @@ test('the retired TableCheckboxStyles bodies cannot come back under the lowered 
   assert.deepEqual(
     { maxCount: row.maxCount, maxFiles: row.maxFiles, digest: row.digest },
     {
-      maxCount: 289,
-      maxFiles: 129,
-      digest: '99ce9eb7770a39533131eec558beeca2e7a30d440da9b2a955f100a52798e4d5',
+      maxCount: 285,
+      maxFiles: 128,
+      digest: 'f840154f977be22e4e247faf65b75ecfd1f2fd42421a4aa443e18ae5fdc6f2b0',
     },
   );
 
