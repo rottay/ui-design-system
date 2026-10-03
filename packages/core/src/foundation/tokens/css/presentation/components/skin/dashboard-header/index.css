@@ -346,11 +346,13 @@
 }
 
 /* The readout's ring is the shared kernel's decision read off `data-state`,
-   with the platform pseudo as the fallback arm of the same rule (F-37). */
+   with the platform pseudo as the fallback arm of the same rule (F-37). It
+   wears the tenant focus signature. */
 .ds-structure.ds-dashboard-header [data-part='metrics-row'][data-state~='focus-visible'],
 .ds-structure.ds-dashboard-header [data-part='metrics-row']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 
 .ds-structure.ds-dashboard-header [data-part='metric-chip'] {
@@ -597,7 +599,9 @@
      a media query, not a second authority on when the ring belongs. */
   .ds-structure.ds-dashboard-header [data-part='metrics-row'][data-state~='focus-visible'],
   .ds-structure.ds-dashboard-header [data-part='metrics-row']:focus-visible {
-    outline-color: Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 }
 

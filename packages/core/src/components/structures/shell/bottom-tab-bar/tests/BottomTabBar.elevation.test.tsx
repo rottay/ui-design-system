@@ -151,8 +151,11 @@ describe('BottomTabBar elevation contract', () => {
 
     const pseudos = RULES.filter((rule) => isPseudo(rule.selector));
     expect(pseudos.length).toBeGreaterThan(0);
+    // The focus overlay paints while its tab holds keyboard focus, a state no
+    // resting render carries, so its originating element is asked at rest.
+    const FOCUSED = ":is([data-state~='focus-visible'], :focus-visible)";
     for (const rule of pseudos) {
-      const originating = rule.selector.replace(/::[a-z-]+$/, '');
+      const originating = rule.selector.replace(/::[a-z-]+$/, '').replace(FOCUSED, '');
       expect(container.querySelector(originating), rule.selector).not.toBeNull();
     }
   });

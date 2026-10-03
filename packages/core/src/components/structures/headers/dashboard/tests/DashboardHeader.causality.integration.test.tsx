@@ -100,19 +100,13 @@ describeCausality({
   family: 'dashboard-header',
   markup,
   targets: [
-    // The identity tile's ink is the seeded primary; the readout ring falls
-    // back to the same seed when the theme states no focus colour.
+    // The identity tile's ink is the seeded primary; the readout wears the
+    // tenant focus signature, whose colour rests on the same seed.
     { id: 'iconInk', selector: ICON, property: 'color' },
     {
-      id: 'ringOutline',
+      id: 'ringSignature',
       selector: READOUT,
-      property: 'outline-color',
-      attributes: { 'data-state': 'focus-visible' },
-    },
-    {
-      id: 'ringWidth',
-      selector: READOUT,
-      property: 'outline-width',
+      property: 'box-shadow',
       attributes: { 'data-state': 'focus-visible' },
     },
     // The operational marker and the up-trend change read the status ramp.
@@ -147,11 +141,11 @@ describeCausality({
     { id: 'ruleWidth', selector: ROOT, property: '--ds-dashboard-header-rule' },
   ],
   decisions: {
-    // `consumes: palette.*` — the seeded primary reaches the identity ink and,
-    // through the fallback arm, the readout's ring.
+    // `consumes: palette.*` — the seeded primary reaches the identity ink and
+    // the readout's focus signature.
     'palette.seeds': {
       value: { primary: '#2F6B9A' },
-      moves: ['iconInk', 'ringOutline'],
+      moves: ['iconInk', 'ringSignature'],
       holds: 'ruleWidth',
       in: VERTICALS,
     },
@@ -200,10 +194,10 @@ describeCausality({
       in: VERTICALS,
     },
     // `consumes: surfaces.focusStyle / states.*` — the readout's keyboard ring,
-    // whose weight the focus style decides.
+    // whose signature the focus style decides.
     'states.focus-style': {
       value: 'glow',
-      moves: ['ringWidth'],
+      moves: ['ringSignature'],
       holds: 'ruleWidth',
       in: VERTICALS,
     },
@@ -256,25 +250,25 @@ describe('dashboard-header causality surface', () => {
       markup,
       arms: { base: {} },
       targets: [
-        { id: 'restingOutline', selector: READOUT, property: 'outline-color' },
+        { id: 'restingShadow', selector: READOUT, property: 'box-shadow' },
+        {
+          id: 'kernelShadow',
+          selector: READOUT,
+          property: 'box-shadow',
+          attributes: { 'data-state': 'focus-visible' },
+        },
         {
           id: 'kernelOutline',
           selector: READOUT,
           property: 'outline-color',
           attributes: { 'data-state': 'focus-visible' },
         },
-        { id: 'restingWidth', selector: READOUT, property: 'outline-width' },
-        {
-          id: 'kernelWidth',
-          selector: READOUT,
-          property: 'outline-width',
-          attributes: { 'data-state': 'focus-visible' },
-        },
       ],
     });
     const r = readings.base!;
-    expect(r.kernelOutline).not.toBe(r.restingOutline);
-    expect(r.kernelWidth).not.toBe(r.restingWidth);
+    expect(r.kernelShadow).not.toBe(r.restingShadow);
+    // The signature is a shadow: a painted outline would be one contour under every focus style.
+    expect(r.kernelOutline).toBe('rgba(0, 0, 0, 0)');
   }, 120_000);
 
   it('maps the inter-cell rule to the physical end edge in rtl', async () => {

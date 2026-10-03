@@ -136,10 +136,15 @@
   );
 }
 
+/* Keyboard focus wears the tenant focus signature, whole on every line of a
+   wrapped link; the outline is transparent until a tenant states its colour. */
 .rottay-link-shell.rottay-link-shell--modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-link-focus-ring-width, var(--ds-focus-ring-width, 2px)) solid
-    var(--ds-link-focus-ring-color, color-mix(in srgb, var(--ds-link-tone) 60%, transparent));
-  outline-offset: var(--ds-link-focus-ring-offset, var(--ds-focus-ring-offset, 2px));
+  outline: var(--ds-link-focus-ring-width, var(--ds-focus-ring-width)) solid
+    var(--ds-link-focus-ring-color, color-mix(in srgb, var(--ds-focus-ring-color) 0%, transparent));
+  outline-offset: var(--ds-link-focus-ring-offset, var(--ds-focus-ring-offset));
+  box-shadow: var(--ds-focus-ring);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-disabled='true'][data-disabled='true'] {
@@ -179,8 +184,9 @@
     color: VisitedText;
   }
   .rottay-link-shell.rottay-link-shell--modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
-    outline-offset: var(--ds-focus-ring-offset, 2px);
+    outline: max(2px, var(--ds-link-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: var(--ds-link-focus-ring-offset, var(--ds-focus-ring-offset));
+    box-shadow: none;
   }
   .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-disabled='true'][data-disabled='true'] {
     color: GrayText;

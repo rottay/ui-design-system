@@ -271,12 +271,16 @@
   gap: var(--ds-spacing-2, 8px);
 }
 
-/* The trail is a tab stop now (scrollable region), so it needs the governed
-   ring — a focusable element with no indicator is worse than no tab stop. */
+/* The trail is a tab stop now (scrollable region), so it wears the tenant
+   focus signature over its own highlight — a focusable element with no
+   indicator is worse than no tab stop. */
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible,
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb'][data-state~='focus-visible'] {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow:
+    var(--ds-focus-ring),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
 }
 
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'] {
@@ -290,12 +294,13 @@
   transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
-/* Keyboard users get the governed ring on crumb links (the UA default was
-   the only indicator before); hover/active keep their color-only cue. */
+/* Keyboard users get the tenant focus signature on crumb links;
+   hover/active keep their color-only cue. */
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible,
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='focus-visible'] {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-last='true'] {
@@ -480,6 +485,15 @@
   .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions'],
   .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'] {
     border-color: ButtonText;
+  }
+
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible,
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb'][data-state~='focus-visible'],
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible,
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='focus-visible'] {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 }
 

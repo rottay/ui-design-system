@@ -252,19 +252,21 @@
 
 /* ---- link interaction states (Phase B batch-01 B2): the skin painted no
    keyboard focus ring and no pressed cue for typography links -- only the
-   engine's pinned `hover:underline` utility carried interactivity. Focus is
-   now an independent, channel-driven ring (the same `--ds-focus-ring-*`
-   grammar as anchor.css), and the press cue is a decoration-thickness step
-   that works on touch (no hover there) without depending on the link's
-   resolved ink. Geometry never moves: outline + decoration only. ---- */
+   engine's pinned `hover:underline` utility carried interactivity. Focus
+   wears the tenant focus signature, whole on every line of a wrapped link,
+   and the press cue is a decoration-thickness step that works on touch (no
+   hover there) without depending on the link's resolved ink. Geometry never
+   moves: shadow + decoration only. ---- */
 /* Paired with the stamped state so the ring is reachable without a real
    keyboard, which is how it is probed. */
 .rottay-typography.rottay-typography--modern:is(a):focus-visible,
 .rottay-typography.rottay-typography--modern:is(a)[data-state~='focus-visible'] {
-  outline: var(--ds-focus-ring-width) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   border-radius: var(--ds-radius-sm);
+  box-shadow: var(--ds-focus-ring);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 .rottay-typography.rottay-typography--modern:is(a):not([data-disabled='true']):active,
@@ -357,6 +359,12 @@
   .rottay-typography.rottay-typography--modern:is(a)[data-disabled='true'] {
     color: GrayText;
     text-decoration: none;
+  }
+  .rottay-typography.rottay-typography--modern:is(a):focus-visible,
+  .rottay-typography.rottay-typography--modern:is(a)[data-state~='focus-visible'] {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 }
 

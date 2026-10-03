@@ -184,10 +184,24 @@
   pointer-events: none;
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
+/* The tabs tile the bar edge to edge against the viewport floor, so the
+   tenant focus signature rides an overlay inset by its own reach. */
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: calc(-1 * var(--ds-focus-ring-width));
   border-radius: var(--ds-radius-md, 10px);
+}
+
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  content: '';
+  border-radius: max(
+    0px,
+    calc(var(--ds-radius-md, 10px) - var(--ds-focus-ring-offset) - var(--ds-focus-ring-width))
+  );
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'],
@@ -375,5 +389,14 @@
   .rottay-bottom-tab-bar__badge[data-part='badge'] {
     box-shadow: none;
     outline: 1px solid CanvasText;
+  }
+
+  .rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
+  }
+
+  .rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+    display: none;
   }
 }

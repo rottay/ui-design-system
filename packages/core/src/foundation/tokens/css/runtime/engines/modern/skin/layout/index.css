@@ -225,9 +225,20 @@
   background: var(--ds-layout-sider-trigger-bg-hover, var(--ds-surface-highlight));
 }
 
+/* The trigger spans the sider, which scrolls and clips: the tenant focus
+   signature rides an overlay inset by its own reach. */
 .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color);
-  outline-offset: calc(-1 * var(--ds-focus-ring-offset));
+  position: relative;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: calc(-1 * var(--ds-focus-ring-width));
+}
+
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible)::after {
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  content: '';
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 /* The collapse/expand glyph is directional: in RTL the sider sits at the
@@ -287,8 +298,12 @@
   }
 
   .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
-    outline-offset: var(--ds-focus-ring-offset, 2px);
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
+  }
+
+  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible)::after {
+    display: none;
   }
 }
 

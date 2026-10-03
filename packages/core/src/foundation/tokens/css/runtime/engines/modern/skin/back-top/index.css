@@ -120,10 +120,20 @@
   box-shadow: var(--ds-backtop-shadow, var(--ds-elevation-2));
 }
 
-/* ---- keyboard focus ring. ---- */
+/* ---- keyboard focus: the tenant focus signature rides an overlay on the
+        circle, so the elevation and its hover step keep painting under it. ---- */
 .rottay-backtop.rottay-backtop--modern[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-backtop-focus-ring-offset, var(--ds-focus-ring-offset, 2px));
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-backtop-focus-ring-offset, var(--ds-focus-ring-offset));
+}
+
+.rottay-backtop.rottay-backtop--modern[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible)::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  border-radius: inherit;
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 @media (forced-colors: active) {
@@ -133,7 +143,10 @@
     forced-color-adjust: auto;
   }
   .rottay-backtop.rottay-backtop--modern[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+  }
+  .rottay-backtop.rottay-backtop--modern[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible)::after {
+    display: none;
   }
 }
 

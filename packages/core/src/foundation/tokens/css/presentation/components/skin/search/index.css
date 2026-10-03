@@ -83,17 +83,27 @@
 }
 
 /* Custom result renderer: the surface owns click-to-select around app
-   content, so it also owns the cursor affordance and the keyboard focus
-   ring — keyed on the canonical focus channels, with the same forced-colors
-   re-key the actionable Card uses. */
+   content, so it also owns the cursor affordance and the keyboard focus —
+   the tenant focus signature on an overlay, because the app content covers
+   the row and an inset signature would sit under it. */
 .ds-surface.ds-search [data-part="result-custom"] {
+  position: relative;
   cursor: pointer;
 }
 
 .ds-surface.ds-search [data-part="result-custom"]:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: 2px;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
+.ds-surface.ds-search [data-part="result-custom"]:focus-visible::after {
+  position: absolute;
+  inset: 0;
+  z-index: var(--ds-z-index-relative-above, 1);
+  content: "";
+  border-radius: inherit;
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 /* Custom renderers become a whole-row button. Keep fine-pointer density
@@ -106,8 +116,12 @@
 
 @media (forced-colors: active) {
   .ds-surface.ds-search [data-part="result-custom"]:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+  }
+
+  .ds-surface.ds-search [data-part="result-custom"]:focus-visible::after {
+    display: none;
   }
 }
 
