@@ -30,6 +30,19 @@ function rulesNaming(part: string): Array<{ selector: string; body: string }> {
     .filter((rule) => rule.selector.includes(`[data-part='${part}']`));
 }
 
+const ROOT_FOCUS =
+  ".ds-pattern-approval-inbox.ds-engine-modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible)";
+
+function declarationsOf(css: string): Array<{ selector: string; declarations: string[] }> {
+  return [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((match) => ({
+    selector: match[1].trim().replace(/\s+/g, ' '),
+    declarations: match[2]
+      .split(';')
+      .map((declaration) => declaration.trim().replace(/\s+/g, ' '))
+      .filter(Boolean),
+  }));
+}
+
 function renderWithSelection() {
   const view = render(
     <ModernApprovalInbox
@@ -84,5 +97,54 @@ describe('Modern ApprovalInbox — actions wear the Button focus signature', () 
       expect(isButton || isCheckbox).toBe(true);
     }
     expect(container.querySelector('[data-part="item"]')).not.toHaveAttribute('tabindex');
+  });
+
+  it('dresses the hand-off root in the focus signature, carried above its content', () => {
+    const { container } = renderWithSelection();
+    const root = container.querySelector<HTMLElement>('[data-part="root"]');
+    expect(root?.tabIndex).toBe(-1);
+
+    const forcedStart = SKIN.indexOf('@media (forced-colors: active)');
+    const forcedEnd = SKIN.indexOf('@media (prefers-reduced-motion: reduce)');
+    expect(forcedStart).toBeGreaterThan(-1);
+    expect(forcedEnd).toBeGreaterThan(forcedStart);
+    const authored = declarationsOf(SKIN.slice(0, forcedStart) + SKIN.slice(forcedEnd));
+    const forced = declarationsOf(SKIN.slice(forcedStart, forcedEnd));
+    const named = (rules: typeof authored, selector: string) =>
+      rules.filter((rule) => rule.selector === selector).map((rule) => rule.declarations);
+
+    expect(named(authored, ROOT_FOCUS)).toEqual([
+      [
+        'outline: var(--ds-focus-ring-width) solid transparent',
+        'outline-offset: var(--ds-focus-ring-offset)',
+      ],
+    ]);
+    expect(named(authored, `${ROOT_FOCUS}::after`)).toEqual([
+      [
+        'position: absolute',
+        'inset: 0',
+        'z-index: var(--ds-z-index-relative-above, 1)',
+        "content: ''",
+        'border-radius: var(--ds-radius-lg)',
+        'box-shadow: var(--ds-focus-ring)',
+        'pointer-events: none',
+      ],
+    ]);
+    const rest = named(authored, ".ds-pattern-approval-inbox.ds-engine-modern[data-part='root']");
+    expect(rest.flat()).toContain('position: relative');
+
+    expect(named(forced, ROOT_FOCUS)).toEqual([
+      [
+        'outline: max(2px, var(--ds-focus-ring-width)) solid Highlight',
+        'outline-offset: var(--ds-focus-ring-offset)',
+      ],
+    ]);
+    expect(named(forced, `${ROOT_FOCUS}::after`)).toEqual([['display: none']]);
+
+    for (const rule of [...authored, ...forced]) {
+      const readsSignature = rule.declarations.some((declaration) => declaration.includes('--ds-focus-ring'));
+      if (readsSignature) expect(rule.selector.startsWith(ROOT_FOCUS)).toBe(true);
+    }
+    expect(SKIN).not.toContain('--ds-focus-ring-color');
   });
 });

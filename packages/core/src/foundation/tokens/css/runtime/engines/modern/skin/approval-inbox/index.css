@@ -27,7 +27,28 @@
 
 /* --- Root + named container ------------------------------------------------- */
 .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] {
+  position: relative;
   container: ds-approval-inbox / inline-size;
+}
+
+/* --- Focus hand-off anchor ----------------------------------------------------
+   Settling the last item hands focus to the root (`tabIndex=-1`), so a
+   keyboard decision lands on the tenant focus signature. The cards cover the
+   root and an inset signature would sit under them, so an overlay carries it
+   above the content. */
+.ds-pattern-approval-inbox.ds-engine-modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible)::after {
+  position: absolute;
+  inset: 0;
+  z-index: var(--ds-z-index-relative-above, 1);
+  content: '';
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 /* --- Groups stack ------------------------------------------------------------ */
@@ -367,6 +388,15 @@
   .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-sla'][data-urgency='critical'] {
     outline: 1px solid Highlight;
     outline-offset: 1px;
+  }
+
+  .ds-pattern-approval-inbox.ds-engine-modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+  }
+
+  .ds-pattern-approval-inbox.ds-engine-modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible)::after {
+    display: none;
   }
 }
 
