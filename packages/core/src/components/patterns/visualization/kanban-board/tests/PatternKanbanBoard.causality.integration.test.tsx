@@ -119,11 +119,18 @@ describeCausality({
   family: 'kanban-board',
   markup,
   targets: [
-    // The drop target and the focus ring are the family's two seeded signals.
+    // The drop target and the focus signature are the family's two seeded
+    // signals; the list clips its cards, so the signature rides the card's
+    // inset overlay.
     { id: 'dropGround', selector: BODY, property: 'background-color', attributes: { 'data-dropping': 'true' } },
     { id: 'dropRing', selector: BODY, property: 'box-shadow', attributes: { 'data-dropping': 'true' } },
-    { id: 'focusInk', selector: CARD, property: 'outline-color', attributes: { 'data-state': 'focus-visible' } },
-    { id: 'focusRing', selector: CARD, property: 'outline-width', attributes: { 'data-state': 'focus-visible' } },
+    {
+      id: 'focusSignature',
+      selector: CARD,
+      property: 'box-shadow',
+      pseudo: '::after',
+      attributes: { 'data-state': 'focus-visible' },
+    },
     { id: 'titleFont', selector: TITLE, property: 'font-size' },
     { id: 'cardCorner', selector: CARD, property: 'border-top-left-radius' },
     { id: 'headerCorner', selector: HEADER, property: 'border-top-left-radius' },
@@ -137,10 +144,10 @@ describeCausality({
   ],
   decisions: {
     // `consumes: palette.*` -- the drop ground, the drop ring and the card's
-    // focus ink all resolve from the seeded ramp.
+    // focus signature all resolve from the seeded ramp.
     'palette.seeds': {
       value: { primary: '#2F6B9A' },
-      moves: ['dropGround', 'dropRing', 'focusInk'],
+      moves: ['dropGround', 'dropRing', 'focusSignature'],
       holds: 'cardCorner',
       in: VERTICALS,
     },
@@ -156,7 +163,7 @@ describeCausality({
     'shape.radius-scale': {
       value: 1.2,
       moves: ['cardCorner', 'headerCorner'],
-      holds: 'focusInk',
+      holds: 'focusSignature',
       in: VERTICALS,
     },
     // `consumes: surfaces.elevation` -- the card at rest is the family's only
@@ -167,11 +174,11 @@ describeCausality({
       holds: 'cardCorner',
       in: VERTICALS,
     },
-    // `consumes: states.focus` -- the card is a real tab stop, so the focus
-    // signature is the width of its own ring.
+    // `consumes: states.focus` -- the card is a real tab stop, so it wears the
+    // tenant focus signature.
     'states.focus-style': {
       value: 'glow',
-      moves: ['focusRing'],
+      moves: ['focusSignature'],
       holds: 'cardCorner',
       in: VERTICALS,
     },

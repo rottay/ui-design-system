@@ -253,10 +253,24 @@
   border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-bg-tertiary));
 }
 
+/* The signature shares box-shadow with the card's own shadow and leads the
+   list; a `none` hover elevation would void it, so that arm is guarded. */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow:
+    var(--ds-focus-ring),
+    0 1px 2px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+}
+
+@media (hover: hover) {
+  @container not style(--ds-shadow-md: none) {
+    .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:is([data-state~='hovered'], :hover):is([data-state~='focus-visible'], :focus-visible) {
+      box-shadow:
+        var(--ds-focus-ring),
+        var(--ds-shadow-md, 0 4px 6px -1px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent));
+    }
+  }
 }
 
 /* ---- date grouping ---- */
@@ -418,6 +432,8 @@
   }
 
   .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) {
-    outline-color: Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 }

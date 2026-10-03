@@ -183,8 +183,27 @@
    the button variant is test-pinned and stays a native element for now). */
 .ds-surface.ds-collection-render-dispatch
   .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: calc(-1 * var(--ds-focus-ring-width));
+}
+
+/* The card sits flush in the grid and covers its item, so the tenant focus
+   signature rides an overlay inset by its own reach, above the card. */
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible)::after {
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  z-index: var(--ds-z-index-relative-above, 1);
+  content: '';
+  border-radius: max(
+    0px,
+    calc(
+      var(--ds-collection-card-radius, var(--ds-radius-lg, 12px)) -
+        var(--ds-focus-ring-offset) - var(--ds-focus-ring-width)
+    )
+  );
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 .ds-surface.ds-collection-render-dispatch
@@ -230,7 +249,8 @@
 }
 
 /* Fallback "Open details" affordance: skinned identically whether it renders
-   as the native anchor or as the DS Button replacement. */
+   as the native anchor or as the DS Button replacement. The anchor wears the
+   tenant focus signature here; the Button keeps its own. */
 .ds-surface.ds-collection-render-dispatch
   .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"] {
   display: inline-flex;
@@ -249,12 +269,13 @@
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:is(
+  a.ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:is(
     [data-state~="focus-visible"],
     :focus-visible
   ) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 
 /* Pagination footer (hand-rolled, preserved; controls are DS primitives). */
@@ -332,7 +353,23 @@
 @media (forced-colors: active) {
   .ds-surface.ds-collection-render-dispatch
     .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible) {
-    outline: 2px solid Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
+  }
+
+  .ds-surface.ds-collection-render-dispatch
+    .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible)::after {
+    box-shadow: none;
+  }
+
+  .ds-surface.ds-collection-render-dispatch
+    a.ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:is(
+      [data-state~="focus-visible"],
+      :focus-visible
+    ) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 
   .ds-surface.ds-collection-render-dispatch

@@ -176,8 +176,15 @@
     var(--ds-color-primary) 42%,
     var(--ds-color-border-secondary)
   );
-  box-shadow: 0 0 0 3px
-      color-mix(in srgb, var(--ds-color-primary) 12%, transparent),
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+/* The native select is an invisible overlay, so the pill wears the tenant
+   focus signature for it, ahead of its own lift. */
+.ds-collection-page-size-control:has(.ds-collection-page-size-control__select:focus-visible) {
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow:
+    var(--ds-focus-ring),
     0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
 }
 .ds-collection-page-size-control__picker {
@@ -1020,10 +1027,20 @@
   opacity: 0;
 }
 
+/* The surface takes focus by script when it opens with nothing focusable
+   inside, so it wears the tenant focus signature. The signature shares
+   box-shadow with the popover elevation; a `none` elevation would void the
+   list. */
 .ds-collection-workspace__filter-dropdown[data-part="filter-dropdown-surface"]:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
+}
+
+@container (not style(--ds-popover-shadow: none)) and (not style(--ds-elevation-3: none)) {
+  .ds-collection-workspace__filter-dropdown[data-part="filter-dropdown-surface"]:focus-visible {
+    box-shadow: var(--ds-focus-ring), var(--ds-popover-shadow, var(--ds-elevation-3));
+  }
 }
 
 @supports (inline-size: 100dvw) {
@@ -1067,6 +1084,13 @@
   .ds-surface.ds-collection-workspace
     .ds-collection-preview-rail__resize[data-part="preview-rail-resize"]:focus-visible {
     outline: 2px solid Highlight;
+  }
+
+  .ds-collection-page-size-control:has(.ds-collection-page-size-control__select:focus-visible),
+  .ds-collection-workspace__filter-dropdown[data-part="filter-dropdown-surface"]:focus-visible {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 }
 

@@ -276,14 +276,31 @@
 .ds-pattern-kanban-board.ds-engine-modern [data-part='card'][data-dragging='true'] {
   opacity: 0.4;
 }
+/* The card list scrolls and clips its cards, so the tenant focus signature
+   rides an overlay inset by its own reach, only while the card itself holds
+   focus. */
 .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
   > [data-part='board']
   > [data-part='column']
   > [data-part='column-body']
   > [data-part='card-list']
   > [data-part='card']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  position: relative;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: calc(-1 * var(--ds-focus-ring-width));
+}
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='card-list']
+  > [data-part='card']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  content: '';
+  border-radius: inherit;
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 @media (hover: hover) {
   .ds-pattern-kanban-board.ds-engine-modern
@@ -423,7 +440,16 @@
     > [data-part='column-body']
     > [data-part='card-list']
     > [data-part='card']:is([data-state~='focus-visible'], :focus-visible) {
-    outline-color: Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
+  }
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body']
+    > [data-part='card-list']
+    > [data-part='card']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+    box-shadow: none;
   }
 }
 

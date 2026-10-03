@@ -165,11 +165,12 @@
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="table-scroll"] {
   overflow-x: auto;
 }
-/* The fixture is a tab stop now (scrollable region), so it needs the governed
-   ring — a focusable element with no indicator is worse than no tab stop. */
+/* The fixture is a tab stop (scrollable region) inside the previewed scope,
+   so it wears the previewed tenant's focus signature. */
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="table-scroll"]:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="sample-table"] {
   inline-size: 100%;
@@ -258,6 +259,12 @@
 @media (forced-colors: active) {
   .ds-pattern-tenant-preview.ds-engine-modern [data-part="swatch"] {
     forced-color-adjust: none;
+  }
+
+  .ds-pattern-tenant-preview.ds-engine-modern [data-part="table-scroll"]:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 
   .ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]

@@ -101,8 +101,10 @@ describe('CollectionRenderDispatch card press stamp', () => {
   it('pairs the open-link ring with the stamped state', () => {
     expect(skin).toContain('[data-part="fallback-open-link"]:is(');
     expect(skin).toContain('[data-state~="focus-visible"]');
-    expect(skin).toContain('outline: var(--ds-focus-ring-width, 2px) solid');
-    expect(skin).toContain('outline-offset: var(--ds-focus-ring-offset, 2px);');
+    expect(skin).toMatch(
+      /a\.ds-collection-render-dispatch__fallback-open-link\[data-part="fallback-open-link"\]:is\(\s*\[data-state~="focus-visible"\],\s*:focus-visible\s*\)\s*\{\s*outline: var\(--ds-focus-ring-width\) solid transparent;\s*outline-offset: var\(--ds-focus-ring-offset\);\s*box-shadow: var\(--ds-focus-ring\);\s*\}/u,
+    );
+    expect(skin).not.toMatch(/outline:[^;]*solid\s+var\(--ds-focus-ring-color/u);
     expect(skin).not.toMatch(/\[data-part="fallback-open-link"\]:focus-visible\s*\{/u);
   });
 
