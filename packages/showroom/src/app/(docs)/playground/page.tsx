@@ -15,11 +15,7 @@ import {
   Text,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import {
-  RocketIcon,
-  SettingsIcon,
-  SparklesIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 const ACTIONS = [
   {
@@ -45,7 +41,7 @@ const ENTRY_POINTS = [
     badge: 'Interactive',
     description:
       'Adjust palette, typography, and surface treatment with immediate DS feedback.',
-    icon: <SparklesIcon size={18} />,
+    icon: <Icon name="ai.sparkles" decorative size={18} />,
   },
   {
     title: 'Engines',
@@ -53,7 +49,7 @@ const ENTRY_POINTS = [
     badge: 'Compare',
     description:
       'Review how Classic, Modern, and Rustic reshape the same component contract.',
-    icon: <SettingsIcon size={18} />,
+    icon: <Icon name="navigation.settings" decorative size={18} />,
   },
   {
     title: 'Themes',
@@ -61,7 +57,7 @@ const ENTRY_POINTS = [
     badge: 'Tenant',
     description:
       'Validate how brand and vertical variables affect the same shared component set.',
-    icon: <RocketIcon size={18} />,
+    icon: <Icon name="action.play" decorative size={18} />,
   },
 ];
 

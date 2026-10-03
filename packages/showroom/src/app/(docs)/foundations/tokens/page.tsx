@@ -13,12 +13,7 @@ import {
   Text,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import {
-  BracesIcon,
-  LayersIcon,
-  SparklesIcon,
-  ZapIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 import { CodeBlock } from '@/components/playground';
 import { FoundationTopRail } from '../foundation-top-rail';
 import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial';
@@ -383,7 +378,7 @@ export default function TokensPage() {
         <DocsPanel
           eyebrow={
             <Flex align="center" gap={8}>
-              <LayersIcon size={18} />
+              <Icon name="layout.hierarchy" decorative size={18} />
               <Text size="sm" weight="semibold">
                 Token access
               </Text>
@@ -405,17 +400,17 @@ export default function TokensPage() {
             <Stack spacing={8}>
               {[
                 {
-                  icon: <BracesIcon size={14} />,
+                  icon: <Icon name="content.code" decorative size={14} />,
                   label: 'Base primitives',
                   detail: 'Core scales and neutral defaults.',
                 },
                 {
-                  icon: <SparklesIcon size={14} />,
+                  icon: <Icon name="ai.sparkles" decorative size={14} />,
                   label: 'Engine accents',
                   detail: 'Radius, shadows, motion, density.',
                 },
                 {
-                  icon: <ZapIcon size={14} />,
+                  icon: <Icon name="appearance.theme" decorative size={14} />,
                   label: 'Tenant overrides',
                   detail: 'Brand and vertical-specific values.',
                 },

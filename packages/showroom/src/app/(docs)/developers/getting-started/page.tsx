@@ -11,7 +11,7 @@ import {
   Text,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import { ArrowLeftIcon } from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 import { CodeBlock } from '@/components/playground';
 import { useShowroom } from '@/components/showroom-context';
 import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial';
@@ -300,7 +300,7 @@ export default function GettingStartedPage() {
           textDecoration: 'none',
         }}
       >
-        <ArrowLeftIcon size={14} /> Back to Developers
+        <Icon name="navigation.back" decorative size={14} /> Back to Developers
       </Link>
 
       <Card

@@ -9,18 +9,7 @@ import {
   type PatternGroup,
 } from "@/data/registry/patterns";
 import { charts } from "@/data/registry/charts";
-import {
-  ActivityIcon,
-  BarChart3Icon,
-  CreditCardIcon,
-  GitCompareIcon,
-  LayoutDashboardIcon,
-  MessageSquareIcon,
-  PaletteIcon,
-  ScanSearchIcon,
-  SparklesIcon,
-  UsersRoundIcon,
-} from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 
 interface PatternEditorial {
   promise: string;
@@ -46,7 +35,7 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     ],
     tint: "var(--ds-color-primary-50)",
     accent: "var(--ds-color-primary-600)",
-    icon: <BarChart3Icon size={20} />,
+    icon: <Icon name="data.chart" decorative size={20} />,
   },
   forms: {
     promise: "Turn structured capture flows into reusable systems.",
@@ -57,7 +46,7 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     pairedSurfaces: ["FormSurface", "WizardSurface", "DetailFormSurface"],
     tint: "var(--ds-color-success-50)",
     accent: "var(--ds-color-success-700)",
-    icon: <SparklesIcon size={20} />,
+    icon: <Icon name="ai.sparkles" decorative size={20} />,
   },
   visualization: {
     promise: "Reveal systems, trends, and spatial relationships.",
@@ -72,7 +61,7 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     ],
     tint: "var(--ds-color-warning-50)",
     accent: "var(--ds-color-warning-700)",
-    icon: <ActivityIcon size={20} />,
+    icon: <Icon name="analytics.activity" decorative size={20} />,
   },
   communication: {
     promise: "Make activity and collaboration legible.",
@@ -83,7 +72,7 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     pairedSurfaces: ["ChatSurface", "NotificationSurface", "ActivitySurface"],
     tint: "var(--ds-color-primary-50)",
     accent: "var(--ds-color-primary-700)",
-    icon: <MessageSquareIcon size={20} />,
+    icon: <Icon name="communication.message" decorative size={20} />,
   },
   workflow: {
     promise: "Model operational review and decision loops.",
@@ -98,7 +87,7 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     ],
     tint: "var(--ds-color-error-50)",
     accent: "var(--ds-color-error-700)",
-    icon: <GitCompareIcon size={20} />,
+    icon: <Icon name="system.workflow" decorative size={20} />,
   },
   navigation: {
     promise: "Give power users faster ways to move and switch context.",
@@ -113,7 +102,7 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     ],
     tint: "var(--ds-color-neutral-100)",
     accent: "var(--ds-color-text-primary, #111827)",
-    icon: <ScanSearchIcon size={20} />,
+    icon: <Icon name="action.search" decorative size={20} />,
   },
   feedback: {
     promise: "Adapt feedback flows to the device without changing their intent.",
@@ -123,7 +112,7 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     pairedSurfaces: ["FormSurface", "DetailSurface", "CommandCenterSurface"],
     tint: "var(--ds-color-error-50)",
     accent: "var(--ds-color-error-700)",
-    icon: <MessageSquareIcon size={20} />,
+    icon: <Icon name="status.info" decorative size={20} />,
   },
   commerce: {
     promise: "Turn pricing and transactional decisions into a coherent surface.",
@@ -134,7 +123,7 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     pairedSurfaces: ["PricingSurface", "BillingSurface", "MarketingSurface"],
     tint: "var(--ds-color-success-50)",
     accent: "var(--ds-color-success-700)",
-    icon: <CreditCardIcon size={20} />,
+    icon: <Icon name="billing.credit-card" decorative size={20} />,
   },
   customization: {
     promise: "Let a tenant see and shape their own visual identity live.",
@@ -145,7 +134,7 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     pairedSurfaces: ["BrandStudioSurface", "PreviewSurface", "SettingsSurface"],
     tint: "var(--ds-color-primary-50)",
     accent: "var(--ds-color-primary-600)",
-    icon: <PaletteIcon size={20} />,
+    icon: <Icon name="appearance.theme" decorative size={20} />,
   },
   identity: {
     promise: "Give people a consistent, reusable face across the product.",
@@ -156,7 +145,7 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     pairedSurfaces: ["DetailSurface", "ListSurface", "TeamSurface"],
     tint: "var(--ds-color-neutral-100)",
     accent: "var(--ds-color-text-primary, #111827)",
-    icon: <UsersRoundIcon size={20} />,
+    icon: <Icon name="entity.group" decorative size={20} />,
   },
   shell: {
     promise: "Frame a page consistently before any content loads.",
@@ -171,7 +160,7 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     ],
     tint: "var(--ds-color-warning-50)",
     accent: "var(--ds-color-warning-700)",
-    icon: <LayoutDashboardIcon size={20} />,
+    icon: <Icon name="operations.dashboard" decorative size={20} />,
   },
 };
 
@@ -690,7 +679,7 @@ export default function PatternsPage() {
                     style={{ flexWrap: "wrap" }}
                   >
                     <Flex align="center" gap={8} style={{ minWidth: 0 }}>
-                      <ActivityIcon size={18} />
+                      <Icon name="data.chart" decorative size={18} />
                       <Box style={{ minWidth: 0 }}>
                         <Text
                           as="div"

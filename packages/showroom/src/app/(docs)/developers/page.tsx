@@ -3,12 +3,7 @@
 import { ShowroomLink as Link } from '@/components/navigation/link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import {
-  BracesIcon,
-  LayoutTemplateIcon,
-  RocketIcon,
-  SparklesIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 import { CodeBlock } from '@/components/playground';
 import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial';
 import { patterns, primitives, structures, surfaces } from '@/data/registry';
@@ -614,7 +609,7 @@ export default function DevelopersPage() {
         >
           <Stack spacing="md">
             <Flex align="center" gap={8}>
-              <RocketIcon size={18} />
+              <Icon name="workflow.step" decorative size={18} />
               <Text as={"h2" as any} size="lg" weight="semibold">
                 First-day implementation board
               </Text>
@@ -658,7 +653,7 @@ export function AppShell() {
         >
           <Stack spacing="md">
             <Flex align="center" gap={8}>
-              <LayoutTemplateIcon size={18} />
+              <Icon name="workflow.template" decorative size={18} />
               <Text as={"h2" as any} size="lg" weight="semibold">
                 Validation checklist
               </Text>
@@ -756,7 +751,7 @@ export function AppShell() {
           description="Route people by intent instead of by taxonomy so first render, ownership, and visual comparison stay reachable in one pass."
           actions={
             <Flex align="center" gap={8}>
-              <SparklesIcon size={18} />
+              <Icon name="ai.sparkles" decorative size={18} />
               <Badge variant="secondary">Intent-led navigation</Badge>
             </Flex>
           }
@@ -823,7 +818,7 @@ export function AppShell() {
             }}
           >
             <Flex align="center" gap={8}>
-              <BracesIcon size={18} />
+              <Icon name="content.code" decorative size={18} />
               <Text size="sm" weight="semibold">
                 Working rule
               </Text>

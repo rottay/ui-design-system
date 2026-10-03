@@ -3,12 +3,7 @@ import { Badge, Box, Flex, Stack, Text } from '@rottay/design-system';
 import { DocsFrame } from '@/components/docs/frame';
 import { iconCategories } from '@/data/registry/icons';
 import { IMPLEMENTED_ENGINE_NAMES } from '@rottay/design-system/server';
-import {
-  BracesIcon,
-  LayersIcon,
-  SettingsIcon,
-  SparklesIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 import { FoundationTopRail } from './foundation-top-rail';
 
 interface FoundationArea {
@@ -43,7 +38,7 @@ const FOUNDATION_AREAS: FoundationArea[] = [
     whenToUse:
       'A UI feels inconsistent and you need to trace the value that is driving it.',
     samples: ['colors', 'spacing', 'typography', 'motion'],
-    icon: <LayersIcon size={22} />,
+    icon: <Icon name="layout.hierarchy" decorative size={22} />,
     tint: 'var(--ds-color-info-bg)',
     accent: 'var(--ds-color-info)',
     panel: 'var(--ds-color-bg-overlay)',
@@ -59,7 +54,7 @@ const FOUNDATION_AREAS: FoundationArea[] = [
     whenToUse:
       'You need to explain how one system becomes Rottay, BitHire, or Evnto at runtime.',
     samples: ['rottay', 'bithire', 'evnto', 'brand themes'],
-    icon: <SparklesIcon size={22} />,
+    icon: <Icon name="ai.sparkles" decorative size={22} />,
     tint: 'var(--ds-color-warning-bg)',
     accent: 'var(--ds-color-warning)',
     panel: 'var(--ds-color-bg-overlay)',
@@ -75,7 +70,7 @@ const FOUNDATION_AREAS: FoundationArea[] = [
     whenToUse:
       'Teams want to compare rendering direction without rewriting application code.',
     samples: [...IMPLEMENTED_ENGINE_NAMES, 'runtime switching'],
-    icon: <SettingsIcon size={22} />,
+    icon: <Icon name="navigation.settings" decorative size={22} />,
     tint: 'var(--ds-color-success-bg)',
     accent: 'var(--ds-color-success)',
     panel: 'var(--ds-color-bg-overlay)',
@@ -91,7 +86,7 @@ const FOUNDATION_AREAS: FoundationArea[] = [
     whenToUse:
       'You need recognisable affordances without drifting into custom SVG sets.',
     samples: ['navigation', 'status', 'data', 'currentColor'],
-    icon: <BracesIcon size={22} />,
+    icon: <Icon name="content.code" decorative size={22} />,
     tint: 'var(--ds-color-bg-overlay)',
     accent: 'var(--ds-color-text-primary)',
     panel: 'var(--ds-color-bg-overlay)',
@@ -224,10 +219,10 @@ function TrackVisual({ area }: { area: FoundationArea }) {
       }}
     >
       {[
-        <LayersIcon key="layers" size={18} />,
-        <SparklesIcon key="sparkles" size={18} />,
-        <SettingsIcon key="settings" size={18} />,
-        <BracesIcon key="braces" size={18} />,
+        <Icon key="layers" name="layout.hierarchy" decorative size={18} />,
+        <Icon key="sparkles" name="ai.sparkles" decorative size={18} />,
+        <Icon key="settings" name="navigation.settings" decorative size={18} />,
+        <Icon key="braces" name="content.code" decorative size={18} />,
       ].map((icon, index) => (
         <Box
           key={index}

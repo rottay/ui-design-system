@@ -7,15 +7,7 @@ import {
   primitivesByCategory,
   type PrimitiveCategory,
 } from '@/data/registry/primitives';
-import {
-  AlertCircleIcon,
-  EditIcon,
-  EyeIcon,
-  LayersIcon,
-  LayoutGridIcon,
-  PanelRightCloseIcon,
-  ScanSearchIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 import { LiveComponentShowcaseDeferred } from './live-component-showcase-deferred';
 
 interface PrimitiveEditorial {
@@ -38,7 +30,7 @@ const CATEGORY_EDITORIAL: Record<PrimitiveCategory, PrimitiveEditorial> = {
     buildHint: 'Dashboards, record summaries, media galleries, metadata blocks',
     accent: 'var(--ds-color-primary-600)',
     tint: 'var(--ds-color-primary-50)',
-    icon: <EyeIcon size={20} />,
+    icon: <Icon name="action.reveal" decorative size={20} />,
   },
   inputs: {
     headline: 'Capture intent, edits, and decisions.',
@@ -49,7 +41,7 @@ const CATEGORY_EDITORIAL: Record<PrimitiveCategory, PrimitiveEditorial> = {
     buildHint: 'Settings forms, creation flows, search bars, action toolbars',
     accent: 'var(--ds-color-success-700)',
     tint: 'var(--ds-color-success-50)',
-    icon: <EditIcon size={20} />,
+    icon: <Icon name="action.edit" decorative size={20} />,
   },
   feedback: {
     headline: 'Explain state changes and keep users oriented.',
@@ -60,7 +52,7 @@ const CATEGORY_EDITORIAL: Record<PrimitiveCategory, PrimitiveEditorial> = {
     buildHint: 'Loading states, confirmations, notices, async outcomes',
     accent: 'var(--ds-color-warning-700)',
     tint: 'var(--ds-color-warning-50)',
-    icon: <AlertCircleIcon size={20} />,
+    icon: <Icon name="status.info" decorative size={20} />,
   },
   layout: {
     headline: 'Control rhythm, spacing, and responsive composition.',
@@ -71,7 +63,7 @@ const CATEGORY_EDITORIAL: Record<PrimitiveCategory, PrimitiveEditorial> = {
     buildHint: 'Page scaffolds, adaptive sections, balanced spacing systems',
     accent: 'var(--ds-color-primary-700)',
     tint: 'var(--ds-color-neutral-100)',
-    icon: <LayoutGridIcon size={20} />,
+    icon: <Icon name="layout.grid" decorative size={20} />,
   },
   navigation: {
     headline: 'Move users through the product without losing context.',
@@ -82,7 +74,7 @@ const CATEGORY_EDITORIAL: Record<PrimitiveCategory, PrimitiveEditorial> = {
     buildHint: 'Collection tabs, section anchors, shells, mobile navigation',
     accent: 'var(--ds-color-primary-600)',
     tint: 'var(--ds-color-primary-50)',
-    icon: <ScanSearchIcon size={20} />,
+    icon: <Icon name="navigation.route" decorative size={20} />,
   },
   overlay: {
     headline: 'Layer high-attention UI above the page.',
@@ -93,7 +85,7 @@ const CATEGORY_EDITORIAL: Record<PrimitiveCategory, PrimitiveEditorial> = {
     buildHint: 'Menus, confirmations, coach marks, contextual actions',
     accent: 'var(--ds-color-error-700)',
     tint: 'var(--ds-color-error-50)',
-    icon: <PanelRightCloseIcon size={20} />,
+    icon: <Icon name="action.reveal" decorative size={20} />,
   },
 };
 
@@ -511,7 +503,7 @@ export default function PrimitivesPage() {
               >
                 <Stack spacing="sm">
                   <Flex align="center" gap={8}>
-                    <LayersIcon size={18} />
+                    <Icon name="layout.hierarchy" decorative size={18} />
                     <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', display: 'block' }}>
                       Taxonomy fit
                     </Text>

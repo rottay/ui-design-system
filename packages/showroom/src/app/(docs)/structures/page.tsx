@@ -8,13 +8,7 @@ import {
   type StructureGroup,
 } from '@/data/registry/structures';
 import { surfaces } from '@/data/registry/surfaces';
-import {
-  BarChart3Icon,
-  FileTextIcon,
-  LayoutTemplateIcon,
-  LoaderCircleIcon,
-  ScanSearchIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 interface StructureEditorial {
   role: string;
@@ -35,7 +29,7 @@ const STRUCTURE_EDITORIAL: Record<StructureGroup, StructureEditorial> = {
     pairings: ['PatternDataTable', 'PatternFormBuilder', 'DashboardSurface'],
     tint: 'var(--ds-color-primary-50)',
     accent: 'var(--ds-color-primary-600)',
-    icon: <LayoutTemplateIcon size={20} />,
+    icon: <Icon name="workflow.template" decorative size={20} />,
   },
   workspace: {
     role: 'Search, filters, view modes, selections, and operator controls.',
@@ -45,7 +39,7 @@ const STRUCTURE_EDITORIAL: Record<StructureGroup, StructureEditorial> = {
     pairings: ['PatternDataTable', 'PatternGridView', 'CollectionWorkspaceSurface'],
     tint: 'var(--ds-color-success-50)',
     accent: 'var(--ds-color-success-700)',
-    icon: <ScanSearchIcon size={20} />,
+    icon: <Icon name="action.search" decorative size={20} />,
   },
   record: {
     role: 'Sectioning and field framing for entity-heavy screens.',
@@ -55,7 +49,7 @@ const STRUCTURE_EDITORIAL: Record<StructureGroup, StructureEditorial> = {
     pairings: ['DetailSurface', 'DetailFormSurface', 'RecordWorkbenchSurface'],
     tint: 'var(--ds-color-warning-50)',
     accent: 'var(--ds-color-warning-700)',
-    icon: <FileTextIcon size={20} />,
+    icon: <Icon name="content.document" decorative size={20} />,
   },
   dashboard: {
     role: 'Insight framing, metric rhythm, and supporting context.',
@@ -65,7 +59,7 @@ const STRUCTURE_EDITORIAL: Record<StructureGroup, StructureEditorial> = {
     pairings: ['PatternStatsGrid', 'DashboardSurface', 'OperationalSurface'],
     tint: 'var(--ds-color-primary-50)',
     accent: 'var(--ds-color-primary-700)',
-    icon: <BarChart3Icon size={20} />,
+    icon: <Icon name="analytics.dashboard" decorative size={20} />,
   },
   feedback: {
     role: 'Route-level waiting, transition, and blocking states.',
@@ -75,7 +69,7 @@ const STRUCTURE_EDITORIAL: Record<StructureGroup, StructureEditorial> = {
     pairings: ['FormSurface', 'CommandCenterSurface', 'Loading states'],
     tint: 'var(--ds-color-error-50)',
     accent: 'var(--ds-color-error-700)',
-    icon: <LoaderCircleIcon size={20} />,
+    icon: <Icon name="status.loading" decorative size={20} />,
   },
   shell: {
     role: 'Persistent mobile navigation, active destination, badges, and safe-area framing.',
@@ -89,7 +83,7 @@ const STRUCTURE_EDITORIAL: Record<StructureGroup, StructureEditorial> = {
     ],
     tint: 'var(--ds-color-primary-50)',
     accent: 'var(--ds-color-primary-700)',
-    icon: <LayoutTemplateIcon size={20} />,
+    icon: <Icon name="workflow.template" decorative size={20} />,
   },
 };
 

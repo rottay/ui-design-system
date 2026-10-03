@@ -11,14 +11,7 @@ import {
   type SurfaceGroup,
 } from '@/data/registry';
 import { CodeBlock } from '@/components/playground';
-import {
-  ActivityIcon,
-  BarChart3Icon,
-  Building2Icon,
-  EditIcon,
-  LayoutTemplateIcon,
-  SparklesIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 interface SurfaceEditorial {
   promise: string;
@@ -39,7 +32,7 @@ const SURFACE_EDITORIAL: Record<SurfaceGroup, SurfaceEditorial> = {
     examples: ['SettingsSurface', 'TeamSurface', 'AuditSurface'],
     tint: 'var(--ds-color-primary-50)',
     accent: 'var(--ds-color-primary-600)',
-    icon: <Building2Icon size={20} />,
+    icon: <Icon name="entity.organization" decorative size={20} />,
   },
   data: {
     promise: 'Present entities, metrics, search, and analysis as full screens.',
@@ -49,7 +42,7 @@ const SURFACE_EDITORIAL: Record<SurfaceGroup, SurfaceEditorial> = {
     examples: ['ListSurface', 'DashboardSurface', 'ReportSurface'],
     tint: 'var(--ds-color-success-50)',
     accent: 'var(--ds-color-success-700)',
-    icon: <BarChart3Icon size={20} />,
+    icon: <Icon name="analytics.dashboard" decorative size={20} />,
   },
   experience: {
     promise: 'Ship user-facing journeys with a stronger product posture.',
@@ -59,7 +52,7 @@ const SURFACE_EDITORIAL: Record<SurfaceGroup, SurfaceEditorial> = {
     examples: ['AuthSurface', 'PricingSurface', 'MarketingSurface'],
     tint: 'var(--ds-color-warning-50)',
     accent: 'var(--ds-color-warning-700)',
-    icon: <SparklesIcon size={20} />,
+    icon: <Icon name="ai.sparkles" decorative size={20} />,
   },
   forms: {
     promise: 'Wrap drafting, editing, and review into page-level flows.',
@@ -69,7 +62,7 @@ const SURFACE_EDITORIAL: Record<SurfaceGroup, SurfaceEditorial> = {
     examples: ['FormSurface', 'DetailFormSurface', 'WizardSurface'],
     tint: 'var(--ds-color-primary-50)',
     accent: 'var(--ds-color-primary-700)',
-    icon: <EditIcon size={20} />,
+    icon: <Icon name="action.edit" decorative size={20} />,
   },
   operations: {
     promise: 'Support live work, scheduling, queues, and monitoring.',
@@ -79,7 +72,7 @@ const SURFACE_EDITORIAL: Record<SurfaceGroup, SurfaceEditorial> = {
     examples: ['KanbanSurface', 'SchedulerSurface', 'OperationalSurface'],
     tint: 'var(--ds-color-error-50)',
     accent: 'var(--ds-color-error-700)',
-    icon: <ActivityIcon size={20} />,
+    icon: <Icon name="operations.dashboard" decorative size={20} />,
   },
   workspace: {
     promise: 'Assemble the richest operator desks in the system.',
@@ -89,7 +82,7 @@ const SURFACE_EDITORIAL: Record<SurfaceGroup, SurfaceEditorial> = {
     examples: ['CollectionWorkspaceSurface', 'DecisionInboxSurface', 'RecordWorkbenchSurface'],
     tint: 'var(--ds-color-neutral-100)',
     accent: 'var(--ds-color-text-primary, #111827)',
-    icon: <LayoutTemplateIcon size={20} />,
+    icon: <Icon name="workflow.template" decorative size={20} />,
   },
 };
 

@@ -3,7 +3,7 @@
 import { ShowroomLink as Link } from '@/components/navigation/link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import { ArrowLeftIcon } from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 import { CodeBlock } from '@/components/playground';
 import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial';
 
@@ -149,7 +149,7 @@ export default function ArchitecturePage() {
           textDecoration: 'none',
         }}
       >
-        <ArrowLeftIcon size={14} /> Back to Developers
+        <Icon name="navigation.back" decorative size={14} /> Back to Developers
       </Link>
 
       <Card
