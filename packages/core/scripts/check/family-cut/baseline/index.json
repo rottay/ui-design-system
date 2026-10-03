@@ -2373,7 +2373,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 174,
+        "channelsRead": 173,
         "classTokens": 1,
         "partsStamped": 32,
         "partsConsumed": 32
@@ -2389,7 +2389,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-11 sub-lot A admission. readWithoutProducer=0 is a FALSE GREEN and is recorded as such: the family reads no channel in its own namespace at all -- its 22 reads are root tokens, `--ds-search-command-bar-*` has 0 producers and 0 readers, and the namespace has to be created before it can be drained. The pin is the gate's measurement, and the work is larger than the number. Re-pin 2026-09-20 (DT, wave window): channelsRead 167 -> 173 = +6 root reads from the FAM-11 shell-cluster wiring lot 82bffda11 (--ds-border-width-1, --ds-font-weight-bold, --ds-font-weight-semibold, --ds-line-height-normal, --ds-radius-lg, --ds-text-eyebrow-letter-spacing — 16 channels wired to governed roots, six of those root reads new names in this skin); the ccb6b784d motion swap is net 0., measured by the gate; every move named with its lot. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 173 -> 174 = bc1f738ed (WO-EVI-02 search-command-bar wiring: --ds-motion-glacial) -- coverage."
+      "cutNote": "WO-FAM-11 sub-lot A admission. readWithoutProducer=0 is a FALSE GREEN and is recorded as such: the family reads no channel in its own namespace at all -- its 22 reads are root tokens, `--ds-search-command-bar-*` has 0 producers and 0 readers, and the namespace has to be created before it can be drained. The pin is the gate's measurement, and the work is larger than the number. Re-pin 2026-09-20 (DT, wave window): channelsRead 167 -> 173 = +6 root reads from the FAM-11 shell-cluster wiring lot 82bffda11 (--ds-border-width-1, --ds-font-weight-bold, --ds-font-weight-semibold, --ds-line-height-normal, --ds-radius-lg, --ds-text-eyebrow-letter-spacing — 16 channels wired to governed roots, six of those root reads new names in this skin); the ccb6b784d motion swap is net 0., measured by the gate; every move named with its lot. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 173 -> 174 = bc1f738ed (WO-EVI-02 search-command-bar wiring: --ds-motion-glacial) -- coverage. Denominator re-read 2026-10-03 (census re-read per the gate instruction; the mover's skin diff read against the gate's live read set): channelsRead 174 -> 173 = ebd2585b5 (fix(search-command-bar): composed buttons follow the tenant focus signature): the composed buttons' focus ring stops being assembled in the skin from --ds-focus-ring-width and --ds-focus-ring-color and reads the composed --ds-focus-ring instead -- two names left the set, one joined, and the --ds-color-primary read on the same declaration is still read elsewhere in the skin. readWithoutProducer stays 0; no ratchet moved."
     },
     "command-palette": {
       "cut": "WO-FAM-11",
