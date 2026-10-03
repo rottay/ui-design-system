@@ -952,6 +952,7 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   // the body is everything left of the footer -- so the caller's mark, nav and
   // footer inside them are what the bones draw, never the strip itself.
   'navigation-body': 'pass',
+  'navigation-bottom-bar': 'pass',
   'navigation-drawer-header': 'pass',
   'navigation-footer': 'pass',
   'navigation-logo': 'pass',

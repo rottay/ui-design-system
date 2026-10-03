@@ -727,6 +727,7 @@ const FAM_11_ROLES: Readonly<Record<string, string>> = {
   'header-right': 'pass',
   'main-area': 'pass',
   'navigation-body': 'pass',
+  'navigation-bottom-bar': 'pass',
   'navigation-close': 'block',
   'navigation-drawer-header': 'pass',
   'navigation-footer': 'pass',
@@ -790,7 +791,7 @@ describe('the shell, command and search vocabulary (WO-FAM-11)', () => {
       expect(resolvePartRole(part), part).toBe(role);
       expect(SKELETON_PART_ROLES[part], part).toBeDefined();
     }
-    expect(Object.keys(FAM_11_ROLES)).toHaveLength(55);
+    expect(Object.keys(FAM_11_ROLES)).toHaveLength(56);
   });
 
   it('draws the command row as its two lines of copy, not as a slab over them', () => {
