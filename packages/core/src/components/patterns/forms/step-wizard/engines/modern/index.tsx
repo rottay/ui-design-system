@@ -90,6 +90,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
     progressPosture = 'rail',
     formatProgressLabel,
     actionPosture = 'inline',
+    renderActions,
     nextLabel: nextLabelProp,
     prevLabel: prevLabelProp,
     completeLabel: completeLabelProp,
@@ -129,7 +130,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
   const current = hasSteps ? Math.min(Math.max(rawCurrent, 0), stepCount - 1) : 0;
   const isLast = hasSteps && current >= stepCount - 1;
   const currentDef = steps[current];
-  const stickyActions = actionPosture === 'sticky-bottom';
+  const stickyActions = !renderActions && actionPosture === 'sticky-bottom';
   const showProgressChrome = showProgress && hasSteps;
   const progressLabel =
     formatProgressLabel?.({
@@ -310,7 +311,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
     </div>
   );
 
-  const navigationBar = stickyActions ? (
+  const navigationBar = renderActions ? renderActions(navigationContent) : stickyActions ? (
     <StickyWizardActions>
       {navigationContent}
     </StickyWizardActions>

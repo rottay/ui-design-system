@@ -154,6 +154,9 @@ export interface StepWizardProps extends PatternBaseProps {
    */
   actionPosture?: 'inline' | 'sticky-bottom';
 
+  /** Modern-only composition of the existing navigation controls; validation stays pattern-owned. */
+  renderActions?: (actions: ReactNode) => ReactNode;
+
   /** Custom label for the "Next" navigation button. */
   nextLabel?: string;
 

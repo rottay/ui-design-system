@@ -7,6 +7,8 @@
  * The app owns step content, fields, and domain-specific validation.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureAction, SurfacePostureScope, SurfacePostureSlot, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Button, Card, Flex, Grid, Stack, Text } from '../../../../../primitives';
 import { PatternFormBuilder, PatternStepWizard } from '../../../../../patterns';
@@ -119,6 +121,7 @@ function renderWizardStepContent(
 }
 
 export interface WizardSurfaceProps {
+  postures?: SurfacePostures;
   config: WizardSurfaceConfig;
   loading?: boolean;
   error?: unknown;
@@ -132,7 +135,16 @@ export interface WizardSurfaceProps {
   adapt?: Adapt<FormSurfaceAdaptation>;
 }
 
-export function WizardSurface({ config, loading = false, error, onRetry, adapt }: WizardSurfaceProps): React.ReactElement {
+export function WizardSurface(props: WizardSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="form">
+      <WizardSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function WizardSurfaceContent({ config, loading = false, error, onRetry, adapt }: WizardSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
@@ -347,7 +359,7 @@ export function WizardSurface({ config, loading = false, error, onRetry, adapt }
   // Aside, like footer, supports both static and context-aware rendering.
   // Context-aware asides are useful for showing step-specific help or
   // progress summaries that update as the user advances.
-  const asideNode =
+  const asideNode = surfacePosture?.regions.aside === 'hide' ? null :
     typeof config.presentation.aside === 'function'
       ? config.presentation.aside(activeContext)
       : config.presentation.aside;
@@ -371,18 +383,18 @@ export function WizardSurface({ config, loading = false, error, onRetry, adapt }
       <Grid.Item span={asideNode && !shouldStack ? 8 : undefined}>
         <Stack spacing={sectionSpacing}>
           {config.presentation.description && (
-            <Text data-part="description" as="p" color="subtle">
+            <SurfacePostureSlot name="description" asChild><Text data-part="description" as="p" color="subtle">
               {config.presentation.description}
-            </Text>
+            </Text></SurfacePostureSlot>
           )}
 
           {config.presentation.error && (
             // The banner is a ruled alert, not a second card frame: the skin
             // paints the recessed ground, the emphasis edge and the optical
             // padding on the part the surface stamps.
-            <Box data-part="error-banner" role="alert">
+            <SurfacePostureSlot name="error-banner" asChild><Box data-part="error-banner" role="alert">
               {config.presentation.error}
-            </Box>
+            </Box></SurfacePostureSlot>
           )}
 
           <PatternStepWizard
@@ -424,7 +436,12 @@ export function WizardSurface({ config, loading = false, error, onRetry, adapt }
             formatProgressLabel={({ current, total, title }) =>
               tSurfaceOr('wizard.step_counter', 'Step {current} of {total}: {title}', { current, total, title })
             }
-            actionPosture={resolvedMobile && config.visual.mobileActionsSticky ? 'sticky-bottom' : 'inline'}
+            actionPosture={surfacePosture ? 'inline' : resolvedMobile && config.visual.mobileActionsSticky ? 'sticky-bottom' : 'inline'}
+            renderActions={surfacePosture ? (actions) => (
+              <SurfacePostureAction label={tSurfaceOr('wizard.navigation_label', 'Step navigation')}>
+                {actions}
+              </SurfacePostureAction>
+            ) : undefined}
             nextLabel={config.behavior.nextLabel}
             prevLabel={config.behavior.prevLabel}
             completeLabel={submitAction?.label ?? tSurfaceOr('wizard.complete', 'Complete')}
@@ -441,11 +458,11 @@ export function WizardSurface({ config, loading = false, error, onRetry, adapt }
       </Grid.Item>
 
       {asideNode && (
-        <Grid.Item span={!shouldStack ? 4 : undefined}>
+        <SurfacePostureSlot name="aside" asChild><Grid.Item role={surfacePosture ? 'region' : undefined} aria-label={surfacePosture ? tSurfaceOr('wizard.aside_label', 'Step guidance') : undefined} span={!shouldStack ? 4 : undefined}>
           <Card className="ds-wizard__aside-card" variant={profileDefaults.cardVariant}>
             <Card.Body>{asideNode}</Card.Body>
           </Card>
-        </Grid.Item>
+        </Grid.Item></SurfacePostureSlot>
       )}
     </Grid>
   );
