@@ -1,0 +1,413 @@
+{
+ "schema": 1,
+ "audit": {
+  "date": "2026-10-03",
+  "auditor": "claude-fable-5-1",
+  "scope": "one-time independent verification of the five receipts re-minted at the WO-RET-01 reconciliation adoption (the receipts without an audited mark in receipts/index.json); the 22 receipts audited by audits/2026-10-03/index.json were re-checked against the re-homed ledger and are listed under keptReceiptsRecheck",
+  "method": "read-only re-derivation against the sibling checkouts at the recorded commit: `git -C <app> show <commit>:<path> | shasum -a 256` = fileDigest; first line containing the needle and sha256 of that line = matchLine/matchDigest (gate matchOf); canonical-JSON digest of the CURRENT ledger row = rowDigest (gate rowDigestOf); canonical-JSON digest of the receipt body without integrity and without audit keys = integrity at minting (gate mintIntegrityOf); `git merge-base --is-ancestor <commit> origin/main`; `git remote get-url origin`; needle presence at the sibling HEAD. No fetch was run; origin/main is the local tracking ref.",
+  "dsCommit": "b6e0e68f0f067325cc169e02ffd5db2eca3acf98",
+  "dsTree": "HEAD plus the uncommitted reconciliation adoption (ledger re-homing, re-minted receipts)",
+  "receiptsFile": "packages/core/contracts/package/deprecations/receipts/index.json",
+  "receiptsFileDigest": "sha256:e246485c41961f6aec3b1b94eaa2d674ecfe0d3f26ef6fb2ad5d23177618fa97",
+  "ledger": "packages/core/contracts/package/deprecations/index.json",
+  "ledgerDigest": "sha256:287af9d0104240eceb7c19f69aa94431754bae5352d19c2c76182bd729df9aef",
+  "apps": {
+   "app-bithire": {
+    "origin": "https://github.com/rottay/app-bithire.git",
+    "head": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+    "originMain": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "app-evnto": {
+    "origin": "https://github.com/rottay/app-evnto.git",
+    "head": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
+    "originMain": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f"
+   },
+   "app-platform": {
+    "origin": "https://github.com/rottay/app-platform.git",
+    "head": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
+    "originMain": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7"
+   }
+  },
+  "verified": 5,
+  "failed": 0
+ },
+ "receipts": [
+  {
+   "index": 9,
+   "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'left'",
+   "kind": "consumer",
+   "path": "../app-bithire/src/ui/forms/create/page-shell/components/index.tsx",
+   "needle": "placement=\"left\"",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:3b2b991fd8608a5e82d94c98624f88725a92b115148ec854270c1b3f31e93be8",
+    "matchLine": 295,
+    "matchDigest": "sha256:fda8603805c8d87aad53038cd99a2b6f0e582309cae18ffa4e307cf8e55c6810",
+    "rowDigest": "sha256:57f7418a0254ac5c30d4d00566c3b90ef5864a116c155d0ff1831c1449197d82",
+    "integrity": "sha256:8bbd52d8fa5de9f3e6397e4755822e3d45b0484381314506bc6d19a862033a0e",
+    "date": "2026-10-03"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:3b2b991fd8608a5e82d94c98624f88725a92b115148ec854270c1b3f31e93be8",
+    "matchLine": 295,
+    "matchDigest": "sha256:fda8603805c8d87aad53038cd99a2b6f0e582309cae18ffa4e307cf8e55c6810",
+    "rowDigest": "sha256:57f7418a0254ac5c30d4d00566c3b90ef5864a116c155d0ff1831c1449197d82",
+    "integrity": "sha256:8bbd52d8fa5de9f3e6397e4755822e3d45b0484381314506bc6d19a862033a0e",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 10,
+   "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'left'",
+   "kind": "consumer",
+   "path": "../app-bithire/src/ui/tables/collection/preview/index.tsx",
+   "needle": "<MaybeTooltip content={tooltip ?? \"Close this preview panel.\"} placement=\"left\">",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:7d852d5b3e3d23d9f7e2702f61ebd49f5f47749b98feff96b15b2142b534828e",
+    "matchLine": 447,
+    "matchDigest": "sha256:0017ae7de9996188a5ffb69f34d8642212e6ec451ee5fa31c0130abfddf1d3e5",
+    "rowDigest": "sha256:57f7418a0254ac5c30d4d00566c3b90ef5864a116c155d0ff1831c1449197d82",
+    "integrity": "sha256:b2f7479a142ef16b963a99f25222a6c2c201858286e6a2fa544f9066ede14f98",
+    "date": "2026-10-03"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:7d852d5b3e3d23d9f7e2702f61ebd49f5f47749b98feff96b15b2142b534828e",
+    "matchLine": 447,
+    "matchDigest": "sha256:0017ae7de9996188a5ffb69f34d8642212e6ec451ee5fa31c0130abfddf1d3e5",
+    "rowDigest": "sha256:57f7418a0254ac5c30d4d00566c3b90ef5864a116c155d0ff1831c1449197d82",
+    "integrity": "sha256:b2f7479a142ef16b963a99f25222a6c2c201858286e6a2fa544f9066ede14f98",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 11,
+   "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'right'",
+   "kind": "consumer",
+   "path": "../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx",
+   "needle": "placement=\"right\" color=\"primary\">",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+    "matchLine": 271,
+    "matchDigest": "sha256:98951eaeb91dbcf795c7e8ecbaee17fab89b629a176c243830ec04433cb43609",
+    "rowDigest": "sha256:d93342a1fde220622e27026cffb046ef0a257f42678137801388109e7c3f1fe1",
+    "integrity": "sha256:89807646e2f96159f50b957c87986199d57f044653ba08df867caf1c21c5ae91",
+    "date": "2026-10-03"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+    "matchLine": 271,
+    "matchDigest": "sha256:98951eaeb91dbcf795c7e8ecbaee17fab89b629a176c243830ec04433cb43609",
+    "rowDigest": "sha256:d93342a1fde220622e27026cffb046ef0a257f42678137801388109e7c3f1fe1",
+    "integrity": "sha256:89807646e2f96159f50b957c87986199d57f044653ba08df867caf1c21c5ae91",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 12,
+   "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'right'",
+   "kind": "consumer",
+   "path": "../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx",
+   "needle": "placement=\"right\" color={isActive ? 'primary' : 'secondary'}>",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+    "matchLine": 304,
+    "matchDigest": "sha256:9e59bb171fa0f28bc1272d01828aad4d95b264c8a1b8cb0e124e043da2ddb73f",
+    "rowDigest": "sha256:d93342a1fde220622e27026cffb046ef0a257f42678137801388109e7c3f1fe1",
+    "integrity": "sha256:da58cba98e8e15ab7e16442c10a59b09f7dad4728b2bb7c6a6112fc5c8d9e73d",
+    "date": "2026-10-03"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+    "matchLine": 304,
+    "matchDigest": "sha256:9e59bb171fa0f28bc1272d01828aad4d95b264c8a1b8cb0e124e043da2ddb73f",
+    "rowDigest": "sha256:d93342a1fde220622e27026cffb046ef0a257f42678137801388109e7c3f1fe1",
+    "integrity": "sha256:da58cba98e8e15ab7e16442c10a59b09f7dad4728b2bb7c6a6112fc5c8d9e73d",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 19,
+   "row": "src/components/primitives/inputs/toggle/contracts/index.ts#SwitchSize",
+   "kind": "consumer",
+   "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
+   "needle": "Card, Button, Badge, Input, Modal, Select, Spinner, Switch } from '@rottay/design-system';",
+   "repository": "https://github.com/rottay/app-platform.git",
+   "commit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
+   "recorded": {
+    "fileDigest": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
+    "matchLine": 61,
+    "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
+    "rowDigest": "sha256:e3e20e33ebf64c6ff5a2d0d00769c9807ece472203e96a4d6a1c1804c41e8700",
+    "integrity": "sha256:584ad10eaceff79e3ec40565e4748247c27e0697aad1c4e2d38beedd346af0dc",
+    "date": "2026-10-03"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
+    "matchLine": 61,
+    "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
+    "rowDigest": "sha256:e3e20e33ebf64c6ff5a2d0d00769c9807ece472203e96a4d6a1c1804c41e8700",
+    "integrity": "sha256:584ad10eaceff79e3ec40565e4748247c27e0697aad1c4e2d38beedd346af0dc",
+    "appHeadAtAudit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  }
+ ],
+ "keptReceiptsRecheck": {
+  "record": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
+  "audited": 22,
+  "staleRowDigest": 0,
+  "integrityInvalid": 0,
+  "disagreementsWithKeptRecord": [],
+  "keptEntriesWithoutReceipt": [
+   {
+    "index": 27,
+    "row": "src/foundation/contracts/kernel/common/index.ts#LegacySizeAlias",
+    "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx"
+   }
+  ],
+  "rows": [
+   {
+    "index": 0,
+    "row": "src/components/patterns/data/data-table/contracts/index.ts#DataTablePatternProps.mobileBreakpoint",
+    "path": "../app-bithire/src/ui/tables/data-table/index.tsx",
+    "rowDigestRecorded": "sha256:7b8b5311d2461728b6f81a81c1bad956276c1b7aa9c2f5a547f09e2706fd17eb",
+    "rowDigestNow": "sha256:7b8b5311d2461728b6f81a81c1bad956276c1b7aa9c2f5a547f09e2706fd17eb",
+    "stale": false
+   },
+   {
+    "index": 1,
+    "row": "src/components/primitives/display/badge/contracts/index.ts#BadgeVariant",
+    "path": "../app-bithire/src/features/interviews/model/domain/workflows/feedback/listing/index.ts",
+    "rowDigestRecorded": "sha256:b09251def9a6268aa3778e0a2127ecc4e983a1caf726a635a3ca9d7fc1f6319a",
+    "rowDigestNow": "sha256:b09251def9a6268aa3778e0a2127ecc4e983a1caf726a635a3ca9d7fc1f6319a",
+    "stale": false
+   },
+   {
+    "index": 2,
+    "row": "src/components/primitives/display/badge/contracts/index.ts#BadgeBaseProps.variant",
+    "path": "../app-bithire/src/vertical/showcase/applications/ai-recommendation-variants/index.tsx",
+    "rowDigestRecorded": "sha256:3dfa478f9addefe774f53776124d611d56677c6ceb5a5c4f5458ce20acd4b9fb",
+    "rowDigestNow": "sha256:3dfa478f9addefe774f53776124d611d56677c6ceb5a5c4f5458ce20acd4b9fb",
+    "stale": false
+   },
+   {
+    "index": 3,
+    "row": "src/components/primitives/display/badge/contracts/index.ts#BadgeBaseProps.overflowCount",
+    "path": "../app-platform/src/features/organization/admin/surface/screens/sessions/overview/index.tsx",
+    "rowDigestRecorded": "sha256:9cd852a068f53a84d0cdbcca89b5daf2fb48511c2d421b87ca78366ae37f0c44",
+    "rowDigestNow": "sha256:9cd852a068f53a84d0cdbcca89b5daf2fb48511c2d421b87ca78366ae37f0c44",
+    "stale": false
+   },
+   {
+    "index": 4,
+    "row": "src/components/primitives/display/callout/contracts/index.ts#CalloutVariant",
+    "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
+    "rowDigestRecorded": "sha256:63c13a34a01ef33605c45bf50118e5cb9e86defa2872304d67f47e7c1bf0e2ef",
+    "rowDigestNow": "sha256:63c13a34a01ef33605c45bf50118e5cb9e86defa2872304d67f47e7c1bf0e2ef",
+    "stale": false
+   },
+   {
+    "index": 5,
+    "row": "src/components/primitives/display/callout/contracts/index.ts#CalloutProps.variant",
+    "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
+    "rowDigestRecorded": "sha256:77b79c76509514fbeaa6be4e62131e2f9b96eacbbfa575520617d4d7928df2f2",
+    "rowDigestNow": "sha256:77b79c76509514fbeaa6be4e62131e2f9b96eacbbfa575520617d4d7928df2f2",
+    "stale": false
+   },
+   {
+    "index": 6,
+    "row": "src/components/primitives/display/callout/index.tsx#Callout",
+    "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
+    "rowDigestRecorded": "sha256:075059296bda904c6b26fccac26f6aad4cfe48200d878af48aebb194eaa8d38c",
+    "rowDigestNow": "sha256:075059296bda904c6b26fccac26f6aad4cfe48200d878af48aebb194eaa8d38c",
+    "stale": false
+   },
+   {
+    "index": 7,
+    "row": "src/components/primitives/display/tag/contracts/index.ts#TagVariant",
+    "path": "../app-bithire/src/vertical/surface/shell/header/index.tsx",
+    "rowDigestRecorded": "sha256:81d97a408712773530f0df36a96e9066e4c9173ce50046015f9a2eb35502e334",
+    "rowDigestNow": "sha256:81d97a408712773530f0df36a96e9066e4c9173ce50046015f9a2eb35502e334",
+    "stale": false
+   },
+   {
+    "index": 8,
+    "row": "src/components/primitives/display/tag/contracts/index.ts#TagProps.variant",
+    "path": "../app-bithire/src/vertical/surface/shell/header/index.tsx",
+    "rowDigestRecorded": "sha256:fa2813d94ab917b70fd75e7fbf4801c8e9c6c80f65937bf0138ce97d262c9648",
+    "rowDigestNow": "sha256:fa2813d94ab917b70fd75e7fbf4801c8e9c6c80f65937bf0138ce97d262c9648",
+    "stale": false
+   },
+   {
+    "index": 13,
+    "row": "src/components/primitives/feedback/alert/contracts/index.ts#AlertSharedProps.type",
+    "path": "../app-evnto/src/features/identity/auth/surface/screens/login/index.tsx",
+    "rowDigestRecorded": "sha256:5d221266fb141a56eeba175c156974cda4911cc33e46ab457886b065ce51cf98",
+    "rowDigestNow": "sha256:5d221266fb141a56eeba175c156974cda4911cc33e46ab457886b065ce51cf98",
+    "stale": false
+   },
+   {
+    "index": 14,
+    "row": "src/components/primitives/inputs/button/contracts/index.ts#ButtonProps.asChild",
+    "path": "../app-bithire/src/features/interviews/surface/screens/workflows/live-scoring/index.tsx",
+    "rowDigestRecorded": "sha256:9e1a2042f93173601102be80a1094dbf8deee827ce3ea48eb765d2d111db2ae6",
+    "rowDigestNow": "sha256:9e1a2042f93173601102be80a1094dbf8deee827ce3ea48eb765d2d111db2ae6",
+    "stale": false
+   },
+   {
+    "index": 15,
+    "row": "src/components/primitives/inputs/button/contracts/index.ts#ButtonProps.loading",
+    "path": "../app-bithire/src/features/offers/surface/screens/workflows/document-templates/listing/index.tsx",
+    "rowDigestRecorded": "sha256:734d7b6e66d38aef356c4c803e2e479bd0e32fe8d0e1491e0775c85ab66e6e6a",
+    "rowDigestNow": "sha256:734d7b6e66d38aef356c4c803e2e479bd0e32fe8d0e1491e0775c85ab66e6e6a",
+    "stale": false
+   },
+   {
+    "index": 16,
+    "row": "src/components/primitives/inputs/button/contracts/index.ts#ButtonProps.loadingText",
+    "path": "../app-bithire/src/core/auth/components/session-security/passkey-prompt/index.tsx",
+    "rowDigestRecorded": "sha256:c9255e9073c9a1b502127a051e48a857c664ec38b0887c9fb5485e4cb0382924",
+    "rowDigestNow": "sha256:c9255e9073c9a1b502127a051e48a857c664ec38b0887c9fb5485e4cb0382924",
+    "stale": false
+   },
+   {
+    "index": 17,
+    "row": "src/components/primitives/inputs/toggle/compound/switch/index.tsx#<module>",
+    "path": "../app-bithire/src/features/positions/surface/screens/record/listing/view/sections/team-assign/index.tsx",
+    "rowDigestRecorded": "sha256:ec3c3505796bd58dfe6891015937aea12ac076374a3dab097092611c2a8c1d84",
+    "rowDigestNow": "sha256:ec3c3505796bd58dfe6891015937aea12ac076374a3dab097092611c2a8c1d84",
+    "stale": false
+   },
+   {
+    "index": 18,
+    "row": "src/components/primitives/inputs/toggle/compound/switch/index.tsx#<module>",
+    "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
+    "rowDigestRecorded": "sha256:ec3c3505796bd58dfe6891015937aea12ac076374a3dab097092611c2a8c1d84",
+    "rowDigestNow": "sha256:ec3c3505796bd58dfe6891015937aea12ac076374a3dab097092611c2a8c1d84",
+    "stale": false
+   },
+   {
+    "index": 20,
+    "row": "src/components/primitives/inputs/toggle/contracts/index.ts#SwitchProps",
+    "path": "../app-bithire/src/features/positions/surface/screens/record/listing/view/sections/team-assign/index.tsx",
+    "rowDigestRecorded": "sha256:95c6d3d9be316163e557893e5cfb0a8b65f80690a260a5dfadbbcfa7bb1f38bf",
+    "rowDigestNow": "sha256:95c6d3d9be316163e557893e5cfb0a8b65f80690a260a5dfadbbcfa7bb1f38bf",
+    "stale": false
+   },
+   {
+    "index": 21,
+    "row": "src/components/primitives/inputs/toggle/contracts/index.ts#SwitchProps",
+    "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
+    "rowDigestRecorded": "sha256:95c6d3d9be316163e557893e5cfb0a8b65f80690a260a5dfadbbcfa7bb1f38bf",
+    "rowDigestNow": "sha256:95c6d3d9be316163e557893e5cfb0a8b65f80690a260a5dfadbbcfa7bb1f38bf",
+    "stale": false
+   },
+   {
+    "index": 22,
+    "row": "src/components/primitives/layout/space/contracts/index.ts#LegacySpaceSize",
+    "path": "../app-platform/src/features/security/authentication/surface/components/session-table/index.tsx",
+    "rowDigestRecorded": "sha256:85a3842a161fd766fc83a7c37479ff00f55b7ed9986d3a35ba9e3b6a8c3def64",
+    "rowDigestNow": "sha256:85a3842a161fd766fc83a7c37479ff00f55b7ed9986d3a35ba9e3b6a8c3def64",
+    "stale": false
+   },
+   {
+    "index": 23,
+    "row": "src/components/primitives/navigation/stepper/compound/steps/index.tsx#<module>",
+    "path": "../app-bithire/src/features/candidates/surface/screens/record/detail/view/tabs/activity/index.tsx",
+    "rowDigestRecorded": "sha256:1e5814cfaaba660855c266e76ec5084be670d2826d1469dfe1f8c2a38ca0f439",
+    "rowDigestNow": "sha256:1e5814cfaaba660855c266e76ec5084be670d2826d1469dfe1f8c2a38ca0f439",
+    "stale": false
+   },
+   {
+    "index": 24,
+    "row": "src/components/primitives/navigation/stepper/contracts/index.ts#ProgressDotInfo",
+    "path": "../app-bithire/src/features/candidates/surface/screens/record/detail/view/tabs/activity/index.tsx",
+    "rowDigestRecorded": "sha256:195f364b18a5208f151cc13d76b4fb643defdebb1f30ad510833eca5935db7c1",
+    "rowDigestNow": "sha256:195f364b18a5208f151cc13d76b4fb643defdebb1f30ad510833eca5935db7c1",
+    "stale": false
+   },
+   {
+    "index": 25,
+    "row": "src/components/primitives/navigation/stepper/contracts/index.ts#StepsProps",
+    "path": "../app-bithire/src/features/candidates/surface/screens/record/detail/view/tabs/activity/index.tsx",
+    "rowDigestRecorded": "sha256:b82ef349fff58cffd36ae18efd3b952188feae716f74ddb5d25af7a1a6123f92",
+    "rowDigestNow": "sha256:b82ef349fff58cffd36ae18efd3b952188feae716f74ddb5d25af7a1a6123f92",
+    "stale": false
+   },
+   {
+    "index": 26,
+    "row": "src/components/structures/foundation/chrome/contracts/index.ts#SurfaceTabbedView.permissionId",
+    "path": "../app-evnto/src/features/admin/settings/surface/screens/general/index.tsx",
+    "rowDigestRecorded": "sha256:d373958789f506a5d2754724766b0e9c95793635c2733a3249d56ce49d4a81a7",
+    "rowDigestNow": "sha256:d373958789f506a5d2754724766b0e9c95793635c2733a3249d56ce49d4a81a7",
+    "stale": false
+   }
+  ]
+ }
+}

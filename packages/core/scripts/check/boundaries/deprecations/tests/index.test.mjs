@@ -1298,6 +1298,63 @@ describe('deprecations — evidence in a sibling checkout', () => {
     assertRedOnlyFor(unprovable, /is present but is not a git checkout; the receipt cannot be re-proven/, 1);
     assert.equal(unprovable.report.siblingEvidence[0].receipt.reproven, false);
   });
+
+  it('E18: audits accumulate: a later record marks only what it covers and keeps what an earlier record still backs', async () => {
+    const RECORD_B = RECORD.replace(`/${TODAY}/`, `/${TODAY}-b/`);
+    const second = 'export const Page';
+    /** One receipt audited by the first record, then a second receipt minted for another row, covered by no record yet. */
+    const twoAudits = async () => {
+      const scratch = siblingCase();
+      await scratch.mintAudited();
+      scratch.editLedger((ledger) => {
+        ledger.rows.find((row) => row.anchor === 'WidgetProps.materials').evidence.push({ kind: 'consumer', path: scratch.path, needle: second });
+      });
+      const minted = await scratch.mint();
+      assert.deepEqual([minted.code, minted.mint.minted.length, minted.mint.kept.length], [0, 1, 1]);
+      const recordA = join(scratch.roots.repoRoot, RECORD);
+      const recordB = join(scratch.roots.repoRoot, RECORD_B);
+      const first = readFileSync(recordA, 'utf8');
+      scratch.writeRecord((record) => { record.receipts = record.receipts.filter((entry) => entry.needle === second); });
+      mkdirSync(dirname(recordB), { recursive: true });
+      renameSync(recordA, recordB);
+      writeFileSync(recordA, first);
+      return {
+        scratch, recordA, first,
+        auditB: () => run(['--audit-receipts', `--by=${AUDITOR}`, `--record=${RECORD_B}`], scratch.roots),
+      };
+    };
+
+    const { scratch, auditB } = await twoAudits();
+    const [earlier] = scratch.readReceipts().receipts;
+    const marked = await auditB();
+    assert.deepEqual([marked.code, marked.written, marked.audit.marked.length, marked.audit.kept.length], [0, true, 1, 1], marked.failures.join('\n'));
+    const [kept, later] = scratch.readReceipts().receipts;
+    assert.deepEqual(kept, earlier, 'the receipt the first record backs is untouched');
+    assert.deepEqual([kept.auditRecord, later.auditRecord], [RECORD, RECORD_B]);
+    const after = scratch.receiptsText();
+    const again = await auditB();
+    assert.deepEqual([again.code, again.audit.marked.length, again.audit.kept.length], [0, 0, 2]);
+    assert.equal(scratch.receiptsText(), after);
+    scratch.hide();
+    const closed = scratch.closure();
+    assertGreen(closed);
+    assert.deepEqual(statusOf(closed), ['historical-receipt', 'historical-receipt']);
+
+    const unbacked = await twoAudits();
+    writeFileSync(unbacked.recordA, JSON.stringify({ ...JSON.parse(unbacked.first), receipts: [] }));
+    const before = unbacked.scratch.receiptsText();
+    const refused = await unbacked.auditB();
+    assert.deepEqual([refused.code, refused.written, refused.failures.length], [1, false, 1]);
+    assert.match(refused.failures[0], /WidgetProps\.variant .*not marked audited: AUDIT MARK: the audit record has no entry for it/);
+    assert.equal(unbacked.scratch.receiptsText(), before, 'a refused audit leaves the file as it was');
+
+    const uncovered = await twoAudits();
+    const untouched = uncovered.scratch.receiptsText();
+    const absent = await uncovered.scratch.audit();
+    assert.deepEqual([absent.code, absent.written, absent.failures.length, absent.audit.kept.length], [1, false, 1, 1]);
+    assert.match(absent.failures[0], /WidgetProps\.materials .*not marked audited: the audit record has no entry for it/);
+    assert.equal(uncovered.scratch.receiptsText(), untouched);
+  });
 });
 
 describe('deprecations — the real package', () => {
@@ -1311,7 +1368,8 @@ describe('deprecations — the real package', () => {
   it('the ledger carries no wildcard and no key outside the schema', () => {
     const ledger = JSON.parse(readFileSync(join(REAL_PACKAGE, LEDGER_PATH), 'utf8'));
     assert.deepEqual(Object.keys(ledger).sort(), [...HEADER_KEYS].sort());
-    assert.deepEqual(ledger.compatReceivers, [], 'no successor is registered yet: closure stays impossible');
+    assert.deepEqual(ledger.compatReceivers, ['WO-RET-06'], 'the one registered successor; a receiver is added only with its work order');
+    assert.deepEqual(ledger.noDebtReceivers, ['WO-RET-06'], 'a successor never receives debt');
     for (const row of ledger.rows) {
       assert.deepEqual(Object.keys(row).sort(), [...ROW_KEYS].sort(), `${row.file} ${row.anchor}`);
       assert.doesNotMatch(row.file, /[*?[\]{}]/);

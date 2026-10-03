@@ -79,6 +79,8 @@
  * the source commits in read-only checkouts: `--audit-receipts` re-proves each
  * receipt live, requires the kept audit record to hold the same values hash
  * for hash, and only then sets `auditedBy`, `auditedAt` and `auditRecord`.
+ * Audits accumulate, one kept record per audit: a later audit marks only the
+ * receipts its own record covers and keeps the marks an earlier record backs.
  * Without the sibling the gate checks integrity and agreement with that kept
  * record, and calls the result a historical audited receipt, not re-verified
  * here; it is never an independent check of the source.
@@ -939,8 +941,9 @@ export function mintReceipts(measurement, { inspect = inspectSibling, today = ne
 /**
  * The audit step: sets the audited mark on every receipt that re-proves live on
  * this run against its recorded commit, sits on the sibling's origin/main, and
- * that the kept audit record re-derived to the same values. Anything else is
- * refused by name.
+ * that the kept audit record re-derived to the same values. A receipt already
+ * marked by another kept record is left untouched when that record still
+ * vouches for it. Anything else is refused by name.
  */
 export function auditReceipts(measurement, { by, record, inspect = inspectSibling } = {}) {
   const refused = [];
@@ -970,11 +973,18 @@ export function auditReceipts(measurement, { by, record, inspect = inspectSiblin
     }
   }
   const siblingOf = siblingLocator(measurement.repoRoot, 'detect', inspect);
+  const records = new Map();
   const receipts = source.map((receipt, index) => {
     const structural = receiptProblems(receipt);
     const label = structural.length === 0 ? receiptKey(receipt) : `receipt ${index}`;
     const refuse = (why) => { refused.push({ receipt: label, why }); return receipt; };
     if (structural.length > 0) return refuse(structural.join('; '));
+    if (isAudited(receipt) && receipt.auditRecord !== record) {
+      const unbacked = auditMarkProblems(receipt, measurement.repoRoot, records);
+      if (unbacked.length > 0) return refuse(unbacked.join('; '));
+      kept.push(label);
+      return receipt;
+    }
     const cited = entries.get(label);
     if (!cited) return refuse('it names no evidence entry of the ledger');
     const sibling = siblingOf(receipt.path);

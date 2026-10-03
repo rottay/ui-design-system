@@ -502,6 +502,18 @@ is historical: do not register duplicates or wait for another owner GO. Use
 `show`/`delegate`/`next` and the registry dependencies to schedule the work;
 registration is not permission to skip prerequisites or file reservations.
 
+**Registered on 2026-10-03:** the executable specification of WO-RET-06
+(Transitional compatibility and transferred closures of the 3.0 line) is in
+[`retire.md`](./retire.md#wo-ret-06-transitional-compatibility-and-transferred-closures-of-the-30-line),
+with its entry in `registry.json` and generated STATUS. The addition changed the
+WO denominator **164 -> 165** (done stays 134; milestone C 64 -> 65), preserving
+prior completion evidence, source IDs, the 82-item authority denominator, phase
+controls and their fingerprint. It belongs to `audit-2026-09-05` and therefore
+gates programme C. Authority: owner ruling 2026-10-03 section 1 and R19; the
+WO-RET-01 AMENDMENT of 2026-10-03 in `retire.md` is the adoption record. The
+134/164 figure near the top of this file is the historical handoff checkpoint
+and is not refreshed.
+
 Finish current packets without interruption. CAT-04 must acquire the shared
 Theme/catalog/ingress reservation; scope approval is not shared-core design
 approval: Kimi and Fable must review its implementation debrief under the

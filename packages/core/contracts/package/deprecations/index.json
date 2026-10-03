@@ -1,8 +1,12 @@
 {
   "schema": 1,
   "sealedAt": "2026-10-03",
-  "noDebtReceivers": [],
-  "compatReceivers": [],
+  "noDebtReceivers": [
+    "WO-RET-06"
+  ],
+  "compatReceivers": [
+    "WO-RET-06"
+  ],
   "notes": [
     "The `removeIn` line `4.0` on the compat-frozen-sole-implementer, compat-canon-pending and compat-persisted-data rows is the ledger author's assumption (the first major after 3.0); the release line of those rows awaits an owner statement."
   ],
@@ -55,7 +59,7 @@
       "replacement": "`AvatarTone` through the `tone` prop for five of the seven values; none yet for `secondary` and `gradient`",
       "canonicalOwner": "src/components/primitives/display/avatar/contracts/index.ts",
       "blocker": "replacement-capability-absent:gradient",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-07-10",
       "removeIn": "4.0",
       "evidence": [
@@ -84,7 +88,7 @@
       "replacement": "`tone` for default, primary, success, warning and error; none yet for `secondary` and `gradient`",
       "canonicalOwner": "src/components/primitives/display/avatar/contracts/index.ts",
       "blocker": "replacement-capability-absent:gradient",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-07-10",
       "removeIn": "4.0",
       "evidence": [
@@ -194,7 +198,7 @@
       "replacement": "`removable` with a localized `removeLabel`",
       "canonicalOwner": "src/components/primitives/display/badge/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-07-25",
       "removeIn": "4.0",
       "evidence": [
@@ -235,7 +239,7 @@
       "replacement": "`cellRender`",
       "canonicalOwner": "src/components/primitives/display/calendar/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-03-16",
       "removeIn": "4.0",
       "evidence": [
@@ -259,7 +263,7 @@
       "replacement": "`cellRender`",
       "canonicalOwner": "src/components/primitives/display/calendar/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-03-16",
       "removeIn": "4.0",
       "evidence": [
@@ -352,7 +356,7 @@
       "replacement": "theme card chrome, or a scoped `--ds-card-bg` custom property",
       "canonicalOwner": "src/components/primitives/display/card/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-15",
       "removeIn": "4.0",
       "evidence": [
@@ -381,7 +385,7 @@
       "replacement": "none: the Ant pagination size has no design-system counterpart, and Modern and Rustic size the pager from the table itself",
       "canonicalOwner": "src/components/primitives/display/table/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-10-03",
       "removeIn": "4.0",
       "evidence": [
@@ -465,7 +469,7 @@
       "replacement": "`'inline-start'`",
       "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-17",
       "removeIn": "4.0",
       "evidence": [
@@ -506,7 +510,7 @@
       "replacement": "`'inline-start-start'`",
       "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-17",
       "removeIn": "4.0",
       "evidence": [
@@ -535,7 +539,7 @@
       "replacement": "`'inline-start-end'`",
       "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-17",
       "removeIn": "4.0",
       "evidence": [
@@ -564,7 +568,7 @@
       "replacement": "`'inline-end'`",
       "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-17",
       "removeIn": "4.0",
       "evidence": [
@@ -605,7 +609,7 @@
       "replacement": "`'inline-end-start'`",
       "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-17",
       "removeIn": "4.0",
       "evidence": [
@@ -634,7 +638,7 @@
       "replacement": "`'inline-end-end'`",
       "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-17",
       "removeIn": "4.0",
       "evidence": [
@@ -690,7 +694,7 @@
       "replacement": "`closeOnBackdropClick`",
       "canonicalOwner": "src/components/primitives/feedback/modal/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-03-15",
       "removeIn": "4.0",
       "evidence": [
@@ -784,7 +788,7 @@
       "replacement": "`'inline-start'`",
       "canonicalOwner": "src/components/primitives/inputs/slider/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-17",
       "removeIn": "4.0",
       "evidence": [
@@ -808,7 +812,7 @@
       "replacement": "`'inline-end'`",
       "canonicalOwner": "src/components/primitives/inputs/slider/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-17",
       "removeIn": "4.0",
       "evidence": [
@@ -911,7 +915,7 @@
       "replacement": "`paddingInlineEnd`",
       "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-16",
       "removeIn": "4.0",
       "evidence": [
@@ -940,7 +944,7 @@
       "replacement": "`pe`",
       "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-16",
       "removeIn": "4.0",
       "evidence": [
@@ -969,7 +973,7 @@
       "replacement": "`paddingInlineStart`",
       "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-16",
       "removeIn": "4.0",
       "evidence": [
@@ -998,7 +1002,7 @@
       "replacement": "`ps`",
       "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-16",
       "removeIn": "4.0",
       "evidence": [
@@ -1027,7 +1031,7 @@
       "replacement": "`marginInlineEnd`",
       "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-16",
       "removeIn": "4.0",
       "evidence": [
@@ -1056,7 +1060,7 @@
       "replacement": "`me`",
       "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-16",
       "removeIn": "4.0",
       "evidence": [
@@ -1085,7 +1089,7 @@
       "replacement": "`marginInlineStart`",
       "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-16",
       "removeIn": "4.0",
       "evidence": [
@@ -1114,7 +1118,7 @@
       "replacement": "`ms`",
       "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-16",
       "removeIn": "4.0",
       "evidence": [
@@ -1231,7 +1235,7 @@
       "replacement": "`'inline-start'`",
       "canonicalOwner": "src/components/primitives/overlay/hover-card/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-17",
       "removeIn": "4.0",
       "evidence": [
@@ -1254,7 +1258,7 @@
       "replacement": "`'inline-end'`",
       "canonicalOwner": "src/components/primitives/overlay/hover-card/engines/modern/index.tsx",
       "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-09-17",
       "removeIn": "4.0",
       "evidence": [
@@ -1300,7 +1304,7 @@
       "replacement": "`surfaceRoles`",
       "canonicalOwner": "src/foundation/contracts/composition/tenants/themes/index.ts",
       "blocker": "persisted-data-unproven",
-      "receiver": "WO-RET-01",
+      "receiver": "WO-RET-06",
       "since": "2026-07-25",
       "removeIn": "4.0",
       "evidence": [
@@ -1321,30 +1325,30 @@
     {
       "file": "src/foundation/contracts/composition/tenants/themes/index.ts",
       "anchor": "BrandMotion",
-      "class": "debt",
-      "reason": "No bundled preset authors the interface any more, but it is still live: the theme-document iso schema admits its twelve open-ended fields and the personality lowering reads them, and the Brand Studio editor authors six of them, so retiring it is owed a migration of that door first.",
-      "scope": "Exported interface; it types `FlatTheme.motion`. The Brand Studio editor authors entrance, entranceDuration, hoverLift, hoverScale, pulseSpeed and skeletonStyle into drafts and its file export reads entranceDuration. The four governed fields (intensity, durationScale, ambient, character) stay. Whether stored tenant payloads carry the open-ended fields was not measured.",
+      "class": "compat-persisted-data",
+      "reason": "Theme documents stored for tenants may carry its twelve open-ended fields: the theme-document iso schema admits them and the personality lowering reads them, and nothing proves the stored data absent or migrated. No bundled preset authors the interface any more.",
+      "scope": "Exported interface; it types `FlatTheme.motion`. The Brand Studio editor still authors six of the open-ended fields (entrance, entranceDuration, hoverLift, hoverScale, pulseSpeed and skeletonStyle) into drafts and its file export reads entranceDuration; that door is retired before the interface is narrowed. The four governed fields (intensity, durationScale, ambient, character) stay. No database was inspected: whether stored tenant payloads carry the open-ended fields was not measured.",
       "replacement": "the vertical `MotionProfile` plus the bounded `TenantMotionDial`",
-      "canonicalOwner": null,
-      "blocker": null,
-      "receiver": "WO-RET-01",
+      "canonicalOwner": "src/foundation/contracts/composition/tenants/themes/index.ts",
+      "blocker": "persisted-data-unproven",
+      "receiver": "WO-RET-06",
       "since": "2026-07-16",
-      "removeIn": "3.0",
+      "removeIn": "4.0",
       "evidence": [
         {
-          "kind": "census-receipt",
+          "kind": "persisted-reader",
           "path": "packages/core/src/foundation/contracts/composition/tenants/themes/iso/schema/index.ts",
           "needle": "\"motion.entranceDuration\": NUMBER",
           "note": "Measured: the theme-document schema admits the open-ended motion fields. Not measured: stored tenant documents."
         },
         {
-          "kind": "census-receipt",
+          "kind": "persisted-reader",
           "path": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality/index.ts",
           "needle": "entranceDuration: bt.motion?.entranceDuration",
           "note": "Measured: the personality lowering reads the open-ended fields from the flat theme."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#BrandMotion.entranceDuration",
       "changeset": null
     },
     {

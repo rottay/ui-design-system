@@ -174,12 +174,12 @@
       "fileDigest": "sha256:3b2b991fd8608a5e82d94c98624f88725a92b115148ec854270c1b3f31e93be8",
       "matchLine": 295,
       "matchDigest": "sha256:fda8603805c8d87aad53038cd99a2b6f0e582309cae18ffa4e307cf8e55c6810",
-      "rowDigest": "sha256:f1cd38f053680b61442d14c89fe2ca8fe31390e1105efb7ebc22de6983fd31c4",
+      "rowDigest": "sha256:57f7418a0254ac5c30d4d00566c3b90ef5864a116c155d0ff1831c1449197d82",
       "date": "2026-10-03",
       "auditedBy": "claude-fable-5-1",
       "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:8aeb126c4390268c0d54e9bb2fb9cc85385e17854079038b4fcfd74da5a4d41e"
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03-b/index.json",
+      "integrity": "sha256:bc0ae4c3bef10e5356abc2c6ce2f36dcb3605b8351bb1b3ce83a0cf3eb3deeae"
     },
     {
       "file": "src/components/primitives/display/tooltip/contracts/index.ts",
@@ -192,12 +192,12 @@
       "fileDigest": "sha256:7d852d5b3e3d23d9f7e2702f61ebd49f5f47749b98feff96b15b2142b534828e",
       "matchLine": 447,
       "matchDigest": "sha256:0017ae7de9996188a5ffb69f34d8642212e6ec451ee5fa31c0130abfddf1d3e5",
-      "rowDigest": "sha256:f1cd38f053680b61442d14c89fe2ca8fe31390e1105efb7ebc22de6983fd31c4",
+      "rowDigest": "sha256:57f7418a0254ac5c30d4d00566c3b90ef5864a116c155d0ff1831c1449197d82",
       "date": "2026-10-03",
       "auditedBy": "claude-fable-5-1",
       "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:23c9895afed6d01f84ae67106faafff49bec8726c30366d2411a68f408f3df4d"
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03-b/index.json",
+      "integrity": "sha256:06b128164a0864a228a4fbab844ecd49eb3b933578f6d9149f959c79758b269f"
     },
     {
       "file": "src/components/primitives/display/tooltip/contracts/index.ts",
@@ -210,12 +210,12 @@
       "fileDigest": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
       "matchLine": 271,
       "matchDigest": "sha256:98951eaeb91dbcf795c7e8ecbaee17fab89b629a176c243830ec04433cb43609",
-      "rowDigest": "sha256:1771fed864c6207c4662f3094ee40a708d60e0a7550d24e8c562831436087049",
+      "rowDigest": "sha256:d93342a1fde220622e27026cffb046ef0a257f42678137801388109e7c3f1fe1",
       "date": "2026-10-03",
       "auditedBy": "claude-fable-5-1",
       "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:15869149b06dd6f10428815c5060ea036814ea0297f995eb362f907d73d18550"
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03-b/index.json",
+      "integrity": "sha256:2133e450890c1676c82d7cc2417a1f6ca7d66f61710bb421069ec815a05d2973"
     },
     {
       "file": "src/components/primitives/display/tooltip/contracts/index.ts",
@@ -228,12 +228,12 @@
       "fileDigest": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
       "matchLine": 304,
       "matchDigest": "sha256:9e59bb171fa0f28bc1272d01828aad4d95b264c8a1b8cb0e124e043da2ddb73f",
-      "rowDigest": "sha256:1771fed864c6207c4662f3094ee40a708d60e0a7550d24e8c562831436087049",
+      "rowDigest": "sha256:d93342a1fde220622e27026cffb046ef0a257f42678137801388109e7c3f1fe1",
       "date": "2026-10-03",
       "auditedBy": "claude-fable-5-1",
       "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:ab661bb6dcff39702aab36b1e4070de3428f93c4739488b283953a3fd830c202"
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03-b/index.json",
+      "integrity": "sha256:1ef6566b1de2f482cca29b160cebc690fa2301b84b1e3296bd5287621c0dc676"
     },
     {
       "file": "src/components/primitives/feedback/alert/contracts/index.ts",
@@ -354,12 +354,12 @@
       "fileDigest": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
       "matchLine": 61,
       "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
-      "rowDigest": "sha256:8e8114569744fa0d9f4791d76b348718633acb25c4d60101216d94c13f1832a1",
+      "rowDigest": "sha256:e3e20e33ebf64c6ff5a2d0d00769c9807ece472203e96a4d6a1c1804c41e8700",
       "date": "2026-10-03",
       "auditedBy": "claude-fable-5-1",
       "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:c328e3a48a8fcafdaffb1fe7b01882ca6c7fcbe4291492ff799f692f8c919eea"
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03-b/index.json",
+      "integrity": "sha256:912216b06d3a181d15acf6617a36727ceded72bfac8ec56c64e71a4013fe200c"
     },
     {
       "file": "src/components/primitives/inputs/toggle/contracts/index.ts",
