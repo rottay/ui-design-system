@@ -24,6 +24,7 @@ import {
 } from '@/infrastructure/runtime/responsive';
 import { appShellChromeDeriver } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell';
 import { AppShell } from '..';
+import { PageShellSurface } from '../../page-shell-surface';
 import {
   SHELL_PUBLISHED_CHANNELS,
   SHELL_RESOLVED_CHANNELS,
@@ -181,6 +182,66 @@ describe('AppShell (WO-FAM-11 cut) — the --ds-shell-* split', () => {
 });
 
 describe('AppShell (WO-FAM-11 cut) — the anatomy contract', () => {
+  it.each([true, false])('keeps nested page chrome outside shell header/content paint with own header=%s', async (hasHeader) => {
+    const { container } = renderWithEngine(
+      <div data-anatomy-layout="flat">
+        <ResponsiveContext.Provider value={DESKTOP_CONTEXT}>
+          <AppShell sidebar={SIDEBAR} header={hasHeader ? { left: <span>Shell header</span> } : undefined}>
+            <PageShellSurface chrome={{ title: 'Nested page' }} actions={<button>Page action</button>}>
+              <p>Nested page body</p>
+            </PageShellSurface>
+          </AppShell>
+        </ResponsiveContext.Provider>
+      </div>,
+      'modern',
+    );
+    await within(container).findByRole('heading', { name: 'Nested page' });
+    const layout = container.querySelector('[data-anatomy-layout]')!;
+    const ownHeaderSelector = '.ds-app-shell > [data-part="main-area"] > [data-part="header"]';
+    const ownContentSelector = '.ds-app-shell > [data-part="main-area"] > [data-part="content"]';
+    const ownHeader = container.querySelector(ownHeaderSelector);
+    const ownContent = container.querySelector(ownContentSelector)!;
+    const shell = container.querySelector('.ds-app-shell') as HTMLElement;
+    const page = container.querySelector('.ds-pattern-page-shell')!;
+    const nestedHeader = page.querySelector('[data-part="header"]')!;
+    const nestedContent = page.querySelector('[data-part="content"]')!;
+    expect(ownHeader !== null).toBe(hasHeader);
+    expect(shell.style.getPropertyValue('--ds-shell-safe-area-top')).toBe('env(safe-area-inset-top, 0px)');
+    expect(shell.style.getPropertyValue('--ds-shell-top-inset')).toBe(
+      hasHeader
+        ? `calc(${shell.style.getPropertyValue('--ds-shell-header-height')} + var(--ds-shell-safe-area-top))`
+        : 'var(--ds-shell-safe-area-top)',
+    );
+    expect(ownContent).not.toBeNull();
+    expect(nestedHeader).not.toBeNull();
+    expect(nestedContent).not.toBeNull();
+
+    const rules = [...SKIN.matchAll(/([^{}]+)\{([^{}]*)\}/g)].flatMap((match) =>
+      match[1]!.split(',').map((selector) => ({ selector: selector.trim(), declarations: match[2]! })),
+    );
+    const headerRules = rules.filter(({ selector }) => selector.includes('[data-part="header"]'));
+    const contentRules = rules.filter(({ selector }) => selector.includes('[data-part="content"]'));
+    expect(headerRules).toHaveLength(5);
+    expect(contentRules).toHaveLength(1);
+    const baseHeader = headerRules.find(({ selector }) => selector === ownHeaderSelector)!;
+    expect(baseHeader.declarations).toContain('position: sticky;');
+    expect(baseHeader.declarations).toContain('height: var(--ds-shell-top-inset);');
+
+    for (const rule of [...headerRules, ...contentRules]) {
+      const isHeader = headerRules.includes(rule);
+      expect(rule.selector).toContain(isHeader ? ownHeaderSelector : ownContentSelector);
+      const nested = isHeader ? nestedHeader : nestedContent;
+      let matchesOwn = false;
+      for (const anatomy of ['flat', 'floating']) {
+        layout.setAttribute('data-anatomy-layout', anatomy);
+        expect(nested.matches(rule.selector), rule.selector).toBe(false);
+        const own = isHeader ? ownHeader : ownContent;
+        matchesOwn ||= own?.matches(rule.selector) ?? false;
+      }
+      expect(matchesOwn, rule.selector).toBe(!isHeader || hasHeader);
+    }
+  });
+
   it('stamps every part the skin selects, and the skin selects every stamped part', () => {
     const { container } = renderShell(DESKTOP_CONTEXT);
     const stamped = new Set(
