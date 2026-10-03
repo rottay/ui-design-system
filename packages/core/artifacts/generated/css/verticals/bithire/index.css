@@ -15777,7 +15777,21 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
     ) 1fr auto;
 }
 
+/* The scrollport is a tab stop; its ring sits inside the edge because the root
+   clips overflow and would swallow an outward one. */
+.ds-pattern-decision-comparison.ds-engine-modern
+  .ds-decision-comparison__viewport:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(var(--ds-focus-ring-offset, 2px) * -1);
+}
+
 @media (forced-colors: active) {
+  .ds-pattern-decision-comparison.ds-engine-modern
+    .ds-decision-comparison__viewport:focus-visible {
+    outline-color: Highlight;
+  }
+
   /* The tone dot is the "never hue alone" marker, and forced colors replaces a
    `currentColor` background, so the redundancy needs its own carrier. */
   .ds-pattern-decision-comparison.ds-engine-modern
@@ -34118,6 +34132,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
   background: var(--ds-input-bg-disabled, var(--ds-material-control-background-disabled));
   border-color: var(--ds-input-border-disabled, var(--ds-color-border));
+  opacity: var(--ds-input-disabled-opacity, var(--ds-state-disabled-opacity));
 }
 
 /* Select joins the same seam (C-02 compound field): a Select shell as a
@@ -34170,6 +34185,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
   background: var(--ds-input-bg-disabled, var(--ds-material-control-background-disabled));
   border-color: var(--ds-input-border-disabled, var(--ds-color-border));
+  opacity: var(--ds-select-disabled-opacity, var(--ds-state-disabled-opacity));
 }
 
 /* TextArea --------------------------------------------------------------- */
@@ -34317,7 +34333,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   background: var(--ds-input-bg-disabled);
   border-color: var(--ds-input-border-disabled);
   cursor: var(--ds-input-disabled-cursor);
-  opacity: var(--ds-input-disabled-opacity);
+  opacity: var(--ds-input-disabled-opacity, var(--ds-state-disabled-opacity));
 }
 
 .ds-input-textarea[data-part='root'][data-loading='true'] [data-part='control'] {
@@ -66382,6 +66398,13 @@ html[data-ds-motion='reduced']
   inset-inline-end: auto;
 }
 
+/* ---- panel focus anchor: dismissing a row hands focus to the panel, so a
+   keyboard dismiss must land on a visible, governed ring ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='panel']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
 /* ---- header: title row + bottom rule (was the `border-b` utility) ---- */
 .ds-pattern-notification-center.ds-engine-modern [data-part='header'] {
   display: flex;
@@ -66608,6 +66631,9 @@ html[data-ds-motion='reduced']
     border: 1px solid ButtonText;
     background: Canvas;
     box-shadow: none;
+  }
+  .ds-pattern-notification-center.ds-engine-modern [data-part='panel']:is([data-state~='focus-visible'], :focus-visible) {
+    outline-color: Highlight;
   }
   .ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='header'],
   .ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='row'] {
@@ -101248,7 +101274,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
         it; the timestamp slot carried it only on the side that renders no
         timestamp of its own, which is the shipped shape. ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'] {
-  border: var(--ds-edge-hairline-width, var(--ds-border-width-1)) solid var(--ds-color-bg-tertiary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-bg-tertiary);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-color-bg-primary);
   padding-inline: var(--ds-spacing-4, 1rem);
