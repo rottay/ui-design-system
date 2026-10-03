@@ -16,9 +16,12 @@ previously exposed on `./icons/full` are retained on the canonical `./icons` doo
 
 RET-01/D07 also removes the 328 vendor-named glyph exports from the canonical
 `./icons` public API in this target major. The inventory below is derived from
-the existing private catalog, not from a zero-consumer claim. Existing
-app-platform consumers and 52 Showroom files import this door; their named-glyph
-imports must be adapted. Apps remain outside this DS packet, and Showroom
+the existing private catalog, not from a zero-consumer claim. Application
+consumers import named glyphs from this door and must adapt them (the codemod
+kit's map records design-system-resolved sites in app-bithire, app-evnto and
+app-platform as of its 2026-10-03 dry-run); Showroom files import this door,
+but none imports a retired named glyph today (the codemod kit and an
+independent grep both find zero). Apps remain outside this DS packet, and Showroom
 migration is required before closing RET-01 or certifying Showroom against this
 major. No claim is made that those consumers compile unchanged today.
 

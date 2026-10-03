@@ -36,4 +36,5 @@ signature .#ProfileSurfaceProps — adds optional SurfacePostures
 signature .#SettingsSurfaceProps — adds optional SurfacePostures
 signature .#TeamSurfaceProps — adds optional SurfacePostures
 signature .#SurfaceActionBarProps — accepts three typed optional posture anatomy attributes on the existing action row
+signature .#SurfaceActionBar — destructures the three optional `data-surface-region`, `data-region-disposition` and `data-posture` props and forwards them to the existing action-row container; the return type and every existing prop are unchanged
 ```
