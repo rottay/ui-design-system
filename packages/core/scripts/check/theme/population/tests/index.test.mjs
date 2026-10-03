@@ -1091,7 +1091,8 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     assert.equal(MOVERS.length, 118);
     assert.deepEqual(MOVERS.filter((family) => !states.includes(family)), [], 'a mover may never leave the population');
     assert.deepEqual(Object.fromEntries(['shape', 'typography', 'rhythm', 'depth', 'motion'].map((axis) => [axis, byAxis[axis].denominator])),
-      { shape: 214, typography: 182, rhythm: 224, depth: 199, motion: 204 });
+      // depth 199 -> 204 (2026-10-03): the focus-signature sweep's five entrants, drilled in D9.
+      { shape: 214, typography: 182, rhythm: 224, depth: 204, motion: 204 });
     assert.deepEqual(Object.fromEntries(report.axes.map((entry) => [entry.axis, entry.notApplicableCount])),
       { shape: 4, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
     // The two ruled-out alternatives, measured: the twin clause keeps out
@@ -1127,6 +1128,52 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     };
     assert.ok(at(156).some((line) => line.startsWith('states: denominator 154 is BELOW its floor 156')), at(156).join(' | '));
     assert.ok(at(153).some((line) => line.startsWith('states: denominator 154 is ABOVE its pin 153')), at(153).join(' | '));
+  });
+
+  it('D9: depth is 204 -- the five focus-signature entrants are in it by name, states keeps 154, and the floor refuses both directions', () => {
+    const report = populationReport();
+    const byAxis = Object.fromEntries(report.axes.map((entry) => [entry.axis, entry]));
+    const ENTERED = ['link', 'scroll-area', 'search', 'typography', 'virtual-list'];
+    assert.equal(byAxis.depth.denominator, 204);
+    for (const family of ENTERED) assert.ok(byAxis.depth.families.includes(family), `${family} declares depth under the committed rule`);
+    assert.equal(byAxis.states.denominator, 154);
+    for (const family of [...ENTERED, 'breadcrumb-compounds']) assert.ok(byAxis.states.families.includes(family), `${family} is a states member`);
+    const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
+    assert.equal(floor.axes.depth, 204);
+    assert.equal(floor.catalogRevision, catalogRevision().digest);
+    const move = floor.provenance.membershipMoves.focusSignatureSweep;
+    assert.deepEqual(move.byAxis.depth, { added: ENTERED, removed: [] });
+    for (const axis of ['shape', 'typography', 'rhythm', 'states', 'motion']) assert.deepEqual(move.byAxis[axis], { added: [], removed: [] }, axis);
+    assert.deepEqual(move.depth, { pinned: 199, repinned: 204 });
+    assert.match(move.reason, /^five families entered by the focus-signature sweep \(237a4bf8f, a8f594ab4\): link, scroll-area, search, typography, virtual-list /u);
+    assert.match(move.reason, /classification debt of the population rule, correction reserved to the owner$/u);
+    assert.equal(move.catalogRevisionMove.to, floor.catalogRevision);
+    // THE NAMED NOTE, held to the tree: each of the six is in depth through a
+    // focus-signature `box-shadow` (or its `none` twin) and nothing else.
+    assert.deepEqual(move.focusSignatureOnly.families, ['breadcrumb-compounds', ...ENTERED]);
+    const signature = /^(?:none|var\(--ds-focus-ring\)|var\(--ds-[a-z-]*focus-ring, var\(--ds-focus-ring\)\))$/u;
+    const declarations = familyAxisDeclarations();
+    for (const family of move.focusSignatureOnly.families) {
+      const record = declarations.get(family);
+      assert.deepEqual(record.axes.depth, { properties: ['box-shadow'], headChannels: [] }, family);
+      const written = record.files.flatMap((file) => cssRules(readFileSync(join(ROOT, file), 'utf8')))
+        .flatMap((rule) => rule.declarations.filter((declaration) => AXES.depth.authored.includes(declaration.property))
+          .map((declaration) => ({ selector: rule.selector, value: declaration.value.replace(/\s+/gu, ' ').trim() })));
+      assert.ok(written.length > 0, family);
+      for (const entry of written) assert.match(entry.value, signature, `${family}: ${entry.selector} { box-shadow: ${entry.value} }`);
+      assert.ok(written.some((entry) => /focus-ring/u.test(entry.value) && /focus-visible/u.test(entry.selector)), `${family}: no focus-gated signature shadow`);
+    }
+    // A family with a resting elevation is NOT in the note's class: the note names an exact set.
+    assert.notDeepEqual(declarations.get('card').axes.depth, { properties: ['box-shadow'], headChannels: [] });
+    const dir = mkdtempSync(join(tmpdir(), 'evi02-depth-focus-'));
+    sandboxes.push(dir);
+    const at = (depth) => {
+      const path = join(dir, `floor-${depth}.json`);
+      writeFileSync(path, JSON.stringify({ ...floor, axes: { ...floor.axes, depth } }));
+      return checkPopulationFloor(ROOT, undefined, path).failures;
+    };
+    assert.ok(at(199).some((line) => line.startsWith('depth: denominator 204 is ABOVE its pin 199')), at(199).join(' | '));
+    assert.ok(at(205).some((line) => line.startsWith('depth: denominator 204 is BELOW its floor 205')), at(205).join(' | '));
   });
 
   it('D8: 8 declaring states families are unobservable -- surface-states is not one (opacity is read) -- and none is subtracted', () => {
