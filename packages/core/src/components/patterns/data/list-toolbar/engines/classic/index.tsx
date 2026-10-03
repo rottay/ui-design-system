@@ -44,7 +44,7 @@ import type {
   ListToolbarProps,
   ListToolbarMessages,
   FilterPillConfig,
-  DensityKey,
+  DensityPosture,
 } from '../../contracts';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useEngineContext } from '@/infrastructure/runtime/engines/composition/react/provider';
@@ -138,7 +138,7 @@ function focusVisibleRingHandlers(baseShadow: string) {
 }
 
 const DENSITY_OPTIONS: {
-  key: DensityKey;
+  key: DensityPosture;
   icon: React.ReactNode;
   labelKey: 'compact' | 'comfortable' | 'spacious';
   descriptionKey: 'compactDescription' | 'comfortableDescription' | 'spaciousDescription';
@@ -325,8 +325,8 @@ function DensitySection({
   onDensityChange,
   messages,
 }: {
-  density: DensityKey;
-  onDensityChange: (d: DensityKey) => void;
+  density: DensityPosture;
+  onDensityChange: (d: DensityPosture) => void;
   messages: ListToolbarMessages;
 }) {
   return (
@@ -421,8 +421,8 @@ function SettingsDropdownContent({
 }: {
   columnSettingsContent?: React.ReactNode;
   savedViewsContent?: React.ReactNode;
-  density: DensityKey;
-  onDensityChange: (d: DensityKey) => void;
+  density: DensityPosture;
+  onDensityChange: (d: DensityPosture) => void;
   messages: ListToolbarMessages;
 }) {
   return (

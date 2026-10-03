@@ -9,17 +9,17 @@ import type { ReactNode } from 'react';
 import type { PatternBaseProps } from '../../../../../foundation/contracts/runtime/components/patterns/core';
 import type {
   ActiveFilterState,
-  DensityKey,
   FilterPillConfig,
   ViewMode,
 } from '@/foundation/contracts/runtime/components/patterns/data';
+import type { DensityPosture } from '@/infrastructure/runtime/foundation/density';
 
 export type {
   ActiveFilterState,
-  DensityKey,
   FilterPillConfig,
   ViewMode,
 } from '@/foundation/contracts/runtime/components/patterns/data';
+export type { DensityPosture } from '@/infrastructure/runtime/foundation/density';
 
 /** Localizable copy owned by the toolbar chrome, rather than by its data. */
 export interface ListToolbarMessages {
@@ -127,9 +127,9 @@ export interface ListToolbarProps extends PatternBaseProps {
   /** View mode change handler */
   onViewModeChange: (mode: ViewMode) => void;
   /** Current row density */
-  density: DensityKey;
+  density: DensityPosture;
   /** Density change handler */
-  onDensityChange: (density: DensityKey) => void;
+  onDensityChange: (density: DensityPosture) => void;
 
   // Column settings (rendered inside settings dropdown)
   /** Column settings content rendered as a slot */

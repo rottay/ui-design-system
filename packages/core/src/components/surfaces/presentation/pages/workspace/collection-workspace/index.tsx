@@ -45,7 +45,8 @@ import type {
 import { deviceAliasForBreakpoint } from '@/foundation/contracts/kernel/responsive/breakpoints';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { resolveSurfacePosture, type SurfaceAdaptivePosture } from '../../../../foundation/contracts/adaptive';
-import type { DensityKey, ViewMode } from '../../../../../patterns/data/list-toolbar/contracts';
+import type { ViewMode } from '../../../../../patterns/data/list-toolbar/contracts';
+import type { DensityPosture } from '@/infrastructure/runtime/foundation/density';
 import type {
   CollectionHeaderMetaItem,
   CollectionHeaderProps,
@@ -865,7 +866,7 @@ function CollectionWorkspaceSurfaceContent<T extends object>(props: CollectionWo
   // resolved density CSS variables (design-language §3) are emitted on the
   // surface root so the inner table + embedded cards derive cell/card padding
   // from the token cascade.
-  const density: DensityKey = surfacePosture?.density ?? controls?.density?.value ?? densityMode;
+  const density: DensityPosture = surfacePosture?.density ?? controls?.density?.value ?? densityMode;
   const densityStyleVars = resolveCollectionWorkspaceDensityStyleVars(
     normalizeDensityMode(density),
   );
@@ -1932,7 +1933,7 @@ function CollectionWorkspaceSurfaceContent<T extends object>(props: CollectionWo
               viewMode={toolbarViewMode}
               onViewModeChange={(mode: ViewMode) => changeViewMode(mode === 'list' ? 'table' : mode)}
               density={density}
-              onDensityChange={(d: DensityKey) => controls?.density?.onChange?.(d)}
+              onDensityChange={(d: DensityPosture) => controls?.density?.onChange?.(d)}
               activeFilters={workspace.filterValues}
               onClearFilters={workspace.resetFilters}
               activeFilterCount={workspace.activeFilterCount}

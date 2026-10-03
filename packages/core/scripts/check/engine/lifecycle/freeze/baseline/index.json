@@ -53,9 +53,9 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/list-toolbar/engines/classic/index.tsx": {
-      "blob": "d780d64d5b13b76fd9857079e37254e4db51bc0b62f24e46705b78f24cc676ad",
-      "relocationDigest": "a40bc8d93bb36b142e07fb0141cf6cad7d220a8e0adbc4fe4b8fe80e179b6c33",
-      "reason": "Re-authorized after the governed direct-entrypoint migration (fa0efd3b6) rewrote its barrel import into per-family deep imports. Mechanical import-path change plus a header comment; no classic behaviour, markup or paint was altered.",
+      "blob": "bf64bd600206bf1fbd1fa5f7b3cc4ae3c9f5a9328a9645cf139e1d4aeb227950",
+      "relocationDigest": "38d0fa2e7110664d45736f24b2318a90af3e073fec975ddab39ec6394d56f9f5",
+      "reason": "WO-RET-01 F-84: minimal shared-contract compile fix: type identifier DensityKey -> DensityPosture at six type positions (the import specifier and five uses); no emitted change, transpiled output byte-identical. Also carries the earlier authorized change: the governed direct-entrypoint migration (fa0efd3b6) rewrote its barrel import into per-family deep imports, a mechanical import-path change plus a header comment; no classic behaviour, markup or paint was altered.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/record-facts/engines/classic/index.tsx": {

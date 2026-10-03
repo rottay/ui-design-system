@@ -39,7 +39,7 @@ import { SurfaceCapabilityAnatomy } from '../../../../../../structures/feedback/
 import { useFormatter } from '@/infrastructure/runtime/i18n';
 import type { UseFormatterResult } from '@/infrastructure/runtime/i18n';
 import { useSurfaceTranslations } from '../../../../../../structures/foundation/chrome/runtime/i18n';
-import type { DensityKey } from '../../../../../../patterns/data/list-toolbar/contracts';
+import type { DensityPosture } from '@/infrastructure/runtime/foundation/density';
 import type { BulkAction } from '../../../../../../../foundation/contracts/runtime/components/patterns/core';
 import type { SortConfig, PaginationConfig, FilterDef } from '../../../../../../../foundation/contracts/runtime/components/patterns/core';
 import { PatternDataTable } from '../../../../../../patterns/data/data-table';
@@ -97,7 +97,7 @@ export interface CollectionRenderDispatchProps<T extends object> {
   onSortChange?: (sort: SortConfig) => void;
   pagination?: PaginationConfig | false;
   compact?: boolean;
-  density?: DensityKey;
+  density?: DensityPosture;
   striped?: boolean;
   bordered?: boolean;
   hoverable?: boolean;

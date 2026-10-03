@@ -9,7 +9,7 @@
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
 import type { ListToolbarProps } from './contracts';
 
-export type { ListToolbarProps, FilterPillConfig, DensityKey, ViewMode } from './contracts';
+export type { ListToolbarProps, FilterPillConfig, ViewMode } from './contracts';
 
 export const PatternListToolbar = createEngineComponent<ListToolbarProps>(
   'PatternListToolbar',

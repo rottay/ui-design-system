@@ -27,7 +27,7 @@ import {
   Tooltip,
   WidgetBoard,
   type ColumnDef,
-  type DensityKey,
+  type DensityPosture,
   type FilterPillConfig,
   type ListToolbarProps,
   type ViewMode,
@@ -415,10 +415,10 @@ function HeaderSection({ copy }: { copy: CanaryCopy }) {
 // wc-toolbar — PatternListToolbar with real controlled state
 // ---------------------------------------------------------------------------
 
-function ToolbarSection({ copy, initialDensity }: { copy: CanaryCopy; initialDensity: DensityKey }) {
+function ToolbarSection({ copy, initialDensity }: { copy: CanaryCopy; initialDensity: DensityPosture }) {
   const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("list");
-  const [density, setDensity] = useState<DensityKey>(initialDensity);
+  const [density, setDensity] = useState<DensityPosture>(initialDensity);
   const [filters, setFilters] = useState<Record<string, unknown>>({
     stage: "interview",
     source: "linkedin",
@@ -817,7 +817,7 @@ export function WlCanaryCanvas({
   sheetInitiallyOpen,
 }: WlCanaryCanvasProps) {
   const copy = COPY[locale];
-  const appearanceDensity: DensityKey = density;
+  const appearanceDensity: DensityPosture = density;
 
   return (
     <Box

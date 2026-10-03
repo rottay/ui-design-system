@@ -26,8 +26,8 @@ import type {
   AssistantMessageRole,
   AssistantDeliveryStatus,
   FilterPillConfig,
-  DensityKey,
 } from '@/foundation/contracts/runtime/components/patterns';
+import type { DensityPosture } from '@/infrastructure/runtime/foundation/density';
 import type { GridColumns } from '../../../primitives/layout/grid';
 import type { TabsProps } from '../../../primitives/navigation/tabs';
 
@@ -186,9 +186,9 @@ export interface ListSurfaceToolbarConfig {
 
   // Density
   /** Current row density. */
-  density: DensityKey;
+  density: DensityPosture;
   /** Density change handler. */
-  onDensityChange: (density: DensityKey) => void;
+  onDensityChange: (density: DensityPosture) => void;
 
   // Export
   /** Export handler. When provided, the toolbar renders an export button. */

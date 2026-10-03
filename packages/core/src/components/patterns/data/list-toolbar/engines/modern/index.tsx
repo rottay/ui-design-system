@@ -61,8 +61,8 @@ import type {
   ListToolbarMessages,
   FilterPillConfig,
   ActiveFilterState,
-  DensityKey,
 } from '../../contracts';
+import type { DensityPosture } from '@/infrastructure/runtime/foundation/density';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useOptionalFormatter, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
@@ -172,7 +172,7 @@ function useContainerCompact(fallbackCompact: boolean) {
 // ============================================================================
 
 const DENSITY_OPTIONS: {
-  key: DensityKey;
+  key: DensityPosture;
   icon: React.ReactNode;
   labelKey: 'compact' | 'comfortable' | 'spacious';
 }[] = [
@@ -407,8 +407,8 @@ function DensitySwitch({
   onDensityChange,
   messages,
 }: {
-  density: DensityKey;
-  onDensityChange: (d: DensityKey) => void;
+  density: DensityPosture;
+  onDensityChange: (d: DensityPosture) => void;
   messages: ListToolbarMessages;
 }) {
   return (
@@ -418,7 +418,7 @@ function DensitySwitch({
         className='ds-list-toolbar__segmented-control'
         size='small'
         value={density}
-        onChange={(value) => onDensityChange(value as DensityKey)}
+        onChange={(value) => onDensityChange(value as DensityPosture)}
         options={DENSITY_OPTIONS.map((opt) => {
           const label = `${messages[opt.labelKey]} ${messages.densitySuffix}`;
           return {
@@ -446,8 +446,8 @@ function SettingsDropdown({
 }: {
   columnSettingsContent?: React.ReactNode;
   savedViewsContent?: React.ReactNode;
-  density: DensityKey;
-  onDensityChange: (d: DensityKey) => void;
+  density: DensityPosture;
+  onDensityChange: (d: DensityPosture) => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   messages: ListToolbarMessages;
@@ -573,8 +573,8 @@ function MobileOverflow({
   onExport,
   messages,
 }: {
-  density: DensityKey;
-  onDensityChange: (d: DensityKey) => void;
+  density: DensityPosture;
+  onDensityChange: (d: DensityPosture) => void;
   viewMode: 'list' | 'cards';
   onViewModeChange: (mode: 'list' | 'cards') => void;
   onExport?: () => void;

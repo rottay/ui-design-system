@@ -57,7 +57,6 @@ export interface FilterPillConfig {
   options: { label: string; value: string }[];
 }
 
-export type DensityKey = 'compact' | 'comfortable' | 'spacious';
 export type ViewMode = 'list' | 'cards';
 export type DetailPanelSidebarPosition = 'left' | 'right';
 export type CollectionViewMode =

@@ -38,7 +38,7 @@ import {
   PatternListToolbar,
   Stack,
   Text,
-  type DensityKey,
+  type DensityPosture,
   type FilterPillConfig,
   type ListToolbarProps,
   type ViewMode,
@@ -182,11 +182,11 @@ function ToolbarCell({
   testId,
 }: {
   copy: LocaleCopy;
-  initialDensity: DensityKey;
+  initialDensity: DensityPosture;
   testId: string;
 }) {  const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("list");
-  const [density, setDensity] = useState<DensityKey>(initialDensity);
+  const [density, setDensity] = useState<DensityPosture>(initialDensity);
   const [filters, setFilters] = useState<Record<string, unknown>>({
     status: "active",
     team: "ops",
