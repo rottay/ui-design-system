@@ -129,30 +129,59 @@ describe('NotificationCenter modern engine keyboard state contract', () => {
     }
   });
 
-  it('leaves the composed Buttons their own ring and paints only the panel anchor', async () => {
+  it('leaves the composed Buttons their own ring and dresses only the panel anchor in the focus signature', async () => {
     const { container } = render(<ModernNotificationCenter {...buildProps({ onClear: vi.fn() })} />);
     await settle();
 
     const panel = container.querySelector<HTMLElement>('[data-part="panel"]');
     expect(panel?.tabIndex).toBe(-1);
 
-    const panelRing =
+    const panelFocus =
       ".ds-pattern-notification-center.ds-engine-modern [data-part='panel']:is([data-state~='focus-visible'], :focus-visible)";
-    const ringRules = [...MODERN_SKIN.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
-      .map(([, selector, body]) => ({ selector: selector.trim(), body }))
-      .filter(({ body }) => /(^|[\s;])outline(-color)?\s*:/.test(body));
-    expect(ringRules.length).toBeGreaterThan(0);
-    for (const rule of ringRules) expect(rule.selector).toBe(panelRing);
+    const declarations = (body: string) =>
+      body
+        .split(';')
+        .map((declaration) => declaration.trim().replace(/\s+/g, ' '))
+        .filter(Boolean);
+    const rulesOf = (css: string) =>
+      [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({
+        selector: selector.trim(),
+        declarations: declarations(body),
+      }));
 
-    const base = ringRules.find(({ body }) => /(^|[\s;])outline\s*:/.test(body));
-    expect(base?.body).toContain('var(--ds-focus-ring-width, 2px)');
-    expect(base?.body).toContain('var(--ds-focus-ring-color, var(--ds-color-primary))');
-    expect(base?.body).toContain('var(--ds-focus-ring-offset, 2px)');
+    const forcedStart = MODERN_SKIN.indexOf('@media (forced-colors: active)');
+    const forcedEnd = MODERN_SKIN.indexOf('@media (hover: none), (pointer: coarse)');
+    expect(forcedStart).toBeGreaterThan(-1);
+    expect(forcedEnd).toBeGreaterThan(forcedStart);
+    const authored = rulesOf(MODERN_SKIN.slice(0, forcedStart) + MODERN_SKIN.slice(forcedEnd));
+    const forced = rulesOf(MODERN_SKIN.slice(forcedStart, forcedEnd));
 
-    const forcedColors = MODERN_SKIN.slice(MODERN_SKIN.indexOf('@media (forced-colors: active)'));
-    expect(forcedColors).toMatch(
-      /\[data-part='panel'\]:is\(\[data-state~='focus-visible'\], :focus-visible\)\s*\{\s*outline-color:\s*Highlight;/,
+    const paintsFocus = (rule: { declarations: string[] }) =>
+      rule.declarations.some((declaration) => /^outline(-[a-z]+)?\s*:|--ds-focus-ring/.test(declaration));
+    const focusRules = authored.filter(paintsFocus);
+    for (const rule of focusRules) expect(rule.selector).toBe(panelFocus);
+    for (const rule of forced.filter(paintsFocus)) expect(rule.selector).toBe(panelFocus);
+
+    expect(focusRules.map((rule) => rule.declarations)).toEqual([
+      [
+        'outline: var(--ds-focus-ring-width) solid transparent',
+        'outline-offset: var(--ds-focus-ring-offset)',
+        'box-shadow: var(--ds-focus-ring)',
+      ],
+      ['box-shadow: var(--ds-focus-ring), var(--ds-elevation-3)'],
+    ]);
+    expect(MODERN_SKIN).toMatch(
+      /@container not style\(--ds-elevation-3: none\)\s*\{\s*\.ds-pattern-notification-center\.ds-engine-modern \[data-part='panel'\]:is\(\[data-state~='focus-visible'\], :focus-visible\)\s*\{\s*box-shadow: var\(--ds-focus-ring\), var\(--ds-elevation-3\);/,
     );
+    expect(MODERN_SKIN).not.toContain('--ds-focus-ring-color');
+
+    expect(forced.filter(paintsFocus).map((rule) => rule.declarations)).toEqual([
+      [
+        'outline: var(--ds-focus-ring-width) solid Highlight',
+        'outline-offset: var(--ds-focus-ring-width)',
+        'box-shadow: none',
+      ],
+    ]);
   });
 });
 

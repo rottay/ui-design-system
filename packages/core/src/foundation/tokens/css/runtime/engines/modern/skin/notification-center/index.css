@@ -106,10 +106,17 @@
 }
 
 /* ---- panel focus anchor: dismissing a row hands focus to the panel, so a
-   keyboard dismiss must land on a visible, governed ring ---- */
+   keyboard dismiss lands on the tenant focus signature. The signature shares
+   box-shadow with the elevation; a `none` elevation would void the list. ---- */
 .ds-pattern-notification-center.ds-engine-modern [data-part='panel']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
+}
+@container not style(--ds-elevation-3: none) {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='panel']:is([data-state~='focus-visible'], :focus-visible) {
+    box-shadow: var(--ds-focus-ring), var(--ds-elevation-3);
+  }
 }
 
 /* ---- header: title row + bottom rule (was the `border-b` utility) ---- */
@@ -340,7 +347,9 @@
     box-shadow: none;
   }
   .ds-pattern-notification-center.ds-engine-modern [data-part='panel']:is([data-state~='focus-visible'], :focus-visible) {
-    outline-color: Highlight;
+    outline: var(--ds-focus-ring-width) solid Highlight;
+    outline-offset: var(--ds-focus-ring-width);
+    box-shadow: none;
   }
   .ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='header'],
   .ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='row'] {
