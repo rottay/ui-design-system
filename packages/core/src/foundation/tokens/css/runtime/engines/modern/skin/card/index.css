@@ -600,15 +600,17 @@
     background: none;
   }
 
-  .ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible'] {
-    outline: var(--ds-focus-ring-width) solid Highlight;
-    outline-offset: var(--ds-focus-ring-width);
-  }
-
   .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'] {
     border-color: Highlight;
     outline: var(--ds-focus-ring-width) solid Highlight;
     outline-offset: calc(-1 * var(--ds-focus-ring-width));
+  }
+
+  /* The repeated `[data-part='root']` outranks the tenant-coloured focus and
+     selection outlines, which a `forced-color-adjust: none` card keeps. */
+  .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
   }
 
   /* opacity and the disabled ink do not survive forced colours; the system

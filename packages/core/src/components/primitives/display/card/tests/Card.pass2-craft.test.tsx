@@ -305,3 +305,54 @@ describe('Card unavailable state under forced colors', () => {
     expect(root.querySelector('[data-part="title"]')).not.toBeNull();
   });
 });
+
+describe('Card keyboard focus under forced colors', () => {
+  const skin = readFileSync(modernSkinPath, 'utf-8').replace(/\/\*[\s\S]*?\*\//g, '');
+  const split = skin.indexOf('@media (forced-colors: active)');
+  const rulesOf = (css: string) =>
+    [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(
+      ([, selector, body]) => [(selector ?? '').replace(/\s+/g, ' ').trim(), body ?? ''] as const,
+    );
+  const weight = (selector: string) => (selector.match(/\.[\w-]+|\[[^\]]+\]/g) ?? []).length;
+  const outlines = (css: string) =>
+    rulesOf(css).filter(([selector, body]) => selector.startsWith('.ds-card') && /outline:/.test(body));
+
+  const forced = outlines(skin.slice(split));
+  const focusArm = forced.find(([selector]) => selector.includes("[data-state~='focus-visible']"));
+
+  it('paints a system-colour outline no thinner than two pixels at the tenant offset', () => {
+    expect(focusArm).toBeDefined();
+    expect(focusArm?.[1]).toMatch(/outline:\s*max\(2px, var\(--ds-focus-ring-width\)\) solid Highlight;/);
+    expect(focusArm?.[1]).toMatch(/outline-offset:\s*var\(--ds-focus-ring-offset\);/);
+  });
+
+  // A card that keeps its own colours (`forced-color-adjust: none`) keeps every
+  // normal rule too, so the system arm must win the cascade on its own weight.
+  it('outranks every other outline the skin states for the card root', () => {
+    const arm = focusArm?.[0] ?? '';
+    const rivals = [...outlines(skin.slice(0, split)), ...forced].filter(
+      ([selector]) => selector !== arm && !selector.includes("[data-state~='disabled']"),
+    );
+    expect(rivals.length).toBeGreaterThan(0);
+    for (const [selector] of rivals) expect(weight(arm), selector).toBeGreaterThanOrEqual(weight(selector));
+    expect(forced[forced.length - 1]?.[0]).toBe(arm);
+  });
+
+  it('keeps the unavailable card out of the focus arm', () => {
+    expect(focusArm?.[0]).toContain(":not([data-state~='disabled'])");
+  });
+
+  it('still stamps the hooks the arm selects on', () => {
+    const { container } = render(
+      <ModernCard onClick={vi.fn()} title="Open record">
+        Body
+      </ModernCard>,
+    );
+    const root = container.querySelector('[data-part="root"]') as HTMLElement;
+    expect(root.getAttribute('data-actionable')).toBe('true');
+    expect(root.tabIndex).toBe(0);
+    fireEvent.keyDown(document.body, { key: 'Tab' });
+    fireEvent.focus(root);
+    expect(root.getAttribute('data-state') ?? '').toContain('focus');
+  });
+});
