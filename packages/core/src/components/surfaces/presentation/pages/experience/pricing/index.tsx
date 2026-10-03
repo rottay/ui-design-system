@@ -38,6 +38,8 @@
  * live-region semantics are inferred.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React from 'react';
 import { Box, Stack, Text } from '../../../../../primitives';
 import { PatternPricingTable } from '../../../../../patterns';
@@ -51,8 +53,10 @@ import { SurfaceErrorState } from '../../../../../structures/feedback/surface-li
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { filterSurfaceActions } from '../../../../../structures/foundation/chrome/runtime/access';
 
 export interface PricingSurfaceProps {
+  postures?: SurfacePostures;
   config: PricingSurfaceConfig;
   /** Payload pending; renders the mirror skeleton inside the live comparison region. */
   loading?: boolean;
@@ -62,12 +66,22 @@ export interface PricingSurfaceProps {
   onRetry?: () => void | Promise<void>;
 }
 
-export function PricingSurface({
+export function PricingSurface(props: PricingSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="list">
+      <PricingSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function PricingSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: PricingSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
+  const dockActions = !!surfacePosture?.primaryAction && surfacePosture.primaryAction !== 'app-bar';
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
@@ -78,7 +92,8 @@ export function PricingSurface({
   // (marketing idiom: error wins over loading).
   const showSkeleton = loading && !hasSurfaceError(error);
 
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} access={config.access} />;
+  const visibleActions = surfacePosture ? filterSurfaceActions(config.behavior.actions, config.access) : config.behavior.actions;
+  const actionsNode = !surfacePosture || visibleActions?.length ? <SurfacePostureAction><SurfacePostureSlot name="primary-action"><SurfaceActionBar actions={visibleActions} access={surfacePosture ? { mode: 'all' } : config.access} /></SurfacePostureSlot></SurfacePostureAction> : undefined;
 
   // Plans and features are re-mapped to strip surface-level metadata before
   // reaching the pricing pattern. This keeps the pattern API stable even if
@@ -121,7 +136,7 @@ export function PricingSurface({
   return (
     <PageShellSurface
       chrome={{ ...config.presentation.chrome, maxWidth: config.visual.maxWidth }}
-      actions={actionsNode}
+      actions={dockActions ? undefined : actionsNode}
       loading={false}
     >
       <Stack
@@ -144,7 +159,7 @@ export function PricingSurface({
         {/* The comparison grid is a labeled region (SU16 idiom) so
             screen-reader users can jump straight to the plans; the region
             stays mounted across loading/error so the swap is paint-only. */}
-        <Box
+        <SurfacePostureSlot name="comparison" asChild><Box
           as="section"
           aria-label={tSurfaceOr('pricing.table_region_label', 'Plan comparison')}
         >
@@ -178,10 +193,11 @@ export function PricingSurface({
           ) : (
             tableNode
           )}
-        </Box>
+        </Box></SurfacePostureSlot>
 
-        {config.presentation.footer}
+        <SurfacePostureSlot name="footer">{config.presentation.footer}</SurfacePostureSlot>
       </Stack>
+      {dockActions && actionsNode}
     </PageShellSurface>
   );
 }

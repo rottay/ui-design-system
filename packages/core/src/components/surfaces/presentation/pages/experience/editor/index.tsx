@@ -28,6 +28,8 @@
  * semantics: the preview region is a labeled landmark, not an announcer.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useEffect, useId, useState } from 'react';
 import { Box, Card, Grid, Stack, Text, Textarea } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
@@ -43,10 +45,12 @@ import { PageShellSurface } from '../../../../../structures/shell/page-shell-sur
 import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
 import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/shell/surface-chrome';
+import { filterSurfaceActions } from '../../../../../structures/foundation/chrome/runtime/access';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 
 export interface EditorSurfaceProps {
+  postures?: SurfacePostures;
   config: EditorSurfaceConfig;
   loading?: boolean;
   /** Load failure of the document payload; renders the shared error kit under the live page chrome. */
@@ -56,12 +60,22 @@ export interface EditorSurfaceProps {
 }
 
 /** Editing surface with controlled/uncontrolled value handling and optional preview rail. */
-export function EditorSurface({
+export function EditorSurface(props: EditorSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <EditorSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function EditorSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: EditorSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
+  const dockActions = !!surfacePosture?.primaryAction && surfacePosture.primaryAction !== 'app-bar';
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
@@ -129,7 +143,7 @@ export function EditorSurface({
   // wide enough. Otherwise the editor uses the full width and the preview
   // (when configured) stacks below as its own panel.
   const useSplit =
-    config.visual.layout === 'split' && Boolean(config.presentation.preview) && !shouldStack;
+    config.visual.layout === 'split' && Boolean(config.presentation.preview) && !shouldStack && surfacePosture?.regions.preview !== 'hide';
   // `previewWidth` is contract-declared: when set, the split leaves the fixed
   // 12-column 8/4 recipe and gives the preview rail its own track; the editor
   // column stays fluid (`minmax(0, 1fr)`) so long content can never overflow
@@ -145,19 +159,19 @@ export function EditorSurface({
   // usable (dashboard idiom). Only the cancel action survives here: save and
   // publish act on the document value, which never loaded.
   if (hasSurfaceError(error)) {
+    const cancelActions = config.behavior.cancelAction ? [config.behavior.cancelAction] : [];
+    const visibleCancelActions = surfacePosture ? filterSurfaceActions(cancelActions, config.access) : cancelActions;
+    const cancelActionsNode = visibleCancelActions.length > 0 ? <SurfacePostureAction><SurfacePostureSlot name="primary-action"><SurfaceActionBar actions={visibleCancelActions} access={surfacePosture ? { mode: 'all' } : config.access} /></SurfacePostureSlot></SurfacePostureAction> : undefined;
     return (
       <PageShellSurface
         chrome={{
           ...config.presentation.chrome,
           maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
         }}
-        actions={
-          config.behavior.cancelAction ? (
-            <SurfaceActionBar actions={[config.behavior.cancelAction]} access={config.access} />
-          ) : undefined
-        }
+        actions={dockActions ? undefined : cancelActionsNode}
       >
         <SurfaceErrorState error={error} onRetry={onRetry} />
+        {dockActions && cancelActionsNode}
       </PageShellSurface>
     );
   }
@@ -184,7 +198,7 @@ export function EditorSurface({
           /* The toolbar acts on the editor instance; during the mirror
              skeleton there is no editor to act on, so the slot stays out
              until the content resolves. */
-          actions={loading ? undefined : config.presentation.toolbar}
+          actions={loading || surfacePosture?.regions.toolbar === 'hide' ? undefined : surfacePosture && config.presentation.toolbar ? <SurfacePostureSlot name="toolbar">{config.presentation.toolbar}</SurfacePostureSlot> : config.presentation.toolbar}
         >
           <Stack spacing="md">
             {config.presentation.helperText && (
@@ -244,7 +258,7 @@ export function EditorSurface({
       </Grid.Item>
 
       {config.presentation.preview && (
-        <Grid.Item span={useSplit && !previewTrack ? 4 : undefined}>
+        <SurfacePostureSlot name="preview" asChild><Grid.Item role={surfacePosture ? 'region' : undefined} aria-label={surfacePosture ? tSurfaceOr('editor.preview_title', 'Preview') : undefined} span={useSplit && !previewTrack ? 4 : undefined}>
           {/* The preview is a labeled landmark (`<section>` + accessible name
               is the native region role): screen-reader users can jump straight
               to the rendered output. The visible card title doubles as the
@@ -265,10 +279,13 @@ export function EditorSurface({
               </Card.Body>
             </Card>
           </Box>
-        </Grid.Item>
+        </Grid.Item></SurfacePostureSlot>
       )}
     </Grid>
   );
+
+  const visibleActions = surfacePosture ? filterSurfaceActions(actions, config.access) : actions;
+  const actionsNode = !surfacePosture || visibleActions.length > 0 ? <SurfacePostureAction><SurfacePostureSlot name="primary-action"><SurfaceActionBar actions={visibleActions} access={surfacePosture ? { mode: 'all' } : config.access} /></SurfacePostureSlot></SurfacePostureAction> : undefined;
 
   return (
     /* The shell's loading early-return is intentionally not engaged: the
@@ -280,7 +297,7 @@ export function EditorSurface({
         ...config.presentation.chrome,
         maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
       }}
-      actions={<SurfaceActionBar actions={actions} access={config.access} />}
+      actions={dockActions ? undefined : actionsNode}
       loading={false}
     >
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
@@ -290,6 +307,7 @@ export function EditorSurface({
           editorContent
         )}
       </SurfaceAccentBarWrapper>
+      {dockActions && actionsNode}
     </PageShellSurface>
   );
 }

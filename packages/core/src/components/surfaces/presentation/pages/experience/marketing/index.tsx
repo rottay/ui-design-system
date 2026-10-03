@@ -29,6 +29,8 @@
  * zero inline paint remains.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React from 'react';
 import {
   Badge,
@@ -42,6 +44,7 @@ import {
 } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
 import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
+import { filterSurfaceActions } from '../../../../../structures/foundation/chrome/runtime/access';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
@@ -51,6 +54,7 @@ import { surfaceStackingValue } from '../../../../../structures/foundation/chrom
 import type { MarketingSurfaceConfig } from '../../../../foundation/contracts';
 
 export interface MarketingSurfaceProps {
+  postures?: SurfacePostures;
   config: MarketingSurfaceConfig;
   /** Payload pending; renders the mirror skeleton under the live top bar. */
   loading?: boolean;
@@ -79,10 +83,10 @@ function MarketingIntroSkeleton(): React.ReactElement {
         <Box data-part="marketing-skeleton-lede" data-line="1" />
         <Box data-part="marketing-skeleton-lede" data-line="2" />
       </Stack>
-      <Flex gap={8} wrap="wrap">
+      <SurfacePostureSlot name="primary-action" asChild><Flex gap={8} wrap="wrap">
         <Box data-part="marketing-skeleton-cta" data-variant="primary" />
         <Box data-part="marketing-skeleton-cta" />
-      </Flex>
+      </Flex></SurfacePostureSlot>
     </Stack>
   );
 }
@@ -107,12 +111,22 @@ function MarketingFeaturesSkeleton(): React.ReactElement {
   );
 }
 
-export function MarketingSurface({
+export function MarketingSurface(props: MarketingSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="list">
+      <MarketingSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function MarketingSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: MarketingSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
+  const dockActions = !!surfacePosture?.primaryAction && surfacePosture.primaryAction !== 'app-bar';
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
@@ -128,11 +142,20 @@ export function MarketingSurface({
     isMobile && config.presentation.mobileSupporting
       ? config.presentation.mobileSupporting
       : config.presentation.supporting;
+  const visibleActions = surfacePosture ? filterSurfaceActions(config.behavior.actions, config.access) : config.behavior.actions;
+  const actionsNode = visibleActions?.length ? (
+    <SurfacePostureAction><SurfacePostureSlot name="primary-action"><SurfaceActionBar
+      actions={visibleActions}
+      access={surfacePosture ? { mode: 'all' } : config.access}
+      justify="start"
+      size={isMobile ? 'sm' : 'md'}
+    /></SurfacePostureSlot></SurfacePostureAction>
+  ) : null;
 
   const heroNode = heroContent ? (
-    <Box className="ds-marketing__hero" data-part="hero">
+    <SurfacePostureSlot name="hero" asChild><Box className="ds-marketing__hero" data-part="hero">
       {heroContent}
-    </Box>
+    </Box></SurfacePostureSlot>
   ) : null;
 
   const introNode = (
@@ -188,16 +211,9 @@ export function MarketingSurface({
         ) : null}
       </Stack>
 
-      {config.behavior.actions?.length ? (
-        <SurfaceActionBar
-          actions={config.behavior.actions}
-          access={config.access}
-          justify="start"
-          size={isMobile ? 'sm' : 'md'}
-        />
-      ) : null}
+      {!dockActions && actionsNode}
 
-      {supportingContent ? <Box>{supportingContent}</Box> : null}
+      {supportingContent ? <Box><SurfacePostureSlot name="supporting-content">{supportingContent}</SurfacePostureSlot></Box> : null}
     </Stack>
   );
 
@@ -205,9 +221,9 @@ export function MarketingSurface({
   // appears when a hero slot is configured, so the split/stacked geometry
   // never shifts when real content arrives.
   const introColumn = loading ? <MarketingIntroSkeleton /> : introNode;
-  const heroColumn = loading
+  const heroColumn = surfacePosture?.regions.hero === 'hide' ? null : loading
     ? heroNode
-      ? <MarketingHeroSkeleton />
+      ? <SurfacePostureSlot name="hero"><MarketingHeroSkeleton /></SurfacePostureSlot>
       : null
     : heroNode;
 
@@ -234,14 +250,14 @@ export function MarketingSurface({
       )}
 
       {loading ? (
-        <MarketingFeaturesSkeleton />
+        <SurfacePostureSlot name="sections"><MarketingFeaturesSkeleton /></SurfacePostureSlot>
       ) : (
         config.presentation.sections?.length ? (
-          <Stack spacing={sectionSpacing}>
+          <SurfacePostureSlot name="sections" asChild><Stack spacing={sectionSpacing}>
             {config.presentation.sections.map((section, index) => (
               <Box key={index}>{section}</Box>
             ))}
-          </Stack>
+          </Stack></SurfacePostureSlot>
         ) : null
       )}
 
@@ -276,7 +292,7 @@ export function MarketingSurface({
             : undefined
         }
       >
-        {config.presentation.topBar}
+        <SurfacePostureSlot name="top-bar">{config.presentation.topBar}</SurfacePostureSlot>
         {/* Entrance motion rides the product personality; reduced/calm
             contexts render the final state by FadeIn's own contract. */}
         {profileDefaults.animateEntrance ? (
@@ -284,6 +300,7 @@ export function MarketingSurface({
         ) : (
           mainNode
         )}
+        {!loading && !hasSurfaceError(error) && dockActions && actionsNode}
       </Stack>
     </Box>
   );

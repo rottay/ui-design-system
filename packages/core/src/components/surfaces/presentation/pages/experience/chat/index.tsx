@@ -33,6 +33,8 @@
  * `role="status"`.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Card, Grid, Stack, Textarea } from '../../../../../primitives';
 import {
@@ -140,14 +142,14 @@ function ChatLoadingSkeleton(): React.ReactElement {
 
   return (
     <>
-      <SurfaceSectionCard title={tSurfaceOr('chat.conversation_title', 'Conversation')}>
+      <SurfacePostureSlot name="transcript"><SurfaceSectionCard title={tSurfaceOr('chat.conversation_title', 'Conversation')}>
         <Stack data-part="transcript-skeleton" spacing="md" aria-hidden="true">
           <Box data-part="chat-skeleton-bubble" data-align="start" data-size="lg" />
           <Box data-part="chat-skeleton-bubble" data-align="end" data-size="md" />
           <Box data-part="chat-skeleton-bubble" data-align="start" data-size="sm" />
         </Stack>
-      </SurfaceSectionCard>
-      <Box
+      </SurfaceSectionCard></SurfacePostureSlot>
+      <SurfacePostureSlot name="composer" asChild><Box
         className="ds-chat__composer"
         data-part="composer"
         data-mobile-sticky="false"
@@ -159,12 +161,13 @@ function ChatLoadingSkeleton(): React.ReactElement {
             <Box data-part="chat-skeleton-block" data-size="send-button" />
           </Stack>
         </SurfaceSectionCard>
-      </Box>
+      </Box></SurfacePostureSlot>
     </>
   );
 }
 
 export interface ChatSurfaceProps {
+  postures?: SurfacePostures;
   config: ChatSurfaceConfig;
   loading?: boolean;
   /** Load failure of the conversation payload; renders the shared error kit under the live page chrome. */
@@ -174,12 +177,21 @@ export interface ChatSurfaceProps {
 }
 
 /** Full chat surface composed from transcript, composer, optional sidebar, and shell chrome. */
-export function ChatSurface({
+export function ChatSurface(props: ChatSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <ChatSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function ChatSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: ChatSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const {
@@ -192,7 +204,7 @@ export function ChatSurface({
   const resolvedMobile = isMobile && hasResolvedViewport;
   const showSidebar =
     !!config.presentation.sidebar &&
-    !(resolvedMobile && config.visual.hideListOnMobile === true);
+    (surfacePosture?.regions.sidebar ? surfacePosture.regions.sidebar !== 'hide' : !(resolvedMobile && config.visual.hideListOnMobile === true));
   const stickyComposer = resolvedMobile && config.visual.stickyInputOnMobile === true;
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   // The composer supports both controlled (app owns draft state) and
@@ -233,6 +245,18 @@ export function ChatSurface({
       // error surfacing (the contract declares no surface-level error slot).
     }
   };
+  const dockActions = !!surfacePosture?.primaryAction && surfacePosture.primaryAction !== 'app-bar';
+  const sendActionsNode = (
+    <SurfacePostureAction><Button
+      className="ds-chat__send-button"
+      variant="primary"
+      onClick={() => void handleSend()}
+      loading={config.behavior.sending}
+      disabled={!draft.trim() || config.behavior.sending}
+    >
+      {config.behavior.sendLabel ?? tSurfaceOr('chat.send', 'Send')}
+    </Button></SurfacePostureAction>
+  );
 
   const useSplit = showSidebar && !shouldStack;
   // `sidebarWidth` is contract-declared: when set, the split leaves the fixed
@@ -254,9 +278,9 @@ export function ChatSurface({
           ...config.presentation.chrome,
           maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
         }}
-        actions={<SurfaceActionBar actions={config.behavior.actions} access={config.access} />}
+        actions={<SurfacePostureSlot name="header-actions"><SurfaceActionBar actions={config.behavior.actions} access={config.access} /></SurfacePostureSlot>}
       >
-        <SurfaceErrorState error={error} onRetry={onRetry} />
+        <SurfacePostureSlot name="transcript"><SurfaceErrorState error={error} onRetry={onRetry} /></SurfacePostureSlot>
       </PageShellSurface>
     );
   }
@@ -281,7 +305,7 @@ export function ChatSurface({
     >
       <Grid.Item span={useSplit && !sidebarTrack ? 8 : undefined}>
         <Stack spacing={sectionSpacing}>
-          {config.presentation.headerContent}
+          <SurfacePostureSlot name="header-content">{config.presentation.headerContent}</SurfacePostureSlot>
 
           {loading ? (
             /* Mirror skeleton: the section frames and page chrome stay live
@@ -291,7 +315,7 @@ export function ChatSurface({
             <ChatLoadingSkeleton />
           ) : (
             <>
-              <SurfaceSectionCard title={tSurfaceOr('chat.conversation_title', 'Conversation')}>
+              <SurfacePostureSlot name="transcript"><SurfaceSectionCard title={tSurfaceOr('chat.conversation_title', 'Conversation')}>
                 {config.behavior.messages.length === 0 ? (
                   config.presentation.emptyState ?? (
                     <SurfaceEmptyState
@@ -351,9 +375,9 @@ export function ChatSurface({
                     ) : null}
                   </Stack>
                 )}
-              </SurfaceSectionCard>
+              </SurfaceSectionCard></SurfacePostureSlot>
 
-              <Box
+              <SurfacePostureSlot name="composer" asChild><Box
                 className="ds-chat__composer"
                 data-part="composer"
                 data-mobile-sticky={stickyComposer ? 'true' : 'false'}
@@ -375,31 +399,23 @@ export function ChatSurface({
                       rows={config.visual.composerRows ?? 4}
                       disabled={config.behavior.sending}
                     />
-                    <Button
-                      className="ds-chat__send-button"
-                      variant="primary"
-                      onClick={() => void handleSend()}
-                      loading={config.behavior.sending}
-                      disabled={!draft.trim() || config.behavior.sending}
-                    >
-                      {config.behavior.sendLabel ?? tSurfaceOr('chat.send', 'Send')}
-                    </Button>
+                    {!dockActions && sendActionsNode}
                   </Stack>
                 </SurfaceSectionCard>
-              </Box>
+              </Box></SurfacePostureSlot>
             </>
           )}
 
-          {config.presentation.footer}
+          <SurfacePostureSlot name="footer">{config.presentation.footer}</SurfacePostureSlot>
         </Stack>
       </Grid.Item>
 
       {showSidebar && (
-        <Grid.Item span={useSplit && !sidebarTrack ? 4 : undefined}>
+        <SurfacePostureSlot name="sidebar" asChild><Grid.Item role={surfacePosture ? 'region' : undefined} aria-label={surfacePosture ? tSurfaceOr('chat.sidebar_label', 'Conversation sidebar') : undefined} span={useSplit && !sidebarTrack ? 4 : undefined}>
           <Card className="ds-chat__sidebar" variant={profileDefaults.cardVariant}>
             <Card.Body>{config.presentation.sidebar}</Card.Body>
           </Card>
-        </Grid.Item>
+        </Grid.Item></SurfacePostureSlot>
       )}
     </Grid>
   );
@@ -414,7 +430,7 @@ export function ChatSurface({
         ...config.presentation.chrome,
         maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
       }}
-      actions={<SurfaceActionBar actions={config.behavior.actions} access={config.access} />}
+      actions={<SurfacePostureSlot name="header-actions"><SurfaceActionBar actions={config.behavior.actions} access={config.access} /></SurfacePostureSlot>}
       loading={false}
     >
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
@@ -426,6 +442,7 @@ export function ChatSurface({
           chatContent
         )}
       </SurfaceAccentBarWrapper>
+      {!loading && dockActions && surfacePosture?.regions.composer !== 'hide' && surfacePosture?.regions.composer !== 'collapse' && sendActionsNode}
     </PageShellSurface>
   );
 }

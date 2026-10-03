@@ -14,6 +14,8 @@
  * intentionally not engaged (scheduler/operational precedent).
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Button, Card, Flex, Stack, Text } from '../../../../../primitives';
 import { PatternKanbanBoard, PatternFilterPanel } from '../../../../../patterns';
@@ -22,6 +24,7 @@ import type { KanbanSurfaceConfig, KanbanSurfaceCard } from '../../../../foundat
 import { countActiveFilters, hasSurfaceError } from '../../../../runtime/helpers';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
+import { filterSurfaceActions } from '../../../../../structures/foundation/chrome/runtime/access';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
 import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
@@ -63,18 +66,29 @@ function KanbanSkeleton({
 }
 
 export interface KanbanSurfaceProps {
+  postures?: SurfacePostures;
   config: KanbanSurfaceConfig;
   loading?: boolean;
   error?: unknown;
   onRetry?: () => void | Promise<void>;
 }
 
-export function KanbanSurface({
+export function KanbanSurface(props: KanbanSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <KanbanSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function KanbanSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: KanbanSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
+  const dockActions = !!surfacePosture?.primaryAction && surfacePosture.primaryAction !== 'app-bar';
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurfaceOr } = useSurfaceTranslations();
   const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
@@ -89,7 +103,8 @@ export function KanbanSurface({
   };
   // Actions render outside the board so they remain accessible even when
   // the board is empty -- this matches the list surface's action placement.
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} access={config.access} />;
+  const visibleActions = surfacePosture ? filterSurfaceActions(config.behavior.actions, config.access) : config.behavior.actions;
+  const actionsNode = !surfacePosture || visibleActions?.length ? <SurfacePostureAction><SurfacePostureSlot name="primary-action"><SurfaceActionBar actions={visibleActions} access={surfacePosture ? { mode: 'all' } : config.access} /></SurfacePostureSlot></SurfacePostureAction> : undefined;
   // Active filter count drives the badge on the filter toggle, giving users
   // a quick signal of how many constraints are applied.
   const activeFilterCount = countActiveFilters(config.behavior.filterValues);
@@ -134,8 +149,9 @@ export function KanbanSurface({
   // even when the data load failed (report/scheduler precedent).
   if (hasSurfaceError(error)) {
     return (
-      <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
-        <SurfaceErrorState error={error} onRetry={onRetry} />
+      <PageShellSurface chrome={chrome} actions={dockActions ? undefined : actionsNode} loading={false}>
+        <SurfacePostureSlot name="board"><SurfaceErrorState error={error} onRetry={onRetry} /></SurfacePostureSlot>
+        {dockActions && actionsNode}
       </PageShellSurface>
     );
   }
@@ -177,9 +193,9 @@ export function KanbanSurface({
            the swap is paint-only. The page-shell loading early-return is NOT
            used here because it would drop the surface's own shape
            (operational/scheduler precedent). */
-        <KanbanSkeleton columnCount={resolvedMobile ? mobilePageSize : boardColumns.length} />
+        <SurfacePostureSlot name="board"><KanbanSkeleton columnCount={resolvedMobile ? mobilePageSize : boardColumns.length} /></SurfacePostureSlot>
       ) : !hasItems ? (
-        <Card className="ds-kanban__empty-state" variant={cardVariant}>
+        <SurfacePostureSlot name="board" asChild><Card className="ds-kanban__empty-state" variant={cardVariant}>
           <Card.Body>
             {config.presentation.emptyState ?? (
               <SurfaceEmptyState
@@ -191,9 +207,9 @@ export function KanbanSurface({
               />
             )}
           </Card.Body>
-        </Card>
+        </Card></SurfacePostureSlot>
       ) : (
-        <div
+        <SurfacePostureSlot name="board" asChild><div
           className="ds-kanban__board"
           data-part="responsive-board"
           data-mobile-stack={stackMobileColumns ? 'true' : 'false'}
@@ -203,7 +219,7 @@ export function KanbanSurface({
             /* Lane paging is a named control group: prev/range/next read as
                one widget, and the range announcement rides a polite live
                region (pinned anatomy). */
-            <Flex
+            <SurfacePostureSlot name="lane-navigation" asChild><Flex
               data-part="mobile-lane-navigation"
               role="group"
               aria-label={tSurfaceOr('kanban.lanes_nav_aria', 'Kanban lanes')}
@@ -238,7 +254,7 @@ export function KanbanSurface({
               >
                 {tSurfaceOr('kanban.next', 'Next')}
               </Button>
-            </Flex>
+            </Flex></SurfacePostureSlot>
           )}
 
           <PatternKanbanBoard
@@ -270,7 +286,7 @@ export function KanbanSurface({
             columnGap={config.visual.columnGap}
             columnMinWidth={stackMobileColumns ? 0 : config.visual.columnMinWidth}
           />
-        </div>
+        </div></SurfacePostureSlot>
       )}
     </Stack>
   );
@@ -279,7 +295,7 @@ export function KanbanSurface({
     /* The page chrome (title + toolbar actions) stays live through the load:
        the surface owns the mirror skeleton, so the shell's loading
        early-return is intentionally not engaged. */
-    <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
+    <PageShellSurface chrome={chrome} actions={dockActions ? undefined : actionsNode} loading={false}>
       {profileDefaults.animateEntrance ? (
         <FadeIn durationMs={profileDefaults.entranceDuration}>
           <StaggerChildren staggerDelayMs={profileDefaults.staggerDelay}>
@@ -289,6 +305,7 @@ export function KanbanSurface({
       ) : (
         kanbanContent
       )}
+      {dockActions && actionsNode}
     </PageShellSurface>
   );
 }

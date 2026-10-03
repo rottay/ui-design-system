@@ -37,6 +37,38 @@ function buildConfig(overrides?: Partial<ChatSurfaceConfig>): ChatSurfaceConfig 
 }
 
 describe('ChatSurface', () => {
+  it('moves the send action after the page body while preserving draft and composer visibility', async () => {
+    const onSend = vi.fn();
+    const value = buildConfig({ behavior: { messages: [], draft: 'Send this draft', onSend } });
+    const { container, rerender } = renderSurface(<ChatSurface config={value} postures={{ phone: { primaryAction: 'bottom-bar' } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    const send = await screen.findByRole('button', { name: 'Send' });
+    expect(send.closest('[data-part="composer"]')).toBeNull();
+    expect(send.closest('.ds-action-dock')?.parentElement).toHaveClass('ds-page-shell-surface');
+    expect(screen.getAllByRole('button', { name: 'Send' })).toHaveLength(1);
+    fireEvent.click(send);
+    await waitFor(() => expect(onSend).toHaveBeenCalledWith('Send this draft'));
+    rerender(<ChatSurface config={value} postures={{ phone: { primaryAction: 'bottom-bar', regions: { composer: 'collapse' } } }} />);
+    expect(screen.queryByRole('button', { name: 'Send' })).toBeNull();
+    expect(container.querySelector('.ds-action-dock')).toBeNull();
+  });
+
+  it.each(['loading', 'empty', 'error'] as const)('hides the transcript in its %s state while retaining page chrome', async (state) => {
+    const value = buildConfig({ behavior: { messages: [], onSend: vi.fn() } });
+    const { container } = renderSurface(<ChatSurface config={value} loading={state === 'loading'} error={state === 'error' ? new Error('Transcript failed') : undefined} postures={{ phone: { regions: { transcript: 'hide' } } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    await screen.findByText('Copilot Chat');
+    expect(container.querySelector('[data-surface-region="transcript"]')).toBeNull();
+    expect(container.querySelector('[data-part="transcript-skeleton"]')).toBeNull();
+    expect(screen.queryByText('No messages yet')).toBeNull();
+    expect(screen.queryByText('Transcript failed')).toBeNull();
+  });
+
+  it('collapses the loading transcript without removing the composer', async () => {
+    const { container } = renderSurface(<ChatSurface config={buildConfig()} loading postures={{ phone: { regions: { transcript: 'collapse' } } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    await screen.findByText('Copilot Chat');
+    expect(container.querySelector('[data-surface-region="transcript"]')?.childElementCount).toBe(0);
+    expect(container.querySelector('[data-part="composer"]')).not.toBeNull();
+  });
+
   beforeAll(async () => {
     await import('../../../../../../primitives/inputs/textarea/engines/rustic');
   });

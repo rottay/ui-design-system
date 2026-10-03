@@ -32,6 +32,8 @@
  * `role="alert"`/`status` without an explicit contract).
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useMemo } from 'react';
 import {
   Badge,
@@ -66,6 +68,7 @@ import {
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 
 export interface NotificationSurfaceProps {
+  postures?: SurfacePostures;
   config: NotificationSurfaceConfig;
   loading?: boolean;
   /** Load failure of the feed/preferences payload; renders the shared error kit under the live page chrome. */
@@ -357,12 +360,22 @@ function PreferencesPanel({
   );
 }
 
-export function NotificationSurface({
+export function NotificationSurface(props: NotificationSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="list">
+      <NotificationSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function NotificationSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: NotificationSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
+  const dockActions = !!surfacePosture?.primaryAction && surfacePosture.primaryAction !== 'app-bar';
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
@@ -378,28 +391,29 @@ export function NotificationSurface({
 
   // "Mark all read" only appears when there are unread items AND the app
   // provides the handler. This prevents confusing no-op buttons.
-  const actionsNode = (
-    <Flex gap={8} wrap="wrap" justify="end">
+  const actionsNode = !surfacePosture || (unreadCount > 0 && config.behavior.onMarkAllRead) ? (
+    <SurfacePostureAction><Flex gap={8} wrap="wrap" justify="end">
       {unreadCount > 0 && config.behavior.onMarkAllRead && (
         <Button variant="secondary" size="sm" onClick={config.behavior.onMarkAllRead}>
           {tSurfaceOr('notification.mark_all_read', 'Mark all read')}
         </Button>
       )}
-    </Flex>
-  );
+    </Flex></SurfacePostureAction>
+  ) : undefined;
 
   // Error state renders under the live page chrome so header actions stay
   // usable, mirroring the dashboard/chat idiom.
   if (hasSurfaceError(error)) {
     return (
-      <PageShellSurface chrome={config.presentation.chrome} actions={actionsNode} loading={false}>
+      <PageShellSurface chrome={config.presentation.chrome} actions={dockActions ? undefined : actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />
+        {dockActions && actionsNode}
       </PageShellSurface>
     );
   }
 
   const notificationsContent = (
-    <Stack spacing="md">
+    <SurfacePostureSlot name="notifications" asChild><Stack spacing="md">
       {loading ? (
         <NotificationFeedSkeleton />
       ) : (
@@ -417,7 +431,7 @@ export function NotificationSurface({
           The canonical primitive renders the paged mode; the `incremental`
           load mode has no visualization yet (registered gap, not invented). */}
       {!loading && pagination && pagination.loadMode !== 'incremental' && (
-        <Flex className="ds-notification__pagination" data-part="pagination" justify="end">
+        <SurfacePostureSlot name="pagination" asChild><Flex className="ds-notification__pagination" data-part="pagination" justify="end">
           <Pagination
             current={pagination.current}
             total={pagination.total}
@@ -427,12 +441,12 @@ export function NotificationSurface({
             showSizeChanger={Boolean(pagination.pageSizeOptions?.length)}
             onChange={pagination.onChange}
           />
-        </Flex>
+        </Flex></SurfacePostureSlot>
       )}
-    </Stack>
+    </Stack></SurfacePostureSlot>
   );
 
-  const preferencesContent = loading ? (
+  const preferencesContent = (<SurfacePostureSlot name="preferences">{loading ? (
     <NotificationPreferencesSkeleton />
   ) : (
     <PreferencesPanel
@@ -440,7 +454,7 @@ export function NotificationSurface({
       onPreferenceChange={config.behavior.onPreferenceChange}
       categoryHeadingLevel={useTabs ? 'h2' : 'h3'}
     />
-  );
+  )}</SurfacePostureSlot>);
 
   const content = useTabs ? (
     <Stack
@@ -503,7 +517,7 @@ export function NotificationSurface({
        surface owns a mirror skeleton that preserves the feed/preferences
        anatomy (dashboard/chat idiom), so the page chrome and section headings
        stay live and the swap to real content is paint-only. */
-    <PageShellSurface chrome={config.presentation.chrome} actions={actionsNode} loading={false}>
+    <PageShellSurface chrome={config.presentation.chrome} actions={dockActions ? undefined : actionsNode} loading={false}>
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (
           <FadeIn durationMs={profileDefaults.entranceDuration}>{content}</FadeIn>
@@ -511,6 +525,7 @@ export function NotificationSurface({
           content
         )}
       </SurfaceAccentBarWrapper>
+      {dockActions && actionsNode}
     </PageShellSurface>
   );
 }

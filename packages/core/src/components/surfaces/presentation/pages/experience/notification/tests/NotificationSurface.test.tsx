@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { NotificationSurface } from '..';
 import type { NotificationSurfaceConfig } from '../../../../../foundation/contracts';
-import { renderSurface } from '../../../../../foundation/common/test-utils';
+import { renderSurface, RESOLVED_PHONE_TEST_CONTEXT } from '../../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<NotificationSurfaceConfig>): NotificationSurfaceConfig {
   return {
@@ -65,6 +65,27 @@ function buildConfig(overrides?: Partial<NotificationSurfaceConfig>): Notificati
 }
 
 describe('NotificationSurface', () => {
+  it('places mark-all-read after the body for a sticky posture', async () => {
+    const value = buildConfig();
+    renderSurface(<NotificationSurface config={value} postures={{ phone: { primaryAction: 'bottom-bar' } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    const action = await screen.findByRole('button', { name: 'Mark all read' });
+    expect(action.closest('[data-part="header"]')).toBeNull();
+    expect(action.closest('.ds-action-dock')?.parentElement).toHaveClass('ds-page-shell-surface');
+    expect(screen.getAllByRole('button', { name: 'Mark all read' })).toHaveLength(1);
+    fireEvent.click(action);
+    expect(value.behavior.onMarkAllRead).toHaveBeenCalledOnce();
+  });
+
+  it.each(['read', 'no-handler'] as const)('does not create a dock when mark-all-read is unavailable: %s', async (condition) => {
+    const value = buildConfig();
+    if (condition === 'read') value.behavior.notifications = value.behavior.notifications.map((notification) => ({ ...notification, read: true }));
+    else value.behavior.onMarkAllRead = undefined;
+    const { container } = renderSurface(<NotificationSurface config={value} postures={{ phone: { primaryAction: 'bottom-bar' } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    await screen.findByText('New deployment');
+    expect(screen.queryByRole('button', { name: 'Mark all read' })).toBeNull();
+    expect(container.querySelector('.ds-action-dock')).toBeNull();
+  });
+
   it('renders notifications and preferences', async () => {
     renderSurface(<NotificationSurface config={buildConfig()} />);
 

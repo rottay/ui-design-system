@@ -13,6 +13,8 @@
  * structure and the responsive choreography, never the composed chrome.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useMemo } from 'react';
 import { Box, Card, Grid, Stack, Text } from '../../../../../primitives';
 import { PatternCalendarView, type CalendarEvent } from '../../../../../patterns';
@@ -24,6 +26,7 @@ import { resolveStackSpacing } from '../../../../../structures/foundation/chrome
 import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
 import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
+import { filterSurfaceActions } from '../../../../../structures/foundation/chrome/runtime/access';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
@@ -61,6 +64,8 @@ function SchedulerSkeleton({
   shouldStack: boolean;
   isListView: boolean;
 }): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
+  const { tSurfaceOr } = useSurfaceTranslations();
   return (
     <Grid columns={showTimeline && !shouldStack ? 12 : 1} gap={sectionSpacing}>
       <Grid.Item span={showTimeline && !shouldStack ? 8 : undefined}>
@@ -87,31 +92,42 @@ function SchedulerSkeleton({
       </Grid.Item>
 
       {showTimeline && (
-        <Grid.Item span={!shouldStack ? 4 : undefined}>
+        <SurfacePostureSlot name="sidebar" asChild><Grid.Item role={surfacePosture ? 'region' : undefined} aria-label={surfacePosture ? tSurfaceOr('scheduler.sidebar_label', 'Timeline') : undefined} span={!shouldStack ? 4 : undefined}>
           <Card variant={cardVariant}>
             <Card.Body>
               <Box data-part="scheduler-skeleton-block" data-size="aside" />
             </Card.Body>
           </Card>
-        </Grid.Item>
+        </Grid.Item></SurfacePostureSlot>
       )}
     </Grid>
   );
 }
 
 export interface SchedulerSurfaceProps {
+  postures?: SurfacePostures;
   config: SchedulerSurfaceConfig;
   loading?: boolean;
   error?: unknown;
   onRetry?: () => void | Promise<void>;
 }
 
-export function SchedulerSurface({
+export function SchedulerSurface(props: SchedulerSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <SchedulerSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function SchedulerSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: SchedulerSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
+  const dockActions = !!surfacePosture?.primaryAction && surfacePosture.primaryAction !== 'app-bar';
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurfaceOr, locale } = useSurfaceTranslations();
   const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
@@ -123,7 +139,7 @@ export function SchedulerSurface({
   const resolvedMobile = isMobile && hasResolvedViewport;
   const showTimeline =
     !!config.presentation.sidebar &&
-    !(resolvedMobile && config.visual.hideTimelineOnMobile === true);
+    (surfacePosture?.regions.sidebar ? surfacePosture.regions.sidebar !== 'hide' : !(resolvedMobile && config.visual.hideTimelineOnMobile === true));
   const resolvedView =
     config.behavior.activeView ??
     (resolvedMobile ? config.visual.mobileView : undefined) ??
@@ -156,11 +172,13 @@ export function SchedulerSurface({
   // toolbarStart/toolbarEnd slots let apps inject view toggles or date
   // navigation controls around the standard action buttons without
   // overriding the entire actions area.
+  const visibleActions = surfacePosture ? filterSurfaceActions(config.behavior.actions, config.access) : config.behavior.actions;
+  const primaryActionsNode = !surfacePosture || (visibleActions?.length ?? 0) > 0 ? <SurfacePostureAction><SurfacePostureSlot name="primary-action"><SurfaceActionBar actions={visibleActions} access={surfacePosture ? { mode: 'all' } : config.access} /></SurfacePostureSlot></SurfacePostureAction> : undefined;
   const actionsNode = (
     <Stack spacing="sm">
-      {config.presentation.toolbarStart}
-      <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
-      {config.presentation.toolbarEnd}
+      <SurfacePostureSlot name="toolbar-start">{config.presentation.toolbarStart}</SurfacePostureSlot>
+      {!dockActions && primaryActionsNode}
+      <SurfacePostureSlot name="toolbar-end">{config.presentation.toolbarEnd}</SurfacePostureSlot>
     </Stack>
   );
 
@@ -170,6 +188,7 @@ export function SchedulerSurface({
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />
+        {dockActions && primaryActionsNode}
       </PageShellSurface>
     );
   }
@@ -324,16 +343,16 @@ export function SchedulerSurface({
           </Grid.Item>
 
           {showTimeline && (
-            <Grid.Item span={!shouldStack ? 4 : undefined}>
+            <SurfacePostureSlot name="sidebar" asChild><Grid.Item role={surfacePosture ? 'region' : undefined} aria-label={surfacePosture ? tSurfaceOr('scheduler.sidebar_label', 'Timeline') : undefined} span={!shouldStack ? 4 : undefined}>
               <Card variant={cardVariant}>
                 <Card.Body>{config.presentation.sidebar}</Card.Body>
               </Card>
-            </Grid.Item>
+            </Grid.Item></SurfacePostureSlot>
           )}
         </Grid>
       )}
 
-      {config.presentation.footer}
+      <SurfacePostureSlot name="footer">{config.presentation.footer}</SurfacePostureSlot>
     </Stack>
   );
 
@@ -351,6 +370,7 @@ export function SchedulerSurface({
       ) : (
         schedulerContent
       )}
+      {dockActions && primaryActionsNode}
     </PageShellSurface>
   );
 }

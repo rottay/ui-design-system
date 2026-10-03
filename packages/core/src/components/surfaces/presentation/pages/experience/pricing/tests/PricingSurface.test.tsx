@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { PricingSurface } from '..';
 import type { PricingSurfaceConfig } from '../../../../../foundation/contracts';
-import { renderSurface } from '../../../../../foundation/common/test-utils';
+import { renderSurface, RESOLVED_PHONE_TEST_CONTEXT } from '../../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<PricingSurfaceConfig>): PricingSurfaceConfig {
   return {
@@ -52,6 +52,35 @@ function buildConfig(overrides?: Partial<PricingSurfaceConfig>): PricingSurfaceC
 }
 
 describe('PricingSurface', () => {
+  it('keeps app-resolved action disabling after resolving dock visibility', async () => {
+    const value = buildConfig();
+    value.behavior.actions = [{ id: 'contact', label: 'Contact sales', onClick: vi.fn() }];
+    value.access = { mode: 'resolved', capabilities: [{ kind: 'action', id: 'contact', visible: true, disabled: true }] };
+    const { container } = renderSurface(<PricingSurface config={value} postures={{ phone: { primaryAction: 'floating' } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    const action = await screen.findByRole('button', { name: 'Contact sales' });
+    expect(action).toBeDisabled();
+    expect(action.closest('.ds-action-dock')?.parentElement).toHaveClass('ds-page-shell-surface');
+    expect(container.querySelectorAll('.ds-action-dock')).toHaveLength(1);
+  });
+
+  it.each(['loading', 'error', 'empty'] as const)('hides the comparison host in its %s state', async (state) => {
+    const value = buildConfig();
+    if (state === 'empty') value.behavior.plans = [];
+    const { container } = renderSurface(<PricingSurface config={value} loading={state === 'loading'} error={state === 'error' ? new Error('Comparison failed') : undefined} postures={{ phone: { regions: { comparison: 'hide' } } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    await screen.findByText('Pricing');
+    expect(screen.queryByRole('region', { name: 'Plan comparison' })).toBeNull();
+    expect(container.querySelector('[data-part="pricing-skeleton-plans"]')).toBeNull();
+    expect(screen.queryByText('Comparison failed')).toBeNull();
+    expect(container.querySelector('.ds-action-dock')).toBeNull();
+  });
+
+  it('retains a named empty comparison host when loading is collapsed', async () => {
+    const { container } = renderSurface(<PricingSurface config={buildConfig()} loading postures={{ phone: { regions: { comparison: 'collapse' } } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    await screen.findByText('Pricing');
+    expect(screen.getByRole('region', { name: 'Plan comparison' }).childElementCount).toBe(0);
+    expect(container.querySelector('[data-part="pricing-skeleton-plans"]')).toBeNull();
+  });
+
   it('renders page chrome and intro', async () => {
     renderSurface(<PricingSurface config={buildConfig()} />);
 

@@ -35,6 +35,43 @@ function buildConfig(overrides?: Partial<SchedulerSurfaceConfig>): SchedulerSurf
 }
 
 describe('SchedulerSurface', () => {
+  it('leaves toolbar slots in the header while moving sticky actions after the body', async () => {
+    const value = buildConfig();
+    const refresh = vi.fn();
+    value.presentation.toolbarStart = <div>Schedule tools</div>;
+    value.behavior.actions = [{ id: 'refresh', label: 'Refresh', onClick: refresh }];
+    renderSurface(<SchedulerSurface config={value} postures={{ phone: { primaryAction: 'bottom-bar' } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    const action = await screen.findByRole('button', { name: 'Refresh' });
+    expect(screen.getByText('Schedule tools').closest('[data-part="header"]')).not.toBeNull();
+    expect(action.closest('[data-part="header"]')).toBeNull();
+    expect(action.closest('.ds-action-dock')?.parentElement).toHaveClass('ds-page-shell-surface');
+    fireEvent.click(action);
+    expect(refresh).toHaveBeenCalledOnce();
+  });
+
+  it('collapses the timeline loading skeleton and lets explicit render override mobile hiding', async () => {
+    const value = buildConfig({ visual: { hideTimelineOnMobile: true }, presentation: { chrome: { title: 'Schedule' }, sidebar: <div>Timeline guidance</div> }, behavior: { events: [] } });
+    const { container, rerender } = renderSurface(<SchedulerSurface config={value} loading postures={{ phone: { regions: { sidebar: 'collapse' } } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    await screen.findByText('Schedule');
+    expect(container.querySelector('[data-surface-region="sidebar"]')).toHaveAttribute('data-region-disposition', 'collapse');
+    expect(container.querySelector('[data-surface-region="sidebar"]')?.childElementCount).toBe(0);
+    expect(container.querySelector('[data-size="aside"]')).toBeNull();
+    value.behavior.events = [{ id: 'one', title: 'Event', start: new Date('2026-10-01T10:00:00Z') }];
+    rerender(<SchedulerSurface config={value} postures={{ phone: { regions: { sidebar: 'render' } } }} />);
+    expect(await screen.findByText('Timeline guidance')).toBeInTheDocument();
+  });
+
+  it('keeps toolbar content without creating a dock for inaccessible actions', async () => {
+    const value = buildConfig();
+    value.presentation.toolbarStart = <div>Schedule tools</div>;
+    value.behavior.actions = [{ id: 'refresh', label: 'Refresh', onClick: vi.fn() }];
+    value.access = { mode: 'resolved', capabilities: [] };
+    const { container } = renderSurface(<SchedulerSurface config={value} postures={{ phone: { primaryAction: 'floating' } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    await screen.findByText('Schedule tools');
+    expect(screen.queryByRole('button', { name: 'Refresh' })).toBeNull();
+    expect(container.querySelector('.ds-action-dock')).toBeNull();
+  });
+
   it('uses the product profile scheduler default when the surface does not set one', async () => {
     const config = buildConfig();
 

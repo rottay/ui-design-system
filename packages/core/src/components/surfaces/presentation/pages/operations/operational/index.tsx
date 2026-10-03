@@ -14,6 +14,8 @@
  * choreography — it never rebuilds composed chrome.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React from 'react';
 import { Box, Card, Grid, Stack } from '../../../../../primitives';
 import type { GridColumns } from '../../../../../primitives/layout/grid/contracts';
@@ -27,6 +29,7 @@ import { resolveStackSpacing } from '../../../../../structures/foundation/chrome
 import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
 import { surfaceStackingValue, surfaceColumnsValue } from '../../../../../structures/foundation/chrome/contracts';
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/shell/surface-chrome';
+import { filterSurfaceActions } from '../../../../../structures/foundation/chrome/runtime/access';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
@@ -192,18 +195,29 @@ function OperationalSkeleton({
 }
 
 export interface OperationalSurfaceProps<TFeed extends FeedItem = FeedItem> {
+  postures?: SurfacePostures;
   config: OperationalSurfaceConfig<TFeed>;
   loading?: boolean;
   error?: unknown;
   onRetry?: () => void | Promise<void>;
 }
 
-export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
+export function OperationalSurface<TFeed extends FeedItem = FeedItem>(props: OperationalSurfaceProps<TFeed>) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <OperationalSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function OperationalSurfaceContent<TFeed extends FeedItem = FeedItem>({
   config,
   loading = false,
   error,
   onRetry,
 }: OperationalSurfaceProps<TFeed>): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
+  const dockActions = !!surfacePosture?.primaryAction && surfacePosture.primaryAction !== 'app-bar';
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurfaceOr } = useSurfaceTranslations();
   const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
@@ -258,22 +272,30 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
         : (config.visual.sectionsColumns ?? 12);
   const hasSecondaryPanel =
     !!config.presentation.secondaryPanel &&
-    !(isMobile && config.visual.hideSecondaryPanelOnMobile);
+    (surfacePosture?.regions['secondary-panel']
+      ? surfacePosture.regions['secondary-panel'] !== 'hide'
+      : !(isMobile && config.visual.hideSecondaryPanelOnMobile));
 
   // Rail placement is resolved once and shared by the mirror skeleton and the
   // real content, so the loading geometry matches the loaded page exactly.
   // 'hidden' is an explicit mobile placement: the module is dropped from
   // every rail instead of silently falling through the distribution.
-  const queueRail = !config.presentation.queue
+  const legacyQueueRail = !config.presentation.queue
     ? null
     : isMobile
       ? (config.visual.mobileQueuePosition ?? 'bottom')
       : 'sidebar';
-  const feedRail = !config.behavior.feed
+  const legacyFeedRail = !config.behavior.feed
     ? null
     : isMobile
       ? (config.visual.mobileFeedPosition ?? 'bottom')
       : 'sidebar';
+  const queueRail = surfacePosture?.regions.queue === 'hide' ? null
+    : surfacePosture?.regions.queue && legacyQueueRail === 'hidden' ? 'bottom'
+    : legacyQueueRail;
+  const feedRail = surfacePosture?.regions.feed === 'hide' ? null
+    : surfacePosture?.regions.feed && legacyFeedRail === 'hidden' ? 'bottom'
+    : legacyFeedRail;
   const railPlacements = [queueRail, feedRail].filter(
     (rail): rail is 'top' | 'bottom' | 'sidebar' => rail !== null && rail !== 'hidden'
   );
@@ -285,27 +307,29 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
   };
-  const actionsNode = (
-    <SurfaceActionBar actions={actions} access={config.access} />
-  );
+  const visibleActions = surfacePosture ? filterSurfaceActions(actions, config.access) : actions;
+  const actionsNode = !surfacePosture || visibleActions.length > 0 ? (
+    <SurfacePostureAction><SurfacePostureSlot name="primary-action"><SurfaceActionBar actions={visibleActions} access={surfacePosture ? { mode: 'all' } : config.access} /></SurfacePostureSlot></SurfacePostureAction>
+  ) : undefined;
 
   // Error state renders full page chrome so header actions (e.g. refresh)
   // stay available even when the data load failed.
   if (hasSurfaceError(error)) {
     return (
-      <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
+      <PageShellSurface chrome={chrome} actions={dockActions ? undefined : actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />
+        {dockActions && actionsNode}
       </PageShellSurface>
     );
   }
 
-  const queueNode = queueRail !== null && queueRail !== 'hidden' ? (
-    <SurfaceSectionCard title={tSurfaceOr('operational.queue', 'Queue')}>
+  const queueNode = queueRail !== null && queueRail !== 'hidden' && surfacePosture?.regions.queue !== 'hide' ? (
+    <SurfacePostureSlot name="queue">{loading ? <OperationalSkeletonCard cardVariant={cardVariant} size="rail" /> : <SurfaceSectionCard title={tSurfaceOr('operational.queue', 'Queue')}>
       {config.presentation.queue}
-    </SurfaceSectionCard>
+    </SurfaceSectionCard>}</SurfacePostureSlot>
   ) : null;
-  const feedNode = feedRail !== null && feedRail !== 'hidden' && config.behavior.feed ? (
-    <SurfaceSectionCard title={tSurfaceOr('operational.live_feed', 'Live feed')}>
+  const feedNode = feedRail !== null && feedRail !== 'hidden' && config.behavior.feed && surfacePosture?.regions.feed !== 'hide' ? (
+    <SurfacePostureSlot name="feed">{loading ? <OperationalSkeletonCard cardVariant={cardVariant} size="rail" /> : <SurfaceSectionCard title={tSurfaceOr('operational.live_feed', 'Live feed')}>
       <PatternLiveFeed
         items={config.behavior.feed.items as FeedItem[]}
         renderItem={
@@ -326,14 +350,14 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
         header={config.behavior.feed.header}
         loading={loading}
       />
-    </SurfaceSectionCard>
+    </SurfaceSectionCard>}</SurfacePostureSlot>
   ) : null;
   const secondaryPanelNode = hasSecondaryPanel ? (
-    <SurfaceSectionCard
+    <SurfacePostureSlot name="secondary-panel">{loading ? <OperationalSkeletonCard cardVariant={cardVariant} size="panel" /> : <SurfaceSectionCard
       title={tSurfaceOr('operational.secondary_panel', 'Secondary panel')}
     >
       {config.presentation.secondaryPanel}
-    </SurfaceSectionCard>
+    </SurfaceSectionCard>}</SurfacePostureSlot>
   ) : null;
 
   const topRailCards: React.ReactNode[] = [];
@@ -369,7 +393,7 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
       aria-busy={loading || undefined}
       spacing={sectionSpacing}
     >
-      {loading ? (
+      {loading && !surfacePosture ? (
         /* Mirror skeleton: the dashboard's geometry is preserved through the
            load — the page chrome stays live and the swap is paint-only. The
            page-shell loading early-return is NOT used here because it would
@@ -393,7 +417,7 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
           topRailCount={topRailCount}
           bottomRailCount={bottomRailCount}
         />
-      ) : !hasContent ? (
+      ) : !hasContent && !loading ? (
         config.presentation.emptyState ?? (
           <SurfaceEmptyState
             title={tSurfaceOr(
@@ -408,12 +432,12 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
         )
       ) : (
         <>
-          {config.presentation.intro}
+          {!loading && <SurfacePostureSlot name="intro">{config.presentation.intro}</SurfacePostureSlot>}
 
           {stats && stats.length > 0 && (
             /* The KPI strip is a named group so assistive tech can skip or
                jump straight to the operational metrics. */
-            <Box
+            <SurfacePostureSlot name="stats" asChild><Box
               role="group"
               aria-label={tSurfaceOr(
                 'operational.stats_group_aria',
@@ -421,11 +445,12 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
               )}
             >
               <PatternStatsGrid
+                loading={loading}
                 stats={stats}
                 columns={statsColumns}
                 variant={resolveStatsGridVariant(cardVariant)}
               />
-            </Box>
+            </Box></SurfacePostureSlot>
           )}
 
           {topRailCards.length > 0 && (
@@ -443,11 +468,11 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
             <Grid.Item span={sideRailCards.length > 0 ? (!shouldStack ? 8 : undefined) : undefined}>
               <Stack spacing={sectionSpacing}>
                 {config.presentation.primaryPanel && (
-                  <SurfaceSectionCard
+                  <SurfacePostureSlot name="primary-panel">{loading ? <OperationalSkeletonCard cardVariant={cardVariant} size="panel" /> : <SurfaceSectionCard
                     title={tSurfaceOr('operational.primary_panel', 'Primary panel')}
                   >
                     {config.presentation.primaryPanel}
-                  </SurfaceSectionCard>
+                  </SurfaceSectionCard>}</SurfacePostureSlot>
                 )}
 
                 {secondaryPanelNode}
@@ -465,14 +490,14 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
                               : section.span
                         }
                       >
-                        <SurfaceSectionCard
+                        {loading ? <OperationalSkeletonCard cardVariant={cardVariant} size="section" /> : <SurfaceSectionCard
                           title={section.title}
                           description={section.description}
                           actions={section.actions}
                           plain={section.chrome === 'plain'}
                         >
                           {section.content}
-                        </SurfaceSectionCard>
+                        </SurfaceSectionCard>}
                       </Grid.Item>
                     ))}
                   </Grid>
@@ -499,7 +524,7 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
             </Stack>
           )}
 
-          {config.presentation.footer}
+          {!loading && <SurfacePostureSlot name="footer">{config.presentation.footer}</SurfacePostureSlot>}
         </>
       )}
     </Stack>
@@ -509,7 +534,7 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
     /* The page chrome (title + actions) stays live through the load: the
        surface owns the mirror skeleton, so the shell's loading early-return
        is intentionally not engaged. */
-    <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
+    <PageShellSurface chrome={chrome} actions={dockActions ? undefined : actionsNode} loading={false}>
       {profileDefaults.animateEntrance ? (
         <FadeIn durationMs={profileDefaults.entranceDuration}>
           <StaggerChildren staggerDelayMs={profileDefaults.staggerDelay}>
@@ -519,6 +544,7 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
       ) : (
         operationalContent
       )}
+      {dockActions && actionsNode}
     </PageShellSurface>
   );
 }

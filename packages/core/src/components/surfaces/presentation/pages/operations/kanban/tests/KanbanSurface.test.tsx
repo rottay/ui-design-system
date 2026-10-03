@@ -50,6 +50,36 @@ function buildConfig(overrides?: Partial<KanbanSurfaceConfig>): KanbanSurfaceCon
 }
 
 describe('KanbanSurface', () => {
+  it('places board actions after the body for a sticky posture', async () => {
+    const value = buildConfig();
+    const create = vi.fn();
+    value.behavior.actions = [{ id: 'create', label: 'Create card', onClick: create }];
+    renderSurface(<KanbanSurface config={value} postures={{ phone: { primaryAction: 'bottom-bar' } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    const action = await screen.findByRole('button', { name: 'Create card' });
+    expect(action.closest('[data-part="header"]')).toBeNull();
+    expect(action.closest('.ds-action-dock')?.parentElement).toHaveClass('ds-page-shell-surface');
+    fireEvent.click(action);
+    expect(create).toHaveBeenCalledOnce();
+  });
+
+  it.each(['loading', 'empty', 'error'] as const)('hides the board in its %s state', async (state) => {
+    const value = buildConfig({ behavior: { columns: [{ id: 'todo', title: 'To Do', items: [] }] } });
+    const { container } = renderSurface(<KanbanSurface config={value} loading={state === 'loading'} error={state === 'error' ? new Error('Board failed') : undefined} postures={{ phone: { regions: { board: 'hide' }, primaryAction: 'floating' } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    await screen.findByText('Project Board');
+    expect(container.querySelector('[data-surface-region="board"]')).toBeNull();
+    expect(container.querySelector('[data-part="kanban-skeleton-block"]')).toBeNull();
+    expect(screen.queryByText('No items')).toBeNull();
+    expect(container.querySelector('.ds-action-dock')).toBeNull();
+  });
+
+  it('collapses the initial board skeleton to an empty landmark', async () => {
+    const value = buildConfig({ behavior: { columns: [{ id: 'todo', title: 'To Do', items: [] }] } });
+    const { container } = renderSurface(<KanbanSurface config={value} loading postures={{ phone: { regions: { board: 'collapse' } } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    await screen.findByText('Project Board');
+    expect(container.querySelector('[data-surface-region="board"]')).toHaveAttribute('data-region-disposition', 'collapse');
+    expect(container.querySelector('[data-surface-region="board"]')?.childElementCount).toBe(0);
+  });
+
   it('renders page chrome and board', async () => {
     renderSurface(<KanbanSurface config={buildConfig()} />);
 
