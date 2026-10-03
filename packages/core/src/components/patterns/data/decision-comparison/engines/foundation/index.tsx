@@ -179,6 +179,7 @@ export function DecisionComparisonEngine({
         <div
           className="ds-decision-comparison__viewport"
           data-part="viewport"
+          tabIndex={0}
           style={
             {
               '--ds-decision-comparison-columns': Math.min(subjects.length, 4),

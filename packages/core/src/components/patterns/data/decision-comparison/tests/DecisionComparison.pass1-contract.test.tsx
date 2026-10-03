@@ -66,6 +66,49 @@ describe("DecisionComparison Pass 1 product contract", () => {
     expect(within(root).getByRole("button", { name: "Open full record" })).toBeInTheDocument();
   });
 
+  it("makes the inline scrollport the only keyboard tab stop, named by its region", () => {
+    const { container } = render(
+      <DecisionComparisonEngine ariaLabel="Candidate comparison" subjects={subjects} />
+    );
+
+    const root = screen.getByRole("region", { name: "Candidate comparison" });
+    const viewport = container.querySelector<HTMLElement>('[data-part="viewport"]');
+    expect(viewport).not.toBeNull();
+    expect(root).toContainElement(viewport);
+    expect(viewport).toHaveClass("ds-decision-comparison__viewport");
+    expect(viewport).toHaveAttribute("tabindex", "0");
+    expect(viewport).not.toHaveAttribute("role");
+    expect(viewport).not.toHaveAttribute("aria-label");
+    expect(screen.queryByRole("group")).toBeNull();
+
+    viewport?.focus();
+    expect(viewport).toHaveFocus();
+
+    for (const fact of container.querySelectorAll('[data-part="fact"]')) {
+      expect(fact).not.toHaveAttribute("tabindex");
+      expect(fact).not.toHaveAttribute("role");
+    }
+    expect(container.querySelectorAll("[tabindex]")).toHaveLength(1);
+  });
+
+  it("keeps the scrollport an unnamed tab stop when the instrument has no label", () => {
+    const { container } = render(<DecisionComparisonEngine subjects={subjects} />);
+
+    const viewport = container.querySelector<HTMLElement>('[data-part="viewport"]');
+    expect(viewport).toHaveAttribute("tabindex", "0");
+    expect(viewport).not.toHaveAttribute("role");
+    expect(viewport).not.toHaveAttribute("aria-label");
+
+    viewport?.focus();
+    expect(viewport).toHaveFocus();
+
+    for (const fact of container.querySelectorAll('[data-part="fact"]')) {
+      expect(fact).not.toHaveAttribute("tabindex");
+      expect(fact).not.toHaveAttribute("role");
+    }
+    expect(container.querySelectorAll("[tabindex]")).toHaveLength(1);
+  });
+
   it("keeps empty, density and optional-section states truthful", () => {
     const { container } = render(
       <DecisionComparisonEngine

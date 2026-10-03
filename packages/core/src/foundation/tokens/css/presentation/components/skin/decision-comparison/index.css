@@ -870,7 +870,21 @@
     ) 1fr auto;
 }
 
+/* The scrollport is a tab stop; its ring sits inside the edge because the root
+   clips overflow and would swallow an outward one. */
+.ds-pattern-decision-comparison.ds-engine-modern
+  .ds-decision-comparison__viewport:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(var(--ds-focus-ring-offset, 2px) * -1);
+}
+
 @media (forced-colors: active) {
+  .ds-pattern-decision-comparison.ds-engine-modern
+    .ds-decision-comparison__viewport:focus-visible {
+    outline-color: Highlight;
+  }
+
   /* The tone dot is the "never hue alone" marker, and forced colors replaces a
    `currentColor` background, so the redundancy needs its own carrier. */
   .ds-pattern-decision-comparison.ds-engine-modern

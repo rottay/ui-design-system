@@ -51,6 +51,18 @@ describe("DecisionComparison Pass 2 craft contract", () => {
     expect(skin).toContain("outline: 2px solid Highlight");
   });
 
+  it("rings the focused scrollport from the states dials and never the static fact rows", () => {
+    const ring = skin.match(
+      /\.ds-pattern-decision-comparison\.ds-engine-modern\s+\.ds-decision-comparison__viewport:focus-visible\s*\{([^}]*)\}/
+    );
+    expect(ring).not.toBeNull();
+    const body = ring?.[1] ?? "";
+    expect(body).toContain("var(--ds-focus-ring-width, 2px)");
+    expect(body).toContain("var(--ds-focus-ring-color, var(--ds-color-primary))");
+    expect(body).toContain("calc(var(--ds-focus-ring-offset, 2px) * -1)");
+    expect(skin).not.toMatch(/__fact[^,{]*:focus/);
+  });
+
   it("uses top emphasis for the leading subject and never a colored side rail", () => {
     expect(skin).toContain("box-shadow: inset 0 3px 0 var(--ds-color-primary)");
     expect(skin).not.toMatch(/border-left\s*:/);
