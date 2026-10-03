@@ -28,7 +28,7 @@ interface Row {
 }
 
 const COLUMNS: ColumnType<Row>[] = [
-  { key: 'name', title: 'Name', dataIndex: 'name' },
+  { key: 'name', title: 'Name', dataIndex: 'name', sorter: true },
   { key: 'score', title: 'Score', dataIndex: 'score', align: 'right', fieldType: 'number' },
 ];
 
@@ -132,7 +132,7 @@ describe('table derived channels and accessibility', () => {
         { id: 'cellPadTop', selector: "#table [data-part='cell']", property: 'padding-top' },
         { id: 'cellPadLeft', selector: "#table [data-part='cell']", property: 'padding-left' },
         { id: 'numericAlign', selector: "#table [data-part='cell'][data-align='right']", property: 'text-align' },
-        { id: 'sortRing', selector: "#table [data-sortable='true']", property: 'outline-style', attributes: { 'data-state': 'focused focus-visible' } },
+        { id: 'sortOutline', selector: "#table [data-sortable='true']", property: 'outline-color', attributes: { 'data-state': 'focused focus-visible' } },
         { id: 'loadingOpacity', selector: "#table [data-part='scroll-container']", property: 'opacity', attributes: { 'data-loading': 'true' } },
         { id: 'pageHeight', selector: PAGE_BUTTON, property: 'height' },
       ],
@@ -144,7 +144,8 @@ describe('table derived channels and accessibility', () => {
     expect(Number.parseFloat(r.cellPadTop)).toBeGreaterThan(0);
     expect(Number.parseFloat(r.cellPadLeft)).toBeGreaterThan(Number.parseFloat(r.cellPadTop));
     expect(r.numericAlign).toBe('right');
-    expect(r.sortRing).not.toBe('none');
+    // The sortable header carries the focus signature on an overlay; a solid outline would be a second contour.
+    expect(r.sortOutline).toBe('rgba(0, 0, 0, 0)');
     expect(Number(r.loadingOpacity)).toBeLessThan(1);
     expect(Number.parseFloat(r.pageHeight)).toBeGreaterThan(0);
   }, 60_000);
