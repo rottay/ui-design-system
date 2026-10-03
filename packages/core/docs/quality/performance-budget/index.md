@@ -12,8 +12,8 @@ Enforced in CI via `scripts/check/automation/bundle/index.mjs`. Any violation fa
 | Icons bundle (`dist/icons.js`) | < 40 KB gzipped |
 | Marks bundle (`dist/marks.js`) | < 30 KB gzipped, excluding the explicitly installed renderer peer |
 | Named semantic role consumer closure | < 40 KB gzipped in ESM and CJS; renderer supplier included, React external |
-| BitHire selected `Icon` preset closure | ≤ 75,275/81,828 B gzip ESM/CJS; 74,701/81,710 B measured for the exact productive 104-role inventory, renderer supplier included, React external |
-| Explicit full-corpus `Icon` compatibility closure | < 203/226 KB gzip ESM/CJS compatibility ratchet; 200,611/225,008 B measured for all 282 roles, never presented as a route-sized < 40 KB payload |
+| BitHire selected `Icon` preset closure | ≤ 75,275/81,828 B gzip ESM/CJS; 74,712/81,327 B measured for the exact productive 104-role inventory, renderer supplier included, React external |
+| Canonical `./icons` `Icon` closure (all 282 roles, RET-01-F consolidated door; the former explicit full-corpus compatibility closure) | ≤ 203,000/226,000 B gzip ESM/CJS compatibility ratchet; 200,658/225,125 B measured, never presented as a route-sized < 40 KB payload |
 | `BrandMark` consumer closure | < 30 KB gzipped in ESM and CJS; renderer supplier included, React external |
 | `CloudServiceMark` consumer closure | < 30 KB gzipped in ESM and CJS; renderer supplier included, React external |
 | `FeaturePictogram` consumer closure | < 4 KB gzipped in ESM and CJS; React external |
@@ -146,7 +146,8 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
    also enforces the four raw facade ceilings. `node scripts/check/automation/bundle/index.mjs --spatial` runs
    only this focused gate.
 9. The semantic-asset retention gate selects a generated role subpath, the exact
-   104-role BitHire preset, the explicit full-corpus compatibility facade, focused `BrandMark` and
+   104-role BitHire preset, the canonical `./icons` full-corpus facade (the former
+   explicit compatibility door, consolidated by RET-01-F), focused `BrandMark` and
    `CloudServiceMark` entries, and `FeaturePictogram`. For ESM it records the tree-shaken inline
    bundle; for CJS it walks the complete executable static `require()` closure. Both formats
    include resolvable renderer suppliers and keep only React external. Route boundaries retain
@@ -162,14 +163,38 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 The 40 KB icon and 30 KB mark ceilings are payload contracts, not top-level
 preserveModules file-size checks. They are enforced on generated per-role
 ESM/CJS subpaths, the exact 104-role BitHire preset, and separate brand/cloud
-entries. The exhaustive synchronous 263-role registry remains available at
-`./icons/full` and is always measured, but is explicitly not represented as a
-route-sized payload. Its independent ESM/CJS compatibility ratchet is derived
-from the exact 184,033/204,761 B gzip baseline with 10% headroom and protects
-against silent full-corpus growth without widening the route budget. This
-preserves every semantic role without hiding the compatibility cost. The
-historical `./icons` facade remains a one-minor compatibility alias while
-consumers migrate to role or preset boundaries.
+entries. The exhaustive synchronous registry is available at the canonical
+`./icons` door and is always measured, but is not represented as a route-sized
+payload. Its independent ESM/CJS full-corpus ratchet is derived from the exact
+184,033/204,761 B gzip baseline with 10% headroom and protects against silent
+growth without widening the route budget. RET-01-F consolidates the renderer,
+metadata and runtime governance there; it does not add `./icons/legacy`.
+The RET-01/D07 target major removes the public vendor-named glyph catalog from
+`./icons`, while preserving all 282 semantic roles, metadata, runtime governance
+and structural SVG helpers, including the explicitly preserved first-party
+`AlertIcon` leaf wrapper. The 329-binding private catalog is not reexported:
+328 vendor-named glyphs leave the public API and only that helper remains.
+App-platform named-glyph consumers still need the
+documented semantic-role migration after the DS-first change; the 52 Showroom
+files that imported this door are already migrated to the semantic facade, and
+app adaptation remains read-only-deferred in this stage; the private
+catalog remains for real DS component owners. No one-minor compatibility
+promise or legacy door applies to this target major. The official
+asset-retention gate has since measured the consolidated canonical `./icons`
+facade on the cohesive RET-01-F milestone build: all 282 semantic roles,
+renderer, metadata and runtime governance retained, at 200,658 B gzip ESM
+(≤ 203,000 B ratchet) and 225,125 B gzip CJS (≤ 226,000 B ratchet) — budgets
+unchanged, no ceiling widened (`pnpm analyze:asset-retention`, recorded
+deterministically in `test-artifacts/craft/cra-17/bundle-retention.json`).
+The 184,033/204,761 B gzip ESM/CJS baseline and the later 225,008 B gzip CJS
+measurement are historic: they describe the former semantic `./icons/full`
+compatibility facade, without the historical named-glyph catalog, and are not
+the current proof. The catalog-bearing canonical-door candidate measured
+319,099 B gzip CJS and FAILED the existing ceiling; it remains a historic
+failed candidate, not a baseline and not a passing result. The full 282-role
+registry is never presented as a route-sized < 40 KB payload, and this
+measurement closes the RET-01-F facade evidence only — it is not a claim that
+the whole of WO-RET-01 is done.
 
 The VIZ-03 raw ESM/CJS entries and named-renderer bundles were measured from
 the same cohesive producer build on 2026-07-16. Re-measure through the focused
