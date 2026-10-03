@@ -164,7 +164,7 @@ export const Histogram = memo(function Histogram({
         <TooltipValue
           label={`${fmtVal(active.datum.x0)} - ${fmtVal(active.datum.x1)}`}
           value={density ? active.datum.densityValue.toFixed(4) : active.datum.count}
-          color={color}
+          swatchColor={color}
         />
       ),
     }

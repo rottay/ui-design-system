@@ -149,14 +149,13 @@ export function ChartTooltip({
  *
  * @example
  * ```tsx
- * <TooltipValue label="Revenue" value="$4,200" color="var(--ds-color-primary-500)" />
+ * <TooltipValue label="Revenue" value="$4,200" swatchColor="var(--ds-color-primary-500)" />
  * ```
  */
 export function TooltipValue({
   label,
   value,
   swatchColor,
-  color,
 }: {
   /** Descriptive label (e.g. category name, series name) */
   label: string;
@@ -164,13 +163,10 @@ export function TooltipValue({
   value: string | number;
   /** Optional semantic series color for the swatch. TooltipValue owns paint. */
   swatchColor?: string;
-  /** @deprecated Use `swatchColor`; retained for source compatibility. */
-  color?: string;
 }) {
-  const resolvedSwatchColor = swatchColor ?? color;
   return (
     <div className="ds-chart-tooltip-value" data-part="tooltip-value">
-      {resolvedSwatchColor ? <span data-part="swatch" style={{ backgroundColor: resolvedSwatchColor }} /> : null}
+      {swatchColor ? <span data-part="swatch" style={{ backgroundColor: swatchColor }} /> : null}
       <span data-part="label">{label}</span>
       <span data-part="value" className="ds-nums-tabular">{value}</span>
     </div>

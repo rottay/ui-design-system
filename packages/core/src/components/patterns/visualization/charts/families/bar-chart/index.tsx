@@ -307,7 +307,7 @@ export const BarChart = memo(function BarChart({
           <TooltipValue
             label={label}
             value={active.datum.valueLabel ?? active.datum.value}
-            {...(active.datum.color === undefined ? {} : { color: active.datum.color })}
+            {...(active.datum.color === undefined ? {} : { swatchColor: active.datum.color })}
           />
         );
       },

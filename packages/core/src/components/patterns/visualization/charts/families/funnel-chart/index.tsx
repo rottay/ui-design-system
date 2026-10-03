@@ -133,7 +133,7 @@ export const FunnelChart = memo(function FunnelChart({
               ? `${active.datum.value} (${((active.datum.value / model.maxValue) * 100).toFixed(1)}%)`
               : active.datum.value
           }
-          color={active.datum.color}
+          swatchColor={active.datum.color}
         />
       ),
     }

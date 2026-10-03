@@ -211,7 +211,7 @@ export const GaugeChart = memo(function GaugeChart({
         <TooltipValue
           label={active.datum.label ?? `${active.datum.from} - ${active.datum.to}`}
           value={displayValue}
-          color={active.datum.color}
+          swatchColor={active.datum.color}
         />
       ),
     }

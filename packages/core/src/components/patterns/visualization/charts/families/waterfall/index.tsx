@@ -210,7 +210,7 @@ export const WaterfallChart = memo(function WaterfallChart({
         <TooltipValue
           label={`${active.datum.label} (${active.datum.type})`}
           value={`${formatVal(active.datum.value)} → ${formatVal(active.datum.end)}`}
-          color={active.datum.paint}
+          swatchColor={active.datum.paint}
         />
       ),
     }
