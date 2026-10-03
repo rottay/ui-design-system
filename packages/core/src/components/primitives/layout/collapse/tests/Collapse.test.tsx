@@ -200,7 +200,7 @@ describe('Collapse', () => {
   });
 
   describe('size prop', () => {
-    it.each(['small', 'middle', 'large'] as const)('renders size %s', (size) => {
+    it.each(['sm', 'md', 'lg'] as const)('renders size %s', (size) => {
       render(
         <Collapse size={size}>
           <Collapse.Panel header="Panel 1" panelKey="1">

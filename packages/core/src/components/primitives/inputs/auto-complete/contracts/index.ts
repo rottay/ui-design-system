@@ -43,12 +43,6 @@ import type { Size } from '../../../../../foundation/contracts/kernel/common';
 export type AutoCompleteSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 /**
- * @deprecated Legacy antd-style spelling; use {@link AutoCompleteSize} ('sm' | 'md' | 'lg')
- * instead. Retained for one release so existing values keep compiling.
- */
-export type LegacyAutoCompleteSize = 'small' | 'middle' | 'large';
-
-/**
  * Structure for an autocomplete option.
  *
  * @example
@@ -141,7 +135,7 @@ export interface AutoCompleteProps {
   /** Callback when dropdown visibility changes */
   onDropdownVisibleChange?: (open: boolean) => void;
   /** Size of input */
-  size?: AutoCompleteSize | LegacyAutoCompleteSize;
+  size?: AutoCompleteSize;
   /** Status */
   status?: 'error' | 'warning';
   /** Not found content */
@@ -182,7 +176,7 @@ export const AUTOCOMPLETE_DEFAULTS: Partial<AutoCompleteProps> = {
   /** No auto focus by default */
   autoFocus: false,
   /** Default size variant */
-  size: 'middle',
+  size: 'md',
   /** Dropdown matches input width */
   popupMatchSelectWidth: true,
   /** Built-in filtering enabled */

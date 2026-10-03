@@ -80,7 +80,7 @@
  * <TreeSelect engine="classic" treeData={data} treeCheckable />
  *
  * // Modern engine (DaisyUI/Tailwind)
- * <TreeSelect engine="modern" treeData={data} size="large" />
+ * <TreeSelect engine="modern" treeData={data} size="lg" />
  *
  * // Rustic engine (Pure HTML/CSS)
  * <TreeSelect engine="rustic" treeData={data} />
@@ -101,7 +101,6 @@ export {
   type TreeSelectNode,
   type TreeSelectValue,
   type TreeSelectSize,
-  type LegacyTreeSelectSize,
   TREESELECT_DEFAULTS,
 } from './contracts';
 

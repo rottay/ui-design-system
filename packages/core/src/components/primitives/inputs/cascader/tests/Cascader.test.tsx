@@ -173,7 +173,7 @@ describe('Cascader', () => {
   });
 
   describe('size prop', () => {
-    it.each(['small', 'middle', 'large'] as const)('renders size %s', (size) => {
+    it.each(['sm', 'md', 'lg'] as const)('renders size %s', (size) => {
       render(<Cascader options={defaultOptions} size={size} />);
       expect(screen.getByTestId('cascader')).toHaveAttribute('data-size', size);
     });

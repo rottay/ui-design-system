@@ -41,7 +41,7 @@ TreeSelect component for selecting from hierarchical tree data.
   argTypes: {
     size: {
       control: 'select',
-      options: ['small', 'middle', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of the input',
     },
     status: {
@@ -150,7 +150,7 @@ export const DefaultValue: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {(['small', 'middle', 'large'] as const).map((size) => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size}>
           <span style={{ display: 'inline-block', width: 80 }}>{size}:</span>
           <TreeSelect
@@ -357,7 +357,7 @@ export const SizeMatrix: Story = {
       component={TreeSelect}
       baseProps={{ treeData: defaultTreeData, placeholder: 'Select', style: { width: 150 } }}
       sizeProp="size"
-      sizes={['small', 'middle', 'large']}
+      sizes={['sm', 'md', 'lg']}
     />
   ),
 };

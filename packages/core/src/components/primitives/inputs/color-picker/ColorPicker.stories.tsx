@@ -41,7 +41,7 @@ ColorPicker component for selecting colors with various formats and presets.
   argTypes: {
     size: {
       control: 'select',
-      options: ['small', 'middle', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of the trigger',
     },
     format: {
@@ -130,7 +130,7 @@ export const Formats: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-      {(['small', 'middle', 'large'] as const).map((size) => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <ColorPicker key={size} defaultValue="#1677ff" size={size} />
       ))}
     </div>
@@ -307,7 +307,7 @@ export const SizeMatrix: Story = {
       component={ColorPicker}
       baseProps={{ defaultValue: '#1677ff' }}
       sizeProp="size"
-      sizes={['small', 'middle', 'large']}
+      sizes={['sm', 'md', 'lg']}
     />
   ),
 };

@@ -142,7 +142,6 @@ export {
   type CollapseProps,
   type CollapsePanelProps,
   type CollapseSize,
-  type LegacyCollapseSize,
   COLLAPSE_DEFAULTS,
 } from './contracts';
 export { useCollapseTokens } from './runtime/tokens';

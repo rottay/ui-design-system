@@ -41,7 +41,7 @@ Cascader component for hierarchical multi-level selection.
   argTypes: {
     size: {
       control: 'select',
-      options: ['small', 'middle', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of the input',
     },
     status: {
@@ -137,7 +137,7 @@ export const DefaultValue: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {(['small', 'middle', 'large'] as const).map((size) => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <Cascader key={size} options={defaultOptions} size={size} placeholder={`Size ${size}`} style={{ width: 250 }} />
       ))}
     </div>
@@ -218,7 +218,7 @@ export const SizeMatrix: Story = {
       component={Cascader}
       baseProps={{ options: defaultOptions, placeholder: 'Select', style: { width: 150 } }}
       sizeProp="size"
-      sizes={['small', 'middle', 'large']}
+      sizes={['sm', 'md', 'lg']}
     />
   ),
 };

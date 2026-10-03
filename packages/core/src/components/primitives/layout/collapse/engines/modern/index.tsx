@@ -9,7 +9,7 @@
  * stamped here.
  *
  * Contract coverage (K3-C pass 1):
- * - `size` (`sm|md|lg`, legacy `small|middle|large` aliases) is normalized
+ * - `size` (`sm|md|lg`) is normalized
  *   and stamped as `data-size` on the root; the skin owns the per-size
  *   header/content padding rhythm.
  * - `collapsible` (`header|icon|disabled`) gates the toggle affordance:
@@ -80,16 +80,14 @@ interface CollapseContextValue {
 
 const CollapseContext = createContext<CollapseContextValue | null>(null);
 
-/** Normalize the canonical `sm|md|lg` scale plus the legacy antd aliases. */
+/** Resolve the `sm|md|lg` scale, defaulting an absent size to `md`. */
 export function normalizeCollapseSize(
   size: CollapseProps['size']
 ): 'sm' | 'md' | 'lg' {
   switch (size) {
     case 'sm':
-    case 'small':
       return 'sm';
     case 'lg':
-    case 'large':
       return 'lg';
     default:
       return 'md';

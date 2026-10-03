@@ -143,7 +143,7 @@ describe('AutoComplete', () => {
   });
 
   describe('size prop', () => {
-    it.each(['small', 'middle', 'large'] as const)('renders size %s', (size) => {
+    it.each(['sm', 'md', 'lg'] as const)('renders size %s', (size) => {
       render(<AutoComplete options={defaultOptions} size={size} />);
       expect(screen.getByTestId('autocomplete')).toHaveAttribute('data-size', size);
     });

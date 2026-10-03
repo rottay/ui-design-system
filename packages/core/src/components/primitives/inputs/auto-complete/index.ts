@@ -76,7 +76,7 @@
  * <AutoComplete engine="classic" options={options} allowClear />
  *
  * // Modern engine (DaisyUI/Tailwind)
- * <AutoComplete engine="modern" options={options} size="large" />
+ * <AutoComplete engine="modern" options={options} size="lg" />
  *
  * // Rustic engine (Pure HTML/CSS)
  * <AutoComplete engine="rustic" options={options} />
@@ -96,7 +96,6 @@ export {
   type AutoCompleteProps,
   type AutoCompleteOption,
   type AutoCompleteSize,
-  type LegacyAutoCompleteSize,
   AUTOCOMPLETE_DEFAULTS,
 } from './contracts';
 

@@ -137,7 +137,7 @@ describe('ColorPicker', () => {
   });
 
   describe('size prop', () => {
-    it.each(['small', 'middle', 'large'] as const)('renders size %s', (size) => {
+    it.each(['sm', 'md', 'lg'] as const)('renders size %s', (size) => {
       render(<ColorPicker size={size} />);
       expect(screen.getByTestId('colorpicker')).toHaveAttribute('data-size', size);
     });

@@ -8,7 +8,7 @@
  * and the header/content padding rhythm was split between engine inline
  * styles and the skin. These tests pin:
  *
- *  - `data-size` normalization (canonical sm|md|lg + legacy antd aliases);
+ *  - `data-size` normalization (canonical sm|md|lg);
  *  - keyboard toggle semantics (Enter/Space, tabIndex, aria-expanded,
  *    aria-disabled) including the `collapsible='icon'` and
  *    `collapsible='disabled'` modes;
@@ -51,21 +51,16 @@ function contentTrackOf(text: string): HTMLElement {
 }
 
 describe('Collapse modern contract: size', () => {
-  it('normalizes the canonical and legacy size values', () => {
+  it('normalizes the canonical size values', () => {
     expect(normalizeCollapseSize('sm')).toBe('sm');
-    expect(normalizeCollapseSize('small')).toBe('sm');
     expect(normalizeCollapseSize('md')).toBe('md');
-    expect(normalizeCollapseSize('middle')).toBe('md');
     expect(normalizeCollapseSize(undefined)).toBe('md');
     expect(normalizeCollapseSize('lg')).toBe('lg');
-    expect(normalizeCollapseSize('large')).toBe('lg');
   });
 
   it.each([
-    ['small', 'sm'],
-    ['middle', 'md'],
-    ['large', 'lg'],
     ['sm', 'sm'],
+    ['md', 'md'],
     ['lg', 'lg'],
   ] as const)('stamps data-size="%s" as "%s" on the root', (size, stamped) => {
     const { container } = renderBasic({ size });

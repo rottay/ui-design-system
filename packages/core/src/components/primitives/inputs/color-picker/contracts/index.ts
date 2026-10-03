@@ -55,12 +55,6 @@ export type ColorFormat = 'hex' | 'rgb' | 'hsb';
 export type ColorPickerSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 /**
- * @deprecated Legacy antd-style spelling; use {@link ColorPickerSize} ('sm' | 'md' | 'lg')
- * instead. Retained for one release so existing values keep compiling.
- */
-export type LegacyColorPickerSize = 'small' | 'middle' | 'large';
-
-/**
  * Trigger behavior for opening the color panel.
  * - 'click': Opens on click (default)
  * - 'hover': Opens on mouse hover
@@ -140,7 +134,7 @@ export interface ColorPickerProps {
   /** Show color value as text (true, false, or custom render function) */
   showText?: boolean | ((color: Color) => ReactNode);
   /** Size of the color picker trigger */
-  size?: ColorPickerSize | LegacyColorPickerSize;
+  size?: ColorPickerSize;
   /** Whether the color picker is disabled */
   disabled?: boolean;
   /** Allow clearing the selected color */
@@ -173,7 +167,7 @@ export const COLORPICKER_DEFAULTS: Partial<ColorPickerProps> = {
   /** Default format is hex */
   format: 'hex',
   /** Default size is middle */
-  size: 'middle',
+  size: 'md',
   /** Not disabled by default */
   disabled: false,
   /** No clear button by default */

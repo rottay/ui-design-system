@@ -49,12 +49,6 @@ import type { Size } from '../../../../../foundation/contracts/kernel/common';
 export type TreeSelectSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 /**
- * @deprecated Legacy antd-style spelling; use {@link TreeSelectSize} ('sm' | 'md' | 'lg')
- * instead. Retained for one release so existing values keep compiling.
- */
-export type LegacyTreeSelectSize = 'small' | 'middle' | 'large';
-
-/**
  * Structure for a tree select node with hierarchical children.
  *
  * @example
@@ -171,7 +165,7 @@ export interface TreeSelectBaseProps {
   /** Allow clear */
   allowClear?: boolean;
   /** Size of input */
-  size?: TreeSelectSize | LegacyTreeSelectSize;
+  size?: TreeSelectSize;
   /** Max tag count (multiple mode) */
   maxTagCount?: number | 'responsive';
   /** Status */
@@ -299,7 +293,7 @@ export const TREESELECT_DEFAULTS: Partial<TreeSelectProps> = {
   /** Clear button enabled */
   allowClear: true,
   /** Default size variant */
-  size: 'middle',
+  size: 'md',
   /** Default placeholder text */
   placeholder: 'Please select',
   /** Tree lines hidden by default */

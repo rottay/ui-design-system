@@ -85,7 +85,7 @@
  * <Cascader engine="classic" options={options} showSearch />
  *
  * // Modern engine (DaisyUI/Tailwind)
- * <Cascader engine="modern" options={options} size="large" />
+ * <Cascader engine="modern" options={options} size="lg" />
  *
  * // Rustic engine (Pure HTML/CSS)
  * <Cascader engine="rustic" options={options} />
@@ -106,7 +106,6 @@ export {
   type CascaderOption,
   type CascaderValue,
   type CascaderSize,
-  type LegacyCascaderSize,
   type CascaderExpandTrigger,
   CASCADER_DEFAULTS,
 } from './contracts';

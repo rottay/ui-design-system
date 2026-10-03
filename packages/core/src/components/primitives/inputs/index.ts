@@ -105,7 +105,6 @@ export type {
   AutoCompleteProps,
   AutoCompleteOption,
   AutoCompleteSize,
-  LegacyAutoCompleteSize,
 } from './auto-complete';
 export { AUTOCOMPLETE_DEFAULTS } from './auto-complete';
 
@@ -116,7 +115,6 @@ export type {
   CascaderOption,
   CascaderValue,
   CascaderSize,
-  LegacyCascaderSize,
   CascaderExpandTrigger,
 } from './cascader';
 export { CASCADER_DEFAULTS } from './cascader';
@@ -128,7 +126,6 @@ export type {
   TreeSelectNode,
   TreeSelectValue,
   TreeSelectSize,
-  LegacyTreeSelectSize,
 } from './tree-select';
 export { TREESELECT_DEFAULTS } from './tree-select';
 
@@ -158,7 +155,6 @@ export type {
   Color,
   ColorFormat,
   ColorPickerSize,
-  LegacyColorPickerSize,
   ColorPickerTrigger,
 } from './color-picker';
 export { COLORPICKER_DEFAULTS } from './color-picker';

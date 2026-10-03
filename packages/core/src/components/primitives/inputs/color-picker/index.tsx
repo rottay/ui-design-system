@@ -32,7 +32,6 @@ export {
   type Color,
   type ColorFormat,
   type ColorPickerSize,
-  type LegacyColorPickerSize,
   type ColorPickerTrigger,
   COLORPICKER_DEFAULTS,
 } from './contracts';

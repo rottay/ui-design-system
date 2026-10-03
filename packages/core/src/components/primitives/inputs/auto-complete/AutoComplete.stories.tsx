@@ -40,7 +40,7 @@ AutoComplete component for input with dropdown suggestions.
   argTypes: {
     size: {
       control: 'select',
-      options: ['small', 'middle', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of the input',
     },
     status: {
@@ -109,7 +109,7 @@ export const Controlled: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {(['small', 'middle', 'large'] as const).map((size) => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <AutoComplete
           key={size}
           options={defaultOptions}
@@ -174,7 +174,7 @@ export const SizeMatrix: Story = {
       component={AutoComplete}
       baseProps={{ options: defaultOptions, placeholder: 'Search', style: { width: 150 } }}
       sizeProp="size"
-      sizes={['small', 'middle', 'large']}
+      sizes={['sm', 'md', 'lg']}
     />
   ),
 };

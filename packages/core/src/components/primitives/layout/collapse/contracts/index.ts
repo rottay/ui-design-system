@@ -43,12 +43,6 @@ type CollapseEngine = EngineName;
 /** Collapse size, derived from the canonical {@link Size} scale. */
 export type CollapseSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
-/**
- * @deprecated Legacy antd-style spelling; use {@link CollapseSize} ('sm' | 'md' | 'lg')
- * instead. Retained for one release so existing values keep compiling.
- */
-export type LegacyCollapseSize = 'small' | 'middle' | 'large';
-
 export interface CollapsePanelProps {
   /** Unique key for the panel */
   panelKey?: string;
@@ -90,7 +84,7 @@ export interface CollapseProps {
   /** Whether all panels are collapsible */
   collapsible?: 'header' | 'icon' | 'disabled';
   /** Size variant */
-  size?: CollapseSize | LegacyCollapseSize;
+  size?: CollapseSize;
   /** Panel children */
   children?: ReactNode;
   /** Custom class name */
@@ -105,5 +99,5 @@ export const COLLAPSE_DEFAULTS = {
   bordered: true,
   accordion: false,
   expandIconPosition: 'start' as const,
-  size: 'middle' as const,
+  size: 'md' as const,
 };

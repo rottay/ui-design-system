@@ -49,12 +49,6 @@ import type { Size } from '../../../../../foundation/contracts/kernel/common';
 export type CascaderSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 /**
- * @deprecated Legacy antd-style spelling; use {@link CascaderSize} ('sm' | 'md' | 'lg')
- * instead. Retained for one release so existing values keep compiling.
- */
-export type LegacyCascaderSize = 'small' | 'middle' | 'large';
-
-/**
  * Trigger behavior for expanding child options.
  *
  * @example
@@ -179,7 +173,7 @@ export interface CascaderProps {
   /** Allow clear */
   allowClear?: boolean;
   /** Size of input */
-  size?: CascaderSize | LegacyCascaderSize;
+  size?: CascaderSize;
   /** Not found content */
   notFoundContent?: ReactNode;
   /** Loading state */
@@ -228,7 +222,7 @@ export const CASCADER_DEFAULTS: Partial<CascaderProps> = {
   /** Clear button enabled */
   allowClear: true,
   /** Default size variant */
-  size: 'middle',
+  size: 'md',
   /** Default placeholder text */
   placeholder: 'Please select',
 };

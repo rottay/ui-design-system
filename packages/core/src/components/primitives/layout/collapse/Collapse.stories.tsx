@@ -46,7 +46,7 @@ const meta: Meta<typeof Collapse> = {
     },
     size: {
       control: 'select',
-      options: ['small', 'middle', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of the collapse',
     },
   },
@@ -153,7 +153,7 @@ export const ExpandIconPosition: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['small', 'middle', 'large'] as const).map((size) => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size}>
           <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{size}</h4>
           <Collapse size={size} defaultActiveKey={['1']}>
