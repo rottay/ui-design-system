@@ -28,8 +28,8 @@ import {
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from '@/infrastructure/compilers/composition/tenant-theme';
-import { emitTenantThemeArtifactForSsr } from '@/infrastructure/runtime/theming/foundation/visual-authority';
-import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
+import { emitTenantThemeArtifactForSsr } from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
+import { stampTenantThemeScope } from '@tests/integration/visual-authority-retirement/tests/mount-fixture';
 import { resolveEffectiveDensityScale } from '@/foundation/tokens/ts/foundation/base/density';
 
 import { useTokens } from '..';

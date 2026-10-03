@@ -15,7 +15,7 @@ import {
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
 } from '@/infrastructure/runtime/theming';
 import { DesignSystemProvider } from '..';
-import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
+import { stampTenantThemeScope } from '@tests/integration/visual-authority-retirement/tests/mount-fixture';
 
 const ARTIFACT = compileTenantThemeConfig(
   hydrateTenantThemeConfig({

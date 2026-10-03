@@ -20,7 +20,7 @@ import {
   hydrateTenantThemeConfig,
 } from '@/infrastructure/compilers/composition/tenant-theme';
 
-import { resolveVisualAuthority, verifyTenantThemeArtifactScope } from '../foundation/admission';
+import { resolveVisualAuthority, verifyTenantThemeArtifactScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import {
   clearTenantThemeScope,
   mountTenantThemeArtifactFixture,

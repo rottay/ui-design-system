@@ -15,7 +15,7 @@ import {
 } from '@/infrastructure/runtime/theming';
 import { useMotionPolicy } from '../../../../../motion';
 import { DesignSystemProvider } from '..';
-import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
+import { stampTenantThemeScope } from '@tests/integration/visual-authority-retirement/tests/mount-fixture';
 
 function artifact(slug: string, verticalKey: 'evnto' | 'rottay', motion: TenantMotionDial) {
   return compileTenantThemeConfig(

@@ -15,13 +15,15 @@ import {
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
   censusRuntimeVisualPayload,
-  reportVisualAuthorityConflict,
-  resetVisualAuthorityDiagnostics,
   resolveVisualAuthority,
   verifyMountedTenantThemeArtifact,
   verifyTenantThemeArtifactV1,
   type RuntimeVisualPayloadCensus,
-} from '..';
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
+import {
+  reportVisualAuthorityConflict,
+  resetVisualAuthorityDiagnostics,
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/runtime/retention';
 import { stampTenantThemeScope } from './mount-fixture';
 
 const ARTIFACT = compileTenantThemeConfig(

@@ -18,7 +18,7 @@ import {
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
-} from '../../foundation/admission';
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 
 /** The identity a tenant artifact's scope selector is keyed on. */
 export interface TenantThemeScopeIdentity {

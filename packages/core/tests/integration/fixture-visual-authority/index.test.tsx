@@ -34,7 +34,7 @@ import React from 'react';
 import { describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '../../../src/foundation/contracts';
-import { censusRuntimeVisualPayload } from '../../../src/infrastructure/runtime/theming/foundation/visual-authority';
+import { censusRuntimeVisualPayload } from '../../../src/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import { renderSurface } from '../../../src/components/surfaces/foundation/common/test-utils';
 import { renderWithEngine } from '../../support/engine';
 

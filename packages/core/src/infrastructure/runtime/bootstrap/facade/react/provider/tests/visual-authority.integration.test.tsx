@@ -16,7 +16,7 @@ import {
   resetVisualAuthorityDiagnostics,
 } from '@/infrastructure/runtime/theming';
 import { DesignSystemProvider } from '..';
-import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
+import { stampTenantThemeScope } from '@tests/integration/visual-authority-retirement/tests/mount-fixture';
 import { outstandingRootClaims } from '@/infrastructure/runtime/foundation/root-attributes';
 /**
  * Whether the provider CLAIMED the root scope.

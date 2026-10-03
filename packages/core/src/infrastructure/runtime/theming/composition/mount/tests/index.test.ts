@@ -22,7 +22,7 @@ import {
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
   auditTenantThemeArtifactSsrReceipt,
-} from '../../../foundation/visual-authority';
+} from '../../../foundation/visual-authority/foundation/admission';
 import { firstPartyArtifactRecipeProfile } from '@/infrastructure/compilers/runtime/tenant-css/artifact-runtime';
 import { mountTenantTheme } from '..';
 

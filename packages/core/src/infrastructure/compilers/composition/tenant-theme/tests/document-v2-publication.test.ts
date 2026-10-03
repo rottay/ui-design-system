@@ -24,7 +24,7 @@ import { TenantThemeDocumentV2Error } from "@/contracts/theme/presentation/docum
 // The verifier is deliberately NOT public: a consumer proves a mount through
 // `resolveVisualAuthority`. This suite asserts the producer/verifier pair, so
 // it reads the verifier where it lives.
-import { verifyTenantThemeArtifactV1 } from "@/infrastructure/runtime/theming/foundation/visual-authority";
+import { verifyTenantThemeArtifactV1 } from "@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission";
 
 const IDENTITY = {
   tenantId: "22222222-2222-4222-8222-222222222222",

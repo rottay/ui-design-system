@@ -3,17 +3,15 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
-  resolveVisualAuthority as resolveFromAdmission,
-  verifyTenantThemeArtifactV1,
-} from '../foundation/admission';
-import {
-  resolveVisualAuthority as resolveFromFacade,
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
-} from '..';
-import * as retention from '../runtime/retention';
-import type { RuntimeVisualPayloadCensus } from '../foundation/admission';
+  resolveVisualAuthority as resolveFromAdmission,
+  verifyTenantThemeArtifactV1,
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
+import { resolveVisualAuthority as resolveFromFacade } from '@/entrypoints/server';
+import * as retention from '@/infrastructure/runtime/theming/foundation/visual-authority/runtime/retention';
+import type { RuntimeVisualPayloadCensus } from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import { stampTenantThemeScope } from './mount-fixture';
 import { withRootAliases } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css';
 import { verticalOutright } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';

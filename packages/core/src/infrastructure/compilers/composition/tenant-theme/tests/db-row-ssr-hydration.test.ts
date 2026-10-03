@@ -36,7 +36,7 @@ import {
   appearanceMatchesArtifact,
   emitTenantThemeArtifactForSsr,
   type TenantThemeArtifactSsrEmission,
-} from '@/infrastructure/runtime/theming/foundation/visual-authority';
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 
 import {
   compileTenantThemeConfig,
@@ -44,7 +44,7 @@ import {
   hydrateTenantThemeConfig,
   tenantThemeArtifactRootAttributes,
 } from '..';
-import { clearTenantThemeScope, stampTenantThemeScopeFor } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
+import { clearTenantThemeScope, stampTenantThemeScopeFor } from '@tests/integration/visual-authority-retirement/tests/mount-fixture';
 
 /**
  * The projection must agree with the compiler's own scope helper. Asserting the

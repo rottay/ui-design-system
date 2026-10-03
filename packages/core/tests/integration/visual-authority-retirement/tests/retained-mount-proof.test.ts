@@ -11,14 +11,16 @@ import {
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
-  armMountedTenantThemeArtifact,
   auditRetainedTenantThemeArtifact,
+  verifyMountedTenantThemeArtifact,
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
+import {
+  armMountedTenantThemeArtifact,
   prepareMountedTenantThemeArtifactClaim,
   resetVisualAuthorityDiagnostics,
   retainMountedTenantThemeArtifact,
-  verifyMountedTenantThemeArtifact,
-} from '..';
-import type { PreparedTenantThemeArtifactClaim } from '..';
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/runtime/retention';
+import type { PreparedTenantThemeArtifactClaim } from '@/infrastructure/runtime/theming/foundation/visual-authority/runtime/retention';
 import { clearTenantThemeScope, stampTenantThemeScope } from './mount-fixture';
 
 const ARTIFACT = compileTenantThemeConfig(

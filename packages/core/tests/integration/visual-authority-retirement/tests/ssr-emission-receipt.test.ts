@@ -24,7 +24,7 @@ import {
   emitTenantThemeArtifactForSsr,
   resolveVisualAuthority,
   tenantThemeArtifactElementId,
-} from '..';
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import { clearTenantThemeScope, stampTenantThemeScope } from './mount-fixture';
 
 function buildArtifact(slug: string, rowVersion: number): TenantThemeArtifact {

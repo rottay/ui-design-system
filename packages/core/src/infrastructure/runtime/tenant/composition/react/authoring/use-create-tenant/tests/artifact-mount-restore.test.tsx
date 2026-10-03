@@ -9,7 +9,7 @@ import {
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
-} from '@/infrastructure/runtime/theming/foundation/visual-authority';
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import { ReservedTenantIdentityError } from '@/foundation/presets/verticals/roster';
 import { useCreateTenant } from '..';
 

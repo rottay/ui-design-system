@@ -39,8 +39,8 @@ import {
 import {
   censusRuntimeVisualPayload,
   emitTenantThemeArtifactForSsr,
-} from '@/infrastructure/runtime/theming/foundation/visual-authority';
-import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
+import { stampTenantThemeScope } from '@tests/integration/visual-authority-retirement/tests/mount-fixture';
 
 /**
  * Identity only. Every visual field this fixture used to carry is now either

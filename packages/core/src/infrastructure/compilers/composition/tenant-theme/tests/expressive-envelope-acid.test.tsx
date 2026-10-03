@@ -33,14 +33,14 @@ import {
   getCodeOwnedGovernedBehavior,
   getKnownTenantConfig,
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
-import { emitTenantThemeArtifactForSsr } from '@/infrastructure/runtime/theming/foundation/visual-authority';
+import { emitTenantThemeArtifactForSsr } from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
   validateTenantThemeDocument,
 } from '..';
-import { clearTenantThemeScope, stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
+import { clearTenantThemeScope, stampTenantThemeScope } from '@tests/integration/visual-authority-retirement/tests/mount-fixture';
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 
