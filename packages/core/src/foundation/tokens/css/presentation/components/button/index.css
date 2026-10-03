@@ -272,7 +272,7 @@
   --ds-button-disabled-bg: var(--ds-material-control-background-disabled);
   --ds-button-disabled-color: var(--ds-material-control-foreground-disabled);
   --ds-button-disabled-border-color: var(--ds-material-control-border-disabled);
-  --ds-button-disabled-opacity: 0.58;
+  --ds-button-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-button-disabled-cursor: not-allowed;
   --ds-button-disabled-shadow: none;
 

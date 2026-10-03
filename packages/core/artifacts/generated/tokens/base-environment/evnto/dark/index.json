@@ -5,7 +5,7 @@
   "vertical": "evnto",
   "mode": "dark",
   "channelCount": 4262,
-  "digest": "cb50064ac1d035d23478817c25bdf0b6d118f959ea4d88279b8510d255d88f2d",
+  "digest": "18d21ae2138716e19e31f3316901eba38c7f3e43e6cb39905e3ffa60ebce0cdb",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -416,7 +416,7 @@
     "--ds-button-disabled-border-color": "var(--ds-material-control-border-disabled)",
     "--ds-button-disabled-color": "var(--ds-material-control-foreground-disabled)",
     "--ds-button-disabled-cursor": "not-allowed",
-    "--ds-button-disabled-opacity": "0.58",
+    "--ds-button-disabled-opacity": "var(--ds-state-disabled-opacity)",
     "--ds-button-disabled-shadow": "none",
     "--ds-button-elevated-shadow": "var(--ds-elevation-1)",
     "--ds-button-elevated-shadow-hover": "var(--ds-elevation-2)",

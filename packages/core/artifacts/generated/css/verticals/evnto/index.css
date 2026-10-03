@@ -7015,7 +7015,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-disabled-bg: var(--ds-material-control-background-disabled);
   --ds-button-disabled-color: var(--ds-material-control-foreground-disabled);
   --ds-button-disabled-border-color: var(--ds-material-control-border-disabled);
-  --ds-button-disabled-opacity: 0.58;
+  --ds-button-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-button-disabled-cursor: not-allowed;
   --ds-button-disabled-shadow: none;
 
@@ -15777,19 +15777,47 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
     ) 1fr auto;
 }
 
-/* The scrollport is a tab stop; its ring sits inside the edge because the root
-   clips overflow and would swallow an outward one. */
+/* The scrollport is a tab stop, but the root clips it and the subjects cover
+   it, so the root wears the focus signature while the scrollport holds focus. */
+.ds-pattern-decision-comparison.ds-engine-modern[data-part="root"]:has(
+    > .ds-decision-comparison__viewport:focus-visible
+  ) {
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring), var(--ds-decision-comparison-shadow);
+}
+
+/* An inset signature would sit under the columns; this square overlay lifts it
+   above them, and the root clips every outward layer so nothing paints twice. */
+.ds-pattern-decision-comparison.ds-engine-modern[data-part="root"]:has(
+    > .ds-decision-comparison__viewport:focus-visible
+  )::after {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  content: "";
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
+}
+
 .ds-pattern-decision-comparison.ds-engine-modern
   .ds-decision-comparison__viewport:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(var(--ds-focus-ring-offset, 2px) * -1);
+  outline: none;
 }
 
 @media (forced-colors: active) {
-  .ds-pattern-decision-comparison.ds-engine-modern
-    .ds-decision-comparison__viewport:focus-visible {
-    outline-color: Highlight;
+  .ds-pattern-decision-comparison.ds-engine-modern[data-part="root"]:has(
+      > .ds-decision-comparison__viewport:focus-visible
+    ) {
+    outline: var(--ds-focus-ring-width) solid Highlight;
+    outline-offset: var(--ds-focus-ring-width);
+    box-shadow: none;
+  }
+
+  .ds-pattern-decision-comparison.ds-engine-modern[data-part="root"]:has(
+      > .ds-decision-comparison__viewport:focus-visible
+    )::after {
+    box-shadow: none;
   }
 
   /* The tone dot is the "never hue alone" marker, and forced colors replaces a
@@ -18052,10 +18080,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 
 .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="focus-visible"], :focus-visible) {
   border-radius: 999px;
-  box-shadow: var(
-    --ds-shadow-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
-  );
+  box-shadow: var(--ds-focus-ring);
 }
 
 .ds-pattern-widget-board .ds-widget-board__resize-rail {
@@ -24027,11 +24052,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   --ds-button-ghost-bg-active: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card));
   /* The ring recipe rides the same channel block: the Button applies
      --ds-button-focus-ring only when IT decides focus is visible, so a second
-     :focus-visible here would gate a channel that is already inert until then
-     (the inset highlight survives so the ring keeps the family signature). */
-  --ds-button-focus-ring:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent),
-    0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+     :focus-visible here would gate a channel that is already inert until then.
+     The ring is the tenant's focus signature; the chip's resting highlight
+     composes under it so focus never drops the material. */
+  --ds-button-focus-ring: var(--ds-focus-ring), var(--ds-button-ghost-shadow);
 }
 
 .ds-structure.ds-field-filters-panel [data-part='preset-chip-icon'] {
@@ -60178,13 +60202,6 @@ html[data-ds-motion='reduced']
   }
 }
 
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='batch-approve-button']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='batch-clear-button']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
-}
-
 /* --- Batch toolbar ------------------------------------------------------------- */
 /* The family-private offset keeps the batch toolbar pinned to the block-start
    of its nearest scroll ancestor while a selection is active. It is plumbing
@@ -60543,14 +60560,6 @@ html[data-ds-motion='reduced']
   .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-error-600);
   }
-}
-
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-approve-button']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-reject-button']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-clear-button']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 /* --- Card footer -------------------------------------------------------------------- */
@@ -66399,10 +66408,17 @@ html[data-ds-motion='reduced']
 }
 
 /* ---- panel focus anchor: dismissing a row hands focus to the panel, so a
-   keyboard dismiss must land on a visible, governed ring ---- */
+   keyboard dismiss lands on the tenant focus signature. The signature shares
+   box-shadow with the elevation; a `none` elevation would void the list. ---- */
 .ds-pattern-notification-center.ds-engine-modern [data-part='panel']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
+}
+@container not style(--ds-elevation-3: none) {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='panel']:is([data-state~='focus-visible'], :focus-visible) {
+    box-shadow: var(--ds-focus-ring), var(--ds-elevation-3);
+  }
 }
 
 /* ---- header: title row + bottom rule (was the `border-b` utility) ---- */
@@ -66633,7 +66649,9 @@ html[data-ds-motion='reduced']
     box-shadow: none;
   }
   .ds-pattern-notification-center.ds-engine-modern [data-part='panel']:is([data-state~='focus-visible'], :focus-visible) {
-    outline-color: Highlight;
+    outline: var(--ds-focus-ring-width) solid Highlight;
+    outline-offset: var(--ds-focus-ring-width);
+    box-shadow: none;
   }
   .ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='header'],
   .ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='row'] {
@@ -84846,8 +84864,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    `:is([data-state~='focus-visible'], :focus-visible)` arm. This rule used to
    gate the CHANNEL behind a bare `:focus-visible` of its own -- a second
    authority on when a control is keyboard-focused, and the family's one
-   unpaired state pseudo. The channel is a recipe, not paint, so it is simply
-   stated; the primitive still decides when to draw it. */
+   unpaired state pseudo. The channel rests on the tenant's focus signature,
+   so it is simply stated; the primitive still decides when to draw it. */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestion-chip,
 .ds-structure.ds-search-command-bar
@@ -84858,11 +84876,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-search-command-bar__voice-help-close,
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help-cancel {
-  --ds-button-focus-ring: var(
-    --ds-search-command-bar-focus-ring,
-    0 0 0 var(--ds-focus-ring-width, 2px)
-      var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent))
-  );
+  --ds-button-focus-ring: var(--ds-search-command-bar-focus-ring, var(--ds-focus-ring));
 }
 
 /* The drawer's forward action carries NO rule here, and stamps no part of its
@@ -107302,7 +107316,7 @@ html[lang]:lang(ar) {
   --ds-search-command-bar-editorial-padding-inline: 20px;
   --ds-search-command-bar-embedded-padding-block: 8px;
   --ds-search-command-bar-error-border: 1px solid var(--ds-color-error);
-  --ds-search-command-bar-focus-ring: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+  --ds-search-command-bar-focus-ring: var(--ds-focus-ring);
   --ds-search-command-bar-icon-color: var(--ds-color-text-muted);
   --ds-search-command-bar-icon-inset-inline-start: 24px;
   --ds-search-command-bar-input-bg: var(--ds-surface-panel);
@@ -108391,6 +108405,7 @@ html[lang]:lang(ar) {
   --ds-badge-font-weight: var(--ds-font-weight-medium, 500);
   --ds-badge-motion-duration: var(--ds-motion-feedback);
   --ds-badge-motion-easing: var(--ds-motion-ease-out, ease-out);
+  --ds-button-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-button-icon-active-transform: scale(var(--ds-state-press-scale));
   --ds-button-spinner-duration: var(--ds-motion-attention);
   --ds-button-text-transform: var(--ds-type-label-text-transform, none);

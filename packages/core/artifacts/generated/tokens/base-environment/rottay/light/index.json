@@ -5,7 +5,7 @@
   "vertical": "rottay",
   "mode": "light",
   "channelCount": 4256,
-  "digest": "6d1493f6cc82e1aa5a333689ad70338667bcdba0312111bf3d9c6ab91bd6295a",
+  "digest": "58867c8a9a5530038c3db0ddafefaa6946757f2b9e285991066745bbb468a586",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -416,7 +416,7 @@
     "--ds-button-disabled-border-color": "var(--ds-material-control-border-disabled)",
     "--ds-button-disabled-color": "var(--ds-material-control-foreground-disabled)",
     "--ds-button-disabled-cursor": "not-allowed",
-    "--ds-button-disabled-opacity": "0.58",
+    "--ds-button-disabled-opacity": "var(--ds-state-disabled-opacity)",
     "--ds-button-disabled-shadow": "none",
     "--ds-button-elevated-shadow": "var(--ds-elevation-1)",
     "--ds-button-elevated-shadow-hover": "var(--ds-elevation-2)",

@@ -5,7 +5,7 @@
   "vertical": "bithire",
   "mode": "dark",
   "channelCount": 4262,
-  "digest": "29b17b454c2295e2373985af042eb53ad7a692dc9efca74f99d1ba51f9e8f505",
+  "digest": "e7728156a1f8b2f099dbc08e0ecf5b5fe83a4dfb9b290ea9b07a2c39e60f91f1",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -416,7 +416,7 @@
     "--ds-button-disabled-border-color": "var(--ds-material-control-border-disabled)",
     "--ds-button-disabled-color": "var(--ds-material-control-foreground-disabled)",
     "--ds-button-disabled-cursor": "not-allowed",
-    "--ds-button-disabled-opacity": "0.58",
+    "--ds-button-disabled-opacity": "var(--ds-state-disabled-opacity)",
     "--ds-button-disabled-shadow": "none",
     "--ds-button-elevated-shadow": "var(--ds-elevation-1)",
     "--ds-button-elevated-shadow-hover": "var(--ds-elevation-2)",

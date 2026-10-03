@@ -1916,7 +1916,7 @@
   --ds-search-command-bar-editorial-padding-inline: 20px;
   --ds-search-command-bar-embedded-padding-block: 8px;
   --ds-search-command-bar-error-border: 1px solid var(--ds-color-error);
-  --ds-search-command-bar-focus-ring: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+  --ds-search-command-bar-focus-ring: var(--ds-focus-ring);
   --ds-search-command-bar-icon-color: var(--ds-color-text-muted);
   --ds-search-command-bar-icon-inset-inline-start: 24px;
   --ds-search-command-bar-input-bg: var(--ds-surface-panel);
@@ -3005,6 +3005,7 @@
   --ds-badge-font-weight: var(--ds-font-weight-medium, 500);
   --ds-badge-motion-duration: var(--ds-motion-feedback);
   --ds-badge-motion-easing: var(--ds-motion-ease-out, ease-out);
+  --ds-button-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-button-icon-active-transform: scale(var(--ds-state-press-scale));
   --ds-button-spinner-duration: var(--ds-motion-attention);
   --ds-button-text-transform: var(--ds-type-label-text-transform, none);
