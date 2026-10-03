@@ -547,6 +547,7 @@ export default function ModernDataTable<T extends object>(
     rowKey: string;
     columnKey: string;
   } | null>(null);
+  const editFocusReturnRef = useRef<string | null>(null);
 
   // ---------------------------------------------------------------------------
   // Derived values
@@ -742,6 +743,25 @@ export default function ModernDataTable<T extends object>(
     },
     [onCellEditCancel, setEditingCell]
   );
+
+  // An editor that unmounts while it holds focus hands focus back to its row;
+  // the removed control would otherwise leave it on <body>.
+  const isEditing = editingCell != null;
+  useEffect(() => {
+    const rk = editFocusReturnRef.current;
+    editFocusReturnRef.current = null;
+    if (isEditing || rk === null || !tbodyRef.current) return;
+    const focused = document.activeElement;
+    if (focused && focused !== document.body && focused.isConnected) return;
+    const rows =
+      tbodyRef.current.querySelectorAll<HTMLTableRowElement>("tr[data-row-key]");
+    for (const candidate of Array.from(rows)) {
+      if (candidate.getAttribute("data-row-key") === rk) {
+        candidate.focus();
+        return;
+      }
+    }
+  }, [isEditing, editingCell?.rowKey, editingCell?.columnKey]);
 
   // ---------------------------------------------------------------------------
   // Virtual scrolling
@@ -1234,7 +1254,8 @@ export default function ModernDataTable<T extends object>(
   );
 
   // ---------------------------------------------------------------------------
-  // Keyboard navigation: row arrow keys (roving tabindex)
+  // Keyboard navigation: row arrow keys (roving tabindex); F2 on the focused
+  // row opens the editor of its first editable cell.
   // ---------------------------------------------------------------------------
 
   const handleRowKeyDown = useCallback(
@@ -1264,6 +1285,14 @@ export default function ModernDataTable<T extends object>(
             onRowClick(row, index);
           }
           return;
+        case "F2": {
+          if (e.target !== e.currentTarget) return;
+          const editableKey = findAdjacentEditableCol("", "next", row);
+          if (editableKey === null) return;
+          e.preventDefault();
+          enterEditMode(getRowKey(row, index), editableKey, row);
+          return;
+        }
         default:
           return;
       }
@@ -1272,7 +1301,7 @@ export default function ModernDataTable<T extends object>(
         setActiveRowIndex(nextIndex);
       }
     },
-    [data.length, onRowClick]
+    [data.length, enterEditMode, findAdjacentEditableCol, getRowKey, onRowClick]
   );
 
   const clearPendingEditableRowClick = useCallback(() => {
@@ -2340,6 +2369,9 @@ export default function ModernDataTable<T extends object>(
                                           onCancel={() =>
                                             handleCellCancel(row, col.key)
                                           }
+                                          onExitFocused={() => {
+                                            editFocusReturnRef.current = key;
+                                          }}
                                           onControlsChange={(controls) => {
                                             if (
                                               editingCell?.rowKey === key &&
@@ -2795,6 +2827,9 @@ export default function ModernDataTable<T extends object>(
                                       onCancel={() =>
                                         handleCellCancel(row, col.key)
                                       }
+                                      onExitFocused={() => {
+                                        editFocusReturnRef.current = key;
+                                      }}
                                       onControlsChange={(controls) => {
                                         if (
                                           editingCell?.rowKey === key &&
