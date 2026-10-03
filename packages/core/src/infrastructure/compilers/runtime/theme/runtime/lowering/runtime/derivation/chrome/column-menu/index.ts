@@ -66,6 +66,7 @@ export const columnMenuChromeDeriver: FamilyDeriver = {
     "--ds-column-menu-panel-border",
     "--ds-column-menu-panel-focus-outline",
     "--ds-column-menu-panel-focus-outline-offset",
+    "--ds-column-menu-panel-focus-ring",
     "--ds-column-menu-panel-inline-size",
     "--ds-column-menu-panel-radius",
     "--ds-column-menu-panel-shadow",
@@ -111,8 +112,11 @@ export function deriveColumnMenuChannels(): Record<string, string> {
   vars["--ds-column-menu-panel-shadow"] =
     "var(--ds-material-overlay-shadow, var(--ds-elevation-4, 0 24px 64px color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)))";
   vars["--ds-column-menu-panel-backdrop"] = "none";
-  // The panel is programmatically focused on open, so it owns a ring of its own.
-  vars["--ds-column-menu-panel-focus-outline"] = "var(--ds-focus-ring-width, 2px) solid var(--ds-color-border-focus)";
+  // The panel is programmatically focused on open and rests on the tenant's
+  // focus signature. Its outline is transparent until a tenant states one, and
+  // a stated outline paints at the offset stated beside it.
+  vars["--ds-column-menu-panel-focus-ring"] = "var(--ds-focus-ring)";
+  vars["--ds-column-menu-panel-focus-outline"] = "var(--ds-focus-ring-width) solid transparent";
   vars["--ds-column-menu-panel-focus-outline-offset"] = "-2px";
 
   // Header band, and the seam every section of the panel is cut with.
