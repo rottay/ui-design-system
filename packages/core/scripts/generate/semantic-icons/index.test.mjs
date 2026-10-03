@@ -7,10 +7,12 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import {
+  BITHIRE_PACK_ROLE_IDS,
   EXPECTED_COMPAT_CORPUS_IDS,
   ICON_PACK_COUNTS,
   buildGeneratedFiles,
   checkGeneratedFiles,
+  collectBitHirePackMembershipErrors,
   componentNameForId,
   loadAndValidateManifests,
   roleFileName,
@@ -102,6 +104,165 @@ test('BitHire preset is the exact bounded productive Icon inventory', async () =
       'bithire.offer',
       'bithire.pipeline',
     ],
+  );
+});
+
+function presetWithout(preset, name) {
+  const next = structuredClone(preset);
+  next.names = next.names.filter((candidate) => candidate !== name);
+  next.expectedCount = next.names.length;
+  return next;
+}
+
+test('BitHire pack rows are exactly the six frozen roles and all are preset members', async () => {
+  const corpus = await readJson(CORPUS_PATH);
+  const preset = await readJson(BITHIRE_PRESET_PATH);
+
+  assert.deepEqual(BITHIRE_PACK_ROLE_IDS, [
+    'bithire.candidate',
+    'bithire.interview',
+    'bithire.pipeline',
+    'bithire.evidence',
+    'bithire.job',
+    'bithire.offer',
+  ]);
+  assert.equal(ICON_PACK_COUNTS.bithire, 6);
+  assert.deepEqual(
+    corpus.entries.filter(({ pack }) => pack === 'bithire').map(({ id }) => id),
+    BITHIRE_PACK_ROLE_IDS,
+  );
+  assert.deepEqual(collectBitHirePackMembershipErrors(corpus, preset), []);
+  assert.doesNotThrow(() => validateCorpusManifest(structuredClone(corpus)));
+  assert.doesNotThrow(() => validateIconPresetManifest(structuredClone(preset), corpus));
+});
+
+test('a seventh BitHire pack row is rejected by the corpus and by the preset membership check', async () => {
+  const corpus = await readJson(CORPUS_PATH);
+  const preset = await readJson(BITHIRE_PRESET_PATH);
+  const seventh = structuredClone(corpus);
+  seventh.entries.push({
+    ...structuredClone(seventh.entries.find(({ id }) => id === 'bithire.offer')),
+    id: 'bithire.referral',
+    componentName: componentNameForId('bithire.referral'),
+    status: 'candidate',
+    since: 4,
+  });
+
+  assert.throws(
+    () => validateCorpusManifest(seventh),
+    /bithire pack must contain 6 entries; received 7/u,
+  );
+  assert.throws(
+    () => validateIconPresetManifest(structuredClone(preset), seventh),
+    /exactly 6 "pack": "bithire" rows; received 7/u,
+  );
+  assert.throws(
+    () => validateIconPresetManifest(structuredClone(preset), seventh),
+    /bithire\.referral is not one of the 6 frozen BitHire roles/u,
+  );
+
+  const seventhInPreset = structuredClone(preset);
+  seventhInPreset.names = [...seventhInPreset.names, 'bithire.referral'].sort();
+  seventhInPreset.expectedCount = seventhInPreset.names.length;
+  assert.throws(
+    () => validateIconPresetManifest(seventhInPreset, seventh),
+    /exactly 6 "pack": "bithire" rows; received 7/u,
+  );
+});
+
+test('a BitHire pack row missing from the preset is rejected', async () => {
+  const corpus = await readJson(CORPUS_PATH);
+  const preset = await readJson(BITHIRE_PRESET_PATH);
+
+  for (const id of BITHIRE_PACK_ROLE_IDS) {
+    const dropped = presetWithout(preset, id);
+    assert.equal(dropped.names.length, 103);
+    assert.throws(
+      () => validateIconPresetManifest(dropped, corpus),
+      new RegExp(`corpus BitHire pack row ${id.replace('.', '\\.')} must be a member of the bithire preset names`, 'u'),
+      id,
+    );
+  }
+  assert.doesNotThrow(() => validateIconPresetManifest(presetWithout(preset, 'action.add'), corpus));
+});
+
+test('a foundation role re-packed as BitHire is rejected', async () => {
+  const corpus = await readJson(CORPUS_PATH);
+  const preset = await readJson(BITHIRE_PRESET_PATH);
+  const repacked = structuredClone(corpus);
+  const target = repacked.entries.find(({ id }) => id === 'action.add');
+  assert.equal(target.pack, 'foundation');
+  assert.ok(preset.names.includes('action.add'));
+  target.pack = 'bithire';
+
+  assert.throws(() => validateCorpusManifest(repacked), /BitHire entries must use the bithire domain/u);
+  assert.throws(
+    () => validateIconPresetManifest(structuredClone(preset), repacked),
+    /exactly 6 "pack": "bithire" rows; received 7/u,
+  );
+  assert.throws(
+    () => validateIconPresetManifest(structuredClone(preset), repacked),
+    /action\.add is not one of the 6 frozen BitHire roles/u,
+  );
+});
+
+test('a BitHire role removed from the corpus or the pack while still in the preset is rejected', async () => {
+  const corpus = await readJson(CORPUS_PATH);
+  const preset = await readJson(BITHIRE_PRESET_PATH);
+
+  const deleted = structuredClone(corpus);
+  deleted.entries = deleted.entries.filter(({ id }) => id !== 'bithire.offer');
+  assert.throws(() => validateCorpusManifest(deleted), /bithire pack must contain 6 entries; received 5/u);
+  assert.throws(
+    () => validateIconPresetManifest(structuredClone(preset), deleted),
+    /is not a governed semantic role/u,
+  );
+  assert.throws(
+    () => validateIconPresetManifest(structuredClone(preset), deleted),
+    /frozen BitHire role bithire\.offer is missing from the corpus/u,
+  );
+  assert.throws(
+    () => validateIconPresetManifest(presetWithout(preset, 'bithire.offer'), deleted),
+    /exactly 6 "pack": "bithire" rows; received 5/u,
+  );
+
+  const unpacked = structuredClone(corpus);
+  unpacked.entries.find(({ id }) => id === 'bithire.job').pack = 'foundation';
+  assert.throws(
+    () => validateIconPresetManifest(structuredClone(preset), unpacked),
+    /frozen BitHire role bithire\.job must stay in the bithire pack/u,
+  );
+});
+
+test('a reordered frozen prefix is rejected', async () => {
+  const corpus = await readJson(CORPUS_PATH);
+  const preset = await readJson(BITHIRE_PRESET_PATH);
+  const reordered = structuredClone(corpus);
+  const first = reordered.entries.findIndex(({ id }) => id === 'bithire.candidate');
+  const second = reordered.entries.findIndex(({ id }) => id === 'bithire.interview');
+  [reordered.entries[first], reordered.entries[second]] = [
+    reordered.entries[second],
+    reordered.entries[first],
+  ];
+
+  assert.throws(
+    () => validateCorpusManifest(reordered),
+    /exact ordered 50-name v3 compatibility corpus/u,
+  );
+  assert.throws(
+    () => validateCorpusManifest(reordered),
+    /exact ordered 126-role v4 corpus prefix must remain unchanged/u,
+  );
+  assert.throws(
+    () => validateIconPresetManifest(structuredClone(preset), reordered),
+    /must preserve the exact frozen compatibility order/u,
+  );
+
+  const edited = structuredClone(corpus);
+  edited.entries.find(({ id }) => id === 'bithire.offer').intent += ' Edited.';
+  assert.throws(
+    () => validateCorpusManifest(edited),
+    /exact ordered 126-role v4 corpus prefix must remain unchanged/u,
   );
 });
 

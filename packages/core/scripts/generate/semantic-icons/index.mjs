@@ -91,6 +91,9 @@ export const ICON_PACK_COUNTS = Object.freeze({
 });
 export const ICON_PACKS = Object.freeze(Object.keys(ICON_PACK_COUNTS));
 const VALID_PACKS = new Set(ICON_PACKS);
+export const BITHIRE_PACK_ROLE_IDS = Object.freeze(
+  EXPECTED_COMPAT_CORPUS_IDS.filter((id) => id.startsWith('bithire.')),
+);
 const EXPECTED_GLOBAL_COUNT = Object.values(ICON_PACK_COUNTS).reduce((total, count) => total + count, 0);
 const V4_PREFIX_COUNT = 126;
 const V4_CORPUS_PREFIX_FINGERPRINT = '3bf16410b53b8fc734c1f1464a89379feb600824b58ce69cdf91f41012c1c738';
@@ -315,6 +318,46 @@ export function validateAdapterManifest(adapter, corpus) {
   return adapter;
 }
 
+export function collectBitHirePackMembershipErrors(corpus, preset) {
+  const errors = [];
+  const expected = ICON_PACK_COUNTS.bithire;
+  const corpusEntries = Array.isArray(corpus?.entries) ? corpus.entries : [];
+  const presetNames = new Set(Array.isArray(preset?.names) ? preset.names : []);
+  const packIds = corpusEntries
+    .filter((entry) => entry?.pack === 'bithire')
+    .map((entry) => entry.id);
+  const corpusIds = new Set(corpusEntries.map((entry) => entry?.id));
+
+  if (BITHIRE_PACK_ROLE_IDS.length !== expected) {
+    errors.push(`the frozen compatibility corpus must name exactly ${expected} BitHire roles; received ${BITHIRE_PACK_ROLE_IDS.length}`);
+  }
+  if (packIds.length !== expected) {
+    errors.push(`corpus must contain exactly ${expected} "pack": "bithire" rows; received ${packIds.length}`);
+  }
+  for (const id of packIds) {
+    if (!BITHIRE_PACK_ROLE_IDS.includes(id)) {
+      errors.push(`corpus BitHire pack row ${id} is not one of the ${expected} frozen BitHire roles`);
+    }
+    if (!presetNames.has(id)) {
+      errors.push(`corpus BitHire pack row ${id} must be a member of the bithire preset names`);
+    }
+  }
+  for (const id of BITHIRE_PACK_ROLE_IDS) {
+    if (!corpusIds.has(id)) {
+      errors.push(`frozen BitHire role ${id} is missing from the corpus`);
+    } else if (!packIds.includes(id)) {
+      errors.push(`frozen BitHire role ${id} must stay in the bithire pack`);
+    }
+    if (!presetNames.has(id)) {
+      errors.push(`frozen BitHire role ${id} must be a member of the bithire preset names`);
+    }
+  }
+  if (!sameArray(packIds, BITHIRE_PACK_ROLE_IDS)) {
+    errors.push('corpus BitHire pack rows must preserve the exact frozen compatibility order');
+  }
+  return [...new Set(errors)];
+}
+
 export function validateIconPresetManifest(preset, corpus) {
   const errors = [];
   const rootKeys = new Set([
@@ -360,6 +403,7 @@ export function validateIconPresetManifest(preset, corpus) {
       errors.push(`preset.names[${index}] is not a governed semantic role`);
     }
   }
+  errors.push(...collectBitHirePackMembershipErrors(corpus, preset));
   throwValidation('Icon preset manifest', errors);
   return preset;
 }
