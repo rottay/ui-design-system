@@ -325,12 +325,7 @@
   font-weight: var(--ds-approval-title-font-weight, var(--ds-font-weight-semibold, 600));
 }
 
-/* --- Action states: focus ring, disabled, coarse floor ------------------------ */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
-}
-
+/* --- Action states: disabled, coarse floor ------------------------------------ */
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:is([data-state~='disabled'], :disabled) {
   opacity: var(--ds-approval-disabled-opacity, var(--ds-state-disabled-opacity));
   cursor: not-allowed;
