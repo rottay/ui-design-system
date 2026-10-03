@@ -89,7 +89,7 @@ describeCausality({
   markup,
   targets: [
     { id: 'toneBorder', selector: "#tone [data-part='root']", property: 'border-top-color' },
-    { id: 'focusRing', selector: ACTION, property: 'outline-offset', attributes: { 'data-state': 'focused focus-visible' } },
+    { id: 'focusRing', selector: ACTION, property: 'box-shadow', attributes: { 'data-state': 'focused focus-visible' } },
     { id: 'titleSize', selector: "#small [data-part='title']", property: 'font-size' },
     { id: 'radius', selector: PLAIN, property: 'border-top-left-radius' },
     { id: 'bodyPad', selector: "#plain [data-part='body']", property: 'padding-top' },
@@ -149,8 +149,9 @@ describe('card direction, state governance, toned inks and accessibility', () =>
       targets: [
         { id: 'restEdge', selector: ACTION, property: 'border-top-color' },
         { id: 'hoverEdge', selector: ACTION, property: 'border-top-color', attributes: { 'data-state': 'hovered' } },
-        { id: 'restRing', selector: ACTION, property: 'outline-style' },
-        { id: 'focusRing', selector: ACTION, property: 'outline-style', attributes: { 'data-state': 'focused focus-visible' } },
+        { id: 'restRing', selector: ACTION, property: 'box-shadow' },
+        { id: 'focusRing', selector: ACTION, property: 'box-shadow', attributes: { 'data-state': 'focused focus-visible' } },
+        { id: 'focusOutline', selector: ACTION, property: 'outline-color', attributes: { 'data-state': 'focused focus-visible' } },
         { id: 'pressedTransform', selector: ACTION, property: 'transform', attributes: { 'data-state': 'pressed' } },
         { id: 'disabledCursor', selector: "#disabled [data-part='root']", property: 'cursor' },
         { id: 'disabledEvents', selector: "#disabled [data-part='root']", property: 'pointer-events' },
@@ -160,6 +161,7 @@ describe('card direction, state governance, toned inks and accessibility', () =>
     expect(r.hoverEdge).not.toBe(r.restEdge);
     expect(r.restRing).toBe('none');
     expect(r.focusRing).not.toBe('none');
+    expect(r.focusOutline).toBe('rgba(0, 0, 0, 0)');
     expect(r.pressedTransform).not.toBe('none');
     expect(r.disabledCursor).toBe('not-allowed');
     expect(r.disabledEvents).toBe('none');

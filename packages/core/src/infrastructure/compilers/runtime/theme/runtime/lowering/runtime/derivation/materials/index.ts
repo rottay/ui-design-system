@@ -83,7 +83,7 @@ export function deriveMaterialChannels(bt: FlatTheme): Record<string, string> {
   vars["--ds-material-card-shadow"] = "var(--ds-shadow-sm)";
   vars["--ds-material-card-shadow-hover"] = "var(--ds-shadow-md)";
   vars["--ds-material-card-shadow-active"] = "var(--ds-shadow-sm)";
-  vars["--ds-material-card-shadow-selected"] = "var(--ds-material-card-focus-ring)";
+  vars["--ds-material-card-shadow-selected"] = "none";
   vars["--ds-material-inset-background"] = "var(--ds-surface-inset)";
   vars["--ds-material-inset-foreground"] = "var(--ds-color-text-primary)";
   vars["--ds-material-inset-shadow"] = "var(--ds-shadow-inner)";

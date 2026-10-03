@@ -359,7 +359,7 @@
   --ds-material-card-shadow: var(--ds-shadow-sm);
   --ds-material-card-shadow-hover: var(--ds-shadow-md);
   --ds-material-card-shadow-active: var(--ds-shadow-sm);
-  --ds-material-card-shadow-selected: var(--ds-material-card-focus-ring);
+  --ds-material-card-shadow-selected: none;
 
   --ds-material-inset-background: var(--ds-surface-inset);
   --ds-material-inset-foreground: var(--ds-color-text-primary);

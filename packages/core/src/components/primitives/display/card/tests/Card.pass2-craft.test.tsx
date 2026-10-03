@@ -356,3 +356,143 @@ describe('Card keyboard focus under forced colors', () => {
     expect(root.getAttribute('data-state') ?? '').toContain('focus');
   });
 });
+
+describe('Card keyboard focus wears the tenant focus signature', () => {
+  const strip = (css: string) => css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const skin = strip(readFileSync(modernSkinPath, 'utf-8'));
+  const tokens = strip(readFileSync(cardTokensPath, 'utf-8'));
+  const personality = strip(
+    readFileSync(join(__dirname, '../../../../../foundation/tokens/css/runtime/personality/index.css'), 'utf-8'),
+  );
+  const normal = skin.slice(0, skin.indexOf('@media (forced-colors: active)'));
+  const FOCUS = "[data-actionable='true'][data-state~='focus-visible']";
+  const ROOT = ".ds-card.ds-card--modern[data-part='root']";
+  const clean = (selector: string) => selector.replace(/\s+/g, ' ').trim();
+
+  /** Every style rule of `css`, with the conditions it sits under. */
+  function rulesOf(css: string): { selector: string; body: string; conditions: string[] }[] {
+    const found: { selector: string; body: string; conditions: string[] }[] = [];
+    const walk = (text: string, conditions: string[]) => {
+      let at = 0;
+      while (at < text.length) {
+        const open = text.indexOf('{', at);
+        if (open < 0) return;
+        let close = open + 1;
+        for (let depth = 1; depth > 0; close += 1) {
+          if (text[close] === '{') depth += 1;
+          else if (text[close] === '}') depth -= 1;
+        }
+        const head = clean(text.slice(at, open));
+        const inner = text.slice(open + 1, close - 1);
+        if (head.startsWith('@media') || head.startsWith('@container')) walk(inner, [...conditions, head]);
+        else if (!head.startsWith('@')) found.push({ selector: head, body: inner, conditions });
+        at = close;
+      }
+    };
+    walk(css, []);
+    return found;
+  }
+
+  const rules = rulesOf(normal);
+  const paintsRootShadow = (rule: { selector: string; body: string }) =>
+    /(^|;|\s)box-shadow:/.test(rule.body) &&
+    rule.selector.includes(ROOT) &&
+    !/[\s>]|::/.test(rule.selector.slice(rule.selector.lastIndexOf(ROOT)));
+  const shadowOf = (body: string) => clean(/box-shadow:([^;]*);/.exec(body)?.[1] ?? '');
+  const focusRules = rules.filter((rule) => rule.selector.includes(FOCUS) && paintsRootShadow(rule));
+  const restingRules = rules.filter(
+    (rule) => !rule.selector.includes(FOCUS) && paintsRootShadow(rule) && !/(?<!:not\()\[data-state~='disabled'\]/.test(rule.selector),
+  );
+
+  it('states the signature first in every shadow a focused card paints', () => {
+    expect(focusRules.length).toBeGreaterThan(0);
+    for (const rule of focusRules) {
+      expect(shadowOf(rule.body), rule.selector).toMatch(/^var\(--ds-card-focus-ring\)(,|$)/);
+      expect(rule.selector, rule.selector).toContain(":not([data-state~='disabled'])");
+    }
+  });
+
+  it('mirrors every resting, hovered, pressed and selected shadow, in the same order', () => {
+    const base = (selector: string) =>
+      clean(selector).replace(FOCUS, '').replace(/:not\(\[data-state~='disabled'\]\)/g, '');
+    const mirrored = [...new Set(focusRules.map((rule) => base(rule.selector)))];
+    const resting = [...new Set(restingRules.map((rule) => base(rule.selector)))];
+    expect(resting).toHaveLength(14);
+    expect(mirrored).toEqual(resting);
+  });
+
+  it('composes a shadow only behind a guard on the channel that could void the list', () => {
+    for (const rule of focusRules) {
+      const shadow = shadowOf(rule.body);
+      const guard = rule.conditions.find((condition) => condition.startsWith('@container not style('));
+      if (shadow === 'var(--ds-card-focus-ring)') {
+        expect(guard, rule.selector).toBeUndefined();
+        continue;
+      }
+      const channel = /@container not style\((--ds-card-[a-z-]+): none\)/.exec(guard ?? '')?.[1];
+      expect(channel, rule.selector).toBeDefined();
+      expect(shadow, rule.selector).toContain(`var(${channel}`);
+      expect(focusRules.some((other) => other.selector === rule.selector && other.conditions.every((c) => !c.startsWith('@container'))), rule.selector).toBe(true);
+    }
+  });
+
+  it('paints no solid outline from the width and colour operands', () => {
+    const outlines = rules.filter((rule) => rule.selector.includes(FOCUS) && /outline:/.test(rule.body));
+    expect(outlines).toHaveLength(1);
+    expect(outlines[0]?.body).toMatch(/outline:\s*var\(--ds-card-focus-ring-width\) solid var\(--ds-card-focus-ring-color\);/);
+    expect(outlines[0]?.body).toMatch(/outline-offset:\s*var\(--ds-card-focus-ring-offset\);/);
+    expect(normal).not.toMatch(/outline:[^;]*var\(--ds-focus-ring-color/);
+    expect(tokens).toMatch(/--ds-card-focus-ring-color:\s*transparent;/);
+  });
+
+  it('rests the family ring on the signature and keeps every authored hook painting', () => {
+    expect(tokens).toMatch(/--ds-card-focus-ring:\s*var\(--ds-material-card-focus-ring, var\(--ds-focus-ring\)\);/);
+    expect(tokens).toMatch(/--ds-card-focus-ring-width:\s*var\(--ds-focus-ring-width\);/);
+    expect(tokens).toMatch(/--ds-card-focus-ring-offset:\s*var\(--ds-focus-ring-offset, 2px\);/);
+    const authored = chromeToVariables({
+      cardComponent: {
+        focusRing: '0 0 0 3px #B4232F',
+        focusRingColor: '#B4232F',
+        focusRingWidth: '3px',
+        focusRingOffset: '4px',
+      },
+    });
+    expect(authored['--ds-card-focus-ring']).toBe('0 0 0 3px #B4232F');
+    expect(authored['--ds-card-focus-ring-color']).toBe('#B4232F');
+    expect(authored['--ds-card-focus-ring-width']).toBe('3px');
+    expect(authored['--ds-card-focus-ring-offset']).toBe('4px');
+    const unauthored = chromeToVariables({ cardComponent: { radius: '12px' } });
+    for (const hook of ['--ds-card-focus-ring', '--ds-card-focus-ring-color', '--ds-card-focus-ring-width', '--ds-card-focus-ring-offset']) {
+      expect(unauthored[hook], hook).toBeUndefined();
+      expect(normal, hook).toContain(`var(${hook})`);
+    }
+  });
+
+  // The personality layer sits after the engine layer: a card shadow stated
+  // there for a Modern card would outrank every rule of this skin.
+  it('keeps the personality layer off the Modern card root', () => {
+    const cardRules = rulesOf(personality).filter((rule) => /\.ds-card(?![\w-])/.test(rule.selector));
+    expect(cardRules.length).toBeGreaterThan(0);
+    for (const rule of cardRules) {
+      for (const arm of rule.selector.split(',').map(clean).filter((part) => /\.ds-card(?![\w-])/.test(part))) {
+        expect(arm, arm).toContain('.ds-card:not(.ds-card--modern)');
+      }
+    }
+  });
+
+  // Selection that rested on the focus ring made a selected card look focused
+  // and left keyboard focus nothing to add.
+  it('never lets a selected card fall back to the focus ring', () => {
+    const selected = restingRules.filter((rule) => rule.selector.includes("[data-selected='true']"));
+    expect(selected).toHaveLength(2);
+    for (const rule of selected) expect(shadowOf(rule.body), rule.selector).toBe('var(--ds-card-shadow-selected)');
+    for (const rule of focusRules.filter((rule) => rule.selector.includes("[data-selected='true']"))) {
+      expect(shadowOf(rule.body).match(/--ds-card-focus-ring/g), rule.selector).toHaveLength(1);
+    }
+    expect(tokens).toMatch(/--ds-card-shadow-selected:\s*var\(--ds-material-card-shadow-selected\);/);
+  });
+
+  it('reads a personality hover transform before the family default', () => {
+    expect(normal).toMatch(/transform:\s*var\(--ds-card-hover-transform, var\(--ds-card-interactive-transform-hover\)\);/);
+  });
+});

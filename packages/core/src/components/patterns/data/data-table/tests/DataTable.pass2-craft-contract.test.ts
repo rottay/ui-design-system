@@ -240,29 +240,35 @@ describe("DataTable pass 2 craft contract", () => {
       }
     });
 
-    it("delivers the mobile card's focus on the channel the Card engine skin paints from", () => {
-      const FOCUS = ':is([data-state~="focus-visible"], :focus-visible)';
-      const card = rules(mobile).filter(
-        ([selector]) => selector.includes(".ds-data-table__mobile-card") && selector.endsWith(FOCUS)
+    it("leaves the mobile card's focus to the Card skin and hands it the tenant's mobile-card ring", () => {
+      const cardFocus = rules(mobile).filter(
+        ([selector]) =>
+          selector.includes(".ds-data-table__mobile-card") && /focus-visible/.test(selector)
       );
-      expect(card).toHaveLength(2);
-      const [[selector, body], [, forced]] = card as [[string, string], [string, string]];
-      const resting = rules(mobile).find(
-        ([candidate, declarations]) =>
-          candidate.includes(".ds-data-table__mobile-card.ds-data-table__mobile-card") &&
-          !candidate.includes("[data-recipe") &&
-          /box-shadow:\s*var\(--ds-collection-card-shadow, none\);/.test(declarations)
+      expect(cardFocus).toEqual([]);
+      for (const [selector, body] of rules(mobile)) {
+        if (!selector.includes(".ds-data-table__mobile-card")) continue;
+        expect(body, selector).not.toMatch(/--ds-card-focus-ring-(?:color|width)\s*:/);
+      }
+      const hook = rules(mobile).filter(([, body]) => /--ds-card-focus-ring\s*:/.test(body));
+      expect(hook).toHaveLength(1);
+      expect(hook[0]?.[0]).toBe(".ds-pattern-data-table.ds-data-table--mobile .ds-data-table__mobile-card");
+      expect(hook[0]?.[1]).toMatch(
+        /--ds-card-focus-ring:\s*var\(--ds-data-table-mobile-card-focus-ring, var\(--ds-focus-ring\)\);/
       );
-      expect(resting).toBeDefined();
-      expect(selector).toBe(`${resting?.[0]}${FOCUS}`);
-      const SIGNATURE = String.raw`var\(--ds-data-table-mobile-card-focus-ring, var\(--ds-focus-ring\)\);`;
-      expect(body).toMatch(new RegExp(`--ds-card-bordered-shadow:\\s*${SIGNATURE}`));
-      expect(body).toMatch(new RegExp(`box-shadow:\\s*${SIGNATURE}`));
-      expect(body).toMatch(/outline:\s*var\(--ds-focus-ring-width\) solid transparent;/);
-      expect(forced).toMatch(/outline:\s*max\(2px, var\(--ds-focus-ring-width\)\) solid Highlight;/);
-      expect(forced).toMatch(/--ds-card-focus-ring-color:\s*Highlight;/);
-      expect(forced).toMatch(/--ds-card-bordered-shadow:\s*none;/);
-      expect(mobile.slice(mobile.lastIndexOf("@media (forced-colors: active)"))).toContain(forced);
+      const cardSkin = readFileSync(
+        join(here, "../../../../../foundation/tokens/css/runtime/engines/modern/skin/card/index.css"),
+        "utf8"
+      ).replace(/\/\*[\s\S]*?\*\//g, "");
+      const painted = rules(cardSkin).filter(
+        ([selector, body]) =>
+          selector.includes("[data-variant='outlined'][data-actionable='true'][data-state~='focus-visible']") &&
+          /box-shadow:/.test(body)
+      );
+      expect(painted.length).toBeGreaterThan(0);
+      for (const [selector, body] of painted) {
+        expect(body, selector).toMatch(/box-shadow:\s*var\(--ds-card-focus-ring\)[,;]/);
+      }
     });
   });
 

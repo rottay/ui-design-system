@@ -773,7 +773,6 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
         "--ds-material-card-focus-ring",
         "--ds-material-control-focus-ring",
         "--ds-material-panel-shadow-selected",
-        "--ds-material-card-shadow-selected",
         "--ds-material-control-shadow-selected",
         "--ds-material-inset-shadow-selected",
       ],

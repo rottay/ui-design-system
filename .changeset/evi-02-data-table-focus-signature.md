@@ -76,3 +76,14 @@ keyboard focus.
 
 Proof is Chromium-only: no non-Chromium engine was read for the row overlay,
 whose containing block is a relatively positioned `tr`.
+
+CORRECTION (mobile card). The "mobile card, after" row above was measured
+without `data-engine` on the document. In an application, where the engine
+provider stamps `html[data-engine]`, the personality layer owned the card
+root's `box-shadow` from a later cascade layer, so the mobile-card signature
+stated here did not paint: the focused card showed only the Card's solid
+outline, under all three focus styles. The signature paints on the mobile card
+in an application from the release that carries
+`evi-02-card-focus-signature.md`, which also removes the two mobile-card focus
+rules and the `--ds-card-bordered-shadow` route described above, and closes the
+solid-outline residual.

@@ -141,7 +141,7 @@ describe('Card real engine coverage', () => {
       "[data-interactive='true'][data-variant='elevated'][data-state~='hovered']"
     );
     expect(skin).toContain(
-      'transform: var(--ds-card-interactive-transform-hover, var(--ds-card-hover-transform))'
+      'transform: var(--ds-card-hover-transform, var(--ds-card-interactive-transform-hover))'
     );
     expect(skin).toContain(
       'box-shadow: var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover))'

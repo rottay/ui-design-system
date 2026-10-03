@@ -228,7 +228,7 @@ describe('buildTenantThemePreviewScope', () => {
     // The preview root sits below the document root: a compiled channel or a
     // root alias that reads the moved primary must be stated here, or it paints
     // the host's primary.
-    expect(scope.css).toContain('--ds-card-focus-ring: var(--ds-shadow-focus-ring);');
+    expect(scope.css).toContain('--ds-checkbox-focus-ring: var(--ds-shadow-focus-ring);');
     expect(scope.css).toContain(
       '--ds-shadow-focus-ring: 0 0 0 3px var(--ds-tint-24, color-mix(in srgb, var(--ds-color-primary) 24%, transparent));',
     );

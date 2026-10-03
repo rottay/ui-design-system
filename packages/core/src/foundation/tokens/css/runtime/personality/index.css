@@ -201,7 +201,7 @@
 
 .ant-card,
 .card:where(:not(.card-compact)),
-[data-engine] .ds-card {
+[data-engine] .ds-card:not(.ds-card--modern) {
   box-shadow: var(--ds-card-shadow);
   transition: box-shadow
       var(--ds-personality-animation-entrance-duration, 300ms),
@@ -211,7 +211,7 @@
 
 .ant-card:hover,
 .card:hover:where(:not(.card-compact)),
-[data-engine] .ds-card:hover {
+[data-engine] .ds-card:not(.ds-card--modern):hover {
   box-shadow: var(--ds-card-shadow-hover);
   transform: var(--ds-card-hover-transform, translateY(0) scale(1));
   background-color: var(--ds-card-bg-hover);

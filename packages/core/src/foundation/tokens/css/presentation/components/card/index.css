@@ -589,8 +589,8 @@
      ACCESSIBILITY
      Focus states and keyboard navigation
      ======================================================================== */
-  --ds-card-focus-ring: var(--ds-shadow-focus-ring);
-  --ds-card-focus-ring-color: var(--ds-focus-ring-color);
+  --ds-card-focus-ring: var(--ds-material-card-focus-ring, var(--ds-focus-ring));
+  --ds-card-focus-ring-color: transparent;
   --ds-card-focus-ring-width: var(--ds-focus-ring-width);
   --ds-card-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
   --ds-card-selected-outline-width: var(--ds-card-border-width);
