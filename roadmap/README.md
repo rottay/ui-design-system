@@ -1,6 +1,37 @@
 # Design System Roadmap — Modern Engine Premium Uplift
 
-## Current owner succession — 2026-10-02
+## Current owner succession — 2026-10-03
+
+The owner appointed Claude as the sole active DT, integrator and audit
+coordinator of the current programme, directly on main in
+`/Users/daniel/Developer/Rottay/ui-design-system`, replacing the temporary
+Codex assignment of 2026-10-02 below for this continuation only. Every
+ownership statement in the 2026-10-02 section (registry, shared generators,
+validation windows, index, functional commits) now reads "Claude DT"; its
+execution order and product invariants stand verbatim.
+
+- **Handoff barrier met:** checkpoint `e74bf6e31` (134/164 done, 3 in-progress);
+  the last delegated Kimi packet, the read-only RET-01 compat-display census,
+  was terminal with its receipt before any successor writer was dispatched.
+- **Effective account by receipt:** normal `claude` on
+  `daniel.avila@rottay.com`, model `claude-opus-5-5`. The intended
+  `claude-admin` profile failed authentication twice on 2026-10-03; the owner
+  explicitly authorized this account instead.
+- **Review:** real Opus writers; the DT never approves its own product code.
+  Independent review uses real Fable when its model receipt is verified,
+  otherwise a separate Opus session with a real receipt. No model is relabelled.
+- **Codex:** its goal stays paused; the 2026-09-19 restriction applies in full.
+  No CLI/API/MCP call, message or monitor targets it; only the owner asks it
+  for independent audits.
+- **Scope:** DS repo only, on main; no branches or worktrees; applications are
+  read-only consumers; **no push**, package publication or deployment in this
+  continuation. A lot that needs `docs-engineering` writes records the need and
+  asks the owner for that write set.
+
+The sealed Modern Rescue programme, registry, DAG, phase controls, denominators
+and acceptance criteria are unchanged.
+
+## Prior owner succession — 2026-10-02 (superseded by 2026-10-03)
 
 The owner appointed Codex as the autonomous DT, implementation owner, reviewer
 and integrator of the current programme, directly on main in

@@ -1,6 +1,23 @@
 # Agent Constitution — Modern Rescue (WO-CRA-23)
 
-## Current owner succession — 2026-10-02
+## Current owner succession — 2026-10-03
+
+The owner explicitly appointed Claude as the sole active DT, implementation
+owner, auditor-coordinator and integrator of the current Design System roadmap
+on main at `/Users/daniel/Developer/Rottay/ui-design-system`, replacing the
+temporary Codex assignment of 2026-10-02 for this continuation only. The
+handoff barrier was met at checkpoint `e74bf6e31`: the last delegated Kimi
+packet (read-only RET-01 compat census) reached its terminal receipt before
+any successor writer was dispatched. Effective account, recorded by receipt:
+normal `claude` on `daniel.avila@rottay.com`, model `claude-opus-5-5`; the
+intended `claude-admin` profile failed authentication on 2026-10-03 and the
+owner authorized this account instead. Codex's goal stays paused and the
+2026-09-19 restriction below applies again in full: no agent invokes Codex.
+The DT never approves its own product code; independent review uses real
+Fable when verified, otherwise a separate Opus session with a real receipt.
+Registry, DAG, acceptance criteria and the sealed programme are unchanged.
+
+## Prior owner succession — 2026-10-02 (superseded by 2026-10-03)
 
 The owner explicitly appointed Codex as the autonomous DT, implementation owner,
 reviewer and integrator of the current Design System roadmap on main at
