@@ -51,6 +51,7 @@ import { basename, dirname, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
+import { AUTHORED_CSS_ROOTS, COMPILER_PRODUCER_ROOTS } from '../../../libraries/tokens/producers/index.mjs';
 import {
   CATALOG_SOURCE,
   readThemeCatalog,
@@ -697,6 +698,222 @@ export function stateRuleEvidence(rulesByFile) {
 }
 
 /**
+ * THE FOCUS-SIGNATURE LAW OF THE DEPTH AXIS (owner authorization 2026-10-03).
+ *
+ * A `box-shadow` that is EXCLUSIVELY a focus shadow does not declare depth; a
+ * mixture with elevation or material does; an alias whose producer does not
+ * prove its semantics stays INCLUDED. "Exclusively focus" is decided on the
+ * PRODUCER side, never on a channel name, a fallback or a family:
+ *
+ *  - a SIGNATURE ROOT is a head channel of the catalog row `states.focus-style`
+ *    whose every compiler emission sits in the states derivation;
+ *  - a channel is PROVEN when it is a root, or when it has at least one
+ *    producer and every producer -- each authored `--ds-x: value` and each
+ *    compiler `vars["--ds-x"] = "value"` -- writes a value that is itself
+ *    exclusively proven channels. A producer whose value is not a string
+ *    literal proves nothing; and while the compiler has `vars[<non-literal
+ *    key>]` sites the proof cannot enumerate, it treats each as able to write
+ *    any name it cannot rule out, so such a channel is UNPROVABLE TO THIS
+ *    READER (a limit of the proof, not a claim about that site);
+ *  - a value is exclusively focus when every comma-separated layer is one
+ *    `var()` of a proven channel, with no fallback or a fallback that is itself
+ *    exclusively focus. A reset keyword alone qualifies only where every
+ *    branch of its selector is focus-gated AND the same family declares the
+ *    signature under a focus gate: at rest `box-shadow: none` is a position
+ *    on depth, and so is a gated reset with no signature beside it.
+ *
+ * The proof reads the producers from SOURCE on every call (the authored
+ * stylesheets and the compiler roots of `libraries/tokens/producers`), not
+ * from a committed manifest, so it cannot be stale against the tree it reads.
+ */
+export const FOCUS_SIGNATURE_RESETS = Object.freeze(['none', 'initial', 'unset', 'revert', 'revert-layer']);
+/** The catalog row whose head channels the states derivation writes as the focus signature. */
+export const FOCUS_SIGNATURE_ROW = 'states.focus-style';
+const FOCUS_GATE = /:focus(?:-visible|-within)?(?![\w-])|\[data-state[~|^$*]?=["']?(?:focus-visible|focused)["']?\]/u;
+const SOURCE_NOISE = /(?:^|\/)(?:facade\/artifacts|generated|dist|node_modules|coverage|__snapshots__|tests|fixtures)(?:\/|$)/u;
+
+function filesUnder(dir, extension, found = []) {
+  if (!existsSync(dir)) return found;
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (SOURCE_NOISE.test(full.split(sep).join('/'))) continue;
+    if (entry.isDirectory()) filesUnder(full, extension, found);
+    else if (entry.name.endsWith(extension)) found.push(full);
+  }
+  return found;
+}
+
+/** `text` split on the commas that sit outside every parenthesis. */
+function topLevelParts(text) {
+  const parts = [];
+  let depth = 0;
+  let from = 0;
+  for (let index = 0; index < text.length; index += 1) {
+    if (text[index] === '(') depth += 1;
+    else if (text[index] === ')') depth -= 1;
+    else if (text[index] === ',' && depth === 0) {
+      parts.push(text.slice(from, index));
+      from = index + 1;
+    }
+  }
+  parts.push(text.slice(from));
+  return parts.map((part) => part.trim());
+}
+
+/** `{ head, fallback }` when the whole text is ONE `var()`, else null. */
+function wholeVar(text) {
+  if (!text.startsWith('var(') || !text.endsWith(')')) return null;
+  const inner = text.slice(4, -1);
+  let depth = 0;
+  for (const char of inner) {
+    if (char === '(') depth += 1;
+    else if (char === ')' && --depth < 0) return null;
+  }
+  const [head, ...rest] = topLevelParts(inner);
+  if (!/^--[a-zA-Z0-9_-]+$/u.test(head)) return null;
+  return { head, fallback: rest.length === 0 ? null : rest.join(', ') };
+}
+
+/** Every compiler `vars[<key>] = <rhs>;` of one source: the key text and the value when both are plain string literals. */
+function compilerEmissions(source) {
+  const sites = [];
+  const literal = /^(["'])((?:(?!\1)[^\\\n])*)\1$/u;
+  for (const match of source.matchAll(/\bvars\[\s*([^\]]+?)\s*\]\s*=(?!=)/gu)) {
+    let end = match.index + match[0].length;
+    let depth = 0;
+    let quote = null;
+    for (; end < source.length; end += 1) {
+      const char = source[end];
+      if (quote !== null) {
+        if (char === quote && source[end - 1] !== '\\') quote = null;
+      } else if (char === '"' || char === "'" || char === '`') quote = char;
+      else if (char === '(' || char === '[' || char === '{') depth += 1;
+      else if (char === ')' || char === ']' || char === '}') depth -= 1;
+      else if (char === ';' && depth <= 0) break;
+    }
+    const key = literal.exec(match[1]);
+    const value = literal.exec(source.slice(match.index + match[0].length, end).trim());
+    sites.push({
+      key: key === null ? null : key[2],
+      rawKey: match[1],
+      value: value === null ? null : normalizeCssText(value[2]),
+      line: source.slice(0, match.index).split('\n').length,
+    });
+  }
+  return sites;
+}
+
+/**
+ * The producer-side proof for one tree: `proven(channel)` and why not.
+ * Exported so the drills and the report read the same answer the rule does.
+ */
+export function focusSignatureProof(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE) {
+  const sites = new Map();
+  const keyed = [];
+  const add = (channel, site) => sites.set(channel, [...(sites.get(channel) ?? []), site]);
+  for (const cssRoot of AUTHORED_CSS_ROOTS) {
+    for (const file of filesUnder(join(root, cssRoot), '.css')) {
+      const text = stripCssComments(readFileSync(file, 'utf8'));
+      for (const match of text.matchAll(/(--[a-zA-Z0-9_-]+)\s*:\s*([^;{}]*)/gu)) {
+        add(match[1], {
+          kind: 'authored',
+          file: `${relativeTo(root, file)}:${text.slice(0, match.index).split('\n').length}`,
+          value: normalizeCssText(match[2].replace(/!important\s*$/u, '')),
+        });
+      }
+    }
+  }
+  for (const { root: compilerRoot } of COMPILER_PRODUCER_ROOTS) {
+    for (const file of filesUnder(join(root, compilerRoot), '.ts')) {
+      for (const site of compilerEmissions(readFileSync(file, 'utf8'))) {
+        const where = `${relativeTo(root, file)}:${site.line}`;
+        if (site.key === null) keyed.push({ file: where, rawKey: site.rawKey });
+        else add(site.key, { kind: 'compiler', file: where, value: site.value });
+      }
+    }
+  }
+  // A keyed emission writes names this reader cannot enumerate: a template key may write what its literal
+  // parts admit, and any other key expression may write anything.
+  const keyedWriter = (channel) => keyed.find(({ rawKey }) => {
+    const template = /^`([\s\S]*)`$/u.exec(rawKey);
+    if (template === null) return true;
+    const pattern = template[1].split(/\$\{[^}]*\}/u).map((piece) => piece.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')).join('.+');
+    return new RegExp(`^${pattern}$`, 'u').test(channel);
+  });
+  const statesDerivation = `/derivation/${AXES.states.group}/`;
+  const signatureRow = readThemeCatalog(sourcePath).find((row) => row.id === FOCUS_SIGNATURE_ROW);
+  const roots = new Set((signatureRow?.produces?.channels ?? []).filter((channel) => {
+    const compiled = (sites.get(channel) ?? []).filter((site) => site.kind === 'compiler');
+    return compiled.length > 0 && compiled.every((site) => site.file.includes(statesDerivation));
+  }));
+  const verdicts = new Map();
+  const judgeValue = (value, trail) => {
+    for (const layer of topLevelParts(value)) {
+      const read = wholeVar(layer);
+      if (read === null) return `\`${layer}\` is not a single var() read`;
+      const head = judge(read.head, trail);
+      if (!head.proven) return `${read.head}: ${head.reason}`;
+      if (read.fallback !== null) {
+        const fallback = judgeValue(read.fallback, trail);
+        if (fallback !== null) return `the fallback of ${read.head} is not exclusively focus (${fallback})`;
+      }
+    }
+    return null;
+  };
+  function judge(channel, trail = []) {
+    if (verdicts.has(channel)) return verdicts.get(channel);
+    let verdict;
+    if (roots.has(channel)) verdict = { proven: true, reason: `a head channel of the catalog row ${FOCUS_SIGNATURE_ROW}, emitted by the states derivation alone` };
+    else if (trail.includes(channel)) verdict = { proven: false, reason: 'its producers read it back (a cycle proves nothing)' };
+    else {
+      const own = sites.get(channel) ?? [];
+      const open = own.find((site) => site.value === null);
+      // What a literal producer WRITES is judged before the reader's own limit: a value that is not
+      // the signature is a fact about the channel, and only a channel with nothing against it is "unprovable".
+      const failed = own.filter((site) => site.value !== null)
+        .map((site) => [site, judgeValue(site.value, [...trail, channel])]).find(([, reason]) => reason !== null);
+      const writer = keyedWriter(channel);
+      if (own.length === 0) verdict = { proven: false, reason: 'no producer found: nothing proves what it carries' };
+      else if (open !== undefined) verdict = { proven: false, reason: `${open.file} writes it from a value that is not a string literal` };
+      else if (failed !== undefined) verdict = { proven: false, reason: `${failed[0].file} writes \`${failed[0].value}\`: ${failed[1]}` };
+      else if (writer !== undefined) {
+        verdict = {
+          proven: false,
+          reason: `unprovable to this reader: ${keyed.length} compiler site(s) write \`vars[<non-literal key>]\` and the proof treats each `
+            + `as able to write any name it cannot rule out (first: vars[${writer.rawKey}] at ${writer.file}); its literal producer(s): `
+            + `${own.map((site) => `${site.file} = ${site.value}`).join('; ')}`,
+        };
+      } else verdict = { proven: true, reason: `every producer (${own.length}) writes the focus signature alone` };
+    }
+    if (!trail.includes(channel)) verdicts.set(channel, verdict);
+    return verdict;
+  }
+  return { roots, keyedEmissions: keyed.length, judge, judgeValue: (value) => judgeValue(value, []) };
+}
+
+/** True when EVERY branch of the selector applies only under focus (`:not()` arguments removed). */
+function focusGated(selector) {
+  const branches = selectorBranches(selector);
+  return branches.length > 0 && branches.every((branch) => FOCUS_GATE.test(withoutNegations(branch)));
+}
+
+/**
+ * How the depth axis reads one `box-shadow` declaration: `focus` (exclusively
+ * the focus signature: declares nothing), `reset` (a reset keyword under a
+ * focus gate: focus only beside a gated signature, which the walk decides),
+ * `ambiguous` (only var() reads, not proven: declares depth, published) or
+ * `depth`. Takes no family.
+ */
+export function classifyDepthShadow(rule, declaration, proof) {
+  if (declaration.property !== 'box-shadow') return { kind: 'depth' };
+  const value = normalizeCssText(declaration.value.replace(/!important\s*$/u, ''));
+  if (FOCUS_SIGNATURE_RESETS.includes(value)) return focusGated(rule.selector) ? { kind: 'reset' } : { kind: 'depth' };
+  if (!topLevelParts(value).every((layer) => wholeVar(layer) !== null)) return { kind: 'depth' };
+  const reason = proof.judgeValue(value);
+  return reason === null ? { kind: 'focus', gated: focusGated(rule.selector) } : { kind: 'ambiguous', reason };
+}
+
+/**
  * family -> the axes it DECLARES it consumes, with the evidence for each, and
  * the axes a reviewed exclusion withdrew it from, with the reason.
  *
@@ -714,6 +931,7 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
   const channelsByAxis = axisChannels(sourcePath);
   const registry = readExclusions(exclusionsPath);
   const declarations = new Map();
+  const proof = focusSignatureProof(root, sourcePath);
   for (const [family, files] of skinFamilies(root)) {
     const sources = files.map((file) => ({ file: relativeTo(root, file), css: readFileSync(file, 'utf8') }));
     const css = sources.map((source) => source.css).join('\n');
@@ -721,11 +939,17 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
     const channels = readChannels(css);
     const axes = {};
     const notApplicable = {};
+    const focusSignatureOnly = {};
     for (const axis of AXIS_IDS) {
       const spec = AXES[axis];
       const authored = new Set(spec.authored);
       const declaredNames = new Set();
       const excluded = [];
+      const focusOnly = [];
+      const resets = [];
+      const ambiguous = [];
+      let unambiguous = 0;
+      let gatedSignature = false;
       for (const { file, rules } of rulesByFile) {
         for (const rule of rules) {
           for (const declaration of rule.declarations) {
@@ -735,10 +959,31 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
               excluded.push({
                 file, context: rule.atRules, selector: rule.selector, property: declaration.property, value: declaration.value, review: entry.review,
               });
-            } else {
-              declaredNames.add(declaration.property);
+              continue;
             }
+            const shadow = axis === 'depth' ? classifyDepthShadow(rule, declaration, proof) : { kind: axis };
+            const cited = { file, context: rule.atRules, selector: rule.selector, value: declaration.value };
+            if (shadow.kind === 'focus') {
+              focusOnly.push(cited);
+              gatedSignature ||= shadow.gated;
+              continue;
+            }
+            if (shadow.kind === 'reset') {
+              resets.push({ cited, property: declaration.property });
+              continue;
+            }
+            if (shadow.kind === 'ambiguous') ambiguous.push({ ...cited, reason: shadow.reason });
+            else unambiguous += 1;
+            declaredNames.add(declaration.property);
           }
+        }
+      }
+      // A gated reset is the signature's own twin only where the family states a gated signature.
+      for (const reset of resets) {
+        if (gatedSignature) focusOnly.push(reset.cited);
+        else {
+          unambiguous += 1;
+          declaredNames.add(reset.property);
         }
       }
       const byProperty = spec.authored.filter((name) => declaredNames.has(name));
@@ -754,7 +999,11 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
             ? { stateGates: GATE_ORDER.filter((gate) => stateRules.some((rule) => rule.gates.includes(gate))), stateRules }
             : {}),
           ...(excluded.length > 0 ? { excludedDeclarations: excluded, exclusionEffective: false } : {}),
+          // Published where membership HINGES on the conservative arm: nothing else declares the axis.
+          ...(ambiguous.length > 0 && unambiguous === 0 && byHeadChannel.length === 0 ? { onlyThroughUnprovenAliases: ambiguous } : {}),
         };
+      } else if (focusOnly.length > 0) {
+        focusSignatureOnly[axis] = focusOnly;
       } else if (excluded.length > 0) {
         const entry = registry.entries.find((candidate) => candidate.family === family && candidate.axis === axis);
         notApplicable[axis] = {
@@ -764,7 +1013,7 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
         };
       }
     }
-    declarations.set(family, { family, files: sources.map((source) => source.file), axes, notApplicable });
+    declarations.set(family, { family, files: sources.map((source) => source.file), axes, notApplicable, focusSignatureOnly });
   }
   return declarations;
 }
@@ -965,9 +1214,19 @@ export function populationReport(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURC
   const populations = new Map(AXIS_IDS.map((axis) => [axis, []]));
   const notApplicable = new Map(AXIS_IDS.map((axis) => [axis, []]));
   const ineffective = [];
+  const focusSignatureOnly = new Map(AXIS_IDS.map((axis) => [axis, []]));
+  const unprovenShadowAliases = new Map(AXIS_IDS.map((axis) => [axis, []]));
   for (const [family, record] of declarations) {
+    for (const [axis, cited] of Object.entries(record.focusSignatureOnly)) {
+      focusSignatureOnly.get(axis).push({ family, declarations: cited.length });
+    }
     for (const [axis, evidence] of Object.entries(record.axes)) {
       populations.get(axis).push(family);
+      if (evidence.onlyThroughUnprovenAliases !== undefined) {
+        unprovenShadowAliases.get(axis).push({
+          family, reasons: [...new Set(evidence.onlyThroughUnprovenAliases.map((entry) => entry.reason))],
+        });
+      }
       if (evidence.exclusionEffective === false) {
         ineffective.push({ family, axis, stillDeclares: evidence.properties, headChannels: evidence.headChannels });
       }
@@ -1003,6 +1262,9 @@ export function populationReport(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURC
       // Reported beside the denominator, never subtracted from it.
       unobservableCount: unobservable.get(axis).length,
       unobservable: unobservable.get(axis),
+      // The focus-signature law, by name: who it left out, and who stays in on the conservative arm alone.
+      focusSignatureOnly: focusSignatureOnly.get(axis),
+      unprovenShadowAliases: unprovenShadowAliases.get(axis),
     })),
   };
 }

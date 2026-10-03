@@ -42,6 +42,9 @@ import {
   skinFamilies,
   stripCssComments,
   withNotApplicable,
+  classifyDepthShadow,
+  focusSignatureProof,
+  FOCUS_SIGNATURE_RESETS,
 } from '../index.mjs';
 import * as population from '../index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
@@ -1091,8 +1094,8 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     assert.equal(MOVERS.length, 118);
     assert.deepEqual(MOVERS.filter((family) => !states.includes(family)), [], 'a mover may never leave the population');
     assert.deepEqual(Object.fromEntries(['shape', 'typography', 'rhythm', 'depth', 'motion'].map((axis) => [axis, byAxis[axis].denominator])),
-      // depth 199 -> 204 (2026-10-03): the focus-signature sweep's five entrants, drilled in D9.
-      { shape: 214, typography: 182, rhythm: 224, depth: 204, motion: 204 });
+      // depth 199 -> 204 -> 199 (2026-10-03): the focus-signature sweep's five entrants, and the law that reads them out (D9, FS drills).
+      { shape: 214, typography: 182, rhythm: 224, depth: 199, motion: 204 });
     assert.deepEqual(Object.fromEntries(report.axes.map((entry) => [entry.axis, entry.notApplicableCount])),
       { shape: 4, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
     // The two ruled-out alternatives, measured: the twin clause keeps out
@@ -1130,41 +1133,54 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     assert.ok(at(153).some((line) => line.startsWith('states: denominator 154 is ABOVE its pin 153')), at(153).join(' | '));
   });
 
-  it('D9: depth is 204 -- the five focus-signature entrants are in it by name, states keeps 154, and the floor refuses both directions', () => {
+  it('D9: depth is 199 under the focus-signature law -- five leave by name, the unproven alias stays, states keeps 154, the floor refuses both directions', () => {
     const report = populationReport();
     const byAxis = Object.fromEntries(report.axes.map((entry) => [entry.axis, entry]));
-    const ENTERED = ['link', 'scroll-area', 'search', 'typography', 'virtual-list'];
-    assert.equal(byAxis.depth.denominator, 204);
-    for (const family of ENTERED) assert.ok(byAxis.depth.families.includes(family), `${family} declares depth under the committed rule`);
+    const LEFT = ['link', 'scroll-area', 'search', 'typography', 'virtual-list'];
+    assert.equal(byAxis.depth.denominator, 199);
+    for (const family of LEFT) assert.ok(!byAxis.depth.families.includes(family), `${family}: a focus-only shadow does not declare depth`);
+    assert.deepEqual(byAxis.depth.focusSignatureOnly.map((entry) => entry.family).sort(), LEFT);
+    // The conservative arm, published by name: in depth through a var()-only shadow no producer proves.
+    assert.ok(byAxis.depth.families.includes('breadcrumb-compounds'));
+    assert.deepEqual(byAxis.depth.unprovenShadowAliases.map((entry) => entry.family), ['breadcrumb-compounds', 'tooltip-compounds']);
+    // breadcrumb: its one literal producer writes the signature; what stops the proof is the reader's own limit, said as such.
+    assert.match(byAxis.depth.unprovenShadowAliases[0].reasons[0],
+      /^--ds-breadcrumb-focus-ring: unprovable to this reader: \d+ compiler site\(s\) write `vars\[<non-literal key>\]` .*its literal producer\(s\): .*chrome\/breadcrumb\/index\.ts:\d+ = var\(--ds-focus-ring\)$/u);
+    // tooltip-compounds: an elevation alias, read as one -- never an unproven focus alias.
+    assert.match(byAxis.depth.unprovenShadowAliases[1].reasons[0], /^--ds-tooltip-shadow: .* writes `var\(--ds-shadow-md\)`: --ds-shadow-md: /u);
+    // States keeps its own law: 154, and every family the depth law touched is still a member.
     assert.equal(byAxis.states.denominator, 154);
-    for (const family of [...ENTERED, 'breadcrumb-compounds']) assert.ok(byAxis.states.families.includes(family), `${family} is a states member`);
-    const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
-    assert.equal(floor.axes.depth, 204);
-    assert.equal(floor.catalogRevision, catalogRevision().digest);
-    const move = floor.provenance.membershipMoves.focusSignatureSweep;
-    assert.deepEqual(move.byAxis.depth, { added: ENTERED, removed: [] });
-    for (const axis of ['shape', 'typography', 'rhythm', 'states', 'motion']) assert.deepEqual(move.byAxis[axis], { added: [], removed: [] }, axis);
-    assert.deepEqual(move.depth, { pinned: 199, repinned: 204 });
-    assert.match(move.reason, /^five families entered by the focus-signature sweep \(237a4bf8f, a8f594ab4\): link, scroll-area, search, typography, virtual-list /u);
-    assert.match(move.reason, /classification debt of the population rule, correction reserved to the owner$/u);
-    assert.equal(move.catalogRevisionMove.to, floor.catalogRevision);
-    // THE NAMED NOTE, held to the tree: each of the six is in depth through a
-    // focus-signature `box-shadow` (or its `none` twin) and nothing else.
-    assert.deepEqual(move.focusSignatureOnly.families, ['breadcrumb-compounds', ...ENTERED]);
-    const signature = /^(?:none|var\(--ds-focus-ring\)|var\(--ds-[a-z-]*focus-ring, var\(--ds-focus-ring\)\))$/u;
-    const declarations = familyAxisDeclarations();
-    for (const family of move.focusSignatureOnly.families) {
-      const record = declarations.get(family);
-      assert.deepEqual(record.axes.depth, { properties: ['box-shadow'], headChannels: [] }, family);
-      const written = record.files.flatMap((file) => cssRules(readFileSync(join(ROOT, file), 'utf8')))
-        .flatMap((rule) => rule.declarations.filter((declaration) => AXES.depth.authored.includes(declaration.property))
-          .map((declaration) => ({ selector: rule.selector, value: declaration.value.replace(/\s+/gu, ' ').trim() })));
-      assert.ok(written.length > 0, family);
-      for (const entry of written) assert.match(entry.value, signature, `${family}: ${entry.selector} { box-shadow: ${entry.value} }`);
-      assert.ok(written.some((entry) => /focus-ring/u.test(entry.value) && /focus-visible/u.test(entry.selector)), `${family}: no focus-gated signature shadow`);
+    for (const family of [...LEFT, 'breadcrumb-compounds']) assert.ok(byAxis.states.families.includes(family), `${family} is a states member`);
+    // The law is depth's alone: it withdraws nothing and publishes nothing on any other axis.
+    for (const axis of AXIS_IDS.filter((id) => id !== 'depth')) {
+      assert.deepEqual([byAxis[axis].focusSignatureOnly, byAxis[axis].unprovenShadowAliases], [[], []], axis);
     }
-    // A family with a resting elevation is NOT in the note's class: the note names an exact set.
-    assert.notDeepEqual(declarations.get('card').axes.depth, { properties: ['box-shadow'], headChannels: [] });
+    assert.equal(byAxis.depth.notApplicableCount, 0, 'the law is a definition, never a reviewed exclusion');
+    const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
+    assert.equal(floor.axes.depth, 199);
+    assert.equal(floor.catalogRevision, catalogRevision().digest);
+    const move = floor.provenance.membershipMoves.depthFocusSignatureLaw;
+    assert.deepEqual(move.byAxis.depth, { added: [], removed: LEFT });
+    for (const axis of ['shape', 'typography', 'rhythm', 'states', 'motion']) assert.deepEqual(move.byAxis[axis], { added: [], removed: [] }, axis);
+    assert.deepEqual([move.depthFloorLowering.pinned, move.depthFloorLowering.repinned], [204, 199]);
+    assert.deepEqual(Object.keys(move.depthFloorLowering.leavers), LEFT);
+    assert.deepEqual(Object.keys(move.depthFloorLowering.stayConservatively), ['breadcrumb-compounds', 'tooltip-compounds']);
+    // The pinned reasons are the rule's own, word for word.
+    for (const entry of byAxis.depth.unprovenShadowAliases) {
+      assert.deepEqual(move.depthFloorLowering.stayConservatively[entry.family].reasons, entry.reasons, entry.family);
+    }
+    assert.equal(move.depthFloorLowering.stayConservatively['tooltip-compounds'].kind, 'an elevation alias, in depth under any proof');
+    // The owner's sentence is quoted in its own words; the English beside it is marked as a translation.
+    const note = move.depthFloorLowering.ownerFacingNote;
+    assert.ok(note.includes('quoted verbatim: "Este mensaje autoriza la corrección semántica de población depth propuesta, NO un denominador predeterminado. '
+      + 'Una sombra exclusivamente de foco no debe declarar profundidad. Una mezcla con elevación/material sí. '
+      + 'Aliases ambiguos permanecen conservadoramente incluidos: el nombre o fallback por sí solos no demuestran la semántica del productor.'), note);
+    assert.ok(note.includes('No introducir exclusiones por familia para alcanzar el porcentaje." -- translation, not the owner\'s text: "'), note);
+    assert.ok(note.includes('2026-10-03 (R25)') && !note.includes('INCLUDED'));
+    assert.deepEqual(move.outOfScope.shape.families, ['anchor', 'virtual-list']);
+    assert.equal(move.knownLimits.length, 2);
+    // The earlier growth stays on the record: 199 -> 204 by the sweep, then the law.
+    assert.deepEqual(floor.provenance.membershipMoves.focusSignatureSweep.depth, { pinned: 199, repinned: 204 });
     const dir = mkdtempSync(join(tmpdir(), 'evi02-depth-focus-'));
     sandboxes.push(dir);
     const at = (depth) => {
@@ -1172,8 +1188,8 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
       writeFileSync(path, JSON.stringify({ ...floor, axes: { ...floor.axes, depth } }));
       return checkPopulationFloor(ROOT, undefined, path).failures;
     };
-    assert.ok(at(199).some((line) => line.startsWith('depth: denominator 204 is ABOVE its pin 199')), at(199).join(' | '));
-    assert.ok(at(205).some((line) => line.startsWith('depth: denominator 204 is BELOW its floor 205')), at(205).join(' | '));
+    assert.ok(at(204).some((line) => line.startsWith('depth: denominator 199 is BELOW its floor 204')), at(204).join(' | '));
+    assert.ok(at(198).some((line) => line.startsWith('depth: denominator 199 is ABOVE its pin 198')), at(198).join(' | '));
   });
 
   it('D8: 8 declaring states families are unobservable -- surface-states is not one (opacity is read) -- and none is subtracted', () => {
@@ -1194,3 +1210,205 @@ function readdirSyncRecursive(dir) {
     : entry.name.endsWith('.css') ? [join(dir, entry.name)] : []));
 }
 
+/**
+ * THE FOCUS-SIGNATURE LAW OF DEPTH (owner authorization 2026-10-03), drilled on
+ * synthetic families with synthetic producers, both directions. A sandbox with
+ * no compiler source proves nothing, so every case states its producers.
+ */
+describe('theme population — FS: a shadow that is exclusively the focus signature does not declare depth', () => {
+  const DERIVATION = 'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation';
+  const SIGNATURE = 'var(--ds-focus-ring)';
+  const tree = ({ skins, compiler = {}, states = 'vars["--ds-focus-ring"] = focus.shadow;' }) => {
+    const dir = sandbox();
+    for (const [family, css] of Object.entries(skins)) {
+      mkdirSync(join(dir, SKIN_ROOT, family), { recursive: true });
+      writeFileSync(join(dir, SKIN_ROOT, family, 'index.css'), css);
+    }
+    const sources = { 'states/index.ts': states, ...compiler };
+    for (const [file, text] of Object.entries(sources)) {
+      if (text === null) continue;
+      mkdirSync(join(dir, DERIVATION, dirname(file)), { recursive: true });
+      writeFileSync(join(dir, DERIVATION, file), `export function derive(vars, focus, chrome) {\n  ${text}\n}\n`);
+    }
+    const declarations = familyAxisDeclarations(dir, catalogIn(dir));
+    return { dir, declarations, depth: (family) => declarations.get(family).axes.depth, record: (family) => declarations.get(family) };
+  };
+  const gated = (value, selector = '.fs:focus-visible') => `${selector} { box-shadow: ${value}; }`;
+
+  it('NEGATIVE: the signature alone is not depth -- under a focus gate, on an ::after carrier, with its `none` twin, and at rest', () => {
+    const { depth, record } = tree({
+      skins: {
+        'fs-gated': gated(SIGNATURE),
+        'fs-stamped': gated(SIGNATURE, ".fs[data-state~='focus-visible']"),
+        'fs-carrier': gated(SIGNATURE, '.fs:focus-visible::after'),
+        'fs-twin': `${gated(SIGNATURE)}\n@media (forced-colors: active) { .fs:focus-visible { box-shadow: none; } }`,
+        'fs-rest': `.fs { box-shadow: ${SIGNATURE}; }`,
+        'fs-important': gated(`${SIGNATURE} !important`),
+      },
+    });
+    for (const family of ['fs-gated', 'fs-stamped', 'fs-carrier', 'fs-twin', 'fs-rest', 'fs-important']) {
+      assert.equal(depth(family), undefined, `${family} must not declare depth`);
+      assert.ok(record(family).focusSignatureOnly.depth.length > 0, `${family} is published as focus-only`);
+    }
+    assert.equal(record('fs-twin').focusSignatureOnly.depth.length, 2);
+    // At rest too: what makes it a focus shadow is the producer of the channel it reads, not the selector it sits under.
+    assert.equal(record('fs-rest').axes.states?.headChannels.includes('--ds-focus-ring'), true, 'it still declares states by K2');
+    assert.ok(record('fs-gated').axes.states, 'the gated rule still declares states by K1');
+  });
+
+  it('POSITIVE: a mixture with elevation or material, a recipe, a border, or a resting `none` declares depth', () => {
+    const { depth } = tree({
+      skins: {
+        'fs-mix': gated(`${SIGNATURE}, var(--ds-elevation-1)`),
+        'fs-mix-carrier': gated(`${SIGNATURE}, var(--ds-elevation-2)`, '.fs:focus-visible::after'),
+        'fs-recipe': gated('0 0 0 var(--ds-focus-ring-width) currentColor'),
+        'fs-recipe-mix': gated(`${SIGNATURE}, 0 1px 2px rgba(0, 0, 0, 0.2)`),
+        'fs-border': `${gated(SIGNATURE)}\n.fs { border-width: 1px; }`,
+        'fs-rest-none': `${gated(SIGNATURE)}\n.fs { box-shadow: none; }`,
+        'fs-rest-elevation': `${gated(SIGNATURE)}\n.fs { box-shadow: var(--ds-elevation-1); }`,
+        'fs-head-channel': `${gated(SIGNATURE)}\n.fs { outline-width: var(--ds-edge-standard-width); }`,
+        'fs-hover-none': '.fs:hover { box-shadow: none; }',
+        // A gated reset with NO signature beside it resets something else: a container dropping its elevation while focus is inside.
+        'fs-reset-alone': '.fs:focus-visible { box-shadow: none; }',
+        'fs-within-reset': '.fs:focus-within { box-shadow: none; }',
+        // One ungated branch makes the reset apply at rest.
+        'fs-mixed-branch': `${gated(SIGNATURE)}\n.fs:focus-visible, .fs-other { box-shadow: none; }`,
+        // A gate that survives only inside :not() is no gate.
+        'fs-negated-gate': `${gated(SIGNATURE)}\n.fs:not(:focus-visible) { box-shadow: none; }`,
+      },
+    });
+    for (const family of ['fs-reset-alone', 'fs-within-reset', 'fs-mixed-branch', 'fs-negated-gate']) {
+      assert.deepEqual(depth(family)?.properties, ['box-shadow'], `${family}: the reset is a position on depth`);
+    }
+    for (const family of ['fs-mix', 'fs-mix-carrier', 'fs-recipe', 'fs-recipe-mix', 'fs-rest-none', 'fs-rest-elevation', 'fs-hover-none']) {
+      assert.deepEqual(depth(family)?.properties, ['box-shadow'], `${family} must declare depth`);
+    }
+    assert.deepEqual(depth('fs-border').properties, ['border-width']);
+    assert.deepEqual(depth('fs-head-channel'), { properties: [], headChannels: ['--ds-edge-standard-width'] });
+    // A mixture reads a depth head channel: it declares depth twice over, by the property and by K2.
+    assert.deepEqual(depth('fs-mix').headChannels, ['--ds-elevation-1']);
+    assert.equal(depth('fs-mix').onlyThroughUnprovenAliases, undefined);
+    // A reset is exclusively focus only under a FOCUS gate: at rest, or under hover, `none` is a position on depth.
+    assert.equal(depth('fs-rest-none').onlyThroughUnprovenAliases, undefined);
+  });
+
+  it('ALIASES are judged on the producer side: states-only producers prove one; unknown, open, mixed or authored-literal producers do not', () => {
+    const alias = (name, fallback = '') => gated(`var(--ds-fs-${name}${fallback})`);
+    const { depth, record, dir } = tree({
+      skins: {
+        'fs-proven': alias('proven'),
+        'fs-chained': alias('chained'),
+        'fs-proven-fallback': alias('proven', `, ${SIGNATURE}`),
+        'fs-unknown': alias('unknown'),
+        'fs-unknown-fallback': alias('unknown', `, ${SIGNATURE}`),
+        'fs-literal-fallback': gated('var(--ds-focus-ring, 0 0 0 2px blue)'),
+        'fs-open': alias('open'),
+        'fs-material': alias('material'),
+        'fs-two-producers': alias('two'),
+        'fs-authored-proven': `${alias('authored-proven')}\n:root { --ds-fs-authored-proven: ${SIGNATURE}; }`,
+        'fs-authored-literal': `${alias('authored-literal')}\n:root { --ds-fs-authored-literal: 0 0 0 2px blue; }`,
+        'fs-cycle': alias('cycle-a'),
+      },
+      compiler: {
+        'chrome/fs/index.ts': [
+          'vars["--ds-fs-proven"] = "var(--ds-focus-ring)";',
+          'vars["--ds-fs-chained"] = "var(--ds-fs-proven)";',
+          'vars["--ds-fs-open"] = chrome.focusRing;',
+          'vars["--ds-fs-material"] = "var(--ds-focus-ring), var(--ds-elevation-2)";',
+          'vars["--ds-fs-two"] = "var(--ds-focus-ring)";',
+          'if (chrome.strong) vars["--ds-fs-two"] = "0 0 0 3px red";',
+          'vars["--ds-fs-cycle-a"] = "var(--ds-fs-cycle-b)";',
+          'vars["--ds-fs-cycle-b"] = "var(--ds-fs-cycle-a)";',
+        ].join('\n  '),
+      },
+    });
+    for (const family of ['fs-proven', 'fs-chained', 'fs-proven-fallback', 'fs-authored-proven']) {
+      assert.equal(depth(family), undefined, `${family}: every producer writes the signature alone`);
+      assert.ok(record(family).focusSignatureOnly.depth.length > 0, family);
+    }
+    const reasonOf = (family) => depth(family)?.onlyThroughUnprovenAliases?.[0]?.reason ?? `${family} is not in depth through an unproven alias`;
+    assert.match(reasonOf('fs-unknown'), /^--ds-fs-unknown: no producer found/u);
+    assert.match(reasonOf('fs-unknown-fallback'), /^--ds-fs-unknown: no producer found/u, 'a fallback to the signature proves nothing about the head');
+    assert.match(reasonOf('fs-literal-fallback'), /^the fallback of --ds-focus-ring is not exclusively focus/u);
+    assert.match(reasonOf('fs-open'), /^--ds-fs-open: .* writes it from a value that is not a string literal$/u);
+    assert.match(reasonOf('fs-material'), /^--ds-fs-material: .*--ds-elevation-2: /u);
+    assert.match(reasonOf('fs-two-producers'), /^--ds-fs-two: .* writes `0 0 0 3px red`/u);
+    assert.match(reasonOf('fs-authored-literal'), /^--ds-fs-authored-literal: .* writes `0 0 0 2px blue`/u);
+    assert.match(reasonOf('fs-cycle'), /^--ds-fs-cycle-a: /u);
+    const proof = focusSignatureProof(dir, catalogIn(dir));
+    assert.equal(proof.judge('--ds-focus-ring').proven, true);
+    assert.equal(proof.judge('--ds-fs-proven').proven, true);
+    assert.equal(proof.judge('--ds-fs-chained').proven, true);
+  });
+
+  it('THE ROOT is proven by its producer, never by its name: no states emission, or an emission outside the states derivation, proves nothing', () => {
+    const skins = { 'fs-gated': gated(SIGNATURE) };
+    assert.equal(tree({ skins }).depth('fs-gated'), undefined, 'the control: the states derivation alone emits the signature');
+    const absent = tree({ skins, states: null });
+    assert.match(absent.depth('fs-gated').onlyThroughUnprovenAliases[0].reason, /^--ds-focus-ring: no producer found/u);
+    const foreign = tree({ skins, compiler: { 'materials/index.ts': 'vars["--ds-focus-ring"] = "0 4px 12px black";' } });
+    assert.match(foreign.depth('fs-gated').onlyThroughUnprovenAliases[0].reason, /^--ds-focus-ring: /u,
+      'a second emitter outside the states derivation unmakes the root, and the channel is then judged as any alias');
+    assert.equal(focusSignatureProof(foreign.dir, catalogIn(foreign.dir)).roots.has('--ds-focus-ring'), false);
+    // ONLY the focus-style row: another states-row channel the same derivation emits (states.emphasis) is not the signature.
+    const emphasis = tree({
+      skins: { 'fs-emphasis': gated('var(--ds-state-press-scale)') },
+      states: 'vars["--ds-focus-ring"] = focus.shadow;\n  vars["--ds-state-press-scale"] = "0.97";',
+    });
+    assert.equal(focusSignatureProof(emphasis.dir, catalogIn(emphasis.dir)).roots.has('--ds-state-press-scale'), false);
+    assert.deepEqual([...focusSignatureProof(emphasis.dir, catalogIn(emphasis.dir)).roots], ['--ds-focus-ring']);
+    assert.match(emphasis.depth('fs-emphasis').onlyThroughUnprovenAliases[0].reason, /^--ds-state-press-scale: .* writes `0\.97`/u);
+    // A depth head channel renamed to look like the signature is still not one: the catalog row decides, not the spelling.
+    const lookalike = tree({ skins: { 'fs-lookalike': gated('var(--ds-fs-focus-ring)') } });
+    assert.match(lookalike.depth('fs-lookalike').onlyThroughUnprovenAliases[0].reason, /^--ds-fs-focus-ring: no producer found/u);
+  });
+
+  it('A KEYED EMISSION that may write the alias leaves it unproven; a template key that cannot match does not', () => {
+    const skins = { 'fs-proven': gated('var(--ds-fs-proven)') };
+    const base = 'vars["--ds-fs-proven"] = "var(--ds-focus-ring)";';
+    assert.equal(tree({ skins, compiler: { 'chrome/fs/index.ts': `${base}\n  vars[\`--ds-other-\${chrome.name}\`] = chrome.value;` } }).depth('fs-proven'), undefined);
+    const template = tree({ skins, compiler: { 'chrome/fs/index.ts': `${base}\n  vars[\`--ds-fs-\${chrome.name}\`] = chrome.value;` } });
+    assert.match(template.depth('fs-proven').onlyThroughUnprovenAliases[0].reason, /^--ds-fs-proven: unprovable to this reader: 1 compiler site\(s\) write `vars\[<non-literal key>\]`/u);
+    const open = tree({ skins, compiler: { 'chrome/fs/index.ts': `${base}\n  vars[chrome.channel] = chrome.value;` } });
+    assert.match(open.depth('fs-proven').onlyThroughUnprovenAliases[0].reason, /^--ds-fs-proven: unprovable to this reader: .*\(first: vars\[chrome\.channel\] at .*its literal producer\(s\): .* = var\(--ds-focus-ring\)$/u);
+    // The root is not an alias: its proof is the states derivation, and a keyed forwarder does not unmake it.
+    assert.equal(tree({ skins: { 'fs-gated': gated(SIGNATURE) }, compiler: { 'chrome/fs/index.ts': 'vars[chrome.channel] = chrome.value;' } }).depth('fs-gated'), undefined);
+  });
+
+  it('THE RULE NAMES NO FAMILY: it takes a rule, a declaration and the proof, and its source and data carry no skin family id', () => {
+    assert.equal(classifyDepthShadow.length, 3);
+    assert.deepEqual([...FOCUS_SIGNATURE_RESETS], ['none', 'initial', 'unset', 'revert', 'revert-layer']);
+    const sources = [classifyDepthShadow, focusSignatureProof].map((fn) => fn.toString()).join('\n');
+    assert.ok(!/\bfamil(?:y|ies)\b/u.test(sources), 'the rule may not read a family');
+    // Nor a selector: a class, a BEM block or a part named in the rule or in the walk that applies it would be
+    // an exclusion by another spelling -- one a membership test only sees if it happens to move a family.
+    const walk = `${sources}\n${familyAxisDeclarations.toString()}`;
+    assert.ok(!/(?:^|[^-\w])(?:ds|rottay|rt)-[a-z]|data-part|\.[a-z][\w-]*__/u.test(walk), 'the rule or its walk names a class, a block or a part');
+    assert.equal(population.FOCUS_SIGNATURE_ROW, 'states.focus-style');
+    for (const family of skinFamilies(ROOT).keys()) {
+      for (const quote of ["'", '"', '`']) {
+        assert.ok(!sources.includes(`${quote}${family}${quote}`), `the rule names the family ${family}`);
+      }
+      assert.ok(!FOCUS_SIGNATURE_RESETS.includes(family));
+    }
+    // And the registry of reviewed exclusions gained no depth entry: the percentage is reached by no per-family subtraction.
+    assert.deepEqual(baseRegistry().entries.filter((entry) => entry.axis === 'depth'), []);
+    // The same family under two names reads the same: only the declarations decide.
+    const { depth } = tree({ skins: { link: gated(`${SIGNATURE}, var(--ds-elevation-1)`), 'fs-anything': gated(SIGNATURE) } });
+    assert.deepEqual(depth('link')?.properties, ['box-shadow'], 'a family the law read out on the tree is IN the moment its shadow mixes elevation');
+    assert.equal(depth('fs-anything'), undefined);
+  });
+
+  it('ON THE TREE: the proof agrees with the producers library, and every family it reads out reads the root itself', () => {
+    const proof = focusSignatureProof();
+    assert.deepEqual([...proof.roots], ['--ds-focus-ring', '--ds-focus-ring-width', '--ds-focus-ring-offset'], 'the focus-style row alone');
+    assert.ok(!proof.roots.has('--ds-material-card-focus-ring'), 'a states-row channel the materials deriver emits is not a root');
+    assert.ok(proof.keyedEmissions > 0, 'this tree has keyed emissions; while it does, no alias is provable');
+    for (const [family, record] of familyAxisDeclarations()) {
+      for (const cited of record.focusSignatureOnly.depth ?? []) {
+        const value = normalizeCssText(cited.value.replace(/!important\s*$/u, ''));
+        assert.ok(FOCUS_SIGNATURE_RESETS.includes(value) || value === SIGNATURE, `${family}: ${cited.selector} { box-shadow: ${cited.value} }`);
+      }
+    }
+  });
+});
