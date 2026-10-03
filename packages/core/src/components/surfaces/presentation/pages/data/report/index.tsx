@@ -12,6 +12,8 @@
  */
 
 import React from 'react';
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { Box, Button, Card, Flex, Grid, Heading, Stack, Text } from '../../../../../primitives';
 import {
   PatternDataTable,
@@ -393,17 +395,18 @@ function ReportSkeleton({
   const configSkeleton = (
     <Stack spacing={sectionSpacing} data-part="skeleton-config">
       {hasTemplates && (
-        <>
+        <SurfacePostureSlot name="templates">
           <Box data-part="report-skeleton-block" data-size="section-title" />
           <Box data-part="report-skeleton-block" data-size="template-card" />
           <Box data-part="report-skeleton-block" data-size="template-card" />
-        </>
+        </SurfacePostureSlot>
       )}
-      {hasFilters && <Box data-part="report-skeleton-block" data-size="filter" />}
+      {hasFilters && <SurfacePostureSlot name="filters" asChild><Box data-part="report-skeleton-block" data-size="filter" /></SurfacePostureSlot>}
     </Stack>
   );
 
   const resultsSkeleton = (
+    <SurfacePostureSlot name="results" asChild>
     <Stack spacing={sectionSpacing} data-part="skeleton-results">
       <Grid
         templateColumns="repeat(auto-fit, minmax(min(100%, 160px), 1fr))"
@@ -421,6 +424,7 @@ function ReportSkeleton({
         <Box data-part="report-skeleton-block" data-size="line" />
       </Stack>
     </Stack>
+    </SurfacePostureSlot>
   );
 
   if (sidebar) {
@@ -441,6 +445,7 @@ function ReportSkeleton({
 }
 
 export interface ReportSurfaceProps {
+  postures?: SurfacePostures;
   config: ReportSurfaceConfig;
   loading?: boolean;
   error?: unknown;
@@ -448,12 +453,21 @@ export interface ReportSurfaceProps {
 }
 
 /** Report builder/viewer shell: templates + filters configure, results read. */
-export function ReportSurface({
+export function ReportSurface(props: ReportSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <ReportSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function ReportSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: ReportSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
@@ -477,10 +491,10 @@ export function ReportSurface({
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
   };
 
-  const actionsNode = (
-    <Flex gap={8} wrap="wrap" justify="end">
-      {config.behavior.onGenerate && (
-        <Button
+  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const primaryActionNode = config.behavior.onGenerate ? (
+    <SurfacePostureAction label={tSurfaceOr('report.generate', 'Generate')}>
+      <Button
           variant="primary"
           size="sm"
           onClick={() => {
@@ -491,7 +505,11 @@ export function ReportSurface({
         >
           {tSurfaceOr('report.generate', 'Generate')}
         </Button>
-      )}
+    </SurfacePostureAction>
+  ) : null;
+  const actionsNode = (
+    <Flex gap={8} wrap="wrap" justify="end">
+      {!dockPrimaryAction && primaryActionNode}
       {/* All three export formats are always offered when onExport is set.
           The app decides which formats to actually support in its callback.
           Exporting needs a generated report, so the group stays disabled
@@ -525,11 +543,13 @@ export function ReportSurface({
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />
+        {dockPrimaryAction && primaryActionNode}
       </PageShellSurface>
     );
   }
 
   const templateSection = (
+    <SurfacePostureSlot name="templates">
     <TemplateSelector
       templates={config.behavior.templates}
       selectedTemplate={config.behavior.selectedTemplate}
@@ -537,9 +557,11 @@ export function ReportSurface({
       layout={isSidebarLayout ? 'stack' : 'grid'}
       cardVariant={cardVariant}
     />
+    </SurfacePostureSlot>
   );
 
   const filterSection = (
+    <SurfacePostureSlot name="filters">
     <FilterPanel
       config={config}
       /* Sidebar columns keep the panel stacked; the top layout lets filters
@@ -547,14 +569,17 @@ export function ReportSurface({
       layout={!useSidebarColumns && !isMobile && !shouldStack ? 'inline' : 'stacked'}
       cardVariant={cardVariant}
     />
+    </SurfacePostureSlot>
   );
 
   const resultsSection = (
+    <SurfacePostureSlot name="results">
     <ReportResults
       config={config}
       cardVariant={cardVariant}
       sectionSpacing={sectionSpacing}
     />
+    </SurfacePostureSlot>
   );
 
   const bodyContent = loading ? (
@@ -620,6 +645,7 @@ export function ReportSurface({
       ) : (
         reportContent
       )}
+      {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );
 }

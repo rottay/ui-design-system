@@ -17,6 +17,8 @@
  */
 
 import React from 'react';
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { Box, Button, Card, Flex, Grid, Select, Stack, Tag, Text } from '../../../../../primitives';
 import type { CardVariant } from '../../../../../primitives/display/card/contracts';
 import { FadeIn } from '@/graphics/motion';
@@ -42,6 +44,7 @@ import {
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 
 export interface TeamSurfaceProps {
+  postures?: SurfacePostures;
   config: TeamSurfaceConfig;
   loading?: boolean;
   /** Load/render failure surfaced as an error state (ListSurface prop precedent). */
@@ -276,19 +279,28 @@ function MemberCard({
   );
 }
 
-export function TeamSurface({
+export function TeamSurface(props: TeamSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="list">
+      <TeamSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function TeamSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: TeamSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { isPhone: isMobile } = useResponsive();
   const { tSurfaceOr } = useSurfaceTranslations();
   const members = config.behavior.members;
   const hasMembers = members.length > 0;
   const layout = config.visual.layout ?? 'table';
-  const isCompact = profileDefaults.density === 'compact';
+  const isCompact = (posture?.density ?? profileDefaults.density) === 'compact';
   const stagger = useCollectionStagger(members.length);
   const applyStagger = profileDefaults.animateEntrance && stagger.animated && !loading && hasMembers;
   const chrome = {
@@ -301,8 +313,9 @@ export function TeamSurface({
   // Invite is rendered alongside the generic actions when the app provides
   // the handler. It always appears first (primary prominence) because
   // inviting new members is the highest-value action on a team page.
-  const actionsNode = config.behavior.onInvite ? (
-    <Flex gap="sm" wrap="wrap" justify="end">
+  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const primaryActionNode = config.behavior.onInvite ? (
+    <SurfacePostureAction label={tSurfaceOr('team.action_invite', 'Invite Member')}>
       <Button
         variant="primary"
         size="sm"
@@ -311,6 +324,11 @@ export function TeamSurface({
       >
         {tSurfaceOr('team.action_invite', 'Invite Member')}
       </Button>
+    </SurfacePostureAction>
+  ) : null;
+  const actionsNode = config.behavior.onInvite ? (
+    <Flex gap="sm" wrap="wrap" justify="end">
+      {!dockPrimaryAction && primaryActionNode}
       <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
     </Flex>
   ) : (
@@ -324,6 +342,7 @@ export function TeamSurface({
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />
+        {dockPrimaryAction && primaryActionNode}
       </PageShellSurface>
     );
   }
@@ -447,11 +466,11 @@ export function TeamSurface({
       data-layout={layout}
       data-mobile={isMobile ? 'true' : 'false'}
       data-loading={loading ? 'true' : 'false'}
-      {...densityScopeAttributes(profileDefaults.density)}
+      {...densityScopeAttributes(posture?.density ?? profileDefaults.density)}
       aria-busy={loading}
       spacing={resolveStackSpacing(profileDefaults.sectionSpacing)}
     >
-      {contentBody}
+      <SurfacePostureSlot name="members">{contentBody}</SurfacePostureSlot>
     </Stack>
   );
 
@@ -462,6 +481,7 @@ export function TeamSurface({
       ) : (
         teamContent
       )}
+      {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );
 }

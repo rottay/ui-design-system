@@ -1,12 +1,12 @@
 /** @fileoverview IntegrationSurface tests -- API keys, webhooks, and connected apps. */
 
 import React from 'react';
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { IntegrationSurface } from '..';
 import type { IntegrationSurfaceConfig } from '../../../../../foundation/contracts';
-import { renderSurface } from '../../../../../foundation/common/test-utils';
+import { renderSurface, RESOLVED_PHONE_TEST_CONTEXT } from '../../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<IntegrationSurfaceConfig>): IntegrationSurfaceConfig {
   return {
@@ -40,6 +40,41 @@ function buildConfig(overrides?: Partial<IntegrationSurfaceConfig>): Integration
 }
 
 describe('IntegrationSurface', () => {
+  describe.each([
+    { name: 'api-keys', label: 'API Keys', content: 'Production' },
+    { name: 'webhooks', label: 'Webhooks', content: 'https://api.example.com/webhook' },
+  ])('$name tab posture', ({ name, label, content }) => {
+    it.each([
+      { loading: true, disposition: 'render' },
+      { loading: true, disposition: 'hide' },
+      { loading: true, disposition: 'collapse' },
+      { loading: false, disposition: 'render' },
+      { loading: false, disposition: 'hide' },
+      { loading: false, disposition: 'collapse' },
+    ] as const)('applies $disposition with loading=$loading', async ({ loading, disposition }) => {
+      const config = buildConfig({ visual: { layout: 'tabs' } });
+      renderSurface(
+        <IntegrationSurface config={config} loading={loading} postures={{ phone: { regions: { [name]: disposition } } }} />,
+        { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT },
+      );
+      const tab = await screen.findByRole('tab', { name: label });
+      fireEvent.click(tab);
+      await waitFor(() => expect(tab).toHaveAttribute('aria-selected', 'true'));
+      const panel = screen.getByRole('tabpanel');
+      const region = panel.querySelector(`[data-surface-region="${name}"]`);
+      if (disposition === 'hide') expect(region).toBeNull();
+      else {
+        expect(region).toHaveAttribute('data-region-disposition', disposition);
+        if (disposition === 'collapse') expect(region?.textContent).toBe('');
+      }
+      if (disposition !== 'render') {
+        expect(panel.querySelector('.ds-loading-skeleton')).toBeNull();
+        expect(panel.textContent).not.toContain(content);
+      } else if (loading) expect(panel.querySelector('.ds-loading-skeleton')).not.toBeNull();
+      else await waitFor(() => expect(panel.textContent).toContain(content));
+    });
+  });
+
   it('renders API keys, webhooks, and connected apps', async () => {
     renderSurface(<IntegrationSurface config={buildConfig()} />);
 

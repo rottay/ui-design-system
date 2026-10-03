@@ -22,6 +22,8 @@ import { ActionSaveIcon } from '@/graphics/icons/semantic/generated/roles/action
 import { AuthPasswordIcon } from '@/graphics/icons/semantic/generated/roles/auth-password';
 import { NavigationProfileIcon } from '@/graphics/icons/semantic/generated/roles/navigation-profile';
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { Button, Card, Flex, Grid, Heading, Input, Stack, Text, Textarea } from '../../../../../primitives';
 import type { ProfileSection, ProfileSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
@@ -38,6 +40,7 @@ import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structure
 import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 
 export interface ProfileSurfaceProps {
+  postures?: SurfacePostures;
   config: ProfileSurfaceConfig;
   loading?: boolean;
   /** Load/render failure surfaced as an error state (ListSurface prop precedent). */
@@ -243,12 +246,21 @@ function ProfileSectionCard({
   );
 }
 
-export function ProfileSurface({
+export function ProfileSurface(props: ProfileSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="record">
+      <ProfileSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function ProfileSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: ProfileSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
@@ -261,11 +273,12 @@ export function ProfileSurface({
     useResponsiveValue(
       surfaceStackingValue({ stackOnMobile: true, stackOnTablet: isSidebarLayout })
     ) ?? false;
-  const isCompact = profileDefaults.density === 'compact';
+  const isCompact = (posture?.density ?? profileDefaults.density) === 'compact';
 
   const hasPageActions =
     !!config.behavior.onPasswordChange || !!config.behavior.onDeleteAccount;
   const actionsNode = hasPageActions ? (
+    <SurfacePostureSlot name="toolbar" asChild>
     <Flex gap={8} wrap="wrap" justify="end">
       {/* Password change is triggered with empty strings because the actual
           old/new password values come from a modal or separate form that the
@@ -291,6 +304,7 @@ export function ProfileSurface({
         </Button>
       )}
     </Flex>
+    </SurfacePostureSlot>
   ) : undefined;
 
   // Error short-circuits the whole body: the shell keeps the page chrome and
@@ -307,12 +321,13 @@ export function ProfileSurface({
     );
   }
 
-  const showSidebar = isSidebarLayout && !shouldStack;
+  const showSidebar = isSidebarLayout && !shouldStack && posture?.regions.sidebar !== 'hide';
 
   // When the sidebar is not rendered (stacked layout, or sidebar layout
   // stacked on mobile/tablet), the avatar and header slots move into the
   // main column so consumer content is never dropped at narrow widths.
   const identityContent = (config.presentation.avatar || config.presentation.header) ? (
+    <SurfacePostureSlot name="identity" asChild>
     <Stack spacing="md">
       {config.presentation.avatar && (
         <Card variant={profileDefaults.cardVariant}>
@@ -323,6 +338,7 @@ export function ProfileSurface({
       )}
       {config.presentation.header}
     </Stack>
+    </SurfacePostureSlot>
   ) : null;
 
   const sidebarContent = showSidebar ? identityContent : null;
@@ -333,7 +349,7 @@ export function ProfileSurface({
       data-part="root"
       data-layout={showSidebar ? 'sidebar' : 'stacked'}
       data-mobile={isMobile ? 'true' : 'false'}
-      {...densityScopeAttributes(profileDefaults.density)}
+      {...densityScopeAttributes(posture?.density ?? profileDefaults.density)}
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading}
       spacing={resolveStackSpacing(profileDefaults.sectionSpacing)}
@@ -348,6 +364,7 @@ export function ProfileSurface({
         mirror the typical sections footprint and avoid layout shift; row
         count scales with density.
       */}
+      <SurfacePostureSlot name="sections">
       {loading ? (
         <>
           {[0, 1].map((skeletonIndex) => (
@@ -381,6 +398,7 @@ export function ProfileSurface({
           />
         ))
       )}
+      </SurfacePostureSlot>
     </Stack>
   );
 
@@ -398,7 +416,7 @@ export function ProfileSurface({
     >
       {sidebarContent ? (
         <Grid columns={12} gap="lg">
-          <Grid.Item span={4}>{sidebarContent}</Grid.Item>
+          <SurfacePostureSlot name="sidebar" asChild><Grid.Item span={4}>{sidebarContent}</Grid.Item></SurfacePostureSlot>
           <Grid.Item span={8}>{bodyContent}</Grid.Item>
         </Grid>
       ) : (

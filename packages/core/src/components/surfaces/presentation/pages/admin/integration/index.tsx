@@ -24,6 +24,8 @@ import { ActionPlayIcon } from '@/graphics/icons/semantic/generated/roles/action
 import { ConnectivityWebIcon } from '@/graphics/icons/semantic/generated/roles/connectivity-web';
 import { WorkflowWebhookIcon } from '@/graphics/icons/semantic/generated/roles/workflow-webhook';
 import React from 'react';
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { Button, Card, Flex, Heading, Stack, Tabs, Tag, Text } from '../../../../../primitives';
 import type {
   IntegrationApiKey,
@@ -45,6 +47,7 @@ import { resolveStackSpacing } from '../../../../../structures/foundation/chrome
 import type { CardVariant } from '../../../../../primitives/display/card/contracts';
 
 export interface IntegrationSurfaceProps {
+  postures?: SurfacePostures;
   config: IntegrationSurfaceConfig;
   loading?: boolean;
   /** Load/render failure surfaced as an error state (ListSurface prop precedent). */
@@ -430,31 +433,46 @@ function IntegrationLoadingBody({
 }): React.ReactElement {
   return (
     <>
+      <SurfacePostureSlot name="api-keys" asChild>
       <Card variant={cardVariant}>
         <Card.Body>
           <SurfaceLoadingSkeleton rows={isCompact ? 4 : 3} />
         </Card.Body>
       </Card>
+      </SurfacePostureSlot>
+      <SurfacePostureSlot name="webhooks" asChild>
       <Card variant={cardVariant}>
         <Card.Body>
           <SurfaceLoadingSkeleton rows={isCompact ? 3 : 2} />
         </Card.Body>
       </Card>
+      </SurfacePostureSlot>
+      <SurfacePostureSlot name="connected-apps" asChild>
       <Card variant={cardVariant}>
         <Card.Body>
           <SurfaceLoadingSkeleton rows={isCompact ? 2 : 1} />
         </Card.Body>
       </Card>
+      </SurfacePostureSlot>
     </>
   );
 }
 
-export function IntegrationSurface({
+export function IntegrationSurface(props: IntegrationSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <IntegrationSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function IntegrationSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: IntegrationSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
@@ -462,8 +480,25 @@ export function IntegrationSurface({
   const { isMobile } = useBreakpoints();
   const useTabs = config.visual.layout === 'tabs';
   const cardVariant = profileDefaults.cardVariant;
-  const isCompact = profileDefaults.density === 'compact';
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} access={config.access} />;
+  const isCompact = (posture?.density ?? profileDefaults.density) === 'compact';
+  const primaryAction = posture
+    ? config.behavior.actions?.find((action) => action.variant === 'primary')
+    : undefined;
+  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const primaryActionNode = primaryAction ? (
+    <SurfacePostureAction label={primaryAction.label}>
+      <SurfaceActionBar actions={[primaryAction]} access={config.access} />
+    </SurfacePostureAction>
+  ) : null;
+  const actionsNode = (
+    <SurfacePostureSlot name="toolbar">
+      <SurfaceActionBar
+        actions={primaryAction ? config.behavior.actions?.filter((action) => action !== primaryAction) : config.behavior.actions}
+        access={config.access}
+      />
+      {!dockPrimaryAction && primaryActionNode}
+    </SurfacePostureSlot>
+  );
 
   // Error short-circuits the whole body: the shell keeps the page chrome so
   // retry never loses context (ListSurface precedent).
@@ -474,7 +509,8 @@ export function IntegrationSurface({
         loading={false}
       >
         <SurfaceErrorState error={error} onRetry={onRetry} />
-      </PageShellSurface>
+        {dockPrimaryAction && primaryActionNode}
+    </PageShellSurface>
     );
   }
 
@@ -482,9 +518,9 @@ export function IntegrationSurface({
     <IntegrationLoadingBody cardVariant={cardVariant} isCompact={isCompact} />
   ) : (
     <>
-      <ApiKeysSection config={config} cardVariant={cardVariant} />
-      <WebhooksSection config={config} cardVariant={cardVariant} />
-      <ConnectedAppsSection config={config} cardVariant={cardVariant} />
+      <SurfacePostureSlot name="api-keys"><ApiKeysSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
+      <SurfacePostureSlot name="webhooks"><WebhooksSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
+      <SurfacePostureSlot name="connected-apps"><ConnectedAppsSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
     </>
   );
 
@@ -501,7 +537,7 @@ export function IntegrationSurface({
       data-part="root"
       data-view="tabs"
       data-mobile={isMobile ? 'true' : 'false'}
-      {...densityScopeAttributes(profileDefaults.density)}
+      {...densityScopeAttributes(posture?.density ?? profileDefaults.density)}
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading}
       spacing={resolveStackSpacing(profileDefaults.sectionSpacing)}
@@ -512,26 +548,30 @@ export function IntegrationSurface({
           key: 'api-keys',
           label: tSurfaceOr('integration.keys_title', 'API Keys'),
           children: loading ? (
+            <SurfacePostureSlot name="api-keys" asChild>
             <Card variant={cardVariant}>
               <Card.Body>
                 <SurfaceLoadingSkeleton rows={isCompact ? 4 : 3} />
               </Card.Body>
             </Card>
+            </SurfacePostureSlot>
           ) : (
-            <ApiKeysSection config={config} cardVariant={cardVariant} />
+            <SurfacePostureSlot name="api-keys"><ApiKeysSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
           ),
         },
         {
           key: 'webhooks',
           label: tSurfaceOr('integration.webhooks_title', 'Webhooks'),
           children: loading ? (
+            <SurfacePostureSlot name="webhooks" asChild>
             <Card variant={cardVariant}>
               <Card.Body>
                 <SurfaceLoadingSkeleton rows={isCompact ? 3 : 2} />
               </Card.Body>
             </Card>
+            </SurfacePostureSlot>
           ) : (
-            <WebhooksSection config={config} cardVariant={cardVariant} />
+            <SurfacePostureSlot name="webhooks"><WebhooksSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
           ),
         },
         ...(!loading && config.behavior.connectedApps && config.behavior.connectedApps.length > 0
@@ -539,7 +579,7 @@ export function IntegrationSurface({
               {
                 key: 'apps',
                 label: tSurfaceOr('integration.apps_title', 'Connected Apps'),
-                children: <ConnectedAppsSection config={config} cardVariant={cardVariant} />,
+                children: <SurfacePostureSlot name="connected-apps"><ConnectedAppsSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>,
               },
             ]
           : []),
@@ -552,7 +592,7 @@ export function IntegrationSurface({
       data-part="root"
       data-view="sections"
       data-mobile={isMobile ? 'true' : 'false'}
-      {...densityScopeAttributes(profileDefaults.density)}
+      {...densityScopeAttributes(posture?.density ?? profileDefaults.density)}
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading}
       spacing={resolveStackSpacing(profileDefaults.sectionSpacing)}
@@ -572,6 +612,7 @@ export function IntegrationSurface({
       ) : (
         content
       )}
+      {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );
 }

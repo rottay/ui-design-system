@@ -22,6 +22,8 @@ import { ContentCodeIcon } from '@/graphics/icons/semantic/generated/roles/conte
 import { ContentDocumentIcon } from '@/graphics/icons/semantic/generated/roles/content-document';
 import { ContentFileIcon } from '@/graphics/icons/semantic/generated/roles/content-file';
 import React from 'react';
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { Button, Card, Flex, Stack, Text } from '../../../../../primitives';
 import { PatternDataTable, PatternFilterPanel } from '../../../../../patterns';
 import { countActiveFilters, hasSurfaceError } from '../../../../runtime/helpers';
@@ -56,6 +58,7 @@ const EXPORT_FORMAT_ICONS: Record<AuditExportFormat, React.ReactNode> = {
 };
 
 export interface AuditSurfaceProps {
+  postures?: SurfacePostures;
   config: AuditSurfaceConfig;
   loading?: boolean;
   /** Load/render failure surfaced as an error state (ListSurface prop precedent). */
@@ -64,18 +67,27 @@ export interface AuditSurfaceProps {
   onRetry?: () => void | Promise<void>;
 }
 
-export function AuditSurface({
+export function AuditSurface(props: AuditSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="list">
+      <AuditSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function AuditSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: AuditSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
   const { tSurfaceOr } = useSurfaceTranslations();
   const { isMobile } = useBreakpoints();
-  const isCompact = config.visual.density === 'compact';
+  const isCompact = (posture?.density ?? config.visual.density) === 'compact';
   // Active filter count drives the badge in the filter panel header,
   // giving users a quick signal about how many constraints are applied.
   const activeFilterCount = countActiveFilters(config.behavior.filterValues);
@@ -113,9 +125,11 @@ export function AuditSurface({
   ) : null;
 
   const actionsNode = exportActions ? (
+    <SurfacePostureSlot name="toolbar" asChild>
     <Flex gap={8} wrap="wrap" justify="end">
       {exportActions}
     </Flex>
+    </SurfacePostureSlot>
   ) : undefined;
 
   // Translate surface column config into the PatternDataTable ColumnDef contract.
@@ -153,13 +167,14 @@ export function AuditSurface({
       data-view="table"
       data-mobile={isMobile ? 'true' : 'false'}
       {...densityScopeAttributes(
-        config.visual.density === 'compact' ? 'compact' : 'comfortable'
+        posture?.density ?? (config.visual.density === 'compact' ? 'compact' : 'comfortable')
       )}
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading}
       spacing={resolveStackSpacing(profileDefaults.sectionSpacing)}
     >
       {config.behavior.filters.length > 0 && (
+        <SurfacePostureSlot name="filters" asChild>
         <Card variant={profileDefaults.cardVariant}>
           <Card.Body>
             <PatternFilterPanel
@@ -176,6 +191,7 @@ export function AuditSurface({
             />
           </Card.Body>
         </Card>
+        </SurfacePostureSlot>
       )}
 
       {/*
@@ -186,6 +202,7 @@ export function AuditSurface({
         only exist here. Row count scales with density to mirror the final
         table footprint and avoid layout shift.
       */}
+      <SurfacePostureSlot name="results">
       {loading ? (
         <Card variant={profileDefaults.cardVariant}>
           <Card.Body>
@@ -228,7 +245,9 @@ export function AuditSurface({
         </Card>
       )}
 
+      </SurfacePostureSlot>
       {!loading && config.behavior.pagination && (
+        <SurfacePostureSlot name="pagination-summary">
         <Flex justify="end">
           {/*
             Typography rides the primitive's scale/color channels (`xs` +
@@ -246,6 +265,7 @@ export function AuditSurface({
             )}
           </Text>
         </Flex>
+        </SurfacePostureSlot>
       )}
     </Stack>
   );

@@ -16,7 +16,9 @@
  * sidebar, actions, avatar, status).
  */
 
-import { Box, Stack } from "../../../../../primitives";
+import { Box, Button, Stack } from "../../../../../primitives";
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { PatternDetailPanel, resolveRowKey } from "../../../../../patterns";
 import { FadeIn, recordTransitionName } from "@/graphics/motion";
 import { useBreakpoints } from "@/infrastructure/runtime/responsive";
@@ -55,6 +57,7 @@ function DeferredTabContent<TView>({
 }
 
 export interface DetailSurfaceProps<TRaw, TView> {
+  postures?: SurfacePostures;
   data?: TRaw | null;
   adapter: EntityAdapter<TRaw, TView>;
   config: DetailSurfaceConfig<TView>;
@@ -95,7 +98,15 @@ function resolveDetailErrorCapabilities<TRaw, TView>(
 }
 
 /** Detail-page shell with adapter mapping, action normalization, and tab filtering. */
-export function DetailSurface<TRaw, TView>({
+export function DetailSurface<TRaw, TView>(props: DetailSurfaceProps<TRaw, TView>): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="record">
+      <DetailSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function DetailSurfaceContent<TRaw, TView>({
   data,
   adapter,
   config,
@@ -103,6 +114,7 @@ export function DetailSurface<TRaw, TView>({
   error,
   onRetry,
 }: DetailSurfaceProps<TRaw, TView>): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const { tSurface } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
@@ -173,6 +185,23 @@ export function DetailSurface<TRaw, TView>({
       )
     : [];
 
+  const primaryAction = posture ? actions.find((action) => action.variant === "primary") : undefined;
+  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== "app-bar";
+  const suppressPrimaryAction = posture?.regions['primary-action'] === 'hide' || posture?.regions['primary-action'] === 'collapse';
+  const primaryActionNode = primaryAction ? (
+    <SurfacePostureAction label={primaryAction.label}>
+      <Button
+        variant="primary"
+        icon={primaryAction.icon}
+        disabled={primaryAction.disabled}
+        loading={primaryAction.loading}
+        onClick={primaryAction.onClick}
+      >
+        {primaryAction.label}
+      </Button>
+    </SurfacePostureAction>
+  ) : null;
+
   // Tabs are filtered after mapping the item so `visible` and `badge` callbacks can inspect real data.
   const visibleTabs = item
     ? filterDetailSurfaceTabs(
@@ -199,12 +228,14 @@ export function DetailSurface<TRaw, TView>({
   // When activeTab is undefined the Tabs component manages its own state
   // (uncontrolled mode). We track this so we pass the right prop.
   const isControlledTabState = config.behavior.activeTab !== undefined;
-  const resolvedSidebar = item
-    ? config.presentation.sidebar?.(item)
-    : undefined;
+  const sidebarContent = item ? config.presentation.sidebar?.(item) : undefined;
+  const resolvedSidebar = sidebarContent && posture?.regions.sidebar !== 'hide' ? (
+    <SurfacePostureSlot name="sidebar">{sidebarContent}</SurfacePostureSlot>
+  ) : undefined;
   const shouldCollapseSidebarOnMobile =
     isMobile &&
     !!resolvedSidebar &&
+    posture?.regions.sidebar !== "hide" &&
     config.visual.collapseSidebarOnMobile !== false;
   const resolvedFooter =
     item &&
@@ -214,6 +245,7 @@ export function DetailSurface<TRaw, TView>({
         {shouldCollapseSidebarOnMobile ? resolvedSidebar : null}
       </Stack>
     ) : undefined;
+  const resolvedHeaderExtra = item ? config.presentation.headerExtra?.(item) : undefined;
 
   // Determine whether we have page-level chrome that warrants wrapping
   // the detail panel in a PageShell for the premium two-tier layout.
@@ -274,12 +306,12 @@ export function DetailSurface<TRaw, TView>({
         avatar={item ? config.presentation.avatar?.(item) : undefined}
         status={item ? config.presentation.status?.(item) : undefined}
         tabs={visibleTabs}
-        actions={actions}
+        actions={(dockPrimaryAction || suppressPrimaryAction) && primaryAction ? actions.filter((action) => action !== primaryAction) : actions}
         sidebar={shouldCollapseSidebarOnMobile ? undefined : resolvedSidebar}
         sidebarPosition={config.visual.sidebarPosition}
         sidebarWidth={config.visual.sidebarWidth}
-        headerExtra={item ? config.presentation.headerExtra?.(item) : undefined}
-        footer={resolvedFooter}
+        headerExtra={resolvedHeaderExtra ? <SurfacePostureSlot name="header-extra">{resolvedHeaderExtra}</SurfacePostureSlot> : resolvedHeaderExtra}
+        footer={resolvedFooter ? <SurfacePostureSlot name="footer">{resolvedFooter}</SurfacePostureSlot> : undefined}
         activeTab={isControlledTabState ? resolvedActiveTab : undefined}
         onTabChange={config.behavior.onTabChange}
         loading={loading}
@@ -306,7 +338,7 @@ export function DetailSurface<TRaw, TView>({
       }}
       loading={loading}
     >
-      {detailPanel}
+      <SurfacePostureSlot name="detail-panel" asChild>{detailPanel}</SurfacePostureSlot>
     </PageShellSurface>
   ) : (
     /* No page chrome: the surface frames the panel itself. The margin is a
@@ -320,7 +352,7 @@ export function DetailSurface<TRaw, TView>({
         maxWidth: config.presentation.chrome?.maxWidth,
       }}
     >
-      {detailPanel}
+      <SurfacePostureSlot name="detail-panel" asChild>{detailPanel}</SurfacePostureSlot>
     </Box>
   );
 
@@ -334,6 +366,7 @@ export function DetailSurface<TRaw, TView>({
       data-state={loading ? "loading" : "ready"}
     >
       {content}
+      {(dockPrimaryAction || suppressPrimaryAction) && primaryActionNode}
     </Box>
   );
 

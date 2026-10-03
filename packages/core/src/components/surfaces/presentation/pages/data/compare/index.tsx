@@ -8,6 +8,8 @@
  */
 
 import React from "react";
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { Box, Card, Heading, Stack, Table, Text } from "../../../../../primitives";
 import type {
   CompareSurfaceConfig,
@@ -24,6 +26,7 @@ import { hasSurfaceError } from "../../../../runtime/helpers";
 import { SurfaceEmptyState, SurfaceErrorState } from "../../../../../structures/feedback/surface-lifecycle";
 
 export interface CompareSurfaceProps {
+  postures?: SurfacePostures;
   config: CompareSurfaceConfig;
   loading?: boolean;
   /** Load/render failure surfaced as an error state (ListSurface prop precedent). */
@@ -53,12 +56,21 @@ function CompareSkeleton({
   );
 }
 
-export function CompareSurface({
+export function CompareSurface(props: CompareSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="list">
+      <CompareSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function CompareSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: CompareSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
@@ -81,8 +93,23 @@ export function CompareSurface({
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
   };
+  const primaryAction = posture
+    ? config.behavior.actions?.find((action) => action.variant === 'primary')
+    : undefined;
+  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const primaryActionNode = primaryAction ? (
+    <SurfacePostureAction label={primaryAction.label}>
+      <SurfaceActionBar actions={[primaryAction]} access={config.access} />
+    </SurfacePostureAction>
+  ) : null;
   const actionsNode = (
-    <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
+    <SurfacePostureSlot name="toolbar">
+      <SurfaceActionBar
+        actions={primaryAction ? config.behavior.actions?.filter((action) => action !== primaryAction) : config.behavior.actions}
+        access={config.access}
+      />
+      {!dockPrimaryAction && primaryActionNode}
+    </SurfacePostureSlot>
   );
 
   // Error short-circuits the whole body: the shell keeps the page chrome so
@@ -91,7 +118,8 @@ export function CompareSurface({
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />
-      </PageShellSurface>
+        {dockPrimaryAction && primaryActionNode}
+    </PageShellSurface>
     );
   }
 
@@ -166,8 +194,9 @@ export function CompareSurface({
           data-loading={loading ? "true" : "false"}
           spacing="lg"
         >
-          {config.presentation.intro}
+          <SurfacePostureSlot name="intro">{config.presentation.intro}</SurfacePostureSlot>
 
+          <SurfacePostureSlot name="comparison">
           {loading ? (
             /* Mirror skeleton: section chrome and intro/footer stay live so
                the swap to real content is paint-only. */
@@ -273,7 +302,8 @@ export function CompareSurface({
             ))
           )}
 
-          {config.presentation.footer}
+          </SurfacePostureSlot>
+          <SurfacePostureSlot name="footer">{config.presentation.footer}</SurfacePostureSlot>
         </Stack>
       ) : (
         config.presentation.emptyState ?? (
@@ -283,6 +313,7 @@ export function CompareSurface({
           />
         )
       )}
+      {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );
 }

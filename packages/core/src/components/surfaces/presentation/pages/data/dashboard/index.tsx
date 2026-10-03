@@ -11,6 +11,8 @@
  */
 
 import { useMemo, useRef } from "react";
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 
 import {
   Button,
@@ -98,6 +100,7 @@ function DashboardSkeleton({
   return (
     <>
       {statsCount > 0 && (
+        <SurfacePostureSlot name="stats" asChild>
         <Grid
           columns={statsColumns}
           gap={sectionSpacing}
@@ -111,8 +114,10 @@ function DashboardSkeleton({
             />
           ))}
         </Grid>
+        </SurfacePostureSlot>
       )}
       {sections.length > 0 && (
+        <SurfacePostureSlot name="sections" asChild>
         <Grid columns={sectionsColumns} gap={sectionSpacing}>
           {sections.map((section) => (
             <Grid.Item
@@ -146,12 +151,14 @@ function DashboardSkeleton({
             </Grid.Item>
           ))}
         </Grid>
+        </SurfacePostureSlot>
       )}
     </>
   );
 }
 
 export interface DashboardSurfaceProps {
+  postures?: SurfacePostures;
   config: DashboardSurfaceConfig;
   loading?: boolean;
   error?: unknown;
@@ -159,12 +166,21 @@ export interface DashboardSurfaceProps {
 }
 
 /** Dashboard page shell with stats, header actions, section cards, and error handling. */
-export function DashboardSurface({
+export function DashboardSurface(props: DashboardSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <DashboardSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function DashboardSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: DashboardSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
@@ -314,10 +330,10 @@ export function DashboardSurface({
     adaptiveEnvironment,
   ]);
 
-  const actionsNode = (
-    <Flex gap={8} wrap="wrap" justify="end">
-      {headerActions.map((action) => (
-        <Button
+  const primaryAction = posture ? headerActions.find((action) => action.variant === "primary") : undefined;
+  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== "app-bar";
+  const renderAction = (action: (typeof headerActions)[number]) => (
+    <Button
           key={action.id}
           variant={resolveSurfaceButtonVariant(action.variant)}
           disabled={action.disabled}
@@ -327,7 +343,14 @@ export function DashboardSurface({
         >
           {action.label}
         </Button>
-      ))}
+  );
+  const primaryActionNode = primaryAction ? (
+    <SurfacePostureAction label={primaryAction.label}>{renderAction(primaryAction)}</SurfacePostureAction>
+  ) : null;
+  const actionsNode = (
+    <Flex gap={8} wrap="wrap" justify="end">
+      {headerActions.filter((action) => action !== primaryAction).map(renderAction)}
+      {!dockPrimaryAction && primaryActionNode}
     </Flex>
   );
 
@@ -341,6 +364,7 @@ export function DashboardSurface({
         loading={false}
       >
         <SurfaceErrorState error={error} onRetry={onRetry} />
+        {dockPrimaryAction && primaryActionNode}
       </PageShellSurface>
     );
   }
@@ -354,7 +378,7 @@ export function DashboardSurface({
       data-heading-weight={profileDefaults.headerWeight}
       spacing={sectionSpacing}
     >
-      {config.presentation.headerContent}
+      <SurfacePostureSlot name="header">{config.presentation.headerContent}</SurfacePostureSlot>
 
       {loading ? (
         /* Mirror skeleton: the board's geometry is preserved through the
@@ -377,21 +401,24 @@ export function DashboardSurface({
         <>
           {/* Stats stay optional so the same surface can power sparse and dense dashboards. */}
           {stats && stats.length > 0 && (
+            <SurfacePostureSlot name="stats">
             <PatternStatsGrid
               stats={stats}
               columns={statsColumns}
               variant={resolveStatsGridVariant(profileDefaults.cardVariant)}
               onStatClick={config.behavior.onStatClick}
             />
+            </SurfacePostureSlot>
           )}
 
           {visibleSections.length === 0 && (!stats || stats.length === 0) ? (
-            <SurfaceEmptyState action={headerActions[0]} />
+            <SurfaceEmptyState action={primaryAction === headerActions[0] ? undefined : headerActions[0]} />
           ) : null}
 
           {visibleSections.length > 0 && (
             /* Packed spans are resolved on a 12-column tier, so the grid
                must expose those 12 tracks whenever the solver is active. */
+            <SurfacePostureSlot name="sections" asChild>
             <Grid
               ref={sectionsRegionRef}
               columns={packedSectionSpans ? solverColumns : sectionsColumns}
@@ -459,6 +486,7 @@ export function DashboardSurface({
                 );
               })}
             </Grid>
+            </SurfacePostureSlot>
           )}
         </>
       )}
@@ -485,6 +513,7 @@ export function DashboardSurface({
           dashboardContent
         )}
       </SurfaceAccentBarWrapper>
+      {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );
 }

@@ -16,6 +16,8 @@
  */
 
 import React from 'react';
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { Card, Grid, Stack, Tabs, Text } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
@@ -39,6 +41,7 @@ import {
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 
 export interface SettingsSurfaceProps {
+  postures?: SurfacePostures;
   config: SettingsSurfaceConfig;
   loading?: boolean;
   /** Load/render failure surfaced as an error state (ListSurface prop precedent). */
@@ -56,19 +59,45 @@ function isEmptyTabLabel(label: React.ReactNode): boolean {
   );
 }
 
-export function SettingsSurface({
+export function SettingsSurface(props: SettingsSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="form">
+      <SettingsSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function SettingsSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: SettingsSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { isPhone: isMobile } = useResponsive();
   const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   const { tSurfaceOr } = useSurfaceTranslations();
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
-  const isCompact = profileDefaults.density === 'compact';
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} access={config.access} />;
+  const isCompact = (posture?.density ?? profileDefaults.density) === 'compact';
+  const primaryAction = posture
+    ? config.behavior.actions?.find((action) => action.variant === 'primary')
+    : undefined;
+  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const primaryActionNode = primaryAction ? (
+    <SurfacePostureAction label={primaryAction.label}>
+      <SurfaceActionBar actions={[primaryAction]} access={config.access} />
+    </SurfacePostureAction>
+  ) : null;
+  const actionsNode = (
+    <SurfacePostureSlot name="toolbar">
+      <SurfaceActionBar
+        actions={primaryAction ? config.behavior.actions?.filter((action) => action !== primaryAction) : config.behavior.actions}
+        access={config.access}
+      />
+      {!dockPrimaryAction && primaryActionNode}
+    </SurfacePostureSlot>
+  );
   const chrome = {
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
@@ -104,7 +133,8 @@ export function SettingsSurface({
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />
-      </PageShellSurface>
+        {dockPrimaryAction && primaryActionNode}
+    </PageShellSurface>
     );
   }
 
@@ -196,16 +226,17 @@ export function SettingsSurface({
       data-view={resolvedView}
       data-mobile={isMobile ? 'true' : 'false'}
       data-loading={loading ? 'true' : 'false'}
-      {...densityScopeAttributes(profileDefaults.density)}
+      {...densityScopeAttributes(posture?.density ?? profileDefaults.density)}
       aria-busy={loading}
-      columns={config.presentation.sidebar && !shouldStack ? 12 : 1}
+      columns={config.presentation.sidebar && posture?.regions.sidebar !== 'hide' && !shouldStack ? 12 : 1}
       gap="lg"
     >
-      <Grid.Item span={config.presentation.sidebar && !shouldStack ? 8 : undefined}>
-        {framedContent}
+      <Grid.Item span={config.presentation.sidebar && posture?.regions.sidebar !== 'hide' && !shouldStack ? 8 : undefined}>
+        <SurfacePostureSlot name="content">{framedContent}</SurfacePostureSlot>
       </Grid.Item>
 
-      {config.presentation.sidebar && (
+      {config.presentation.sidebar && posture?.regions.sidebar !== 'hide' && (
+        <SurfacePostureSlot name="sidebar" asChild>
         <Grid.Item span={!shouldStack ? 4 : undefined}>
           {/*
             Sticky offset lives in the skin, keyed on the always-stamped
@@ -217,6 +248,7 @@ export function SettingsSurface({
             <Card.Body>{config.presentation.sidebar}</Card.Body>
           </Card>
         </Grid.Item>
+        </SurfacePostureSlot>
       )}
     </Grid>
   );
@@ -236,6 +268,7 @@ export function SettingsSurface({
           settingsContent
         )}
       </SurfaceAccentBarWrapper>
+      {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );
 }

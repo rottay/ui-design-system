@@ -11,6 +11,8 @@
  */
 
 import React, { useEffect, useMemo, useState } from 'react';
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { Box, Card, Flex, Grid, Input, Stack, Text } from '../../../../../primitives';
 import { PatternFilterPanel } from '../../../../../patterns';
 import { FadeIn } from '@/graphics/motion';
@@ -124,7 +126,7 @@ function SearchSkeleton({
   return (
     <Stack spacing={sectionSpacing} data-part="skeleton">
       <Box data-part="search-skeleton-block" data-size="input" />
-      {hasFilters && <Box data-part="search-skeleton-block" data-size="filter" />}
+      {hasFilters && <SurfacePostureSlot name="filters" asChild><Box data-part="search-skeleton-block" data-size="filter" /></SurfacePostureSlot>}
       {split ? (
         <Grid columns={12} gap="lg">
           <Grid.Item span={7}>{resultsSkeleton}</Grid.Item>
@@ -140,6 +142,7 @@ function SearchSkeleton({
 }
 
 export interface SearchSurfaceProps {
+  postures?: SurfacePostures;
   config: SearchSurfaceConfig;
   loading?: boolean;
   error?: unknown;
@@ -147,12 +150,21 @@ export interface SearchSurfaceProps {
 }
 
 /** Search page shell: command bar (query + filters), results, split preview. */
-export function SearchSurface({
+export function SearchSurface(props: SearchSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="list">
+      <SearchSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function SearchSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: SearchSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
@@ -215,7 +227,7 @@ export function SearchSurface({
   // Split layout with preview rail requires both a selected result AND a wide
   // enough viewport. On mobile the preview collapses into a full-width panel
   // below the results (the 12-col grid resolves to a single column).
-  const showPreview = config.visual.layout === 'split' && !!selectedResult;
+  const showPreview = config.visual.layout === 'split' && !!selectedResult && posture?.regions['preview-rail'] !== 'hide';
   const splitLayout = showPreview && !shouldStack;
   const resultMinWidth = config.visual.resultMinWidth ?? 280;
   const hasResults = config.behavior.results.length > 0;
@@ -232,8 +244,23 @@ export function SearchSurface({
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
   };
 
+  const primaryAction = posture
+    ? config.behavior.actions?.find((action) => action.variant === 'primary')
+    : undefined;
+  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const primaryActionNode = primaryAction ? (
+    <SurfacePostureAction label={primaryAction.label}>
+      <SurfaceActionBar actions={[primaryAction]} access={config.access} />
+    </SurfacePostureAction>
+  ) : null;
   const actionsNode = (
-    <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
+    <SurfacePostureSlot name="toolbar">
+      <SurfaceActionBar
+        actions={primaryAction ? config.behavior.actions?.filter((action) => action !== primaryAction) : config.behavior.actions}
+        access={config.access}
+      />
+      {!dockPrimaryAction && primaryActionNode}
+    </SurfacePostureSlot>
   );
 
   // Error state renders full page chrome so header actions stay available
@@ -242,7 +269,8 @@ export function SearchSurface({
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />
-      </PageShellSurface>
+        {dockPrimaryAction && primaryActionNode}
+    </PageShellSurface>
     );
   }
 
@@ -261,6 +289,7 @@ export function SearchSurface({
         />
 
         {hasFilters && config.behavior.filters && (
+          <SurfacePostureSlot name="filters">
           <PatternFilterPanel
             filters={config.behavior.filters}
             values={config.behavior.filterValues ?? {}}
@@ -273,6 +302,7 @@ export function SearchSurface({
             title={tSurfaceOr('search.filters_title', 'Filters')}
             layout={isMobile ? 'stacked' : 'inline'}
           />
+          </SurfacePostureSlot>
         )}
       </Stack>
     </SurfaceSectionCard>
@@ -428,9 +458,12 @@ export function SearchSurface({
       )
     ) : (
       <Grid columns={splitLayout ? 12 : 1} gap="lg">
-        <Grid.Item span={splitLayout ? 7 : undefined}>{resultsRegion}</Grid.Item>
+        <SurfacePostureSlot name="results" asChild>
+          <Grid.Item span={splitLayout ? 7 : undefined}>{resultsRegion}</Grid.Item>
+        </SurfacePostureSlot>
 
         {showPreview && selectedResult && (
+          <SurfacePostureSlot name="preview-rail" asChild>
           <Grid.Item span={splitLayout ? 5 : undefined}>
             <Box data-part="preview">
               <SurfaceSectionCard
@@ -468,6 +501,7 @@ export function SearchSurface({
               </SurfaceSectionCard>
             </Box>
           </Grid.Item>
+          </SurfacePostureSlot>
         )}
       </Grid>
     );
@@ -482,9 +516,11 @@ export function SearchSurface({
       data-preview={showPreview ? 'true' : 'false'}
       spacing={sectionSpacing}
     >
-      {commandBar}
-      {bodyContent}
-      {config.presentation.footer}
+      <SurfacePostureSlot name="command-bar">{commandBar}</SurfacePostureSlot>
+      {loading && !hasResults || !hasEnoughQuery && !loading || !hasResults ? (
+        <SurfacePostureSlot name="results">{bodyContent}</SurfacePostureSlot>
+      ) : bodyContent}
+      <SurfacePostureSlot name="footer">{config.presentation.footer}</SurfacePostureSlot>
     </Stack>
   );
 
@@ -498,6 +534,7 @@ export function SearchSurface({
       ) : (
         searchContent
       )}
+      {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );
 }

@@ -2,10 +2,16 @@
 
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import { SearchSurface } from '..';
+import { describe, expect, expectTypeOf, it, vi } from 'vitest';
+import { SearchSurface, type SearchSurfaceProps } from '..';
+import type { SurfacePostures } from '../../../../../foundation/contracts/postures';
+import { DensityScope, useDensity } from '@/infrastructure/runtime/foundation/density';
 import type { SearchSurfaceConfig } from '../../../../../foundation/contracts';
-import { renderSurface } from '../../../../../foundation/common/test-utils';
+import { renderSurface, RESOLVED_PHONE_TEST_CONTEXT } from '../../../../../foundation/common/test-utils';
+
+function DensityProbe() {
+  return <output data-testid="search-density">{useDensity().posture}</output>;
+}
 
 function buildConfig(overrides?: Partial<SearchSurfaceConfig>): SearchSurfaceConfig {
   return {
@@ -64,6 +70,59 @@ function buildConfig(overrides?: Partial<SearchSurfaceConfig>): SearchSurfaceCon
 }
 
 describe('SearchSurface', () => {
+  it('owns the canonical optional posture prop', () => {
+    expectTypeOf<SearchSurfaceProps['postures']>().toEqualTypeOf<SurfacePostures | undefined>();
+  });
+
+  it('preserves disabled semantics when the app primary action is moved', async () => {
+    const config = buildConfig();
+    const onClick = vi.fn();
+    config.behavior.actions = [{ id: 'create', label: 'Create entry', variant: 'primary', disabled: true, onClick }];
+    const { container } = renderSurface(
+      <SearchSurface config={config} postures={{ phone: { primaryAction: 'floating' } }} />,
+      { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT },
+    );
+    const action = await screen.findByRole('button', { name: 'Create entry' });
+    expect(action).toBeDisabled();
+    expect(screen.getAllByRole('button', { name: 'Create entry' })).toHaveLength(1);
+    expect(action.closest('[data-surface-region="floating"]')).not.toBeNull();
+    expect(container.querySelector('[data-surface-action="create"]')).toBe(action);
+    fireEvent.click(action);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it.each(['hide', 'collapse'] as const)('%s removes the real preview and its actions while results remain selectable', async (disposition) => {
+    const config = buildConfig();
+    const { container } = renderSurface(
+      <SearchSurface config={config} postures={{ phone: { regions: { 'preview-rail': disposition, filters: 'hide' } } }} />,
+      { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT },
+    );
+    fireEvent.click(await screen.findByText('Andre Silva'));
+    expect(config.behavior.onSelectResult).toHaveBeenCalledWith(expect.objectContaining({ id: '2' }));
+    expect(screen.queryByText('Preview: Andre Silva')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Open profile' })).toBeNull();
+    expect(container.querySelector('[data-surface-region="filters"]')).toBeNull();
+    const preview = container.querySelector('[data-surface-region="preview-rail"]');
+    if (disposition === 'hide') expect(preview).toBeNull();
+    else {
+      expect(preview).toHaveAttribute('data-region-disposition', 'collapse');
+      expect(preview?.textContent).toBe('');
+    }
+  });
+
+  it.each([undefined, 'spacious'] as const)('inherits ambient density unless a posture declares %s', async (density) => {
+    const config = buildConfig();
+    config.presentation.renderResult = () => <DensityProbe />;
+    const { container } = renderSurface(
+      <DensityScope posture="compact">
+        <SearchSurface config={config} postures={density ? { phone: { density } } : undefined} />
+      </DensityScope>,
+      { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT },
+    );
+    await waitFor(() => expect(container.querySelector('[data-testid="search-density"]')?.textContent).toBe(density ?? 'compact'));
+    if (!density) expect(container.querySelector('[data-surface-region]')).toBeNull();
+  });
+
   it('propagates query changes through the surface input', async () => {
     const config = buildConfig();
 

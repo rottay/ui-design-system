@@ -27,6 +27,8 @@ import { DataImportIcon } from '@/graphics/icons/semantic/generated/roles/data-i
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
 import { TimeTimestampIcon } from '@/graphics/icons/semantic/generated/roles/time-timestamp';
 import React, { useState } from 'react';
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import {
   Button,
   Card,
@@ -60,6 +62,7 @@ import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structure
 import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 
 export interface ImportExportSurfaceProps {
+  postures?: SurfacePostures;
   config: ImportExportSurfaceConfig;
   loading?: boolean;
   /** Load/render failure surfaced as an error state (ListSurface prop precedent). */
@@ -332,6 +335,7 @@ function ImportPanel({
                 >
                   {tSurfaceOr('import_export.back', 'Back')}
                 </Button>
+                <SurfacePostureAction label={tSurfaceOr('import_export.confirm_import', 'Confirm Import')}>
                 <Button
                   variant="primary"
                   onClick={() => { void handleConfirm(); }}
@@ -340,6 +344,7 @@ function ImportPanel({
                 >
                   {tSurfaceOr('import_export.confirm_import', 'Confirm Import')}
                 </Button>
+                </SurfacePostureAction>
               </Flex>
             </Stack>
           )}
@@ -515,6 +520,7 @@ function ExportPanel({
           </Stack>
 
           <Flex justify="end">
+            <SurfacePostureAction label={tSurfaceOr('import_export.export_action', 'Export')}>
             <Button
               variant="primary"
               onClick={() => { void handleExport(); }}
@@ -523,6 +529,7 @@ function ExportPanel({
             >
               {tSurfaceOr('import_export.export_action', 'Export')}
             </Button>
+            </SurfacePostureAction>
           </Flex>
         </Stack>
       </Card.Body>
@@ -602,12 +609,21 @@ function HistoryPanel({
   );
 }
 
-export function ImportExportSurface({
+export function ImportExportSurface(props: ImportExportSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <ImportExportSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function ImportExportSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: ImportExportSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
@@ -618,7 +634,7 @@ export function ImportExportSurface({
   const showImport = mode === 'import' || mode === 'both';
   const showExport = mode === 'export' || mode === 'both';
   const cardVariant = profileDefaults.cardVariant;
-  const isCompact = profileDefaults.density === 'compact';
+  const isCompact = (posture?.density ?? profileDefaults.density) === 'compact';
 
   const chrome = {
     ...config.presentation.chrome,
@@ -650,39 +666,45 @@ export function ImportExportSurface({
       data-mode={mode}
       data-loading={loading ? 'true' : 'false'}
       data-mobile={isMobile ? 'true' : 'false'}
-      {...densityScopeAttributes(profileDefaults.density)}
+      {...densityScopeAttributes(posture?.density ?? profileDefaults.density)}
       aria-busy={loading}
       spacing={resolveStackSpacing(profileDefaults.sectionSpacing)}
     >
       {loading ? (
         <>
           {showImport && (
+            <SurfacePostureSlot name="import" asChild>
             <Card variant={cardVariant}>
               <Card.Body>
                 <SurfaceLoadingSkeleton rows={isCompact ? 6 : 4} />
               </Card.Body>
             </Card>
+            </SurfacePostureSlot>
           )}
           {showExport && (
+            <SurfacePostureSlot name="export" asChild>
             <Card variant={cardVariant}>
               <Card.Body>
                 <SurfaceLoadingSkeleton rows={isCompact ? 6 : 4} />
               </Card.Body>
             </Card>
+            </SurfacePostureSlot>
           )}
           {config.behavior.history && (
+            <SurfacePostureSlot name="history" asChild>
             <Card variant={cardVariant}>
               <Card.Body>
                 <SurfaceLoadingSkeleton rows={3} />
               </Card.Body>
             </Card>
+            </SurfacePostureSlot>
           )}
         </>
       ) : (
         <>
-          {showImport && <ImportPanel config={config} cardVariant={cardVariant} />}
-          {showExport && <ExportPanel config={config} cardVariant={cardVariant} />}
-          <HistoryPanel config={config} cardVariant={cardVariant} />
+          {showImport && <SurfacePostureSlot name="import"><ImportPanel config={config} cardVariant={cardVariant} /></SurfacePostureSlot>}
+          {showExport && <SurfacePostureSlot name="export"><ExportPanel config={config} cardVariant={cardVariant} /></SurfacePostureSlot>}
+          <SurfacePostureSlot name="history"><HistoryPanel config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
         </>
       )}
     </Stack>

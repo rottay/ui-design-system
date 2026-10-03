@@ -20,6 +20,8 @@
  */
 
 import React from 'react';
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { Box, Flex, Skeleton, Stack } from '../../../../../primitives';
 import { PatternFileManager } from '../../../../../patterns';
 import type { FileItem, FolderItem } from '../../../../../patterns';
@@ -39,6 +41,7 @@ import {
 } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 
 export interface FileBrowserSurfaceProps {
+  postures?: SurfacePostures;
   config: FileBrowserSurfaceConfig;
   loading?: boolean;
   error?: unknown;
@@ -148,12 +151,22 @@ function FileBrowserLoadingMirror({
   );
 }
 
-export function FileBrowserSurface({
+export function FileBrowserSurface(props: FileBrowserSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <FileBrowserSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function FileBrowserSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: FileBrowserSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
+
   // Visual defaults cascade: explicit surface config -> product profile -> DS
   // defaults. The contract declares `visual.profileOverrides`; wiring it here
   // realizes that cascade (section spacing, entrance motion, accent bar).
@@ -170,8 +183,23 @@ export function FileBrowserSurface({
       ? 'pulse'
       : 'wave';
 
+  const primaryAction = posture
+    ? config.behavior.actions?.find((action) => action.variant === 'primary')
+    : undefined;
+  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const primaryActionNode = primaryAction ? (
+    <SurfacePostureAction label={primaryAction.label}>
+      <SurfaceActionBar actions={[primaryAction]} access={config.access} />
+    </SurfacePostureAction>
+  ) : null;
   const actionsNode = (
-    <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
+    <SurfacePostureSlot name="toolbar">
+      <SurfaceActionBar
+        actions={primaryAction ? config.behavior.actions?.filter((action) => action !== primaryAction) : config.behavior.actions}
+        access={config.access}
+      />
+      {!dockPrimaryAction && primaryActionNode}
+    </SurfacePostureSlot>
   );
 
   // The pattern requires discriminated union types (FileItem / FolderItem).
@@ -194,7 +222,8 @@ export function FileBrowserSurface({
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />
-      </PageShellSurface>
+        {dockPrimaryAction && primaryActionNode}
+    </PageShellSurface>
     );
   }
 
@@ -209,6 +238,7 @@ export function FileBrowserSurface({
       aria-busy={loading || undefined}
       spacing={resolveStackSpacing(profileDefaults.sectionSpacing)}
     >
+      <SurfacePostureSlot name="browser">
       {loading ? (
         <FileBrowserLoadingMirror
           viewMode={viewMode}
@@ -238,6 +268,7 @@ export function FileBrowserSurface({
           emptyMessage={tSurfaceOr('file_browser.empty_message', 'No files or folders found.')}
         />
       )}
+      </SurfacePostureSlot>
     </Stack>
   );
 
@@ -253,6 +284,7 @@ export function FileBrowserSurface({
           browserBody
         )}
       </SurfaceAccentBarWrapper>
+      {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );
 }

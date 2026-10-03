@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { DashboardSurface } from '..';
 import type { DashboardSurfaceConfig } from '../../../../../foundation/contracts';
-import { renderSurface } from '../../../../../foundation/common/test-utils';
+import { renderSurface, RESOLVED_PHONE_TEST_CONTEXT } from '../../../../../foundation/common/test-utils';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 
 function buildDashboardConfig(onHeaderAction = vi.fn()): DashboardSurfaceConfig {
@@ -49,6 +49,34 @@ function buildDashboardConfig(onHeaderAction = vi.fn()): DashboardSurfaceConfig 
 }
 
 describe('DashboardSurface', () => {
+  it('applies hidden anatomy to the loading mirror on the resolved phone paint', async () => {
+    const { container } = renderSurface(
+      <DashboardSurface config={buildDashboardConfig()} loading postures={{ phone: {
+        regions: { header: 'hide', stats: 'hide', sections: 'hide' },
+      } }} />,
+      { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT },
+    );
+    expect(await screen.findByText('Operations dashboard')).toBeInTheDocument();
+    expect(screen.queryByText('Header summary')).toBeNull();
+    expect(container.querySelector('[data-part="dashboard-skeleton-block"]')).toBeNull();
+    expect(container.querySelector('[data-surface-region="stats"], [data-surface-region="sections"]')).toBeNull();
+  });
+
+  it('renders an empty dashboard primary operation once after moving it out of chrome', async () => {
+    const callback = vi.fn();
+    const config = buildDashboardConfig(callback);
+    config.presentation.sections = [];
+    config.behavior.stats = [];
+    renderSurface(<DashboardSurface config={config} postures={{ phone: { primaryAction: 'bottom-bar' } }} />, {
+      engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT,
+    });
+    const action = await screen.findByRole('button', { name: 'Refresh' });
+    expect(screen.getAllByRole('button', { name: 'Refresh' })).toHaveLength(1);
+    expect(action.closest('[data-mode="sticky"]')).not.toBeNull();
+    fireEvent.click(action);
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
+
   it('renders page chrome, stats, sections and header actions', async () => {
     const onHeaderAction = vi.fn();
 

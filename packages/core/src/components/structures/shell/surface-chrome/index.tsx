@@ -39,6 +39,7 @@
  */
 
 import type { MouseEvent, ReactNode } from 'react';
+import type { ViewportPosture } from '@/foundation/contracts/kernel/adaptation/foundation';
 import { Button, Card, Flex, Heading, Stack, Text } from '../../../primitives';
 import type { CardProps } from '../../../primitives/display/card/contracts';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
@@ -59,6 +60,9 @@ export interface SurfaceActionBarProps<TView = void> {
   justify?: 'start' | 'center' | 'end' | 'between';
   size?: 'sm' | 'md' | 'lg';
   stopPropagation?: boolean;
+  'data-surface-region'?: string;
+  'data-region-disposition'?: 'render' | 'collapse' | 'hide';
+  'data-posture'?: ViewportPosture;
 }
 
 /** Render an app-resolved action row using the standard DS button contract. */
@@ -69,6 +73,9 @@ export function SurfaceActionBar<TView>({
   justify = 'end',
   size = 'sm',
   stopPropagation = false,
+  'data-surface-region': surfaceRegion,
+  'data-region-disposition': regionDisposition,
+  'data-posture': posture,
 }: SurfaceActionBarProps<TView>): React.ReactElement | null {
   /**
    * Filtering lives here on purpose. This component is the one place where the
@@ -82,7 +89,14 @@ export function SurfaceActionBar<TView>({
   }
 
   return (
-    <Flex gap={8} wrap="wrap" justify={justify}>
+    <Flex
+      gap={8}
+      wrap="wrap"
+      justify={justify}
+      data-surface-region={surfaceRegion}
+      data-region-disposition={regionDisposition}
+      data-posture={posture}
+    >
       {visibleActions.map((action) => (
         <Button
           key={action.id}

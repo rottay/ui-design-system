@@ -24,6 +24,8 @@ import { BillingInvoiceIcon } from '@/graphics/icons/semantic/generated/roles/bi
 import { BillingSubscriptionIcon } from '@/graphics/icons/semantic/generated/roles/billing-subscription';
 import { DataChartIcon } from '@/graphics/icons/semantic/generated/roles/data-chart';
 import React from 'react';
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { Button, Card, Flex, Heading, Progress, Stack, Tabs, Tag, Text } from '../../../../../primitives';
 import type { BillingSurfaceConfig, BillingInvoice } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
@@ -38,6 +40,7 @@ import { resolveStackSpacing } from '../../../../../structures/foundation/chrome
 import type { CardVariant } from '../../../../../primitives/display/card/contracts';
 
 export interface BillingSurfaceProps {
+  postures?: SurfacePostures;
   config: BillingSurfaceConfig;
   loading?: boolean;
   /** Load/render failure surfaced as an error state (ListSurface prop precedent). */
@@ -87,6 +90,15 @@ function PlanSection({
   cardVariant: SectionCardVariant;
 }): React.ReactElement {
   const { tSurfaceOr } = useSurfaceTranslations();
+  const posture = useScopedSurfacePosture();
+  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const upgradeAction = config.behavior.onUpgrade ? (
+    <SurfacePostureAction label={tSurfaceOr('billing.action_upgrade', 'Upgrade')}>
+      <Button variant="primary" size="sm" onClick={config.behavior.onUpgrade}>
+        {tSurfaceOr('billing.action_upgrade', 'Upgrade')}
+      </Button>
+    </SurfacePostureAction>
+  ) : null;
 
   // Full escape hatch: when the app provides a custom plan renderer, the
   // surface yields entirely. This allows Stripe-specific or custom plan
@@ -117,11 +129,7 @@ function PlanSection({
             </Stack>
             {hasActions && (
               <Flex gap={8} wrap="wrap">
-                {config.behavior.onUpgrade && (
-                  <Button variant="primary" size="sm" onClick={config.behavior.onUpgrade}>
-                    {tSurfaceOr('billing.action_upgrade', 'Upgrade')}
-                  </Button>
-                )}
+                {!dockPrimaryAction && upgradeAction}
                 {/*
                   Cancel fires the contract callback directly: the contract
                   declares no confirmation step, so the surface does not invent
@@ -150,6 +158,7 @@ function PlanSection({
               ))}
             </Stack>
           )}
+          {dockPrimaryAction && upgradeAction}
         </Stack>
       </Card.Body>
     </Card>
@@ -349,31 +358,46 @@ function BillingLoadingBody({
 }): React.ReactElement {
   return (
     <>
+      <SurfacePostureSlot name="plan" asChild>
       <Card variant={cardVariant}>
         <Card.Body>
           <SurfaceLoadingSkeleton rows={2} />
         </Card.Body>
       </Card>
+      </SurfacePostureSlot>
+      <SurfacePostureSlot name="usage" asChild>
       <Card variant={cardVariant}>
         <Card.Body>
           <SurfaceLoadingSkeleton rows={isCompact ? 4 : 2} />
         </Card.Body>
       </Card>
+      </SurfacePostureSlot>
+      <SurfacePostureSlot name="invoices" asChild>
       <Card variant={cardVariant}>
         <Card.Body>
           <SurfaceLoadingSkeleton rows={isCompact ? 5 : 3} />
         </Card.Body>
       </Card>
+      </SurfacePostureSlot>
     </>
   );
 }
 
-export function BillingSurface({
+export function BillingSurface(props: BillingSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="record">
+      <BillingSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function BillingSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: BillingSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
@@ -381,7 +405,7 @@ export function BillingSurface({
   const { isMobile } = useBreakpoints();
   const useTabs = config.visual.layout === 'tabs';
   const cardVariant = profileDefaults.cardVariant;
-  const isCompact = profileDefaults.density === 'compact';
+  const isCompact = (posture?.density ?? profileDefaults.density) === 'compact';
 
   // Error short-circuits the whole body: the shell keeps the page chrome so
   // retry never loses context (ListSurface precedent).
@@ -397,10 +421,10 @@ export function BillingSurface({
     <BillingLoadingBody cardVariant={cardVariant} isCompact={isCompact} />
   ) : (
     <>
-      <PlanSection config={config} cardVariant={cardVariant} />
-      <UsageSection config={config} cardVariant={cardVariant} />
-      <InvoicesSection config={config} cardVariant={cardVariant} />
-      <PaymentMethodsSection config={config} cardVariant={cardVariant} />
+      <SurfacePostureSlot name="plan"><PlanSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
+      <SurfacePostureSlot name="usage"><UsageSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
+      <SurfacePostureSlot name="invoices"><InvoicesSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
+      <SurfacePostureSlot name="payment-methods"><PaymentMethodsSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
     </>
   );
 
@@ -417,7 +441,7 @@ export function BillingSurface({
       data-part="root"
       data-view="tabs"
       data-mobile={isMobile ? 'true' : 'false'}
-      {...densityScopeAttributes(profileDefaults.density)}
+      {...densityScopeAttributes(posture?.density ?? profileDefaults.density)}
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading}
       spacing={resolveStackSpacing(profileDefaults.sectionSpacing)}
@@ -433,8 +457,8 @@ export function BillingSurface({
             </Stack>
           ) : (
             <Stack spacing="lg">
-              <PlanSection config={config} cardVariant={cardVariant} />
-              <UsageSection config={config} cardVariant={cardVariant} />
+              <SurfacePostureSlot name="plan"><PlanSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
+              <SurfacePostureSlot name="usage"><UsageSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>
             </Stack>
           ),
         },
@@ -443,7 +467,7 @@ export function BillingSurface({
               {
                 key: 'invoices',
                 label: tSurfaceOr('billing.invoices_title', 'Invoices'),
-                children: <InvoicesSection config={config} cardVariant={cardVariant} />,
+                children: <SurfacePostureSlot name="invoices"><InvoicesSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>,
               },
             ]
           : []),
@@ -454,7 +478,7 @@ export function BillingSurface({
               {
                 key: 'payment',
                 label: tSurfaceOr('billing.payment_methods_title', 'Payment Methods'),
-                children: <PaymentMethodsSection config={config} cardVariant={cardVariant} />,
+                children: <SurfacePostureSlot name="payment-methods"><PaymentMethodsSection config={config} cardVariant={cardVariant} /></SurfacePostureSlot>,
               },
             ]
           : []),
@@ -467,7 +491,7 @@ export function BillingSurface({
       data-part="root"
       data-view="sections"
       data-mobile={isMobile ? 'true' : 'false'}
-      {...densityScopeAttributes(profileDefaults.density)}
+      {...densityScopeAttributes(posture?.density ?? profileDefaults.density)}
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading}
       spacing={resolveStackSpacing(profileDefaults.sectionSpacing)}

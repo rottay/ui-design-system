@@ -12,6 +12,8 @@
  */
 
 import React from 'react';
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { Box, Card, Flex, Grid, Stack, Tabs, Text } from '../../../../../primitives';
 import type { GridColumns } from '../../../../../primitives/layout/grid/contracts';
 import { PatternStatsGrid } from '../../../../../patterns';
@@ -62,6 +64,7 @@ function VisualizationSkeleton({
   return (
     <Stack spacing={sectionSpacing} data-part="visualization-skeleton">
       {statsCount > 0 && (
+        <SurfacePostureSlot name="stats" asChild>
         <Grid
           columns={statsColumns}
           gap={sectionSpacing}
@@ -75,7 +78,9 @@ function VisualizationSkeleton({
             />
           ))}
         </Grid>
+        </SurfacePostureSlot>
       )}
+      <SurfacePostureSlot name="views" asChild>
       <Card variant={cardVariant}>
         <Card.Body>
           <Stack spacing="md">
@@ -89,11 +94,13 @@ function VisualizationSkeleton({
           </Stack>
         </Card.Body>
       </Card>
+      </SurfacePostureSlot>
     </Stack>
   );
 }
 
 export interface VisualizationSurfaceProps {
+  postures?: SurfacePostures;
   config: VisualizationSurfaceConfig;
   loading?: boolean;
   error?: unknown;
@@ -101,12 +108,21 @@ export interface VisualizationSurfaceProps {
 }
 
 /** Visualization page shell: KPI strip + tabbed chart views + optional aside rail. */
-export function VisualizationSurface({
+export function VisualizationSurface(props: VisualizationSurfaceProps): React.ReactElement {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <VisualizationSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function VisualizationSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: VisualizationSurfaceProps): React.ReactElement {
+  const posture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurfaceOr } = useSurfaceTranslations();
   const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
@@ -130,15 +146,30 @@ export function VisualizationSurface({
   // Stats grid adapts from 4 columns on desktop to 1 on mobile so KPI
   // numbers remain readable at every breakpoint.
   const statsColumns = useResponsiveValue(surfaceColumnsValue(4, 2, 1)) ?? 1;
-  const hasAside = Boolean(config.presentation.aside);
+  const hasAside = Boolean(config.presentation.aside) && posture?.regions.aside !== 'hide';
   const useAsideColumns = hasAside && !shouldStack;
 
   const chrome = {
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
   };
+  const primaryAction = posture
+    ? config.behavior.actions?.find((action) => action.variant === 'primary')
+    : undefined;
+  const dockPrimaryAction = !!posture?.primaryAction && posture.primaryAction !== 'app-bar';
+  const primaryActionNode = primaryAction ? (
+    <SurfacePostureAction label={primaryAction.label}>
+      <SurfaceActionBar actions={[primaryAction]} access={config.access} />
+    </SurfacePostureAction>
+  ) : null;
   const actionsNode = (
-    <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
+    <SurfacePostureSlot name="toolbar">
+      <SurfaceActionBar
+        actions={primaryAction ? config.behavior.actions?.filter((action) => action !== primaryAction) : config.behavior.actions}
+        access={config.access}
+      />
+      {!dockPrimaryAction && primaryActionNode}
+    </SurfacePostureSlot>
   );
 
   // Error state renders full page chrome so header actions (e.g. refresh)
@@ -147,7 +178,8 @@ export function VisualizationSurface({
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />
-      </PageShellSurface>
+        {dockPrimaryAction && primaryActionNode}
+    </PageShellSurface>
     );
   }
 
@@ -176,16 +208,19 @@ export function VisualizationSurface({
     )
   ) : (
     <Stack spacing={sectionSpacing}>
-      {config.presentation.intro}
+      <SurfacePostureSlot name="intro">{config.presentation.intro}</SurfacePostureSlot>
 
       {config.behavior.stats && config.behavior.stats.length > 0 && (
+        <SurfacePostureSlot name="stats">
         <PatternStatsGrid
           stats={config.behavior.stats}
           columns={statsColumns}
           variant={resolveStatsGridVariant(cardVariant)}
         />
+        </SurfacePostureSlot>
       )}
 
+      <SurfacePostureSlot name="views" asChild>
       <Card variant={cardVariant}>
         <Card.Body>
           <Tabs
@@ -229,7 +264,8 @@ export function VisualizationSurface({
         </Card.Body>
       </Card>
 
-      {config.presentation.footer}
+      </SurfacePostureSlot>
+      <SurfacePostureSlot name="footer">{config.presentation.footer}</SurfacePostureSlot>
     </Stack>
   );
 
@@ -245,6 +281,7 @@ export function VisualizationSurface({
       <Grid.Item span={useAsideColumns ? 8 : undefined}>{mainColumn}</Grid.Item>
 
       {hasAside && (
+        <SurfacePostureSlot name="aside" asChild>
         <Grid.Item
           span={useAsideColumns ? 4 : undefined}
           data-part="visualization-aside"
@@ -261,6 +298,7 @@ export function VisualizationSurface({
             </Card>
           )}
         </Grid.Item>
+        </SurfacePostureSlot>
       )}
     </Grid>
   );
@@ -279,6 +317,7 @@ export function VisualizationSurface({
       ) : (
         visualizationContent
       )}
+      {dockPrimaryAction && primaryActionNode}
     </PageShellSurface>
   );
 }
