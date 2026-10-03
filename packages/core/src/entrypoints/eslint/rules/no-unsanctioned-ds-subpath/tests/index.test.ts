@@ -4,15 +4,17 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { rules } from '../../..';
-import { noUnsanctionedDsSubpath } from '..';
+import { createNoUnsanctionedDsSubpath, noUnsanctionedDsSubpath } from '..';
 import {
   CONTRACT_ROWS,
   PUBLISHED_SUBPATHS,
   UNPUBLISHED_SUBPATHS,
   classifySubpath,
+  classifySubpathIn,
   subpathOfSpecifier,
 } from '../contract';
 import {
+  labLedgerProblems,
   parseConsumerContract,
   parseContractMeasurements,
 } from '../contract/parse';
@@ -20,6 +22,7 @@ import {
 const PACKAGE_ROOT = resolve(__dirname, '../../../../../..');
 const DOCUMENT_PATH = resolve(PACKAGE_ROOT, 'docs/consumer-contract/index.md');
 const PACKAGE_PATH = resolve(PACKAGE_ROOT, 'package.json');
+const REGISTRY_PATH = resolve(PACKAGE_ROOT, '../../roadmap/registry.json');
 
 const SHOWROOM_CONFIG_PATH = resolve(
   PACKAGE_ROOT,
@@ -32,11 +35,50 @@ const parsed = parseConsumerContract(documentMarkdown);
 const measuredBySubpath = new Map(
   parseContractMeasurements(documentMarkdown).map((row) => [row.subpath, row]),
 );
-const exportKeys = Object.keys(
-  (JSON.parse(readFileSync(PACKAGE_PATH, 'utf8')) as {
-    exports: Record<string, unknown>;
-  }).exports,
+const packageJson = JSON.parse(readFileSync(PACKAGE_PATH, 'utf8')) as {
+  version: string;
+  exports: Record<string, unknown>;
+  releaseSync?: { lab?: unknown };
+};
+const exportKeys = Object.keys(packageJson.exports);
+const workOrderStatuses = new Map(
+  (
+    JSON.parse(readFileSync(REGISTRY_PATH, 'utf8')) as {
+      workOrders: Array<{ id: string; status: string }>;
+    }
+  ).workOrders.map((workOrder) => [workOrder.id, workOrder.status]),
 );
+const workOrderStatus = (id: string): string | null =>
+  workOrderStatuses.get(id) ?? null;
+
+const SPATIAL_ROW = /^\| `\.\/spatial` \| [a-z-]+ \| \S+ \|/m;
+
+/** The live document with `./spatial` rewritten, for the lab drills. */
+function withSpatialRow(disposition: string, workOrder: string): string {
+  if (!SPATIAL_ROW.test(documentMarkdown))
+    throw new Error('the document has no ./spatial row to drill on');
+  return documentMarkdown.replace(
+    SPATIAL_ROW,
+    `| \`./spatial\` | ${disposition} | ${workOrder} |`,
+  );
+}
+
+const LAB_FIXTURE = parseConsumerContract(withSpatialRow('lab', 'WO-CRA-15'));
+const LAB_FIXTURE_LEDGER = {
+  './spatial': { owner: 'WO-CRA-15', reviewBy: '4.0' },
+};
+
+function labFixtureProblems(
+  overrides: Partial<Parameters<typeof labLedgerProblems>[0]> = {},
+): string[] {
+  return labLedgerProblems({
+    published: LAB_FIXTURE.published,
+    ledger: LAB_FIXTURE_LEDGER,
+    packageVersion: '2.19.36',
+    workOrderStatus: (id) => (id === 'WO-CRA-15' ? 'todo' : null),
+    ...overrides,
+  });
+}
 
 function visitors(
   options: unknown[] = [],
@@ -89,21 +131,43 @@ describe('consumer contract: document is the single source', () => {
   });
 
   it('states the disposition split the table actually has', () => {
-    const tally = (disposition: string, retiredBy: string | null) =>
-      parsed.published.filter(
-        (row) =>
-          row.disposition === disposition && row.retiredBy === retiredBy,
-      ).length;
+    expect(statedTally(documentMarkdown)).toEqual(
+      expectedTally(parsed.published),
+    );
+    expect(expectedTally(parsed.published)).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/^\| `guaranteed` \| \d+ \|$/),
+      ]),
+    );
+  });
 
-    expect(documentMarkdown).toContain(
-      `| \`guaranteed\` | ${tally('guaranteed', null)} |`,
+  it('tallies lab rows on their own line, apart from guaranteed', () => {
+    const lab = expectedTally(LAB_FIXTURE.published);
+    const before = expectedTally(
+      parseConsumerContract(withSpatialRow('retire-by', 'WO-RET-01')).published,
     );
-    expect(documentMarkdown).toContain(
-      `| \`retire-by WO-RET-01\` | ${tally('retire-by', 'WO-RET-01')} |`,
+    const guaranteedLine = (lines: string[]) =>
+      lines.find((line) => line.startsWith('| `guaranteed` |'));
+
+    expect(lab).toContain('| `lab` | 1 |');
+    expect(before).not.toContain('| `lab` | 1 |');
+    expect(guaranteedLine(lab)).toBe(guaranteedLine(before));
+
+    // A document that flips the row and keeps the old summary is red; one
+    // that restates the summary is green.
+    const flipped = withSpatialRow('lab', 'WO-CRA-15');
+    expect(statedTally(flipped)).not.toEqual(lab);
+
+    const stale = statedTally(flipped).find((line) =>
+      line.startsWith('| `retire-by WO-RET-01` |'),
     );
-    expect(documentMarkdown).toContain(
-      `| \`retire-by WO-CAN-03\` | ${tally('retire-by', 'WO-CAN-03')} |`,
+    const fresh = lab.find((line) =>
+      line.startsWith('| `retire-by WO-RET-01` |'),
     );
+    if (!stale || !fresh) throw new Error('no WO-RET-01 summary line to drill');
+    expect(
+      statedTally(flipped.replace(stale, `${fresh}\n| \`lab\` | 1 |`)),
+    ).toEqual(lab);
   });
 
   it('records commercial.css as forbidden with no DS retirement action', () => {
@@ -140,6 +204,27 @@ describe('consumer contract: document is the single source', () => {
       /unknown disposition "allowed"/,
     );
 
+    // N1: a lab door with no owning work order.
+    expect(() => parseConsumerContract(withSpatialRow('lab', '—'))).toThrow(
+      /\.\/spatial is lab but names no work order/,
+    );
+    expect(() => parseConsumerContract(withSpatialRow('lab', '4.0'))).toThrow(
+      /not a work order id/,
+    );
+    expect(() =>
+      parseConsumerContract(
+        withSpatialRow('experimental', 'WO-CRA-15'),
+      ),
+    ).toThrow(/unknown disposition "experimental"/);
+    expect(() =>
+      parseConsumerContract(
+        documentMarkdown.replace(
+          '| `./surfaces` | forbidden | — |',
+          '| `./surfaces` | lab | WO-CRA-15 |',
+        ),
+      ),
+    ).toThrow(/\.\/surfaces is lab but is not a published subpath/);
+
     const unfenced = documentMarkdown.replace(
       '<!-- consumer-contract:published:end -->',
       '',
@@ -148,11 +233,138 @@ describe('consumer contract: document is the single source', () => {
   });
 });
 
+describe('lab doors: the review ledger cannot drift from the table', () => {
+  it('holds on the live table, package.json and roadmap registry', () => {
+    expect(
+      labLedgerProblems({
+        published: parsed.published,
+        ledger: packageJson.releaseSync?.lab,
+        packageVersion: packageJson.version,
+        workOrderStatus,
+      }),
+    ).toEqual([]);
+  });
+
+  it('P1: accepts a lab row with an open owner and a later review line', () => {
+    expect(
+      LAB_FIXTURE.published.find((row) => row.subpath === './spatial'),
+    ).toEqual({
+      subpath: './spatial',
+      disposition: 'lab',
+      retiredBy: 'WO-CRA-15',
+    });
+    expect(labFixtureProblems()).toEqual([]);
+    expect(labFixtureProblems({ packageVersion: '3.9.12' })).toEqual([]);
+  });
+
+  it('N2: rejects a lab owner that is done or unknown', () => {
+    expect(labFixtureProblems({ workOrderStatus: () => 'done' })).toEqual([
+      './spatial lab owner WO-CRA-15 is done',
+    ]);
+    expect(labFixtureProblems({ workOrderStatus: () => null })).toEqual([
+      './spatial lab owner WO-CRA-15 is not a work order',
+    ]);
+  });
+
+  it('N3: rejects a ledger whose key set is not the lab rows', () => {
+    expect(labFixtureProblems({ ledger: undefined })).toEqual([
+      './spatial is lab but has no releaseSync.lab entry',
+    ]);
+    expect(labFixtureProblems({ ledger: {} })).toEqual([
+      './spatial is lab but has no releaseSync.lab entry',
+    ]);
+    expect(
+      labFixtureProblems({
+        ledger: {
+          ...LAB_FIXTURE_LEDGER,
+          './motion': { owner: 'WO-CRA-15', reviewBy: '4.0' },
+        },
+      }),
+    ).toEqual(['releaseSync.lab names ./motion, which is not a lab row']);
+    expect(
+      labFixtureProblems({
+        published: parseConsumerContract(
+          withSpatialRow('retire-by', 'WO-RET-01'),
+        ).published,
+      }),
+    ).toEqual(['releaseSync.lab names ./spatial, which is not a lab row']);
+    expect(
+      labFixtureProblems({
+        ledger: { './spatial': { owner: 'WO-GAT-10', reviewBy: '4.0' } },
+      }),
+    ).toEqual([
+      'releaseSync.lab ./spatial owner is not the table owner WO-CRA-15',
+    ]);
+    expect(
+      labFixtureProblems({
+        ledger: {
+          './spatial': { owner: 'WO-CRA-15', reviewBy: '4.0', certified: true },
+        },
+      }),
+    ).toEqual(['releaseSync.lab ./spatial has unknown key certified']);
+    expect(labFixtureProblems({ ledger: ['./spatial'] })).toEqual([
+      'releaseSync.lab is not an object keyed by subpath',
+    ]);
+  });
+
+  it('N4: rejects a missing, malformed or already reached review line', () => {
+    const withReviewBy = (reviewBy: unknown) =>
+      labFixtureProblems({
+        ledger: { './spatial': { owner: 'WO-CRA-15', reviewBy } },
+      });
+
+    expect(
+      labFixtureProblems({ ledger: { './spatial': { owner: 'WO-CRA-15' } } }),
+    ).toEqual(['./spatial is lab but has no reviewBy release line']);
+    expect(withReviewBy('next major')).toEqual([
+      './spatial reviewBy "next major" is not a release line (major.minor)',
+    ]);
+    expect(withReviewBy('4.0.0')).toHaveLength(1);
+    expect(withReviewBy('2.19')).toEqual([
+      './spatial reviewBy 2.19 is not later than 2.19.36',
+    ]);
+    expect(withReviewBy('2.4')).toHaveLength(1);
+    expect(withReviewBy('2.20')).toEqual([]);
+    expect(
+      labFixtureProblems({ packageVersion: '4.0.0' }),
+    ).toEqual(['./spatial reviewBy 4.0 is not later than 4.0.0']);
+  });
+});
+
 /**
  * The showroom is the only consumer inside this repository, so its baseline is
  * the design system's own to keep honest. Reading the config as text keeps the
  * assertion independent of the showroom's Next/ESLint dependency tree.
  */
+function tallyLabel(row: { disposition: string; retiredBy: string | null }) {
+  return row.disposition === 'retire-by'
+    ? `retire-by ${row.retiredBy}`
+    : row.disposition;
+}
+
+/** The summary lines §1.1 must carry for a published table, sorted. */
+function expectedTally(
+  published: ReadonlyArray<{ disposition: string; retiredBy: string | null }>,
+): string[] {
+  const counts = new Map<string, number>();
+  for (const row of published) {
+    const label = tallyLabel(row);
+    counts.set(label, (counts.get(label) ?? 0) + 1);
+  }
+  return [...counts]
+    .map(([label, count]) => `| \`${label}\` | ${count} |`)
+    .sort();
+}
+
+/** The disposition summary lines a document actually states, sorted. */
+function statedTally(markdown: string): string[] {
+  return (
+    markdown.match(
+      /^\| `(?:guaranteed|lab|forbidden|retire-by [^`]+)` \| \d+ \|$/gm,
+    ) ?? []
+  ).sort();
+}
+
 describe('showroom mounts the rule with a decrease-only baseline', () => {
   const SHOWROOM_BASELINE_CAP = 7;
 
@@ -299,6 +511,81 @@ describe('no-unsanctioned-ds-subpath', () => {
     expect(reports.every((report) => report.messageId === 'retireBy')).toBe(
       true,
     );
+  });
+
+  describe('lab doors', () => {
+    const labRule = createNoUnsanctionedDsSubpath((subpath) =>
+      classifySubpathIn(
+        [...LAB_FIXTURE.published, ...LAB_FIXTURE.unpublished],
+        subpath,
+      ),
+    );
+
+    function lint(options: unknown[] = []) {
+      const reports: Array<{
+        messageId?: string;
+        data?: Record<string, string>;
+      }> = [];
+      labRule
+        .create({
+          filename: '/app/src/scene/index.tsx',
+          options,
+          report: (descriptor) => reports.push(descriptor),
+        })
+        .ImportDeclaration?.({
+          source: { value: '@rottay/design-system/spatial' },
+        });
+      return reports;
+    }
+
+    it('N5: fails an app import of a lab door that is not opted in', () => {
+      const reports = lint();
+
+      expect(reports).toHaveLength(1);
+      expect(reports[0]?.messageId).toBe('lab');
+      expect(reports[0]?.data).toMatchObject({
+        specifier: '@rottay/design-system/spatial',
+        subpath: './spatial',
+        retiredBy: 'WO-CRA-15',
+      });
+      expect(
+        lint([{ allowSubpaths: ['./icons/presets/bithire'] }]),
+      ).toHaveLength(1);
+    });
+
+    it('P1: passes once the app lists the lab door in allowSubpaths', () => {
+      expect(lint([{ allowSubpaths: ['./spatial'] }])).toEqual([]);
+    });
+
+    it('names the lab status, the owner and the opt-in in its message', () => {
+      const message = labRule.meta.messages?.lab ?? '';
+
+      expect(message).toContain('disposition: lab, owner {{retiredBy}}');
+      expect(message).toContain('not counted as productive or certified');
+      expect(message).toContain("'{{subpath}}' in allowSubpaths");
+    });
+
+    it('never treats a lab door as guaranteed in the live table', () => {
+      for (const row of PUBLISHED_SUBPATHS) {
+        if (row.disposition !== 'lab') continue;
+        const specifier = `@rottay/design-system${row.subpath.slice(1)}`;
+        expect(importFrom(specifier), specifier).toEqual(['lab']);
+        expect(
+          importFrom(specifier, [{ allowSubpaths: [row.subpath] }]),
+          specifier,
+        ).toEqual([]);
+      }
+    });
+
+    it('has a message for every disposition the rule reports', () => {
+      const messages = Object.keys(noUnsanctionedDsSubpath.meta.messages ?? {});
+      expect(messages.sort()).toEqual([
+        'forbidden',
+        'lab',
+        'retireBy',
+        'unknown',
+      ]);
+    });
   });
 
   it('honours the decrease-only per-app baseline and file exemptions', () => {

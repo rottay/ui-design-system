@@ -4,6 +4,10 @@
  * Used by the drift test (which owns the filesystem read) so the document in
  * `docs/consumer-contract/index.md` stays the single source of the disposition
  * table. Never imported by the rule itself.
+ *
+ * Also the pure check of the lab review ledger (`package.json`
+ * `releaseSync.lab`) against the table's `lab` rows. No gate script reads that
+ * key, so the drift test calling `labLedgerProblems` is its only guard.
  */
 
 import type { ContractRow, SubpathDisposition } from '..';
@@ -11,7 +15,13 @@ import type { ContractRow, SubpathDisposition } from '..';
 const DISPOSITIONS: readonly SubpathDisposition[] = [
   'guaranteed',
   'retire-by',
+  'lab',
   'forbidden',
+];
+
+const WORK_ORDER_DISPOSITIONS: readonly SubpathDisposition[] = [
+  'retire-by',
+  'lab',
 ];
 
 export type ContractTableName = 'published' | 'unpublished';
@@ -89,10 +99,15 @@ function parseRows(markdown: string, table: ContractTableName): ParsedRow[] {
     const disposition = rawDisposition as SubpathDisposition;
 
     const retiredBy = rawRetiredBy === '—' ? null : rawRetiredBy;
-    if (disposition === 'retire-by' && retiredBy === null)
-      fail(`${subpath} is retire-by but names no work order`);
-    if (disposition !== 'retire-by' && retiredBy !== null)
+    const needsWorkOrder = WORK_ORDER_DISPOSITIONS.includes(disposition);
+    if (needsWorkOrder && retiredBy === null)
+      fail(`${subpath} is ${disposition} but names no work order`);
+    if (!needsWorkOrder && retiredBy !== null)
       fail(`${subpath} is ${disposition} but names a work order`);
+    if (retiredBy !== null && !/^WO-[A-Z]+-\d+$/.test(retiredBy))
+      fail(`${subpath} names "${retiredBy}", which is not a work order id`);
+    if (disposition === 'lab' && table !== 'published')
+      fail(`${subpath} is lab but is not a published subpath`);
 
     for (const count of cells.slice(3)) {
       if (!/^\d+$/.test(count))
@@ -142,4 +157,100 @@ export function parseConsumerContract(markdown: string): {
     published: parseContractTable(markdown, 'published'),
     unpublished: parseContractTable(markdown, 'unpublished'),
   };
+}
+
+/** One `releaseSync.lab` entry: who owns the lab door and when it is reviewed. */
+export interface LabReview {
+  owner: string;
+  reviewBy: string;
+}
+
+export interface LabLedgerInput {
+  /** Parsed published rows of the contract document. */
+  published: readonly ContractRow[];
+  /** `package.json` `releaseSync.lab`, as read from JSON (absent = undefined). */
+  ledger: unknown;
+  /** `package.json` `version`. */
+  packageVersion: string;
+  /** Roadmap status of a work order, or null when the registry has no such id. */
+  workOrderStatus: (id: string) => string | null;
+}
+
+const RELEASE_LINE = /^(\d+)\.(\d+)$/;
+const LAB_REVIEW_KEYS: readonly string[] = ['owner', 'reviewBy'];
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isLaterReleaseLine(reviewBy: string, packageVersion: string): boolean {
+  const line = RELEASE_LINE.exec(reviewBy);
+  const current = /^(\d+)\.(\d+)\./.exec(packageVersion);
+  if (!line || !current) return false;
+  const [major, minor] = [Number(line[1]), Number(line[2])];
+  const [currentMajor, currentMinor] = [Number(current[1]), Number(current[2])];
+  return major > currentMajor || (major === currentMajor && minor > currentMinor);
+}
+
+/**
+ * Every way the lab review ledger disagrees with the table's `lab` rows.
+ * Empty means: same key set, each entry names the row's owner, the owner is an
+ * open work order, and `reviewBy` is a release line after the package version.
+ */
+export function labLedgerProblems({
+  published,
+  ledger,
+  packageVersion,
+  workOrderStatus,
+}: LabLedgerInput): string[] {
+  const problems: string[] = [];
+  const labRows = published.filter((row) => row.disposition === 'lab');
+
+  if (ledger !== undefined && !isRecord(ledger)) {
+    return ['releaseSync.lab is not an object keyed by subpath'];
+  }
+  const entries = ledger ?? {};
+
+  for (const subpath of Object.keys(entries)) {
+    if (!labRows.some((row) => row.subpath === subpath))
+      problems.push(`releaseSync.lab names ${subpath}, which is not a lab row`);
+  }
+
+  for (const row of labRows) {
+    const status = row.retiredBy === null ? null : workOrderStatus(row.retiredBy);
+    if (status === null)
+      problems.push(`${row.subpath} lab owner ${row.retiredBy} is not a work order`);
+    else if (status === 'done')
+      problems.push(`${row.subpath} lab owner ${row.retiredBy} is done`);
+
+    if (!Object.keys(entries).includes(row.subpath)) {
+      problems.push(`${row.subpath} is lab but has no releaseSync.lab entry`);
+      continue;
+    }
+    const entry = entries[row.subpath];
+    if (!isRecord(entry)) {
+      problems.push(`releaseSync.lab ${row.subpath} is not an object`);
+      continue;
+    }
+    for (const key of Object.keys(entry)) {
+      if (!LAB_REVIEW_KEYS.includes(key))
+        problems.push(`releaseSync.lab ${row.subpath} has unknown key ${key}`);
+    }
+    if (entry.owner !== row.retiredBy)
+      problems.push(
+        `releaseSync.lab ${row.subpath} owner is not the table owner ${row.retiredBy}`,
+      );
+    if (typeof entry.reviewBy !== 'string')
+      problems.push(`${row.subpath} is lab but has no reviewBy release line`);
+    else if (!RELEASE_LINE.test(entry.reviewBy))
+      problems.push(
+        `${row.subpath} reviewBy "${entry.reviewBy}" is not a release line (major.minor)`,
+      );
+    else if (!isLaterReleaseLine(entry.reviewBy, packageVersion))
+      problems.push(
+        `${row.subpath} reviewBy ${entry.reviewBy} is not later than ${packageVersion}`,
+      );
+  }
+
+  return problems;
 }

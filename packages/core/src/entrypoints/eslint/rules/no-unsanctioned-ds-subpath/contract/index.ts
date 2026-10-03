@@ -7,13 +7,13 @@
  * the document and fails on any difference, so the two cannot drift.
  */
 
-export type SubpathDisposition = 'guaranteed' | 'retire-by' | 'forbidden';
+export type SubpathDisposition = 'guaranteed' | 'retire-by' | 'lab' | 'forbidden';
 
 export interface ContractRow {
   /** Export-map key, e.g. `.`, `./icons`, `./icons/roles/*`. */
   subpath: string;
   disposition: SubpathDisposition;
-  /** Work order that adjudicates the retirement, or null. */
+  /** Work order that adjudicates the retirement or owns the lab door, or null. */
   retiredBy: string | null;
 }
 
@@ -99,10 +99,18 @@ function matchesSubpath(pattern: string, subpath: string): boolean {
  * neither table -- the rule treats that as `unknown` and reports it.
  */
 export function classifySubpath(subpath: string): ContractRow | null {
-  for (const row of CONTRACT_ROWS) {
+  return classifySubpathIn(CONTRACT_ROWS, subpath);
+}
+
+/** `classifySubpath` over an explicit table instead of the mirrored one. */
+export function classifySubpathIn(
+  rows: readonly ContractRow[],
+  subpath: string,
+): ContractRow | null {
+  for (const row of rows) {
     if (row.subpath === subpath) return row;
   }
-  for (const row of CONTRACT_ROWS) {
+  for (const row of rows) {
     if (matchesSubpath(row.subpath, subpath)) return row;
   }
   return null;
