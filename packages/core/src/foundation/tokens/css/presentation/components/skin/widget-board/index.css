@@ -1036,10 +1036,7 @@
 
 .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="focus-visible"], :focus-visible) {
   border-radius: 999px;
-  box-shadow: var(
-    --ds-shadow-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
-  );
+  box-shadow: var(--ds-focus-ring);
 }
 
 .ds-pattern-widget-board .ds-widget-board__resize-rail {
