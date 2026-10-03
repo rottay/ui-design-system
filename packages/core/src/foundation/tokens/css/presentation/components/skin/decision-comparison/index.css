@@ -902,7 +902,7 @@
   .ds-pattern-decision-comparison.ds-engine-modern[data-part="root"]:has(
       > .ds-decision-comparison__viewport:focus-visible
     ) {
-    outline: var(--ds-focus-ring-width) solid Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-width);
     box-shadow: none;
   }

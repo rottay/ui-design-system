@@ -177,7 +177,7 @@ describe('NotificationCenter modern engine keyboard state contract', () => {
 
     expect(forced.filter(paintsFocus).map((rule) => rule.declarations)).toEqual([
       [
-        'outline: var(--ds-focus-ring-width) solid Highlight',
+        'outline: max(2px, var(--ds-focus-ring-width)) solid Highlight',
         'outline-offset: var(--ds-focus-ring-width)',
         'box-shadow: none',
       ],

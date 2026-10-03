@@ -82,8 +82,9 @@ describe("DecisionComparison Pass 2 craft contract", () => {
     expect(overlay).not.toContain("border-radius");
 
     expect(declaration(forcedRoot ?? "", "outline")).toBe(
-      "var(--ds-focus-ring-width) solid Highlight"
+      "max(2px, var(--ds-focus-ring-width)) solid Highlight"
     );
+    expect(declaration(forcedRoot ?? "", "outline-offset")).toBe("var(--ds-focus-ring-width)");
     expect(declaration(forcedRoot ?? "", "box-shadow")).toBe("none");
     expect(declaration(forcedOverlay ?? "", "box-shadow")).toBe("none");
     const forcedColors = skin.slice(skin.lastIndexOf("@media (forced-colors: active)"));

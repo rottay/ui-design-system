@@ -347,7 +347,7 @@
     box-shadow: none;
   }
   .ds-pattern-notification-center.ds-engine-modern [data-part='panel']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-focus-ring-width) solid Highlight;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-width);
     box-shadow: none;
   }
