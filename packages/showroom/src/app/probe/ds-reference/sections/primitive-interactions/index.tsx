@@ -6,7 +6,7 @@ import {
   Modal,
   Pagination,
   Progress,
-  Steps,
+  Stepper,
   Transfer,
 } from '@rottay/design-system';
 
@@ -97,7 +97,7 @@ export function PrimitiveInteractionScene({ only }: { only: PrimitiveInteraction
       {only === 'steps' && (
         <SpecimenRow axis="STEPS - aria-current rides the interactive trigger">
           <div data-testid="lab-steps" style={{ inlineSize: 420 }}>
-            <Steps items={STEP_ITEMS} current={1} onChange={() => {}} />
+            <Stepper items={STEP_ITEMS} current={1} clickable onChange={() => {}} />
           </div>
         </SpecimenRow>
       )}

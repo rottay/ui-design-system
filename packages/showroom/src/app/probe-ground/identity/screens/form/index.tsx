@@ -11,9 +11,9 @@ import {
   Input,
   Select,
   Stack,
-  Switch,
   Text,
   Textarea,
+  Toggle,
 } from '@rottay/design-system';
 
 const SENIORITY = [
@@ -103,7 +103,7 @@ export function FormScreen() {
               Panels are scheduled in the candidate&apos;s timezone.
             </Text>
           </Stack>
-          <Switch checked onChange={() => undefined} />
+          <Toggle checked onChange={() => undefined} />
         </Flex>
         <Checkbox label="Require a written debrief before advancing" checked onChange={() => undefined} />
         <Checkbox label="Publish the compensation band on the post" />

@@ -38,9 +38,8 @@ import {
   PasswordInput,
   Popconfirm,
   Stepper,
-  Steps,
-  Switch,
   Timeline,
+  Toggle,
   TreeSelect,
 } from '@rottay/design-system';
 
@@ -311,21 +310,21 @@ function SwitchBusyHarness() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, inlineSize: 'min(420px, 100%)' }}>
       <div data-lab-switch="busy" style={OUTLINE_FRAME}>
         <AxisCaption>loading — still a tab stop, refuses to commit</AxisCaption>
-        <Switch
+        <Toggle
           aria-label="Publish this requisition to the careers page"
           loading
-          checkedChildren="Published"
-          unCheckedChildren="Draft"
+          checkedLabel="Published"
+          uncheckedLabel="Draft"
           onChange={() => setCommits((n) => n + 1)}
         />
       </div>
       <div data-lab-switch="standalone" style={OUTLINE_FRAME}>
         <AxisCaption>indicator-only — carries the coarse-pointer floor stamp</AxisCaption>
-        <Switch aria-label="Notify the panel by email" />
+        <Toggle aria-label="Notify the panel by email" />
       </div>
       <div data-lab-switch="disabled" style={OUTLINE_FRAME}>
         <AxisCaption>caller-disabled — still hard-disabled</AxisCaption>
-        <Switch aria-label="Archive this requisition" disabled />
+        <Toggle aria-label="Archive this requisition" disabled />
       </div>
       <Readout id="lab-switch-readout">commits while busy: {commits}</Readout>
     </div>
@@ -925,8 +924,9 @@ function StepperContentHarness() {
 function StepsStatusHarness() {
   return (
     <div style={{ inlineSize: 'min(760px, 100%)' }}>
-      <Steps
+      <Stepper
         current={2}
+        clickable
         onChange={() => {}}
         items={[
           { ...STEP_ITEMS[0] },

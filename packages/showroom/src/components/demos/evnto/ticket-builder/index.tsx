@@ -11,8 +11,8 @@ import {
   Input,
   Select,
   Stack,
-  Switch,
   Text,
+  Toggle,
   useTokens,
 } from '@rottay/design-system';
 import { Icon } from '@rottay/design-system/icons';
@@ -172,7 +172,7 @@ export function TicketBuilderDemo() {
                           </Text>
                         </Box>
                       </Flex>
-                      <Switch checked={dynamicPricing} onChange={setDynamicPricing} />
+                      <Toggle checked={dynamicPricing} onChange={setDynamicPricing} />
                     </Flex>
 
                     <Flex align="center" justify="between" gap={12}>
@@ -187,7 +187,7 @@ export function TicketBuilderDemo() {
                           </Text>
                         </Box>
                       </Flex>
-                      <Switch checked={waitlistEnabled} onChange={setWaitlistEnabled} />
+                      <Toggle checked={waitlistEnabled} onChange={setWaitlistEnabled} />
                     </Flex>
                   </Stack>
                 </Card>

@@ -12,9 +12,9 @@ import {
   Input,
   Select,
   Stack,
-  Switch,
   Text,
   Textarea,
+  Toggle,
   useTokens,
 } from '@rottay/design-system';
 import { Icon } from '@rottay/design-system/icons';
@@ -350,7 +350,7 @@ export default function PlatformTenantFormDemo() {
                             Blocks password-only access after onboarding.
                           </Text>
                         </Box>
-                        <Switch checked={enforceSso} onChange={setEnforceSso} />
+                        <Toggle checked={enforceSso} onChange={setEnforceSso} />
                       </Flex>
 
                       <Checkbox
@@ -407,7 +407,7 @@ export default function PlatformTenantFormDemo() {
                             Lets the tenant diverge without forking structure.
                           </Text>
                         </Box>
-                        <Switch
+                        <Toggle
                           checked={allowBrandOverrides}
                           onChange={setAllowBrandOverrides}
                         />
