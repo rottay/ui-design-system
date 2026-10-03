@@ -12,6 +12,8 @@
  * skeleton (title, field rows, action bar) is what the user sees.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { useMemo, useState } from 'react';
 
 import { Box, Button, Card, Grid, Stack, Text, Flex } from '../../../../../primitives';
@@ -45,6 +47,7 @@ import {
 import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 
 export interface FormSurfaceProps {
+  postures?: SurfacePostures;
   config: FormSurfaceConfig;
   loading?: boolean;
   error?: unknown;
@@ -60,7 +63,16 @@ export interface FormSurfaceProps {
 }
 
 /** Page-level form shell with error handling, action normalization, and optional aside content. */
-export function FormSurface({ config, loading = false, error, onRetry, adapt }: FormSurfaceProps): React.ReactElement {
+export function FormSurface(props: FormSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="form">
+      <FormSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function FormSurfaceContent({ config, loading = false, error, onRetry, adapt }: FormSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
@@ -105,7 +117,7 @@ export function FormSurface({ config, loading = false, error, onRetry, adapt }: 
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
   };
-  const showAside = !!config.presentation.aside && (!isMobile || config.visual.hideAsideOnMobile === false);
+  const showAside = !!config.presentation.aside && (surfacePosture?.regions.aside ? surfacePosture.regions.aside !== 'hide' : (!isMobile || config.visual.hideAsideOnMobile === false));
   const resolvedLayout = shouldStack && config.visual.layout === 'horizontal' ? 'vertical' : config.visual.layout;
   const resolvedColumns = shouldStack ? 1 : config.visual.columns;
 
@@ -119,7 +131,7 @@ export function FormSurface({ config, loading = false, error, onRetry, adapt }: 
 
   // Mobile persistence uses the canonical viewport-aware ActionDock; the
   // surface skin owns the reserved scroll space for the fixed bar.
-  const actionsSticky = Boolean(resolvedMobile && config.visual.mobileActionsSticky);
+  const actionsSticky = !surfacePosture?.primaryAction && Boolean(resolvedMobile && config.visual.mobileActionsSticky);
 
   // Both actions ride the Button primitive's own `block` mode on mobile
   // (full-width, engine-owned geometry) instead of inline flex styles.
@@ -159,7 +171,9 @@ export function FormSurface({ config, loading = false, error, onRetry, adapt }: 
     </>
   );
 
-  const actionsNode = actionsSticky ? (
+  const actionsNode = submitAction || cancelAction ? (<SurfacePostureSlot name="primary-action">{surfacePosture?.primaryAction ? (
+    <SurfacePostureAction>{actionButtons}</SurfacePostureAction>
+  ) : actionsSticky ? (
     <ActionDock
       mode="fixed"
       position="bottom"
@@ -175,7 +189,7 @@ export function FormSurface({ config, loading = false, error, onRetry, adapt }: 
     <Flex data-part="actions" direction={isMobile ? 'column' : 'row'} wrap="wrap" justify="end">
       {actionButtons}
     </Flex>
-  );
+  )}</SurfacePostureSlot>) : null;
 
   // Aside column only renders when content is provided AND viewport is wide
   // enough. This keeps the form full-width by default, matching the most
@@ -200,18 +214,18 @@ export function FormSurface({ config, loading = false, error, onRetry, adapt }: 
           <Card.Body>
             <Stack spacing={sectionSpacing}>
               {config.presentation.description && (
-                <Text data-part="description" as="p" size="sm" color="subtle">
+                <SurfacePostureSlot name="description" asChild><Text data-part="description" as="p" size="sm" color="subtle">
                   {config.presentation.description}
-                </Text>
+                </Text></SurfacePostureSlot>
               )}
 
               {config.presentation.error && (
                 // The banner is a ruled alert, not a second card frame: the skin
                 // paints the recessed ground, the emphasis edge and the optical
                 // padding on the part the surface stamps.
-                <Box data-part="error-banner" role="alert">
+                <SurfacePostureSlot name="error-banner" asChild><Box data-part="error-banner" role="alert">
                   {config.presentation.error}
-                </Box>
+                </Box></SurfacePostureSlot>
               )}
 
               {/* The form builder owns field generation and the form-shaped
@@ -243,11 +257,11 @@ export function FormSurface({ config, loading = false, error, onRetry, adapt }: 
       </Grid.Item>
 
       {showAside && (
-        <Grid.Item span={!shouldStack ? 4 : undefined}>
+        <SurfacePostureSlot name="aside" asChild><Grid.Item role={surfacePosture ? 'region' : undefined} aria-label={surfacePosture ? tSurfaceOr('form.aside_label', 'Form guidance') : undefined} span={!shouldStack ? 4 : undefined}>
           <Card className="ds-form-surface__aside-card" variant={profileDefaults.cardVariant}>
             <Card.Body>{config.presentation.aside}</Card.Body>
           </Card>
-        </Grid.Item>
+        </Grid.Item></SurfacePostureSlot>
       )}
     </Grid>
   );

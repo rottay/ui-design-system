@@ -15,6 +15,8 @@
  * Advanced filters are collapsible -- hidden by default, toggled via button.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
@@ -120,6 +122,7 @@ function collectionColumnCapabilityId<T>(column: ColumnDef<T>): string {
 // ---------------------------------------------------------------------------
 
 export interface CollectionWorkspaceProps<T extends object> extends CollectionWorkspaceConfig<T> {
+  postures?: SurfacePostures;
   title: string;
   subtitle?: string;
   columns: ColumnDef<T>[];
@@ -726,6 +729,15 @@ function PageSizeControl({
 // ---------------------------------------------------------------------------
 
 export function CollectionWorkspaceSurface<T extends object>(props: CollectionWorkspaceProps<T>) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <CollectionWorkspaceSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function CollectionWorkspaceSurfaceContent<T extends object>(props: CollectionWorkspaceProps<T>) {
+  const surfacePosture = useScopedSurfacePosture();
   const {
     title,
     subtitle,
@@ -843,17 +855,39 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const postureBreakpoint = workspace.containerBreakpoint ?? activeBreakpoint;
   const postureDevice = deviceAliasForBreakpoint(postureBreakpoint);
   const postureIsPhone = postureDevice === 'phone';
-  const posture = resolveSurfacePosture(adaptive, postureBreakpoint);
+  const legacyPosture = resolveSurfacePosture(adaptive, postureBreakpoint);
+  const primaryPlacement = surfacePosture?.primaryAction;
+  const primaryActionVisible = surfacePosture?.regions['primary-action'] !== 'hide' && surfacePosture?.regions['primary-action'] !== 'collapse';
+  const relocatePrimaryAction = primaryPlacement === 'bottom-bar' || primaryPlacement === 'floating';
+  const posture = primaryPlacement ? { ...legacyPosture, actionBar: 'inline' as const } : legacyPosture;
   // Effective density: a runtime `controls.density` switcher value wins; else
   // the declarative `density` prop baseline (default 'comfortable'). The
   // resolved density CSS variables (design-language §3) are emitted on the
   // surface root so the inner table + embedded cards derive cell/card padding
   // from the token cascade.
-  const density: DensityKey = controls?.density?.value ?? densityMode;
+  const density: DensityKey = surfacePosture?.density ?? controls?.density?.value ?? densityMode;
   const densityStyleVars = resolveCollectionWorkspaceDensityStyleVars(
     normalizeDensityMode(density),
   );
   const compact = density === 'compact';
+  const scopedPrimaryAction = primaryPlacement && primaryAction && primaryActionVisible ? (
+    <SurfacePostureAction>
+      <Button
+        variant="primary"
+        size="sm"
+        className="ds-collection-workspace__toolbar-primary-action"
+        data-part="toolbar-primary-action"
+        icon={primaryAction.icon}
+        disabled={primaryAction.disabled}
+        pending={primaryAction.pending ?? primaryAction.loading}
+        pendingLabel={primaryAction.pendingLabel}
+        aria-label={primaryAction.ariaLabel}
+        onClick={primaryAction.onClick}
+      >
+        {primaryAction.label}
+      </Button>
+    </SurfacePostureAction>
+  ) : null;
   const enhanced = presentation?.enhancedInteractions ?? false;
   const resolvedChrome = resolveCollectionWorkspaceChrome(surfaceMode, chrome);
   const autoEmbeddedSearchCommand =
@@ -871,8 +905,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const resolvedCommand = resolvedChrome.command
     ? (command ?? autoEmbeddedSearchCommand)
     : undefined;
-  const resolvedContextSlot = resolvedChrome.context ? contextSlot : undefined;
-  const resolvedStatsSlot = resolvedChrome.stats ? statsSlot : undefined;
+  const resolvedContextSlot = surfacePosture?.regions.context && surfacePosture.regions.context !== 'hide' ? contextSlot : resolvedChrome.context ? contextSlot : undefined;
+  const resolvedStatsSlot = surfacePosture?.regions.stats && surfacePosture.regions.stats !== 'hide' ? statsSlot : resolvedChrome.stats ? statsSlot : undefined;
   const resolvedActiveFilters = resolvedChrome.activeFilters
     ? activeFilters
     : undefined;
@@ -970,10 +1004,10 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
   const showOptionalChrome = !posture.compactHeader && !postureIsPhone;
   const showContextChrome = Boolean(
-    resolvedContextSlot && (showOptionalChrome || chrome?.context === true),
+    resolvedContextSlot && (surfacePosture?.regions.context ? surfacePosture.regions.context !== 'hide' : showOptionalChrome || chrome?.context === true),
   );
   const showStatsChrome = Boolean(
-    resolvedStatsSlot && (showOptionalChrome || chrome?.stats === true),
+    resolvedStatsSlot && (surfacePosture?.regions.stats ? surfacePosture.regions.stats !== 'hide' : showOptionalChrome || chrome?.stats === true),
   );
 
   // Focus
@@ -983,7 +1017,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     ?? (workspace.selectedKeys.length === 1 ? workspace.selectedKeys[0] : null);
   const panePosture = posture.pane ?? 'inline';
   const previewEnabled = Boolean(
-    behavior?.previewRail?.enabled && behavior.previewRail.render,
+    behavior?.previewRail?.enabled && behavior.previewRail.render && surfacePosture?.regions['preview-rail'] !== 'hide',
   );
   const usesPreviewSheet = previewEnabled && panePosture === 'sheet';
   const usesPreviewAccordion = previewEnabled && panePosture === 'accordion';
@@ -1122,7 +1156,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         : behavior?.previewRail?.width ?? `${DEFAULT_PREVIEW_RAIL_WIDTH}px`;
 
       return (
-        <Box
+        <SurfacePostureSlot name="preview-rail" asChild><Box
           className="ds-collection-preview-rail"
           data-part="preview-rail"
           data-resizable={previewRailResizable ? 'true' : 'false'}
@@ -1160,7 +1194,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             </Box>
           ) : null}
           {behavior!.previewRail!.render!(railItem, { pane: 'inline', compact: false })}
-        </Box>
+        </Box></SurfacePostureSlot>
       );
     },
     [
@@ -1312,7 +1346,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     [displayData, resolvedCompactPreviewKey, rowKey],
   );
   const compactPreviewVisible = Boolean(
-    usesCompactPreview && compactPreviewOpen && resolvedCompactPreviewKey != null,
+    usesCompactPreview && compactPreviewOpen && resolvedCompactPreviewKey != null && surfacePosture?.regions['preview-rail'] !== 'collapse',
   );
 
   const handleCompactPreviewOpenChange = useCallback((open: boolean) => {
@@ -1741,7 +1775,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   );
 
   const compactPreviewSheet = usesPreviewSheet ? (
-    <AdaptiveOverlay
+    <SurfacePostureSlot name="preview-rail" label={previewDetailsTitle}><AdaptiveOverlay
       mode="sheet"
       open={compactPreviewVisible}
       onOpenChange={handleCompactPreviewOpenChange}
@@ -1761,11 +1795,13 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             ? <Text color="muted">{loadingDetailsLabel}</Text>
             : null}
       </Box>
-    </AdaptiveOverlay>
+    </AdaptiveOverlay></SurfacePostureSlot>
   ) : null;
 
   const compactPreviewAccordion = usesPreviewAccordion && resolvedCompactPreviewKey != null ? (
-    <Box
+    <SurfacePostureSlot name="preview-rail" label={previewDetailsTitle} asChild><Box
+      role={surfacePosture ? 'region' : undefined}
+      aria-label={surfacePosture ? previewDetailsTitle : undefined}
       className="ds-collection-workspace__preview-accordion"
       data-part="preview-accordion"
       data-preview-key={resolvedCompactPreviewKey ?? undefined}
@@ -1804,7 +1840,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               : null}
         </Box>
       ) : null}
-    </Box>
+    </Box></SurfacePostureSlot>
   ) : null;
 
   const compactActionsSheet = usesStickyActionContinuity
@@ -1885,7 +1921,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         {showToolbar && (
           <>
             {/* Legacy PatternListToolbar import kept inline for backward compat */}
-            <PatternListToolbar
+            <SurfacePostureSlot name="toolbar"><PatternListToolbar
               title={title}
               icon={icon}
               totalCount={data.length}
@@ -1900,9 +1936,9 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               activeFilters={workspace.filterValues}
               onClearFilters={workspace.resetFilters}
               activeFilterCount={workspace.activeFilterCount}
-              primaryAction={primaryAction}
+              primaryAction={relocatePrimaryAction || !primaryActionVisible ? undefined : primaryAction}
               onExport={handleExport}
-            />
+            /></SurfacePostureSlot>
             {subtitle && <Text className="ds-collection-workspace__muted-text" size="sm" color="muted">{subtitle}</Text>}
           </>
         )}
@@ -1959,7 +1995,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           </Button>
         )}
         <Flex className="ds-collection-workspace__content" data-part="content" gap={4}>
-          <Box
+          <SurfacePostureSlot name="collection" asChild><Box
             ref={workspace.collectionRef}
             className="ds-collection-workspace__collection"
             data-part="collection"
@@ -2027,7 +2063,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               tabNavigation={behavior?.cellEditing?.tabNavigation}
               mobileCard={mobileCard}
             />
-          </Box>
+          </Box></SurfacePostureSlot>
           {showPreviewRail && (() => {
             const railItem = displayData.find((item) => resolveKey(item, rowKey) === previewKey);
             if (!railItem) return null;
@@ -2035,7 +2071,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           })()}
         </Flex>
         {compactPreviewAccordion}
-          {footerSlot}
+          <SurfacePostureSlot name="footer">{footerSlot}</SurfacePostureSlot>
+          {relocatePrimaryAction && scopedPrimaryAction}
         </Stack>
         {filterSheet}
         {filterDropdown}
@@ -2093,7 +2130,9 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           {...resolvedHeader}
           compact={posture.compactHeader}
           minimal={usesMinimalHeader}
-          quickActions={usesStickyActionContinuity ? undefined : resolvedHeader.quickActions}
+          quickActions={usesStickyActionContinuity ? undefined : primaryPlacement || !primaryActionVisible
+            ? resolvedHeader.quickActions?.filter((action) => !isPrimaryCollectionAction(action, primaryAction))
+            : resolvedHeader.quickActions}
           shortcuts={usesMinimalHeader || promotedShortcuts
             ? undefined
             : resolvedHeader.shortcuts}
@@ -2120,14 +2159,14 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       )}
 
       {showContextChrome && (
-        <Box
+        <SurfacePostureSlot name="context" asChild><Box
           className="ds-collection-workspace__context-slot"
           data-part="context-slot"
           data-collapsed={slotsCollapsed ? 'true' : 'false'}
           data-masthead={editorialTechMasthead ? 'true' : 'false'}
         >
           {resolvedContextSlot}
-        </Box>
+        </Box></SurfacePostureSlot>
       )}
     </>
   );
@@ -2159,20 +2198,20 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
       {/* 4. Stats slot (optional, collapsible) */}
       {showStatsChrome && (
-        <Box
+        <SurfacePostureSlot name="stats" asChild><Box
           className="ds-collection-workspace__stats-slot"
           data-part="stats-slot"
           data-collapsed={slotsCollapsed ? 'true' : 'false'}
         >
           {resolvedStatsSlot}
-        </Box>
+        </Box></SurfacePostureSlot>
       )}
 
       {/* 5. Single compact controls rail with animated saved-views <-> filters swap.
           The data-ds-collection-* attributes are the STABLE addressing contract
           for consumers (WO-UX-03): apps must target these hooks, never the
           inline-style values, which may change in any release. */}
-      <Box
+      <SurfacePostureSlot name="toolbar" asChild><Box
         className="ds-collection-workspace__toolbar-row"
         data-part="toolbar-row"
         data-filters-expanded={inlineFiltersExpanded ? 'true' : 'false'}
@@ -2439,7 +2478,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               />
             )}
 
-            {!resolvedHeader && !usesStickyActionContinuity && primaryAction && (
+            {primaryPlacement === 'app-bar' && scopedPrimaryAction}
+            {!primaryPlacement && primaryActionVisible && !resolvedHeader && !usesStickyActionContinuity && primaryAction && (
               <Button
                 variant="primary"
                 size="sm"
@@ -2457,7 +2497,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             )}
           </Flex>
         </Flex>
-      </Box>
+      </Box></SurfacePostureSlot>
 
       {/* 5.5 Active filters (embedded into the shell when present) */}
       {resolvedActiveFilters && resolvedActiveFilters.filters.length > 0 && (
@@ -2472,7 +2512,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
       {/* 6. Smart selection sets (visible only while selection mode is on) */}
       {selectionEnabled && behavior?.smartSelection && behavior.smartSelection.length > 0 && workspace.selectedKeys.length > 0 && (
-        <Box className="ds-collection-workspace__smart-selection" data-part="smart-selection">
+        <SurfacePostureSlot name="selection" asChild><Box className="ds-collection-workspace__smart-selection" data-part="smart-selection">
           <Flex align="center" gap={8} wrap="wrap">
             <Box
               as="span"
@@ -2502,7 +2542,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               </Button>
             ))}
           </Flex>
-        </Box>
+        </Box></SurfacePostureSlot>
       )}
 
       {/* 7. Table + preview rail */}
@@ -2513,7 +2553,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         data-ds-collection-body="true"
       >
         <Flex className="ds-collection-workspace__body-content" data-part="body-content" gap={4}>
-          <Box
+          <SurfacePostureSlot name="collection" asChild><Box
             ref={workspace.collectionRef}
             className="ds-collection-workspace__collection"
             data-part="collection"
@@ -2582,7 +2622,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               mobileCard={mobileCard}
               focusEnabled={focusEnabled}
             />
-          </Box>
+          </Box></SurfacePostureSlot>
 
           {/* Preview rail */}
           {showPreviewRail && (() => {
@@ -2595,7 +2635,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
       {compactPreviewAccordion}
 
-      {footerSlot}
+      <SurfacePostureSlot name="footer">{footerSlot}</SurfacePostureSlot>
+      {relocatePrimaryAction && scopedPrimaryAction}
     </Stack>
   );
 
@@ -2645,7 +2686,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
       {/* Sticky bottom action bar (phone posture) */}
       {posture.actionBar === 'sticky-bottom'
-        && (primaryAction || actionOverflowItems.length > 0) && (
+        && ((primaryAction && primaryActionVisible) || actionOverflowItems.length > 0) && (
         <ActionDock
           mode="sticky"
           className="ds-surface ds-collection-workspace ds-collection-workspace__sticky-action-bar"
@@ -2681,7 +2722,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             </Button>
           )}
 
-          {primaryAction && (
+          {primaryAction && primaryActionVisible && (
             <Button
               variant="primary"
               icon={primaryAction.icon}

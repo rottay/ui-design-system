@@ -7,6 +7,8 @@
  * support ticket triage, impersonation request review.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useState, useCallback, useId } from 'react';
 import type { ReactNode } from 'react';
 import type { ColumnDef } from '../../../../../../foundation/contracts/runtime/components/patterns/core';
@@ -64,6 +66,7 @@ export interface DecisionAction {
 }
 
 export interface DecisionInboxSurfaceProps<T extends object> {
+  postures?: SurfacePostures;
   /** Queue name displayed as title. */
   queueName: string;
   /** Optional subtitle. */
@@ -175,14 +178,14 @@ function DecisionInboxSkeleton() {
       </Box>
 
       {/* Filter skeleton */}
-      <Flex gap={2}>
+      <SurfacePostureSlot name="filters" asChild><Flex gap={2}>
         <Skeleton variant="rounded" width={120} height={32} />
         <Skeleton variant="rounded" width={120} height={32} />
         <Skeleton variant="rounded" width={120} height={32} />
-      </Flex>
+      </Flex></SurfacePostureSlot>
 
       {/* Table skeleton */}
-      <Card variant="outlined">
+      <SurfacePostureSlot name="queue"><Card variant="outlined">
         <Card.Body>
           <Stack spacing="sm">
             {/* Header row */}
@@ -215,7 +218,7 @@ function DecisionInboxSkeleton() {
             ))}
           </Stack>
         </Card.Body>
-      </Card>
+      </Card></SurfacePostureSlot>
     </Stack>
   );
 }
@@ -225,6 +228,15 @@ function DecisionInboxSkeleton() {
 // ---------------------------------------------------------------------------
 
 export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfaceProps<T>) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <DecisionInboxSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function DecisionInboxSurfaceContent<T extends object>(props: DecisionInboxSurfaceProps<T>) {
+  const surfacePosture = useScopedSurfacePosture();
   const {
     queueName,
     subtitle,
@@ -377,7 +389,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
         spacing="md"
         aria-busy="true"
       >
-        {headerSlot}
+        <SurfacePostureSlot name="header-slot">{headerSlot}</SurfacePostureSlot>
         <Text
           as="span"
           className="ds-decision-inbox__loading-label"
@@ -386,7 +398,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
           {tSurfaceOr('decision_inbox.loading_label', 'Loading…')}
         </Text>
         <DecisionInboxSkeleton />
-        {footerSlot}
+        <SurfacePostureSlot name="footer">{footerSlot}</SurfacePostureSlot>
       </Stack>
     );
   }
@@ -400,7 +412,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
       data-mobile={workspace.isMobile ? 'true' : 'false'}
       spacing="md"
     >
-      {headerSlot}
+      <SurfacePostureSlot name="header-slot">{headerSlot}</SurfacePostureSlot>
 
       {/* Header */}
       <Flex align="center" justify="between">
@@ -430,19 +442,19 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
 
       {/* Filters */}
       {workspaceConfig.controls?.filters && workspaceConfig.controls.filters.length > 0 && (
-        <PatternFilterPanel
+        <SurfacePostureSlot name="filters"><PatternFilterPanel
           filters={workspaceConfig.controls.filters}
           values={workspace.filterValues}
           onChange={workspace.applyFilters}
           onReset={workspace.resetFilters}
           activeCount={workspace.activeFilterCount}
           layout={workspace.isMobile ? 'stacked' : 'inline'}
-        />
+        /></SurfacePostureSlot>
       )}
 
       {/* Batch decision bar */}
       {batchDecisions && workspace.hasSelection && workspace.selectedKeys.length > 1 && (
-        <Card
+        <SurfacePostureSlot name="batch-decisions" asChild><Card
           className="ds-decision-inbox__selection-bar"
           variant="outlined"
         >
@@ -489,7 +501,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
               {decisions.map((decision) => renderDecisionButton(decision, handleBatchDecision, false))}
             </Flex>
           </Card.Body>
-        </Card>
+        </Card></SurfacePostureSlot>
       )}
 
       {/* Error state (app-owned node from the collection contract) */}
@@ -530,7 +542,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
           gap={4}
         >
           {/* Queue table */}
-          <Box className="ds-decision-inbox__queue" data-part="queue">
+          <SurfacePostureSlot name="queue" asChild><Box className="ds-decision-inbox__queue" data-part="queue">
             <PatternDataTable<T>
               data={workspaceConfig.data}
               columns={enrichedColumns}
@@ -547,15 +559,16 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
               hoverable
               actions={actions}
             />
-          </Box>
+          </Box></SurfacePostureSlot>
 
           {/* Review rail (complementary landmark labelled by its heading) */}
           {showReviewRail && (
-            <Box
+            <SurfacePostureSlot name="review-rail" asChild><Box
               as="aside"
               className="ds-decision-inbox__review-rail"
               data-part="review-rail"
-              aria-labelledby={reviewRailTitleId}
+              aria-labelledby={surfacePosture?.regions['review-rail'] === 'collapse' ? undefined : reviewRailTitleId}
+              aria-label={surfacePosture?.regions['review-rail'] === 'collapse' ? tSurfaceOr('decision_inbox.review_details', 'Review Details') : undefined}
               style={
                 reviewRail.width
                   ? ({ '--_ds-instance-decision-inbox-rail-width': reviewRail.width } as React.CSSProperties)
@@ -644,12 +657,12 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
                   </Stack>
                 </Card.Body>
               </Card>
-            </Box>
+            </Box></SurfacePostureSlot>
           )}
         </Flex>
       )}
 
-      {footerSlot}
+      <SurfacePostureSlot name="footer">{footerSlot}</SurfacePostureSlot>
     </Stack>
   );
 }

@@ -14,6 +14,8 @@
  * user sees instead of the generic page skeleton.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import { useMemo, useState } from 'react';
 
 import { Box, Button, Grid, Stack } from '../../../../../primitives';
@@ -44,6 +46,7 @@ import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/
 import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 
 export interface DetailFormSurfaceProps {
+  postures?: SurfacePostures;
   config: DetailFormSurfaceConfig;
   loading?: boolean;
   error?: unknown;
@@ -58,13 +61,22 @@ export interface DetailFormSurfaceProps {
 }
 
 /** Split/stacked edit page: schema-driven form plus a read-only summary column. */
-export function DetailFormSurface({
+export function DetailFormSurface(props: DetailFormSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="form">
+      <DetailFormSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function DetailFormSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
   adapt,
 }: DetailFormSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
@@ -157,9 +169,9 @@ export function DetailFormSurface({
           // The banner is a ruled alert, not a second card frame: the skin
           // paints the recessed ground, the emphasis edge and the optical
           // padding on the part the surface stamps.
-          <Box data-part="error-banner" role="alert">
+          <SurfacePostureSlot name="error-banner" asChild><Box data-part="error-banner" role="alert">
             {config.presentation.error}
-          </Box>
+          </Box></SurfacePostureSlot>
         )}
 
         <PatternFormBuilder
@@ -173,7 +185,7 @@ export function DetailFormSurface({
               // The submit icon rides the Button primitive's own icon slot:
               // the engine owns the icon-label gap (logical, density-scaled),
               // so no inline geometry lives here.
-              <Button
+              <SurfacePostureAction><Button
                 variant={resolveSurfaceButtonVariant(submitAction.variant ?? 'primary')}
                 htmlType="submit"
                 disabled={config.behavior.disabled || submitAction.disabled}
@@ -181,7 +193,7 @@ export function DetailFormSurface({
                 icon={submitAction.icon}
               >
                 {submitAction.label}
-              </Button>
+              </Button></SurfacePostureAction>
             ) : null
           }
           onSubmit={(values) => submitAction?.onClick?.(values)}
@@ -196,13 +208,13 @@ export function DetailFormSurface({
           loading={loading}
         />
 
-        {config.presentation.footer}
+        <SurfacePostureSlot name="footer">{config.presentation.footer}</SurfacePostureSlot>
       </Stack>
     </SurfaceSectionCard>
   );
 
   const summaryNode = (
-    <Stack className="ds-detail-form__summary" spacing={sectionSpacing}>
+    <SurfacePostureSlot name="summary" asChild><Stack className="ds-detail-form__summary" spacing={sectionSpacing}>
       {config.presentation.summary && (
         <SurfaceSectionCard
           title={config.presentation.summaryTitle ?? tSurfaceOr('detail_form.summary_title', 'Summary')}
@@ -211,7 +223,7 @@ export function DetailFormSurface({
         </SurfaceSectionCard>
       )}
       {config.presentation.aside && <SurfaceSectionCard>{config.presentation.aside}</SurfaceSectionCard>}
-    </Stack>
+    </Stack></SurfacePostureSlot>
   );
 
   // Three conditions force a stacked (single-column) layout:
@@ -221,6 +233,7 @@ export function DetailFormSurface({
   const stacked =
     config.visual.layout === 'stacked' ||
     shouldStack ||
+    surfacePosture?.regions.summary === 'hide' ||
     (!config.presentation.summary && !config.presentation.aside);
 
   const content = stacked ? (

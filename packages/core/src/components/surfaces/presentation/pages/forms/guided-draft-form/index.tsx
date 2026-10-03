@@ -31,6 +31,8 @@
  *   shape of the form it stands in for.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useCallback, useId, useMemo, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import { Box } from '../../../../../primitives/layout/box';
@@ -113,6 +115,7 @@ export interface ValidationIssue {
 export type DraftStatus = 'unsaved' | 'saving' | 'saved' | 'error';
 
 export interface GuidedDraftFormSurfaceProps {
+  postures?: SurfacePostures;
   /** Form title. */
   title: string;
   /** Subtitle or description. */
@@ -551,6 +554,15 @@ function GuidedDraftFormSectionCard({
 // ---------------------------------------------------------------------------
 
 export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="form">
+      <GuidedDraftFormSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
+  const surfacePosture = useScopedSurfacePosture();
   const {
     title,
     subtitle,
@@ -620,12 +632,15 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
     formLayoutMap[adaptation.sectionLayout] ?? 'sidebar';
   const shouldStack = adaptation.stacked;
   // Action bar posture: sticky-bottom (default) | inline | floating.
-  const actionBarPosture = adaptation.actionBar;
+  const actionBarPosture = surfacePosture?.primaryAction ? 'inline' : adaptation.actionBar;
   const compactHeader = adaptation.compactHeader;
 
   const [activeSection, setActiveSection] = useState(sections[0]?.key ?? '');
   const [showTemplates, setShowTemplates] = useState(false);
   const templatePickerId = useId();
+  const templatesAvailable = Boolean(templates?.items.length)
+    && surfacePosture?.regions.templates !== 'hide'
+    && surfacePosture?.regions.templates !== 'collapse';
 
   const errorCount = validationIssues?.filter((v) => v.severity === 'error').length ?? 0;
   const warningCount =
@@ -756,13 +771,13 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
       {shouldStack ? (
         // Tablet / Mobile: stack vertically -- nav on top, form below
         <Stack data-part="content" data-layout="stacked" spacing={sectionSpacing}>
-          <SectionNav
+          <SurfacePostureSlot name="section-navigation"><SectionNav
             sections={sections}
             activeSection={activeSection}
             onSectionClick={handleSectionClick}
             layout={sectionNavLayout}
             mode={mode}
-          />
+          /></SurfacePostureSlot>
           <Box data-part="content-body">
             {mode === 'wizard' ? wizardContent : sectionCards}
           </Box>
@@ -775,13 +790,13 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
               form layout was silently dropped above the stacking width. With no
               posture declared the resolution below still answers `sidebar`
               here, so the default is unchanged. */}
-          <SectionNav
+          <SurfacePostureSlot name="section-navigation"><SectionNav
             sections={sections}
             activeSection={activeSection}
             onSectionClick={handleSectionClick}
             layout={sectionNavLayout}
             mode={mode}
-          />
+          /></SurfacePostureSlot>
           {/* The body claims the track the nav leaves: without it the column is
               shrink-to-fit and a ledger section is as wide as its widest field. */}
           <Box data-part="content-body" flex={1}>
@@ -792,7 +807,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
 
       {/* Validation summary */}
       {validationIssues && validationIssues.length > 0 && (
-        <Card
+        <SurfacePostureSlot name="validation" asChild><Card
           className={[
             'ds-guided-draft-form__validation-summary',
             errorCount > 0
@@ -889,11 +904,11 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
               )}
             </Stack>
           </Card.Body>
-        </Card>
+        </Card></SurfacePostureSlot>
       )}
 
       {/* Submit bar (sticky by default; posture-driven) */}
-      <Box data-part="submit-bar" data-action-bar={actionBarPosture}>
+      <SurfacePostureAction><Box data-part="submit-bar" data-action-bar={actionBarPosture}>
         <Box data-part="submit-bar-panel">
           {isMobile ? (
             // Mobile: stacked, full-width actions
@@ -971,7 +986,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             </Flex>
           )}
         </Box>
-      </Box>
+      </Box></SurfacePostureAction>
     </>
   );
 
@@ -993,7 +1008,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
         } as CSSProperties
       }
     >
-      {headerSlot}
+      <SurfacePostureSlot name="header-slot">{headerSlot}</SurfacePostureSlot>
 
       {/* Draft recovery banner */}
       {showFullChrome && draftRecovery?.hasDraft && (
@@ -1080,14 +1095,14 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
         {showFullChrome && draftStatus && (
           <DraftStatusBadge status={draftStatus} lastSavedAt={lastSavedAt} />
         )}
-        {showFullChrome && templates && (
+        {showFullChrome && templatesAvailable && (
           <Button
             size="sm"
             variant="secondary"
             className="ds-guided-draft-form__templates-toggle"
             icon={<WorkflowTemplateIcon decorative size={16} />}
             aria-expanded={showTemplates}
-            aria-controls={templatePickerId}
+            aria-controls={showTemplates ? templatePickerId : undefined}
             onClick={() => setShowTemplates(!showTemplates)}
           >
             {showTemplates
@@ -1098,8 +1113,8 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
       </Flex>
 
       {/* Template picker */}
-      {showFullChrome && showTemplates && templates && (
-        <Box
+      {showFullChrome && showTemplates && templates && templates.items.length > 0 && (
+        <SurfacePostureSlot name="templates" asChild><Box
           data-part="template-picker"
           id={templatePickerId}
           role="region"
@@ -1119,7 +1134,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
               cardVariant={profileDefaults.cardVariant}
             />
           ))}
-        </Box>
+        </Box></SurfacePostureSlot>
       )}
 
       {/* Body: error kit | real anatomy under the shared skeleton | empty kit | form */}
@@ -1142,7 +1157,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
         formBody
       )}
 
-      {footerSlot}
+      <SurfacePostureSlot name="footer">{footerSlot}</SurfacePostureSlot>
     </Stack>
   );
 

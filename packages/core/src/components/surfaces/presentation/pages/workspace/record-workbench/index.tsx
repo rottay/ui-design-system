@@ -20,6 +20,8 @@
  * stays consumer-owned.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useState, useCallback, useId } from 'react';
 import type { KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react';
 import { Box } from '../../../../../primitives/layout/box';
@@ -70,6 +72,7 @@ export interface MetadataField {
 }
 
 export interface RecordWorkbenchSurfaceProps {
+  postures?: SurfacePostures;
   /** Record title (entity name, user name, etc.). */
   title: string;
   /** Subtitle or description. */
@@ -136,6 +139,15 @@ function resolveRecordActionVariant(
 // ---------------------------------------------------------------------------
 
 export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="record">
+      <RecordWorkbenchSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function RecordWorkbenchSurfaceContent(props: RecordWorkbenchSurfaceProps) {
+  const surfacePosture = useScopedSurfacePosture();
   const {
     title,
     subtitle,
@@ -215,8 +227,9 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
 
   const activeTabContent = tabs.find((t) => t.key === activeTab);
   const hasTabs = tabs.length > 0;
+  const tabControlsRendered = hasTabs && !loading && surfacePosture?.regions.tabs !== 'hide' && surfacePosture?.regions.tabs !== 'collapse';
   const showSidebar =
-    !hideSidebar && (forceSidebar || (metadata && metadata.length > 0));
+    !hideSidebar && (forceSidebar || (metadata && metadata.length > 0)) && surfacePosture?.regions.sidebar !== 'hide';
 
   // The active tab's rendered content; a nullish render (or a missing tab)
   // resolves to the per-tab empty slot or the shared empty-state kit. The
@@ -245,8 +258,8 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
       spacing="md"
       aria-busy={loading ? 'true' : undefined}
     >
-      {headerSlot}
-      {breadcrumbs}
+      <SurfacePostureSlot name="header-slot">{headerSlot}</SurfacePostureSlot>
+      <SurfacePostureSlot name="breadcrumbs">{breadcrumbs}</SurfacePostureSlot>
 
       {loading && (
         <Text
@@ -259,7 +272,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
       )}
 
       {/* Record header */}
-      <Flex className="ds-record-workbench__header" data-part="header" align="center" gap={4} wrap="wrap">
+      <SurfacePostureSlot name="header" asChild><Flex className="ds-record-workbench__header" data-part="header" align="center" gap={4} wrap="wrap">
         {loading ? (
           <Flex
             className="ds-record-workbench__identity"
@@ -306,7 +319,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
 
         {/* Action buttons */}
         {actions && actions.length > 0 && (
-          <Flex className="ds-record-workbench__actions" data-part="actions" gap={2} wrap="wrap">
+          <SurfacePostureAction><Flex className="ds-record-workbench__actions" data-part="actions" gap={2} wrap="wrap">
             {actions.map((action) => (
               <Button
                 className="ds-record-workbench__action"
@@ -322,9 +335,9 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
                 {action.label}
               </Button>
             ))}
-          </Flex>
+          </Flex></SurfacePostureAction>
         )}
-      </Flex>
+      </Flex></SurfacePostureSlot>
 
       {/* Error state replaces the work area; the record identity stays visible. */}
       {hasSurfaceError(error) && !loading ? (
@@ -333,7 +346,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
         <>
           {/* Tab bar */}
           {loading ? (
-            <Flex
+            <SurfacePostureSlot name="tabs" asChild><Flex
               className="ds-record-workbench__tab-list"
               data-part="tab-list"
               data-loading="true"
@@ -343,9 +356,9 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
               <Skeleton variant="rounded" width={96} height={32} />
               <Skeleton variant="rounded" width={96} height={32} />
               <Skeleton variant="rounded" width={96} height={32} />
-            </Flex>
+            </Flex></SurfacePostureSlot>
           ) : hasTabs ? (
-            <div
+            <SurfacePostureSlot name="tabs" asChild><div
               className="ds-record-workbench__tab-list"
               data-part="tab-list"
               role="tablist"
@@ -389,7 +402,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
                   </Button>
                 );
               })}
-            </div>
+            </div></SurfacePostureSlot>
           ) : null}
 
           {/* Content area with optional sidebar */}
@@ -398,9 +411,10 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
             <Box
               className="ds-record-workbench__tabpanel"
               data-part="tabpanel"
-              role={hasTabs ? 'tabpanel' : undefined}
+              role={tabControlsRendered ? 'tabpanel' : surfacePosture && hasTabs ? 'region' : undefined}
               id={hasTabs ? panelId(activeTab) : undefined}
-              aria-labelledby={hasTabs ? tabId(activeTab) : undefined}
+              aria-labelledby={tabControlsRendered ? tabId(activeTab) : undefined}
+              aria-label={surfacePosture && hasTabs && !tabControlsRendered ? tSurfaceOr('record_workbench.content_label', 'Record content') : undefined}
             >
               {loading ? (
                 <Skeleton
@@ -415,19 +429,20 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
 
               {/* Related records */}
               {relatedRecords && !loading && (
-                <Box className="ds-record-workbench__related" data-part="related">
+                <SurfacePostureSlot name="related-records" asChild><Box className="ds-record-workbench__related" data-part="related">
                   {relatedRecords}
-                </Box>
+                </Box></SurfacePostureSlot>
               )}
             </Box>
 
             {/* Sidebar */}
             {showSidebar && (
-              <Box
+              <SurfacePostureSlot name="sidebar" asChild><Box
                 as="aside"
                 className="ds-record-workbench__sidebar"
                 data-part="sidebar"
-                aria-labelledby={loading ? undefined : sidebarTitleId}
+                aria-labelledby={loading || surfacePosture?.regions.sidebar === 'collapse' ? undefined : sidebarTitleId}
+                aria-label={surfacePosture?.regions.sidebar === 'collapse' ? tSurfaceOr('record_workbench.details_title', 'Details') : undefined}
                 style={
                   {
                     '--_ds-instance-record-workbench-sidebar-width': sidebarWidth,
@@ -480,13 +495,13 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
                     </Stack>
                   </>
                 )}
-              </Box>
+              </Box></SurfacePostureSlot>
             )}
           </Flex>
         </>
       )}
 
-      {footerSlot}
+      <SurfacePostureSlot name="footer">{footerSlot}</SurfacePostureSlot>
     </Stack>
   );
 }

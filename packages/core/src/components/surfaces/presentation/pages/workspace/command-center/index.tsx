@@ -10,6 +10,8 @@
  * hooks and `data-*` contract stamped below.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot } from '../../../../runtime/postures/scope';
 import React from 'react';
 import type { ReactNode } from 'react';
 import { Box } from '../../../../../primitives/layout/box';
@@ -80,6 +82,7 @@ export interface InsightItem {
 }
 
 export interface CommandCenterSurfaceProps {
+  postures?: SurfacePostures;
   /** Page title. */
   title: string;
   /** Optional greeting (e.g., "Good morning, Daniel"). */
@@ -328,6 +331,14 @@ function SectionSkeleton() {
 // ---------------------------------------------------------------------------
 
 export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="workspace">
+      <CommandCenterSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function CommandCenterSurfaceContent(props: CommandCenterSurfaceProps) {
   const {
     title,
     greeting,
@@ -368,7 +379,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
       spacing="lg"
       aria-busy={loading || undefined}
     >
-      {headerSlot}
+      <SurfacePostureSlot name="header-slot">{headerSlot}</SurfacePostureSlot>
 
       {/* Visually-hidden live label beside aria-busy (sr-only idiom, same as
           the decision-inbox / record-workbench siblings; skin owns geometry). */}
@@ -383,7 +394,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
       )}
 
       {/* Header with greeting */}
-      <Box className="ds-command-center__header" data-part="header">
+      <SurfacePostureSlot name="header" asChild><Box className="ds-command-center__header" data-part="header">
         {loading ? (
           <>
             <Skeleton className="ds-command-center__skeleton-greeting" variant="text" width="30%" height={14} />
@@ -410,7 +421,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
             </Heading>
           </>
         )}
-      </Box>
+      </Box></SurfacePostureSlot>
 
       {/* Load failure replaces the work area only; the identity header above
           stays visible (record-workbench precedent -- chrome stays live). */}
@@ -420,12 +431,12 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
         <>
       {/* Insights/alerts */}
       {loading && (!insights || insights.length === 0) && (
-        <Stack spacing="sm">
+        <SurfacePostureSlot name="insights" asChild><Stack spacing="sm">
           <InsightSkeleton />
-        </Stack>
+        </Stack></SurfacePostureSlot>
       )}
       {insights && insights.length > 0 && (
-        <Stack
+        <SurfacePostureSlot name="insights" asChild><Stack
           as="section"
           spacing="sm"
           data-part="insights"
@@ -434,32 +445,32 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
           {insights.map((insight) => (
             <InsightCard key={insight.id} insight={insight} />
           ))}
-        </Stack>
+        </Stack></SurfacePostureSlot>
       )}
 
       {/* Stats strip */}
       {(stats && stats.length > 0) || loading ? (
-        <PatternStatsGrid
+        <SurfacePostureSlot name="stats"><PatternStatsGrid
           loading={loading}
           stats={stats && stats.length > 0 ? mapStatsToStatDefs(stats) : []}
           columns={stats ? Math.min(stats.length, 4) : 4}
           variant="outlined"
-        />
+        /></SurfacePostureSlot>
       ) : null}
 
       {/* Quick actions grid */}
       {loading && (!quickActions || quickActions.length === 0) && (
-        <Box>
+        <SurfacePostureSlot name="quick-actions" asChild><Box>
           <Skeleton className="ds-command-center__skeleton-heading" variant="text" width="20%" height={14} />
           <Box className="ds-command-center__quick-actions-grid" data-part="quick-actions-grid">
             <QuickActionSkeleton />
             <QuickActionSkeleton />
             <QuickActionSkeleton />
           </Box>
-        </Box>
+        </Box></SurfacePostureSlot>
       )}
       {quickActions && quickActions.length > 0 && (
-        <Box className="ds-command-center__quick-actions" data-part="quick-actions">
+        <SurfacePostureSlot name="quick-actions" asChild><Box className="ds-command-center__quick-actions" data-part="quick-actions">
           <Heading
             level="h2"
             textStyle="sectionTitle"
@@ -492,18 +503,18 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
               />
             ))}
           </Box>
-        </Box>
+        </Box></SurfacePostureSlot>
       )}
 
       {/* Recent activity */}
       {loading && (!recentActivity || recentActivity.items.length === 0) && (
-        <Box>
+        <SurfacePostureSlot name="recent-activity" asChild><Box>
           <Skeleton className="ds-command-center__skeleton-heading" variant="text" width="25%" height={14} />
           <ActivitySkeleton />
-        </Box>
+        </Box></SurfacePostureSlot>
       )}
       {recentActivity && recentActivity.items.length > 0 && (
-        <Card className="ds-command-center__recent-activity" variant="outlined">
+        <SurfacePostureSlot name="recent-activity" asChild><Card className="ds-command-center__recent-activity" variant="outlined">
           <Card.Body>
             <Flex
               align="center"
@@ -543,19 +554,19 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
               emptyMessage={tSurfaceOr('command_center.activity_empty', 'No recent activity.')}
             />
           </Card.Body>
-        </Card>
+        </Card></SurfacePostureSlot>
       )}
 
       {/* Body sections */}
       {loading && (!sections || sections.length === 0) && (
-        <Box className="ds-command-center__sections-grid" data-part="sections-grid">
+        <SurfacePostureSlot name="sections" asChild><Box className="ds-command-center__sections-grid" data-part="sections-grid">
           <SectionSkeleton />
           <SectionSkeleton />
           <SectionSkeleton />
-        </Box>
+        </Box></SurfacePostureSlot>
       )}
       {sections && sections.length > 0 && (
-        <Box className="ds-command-center__sections-grid" data-part="sections-grid">
+        <SurfacePostureSlot name="sections" asChild><Box className="ds-command-center__sections-grid" data-part="sections-grid">
           {sections.map((section) => (
             <Card
               key={section.key}
@@ -577,7 +588,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
               </Card.Body>
             </Card>
           ))}
-        </Box>
+        </Box></SurfacePostureSlot>
       )}
 
       {/* Empty state */}
@@ -597,7 +608,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
         </>
       )}
 
-      {footerSlot}
+      <SurfacePostureSlot name="footer">{footerSlot}</SurfacePostureSlot>
     </Stack>
   );
 }
