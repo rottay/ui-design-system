@@ -426,13 +426,18 @@ test('C2/MEDIDO — el grafo MEDIDO del subpath retenido queda clavado, numero c
    * un numero y no contra una frase. Su presupuesto declarado (242 modulos /
    * 2482000 bytes, anclado en revision) tiene holgura sobre la medicion; la ley
    * de la holgura cero del lote C2 sigue siendo drillada por los TECHO
-   * sinteticos de arriba. */
+   * sinteticos de arriba.
+   *
+   * 1216380 -> 1216267 (-113), same 180 modules, measured file by file:
+   * 9fd2fd28a +21 (theming/composition/react/provider), a3dc4c4f9 -164
+   * (charts/presentation/tooltip) and +6 in each of five chart families
+   * (bar-chart, funnel-chart, gauge, histogram, waterfall). */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
     .filter((entry) => entry.subpath === './patterns/charts');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 180, sourceBytes: 1216380 },
+    { reachableModules: 180, sourceBytes: 1216267 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
   assert.deepEqual(baseline.ceilings['./patterns/charts'], ceiling(242, 2482000), 'el ancla del retenido es el valor revisado en HEAD, sin cambio');

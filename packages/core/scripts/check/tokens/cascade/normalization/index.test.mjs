@@ -184,13 +184,26 @@ test('L4(a) — sobre el arbol real, la keyword de borders:29 queda fuera y un p
   const baseline = analyse(live).counters.shadowingLiteralPins;
   assert.ok(!analyse(live).shadows.some((shadow) => shadow.site === site));
 
-  const withInherit = live.literalPins.map((pin) => (pin === keywordPin ? { ...pin, value: 'inherit' } : pin));
-  assert.equal(analyse({ ...live, literalPins: withInherit }).counters.shadowingLiteralPins, baseline);
+  /* The plant rides a channel the live membership roots under a root that can
+   * derive. `--ds-radius-button` lost its only root with the framework
+   * projection bridge (7a79c1b89, membership regenerated in 68f720c1a), so a
+   * plant on it would prove nothing in either direction. */
+  const rooted = '--ds-button-md-radius';
+  const member = live.membership.rows.find((row) => row.channel === rooted);
+  assert.equal(member?.rootId, 'control.ratio.radius');
+  const root = live.catalog.roots.find((candidate) => candidate.rootId === member.rootId);
+  assert.ok(root?.derivationDebt && root?.derivation, 'control.ratio.radius must still know how to derive');
+  const plant = (value) => live.literalPins.map((pin) => (pin === keywordPin ? { ...pin, channel: rooted, value } : pin));
 
-  const withLiteral = live.literalPins.map((pin) => (pin === keywordPin ? { ...pin, value: '8px' } : pin));
-  const planted = analyse({ ...live, literalPins: withLiteral });
+  for (const keyword of ['initial', 'inherit']) {
+    const kept = analyse({ ...live, literalPins: plant(keyword) });
+    assert.equal(kept.counters.shadowingLiteralPins, baseline, `${keyword} on ${rooted} counted as a shadow`);
+    assert.ok(!kept.shadows.some((shadow) => shadow.site === site));
+  }
+
+  const planted = analyse({ ...live, literalPins: plant('8px') });
   assert.equal(planted.counters.shadowingLiteralPins, baseline + 1);
-  assert.ok(planted.shadows.some((shadow) => shadow.site === site && shadow.rootId === 'radius.base'));
+  assert.ok(planted.shadows.some((shadow) => shadow.site === site && shadow.channel === rooted && shadow.rootId === 'control.ratio.radius'));
 });
 
 /* ── 6. L5: la superficie del tenant no se achica ───────────────────────── */

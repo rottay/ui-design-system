@@ -28,8 +28,7 @@
     "src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/parse/index.ts",
     "src/foundation/presets/candidates/bithire/documents/index.ts",
     "src/foundation/presets/candidates/bithire/index.ts",
-    "src/infrastructure/runtime/foundation/change-key/index.ts",
-    "src/infrastructure/runtime/foundation/icons/active-profile/index.ts"
+    "src/infrastructure/runtime/foundation/change-key/index.ts"
   ],
   "stylesUnreferenced": [
     "src/foundation/tokens/css/presentation/components/index.css",

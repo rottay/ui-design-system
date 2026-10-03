@@ -14,6 +14,8 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 
+import { archiveRoot, openArchivedUnit, snapshotDir } from '../../../../libraries/archive/index.mjs';
+import { RET03_EVIDENCE_SNAPSHOT, RET03_MODERN_RESCUE_PIN } from '../../../../libraries/archive/units/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 import {
   loadProgramContracts,
@@ -52,13 +54,24 @@ const contracts = loadProgramContracts();
  * The R0 canary proposal is SEALED evidence. It is located through the live
  * program contract instead of a hardcoded path, so a round relocation moves the
  * drills with it and the receipt is never rewritten to keep a test green.
+ *
+ * The bytes live in the docs-engineering archive, so they are read through the
+ * archive door, which re-hashes the whole unit against its pin before serving
+ * one file of it.
  */
 function r0ProposalPath() {
-  return path.join(
-    REPOSITORY_ROOT,
-    roundEvidenceRelativePath(contracts, 'R0'),
-    'receipts/r1-canary-ownership-proposal.json',
-  );
+  return [roundEvidenceRelativePath(contracts, 'R0'), 'receipts/r1-canary-ownership-proposal.json'].join('/');
+}
+
+function r0ProposalText() {
+  const repoPath = r0ProposalPath();
+  const unitPrefix = `${RET03_MODERN_RESCUE_PIN.unit}/`;
+  assert.ok(repoPath.startsWith(unitPrefix), `${repoPath} must sit inside the archived unit ${RET03_MODERN_RESCUE_PIN.unit}`);
+  const unit = openArchivedUnit({
+    snapshotDir: snapshotDir(archiveRoot({ repoRoot: REPOSITORY_ROOT }), RET03_EVIDENCE_SNAPSHOT),
+    pin: RET03_MODERN_RESCUE_PIN,
+  });
+  return unit.readText(repoPath.slice(unitPrefix.length));
 }
 
 /**
@@ -119,7 +132,7 @@ function reanchorEntry(entry) {
 }
 
 function r0Proposal({ reanchored = true } = {}) {
-  const proposal = JSON.parse(fs.readFileSync(r0ProposalPath(), 'utf8'));
+  const proposal = JSON.parse(r0ProposalText());
   if (!reanchored) return proposal;
   return {
     ...proposal,

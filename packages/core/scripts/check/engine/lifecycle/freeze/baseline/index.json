@@ -16,12 +16,6 @@
       "reason": "441477d3a: TenantConfig no longer carries the visual payload, so the preview reads personality from personalityInfo.tokens and composes through draftPreviewSource(creationConfig) ?? tenantConfig. A shared-contract follow. One deliberate delta: the engine label is the file's own literal rather than creationConfig.engine.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/patterns/data/column-settings/engines/rustic/index.tsx": {
-      "blob": "3d667d0ae993d67483e61049a4b79048020b9944deb89e58531f652db471f05d",
-      "relocationDigest": "a19bdd8ac0032234cc2fc15158e039a83367bf36c6940d39ad23aa5b87dad450",
-      "reason": "WO-CAN-06 engine policy: these two files were silent forwarding aliases (export { default } from '../classic'), not Rustic content. They painted Classic chrome under the Rustic name, invisible to the forwarding-engine rule until this WO extended it. Converted to declared absences that refuse by name; no Rustic implementation was added, removed or improved.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
     "packages/core/src/components/patterns/data/data-table/engines/classic/index.tsx": {
       "blob": "bd5a4574a0a02cb9d0ccec425a08e822944a50ecdc194053d70c434c2328cf68",
       "relocationDigest": "11f034645be3cbde962a594a1aa7a3881fc1aa295da29b22e6b26cd22d6eda0e",
@@ -62,12 +56,6 @@
       "blob": "d780d64d5b13b76fd9857079e37254e4db51bc0b62f24e46705b78f24cc676ad",
       "relocationDigest": "a40bc8d93bb36b142e07fb0141cf6cad7d220a8e0adbc4fe4b8fe80e179b6c33",
       "reason": "Re-authorized after the governed direct-entrypoint migration (fa0efd3b6) rewrote its barrel import into per-family deep imports. Mechanical import-path change plus a header comment; no classic behaviour, markup or paint was altered.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/components/patterns/data/list-toolbar/engines/rustic/index.tsx": {
-      "blob": "8d0fdce7b9e77297fbee9f6ffa9ec9d14593bcbd4a3c12bb3db4379109c5928b",
-      "relocationDigest": "bcc6383a80fa9cece2de94b3a6a600329445bc2170381ba684e33273cb12eb1a",
-      "reason": "WO-CAN-06 engine policy: these two files were silent forwarding aliases (export { default } from '../classic'), not Rustic content. They painted Classic chrome under the Rustic name, invisible to the forwarding-engine rule until this WO extended it. Converted to declared absences that refuse by name; no Rustic implementation was added, removed or improved.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/record-facts/engines/classic/index.tsx": {
