@@ -108,6 +108,7 @@ describe("DataTable pass 2 craft contract", () => {
     const ROW = String.raw`\[data-part="body-row"\]${FOCUS}`;
     const GROUP_ROW = String.raw`\[data-part="group-header-row"\]${FOCUS}`;
     const HEADER = String.raw`\[data-part="header-cell"\]\[data-sortable="true"\]${FOCUS}`;
+    const SELF = String.raw`:not\(:focus-within:not\(:focus\)\)`;
     const bodies = (selector: string): string[] =>
       [...skin.matchAll(new RegExp(`${selector}\\s*[,{][^{}]*\\{([^}]*)\\}|${selector}\\s*\\{([^}]*)\\}`, "g"))].map(
         (match) => match[1] ?? match[2] ?? ""
@@ -126,7 +127,7 @@ describe("DataTable pass 2 craft contract", () => {
         undefined,
       ],
     ])("hosts one overlay on %s, and a system-colour outline in forced colors", (_label, node, shadow, zIndex) => {
-      const [overlay, forced, ...extra] = bodies(`${node}::after`);
+      const [overlay, forced, ...extra] = bodies(`${node}${SELF}::after`);
       expect(extra).toEqual([]);
       expect(declaration(overlay ?? "", "content")).toBe('""');
       expect(declaration(overlay ?? "", "position")).toBe("absolute");
@@ -147,6 +148,14 @@ describe("DataTable pass 2 craft contract", () => {
       expect(declaration(forced ?? "", "outline-offset")).toBe("var(--ds-focus-ring-offset)");
       expect(declaration(forced ?? "", "box-shadow")).toBe("none");
       expect(forcedColors).toContain(forced);
+    });
+
+    it("shows an overlay only while its host holds focus itself, never for a focused descendant", () => {
+      const overlays = [...skin.matchAll(/:focus-visible\)([^\s,{]*)::after/g)].map(([, tail]) => tail);
+      expect(overlays).toHaveLength(6);
+      for (const tail of overlays) {
+        expect(tail).toBe(":not(:focus-within:not(:focus))");
+      }
     });
 
     it("keeps the row overlay above its pinned cells and under the sticky header", () => {
@@ -254,6 +263,56 @@ describe("DataTable pass 2 craft contract", () => {
       expect(forced).toMatch(/--ds-card-focus-ring-color:\s*Highlight;/);
       expect(forced).toMatch(/--ds-card-bordered-shadow:\s*none;/);
       expect(mobile.slice(mobile.lastIndexOf("@media (forced-colors: active)"))).toContain(forced);
+    });
+  });
+
+  describe("the inline cell editor's raw controls wear the tenant focus signature", () => {
+    const cellEditor = readFileSync(join(here, "../engines/modern/cell-editor/index.tsx"), "utf8");
+    const mobile = mobileSkin.replace(/\/\*[\s\S]*?\*\//g, "");
+    const EDITOR_FOCUS =
+      '.ds-pattern-data-table :is([data-part="editor-input"], [data-part="editor-checkbox"]):is([data-state~="focus-visible"], :focus-visible)';
+    const editorRules = [...mobile.matchAll(/([^{}]*)\{([^{}]*)\}/g)]
+      .map(([, selector, body]) => [(selector ?? "").replace(/\s+/g, " ").trim(), body ?? ""] as const)
+      .filter(([selector]) => /editor-(?:input|checkbox)/.test(selector) && selector.includes("focus-visible"));
+
+    it("covers every focusable control the editor renders, and each is a raw element", () => {
+      const controls = [...cellEditor.matchAll(/<(input|select|textarea|button)\b[\s\S]*?data-part="([a-z-]+)"/g)].map(
+        ([, tag, part]) => `${tag}:${part}`
+      );
+      expect([...new Set(controls)].sort()).toEqual(["input:editor-checkbox", "input:editor-input", "select:editor-input"]);
+      expect(cellEditor).not.toMatch(/<(?:Input|Select|Checkbox|DatePicker|InputNumber)\b/);
+    });
+
+    it("paints the signature once, on the control, and a system-colour outline in forced colors", () => {
+      expect(editorRules.map(([selector]) => selector)).toEqual([EDITOR_FOCUS, EDITOR_FOCUS]);
+      const [[, body], [, forced]] = editorRules as unknown as [[string, string], [string, string]];
+      expect(body).toMatch(/outline:\s*var\(--ds-focus-ring-width\) solid transparent;/);
+      expect(body).toMatch(/outline-offset:\s*var\(--ds-focus-ring-offset\);/);
+      expect(body).toMatch(/box-shadow:\s*var\(--ds-focus-ring\);/);
+      expect(forced).toMatch(/outline:\s*max\(2px, var\(--ds-focus-ring-width\)\) solid Highlight;/);
+      expect(forced).toMatch(/outline-offset:\s*var\(--ds-focus-ring-offset\);/);
+      expect(forced).toMatch(/box-shadow:\s*none;/);
+      expect(mobile.slice(mobile.lastIndexOf("@media (forced-colors: active)"))).toContain(forced);
+      for (const skin of [modernSkin, interactionsSkin]) {
+        expect(skin).not.toMatch(/editor-(?:input|checkbox)[^{}]*focus/);
+      }
+    });
+
+    it("is not outranked by the engine bridge's bare select focus, the one bridge focus rule on a form control", () => {
+      const bridge = readFileSync(
+        join(here, "../../../../../foundation/tokens/css/runtime/engines/modern/framework-bridge/index.css"),
+        "utf8"
+      ).replace(/\/\*[\s\S]*?\*\//g, "");
+      const focusSelectors = [...bridge.matchAll(/([^{}]*)\{[^{}]*\}/g)]
+        .map(([, selector]) => (selector ?? "").replace(/\s+/g, " ").trim())
+        .filter((selector) => /\b(?:input|select|textarea)\b[^,]*:focus/.test(selector));
+      expect(focusSelectors).toEqual(["[data-engine='modern'] select:not([data-part='editor-input']):focus"]);
+    });
+
+    it("keeps the editing cell unclipped, so the ring is whole inside the cell padding", () => {
+      const editing = modernSkin.match(/\[data-part="data-cell"\]\[data-editing="true"\]\s*\{([^}]*)\}/)?.[1] ?? "";
+      expect(editing).toMatch(/overflow:\s*visible;/);
+      expect(editing).toMatch(/padding:\s*4px 6px;/);
     });
   });
 

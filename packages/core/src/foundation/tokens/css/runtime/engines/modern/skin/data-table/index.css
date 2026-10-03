@@ -1281,11 +1281,11 @@
   outline: none;
 }
 /* A row cannot paint outward (the scroller clips it) and a shadow on a <tr>
-   does not paint: the row hosts one overlay, above its own pinned cells. */
+   does not paint: the row hosts one overlay, only while it holds focus itself. */
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)::after,
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after,
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="group-header-row"]:is([data-state~="focus-visible"], :focus-visible)::after {
+  [data-part="group-header-row"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after {
   content: "";
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
@@ -1816,7 +1816,7 @@
   position: relative;
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)::after {
+  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after {
   content: "";
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
@@ -2319,11 +2319,11 @@
   }
 
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)::after,
+    [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after,
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="group-header-row"]:is([data-state~="focus-visible"], :focus-visible)::after,
+    [data-part="group-header-row"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after,
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)::after {
+    [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after {
     inset: calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width)));
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
