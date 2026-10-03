@@ -198,13 +198,6 @@ export interface StepperProps extends BaseComponentProps, EngineAwareProps, With
   onChange?: (current: number) => void;
 
   /**
-   * Initial step index for uncontrolled mode.
-   * @deprecated Use `defaultCurrent` instead
-   * @default 0
-   */
-  initial?: number;
-
-  /**
    * Progress percentage for current step (0-100).
    * Displays a progress indicator within the current step.
    */

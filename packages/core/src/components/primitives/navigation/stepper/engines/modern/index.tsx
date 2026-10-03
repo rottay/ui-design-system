@@ -246,10 +246,8 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
     'aria-label': callerAriaLabel,
     engine: _engine,
     // Consumed contract axes that must NOT leak onto the DOM through the
-    // rest spread: `initial` (deprecated alias of defaultCurrent),
-    // `responsive` (absorbed by the skin's container query — documented
-    // drift), `percent` (batch-33 debt, no governed render channel).
-    initial: _initial,
+    // rest spread: `responsive` (absorbed by the skin's container query —
+    // documented drift), `percent` (batch-33 debt, no governed render channel).
     responsive: _responsive,
     percent: _percent,
     // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
