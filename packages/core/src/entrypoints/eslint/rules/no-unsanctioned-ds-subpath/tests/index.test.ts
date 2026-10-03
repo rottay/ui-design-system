@@ -51,16 +51,31 @@ const workOrderStatuses = new Map(
 const workOrderStatus = (id: string): string | null =>
   workOrderStatuses.get(id) ?? null;
 
-const SPATIAL_ROW = /^\| `\.\/spatial` \| [a-z-]+ \| \S+ \|/m;
-
-/** The live document with `./spatial` rewritten, for the lab drills. */
-function withSpatialRow(disposition: string, workOrder: string): string {
-  if (!SPATIAL_ROW.test(documentMarkdown))
-    throw new Error('the document has no ./spatial row to drill on');
-  return documentMarkdown.replace(
-    SPATIAL_ROW,
-    `| \`./spatial\` | ${disposition} | ${workOrder} |`,
+/** A document with one published row's disposition cells rewritten. */
+function withRow(
+  markdown: string,
+  subpath: string,
+  disposition: string,
+  workOrder: string,
+): string {
+  const row = new RegExp(
+    `^\\| \`${subpath.replace(/[.*/]/g, '\\$&')}\` \\| [a-z-]+ \\| \\S+ \\|`,
+    'm',
   );
+  if (!row.test(markdown))
+    throw new Error(`the document has no ${subpath} row to drill on`);
+  return markdown.replace(
+    row,
+    `| \`${subpath}\` | ${disposition} | ${workOrder} |`,
+  );
+}
+
+/**
+ * The live document with `./spatial` rewritten, for the lab drills. Every
+ * drill states the row it needs, so none depends on what the row says today.
+ */
+function withSpatialRow(disposition: string, workOrder: string): string {
+  return withRow(documentMarkdown, './spatial', disposition, workOrder);
 }
 
 const LAB_FIXTURE = parseConsumerContract(withSpatialRow('lab', 'WO-CRA-15'));
@@ -142,32 +157,46 @@ describe('consumer contract: document is the single source', () => {
   });
 
   it('tallies lab rows on their own line, apart from guaranteed', () => {
-    const lab = expectedTally(LAB_FIXTURE.published);
-    const before = expectedTally(
-      parseConsumerContract(withSpatialRow('retire-by', 'WO-RET-01')).published,
-    );
-    const guaranteedLine = (lines: string[]) =>
-      lines.find((line) => line.startsWith('| `guaranteed` |'));
+    const retiring = withSpatialRow('retire-by', 'WO-RET-01');
+    const oneLab = withSpatialRow('lab', 'WO-CRA-15');
+    const twoLab = withRow(oneLab, './motion', 'lab', 'WO-CRA-15');
+    const tallyOf = (markdown: string) =>
+      expectedTally(parseConsumerContract(markdown).published);
+    const count = (lines: string[], label: string) => {
+      const line = lines.find((entry) => entry.startsWith(`| \`${label}\` |`));
+      return line ? Number(/\| (\d+) \|$/.exec(line)?.[1]) : 0;
+    };
 
-    expect(lab).toContain('| `lab` | 1 |');
-    expect(before).not.toContain('| `lab` | 1 |');
-    expect(guaranteedLine(lab)).toBe(guaranteedLine(before));
-
-    // A document that flips the row and keeps the old summary is red; one
-    // that restates the summary is green.
-    const flipped = withSpatialRow('lab', 'WO-CRA-15');
-    expect(statedTally(flipped)).not.toEqual(lab);
-
-    const stale = statedTally(flipped).find((line) =>
-      line.startsWith('| `retire-by WO-RET-01` |'),
+    expect(count(tallyOf(retiring), 'lab')).toBe(0);
+    expect(count(tallyOf(oneLab), 'lab')).toBe(1);
+    expect(count(tallyOf(oneLab), 'guaranteed')).toBe(
+      count(tallyOf(retiring), 'guaranteed'),
     );
-    const fresh = lab.find((line) =>
-      line.startsWith('| `retire-by WO-RET-01` |'),
+    expect(count(tallyOf(oneLab), 'retire-by WO-RET-01')).toBe(
+      count(tallyOf(retiring), 'retire-by WO-RET-01') - 1,
     );
-    if (!stale || !fresh) throw new Error('no WO-RET-01 summary line to drill');
-    expect(
-      statedTally(flipped.replace(stale, `${fresh}\n| \`lab\` | 1 |`)),
-    ).toEqual(lab);
+
+    // A guaranteed door moved to lab leaves the guaranteed count.
+    expect(count(tallyOf(twoLab), 'lab')).toBe(2);
+    expect(count(tallyOf(twoLab), 'guaranteed')).toBe(
+      count(tallyOf(oneLab), 'guaranteed') - 1,
+    );
+
+    // Each regrouping is refused while the summary still says what it said,
+    // and accepted once the summary is restated. The live table is one of
+    // `retiring` / `oneLab`, so exactly that one is the identity.
+    const live = expectedTally(parsed.published);
+    const regrouped = [retiring, oneLab, twoLab].filter(
+      (markdown) => tallyOf(markdown).join() !== live.join(),
+    );
+    expect(regrouped).toHaveLength(2);
+    expect(regrouped).toContain(twoLab);
+
+    for (const markdown of regrouped) {
+      expect(statedTally(markdown)).toEqual(live);
+      expect(statedTally(markdown)).not.toEqual(tallyOf(markdown));
+      expect(statedTally(restateTally(markdown))).toEqual(tallyOf(markdown));
+    }
   });
 
   it('records commercial.css as forbidden with no DS retirement action', () => {
@@ -356,12 +385,30 @@ function expectedTally(
     .sort();
 }
 
+/** The document with §1.1 rewritten to the tally its own table has. */
+function restateTally(markdown: string): string {
+  const lines = markdown
+    .split('\n')
+    .filter((line) => !TALLY_LINE.test(line));
+  const anchor = lines.findIndex((line) =>
+    line.startsWith('| Subpaths publicados |'),
+  );
+  if (anchor === -1) throw new Error('the document has no §1.1 summary');
+  lines.splice(
+    anchor + 1,
+    0,
+    ...expectedTally(parseConsumerContract(markdown).published),
+  );
+  return lines.join('\n');
+}
+
+const TALLY_LINE =
+  /^\| `(?:guaranteed|lab|forbidden|retire-by [^`]+)` \| \d+ \|$/;
+
 /** The disposition summary lines a document actually states, sorted. */
 function statedTally(markdown: string): string[] {
   return (
-    markdown.match(
-      /^\| `(?:guaranteed|lab|forbidden|retire-by [^`]+)` \| \d+ \|$/gm,
-    ) ?? []
+    markdown.match(new RegExp(TALLY_LINE.source, 'gm')) ?? []
   ).sort();
 }
 

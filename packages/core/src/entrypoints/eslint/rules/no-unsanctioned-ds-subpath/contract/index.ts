@@ -46,7 +46,7 @@ export const PUBLISHED_SUBPATHS: readonly ContractRow[] = [
   { subpath: './charts/access', disposition: 'guaranteed', retiredBy: null },
   { subpath: './charts/renderers', disposition: 'guaranteed', retiredBy: null },
   { subpath: './motion', disposition: 'guaranteed', retiredBy: null },
-  { subpath: './spatial', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
+  { subpath: './spatial', disposition: 'lab', retiredBy: 'WO-CRA-15' },
   { subpath: './styles.css', disposition: 'guaranteed', retiredBy: null },
   { subpath: './styles/bithire', disposition: 'retire-by', retiredBy: 'WO-CAN-03' },
   { subpath: './styles/evnto', disposition: 'retire-by', retiredBy: 'WO-CAN-03' },

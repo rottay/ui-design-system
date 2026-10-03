@@ -43,6 +43,7 @@ pone el test en rojo; quitar un `exports` sin quitar su fila también.
 | --- | --- | --- |
 | `guaranteed` | publicado y sancionado; no se retira sin changeset 3.0 y codemod | pasa |
 | `retire-by` | publicado, **no** sancionado; la WO nombrada adjudica su retiro | falla, nombrando la WO |
+| `lab` | publicado y experimental; no cuenta como productivo ni certificado; la WO nombrada es su owner y `releaseSync.lab` fija su línea de revisión (`reviewBy`) | falla con mensaje `lab`, salvo opt-in explícito en `allowSubpaths` |
 | `forbidden` | no publicado en `exports`; nunca sancionado; **sin acción del DS** | falla, remitiendo a la app consumidora |
 
 Regla de admisión (WO-CON-01 «Do NOT»): un subpath solo entra en `guaranteed`
@@ -69,8 +70,9 @@ disposición es la parte normativa y es la que no puede derivar.
 | --- | --- |
 | Subpaths publicados | 40 |
 | `guaranteed` | 19 |
-| `retire-by WO-RET-01` | 16 |
+| `retire-by WO-RET-01` | 15 |
 | `retire-by WO-CAN-03` | 5 |
+| `lab` | 1 |
 | Subpaths publicados con 0 consumidores en alcance (bithire + showroom) | 14 |
 | Importaciones a superficie garantizada | bithire 2086 · showroom 325 |
 | Importaciones a superficie no garantizada (línea base, decrece) | bithire 16 · showroom 14 |
@@ -100,7 +102,7 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./charts/access` | guaranteed | — | 2 | 0 |
 | `./charts/renderers` | guaranteed | — | 5 | 0 |
 | `./motion` | guaranteed | — | 4 | 0 |
-| `./spatial` | retire-by | WO-RET-01 | 0 | 2 |
+| `./spatial` | lab | WO-CRA-15 | 0 | 2 |
 | `./styles.css` | guaranteed | — | 0 | 1 |
 | `./styles/bithire` | retire-by | WO-CAN-03 | 2 | 0 |
 | `./styles/evnto` | retire-by | WO-CAN-03 | 0 | 0 |

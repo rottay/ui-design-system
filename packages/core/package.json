@@ -352,6 +352,12 @@
     "public-entrypoints:codemod": "node scripts/maintain/public-entrypoint-imports/index.mjs"
   },
   "releaseSync": {
+    "lab": {
+      "./spatial": {
+        "owner": "WO-CRA-15",
+        "reviewBy": "4.0"
+      }
+    },
     "sourceEntrypoints": {
       "./server": "entrypoints/server/index.ts",
       "./patterns/charts": "entrypoints/public/patterns/charts/index.ts",
