@@ -10,7 +10,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { analyse, measure, selfCancelling } from './index.mjs';
+import { analyse, measure, readRootAliases, restatesRootAlias, selfCancelling } from './index.mjs';
 
 const DIALS = new Set(['--ds-effect-intensity', '--ds-type-scale']);
 
@@ -172,4 +172,172 @@ test('drill 9 [F-07]: normalizing against a LITERAL baseline is not a cancellati
 test('drill 10 [F-07]: the real tree carries no self-cancelling dial', () => {
   const { cancellations } = measure();
   assert.deepEqual(cancellations, [], 'a dial that cancels itself is present and inert');
+});
+
+/* The scope re-resolution alias law: an artifact restates a root alias with its
+ * root text so the alias resolves again in the vertical scope. */
+
+const CONSOLE_BG = '--ds-command-home-console-bg';
+const OVERLAY = '--ds-workspace-shell-overlay';
+const TEXTURE = '--ds-material-canvas-texture';
+const CONSOLE_BG_ROW =
+  'repeating-linear-gradient(90deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 30px), ' +
+  'var(--ds-workspace-shell-overlay, transparent), var(--ds-surface-card-bg)';
+const OVERLAY_ROW = 'var(--ds-material-canvas-texture, transparent)';
+const TEXTURE_SEED =
+  'repeating-linear-gradient(0deg, color-mix(in srgb, var(--ds-color-text-primary) calc(2% * var(--ds-effect-intensity, 1)), transparent) 0 1px, transparent 1px 3px)';
+const ALIAS_DIALS = new Set(['--ds-effect-intensity']);
+const ALIAS_TABLE = new Map([[CONSOLE_BG, CONSOLE_BG_ROW]]);
+const named = (findings) => findings.map((f) => `${f.vertical}|${f.channel}|${f.dial}`);
+
+function restatedTree(row = CONSOLE_BG_ROW) {
+  return {
+    base: { [OVERLAY]: [OVERLAY_ROW] },
+    artifacts: {
+      rottay: { [CONSOLE_BG]: [row] },
+      bithire: { [CONSOLE_BG]: [row], [OVERLAY]: [OVERLAY_ROW], [TEXTURE]: [TEXTURE_SEED] },
+      evnto: { [CONSOLE_BG]: [row] },
+    },
+  };
+}
+
+test('drill 11 [alias law]: a root alias restated with its root text is not vertical-authored', () => {
+  const { base, artifacts } = restatedTree();
+  assert.deepEqual(
+    named(analyse(base, artifacts, ALIAS_DIALS)),
+    [`evnto|${CONSOLE_BG}|--ds-effect-intensity`, `rottay|${CONSOLE_BG}|--ds-effect-intensity`],
+    'without the table the restatement reads as a freeze: the false positive, reproduced'
+  );
+  assert.deepEqual(analyse(base, artifacts, ALIAS_DIALS, ALIAS_TABLE), [], 'with the table nothing was frozen');
+
+  const liveTable = readRootAliases();
+  const liveRow = liveTable.get(CONSOLE_BG);
+  assert.ok(liveRow?.includes(`var(${OVERLAY}`), 'the live row reads the overlay link');
+  const live = restatedTree(liveRow);
+  assert.deepEqual(analyse(live.base, live.artifacts, ALIAS_DIALS, liveTable), [], 'the live table admits this tree');
+  assert.deepEqual(
+    named(analyse(live.base, live.artifacts, ALIAS_DIALS)),
+    [`evnto|${CONSOLE_BG}|--ds-effect-intensity`, `rottay|${CONSOLE_BG}|--ds-effect-intensity`],
+    'and with no table passed nothing is admitted: the default is the empty table, never the live one'
+  );
+  assert.deepEqual(
+    analyse(live.base, live.artifacts, ALIAS_DIALS),
+    analyse(live.base, live.artifacts, ALIAS_DIALS, new Map())
+  );
+});
+
+test('drill 12 [alias law]: a vertical that genuinely drops the factor stays red, table or not', () => {
+  const dropped = restatedTree();
+  dropped.artifacts.evnto[CONSOLE_BG] = [CONSOLE_BG_ROW.replace('var(--ds-workspace-shell-overlay, transparent)', 'transparent')];
+  assert.deepEqual(named(analyse(dropped.base, dropped.artifacts, ALIAS_DIALS, ALIAS_TABLE)), [
+    `evnto|${CONSOLE_BG}|--ds-effect-intensity`,
+  ]);
+
+  const twice = restatedTree();
+  twice.artifacts.evnto[CONSOLE_BG] = [CONSOLE_BG_ROW, 'var(--ds-surface-card-bg)'];
+  assert.deepEqual(
+    named(analyse(twice.base, twice.artifacts, ALIAS_DIALS, ALIAS_TABLE)),
+    [`evnto|${CONSOLE_BG}|--ds-effect-intensity`],
+    'one authored text beside the restatement is still authored'
+  );
+
+  /* The base carries the factor through a link; the vertical restates the alias
+   * and freezes the LINK. The alias is skipped and the frozen link is named. */
+  const base = { [CONSOLE_BG]: [CONSOLE_BG_ROW], [OVERLAY]: [OVERLAY_ROW], [TEXTURE]: [TEXTURE_SEED] };
+  const artifacts = {
+    rottay: {},
+    bithire: {},
+    evnto: { [CONSOLE_BG]: [CONSOLE_BG_ROW], [OVERLAY]: ['none'] },
+  };
+  const table = new Map([[CONSOLE_BG, CONSOLE_BG_ROW], [OVERLAY, OVERLAY_ROW]]);
+  const findings = analyse(base, artifacts, ALIAS_DIALS, table);
+  assert.deepEqual(named(findings), [`evnto|${OVERLAY}|--ds-effect-intensity`]);
+  assert.deepEqual(findings[0].dialCarriedBy, ['base', 'rottay', 'bithire']);
+});
+
+test('drill 13 [alias law]: a literal row launders nothing', () => {
+  /* Drill 1 again, with a table whose row is the frozen literal itself. */
+  const blurBase = { '--ds-glass-blur': ['calc(12px * var(--ds-effect-intensity))'] };
+  const blurArtifacts = { rottay: {}, bithire: { '--ds-glass-blur': ['12px'] }, evnto: {} };
+  assert.deepEqual(
+    named(analyse(blurBase, blurArtifacts, DIALS, new Map([['--ds-glass-blur', '12px']]))),
+    ['bithire|--ds-glass-blur|--ds-effect-intensity']
+  );
+
+  /* Drill 2 again: the base text IS a literal and the vertical restates it. */
+  const sizeBase = {
+    '--ds-input-md-font-size': ['0.875rem'],
+    '--ds-font-size-sm': ['calc(var(--ds-font-size-sm-base) * var(--ds-type-scale, 1))'],
+  };
+  const sizeArtifacts = {
+    rottay: { '--ds-input-md-font-size': ['var(--ds-font-size-sm)'] },
+    bithire: { '--ds-input-md-font-size': ['0.875rem'] },
+    evnto: {},
+  };
+  assert.deepEqual(
+    named(analyse(sizeBase, sizeArtifacts, DIALS, new Map([['--ds-input-md-font-size', '0.875rem']]))),
+    ['bithire|--ds-input-md-font-size|--ds-type-scale']
+  );
+  for (const literal of ['12px', '0.875rem', 'none', 'calc(12px * 1)', 'var(12px)']) {
+    assert.ok(!restatesRootAlias('--x', [literal], {}, new Map([['--x', literal]])), `${literal} reads no channel`);
+  }
+});
+
+test('drill 14 [alias law]: a restatement that shadows another base text is judged as authored', () => {
+  /* The row is non-literal and the vertical text equals it, but the base also
+   * states the channel WITH the factor: restating the row there drops it. */
+  const row = 'var(--ds-blur-seed)';
+  const base = { '--ds-glass-blur': [row, 'calc(12px * var(--ds-effect-intensity))'], '--ds-blur-seed': ['12px'] };
+  const artifacts = { rottay: {}, bithire: { '--ds-glass-blur': [row] }, evnto: {} };
+  assert.deepEqual(named(analyse(base, artifacts, DIALS, new Map([['--ds-glass-blur', row]]))), [
+    'bithire|--ds-glass-blur|--ds-effect-intensity',
+  ]);
+  assert.ok(restatesRootAlias('--ds-glass-blur', [row], { '--ds-glass-blur': [row] }, new Map([['--ds-glass-blur', row]])));
+  assert.ok(!restatesRootAlias('--ds-glass-blur', [row], {}, new Map()), 'no row, no admission');
+  assert.ok(!restatesRootAlias('--ds-glass-blur', [row], {}, new Map([['--ds-glass-blur-2', row]])), 'another name’s row');
+});
+
+test('drill 15 [alias law]: the live table is read, and the real restatements pass by form', async () => {
+  const { mkdtempSync, readFileSync, rmSync, writeFileSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { dirname, join } = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+  const table = readRootAliases();
+  assert.ok(table.size > 1000, `the generated table was read: ${table.size} rows`);
+  const row = table.get(CONSOLE_BG);
+  assert.ok(row && /var\(\s*--/.test(row), 'the reviewed alias is tabled and non-literal');
+  const artifactsDir = join(
+    dirname(fileURLToPath(import.meta.url)),
+    '../../../../../src/foundation/tokens/css/facade/artifacts'
+  );
+  for (const vertical of ['rottay', 'bithire', 'evnto']) {
+    const css = readFileSync(join(artifactsDir, vertical, 'index.css'), 'utf8');
+    const declared = css.split('\n').filter((line) => line.trim().startsWith(`${CONSOLE_BG}:`));
+    assert.ok(declared.length > 0, `${vertical} restates ${CONSOLE_BG}`);
+    for (const line of declared) {
+      assert.equal(line.trim(), `${CONSOLE_BG}: ${row};`, `${vertical} restates the root text byte-equal`);
+    }
+  }
+  assert.deepEqual(
+    measure().findings.filter((f) => f.channel === CONSOLE_BG),
+    [],
+    'and the live tree no longer names the restatement'
+  );
+
+  assert.equal(readRootAliases(join(tmpdir(), 'dial-authority-no-such-table.ts')).size, 0);
+  const directory = mkdtempSync(join(tmpdir(), 'dial-authority-alias-'));
+  try {
+    const head = 'export const ROOT_ALIASES: readonly (readonly [name: string, value: string])[] = [\n';
+    const good = join(directory, 'good.ts');
+    writeFileSync(good, `${head}  ["--x", "var(--y)"],\n];\n`);
+    assert.equal(readRootAliases(good).get('--x'), 'var(--y)');
+    const duplicated = join(directory, 'duplicated.ts');
+    writeFileSync(duplicated, `${head}  ["--x", "var(--y)"],\n  ["--x", "12px"],\n];\n`);
+    assert.equal(readRootAliases(duplicated).size, 0, 'two texts for one name admit nothing');
+    const broken = join(directory, 'broken.ts');
+    writeFileSync(broken, `${head}  ["--x", "var(--y)"],\n  ["--z", unquoted],\n];\n`);
+    assert.equal(readRootAliases(broken).size, 0, 'a row that does not parse admits nothing');
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
 });

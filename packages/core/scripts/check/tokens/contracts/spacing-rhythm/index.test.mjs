@@ -42,7 +42,9 @@ import {
   NAMED_FORBIDDEN_CAPABILITIES,
   occurrenceCount,
   RAW_RHYTHM_CHANNEL,
+  readRootAliases,
   resolveDashboardInsightsFamilyId,
+  restatesRootRhythmAlias,
   RHYTHM_CHANNEL,
   runGate,
   scalesByReference,
@@ -1688,13 +1690,16 @@ test('decision 20 (e): la mordida clasica intacta — ritmo sobre una propiedad 
  * property is judged by what its consumers paint, never by a name allowance.
  * ------------------------------------------------------------------------- */
 
-test('ruling 1: the seed passes only as a bare finite number; the derived channel never', () => {
+test('ruling 1: the seed passes only as a bare finite number; the derived channel only as its root alias', () => {
   for (const seed of [':root { --ds-rhythm-scale: 0.85; }', ':root { --ds-rhythm-scale: 1; }']) {
     assert.deepEqual(illicitRhythmMentions(seed), [], `${seed} is the vertical authoring its seed`);
   }
   const red = [
     ':root { --ds-rhythm-effective-scale: 1; }',
-    ':root { --ds-rhythm-effective-scale: clamp(0.8, var(--ds-rhythm-scale, 1), 1.25); }',
+    ':root { --ds-rhythm-effective-scale: clamp(0.8, 1, 1.25); }',
+    ':root { --ds-rhythm-effective-scale: clamp(1, var(--ds-rhythm-scale, 1), 1); }',
+    ':root { --ds-rhythm-effective-scale: clamp(0.8, var(--ds-rhythm-scale, 1), 1.25) !important; }',
+    ':root { --ds-rhythm-effective-scale: var(--ds-rhythm-scale, 1); }',
     ':root { --ds-rhythm-scale: var(--x); }',
     ':root { --ds-rhythm-scale: calc(1 * 0.85); }',
     ':root { --ds-rhythm-scale: 0.85 !important; }',
@@ -1712,6 +1717,163 @@ test('ruling 1: the seed passes only as a bare finite number; the derived channe
   // Two seeds on one line: the first one's delimiter must not hide the second.
   const pair = illicitRhythmMentions(':root { --ds-rhythm-scale: 1; --ds-rhythm-scale: var(--x); }');
   assert.equal(pair.length, 1);
+});
+
+/* ---------------------------------------------------------------------------
+ * Scope re-resolution alias law: the derived channel restated byte-equal to its
+ * generated root alias row is the one admitted declaration. Both directions.
+ * ------------------------------------------------------------------------- */
+
+const ROOT_RHYTHM_ALIAS = 'clamp(0.8, var(--ds-rhythm-scale, 1), 1.25)';
+const ARTIFACT_VERTICALS = ['bithire', 'evnto', 'rottay'];
+const readArtifact = (vertical) =>
+  readFileSync(
+    new URL(`../../../../../src/foundation/tokens/css/facade/artifacts/${vertical}/index.css`, import.meta.url),
+    'utf8',
+  );
+const freezes = (offenders) => offenders.filter((offender) => /congela el dial/u.test(offender.why));
+
+test('alias law (a): the live table row re-resolves the raw dial and the three artifacts restate it byte-equal', () => {
+  const table = readRootAliases();
+  assert.ok(table.size > 1000, `the generated table was read: ${table.size} rows`);
+  assert.equal(table.get(RHYTHM_CHANNEL), ROOT_RHYTHM_ALIAS);
+  const { authored } = walkModernStylesheets();
+  for (const vertical of ARTIFACT_VERTICALS) {
+    const css = readArtifact(vertical);
+    const declared = [...css.matchAll(/^\s*--ds-rhythm-effective-scale\s*:\s*([^;]*);/gmu)].map((m) => m[1].trim());
+    assert.ok(declared.length > 0, `${vertical} restates the derived channel`);
+    for (const value of declared) assert.equal(value, ROOT_RHYTHM_ALIAS, `${vertical} restates the root text`);
+    assert.deepEqual(illicitRhythmMentions(css, vertical, { consumerStylesheets: authored }), [], vertical);
+  }
+});
+
+test('alias law (b): a literal planted over the restatement in a real artifact is red', () => {
+  const { authored } = walkModernStylesheets();
+  const restated = `--ds-rhythm-effective-scale: ${ROOT_RHYTHM_ALIAS};`;
+  for (const vertical of ARTIFACT_VERTICALS) {
+    const css = readArtifact(vertical);
+    assert.ok(css.includes(restated), `${vertical} carries the restatement to plant over`);
+    for (const frozen of ['1', '0.85', 'clamp(0.8, 1, 1.25)', 'clamp(0.8, var(--ds-rhythm-scale, 1), 1.3)']) {
+      const planted = css.replace(restated, `--ds-rhythm-effective-scale: ${frozen};`);
+      const offenders = freezes(illicitRhythmMentions(planted, vertical, { consumerStylesheets: authored }));
+      assert.equal(offenders.length, 1, `${vertical}: ${frozen} must be named once; got ${JSON.stringify(offenders)}`);
+    }
+    const appended = `${css}\n[data-vertical="${vertical}"] { --ds-rhythm-effective-scale: 1; }\n`;
+    assert.equal(
+      freezes(illicitRhythmMentions(appended, vertical, { consumerStylesheets: authored })).length,
+      1,
+      `${vertical}: a literal beside the lawful restatement is still named`,
+    );
+  }
+});
+
+test('alias law (c): a literal row launders nothing, and neither does a missing or unreadable table', () => {
+  const declare = (value) => `[data-vertical="x"] { --ds-rhythm-effective-scale: ${value}; }`;
+  const laundering = [
+    ['1', '1'],
+    ['0.85', '0.85'],
+    ['clamp(0.8, 1, 1.25)', 'clamp(0.8, 1, 1.25)'],
+    ['var(--ds-rhythm-scale-frozen, 1)', 'var(--ds-rhythm-scale-frozen, 1)'],
+    ['var(--ds-rhythm-effective-scale)', 'var(--ds-rhythm-effective-scale)'],
+  ];
+  for (const [row, value] of laundering) {
+    const rootAliases = new Map([[RHYTHM_CHANNEL, row]]);
+    assert.ok(!restatesRootRhythmAlias(value, rootAliases), `row ${row} must admit nothing`);
+    assert.equal(
+      freezes(illicitRhythmMentions(declare(value), '<inline>', { rootAliases })).length,
+      1,
+      `a declaration equal to the row ${JSON.stringify(row)} stays red`,
+    );
+  }
+  for (const rootAliases of [new Map(), new Map([[RAW_RHYTHM_CHANNEL, ROOT_RHYTHM_ALIAS]])]) {
+    assert.equal(
+      freezes(illicitRhythmMentions(declare(ROOT_RHYTHM_ALIAS), '<inline>', { rootAliases })).length,
+      1,
+      'without its own row the restatement is not admitted',
+    );
+  }
+  assert.equal(readRootAliases(join(tmpdir(), 'spacing-rhythm-no-such-table.ts')).size, 0);
+  const directory = mkdtempSync(join(tmpdir(), 'spacing-rhythm-alias-'));
+  try {
+    const head = 'export const ROOT_ALIASES: readonly (readonly [name: string, value: string])[] = [\n';
+    const row = `  ["${RHYTHM_CHANNEL}", "${ROOT_RHYTHM_ALIAS}"],\n`;
+    const good = join(directory, 'good.ts');
+    writeFileSync(good, `${head}${row}];\n`);
+    assert.equal(readRootAliases(good).get(RHYTHM_CHANNEL), ROOT_RHYTHM_ALIAS);
+    const duplicated = join(directory, 'duplicated.ts');
+    writeFileSync(duplicated, `${head}${row}  ["${RHYTHM_CHANNEL}", "1"],\n];\n`);
+    assert.equal(readRootAliases(duplicated).size, 0, 'two texts for one name admit nothing');
+    const broken = join(directory, 'broken.ts');
+    writeFileSync(broken, `${head}${row}  ["--ds-x", unquoted],\n];\n`);
+    assert.equal(readRootAliases(broken).size, 0, 'a row that does not parse admits nothing');
+    const unterminated = join(directory, 'unterminated.ts');
+    writeFileSync(unterminated, `${head}${row}`);
+    assert.equal(readRootAliases(unterminated).size, 0, 'an unterminated table admits nothing');
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test('alias law (d): only the derived channel is admitted, and only whole', () => {
+  const rootAliases = new Map([
+    [RHYTHM_CHANNEL, ROOT_RHYTHM_ALIAS],
+    [RAW_RHYTHM_CHANNEL, 'var(--ds-rhythm-scale, 1)'],
+  ]);
+  assert.ok(restatesRootRhythmAlias(` ${ROOT_RHYTHM_ALIAS} `, rootAliases), 'surrounding whitespace is not text');
+  assert.deepEqual(
+    illicitRhythmMentions(`[data-vertical="x"] { --ds-rhythm-effective-scale: ${ROOT_RHYTHM_ALIAS}; }`, '<inline>', {
+      rootAliases,
+    }),
+    [],
+  );
+  assert.equal(
+    freezes(
+      illicitRhythmMentions('[data-vertical="x"] { --ds-rhythm-scale: var(--ds-rhythm-scale, 1); }', '<inline>', {
+        rootAliases,
+      }),
+    ).length,
+    1,
+    'the raw seed never borrows the alias admission',
+  );
+  assert.equal(
+    freezes(
+      illicitRhythmMentions(`[data-vertical="x"] { --ds-rhythm-scale: ${ROOT_RHYTHM_ALIAS}; }`, '<inline>', {
+        rootAliases,
+      }),
+    ).length,
+    1,
+    'the raw seed never borrows the row text',
+  );
+  assert.equal(
+    freezes(
+      illicitRhythmMentions(
+        '[data-vertical="x"] { --ds-rhythm-effective-scale: clamp(0.8,\n  var(--ds-rhythm-scale, 1), 1.25); }',
+        '<inline>',
+        { rootAliases },
+      ),
+    ).length,
+    1,
+    'a restatement that is not the row text on one line is not the row',
+  );
+});
+
+test('alias law (e): through the gate walk, the restatement in an artifact passes and a literal there throws', () => {
+  const scope = (value) => `:root[data-vertical="x"] { --ds-rhythm-effective-scale: ${value}; }\n`;
+  const lawful = tempDirectory('spacing-rhythm-alias-walk');
+  write(lawful, 'presentation/modern.css', `.ok { gap: calc(1rem * ${READ}); }`);
+  write(lawful, 'facade/artifacts/x/index.css', scope(ROOT_RHYTHM_ALIAS));
+  assert.equal(collectAuthoredModernStylesheets(lawful).length, 1);
+
+  for (const frozen of ['1', 'clamp(0.8, 1, 1.25)']) {
+    const root = tempDirectory('spacing-rhythm-alias-frozen');
+    write(root, 'presentation/modern.css', `.ok { gap: calc(1rem * ${READ}); }`);
+    write(root, 'facade/artifacts/x/index.css', scope(ROOT_RHYTHM_ALIAS) + scope(frozen));
+    assert.throws(
+      () => collectAuthoredModernStylesheets(root),
+      /hiding 1 ILLICIT rhythm mention\(s\).*congela el dial/su,
+      `${frozen} must fail the walk`,
+    );
+  }
 });
 
 test('ruling 1: isBareFiniteNumber admits literals only', () => {

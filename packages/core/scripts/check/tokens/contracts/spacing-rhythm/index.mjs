@@ -317,6 +317,54 @@ const RHYTHM_READ = new RegExp(
 /** Every `var(--name` reference in a value, fallback arms included. */
 const VAR_REFERENCE = /var\(\s*(--[\w-]+)/gu;
 
+const ROOT_ALIASES_TABLE = resolve(
+  CORE_ROOT,
+  'src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.ts',
+);
+
+/** name -> root text of every generated ROOT_ALIASES row; empty when the table cannot be read. */
+export function readRootAliases(file = ROOT_ALIASES_TABLE) {
+  const rows = new Map();
+  let text;
+  try {
+    text = readFileSync(file, 'utf8');
+  } catch {
+    return rows;
+  }
+  const open = text.indexOf('export const ROOT_ALIASES:');
+  const close = open === -1 ? -1 : text.indexOf('\n];', open);
+  if (close === -1) return rows;
+  for (const line of text.slice(open, close).split('\n')) {
+    const row = line.trim().replace(/,$/u, '');
+    if (!row.startsWith('["')) continue;
+    let pair;
+    try {
+      pair = JSON.parse(row);
+    } catch {
+      return new Map();
+    }
+    if (!Array.isArray(pair) || pair.length !== 2 || rows.has(pair[0])) return new Map();
+    rows.set(pair[0], pair[1]);
+  }
+  return rows;
+}
+
+let liveRootAliases;
+
+const RAW_DIAL_READ = new RegExp(
+  `var\\(\\s*${RAW_RHYTHM_CHANNEL.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')}(?![-\\w])`,
+  'u',
+);
+
+/**
+ * The derived channel restated with its root text re-resolves the dial in the
+ * declaring scope. A row that does not read the raw dial admits nothing.
+ */
+export function restatesRootRhythmAlias(value, rootAliases) {
+  const row = rootAliases.get(RHYTHM_CHANNEL);
+  return typeof row === 'string' && RAW_DIAL_READ.test(row) && String(value ?? '').trim() === row;
+}
+
 function reportPath(file) {
   return relative(CORE_ROOT, file).split(sep).join('/');
 }
@@ -339,11 +387,17 @@ export function occurrenceCount(value) {
  * Devuelve las menciones que NO cumplen esa forma. Dos son las que importan y
  * las dos siguen siendo rojo:
  *   - el artefacto DECLARA un canal de ritmo (`--ds-rhythm-effective-scale: 1`):
- *     eso congela el dial en su propia raíz, que es la falta más grave de todas;
+ *     eso congela el dial en su propia raíz, que es la falta más grave de todas.
+ *     The one admitted declaration is the derived channel restated byte-equal
+ *     to its generated ROOT_ALIASES row, and only while that row reads the raw dial;
  *   - el artefacto LEE el canal fuera de un `calc()` (`padding: var(--ds-rhythm-…)`),
  *     que pinta con un escalar y no multiplica nada.
  */
-export function illicitRhythmMentions(css, file = '<inline>', { consumerStylesheets = [] } = {}) {
+export function illicitRhythmMentions(
+  css,
+  file = '<inline>',
+  { consumerStylesheets = [], rootAliases } = {},
+) {
   const text = String(css ?? '');
   const offenders = [];
   const channelAlternation = RHYTHM_CHANNELS.map((channel) =>
@@ -356,6 +410,12 @@ export function illicitRhythmMentions(css, file = '<inline>', { consumerStyleshe
       /* La semilla cruda es la vertical autorando su dial (decision 20): solo un
        * numero finito a pelo. El canal derivado declarado congela el dial. */
       if (channel === RAW_RHYTHM_CHANNEL && isBareFiniteNumber(value)) continue;
+      if (
+        channel === RHYTHM_CHANNEL &&
+        restatesRootRhythmAlias(value, rootAliases ?? (liveRootAliases ??= readRootAliases()))
+      ) {
+        continue;
+      }
       offenders.push({ line: line.trim(), why: 'declara un canal de ritmo: congela el dial en su raiz' });
     }
   }

@@ -69,6 +69,10 @@ const ARTIFACTS = join(CSS, 'facade/artifacts');
  * necesita el universo de canales DECLARADOS, y el catalogo lo declara con la
  * misma poblacion que la vista de manifest que reemplaza. */
 const INVENTORY = join(HERE, 'inventory/index.json');
+const ROOT_ALIASES_TABLE = join(
+  CORE,
+  'src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.ts'
+);
 
 const VERTICALS = Object.freeze(['rottay', 'bithire', 'evnto']);
 const DECLARATION = /^\s*(--ds-[a-z0-9-]+)\s*:\s*([^;]+);/i;
@@ -149,6 +153,7 @@ function reaches(map, channel, dial, seen = new Set()) {
  * @param {Record<string, string[]>} base authored base-layer declarations
  * @param {Record<string, Record<string, string[]>>} artifacts per-vertical declarations
  * @param {Set<string>} dials the factor dials to judge against
+ * @param {Map<string, string>} [rootAliases] generated root alias rows; none admits nothing
  */
 /**
  * A declaration that DIVIDES and MULTIPLIES by the same dial.
@@ -190,7 +195,44 @@ export function selfCancelling(maps, dials) {
   return findings;
 }
 
-export function analyse(base, artifacts, dials) {
+/** name -> root text of every generated ROOT_ALIASES row; empty when the table cannot be read. */
+export function readRootAliases(file = ROOT_ALIASES_TABLE) {
+  const rows = new Map();
+  let text;
+  try {
+    text = readFileSync(file, 'utf8');
+  } catch {
+    return rows;
+  }
+  const open = text.indexOf('export const ROOT_ALIASES:');
+  const close = open === -1 ? -1 : text.indexOf('\n];', open);
+  if (close === -1) return rows;
+  for (const line of text.slice(open, close).split('\n')) {
+    const row = line.trim().replace(/,$/, '');
+    if (!row.startsWith('["')) continue;
+    let pair;
+    try {
+      pair = JSON.parse(row);
+    } catch {
+      return new Map();
+    }
+    if (!Array.isArray(pair) || pair.length !== 2 || rows.has(pair[0])) return new Map();
+    rows.set(pair[0], pair[1]);
+  }
+  return rows;
+}
+
+/**
+ * A vertical declaration that only restates the generated root alias: same text
+ * as the root row and as every base declaration, and the row reads a `var()`.
+ */
+export function restatesRootAlias(channel, values, base, rootAliases) {
+  const row = rootAliases.get(channel);
+  if (typeof row !== 'string' || !/var\(\s*--/.test(row)) return false;
+  return values.every((value) => value === row) && (base[channel] ?? []).every((value) => value === row);
+}
+
+export function analyse(base, artifacts, dials, rootAliases = new Map()) {
   const verticals = Object.keys(artifacts);
   const effective = {};
   for (const vertical of verticals) {
@@ -207,6 +249,7 @@ export function analyse(base, artifacts, dials) {
       if (!viaBase && carriers.length === 0) continue;
       for (const vertical of VERTICALS) {
         if (!artifacts[vertical][channel]) continue;
+        if (restatesRootAlias(channel, artifacts[vertical][channel], base, rootAliases)) continue;
         if (reaches(effective[vertical], channel, dial)) continue;
         findings.push({
           channel,
@@ -233,7 +276,7 @@ export function measure() {
   const dials = factorDials(base);
   return {
     dials: [...dials].sort(),
-    findings: analyse(base, artifacts, dials),
+    findings: analyse(base, artifacts, dials, readRootAliases()),
     cancellations: selfCancelling({ base, ...artifacts }, dials),
   };
 }

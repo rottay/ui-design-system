@@ -326,6 +326,12 @@ const TEMPLATE_EXITS = Object.freeze({
   '--ds-metric-card-transition': 'sharedPaint',
 });
 
+/* PRODUCED_EXITS: the read stays and the name gained a NEW producer (the palette
+ * deriver, 91cf964ab; its ledger exit row landed in 7120887d4). */
+const PRODUCED_EXITS = Object.freeze({
+  '--ds-color-border-hover': 'sharedPaint',
+});
+
 const readBaseline = () => JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
 
 /** Planta archivos en una sandbox con forma de paquete y devuelve su raiz. */
@@ -375,11 +381,14 @@ test('the remaining WO-EVI-03 rows are named one by one in the ledger, each with
   }
 });
 
-test('the 44 exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
+test('the 45 exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
   const classes = readBaseline().readClasses;
   const shared = classifyReadClass(collectSharedPaintFiles(), 'css', PRODUCERS);
   const inline = classifyReadClass(collectComponentInlineFiles(), 'script', PRODUCERS);
-  assert.deepEqual(Object.keys(classes.exits.rows).sort(), [...Object.keys(EXITS), ...Object.keys(TEMPLATE_EXITS)].sort());
+  assert.deepEqual(
+    Object.keys(classes.exits.rows).sort(),
+    [...Object.keys(EXITS), ...Object.keys(TEMPLATE_EXITS), ...Object.keys(PRODUCED_EXITS)].sort()
+  );
   for (const [name, cls] of Object.entries(EXITS)) {
     assert.ok(!classes.sharedPaint.names[name] && !classes.componentInline.names[name], `${name} is no longer a row`);
     assert.ok(!shared.debt[name] && !inline.debt[name], `${name} is no longer read without a producer`);
@@ -395,6 +404,16 @@ test('the 44 exits are gone from the tree and the ledger, each written down with
     const exit = classes.exits.rows[name];
     assert.equal(exit.class, cls);
     assert.ok(exit.disposition?.trim() && exit.mover?.trim(), `${name} carries its disposition and mover`);
+  }
+  for (const [name, cls] of Object.entries(PRODUCED_EXITS)) {
+    assert.ok(!classes.sharedPaint.names[name] && !classes.componentInline.names[name], `${name} is no longer a row`);
+    assert.ok(!shared.debt[name] && !inline.debt[name], `${name} is no longer read without a producer`);
+    assert.ok(PRODUCERS.has(name), `${name} left by GAINING a producer (the palette deriver, 91cf964ab)`);
+    const exit = classes.exits.rows[name];
+    assert.equal(exit.class, cls);
+    assert.ok(exit.disposition?.trim() && exit.mover?.trim(), `${name} carries its disposition and mover`);
+    assert.match(exit.disposition, /^produced:/, `${name} is written down as a produced exit`);
+    assert.match(exit.mover, /91cf964ab/, `${name} names the commit that added its producer`);
   }
 });
 
