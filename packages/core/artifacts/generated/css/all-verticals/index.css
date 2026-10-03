@@ -45749,6 +45749,18 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
   -webkit-backdrop-filter: var(--ds-modal-overlay-backdrop, var(--ds-glass-backdrop-filter));
 }
 
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='backdrop'][data-intensity='light'] {
+  background-color: var(--ds-overlay-light, var(--ds-modal-overlay-bg, var(--ds-color-bg-overlay)));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='backdrop'][data-intensity='medium'] {
+  background-color: var(--ds-overlay-medium, var(--ds-modal-overlay-bg, var(--ds-color-bg-overlay)));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='backdrop'][data-intensity='heavy'] {
+  background-color: var(--ds-overlay-heavy, var(--ds-modal-overlay-bg, var(--ds-color-bg-overlay)));
+}
+
 .ds-modal.ds-modal--modern[data-part='root'][data-motion='animated'] > [data-part='backdrop'][data-open='true'] {
   animation: ds-modal-backdrop-enter var(--ds-modal-enter-duration, var(--ds-motion-reveal)) var(--ds-modal-enter-curve, var(--ds-motion-ease-enter)) both;
 }
@@ -47814,6 +47826,18 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
   );
   backdrop-filter: var(--ds-sheet-overlay-backdrop, var(--ds-glass-backdrop-filter));
   -webkit-backdrop-filter: var(--ds-sheet-overlay-backdrop, var(--ds-glass-backdrop-filter));
+}
+
+.ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='backdrop'][data-intensity='light'] {
+  background-color: var(--ds-overlay-light, var(--ds-sheet-overlay-bg, var(--ds-color-bg-overlay)));
+}
+
+.ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='backdrop'][data-intensity='medium'] {
+  background-color: var(--ds-overlay-medium, var(--ds-sheet-overlay-bg, var(--ds-color-bg-overlay)));
+}
+
+.ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='backdrop'][data-intensity='heavy'] {
+  background-color: var(--ds-overlay-heavy, var(--ds-sheet-overlay-bg, var(--ds-color-bg-overlay)));
 }
 
 .ds-sheet.ds-sheet--modern[data-part='root'][data-motion='animated'] > [data-part='backdrop'][data-open='true'] {
@@ -51109,6 +51133,66 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   box-shadow: var(--ds-shell-navigation-shadow, none);
 }
 
+/* The persistent bottom presentation: same chrome channels as the track,
+   full width, pinned to the viewport bottom; the track's inline-end hairline
+   reads as a block-start hairline here. The bar is chrome, not an overlay:
+   it never carries a trigger and never opens a dialog. The 64px minimum is
+   the bar's content geometry, stated as a literal — the same idiom the
+   BottomTabBar reservation below documents; the content-avoidance rule reads
+   the same literal, so the two cannot drift apart. */
+.ds-app-shell [data-part="navigation-bottom-bar"] {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: var(--ds-app-shell-navigation-z-index, var(--ds-z-index-fixed, 1200));
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 64px;
+  padding-inline-start: var(--ds-shell-safe-area-left);
+  padding-inline-end: var(--ds-shell-safe-area-right);
+  padding-block-end: var(--ds-shell-safe-area-bottom);
+  background: var(--ds-app-shell-navigation-background, var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated))));
+  color: var(--ds-app-shell-navigation-color, var(--ds-sidebar-text, var(--ds-color-text-primary)));
+  border: var(--ds-shell-navigation-border, var(--ds-app-shell-navigation-border, 0));
+  border-block-start: var(--ds-shell-navigation-border-inline-end, var(--ds-app-shell-navigation-border-inline-end, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))));
+  border-radius: var(--ds-shell-navigation-radius, var(--ds-app-shell-navigation-radius, 0));
+  box-shadow: var(--ds-shell-navigation-shadow, none);
+}
+
+/* The bar lays its navigation body out as a horizontal strip: one row,
+   scrolling sideways, never vertically. */
+.ds-app-shell [data-part="navigation-bottom-bar"] [data-part="navigation-body"] {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  padding: var(--ds-shell-navigation-body-padding, var(--ds-app-shell-navigation-body-padding, 0 var(--ds-spacing-3, 12px)));
+}
+
+/* A logo slotted into the bar keeps the bar's rhythm instead of the track's
+   header block size; the footer hairline still reads as the region's top edge. */
+.ds-app-shell [data-part="navigation-bottom-bar"] [data-part="navigation-logo"] {
+  height: auto;
+  min-height: 44px;
+  border-block-end: 0;
+}
+
+/* CONTENT AVOIDANCE vs the persistent bottom bar. The same declarative
+   `:has()` reservation the composed BottomTabBar uses: the bar publishes no
+   channel the main area can read (custom properties inherit down), so the
+   shell reserves the bar's block size when the part is present. The 64px
+   base tracks the bar's min-height above; `max()` keeps any LARGER
+   app-authored bottom inset intact. Browsers without `:has()` skip the
+   rule: the app's explicit `geometry.bottomInset` contract keeps working as
+   before. */
+.ds-app-shell:has([data-part="navigation-bottom-bar"]) [data-part="main-area"] {
+  --ds-shell-main-padding-block-end: max(
+    var(--ds-shell-bottom-inset),
+    calc(64px + env(safe-area-inset-bottom, 0px))
+  );
+}
+
 /* The drawer surface is the Sheet's own part in the Sheet's own portal. The
    shell selects it by its own class, tripled to hold the specificity the
    `[data-part='surface']` qualifier used to carry, without consuming a part
@@ -51289,7 +51373,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   margin-inline-start: 0;
 }
 
-.ds-app-shell [data-part="header"] {
+.ds-app-shell > [data-part="main-area"] > [data-part="header"] {
   position: sticky;
   inset-block-start: var(--ds-shell-header-inset-block-start, var(--ds-app-shell-header-inset-block-start, 0));
   inset-inline: var(--ds-shell-header-inset-inline, var(--ds-app-shell-header-inset-inline, 0));
@@ -51333,7 +51417,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   gap: var(--ds-app-shell-header-slot-gap, var(--ds-spacing-1, 4px));
 }
 
-.ds-app-shell [data-part="content"] {
+.ds-app-shell > [data-part="main-area"] > [data-part="content"] {
   flex: 1;
   min-width: 0;
   padding: var(--ds-app-shell-content-padding, 0);
@@ -51381,7 +51465,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* layout flat: the shell header merges with the canvas — no rule, radius,
    elevation or backdrop tint. */
-[data-anatomy-layout='flat'] .ds-app-shell [data-part="header"] {
+[data-anatomy-layout='flat'] .ds-app-shell > [data-part="main-area"] > [data-part="header"] {
   border-block-end: 0;
   border-radius: 0;
   box-shadow: none;
@@ -51391,7 +51475,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* layout floating: the shell header lifts into an inset, rounded, elevated
    card (mirrors the modern Layout.Header floating anatomy). */
-[data-anatomy-layout='floating'] .ds-app-shell [data-part="header"] {
+[data-anatomy-layout='floating'] .ds-app-shell > [data-part="main-area"] > [data-part="header"] {
   border-block-end: 0;
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-2);
@@ -51510,7 +51594,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    affordance only — drop it (and the translucent wash it softens) so the
    header reads as a solid surface (sheet.css precedent). */
 @media (prefers-reduced-transparency: reduce) {
-  .ds-app-shell [data-part="header"] {
+  .ds-app-shell > [data-part="main-area"] > [data-part="header"] {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: var(--ds-shell-header-background, var(--ds-app-shell-header-background, var(--ds-layout-header-bg, var(--ds-surface-canvas))));
@@ -51529,8 +51613,9 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
      frame) re-key to a system color so the region separation survives when
      the tenant palette is forced away. */
   .ds-app-shell [data-part="navigation-sidebar"],
+  .ds-app-shell [data-part="navigation-bottom-bar"],
   .ds-app-shell__navigation-drawer.ds-app-shell__navigation-drawer.ds-app-shell__navigation-drawer,
-  .ds-app-shell [data-part="header"],
+  .ds-app-shell > [data-part="main-area"] > [data-part="header"],
   .ds-app-shell [data-part="navigation-logo"],
   :is(.ds-app-shell, .ds-app-shell__navigation-drawer)
     [data-part="navigation-drawer-header"],
@@ -63665,7 +63750,7 @@ html[data-ds-motion='reduced']
 .ds-pattern-page-shell.ds-engine-modern [data-part='header-content'] {
   margin-top: var(--ds-page-shell-section-gap);
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='content'] {
+.ds-pattern-page-shell.ds-engine-modern > [data-part='content'] {
   padding: var(--ds-page-shell-content-padding);
 }
 
@@ -96283,13 +96368,6 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
     color-mix(in srgb, var(--ds-chart-accent, var(--ds-color-primary)) 34%, var(--ds-color-border-subtle));
 }
 
-.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] [data-part='crosshair-line'] {
-  stroke: var(--ds-color-border);
-}
-
-.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] [data-part='crosshair-dot'] {
-  stroke: var(--ds-color-bg-primary);
-}
 
 /* VIZ-01 — renderer-neutral ChartFrame anatomy. The frame owns chrome and
  * semantic states only; projected renderers retain ownership of their marks. */
