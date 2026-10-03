@@ -20,6 +20,7 @@ import {
   axisReadings,
   buildIndicator,
   indicatorRefusal,
+  provenanceRefusal,
   negativeControlsOf,
   negativeTest,
   nonMoverFailures,
@@ -195,7 +196,7 @@ describe('tenant-difference-by-axis indicator', () => {
   it('publishes the unobservable count per axis beside the declared denominator, named, and never subtracts it', () => {
     const indicator = build(fleetResult({ states: 117 }));
     assert.equal(indicator.axes.states.declared, 155);
-    assert.equal(indicator.axes.states.unobservable, 9);
+    assert.equal(indicator.axes.states.unobservable, 8);
     assert.deepEqual(indicator.axes.states.unobservableFamilies.map((entry) => entry.family),
       Object.keys(UNOBSERVABLE_FAMILIES.states));
     assert.equal(indicator.axes.states.worstPercentDeclared, 75.5);
@@ -235,6 +236,44 @@ describe('tenant-difference-by-axis indicator', () => {
     assert.deepEqual(witnesses[0].movedIds, ids);
     assert.equal(indicator.negativeTest.controls['palette-only'].witnesses[0].differing, 23);
     assert.deepEqual(indicator.realRender.statesRefused.map((entry) => entry.row), ['column-menu']);
+  });
+
+  it('PUBLICATION is refused on a dirty tree, a dist not built from the sources on disk, or a catalog that is not the commit\'s', () => {
+    const clean = { dirty: [], dist: { ok: true, failures: [] }, catalog: { run: 'abc', head: 'abc' } };
+    assert.equal(provenanceRefusal(clean), null);
+    assert.match(provenanceRefusal({ ...clean, dirty: ['packages/core/src/a.css', 'b', 'c', 'd'] }),
+      /^the working tree has 4 uncommitted path\(s\) under the package \(packages\/core\/src\/a\.css, b, c, \.\.\.\); the indicator would stamp HEAD/u);
+    assert.match(provenanceRefusal({ ...clean, dist: { ok: false, failures: ['dist is STALE: source changed'] } }),
+      /^dist is not built from the sources on disk \(dist is STALE: source changed\)/u);
+    assert.match(provenanceRefusal({ ...clean, catalog: { run: 'abc', head: 'def' } }),
+      /^the run read catalog abc and the commit carries def/u);
+    // A fact that could not be established refuses as well: silence is not provenance.
+    assert.match(provenanceRefusal({ ...clean, dirty: null }), /could not be read from git/u);
+    assert.match(provenanceRefusal({ ...clean, dist: null }), /build stamp could not be checked/u);
+    assert.match(provenanceRefusal({ ...clean, catalog: { run: 'abc', head: null } }), /catalog revision of the commit could not be read/u);
+    assert.match(provenanceRefusal(), /could not be read from git/u);
+    // The dirty tree is named first: a rebuilt dist over uncommitted skins is still not the commit.
+    assert.match(provenanceRefusal({ dirty: ['x'], dist: { ok: false, failures: ['y'] }, catalog: { run: 'a', head: 'b' } }), /^the working tree/u);
+  });
+
+  it('names the width-only states movers the run published, each with its open defect and receiver; none when the run names none', () => {
+    assert.deepEqual(build(fleetResult()).statesWidthOnly, []);
+    assert.deepEqual(build(fleetResult()).statesWidthOnlyObserved, []);
+    assert.deepEqual(build(fleetResult()).statesNonMoverNotes, []);
+    const result = fleetResult();
+    const entry = { family: 'synthetic-ring', properties: ['outline-width'], defect: 'focus signature not honoured', defectStatus: 'open', receiver: 'WO-X' };
+    const note = { family: 'synthetic-carrier', since: 'abc1234', reason: 'moves, outside the instrument\'s reach' };
+    result.limits = { states: { widthOnly: [entry], nonMoverNotes: [note] } };
+    for (const cell of result.cells.filter((item) => item.kind === 'positive' && item.axis === 'states')) {
+      cell.widthOnly = [{ family: 'synthetic-ring', properties: ['outline-width'] }, { family: 'unnamed-ring', properties: ['outline-offset'] }];
+    }
+    const indicator = build(result);
+    assert.deepEqual(indicator.statesWidthOnly, [entry]);
+    assert.deepEqual(indicator.statesWidthOnlyObserved, ['synthetic-ring', 'unnamed-ring']);
+    assert.deepEqual(indicator.statesNonMoverNotes, [note]);
+    // A note names a non-mover; it adds no class and moves no count.
+    assert.deepEqual(indicator.axes, build(fleetResult()).axes);
+    assert.ok(!NON_MOVER_CLASSES.includes('outOfReach') && NON_MOVER_CLASSES.length === 5);
   });
 
   // CR-2: the chromatic states reading, a SIBLING of `axes` (owner directive
@@ -323,7 +362,7 @@ describe('tenant-difference-by-axis indicator', () => {
     assert.deepEqual(block.chromaticOnlyPinned, ['data-table']);
     assert.deepEqual(block.unreached, Object.entries(UNOBSERVABLE_FAMILIES.states)
       .filter(([, kind]) => kind === 'colour-only').map(([family]) => family));
-    assert.deepEqual(block.unreached, ['approval-inbox', 'edit-fields', 'list', 'metrics-chart', 'operational-ledger', 'table-toolbar']);
+    assert.deepEqual(block.unreached, ['edit-fields', 'list', 'metrics-chart', 'operational-ledger', 'table-toolbar']);
     // The controls: 36 + 12 = 48 non-chromatic cells at the law (not 54).
     assert.equal(block.controls['palette-only'].nonChromatic, '0 on 36/36 (the law)');
     assert.equal(block.controls['palette-only'].chromatic, 115);
@@ -332,7 +371,7 @@ describe('tenant-difference-by-axis indicator', () => {
     assert.equal(block.controls['states-emphasis-only'].chromatic, 22);
     assert.deepEqual(block.controls['states-emphasis-only'].channels, ['background-color']);
     assert.equal(block.line, 'chromatic-states (reported apart, never a status): 52/155 declared (33.5 %), 52/147 effective '
-      + '(35.4 %), every cell; rest-isolated 51; chromatic-only: data-table; unreached: 6 colour-only families; '
+      + '(35.4 %), every cell; rest-isolated 51; chromatic-only: data-table; unreached: 5 colour-only families; '
       + 'palette-only non-chromatic 0 on 36/36 | chromatic 115 (reference)');
     const keys = Object.keys(indicator);
     assert.equal(keys.indexOf('chromaticStates'), keys.indexOf('axes') + 1);

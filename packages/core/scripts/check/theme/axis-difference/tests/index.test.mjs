@@ -55,6 +55,13 @@ import {
   publicationRefusal,
   UNMOUNTABLE_FAMILIES,
   UNSETTLED_FAMILIES,
+  STATES_WIDTH_ONLY_MOVERS,
+  STATES_WIDTH_PROPERTIES,
+  STATES_NON_MOVER_NOTES,
+  nonMoverNoteDrift,
+  PSEUDO_ONLY_CREDITS,
+  statesDifferences,
+  widthOnlyDrift,
   WITNESSED_CONTROLS,
   AS_RENDERED_ROOT_STAMPS,
   asRenderedReport,
@@ -97,6 +104,7 @@ import {
   familyAxisParts,
   familyParts,
   measureCell,
+  readSettled,
   partMountReport,
   partTreeHtml,
   projectPartChain,
@@ -938,6 +946,189 @@ describe('axis-difference drills — every verdict is reachable', () => {
       families: { mountable: 10, unmountable: [], excludedUnsettled: [...UNSETTLED_FAMILIES], observedUnsettled: ['button'], newlyUnsettled: ['button'] },
     }));
     assert.ok(failures.some((line) => line.startsWith('button:')), failures.join(' | '));
+  });
+
+  const unsettledRun = (families, over = {}) => result([cell()], {
+    ...over,
+    families: {
+      mountable: 10,
+      unmountable: [...UNMOUNTABLE_FAMILIES],
+      pinnedUnmountable: [...UNMOUNTABLE_FAMILIES],
+      excludedUnsettled: [],
+      observedUnsettled: [],
+      newlyUnsettled: [],
+      ...families,
+    },
+  });
+
+  it('MUTANT: a pinned family that settles in every cell must be unpinned', () => {
+    const failures = evaluate(unsettledRun({ excludedUnsettled: ['synthetic-drift'] }));
+    assert.ok(
+      failures.some((line) => line.startsWith('synthetic-drift: pinned as unsettled and settled') && line.includes('UNSETTLED_FAMILIES')),
+      failures.join(' | '),
+    );
+  });
+
+  it('a pinned family the run still reads unsettled is the pin holding, not a failure', () => {
+    const failures = evaluate(unsettledRun({ excludedUnsettled: ['synthetic-drift'], observedUnsettled: ['synthetic-drift'] }));
+    assert.deepEqual(failures, [], failures.join(' | '));
+  });
+
+  it('the unsettled pin is two-directional in one run: the stale name and the new one are both named', () => {
+    const failures = evaluate(unsettledRun({
+      excludedUnsettled: ['synthetic-drift'], observedUnsettled: ['button'], newlyUnsettled: ['button'],
+    }));
+    assert.ok(failures.some((line) => line.startsWith('synthetic-drift: pinned as unsettled and settled')), failures.join(' | '));
+    assert.ok(failures.some((line) => line.startsWith('button: its readings never settle')), failures.join(' | '));
+  });
+
+  it('a --families run does not fail for a pinned family it did not measure, and still names a new one', () => {
+    const filtered = { familiesFiltered: true };
+    assert.deepEqual(evaluate(unsettledRun({ excludedUnsettled: ['synthetic-drift'] }, filtered)), []);
+    const failures = evaluate(unsettledRun({
+      excludedUnsettled: ['synthetic-drift'], observedUnsettled: ['button'], newlyUnsettled: ['button'],
+    }, filtered));
+    assert.equal(failures.length, 1, failures.join(' | '));
+    assert.ok(failures[0].startsWith('button: its readings never settle'), failures[0]);
+  });
+
+  it('the shipped pin passes its own check with nothing observed, and no failure text blames a container query', () => {
+    assert.deepEqual(evaluate(result([cell()])), []);
+    const failures = evaluate(unsettledRun({ excludedUnsettled: ['synthetic-drift'], newlyUnsettled: ['button'] }));
+    assert.ok(failures.every((line) => !/container query/u.test(line)), failures.join(' | '));
+  });
+
+  it('the width-only class is pinned by name: every entry states its properties, the open defect and the receiver; hover-card is one', () => {
+    const entry = STATES_WIDTH_ONLY_MOVERS.find((candidate) => candidate.family === 'hover-card');
+    assert.ok(entry, 'hover-card must be published by name');
+    assert.deepEqual([...entry.properties], ['outline-width', 'outline-offset']);
+    assert.deepEqual(STATES_WIDTH_ONLY_MOVERS.map((candidate) => candidate.family),
+      ['ascii-diagram', 'hover-card', 'tooltip', 'tree-view-connector']);
+    const names = STATES_WIDTH_ONLY_MOVERS.map((candidate) => candidate.family);
+    assert.deepEqual(names, [...new Set(names)].sort(), 'named once each, in order');
+    const states = axisPopulations(ROOT).get('states');
+    for (const candidate of STATES_WIDTH_ONLY_MOVERS) {
+      assert.equal(candidate.defect, 'focus signature not honoured (solid outline)', candidate.family);
+      assert.equal(candidate.defectStatus, 'open', candidate.family);
+      assert.equal(candidate.receiver, 'WO-EVI-02 (focus-signature programme)', candidate.family);
+      assert.ok(candidate.properties.length > 0 && candidate.properties.every((name) => STATES_WIDTH_PROPERTIES.includes(name)), candidate.family);
+      assert.ok(states.includes(candidate.family), `${candidate.family}: a named states mover declares the axis`);
+      for (const pin of [UNSETTLED_FAMILIES, UNMOUNTABLE_FAMILIES, probe.CHROMATIC_ONLY_STATES, Object.keys(UNOBSERVABLE_FAMILIES.states)]) {
+        assert.ok(!pin.includes(candidate.family), `${candidate.family}: a mover is in no non-mover pin`);
+      }
+    }
+  });
+
+  it('the noted non-movers are published by name with their repair and reason, and are no class', () => {
+    assert.deepEqual(STATES_NON_MOVER_NOTES.map((note) => note.family), ['column-settings', 'saved-views', 'widget-board']);
+    const states = axisPopulations(ROOT).get('states');
+    for (const note of STATES_NON_MOVER_NOTES) {
+      assert.ok(states.includes(note.family), note.family);
+      assert.match(note.reason, /^moves, outside the instrument's reach: /u, note.family);
+      assert.match(note.since, /^[0-9a-f]{9}(?:, [0-9a-f]{9})*$/u, note.family);
+      assert.ok(!STATES_WIDTH_ONLY_MOVERS.some((entry) => entry.family === note.family), note.family);
+    }
+    const noted = (movedIds) => nonMoverNoteDrift(result([cell({ scenario: 'states', axis: 'states', movedIds })]));
+    assert.deepEqual(noted(['button']), []);
+    const stale = noted(['button', 'widget-board']);
+    assert.equal(stale.length, 1, stale.join(' | '));
+    assert.ok(stale[0].startsWith('widget-board: noted as a states non-mover outside the instrument\'s reach and it moves on bithire/light'), stale[0]);
+    assert.ok(evaluate(result([cell({ scenario: 'states', axis: 'states', movedIds: ['saved-views'] })]))
+      .some((line) => line.startsWith('saved-views: noted as a states non-mover')));
+  });
+
+  it('a pinned unsettled family the run never mounted is not judged stale; one in a measured population is', () => {
+    const reconciled = (declaredFamilies) => ({ denominatorReconciliation: { states: { declaredFamilies } } });
+    assert.deepEqual(evaluate(unsettledRun({ excludedUnsettled: ['synthetic-drift'] }, reconciled(['button']))), []);
+    assert.ok(evaluate(unsettledRun({ excludedUnsettled: ['synthetic-drift'] }, reconciled(['button', 'synthetic-drift'])))
+      .some((line) => line.startsWith('synthetic-drift: pinned as unsettled and settled')));
+    const unmountable = unsettledRun({ excludedUnsettled: ['billing'] }, reconciled(['billing']));
+    assert.deepEqual(evaluate(unmountable), [], 'an unmountable family was never read, so it did not settle');
+  });
+
+  const statesCell = (over = {}) => cell({ scenario: 'states', axis: 'states', movedIds: ['ring', 'glow'], widthOnly: [], ...over });
+  const RING = Object.freeze([Object.freeze({ family: 'ring', properties: Object.freeze(['outline-width']) })]);
+  const measuredStates = { effectiveFamilies: { states: ['ring', 'glow', 'still'] } };
+
+  it('reads every property a family differs on under a state, over both halves, and colour alone is none', () => {
+    const reading = (stamped, native) => ({
+      states: { 'focus-visible': { f: stamped } }, native: { 'focus-visible': { f: native } },
+    });
+    const rest = { 'outline-width': '0px', 'outline-offset': '0px', 'box-shadow': 'none' };
+    const a = reading({ ...rest, 'outline-width': '2px', 'box-shadow': 'rgb(1, 2, 3) 0px 0px 0px 2px' }, { ...rest, 'outline-offset': '2px' });
+    const b = reading({ ...rest, 'outline-width': '1px', 'box-shadow': 'rgb(9, 9, 9) 0px 0px 0px 2px' }, { ...rest, 'outline-offset': '0px' });
+    assert.deepEqual(statesDifferences(a, b, 'f'), ['outline-width', 'outline-offset']);
+    assert.deepEqual(statesDifferences(a, a, 'f'), []);
+    assert.deepEqual([...STATES_WIDTH_PROPERTIES], ['outline-width', 'outline-offset']);
+  });
+
+  it('the width-only pin holds when the named family moves on a width alone in the cell', () => {
+    const holding = result([statesCell({ widthOnly: [{ family: 'ring', properties: ['outline-width'] }] })], measuredStates);
+    assert.deepEqual(widthOnlyDrift(holding, RING), []);
+  });
+
+  it('MUTANT: a named width-only family that moves on a non-width property is a stale caveat, on a --families run too', () => {
+    for (const familiesFiltered of [false, true]) {
+      const failures = widthOnlyDrift(result([statesCell()], { ...measuredStates, familiesFiltered }), RING);
+      assert.equal(failures.length, 1, failures.join(' | '));
+      assert.ok(failures[0].startsWith('ring: named a width-only states mover and it moves on more than a width on bithire/light'), failures[0]);
+    }
+  });
+
+  it('MUTANT: a named width-only family that stopped moving is a stale caveat; one the run did not measure is not', () => {
+    const stopped = widthOnlyDrift(result([statesCell({ movedIds: ['glow'] })], measuredStates), RING);
+    assert.equal(stopped.length, 1, stopped.join(' | '));
+    assert.ok(stopped[0].startsWith('ring: named a width-only states MOVER and it does not move on bithire/light'), stopped[0]);
+    const unmeasured = result([statesCell({ movedIds: ['glow'] })], { effectiveFamilies: { states: ['glow'] }, familiesFiltered: true });
+    assert.deepEqual(widthOnlyDrift(unmeasured, RING), []);
+  });
+
+  it('MUTANT: a width-only mover nobody named is refused on a full run, and not on a --families run', () => {
+    const observed = [{ family: 'ring', properties: ['outline-width'] }, { family: 'glow', properties: ['outline-width', 'outline-offset'] }];
+    const failures = widthOnlyDrift(result([statesCell({ widthOnly: observed })], measuredStates), RING);
+    assert.equal(failures.length, 1, failures.join(' | '));
+    assert.ok(failures[0].startsWith('glow: moves on states through outline-width, outline-offset ALONE on bithire/light and is not named'), failures[0]);
+    assert.deepEqual(widthOnlyDrift(result([statesCell({ widthOnly: observed })], { ...measuredStates, familiesFiltered: true }), RING), []);
+  });
+
+  it('MUTANT: a named family that moves on other width properties than its pin is re-pinned, never read as holding', () => {
+    const failures = widthOnlyDrift(
+      result([statesCell({ widthOnly: [{ family: 'ring', properties: ['outline-width', 'outline-offset'] }] })], { ...measuredStates, familiesFiltered: true }),
+      RING,
+    );
+    assert.deepEqual(failures, ['ring: pinned width-only on outline-width and it moves on outline-width, outline-offset on bithire/light; '
+      + 're-pin STATES_WIDTH_ONLY_MOVERS with the measurement']);
+  });
+
+  it('the width-only pin is read through the run\'s own door, and a cell that published no reading is not judged', () => {
+    const measured = { effectiveFamilies: { states: STATES_WIDTH_ONLY_MOVERS.map((entry) => entry.family) } };
+    const stale = evaluate(result([statesCell({ movedIds: STATES_WIDTH_ONLY_MOVERS.map((entry) => entry.family) })], measured));
+    assert.ok(stale.some((line) => line.startsWith('hover-card: named a width-only states mover and it moves on more than a width')), stale.join(' | '));
+    assert.deepEqual(widthOnlyDrift(result([cell({ scenario: 'states', axis: 'states' })], measuredStates), RING), []);
+  });
+
+  it('data-table is pinned pseudo-only on states, on the overlay that paints the tenant focus signature', () => {
+    assert.deepEqual({ ...PSEUDO_ONLY_CREDITS.states['data-table'] }, {
+      pseudo: '.ds-pattern-data-table.ds-engine-modern [data-part="body-row"][data-state~="focus-visible"]::after',
+      property: 'box-shadow',
+      moves: '--ds-focus-ring',
+    });
+    const css = skinFamilies(ROOT).get('data-table').map((file) => readFileSync(file, 'utf8')).join('\n');
+    assert.match(css, /\[data-part="body-row"\][^{]*focus-visible[^{]*::after,[^{]*\{[^}]*box-shadow: var\(--ds-table-row-focus-shadow, var\(--ds-focus-ring\)\);/u);
+    assert.match(css, /\[data-part="header-cell"\]\[data-sortable="true"\][^{]*focus-visible[^{]*::after \{[^}]*box-shadow: var\(--ds-data-table-header-focus-shadow, var\(--ds-focus-ring\)\);/u);
+    assert.ok(!STATES_WIDTH_ONLY_MOVERS.some((entry) => entry.family === 'data-table'));
+    assert.equal(PSEUDO_ONLY_CREDITS.states['data-table-interactions'].moves, '--ds-focus-ring');
+    const handle = skinFamilies(ROOT).get('data-table-interactions').map((file) => readFileSync(file, 'utf8')).join('\n');
+    assert.match(handle, /\.ds-resize-handle[^{]*focus-visible[^{]*::after \{[^}]*box-shadow: var\(--ds-focus-ring\);/u);
+  });
+
+  it('publication reads its provenance off the checkout, and only after every other refusal: --no-write never reaches it', () => {
+    const provenance = probe.readPublicationProvenance({ revision: probe.catalogRevision?.() ?? { digest: null } });
+    assert.ok(provenance.dirty === null || Array.isArray(provenance.dirty));
+    assert.equal(typeof provenance.dist.ok, 'boolean');
+    assert.deepEqual(Object.keys(provenance.catalog), ['run', 'head']);
+    const cli = readFileSync(join(HERE, '../index.mjs'), 'utf8');
+    assert.match(cli, /writeRefusal: refusal,\n  \}\) \?\? provenanceRefusal\(readPublicationProvenance\(result\)\);/u);
   });
 
   it('MUTANT: an axis under the threshold is named, and only when a threshold is asked for', () => {
@@ -1883,6 +2074,94 @@ describe('axis-difference BROWSER drill — a mounted part that STOPS differing 
  * BLIND and RED read the same 0 and mean opposite things, which is why the
  * root map is published with every run.
  */
+/**
+ * THE SETTLEMENT DRILL, on a synthetic family whose motion is started by the
+ * instrument's own variable write. Every read is taken on a new animation
+ * frame, so a running animation differs in every pair on any machine.
+ */
+describe('axis-difference BROWSER drill — a moving family is unsettled, and the settlement step is what holds it', { skip: browserReason }, () => {
+  const ROOT_RULE = ".ds-drill.ds-drill--modern[data-part='root']";
+  const TRANSITION = `${ROOT_RULE} { padding-top: var(--ds-drill-pad, 0px); transition: padding-top 10s linear; }`;
+  const INFINITE = `@keyframes drill-breathe { from { padding-top: 0px; } to { padding-top: 100px; } }
+    ${ROOT_RULE} { animation: drill-breathe 10s linear infinite; }`;
+  const ARM = { '--ds-drill-pad': '100px' };
+  const axisOf = axisByProperty();
+  const properties = allProperties();
+
+  const onNewFrame = (page) => ({
+    evaluate: async (...args) => {
+      await page.evaluate(() => new Promise((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(resolve));
+      }));
+      return page.evaluate(...args);
+    },
+  });
+
+  /** One arm of the synthetic scene, read the way `run` reads a cell at rest, twice. */
+  const read = async (css, { settlement }) => {
+    const { browser, close } = await launchBrowser();
+    try {
+      const page = await (await browser.newContext()).newPage();
+      await page.setContent(
+        sceneHtml({ css, vertical: 'bithire', theme: 'light', elements: new Map([['drill', DRILL_ELEMENT]]) }),
+        { waitUntil: 'load' },
+      );
+      const finishThrows = await page.evaluate(() => {
+        void document.documentElement.offsetHeight;
+        const [animation] = document.getAnimations();
+        if (animation === undefined) return null;
+        try {
+          animation.finish();
+          return false;
+        } catch (error) {
+          return error.name;
+        }
+      });
+      if (!settlement) await page.evaluate(() => { document.getAnimations = () => []; });
+      const framed = onNewFrame(page);
+      const first = await measureCell({ page: framed, variables: ARM, properties, axisOf, states: [] });
+      const second = await readSettled(framed, { properties, axisOf });
+      const running = await page.evaluate(() => Document.prototype.getAnimations.call(document)
+        .filter((animation) => animation.playState === 'running').length);
+      await page.close();
+      return {
+        finishThrows,
+        unsettled: [...new Set([...first.unsettled, ...second.unsettled])],
+        values: [first.base.drill['padding-top'], second.values.drill['padding-top']],
+        running,
+      };
+    } finally {
+      await close();
+    }
+  };
+
+  it('(a) a transition the instrument\'s own write started is reported unsettled when nothing ends it', async () => {
+    const reading = await read(TRANSITION, { settlement: false });
+    assert.deepEqual(reading.unsettled, ['drill'], 'the loop must name a family that moves in every pair of readings');
+    assert.equal(reading.running, 1, 'the transition must still be running -- otherwise this drill proves nothing');
+    assert.notEqual(reading.values[0], reading.values[1]);
+    assert.ok(reading.values.every((value) => value !== '100px'), reading.values.join(' / '));
+  }, 120_000);
+
+  it('(b) with the settlement step the same transition reads its end value, stable, and is not unsettled', async () => {
+    const reading = await read(TRANSITION, { settlement: true });
+    assert.deepEqual(reading.unsettled, []);
+    assert.deepEqual(reading.values, ['100px', '100px']);
+    assert.equal(reading.running, 0);
+  }, 120_000);
+
+  it('(c) an infinite animation, where finish() throws, is held at its start by the fallback and is not unsettled', async () => {
+    const moving = await read(INFINITE, { settlement: false });
+    assert.equal(moving.finishThrows, 'InvalidStateError', 'finish() must throw here, or the fallback is not what is drilled');
+    assert.deepEqual(moving.unsettled, ['drill'], 'unheld, the animation must read unsettled -- otherwise the hold proves nothing');
+    const held = await read(INFINITE, { settlement: true });
+    assert.equal(held.finishThrows, 'InvalidStateError');
+    assert.deepEqual(held.unsettled, []);
+    assert.deepEqual(held.values, ['0px', '0px']);
+    assert.equal(held.running, 0);
+  }, 120_000);
+});
+
 describe('axis-difference BROWSER drill — a root that STOPS differing is caught', { skip: browserReason }, () => {
   const ARM_A = { '--ds-radius-md': '4px' };
   const ARM_B = { '--ds-radius-md': '16px' };
@@ -3001,7 +3280,6 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'column-settings',
       'command-palette',
       'data-table-actions',
-      'data-table-focus',
       'date-picker',
       'descriptions',
       'detail',
@@ -3593,17 +3871,21 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     assert.deepEqual(dropped, ['command-palette: a pinned states refusal the run did not publish in realRender.statesRefused']);
   });
 
-  it('S7 MEASURED: column-menu declares states -- the panel the engine focuses on open is a stamped part its focus rule reaches -- and left the pin', () => {
+  it('S7 MEASURED: column-menu declares states -- the Popover surface and the panel are stamped parts their focus rules reach -- and left the pin', () => {
     const entry = REAL_RENDER_MOUNTS['column-menu'];
     assert.deepEqual([...entry.axes], ['shape', 'rhythm', 'depth', 'motion', 'states']);
-    assert.ok(probe.realRenderStampedParts(entry).includes('panel'));
+    assert.deepEqual(probe.realRenderStampedParts(entry), ['panel', 'row', 'surface']);
     assert.equal(Object.hasOwn(REAL_RENDER_STATES_REFUSALS, 'column-menu'), false);
+    // The surface is stamped by the Popover engine, not by the family's own file.
+    const popover = readFileSync(join(ROOT, 'src/components/primitives/overlay/popover/engines/modern/index.tsx'), 'utf8');
+    assert.ok(popover.includes("{...partAttributes('surface', surfaceFocus)}"));
     // The configuration the row reads under a state is the engine's own: the
     // panel is focused on open, and its ring rule carries both halves.
     const engine = readFileSync(join(ROOT, 'src/components/structures/workspace/column-menu/index.tsx'), 'utf8');
     assert.ok(engine.includes('window.requestAnimationFrame(() => panelRef.current?.focus());'));
     const skin = readFileSync(join(ROOT, 'src/foundation/tokens/css/presentation/components/skin/column-menu/index.css'), 'utf8');
-    assert.ok(skin.includes('[data-part="panel"]:is([data-state~="focus-visible"], :focus-visible) {'));
+    assert.match(skin, /\.ds-column-menu-panel\[data-part="surface"\]:is\(\[data-state~="focus-visible"\], :focus-visible\) \{[^}]*box-shadow: var\(--ds-column-menu-panel-focus-ring, var\(--ds-focus-ring\)\);/u);
+    assert.match(skin, /\[data-part="panel"\][^{]*focus-visible[^{]*::after \{/u);
     assert.deepEqual(realRenderRosterFailures(ROOT, { 'column-menu': entry }), []);
   });
 
@@ -3662,7 +3944,7 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     assert.ok(failures.some((line) => line.includes('witness moved 13 and published 13 id(s) / 12 famil(ies)')), failures.join(' | '));
   });
 
-  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 9 on states, 0 elsewhere', () => {
+  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 8 on states, 0 elsewhere', () => {
     const live = axisUnobservable(ROOT);
     const asRun = Object.fromEntries(AXIS_IDS.map((axis) => [axis, live.get(axis)]));
     assert.deepEqual(unobservableDrift(asRun), []);
@@ -3670,14 +3952,17 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     // leave with the population; edit-fields, table-toolbar and form-builder enter with it.
     // 9 -> 8 (OVM 2026-10-02): overlay-modal-compounds leaves with its retired orphan rules.
     // 8 -> 9 (2026-10-03): approval-inbox enters colour-only -- 0c9b89be0 retired its one non-chromatic state paint.
-    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 9);
+    // 9 -> 8 (2026-10-03): approval-inbox leaves -- 083423044 writes `box-shadow` on its root `::after` under focus.
+    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 8);
     assert.deepEqual(Object.entries(UNOBSERVABLE_FAMILIES.states).filter(([, kind]) => kind === 'colour-only').map(([family]) => family),
-      ['approval-inbox', 'edit-fields', 'list', 'metrics-chart', 'operational-ledger', 'table-toolbar']);
-    assert.equal(UNOBSERVABLE_FAMILIES.states['approval-inbox'], 'colour-only');
+      ['edit-fields', 'list', 'metrics-chart', 'operational-ledger', 'table-toolbar']);
+    assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'approval-inbox'), false);
+    assert.ok(!live.get('states').some((entry) => entry.family === 'approval-inbox'));
+    assert.ok(axisPopulations(ROOT).get('states').includes('approval-inbox'), 'it stays in the declared denominator');
     // moderation-gallery had the same repair and is NOT here: its card rules still write read properties under a state.
     assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'moderation-gallery'), false);
     assert.ok(!live.get('states').some((entry) => entry.family === 'moderation-gallery'));
-    assert.deepEqual(live.get('states').find((entry) => entry.family === 'approval-inbox').properties, ['background']);
+    assert.deepEqual(live.get('states').find((entry) => entry.family === 'operational-ledger').properties, ['background']);
     assert.deepEqual(Object.entries(UNOBSERVABLE_FAMILIES.states).filter(([, kind]) => kind === 'no-vocabulary').map(([family]) => family),
       ['button-group', 'form-builder', 'metrics-rows']);
     assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'surface-states'), false, 'its disabled opacity is read');
@@ -3701,27 +3986,27 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     assert.ok(!evaluate(result([cell()], { unobservable: entered, familiesFiltered: true })).some((line) => line.includes('UNOBSERVABLE')));
   });
 
-  it('MUTANT: approval-inbox dropped from the pin while the TREE still derives it unobservable is RED -- reported, never subtracted', () => {
+  it('MUTANT: operational-ledger dropped from the pin while the TREE still derives it unobservable is RED -- reported, never subtracted', () => {
     const live = axisUnobservable(ROOT);
     const asRun = Object.fromEntries(AXIS_IDS.map((axis) => [axis, live.get(axis)]));
-    const { 'approval-inbox': dropped, ...rest } = UNOBSERVABLE_FAMILIES.states;
+    const { 'operational-ledger': dropped, ...rest } = UNOBSERVABLE_FAMILIES.states;
     assert.equal(dropped, 'colour-only');
     const shrunk = { ...UNOBSERVABLE_FAMILIES, states: rest };
     assert.deepEqual(unobservableDrift(asRun, shrunk), [
-      'states: approval-inbox is unobservable (colour-only) and not in UNOBSERVABLE_FAMILIES -- re-pin it; it is reported, never subtracted',
+      'states: operational-ledger is unobservable (colour-only) and not in UNOBSERVABLE_FAMILIES -- re-pin it; it is reported, never subtracted',
     ]);
     // The same drift through the run's own door, on the shipped pin: a record that still names it is green, one that lost it is red.
     assert.deepEqual(evaluate(result([cell()], { unobservable: asRun })).filter((line) => line.includes('UNOBSERVABLE')), []);
-    const lost = { ...asRun, states: asRun.states.filter((entry) => entry.family !== 'approval-inbox') };
+    const lost = { ...asRun, states: asRun.states.filter((entry) => entry.family !== 'operational-ledger') };
     assert.deepEqual(evaluate(result([cell()], { unobservable: lost })).filter((line) => line.includes('UNOBSERVABLE')), [
-      'states: approval-inbox is pinned unobservable (colour-only) and the probe can now observe it -- re-pin UNOBSERVABLE_FAMILIES',
+      'states: operational-ledger is pinned unobservable (colour-only) and the probe can now observe it -- re-pin UNOBSERVABLE_FAMILIES',
     ]);
     // A pin entry of the wrong class is a third drift, named as such.
-    assert.deepEqual(unobservableDrift(asRun, { ...UNOBSERVABLE_FAMILIES, states: { ...rest, 'approval-inbox': 'no-vocabulary' } }), [
-      'states: approval-inbox is unobservable as colour-only, pinned as no-vocabulary',
+    assert.deepEqual(unobservableDrift(asRun, { ...UNOBSERVABLE_FAMILIES, states: { ...rest, 'operational-ledger': 'no-vocabulary' } }), [
+      'states: operational-ledger is unobservable as colour-only, pinned as no-vocabulary',
     ]);
     // Pinned or not, it stays in the declared denominator.
-    assert.ok(axisPopulations(ROOT).get('states').includes('approval-inbox'));
+    assert.ok(axisPopulations(ROOT).get('states').includes('operational-ledger'));
   });
 });
 
@@ -4036,7 +4321,8 @@ describe('axis-difference — the pseudo-element read law: bounds, census, pin',
   });
 
   it('C5: pins exactly stepper on depth (the WIDTH channel) and record-facts on motion (the shimmer duration)', () => {
-    assert.deepEqual(Object.keys(probe.PSEUDO_ONLY_CREDITS).sort(), ['depth', 'motion']);
+    assert.deepEqual(Object.keys(probe.PSEUDO_ONLY_CREDITS).sort(), ['depth', 'motion', 'states']);
+    assert.deepEqual(Object.keys(probe.PSEUDO_ONLY_CREDITS.states), ['data-table', 'data-table-interactions']);
     assert.deepEqual(Object.keys(probe.PSEUDO_ONLY_CREDITS.depth), ['stepper']);
     assert.deepEqual(Object.keys(probe.PSEUDO_ONLY_CREDITS.motion), ['record-facts']);
     assert.equal(probe.PSEUDO_ONLY_CREDITS.depth.stepper.moves, '--ds-edge-standard-width');
@@ -4044,6 +4330,19 @@ describe('axis-difference — the pseudo-element read law: bounds, census, pin',
     assert.equal(probe.PSEUDO_ONLY_CREDITS.depth.stepper.property, 'border-top-width');
     assert.equal(probe.PSEUDO_ONLY_CREDITS.motion['record-facts'].property, 'animation-duration');
     assert.deepEqual(evaluate(lawResult([stepperCell(), recordFactsCell()])), [], 'the green arm');
+  });
+
+  it('card is NOT pinned pseudo-only on motion: its host carries the dialed transition, and a pseudo-only card would be refused', () => {
+    assert.equal(Object.hasOwn(probe.PSEUDO_ONLY_CREDITS.motion, 'card'), false);
+    const core = findPackageRoot(HERE);
+    assert.ok(axisPopulations(core).get('motion').includes('card'));
+    const wash = { family: 'card', property: 'transition-duration' };
+    const shimmer = { family: 'record-facts', property: 'animation-duration' };
+    const entries = [wash, shimmer];
+    const failures = evaluate(lawResult([stepperCell(), recordFactsCell({
+      pseudoOnly: entries, movedIds: entries.map((entry) => entry.family), movedFamilies: entries, moved: 2,
+    })]));
+    assert.ok(failures.some((line) => line.startsWith('card: credited on bithire/light motion through a ::before/::after reading ALONE and NOT pinned')), failures.join(' | '));
   });
 
   it('C5 RED: a pinned credit that stops moving through its pseudo fails, on every cell it stops in', () => {
@@ -4125,8 +4424,8 @@ describe('axis-difference — the pseudo-element read law: bounds, census, pin',
  */
 describe('axis-difference BROWSER drill — the pseudo-element read law reads paint already there, and nothing else', { skip: browserReason }, () => {
   const ROOT = ".ds-drill.ds-drill--modern[data-part='root']";
-  const ARM_A = { '--ds-drill-blur': '2px', '--ds-state-disabled-opacity': '0.5', '--ds-state-press-scale': '0.9', '--ds-drill-op': '0.9' };
-  const ARM_B = { '--ds-drill-blur': '6px', '--ds-state-disabled-opacity': '0.3', '--ds-state-press-scale': '0.7', '--ds-drill-op': '0.6' };
+  const ARM_A = { '--ds-drill-blur': '2px', '--ds-state-disabled-opacity': '0.5', '--ds-state-press-scale': '0.9', '--ds-drill-op': '0.9', '--ds-drill-ink': 'rgb(10, 20, 200)' };
+  const ARM_B = { '--ds-drill-blur': '6px', '--ds-state-disabled-opacity': '0.3', '--ds-state-press-scale': '0.7', '--ds-drill-op': '0.6', '--ds-drill-ink': 'rgb(200, 20, 10)' };
   const properties = allProperties();
   const axisOf = axisByProperty();
 
@@ -4179,6 +4478,7 @@ describe('axis-difference BROWSER drill — the pseudo-element read law reads pa
       halves: axis === 'states' ? statesHalves(before, after, 'drill') : null,
       sources: plan === null ? null : probe.pseudoSources({ before, after, family: 'drill', axis }),
       census,
+      chromatic: probe.chromaticCell(before, after, ['drill']),
     };
   };
 
@@ -4302,6 +4602,22 @@ describe('axis-difference BROWSER drill — the pseudo-element read law reads pa
     assert.deepEqual(forced.halves, { stamped: null, native: 'transform' }, 'forcing the host reaches its own pseudo; the stamp never enters :hover');
     assert.equal(withheld.moved, null, 'a withheld family is withheld on its pseudo too -- never credited');
   }, 180_000);
+
+  it('(g) COLOUR ALONE on a stamped pseudo is chromatic-only: no states credit, and the same ring by geometry is one', async () => {
+    const ring = (shadow) => `${DRILL_ROOT_CSS}
+      ${ROOT}::after { content: ''; }
+      ${ROOT}[data-state~='focus-visible']::after { box-shadow: ${shadow}; }`;
+    const [recoloured, resized] = await withPage(async (context) => [
+      await measure(context, ring('0 0 0 2px var(--ds-drill-ink)'), { axes: ['states', 'depth'] }),
+      await measure(context, ring('0 0 0 var(--ds-drill-blur) black'), { axes: ['states', 'depth'] }),
+    ]);
+    assert.equal(recoloured.moved, null, 'a pseudo whose ring changes colour alone was credited on states');
+    assert.deepEqual(recoloured.halves, { stamped: null, native: null });
+    assert.deepEqual(recoloured.chromatic.movedIds, ['drill'], 'the colour move must be read -- otherwise this drill proves nothing');
+    assert.deepEqual(recoloured.chromatic.families.drill.channels, ['box-shadow(colour)']);
+    assert.equal(resized.moved, 'box-shadow', 'the red arm: the same pseudo moving by geometry is a states mover');
+    assert.deepEqual(resized.chromatic.movedIds, []);
+  }, 120_000);
 });
 
 describe('axis-difference — S8/S9: the shape rows the D1 census named, refused on literals, qualified on the channel (WO-EVI-02)', () => {
@@ -4650,7 +4966,7 @@ describe('axis-difference CR-2 — the chromatic states reading stays apart', ()
       && line.includes('button(background-color)')));
   });
 
-  const chromaticResult = ({ chromaticOnly = [], over = {}, cellOver = {}, extraCells = [] } = {}) => result([
+  const chromaticResult = ({ chromaticOnly = [...probe.CHROMATIC_ONLY_STATES], over = {}, cellOver = {}, extraCells = [] } = {}) => result([
     cell({ scenario: 'states', axis: 'states', moved: 118 }),
     ...extraCells,
   ], {
@@ -4658,7 +4974,7 @@ describe('axis-difference CR-2 — the chromatic states reading stays apart', ()
       properties: PURE,
       embedded: ['box-shadow', 'text-shadow', 'background-image'],
       scene: 'fixture',
-      pinnedChromaticOnly: [],
+      pinnedChromaticOnly: [...probe.CHROMATIC_ONLY_STATES],
       cells: FLEET.map(([vertical, theme]) => ({
         vertical, theme, scenario: 'states', kind: 'positive', moved: 52, movedIds: [], restIsolated: 51,
         restIsolatedIds: [], byChannel: {}, halves: { stamped: 50, native: 43 }, families: {}, nonChromatic: 118,
@@ -4671,17 +4987,21 @@ describe('axis-difference CR-2 — the chromatic states reading stays apart', ()
   const chromaticFailures = (measurement, options) => evaluate(measurement, options)
     .filter((line) => /chromatic|CHROMATIC_ONLY_STATES|outside the six/u.test(line));
 
-  it('P4: the chromatic-only set is pinned by name -- EMPTY since data-table left it, in every states cell, both directions', () => {
-    // Re-pinned ['data-table'] -> [] on 2026-10-03: the data-table-focus row
-    // reads its width-fed focus shadows, so it moves on the axis itself.
-    assert.deepEqual([...probe.CHROMATIC_ONLY_STATES], []);
+  it('P4: the chromatic-only set is pinned by name -- card alone since data-table left it, in every states cell, both directions', () => {
+    // Re-pinned ['data-table'] -> [] on 2026-10-03: its focus overlays paint
+    // the tenant signature, so it moves on the axis itself. card entered the
+    // same day, back in the measured population and moving by colour alone.
+    assert.deepEqual([...probe.CHROMATIC_ONLY_STATES], ['card']);
     assert.deepEqual(chromaticFailures(chromaticResult()), []);
+    const settled = chromaticFailures(chromaticResult({ chromaticOnly: [] }));
+    assert.equal(settled.length, 6, settled.join(' | '));
+    assert.match(settled[0], /^bithire\/light card: pinned chromatic-only on states and it is not/u);
     // DIRECTION 1, on the shipped pin: a family that moves by colour ALONE is
     // refused, cell by cell -- data-table itself if it stops moving on the axis.
-    const back = chromaticFailures(chromaticResult({ chromaticOnly: ['data-table'] }));
+    const back = chromaticFailures(chromaticResult({ chromaticOnly: ['card', 'data-table'] }));
     assert.equal(back.length, 6, back.join(' | '));
     assert.match(back[0], /^bithire\/light data-table: moves on states by colour ALONE and is not in CHROMATIC_ONLY_STATES/u);
-    const entered = chromaticFailures(chromaticResult({ chromaticOnly: ['tree'] }));
+    const entered = chromaticFailures(chromaticResult({ chromaticOnly: ['card', 'tree'] }));
     assert.equal(entered.length, 6);
     assert.match(entered[0], /tree: moves on states by colour ALONE and is not in CHROMATIC_ONLY_STATES/u);
     // DIRECTION 2, THE LEAK FINGERPRINT: a pinned family a merge counted on
@@ -4707,12 +5027,11 @@ describe('axis-difference CR-2 — the chromatic states reading stays apart', ()
   });
 });
 
-describe('axis-difference CR-2 BROWSER drill — the chromatic reading is always taken, and data-table\'s DEFAULT mount moves by colour alone', { skip: browserReason }, () => {
-  // Read WITHOUT the real-render mounts: since 2026-10-03 the data-table-focus
-  // row moves the family on the axis itself (drilled in the states-reach
-  // block), so the colour-alone reading is the default mount's, and this drill
-  // keeps proving that colour there never reaches the states numerator.
-  it('data-table default mount: a states non-mover on the six axes, a chromatic mover, named chromatic-only; a null pair reads 0 chromatic', async () => {
+describe('axis-difference CR-2 BROWSER drill — the chromatic reading is always taken, and data-table\'s HOSTS move by colour alone', { skip: browserReason }, () => {
+  // Read WITHOUT the pseudo-element reads: data-table's focus ring lives on
+  // `::after` overlays, so its hosts alone paint a background tint, and this
+  // drill keeps proving that colour there never reaches the states numerator.
+  it('data-table hosts alone: a states non-mover on the six axes, a chromatic mover, named chromatic-only; a null pair reads 0 chromatic', async () => {
     const states = SCENARIOS.find((scenario) => scenario.id === 'states');
     const families = ['data-table', 'button', 'tag'];
     const measurement = await run({
@@ -4721,11 +5040,12 @@ describe('axis-difference CR-2 BROWSER drill — the chromatic reading is always
       families,
       scenarios: [states, { ...states, id: 'null-states', b: states.a }],
       realRenderMounts: false,
+      pseudoReads: false,
     });
     assert.deepEqual(measurement.refusals, [], JSON.stringify(measurement.refusals));
     const block = measurement.chromaticStates;
     assert.ok(block, 'the run took no chromatic states reading; it has no flag and is always on');
-    assert.deepEqual(block.pinnedChromaticOnly, []);
+    assert.deepEqual(block.pinnedChromaticOnly, [...probe.CHROMATIC_ONLY_STATES]);
     const axisCell = measurement.cells.find((entry) => entry.scenario === 'states' && entry.axis === 'states');
     const chromatic = block.cells.find((entry) => entry.scenario === 'states');
     assert.ok(!axisCell.movedIds.includes('data-table'), 'data-table moved on the states AXIS: colour leaked into a numerator');
@@ -4741,7 +5061,7 @@ describe('axis-difference CR-2 BROWSER drill — the chromatic reading is always
 });
 
 /**
- * THE STATES REACH ROWS (2026-10-03). Four rows mount a public render whose
+ * THE STATES REACH ROWS (2026-10-03). Three rows mount a public render whose
  * skin already reads a states dial on a node the default scene does not hold.
  * Each drill below is a way the lot could have made the number friendlier:
  * a row for a render that does not exist, a row credited for a palette move,
@@ -4749,7 +5069,6 @@ describe('axis-difference CR-2 BROWSER drill — the chromatic reading is always
  */
 describe('axis-difference — the states reach rows: real public renders, and only where the law admits them', () => {
   const ROWS = {
-    'data-table-focus': { family: 'data-table', stamped: ['body-row', 'header-cell'] },
     'input-compounds': { family: 'input-compounds', stamped: ['root'] },
     'stepper-compounds': { family: 'stepper-compounds', stamped: [] },
     'chart-foundation': { family: 'chart-foundation', stamped: [] },
@@ -4767,19 +5086,17 @@ describe('axis-difference — the states reach rows: real public renders, and on
       assert.deepEqual(realRenderRosterFailures(ROOT, { [row]: entry }), [], row);
       assert.deepEqual(probe.realRenderStampedParts(entry), expected.stamped, row);
     }
-    // data-table keeps its depth row; the states row is a second, disjoint one.
+    // data-table keeps its depth row and has no states row: its default scene reads the focus overlays.
     assert.deepEqual([...REAL_RENDER_MOUNTS['data-table-actions'].axes], ['depth']);
+    assert.equal(REAL_RENDER_MOUNTS['data-table-focus'], undefined);
   });
 
   it('each row reads a rule its family skin ships: the selector the mounted node answers, and the dial it reads', () => {
-    const dataTable = skin('data-table');
-    assert.match(dataTable, /\[data-part="body-row"\]:is\(\[data-state~="focus-visible"\], :focus-visible\) > td \{\s*box-shadow: var\(\s*--ds-table-row-focus-shadow,\s*inset 0 0 0 var\(--ds-focus-ring-width, 2px\)/u);
-    assert.match(dataTable, /\[data-part="header-cell"\]\[data-sortable="true"\]:is\(\[data-state~="focus-visible"\], :focus-visible\) \{\s*outline: none;\s*box-shadow: var\(\s*--ds-data-table-header-focus-shadow,\s*inset 0 0 0 var\(--ds-focus-ring-width, 2px\)/u);
     assert.match(skin('input-compounds'), /\.ds-input-textarea\[data-part='root'\]\[data-disabled='true'\] \[data-part='control'\] \{[^}]*opacity: var\(--ds-input-disabled-opacity, var\(--ds-state-disabled-opacity\)\);/u);
     const stepper = skin('stepper-compounds');
     assert.match(stepper, /\.ds-stepper-step\[data-clickable='true'\]:is\(\[data-state~='focus-visible'\], :focus-visible\) \{\s*outline: none;\s*box-shadow: var\(--ds-stepper-focus-ring, var\(--ds-focus-ring\)\);/u);
     assert.match(stepper, /\.ds-stepper-step\[data-clickable='true'\]:is\(\[data-state~='pressed'\], :active\) \[data-part='icon'\] \{[^}]*transform: var\(--ds-stepper-pressed-transform\);/u);
-    assert.match(skin('chart-foundation'), /\[data-part='data-trigger'\]:focus-visible,[^{]*\{\s*outline: var\(--ds-focus-ring-width, 2px\) solid[^;]*;\s*outline-offset: var\(--ds-focus-ring-offset, 2px\);/u);
+    assert.match(skin('chart-foundation'), /\[data-part='data-trigger'\]:focus-visible,[^{]*\{\s*outline: var\(--ds-focus-ring-width\) solid transparent;\s*outline-offset: var\(--ds-focus-ring-offset\);\s*box-shadow: var\(--ds-focus-ring\);/u);
   });
 
   it('MUTANT: a row whose mounted render does not exist is RED -- a missing engine file, a retired gate, a fabricated node', () => {
@@ -4819,6 +5136,42 @@ describe('axis-difference — the states reach rows: real public renders, and on
     const second = { ...REAL_RENDER_MOUNTS['input-compounds'], family: 'input-compounds' };
     const failures = realRenderRosterFailures(ROOT, { 'input-compounds': REAL_RENDER_MOUNTS['input-compounds'], 'input-compounds-group': second });
     assert.ok(failures.some((line) => line.startsWith('input-compounds: 2 rows declare states (input-compounds, input-compounds-group) -- at most one row per family may')), failures.join(' | '));
+  });
+
+  it('a declared pseudo read is held to the skin: column-menu reads its panel overlay, and a box nobody paints is RED', () => {
+    const entry = REAL_RENDER_MOUNTS['column-menu'];
+    assert.deepEqual(entry.pseudoReads.map((box) => `${box.part}${box.pseudo}`), ['panel::after']);
+    assert.deepEqual(realRenderRosterFailures(ROOT, { 'column-menu': entry }), []);
+    assert.match(skin('column-menu'), /\[data-part="panel"\][^{]*focus-visible[^{]*::after \{[^}]*box-shadow: var\(--ds-column-menu-panel-focus-ring, var\(--ds-focus-ring\)\);/u);
+    assert.deepEqual(realRenderMountList(familyElements(ROOT, ['column-menu'], { asRendered: true }), { roster: { 'column-menu': entry } })[0].pseudoReads, ['panel::after']);
+    assert.ok(sceneHtml({
+      css: '', vertical: 'bithire', theme: 'light', elements: new Map(),
+      realRenders: [{ family: 'column-menu', axes: ['states'], markup: '', pseudoReads: ['panel::after'] }],
+    }).includes('data-axis-real-pseudo="panel::after"'));
+    const declaring = (pseudoReads, over = {}) => realRenderRosterFailures(ROOT, { 'column-menu': { ...entry, ...over, pseudoReads } });
+    assert.deepEqual(declaring([{ part: 'footer', pseudo: '::after' }]), ['column-menu/footer::after: no state rule of the family skin paints that box']);
+    assert.ok(declaring([{ part: 'ghost', pseudo: '::after' }]).includes('column-menu/ghost::after: the mount has no `data-part="ghost"` node'));
+    assert.ok(declaring([{ part: 'panel', pseudo: '::marker' }]).includes('column-menu/panel::marker: a real-render mount reads only ::before and ::after'));
+    assert.ok(declaring([{ part: 'panel', pseudo: '::after' }], { axes: ['shape'] })
+      .includes('column-menu/panel::after: a pseudo read is a states read, and the row does not declare states'));
+    // A RESTING box is not a states read: dropdown paints `surface::before` at rest and under no state.
+    const dropdown = REAL_RENDER_MOUNTS.dropdown;
+    const resting = realRenderRosterFailures(ROOT, {
+      dropdown: { ...dropdown, axes: [...dropdown.axes, 'states'], pseudoReads: [{ part: 'surface', pseudo: '::before' }] },
+    });
+    assert.deepEqual(resting, ['dropdown/surface::before: no state rule of the family skin paints that box']);
+    const restingRules = cssRules(skin('dropdown')).flatMap((rule) => selectorList(rule.selector).map((selector) => selector.trim()))
+      .filter((selector) => selector.endsWith('::before')
+        && [...selector.matchAll(/\[data-part=["']?([\w-]+)["']?\]/gu)].at(-1)?.[1] === 'surface');
+    assert.ok(restingRules.length > 0, 'the skin must paint that box at rest -- otherwise this drill proves nothing');
+    // Opt-in: no other row declares one, so every other mount is read exactly as before.
+    assert.deepEqual(Object.entries(REAL_RENDER_MOUNTS).filter(([, row]) => row.pseudoReads !== undefined).map(([row]) => row).sort(),
+      ['activity-log', 'anchor', 'column-menu', 'layout']);
+    for (const row of ['activity-log', 'anchor', 'layout']) {
+      assert.deepEqual(realRenderRosterFailures(ROOT, { [row]: REAL_RENDER_MOUNTS[row] }), [], row);
+    }
+    assert.deepEqual(['activity-log', 'anchor', 'layout'].map((row) => REAL_RENDER_MOUNTS[row].pseudoReads.map((box) => `${box.part}${box.pseudo}`)),
+      [['item-body::after'], ['item::after'], ['trigger::after']]);
   });
 
   it('NOT ROWS, by the law as it stands: a pseudo inside :has(), and a family that owns no state rule', () => {
@@ -4872,42 +5225,72 @@ describe('axis-difference — the states reach rows: real public renders, and on
 describe('axis-difference BROWSER drill — the states reach rows move states through their mount, and only through it', { skip: browserReason }, () => {
   const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
   const scenarios = [byId('states'), byId('palette-only')];
+  const rows = ['chart-foundation', 'input-compounds', 'stepper-compounds'];
   const families = ['chart-foundation', 'data-table', 'input-compounds', 'stepper-compounds'];
   const cellOf = (measurement, id) => measurement.cells.find((entry) => entry.scenario === id && entry.axis === 'states');
 
-  it('all four move on states with the row and none without; palette-only reads every mount and stays 0; data-table leaves chromatic-only', async () => {
+  it('the three rows move on states with the row and not without; data-table moves on its default scene through its overlays alone; palette-only stays 0', async () => {
     const on = await run({ verticals: ['bithire'], themes: ['light'], families, scenarios });
     const off = await run({ verticals: ['bithire'], themes: ['light'], families, scenarios, realRenderMounts: false });
     const states = cellOf(on, 'states');
     assert.deepEqual(states.realRender.refused, []);
-    assert.deepEqual([...states.realRender.rescued].sort(), families, JSON.stringify(states.realRender));
-    assert.deepEqual(cellOf(off, 'states').movedIds, [], 'a family moved on states without its mount');
+    assert.deepEqual([...states.realRender.rescued].sort(), rows, JSON.stringify(states.realRender));
+    assert.deepEqual(cellOf(off, 'states').movedIds, ['data-table'], 'a row family moved on states without its mount');
+    assert.deepEqual(states.pseudoOnly, [{ family: 'data-table', property: 'box-shadow' }]);
+    assert.deepEqual(states.widthOnly, [], 'none of the four moves on a width alone');
     assert.deepEqual(Object.fromEntries(states.movedFamilies.map((entry) => [entry.family, entry.property])), {
-      'chart-foundation': 'outline-width',
+      'chart-foundation': 'box-shadow',
       'data-table': 'box-shadow',
       'input-compounds': 'opacity',
       'stepper-compounds': 'transform',
     });
-    // THE CONTROL: the same four mounts, read under the palette-only pair.
+    // THE CONTROL: the same mounts, read under the palette-only pair.
     const control = cellOf(on, 'palette-only');
     assert.equal(control.evidential, true, control.nonEvidentialReason);
-    assert.deepEqual([...control.realRender.credited].sort(), families, 'the control did not read the mounts its positive credited');
+    assert.deepEqual([...control.realRender.credited].sort(), rows, 'the control did not read the mounts its positive credited');
     assert.equal(control.moved, 0, JSON.stringify(control.movedFamilies));
     assert.equal(control.movedStamped, 0);
     assert.equal(control.movedNative, 0);
     for (const entry of on.cells.filter((item) => item.kind === 'negative')) assert.equal(entry.moved, 0, `${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
     assert.deepEqual(on.populations, off.populations, 'a mount may move a numerator, never a denominator');
     // The stamp reaches the kernel-stamped parts; the literal ones are reached by forcing alone.
-    assert.equal(on.realRender.map['data-table-focus'].statesReach.stamped > 0, true);
     assert.equal(on.realRender.map['input-compounds'].statesReach.stamped > 0, true);
     assert.equal(on.realRender.map['stepper-compounds'].statesReach.stamped, 0);
     assert.equal(on.realRender.map['chart-foundation'].statesReach.stamped, 0);
     assert.equal(on.realRender.map['stepper-compounds'].statesReach.native > 0, true);
     assert.equal(on.realRender.map['chart-foundation'].statesReach.native > 0, true);
-    // data-table: chromatic-only on its default mount, a mover on the axis with the row.
+    // data-table moves on the axis in both readings, so neither names it chromatic-only.
     const chromatic = (measurement) => measurement.chromaticStates.cells.find((entry) => entry.scenario === 'states');
-    assert.deepEqual(chromatic(off).chromaticOnly, ['data-table']);
+    assert.deepEqual(chromatic(off).chromaticOnly, []);
     assert.deepEqual(chromatic(on).chromaticOnly, []);
+    assert.deepEqual(evaluate(on), []);
+  }, 360_000);
+
+  it('a declared overlay is read under a state: the rows move on their ring, not on a width alone; without the read they are width-only; palette-only stays 0', async () => {
+    const overlays = ['activity-log', 'anchor', 'layout'];
+    const only = [...overlays, 'column-menu'].sort();
+    const bare = (row) => Object.fromEntries(Object.entries(REAL_RENDER_MOUNTS[row]).filter(([key]) => key !== 'pseudoReads'));
+    const on = await run({ verticals: ['bithire'], themes: ['light'], families: only, scenarios });
+    const off = await run({
+      verticals: ['bithire'], themes: ['light'], families: only, scenarios,
+      realRenderRoster: { ...REAL_RENDER_MOUNTS, ...Object.fromEntries(only.map((row) => [row, bare(row)])) },
+    });
+    for (const measurement of [on, off]) {
+      assert.deepEqual(cellOf(measurement, 'states').movedIds, only, 'the read changes what is seen, never whether the family is credited');
+      assert.deepEqual([...cellOf(measurement, 'states').realRender.credited].sort(), only);
+      const control = cellOf(measurement, 'palette-only');
+      assert.equal(control.evidential, true, control.nonEvidentialReason);
+      assert.equal(control.moved, 0, 'an overlay whose ring changes colour alone was credited');
+      for (const entry of measurement.cells.filter((item) => item.kind === 'negative')) assert.equal(entry.moved, 0, entry.axis);
+    }
+    assert.deepEqual(cellOf(on, 'states').widthOnly, [], 'the overlay carries the signature: geometry beyond a width');
+    // THE RED ARM: without the declared box each overlay row reads its transparent host outline and nothing else.
+    // column-menu is not among them: its stamped Popover surface wears the signature on the node itself.
+    assert.deepEqual(cellOf(off, 'states').widthOnly.map((entry) => entry.family), overlays);
+    for (const entry of cellOf(off, 'states').widthOnly) {
+      assert.ok(entry.properties.every((name) => STATES_WIDTH_PROPERTIES.includes(name)), entry.family);
+    }
+    assert.deepEqual(on.populations, off.populations);
     assert.deepEqual(evaluate(on), []);
   }, 360_000);
 

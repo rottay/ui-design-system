@@ -120,7 +120,8 @@
  * lot adds is the browser's computed style of the box it generates, read on a
  * host the DEFAULT scene already holds, for the axis whose own rule wrote the
  * property, and only where `content` is generated. Every other `::` is refused
- * by name (`ua-shadow-pseudo`), real-render mounts are out of scope, every
+ * by name (`ua-shadow-pseudo`), a real-render mount reads only the boxes its
+ * row declares (`pseudoReads`, under a state, held to the skin), every
  * refusal entry publishes its outcome and the credits that rest on a pseudo
  * alone are pinned. That is instrument visibility of paint already there, not
  * fleet improvement. The law is at `pseudoReadEntry`; `--no-pseudo-reads`
@@ -158,11 +159,13 @@
  */
 
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
+import { assertDistFresh } from '../../../package/artifacts/freshness/index.mjs';
 import { launchBrowser } from '../../tokens/cascade/probe/runtime/browser/index.mjs';
 import { resolveBundle } from '../../tokens/cascade/probe/runtime/bundle/index.mjs';
 import {
@@ -193,6 +196,7 @@ import {
   buildIndicator,
   chromaticStatesReading,
   indicatorRefusal,
+  provenanceRefusal,
   negativeControlsOf,
   negativeTest,
   writeIndicator,
@@ -1234,7 +1238,7 @@ const SHAPE_REACH_ROWS = Object.freeze({
         stamp: 'data-size={normalizeCollapseSize(size)}',
         resolves: Object.freeze([
           Object.freeze({ source: COLLAPSE_ENGINE, text: 'size = COLLAPSE_DEFAULTS.size,' }),
-          Object.freeze({ source: 'src/components/primitives/layout/collapse/contracts/index.ts', text: "size: 'middle' as const," }),
+          Object.freeze({ source: 'src/components/primitives/layout/collapse/contracts/index.ts', text: "size: 'md' as const," }),
           Object.freeze({ source: COLLAPSE_ENGINE, text: "    default:\n      return 'md';" }),
         ]),
       }),
@@ -1423,56 +1427,33 @@ const TOOLTIP_CONTRACT = 'src/components/primitives/display/tooltip/contracts/in
 const DROPDOWN_ENGINE = 'src/components/primitives/overlay/dropdown/engines/modern/index.tsx';
 const DROPDOWN_CONTRACT = 'src/components/primitives/overlay/dropdown/contracts/index.ts';
 
-const DATA_TABLE_ENGINE = 'src/components/patterns/data/data-table/engines/modern/index.tsx';
 const TEXT_AREA_ENGINE = 'src/components/primitives/inputs/input/compound/text-area/index.tsx';
 const STEPPER_STEP_ENGINE = 'src/components/primitives/navigation/stepper/compound/step/index.tsx';
 const CHART_DATA_ACCESS = `${CHARTS_ROOT}/runtime/chart-engine/presentation/react/access/index.tsx`;
 
 /**
- * THE STATES REACH ROWS (2026-10-03, WO-EVI-02). Four families whose skin
+ * THE STATES REACH ROWS (2026-10-03, WO-EVI-02). Three families whose skin
  * already reads a states dial on a node the default scene does not hold, each
  * mounted as the public render that carries it and declaring states alone, so
  * every resting axis reads as before. Law 3 still decides each cell in the
  * browser; a row is a reach claim, never a credit.
  *
- * NOT ROWS, by the law as it stands: decision-comparison's ring is painted on
+ * NOT ROWS, by the law as it stands: data-table's focus paint lives on
+ * `::after` overlays of its sortable header cell and its rows, which the
+ * default scene reads through the pseudo-element read law, so law 3 refuses a
+ * row for it (`PSEUDO_ONLY_CREDITS.states`); decision-comparison's ring is painted on
  * the root under `:has(> viewport:focus-visible)` -- a pseudo inside `:has()`
  * is a condition on a node the pass does not read (`withoutForcedPseudos`),
  * and the rule has no stamp twin; field-filters-panel and search-command-bar
  * own no state rule at all (they feed `--ds-button-focus-ring` to a composed
  * Button, whose paint is the Button's); input-compounds' compact-group seam is
  * a sibling relation over a composed Input, and a second states row is
- * refused by the single-states-row law.
+ * refused by the single-states-row law. column-settings (3e8c3fa6b),
+ * saved-views (d2ef3211b, 20e4875b5) and widget-board (6e26d5aff) move, outside
+ * the instrument's reach: their ring is a composed Button's or Input's, or
+ * sits on a `:has()` carrier (`STATES_NON_MOVER_NOTES`).
  */
 const STATES_REACH_ROWS = Object.freeze({
-  'data-table-focus': Object.freeze({
-    family: 'data-table',
-    state: Object.freeze({
-      name: 'a default DataTable with one sortable column and one body row -- the sortable header cell and the body row are the '
-        + 'kernel-stamped tab stops, and their focus shadows (the header cell itself; the row\'s `> td`) read '
-        + '`--ds-focus-ring-width` (the wrappers between root and table are omitted: the rules are descendant matches)',
-      source: DATA_TABLE_ENGINE,
-      anchors: Object.freeze(['{...partAttributes("header-cell", part.state)}', '{...partAttributes("body-row", part.state)}']),
-      resolves: Object.freeze([
-        Object.freeze({ source: 'src/foundation/contracts/runtime/components/patterns/core/index.ts', text: 'sortable?: boolean;' }),
-      ]),
-    }),
-    axes: Object.freeze(['states']),
-    markup: '<div class="ds-pattern-data-table ds-engine-modern" data-part="root"><table data-part="table">'
-      + '<thead data-part="table-head"><tr data-part="header-row">'
-      + '<th role="columnheader" tabindex="0" data-sortable="true" data-part="header-cell">Name</th></tr></thead>'
-      + '<tbody><tr tabindex="0" role="row" data-part="body-row"><td data-part="data-cell">Ada</td></tr></tbody></table></div>',
-    stamps: Object.freeze([
-      Object.freeze({ token: 'attr:data-part=header-cell', stamp: '{...partAttributes("header-cell", part.state)}' }),
-      Object.freeze({ token: 'attr:data-part=body-row', stamp: '{...partAttributes("body-row", part.state)}' }),
-      Object.freeze({ token: 'attr:data-sortable=true', stamp: 'data-sortable={col.sortable ? "true" : undefined}' }),
-      Object.freeze({
-        token: 'attr:tabindex=0',
-        stamp: Object.freeze(['tabIndex={col.sortable ? 0 : undefined}', 'activeRowIndex < 0']),
-        resolves: Object.freeze([Object.freeze({ source: DATA_TABLE_ENGINE, text: 'const [activeRowIndex, setActiveRowIndex] = useState<number>(-1);' })]),
-      }),
-    ]),
-  }),
   'input-compounds': Object.freeze({
     state: Object.freeze({
       name: 'a default Input.TextArea (outline, md) -- its root is kernel-stamped and a disabled TextArea writes `data-disabled="true"` on '
@@ -1556,7 +1537,8 @@ const STATES_REACH_ROWS = Object.freeze({
   'chart-foundation': Object.freeze({
     state: Object.freeze({
       name: 'a closed ChartDataAccess (the public accessible-data companion, `@rottay/design-system/charts/access`) -- its disclosure '
-        + 'trigger is the node the ring rule is gated on, and that ring reads `--ds-focus-ring-width` and `--ds-focus-ring-offset`; '
+        + 'trigger is the node the ring rule is gated on, and that ring is the tenant focus signature (`box-shadow: '
+        + 'var(--ds-focus-ring)`) over a transparent outline of `--ds-focus-ring-width` at `--ds-focus-ring-offset`; '
         + 'the mounted family root is the chart tooltip, which never contains it',
       source: CHART_DATA_ACCESS,
       anchors: Object.freeze(['export function ChartDataAccess<TRow>({', 'data-part="data-trigger"']),
@@ -1686,6 +1668,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
         stamp: 'data-trigger={Array.from(triggers).join(" ")}',
         resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'trigger: "hover" as const,' })]),
       }),
+      Object.freeze({ token: 'attr:data-part=bubble', stamp: '{...partAttributes("bubble", bubbleFocus)}' }),
       Object.freeze({ token: 'attr:role=tooltip', stamp: 'role={interactive ? "dialog" : "tooltip"}' }),
       Object.freeze({
         token: 'attr:data-tone=default',
@@ -1783,7 +1766,8 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   'column-menu': Object.freeze({
     state: Object.freeze({
       name: 'the open panel of a default column menu (Popover surface carrying the family overlay class) with one visible and one hidden column -- the surface, count pill and rows carry radius, keyline and elevation; '
-        + 'the engine focuses the panel on open, so its focus ring (`--ds-focus-ring-width`) is the states reading (S7)',
+        + 'the Popover surface holds focus when the menu opens from the keyboard and wears the tenant signature (`--ds-focus-ring`) '
+        + 'itself, kernel-stamped; a script that parks focus on the panel paints the same signature on the panel\'s `::after` overlay (S7)',
       source: 'src/components/structures/workspace/column-menu/index.tsx',
       anchors: Object.freeze([
         'open={isOpen}',
@@ -1798,6 +1782,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       ]),
     }),
     axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion', 'states']),
+    pseudoReads: Object.freeze([Object.freeze({ part: 'panel', pseudo: '::after' })]),
     markup: '<div data-part="surface" class="ds-structure ds-column-menu-panel"><div data-part="panel">'
       + '<div data-part="header"><div><div data-part="header-copy"></div><div>'
       + '<div data-part="count-pill">1/2</div></div></div></div><div data-part="scroll-region"><div>'
@@ -1825,11 +1810,12 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       }),
       Object.freeze({
         token: 'attr:data-part=surface',
-        stamp: 'overlayClassName="ds-structure ds-column-menu-panel"',
+        source: 'src/components/primitives/overlay/popover/engines/modern/index.tsx',
+        stamp: "{...partAttributes('surface', surfaceFocus)}",
         resolves: Object.freeze([
           Object.freeze({
-            source: 'src/components/primitives/overlay/popover/engines/modern/index.tsx',
-            text: 'data-part="surface"',
+            source: 'src/components/structures/workspace/column-menu/index.tsx',
+            text: 'overlayClassName="ds-structure ds-column-menu-panel"',
           }),
           Object.freeze({
             source: 'src/components/primitives/overlay/popover/engines/modern/index.tsx',
@@ -2598,7 +2584,8 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   'tooltip-interactive': Object.freeze({
     family: 'tooltip',
     state: Object.freeze({
-      name: 'the present bubble of an `interactive` tooltip (anchor-css branch: inline under its root) -- a non-modal dialog, `data-interactive="true"`, the node the focus-within ring is gated on',
+      name: 'the present bubble of an `interactive` tooltip (anchor-css branch: inline under its root) -- a non-modal dialog, `data-interactive="true"`, whose bubble states a transparent outline of `--ds-focus-ring-width` '
+        + 'while a control inside holds the keyboard and paints no ring of its own',
       source: TOOLTIP_ENGINE,
       anchors: Object.freeze([
         'hasRenderableContent &&\n      present &&\n      mounted ? (',
@@ -2633,6 +2620,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
           Object.freeze({ source: TOOLTIP_ENGINE, text: 'if (requested.has("hover")) requested.add("focus");' }),
         ]),
       }),
+      Object.freeze({ token: 'attr:data-part=bubble', stamp: '{...partAttributes("bubble", bubbleFocus)}' }),
       Object.freeze({ token: 'attr:role=dialog', stamp: 'role={interactive ? "dialog" : "tooltip"}' }),
       Object.freeze({ token: 'attr:tabindex=-1', stamp: 'tabIndex={interactive ? -1 : undefined}' }),
       Object.freeze({
@@ -2776,6 +2764,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       ]),
     }),
     axes: Object.freeze(['states']),
+    pseudoReads: Object.freeze([Object.freeze({ part: 'item-body', pseudo: '::after' })]),
     markup: '<div data-part="root" class="ds-pattern-activity-log ds-engine-modern" data-loading="false">'
       + '<div data-part="item-body" data-interactive="true" role="button" tabindex="0"></div></div>',
     stamps: Object.freeze([
@@ -2839,6 +2828,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       ]),
     }),
     axes: Object.freeze(['shape', 'rhythm', 'states']),
+    pseudoReads: Object.freeze([Object.freeze({ part: 'trigger', pseudo: '::after' })]),
     markup: '<aside class="rottay-layout-sider rottay-layout-sider--modern" data-part="sider" data-theme="light" data-collapsed="false">'
       + '<button type="button" data-part="trigger" data-collapsed="false" aria-expanded="true">'
       + '<span data-part="trigger-icon" aria-hidden="true"></span></button></aside>',
@@ -2916,6 +2906,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       resolves: Object.freeze([]),
     }),
     axes: Object.freeze(['states']),
+    pseudoReads: Object.freeze([Object.freeze({ part: 'item', pseudo: '::after' })]),
     markup: '<div class="rottay-anchor rottay-anchor--modern" data-part="root" data-direction="vertical" data-affix="true" role="navigation">'
       + '<div data-part="link-wrapper"><a class="rottay-anchor-link rottay-anchor-link--modern" data-part="item" data-selected="false">Section</a></div></div>',
     stamps: Object.freeze([
@@ -3560,6 +3551,10 @@ export function realRenderRefusedRowFailures(root = CORE_ROOT, {
  * published by name. moderation-gallery (504e2fec8, the same repair) does NOT
  * enter: its card rules still write `box-shadow`, `transform` and `opacity`
  * under a state, so the probe observes it -- as a non-mover.
+ *
+ * Re-pinned 9 -> 8 (2026-10-03): approval-inbox leaves. 083423044 gave its
+ * root a hand-off focus rule that writes `box-shadow` on `::after`, a read
+ * property under a state.
  */
 export const UNOBSERVABLE_FAMILIES = Object.freeze({
   shape: Object.freeze({}),
@@ -3567,7 +3562,6 @@ export const UNOBSERVABLE_FAMILIES = Object.freeze({
   rhythm: Object.freeze({}),
   depth: Object.freeze({}),
   states: Object.freeze({
-    'approval-inbox': 'colour-only',
     'button-group': 'no-vocabulary',
     'edit-fields': 'colour-only',
     'form-builder': 'no-vocabulary',
@@ -3716,6 +3710,23 @@ export function realRenderRosterFailures(root = CORE_ROOT, roster = REAL_RENDER_
     for (const tag of entry.host ?? []) {
       if (!/^[a-z][a-z0-9-]*$/u.test(tag)) failures.push(`${family}: host \`${tag}\` must be a bare element name`);
     }
+    // A declared pseudo read is held to the skin: a state rule of the family
+    // paints that box on that part, or the row reads a box nobody ships.
+    for (const box of entry.pseudoReads ?? []) {
+      const where = `${family}/${box.part}${box.pseudo}`;
+      if (!entry.axes.includes('states')) failures.push(`${where}: a pseudo read is a states read, and the row does not declare states`);
+      if (!REAL_RENDER_PSEUDO_ELEMENTS.includes(box.pseudo)) {
+        failures.push(`${where}: a real-render mount reads only ${REAL_RENDER_PSEUDO_ELEMENTS.join(' and ')}`);
+      }
+      if (!markupTokens(entry.markup).includes(`attr:data-part=${box.part}`)) failures.push(`${where}: the mount has no \`data-part="${box.part}"\` node`);
+      // The box's host is the LAST part its selector names, under a state.
+      const paints = (selector) => selector.endsWith(box.pseudo)
+        && /\[data-state~=|:focus-visible|:hover|:active|:disabled/u.test(selector)
+        && [...selector.matchAll(/\[data-part=["']?([\w-]+)["']?\]/gu)].at(-1)?.[1] === box.part;
+      const painted = cssRules(files.map((file) => readFileSync(file, 'utf8')).join('\n'))
+        .some((rule) => selectorList(rule.selector).some((selector) => paints(selector.trim())));
+      if (!painted) failures.push(`${where}: no state rule of the family skin paints that box`);
+    }
     const engine = read(entry.state.source);
     if (engine === null) {
       failures.push(`${family}: ${entry.state.source} does not exist`);
@@ -3777,6 +3788,9 @@ export function realRenderStampedParts(entry) {
     .map((row) => row.token.slice('attr:data-part='.length)))].sort();
 }
 
+/** The boxes a real-render row may declare beside its nodes (`pseudoReads`): read under a state only, never at rest. */
+export const REAL_RENDER_PSEUDO_ELEMENTS = Object.freeze(['::before', '::after']);
+
 /** The mounts a run applies: roster rows of the families it measures, each with its host-wrapped markup. */
 export function realRenderMountList(elements, { applied = true, roster = REAL_RENDER_MOUNTS } = {}) {
   if (!applied) return [];
@@ -3788,6 +3802,7 @@ export function realRenderMountList(elements, { applied = true, roster = REAL_RE
       row,
       axes: [...entry.axes],
       stampedParts: realRenderStampedParts(entry),
+      pseudoReads: (entry.pseudoReads ?? []).map((box) => `${box.part}${box.pseudo}`),
       markup: (entry.host ?? []).map((tag) => `<${tag} data-axis-real-host="">`).join('')
         + entry.markup
         + [...(entry.host ?? [])].reverse().map((tag) => `</${tag}>`).join(''),
@@ -4663,6 +4678,12 @@ const PSEUDO_SEEN_READ = 2;
  * Measured 2026-10-01 (P1, Fable-reproduced) in all six cells: depth crosses
  * the 80 % bar by ONE family on the declared denominator (160/199), and this
  * pin is what makes losing it loud.
+ *
+ * data-table and data-table-interactions enter on states (2026-10-03): the
+ * focus ring is the tenant signature (`--ds-focus-ring`) on an `::after`
+ * overlay -- of the row and the sortable header cell, and of the resize
+ * handle -- and the hosts themselves paint no ring.
+
  */
 export const PSEUDO_ONLY_CREDITS = Object.freeze({
   depth: Object.freeze({
@@ -4671,6 +4692,18 @@ export const PSEUDO_ONLY_CREDITS = Object.freeze({
       property: 'border-top-width',
       moves: '--ds-edge-standard-width',
       holds: '--ds-edge-standard-style',
+    }),
+  }),
+  states: Object.freeze({
+    'data-table': Object.freeze({
+      pseudo: '.ds-pattern-data-table.ds-engine-modern [data-part="body-row"][data-state~="focus-visible"]::after',
+      property: 'box-shadow',
+      moves: '--ds-focus-ring',
+    }),
+    'data-table-interactions': Object.freeze({
+      pseudo: '.ds-engine-modern.ds-pattern-data-table .ds-resize-handle[data-state~="focus-visible"]::after',
+      property: 'box-shadow',
+      moves: '--ds-focus-ring',
     }),
   }),
   motion: Object.freeze({
@@ -5091,7 +5124,8 @@ export function sceneHtml({ css, vertical, theme, elements, mounts = null, partM
     .join('\n');
   const real = realRenders.map((mount) =>
     `\n<div data-axis-real-render="${mount.family}" data-axis-real-axes="${mount.axes.join(' ')}"`
-    + ` data-axis-real-row="${mount.row ?? mount.family}" data-axis-real-stamped="${(mount.stampedParts ?? []).join(' ')}">`
+    + ` data-axis-real-row="${mount.row ?? mount.family}" data-axis-real-stamped="${(mount.stampedParts ?? []).join(' ')}"`
+    + ` data-axis-real-pseudo="${(mount.pseudoReads ?? []).join(' ')}">`
     + `${mount.markup}</div>`).join('');
   return `<!doctype html><html ${attributes}><head><style>${css}</style></head>`
     + `<body><div id="axis-scene">${nodes}${real}</div></body></html>`;
@@ -5472,6 +5506,21 @@ const readComputed = ({
         : (property) => axisOf[property] !== 'states' && axes.includes(axisOf[property]);
       if (!properties.some(readable)) continue;
       const nodes = [...container.querySelectorAll('*')].filter((node) => !node.hasAttribute('data-axis-real-host'));
+      // The boxes the row declares, read under a state only and only where
+      // the browser generated them: one entry per box, after the nodes.
+      const boxes = realStates
+        ? (container.getAttribute('data-axis-real-pseudo') ?? '').split(' ').filter(Boolean).flatMap((key) => {
+          const at = key.indexOf('::');
+          return nodes.filter((node) => node.getAttribute('data-part') === key.slice(0, at)).map((node) => ({ node, pseudo: key.slice(at) }));
+        })
+        : [];
+      const boxValue = ({ node, pseudo }, property) => {
+        const style = getComputedStyle(node, pseudo);
+        const content = style.getPropertyValue('content');
+        return content === 'none' || content === 'normal' || content === ''
+          ? `${pseudo}=ungenerated`
+          : `${pseudo}=${style.getPropertyValue(property)}`;
+      };
       if (!byFamily.has(family)) {
         byFamily.set(family, { own: Object.fromEntries(properties.map((property) => [property, out[family][property]])), real: {} });
       }
@@ -5479,12 +5528,19 @@ const readComputed = ({
       for (const property of properties) {
         if (!readable(property)) continue;
         if (depth === null) {
-          const value = nodes.map((node) => styleOf(node).getPropertyValue(property)).join(' | ');
+          const value = [
+            ...nodes.map((node) => styleOf(node).getPropertyValue(property)),
+            ...boxes.map((box) => boxValue(box, property)),
+          ].join(' | ');
           real[property] = real[property] === undefined ? value : `${real[property]} | ${value}`;
         } else {
-          real[property] = [...(real[property] ?? []), ...nodes.map((node) => (Number(node.getAttribute('data-axis-depth')) === depth
-            ? styleOf(node).getPropertyValue(property)
-            : null))];
+          real[property] = [
+            ...(real[property] ?? []),
+            ...nodes.map((node) => (Number(node.getAttribute('data-axis-depth')) === depth
+              ? styleOf(node).getPropertyValue(property)
+              : null)),
+            ...boxes.map((box) => (Number(box.node.getAttribute('data-axis-depth')) === depth ? boxValue(box, property) : null)),
+          ];
         }
       }
     }
@@ -5625,40 +5681,86 @@ const invalidateStyles = () => {
 export const SETTLE_ATTEMPTS = 6;
 
 /**
- * The families whose computed values converge asymptotically instead of
- * settling, excluded from every denominator by NAME.
+ * The families whose readings never settle, excluded from every denominator by
+ * NAME.
  *
- * They are declared rather than discovered per run, and that is the whole
- * point: which of them a given run happens to catch varies (`card` in one run,
- * `input` in the next), so a per-run exclusion would move the denominator
- * between runs -- the precise thing `WO-EVI-02` R4 amendment 3 forbids.
- * Declared, the denominator is the same number every time and a family that
- * BECOMES unsettled outside this list is a failure rather than a silent
- * shrinkage.
+ * They are declared rather than discovered per run: a per-run exclusion would
+ * move the denominator between runs -- the precise thing `WO-EVI-02` R4
+ * amendment 3 forbids. The pin is checked in BOTH directions on a full run: a
+ * family that becomes unsettled outside this list is a failure, and so is a
+ * listed family that settles.
  *
- * Measured 2026-09-11 on bithire/evnto/rottay, light and dark: each resolves
- * padding through a container query over its own box, so every recalculation
- * nudges the value a little less than the last (9.66599px, 9.62545px,
- * 9.61983px, 9.61875px) without ever repeating.
+ * Empty by measurement since 2026-10-03. e8066d7b4 (2026-09-11) pinned affix,
+ * card, cockpit-header, detail-header, input, layout-primitives and
+ * mobile-header: the reader then sampled computed style while transitions
+ * started by the instrument's own variable writes and state stamps were still
+ * running, so each round trip read a later frame (9.66599px, 9.62545px,
+ * 9.61983px, 9.61875px was the tail of a `transition: padding`). d62e8e11a
+ * (2026-09-13) repaired the reader -- `getAnimations() -> finish()`, held at 0
+ * where `finish()` throws -- and all seven read settled in every cell since.
  */
-export const UNSETTLED_FAMILIES = Object.freeze([
-  'affix',
-  'card',
-  'cockpit-header',
-  'detail-header',
-  'input',
-  'layout-primitives',
-  'mobile-header',
+export const UNSETTLED_FAMILIES = Object.freeze([]);
+
+/** The states properties that carry a ring's width and nothing of its signature. */
+export const STATES_WIDTH_PROPERTIES = Object.freeze(['outline-width', 'outline-offset']);
+
+/**
+ * THE WIDTH-ONLY CLASS: the states movers whose only move is the width or
+ * offset of a solid outline, pinned by name with the properties each moves on
+ * and held to every states positive cell in both directions
+ * (`widthOnlyDrift`). They are counted, and being counted closes nothing: the
+ * outline does not paint the tenant focus signature (`--ds-focus-ring`), and a
+ * pair that keeps the width (ring -> underline) would drop each of them.
+ * Published with every run at `limits.states.widthOnly`.
+ */
+const WIDTH_AND_OFFSET = Object.freeze(['outline-width', 'outline-offset']);
+const WIDTH_ALONE = Object.freeze(['outline-width']);
+const WIDTH_ONLY_FAMILIES = Object.freeze({
+  'ascii-diagram': WIDTH_ALONE,
+  'hover-card': WIDTH_AND_OFFSET,
+  tooltip: WIDTH_AND_OFFSET,
+  'tree-view-connector': WIDTH_ALONE,
+});
+export const STATES_WIDTH_ONLY_DEFECT = Object.freeze({
+  defect: 'focus signature not honoured (solid outline)',
+  defectStatus: 'open',
+  receiver: 'WO-EVI-02 (focus-signature programme)',
+});
+export const STATES_WIDTH_ONLY_MOVERS = Object.freeze(Object.entries(WIDTH_ONLY_FAMILIES)
+  .map(([family, properties]) => Object.freeze({ family, properties, ...STATES_WIDTH_ONLY_DEFECT })));
+
+/**
+ * States NON-movers whose focus paint follows the tenant and is carried where
+ * no half of the scene reads it. Published by name with the reason; not a
+ * class and never a credit. A noted family that moves is a stale note.
+ */
+export const STATES_NON_MOVER_NOTES = Object.freeze([
+  Object.freeze({
+    family: 'column-settings',
+    since: '3e8c3fa6b',
+    reason: 'moves, outside the instrument\'s reach: the grip is a composed Button and wears the Button\'s own ring',
+  }),
+  Object.freeze({
+    family: 'saved-views',
+    since: 'd2ef3211b, 20e4875b5',
+    reason: 'moves, outside the instrument\'s reach: its controls are composed Buttons and plain Inputs, each wearing its own ring',
+  }),
+  Object.freeze({
+    family: 'widget-board',
+    since: '6e26d5aff',
+    reason: 'moves, outside the instrument\'s reach: the ring is on the card\'s `::after` under `:has(> handle:focus-visible)`',
+  }),
 ]);
 
 /**
  * The families whose Modern skin publishes NO selector this probe can
  * materialise as one element, excluded from every denominator by NAME.
  *
- * WHY THIS IS PINNED and not merely reported. The published population is
- * 221/183/216/197/157/202 families per axis; what a run measures is that set
- * MINUS the families it could not mount and MINUS the unsettled ones, which is
- * 206/175/199/182/148/191. That subtraction is legitimate -- a family with no
+ * WHY THIS IS PINNED and not merely reported. What a run measures is the
+ * declared population of each axis MINUS the families it could not mount and
+ * MINUS the ones pinned as unsettled (none since 2026-10-03); both are
+ * published per axis at `denominatorReconciliation`. That subtraction is
+ * legitimate -- a family with no
  * mountable selector has nothing to read a computed style off -- but a
  * subtraction nobody pinned is a denominator that shrinks silently: a skin
  * refactor that turns a single-element rule into a descendant rule removes the
@@ -5715,19 +5817,20 @@ export const UNMOUNTABLE_FAMILIES = Object.freeze([
  *
  * WHY NOT the sibling probe's `readUntilStable`. That helper is all-or-nothing
  * over a small hand-built plan: it demands two consecutive identical readings
- * of the WHOLE plan and throws otherwise. On a 248-family scene it never
- * returns, and running it established why -- two families
- * (`cockpit-header`, `layout-primitives`) resolve their padding through a
- * container query over their own box, so each recalculation nudges the value a
- * little less than the last: 9.66599px, 9.62545px, 9.61983px, 9.61875px. That
- * is convergence, not settlement, and no number of round trips makes it exact.
+ * of the WHOLE plan and throws otherwise, so one family still moving costs the
+ * whole scene. Here that family is named and the rest are read.
  *
- * Averaging or rounding it away would be worse than the problem: a 0.04px drift
- * between the two arms of a pair is indistinguishable from a real difference,
- * so it would inflate every positive percentage AND break both negative
- * controls. So the unsettled families are NAMED, excluded from every
- * denominator, and published with the run. An exclusion nobody can see is how a
- * denominator gets shrunk to reach a threshold.
+ * A family is unsettled when it differs in every consecutive pair of readings.
+ * `readComputed` ends every animation before it reads (d62e8e11a, 2026-09-13);
+ * before that the reader sampled the transitions its own writes had started,
+ * which is what e8066d7b4 (2026-09-11) recorded as families that never settle.
+ *
+ * Averaging or rounding a moving value away would be worse than the problem: a
+ * 0.04px drift between the two arms of a pair is indistinguishable from a real
+ * difference, so it would inflate every positive percentage AND break both
+ * negative controls. So an unsettled family is NAMED, published with the run,
+ * and excluded from every denominator only through the pin. An exclusion
+ * nobody can see is how a denominator gets shrunk to reach a threshold.
  */
 export async function readSettled(page, plan) {
   // Settling is decided on the six axes' vocabulary alone (`settleOn`): the
@@ -6371,6 +6474,80 @@ export function statesHalves(before, after, family, properties = allProperties()
   };
 }
 
+/** Every property a family differs on under a state, over both halves. A reading beside the credit, never one. */
+export function statesDifferences(before, after, family, properties = allProperties()) {
+  const found = new Set();
+  const pairs = [
+    ...STATE_VARIANTS.map((state) => [before.states?.[state], after.states?.[state]]),
+    ...NATIVE_PSEUDO_VARIANTS.map((variant) => [before.native?.[variant], after.native?.[variant]]),
+  ];
+  for (const [left, right] of pairs) {
+    const a = left?.[family];
+    const b = right?.[family];
+    if (!a || !b) continue;
+    for (const property of properties) {
+      if (stripColour(a[property]) !== stripColour(b[property])) found.add(property);
+    }
+  }
+  return properties.filter((property) => found.has(property));
+}
+
+/**
+ * The width-only pin over a run, both directions. A named family that does
+ * not move, or moves on other properties than the ones it is pinned with, is
+ * stale on any run that measured it; a full run also refuses a family that
+ * moves on a width alone and is not named.
+ */
+export function widthOnlyDrift(result, pin = STATES_WIDTH_ONLY_MOVERS) {
+  const failures = [];
+  const measured = result.effectiveFamilies?.states ?? [];
+  for (const cell of result.cells) {
+    if (cell.kind !== 'positive' || cell.axis !== 'states' || !cell.evidential || cell.widthOnly === undefined) continue;
+    const where = `${cell.vertical}/${cell.theme}`;
+    for (const entry of pin) {
+      if (!measured.includes(entry.family)) continue;
+      const observed = cell.widthOnly.find((candidate) => candidate.family === entry.family);
+      if (observed === undefined) {
+        failures.push(cell.movedIds.includes(entry.family)
+          ? `${entry.family}: named a width-only states mover and it moves on more than a width on ${where}; remove it from `
+            + 'STATES_WIDTH_ONLY_MOVERS in this commit, with the measurement'
+          : `${entry.family}: named a width-only states MOVER and it does not move on ${where}; remove it from `
+            + 'STATES_WIDTH_ONLY_MOVERS in this commit, with the measurement');
+      } else if (observed.properties.join(', ') !== entry.properties.join(', ')) {
+        failures.push(
+          `${entry.family}: pinned width-only on ${entry.properties.join(', ')} and it moves on ${observed.properties.join(', ')} `
+          + `on ${where}; re-pin STATES_WIDTH_ONLY_MOVERS with the measurement`,
+        );
+      }
+    }
+    if (result.familiesFiltered === true) continue;
+    for (const observed of cell.widthOnly) {
+      if (pin.some((entry) => entry.family === observed.family)) continue;
+      failures.push(
+        `${observed.family}: moves on states through ${observed.properties.join(', ')} ALONE on ${where} and is not named in `
+        + 'STATES_WIDTH_ONLY_MOVERS; name it there with the measurement in this commit',
+      );
+    }
+  }
+  return failures;
+}
+
+/** A noted non-mover that moves in a measured states positive cell is a stale note. */
+export function nonMoverNoteDrift(result, notes = STATES_NON_MOVER_NOTES) {
+  const failures = [];
+  for (const cell of result.cells) {
+    if (cell.kind !== 'positive' || cell.axis !== 'states' || !cell.evidential) continue;
+    for (const note of notes) {
+      if (!(cell.movedIds ?? []).includes(note.family)) continue;
+      failures.push(
+        `${note.family}: noted as a states non-mover outside the instrument's reach and it moves on ${cell.vertical}/${cell.theme}; `
+        + 'remove it from STATES_NON_MOVER_NOTES in this commit',
+      );
+    }
+  }
+  return failures;
+}
+
 /**
  * THE CHROMATIC STATES READING, reported APART from the six axes (owner
  * directive 2026-10-01; measured by CR-1, shape ruled by the CR-1 review).
@@ -6421,17 +6598,18 @@ export const CHROMATIC_SCENE = 'the non-chromatic scene: root plus states-tagged
  * would add to the numerator, and the pin is what turns that leak into a
  * failure. Re-pinned only with the measurement, like `UNOBSERVABLE_FAMILIES`.
  *
- * Re-pinned ['data-table'] -> [] on bc5eb993b (2026-10-03). The old entry said
- * data-table paints `focus-visible` "as a background tint and nothing else";
- * that was true of the nodes the default scene mounts and false of the skin:
- * the sortable header cell and the focused row's `> td` paint an inset shadow
- * whose spread is `--ds-focus-ring-width`. The `data-table-focus` real-render
- * row mounts those two tab stops, the family moves on `box-shadow` in all six
- * cells (2px -> 1px under ring -> glow) and at 0 under palette-only, so it is
- * no longer chromatic-ONLY. The recipe reads the width alone: a pair that
- * keeps the width (ring -> underline) would leave it a non-mover again.
+ * Empty since 2026-10-03. data-table was the one entry while its focus paint
+ * was read as a background tint alone. Its row and sortable header cell now
+ * paint the tenant focus signature (`--ds-focus-ring`) on an `::after`
+ * overlay, which the default scene reads: it moves on `box-shadow` by
+ * geometry and stays at 0 under palette-only (`PSEUDO_ONLY_CREDITS.states`).
+ *
+ * card enters (2026-10-03) with the measurement that emptied
+ * `UNSETTLED_FAMILIES`: back in the measured population, its default mount
+ * moves `background-color` under disabled, hover and active and nothing the
+ * six axes read, in all six cells.
  */
-export const CHROMATIC_ONLY_STATES = Object.freeze([]);
+export const CHROMATIC_ONLY_STATES = Object.freeze(['card']);
 
 /** The read set the chromatic reading adds to the run: what the six axes do not already read. */
 export function chromaticReadProperties() {
@@ -7297,6 +7475,7 @@ export async function run({
             const denominator = effective(axis);
             const moved = [];
             const halves = axis === 'states' ? { stamped: [], native: [] } : null;
+            const widthOnly = axis === 'states' && scenario.kind === 'positive' ? [] : null;
             const real = { credited: [], rescued: [], refused: [], undecided: [] };
             const pending = [];
             const sources = [];
@@ -7352,6 +7531,12 @@ export async function run({
                 property = differsOnAxis(axis, before, after, family);
               }
               if (property) moved.push({ family, property });
+              if (property && widthOnly !== null) {
+                const properties = statesDifferences(splitOn[0], splitOn[1], family);
+                if (properties.length > 0 && properties.every((name) => STATES_WIDTH_PROPERTIES.includes(name))) {
+                  widthOnly.push({ family, properties });
+                }
+              }
               if (halves !== null) {
                 const split = statesHalves(splitOn[0], splitOn[1], family);
                 if (split.stamped) halves.stamped.push(family);
@@ -7404,6 +7589,7 @@ export async function run({
               percent: denominator.length === 0 ? 0 : (moved.length / denominator.length) * 100,
               movedFamilies: moved.slice(0, 12),
               movedIds: moved.map((entry) => entry.family),
+              ...(widthOnly === null ? {} : { widthOnly }),
               // The real-render mounts this cell read (law 3 passed), the
               // families that moved ONLY through them, and every refusal.
               ...(realRenders.length === 0 ? {} : { realRender: real }),
@@ -7484,7 +7670,7 @@ export async function run({
     applied: pseudoReads,
     scope: 'the default scene only: ::before/::after at the end of a selector, on a host the root, a part mount or a '
       + 'block-element part already put in the scene, for the axis whose own rule wrote the property, credited only '
-      + 'where content computes generated; real-render mounts are out of scope in this lot',
+      + 'where content computes generated; a real-render mount reads only the boxes its row declares (`pseudoReads`), under a state',
     families: Object.keys(partMountsReport.pseudoReads).length,
     reads: Object.values(partMountsReport.pseudoReads).reduce((total, byAxis) =>
       total + Object.values(byAxis).reduce((sum, list) => sum + list.length, 0), 0),
@@ -7608,7 +7794,7 @@ export async function run({
     },
     partReadings,
     limits: {
-      states: { ...STATES_AXIS_LIMITS, stampedStates, unreachable: statesUnreachable },
+      states: { ...STATES_AXIS_LIMITS, stampedStates, unreachable: statesUnreachable, widthOnly: STATES_WIDTH_ONLY_MOVERS, nonMoverNotes: STATES_NON_MOVER_NOTES },
       disabled: { ...disabledCensus, stamped: statesDisabled },
     },
     nativePseudos: nativeReport,
@@ -7626,9 +7812,11 @@ export async function run({
         + 'here; they are named rather than implied. What else this probe cannot see on that axis is '
         + 'enumerated with its measurements in limits.states and limits.disabled.',
     unsettledNote:
-      'A family whose computed values converge asymptotically under repeated style invalidation (a container '
-      + 'query over its own box) is excluded from every denominator of the run it was unsettled in, and named '
-      + 'here. Its drift is indistinguishable from a real difference at the sizes involved.',
+      'A family whose computed values still differ after every style invalidation of a reading cannot be compared '
+      + 'between two arms. One pinned in UNSETTLED_FAMILIES is excluded from every denominator and named here; the '
+      + 'pin is checked in both directions on a full run and is empty by measurement since 2026-10-03. The seven '
+      + 'families pinned on 2026-09-11 (e8066d7b4) were read while transitions started by the instrument\'s own '
+      + 'writes were running; the reader ends them before reading since 2026-09-13 (d62e8e11a).',
     unmountableNote:
       'A family whose Modern skin publishes no single-element selector cannot be mounted and is excluded from '
       + 'every denominator. The set is PINNED in UNMOUNTABLE_FAMILIES and checked for exact equality on a full '
@@ -7774,6 +7962,20 @@ export function evaluate(result, {
         failures.push(`${family}: pinned as unmountable and now mounts; remove it from UNMOUNTABLE_FAMILIES in this commit`);
       }
     }
+    // A pinned family this run never saw unsettled is a stale exclusion.
+    const stillUnsettled = result.families.observedUnsettled ?? [];
+    const reconciliation = result.denominatorReconciliation;
+    const mounted = (family) => reconciliation === undefined
+      || (!result.families.unmountable.includes(family)
+        && Object.values(reconciliation).some((row) => (row.declaredFamilies ?? []).includes(family)));
+    for (const family of result.families.excludedUnsettled ?? UNSETTLED_FAMILIES) {
+      if (mounted(family) && !stillUnsettled.includes(family)) {
+        failures.push(
+          `${family}: pinned as unsettled and settled in every cell of this run, so the pin keeps a measurable family `
+          + 'out of every denominator; remove it from UNSETTLED_FAMILIES in this commit, with the measurement',
+        );
+      }
+    }
     // THE UNOBSERVABLE SET IS PINNED BESIDE THE DENOMINATOR, never subtracted.
     failures.push(...unobservableDrift(result.unobservable ?? {}));
     // THE PSEUDO-ONLY CREDITS ARE PINNED, both directions, cell by cell.
@@ -7840,11 +8042,12 @@ export function evaluate(result, {
       + 'own match, so that half of the states axis was not measured',
     );
   }
+  failures.push(...widthOnlyDrift(result), ...nonMoverNoteDrift(result));
   for (const family of result.families.newlyUnsettled ?? []) {
     failures.push(
-      `${family}: its readings never settle and it is NOT in UNSETTLED_FAMILIES. A family whose paint converges `
-      + 'asymptotically cannot be compared between two arms; name it there with the measurement, or fix the '
-      + 'self-referential container query that causes it',
+      `${family}: its readings never settle and it is NOT in UNSETTLED_FAMILIES. A family still moving after the `
+      + 'reader ended its animations cannot be compared between two arms; find the animation the settlement step '
+      + 'does not reach, or name the family there with the measurement in this commit',
     );
   }
   // A REAL-RENDER ROW THAT DOES NOT QUALIFY is a roster defect, never a
@@ -8091,6 +8294,45 @@ function headCommit() {
   }
 }
 
+/**
+ * The three facts `provenanceRefusal` judges, read off this checkout. `dirty`
+ * is `git status --porcelain` under the package minus the indicator itself;
+ * `dist` is the build stamp's content proof (`assertDistFresh`); `catalog`
+ * compares the digest the run read with the same digest of HEAD's blob.
+ */
+export function readPublicationProvenance(result, { root = CORE_ROOT } = {}) {
+  const git = (args) => {
+    try {
+      return execFileSync('git', args, { cwd: root, encoding: 'buffer', stdio: ['ignore', 'pipe', 'ignore'] });
+    } catch {
+      return null;
+    }
+  };
+  const status = git(['status', '--porcelain', '--', '.']);
+  const top = git(['rev-parse', '--show-toplevel'])?.toString('utf8').trim() ?? null;
+  const own = top === null ? null : relative(top, resolve(root, INDICATOR_PATH)).split('\\').join('/');
+  const dirty = status === null || own === null
+    ? null
+    : status.toString('utf8').split('\n').filter((line) => line !== '').map((line) => line.slice(3)).filter((path) => path !== own);
+  let dist = null;
+  try {
+    const proof = assertDistFresh({ packageRoot: root, stampPath: resolve(root, 'dist/build-stamp.json') });
+    dist = { ok: proof.ok === true, failures: proof.failures ?? [] };
+  } catch (error) {
+    dist = { ok: false, failures: [error instanceof Error ? error.message : String(error)] };
+  }
+  const source = result.revision?.source;
+  const blob = source === undefined || top === null ? null : git(['show', `HEAD:${relative(top, source).split('\\').join('/')}`]);
+  return {
+    dirty,
+    dist,
+    catalog: {
+      run: result.revision?.digest ?? null,
+      head: blob === null ? null : createHash('sha256').update(blob).digest('hex').slice(0, 16),
+    },
+  };
+}
+
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
 if (isMain) {
   const argument = (name) =>
@@ -8207,9 +8449,18 @@ if (isMain) {
     console.log(`    states REFUSED ${entry.row}${entry.row === entry.family ? '' : ` (${entry.family})`} -- ${entry.reason}`);
   }
   console.log(
-    `  excluded as unsettled (declared, named): ${result.families.excludedUnsettled.join(', ')}`
-    + ` — observed this run: ${result.families.observedUnsettled.join(', ') || 'none'}`,
+    `  excluded as unsettled (declared, named): ${result.families.excludedUnsettled.join(', ') || 'none'}`
+    + ` — observed this run: ${result.families.observedUnsettled.join(', ') || 'none'}`
+    + ` — exactly the pin: ${result.familiesFiltered ? 'new instability only (--families run)' : 'both directions'}`,
   );
+  console.log(
+    `  states movers on a WIDTH ALONE (pinned by name, ${STATES_WIDTH_ONLY_DEFECT.defect}, `
+    + `${STATES_WIDTH_ONLY_DEFECT.defectStatus.toUpperCase()}, receiver ${STATES_WIDTH_ONLY_DEFECT.receiver}): `
+    + `${result.limits.states.widthOnly.length} -- ${result.limits.states.widthOnly.map((entry) => entry.family).join(', ')}`,
+  );
+  for (const note of result.limits.states.nonMoverNotes) {
+    console.log(`  states non-mover, noted: ${note.family} (${note.since}) -- ${note.reason}`);
+  }
   for (const kind of ['positive', 'negative']) {
     for (const cell of result.cells.filter((entry) => entry.kind === kind)) {
       console.log(
@@ -8307,11 +8558,12 @@ if (isMain) {
     + `${refusal === null ? 'permitted under this invocation' : `REFUSED — ${refusal}`}`
     + ' — this CLI does not write it',
   );
+  // Provenance is read only for a run that may otherwise publish.
   const indicatorBlocked = indicatorRefusal(result, {
     argv: process.argv,
     instrumentFailures: evaluate(result),
     writeRefusal: refusal,
-  });
+  }) ?? provenanceRefusal(readPublicationProvenance(result));
   if (indicatorBlocked === null) {
     const indicator = buildIndicator(result, {
       negativeControls: negativeControlsOf(SCENARIOS),

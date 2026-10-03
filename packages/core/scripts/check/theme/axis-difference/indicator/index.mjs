@@ -256,6 +256,37 @@ export function indicatorRefusal(result, { argv = [], instrumentFailures = [], w
 }
 
 /**
+ * What a PUBLISHED reading was taken from, beyond the run itself: a committed
+ * tree, a `dist` whose build stamp is a content proof of the sources on disk,
+ * and the catalog the commit carries. Judged only when the run may otherwise
+ * publish; a `--no-write` measurement never reaches it. Each fact is `null`
+ * when it could not be established, and that refuses too.
+ *
+ * @param {{ dirty: readonly string[] | null, dist: { ok: boolean, failures: readonly string[] } | null,
+ *   catalog: { run: string | null, head: string | null } | null }} provenance
+ * @returns {string | null}
+ */
+export function provenanceRefusal({ dirty = null, dist = null, catalog = null } = {}) {
+  if (dirty === null) return 'the working tree could not be read from git; a published reading names the commit it was taken on';
+  if (dirty.length > 0) {
+    return `the working tree has ${dirty.length} uncommitted path(s) under the package (${dirty.slice(0, 3).join(', ')}`
+      + `${dirty.length > 3 ? ', ...' : ''}); the indicator would stamp HEAD on a reading of something else`;
+  }
+  if (dist === null) return 'the dist build stamp could not be checked; decisions compile through dist';
+  if (!dist.ok) {
+    return `dist is not built from the sources on disk (${dist.failures[0] ?? 'no reason given'}); `
+      + 'decisions compile through dist, so the arms would be an older compiler\'s';
+  }
+  if (catalog === null || catalog.run === null || catalog.head === null) {
+    return 'the catalog revision of the commit could not be read; the populations are read at a catalog revision';
+  }
+  if (catalog.run !== catalog.head) {
+    return `the run read catalog ${catalog.run} and the commit carries ${catalog.head}; the populations are not the commit's`;
+  }
+  return null;
+}
+
+/**
  * THE CHROMATIC STATES READING, reported APART (owner directive 2026-10-01;
  * shape ruled by the CR-1 review): a sibling of `axes`, never under it, with no
  * status, no threshold and no `met`. It reads `result.chromaticStates` and the
@@ -445,6 +476,14 @@ export function buildIndicator(result, {
     // The real-render rows measured and refused on states, with the reach this
     // run read on each: evidence in the artifact, not only in a receipt.
     realRender: { statesRefused: result.realRender?.statesRefused ?? [] },
+    // The states movers counted through a width alone, pinned by name, each
+    // with its open defect and receiver; and what the measured cells read.
+    statesWidthOnly: (result.limits?.states?.widthOnly ?? []).map((entry) => ({ ...entry, properties: [...(entry.properties ?? [])] })),
+    statesWidthOnlyObserved: [...new Set((result.cells ?? [])
+      .filter((cell) => cell.kind === 'positive' && cell.axis === 'states')
+      .flatMap((cell) => (cell.widthOnly ?? []).map((entry) => entry.family)))].sort(),
+    // States non-movers whose paint follows the tenant outside the scene's reach: a note, never a class.
+    statesNonMoverNotes: (result.limits?.states?.nonMoverNotes ?? []).map((note) => ({ ...note })),
   };
   const failures = [...indicatorSeparationFailures(artifact), ...nonMoverFailures(axes)];
   if (failures.length > 0) throw new Error(`tenant-difference-by-axis: ${failures.join(' | ')}`);
