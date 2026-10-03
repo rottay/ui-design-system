@@ -2994,12 +2994,14 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'chart-bullet',
       'chart-c',
       'chart-c-histogram-legend',
+      'chart-foundation',
       'chart-waterfall',
       'collapse',
       'column-menu',
       'column-settings',
       'command-palette',
       'data-table-actions',
+      'data-table-focus',
       'date-picker',
       'descriptions',
       'detail',
@@ -3019,6 +3021,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'image',
       'image-compounds',
       'image-radius',
+      'input-compounds',
       'layout',
       'list',
       'modal-compounds',
@@ -3036,6 +3039,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'stats-grid',
       'stats-grid-interactive',
       'stats-header',
+      'stepper-compounds',
       'table',
       'time-picker',
       'tooltip',
@@ -3334,8 +3338,15 @@ describe('axis-difference — S1: law 5 over a reading, the stamp contract, and 
   // Reclassified by owner ruling 2026-10-01: the measurement stands, the
   // framing does not. The CONTAINER path never renders `.ds-stepper-step`;
   // the STANDALONE public path does, with its clickable paint. Not dead paint.
-  it('NO ROW, TWO PATHS: stepper-compounds has no row; the Modern Stepper container never renders `.ds-stepper-step`, the standalone StepperStep does', () => {
-    assert.equal(REAL_RENDER_MOUNTS['stepper-compounds'], undefined);
+  // The row that joined on 2026-10-03 mounts the standalone path and no other.
+  it('ONE ROW, TWO PATHS: the stepper-compounds row is the standalone StepperStep; the Modern Stepper container never renders `.ds-stepper-step`', () => {
+    const row = REAL_RENDER_MOUNTS['stepper-compounds'];
+    assert.deepEqual([...row.axes], ['states']);
+    assert.equal(row.state.source, 'src/components/primitives/navigation/stepper/compound/step/index.tsx');
+    assert.match(row.markup, /^<div class="ds-stepper-step" role="button" tabindex="0" data-part="item"/u);
+    // `data-part="item"` is literal and `data-state` comes from `serializeState`:
+    // no `partAttributes` spread, so the stamp contract leaves the row to forcing.
+    assert.deepEqual(probe.realRenderStampedParts(row), []);
     const engine = readFileSync(join(ROOT, 'src/components/primitives/navigation/stepper/engines/modern/index.tsx'), 'utf8');
     assert.ok(!engine.includes('ds-stepper-step'), 'the Modern Stepper container now writes .ds-stepper-step -- re-measure the container path');
     assert.ok(!engine.includes('<StepperStep'), 'the Modern Stepper container now renders StepperStep -- re-measure the container path');
@@ -3651,15 +3662,22 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     assert.ok(failures.some((line) => line.includes('witness moved 13 and published 13 id(s) / 12 famil(ies)')), failures.join(' | '));
   });
 
-  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 8 on states, 0 elsewhere', () => {
+  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 9 on states, 0 elsewhere', () => {
     const live = axisUnobservable(ROOT);
     const asRun = Object.fromEntries(AXIS_IDS.map((axis) => [axis, live.get(axis)]));
     assert.deepEqual(unobservableDrift(asRun), []);
     // Movers of the pin (8 -> 9, STATES-K 2026-10-01): record-facts and scope-switcher
     // leave with the population; edit-fields, table-toolbar and form-builder enter with it.
     // 9 -> 8 (OVM 2026-10-02): overlay-modal-compounds leaves with its retired orphan rules.
-    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 8);
-    assert.deepEqual(Object.values(UNOBSERVABLE_FAMILIES.states).filter((kind) => kind === 'colour-only').length, 5);
+    // 8 -> 9 (2026-10-03): approval-inbox enters colour-only -- 0c9b89be0 retired its one non-chromatic state paint.
+    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 9);
+    assert.deepEqual(Object.entries(UNOBSERVABLE_FAMILIES.states).filter(([, kind]) => kind === 'colour-only').map(([family]) => family),
+      ['approval-inbox', 'edit-fields', 'list', 'metrics-chart', 'operational-ledger', 'table-toolbar']);
+    assert.equal(UNOBSERVABLE_FAMILIES.states['approval-inbox'], 'colour-only');
+    // moderation-gallery had the same repair and is NOT here: its card rules still write read properties under a state.
+    assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'moderation-gallery'), false);
+    assert.ok(!live.get('states').some((entry) => entry.family === 'moderation-gallery'));
+    assert.deepEqual(live.get('states').find((entry) => entry.family === 'approval-inbox').properties, ['background']);
     assert.deepEqual(Object.entries(UNOBSERVABLE_FAMILIES.states).filter(([, kind]) => kind === 'no-vocabulary').map(([family]) => family),
       ['button-group', 'form-builder', 'metrics-rows']);
     assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'surface-states'), false, 'its disabled opacity is read');
@@ -3681,6 +3699,29 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
       'states: badge is unobservable (colour-only) and not in UNOBSERVABLE_FAMILIES',
     )));
     assert.ok(!evaluate(result([cell()], { unobservable: entered, familiesFiltered: true })).some((line) => line.includes('UNOBSERVABLE')));
+  });
+
+  it('MUTANT: approval-inbox dropped from the pin while the TREE still derives it unobservable is RED -- reported, never subtracted', () => {
+    const live = axisUnobservable(ROOT);
+    const asRun = Object.fromEntries(AXIS_IDS.map((axis) => [axis, live.get(axis)]));
+    const { 'approval-inbox': dropped, ...rest } = UNOBSERVABLE_FAMILIES.states;
+    assert.equal(dropped, 'colour-only');
+    const shrunk = { ...UNOBSERVABLE_FAMILIES, states: rest };
+    assert.deepEqual(unobservableDrift(asRun, shrunk), [
+      'states: approval-inbox is unobservable (colour-only) and not in UNOBSERVABLE_FAMILIES -- re-pin it; it is reported, never subtracted',
+    ]);
+    // The same drift through the run's own door, on the shipped pin: a record that still names it is green, one that lost it is red.
+    assert.deepEqual(evaluate(result([cell()], { unobservable: asRun })).filter((line) => line.includes('UNOBSERVABLE')), []);
+    const lost = { ...asRun, states: asRun.states.filter((entry) => entry.family !== 'approval-inbox') };
+    assert.deepEqual(evaluate(result([cell()], { unobservable: lost })).filter((line) => line.includes('UNOBSERVABLE')), [
+      'states: approval-inbox is pinned unobservable (colour-only) and the probe can now observe it -- re-pin UNOBSERVABLE_FAMILIES',
+    ]);
+    // A pin entry of the wrong class is a third drift, named as such.
+    assert.deepEqual(unobservableDrift(asRun, { ...UNOBSERVABLE_FAMILIES, states: { ...rest, 'approval-inbox': 'no-vocabulary' } }), [
+      'states: approval-inbox is unobservable as colour-only, pinned as no-vocabulary',
+    ]);
+    // Pinned or not, it stays in the declared denominator.
+    assert.ok(axisPopulations(ROOT).get('states').includes('approval-inbox'));
   });
 });
 
@@ -4399,9 +4440,14 @@ describe('axis-difference — S10: the shape reach rows the SC1 census measured'
       'the recipe profiles\' tag radius overrides changed -- update the caveat on the tag row');
   });
 
-  it('CONTAINER PATH: every Stepper engine flattens Stepper.Step into items and drops onClick, so the clickable step is unreachable INSIDE a Stepper (and no row mounts one)', () => {
-    for (const row of Object.values(REAL_RENDER_MOUNTS)) assert.notEqual(row.family, 'stepper-compounds');
-    assert.equal(REAL_RENDER_MOUNTS['stepper-compounds'], undefined);
+  it('CONTAINER PATH: every Stepper engine flattens Stepper.Step into items and drops onClick, so the clickable step is unreachable INSIDE a Stepper (and no row mounts the container path)', () => {
+    // The one stepper-compounds row is the STANDALONE step: no row names a Stepper engine, and none declares shape.
+    for (const [key, row] of Object.entries(REAL_RENDER_MOUNTS)) {
+      if ((row.family ?? key) !== 'stepper-compounds') continue;
+      assert.equal(key, 'stepper-compounds');
+      assert.ok(!row.state.source.includes('/stepper/engines/'), 'a row mounts the container path, which never renders a clickable step');
+      assert.ok(!row.axes.includes('shape'), 'the S10 shape ruling stands: stepper-compounds has no shape row');
+    }
     for (const engine of ['modern', 'classic', 'rustic']) {
       const source = readFileSync(join(ROOT, `src/components/primitives/navigation/stepper/engines/${engine}/index.tsx`), 'utf8');
       assert.ok(source.includes("displayName === 'Stepper.Step'"), `${engine}: no longer flattens Stepper.Step -- re-measure the container path`);
@@ -4604,7 +4650,7 @@ describe('axis-difference CR-2 — the chromatic states reading stays apart', ()
       && line.includes('button(background-color)')));
   });
 
-  const chromaticResult = ({ chromaticOnly = ['data-table'], over = {}, cellOver = {}, extraCells = [] } = {}) => result([
+  const chromaticResult = ({ chromaticOnly = [], over = {}, cellOver = {}, extraCells = [] } = {}) => result([
     cell({ scenario: 'states', axis: 'states', moved: 118 }),
     ...extraCells,
   ], {
@@ -4612,7 +4658,7 @@ describe('axis-difference CR-2 — the chromatic states reading stays apart', ()
       properties: PURE,
       embedded: ['box-shadow', 'text-shadow', 'background-image'],
       scene: 'fixture',
-      pinnedChromaticOnly: ['data-table'],
+      pinnedChromaticOnly: [],
       cells: FLEET.map(([vertical, theme]) => ({
         vertical, theme, scenario: 'states', kind: 'positive', moved: 52, movedIds: [], restIsolated: 51,
         restIsolatedIds: [], byChannel: {}, halves: { stamped: 50, native: 43 }, families: {}, nonChromatic: 118,
@@ -4625,19 +4671,26 @@ describe('axis-difference CR-2 — the chromatic states reading stays apart', ()
   const chromaticFailures = (measurement, options) => evaluate(measurement, options)
     .filter((line) => /chromatic|CHROMATIC_ONLY_STATES|outside the six/u.test(line));
 
-  it('P4: the chromatic-only set is pinned by name -- data-table, in every states cell, both directions', () => {
-    assert.deepEqual([...probe.CHROMATIC_ONLY_STATES], ['data-table']);
+  it('P4: the chromatic-only set is pinned by name -- EMPTY since data-table left it, in every states cell, both directions', () => {
+    // Re-pinned ['data-table'] -> [] on 2026-10-03: the data-table-focus row
+    // reads its width-fed focus shadows, so it moves on the axis itself.
+    assert.deepEqual([...probe.CHROMATIC_ONLY_STATES], []);
     assert.deepEqual(chromaticFailures(chromaticResult()), []);
-    // THE LEAK FINGERPRINT: a merge would count data-table on states, so it
-    // stops being chromatic-only -- and the run is refused, cell by cell.
-    const leaked = chromaticFailures(chromaticResult({ chromaticOnly: [] }));
-    assert.equal(leaked.length, 6, leaked.join(' | '));
-    assert.match(leaked[0], /^bithire\/light data-table: pinned chromatic-only on states and it is not -- a states numerator that now counts it is the fingerprint/u);
-    const entered = chromaticFailures(chromaticResult({ chromaticOnly: ['data-table', 'tree'] }));
+    // DIRECTION 1, on the shipped pin: a family that moves by colour ALONE is
+    // refused, cell by cell -- data-table itself if it stops moving on the axis.
+    const back = chromaticFailures(chromaticResult({ chromaticOnly: ['data-table'] }));
+    assert.equal(back.length, 6, back.join(' | '));
+    assert.match(back[0], /^bithire\/light data-table: moves on states by colour ALONE and is not in CHROMATIC_ONLY_STATES/u);
+    const entered = chromaticFailures(chromaticResult({ chromaticOnly: ['tree'] }));
     assert.equal(entered.length, 6);
     assert.match(entered[0], /tree: moves on states by colour ALONE and is not in CHROMATIC_ONLY_STATES/u);
+    // DIRECTION 2, THE LEAK FINGERPRINT: a pinned family a merge counted on
+    // states stops being chromatic-only -- and the run is refused, cell by cell.
+    const leaked = chromaticFailures(chromaticResult({ chromaticOnly: [] }), { chromaticOnlyStates: ['data-table'] });
+    assert.equal(leaked.length, 6, leaked.join(' | '));
+    assert.match(leaked[0], /^bithire\/light data-table: pinned chromatic-only on states and it is not -- a states numerator that now counts it is the fingerprint/u);
     // A --families run measures a subset; the pin is a fleet fact.
-    assert.deepEqual(chromaticFailures({ ...chromaticResult({ chromaticOnly: [] }), familiesFiltered: true }), []);
+    assert.deepEqual(chromaticFailures({ ...chromaticResult({ chromaticOnly: ['tree'] }), familiesFiltered: true }), []);
     assert.deepEqual(chromaticFailures(chromaticResult({ chromaticOnly: ['tree'] }), { chromaticOnlyStates: ['tree'] }), []);
   });
 
@@ -4654,8 +4707,12 @@ describe('axis-difference CR-2 — the chromatic states reading stays apart', ()
   });
 });
 
-describe('axis-difference CR-2 BROWSER drill — the chromatic reading is always taken, and data-table moves by colour alone', { skip: browserReason }, () => {
-  it('data-table: a states non-mover on the six axes, a chromatic mover, named chromatic-only; a null pair reads 0 chromatic', async () => {
+describe('axis-difference CR-2 BROWSER drill — the chromatic reading is always taken, and data-table\'s DEFAULT mount moves by colour alone', { skip: browserReason }, () => {
+  // Read WITHOUT the real-render mounts: since 2026-10-03 the data-table-focus
+  // row moves the family on the axis itself (drilled in the states-reach
+  // block), so the colour-alone reading is the default mount's, and this drill
+  // keeps proving that colour there never reaches the states numerator.
+  it('data-table default mount: a states non-mover on the six axes, a chromatic mover, named chromatic-only; a null pair reads 0 chromatic', async () => {
     const states = SCENARIOS.find((scenario) => scenario.id === 'states');
     const families = ['data-table', 'button', 'tag'];
     const measurement = await run({
@@ -4663,11 +4720,12 @@ describe('axis-difference CR-2 BROWSER drill — the chromatic reading is always
       themes: ['light'],
       families,
       scenarios: [states, { ...states, id: 'null-states', b: states.a }],
+      realRenderMounts: false,
     });
     assert.deepEqual(measurement.refusals, [], JSON.stringify(measurement.refusals));
     const block = measurement.chromaticStates;
     assert.ok(block, 'the run took no chromatic states reading; it has no flag and is always on');
-    assert.deepEqual(block.pinnedChromaticOnly, ['data-table']);
+    assert.deepEqual(block.pinnedChromaticOnly, []);
     const axisCell = measurement.cells.find((entry) => entry.scenario === 'states' && entry.axis === 'states');
     const chromatic = block.cells.find((entry) => entry.scenario === 'states');
     assert.ok(!axisCell.movedIds.includes('data-table'), 'data-table moved on the states AXIS: colour leaked into a numerator');
@@ -4680,4 +4738,192 @@ describe('axis-difference CR-2 BROWSER drill — the chromatic reading is always
     assert.equal(nullChromatic.moved, 0, JSON.stringify(nullChromatic.families));
     assert.deepEqual(evaluate(measurement).filter((line) => /chromatic/iu.test(line)), []);
   }, 600_000);
+});
+
+/**
+ * THE STATES REACH ROWS (2026-10-03). Four rows mount a public render whose
+ * skin already reads a states dial on a node the default scene does not hold.
+ * Each drill below is a way the lot could have made the number friendlier:
+ * a row for a render that does not exist, a row credited for a palette move,
+ * a row for a family the law refuses, a second states row.
+ */
+describe('axis-difference — the states reach rows: real public renders, and only where the law admits them', () => {
+  const ROWS = {
+    'data-table-focus': { family: 'data-table', stamped: ['body-row', 'header-cell'] },
+    'input-compounds': { family: 'input-compounds', stamped: ['root'] },
+    'stepper-compounds': { family: 'stepper-compounds', stamped: [] },
+    'chart-foundation': { family: 'chart-foundation', stamped: [] },
+  };
+  const skin = (family) => skinFamilies(ROOT).get(family).map((file) => readFileSync(file, 'utf8')).join('\n');
+
+  it('each row declares states alone, on a family in the states population, passes the door on its own, and is stamped only where the kernel stamps', () => {
+    const states = axisPopulations(ROOT).get('states');
+    for (const [row, expected] of Object.entries(ROWS)) {
+      const entry = REAL_RENDER_MOUNTS[row];
+      assert.ok(entry !== undefined, `${row} has no roster row`);
+      assert.deepEqual([...entry.axes], ['states'], row);
+      assert.equal(entry.family ?? row, expected.family, row);
+      assert.ok(states.includes(expected.family), row);
+      assert.deepEqual(realRenderRosterFailures(ROOT, { [row]: entry }), [], row);
+      assert.deepEqual(probe.realRenderStampedParts(entry), expected.stamped, row);
+    }
+    // data-table keeps its depth row; the states row is a second, disjoint one.
+    assert.deepEqual([...REAL_RENDER_MOUNTS['data-table-actions'].axes], ['depth']);
+  });
+
+  it('each row reads a rule its family skin ships: the selector the mounted node answers, and the dial it reads', () => {
+    const dataTable = skin('data-table');
+    assert.match(dataTable, /\[data-part="body-row"\]:is\(\[data-state~="focus-visible"\], :focus-visible\) > td \{\s*box-shadow: var\(\s*--ds-table-row-focus-shadow,\s*inset 0 0 0 var\(--ds-focus-ring-width, 2px\)/u);
+    assert.match(dataTable, /\[data-part="header-cell"\]\[data-sortable="true"\]:is\(\[data-state~="focus-visible"\], :focus-visible\) \{\s*outline: none;\s*box-shadow: var\(\s*--ds-data-table-header-focus-shadow,\s*inset 0 0 0 var\(--ds-focus-ring-width, 2px\)/u);
+    assert.match(skin('input-compounds'), /\.ds-input-textarea\[data-part='root'\]\[data-disabled='true'\] \[data-part='control'\] \{[^}]*opacity: var\(--ds-input-disabled-opacity, var\(--ds-state-disabled-opacity\)\);/u);
+    const stepper = skin('stepper-compounds');
+    assert.match(stepper, /\.ds-stepper-step\[data-clickable='true'\]:is\(\[data-state~='focus-visible'\], :focus-visible\) \{\s*outline: none;\s*box-shadow: var\(--ds-stepper-focus-ring, var\(--ds-focus-ring\)\);/u);
+    assert.match(stepper, /\.ds-stepper-step\[data-clickable='true'\]:is\(\[data-state~='pressed'\], :active\) \[data-part='icon'\] \{[^}]*transform: var\(--ds-stepper-pressed-transform\);/u);
+    assert.match(skin('chart-foundation'), /\[data-part='data-trigger'\]:focus-visible,[^{]*\{\s*outline: var\(--ds-focus-ring-width, 2px\) solid[^;]*;\s*outline-offset: var\(--ds-focus-ring-offset, 2px\);/u);
+  });
+
+  it('MUTANT: a row whose mounted render does not exist is RED -- a missing engine file, a retired gate, a fabricated node', () => {
+    for (const row of Object.keys(ROWS)) {
+      const entry = REAL_RENDER_MOUNTS[row];
+      const gone = realRenderRosterFailures(ROOT, { [row]: { ...entry, state: { ...entry.state, source: entry.state.source.replace('/index.tsx', '/retired/index.tsx') } } });
+      assert.ok(gone.some((line) => line === `${row}: ${entry.state.source.replace('/index.tsx', '/retired/index.tsx')} does not exist`), `${row}: ${gone.join(' | ')}`);
+      // The engine stops rendering the configuration: every gate the row names is gone from the source it is read in.
+      const retired = realRenderRosterFailures(ROOT, { [row]: entry }, {
+        readSource: (file) => {
+          const text = readFileSync(file, 'utf8');
+          return file.endsWith(entry.state.source) ? entry.state.anchors.reduce((source, anchor) => source.replaceAll(anchor, ''), text) : text;
+        },
+      });
+      for (const anchor of entry.state.anchors) {
+        assert.ok(retired.some((line) => line === `${row}: ${entry.state.source} no longer carries the gate \`${anchor}\``), `${row}: ${retired.join(' | ')}`);
+      }
+      // A node the engine never writes, added to make a rule match.
+      const fabricated = realRenderRosterFailures(ROOT, { [row]: { ...entry, markup: `${entry.markup}<div data-part="focus-ring-probe"></div>` } });
+      assert.ok(fabricated.some((line) => line.startsWith(`${row}: \`attr:data-part=focus-ring-probe\` is not written by`)), `${row}: ${fabricated.join(' | ')}`);
+    }
+    // And `run` refuses to mount such a roster at all (drilled in the browser block on `skeleton`).
+  });
+
+  it('MUTANT: the stepper row moved onto the CONTAINER path, which never renders a clickable step, is RED', () => {
+    const entry = REAL_RENDER_MOUNTS['stepper-compounds'];
+    const container = {
+      ...entry,
+      state: { ...entry.state, source: 'src/components/primitives/navigation/stepper/engines/modern/index.tsx' },
+    };
+    const failures = realRenderRosterFailures(ROOT, { 'stepper-compounds': container });
+    assert.ok(failures.some((line) => line.includes('no longer carries the gate `const isClickable = Boolean(onClick) && !disabled;`')), failures.join(' | '));
+    assert.ok(failures.some((line) => line.startsWith('stepper-compounds: `class:ds-stepper-step` is not written by')), failures.join(' | '));
+  });
+
+  it('LAW: a second states row for a family is refused -- the compact Input.Group seam cannot ride beside the TextArea row', () => {
+    const second = { ...REAL_RENDER_MOUNTS['input-compounds'], family: 'input-compounds' };
+    const failures = realRenderRosterFailures(ROOT, { 'input-compounds': REAL_RENDER_MOUNTS['input-compounds'], 'input-compounds-group': second });
+    assert.ok(failures.some((line) => line.startsWith('input-compounds: 2 rows declare states (input-compounds, input-compounds-group) -- at most one row per family may')), failures.join(' | '));
+  });
+
+  it('NOT ROWS, by the law as it stands: a pseudo inside :has(), and a family that owns no state rule', () => {
+    for (const family of ['decision-comparison', 'field-filters-panel']) {
+      for (const [row, entry] of Object.entries(REAL_RENDER_MOUNTS)) assert.notEqual(entry.family ?? row, family, row);
+    }
+    // search-command-bar keeps its resting row; it gained no states declaration.
+    assert.ok(!REAL_RENDER_MOUNTS['search-command-bar'].axes.includes('states'));
+    // decision-comparison: the ring is on the ROOT, conditioned on the viewport's focus through :has().
+    const has = stateRuleProbes(skin('decision-comparison')).filter((entry) => entry.selector.includes(':has('));
+    assert.ok(has.length >= 2, `${has.length} :has() state rule(s)`);
+    for (const entry of has) {
+      assert.match(entry.selector, /\[data-part="root"\]:has\(\s*> \.ds-decision-comparison__viewport:focus-visible\s*\)/u);
+      assert.equal(entry.vocabulary, 'native');
+      assert.equal(entry.reason, 'pseudo-inside-has', entry.selector);
+    }
+    // The viewport's own focus rule is reachable and writes `outline: none` -- a literal, no dial.
+    const own = stateRuleProbes(skin('decision-comparison')).filter((entry) => !entry.selector.includes(':has(') && entry.selector.includes('__viewport:focus-visible'));
+    assert.ok(own.length >= 1 && own.every((entry) => entry.reason === null));
+    // The two composed families own NO state rule: their only states declaration is a channel on a resting selector.
+    for (const family of ['field-filters-panel', 'search-command-bar']) {
+      assert.deepEqual(stateRuleProbes(skin(family)), [], family);
+      assert.match(skin(family), /--ds-button-focus-ring: var\(/u, family);
+    }
+  });
+
+  it('A ROW CANNOT CREDIT A PALETTE-ONLY MOVE: a real render whose ring changes COLOUR alone does not qualify, under either half', () => {
+    const ring = (colour, width) => ({ 'box-shadow': `${colour} 0px 0px 0px ${width} inset`, opacity: '1' });
+    const still = { 'box-shadow': 'none', opacity: '1' };
+    const reading = (real, half, state) => ({
+      base: {},
+      [half]: { [state]: { f: { ...still, ...real }, [`f${REAL_RENDER_KEY.default}`]: still, [`f${REAL_RENDER_KEY.real}`]: real } },
+    });
+    for (const [half, state] of [['states', 'focus-visible'], ['native', 'focus-visible']]) {
+      const qualify = (before, after) => probe.realRenderQualification({
+        before: reading(before, half, state), after: reading(after, half, state), family: 'f', axis: 'states',
+      });
+      const palette = qualify(ring('rgb(10, 20, 200)', '2px'), ring('rgb(200, 20, 10)', '2px'));
+      assert.equal(palette.qualified, false, `${half}: a recoloured ring qualified a row`);
+      assert.match(palette.reason, /the real render does not move on states under either half/u);
+      assert.deepEqual(qualify(ring('rgb(10, 20, 200)', '2px'), ring('rgb(10, 20, 200)', '1px')), { qualified: true }, `${half}: the dialed width did not qualify`);
+      // The numerator reads the same law: colour alone is no difference on either half.
+      assert.deepEqual(
+        statesHalves(reading(ring('rgb(10, 20, 200)', '2px'), half, state), reading(ring('rgb(200, 20, 10)', '2px'), half, state), 'f'),
+        { stamped: null, native: null },
+      );
+    }
+  });
+});
+
+describe('axis-difference BROWSER drill — the states reach rows move states through their mount, and only through it', { skip: browserReason }, () => {
+  const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
+  const scenarios = [byId('states'), byId('palette-only')];
+  const families = ['chart-foundation', 'data-table', 'input-compounds', 'stepper-compounds'];
+  const cellOf = (measurement, id) => measurement.cells.find((entry) => entry.scenario === id && entry.axis === 'states');
+
+  it('all four move on states with the row and none without; palette-only reads every mount and stays 0; data-table leaves chromatic-only', async () => {
+    const on = await run({ verticals: ['bithire'], themes: ['light'], families, scenarios });
+    const off = await run({ verticals: ['bithire'], themes: ['light'], families, scenarios, realRenderMounts: false });
+    const states = cellOf(on, 'states');
+    assert.deepEqual(states.realRender.refused, []);
+    assert.deepEqual([...states.realRender.rescued].sort(), families, JSON.stringify(states.realRender));
+    assert.deepEqual(cellOf(off, 'states').movedIds, [], 'a family moved on states without its mount');
+    assert.deepEqual(Object.fromEntries(states.movedFamilies.map((entry) => [entry.family, entry.property])), {
+      'chart-foundation': 'outline-width',
+      'data-table': 'box-shadow',
+      'input-compounds': 'opacity',
+      'stepper-compounds': 'transform',
+    });
+    // THE CONTROL: the same four mounts, read under the palette-only pair.
+    const control = cellOf(on, 'palette-only');
+    assert.equal(control.evidential, true, control.nonEvidentialReason);
+    assert.deepEqual([...control.realRender.credited].sort(), families, 'the control did not read the mounts its positive credited');
+    assert.equal(control.moved, 0, JSON.stringify(control.movedFamilies));
+    assert.equal(control.movedStamped, 0);
+    assert.equal(control.movedNative, 0);
+    for (const entry of on.cells.filter((item) => item.kind === 'negative')) assert.equal(entry.moved, 0, `${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
+    assert.deepEqual(on.populations, off.populations, 'a mount may move a numerator, never a denominator');
+    // The stamp reaches the kernel-stamped parts; the literal ones are reached by forcing alone.
+    assert.equal(on.realRender.map['data-table-focus'].statesReach.stamped > 0, true);
+    assert.equal(on.realRender.map['input-compounds'].statesReach.stamped > 0, true);
+    assert.equal(on.realRender.map['stepper-compounds'].statesReach.stamped, 0);
+    assert.equal(on.realRender.map['chart-foundation'].statesReach.stamped, 0);
+    assert.equal(on.realRender.map['stepper-compounds'].statesReach.native > 0, true);
+    assert.equal(on.realRender.map['chart-foundation'].statesReach.native > 0, true);
+    // data-table: chromatic-only on its default mount, a mover on the axis with the row.
+    const chromatic = (measurement) => measurement.chromaticStates.cells.find((entry) => entry.scenario === 'states');
+    assert.deepEqual(chromatic(off).chromaticOnly, ['data-table']);
+    assert.deepEqual(chromatic(on).chromaticOnly, []);
+    assert.deepEqual(evaluate(on), []);
+  }, 360_000);
+
+  it('MUTANT: a row mounted WITHOUT the node that reads the dial is REFUSED by law 3 and fails the run -- never a quieter number', async () => {
+    const entry = REAL_RENDER_MOUNTS['chart-foundation'];
+    const hollow = { ...entry, markup: '<section class="ds-chart-data-access" data-part="chart-data-access" data-state="closed"></section>' };
+    assert.deepEqual(realRenderRosterFailures(ROOT, { 'chart-foundation': hollow }), [], 'the hollow mount omits, it does not fabricate');
+    const measurement = await run({
+      verticals: ['bithire'], themes: ['light'], families: ['chart-foundation'], scenarios,
+      realRenderRoster: { ...REAL_RENDER_MOUNTS, 'chart-foundation': hollow },
+    });
+    const states = cellOf(measurement, 'states');
+    const refusal = states.realRender.refused.find((item) => item.family === 'chart-foundation');
+    assert.ok(refusal, JSON.stringify(states.realRender));
+    assert.match(refusal.reason, /the real render does not move on states under either half/u);
+    assert.ok(!states.movedIds.includes('chart-foundation'));
+    assert.ok(evaluate(measurement).some((line) => line.startsWith('chart-foundation: its real-render mount was REFUSED on states in bithire/light states')));
+  }, 240_000);
 });

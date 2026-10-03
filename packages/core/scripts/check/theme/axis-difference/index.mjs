@@ -1211,8 +1211,8 @@ const FLOAT_BUTTON_CONTRACT = 'src/components/primitives/navigation/float-button
  * path, because every Stepper engine flattens `Stepper.Step` children into
  * items and drops their `onClick`, so `.ds-stepper-step[data-clickable]` is
  * never rendered INSIDE a Stepper. Both paths are pinned in the suite and
- * measured in the stepper family tests; whether the standalone path joins
- * this roster is the DT's row decision, not this file's.
+ * measured in the stepper family tests; the standalone path joined the roster
+ * as a STATES row on 2026-10-03 (`STATES_REACH_ROWS`), never a shape one.
  * Each row declares shape alone, so every other axis reads as before.
  */
 const SHAPE_REACH_ROWS = Object.freeze({
@@ -1422,6 +1422,160 @@ const TOOLTIP_ENGINE = 'src/components/primitives/display/tooltip/engines/modern
 const TOOLTIP_CONTRACT = 'src/components/primitives/display/tooltip/contracts/index.ts';
 const DROPDOWN_ENGINE = 'src/components/primitives/overlay/dropdown/engines/modern/index.tsx';
 const DROPDOWN_CONTRACT = 'src/components/primitives/overlay/dropdown/contracts/index.ts';
+
+const DATA_TABLE_ENGINE = 'src/components/patterns/data/data-table/engines/modern/index.tsx';
+const TEXT_AREA_ENGINE = 'src/components/primitives/inputs/input/compound/text-area/index.tsx';
+const STEPPER_STEP_ENGINE = 'src/components/primitives/navigation/stepper/compound/step/index.tsx';
+const CHART_DATA_ACCESS = `${CHARTS_ROOT}/runtime/chart-engine/presentation/react/access/index.tsx`;
+
+/**
+ * THE STATES REACH ROWS (2026-10-03, WO-EVI-02). Four families whose skin
+ * already reads a states dial on a node the default scene does not hold, each
+ * mounted as the public render that carries it and declaring states alone, so
+ * every resting axis reads as before. Law 3 still decides each cell in the
+ * browser; a row is a reach claim, never a credit.
+ *
+ * NOT ROWS, by the law as it stands: decision-comparison's ring is painted on
+ * the root under `:has(> viewport:focus-visible)` -- a pseudo inside `:has()`
+ * is a condition on a node the pass does not read (`withoutForcedPseudos`),
+ * and the rule has no stamp twin; field-filters-panel and search-command-bar
+ * own no state rule at all (they feed `--ds-button-focus-ring` to a composed
+ * Button, whose paint is the Button's); input-compounds' compact-group seam is
+ * a sibling relation over a composed Input, and a second states row is
+ * refused by the single-states-row law.
+ */
+const STATES_REACH_ROWS = Object.freeze({
+  'data-table-focus': Object.freeze({
+    family: 'data-table',
+    state: Object.freeze({
+      name: 'a default DataTable with one sortable column and one body row -- the sortable header cell and the body row are the '
+        + 'kernel-stamped tab stops, and their focus shadows (the header cell itself; the row\'s `> td`) read '
+        + '`--ds-focus-ring-width` (the wrappers between root and table are omitted: the rules are descendant matches)',
+      source: DATA_TABLE_ENGINE,
+      anchors: Object.freeze(['{...partAttributes("header-cell", part.state)}', '{...partAttributes("body-row", part.state)}']),
+      resolves: Object.freeze([
+        Object.freeze({ source: 'src/foundation/contracts/runtime/components/patterns/core/index.ts', text: 'sortable?: boolean;' }),
+      ]),
+    }),
+    axes: Object.freeze(['states']),
+    markup: '<div class="ds-pattern-data-table ds-engine-modern" data-part="root"><table data-part="table">'
+      + '<thead data-part="table-head"><tr data-part="header-row">'
+      + '<th role="columnheader" tabindex="0" data-sortable="true" data-part="header-cell">Name</th></tr></thead>'
+      + '<tbody><tr tabindex="0" role="row" data-part="body-row"><td data-part="data-cell">Ada</td></tr></tbody></table></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-part=header-cell', stamp: '{...partAttributes("header-cell", part.state)}' }),
+      Object.freeze({ token: 'attr:data-part=body-row', stamp: '{...partAttributes("body-row", part.state)}' }),
+      Object.freeze({ token: 'attr:data-sortable=true', stamp: 'data-sortable={col.sortable ? "true" : undefined}' }),
+      Object.freeze({
+        token: 'attr:tabindex=0',
+        stamp: Object.freeze(['tabIndex={col.sortable ? 0 : undefined}', 'activeRowIndex < 0']),
+        resolves: Object.freeze([Object.freeze({ source: DATA_TABLE_ENGINE, text: 'const [activeRowIndex, setActiveRowIndex] = useState<number>(-1);' })]),
+      }),
+    ]),
+  }),
+  'input-compounds': Object.freeze({
+    state: Object.freeze({
+      name: 'a default Input.TextArea (outline, md) -- its root is kernel-stamped and a disabled TextArea writes `data-disabled="true"` on '
+        + 'that same node, which is exactly the disabled stamp; the control then dims on `--ds-input-disabled-opacity`. '
+        + 'The mounted family root is the addon, which never contains a TextArea',
+      source: TEXT_AREA_ENGINE,
+      anchors: Object.freeze(["{...partAttributes('root', interaction)}", "data-disabled={disabled ? 'true' : undefined}"]),
+      resolves: Object.freeze([
+        Object.freeze({ source: 'src/components/primitives/inputs/input/index.ts', text: 'TextArea: InputTextArea,' }),
+      ]),
+    }),
+    axes: Object.freeze(['states']),
+    markup: '<div class="ds-input-textarea" data-part="root" data-size="md" data-variant="outline" data-resize="theme">'
+      + '<textarea data-part="control"></textarea></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-part=root', stamp: "{...partAttributes('root', interaction)}" }),
+      Object.freeze({
+        token: 'attr:data-size=md',
+        stamp: 'data-size={resolvedSize}',
+        resolves: Object.freeze([Object.freeze({ source: TEXT_AREA_ENGINE, text: "size = 'md'," })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-variant=outline',
+        stamp: 'data-variant={variant}',
+        resolves: Object.freeze([Object.freeze({ source: TEXT_AREA_ENGINE, text: "variant = 'outline'," })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-resize=theme',
+        stamp: "data-resize={resize === false ? 'none' : typeof resize === 'string' ? resize : 'theme'}",
+        resolves: Object.freeze([Object.freeze({ source: TEXT_AREA_ENGINE, text: 'resize = true,' })]),
+      }),
+    ]),
+  }),
+  'stepper-compounds': Object.freeze({
+    state: Object.freeze({
+      name: 'a standalone StepperStep given `onClick` (the public `Stepper.Step` rendered outside a Stepper; owner ruling 2026-10-01) -- the '
+        + 'step becomes a button, `data-clickable="true"`, the node the ring rule is gated on. It writes `data-state` through '
+        + '`serializeState`, not a `partAttributes` spread, so the stamp contract leaves it to forcing alone',
+      source: STEPPER_STEP_ENGINE,
+      anchors: Object.freeze(['const isClickable = Boolean(onClick) && !disabled;', 'data-clickable={isClickable || undefined}']),
+      resolves: Object.freeze([
+        Object.freeze({ source: 'src/components/primitives/navigation/stepper/index.tsx', text: 'Step: StepperStep,' }),
+      ]),
+    }),
+    axes: Object.freeze(['states']),
+    markup: '<div class="ds-stepper-step" role="button" tabindex="0" data-part="item" data-status="wait" data-clickable="true" '
+      + 'data-size="md" data-direction="horizontal" data-label-placement="horizontal">'
+      + '<div data-part="icon" data-variant="default"><span>1</span></div>'
+      + '<div data-part="content"><div data-part="label">Step</div></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:role=button', stamp: "role={onClick ? 'button' : undefined}" }),
+      Object.freeze({ token: 'attr:tabindex=0', stamp: 'tabIndex={isClickable ? 0 : undefined}' }),
+      Object.freeze({
+        token: 'attr:data-status=wait',
+        stamp: 'data-status={status}',
+        resolves: Object.freeze([Object.freeze({ source: STEPPER_STEP_ENGINE, text: "status = 'wait'," })]),
+      }),
+      Object.freeze({ token: 'attr:data-clickable=true', stamp: 'data-clickable={isClickable || undefined}' }),
+      Object.freeze({
+        token: 'attr:data-size=md',
+        stamp: 'data-size={size}',
+        resolves: Object.freeze([Object.freeze({ source: STEPPER_STEP_ENGINE, text: "size = 'md'," })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-direction=horizontal',
+        stamp: 'data-direction={direction}',
+        resolves: Object.freeze([Object.freeze({ source: STEPPER_STEP_ENGINE, text: "direction = 'horizontal'," })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-label-placement=horizontal',
+        stamp: 'data-label-placement={labelPlacement}',
+        resolves: Object.freeze([Object.freeze({ source: STEPPER_STEP_ENGINE, text: "labelPlacement = 'horizontal'," })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-variant=default',
+        stamp: 'data-variant={variant}',
+        resolves: Object.freeze([Object.freeze({ source: STEPPER_STEP_ENGINE, text: "variant = 'default'," })]),
+      }),
+    ]),
+  }),
+  'chart-foundation': Object.freeze({
+    state: Object.freeze({
+      name: 'a closed ChartDataAccess (the public accessible-data companion, `@rottay/design-system/charts/access`) -- its disclosure '
+        + 'trigger is the node the ring rule is gated on, and that ring reads `--ds-focus-ring-width` and `--ds-focus-ring-offset`; '
+        + 'the mounted family root is the chart tooltip, which never contains it',
+      source: CHART_DATA_ACCESS,
+      anchors: Object.freeze(['export function ChartDataAccess<TRow>({', 'data-part="data-trigger"']),
+      resolves: Object.freeze([
+        Object.freeze({ source: 'src/entrypoints/charts/access/index.ts', text: '  ChartDataAccess,' }),
+      ]),
+    }),
+    axes: Object.freeze(['states']),
+    markup: '<section class="ds-chart-data-access" data-part="chart-data-access" data-state="closed">'
+      + '<button type="button" data-part="data-trigger">View data</button></section>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-state=closed',
+        stamp: "data-state={open ? 'open' : 'closed'}",
+        resolves: Object.freeze([Object.freeze({ source: CHART_DATA_ACCESS, text: 'const [open, setOpen] = useState(false);' })]),
+      }),
+    ]),
+  }),
+});
 
 const SKELETON_ROWS_MARKUP = Array.from({ length: 4 }, () =>
   '<tr class="ds-skeleton-anatomy-rows" data-part="skeleton-row" data-loading="true" data-animation="shimmer" aria-hidden="true">'
@@ -3308,6 +3462,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   }),
   ...CHART_LEGEND_SHAPE_ROWS,
   ...SHAPE_REACH_ROWS,
+  ...STATES_REACH_ROWS,
 });
 
 /**
@@ -3397,6 +3552,14 @@ export function realRenderRefusedRowFailures(root = CORE_ROOT, {
  *
  * Re-pinned 9 -> 8 by the OVM orphan retirement (owner ruling 4, Fable
  * 2026-10-02): overlay-modal-compounds leaves the population with its rules.
+ *
+ * Re-pinned 8 -> 9 on bc5eb993b (2026-10-03): approval-inbox enters as
+ * colour-only. 0c9b89be0 retired its pattern-level outline over the composed
+ * Buttons, the one non-chromatic state paint it had; the nine state rules left
+ * write `background` alone. A product repair that lowers the states numerator,
+ * published by name. moderation-gallery (504e2fec8, the same repair) does NOT
+ * enter: its card rules still write `box-shadow`, `transform` and `opacity`
+ * under a state, so the probe observes it -- as a non-mover.
  */
 export const UNOBSERVABLE_FAMILIES = Object.freeze({
   shape: Object.freeze({}),
@@ -3404,6 +3567,7 @@ export const UNOBSERVABLE_FAMILIES = Object.freeze({
   rhythm: Object.freeze({}),
   depth: Object.freeze({}),
   states: Object.freeze({
+    'approval-inbox': 'colour-only',
     'button-group': 'no-vocabulary',
     'edit-fields': 'colour-only',
     'form-builder': 'no-vocabulary',
@@ -6252,14 +6416,22 @@ export const CHROMATIC_SCENE = 'the non-chromatic scene: root plus states-tagged
 
 /**
  * THE FAMILIES WHOSE ONLY STATES MOVEMENT IS CHROMATIC, pinned by name and
- * checked on a full run in every states cell, both directions. `data-table`
- * paints its `focus-visible` as a background tint and nothing else, so it is a
- * states NON-mover on the six axes and the one family a merge of this reading
- * would add: 118 -> 119 with `data-table` in `movedIds` is the fingerprint of a
- * leak, and this pin is what turns it into a failure. Re-pinned only with the
- * measurement, like `UNOBSERVABLE_FAMILIES`.
+ * checked on a full run in every states cell, both directions. A family named
+ * here is a states NON-mover on the six axes that a merge of this reading
+ * would add to the numerator, and the pin is what turns that leak into a
+ * failure. Re-pinned only with the measurement, like `UNOBSERVABLE_FAMILIES`.
+ *
+ * Re-pinned ['data-table'] -> [] on bc5eb993b (2026-10-03). The old entry said
+ * data-table paints `focus-visible` "as a background tint and nothing else";
+ * that was true of the nodes the default scene mounts and false of the skin:
+ * the sortable header cell and the focused row's `> td` paint an inset shadow
+ * whose spread is `--ds-focus-ring-width`. The `data-table-focus` real-render
+ * row mounts those two tab stops, the family moves on `box-shadow` in all six
+ * cells (2px -> 1px under ring -> glow) and at 0 under palette-only, so it is
+ * no longer chromatic-ONLY. The recipe reads the width alone: a pair that
+ * keeps the width (ring -> underline) would leave it a non-mover again.
  */
-export const CHROMATIC_ONLY_STATES = Object.freeze(['data-table']);
+export const CHROMATIC_ONLY_STATES = Object.freeze([]);
 
 /** The read set the chromatic reading adds to the run: what the six axes do not already read. */
 export function chromaticReadProperties() {
@@ -7407,6 +7579,11 @@ export async function run({
         excludedUnmountable: declared.filter((family) => unmountable.includes(family)).length,
         excludedUnsettled: declared.filter((family) => UNSETTLED_FAMILIES.includes(family)).length,
         effective: effective(axis).length,
+        // The same three sets BY NAME, so the indicator can publish who did not
+        // move and why without the raw record. Counts above are unchanged.
+        declaredFamilies: [...declared],
+        unmountableFamilies: declared.filter((family) => unmountable.includes(family)),
+        unsettledFamilies: declared.filter((family) => UNSETTLED_FAMILIES.includes(family)),
       }];
     })),
     refusals,

@@ -16,11 +16,14 @@ import {
   INDICATOR_PATH,
   EFFECTIVE_DEFINITION,
   REPRODUCTION_FLAGS,
+  NON_MOVER_CLASSES,
   axisReadings,
   buildIndicator,
   indicatorRefusal,
   negativeControlsOf,
   negativeTest,
+  nonMoverFailures,
+  nonMoversByClass,
   writeIndicator,
 } from '../index.mjs';
 
@@ -192,7 +195,7 @@ describe('tenant-difference-by-axis indicator', () => {
   it('publishes the unobservable count per axis beside the declared denominator, named, and never subtracts it', () => {
     const indicator = build(fleetResult({ states: 117 }));
     assert.equal(indicator.axes.states.declared, 155);
-    assert.equal(indicator.axes.states.unobservable, 8);
+    assert.equal(indicator.axes.states.unobservable, 9);
     assert.deepEqual(indicator.axes.states.unobservableFamilies.map((entry) => entry.family),
       Object.keys(UNOBSERVABLE_FAMILIES.states));
     assert.equal(indicator.axes.states.worstPercentDeclared, 75.5);
@@ -320,7 +323,7 @@ describe('tenant-difference-by-axis indicator', () => {
     assert.deepEqual(block.chromaticOnlyPinned, ['data-table']);
     assert.deepEqual(block.unreached, Object.entries(UNOBSERVABLE_FAMILIES.states)
       .filter(([, kind]) => kind === 'colour-only').map(([family]) => family));
-    assert.deepEqual(block.unreached, ['edit-fields', 'list', 'metrics-chart', 'operational-ledger', 'table-toolbar']);
+    assert.deepEqual(block.unreached, ['approval-inbox', 'edit-fields', 'list', 'metrics-chart', 'operational-ledger', 'table-toolbar']);
     // The controls: 36 + 12 = 48 non-chromatic cells at the law (not 54).
     assert.equal(block.controls['palette-only'].nonChromatic, '0 on 36/36 (the law)');
     assert.equal(block.controls['palette-only'].chromatic, 115);
@@ -329,7 +332,7 @@ describe('tenant-difference-by-axis indicator', () => {
     assert.equal(block.controls['states-emphasis-only'].chromatic, 22);
     assert.deepEqual(block.controls['states-emphasis-only'].channels, ['background-color']);
     assert.equal(block.line, 'chromatic-states (reported apart, never a status): 52/155 declared (33.5 %), 52/147 effective '
-      + '(35.4 %), every cell; rest-isolated 51; chromatic-only: data-table; unreached: 5 colour-only families; '
+      + '(35.4 %), every cell; rest-isolated 51; chromatic-only: data-table; unreached: 6 colour-only families; '
       + 'palette-only non-chromatic 0 on 36/36 | chromatic 115 (reference)');
     const keys = Object.keys(indicator);
     assert.equal(keys.indexOf('chromaticStates'), keys.indexOf('axes') + 1);
@@ -355,5 +358,118 @@ describe('tenant-difference-by-axis indicator', () => {
     assert.deepEqual(leaked.chromaticStates.chromaticOnly, []);
     assert.deepEqual(leaked.chromaticStates.chromaticOnlyPinned, ['data-table']);
     assert.match(leaked.chromaticStates.line, /chromatic-only: none/u);
+  });
+});
+
+/**
+ * THE NON-MOVERS BY NAME (2026-10-03). The artifact published counts; two lots
+ * that both read 118 could not be told apart without the raw record. The names
+ * are ADDED beside every existing field, and they may never move a status.
+ */
+describe('tenant-difference-by-axis indicator — the non-movers are published by name', () => {
+  // A small named fleet on states: ten declared, one unmountable, one unsettled,
+  // one unobservable, one that neither half reaches, one measured and still.
+  const DECLARED_IDS = ['approval-inbox', 'button', 'card', 'data-table', 'kbd', 'moderation-gallery', 'profile', 'tag', 'tooltip', 'tree'];
+  const MOVERS = ['button', 'data-table', 'tag', 'tooltip', 'tree'];
+  const named = ({ movedIn = () => MOVERS, declaredFamilies = DECLARED_IDS } = {}) => {
+    const result = fleetResult();
+    result.denominatorReconciliation.states = {
+      declared: declaredFamilies.length, excludedUnmountable: 1, excludedUnsettled: 1, effective: declaredFamilies.length - 2,
+      declaredFamilies: [...declaredFamilies], unmountableFamilies: ['profile'], unsettledFamilies: ['card'],
+    };
+    result.unobservable.states = [{ family: 'approval-inbox', class: 'colour-only', properties: ['background'] }];
+    result.nativePseudos = { reach: { neither: [{ family: 'approval-inbox', why: 'x' }, { family: 'kbd', why: 'native:no-node 5' }] } };
+    for (const cell of result.cells.filter((entry) => entry.axis === 'states' && entry.kind === 'positive')) {
+      const ids = movedIn(`${cell.vertical}/${cell.theme}`);
+      Object.assign(cell, { moved: ids.length, movedIds: [...ids], denominator: declaredFamilies.length - 2 });
+    }
+    return result;
+  };
+
+  it('every cell names declared minus moved, the axis names their union, and the classes partition it', () => {
+    const { states } = build(named()).axes;
+    assert.deepEqual(states.nonMovers, ['approval-inbox', 'card', 'kbd', 'moderation-gallery', 'profile']);
+    for (const cell of states.cells) {
+      assert.deepEqual(cell.nonMoverIds, ['approval-inbox', 'card', 'kbd', 'moderation-gallery', 'profile']);
+      assert.equal(cell.nonMoverIds.length, cell.declared - cell.moved);
+    }
+    assert.deepEqual(Object.keys(states.nonMoversByClass), [...NON_MOVER_CLASSES]);
+    assert.deepEqual(states.nonMoversByClass, {
+      unmountable: ['profile'],
+      unsettled: ['card'],
+      // Unobservable wins over unreached: the first class that names a family keeps it.
+      unobservable: ['approval-inbox'],
+      unreached: ['kbd'],
+      measuredNotMoving: ['moderation-gallery'],
+    });
+  });
+
+  it('a family that moves in five cells and not in the sixth IS an axis non-mover, named only in the cell that lost it', () => {
+    const { states } = build(named({ movedIn: (where) => (where === 'evnto/dark' ? MOVERS.filter((id) => id !== 'tree') : MOVERS) })).axes;
+    assert.ok(states.nonMovers.includes('tree'));
+    assert.deepEqual(states.nonMoversByClass.measuredNotMoving, ['moderation-gallery', 'tree']);
+    for (const cell of states.cells) {
+      assert.equal(cell.nonMoverIds.includes('tree'), cell.vertical === 'evnto' && cell.theme === 'dark', `${cell.vertical}/${cell.theme}`);
+    }
+  });
+
+  it('ADDED, NOT RENAMED: every field the artifact carried is still there with the same value, and no status reads the names', () => {
+    const before = build(fleetResult({ states: 118 }));
+    const withNames = named();
+    const after = build(withNames);
+    for (const axis of AXIS_IDS) {
+      for (const key of ['status', 'declared', 'effective', 'effectiveDefinition', 'populationLaw', 'excludedUnmountable', 'excludedUnsettled',
+        'notApplicable', 'unobservable', 'unobservableFamilies', 'worstPercentDeclared', 'worstPercentEffective', 'effectiveAtThreshold', 'cells']) {
+        assert.ok(Object.hasOwn(after.axes[axis], key), `${axis}.${key}`);
+        assert.ok(Object.hasOwn(before.axes[axis], key), `${axis}.${key}`);
+      }
+      assert.deepEqual(Object.keys(after.axes[axis]).filter((key) => !['nonMovers', 'nonMoversByClass'].includes(key)),
+        Object.keys(before.axes[axis]).filter((key) => !['nonMovers', 'nonMoversByClass'].includes(key)));
+    }
+    // Stripping the names from the run changes nothing the status is built from.
+    const stripped = structuredClone(withNames);
+    delete stripped.denominatorReconciliation.states.declaredFamilies;
+    const bare = build(stripped);
+    for (const key of ['value', 'met', 'target', 'negativeTest']) assert.equal(JSON.stringify(bare[key]), JSON.stringify(after[key]), key);
+    assert.equal(bare.axes.states.status, after.axes.states.status);
+    assert.equal(bare.axes.states.worstPercentDeclared, after.axes.states.worstPercentDeclared);
+    // A run that published no names publishes null, never a guessed list.
+    assert.equal(bare.axes.states.nonMovers, null);
+    assert.equal(bare.axes.states.nonMoversByClass, null);
+    for (const cell of bare.axes.states.cells) assert.equal(cell.nonMoverIds, null);
+    assert.equal(before.axes.states.nonMovers, null);
+  });
+
+  it('REPORTED, NEVER SUBTRACTED: naming a non-mover unobservable, unmountable or unsettled leaves the declared denominator and the percentage alone', () => {
+    const { states } = build(named()).axes;
+    assert.equal(states.declared, 10);
+    assert.equal(states.worstPercentDeclared, 50);
+    assert.equal(states.status, 'below-threshold');
+    const classed = NON_MOVER_CLASSES.flatMap((kind) => states.nonMoversByClass[kind]);
+    assert.equal(classed.length + MOVERS.length, states.declared, 'every declared family is a mover or a named non-mover');
+  });
+
+  it('MUTANT: names that disagree with the counts refuse the artifact', () => {
+    // A mover the declared list does not hold: the cell would name 5 non-movers for 10 - 6.
+    const ghost = named({ movedIn: () => [...MOVERS, 'not-declared'] });
+    assert.throws(() => build(ghost), /states bithire\/light: 5 non-mover\(s\) named for 10 declared - 6 moved/u);
+    // A declared list shorter than the declared count.
+    const short = named();
+    short.denominatorReconciliation.states.declaredFamilies = DECLARED_IDS.slice(1);
+    assert.throws(() => build(short), /4 non-mover\(s\) named for 10 declared - 5 moved/u);
+    // Classes that drop or invent a family.
+    const axes = axisReadings(named());
+    assert.deepEqual(nonMoverFailures(axes), []);
+    axes.states.nonMoversByClass = { ...axes.states.nonMoversByClass, unobservable: [] };
+    assert.deepEqual(nonMoverFailures(axes), ['states: the non-mover classes name 4 famil(ies) for 5 non-mover(s)']);
+    axes.states.nonMoversByClass = { ...axes.states.nonMoversByClass, unobservable: ['button'] };
+    assert.deepEqual(nonMoverFailures(axes), ['states: the non-mover classes name 5 famil(ies) for 5 non-mover(s)']);
+  });
+
+  it('reach is read on the states axis alone: another axis never classes a family unreached', () => {
+    const result = named();
+    assert.deepEqual(nonMoversByClass(result, 'shape', ['kbd']).unreached, []);
+    assert.deepEqual(nonMoversByClass(result, 'shape', ['kbd']).measuredNotMoving, ['kbd']);
+    assert.deepEqual(nonMoversByClass(result, 'states', ['kbd']).unreached, ['kbd']);
   });
 });

@@ -52,12 +52,41 @@ function expectedCells(result) {
   return result.verticals.flatMap((vertical) => result.themes.map((theme) => ({ vertical, theme })));
 }
 
+/**
+ * THE NON-MOVERS BY NAME (2026-10-03). A count cannot be diffed: 118 -> 118
+ * hid two families gained and two lost. Every declared family that did not
+ * move is named per cell, and per axis in exactly one class. The classes
+ * explain a non-mover; none of them is ever subtracted from the declared
+ * denominator, and no status reads them.
+ */
+export const NON_MOVER_CLASSES = Object.freeze(['unmountable', 'unsettled', 'unobservable', 'unreached', 'measuredNotMoving']);
+
+/** One axis's non-movers, classed in `NON_MOVER_CLASSES` order: the first class that names a family keeps it. */
+export function nonMoversByClass(result, axis, nonMovers) {
+  const row = result.denominatorReconciliation?.[axis] ?? {};
+  // Reach is read on the states axis alone: a family NEITHER half selects a state rule of.
+  const neither = axis === 'states' ? (result.nativePseudos?.reach?.neither ?? []).map((entry) => entry.family) : [];
+  const named = {
+    unmountable: row.unmountableFamilies ?? [],
+    unsettled: row.unsettledFamilies ?? [],
+    unobservable: (result.unobservable?.[axis] ?? []).map((entry) => entry.family),
+    unreached: neither,
+  };
+  const classes = Object.fromEntries(NON_MOVER_CLASSES.map((kind) => [kind, []]));
+  for (const family of nonMovers) {
+    const kind = NON_MOVER_CLASSES.find((entry) => named[entry]?.includes(family)) ?? 'measuredNotMoving';
+    classes[kind].push(family);
+  }
+  return classes;
+}
+
 /** `at-threshold` needs every (vertical, mode) cell present, evidential and at the bar on the declared denominator. */
 export function axisReadings(result, { threshold = INDICATOR_THRESHOLD } = {}) {
   const readings = {};
   for (const axis of AXIS_IDS) {
     const row = result.denominatorReconciliation?.[axis];
     const declared = row?.declared ?? 0;
+    const declaredIds = row?.declaredFamilies ?? null;
     const cells = expectedCells(result).map(({ vertical, theme }) => {
       const cell = result.cells.find((entry) => entry.kind === 'positive' && entry.axis === axis
         && entry.vertical === vertical && entry.theme === theme);
@@ -79,9 +108,17 @@ export function axisReadings(result, { threshold = INDICATOR_THRESHOLD } = {}) {
         effective: cell.denominator,
         percentDeclared: round(percent(cell.moved, declared)),
         percentEffective: round(percent(cell.moved, cell.denominator)),
+        // Null when the run did not publish the names; never a guessed list.
+        nonMoverIds: declaredIds === null || cell.movedIds === undefined
+          ? null
+          : declaredIds.filter((family) => !cell.movedIds.includes(family)).sort(),
       };
     });
     const measuredCells = cells.filter((cell) => cell.measured);
+    // A family is a non-mover of the AXIS when any measured cell leaves it out.
+    const nonMovers = measuredCells.length === 0 || measuredCells.some((cell) => cell.nonMoverIds === null)
+      ? null
+      : [...new Set(measuredCells.flatMap((cell) => cell.nonMoverIds))].sort();
     const unmeasured = cells.filter((cell) => !cell.measured);
     const worst = (key) => (measuredCells.length === 0
       ? null
@@ -109,6 +146,8 @@ export function axisReadings(result, { threshold = INDICATOR_THRESHOLD } = {}) {
       worstPercentEffective: worstEffective?.percentEffective ?? null,
       effectiveAtThreshold: unmeasured.length === 0 && worstEffective !== null
         && worstEffective.percentEffective >= threshold,
+      nonMovers,
+      nonMoversByClass: nonMovers === null ? null : nonMoversByClass(result, axis, nonMovers),
       cells,
     };
   }
@@ -313,8 +352,8 @@ export function chromaticStatesReading(result, negative) {
     worstPercentEffective: worst?.percentEffective ?? null,
     chromaticOnly,
     // Pinned by name in the instrument (`CHROMATIC_ONLY_STATES`) and refused on
-    // a full run if it drifts: data-table is a states NON-mover on the six axes,
-    // so a merge of this reading would add exactly it to the states numerator.
+    // a full run if it drifts: a family named here is a states NON-mover on the
+    // six axes, so a merge of this reading would add exactly it to the numerator.
     chromaticOnlyPinned: [...reading.pinnedChromaticOnly],
     // The worst cell's breakdown; every cell carries its own above.
     byChannel: worst === null ? {} : { ...worst.byChannel },
@@ -342,6 +381,30 @@ export function indicatorSeparationFailures(artifact) {
       for (const key of CHROMATIC_FORBIDDEN_KEYS) {
         if (Object.hasOwn(entry, key)) failures.push(`chromaticStates carries \`${key}\`; it is reported apart, never a status`);
       }
+    }
+  }
+  return failures;
+}
+
+/**
+ * THE NAMES AGREE WITH THE COUNTS, or the artifact is not built: a cell's
+ * non-mover list is exactly `declared - moved` long, and the per-axis classes
+ * partition the axis list -- every family once, none invented.
+ */
+export function nonMoverFailures(axes) {
+  const failures = [];
+  for (const [axis, reading] of Object.entries(axes)) {
+    for (const cell of reading.cells.filter((entry) => entry.measured && entry.nonMoverIds !== null)) {
+      const where = `${axis} ${cell.vertical}/${cell.theme}`;
+      if (cell.nonMoverIds.length !== cell.declared - cell.moved) {
+        failures.push(`${where}: ${cell.nonMoverIds.length} non-mover(s) named for ${cell.declared} declared - ${cell.moved} moved`);
+      }
+    }
+    if (reading.nonMovers === null) continue;
+    const classed = NON_MOVER_CLASSES.flatMap((kind) => reading.nonMoversByClass[kind]);
+    if (classed.length !== reading.nonMovers.length || new Set(classed).size !== classed.length
+      || classed.some((family) => !reading.nonMovers.includes(family))) {
+      failures.push(`${axis}: the non-mover classes name ${classed.length} famil(ies) for ${reading.nonMovers.length} non-mover(s)`);
     }
   }
   return failures;
@@ -383,7 +446,7 @@ export function buildIndicator(result, {
     // run read on each: evidence in the artifact, not only in a receipt.
     realRender: { statesRefused: result.realRender?.statesRefused ?? [] },
   };
-  const failures = indicatorSeparationFailures(artifact);
+  const failures = [...indicatorSeparationFailures(artifact), ...nonMoverFailures(axes)];
   if (failures.length > 0) throw new Error(`tenant-difference-by-axis: ${failures.join(' | ')}`);
   return artifact;
 }
