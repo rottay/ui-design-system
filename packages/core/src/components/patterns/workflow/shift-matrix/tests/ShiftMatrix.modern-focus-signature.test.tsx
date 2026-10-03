@@ -55,6 +55,10 @@ const paintsSolidOutline = (rule: Rule) =>
 const paintsFocusIndicator = (rule: Rule) =>
   /(^|[\s;])outline(-[a-z]+)?\s*:/.test(rule.body) || /--ds-(button-)?focus-ring/.test(rule.body);
 
+const REGION_HOST =
+  ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root']:has(> [data-part='table-region']:is([data-state~='focus-visible'], :focus-visible))";
+const REGION_FOCUS =
+  ".ds-pattern-shift-matrix.ds-engine-modern [data-part='table-region']:is([data-state~='focus-visible'], :focus-visible)";
 const CELL_FOCUS =
   ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible)";
 
@@ -81,14 +85,18 @@ describe('Modern ShiftMatrix — the assignable cell wears the tenant focus sign
     expect(focusRules.filter(paintsSolidOutline)).toEqual([]);
     expect(SKIN).not.toContain('--ds-focus-ring-color');
 
-    expect(focusRules.map((rule) => [rule.selector, declarations(rule.body)])).toEqual([
+    expect(
+      focusRules
+        .filter((rule) => rule.selector.startsWith(CELL_FOCUS))
+        .map((rule) => [rule.selector, declarations(rule.body)]),
+    ).toEqual([
       [
         `${CELL_FOCUS}::after`,
         [
           'position: absolute',
           'inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width))',
           "content: ''",
-          'border-radius: inherit',
+          'border-radius: max( 0px, calc(var(--_ds-button-resolved-radius) - var(--ds-focus-ring-offset) - var(--ds-focus-ring-width)) )',
           'box-shadow: var(--ds-focus-ring)',
           'pointer-events: none',
         ],
@@ -96,7 +104,57 @@ describe('Modern ShiftMatrix — the assignable cell wears the tenant focus sign
     ]);
   });
 
-  it('swaps the overlay for an inset system-colour outline in forced colors', () => {
+  it('keeps the scroll region a named tab stop that is a direct child of the clipping root', () => {
+    render(
+      <ModernShiftMatrix
+        roles={['Bartender']}
+        timeSlots={[{ label: '18:00-21:00', start: '18:00', end: '21:00' }]}
+        assignments={[{ role: 'Bartender', timeSlot: '18:00-21:00', assigned: 2, required: 3 }]}
+      />,
+    );
+
+    const region = screen.getByRole('region', { name: 'Shift coverage matrix' });
+    expect(region).toHaveAttribute('tabindex', '0');
+    expect(region.parentElement).toHaveAttribute('data-part', 'root');
+    expect(region.parentElement).toHaveClass('ds-pattern-shift-matrix', 'ds-engine-modern');
+  });
+
+  it('dresses the root in the signature while the clipped region holds focus', () => {
+    const regionRules = AUTHORED.filter(
+      (rule) => rule.selector.startsWith(REGION_HOST) || rule.selector === REGION_FOCUS,
+    );
+    expect(regionRules.filter(paintsSolidOutline)).toEqual([]);
+    expect(regionRules.map((rule) => [rule.selector, declarations(rule.body)])).toEqual([
+      [
+        REGION_HOST,
+        [
+          'outline: var(--ds-focus-ring-width) solid transparent',
+          'outline-offset: var(--ds-focus-ring-offset)',
+          'box-shadow: var(--ds-focus-ring)',
+        ],
+      ],
+      [REGION_HOST, ['box-shadow: var(--ds-focus-ring), var(--ds-elevation-1)']],
+      [
+        `${REGION_HOST}::after`,
+        [
+          'position: absolute',
+          'inset: 0',
+          'z-index: var(--_ds-shift-matrix-focus-z, 4)',
+          "content: ''",
+          'border-radius: inherit',
+          'box-shadow: var(--ds-focus-ring)',
+          'pointer-events: none',
+        ],
+      ],
+      [REGION_FOCUS, ['outline: none']],
+    ]);
+    // A `none` elevation would void the whole shadow list, signature included.
+    expect(SKIN.replace(/\s+/g, ' ')).toContain(
+      `@container not style(--ds-elevation-1: none) { ${REGION_HOST} { box-shadow: var(--ds-focus-ring), var(--ds-elevation-1); } }`,
+    );
+  });
+
+  it('swaps the overlays for system-colour outlines in forced colors', () => {
     expect(
       rulesOf(FORCED)
         .filter((rule) => /focus/.test(rule.selector))
@@ -110,6 +168,15 @@ describe('Modern ShiftMatrix — the assignable cell wears the tenant focus sign
         ],
       ],
       [`${CELL_FOCUS}::after`, ['box-shadow: none']],
+      [
+        REGION_HOST,
+        [
+          'outline: max(2px, var(--ds-focus-ring-width)) solid Highlight',
+          'outline-offset: var(--ds-focus-ring-offset)',
+          'box-shadow: none',
+        ],
+      ],
+      [`${REGION_HOST}::after`, ['box-shadow: none']],
     ]);
   });
 });
