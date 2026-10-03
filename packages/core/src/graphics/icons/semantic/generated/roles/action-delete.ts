@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.delete: Permanently remove an item. */
 export const ActionDeleteIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.delete",
-  componentName: "ActionDeleteIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

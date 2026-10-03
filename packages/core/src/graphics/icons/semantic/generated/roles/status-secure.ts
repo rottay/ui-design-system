@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.secure: Indicate a protected or trusted security state. */
 export const StatusSecureIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.secure",
-  componentName: "StatusSecureIcon",
   defaultRole: "status",
   defaultTone: "success",
-  autoMirror: false,
 });

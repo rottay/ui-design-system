@@ -7,7 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** communication.reply: Reply to a message or conversation. */
 export const CommunicationReplyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.reply",
-  componentName: "CommunicationReplyIcon",
   defaultRole: "control",
   autoMirror: true,
 });

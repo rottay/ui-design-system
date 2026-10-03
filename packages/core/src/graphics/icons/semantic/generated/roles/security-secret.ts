@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** security.secret: Represent protected secret material or a secret vault. */
 export const SecuritySecretIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "security.secret",
-  componentName: "SecuritySecretIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

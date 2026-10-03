@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.edit: Modify an existing item. */
 export const ActionEditIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.edit",
-  componentName: "ActionEditIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

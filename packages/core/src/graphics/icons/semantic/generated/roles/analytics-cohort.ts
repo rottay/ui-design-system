@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.cohort: Represent analysis of a related cohort. */
 export const AnalyticsCohortIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.cohort",
-  componentName: "AnalyticsCohortIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

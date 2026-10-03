@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.stream: Represent a continuous stream of data events. */
 export const DataStreamIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.stream",
-  componentName: "DataStreamIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

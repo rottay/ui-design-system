@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** compliance.audit: Represent a compliance audit or audit record. */
 export const ComplianceAuditIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "compliance.audit",
-  componentName: "ComplianceAuditIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

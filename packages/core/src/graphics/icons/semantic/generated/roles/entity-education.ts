@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** entity.education: Represent education, academic study, or a degree. */
 export const EntityEducationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "entity.education",
-  componentName: "EntityEducationIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

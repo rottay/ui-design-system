@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** content.note: Represent a note, annotation, or memo. */
 export const ContentNoteIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.note",
-  componentName: "ContentNoteIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

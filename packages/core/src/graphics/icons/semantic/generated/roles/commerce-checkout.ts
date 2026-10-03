@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** commerce.checkout: Represent completion of a commerce checkout. */
 export const CommerceCheckoutIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "commerce.checkout",
-  componentName: "CommerceCheckoutIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

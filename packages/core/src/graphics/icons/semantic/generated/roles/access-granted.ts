@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** access.granted: Indicate that access has been granted. */
 export const AccessGrantedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "access.granted",
-  componentName: "AccessGrantedIcon",
   defaultRole: "status",
   defaultTone: "success",
-  autoMirror: false,
 });

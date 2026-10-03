@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** entity.tag: Represent a classification tag or label. */
 export const EntityTagIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "entity.tag",
-  componentName: "EntityTagIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

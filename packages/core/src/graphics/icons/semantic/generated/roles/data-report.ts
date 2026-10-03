@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.report: Represent an analytical report or presentation. */
 export const DataReportIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.report",
-  componentName: "DataReportIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

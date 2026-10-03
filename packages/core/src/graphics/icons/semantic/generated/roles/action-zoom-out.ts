@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.zoom-out: Decrease the magnification of the current view. */
 export const ActionZoomOutIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.zoom-out",
-  componentName: "ActionZoomOutIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

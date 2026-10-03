@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** security.disabled: Indicate that a security control is disabled. */
 export const SecurityDisabledIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "security.disabled",
-  componentName: "SecurityDisabledIcon",
   defaultRole: "status",
   defaultTone: "muted",
-  autoMirror: false,
 });

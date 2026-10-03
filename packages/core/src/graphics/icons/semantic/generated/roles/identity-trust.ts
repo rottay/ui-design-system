@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** identity.trust: Represent an identity with an established trust relationship. */
 export const IdentityTrustIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "identity.trust",
-  componentName: "IdentityTrustIcon",
   defaultRole: "feature",
   defaultTone: "success",
-  autoMirror: false,
 });

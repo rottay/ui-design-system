@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.query: Represent a structured data query or query explorer. */
 export const DataQueryIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.query",
-  componentName: "DataQueryIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

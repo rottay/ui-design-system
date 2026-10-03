@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.version: Represent a committed version of a workflow. */
 export const WorkflowVersionIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.version",
-  componentName: "WorkflowVersionIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

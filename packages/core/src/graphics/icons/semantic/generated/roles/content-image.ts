@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** content.image: Represent still-image content. */
 export const ContentImageIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.image",
-  componentName: "ContentImageIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

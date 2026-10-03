@@ -7,7 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** commerce.delivery: Represent last-mile delivery of an order. */
 export const CommerceDeliveryIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "commerce.delivery",
-  componentName: "CommerceDeliveryIcon",
   defaultRole: "feature",
   autoMirror: true,
 });

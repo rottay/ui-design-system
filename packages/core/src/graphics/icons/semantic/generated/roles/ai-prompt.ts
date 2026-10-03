@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.prompt: Represent prompt text supplied to an AI system. */
 export const AiPromptIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.prompt",
-  componentName: "AiPromptIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.queue: Represent workflow work waiting in a queue. */
 export const WorkflowQueueIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.queue",
-  componentName: "WorkflowQueueIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

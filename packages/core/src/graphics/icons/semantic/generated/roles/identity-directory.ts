@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** identity.directory: Represent an identity directory or address book. */
 export const IdentityDirectoryIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "identity.directory",
-  componentName: "IdentityDirectoryIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

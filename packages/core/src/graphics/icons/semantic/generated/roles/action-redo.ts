@@ -7,7 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.redo: Reapply the most recently undone change. */
 export const ActionRedoIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.redo",
-  componentName: "ActionRedoIcon",
   defaultRole: "control",
   autoMirror: true,
 });

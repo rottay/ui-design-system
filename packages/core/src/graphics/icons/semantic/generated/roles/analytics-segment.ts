@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.segment: Represent a selected analytical segment. */
 export const AnalyticsSegmentIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.segment",
-  componentName: "AnalyticsSegmentIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

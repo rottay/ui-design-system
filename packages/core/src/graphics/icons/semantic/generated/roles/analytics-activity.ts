@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.activity: Represent measured analytical activity over time. */
 export const AnalyticsActivityIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.activity",
-  componentName: "AnalyticsActivityIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

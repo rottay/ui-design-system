@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** system.workflow: Represent an orchestrated sequence of steps. */
 export const SystemWorkflowIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "system.workflow",
-  componentName: "SystemWorkflowIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

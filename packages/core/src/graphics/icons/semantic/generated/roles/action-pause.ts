@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.pause: Temporarily suspend an active process. */
 export const ActionPauseIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.pause",
-  componentName: "ActionPauseIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

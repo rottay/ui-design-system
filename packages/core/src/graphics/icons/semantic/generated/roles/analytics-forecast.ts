@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.forecast: Represent a projected analytical trend or forecast. */
 export const AnalyticsForecastIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.forecast",
-  componentName: "AnalyticsForecastIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

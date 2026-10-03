@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** feedback.empty: Indicate that a surface contains no content. */
 export const FeedbackEmptyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "feedback.empty",
-  componentName: "FeedbackEmptyIcon",
   defaultRole: "status",
   defaultTone: "muted",
-  autoMirror: false,
 });

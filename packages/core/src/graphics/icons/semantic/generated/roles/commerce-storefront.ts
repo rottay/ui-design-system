@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** commerce.storefront: Represent a commerce storefront. */
 export const CommerceStorefrontIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "commerce.storefront",
-  componentName: "CommerceStorefrontIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

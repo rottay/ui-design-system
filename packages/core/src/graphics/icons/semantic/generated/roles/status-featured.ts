@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.featured: Mark featured, favorited, popular, or highly rated content. */
 export const StatusFeaturedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.featured",
-  componentName: "StatusFeaturedIcon",
   defaultRole: "status",
-  autoMirror: false,
 });

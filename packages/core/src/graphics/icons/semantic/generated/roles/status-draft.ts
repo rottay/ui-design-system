@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.draft: Indicate saved content awaiting publication or finalization. */
 export const StatusDraftIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.draft",
-  componentName: "StatusDraftIcon",
   defaultRole: "status",
   defaultTone: "muted",
-  autoMirror: false,
 });

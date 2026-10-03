@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** appearance.theme: Represent visual theme, skin, or white-label appearance customization. */
 export const AppearanceThemeIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "appearance.theme",
-  componentName: "AppearanceThemeIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

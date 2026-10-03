@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** billing.currency: Represent currency configuration or monetary denomination. */
 export const BillingCurrencyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "billing.currency",
-  componentName: "BillingCurrencyIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

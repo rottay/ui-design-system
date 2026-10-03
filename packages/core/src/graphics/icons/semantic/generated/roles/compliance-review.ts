@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** compliance.review: Represent a checklist-based compliance review. */
 export const ComplianceReviewIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "compliance.review",
-  componentName: "ComplianceReviewIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

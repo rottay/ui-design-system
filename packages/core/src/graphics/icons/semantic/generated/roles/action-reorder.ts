@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.reorder: Drag to reorder or move an item within a collection. */
 export const ActionReorderIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.reorder",
-  componentName: "ActionReorderIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

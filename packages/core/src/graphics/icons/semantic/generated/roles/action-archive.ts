@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.archive: Move an item out of the active set without deleting it. */
 export const ActionArchiveIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.archive",
-  componentName: "ActionArchiveIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

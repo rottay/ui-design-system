@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** navigation.settings: Navigate to settings or configuration. */
 export const NavigationSettingsIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.settings",
-  componentName: "NavigationSettingsIcon",
   defaultRole: "navigation",
-  autoMirror: false,
 });

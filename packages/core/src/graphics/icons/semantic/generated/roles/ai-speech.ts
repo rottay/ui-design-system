@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.speech: Represent AI speech input, output, or synthesis. */
 export const AiSpeechIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.speech",
-  componentName: "AiSpeechIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

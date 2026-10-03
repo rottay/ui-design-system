@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.reasoning: Represent AI reasoning or inference. */
 export const AiReasoningIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.reasoning",
-  componentName: "AiReasoningIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

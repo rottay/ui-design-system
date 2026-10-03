@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.vote: Cast or submit a vote or poll response. */
 export const ActionVoteIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.vote",
-  componentName: "ActionVoteIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

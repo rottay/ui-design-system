@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** billing.subscription: Represent a recurring billing subscription. */
 export const BillingSubscriptionIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "billing.subscription",
-  componentName: "BillingSubscriptionIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** entity.group: Represent a generic group of people. */
 export const EntityGroupIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "entity.group",
-  componentName: "EntityGroupIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

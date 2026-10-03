@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.heatmap: Represent a heatmap or density matrix. */
 export const AnalyticsHeatmapIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.heatmap",
-  componentName: "AnalyticsHeatmapIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** entity.persona: Represent a behavioral persona or character profile. */
 export const EntityPersonaIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "entity.persona",
-  componentName: "EntityPersonaIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

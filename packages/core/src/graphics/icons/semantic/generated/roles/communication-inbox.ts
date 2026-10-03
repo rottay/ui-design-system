@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** communication.inbox: Open or represent incoming messages. */
 export const CommunicationInboxIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.inbox",
-  componentName: "CommunicationInboxIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

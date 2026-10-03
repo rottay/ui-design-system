@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** communication.send: Send a message or payload to its intended recipient. */
 export const CommunicationSendIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.send",
-  componentName: "CommunicationSendIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.pie-chart: Represent a part-to-whole or pie visualization. */
 export const DataPieChartIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.pie-chart",
-  componentName: "DataPieChartIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

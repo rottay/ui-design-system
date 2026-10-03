@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.error: Indicate failure or an invalid condition. */
 export const StatusErrorIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.error",
-  componentName: "StatusErrorIcon",
   defaultRole: "status",
   defaultTone: "error",
-  autoMirror: false,
 });

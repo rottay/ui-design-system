@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** identity.session: Represent an authenticated browser session. */
 export const IdentitySessionIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "identity.session",
-  componentName: "IdentitySessionIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

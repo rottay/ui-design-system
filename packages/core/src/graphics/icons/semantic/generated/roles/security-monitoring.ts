@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** security.monitoring: Represent continuous security monitoring. */
 export const SecurityMonitoringIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "security.monitoring",
-  componentName: "SecurityMonitoringIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

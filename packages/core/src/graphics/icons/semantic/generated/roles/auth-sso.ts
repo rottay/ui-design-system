@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** auth.sso: Represent a single-sign-on authentication path. */
 export const AuthSsoIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "auth.sso",
-  componentName: "AuthSsoIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

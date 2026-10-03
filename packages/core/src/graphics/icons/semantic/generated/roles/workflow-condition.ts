@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.condition: Represent a conditional split in a workflow. */
 export const WorkflowConditionIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.condition",
-  componentName: "WorkflowConditionIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

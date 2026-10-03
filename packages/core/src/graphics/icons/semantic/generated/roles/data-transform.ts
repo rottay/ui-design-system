@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.transform: Represent a data transformation or computed function. */
 export const DataTransformIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.transform",
-  componentName: "DataTransformIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

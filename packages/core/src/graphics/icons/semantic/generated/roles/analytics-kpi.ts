@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.kpi: Represent a key performance indicator. */
 export const AnalyticsKpiIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.kpi",
-  componentName: "AnalyticsKpiIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

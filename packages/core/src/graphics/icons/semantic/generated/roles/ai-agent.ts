@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.agent: Represent an autonomous or tool-using AI agent. */
 export const AiAgentIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.agent",
-  componentName: "AiAgentIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

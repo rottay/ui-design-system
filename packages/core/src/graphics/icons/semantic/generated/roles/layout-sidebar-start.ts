@@ -7,7 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** layout.sidebar-start: Display or select a primary logical-start sidebar layout. */
 export const LayoutSidebarStartIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.sidebar-start",
-  componentName: "LayoutSidebarStartIcon",
   defaultRole: "control",
   autoMirror: true,
 });

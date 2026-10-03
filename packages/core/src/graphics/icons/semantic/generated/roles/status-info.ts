@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.info: Indicate non-critical informational context. */
 export const StatusInfoIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.info",
-  componentName: "StatusInfoIcon",
   defaultRole: "status",
   defaultTone: "info",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.retry: Run a failed operation again. */
 export const ActionRetryIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.retry",
-  componentName: "ActionRetryIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

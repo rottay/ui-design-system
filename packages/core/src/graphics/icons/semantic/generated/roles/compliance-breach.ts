@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** compliance.breach: Represent a reportable compliance or privacy breach. */
 export const ComplianceBreachIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "compliance.breach",
-  componentName: "ComplianceBreachIcon",
   defaultRole: "status",
   defaultTone: "error",
-  autoMirror: false,
 });

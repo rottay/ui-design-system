@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** device.mobile: Represent a mobile-phone environment. */
 export const DeviceMobileIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "device.mobile",
-  componentName: "DeviceMobileIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

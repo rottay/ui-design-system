@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** layout.grid: Display a collection using a grid. */
 export const LayoutGridIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.grid",
-  componentName: "LayoutGridIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

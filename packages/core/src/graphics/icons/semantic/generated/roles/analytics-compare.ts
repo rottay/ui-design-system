@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.compare: Represent comparison between analytical variants or periods. */
 export const AnalyticsCompareIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.compare",
-  componentName: "AnalyticsCompareIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

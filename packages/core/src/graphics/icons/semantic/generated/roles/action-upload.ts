@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.upload: Upload local content to the current service. */
 export const ActionUploadIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.upload",
-  componentName: "ActionUploadIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

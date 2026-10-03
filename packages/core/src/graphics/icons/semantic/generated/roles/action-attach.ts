@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.attach: Attach a file or resource. */
 export const ActionAttachIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.attach",
-  componentName: "ActionAttachIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

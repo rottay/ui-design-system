@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** feedback.tip: Indicate an optional suggestion or piece of guidance. */
 export const FeedbackTipIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "feedback.tip",
-  componentName: "FeedbackTipIcon",
   defaultRole: "status",
   defaultTone: "info",
-  autoMirror: false,
 });

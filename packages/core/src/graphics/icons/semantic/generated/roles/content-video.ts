@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** content.video: Represent video content independently of playback action. */
 export const ContentVideoIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.video",
-  componentName: "ContentVideoIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

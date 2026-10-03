@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** location.global: Represent global or worldwide scope. */
 export const LocationGlobalIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "location.global",
-  componentName: "LocationGlobalIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

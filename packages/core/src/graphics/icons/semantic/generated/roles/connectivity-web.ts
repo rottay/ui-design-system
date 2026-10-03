@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** connectivity.web: Represent the public web or a browser-based experience. */
 export const ConnectivityWebIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "connectivity.web",
-  componentName: "ConnectivityWebIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

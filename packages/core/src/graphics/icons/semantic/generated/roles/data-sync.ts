@@ -7,7 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.sync: Represent bidirectional data synchronization. */
 export const DataSyncIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.sync",
-  componentName: "DataSyncIcon",
   defaultRole: "feature",
   autoMirror: true,
 });

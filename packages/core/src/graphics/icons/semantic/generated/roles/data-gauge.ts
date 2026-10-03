@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.gauge: Represent a measured level or gauge. */
 export const DataGaugeIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.gauge",
-  componentName: "DataGaugeIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

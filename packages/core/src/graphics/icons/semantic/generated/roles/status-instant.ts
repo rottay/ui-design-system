@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.instant: Indicate instant, fast, or high-velocity capability. */
 export const StatusInstantIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.instant",
-  componentName: "StatusInstantIcon",
   defaultRole: "status",
-  autoMirror: false,
 });

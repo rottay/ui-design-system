@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** access.admin: Represent privileged administrative access. */
 export const AccessAdminIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "access.admin",
-  componentName: "AccessAdminIcon",
   defaultRole: "feature",
   defaultTone: "primary",
-  autoMirror: false,
 });

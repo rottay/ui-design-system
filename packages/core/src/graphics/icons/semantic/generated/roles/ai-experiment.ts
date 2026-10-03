@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.experiment: Represent an AI experiment or model trial. */
 export const AiExperimentIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.experiment",
-  componentName: "AiExperimentIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** time.date: Represent a calendar date independently of scheduling state. */
 export const TimeDateIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "time.date",
-  componentName: "TimeDateIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

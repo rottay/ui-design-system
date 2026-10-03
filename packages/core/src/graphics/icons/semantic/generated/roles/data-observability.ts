@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.observability: Represent observability into data systems and flows. */
 export const DataObservabilityIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.observability",
-  componentName: "DataObservabilityIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

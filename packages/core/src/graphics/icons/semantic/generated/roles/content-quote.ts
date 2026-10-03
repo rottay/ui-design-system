@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** content.quote: Represent a quotation, testimonial, or cited passage. */
 export const ContentQuoteIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.quote",
-  componentName: "ContentQuoteIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

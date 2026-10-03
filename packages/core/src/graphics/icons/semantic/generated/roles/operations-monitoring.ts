@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** operations.monitoring: Represent monitoring of operational systems. */
 export const OperationsMonitoringIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "operations.monitoring",
-  componentName: "OperationsMonitoringIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

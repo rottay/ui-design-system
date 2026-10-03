@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.schema: Represent a data schema or typed structure. */
 export const DataSchemaIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.schema",
-  componentName: "DataSchemaIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** identity.service-account: Represent a non-human service account. */
 export const IdentityServiceAccountIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "identity.service-account",
-  componentName: "IdentityServiceAccountIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.stop: End an active process without implying failure. */
 export const ActionStopIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.stop",
-  componentName: "ActionStopIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.timeline: Represent an ordered analytical timeline or history. */
 export const AnalyticsTimelineIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.timeline",
-  componentName: "AnalyticsTimelineIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

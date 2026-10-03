@@ -7,7 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** access.logout: Leave the current authenticated application context. */
 export const AccessLogoutIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "access.logout",
-  componentName: "AccessLogoutIcon",
   defaultRole: "control",
   autoMirror: true,
 });

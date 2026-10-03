@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** operations.server: Represent a server or compute host. */
 export const OperationsServerIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "operations.server",
-  componentName: "OperationsServerIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

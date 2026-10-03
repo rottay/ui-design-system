@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** access.role: Represent a role that groups access permissions. */
 export const AccessRoleIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "access.role",
-  componentName: "AccessRoleIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

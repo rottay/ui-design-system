@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** identity.organization-switch: Represent switching the active organization or identity context. */
 export const IdentityOrganizationSwitchIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "identity.organization-switch",
-  componentName: "IdentityOrganizationSwitchIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

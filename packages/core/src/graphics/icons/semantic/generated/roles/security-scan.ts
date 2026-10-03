@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** security.scan: Represent a security scan or inspection. */
 export const SecurityScanIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "security.scan",
-  componentName: "SecurityScanIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

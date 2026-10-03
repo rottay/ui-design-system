@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.neutral: Indicate a neutral, unchanged, or not-applicable state. */
 export const StatusNeutralIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.neutral",
-  componentName: "StatusNeutralIcon",
   defaultRole: "status",
-  autoMirror: false,
 });

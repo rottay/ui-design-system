@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** entity.person: Represent one generic person or account subject. */
 export const EntityPersonIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "entity.person",
-  componentName: "EntityPersonIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

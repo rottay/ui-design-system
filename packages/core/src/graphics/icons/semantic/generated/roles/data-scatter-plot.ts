@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.scatter-plot: Represent a scatter or correlation visualization. */
 export const DataScatterPlotIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.scatter-plot",
-  componentName: "DataScatterPlotIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

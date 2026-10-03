@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** content.translation: Represent language, translation, or localization. */
 export const ContentTranslationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.translation",
-  componentName: "ContentTranslationIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

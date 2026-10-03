@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** bithire.offer: Represent a BitHire employment offer or agreement. */
 export const BithireOfferIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "bithire.offer",
-  componentName: "BithireOfferIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

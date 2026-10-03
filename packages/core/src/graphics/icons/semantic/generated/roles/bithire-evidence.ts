@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** bithire.evidence: Represent evidence supporting a candidate evaluation. */
 export const BithireEvidenceIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "bithire.evidence",
-  componentName: "BithireEvidenceIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

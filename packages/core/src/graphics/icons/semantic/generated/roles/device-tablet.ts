@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** device.tablet: Represent a tablet environment. */
 export const DeviceTabletIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "device.tablet",
-  componentName: "DeviceTabletIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

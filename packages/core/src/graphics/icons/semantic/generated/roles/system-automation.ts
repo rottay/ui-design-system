@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** system.automation: Represent rule-driven automated processing. */
 export const SystemAutomationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "system.automation",
-  componentName: "SystemAutomationIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

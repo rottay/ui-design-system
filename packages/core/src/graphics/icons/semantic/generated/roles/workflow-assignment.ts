@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.assignment: Represent assignment of workflow work to a person. */
 export const WorkflowAssignmentIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.assignment",
-  componentName: "WorkflowAssignmentIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

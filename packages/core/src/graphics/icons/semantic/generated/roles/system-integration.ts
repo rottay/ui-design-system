@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** system.integration: Represent a connected external or internal integration. */
 export const SystemIntegrationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "system.integration",
-  componentName: "SystemIntegrationIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

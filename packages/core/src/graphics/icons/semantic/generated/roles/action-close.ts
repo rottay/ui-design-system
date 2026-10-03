@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.close: Dismiss the current surface without deleting its subject. */
 export const ActionCloseIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.close",
-  componentName: "ActionCloseIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

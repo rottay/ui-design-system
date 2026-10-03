@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** navigation.more: Reveal additional destinations or choices. */
 export const NavigationMoreIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.more",
-  componentName: "NavigationMoreIcon",
   defaultRole: "navigation",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** bithire.pipeline: Represent the BitHire recruiting pipeline. */
 export const BithirePipelineIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "bithire.pipeline",
-  componentName: "BithirePipelineIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

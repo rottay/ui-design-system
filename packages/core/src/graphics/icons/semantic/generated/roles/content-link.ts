@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** content.link: Represent a hyperlink or linked resource. */
 export const ContentLinkIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.link",
-  componentName: "ContentLinkIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

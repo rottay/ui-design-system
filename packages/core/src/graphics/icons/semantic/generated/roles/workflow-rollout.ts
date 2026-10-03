@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.rollout: Represent staged rollout of a workflow or capability. */
 export const WorkflowRolloutIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.rollout",
-  componentName: "WorkflowRolloutIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

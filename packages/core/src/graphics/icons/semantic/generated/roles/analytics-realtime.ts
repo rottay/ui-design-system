@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.realtime: Represent continuously updating real-time analytics. */
 export const AnalyticsRealtimeIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.realtime",
-  componentName: "AnalyticsRealtimeIcon",
   defaultRole: "status",
   defaultTone: "info",
-  autoMirror: false,
 });

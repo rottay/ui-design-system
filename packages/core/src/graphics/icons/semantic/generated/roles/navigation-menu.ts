@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** navigation.menu: Reveal the application navigation menu. */
 export const NavigationMenuIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.menu",
-  componentName: "NavigationMenuIcon",
   defaultRole: "navigation",
-  autoMirror: false,
 });

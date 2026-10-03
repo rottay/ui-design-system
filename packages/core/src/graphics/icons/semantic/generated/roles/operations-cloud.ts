@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** operations.cloud: Represent cloud infrastructure or service hosting. */
 export const OperationsCloudIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "operations.cloud",
-  componentName: "OperationsCloudIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

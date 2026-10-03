@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.search: Find content using a query. */
 export const ActionSearchIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.search",
-  componentName: "ActionSearchIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** layout.columns: Arrange content regions in columns. */
 export const LayoutColumnsIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.columns",
-  componentName: "LayoutColumnsIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

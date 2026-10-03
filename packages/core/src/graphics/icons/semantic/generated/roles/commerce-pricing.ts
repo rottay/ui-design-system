@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** commerce.pricing: Represent pricing or monetary value for a product. */
 export const CommercePricingIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "commerce.pricing",
-  componentName: "CommercePricingIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

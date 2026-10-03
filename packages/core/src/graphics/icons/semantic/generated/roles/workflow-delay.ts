@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.delay: Represent a timed delay in a workflow. */
 export const WorkflowDelayIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.delay",
-  componentName: "WorkflowDelayIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

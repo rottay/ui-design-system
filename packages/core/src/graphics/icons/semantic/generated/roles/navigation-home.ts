@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** navigation.home: Navigate to the primary home destination. */
 export const NavigationHomeIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.home",
-  componentName: "NavigationHomeIcon",
   defaultRole: "navigation",
-  autoMirror: false,
 });

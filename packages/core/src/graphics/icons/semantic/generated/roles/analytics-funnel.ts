@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.funnel: Represent a funnel-stage visualization. */
 export const AnalyticsFunnelIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.funnel",
-  componentName: "AnalyticsFunnelIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

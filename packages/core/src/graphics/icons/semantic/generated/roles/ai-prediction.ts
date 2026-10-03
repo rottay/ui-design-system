@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.prediction: Represent an AI prediction or predicted target. */
 export const AiPredictionIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.prediction",
-  componentName: "AiPredictionIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

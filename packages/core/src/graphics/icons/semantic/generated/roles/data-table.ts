@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.table: Represent tabular data. */
 export const DataTableIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.table",
-  componentName: "DataTableIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

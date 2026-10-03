@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.waterfall: Represent sequential contributions in a waterfall visualization. */
 export const AnalyticsWaterfallIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.waterfall",
-  componentName: "AnalyticsWaterfallIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

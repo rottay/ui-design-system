@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** content.folder: Represent a container of files or resources. */
 export const ContentFolderIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.folder",
-  componentName: "ContentFolderIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

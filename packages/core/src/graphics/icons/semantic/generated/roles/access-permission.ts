@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** access.permission: Represent a permission or authorization grant. */
 export const AccessPermissionIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "access.permission",
-  componentName: "AccessPermissionIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

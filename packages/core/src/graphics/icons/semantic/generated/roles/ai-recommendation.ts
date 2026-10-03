@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.recommendation: Represent an AI-generated recommendation. */
 export const AiRecommendationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.recommendation",
-  componentName: "AiRecommendationIcon",
   defaultRole: "feature",
   defaultTone: "info",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** billing.refund: Represent refunding funds to a payer. */
 export const BillingRefundIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "billing.refund",
-  componentName: "BillingRefundIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

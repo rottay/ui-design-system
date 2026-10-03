@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** identity.federation: Represent federated identities across organizations or systems. */
 export const IdentityFederationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "identity.federation",
-  componentName: "IdentityFederationIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

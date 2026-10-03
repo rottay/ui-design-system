@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.warehouse: Represent a data warehouse or durable analytical store. */
 export const DataWarehouseIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.warehouse",
-  componentName: "DataWarehouseIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

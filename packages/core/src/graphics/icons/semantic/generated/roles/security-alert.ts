@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** security.alert: Indicate a security condition requiring attention. */
 export const SecurityAlertIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "security.alert",
-  componentName: "SecurityAlertIcon",
   defaultRole: "status",
   defaultTone: "warning",
-  autoMirror: false,
 });

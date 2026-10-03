@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** identity.deactivated: Indicate a deactivated, removed, or inactive account. */
 export const IdentityDeactivatedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "identity.deactivated",
-  componentName: "IdentityDeactivatedIcon",
   defaultRole: "status",
-  autoMirror: false,
 });

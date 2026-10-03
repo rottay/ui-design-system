@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** operations.incident: Represent an operational incident or active alarm. */
 export const OperationsIncidentIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "operations.incident",
-  componentName: "OperationsIncidentIcon",
   defaultRole: "status",
   defaultTone: "error",
-  autoMirror: false,
 });

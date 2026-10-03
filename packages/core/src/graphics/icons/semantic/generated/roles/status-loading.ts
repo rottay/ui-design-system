@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.loading: Indicate an operation awaiting completion. */
 export const StatusLoadingIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.loading",
-  componentName: "StatusLoadingIcon",
   defaultRole: "status",
-  autoMirror: false,
 });

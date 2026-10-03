@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** content.bookmark: Represent a saved or bookmarked resource. */
 export const ContentBookmarkIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.bookmark",
-  componentName: "ContentBookmarkIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.offline: Indicate that network connectivity is unavailable. */
 export const StatusOfflineIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.offline",
-  componentName: "StatusOfflineIcon",
   defaultRole: "status",
   defaultTone: "muted",
-  autoMirror: false,
 });

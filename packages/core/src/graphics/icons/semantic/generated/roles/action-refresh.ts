@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.refresh: Reload or synchronize the current view. */
 export const ActionRefreshIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.refresh",
-  componentName: "ActionRefreshIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

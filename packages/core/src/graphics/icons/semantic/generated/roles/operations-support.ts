@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** operations.support: Represent operational support or service assistance. */
 export const OperationsSupportIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "operations.support",
-  componentName: "OperationsSupportIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

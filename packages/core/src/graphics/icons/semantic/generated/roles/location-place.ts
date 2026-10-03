@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** location.place: Represent a physical or mapped place. */
 export const LocationPlaceIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "location.place",
-  componentName: "LocationPlaceIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

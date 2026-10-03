@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** identity.credential-rotation: Represent rotation of an identity credential. */
 export const IdentityCredentialRotationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "identity.credential-rotation",
-  componentName: "IdentityCredentialRotationIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** time.leave: Represent leave, vacation, or paid time off. */
 export const TimeLeaveIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "time.leave",
-  componentName: "TimeLeaveIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

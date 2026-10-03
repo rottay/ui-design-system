@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** device.desktop: Represent a desktop-computer environment. */
 export const DeviceDesktopIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "device.desktop",
-  componentName: "DeviceDesktopIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

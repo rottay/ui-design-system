@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** device.camera: Represent an image or video capture device. */
 export const DeviceCameraIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "device.camera",
-  componentName: "DeviceCameraIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

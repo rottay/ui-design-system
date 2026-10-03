@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.relationship: Represent a relationship or join between data sets. */
 export const DataRelationshipIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.relationship",
-  componentName: "DataRelationshipIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

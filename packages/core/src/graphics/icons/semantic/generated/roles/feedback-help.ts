@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** feedback.help: Open contextual help or guidance. */
 export const FeedbackHelpIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "feedback.help",
-  componentName: "FeedbackHelpIcon",
   defaultRole: "control",
   defaultTone: "info",
-  autoMirror: false,
 });

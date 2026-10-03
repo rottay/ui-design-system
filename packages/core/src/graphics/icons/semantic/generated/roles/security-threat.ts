@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** security.threat: Represent a detected security threat or vulnerability. */
 export const SecurityThreatIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "security.threat",
-  componentName: "SecurityThreatIcon",
   defaultRole: "status",
   defaultTone: "error",
-  autoMirror: false,
 });

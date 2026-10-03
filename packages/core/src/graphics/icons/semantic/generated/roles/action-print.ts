@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.print: Open the print workflow. */
 export const ActionPrintIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.print",
-  componentName: "ActionPrintIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.bar: Represent a horizontal bar comparison visualization. */
 export const AnalyticsBarIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.bar",
-  componentName: "AnalyticsBarIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

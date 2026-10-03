@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.filter: Constrain a collection using criteria. */
 export const ActionFilterIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.filter",
-  componentName: "ActionFilterIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

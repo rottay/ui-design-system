@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.paused: Indicate a suspended and resumable state. */
 export const StatusPausedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.paused",
-  componentName: "StatusPausedIcon",
   defaultRole: "status",
-  autoMirror: false,
 });

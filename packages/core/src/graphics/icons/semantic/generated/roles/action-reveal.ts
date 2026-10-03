@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.reveal: Expose content or a value that is currently hidden. */
 export const ActionRevealIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.reveal",
-  componentName: "ActionRevealIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

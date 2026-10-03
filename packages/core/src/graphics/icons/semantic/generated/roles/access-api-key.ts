@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** access.api-key: Represent an API access key. */
 export const AccessApiKeyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "access.api-key",
-  componentName: "AccessApiKeyIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

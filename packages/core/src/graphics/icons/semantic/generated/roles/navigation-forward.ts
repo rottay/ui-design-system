@@ -7,7 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** navigation.forward: Navigate to the logically next destination. */
 export const NavigationForwardIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.forward",
-  componentName: "NavigationForwardIcon",
   defaultRole: "navigation",
   autoMirror: true,
 });

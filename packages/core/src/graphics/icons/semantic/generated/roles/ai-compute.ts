@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.compute: Represent AI or model computation and inference capacity. */
 export const AiComputeIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.compute",
-  componentName: "AiComputeIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

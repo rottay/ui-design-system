@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** security.perimeter: Represent a protected security perimeter or boundary. */
 export const SecurityPerimeterIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "security.perimeter",
-  componentName: "SecurityPerimeterIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

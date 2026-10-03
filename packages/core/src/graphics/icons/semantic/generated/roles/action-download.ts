@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.download: Download content to the local device. */
 export const ActionDownloadIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.download",
-  componentName: "ActionDownloadIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

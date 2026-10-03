@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** time.deadline: Represent a due time or deadline. */
 export const TimeDeadlineIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "time.deadline",
-  componentName: "TimeDeadlineIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

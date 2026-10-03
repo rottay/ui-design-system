@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** billing.discount: Represent a billing discount or promotional adjustment. */
 export const BillingDiscountIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "billing.discount",
-  componentName: "BillingDiscountIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

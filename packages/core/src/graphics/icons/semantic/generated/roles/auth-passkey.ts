@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** auth.passkey: Represent passkey or biometric-backed authentication. */
 export const AuthPasskeyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "auth.passkey",
-  componentName: "AuthPasskeyIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

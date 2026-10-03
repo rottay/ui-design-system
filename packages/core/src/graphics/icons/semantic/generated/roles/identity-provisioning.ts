@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** identity.provisioning: Represent provisioning a person into an account or organization. */
 export const IdentityProvisioningIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "identity.provisioning",
-  componentName: "IdentityProvisioningIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

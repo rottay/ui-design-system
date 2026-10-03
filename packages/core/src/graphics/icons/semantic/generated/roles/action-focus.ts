@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.focus: Focus or spotlight the current view on a specific subject. */
 export const ActionFocusIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.focus",
-  componentName: "ActionFocusIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

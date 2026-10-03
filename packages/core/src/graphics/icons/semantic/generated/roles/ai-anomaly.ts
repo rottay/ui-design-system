@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.anomaly: Represent an anomaly detected by an AI system. */
 export const AiAnomalyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.anomaly",
-  componentName: "AiAnomalyIcon",
   defaultRole: "status",
   defaultTone: "warning",
-  autoMirror: false,
 });

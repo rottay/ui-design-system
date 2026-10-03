@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.database: Represent a persisted structured data store. */
 export const DataDatabaseIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.database",
-  componentName: "DataDatabaseIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

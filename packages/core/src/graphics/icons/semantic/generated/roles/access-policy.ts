@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** access.policy: Represent an access policy document. */
 export const AccessPolicyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "access.policy",
-  componentName: "AccessPolicyIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

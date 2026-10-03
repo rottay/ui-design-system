@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.scheduled: Indicate assignment to a future date or time. */
 export const StatusScheduledIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.scheduled",
-  componentName: "StatusScheduledIcon",
   defaultRole: "status",
-  autoMirror: false,
 });

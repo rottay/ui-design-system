@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** compliance.retention: Represent records governed by a retention policy. */
 export const ComplianceRetentionIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "compliance.retention",
-  componentName: "ComplianceRetentionIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

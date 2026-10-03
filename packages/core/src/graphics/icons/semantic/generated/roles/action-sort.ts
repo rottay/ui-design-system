@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.sort: Change collection ordering without specifying a direction. */
 export const ActionSortIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.sort",
-  componentName: "ActionSortIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

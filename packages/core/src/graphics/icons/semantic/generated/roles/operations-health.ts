@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** operations.health: Represent operational health or service vitality. */
 export const OperationsHealthIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "operations.health",
-  componentName: "OperationsHealthIcon",
   defaultRole: "status",
   defaultTone: "success",
-  autoMirror: false,
 });

@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.success: Indicate successful completion. */
 export const StatusSuccessIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.success",
-  componentName: "StatusSuccessIcon",
   defaultRole: "status",
   defaultTone: "success",
-  autoMirror: false,
 });

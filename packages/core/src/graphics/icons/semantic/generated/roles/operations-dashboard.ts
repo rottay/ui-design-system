@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** operations.dashboard: Represent an operational control dashboard. */
 export const OperationsDashboardIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "operations.dashboard",
-  componentName: "OperationsDashboardIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

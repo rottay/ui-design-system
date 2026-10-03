@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** compliance.regulation: Represent a regulation or legal compliance requirement. */
 export const ComplianceRegulationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "compliance.regulation",
-  componentName: "ComplianceRegulationIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** billing.invoice: Represent a billing invoice. */
 export const BillingInvoiceIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "billing.invoice",
-  componentName: "BillingInvoiceIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

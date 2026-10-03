@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.area: Represent an area or dense series visualization. */
 export const AnalyticsAreaIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.area",
-  componentName: "AnalyticsAreaIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

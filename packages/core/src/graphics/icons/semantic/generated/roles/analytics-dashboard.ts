@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.dashboard: Represent an analytics dashboard or overview. */
 export const AnalyticsDashboardIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.dashboard",
-  componentName: "AnalyticsDashboardIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

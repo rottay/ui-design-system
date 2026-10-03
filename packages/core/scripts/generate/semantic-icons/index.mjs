@@ -499,13 +499,14 @@ export function getGeneratedIconMetadata(name: GeneratedIconName): GeneratedIcon
 function generateRoleModule(corpusEntry, adapterEntry) {
   const definitionFields = [
     `name: ${JSON.stringify(corpusEntry.id)}`,
-    `componentName: ${JSON.stringify(corpusEntry.componentName)}`,
     `defaultRole: ${JSON.stringify(corpusEntry.defaultRole)}`,
   ];
   if (corpusEntry.defaultTone) {
     definitionFields.push(`defaultTone: ${JSON.stringify(corpusEntry.defaultTone)}`);
   }
-  definitionFields.push(`autoMirror: ${corpusEntry.autoMirror}`);
+  if (corpusEntry.autoMirror) {
+    definitionFields.push('autoMirror: true');
+  }
   return `${GENERATED_HEADER}import { ${adapterEntry.exportName} as SsrGlyph } from ${JSON.stringify(adapterEntry.module)};
 
 import { createSemanticIcon } from '../../runtime/create-icon';

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.live: Indicate activity occurring now. */
 export const StatusLiveIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.live",
-  componentName: "StatusLiveIcon",
   defaultRole: "status",
-  autoMirror: false,
 });

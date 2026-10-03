@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** entity.organization: Represent an organization or company. */
 export const EntityOrganizationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "entity.organization",
-  componentName: "EntityOrganizationIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

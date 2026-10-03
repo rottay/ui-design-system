@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** operations.target: Represent an operational objective or service target. */
 export const OperationsTargetIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "operations.target",
-  componentName: "OperationsTargetIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

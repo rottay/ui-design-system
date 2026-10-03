@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** communication.call: Represent a synchronous phone or voice call. */
 export const CommunicationCallIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.call",
-  componentName: "CommunicationCallIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

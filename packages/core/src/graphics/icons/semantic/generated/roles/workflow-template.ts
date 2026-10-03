@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.template: Represent a reusable workflow template. */
 export const WorkflowTemplateIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.template",
-  componentName: "WorkflowTemplateIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

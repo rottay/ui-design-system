@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React, { createRef, forwardRef } from 'react';
 import { render, screen } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
@@ -9,6 +9,8 @@ import {
   NavigationForwardIcon,
   StatusSuccessIcon,
 } from '@/graphics/icons/semantic/generated/packs/foundation';
+import { GENERATED_ICON_METADATA } from '@/graphics/icons/semantic/generated/corpus';
+import type { GeneratedIconMetadata } from '@/graphics/icons/semantic/generated/corpus';
 import { BithireIcon } from '@/graphics/icons/semantic/generated/packs/bithire';
 import { IdentityIcon } from '@/graphics/icons/semantic/generated/packs/identity';
 import { IntelligenceIcon } from '@/graphics/icons/semantic/generated/packs/intelligence';
@@ -17,6 +19,7 @@ import {
   BITHIRE_PRESET_ICON_COMPONENTS,
   BITHIRE_PRESET_ICON_NAMES,
 } from '@/graphics/icons/semantic/generated/presets/bithire';
+import { createSemanticIcon } from '../index';
 
 /**
  * A generated icon reached through hostile runtime input.
@@ -141,5 +144,84 @@ describe('generated semantic icon runtime', () => {
       Object.keys(BITHIRE_PRESET_ICON_COMPONENTS),
     );
     expect(BITHIRE_PRESET_ICON_NAMES).toHaveLength(104);
+  });
+});
+
+describe('omitted definition fields', () => {
+  const corpusEntries: ReadonlyArray<GeneratedIconMetadata> = GENERATED_ICON_METADATA;
+
+  const StubGlyph = forwardRef<SVGSVGElement, Record<string, unknown>>(function StubGlyph(
+    { mirrored, ...rest },
+    ref,
+  ) {
+    return <svg ref={ref} data-stub-mirrored={String(mirrored)} {...rest} />;
+  });
+
+  it('derives the DEV displayName from name for every corpus id', () => {
+    expect(corpusEntries).toHaveLength(282);
+    for (const entry of corpusEntries) {
+      const Component = createSemanticIcon(StubGlyph, {
+        name: entry.id,
+        defaultRole: entry.defaultRole,
+        ...(entry.defaultTone ? { defaultTone: entry.defaultTone } : {}),
+      });
+      expect(Component.displayName).toBe(entry.componentName);
+    }
+  });
+
+  it('honors an explicitly supplied componentName', () => {
+    const Component = createSemanticIcon(StubGlyph, {
+      name: 'action.add',
+      componentName: 'LegacyAddIcon',
+      defaultRole: 'control',
+    });
+    expect(Component.displayName).toBe('LegacyAddIcon');
+  });
+
+  it('preserves defaultRole and defaultTone while defaulting autoMirror to false', () => {
+    const Toned = createSemanticIcon(StubGlyph, {
+      name: 'status.success',
+      defaultRole: 'status',
+      defaultTone: 'success',
+    });
+    const Untoned = createSemanticIcon(StubGlyph, {
+      name: 'action.add',
+      defaultRole: 'control',
+    });
+
+    const toned = renderToStaticMarkup(<Toned decorative />);
+    expect(toned).toContain('data-icon-role="status"');
+    expect(toned).toContain('data-icon-tone="success"');
+    expect(toned).toContain('data-icon-mirrored="false"');
+    expect(toned).toContain('data-stub-mirrored="false"');
+
+    const untoned = renderToStaticMarkup(<Untoned decorative />);
+    expect(untoned).toContain('data-icon-role="control"');
+    expect(untoned).toContain('data-icon-tone="default"');
+  });
+
+  it('keeps explicit autoMirror true and physical mirroring overrides unchanged', () => {
+    const ExplicitTrue = createSemanticIcon(StubGlyph, {
+      name: 'navigation.forward',
+      defaultRole: 'navigation',
+      autoMirror: true,
+    });
+    const ExplicitFalse = createSemanticIcon(StubGlyph, {
+      name: 'action.add',
+      defaultRole: 'control',
+      autoMirror: false,
+    });
+
+    const auto = renderToStaticMarkup(<ExplicitTrue decorative />);
+    expect(auto).toContain('data-icon-mirrored="auto"');
+    expect(auto).toContain('data-stub-mirrored="false"');
+
+    const explicitFalse = renderToStaticMarkup(<ExplicitFalse decorative />);
+    expect(explicitFalse).toContain('data-icon-mirrored="false"');
+    expect(explicitFalse).toContain('data-stub-mirrored="false"');
+
+    const physical = renderToStaticMarkup(<ExplicitTrue mirrored decorative />);
+    expect(physical).toContain('data-icon-mirrored="true"');
+    expect(physical).toContain('data-stub-mirrored="true"');
   });
 });

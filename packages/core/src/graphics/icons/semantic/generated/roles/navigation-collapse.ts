@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** navigation.collapse: Collapse an expanded navigation region or surface. */
 export const NavigationCollapseIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.collapse",
-  componentName: "NavigationCollapseIcon",
   defaultRole: "navigation",
-  autoMirror: false,
 });

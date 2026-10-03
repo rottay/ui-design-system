@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.rejection: Represent a rejected workflow decision. */
 export const WorkflowRejectionIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.rejection",
-  componentName: "WorkflowRejectionIcon",
   defaultRole: "status",
   defaultTone: "error",
-  autoMirror: false,
 });

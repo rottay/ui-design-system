@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.webhook: Represent a webhook event sent from a workflow. */
 export const WorkflowWebhookIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.webhook",
-  componentName: "WorkflowWebhookIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

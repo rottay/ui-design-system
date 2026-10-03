@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** privacy.masked: Indicate that a private value is masked or redacted. */
 export const PrivacyMaskedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "privacy.masked",
-  componentName: "PrivacyMaskedIcon",
   defaultRole: "status",
   defaultTone: "muted",
-  autoMirror: false,
 });

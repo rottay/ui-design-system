@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** communication.mute: Indicate muted audio or a disabled microphone. */
 export const CommunicationMuteIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.mute",
-  componentName: "CommunicationMuteIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

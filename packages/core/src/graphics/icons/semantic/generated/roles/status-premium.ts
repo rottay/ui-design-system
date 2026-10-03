@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.premium: Indicate a premium, enterprise, or top-tier plan or entity. */
 export const StatusPremiumIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.premium",
-  componentName: "StatusPremiumIcon",
   defaultRole: "status",
-  autoMirror: false,
 });

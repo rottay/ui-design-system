@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.open-external: Open a destination outside the current application context. */
 export const ActionOpenExternalIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.open-external",
-  componentName: "ActionOpenExternalIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

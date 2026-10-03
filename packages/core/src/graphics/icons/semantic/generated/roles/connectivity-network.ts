@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** connectivity.network: Represent a connected network topology. */
 export const ConnectivityNetworkIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "connectivity.network",
-  componentName: "ConnectivityNetworkIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

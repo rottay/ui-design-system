@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** layout.hierarchy: Represent a parent-child hierarchy. */
 export const LayoutHierarchyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.hierarchy",
-  componentName: "LayoutHierarchyIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

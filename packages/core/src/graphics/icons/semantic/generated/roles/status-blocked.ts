@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.blocked: Indicate progress prevented by policy, dependency, or prerequisite. */
 export const StatusBlockedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.blocked",
-  componentName: "StatusBlockedIcon",
   defaultRole: "status",
   defaultTone: "error",
-  autoMirror: false,
 });

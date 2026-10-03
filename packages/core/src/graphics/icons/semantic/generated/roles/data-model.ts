@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.model: Represent a structured data model. */
 export const DataModelIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.model",
-  componentName: "DataModelIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

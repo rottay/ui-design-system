@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.export: Export data from the current system. */
 export const DataExportIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.export",
-  componentName: "DataExportIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

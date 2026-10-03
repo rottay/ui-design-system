@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** access.denied: Indicate that access has been denied or remains locked. */
 export const AccessDeniedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "access.denied",
-  componentName: "AccessDeniedIcon",
   defaultRole: "status",
   defaultTone: "error",
-  autoMirror: false,
 });

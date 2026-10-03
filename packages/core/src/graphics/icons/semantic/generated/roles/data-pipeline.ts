@@ -7,7 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.pipeline: Represent a branching data pipeline. */
 export const DataPipelineIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.pipeline",
-  componentName: "DataPipelineIcon",
   defaultRole: "feature",
   autoMirror: true,
 });

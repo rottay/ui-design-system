@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.warning: Indicate a condition that may require attention. */
 export const StatusWarningIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.warning",
-  componentName: "StatusWarningIcon",
   defaultRole: "status",
   defaultTone: "warning",
-  autoMirror: false,
 });

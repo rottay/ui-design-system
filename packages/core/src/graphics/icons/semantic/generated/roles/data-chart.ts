@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.chart: Represent a generic chart when its subtype is unknown. */
 export const DataChartIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.chart",
-  componentName: "DataChartIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

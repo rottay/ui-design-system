@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.embedding: Represent a vector embedding or vectorized content. */
 export const AiEmbeddingIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.embedding",
-  componentName: "AiEmbeddingIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

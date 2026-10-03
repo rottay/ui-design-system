@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.verified: Indicate that a claim, identity, or artifact has been verified. */
 export const StatusVerifiedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.verified",
-  componentName: "StatusVerifiedIcon",
   defaultRole: "status",
   defaultTone: "success",
-  autoMirror: false,
 });

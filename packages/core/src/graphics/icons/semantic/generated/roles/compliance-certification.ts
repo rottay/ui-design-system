@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** compliance.certification: Represent a compliance certification. */
 export const ComplianceCertificationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "compliance.certification",
-  componentName: "ComplianceCertificationIcon",
   defaultRole: "feature",
   defaultTone: "success",
-  autoMirror: false,
 });

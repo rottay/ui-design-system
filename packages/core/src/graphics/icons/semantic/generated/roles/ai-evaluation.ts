@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.evaluation: Represent evaluation or testing of an AI model. */
 export const AiEvaluationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.evaluation",
-  componentName: "AiEvaluationIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

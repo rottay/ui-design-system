@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.lineage: Represent data lineage across sources and transformations. */
 export const DataLineageIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.lineage",
-  componentName: "DataLineageIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

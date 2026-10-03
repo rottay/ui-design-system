@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** time.schedule: Represent a schedule or set of dated appointments. */
 export const TimeScheduleIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "time.schedule",
-  componentName: "TimeScheduleIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

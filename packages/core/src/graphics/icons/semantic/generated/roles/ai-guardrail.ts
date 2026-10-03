@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.guardrail: Represent a safety or policy guardrail around an AI system. */
 export const AiGuardrailIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.guardrail",
-  componentName: "AiGuardrailIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

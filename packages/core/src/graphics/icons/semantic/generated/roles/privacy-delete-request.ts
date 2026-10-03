@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** privacy.delete-request: Represent a privacy request to delete a person's data. */
 export const PrivacyDeleteRequestIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "privacy.delete-request",
-  componentName: "PrivacyDeleteRequestIcon",
   defaultRole: "feature",
   defaultTone: "error",
-  autoMirror: false,
 });

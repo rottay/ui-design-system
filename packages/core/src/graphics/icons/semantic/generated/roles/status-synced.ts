@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.synced: Indicate synchronized local and remote state. */
 export const StatusSyncedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.synced",
-  componentName: "StatusSyncedIcon",
   defaultRole: "status",
   defaultTone: "success",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** operations.maintenance: Represent maintenance work or maintenance mode. */
 export const OperationsMaintenanceIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "operations.maintenance",
-  componentName: "OperationsMaintenanceIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

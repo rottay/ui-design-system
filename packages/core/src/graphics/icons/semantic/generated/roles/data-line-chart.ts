@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.line-chart: Represent a line-series visualization. */
 export const DataLineChartIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.line-chart",
-  componentName: "DataLineChartIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

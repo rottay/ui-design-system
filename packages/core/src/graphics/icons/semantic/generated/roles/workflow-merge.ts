@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.merge: Represent workflow branches merging into one path. */
 export const WorkflowMergeIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.merge",
-  componentName: "WorkflowMergeIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

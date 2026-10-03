@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.trend-down: Indicate a decreasing data trend. */
 export const DataTrendDownIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.trend-down",
-  componentName: "DataTrendDownIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

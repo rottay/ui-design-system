@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.response: Represent a textual response from an AI system. */
 export const AiResponseIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.response",
-  componentName: "AiResponseIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

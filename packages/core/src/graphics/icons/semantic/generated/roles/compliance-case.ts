@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** compliance.case: Represent a protected compliance case file. */
 export const ComplianceCaseIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "compliance.case",
-  componentName: "ComplianceCaseIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

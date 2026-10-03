@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** communication.notification: Represent a user-facing notification or alert. */
 export const CommunicationNotificationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.notification",
-  componentName: "CommunicationNotificationIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

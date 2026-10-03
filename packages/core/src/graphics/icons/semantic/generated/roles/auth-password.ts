@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** auth.password: Represent password-based authentication. */
 export const AuthPasswordIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "auth.password",
-  componentName: "AuthPasswordIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

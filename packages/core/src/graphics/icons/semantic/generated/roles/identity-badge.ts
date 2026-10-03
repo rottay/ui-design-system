@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** identity.badge: Represent a formal identity badge or card. */
 export const IdentityBadgeIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "identity.badge",
-  componentName: "IdentityBadgeIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

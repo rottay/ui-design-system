@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.copy: Copy selected content or a value to the clipboard. */
 export const ActionCopyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.copy",
-  componentName: "ActionCopyIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

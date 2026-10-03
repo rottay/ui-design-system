@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.approval: Represent an approval gate in a workflow. */
 export const WorkflowApprovalIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.approval",
-  componentName: "WorkflowApprovalIcon",
   defaultRole: "status",
   defaultTone: "success",
-  autoMirror: false,
 });

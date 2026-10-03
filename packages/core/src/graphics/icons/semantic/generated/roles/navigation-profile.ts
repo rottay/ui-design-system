@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** navigation.profile: Navigate to the current person or account profile. */
 export const NavigationProfileIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.profile",
-  componentName: "NavigationProfileIcon",
   defaultRole: "navigation",
-  autoMirror: false,
 });

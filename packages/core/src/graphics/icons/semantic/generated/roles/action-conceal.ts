@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.conceal: Hide content or a value that is currently visible. */
 export const ActionConcealIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.conceal",
-  componentName: "ActionConcealIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

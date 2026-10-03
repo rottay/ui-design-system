@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** access.key: Represent a key used to unlock access. */
 export const AccessKeyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "access.key",
-  componentName: "AccessKeyIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

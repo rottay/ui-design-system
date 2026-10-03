@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.confirm: Accept or commit the current choice. */
 export const ActionConfirmIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.confirm",
-  componentName: "ActionConfirmIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

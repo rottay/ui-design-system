@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.vision: Represent computer vision input or capability. */
 export const AiVisionIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.vision",
-  componentName: "AiVisionIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

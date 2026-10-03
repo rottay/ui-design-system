@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.priority: Mark an item as flagged, prioritized, or requiring follow-up. */
 export const StatusPriorityIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.priority",
-  componentName: "StatusPriorityIcon",
   defaultRole: "status",
-  autoMirror: false,
 });

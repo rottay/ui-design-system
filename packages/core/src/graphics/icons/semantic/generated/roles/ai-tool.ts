@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.tool: Represent a tool available to an AI system. */
 export const AiToolIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.tool",
-  componentName: "AiToolIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

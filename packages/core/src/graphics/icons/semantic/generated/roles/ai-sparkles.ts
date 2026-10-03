@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** ai.sparkles: Mark AI-enhanced content or capability. */
 export const AiSparklesIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.sparkles",
-  componentName: "AiSparklesIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

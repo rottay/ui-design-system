@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** status.achievement: Represent an achievement, award, or earned recognition. */
 export const StatusAchievementIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.achievement",
-  componentName: "StatusAchievementIcon",
   defaultRole: "status",
-  autoMirror: false,
 });

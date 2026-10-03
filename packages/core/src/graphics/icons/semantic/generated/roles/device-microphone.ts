@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** device.microphone: Represent an audio-input device. */
 export const DeviceMicrophoneIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "device.microphone",
-  componentName: "DeviceMicrophoneIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

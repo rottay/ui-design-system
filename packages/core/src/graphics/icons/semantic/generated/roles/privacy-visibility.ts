@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** privacy.visibility: Represent review of privacy visibility or exposure. */
 export const PrivacyVisibilityIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "privacy.visibility",
-  componentName: "PrivacyVisibilityIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

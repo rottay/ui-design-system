@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** navigation.down: Navigate to a spatially lower destination or level. */
 export const NavigationDownIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.down",
-  componentName: "NavigationDownIcon",
   defaultRole: "navigation",
-  autoMirror: false,
 });

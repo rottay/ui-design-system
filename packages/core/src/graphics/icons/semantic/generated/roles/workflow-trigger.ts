@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.trigger: Represent an event that triggers a workflow. */
 export const WorkflowTriggerIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.trigger",
-  componentName: "WorkflowTriggerIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** content.file: Represent a generic file when its subtype is unknown. */
 export const ContentFileIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.file",
-  componentName: "ContentFileIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.balance: Represent balance, fairness, or weighted distribution. */
 export const AnalyticsBalanceIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.balance",
-  componentName: "AnalyticsBalanceIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

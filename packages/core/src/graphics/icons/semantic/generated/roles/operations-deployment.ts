@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** operations.deployment: Represent a software or service deployment. */
 export const OperationsDeploymentIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "operations.deployment",
-  componentName: "OperationsDeploymentIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

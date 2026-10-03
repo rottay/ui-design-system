@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** billing.wallet: Represent a stored-value or digital wallet. */
 export const BillingWalletIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "billing.wallet",
-  componentName: "BillingWalletIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

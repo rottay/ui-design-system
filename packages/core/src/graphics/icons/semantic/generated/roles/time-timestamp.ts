@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** time.timestamp: Represent a recorded point in time. */
 export const TimeTimestampIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "time.timestamp",
-  componentName: "TimeTimestampIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

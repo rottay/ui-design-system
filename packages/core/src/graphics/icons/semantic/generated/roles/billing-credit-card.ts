@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** billing.credit-card: Represent a credit-card payment method. */
 export const BillingCreditCardIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "billing.credit-card",
-  componentName: "BillingCreditCardIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

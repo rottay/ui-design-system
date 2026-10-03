@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** layout.list: Display a collection as a linear list. */
 export const LayoutListIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.list",
-  componentName: "LayoutListIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

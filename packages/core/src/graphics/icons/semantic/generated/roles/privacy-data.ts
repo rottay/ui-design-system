@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** privacy.data: Represent data protected by privacy controls. */
 export const PrivacyDataIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "privacy.data",
-  componentName: "PrivacyDataIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.quality: Represent a data quality assertion or check. */
 export const DataQualityIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.quality",
-  componentName: "DataQualityIcon",
   defaultRole: "feature",
   defaultTone: "success",
-  autoMirror: false,
 });

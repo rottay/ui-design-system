@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** content.document: Represent a readable text document. */
 export const ContentDocumentIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.document",
-  componentName: "ContentDocumentIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

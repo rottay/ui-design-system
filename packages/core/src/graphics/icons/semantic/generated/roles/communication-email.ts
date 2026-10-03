@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** communication.email: Represent email communication. */
 export const CommunicationEmailIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.email",
-  componentName: "CommunicationEmailIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

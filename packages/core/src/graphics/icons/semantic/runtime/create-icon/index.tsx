@@ -31,13 +31,20 @@ export type SemanticIconComponent = ForwardRefExoticComponent<
 
 export interface SemanticIconDefinition {
   readonly name: string;
-  readonly componentName: string;
+  readonly componentName?: string;
   readonly defaultRole: IconRole;
   readonly defaultTone?: IconTone;
-  readonly autoMirror: boolean;
+  readonly autoMirror?: boolean;
 }
 
 type SemanticIconWeight = 'regular' | 'bold' | 'fill' | 'duotone';
+
+function componentNameForId(id: string): string {
+  return `${id
+    .split(/[.-]/u)
+    .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
+    .join('')}Icon`;
+}
 
 interface SsrGlyphProps extends SVGProps<SVGSVGElement> {
   readonly ref?: Ref<SVGSVGElement>;
@@ -119,9 +126,10 @@ export function createSemanticIcon(
   const Glyph = glyph as ComponentType<SsrGlyphProps>;
   const {
     name,
+    componentName,
     defaultRole,
     defaultTone,
-    autoMirror,
+    autoMirror = false,
   } = definition;
 
   const Component = forwardRef<SVGSVGElement, SemanticIconProps>(function GeneratedSemanticIcon(
@@ -211,7 +219,7 @@ export function createSemanticIcon(
   });
 
   if (process.env.NODE_ENV !== 'production') {
-    Component.displayName = definition.componentName;
+    Component.displayName = componentName ?? componentNameForId(name);
   }
   return Component;
 }

@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** compliance.consent: Represent recorded consent or an attested agreement. */
 export const ComplianceConsentIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "compliance.consent",
-  componentName: "ComplianceConsentIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

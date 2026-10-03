@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.loop: Represent a workflow loop or repeated step. */
 export const WorkflowLoopIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.loop",
-  componentName: "WorkflowLoopIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

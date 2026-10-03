@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** analytics.radar: Represent a radar or polar comparison visualization. */
 export const AnalyticsRadarIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "analytics.radar",
-  componentName: "AnalyticsRadarIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

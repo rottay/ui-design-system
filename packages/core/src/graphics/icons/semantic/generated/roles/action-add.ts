@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.add: Create or append a new item. */
 export const ActionAddIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.add",
-  componentName: "ActionAddIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

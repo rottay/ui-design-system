@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** system.command: Represent a command-line or execution console. */
 export const SystemCommandIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "system.command",
-  componentName: "SystemCommandIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

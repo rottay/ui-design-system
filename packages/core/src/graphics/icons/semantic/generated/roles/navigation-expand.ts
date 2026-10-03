@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** navigation.expand: Expand or enlarge the current region or surface. */
 export const NavigationExpandIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.expand",
-  componentName: "NavigationExpandIcon",
   defaultRole: "navigation",
-  autoMirror: false,
 });

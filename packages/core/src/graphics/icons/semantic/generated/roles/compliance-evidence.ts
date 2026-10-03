@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** compliance.evidence: Represent evidence collected for compliance review. */
 export const ComplianceEvidenceIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "compliance.evidence",
-  componentName: "ComplianceEvidenceIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

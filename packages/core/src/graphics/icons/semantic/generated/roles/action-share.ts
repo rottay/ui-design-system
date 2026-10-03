@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** action.share: Share content with a destination or audience. */
 export const ActionShareIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.share",
-  componentName: "ActionShareIcon",
   defaultRole: "control",
-  autoMirror: false,
 });

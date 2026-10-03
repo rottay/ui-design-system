@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** billing.tax: Represent a tax, percentage, or rate applied to billing. */
 export const BillingTaxIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "billing.tax",
-  componentName: "BillingTaxIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

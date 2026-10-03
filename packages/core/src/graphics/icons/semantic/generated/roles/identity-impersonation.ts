@@ -7,8 +7,6 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** identity.impersonation: Represent an authorized impersonation context. */
 export const IdentityImpersonationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "identity.impersonation",
-  componentName: "IdentityImpersonationIcon",
   defaultRole: "status",
   defaultTone: "warning",
-  autoMirror: false,
 });

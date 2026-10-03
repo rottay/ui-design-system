@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** workflow.branch: Represent a workflow branch into alternative paths. */
 export const WorkflowBranchIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "workflow.branch",
-  componentName: "WorkflowBranchIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });

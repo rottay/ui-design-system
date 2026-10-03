@@ -7,7 +7,5 @@ import { createSemanticIcon } from '../../runtime/create-icon';
 /** data.cluster: Represent a grouped cluster of related data points. */
 export const DataClusterIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.cluster",
-  componentName: "DataClusterIcon",
   defaultRole: "feature",
-  autoMirror: false,
 });
