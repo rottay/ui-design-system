@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "bf904fcfaf119a2dbee3114f5520569f7e80c44b66693303627958b9a02ebbbf",
+    "inputsDigest": "911aefddabb4715da4b0e3461d3bd980591be584267ed5cdde4625c8408aec5d",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 500,
@@ -33936,7 +33936,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 3,
+      "tsWriteSites": 4,
       "tsMetadataMentions": 6
     },
     "--ds-color-info-border": {
@@ -35952,7 +35952,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 3,
+      "tsWriteSites": 4,
       "tsMetadataMentions": 6
     },
     "--ds-color-success-border": {
@@ -36416,7 +36416,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 3,
+      "tsWriteSites": 4,
       "tsMetadataMentions": 6
     },
     "--ds-color-warning-border": {

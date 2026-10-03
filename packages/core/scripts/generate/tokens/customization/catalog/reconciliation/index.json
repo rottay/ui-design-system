@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/generate/tokens/customization/catalog/index.mjs --write",
-  "basedOnReportDigest": "c11eba4981e93a87b49ebe3ffed4db04b967f344af2d0d02357b93f456c68d68",
+  "basedOnReportDigest": "3ed6968caa050282d304949ff24487b22b5f1bbeb4aa7ee74bb1a5427273f1a7",
   "normative": {
     "writers": 7522,
     "deadWriters": 269,
