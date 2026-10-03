@@ -14,7 +14,8 @@ import {
   FIXTURE_TENANT_FACTS,
   type FamilyFixture,
 } from "@tests/support/family-contract";
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { compileThemeIntent, emitThemeCss, firstPartyScope, staticThemeIntent } from "@/entrypoints/server";
 import { projectFirstPartyArtifactScopes } from "@/infrastructure/compilers/kernel/foundation/css/scope-projection";
 import type { FamilyDeriver } from "../../../../../foundation/contract";
@@ -218,10 +219,9 @@ describe("chrome/input focus ring", () => {
 
   it("lets a tenant's authored status ring paint through the compile door", () => {
     for (const status of STATUSES) {
-      const compiled = lowerFlatThemeFixture({
+      const compiled = compileFlatThemeThroughDoor({
         flatTheme: firstPartyFixture("bithire"),
         tenantPatch: { chrome: { controls: { input: { [`${status}ShadowFocus`]: AUTHORED } } } },
-        tenantAuthoredPaths: new Set([`chrome.controls.input.${status}ShadowFocus`]),
       });
       const halo = `--ds-input-${status}-shadow-focus`;
       expect(compiled.cssVariables[halo], status).toBe(AUTHORED);
@@ -230,10 +230,9 @@ describe("chrome/input focus ring", () => {
   });
 
   it("lets a tenant's authored focus shadow outrank the signature through the compile door", () => {
-    const compiled = lowerFlatThemeFixture({
+    const compiled = compileFlatThemeThroughDoor({
       flatTheme: firstPartyFixture("bithire"),
       tenantPatch: { chrome: { controls: { input: { shadowFocus: AUTHORED } } } },
-      tenantAuthoredPaths: new Set(["chrome.controls.input.shadowFocus"]),
     });
     expect(compiled.cssVariables[HALO]).toBe(AUTHORED);
     expect(compiled.cssVariables[RING]).toBe(`var(${HALO})`);
@@ -241,11 +240,9 @@ describe("chrome/input focus ring", () => {
   });
 
   it("keeps a tenant that only re-seeds its primary on the signature", () => {
-    const flatTheme = firstPartyFixture("bithire");
-    const compiled = lowerFlatThemeFixture({
-      flatTheme,
-      tenantPatch: { palette: { ...flatTheme.palette!, primaryColor: "#b4006e" } },
-      tenantAuthoredPaths: new Set(["palette.primaryColor"]),
+    const compiled = compileFlatThemeThroughDoor({
+      flatTheme: firstPartyFixture("bithire"),
+      tenantPatch: { palette: { primaryColor: "#b4006e" } },
     });
     expect(compiled.cssVariables[RING]).toBe("var(--ds-focus-ring)");
     expect(compiled.cssVariables[HALO]).toMatch(/^0 0 0 3px /);

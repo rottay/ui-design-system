@@ -14,7 +14,8 @@ import {
   FIXTURE_TENANT_FACTS,
   type FamilyFixture,
 } from "@tests/support/family-contract";
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
 import { treeSelectChromeDeriver } from "..";
 
@@ -129,10 +130,9 @@ describe("chrome/tree-select focus rings", () => {
 
   it("lets a tenant's authored status ring paint through the compile door", () => {
     for (const status of STATUSES) {
-      const compiled = lowerFlatThemeFixture({
+      const compiled = compileFlatThemeThroughDoor({
         flatTheme: firstPartyFixture("bithire"),
         tenantPatch: { chrome: { controls: { input: { [`${status}ShadowFocus`]: AUTHORED } } } },
-        tenantAuthoredPaths: new Set([`chrome.controls.input.${status}ShadowFocus`]),
       });
       const gated = `--ds-input-focus-ring-${status}`;
       expect(compiled.cssVariables[statusRing(status)], status).toBe(`var(${gated}, var(--ds-focus-ring))`);

@@ -56,6 +56,42 @@ function splitForcedColors(css: string): { forced: string; rest: string } {
   return { forced, rest: rest + css.slice(cursor) };
 }
 
+/** Each declaration of a rule body, whitespace collapsed, last statement of a property winning. */
+function declarations(body: string): Map<string, string> {
+  const found = new Map<string, string>();
+  for (const statement of body.split(";")) {
+    const colon = statement.indexOf(":");
+    if (colon === -1) continue;
+    const value = statement.slice(colon + 1).replace(/\s+/g, " ").replace(/\( /g, "(").replace(/ \)/g, ")");
+    found.set(statement.slice(0, colon).trim(), value.trim());
+  }
+  return found;
+}
+
+/** `value` as the cascade reads it: a stated channel wins, an unstated one yields to its fallback, a bare root read stays. */
+function resolveReads(value: string, stated: Readonly<Record<string, string>> = {}): string {
+  let resolved = "";
+  for (let at = 0; at < value.length; ) {
+    if (!value.startsWith("var(", at)) {
+      resolved += value[at];
+      at += 1;
+      continue;
+    }
+    let end = at + 4;
+    for (let depth = 1; depth > 0 && end < value.length; end += 1) {
+      if (value[end] === "(") depth += 1;
+      else if (value[end] === ")") depth -= 1;
+    }
+    const read = value.slice(at + 4, end - 1);
+    const comma = read.indexOf(",");
+    const name = (comma === -1 ? read : read.slice(0, comma)).trim();
+    const fallback = comma === -1 ? `var(${name})` : resolveReads(read.slice(comma + 1).trim(), stated);
+    resolved += stated[name] ?? fallback;
+    at = end;
+  }
+  return resolved;
+}
+
 const { forced, rest } = splitForcedColors(SKIN);
 const FOCUS = /focus-visible/;
 const PAINTED_OUTLINE = /outline(?:-color)?:[^;]*(?:solid|dashed|dotted|double)\s+(?!\s|transparent\b)/;
@@ -118,6 +154,12 @@ describe("Anchor focus signature (skin contract)", () => {
     expect(overlay[0]!.body).toMatch(
       /inset:\s*calc\(var\(--ds-anchor-focus-ring-offset, var\(--ds-focus-ring-offset\)\) \+ var\(--ds-focus-ring-width\)\);/
     );
-    expect(overlay[0]!.body).toContain("var(--ds-anchor-focus-ring-radius, var(--ds-radius-sm))");
+    const radius = declarations(overlay[0]!.body).get("border-radius") ?? "";
+    expect(resolveReads(radius)).toBe(
+      "max(0px, calc(var(--ds-radius-sm) - var(--ds-focus-ring-offset) - var(--ds-focus-ring-width)))"
+    );
+    expect(resolveReads(radius, { "--ds-anchor-focus-ring-radius": "6px" })).toBe(
+      "max(0px, calc(6px - var(--ds-focus-ring-offset) - var(--ds-focus-ring-width)))"
+    );
   });
 });

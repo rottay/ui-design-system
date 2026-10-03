@@ -56,6 +56,42 @@ function splitForcedColors(css: string): { forced: string; rest: string } {
   return { forced, rest: rest + css.slice(cursor) };
 }
 
+/** Each declaration of a rule body, whitespace collapsed, last statement of a property winning. */
+function declarations(body: string): Map<string, string> {
+  const found = new Map<string, string>();
+  for (const statement of body.split(";")) {
+    const colon = statement.indexOf(":");
+    if (colon === -1) continue;
+    const value = statement.slice(colon + 1).replace(/\s+/g, " ").replace(/\( /g, "(").replace(/ \)/g, ")");
+    found.set(statement.slice(0, colon).trim(), value.trim());
+  }
+  return found;
+}
+
+/** `value` as the cascade reads it: a stated channel wins, an unstated one yields to its fallback, a bare root read stays. */
+function resolveReads(value: string, stated: Readonly<Record<string, string>> = {}): string {
+  let resolved = "";
+  for (let at = 0; at < value.length; ) {
+    if (!value.startsWith("var(", at)) {
+      resolved += value[at];
+      at += 1;
+      continue;
+    }
+    let end = at + 4;
+    for (let depth = 1; depth > 0 && end < value.length; end += 1) {
+      if (value[end] === "(") depth += 1;
+      else if (value[end] === ")") depth -= 1;
+    }
+    const read = value.slice(at + 4, end - 1);
+    const comma = read.indexOf(",");
+    const name = (comma === -1 ? read : read.slice(0, comma)).trim();
+    const fallback = comma === -1 ? `var(${name})` : resolveReads(read.slice(comma + 1).trim(), stated);
+    resolved += stated[name] ?? fallback;
+    at = end;
+  }
+  return resolved;
+}
+
 const { forced, rest } = splitForcedColors(SKIN);
 const FOCUS = /focus-visible/;
 /** The colour hook rests on a zero-weight mix of the focus colour: transparent, and wired to a root. */
@@ -118,13 +154,18 @@ describe("Link focus signature (skin contract)", () => {
       (rule) => FOCUS.test(rule.selector) && /box-shadow:\s*var\(--ds-focus-ring\)/.test(rule.body)
     );
     expect(focused).toHaveLength(1);
-    const body = focused[0]!.body.replace(/\s+/g, " ");
-    expect(body).toContain(
-      `outline: var(--ds-link-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-link-focus-ring-color, ${TRANSPARENT_DEFAULT});`
-    );
-    expect(body).toContain(
-      "outline-offset: var(--ds-link-focus-ring-offset, var(--ds-focus-ring-offset));"
-    );
+    const declared = declarations(focused[0]!.body);
+    const outline = declared.get("outline") ?? "";
+    const offset = declared.get("outline-offset") ?? "";
+    const stated = {
+      "--ds-link-focus-ring-width": "3px",
+      "--ds-link-focus-ring-color": "#b4006e",
+      "--ds-link-focus-ring-offset": "4px",
+    };
+    expect(resolveReads(outline)).toBe(`var(--ds-focus-ring-width) solid ${TRANSPARENT_DEFAULT}`);
+    expect(resolveReads(offset)).toBe("var(--ds-focus-ring-offset)");
+    expect(resolveReads(outline, stated)).toBe("3px solid #b4006e");
+    expect(resolveReads(offset, stated)).toBe("4px");
   });
 
   it("draws the signature whole on every line of a wrapped link", () => {

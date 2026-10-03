@@ -14,8 +14,7 @@ import {
   containerAliasRedeclarations,
   ROOT_ALIASES,
 } from "@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases";
-import { flatThemeIntent } from "@tests/support/theme-door";
-import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { compileFlatThemeThroughDoor, flatThemeIntent } from "@tests/support/theme-door";
 
 import { deriveStateChannels } from "..";
 
@@ -77,7 +76,7 @@ describe("the Button disabled opacity follows the dial of its own scope", () => 
     });
 
     it(`${posture}: a whole compile emitted through the root door restates the alias beside its own dial`, () => {
-      const { cssVariables, cssString } = lowerFlatThemeFixture({ flatTheme: themed(posture) });
+      const { cssVariables, cssString } = compileFlatThemeThroughDoor({ flatTheme: themed(posture) });
       expect(cssVariables[DIAL]).toBe(opacity);
       expect(cssVariables).not.toHaveProperty(BUTTON);
       expect(declarationsOf(cssString, DIAL)).toEqual([opacity]);
@@ -149,7 +148,7 @@ describe("the Button focus offset follows the signature of its own scope", () =>
 
 describe("precedence", () => {
   it("an authored control opacity wins over the dial in the compile and in the emitted scope", () => {
-    const { cssVariables, cssString } = lowerFlatThemeFixture({
+    const { cssVariables, cssString } = compileFlatThemeThroughDoor({
       flatTheme: themed("strong", { chrome: { controls: { disabled: { opacity: 0.3 } } } }),
     });
     expect(cssVariables[DIAL]).toBe("0.5");
