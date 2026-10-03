@@ -102,6 +102,7 @@ Lane-wide rules (binding on every WO):
 - **Closes** — F-46 (partial: surface-level projection; the mechanism closes in WO-INV-04) (closure criteria in `audit/30-findings`).
 - **Wave** — 4; after WO-FAM-10/11 on the same directories (coordinator serializes).
 - **Depends on** — WO-INV-04, WO-FAM-10, WO-FAM-11.
+- **AMENDMENT (2026-10-03, owner ruling on the public value)** — The region mechanism that implements the contract is `ResolvedSurfaceRegion` behind `SurfacePostureScope` (`surfaces/runtime/postures`), consumed by the 35 recipes; applications consume postures only through each surface's `postures` prop. The public value `SurfaceRegion` had no consumer in the DS, the showroom, the consumer fixture or the three applications, so the owner's condition for ratifying it as shared support ("if its consumers prove the role") was not met and the still-unreleased export was withdrawn from `surfaces/index.ts`; the mechanism and its tests are unchanged. The original wording above stands as written; "`SurfaceRegion` implements it" reads as the internal mechanism, not a public primitive.
 - **Steps** —
   1. `surfaces/foundation/contracts/postures` (types, defaults per surface family) and `surfaces/runtime/postures` (resolution from the SSR hint + `useSyncExternalStore`).
   2. `SurfaceRegion` reads the resolved posture; `app-shell` navigation mode per posture (bottom bar on phone).
