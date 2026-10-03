@@ -1,24 +1,11 @@
-import type { ComponentType } from 'react';
-import {
-  BracesIcon,
-  GlobeIcon,
-  HomeIcon,
-  LayersIcon,
-  LayoutGridIcon,
-  LayoutTemplateIcon,
-  RocketIcon,
-  SettingsIcon,
-  SparklesIcon,
-} from '@rottay/design-system/icons';
+import type { IconName } from '@rottay/design-system/icons';
 import { navigation, type NavItem, type NavSection } from '@/data/navigation';
-
-type IconComponent = ComponentType<{ size?: number }>;
 
 interface SectionMeta {
   accent: string;
   description: string;
   eyebrow: string;
-  icon: IconComponent;
+  iconName: IconName;
 }
 
 export const SECTION_META: Record<string, SectionMeta> = {
@@ -26,55 +13,55 @@ export const SECTION_META: Record<string, SectionMeta> = {
     accent: '#0f172a',
     description: 'A multi-engine, multi-theme documentation shell for commercial-grade UI.',
     eyebrow: 'Design System',
-    icon: HomeIcon,
+    iconName: 'navigation.home',
   },
   foundations: {
     accent: '#0f766e',
     description: 'Tokens, engines, themes, and iconography that define the visual system.',
     eyebrow: 'System Layer',
-    icon: LayersIcon,
+    iconName: 'layout.hierarchy',
   },
   primitives: {
     accent: '#2563eb',
     description: 'Base components arranged by category and ready for production composition.',
     eyebrow: 'Component Layer',
-    icon: LayoutGridIcon,
+    iconName: 'layout.grid',
   },
   patterns: {
     accent: '#7c3aed',
     description: 'Reusable UI patterns for complex workflows, data, and interactions.',
     eyebrow: 'Pattern Library',
-    icon: LayoutTemplateIcon,
+    iconName: 'workflow.template',
   },
   structures: {
     accent: '#ea580c',
     description: 'Page chrome, workspace building blocks, and reusable page-level structures.',
     eyebrow: 'Page Structure',
-    icon: BracesIcon,
+    iconName: 'content.code',
   },
   surfaces: {
     accent: '#0891b2',
     description: 'Full-page recipes showing how primitives and patterns ship together.',
     eyebrow: 'Surface Recipes',
-    icon: SparklesIcon,
+    iconName: 'ai.sparkles',
   },
   verticals: {
     accent: '#4f46e5',
     description: 'Tenant-specific adaptations that show the system in real product contexts.',
     eyebrow: 'Tenant Showcase',
-    icon: GlobeIcon,
+    iconName: 'location.global',
   },
   playground: {
     accent: '#d97706',
     description: 'Interactive tools to probe themes, tokens, and real-time system behavior.',
     eyebrow: 'Live Sandbox',
-    icon: RocketIcon,
+    iconName: 'action.play',
   },
   developers: {
     accent: '#475569',
     description: 'Implementation guidance, architecture notes, and onboarding documentation.',
     eyebrow: 'Developer Docs',
-    icon: SettingsIcon,
+    iconName: 'navigation.settings',
   },
 };
 

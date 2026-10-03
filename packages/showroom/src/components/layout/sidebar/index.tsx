@@ -4,14 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ShowroomLink as Link } from "@/components/navigation/link";
 import { usePathname } from "next/navigation";
 import { Box, Flex, Text } from "@rottay/design-system";
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  ExternalLinkIcon,
-  HomeIcon,
-  SearchIcon,
-  XIcon,
-} from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 import { navigation, type NavItem } from "@/data/navigation";
 import {
   useShowroom,
@@ -241,11 +234,11 @@ function NavNode({ activePath, item, level = 0, onNavigate }: NavNodeProps) {
             flexShrink: 0,
           }}
         >
-          {isOpen ? (
-            <ChevronDownIcon size={14} />
-          ) : (
-            <ChevronRightIcon size={14} />
-          )}
+          <Icon
+            name={isOpen ? "navigation.collapse" : "navigation.expand"}
+            decorative
+            size={14}
+          />
         </Box>
       </Flex>
 
@@ -466,7 +459,7 @@ export function Sidebar({
                     flexShrink: 0,
                   }}
                 >
-                  <XIcon size={15} />
+                  <Icon name="action.close" label="Close navigation" size={15} />
                 </Box>
               ) : null}
             </Flex>
@@ -493,7 +486,7 @@ export function Sidebar({
                     color: shellText,
                   }}
                 >
-                  <HomeIcon size={14} />
+                  <Icon name="navigation.home" decorative size={14} />
                   <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 500, textAlign: 'inherit', color: "inherit" }}>
                     Landing
                   </Text>
@@ -521,7 +514,7 @@ export function Sidebar({
                   style={{ padding: "0 14px" }}
                 >
                   <Flex align="center" gap={9}>
-                    <SearchIcon size={14} />
+                    <Icon name="action.search" decorative size={14} />
                     <Text
                       as="div"
                       color="inherit"
@@ -809,7 +802,6 @@ export function Sidebar({
               const sectionIsActive = presentation.sectionSlug === section.slug;
               const isExpanded =
                 expandedSections[section.slug] ?? sectionIsActive;
-              const Icon = meta.icon;
 
               return (
                 <Box
@@ -854,7 +846,7 @@ export function Sidebar({
                               flexShrink: 0,
                             }}
                           >
-                            <Icon size={15} />
+                            <Icon name={meta.iconName} decorative size={15} />
                           </Flex>
 
                           <Box style={{ minWidth: 0 }}>
@@ -933,11 +925,19 @@ export function Sidebar({
                           flexShrink: 0,
                         }}
                       >
-                        {isExpanded ? (
-                          <ChevronDownIcon size={15} />
-                        ) : (
-                          <ChevronRightIcon size={15} />
-                        )}
+                        <Icon
+                          name={
+                            isExpanded
+                              ? "navigation.collapse"
+                              : "navigation.expand"
+                          }
+                          label={
+                            isExpanded
+                              ? `Collapse ${section.label}`
+                              : `Expand ${section.label}`
+                          }
+                          size={15}
+                        />
                       </Box>
                     </Flex>
 
@@ -1008,7 +1008,7 @@ export function Sidebar({
                   >
                     Docs
                   </Text>
-                  <ExternalLinkIcon size={12} />
+                  <Icon name="navigation.forward" decorative size={12} />
                 </Flex>
               </Link>
             </Flex>

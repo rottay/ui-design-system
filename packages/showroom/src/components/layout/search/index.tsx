@@ -4,11 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ShowroomLink as Link } from "@/components/navigation/link";
 import { useRouter } from "next/navigation";
 import { Box, Flex, Stack, Text } from "@rottay/design-system";
-import {
-  ArrowUpRightIcon,
-  SearchIcon,
-  SparklesIcon,
-} from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 import { applyShowroomRuntimeQuery } from "@/components/runtime/query";
 import { useShowroom } from "@/components/showroom-context";
 import {
@@ -270,7 +266,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               flexShrink: 0,
             }}
           >
-            <SearchIcon size={18} />
+            <Icon name="action.search" decorative size={18} />
           </Box>
 
           <Box style={{ flex: 1, minWidth: 0 }}>
@@ -333,7 +329,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           {!debouncedQuery.trim() ? (
             <Stack spacing={14}>
               <Flex align="center" gap={10}>
-                <SparklesIcon size={16} />
+                <Icon name="ai.sparkles" decorative size={16} />
                 <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', color: shellText }}>
                   Popular jumps
                 </Text>
@@ -372,7 +368,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                         >
                           {link.label}
                         </Text>
-                        <ArrowUpRightIcon size={14} />
+                        <Icon name="navigation.forward" decorative size={14} />
                       </Flex>
 
                       <Text

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text } from "@rottay/design-system";
-import { CheckCircleIcon } from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 import { useShowroomRuntime } from "@/components/showroom-context";
 import { ENGINE_OPTIONS, getPreviewOption, THEME_OPTIONS } from "../pickers";
 import { shellBorder, shellBorderStrong, shellShadowStrong, shellSurface, shellSurfaceSubtle, shellText, shellTextTertiary } from "../tokens";
@@ -106,7 +106,7 @@ export function StateToast() {
             flexShrink: 0,
           }}
         >
-          <CheckCircleIcon size={16} />
+          <Icon name="status.success" decorative size={16} />
         </Flex>
 
         <Box style={{ minWidth: 0 }}>

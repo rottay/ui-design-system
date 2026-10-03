@@ -12,7 +12,7 @@ import {
   Text,
   useTokens,
 } from "@rottay/design-system";
-import { SearchIcon } from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 import { RuntimeFingerprint } from "@/components/runtime/fingerprint";
 import { ShowroomLink as Link } from "@/components/navigation/link";
 import {
@@ -187,7 +187,6 @@ function NavigationSection({
   const active = pathname === `/${section.slug}` || pathname.startsWith(`/${section.slug}/`);
   const entryCount = countSectionEntries(section);
   const sectionMeta = getSectionMeta(section.slug);
-  const SectionIcon = sectionMeta.icon;
 
   return (
     <Box
@@ -234,7 +233,7 @@ function NavigationSection({
                 : "none",
             }}
           >
-            <SectionIcon size={16} />
+            <Icon name={sectionMeta.iconName} decorative size={16} />
           </Box>
           <Stack spacing="xs" style={{ minWidth: 0 }}>
             <Text
@@ -397,7 +396,7 @@ function SearchTrigger({ onOpen }: { onOpen: () => void }) {
   return (
     <Button variant="default" size="sm" onClick={onOpen}>
       <Flex align="center" gap={8}>
-        <SearchIcon size={14} />
+        <Icon name="action.search" decorative size={14} />
         <span>Search</span>
         <Box
           as="span"
@@ -870,7 +869,6 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false);
 
   const route = useMemo(() => getRoutePresentation(pathname), [pathname]);
-  const SectionIcon = route.sectionMeta.icon;
   const sidebarWidth = STABLE_SIDEBAR_WIDTH;
   const desktopGutter = tokens.spacing[2];
 
@@ -1175,7 +1173,7 @@ export function ShowroomShell({ children }: { children: ReactNode }) {
                             "0 6px 16px color-mix(in srgb, var(--ds-color-primary, #ffffff) 8%, transparent)",
                         }}
                       >
-                        <SectionIcon size={18} />
+                        <Icon name={route.sectionMeta.iconName} decorative size={18} />
                       </Box>
 
                       <Stack spacing="xs" style={{ minWidth: 0, flex: 1, gap: 4 }}>

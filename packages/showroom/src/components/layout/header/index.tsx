@@ -3,11 +3,7 @@
 import { ShowroomLink as Link } from "@/components/navigation/link";
 import { usePathname } from "next/navigation";
 import { Box, Flex, Text } from "@rottay/design-system";
-import {
-  ChevronRightIcon,
-  MenuIcon,
-  SearchIcon,
-} from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 import { useShowroomRuntime } from "@/components/showroom-context";
 import { getRoutePresentation } from "../navigation/config";
 import { DOC_COUNTS } from "@/data/registry/counts";
@@ -37,7 +33,6 @@ export function Header({
   const presentation = getRoutePresentation(pathname);
   const activeTheme = getPreviewOption(THEME_OPTIONS, runtime.tenantSlug);
   const activeEngine = getPreviewOption(ENGINE_OPTIONS, runtime.engine);
-  const SectionIcon = presentation.sectionMeta.icon;
   const sectionAccent =
     presentation.sectionSlug === "showroom"
       ? "var(--ds-color-primary, #ffffff)"
@@ -118,7 +113,7 @@ export function Header({
                     flexShrink: 0,
                   }}
                 >
-                  <MenuIcon size={16} />
+                  <Icon name="navigation.menu" decorative size={16} />
                 </Box>
               ) : null}
 
@@ -145,7 +140,11 @@ export function Header({
                     flexShrink: 0,
                   }}
                 >
-                  <SectionIcon size={isMobile ? 19 : 22} />
+                  <Icon
+                    name={presentation.sectionMeta.iconName}
+                    decorative
+                    size={isMobile ? 19 : 22}
+                  />
                 </Flex>
 
                 <Box style={{ minWidth: 0, maxWidth: isMobile ? "100%" : 980 }}>
@@ -239,7 +238,7 @@ export function Header({
                           <Flex key={crumb.href} align="center" gap={8}>
                             {index > 0 ? (
                               <Box style={{ color: shellTextTertiary }}>
-                                <ChevronRightIcon size={12} />
+                                <Icon name="navigation.forward" decorative size={12} />
                               </Box>
                             ) : null}
                             {isCurrent ? (
@@ -315,7 +314,7 @@ export function Header({
                   style={{ height: "100%", padding: "0 14px" }}
                 >
                   <Flex align="center" gap={10}>
-                    <SearchIcon size={16} />
+                    <Icon name="action.search" decorative size={16} />
                     <Text as="div" color="inherit" wrap="auto" style={{ fontSize: '0.875rem', fontWeight: 600, textAlign: 'inherit', color: "inherit" }}>
                       Search docs
                     </Text>

@@ -2,7 +2,7 @@
 
 import { ShowroomLink as Link } from "@/components/navigation/link";
 import { Box, Flex, Text } from "@rottay/design-system";
-import { ExternalLinkIcon } from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 import { useShowroomRuntime } from "@/components/showroom-context";
 import { DOC_COUNTS } from "@/data/registry/counts";
 import { ENGINE_OPTIONS, getPreviewOption } from "../pickers";
@@ -170,7 +170,7 @@ export function Footer() {
                     >
                       {link.label}
                     </Text>
-                    <ExternalLinkIcon size={11} />
+                    <Icon name="action.open-external" decorative size={11} />
                   </Flex>
                 </Box>
               ) : (
