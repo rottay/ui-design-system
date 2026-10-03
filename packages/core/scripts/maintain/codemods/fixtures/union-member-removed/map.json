@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "line": "fixture",
+  "package": "@rottay/design-system",
+  "groups": {
+    "fixture": { "changeset": "fixture", "census": "fixture", "mode": "rewrite", "resolves": "fixture: literal rewrite on a design-system prop" }
+  },
+  "entries": [
+    { "id": "union-member-removed/.#LegacySpaceSize.small", "class": "union-member-removed", "group": "fixture", "subpath": ".", "symbol": "LegacySpaceSize", "member": "small", "prop": "size", "components": ["Space"], "replacement": { "member": "sm" } },
+    { "id": "union-member-removed/.#LegacySpaceSize.large", "class": "union-member-removed", "group": "fixture", "subpath": ".", "symbol": "LegacySpaceSize", "member": "large", "prop": "size", "components": ["Space"], "replacement": { "member": "lg" } },
+    { "id": "union-member-removed/.#TooltipPlacement.left", "class": "union-member-removed", "group": "fixture", "subpath": ".", "symbol": "TooltipPlacement", "member": "left", "prop": "placement", "components": ["Tooltip"], "directional": true, "replacement": { "member": "inline-start" } },
+    { "id": "union-member-removed/.#TooltipPlacement.auto", "class": "union-member-removed", "group": "fixture", "subpath": ".", "symbol": "TooltipPlacement", "member": "auto", "prop": "placement", "components": ["Tooltip"], "replacement": null, "guidance": "State a side." }
+  ]
+}

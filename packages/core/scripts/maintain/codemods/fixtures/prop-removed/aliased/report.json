@@ -1,0 +1,26 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 9,
+    "column": 14,
+    "action": "rewrite",
+    "id": "prop-removed/.#GridViewProps.columns",
+    "reason": "attribute-deleted"
+  },
+  {
+    "file": "index.tsx",
+    "line": 10,
+    "column": 27,
+    "action": "rewrite",
+    "id": "prop-removed/.#GridViewProps.minColumnWidth",
+    "reason": "attribute-deleted"
+  },
+  {
+    "file": "index.tsx",
+    "line": 11,
+    "column": 16,
+    "action": "rewrite",
+    "id": "prop-removed/.#GalleryViewProps.columns",
+    "reason": "attribute-deleted"
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 6,
+    "column": 14,
+    "action": "rewrite",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 7,
+    "column": 14,
+    "action": "rewrite",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 8,
+    "column": 14,
+    "action": "report",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "non-literal-value"
+  },
+  {
+    "file": "index.tsx",
+    "line": 9,
+    "column": 14,
+    "action": "report",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "unmapped-value"
+  }
+]

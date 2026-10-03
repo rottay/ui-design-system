@@ -1,0 +1,6 @@
+.own {
+  --ds-commercial-hairline-extra: 1px;
+  color: var(--ds-color-surface-ink);
+  background: var(--ds-color-accent);
+  gap: var(--ds-switch-label-gapless);
+}

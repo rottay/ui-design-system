@@ -1,0 +1,10 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 15,
+    "action": "rewrite",
+    "id": "symbol-removed/.#TONE_TO_TAG_VARIANT",
+    "reason": "import-binding"
+  }
+]

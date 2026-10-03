@@ -1,0 +1,50 @@
+[
+  {
+    "file": "alias/index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "rewrite",
+    "id": "symbol-removed/.#TONE_TO_TAG_VARIANT",
+    "reason": "import-binding"
+  },
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "rewrite",
+    "id": "symbol-removed/.#TONE_TO_TAG_VARIANT",
+    "reason": "import-binding"
+  },
+  {
+    "file": "index.ts",
+    "line": 3,
+    "column": 10,
+    "action": "report",
+    "id": "symbol-removed/.#TONE_TO_TAG_VARIANT",
+    "reason": "indirect"
+  },
+  {
+    "file": "index.ts",
+    "line": 2,
+    "column": 10,
+    "action": "report",
+    "id": "symbol-removed/.#TONE_TO_BADGE_VARIANT",
+    "reason": "indirect"
+  },
+  {
+    "file": "named/index.ts",
+    "line": 2,
+    "column": 10,
+    "action": "rewrite",
+    "id": "symbol-removed/.#TONE_TO_AVATAR_VARIANT",
+    "reason": "re-export"
+  },
+  {
+    "file": "named/index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "rewrite",
+    "id": "symbol-removed/.#TONE_TO_BADGE_VARIANT",
+    "reason": "re-export"
+  }
+]

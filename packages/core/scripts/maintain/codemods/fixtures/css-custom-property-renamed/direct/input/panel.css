@@ -1,0 +1,7 @@
+/* --ds-commercial-ink was the dark surface */
+.panel {
+  background: var(--ds-commercial-ink);
+  border: 1px solid var(--ds-commercial-gray-300);
+  --ds-inputnumber-bg: var(--ds-color-accent-500);
+  gap: var(--ds-switch-label-gap, 8px);
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantCapabilityDeclaration.brandThemePath",
+    "reason": "member-changed"
+  },
+  {
+    "file": "index.ts",
+    "line": 13,
+    "column": 25,
+    "action": "report",
+    "id": "member-changed/.#TENANT_CAPABILITY_REGISTRY.brandThemePath",
+    "reason": "member-changed"
+  },
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 44,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "index.ts",
+    "line": 3,
+    "column": 10,
+    "action": "report",
+    "id": "member-changed/./server#migrateAndAdmitDocument.migrated",
+    "reason": "member-changed"
+  }
+]

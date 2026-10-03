@@ -1,0 +1,18 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 4,
+    "column": 24,
+    "action": "report",
+    "id": "prop-renamed/.#TooltipValue.color",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 14,
+    "column": 15,
+    "action": "report",
+    "id": "prop-renamed/.#TooltipValue.color",
+    "reason": "indirect"
+  }
+]

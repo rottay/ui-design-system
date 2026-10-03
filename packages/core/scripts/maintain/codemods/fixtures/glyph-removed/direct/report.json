@@ -1,0 +1,26 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 16,
+    "action": "report",
+    "id": "glyph-removed/./icons#PlusIcon",
+    "reason": "glyph-role-map-absent"
+  },
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 26,
+    "action": "report",
+    "id": "glyph-removed/./icons#XIcon",
+    "reason": "glyph-role-map-absent"
+  },
+  {
+    "file": "index.tsx",
+    "line": 9,
+    "column": 8,
+    "action": "report",
+    "id": "glyph-removed/./icons#ZapIcon",
+    "reason": "glyph-role-map-absent"
+  }
+]

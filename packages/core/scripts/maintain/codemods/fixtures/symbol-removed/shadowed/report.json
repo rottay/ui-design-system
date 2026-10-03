@@ -1,0 +1,26 @@
+[
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "report",
+    "id": "symbol-removed/.#BrandTheme",
+    "reason": "replacement-shadowed"
+  },
+  {
+    "file": "index.ts",
+    "line": 4,
+    "column": 33,
+    "action": "report",
+    "id": "symbol-removed/.#BrandTheme",
+    "reason": "replacement-shadowed"
+  },
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 22,
+    "action": "rewrite",
+    "id": "symbol-removed/.#serializeBrandTheme",
+    "reason": "import-binding"
+  }
+]

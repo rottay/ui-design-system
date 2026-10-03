@@ -1,0 +1,4 @@
+/* .rottay-app-shell__footer was renamed */
+.rottay-app-shell__main { min-height: 100dvh; }
+:is(.rt-app-shell, .rottay-app-shell__navigation-drawer) > .rottay-app-shell__navigation-sidebar { inset: 0; }
+.rottay-action-dock.rt-tray[data-part="root"] { gap: 0; }

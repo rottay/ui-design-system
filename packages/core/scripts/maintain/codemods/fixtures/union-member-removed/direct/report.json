@@ -1,0 +1,66 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 6,
+    "column": 19,
+    "action": "rewrite",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "literal-rewritten"
+  },
+  {
+    "file": "index.tsx",
+    "line": 8,
+    "column": 38,
+    "action": "rewrite",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "literal-rewritten"
+  },
+  {
+    "file": "index.tsx",
+    "line": 10,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "dynamic"
+  },
+  {
+    "file": "index.tsx",
+    "line": 7,
+    "column": 20,
+    "action": "rewrite",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "literal-rewritten"
+  },
+  {
+    "file": "index.tsx",
+    "line": 8,
+    "column": 28,
+    "action": "rewrite",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "literal-rewritten"
+  },
+  {
+    "file": "index.tsx",
+    "line": 10,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "dynamic"
+  },
+  {
+    "file": "index.tsx",
+    "line": 11,
+    "column": 26,
+    "action": "report",
+    "id": "union-member-removed/.#TooltipPlacement.left",
+    "reason": "direction-semantics"
+  },
+  {
+    "file": "index.tsx",
+    "line": 12,
+    "column": 26,
+    "action": "report",
+    "id": "union-member-removed/.#TooltipPlacement.auto",
+    "reason": "no-replacement"
+  }
+]

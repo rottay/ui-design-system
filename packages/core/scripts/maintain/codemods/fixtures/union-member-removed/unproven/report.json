@@ -1,0 +1,26 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 4,
+    "column": 17,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 8,
+    "column": 15,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "indirect"
+  },
+  {
+    "file": "index.tsx",
+    "line": 4,
+    "column": 17,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "spread"
+  }
+]

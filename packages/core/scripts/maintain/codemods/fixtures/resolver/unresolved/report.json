@@ -1,0 +1,10 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 30,
+    "action": "report",
+    "id": "resolver/.#UnresolvedSpecifier",
+    "reason": "unresolved-specifier"
+  }
+]

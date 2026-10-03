@@ -1,0 +1,106 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./primitives/button#*",
+    "reason": "namespace-import"
+  },
+  {
+    "file": "index.tsx",
+    "line": 2,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./primitives/button#*",
+    "reason": "not-exported-at-target"
+  },
+  {
+    "file": "index.tsx",
+    "line": 3,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./spatial/spec#*",
+    "reason": "no-target"
+  },
+  {
+    "file": "index.tsx",
+    "line": 4,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./effects#*",
+    "reason": "no-target"
+  },
+  {
+    "file": "index.tsx",
+    "line": 5,
+    "column": 23,
+    "action": "report",
+    "id": "subpath-removed/./never-published#*",
+    "reason": "unmapped-unpublished-subpath"
+  },
+  {
+    "file": "index.tsx",
+    "line": 6,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./commercial.css#*",
+    "reason": "no-target"
+  },
+  {
+    "file": "index.tsx",
+    "line": 7,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./commercial#*",
+    "reason": "not-exported-at-target"
+  },
+  {
+    "file": "index.tsx",
+    "line": 9,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./primitives/tabs#*",
+    "reason": "star-reexport"
+  },
+  {
+    "file": "index.tsx",
+    "line": 12,
+    "column": 22,
+    "action": "report",
+    "id": "subpath-removed/./primitives/select#*",
+    "reason": "dynamic-import"
+  },
+  {
+    "file": "index.tsx",
+    "line": 16,
+    "column": 20,
+    "action": "report",
+    "id": "subpath-removed/./primitives/card#*",
+    "reason": "dynamic-import"
+  },
+  {
+    "file": "index.tsx",
+    "line": 7,
+    "column": 22,
+    "action": "report",
+    "id": "symbol-removed-no-replacement/./commercial#ProductWindow",
+    "reason": "no-public-replacement"
+  },
+  {
+    "file": "index.tsx",
+    "line": 7,
+    "column": 37,
+    "action": "report",
+    "id": "symbol-removed-no-replacement/./commercial#TreeView",
+    "reason": "no-public-replacement"
+  },
+  {
+    "file": "theme.css",
+    "line": 2,
+    "column": 10,
+    "action": "report",
+    "id": "subpath-removed/./styles/default#*",
+    "reason": "stylesheet-import"
+  }
+]

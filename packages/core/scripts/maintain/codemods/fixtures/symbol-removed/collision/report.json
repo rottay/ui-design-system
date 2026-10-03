@@ -1,0 +1,10 @@
+[
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "rewrite",
+    "id": "symbol-removed/.#TONE_TO_TAG_VARIANT",
+    "reason": "import-binding-aliased"
+  }
+]

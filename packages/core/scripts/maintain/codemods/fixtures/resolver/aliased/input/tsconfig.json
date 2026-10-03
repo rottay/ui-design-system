@@ -1,0 +1,1 @@
+{ "compilerOptions": { "jsx": "preserve", "paths": { "@rottay/design-system": ["./vendor/ds"], "@rottay/design-system/*": ["./vendor/ds/*"] } } }

@@ -1,0 +1,34 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 20,
+    "action": "report",
+    "id": "symbol-removed-no-replacement/.#useRouterState",
+    "reason": "no-public-replacement"
+  },
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 36,
+    "action": "report",
+    "id": "symbol-removed-no-replacement/.#SurfacePermissionRule",
+    "reason": "no-public-replacement"
+  },
+  {
+    "file": "index.tsx",
+    "line": 6,
+    "column": 20,
+    "action": "report",
+    "id": "symbol-removed-no-replacement/.#STEPS_DEFAULTS",
+    "reason": "no-public-replacement"
+  },
+  {
+    "file": "index.tsx",
+    "line": 9,
+    "column": 8,
+    "action": "report",
+    "id": "symbol-removed-no-replacement/.#Skeleton.Avatar",
+    "reason": "no-public-replacement"
+  }
+]

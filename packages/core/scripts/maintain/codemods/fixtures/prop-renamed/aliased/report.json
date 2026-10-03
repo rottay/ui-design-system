@@ -1,0 +1,42 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 8,
+    "column": 14,
+    "action": "rewrite",
+    "id": "prop-renamed/.#TooltipValue.color",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 9,
+    "column": 24,
+    "action": "rewrite",
+    "id": "prop-renamed/.#TooltipValue.color",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 11,
+    "column": 12,
+    "action": "rewrite",
+    "id": "prop-renamed/.#TooltipValue.color",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 10,
+    "column": 19,
+    "action": "rewrite",
+    "id": "prop-renamed/.#StepperProps.initial",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 12,
+    "column": 16,
+    "action": "rewrite",
+    "id": "prop-renamed/.#StepperProps.initial",
+    "reason": "attribute-renamed"
+  }
+]

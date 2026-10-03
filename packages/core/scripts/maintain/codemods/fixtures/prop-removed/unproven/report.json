@@ -1,0 +1,42 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 12,
+    "column": 24,
+    "action": "report",
+    "id": "prop-removed/.#GridViewProps.columns",
+    "reason": "side-effect"
+  },
+  {
+    "file": "index.tsx",
+    "line": 11,
+    "column": 24,
+    "action": "report",
+    "id": "prop-removed/.#GridViewProps.columns",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 14,
+    "column": 24,
+    "action": "report",
+    "id": "prop-removed/.#GridViewProps.columns",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 6,
+    "column": 33,
+    "action": "report",
+    "id": "prop-removed/.#GridViewProps.columns",
+    "reason": "typed-object"
+  },
+  {
+    "file": "index.tsx",
+    "line": 13,
+    "column": 41,
+    "action": "report",
+    "id": "prop-removed/.#GridViewProps.columns",
+    "reason": "create-element"
+  }
+]

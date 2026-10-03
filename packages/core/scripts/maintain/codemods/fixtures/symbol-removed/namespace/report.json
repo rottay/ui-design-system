@@ -1,0 +1,42 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 3,
+    "column": 20,
+    "action": "rewrite",
+    "id": "symbol-removed/.#TONE_TO_AVATAR_VARIANT",
+    "reason": "namespace-member"
+  },
+  {
+    "file": "index.tsx",
+    "line": 8,
+    "column": 9,
+    "action": "report",
+    "id": "symbol-removed/.#TONE_TO_TAG_VARIANT",
+    "reason": "destructured"
+  },
+  {
+    "file": "index.tsx",
+    "line": 5,
+    "column": 20,
+    "action": "rewrite",
+    "id": "symbol-removed/.#BrandTheme",
+    "reason": "namespace-member"
+  },
+  {
+    "file": "index.tsx",
+    "line": 6,
+    "column": 21,
+    "action": "rewrite",
+    "id": "symbol-removed/.#BrandThemeMode",
+    "reason": "import-type"
+  },
+  {
+    "file": "index.tsx",
+    "line": 4,
+    "column": 27,
+    "action": "rewrite",
+    "id": "symbol-removed/.#serializeBrandTheme",
+    "reason": "namespace-member"
+  }
+]

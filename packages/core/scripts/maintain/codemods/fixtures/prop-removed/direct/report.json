@@ -1,0 +1,42 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 6,
+    "column": 24,
+    "action": "rewrite",
+    "id": "prop-removed/.#GridViewProps.columns",
+    "reason": "attribute-deleted"
+  },
+  {
+    "file": "index.tsx",
+    "line": 9,
+    "column": 9,
+    "action": "rewrite",
+    "id": "prop-removed/.#GridViewProps.columns",
+    "reason": "attribute-deleted"
+  },
+  {
+    "file": "index.tsx",
+    "line": 6,
+    "column": 36,
+    "action": "rewrite",
+    "id": "prop-removed/.#GridViewProps.minColumnWidth",
+    "reason": "attribute-deleted"
+  },
+  {
+    "file": "index.tsx",
+    "line": 12,
+    "column": 41,
+    "action": "rewrite",
+    "id": "prop-removed/.#GalleryViewProps.columns",
+    "reason": "attribute-deleted"
+  },
+  {
+    "file": "index.tsx",
+    "line": 12,
+    "column": 76,
+    "action": "rewrite",
+    "id": "prop-removed/.#GalleryViewProps.minColumnWidth",
+    "reason": "attribute-deleted"
+  }
+]

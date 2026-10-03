@@ -1,0 +1,10 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 51,
+    "action": "report",
+    "id": "resolver/.#PackageAlias",
+    "reason": "package-aliased-locally"
+  }
+]

@@ -255,6 +255,8 @@
     "adaptive-contracts:check": "node scripts/check/contracts/adaptive/index.mjs --check",
     "adaptive-contracts:gate": "node scripts/check/contracts/adaptive/index.mjs --check --require-clean",
     "adaptive-contracts:test": "node --test scripts/check/contracts/adaptive/index.test.mjs",
+    "codemods": "node scripts/maintain/codemods/index.mjs",
+    "deprecations:check": "node scripts/check/boundaries/deprecations/index.mjs --check",
     "claim-exactness:check": "node scripts/check/evidence/certification/claims/exactness/index.mjs --check-artifact",
     "claim-exactness:write": "node scripts/check/evidence/certification/claims/exactness/index.mjs --write",
     "claim-integrity:structural": "node scripts/check/evidence/certification/claims/integrity/index.mjs --structural",
