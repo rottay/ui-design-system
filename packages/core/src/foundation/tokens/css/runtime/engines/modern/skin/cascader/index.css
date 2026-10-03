@@ -403,10 +403,16 @@
 
   .ds-cascader.ds-cascader--modern:is([data-part='root'], [data-part='dropdown']) [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible),
   .ds-cascader.ds-cascader--modern:is([data-part='root'], [data-part='dropdown']) [data-part='search-input']:is([data-state~='focus-visible'], :focus-visible),
-  .ds-cascader.ds-cascader--modern:is([data-part='root'], [data-part='dropdown']) [data-part='option']:is([data-state~='focus-visible'], :focus-visible),
   .ds-cascader.ds-cascader--modern:is([data-part='root'], [data-part='dropdown']) [data-part='clear-button']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: 2px solid Highlight;
-    outline-offset: 1px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
+  }
+
+  /* A column scrolls and clips: the option keeps its outline inside its own box. */
+  .ds-cascader.ds-cascader--modern:is([data-part='root'], [data-part='dropdown']) [data-part='option']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
     box-shadow: none;
   }
 

@@ -95,7 +95,7 @@
   cursor: not-allowed;
 }
 
-/* A semantic frame outranks hover and focus; focus adds its status ring. */
+/* A validation frame survives focus: the ring arrives, the hue stays; an authored status ring replaces it. */
 .ds-auto-complete.ds-auto-complete--modern[data-part='root'][data-status='error'] [data-part='input'][data-part='input'] {
   background: var(--ds-auto-complete-error-bg, var(--ds-material-control-background));
   border-color: var(--ds-auto-complete-error-border, var(--ds-color-error));
@@ -294,8 +294,8 @@
 
   .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input']:is([data-state~='focus-visible'], :focus-visible),
   .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='clear-button']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: 2px solid Highlight;
-    outline-offset: 1px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;
   }
 

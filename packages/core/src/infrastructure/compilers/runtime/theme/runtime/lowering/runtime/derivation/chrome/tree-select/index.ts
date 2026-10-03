@@ -8,12 +8,21 @@
  * @package @rottay/design-system
  */
 
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { FamilyDeriver } from "../../../../foundation/contract";
 
 export const treeSelectChromeDeriver: FamilyDeriver = {
   family: "tree-select",
   rank: "derived",
-  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "typography.roles", "states.focus"],
+  consumes: [
+    "palette.*",
+    "surfaces.materials",
+    "surfaces.elevation",
+    "typography.roles",
+    "states.focus",
+    "chrome.controls.input.errorShadowFocus",
+    "chrome.controls.input.warningShadowFocus",
+  ],
   produces: [
     "--ds-tree-select-bg",
     "--ds-tree-select-ink",
@@ -45,11 +54,12 @@ export const treeSelectChromeDeriver: FamilyDeriver = {
     "--ds-tree-select-spinner-track",
     "--ds-tree-select-spinner-ink",
   ],
-  derive: () => deriveTreeSelectChannels(),
+  derive: (context) => deriveTreeSelectChannels(context.theme),
 };
 
-export function deriveTreeSelectChannels(): Record<string, string> {
+export function deriveTreeSelectChannels(theme?: FlatTheme): Record<string, string> {
   const vars: Record<string, string> = {};
+  const input = theme?.chrome?.controls?.input;
   vars["--ds-tree-select-bg"] = "var(--ds-input-bg, var(--ds-material-control-background))";
   vars["--ds-tree-select-ink"] = "var(--ds-color-text-primary)";
   vars["--ds-tree-select-font-family"] = "var(--ds-input-font-family, var(--ds-type-body-font-family))";
@@ -59,8 +69,8 @@ export function deriveTreeSelectChannels(): Record<string, string> {
   vars["--ds-tree-select-shadow-focus"] = "var(--ds-focus-ring)";
   vars["--ds-tree-select-error-border"] = "var(--ds-color-error)";
   vars["--ds-tree-select-warning-border"] = "var(--ds-color-warning)";
-  vars["--ds-tree-select-error-shadow-focus"] = "var(--ds-input-error-shadow-focus, var(--ds-focus-ring))";
-  vars["--ds-tree-select-warning-shadow-focus"] = "var(--ds-input-warning-shadow-focus, var(--ds-focus-ring))";
+  vars["--ds-tree-select-error-shadow-focus"] = statusRing(input?.errorShadowFocus, "error");
+  vars["--ds-tree-select-warning-shadow-focus"] = statusRing(input?.warningShadowFocus, "warning");
   vars["--ds-tree-select-placeholder"] = "var(--ds-type-color-muted)";
   vars["--ds-tree-select-clear-color"] = "var(--ds-color-text-primary)";
   vars["--ds-tree-select-clear-color-hover"] = "var(--ds-input-clear-color-hover, var(--ds-color-text-primary))";
@@ -80,4 +90,14 @@ export function deriveTreeSelectChannels(): Record<string, string> {
   vars["--ds-tree-select-spinner-track"] = "var(--ds-color-border)";
   vars["--ds-tree-select-spinner-ink"] = "var(--ds-color-primary)";
   return vars;
+}
+
+/**
+ * A status ring is the field's own ring until a theme authors that status, then
+ * the input family's gated ring: the one door to the halo the frozen engines read.
+ */
+function statusRing(authored: string | undefined, status: "error" | "warning"): string {
+  return authored
+    ? `var(--ds-input-focus-ring-${status}, var(--ds-focus-ring))`
+    : "var(--ds-tree-select-shadow-focus, var(--ds-focus-ring))";
 }

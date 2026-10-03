@@ -8,13 +8,22 @@
  * @package @rottay/design-system
  */
 
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { FamilyDeriver } from "../../../../foundation/contract";
 
 /** A vertical's own auto-complete chrome outranks every relation stated here. */
 export const autoCompleteChromeDeriver: FamilyDeriver = {
   family: "auto-complete",
   rank: "derived",
-  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "typography.roles", "states.focus"],
+  consumes: [
+    "palette.*",
+    "surfaces.materials",
+    "surfaces.elevation",
+    "typography.roles",
+    "states.focus",
+    "chrome.controls.input.errorShadowFocus",
+    "chrome.controls.input.warningShadowFocus",
+  ],
   produces: [
     "--ds-auto-complete-bg",
     "--ds-auto-complete-border",
@@ -43,11 +52,12 @@ export const autoCompleteChromeDeriver: FamilyDeriver = {
     "--ds-auto-complete-empty-color",
     "--ds-auto-complete-empty-border",
   ],
-  derive: () => deriveAutoCompleteChannels(),
+  derive: (context) => deriveAutoCompleteChannels(context.theme),
 };
 
-export function deriveAutoCompleteChannels(): Record<string, string> {
+export function deriveAutoCompleteChannels(theme?: FlatTheme): Record<string, string> {
   const vars: Record<string, string> = {};
+  const input = theme?.chrome?.controls?.input;
   vars["--ds-auto-complete-bg"] = "var(--ds-input-bg, var(--ds-material-control-background))";
   vars["--ds-auto-complete-border"] = "var(--ds-input-border, var(--ds-material-control-border))";
   vars["--ds-auto-complete-border-hover"] = "var(--ds-material-control-border-hover)";
@@ -61,8 +71,8 @@ export function deriveAutoCompleteChannels(): Record<string, string> {
   vars["--ds-auto-complete-warning-bg"] = "var(--ds-input-warning-bg, var(--ds-auto-complete-bg))";
   vars["--ds-auto-complete-error-border"] = "var(--ds-color-error)";
   vars["--ds-auto-complete-warning-border"] = "var(--ds-color-warning)";
-  vars["--ds-auto-complete-error-shadow-focus"] = "var(--ds-input-error-shadow-focus, var(--ds-focus-ring))";
-  vars["--ds-auto-complete-warning-shadow-focus"] = "var(--ds-input-warning-shadow-focus, var(--ds-focus-ring))";
+  vars["--ds-auto-complete-error-shadow-focus"] = statusRing(input?.errorShadowFocus, "error");
+  vars["--ds-auto-complete-warning-shadow-focus"] = statusRing(input?.warningShadowFocus, "warning");
   vars["--ds-auto-complete-clear-color"] = "var(--ds-type-color-muted)";
   vars["--ds-auto-complete-clear-color-hover"] = "var(--ds-input-clear-color-hover, var(--ds-color-text-primary))";
   vars["--ds-auto-complete-dropdown-bg"] = "var(--ds-material-overlay-background)";
@@ -76,4 +86,14 @@ export function deriveAutoCompleteChannels(): Record<string, string> {
   vars["--ds-auto-complete-empty-color"] = "var(--ds-type-color-muted)";
   vars["--ds-auto-complete-empty-border"] = "var(--ds-color-border)";
   return vars;
+}
+
+/**
+ * A status ring is the field's own ring until a theme authors that status, then
+ * the input family's gated ring: the one door to the halo the frozen engines read.
+ */
+function statusRing(authored: string | undefined, status: "error" | "warning"): string {
+  return authored
+    ? `var(--ds-input-focus-ring-${status}, var(--ds-focus-ring))`
+    : "var(--ds-auto-complete-shadow-focus, var(--ds-focus-ring))";
 }

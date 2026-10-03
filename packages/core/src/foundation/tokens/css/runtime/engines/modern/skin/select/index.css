@@ -734,9 +734,12 @@
   }
 
   .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-open='true'],
-  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input-wrapper']:focus-within {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
   }
 
   .ds-select-shell.ds-select-shell--modern[data-part='root'][data-disabled='true'] [data-part='trigger'],

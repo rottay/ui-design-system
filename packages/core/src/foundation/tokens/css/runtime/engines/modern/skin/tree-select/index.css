@@ -73,7 +73,7 @@
   box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-focus-ring));
 }
 
-/* A status frame keeps its hue at rest, on hover and under focus, where it takes its status halo. */
+/* A validation frame survives focus: the ring arrives, the hue stays; an authored status ring replaces it. */
 .ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-part='trigger'][data-status='error'] {
   border-color: var(--ds-tree-select-error-border, var(--ds-color-error));
 }
@@ -390,8 +390,8 @@
   .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option']:is([data-state~='focus-visible'], :focus-visible),
   .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-node-toggle']:is([data-state~='focus-visible'], :focus-visible),
   .ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='clear-button']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: 2px solid Highlight;
-    outline-offset: 1px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;
   }
 

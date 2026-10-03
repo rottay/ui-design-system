@@ -443,6 +443,13 @@
 
 .ds-date-picker-panel.ds-date-picker-panel [data-part='time-select'][data-part='time-select'] {
   border: var(--ds-edge-hairline-width) solid var(--ds-date-picker-divider, var(--ds-color-border));
+  outline: none;
+  box-shadow: none;
+}
+
+.ds-date-picker-panel.ds-date-picker-panel [data-part='time-select'][data-part='time-select']:is([data-state~='focus-visible'], :focus-visible) {
+  border-color: var(--ds-date-picker-border-focus, var(--ds-color-primary));
+  box-shadow: var(--ds-date-picker-shadow-focus, var(--ds-focus-ring));
 }
 
 .ds-date-picker-panel [data-part='time-separator'] {
@@ -559,11 +566,14 @@
     outline-offset: -1px;
   }
 
+  .ds-date-picker.ds-date-picker--modern [data-part='trigger-input']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-date-picker-range.ds-date-picker-range--modern [data-part='trigger-input']:is([data-state~='focus-visible'], :focus-visible),
   .ds-date-picker-panel [data-part='cell']:is([data-state~='focus-visible'], :focus-visible),
   .ds-date-picker-panel [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible),
-  .ds-date-picker-panel [data-part='today-button']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: 2px solid Highlight;
-    outline-offset: 1px;
+  .ds-date-picker-panel [data-part='today-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-date-picker-panel.ds-date-picker-panel [data-part='time-select'][data-part='time-select']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;
   }
 

@@ -180,6 +180,8 @@
 .ds-color-picker-panel.ds-color-picker-panel [data-part='hex-input'][data-part='hex-input'],
 .ds-color-picker-panel.ds-color-picker-panel [data-part='format-select'][data-part='format-select'] {
   border: var(--ds-edge-standard-width) var(--ds-edge-standard-style) var(--ds-color-picker-field-border, var(--ds-material-control-border));
+  outline: none;
+  box-shadow: none;
 }
 
 @media (hover: hover) {
@@ -301,6 +303,14 @@
   box-shadow: var(--ds-color-picker-shadow-focus, var(--ds-focus-ring));
 }
 
+/* A focused selected preset wears the ring over its selection keyline; the inner keyline and the check still say selected. */
+.ds-color-picker-panel [data-part='preset-swatch'][data-selected='true']:is([data-state~='focus-visible'], :focus-visible) {
+  box-shadow:
+    var(--ds-color-picker-shadow-focus, var(--ds-focus-ring)),
+    inset 0 0 0 var(--ds-color-picker-selected-ring-width, var(--ds-focus-ring-width)) var(--ds-color-picker-check-ink, var(--ds-color-white)),
+    0 0 0 var(--ds-color-picker-selected-ring-width, var(--ds-focus-ring-width)) var(--ds-color-picker-selected-ring, var(--ds-color-primary));
+}
+
 .ds-color-picker-panel [data-part='clear-field'] {
   margin-block-start: var(--ds-spacing-2);
   padding-block-start: var(--ds-spacing-2);
@@ -420,11 +430,12 @@
 
   .ds-color-picker.ds-color-picker--modern [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible),
   .ds-color-picker-panel [data-part='native-color-input']:is([data-state~='focus-visible'], :focus-visible),
-  .ds-color-picker-panel [data-part='format-select']:is([data-state~='focus-visible'], :focus-visible),
-  .ds-color-picker-panel [data-part='preset-swatch']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-color-picker-panel.ds-color-picker-panel [data-part='hex-input'][data-part='hex-input']:is([data-state~='focused'], :focus),
+  .ds-color-picker-panel.ds-color-picker-panel [data-part='format-select'][data-part='format-select']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-color-picker-panel.ds-color-picker-panel [data-part='preset-swatch'][data-part='preset-swatch']:is([data-state~='focus-visible'], :focus-visible),
   .ds-color-picker-panel [data-part='clear-button']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: 2px solid Highlight;
-    outline-offset: 1px;
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;
   }
 }
