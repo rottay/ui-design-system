@@ -2,28 +2,26 @@
  * WHO MAY COMPILE A THEME AT RUNTIME, pinned.
  *
  * The mount law's claim is that the runtime consumes an artifact and never
- * recompiles one. Stated without qualification that claim is FALSE, and an
- * audit found the counter-example: `useCreateTenant` is a public `'use client'`
- * hook that calls `compileTenantThemeConfig` and injects the result. Rather
- * than let a true-sounding sentence stand over a known exception, the claim is
- * scoped here, in code, to what it actually governs.
+ * recompiles one. The claim is scoped here, in code, to what it actually
+ * governs: every module under `infrastructure/runtime` that imports a semantic
+ * theme compiler is listed, and the list is the measured one.
  *
- * THE BOUNDARY. There are two runtime doors onto a compiler and they answer
- * different questions:
+ * THE BOUNDARY. There is one runtime door onto a compiler:
  *
  *  - `server-mount` — `mountTenantTheme` renders a code-owned vertical's
  *    artifact on the SERVER, once per vertical per process. Expected server
  *    work; it never runs during hydration.
- *  - `authoring` — `useCreateTenant` compiles a DRAFT a human is editing, in an
- *    onboarding flow or admin console, so the preview is byte-identical to what
- *    the tenant will be served. Tenant creation is not provider hydration: no
- *    `DesignSystemProvider` mount reaches it, and an application that never
- *    authors a tenant never loads it.
  *
  * What must have NO door is the hydration path itself: mounting the provider,
  * resolving visual authority, and painting a tenant that already exists. That
- * is the assertion below — the census must contain those two entries and no
- * third, and only one of them may be a client module.
+ * is the assertion below — the census must contain that one entry and no
+ * second, and no entry may be a client module.
+ *
+ * OUTSIDE THIS CENSUS. A draft a human is editing is compiled by the
+ * customization patterns (tenant-preview, brand-studio tenant-theme-preview)
+ * under `components/patterns/customization`, which are not runtime modules: no
+ * provider mount reaches them, and an application that never renders a preview
+ * never loads them.
  *
  * NOT A COMPILE. `emitTenantArtifactCss` re-renders an already-compiled
  * artifact's bytes so the mount proof can compare them. Re-serializing a
@@ -46,7 +44,7 @@ const COMPILER_SYMBOLS: readonly string[] = [
 ];
 
 interface CompileDoor {
-  readonly kind: 'server-mount' | 'authoring';
+  readonly kind: 'server-mount';
   readonly client: boolean;
   readonly reason: string;
 }
@@ -57,12 +55,6 @@ const DOORS: Readonly<Record<string, CompileDoor>> = {
     client: false,
     reason:
       'mountTenantTheme renders a code-owned vertical artifact on the server, cached one compile per vertical per process. Never reached from hydration.',
-  },
-  'tenant/composition/react/authoring/use-create-tenant/index.ts': {
-    kind: 'authoring',
-    client: true,
-    reason:
-      'The sanctioned authoring exception: it compiles a draft TenantThemeDocument a human is editing so an onboarding preview equals what will be served. Not a provider mount, not a hydration path.',
   },
 };
 
@@ -118,18 +110,16 @@ describe('runtime compile doors', () => {
     expect(CENSUS.size).toBeGreaterThan(0);
   });
 
-  it('admits no compile door outside the two named ones', () => {
+  it('admits no compile door outside the named one', () => {
     expect([...CENSUS.keys()].sort()).toEqual(Object.keys(DOORS).sort());
   });
 
-  it('keeps exactly one CLIENT compile door, and it is the authoring hook', () => {
+  it('keeps no CLIENT compile door', () => {
     const clientDoors = [...CENSUS.entries()]
       .filter(([, entry]) => entry.client)
       .map(([path]) => path);
 
-    expect(clientDoors).toEqual([
-      'tenant/composition/react/authoring/use-create-tenant/index.ts',
-    ]);
+    expect(clientDoors).toEqual([]);
     for (const [path, door] of Object.entries(DOORS)) {
       expect(CENSUS.get(path)?.client, `${path} client posture`).toBe(door.client);
       expect(door.reason.length).toBeGreaterThan(60);
@@ -144,6 +134,9 @@ describe('runtime compile doors', () => {
     });
 
     expect([...plantedCensus.keys()].filter((path) => !(path in DOORS))).toEqual([planted]);
+    expect(
+      [...plantedCensus.entries()].filter(([, entry]) => entry.client).map(([path]) => path),
+    ).toEqual([planted]);
     // And the detector reads imports, not prose: a comment naming the compiler
     // must not enter the census, or the fence would be unmaintainable noise.
     expect(importedCompilerSymbols("// compiled once by compileTenantThemeConfig\n")).toEqual([]);

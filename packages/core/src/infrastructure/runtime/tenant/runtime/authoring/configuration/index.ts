@@ -6,6 +6,11 @@
  * (`createTenantTheme`). A `TenantConfig` carries no paint, so a draft's
  * personality preset and density posture land on the theme the compiler lowers,
  * never back on the config.
+ *
+ * INTERNAL. Only the `TenantCreationConfig` type is public (it is the `config`
+ * prop of `TenantPreview`). The two functions are the implementation the
+ * tenant-preview pattern imports by relative path; neither is exported from the
+ * tenant facade.
  */
 
 import type { TenantConfig, TenantPlan } from '../../../../../../foundation/contracts';

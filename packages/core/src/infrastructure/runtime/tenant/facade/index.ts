@@ -28,10 +28,8 @@ export {
 } from '../composition/react/provider';
 export type { TenantProviderProps } from '../composition/react/provider';
 
-// ── Authoring (tenant creation utilities) ──
-export { createTenantConfig } from '../runtime/authoring/configuration';
+// ── Authoring (the draft shape `TenantPreview` takes) ──
 export type { TenantCreationConfig } from '../runtime/authoring/configuration';
-export { useCreateTenant } from '../composition/react/authoring/use-create-tenant';
 
 // ── Presets (personality resolution) ──
 export { resolvePersonalityPreset } from '../foundation/personality/presets';
