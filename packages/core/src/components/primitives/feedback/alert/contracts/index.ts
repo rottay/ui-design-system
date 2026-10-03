@@ -115,29 +115,38 @@ export const TONE_TO_ALERT_TYPE: Record<AlertTone, AlertType> = TONE_TO_VARIANT;
 // Props Interface
 // ============================================================================
 
-/**
- * Props for the Alert component.
- *
- * @interface AlertProps
- * @extends {BaseComponentProps} - Standard props (className, style, id, etc.)
- * @extends {EngineAwareProps} - Engine selection support
- *
- * @example Complete Usage
- * ```tsx
- * <Alert
- *   type="warning"
- *   message="Session Expiring Soon"
- *   description="Your session will expire in 5 minutes. Save your work."
- *   icon={<ClockIcon />}
- *   showIcon
- *   closable
- *   onClose={() => refreshSession()}
- *   className="session-warning"
- *   style={{ marginBottom: 16 }}
- * />
- * ```
- */
-export interface AlertProps extends BaseComponentProps, EngineAwareProps {
+/** An alert led by its message line; the description is optional detail under it. */
+interface AlertTitledContent {
+  /**
+   * The main message content.
+   * Displayed prominently in the alert.
+   * Can be a string or React elements.
+   * Required unless a `description` is given.
+   * @example "Changes saved successfully!"
+   * @example <><strong>Success:</strong> Your profile has been updated.</>
+   */
+  message: ReactNode;
+
+  /**
+   * Additional descriptive content.
+   * Displayed below the main message in a smaller, subdued style.
+   * For complex descriptions, use `<Alert.Description>` compound component.
+   * @example "Please refresh the page to see the changes."
+   */
+  description?: ReactNode;
+}
+
+/** A body-only notice: no message line, so the description is the content. */
+interface AlertBodyOnlyContent {
+  /** The main message content. Optional here because the `description` carries the notice. */
+  message?: ReactNode;
+
+  /** The body of the notice. Required when there is no `message`. */
+  description: ReactNode;
+}
+
+/** Every Alert prop except the content pair (`message`, `description`). */
+interface AlertSharedProps extends BaseComponentProps, EngineAwareProps {
   // ---------------------------------------------------------------------------
   // Type & Appearance
   // ---------------------------------------------------------------------------
@@ -171,27 +180,27 @@ export interface AlertProps extends BaseComponentProps, EngineAwareProps {
    */
   showIcon?: boolean;
 
+  /**
+   * Visual weight of the surface. `subtle` washes one tint step lighter than
+   * `standard`: the weight of a guidance notice rather than an alert.
+   * Rendered by the Modern engine.
+   * @default 'standard'
+   */
+  emphasis?: 'standard' | 'subtle';
+
+  /**
+   * How assistive technology announces the alert. `alert` interrupts
+   * (`role="alert"`), `status` waits its turn (`role="status"`), and `tone`
+   * interrupts only for the urgent tones (warning, danger) and stays polite
+   * for the calm ones (info, success).
+   * Rendered by the Modern engine.
+   * @default 'alert'
+   */
+  announce?: 'alert' | 'status' | 'tone';
+
   // ---------------------------------------------------------------------------
   // Content
   // ---------------------------------------------------------------------------
-
-  /**
-   * The main message content.
-   * Displayed prominently in the alert.
-   * Can be a string or React elements.
-   * @required
-   * @example "Changes saved successfully!"
-   * @example <><strong>Success:</strong> Your profile has been updated.</>
-   */
-  message: ReactNode;
-
-  /**
-   * Additional descriptive content.
-   * Displayed below the main message in a smaller, subdued style.
-   * For complex descriptions, use `<Alert.Description>` compound component.
-   * @example "Please refresh the page to see the changes."
-   */
-  description?: ReactNode;
 
   /**
    * Children content for compound components.
@@ -241,6 +250,33 @@ export interface AlertProps extends BaseComponentProps, EngineAwareProps {
   onClose?: () => void;
 }
 
+/**
+ * Props for the Alert component.
+ *
+ * An alert always says something: `message` is required unless `description`
+ * is given, so an alert with neither does not type-check.
+ *
+ * @interface AlertProps
+ * @extends {BaseComponentProps} - Standard props (className, style, id, etc.)
+ * @extends {EngineAwareProps} - Engine selection support
+ *
+ * @example Complete Usage
+ * ```tsx
+ * <Alert
+ *   type="warning"
+ *   message="Session Expiring Soon"
+ *   description="Your session will expire in 5 minutes. Save your work."
+ *   icon={<ClockIcon />}
+ *   showIcon
+ *   closable
+ *   onClose={() => refreshSession()}
+ *   className="session-warning"
+ *   style={{ marginBottom: 16 }}
+ * />
+ * ```
+ */
+export type AlertProps = AlertSharedProps & (AlertTitledContent | AlertBodyOnlyContent);
+
 // ============================================================================
 // Default Values
 // ============================================================================
@@ -284,4 +320,10 @@ export const ALERT_DEFAULTS: Partial<AlertProps> = {
 
   /** Alerts use normal (non-compact) styling by default */
   compact: false,
+
+  /** Alerts wash at the standard weight by default */
+  emphasis: 'standard',
+
+  /** Alerts announce assertively by default */
+  announce: 'alert',
 };

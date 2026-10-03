@@ -28,6 +28,8 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
     description,
     children,
     action,
+    emphasis = ALERT_DEFAULTS.emphasis,
+    announce = ALERT_DEFAULTS.announce,
     compact = ALERT_DEFAULTS.compact,
     closable = ALERT_DEFAULTS.closable,
     onClose,
@@ -35,9 +37,18 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
     style,
   } = props;
 
+  const surfaceTone = tone ? TONE_TO_ALERT_TYPE[tone] : type;
+  const urgent = surfaceTone === 'warning' || surfaceTone === 'error';
+  const identity = [message, description].map((part) =>
+    typeof part === 'string' || typeof part === 'number' ? String(part) : null,
+  );
+
+  if (!message && !description && !children && !action) return null;
+
   return (
     <AlertSurface
-      tone={tone ? TONE_TO_ALERT_TYPE[tone] : type}
+      tone={surfaceTone}
+      emphasis={emphasis}
       title={message}
       description={description}
       icon={icon}
@@ -47,8 +58,8 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
       closable={closable}
       closeLabel={i18n?.tOr('close', 'Close') ?? 'Close'}
       onClose={onClose}
-      dismissKey={typeof message === 'string' || typeof message === 'number' ? message : null}
-      announce="alert"
+      dismissKey={identity.every((part) => part === null) ? null : identity.map((part) => part ?? '').join('\u0000')}
+      announce={announce === 'tone' ? (urgent ? 'alert' : 'status') : announce === 'status' ? 'status' : 'alert'}
       className={className}
       style={style}
     >
