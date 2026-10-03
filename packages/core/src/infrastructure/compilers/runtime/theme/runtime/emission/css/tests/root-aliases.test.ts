@@ -439,7 +439,7 @@ describe("the DS root's own mode channels (CONTAINER_MODE_TEXTS)", () => {
       base: "#171717",
       light: "#171717",
       dark: "#f8fafc",
-      sites: { base: "foundation/themes/default/index.css:62", dark: "foundation/themes/default/index.css:2107" },
+      sites: { base: "foundation/themes/default/index.css:62", dark: "foundation/themes/default/index.css:2106" },
     });
     expect(row("--ds-table-bg")).toMatchObject({ base: "#ffffff", dark: "var(--ds-surface-card)" });
     // The components layer's bare :root rule outranks the token layer's dark block.
