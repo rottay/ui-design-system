@@ -119,6 +119,34 @@ describe("chrome/search-command-bar", () => {
     expect(SKIN).not.toContain(":focus-visible");
   });
 
+  it("rests the ring on the tenant's focus signature, never on a recipe of its own", () => {
+    for (const fixture of FIXTURES) {
+      const derived = searchCommandBarChromeDeriver.derive(
+        buildLoweringContext({ theme: fixture.theme, tenant: fixture.tenant }),
+        {}
+      );
+      expect(derived["--ds-search-command-bar-focus-ring"], fixture.label).toBe(
+        "var(--ds-focus-ring)"
+      );
+    }
+    expect(skinFallbacks("--ds-search-command-bar-focus-ring")).toEqual(["var(--ds-focus-ring)"]);
+    // A ring rebuilt from the width or colour operands is one fixed shape under every signature.
+    expect(SKIN).not.toMatch(/--ds-focus-ring-(?:width|color|offset)/);
+  });
+
+  it("lets a tenant statement of the ring outrank the signature reference", () => {
+    const tenant: FamilyDeriver = {
+      family: "stated-tenant-ring",
+      rank: "tenant",
+      consumes: ["chrome.*"],
+      produces: ["--ds-search-command-bar-focus-ring"],
+      derive: () => ({ "--ds-search-command-bar-focus-ring": "0 0 0 3px currentColor" }),
+    };
+    const result = runDerivation(context(), [searchCommandBarChromeDeriver, tenant]);
+    expect(result.channels["--ds-search-command-bar-focus-ring"]).toBe("0 0 0 3px currentColor");
+    expect(result.provenance.get("--ds-search-command-bar-focus-ring")?.rank).toBe("tenant");
+  });
+
   it("yields every channel to a vertical or tenant statement of it", () => {
     const channels = Object.keys(searchCommandBarChromeDeriver.derive(context(), {}));
     for (const rank of ["verticalOverride", "tenant"] as const) {

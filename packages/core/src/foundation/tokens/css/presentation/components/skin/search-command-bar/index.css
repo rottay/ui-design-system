@@ -562,8 +562,8 @@
    `:is([data-state~='focus-visible'], :focus-visible)` arm. This rule used to
    gate the CHANNEL behind a bare `:focus-visible` of its own -- a second
    authority on when a control is keyboard-focused, and the family's one
-   unpaired state pseudo. The channel is a recipe, not paint, so it is simply
-   stated; the primitive still decides when to draw it. */
+   unpaired state pseudo. The channel rests on the tenant's focus signature,
+   so it is simply stated; the primitive still decides when to draw it. */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestion-chip,
 .ds-structure.ds-search-command-bar
@@ -574,11 +574,7 @@
   .ds-search-command-bar__voice-help-close,
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help-cancel {
-  --ds-button-focus-ring: var(
-    --ds-search-command-bar-focus-ring,
-    0 0 0 var(--ds-focus-ring-width, 2px)
-      var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent))
-  );
+  --ds-button-focus-ring: var(--ds-search-command-bar-focus-ring, var(--ds-focus-ring));
 }
 
 /* The drawer's forward action carries NO rule here, and stamps no part of its

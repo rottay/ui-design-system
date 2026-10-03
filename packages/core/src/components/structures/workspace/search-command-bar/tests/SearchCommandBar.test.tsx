@@ -10,6 +10,7 @@
  */
 import React from 'react';
 import { act, fireEvent, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 
 import { SearchCommandBar } from '..';
@@ -178,5 +179,48 @@ describe('SearchCommandBar -- the keyboard owner', () => {
     });
 
     expect(other).toHaveFocus();
+  });
+});
+
+describe('SearchCommandBar -- the composed controls own their focus ring', () => {
+  it('reaches clear, voice toggle and suggestion chip by keyboard as Buttons with no ring of their own', async () => {
+    voiceState.isSupported = true;
+    renderWithEngine(
+      bar({
+        command: {
+          placeholder: 'Search records',
+          value: 'draft',
+          onSearch: () => undefined,
+          suggestions: [{ key: 'open', label: 'Open only', query: 'status:open' }],
+        },
+      }),
+      'modern',
+    );
+    const controls = [
+      await screen.findByRole('button', { name: 'Clear search' }),
+      await screen.findByRole('button', { name: 'Start voice input' }),
+      await screen.findByRole('button', { name: 'Open only' }),
+    ];
+
+    const user = userEvent.setup();
+    const reached = new Set<Element>();
+    for (let step = 0; step < 40 && reached.size < controls.length; step += 1) {
+      await user.tab();
+      const active = document.activeElement;
+      if (active && controls.includes(active as HTMLElement)) reached.add(active);
+    }
+    expect(reached.size, 'every composed control is a tab stop').toBe(controls.length);
+
+    expect(controls.map((control) => control.getAttribute('data-part'))).toEqual([
+      'clear',
+      'voice-toggle',
+      'suggestion-chip',
+    ]);
+    for (const control of controls) {
+      expect(control.matches('.ds-button.ds-button--modern[data-variant]')).toBe(true);
+      expect(control.style.boxShadow, 'the ring is never painted inline').toBe('');
+      expect(control.style.outline, 'the ring is never an inline outline').toBe('');
+      expect(control.style.getPropertyValue('--ds-button-focus-ring')).toBe('');
+    }
   });
 });

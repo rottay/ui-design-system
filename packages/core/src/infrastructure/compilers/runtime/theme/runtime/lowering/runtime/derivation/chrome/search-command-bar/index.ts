@@ -258,7 +258,7 @@ export function deriveSearchCommandBarChannels(): Record<string, string> {
   vars["--ds-search-command-bar-control-bg"] = "var(--ds-surface-panel)";
   vars["--ds-search-command-bar-control-border"] = "var(--ds-color-border-subtle)";
   vars["--ds-search-command-bar-control-color"] = "var(--ds-color-text-secondary)";
-  vars["--ds-search-command-bar-focus-ring"] = "0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent))";
+  vars["--ds-search-command-bar-focus-ring"] = "var(--ds-focus-ring)";
   vars["--ds-search-command-bar-quiet-bg-hover"] = "color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent)";
   vars["--ds-search-command-bar-quiet-border"] = "var(--ds-color-border-subtle)";
   vars["--ds-search-command-bar-quiet-color"] = "var(--ds-color-text-secondary)";
