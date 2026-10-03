@@ -21,7 +21,6 @@ import { motion } from "motion/react";
 import type { FadeInProps } from "@/graphics/motion/foundation/contracts";
 import { useMotionPersonality } from "@/graphics/motion/react/runtime";
 import {
-  hasExplicitMotionTiming,
   motionMillisecondsToSeconds,
   motionSecondsToMilliseconds,
   resolveMotionMilliseconds,
@@ -55,8 +54,6 @@ export const FadeIn = forwardRef<HTMLDivElement, FadeInProps>(
       distance,
       durationMs,
       delayMs,
-      duration,
-      delay,
       once = true,
       className,
       style,
@@ -71,21 +68,19 @@ export const FadeIn = forwardRef<HTMLDivElement, FadeInProps>(
     const effectiveDistance = distance ?? motionPersonality.offsetDistance;
     const effectiveDurationMs = resolveMotionMilliseconds({
       milliseconds: durationMs,
-      legacy: duration,
       fallbackMilliseconds: motionSecondsToMilliseconds(
         motionPersonality.durationSeconds
       ),
     });
     const effectiveDelayMs = resolveMotionMilliseconds({
       milliseconds: delayMs,
-      legacy: delay,
       fallbackMilliseconds: motionSecondsToMilliseconds(
         motionPersonality.delaySeconds
       ),
     });
     const effectiveDuration = motionMillisecondsToSeconds(effectiveDurationMs);
     const effectiveDelay = motionMillisecondsToSeconds(effectiveDelayMs);
-    const hasExplicitDuration = hasExplicitMotionTiming(durationMs, duration);
+    const hasExplicitDuration = durationMs !== undefined;
     const resolvedStyle = useMemo(
       () => resolveMotionTransformStyle(style),
       [style]

@@ -19,7 +19,6 @@ import { motion } from "motion/react";
 import type { TextRevealProps } from "@/graphics/motion/foundation/contracts";
 import { useMotionPersonality } from "@/graphics/motion/react/runtime";
 import {
-  hasExplicitMotionTiming,
   motionMillisecondsToSeconds,
   motionSecondsToMilliseconds,
   resolveMotionMilliseconds,
@@ -46,8 +45,6 @@ export const TextReveal: React.FC<TextRevealProps> = ({
   type = "char",
   delayMs,
   durationMs,
-  delay,
-  duration,
   className,
   style,
 }) => {
@@ -66,10 +63,9 @@ export const TextReveal: React.FC<TextRevealProps> = ({
       ? text.split(" ")
       : text.split("\n");
   const segmentCount = Math.max(segments.length, 1);
-  const hasExplicitDuration = hasExplicitMotionTiming(durationMs, duration);
+  const hasExplicitDuration = durationMs !== undefined;
   const effectiveDelayMs = resolveMotionMilliseconds({
     milliseconds: delayMs,
-    legacy: delay,
     fallbackMilliseconds: motionSecondsToMilliseconds(
       motionPersonality.delaySeconds
     ),
@@ -84,7 +80,6 @@ export const TextReveal: React.FC<TextRevealProps> = ({
   );
   const explicitTotalDurationMs = resolveMotionMilliseconds({
     milliseconds: durationMs,
-    legacy: duration,
     fallbackMilliseconds:
       defaultSegmentDurationMs + defaultStaggerMs * (segmentCount - 1),
   });

@@ -25,7 +25,6 @@ import { motion } from "motion/react";
 import type { StaggerChildrenProps } from "@/graphics/motion/foundation/contracts";
 import { useMotionPersonality } from "@/graphics/motion/react/runtime";
 import {
-  hasExplicitMotionTiming,
   motionMillisecondsToSeconds,
   motionSecondsToMilliseconds,
   resolveMotionMilliseconds,
@@ -59,10 +58,6 @@ export const StaggerChildren = forwardRef<HTMLDivElement, StaggerChildrenProps>(
       delayMs,
       staggerDelayMs,
       delayChildrenMs,
-      duration,
-      delay,
-      staggerDelay,
-      delayChildren,
       once = true,
       className,
       style,
@@ -80,22 +75,18 @@ export const StaggerChildren = forwardRef<HTMLDivElement, StaggerChildrenProps>(
     );
     const effectiveDurationMs = resolveMotionMilliseconds({
       milliseconds: durationMs,
-      legacy: duration,
       fallbackMilliseconds: Math.max(personalityDurationMs * 0.45, 180),
     });
     const effectiveDelayMs = resolveMotionMilliseconds({
       milliseconds: delayMs,
-      legacy: delay,
       fallbackMilliseconds: 0,
     });
     const effectiveStaggerDelayMs = resolveMotionMilliseconds({
       milliseconds: staggerDelayMs,
-      legacy: staggerDelay,
       fallbackMilliseconds: Math.max(personalityDelayMs, 40),
     });
     const effectiveDelayChildrenMs = resolveMotionMilliseconds({
       milliseconds: delayChildrenMs,
-      legacy: delayChildren,
       fallbackMilliseconds: Math.max(personalityDelayMs * 0.5, 0),
     });
     const durationScale = motionPersonality.policy.durationScale;
@@ -104,7 +95,7 @@ export const StaggerChildren = forwardRef<HTMLDivElement, StaggerChildrenProps>(
     const childCount = Children.count(children);
     const scaledStaggerDelayMs = scaleExplicitTiming(
       effectiveStaggerDelayMs,
-      hasExplicitMotionTiming(staggerDelayMs, staggerDelay),
+      staggerDelayMs !== undefined,
     );
     const boundedStaggerDelayMs = childCount > 1
       ? Math.min(
@@ -115,11 +106,11 @@ export const StaggerChildren = forwardRef<HTMLDivElement, StaggerChildrenProps>(
     const effectiveDuration = motionMillisecondsToSeconds(
       scaleExplicitTiming(
         effectiveDurationMs,
-        hasExplicitMotionTiming(durationMs, duration),
+        durationMs !== undefined,
       ),
     );
     const effectiveDelay = motionMillisecondsToSeconds(
-      scaleExplicitTiming(effectiveDelayMs, hasExplicitMotionTiming(delayMs, delay)),
+      scaleExplicitTiming(effectiveDelayMs, delayMs !== undefined),
     );
     const effectiveStaggerDelay = motionMillisecondsToSeconds(
       boundedStaggerDelayMs,
@@ -127,10 +118,10 @@ export const StaggerChildren = forwardRef<HTMLDivElement, StaggerChildrenProps>(
     const effectiveDelayChildren = motionMillisecondsToSeconds(
       scaleExplicitTiming(
         effectiveDelayChildrenMs,
-        hasExplicitMotionTiming(delayChildrenMs, delayChildren),
+        delayChildrenMs !== undefined,
       ),
     );
-    const hasExplicitDuration = hasExplicitMotionTiming(durationMs, duration);
+    const hasExplicitDuration = durationMs !== undefined;
     const entrance = motionPersonality.entrance;
     const fadeEase = [0.16, 1, 0.3, 1] as const;
     const isStatic = Boolean(shouldReduceMotion) || entrance === "none";

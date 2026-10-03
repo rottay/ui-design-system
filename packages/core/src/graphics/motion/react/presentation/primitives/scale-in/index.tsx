@@ -21,7 +21,6 @@ import { motion } from "motion/react";
 import type { ScaleInProps } from "@/graphics/motion/foundation/contracts";
 import { useMotionPersonality } from "@/graphics/motion/react/runtime";
 import {
-  hasExplicitMotionTiming,
   motionMillisecondsToSeconds,
   motionSecondsToMilliseconds,
   resolveMotionMilliseconds,
@@ -52,8 +51,6 @@ export const ScaleIn = forwardRef<HTMLDivElement, ScaleInProps>(
       initialScale,
       durationMs,
       delayMs,
-      duration,
-      delay,
       once = true,
       className,
       style,
@@ -68,21 +65,19 @@ export const ScaleIn = forwardRef<HTMLDivElement, ScaleInProps>(
     const effectiveScale = initialScale ?? motionPersonality.initialScale;
     const effectiveDurationMs = resolveMotionMilliseconds({
       milliseconds: durationMs,
-      legacy: duration,
       fallbackMilliseconds: motionSecondsToMilliseconds(
         motionPersonality.durationSeconds
       ),
     });
     const effectiveDelayMs = resolveMotionMilliseconds({
       milliseconds: delayMs,
-      legacy: delay,
       fallbackMilliseconds: motionSecondsToMilliseconds(
         motionPersonality.delaySeconds
       ),
     });
     const effectiveDuration = motionMillisecondsToSeconds(effectiveDurationMs);
     const effectiveDelay = motionMillisecondsToSeconds(effectiveDelayMs);
-    const hasExplicitDuration = hasExplicitMotionTiming(durationMs, duration);
+    const hasExplicitDuration = durationMs !== undefined;
     const resolvedStyle = useMemo(
       () => resolveMotionTransformStyle(style),
       [style]

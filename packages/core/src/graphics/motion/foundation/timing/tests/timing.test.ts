@@ -5,7 +5,7 @@ import {
   resolveMotionMilliseconds,
 } from "..";
 
-describe("motion timing compatibility", () => {
+describe("motion timing", () => {
   it.each([
     [80, 0.08],
     [120, 0.12],
@@ -16,7 +16,6 @@ describe("motion timing compatibility", () => {
   ])("maps canonical %dms to %ss exactly", (milliseconds, seconds) => {
     const resolved = resolveMotionMilliseconds({
       milliseconds,
-      legacy: 2,
       fallbackMilliseconds: 320,
     });
 
@@ -24,50 +23,29 @@ describe("motion timing compatibility", () => {
     expect(motionMillisecondsToSeconds(resolved)).toBe(seconds);
   });
 
-  it.each([
-    [0.08, 80],
-    [0.12, 120],
-    [0.2, 200],
-    [0.32, 320],
-    [0.5, 500],
-    [0.9, 900],
-    [2, 2000],
-  ])(
-    "preserves the legacy %ss compatibility mapping as %dms",
-    (legacy, milliseconds) => {
+  it.each([0.08, 0.5, 1, 2, 10])(
+    "reads %d as milliseconds, never as seconds",
+    (milliseconds) => {
       expect(
-        resolveMotionMilliseconds({ legacy, fallbackMilliseconds: 320 })
+        resolveMotionMilliseconds({ milliseconds, fallbackMilliseconds: 320 })
       ).toBe(milliseconds);
     }
   );
 
-  it("treats legacy values above the compatibility window as milliseconds", () => {
-    expect(
-      resolveMotionMilliseconds({ legacy: 80, fallbackMilliseconds: 320 })
-    ).toBe(80);
-    expect(
-      resolveMotionMilliseconds({ legacy: 900, fallbackMilliseconds: 320 })
-    ).toBe(900);
-  });
-
-  it("lets explicit canonical timing win and keeps zero intentional", () => {
+  it("keeps zero intentional and falls back when no value is supplied", () => {
     expect(
       resolveMotionMilliseconds({
         milliseconds: 120,
-        legacy: 2,
         fallbackMilliseconds: 320,
       })
     ).toBe(120);
     expect(
       resolveMotionMilliseconds({
         milliseconds: 0,
-        legacy: 2,
         fallbackMilliseconds: 320,
       })
     ).toBe(0);
-    expect(
-      resolveMotionMilliseconds({ legacy: 0, fallbackMilliseconds: 320 })
-    ).toBe(0);
+    expect(resolveMotionMilliseconds({ fallbackMilliseconds: 320 })).toBe(320);
   });
 
   it("clamps negatives and falls back from non-finite inputs", () => {
@@ -79,7 +57,7 @@ describe("motion timing compatibility", () => {
     ).toBe(0);
     expect(
       resolveMotionMilliseconds({
-        legacy: Number.NaN,
+        milliseconds: Number.NaN,
         fallbackMilliseconds: 320,
       })
     ).toBe(320);

@@ -7,6 +7,23 @@ import { ScaleIn } from "../presentation/primitives/scale-in";
 import { SlideIn } from "../presentation/primitives/slide-in";
 import { StaggerChildren } from "../presentation/primitives/stagger-children";
 import { TextReveal } from "../presentation/primitives/text-reveal";
+import type {
+  BaseMotionProps,
+  CountUpProps,
+  StaggerChildrenProps,
+  TextRevealProps,
+} from "../../foundation/contracts";
+
+type UnsuffixedTimingKey = Extract<
+  | keyof BaseMotionProps
+  | keyof StaggerChildrenProps
+  | keyof TextRevealProps
+  | keyof CountUpProps,
+  "duration" | "delay" | "staggerDelay" | "delayChildren"
+>;
+const publishesNoUnsuffixedTimingKey: [UnsuffixedTimingKey] extends [never]
+  ? true
+  : false = true;
 
 interface MotionCall {
   tag: "div" | "span";
@@ -86,6 +103,10 @@ beforeEach(() => {
 afterEach(() => cleanup());
 
 describe("public motion primitive timing", () => {
+  it("publishes only millisecond-suffixed timing props", () => {
+    expect(publishesNoUnsuffixedTimingKey).toBe(true);
+  });
+
   it("maps canonical FadeIn timing exactly once from ms to seconds", () => {
     const { container } = render(
       <FadeIn durationMs={200} delayMs={80}>
@@ -123,10 +144,10 @@ describe("public motion primitive timing", () => {
     }
   );
 
-  it("keeps legacy seconds and legacy millisecond values compatible", () => {
+  it("maps SlideIn and ScaleIn millisecond timing exactly once to seconds", () => {
     const { rerender } = render(
-      <SlideIn duration={0.32} delay={0.12}>
-        legacy seconds
+      <SlideIn durationMs={320} delayMs={120}>
+        slide
       </SlideIn>
     );
     expect(lastCall().props.transition).toMatchObject({
@@ -136,13 +157,58 @@ describe("public motion primitive timing", () => {
 
     motionCalls.length = 0;
     rerender(
-      <ScaleIn duration={500} delay={80}>
-        legacy milliseconds
+      <ScaleIn durationMs={500} delayMs={80}>
+        scale
       </ScaleIn>
     );
     expect(lastCall().props.transition).toMatchObject({
       duration: 0.5,
       delay: 0.08,
+    });
+  });
+
+  it("reads timing values of ten or less as milliseconds, never as seconds", () => {
+    const { rerender } = render(
+      <FadeIn durationMs={2} delayMs={1}>
+        fade
+      </FadeIn>
+    );
+    expect(lastCall().props.transition).toMatchObject({
+      duration: 0.002,
+      delay: 0.001,
+    });
+
+    motionCalls.length = 0;
+    rerender(
+      <StaggerChildren
+        durationMs={10}
+        delayMs={4}
+        staggerDelayMs={2}
+        delayChildrenMs={8}
+      >
+        <div>one</div>
+        <div>two</div>
+      </StaggerChildren>
+    );
+    const variants = lastCall().props.variants as {
+      visible: { transition: Record<string, number> };
+    };
+    expect(variants.visible.transition).toMatchObject({
+      duration: 0.01,
+      delay: 0.004,
+      staggerChildren: 0.002,
+      delayChildren: 0.008,
+    });
+
+    motionCalls.length = 0;
+    rerender(<TextReveal text="ab" durationMs={10} delayMs={5} />);
+    const container = motionCalls.find((call) => call.tag === "div");
+    const containerVariants = container?.props.variants as {
+      visible: { transition: Record<string, number> };
+    };
+    expect(containerVariants.visible.transition).toMatchObject({
+      delayChildren: 0.005,
+      staggerChildren: 0.005,
     });
   });
 

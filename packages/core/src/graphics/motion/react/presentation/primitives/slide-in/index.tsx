@@ -21,7 +21,6 @@ import { motion } from "motion/react";
 import type { SlideInProps } from "@/graphics/motion/foundation/contracts";
 import { useMotionPersonality } from "@/graphics/motion/react/runtime";
 import {
-  hasExplicitMotionTiming,
   motionMillisecondsToSeconds,
   motionSecondsToMilliseconds,
   resolveMotionMilliseconds,
@@ -54,8 +53,6 @@ export const SlideIn = forwardRef<HTMLDivElement, SlideInProps>(
       distance,
       durationMs,
       delayMs,
-      duration,
-      delay,
       once = true,
       className,
       style,
@@ -71,7 +68,6 @@ export const SlideIn = forwardRef<HTMLDivElement, SlideInProps>(
     const effectiveDistance = distance ?? motionPersonality.offsetDistance;
     const effectiveDurationMs = resolveMotionMilliseconds({
       milliseconds: durationMs,
-      legacy: duration,
       fallbackMilliseconds: Math.max(
         motionSecondsToMilliseconds(motionPersonality.durationSeconds),
         200
@@ -79,14 +75,13 @@ export const SlideIn = forwardRef<HTMLDivElement, SlideInProps>(
     });
     const effectiveDelayMs = resolveMotionMilliseconds({
       milliseconds: delayMs,
-      legacy: delay,
       fallbackMilliseconds: motionSecondsToMilliseconds(
         motionPersonality.delaySeconds
       ),
     });
     const effectiveDuration = motionMillisecondsToSeconds(effectiveDurationMs);
     const effectiveDelay = motionMillisecondsToSeconds(effectiveDelayMs);
-    const hasExplicitDuration = hasExplicitMotionTiming(durationMs, duration);
+    const hasExplicitDuration = durationMs !== undefined;
     const resolvedStyle = useMemo(
       () => resolveMotionTransformStyle(style),
       [style]

@@ -150,20 +150,13 @@ describe("CountUp duration and cancellation", () => {
     expect(screen.getByText("100")).toBeInTheDocument();
   });
 
-  it("preserves legacy seconds for one minor", () => {
-    render(<CountUp from={0} to={100} duration={0.2} />);
+  it("reads a duration of ten or less as milliseconds, never as seconds", () => {
+    render(<CountUp from={0} to={100} durationMs={2} />);
 
     flushNextFrame(1000);
-    flushNextFrame(1200);
+    flushNextFrame(1002);
     expect(screen.getByText("100")).toBeInTheDocument();
-  });
-
-  it("uses canonical timing when both canonical and deprecated props are supplied", () => {
-    render(<CountUp from={0} to={100} durationMs={80} duration={2} />);
-
-    flushNextFrame(1000);
-    flushNextFrame(1080);
-    expect(screen.getByText("100")).toBeInTheDocument();
+    expect(frames).toHaveLength(0);
   });
 
   it("cancels the scheduled frame when unmounted", () => {

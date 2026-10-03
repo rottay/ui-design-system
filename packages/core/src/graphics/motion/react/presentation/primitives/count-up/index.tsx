@@ -78,8 +78,6 @@ export const CountUp: React.FC<CountUpProps> = ({
   to,
   durationMs,
   delayMs,
-  duration,
-  delay,
   prefix = "",
   suffix = "",
   decimals,
@@ -104,12 +102,10 @@ export const CountUp: React.FC<CountUpProps> = ({
   const resolvedStatic = resolvedStaticRef.current;
   const resolvedDurationMs = resolveMotionMilliseconds({
     milliseconds: durationMs,
-    legacy: duration,
     fallbackMilliseconds: 2000,
   });
   const resolvedDelayMs = resolveMotionMilliseconds({
     milliseconds: delayMs,
-    legacy: delay,
     fallbackMilliseconds: 0,
   });
   const fractionDigits = resolveFractionDigits(decimals);

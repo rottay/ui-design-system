@@ -93,24 +93,13 @@ export type AnimationDirection = "up" | "down" | "left" | "right";
 
 /**
  * Shared base props for all entrance-style motion components.
- * Canonical timing props carry an explicit `Ms` suffix. The un-suffixed props
- * remain as deprecated compatibility aliases for one minor release.
+ * Timing props are milliseconds and carry an explicit `Ms` suffix.
  */
 export interface BaseMotionProps {
   /** Animation duration in milliseconds. */
   durationMs?: number;
   /** Delay before the animation starts, in milliseconds. */
   delayMs?: number;
-  /**
-   * @deprecated Use `durationMs`. During the compatibility window, positive
-   * values up to 10 are interpreted as seconds and all other values as ms.
-   */
-  duration?: number;
-  /**
-   * @deprecated Use `delayMs`. During the compatibility window, positive
-   * values up to 10 are interpreted as seconds and all other values as ms.
-   */
-  delay?: number;
   /** If true, the viewport-triggered animation only plays on its first entry. */
   once?: boolean;
   /** Additional CSS class name applied to the wrapper element. */
@@ -156,17 +145,13 @@ export interface ScrollRevealProps extends BaseMotionProps {
 
 /**
  * Orchestrates staggered entrance of child elements.
- * Each child is delayed by `staggerDelay` ms after the previous one.
+ * Each child is delayed by `staggerDelayMs` after the previous one.
  */
 export interface StaggerChildrenProps extends BaseMotionProps {
   /** Delay between consecutive children, in milliseconds. */
   staggerDelayMs?: number;
   /** Initial delay before the first child animates, in milliseconds. */
   delayChildrenMs?: number;
-  /** @deprecated Use `staggerDelayMs`; legacy seconds remain compatible for one minor. */
-  staggerDelay?: number;
-  /** @deprecated Use `delayChildrenMs`; legacy seconds remain compatible for one minor. */
-  delayChildren?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -218,10 +203,6 @@ export interface TextRevealProps {
   delayMs?: number;
   /** Total time in milliseconds from the first segment starting to the last settling. */
   durationMs?: number;
-  /** @deprecated Use `delayMs`; legacy seconds remain compatible for one minor. */
-  delay?: number;
-  /** @deprecated Use `durationMs`; legacy seconds remain compatible for one minor. */
-  duration?: number;
   /** Stagger unit: individual characters, whole words, or lines. */
   type?: "char" | "word" | "line";
 }
@@ -239,10 +220,6 @@ export interface CountUpProps {
   durationMs?: number;
   /** Delay in milliseconds before counting begins. */
   delayMs?: number;
-  /** @deprecated Use `durationMs`; legacy seconds remain compatible for one minor. */
-  duration?: number;
-  /** @deprecated Use `delayMs`; legacy seconds remain compatible for one minor. */
-  delay?: number;
   /** Text prepended to the displayed number (e.g. "$"). */
   prefix?: string;
   /** Text appended to the displayed number (e.g. "%"). */
