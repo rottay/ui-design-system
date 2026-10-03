@@ -5,8 +5,8 @@
  * primary ink, and every geometry channel on the spacing ramp so density
  * reaches the rail. The menu is not the sidebar: its inks and washes pair
  * with the card it paints, so no sidebar tone enters its colour chain (an
- * inverse tone's ink over the light card reads 1.04:1). Group, child and
- * indent geometry chain to the authored `--ds-sidebar-*` roots.
+ * inverse tone's ink over the light card reads 1.04:1). Row, child, icon,
+ * group and indent geometry chain to the authored `--ds-sidebar-*` roots.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/menu
  * @category Compilers
@@ -166,10 +166,10 @@ export function deriveMenuChannels(): Record<string, string> {
   vars["--ds-menu-item-radius"] = "var(--ds-radius-lg)";
   vars["--ds-menu-item-gap"] = "var(--ds-sidebar-item-gap, var(--ds-spacing-2))";
   vars["--ds-menu-item-padding-inline"] = "var(--ds-sidebar-item-padding-inline, var(--ds-spacing-4))";
-  vars["--ds-menu-item-height"] = "var(--ds-spacing-12)";
+  vars["--ds-menu-item-height"] = "var(--ds-sidebar-item-height, var(--ds-spacing-12))";
   vars["--ds-menu-item-child-height"] = "var(--ds-sidebar-item-child-height, var(--ds-spacing-10))";
   vars["--ds-menu-item-horizontal-height"] = "var(--ds-spacing-11)";
-  vars["--ds-menu-child-padding-inline"] = "var(--ds-sidebar-item-indent, var(--ds-spacing-2))";
+  vars["--ds-menu-child-padding-inline"] = "var(--ds-sidebar-child-padding-inline, var(--ds-sidebar-item-indent, var(--ds-spacing-2)))";
   vars["--ds-menu-inline-indent"] = "var(--ds-spacing-6)";
   vars["--ds-menu-item-font-family"] = "var(--ds-type-body-font-family)";
   vars["--ds-menu-item-font-size"] = "var(--ds-sidebar-item-font-size, var(--ds-type-body-font-size))";
@@ -209,8 +209,8 @@ export function deriveMenuChannels(): Record<string, string> {
 
   // Icon well and disclosure arrow.
   vars["--ds-menu-icon-color"] = "currentColor";
-  vars["--ds-menu-icon-size"] = "var(--ds-icon-sm-size)";
-  vars["--ds-menu-icon-column-size"] = "var(--ds-spacing-6)";
+  vars["--ds-menu-icon-size"] = "var(--ds-sidebar-icon-size, var(--ds-icon-sm-size))";
+  vars["--ds-menu-icon-column-size"] = "var(--ds-sidebar-icon-column-size, var(--ds-spacing-6))";
   vars["--ds-menu-icon-radius"] = "var(--ds-radius-md)";
   vars["--ds-menu-icon-plate-bg"] = "color-mix(in srgb, currentColor 6%, transparent)";
   vars["--ds-menu-icon-opacity"] = "0.7";

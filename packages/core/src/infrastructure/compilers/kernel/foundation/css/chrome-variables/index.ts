@@ -1353,11 +1353,14 @@ export function chromeToVariables(
       vars["--ds-sidebar-header-height"] = s.headerHeight;
       vars["--ds-shell-sidebar-header-block-size"] = s.headerHeight;
     }
-    // The icon and item-height channels (icon size, icon column size, child
-    // padding, item height) stay un-emitted: nothing reads them under either
-    // the --ds-sidebar-* or the --ds-menu-* spelling. The remaining group and
-    // item geometry must keep emitting -- the menu deriver chains its
-    // --ds-menu-* channels off these --ds-sidebar-* roots.
+    // The group, item and icon geometry below is read by the menu deriver,
+    // which chains its --ds-menu-* channels off these --ds-sidebar-* roots.
+    if (s.iconSize) vars["--ds-sidebar-icon-size"] = s.iconSize;
+    if (s.iconColumnSize)
+      vars["--ds-sidebar-icon-column-size"] = s.iconColumnSize;
+    if (s.itemHeight) vars["--ds-sidebar-item-height"] = s.itemHeight;
+    if (s.childPaddingInline)
+      vars["--ds-sidebar-child-padding-inline"] = s.childPaddingInline;
     if (s.groupFontSize) vars["--ds-sidebar-group-font-size"] = s.groupFontSize;
     if (s.groupFontWeight != null)
       vars["--ds-sidebar-group-font-weight"] = String(s.groupFontWeight);
@@ -3028,6 +3031,14 @@ export function chromeToVariables(
     if (tb.lgPadding) vars["--ds-tabs-lg-padding"] = tb.lgPadding;
     if (tb.lgFontSize) vars["--ds-tabs-lg-font-size"] = tb.lgFontSize;
     if (tb.lgIconSize) vars["--ds-tabs-lg-icon-size"] = tb.lgIconSize;
+  }
+
+  // `collapse.border` is a colour, not a border shorthand: it lowers to the
+  // name every engine reads as the colour operand of the panel border, which
+  // is not the key-derived `--ds-collapse-border` the family map would spell.
+  if (chrome.collapse) {
+    const collapse = chrome.collapse;
+    if (collapse.border) vars["--ds-collapse-border-color"] = collapse.border;
   }
 
   for (const [family, mapping] of FLAT_CHROME_FAMILY_VARIABLES) {

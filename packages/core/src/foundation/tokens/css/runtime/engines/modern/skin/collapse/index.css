@@ -167,7 +167,7 @@
         clears the tenant border floor (0,3,1) -- a repeated data-part would
         be redundant here, so none is used (4th-wave recount). ---- */
 .rottay-collapse:not(.rottay-collapse--borderless)[data-part='root'] [data-part='panel'] {
-  border: var(--ds-collapse-root-default-idle-border-width, 1px) var(--ds-collapse-root-default-idle-border-style, solid) var(--ds-collapse-root-default-idle-border-color, var(--ds-color-border));
+  border: var(--ds-collapse-root-default-idle-border-width, 1px) var(--ds-collapse-root-default-idle-border-style, solid) var(--ds-collapse-border-color, var(--ds-collapse-root-default-idle-border-color, var(--ds-color-border)));
 }
 
 /* ---- header: color, 3-way priority (disabled > expanded > idle). Mutually
