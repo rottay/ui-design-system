@@ -4,9 +4,9 @@ import type { SpatialPolicyInput } from '../../../../../../foundation/contracts/
 import {
   SPATIAL_QUALITY_BUDGETS,
   downgradeSpatialMode,
-  resolveSpatialPolicy,
   resolveSpatialQualityBudget,
-} from '../../..';
+} from '../../../foundation/quality';
+import { resolveSpatialPolicy } from '..';
 
 const LIVE_INPUT: SpatialPolicyInput = Object.freeze({
   enabled: true,
