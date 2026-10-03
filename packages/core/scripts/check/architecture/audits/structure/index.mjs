@@ -403,6 +403,15 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     states: 0,
     'use-surface-state': 1,
   }),
+  // One posture family, two internal branches on the same one-way composition
+  // law: `region` owns viewport resolution and the per-region rendering
+  // disposition (render, collapse or hide), and `scope` composes that floor
+  // with the posture context, density and action dock. The scope consumes the
+  // region; the region never observes the scope.
+  'components/surfaces/runtime/postures': Object.freeze({
+    region: 0,
+    scope: 1,
+  }),
 });
 
 /**

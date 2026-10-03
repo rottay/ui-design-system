@@ -258,6 +258,12 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
       states: 0,
       'use-surface-state': 1,
     },
+    // The region owns viewport resolution and per-region rendering; the scope
+    // composes that floor with context, density and the action dock.
+    'components/surfaces/runtime/postures': {
+      region: 0,
+      scope: 1,
+    },
   });
   assert.deepEqual(UI_COMPONENT_BRANCH_RANKS, {
     foundation: 0,
@@ -280,8 +286,8 @@ test('every scoped owner and ranked child resolves to a real directory', () => {
 
   // Pinned before the loop: an entry silently deleted from the table would
   // otherwise leave a passing loop over whatever survived.
-  assert.equal(owners.length, 28);
-  assert.equal(rankedChildren.length, 104);
+  assert.equal(owners.length, 29);
+  assert.equal(rankedChildren.length, 106);
 
   for (const path of [...owners, ...rankedChildren]) {
     assert.equal(
@@ -707,6 +713,53 @@ test('the overlay contract composes its substrate without making UI peers global
     // The substrate floor stays below the mechanisms that consume it.
     assert(ids.has(
       `local-layer-inversion:${owner}/top-layer-host/index.ts->${owner}/portal/index.ts`,
+    ));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('the posture scope composes the region floor without widening the sibling rule', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const owner = 'components/surfaces/runtime/postures';
+    // Both rungs in one fixture: scope -> region is the admitted composition,
+    // region -> scope is the inversion control.
+    write(
+      resolve(sourceRoot, `${owner}/scope/index.ts`),
+      "import { region } from '../region';\nexport const scope = region;\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/region/index.ts`),
+      "import { scope } from '../scope';\nexport const region = scope;\n",
+    );
+    // Control A: a sibling outside the declared pair stays undeclared peer
+    // debt even under the same namespace.
+    write(
+      resolve(sourceRoot, `${owner}/to-shell-adapt/index.ts`),
+      "import { region } from '../region';\nexport const shellAdapt = region;\n",
+    );
+    // Control B: an unrelated family keeps its own existing inversion law.
+    write(
+      resolve(sourceRoot, 'components/structures/feedback/surface-lifecycle/states/index.ts'),
+      "import { useSurfaceState } from '../use-surface-state';\nexport const states = useSurfaceState;\n",
+    );
+    write(
+      resolve(sourceRoot, 'components/structures/feedback/surface-lifecycle/use-surface-state/index.ts'),
+      'export const useSurfaceState = true;\n',
+    );
+
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    assertEveryImportResolved(result);
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    const admitted = `${owner}/scope/index.ts->${owner}/region/index.ts`;
+    assert(!ids.has(`sibling-owner-dependency:${admitted}`), `the scope composes the region floor: ${admitted}`);
+    assert(!ids.has(`local-layer-inversion:${admitted}`), `the scope composes the region floor: ${admitted}`);
+    assert(ids.has(`local-layer-inversion:${owner}/region/index.ts->${owner}/scope/index.ts`));
+    assert(ids.has(`sibling-owner-dependency:${owner}/to-shell-adapt/index.ts->${owner}/region/index.ts`));
+    assert(ids.has(
+      'local-layer-inversion:components/structures/feedback/surface-lifecycle/states/index.ts->components/structures/feedback/surface-lifecycle/use-surface-state/index.ts',
     ));
   } finally {
     rmSync(packageRoot, { recursive: true, force: true });
