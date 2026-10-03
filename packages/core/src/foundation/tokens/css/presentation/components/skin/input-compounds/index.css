@@ -149,6 +149,7 @@
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
   background: var(--ds-input-bg-disabled, var(--ds-material-control-background-disabled));
   border-color: var(--ds-input-border-disabled, var(--ds-color-border));
+  opacity: var(--ds-input-disabled-opacity, var(--ds-state-disabled-opacity));
 }
 
 /* Select joins the same seam (C-02 compound field): a Select shell as a
@@ -201,6 +202,7 @@
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
   background: var(--ds-input-bg-disabled, var(--ds-material-control-background-disabled));
   border-color: var(--ds-input-border-disabled, var(--ds-color-border));
+  opacity: var(--ds-select-disabled-opacity, var(--ds-state-disabled-opacity));
 }
 
 /* TextArea --------------------------------------------------------------- */
@@ -348,7 +350,7 @@
   background: var(--ds-input-bg-disabled);
   border-color: var(--ds-input-border-disabled);
   cursor: var(--ds-input-disabled-cursor);
-  opacity: var(--ds-input-disabled-opacity);
+  opacity: var(--ds-input-disabled-opacity, var(--ds-state-disabled-opacity));
 }
 
 .ds-input-textarea[data-part='root'][data-loading='true'] [data-part='control'] {
