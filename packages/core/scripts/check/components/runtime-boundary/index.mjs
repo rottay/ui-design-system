@@ -17,7 +17,7 @@
  * THE LAW. `src/components/surfaces` and `src/components/structures` may not
  * name `window.location`, `localStorage` or `CustomEvent`. Those capabilities
  * belong to the DECLARED RUNTIME — `src/infrastructure/runtime/**`, which owns
- * `useLayoutPreference` for persistence, `useRouterState` for URL state, and
+ * `useLayoutPreference` for persistence, the app's declared URL-state input, and
  * the interaction owners for keyboard — and a component reaches them by
  * calling a hook, so the dependency is visible in the render tree instead of
  * hiding in a global.

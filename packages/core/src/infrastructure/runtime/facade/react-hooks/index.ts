@@ -13,9 +13,9 @@
  *    `useMediaQuery`/`useResponsiveValue` (responsive). These hooks are real
  *    infrastructure consumed by DS primitives, patterns, and structures.
  *
- * 2. **App-facing utilities** (exported for app consumption, zero DS-internal
- *    consumers): a11y, dnd, state, form, search, routing, data, ai,
- *    commands, notifications. These are domain-agnostic utilities that apps
+ * 2. **App-facing utilities** (internal adoption is capability-specific):
+ *    a11y, dnd, state, form, search, data, ai, commands.
+ *    These are domain-agnostic utilities that apps
  *    wire into their own state management. Surfaces receive data as props,
  *    they do NOT call data hooks internally.
  *
@@ -57,16 +57,10 @@
  * - `ShortcutProvider` - Context provider for the shortcut registry
  * - `formatShortcutKey` - Format shortcut key strings for display
  *
- * **Notification Hooks:**
- * - `useNotificationPreferences` - Manage notification preferences matrix (categories x channels)
- *
  * **State Hooks:**
  * - `useUndoRedo` - State management with full undo/redo history
  * - `useLayoutPreference` - Persisted layout preferences (sidebar, columns, density)
  * - `useCrossTabSync` - Cross-tab synchronization via BroadcastChannel
- *
- * **Routing Hooks:**
- * - `useRouterState` - Sync surface state with URL query params (framework-agnostic)
  *
  * **Data Hooks:**
  * - `useSurfaceQuery` - Data fetching for Surface components
@@ -288,15 +282,6 @@ export type {
 } from '../../application/commands';
 
 // ============================================================================
-// Routing hooks -- URL query param synchronization
-// ============================================================================
-export { useRouterState } from '../../application/navigation/routing';
-export type {
-  UseRouterStateOptions,
-  UseRouterStateReturn,
-} from '../../application/navigation/routing';
-
-// ============================================================================
 // AI hooks -- streaming text and chat interfaces
 // ============================================================================
 export { useStreamingText, useChat } from '../../application/automation/assistant';
@@ -313,17 +298,6 @@ export type {
 // ============================================================================
 export { useVoiceInput } from '../../application/automation/voice/composition/react/input';
 export type { UseVoiceInputOptions, UseVoiceInputResult } from '../../application/automation/voice/composition/react/input';
-
-// ============================================================================
-// Notification hooks -- preference matrix management (categories x channels)
-// ============================================================================
-export { useNotificationPreferences } from '../../application/notifications';
-export type {
-  NotificationChannel,
-  NotificationCategory,
-  UseNotificationPreferencesOptions,
-  UseNotificationPreferencesReturn,
-} from '../../application/notifications';
 
 // ============================================================================
 // State hooks -- undo/redo history, persisted layout preferences, cross-tab sync
