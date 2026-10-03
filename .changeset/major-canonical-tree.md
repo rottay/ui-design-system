@@ -28,7 +28,7 @@ will be documented in the release notes.
 
 **Components removed (one capability, one owner)**
 
-- `Toggle` → use `Switch`. `Stepper` → use `Steps`. `HoverCard` → use
+- `Switch` → use `Toggle`. `Steps` → use `Stepper`. `HoverCard` → use
   `Popover`/`Tooltip`. `Message` → use `Toast`. `Callout` → use `Alert`.
   `Space` → use `Stack`. `ConfirmDialog` → use `AlertDialog`.
   `FloatButton.BackTop` → use `BackTop`.
