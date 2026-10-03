@@ -1,0 +1,1692 @@
+{
+  "schema": 1,
+  "sealedAt": "2026-10-03",
+  "noDebtReceivers": [],
+  "compatReceivers": [],
+  "notes": [
+    "The `removeIn` line `4.0` on the compat-frozen-sole-implementer, compat-canon-pending and compat-persisted-data rows is the ledger author's assumption (the first major after 3.0); the release line of those rows awaits an owner statement."
+  ],
+  "rows": [
+    {
+      "file": "src/components/patterns/data/data-table/contracts/index.ts",
+      "anchor": "DataTablePatternProps.mobileBreakpoint",
+      "class": "compat-consumed",
+      "reason": "app-bithire forwards a pixel `mobileBreakpoint` to `PatternDataTable` from its table wrapper; the replacement is a posture declaration, not a number, so no mechanical rewrite exists and each site needs a decision.",
+      "scope": "One optional prop of `PatternDataTable`; when set it replaces the posture defaults.",
+      "replacement": "`adapt={{ compact: { presentation: \"cards\" } }}`",
+      "canonicalOwner": "src/components/patterns/data/data-table/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-12",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/ui/tables/data-table/index.tsx",
+          "needle": "mobileBreakpoint={mobileBreakpoint}",
+          "note": "The wrapper imports PatternDataTable from @rottay/design-system at :58-72."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
+      "anchor": "ChartScaffoldBaseProps.loading",
+      "class": "debt",
+      "reason": "Boolean alias of `state=\"loading\"` on the chart scaffold; an explicit `state` already wins, and the one known call site is a showroom torture section.",
+      "scope": "One optional prop threaded by every chart family. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Showroom site: components/torture-sections/visualizations/index.tsx (`<BarChart ... loading`).",
+      "replacement": "`state=\"loading\"`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-18",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/patterns/workflow/approval-inbox/index.ts",
+      "anchor": "PatternApprovalInbox",
+      "class": "debt",
+      "reason": "Superseded by `DecisionInboxSurface`; no application renders it, and the two remaining call sites are showroom previews that move with the retirement.",
+      "scope": "Exported pattern with Classic and Modern engines. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Showroom sites: app/probe/ds-reference/sections/component-behaviors/index.tsx and app/(docs)/patterns/[group]/[pattern]/pattern-preview-fixtures.tsx.",
+      "replacement": "`DecisionInboxSurface`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-04-02",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/avatar/contracts/index.ts",
+      "anchor": "AvatarVariant",
+      "class": "debt",
+      "reason": "Type of the `variant` prop of `Avatar`; no application passes that prop, and the single remaining call site is a showroom probe.",
+      "scope": "Exported type alias. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Showroom site: components/probes/primitives/display/index.tsx. A token-layer type of the same name in foundation/tokens/ts/runtime/components/avatar is a different symbol.",
+      "replacement": "`Tone` through the `tone` prop",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/avatar/contracts/index.ts",
+      "anchor": "AvatarProps.variant",
+      "class": "debt",
+      "reason": "Legacy colour axis of `Avatar`; no application passes it, and the single remaining call site is a showroom probe that moves to `tone`.",
+      "scope": "One optional prop of `Avatar`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Showroom site: components/probes/primitives/display/index.tsx.",
+      "replacement": "`tone`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/badge/contracts/index.ts",
+      "anchor": "BadgeVariant",
+      "class": "compat-consumed",
+      "reason": "app-bithire imports the `BadgeVariant` type by name to type its status tables, and the design system itself still authors `variant` on `Badge`; the tone mapping needs a codemod and a parity verdict.",
+      "scope": "Exported type alias, the type of `BadgeBaseProps.variant`.",
+      "replacement": "`Tone` through the `tone` prop",
+      "canonicalOwner": "src/components/primitives/display/badge/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/features/interviews/model/domain/workflows/feedback/listing/index.ts",
+          "needle": "import type { BadgeVariant } from \"@rottay/design-system\";"
+        },
+        {
+          "kind": "consumer",
+          "path": "packages/core/src/components/surfaces/presentation/pages/workspace/decision-inbox/index.tsx",
+          "needle": "<Badge variant=\"error\" badgeStyle=\"soft\" size=\"xs\">"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/badge/contracts/index.ts",
+      "anchor": "BadgeBaseProps.variant",
+      "class": "compat-consumed",
+      "reason": "Authored on `Badge` across design-system surfaces, the showroom and all three apps; `tone` renames `error` to `danger` and drops `gradient`, so removal needs the value-mapping codemod and a parity verdict.",
+      "scope": "One optional prop of `Badge`. Per-root use counts were not re-measured here; they are in the closure debrief and the review.",
+      "replacement": "`tone`",
+      "canonicalOwner": "src/components/primitives/display/badge/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "packages/core/src/components/surfaces/presentation/pages/workspace/decision-inbox/index.tsx",
+          "needle": "<Badge variant=\"error\" badgeStyle=\"soft\" size=\"xs\">"
+        },
+        {
+          "kind": "consumer",
+          "path": "packages/showroom/src/components/demos/evnto/venue-layout/index.tsx",
+          "needle": "<Badge variant=\"primary\">Venue control</Badge>"
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/vertical/showcase/applications/ai-recommendation-variants/index.tsx",
+          "needle": "<Badge variant=\"secondary\" className=\"rt-showcase-ai-rec-c__ai-badge\">"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/badge/contracts/index.ts",
+      "anchor": "BadgeBaseProps.overflowCount",
+      "class": "compat-consumed",
+      "reason": "app-platform still passes `overflowCount` to `Badge`; `max` is the same number under the canonical name, pending the rename codemod.",
+      "scope": "One optional prop of `Badge`; the Modern engine resolves it after `max`.",
+      "replacement": "`max`",
+      "canonicalOwner": "src/components/primitives/display/badge/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-03-16",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-platform/src/features/organization/admin/surface/screens/sessions/overview/index.tsx",
+          "needle": "<Badge count={anomalies.length} overflowCount={99}>"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/badge/contracts/index.ts",
+      "anchor": "BadgeBaseProps.closable",
+      "class": "debt",
+      "reason": "Close control without an accessible name; `removable` with `removeLabel` replaces it, and the one known call site is a showroom torture section.",
+      "scope": "One optional prop of `Badge`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Showroom site: components/torture-sections/media-states/index.tsx.",
+      "replacement": "`removable` with a localized `removeLabel`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-25",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/calendar/contracts/index.ts",
+      "anchor": "CalendarProps.dateCellRender",
+      "class": "compat-canon-pending",
+      "reason": "The Modern Calendar engine renders cells only through `dateCellRender` and does not read `cellRender`, so the documented replacement does not exist in the canonical owner; Rustic reads the same legacy prop.",
+      "scope": "One optional prop of `CalendarProps`. Classic discards it and reads `cellRender`; Modern and Rustic read it. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`cellRender`",
+      "canonicalOwner": "src/components/primitives/display/calendar/engines/modern/index.tsx",
+      "blocker": "replacement-capability-absent:cellRender",
+      "receiver": "WO-RET-01",
+      "since": "2026-03-16",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx",
+          "needle": "dateCellRender(date)",
+          "absentNeedle": "cellRender",
+          "note": "The needle is case-sensitive: the legacy names carry `CellRender`, never `cellRender`."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/calendar/contracts/index.ts",
+      "anchor": "CalendarProps.monthCellRender",
+      "class": "compat-canon-pending",
+      "reason": "The Modern Calendar engine renders cells only through `monthCellRender` and does not read `cellRender`, so the documented replacement does not exist in the canonical owner; Rustic reads the same legacy prop.",
+      "scope": "One optional prop of `CalendarProps`. Classic discards it and reads `cellRender`; Modern and Rustic read it. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`cellRender`",
+      "canonicalOwner": "src/components/primitives/display/calendar/engines/modern/index.tsx",
+      "blocker": "replacement-capability-absent:cellRender",
+      "receiver": "WO-RET-01",
+      "since": "2026-03-16",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx",
+          "needle": "monthCellRender(date)",
+          "absentNeedle": "cellRender",
+          "note": "The needle is case-sensitive: the legacy names carry `CellRender`, never `cellRender`."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/calendar/contracts/index.ts",
+      "anchor": "CalendarProps.dateFullCellRender",
+      "class": "debt",
+      "reason": "No engine honours `dateFullCellRender`: Classic destructures and discards it, Modern and Rustic never read it, so the prop is accepted and ignored.",
+      "scope": "One optional prop of `CalendarProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "`fullCellRender`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-03-16",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/calendar/contracts/index.ts",
+      "anchor": "CalendarProps.monthFullCellRender",
+      "class": "debt",
+      "reason": "No engine honours `monthFullCellRender`: Classic destructures and discards it, Modern and Rustic never read it, so the prop is accepted and ignored.",
+      "scope": "One optional prop of `CalendarProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "`fullCellRender`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-03-16",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/callout/contracts/index.ts",
+      "anchor": "CalloutVariant",
+      "class": "compat-consumed",
+      "reason": "Type of the `variant` prop of `Callout`, which app-evnto still authors on eight call sites; it leaves with the component once `Alert` parity is shown.",
+      "scope": "Exported type alias. No direct import of the name was found in the four consumer roots; it is reached through `CalloutProps.variant`.",
+      "replacement": "`Tone` through the `tone` prop of `Alert`",
+      "canonicalOwner": "src/components/primitives/feedback/alert/index.tsx",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
+          "needle": "<Callout variant=\"warning\" title=\"Offline\"",
+          "note": "Callout is imported from @rottay/design-system at :14 of the same file."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/callout/contracts/index.ts",
+      "anchor": "TONE_TO_CALLOUT_VARIANT",
+      "class": "debt",
+      "reason": "Second public name of the kernel `TONE_TO_VARIANT` map; outside the Callout family nothing imports it, but the frozen Classic and Rustic Callout engines read it, so the export retires with the engines' import, not before.",
+      "scope": "Exported constant, re-exported by the display barrel. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. In-package readers: callout/engines/classic/index.tsx:49 and callout/engines/rustic/index.tsx:54.",
+      "replacement": "`TONE_TO_VARIANT` from the kernel common contracts",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-18",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/callout/contracts/index.ts",
+      "anchor": "CalloutProps.variant",
+      "class": "compat-consumed",
+      "reason": "app-evnto authors `variant` on `Callout`; the `tone` vocabulary renames `error` to `danger`, so the value mapping needs a codemod and a parity verdict before removal.",
+      "scope": "One optional prop of `CalloutProps`; read by the Classic and Rustic Callout engines when `tone` is absent.",
+      "replacement": "`tone`",
+      "canonicalOwner": "src/components/primitives/feedback/alert/index.tsx",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
+          "needle": "<Callout variant=\"warning\" title=\"Offline\"",
+          "note": "Callout is imported from @rottay/design-system at :14 of the same file."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/callout/index.tsx",
+      "anchor": "Callout",
+      "class": "compat-consumed",
+      "reason": "Single canon is `Alert` (`message`, `description`, `action`); app-evnto still renders `Callout`, and equivalence of `title`, `icon` and `closable` on `Alert` has no parity verdict yet.",
+      "scope": "Exported component with Classic and Rustic engines of its own and the Modern path loaded from `Alert`. Showroom call sites are being migrated by hand.",
+      "replacement": "`<Alert message description action />`",
+      "canonicalOwner": "src/components/primitives/feedback/alert/index.tsx",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-14",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
+          "needle": "<Callout variant=\"warning\" title=\"Offline\"",
+          "note": "Callout is imported from @rottay/design-system at :14 of the same file."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/card/contracts/index.ts",
+      "anchor": "CardProps.backgroundColor",
+      "class": "debt",
+      "reason": "Raw colour escape hatch on `Card` that bypasses the theme; card chrome is authored through the theme or a scoped `--ds-card-bg`, and no caller was found passing it.",
+      "scope": "One optional prop of `CardProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "theme card chrome, or a scoped `--ds-card-bg` custom property",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-09-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/tag/contracts/index.ts",
+      "anchor": "TagVariant",
+      "class": "compat-consumed",
+      "reason": "Type of the `variant` prop of `Tag`, still authored in the showroom and in app-bithire; it leaves with the prop once the tone mapping has a parity verdict.",
+      "scope": "Exported type alias. No direct import of the name was found in the four consumer roots; it is reached through `TagProps.variant`.",
+      "replacement": "`Tone` through the `tone` prop",
+      "canonicalOwner": "src/components/primitives/display/tag/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "packages/showroom/src/components/recipe-profile-specimen/index.tsx",
+          "needle": "<Tag data-testid=\"specimen-tag-b\" variant=\"warning\">"
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/vertical/surface/shell/header/index.tsx",
+          "needle": "<Tag size=\"sm\" variant=\"success\" outlined>"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/tag/contracts/index.ts",
+      "anchor": "TagProps.variant",
+      "class": "compat-consumed",
+      "reason": "Authored on `Tag` in the showroom and in app-bithire; `tone` renames `error` to `danger`, so removal needs the value-mapping codemod and a parity verdict.",
+      "scope": "One optional prop of `Tag`.",
+      "replacement": "`tone`",
+      "canonicalOwner": "src/components/primitives/display/tag/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "packages/showroom/src/components/recipe-profile-specimen/index.tsx",
+          "needle": "<Tag data-testid=\"specimen-tag-b\" variant=\"warning\">"
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/vertical/surface/shell/header/index.tsx",
+          "needle": "<Tag size=\"sm\" variant=\"success\" outlined>"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/tooltip/contracts/index.ts",
+      "anchor": "TooltipPlacement.'left'",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Tooltip engines place through a physical map that has `left` and no `inline-start`; a logical request falls back to `top` there, so the physical spelling is the only one that works under those engines.",
+      "scope": "One member of the `TooltipPlacement` union. Modern rewrites it to the logical side. app-bithire passes it on the create page shell and, through its `MaybeTooltip` wrapper, on the collection preview close button.",
+      "replacement": "`'inline-start'`",
+      "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-17",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx",
+          "needle": "left: \"left\",",
+          "absentNeedle": "inline-start"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx",
+          "needle": "placement.startsWith(\"left\")",
+          "absentNeedle": "inline-start"
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/ui/forms/create/page-shell/components/index.tsx",
+          "needle": "placement=\"left\"",
+          "note": "Tooltip is imported from @rottay/design-system at :3 of the same file; the call site ends at :295."
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/ui/tables/collection/preview/index.tsx",
+          "needle": "<MaybeTooltip content={tooltip ?? \"Close this preview panel.\"} placement=\"left\">",
+          "note": "Indirect: MaybeTooltip (app-bithire/src/ui/primitives/tag-tooltip/index.tsx:4-11,221) forwards `placement` to the design-system Tooltip."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/tooltip/contracts/index.ts",
+      "anchor": "TooltipPlacement.'left-start'",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Tooltip engines place through a physical map that has `left-start` and no `inline-start-start`; a logical request falls back to `top` there, so the physical spelling is the only one that works under those engines.",
+      "scope": "One member of the `TooltipPlacement` union. Modern rewrites it to the logical side. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`'inline-start-start'`",
+      "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-17",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx",
+          "needle": "\"left-start\": \"leftTop\",",
+          "absentNeedle": "inline-start"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx",
+          "needle": "placement.startsWith(\"left\")",
+          "absentNeedle": "inline-start"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/tooltip/contracts/index.ts",
+      "anchor": "TooltipPlacement.'left-end'",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Tooltip engines place through a physical map that has `left-end` and no `inline-start-end`; a logical request falls back to `top` there, so the physical spelling is the only one that works under those engines.",
+      "scope": "One member of the `TooltipPlacement` union. Modern rewrites it to the logical side. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`'inline-start-end'`",
+      "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-17",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx",
+          "needle": "\"left-end\": \"leftBottom\",",
+          "absentNeedle": "inline-start"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx",
+          "needle": "placement.startsWith(\"left\")",
+          "absentNeedle": "inline-start"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/tooltip/contracts/index.ts",
+      "anchor": "TooltipPlacement.'right'",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Tooltip engines place through a physical map that has `right` and no `inline-end`; a logical request falls back to `top` there, so the physical spelling is the only one that works under those engines.",
+      "scope": "One member of the `TooltipPlacement` union. Modern rewrites it to the logical side. app-bithire passes it on two tooltips of the role switcher.",
+      "replacement": "`'inline-end'`",
+      "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-17",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx",
+          "needle": "right: \"right\",",
+          "absentNeedle": "inline-end"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx",
+          "needle": "placement.startsWith(\"right\")",
+          "absentNeedle": "inline-end"
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx",
+          "needle": "placement=\"right\" color=\"primary\">",
+          "note": "Tooltip is imported from @rottay/design-system at :26 of the same file."
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx",
+          "needle": "placement=\"right\" color={isActive ? 'primary' : 'secondary'}>",
+          "note": "Second site of the same file, at :304."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/tooltip/contracts/index.ts",
+      "anchor": "TooltipPlacement.'right-start'",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Tooltip engines place through a physical map that has `right-start` and no `inline-end-start`; a logical request falls back to `top` there, so the physical spelling is the only one that works under those engines.",
+      "scope": "One member of the `TooltipPlacement` union. Modern rewrites it to the logical side. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`'inline-end-start'`",
+      "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-17",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx",
+          "needle": "\"right-start\": \"rightTop\",",
+          "absentNeedle": "inline-end"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx",
+          "needle": "placement.startsWith(\"right\")",
+          "absentNeedle": "inline-end"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/display/tooltip/contracts/index.ts",
+      "anchor": "TooltipPlacement.'right-end'",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Tooltip engines place through a physical map that has `right-end` and no `inline-end-end`; a logical request falls back to `top` there, so the physical spelling is the only one that works under those engines.",
+      "scope": "One member of the `TooltipPlacement` union. Modern rewrites it to the logical side. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`'inline-end-end'`",
+      "canonicalOwner": "src/components/primitives/display/tooltip/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-17",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx",
+          "needle": "\"right-end\": \"rightBottom\",",
+          "absentNeedle": "inline-end"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx",
+          "needle": "placement.startsWith(\"right\")",
+          "absentNeedle": "inline-end"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/feedback/alert/contracts/index.ts",
+      "anchor": "AlertSharedProps.type",
+      "class": "compat-consumed",
+      "reason": "Authored on `Alert` in the showroom and in the three apps (app-platform and app-evnto heavily); `tone` renames `error` to `danger`, so removal needs the value-mapping codemod and a parity verdict.",
+      "scope": "One optional prop of `AlertSharedProps`, the shared half of the `AlertProps` union. Per-root use counts were not re-measured here.",
+      "replacement": "`tone`",
+      "canonicalOwner": "src/components/primitives/feedback/alert/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-18",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "packages/showroom/src/components/torture-sections/status-feedback/index.tsx",
+          "needle": "<Alert type=\"info\" message=\"Info alert\""
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-evnto/src/features/identity/auth/surface/screens/login/index.tsx",
+          "needle": "<Alert type=\"error\" message={error} showIcon />"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/feedback/modal/contracts/index.ts",
+      "anchor": "ModalProps.closeOnOverlayClick",
+      "class": "debt",
+      "reason": "Earlier name of `closeOnBackdropClick` on `Modal`; no caller was found passing it to `Modal` (the `Sheet` prop of the same name is a separate, undeprecated contract).",
+      "scope": "One optional prop of `ModalProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "`closeOnBackdropClick`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-03-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/auto-complete/contracts/index.ts",
+      "anchor": "LegacyAutoCompleteSize",
+      "class": "debt",
+      "reason": "Ant-style `small | middle | large` widening of `AutoCompleteSize`; no caller was found passing a legacy spelling to this component or importing the type.",
+      "scope": "Exported type alias, unioned into the component's `size` prop. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "`AutoCompleteSize` (`sm | md | lg`)",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/button/contracts/index.ts",
+      "anchor": "ButtonProps.asChild",
+      "class": "compat-consumed",
+      "reason": "app-bithire passes `asChild` on eight buttons although no engine clones a child: the prop is swallowed. Removing it is a type break with no drop-in replacement, so each site needs `href` or a wrapper.",
+      "scope": "One optional prop of `Button`, consumed and never forwarded to the DOM.",
+      "replacement": "none: use `href` for an anchor button, or compose `Button` through a product-owned wrapper",
+      "canonicalOwner": "src/components/primitives/inputs/button/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-25",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/features/interviews/surface/screens/workflows/live-scoring/index.tsx",
+          "needle": "<Button asChild variant=\"secondary\" size=\"sm\">"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/button/contracts/index.ts",
+      "anchor": "ButtonProps.loading",
+      "class": "compat-consumed",
+      "reason": "Authored on `Button` in design-system structures, the showroom and all three apps; `pending` reserves the resting label width where `loading` does not, so the swap changes layout and needs a parity verdict.",
+      "scope": "One optional prop of `Button`, resolved with `pending` by `resolveButtonBusyState`.",
+      "replacement": "`pending`",
+      "canonicalOwner": "src/components/primitives/inputs/button/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-09",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx",
+          "needle": "onClick={onRefresh} loading={refreshing}>"
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/features/offers/surface/screens/workflows/document-templates/listing/index.tsx",
+          "needle": "loading={creating} disabled={creating}"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/button/contracts/index.ts",
+      "anchor": "ButtonProps.loadingText",
+      "class": "compat-consumed",
+      "reason": "app-bithire passes `loadingText` to `Button`; `pendingLabel` is the same string under the canonical name, pending the rename codemod.",
+      "scope": "One optional prop of `Button`, the fallback busy label when `pendingLabel` is absent.",
+      "replacement": "`pendingLabel`",
+      "canonicalOwner": "src/components/primitives/inputs/button/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-09",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/core/auth/components/session-security/passkey-prompt/index.tsx",
+          "needle": "loadingText={getPrimaryActionLabel(phase, authenticatorName)}"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/cascader/contracts/index.ts",
+      "anchor": "LegacyCascaderSize",
+      "class": "debt",
+      "reason": "Ant-style `small | middle | large` widening of `CascaderSize`; no caller was found passing a legacy spelling to this component or importing the type.",
+      "scope": "Exported type alias, unioned into the component's `size` prop. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "`CascaderSize` (`sm | md | lg`)",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/color-picker/contracts/index.ts",
+      "anchor": "LegacyColorPickerSize",
+      "class": "debt",
+      "reason": "Ant-style `small | middle | large` widening of `ColorPickerSize`; no caller was found passing a legacy spelling to this component or importing the type.",
+      "scope": "Exported type alias, unioned into the component's `size` prop. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "`ColorPickerSize` (`sm | md | lg`)",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/slider/contracts/index.ts",
+      "anchor": "SliderProps.tooltip.placement.'left'",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic Slider engine forwards `tooltip` untouched to the Ant slider, which places by physical side and does not know `inline-start`; only Modern rewrites the alias to the logical side.",
+      "scope": "One member of the `placement` union inside `SliderProps.tooltip`. Rustic renders no tooltip. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`'inline-start'`",
+      "canonicalOwner": "src/components/primitives/inputs/slider/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-17",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/inputs/slider/engines/classic/index.tsx",
+          "needle": "tooltip,",
+          "absentNeedle": "inline-start",
+          "note": "The engine has no placement code of its own: the needle is the pass-through of the `tooltip` object."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/slider/contracts/index.ts",
+      "anchor": "SliderProps.tooltip.placement.'right'",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic Slider engine forwards `tooltip` untouched to the Ant slider, which places by physical side and does not know `inline-end`; only Modern rewrites the alias to the logical side.",
+      "scope": "One member of the `placement` union inside `SliderProps.tooltip`. Rustic renders no tooltip. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`'inline-end'`",
+      "canonicalOwner": "src/components/primitives/inputs/slider/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-17",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/inputs/slider/engines/classic/index.tsx",
+          "needle": "tooltip,",
+          "absentNeedle": "inline-end",
+          "note": "The engine has no placement code of its own: the needle is the pass-through of the `tooltip` object."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/toggle/compound/switch/index.tsx",
+      "anchor": "<module>",
+      "class": "compat-consumed",
+      "reason": "Single canon is `Toggle`; `Switch` is a facade that maps legacy props onto it and all three apps still import it. Showroom and design-system call sites are being migrated by hand; the apps need the import and prop codemod.",
+      "scope": "The module that exports the `Switch` component. It has no engine, skin or token namespace of its own.",
+      "replacement": "`Toggle`",
+      "canonicalOwner": "src/components/primitives/inputs/toggle/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-13",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/features/positions/surface/screens/record/listing/view/sections/team-assign/index.tsx",
+          "needle": "import { Button, Flex, Modal, Stack, Switch, Text } from \"@rottay/design-system\";"
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
+          "needle": "Card, Button, Badge, Input, Modal, Select, Spinner, Switch } from '@rottay/design-system';",
+          "note": "The same file renders `<Switch ... size=\"small\" />` at :426-430."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/toggle/contracts/index.ts",
+      "anchor": "SwitchSize",
+      "class": "compat-consumed",
+      "reason": "Size vocabulary of the `Switch` alias, including the Ant spelling `small` that app-platform passes; `ToggleSize` has no `small`, so the value needs a codemod mapping.",
+      "scope": "Exported type alias. No direct import of the name was found in the four consumer roots; it is reached through `SwitchProps.size`.",
+      "replacement": "`ToggleSize`",
+      "canonicalOwner": "src/components/primitives/inputs/toggle/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-13",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
+          "needle": "Card, Button, Badge, Input, Modal, Select, Spinner, Switch } from '@rottay/design-system';",
+          "note": "The same file renders `<Switch ... size=\"small\" />` at :426-430."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/toggle/contracts/index.ts",
+      "anchor": "SwitchProps",
+      "class": "compat-consumed",
+      "reason": "Props of the `Switch` alias that all three apps render; `checkedChildren` and `unCheckedChildren` become `checkedLabel` and `uncheckedLabel` on `Toggle`, which needs the rename codemod and a parity verdict.",
+      "scope": "Exported interface. No direct import of the name was found in the four consumer roots; it is reached through the `Switch` component.",
+      "replacement": "`ToggleProps`",
+      "canonicalOwner": "src/components/primitives/inputs/toggle/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-13",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/features/positions/surface/screens/record/listing/view/sections/team-assign/index.tsx",
+          "needle": "import { Button, Flex, Modal, Stack, Switch, Text } from \"@rottay/design-system\";"
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
+          "needle": "Card, Button, Badge, Input, Modal, Select, Spinner, Switch } from '@rottay/design-system';",
+          "note": "The same file renders `<Switch ... size=\"small\" />` at :426-430."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/inputs/tree-select/contracts/index.ts",
+      "anchor": "LegacyTreeSelectSize",
+      "class": "debt",
+      "reason": "Ant-style `small | middle | large` widening of `TreeSelectSize`; no caller was found passing a legacy spelling to this component or importing the type.",
+      "scope": "Exported type alias, unioned into the component's `size` prop. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "`TreeSelectSize` (`sm | md | lg`)",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/box/contracts/index.ts",
+      "anchor": "BoxProps.paddingRight",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Box engines read `paddingRight` and have no reader for `paddingInlineEnd`; under those engines the physical prop is the only way to set that edge, so removing it loses behaviour.",
+      "scope": "One optional prop of `Box`. Modern reads the logical edge first and the physical one as fallback. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`paddingInlineEnd`",
+      "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-16",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx",
+          "needle": "props.paddingRight",
+          "absentNeedle": "paddingInlineEnd"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx",
+          "needle": "props.paddingRight",
+          "absentNeedle": "paddingInlineEnd"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/box/contracts/index.ts",
+      "anchor": "BoxProps.pr",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Box engines read `pr` and have no reader for `pe`; under those engines the physical prop is the only way to set that edge, so removing it loses behaviour.",
+      "scope": "One optional prop of `Box`. Modern reads the logical edge first and the physical one as fallback. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`pe`",
+      "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-16",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx",
+          "needle": "scalarOrUndefined(props.pr)",
+          "absentNeedle": "props.pe"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx",
+          "needle": "scalarOrUndefined(props.pr)",
+          "absentNeedle": "props.pe"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/box/contracts/index.ts",
+      "anchor": "BoxProps.paddingLeft",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Box engines read `paddingLeft` and have no reader for `paddingInlineStart`; under those engines the physical prop is the only way to set that edge, so removing it loses behaviour.",
+      "scope": "One optional prop of `Box`. Modern reads the logical edge first and the physical one as fallback. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`paddingInlineStart`",
+      "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-16",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx",
+          "needle": "props.paddingLeft",
+          "absentNeedle": "paddingInlineStart"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx",
+          "needle": "props.paddingLeft",
+          "absentNeedle": "paddingInlineStart"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/box/contracts/index.ts",
+      "anchor": "BoxProps.pl",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Box engines read `pl` and have no reader for `ps`; under those engines the physical prop is the only way to set that edge, so removing it loses behaviour.",
+      "scope": "One optional prop of `Box`. Modern reads the logical edge first and the physical one as fallback. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`ps`",
+      "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-16",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx",
+          "needle": "scalarOrUndefined(props.pl)",
+          "absentNeedle": "props.ps"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx",
+          "needle": "scalarOrUndefined(props.pl)",
+          "absentNeedle": "props.ps"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/box/contracts/index.ts",
+      "anchor": "BoxProps.marginRight",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Box engines read `marginRight` and have no reader for `marginInlineEnd`; under those engines the physical prop is the only way to set that edge, so removing it loses behaviour.",
+      "scope": "One optional prop of `Box`. Modern reads the logical edge first and the physical one as fallback. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`marginInlineEnd`",
+      "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-16",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx",
+          "needle": "props.marginRight",
+          "absentNeedle": "marginInlineEnd"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx",
+          "needle": "props.marginRight",
+          "absentNeedle": "marginInlineEnd"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/box/contracts/index.ts",
+      "anchor": "BoxProps.mr",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Box engines read `mr` and have no reader for `me`; under those engines the physical prop is the only way to set that edge, so removing it loses behaviour.",
+      "scope": "One optional prop of `Box`. Modern reads the logical edge first and the physical one as fallback. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`me`",
+      "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-16",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx",
+          "needle": "scalarOrUndefined(props.mr)",
+          "absentNeedle": "props.me"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx",
+          "needle": "scalarOrUndefined(props.mr)",
+          "absentNeedle": "props.me"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/box/contracts/index.ts",
+      "anchor": "BoxProps.marginLeft",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Box engines read `marginLeft` and have no reader for `marginInlineStart`; under those engines the physical prop is the only way to set that edge, so removing it loses behaviour.",
+      "scope": "One optional prop of `Box`. Modern reads the logical edge first and the physical one as fallback. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`marginInlineStart`",
+      "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-16",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx",
+          "needle": "props.marginLeft",
+          "absentNeedle": "marginInlineStart"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx",
+          "needle": "props.marginLeft",
+          "absentNeedle": "marginInlineStart"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/box/contracts/index.ts",
+      "anchor": "BoxProps.ml",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Box engines read `ml` and have no reader for `ms`; under those engines the physical prop is the only way to set that edge, so removing it loses behaviour.",
+      "scope": "One optional prop of `Box`. Modern reads the logical edge first and the physical one as fallback. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`ms`",
+      "canonicalOwner": "src/components/primitives/layout/box/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-16",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx",
+          "needle": "scalarOrUndefined(props.ml)",
+          "absentNeedle": "props.ms"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx",
+          "needle": "scalarOrUndefined(props.ml)",
+          "absentNeedle": "props.ms"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/box/contracts/index.ts",
+      "anchor": "LegacyPhysicalBoxTextAlign",
+      "class": "debt",
+      "reason": "Physical `left | right` text alignment; every engine forwards `textAlign` to CSS, where `start` and `end` are valid, so the logical spelling already works in Classic and Rustic and no caller was found using the physical one.",
+      "scope": "Exported type alias, unioned into `BoxTextAlignInput`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "`start` / `end`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-09-17",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/collapse/contracts/index.ts",
+      "anchor": "LegacyCollapseSize",
+      "class": "debt",
+      "reason": "Ant-style `small | middle | large` widening of `CollapseSize`; no caller was found passing a legacy spelling to this component or importing the type.",
+      "scope": "Exported type alias, unioned into the component's `size` prop. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "`CollapseSize` (`sm | md | lg`)",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/divider/contracts/index.ts",
+      "anchor": "DividerProps.orientationMargin",
+      "class": "debt",
+      "reason": "Ant-era spelling of `textPosition`; the Modern and Rustic engines fall back to it only when `textPosition` is absent and no caller was found passing it.",
+      "scope": "One optional prop of `DividerProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "`textPosition`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2025-12-26",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/divider/contracts/index.ts",
+      "anchor": "DividerProps.margin",
+      "class": "debt",
+      "reason": "Earlier name of the `spacing` prop of `Divider`; no caller was found passing `margin` to a design-system `Divider`.",
+      "scope": "One optional prop of `DividerProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured.",
+      "replacement": "`spacing`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2025-12-26",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/layout/space/contracts/index.ts",
+      "anchor": "LegacySpaceSize",
+      "class": "compat-consumed",
+      "reason": "Ant-style `small | middle | large` spacing that app-platform passes to `Space` on many screens; `SpaceSize` spells the same steps `sm | md | lg`, pending the value codemod.",
+      "scope": "Exported type alias, unioned into `SpaceProps.size` and the key of `SPACE_SIZE_MAP`. Per-root use counts were not re-measured here.",
+      "replacement": "`SpaceSize` (`sm | md | lg`)",
+      "canonicalOwner": "src/components/primitives/layout/space/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-platform/src/features/security/authentication/surface/components/session-table/index.tsx",
+          "needle": "<Space direction=\"vertical\" style={{ width: '100%' }} size=\"middle\">"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/navigation/stepper/compound/steps/index.tsx",
+      "anchor": "<module>",
+      "class": "compat-consumed",
+      "reason": "Single canon is `Stepper`; `Steps` is a facade that maps legacy props onto it and all three apps still import it. Showroom call sites are being migrated by hand; the apps need the import and prop codemod.",
+      "scope": "The module that exports the `Steps` component. It has no engine, skin or token namespace of its own.",
+      "replacement": "`Stepper`",
+      "canonicalOwner": "src/components/primitives/navigation/stepper/index.tsx",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-15",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/features/candidates/surface/screens/record/detail/view/tabs/activity/index.tsx",
+          "needle": "import { Box, Flex, Stack, Steps, Text } from \"@rottay/design-system\";"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/navigation/stepper/contracts/index.ts",
+      "anchor": "ProgressDotInfo",
+      "class": "compat-consumed",
+      "reason": "Argument type of the render-function `progressDot` of `StepsProps`; it cannot leave before `StepsProps`, which the apps still reach through `Steps`. No caller passing a render function was found.",
+      "scope": "Exported interface. No direct import and no `progressDot` call site was found in the four consumer roots; the row follows `StepsProps`.",
+      "replacement": "`(dot, info)` arguments of `Stepper` `progressDot`",
+      "canonicalOwner": "src/components/primitives/navigation/stepper/index.tsx",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-15",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/features/candidates/surface/screens/record/detail/view/tabs/activity/index.tsx",
+          "needle": "import { Box, Flex, Stack, Steps, Text } from \"@rottay/design-system\";"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/navigation/stepper/contracts/index.ts",
+      "anchor": "StepsProps",
+      "class": "compat-consumed",
+      "reason": "Props of the `Steps` alias that all three apps render; `size`, `initial`, `progressDot` and `type` map differently onto `Stepper`, which needs the prop codemod and a parity verdict.",
+      "scope": "Exported interface. No direct import of the name was found in the four consumer roots; it is reached through the `Steps` component.",
+      "replacement": "`StepperProps`",
+      "canonicalOwner": "src/components/primitives/navigation/stepper/index.tsx",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-15",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-bithire/src/features/candidates/surface/screens/record/detail/view/tabs/activity/index.tsx",
+          "needle": "import { Box, Flex, Stack, Steps, Text } from \"@rottay/design-system\";"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/overlay/hover-card/contracts/index.ts",
+      "anchor": "HoverCardSide.'left'",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic HoverCard engine maps sides through a physical table that has `left` and no `inline-start`; the logical spelling resolves only on the Modern path.",
+      "scope": "One member of the `HoverCardSide` union. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`'inline-start'`",
+      "canonicalOwner": "src/components/primitives/overlay/hover-card/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-17",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/overlay/hover-card/engines/classic/index.tsx",
+          "needle": "left: 'left',",
+          "absentNeedle": "inline-start"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/primitives/overlay/hover-card/contracts/index.ts",
+      "anchor": "HoverCardSide.'right'",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic HoverCard engine maps sides through a physical table that has `right` and no `inline-end`; the logical spelling resolves only on the Modern path.",
+      "scope": "One member of the `HoverCardSide` union. No caller was found in the four consumer roots (line grep, 2026-10-03).",
+      "replacement": "`'inline-end'`",
+      "canonicalOwner": "src/components/primitives/overlay/hover-card/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-01",
+      "since": "2026-09-17",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/overlay/hover-card/engines/classic/index.tsx",
+          "needle": "right: 'right',",
+          "absentNeedle": "inline-end"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/structures/foundation/chrome/contracts/index.ts",
+      "anchor": "SurfaceTabbedView.permissionId",
+      "class": "compat-consumed",
+      "reason": "app-evnto authors `permissionId` on views typed `SurfaceTabbedView`; `capabilityId` is the same string under the canonical name, pending the rename codemod.",
+      "scope": "One optional field of `SurfaceTabbedView`, read after `capabilityId` by the chrome access runtime.",
+      "replacement": "`capabilityId`",
+      "canonicalOwner": "src/components/structures/foundation/chrome/contracts/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-08-14",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "../app-evnto/src/features/admin/settings/surface/screens/general/index.tsx",
+          "needle": "permissionId: \"billing\",",
+          "note": "The file imports the SurfaceTabbedView type from @rottay/design-system at :30."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/components/surfaces/foundation/contracts/index.ts",
+      "anchor": "DetailSurfaceTab.permissionId",
+      "class": "debt",
+      "reason": "Type-only alias of `capabilityId` on detail tabs; no caller typed `DetailSurfaceTab` was found authoring it, so nothing keeps it published.",
+      "scope": "One optional field of `DetailSurfaceTab`, read after `capabilityId` by the surface helpers. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. The app-evnto detail controllers declare a local field of the same name and author no value.",
+      "replacement": "`capabilityId`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-17",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/foundation/contracts/composition/tenants/themes/index.ts",
+      "anchor": "BrandSurfaces.materials",
+      "class": "compat-persisted-data",
+      "reason": "Schema-v1 theme payloads stored for tenants may carry `materials`; the lowering reads it when `surfaceRoles` is absent, and nothing proves the stored data absent or migrated.",
+      "scope": "One optional field of `BrandSurfaces`, read-only: new static themes and database payloads must not author it. No database was inspected.",
+      "replacement": "`surfaceRoles`",
+      "canonicalOwner": "src/foundation/contracts/composition/tenants/themes/index.ts",
+      "blocker": "persisted-data-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-25",
+      "removeIn": "4.0",
+      "evidence": [
+        {
+          "kind": "persisted-reader",
+          "path": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/materials/index.ts",
+          "needle": "bt.surfaces?.surfaceRoles ?? bt.surfaces?.materials"
+        },
+        {
+          "kind": "persisted-reader",
+          "path": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/surfaces/index.ts",
+          "needle": "su.surfaceRoles ?? su.materials"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/foundation/contracts/composition/tenants/themes/index.ts",
+      "anchor": "BrandMotion",
+      "class": "debt",
+      "reason": "Its own condition (\"while bundled themes migrate\") is unmet: the bundled evnto experience baseline still authors springs, stagger and pulse against it, so the interface is owed a migration, not a longer window.",
+      "scope": "Exported interface. Authored by foundation/presets/policy/experience-baselines/evnto, read by the provider bridge and the brand-studio file export. Whether stored tenant payloads carry the open-ended fields was not measured.",
+      "replacement": "the vertical `MotionProfile` plus the bounded `TenantMotionDial`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-16",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/foundation/contracts/kernel/common/index.ts",
+      "anchor": "SizeType",
+      "class": "debt",
+      "reason": "Ant size vocabulary kept for the Classic bridge, but no module under `src/` imports it any more; only the `no-size-type-outside-classic` lint rule still names it.",
+      "scope": "Exported type alias. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Zero importers in packages/core/src outside the lint rule that restricts it.",
+      "replacement": "`Size` (`sm | md | lg`)",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/foundation/contracts/kernel/common/index.ts",
+      "anchor": "LegacySizeAlias",
+      "class": "compat-consumed",
+      "reason": "Six undeprecated size contracts (Table, TimePicker, DatePicker, Form, InputNumber, Switch) are widened with it, and app-platform passes `size=\"small\"` through them; narrowing needs the value codemod.",
+      "scope": "Exported type alias, the Ant-spelling half of six `*Size` unions.",
+      "replacement": "`Size` (`sm | md | lg`)",
+      "canonicalOwner": "src/foundation/contracts/kernel/common/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-18",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "packages/core/src/components/primitives/display/table/contracts/index.ts",
+          "needle": "export type TableSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;"
+        },
+        {
+          "kind": "consumer",
+          "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
+          "needle": "Card, Button, Badge, Input, Modal, Select, Spinner, Switch } from '@rottay/design-system';",
+          "note": "The same file renders `<Switch ... size=\"small\" />` at :426-430."
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/foundation/contracts/kernel/common/index.ts",
+      "anchor": "Variant",
+      "class": "compat-consumed",
+      "reason": "Base union of the undeprecated `ButtonVariant` and `ToastVariant` and of the deprecated badge, tag and avatar variants; it cannot leave while those contracts are built on it.",
+      "scope": "Exported type alias. No direct import of the name was found in the three apps; it is reached through the component variant types.",
+      "replacement": "`Tone` for semantic colour, plus the component's own structural variant",
+      "canonicalOwner": "src/foundation/contracts/kernel/common/index.ts",
+      "blocker": "parity-unproven",
+      "receiver": "WO-RET-01",
+      "since": "2026-07-10",
+      "removeIn": "3.0",
+      "evidence": [
+        {
+          "kind": "consumer",
+          "path": "packages/core/src/components/primitives/inputs/button/contracts/index.ts",
+          "needle": "import type { BaseComponentProps, Variant, LoadableProps, DisableableProps }"
+        },
+        {
+          "kind": "consumer",
+          "path": "packages/core/src/components/primitives/feedback/toast/contracts/index.ts",
+          "needle": "import type { BaseComponentProps, Variant }"
+        }
+      ],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/foundation/contracts/kernel/tokens/extensions/index.ts",
+      "anchor": "ComponentExtensions",
+      "class": "debt",
+      "reason": "Type of the inert `extensions` prop; no production preset reads it and no resolver produces it, so it describes a contract with no implementation.",
+      "scope": "Exported interface. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Referenced only by its own module and by `EngineAwareProps.extensions`.",
+      "replacement": "none: the extension mechanism it describes has no runtime",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/foundation/contracts/kernel/tokens/extensions/index.ts",
+      "anchor": "ExtensionHelpers",
+      "class": "debt",
+      "reason": "Reserved resolver shape that no runtime implementation creates; it is published API with nothing behind it.",
+      "scope": "Exported interface. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Referenced only inside its own module.",
+      "replacement": "none: no resolver creates this interface",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/foundation/contracts/runtime/engine/index.ts",
+      "anchor": "EngineAwareProps.extensions",
+      "class": "debt",
+      "reason": "No production component reads `extensions` and passing it has no runtime effect; it advertises an extension mechanism that was never built.",
+      "scope": "One optional prop of `EngineAwareProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Zero `extensions={` call sites.",
+      "replacement": "none: each component exposes its own evidenced props and compounds",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/graphics/motion/foundation/contracts/index.ts",
+      "anchor": "BaseMotionProps.duration",
+      "class": "debt",
+      "reason": "Unit-ambiguous timing alias: `duration` reads a positive value up to 10 as seconds and anything else as milliseconds, which `durationMs` states explicitly; no caller of the motion primitives was found passing it.",
+      "scope": "One optional prop of `BaseMotionProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. The evnto `Reveal` and the app `StaggeredList` hits are local components, not this contract.",
+      "replacement": "`durationMs`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/graphics/motion/foundation/contracts/index.ts",
+      "anchor": "BaseMotionProps.delay",
+      "class": "debt",
+      "reason": "Unit-ambiguous timing alias: `delay` reads a positive value up to 10 as seconds and anything else as milliseconds, which `delayMs` states explicitly; no caller of the motion primitives was found passing it.",
+      "scope": "One optional prop of `BaseMotionProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. The evnto `Reveal` and the app `StaggeredList` hits are local components, not this contract.",
+      "replacement": "`delayMs`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/graphics/motion/foundation/contracts/index.ts",
+      "anchor": "StaggerChildrenProps.staggerDelay",
+      "class": "debt",
+      "reason": "Unit-ambiguous timing alias: `staggerDelay` reads a positive value up to 10 as seconds and anything else as milliseconds, which `staggerDelayMs` states explicitly; no caller of the motion primitives was found passing it.",
+      "scope": "One optional prop of `StaggerChildrenProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. The evnto `Reveal` and the app `StaggeredList` hits are local components, not this contract.",
+      "replacement": "`staggerDelayMs`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/graphics/motion/foundation/contracts/index.ts",
+      "anchor": "StaggerChildrenProps.delayChildren",
+      "class": "debt",
+      "reason": "Unit-ambiguous timing alias: `delayChildren` reads a positive value up to 10 as seconds and anything else as milliseconds, which `delayChildrenMs` states explicitly; no caller of the motion primitives was found passing it.",
+      "scope": "One optional prop of `StaggerChildrenProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. The evnto `Reveal` and the app `StaggeredList` hits are local components, not this contract.",
+      "replacement": "`delayChildrenMs`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/graphics/motion/foundation/contracts/index.ts",
+      "anchor": "TextRevealProps.delay",
+      "class": "debt",
+      "reason": "Unit-ambiguous timing alias: `delay` reads a positive value up to 10 as seconds and anything else as milliseconds, which `delayMs` states explicitly; no caller of the motion primitives was found passing it.",
+      "scope": "One optional prop of `TextRevealProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. The evnto `Reveal` and the app `StaggeredList` hits are local components, not this contract.",
+      "replacement": "`delayMs`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/graphics/motion/foundation/contracts/index.ts",
+      "anchor": "TextRevealProps.duration",
+      "class": "debt",
+      "reason": "Unit-ambiguous timing alias: `duration` reads a positive value up to 10 as seconds and anything else as milliseconds, which `durationMs` states explicitly; no caller of the motion primitives was found passing it.",
+      "scope": "One optional prop of `TextRevealProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. The evnto `Reveal` and the app `StaggeredList` hits are local components, not this contract.",
+      "replacement": "`durationMs`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/graphics/motion/foundation/contracts/index.ts",
+      "anchor": "CountUpProps.duration",
+      "class": "debt",
+      "reason": "Unit-ambiguous timing alias: `duration` reads a positive value up to 10 as seconds and anything else as milliseconds, which `durationMs` states explicitly; no caller of the motion primitives was found passing it.",
+      "scope": "One optional prop of `CountUpProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. The evnto `Reveal` and the app `StaggeredList` hits are local components, not this contract.",
+      "replacement": "`durationMs`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    },
+    {
+      "file": "src/graphics/motion/foundation/contracts/index.ts",
+      "anchor": "CountUpProps.delay",
+      "class": "debt",
+      "reason": "Unit-ambiguous timing alias: `delay` reads a positive value up to 10 as seconds and anything else as milliseconds, which `delayMs` states explicitly; no caller of the motion primitives was found passing it.",
+      "scope": "One optional prop of `CountUpProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. The evnto `Reveal` and the app `StaggeredList` hits are local components, not this contract.",
+      "replacement": "`delayMs`",
+      "canonicalOwner": null,
+      "blocker": null,
+      "receiver": "WO-RET-01",
+      "since": "2026-07-15",
+      "removeIn": "3.0",
+      "evidence": [],
+      "codemod": null,
+      "changeset": null
+    }
+  ]
+}
