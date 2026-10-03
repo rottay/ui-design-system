@@ -7823,6 +7823,26 @@
      "at": "2026-10-02 20:10",
      "by": "codex-dt",
      "note": "Autonomous continuation checkpoint after25d3b965c: pilots+data/admin15recipes committed; remaining20recipeWIP preserved. Independent review corrections split at same dependency level: experience/editor-chat-marketing-pricing-notification and operations/kanban-scheduler-operational worker owns state parity, empty-action guards, body(notheader) dock placement; forms/workspace worker owns Collection legacytoolbar/adaptiveprimary hide, CommandCenter/DecisionInbox loading slots and GuidedDraft templates ARIA trigger (previous action/rail corrections tested21cases). No full builds run. Next: freeze/re-review/integrate those disjoint packets; implement bounded Wizard controls composition without duplicate callback/filter authority; confirm all35realrecipes then wholeINV06 acceptance. RET01 packaging remains unintegratedpending official suppliers/census+fresh retention proof; originalWIP backup stillpreserved. Root owns registry,generators,heavywindow,index/maincommits. Do not restart completed pilot/data lots or count partial packets as WOs."
+    },
+    {
+     "at": "2026-10-02 20:15",
+     "by": "codex-dt",
+     "note": "Six data/admin access-before-dock correction integrated: canonical resolved action array feeds primary and remaining actions; denied primaries create no dock; omitted path retained. 86 focal tests including42 new, scoped production typecheck zero diagnostics, independent native reviewer PASS. No full-certification claim."
+    },
+    {
+     "at": "2026-10-02 20:16",
+     "by": "codex-dt",
+     "note": "Eight experience/operations recipes integrated after independent PASS: actual primary controls follow body in sticky/floating placement; omitted path preserved; lifecycle branches respect owned regions. 62 owning tests across10 files PASS, 20-recipe production dependency closure zero diagnostics. Four remaining experience/activity recipes HOLD assigned to separate writer; Wizard and workspace/form review not yet whole-WO acceptance."
+    },
+    {
+     "at": "2026-10-02 20:17",
+     "by": "codex-dt",
+     "note": "Wizard integrated10c23afa4: optional Modern-only renderActions composes actual StepWizard controls into canonical posture action without tier inversion/duplicate navigation; frozen engines unchanged. Independent review PASS. 32tests/3files PASS including real Modern placement, suppression, omitted behavior, rejected and pending validation; production20recipe dependencyclosurePASS. Canonical surfaces and forms docs updated this session; documentation reseal deferred to integrated milestone, not forged."
+    },
+    {
+     "at": "2026-10-02 20:18",
+     "by": "codex-dt",
+     "note": "Seven workspace/forms recipes integrated at c102c7629 after independent HOLD -> correction -> PASS: Collection toolbar and adaptive primary suppression, CommandCenter/DecisionInbox loading parity, canonical empty queue collapse, and GuidedDraft template trigger/ARIA follow actual visibility. Corrective run: 36 tests in 6 files PASS; earlier bounded 21 tests cover prior fixes. Integrated adoption: 31/35 recipes (List 1, data/admin 14, experience/operations 8, workspace/forms 7, Wizard 1). Auth, Media, EmptyState and Activity HOLD corrections are in progress; whole INV-06 remains open. Canonical docs committed locally on docs-engineering main at 02800e2; documentation reseal remains a milestone obligation."
     }
    ],
    "doneAt": null,

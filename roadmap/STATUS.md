@@ -232,11 +232,15 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | signature | `./structures/action-dock#ActionDock` | emits only the canonical `ds-action-dock*` class vocabulary; the `rottay-action-dock*` spelling is retired in the same release that announced it | major | `fam-11-legacy-class-retirement.md` |
 | signature | `./structures/app-shell#AppShell` | emits only the canonical `ds-app-shell*` class vocabulary; the `rottay-app-shell*` spelling is retired in the same release that announced it | major | `fam-11-legacy-class-retirement.md` |
 | signature | `.#ActionDockProps` | accepts three typed surface posture attributes on the existing toolbar root (INV-06) | minor | `inv06-surface-posture-adoption.md` |
+| signature | `.#ActivitySurface` | consumes optional app-owned SurfacePostures | minor | `inv06-remaining-recipe-postures.md` |
+| signature | `.#ActivitySurfaceProps` | adds optional SurfacePostures | minor | `inv06-remaining-recipe-postures.md` |
 | signature | `.#admitDocument` | same optional `ranges` input field on the root barrel's re-export | minor | `r1r2-integration-door.md` |
 | signature | `.#AlertProps` | adds `action?: ReactNode`, the action tray Callout carried, rendered by the Modern engine | major | `fam-04-family-cut-overlays-notifier.md` |
 | signature | `.#AuditSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#AuditSurfaceProps` | adds optional SurfacePostures | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#authoredThemePatch` | names the renamed flat view; BrandTheme -> FlatTheme in the declaration text, shape unchanged | major | `der-06-brand-theme-authority-retired.md` |
+| signature | `.#AuthSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-remaining-recipe-postures.md` |
+| signature | `.#AuthSurfaceProps` | adds optional SurfacePostures | minor | `inv06-remaining-recipe-postures.md` |
 | signature | `.#baselineFor` | loses the third parameter; always the neutral foundation with the vertical's preset admitted, labelled with the slug | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#baselineFor` | gains an optional third parameter, the baseline source ("brand-theme" by default, or "neutral-preset"); callers passing two arguments are unchanged | patch | `der-06-neutral-foundation-baseline.md` |
 | signature | `.#BillingSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
@@ -259,7 +263,13 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | signature | `.#Callout` | deprecated in favour of Alert (`message`, `description`, `action`); the Modern engine renders the alert surface | major | `fam-04-family-cut-overlays-notifier.md` |
 | signature | `.#CALLOUT_COLORS` | the colour values name the palette steps without literal hex fallbacks | major | `fam-04-family-cut-overlays-notifier.md` |
 | signature | `.#CardProps` | names the renamed flat view; BrandTheme -> FlatTheme in the declaration text, shape unchanged | major | `der-06-brand-theme-authority-retired.md` |
+| signature | `.#ChatSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-experience-ops-postures.md` |
+| signature | `.#ChatSurfaceProps` | adds optional SurfacePostures | minor | `inv06-experience-ops-postures.md` |
 | signature | `.#CollectionHeader` | changed; accepts the optional `adapt` slot and stamps `data-posture` | minor | `fam-10-collection-header-adapt.md` |
+| signature | `.#CollectionWorkspaceProps` | adds optional SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
+| signature | `.#CollectionWorkspaceSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
+| signature | `.#CommandCenterSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
+| signature | `.#CommandCenterSurfaceProps` | adds optional SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
 | signature | `.#CompareSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#CompareSurfaceProps` | adds optional SurfacePostures | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#CompileThemeIntentOptions` | loses baselineSource; every intent resolves over the vertical's composed baseline | major | `der-06-brand-theme-authority-retired.md` |
@@ -267,9 +277,13 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | signature | `.#CONFIRM_DIALOG_VARIANT_COLORS` | the colour values name the palette steps without literal hex fallbacks | major | `fam-04-family-cut-overlays-notifier.md` |
 | signature | `.#DashboardSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#DashboardSurfaceProps` | adds optional SurfacePostures | minor | `inv06-data-admin-posture-adoption.md` |
+| signature | `.#DecisionInboxSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
+| signature | `.#DecisionInboxSurfaceProps` | adds optional SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
 | signature | `.#DEFAULT_TENANT_CONFIG` | removed from the facade; the default value stays module-private behind getDefaultTenantConfig (RET-01-C) | major | `ret-01-dead-transports-and-deprecated.md` |
 | signature | `.#DesignSystemProviderProps` | `engineVisual` is no longer the only route for the compiled runtime half: the provider publishes `visualAuthority.artifact.runtime` when the artifact was compiled for the rendering engine, and falls back to the prop otherwise. The prop's own type and refusals are unchanged | major | `der-07-artifact-runtime-half.md` |
 | signature | `.#DetailFormSurface` | changed; accepts the optional `adapt` slot | minor | `fam-10-adapt-slot-and-ledger.md` |
+| signature | `.#DetailFormSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
+| signature | `.#DetailFormSurfaceProps` | adds optional SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
 | signature | `.#DetailSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#DetailSurfaceProps` | adds optional SurfacePostures | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#DocumentAdmission` | same two required output fields on the root barrel's re-export of the same declaration | minor | `r1r2-integration-door.md` |
@@ -280,9 +294,13 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | signature | `.#DraftPreviewThemeIntentInput` | gains an optional carriedFrom Theme so a draft ledger can be read against a baseline other than the authored theme | patch | `der-06-neutral-foundation-baseline.md` |
 | signature | `.#DraftPreviewThemeIntentInput` | `draft` widens from `FlatTheme` to `Theme / FlatTheme`: the governed Theme is the transport, and the flat shape is accepted through a named migration that lifts it at the door. Additive; every existing caller keeps compiling the same intent, proven by a canonical leaf-by-leaf comparison of the emitted patch on both routes | minor | `der-08-studio-draft-governed-theme.md` |
 | signature | `.#DrawerProps` | adds `adapt?: Adapt<OverlayAdaptation>`; the resolved presentation and posture are stamped on the panel | major | `fam-04-family-cut-overlays-notifier.md` |
+| signature | `.#EditorSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-experience-ops-postures.md` |
+| signature | `.#EditorSurfaceProps` | adds optional SurfacePostures | minor | `inv06-experience-ops-postures.md` |
 | signature | `.#EmissionScope` | names the renamed flat view; BrandTheme -> FlatTheme in the declaration text, shape unchanged | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#emitBaseRule` | `options` gains optional `container?: ContainerEmission` beside `leadingDeclarations` | minor | `wave-2026-10-01-container-law-normalized-radius.md` |
 | signature | `.#emitDeclarations` | gains an optional second argument `options: { alsoStated?: Iterable<string>; alsoOutright?: Iterable<string> }`; the one-argument call now also appends the radius-chain and root-alias restatements its own channels reach | minor | `wave-2026-10-01-container-law-normalized-radius.md` |
+| signature | `.#EmptyStateSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-remaining-recipe-postures.md` |
+| signature | `.#EmptyStateSurfaceProps` | adds optional SurfacePostures | minor | `inv06-remaining-recipe-postures.md` |
 | signature | `.#EngineProjectionMode` | names the renamed flat view; BrandTheme -> FlatTheme in the declaration text, shape unchanged | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#EngineVisualDeclaration` | names the renamed flat view; BrandTheme -> FlatTheme in the declaration text, shape unchanged | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#FileBrowserSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
@@ -292,10 +310,14 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | signature | `.#flatThemeToTenantAppearanceAdvanced` | the draft input widens from `FlatTheme` to `Theme / FlatTheme`; additive, same projection at the same door | major | `der-08-studio-callback-governed-theme.md` |
 | signature | `.#FormProps` | adds `adapt?: Adapt<FormAdaptation>` | major | `fam-02-family-cut-fields.md` |
 | signature | `.#FormSurface` | changed; accepts the optional `adapt` slot | minor | `fam-10-adapt-slot-and-ledger.md` |
+| signature | `.#FormSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
+| signature | `.#FormSurfaceProps` | adds optional SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
 | signature | `.#FOUNDATION_AUTHORITIES` | names the renamed flat view; BrandTheme -> FlatTheme in the declaration text, shape unchanged | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#GalleryViewProps` | `columns`, `minColumnWidth`, `gap` and `aspectRatio` keep their types (`number / 'auto'`, `number`, `number / string`, `string`, all optional) and lose their implicit defaults (`'auto'` / 200 / 16 / `'1'`): omitted, the skin's resting `--ds-gallery-view-columns` / `--ds-gallery-view-gap` / `--ds-gallery-view-aspect-ratio` paint. The resting gap is now `var(--ds-spacing-4, 16px)` rather than a literal 16px, so a denser or more spacious tenant moves it — the same ruling the kanban-board cut took for its column gap. Documentation of that precedence moved into the props' JSDoc, which is what changed the declaration fingerprint | patch | `fam-08-b7-data-views.md` |
 | signature | `.#generateCalendarGrid` | adds an optional fourth parameter `{ weekStartsOn?: 0/1/2/3/4/5/6 }`; without it the grid still starts on Sunday | major | `fam-03-family-cut-selection.md` |
 | signature | `.#GridViewProps` | `columns`, `minColumnWidth` and `gap` keep their types (`number / 'auto'`, `number`, `number / string`, all optional) and lose their implicit defaults (`'auto'` / 280 / the collection-card gap chain): omitted, the skin's resting `--ds-grid-view-columns` / `--ds-grid-view-gap` paint at exactly those values; stated, the value stamps the channel. Documentation of that precedence moved into the props' JSDoc, which is what changed the declaration fingerprint | patch | `fam-08-b7-data-views.md` |
+| signature | `.#GuidedDraftFormSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
+| signature | `.#GuidedDraftFormSurfaceProps` | adds optional SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
 | signature | `.#I18nProvider` | changed behavior, not shape: runtime locale strings (region tags, unsupported languages) are normalized through toSupportedLocale toward the configured fallback instead of crashing on config.code; onLocaleChange now reports the RESOLVED locale | minor | `inv-02-i18n-contract-kernel.md` |
 | signature | `.#ImportExportSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#ImportExportSurfaceProps` | adds optional SurfacePostures | minor | `inv06-data-admin-posture-adoption.md` |
@@ -304,20 +326,34 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | signature | `.#IntegrationSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#IntegrationSurfaceProps` | adds optional SurfacePostures | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#KanbanBoardProps` | `columnGap` and `columnMinWidth` keep their types (`number / string`, optional) and lose their implicit defaults (16 / 280): omitted, the theme-derived channel paints; stated, the value stamps the channel. Documentation of that precedence moved into the props' JSDoc, which is what changed the declaration fingerprint | patch | `fam-08-kanban-board-cut.md` |
+| signature | `.#KanbanSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-experience-ops-postures.md` |
+| signature | `.#KanbanSurfaceProps` | adds optional SurfacePostures | minor | `inv06-experience-ops-postures.md` |
 | signature | `.#ListSurface` | consumes optional app-owned postures using the shared resolver (INV-06) | minor | `inv06-surface-posture-adoption.md` |
 | signature | `.#ListSurfacePresentationConfig` | adds the optional previewRail content slot (INV-06) | minor | `inv06-surface-posture-adoption.md` |
 | signature | `.#ListSurfaceProps` | adds optional SurfacePostures without changing omitted behavior (INV-06) | minor | `inv06-surface-posture-adoption.md` |
+| signature | `.#MarketingSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-experience-ops-postures.md` |
+| signature | `.#MarketingSurfaceProps` | adds optional SurfacePostures | minor | `inv06-experience-ops-postures.md` |
+| signature | `.#MediaSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-remaining-recipe-postures.md` |
+| signature | `.#MediaSurfaceProps` | adds optional SurfacePostures | minor | `inv06-remaining-recipe-postures.md` |
 | signature | `.#migrateV1` | names the renamed flat view; BrandTheme -> FlatTheme in the declaration text, shape unchanged | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#ModalProps` | adds `adapt?: Adapt<OverlayAdaptation>`; the resolved presentation and posture are stamped on the dialog | major | `fam-04-family-cut-overlays-notifier.md` |
 | signature | `.#ModalProps` | gains overlayIntensity?: 'light' / 'medium' / 'heavy' (the tenant overlay ladder step painted on the backdrop; a custom overlayOpacity scrim keeps precedence and the attribute is not stamped) (OVM-ADOPT) | minor | `overlay-intensity-prop.md` |
+| signature | `.#NotificationSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-experience-ops-postures.md` |
+| signature | `.#NotificationSurfaceProps` | adds optional SurfacePostures | minor | `inv06-experience-ops-postures.md` |
+| signature | `.#OperationalSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-experience-ops-postures.md` |
+| signature | `.#OperationalSurfaceProps` | adds optional SurfacePostures | minor | `inv06-experience-ops-postures.md` |
 | signature | `.#PALETTE_ALIAS_CHANNELS` | loses the textInverse alias channel; setExtendedPaletteVariables emits nothing for a document still carrying the retired leaf (RET-01-CH) | major | `ret-01-three-pinned-channels-retired.md` |
 | signature | `.#paletteDeriver` | produces loses --ds-text-inverse (RET-01-CH) | major | `ret-01-three-pinned-channels-retired.md` |
 | signature | `.#PatternBrandStudioProps` | names the renamed flat view; BrandTheme -> FlatTheme in the declaration text, shape unchanged | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#PatternBrandStudioProps` | BREAKING: `onChange` narrows from `(next: FlatTheme) => void` to `(next: Theme) => void`, and `value` widens from `FlatTheme` to `BrandStudioDraft`. The widened input is additive; the narrowed callback is not, and a handler typed on the flat payload no longer compiles. Migration: `onChange={(next) => legacy(projectThemeDraft(next))}`, or retype the handler on `BrandStudioDraft` / `ComponentProps<typeof PatternBrandStudio>['onChange']` | major | `der-08-studio-callback-governed-theme.md` |
 | signature | `.#PatternVirtualListProps` | `height` keeps its type (`number / string`, optional) and loses its implicit default (`'100%'`): omitted, the skin's resting `--ds-virtual-list-block-size` paints; stated, the value stamps the channel. Documentation of that precedence moved into the prop's JSDoc, which is what changed the declaration fingerprint | patch | `fam-08-b7-data-views.md` |
 | signature | `.#PreviewThemeIntentInput` | same optional `ranges` field on the root barrel's re-export | minor | `r1r2-integration-door.md` |
+| signature | `.#PricingSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-experience-ops-postures.md` |
+| signature | `.#PricingSurfaceProps` | adds optional SurfacePostures | minor | `inv06-experience-ops-postures.md` |
 | signature | `.#ProfileSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#ProfileSurfaceProps` | adds optional SurfacePostures | minor | `inv06-data-admin-posture-adoption.md` |
+| signature | `.#RecordWorkbenchSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
+| signature | `.#RecordWorkbenchSurfaceProps` | adds optional SurfacePostures | minor | `inv06-workspace-forms-postures.md` |
 | signature | `.#renderFirstPartyArtifact` | returns governed beside css and compiled: the motion dial, expressive selection and decided channels the artifact's runtime block publishes | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#ReportSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#ReportSurfaceProps` | adds optional SurfacePostures | minor | `inv06-data-admin-posture-adoption.md` |
@@ -325,6 +361,8 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | signature | `.#ResolveThemeOptions` | baseline is required; resolveTheme validates the intent first and refuses a call without a baseline by name | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#ResolveThemeOptions` | gains optional `vertical?: Theme`; defaults to `baseline` and is recorded as `verticalBaseline`, never merged | minor | `wave-2026-10-01-container-law-normalized-radius.md` |
 | signature | `.#RuntimeVisualPayloadCensus` | reduced to `{ visualBranding: boolean }`; `tokenOverrides`, `personality`, `brandTheme` and `appearance` are gone because a `TenantConfig` can no longer carry them, leaving the branding seeds as the only raw visual channel | major | `emi-02-tenant-config-strip.md` |
+| signature | `.#SchedulerSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-experience-ops-postures.md` |
+| signature | `.#SchedulerSurfaceProps` | adds optional SurfacePostures | minor | `inv06-experience-ops-postures.md` |
 | signature | `.#ScrollRevealProps` | loses the four dormant redeclared timing fields (durationMs/delayMs/duration/delay); the runtime never destructured them (RET-01-D) | major | `ret-01-dead-transports-and-deprecated.md` |
 | signature | `.#SearchSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#SearchSurfaceProps` | adds optional SurfacePostures | minor | `inv06-data-admin-posture-adoption.md` |
@@ -339,6 +377,7 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | signature | `.#SheetProps` | gains overlayIntensity?: 'light' / 'medium' / 'heavy' (the tenant overlay ladder step painted on the backdrop) (OVM-ADOPT) | minor | `overlay-intensity-prop.md` |
 | signature | `.#Skeleton` | the nine static compound members (`Avatar`, `Text`, `Button`, `Card`, `ListItem`, `Table`, `Form`, `Paragraph`, `Transition`) are removed; wrap the real component in `AnatomySkeleton` instead | major | `fam-14-anatomy-derived-skeleton.md` |
 | signature | `.#STEPS_DEFAULTS` | removed (deprecated Stepper defaults alias retired by the deprecated-sweep WIP that already shared this working tree; not part of the RET-01-E export trim) | major | `ret-01-export-trim.md` |
+| signature | `.#StepWizardProps` | adds Modern-only renderActions over existing validated controls | minor | `inv06-wizard-navigation-postures.md` |
 | signature | `.#STRENGTH_COLORS` | values are `var(--ds-password-input-strength-*, var(--ds-color-*))` with no literal fallback | major | `fam-02-family-cut-fields.md` |
 | signature | `.#SurfaceActionBarProps` | accepts three typed optional posture anatomy attributes on the existing action row | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#Switch` | a deprecated alias rendering `Toggle`; forwards its ref to the native switch and keeps `SwitchProps` | major | `fam-01-family-cut-pilot.md` |
@@ -378,6 +417,8 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | signature | `.#VisualizationSurface` | consumes optional app-owned postures using the shared resolver | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#VisualizationSurfaceProps` | adds optional SurfacePostures | minor | `inv06-data-admin-posture-adoption.md` |
 | signature | `.#WizardSurface` | changed; accepts the optional `adapt` slot | minor | `fam-10-adapt-slot-and-ledger.md` |
+| signature | `.#WizardSurface` | consumes optional app-owned SurfacePostures | minor | `inv06-wizard-navigation-postures.md` |
+| signature | `.#WizardSurfaceProps` | adds optional SurfacePostures | minor | `inv06-wizard-navigation-postures.md` |
 | signature | `.#WorkspaceHeader` | changed; the deprecated alias of `.#CollectionHeader`, same signature | minor | `fam-10-collection-header-adapt.md` |
 | export | `./charts/renderers#SvgGaugeRenderer` | changed; the renderer's default palette reads the shared semantic arm. | patch | `fam-09-5b-semantic-chart-tones.md` |
 | export | `./contracts/surfaces#AdaptiveConfig` | removed; superseded by SurfaceAdaptivePosture | major | `inv-04-one-responsive-mechanism.md` |
@@ -629,7 +670,7 @@ Also pending, declaring no public surface movement: `con-08-supporting-ink-wcag-
 | WO-RET-01 | Retire code without productive consumers and the legacy public API (changeset 3.0) | codex-dt | 2026-10-02 | 2026-10-02 19:53 — 2026-10-02 independent Kimi review R1 found stale suppliers snapshot, missing canonical asset controls and superseded writer report. Narrow disposition: 43->38 consolidation at icons/marks (no legacy door); all original full-facade runtime controls and types now preserved at icons; changeset explicitly retires renderer-free metadata-only module boundary. Original 43->39 RET-01-F report is historical, not acceptance for this candidate. Official supplier generation, current asset-retention measurement and final frozen-diff review still required. No WO closure claimed. |
 | WO-EVI-02 | Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness | codex-dt | 2026-09-11 | 2026-10-02 19:40 — Active coordinator reassigned from Kimi K3 to codex-dt; the work-order summary now reflects the current operating model. |
 | WO-DER-07 | BitHire reference identity: three candidate decision sets rendered for the owner to pick | opus | 2026-09-09 | 2026-10-01 20:16 — 2026-10-02 CLOSE CONDITIONS (finite list): the single pending acceptance is the owner's deferred final branding pick (D-30, deferred 2026-09-29 — does not gate technical validation). Everything technical stands: the experimental identity map (5 tenants incl. Atelier as fixture), the two-tenants-of-one-vertical fixture proof, six-axis measured differences surviving a shared palette. Evidencia para cerrar: la decisión del owner registrada acá. No identity invented by the DS team. |
-| WO-INV-06 | Surface posture contract: phone, tablet and desktop postures as app-owned configuration with a correct first paint | codex-dt | 2026-10-02 | 2026-10-02 20:10 — Autonomous continuation checkpoint after25d3b965c: pilots+data/admin15recipes committed; remaining20recipeWIP preserved. Independent review corrections split at same dependency level: experience/editor-chat-marketing-pricing-notification and operations/kanban-scheduler-operational worker owns state parity, empty-action guards, body(notheader) dock placement; forms/workspace worker owns Collection legacytoolbar/adaptiveprimary hide, CommandCenter/DecisionInbox loading slots and GuidedDraft templates ARIA trigger (previous action/rail corrections tested21cases). No full builds run. Next: freeze/re-review/integrate those disjoint packets; implement bounded Wizard controls composition without duplicate callback/filter authority; confirm all35realrecipes then wholeINV06 acceptance. RET01 packaging remains unintegratedpending official suppliers/census+fresh retention proof; originalWIP backup stillpreserved. Root owns registry,generators,heavywindow,index/maincommits. Do not restart completed pilot/data lots or count partial packets as WOs. |
+| WO-INV-06 | Surface posture contract: phone, tablet and desktop postures as app-owned configuration with a correct first paint | codex-dt | 2026-10-02 | 2026-10-02 20:18 — Seven workspace/forms recipes integrated at c102c7629 after independent HOLD -> correction -> PASS: Collection toolbar and adaptive primary suppression, CommandCenter/DecisionInbox loading parity, canonical empty queue collapse, and GuidedDraft template trigger/ARIA follow actual visibility. Corrective run: 36 tests in 6 files PASS; earlier bounded 21 tests cover prior fixes. Integrated adoption: 31/35 recipes (List 1, data/admin 14, experience/operations 8, workspace/forms 7, Wizard 1). Auth, Media, EmptyState and Activity HOLD corrections are in progress; whole INV-06 remains open. Canonical docs committed locally on docs-engineering main at 02800e2; documentation reseal remains a milestone obligation. |
 
 ## Next up (todo, dependencies satisfied)
 
