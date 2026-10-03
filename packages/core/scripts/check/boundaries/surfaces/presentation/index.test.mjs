@@ -47,8 +47,7 @@ function forbiddenPolicyReferences(sourceText, fileName = 'boundary.ts') {
   }
   function visit(node) {
     if (ts.isInterfaceDeclaration(node) && LEGACY_POLICY_TYPE_NAMES.has(node.name.text)) {
-      const deprecated = ts.getJSDocDeprecatedTag(node);
-      if (!deprecated) report(node, `${node.name.text}-without-deprecation`);
+      report(node, node.name.text);
       return;
     }
     if (ts.isPropertyAccessExpression(node) && FORBIDDEN_POLICY_KEYS.has(node.name.text)) {
@@ -137,6 +136,57 @@ test('presentation boundary scanner catches aliases, computed access, destructur
   ]) {
     assert.ok(findings.some((finding) => finding.endsWith(`:${expected}`)), `missed ${expected}`);
   }
+});
+
+test('presentation boundary scanner rejects deprecated and plain legacy policy declarations', () => {
+  const deprecatedDeclaration = `
+    /**
+     * @deprecated Type-only compatibility contract.
+     */
+    export interface SurfacePermissionsConfig {
+      granted?: string[];
+    }
+  `;
+  const deprecatedFindings = forbiddenPolicyReferences(deprecatedDeclaration, 'deprecated-declaration.ts');
+  assert.ok(
+    deprecatedFindings.some((finding) => finding.endsWith(':SurfacePermissionsConfig')),
+    'deprecated legacy policy declaration must be rejected',
+  );
+
+  const plainDeclaration = `
+    export interface SurfaceRuntimeContext {
+      [key: string]: unknown;
+    }
+  `;
+  const plainFindings = forbiddenPolicyReferences(plainDeclaration, 'plain-declaration.ts');
+  assert.ok(
+    plainFindings.some((finding) => finding.endsWith(':SurfaceRuntimeContext')),
+    'non-deprecated legacy policy declaration must be rejected',
+  );
+});
+
+test('presentation boundary scanner rejects legacy policy imports and passes canonical resolved access', () => {
+  const legacyImport = `
+    import type { SurfacePermissionRule } from './contracts';
+    export type Rule = SurfacePermissionRule;
+  `;
+  const importFindings = forbiddenPolicyReferences(legacyImport, 'legacy-import.ts');
+  assert.ok(
+    importFindings.some((finding) => finding.endsWith(':SurfacePermissionRule')),
+    'legacy policy type import must be rejected',
+  );
+
+  const canonicalAccess = `
+    import type { AppResolvedSurfaceAccess, SurfaceAccessInput } from './contracts';
+    export function resolveAccess(input: SurfaceAccessInput): AppResolvedSurfaceAccess {
+      return input;
+    }
+  `;
+  assert.deepEqual(
+    forbiddenPolicyReferences(canonicalAccess, 'canonical-access.ts'),
+    [],
+    'canonical resolved access must produce no findings',
+  );
 });
 
 const ACCESS_INPUT_NAME = 'SurfaceAccessInput';
