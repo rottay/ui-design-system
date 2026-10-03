@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "line": "fixture",
+  "package": "@rottay/design-system",
+  "entries": [
+    {
+      "id": "symbol-removed/.#BrandTheme",
+      "class": "symbol-removed",
+      "subpath": ".",
+      "symbol": "BrandTheme",
+      "replacement": {
+        "subpath": ".",
+        "symbol": "FlatTheme"
+      },
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "report-only",
+      "impossible": "fixture: the migration needs a decision per site"
+    }
+  ]
+}

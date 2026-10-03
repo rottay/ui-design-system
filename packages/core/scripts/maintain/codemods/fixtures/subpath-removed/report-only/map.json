@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "line": "fixture",
+  "package": "@rottay/design-system",
+  "entries": [
+    {
+      "id": "subpath-removed/./primitives/button#*",
+      "class": "subpath-removed",
+      "subpath": "./primitives/button",
+      "symbol": "*",
+      "replacement": {
+        "subpath": "."
+      },
+      "kind": "module",
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "report-only",
+      "impossible": "fixture: the migration needs a decision per site"
+    },
+    {
+      "id": "subpath-removed/./styles/platform#*",
+      "class": "subpath-removed",
+      "subpath": "./styles/platform",
+      "symbol": "*",
+      "replacement": {
+        "subpath": "./styles/rottay"
+      },
+      "kind": "stylesheet",
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "report-only",
+      "impossible": "fixture: the migration needs a decision per site"
+    }
+  ]
+}

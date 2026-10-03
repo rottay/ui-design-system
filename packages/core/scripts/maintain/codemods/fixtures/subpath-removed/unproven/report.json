@@ -82,17 +82,17 @@
   {
     "file": "index.tsx",
     "line": 7,
-    "column": 22,
+    "column": 37,
     "action": "report",
-    "id": "symbol-removed-no-replacement/./commercial#ProductWindow",
-    "reason": "no-public-replacement"
+    "id": "symbol-removed/./commercial#TreeView",
+    "reason": "cross-subpath"
   },
   {
     "file": "index.tsx",
     "line": 7,
-    "column": 37,
+    "column": 22,
     "action": "report",
-    "id": "symbol-removed-no-replacement/./commercial#TreeView",
+    "id": "symbol-removed-no-replacement/./commercial#ProductWindow",
     "reason": "no-public-replacement"
   },
   {

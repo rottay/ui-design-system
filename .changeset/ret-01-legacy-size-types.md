@@ -19,7 +19,7 @@ Tests. The `renders size %s` cases of the five component tests and the stories m
 
 Compatibility promise. The aliases were introduced on 2026-07-09 marked "retained for one release so existing values keep compiling". Only 2.19.x patch releases shipped between that marker and 3.0; no minor ever did, and no consumer exists to claim the window: nothing outside the package passes these spellings to these five components.
 
-Migration. Replace the literal on the `size` prop of the five components (`small` -> `sm`, `middle` -> `md`, `large` -> `lg`); the 3.0 codemod rewrites string literals and reports a value that arrives through a variable, a ternary or a spread. A consumer that imported one of the five type names uses the canonical `<Component>Size`, which stays exported.
+Migration. Replace the literal on the `size` prop of the five components (`small` -> `sm`, `middle` -> `md`, `large` -> `lg`); the 3.0 codemod rewrites string literals, including each literal branch of a ternary, and reports a value that arrives through a variable, any other expression or a spread. A consumer that imported one of the five type names uses the canonical `<Component>Size`, which stays exported.
 
 ```contract-diff
 signature .#AutoCompleteProps — `size` narrows from `AutoCompleteSize | 'small' | 'middle' | 'large'` to `AutoCompleteSize` (`'sm' | 'md' | 'lg'`); pass `sm`, `md` or `lg` (RET-01)

@@ -1,0 +1,18 @@
+[
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "report",
+    "id": "symbol-removed/.#BrandTheme",
+    "reason": "report-only"
+  },
+  {
+    "file": "index.ts",
+    "line": 3,
+    "column": 10,
+    "action": "report",
+    "id": "symbol-removed/.#BrandTheme",
+    "reason": "report-only"
+  }
+]

@@ -3,8 +3,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { packageRoot } from '../../../libraries/repo-root/index.mjs';
 import { CLASSES, runCodemods } from '../index.mjs';
-import { FIXTURES, loadFixtureCases, rowsOf, runCase, snapshot, workingCopy } from './harness/index.mjs';
+import { createPackageSurface } from '../resolve/surface/index.mjs';
+import { FIXTURES, KIT_ROOT, loadFixtureCases, rowsOf, runCase, snapshot, workingCopy } from './harness/index.mjs';
 
 const CASES = loadFixtureCases();
 const UNTOUCHED = new Set(['homonym', 'lookalike']);
@@ -156,4 +158,89 @@ test('--class and --only limit the plan to the named class or entry', () => {
   } finally {
     fs.rmSync(work, { recursive: true, force: true });
   }
+});
+
+function withTree(files, body) {
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'codemods-map-')));
+  try {
+    for (const [file, text] of Object.entries(files)) fs.writeFileSync(path.join(root, file), text);
+    const run = (options = {}) => {
+      const result = runCodemods({ operands: [root], cwd: root, surface: createPackageSurface(packageRoot(KIT_ROOT)), ...options });
+      return { result, rows: rowsOf(result, root) };
+    };
+    body(run, () => snapshot(root));
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+}
+
+const REWRITE_CAPABLE = ['prop-renamed', 'prop-removed', 'union-member-removed', 'symbol-removed', 'subpath-removed'];
+
+test('`mode: "report-only"` is law in every class that can rewrite: --write reports the site and edits nothing', () => {
+  for (const className of REWRITE_CAPABLE) {
+    const fixture = CASES.find((item) => item.name === `${className}/report-only`);
+    assert.ok(fixture, `${className} has no report-only fixture`);
+    assert.deepEqual(snapshot(fixture.expected), snapshot(fixture.input), fixture.name);
+    const work = workingCopy(fixture);
+    try {
+      const { rows } = runCase(fixture, work, { write: true });
+      assert.deepEqual(snapshot(work), snapshot(fixture.input), fixture.name);
+      assert.ok(rows.length > 0 && rows.every((row) => row.action === 'report' && row.reason === 'report-only'), fixture.name);
+    } finally {
+      fs.rmSync(work, { recursive: true, force: true });
+    }
+  }
+});
+
+test('the 3.0 entries that need a decision per site are reported at the attribute and never written', () => {
+  const source = "import { BarChart, ChartScaffold, CountUp, FadeIn, ScrollReveal } from '@rottay/design-system';\n\n"
+    + 'export const nodes = (\n  <>\n    <FadeIn duration={0.32} delay={80}>x</FadeIn>\n    <CountUp value={3} duration="2" />\n'
+    + '    <ScrollReveal duration={0.5}>x</ScrollReveal>\n    <ChartScaffold loading />\n    <BarChart loading data={[]} />\n  </>\n);\n';
+  withTree({ 'index.tsx': source }, (run, read) => {
+    const { rows } = run({ write: true });
+    assert.deepEqual(rows.map((row) => [row.line, row.action, row.id, row.reason]), [
+      [7, 'rewrite', 'prop-removed/.#ScrollRevealProps.duration', 'attribute-deleted'],
+      [8, 'report', 'prop-removed/.#ChartScaffoldProps.loading', 'report-only'],
+      [5, 'report', 'prop-renamed/.#BaseMotionProps.duration', 'report-only'],
+      [5, 'report', 'prop-renamed/.#BaseMotionProps.delay', 'report-only'],
+      [6, 'report', 'prop-renamed/.#CountUpProps.duration', 'report-only'],
+    ]);
+    assert.equal(read()['index.tsx'], source.replace('<ScrollReveal duration={0.5}>', '<ScrollReveal>'));
+  });
+});
+
+test('a name retired on a removed door moves to its recorded successor under its local name, never to a root homonym', () => {
+  const fixture = CASES.find((item) => item.name === 'subpath-removed/cross-door');
+  const expected = snapshot(fixture.expected);
+  assert.match(expected['combined.tsx'],
+    /^import \{ TreeViewConnector as TreeView, type TreeViewConnectorNode as TreeNode, type TreeViewConnectorProps as TreeViewProps \} from '@rottay\/design-system';$/m);
+  assert.match(expected['lone-node.ts'], /^import type \{ TreeViewConnectorNode as TreeNode \} from '@rottay\/design-system';$/m);
+  assert.match(expected['lone-props.ts'], /^import \{ type TreeViewConnectorProps as Props \} from '@rottay\/design-system';$/m);
+  assert.match(expected['lone-props.ts'], /^export \{ TreeViewConnectorProps as TreeViewProps \} from '@rottay\/design-system';$/m);
+  assert.match(expected['control.tsx'], /^import \{ AsciiFrame, type AsciiFrameProps \} from '@rottay\/design-system';$/m);
+  assert.equal(expected['held.tsx'], snapshot(fixture.input)['held.tsx']);
+  const held = reportOf(fixture.name).filter((row) => row.file === 'held.tsx' && row.id === 'subpath-removed/./commercial#*');
+  assert.deepEqual(held.map((row) => [row.line, row.action, row.reason]),
+    [[1, 'report', 'retired-on-door'], [2, 'report', 'not-exported-at-target'], [3, 'report', 'not-exported-at-target']]);
+});
+
+test('the 3.0 map moves the commercial tree import to the connector names, and a second run is a no-op', () => {
+  const files = {
+    'combined.tsx': "import { TreeView, type TreeNode, type TreeViewProps } from '@rottay/design-system/commercial';\n\n"
+      + 'export const node: TreeNode = { label: \'a\' };\nexport const Tree = (props: TreeViewProps) => <TreeView {...props} />;\n',
+    'lone.ts': "import type { TreeNode } from '@rottay/design-system/commercial';\n\nexport type Node = TreeNode;\n",
+  };
+  withTree(files, (run, read) => {
+    const first = run({ write: true });
+    assert.equal(first.rows.every((row) => row.action === 'rewrite'), true);
+    const written = read();
+    assert.equal(written['combined.tsx'], files['combined.tsx'].replace(
+      "{ TreeView, type TreeNode, type TreeViewProps } from '@rottay/design-system/commercial'",
+      "{ TreeViewConnector as TreeView, type TreeViewConnectorNode as TreeNode, type TreeViewConnectorProps as TreeViewProps } from '@rottay/design-system'",
+    ));
+    assert.equal(written['lone.ts'], "import type { TreeViewConnectorNode as TreeNode } from '@rottay/design-system';\n\nexport type Node = TreeNode;\n");
+    const second = run({ write: true });
+    assert.deepEqual(second.rows, []);
+    assert.deepEqual(read(), written);
+  });
 });

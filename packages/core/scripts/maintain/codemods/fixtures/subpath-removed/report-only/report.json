@@ -1,0 +1,18 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./primitives/button#*",
+    "reason": "report-only"
+  },
+  {
+    "file": "index.tsx",
+    "line": 2,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./styles/platform#*",
+    "reason": "report-only"
+  }
+]

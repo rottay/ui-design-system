@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "line": "fixture",
+  "package": "@rottay/design-system",
+  "entries": [
+    {
+      "id": "prop-renamed/.#FadeInProps.duration",
+      "class": "prop-renamed",
+      "subpath": ".",
+      "symbol": "FadeInProps",
+      "member": "duration",
+      "components": [
+        "FadeIn"
+      ],
+      "propsTypes": [
+        "FadeInProps"
+      ],
+      "replacement": {
+        "member": "durationMs"
+      },
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "report-only",
+      "impossible": "fixture: the migration needs a decision per site"
+    },
+    {
+      "id": "prop-renamed/.#FadeInProps.delay",
+      "class": "prop-renamed",
+      "subpath": ".",
+      "symbol": "FadeInProps",
+      "member": "delay",
+      "components": [
+        "FadeIn"
+      ],
+      "propsTypes": [
+        "FadeInProps"
+      ],
+      "replacement": {
+        "member": "delayMs"
+      },
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "report-only",
+      "impossible": "fixture: the migration needs a decision per site"
+    }
+  ]
+}

@@ -87,14 +87,15 @@ test('no substitution points at a private module: every replacement is published
   }
 });
 
-test('`TONE_TO_VARIANT` is published at the package root and the three bridges are not', () => {
+test('`TONE_TO_VARIANT` is published at the package root and the four bridges are not', () => {
   const root = surface.exportsOf('.');
   assert.ok(root.has('TONE_TO_VARIANT'));
   for (const entry of of('symbol-removed').filter((item) => item.symbol.startsWith('TONE_TO_'))) {
     assert.deepEqual(entry.replacement, { subpath: '.', symbol: 'TONE_TO_VARIANT' });
     assert.equal(root.has(entry.symbol), false, entry.symbol);
   }
-  assert.equal(of('symbol-removed').filter((item) => item.symbol.startsWith('TONE_TO_')).length, 3);
+  assert.deepEqual(of('symbol-removed').filter((item) => item.symbol.startsWith('TONE_TO_')).map((item) => item.symbol).sort(),
+    ['TONE_TO_AVATAR_VARIANT', 'TONE_TO_BADGE_VARIANT', 'TONE_TO_CALLOUT_VARIANT', 'TONE_TO_TAG_VARIANT']);
 });
 
 test('what the map calls retired is retired: symbols are unpublished, subpaths are gone', () => {
@@ -191,13 +192,49 @@ test('member-level breaks name an export the package still publishes, what chang
   assert.deepEqual(map.byId.get('member-changed/.#TenantConfig').members, ['brandTheme', 'tokenOverrides', 'personality', 'appearance', 'engine']);
 });
 
-test('the two commercial components with no root successor are explicit report-only entries', () => {
+test('the commercial component with no root successor is an explicit report-only entry', () => {
+  const entry = map.byId.get('symbol-removed-no-replacement/./commercial#ProductWindow');
+  assert.equal(entry.replacement, null);
+  assert.equal(surface.exportsOf('.').has('ProductWindow'), false);
+  assert.equal(map.byId.has('symbol-removed-no-replacement/./commercial#TreeView'), false);
+});
+
+test('the commercial tree names move to the connector, never to the root homonyms of `PatternTreeView`', () => {
   const root = surface.exportsOf('.');
-  for (const symbol of ['ProductWindow', 'TreeView']) {
-    const entry = map.byId.get(`symbol-removed-no-replacement/./commercial#${symbol}`);
-    assert.equal(entry.replacement, null);
-    assert.equal(root.has(symbol), false);
+  const successors = { TreeView: 'TreeViewConnector', TreeNode: 'TreeViewConnectorNode', TreeViewProps: 'TreeViewConnectorProps' };
+  for (const [symbol, successor] of Object.entries(successors)) {
+    const entry = map.byId.get(`symbol-removed/./commercial#${symbol}`);
+    assert.deepEqual(entry.replacement, { subpath: '.', symbol: successor });
+    assert.equal(entry.mode, 'rewrite');
+    assert.ok(root.has(successor), successor);
   }
+  assert.equal(root.has('TreeView'), false);
+  assert.equal(map.byId.get('subpath-removed/./commercial#*').replacement.subpath, '.');
+});
+
+test('the entries that need a decision per site are report-only, whatever their class can rewrite', () => {
+  const decided = map.entries.filter((entry) => entry.mode === 'report-only'
+    && ['prop-renamed', 'prop-removed', 'union-member-removed', 'symbol-removed', 'subpath-removed'].includes(entry.class)
+    && entry.replacement !== null);
+  assert.deepEqual(decided.map((entry) => entry.id).sort(), [
+    'prop-removed/.#ChartScaffoldProps.loading',
+    'prop-renamed/.#BaseMotionProps.delay', 'prop-renamed/.#BaseMotionProps.duration',
+    'prop-renamed/.#CountUpProps.delay', 'prop-renamed/.#CountUpProps.duration',
+    'prop-renamed/.#StaggerChildrenProps.delayChildren', 'prop-renamed/.#StaggerChildrenProps.staggerDelay',
+    'prop-renamed/.#TextRevealProps.delay', 'prop-renamed/.#TextRevealProps.duration',
+  ]);
+  for (const entry of decided) assert.equal(entry.replacement?.values, undefined, `${entry.id}: no value-table workaround`);
+  assert.equal(map.byId.has('prop-renamed/.#ChartScaffoldProps.loading'), false);
+});
+
+test('the literal renames of the retired size and alignment spellings are authored member by member', () => {
+  const entries = of('union-member-removed');
+  const sizes = entries.filter((entry) => entry.prop === 'size');
+  assert.equal(sizes.length, 15);
+  for (const entry of sizes) assert.equal(entry.replacement.member, { small: 'sm', middle: 'md', large: 'lg' }[entry.member], entry.id);
+  const sides = entries.filter((entry) => entry.prop === 'textAlign');
+  assert.deepEqual(sides.map((entry) => [entry.member, entry.replacement.member, entry.directional]), [['left', 'start', true], ['right', 'end', true]]);
+  assert.equal(entries.length, sizes.length + sides.length);
 });
 
 test('the loader refuses a malformed map', () => {

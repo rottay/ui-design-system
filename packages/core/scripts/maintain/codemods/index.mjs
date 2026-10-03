@@ -236,6 +236,19 @@ function admit(findings) {
   return edits;
 }
 
+/** `mode: "report-only"` is law: whatever a transform planned for such an entry is reported and never written. */
+function enforceMode(map, findings) {
+  for (const item of findings) {
+    if (item.action !== 'rewrite') continue;
+    const entry = map.byId.get(item.id);
+    if (entry?.mode !== 'report-only') continue;
+    item.action = 'report';
+    item.reason = 'report-only';
+    item.message = `${item.message}: not written, the map entry is report-only (${entry.impossible})`;
+    item.edits = [];
+  }
+}
+
 function reportKey(item) {
   return `${item.id}\0${item.reason}\0${item.excerpt}`;
 }
@@ -283,6 +296,7 @@ function planSource(context, file, groups) {
       if (!reaches && !TEXTUAL_CLASSES.has(transform.class)) continue;
       current.push(...transform.run(context, analysis, entries));
     }
+    enforceMode(context.map, current);
     const edits = admit(current);
     for (const item of current) {
       if (item.action === 'report') {

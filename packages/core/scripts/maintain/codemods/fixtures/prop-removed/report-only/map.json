@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "line": "fixture",
+  "package": "@rottay/design-system",
+  "entries": [
+    {
+      "id": "prop-removed/.#ChartScaffoldProps.loading",
+      "class": "prop-removed",
+      "subpath": ".",
+      "symbol": "ChartScaffoldProps",
+      "member": "loading",
+      "components": [
+        "ChartScaffold"
+      ],
+      "propsTypes": [
+        "ChartScaffoldProps"
+      ],
+      "guidance": "Write `state=\"loading\"`.",
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "report-only",
+      "impossible": "fixture: the migration needs a decision per site"
+    }
+  ]
+}

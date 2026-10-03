@@ -77,6 +77,7 @@ export const transform = {
       const next = entry.replacement.symbol;
       const label = `\`${entry.symbol}\` -> \`${next}\`${entry.note ? ` (${entry.note})` : ''}`;
       for (const site of sites.get(symbolKey(entry.subpath, entry.symbol)) ?? []) {
+        if (analysis.doorRenamed?.has(site.node)) continue;
         if (entry.replacement.subpath !== entry.subpath) {
           findings.push(report(analysis, entry, site.node, 'cross-subpath',
             `${label} lives on \`${entry.replacement.subpath}\`; move the import by hand`));

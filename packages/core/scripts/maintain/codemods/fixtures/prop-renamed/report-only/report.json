@@ -1,0 +1,18 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 5,
+    "column": 13,
+    "action": "report",
+    "id": "prop-renamed/.#FadeInProps.duration",
+    "reason": "report-only"
+  },
+  {
+    "file": "index.tsx",
+    "line": 5,
+    "column": 29,
+    "action": "report",
+    "id": "prop-renamed/.#FadeInProps.delay",
+    "reason": "report-only"
+  }
+]

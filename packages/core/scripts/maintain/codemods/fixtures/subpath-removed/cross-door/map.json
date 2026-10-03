@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "line": "fixture",
+  "package": "@rottay/design-system",
+  "entries": [
+    {
+      "id": "subpath-removed/./commercial#*",
+      "class": "subpath-removed",
+      "subpath": "./commercial",
+      "symbol": "*",
+      "replacement": {
+        "subpath": "."
+      },
+      "kind": "module",
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "rewrite",
+      "resolves": "fixture: the kit proves and writes this one"
+    },
+    {
+      "id": "symbol-removed/./commercial#TreeView",
+      "class": "symbol-removed",
+      "subpath": "./commercial",
+      "symbol": "TreeView",
+      "replacement": {
+        "subpath": ".",
+        "symbol": "TreeViewConnector"
+      },
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "rewrite",
+      "resolves": "fixture: the kit proves and writes this one"
+    },
+    {
+      "id": "symbol-removed/./commercial#TreeNode",
+      "class": "symbol-removed",
+      "subpath": "./commercial",
+      "symbol": "TreeNode",
+      "replacement": {
+        "subpath": ".",
+        "symbol": "TreeViewConnectorNode"
+      },
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "rewrite",
+      "resolves": "fixture: the kit proves and writes this one"
+    },
+    {
+      "id": "symbol-removed/./commercial#TreeViewProps",
+      "class": "symbol-removed",
+      "subpath": "./commercial",
+      "symbol": "TreeViewProps",
+      "replacement": {
+        "subpath": ".",
+        "symbol": "TreeViewConnectorProps"
+      },
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "rewrite",
+      "resolves": "fixture: the kit proves and writes this one"
+    },
+    {
+      "id": "symbol-removed/./commercial#Badge",
+      "class": "symbol-removed",
+      "subpath": "./commercial",
+      "symbol": "Badge",
+      "replacement": {
+        "subpath": ".",
+        "symbol": "MonoBadge"
+      },
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "report-only",
+      "impossible": "fixture: the migration needs a decision per site"
+    },
+    {
+      "id": "symbol-removed/./commercial#Ticker",
+      "class": "symbol-removed",
+      "subpath": "./commercial",
+      "symbol": "Ticker",
+      "replacement": {
+        "subpath": ".",
+        "symbol": "Marquee"
+      },
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "rewrite",
+      "resolves": "fixture: the kit proves and writes this one"
+    },
+    {
+      "id": "symbol-removed-no-replacement/./commercial#ProductWindow",
+      "class": "symbol-removed-no-replacement",
+      "subpath": "./commercial",
+      "symbol": "ProductWindow",
+      "replacement": null,
+      "guidance": "The component left the package.",
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "report-only",
+      "impossible": "fixture: the migration needs a decision per site"
+    }
+  ]
+}

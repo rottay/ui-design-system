@@ -15,7 +15,8 @@ The kit ships at `packages/core/scripts/maintain/codemods` and runs as
 `pnpm -C packages/core codemods <dir>` (operands resolve from `packages/core`).
 It is a dry-run by default: it prints every planned rewrite and every report
 and writes nothing. `--write` applies the proven rewrites; `--check` is the
-dry-run that exits 1 while any finding remains, for CI.
+dry-run that exits 1 while any finding remains, for CI. An entry marked
+report-only is never written, whatever its class.
 
 A node is edited only when its import resolves to `@rottay/design-system` or
 one of its published subpaths. Everything else is reported with its reason: a
@@ -23,7 +24,7 @@ consumer wrapper, a spread, a props object, a namespace or dynamic import, a
 name reached through a consumer-owned alias, a replacement name the file
 already shadows.
 
-The 3.0 map (`maps/3.0/index.json`) has 535 entries: 104 can rewrite and 431
+The 3.0 map (`maps/3.0/index.json`) has 578 entries: 132 can rewrite and 446
 are report-only. Per class:
 
 - `subpath-removed` (86). 83 re-point: the 75 granular per-tier subpaths and
@@ -32,27 +33,40 @@ are report-only. Per class:
   `./styles.css`, and `./styles/default`, `./styles/platform` and the
   `dist/platform.css` path to `./styles/rottay`. A module door is re-pointed
   only for a named import or re-export whose every name the target door
-  publishes; a namespace, default, side-effect, star or dynamic import is
-  reported. A stylesheet door is re-pointed in a JavaScript or TypeScript
+  publishes or has a successor the map records for that door; a namespace,
+  default, side-effect, star or dynamic import is reported. A stylesheet door is re-pointed in a JavaScript or TypeScript
   import; inside a stylesheet it is reported, never rewritten. 3 are
   report-only because no public substitute is named: `./effects`,
   `./spatial/spec`, `./commercial.css`.
-- `symbol-removed` (15). Rewritten: the import binding moves to the published
-  replacement name and every reference bound to it follows. Reported: a
-  replacement that lives on another subpath, a name reached through a
-  consumer-owned declaration, a shadowed replacement, a binding destructured
-  from a namespace.
-- `prop-renamed` (2). Rewritten on an element proven to be the design-system
+- `symbol-removed` (20). Rewritten: the import binding moves to the published
+  replacement name and every reference bound to it follows; a name retired on
+  a removed door moves to its successor on the target door under its local
+  name (`TreeViewConnector as TreeView`). Reported: a cross-door replacement
+  reached through a namespace, an `import()` type or a declaration the door
+  transform holds back, a name reached through a consumer-owned declaration,
+  a shadowed replacement, a binding destructured from a namespace.
+- `prop-renamed` (12). 4 rewrite on an element proven to be the design-system
   component: `color` to `swatchColor` on `TooltipValue`, `initial` to
-  `defaultCurrent` on `Stepper`. Reported: an element that already states the
-  new prop, a spread, a props object, a consumer wrapper.
-- `prop-removed` (4). Rewritten: `columns` and `minColumnWidth` are deleted
-  from `PatternGridView` and `PatternGalleryView` elements when the value has
-  no side effect. Reported: a value with a side effect, a spread, a props
-  object, a consumer wrapper.
-- `symbol-removed-no-replacement` (57). Report-only: nothing public replaces
+  `defaultCurrent` on `Stepper`, `orientationMargin` to `textPosition` and
+  `margin` to `spacing` on `Divider`. Reported there: an element that already
+  states the new prop, a spread, a props object, a consumer wrapper. 8 are
+  report-only: the un-suffixed motion timing props, whose rename carries a
+  seconds-or-milliseconds decision per site.
+- `prop-removed` (9). 8 rewrite: `columns` and `minColumnWidth` are deleted
+  from `PatternGridView` and `PatternGalleryView` elements, `duration` and
+  `delay` from `ScrollReveal`, `dateFullCellRender` and `monthFullCellRender`
+  from `Calendar`, when the value has no side effect. Reported there: a value
+  with a side effect, a spread, a props object, a consumer wrapper. 1 is
+  report-only: `loading` on `ChartScaffold`, which becomes `state="loading"`.
+- `union-member-removed` (17). Rewritten: a string literal on a prop of an
+  element proven to be the design-system component (`small` / `middle` /
+  `large` to `sm` / `md` / `lg` on `AutoComplete`, `Cascader`, `Collapse`,
+  `ColorPicker` and `TreeSelect`; `left` / `right` to `start` / `end` on `Box`
+  only under `--assume-ltr`). Reported: a non-literal value, a spread, a
+  consumer wrapper.
+- `symbol-removed-no-replacement` (62). Report-only: nothing public replaces
   the export, so every design-system-resolved use is listed with its guidance.
-- `member-changed` (33). Report-only: every design-system-resolved use of the
+- `member-changed` (34). Report-only: every design-system-resolved use of the
   owning export is listed with what changed.
 - `css-class-renamed` (2 entries, 24 class names). Report-only: each exact
   class token is listed with its canonical name.
@@ -60,8 +74,6 @@ are report-only. Per class:
   custom-property name is listed with its recorded successor, or as removed.
 - `glyph-removed` (328). Report-only: each use of a retired vendor-named glyph
   is listed.
-
-The kit's tenth class, `union-member-removed`, has no entry in the 3.0 map.
 
 The 328 vendor glyphs, the CSS class renames and the custom-property renames
 are report-only: the kit lists every site and edits none of them. A glyph ->
@@ -86,14 +98,14 @@ the rewrites above and hands the rest to a person.
   - The root publishes no `TreeView`. The component continues as
     `TreeViewConnector`, with `TreeViewConnectorNode` and
     `TreeViewConnectorProps` carrying the same fields the door's `TreeNode`
-    and `TreeViewProps` had. The kit does not make this rename: it reports
-    `TreeView` and leaves the import alone.
+    and `TreeViewProps` had. The kit makes this rename in a named import or
+    re-export: `TreeView`, `TreeNode` and `TreeViewProps` become
+    `TreeViewConnector as TreeView`, `TreeViewConnectorNode as TreeNode` and
+    `TreeViewConnectorProps as TreeViewProps` on the package root.
   - The root's `TreeNode` and `TreeViewProps` are the types of
     `PatternTreeView`, a different component with a different shape (`key` is
-    required, `data` is an array). An import of only those two names from
-    `./commercial` is re-pointed to the root by the kit and then typechecks
-    against the wrong contract; rename them to the `TreeViewConnector*` types
-    by hand.
+    required, `data` is an array). The kit never re-points those two names to
+    the root homonyms; it moves them to the `TreeViewConnector*` types.
   - `commercialTokens`, `commercialGray`, `COMMERCIAL_GRAY_HEX`,
     `COMMERCIAL_INK_HEX`, `COMMERCIAL_PAPER_HEX` and `CommercialGrayStep` have
     no root successor. Read the custom properties in the table below instead.
