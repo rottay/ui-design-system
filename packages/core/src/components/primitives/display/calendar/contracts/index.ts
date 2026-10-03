@@ -175,7 +175,13 @@ export interface CalendarProps extends BaseComponentProps, EngineAwareProps {
   monthCellRender?: (date: Date) => ReactNode;
 
   /**
-   * Custom render function for cell content (new API).
+   * Custom render function for cell content, appended after the default
+   * day or month label. `info.type` is `'date'` in month view and `'month'`
+   * in year view. When passed, it replaces `dateCellRender` and
+   * `monthCellRender` in both views.
+   *
+   * Honoured by the Classic and Modern engines; the Rustic engine reads only
+   * the legacy `dateCellRender` / `monthCellRender` pair.
    * @param date - The date being rendered
    * @param info - Additional information about the cell
    * @returns Custom content to display in the cell
@@ -183,10 +189,18 @@ export interface CalendarProps extends BaseComponentProps, EngineAwareProps {
   cellRender?: (date: Date, info: CalendarCellInfo) => ReactNode;
 
   /**
-   * Custom render function for entire cell (new API).
+   * Custom render function that replaces the cell's default content;
+   * `info.originNode` is the default day or month label. It wins over
+   * `cellRender` and over the legacy pair.
+   *
+   * Scope differs by engine. Classic replaces the whole cell body. Modern
+   * replaces only the children of the cell button: the `gridcell` role, the
+   * roving tab stop, the selected / today / disabled state and the cell's
+   * accessible name stay engine-owned, so the returned node must not be
+   * interactive. Rustic does not read this prop.
    * @param date - The date being rendered
    * @param info - Additional information about the cell
-   * @returns Custom element to replace the entire cell
+   * @returns Custom content to replace the cell's default content
    */
   fullCellRender?: (date: Date, info: CalendarCellInfo) => ReactNode;
 

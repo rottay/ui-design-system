@@ -57,7 +57,7 @@ import {
   resolveWeekStartsOn,
   weekdayOrder,
 } from '../../../../foundation/calendar';
-import type { CalendarProps, CalendarMode } from '../../contracts';
+import type { CalendarProps, CalendarMode, CalendarCellInfo } from '../../contracts';
 
 // Navigation glyphs always come from the semantic icon corpus. Year movement
 // composes two instances of the same logical role; tenant icon packs and RTL
@@ -137,6 +137,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     disabledDate,
     dateCellRender,
     monthCellRender,
+    cellRender,
+    fullCellRender,
     onPanelChange,
     onChange,
     onSelect,
@@ -308,6 +310,27 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     d1.getFullYear() === d2.getFullYear() &&
     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate();
+
+  // `fullCellRender` replaces the cell's children only: the gridcell button,
+  // its roving stop and its state attributes stay engine-owned.
+  const renderCellChildren = (
+    date: Date,
+    type: CalendarCellInfo['type'],
+    originNode: React.ReactNode,
+    legacyRender: ((date: Date) => React.ReactNode) | undefined,
+  ): React.ReactNode => {
+    const info: CalendarCellInfo = { originNode, today, type };
+    if (fullCellRender) return fullCellRender(date, info);
+    if (!cellRender && !legacyRender) return originNode;
+    return (
+      <>
+        {originNode}
+        <div data-part="cell-content">
+          {cellRender ? cellRender(date, info) : legacyRender?.(date)}
+        </div>
+      </>
+    );
+  };
 
   // -- APG grid keyboard navigation -------------------------------------------
   // Roving tab stop per grid: day cells track a focused DATE (default: the
@@ -530,12 +553,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                       onClick={() => handleDateClick(day)}
                       disabled={isDisabled}
                     >
-                      <span>{day}</span>
-                      {dateCellRender && (
-                        <div data-part="cell-content">
-                          {dateCellRender(date)}
-                        </div>
-                      )}
+                      {renderCellChildren(date, 'date', <span>{day}</span>, dateCellRender)}
                     </button>
                   );
                 })}
@@ -568,15 +586,11 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                     data-selected={isSelected ? 'true' : 'false'}
                     data-today={isCurrentMonth ? 'true' : 'false'}
                     aria-selected={isSelected}
+                    aria-label={fullCellRender ? month : undefined}
                     tabIndex={i === anchorMonthIndex ? 0 : -1}
                     onClick={() => handleMonthClick(i)}
                   >
-                    <span>{month}</span>
-                    {monthCellRender && (
-                      <div data-part="cell-content">
-                        {monthCellRender(date)}
-                      </div>
-                    )}
+                    {renderCellChildren(date, 'month', <span>{month}</span>, monthCellRender)}
                   </button>
                 );
               })}
