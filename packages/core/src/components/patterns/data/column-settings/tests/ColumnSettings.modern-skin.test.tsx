@@ -35,3 +35,25 @@ describe('ColumnSettings modern skin — narrow container posture', () => {
     expect(narrow).toContain('flex-basis: 100%');
   });
 });
+
+describe('ColumnSettings modern skin — the move buttons wear the Button focus signature', () => {
+  const CSS = SKIN.replace(/\/\*[\s\S]*?\*\//g, '');
+  const gripRules = [...CSS.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .map((match) => ({ selector: match[1].trim(), body: match[2] }))
+    .filter((rule) => rule.selector.includes("[data-part='grip']"));
+
+  it('paints no focus indicator of its own on the composed Buttons', () => {
+    // A family outline tied the Button ring rule and drew a solid contour over
+    // the `underline` and `glow` signatures.
+    expect(gripRules.length).toBeGreaterThan(0);
+    for (const rule of gripRules) {
+      expect(rule.body, rule.selector).not.toMatch(/(^|[\s;])outline(-[a-z]+)?\s*:/);
+      expect(rule.body, rule.selector).not.toMatch(/--ds-(button-)?focus-ring/);
+    }
+  });
+
+  it('still lifts the dimmed grip to full strength under keyboard focus', () => {
+    const focus = gripRules.filter((rule) => /focus-visible/.test(rule.selector));
+    expect(focus.map((rule) => rule.body.trim())).toEqual(['opacity: 1;']);
+  });
+});
