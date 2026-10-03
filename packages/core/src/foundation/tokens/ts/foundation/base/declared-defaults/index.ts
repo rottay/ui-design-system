@@ -221,6 +221,7 @@ export const FOUNDATION_COLOR_DEFAULTS_DARK_DELTA: Readonly<
   "--ds-color-error-700": "#fca5a5",
   "--ds-color-error-800": "#fecaca",
   "--ds-color-error-900": "#fee2e2",
+  "--ds-color-info-bg": "#172554",
   "--ds-color-link": "var(--ds-color-primary-400)",
   "--ds-color-link-hover": "var(--ds-color-primary-300)",
   "--ds-color-neutral-0": "#020617",
@@ -235,6 +236,7 @@ export const FOUNDATION_COLOR_DEFAULTS_DARK_DELTA: Readonly<
   "--ds-color-neutral-800": "#e2e8f0",
   "--ds-color-neutral-900": "#f8fafc",
   "--ds-color-on-error": "#171717",
+  "--ds-color-success-bg": "#052e16",
   "--ds-color-surface": "#101826",
   "--ds-color-surface-muted": "#152033",
   "--ds-color-text-inverse": "var(--ds-color-neutral-0)",
@@ -243,6 +245,7 @@ export const FOUNDATION_COLOR_DEFAULTS_DARK_DELTA: Readonly<
   "--ds-color-text-primary": "#f3f4f6",
   "--ds-color-text-secondary": "var(--ds-color-neutral-700)",
   "--ds-color-text-tertiary": "var(--ds-color-neutral-600)",
+  "--ds-color-warning-bg": "#451a03",
   });
 
 /** The effective declaration set per mode, composed the way the cascade does. */

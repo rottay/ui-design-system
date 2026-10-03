@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/generate/tokens/customization/catalog/index.mjs --write",
-  "basedOnReportDigest": "039ebcf026df8daf047755ee5add6af1eb8d5aab57238cc908499eb31d518be9",
+  "basedOnReportDigest": "c11eba4981e93a87b49ebe3ffed4db04b967f344af2d0d02357b93f456c68d68",
   "normative": {
-    "writers": 7516,
+    "writers": 7522,
     "deadWriters": 269,
     "definition": "writer names and productive reads are derived by the customization surface census"
   },

@@ -63130,8 +63130,8 @@ html[data-ds-motion='reduced']
  * here as `:hover` / `:focus` rules. Hovers ride the `@media (hover: hover)`
  * guard (house hover law), each PAIRED with the kernel state the engine
  * stamps: the header, the crumb links and the tabs run `useInteractionState`
- * and stamp `partAttributes`, so `[data-state~='hovered']` and the platform
- * pseudo-class are one decision with a platform fallback, not two authorities.
+ * and stamp `partAttributes`, so `[data-state~='hovered']` and the
+ * pseudo-class are one decision with a pseudo-class fallback, not two authorities.
  * The shell-grid `background-image` is scoped to the non-loading root (the
  * loading root never painted it); it stays invisible until a tenant sets
  * `--ds-shell-grid-size`/`--ds-shell-grid-line`.

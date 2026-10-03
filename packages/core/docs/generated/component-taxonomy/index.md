@@ -21,7 +21,6 @@
 
 ### Exclusions by rule (not governed components)
 
-- Not exported by the category barrel (support/unexposed): `navigation/examples`.
 - Category support (shared by the category's families, no family of its own): `feedback/foundation/notifier`.
 
 Tier support: `facade/`, `foundation/`, `runtime/`.
@@ -45,7 +44,6 @@ Tier support: `facade/`, `foundation/`, `runtime/`.
 ### foundation/
 
 - `foundation/chrome/`
-- `foundation/class-window/`
 
 ### headers/
 
@@ -254,6 +252,7 @@ Support: `shell/contracts/`.
 - `runtime/builders/`
 - `runtime/collection-workspace/`
 - `runtime/helpers/`
+- `runtime/postures/`
 
 ### composition/layout/
 
@@ -314,4 +313,4 @@ Support: `shell/contracts/`.
 
 ---
 
-**Summary**: 6 primitive categories (96 components), 133 families across structures/patterns/surfaces.
+**Summary**: 6 primitive categories (96 components), 132 families across structures/patterns/surfaces.

@@ -6,7 +6,7 @@
 > Rollback: every control is an INPUT — removing the authored value restores the vertical's baseline.
 > `effect today` is MEASURED, not intended: `not-yet-derived` means the row has no producer anywhere yet.
 
-digest: c4de46b748a626dd3ee9a812415d435fe24a700ec63eff05a2c48e80e3ffc85d
+digest: a403c0ff3afec8a67845d1d752899ae662876b7cc027f0fad4daf38933eaac7d
 
 ## STANDARD — 19 controls
 
@@ -14,7 +14,7 @@ digest: c4de46b748a626dd3ee9a812415d435fe24a700ec63eff05a2c48e80e3ffc85d
 |---|---|---|---|---|---|---|---|---|
 | `palette.seeds` | 1 | Brand palette seeds | 4 colours (primary, secondary, accent, background) | `appearance.general.palette.{primary,secondary,accent,background}` | 5 channels | 25/25 (declared fan-out) | never-lockable | css-channels |
 | `palette.status-seeds` | 2 | Status tone seeds (success/warning/error/info) | 4 colours (success, warning, error, info) | `appearance.general.palette.status.{success,warning,error,info}` | 83 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | never-lockable | css-channels |
-| `palette.neutral-temperature` | 3 | Neutral temperature | `cool` \| `neutral` \| `warm` | `appearance.general.palette.neutralTemperature` | 12 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
+| `palette.neutral-temperature` | 3 | Neutral temperature | `cool` \| `neutral` \| `warm` | `appearance.general.palette.neutralTemperature` | 2 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `typography.pairing` | 7 | Type pairing personality | `sober` \| `editorial` \| `geometric` \| `technical` | `appearance.general.typography.typePairing` | 2 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `typography.scale` | 8 | Type scale dial | [0.9 – 1.1] | `appearance.general.typography.scale` | 1 channel | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `typography.role-weights` | 9 | Role weights | `light` \| `regular` \| `strong` | `appearance.general.typography.roleWeights` | 7 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
@@ -45,7 +45,7 @@ digest: c4de46b748a626dd3ee9a812415d435fe24a700ec63eff05a2c48e80e3ffc85d
 | `profiles.expressive` | 26 | Explicit expressive axes | 7 keys (type, geometry, edge, material, elevation, motif, icon), 28 values | `visualFoundation.advanced.profiles.{type,geometry,edge,material,elevation,motif}` | 6 channels | declared fan-out (the row names no separate family list) | open | css-channels |
 | `recipe-profile` | 27 | Family recipe profile | registered ids (`RECIPE_PROFILE_REGISTRY`) | `visualFoundation.recipeProfile` | — | declared fan-out: button, card, section-card, surface-chrome, tabs, tag, input, select, checkbox, radio, toggle | locked-by-default | data-only |
 | `chrome.anatomy` | 28 | Anatomy variants | 4 keys (cardComponent, table, sidebar, layout) | `visualFoundation.advanced.chrome.{cardComponent,table,sidebar,layout}.anatomy` | 4 root attributes | declared fan-out: cardComponent, table, sidebar, layout | open | root-attributes |
-| `responsive.posture` | 29 | Responsive posture | `compact` \| `balanced` \| `expansive` | `visualFoundation.advanced.responsivePosture` | 4 channels | declared fan-out (the row names no separate family list) | open | css-channels |
+| `responsive.posture` | 29 | Responsive posture | `compact` \| `balanced` \| `expansive` | `visualFoundation.advanced.responsivePosture` | — | declared fan-out (the row names no separate family list) | open | data-only |
 
 ## Outside the 29 decisions
 
