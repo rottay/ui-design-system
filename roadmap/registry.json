@@ -7416,6 +7416,11 @@
      "at": "2026-10-03 03:19",
      "by": "claude-dt",
      "note": "Active coordinator reassigned from codex-dt to claude-dt; the work-order summary now reflects the current operating model."
+    },
+    {
+     "at": "2026-10-03 03:49",
+     "by": "claude-dt",
+     "note": "Fresh fleet measurement at 3096abc9f (core build PASS, chromium 149, bundle fresh; indicator committed eedb9cc53): shape 173/214 80.8, typography 174/182 95.6, rhythm 184/224 82.1, depth 160/199 80.4, states 118/154 76.6 (BELOW, needs 124), motion 167/204 81.9; identical on all 6 vertical x mode cells; both negative controls GREEN (palette-only 0% on 36/36, states-emphasis-only 0% on 12/12). Status stays 5/6 on declared denominators; the effective reading is not used. States non-movers named from the run: 28 effective (button-group, card-compounds, chart-c, chart-foundation, collection-header, data-table, decision-comparison, descriptions, edit-fields, field-filters-panel, form-builder, grid-view, input-compounds, kbd, list, metrics-chart, metrics-minimal, metrics-rows, notification-center, operational-ledger, presence, search-command-bar, statistic, stepper-compounds, surface-states, table-toolbar, visual-excellence-preview, widget-board) + 3 unmountable + 5 unsettled. Next: one complete-family writer per real product gap (dial-bound focus ring / press / disabled on genuinely interactive parts), independent audit per lot, then one rebuild + re-measure; rosters, pins and populations stay with the DT; data-table, list and the unsettled container-query repair wait for a design debrief."
     }
    ]
   },
