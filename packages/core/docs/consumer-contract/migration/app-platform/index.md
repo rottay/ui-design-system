@@ -41,6 +41,10 @@ enters scope.
   `branding-bounds` (a third validator); stop passing `vertical="platform"`,
   which is not in the first-party roster.
 - **X-06** — delete the `[data-engine='classic']` patches in `globals.css`.
+- **X-07** — the supplier honesty check breaks on 3.0 (recorded 2026-10-03
+  from the consumer census). 3.0 does not ship `supplier-contract.json` or `consumer/ds-supplier-honesty.mjs` at the package root (the contract is `contracts/runtime/suppliers/index.json`, the CLI is the built `dist/entrypoints/suppliers/cli/index.js`). `scripts/ds-supplier-honesty.mjs` reads the installed package by filesystem path, not through a specifier: `:1551` builds `node_modules/@rottay/design-system`, `:1566` resolves `supplier-contract.json` and `:1567` `consumer/ds-supplier-honesty.mjs` under it. First failure after the upgrade: `resolveInstalledContractMode` throws "has no canonical supplier contract/CLI" (`:1592-1601`). Second failure, once the paths are repointed: the content-equality checks (`:1662-1668`) compare the app's contract snapshot and its own CLI copy with the installed ones, and the 3.0 CLI is a built file, no longer byte-identical to the app's copy. Supported path: read the contract through the specifier `@rottay/design-system/supplier-contract` and run the check through the `rottay-ds-supplier-honesty` bin (the same file as `@rottay/design-system/supplier-honesty-cli`) instead of comparing a vendored copy. The consumer census lists these reads under `installedPathReads` as `breaksOnUpgrade`. The design system edits no application and claims no automatic upgrade. Wired at `package.json:60`
+  (`test`), `:61` (`test:ds-suppliers`) and
+  `.github/workflows/app-platform-full-program-build.yml:382`.
 - app-platform is the WRITER of the tenant document v2 (contract §3), so its
   packet also carries the v1 → v2 row migration through the published,
   fail-closed `migrateDocumentV1ToV2`.

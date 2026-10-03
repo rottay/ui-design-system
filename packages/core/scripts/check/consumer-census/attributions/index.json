@@ -1,0 +1,374 @@
+{
+  "schemaVersion": 1,
+  "residueReceiver": "WO-RET-01",
+  "modules": [
+    {
+      "path": "src/components/surfaces/foundation/common/story-helpers/index.tsx",
+      "class": "story-support",
+      "readers": [
+        {
+          "file": "src/components/patterns/commerce/pricing-table/PricingTable.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/communication/activity-log/ActivityLog.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/communication/comment-thread/CommentThread.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/communication/notification-center/NotificationCenter.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/data/data-table/DataTable.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/data/decision-comparison/DecisionComparison.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/data/file-manager/FileManager.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/data/saved-views/SavedViewsBar.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/data/stats-grid/StatsGrid.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/forms/filter-builder/FilterBuilder.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/forms/form-builder/FormBuilder.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/forms/invoice-template/InvoiceTemplate.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/forms/step-wizard/StepWizard.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/identity/profile/user-profile-card/UserProfileCard.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/navigation/environment-toggle/EnvironmentToggle.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/navigation/shortcuts-overlay/PatternShortcutsOverlay.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/navigation/workspace-switcher/WorkspaceSwitcher.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/tooling/storybook/catalog/advanced/index.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/tooling/storybook/catalog/core/index.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/patterns/visualization/charts/Charts.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/surfaces/foundation/common/SurfaceCatalog.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/surfaces/foundation/common/SurfaceEvntoPilot.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/surfaces/foundation/common/SurfaceInternationalization.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/surfaces/foundation/common/SurfaceProfiles.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/surfaces/foundation/common/SurfaceResponsive.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/surfaces/presentation/pages/admin/audit/AuditSurface.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/surfaces/presentation/pages/admin/billing/BillingSurface.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/surfaces/presentation/pages/admin/import-export/ImportExportSurface.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/surfaces/presentation/pages/admin/profile/ProfileSurface.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/surfaces/presentation/pages/data/report/ReportSurface.stories.tsx",
+          "kind": "story-import"
+        },
+        {
+          "file": "src/components/surfaces/presentation/pages/experience/notification/NotificationSurface.stories.tsx",
+          "kind": "story-import"
+        }
+      ],
+      "reason": "Shared scaffolding for Storybook stories. Stories are not export entrypoints and are not tests, so the import graph reports the module unreachable while every cited story imports it.",
+      "receiver": "WO-RET-04"
+    },
+    {
+      "path": "src/foundation/contracts/kernel/adaptation/composition/families/registry/index.ts",
+      "class": "tooling-path-read",
+      "readers": [
+        {
+          "file": "scripts/check/family-cut/adapt-slot/index.mjs",
+          "kind": "path-read"
+        }
+      ],
+      "reason": "The layout-sensitive family registry is deliberately not aggregated by its barrel: no runtime module imports it. The adapt-slot leg of the family-cut gate reads its exported literals from the file by path.",
+      "receiver": "WO-RET-04"
+    },
+    {
+      "path": "src/components/surfaces/foundation/common/test-utils/index.tsx",
+      "class": "test-support",
+      "readers": [
+        {
+          "file": "src/components/patterns/communication/assistant/tests/assistant.test.tsx",
+          "kind": "test-import"
+        },
+        {
+          "file": "src/components/primitives/feedback/toast/tests/Toast.integration.test.tsx",
+          "kind": "test-import"
+        },
+        {
+          "file": "src/components/structures/headers/header-surface/tests/HeaderSurface.test.tsx",
+          "kind": "test-import"
+        },
+        {
+          "file": "src/components/surfaces/presentation/pages/data/list/tests/ListSurface.integration.test.tsx",
+          "kind": "test-import"
+        },
+        {
+          "file": "src/components/surfaces/runtime/postures/scope/tests/index.test.tsx",
+          "kind": "test-import"
+        },
+        {
+          "file": "src/graphics/motion/react/tests/AnimationCatalog.test.tsx",
+          "kind": "test-import"
+        }
+      ],
+      "reason": "Render harness shared by the unit suites of every tier. It lives beside production modules; its physical home is owed to the tree normalization.",
+      "receiver": "WO-RET-04"
+    },
+    {
+      "path": "src/infrastructure/runtime/foundation/change-key/index.ts",
+      "class": "test-support",
+      "readers": [
+        {
+          "file": "src/infrastructure/runtime/foundation/change-key/tests/index.test.ts",
+          "kind": "test-import"
+        }
+      ],
+      "reason": "No production importer: only its own unit suite reads it. Prepared cut, kept until the tree normalization decides its owner.",
+      "receiver": "WO-RET-04"
+    },
+    {
+      "path": "src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/parse/index.ts",
+      "class": "drift-test-reader",
+      "readers": [
+        {
+          "file": "src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/tests/index.test.ts",
+          "kind": "test-import"
+        }
+      ],
+      "reason": "Pure markdown-to-rows parser of the consumer contract. The published rule imports the derived mirror, never this parser (no node:fs in a published rule); the drift test beside the contract folder reads docs/consumer-contract/index.md, parses it through this module and demands equality with the mirror.",
+      "receiver": null,
+      "owner": "src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/tests/index.test.ts",
+      "document": "docs/consumer-contract/index.md"
+    },
+    {
+      "path": "src/foundation/presets/candidates/bithire/index.ts",
+      "class": "lab-data",
+      "readers": [
+        {
+          "file": "src/foundation/presets/candidates/bithire/tests/index.test.ts",
+          "kind": "test-import"
+        },
+        {
+          "file": "src/foundation/presets/verticals/tests/decisions.test.ts",
+          "kind": "test-import"
+        }
+      ],
+      "reason": "Identity-candidate preset data for BitHire, not admitted to the vertical roster. Tests exercise it; no entrypoint publishes it.",
+      "receiver": "WO-DER-07"
+    },
+    {
+      "path": "src/foundation/presets/candidates/bithire/documents/index.ts",
+      "class": "lab-data",
+      "readers": [
+        {
+          "file": "src/foundation/presets/candidates/bithire/tests/index.test.ts",
+          "kind": "test-import"
+        },
+        {
+          "file": "src/foundation/presets/verticals/tests/decisions.test.ts",
+          "kind": "test-import"
+        }
+      ],
+      "reason": "Candidate documents of the same lab preset, reached by the tests through the candidate index.",
+      "receiver": "WO-DER-07"
+    }
+  ],
+  "doors": [
+    {
+      "subpath": "./supplier-contract",
+      "class": "structural-admission",
+      "evidence": [
+        {
+          "root": "app-bithire",
+          "file": "scripts/ds-supplier-honesty.mjs",
+          "line": 1566,
+          "needle": "resolve(packageDirectory, \"supplier-contract.json\")"
+        },
+        {
+          "root": "app-evnto",
+          "file": "scripts/ds-supplier-honesty.mjs",
+          "line": 1566,
+          "needle": "resolve(packageDirectory, \"supplier-contract.json\")"
+        },
+        {
+          "root": "app-platform",
+          "file": "scripts/ds-supplier-honesty.mjs",
+          "line": 1566,
+          "needle": "resolve(packageDirectory, \"supplier-contract.json\")"
+        },
+        {
+          "root": "app-bithire",
+          "file": "package.json",
+          "line": 91,
+          "needle": "\"test:ds-suppliers\": \"node scripts/ds-supplier-honesty.mjs\""
+        },
+        {
+          "root": "app-bithire",
+          "file": "scripts/run-quality-test-gate.mjs",
+          "line": 57,
+          "needle": "resolve(cwd, \"scripts/ds-supplier-honesty.mjs\")"
+        },
+        {
+          "root": "app-evnto",
+          "file": "package.json",
+          "line": 23,
+          "needle": "\"test\": \"node scripts/ds-supplier-honesty.mjs && vitest\""
+        },
+        {
+          "root": "app-platform",
+          "file": "package.json",
+          "line": 60,
+          "needle": "\"test\": \"node scripts/ds-supplier-honesty.mjs && "
+        },
+        {
+          "root": "app-platform",
+          "file": ".github/workflows/app-platform-full-program-build.yml",
+          "line": 382,
+          "needle": "run_gate ds-suppliers 600 pnpm test:ds-suppliers"
+        }
+      ],
+      "reason": "Each application runs scripts/ds-supplier-honesty.mjs in its test or CI chain, so its configuration requires the supplier contract; no module specifier names the door. This row admits the specifier by structure; it does not claim the door is consumed. The real consumer is a read BY PATH: scripts/ds-supplier-honesty.mjs in app-bithire, app-evnto and app-platform resolves <installed>/supplier-contract.json and <installed>/consumer/ds-supplier-honesty.mjs inside the installed @rottay/design-system 2.19.37 package (lines 1551, 1566-1567). The current tree no longer ships those files at those paths (the contract is contracts/runtime/suppliers/index.json, the CLI is the built dist/entrypoints/suppliers/cli/index.js), so 3.0 breaks that script regardless of this door: first on the missing files, then on its contract and CLI content-equality checks. The gate lists those reads under installedPathReads as breaksOnUpgrade.",
+      "receiver": null
+    },
+    {
+      "subpath": "./supplier-honesty-cli",
+      "class": "structural-admission",
+      "evidence": [
+        {
+          "root": "app-bithire",
+          "file": "scripts/ds-supplier-honesty.mjs",
+          "line": 1567,
+          "needle": "resolve(packageDirectory, \"consumer/ds-supplier-honesty.mjs\")"
+        },
+        {
+          "root": "app-evnto",
+          "file": "scripts/ds-supplier-honesty.mjs",
+          "line": 1567,
+          "needle": "resolve(packageDirectory, \"consumer/ds-supplier-honesty.mjs\")"
+        },
+        {
+          "root": "app-platform",
+          "file": "scripts/ds-supplier-honesty.mjs",
+          "line": 1567,
+          "needle": "resolve(packageDirectory, \"consumer/ds-supplier-honesty.mjs\")"
+        },
+        {
+          "root": "app-bithire",
+          "file": "package.json",
+          "line": 91,
+          "needle": "\"test:ds-suppliers\": \"node scripts/ds-supplier-honesty.mjs\""
+        },
+        {
+          "root": "app-bithire",
+          "file": "scripts/run-quality-test-gate.mjs",
+          "line": 57,
+          "needle": "resolve(cwd, \"scripts/ds-supplier-honesty.mjs\")"
+        },
+        {
+          "root": "app-evnto",
+          "file": "package.json",
+          "line": 23,
+          "needle": "\"test\": \"node scripts/ds-supplier-honesty.mjs && vitest\""
+        },
+        {
+          "root": "app-platform",
+          "file": "package.json",
+          "line": 60,
+          "needle": "\"test\": \"node scripts/ds-supplier-honesty.mjs && "
+        },
+        {
+          "root": "app-platform",
+          "file": ".github/workflows/app-platform-full-program-build.yml",
+          "line": 382,
+          "needle": "run_gate ds-suppliers 600 pnpm test:ds-suppliers"
+        }
+      ],
+      "reason": "Each application runs scripts/ds-supplier-honesty.mjs in its test or CI chain and compares its own copy with the packaged CLI; no module specifier names the door and no application invokes the rottay-ds-supplier-honesty bin. This row admits the specifier by structure; it does not claim the door is consumed. The real consumer is a read BY PATH: scripts/ds-supplier-honesty.mjs in app-bithire, app-evnto and app-platform resolves <installed>/supplier-contract.json and <installed>/consumer/ds-supplier-honesty.mjs inside the installed @rottay/design-system 2.19.37 package (lines 1551, 1566-1567). The current tree no longer ships those files at those paths (the contract is contracts/runtime/suppliers/index.json, the CLI is the built dist/entrypoints/suppliers/cli/index.js), so 3.0 breaks that script regardless of this door: first on the missing files, then on its contract and CLI content-equality checks. The gate lists those reads under installedPathReads as breaksOnUpgrade.",
+      "receiver": null
+    },
+    {
+      "subpath": "./fonts/arabic-text.css",
+      "class": "structural-admission",
+      "evidence": [
+        {
+          "root": "core",
+          "file": "src/foundation/tokens/css/foundation/typography/font-packs/manifest/index.ts",
+          "line": 57,
+          "needle": "cssSubpath: '@rottay/design-system/fonts/arabic-text.css'"
+        },
+        {
+          "root": "core",
+          "file": "src/foundation/presets/verticals/roster/index.ts",
+          "line": 341,
+          "needle": "fontPacks: [\"humanist-text\", \"plex-mono\", \"arabic-text\"]"
+        }
+      ],
+      "reason": "Declared opt-in with zero readers: the font-pack manifest declares this specifier as the pack stylesheet and the vertical roster assigns the pack to verticals, but no application imports the stylesheet and nothing reads cssSubpath at runtime. Admitted by declaration in two reachable foundation modules, not by consumption.",
+      "receiver": null
+    }
+  ]
+}

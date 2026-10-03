@@ -217,18 +217,12 @@ describe('consumer contract: document is the single source', () => {
   });
 
   it('rejects a document whose table drifts from its own grammar', () => {
-    const broken = documentMarkdown.replace(
-      '| `./styles/modern` | retire-by | WO-CAN-03 |',
-      '| `./styles/modern` | retire-by | — |',
-    );
+    const broken = withRow(documentMarkdown, './motion', 'retire-by', '—');
     expect(() => parseConsumerContract(broken)).toThrow(
-      /retire-by but names no work order/,
+      /\.\/motion is retire-by but names no work order/,
     );
 
-    const invented = documentMarkdown.replace(
-      '| `./styles/modern` | retire-by | WO-CAN-03 |',
-      '| `./styles/modern` | allowed | — |',
-    );
+    const invented = withRow(documentMarkdown, './motion', 'allowed', '—');
     expect(() => parseConsumerContract(invented)).toThrow(
       /unknown disposition "allowed"/,
     );
@@ -473,7 +467,7 @@ describe('no-unsanctioned-ds-subpath', () => {
       (row) => row.disposition === 'guaranteed',
     ).map((row) => row.subpath);
 
-    expect(guaranteed).toHaveLength(19);
+    expect(guaranteed).toHaveLength(21);
     for (const subpath of guaranteed) {
       const specifier =
         subpath === '.'

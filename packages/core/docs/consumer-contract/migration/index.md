@@ -14,6 +14,10 @@ Cross-app guides, applying to every consumer at once:
   (owner ruling 8): the `rottay-app-shell*` / `rottay-action-dock*` rename to
   `ds-*`; what changed, who is affected, the exact rename table, verification.
 
+- **X-07** (all three applications) — `scripts/ds-supplier-honesty.mjs` reads
+  the installed package by filesystem path and breaks on 3.0; each packet
+  carries the note with its own wiring lines.
+
 | Packet | Status |
 |---|---|
 | [`app-bithire/`](./app-bithire/index.md) | active — the only APP track in flight (owner, 2026-09-05) |

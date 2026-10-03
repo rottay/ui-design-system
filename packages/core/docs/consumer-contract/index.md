@@ -69,9 +69,8 @@ disposición es la parte normativa y es la que no puede derivar.
 | Métrica | Valor |
 | --- | --- |
 | Subpaths publicados | 40 |
-| `guaranteed` | 19 |
-| `retire-by WO-RET-01` | 15 |
-| `retire-by WO-CAN-03` | 5 |
+| `guaranteed` | 21 |
+| `retire-by WO-RET-01` | 18 |
 | `lab` | 1 |
 | Subpaths publicados con 0 consumidores en alcance (bithire + showroom) | 14 |
 | Importaciones a superficie garantizada | bithire 2086 · showroom 325 |
@@ -104,10 +103,10 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./motion` | guaranteed | — | 4 | 0 |
 | `./spatial` | lab | WO-CRA-15 | 0 | 2 |
 | `./styles.css` | guaranteed | — | 0 | 1 |
-| `./styles/bithire` | retire-by | WO-CAN-03 | 2 | 0 |
-| `./styles/evnto` | retire-by | WO-CAN-03 | 0 | 0 |
-| `./styles/rottay` | retire-by | WO-CAN-03 | 0 | 0 |
-| `./styles/modern` | retire-by | WO-CAN-03 | 0 | 0 |
+| `./styles/bithire` | guaranteed | — | 2 | 0 |
+| `./styles/evnto` | guaranteed | — | 0 | 0 |
+| `./styles/rottay` | retire-by | WO-RET-01 | 0 | 0 |
+| `./styles/modern` | retire-by | WO-RET-01 | 0 | 0 |
 | `./styles/frozen-engines` | guaranteed | — | 0 | 1 |
 | `./eslint` | guaranteed | — | 1 | 0 |
 | `./supplier-contract` | retire-by | WO-RET-01 | 0 | 0 |
@@ -120,7 +119,7 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./fonts/humanist-text.css` | guaranteed | — | 0 | 0 |
 | `./fonts/geometric-display.css` | guaranteed | — | 0 | 0 |
 | `./fonts/plex-mono.css` | guaranteed | — | 0 | 0 |
-| `./dist/*.css` | retire-by | WO-CAN-03 | 0 | 0 |
+| `./dist/*.css` | retire-by | WO-RET-01 | 0 | 0 |
 | `./tenant-theme-canary-fixtures` | retire-by | WO-RET-01 | 2 | 3 |
 <!-- consumer-contract:published:end -->
 

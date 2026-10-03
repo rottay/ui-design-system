@@ -48,10 +48,10 @@ export const PUBLISHED_SUBPATHS: readonly ContractRow[] = [
   { subpath: './motion', disposition: 'guaranteed', retiredBy: null },
   { subpath: './spatial', disposition: 'lab', retiredBy: 'WO-CRA-15' },
   { subpath: './styles.css', disposition: 'guaranteed', retiredBy: null },
-  { subpath: './styles/bithire', disposition: 'retire-by', retiredBy: 'WO-CAN-03' },
-  { subpath: './styles/evnto', disposition: 'retire-by', retiredBy: 'WO-CAN-03' },
-  { subpath: './styles/rottay', disposition: 'retire-by', retiredBy: 'WO-CAN-03' },
-  { subpath: './styles/modern', disposition: 'retire-by', retiredBy: 'WO-CAN-03' },
+  { subpath: './styles/bithire', disposition: 'guaranteed', retiredBy: null },
+  { subpath: './styles/evnto', disposition: 'guaranteed', retiredBy: null },
+  { subpath: './styles/rottay', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
+  { subpath: './styles/modern', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
   { subpath: './styles/frozen-engines', disposition: 'guaranteed', retiredBy: null },
   { subpath: './eslint', disposition: 'guaranteed', retiredBy: null },
   { subpath: './supplier-contract', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
@@ -64,7 +64,7 @@ export const PUBLISHED_SUBPATHS: readonly ContractRow[] = [
   { subpath: './fonts/humanist-text.css', disposition: 'guaranteed', retiredBy: null },
   { subpath: './fonts/geometric-display.css', disposition: 'guaranteed', retiredBy: null },
   { subpath: './fonts/plex-mono.css', disposition: 'guaranteed', retiredBy: null },
-  { subpath: './dist/*.css', disposition: 'retire-by', retiredBy: 'WO-CAN-03' },
+  { subpath: './dist/*.css', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
   { subpath: './tenant-theme-canary-fixtures', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
 ];
 
