@@ -4,11 +4,7 @@ import { ShowroomLink as Link } from "@/components/navigation/link";
 import { RuntimeFingerprint } from "@/components/runtime/fingerprint";
 import { useShowroomRuntime } from "@/components/showroom-context";
 import { Badge, Box, Card, Flex, Stack, Text, useTokens } from "@rottay/design-system";
-import {
-  BriefcaseIcon,
-  SettingsIcon,
-  SparklesIcon,
-} from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 
 interface VerticalEntry {
   name: string;
@@ -51,7 +47,7 @@ const VERTICALS: VerticalEntry[] = [
     tint: "color-mix(in srgb, var(--ds-color-primary-500) 16%, transparent)",
     border:
       "color-mix(in srgb, var(--ds-color-primary-500) 24%, var(--ds-color-border, rgba(148, 163, 184, 0.28)))",
-    icon: <SettingsIcon size={26} />,
+    icon: <Icon name="navigation.settings" decorative size={26} />,
   },
   {
     name: "BitHire",
@@ -73,7 +69,7 @@ const VERTICALS: VerticalEntry[] = [
     tint: "color-mix(in srgb, var(--ds-color-secondary-500) 16%, transparent)",
     border:
       "color-mix(in srgb, var(--ds-color-secondary-500) 24%, var(--ds-color-border, rgba(148, 163, 184, 0.28)))",
-    icon: <BriefcaseIcon size={26} />,
+    icon: <Icon name="bithire.job" decorative size={26} />,
   },
   {
     name: "Evnto",
@@ -95,7 +91,7 @@ const VERTICALS: VerticalEntry[] = [
     tint: "color-mix(in srgb, var(--ds-color-warning-500) 16%, transparent)",
     border:
       "color-mix(in srgb, var(--ds-color-warning-500) 24%, var(--ds-color-border, rgba(148, 163, 184, 0.28)))",
-    icon: <SparklesIcon size={26} />,
+    icon: <Icon name="ai.sparkles" decorative size={26} />,
   },
 ];
 

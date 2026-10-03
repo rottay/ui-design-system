@@ -14,7 +14,7 @@ import {
   Text,
   useTokens,
 } from '@rottay/design-system';
-import { EditIcon, ShieldIcon, Trash2Icon } from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 import type { ColumnDef, SortConfig } from '@rottay/design-system';
 
@@ -392,13 +392,13 @@ export default function PlatformUserListDemo() {
               actions={(row) => (
                 <Flex gap={4}>
                   <Button variant="ghost" size="sm" aria-label={`Edit ${row.name}`}>
-                    <EditIcon size={14} />
+                    <Icon name="action.edit" decorative size={14} />
                   </Button>
                   <Button variant="ghost" size="sm" aria-label={`Review ${row.name}`}>
-                    <ShieldIcon size={14} />
+                    <Icon name="security.protection" decorative size={14} />
                   </Button>
                   <Button variant="ghost" size="sm" aria-label={`Delete ${row.name}`}>
-                    <Trash2Icon size={14} />
+                    <Icon name="action.delete" decorative size={14} />
                   </Button>
                 </Flex>
               )}

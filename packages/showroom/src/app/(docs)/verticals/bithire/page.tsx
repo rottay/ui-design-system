@@ -5,14 +5,7 @@ import { PipelineKanbanDemo } from "@/components/demos/bithire/pipeline-kanban";
 import { RecruiterDashboardDemo } from "@/components/demos/bithire/recruiter-dashboard";
 import { ScorecardDemo } from "@/components/demos/bithire/scorecard";
 import { VerticalShowcaseShell, type VerticalCategoryCard } from "../vertical-showcase-shell";
-import {
-  BarChart3Icon,
-  BriefcaseIcon,
-  SettingsIcon,
-  ShieldIcon,
-  SparklesIcon,
-  UsersIcon,
-} from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 
 const BITHIRE_CATEGORIES: VerticalCategoryCard[] = [
   {
@@ -21,7 +14,7 @@ const BITHIRE_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Stage movement, quick triage, and recruiter flow control.",
     demoCount: 4,
-    icon: <BriefcaseIcon size={20} />,
+    icon: <Icon name="bithire.pipeline" decorative size={20} />,
     lens: "Candidate momentum and prioritization",
   },
   {
@@ -30,7 +23,7 @@ const BITHIRE_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Calendars, scorecards, feedback, and interviewer workflows.",
     demoCount: 3,
-    icon: <UsersIcon size={20} />,
+    icon: <Icon name="entity.group" decorative size={20} />,
     lens: "Signal capture and evaluation quality",
   },
   {
@@ -39,7 +32,7 @@ const BITHIRE_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Sourcing copilots, screeners, and matching intelligence.",
     demoCount: 3,
-    icon: <SparklesIcon size={20} />,
+    icon: <Icon name="ai.sparkles" decorative size={20} />,
     lens: "Explainable decision acceleration",
   },
   {
@@ -47,7 +40,7 @@ const BITHIRE_CATEGORIES: VerticalCategoryCard[] = [
     slug: "positions",
     description: "Role setup, approvals, and publishing readiness.",
     demoCount: 3,
-    icon: <ShieldIcon size={20} />,
+    icon: <Icon name="security.protection" decorative size={20} />,
     lens: "Definition quality and approval hygiene",
   },
   {
@@ -55,7 +48,7 @@ const BITHIRE_CATEGORIES: VerticalCategoryCard[] = [
     slug: "analytics",
     description: "Funnels, hiring velocity, fairness, and source performance.",
     demoCount: 4,
-    icon: <BarChart3Icon size={20} />,
+    icon: <Icon name="analytics.bar" decorative size={20} />,
     lens: "Recruiting performance storytelling",
   },
   {
@@ -64,7 +57,7 @@ const BITHIRE_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Recruiter/interviewer capacity, ownership, and workload balance.",
     demoCount: 3,
-    icon: <UsersIcon size={20} />,
+    icon: <Icon name="entity.group" decorative size={20} />,
     lens: "Utilization and staffing coverage",
   },
   {
@@ -73,7 +66,7 @@ const BITHIRE_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Automation rules, stage transitions, and notification logic.",
     demoCount: 3,
-    icon: <SettingsIcon size={20} />,
+    icon: <Icon name="navigation.settings" decorative size={20} />,
     lens: "Operational scale without hidden glue",
   },
 ];

@@ -17,12 +17,7 @@ import {
   Textarea,
   useTokens,
 } from '@rottay/design-system';
-import {
-  Building2Icon,
-  SettingsIcon,
-  ShieldIcon,
-  SparklesIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 const SURFACE = 'var(--showroom-shell-surface, var(--ds-color-bg-container, #131316))';
 const ELEVATED_SURFACE =
@@ -334,7 +329,7 @@ export default function PlatformTenantFormDemo() {
                     }}
                   >
                     <Flex align="center" gap={10}>
-                      <ShieldIcon size={18} />
+                      <Icon name="security.protection" decorative size={18} />
                       <Box>
                         <Text size="sm" weight="semibold">
                           Security guardrails
@@ -391,7 +386,7 @@ export default function PlatformTenantFormDemo() {
                     }}
                   >
                     <Flex align="center" gap={10}>
-                      <SettingsIcon size={18} />
+                      <Icon name="navigation.settings" decorative size={18} />
                       <Box>
                         <Text size="sm" weight="semibold">
                           Brand governance
@@ -466,7 +461,7 @@ export default function PlatformTenantFormDemo() {
                 }}
               >
                 <Flex align="center" gap={10}>
-                  <SparklesIcon size={18} />
+                  <Icon name="ai.sparkles" decorative size={18} />
                   <Box>
                     <Text size="sm" weight="semibold">
                       Approval ladder
@@ -510,7 +505,7 @@ export default function PlatformTenantFormDemo() {
                 }}
               >
                 <Flex align="center" gap={10}>
-                  <Building2Icon size={18} />
+                  <Icon name="entity.organization" decorative size={18} />
                   <Box>
                     <Text size="sm" weight="semibold">
                       Runtime framing

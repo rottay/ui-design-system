@@ -5,16 +5,7 @@ import { EventDashboardDemo } from "@/components/demos/evnto/event-dashboard";
 import { TicketBuilderDemo } from "@/components/demos/evnto/ticket-builder";
 import { VenueLayoutDemo } from "@/components/demos/evnto/venue-layout";
 import { VerticalShowcaseShell, type VerticalCategoryCard } from "../vertical-showcase-shell";
-import {
-  ActivityIcon,
-  BarChart3Icon,
-  Building2Icon,
-  CalendarIcon,
-  SettingsIcon,
-  StarIcon,
-  UsersIcon,
-  ZapIcon,
-} from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 
 const EVNTO_CATEGORIES: VerticalCategoryCard[] = [
   {
@@ -23,7 +14,7 @@ const EVNTO_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Event setup, scheduling, programming, and recurrence.",
     demoCount: 4,
-    icon: <CalendarIcon size={20} />,
+    icon: <Icon name="time.schedule" decorative size={20} />,
     lens: "Programming the event itself",
   },
   {
@@ -32,7 +23,7 @@ const EVNTO_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Venue profiles, floor plans, capacity, and availability.",
     demoCount: 3,
-    icon: <Building2Icon size={20} />,
+    icon: <Icon name="location.place" decorative size={20} />,
     lens: "Spatial planning and capacity control",
   },
   {
@@ -41,7 +32,7 @@ const EVNTO_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Ticket tiers, pricing rules, promo logic, and launch readiness.",
     demoCount: 4,
-    icon: <StarIcon size={20} />,
+    icon: <Icon name="status.featured" decorative size={20} />,
     lens: "Monetization and launch readiness",
   },
   {
@@ -50,7 +41,7 @@ const EVNTO_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Checklists, vendor coordination, and day-of timeline control.",
     demoCount: 3,
-    icon: <SettingsIcon size={20} />,
+    icon: <Icon name="navigation.settings" decorative size={20} />,
     lens: "Showtime reliability and execution",
   },
   {
@@ -59,7 +50,7 @@ const EVNTO_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Staff scheduling, roles, shifts, and live check-in.",
     demoCount: 3,
-    icon: <UsersIcon size={20} />,
+    icon: <Icon name="entity.group" decorative size={20} />,
     lens: "Ground-team orchestration",
   },
   {
@@ -68,7 +59,7 @@ const EVNTO_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Revenue, expenses, settlements, and event economics.",
     demoCount: 3,
-    icon: <BarChart3Icon size={20} />,
+    icon: <Icon name="data.chart" decorative size={20} />,
     lens: "Commercial clarity and reconciliation",
   },
   {
@@ -77,7 +68,7 @@ const EVNTO_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Polls, social surfaces, feedback loops, and attendee energy.",
     demoCount: 3,
-    icon: <ZapIcon size={20} />,
+    icon: <Icon name="status.instant" decorative size={20} />,
     lens: "Audience momentum and participation",
   },
   {
@@ -86,7 +77,7 @@ const EVNTO_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Attendance, revenue, and engagement hindsight.",
     demoCount: 4,
-    icon: <ActivityIcon size={20} />,
+    icon: <Icon name="analytics.activity" decorative size={20} />,
     lens: "Operational and commercial hindsight",
   },
 ];

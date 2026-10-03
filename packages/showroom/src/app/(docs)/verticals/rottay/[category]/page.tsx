@@ -3,7 +3,7 @@
 import { use } from 'react';
 import { ShowroomLink as Link } from '@/components/navigation/link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
-import { ChevronLeftIcon } from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 import {
   VerticalCategoryAppendix,
   type VerticalDemoItem,
@@ -242,7 +242,7 @@ function PlatformCategoryContent({ category }: { category: string }) {
       <Stack spacing="lg" fullWidth>
         <Link href="/verticals/rottay" style={{ textDecoration: 'none' }}>
           <Flex align="center" gap={4}>
-            <ChevronLeftIcon size={16} />
+            <Icon name="navigation.back" decorative size={16} />
             <Text size="sm" color="primary">Back to Rottay</Text>
           </Flex>
         </Link>

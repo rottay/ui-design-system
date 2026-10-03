@@ -14,7 +14,7 @@ import {
   Textarea,
   useTokens,
 } from '@rottay/design-system';
-import { StarIcon } from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 const SURFACE = 'var(--ds-color-bg-container, #ffffff)';
 const ELEVATED_SURFACE = 'var(--ds-color-bg-elevated, #f8fafc)';
@@ -58,8 +58,16 @@ function StarRating({
     <Flex gap={4}>
       {[1, 2, 3, 4, 5].map((star) => (
         <Box
+          as="button"
+          type="button"
           key={star}
+          aria-label={`Rate ${star} out of 5`}
+          aria-pressed={star <= value}
           style={{
+            appearance: 'none',
+            background: 'none',
+            border: 'none',
+            padding: 0,
             cursor: 'pointer',
             color:
               star <= (hovered || value)
@@ -72,7 +80,7 @@ function StarRating({
           onMouseLeave={() => setHovered(0)}
           onClick={() => onChange(star)}
         >
-          <StarIcon size={22} />
+          <Icon name="status.featured" decorative size={22} />
         </Box>
       ))}
     </Flex>

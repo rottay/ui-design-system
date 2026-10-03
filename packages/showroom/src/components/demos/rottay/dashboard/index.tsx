@@ -13,12 +13,7 @@ import {
   Text,
   useTokens,
 } from '@rottay/design-system';
-import {
-  ActivityIcon,
-  Building2Icon,
-  ShieldIcon,
-  UsersIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 import type { StatItem } from '@rottay/design-system';
 
@@ -43,7 +38,7 @@ const STATS: StatItem[] = [
     change: 9,
     changeType: 'increase',
     periodLabel: 'since last month',
-    icon: <Building2Icon size={18} />,
+    icon: <Icon name="entity.organization" decorative size={18} />,
     sparkDots: [74, 81, 79, 88, 92, 109, 128],
     accentColor: 'primary',
   },
@@ -54,7 +49,7 @@ const STATS: StatItem[] = [
     change: 6,
     changeType: 'increase',
     periodLabel: 'this week',
-    icon: <UsersIcon size={18} />,
+    icon: <Icon name="entity.group" decorative size={18} />,
     sparkDots: [52, 58, 63, 61, 68, 72, 79],
     accentColor: 'info',
   },
@@ -65,7 +60,7 @@ const STATS: StatItem[] = [
     change: -3,
     changeType: 'decrease',
     periodLabel: 'vs yesterday',
-    icon: <ShieldIcon size={18} />,
+    icon: <Icon name="security.protection" decorative size={18} />,
     sparkDots: [28, 24, 22, 21, 19, 17, 14],
     accentColor: 'success',
   },
@@ -75,7 +70,7 @@ const STATS: StatItem[] = [
     value: '99.97%',
     changeType: 'neutral',
     periodLabel: '30-day uptime',
-    icon: <ActivityIcon size={18} />,
+    icon: <Icon name="operations.health" decorative size={18} />,
     sparkDots: [99, 99, 100, 99, 100, 100, 100],
     accentColor: 'success',
   },

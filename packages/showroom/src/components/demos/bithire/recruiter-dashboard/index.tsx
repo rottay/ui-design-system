@@ -12,12 +12,7 @@ import {
   Text,
   useTokens,
 } from '@rottay/design-system';
-import {
-  BriefcaseIcon,
-  CheckCircleIcon,
-  ClockIcon,
-  UsersIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 const SURFACE = 'var(--ds-color-bg-container, #ffffff)';
 const ELEVATED_SURFACE = 'var(--ds-color-bg-elevated, #f8fafc)';
@@ -40,25 +35,25 @@ const KPI_DATA: KPICardData[] = [
     label: 'Critical reqs',
     value: '7',
     change: '3 close-ready this week',
-    icon: <BriefcaseIcon size={20} />,
+    icon: <Icon name="bithire.job" decorative size={20} />,
   },
   {
     label: 'Live loops',
     value: '24',
     change: '2 need interviewer fill',
-    icon: <UsersIcon size={20} />,
+    icon: <Icon name="entity.group" decorative size={20} />,
   },
   {
     label: 'Median advance time',
     value: '42h',
     change: '-9h vs last sprint',
-    icon: <ClockIcon size={20} />,
+    icon: <Icon name="time.timestamp" decorative size={20} />,
   },
   {
     label: 'Offer close rate',
     value: '81%',
     change: '+6 pts after comp refresh',
-    icon: <CheckCircleIcon size={20} />,
+    icon: <Icon name="status.success" decorative size={20} />,
   },
 ];
 

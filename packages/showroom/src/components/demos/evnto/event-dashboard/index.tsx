@@ -12,12 +12,7 @@ import {
   Text,
   useTokens,
 } from '@rottay/design-system';
-import {
-  CalendarIcon,
-  StarIcon,
-  TrendingUpIcon,
-  UserCheckIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 const SURFACE =
   'var(--ds-color-bg-container, var(--ds-color-bg-elevated, var(--ds-color-bg-primary, #ffffff)))';
@@ -69,28 +64,28 @@ const KPI_DATA: KpiItem[] = [
     label: 'Tickets sold',
     value: '2,340',
     sub: 'of 3,000 capacity',
-    icon: <CalendarIcon size={20} />,
+    icon: <Icon name="time.schedule" decorative size={20} />,
     trend: '+12%',
   },
   {
     label: 'Revenue',
     value: '$78.4K',
     sub: 'this event',
-    icon: <TrendingUpIcon size={20} />,
+    icon: <Icon name="data.trend" decorative size={20} />,
     trend: '+8.2%',
   },
   {
     label: 'Check-ins',
     value: '1,890',
     sub: 'current throughput',
-    icon: <UserCheckIcon size={20} />,
+    icon: <Icon name="entity.person" decorative size={20} />,
     trend: '80.7%',
   },
   {
     label: 'Avg rating',
     value: '4.7',
     sub: 'post-session pulse',
-    icon: <StarIcon size={20} />,
+    icon: <Icon name="status.featured" decorative size={20} />,
     trend: '+0.3',
   },
 ];

@@ -12,7 +12,7 @@ import {
   Text,
   useTokens,
 } from '@rottay/design-system';
-import { ChevronLeftIcon } from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 export interface VerticalDemoItem {
   title: string;
@@ -566,7 +566,7 @@ export function VerticalCategoryAppendix({
             boxShadow: PANEL_SHADOW,
           }}
         >
-          <ChevronLeftIcon size={16} />
+          <Icon name="navigation.back" decorative size={16} />
           <Text size="sm" color="primary">
             {backLabel}
           </Text>

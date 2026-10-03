@@ -5,15 +5,7 @@ import PlatformDashboardDemo from "@/components/demos/rottay/dashboard";
 import PlatformTenantFormDemo from "@/components/demos/rottay/tenant-form";
 import PlatformUserListDemo from "@/components/demos/rottay/user-list";
 import { VerticalShowcaseShell, type VerticalCategoryCard } from "../vertical-showcase-shell";
-import {
-  BellIcon,
-  Building2Icon,
-  FlagIcon,
-  LockIcon,
-  SettingsIcon,
-  ShieldIcon,
-  UsersIcon,
-} from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 
 const PLATFORM_CATEGORIES: VerticalCategoryCard[] = [
   {
@@ -22,7 +14,7 @@ const PLATFORM_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "User directories, profiles, sessions, and account-state control.",
     demoCount: 4,
-    icon: <UsersIcon size={20} />,
+    icon: <Icon name="entity.group" decorative size={20} />,
     lens: "Lifecycle control and operator trust",
   },
   {
@@ -31,7 +23,7 @@ const PLATFORM_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Tenant setup, branding, billing, and lifecycle control.",
     demoCount: 3,
-    icon: <Building2Icon size={20} />,
+    icon: <Icon name="entity.organization" decorative size={20} />,
     lens: "Multi-tenant governance and brand integrity",
   },
   {
@@ -40,7 +32,7 @@ const PLATFORM_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Role models, permission matrices, and policy authoring.",
     demoCount: 3,
-    icon: <ShieldIcon size={20} />,
+    icon: <Icon name="security.protection" decorative size={20} />,
     lens: "Auditability and access confidence",
   },
   {
@@ -49,7 +41,7 @@ const PLATFORM_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Sign-in, MFA, session posture, recovery, and API credentials.",
     demoCount: 4,
-    icon: <LockIcon size={20} />,
+    icon: <Icon name="security.protection" decorative size={20} />,
     lens: "Entry trust and credential hygiene",
   },
   {
@@ -58,7 +50,7 @@ const PLATFORM_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Flags, rollouts, experiments, and release governance.",
     demoCount: 3,
-    icon: <FlagIcon size={20} />,
+    icon: <Icon name="status.priority" decorative size={20} />,
     lens: "Controlled release tooling",
   },
   {
@@ -67,7 +59,7 @@ const PLATFORM_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Admin shells, breadcrumbs, search, and fast module switching.",
     demoCount: 3,
-    icon: <SettingsIcon size={20} />,
+    icon: <Icon name="navigation.settings" decorative size={20} />,
     lens: "Orientation inside dense SaaS work",
   },
   {
@@ -76,7 +68,7 @@ const PLATFORM_CATEGORIES: VerticalCategoryCard[] = [
     description:
       "Alert centers, toasts, banners, and admin messaging.",
     demoCount: 3,
-    icon: <BellIcon size={20} />,
+    icon: <Icon name="communication.notification" decorative size={20} />,
     lens: "Operational awareness and follow-up state",
   },
 ];

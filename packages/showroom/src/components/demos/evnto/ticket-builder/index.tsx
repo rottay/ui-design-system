@@ -15,7 +15,7 @@ import {
   Text,
   useTokens,
 } from '@rottay/design-system';
-import { CheckIcon, SparklesIcon, StarIcon } from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 const SURFACE =
   'var(--ds-color-bg-container, var(--ds-color-bg-elevated, var(--ds-color-bg-primary, #ffffff)))';
@@ -162,7 +162,7 @@ export function TicketBuilderDemo() {
                   <Stack spacing="sm">
                     <Flex align="center" justify="between" gap={12}>
                       <Flex align="center" gap={10}>
-                        <StarIcon size={18} />
+                        <Icon name="status.featured" decorative size={18} />
                         <Box>
                           <Text size="sm" weight="semibold">
                             Dynamic pricing
@@ -177,7 +177,7 @@ export function TicketBuilderDemo() {
 
                     <Flex align="center" justify="between" gap={12}>
                       <Flex align="center" gap={10}>
-                        <SparklesIcon size={18} />
+                        <Icon name="ai.sparkles" decorative size={18} />
                         <Box>
                           <Text size="sm" weight="semibold">
                             Waitlist unlock
@@ -207,12 +207,12 @@ export function TicketBuilderDemo() {
             <Stack spacing="md">
               {[
                 {
-                  icon: <CheckIcon size={18} />,
+                  icon: <Icon name="action.confirm" decorative size={18} />,
                   title: 'Inventory ladder',
                   detail: 'VIP 82% sold · GA 54% sold · Tables 6 left',
                 },
                 {
-                  icon: <StarIcon size={18} />,
+                  icon: <Icon name="status.featured" decorative size={18} />,
                   title: 'Conversion read',
                   detail: 'VIP tier outpacing forecast by 18% this cycle',
                 },
