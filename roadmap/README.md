@@ -22,6 +22,50 @@ Applications are read-only consumers now; their adaptation follows the DS.
 Existing authorization for audited publication is unchanged; no force-push,
 package publication or deployment is inferred from this succession.
 
+### Autonomous goal — execution order and product invariants
+
+This is an execution policy for the existing registry, not a second backlog.
+Live dispositions and recovery receipts are appended to each WO's `progressLog`;
+never replace its original findings, supersedes, dependencies or evidence history.
+
+1. Preserve and integrate delivered work. Complete INV-06 on real surfaces,
+   including loading/empty/error states, SSR, actual primary actions and accessible
+   names. The pilot is not acceptance for all recipes. Correct a falsified closure
+   with `reopen`, retaining its old evidence; do not erase or reimplement it.
+2. Complete RET-01's remaining public-door and capability dispositions. Preserve
+   useful renderers, metadata, live preset roles and isolation contracts while
+   removing duplicates. Refresh supplier/census/package evidence with their real
+   producers on the integrated candidate; no hand-edited measurement or widened
+   budget to make a regression green. Then execute RET-04's physical normalization
+   with atomic family modules, folder indexes and declared ownership.
+3. Complete EVI-02 and the remaining derivation/family dependencies. A tenant
+   decision must have a measured, anatomically appropriate fan-out through family
+   derivers to real consumers. One compiler and one catalogue own the flow; neither
+   the old manifest nor the count of tokens proves customization. Measure tenant
+   differences beyond palette using rendered output, not only emitted variables.
+4. Follow `dependsOn` through remaining product contracts, reusable styles,
+   traceability, accessibility, RTL/i18n, responsive/mobile and release work.
+   Vertical defaults and database-sourced tenant decisions use the same admission
+   and compilation path. Standard/Pro control editing permissions, not whether a
+   tenant receives complete tokens or a premium-quality interface. Internal
+   branding controls remain developer-owned; user choices are bounded options.
+5. Certify milestones on a frozen candidate and close WOs only with their full
+   acceptance evidence. Applications remain read-only during DS implementation;
+   document public breaks for later app adaptation rather than blocking this
+   programme on app migration. Keep the existing engines; prioritize the custom
+   engine without inventing legacy compatibility paths.
+
+Within a dependency level, dispatch as many useful, disjoint packets as capacity
+and quality allow. Each writer owns its files and focal regressions; only the DT
+owns shared-contract changes, generated authorities, heavy validation, staging
+and commits. Review deliveries independently, return precise corrections, then
+commit by functionality on main. Run package/build/browser/full-suite checks for
+relevant milestones or artifact changes, not for each spacing edit. Wait for
+delivery events; no recurring status polling, duplicated censuses or repeated
+microaudits. A finished packet triggers the next unblocked packet, not an idle
+handoff. Escalate only genuine new authority or product ambiguity, preserving
+work and continuing independent unblocked lanes.
+
 - **Status**: canonical operative backlog. Takes the `modern` engine from its audited state
   ("hand-made, mid-tier; near-indistinguishable from `rustic`") to the Quiet Premium target.
 - **Normative law** (read FIRST, it is the spec every WO implements): the modern-engine
