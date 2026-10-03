@@ -198,14 +198,6 @@
   }
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-approve-button']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-reject-button']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-clear-button']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
-}
-
 /* --- Card footer -------------------------------------------------------------------- */
 .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-footer'] {
   display: flex;
