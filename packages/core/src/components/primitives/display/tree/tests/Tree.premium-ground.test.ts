@@ -17,7 +17,8 @@ function ruleBlock(css: string, selectorPart: string): string {
 }
 
 const SELECTED_ROW = "[data-part='row'][data-selected='true'] {";
-const SELECTED_FOCUSED = "[data-part='row'][data-selected='true'][data-focused='true'] {";
+const SELECTED_FOCUSED =
+  "[data-part='row'][data-selected='true'][data-focused='true']:not(:is([data-state~='focus-visible'], :focus-visible, :has(:focus-visible))) {";
 
 describe('Tree modern premium ground', () => {
   it('gives the selected node no frame: it is emphasis, not a card', () => {

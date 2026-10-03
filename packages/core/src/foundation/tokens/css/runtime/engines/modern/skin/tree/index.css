@@ -198,16 +198,16 @@
   opacity: var(--_ds-tree-dragging-opacity, 0.55);
 }
 
-/* The engine's focusedKey state ring (roving focus after the first arrow
-   keystroke) -- was an imperative `--tw-ring-color` write on Tailwind's
-   ring-2 utility. */
-.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-focused='true'] {
+/* The engine's focusedKey mark: it outlives DOM focus as the tree's current
+   item, and yields to the focus signature while the row or a control inside
+   it shows one. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-focused='true']:not(:is([data-state~='focus-visible'], :focus-visible, :has(:focus-visible))) {
   box-shadow: 0 0 0 var(--ds-focus-ring-width)
     color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
 }
 
 /* Selected AND focused: the focus ring alone, over the selected tint. */
-.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'][data-focused='true'] {
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'][data-focused='true']:not(:is([data-state~='focus-visible'], :focus-visible, :has(:focus-visible))) {
   box-shadow: 0 0 0 var(--ds-focus-ring-width)
     color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
 }
@@ -216,10 +216,25 @@
    without setting the engine's focus state, so the visible indicator is a
    Rottay :focus-visible ring owned here (the state ring only exists once
    the engine's focusedKey is set). */
-.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:is([data-state~='focus-visible'], :focus-visible),
+/* Rows sit flush in whatever scrolls the tree, so the tenant focus signature
+   rides an overlay inset by its own reach, only while the row itself holds
+   focus. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: calc(-1 * var(--ds-focus-ring-width));
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  border-radius: max(0px, calc(var(--ds-tree-node-radius, var(--ds-radius-md)) - var(--ds-focus-ring-offset) - var(--ds-focus-ring-width)));
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
+}
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(-1 * var(--ds-focus-ring-offset));
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 
 /* ---- row contents: expander, spacer, checkbox, icon, search highlight ---- */
@@ -422,6 +437,19 @@
 
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside'] {
     box-shadow: inset 0 0 0 2px Highlight;
+  }
+
+  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
+  }
+  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+    box-shadow: none;
+  }
+  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle'][data-move-mode='origin'] {
