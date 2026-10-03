@@ -901,7 +901,15 @@ test("every shared skin the entrypoint binds agrees with its owning family", () 
   // existed and was bound by nothing. Its tier was reviewed the same way as
   // every other row -- `family-owner` -> `rottay-structures` -- and the
   // `orphan-skin` arm is what now makes an unbound skin impossible.
-  assert.equal(rows.length, 157);
+  // 157 -> 158 (GLASS-1, 2a81cbc08): `skin/glass-card/index.css` entered bound
+  // to `rottay-components`. Tier review: its owner is the GlassCard effect in
+  // `src/graphics/motion/react/presentation/effects/glass-card`, a leaf
+  // primitive with no family-inventory row and no engine skin, so no route
+  // above `engine-agnostic-default` can name it and the resolver answers
+  // `rottay-components` -- the tier the entrypoint binds and the sheet's own
+  // LAYER header states, the same route `chart-foundation` and
+  // `cell-renderers` take.
+  assert.equal(rows.length, 158);
   const mismatched = rows.filter((row) => row.bound !== row.tier);
   assert.deepEqual(mismatched, [], JSON.stringify(mismatched, null, 2));
   // Nothing is classified by a route that reads no source at all.
