@@ -17,12 +17,7 @@ import {
   tenantThemeArtifactRootAttributes,
   type TenantThemeArtifact,
 } from '@rottay/design-system/server';
-import {
-  BarChart3Icon,
-  BriefcaseIcon,
-  SettingsIcon,
-  UsersIcon,
-} from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 import { RecruiterDashboardDemo } from '@/components/demos/bithire/recruiter-dashboard';
 import { ScorecardDemo } from '@/components/demos/bithire/scorecard';
@@ -127,10 +122,10 @@ function PipelineListRoute() {
 }
 
 const NAV_ITEMS = [
-  { key: 'pipeline', label: 'Pipeline', icon: <BriefcaseIcon size={18} /> },
-  { key: 'candidates', label: 'Candidates', icon: <UsersIcon size={18} /> },
-  { key: 'analytics', label: 'Analytics', icon: <BarChart3Icon size={18} /> },
-  { key: 'settings', label: 'Settings', icon: <SettingsIcon size={18} /> },
+  { key: 'pipeline', label: 'Pipeline', icon: <Icon name="bithire.pipeline" decorative size={18} /> },
+  { key: 'candidates', label: 'Candidates', icon: <Icon name="bithire.candidate" decorative size={18} /> },
+  { key: 'analytics', label: 'Analytics', icon: <Icon name="data.chart" decorative size={18} /> },
+  { key: 'settings', label: 'Settings', icon: <Icon name="navigation.settings" decorative size={18} /> },
 ];
 
 export function DivergenceSurface({
