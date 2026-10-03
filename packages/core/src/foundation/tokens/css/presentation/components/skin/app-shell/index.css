@@ -78,11 +78,17 @@
   border: 0;
 }
 /* The ring is the kernel's decision, with the platform pseudo as the same
-   rule's fallback arm. */
+   rule's fallback arm. It wears the tenant focus signature, which shares
+   box-shadow with the lift; a `none` lift would void the list. */
 .ds-app-shell [data-part="skip-link"]:is([data-state~="focus-visible"], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
+}
+@container (not style(--ds-app-shell-skip-link-shadow: none)) and (not style(--ds-elevation-2: none)) {
+  .ds-app-shell [data-part="skip-link"]:is([data-state~="focus-visible"], :focus-visible) {
+    box-shadow: var(--ds-focus-ring), var(--ds-app-shell-skip-link-shadow, var(--ds-elevation-2, none));
+  }
 }
 
 .ds-app-shell [data-part="navigation-sidebar"] {
@@ -399,6 +405,35 @@
   border: var(--ds-app-shell-content-border, 0);
 }
 
+/* The skip link hands keyboard focus to the content landmark (`tabIndex=-1`),
+   which runs under the chrome and past the viewport: the tenant focus
+   signature rides an overlay pinned to the visible content area, inset by its
+   own reach, above the page content. The landmark itself is not positioned,
+   so page content keeps its containing block. */
+.ds-app-shell > [data-part="main-area"] > [data-part="content"][data-state~="focus-visible"],
+.ds-app-shell > [data-part="main-area"] > [data-part="content"]:focus-visible {
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: calc(-1 * var(--ds-focus-ring-width));
+}
+
+.ds-app-shell > [data-part="main-area"] > [data-part="content"][data-state~="focus-visible"]::after,
+.ds-app-shell > [data-part="main-area"] > [data-part="content"]:focus-visible::after {
+  position: fixed;
+  inset-block: calc(var(--ds-shell-top-inset) + var(--ds-focus-ring-offset) + var(--ds-focus-ring-width))
+    calc(
+      var(--ds-shell-main-padding-block-end, var(--ds-shell-bottom-inset)) + var(--ds-focus-ring-offset) +
+        var(--ds-focus-ring-width)
+    );
+  inset-inline: calc(
+      var(--ds-shell-inline-start-inset) + var(--ds-focus-ring-offset) + var(--ds-focus-ring-width)
+    )
+    calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  z-index: var(--ds-z-index-relative-above, 1);
+  content: "";
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
+}
+
 .ds-app-shell [data-part="footer"] {
   flex-shrink: 0;
   padding: var(--ds-app-shell-footer-padding, 0);
@@ -545,14 +580,32 @@
   background: var(--ds-app-shell-navigation-action-active-bg, var(--ds-color-neutral-200, var(--ds-color-neutral-100)));
 }
 
+.ds-app-shell [data-part="navigation-trigger"]:is([data-state~="focus-visible"], :focus-visible) {
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
+}
+
+/* The drawer header clips the close control, so the signature rides an
+   overlay inset by its own reach. */
 :is(.ds-app-shell, .ds-app-shell__navigation-drawer)
-  :is([data-part="navigation-close"], [data-part="navigation-trigger"]):is(
-    [data-state~="focus-visible"],
-    :focus-visible
-  ) {
-  outline: var(--ds-focus-ring-width, 2px) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  [data-part="navigation-close"]:is([data-state~="focus-visible"], :focus-visible) {
+  position: relative;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: calc(-1 * var(--ds-focus-ring-width));
+}
+
+:is(.ds-app-shell, .ds-app-shell__navigation-drawer)
+  [data-part="navigation-close"]:is([data-state~="focus-visible"], :focus-visible)::after {
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  content: "";
+  border-radius: max(
+    0px,
+    calc(var(--ds-radius-md, 8px) - var(--ds-focus-ring-offset) - var(--ds-focus-ring-width))
+  );
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -603,5 +656,27 @@
     border: 1px solid ButtonText;
     background: Canvas;
     color: ButtonText;
+  }
+
+  .ds-app-shell [data-part="skip-link"]:is([data-state~="focus-visible"], :focus-visible),
+  .ds-app-shell [data-part="navigation-trigger"]:is([data-state~="focus-visible"], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
+  }
+
+  :is(.ds-app-shell, .ds-app-shell__navigation-drawer)
+    [data-part="navigation-close"]:is([data-state~="focus-visible"], :focus-visible),
+  .ds-app-shell > [data-part="main-area"] > [data-part="content"][data-state~="focus-visible"],
+  .ds-app-shell > [data-part="main-area"] > [data-part="content"]:focus-visible {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
+  }
+
+  :is(.ds-app-shell, .ds-app-shell__navigation-drawer)
+    [data-part="navigation-close"]:is([data-state~="focus-visible"], :focus-visible)::after,
+  .ds-app-shell > [data-part="main-area"] > [data-part="content"][data-state~="focus-visible"]::after,
+  .ds-app-shell > [data-part="main-area"] > [data-part="content"]:focus-visible::after {
+    display: none;
   }
 }

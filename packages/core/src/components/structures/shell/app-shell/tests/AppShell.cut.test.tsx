@@ -222,7 +222,8 @@ describe('AppShell (WO-FAM-11 cut) — the anatomy contract', () => {
     const headerRules = rules.filter(({ selector }) => selector.includes('[data-part="header"]'));
     const contentRules = rules.filter(({ selector }) => selector.includes('[data-part="content"]'));
     expect(headerRules).toHaveLength(5);
-    expect(contentRules).toHaveLength(1);
+    // The landmark's own box, its keyboard hand-off and that hand-off's forced-colors arm.
+    expect(contentRules).toHaveLength(9);
     const baseHeader = headerRules.find(({ selector }) => selector === ownHeaderSelector)!;
     expect(baseHeader.declarations).toContain('position: sticky;');
     expect(baseHeader.declarations).toContain('height: var(--ds-shell-top-inset);');
@@ -232,11 +233,17 @@ describe('AppShell (WO-FAM-11 cut) — the anatomy contract', () => {
       expect(rule.selector).toContain(isHeader ? ownHeaderSelector : ownContentSelector);
       const nested = isHeader ? nestedHeader : nestedContent;
       let matchesOwn = false;
+      // The hand-off rules paint while the landmark holds keyboard focus, so
+      // the element they originate from is asked at rest.
+      const resting = rule.selector.replace(
+        /(?:\[data-state~="focus-visible"\]|:focus-visible)(?:::after)?$/,
+        '',
+      );
       for (const anatomy of ['flat', 'floating']) {
         layout.setAttribute('data-anatomy-layout', anatomy);
-        expect(nested.matches(rule.selector), rule.selector).toBe(false);
+        expect(nested.matches(resting), rule.selector).toBe(false);
         const own = isHeader ? ownHeader : ownContent;
-        matchesOwn ||= own?.matches(rule.selector) ?? false;
+        matchesOwn ||= own?.matches(resting) ?? false;
       }
       expect(matchesOwn, rule.selector).toBe(!isHeader || hasHeader);
     }

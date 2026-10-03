@@ -104,17 +104,11 @@ describeCausality({
     { id: 'navFooterPad', selector: FOOTER_NAV, property: 'padding-top' },
     // The skip link's lift rides the governed elevation ramp.
     { id: 'skipShadow', selector: SKIP, property: 'box-shadow' },
-    // Its keyboard ring is the focus decision on the seeded primary.
+    // Its keyboard ring is the tenant focus signature on the seeded primary.
     {
       id: 'skipRing',
       selector: SKIP,
-      property: 'outline-color',
-      attributes: { 'data-state': 'focus-visible' },
-    },
-    {
-      id: 'skipRingWidth',
-      selector: SKIP,
-      property: 'outline-width',
+      property: 'box-shadow',
       attributes: { 'data-state': 'focus-visible' },
     },
     // The collapse of the track rides the rearrange step of the motion dial.
@@ -158,10 +152,10 @@ describeCausality({
       holds: 'ruleWeight',
       in: VERTICALS,
     },
-    // `consumes: surfaces.* / states.*` — the ring's weight.
+    // `consumes: surfaces.* / states.*` — the ring's signature.
     'states.focus-style': {
       value: 'glow',
-      moves: ['skipRingWidth'],
+      moves: ['skipRing'],
       holds: 'ruleWeight',
       in: VERTICALS,
     },
@@ -221,24 +215,25 @@ describe('app-shell causality surface', () => {
       markup,
       arms: { base: {} },
       targets: [
-        { id: 'restingOutline', selector: SKIP, property: 'outline-color' },
+        { id: 'restingShadow', selector: SKIP, property: 'box-shadow' },
+        {
+          id: 'kernelShadow',
+          selector: SKIP,
+          property: 'box-shadow',
+          attributes: { 'data-state': 'focus-visible' },
+        },
         {
           id: 'kernelOutline',
           selector: SKIP,
           property: 'outline-color',
           attributes: { 'data-state': 'focus-visible' },
         },
-        { id: 'restingWidth', selector: SKIP, property: 'outline-width' },
-        {
-          id: 'kernelWidth',
-          selector: SKIP,
-          property: 'outline-width',
-          attributes: { 'data-state': 'focus-visible' },
-        },
       ],
     });
     const r = readings.base!;
-    expect(r.kernelWidth).not.toBe(r.restingWidth);
+    expect(r.kernelShadow).not.toBe(r.restingShadow);
+    // The signature is a shadow: a painted outline would be one contour under every focus style.
+    expect(r.kernelOutline).toBe('rgba(0, 0, 0, 0)');
   }, 120_000);
 
   // Chromium substitutes env(safe-area-inset-*) to 0px here, so only resolution
