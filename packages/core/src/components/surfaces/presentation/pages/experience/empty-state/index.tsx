@@ -15,6 +15,8 @@
  * `surfaces.states.*`).
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React from 'react';
 import { Box, Stack } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
@@ -29,12 +31,22 @@ import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/resp
 import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 
 export interface EmptyStateSurfaceProps {
+  postures?: SurfacePostures;
   config: EmptyStateSurfaceConfig;
 }
 
-export function EmptyStateSurface({
+export function EmptyStateSurface(props: EmptyStateSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="list">
+      <EmptyStateSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function EmptyStateSurfaceContent({
   config,
 }: EmptyStateSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
@@ -63,19 +75,24 @@ export function EmptyStateSurface({
         title={config.presentation.title}
         description={config.presentation.description}
         icon={config.presentation.icon}
-        action={primaryAction}
+        action={surfacePosture ? undefined : primaryAction}
       />
+      {surfacePosture && primaryAction && (
+        <SurfacePostureAction>
+          <SurfaceActionBar actions={[primaryAction]} access={{ mode: 'all' }} justify="center" />
+        </SurfacePostureAction>
+      )}
       {secondaryActions.length > 0 && (
-        <Box data-part="secondary-actions">
+        <SurfacePostureSlot name="secondary-actions" asChild><Box data-part="secondary-actions">
           <SurfaceActionBar
             actions={secondaryActions}
-            access={config.access}
+            access={surfacePosture ? { mode: 'all' } : config.access}
             justify="center"
           />
-        </Box>
+        </Box></SurfacePostureSlot>
       )}
       {config.presentation.content && (
-        <Box data-part="content">{config.presentation.content}</Box>
+        <SurfacePostureSlot name="guidance" asChild><Box data-part="content">{config.presentation.content}</Box></SurfacePostureSlot>
       )}
     </Stack>
   );

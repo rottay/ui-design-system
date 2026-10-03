@@ -33,6 +33,8 @@
  *   live chrome; empty composes the `SurfaceEmptyState` kit inside the root.
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Card, Grid, Image, Stack, Text } from '../../../../../primitives';
 import { FadeIn, recordTransitionName } from '@/graphics/motion';
@@ -179,6 +181,7 @@ function MediaRailSkeleton({
 }
 
 export interface MediaSurfaceProps {
+  postures?: SurfacePostures;
   config: MediaSurfaceConfig;
   loading?: boolean;
   /** Load failure of the media payload; renders the shared error kit under the live page chrome. */
@@ -188,12 +191,21 @@ export interface MediaSurfaceProps {
 }
 
 /** Media-browser shell with selection state, responsive gallery layout, and details rail. */
-export function MediaSurface({
+export function MediaSurface(props: MediaSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="list">
+      <MediaSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function MediaSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: MediaSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
@@ -239,7 +251,7 @@ export function MediaSurface({
   const resolvedLayout =
     config.visual.layout ??
     (config.presentation.renderDetails || config.presentation.renderPreview ? 'detail' : 'gallery');
-  const showDetailsRail = !!selectedItem && resolvedLayout === 'detail';
+  const showDetailsRail = !!selectedItem && resolvedLayout === 'detail' && surfacePosture?.regions.details !== 'hide';
   // `detailsWidth` is contract-declared: when set, the split leaves the fixed
   // 12-column 7/5 recipe and gives the details rail its own track; the gallery
   // column stays fluid (`minmax(0, 1fr)`) so long content can never overflow
@@ -283,6 +295,17 @@ export function MediaSurface({
 
   // Error state renders under the live page chrome so header actions (e.g.
   // upload) stay usable, mirroring the dashboard/chat surface idiom.
+  const resolvedActions = surfacePosture
+    ? filterSurfaceActions(config.behavior.actions, config.access)
+    : undefined;
+  const actionsNode = surfacePosture ? (
+    resolvedActions?.length ? (
+      <SurfacePostureAction><SurfaceActionBar actions={resolvedActions} access={{ mode: 'all' }} /></SurfacePostureAction>
+    ) : null
+  ) : (
+    <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
+  );
+  const dockActions = !!surfacePosture?.primaryAction && surfacePosture.primaryAction !== 'app-bar';
   if (hasSurfaceError(error)) {
     return (
       <PageShellSurface
@@ -290,9 +313,10 @@ export function MediaSurface({
           ...config.presentation.chrome,
           maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
         }}
-        actions={<SurfaceActionBar actions={config.behavior.actions} access={config.access} />}
+        actions={dockActions ? undefined : actionsNode}
       >
         <SurfaceErrorState error={error} onRetry={onRetry} />
+        {dockActions && actionsNode}
       </PageShellSurface>
     );
   }
@@ -301,7 +325,7 @@ export function MediaSurface({
   // whenever the detail layout would show one), so resolving into real
   // content is paint-only. The pinned `split`/`stacked` modifier logic for
   // the loaded state is unchanged.
-  const railVisible = loading ? resolvedLayout === 'detail' : showDetailsRail;
+  const railVisible = (loading ? resolvedLayout === 'detail' : showDetailsRail) && surfacePosture?.regions.details !== 'hide';
   const splitActive = railVisible && !shouldStack;
 
   const mediaContent = (
@@ -413,13 +437,13 @@ export function MediaSurface({
               })}
             </Grid>
 
-            {config.presentation.footer}
+            <SurfacePostureSlot name="footer">{config.presentation.footer}</SurfacePostureSlot>
           </Stack>
         )}
       </Grid.Item>
 
       {railVisible && (
-        <Grid.Item span={!shouldStack && !detailsTrack ? 5 : undefined}>
+        <SurfacePostureSlot name="details" asChild><Grid.Item role={surfacePosture ? 'region' : undefined} aria-label={surfacePosture ? tSurfaceOr('media.details_title', 'Details') : undefined} span={!shouldStack && !detailsTrack ? 5 : undefined}>
           {loading ? (
             <MediaRailSkeleton
               previewHeight={previewHeightPx}
@@ -465,7 +489,7 @@ export function MediaSurface({
               </Stack>
             )
           )}
-        </Grid.Item>
+        </Grid.Item></SurfacePostureSlot>
       )}
     </Grid>
   );
@@ -476,7 +500,7 @@ export function MediaSurface({
         ...config.presentation.chrome,
         maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
       }}
-      actions={<SurfaceActionBar actions={config.behavior.actions} access={config.access} />}
+      actions={dockActions ? undefined : actionsNode}
       // The page-shell loading early-return is intentionally NOT engaged: it
       // would replace the body with a generic page skeleton and drop the
       // gallery anatomy. The surface owns a mirror skeleton instead.
@@ -489,6 +513,7 @@ export function MediaSurface({
           mediaContent
         )}
       </SurfaceAccentBarWrapper>
+      {dockActions && actionsNode}
     </PageShellSurface>
   );
 }

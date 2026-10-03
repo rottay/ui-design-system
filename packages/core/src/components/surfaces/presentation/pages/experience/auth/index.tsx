@@ -40,6 +40,8 @@
  * never assumed decorative), and the title is the page's single h1 riding the
  * governed `pageTitle` type role. No live-region semantics are inferred.
  */
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useId } from 'react';
 import { Box, Card, Grid, Heading, Stack, Text } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
@@ -47,13 +49,14 @@ import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/resp
 import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import type { AuthSurfaceConfig } from '../../../../foundation/contracts';
 import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
-import { hasSurfaceError } from '../../../../runtime/helpers';
+import { filterSurfaceActions, hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 
 export interface AuthSurfaceProps {
+  postures?: SurfacePostures;
   config: AuthSurfaceConfig;
   /** Payload pending; renders the mirror skeleton inside the live panel frames. */
   loading?: boolean;
@@ -63,12 +66,21 @@ export interface AuthSurfaceProps {
   onRetry?: () => void | Promise<void>;
 }
 
-export function AuthSurface({
+export function AuthSurface(props: AuthSurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="form">
+      <AuthSurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function AuthSurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: AuthSurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
@@ -81,7 +93,7 @@ export function AuthSurface({
   // hero content to display, and enough viewport width. Missing any one falls
   // back to the vertically-centered single-column design.
   const isSplitLayout =
-    config.visual.layout !== 'centered' && !!config.presentation.hero && !shouldStack;
+    config.visual.layout !== 'centered' && !!config.presentation.hero && !shouldStack && surfacePosture?.regions.hero !== 'hide';
   // Default hero placement is "start" (left side). Only when explicitly set
   // to 'end' does the hero swap to the right/bottom position.
   const heroFirst = config.visual.heroPosition !== 'end';
@@ -92,12 +104,25 @@ export function AuthSurface({
   // In error the payload never resolved, so no skeleton runs under it
   // (marketing idiom: error wins over loading).
   const showSkeleton = loading && !hasSurfaceError(error);
+  const resolvedActions = surfacePosture
+    ? filterSurfaceActions(config.behavior.actions, config.access)
+    : undefined;
+  const actionsNode = surfacePosture ? (
+    resolvedActions?.length ? (
+      <SurfacePostureAction>
+        <SurfaceActionBar actions={resolvedActions} access={{ mode: 'all' }} justify="start" size={isMobile ? 'sm' : 'md'} />
+      </SurfacePostureAction>
+    ) : null
+  ) : (
+    <SurfaceActionBar actions={config.behavior.actions} access={config.access} justify="start" size={isMobile ? 'sm' : 'md'} />
+  );
+  const dockActions = !!surfacePosture?.primaryAction && surfacePosture.primaryAction !== 'app-bar';
 
   const formPanel = (
     /* The form panel is a labeled region: the visible h1 doubles as the
        region name (SU18 idiom), so screen-reader users can jump straight to
        the sign-in form. */
-    <Box as="section" aria-labelledby={titleId}>
+    <SurfacePostureSlot name="form-panel" asChild><Box as="section" aria-labelledby={surfacePosture?.regions['form-panel'] === 'collapse' ? undefined : titleId} aria-label={surfacePosture?.regions['form-panel'] === 'collapse' ? tSurfaceOr('auth.form_label', 'Authentication') : undefined}>
       <Card className="ds-auth__form-panel" variant={profileDefaults.cardVariant}>
         <Card.Body>
           <Stack spacing="lg">
@@ -140,40 +165,35 @@ export function AuthSurface({
                  the swap to real content is paint-only. Blocks are decorative
                  (`aria-hidden`) while the surface root carries `aria-busy`;
                  geometry and pulse live in the auth skin. */
-              <Stack spacing="md" aria-hidden="true">
+              <SurfacePostureSlot name="form" asChild><Stack spacing="md" aria-hidden="true">
                 <Box data-part="auth-skeleton-field" />
                 <Box data-part="auth-skeleton-field" />
                 <Box data-part="auth-skeleton-cta" />
-              </Stack>
+              </Stack></SurfacePostureSlot>
             ) : (
               <>
-                {config.presentation.form}
+                <SurfacePostureSlot name="form">{config.presentation.form}</SurfacePostureSlot>
                 {/* SSO / surface-level actions: access-filtered, each action's
                     `loading` flag drives its Button's async spinner (the
                     caller owns submit pending; the contract declares no
                     surface-level pending axis). */}
-                <SurfaceActionBar
-                  actions={config.behavior.actions}
-                  access={config.access}
-                  justify="start"
-                  size={isMobile ? 'sm' : 'md'}
-                />
+                {!dockActions && actionsNode}
               </>
             )}
-            {config.presentation.footer}
-            {config.presentation.legal}
+            <SurfacePostureSlot name="footer">{config.presentation.footer}</SurfacePostureSlot>
+            <SurfacePostureSlot name="legal">{config.presentation.legal}</SurfacePostureSlot>
           </Stack>
         </Card.Body>
       </Card>
-    </Box>
+    </Box></SurfacePostureSlot>
   );
 
-  const heroPanel = heroContent ? (
+  const heroPanel = heroContent && surfacePosture?.regions.hero !== 'hide' ? (
     /* The hero is governed tenant branding rendered as a complementary
        landmark: never assumed decorative (caller content stays in the a11y
        tree), never painted by the surface (the Card material and tenant
        channels own its chrome). */
-    <Box as="aside" aria-label={tSurfaceOr('auth.hero_region_label', 'Brand showcase')}>
+    <SurfacePostureSlot name="hero" asChild><Box as="aside" aria-label={tSurfaceOr('auth.hero_region_label', 'Brand showcase')}>
       <Card className="ds-auth__hero-panel" variant="elevated">
         <Card.Body>
           {showSkeleton ? (
@@ -183,13 +203,13 @@ export function AuthSurface({
           )}
         </Card.Body>
       </Card>
-    </Box>
+    </Box></SurfacePostureSlot>
   ) : null;
 
   // In error only the form column swaps to the shared error kit: the brand
   // hero is chrome (not payload) and the split/centered geometry holds.
   const formColumn = hasSurfaceError(error) ? (
-    <SurfaceErrorState error={error} onRetry={onRetry} />
+    <SurfacePostureSlot name="form-panel"><SurfaceErrorState error={error} onRetry={onRetry} /></SurfacePostureSlot>
   ) : (
     formPanel
   );
@@ -237,7 +257,7 @@ export function AuthSurface({
             : undefined
         }
       >
-        {config.presentation.topBar}
+        <SurfacePostureSlot name="top-bar">{config.presentation.topBar}</SurfacePostureSlot>
         {/* Entrance motion rides the product personality; reduced/calm
             contexts render the final state by FadeIn's own contract. */}
         {profileDefaults.animateEntrance ? (
@@ -245,6 +265,7 @@ export function AuthSurface({
         ) : (
           mainNode
         )}
+        {dockActions && !loading && !hasSurfaceError(error) && actionsNode}
       </Stack>
     </Box>
   );

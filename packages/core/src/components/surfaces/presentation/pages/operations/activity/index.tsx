@@ -25,6 +25,8 @@
  * SurfaceErrorState kit with the full page chrome alive (SU30/SU31 pattern).
  */
 
+import type { SurfacePostures } from '../../../../foundation/contracts/postures';
+import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React from 'react';
 import { Flex, Pagination, Stack, Text } from '../../../../../primitives';
 import { PatternActivityLog } from '../../../../../patterns';
@@ -32,31 +34,51 @@ import type { Activity } from '../../../../../patterns';
 import type { ActivitySurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
-import { hasSurfaceError } from '../../../../runtime/helpers';
+import { filterSurfaceActions, hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 
 export interface ActivitySurfaceProps {
+  postures?: SurfacePostures;
   config: ActivitySurfaceConfig;
   loading?: boolean;
   error?: unknown;
   onRetry?: () => void | Promise<void>;
 }
 
-export function ActivitySurface({
+export function ActivitySurface(props: ActivitySurfaceProps) {
+  return (
+    <SurfacePostureScope postures={props.postures} family="list">
+      <ActivitySurfaceContent {...props} />
+    </SurfacePostureScope>
+  );
+}
+
+function ActivitySurfaceContent({
   config,
   loading = false,
   error,
   onRetry,
 }: ActivitySurfaceProps): React.ReactElement {
+  const surfacePosture = useScopedSurfacePosture();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurfaceOr } = useSurfaceTranslations();
 
   // Actions render outside the timeline so they remain accessible even when
   // the activity log is empty -- consistent with other surface action placements.
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} access={config.access} />;
+  const resolvedActions = surfacePosture
+    ? filterSurfaceActions(config.behavior.actions, config.access)
+    : undefined;
+  const actionsNode = surfacePosture ? (
+    resolvedActions?.length ? (
+      <SurfacePostureAction><SurfaceActionBar actions={resolvedActions} access={{ mode: 'all' }} /></SurfacePostureAction>
+    ) : null
+  ) : (
+    <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
+  );
+  const dockActions = !!surfacePosture?.primaryAction && surfacePosture.primaryAction !== 'app-bar';
   const chrome = {
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
@@ -80,8 +102,9 @@ export function ActivitySurface({
   // even when the data load failed (scheduler/operational precedent).
   if (hasSurfaceError(error)) {
     return (
-      <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
-        <SurfaceErrorState error={error} onRetry={onRetry} />
+      <PageShellSurface chrome={chrome} actions={dockActions ? undefined : actionsNode} loading={false}>
+        <SurfacePostureSlot name="activity"><SurfaceErrorState error={error} onRetry={onRetry} /></SurfacePostureSlot>
+        {dockActions && actionsNode}
       </PageShellSurface>
     );
   }
@@ -103,7 +126,7 @@ export function ActivitySurface({
     : 0;
 
   const activityContent = (
-    <Stack spacing="md" aria-busy={loading || undefined}>
+    <SurfacePostureSlot name="activity" asChild><Stack spacing="md" aria-busy={loading || undefined}>
       {showCustomEmpty ? (
         /* The custom empty slot takes over the empty presentation wholly and
            keeps the surface root hook that the pinned pattern root would
@@ -135,7 +158,7 @@ export function ActivitySurface({
       )}
 
       {pagination && (
-        <Flex
+        <SurfacePostureSlot name="pagination" asChild><Flex
           className="ds-surface ds-activity ds-activity__pagination"
           data-part="pagination"
           justify="between"
@@ -165,13 +188,13 @@ export function ActivitySurface({
               onChange={pagination.onChange}
             />
           )}
-        </Flex>
+        </Flex></SurfacePostureSlot>
       )}
-    </Stack>
+    </Stack></SurfacePostureSlot>
   );
 
   return (
-    <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
+    <PageShellSurface chrome={chrome} actions={dockActions ? undefined : actionsNode} loading={false}>
       {profileDefaults.animateEntrance ? (
         <FadeIn durationMs={profileDefaults.entranceDuration}>
           <StaggerChildren staggerDelayMs={profileDefaults.staggerDelay}>
@@ -181,6 +204,7 @@ export function ActivitySurface({
       ) : (
         activityContent
       )}
+      {dockActions && actionsNode}
     </PageShellSurface>
   );
 }
