@@ -4,4 +4,3 @@ export { noHardcodedColors } from './no-hardcoded-colors';
 export { noLayoutPropertyAnimation, LAYOUT_PROPERTY_TOKENS } from './no-layout-property-animation';
 export { noMotionLiterals } from './no-motion-literals';
 export { noRawHtml } from './no-raw-html';
-export { noSizeTypeOutsideClassic } from './no-size-type-outside-classic';

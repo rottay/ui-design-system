@@ -14,7 +14,7 @@ describe('DatePicker modern advanced coverage', () => {
         placeholder="Modern advanced"
         picker="year"
         status="warning"
-        size="large"
+        size="lg"
         onChange={handleChange}
       />,
       'modern'
@@ -83,7 +83,7 @@ describe('DatePicker modern advanced coverage', () => {
         picker="week"
         placeholder="Week picker"
         allowClear={false}
-        size="small"
+        size="sm"
         status="error"
         onChange={handleChange}
       />,

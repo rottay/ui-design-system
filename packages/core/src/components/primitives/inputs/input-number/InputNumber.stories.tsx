@@ -39,7 +39,7 @@ A numeric input component with increment/decrement controls and multi-engine sup
   argTypes: {
     size: {
       control: 'select',
-      options: ['small', 'default', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of the input',
     },
     status: {
@@ -78,9 +78,9 @@ export const Default: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <InputNumber size="small" placeholder="Small" defaultValue={10} />
-      <InputNumber size="default" placeholder="Default" defaultValue={20} />
-      <InputNumber size="large" placeholder="Large" defaultValue={30} />
+      <InputNumber size="sm" placeholder="Small" defaultValue={10} />
+      <InputNumber size="md" placeholder="Default" defaultValue={20} />
+      <InputNumber size="lg" placeholder="Large" defaultValue={30} />
     </div>
   ),
 };
@@ -212,7 +212,7 @@ export const SizeMatrix: Story = {
       component={InputNumber}
       baseProps={{ defaultValue: 10, style: { width: 120 } }}
       sizeProp="size"
-      sizes={['small', 'default', 'large']}
+      sizes={['sm', 'md', 'lg']}
     />
   ),
 };

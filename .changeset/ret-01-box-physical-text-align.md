@@ -8,7 +8,7 @@ What renders. On Modern nothing changes for a migrated caller: `left` / `right` 
 
 Census, over `packages/core/src`, `packages/showroom/src` and the `src` roots of app-bithire, app-evnto and app-platform: zero `textAlign="left"` / `textAlign="right"` on any element typed by `BoxProps` (multi-line JSX, ternaries and object-valued props included; the prop is not responsive-typed), zero Box props objects or `createElement(Box, ...)` calls carrying a physical value, and zero imports of either retired type name. The object-literal `textAlign: 'left' | 'right'` occurrences in those trees are CSS style objects, which this change does not touch. The only uses were the four tests that proved the alias (the table's size, the normalizer, and the two Modern alias renders); they retire with it, the logical pass-through and unset tests stay, and a type-level test now asserts that `left` and `right` do not type-check.
 
-No minor was published between the deprecation (2026-09-17) and 3.0, and no consumer exists to claim a compatibility window.
+The deprecated form dates from 2026-09-17, after the last version bump in this repository (2.19.36, 2026-07-19) and after the 2.19.37 the applications install from the registry (installed files dated 2026-08-09, with no `LegacyPhysicalBoxTextAlign` in their declarations): no release of any kind was cut after it, so the deprecated form never shipped, and no consumer exists to claim a compatibility window.
 
 ```contract-diff
 export .#LegacyPhysicalBoxTextAlign — removed; the deprecated physical `left | right` alias type, zero consumers; write `start` / `end` (RET-01-BOX-PHYSICAL-TEXT-ALIGN)

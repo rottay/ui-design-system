@@ -21,29 +21,15 @@ import type { CSSProperties, ReactNode } from 'react';
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
 /**
- * @deprecated Ant Design-compatible size vocabulary. Use {@link Size} ('sm' | 'md' | 'lg')
- * in public component prop types; the classic engine's antd adapters translate a canonical
- * `Size` step to this spelling internally via {@link toLegacySize}. Retained for one release
- * so existing `'small' | 'middle' | 'large' | 'default'` values keep compiling. Importable only
- * under `engines/classic/` (the antd size-vocabulary bridge) -- see the
- * `no-size-type-outside-classic` ESLint rule in `@rottay/design-system/eslint`. Public contract
- * files reference {@link LegacySizeAlias} instead so that restriction can be enforced by name.
+ * @deprecated The Ant Design-style size spellings. No `*Size` contract is widened with them
+ * any more; `size` props take the canonical {@link Size} step (`'sm' | 'md' | 'lg'`). `'small'`
+ * is `'sm'`, `'middle'` and `'default'` are `'md'`, `'large'` is `'lg'`. Every exported `*Props`
+ * size-typed field across the design system must stay assignable to `Size | LegacySizeAlias` --
+ * the axis-law ratchet enforced by `scripts/check/boundaries/components/sizing/index.mjs`.
  */
-export type SizeType = 'small' | 'middle' | 'large' | 'default';
+export type LegacySizeAlias = 'small' | 'middle' | 'large' | 'default';
 
-/**
- * @deprecated Same literal union as {@link SizeType}, exported under a second name so the six
- * retyped `*Size` contracts (Table, TimePicker, DatePicker, Form, InputNumber, Switch) can widen
- * their canonical `'sm' | 'md' | 'lg'` step with the deprecated antd-style spellings for one
- * release without importing `SizeType` itself (which is restricted to `engines/classic/`).
- * Every exported `*Props` size-typed field across the design system must stay assignable to
- * `Size | LegacySizeAlias` -- this is the axis-law ratchet enforced by
- * `scripts/check/boundaries/components/sizing/index.mjs`. A follow-up release deletes this alias from the six
- * contracts' `*Size` unions (recorded in the roadmap, not silently).
- */
-export type LegacySizeAlias = SizeType;
-
-/** The `sm | md | lg` subset of {@link Size} that has a legacy `SizeType` counterpart. */
+/** The `sm | md | lg` subset of {@link Size} that has an Ant Design-style counterpart. */
 type CanonicalLegacySizeStep = 'sm' | 'md' | 'lg';
 
 /** Every canonical `sm | md | lg` step mapped to its legacy antd-style spelling. */
@@ -54,7 +40,7 @@ const LEGACY_SIZE_BY_CANON: Record<CanonicalLegacySizeStep, 'small' | 'middle' |
 };
 
 /**
- * Resolves a canonical `Size` step to its legacy `SizeType` spelling for engine bindings that
+ * Resolves a canonical `Size` step to its Ant Design-style spelling for engine bindings that
  * still key an internal lookup table, CSS class suffix, or antd component prop by
  * `'small' | 'middle' | 'large'`. Any other input -- an already-legacy spelling, `'default'`,
  * or `undefined` -- passes through unchanged, so calling this once on a `size` prop before it
@@ -72,7 +58,7 @@ export function toLegacySize<T extends string | undefined>(
   return size as Exclude<T, CanonicalLegacySizeStep>;
 }
 
-/** Every deprecated `SizeType` spelling (including the ambiguous `'default'`) mapped to its canonical `Size` step. */
+/** Every Ant Design-style spelling (including the ambiguous `'default'`) mapped to its canonical `Size` step. */
 const CANON_SIZE_BY_LEGACY: Record<'small' | 'middle' | 'large' | 'default', CanonicalLegacySizeStep> = {
   small: 'sm',
   middle: 'md',
@@ -81,7 +67,7 @@ const CANON_SIZE_BY_LEGACY: Record<'small' | 'middle' | 'large' | 'default', Can
 };
 
 /**
- * Resolves a legacy `SizeType` spelling -- or the ambiguous `'default'` -- to its canonical
+ * Resolves an Ant Design-style spelling -- or the ambiguous `'default'` -- to its canonical
  * `sm | md | lg` step, for engine bindings (modern/rustic) that key an internal lookup table,
  * CSS class suffix, or `data-size` attribute by the canonical vocabulary. Already-canonical
  * input, `undefined`, or any other `Size` step (`'xs'`, `'xl'`, ...) passes through unchanged,
@@ -106,7 +92,8 @@ export type StatusType = '' | 'error' | 'warning';
  * @deprecated Legacy color axis conflating semantic meaning (primary, success, warning, error)
  * with one structural value (gradient) in a single union. Use {@link Tone} for semantic color;
  * pair it with a component's own structural variant type (e.g. `BadgeStyle`) for rendering
- * style. Retained for one release so existing values keep compiling.
+ * style. It is the union behind the deprecated `BadgeVariant`, `TagVariant` and `AvatarVariant`
+ * only, and leaves with them.
  */
 export type Variant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'gradient';
 

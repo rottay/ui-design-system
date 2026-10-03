@@ -147,7 +147,7 @@ const meta: Meta<typeof Table<User>> = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['small', 'default', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of the table',
     },
     bordered: {
@@ -182,14 +182,14 @@ export const Default: Story = {
   args: {
     dataSource: data,
     columns: columns,
-    size: 'default',
+    size: 'md',
   },
 };
 
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['small', 'default', 'large'] as const).map((size) => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size}>
           <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>
             {size}
@@ -415,7 +415,7 @@ export const CompareEngines: Story = {
       props={{
         dataSource: data.slice(0, 3),
         columns: columns.slice(0, 4),
-        size: 'small',
+        size: 'sm',
         bordered: true,
         pagination: false,
       }}
@@ -447,7 +447,7 @@ export const VariantMatrix: Story = {
         bordered: true,
       }}
       variantProp="size"
-      variants={['small', 'default', 'large']}
+      variants={['sm', 'md', 'lg']}
     />
   ),
 };

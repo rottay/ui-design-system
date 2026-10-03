@@ -15,7 +15,7 @@ describe('TimePicker rustic advanced coverage', () => {
           engine="rustic"
           defaultValue="09:30:00"
           status="error"
-          size="small"
+          size="sm"
           format="HH:mm:ss"
           onChange={handleChange}
         />

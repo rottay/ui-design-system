@@ -40,7 +40,7 @@ TimePicker component for selecting time values with support for multiple engines
   argTypes: {
     size: {
       control: 'select',
-      options: ['small', 'default', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of the picker input',
     },
     status: {
@@ -83,7 +83,7 @@ type Story = StoryObj<typeof TimePicker>;
 export const Default: Story = {
   args: {
     placeholder: 'Select time',
-    size: 'default',
+    size: 'md',
     allowClear: true,
   },
 };
@@ -106,7 +106,7 @@ export const TwelveHourFormat: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
-      {(['small', 'default', 'large'] as const).map((size) => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <span style={{ fontSize: 12, color: '#666' }}>{size}</span>
           <TimePicker size={size} placeholder={`Size: ${size}`} />
@@ -202,7 +202,7 @@ export const SizeMatrix: Story = {
       component={TimePicker}
       baseProps={{ placeholder: 'Time', style: { width: 130 } }}
       sizeProp="size"
-      sizes={['small', 'default', 'large']}
+      sizes={['sm', 'md', 'lg']}
     />
   ),
 };
@@ -233,7 +233,7 @@ export const RangePicker: Story = {
 export const RangePickerSizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {(['small', 'default', 'large'] as const).map((size) => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <span style={{ fontSize: 12, color: '#666' }}>{size}</span>
           <TimePicker.RangePicker

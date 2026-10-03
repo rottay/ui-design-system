@@ -40,7 +40,7 @@ describe('Form integration', () => {
 
   it.each(STABLE_ENGINES)('applies layout and size attributes for the %s engine', async (engine) => {
     renderWithEngine(
-      <Form layout="vertical" size="large" className="integration-form">
+      <Form layout="vertical" size="lg" className="integration-form">
         Form content
       </Form>,
       engine

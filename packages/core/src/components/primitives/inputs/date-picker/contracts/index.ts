@@ -37,16 +37,13 @@
  */
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '@/foundation/contracts/runtime/engine';
-import type { LegacySizeAlias, Size, StatusType } from '../../../../../foundation/contracts/kernel/common';
+import type { Size, StatusType } from '../../../../../foundation/contracts/kernel/common';
 
 /**
  * Size variants for the DatePicker input.
- * @remarks Canonical values are the {@link Size} subset `'sm' | 'md' | 'lg'`. The legacy Ant
- * Design-style spellings (`'small' | 'middle' | 'large' | 'default'`) are accepted for one
- * release via {@link LegacySizeAlias} and are deprecated; prefer the canonical spelling in new
- * code.
+ * @remarks The {@link Size} subset `'sm' | 'md' | 'lg'`.
  */
-export type DatePickerSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
+export type DatePickerSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 /**
  * Validation status for the DatePicker.
@@ -275,7 +272,7 @@ export const DATE_PICKER_DEFAULTS: Partial<DatePickerProps> = {
   /** Default picker mode */
   picker: 'date',
   /** Default size variant */
-  size: 'default',
+  size: 'md',
   /** Allow clearing the selected date */
   allowClear: true,
   /** Show today button in footer */

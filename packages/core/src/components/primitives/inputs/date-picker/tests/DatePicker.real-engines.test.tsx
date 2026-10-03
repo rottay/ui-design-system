@@ -47,7 +47,7 @@ describe('DatePicker real engine coverage', () => {
         <ModernDatePicker
           placeholder="Modern date"
           status="error"
-          size="large"
+          size="lg"
           onChange={onChange}
         />
         <ModernDatePickerCompound.RangePicker

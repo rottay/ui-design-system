@@ -22,7 +22,7 @@ describe('TimePicker modern advanced coverage', () => {
       <ModernTimePicker
         defaultValue="09:30:00"
         status="error"
-        size="small"
+        size="sm"
         format="HH:mm:ss"
         onChange={handleChange}
       />

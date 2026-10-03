@@ -16,7 +16,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { BaseComponentProps, Variant } from '../../../../../foundation/contracts/kernel/common';
+import type { BaseComponentProps } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 
 // ============================================================================
@@ -27,8 +27,7 @@ import type { EngineAwareProps } from '../../../../../foundation/contracts/runti
  * Toast variant types.
  *
  * @description
- * Extends the base Variant type with an additional 'info' variant
- * commonly used for informational toast messages.
+ * The colour and meaning of a toast.
  *
  * Available variants:
  * - `default` - Neutral styling
@@ -37,9 +36,18 @@ import type { EngineAwareProps } from '../../../../../foundation/contracts/runti
  * - `success` - Success/positive feedback
  * - `warning` - Warning/caution feedback
  * - `error` - Error/negative feedback
+ * - `gradient` - Brand gradient fill
  * - `info` - Informational messages
  */
-export type ToastVariant = Variant | 'info';
+export type ToastVariant =
+  | 'default'
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'gradient'
+  | 'info';
 
 // ============================================================================
 // Position Types

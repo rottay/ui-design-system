@@ -31,7 +31,7 @@
  *   min={0}
  *   max={100}
  *   step={5}
- *   size="default"
+ *   size="md"
  *   className="w-32"
  * />
  * ```

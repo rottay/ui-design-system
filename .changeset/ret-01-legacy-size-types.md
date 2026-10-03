@@ -17,7 +17,7 @@ Census (2026-10-03), measured over whole JSX opening tags (multi-line and spread
 
 Tests. The `renders size %s` cases of the five component tests and the stories move to `sm | md | lg`. In the Modern Collapse contract test the assertions that existed only to prove the Ant spellings were accepted (`normalizeCollapseSize('small' | 'middle' | 'large')` and the three `data-size` rows for them) are removed with the acceptance; the canonical assertions stay and a `md` row is added.
 
-Compatibility promise. The aliases were introduced on 2026-07-09 marked "retained for one release so existing values keep compiling". Only 2.19.x patch releases shipped between that marker and 3.0; no minor ever did, and no consumer exists to claim the window: nothing outside the package passes these spellings to these five components.
+Compatibility promise. The aliases were introduced on 2026-07-09 marked "retained for one release so existing values keep compiling". The package was at 2.16.6 on that date; 2.17.0 (2026-07-11), 2.18.0 (2026-07-13) and 2.19.0 through 2.19.36 were released after the marker, so the one-release window has elapsed, and no consumer exists to claim it: nothing outside the package passes these spellings to these five components.
 
 Migration. Replace the literal on the `size` prop of the five components (`small` -> `sm`, `middle` -> `md`, `large` -> `lg`); the 3.0 codemod rewrites string literals, including each literal branch of a ternary, and reports a value that arrives through a variable, any other expression or a spread. A consumer that imported one of the five type names uses the canonical `<Component>Size`, which stays exported.
 

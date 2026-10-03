@@ -32,7 +32,7 @@ function renderEngineForm(node: React.ReactElement, engine: 'modern' | 'rustic')
 describe('Modern Form visual contract', () => {
   it('stamps layout, framed field anatomy, semantic feedback, and accessible messages', () => {
     const view = renderEngineForm(
-      <ModernForm layout="vertical" size="large" requiredMark="optional" hasFeedback>
+      <ModernForm layout="vertical" size="lg" requiredMark="optional" hasFeedback>
         <ModernForm.Item
           name="displayName"
           label="Display name"
@@ -145,7 +145,7 @@ describe('Form engine branch coverage', () => {
       orphanErrors.unmount();
 
       renderEngineForm(
-        <EngineForm size="middle" layout="horizontal">
+        <EngineForm size="md" layout="horizontal">
           <EngineForm.Item
             name="nickname"
             label="Nickname"

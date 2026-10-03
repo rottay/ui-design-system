@@ -3,8 +3,8 @@
  *
  * WHY THIS FILE DID NOT EXIST. `packages/core` shipped `@rottay/no-raw-html`,
  * `@rottay/no-hardcoded-colors`, `@rottay/no-db-in-components`,
- * `@rottay/no-direct-lucide`, `@rottay/no-motion-literals` and
- * `@rottay/no-size-type-outside-classic` to every Rottay app, had no ESLint
+ * `@rottay/no-direct-lucide` and `@rottay/no-motion-literals` to every Rottay
+ * app, had no ESLint
  * config of its own, and its `lint` script was a chain of node checks that
  * never invoked ESLint (audit F-57). The rules the DS sells did not protect
  * the DS.
@@ -79,7 +79,6 @@ export default [
       '@rottay/no-direct-lucide': 'error',
       '@rottay/no-motion-literals': 'error',
       '@rottay/no-layout-property-animation': 'error',
-      '@rottay/no-size-type-outside-classic': 'error',
 
       // ON, with three file exemptions declared below. Across production
       // `src/**` it measures ZERO once they apply: the findings were seven in

@@ -26,7 +26,6 @@ import {
   noLayoutPropertyAnimation,
   noMotionLiterals,
   noRawHtml,
-  noSizeTypeOutsideClassic,
 } from '../rules';
 
 // ── Plugin object ──────────────────────────────────────────────────
@@ -38,7 +37,6 @@ export const rules = {
   'no-direct-lucide': noDirectLucide,
   'no-motion-literals': noMotionLiterals,
   'no-layout-property-animation': noLayoutPropertyAnimation,
-  'no-size-type-outside-classic': noSizeTypeOutsideClassic,
 };
 
 /** Standalone plugin reference (for manual wiring) */
@@ -66,7 +64,6 @@ export const configs = {
       // have never been measured, and a rule that lands as noise gets disabled
       // wholesale. Apps opt in per app; `packages/core/eslint.config.ts` is on.
       '@rottay/no-layout-property-animation': 'off' as const,
-      '@rottay/no-size-type-outside-classic': 'warn' as const,
     },
   },
 

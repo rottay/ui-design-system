@@ -16,7 +16,7 @@ describe('DatePicker rustic advanced coverage', () => {
           picker="year"
           defaultValue={new Date('2026-03-13T00:00:00.000Z')}
           status="warning"
-          size="large"
+          size="lg"
           onChange={handleChange}
         />
       </Suspense>,

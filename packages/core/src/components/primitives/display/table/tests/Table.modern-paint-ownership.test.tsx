@@ -92,7 +92,7 @@ function renderModern(ui: React.ReactElement) {
 describe('Table modern — geometry lives in the skin, hooks in the DOM', () => {
   it('stamps the data-size / data-align / data-part hooks the skin keys on', () => {
     const { container } = renderModern(
-      <ModernTable columns={COLUMNS} dataSource={DATA} pagination={false} size="small" />
+      <ModernTable columns={COLUMNS} dataSource={DATA} pagination={false} size="sm" />
     );
 
     const table = container.querySelector('[data-part="table"]');

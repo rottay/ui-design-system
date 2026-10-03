@@ -120,7 +120,7 @@ describe('DatePicker', () => {
     expect(screen.getByTestId('date-picker')).toHaveAttribute('data-picker', picker);
   });
 
-  it.each(['small', 'default', 'large'] as const)('renders size %s', (size) => {
+  it.each(['sm', 'md', 'lg'] as const)('renders size %s', (size) => {
     render(<DatePicker size={size} />);
     expect(screen.getByTestId('date-picker')).toHaveAttribute('data-size', size);
   });
@@ -192,7 +192,7 @@ describe('DatePicker.RangePicker', () => {
     expect(screen.getByTestId('range-separator')).toHaveTextContent('-');
   });
 
-  it.each(['small', 'default', 'large'] as const)('renders size %s', (size) => {
+  it.each(['sm', 'md', 'lg'] as const)('renders size %s', (size) => {
     render(<DatePicker.RangePicker size={size} />);
     expect(screen.getByTestId('range-picker')).toHaveAttribute('data-size', size);
   });

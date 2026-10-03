@@ -44,7 +44,7 @@ A form component with validation and layout support with multi-engine support.
     },
     size: {
       control: 'select',
-      options: ['small', 'default', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of form controls',
     },
     engine: {
@@ -199,15 +199,15 @@ export const DisabledForm: Story = {
 export const FormSizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['small', 'default', 'large'] as const).map((size) => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size}>
           <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{size}</h4>
           <Form size={size} layout="inline">
             <Form.Item name="field1" label="Field">
-              <input type="text" placeholder="Input" style={{ padding: size === 'small' ? 4 : size === 'large' ? 12 : 8 }} />
+              <input type="text" placeholder="Input" style={{ padding: size === 'sm' ? 4 : size === 'lg' ? 12 : 8 }} />
             </Form.Item>
             <Form.Item>
-              <button type="submit" style={{ padding: size === 'small' ? '4px 8px' : size === 'large' ? '12px 24px' : '8px 16px' }}>
+              <button type="submit" style={{ padding: size === 'sm' ? '4px 8px' : size === 'lg' ? '12px 24px' : '8px 16px' }}>
                 Submit
               </button>
             </Form.Item>

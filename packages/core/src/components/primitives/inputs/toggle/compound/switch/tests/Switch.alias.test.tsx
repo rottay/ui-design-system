@@ -19,10 +19,10 @@ describe('Switch is the deprecated name of Toggle', () => {
     await waitFor(() => expect(screen.getByText('On')).toBeInTheDocument());
   });
 
-  it('maps legacy sizes onto the canonical scale and keeps the one-argument onChange', async () => {
+  it('stamps the size step and keeps the one-argument onChange', async () => {
     const onChange = vi.fn();
     const { container } = renderWithEngine(
-      <Switch aria-label="Sync" size="small" onChange={onChange} />,
+      <Switch aria-label="Sync" size="sm" onChange={onChange} />,
       'modern',
     );
     const control = await screen.findByRole('switch', { name: 'Sync' });

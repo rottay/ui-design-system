@@ -124,7 +124,7 @@ describe('InputNumber', () => {
     expect(screen.getByRole('spinbutton')).toHaveAttribute('step', '5');
   });
 
-  it.each(['small', 'default', 'large'] as const)('renders size %s', (size) => {
+  it.each(['sm', 'md', 'lg'] as const)('renders size %s', (size) => {
     render(<InputNumber size={size} />);
     expect(screen.getByTestId('input-number')).toHaveAttribute('data-size', size);
   });

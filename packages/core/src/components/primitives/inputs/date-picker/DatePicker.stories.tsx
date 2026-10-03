@@ -44,7 +44,7 @@ A date picker component with various modes and multi-engine support.
     },
     size: {
       control: 'select',
-      options: ['small', 'default', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of the picker',
     },
     status: {
@@ -78,9 +78,9 @@ export const Default: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <DatePicker size="small" placeholder="Small" />
-      <DatePicker size="default" placeholder="Default" />
-      <DatePicker size="large" placeholder="Large" />
+      <DatePicker size="sm" placeholder="Small" />
+      <DatePicker size="md" placeholder="Default" />
+      <DatePicker size="lg" placeholder="Large" />
     </div>
   ),
 };
@@ -168,7 +168,7 @@ export const SizeMatrix: Story = {
       component={DatePicker}
       baseProps={{ placeholder: 'Date', style: { width: 150 } }}
       sizeProp="size"
-      sizes={['small', 'default', 'large']}
+      sizes={['sm', 'md', 'lg']}
     />
   ),
 };

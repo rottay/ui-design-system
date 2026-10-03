@@ -36,7 +36,7 @@
  */
 
 import type { EngineAwareProps } from '../../../../../foundation/contracts';
-import type { LegacySizeAlias, Size } from '../../../../../foundation/contracts/kernel/common';
+import type { Size } from '../../../../../foundation/contracts/kernel/common';
 import type { ReactNode, CSSProperties, ChangeEvent, MouseEvent } from 'react';
 
 // Size types
@@ -151,7 +151,7 @@ export const TOGGLE_DEFAULTS = {
  * Size of the deprecated `Switch` alias.
  * @deprecated since 2026-09-12 (D-16): use `ToggleSize`; `Switch` resolves to `Toggle`.
  */
-export type SwitchSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
+export type SwitchSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 /**
  * Props of the deprecated `Switch` alias.

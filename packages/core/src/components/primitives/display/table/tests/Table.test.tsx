@@ -213,7 +213,7 @@ describe('Table', () => {
     expect(screen.getByTestId('table-loading')).toBeInTheDocument();
   });
 
-  it.each(['small', 'default', 'large'] as const)(
+  it.each(['sm', 'md', 'lg'] as const)(
     'renders size %s',
     (size) => {
       render(<Table dataSource={mockData} columns={mockColumns} size={size} />);

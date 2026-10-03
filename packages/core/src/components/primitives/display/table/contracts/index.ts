@@ -49,16 +49,13 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties, Key } from 'react';
-import type { LegacySizeAlias, Size } from '../../../../../foundation/contracts/kernel/common';
+import type { Size } from '../../../../../foundation/contracts/kernel/common';
 
 /**
  * Table size variant. Controls row height, padding, and font-size of the table.
- * @remarks Canonical values are the {@link Size} subset `'sm' | 'md' | 'lg'`. The legacy Ant
- * Design-style spellings (`'small' | 'middle' | 'large' | 'default'`) are accepted for one
- * release via {@link LegacySizeAlias} and are deprecated; prefer the canonical spelling in new
- * code.
+ * @remarks The {@link Size} subset `'sm' | 'md' | 'lg'`.
  */
-export type TableSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
+export type TableSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 /**
  * Table layout algorithm.
@@ -249,7 +246,10 @@ export interface TablePaginationConfig {
   disabled?: boolean;
   /** Simple mode */
   simple?: boolean;
-  /** Size */
+  /**
+   * @deprecated Ant Design pagination size, kept only because the frozen Classic engine forwards
+   * `pagination` whole to Ant Design. No Modern or Rustic code reads it; it leaves with Classic.
+   */
   size?: 'default' | 'small';
   /** Responsive */
   responsive?: boolean;
@@ -468,7 +468,7 @@ export interface TableProps<T = unknown> {
  */
 export const TABLE_DEFAULTS: Partial<TableProps> = {
   /** Compact/default/large row density. */
-  size: 'default',
+  size: 'md',
   /** No outer border by default. */
   bordered: false,
   /** Header/body separator hairline is shown by default. */

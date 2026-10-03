@@ -37,16 +37,13 @@
  */
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
-import type { LegacySizeAlias, Size, StatusType } from '../../../../../foundation/contracts/kernel/common';
+import type { Size, StatusType } from '../../../../../foundation/contracts/kernel/common';
 
 /**
  * Size variants for the TimePicker input.
- * @remarks Canonical values are the {@link Size} subset `'sm' | 'md' | 'lg'`. The legacy Ant
- * Design-style spellings (`'small' | 'middle' | 'large' | 'default'`) are accepted for one
- * release via {@link LegacySizeAlias} and are deprecated; prefer the canonical spelling in new
- * code.
+ * @remarks The {@link Size} subset `'sm' | 'md' | 'lg'`.
  */
-export type TimePickerSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
+export type TimePickerSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 /**
  * Validation status for the TimePicker.
@@ -70,7 +67,7 @@ export type TimePickerPlacement = 'bottomLeft' | 'bottomRight' | 'topLeft' | 'to
  * ```tsx
  * <TimePicker
  *   format="HH:mm"
- *   size="large"
+ *   size="lg"
  *   onChange={(time, timeString) => console.log(time, timeString)}
  * />
  * ```
@@ -192,7 +189,7 @@ export interface TimeRangePickerProps extends Omit<TimePickerProps, 'value' | 'd
  */
 export const TIME_PICKER_DEFAULTS: Partial<TimePickerProps> = {
   /** Default size variant */
-  size: 'default',
+  size: 'md',
   /** Allow clearing the selected time */
   allowClear: true,
   /** Show "Now" button in footer */

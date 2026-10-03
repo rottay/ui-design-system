@@ -119,7 +119,7 @@ describe('TimePicker', () => {
     expect(screen.getByTestId('time-input')).toBeDisabled();
   });
 
-  it.each(['small', 'default', 'large'] as const)('renders size %s', (size) => {
+  it.each(['sm', 'md', 'lg'] as const)('renders size %s', (size) => {
     render(<TimePicker size={size} />);
     expect(screen.getByTestId('time-picker')).toHaveAttribute('data-size', size);
   });
@@ -198,7 +198,7 @@ describe('TimePicker.RangePicker', () => {
     expect(screen.getByTestId('time-range-end')).toBeDisabled();
   });
 
-  it.each(['small', 'default', 'large'] as const)('renders size %s', (size) => {
+  it.each(['sm', 'md', 'lg'] as const)('renders size %s', (size) => {
     render(<TimePicker.RangePicker size={size} />);
     expect(screen.getByTestId('time-range-picker')).toHaveAttribute('data-size', size);
   });

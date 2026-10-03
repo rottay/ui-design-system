@@ -55,7 +55,7 @@
  */
 
 import type { ReactNode, MouseEvent, ButtonHTMLAttributes } from 'react';
-import type { BaseComponentProps, Variant, LoadableProps, DisableableProps } from '../../../../../foundation/contracts/kernel/common';
+import type { BaseComponentProps, LoadableProps, DisableableProps } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import type { ButtonRecipeSizeValue } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
@@ -75,7 +75,13 @@ export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
  * Button variants.
  */
 export type ButtonVariant =
-  | Variant
+  | 'default'
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'gradient'
   | 'outline'
   | 'info'
   | 'text'

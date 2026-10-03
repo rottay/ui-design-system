@@ -16,15 +16,15 @@
 
 import React, { forwardRef } from 'react';
 
-import type { SwitchProps, ToggleSize } from '../../contracts';
+import type { SwitchProps } from '../../contracts';
 import { Toggle } from '../..';
 
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
-  ({ size = 'default', checkedChildren, unCheckedChildren, onChange, onClick, ...rest }, ref) => (
+  ({ size = 'md', checkedChildren, unCheckedChildren, onChange, onClick, ...rest }, ref) => (
     <Toggle
       {...rest}
       ref={ref as never}
-      size={size as ToggleSize}
+      size={size}
       checkedLabel={checkedChildren}
       uncheckedLabel={unCheckedChildren}
       onChange={

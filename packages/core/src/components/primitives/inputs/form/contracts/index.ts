@@ -14,7 +14,7 @@
  * - `FormErrorListProps` - Error display component props
  * - `FormInstance` - Programmatic form control interface
  * - `FormLayout` - Layout options (horizontal, vertical, inline)
- * - `FormSize` - Size variants (small, default, large)
+ * - `FormSize` - Size variants (sm, md, lg)
  * - `FormRule` - Validation rule structure
  * - `FieldData` - Field state structure
  * - `FormListFieldData` - List field metadata
@@ -75,7 +75,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { LegacySizeAlias, Size } from '../../../../../foundation/contracts/kernel/common';
+import type { Size } from '../../../../../foundation/contracts/kernel/common';
 import type { Adapt, FormAdaptation } from '../../../../../foundation/contracts/kernel/adaptation';
 
 /**
@@ -89,12 +89,9 @@ export type FormLayout = 'horizontal' | 'vertical' | 'inline';
 /**
  * Size variants for all form controls within the form.
  * Propagated to child Input, Select, DatePicker, etc. components.
- * @remarks Canonical values are the {@link Size} subset `'sm' | 'md' | 'lg'`. The legacy Ant
- * Design-style spellings (`'small' | 'middle' | 'large' | 'default'`) are accepted for one
- * release via {@link LegacySizeAlias} and are deprecated; prefer the canonical spelling in new
- * code.
+ * @remarks The {@link Size} subset `'sm' | 'md' | 'lg'`.
  */
-export type FormSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
+export type FormSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 /**
  * Text alignment for form field labels in horizontal layout.
@@ -394,7 +391,7 @@ export interface FormErrorListProps {
  * @property {string} layout - Default layout direction ('vertical')
  * @property {string} labelAlign - Default label text alignment ('right')
  * @property {boolean} colon - Show colon after labels (true)
- * @property {string} size - Default control size ('default')
+ * @property {string} size - Default control size ('md')
  * @property {boolean} requiredMark - Show required asterisk (true)
  * @property {string} validateTrigger - Default validation event ('onChange')
  * @property {boolean} preserve - Preserve values on unmount (true)
@@ -404,7 +401,7 @@ export const FORM_DEFAULTS: Partial<FormProps> & { layout: FormLayout } = {
   layout: 'vertical',
   labelAlign: 'right',
   colon: true,
-  size: 'default',
+  size: 'md',
   requiredMark: true,
   validateTrigger: 'onChange',
   preserve: true,

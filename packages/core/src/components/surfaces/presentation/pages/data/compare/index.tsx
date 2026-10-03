@@ -289,7 +289,7 @@ function CompareSurfaceContent({
                     rowKey="key"
                     pagination={false}
                     bordered
-                    size={compact ? "small" : "default"}
+                    size={compact ? "sm" : "md"}
                     rowHoverable={false}
                     locale={{
                       emptyText: tSurface("compare.empty_description"),

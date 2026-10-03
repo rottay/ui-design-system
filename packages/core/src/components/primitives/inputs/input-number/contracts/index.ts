@@ -9,7 +9,7 @@
  *
  * **Exported Types:**
  * - `InputNumberProps` - Main component props interface
- * - `InputNumberSize` - Size variant type ('sm' | 'md' | 'lg', legacy 'small' | 'middle' | 'large' | 'default' accepted for one release)
+ * - `InputNumberSize` - Size variant type ('sm' | 'md' | 'lg')
  * - `InputNumberStatus` - Validation status type (StatusType)
  *
  * **Configuration Constants:**
@@ -39,16 +39,13 @@
  */
 
 import type { ReactNode, CSSProperties, KeyboardEvent } from 'react';
-import type { LegacySizeAlias, Size, StatusType } from '../../../../../foundation/contracts/kernel/common';
+import type { Size, StatusType } from '../../../../../foundation/contracts/kernel/common';
 
 /**
  * Size variants for the InputNumber input.
- * @remarks Canonical values are the {@link Size} subset `'sm' | 'md' | 'lg'`. The legacy Ant
- * Design-style spellings (`'small' | 'middle' | 'large' | 'default'`) are accepted for one
- * release via {@link LegacySizeAlias} and are deprecated; prefer the canonical spelling in new
- * code.
+ * @remarks The {@link Size} subset `'sm' | 'md' | 'lg'`.
  */
-export type InputNumberSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
+export type InputNumberSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 /**
  * Validation status for the InputNumber input.
@@ -161,7 +158,7 @@ export interface InputNumberProps {
  */
 export const INPUT_NUMBER_DEFAULTS: Partial<InputNumberProps> = {
   /** Default size variant */
-  size: 'default',
+  size: 'md',
   /** Default step increment */
   step: 1,
   /** Show step controls by default */
