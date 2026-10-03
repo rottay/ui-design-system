@@ -213,7 +213,7 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
   // The reconstructed object carries only the state fields (no own-prop leak);
   // the cast is a downcast from the widened destructured shape to the union.
   const scaffoldStateProps = {
-    state,
+    state: state ?? (loading ? 'loading' : undefined),
     emptyLabel,
     emptyDescription,
     emptyAction,
@@ -530,7 +530,6 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
       height={height}
       className={['ds-chart-network-graph', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
       skeleton={skeleton}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}

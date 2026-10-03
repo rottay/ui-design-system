@@ -41,7 +41,7 @@ describe('ChartScaffold', () => {
         containerRef={containerRef}
         svgRef={svgRef}
         height={320}
-        loading
+        state="loading"
         loadingLabel="Loading demand"
         ariaLabel="Demand chart"
         ariaDescription="Loading demand chart."

@@ -559,7 +559,7 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
   // The reconstructed object carries only the state fields (no own-prop leak);
   // the cast is a downcast from the widened destructured shape to the union.
   const scaffoldStateProps = {
-    state,
+    state: state ?? (loading ? 'loading' : undefined),
     emptyLabel,
     emptyDescription,
     emptyAction,
@@ -929,7 +929,6 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
       height={height}
       className={['ds-chart-sankey', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
       skeleton={skeleton}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}

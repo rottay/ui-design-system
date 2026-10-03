@@ -57,8 +57,6 @@ interface ChartScaffoldBaseProps {
   height: number;
   className?: string;
   style?: CSSProperties;
-  /** @deprecated Alias for `state='loading'`; an explicit `state` prop wins. */
-  loading?: boolean;
   loadingLabel: string;
   /**
    * Loading presentation variant: renders static placeholder bars instead of
@@ -100,7 +98,7 @@ export type ChartScaffoldProps = ChartScaffoldBaseProps & ChartStateProps;
 export interface ChartScaffoldStateResolution {
   /** Caller-declared state; always wins when present. */
   state?: ChartScaffoldState;
-  /** Legacy loading alias threaded by every family contract. */
+  /** The public chart `loading` flag threaded by every family contract. */
   loading?: boolean;
   /** Number of renderable data items the family received. */
   dataCount: number;
@@ -110,7 +108,7 @@ export interface ChartScaffoldStateResolution {
 
 /**
  * Single authority for the family-side state resolution law: an explicit
- * `state` wins; the deprecated `loading` alias maps to `'loading'`; zero data
+ * `state` wins; the public `loading` flag maps to `'loading'`; zero data
  * activates `'empty'` ONLY when the application supplied `emptyLabel` (the DS
  * hardcodes no copy); otherwise the chart is `'ready'` and empty data remains
  * the renderer surface's `data-empty` concern.
@@ -181,7 +179,7 @@ function renderSummary(summary?: ChartSummaryTable): ReactNode {
  *   containerRef={containerRef}
  *   svgRef={svgRef}
  *   height={400}
- *   loading={isLoading}
+ *   state={isLoading ? 'loading' : 'ready'}
  *   loadingLabel="Loading chart..."
  *   ariaLabel="Monthly revenue"
  *   ariaDescription="Bar chart showing revenue by month"
@@ -196,7 +194,6 @@ export function ChartScaffold({
   height,
   className,
   style,
-  loading = false,
   loadingLabel,
   skeleton = false,
   state,
@@ -276,7 +273,7 @@ export function ChartScaffold({
     }
   };
 
-  const resolvedState: ChartScaffoldState = state ?? (loading ? 'loading' : 'ready');
+  const resolvedState: ChartScaffoldState = state ?? 'ready';
 
   if (resolvedState === 'loading') {
     return (

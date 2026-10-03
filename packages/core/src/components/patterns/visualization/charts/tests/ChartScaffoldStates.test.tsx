@@ -75,16 +75,8 @@ describe('ChartScaffold lifecycle states', () => {
     expect(container.querySelector('svg')).toBeNull();
   });
 
-  it('keeps the legacy loading alias and the explicit loading state equivalent', () => {
+  it('renders the loading state with the loading label and no plot', () => {
     const plot = vi.fn(() => <svg data-testid="plot-svg" />);
-    const legacy = render(
-      <ChartScaffold {...scaffoldRefs()} {...BASE_PROPS} loading plot={plot} />,
-    );
-    const legacyScaffold = legacy.container.querySelector('[data-part="chart-scaffold"]');
-    expect(legacyScaffold).toHaveAttribute('data-state', 'loading');
-    expect(legacy.container.querySelector('[data-part="loading"]')).toHaveTextContent('Loading revenue');
-    legacy.unmount();
-
     const explicit = render(
       <ChartScaffold {...scaffoldRefs()} {...BASE_PROPS} state="loading" plot={plot} />,
     );
@@ -114,7 +106,7 @@ describe('ChartScaffold lifecycle states', () => {
 
   it('does not stamp the skeleton attribute on the default loading presentation', () => {
     const { container } = render(
-      <ChartScaffold {...scaffoldRefs()} {...BASE_PROPS} loading />,
+      <ChartScaffold {...scaffoldRefs()} {...BASE_PROPS} state="loading" />,
     );
 
     const scaffold = container.querySelector('[data-part="chart-scaffold"]');
@@ -138,7 +130,7 @@ describe('resolveChartScaffoldState', () => {
     ).toBe('error');
   });
 
-  it('maps the legacy loading alias to the loading state', () => {
+  it('maps the public loading flag to the loading state', () => {
     expect(resolveChartScaffoldState({ loading: true, dataCount: 5 })).toBe('loading');
   });
 
