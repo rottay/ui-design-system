@@ -622,7 +622,7 @@
 .ds-pattern-page-shell.ds-engine-modern [data-part='header-content'] {
   margin-top: var(--ds-page-shell-section-gap);
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='content'] {
+.ds-pattern-page-shell.ds-engine-modern > [data-part='content'] {
   padding: var(--ds-page-shell-content-padding);
 }
 

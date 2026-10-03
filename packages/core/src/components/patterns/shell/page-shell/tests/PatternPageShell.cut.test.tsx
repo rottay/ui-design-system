@@ -10,12 +10,14 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernPageShell from '../engines/modern';
 import type { PageShellProps } from '../contracts';
 import { pageShellChromeDeriver } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/page-shell';
+import { Button } from '@/components/primitives/inputs/button';
+import { renderWithEngine } from '@tests/support/engine';
 
 const SKIN = readFileSync(
   resolve(
@@ -44,6 +46,49 @@ function buildProps(overrides: Partial<PageShellProps> = {}): PageShellProps {
 }
 
 describe('PatternPageShell — the FAM-11 cut', () => {
+  it.each([false, true])('keeps page padding off composed Button content with loading=%s', async (loading) => {
+    const { container } = renderWithEngine(
+      <ModernPageShell {...buildProps({
+        loading,
+        tabs: undefined,
+        actions: <Button>Page action</Button>,
+        children: (
+          <ModernPageShell title="Nested page" actions={<Button>Nested action</Button>}>
+            <Button>Nested body action</Button>
+          </ModernPageShell>
+        ),
+      })} />,
+      'modern',
+    );
+    await waitFor(() => {
+      expect(container.querySelectorAll('.ds-button.ds-button--modern')).toHaveLength(loading ? 1 : 3);
+    });
+    const contentRules = [...SKIN.matchAll(/([^{}]+)\{([^{}]*)\}/g)].filter(
+      (match) => match[1]!.includes("[data-part='content']"),
+    );
+    expect(contentRules).toHaveLength(1);
+    const selector = contentRules[0]![1]!.trim();
+    expect(selector).toBe(".ds-pattern-page-shell.ds-engine-modern > [data-part='content']");
+    expect(contentRules[0]![2]!.trim()).toBe('padding: var(--ds-page-shell-content-padding);');
+
+    const shells = [...container.querySelectorAll('.ds-pattern-page-shell.ds-engine-modern')];
+    expect(shells).toHaveLength(loading ? 1 : 2);
+    const ownedContent = shells.flatMap((shell) => [...shell.children].filter(
+      (child) => child.matches("[data-part='content']"),
+    ));
+    expect(ownedContent).toHaveLength(loading ? 0 : 2);
+    expect([...container.querySelectorAll(selector)]).toEqual(ownedContent);
+    const buttonContent = container.querySelectorAll('.ds-button.ds-button--modern [data-part="content"]');
+    expect(buttonContent).toHaveLength(loading ? 1 : 3);
+    for (const content of buttonContent) expect(content.matches(selector)).toBe(false);
+    if (loading) {
+      const source = container.querySelector('.ds-skeleton-anatomy [data-part="source"]')!;
+      expect(source).toHaveAttribute('aria-hidden', 'true');
+      expect(source.querySelector('[data-part="header"]')).not.toBeNull();
+      expect(source.querySelector('.ds-button.ds-button--modern')).not.toBeNull();
+    }
+  });
+
   it('decides hover once, in the kernel, for the panel and its identity tile', () => {
     const { container } = render(<ModernPageShell {...buildProps({ icon: <span>I</span> })} />);
     const header = container.querySelector('[data-part="header"]') as HTMLElement;
