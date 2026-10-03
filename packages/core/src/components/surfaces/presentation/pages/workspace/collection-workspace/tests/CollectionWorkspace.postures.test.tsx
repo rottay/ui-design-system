@@ -10,7 +10,7 @@ const columns = [{ key: 'name', header: 'Name', accessorKey: 'name' as const }];
 describe('CollectionWorkspace postures', () => {
   it.each(['hide', 'collapse'] as const)('applies toolbar %s to the legacy toolbar and its controls', async (disposition) => {
     const create = vi.fn();
-    const { container } = renderSurface(<CollectionWorkspaceSurface title="Records" data={data} columns={columns} rowKey="id" controls={{ viewMode: { enabled: true } }} primaryAction={{ label: 'Add record', onClick: create }} postures={{ phone: { regions: { toolbar: disposition } } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    const { container } = renderSurface(<CollectionWorkspaceSurface title="Records" data={data} columns={columns} rowKey="id" controls={{ viewMode: { enabled: true, modes: ['table', 'cards'] } }} primaryAction={{ label: 'Add record', onClick: create }} postures={{ phone: { regions: { toolbar: disposition } } }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
     await screen.findByText('One row');
     await waitFor(() => expect(container.querySelector('.ds-collection-workspace__collection')).not.toBeNull());
     expect(container.querySelector('.ds-pattern-list-toolbar')).toBeNull();
@@ -47,7 +47,7 @@ describe('CollectionWorkspace postures', () => {
   it.each(['legacy', 'premium'] as const)('keeps an explicit app-bar primary action in the %s toolbar', async (mode) => {
     const create = vi.fn();
     const { container } = renderSurface(
-      <CollectionWorkspaceSurface title="Records" data={data} columns={columns} rowKey="id" controls={{ viewMode: { enabled: true } }} {...(mode === 'premium' ? { header: { eyebrow: 'Records', title: 'Records', subtitle: 'Manage records', quickActions: [{ key: 'create', label: 'Add record', onClick: create }] } } : {})} primaryAction={{ key: 'create', label: 'Add record', onClick: create }} postures={{ phone: { primaryAction: 'app-bar' } }} />,
+      <CollectionWorkspaceSurface title="Records" data={data} columns={columns} rowKey="id" controls={{ viewMode: { enabled: true, modes: ['table', 'cards'] } }} {...(mode === 'premium' ? { header: { eyebrow: 'Records', title: 'Records', subtitle: 'Manage records', quickActions: [{ key: 'create', label: 'Add record', onClick: create }] } } : {})} primaryAction={{ key: 'create', label: 'Add record', onClick: create }} postures={{ phone: { primaryAction: 'app-bar' } }} />,
       { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT },
     );
     const button = await screen.findByRole('button', { name: 'Add record' });
@@ -92,7 +92,7 @@ describe('CollectionWorkspace postures', () => {
   it('moves the legacy toolbar primary action exactly once and uses scoped density', async () => {
     const create = vi.fn();
     const { container } = renderSurface(
-      <CollectionWorkspaceSurface title="Records" data={data} columns={columns} rowKey="id" controls={{ viewMode: { enabled: true }, density: { enabled: true, value: 'comfortable' } }} primaryAction={{ label: 'Add record', onClick: create }} postures={{ phone: { primaryAction: 'bottom-bar', density: 'compact' } }} />,
+      <CollectionWorkspaceSurface title="Records" data={data} columns={columns} rowKey="id" controls={{ viewMode: { enabled: true, modes: ['table', 'cards'] }, density: { enabled: true, value: 'comfortable' } }} primaryAction={{ label: 'Add record', onClick: create }} postures={{ phone: { primaryAction: 'bottom-bar', density: 'compact' } }} />,
       { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT },
     );
     const button = await screen.findByRole('button', { name: 'Add record' });
@@ -120,7 +120,7 @@ describe('CollectionWorkspace postures', () => {
   });
 
   it('retains the legacy toolbar action without a posture dock when omitted', async () => {
-    const { container } = renderSurface(<CollectionWorkspaceSurface title="Records" data={data} columns={columns} rowKey="id" controls={{ viewMode: { enabled: true } }} primaryAction={{ label: 'Add record', onClick: vi.fn() }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
+    const { container } = renderSurface(<CollectionWorkspaceSurface title="Records" data={data} columns={columns} rowKey="id" controls={{ viewMode: { enabled: true, modes: ['table', 'cards'] } }} primaryAction={{ label: 'Add record', onClick: vi.fn() }} />, { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT });
     const button = await screen.findByRole('button', { name: 'Add record' });
     expect(button.closest('.ds-pattern-list-toolbar')).not.toBeNull();
     expect(container.querySelector('[data-surface-region]')).toBeNull();
