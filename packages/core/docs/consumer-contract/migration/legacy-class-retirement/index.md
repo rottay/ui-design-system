@@ -1,8 +1,8 @@
 # Guide — the legacy shell/dock class retirement (WO-FAM-11, owner ruling 8)
 
 Cross-app guide. The per-app impact sections live in the
-[`app-bithire`](./app-bithire/index.md) and [`app-evnto`](./app-evnto/index.md)
-packets; [`app-platform`](./app-platform/index.md) measured zero references.
+[`app-bithire`](../app-bithire/index.md) and [`app-evnto`](../app-evnto/index.md)
+packets; [`app-platform`](../app-platform/index.md) measured zero references.
 Release declaration: `.changeset/fam-11-legacy-class-retirement.md` (major).
 
 ## What changed

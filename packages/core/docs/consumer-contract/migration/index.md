@@ -10,7 +10,7 @@ repository (contract §7).
 
 Cross-app guides, applying to every consumer at once:
 
-- [`legacy-class-retirement.md`](./legacy-class-retirement.md) — WO-FAM-11
+- [`legacy-class-retirement/index.md`](./legacy-class-retirement/index.md) — WO-FAM-11
   (owner ruling 8): the `rottay-app-shell*` / `rottay-action-dock*` rename to
   `ds-*`; what changed, who is affected, the exact rename table, verification.
 

@@ -24,7 +24,7 @@ no rule):
 
 WO-FAM-11 class retirement (owner ruling 8): **no impact measured** — zero
 references to `rottay-app-shell*` / `rottay-action-dock*` in the app
-(2026-10-02 sweep). See the [cross-app guide](../legacy-class-retirement.md).
+(2026-10-02 sweep). See the [cross-app guide](../legacy-class-retirement/index.md).
 
 `./commercial` and `./commercial.css` are `forbidden` with **no design-system
 action** (contract §1.5): the package does not export them, `app-platform`

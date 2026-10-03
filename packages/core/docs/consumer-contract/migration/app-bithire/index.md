@@ -25,7 +25,7 @@ Scope note (owner, 2026-09-05): app-bithire is the only APP track in flight.
 | Rule findings when the rule reaches the app | **14** — 11 in `src/**`, 3 in `tests/**` | contract §1.4 |
 | Findings by subpath | `./icons/presets/bithire` 11 · `./tenant-theme-canary-fixtures` 2 · `./hooks-manifest` 1 | contract §1.4 |
 | Hand-written mount files | `src/core/lib/theme/runtime-tenant-theme/{ssr,contracts,artifact-resolution,visual-authority,presentation-profile,provider-guard}` | X-02 |
-| Legacy shell/dock class selectors | 6 selectors in 3 CSS files (`rottay-app-shell*` / `rottay-action-dock*`) | WO-FAM-11 ruling 8 — [guide](../legacy-class-retirement.md), step 7 below |
+| Legacy shell/dock class selectors | 6 selectors in 3 CSS files (`rottay-app-shell*` / `rottay-action-dock*`) | WO-FAM-11 ruling 8 — [guide](../legacy-class-retirement/index.md), step 7 below |
 
 The pinned tarball does **not** contain `@rottay/no-unsanctioned-ds-subpath`
 (its `dist/eslint.js` has zero matches) and still exports `./commercial`,
@@ -263,7 +263,7 @@ Land the renames in the **same pull request** that bumps the app past the
 major. The substitution is class for class (`ds-action-dock*`,
 `ds-app-shell*`), which keeps every rule's specificity byte-equal; the full
 rename table — including the `data-part` each node carries — is in the
-[cross-app guide](../legacy-class-retirement.md). Where a `data-part` exists
+[cross-app guide](../legacy-class-retirement/index.md). Where a `data-part` exists
 on the node (`:44`'s sidebar has `data-part="navigation-sidebar"`), prefer
 the `data-part` selector: the boundaries-imports ratchet already counts these
 three reaches as private-anatomy reaches, and migrating to the public hook

@@ -40,7 +40,7 @@ class rename to `ds-app-shell*` (the file moved to
 old path is stale). The two `dsDeclarations` reads should be re-checked
 against what they meant, since the skin never selected the trigger by class.
 Full table and verification:
-[cross-app guide](../legacy-class-retirement.md).
+[cross-app guide](../legacy-class-retirement/index.md).
 
 ## What will be in the packet when it is written
 

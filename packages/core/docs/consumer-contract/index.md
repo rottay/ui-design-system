@@ -362,7 +362,7 @@ de acciones móvil, del drawer y del sidebar) y app-evnto 7 líneas en un
 archivo de test; app-platform: 0. La tabla de renombrado exacta (con el
 `data-part` de cada nodo), las reglas de la migración y el paso de
 verificación viven en la guía
-[`migration/legacy-class-retirement.md`](migration/legacy-class-retirement.md);
+[`migration/legacy-class-retirement/index.md`](migration/legacy-class-retirement/index.md);
 las secciones de impacto por app, en los paquetes
 [`app-bithire`](migration/app-bithire/index.md) (paso 7) y
 [`app-evnto`](migration/app-evnto/index.md).

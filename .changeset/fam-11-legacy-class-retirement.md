@@ -24,7 +24,7 @@ class for the superseded one, selector by selector, in the same pull request
 that bumps past this major. Specificity is unchanged — one class for one
 class keeps every rule's exact `(a,b,c)`. The full rename table (with the
 `data-part` each node carries) and the verification step live in the
-migration guide, `packages/core/docs/consumer-contract/migration/legacy-class-retirement.md`;
+migration guide, `packages/core/docs/consumer-contract/migration/legacy-class-retirement/index.md`;
 the per-app impact sections live in the `app-bithire` and `app-evnto`
 packets. The rename table in summary:
 
