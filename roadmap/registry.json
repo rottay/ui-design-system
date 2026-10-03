@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-02",
+ "updated": "2026-10-03",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -6290,6 +6290,11 @@
      "at": "2026-10-02 23:51",
      "by": "codex-dt",
      "note": "Posture structural follow-up root39/39gate testsPASS; real reverse/unknownpeer/unrelatedfamily negative drills kept; structurecheckPASS5preexisting findings unchanged,no runtime/baseline edits. Canonical scoped mechanismregion0/compositionscope1 declared as instrument-only corrective,noticonregression. Final iconpackage/build/retention/packproofs remain green; bounded K2.8 readonly closure plan dispatched for concrete remainingdeprecated/D19/reachability/domainowner batches; no completedproof repetitions or wholeWOclosure."
+    },
+    {
+     "at": "2026-10-03 00:33",
+     "by": "codex-dt",
+     "note": "Root-audited S1 e44a58638 retires only three unused policy types, preserves live permissionId fallbacks, and tightens legacy redeclaration refusal: 4/4 boundary tests, exact non-policy bytes unchanged. Root-audited S2 0e8a98b28 retires private test-only icon-profile barrel, preserves SSR/hydration suite at integration owner: writer 80+7 focal tests, root body byteidentity and structure PASS with five preexisting debts unchanged. Current census measured testOnly 7 to 6, other buckets unchanged; no baseline seed/build repeated. Whole RET-01 stays in-progress. Next bounded K2.8 S3 exec95702 removes private visual-authority facade with public ./server exports conserved and cross-owner tests retained; no apps/push."
     }
    ]
   },
