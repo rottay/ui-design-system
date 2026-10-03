@@ -91,8 +91,6 @@ describe('ModernWorkspaceSwitcher — composed controls wear the Button focus si
   });
 
   it('paints no focus indicator of its own on the composed Buttons', () => {
-    // A family outline tied the Button ring rule and drew a solid contour over
-    // the `underline` and `glow` signatures.
     for (const part of BUTTON_PARTS) {
       const named = [...AUTHORED, ...rulesOf(FORCED)].filter((rule) =>
         new RegExp(`\\[data-part='${part}'\\](?![^,]*\\[data-part=)`).test(rule.selector),
@@ -102,6 +100,48 @@ describe('ModernWorkspaceSwitcher — composed controls wear the Button focus si
         expect(paintsFocusIndicator(rule), rule.selector).toBe(false);
       }
     }
+  });
+
+  it('carries the row focus signature on an overlay inset by its reach', () => {
+    const ITEM_FOCUS =
+      ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible)";
+    const itemRules = AUTHORED.filter((rule) => rule.selector.startsWith(ITEM_FOCUS));
+    expect(itemRules.filter(paintsSolidOutline)).toEqual([]);
+    expect(SKIN).not.toContain('--ds-focus-ring-color');
+    expect(itemRules.map((rule) => [rule.selector, declarations(rule.body)])).toEqual([
+      [
+        ITEM_FOCUS,
+        [
+          'position: relative',
+          'outline: var(--ds-focus-ring-width) solid transparent',
+          'outline-offset: calc(-1 * var(--ds-focus-ring-width))',
+        ],
+      ],
+      [
+        `${ITEM_FOCUS}::after`,
+        [
+          'position: absolute',
+          'inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width))',
+          "content: ''",
+          'box-shadow: var(--ds-focus-ring)',
+          'pointer-events: none',
+        ],
+      ],
+    ]);
+    expect(
+      rulesOf(FORCED)
+        .filter((rule) => rule.selector.startsWith(ITEM_FOCUS))
+        .map((rule) => [rule.selector, declarations(rule.body)]),
+    ).toEqual([
+      [
+        ITEM_FOCUS,
+        [
+          'outline: max(2px, var(--ds-focus-ring-width)) solid Highlight',
+          'outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)))',
+        ],
+      ],
+      [`${ITEM_FOCUS}::after`, ['box-shadow: none']],
+    ]);
   });
 
   it('still reveals the gear when it takes keyboard focus', () => {

@@ -497,8 +497,17 @@
 /* The row control now takes REAL focus. Its ring draws INSIDE the box: the
    list scrolls and the panel clips, so an outset ring would be shaved off. */
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
+  position: relative;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: calc(-1 * var(--ds-focus-ring-width));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible)::after {
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  content: '';
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 /* ---- coarse pointers: 44px floors; the gear grows a transparent hit area
@@ -568,6 +577,13 @@
     outline: 1px solid ButtonText;
     outline-offset: -1px;
     background: Canvas;
+  }
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
+  }
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible)::after {
+    box-shadow: none;
   }
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='check'] {
     color: CanvasText;
