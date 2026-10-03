@@ -26,11 +26,11 @@ export type CalloutVariant = 'info' | 'warning' | 'error' | 'success';
 export type CalloutTone = 'info' | 'warning' | 'danger' | 'success';
 
 /**
- * @deprecated Use the kernel {@link TONE_TO_VARIANT} map directly; this export now folds into it
- * and is retained under Callout's name for one release. Every {@link CalloutTone} value mapped
- * to the internal color-token key `variant` has always used ('danger' is the canonical Tone
- * spelling; Callout's internal key has always been 'error'). Callout's own `CalloutVariant`
- * vocabulary ('info' | 'warning' | 'error' | 'success') happens to be a subset of the literal
+ * Family-internal binding of the kernel {@link TONE_TO_VARIANT} map, read by the Classic and
+ * Rustic Callout engines; it is not part of the package's public surface. Every
+ * {@link CalloutTone} value maps to the internal color-token key `variant` has always used
+ * ('danger' is the canonical Tone spelling; Callout's internal key has always been 'error').
+ * Callout's own `CalloutVariant` vocabulary ('info' | 'warning' | 'error' | 'success') is a subset of the literal
  * values `TONE_TO_VARIANT` produces for these four keys, so the kernel map is directly assignable
  * here too despite not sharing the generic `Variant` type.
  */

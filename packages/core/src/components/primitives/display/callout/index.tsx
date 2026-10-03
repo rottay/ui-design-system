@@ -30,7 +30,6 @@ export {
   type CalloutTone,
   CALLOUT_DEFAULTS,
   CALLOUT_COLORS,
-  TONE_TO_CALLOUT_VARIANT,
 } from './contracts';
 
 /** @deprecated Callout is folded into Alert: use `<Alert message description action />`. */
