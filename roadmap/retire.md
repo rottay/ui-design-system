@@ -43,6 +43,15 @@ Lane-wide rules (binding on every WO):
   BitHire preset and the generator's frozen prefix; a zero `pack: bithire` grep
   is not permission to delete them. Final domain ownership must be resolved through
   the preset/corpus producer, with content conservation and a generator check.
+- **AMENDMENT (2026-10-02, resource-isolation review)** —
+  Preserve `./marks/brand` and `./marks/cloud` alongside aggregate `./marks`.
+  They are distinct resource boundaries over the same canonical implementations,
+  not duplicate implementations: the aggregate CommonJS require closure executes
+  both adapters even when a consumer selects one export. Removing the class doors
+  would violate asset-isolation acceptance and synchronous SSR.
+  RET-01-F therefore retires three icon doors (43 to 40 subpaths), not five.
+  Keep the split ESM/CJS fixtures and original retention budgets; availability
+  through the aggregate is not evidence of isolated execution.
 - **Files** — `packages/core/src/components/**`; `packages/core/src/infrastructure/runtime/application/**`; `packages/core/src/entrypoints/**`; `packages/core/package.json`; `packages/core/src/graphics/**`; `.changeset/**`.
 - **Acceptance gate** — Import graph: 0 unreachable modules; `exports` with a censused consumer per subpath; `grep -rn "@deprecated" src | wc -l` = 0; `grep -c '"pack": "bithire"' corpus/manifest.json` = 0.
 - **Do NOT** — Do not delete anything whose census shows a consumer without first migrating that consumer (consumer notes X-01…X-06).

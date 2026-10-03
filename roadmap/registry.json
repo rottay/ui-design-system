@@ -6225,6 +6225,11 @@
      "at": "2026-10-02 19:53",
      "by": "codex-dt",
      "note": "2026-10-02 independent Kimi review R1 found stale suppliers snapshot, missing canonical asset controls and superseded writer report. Narrow disposition: 43->38 consolidation at icons/marks (no legacy door); all original full-facade runtime controls and types now preserved at icons; changeset explicitly retires renderer-free metadata-only module boundary. Original 43->39 RET-01-F report is historical, not acceptance for this candidate. Official supplier generation, current asset-retention measurement and final frozen-diff review still required. No WO closure claimed."
+    },
+    {
+     "at": "2026-10-02 20:27",
+     "by": "codex-dt",
+     "note": "D19two test-only spatialshim barrels removed at3a6a31ebc after rootindependentreview; SpatialPolicy25PASS, publichost unchanged. Frozenpackagereview foundmarkclassisolation regression: preserving ./marks/brand +./marks/cloud overcanonicalowners, map43->40 not38. Threeiconretirements retained; allbudgetsunchanged. Supplier officialwriter172350bytes; censusofficialproducer shrink3doors+2testshimmodules (12consumerless,2previouslyrefusedunreachable,7testonly), nogrowth/missingroots. Current40mirror/publicAPI22tests PASS. Freshbuild/retention/packageproof andfinalreviewstillrequired; wholeRET01 remainsopen."
     }
    ]
   },
@@ -7843,6 +7848,11 @@
      "at": "2026-10-02 20:18",
      "by": "codex-dt",
      "note": "Seven workspace/forms recipes integrated at c102c7629 after independent HOLD -> correction -> PASS: Collection toolbar and adaptive primary suppression, CommandCenter/DecisionInbox loading parity, canonical empty queue collapse, and GuidedDraft template trigger/ARIA follow actual visibility. Corrective run: 36 tests in 6 files PASS; earlier bounded 21 tests cover prior fixes. Integrated adoption: 31/35 recipes (List 1, data/admin 14, experience/operations 8, workspace/forms 7, Wizard 1). Auth, Media, EmptyState and Activity HOLD corrections are in progress; whole INV-06 remains open. Canonical docs committed locally on docs-engineering main at 02800e2; documentation reseal remains a milestone obligation."
+    },
+    {
+     "at": "2026-10-02 20:27",
+     "by": "codex-dt",
+     "note": "All35actual recipe adopters nowintegrated at7f9f11764 after last4HOLD->correction->independentPASS. Lastwindow55tests/4suites PASS; scoped4production dependencyclosures zero diagnostics. Closure audit confirms35uniquepublicrecipes+props+sharedscopes and0production directmediaqueries outside runtime. HOLD onlyexplicitcomputed-style browseracceptance; dedicatedrealcomponentChromiumproof dispatched, not waived. FullINV-only regression window39focalfiles prepared; nowholeDSsuite required for thissubmilestone."
     }
    ],
    "doneAt": null,
