@@ -39,6 +39,13 @@
  * </EngineErrorBoundary>
  * ```
  *
+ * The default fallback renders after an engine failed to load, so it resolves
+ * nothing through the engine loader: it is plain elements styled only by
+ * `--ds-*` custom properties, with catalog copy when an i18n provider is
+ * mounted and English literals otherwise. Raw structural elements here are a
+ * documented exception to the no-raw-HTML rule: a primitive resolved through an
+ * engine could fail again inside the fallback.
+ *
  * @see {@link createEngineComponent} - Uses this boundary internally
  * @module System/Engines/Boundary/EngineErrorBoundary
  * @category System
@@ -46,9 +53,71 @@
  */
 
 import { Component, ErrorInfo, ReactNode } from 'react';
+import type { CSSProperties } from 'react';
 import { errorInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n/composition/translation';
 import { ErrorHandler } from '../../../../error-handling/runtime/handler';
 import { ErrorCategory, ErrorSeverity } from '@/foundation/contracts/runtime/errors';
+
+const FALLBACK_TITLE_KEY = 'errors.generic';
+const FALLBACK_TITLE = 'An unexpected error occurred';
+const FALLBACK_RETRY_KEY = 'components.surfaces.states.retry';
+const FALLBACK_RETRY = 'Try again';
+
+const FALLBACK_ROOT_STYLE: CSSProperties = {
+  padding: 'var(--ds-spacing-4)',
+  color: 'var(--ds-color-error-700, var(--ds-color-error))',
+  background: 'var(--ds-color-error-bg)',
+  borderWidth: 'var(--ds-border-width-thin, var(--ds-border-width-1))',
+  borderStyle: 'solid',
+  borderColor: 'var(--ds-color-error-border, var(--ds-color-error))',
+  borderRadius: 'var(--ds-radius-sm)',
+};
+
+const FALLBACK_DETAIL_STYLE: CSSProperties = {
+  marginTop: 'var(--ds-spacing-2)',
+  fontSize: 'var(--ds-font-size-xs)',
+};
+
+const FALLBACK_ACTIONS_STYLE: CSSProperties = {
+  marginTop: 'var(--ds-spacing-3)',
+};
+
+const FALLBACK_RETRY_STYLE: CSSProperties = {
+  padding: 'var(--ds-spacing-2) var(--ds-spacing-4)',
+  font: 'inherit',
+  fontSize: 'var(--ds-font-size-sm)',
+  cursor: 'pointer',
+  borderWidth: 'var(--ds-border-width-thin, var(--ds-border-width-1))',
+  borderStyle: 'solid',
+  borderColor: 'var(--ds-color-error-border, var(--ds-color-error))',
+  borderRadius: 'var(--ds-radius-sm)',
+  background: 'none',
+  color: 'inherit',
+};
+
+function EngineErrorFallback({ error, onRetry }: { error?: Error; onRetry: () => void }) {
+  const i18n = useOptionalTranslation();
+  const copy = (key: string, literal: string): string => {
+    try {
+      return i18n?.tOr(key, literal) ?? literal;
+    } catch {
+      return literal;
+    }
+  };
+
+  return (
+    <div role="alert" style={FALLBACK_ROOT_STYLE}>
+      <strong>{copy(FALLBACK_TITLE_KEY, FALLBACK_TITLE)}</strong>
+      {error?.message ? <div style={FALLBACK_DETAIL_STYLE}>{error.message}</div> : null}
+      <div style={FALLBACK_ACTIONS_STYLE}>
+        <button type="button" onClick={onRetry} style={FALLBACK_RETRY_STYLE}>
+          {copy(FALLBACK_RETRY_KEY, FALLBACK_RETRY)}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export interface EngineErrorBoundaryProps {
   /** Child components to render */
@@ -115,42 +184,7 @@ export class EngineErrorBoundary extends Component<EngineErrorBoundaryProps, Sta
         return this.props.fallbackRender(this.state.error, this.reset);
       }
 
-      // Default error UI
-      return (
-        <div
-          style={{
-            padding: '16px',
-            color: 'var(--ds-color-error-700)',
-            background: 'var(--ds-color-error-bg)',
-            border: '1px solid var(--ds-color-error-border)',
-            borderRadius: 'var(--ds-radius-sm)',
-          }}
-        >
-          <strong>Engine Error:</strong> Failed to load component.
-          {this.state.error && (
-            <div style={{ marginTop: '8px', fontSize: '12px', opacity: 0.7 }}>
-              {this.state.error.message}
-            </div>
-          )}
-          <div style={{ marginTop: '12px' }}>
-            <button
-              type="button"
-              onClick={this.reset}
-              style={{
-                padding: '6px 16px',
-                fontSize: '13px',
-                cursor: 'pointer',
-                border: '1px solid var(--ds-color-error-border)',
-                borderRadius: 'var(--ds-radius-sm)',
-                background: 'transparent',
-                color: 'inherit',
-              }}
-            >
-              Retry
-            </button>
-          </div>
-        </div>
-      );
+      return <EngineErrorFallback error={this.state.error} onRetry={this.reset} />;
     }
 
     return this.props.children;

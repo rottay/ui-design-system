@@ -23,7 +23,7 @@
  */
 import React from 'react';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { createEngineComponent } from '..';
 import { EngineProvider } from '../../../composition/react/provider';
 import {
@@ -151,10 +151,10 @@ describe('componentPack resolution (custom engine)', () => {
 
     render(renderWithPack('acme-pack', <UnpackedWidget />));
 
-    const boundary = await screen.findByText(/Engine Error:/);
+    const boundary = await screen.findByRole('alert');
     expect(boundary).toBeInTheDocument();
     expect(
-      await screen.findByText(/No custom implementation registered for "UnpackedWidget"/)
+      await within(boundary).findByText(/No custom implementation registered for "UnpackedWidget"/)
     ).toBeInTheDocument();
     expect(screen.queryByTestId('fallback-widget')).toBeNull();
   });

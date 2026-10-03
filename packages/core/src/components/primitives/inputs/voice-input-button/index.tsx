@@ -62,7 +62,11 @@ import { useVoiceInput } from '../../../../infrastructure/runtime/application/au
  * default only applies when neither is given.
  */
 export interface VoiceInputButtonProps extends BaseComponentProps {
-  /** BCP 47 language tag, e.g. 'en-US', 'es-AR'. Default: 'en-US'. */
+  /**
+   * BCP 47 language tag, e.g. 'en-US', 'es-AR'. Default: the regional tag of
+   * the mounted `I18nProvider` locale ('en-US', 'es-ES', 'pt-BR', …); 'en-US'
+   * when none is mounted.
+   */
   lang?: string;
   /** Called with the final transcript when recording stops. */
   onTranscript: (transcript: string) => void;
@@ -74,8 +78,17 @@ export interface VoiceInputButtonProps extends BaseComponentProps {
   ariaLabel?: string;
 }
 
+function regionalSpeechTag(locale: string): string {
+  try {
+    const { language, region } = new Intl.Locale(locale).maximize();
+    return region ? `${language}-${region}` : locale;
+  } catch {
+    return locale;
+  }
+}
+
 export function VoiceInputButton({
-  lang = 'en-US',
+  lang,
   onTranscript,
   size = 'md',
   variant = 'ghost',
@@ -84,6 +97,7 @@ export function VoiceInputButton({
   style,
   ...passthrough
 }: VoiceInputButtonProps) {
+  const i18n = useOptionalTranslation('components');
   const {
     isSupported,
     status,
@@ -92,7 +106,10 @@ export function VoiceInputButton({
     errorMessage,
     startListening,
     stopListening,
-  } = useVoiceInput({ lang, onTranscript });
+  } = useVoiceInput({
+    lang: lang ?? (i18n ? regionalSpeechTag(i18n.locale) : 'en-US'),
+    onTranscript,
+  });
 
   // Component-owned strings: translated when an I18nProvider is mounted, with
   // the documented English fallbacks otherwise (a missing catalog key echoes
@@ -105,7 +122,6 @@ export function VoiceInputButton({
   // The press scale the skin paints is one decision: the kernel stamps it and
   // the skin's `:active` arm is that decision's fallback.
   const trigger = useInteractionState();
-  const i18n = useOptionalTranslation('components');
   const voiceLabel = (key: string, fallback: string): string => {
     const translated = i18n?.t(key);
     return translated && !translated.endsWith(key) ? translated : fallback;
