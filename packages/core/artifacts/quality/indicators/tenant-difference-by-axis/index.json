@@ -1,11 +1,11 @@
 {
   "id": "tenant-difference-by-axis",
   "gate": "axis-difference (`capability-propagation` by axis, WO-EVI-02)",
-  "producedAt": "2026-10-01T17:47:56.331Z",
+  "producedAt": "2026-10-03T07:48:36.031Z",
   "value": "5/6 axes at >= 80 % of declaring families (shape, typography, rhythm, depth, motion; effective-denominator reading 6/6, never the status); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
   "target": "6/6 axes at >= 80 % and the negative test green",
   "met": false,
-  "commit": "bb4009b74a5c6b863397d5d0449e2be976c1db33",
+  "commit": "3096abc9f74257eaf2a201bded4fb1d5dd5b7b88",
   "catalogRevision": "3f42e4ddc61d0e8b",
   "browser": "149.0.7827.55",
   "bundleMode": "fresh",
@@ -23,78 +23,78 @@
   "axes": {
     "shape": {
       "status": "at-threshold",
-      "declared": 215,
-      "effective": 203,
+      "declared": 214,
+      "effective": 202,
       "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
       "populationLaw": null,
       "excludedUnmountable": 6,
       "excludedUnsettled": 6,
-      "notApplicable": 3,
+      "notApplicable": 4,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 80,
-      "worstPercentEffective": 84.7,
+      "worstPercentDeclared": 80.8,
+      "worstPercentEffective": 85.6,
       "effectiveAtThreshold": true,
       "cells": [
         {
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
-          "moved": 172,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 80,
-          "percentEffective": 84.7
+          "moved": 173,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 80.8,
+          "percentEffective": 85.6
         },
         {
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
-          "moved": 172,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 80,
-          "percentEffective": 84.7
+          "moved": 173,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 80.8,
+          "percentEffective": 85.6
         },
         {
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
-          "moved": 172,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 80,
-          "percentEffective": 84.7
+          "moved": 173,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 80.8,
+          "percentEffective": 85.6
         },
         {
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
-          "moved": 172,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 80,
-          "percentEffective": 84.7
+          "moved": 173,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 80.8,
+          "percentEffective": 85.6
         },
         {
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
-          "moved": 172,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 80,
-          "percentEffective": 84.7
+          "moved": 173,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 80.8,
+          "percentEffective": 85.6
         },
         {
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
-          "moved": 172,
-          "declared": 215,
-          "effective": 203,
-          "percentDeclared": 80,
-          "percentEffective": 84.7
+          "moved": 173,
+          "declared": 214,
+          "effective": 202,
+          "percentDeclared": 80.8,
+          "percentEffective": 85.6
         }
       ]
     },
@@ -331,8 +331,8 @@
     },
     "states": {
       "status": "below-threshold",
-      "declared": 155,
-      "effective": 147,
+      "declared": 154,
+      "effective": 146,
       "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
       "populationLaw": {
         "law": "STATES-K",
@@ -344,7 +344,7 @@
       "excludedUnmountable": 3,
       "excludedUnsettled": 5,
       "notApplicable": 0,
-      "unobservable": 9,
+      "unobservable": 8,
       "unobservableFamilies": [
         {
           "family": "button-group",
@@ -375,16 +375,12 @@
           "class": "colour-only"
         },
         {
-          "family": "overlay-modal-compounds",
-          "class": "colour-only"
-        },
-        {
           "family": "table-toolbar",
           "class": "colour-only"
         }
       ],
-      "worstPercentDeclared": 76.1,
-      "worstPercentEffective": 80.3,
+      "worstPercentDeclared": 76.6,
+      "worstPercentEffective": 80.8,
       "effectiveAtThreshold": true,
       "cells": [
         {
@@ -392,60 +388,60 @@
           "theme": "light",
           "measured": true,
           "moved": 118,
-          "declared": 155,
-          "effective": 147,
-          "percentDeclared": 76.1,
-          "percentEffective": 80.3
+          "declared": 154,
+          "effective": 146,
+          "percentDeclared": 76.6,
+          "percentEffective": 80.8
         },
         {
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
           "moved": 118,
-          "declared": 155,
-          "effective": 147,
-          "percentDeclared": 76.1,
-          "percentEffective": 80.3
+          "declared": 154,
+          "effective": 146,
+          "percentDeclared": 76.6,
+          "percentEffective": 80.8
         },
         {
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
           "moved": 118,
-          "declared": 155,
-          "effective": 147,
-          "percentDeclared": 76.1,
-          "percentEffective": 80.3
+          "declared": 154,
+          "effective": 146,
+          "percentDeclared": 76.6,
+          "percentEffective": 80.8
         },
         {
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
           "moved": 118,
-          "declared": 155,
-          "effective": 147,
-          "percentDeclared": 76.1,
-          "percentEffective": 80.3
+          "declared": 154,
+          "effective": 146,
+          "percentDeclared": 76.6,
+          "percentEffective": 80.8
         },
         {
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
           "moved": 118,
-          "declared": 155,
-          "effective": 147,
-          "percentDeclared": 76.1,
-          "percentEffective": 80.3
+          "declared": 154,
+          "effective": 146,
+          "percentDeclared": 76.6,
+          "percentEffective": 80.8
         },
         {
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
           "moved": 118,
-          "declared": 155,
-          "effective": 147,
-          "percentDeclared": 76.1,
-          "percentEffective": 80.3
+          "declared": 154,
+          "effective": 146,
+          "percentDeclared": 76.6,
+          "percentEffective": 80.8
         }
       ]
     },
@@ -552,8 +548,8 @@
       "background-image"
     ],
     "scene": "the non-chromatic scene: root plus states-tagged parts; a colour-only state rule mounts no part, so this is a lower bound",
-    "declared": 155,
-    "effective": 147,
+    "declared": 154,
+    "effective": 146,
     "cells": [
       {
         "vertical": "bithire",
@@ -561,8 +557,8 @@
         "measured": true,
         "moved": 52,
         "restIsolated": 51,
-        "percentDeclared": 33.5,
-        "percentEffective": 35.4,
+        "percentDeclared": 33.8,
+        "percentEffective": 35.6,
         "chromaticOnly": [
           "data-table"
         ],
@@ -636,8 +632,8 @@
         "measured": true,
         "moved": 52,
         "restIsolated": 51,
-        "percentDeclared": 33.5,
-        "percentEffective": 35.4,
+        "percentDeclared": 33.8,
+        "percentEffective": 35.6,
         "chromaticOnly": [
           "data-table"
         ],
@@ -711,8 +707,8 @@
         "measured": true,
         "moved": 52,
         "restIsolated": 51,
-        "percentDeclared": 33.5,
-        "percentEffective": 35.4,
+        "percentDeclared": 33.8,
+        "percentEffective": 35.6,
         "chromaticOnly": [
           "data-table"
         ],
@@ -786,8 +782,8 @@
         "measured": true,
         "moved": 52,
         "restIsolated": 51,
-        "percentDeclared": 33.5,
-        "percentEffective": 35.4,
+        "percentDeclared": 33.8,
+        "percentEffective": 35.6,
         "chromaticOnly": [
           "data-table"
         ],
@@ -861,8 +857,8 @@
         "measured": true,
         "moved": 52,
         "restIsolated": 51,
-        "percentDeclared": 33.5,
-        "percentEffective": 35.4,
+        "percentDeclared": 33.8,
+        "percentEffective": 35.6,
         "chromaticOnly": [
           "data-table"
         ],
@@ -936,8 +932,8 @@
         "measured": true,
         "moved": 52,
         "restIsolated": 51,
-        "percentDeclared": 33.5,
-        "percentEffective": 35.4,
+        "percentDeclared": 33.8,
+        "percentEffective": 35.6,
         "chromaticOnly": [
           "data-table"
         ],
@@ -1006,8 +1002,8 @@
         ]
       }
     ],
-    "worstPercentDeclared": 33.5,
-    "worstPercentEffective": 35.4,
+    "worstPercentDeclared": 33.8,
+    "worstPercentEffective": 35.6,
     "chromaticOnly": [
       "data-table"
     ],
@@ -1027,7 +1023,6 @@
       "list",
       "metrics-chart",
       "operational-ledger",
-      "overlay-modal-compounds",
       "table-toolbar"
     ],
     "controls": {
@@ -1111,7 +1106,7 @@
         "reads": "reference, not a zero: a chromatic reading has no 0 % law"
       }
     },
-    "line": "chromatic-states (reported apart, never a status): 52/155 declared (33.5 %), 52/147 effective (35.4 %), every cell; rest-isolated 51; chromatic-only: data-table; unreached: 6 colour-only families; palette-only non-chromatic 0 on 36/36 | chromatic 115 (reference)"
+    "line": "chromatic-states (reported apart, never a status): 52/154 declared (33.8 %), 52/146 effective (35.6 %), every cell; rest-isolated 51; chromatic-only: data-table; unreached: 5 colour-only families; palette-only non-chromatic 0 on 36/36 | chromatic 115 (reference)"
   },
   "negativeTest": {
     "status": "green",
@@ -1192,7 +1187,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 147,
+            "denominator": 146,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -1241,7 +1236,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 147,
+            "denominator": 146,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -1290,7 +1285,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 147,
+            "denominator": 146,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -1339,7 +1334,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 147,
+            "denominator": 146,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -1388,7 +1383,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 147,
+            "denominator": 146,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -1437,7 +1432,7 @@
             "control": "states.emphasis",
             "axis": "states",
             "moved": 39,
-            "denominator": 147,
+            "denominator": 146,
             "movedIds": [
               "alert",
               "approval-workflow",
