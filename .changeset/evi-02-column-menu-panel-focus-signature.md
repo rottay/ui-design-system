@@ -40,3 +40,11 @@ signature. To replace the signature rather than add to it, also author
 `--ds-column-menu-panel-focus-ring` (`none`, or a `box-shadow` value of your
 own). An authored value of any of the three outranks the derived default in the
 compile and in every emitted scope.
+
+Correction: the Popover that hosts the menu focuses its own surface on open, so
+at keyboard open the panel did not hold focus and its overlay did not paint
+(the Popover surface showed a solid outline instead). The overlay DID paint
+once a control inside the panel took focus, as a second indicator next to that
+control's own. The indicator, and the three hooks above, now belong to the
+Popover surface (see `evi-02-focus-signature-overlays`); the panel keeps its
+overlay for its own focus only, when a script parks focus on the panel itself.

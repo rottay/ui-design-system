@@ -72,6 +72,7 @@ import {
   type DsPortalVariableStyle,
 } from '../../../../runtime/overlay/foundation/portal-theme';
 import { resolveExitFallbackMs } from '@/graphics/motion/react/runtime/presence/duration';
+import { partAttributes } from '@/foundation/behavior';
 
 type OpenReason = 'hover' | 'focus' | 'click' | 'touch';
 
@@ -340,6 +341,10 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     const [mounted, setMounted] = useState(false);
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
     const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
+    // The surface's own focus only: focus is parked on it by script when its
+    // content holds no control, so the platform's answer is the one reading of
+    // whether that hand-off came from the keyboard.
+    const [surfaceFocus, setSurfaceFocus] = useState({ focused: false, focusVisible: false });
     const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr');
     const [language, setLanguage] = useState<string | undefined>();
     const [portalScope, setPortalScope] = useState<PopoverPortalScope>({});
@@ -608,6 +613,14 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       surfaceEl,
     ]);
 
+    // A surface destroyed while focused never blurs, so a close clears its stamp.
+    useEffect(() => {
+      if (isOpen) return;
+      setSurfaceFocus((current) =>
+        current.focused ? { focused: false, focusVisible: false } : current
+      );
+    }, [isOpen]);
+
     // Focus ownership, tracking: remember whether focus lives inside the
     // surface. A blur toward a real destination clears the flag (that focus
     // move stays user-owned); an inert/unmount blur has no destination and
@@ -794,7 +807,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         tabIndex={-1}
         dir={direction}
         lang={language}
-        data-part="surface"
+        {...partAttributes('surface', surfaceFocus)}
         data-open={isOpen ? 'true' : 'false'}
         data-placement={toPhysicalPlacementAttribute(resolvedPlacement, direction)}
         data-preferred-placement={toPhysicalPlacementAttribute(
@@ -817,8 +830,21 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         style={surfaceStyle}
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        onFocus={(event) => {
+          if (event.target === event.currentTarget) {
+            setSurfaceFocus({
+              focused: true,
+              focusVisible: event.currentTarget.matches(':focus-visible'),
+            });
+          }
+          handleFocus();
+        }}
+        onBlur={(event) => {
+          if (event.target === event.currentTarget) {
+            setSurfaceFocus({ focused: false, focusVisible: false });
+          }
+          handleBlur(event);
+        }}
         onAnimationEnd={(event) => {
           if (event.target !== event.currentTarget || isOpen) return;
           if (exitTimeoutRef.current) {

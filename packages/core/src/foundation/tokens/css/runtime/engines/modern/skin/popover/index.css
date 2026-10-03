@@ -252,9 +252,39 @@
   border-radius: inherit;
 }
 
-.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface']:focus-within {
-  outline: var(--ds-focus-ring-width) var(--ds-edge-standard-style) var(--ds-focus-ring-color);
+/* The surface takes focus itself when its content holds no control. It wears
+   the tenant focus signature in front of its elevation; the signature shares
+   box-shadow with that elevation, and a `none` elevation would void the list,
+   so each recipe composes only where its own elevation is stated. */
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
+}
+@container not (style(--ds-popover-bordered-shadow: none) or style(--ds-elevation-3: none)) {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface']:not(:is([data-variant='minimal'], [data-variant='inverse'], [data-variant='rich'])):is([data-state~='focus-visible'], :focus-visible) {
+    box-shadow: var(--ds-focus-ring), var(--ds-popover-shadow-current, var(--ds-popover-bordered-shadow, var(--ds-elevation-3)));
+  }
+}
+@container not (style(--ds-popover-minimal-shadow: none) or style(--ds-shadow-md: none)) {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-variant='minimal']:is([data-state~='focus-visible'], :focus-visible) {
+    box-shadow: var(--ds-focus-ring), var(--ds-popover-shadow-current);
+  }
+}
+@container not (style(--ds-popover-inverse-shadow: none) or style(--ds-shadow-xl: none)) {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-variant='inverse']:is([data-state~='focus-visible'], :focus-visible) {
+    box-shadow: var(--ds-focus-ring), var(--ds-popover-shadow-current);
+  }
+}
+@container not (style(--ds-popover-rich-shadow: none) or style(--ds-shadow-xl: none)) {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-variant='rich']:is([data-state~='focus-visible'], :focus-visible) {
+    box-shadow: var(--ds-focus-ring), var(--ds-popover-shadow-current);
+  }
+}
+@container not style(--ds-elevation-5: none) {
+  .ds-modal.ds-modal--modern .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface']:is([data-state~='focus-visible'], :focus-visible) {
+    box-shadow: var(--ds-focus-ring), var(--_ds-popover-layer-step-shadow);
+  }
 }
 
 /* The arrow carries the surface's own fill and lift so the joint never seams. */
@@ -393,6 +423,12 @@
   }
 
   .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface']::after {
+    box-shadow: none;
+  }
+
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;
   }
 

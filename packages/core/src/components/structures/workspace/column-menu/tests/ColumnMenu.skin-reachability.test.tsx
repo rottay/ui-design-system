@@ -110,7 +110,11 @@ describe("ColumnMenu skin reachability", () => {
     for (const [, name] of css.matchAll(/container-name:\s*([\w-]+)/g)) declared.add(name);
     for (const [, name] of css.matchAll(/container:\s*([\w-]+)\s*\//g)) declared.add(name);
 
-    const queried = [...css.matchAll(/@container\s+([\w-]+)\s*\(/g)].map(([, name]) => name);
+    // A style query names no container: it reads the nearest ancestor's own
+    // custom properties, so only the named, sized queries are held to this.
+    const queried = [...css.matchAll(/@container\s+([\w-]+)\s*\(/g)]
+      .map(([, name]) => name)
+      .filter((name) => name !== "not" && name !== "style");
     expect(queried.length).toBeGreaterThan(0);
     for (const name of queried) expect(declared, name).toContain(name);
 
@@ -120,8 +124,9 @@ describe("ColumnMenu skin reachability", () => {
 
   it("every part the narrow posture names is stamped by the family", async () => {
     await openMenu();
-    const rules = readSkinRules("column-menu").filter((rule) =>
-      rule.conditions.includes("@container")
+    // The focus rules gated on a style query match only a focused surface.
+    const rules = readSkinRules("column-menu").filter(
+      (rule) => rule.conditions.includes("@container") && !rule.selector.includes(":focus-visible")
     );
     expect(rules.length).toBeGreaterThan(0);
     for (const rule of rules) {

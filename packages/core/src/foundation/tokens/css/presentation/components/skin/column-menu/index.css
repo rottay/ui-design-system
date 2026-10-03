@@ -110,13 +110,57 @@
   outline: none;
 }
 
-/* One decision, with its native fallback: the panel's ring is the kernel's
-   answer, and `:focus-visible` is what the kernel falls through to (F-37).
-   The surface clips the panel, so the tenant's focus signature rides an
-   overlay inset by its own reach; the outline is transparent until a tenant
-   states one. */
+/* The Popover surface holds focus when the menu opens from the keyboard, so
+   the surface wears the tenant's focus signature, in front of its elevation.
+   The two share box-shadow: a `none` on either side would void the list, so
+   they compose only where both are stated. The outline is transparent until
+   a tenant states one. */
+.ds-structure.ds-column-menu-panel[data-part="surface"]:is([data-state~="focus-visible"], :focus-visible) {
+  outline: var(
+    --ds-column-menu-panel-focus-outline,
+    var(--ds-focus-ring-width) solid transparent
+  );
+  outline-offset: var(--ds-column-menu-panel-focus-outline-offset, -2px);
+  box-shadow: var(--ds-column-menu-panel-focus-ring, var(--ds-focus-ring));
+}
+@container not (style(--ds-column-menu-panel-focus-ring: none) or style(--ds-column-menu-panel-shadow: none) or style(--ds-material-overlay-shadow: none) or style(--ds-elevation-4: none)) {
+  .ds-structure.ds-column-menu-panel[data-part="surface"]:is([data-state~="focus-visible"], :focus-visible) {
+    box-shadow:
+      var(--ds-column-menu-panel-focus-ring, var(--ds-focus-ring)),
+      var(
+      --ds-column-menu-panel-shadow,
+      var(
+        --ds-material-overlay-shadow,
+        var(
+          --ds-elevation-4,
+          0 24px 64px
+            color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)
+        )
+      )
+    );
+  }
+}
+@container style(--ds-column-menu-panel-focus-ring: none) {
+  .ds-structure.ds-column-menu-panel[data-part="surface"]:is([data-state~="focus-visible"], :focus-visible) {
+    box-shadow: var(
+      --ds-column-menu-panel-shadow,
+      var(
+        --ds-material-overlay-shadow,
+        var(
+          --ds-elevation-4,
+          0 24px 64px
+            color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)
+        )
+      )
+    );
+  }
+}
+
+/* The panel itself, when a script parks focus on it: the surface clips it, so
+   the signature rides an overlay inset by its own reach, only while the panel
+   itself holds focus. One decision, with its native fallback (F-37). */
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible) {
+  [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus)) {
   outline: var(
     --ds-column-menu-panel-focus-outline,
     var(--ds-focus-ring-width) solid transparent
@@ -125,7 +169,7 @@
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible)::after {
+  [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after {
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
   z-index: var(--ds-z-index-relative-above, 1);
@@ -506,14 +550,20 @@
     outline-offset: -2px;
   }
 
+  .ds-structure.ds-column-menu-panel[data-part="surface"]:is([data-state~="focus-visible"], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-column-menu-panel-focus-outline-offset, -2px);
+    box-shadow: none;
+  }
+
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible) {
+    [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus)) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-column-menu-panel-focus-outline-offset, -2px);
   }
 
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible)::after {
+    [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after {
     display: none;
   }
 }

@@ -52,8 +52,12 @@ const SKIN = readFileSync(
   .replace(/\( /g, "(")
   .replace(/ \)/g, ")");
 
+const SURFACE_FOCUS =
+  '.ds-structure.ds-column-menu-panel[data-part="surface"]:is([data-state~="focus-visible"], :focus-visible)';
 const PANEL_FOCUS =
-  '.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible)';
+  '.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))';
+const PANEL_ELEVATION =
+  "var(--ds-column-menu-panel-shadow, var(--ds-material-overlay-shadow, var(--ds-elevation-4, 0 24px 64px color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent))))";
 
 /** The declarations of every rule whose selector is exactly `selector`, in `css`. */
 function declarationsOf(css: string, selector: string): string[][] {
@@ -128,7 +132,31 @@ describe("chrome/column-menu", () => {
     expect(columnMenuChromeDeriver.produces).toContain("--ds-column-menu-panel-focus-ring");
   });
 
-  it("carries the signature on an overlay inside the clipping surface and keeps both outline hooks read", () => {
+  it("wears the signature on the Popover surface that holds focus, in front of its elevation, and keeps every hook read", () => {
+    expect(declarationsOf(AUTHORED, SURFACE_FOCUS)).toEqual([
+      [
+        "outline: var(--ds-column-menu-panel-focus-outline, var(--ds-focus-ring-width) solid transparent)",
+        "outline-offset: var(--ds-column-menu-panel-focus-outline-offset, -2px)",
+        "box-shadow: var(--ds-column-menu-panel-focus-ring, var(--ds-focus-ring))",
+      ],
+      [`box-shadow: var(--ds-column-menu-panel-focus-ring, var(--ds-focus-ring)), ${PANEL_ELEVATION}`],
+      [`box-shadow: ${PANEL_ELEVATION}`],
+    ]);
+    // A `none` on either side voids the shared list, so the two compose only where both are stated.
+    expect(SKIN).toContain(
+      "@container not (style(--ds-column-menu-panel-focus-ring: none) or style(--ds-column-menu-panel-shadow: none) or style(--ds-material-overlay-shadow: none) or style(--ds-elevation-4: none))"
+    );
+    expect(SKIN).toContain("@container style(--ds-column-menu-panel-focus-ring: none)");
+    expect(declarationsOf(FORCED, SURFACE_FOCUS)).toEqual([
+      [
+        "outline: max(2px, var(--ds-focus-ring-width)) solid Highlight",
+        "outline-offset: var(--ds-column-menu-panel-focus-outline-offset, -2px)",
+        "box-shadow: none",
+      ],
+    ]);
+  });
+
+  it("carries the signature on an overlay inside the clipping surface for the panel's own focus only", () => {
     expect(FORCED_START).toBeGreaterThan(-1);
     expect(FORCED_END).toBeGreaterThan(FORCED_START);
 
