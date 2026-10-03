@@ -197,11 +197,10 @@
   --ds-button-ghost-bg-active: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card));
   /* The ring recipe rides the same channel block: the Button applies
      --ds-button-focus-ring only when IT decides focus is visible, so a second
-     :focus-visible here would gate a channel that is already inert until then
-     (the inset highlight survives so the ring keeps the family signature). */
-  --ds-button-focus-ring:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent),
-    0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+     :focus-visible here would gate a channel that is already inert until then.
+     The ring is the tenant's focus signature; the chip's resting highlight
+     composes under it so focus never drops the material. */
+  --ds-button-focus-ring: var(--ds-focus-ring), var(--ds-button-ghost-shadow);
 }
 
 .ds-structure.ds-field-filters-panel [data-part='preset-chip-icon'] {

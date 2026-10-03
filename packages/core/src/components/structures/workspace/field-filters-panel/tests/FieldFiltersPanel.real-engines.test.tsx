@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { FieldFiltersPanel } from '..';
 import type { FieldFilterDefinition, FieldFilterPreset, FieldFilterVisual } from '..';
@@ -158,6 +159,29 @@ describe('FieldFiltersPanel skin — structural contract', () => {
       );
     }
   });
+
+  it('hands the preset chip the tenant focus signature over its resting highlight', () => {
+    const declarations = rules
+      .filter(({ selector }) => selector.endsWith("[data-part='preset-chip']"))
+      .flatMap(({ body }) => body.split(';').map((declaration) => declaration.trim()));
+    const ring = declarations.filter((declaration) =>
+      declaration.startsWith('--ds-button-focus-ring:')
+    );
+    expect(ring, 'the chip states its ring channel exactly once').toHaveLength(1);
+    const value = ring[0]!.slice('--ds-button-focus-ring:'.length).replace(/\s+/g, ' ').trim();
+    expect(value).toBe('var(--ds-focus-ring), var(--ds-button-ghost-shadow)');
+    expect(
+      declarations.some((declaration) => declaration.startsWith('--ds-button-ghost-shadow:')),
+      'the composed highlight is the one the chip rests on'
+    ).toBe(true);
+  });
+
+  it('owns no focus recipe, focus gate or outline of its own', () => {
+    const css = SKIN.replace(/\/\*[\s\S]*?\*\//g, '');
+    expect(css).not.toMatch(/--ds-focus-ring-(?:width|color|offset)/);
+    expect(css).not.toContain(':focus-visible');
+    expect(css).not.toMatch(/(?:^|[\s;{])outline(?:-[a-z]+)?\s*:/);
+  });
 });
 
 const FILTERS: FieldFilterDefinition[] = [
@@ -276,6 +300,38 @@ describe.each(['modern'] as const)(
           expect(el.style.color, `${part} (Box) paints color inline`).toBe('');
         });
       }
+    });
+
+    it('reaches each preset chip by keyboard as a composed Button that wears the ring channel', async () => {
+      const { container } = renderWithEngine(
+        <FieldFiltersPanel
+          filters={FILTERS}
+          presets={PRESETS}
+          values={VALUES}
+          onChange={() => undefined}
+        />,
+        engine
+      );
+      await waitForComposedContent(waitFor, container, '[data-part="preset-chip"]', PRESETS.length);
+
+      const chips = ownParts(container, 'preset-chip');
+      expect(chips).toHaveLength(PRESETS.length);
+      const user = userEvent.setup();
+      const reached = new Set<Element>();
+      for (let step = 0; step < 40 && reached.size < chips.length; step += 1) {
+        await user.tab();
+        const active = container.ownerDocument.activeElement;
+        if (active && chips.includes(active as HTMLElement)) reached.add(active);
+      }
+      expect(reached.size, 'every preset chip is a tab stop').toBe(chips.length);
+
+      chips.forEach((chip) => {
+        expect(chip.tagName).toBe('BUTTON');
+        expect(chip.matches('.ds-button.ds-button--modern[data-variant="ghost"]')).toBe(true);
+        expect(chip.style.boxShadow, 'the ring is never painted inline').toBe('');
+        expect(chip.style.outline, 'the ring is never an inline outline').toBe('');
+        expect(chip.style.getPropertyValue('--ds-button-focus-ring')).toBe('');
+      });
     });
   }
 );
