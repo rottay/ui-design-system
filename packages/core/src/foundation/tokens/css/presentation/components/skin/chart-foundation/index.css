@@ -496,8 +496,9 @@
   [data-part='data-pagination'] button:focus-visible,
 .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
   [data-part='data-table-scroll']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-focus, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 
 .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
@@ -610,6 +611,19 @@
     background: Canvas;
     color: CanvasText;
     forced-color-adjust: auto;
+  }
+
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-trigger']:focus-visible,
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-action']:focus-visible,
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-pagination'] button:focus-visible,
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-table-scroll']:focus-visible {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 }
 
