@@ -1,0 +1,1072 @@
+{
+  "schema": 1,
+  "audit": {
+    "date": "2026-10-03",
+    "auditor": "independent auditor (claude-fable-5-1)",
+    "method": "read-only re-derivation against the three sibling checkouts: `git -C <app> show <commit>:<path> | shasum -a 256`, first needle line and its sha256, canonical-JSON row digest of the ledger row, receipt integrity digest, `git merge-base --is-ancestor <commit> origin/main`",
+    "dsCommit": "3b517fd13675aae75dd95590c74e23ca2de5e83f",
+    "receiptsFile": "packages/core/contracts/package/deprecations/receipts/index.json",
+    "receiptsFileDigest": "sha256:b4bfe79386fd978c076f7f14330064ff44f2bbecd916987c5bfdc1815cf69944",
+    "ledgerDigest": "sha256:b690543b10a1150de17e7da20a5dec6eba26516a5ea9ee1eed7de369d4f37e67",
+    "apps": {
+      "app-bithire": {
+        "origin": "https://github.com/rottay/app-bithire.git",
+        "head": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+        "originMain": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+        "fetchDryRun": "no new remote commits"
+      },
+      "app-evnto": {
+        "origin": "https://github.com/rottay/app-evnto.git",
+        "head": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
+        "originMain": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
+        "fetchDryRun": "no new remote commits"
+      },
+      "app-platform": {
+        "origin": "https://github.com/rottay/app-platform.git",
+        "head": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
+        "originMain": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
+        "fetchDryRun": "no new remote commits"
+      }
+    },
+    "verified": 28,
+    "failed": 0
+  },
+  "receipts": [
+    {
+      "index": 0,
+      "row": "src/components/patterns/data/data-table/contracts/index.ts#DataTablePatternProps.mobileBreakpoint",
+      "kind": "consumer",
+      "path": "../app-bithire/src/ui/tables/data-table/index.tsx",
+      "needle": "mobileBreakpoint={mobileBreakpoint}",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:964bddda086627f1056c1d5fca713264cd9da395e980ebbfc7b206528b7a9d52",
+        "matchLine": 1330,
+        "matchDigest": "sha256:4e612bb0b6483cc83dc07c8a4b179aace6d92879fbbb76a91e5015200284b672",
+        "rowDigest": "sha256:7b8b5311d2461728b6f81a81c1bad956276c1b7aa9c2f5a547f09e2706fd17eb",
+        "integrity": "sha256:d7ec570c49dea1810ca4484b99439241bffdcb8202bf5d58c2171b7ad88b442d",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:964bddda086627f1056c1d5fca713264cd9da395e980ebbfc7b206528b7a9d52",
+        "matchLine": 1330,
+        "matchDigest": "sha256:4e612bb0b6483cc83dc07c8a4b179aace6d92879fbbb76a91e5015200284b672",
+        "rowDigest": "sha256:7b8b5311d2461728b6f81a81c1bad956276c1b7aa9c2f5a547f09e2706fd17eb",
+        "integrity": "sha256:d7ec570c49dea1810ca4484b99439241bffdcb8202bf5d58c2171b7ad88b442d",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 1,
+      "row": "src/components/primitives/display/badge/contracts/index.ts#BadgeVariant",
+      "kind": "consumer",
+      "path": "../app-bithire/src/features/interviews/model/domain/workflows/feedback/listing/index.ts",
+      "needle": "import type { BadgeVariant } from \"@rottay/design-system\";",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:0d5c94185435a0e1d8e04fc3857d37c0f5108381f2c4fa44eaf0fc32fc2a8fc6",
+        "matchLine": 1,
+        "matchDigest": "sha256:d48103b2adc94afa308cbb3e03318edd95fd2956db525f15bb109ccfb1a6f7c6",
+        "rowDigest": "sha256:b09251def9a6268aa3778e0a2127ecc4e983a1caf726a635a3ca9d7fc1f6319a",
+        "integrity": "sha256:0dfea835e8c725f6c77e1cded6cddb61aa375843e7bedce89903fa0f1bf9c96d",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:0d5c94185435a0e1d8e04fc3857d37c0f5108381f2c4fa44eaf0fc32fc2a8fc6",
+        "matchLine": 1,
+        "matchDigest": "sha256:d48103b2adc94afa308cbb3e03318edd95fd2956db525f15bb109ccfb1a6f7c6",
+        "rowDigest": "sha256:b09251def9a6268aa3778e0a2127ecc4e983a1caf726a635a3ca9d7fc1f6319a",
+        "integrity": "sha256:0dfea835e8c725f6c77e1cded6cddb61aa375843e7bedce89903fa0f1bf9c96d",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 2,
+      "row": "src/components/primitives/display/badge/contracts/index.ts#BadgeBaseProps.variant",
+      "kind": "consumer",
+      "path": "../app-bithire/src/vertical/showcase/applications/ai-recommendation-variants/index.tsx",
+      "needle": "<Badge variant=\"secondary\" className=\"rt-showcase-ai-rec-c__ai-badge\">",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:46886c161e9bcdfd1ef00443c7c9498f5c7ff8bc797f9b146e70ff2e2df118d3",
+        "matchLine": 269,
+        "matchDigest": "sha256:b5dd2cc4e1ba69ece3fb5d3c433c23b24f6d144fc06a18c9387826fd352bb3a6",
+        "rowDigest": "sha256:3dfa478f9addefe774f53776124d611d56677c6ceb5a5c4f5458ce20acd4b9fb",
+        "integrity": "sha256:073cf04353b73c4977453f46108cdcf1efaa35fe6cafadece47f75efd495316d",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:46886c161e9bcdfd1ef00443c7c9498f5c7ff8bc797f9b146e70ff2e2df118d3",
+        "matchLine": 269,
+        "matchDigest": "sha256:b5dd2cc4e1ba69ece3fb5d3c433c23b24f6d144fc06a18c9387826fd352bb3a6",
+        "rowDigest": "sha256:3dfa478f9addefe774f53776124d611d56677c6ceb5a5c4f5458ce20acd4b9fb",
+        "integrity": "sha256:073cf04353b73c4977453f46108cdcf1efaa35fe6cafadece47f75efd495316d",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 3,
+      "row": "src/components/primitives/display/badge/contracts/index.ts#BadgeBaseProps.overflowCount",
+      "kind": "consumer",
+      "path": "../app-platform/src/features/organization/admin/surface/screens/sessions/overview/index.tsx",
+      "needle": "<Badge count={anomalies.length} overflowCount={99}>",
+      "repository": "https://github.com/rottay/app-platform.git",
+      "commit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
+      "recorded": {
+        "fileDigest": "sha256:00fc916f558614e9b04941c735290b6735e441898daaaab08463eac1383689da",
+        "matchLine": 815,
+        "matchDigest": "sha256:94296269cd94c44ed37c8df4c5aa699c270f6881f45df013dd8c69184cc729ec",
+        "rowDigest": "sha256:9cd852a068f53a84d0cdbcca89b5daf2fb48511c2d421b87ca78366ae37f0c44",
+        "integrity": "sha256:efbf879effec7221404c79adc9365005820e570aef9a8e01660e30bb0347d642",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:00fc916f558614e9b04941c735290b6735e441898daaaab08463eac1383689da",
+        "matchLine": 815,
+        "matchDigest": "sha256:94296269cd94c44ed37c8df4c5aa699c270f6881f45df013dd8c69184cc729ec",
+        "rowDigest": "sha256:9cd852a068f53a84d0cdbcca89b5daf2fb48511c2d421b87ca78366ae37f0c44",
+        "integrity": "sha256:efbf879effec7221404c79adc9365005820e570aef9a8e01660e30bb0347d642",
+        "appHeadAtAudit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 4,
+      "row": "src/components/primitives/display/callout/contracts/index.ts#CalloutVariant",
+      "kind": "consumer",
+      "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
+      "needle": "<Callout variant=\"warning\" title=\"Offline\"",
+      "repository": "https://github.com/rottay/app-evnto.git",
+      "commit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
+      "recorded": {
+        "fileDigest": "sha256:6dcc2b7ed349f9c2cbf787144a9dea77a86c1fd65bd6713198bc78ae1c24fe77",
+        "matchLine": 779,
+        "matchDigest": "sha256:38da4ff3b7b22c404a64382c351a5d9af4e9fb60539ff5e72e4f193359dcca6d",
+        "rowDigest": "sha256:63c13a34a01ef33605c45bf50118e5cb9e86defa2872304d67f47e7c1bf0e2ef",
+        "integrity": "sha256:99d0610f254eb64ae0c49fa9cb85659a3c3b715f2ba19781108f3eeddbc0fa5c",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:6dcc2b7ed349f9c2cbf787144a9dea77a86c1fd65bd6713198bc78ae1c24fe77",
+        "matchLine": 779,
+        "matchDigest": "sha256:38da4ff3b7b22c404a64382c351a5d9af4e9fb60539ff5e72e4f193359dcca6d",
+        "rowDigest": "sha256:63c13a34a01ef33605c45bf50118e5cb9e86defa2872304d67f47e7c1bf0e2ef",
+        "integrity": "sha256:99d0610f254eb64ae0c49fa9cb85659a3c3b715f2ba19781108f3eeddbc0fa5c",
+        "appHeadAtAudit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 5,
+      "row": "src/components/primitives/display/callout/contracts/index.ts#CalloutProps.variant",
+      "kind": "consumer",
+      "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
+      "needle": "<Callout variant=\"warning\" title=\"Offline\"",
+      "repository": "https://github.com/rottay/app-evnto.git",
+      "commit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
+      "recorded": {
+        "fileDigest": "sha256:6dcc2b7ed349f9c2cbf787144a9dea77a86c1fd65bd6713198bc78ae1c24fe77",
+        "matchLine": 779,
+        "matchDigest": "sha256:38da4ff3b7b22c404a64382c351a5d9af4e9fb60539ff5e72e4f193359dcca6d",
+        "rowDigest": "sha256:77b79c76509514fbeaa6be4e62131e2f9b96eacbbfa575520617d4d7928df2f2",
+        "integrity": "sha256:1ffb97394ad9b3e8c1be15b103f57d41e2a0e32b9fcff0b5060d3953284e2b43",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:6dcc2b7ed349f9c2cbf787144a9dea77a86c1fd65bd6713198bc78ae1c24fe77",
+        "matchLine": 779,
+        "matchDigest": "sha256:38da4ff3b7b22c404a64382c351a5d9af4e9fb60539ff5e72e4f193359dcca6d",
+        "rowDigest": "sha256:77b79c76509514fbeaa6be4e62131e2f9b96eacbbfa575520617d4d7928df2f2",
+        "integrity": "sha256:1ffb97394ad9b3e8c1be15b103f57d41e2a0e32b9fcff0b5060d3953284e2b43",
+        "appHeadAtAudit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 6,
+      "row": "src/components/primitives/display/callout/index.tsx#Callout",
+      "kind": "consumer",
+      "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
+      "needle": "<Callout variant=\"warning\" title=\"Offline\"",
+      "repository": "https://github.com/rottay/app-evnto.git",
+      "commit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
+      "recorded": {
+        "fileDigest": "sha256:6dcc2b7ed349f9c2cbf787144a9dea77a86c1fd65bd6713198bc78ae1c24fe77",
+        "matchLine": 779,
+        "matchDigest": "sha256:38da4ff3b7b22c404a64382c351a5d9af4e9fb60539ff5e72e4f193359dcca6d",
+        "rowDigest": "sha256:075059296bda904c6b26fccac26f6aad4cfe48200d878af48aebb194eaa8d38c",
+        "integrity": "sha256:bee982760ae4c53a5fbfc26fa759be5e86443da6bddeaffc2962248a9db5281f",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:6dcc2b7ed349f9c2cbf787144a9dea77a86c1fd65bd6713198bc78ae1c24fe77",
+        "matchLine": 779,
+        "matchDigest": "sha256:38da4ff3b7b22c404a64382c351a5d9af4e9fb60539ff5e72e4f193359dcca6d",
+        "rowDigest": "sha256:075059296bda904c6b26fccac26f6aad4cfe48200d878af48aebb194eaa8d38c",
+        "integrity": "sha256:bee982760ae4c53a5fbfc26fa759be5e86443da6bddeaffc2962248a9db5281f",
+        "appHeadAtAudit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 7,
+      "row": "src/components/primitives/display/tag/contracts/index.ts#TagVariant",
+      "kind": "consumer",
+      "path": "../app-bithire/src/vertical/surface/shell/header/index.tsx",
+      "needle": "<Tag size=\"sm\" variant=\"success\" outlined>",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:cacb520e954379a770de0223f793331638368bb27dac450d67c448933899c558",
+        "matchLine": 541,
+        "matchDigest": "sha256:251624312b07d9cc222dfbbed5d1f58806cbbf228f380daa629de89e38527e4a",
+        "rowDigest": "sha256:81d97a408712773530f0df36a96e9066e4c9173ce50046015f9a2eb35502e334",
+        "integrity": "sha256:dd7ecd6636c6c43e428ab747be84a56b41eee28d8ed921915270f837e24d63ea",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:cacb520e954379a770de0223f793331638368bb27dac450d67c448933899c558",
+        "matchLine": 541,
+        "matchDigest": "sha256:251624312b07d9cc222dfbbed5d1f58806cbbf228f380daa629de89e38527e4a",
+        "rowDigest": "sha256:81d97a408712773530f0df36a96e9066e4c9173ce50046015f9a2eb35502e334",
+        "integrity": "sha256:dd7ecd6636c6c43e428ab747be84a56b41eee28d8ed921915270f837e24d63ea",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 8,
+      "row": "src/components/primitives/display/tag/contracts/index.ts#TagProps.variant",
+      "kind": "consumer",
+      "path": "../app-bithire/src/vertical/surface/shell/header/index.tsx",
+      "needle": "<Tag size=\"sm\" variant=\"success\" outlined>",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:cacb520e954379a770de0223f793331638368bb27dac450d67c448933899c558",
+        "matchLine": 541,
+        "matchDigest": "sha256:251624312b07d9cc222dfbbed5d1f58806cbbf228f380daa629de89e38527e4a",
+        "rowDigest": "sha256:fa2813d94ab917b70fd75e7fbf4801c8e9c6c80f65937bf0138ce97d262c9648",
+        "integrity": "sha256:2bdecb3c9abbdd74ad70209b48d97ec0831592908a0dff98cd0a775011c20de9",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:cacb520e954379a770de0223f793331638368bb27dac450d67c448933899c558",
+        "matchLine": 541,
+        "matchDigest": "sha256:251624312b07d9cc222dfbbed5d1f58806cbbf228f380daa629de89e38527e4a",
+        "rowDigest": "sha256:fa2813d94ab917b70fd75e7fbf4801c8e9c6c80f65937bf0138ce97d262c9648",
+        "integrity": "sha256:2bdecb3c9abbdd74ad70209b48d97ec0831592908a0dff98cd0a775011c20de9",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 9,
+      "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'left'",
+      "kind": "consumer",
+      "path": "../app-bithire/src/ui/forms/create/page-shell/components/index.tsx",
+      "needle": "placement=\"left\"",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:3b2b991fd8608a5e82d94c98624f88725a92b115148ec854270c1b3f31e93be8",
+        "matchLine": 295,
+        "matchDigest": "sha256:fda8603805c8d87aad53038cd99a2b6f0e582309cae18ffa4e307cf8e55c6810",
+        "rowDigest": "sha256:f1cd38f053680b61442d14c89fe2ca8fe31390e1105efb7ebc22de6983fd31c4",
+        "integrity": "sha256:33e46b5a89978c98cacdf34b4da11abef1ae8b90d3e6669f58a91616be300303",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:3b2b991fd8608a5e82d94c98624f88725a92b115148ec854270c1b3f31e93be8",
+        "matchLine": 295,
+        "matchDigest": "sha256:fda8603805c8d87aad53038cd99a2b6f0e582309cae18ffa4e307cf8e55c6810",
+        "rowDigest": "sha256:f1cd38f053680b61442d14c89fe2ca8fe31390e1105efb7ebc22de6983fd31c4",
+        "integrity": "sha256:33e46b5a89978c98cacdf34b4da11abef1ae8b90d3e6669f58a91616be300303",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 10,
+      "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'left'",
+      "kind": "consumer",
+      "path": "../app-bithire/src/ui/tables/collection/preview/index.tsx",
+      "needle": "<MaybeTooltip content={tooltip ?? \"Close this preview panel.\"} placement=\"left\">",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:7d852d5b3e3d23d9f7e2702f61ebd49f5f47749b98feff96b15b2142b534828e",
+        "matchLine": 447,
+        "matchDigest": "sha256:0017ae7de9996188a5ffb69f34d8642212e6ec451ee5fa31c0130abfddf1d3e5",
+        "rowDigest": "sha256:f1cd38f053680b61442d14c89fe2ca8fe31390e1105efb7ebc22de6983fd31c4",
+        "integrity": "sha256:406b568067315b9883732dbdf535e7e5676391b186d479924f66753369bcd6e4",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:7d852d5b3e3d23d9f7e2702f61ebd49f5f47749b98feff96b15b2142b534828e",
+        "matchLine": 447,
+        "matchDigest": "sha256:0017ae7de9996188a5ffb69f34d8642212e6ec451ee5fa31c0130abfddf1d3e5",
+        "rowDigest": "sha256:f1cd38f053680b61442d14c89fe2ca8fe31390e1105efb7ebc22de6983fd31c4",
+        "integrity": "sha256:406b568067315b9883732dbdf535e7e5676391b186d479924f66753369bcd6e4",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 11,
+      "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'right'",
+      "kind": "consumer",
+      "path": "../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx",
+      "needle": "placement=\"right\" color=\"primary\">",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+        "matchLine": 271,
+        "matchDigest": "sha256:98951eaeb91dbcf795c7e8ecbaee17fab89b629a176c243830ec04433cb43609",
+        "rowDigest": "sha256:1771fed864c6207c4662f3094ee40a708d60e0a7550d24e8c562831436087049",
+        "integrity": "sha256:76543c30984b3e77b3115d2f73ffbc471aec59fd815de0f4c2df8b17f686ee4a",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+        "matchLine": 271,
+        "matchDigest": "sha256:98951eaeb91dbcf795c7e8ecbaee17fab89b629a176c243830ec04433cb43609",
+        "rowDigest": "sha256:1771fed864c6207c4662f3094ee40a708d60e0a7550d24e8c562831436087049",
+        "integrity": "sha256:76543c30984b3e77b3115d2f73ffbc471aec59fd815de0f4c2df8b17f686ee4a",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 12,
+      "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'right'",
+      "kind": "consumer",
+      "path": "../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx",
+      "needle": "placement=\"right\" color={isActive ? 'primary' : 'secondary'}>",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+        "matchLine": 304,
+        "matchDigest": "sha256:9e59bb171fa0f28bc1272d01828aad4d95b264c8a1b8cb0e124e043da2ddb73f",
+        "rowDigest": "sha256:1771fed864c6207c4662f3094ee40a708d60e0a7550d24e8c562831436087049",
+        "integrity": "sha256:cb911256dc320eab1c7973bffe74211f8ef4446b9325a764a0aab4e78bf17861",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+        "matchLine": 304,
+        "matchDigest": "sha256:9e59bb171fa0f28bc1272d01828aad4d95b264c8a1b8cb0e124e043da2ddb73f",
+        "rowDigest": "sha256:1771fed864c6207c4662f3094ee40a708d60e0a7550d24e8c562831436087049",
+        "integrity": "sha256:cb911256dc320eab1c7973bffe74211f8ef4446b9325a764a0aab4e78bf17861",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 13,
+      "row": "src/components/primitives/feedback/alert/contracts/index.ts#AlertSharedProps.type",
+      "kind": "consumer",
+      "path": "../app-evnto/src/features/identity/auth/surface/screens/login/index.tsx",
+      "needle": "<Alert type=\"error\" message={error} showIcon />",
+      "repository": "https://github.com/rottay/app-evnto.git",
+      "commit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
+      "recorded": {
+        "fileDigest": "sha256:9c00f43f3297b77d1b11c4c98fb578262071be872d383de0355bcf62858af233",
+        "matchLine": 338,
+        "matchDigest": "sha256:4ace6fee1657054c170318eabdc965cb0721e5e946e7aa02ded29ca7dd4618ba",
+        "rowDigest": "sha256:5d221266fb141a56eeba175c156974cda4911cc33e46ab457886b065ce51cf98",
+        "integrity": "sha256:a39f43005e57d0d953eaf95f1d72317d546587f82ce1c8841db42525edf97d80",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:9c00f43f3297b77d1b11c4c98fb578262071be872d383de0355bcf62858af233",
+        "matchLine": 338,
+        "matchDigest": "sha256:4ace6fee1657054c170318eabdc965cb0721e5e946e7aa02ded29ca7dd4618ba",
+        "rowDigest": "sha256:5d221266fb141a56eeba175c156974cda4911cc33e46ab457886b065ce51cf98",
+        "integrity": "sha256:a39f43005e57d0d953eaf95f1d72317d546587f82ce1c8841db42525edf97d80",
+        "appHeadAtAudit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 14,
+      "row": "src/components/primitives/inputs/button/contracts/index.ts#ButtonProps.asChild",
+      "kind": "consumer",
+      "path": "../app-bithire/src/features/interviews/surface/screens/workflows/live-scoring/index.tsx",
+      "needle": "<Button asChild variant=\"secondary\" size=\"sm\">",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:d863db92f13fbd6fde5b50b158c0daa6f085775b4d0bcf1d1df2abc28107dce2",
+        "matchLine": 1509,
+        "matchDigest": "sha256:bd0b29fb1fe4a74416bc4b83816d7715672e6d997b63a855951bb9f9c7e0341f",
+        "rowDigest": "sha256:9e1a2042f93173601102be80a1094dbf8deee827ce3ea48eb765d2d111db2ae6",
+        "integrity": "sha256:a2c482cdbd5688919c748049363103c8fb89460c18801982655e94644432ec12",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:d863db92f13fbd6fde5b50b158c0daa6f085775b4d0bcf1d1df2abc28107dce2",
+        "matchLine": 1509,
+        "matchDigest": "sha256:bd0b29fb1fe4a74416bc4b83816d7715672e6d997b63a855951bb9f9c7e0341f",
+        "rowDigest": "sha256:9e1a2042f93173601102be80a1094dbf8deee827ce3ea48eb765d2d111db2ae6",
+        "integrity": "sha256:a2c482cdbd5688919c748049363103c8fb89460c18801982655e94644432ec12",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 15,
+      "row": "src/components/primitives/inputs/button/contracts/index.ts#ButtonProps.loading",
+      "kind": "consumer",
+      "path": "../app-bithire/src/features/offers/surface/screens/workflows/document-templates/listing/index.tsx",
+      "needle": "loading={creating} disabled={creating}",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:78255e9f5d2ec894a3c8905aba0048f7bcf8cc992b19cb382392d0dc8386633f",
+        "matchLine": 322,
+        "matchDigest": "sha256:687aae96af64e70670141551321c62bca0574443e73ef316fc735e6ecdb4ce69",
+        "rowDigest": "sha256:734d7b6e66d38aef356c4c803e2e479bd0e32fe8d0e1491e0775c85ab66e6e6a",
+        "integrity": "sha256:83e86990a0a1f1ced614bdac113eae08753a49078f9db5441dfb48794df8817c",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:78255e9f5d2ec894a3c8905aba0048f7bcf8cc992b19cb382392d0dc8386633f",
+        "matchLine": 322,
+        "matchDigest": "sha256:687aae96af64e70670141551321c62bca0574443e73ef316fc735e6ecdb4ce69",
+        "rowDigest": "sha256:734d7b6e66d38aef356c4c803e2e479bd0e32fe8d0e1491e0775c85ab66e6e6a",
+        "integrity": "sha256:83e86990a0a1f1ced614bdac113eae08753a49078f9db5441dfb48794df8817c",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 16,
+      "row": "src/components/primitives/inputs/button/contracts/index.ts#ButtonProps.loadingText",
+      "kind": "consumer",
+      "path": "../app-bithire/src/core/auth/components/session-security/passkey-prompt/index.tsx",
+      "needle": "loadingText={getPrimaryActionLabel(phase, authenticatorName)}",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:8791c598ab9a4bc9b04498bcf94e97c6ef15f5a86a8ab5c1c846d63ec3970844",
+        "matchLine": 629,
+        "matchDigest": "sha256:45b6dad7008fdbc0f4bc6dadfc22bd90398e7b746d7fbd93c0a7fa422cee1079",
+        "rowDigest": "sha256:c9255e9073c9a1b502127a051e48a857c664ec38b0887c9fb5485e4cb0382924",
+        "integrity": "sha256:04b96ad2ff682da3d4bf4d99995197712a21296352184382a4922ef92551bc48",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:8791c598ab9a4bc9b04498bcf94e97c6ef15f5a86a8ab5c1c846d63ec3970844",
+        "matchLine": 629,
+        "matchDigest": "sha256:45b6dad7008fdbc0f4bc6dadfc22bd90398e7b746d7fbd93c0a7fa422cee1079",
+        "rowDigest": "sha256:c9255e9073c9a1b502127a051e48a857c664ec38b0887c9fb5485e4cb0382924",
+        "integrity": "sha256:04b96ad2ff682da3d4bf4d99995197712a21296352184382a4922ef92551bc48",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 17,
+      "row": "src/components/primitives/inputs/toggle/compound/switch/index.tsx#<module>",
+      "kind": "consumer",
+      "path": "../app-bithire/src/features/positions/surface/screens/record/listing/view/sections/team-assign/index.tsx",
+      "needle": "import { Button, Flex, Modal, Stack, Switch, Text } from \"@rottay/design-system\";",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:882e6486db28e35e1423dd554ed1c58eb67f04f53aac526ccc9975fac5d8a464",
+        "matchLine": 19,
+        "matchDigest": "sha256:6a93dd9f5724aec700f0c93f9a69d1aa5d5c33012f4341a7c47614d94c8be9d3",
+        "rowDigest": "sha256:ec3c3505796bd58dfe6891015937aea12ac076374a3dab097092611c2a8c1d84",
+        "integrity": "sha256:d1dca8b404e0aa04de848446a4707bee02f22bbf488e7988c2871a07694b32af",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:882e6486db28e35e1423dd554ed1c58eb67f04f53aac526ccc9975fac5d8a464",
+        "matchLine": 19,
+        "matchDigest": "sha256:6a93dd9f5724aec700f0c93f9a69d1aa5d5c33012f4341a7c47614d94c8be9d3",
+        "rowDigest": "sha256:ec3c3505796bd58dfe6891015937aea12ac076374a3dab097092611c2a8c1d84",
+        "integrity": "sha256:d1dca8b404e0aa04de848446a4707bee02f22bbf488e7988c2871a07694b32af",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 18,
+      "row": "src/components/primitives/inputs/toggle/compound/switch/index.tsx#<module>",
+      "kind": "consumer",
+      "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
+      "needle": "Card, Button, Badge, Input, Modal, Select, Spinner, Switch } from '@rottay/design-system';",
+      "repository": "https://github.com/rottay/app-platform.git",
+      "commit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
+      "recorded": {
+        "fileDigest": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
+        "matchLine": 61,
+        "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
+        "rowDigest": "sha256:ec3c3505796bd58dfe6891015937aea12ac076374a3dab097092611c2a8c1d84",
+        "integrity": "sha256:b31340320f9d96f626c3767835b4e8065b4dc2f6555313e193be29d06799432a",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
+        "matchLine": 61,
+        "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
+        "rowDigest": "sha256:ec3c3505796bd58dfe6891015937aea12ac076374a3dab097092611c2a8c1d84",
+        "integrity": "sha256:b31340320f9d96f626c3767835b4e8065b4dc2f6555313e193be29d06799432a",
+        "appHeadAtAudit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 19,
+      "row": "src/components/primitives/inputs/toggle/contracts/index.ts#SwitchSize",
+      "kind": "consumer",
+      "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
+      "needle": "Card, Button, Badge, Input, Modal, Select, Spinner, Switch } from '@rottay/design-system';",
+      "repository": "https://github.com/rottay/app-platform.git",
+      "commit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
+      "recorded": {
+        "fileDigest": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
+        "matchLine": 61,
+        "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
+        "rowDigest": "sha256:8e8114569744fa0d9f4791d76b348718633acb25c4d60101216d94c13f1832a1",
+        "integrity": "sha256:817f192139245169097051a2ede016d1641f1eb175adba784184a481d75dfd2c",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
+        "matchLine": 61,
+        "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
+        "rowDigest": "sha256:8e8114569744fa0d9f4791d76b348718633acb25c4d60101216d94c13f1832a1",
+        "integrity": "sha256:817f192139245169097051a2ede016d1641f1eb175adba784184a481d75dfd2c",
+        "appHeadAtAudit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 20,
+      "row": "src/components/primitives/inputs/toggle/contracts/index.ts#SwitchProps",
+      "kind": "consumer",
+      "path": "../app-bithire/src/features/positions/surface/screens/record/listing/view/sections/team-assign/index.tsx",
+      "needle": "import { Button, Flex, Modal, Stack, Switch, Text } from \"@rottay/design-system\";",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:882e6486db28e35e1423dd554ed1c58eb67f04f53aac526ccc9975fac5d8a464",
+        "matchLine": 19,
+        "matchDigest": "sha256:6a93dd9f5724aec700f0c93f9a69d1aa5d5c33012f4341a7c47614d94c8be9d3",
+        "rowDigest": "sha256:95c6d3d9be316163e557893e5cfb0a8b65f80690a260a5dfadbbcfa7bb1f38bf",
+        "integrity": "sha256:55d2b72c6cbfdbe5c04eff9b6a7d84e3426ba55c040b6c4deedc43a219ba669d",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:882e6486db28e35e1423dd554ed1c58eb67f04f53aac526ccc9975fac5d8a464",
+        "matchLine": 19,
+        "matchDigest": "sha256:6a93dd9f5724aec700f0c93f9a69d1aa5d5c33012f4341a7c47614d94c8be9d3",
+        "rowDigest": "sha256:95c6d3d9be316163e557893e5cfb0a8b65f80690a260a5dfadbbcfa7bb1f38bf",
+        "integrity": "sha256:55d2b72c6cbfdbe5c04eff9b6a7d84e3426ba55c040b6c4deedc43a219ba669d",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 21,
+      "row": "src/components/primitives/inputs/toggle/contracts/index.ts#SwitchProps",
+      "kind": "consumer",
+      "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
+      "needle": "Card, Button, Badge, Input, Modal, Select, Spinner, Switch } from '@rottay/design-system';",
+      "repository": "https://github.com/rottay/app-platform.git",
+      "commit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
+      "recorded": {
+        "fileDigest": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
+        "matchLine": 61,
+        "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
+        "rowDigest": "sha256:95c6d3d9be316163e557893e5cfb0a8b65f80690a260a5dfadbbcfa7bb1f38bf",
+        "integrity": "sha256:4e5a2667c25817e4f7666feb6072dcb01562abf80ea8d87af8c914a3c2868818",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
+        "matchLine": 61,
+        "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
+        "rowDigest": "sha256:95c6d3d9be316163e557893e5cfb0a8b65f80690a260a5dfadbbcfa7bb1f38bf",
+        "integrity": "sha256:4e5a2667c25817e4f7666feb6072dcb01562abf80ea8d87af8c914a3c2868818",
+        "appHeadAtAudit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 22,
+      "row": "src/components/primitives/layout/space/contracts/index.ts#LegacySpaceSize",
+      "kind": "consumer",
+      "path": "../app-platform/src/features/security/authentication/surface/components/session-table/index.tsx",
+      "needle": "<Space direction=\"vertical\" style={{ width: '100%' }} size=\"middle\">",
+      "repository": "https://github.com/rottay/app-platform.git",
+      "commit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
+      "recorded": {
+        "fileDigest": "sha256:153bcfa5fc3e2d76726d9b73d1adf960d4bb226b62583859f9d6d6a53bd52d95",
+        "matchLine": 279,
+        "matchDigest": "sha256:467eb26246f914791085ea1b7a4c6d423a8e8379866273a6838ed91b028eadea",
+        "rowDigest": "sha256:85a3842a161fd766fc83a7c37479ff00f55b7ed9986d3a35ba9e3b6a8c3def64",
+        "integrity": "sha256:9da80783133bbce104e0af909265baf175f07dd5ddf50c8fc7017d6faed980f9",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:153bcfa5fc3e2d76726d9b73d1adf960d4bb226b62583859f9d6d6a53bd52d95",
+        "matchLine": 279,
+        "matchDigest": "sha256:467eb26246f914791085ea1b7a4c6d423a8e8379866273a6838ed91b028eadea",
+        "rowDigest": "sha256:85a3842a161fd766fc83a7c37479ff00f55b7ed9986d3a35ba9e3b6a8c3def64",
+        "integrity": "sha256:9da80783133bbce104e0af909265baf175f07dd5ddf50c8fc7017d6faed980f9",
+        "appHeadAtAudit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 23,
+      "row": "src/components/primitives/navigation/stepper/compound/steps/index.tsx#<module>",
+      "kind": "consumer",
+      "path": "../app-bithire/src/features/candidates/surface/screens/record/detail/view/tabs/activity/index.tsx",
+      "needle": "import { Box, Flex, Stack, Steps, Text } from \"@rottay/design-system\";",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:426ccec2e16b44422d35b38125f200dd04d5486088842bb50e2055ee625b6364",
+        "matchLine": 18,
+        "matchDigest": "sha256:2850dcfdaad3f672cb1722554540fc38796d0481ff42f1db90b6a8b030ceca2c",
+        "rowDigest": "sha256:1e5814cfaaba660855c266e76ec5084be670d2826d1469dfe1f8c2a38ca0f439",
+        "integrity": "sha256:721b694b91d34109e6ae1104cf608948f253bf4b875dc68fcfb06c291f3ec484",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:426ccec2e16b44422d35b38125f200dd04d5486088842bb50e2055ee625b6364",
+        "matchLine": 18,
+        "matchDigest": "sha256:2850dcfdaad3f672cb1722554540fc38796d0481ff42f1db90b6a8b030ceca2c",
+        "rowDigest": "sha256:1e5814cfaaba660855c266e76ec5084be670d2826d1469dfe1f8c2a38ca0f439",
+        "integrity": "sha256:721b694b91d34109e6ae1104cf608948f253bf4b875dc68fcfb06c291f3ec484",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 24,
+      "row": "src/components/primitives/navigation/stepper/contracts/index.ts#ProgressDotInfo",
+      "kind": "consumer",
+      "path": "../app-bithire/src/features/candidates/surface/screens/record/detail/view/tabs/activity/index.tsx",
+      "needle": "import { Box, Flex, Stack, Steps, Text } from \"@rottay/design-system\";",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:426ccec2e16b44422d35b38125f200dd04d5486088842bb50e2055ee625b6364",
+        "matchLine": 18,
+        "matchDigest": "sha256:2850dcfdaad3f672cb1722554540fc38796d0481ff42f1db90b6a8b030ceca2c",
+        "rowDigest": "sha256:195f364b18a5208f151cc13d76b4fb643defdebb1f30ad510833eca5935db7c1",
+        "integrity": "sha256:8679c6cca0fd6929cbd60ed57c34ce7ec02d8e12e83fa83c55ea0028edb0bf49",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:426ccec2e16b44422d35b38125f200dd04d5486088842bb50e2055ee625b6364",
+        "matchLine": 18,
+        "matchDigest": "sha256:2850dcfdaad3f672cb1722554540fc38796d0481ff42f1db90b6a8b030ceca2c",
+        "rowDigest": "sha256:195f364b18a5208f151cc13d76b4fb643defdebb1f30ad510833eca5935db7c1",
+        "integrity": "sha256:8679c6cca0fd6929cbd60ed57c34ce7ec02d8e12e83fa83c55ea0028edb0bf49",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 25,
+      "row": "src/components/primitives/navigation/stepper/contracts/index.ts#StepsProps",
+      "kind": "consumer",
+      "path": "../app-bithire/src/features/candidates/surface/screens/record/detail/view/tabs/activity/index.tsx",
+      "needle": "import { Box, Flex, Stack, Steps, Text } from \"@rottay/design-system\";",
+      "repository": "https://github.com/rottay/app-bithire.git",
+      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+      "recorded": {
+        "fileDigest": "sha256:426ccec2e16b44422d35b38125f200dd04d5486088842bb50e2055ee625b6364",
+        "matchLine": 18,
+        "matchDigest": "sha256:2850dcfdaad3f672cb1722554540fc38796d0481ff42f1db90b6a8b030ceca2c",
+        "rowDigest": "sha256:b82ef349fff58cffd36ae18efd3b952188feae716f74ddb5d25af7a1a6123f92",
+        "integrity": "sha256:2a9bd2e6ad64338ef764399fe6047ed467210302fab7c6f9c6f13c794433be33",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:426ccec2e16b44422d35b38125f200dd04d5486088842bb50e2055ee625b6364",
+        "matchLine": 18,
+        "matchDigest": "sha256:2850dcfdaad3f672cb1722554540fc38796d0481ff42f1db90b6a8b030ceca2c",
+        "rowDigest": "sha256:b82ef349fff58cffd36ae18efd3b952188feae716f74ddb5d25af7a1a6123f92",
+        "integrity": "sha256:2a9bd2e6ad64338ef764399fe6047ed467210302fab7c6f9c6f13c794433be33",
+        "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 26,
+      "row": "src/components/structures/foundation/chrome/contracts/index.ts#SurfaceTabbedView.permissionId",
+      "kind": "consumer",
+      "path": "../app-evnto/src/features/admin/settings/surface/screens/general/index.tsx",
+      "needle": "permissionId: \"billing\",",
+      "repository": "https://github.com/rottay/app-evnto.git",
+      "commit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
+      "recorded": {
+        "fileDigest": "sha256:55f5e660c7bc3201102a4956444ee03b566c34249e05c7855ff7a86b51c879e3",
+        "matchLine": 191,
+        "matchDigest": "sha256:ab32bd42e66a8c0edf0875fe1f370568125f39ca79ee7eedca94d0d556f17929",
+        "rowDigest": "sha256:d373958789f506a5d2754724766b0e9c95793635c2733a3249d56ce49d4a81a7",
+        "integrity": "sha256:8a7e472af57fb680f7d68b3989f4a0b42719331ac34d66c6e637a392d9cf46db",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:55f5e660c7bc3201102a4956444ee03b566c34249e05c7855ff7a86b51c879e3",
+        "matchLine": 191,
+        "matchDigest": "sha256:ab32bd42e66a8c0edf0875fe1f370568125f39ca79ee7eedca94d0d556f17929",
+        "rowDigest": "sha256:d373958789f506a5d2754724766b0e9c95793635c2733a3249d56ce49d4a81a7",
+        "integrity": "sha256:8a7e472af57fb680f7d68b3989f4a0b42719331ac34d66c6e637a392d9cf46db",
+        "appHeadAtAudit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    },
+    {
+      "index": 27,
+      "row": "src/foundation/contracts/kernel/common/index.ts#LegacySizeAlias",
+      "kind": "consumer",
+      "path": "../app-platform/src/features/services/feature-flags/surface/screens/relations/rules/index.tsx",
+      "needle": "Card, Button, Badge, Input, Modal, Select, Spinner, Switch } from '@rottay/design-system';",
+      "repository": "https://github.com/rottay/app-platform.git",
+      "commit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
+      "recorded": {
+        "fileDigest": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
+        "matchLine": 61,
+        "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
+        "rowDigest": "sha256:505c8737f24115f846aa4390e6f3381a079fa5d1cf950c11d98ce0e07145a2c2",
+        "integrity": "sha256:0d648fc2e7e0564575384d9ec8651f1fb2a1b06d93c8491fdc7b34670fb299ea",
+        "date": "2026-10-03"
+      },
+      "recomputed": {
+        "fileSha256": "sha256:696812e08ea76b6863a1c88c2016237937dbe9742f0699d27e1f7157f376b484",
+        "matchLine": 61,
+        "matchDigest": "sha256:451984b6b0eb4d2742a660052d2e420f6f43fd4a8d28602ed0294cecb030d8d7",
+        "rowDigest": "sha256:505c8737f24115f846aa4390e6f3381a079fa5d1cf950c11d98ce0e07145a2c2",
+        "integrity": "sha256:0d648fc2e7e0564575384d9ec8651f1fb2a1b06d93c8491fdc7b34670fb299ea",
+        "appHeadAtAudit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7"
+      },
+      "checks": {
+        "fileDigestMatches": true,
+        "needlePresentAtCommit": true,
+        "matchLineMatches": true,
+        "matchDigestMatches": true,
+        "rowDigestMatches": true,
+        "integrityMatches": true,
+        "commitReachableFromOriginMain": true,
+        "repositoryMatchesOrigin": true,
+        "needleStillAtHead": true
+      },
+      "verdict": "VERIFIED"
+    }
+  ]
+}

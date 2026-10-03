@@ -7,18 +7,22 @@
  * red for that reason and for nothing else, so a mutant cannot pass because an
  * unrelated rule happened to fire. N1-N14 and P1-P5 are the numbered cases of
  * the instrument's design; the unnumbered ones cover the remaining refusals.
+ * E1-E17 drill evidence in a sibling checkout, its receipts and their audited
+ * mark against scratch git repositories.
  */
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { after, describe, it } from 'node:test';
 
 import {
   BLOCKERS, CLASSES, CODEMOD_FIXTURES_PATH, CODEMOD_MAP_PATH, CODEMOD_TESTS_PATH, GATES_MANIFEST_PATH, HEADER_KEYS,
-  LEDGER_PATH, REGISTRY_PATH, ROW_KEYS, codemodIdProblem, evaluate, fixtureVerdict, identifierResolves,
-  loadCodemodLookup, measure, parseArgs, reasonProblem, run, scanMarkers,
+  LEDGER_PATH, RECEIPTS_PATH, RECEIPT_AUDIT_KEYS, RECEIPT_KEYS, REGISTRY_PATH, ROW_KEYS, codemodIdProblem, digestOf, evaluate,
+  fixtureVerdict, identifierResolves, loadCodemodLookup, matchOf, measure, mintIntegrityOf, parseArgs, reasonProblem,
+  receiptIntegrityOf, rowDigestOf, run, scanMarkers,
 } from '../index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 
@@ -716,6 +720,8 @@ describe('deprecations — reports and the command line', () => {
     assert.deepEqual(result.report.unverifiedEvidence, [
       { row: `${CONTRACTS}#WidgetProps.variant`, kind: 'consumer', path: '../app-absent/src/page.tsx' },
     ]);
+    assert.deepEqual(result.report.unverifiedByRow, { [`${CONTRACTS}#WidgetProps.variant`]: 1 });
+    assert.deepEqual(result.report.siblingEvidence.map((entry) => entry.status), ['not-verified']);
   });
 
   it('files named as tests are counted and not ledgered; a file merely under tests/ is scanned', () => {
@@ -732,8 +738,15 @@ describe('deprecations — reports and the command line', () => {
 
   it('parses its arguments and refuses unknown ones', async () => {
     assert.deepEqual(parseArgs(['--check', '--assume-done=WO-RET-01,WO-RET-04', '--consumers', '--json']), {
-      check: true, json: true, consumers: true, assumeDone: ['WO-RET-01', 'WO-RET-04'], unknown: [],
+      check: true, json: true, consumers: true, writeReceipts: false, auditReceipts: false, by: null, record: null,
+      siblings: 'detect', assumeDone: ['WO-RET-01', 'WO-RET-04'], unknown: [],
     });
+    const audit = parseArgs(['--audit-receipts', '--by=someone', '--record=a/b/index.json']);
+    assert.deepEqual([audit.auditReceipts, audit.by, audit.record], [true, 'someone', 'a/b/index.json']);
+    assert.deepEqual(parseArgs(['--by=', '--record=']).unknown, ['--by=', '--record=']);
+    assert.equal(parseArgs(['--write-receipts']).writeReceipts, true);
+    assert.equal(parseArgs(['--check', '--siblings=absent']).siblings, 'absent');
+    assert.deepEqual(parseArgs(['--siblings=present']).unknown, ['--siblings=present']);
     const roots = tree();
     assert.equal((await run(['--check'], roots)).code, 0);
     assert.equal((await run(['--check', '--assume-done=WO-RET-01'], roots)).code, 1);
@@ -753,6 +766,537 @@ describe('deprecations — reports and the command line', () => {
     ]);
     assert.deepEqual([...HEADER_KEYS], ['schema', 'sealedAt', 'noDebtReceivers', 'compatReceivers', 'notes', 'rows']);
     assert.equal(ROW_KEYS.length, 14);
+  });
+});
+
+const GIT_ENV = {
+  ...process.env,
+  GIT_CONFIG_GLOBAL: '/dev/null',
+  GIT_CONFIG_SYSTEM: '/dev/null',
+  GIT_AUTHOR_NAME: 'fixture',
+  GIT_AUTHOR_EMAIL: 'fixture@example.invalid',
+  GIT_COMMITTER_NAME: 'fixture',
+  GIT_COMMITTER_EMAIL: 'fixture@example.invalid',
+};
+const ORIGIN = 'https://example.invalid/app-fixture.git';
+const NEEDLE = '<Widget variant="primary" />';
+const PAGE = 'src/page.tsx';
+const PAGE_SOURCE = `export const Page = () => ${NEEDLE};\n`;
+const VARIANT = 'WidgetProps.variant';
+const TODAY = '2026-10-03';
+const AUDITOR = 'fixture-auditor';
+const RECORD = `packages/core/${dirname(RECEIPTS_PATH)}/audits/${TODAY}/index.json`;
+let scratchCount = 0;
+
+/**
+ * A fixture workspace whose `compat-consumed` row cites a scratch sibling
+ * repository, re-homed so that closure is green but for that evidence.
+ */
+function siblingCase({ committed = PAGE_SOURCE } = {}) {
+  scratchCount += 1;
+  const name = `ret01-app-${process.pid}-${scratchCount}`;
+  const path = `../${name}/${PAGE}`;
+  const roots = tree((parts) => {
+    rehome(parts);
+    rowOf(parts, VARIANT).evidence = [{ kind: 'consumer', path, needle: NEEDLE }];
+  });
+  const dir = join(dirname(roots.repoRoot), name);
+  const hidden = `${dir}.hidden`;
+  sandboxes.push(dir, hidden);
+  const git = (...args) => execFileSync('git', ['-C', dir, ...args], { env: GIT_ENV, encoding: 'utf8' }).trim();
+  /** Commit the page; `pushed` moves the scratch `origin/main` with it, as a push would. */
+  const commit = (content, message, { pushed = true } = {}) => {
+    mkdirSync(dirname(join(dir, PAGE)), { recursive: true });
+    writeFileSync(join(dir, PAGE), content);
+    git('add', '-A');
+    git('commit', '-q', '-m', message);
+    if (pushed) git('update-ref', 'refs/remotes/origin/main', 'HEAD');
+    return git('rev-parse', 'HEAD');
+  };
+  mkdirSync(dir, { recursive: true });
+  git('init', '-q');
+  git('remote', 'add', 'origin', ORIGIN);
+  const first = commit(committed, 'page');
+  const receiptsFile = join(roots.packageRoot, RECEIPTS_PATH);
+  const ledgerFile = join(roots.packageRoot, LEDGER_PATH);
+  const recordFile = join(roots.repoRoot, RECORD);
+  const readReceipts = () => JSON.parse(readFileSync(receiptsFile, 'utf8'));
+  const options = { codemods: wiredFor(ALL_IDS) };
+  /** The record an independent auditor keeps: every receipt re-derived, in the auditor's own schema. */
+  const writeRecord = (edit = () => {}) => {
+    const record = {
+      schema: 1,
+      audit: { date: TODAY, auditor: `independent auditor (${AUDITOR})` },
+      receipts: readReceipts().receipts.map((receipt) => ({
+        row: `${receipt.file}#${receipt.anchor}`,
+        kind: receipt.kind,
+        path: receipt.path,
+        needle: receipt.needle,
+        commit: receipt.commit,
+        recomputed: {
+          fileSha256: receipt.fileDigest,
+          matchLine: receipt.matchLine,
+          matchDigest: receipt.matchDigest,
+          rowDigest: receipt.rowDigest,
+          integrity: mintIntegrityOf(receipt),
+        },
+        verdict: 'VERIFIED',
+      })),
+    };
+    edit(record);
+    mkdirSync(dirname(recordFile), { recursive: true });
+    writeFileSync(recordFile, JSON.stringify(record, null, 2));
+  };
+  const mint = () => run(['--write-receipts'], { ...roots, today: TODAY });
+  const audit = () => run(['--audit-receipts', `--by=${AUDITOR}`, `--record=${RECORD}`], roots);
+  return {
+    roots, dir, path, first, git, commit, mint, audit, writeRecord, readReceipts,
+    key: `${CONTRACTS}#${VARIANT}`,
+    hide: () => renameSync(dir, hidden),
+    show: () => renameSync(hidden, dir),
+    writeWorkingTree: (content) => writeFileSync(join(dir, PAGE), content),
+    mintAudited: async () => {
+      assert.equal((await mint()).code, 0);
+      writeRecord();
+      const result = await audit();
+      assert.equal(result.code, 0, result.failures.join('\n'));
+      return result;
+    },
+    receiptsText: () => readFileSync(receiptsFile, 'utf8'),
+    /** Edit the one receipt; `reseal` recomputes its integrity digest as a forger would. */
+    editReceipt: (edit, { reseal = false } = {}) => {
+      const document = readReceipts();
+      edit(document.receipts[0], document);
+      if (reseal) document.receipts[0].integrity = receiptIntegrityOf(document.receipts[0]);
+      writeFileSync(receiptsFile, JSON.stringify(document, null, 2));
+    },
+    editLedger: (edit) => {
+      const ledger = JSON.parse(readFileSync(ledgerFile, 'utf8'));
+      edit(ledger);
+      writeFileSync(ledgerFile, JSON.stringify(ledger, null, 2));
+    },
+    preliminary: (extra = {}) => evaluate(measure(roots), { ...options, ...extra }),
+    closure: (extra = {}) => evaluate(measure(roots), { ...options, assumeDone: [OWNER], ...extra }),
+  };
+}
+
+const statusOf = (result) => result.report.siblingEvidence.map((entry) => entry.status);
+const variantRow = (ledger) => ledger.rows.find((row) => row.anchor === VARIANT);
+const UNSATISFIED = /`WidgetProps\.variant`: compat-consumed row: `consumer` evidence is NOT VERIFIED under --assume-done/;
+const UNAUDITED = /`WidgetProps\.variant`: receipt for `consumer` at \S+: UNAUDITED: it carries no audited mark/;
+const anyOf = (...patterns) => new RegExp(patterns.map((pattern) => pattern.source).join('|'));
+
+describe('deprecations — evidence in a sibling checkout', () => {
+  it('E1 (positive): evidence verified live satisfies closure', () => {
+    const scratch = siblingCase();
+    const closed = scratch.closure();
+    assertGreen(closed);
+    assert.deepEqual(statusOf(closed), ['verified-live']);
+    assert.deepEqual(closed.report.unverifiedByRow, {});
+    assert.deepEqual(closed.report.rowsOnHistoricalReceipts, []);
+  });
+
+  it('E2 (positive): an audited receipt satisfies closure without its sibling, as a historical receipt and never as verified', async () => {
+    const scratch = siblingCase();
+    const minted = await scratch.mint();
+    assert.equal(minted.code, 0, minted.failures.join('\n'));
+    assert.deepEqual(minted.mint.minted, [`${scratch.key} consumer ${scratch.path} needle=${JSON.stringify(NEEDLE)}`]);
+    const [receipt] = scratch.readReceipts().receipts;
+    assert.deepEqual(Object.keys(receipt), [...RECEIPT_KEYS], 'a minted receipt carries no audited mark');
+    assert.equal(receipt.repository, ORIGIN);
+    assert.equal(receipt.commit, scratch.first);
+    assert.equal(receipt.fileDigest, digestOf(Buffer.from(PAGE_SOURCE)));
+    assert.deepEqual({ line: receipt.matchLine, digest: receipt.matchDigest }, matchOf(Buffer.from(PAGE_SOURCE), NEEDLE));
+    assert.equal(receipt.date, TODAY);
+
+    scratch.writeRecord();
+    const audited = await scratch.audit();
+    assert.deepEqual([audited.code, audited.audit.marked.length, audited.written], [0, 1, true]);
+    const [marked] = scratch.readReceipts().receipts;
+    assert.deepEqual(RECEIPT_AUDIT_KEYS.map((key) => marked[key]), [AUDITOR, TODAY, RECORD]);
+    assert.equal(marked.integrity, receiptIntegrityOf(marked), 'the mark is inside the integrity body');
+    assert.notEqual(marked.integrity, receipt.integrity);
+    assert.equal(mintIntegrityOf(marked), receipt.integrity);
+    const again = await scratch.audit();
+    assert.deepEqual([again.code, again.audit.marked.length, again.audit.kept.length], [0, 0, 1]);
+
+    const live = scratch.closure();
+    assertGreen(live);
+    assert.deepEqual(statusOf(live), ['verified-live']);
+    assert.equal(live.report.siblingEvidence[0].receipt.reproven, true);
+    assert.deepEqual(live.report.rowsOnHistoricalReceipts, []);
+
+    scratch.hide();
+    for (const result of [scratch.closure(), scratch.preliminary()]) {
+      assertGreen(result);
+      assert.deepEqual(statusOf(result), ['historical-receipt']);
+      assert.deepEqual(result.report.siblingEvidence[0].receipt, {
+        commit: scratch.first, date: TODAY, holds: true, reproven: false, audited: { by: AUDITOR, at: TODAY, record: RECORD },
+      });
+      assert.deepEqual(result.report.rowsOnHistoricalReceipts, [scratch.key]);
+      assert.deepEqual(result.report.unverifiedEvidence, []);
+      assert.doesNotMatch(JSON.stringify(result.report.siblingEvidence), /verified/, 'a receipt is never reported as a verification');
+    }
+    scratch.show();
+    assert.deepEqual(statusOf(scratch.closure({ siblings: 'absent' })), ['historical-receipt']);
+  });
+
+  it('E3 (preliminary): unavailable evidence does not fail the row and is reported by row, never as satisfied', () => {
+    const scratch = siblingCase();
+    scratch.hide();
+    const result = scratch.preliminary();
+    assertGreen(result);
+    assert.deepEqual(statusOf(result), ['not-verified']);
+    assert.deepEqual(result.report.unverifiedByRow, { [scratch.key]: 1 });
+    assert.deepEqual(result.report.unverifiedEvidence, [{ row: scratch.key, kind: 'consumer', path: scratch.path }]);
+  });
+
+  it('E4 (absent): at closure a kind that is only unverified, with no receipt, is red', async () => {
+    const scratch = siblingCase();
+    scratch.hide();
+    const closed = scratch.closure();
+    assertRedOnlyFor(closed, UNSATISFIED, 1);
+    assert.deepEqual(closed.report.unverifiedByRow, { [scratch.key]: 1 });
+    scratch.show();
+    assertRedOnlyFor(scratch.closure({ siblings: 'absent' }), UNSATISFIED, 1);
+    const cli = await run(['--check', `--assume-done=${OWNER}`, '--siblings=absent'], {
+      ...scratch.roots, codemodLookup: async () => wiredFor(ALL_IDS),
+    });
+    assert.equal(cli.code, 1);
+    assertRedOnlyFor(cli, UNSATISFIED, 1);
+  });
+
+  it('E5 (stale): a receipt whose row changed is red at closure and reported before it', async () => {
+    const renamed = siblingCase();
+    await renamed.mintAudited();
+    renamed.editLedger((ledger) => { variantRow(ledger).evidence[0].needle = '<Widget variant'; });
+    assertRedOnlyFor(renamed.preliminary(), /names no evidence entry of the ledger/, 1);
+    renamed.hide();
+    assertRedOnlyFor(renamed.closure(), anyOf(/names no evidence entry of the ledger/, UNSATISFIED), 2);
+
+    const twoNeedles = siblingCase();
+    twoNeedles.editLedger((ledger) => {
+      variantRow(ledger).evidence.push({ kind: 'consumer', path: twoNeedles.path, needle: 'export const Page' });
+    });
+    assert.equal((await twoNeedles.mintAudited()).audit.marked.length, 2, 'one file cited for two needles earns two receipts');
+    twoNeedles.hide();
+    assertGreen(twoNeedles.closure());
+
+    for (const edit of [
+      (row) => { row.reason = `${row.reason} The wrapper forwards it unchanged to the table.`; },
+      (row) => { row.evidence[0].note = 'Reviewed again.'; },
+      (row) => { row.receiver = OTHER_RETIRE; },
+    ]) {
+      const scratch = siblingCase();
+      await scratch.mintAudited();
+      scratch.editLedger((ledger) => edit(variantRow(ledger)));
+      scratch.hide();
+      const closed = scratch.closure();
+      const stale = closed.failures.filter((failure) => /receipt for `consumer` at \S+: STALE: it certifies row digest/.test(failure));
+      assert.equal(stale.length, 1, closed.failures.join('\n'));
+      assert.ok(closed.failures.some((failure) => UNSATISFIED.test(failure)), 'a stale receipt stands in for nothing');
+      const open = scratch.preliminary();
+      assert.deepEqual(statusOf(open), ['not-verified']);
+      assert.equal(open.report.staleReceipts.length, 1);
+      assert.match(open.report.staleReceipts[0].why, /^STALE: it certifies row digest/);
+      assert.deepEqual(open.failures.filter((failure) => /receipt|evidence/.test(failure)), [], 'reported, not failed, before closure');
+      scratch.show();
+      assert.ok(scratch.closure().failures.some((failure) => /STALE: it certifies row digest/.test(failure)));
+    }
+  });
+
+  it('E6 (stale): a sibling whose HEAD no longer carries the needle is red at closure', async () => {
+    const scratch = siblingCase();
+    await scratch.mintAudited();
+    const moved = scratch.commit('export const Page = () => <Widget tone="primary" />;\n', 'migrate');
+    const gone = scratch.closure();
+    assert.ok(gone.failures.some((failure) => failure.includes(`STALE: at HEAD ${moved}`) && failure.includes(`read at ${scratch.first}`)));
+    assertRedOnlyFor(gone, /`WidgetProps\.variant`: (receipt for `consumer` at \S+: STALE: at HEAD|evidence `consumer`: \S+ no longer contains|compat-consumed row has no verified `consumer` evidence)/, 3);
+
+    scratch.writeWorkingTree(PAGE_SOURCE);
+    assertRedOnlyFor(scratch.closure(), /receipt for `consumer` at \S+: STALE: at HEAD \w{40} of \S+ the file no longer contains/, 1);
+    const open = scratch.preliminary();
+    assertGreen(open);
+    assert.match(open.report.staleReceipts[0].why, /^STALE: at HEAD/);
+  });
+
+  it('E7 (altered): a receipt edited by hand, its audited mark included, fails its integrity digest in every mode', async () => {
+    const other = 'f'.repeat(40);
+    for (const edit of [
+      (receipt) => { receipt.fileDigest = digestOf('other bytes'); },
+      (receipt) => { receipt.commit = other; },
+      (receipt) => { receipt.rowDigest = digestOf('another row'); },
+      (receipt) => { receipt.date = '2027-01-01'; },
+      (receipt) => { receipt.auditedBy = 'someone-else'; },
+      (receipt) => { receipt.auditedAt = '2027-01-01'; },
+      (receipt) => { receipt.auditRecord = 'packages/core/another/index.json'; },
+      (receipt) => { receipt.integrity = digestOf('tampered'); },
+    ]) {
+      const scratch = siblingCase();
+      await scratch.mintAudited();
+      scratch.editReceipt(edit);
+      const present = scratch.preliminary();
+      assertRedOnlyFor(present, /receipts\/index\.json: receipt 0 \(`WidgetProps\.variant`\): ALTERED: the integrity digest does not match/, 1);
+      scratch.hide();
+      assertRedOnlyFor(scratch.preliminary(), /ALTERED: the integrity digest does not match/, 1);
+      const closed = scratch.closure();
+      assert.ok(closed.failures.some((failure) => /ALTERED: the integrity digest does not match/.test(failure)));
+      assert.ok(closed.failures.some((failure) => UNSATISFIED.test(failure)), 'an altered receipt satisfies nothing');
+      assert.equal(closed.failures.length, 2, closed.failures.join('\n'));
+    }
+  });
+
+  it('E8 (altered): an incomplete or malformed receipt is red and satisfies nothing', async () => {
+    for (const [edit, pattern] of [
+      [(receipt) => { delete receipt.fileDigest; }, /key `fileDigest` is missing/],
+      [(receipt) => { receipt.reviewer = 'me'; }, /unknown key `reviewer`/],
+      [(receipt) => { receipt.commit = 'main'; }, /commit `main` is not a full commit SHA/],
+      [(receipt) => { receipt.matchDigest = 'yes'; }, /`matchDigest` is not a sha256 digest/],
+      [(receipt) => { delete receipt.auditRecord; }, /the audited mark is partial/],
+      [(receipt, document) => { document.receipts.push({ ...receipt }); }, /receipt 1 \(`WidgetProps\.variant`\): duplicate receipt/],
+      [(receipt, document) => { document.approvedBy = 'me'; }, /not an object of exactly schema, receipts/],
+    ]) {
+      const scratch = siblingCase();
+      await scratch.mintAudited();
+      scratch.editReceipt(edit);
+      assert.ok(scratch.preliminary().failures.some((failure) => pattern.test(failure)), String(pattern));
+    }
+    const scratch = siblingCase();
+    await scratch.mintAudited();
+    writeFileSync(join(scratch.roots.packageRoot, RECEIPTS_PATH), '{ not json');
+    assertRedOnlyFor(scratch.preliminary(), /receipts\/index\.json is not valid JSON/, 1);
+  });
+
+  it('E9 (altered): a resealed forgery is refuted by the sibling it cites and by the kept audit record', async () => {
+    const RECORD_DISAGREES = /AUDIT MARK: the audit record re-derived other values/;
+    const forgeries = [
+      [(receipt) => { receipt.fileDigest = digestOf('other bytes'); }, /ALTERED: at commit \w{40} the file digest is \w{12}, the receipt records \w{12}/],
+      [(receipt) => { receipt.matchLine = 7; }, /ALTERED: at commit \w{40} the needle matches line 1 \(\w{12}\), not the recorded line/],
+    ];
+    for (const [edit, pattern] of forgeries) {
+      const scratch = siblingCase();
+      await scratch.mintAudited();
+      scratch.editReceipt(edit, { reseal: true });
+      for (const result of [scratch.preliminary(), scratch.closure()]) {
+        assertRedOnlyFor(result, anyOf(pattern, RECORD_DISAGREES), 2);
+        assert.ok(result.failures.some((failure) => pattern.test(failure)));
+      }
+      scratch.hide();
+      assertRedOnlyFor(scratch.preliminary(), RECORD_DISAGREES, 1);
+      assertRedOnlyFor(scratch.closure(), anyOf(RECORD_DISAGREES, UNSATISFIED), 2);
+    }
+    const origin = siblingCase();
+    await origin.mintAudited();
+    origin.editReceipt((receipt) => { receipt.repository = 'https://example.invalid/another.git'; }, { reseal: true });
+    for (const result of [origin.preliminary(), origin.closure()]) {
+      assert.ok(result.failures.some((failure) => /ALTERED: it names repository/.test(failure)));
+    }
+    const moved = siblingCase();
+    await moved.mintAudited();
+    moved.editReceipt((receipt) => { receipt.path = receipt.path.replace('page.tsx', 'other.tsx'); }, { reseal: true });
+    assert.ok(moved.preliminary().failures.some((failure) => /names no evidence entry of the ledger/.test(failure)));
+  });
+
+  it('E10 (altered): file bytes that differ from the recorded digest at the recorded commit are red', async () => {
+    const scratch = siblingCase();
+    await scratch.mintAudited();
+    const later = scratch.commit(`// reviewed\n${PAGE_SOURCE}`, 'comment');
+    scratch.editReceipt((receipt) => { receipt.commit = later; }, { reseal: true });
+    for (const result of [scratch.preliminary(), scratch.closure()]) {
+      assert.ok(result.failures.some((failure) => failure.includes(`ALTERED: at commit ${later} the file digest is`)), result.failures.join('\n'));
+    }
+
+    const unknown = siblingCase();
+    await unknown.mint();
+    unknown.editReceipt((receipt) => { receipt.commit = 'f'.repeat(40); }, { reseal: true });
+    assert.ok(unknown.closure().failures.some((failure) => /commit f{40} is not in \S+; the receipt cannot be re-proven/.test(failure)));
+    const open = unknown.preliminary();
+    assertGreen(open);
+    assert.match(open.report.staleReceipts[0].why, /cannot be re-proven/);
+  });
+
+  it('E11: without the sibling a receipt shows integrity and agreement with the kept record, not provenance', async () => {
+    const scratch = siblingCase();
+    await scratch.mintAudited();
+    scratch.editReceipt((receipt) => { receipt.fileDigest = digestOf('other bytes'); }, { reseal: true });
+    scratch.writeRecord();
+    assert.ok(scratch.closure().failures.some((failure) => /ALTERED: at commit/.test(failure)), 'the source refutes it');
+    scratch.hide();
+    const blind = scratch.closure();
+    assertGreen(blind);
+    assert.deepEqual(statusOf(blind), ['historical-receipt']);
+    assert.equal(blind.report.siblingEvidence[0].receipt.reproven, false, 'accepted without its source is never reported as re-proven');
+  });
+
+  it('E12: --write-receipts mints only from evidence verified live, is idempotent and never destroys a receipt on a refusal', async () => {
+    const scratch = siblingCase();
+    assert.equal((await run(['--write-receipts', '--check'], scratch.roots)).code, 2);
+    assert.equal((await run(['--write-receipts', `--assume-done=${OWNER}`], scratch.roots)).code, 2);
+    assert.equal((await run(['--write-receipts', '--audit-receipts', '--by=a', '--record=b'], scratch.roots)).code, 2);
+    assert.equal(existsSync(join(scratch.roots.packageRoot, RECEIPTS_PATH)), false);
+
+    await scratch.mintAudited();
+    const before = scratch.receiptsText();
+    const again = await run(['--write-receipts'], { ...scratch.roots, today: '2027-01-01' });
+    assert.deepEqual([again.code, again.mint.minted.length, again.mint.kept.length], [0, 0, 1]);
+    assert.equal(scratch.receiptsText(), before, 'an unchanged receipt keeps its date and its audited mark');
+
+    scratch.hide();
+    const kept = await scratch.mint();
+    assert.deepEqual([kept.code, kept.mint.kept.length], [0, 1], 'an intact receipt survives a run without its sibling');
+    assert.equal(scratch.receiptsText(), before);
+    scratch.editLedger((ledger) => { variantRow(ledger).scope = 'One optional prop of the widget contract.'; });
+    const absent = await scratch.mint();
+    assert.deepEqual([absent.code, absent.written], [1, false]);
+    assert.match(absent.failures[0], /no receipt minted: the sibling checkout is not present/);
+    assert.equal(scratch.receiptsText(), before, 'a refused run leaves the file as it was');
+    scratch.show();
+    const reminted = await scratch.mint();
+    assert.deepEqual([reminted.code, reminted.mint.minted.length, reminted.written], [0, 1, true]);
+    const [fresh] = scratch.readReceipts().receipts;
+    assert.equal(fresh.rowDigest, rowDigestOf(variantRow(JSON.parse(readFileSync(join(scratch.roots.packageRoot, LEDGER_PATH), 'utf8')))));
+    assert.deepEqual(Object.keys(fresh), [...RECEIPT_KEYS], 'a re-minted receipt loses the audited mark');
+
+    const uncommitted = siblingCase({ committed: 'export const Page = () => null;\n' });
+    uncommitted.writeWorkingTree(PAGE_SOURCE);
+    assertGreen(uncommitted.closure());
+    const refused = await uncommitted.mint();
+    assert.equal(refused.code, 1);
+    assert.match(refused.failures[0], /no receipt minted: at HEAD \w{40} the committed file does not contain the needle; only the working tree does/);
+    assert.equal(existsSync(join(uncommitted.roots.packageRoot, RECEIPTS_PATH)), false);
+
+    const missing = siblingCase({ committed: 'export const Page = () => null;\n' });
+    const failed = await missing.mint();
+    assert.equal(failed.code, 1);
+    assert.match(failed.failures[0], /no receipt minted: evidence `consumer`: \S+ no longer contains/);
+
+    const plain = siblingCase();
+    rmSync(join(plain.dir, '.git'), { recursive: true, force: true });
+    const unanchored = await plain.mint();
+    assert.match(unanchored.failures[0], /is not a git checkout; evidence cannot be anchored to a commit/);
+
+    const orphan = siblingCase();
+    await orphan.mintAudited();
+    orphan.editLedger((ledger) => { variantRow(ledger).evidence = [{ kind: 'consumer', path: SHOWROOM_PAGE, needle: NEEDLE }]; });
+    assertRedOnlyFor(orphan.preliminary(), /receipt for \S+ `WidgetProps\.variant` \(`consumer` at \S+\) names no evidence entry of the ledger/, 1);
+    const pruned = await orphan.mint();
+    assert.deepEqual([pruned.code, pruned.mint.dropped.length], [0, 1]);
+    assertGreen(orphan.closure());
+  });
+
+  it('E13: --write-receipts refuses a sibling HEAD that is not on its origin/main', async () => {
+    const scratch = siblingCase();
+    const local = scratch.commit(`// local only\n${PAGE_SOURCE}`, 'unpushed', { pushed: false });
+    const refused = await scratch.mint();
+    assert.deepEqual([refused.code, refused.written], [1, false]);
+    assert.match(refused.failures[0], new RegExp(`no receipt minted: HEAD ${local} of \\S+ is not an ancestor of its origin/main`));
+    assert.equal(existsSync(join(scratch.roots.packageRoot, RECEIPTS_PATH)), false);
+    scratch.git('update-ref', 'refs/remotes/origin/main', 'HEAD');
+    assert.equal((await scratch.mint()).code, 0);
+
+    const noRemoteBranch = siblingCase();
+    noRemoteBranch.git('update-ref', '-d', 'refs/remotes/origin/main');
+    assert.match((await noRemoteBranch.mint()).failures[0], /is not an ancestor of its origin\/main/);
+  });
+
+  it('E14 (unaudited): a receipt without the audited mark is red at closure, with or without its sibling', async () => {
+    const scratch = siblingCase();
+    await scratch.mint();
+    assertRedOnlyFor(scratch.closure(), UNAUDITED, 1);
+    const open = scratch.preliminary();
+    assertGreen(open);
+    assert.deepEqual(open.report.unauditedReceipts, [{ row: scratch.key, kind: 'consumer', path: scratch.path }]);
+    scratch.hide();
+    assertRedOnlyFor(scratch.closure(), anyOf(UNAUDITED, UNSATISFIED), 2);
+    const blind = scratch.preliminary();
+    assertGreen(blind);
+    assert.deepEqual(statusOf(blind), ['not-verified'], 'an unaudited receipt stands in for nothing');
+    assert.deepEqual(blind.report.unverifiedByRow, { [scratch.key]: 1 });
+    assert.deepEqual(blind.report.rowsOnHistoricalReceipts, []);
+  });
+
+  it('E15 (altered): an audited mark set by hand and resealed is red unless a kept record vouches for it hash for hash', async () => {
+    const mark = (receipt, fields = {}) => {
+      const { integrity, ...body } = receipt;
+      for (const key of Object.keys(receipt)) delete receipt[key];
+      Object.assign(receipt, body, { auditedBy: AUDITOR, auditedAt: TODAY, auditRecord: RECORD, ...fields }, { integrity });
+    };
+    const noRecord = siblingCase();
+    await noRecord.mint();
+    noRecord.editReceipt((receipt) => mark(receipt), { reseal: true });
+    assertRedOnlyFor(noRecord.preliminary(), /AUDIT MARK: .*audits\/2026-10-03\/index\.json does not exist/, 1);
+    noRecord.hide();
+    assertRedOnlyFor(noRecord.closure(), anyOf(/AUDIT MARK: .* does not exist/, UNSATISFIED), 2);
+
+    for (const [fields, editRecord, pattern] of [
+      [{ auditedBy: 'someone-else' }, () => {}, /AUDIT MARK: auditedBy `someone-else` is not the auditor of/],
+      [{ auditedAt: '2026-09-01' }, () => {}, /AUDIT MARK: auditedAt 2026-09-01 is not the date of/],
+      [{ auditRecord: '../outside/index.json' }, () => {}, /AUDIT MARK: audit record `\.\.\/outside\/index\.json` is not a repository-relative path/],
+      [{}, (record) => { record.receipts = []; }, /AUDIT MARK: the audit record has no entry for it/],
+      [{}, (record) => { record.receipts[0].verdict = 'FAILED'; }, /AUDIT MARK: the audit record's verdict for it is `FAILED`/],
+      [{}, (record) => { record.receipts[0].recomputed.fileSha256 = digestOf('what the auditor read'); }, /AUDIT MARK: the audit record re-derived other values: fileDigest/],
+      [{}, (record) => { record.receipts[0].commit = 'e'.repeat(40); }, /AUDIT MARK: the audit record re-derived other values: commit/],
+      [{}, (record) => { record.receipts[0].recomputed.integrity = digestOf('another receipt'); }, /AUDIT MARK: the audit record re-derived other values: integrity at minting/],
+    ]) {
+      const scratch = siblingCase();
+      await scratch.mint();
+      scratch.writeRecord(editRecord);
+      scratch.editReceipt((receipt) => mark(receipt, fields), { reseal: true });
+      assertRedOnlyFor(scratch.preliminary(), pattern, 1);
+      scratch.hide();
+      assertRedOnlyFor(scratch.closure(), anyOf(pattern, UNSATISFIED), 2);
+    }
+  });
+
+  it('E16 (audit mode): a receipt that does not re-prove live on that run is refused and nothing is written', async () => {
+    const usage = siblingCase();
+    await usage.mint();
+    assert.equal((await run(['--audit-receipts'], usage.roots)).code, 2);
+    assert.equal((await run(['--audit-receipts', `--by=${AUDITOR}`], usage.roots)).code, 2);
+    assert.equal((await run(['--check', `--by=${AUDITOR}`], usage.roots)).code, 2);
+    assert.equal((await run(['--audit-receipts', `--by=${AUDITOR}`, `--record=${RECORD}`, '--check'], usage.roots)).code, 2);
+    const noRecord = await usage.audit();
+    assert.deepEqual([noRecord.code, noRecord.written], [1, false]);
+    assert.match(noRecord.failures[0], /not marked audited: .* does not exist/);
+    usage.writeRecord();
+    const stranger = await run(['--audit-receipts', '--by=someone-else', `--record=${RECORD}`], usage.roots);
+    assert.match(stranger.failures[0], /names auditor `independent auditor \(fixture-auditor\)`, not `someone-else`/);
+
+    const cases = [
+      [(scratch) => scratch.hide(), /not marked audited: \S+ is not present; nothing was re-proven on this run/],
+      [(scratch) => scratch.editReceipt((receipt) => { receipt.fileDigest = digestOf('other bytes'); }, { reseal: true }), /not marked audited: ALTERED: at commit \w{40} the file digest is/],
+      [(scratch) => scratch.editReceipt((receipt) => { receipt.fileDigest = digestOf('other bytes'); }), /not marked audited: ALTERED: the integrity digest does not match/],
+      [(scratch) => scratch.commit('export const Page = () => null;\n', 'migrate'), /not marked audited: STALE: at HEAD/],
+      [(scratch) => scratch.editLedger((ledger) => { variantRow(ledger).scope = 'Another scope of the widget.'; }), /not marked audited: STALE: it certifies row digest/],
+      [(scratch) => scratch.git('update-ref', '-d', 'refs/remotes/origin/main'), /not marked audited: commit \w{40} is not an ancestor of origin\/main/],
+      [(scratch) => scratch.writeRecord((record) => { record.receipts[0].recomputed.matchDigest = digestOf('another line'); }), /not marked audited: the audit record re-derived other values: matchDigest/],
+      [(scratch) => scratch.writeRecord((record) => { record.receipts[0].verdict = 'FAILED'; }), /not marked audited: the audit record's verdict for it is `FAILED`/],
+    ];
+    for (const [plant, pattern] of cases) {
+      const scratch = siblingCase();
+      await scratch.mint();
+      scratch.writeRecord();
+      plant(scratch);
+      const before = scratch.receiptsText();
+      const refused = await scratch.audit();
+      assert.deepEqual([refused.code, refused.written, refused.audit.marked.length], [1, false, 0], String(pattern));
+      assert.match(refused.failures[0], pattern);
+      assert.equal(scratch.receiptsText(), before, 'a refused audit leaves the file as it was');
+    }
+  });
+
+  it('E17: closure with the sibling present needs the audited receipt re-proven on that run', async () => {
+    const scratch = siblingCase();
+    await scratch.mintAudited();
+    const live = scratch.closure();
+    assertGreen(live);
+    assert.deepEqual(live.report.siblingEvidence[0].receipt, {
+      commit: scratch.first, date: TODAY, holds: true, reproven: true, audited: { by: AUDITOR, at: TODAY, record: RECORD },
+    });
+    rmSync(join(scratch.dir, '.git'), { recursive: true, force: true });
+    const unprovable = scratch.closure();
+    assertRedOnlyFor(unprovable, /is present but is not a git checkout; the receipt cannot be re-proven/, 1);
+    assert.equal(unprovable.report.siblingEvidence[0].receipt.reproven, false);
   });
 });
 

@@ -11,9 +11,9 @@
  * this gate compares the ledger against the tree in both directions and
  * re-verifies each row's claims on every run.
  *
- * NOT A BASELINE. There is no write or seed mode, no count ceiling and no
- * wildcard row. A row is keyed by one file and one anchor; a marker the ledger
- * does not name is red, and so is a row whose marker is gone.
+ * NOT A BASELINE. No mode writes or seeds the ledger; there is no count ceiling
+ * and no wildcard row. A row is keyed by one file and one anchor; a marker the
+ * ledger does not name is red, and so is a row whose marker is gone.
  *
  * WHAT IS RED
  *   - a marker without a row, a row without a marker, a duplicate row;
@@ -37,6 +37,10 @@
  *     the canonical owner;
  *   - a row newer than `sealedAt` without a changeset that names the symbol;
  *   - a `removeIn` release line the package version has already reached;
+ *   - a receipt that is incomplete, duplicated, edited after it was minted,
+ *     contradicted by the sibling checkout it cites, or that names no evidence
+ *     entry of the ledger; an audited mark whose kept audit record is missing
+ *     or re-derived other values.
  *
  * WHAT `--assume-done=<WO>` ADDS (the closure candidate). Re-homing every row to
  * another open work order must not close anything, so in this mode:
@@ -46,30 +50,71 @@
  *   - a non-`debt` row needs a codemod id that the codemod map was actually
  *     asked about; a shape-only check, a missing map or a kit that fails to
  *     load is red;
- *   - `parity-unproven` is red: a verdict still owed cannot cross a closure.
+ *   - `parity-unproven` is red: a verdict still owed cannot cross a closure;
+ *   - the evidence kind a class requires must be verified live on this run or
+ *     rest on an audited receipt; evidence that is merely unavailable is red;
+ *   - a receipt without the audited mark is red;
+ *   - a receipt that is stale (its row changed, or the sibling's HEAD no longer
+ *     carries the needle) or that a present sibling cannot re-prove is red.
  *
  * WHAT THIS GATE CANNOT SEE. It scans for the literal tag. A reworded comment
  * (`Deprecated:` with no tag, `@Deprecated`) is not a marker here, and neither
  * is a symbol whose tag was deleted while the legacy symbol stayed published;
  * the guards for those are the contract-changeset gate and review. A row's
  * `since` is authored, so a new marker can be back-dated past `sealedAt`.
- * Evidence under a sibling application that is not checked out (CI) is
- * reported as unverified and still satisfies the row.
+ *
+ * EVIDENCE IN A SIBLING CHECKOUT. An entry under `../<application>` is verified
+ * live when that checkout is present. When it is absent (CI) a plain `--check`
+ * reports the entry by row and does not fail the row; under `--assume-done`
+ * only an audited receipt stands in for it. A receipt
+ * (`contracts/package/deprecations/receipts/index.json`, one per row, kind,
+ * path and needle) records the sibling's origin, the commit the evidence was
+ * read at, the digests of the file and of the matched line at that commit, the
+ * digest of the ledger row it certifies and a digest of itself.
+ *
+ * INTEGRITY IS NOT PROVENANCE. The receipt's own digests prove only that the
+ * record and its row were not edited since minting; they are unkeyed and say
+ * nothing about whether the evidence came from the cited application.
+ * Provenance is established once, by an audit that re-derives every value from
+ * the source commits in read-only checkouts: `--audit-receipts` re-proves each
+ * receipt live, requires the kept audit record to hold the same values hash
+ * for hash, and only then sets `auditedBy`, `auditedAt` and `auditRecord`.
+ * Without the sibling the gate checks integrity and agreement with that kept
+ * record, and calls the result a historical audited receipt, not re-verified
+ * here; it is never an independent check of the source.
+ * The limit, stated plainly: with the siblings absent, a forger who fabricates
+ * both the receipt and the audit record passes; the gate does not detect it,
+ * and closure is therefore run with the siblings present.
+ *
+ * ORDER AT CLOSURE. The row digest covers the whole row, so re-homing a row
+ * invalidates its receipt. Re-home the rows, run `--write-receipts` with the
+ * siblings present, have the receipts audited and marked, then run the closure
+ * check with the siblings present and keep its `--json` beside the audit
+ * record.
  *
  * WHAT IS REPORTED AND NEVER A PASS. `receiverPhaseLocked` per row, so a
  * transfer to a locked work order cannot look actionable; evidence in a sibling
- * checkout that is not present; codemod ids the map could not be asked about.
+ * checkout that is not present, by row; rows that rest on historical audited
+ * receipts; receipts that are stale or unaudited; codemod ids the map could
+ * not be asked about.
  *
  * `--consumers` asks whether each `compat-consumed` row still has a
  * design-system-resolved use in the four consumer roots. The resolver is an
  * interface (`loadConsumerResolver`); while none is wired the flag fails
  * closed rather than reporting green.
  *
+ * `--siblings=absent` evaluates as CI does, with no sibling checkout.
+ *
  * Usage: node scripts/check/boundaries/deprecations/index.mjs --check
- *          [--assume-done=<WO>[,<WO>]] [--consumers] [--json]
+ *          [--assume-done=<WO>[,<WO>]] [--consumers] [--siblings=absent] [--json]
+ *        node scripts/check/boundaries/deprecations/index.mjs --write-receipts
+ *        node scripts/check/boundaries/deprecations/index.mjs --audit-receipts
+ *          --by=<auditor> --record=<repo-relative path of the kept audit record>
  */
 
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -83,6 +128,7 @@ import {
 const HERE = dirname(fileURLToPath(import.meta.url));
 
 export const LEDGER_PATH = 'contracts/package/deprecations/index.json';
+export const RECEIPTS_PATH = 'contracts/package/deprecations/receipts/index.json';
 export const REGISTRY_PATH = 'roadmap/registry.json';
 export const GATES_MANIFEST_PATH = 'scripts/check/automation/gates/manifest/index.mjs';
 export const CODEMOD_MAP_PATH = 'scripts/maintain/codemods/maps/3.0/index.json';
@@ -138,6 +184,13 @@ export const EVIDENCE_KINDS = Object.freeze({
   'census-receipt': ['kind', 'path', 'needle', 'note'],
 });
 
+export const RECEIPT_HEADER_KEYS = Object.freeze(['schema', 'receipts']);
+export const RECEIPT_KEYS = Object.freeze([
+  'file', 'anchor', 'kind', 'path', 'needle', 'repository', 'commit', 'fileDigest', 'matchLine', 'matchDigest',
+  'rowDigest', 'date', 'integrity',
+]);
+export const RECEIPT_AUDIT_KEYS = Object.freeze(['auditedBy', 'auditedAt', 'auditRecord']);
+
 export const HEADER_KEYS = Object.freeze(['schema', 'sealedAt', 'noDebtReceivers', 'compatReceivers', 'notes', 'rows']);
 export const ROW_KEYS = Object.freeze([
   'file', 'anchor', 'class', 'reason', 'scope', 'replacement', 'canonicalOwner', 'blocker',
@@ -151,6 +204,8 @@ const GLOB = /[*?[\]{}]/;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const RELEASE_LINE = /^(\d+)\.(\d+)$/;
 const WORK_ORDER = /^WO-[A-Z]+-\d+$/;
+const COMMIT_SHA = /^[0-9a-f]{40}$/;
+const SHA256 = /^sha256:[0-9a-f]{64}$/;
 // The id grammar of the codemod kit (`parseEntryId`): a subpath entry spells its symbol `*`.
 const CODEMOD_ID =
   /^[a-z][a-z-]*\/\.(?:\/[A-Za-z0-9._*-]+)*#(?:[A-Za-z_$*][\w$]*|\*)(?:\.[\w$-]+)?$/;
@@ -397,6 +452,8 @@ function readJson(path) {
 export function measure({ packageRoot, repoRoot }) {
   const ledger = readJson(join(packageRoot, LEDGER_PATH));
   const registry = readJson(join(repoRoot, REGISTRY_PATH));
+  const receiptsPath = join(packageRoot, RECEIPTS_PATH);
+  const receipts = existsSync(receiptsPath) ? readJson(receiptsPath) : { value: null, error: null };
   const pkg = readJson(join(packageRoot, 'package.json'));
   const manifestPath = join(packageRoot, GATES_MANIFEST_PATH);
   return {
@@ -407,6 +464,8 @@ export function measure({ packageRoot, repoRoot }) {
     ledgerError: ledger.error,
     registry: registry.value,
     registryError: registry.error,
+    receipts: receipts.value,
+    receiptsError: receipts.error,
     version: pkg.value?.version ?? null,
     gatesManifest: existsSync(manifestPath) ? readFileSync(manifestPath, 'utf8') : null,
   };
@@ -485,8 +544,8 @@ function evidencePathProblem(path) {
 
 /**
  * One evidence entry, verified against the tree.
- * Returns `{ problems, verified, unverified }`: an entry in a sibling checkout
- * that is not present is neither a problem nor a verification.
+ * Returns `{ problems, verified, unverified, sibling }`: an entry in a sibling
+ * checkout that is not present is neither a problem nor a verification.
  */
 function verifyEvidence(entry, row, context) {
   const problems = [];
@@ -543,13 +602,13 @@ function verifyEvidence(entry, row, context) {
   if (problems.length > 0) return { problems, verified: false, unverified: false };
 
   const sibling = entry.path.startsWith('../');
-  if (sibling && !existsSync(resolve(context.repoRoot, entry.path.split('/').slice(0, 2).join('/')))) {
-    return { problems, verified: false, unverified: true };
+  if (sibling && !context.siblingOf(entry.path).info.present) {
+    return { problems, verified: false, unverified: true, sibling };
   }
   const full = resolve(context.repoRoot, entry.path);
   if (!existsSync(full) || !statSync(full).isFile()) {
     problems.push(`evidence \`${entry.kind}\`: ${entry.path} does not exist`);
-    return { problems, verified: false, unverified: false };
+    return { problems, verified: false, unverified: false, sibling };
   }
   const text = readFileSync(full, 'utf8');
   if (isText(entry.needle) && !text.includes(entry.needle)) {
@@ -561,7 +620,382 @@ function verifyEvidence(entry, row, context) {
       + 'the frozen engine reads the replacement, so the sole-implementer claim no longer holds',
     );
   }
-  return { problems, verified: problems.length === 0, unverified: false };
+  return { problems, verified: problems.length === 0, unverified: false, sibling };
+}
+
+// ---------------------------------------------------------------------------
+// Receipts
+// ---------------------------------------------------------------------------
+
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(',')}}`;
+  }
+  return JSON.stringify(value) ?? 'null';
+}
+
+export function digestOf(bytes) {
+  return `sha256:${createHash('sha256').update(bytes).digest('hex')}`;
+}
+
+/** The digest of one ledger row: every key, in canonical order. */
+export function rowDigestOf(row) {
+  return digestOf(canonicalJson(row));
+}
+
+/** The digest a receipt carries of its own content. */
+export function receiptIntegrityOf(receipt) {
+  const body = Object.fromEntries(Object.entries(receipt).filter(([key]) => key !== 'integrity'));
+  return digestOf(canonicalJson(body));
+}
+
+export function isAudited(receipt) {
+  return RECEIPT_AUDIT_KEYS.every((key) => key in receipt);
+}
+
+/** The integrity digest the receipt carried when it was minted, before any audited mark. */
+export function mintIntegrityOf(receipt) {
+  return receiptIntegrityOf(Object.fromEntries(Object.entries(receipt).filter(([key]) => !RECEIPT_AUDIT_KEYS.includes(key))));
+}
+
+function readAuditRecord(repoRoot, path) {
+  if (!isText(path) || path.startsWith('/') || /^[A-Za-z]:/.test(path) || GLOB.test(path) || path.split('/').includes('..')) {
+    return { value: null, error: `audit record \`${path}\` is not a repository-relative path` };
+  }
+  return readJson(join(repoRoot, path));
+}
+
+/**
+ * Why a kept audit record does not vouch for a receipt, or null when it does:
+ * the record must list the receipt as VERIFIED with the same commit and the
+ * same re-derived digests, hash for hash.
+ */
+export function auditRecordDisagreement(record, receipt) {
+  if (!record || typeof record !== 'object' || !Array.isArray(record.receipts)) return 'the audit record lists no receipts';
+  const entry = record.receipts.find((candidate) => (
+    candidate && candidate.row === `${receipt.file}#${receipt.anchor}` && candidate.kind === receipt.kind
+    && candidate.path === receipt.path && candidate.needle === receipt.needle
+  ));
+  if (!entry) return 'the audit record has no entry for it';
+  if (entry.verdict !== 'VERIFIED') return `the audit record's verdict for it is \`${entry.verdict}\``;
+  const differing = [
+    ['commit', entry.commit, receipt.commit],
+    ['fileDigest', entry.recomputed?.fileSha256, receipt.fileDigest],
+    ['matchLine', entry.recomputed?.matchLine, receipt.matchLine],
+    ['matchDigest', entry.recomputed?.matchDigest, receipt.matchDigest],
+    ['rowDigest', entry.recomputed?.rowDigest, receipt.rowDigest],
+    ['integrity at minting', entry.recomputed?.integrity, mintIntegrityOf(receipt)],
+  ].filter(([, audited, recorded]) => audited !== recorded);
+  if (differing.length === 0) return null;
+  return `the audit record re-derived other values: ${differing.map(([name, audited, recorded]) => `${name} (record ${audited}, receipt ${recorded})`).join('; ')}`;
+}
+
+/** Why the audited mark of a receipt is not backed by its kept record; empty when it is. */
+function auditMarkProblems(receipt, repoRoot, records) {
+  if (!records.has(receipt.auditRecord)) records.set(receipt.auditRecord, readAuditRecord(repoRoot, receipt.auditRecord));
+  const { value, error } = records.get(receipt.auditRecord);
+  if (error) return [`AUDIT MARK: ${error}`];
+  const problems = [];
+  if (value?.audit?.date !== receipt.auditedAt) {
+    problems.push(`AUDIT MARK: auditedAt ${receipt.auditedAt} is not the date of ${receipt.auditRecord} (${value?.audit?.date})`);
+  }
+  if (!String(value?.audit?.auditor ?? '').includes(receipt.auditedBy)) {
+    problems.push(`AUDIT MARK: auditedBy \`${receipt.auditedBy}\` is not the auditor of ${receipt.auditRecord} (\`${value?.audit?.auditor}\`)`);
+  }
+  const disagreement = auditRecordDisagreement(value, receipt);
+  if (disagreement) problems.push(`AUDIT MARK: ${disagreement}`);
+  return problems;
+}
+
+/** One receipt per row, evidence kind, path and needle: a row may cite one file for two needles. */
+export function receiptKey({ file, anchor, kind, path, needle }) {
+  return `${file}#${anchor} ${kind} ${path} needle=${JSON.stringify(needle)}`;
+}
+
+/** The first occurrence of `needle`: its 1-based line and the digest of the whole line(s) it spans. */
+export function matchOf(bytes, needle) {
+  const text = bytes.toString('utf8');
+  const at = text.indexOf(needle);
+  if (at === -1) return null;
+  const start = text.lastIndexOf('\n', at - 1) + 1;
+  const stop = text.indexOf('\n', at + needle.length);
+  const range = text.slice(start, stop === -1 ? text.length : stop);
+  return { line: text.slice(0, start).split('\n').length, digest: digestOf(Buffer.from(range, 'utf8')) };
+}
+
+/**
+ * What a sibling directory is: absent, a plain directory, or a git checkout
+ * that can be asked for its origin, its HEAD and a file at a commit. Read-only.
+ */
+export function inspectSibling(dir) {
+  if (!existsSync(dir)) return { present: false };
+  const git = (args) => {
+    try {
+      return execFileSync('git', ['-C', dir, ...args], { stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 2 ** 28 });
+    } catch {
+      return null;
+    }
+  };
+  const top = git(['rev-parse', '--show-toplevel']);
+  const checkout = top !== null && realpathSync(top.toString('utf8').trim()) === realpathSync(dir);
+  if (!checkout) return { present: true, checkout: false };
+  return {
+    present: true,
+    checkout: true,
+    origin: git(['config', '--get', 'remote.origin.url'])?.toString('utf8').trim() || null,
+    head: git(['rev-parse', '--verify', 'HEAD^{commit}'])?.toString('utf8').trim() || null,
+    hasCommit: (sha) => COMMIT_SHA.test(sha) && git(['cat-file', '-e', `${sha}^{commit}`]) !== null,
+    onOriginMain: (sha) => COMMIT_SHA.test(sha) && git(['merge-base', '--is-ancestor', sha, 'origin/main']) !== null,
+    blobAt: (revision, inner) => git(['show', `${revision}:./${inner}`]),
+  };
+}
+
+function siblingLocator(repoRoot, siblings, inspect) {
+  const cache = new Map();
+  return (path) => {
+    const [, name, ...rest] = path.split('/');
+    if (!cache.has(name)) {
+      cache.set(name, siblings === 'absent' ? { present: false } : inspect(resolve(repoRoot, '..', name)));
+    }
+    return { name: `../${name}`, inner: rest.join('/'), info: cache.get(name) };
+  };
+}
+
+/** Why a receipt is not a complete, self-consistent record; empty when it is. */
+export function receiptProblems(receipt) {
+  if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) return ['is not an object'];
+  const problems = [];
+  for (const key of Object.keys(receipt)) {
+    if (!RECEIPT_KEYS.includes(key) && !RECEIPT_AUDIT_KEYS.includes(key)) problems.push(`unknown key \`${key}\``);
+  }
+  for (const key of RECEIPT_KEYS) {
+    if (!(key in receipt)) problems.push(`key \`${key}\` is missing`);
+  }
+  const marks = RECEIPT_AUDIT_KEYS.filter((key) => key in receipt);
+  if (marks.length > 0 && marks.length < RECEIPT_AUDIT_KEYS.length) {
+    problems.push(`the audited mark is partial: ${RECEIPT_AUDIT_KEYS.join(', ')} are set together or not at all`);
+  }
+  if (problems.length > 0) return problems;
+  if (marks.length > 0) {
+    if (!isText(receipt.auditedBy)) problems.push('`auditedBy` is empty');
+    if (!ISO_DATE.test(String(receipt.auditedAt))) problems.push(`auditedAt \`${receipt.auditedAt}\` is not a YYYY-MM-DD date`);
+    if (!isText(receipt.auditRecord)) problems.push('`auditRecord` is empty');
+  }
+  for (const key of ['file', 'anchor', 'kind', 'path', 'needle', 'repository']) {
+    if (!isText(receipt[key])) problems.push(`\`${key}\` is empty`);
+  }
+  if (isText(receipt.path) && (!receipt.path.startsWith('../') || evidencePathProblem(receipt.path))) {
+    problems.push(`path \`${receipt.path}\` is not a file of a sibling checkout`);
+  }
+  if (!COMMIT_SHA.test(String(receipt.commit))) problems.push(`commit \`${receipt.commit}\` is not a full commit SHA`);
+  for (const key of ['fileDigest', 'matchDigest', 'rowDigest', 'integrity']) {
+    if (!SHA256.test(String(receipt[key]))) problems.push(`\`${key}\` is not a sha256 digest`);
+  }
+  if (!Number.isInteger(receipt.matchLine) || receipt.matchLine < 1) problems.push('`matchLine` is not a line number');
+  if (!ISO_DATE.test(String(receipt.date))) problems.push(`date \`${receipt.date}\` is not a YYYY-MM-DD date`);
+  if (problems.length === 0 && receipt.integrity !== receiptIntegrityOf(receipt)) {
+    problems.push('ALTERED: the integrity digest does not match the content; the receipt was edited after it was minted');
+  }
+  return problems;
+}
+
+const short = (digest) => String(digest).replace(/^sha256:/, '').slice(0, 12);
+
+/**
+ * One receipt against the row it names and, when present, the sibling it cites.
+ * `refuted` is red in every mode: the sibling contradicts the record. `stale`
+ * is red at closure and reported otherwise: the record no longer certifies the
+ * current row or the current sibling, or cannot be re-proven here.
+ */
+function proveReceipt(receipt, row, entry, sibling) {
+  const refuted = [];
+  const stale = [];
+  const { info, inner, name } = sibling;
+  if (receipt.rowDigest !== rowDigestOf(row)) {
+    stale.push(
+      `STALE: it certifies row digest ${short(receipt.rowDigest)} and the row is now ${short(rowDigestOf(row))}; `
+      + `the row or its needle changed after ${receipt.date}`,
+    );
+  }
+  if (!info.present) return { refuted, stale, reproven: false };
+  if (!info.checkout) {
+    stale.push(`${name} is present but is not a git checkout; the receipt cannot be re-proven`);
+    return { refuted, stale, reproven: false };
+  }
+  if (info.origin !== receipt.repository) {
+    refuted.push(`ALTERED: it names repository \`${receipt.repository}\` and ${name} has origin \`${info.origin}\``);
+  }
+  if (!info.hasCommit(receipt.commit)) {
+    stale.push(`commit ${receipt.commit} is not in ${name}; the receipt cannot be re-proven (fetch the commit or mint again)`);
+    return { refuted, stale, reproven: false };
+  }
+  const blob = info.blobAt(receipt.commit, inner);
+  if (blob === null) {
+    refuted.push(`ALTERED: ${entry.path} does not exist at commit ${receipt.commit}`);
+  } else {
+    const match = matchOf(blob, receipt.needle);
+    if (digestOf(blob) !== receipt.fileDigest) {
+      refuted.push(
+        `ALTERED: at commit ${receipt.commit} the file digest is ${short(digestOf(blob))}, `
+        + `the receipt records ${short(receipt.fileDigest)}`,
+      );
+    } else if (!match) {
+      refuted.push(`ALTERED: at commit ${receipt.commit} the file does not contain the needle`);
+    } else if (match.line !== receipt.matchLine || match.digest !== receipt.matchDigest) {
+      refuted.push(`ALTERED: at commit ${receipt.commit} the needle matches line ${match.line} (${short(match.digest)}), not the recorded line`);
+    }
+  }
+  const head = info.blobAt('HEAD', inner);
+  if (head === null || !head.includes(entry.needle)) {
+    stale.push(
+      `STALE: at HEAD ${info.head} of ${name} the file ${head === null ? 'is gone' : `no longer contains \`${entry.needle}\``}; `
+      + `the receipt was read at ${receipt.commit}`,
+    );
+  }
+  return { refuted, stale, reproven: refuted.length === 0 };
+}
+
+function isSiblingEntry(entry) {
+  return Boolean(entry) && typeof entry === 'object' && typeof entry.path === 'string' && entry.path.startsWith('../');
+}
+
+/**
+ * The receipts of every sibling evidence entry that verifies live on this run,
+ * read from the sibling's HEAD commit. An entry whose sibling is absent keeps
+ * the receipt it already has when that receipt is intact and still certifies
+ * the row; every other entry is refused by name. A new receipt carries no
+ * audited mark.
+ */
+export function mintReceipts(measurement, { inspect = inspectSibling, today = new Date().toISOString().slice(0, 10) } = {}) {
+  const existing = new Map();
+  for (const receipt of measurement.receipts?.receipts ?? []) {
+    if (receiptProblems(receipt).length === 0) existing.set(receiptKey(receipt), receipt);
+  }
+  const context = {
+    repoRoot: measurement.repoRoot,
+    gatesManifest: measurement.gatesManifest,
+    siblingOf: siblingLocator(measurement.repoRoot, 'detect', inspect),
+  };
+  const receipts = [];
+  const minted = [];
+  const kept = [];
+  const refused = [];
+  const seen = new Set();
+  for (const row of Array.isArray(measurement.ledger?.rows) ? measurement.ledger.rows : []) {
+    if (!row || typeof row !== 'object' || !isText(row.file) || !isText(row.anchor)) continue;
+    for (const entry of Array.isArray(row.evidence) ? row.evidence : []) {
+      if (!isSiblingEntry(entry)) continue;
+      const key = receiptKey({ file: row.file, anchor: row.anchor, kind: entry.kind, path: entry.path, needle: entry.needle });
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const refuse = (why) => refused.push({ row: rowKey(row), kind: entry.kind, path: entry.path, why });
+      const result = verifyEvidence(entry, row, context);
+      const prior = existing.get(key) ?? null;
+      if (result.unverified) {
+        if (prior && prior.rowDigest === rowDigestOf(row)) { receipts.push(prior); kept.push(key); }
+        else refuse('the sibling checkout is not present, so nothing was verified on this run');
+        continue;
+      }
+      if (!result.verified) { refuse(result.problems.join('; ')); continue; }
+      const { info, inner, name } = context.siblingOf(entry.path);
+      if (!info.checkout) { refuse(`${name} is not a git checkout; evidence cannot be anchored to a commit`); continue; }
+      if (!info.origin) { refuse(`${name} has no origin remote; the repository cannot be identified`); continue; }
+      if (!info.head) { refuse(`${name} has no HEAD commit`); continue; }
+      if (!info.onOriginMain(info.head)) {
+        refuse(`HEAD ${info.head} of ${name} is not an ancestor of its origin/main; a commit nobody else can fetch anchors nothing`);
+        continue;
+      }
+      const blob = info.blobAt('HEAD', inner);
+      const match = blob === null ? null : matchOf(blob, entry.needle);
+      if (!match) {
+        refuse(`at HEAD ${info.head} the committed file ${blob === null ? 'does not exist' : 'does not contain the needle'}; only the working tree does`);
+        continue;
+      }
+      const body = {
+        file: row.file,
+        anchor: row.anchor,
+        kind: entry.kind,
+        path: entry.path,
+        needle: entry.needle,
+        repository: info.origin,
+        commit: info.head,
+        fileDigest: digestOf(blob),
+        matchLine: match.line,
+        matchDigest: match.digest,
+        rowDigest: rowDigestOf(row),
+      };
+      const same = prior && Object.keys(body).every((field) => prior[field] === body[field]);
+      if (same) { receipts.push(prior); kept.push(key); continue; }
+      const receipt = { ...body, date: today };
+      receipts.push({ ...receipt, integrity: receiptIntegrityOf(receipt) });
+      minted.push(key);
+    }
+  }
+  const dropped = [...existing.keys()].filter((key) => !seen.has(key));
+  return { document: { schema: 1, receipts }, minted, kept, refused, dropped };
+}
+
+/**
+ * The audit step: sets the audited mark on every receipt that re-proves live on
+ * this run against its recorded commit, sits on the sibling's origin/main, and
+ * that the kept audit record re-derived to the same values. Anything else is
+ * refused by name.
+ */
+export function auditReceipts(measurement, { by, record, inspect = inspectSibling } = {}) {
+  const refused = [];
+  const marked = [];
+  const kept = [];
+  const keptRecord = readAuditRecord(measurement.repoRoot, record);
+  const auditedAt = keptRecord.value?.audit?.date;
+  const fatal = [];
+  if (!isText(by)) fatal.push('--by names no auditor');
+  if (keptRecord.error) fatal.push(keptRecord.error);
+  else {
+    if (!ISO_DATE.test(String(auditedAt))) fatal.push(`${record} carries no audit date`);
+    if (isText(by) && !String(keptRecord.value?.audit?.auditor ?? '').includes(by)) {
+      fatal.push(`${record} names auditor \`${keptRecord.value?.audit?.auditor}\`, not \`${by}\``);
+    }
+  }
+  const source = measurement.receipts?.receipts;
+  if (!Array.isArray(source)) fatal.push(`${RECEIPTS_PATH} holds no receipts`);
+  if (fatal.length > 0) return { document: null, marked, kept, refused: fatal.map((why) => ({ receipt: null, why })) };
+
+  const entries = new Map();
+  for (const row of Array.isArray(measurement.ledger?.rows) ? measurement.ledger.rows : []) {
+    if (!row || typeof row !== 'object' || !isText(row.file) || !isText(row.anchor)) continue;
+    for (const entry of Array.isArray(row.evidence) ? row.evidence : []) {
+      if (!isSiblingEntry(entry)) continue;
+      entries.set(receiptKey({ file: row.file, anchor: row.anchor, kind: entry.kind, path: entry.path, needle: entry.needle }), { row, entry });
+    }
+  }
+  const siblingOf = siblingLocator(measurement.repoRoot, 'detect', inspect);
+  const receipts = source.map((receipt, index) => {
+    const structural = receiptProblems(receipt);
+    const label = structural.length === 0 ? receiptKey(receipt) : `receipt ${index}`;
+    const refuse = (why) => { refused.push({ receipt: label, why }); return receipt; };
+    if (structural.length > 0) return refuse(structural.join('; '));
+    const cited = entries.get(label);
+    if (!cited) return refuse('it names no evidence entry of the ledger');
+    const sibling = siblingOf(receipt.path);
+    const proof = proveReceipt(receipt, cited.row, cited.entry, sibling);
+    if (proof.refuted.length > 0 || proof.stale.length > 0) return refuse([...proof.refuted, ...proof.stale].join('; '));
+    if (!proof.reproven) return refuse(`${sibling.name} is not present; nothing was re-proven on this run`);
+    if (!sibling.info.onOriginMain(receipt.commit)) return refuse(`commit ${receipt.commit} is not an ancestor of origin/main of ${sibling.name}`);
+    const disagreement = auditRecordDisagreement(keptRecord.value, receipt);
+    if (disagreement) return refuse(disagreement);
+    if (receipt.auditedBy === by && receipt.auditedAt === auditedAt && receipt.auditRecord === record) {
+      kept.push(label);
+      return receipt;
+    }
+    const body = Object.fromEntries(
+      Object.entries(receipt).filter(([key]) => key !== 'integrity' && !RECEIPT_AUDIT_KEYS.includes(key)),
+    );
+    const audited = { ...body, auditedBy: by, auditedAt, auditRecord: record };
+    marked.push(label);
+    return { ...audited, integrity: receiptIntegrityOf(audited) };
+  });
+  return { document: { schema: 1, receipts }, marked, kept, refused };
 }
 
 /** Whether an id has the grammar of the codemod kit. */
@@ -711,22 +1145,72 @@ function checkRow(row, context, report) {
   const evidence = Array.isArray(row.evidence) ? row.evidence : null;
   if (!evidence) problems.push('evidence is not an array');
   const verifiedKinds = new Set();
+  const receiptedKinds = new Set();
   const unverifiedKinds = new Set();
   for (const entry of evidence ?? []) {
     const result = verifyEvidence(entry, row, context);
     problems.push(...result.problems);
     if (result.verified) verifiedKinds.add(entry.kind);
-    if (result.unverified) {
+    if (!result.sibling) continue;
+
+    const key = receiptKey({ file: row.file, anchor: row.anchor, kind: entry.kind, path: entry.path, needle: entry.needle });
+    const receipt = context.receipts.get(key) ?? null;
+    let holds = false;
+    let reproven = false;
+    if (receipt) {
+      context.receiptsUsed.add(key);
+      const proof = proveReceipt(receipt, row, entry, context.siblingOf(entry.path));
+      for (const problem of proof.refuted) problems.push(`receipt for \`${entry.kind}\` at ${entry.path}: ${problem}`);
+      for (const problem of proof.stale) {
+        if (closing) problems.push(`receipt for \`${entry.kind}\` at ${entry.path}: ${problem}`);
+        else report.staleReceipts.push({ row: rowKey(row), kind: entry.kind, path: entry.path, why: problem });
+      }
+      if (!isAudited(receipt)) {
+        const problem = 'UNAUDITED: it carries no audited mark; its digests show integrity, not that the evidence comes from the cited application';
+        if (closing) problems.push(`receipt for \`${entry.kind}\` at ${entry.path}: ${problem}`);
+        else report.unauditedReceipts.push({ row: rowKey(row), kind: entry.kind, path: entry.path });
+      }
+      holds = proof.refuted.length === 0 && proof.stale.length === 0 && context.vouched.has(key);
+      reproven = proof.refuted.length === 0 && proof.stale.length === 0 && proof.reproven;
+    }
+    if (result.unverified && holds) receiptedKinds.add(entry.kind);
+    if (result.unverified && !holds) {
       unverifiedKinds.add(entry.kind);
       report.unverifiedEvidence.push({ row: rowKey(row), kind: entry.kind, path: entry.path });
     }
+    report.siblingEvidence.push({
+      row: rowKey(row),
+      kind: entry.kind,
+      path: entry.path,
+      status: result.verified ? 'verified-live' : result.unverified ? (holds ? 'historical-receipt' : 'not-verified') : 'failed',
+      receipt: receipt
+        ? {
+          commit: receipt.commit,
+          date: receipt.date,
+          holds,
+          reproven,
+          audited: isAudited(receipt) ? { by: receipt.auditedBy, at: receipt.auditedAt, record: receipt.auditRecord } : null,
+        }
+        : null,
+    });
   }
 
   if (CLASSES.includes(row.class) && row.class !== 'debt') {
     if (evidence && evidence.length === 0) problems.push(`${row.class} row has no evidence`);
     const required = REQUIRED_EVIDENCE_BY_CLASS[row.class];
-    if (required && evidence && evidence.length > 0 && !verifiedKinds.has(required) && !unverifiedKinds.has(required)) {
-      problems.push(`${row.class} row has no verified \`${required}\` evidence`);
+    const satisfied = verifiedKinds.has(required) || receiptedKinds.has(required);
+    if (required && !verifiedKinds.has(required) && receiptedKinds.has(required)) {
+      report.rowsOnHistoricalReceipts.push(rowKey(row));
+    }
+    if (required && evidence && evidence.length > 0 && !satisfied) {
+      if (!unverifiedKinds.has(required)) {
+        problems.push(`${row.class} row has no verified \`${required}\` evidence`);
+      } else if (closing) {
+        problems.push(
+          `${row.class} row: \`${required}\` evidence is NOT VERIFIED under --assume-done: its sibling checkout is not `
+          + 'present and no audited receipt stands in for it; closure needs it verified live or a historical audited receipt',
+        );
+      }
     }
     const blocker = blockerShape(row.blocker);
     if (!isText(row.blocker)) {
@@ -819,9 +1303,14 @@ function checkRow(row, context, report) {
  * @param measurement the result of `measure`
  * @param options `assumeDone`: work orders treated as closed;
  *   `consumers`: `(row) => { uses, roots }` or null when `--consumers` is off;
- *   `codemods`: the result of `loadCodemodLookup`, or null for a shape-only check.
+ *   `codemods`: the result of `loadCodemodLookup`, or null for a shape-only check;
+ *   `siblings`: `'absent'` treats every sibling checkout as not present (what CI sees);
+ *   `inspect`: the reader of a sibling directory.
  */
-export function evaluate(measurement, { assumeDone = [], consumers = null, codemods = null } = {}) {
+export function evaluate(
+  measurement,
+  { assumeDone = [], consumers = null, codemods = null, siblings = 'detect', inspect = inspectSibling } = {},
+) {
   const failures = [];
   const report = {
     markers: measurement.scan.markers.length,
@@ -832,6 +1321,12 @@ export function evaluate(measurement, { assumeDone = [], consumers = null, codem
     byReceiver: {},
     receiverPhaseLocked: [],
     unverifiedEvidence: [],
+    unverifiedByRow: {},
+    siblingEvidence: [],
+    rowsOnHistoricalReceipts: [],
+    staleReceipts: [],
+    unauditedReceipts: [],
+    receipts: 0,
     codemodLookup: {},
     consumers: consumers ? [] : 'not requested',
   };
@@ -876,7 +1371,38 @@ export function evaluate(measurement, { assumeDone = [], consumers = null, codem
   const rows = Array.isArray(ledger.rows) ? ledger.rows : [];
   if (!Array.isArray(ledger.rows)) failures.push(`${LEDGER_PATH}: rows is not an array`);
 
+  const receipts = new Map();
+  const vouched = new Set();
+  const auditRecords = new Map();
+  if (measurement.receiptsError) failures.push(measurement.receiptsError);
+  const receiptDocument = measurement.receipts ?? null;
+  if (receiptDocument !== null) {
+    const shaped = typeof receiptDocument === 'object' && !Array.isArray(receiptDocument)
+      && Object.keys(receiptDocument).sort().join() === [...RECEIPT_HEADER_KEYS].sort().join()
+      && Array.isArray(receiptDocument.receipts);
+    if (!shaped) failures.push(`${RECEIPTS_PATH}: not an object of exactly ${RECEIPT_HEADER_KEYS.join(', ')}`);
+    (shaped ? receiptDocument.receipts : []).forEach((receipt, index) => {
+      const label = `${RECEIPTS_PATH}: receipt ${index}${isText(receipt?.anchor) ? ` (\`${receipt.anchor}\`)` : ''}`;
+      const found = receiptProblems(receipt);
+      for (const problem of found) failures.push(`${label}: ${problem}`);
+      if (found.length > 0) return;
+      const key = receiptKey(receipt);
+      if (receipts.has(key)) { failures.push(`${label}: duplicate receipt`); return; }
+      receipts.set(key, receipt);
+      if (!isAudited(receipt)) return;
+      const unbacked = auditMarkProblems(receipt, measurement.repoRoot, auditRecords);
+      for (const problem of unbacked) failures.push(`${label}: ${problem}`);
+      if (unbacked.length === 0) vouched.add(key);
+    });
+  }
+  report.receipts = receipts.size;
+  const receiptsUsed = new Set();
+
   const context = {
+    receipts,
+    receiptsUsed,
+    vouched,
+    siblingOf: siblingLocator(measurement.repoRoot, siblings, inspect),
     packageRoot: measurement.packageRoot,
     repoRoot: measurement.repoRoot,
     registry: measurement.registry,
@@ -943,6 +1469,17 @@ export function evaluate(measurement, { assumeDone = [], consumers = null, codem
       failures.push(`${marker.file}:${marker.line} \`${marker.anchor}\`: marker without a row in ${LEDGER_PATH}`);
     }
   }
+  for (const [key, receipt] of receipts) {
+    if (!receiptsUsed.has(key)) {
+      failures.push(
+        `${RECEIPTS_PATH}: receipt for ${receipt.file} \`${receipt.anchor}\` (\`${receipt.kind}\` at ${receipt.path}) `
+        + 'names no evidence entry of the ledger: delete it with the row or the entry',
+      );
+    }
+  }
+  for (const entry of report.unverifiedEvidence) {
+    report.unverifiedByRow[entry.row] = (report.unverifiedByRow[entry.row] ?? 0) + 1;
+  }
 
   return { failures, report };
 }
@@ -952,11 +1489,19 @@ export function evaluate(measurement, { assumeDone = [], consumers = null, codem
 // ---------------------------------------------------------------------------
 
 export function parseArgs(argv) {
-  const options = { check: false, json: false, consumers: false, assumeDone: [], unknown: [] };
+  const options = {
+    check: false, json: false, consumers: false, writeReceipts: false, auditReceipts: false, by: null, record: null,
+    siblings: 'detect', assumeDone: [], unknown: [],
+  };
   for (const arg of argv) {
     if (arg === '--check') options.check = true;
     else if (arg === '--json') options.json = true;
     else if (arg === '--consumers') options.consumers = true;
+    else if (arg === '--write-receipts') options.writeReceipts = true;
+    else if (arg === '--audit-receipts') options.auditReceipts = true;
+    else if (arg.startsWith('--by=') && arg.length > '--by='.length) options.by = arg.slice('--by='.length);
+    else if (arg.startsWith('--record=') && arg.length > '--record='.length) options.record = arg.slice('--record='.length);
+    else if (arg === '--siblings=absent') options.siblings = 'absent';
     else if (arg.startsWith('--assume-done=')) {
       options.assumeDone.push(...arg.slice('--assume-done='.length).split(',').map((id) => id.trim()).filter(Boolean));
     } else options.unknown.push(arg);
@@ -964,10 +1509,44 @@ export function parseArgs(argv) {
   return options;
 }
 
-export async function run(argv, { packageRoot, repoRoot, resolver = loadConsumerResolver, codemodLookup = loadCodemodLookup } = {}) {
+export async function run(
+  argv,
+  { packageRoot, repoRoot, resolver = loadConsumerResolver, codemodLookup = loadCodemodLookup, inspect = inspectSibling, today } = {},
+) {
   const options = parseArgs(argv);
   if (options.unknown.length > 0) {
     return { code: 2, failures: [`unknown argument(s): ${options.unknown.join(' ')}`], report: null };
+  }
+  const checking = options.check || options.consumers || options.assumeDone.length > 0 || options.siblings !== 'detect';
+  if (!options.auditReceipts && (options.by !== null || options.record !== null)) {
+    return { code: 2, failures: ['--by and --record belong to --audit-receipts'], report: null };
+  }
+  if (options.writeReceipts || options.auditReceipts) {
+    if (checking || (options.writeReceipts && options.auditReceipts)) {
+      return { code: 2, failures: ['--write-receipts and --audit-receipts are modes of their own: neither combines with a check or with the other'], report: null };
+    }
+    if (options.auditReceipts && (options.by === null || options.record === null)) {
+      return { code: 2, failures: ['--audit-receipts needs --by=<auditor> and --record=<kept audit record>'], report: null };
+    }
+    const measurement = measure({ packageRoot, repoRoot });
+    if (measurement.ledgerError || measurement.receiptsError) {
+      return { code: 1, failures: [measurement.ledgerError, measurement.receiptsError].filter(Boolean), report: null, options };
+    }
+    const target = join(packageRoot, RECEIPTS_PATH);
+    const write = (document) => {
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, `${JSON.stringify(document, null, 2)}\n`);
+    };
+    if (options.auditReceipts) {
+      const audit = auditReceipts(measurement, { by: options.by, record: options.record, inspect });
+      const failures = audit.refused.map((entry) => `${entry.receipt ?? RECEIPTS_PATH}: not marked audited: ${entry.why}`);
+      if (failures.length === 0) write(audit.document);
+      return { code: failures.length > 0 ? 1 : 0, failures, report: null, audit, written: failures.length === 0, options };
+    }
+    const mint = mintReceipts(measurement, { inspect, ...(today ? { today } : {}) });
+    const failures = mint.refused.map((entry) => `${entry.row}: \`${entry.kind}\` at ${entry.path}: no receipt minted: ${entry.why}`);
+    if (failures.length === 0) write(mint.document);
+    return { code: failures.length > 0 ? 1 : 0, failures, report: null, mint, written: failures.length === 0, options };
   }
   let consumers = null;
   if (options.consumers) {
@@ -984,17 +1563,36 @@ export async function run(argv, { packageRoot, repoRoot, resolver = loadConsumer
     }
   }
   const codemods = await codemodLookup({ packageRoot });
-  const result = evaluate(measure({ packageRoot, repoRoot }), { assumeDone: options.assumeDone, consumers, codemods });
+  const result = evaluate(measure({ packageRoot, repoRoot }), {
+    assumeDone: options.assumeDone, consumers, codemods, siblings: options.siblings, inspect,
+  });
   return { code: result.failures.length > 0 ? 1 : 0, ...result, options };
 }
 
 async function main() {
   const packageRoot = findPackageRoot(HERE);
   const repoRoot = findRepoRoot(HERE);
-  const { code, failures, report, options } = await run(process.argv.slice(2), { packageRoot, repoRoot });
+  const { code, failures, report, options, mint, audit, written } = await run(process.argv.slice(2), { packageRoot, repoRoot });
   if (options?.json) {
-    process.stdout.write(`${JSON.stringify({ ok: code === 0, failures, report }, null, 2)}\n`);
+    const minted = mint ? { written, minted: mint.minted, kept: mint.kept, refused: mint.refused, dropped: mint.dropped } : undefined;
+    const audited = audit ? { written, marked: audit.marked, kept: audit.kept, refused: audit.refused } : undefined;
+    process.stdout.write(`${JSON.stringify({ ok: code === 0, failures, report, mint: minted, audit: audited }, null, 2)}\n`);
     process.exit(code);
+  }
+  if (mint) {
+    console.log(
+      `deprecations: ${RECEIPTS_PATH} ${written ? 'written' : 'NOT WRITTEN (a refusal leaves the file as it was)'} — `
+      + `${mint.minted.length} minted, ${mint.kept.length} kept, ${mint.dropped.length} dropped, ${mint.refused.length} refused`,
+    );
+    for (const key of mint.minted) console.log(`  MINTED (unaudited) ${key}`);
+    for (const key of mint.dropped) console.log(`  DROPPED ${key}`);
+  }
+  if (audit) {
+    console.log(
+      `deprecations: ${RECEIPTS_PATH} ${written ? 'written' : 'NOT WRITTEN (a refusal leaves the file as it was)'} — `
+      + `${audit.marked.length} marked audited, ${audit.kept.length} already marked, ${audit.refused.length} refused`,
+    );
+    for (const key of audit.marked) console.log(`  AUDITED ${key}`);
   }
   if (report) {
     const classes = Object.entries(report.byClass).map(([id, count]) => `${id} ${count}`).join(', ');
@@ -1005,8 +1603,44 @@ async function main() {
     for (const locked of report.receiverPhaseLocked) {
       console.log(`  REPORT receiverPhaseLocked: ${locked.row} -> ${locked.receiver} (phase ${locked.phase} is locked; not actionable)`);
     }
-    if (report.unverifiedEvidence.length > 0) {
-      console.log(`  REPORT ${report.unverifiedEvidence.length} evidence entr(ies) in sibling checkouts that are not present: NOT VERIFIED on this run`);
+    const closing = options.assumeDone.length > 0;
+    const live = report.siblingEvidence.filter((entry) => entry.status === 'verified-live');
+    const historical = report.siblingEvidence.filter((entry) => entry.status === 'historical-receipt');
+    if (report.siblingEvidence.length > 0) {
+      console.log(
+        `  REPORT sibling evidence: ${live.length} verified live, ${historical.length} historical audited receipt(s), `
+        + `not re-verified here, ${report.unverifiedEvidence.length} NOT VERIFIED`,
+      );
+    }
+    if (closing) {
+      for (const entry of live) {
+        const backing = entry.receipt?.reproven ? `; receipt at ${entry.receipt.commit} re-proven` : '';
+        console.log(`  EVIDENCE ${entry.row}: \`${entry.kind}\` verified live at ${entry.path}${backing}`);
+      }
+    }
+    for (const entry of historical) {
+      console.log(
+        `  EVIDENCE ${entry.row}: \`${entry.kind}\` historical audited receipt, not re-verified here `
+        + `(read at ${entry.receipt.commit}; audited ${entry.receipt.audited.at} by ${entry.receipt.audited.by}, ${entry.receipt.audited.record})`,
+      );
+    }
+    if (report.unauditedReceipts.length > 0) {
+      console.log(
+        `  REPORT ${report.unauditedReceipts.length} receipt(s) carry no audited mark: integrity only, they stand in for nothing `
+        + 'and are red under --assume-done',
+      );
+    }
+    const unverifiedRows = Object.entries(report.unverifiedByRow);
+    if (unverifiedRows.length > 0) {
+      console.log(
+        `  REPORT NOT VERIFIED: ${report.unverifiedEvidence.length} evidence entr(ies) across ${unverifiedRows.length} row(s) sit in `
+        + 'sibling checkouts that are not present and have no valid receipt. These rows are not satisfied; '
+        + `${closing ? 'closure fails them' : 'this run does not fail them and --assume-done would'}:`,
+      );
+      for (const [row, count] of unverifiedRows) console.log(`    NOT VERIFIED ${row}: ${count} entr(ies)`);
+    }
+    for (const stale of report.staleReceipts) {
+      console.log(`  REPORT stale receipt (red under --assume-done): ${stale.row} \`${stale.kind}\` at ${stale.path}: ${stale.why}`);
     }
     const shapeOnly = report.codemodLookup['shape-only'] ?? 0;
     if (shapeOnly > 0) console.log(`  REPORT ${shapeOnly} codemod id(s) checked for shape only: the codemod map was NOT consulted`);
@@ -1017,7 +1651,17 @@ async function main() {
     for (const failure of failures) console.error(`  ✗ ${failure}`);
     process.exit(code);
   }
-  console.log('✓ every marker has one row and every row verifies');
+  if (!report) return;
+  const pending = Object.keys(report.unverifiedByRow).length;
+  const resting = report.rowsOnHistoricalReceipts.length;
+  if (pending === 0 && resting === 0) {
+    console.log('✓ every marker has one row and every row verifies');
+    return;
+  }
+  const notes = [];
+  if (resting > 0) notes.push(`${resting} row(s) rest on historical audited receipts, not re-verified here`);
+  if (pending > 0) notes.push(`${pending} row(s) carry evidence that was NOT VERIFIED on this run`);
+  console.log(`✓ every marker has one row and no row failed; ${notes.join('; ')}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
